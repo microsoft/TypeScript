@@ -91,7 +91,7 @@ namespace ts.Completions {
         const entries: CompletionEntry[] = [];
 
         if (isSourceFileJavaScript(sourceFile)) {
-            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, typeChecker, compilerOptions.target, log, completionKind, includeBracketCompletions, propertyAccessToConvert, recommendedCompletion, symbolToOriginInfoMap);
+            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, sourceFile, typeChecker, compilerOptions.target, log, completionKind, includeBracketCompletions, propertyAccessToConvert, recommendedCompletion, symbolToOriginInfoMap);
             getJavaScriptCompletionEntries(sourceFile, location.pos, uniqueNames, compilerOptions.target, entries);
         }
         else {
@@ -99,7 +99,7 @@ namespace ts.Completions {
                 return undefined;
             }
 
-            getCompletionEntriesFromSymbols(symbols, entries, location, typeChecker, compilerOptions.target, log, completionKind, includeBracketCompletions, propertyAccessToConvert, recommendedCompletion, symbolToOriginInfoMap);
+            getCompletionEntriesFromSymbols(symbols, entries, location, sourceFile, typeChecker, compilerOptions.target, log, completionKind, includeBracketCompletions, propertyAccessToConvert, recommendedCompletion, symbolToOriginInfoMap);
         }
 
         // TODO add filter for keyword based on type/value/namespace and also location
@@ -152,6 +152,7 @@ namespace ts.Completions {
     function createCompletionEntry(
         symbol: Symbol,
         location: Node,
+        sourceFile: SourceFile,
         typeChecker: TypeChecker,
         target: ScriptTarget,
         kind: CompletionKind,
@@ -187,7 +188,7 @@ namespace ts.Completions {
             // TODO: GH#20619 Use configured quote style
             insertText: needsConvertPropertyAccess ? `["${name}"]` : undefined,
             replacementSpan: needsConvertPropertyAccess
-                ? createTextSpanFromBounds(findChildOfKind(propertyAccessToConvert, SyntaxKind.DotToken)!.getStart(), propertyAccessToConvert.name.end)
+                ? createTextSpanFromBounds(findChildOfKind(propertyAccessToConvert, SyntaxKind.DotToken, sourceFile)!.getStart(sourceFile), propertyAccessToConvert.name.end)
                 : undefined,
             hasAction: trueOrUndefined(needsConvertPropertyAccess || origin !== undefined),
             isRecommended: trueOrUndefined(isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker)),
@@ -212,6 +213,7 @@ namespace ts.Completions {
         symbols: ReadonlyArray<Symbol>,
         entries: Push<CompletionEntry>,
         location: Node,
+        sourceFile: SourceFile,
         typeChecker: TypeChecker,
         target: ScriptTarget,
         log: Log,
@@ -230,7 +232,7 @@ namespace ts.Completions {
         if (symbols) {
             for (const symbol of symbols) {
                 const origin = symbolToOriginInfoMap ? symbolToOriginInfoMap[getSymbolId(symbol)] : undefined;
-                const entry = createCompletionEntry(symbol, location, typeChecker, target, kind, origin, recommendedCompletion, propertyAccessToConvert, includeBracketCompletions);
+                const entry = createCompletionEntry(symbol, location, sourceFile, typeChecker, target, kind, origin, recommendedCompletion, propertyAccessToConvert, includeBracketCompletions);
                 if (!entry) {
                     continue;
                 }
@@ -281,7 +283,7 @@ namespace ts.Completions {
             //      foo({
             //          '/*completion position*/'
             //      });
-            return getStringLiteralCompletionEntriesFromPropertyAssignment(<ObjectLiteralElement>node.parent, typeChecker, compilerOptions.target, log);
+            return getStringLiteralCompletionEntriesFromPropertyAssignment(<ObjectLiteralElement>node.parent, sourceFile, typeChecker, compilerOptions.target, log);
         }
         else if (isElementAccessExpression(node.parent) && node.parent.argumentExpression === node) {
             // Get all names of properties on the expression
@@ -290,7 +292,7 @@ namespace ts.Completions {
             // }
             // let a: A;
             // a['/*completion position*/']
-            return getStringLiteralCompletionEntriesFromElementAccess(node.parent, typeChecker, compilerOptions.target, log);
+            return getStringLiteralCompletionEntriesFromElementAccess(node.parent, sourceFile, typeChecker, compilerOptions.target, log);
         }
         else if (node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration
             || isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false) || isImportCall(node.parent)
@@ -343,11 +345,11 @@ namespace ts.Completions {
         };
     }
 
-    function getStringLiteralCompletionEntriesFromPropertyAssignment(element: ObjectLiteralElement, typeChecker: TypeChecker, target: ScriptTarget, log: Log): CompletionInfo | undefined {
+    function getStringLiteralCompletionEntriesFromPropertyAssignment(element: ObjectLiteralElement, sourceFile: SourceFile, typeChecker: TypeChecker, target: ScriptTarget, log: Log): CompletionInfo | undefined {
         const type = typeChecker.getContextualType((<ObjectLiteralExpression>element.parent));
         const entries: CompletionEntry[] = [];
         if (type) {
-            getCompletionEntriesFromSymbols(type.getApparentProperties(), entries, element, typeChecker, target, log, CompletionKind.String);
+            getCompletionEntriesFromSymbols(type.getApparentProperties(), entries, element, sourceFile, typeChecker, target, log, CompletionKind.String);
             if (entries.length) {
                 return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: true, entries };
             }
@@ -372,11 +374,11 @@ namespace ts.Completions {
         return undefined;
     }
 
-    function getStringLiteralCompletionEntriesFromElementAccess(node: ElementAccessExpression, typeChecker: TypeChecker, target: ScriptTarget, log: Log): CompletionInfo | undefined {
+    function getStringLiteralCompletionEntriesFromElementAccess(node: ElementAccessExpression, sourceFile: SourceFile, typeChecker: TypeChecker, target: ScriptTarget, log: Log): CompletionInfo | undefined {
         const type = typeChecker.getTypeAtLocation(node.expression);
         const entries: CompletionEntry[] = [];
         if (type) {
-            getCompletionEntriesFromSymbols(type.getApparentProperties(), entries, node, typeChecker, target, log, CompletionKind.String);
+            getCompletionEntriesFromSymbols(type.getApparentProperties(), entries, node, sourceFile, typeChecker, target, log, CompletionKind.String);
             if (entries.length) {
                 return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: true, entries };
             }
@@ -1364,7 +1366,7 @@ namespace ts.Completions {
                 // through type declaration or inference.
                 // Also proceed if rootDeclaration is a parameter and if its containing function expression/arrow function is contextually typed -
                 // type of parameter will flow in from the contextual type of the function
-                let canGetType = rootDeclaration.initializer || rootDeclaration.type || rootDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement;
+                let canGetType = hasInitializer(rootDeclaration) || hasType(rootDeclaration) || rootDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement;
                 if (!canGetType && rootDeclaration.kind === SyntaxKind.Parameter) {
                     if (isExpression(rootDeclaration.parent)) {
                         canGetType = !!typeChecker.getContextualType(<Expression>rootDeclaration.parent);

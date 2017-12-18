@@ -297,7 +297,7 @@ namespace FourSlash {
                 const host = new Utils.MockParseConfigHost(baseDir, /*ignoreCase*/ false, this.inputFiles);
 
                 const configJsonObj = ts.parseConfigFileTextToJson(configFileName, this.inputFiles.get(configFileName));
-                assert(configJsonObj.config !== undefined);
+                assert.isTrue(configJsonObj.config !== undefined);
 
                 const { options, errors } = ts.parseJsonConfigFileContent(configJsonObj.config, host, baseDir);
 
@@ -443,7 +443,7 @@ namespace FourSlash {
 
         public goToEachMarker(action: () => void) {
             const markers = this.getMarkers();
-            assert(markers.length !== 0);
+            assert(markers.length);
             for (const marker of markers) {
                 this.goToMarker(marker);
                 action();
@@ -452,7 +452,7 @@ namespace FourSlash {
 
         public goToEachRange(action: () => void) {
             const ranges = this.getRanges();
-            assert(ranges.length !== 0);
+            assert(ranges.length);
             for (const range of ranges) {
                 this.goToRangeStart(range);
                 action();
@@ -799,7 +799,7 @@ namespace FourSlash {
             }
 
             const entries = this.getCompletionListAtCaret().entries;
-            assert(items.length <= entries.length, `Amount of expected items in completion list [ ${items.length} ] is greater than actual number of items in list [ ${entries.length} ]`);
+            assert.isTrue(items.length <= entries.length, `Amount of expected items in completion list [ ${items.length} ] is greater than actual number of items in list [ ${entries.length} ]`);
             ts.zipWith(entries, items, (entry, item) => {
                 assert.equal(entry.name, item, `Unexpected item in completion list`);
             });
@@ -964,7 +964,7 @@ namespace FourSlash {
         public verifyCompletionEntryDetails(entryName: string, expectedText: string, expectedDocumentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]) {
             const details = this.getCompletionEntryDetails(entryName);
 
-            assert.isDefined(details, "no completion entry available");
+            assert(details, "no completion entry available");
 
             assert.equal(ts.displayPartsToString(details.displayParts), expectedText, this.assertionMessageAtLastKnownMarker("completion entry details text"));
 
@@ -1099,7 +1099,7 @@ namespace FourSlash {
 
         public verifyRangesReferenceEachOther(ranges?: Range[]) {
             ranges = ranges || this.getRanges();
-            assert(ranges.length !== 0);
+            assert(ranges.length);
             for (const range of ranges) {
                 this.verifyReferencesOf(range, ranges);
             }
@@ -1385,6 +1385,7 @@ Actual: ${stringify(fullActual)}`);
 
         public verifyCurrentParameterIsVariable(isVariable: boolean) {
             const signature = this.getActiveSignatureHelpItem();
+            assert.isOk(signature);
             assert.equal(isVariable, signature.isVariadic);
         }
 
@@ -2035,7 +2036,7 @@ Actual: ${stringify(fullActual)}`);
             const implementations = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition);
 
             if (negative) {
-                assert(implementations && implementations.length > 0, "Expected at least one implementation but got 0");
+                assert.isTrue(implementations && implementations.length > 0, "Expected at least one implementation but got 0");
             }
             else {
                 assert.isUndefined(implementations, "Expected implementation list to be empty but implementations returned");
@@ -3140,7 +3141,7 @@ Actual: ${stringify(fullActual)}`);
 
             if (spanIndex !== undefined) {
                 const span = this.getTextSpanForRangeAtIndex(spanIndex);
-                assert(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + entryId));
+                assert.isTrue(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + entryId));
             }
 
             assert.equal(item.hasAction, hasAction);

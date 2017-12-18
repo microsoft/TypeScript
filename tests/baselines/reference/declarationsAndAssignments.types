@@ -495,7 +495,7 @@ function f15() {
 >{ a, b, c } : { a: string; b: number; c: boolean; }
 >a : string
 >b : number
->c : true
+>c : boolean
 }
 
 function f16() {

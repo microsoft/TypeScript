@@ -18,7 +18,7 @@ describe("PreProcessFile:", () => {
             return;
         }
         if (!expected) {
-            assert(false, `Expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+            assert.isTrue(false, `Expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
         }
         assert.equal(actual.length, expected.length, `[${kind}] Actual array's length does not match expected length. Expected files: ${JSON.stringify(expected)}, actual files: ${JSON.stringify(actual)}`);
 

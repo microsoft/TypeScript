@@ -316,3 +316,46 @@ class SelfAssert {
         }
     }
 }
+
+interface Indexed {
+>Indexed : Indexed
+
+    [s: string]: any;
+>s : string
+}
+
+function f(i: Indexed) {
+>f : (i: Indexed) => any
+>i : Indexed
+>Indexed : Indexed
+
+    if ("a" in i) {
+>"a" in i : boolean
+>"a" : "a"
+>i : Indexed
+
+        return i.a;
+>i.a : any
+>i : Indexed
+>a : any
+    }
+    else if ("b" in i) {
+>"b" in i : boolean
+>"b" : "b"
+>i : Indexed
+
+        return i.b;
+>i.b : any
+>i : Indexed
+>b : any
+    }
+    return "c" in i && i.c;
+>"c" in i && i.c : any
+>"c" in i : boolean
+>"c" : "c"
+>i : Indexed
+>i.c : any
+>i : Indexed
+>c : any
+}
+

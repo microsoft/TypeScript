@@ -2623,10 +2623,6 @@
         "category": "Error",
         "code": 5010
     },
-    "File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'.": {
-        "category": "Error",
-        "code": 5011
-    },
     "Cannot read file '{0}': {1}.": {
         "category": "Error",
         "code": 5012
@@ -3419,6 +3415,14 @@
     "Enable strict checking of property initialization in classes.": {
         "category": "Message",
         "code": 6187
+    },
+    "Numeric separators are not allowed here.": {
+        "category": "Error",
+        "code": 6188
+    },
+    "Multiple consecutive numeric separators are not permitted.": {
+        "category": "Error",
+        "code": 6189
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

@@ -91,6 +91,21 @@ class SelfAssert {
     }
 }
 
+interface Indexed {
+    [s: string]: any;
+}
+
+function f(i: Indexed) {
+    if ("a" in i) {
+        return i.a;
+    }
+    else if ("b" in i) {
+        return i.b;
+    }
+    return "c" in i && i.c;
+}
+
+
 //// [typeGuardOfFromPropNameInUnionType.js]
 var A = /** @class */ (function () {
     function A() {
@@ -216,3 +231,12 @@ var SelfAssert = /** @class */ (function () {
     };
     return SelfAssert;
 }());
+function f(i) {
+    if ("a" in i) {
+        return i.a;
+    }
+    else if ("b" in i) {
+        return i.b;
+    }
+    return "c" in i && i.c;
+}
