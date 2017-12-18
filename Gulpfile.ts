@@ -779,10 +779,6 @@ gulp.task("runtests",
         runConsoleTests("mocha-fivemat-progress-reporter", /*runInParallel*/ false, done);
     });
 
-gulp.task("runtests-in-watch", ["build-rules", "tests"], done => {
-    runConsoleTests("min", /*runInParallel*/ false, done, /*noExit*/ true);
-});
-
 const nodeServerOutFile = "tests/webTestServer.js";
 const nodeServerInFile = "tests/webTestServer.ts";
 gulp.task(nodeServerOutFile, /*help*/ false, [servicesFile], () => {
@@ -1129,9 +1125,5 @@ gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: 
 gulp.task("default", "Runs 'local'", ["local"]);
 
 gulp.task("watch", "Watches the src/ directory for changes and executes runtests-parallel.", [], () => {
-    gulp.watch("src/**/*.*", ["runtests-parallel"]);
-});
-
-gulp.task("watch-no-parallel", "Watches the src/ directory for changes and executes runtests.", [], () => {
-    gulp.watch(["src/**/*.*", "scripts/typemock/src/**/*.*"], ["runtests-in-watch"]);
+    gulp.watch(["src/**/*.*", "scripts/typemock/src/**/*.*"], ["runtests-parallel"]);
 });

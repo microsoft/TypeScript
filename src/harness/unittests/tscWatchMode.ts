@@ -707,7 +707,7 @@ namespace ts.tscWatch {
                     createExclusiveCompilerOptionDiagnostic(watch(), configFileContentWithComment, "allowJs", "declaration", /*checkFirst*/ true),
                     createExclusiveCompilerOptionDiagnostic(watch(), configFileContentWithComment, "allowJs", "declaration", /*checkFirst*/ false)
                 ];
-            	checkOutputErrors(host, initialErrors, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
+                checkOutputErrors(host, initialErrors, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 host.vfs.writeFile("/a/b/tsconfig.json", configFileContentWithoutComment);
                 host.runQueuedTimeoutCallbacks();
@@ -715,7 +715,7 @@ namespace ts.tscWatch {
                     createExclusiveCompilerOptionDiagnostic(watch(), configFileContentWithoutComment, "allowJs", "declaration", /*checkFirst*/ true),
                     createExclusiveCompilerOptionDiagnostic(watch(), configFileContentWithoutComment, "allowJs", "declaration", /*checkFirst*/ false)
                 ];
-            	checkOutputErrors(host, nowErrors, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
+                checkOutputErrors(host, nowErrors, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
 
                 assert.equal(nowErrors[0].start, initialErrors[0].start - configFileContentComment.length);
                 assert.equal(nowErrors[1].start, initialErrors[1].start - configFileContentComment.length);
@@ -1264,7 +1264,7 @@ namespace ts.tscWatch {
 
                 checkOutputErrors(host, [
                     createCannotFindModuleDiagnostic(watch(), "/a/foo.ts", rootContent1, "bar")
-            	], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
+                ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 // spy on calls to fileExists after synchronization is triggered
                 const fileExistsSpy2 = spy(host, "fileExists");
@@ -1299,7 +1299,7 @@ namespace ts.tscWatch {
                     .verify(_ => _(Arg.includes("/bar.")), Times.atLeastOnce())
                     .revoke();
 
-            	checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
+                checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 // spy on fileExists when triggering synchronization
                 const fileExistsSpy2 = spy(host, "fileExists");
@@ -1314,7 +1314,7 @@ namespace ts.tscWatch {
 
                 checkOutputErrors(host, [
                     createCannotFindModuleDiagnostic(watch(), "/a/foo.ts", rootContent, "bar")
-            	], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
+                ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
 
                 // spy on fileExists when triggering synchronization
                 const fileExistsSpy3 = spy(host, "fileExists");
@@ -1359,12 +1359,12 @@ namespace ts.tscWatch {
 
                 checkOutputErrors(host, [
                     createCannotFindModuleDiagnostic(watch(), "/a/b/foo.ts", rootContent, "fs")
-            	], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
+                ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 const fileContent2 = fileContent1 + `declare module "fs" {\n    export interface Stats {\n        isFile(): boolean;\n    }\n}`;
                 host.vfs.writeFile("/a/b/bar.d.ts", fileContent2);
                 host.runQueuedTimeoutCallbacks();
-            	checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
+                checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
             });
 
             it("works when reusing program with files from external library", () => {
@@ -1397,7 +1397,7 @@ namespace ts.tscWatch {
                     "/a/b/projects/myProject/node_modules/module1/index.js",
                     fakes.FakeServerHost.libPath
                 ]);
-            	checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
+                checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 // verify writeFile was called correctly.
                 writeFileSpy1
@@ -1417,7 +1417,7 @@ namespace ts.tscWatch {
                     "/a/b/projects/myProject/node_modules/module1/index.js",
                     fakes.FakeServerHost.libPath
                 ]);
-            	checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
+                checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
 
                 // verify writeFile was called correctly
                 writeFileSpy2

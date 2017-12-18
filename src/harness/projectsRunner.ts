@@ -380,12 +380,12 @@ namespace project {
                 }
             });
 
-            const vfs_ = vfs.VirtualFileSystem.createFromDocuments(/*useCaseSensitiveFileNames*/ true, allInputFiles, {
+            const _vfs = vfs.VirtualFileSystem.createFromDocuments(/*useCaseSensitiveFileNames*/ true, allInputFiles, {
                 currentDirectory: vpath.combine("/.src", this.testCase.projectRoot)
             });
 
             // Dont allow config files since we are compiling existing source options
-            const compilerHost = new ProjectCompilerHost(vfs_, compilerResult.compilerOptions, this.testCaseJustName, this.testCase, compilerResult.moduleKind);
+            const compilerHost = new ProjectCompilerHost(_vfs, compilerResult.compilerOptions, this.testCaseJustName, this.testCase, compilerResult.moduleKind);
             return this.compileProjectFiles(compilerResult.moduleKind, compilerResult.configFileSourceFiles, () => rootFiles, compilerHost, compilerResult.compilerOptions);
 
             function findOutputDtsFile(fileName: string) {

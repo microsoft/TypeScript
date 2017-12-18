@@ -303,7 +303,7 @@ namespace ts.projectSystem {
                 .setup(_ => _(Arg.any(), Arg.any(), Arg.any(), Arg.any()), {
                     callback: (_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) => {
                         const installedTypings = ["@types/lodash", "@types/react"];
-                    	const typingFiles = [lodashDts, reactDts];
+                        const typingFiles = [lodashDts, reactDts];
                         executeCommand(installer, host, installedTypings, typingFiles, cb);
                     }
                 });
