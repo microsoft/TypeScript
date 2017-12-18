@@ -82,12 +82,13 @@ namespace ts {
                 es2015: ScriptTarget.ES2015,
                 es2016: ScriptTarget.ES2016,
                 es2017: ScriptTarget.ES2017,
+                es2018: ScriptTarget.ES2018,
                 esnext: ScriptTarget.ESNext,
             }),
             paramType: Diagnostics.VERSION,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
-            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_or_ESNEXT,
+            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_or_ESNEXT,
         },
         {
             name: "module",
@@ -120,6 +121,7 @@ namespace ts {
                     "es7": "lib.es2016.d.ts",
                     "es2016": "lib.es2016.d.ts",
                     "es2017": "lib.es2017.d.ts",
+                    "es2018": "lib.es2018.d.ts",
                     "esnext": "lib.esnext.d.ts",
                     // Host only
                     "dom": "lib.dom.d.ts",
@@ -276,6 +278,13 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Type_Checking_Options,
             description: Diagnostics.Enable_strict_checking_of_function_types
+        },
+        {
+            name: "strictPropertyInitialization",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Strict_Type_Checking_Options,
+            description: Diagnostics.Enable_strict_checking_of_property_initialization_in_classes
         },
         {
             name: "noImplicitThis",
@@ -702,12 +711,11 @@ namespace ts {
     export function convertEnableAutoDiscoveryToEnable(typeAcquisition: TypeAcquisition): TypeAcquisition {
         // Convert deprecated typingOptions.enableAutoDiscovery to typeAcquisition.enable
         if (typeAcquisition && typeAcquisition.enableAutoDiscovery !== undefined && typeAcquisition.enable === undefined) {
-            const result: TypeAcquisition = {
+            return {
                 enable: typeAcquisition.enableAutoDiscovery,
                 include: typeAcquisition.include || [],
                 exclude: typeAcquisition.exclude || []
             };
-            return result;
         }
         return typeAcquisition;
     }
@@ -1540,7 +1548,7 @@ namespace ts {
             host: ParseConfigHost,
             basePath: string,
             configFileName: string,
-            getCanonicalFileName: (fileName: string) => string,
+            getCanonicalFileName: GetCanonicalFileName,
             resolutionStack: Path[],
             errors: Push<Diagnostic>,
     ): ParsedTsconfig {
@@ -1588,7 +1596,7 @@ namespace ts {
         json: any,
         host: ParseConfigHost,
         basePath: string,
-        getCanonicalFileName: (fileName: string) => string,
+        getCanonicalFileName: GetCanonicalFileName,
         configFileName: string | undefined,
         errors: Push<Diagnostic>
     ): ParsedTsconfig {
@@ -1619,7 +1627,7 @@ namespace ts {
         sourceFile: JsonSourceFile,
         host: ParseConfigHost,
         basePath: string,
-        getCanonicalFileName: (fileName: string) => string,
+        getCanonicalFileName: GetCanonicalFileName,
         configFileName: string | undefined,
         errors: Push<Diagnostic>
     ): ParsedTsconfig {
@@ -1688,7 +1696,7 @@ namespace ts {
         extendedConfig: string,
         host: ParseConfigHost,
         basePath: string,
-        getCanonicalFileName: (fileName: string) => string,
+        getCanonicalFileName: GetCanonicalFileName,
         errors: Push<Diagnostic>,
         createDiagnostic: (message: DiagnosticMessage, arg1?: string) => Diagnostic) {
         extendedConfig = normalizeSlashes(extendedConfig);
@@ -1713,7 +1721,7 @@ namespace ts {
         extendedConfigPath: Path,
         host: ts.ParseConfigHost,
         basePath: string,
-        getCanonicalFileName: (fileName: string) => string,
+        getCanonicalFileName: GetCanonicalFileName,
         resolutionStack: Path[],
         errors: Push<Diagnostic>,
     ): ParsedTsconfig | undefined {
@@ -1790,9 +1798,8 @@ namespace ts {
         return options;
     }
 
-    function getDefaultTypeAcquisition(configFileName?: string) {
-        const options: TypeAcquisition = { enable: getBaseFileName(configFileName) === "jsconfig.json", include: [], exclude: [] };
-        return options;
+    function getDefaultTypeAcquisition(configFileName?: string): TypeAcquisition {
+        return { enable: getBaseFileName(configFileName) === "jsconfig.json", include: [], exclude: [] };
     }
 
     function convertTypeAcquisitionFromJsonWorker(jsonOptions: any,
@@ -1898,21 +1905,6 @@ namespace ts {
      *  \/?$        # matches an optional trailing directory separator at the end of the string.
      */
     const invalidTrailingRecursionPattern = /(^|\/)\*\*\/?$/;
-
-    /**
-     * Tests for a path with multiple recursive directory wildcards.
-     * Matches **\** and **\a\**, but not **\a**b.
-     *
-     * NOTE: used \ in place of / above to avoid issues with multiline comments.
-     *
-     * Breakdown:
-     *  (^|\/)      # matches either the beginning of the string or a directory separator.
-     *  \*\*\/      # matches a recursive directory wildcard "**" followed by a directory separator.
-     *  (.*\/)?     # optionally matches any number of characters followed by a directory separator.
-     *  \*\*        # matches a recursive directory wildcard "**"
-     *  ($|\/)      # matches either the end of the string or a directory separator.
-     */
-    const invalidMultipleRecursionPatterns = /(^|\/)\*\*\/(.*\/)?\*\*($|\/)/;
 
     /**
      * Tests for a path where .. appears after a recursive directory wildcard.
@@ -2107,9 +2099,6 @@ namespace ts {
     function specToDiagnostic(spec: string, allowTrailingRecursion: boolean): ts.DiagnosticMessage | undefined {
         if (!allowTrailingRecursion && invalidTrailingRecursionPattern.test(spec)) {
             return Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0;
-        }
-        else if (invalidMultipleRecursionPatterns.test(spec)) {
-            return Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0;
         }
         else if (invalidDotDotAfterRecursiveWildcardPattern.test(spec)) {
             return Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0;

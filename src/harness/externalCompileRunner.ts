@@ -9,6 +9,10 @@ interface ExecResult {
     status: number;
 }
 
+interface UserConfig {
+    types: string[];
+}
+
 abstract class ExternalCompileRunnerBase extends RunnerBase {
     abstract testDir: string;
     abstract report(result: ExecResult, cwd: string): string;
@@ -33,18 +37,34 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
             const cp = require("child_process");
 
             it("should build successfully", () => {
-                const cwd = path.join(__dirname, "../../", this.testDir, directoryName);
+                let cwd = path.join(__dirname, "../../", this.testDir, directoryName);
                 const timeout = 600000; // 600s = 10 minutes
+                const stdio = isWorker ? "pipe" : "inherit";
+                let types: string[];
+                if (fs.existsSync(path.join(cwd, "test.json"))) {
+                    const update = cp.spawnSync("git", ["submodule", "update", "--remote"], { cwd, timeout, shell: true, stdio });
+                    if (update.status !== 0) throw new Error(`git submodule update for ${directoryName} failed!`);
+
+                    const config = JSON.parse(fs.readFileSync(path.join(cwd, "test.json"), { encoding: "utf8" })) as UserConfig;
+                    ts.Debug.assert(!!config.types, "Bad format from test.json: Types field must be present.");
+                    types = config.types;
+
+                    cwd = path.join(cwd, directoryName);
+                }
                 if (fs.existsSync(path.join(cwd, "package.json"))) {
                     if (fs.existsSync(path.join(cwd, "package-lock.json"))) {
                         fs.unlinkSync(path.join(cwd, "package-lock.json"));
                     }
-                    const stdio = isWorker ? "pipe" : "inherit";
                     const install = cp.spawnSync(`npm`, ["i"], { cwd, timeout, shell: true, stdio });
                     if (install.status !== 0) throw new Error(`NPM Install for ${directoryName} failed!`);
                 }
+                const args = [path.join(__dirname, "tsc.js")];
+                if (types) {
+                    args.push("--types", types.join(","));
+                }
+                args.push("--noEmit");
                 Harness.Baseline.runBaseline(`${this.kind()}/${directoryName}.log`, () => {
-                    return this.report(cp.spawnSync(`node`, [path.join(__dirname, "tsc.js")], { cwd, timeout, shell: true }), cwd);
+                    return this.report(cp.spawnSync(`node`, args, { cwd, timeout, shell: true }), cwd);
                 });
             });
         });

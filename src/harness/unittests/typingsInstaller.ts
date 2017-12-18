@@ -188,6 +188,30 @@ namespace ts.projectSystem {
                 .revoke();
         });
 
+        it("external project - deduplicate from local @types packages", () => {
+            const host = new fakes.FakeServerHost({ safeList: true });
+            const appJs = host.vfs.addFile("/a/b/app.js", "");
+            host.vfs.addFile("/node_modules/@types/node/index.d.ts", "declare var node;");
+
+            const installer = new Installer(host, { typesRegistry: createTypesRegistry("node") });
+            const installWorkerSpy = spy(installer, "installWorker");
+
+            const projectFileName = "/a/app/test.csproj";
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openExternalProject({
+                projectFileName,
+                options: {},
+                rootFiles: [toExternalFile(appJs.path)],
+                typeAcquisition: { enable: true, include: ["node"] }
+            });
+
+            installer.checkPendingCommands(/*expectedCount*/ 0);
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+            installWorkerSpy
+                .verify(_ => _(Arg.any(), Arg.any(), Arg.any(), Arg.any()), Times.none(), "nothing should get installed")
+                .revoke();
+        });
+
         it("external project - no auto in typing acquisition, no .d.ts/js files", () => {
             const host = new fakes.FakeServerHost({ safeList: true });
             const file1 = host.vfs.addFile("/a/b/app.ts", ``);
@@ -260,16 +284,16 @@ namespace ts.projectSystem {
             // 2. loose files names are matched against safe list for typings if
             //    this is a JS project (only js, jsx, d.ts files are present)
             const host = new fakes.FakeServerHost({ safeList: true });
-            const file1 = host.vfs.addFile("/a/b/lodash.js", ``);
-            const file2 = host.vfs.addFile("/a/b/file2.jsx", ``);
-            const file3 = host.vfs.addFile("/a/b/file3.d.ts", ``);
+            const lodashJs = host.vfs.addFile("/a/b/lodash.js", ``);
+            const file2Jsx = host.vfs.addFile("/a/b/file2.jsx", ``);
+            const file3Dts = host.vfs.addFile("/a/b/file3.d.ts", ``);
             host.vfs.addFile(customTypesMap.path, customTypesMap.content);
 
-            const react = {
+            const reactDts = {
                 path: "/a/data/node_modules/@types/react/index.d.ts",
                 content: "declare const react: { x: number }"
             };
-            const lodash = {
+            const lodashDts = {
                 path: "/a/data/node_modules/@types/lodash/index.d.ts",
                 content: "declare const lodash: { x: number }"
             };
@@ -279,7 +303,7 @@ namespace ts.projectSystem {
                 .setup(_ => _(Arg.any(), Arg.any(), Arg.any(), Arg.any()), {
                     callback: (_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) => {
                         const installedTypings = ["@types/lodash", "@types/react"];
-                        const typingFiles = [lodash, react];
+                    	const typingFiles = [lodashDts, reactDts];
                         executeCommand(installer, host, installedTypings, typingFiles, cb);
                     }
                 });
@@ -289,30 +313,30 @@ namespace ts.projectSystem {
             projectService.openExternalProject({
                 projectFileName,
                 options: { allowJS: true, moduleResolution: ModuleResolutionKind.NodeJs },
-                rootFiles: [toExternalFile(file1.path), toExternalFile(file2.path), toExternalFile(file3.path)],
-                typeAcquisition: {}
+                rootFiles: [toExternalFile(lodashJs.path), toExternalFile(file2Jsx.path), toExternalFile(file3Dts.path)],
+                typeAcquisition: { }
             });
 
             const p = projectService.externalProjects[0];
             projectService.checkNumberOfProjects({ externalProjects: 1 });
-            checkProjectActualFiles(p, [file1.path, file2.path, file3.path]);
+            checkProjectActualFiles(p, [file2Jsx.path, file3Dts.path]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            checkProjectActualFiles(p, [file1.path, file2.path, file3.path, lodash.path, react.path]);
+            checkProjectActualFiles(p, [file2Jsx.path, file3Dts.path, lodashDts.path, reactDts.path]);
 
             installWorkerSpy.revoke();
         });
 
-        it("external project - no type acquisition, with js & ts files", () => {
+        it("external project - type acquisition with enable: false", () => {
             // Tests:
-            // 1. No typings are included for JS projects when the project contains ts files
+            // Exclude
+
             const host = new fakes.FakeServerHost({ safeList: true });
-            const file1 = host.vfs.addFile("/a/b/jquery.js", ``);
-            const file2 = host.vfs.addFile("/a/b/file2.ts", ``);
+            const jqueryJs = host.vfs.addFile("/a/b/jquery.js", "");
 
             const installer = new Installer(host, { typesRegistry: createTypesRegistry("jquery") });
             const installWorkerSpy = spy(installer, "installWorker")
@@ -327,18 +351,51 @@ namespace ts.projectSystem {
             projectService.openExternalProject({
                 projectFileName,
                 options: { allowJS: true, moduleResolution: ModuleResolutionKind.NodeJs },
-                rootFiles: [toExternalFile(file1.path), toExternalFile(file2.path)],
+                rootFiles: [toExternalFile(jqueryJs.path)],
+                typeAcquisition: { enable: false }
+            });
+
+            const p = projectService.externalProjects[0];
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+
+            checkProjectActualFiles(p, [jqueryJs.path]);
+
+            installer.checkPendingCommands(/*expectedCount*/ 0);
+            installWorkerSpy.revoke();
+        });
+        it("external project - no type acquisition, with js & ts files", () => {
+            // Tests:
+            // 1. No typings are included for JS projects when the project contains ts files
+            const host = new fakes.FakeServerHost({ safeList: true });
+            const jqueryJs = host.vfs.addFile("/a/b/jquery.js", ``);
+            const file2Ts = host.vfs.addFile("/a/b/file2.ts", ``);
+
+            const installer = new Installer(host, { typesRegistry: createTypesRegistry("jquery") });
+            const installWorkerSpy = spy(installer, "installWorker")
+                .setup(_ => _(Arg.any(), Arg.any(), Arg.any(), Arg.any()), {
+                    callback: (_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) => {
+                        executeCommand(installer, host, [], [], cb);
+                    }
+                });
+
+            const projectFileName = "/a/app/test.csproj";
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openExternalProject({
+                projectFileName,
+                options: { allowJS: true, moduleResolution: ModuleResolutionKind.NodeJs },
+                rootFiles: [toExternalFile(jqueryJs.path), toExternalFile(file2Ts.path)],
                 typeAcquisition: {}
             });
 
             const p = projectService.externalProjects[0];
             projectService.checkNumberOfProjects({ externalProjects: 1 });
-            checkProjectActualFiles(p, [file2.path]);
+
+            checkProjectActualFiles(p, [jqueryJs.path, file2Ts.path]);
 
             installer.checkPendingCommands(/*expectedCount*/ 0);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            checkProjectActualFiles(p, [file2.path]);
+            checkProjectActualFiles(p, [jqueryJs.path, file2Ts.path]);
             installWorkerSpy.revoke();
         });
 
@@ -348,9 +405,9 @@ namespace ts.projectSystem {
             // 2. Types for safelist matches are not included when they also appear in the type acquisition exclude list
             // 3. Multiple includes and excludes are respected in type acquisition
             const host = new fakes.FakeServerHost({ safeList: true });
-            const file1 = host.vfs.addFile("/a/b/lodash.js", ``);
-            const file2 = host.vfs.addFile("/a/b/commander.js", ``);
-            const file3 = host.vfs.addFile("/a/b/file3.d.ts", ``);
+            const lodashJs = host.vfs.addFile("/a/b/lodash.js", ``);
+            const commanderJs = host.vfs.addFile("/a/b/commander.js", ``);
+            const file3Dts = host.vfs.addFile("/a/b/file3.d.ts", ``);
             host.vfs.addFile("/a/b/package.json", `{ "name": "test", "dependencies": { "express": "^3.1.0" } }`);
             host.vfs.addFile(customTypesMap.path, customTypesMap.content);
 
@@ -386,20 +443,25 @@ namespace ts.projectSystem {
             projectService.openExternalProject({
                 projectFileName,
                 options: { allowJS: true, moduleResolution: ModuleResolutionKind.NodeJs },
-                rootFiles: [toExternalFile(file1.path), toExternalFile(file2.path), toExternalFile(file3.path)],
-                typeAcquisition: { include: ["jquery", "moment"], exclude: ["lodash"] }
+                rootFiles: [toExternalFile(lodashJs.path), toExternalFile(commanderJs.path), toExternalFile(file3Dts.path)],
+                typeAcquisition: { enable: true, include: ["jquery", "moment"], exclude: ["lodash"] }
             });
 
             const p = projectService.externalProjects[0];
             projectService.checkNumberOfProjects({ externalProjects: 1 });
-            checkProjectActualFiles(p, [file1.path, file2.path, file3.path]);
+            checkProjectActualFiles(p, [file3Dts.path]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            checkProjectActualFiles(p, [file1.path, file2.path, file3.path, commander.path, express.path, jquery.path, moment.path]);
+            // Commander: Existed as a JS file
+            // JQuery: Specified in 'include'
+            // Moment: Specified in 'include'
+            // Express: Specified in package.json
+            // lodash: Excluded (not present)
+            checkProjectActualFiles(p, [file3Dts.path, commander.path, jquery.path, moment.path, express.path]);
             installWorkerSpy.revoke();
         });
 
@@ -453,7 +515,7 @@ namespace ts.projectSystem {
 
             const p = projectService.externalProjects[0];
             projectService.checkNumberOfProjects({ externalProjects: 1 });
-            checkProjectActualFiles(p, [lodashJs.path, commanderJs.path, file3.path]);
+            checkProjectActualFiles(p, [file3.path]);
             installer.checkPendingCommands(/*expectedCount*/ 1);
             installer.executePendingCommands();
             // expected all typings file to exist
@@ -462,7 +524,7 @@ namespace ts.projectSystem {
             }
             host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            checkProjectActualFiles(p, [lodashJs.path, commanderJs.path, file3.path, commander.path, express.path, jquery.path, moment.path, lodash.path]);
+            checkProjectActualFiles(p, [file3.path, commander.path, express.path, jquery.path, moment.path, lodash.path]);
             installWorkerSpy.revoke();
         });
 
@@ -543,7 +605,7 @@ namespace ts.projectSystem {
             const p1 = projectService.externalProjects[0];
             const p2 = projectService.externalProjects[1];
             projectService.checkNumberOfProjects({ externalProjects: 2 });
-            checkProjectActualFiles(p1, [lodashJs.path, commanderJs.path, file3.path]);
+            checkProjectActualFiles(p1, [file3.path]);
             checkProjectActualFiles(p2, [file3.path]);
 
             installer.executePendingCommands();
@@ -553,8 +615,8 @@ namespace ts.projectSystem {
             assert.equal(installer.pendingRunRequests.length, 0, "expected no throttled requests");
 
             installer.executePendingCommands();
-            host.checkTimeoutQueueLengthAndRun(3);
-            checkProjectActualFiles(p1, [lodashJs.path, commanderJs.path, file3.path, commander.path, jquery.path, lodash.path, cordova.path]);
+            host.checkTimeoutQueueLengthAndRun(3); // for 2 projects and 1 refreshing inferred project
+            checkProjectActualFiles(p1, [file3.path, commander.path, jquery.path, lodash.path, cordova.path]);
             checkProjectActualFiles(p2, [file3.path, grunt.path, gulp.path]);
             installWorkerSpy.revoke();
         });
@@ -779,7 +841,7 @@ namespace ts.projectSystem {
             installWorkerSpy.revoke();
         });
 
-        it("cached unresolved typings are not recomputed if program structure did not change", () => {
+        it("should recompute resolutions after typings are installed", () => {
             const host = new fakes.FakeServerHost({ safeList: true });
             const session = createSession(host);
             const f = {
@@ -821,7 +883,7 @@ namespace ts.projectSystem {
             session.executeCommand(changeRequest);
             host.checkTimeoutQueueLengthAndRun(2); // This enqueues the updategraph and refresh inferred projects
             const version2 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
-            assert.equal(version1, version2, "set of unresolved imports should not change");
+            assert.notEqual(version1, version2, "set of unresolved imports should change");
         });
     });
 

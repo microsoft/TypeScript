@@ -1,4 +1,4 @@
-tests/cases/conformance/statements/for-ofStatements/ES5For-of7.ts(6,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' has type 'any' at tests/cases/conformance/statements/for-ofStatements/ES5For-of7.ts 1:8, but here has type 'any[]'.
+tests/cases/conformance/statements/for-ofStatements/ES5For-of7.ts(6,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'any', but here has type 'any[]'.
 
 
 ==== tests/cases/conformance/statements/for-ofStatements/ES5For-of7.ts (1 errors) ====
@@ -9,5 +9,5 @@ tests/cases/conformance/statements/for-ofStatements/ES5For-of7.ts(6,9): error TS
     for (var v of []) {
         var x = [w, v];
             ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' has type 'any' at tests/cases/conformance/statements/for-ofStatements/ES5For-of7.ts 1:8, but here has type 'any[]'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'any', but here has type 'any[]'.
     }

@@ -118,6 +118,7 @@
         "./unittests/reuseProgramStructure.ts",
         "./unittests/moduleResolution.ts",
         "./unittests/tsconfigParsing.ts",
+        "./unittests/asserts.ts",
         "./unittests/builder.ts",
         "./unittests/commandLineParsing.ts",
         "./unittests/configurationExtension.ts",

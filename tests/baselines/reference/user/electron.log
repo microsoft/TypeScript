@@ -1,4 +1,4 @@
-Exit Code: 2
+Exit Code: 1
 Standard output:
 node_modules/electron/electron.d.ts(5390,13): error TS2430: Interface 'WebviewTag' incorrectly extends interface 'HTMLElement'.
   Types of property 'addEventListener' are incompatible.

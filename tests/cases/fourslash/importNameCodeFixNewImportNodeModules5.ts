@@ -18,8 +18,5 @@
 ////   "types": "bin/lib/libfile.d.ts"
 //// }
 
-verify.importFixAtPosition([
-`import { f1 } from "package-name/node_modules/package-name2";
-
-f1('');`
-]);
+// No fix because this accesses a nested node_modules
+verify.not.codeFixAvailable();

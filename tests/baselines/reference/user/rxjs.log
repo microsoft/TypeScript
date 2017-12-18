@@ -1,4 +1,4 @@
-Exit Code: 2
+Exit Code: 1
 Standard output:
 node_modules/rxjs/scheduler/VirtualTimeScheduler.d.ts(22,22): error TS2415: Class 'VirtualAction<T>' incorrectly extends base class 'AsyncAction<T>'.
   Types of property 'work' are incompatible.

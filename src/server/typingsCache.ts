@@ -1,14 +1,15 @@
 /// <reference path="project.ts"/>
 
 namespace ts.server {
-    export interface InstallPackageOptionsWithProjectRootPath extends InstallPackageOptions {
+    export interface InstallPackageOptionsWithProject extends InstallPackageOptions {
+        projectName: string;
         projectRootPath: Path;
     }
 
     // tslint:disable-next-line interface-name (for backwards-compatibility)
     export interface ITypingsInstaller {
         isKnownTypesPackageName(name: string): boolean;
-        installPackage(options: InstallPackageOptionsWithProjectRootPath): Promise<ApplyCodeActionCommandResult>;
+        installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult>;
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
@@ -91,7 +92,7 @@ namespace ts.server {
             return this.installer.isKnownTypesPackageName(name);
         }
 
-        installPackage(options: InstallPackageOptionsWithProjectRootPath): Promise<ApplyCodeActionCommandResult> {
+        installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult> {
             return this.installer.installPackage(options);
         }
 

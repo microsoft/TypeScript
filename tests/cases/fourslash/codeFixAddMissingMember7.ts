@@ -9,7 +9,7 @@
 ////}
 
 verify.codeFix({
-    description: "Initialize static property 'foo'.",
+    description: "Initialize static property 'foo'",
     index: 2,
     // TODO: GH#18445
     newFileContent: `class C {

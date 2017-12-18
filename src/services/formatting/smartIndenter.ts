@@ -36,24 +36,7 @@ namespace ts.formatting {
 
             const enclosingCommentRange = getRangeOfEnclosingComment(sourceFile, position, /*onlyMultiLine*/ true, precedingToken || null); // tslint:disable-line:no-null-keyword
             if (enclosingCommentRange) {
-                const previousLine = getLineAndCharacterOfPosition(sourceFile, position).line - 1;
-                const commentStartLine = getLineAndCharacterOfPosition(sourceFile, enclosingCommentRange.pos).line;
-
-                Debug.assert(commentStartLine >= 0);
-
-                if (previousLine <= commentStartLine) {
-                    return findFirstNonWhitespaceColumn(getStartPositionOfLine(commentStartLine, sourceFile), position, sourceFile, options);
-                }
-
-                const startPostionOfLine = getStartPositionOfLine(previousLine, sourceFile);
-                const { column, character } = findFirstNonWhitespaceCharacterAndColumn(startPostionOfLine, position, sourceFile, options);
-
-                if (column === 0) {
-                    return column;
-                }
-
-                const firstNonWhitespaceCharacterCode = sourceFile.text.charCodeAt(startPostionOfLine + character);
-                return firstNonWhitespaceCharacterCode === CharacterCodes.asterisk ? column - 1 : column;
+                return getCommentIndent(sourceFile, position, options, enclosingCommentRange);
             }
 
             if (!precedingToken) {
@@ -72,20 +55,7 @@ namespace ts.formatting {
             // for block indentation, we should look for a line which contains something that's not
             // whitespace.
             if (options.indentStyle === IndentStyle.Block) {
-
-                // move backwards until we find a line with a non-whitespace character,
-                // then find the first non-whitespace character for that line.
-                let current = position;
-                while (current > 0) {
-                    const char = sourceFile.text.charCodeAt(current);
-                    if (!isWhiteSpaceLike(char)) {
-                        break;
-                    }
-                    current--;
-                }
-
-                const lineStart = ts.getLineStartPositionForPosition(current, sourceFile);
-                return SmartIndenter.findFirstNonWhitespaceColumn(lineStart, current, sourceFile, options);
+                return getBlockIndent(sourceFile, position, options);
             }
 
             if (precedingToken.kind === SyntaxKind.CommaToken && precedingToken.parent.kind !== SyntaxKind.BinaryExpression) {
@@ -96,26 +66,60 @@ namespace ts.formatting {
                 }
             }
 
+            return getSmartIndent(sourceFile, position, precedingToken, lineAtPosition, assumeNewLineBeforeCloseBrace, options);
+        }
+
+        function getCommentIndent(sourceFile: SourceFile, position: number, options: EditorSettings, enclosingCommentRange: CommentRange): number {
+            const previousLine = getLineAndCharacterOfPosition(sourceFile, position).line - 1;
+            const commentStartLine = getLineAndCharacterOfPosition(sourceFile, enclosingCommentRange.pos).line;
+
+            Debug.assert(commentStartLine >= 0);
+
+            if (previousLine <= commentStartLine) {
+                return findFirstNonWhitespaceColumn(getStartPositionOfLine(commentStartLine, sourceFile), position, sourceFile, options);
+            }
+
+            const startPostionOfLine = getStartPositionOfLine(previousLine, sourceFile);
+            const { column, character } = findFirstNonWhitespaceCharacterAndColumn(startPostionOfLine, position, sourceFile, options);
+
+            if (column === 0) {
+                return column;
+            }
+
+            const firstNonWhitespaceCharacterCode = sourceFile.text.charCodeAt(startPostionOfLine + character);
+            return firstNonWhitespaceCharacterCode === CharacterCodes.asterisk ? column - 1 : column;
+        }
+
+        function getBlockIndent(sourceFile: SourceFile, position: number, options: EditorSettings): number {
+            // move backwards until we find a line with a non-whitespace character,
+            // then find the first non-whitespace character for that line.
+            let current = position;
+            while (current > 0) {
+                const char = sourceFile.text.charCodeAt(current);
+                if (!isWhiteSpaceLike(char)) {
+                    break;
+                }
+                current--;
+            }
+
+            const lineStart = ts.getLineStartPositionForPosition(current, sourceFile);
+            return findFirstNonWhitespaceColumn(lineStart, current, sourceFile, options);
+        }
+
+        function getSmartIndent(sourceFile: SourceFile, position: number, precedingToken: Node, lineAtPosition: number, assumeNewLineBeforeCloseBrace: boolean, options: EditorSettings): number {
             // try to find node that can contribute to indentation and includes 'position' starting from 'precedingToken'
             // if such node is found - compute initial indentation for 'position' inside this node
-            let previous: Node;
+            let previous: Node | undefined;
             let current = precedingToken;
-            let currentStart: LineAndCharacter;
-            let indentationDelta: number;
-
             while (current) {
-                if (positionBelongsToNode(current, position, sourceFile) && shouldIndentChildNode(current, previous)) {
-                    currentStart = getStartLineAndCharacterForNode(current, sourceFile);
-
+                if (positionBelongsToNode(current, position, sourceFile) && shouldIndentChildNode(current, previous, /*isNextChild*/ true)) {
+                    const currentStart = getStartLineAndCharacterForNode(current, sourceFile);
                     const nextTokenKind = nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken, current, lineAtPosition, sourceFile);
-                    if (nextTokenKind !== NextTokenKind.Unknown) {
+                    const indentationDelta = nextTokenKind !== NextTokenKind.Unknown
                         // handle cases when codefix is about to be inserted before the close brace
-                        indentationDelta = assumeNewLineBeforeCloseBrace && nextTokenKind === NextTokenKind.CloseBrace ? options.indentSize : 0;
-                    }
-                    else {
-                        indentationDelta = lineAtPosition !== currentStart.line ? options.indentSize : 0;
-                    }
-                    break;
+                        ? assumeNewLineBeforeCloseBrace && nextTokenKind === NextTokenKind.CloseBrace ? options.indentSize : 0
+                        : lineAtPosition !== currentStart.line ? options.indentSize : 0;
+                    return getIndentationForNodeWorker(current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta, sourceFile, /*isNextChild*/ true, options);
                 }
 
                 // check if current node is a list item - if yes, take indentation from it
@@ -131,18 +135,13 @@ namespace ts.formatting {
                 previous = current;
                 current = current.parent;
             }
-
-            if (!current) {
-                // no parent was found - return the base indentation of the SourceFile
-                return getBaseIndentation(options);
-            }
-
-            return getIndentationForNodeWorker(current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta, sourceFile, options);
+            // no parent was found - return the base indentation of the SourceFile
+            return getBaseIndentation(options);
         }
 
         export function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: EditorSettings): number {
             const start = sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile));
-            return getIndentationForNodeWorker(n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, options);
+            return getIndentationForNodeWorker(n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, /*isNextChild*/ false, options);
         }
 
         export function getBaseIndentation(options: EditorSettings) {
@@ -155,11 +154,9 @@ namespace ts.formatting {
             ignoreActualIndentationRange: TextRange,
             indentationDelta: number,
             sourceFile: SourceFile,
+            isNextChild: boolean,
             options: EditorSettings): number {
-
-            let parent: Node = current.parent;
-            let containingListOrParentStart: LineAndCharacter;
-
+            let parent = current.parent!;
             // Walk up the tree and collect indentation for parent-child node pairs. Indentation is not added if
             // * parent and child nodes start on the same line, or
             // * parent is an IfStatement and child starts on the same line as an 'else clause'.
@@ -178,7 +175,7 @@ namespace ts.formatting {
                     }
                 }
 
-                containingListOrParentStart = getContainingListOrParentStart(parent, current, sourceFile);
+                const containingListOrParentStart = getContainingListOrParentStart(parent, current, sourceFile);
                 const parentAndChildShareLine =
                     containingListOrParentStart.line === currentStart.line ||
                     childStartsOnTheSameLineWithElseInIfStatement(parent, current, currentStart.line, sourceFile);
@@ -196,7 +193,7 @@ namespace ts.formatting {
                 }
 
                 // increase indentation if parent node wants its content to be indented and parent and child nodes don't start on the same line
-                if (shouldIndentChildNode(parent, current) && !parentAndChildShareLine) {
+                if (shouldIndentChildNode(parent, current, isNextChild) && !parentAndChildShareLine) {
                     indentationDelta += options.indentSize;
                 }
 
@@ -214,7 +211,7 @@ namespace ts.formatting {
 
                 current = parent;
                 parent = current.parent;
-                currentStart = useTrueStart ? sourceFile.getLineAndCharacterOfPosition(current.getStart()) : containingListOrParentStart;
+                currentStart = useTrueStart ? sourceFile.getLineAndCharacterOfPosition(current.getStart(sourceFile)) : containingListOrParentStart;
             }
 
             return indentationDelta + getBaseIndentation(options);
@@ -533,8 +530,7 @@ namespace ts.formatting {
             return false;
         }
 
-        /* @internal */
-        export function nodeWillIndentChild(parent: TextRangeWithKind, child: TextRangeWithKind, indentByDefault: boolean) {
+        export function nodeWillIndentChild(parent: TextRangeWithKind, child: TextRangeWithKind | undefined, indentByDefault: boolean): boolean {
             const childKind = child ? child.kind : SyntaxKind.Unknown;
             switch (parent.kind) {
                 case SyntaxKind.DoStatement:
@@ -555,7 +551,7 @@ namespace ts.formatting {
                     return childKind !== SyntaxKind.NamedExports;
                 case SyntaxKind.ImportDeclaration:
                     return childKind !== SyntaxKind.ImportClause ||
-                        ((<ImportClause>child).namedBindings && (<ImportClause>child).namedBindings.kind !== SyntaxKind.NamedImports);
+                        (!!(<ImportClause>child).namedBindings && (<ImportClause>child).namedBindings.kind !== SyntaxKind.NamedImports);
                 case SyntaxKind.JsxElement:
                     return childKind !== SyntaxKind.JsxClosingElement;
             }
@@ -563,11 +559,44 @@ namespace ts.formatting {
             return indentByDefault;
         }
 
-        /*
-        Function returns true when the parent node should indent the given child by an explicit rule
-        */
-        export function shouldIndentChildNode(parent: TextRangeWithKind, child?: TextRangeWithKind): boolean {
-            return nodeContentIsAlwaysIndented(parent.kind) || nodeWillIndentChild(parent, child, /*indentByDefault*/ false);
+        function isControlFlowEndingStatement(kind: SyntaxKind, parent: TextRangeWithKind): boolean {
+            switch (kind) {
+                case SyntaxKind.ReturnStatement:
+                case SyntaxKind.ThrowStatement:
+                    switch (parent.kind) {
+                        case SyntaxKind.Block:
+                            const grandParent = (parent as Node).parent;
+                            switch (grandParent && grandParent.kind) {
+                                case SyntaxKind.FunctionDeclaration:
+                                case SyntaxKind.FunctionExpression:
+                                    // We may want to write inner functions after this.
+                                    return false;
+                                default:
+                                    return true;
+                            }
+                        case SyntaxKind.CaseClause:
+                        case SyntaxKind.DefaultClause:
+                        case SyntaxKind.SourceFile:
+                        case SyntaxKind.ModuleBlock:
+                            return true;
+                        default:
+                            throw Debug.fail();
+                    }
+                case SyntaxKind.ContinueStatement:
+                case SyntaxKind.BreakStatement:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        /**
+         * True when the parent node should indent the given child by an explicit rule.
+         * @param isNextChild If true, we are judging indent of a hypothetical child *after* this one, not the current child.
+         */
+        export function shouldIndentChildNode(parent: TextRangeWithKind, child?: TextRangeWithKind, isNextChild = false): boolean {
+            return (nodeContentIsAlwaysIndented(parent.kind) || nodeWillIndentChild(parent, child, /*indentByDefault*/ false))
+                && !(isNextChild && child && isControlFlowEndingStatement(child.kind, parent));
         }
     }
 }

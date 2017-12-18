@@ -20,7 +20,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function computeCommonSourceDirectoryOfFilenames(fileNames: string[], currentDirectory: string, getCanonicalFileName: (fileName: string) => string): string {
+    export function computeCommonSourceDirectoryOfFilenames(fileNames: string[], currentDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
         let commonPathComponents: string[];
         const failed = forEach(fileNames, sourceFile => {
             // Each file contributes into common source file path
@@ -704,7 +704,7 @@ namespace ts {
 
         interface OldProgramState {
             program: Program | undefined;
-            file: SourceFile;
+            oldSourceFile: SourceFile | undefined;
             /** The collection of paths modified *since* the old program. */
             modifiedFilePaths: Path[];
         }
@@ -753,7 +753,6 @@ namespace ts {
             let reusedNames: string[];
             /** A transient placeholder used to mark predicted resolution in the result list. */
             const predictedToResolveToAmbientModuleMarker: ResolvedModuleFull = <any>{};
-
 
             for (let i = 0; i < moduleNames.length; i++) {
                 const moduleName = moduleNames[i];
@@ -825,9 +824,13 @@ namespace ts {
             // If we change our policy of rechecking failed lookups on each program create,
             // we should adjust the value returned here.
             function moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName: string, oldProgramState: OldProgramState): boolean {
-                const resolutionToFile = getResolvedModule(oldProgramState.file, moduleName);
-                if (resolutionToFile) {
-                    // module used to be resolved to file - ignore it
+                const resolutionToFile = getResolvedModule(oldProgramState.oldSourceFile, moduleName);
+                const resolvedFile = resolutionToFile && oldProgramState.program && oldProgramState.program.getSourceFile(resolutionToFile.resolvedFileName);
+                if (resolutionToFile && resolvedFile && !resolvedFile.externalModuleIndicator) {
+                    // In the old program, we resolved to an ambient module that was in the same
+                    //   place as we expected to find an actual module file.
+                    // We actually need to return 'false' here even though this seems like a 'true' case
+                    //   because the normal module resolution algorithm will find this anyway.
                     return false;
                 }
                 const ambientModule = oldProgramState.program && oldProgramState.program.getTypeChecker().tryFindAmbientModuleWithoutAugmentations(moduleName);
@@ -1001,7 +1004,7 @@ namespace ts {
                 const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory);
                 if (resolveModuleNamesWorker) {
                     const moduleNames = getModuleNames(newSourceFile);
-                    const oldProgramState = { program: oldProgram, file: oldSourceFile, modifiedFilePaths };
+                    const oldProgramState: OldProgramState = { program: oldProgram, oldSourceFile, modifiedFilePaths };
                     const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFilePath, newSourceFile, oldProgramState);
                     // ensure that module resolution results are still correct
                     const resolutionsChanged = hasChangesInResolutions(moduleNames, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo);
@@ -1227,9 +1230,6 @@ namespace ts {
             if (isSourceFileJavaScript(sourceFile)) {
                 if (!sourceFile.additionalSyntacticDiagnostics) {
                     sourceFile.additionalSyntacticDiagnostics = getJavaScriptSyntacticDiagnosticsForFile(sourceFile);
-                    if (isCheckJsEnabledForFile(sourceFile, options)) {
-                        sourceFile.additionalSyntacticDiagnostics = concatenate(sourceFile.additionalSyntacticDiagnostics, sourceFile.jsDocDiagnostics);
-                    }
                 }
                 return concatenate(sourceFile.additionalSyntacticDiagnostics, sourceFile.parseDiagnostics);
             }
@@ -1276,15 +1276,18 @@ namespace ts {
 
                 Debug.assert(!!sourceFile.bindDiagnostics);
 
+                const isCheckJs = isCheckJsEnabledForFile(sourceFile, options);
                 // By default, only type-check .ts, .tsx, and 'External' files (external files are added by plugins)
                 const includeBindAndCheckDiagnostics = sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX ||
-                    sourceFile.scriptKind === ScriptKind.External || isCheckJsEnabledForFile(sourceFile, options);
+                    sourceFile.scriptKind === ScriptKind.External || isCheckJs;
                 const bindDiagnostics = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
                 const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
-
-                const diagnostics = bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
+                let diagnostics = bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
+                if (isCheckJs) {
+                    diagnostics = concatenate(diagnostics, sourceFile.jsDocDiagnostics);
+                }
                 return filter(diagnostics, shouldReportDiagnostic);
             });
         }
@@ -1945,7 +1948,7 @@ namespace ts {
             if (file.imports.length || file.moduleAugmentations.length) {
                 // Because global augmentation doesn't have string literal name, we can check for global augmentation as such.
                 const moduleNames = getModuleNames(file);
-                const oldProgramState = { program: oldProgram, file, modifiedFilePaths };
+                const oldProgramState: OldProgramState = { program: oldProgram, oldSourceFile: oldProgram && oldProgram.getSourceFile(file.fileName), modifiedFilePaths };
                 const resolutions = resolveModuleNamesReusingOldState(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory), file, oldProgramState);
                 Debug.assert(resolutions.length === moduleNames.length);
                 for (let i = 0; i < moduleNames.length; i++) {

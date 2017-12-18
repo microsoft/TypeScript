@@ -62,6 +62,18 @@ declare function encodeURI(uri: string): string;
   */
 declare function encodeURIComponent(uriComponent: string): string;
 
+/**
+  * Computes a new string in which certain characters have been replaced by a hexadecimal escape sequence.
+  * @param string A string value
+  */
+declare function escape(string: string): string;
+
+/**
+  * Computes a new string in which hexadecimal escape sequences are replaced with the character that it represents.
+  * @param string A string value
+  */
+declare function unescape(string: string): string;
+
 interface PropertyDescriptor {
     configurable?: boolean;
     enumerable?: boolean;
@@ -538,7 +550,7 @@ interface Math {
       */
     atan2(y: number, x: number): number;
     /**
-      * Returns the smallest number greater than or equal to its numeric argument.
+      * Returns the smallest integer greater than or equal to its numeric argument.
       * @param x A numeric expression.
       */
     ceil(x: number): number;
@@ -553,7 +565,7 @@ interface Math {
       */
     exp(x: number): number;
     /**
-      * Returns the greatest number less than or equal to its numeric argument.
+      * Returns the greatest integer less than or equal to its numeric argument.
       * @param x A numeric expression.
       */
     floor(x: number): number;
@@ -980,12 +992,12 @@ interface ReadonlyArray<T> {
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    concat(...items: ReadonlyArray<T>[]): T[];
+    concat(...items: (T[] | ReadonlyArray<T>)[]): T[];
     /**
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    concat(...items: (T | ReadonlyArray<T>)[]): T[];
+    concat(...items: (T | T[] | ReadonlyArray<T>)[]): T[];
     /**
       * Adds all the elements of an array separated by the specified separator string.
       * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
@@ -1101,12 +1113,12 @@ interface Array<T> {
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    concat(...items: ReadonlyArray<T>[]): T[];
+    concat(...items: (T[] | ReadonlyArray<T>)[]): T[];
     /**
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    concat(...items: (T | ReadonlyArray<T>)[]): T[];
+    concat(...items: (T | T[] | ReadonlyArray<T>)[]): T[];
     /**
       * Adds all the elements of an array separated by the specified separator string.
       * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.

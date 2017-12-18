@@ -2553,7 +2553,7 @@ namespace ts {
         }
 
         /**
-         * Visits an ObjectLiteralExpression with computed propety names.
+         * Visits an ObjectLiteralExpression with computed property names.
          *
          * @param node An ObjectLiteralExpression node.
          */
@@ -3633,7 +3633,7 @@ namespace ts {
          * @param node A string literal.
          */
         function visitNumericLiteral(node: NumericLiteral) {
-            if (node.numericLiteralFlags & NumericLiteralFlags.BinaryOrOctalSpecifier) {
+            if (node.numericLiteralFlags & TokenFlags.BinaryOrOctalSpecifier) {
                 return setTextRange(createNumericLiteral(node.text), node);
             }
             return node;

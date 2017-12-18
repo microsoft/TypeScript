@@ -5,7 +5,7 @@
 var NUMBER1 = var NUMBER-;  //expect error
 >NUMBER1 : any
 > : any
->NUMBER : number
+>NUMBER : any
 >- : number
 > : any
 
@@ -36,7 +36,7 @@ var NUMBER4 = -(undefined - undefined);
 
 // miss operand
 var NUMBER =-;
->NUMBER : number
+>NUMBER : any
 >- : number
 > : any
 

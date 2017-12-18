@@ -792,7 +792,7 @@ namespace ts.formatting {
                     processTrivia(currentTokenInfo.leadingTrivia, parent, childContextNode, dynamicIndentation);
                 }
 
-                let lineAdded: boolean;
+                let lineAction = LineAction.None;
                 const isTokenInRange = rangeContainsRange(originalRange, currentTokenInfo.token);
 
                 const tokenStart = sourceFile.getLineAndCharacterOfPosition(currentTokenInfo.token.pos);
@@ -800,19 +800,16 @@ namespace ts.formatting {
                     const rangeHasError = rangeContainsError(currentTokenInfo.token);
                     // save previousRange since processRange will overwrite this value with current one
                     const savePreviousRange = previousRange;
-                    lineAdded = processRange(currentTokenInfo.token, tokenStart, parent, childContextNode, dynamicIndentation);
-                    if (rangeHasError) {
-                        // do not indent comments\token if token range overlaps with some error
-                        indentToken = false;
-                    }
-                    else {
-                        if (lineAdded !== undefined) {
-                            indentToken = lineAdded;
-                        }
-                        else {
+                    lineAction = processRange(currentTokenInfo.token, tokenStart, parent, childContextNode, dynamicIndentation);
+                    // do not indent comments\token if token range overlaps with some error
+                    if (!rangeHasError) {
+                        if (lineAction === LineAction.None) {
                             // indent token only if end line of previous range does not match start line of the token
                             const prevEndLine = savePreviousRange && sourceFile.getLineAndCharacterOfPosition(savePreviousRange.end).line;
                             indentToken = lastTriviaWasNewLine && tokenStart.line !== prevEndLine;
+                        }
+                        else {
+                            indentToken = lineAction === LineAction.LineAdded;
                         }
                     }
                 }
@@ -854,7 +851,7 @@ namespace ts.formatting {
 
                     // indent token only if is it is in target range and does not overlap with any error ranges
                     if (tokenIndentation !== Constants.Unknown && indentNextTokenOrTrivia) {
-                        insertIndentation(currentTokenInfo.token.pos, tokenIndentation, lineAdded);
+                        insertIndentation(currentTokenInfo.token.pos, tokenIndentation, lineAction === LineAction.LineAdded);
 
                         lastIndentedLine = tokenStart.line;
                         indentationOnLastIndentedLine = tokenIndentation;
@@ -880,10 +877,10 @@ namespace ts.formatting {
             rangeStart: LineAndCharacter,
             parent: Node,
             contextNode: Node,
-            dynamicIndentation: DynamicIndentation): boolean {
+            dynamicIndentation: DynamicIndentation): LineAction {
 
             const rangeHasError = rangeContainsError(range);
-            let lineAdded: boolean;
+            let lineAction = LineAction.None;
             if (!rangeHasError) {
                 if (!previousRange) {
                     // trim whitespaces starting from the beginning of the span up to the current line
@@ -891,7 +888,7 @@ namespace ts.formatting {
                     trimTrailingWhitespacesForLines(originalStart.line, rangeStart.line);
                 }
                 else {
-                    lineAdded =
+                    lineAction =
                         processPair(range, rangeStart.line, parent, previousRange, previousRangeStartLine, previousParent, contextNode, dynamicIndentation);
                 }
             }
@@ -900,7 +897,7 @@ namespace ts.formatting {
             previousParent = parent;
             previousRangeStartLine = rangeStart.line;
 
-            return lineAdded;
+            return lineAction;
         }
 
         function processPair(currentItem: TextRangeWithKind,
@@ -910,19 +907,19 @@ namespace ts.formatting {
             previousStartLine: number,
             previousParent: Node,
             contextNode: Node,
-            dynamicIndentation: DynamicIndentation): boolean {
+            dynamicIndentation: DynamicIndentation): LineAction {
 
             formattingContext.updateContext(previousItem, previousParent, currentItem, currentParent, contextNode);
 
             const rule = getRule(formattingContext);
 
             let trimTrailingWhitespaces: boolean;
-            let lineAdded: boolean;
+            let lineAction = LineAction.None;
             if (rule) {
                 applyRuleEdits(rule, previousItem, previousStartLine, currentItem, currentStartLine);
 
                 if (rule.action & (RuleAction.Space | RuleAction.Delete) && currentStartLine !== previousStartLine) {
-                    lineAdded = false;
+                    lineAction = LineAction.LineRemoved;
                     // Handle the case where the next line is moved to be the end of this line.
                     // In this case we don't indent the next line in the next pass.
                     if (currentParent.getStart(sourceFile) === currentItem.pos) {
@@ -930,7 +927,7 @@ namespace ts.formatting {
                     }
                 }
                 else if (rule.action & RuleAction.NewLine && currentStartLine === previousStartLine) {
-                    lineAdded = true;
+                    lineAction = LineAction.LineAdded;
                     // Handle the case where token2 is moved to the new line.
                     // In this case we indent token2 in the next pass but we set
                     // sameLineIndent flag to notify the indenter that the indentation is within the line.
@@ -951,7 +948,7 @@ namespace ts.formatting {
                 trimTrailingWhitespacesForLines(previousStartLine, currentStartLine, previousItem);
             }
 
-            return lineAdded;
+            return lineAction;
         }
 
         function insertIndentation(pos: number, indentation: number, lineAdded: boolean): void {
@@ -1153,6 +1150,8 @@ namespace ts.formatting {
             }
         }
     }
+
+    const enum LineAction { None, LineAdded, LineRemoved }
 
     /**
      * @param precedingToken pass `null` if preceding token was already computed and result was `undefined`.

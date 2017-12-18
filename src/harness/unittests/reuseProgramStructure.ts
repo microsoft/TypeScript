@@ -346,7 +346,7 @@ namespace ts {
 
             const newTexts: NamedSourceText[] = files.concat([{ name: "non-existing-file.ts", text: SourceText.New("", "", `var x = 1`) }]);
             const program2 = updateProgram(program1, ["a.ts"], options, noop, newTexts);
-            assert.deepEqual(emptyArray, program2.getMissingFilePaths());
+            assert.lengthOf(program2.getMissingFilePaths(), 0);
 
             assert.equal(StructureIsReused.Not, program1.structureIsReused);
         });
@@ -388,6 +388,19 @@ namespace ts {
             });
             assert.equal(program3.structureIsReused, StructureIsReused.SafeModules);
             checkResolvedModulesCache(program4, "a.ts", createMapFromTemplate({ b: createResolvedModule("b.ts"), c: undefined }));
+        });
+
+        it("set the resolvedImports after re-using an ambient external module declaration", () => {
+            const files = [
+                { name: "/a.ts", text: SourceText.New("", "", 'import * as a from "a";') },
+                { name: "/types/zzz/index.d.ts", text: SourceText.New("", "", 'declare module "a" { }') },
+            ];
+            const options: CompilerOptions = { target, typeRoots: ["/types"] };
+            const program1 = newProgram(files, ["/a.ts"], options);
+            const program2 = updateProgram(program1, ["/a.ts"], options, files => {
+                files[0].text = files[0].text.updateProgram('import * as aa from "a";');
+            });
+            assert.isDefined(program2.getSourceFile("/a.ts").resolvedModules.get("a"), "'a' is not an unresolved module after re-use");
         });
 
         it("resolved type directives cache follows type directives", () => {
@@ -827,12 +840,12 @@ namespace ts {
                     updateProgramText(files, root, "const x = 1;");
                 });
                 assert.equal(program1.structureIsReused, StructureIsReused.Completely);
-                assert.deepEqual(program2.getSemanticDiagnostics(), emptyArray);
+                assert.lengthOf(program2.getSemanticDiagnostics(), 0);
             });
 
             it("Target changes -> redirect broken", () => {
                 const program1 = createRedirectProgram();
-                assert.deepEqual(program1.getSemanticDiagnostics(), emptyArray);
+                assert.lengthOf(program1.getSemanticDiagnostics(), 0);
 
                 const program2 = updateRedirectProgram(program1, files => {
                     updateProgramText(files, axIndex, "export default class X { private x: number; private y: number; }");

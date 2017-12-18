@@ -7,7 +7,7 @@
 //// }
 
 verify.codeFix({
-    description: "Remove declaration for: 'x'.",
+    description: "Remove declaration for: 'x'",
     index: 0,
     newRangeContent: "return () => {}",
 });

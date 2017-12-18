@@ -53,7 +53,7 @@ declare namespace ts.server {
         readonly kind: "typesRegistry";
     }
 
-    export interface InstallPackageRequest {
+    export interface InstallPackageRequest extends TypingInstallerRequestWithProjectName {
         readonly kind: "installPackage";
         readonly fileName: Path;
         readonly packageName: string;
@@ -62,14 +62,14 @@ declare namespace ts.server {
 
     export type ActionSet = "action::set";
     export type ActionInvalidate = "action::invalidate";
+    export type ActionPackageInstalled = "action::packageInstalled";
     export type EventTypesRegistry = "event::typesRegistry";
-    export type EventPackageInstalled = "event::packageInstalled";
     export type EventBeginInstallTypes = "event::beginInstallTypes";
     export type EventEndInstallTypes = "event::endInstallTypes";
     export type EventInitializationFailed = "event::initializationFailed";
 
     export interface TypingInstallerResponse {
-        readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | EventPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
+        readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
     }
     /* @internal */
     export type TypingInstallerResponseUnion = SetTypings | InvalidateCachedTypings | TypesRegistryResponse | PackageInstalledResponse | InstallTypes | InitializationFailedResponse;
@@ -80,9 +80,8 @@ declare namespace ts.server {
         readonly typesRegistry: MapLike<void>;
     }
 
-    /* @internal */
-    export interface PackageInstalledResponse extends TypingInstallerResponse {
-        readonly kind: EventPackageInstalled;
+    export interface PackageInstalledResponse extends ProjectResponse {
+        readonly kind: ActionPackageInstalled;
         readonly success: boolean;
         readonly message: string;
     }

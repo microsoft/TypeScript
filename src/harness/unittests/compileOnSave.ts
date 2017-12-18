@@ -362,6 +362,21 @@ namespace ts.projectSystem {
                     []);
             });
 
+            it("should return empty array if noEmit is set", () => {
+                const host = new fakes.FakeServerHost({ lib: true });
+                const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ "compileOnSave": true, "compilerOptions": { "noEmit": true } }`);
+                const moduleFile1 = host.vfs.addFile("/a/b/moduleFile1.ts", `export function Foo() { };`);
+                host.vfs.addFile("/a/b/file1Consumer1.ts", `import {Foo} from "./moduleFile1"; export var y = 10;`);
+                host.vfs.addFile("/a/b/file1Consumer2.ts", `import {Foo} from "./moduleFile1"; let z = 10;`);
+
+                const typingsInstaller = createTestTypingsInstaller(host);
+                const session = createSession(host, typingsInstaller);
+                openFilesForSession([moduleFile1], session);
+                sendAffectedFileRequestAndCheckResult(session,
+                    { projectFileName: configFile.path, file: moduleFile1.path },
+                    []);
+            });
+
             it("should save when compileOnSave is enabled in base tsconfig.json", () => {
                 const host = new fakes.FakeServerHost({ lib: true });
                 const configFile = host.vfs.addFile("/a/b/tsconfig.json", `{ "extends": "/a/tsconfig.json" }`);

@@ -53,6 +53,11 @@ namespace ts.server {
     }
 
     /* @internal */
+    export function hasNoTypeScriptSource(fileNames: string[]): boolean {
+        return !fileNames.some(fileName => (fileExtensionIs(fileName, Extension.Ts) && !fileExtensionIs(fileName, Extension.Dts)) || fileExtensionIs(fileName, Extension.Tsx));
+    }
+
+    /* @internal */
     export interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {
         projectErrors: ReadonlyArray<Diagnostic>;
     }
@@ -244,7 +249,7 @@ namespace ts.server {
             return this.typingsCache.isKnownTypesPackageName(name);
         }
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult> {
-            return this.typingsCache.installPackage({ ...options, projectRootPath: this.toPath(this.currentDirectory) });
+            return this.typingsCache.installPackage({ ...options, projectName: this.projectName, projectRootPath: this.toPath(this.currentDirectory) });
         }
         private get typingsCache(): TypingsCache {
             return this.projectService.typingsCache;
@@ -501,6 +506,14 @@ namespace ts.server {
         }
         abstract getTypeAcquisition(): TypeAcquisition;
 
+        protected removeLocalTypingsFromTypeAcquisition(newTypeAcquisition: TypeAcquisition): TypeAcquisition {
+            if (!newTypeAcquisition || !newTypeAcquisition.include) {
+                // Nothing to filter out, so just return as-is
+                return newTypeAcquisition;
+            }
+            return { ...newTypeAcquisition, include: this.removeExistingTypings(newTypeAcquisition.include) };
+        }
+
         getExternalFiles(): SortedReadonlyArray<string> {
             return emptyArray as SortedReadonlyArray<string>;
         }
@@ -713,7 +726,8 @@ namespace ts.server {
             this.projectStateVersion++;
         }
 
-        private extractUnresolvedImportsFromSourceFile(file: SourceFile, result: Push<string>) {
+        /* @internal */
+        private extractUnresolvedImportsFromSourceFile(file: SourceFile, result: Push<string>, ambientModules: string[]) {
             const cached = this.cachedUnresolvedImportsPerFile.get(file.path);
             if (cached) {
                 // found cached result - use it and return
@@ -726,7 +740,7 @@ namespace ts.server {
             if (file.resolvedModules) {
                 file.resolvedModules.forEach((resolvedModule, name) => {
                     // pick unresolved non-relative names
-                    if (!resolvedModule && !isExternalModuleNameRelative(name)) {
+                    if (!resolvedModule && !isExternalModuleNameRelative(name) && !isAmbientlyDeclaredModule(name)) {
                         // for non-scoped names extract part up-to the first slash
                         // for scoped names - extract up to the second slash
                         let trimmed = name.trim();
@@ -743,6 +757,10 @@ namespace ts.server {
                 });
             }
             this.cachedUnresolvedImportsPerFile.set(file.path, unresolvedImports || emptyArray);
+
+            function isAmbientlyDeclaredModule(name: string) {
+                return ambientModules.some(m => m === name);
+            }
         }
 
         /**
@@ -772,8 +790,9 @@ namespace ts.server {
                 // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
                 if (hasChanges || changedFiles.length) {
                     const result: string[] = [];
+                    const ambientModules = this.program.getTypeChecker().getAmbientModules().map(mod => stripQuotes(mod.getName()));
                     for (const sourceFile of this.program.getSourceFiles()) {
-                        this.extractUnresolvedImportsFromSourceFile(sourceFile, result);
+                        this.extractUnresolvedImportsFromSourceFile(sourceFile, result, ambientModules);
                     }
                     this.lastCachedUnresolvedImportsList = toDeduplicatedSortedArray(result);
                 }
@@ -797,6 +816,13 @@ namespace ts.server {
                 this.projectStructureVersion++;
             }
             return !hasChanges;
+        }
+
+
+
+        protected removeExistingTypings(include: string[]): string[] {
+            const existing = ts.getAutomaticTypeDirectiveNames(this.getCompilerOptions(), this.directoryStructureHost);
+            return include.filter(i => existing.indexOf(i) < 0);
         }
 
         private setTypings(typings: SortedReadonlyArray<string>): boolean {
@@ -1294,7 +1320,7 @@ namespace ts.server {
         }
 
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void {
-            this.typeAcquisition = newTypeAcquisition;
+            this.typeAcquisition = this.removeLocalTypingsFromTypeAcquisition(newTypeAcquisition);
         }
 
         getTypeAcquisition() {
@@ -1436,27 +1462,11 @@ namespace ts.server {
         }
 
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void {
-            if (!newTypeAcquisition) {
-                // set default typings options
-                newTypeAcquisition = {
-                    enable: allRootFilesAreJsOrDts(this),
-                    include: [],
-                    exclude: []
-                };
-            }
-            else {
-                if (newTypeAcquisition.enable === undefined) {
-                    // if autoDiscovery was not specified by the caller - set it based on the content of the project
-                    newTypeAcquisition.enable = allRootFilesAreJsOrDts(this);
-                }
-                if (!newTypeAcquisition.include) {
-                    newTypeAcquisition.include = [];
-                }
-                if (!newTypeAcquisition.exclude) {
-                    newTypeAcquisition.exclude = [];
-                }
-            }
-            this.typeAcquisition = newTypeAcquisition;
+            Debug.assert(!!newTypeAcquisition, "newTypeAcquisition may not be null/undefined");
+            Debug.assert(!!newTypeAcquisition.include, "newTypeAcquisition.include may not be null/undefined");
+            Debug.assert(!!newTypeAcquisition.exclude, "newTypeAcquisition.exclude may not be null/undefined");
+            Debug.assert(typeof newTypeAcquisition.enable === "boolean", "newTypeAcquisition.enable may not be null/undefined");
+            this.typeAcquisition = this.removeLocalTypingsFromTypeAcquisition(newTypeAcquisition);
         }
     }
 }

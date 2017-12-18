@@ -10,7 +10,7 @@ type Data<T> = {
 };
 
 class Parent<M> {
-    private data: Data<M>;
+    constructor(private data: Data<M>) {}
     getData(): Data<M> {
         return this.data;
     }
@@ -50,7 +50,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var Parent = /** @class */ (function () {
-    function Parent() {
+    function Parent(data) {
+        this.data = data;
     }
     Parent.prototype.getData = function () {
         return this.data;

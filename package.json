@@ -31,7 +31,6 @@
     "devDependencies": {
         "@types/browserify": "latest",
         "@types/chai": "latest",
-        "@types/colors": "latest",
         "@types/convert-source-map": "latest",
         "@types/del": "latest",
         "@types/glob": "latest",
@@ -51,10 +50,10 @@
         "@types/source-map-support": "^0.4.0",
         "@types/through2": "latest",
         "@types/xml2js": "^0.4.0",
+        "xml2js": "^0.4.19",
         "browser-resolve": "^1.11.2",
         "browserify": "latest",
         "chai": "latest",
-        "colors": "latest",
         "convert-source-map": "latest",
         "del": "latest",
         "gulp": "3.X",
@@ -81,9 +80,9 @@
         "ts-node": "latest",
         "tslint": "latest",
         "typemock": "file:scripts/typemock",
-        "typescript": "next",
         "vinyl": "latest",
-        "xml2js": "^0.4.19"
+        "chalk": "latest",
+        "typescript": "next"
     },
     "scripts": {
         "pretest": "jake tests",

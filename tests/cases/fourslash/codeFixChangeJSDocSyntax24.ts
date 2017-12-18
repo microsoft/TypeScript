@@ -4,6 +4,6 @@
 ////}
 
 verify.codeFix({
-    description: "Change '*' to 'any'.",
+    description: "Change '*' to 'any'",
     newRangeContent: "any",
 });

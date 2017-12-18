@@ -27,14 +27,35 @@
 
 
 // Block scoped definitions work poorly for global variables, temporarily enable var
-/* tslint:disable:no-var-keyword prefer-const */
+/* tslint:disable:no-var-keyword */
 
 // this will work in the browser via browserify
 var _chai: typeof chai = require("chai");
 var assert: typeof _chai.assert = _chai.assert;
-// chai's builtin `assert.isFalse` is featureful but slow - we don't use those features,
-// so we'll just overwrite it as an alterative to migrating a bunch of code off of chai
-assert.isFalse = (expr, msg) => { if (expr as any as boolean !== false) throw new Error(msg); };
+{
+    // chai's builtin `assert.isFalse` is featureful but slow - we don't use those features,
+    // so we'll just overwrite it as an alterative to migrating a bunch of code off of chai
+    assert.isFalse = (expr, msg) => { if (expr as any as boolean !== false) throw new Error(msg); };
+
+    const assertDeepImpl = assert.deepEqual;
+    assert.deepEqual = (a, b, msg) => {
+        if (ts.isArray(a) && ts.isArray(b)) {
+            assertDeepImpl(arrayExtraKeysObject(a), arrayExtraKeysObject(b), "Array extra keys differ");
+        }
+        assertDeepImpl(a, b, msg);
+
+        function arrayExtraKeysObject(a: ReadonlyArray<{} | null | undefined>): object {
+            const obj: { [key: string]: {} | null | undefined } = {};
+            for (const key in a) {
+                if (Number.isNaN(Number(key))) {
+                    obj[key] = a[key];
+                }
+            }
+            return obj;
+        }
+    };
+}
+
 var global: NodeJS.Global = <any>Function("return this").call(undefined);
 
 declare var window: {};
@@ -138,7 +159,7 @@ namespace Utils {
         return content;
     }
 
-    export function memoize<T extends Function>(f: T, memoKey: (...anything: any[]) => string): T {
+    export function memoize<T extends ts.AnyFunction>(f: T, memoKey: (...anything: any[]) => string): T {
         const cache = ts.createMap<any>();
 
         return <any>(function(this: any, ...args: any[]) {

@@ -1,0 +1,15 @@
+tests/cases/compiler/bar.ts(1,35): error TS2524: 'await' expressions cannot be used in a parameter initializer.
+tests/cases/compiler/bar.ts(4,31): error TS2523: 'yield' expressions cannot be used in a parameter initializer.
+
+
+==== tests/cases/compiler/bar.ts (2 errors) ====
+    export async function foo({ foo = await import("./bar") }) {
+                                      ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2524: 'await' expressions cannot be used in a parameter initializer.
+    }
+    
+    export function* foo2({ foo = yield "a" }) {
+                                  ~~~~~~~~~
+!!! error TS2523: 'yield' expressions cannot be used in a parameter initializer.
+    }
+    

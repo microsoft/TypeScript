@@ -43,7 +43,7 @@ namespace ts.server {
                 return <Path>"";
             case ProjectKind.External:
                 const projectName = normalizeSlashes(project.getProjectName());
-                return project.projectService.host.fileExists(projectName) ? <Path>getDirectoryPath(projectName) : <Path>projectName;
+                return <Path>getDirectoryPath(projectName);
         }
     }
 

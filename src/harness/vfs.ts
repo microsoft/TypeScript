@@ -443,6 +443,11 @@ namespace vfs {
             return oldEntry !== undefined && this.root.replaceEntry(newpath, oldEntry);
         }
 
+        public realpath(path: string) {
+            const entry = this.getEntry(path, { followSymlinks: true });
+            return entry && entry.path || path;
+        }
+
         /**
          * Get file stats
          */

@@ -214,6 +214,8 @@ namespace ts.projectSystem {
 
     class TestSession extends server.Session {
         private seq = 0;
+        public events: protocol.Event[] = [];
+        public host: fakes.FakeServerHost;
 
         getProjectService() {
             return this.projectService;
@@ -232,6 +234,16 @@ namespace ts.projectSystem {
             request.seq = this.seq;
             request.type = "request";
             return this.executeCommand(<T>request);
+        }
+
+        public event<T extends object>(body: T, eventName: string) {
+            this.events.push(server.toEvent(eventName, body));
+            super.event(body, eventName);
+        }
+
+        public clearMessages() {
+            clear(this.events);
+            this.host.clearOutput();
         }
     }
 
@@ -461,48 +473,29 @@ namespace ts.projectSystem {
         verifyDiagnostics(actual, []);
     }
 
-    function assertEvent(actualOutput: string, expectedEvent: protocol.Event, host: ts.System) {
-        assert.equal(actualOutput, server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, host.newLine));
+    function checkErrorMessage(session: TestSession, eventName: "syntaxDiag" | "semanticDiag", diagnostics: protocol.DiagnosticEventBody) {
+        checkNthEvent(session, ts.server.toEvent(eventName, diagnostics), 0, /*isMostRecent*/ false);
     }
 
-    function checkErrorMessage(host: fakes.FakeServerHost, eventName: "syntaxDiag" | "semanticDiag", diagnostics: protocol.DiagnosticEventBody) {
-        const outputs = host.getOutput();
-        assert.isTrue(outputs.length >= 1, outputs.toString());
-        const event: protocol.Event = {
-            seq: 0,
-            type: "event",
-            event: eventName,
-            body: diagnostics
-        };
-        assertEvent(outputs[0], event, host);
+    function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number) {
+        checkNthEvent(session, ts.server.toEvent("requestCompleted", { request_seq: expectedSequenceId }), numberOfCurrentEvents - 1, /*isMostRecent*/ true);
     }
 
-    function checkCompleteEvent(host: fakes.FakeServerHost, numberOfCurrentEvents: number, expectedSequenceId: number) {
-        const outputs = host.getOutput();
-        assert.equal(outputs.length, numberOfCurrentEvents, outputs.toString());
-        const event: protocol.RequestCompletedEvent = {
-            seq: 0,
-            type: "event",
-            event: "requestCompleted",
-            body: {
-                request_seq: expectedSequenceId
-            }
-        };
-        assertEvent(outputs[numberOfCurrentEvents - 1], event, host);
+    function checkProjectUpdatedInBackgroundEvent(session: TestSession, openFiles: string[]) {
+        checkNthEvent(session, ts.server.toEvent("projectsUpdatedInBackground", { openFiles }), 0, /*isMostRecent*/ true);
     }
 
-    function checkProjectUpdatedInBackgroundEvent(host: fakes.FakeServerHost, openFiles: string[]) {
-        const outputs = host.getOutput();
-        assert.equal(outputs.length, 1, outputs.toString());
-        const event: protocol.ProjectsUpdatedInBackgroundEvent = {
-            seq: 0,
-            type: "event",
-            event: "projectsUpdatedInBackground",
-            body: {
-                openFiles
-            }
-        };
-        assertEvent(outputs[0], event, host);
+    function checkNthEvent(session: TestSession, expectedEvent: protocol.Event, index: number, isMostRecent: boolean) {
+        const events = session.events;
+        assert.deepEqual(events[index], expectedEvent);
+
+        const outputs = session.host.getOutput();
+        assert.equal(outputs[index], server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, session.host.newLine));
+
+        if (isMostRecent) {
+            assert.strictEqual(events.length, index + 1, JSON.stringify(events));
+            assert.strictEqual(outputs.length, index + 1, JSON.stringify(outputs));
+        }
     }
 
     function createServerHost(files: FileOrFolder[], options?: Partial<fakes.FakeServerHostOptions>) {
@@ -549,7 +542,7 @@ namespace ts.projectSystem {
         assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map: Actual keys: ${arrayFrom(map.keys())} Expected: ${expectedKeys}${getDiffInKeys(map, expectedKeys)}`);
     }
 
-    describe("tsserverProjectSystem", () => {
+    describe("tsserverProjectSystem general functionality", () => {
         describe("general", () => {
             const commonFile1: FileOrFolder = {
                 path: "/a/b/commonFile1.ts",
@@ -1541,7 +1534,7 @@ namespace ts.projectSystem {
 
             it("ignores files excluded by a custom safe type list", () => {
                 const file1 = {
-                    path: "/a/b/f1.ts",
+                path: "/a/b/f1.js",
                     content: "export let x = 5"
                 };
                 const office = {
@@ -1562,7 +1555,7 @@ namespace ts.projectSystem {
 
             it("ignores files excluded by the default type list", () => {
                 const file1 = {
-                    path: "/a/b/f1.ts",
+                path: "/a/b/f1.js",
                     content: "export let x = 5"
                 };
                 const minFile = {
@@ -1577,6 +1570,10 @@ namespace ts.projectSystem {
                     path: "/q/lib/kendo/kendo.ui.min.js",
                     content: "unspecified"
                 };
+            const kendoFile3 = {
+                path: "/q/lib/kendo-ui/kendo.all.js",
+                content: "unspecified"
+            };
                 const officeFile1 = {
                     path: "/scripts/Office/1/excel-15.debug.js",
                     content: "unspecified"
@@ -1585,7 +1582,7 @@ namespace ts.projectSystem {
                     path: "/scripts/Office/1/powerpoint.js",
                     content: "unspecified"
                 };
-                const files = [file1, minFile, kendoFile1, kendoFile2, officeFile1, officeFile2];
+            const files = [file1, minFile, kendoFile1, kendoFile2, kendoFile3, officeFile1, officeFile2];
                 const host = createServerHost(files);
                 const projectService = createProjectService(host);
                 try {
@@ -1623,7 +1620,11 @@ namespace ts.projectSystem {
                     path: "/a/b/foo.js",
                     content: ""
                 };
-                const host = createServerHost([file1, file2, customTypesMap]);
+            const file3 = {
+                path: "/a/b/Bacon.js",
+                content: "let y = 5"
+            };
+            const host = createServerHost([file1, file2, file3, customTypesMap]);
                 const projectService = createProjectService(host);
                 try {
                     projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path, file2.path]), typeAcquisition: { enable: true } });
@@ -2864,7 +2865,7 @@ namespace ts.projectSystem {
 
         });
 
-        describe("Proper errors", () => {
+    describe("tsserverProjectSystem Proper errors", () => {
             it("document is not contained in project", () => {
                 const file1 = {
                     path: "/a/b/app.ts",
@@ -2946,14 +2947,14 @@ namespace ts.projectSystem {
 
                     assert.isFalse(hasError);
                     host.checkTimeoutQueueLength(2);
-                    checkErrorMessage(host, "syntaxDiag", { file: untitledFile, diagnostics: [] });
-                    host.clearOutput();
+                checkErrorMessage(session, "syntaxDiag", { file: untitledFile, diagnostics: [] });
+                session.clearMessages();
 
                     host.runQueuedImmediateCallbacks();
                     assert.isFalse(hasError);
-                    checkErrorMessage(host, "semanticDiag", { file: untitledFile, diagnostics: [] });
+                checkErrorMessage(session, "semanticDiag", { file: untitledFile, diagnostics: [] });
 
-                    checkCompleteEvent(host, 2, expectedSequenceId);
+                checkCompleteEvent(session, 2, expectedSequenceId);
                 }
 
                 it("has projectRoot", () => {
@@ -2997,7 +2998,7 @@ namespace ts.projectSystem {
                 verifyErrorsInApp();
 
                 function verifyErrorsInApp() {
-                    host.clearOutput();
+                session.clearMessages();
                     const expectedSequenceId = session.getNextSeq();
                     session.executeCommandSeq<protocol.GeterrRequest>({
                         command: server.CommandNames.Geterr,
@@ -3007,18 +3008,18 @@ namespace ts.projectSystem {
                         }
                     });
                     host.checkTimeoutQueueLengthAndRun(1);
-                    checkErrorMessage(host, "syntaxDiag", { file: app.path, diagnostics: [] });
-                    host.clearOutput();
+                checkErrorMessage(session, "syntaxDiag", { file: app.path, diagnostics: [] });
+                session.clearMessages();
 
                     host.runQueuedImmediateCallbacks();
-                    checkErrorMessage(host, "semanticDiag", { file: app.path, diagnostics: [] });
-                    checkCompleteEvent(host, 2, expectedSequenceId);
-                    host.clearOutput();
+                checkErrorMessage(session, "semanticDiag", { file: app.path, diagnostics: [] });
+                checkCompleteEvent(session, 2, expectedSequenceId);
+                session.clearMessages();
                 }
             });
         });
 
-        describe("autoDiscovery", () => {
+    describe("tsserverProjectSystem autoDiscovery", () => {
             it("does not depend on extension", () => {
                 const file1 = {
                     path: "/a/b/app.html",
@@ -3041,7 +3042,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("extra resolution pass in lshost", () => {
+    describe("tsserverProjectSystem extra resolution pass in lshost", () => {
             it("can load typings that are proper modules", () => {
                 const file1 = {
                     path: "/a/b/app.js",
@@ -3081,7 +3082,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("navigate-to for javascript project", () => {
+    describe("tsserverProjectSystem navigate-to for javascript project", () => {
             function containsNavToItem(items: protocol.NavtoItem[], itemName: string, itemKind: string) {
                 return find(items, item => item.name === itemName && item.kind === itemKind) !== undefined;
             }
@@ -3110,7 +3111,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("external projects", () => {
+    describe("tsserverProjectSystem external projects", () => {
             it("correctly handling add/remove tsconfig - 1", () => {
                 const f1 = {
                     path: "/a/b/app.ts",
@@ -3336,7 +3337,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("prefer typings to js", () => {
+    describe("tsserverProjectSystem prefer typings to js", () => {
             it("during second resolution pass", () => {
                 const typingsCacheLocation = "/a/typings";
                 const f1 = {
@@ -3364,7 +3365,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("format settings", () => {
+    describe("tsserverProjectSystem format settings", () => {
             it("can be set globally", () => {
                 const f1 = {
                     path: "/a/b/app.ts",
@@ -3405,7 +3406,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("watching @types", () => {
+    describe("tsserverProjectSystem watching @types", () => {
             it("works correctly when typings are added or removed", () => {
                 const f1 = {
                     path: "/a/b/app.ts",
@@ -3451,7 +3452,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("Open-file", () => {
+    describe("tsserverProjectSystem Open-file", () => {
             it("can be reloaded with empty content", () => {
                 const f = {
                     path: "/a/b/app.ts",
@@ -3526,7 +3527,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("Language service", () => {
+    describe("tsserverProjectSystem Language service", () => {
             it("should work correctly on case-sensitive file systems", () => {
                 const lib = {
                     path: "/a/Lib/lib.d.ts",
@@ -3544,7 +3545,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("rename a module file and rename back", () => {
+    describe("tsserverProjectSystem rename a module file and rename back", () => {
             it("should restore the states for inferred projects", () => {
                 const moduleFile = {
                     path: "/a/b/moduleFile.ts",
@@ -3674,7 +3675,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("add the missing module file for inferred project", () => {
+    describe("tsserverProjectSystem add the missing module file for inferred project", () => {
             it("should remove the `module not found` error", () => {
                 const moduleFile = {
                     path: "/a/b/moduleFile.ts",
@@ -3731,7 +3732,7 @@ namespace ts.projectSystem {
                     }
                 });
                 checkNumberOfProjects(service, { inferredProjects: 1 });
-                host.clearOutput();
+            session.clearMessages();
                 const expectedSequenceId = session.getNextSeq();
                 session.executeCommandSeq<protocol.GeterrRequest>({
                     command: server.CommandNames.Geterr,
@@ -3742,23 +3743,24 @@ namespace ts.projectSystem {
                 });
 
                 host.checkTimeoutQueueLengthAndRun(1);
-                checkErrorMessage(host, "syntaxDiag", { file: file1.path, diagnostics: [] });
-                host.clearOutput();
+            checkErrorMessage(session, "syntaxDiag", { file: file1.path, diagnostics: [] });
+            session.clearMessages();
 
                 host.runQueuedImmediateCallbacks();
                 const moduleNotFound = Diagnostics.Cannot_find_module_0;
                 const startOffset = file1.content.indexOf('"') + 1;
-                checkErrorMessage(host, "semanticDiag", {
+            checkErrorMessage(session, "semanticDiag", {
                     file: file1.path, diagnostics: [{
                         start: { line: 1, offset: startOffset },
                         end: { line: 1, offset: startOffset + '"pad"'.length },
                         text: formatStringFromArgs(moduleNotFound.message, ["pad"]),
                         code: moduleNotFound.code,
-                        category: DiagnosticCategory[moduleNotFound.category].toLowerCase()
+                    category: DiagnosticCategory[moduleNotFound.category].toLowerCase(),
+                    source: undefined
                     }]
                 });
-                checkCompleteEvent(host, 2, expectedSequenceId);
-                host.clearOutput();
+            checkCompleteEvent(session, 2, expectedSequenceId);
+            session.clearMessages();
 
                 const padIndex: FileOrFolder = {
                     path: `${folderPath}/node_modules/@types/pad/index.d.ts`,
@@ -3772,19 +3774,19 @@ namespace ts.projectSystem {
                 host.vfs.watchFiles = true;
 
                 host.runQueuedTimeoutCallbacks();
-                checkProjectUpdatedInBackgroundEvent(host, [file1.path]);
-                host.clearOutput();
+            checkProjectUpdatedInBackgroundEvent(session, [file1.path]);
+            session.clearMessages();
 
                 host.runQueuedTimeoutCallbacks();
-                checkErrorMessage(host, "syntaxDiag", { file: file1.path, diagnostics: [] });
-                host.clearOutput();
+            checkErrorMessage(session, "syntaxDiag", { file: file1.path, diagnostics: [] });
+            session.clearMessages();
 
                 host.runQueuedImmediateCallbacks();
-                checkErrorMessage(host, "semanticDiag", { file: file1.path, diagnostics: [] });
+            checkErrorMessage(session, "semanticDiag", { file: file1.path, diagnostics: [] });
             });
         });
 
-        describe("Configure file diagnostics events", () => {
+    describe("tsserverProjectSystem Configure file diagnostics events", () => {
 
             it("are generated when the config file has errors", () => {
                 const file = {
@@ -3905,7 +3907,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("skipLibCheck", () => {
+    describe("tsserverProjectSystem skipLibCheck", () => {
             it("should be turned on for js-only inferred projects", () => {
                 const file1 = {
                     path: "/a/b/file1.js",
@@ -4133,7 +4135,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("non-existing directories listed in config file input array", () => {
+    describe("tsserverProjectSystem non-existing directories listed in config file input array", () => {
             it("should be tolerated without crashing the server", () => {
                 const configFile = {
                     path: "/a/b/tsconfig.json",
@@ -4188,7 +4190,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("reload", () => {
+    describe("tsserverProjectSystem reload", () => {
             it("should work with temp file", () => {
                 const f1 = {
                     path: "/a/b/app.ts",
@@ -4327,7 +4329,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("Inferred projects", () => {
+    describe("tsserverProjectSystem Inferred projects", () => {
             it("should support files without extensions", () => {
                 const f = {
                     path: "/a/compile",
@@ -4555,7 +4557,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("No overwrite emit error", () => {
+    describe("tsserverProjectSystem No overwrite emit error", () => {
             it("for inferred project", () => {
                 const f1 = {
                     path: "/a/b/f1.js",
@@ -4638,7 +4640,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("emit with outFile or out setting", () => {
+    describe("tsserverProjectSystem emit with outFile or out setting", () => {
             function test(opts: CompilerOptions, expectedUsesOutFile: boolean) {
                 const f1 = {
                     path: "/a/a.ts",
@@ -4686,7 +4688,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("import helpers", () => {
+    describe("tsserverProjectSystem import helpers", () => {
             it("should not crash in tsserver", () => {
                 const f1 = {
                     path: "/a/app.ts",
@@ -4703,7 +4705,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("searching for config file", () => {
+    describe("tsserverProjectSystem searching for config file", () => {
             it("should stop at projectRootPath if given", () => {
                 const f1 = {
                     path: "/a/file1.ts",
@@ -4795,9 +4797,9 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("cancellationToken", () => {
+    describe("tsserverProjectSystem cancellationToken", () => {
             // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
-            let oldPrepare: Function;
+        let oldPrepare: ts.AnyFunction;
             before(() => {
                 oldPrepare = (Error as any).prepareStackTrace;
                 delete (Error as any).prepareStackTrace;
@@ -4899,7 +4901,7 @@ namespace ts.projectSystem {
                         command: "projectInfo",
                         arguments: { file: f1.path }
                     });
-                    host.clearOutput();
+                session.clearMessages();
 
                     // cancel previously issued Geterr
                     cancellationToken.setRequestToCancel(getErrId);
@@ -4923,7 +4925,7 @@ namespace ts.projectSystem {
                     assert.equal(host.getOutput().length, 1, "expect 1 message");
                     const e1 = <protocol.Event>getMessage(0);
                     assert.equal(e1.event, "syntaxDiag");
-                    host.clearOutput();
+                session.clearMessages();
 
                     cancellationToken.setRequestToCancel(getErrId);
                     host.runQueuedImmediateCallbacks();
@@ -4945,7 +4947,7 @@ namespace ts.projectSystem {
                     assert.equal(host.getOutput().length, 1, "expect 1 message");
                     const e1 = <protocol.Event>getMessage(0);
                     assert.equal(e1.event, "syntaxDiag");
-                    host.clearOutput();
+                session.clearMessages();
 
                     // the semanticDiag message
                     host.runQueuedImmediateCallbacks();
@@ -4968,7 +4970,7 @@ namespace ts.projectSystem {
                     assert.equal(host.getOutput().length, 1, "expect 1 message");
                     const e1 = <protocol.Event>getMessage(0);
                     assert.equal(e1.event, "syntaxDiag");
-                    host.clearOutput();
+                session.clearMessages();
 
                     session.executeCommandSeq(<protocol.GeterrRequest>{
                         command: "geterr",
@@ -4982,7 +4984,7 @@ namespace ts.projectSystem {
                     const event = <protocol.RequestCompletedEvent>getMessage(n);
                     assert.equal(event.event, "requestCompleted");
                     assert.equal(event.body.request_seq, expectedSeq, "expectedSeq");
-                    host.clearOutput();
+                session.clearMessages();
                 }
 
                 function getMessage(n: number) {
@@ -5058,7 +5060,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("occurence highlight on string", () => {
+    describe("tsserverProjectSystem occurence highlight on string", () => {
             it("should be marked if only on string values", () => {
                 const file1: FileOrFolder = {
                     path: "/a/b/file1.ts",
@@ -5104,7 +5106,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("maxNodeModuleJsDepth for inferred projects", () => {
+    describe("tsserverProjectSystem maxNodeModuleJsDepth for inferred projects", () => {
             it("should be set to 2 if the project has js root files", () => {
                 const file1: FileOrFolder = {
                     path: "/a/b/file1.js",
@@ -5158,7 +5160,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("Options Diagnostic locations reported correctly with changes in configFile contents", () => {
+    describe("tsserverProjectSystem Options Diagnostic locations reported correctly with changes in configFile contents", () => {
             it("when options change", () => {
                 const file = {
                     path: "/a/b/app.ts",
@@ -5222,7 +5224,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("refactors", () => {
+    describe("tsserverProjectSystem refactors", () => {
             it("use formatting options", () => {
                 const file = {
                     path: "/a.ts",
@@ -5278,7 +5280,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("CachingFileSystemInformation", () => {
+    describe("tsserverProjectSystem CachingFileSystemInformation", () => {
             enum CalledMapsWithSingleArg {
                 fileExists = "fileExists",
                 directoryExists = "directoryExists",
@@ -5919,7 +5921,7 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("ProjectsChangedInBackground", () => {
+    describe("tsserverProjectSystem ProjectsChangedInBackground", () => {
             function verifyFiles(caption: string, actual: ReadonlyArray<string>, expected: ReadonlyArray<string>) {
                 assert.equal(actual.length, expected.length, `Incorrect number of ${caption}. Actual: ${actual} Expected: ${expected}`);
                 const seen = createMap<true>();
@@ -6533,13 +6535,13 @@ namespace ts.projectSystem {
                         });
 
                         // Verified the events, reset them
-                        host.clearOutput();
+                    session.clearMessages();
                     }
                 }
             });
         });
 
-        describe("Watched recursive directories with windows style file system", () => {
+    describe("tsserverProjectSystem Watched recursive directories with windows style file system", () => {
             function verifyWatchedDirectories(useProjectAtRoot: boolean) {
                 const root = useProjectAtRoot ? "c:/" : "c:/myfolder/allproject/";
                 const configFile: FileOrFolder = {

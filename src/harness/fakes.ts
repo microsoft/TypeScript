@@ -75,6 +75,7 @@ namespace fakes {
         private readonly _trace: string[] = [];
         private readonly _executingFilePath: string;
         private readonly _getCanonicalFileName: (file: string) => string;
+        private _screenClears = 0;
 
         constructor(options: FakeServerHostOptions = {}) {
             const {
@@ -216,8 +217,7 @@ namespace fakes {
         }
 
         public realpath(path: string) {
-            const entry = this.vfs.getRealEntry(this.vfs.getEntry(path));
-            return entry && entry.path;
+            return this.vfs.realpath(path);
         }
 
         public getEnvironmentVariable(_name: string): string | undefined {
@@ -230,6 +230,10 @@ namespace fakes {
 
         public clearTimeout(timeoutId: any): void {
             this.timers.clearTimeout(timeoutId);
+        }
+
+        public clearScreen(): void {
+            this._screenClears++;
         }
         // #endregion System members
 
@@ -269,6 +273,7 @@ namespace fakes {
             this._trace.length = 0;
         }
 
+        // expectations
         public checkTimeoutQueueLength(expected: number) {
             const callbacksCount = this.timers.getPending({ kind: "timeout", ms: this.timers.remainingTime }).length;
             assert.equal(callbacksCount, expected, `expected ${expected} timeout callbacks queued but found ${callbacksCount}.`);
@@ -301,7 +306,6 @@ namespace fakes {
             }
         }
 
-        // expectations
         public checkOutputContains(expected: Iterable<string>) {
             const mapExpected = new Set(expected);
             const mapSeen = new Set<string>();
@@ -328,6 +332,10 @@ namespace fakes {
 
         public checkWatchedDirectories(expected: Iterable<string>, recursive = false) {
             return checkSortedSet(recursive ? this.vfs.watchedRecursiveDirectories : this.vfs.watchedNonRecursiveDirectories, expected);
+        }
+
+        public checkScreenClears(expected: number) {
+            assert.equal(this._screenClears, expected);
         }
     }
 

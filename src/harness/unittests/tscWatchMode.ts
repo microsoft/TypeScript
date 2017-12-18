@@ -59,20 +59,47 @@ namespace ts.tscWatch {
         return result;
     }
 
-    function checkOutputErrors(host: fakes.FakeServerHost, errors: ReadonlyArray<Diagnostic>, isInitial?: true, skipWaiting?: true) {
+    enum ExpectedOutputErrorsPosition {
+        BeforeCompilationStarts,
+        AfterCompilationStarting,
+        AfterFileChangeDetected
+    }
+
+    function checkOutputErrors(
+        host: fakes.FakeServerHost,
+        errors: ReadonlyArray<Diagnostic>,
+        errorsPosition: ExpectedOutputErrorsPosition,
+        skipWaiting?: true
+    ) {
         const outputs = host.getOutput();
-        const expectedOutputCount = (isInitial ? 0 : 1) + errors.length + (skipWaiting ? 0 : 1);
+        const expectedOutputCount = errors.length + (skipWaiting ? 0 : 1) + 1;
         assert.equal(outputs.length, expectedOutputCount, "Outputs = " + outputs.toString());
-        let index = 0;
-        if (!isInitial) {
-            assertWatchDiagnosticAt(host, index, Diagnostics.File_change_detected_Starting_incremental_compilation);
-            index++;
+        let index: number;
+
+        switch (errorsPosition) {
+            case ExpectedOutputErrorsPosition.AfterCompilationStarting:
+                assertWatchDiagnosticAt(host, 0, Diagnostics.Starting_compilation_in_watch_mode);
+                index = 1;
+                break;
+            case ExpectedOutputErrorsPosition.AfterFileChangeDetected:
+                assertWatchDiagnosticAt(host, 0, Diagnostics.File_change_detected_Starting_incremental_compilation);
+                index = 1;
+                break;
+            case ExpectedOutputErrorsPosition.BeforeCompilationStarts:
+                assertWatchDiagnosticAt(host, errors.length, Diagnostics.Starting_compilation_in_watch_mode);
+                index = 0;
+                break;
         }
+
         forEach(errors, error => {
             assertDiagnosticAt(host, index, error);
             index++;
         });
         if (!skipWaiting) {
+            if (errorsPosition === ExpectedOutputErrorsPosition.BeforeCompilationStarts) {
+                assertWatchDiagnosticAt(host, index, ts.Diagnostics.Starting_compilation_in_watch_mode);
+                index += 1;
+            }
             assertWatchDiagnosticAt(host, index, Diagnostics.Compilation_complete_Watching_for_file_changes);
         }
         host.clearOutput();
@@ -261,13 +288,13 @@ namespace ts.tscWatch {
                 checkOutputErrors(host, [
                     createFileNotFoundDiagnostic(watch(), "/a/b/commonFile1.ts", file1Content, "commonFile2.ts", "/a/b/commonFile2.ts"),
                     createCannotFindNameDiagnostic(watch(), "/a/b/commonFile1.ts", file1Content, "y"),
-                ], /*isInitial*/ true);
+            ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 host.vfs.addFile("/a/b/commonFile2.ts", `let y = 1`);
                 host.checkTimeoutQueueLengthAndRun(1);
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts"]);
                 checkProgramActualFiles(watch(), ["/a/b/commonFile1.ts", fakes.FakeServerHost.libPath, "/a/b/commonFile2.ts"]);
-                checkOutputErrors(host, emptyArray);
+            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
             });
 
             it("should reflect change in config file", () => {
@@ -457,7 +484,7 @@ namespace ts.tscWatch {
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
 
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts", "/a/b/f2.ts", fakes.FakeServerHost.libPath]);
-                checkOutputErrors(host, emptyArray, /*isInitial*/ true);
+            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 host.vfs.removeFile("/a/b/tsconfig.json");
                 host.checkTimeoutQueueLengthAndRun(1);
@@ -465,7 +492,7 @@ namespace ts.tscWatch {
                 assert.equal(host.exitCode, ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 checkOutputErrors(host, [
                     createCompilerDiagnostic(Diagnostics.File_0_not_found, "/a/b/tsconfig.json")
-                ], /*isInitial*/ undefined, /*skipWaiting*/ true);
+            ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected, /*skipWaiting*/ true);
             });
 
             it("Proper errors: document is not contained in project", () => {
@@ -508,7 +535,7 @@ namespace ts.tscWatch {
                 host.vfs.addFile("/a/b/moduleFile.ts", `export function bar() { };`);
 
                 const watch = createWatchModeWithoutConfigFile(["/a/b/file1.ts"], host);
-                checkOutputErrors(host, emptyArray, /*isInitial*/ true);
+            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 host.vfs.removeFile("/a/b/moduleFile.js");
                 host.vfs.rename("/a/b/moduleFile.ts", "/a/b/moduleFile1.ts");
@@ -516,13 +543,13 @@ namespace ts.tscWatch {
                 host.runQueuedTimeoutCallbacks();
                 checkOutputErrors(host, [
                     createCannotFindModuleDiagnostic(watch(), "/a/b/file1.ts", file1Content, "./moduleFile")
-                ]);
+            ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
 
                 host.vfs.removeFile("/a/b/moduleFile1.js");
                 host.vfs.rename("/a/b/moduleFile1.ts", "/a/b/moduleFile.ts");
 
                 host.runQueuedTimeoutCallbacks();
-                checkOutputErrors(host, emptyArray);
+            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
             });
 
             it("rename a module file and rename back should restore the states for configured projects", () => {
@@ -533,7 +560,7 @@ namespace ts.tscWatch {
                 host.vfs.addFile("/a/b/tsconfig.json", `{}`);
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
-                checkOutputErrors(host, emptyArray, /*isInitial*/ true);
+            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 host.vfs.removeFile("/a/b/moduleFile.js");
                 host.vfs.rename("/a/b/moduleFile.ts", "/a/b/moduleFile1.ts");
@@ -541,13 +568,13 @@ namespace ts.tscWatch {
                 host.runQueuedTimeoutCallbacks();
                 checkOutputErrors(host, [
                     createCannotFindModuleDiagnostic(watch(), "/a/b/file1.ts", file1Content, "./moduleFile")
-                ]);
+            ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
 
                 host.vfs.removeFile("/a/b/moduleFile1.js");
                 host.vfs.rename("/a/b/moduleFile1.ts", "/a/b/moduleFile.ts");
 
                 host.runQueuedTimeoutCallbacks();
-                checkOutputErrors(host, emptyArray);
+            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
             });
 
             it("types should load from config file path if config exists", () => {
@@ -570,12 +597,12 @@ namespace ts.tscWatch {
 
                 checkOutputErrors(host, [
                     createCannotFindModuleDiagnostic(watch(), "/a/b/file1.ts", file1Content, "./moduleFile")
-                ], /*isInitial*/ true);
+            ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 host.vfs.addFile("/a/b/moduleFile.ts", `export function bar() { };`);
 
                 host.runQueuedTimeoutCallbacks();
-                checkOutputErrors(host, emptyArray);
+            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
             });
 
             it("Configure file diagnostics events are generated when the config file has errors", () => {
@@ -588,7 +615,7 @@ namespace ts.tscWatch {
                 checkOutputErrors(host, [
                     createUnknownCompilerOptionDiagnostic(watch(), configFileContent, "foo"),
                     createUnknownCompilerOptionDiagnostic(watch(), configFileContent, "allowJS")
-                ], /*isInitial*/ true);
+            ], /*errorsPosition*/ ExpectedOutputErrorsPosition.BeforeCompilationStarts);
             });
 
             it("If config file doesnt have errors, they are not reported", () => {
@@ -597,7 +624,7 @@ namespace ts.tscWatch {
                 host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {} }`);
 
                 createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
-                checkOutputErrors(host, emptyArray, /*isInitial*/ true);
+            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
             });
 
             it("Reports errors when the config file changes", () => {
@@ -606,7 +633,7 @@ namespace ts.tscWatch {
                 host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {} }`);
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
-                checkOutputErrors(host, emptyArray, /*isInitial*/ true);
+            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 const configFileBadContent = `{ "compilerOptions": { "haha": 123 } }`;
                 host.vfs.writeFile("/a/b/tsconfig.json", configFileBadContent);
@@ -614,12 +641,12 @@ namespace ts.tscWatch {
                 host.runQueuedTimeoutCallbacks();
                 checkOutputErrors(host, [
                     createUnknownCompilerOptionDiagnostic(watch(), configFileBadContent, "haha")
-                ]);
+            ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
 
                 host.vfs.writeFile("/a/b/tsconfig.json", `{ "compilerOptions": {} }`);
 
                 host.runQueuedTimeoutCallbacks();
-                checkOutputErrors(host, emptyArray);
+            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
             });
 
             it("non-existing directories listed in config file input array should be tolerated without crashing the server", () => {
@@ -680,7 +707,7 @@ namespace ts.tscWatch {
                     createExclusiveCompilerOptionDiagnostic(watch(), configFileContentWithComment, "allowJs", "declaration", /*checkFirst*/ true),
                     createExclusiveCompilerOptionDiagnostic(watch(), configFileContentWithComment, "allowJs", "declaration", /*checkFirst*/ false)
                 ];
-                checkOutputErrors(host, initialErrors, /*isInitial*/ true);
+            	checkOutputErrors(host, initialErrors, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 host.vfs.writeFile("/a/b/tsconfig.json", configFileContentWithoutComment);
                 host.runQueuedTimeoutCallbacks();
@@ -688,7 +715,7 @@ namespace ts.tscWatch {
                     createExclusiveCompilerOptionDiagnostic(watch(), configFileContentWithoutComment, "allowJs", "declaration", /*checkFirst*/ true),
                     createExclusiveCompilerOptionDiagnostic(watch(), configFileContentWithoutComment, "allowJs", "declaration", /*checkFirst*/ false)
                 ];
-                checkOutputErrors(host, nowErrors);
+            	checkOutputErrors(host, nowErrors, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
 
                 assert.equal(nowErrors[0].start, initialErrors[0].start - configFileContentComment.length);
                 assert.equal(nowErrors[1].start, initialErrors[1].start - configFileContentComment.length);
@@ -1158,7 +1185,7 @@ namespace ts.tscWatch {
                 checkOutputErrors(host, [
                     createFileIsNotAModuleDiagnostic(watch(), "/a/d/f0.ts", rootContent1, "f1", "/a/f1.ts"),
                     createCannotFindNameDiagnostic(watch(), "/a/f1.ts", importedContent, "foo")
-                ], /*isInitial*/ true);
+                ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 // spy on calls to fileExists to make sure that disk is not touched
                 const fileExistsSpy1 = spy(host, "fileExists");
@@ -1178,7 +1205,7 @@ namespace ts.tscWatch {
                     createFileIsNotAModuleDiagnostic(watch(), "/a/d/f0.ts", rootContent1, "f1", "/a/f1.ts"),
                     createFileDiagnostic(getFile(watch(), "/a/d/f0.ts"), rootContent2.indexOf("var x") + "var ".length, "x".length, Diagnostics.Type_0_is_not_assignable_to_type_1, "1", "string"),
                     createCannotFindNameDiagnostic(watch(), "/a/f1.ts", importedContent, "foo")
-                ]);
+                ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
 
                 // spy on calls to fileExists to make sure LSHost only searches for 'f2'
                 const fileExistsSpy2 = spy(host, "fileExists");
@@ -1197,7 +1224,7 @@ namespace ts.tscWatch {
                 // ensure file has correct number of errors after edit
                 checkOutputErrors(host, [
                     createCannotFindModuleDiagnostic(watch(), "/a/d/f0.ts", rootContent3, "f2")
-                ]);
+                ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
 
                 // spy on calls to fileExists to make sure LSHost only searches for 'f1'
                 const fileExistsSpy3 = spy(host, "fileExists");
@@ -1216,7 +1243,7 @@ namespace ts.tscWatch {
                 checkOutputErrors(host, [
                     createFileIsNotAModuleDiagnostic(watch(), "/a/d/f0.ts", rootContent1, "f1", "/a/f1.ts"),
                     createCannotFindNameDiagnostic(watch(), "/a/f1.ts", importedContent, "foo")
-                ]);
+                ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
             });
 
             it("loads missing files from disk", () => {
@@ -1237,7 +1264,7 @@ namespace ts.tscWatch {
 
                 checkOutputErrors(host, [
                     createCannotFindModuleDiagnostic(watch(), "/a/foo.ts", rootContent1, "bar")
-                ], /*isInitial*/ true);
+            	], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 // spy on calls to fileExists after synchronization is triggered
                 const fileExistsSpy2 = spy(host, "fileExists");
@@ -1251,7 +1278,7 @@ namespace ts.tscWatch {
                     .verify(_ => _(Arg.includes("/bar.")), Times.atLeastOnce())
                     .revoke();
 
-                checkOutputErrors(host, emptyArray);
+                checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
             });
 
             it("should compile correctly when resolved module goes missing and then comes back (module is not part of the root)", () => {
@@ -1272,7 +1299,7 @@ namespace ts.tscWatch {
                     .verify(_ => _(Arg.includes("/bar.")), Times.atLeastOnce())
                     .revoke();
 
-                checkOutputErrors(host, emptyArray, /*isInitial*/ true);
+            	checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 // spy on fileExists when triggering synchronization
                 const fileExistsSpy2 = spy(host, "fileExists");
@@ -1287,7 +1314,7 @@ namespace ts.tscWatch {
 
                 checkOutputErrors(host, [
                     createCannotFindModuleDiagnostic(watch(), "/a/foo.ts", rootContent, "bar")
-                ]);
+            	], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
 
                 // spy on fileExists when triggering synchronization
                 const fileExistsSpy3 = spy(host, "fileExists");
@@ -1300,7 +1327,7 @@ namespace ts.tscWatch {
                     .verify(_ => _(Arg.includes("/bar.")), Times.atLeastOnce())
                     .revoke();
 
-                checkOutputErrors(host, emptyArray);
+                checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
             });
 
             it("works when module resolution changes to ambient module", () => {
@@ -1312,12 +1339,12 @@ namespace ts.tscWatch {
 
                 checkOutputErrors(host, [
                     createCannotFindModuleDiagnostic(watch(), "/a/b/foo.ts", rootContent, "fs")
-                ], /*isInitial*/ true);
+            ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 host.vfs.writeFile("/a/b/node_modules/@types/node/package.json", `{\n  "main": ""\n}\n`);
                 host.vfs.writeFile("/a/b/node_modules/@types/node/index.d.ts", `\ndeclare module "fs" {\n    export interface Stats {\n        isFile(): boolean;\n    }\n}`);
                 host.runQueuedTimeoutCallbacks();
-                checkOutputErrors(host, emptyArray);
+            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
             });
 
             it("works when included file with ambient module changes", () => {
@@ -1332,12 +1359,12 @@ namespace ts.tscWatch {
 
                 checkOutputErrors(host, [
                     createCannotFindModuleDiagnostic(watch(), "/a/b/foo.ts", rootContent, "fs")
-                ], /*isInitial*/ true);
+            	], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 const fileContent2 = fileContent1 + `declare module "fs" {\n    export interface Stats {\n        isFile(): boolean;\n    }\n}`;
                 host.vfs.writeFile("/a/b/bar.d.ts", fileContent2);
                 host.runQueuedTimeoutCallbacks();
-                checkOutputErrors(host, emptyArray);
+            	checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
             });
 
             it("works when reusing program with files from external library", () => {
@@ -1370,7 +1397,7 @@ namespace ts.tscWatch {
                     "/a/b/projects/myProject/node_modules/module1/index.js",
                     fakes.FakeServerHost.libPath
                 ]);
-                checkOutputErrors(host, emptyArray, /*isInitial*/ true);
+            	checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 // verify writeFile was called correctly.
                 writeFileSpy1
@@ -1390,7 +1417,7 @@ namespace ts.tscWatch {
                     "/a/b/projects/myProject/node_modules/module1/index.js",
                     fakes.FakeServerHost.libPath
                 ]);
-                checkOutputErrors(host, emptyArray);
+            	checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
 
                 // verify writeFile was called correctly
                 writeFileSpy2
@@ -1444,6 +1471,29 @@ namespace ts.tscWatch {
                     .verify(_ => _("/a/rootFolder/project/Static/scripts/TypeScript.js", `var zz30 = 100;\n`, Arg.any()), Times.once())
                     .revoke();
             });
+        });
+    });
+
+    describe("tsc-watch console clearing", () => {
+        it("clears the console when it starts", () => {
+            const host = new fakes.FakeServerHost({ lib: true });
+            host.vfs.addFile("/a/f.ts", "");
+
+            createWatchModeWithoutConfigFile(["/a/f.ts"], host);
+            host.runQueuedTimeoutCallbacks();
+
+            host.checkScreenClears(1);
+        });
+
+        it("clears the console on recompile", () => {
+            const host = new fakes.FakeServerHost({ lib: true });
+            host.vfs.addFile("/a/f.ts", "");
+            createWatchModeWithoutConfigFile(["/a/f.ts"], host);
+
+            host.vfs.writeFile("/a/f.ts", "//");
+            host.runQueuedTimeoutCallbacks();
+
+            host.checkScreenClears(2);
         });
     });
 }

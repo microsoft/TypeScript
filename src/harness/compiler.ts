@@ -93,8 +93,7 @@ namespace compiler {
         }
 
         public realpath(path: string): string {
-            const entry = this.vfs.getEntry(path, { followSymlinks: true });
-            return entry && entry.path || path;
+            return this.vfs.realpath(path);
         }
 
         public getDefaultLibLocation(): string {

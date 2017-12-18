@@ -416,6 +416,7 @@ namespace ts {
         _updateExpressionBrand: any;
         _unaryExpressionBrand: any;
         _expressionBrand: any;
+        _declarationBrand: any;
         /*@internal*/typeArguments: NodeArray<TypeNode>;
         constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
             super(pos, end);
@@ -472,6 +473,12 @@ namespace ts {
         getNonNullableType(): Type {
             return this.checker.getNonNullableType(this);
         }
+        getConstraint(): Type | undefined {
+            return this.checker.getBaseConstraintOfType(this);
+        }
+        getDefault(): Type | undefined {
+            return this.checker.getDefaultFromTypeParameter(this);
+        }
     }
 
     class SignatureObject implements Signature {
@@ -481,6 +488,7 @@ namespace ts {
         parameters: Symbol[];
         thisParameter: Symbol;
         resolvedReturnType: Type;
+        resolvedTypePredicate: TypePredicate | undefined;
         minTypeArgumentCount: number;
         minArgumentCount: number;
         hasRestParameter: boolean;
@@ -938,7 +946,7 @@ namespace ts {
         private _compilationSettings: CompilerOptions;
         private currentDirectory: string;
 
-        constructor(private host: LanguageServiceHost, getCanonicalFileName: (fileName: string) => string) {
+        constructor(private host: LanguageServiceHost, getCanonicalFileName: GetCanonicalFileName) {
             // script id => script index
             this.currentDirectory = host.getCurrentDirectory();
             this.fileNameToEntry = createMap<CachedHostFileInformation>();
@@ -1261,6 +1269,7 @@ namespace ts {
                     }
                     return host.readFile && host.readFile(fileName);
                 },
+                realpath: host.realpath && (path => host.realpath(path)),
                 directoryExists: directoryName => {
                     return directoryProbablyExists(directoryName, host);
                 },
@@ -1439,7 +1448,7 @@ namespace ts {
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions?: FormatCodeSettings, source?: string): CompletionEntryDetails {
             synchronizeHostData();
             return Completions.getCompletionEntryDetails(
-                program.getTypeChecker(),
+                program,
                 log,
                 program.getCompilerOptions(),
                 getValidSourceFile(fileName),
@@ -1447,7 +1456,8 @@ namespace ts {
                 { name, source },
                 program.getSourceFiles(),
                 host,
-                formattingOptions && formatting.getFormatContext(formattingOptions));
+                formattingOptions && formatting.getFormatContext(formattingOptions),
+                getCanonicalFileName);
         }
 
         function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol {
@@ -1873,7 +1883,7 @@ namespace ts {
             return [];
         }
 
-        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[] {
+        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings): ReadonlyArray<CodeFixAction> {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const span = createTextSpanFromBounds(start, end);
@@ -1886,18 +1896,31 @@ namespace ts {
             });
         }
 
-        function applyCodeActionCommand(fileName: Path, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
-        function applyCodeActionCommand(fileName: Path, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
-        function applyCodeActionCommand(fileName: Path, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]> {
-            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-            return isArray(action) ? Promise.all(action.map(a => applySingleCodeActionCommand(path, a))) : applySingleCodeActionCommand(path, action);
+        function getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions {
+            synchronizeHostData();
+            Debug.assert(scope.type === "file");
+            const sourceFile = getValidSourceFile(scope.fileName);
+            const newLineCharacter = getNewLineOrDefaultFromHost(host);
+            const formatContext = formatting.getFormatContext(formatOptions);
+
+            return codefix.getAllFixes({ fixId, sourceFile, program, newLineCharacter, host, cancellationToken, formatContext });
         }
 
-        function applySingleCodeActionCommand(fileName: Path, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult> {
+        function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
+        function applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
+        function applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
+        function applyCodeActionCommand(fileName: Path, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
+        function applyCodeActionCommand(fileName: Path, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
+        function applyCodeActionCommand(fileName: Path | CodeActionCommand | CodeActionCommand[], actionOrUndefined?: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]> {
+            const action = typeof fileName === "string" ? actionOrUndefined! : fileName as CodeActionCommand[];
+            return isArray(action) ? Promise.all(action.map(applySingleCodeActionCommand)) : applySingleCodeActionCommand(action);
+        }
+
+        function applySingleCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult> {
             switch (action.type) {
                 case "install package":
                     return host.installPackage
-                        ? host.installPackage({ fileName, packageName: action.packageName })
+                        ? host.installPackage({ fileName: toPath(action.file, currentDirectory, getCanonicalFileName), packageName: action.packageName })
                         : Promise.reject("Host does not implement `installPackage`");
                 default:
                     Debug.fail();
@@ -2177,6 +2200,7 @@ namespace ts {
             isValidBraceCompletionAtPosition,
             getSpanOfEnclosingComment,
             getCodeFixesAtPosition,
+            getCombinedCodeFix,
             applyCodeActionCommand,
             getEmitOutput,
             getNonBoundSourceFile,

@@ -1,7 +1,7 @@
 tests/cases/compiler/duplicateLocalVariable1.ts(1,4): error TS1005: ';' expected.
 tests/cases/compiler/duplicateLocalVariable1.ts(1,11): error TS1146: Declaration expected.
 tests/cases/compiler/duplicateLocalVariable1.ts(1,13): error TS2304: Cannot find name 'commonjs'.
-tests/cases/compiler/duplicateLocalVariable1.ts(186,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' has type 'string' at tests/cases/compiler/duplicateLocalVariable1.ts 180:21, but here has type 'number'.
+tests/cases/compiler/duplicateLocalVariable1.ts(186,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'string', but here has type 'number'.
 tests/cases/compiler/duplicateLocalVariable1.ts(186,29): error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
 tests/cases/compiler/duplicateLocalVariable1.ts(186,37): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
 
@@ -200,7 +200,7 @@ tests/cases/compiler/duplicateLocalVariable1.ts(186,37): error TS2356: An arithm
                 var bytes = [];
                 for (var i = 0; i < 14; i++) {
                          ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' has type 'string' at tests/cases/compiler/duplicateLocalVariable1.ts 180:21, but here has type 'number'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'string', but here has type 'number'.
                                 ~~~~~~
 !!! error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
                                         ~
