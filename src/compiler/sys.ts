@@ -30,6 +30,23 @@ namespace ts {
         mtime?: Date;
     }
 
+    /* @internal */
+    export enum WatchPriority {
+        High,
+        Medium,
+        Low
+    }
+
+    const pollingIntervalsForPriority = [250, 1000, 4000];
+    function pollingInterval(watchPriority: WatchPriority): number {
+        return pollingIntervalsForPriority[watchPriority];
+    }
+
+    /* @internal */
+    export function watchFileUsingPriorityPollingInterval(host: System, fileName: string, callback: FileWatcherCallback, watchPriority: WatchPriority): FileWatcher {
+        return host.watchFile(fileName, callback, pollingInterval(watchPriority));
+    }
+
     /**
      * Partial interface of the System thats needed to support the caching of directory structure
      */

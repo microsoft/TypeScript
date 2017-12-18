@@ -410,11 +410,7 @@ namespace ts.server {
         private readonly seenProjects = createMap<true>();
 
         /*@internal*/
-        readonly watchFile: WatchFile;
-        /*@internal*/
-        readonly watchFilePath: WatchFilePath;
-        /*@internal*/
-        readonly watchDirectory: WatchDirectory;
+        readonly watchFactory: WatchFactory<WatchType, Project>;
 
         constructor(opts: ProjectServiceOptions) {
             this.host = opts.host;
@@ -457,9 +453,7 @@ namespace ts.server {
             const watchLogLevel = this.logger.hasLevel(LogLevel.verbose) ? WatchLogLevel.Verbose :
                 this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
             const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
-            this.watchFile = createWatchFile(watchLogLevel, log, getDetailWatchInfo);
-            this.watchFilePath = createWatchFilePath(watchLogLevel, log, getDetailWatchInfo);
-            this.watchDirectory = createWatchDirectory(watchLogLevel, log, getDetailWatchInfo);
+            this.watchFactory = getDefaultWatchFactory(watchLogLevel, log, getDetailWatchInfo);
         }
 
         toPath(fileName: string) {
@@ -792,7 +786,7 @@ namespace ts.server {
          */
         /*@internal*/
         watchWildcardDirectory(directory: Path, flags: WatchDirectoryFlags, project: ConfiguredProject) {
-            return this.watchDirectory(
+            return this.watchFactory.watchDirectory(
                 this.host,
                 directory,
                 fileOrDirectory => {
@@ -1122,11 +1116,11 @@ namespace ts.server {
             canonicalConfigFilePath: string,
             configFileExistenceInfo: ConfigFileExistenceInfo
         ) {
-            configFileExistenceInfo.configFileWatcherForRootOfInferredProject = this.watchFile(
+            configFileExistenceInfo.configFileWatcherForRootOfInferredProject = this.watchFactory.watchFile(
                 this.host,
                 configFileName,
                 (_filename, eventKind) => this.onConfigFileChangeForOpenScriptInfo(configFileName, eventKind),
-                /*pollingInterval*/ undefined,
+                WatchPriority.Low,
                 WatchType.ConfigFileForInferredRoot
             );
             this.logConfigFileWatchUpdate(configFileName, canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.UpdatedCallback);
@@ -1506,11 +1500,11 @@ namespace ts.server {
 
             project.configFileSpecs = configFileSpecs;
             // TODO: We probably should also watch the configFiles that are extended
-            project.configFileWatcher = this.watchFile(
+            project.configFileWatcher = this.watchFactory.watchFile(
                 this.host,
                 configFileName,
                 (_fileName, eventKind) => this.onConfigChangedForConfiguredProject(project, eventKind),
-                /*pollingInterval*/ undefined,
+                WatchPriority.Low,
                 WatchType.ConfigFilePath,
                 project
             );
@@ -1733,11 +1727,11 @@ namespace ts.server {
             // do not watch files with mixed content - server doesn't know how to interpret it
             if (!info.isDynamicOrHasMixedContent()) {
                 const { fileName } = info;
-                info.fileWatcher = this.watchFilePath(
+                info.fileWatcher = this.watchFactory.watchFilePath(
                     this.host,
                     fileName,
                     (fileName, eventKind, path) => this.onSourceFileChanged(fileName, eventKind, path),
-                    /*pollingInterval*/ undefined,
+                    WatchPriority.Medium,
                     info.path,
                     WatchType.ClosedScriptInfo
                 );

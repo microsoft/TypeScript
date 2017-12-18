@@ -376,7 +376,7 @@ namespace ts.server {
 
         /*@internal*/
         watchDirectoryOfFailedLookupLocation(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags) {
-            return this.projectService.watchDirectory(
+            return this.projectService.watchFactory.watchDirectory(
                 this.projectService.host,
                 directory,
                 cb,
@@ -393,7 +393,7 @@ namespace ts.server {
 
         /*@internal*/
         watchTypeRootsDirectory(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags) {
-            return this.projectService.watchDirectory(
+            return this.projectService.watchFactory.watchDirectory(
                 this.projectService.host,
                 directory,
                 cb,
@@ -916,7 +916,7 @@ namespace ts.server {
         }
 
         private addMissingFileWatcher(missingFilePath: Path) {
-            const fileWatcher = this.projectService.watchFile(
+            const fileWatcher = this.projectService.watchFactory.watchFile(
                 this.projectService.host,
                 missingFilePath,
                 (fileName, eventKind) => {
@@ -932,7 +932,7 @@ namespace ts.server {
                         this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
                     }
                 },
-                /*pollingInterval*/ undefined,
+                WatchPriority.Medium,
                 WatchType.MissingFilePath,
                 this
             );
