@@ -441,12 +441,11 @@ namespace FourSlash {
             this.goToPosition(marker.position);
         }
 
-        public goToEachMarker(action: () => void) {
-            const markers = this.getMarkers();
+        public goToEachMarker(markers: ReadonlyArray<Marker>, action: (marker: FourSlash.Marker, index: number) => void) {
             assert(markers.length);
-            for (const marker of markers) {
-                this.goToMarker(marker);
-                action();
+            for (let i = 0; i < markers.length; i++) {
+                this.goToMarker(markers[i]);
+                action(markers[i], i);
             }
         }
 
@@ -3764,8 +3763,11 @@ namespace FourSlashInterface {
             this.state.goToMarker(name);
         }
 
-        public eachMarker(action: () => void) {
-            this.state.goToEachMarker(action);
+        public eachMarker(markers: ReadonlyArray<string>, action: (marker: FourSlash.Marker, index: number) => void): void;
+        public eachMarker(action: (marker: FourSlash.Marker, index: number) => void): void;
+        public eachMarker(a: ReadonlyArray<string> | ((marker: FourSlash.Marker, index: number) => void), b?: (marker: FourSlash.Marker, index: number) => void): void  {
+            const markers = typeof a === "function" ? this.state.getMarkers() : a.map(m => this.state.getMarkerByName(m));
+            this.state.goToEachMarker(markers, typeof a === "function" ? a : b);
         }
 
         public rangeStart(range: FourSlash.Range) {
