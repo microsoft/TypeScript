@@ -4682,6 +4682,7 @@ namespace ts {
                 }
                 else if (isJSDocPropertyTag(declaration)
                     || isPropertyAccessExpression(declaration)
+                    || isIdentifier(declaration)
                     || isMethodDeclaration(declaration) && !isObjectLiteralMethod(declaration)) {
                     // TODO: Mimics old behavior from incorrect usage of getWidenedTypeForVariableLikeDeclaration, but seems incorrect
                     type = tryGetTypeFromEffectiveTypeNode(declaration) || anyType;
