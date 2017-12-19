@@ -8,7 +8,7 @@
     "out": "out.js",
     "baselineCheck": true,
     "resolvedInputFiles": [
-        "lib.es5.d.ts",
+        "lib.d.ts",
         "globalThisCapture.ts",
         "__extends.ts"
     ],

@@ -6,7 +6,7 @@
         "a.ts"
     ],
     "resolvedInputFiles": [
-        "lib.es5.d.ts",
+        "lib.d.ts",
         "b.ts",
         "a.ts"
     ],

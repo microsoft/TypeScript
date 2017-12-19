@@ -10,7 +10,7 @@
     "mapRoot": "tests/cases/projects/outputdir_singleFile/mapFiles",
     "resolveMapRoot": true,
     "resolvedInputFiles": [
-        "lib.es5.d.ts",
+        "lib.d.ts",
         "test.ts"
     ],
     "emittedFiles": [

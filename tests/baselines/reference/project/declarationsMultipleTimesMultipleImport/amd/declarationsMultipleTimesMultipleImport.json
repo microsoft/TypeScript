@@ -7,7 +7,7 @@
     "declaration": true,
     "baselineCheck": true,
     "resolvedInputFiles": [
-        "lib.es5.d.ts",
+        "lib.d.ts",
         "m4.ts",
         "m5.ts",
         "useModule.ts"

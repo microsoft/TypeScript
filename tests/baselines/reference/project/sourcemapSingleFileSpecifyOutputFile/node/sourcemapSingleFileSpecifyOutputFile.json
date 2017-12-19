@@ -9,7 +9,7 @@
     "declaration": true,
     "baselineCheck": true,
     "resolvedInputFiles": [
-        "lib.es5.d.ts",
+        "lib.d.ts",
         "test.ts"
     ],
     "emittedFiles": [

@@ -3,7 +3,7 @@
     "projectRoot": "tests/cases/projects/projectOption/SpecifyExcludeUsingRelativePathWithAllowJS",
     "baselineCheck": true,
     "resolvedInputFiles": [
-        "lib.es5.d.ts",
+        "lib.d.ts",
         "a.ts"
     ],
     "emittedFiles": [

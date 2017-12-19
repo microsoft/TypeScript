@@ -6,7 +6,7 @@
     ],
     "baselineCheck": true,
     "resolvedInputFiles": [
-        "lib.es5.d.ts",
+        "lib.d.ts",
         "fs.ts",
         "server.ts",
         "commands.ts"

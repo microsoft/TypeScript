@@ -4,7 +4,7 @@
     "baselineCheck": true,
     "runTest": true,
     "resolvedInputFiles": [
-        "lib.es5.d.ts",
+        "lib.d.ts",
         "main.ts"
     ],
     "emittedFiles": [

@@ -210,7 +210,13 @@ namespace project {
                 .map(output => utils.removeTestPathPrefixes(vpath.isAbsolute(output) ? vpath.relative(cwd, output, ignoreCase) : output));
 
             const content = JSON.stringify(resolutionInfo, undefined, "    ");
-            Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".json", () => content);
+
+            // TODO(rbuckton): This patches the baseline to replace lib.es5.d.ts with lib.d.ts.
+            // This is only to make the PR for this change easier to read. A follow-up PR will
+            // revert this change and accept the new baselines.
+            // See https://github.com/Microsoft/TypeScript/pull/20763#issuecomment-352553264
+            const patchedContent = content.replace(/lib\.es5\.d\.ts/g, "lib.d.ts");
+            Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".json", () => patchedContent);
         }
 
         public verifyDiagnostics() {
