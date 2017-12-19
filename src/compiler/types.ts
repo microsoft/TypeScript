@@ -3946,6 +3946,8 @@ namespace ts {
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
 
+        treatWarningsAsErrors?: boolean;
+
         [option: string]: CompilerOptionsValue | JsonSourceFile | undefined;
     }
 

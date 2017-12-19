@@ -114,11 +114,12 @@ namespace ts {
             });
         }
 
-        if (emitSkipped && diagnostics.length > 0) {
+        const hasError = some(diagnostics, d => d.category === DiagnosticCategory.Error);
+        if (emitSkipped && hasError) {
             // If the emitter didn't emit anything, then pass that value along.
             return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
-        else if (diagnostics.length > 0) {
+        else if (hasError) {
             // The emitter emitted something, inform the caller if that happened in the presence
             // of diagnostics or not.
             return ExitStatus.DiagnosticsPresent_OutputsGenerated;
@@ -149,11 +150,11 @@ namespace ts {
 
             // If we didn't have any syntactic errors, then also try getting the global and
             // semantic errors.
-            if (diagnostics.length === 0) {
+            if (!some(diagnostics, d => d.category === DiagnosticCategory.Error)) {
                 addRange(diagnostics, program.getOptionsDiagnostics());
                 addRange(diagnostics, program.getGlobalDiagnostics());
 
-                if (diagnostics.length === 0) {
+                if (!some(diagnostics, d => d.category === DiagnosticCategory.Error)) {
                     reportSemanticDiagnostics = true;
                 }
             }

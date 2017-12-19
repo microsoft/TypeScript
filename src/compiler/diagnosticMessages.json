@@ -3201,7 +3201,7 @@
         "code": 6132
     },
     "'{0}' is declared but its value is never read.": {
-        "category": "Error",
+        "category": "Warning",
         "code": 6133
     },
     "Report errors on unused locals.": {
@@ -3497,19 +3497,19 @@
         "code": 7026
     },
     "Unreachable code detected.": {
-        "category": "Error",
+        "category": "Warning",
         "code": 7027
     },
     "Unused label.": {
-        "category": "Error",
+        "category": "Warning",
         "code": 7028
     },
     "Fallthrough case in switch.": {
-        "category": "Error",
+        "category": "Warning",
         "code": 7029
     },
     "Not all code paths return a value.": {
-        "category": "Error",
+        "category": "Warning",
         "code": 7030
     },
     "Binding element '{0}' implicitly has an '{1}' type.": {
@@ -3535,6 +3535,10 @@
     "Dynamic import's specifier must be of type 'string', but here has type '{0}'.": {
         "category": "Error",
         "code": 7036
+    },
+    "Treat warnings as errors": {
+        "category": "Warning",
+        "code": 7037
     },
 
     "You cannot rename this element.": {

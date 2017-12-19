@@ -70,6 +70,13 @@ namespace ts {
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Watch_input_files,
         },
+        {
+            name: "treatWarningsAsErrors",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Treat_warnings_as_errors
+        },
 
         // Basic
         {

@@ -1,0 +1,67 @@
+
+tests/cases/compiler/treatWarningsAsErrorsFalsePretty.ts(1,14): [93mwarning[0m TS6133: 'p' is declared but its value is never read.
+
+[30;47m1[0m function foo(p: any): string { // unused parameter
+[30;47m [0m [93m             ~[0m
+
+tests/cases/compiler/treatWarningsAsErrorsFalsePretty.ts(2,5): [93mwarning[0m TS7028: Unused label.
+
+[30;47m2[0m     foo: while (false) {} // unused label
+[30;47m [0m [93m    ~~~[0m
+
+tests/cases/compiler/treatWarningsAsErrorsFalsePretty.ts(5,11): [93mwarning[0m TS6133: 'y' is declared but its value is never read.
+
+[30;47m5[0m     const y = "any"; // unused variable
+[30;47m [0m [93m          ~[0m
+
+tests/cases/compiler/treatWarningsAsErrorsFalsePretty.ts(7,9): [93mwarning[0m TS7029: Fallthrough case in switch.
+
+[30;47m7[0m         case "a":
+[30;47m [0m [93m        ~~~~[0m
+
+tests/cases/compiler/treatWarningsAsErrorsFalsePretty.ts(9,14): [91merror[0m TS2678: Type '"b"' is not comparable to type '"a"'.
+
+[30;47m9[0m         case "b":
+[30;47m [0m [91m             ~~~[0m
+
+tests/cases/compiler/treatWarningsAsErrorsFalsePretty.ts(10,13): [93mwarning[0m TS7030: Not all code paths return a value.
+
+[30;47m10[0m             return; // implicit return
+[30;47m  [0m [93m            ~~~~~~~[0m
+
+tests/cases/compiler/treatWarningsAsErrorsFalsePretty.ts(11,13): [93mwarning[0m TS7027: Unreachable code detected.
+
+[30;47m11[0m             if (x === x) { // unreachable code
+[30;47m  [0m [93m            ~~[0m
+
+
+==== tests/cases/compiler/treatWarningsAsErrorsFalsePretty.ts (7 errors) ====
+    function foo(p: any): string { // unused parameter
+                 ~
+!!! warning TS6133: 'p' is declared but its value is never read.
+        foo: while (false) {} // unused label
+        ~~~
+!!! warning TS7028: Unused label.
+    
+        const x: { kind: "a" } | { kind: "b" } = { kind: "a" };
+        const y = "any"; // unused variable
+              ~
+!!! warning TS6133: 'y' is declared but its value is never read.
+        switch (x.kind) {
+            case "a":
+            ~~~~
+!!! warning TS7029: Fallthrough case in switch.
+                void x; // implicit fallthrough
+            case "b":
+                 ~~~
+!!! error TS2678: Type '"b"' is not comparable to type '"a"'.
+                return; // implicit return
+                ~~~~~~~
+!!! warning TS7030: Not all code paths return a value.
+                if (x === x) { // unreachable code
+                ~~
+!!! warning TS7027: Unreachable code detected.
+                    void x;
+                }
+        }
+    }

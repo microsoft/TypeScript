@@ -1,0 +1,48 @@
+=== tests/cases/compiler/treatWarningsAsErrorsFalsePretty.ts ===
+function foo(p: any): string { // unused parameter
+>foo : (p: any) => string
+>p : any
+
+    foo: while (false) {} // unused label
+>foo : any
+>false : false
+
+    const x: { kind: "a" } | { kind: "b" } = { kind: "a" };
+>x : { kind: "a"; } | { kind: "b"; }
+>kind : "a"
+>kind : "b"
+>{ kind: "a" } : { kind: "a"; }
+>kind : string
+>"a" : "a"
+
+    const y = "any"; // unused variable
+>y : "any"
+>"any" : "any"
+
+    switch (x.kind) {
+>x.kind : "a"
+>x : { kind: "a"; }
+>kind : "a"
+
+        case "a":
+>"a" : "a"
+
+            void x; // implicit fallthrough
+>void x : undefined
+>x : { kind: "a"; }
+
+        case "b":
+>"b" : "b"
+
+            return; // implicit return
+            if (x === x) { // unreachable code
+>x === x : boolean
+>x : { kind: "a"; } | { kind: "b"; }
+>x : { kind: "a"; } | { kind: "b"; }
+
+                void x;
+>void x : undefined
+>x : { kind: "a"; } | { kind: "b"; }
+            }
+    }
+}
