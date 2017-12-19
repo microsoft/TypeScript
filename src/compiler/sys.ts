@@ -25,9 +25,9 @@ namespace ts {
     export type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind) => void;
     export type DirectoryWatcherCallback = (fileName: string) => void;
     export interface WatchedFile {
-        fileName: string;
-        callback: FileWatcherCallback;
-        mtime?: Date;
+        readonly fileName: string;
+        readonly callback: FileWatcherCallback;
+        mtime: Date;
     }
 
     /* @internal */
@@ -37,7 +37,13 @@ namespace ts {
         Low
     }
 
-    const pollingIntervalsForPriority = [250, 1000, 4000];
+    function getPriorityValues(highPriorityValue: number): [number, number, number] {
+        const mediumPriorityValue = highPriorityValue * 2;
+        const lowPriorityValue = mediumPriorityValue * 4;
+        return [highPriorityValue, mediumPriorityValue, lowPriorityValue];
+    }
+
+    const pollingIntervalsForPriority = getPriorityValues(250);
     function pollingInterval(watchPriority: WatchPriority): number {
         return pollingIntervalsForPriority[watchPriority];
     }
@@ -45,6 +51,201 @@ namespace ts {
     /* @internal */
     export function watchFileUsingPriorityPollingInterval(host: System, fileName: string, callback: FileWatcherCallback, watchPriority: WatchPriority): FileWatcher {
         return host.watchFile(fileName, callback, pollingInterval(watchPriority));
+    }
+
+    /* @internal */
+    export interface DynamicPriorityPollingStatsSet {
+        watchFile(fileName: string, callback: FileWatcherCallback, defaultPriority: WatchPriority): FileWatcher;
+    }
+
+    /* @internal */
+    export const missingFileModifiedTime = new Date(0); // Any subsequent modification will occur after this time
+    /* @internal */
+    export function createDynamicPriorityPollingStatsSet(host: System): DynamicPriorityPollingStatsSet {
+        if (!host.getModifiedTime || !host.setTimeout) {
+            throw notImplemented();
+        }
+
+        interface WatchedFile extends ts.WatchedFile {
+            isClosed?: boolean;
+            unchangedPolls: number;
+        }
+
+        interface WatchPriorityQueue extends Array<WatchedFile> {
+            watchPriority: WatchPriority;
+            pollIndex: number;
+        }
+
+        const chunkSizes = getPriorityValues(32);
+        const unChangedThresholds = getPriorityValues(32);
+        const watchedFiles: WatchedFile[] = [];
+        const changedFilesInLastPoll: WatchedFile[] = [];
+        const priorityQueues = [createPriorityQueue(WatchPriority.High), createPriorityQueue(WatchPriority.Medium), createPriorityQueue(WatchPriority.Low)];
+        return {
+            watchFile
+        };
+
+        function watchFile(fileName: string, callback: FileWatcherCallback, defaultPriority: WatchPriority): FileWatcher {
+            const file: WatchedFile = {
+                fileName,
+                callback,
+                unchangedPolls: 0,
+                mtime: getModifiedTime(fileName)
+            };
+            watchedFiles.push(file);
+
+            addToPriorityQueue(file, defaultPriority);
+            return {
+                close: () => {
+                    file.isClosed = true;
+                    // Remove from watchedFiles
+                    unorderedRemoveItem(watchedFiles, file);
+                    // Do not update priority queue since that will happen as part of polling
+                }
+            };
+        }
+
+        function createPriorityQueue(watchPriority: WatchPriority): WatchPriorityQueue {
+            const queue = [] as WatchPriorityQueue;
+            queue.watchPriority = watchPriority;
+            queue.pollIndex = 0;
+            return queue;
+        }
+
+        function pollPriorityQueue(queue: WatchPriorityQueue) {
+            const priority = queue.watchPriority;
+            queue.pollIndex = pollQueue(queue, priority, queue.pollIndex, chunkSizes[priority]);
+            // Set the next polling index and timeout
+            if (queue.length) {
+                scheduleNextPoll(priority);
+            }
+            else {
+                Debug.assert(queue.pollIndex === 0);
+            }
+        }
+
+        function pollHighPriorityQueue(queue: WatchPriorityQueue) {
+            // Always poll complete list of changedFilesInLastPoll
+            pollQueue(changedFilesInLastPoll, WatchPriority.High, /*pollIndex*/ 0, changedFilesInLastPoll.length);
+
+            // Finally do the actual polling of the queue
+            pollPriorityQueue(queue);
+            // Schedule poll if there are files in changedFilesInLastPoll but no files in the actual queue
+            // as pollPriorityQueue wont schedule for next poll
+            if (!queue.length && changedFilesInLastPoll.length) {
+                scheduleNextPoll(WatchPriority.High);
+            }
+        }
+
+        function pollQueue(queue: WatchedFile[], priority: WatchPriority, pollIndex: number, chunkSize: number) {
+            // Max visit would be all elements of the queue
+            let needsVisit = queue.length;
+            let definedValueCopyToIndex = pollIndex;
+            const unChangedThreshold = unChangedThresholds[priority];
+            for (let polled = 0; polled < chunkSize && needsVisit > 0; nextPollIndex(), needsVisit--) {
+                const watchedFile = queue[pollIndex];
+                if (!watchedFile) {
+                    continue;
+                }
+                else if (watchedFile.isClosed) {
+                    queue[pollIndex] = undefined;
+                    continue;
+                }
+
+                polled++;
+                const fileChanged = onWatchedFileStat(watchedFile, getModifiedTime(watchedFile.fileName));
+                if (watchedFile.isClosed) {
+                    // Closed watcher as part of callback
+                    queue[pollIndex] = undefined;
+                }
+                else if (fileChanged) {
+                    watchedFile.unchangedPolls = 0;
+                    // Changed files go to changedFilesInLastPoll queue
+                    if (queue !== changedFilesInLastPoll && priority !== WatchPriority.High) {
+                        queue[pollIndex] = undefined;
+                        addChangedFileToHighPriorityQueue(watchedFile);
+                    }
+                }
+                else if (watchedFile.unchangedPolls !== unChangedThreshold) {
+                    watchedFile.unchangedPolls++;
+                }
+                else if (queue === changedFilesInLastPoll) {
+                    // Restart unchangedPollCount for unchanged file and move to high priority queue
+                    watchedFile.unchangedPolls = 0;
+                    addToPriorityQueue(watchedFile, WatchPriority.High);
+                }
+                else if (priority !== WatchPriority.Low) {
+                    watchedFile.unchangedPolls++;
+                    queue[pollIndex] = undefined;
+                    addToPriorityQueue(watchedFile, priority + 1);
+                }
+
+                if (queue[pollIndex]) {
+                    // Copy this file to the non hole location
+                    if (definedValueCopyToIndex < pollIndex) {
+                        queue[definedValueCopyToIndex] = watchedFile;
+                        queue[pollIndex] = undefined;
+                    }
+                    definedValueCopyToIndex++;
+                }
+            }
+
+            // Return next poll index
+            return pollIndex;
+
+            function nextPollIndex() {
+                pollIndex++;
+                if (pollIndex === queue.length) {
+                    if (definedValueCopyToIndex < pollIndex) {
+                        // There are holes from nextDefinedValueIndex to end of queue, change queue size
+                        queue.length = definedValueCopyToIndex;
+                    }
+                    pollIndex = 0;
+                    definedValueCopyToIndex = 0;
+                }
+            }
+        }
+
+        function addToPriorityQueue(file: WatchedFile, priority: WatchPriority) {
+            if (priorityQueues[priority].push(file) === 1) {
+                scheduleNextPoll(priority);
+            }
+        }
+
+        function addChangedFileToHighPriorityQueue(file: WatchedFile) {
+            if (changedFilesInLastPoll.push(file) === 1 && !priorityQueues[WatchPriority.High].length) {
+                scheduleNextPoll(WatchPriority.High);
+            }
+        }
+
+        function scheduleNextPoll(priority: WatchPriority) {
+            host.setTimeout(priority === WatchPriority.High ? pollHighPriorityQueue : pollPriorityQueue, pollingInterval(priority), priorityQueues[priority]);
+        }
+
+        function getModifiedTime(fileName: string) {
+            return host.getModifiedTime(fileName) || missingFileModifiedTime;
+        }
+    }
+
+    /**
+     * Returns true if file status changed
+     */
+    /*@internal*/
+    export function onWatchedFileStat(watchedFile: WatchedFile, modifiedTime: Date): boolean {
+        const oldTime = watchedFile.mtime.getTime();
+        const newTime = modifiedTime.getTime();
+        if (oldTime !== newTime) {
+            watchedFile.mtime = modifiedTime;
+            const eventKind = oldTime === 0
+                ? FileWatcherEventKind.Created
+                : newTime === 0
+                    ? FileWatcherEventKind.Deleted
+                    : FileWatcherEventKind.Changed;
+            watchedFile.callback(watchedFile.fileName, eventKind);
+            return true;
+        }
+
+        return false;
     }
 
     /**

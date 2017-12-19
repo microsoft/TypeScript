@@ -113,6 +113,9 @@ namespace ts {
             case "PriorityPollingInterval":
                 // Use polling interval based on priority when create watch using host.watchFile
                 return getWatchFactoryWith(watchLogLevel, log, getDetailWatchInfo, watchFileUsingPriorityPollingInterval, watchDirectory);
+            case "DynamicPriorityPolling":
+                // Dynamically move frequently changing files to high frequency polling and non changing files to lower frequency
+                return getWatchFactoryWithDynamicPriorityPolling(host, watchLogLevel, log, getDetailWatchInfo);
             default:
                 return getDefaultWatchFactory(watchLogLevel, log, getDetailWatchInfo);
         }
@@ -143,6 +146,15 @@ namespace ts {
         }
     }
 
+    function getWatchFactoryWithDynamicPriorityPolling<X = undefined, Y = undefined>(host: System, watchLogLevel: WatchLogLevel, log: (s: string) => void, getDetailWatchInfo?: GetDetailWatchInfo<X, Y>): WatchFactory<X, Y> {
+        const pollingSet = createDynamicPriorityPollingStatsSet(host);
+        return getWatchFactoryWith(watchLogLevel, log, getDetailWatchInfo, watchFile, watchDirectory);
+
+        function watchFile(_host: System, file: string, callback: FileWatcherCallback, watchPriority: WatchPriority): FileWatcher {
+            return pollingSet.watchFile(file, callback, watchPriority);
+        }
+    }
+
     function watchFile(host: System, file: string, callback: FileWatcherCallback, _watchPriority: WatchPriority): FileWatcher {
         return host.watchFile(file, callback);
     }
@@ -161,9 +173,9 @@ namespace ts {
             case WatchLogLevel.None:
                 return addWatch;
             case WatchLogLevel.TriggerOnly:
-                return createFileWatcherWithLogging;
-            case WatchLogLevel.Verbose:
                 return createFileWatcherWithTriggerLogging;
+            case WatchLogLevel.Verbose:
+                return createFileWatcherWithLogging;
         }
     }
 
