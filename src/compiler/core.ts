@@ -1849,12 +1849,12 @@ namespace ts {
             comparer(a[key], b[key]);
     }
 
-    function getDiagnosticFileName(diagnostic: Diagnostic): string {
+    function getDiagnosticFilePath(diagnostic: Diagnostic): string {
         return diagnostic.file ? diagnostic.file.path : undefined;
     }
 
     export function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): Comparison {
-        return compareStringsCaseSensitive(getDiagnosticFileName(d1), getDiagnosticFileName(d2)) ||
+        return compareStringsCaseSensitive(getDiagnosticFilePath(d1), getDiagnosticFilePath(d2)) ||
             compareValues(d1.start, d2.start) ||
             compareValues(d1.length, d2.length) ||
             compareValues(d1.code, d2.code) ||
