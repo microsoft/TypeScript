@@ -1477,6 +1477,11 @@ namespace ts {
             return isStartOfExpression();
         }
 
+        function nextTokenIsStartOfType() {
+            nextToken();
+            return isStartOfType();
+        }
+
         // True if positioned at a list terminator
         function isListTerminator(kind: ParsingContext): boolean {
             if (token() === SyntaxKind.EndOfFileToken) {
@@ -2767,8 +2772,8 @@ namespace ts {
                         type = createJSDocPostfixType(SyntaxKind.JSDocNonNullableType, type);
                         break;
                     case SyntaxKind.QuestionToken:
-                        // only parse postfix ? inside jsdoc, otherwise it is a conditional type
-                        if (!(contextFlags & NodeFlags.JSDoc)) {
+                        // If not in JSDoc and next token is start of a type we have a conditional type
+                        if (!(contextFlags & NodeFlags.JSDoc) && lookAhead(nextTokenIsStartOfType)) {
                             return type;
                         }
                         type = createJSDocPostfixType(SyntaxKind.JSDocNullableType, type);
