@@ -4,4 +4,4 @@
 ////x[|.fo/**/|];
 
 const replacementSpan = test.ranges()[0];
-verify.completionsAt("", [{ name: "foo ", insertText: '["foo "]', replacementSpan }], { includeBracketCompletions: true });
+verify.completionsAt("", [{ name: "foo ", insertText: '["foo "]', replacementSpan }], { includeInsertTextCompletions: true });

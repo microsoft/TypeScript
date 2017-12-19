@@ -3997,7 +3997,7 @@ declare namespace ts {
     }
     interface GetCompletionsAtPositionOptions {
         includeExternalModuleExports: boolean;
-        includeBracketCompletions: boolean;
+        includeInsertTextCompletions: boolean;
     }
     interface ApplyCodeActionCommandResult {
         successMessage: string;
@@ -6107,7 +6107,7 @@ declare namespace ts.server.protocol {
          * If enabled, the completion list will include completions with invalid identifier names.
          * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
          */
-        includeBracketCompletions: boolean;
+        includeInsertTextCompletions: boolean;
     }
     /**
      * Completions request; value of command field is "completions".

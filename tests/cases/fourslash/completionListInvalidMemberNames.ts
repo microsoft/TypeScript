@@ -27,5 +27,5 @@ verify.completionsAt("a", [
     "b",
     { name: "1b", insertText: '["1b"]', replacementSpan },
 ], {
-    includeBracketCompletions: true,
+    includeInsertTextCompletions: true,
 });

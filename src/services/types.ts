@@ -333,7 +333,7 @@ namespace ts {
 
     export interface GetCompletionsAtPositionOptions {
         includeExternalModuleExports: boolean;
-        includeBracketCompletions: boolean;
+        includeInsertTextCompletions: boolean;
     }
 
     export interface ApplyCodeActionCommandResult {

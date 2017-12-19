@@ -188,7 +188,7 @@ declare namespace FourSlashInterface {
         caretAtMarker(markerName?: string): void;
         completionsAt(markerName: string, completions: ReadonlyArray<string | { name: string, insertText?: string, replacementSpan?: Range }>, options?: {
             isNewIdentifierLocation?: boolean;
-            includeBracketCompletions?: boolean;
+            includeInsertTextCompletions?: boolean;
         }): void;
         completionsAndDetailsAt(
             markerName: string,
