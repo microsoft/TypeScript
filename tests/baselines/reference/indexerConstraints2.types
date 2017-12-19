@@ -147,3 +147,11 @@ interface R {
 >NonIndexableUnion3 : NonIndexableUnion3
 >A : A
 }
+
+interface S {
+>S : S
+
+    [u: "foo" | "bar"]: A;
+>u : IndexableUnion
+>A : A
+}

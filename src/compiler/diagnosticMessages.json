@@ -939,11 +939,11 @@
         "category": "Error",
         "code": 1335
     },
-    "An index signature parameter type cannot be a type alias. Use '[index: {0}]' instead.": {
+    "An index signature parameter type cannot be a type alias. Consider writing '[{0}: {1}]: {2}' instead.": {
         "category": "Error",
         "code": 1336
     },
-    "An index signature parameter type cannot be a union type. Use '[K in {0}]' instead.": {
+    "An index signature parameter type cannot be a union type. Consider using a mapped object type instead.": {
         "category": "Error",
         "code": 1337
     },

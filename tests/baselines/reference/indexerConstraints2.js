@@ -71,6 +71,10 @@ interface R {
     [u: NonIndexableUnion3]: A;
 }
 
+interface S {
+    [u: "foo" | "bar"]: A;
+}
+
 //// [indexerConstraints2.js]
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||

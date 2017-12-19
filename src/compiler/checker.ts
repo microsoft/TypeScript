@@ -25778,11 +25778,16 @@ namespace ts {
                 const type = getTypeFromTypeNode(parameter.type);
 
                 if (type.flags & TypeFlags.String || type.flags & TypeFlags.Number) {
-                    return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_cannot_be_a_type_alias_Use_index_Colon_0_instead, typeToString(type));
+                    return grammarErrorOnNode(parameter.name,
+                                              Diagnostics.An_index_signature_parameter_type_cannot_be_a_type_alias_Consider_writing_0_Colon_1_Colon_2_instead,
+                                              getTextOfNode(parameter.name),
+                                              typeToString(type),
+                                              typeToString(getTypeFromTypeNode(node.type)));
                 }
 
-                if (type.flags & TypeFlags.Union && every((<UnionType>type).types, t => !!(t.flags & TypeFlags.StringLiteral))) {
-                    return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_cannot_be_a_union_type_Use_K_in_0_instead, symbolName(type.aliasSymbol));
+                if (allTypesAssignableToKind(type, TypeFlags.StringLiteral, /*strict*/ true)) {
+                    return grammarErrorOnNode(parameter.name,
+                                              Diagnostics.An_index_signature_parameter_type_cannot_be_a_union_type_Consider_using_a_mapped_object_type_instead);
                 }
 
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_must_be_string_or_number);

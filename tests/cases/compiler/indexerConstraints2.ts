@@ -69,3 +69,7 @@ type NonIndexableUnion3 = "foo" | 42;
 interface R {
     [u: NonIndexableUnion3]: A;
 }
+
+interface S {
+    [u: "foo" | "bar"]: A;
+}
