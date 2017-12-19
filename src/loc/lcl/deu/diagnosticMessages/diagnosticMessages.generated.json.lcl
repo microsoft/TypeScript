@@ -2191,7 +2191,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Computed values are not permitted in an enum with string valued members.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Berechnete Werte sind in einer Aufzählung mit Membern mit Zeichenfolgenwerten nicht zulässig.]]></Val>
+            <Val><![CDATA[Berechnete Werte sind in einer Enumeration mit Membern mit Zeichenfolgenwerten nicht zulässig.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
