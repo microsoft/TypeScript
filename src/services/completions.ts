@@ -238,7 +238,7 @@ namespace ts.Completions {
 
     function getStringLiteralCompletionEntries(sourceFile: SourceFile, position: number, typeChecker: TypeChecker, compilerOptions: CompilerOptions, host: LanguageServiceHost, log: Log): CompletionInfo | undefined {
         const node = findPrecedingToken(position, sourceFile);
-        if (!node || node.kind !== SyntaxKind.StringLiteral) {
+        if (!node || (node.kind !== SyntaxKind.StringLiteral && node.kind !== SyntaxKind.NoSubstitutionTemplateLiteral)) {
             return undefined;
         }
 
@@ -303,7 +303,7 @@ namespace ts.Completions {
 
             // Get completion for string literal from string literal type
             // i.e. var x: "hi" | "hello" = "/*completion position*/"
-            return getStringLiteralCompletionEntriesFromType(typeChecker.getContextualType(<StringLiteral>node), typeChecker);
+            return getStringLiteralCompletionEntriesFromType(typeChecker.getContextualType(<LiteralExpression>node), typeChecker);
         }
     }
 
