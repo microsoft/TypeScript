@@ -1198,18 +1198,13 @@ namespace Harness {
             fileOptions?: any;
         }
 
-        export interface CompilationOutput {
-            result: compiler.CompilationResult;
-            options: ts.CompilerOptions & HarnessOptions;
-        }
-
         export function compileFiles(
             inputFiles: TestFile[],
             otherFiles: TestFile[],
             harnessSettings: TestCaseParser.CompilerSettings,
             compilerOptions: ts.CompilerOptions,
             // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
-            currentDirectory: string): CompilationOutput {
+            currentDirectory: string): compiler.CompilationResult {
             const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
             options.target = options.target || ts.ScriptTarget.ES3;
             options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
@@ -1244,7 +1239,7 @@ namespace Harness {
                 }
             }
 
-            const result = compiler.compileFiles(
+            return compiler.compileFiles(
                 new compiler.CompilerHost(
                     vfs.VirtualFileSystem.createFromDocuments(
                         useCaseSensitiveFileNames,
@@ -1255,14 +1250,6 @@ namespace Harness {
                 ),
                 programFileNames,
                 options);
-
-            // const fileOutputs = compilation.outputs.map(output => output.asGeneratedFile());
-            // const traceResults = compilation.traces && compilation.traces.slice();
-            // const program = compilation.program;
-            // const emitResult = compilation.result;
-            // const errors = compilation.diagnostics;
-            // const result = new CompilerResult(fileOutputs, errors, program, compilation.vfs.currentDirectory, emitResult.sourceMaps, traceResults);
-            return { result, options };
         }
 
         export interface DeclarationCompilationContext {
@@ -1343,7 +1330,7 @@ namespace Harness {
             }
             const { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory } = context;
             const output = compileFiles(declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory);
-            return { declInputFiles, declOtherFiles, declResult: output.result };
+            return { declInputFiles, declOtherFiles, declResult: output };
         }
 
         export function minimalDiagnosticsToString(diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {

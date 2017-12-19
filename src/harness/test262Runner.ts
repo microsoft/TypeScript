@@ -52,14 +52,12 @@ class Test262BaselineRunner extends RunnerBase {
                     compilerResult: undefined,
                 };
 
-                const output = Harness.Compiler.compileFiles(
+                testState.compilerResult = Harness.Compiler.compileFiles(
                     [Test262BaselineRunner.helperFile].concat(inputFiles),
                     /*otherFiles*/ [],
                     /* harnessOptions */ undefined,
                     Test262BaselineRunner.options,
-                    /* currentDirectory */ undefined
-                    );
-                testState.compilerResult = output.result;
+                    /* currentDirectory */ undefined);
             });
 
             after(() => {

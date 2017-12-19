@@ -19,8 +19,8 @@ describe("Public APIs", () => {
                 content: fileContent
             };
             const inputFiles = [testFile];
-            const output = Harness.Compiler.compileFiles(inputFiles, [], /*harnessSettings*/ undefined, /*options*/ {}, /*currentDirectory*/ undefined);
-            assert(!output.result.diagnostics || !output.result.diagnostics.length, Harness.Compiler.minimalDiagnosticsToString(output.result.diagnostics, /*pretty*/ true));
+            const result = Harness.Compiler.compileFiles(inputFiles, [], /*harnessSettings*/ undefined, /*options*/ {}, /*currentDirectory*/ undefined);
+            assert(!result.diagnostics || !result.diagnostics.length, Harness.Compiler.minimalDiagnosticsToString(result.diagnostics, /*pretty*/ true));
         });
     }
 

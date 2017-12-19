@@ -164,15 +164,14 @@ class CompilerTest {
             tsConfigOptions.configFile.fileName = tsConfigOptions.configFilePath;
         }
 
-        const output = Harness.Compiler.compileFiles(
+        this.result = Harness.Compiler.compileFiles(
             this.toBeCompiled,
             this.otherFiles,
             this.harnessSettings,
             /*options*/ tsConfigOptions,
             /*currentDirectory*/ this.harnessSettings.currentDirectory);
 
-        this.options = output.options;
-        this.result = output.result;
+        this.options = this.result.options;
     }
 
     public static getConfigurations(fileName: string) {

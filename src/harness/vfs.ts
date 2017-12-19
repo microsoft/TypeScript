@@ -9,10 +9,11 @@
 //       support the eventual conversion of harness into a modular system.
 
 namespace vfs {
-    const S_IFMT = 0xf000;
-    const S_IFLNK = 0xa000;
-    const S_IFREG = 0x8000;
-    const S_IFDIR = 0x4000;
+    // file mode flags used for computing Stats
+    const S_IFMT = 0xf000; // file type flags mask
+    const S_IFLNK = 0xa000; // symbolic link
+    const S_IFREG = 0x8000; // regular file
+    const S_IFDIR = 0x4000; // regular directory
 
     export interface PathMappings {
         [path: string]: string;

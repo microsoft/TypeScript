@@ -142,8 +142,7 @@ namespace RWC {
                     opts.options.noLib = true;
 
                     // Emit the results
-                    compilerOptions = undefined;
-                    const output = Harness.Compiler.compileFiles(
+                    compilerResult = Harness.Compiler.compileFiles(
                         inputFiles,
                         otherFiles,
                         /* harnessOptions */ undefined,
@@ -151,9 +150,7 @@ namespace RWC {
                         // Since each RWC json file specifies its current directory in its json file, we need
                         // to pass this information in explicitly instead of acquiring it from the process.
                         currentDirectory);
-
-                    compilerOptions = output.options;
-                    compilerResult = output.result;
+                    compilerOptions = compilerResult.options;
                 });
 
                 function getHarnessCompilerInputUnit(fileName: string): Harness.Compiler.TestFile {

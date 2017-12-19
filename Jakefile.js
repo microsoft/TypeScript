@@ -487,7 +487,6 @@ var buildProtocolTs = path.join(scriptsDirectory, "buildProtocol.ts");
 var buildProtocolJs = path.join(scriptsDirectory, "buildProtocol.js");
 var buildProtocolDts = path.join(builtLocalDirectory, "protocol.d.ts");
 var typescriptServicesDts = path.join(builtLocalDirectory, "typescriptServices.d.ts");
-var typesMapJson = path.join(builtLocalDirectory, "typesMap.json");
 
 file(buildProtocolTs);
 
@@ -652,7 +651,7 @@ var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources, [builtLocalDirectory, copyright, cancellationTokenFile, typingsInstallerFile, watchGuardFile].concat(serverSources).concat(servicesSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"], preserveConstEnums: true, lib: "es6" });
 var tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 var tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
-file(typesMapOutputPath, undefined, function() {
+file(typesMapOutputPath, /** @type {*} */(function() {
     var content = fs.readFileSync(path.join(serverDirectory, 'typesMap.json'));
     // Validate that it's valid JSON
     try {
@@ -661,7 +660,7 @@ file(typesMapOutputPath, undefined, function() {
         console.log("Parse error in typesMap.json: " + e);
     }
     fs.writeFileSync(typesMapOutputPath, content);
-});
+}));
 compileFile(
     tsserverLibraryFile,
     languageServiceLibrarySources,
