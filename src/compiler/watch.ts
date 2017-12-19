@@ -48,6 +48,15 @@ namespace ts {
         };
     }
 
+    /** @internal */
+    export function createWatchDiagnosticReporterWithColor(system = sys): DiagnosticReporter {
+        return diagnostic => {
+            let output = `[${ formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey) }] `;
+            output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${system.newLine + system.newLine + system.newLine}`;
+            system.write(output);
+        };
+    }
+
     export function reportDiagnostics(diagnostics: Diagnostic[], reportDiagnostic: DiagnosticReporter): void {
         for (const diagnostic of diagnostics) {
             reportDiagnostic(diagnostic);
@@ -131,7 +140,7 @@ namespace ts {
         reportWatchDiagnostic?: DiagnosticReporter
     ): WatchingSystemHost {
         reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system, pretty ? reportDiagnosticWithColorAndContext : reportDiagnosticSimply);
-        reportWatchDiagnostic = reportWatchDiagnostic || createWatchDiagnosticReporter(system);
+        reportWatchDiagnostic = reportWatchDiagnostic || pretty ? createWatchDiagnosticReporterWithColor(system) : createWatchDiagnosticReporter(system);
         parseConfigFile = parseConfigFile || ts.parseConfigFile;
         return {
             system,
