@@ -242,22 +242,22 @@ namespace ts {
     }
 
     /** @internal */
-    export const foregroundColorEscapeSequences = {
-        grey: "\u001b[90m",
-        red: "\u001b[91m",
-        yellow: "\u001b[93m",
-        blue: "\u001b[94m",
-        cyan: "\u001b[96m"
-    };
+    export enum ForegroundColorEscapeSequences {
+        Grey = "\u001b[90m",
+        Red = "\u001b[91m",
+        Yellow = "\u001b[93m",
+        Blue = "\u001b[94m",
+        Cyan = "\u001b[96m"
+    }
     const gutterStyleSequence = "\u001b[30;47m";
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
     function getCategoryFormat(category: DiagnosticCategory): string {
         switch (category) {
-            case DiagnosticCategory.Warning: return foregroundColorEscapeSequences.yellow;
-            case DiagnosticCategory.Error: return foregroundColorEscapeSequences.red;
-            case DiagnosticCategory.Message: return foregroundColorEscapeSequences.blue;
+            case DiagnosticCategory.Warning: return ForegroundColorEscapeSequences.Yellow;
+            case DiagnosticCategory.Error: return ForegroundColorEscapeSequences.Red;
+            case DiagnosticCategory.Message: return ForegroundColorEscapeSequences.Blue;
         }
     }
 
@@ -311,7 +311,7 @@ namespace ts {
 
                     // Output the gutter and the error span for the line using tildes.
                     context += formatColorAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
-                    context += foregroundColorEscapeSequences.red;
+                    context += ForegroundColorEscapeSequences.Red;
                     if (i === firstLine) {
                         // If we're on the last line, then limit it to the last character of the last line.
                         // Otherwise, we'll just squiggle the rest of the line, giving 'slice' no end position.
@@ -330,18 +330,18 @@ namespace ts {
                     context += resetEscapeSequence;
                 }
 
-                output += formatColorAndReset(relativeFileName, foregroundColorEscapeSequences.cyan);
+                output += formatColorAndReset(relativeFileName, ForegroundColorEscapeSequences.Cyan);
                 output += "(";
-                output += formatColorAndReset(`${ firstLine + 1 }`, foregroundColorEscapeSequences.yellow);
+                output += formatColorAndReset(`${ firstLine + 1 }`, ForegroundColorEscapeSequences.Yellow);
                 output += ",";
-                output += formatColorAndReset(`${ firstLineChar + 1 }`, foregroundColorEscapeSequences.yellow);
+                output += formatColorAndReset(`${ firstLineChar + 1 }`, ForegroundColorEscapeSequences.Yellow);
                 output += "): ";
             }
 
             const categoryColor = getCategoryFormat(diagnostic.category);
             const category = DiagnosticCategory[diagnostic.category].toLowerCase();
             output += formatColorAndReset(category, categoryColor);
-            output += formatColorAndReset(` TS${ diagnostic.code }: `, foregroundColorEscapeSequences.grey);
+            output += formatColorAndReset(` TS${ diagnostic.code }: `, ForegroundColorEscapeSequences.Grey);
             output += flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine());
 
             if (diagnostic.file) {

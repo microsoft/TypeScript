@@ -48,9 +48,10 @@ namespace ts {
         };
     }
 
+    /** @internal */
     export function createWatchDiagnosticReporterWithColor(system = sys): DiagnosticReporter {
         return diagnostic => {
-            let output = `[${ formatColorAndReset(new Date().toLocaleTimeString(), foregroundColorEscapeSequences.grey) }] `;
+            let output = `[${ formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey) }] `;
             output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${system.newLine + system.newLine + system.newLine}`;
             system.write(output);
         };
