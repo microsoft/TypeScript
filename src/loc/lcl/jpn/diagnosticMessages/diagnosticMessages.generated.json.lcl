@@ -145,7 +145,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a class property declaration must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[クラス プロパティ宣言内の計算されたプロパティ名は、型がリテラル型または '一意のシンボル' 型の式を参照する必要があります。]]></Val>
+            <Val><![CDATA[クラス プロパティ宣言内の計算されたプロパティ名は、型がリテラル型または 'unique symbol' 型の式を参照する必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -154,7 +154,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[メソッド オーバーロード内の計算されたプロパティ名は、型がリテラル型または '一意のシンボル' 型の式を参照する必要があります。]]></Val>
+            <Val><![CDATA[メソッド オーバーロード内の計算されたプロパティ名は、型がリテラル型または 'unique symbol' 型の式を参照する必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -163,7 +163,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型リテラル内の計算されたプロパティ名は、型がリテラル型または '一意のシンボル' 型の式を参照する必要があります。]]></Val>
+            <Val><![CDATA[型リテラル内の計算されたプロパティ名は、型がリテラル型または 'unique symbol' 型の式を参照する必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -172,7 +172,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in an ambient context must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[環境コンテキスト内の計算されたプロパティ名は、型がリテラル型または '一意のシンボル' 型の式を参照する必要があります。]]></Val>
+            <Val><![CDATA[環境コンテキスト内の計算されたプロパティ名は、型がリテラル型または 'unique symbol' 型の式を参照する必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -181,7 +181,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[インターフェイス内の計算されたプロパティ名は、型がリテラル型または '一意のシンボル' 型の式を参照する必要があります。]]></Val>
+            <Val><![CDATA[インターフェイス内の計算されたプロパティ名は、型がリテラル型または 'unique symbol' 型の式を参照する必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -418,7 +418,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[enum 宣言のメンバー初期化子は、他の enum で定義されたメンバーを含め、その後で宣言されたメンバーを参照できません。]]></Val>
+            <Val><![CDATA[列挙型宣言のメンバー初期化子は、他の列挙型で定義されたメンバーを含め、その後で宣言されたメンバーを参照できません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -532,7 +532,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型が '一意のシンボル' 型のクラスのプロパティは、'static' と 'readonly' の両方である必要があります。]]></Val>
+            <Val><![CDATA[型が 'unique symbol' 型のクラスのプロパティは、'static' と 'readonly' の両方である必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -541,7 +541,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A property of an interface or type literal whose type is a 'unique symbol' type must be 'readonly'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型が '一意のシンボル' 型のインターフェイスまたは型リテラルのプロパティは、'readonly' である必要があります。]]></Val>
+            <Val><![CDATA[型が 'unique symbol' 型のインターフェイスまたは型リテラルのプロパティは、'readonly' である必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -796,7 +796,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A variable whose type is a 'unique symbol' type must be 'const'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型が '一意のシンボル' 型の変数は、'const' である必要があります。]]></Val>
+            <Val><![CDATA[型が 'unique symbol' 型の変数は、'const' である必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -866,52 +866,58 @@
       </Item>
       <Item ItemId=";Add_0_to_existing_import_declaration_from_1_90015" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add '{0}' to existing import declaration from "{1}".]]></Val>
+          <Val><![CDATA[Add '{0}' to existing import declaration from "{1}"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["{1}" から既存のインポート宣言に '{0}' を追加します。]]></Val>
+            <Val><![CDATA["{1}" から既存のインポート宣言に '{0}' を追加する]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Add {0} to existing import declaration from {1}.]]></Val>
+            <Val><![CDATA[Add '{0}' to existing import declaration from "{1}".]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_index_signature_for_property_0_90017" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add index signature for property '{0}'.]]></Val>
+          <Val><![CDATA[Add index signature for property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プロパティ '{0}' のインデックス シグネチャを追加します。]]></Val>
+            <Val><![CDATA[プロパティ '{0}' のインデックス シグネチャを追加する]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Add index signature for property '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_missing_super_call_90001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add missing 'super()' call.]]></Val>
+          <Val><![CDATA[Add missing 'super()' call]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[欠落している 'super()' 呼び出しを追加します。]]></Val>
+            <Val><![CDATA[欠落している 'super()' 呼び出しを追加する]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Add missing 'super()' call.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_this_to_unresolved_variable_90008" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add 'this.' to unresolved variable.]]></Val>
+          <Val><![CDATA[Add 'this.' to unresolved variable]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['this.' を未解決の変数に追加します。]]></Val>
+            <Val><![CDATA['this.' を未解決の変数に追加する]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Add 'this.' to unresolved variable.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript__90009" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript__5068" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[tsconfig.json ファイルを追加すると、TypeScript ファイルと JavaScript ファイルの両方を含むプロジェクトを整理できます。詳細については、https://aka.ms/tsconfig をご覧ください。]]></Val>
           </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig]]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1099,7 +1105,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An enum member cannot have a numeric name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[列挙メンバーに数値名を含めることはできません。]]></Val>
+            <Val><![CDATA[列挙型メンバーに数値名を含めることはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1541,10 +1547,13 @@
       </Item>
       <Item ItemId=";Call_decorator_expression_90028" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Call decorator expression.]]></Val>
+          <Val><![CDATA[Call decorator expression]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[デコレーター式を呼び出します。]]></Val>
+            <Val><![CDATA[デコレーター式を呼び出す]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Call decorator expression.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1955,34 +1964,37 @@
       </Item>
       <Item ItemId=";Change_0_to_1_90014" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Change '{0}' to '{1}'.]]></Val>
+          <Val><![CDATA[Change '{0}' to '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' を '{1}' に変更します。]]></Val>
+            <Val><![CDATA['{0}' を '{1}' に変更する]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Change {0} to {1}.]]></Val>
+            <Val><![CDATA[Change '{0}' to '{1}'.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Change_extends_to_implements_90003" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Change 'extends' to 'implements'.]]></Val>
+          <Val><![CDATA[Change 'extends' to 'implements']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['extends' を 'implements' に変更します。]]></Val>
+            <Val><![CDATA['extends' を 'implements' に変更する]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Change 'extends' to 'implements']]></Val>
+            <Val><![CDATA[Change 'extends' to 'implements'.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Change_spelling_to_0_90022" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Change spelling to '{0}'.]]></Val>
+          <Val><![CDATA[Change spelling to '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[スペルを '{0}' に変更してください。]]></Val>
+            <Val><![CDATA[スペルを '{0}' に変更する]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Change spelling to '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2173,7 +2185,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Computed property names are not allowed in enums.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[計算されたプロパティ名は列挙では使用できません。]]></Val>
+            <Val><![CDATA[計算されたプロパティ名は列挙型では使用できません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2182,7 +2194,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Computed values are not permitted in an enum with string valued members.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[文字列値のメンバーを持つ列挙では、計算値は許可されません。]]></Val>
+            <Val><![CDATA[文字列値のメンバーを持つ列挙型では、計算値は許可されません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2354,37 +2366,49 @@
       </Item>
       <Item ItemId=";Declare_method_0_90023" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Declare method '{0}'.]]></Val>
+          <Val><![CDATA[Declare method '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[メソッド '{0}' を宣言します。]]></Val>
+            <Val><![CDATA[メソッド '{0}' を宣言する]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Declare method '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Declare_property_0_90016" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Declare property '{0}'.]]></Val>
+          <Val><![CDATA[Declare property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プロパティ '{0}' を宣言します。]]></Val>
+            <Val><![CDATA[プロパティ '{0}' を宣言する]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Declare property '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Declare_static_method_0_90024" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Declare static method '{0}'.]]></Val>
+          <Val><![CDATA[Declare static method '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[静的メソッド '{0}' を宣言します。]]></Val>
+            <Val><![CDATA[静的メソッド '{0}' を宣言する]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Declare static method '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Declare_static_property_0_90027" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Declare static property '{0}'.]]></Val>
+          <Val><![CDATA[Declare static property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[静的プロパティ '{0}' を宣言します。]]></Val>
+            <Val><![CDATA[静的プロパティ '{0}' を宣言する]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Declare static property '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2462,10 +2486,13 @@
       </Item>
       <Item ItemId=";Disable_checking_for_this_file_90018" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable checking for this file.]]></Val>
+          <Val><![CDATA[Disable checking for this file]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[このファイルのチェックを無効にします。]]></Val>
+            <Val><![CDATA[このファイルのチェックを無効にする]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disable checking for this file.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2554,7 +2581,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Do not erase const enum declarations in generated code.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[生成されたコード内で const enum 宣言を消去しないでください。]]></Val>
+            <Val><![CDATA[生成されたコード内で const 列挙型宣言を消去しないでください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2899,7 +2926,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum declarations must all be const or non-const.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[enum 宣言は、すべてが定数、またはすべてが非定数でなければなりません。]]></Val>
+            <Val><![CDATA[列挙型宣言は、すべてが定数、またはすべてが非定数でなければなりません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2917,7 +2944,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum member must have initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[列挙メンバーには初期化子が必要です。]]></Val>
+            <Val><![CDATA[列挙型メンバーには初期化子が必要です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3429,15 +3456,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0_5011" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ファイルの指定に複数の再帰的なディレクトリのワイルドカード ('**') を含めることはできません: '{0}'。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0_5010" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[File specification cannot end in a recursive directory wildcard ('**'): '{0}'.]]></Val>
@@ -3731,31 +3749,37 @@
       </Item>
       <Item ItemId=";Ignore_this_error_message_90019" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Ignore this error message.]]></Val>
+          <Val><![CDATA[Ignore this error message]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[このエラー メッセージを無視します。]]></Val>
+            <Val><![CDATA[このエラー メッセージを無視する]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Ignore this error message.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Implement_inherited_abstract_class_90007" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Implement inherited abstract class.]]></Val>
+          <Val><![CDATA[Implement inherited abstract class]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[継承抽象クラスを実装します。]]></Val>
+            <Val><![CDATA[継承抽象クラスを実装する]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Implement inherited abstract class]]></Val>
+            <Val><![CDATA[Implement inherited abstract class.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Implement_interface_0_90006" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Implement interface '{0}'.]]></Val>
+          <Val><![CDATA[Implement interface '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[インターフェイス '{0}' を実装します。]]></Val>
+            <Val><![CDATA[インターフェイス '{0}' を実装する]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Implement interface '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3770,10 +3794,13 @@
       </Item>
       <Item ItemId=";Import_0_from_module_1_90013" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Import '{0}' from module "{1}".]]></Val>
+          <Val><![CDATA[Import '{0}' from module "{1}"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[モジュール "{1}" から '{0}' をインポートします。]]></Val>
+            <Val><![CDATA[モジュール "{1}" から '{0}' をインポートする]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Import '{0}' from module "{1}".]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3868,7 +3895,7 @@
         <Str Cat="Text">
           <Val><![CDATA[In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[複数の宣言がある列挙で、最初の列挙要素の初期化子を省略できる宣言は 1 つのみです。]]></Val>
+            <Val><![CDATA[複数の宣言がある列挙型で、最初の列挙要素の初期化子を省略できる宣言は 1 つのみです。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3920,37 +3947,49 @@
       </Item>
       <Item ItemId=";Infer_parameter_types_from_usage_95012" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Infer parameter types from usage.]]></Val>
+          <Val><![CDATA[Infer parameter types from usage]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[使用状況からパラメーターの型を推論します。]]></Val>
+            <Val><![CDATA[使用状況からパラメーターの型を推論する]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Infer parameter types from usage.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Infer_type_of_0_from_usage_95011" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Infer type of '{0}' from usage.]]></Val>
+          <Val><![CDATA[Infer type of '{0}' from usage]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[使用状況から型 '{0}' を推論します。]]></Val>
+            <Val><![CDATA[使用状況から '{0}' の型を推論する]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Infer type of '{0}' from usage.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Initialize_property_0_in_the_constructor_90020" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Initialize property '{0}' in the constructor.]]></Val>
+          <Val><![CDATA[Initialize property '{0}' in the constructor]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[コンストラクターのプロパティ '{0}' を初期化します。]]></Val>
+            <Val><![CDATA[コンストラクターのプロパティ '{0}' を初期化する]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Initialize property '{0}' in the constructor.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Initialize_static_property_0_90021" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Initialize static property '{0}'.]]></Val>
+          <Val><![CDATA[Initialize static property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[静的プロパティ '{0}' を初期化します。]]></Val>
+            <Val><![CDATA[静的プロパティ '{0}' を初期化する]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Initialize static property '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4481,10 +4520,13 @@
       </Item>
       <Item ItemId=";Make_super_call_the_first_statement_in_the_constructor_90002" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Make 'super()' call the first statement in the constructor.]]></Val>
+          <Val><![CDATA[Make 'super()' call the first statement in the constructor]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['super()' 呼び出しをコンストラクター内の最初のステートメントにします。]]></Val>
+            <Val><![CDATA['super()' 呼び出しをコンストラクター内の最初のステートメントにする]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Make 'super()' call the first statement in the constructor.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4701,6 +4743,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Multiple_consecutive_numeric_separators_are_not_permitted_6189" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Multiple consecutive numeric separators are not permitted.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[複数の連続した数値区切り記号を指定することはできません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Multiple_constructor_implementations_are_not_allowed_2392" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Multiple constructor implementations are not allowed.]]></Val>
@@ -4791,6 +4842,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Numeric_separators_are_not_allowed_here_6188" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Numeric separators are not allowed here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[数値の区切り記号は、ここでは使用できません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Object_is_possibly_null_2531" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Object is possibly 'null'.]]></Val>
@@ -4867,7 +4927,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Octal literals are not allowed in enums members initializer. Use the syntax '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[8 進数のリテラルは、列挙メンバーの初期化子では許可されていません。構文 '{0}' を使用してください。]]></Val>
+            <Val><![CDATA[8 進数のリテラルは、列挙型メンバーの初期化子では許可されていません。構文 '{0}' を使用してください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5396,10 +5456,13 @@
       </Item>
       <Item ItemId=";Prefix_0_with_an_underscore_90025" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Prefix '{0}' with an underscore.]]></Val>
+          <Val><![CDATA[Prefix '{0}' with an underscore]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[アンダースコアを含むプレフィックス '{0}'。]]></Val>
+            <Val><![CDATA[アンダースコアを含むプレフィックス '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Prefix '{0}' with an underscore.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5443,7 +5506,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' does not exist on 'const' enum '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プロパティ '{0}' が 'const' 列挙 '{1}' に存在しません。]]></Val>
+            <Val><![CDATA[プロパティ '{0}' が 'const' 列挙型 '{1}' に存在しません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5849,10 +5912,13 @@
       </Item>
       <Item ItemId=";Remove_declaration_for_Colon_0_90004" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Remove declaration for: '{0}'.]]></Val>
+          <Val><![CDATA[Remove declaration for: '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[次に対する宣言を削除します: {0}。]]></Val>
+            <Val><![CDATA[次に対する宣言を削除する: '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Remove declaration for: '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6275,10 +6341,13 @@
       </Item>
       <Item ItemId=";Rewrite_as_the_indexed_access_type_0_90026" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Rewrite as the indexed access type '{0}'.]]></Val>
+          <Val><![CDATA[Rewrite as the indexed access type '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[インデックス化されたアクセスの種類 '{0}' として書き換えます。]]></Val>
+            <Val><![CDATA[インデックス付きのアクセスの種類 '{0}' として書き換える]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Rewrite as the indexed access type '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6390,15 +6459,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_or_ESNEXT_6015" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_or_ESNEXT_6015" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'.]]></Val>
+          <Val><![CDATA[Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ECMAScript のターゲット バージョンを指定します: 'ES3' (既定)、'ES5'、'ES2015'、'ES2016'、'ES2017'、'ESNEXT'。]]></Val>
+            <Val><![CDATA[ECMAScript のターゲット バージョンを指定します: 'ES3' (既定)、'ES5'、'ES2015'、'ES2016'、'ES2017'、'ES2018'、'ESNEXT'。]]></Val>
           </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT']]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6504,6 +6570,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Starting_compilation_in_watch_mode_6031" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Starting compilation in watch mode...]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ウォッチ モードでのコンパイルを開始しています...]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Statement_expected_1129" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Statement expected.]]></Val>
@@ -6582,6 +6657,9 @@
       <Item ItemId=";Subsequent_property_declarations_must_have_the_same_type_Property_0_must_be_of_type_1_but_here_has_t_2717" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Subsequent property declarations must have the same type.  Property '{0}' must be of type '{1}', but here has type '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[後続のプロパティ宣言は同じ型でなければなりません。プロパティ '{0}' の型は '{1}' である必要がありますが、ここでは型が '{2}' になっています。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7350,7 +7428,7 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated_90010" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated_2719" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is not assignable to type '{1}'. Two different types with this name exist, but they are unrelated.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
@@ -8395,7 +8473,7 @@
         <Str Cat="Text">
           <Val><![CDATA['const' enum member initializer was evaluated to a non-finite value.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['const' 列挙メンバーの初期化子が、無限値に評価されました。]]></Val>
+            <Val><![CDATA['const' 列挙型メンバーの初期化子が、無限値に評価されました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8404,7 +8482,7 @@
         <Str Cat="Text">
           <Val><![CDATA['const' enum member initializer was evaluated to disallowed value 'NaN'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['const' 列挙メンバーの初期化子が、許可されない値 'NaN' に評価されました。]]></Val>
+            <Val><![CDATA['const' 列挙型メンバーの初期化子が、許可されない値 'NaN' に評価されました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8431,7 +8509,7 @@
         <Str Cat="Text">
           <Val><![CDATA['enum declarations' can only be used in a .ts file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['enum 宣言' を使用できるのは .ts ファイル内のみです。]]></Val>
+            <Val><![CDATA['列挙型宣言' を使用できるのは .ts ファイル内のみです。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8866,7 +8944,7 @@
         <Str Cat="Text">
           <Val><![CDATA['unique symbol' types are not allowed here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['一意のシンボル' 型はここでは許可されていません。]]></Val>
+            <Val><![CDATA['unique symbol' 型はここでは許可されていません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8875,7 +8953,7 @@
         <Str Cat="Text">
           <Val><![CDATA['unique symbol' types are only allowed on variables in a variable statement.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['一意のシンボル' 型は変数ステートメントの変数でのみ許可されています。]]></Val>
+            <Val><![CDATA['unique symbol' 型は変数ステートメントの変数でのみ許可されています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8884,7 +8962,7 @@
         <Str Cat="Text">
           <Val><![CDATA['unique symbol' types may not be used on a variable declaration with a binding name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['一意のシンボル' 型は、バインディング名を持つ変数の宣言では使用できません。]]></Val>
+            <Val><![CDATA['unique symbol' 型は、バインディング名を持つ変数の宣言では使用できません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

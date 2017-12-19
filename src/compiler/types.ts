@@ -584,6 +584,40 @@ namespace ts {
         | JSDocFunctionType
         | EndOfFileToken;
 
+    export type HasType =
+        | SignatureDeclaration
+        | VariableDeclaration
+        | ParameterDeclaration
+        | PropertySignature
+        | PropertyDeclaration
+        | TypePredicateNode
+        | ParenthesizedTypeNode
+        | TypeOperatorNode
+        | MappedTypeNode
+        | AssertionExpression
+        | TypeAliasDeclaration
+        | JSDocTypeExpression
+        | JSDocNonNullableType
+        | JSDocNullableType
+        | JSDocOptionalType
+        | JSDocVariadicType;
+
+    export type HasInitializer =
+        | HasExpressionInitializer
+        | ForStatement
+        | ForInStatement
+        | ForOfStatement
+        | JsxAttribute;
+
+    export type HasExpressionInitializer =
+        | VariableDeclaration
+        | ParameterDeclaration
+        | BindingElement
+        | PropertySignature
+        | PropertyDeclaration
+        | PropertyAssignment
+        | EnumMember;
+
     /* @internal */
     export type MutableNodeArray<T extends Node> = NodeArray<T> & T[];
 
@@ -793,6 +827,9 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
+    /*@internal*/
+    export type BindingElementGrandparent = BindingElement["parent"]["parent"];
+
     export interface PropertySignature extends TypeElement, JSDocContainer {
         kind: SyntaxKind.PropertySignature;
         name: PropertyName;                 // Declared property name
@@ -848,25 +885,18 @@ namespace ts {
         expression: Expression;
     }
 
-    // SyntaxKind.VariableDeclaration
-    // SyntaxKind.Parameter
-    // SyntaxKind.BindingElement
-    // SyntaxKind.Property
-    // SyntaxKind.PropertyAssignment
-    // SyntaxKind.JsxAttribute
-    // SyntaxKind.ShorthandPropertyAssignment
-    // SyntaxKind.EnumMember
-    // SyntaxKind.JSDocPropertyTag
-    // SyntaxKind.JSDocParameterTag
-    export interface VariableLikeDeclaration extends NamedDeclaration {
-        propertyName?: PropertyName;
-        dotDotDotToken?: DotDotDotToken;
-        name: DeclarationName;
-        questionToken?: QuestionToken;
-        exclamationToken?: ExclamationToken;
-        type?: TypeNode;
-        initializer?: Expression;
-    }
+    export type VariableLikeDeclaration =
+        | VariableDeclaration
+        | ParameterDeclaration
+        | BindingElement
+        | PropertyDeclaration
+        | PropertyAssignment
+        | PropertySignature
+        | JsxAttribute
+        | ShorthandPropertyAssignment
+        | EnumMember
+        | JSDocPropertyTag
+        | JSDocParameterTag;
 
     export interface PropertyLikeDeclaration extends NamedDeclaration {
         name: PropertyName;
@@ -949,7 +979,7 @@ namespace ts {
 
     export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement, JSDocContainer {
         kind: SyntaxKind.Constructor;
-        parent?: ClassDeclaration | ClassExpression;
+        parent?: ClassLikeDeclaration;
         body?: FunctionBody;
         /* @internal */ returnFlowNode?: FlowNode;
     }
@@ -957,14 +987,14 @@ namespace ts {
     /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
     export interface SemicolonClassElement extends ClassElement {
         kind: SyntaxKind.SemicolonClassElement;
-        parent?: ClassDeclaration | ClassExpression;
+        parent?: ClassLikeDeclaration;
     }
 
     // See the comment on MethodDeclaration for the intuition behind GetAccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
     export interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer {
         kind: SyntaxKind.GetAccessor;
-        parent?: ClassDeclaration | ClassExpression | ObjectLiteralExpression;
+        parent?: ClassLikeDeclaration | ObjectLiteralExpression;
         name: PropertyName;
         body?: FunctionBody;
     }
@@ -973,7 +1003,7 @@ namespace ts {
     // ClassElement and an ObjectLiteralElement.
     export interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer {
         kind: SyntaxKind.SetAccessor;
-        parent?: ClassDeclaration | ClassExpression | ObjectLiteralExpression;
+        parent?: ClassLikeDeclaration | ObjectLiteralExpression;
         name: PropertyName;
         body?: FunctionBody;
     }
@@ -982,7 +1012,7 @@ namespace ts {
 
     export interface IndexSignatureDeclaration extends SignatureDeclarationBase, ClassElement, TypeElement {
         kind: SyntaxKind.IndexSignature;
-        parent?: ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeLiteralNode;
+        parent?: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
     }
 
     export interface TypeNode extends Node {
@@ -1490,8 +1520,9 @@ namespace ts {
         HexSpecifier = 1 << 6,      // e.g. `0x00000000`
         BinarySpecifier = 1 << 7,   // e.g. `0b0110010000000000`
         OctalSpecifier = 1 << 8,    // e.g. `0o777`
+        ContainsSeparator = 1 << 9, // e.g. `0b1100_0101`
         BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,
-        NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinarySpecifier | OctalSpecifier
+        NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinarySpecifier | OctalSpecifier | ContainsSeparator
     }
 
     export interface NumericLiteral extends LiteralExpression {
@@ -1986,7 +2017,7 @@ namespace ts {
 
     export interface HeritageClause extends Node {
         kind: SyntaxKind.HeritageClause;
-        parent?: InterfaceDeclaration | ClassDeclaration | ClassExpression;
+        parent?: InterfaceDeclaration | ClassLikeDeclaration;
         token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword;
         types: NodeArray<ExpressionWithTypeArguments>;
     }
@@ -2478,7 +2509,7 @@ namespace ts {
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-        /* @internal */ resolvedModules: Map<ResolvedModuleFull>;
+        /* @internal */ resolvedModules: Map<ResolvedModuleFull | undefined>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: ReadonlyArray<StringLiteral>;
         // Identifier only if `declare global`
@@ -2738,6 +2769,8 @@ namespace ts {
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
         getContextualType(node: Expression): Type | undefined;
+        /* @internal */ isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElementLike | JsxAttributeLike): boolean;
+
         /**
          * returns unknownSignature in the case of an error.
          * @param argumentCount Apparent number of arguments, passed in case of a possibly incomplete call. This should come from an ArgumentListInfo. See `signatureHelp.ts`.
@@ -2752,6 +2785,8 @@ namespace ts {
 
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
+        /** Exclude accesses to private properties or methods with a `this` parameter that `type` doesn't satisfy. */
+        /* @internal */ isValidPropertyAccessForCompletions(node: PropertyAccessExpression, type: Type, property: Symbol): boolean;
         /** Follow all aliases to get the original symbol. */
         getAliasedSymbol(symbol: Symbol): Symbol;
         /** Follow a *single* alias to get the immediately aliased symbol. */
@@ -2786,7 +2821,7 @@ namespace ts {
         /* @internal */ getNullType(): Type;
         /* @internal */ getESSymbolType(): Type;
         /* @internal */ getNeverType(): Type;
-        /* @internal */ getUnionType(types: Type[], subtypeReduction?: boolean): Type;
+        /* @internal */ getUnionType(types: Type[], subtypeReduction?: UnionReduction): Type;
         /* @internal */ createArrayType(elementType: Type): Type;
         /* @internal */ createPromiseType(type: Type): Type;
 
@@ -2839,6 +2874,13 @@ namespace ts {
          * This should be called in a loop climbing parents of the symbol, so we'll get `N`.
          */
         /* @internal */ getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined;
+    }
+
+    /* @internal */
+    export const enum UnionReduction {
+        None = 0,
+        Literal,
+        Subtype
     }
 
     export enum NodeBuilderFlags {
@@ -4243,6 +4285,8 @@ namespace ts {
      * If changing this, remember to change `moduleResolutionIsEqualTo`.
      */
     export interface ResolvedModuleFull extends ResolvedModule {
+        /* @internal */
+        readonly originalPath?: string;
         /**
          * Extension of resolvedFileName. This must match what's at the end of resolvedFileName.
          * This is optional for backwards-compatibility, but will be added if not provided.

@@ -145,7 +145,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a class property declaration must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[類別屬性宣告中的計算屬性名稱必須參考型別為常值型別或 'unique symbol' 型別的運算式。]]></Val>
+            <Val><![CDATA[類別屬性宣告中的計算屬性名稱，必須參考類型為常值型別或 'unique symbol' 類型的運算式。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -163,7 +163,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型別常值中的計算屬性名稱必須參考型別為常值型別或 'unique symbol' 型別的運算式。]]></Val>
+            <Val><![CDATA[常值型別中的計算屬性名稱，必須參考類型為常值型別或 'unique symbol' 類型的運算式。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -532,7 +532,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型別為 'unique symbol' 型別的類別屬性必須同時為 'static' 與 'readonly'。]]></Val>
+            <Val><![CDATA[類型為 'unique symbol' 類型的類別屬性，必須為 'static' 和 'readonly'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -541,7 +541,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A property of an interface or type literal whose type is a 'unique symbol' type must be 'readonly'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型別為 'unique symbol' 型別的介面或型別常值屬性必須是 'readonly'。]]></Val>
+            <Val><![CDATA[類型為 'unique symbol' 類型之介面或常值型別的屬性，必須是 'readonly'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -866,52 +866,58 @@
       </Item>
       <Item ItemId=";Add_0_to_existing_import_declaration_from_1_90015" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add '{0}' to existing import declaration from "{1}".]]></Val>
+          <Val><![CDATA[Add '{0}' to existing import declaration from "{1}"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[從 "{1}" 將 '{0}' 新增至現有的匯入宣告。]]></Val>
+            <Val><![CDATA[從 "{1}" 將 '{0}' 新增至現有的匯入宣告]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Add {0} to existing import declaration from {1}.]]></Val>
+            <Val><![CDATA[Add '{0}' to existing import declaration from "{1}".]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_index_signature_for_property_0_90017" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add index signature for property '{0}'.]]></Val>
+          <Val><![CDATA[Add index signature for property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[為屬性 '{0}' 新增索引簽章。]]></Val>
+            <Val><![CDATA[為屬性 '{0}' 新增索引簽章]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Add index signature for property '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_missing_super_call_90001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add missing 'super()' call.]]></Val>
+          <Val><![CDATA[Add missing 'super()' call]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[新增遺漏的 'super()' 呼叫。]]></Val>
+            <Val><![CDATA[新增遺漏的 'super()' 呼叫]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Add missing 'super()' call.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_this_to_unresolved_variable_90008" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add 'this.' to unresolved variable.]]></Val>
+          <Val><![CDATA[Add 'this.' to unresolved variable]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[將 'this.' 新增到未經解析的變數。]]></Val>
+            <Val><![CDATA[將 'this' 新增至未解析的變數]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Add 'this.' to unresolved variable.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript__90009" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript__5068" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[新增 tsconfig.json 檔案有助於組織同時包含 TypeScript 及 JavaScript 檔案的專案。如需深入了解，請參閱 https://aka.ms/tsconfig。]]></Val>
+            <Val><![CDATA[新增 tsconfig.json 檔案有助於組織同時包含 TypeScript 及 JavaScript 檔案的專案。若要深入了解，請前往 https://aka.ms/tsconfig。]]></Val>
           </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig]]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1541,10 +1547,13 @@
       </Item>
       <Item ItemId=";Call_decorator_expression_90028" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Call decorator expression.]]></Val>
+          <Val><![CDATA[Call decorator expression]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[呼叫裝飾項目運算式。]]></Val>
+            <Val><![CDATA[呼叫裝飾項目運算式]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Call decorator expression.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1955,34 +1964,37 @@
       </Item>
       <Item ItemId=";Change_0_to_1_90014" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Change '{0}' to '{1}'.]]></Val>
+          <Val><![CDATA[Change '{0}' to '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[將 '{0}' 變更為 '{1}'。]]></Val>
+            <Val><![CDATA[將 '{0}' 變更為 '{1}']]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Change {0} to {1}.]]></Val>
+            <Val><![CDATA[Change '{0}' to '{1}'.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Change_extends_to_implements_90003" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Change 'extends' to 'implements'.]]></Val>
+          <Val><![CDATA[Change 'extends' to 'implements']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[將 'extends' 變更為 'implements'。]]></Val>
+            <Val><![CDATA[將 [延伸]5D; 變更至 [實作]5D;]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Change 'extends' to 'implements']]></Val>
+            <Val><![CDATA[Change 'extends' to 'implements'.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Change_spelling_to_0_90022" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Change spelling to '{0}'.]]></Val>
+          <Val><![CDATA[Change spelling to '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[將拼字變更為 '{0}'。]]></Val>
+            <Val><![CDATA[將拼字變更為 '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Change spelling to '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2354,37 +2366,49 @@
       </Item>
       <Item ItemId=";Declare_method_0_90023" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Declare method '{0}'.]]></Val>
+          <Val><![CDATA[Declare method '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[宣告方法 '{0}'。]]></Val>
+            <Val><![CDATA[宣告方法 '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Declare method '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Declare_property_0_90016" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Declare property '{0}'.]]></Val>
+          <Val><![CDATA[Declare property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[宣告屬性 '{0}'。]]></Val>
+            <Val><![CDATA[宣告屬性 '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Declare property '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Declare_static_method_0_90024" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Declare static method '{0}'.]]></Val>
+          <Val><![CDATA[Declare static method '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[宣告靜態方法 '{0}'。]]></Val>
+            <Val><![CDATA[宣告靜態方法 '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Declare static method '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Declare_static_property_0_90027" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Declare static property '{0}'.]]></Val>
+          <Val><![CDATA[Declare static property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[宣告靜態屬性 '{0}'。]]></Val>
+            <Val><![CDATA[宣告靜態屬性 '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Declare static property '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2462,10 +2486,13 @@
       </Item>
       <Item ItemId=";Disable_checking_for_this_file_90018" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable checking for this file.]]></Val>
+          <Val><![CDATA[Disable checking for this file]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[停用此檔案的檢查。]]></Val>
+            <Val><![CDATA[停用此檔案的檢查]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disable checking for this file.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3220,7 +3247,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expression resolves to variable declaration '_newTarget' that compiler uses to capture 'new.target' meta-property reference.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[運算式解析成編譯器用來擷取 'new.target' 中繼屬性參考的變數宣告 '_newTarget'。]]></Val>
+            <Val><![CDATA[運算式將解析成變數宣告 '_newTarget'，而供編譯器用來擷取 'new.target' 中繼屬性參考。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3425,15 +3452,6 @@
           <Val><![CDATA[File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[檔案規格不得包含出現在遞迴目錄萬用字元 ('**') 之後的父目錄 ('..'): '{0}'。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0_5011" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[檔案規格不能包含多個遞迴目錄萬用字元 ('**'): '{0}'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3731,31 +3749,37 @@
       </Item>
       <Item ItemId=";Ignore_this_error_message_90019" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Ignore this error message.]]></Val>
+          <Val><![CDATA[Ignore this error message]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[忽略此錯誤訊息。]]></Val>
+            <Val><![CDATA[略過此錯誤訊息]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Ignore this error message.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Implement_inherited_abstract_class_90007" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Implement inherited abstract class.]]></Val>
+          <Val><![CDATA[Implement inherited abstract class]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[實作已繼承的抽象類別。]]></Val>
+            <Val><![CDATA[實作已繼承的抽象類別]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Implement inherited abstract class]]></Val>
+            <Val><![CDATA[Implement inherited abstract class.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Implement_interface_0_90006" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Implement interface '{0}'.]]></Val>
+          <Val><![CDATA[Implement interface '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[實作介面 '{0}'。]]></Val>
+            <Val><![CDATA[實作介面 '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Implement interface '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3770,10 +3794,13 @@
       </Item>
       <Item ItemId=";Import_0_from_module_1_90013" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Import '{0}' from module "{1}".]]></Val>
+          <Val><![CDATA[Import '{0}' from module "{1}"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[從模組 "{1}" 匯入 '{0}'。]]></Val>
+            <Val><![CDATA[從模組 "{1}" 匯入 '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Import '{0}' from module "{1}".]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3920,37 +3947,49 @@
       </Item>
       <Item ItemId=";Infer_parameter_types_from_usage_95012" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Infer parameter types from usage.]]></Val>
+          <Val><![CDATA[Infer parameter types from usage]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[從用法推斷參數類型。]]></Val>
+            <Val><![CDATA[從使用方式推斷參數類型]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Infer parameter types from usage.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Infer_type_of_0_from_usage_95011" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Infer type of '{0}' from usage.]]></Val>
+          <Val><![CDATA[Infer type of '{0}' from usage]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[從用法推斷 '{0}' 的類型。]]></Val>
+            <Val><![CDATA[從使用方式推斷 '{0}' 的類型]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Infer type of '{0}' from usage.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Initialize_property_0_in_the_constructor_90020" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Initialize property '{0}' in the constructor.]]></Val>
+          <Val><![CDATA[Initialize property '{0}' in the constructor]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[初始化建構函式中的屬性 '{0}'。]]></Val>
+            <Val><![CDATA[將建構函式中的屬性 '{0}' 初始化]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Initialize property '{0}' in the constructor.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Initialize_static_property_0_90021" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Initialize static property '{0}'.]]></Val>
+          <Val><![CDATA[Initialize static property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[初始化靜態屬性 '{0}'。]]></Val>
+            <Val><![CDATA[將靜態屬性 '{0}' 初始化]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Initialize static property '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4481,10 +4520,13 @@
       </Item>
       <Item ItemId=";Make_super_call_the_first_statement_in_the_constructor_90002" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Make 'super()' call the first statement in the constructor.]]></Val>
+          <Val><![CDATA[Make 'super()' call the first statement in the constructor]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[使 'super()' 呼叫成為建構函式中的第一個陳述式。]]></Val>
+            <Val><![CDATA[使 'super()' 呼叫成為建構函式中的第一個陳述式]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Make 'super()' call the first statement in the constructor.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4701,6 +4743,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Multiple_consecutive_numeric_separators_are_not_permitted_6189" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Multiple consecutive numeric separators are not permitted.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[不允許多個連續的數字分隔符號。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Multiple_constructor_implementations_are_not_allowed_2392" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Multiple constructor implementations are not allowed.]]></Val>
@@ -4787,6 +4838,15 @@
           <Val><![CDATA[Numeric index type '{0}' is not assignable to string index type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[數值索引類型 '{0}' 不可指派給字串索引類型 '{1}'。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Numeric_separators_are_not_allowed_here_6188" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Numeric separators are not allowed here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[這裡不允許數字分隔符號。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5396,10 +5456,13 @@
       </Item>
       <Item ItemId=";Prefix_0_with_an_underscore_90025" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Prefix '{0}' with an underscore.]]></Val>
+          <Val><![CDATA[Prefix '{0}' with an underscore]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[有底線的前置詞 '{0}'。]]></Val>
+            <Val><![CDATA[具有底線的前置詞 '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Prefix '{0}' with an underscore.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5443,7 +5506,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' does not exist on 'const' enum '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['const' 列舉 '{1}' 沒有屬性 '{0}'。]]></Val>
+            <Val><![CDATA['const' 列舉 '{1}' 上並沒有屬性 '{0}'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5849,10 +5912,13 @@
       </Item>
       <Item ItemId=";Remove_declaration_for_Colon_0_90004" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Remove declaration for: '{0}'.]]></Val>
+          <Val><![CDATA[Remove declaration for: '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[移除 {0} 的宣告。]]></Val>
+            <Val><![CDATA[移除 '{0}' 的宣告]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Remove declaration for: '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6275,10 +6341,13 @@
       </Item>
       <Item ItemId=";Rewrite_as_the_indexed_access_type_0_90026" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Rewrite as the indexed access type '{0}'.]]></Val>
+          <Val><![CDATA[Rewrite as the indexed access type '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[重寫為索引存取類型 '{0}'。]]></Val>
+            <Val><![CDATA[重寫為索引存取類型 '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Rewrite as the indexed access type '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6390,15 +6459,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_or_ESNEXT_6015" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_or_ESNEXT_6015" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'.]]></Val>
+          <Val><![CDATA[Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[指定 ECMAScript 目標版本: 'ES3' (預設)、'ES5'、'ES2015'、'ES2016'、'ES2017' 或 'ESNEXT'。]]></Val>
+            <Val><![CDATA[指定 ECMAScript 目標版本: 'ES3' (預設)、'ES5'、'ES2015'、'ES2016'、'ES2017'、'ES2018' 或 'ESNEXT'。]]></Val>
           </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT']]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6504,6 +6570,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Starting_compilation_in_watch_mode_6031" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Starting compilation in watch mode...]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[在監看模式中開始編譯...]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Statement_expected_1129" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Statement expected.]]></Val>
@@ -6571,7 +6646,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Stylize errors and messages using color and context (experimental).]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[使用色彩及內容設計錯誤與訊息的風格 (實驗)。]]></Val>
+            <Val><![CDATA[使用色彩及內容來設計錯誤與訊息的風格 (實驗)。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Stylize errors and messages using color and context. (experimental)]]></Val>
@@ -6582,6 +6657,9 @@
       <Item ItemId=";Subsequent_property_declarations_must_have_the_same_type_Property_0_must_be_of_type_1_but_here_has_t_2717" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Subsequent property declarations must have the same type.  Property '{0}' must be of type '{1}', but here has type '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[後續的屬性宣告必須具有相同的類型。屬性 '{0}' 的類型必須是 '{1}'，但此處卻是類型 '{2}'。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7350,7 +7428,7 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated_90010" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated_2719" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is not assignable to type '{1}'. Two different types with this name exist, but they are unrelated.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
@@ -8374,7 +8452,7 @@
         <Str Cat="Text">
           <Val><![CDATA['const' declarations can only be declared inside a block.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[只可在區塊內宣告 'const' 宣告。]]></Val>
+            <Val><![CDATA[只能在區塊內宣告 'const' 宣告。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8383,7 +8461,7 @@
         <Str Cat="Text">
           <Val><![CDATA['const' declarations must be initialized.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['const' 宣告必須初始化 。]]></Val>
+            <Val><![CDATA['const' 宣告必須初始化。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA['const' declarations must be initialized]]></Val>
@@ -8413,7 +8491,7 @@
         <Str Cat="Text">
           <Val><![CDATA['const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['const' 列舉只可用於屬性或索引存取運算式中，或者用於匯入宣告或匯出指派的右側 。]]></Val>
+            <Val><![CDATA['const' 列舉只可用於屬性或索引存取運算式中，或者用於匯入宣告或匯出指派的右側。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

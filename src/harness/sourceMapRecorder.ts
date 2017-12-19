@@ -285,10 +285,10 @@ namespace Harness.SourceMapRecorder {
         }
 
         export function recordNewSourceFileSpan(sourceMapSpan: ts.SourceMapSpan, newSourceFileCode: string) {
-            assert(spansOnSingleLine.length === 0 || spansOnSingleLine[0].sourceMapSpan.emittedLine !== sourceMapSpan.emittedLine, "new file source map span should be on new line. We currently handle only that scenario");
+            assert.isTrue(spansOnSingleLine.length === 0 || spansOnSingleLine[0].sourceMapSpan.emittedLine !== sourceMapSpan.emittedLine, "new file source map span should be on new line. We currently handle only that scenario");
             recordSourceMapSpan(sourceMapSpan);
 
-            assert(spansOnSingleLine.length === 1);
+            assert.isTrue(spansOnSingleLine.length === 1);
             sourceMapRecorder.WriteLine("-------------------------------------------------------------------");
             sourceMapRecorder.WriteLine("emittedFile:" + jsFile.fileName);
             sourceMapRecorder.WriteLine("sourceFile:" + sourceMapSources[spansOnSingleLine[0].sourceMapSpan.sourceIndex]);
@@ -331,7 +331,7 @@ namespace Harness.SourceMapRecorder {
             function getMarkerId(markerIndex: number) {
                 let markerId = "";
                 if (spanMarkerContinues) {
-                    assert(markerIndex === 0);
+                    assert.isTrue(markerIndex === 0);
                     markerId = "1->";
                 }
                 else {

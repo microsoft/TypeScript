@@ -228,6 +228,37 @@ namespace ts.projectSystem {
             projectService.checkNumberOfProjects({ externalProjects: 1 });
         });
 
+        it("external project - deduplicate from local @types packages", () => {
+            const appJs = {
+                path: "/a/b/app.js",
+                content: ""
+            };
+            const nodeDts = {
+                path: "/node_modules/@types/node/index.d.ts",
+                content: "declare var node;"
+            };
+            const host = createServerHost([appJs, nodeDts]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { typesRegistry: createTypesRegistry("node") });
+                }
+                installWorker() {
+                    assert(false, "nothing should get installed");
+                }
+            })();
+
+            const projectFileName = "/a/app/test.csproj";
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openExternalProject({
+                projectFileName,
+                options: {},
+                rootFiles: [toExternalFile(appJs.path)],
+                typeAcquisition: { enable: true, include: ["node"] }
+            });
+            installer.checkPendingCommands(/*expectedCount*/ 0);
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+        });
+
         it("external project - no auto in typing acquisition, no .d.ts/js files", () => {
             const file1 = {
                 path: "/a/b/app.ts",
@@ -292,7 +323,7 @@ namespace ts.projectSystem {
                 typeAcquisition: { enable: true, include: ["jquery"] }
             });
 
-            assert(enqueueIsCalled, "expected enqueueIsCalled to be true");
+            assert.isTrue(enqueueIsCalled, "expected enqueueIsCalled to be true");
             installer.installAll(/*expectedCount*/ 1);
 
             // auto is set in type acquisition - use it even if project contains only .ts files
@@ -598,7 +629,7 @@ namespace ts.projectSystem {
             installer.executePendingCommands();
             // expected all typings file to exist
             for (const f of typingFiles) {
-                assert(host.fileExists(f.path), `expected file ${f.path} to exist`);
+                assert.isTrue(host.fileExists(f.path), `expected file ${f.path} to exist`);
             }
             host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { externalProjects: 1 });
@@ -934,8 +965,8 @@ namespace ts.projectSystem {
 
             installer.installAll(/*expectedCount*/1);
 
-            assert(host.fileExists(node.path), "typings for 'node' should be created");
-            assert(host.fileExists(commander.path), "typings for 'commander' should be created");
+            assert.isTrue(host.fileExists(node.path), "typings for 'node' should be created");
+            assert.isTrue(host.fileExists(commander.path), "typings for 'commander' should be created");
 
             checkProjectActualFiles(service.inferredProjects[0], [file.path, node.path, commander.path]);
         });
@@ -978,7 +1009,7 @@ namespace ts.projectSystem {
             installer.installAll(/*expectedCount*/ 1);
         });
 
-        it("cached unresolved typings are not recomputed if program structure did not change", () => {
+        it("should recompute resolutions after typings are installed", () => {
             const host = createServerHost([]);
             const session = createSession(host);
             const f = {
@@ -1020,7 +1051,7 @@ namespace ts.projectSystem {
             session.executeCommand(changeRequest);
             host.checkTimeoutQueueLengthAndRun(2); // This enqueues the updategraph and refresh inferred projects
             const version2 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
-            assert.equal(version1, version2, "set of unresolved imports should not change");
+            assert.notEqual(version1, version2, "set of unresolved imports should change");
         });
     });
 
@@ -1076,7 +1107,7 @@ namespace ts.projectSystem {
             projectService.openClientFile(f1.path);
 
             installer.checkPendingCommands(/*expectedCount*/ 0);
-            assert(messages.indexOf("Package name '; say ‘Hello from TypeScript!’ #' contains non URI safe characters") > 0, "should find package with invalid name");
+            assert.isTrue(messages.indexOf("Package name '; say ‘Hello from TypeScript!’ #' contains non URI safe characters") > 0, "should find package with invalid name");
         });
     });
 
@@ -1225,7 +1256,7 @@ namespace ts.projectSystem {
 
             installer.installAll(/*expectedCount*/ 1);
 
-            assert(seenTelemetryEvent);
+            assert.isTrue(seenTelemetryEvent);
             host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(projectService.inferredProjects[0], [f1.path, commander.path]);
@@ -1276,10 +1307,10 @@ namespace ts.projectSystem {
 
             installer.installAll(/*expectedCount*/ 1);
 
-            assert(!!beginEvent);
-            assert(!!endEvent);
-            assert(beginEvent.eventId === endEvent.eventId);
-            assert(endEvent.installSuccess);
+            assert.isTrue(!!beginEvent);
+            assert.isTrue(!!endEvent);
+            assert.isTrue(beginEvent.eventId === endEvent.eventId);
+            assert.isTrue(endEvent.installSuccess);
             host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(projectService.inferredProjects[0], [f1.path, commander.path]);
@@ -1322,9 +1353,9 @@ namespace ts.projectSystem {
 
             installer.installAll(/*expectedCount*/ 1);
 
-            assert(!!beginEvent);
-            assert(!!endEvent);
-            assert(beginEvent.eventId === endEvent.eventId);
+            assert.isTrue(!!beginEvent);
+            assert.isTrue(!!endEvent);
+            assert.isTrue(beginEvent.eventId === endEvent.eventId);
             assert.isFalse(endEvent.installSuccess);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(projectService.inferredProjects[0], [f1.path]);

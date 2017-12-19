@@ -23,60 +23,39 @@
 /// <reference path="virtualFileSystem.ts" />
 /// <reference types="node" />
 /// <reference types="mocha" />
+/// <reference types="chai" />
+
 
 // Block scoped definitions work poorly for global variables, temporarily enable var
 /* tslint:disable:no-var-keyword */
 
-function assert(expr: boolean, msg?: string | (() => string)): void {
-    if (!expr) {
-        throw new Error(typeof msg === "string" ? msg : msg());
-    }
-}
-namespace assert {
-    export function isFalse(expr: boolean, msg = "Expected value to be false."): void {
-        assert(!expr, msg);
-    }
-    export function equal<T>(a: T, b: T, msg = "Expected values to be equal."): void {
-        assert(a === b, msg);
-    }
-    export function notEqual<T>(a: T, b: T, msg = "Expected values to not be equal."): void {
-        assert(a !== b, msg);
-    }
-    export function isDefined(x: {} | null | undefined, msg = "Expected value to be defined."): void {
-        assert(x !== undefined && x !== null, msg);
-    }
-    export function isUndefined(x: {} | null | undefined, msg = "Expected value to be undefined."): void {
-        assert(x === undefined, msg);
-    }
-    export function deepEqual<T>(a: T, b: T, msg?: string): void {
-        assert(isDeepEqual(a, b), msg || (() => `Expected values to be deeply equal:\nExpected:\n${JSON.stringify(a, undefined, 4)}\nActual:\n${JSON.stringify(b, undefined, 4)}`));
-    }
-    export function lengthOf(a: ReadonlyArray<{}>, length: number, msg = "Expected length to match."): void {
-        assert(a.length === length, msg);
-    }
-    export function throws(cb: () => void, msg = "Expected callback to throw"): void {
-        let threw = false;
-        try {
-            cb();
-        }
-        catch {
-            threw = true;
-        }
-        assert(threw, msg);
-    }
+// this will work in the browser via browserify
+var _chai: typeof chai = require("chai");
+var assert: typeof _chai.assert = _chai.assert;
+{
+    // chai's builtin `assert.isFalse` is featureful but slow - we don't use those features,
+    // so we'll just overwrite it as an alterative to migrating a bunch of code off of chai
+    assert.isFalse = (expr, msg) => { if (expr as any as boolean !== false) throw new Error(msg); };
 
-    function isDeepEqual<T>(a: T, b: T): boolean {
-        if (a === b) {
-            return true;
+    const assertDeepImpl = assert.deepEqual;
+    assert.deepEqual = (a, b, msg) => {
+        if (ts.isArray(a) && ts.isArray(b)) {
+            assertDeepImpl(arrayExtraKeysObject(a), arrayExtraKeysObject(b), "Array extra keys differ");
         }
-        if (typeof a !== "object" || typeof b !== "object" || a === null || b === null) {
-            return false;
+        assertDeepImpl(a, b, msg);
+
+        function arrayExtraKeysObject(a: ReadonlyArray<{} | null | undefined>): object {
+            const obj: { [key: string]: {} | null | undefined } = {};
+            for (const key in a) {
+                if (Number.isNaN(Number(key))) {
+                    obj[key] = a[key];
+                }
+            }
+            return obj;
         }
-        const aKeys = Object.keys(a).sort();
-        const bKeys = Object.keys(b).sort();
-        return aKeys.length === bKeys.length && aKeys.every((key, i) => bKeys[i] === key && isDeepEqual((a as any)[key], (b as any)[key]));
-    }
+    };
 }
+
 declare var __dirname: string; // Node-specific
 var global: NodeJS.Global = <any>Function("return this").call(undefined);
 
@@ -389,8 +368,8 @@ namespace Utils {
             return;
         }
 
-        assert(!!array1, "array1");
-        assert(!!array2, "array2");
+        assert(array1, "array1");
+        assert(array2, "array2");
 
         assert.equal(array1.length, array2.length, "array1.length !== array2.length");
 
@@ -413,8 +392,8 @@ namespace Utils {
             return;
         }
 
-        assert(!!node1, "node1");
-        assert(!!node2, "node2");
+        assert(node1, "node1");
+        assert(node2, "node2");
         assert.equal(node1.pos, node2.pos, "node1.pos !== node2.pos");
         assert.equal(node1.end, node2.end, "node1.end !== node2.end");
         assert.equal(node1.kind, node2.kind, "node1.kind !== node2.kind");
@@ -444,8 +423,8 @@ namespace Utils {
             return;
         }
 
-        assert(!!array1, "array1");
-        assert(!!array2, "array2");
+        assert(array1, "array1");
+        assert(array2, "array2");
         assert.equal(array1.pos, array2.pos, "array1.pos !== array2.pos");
         assert.equal(array1.end, array2.end, "array1.end !== array2.end");
         assert.equal(array1.length, array2.length, "array1.length !== array2.length");
@@ -1301,7 +1280,7 @@ namespace Harness {
 
             function findResultCodeFile(fileName: string) {
                 const sourceFile = result.program.getSourceFile(fileName);
-                assert.isDefined(sourceFile, "Program has no source file with name '" + fileName + "'");
+                assert(sourceFile, "Program has no source file with name '" + fileName + "'");
                 // Is this file going to be emitted separately
                 let sourceFileName: string;
                 const outFile = options.outFile || options.out;
@@ -1984,7 +1963,7 @@ namespace Harness {
                 const data = testUnitData[i];
                 if (ts.getBaseFileName(data.name).toLowerCase() === "tsconfig.json") {
                     const configJson = ts.parseJsonText(data.name, data.content);
-                    assert(configJson.endOfFileToken !== undefined);
+                    assert.isTrue(configJson.endOfFileToken !== undefined);
                     let baseDir = ts.normalizePath(ts.getDirectoryPath(data.name));
                     if (rootDir) {
                         baseDir = ts.getNormalizedAbsolutePath(baseDir, rootDir);
