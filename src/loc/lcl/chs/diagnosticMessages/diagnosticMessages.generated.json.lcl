@@ -154,7 +154,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[方法重载中的计算属性名称必须引用类型为文本类型或 "unique symbol" 类型的表达式。]]></Val>
+            <Val><![CDATA[方法重载中的计算属性名称必须引用文本类型或 "unique symbol" 类型的表达式。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1384,7 +1384,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Annotate with type from JSDoc]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[使用 JSDoc 中的类型批注]]></Val>
+            <Val><![CDATA[通过 JSDoc 类型批注]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

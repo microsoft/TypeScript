@@ -3247,7 +3247,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expression resolves to variable declaration '_newTarget' that compiler uses to capture 'new.target' meta-property reference.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[運算式解析成編譯器用來擷取 'new.target' 中繼屬性參考的變數宣告 '_newTarget'。]]></Val>
+            <Val><![CDATA[運算式將解析成變數宣告 '_newTarget'，而供編譯器用來擷取 'new.target' 中繼屬性參考。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6646,7 +6646,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Stylize errors and messages using color and context (experimental).]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[使用色彩及內容設計錯誤與訊息的風格 (實驗)。]]></Val>
+            <Val><![CDATA[使用色彩及內容來設計錯誤與訊息的風格 (實驗)。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Stylize errors and messages using color and context. (experimental)]]></Val>
