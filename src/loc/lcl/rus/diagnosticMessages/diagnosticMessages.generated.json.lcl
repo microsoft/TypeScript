@@ -3036,7 +3036,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expected at least {0} arguments, but got {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ожидалось аргументов не менее: {0}, получено: {1}.]]></Val>
+            <Val><![CDATA[Ожидалось аргументов не меньше: {0}, получено: {1}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3451,15 +3451,6 @@
           <Val><![CDATA[File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Спецификация файла не может содержать родительский каталог (".."), который указывается после рекурсивного подстановочного знака каталога ("**"): "{0}".]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0_5011" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Спецификация файла не может содержать несколько рекурсивных подстановочных знаков каталога ("**"): "{0}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
