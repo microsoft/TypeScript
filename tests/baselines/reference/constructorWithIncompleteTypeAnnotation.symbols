@@ -79,9 +79,6 @@ module TypeScriptAllInOne {
 >e : Symbol(e, Decl(constructorWithIncompleteTypeAnnotation.ts, 45, 19))
 
                 console.log(e);
->console.log : Symbol(Console.log, Decl(lib.d.ts, --, --))
->console : Symbol(console, Decl(lib.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.d.ts, --, --))
 >e : Symbol(e, Decl(constructorWithIncompleteTypeAnnotation.ts, 45, 19))
             }
             finally {
@@ -89,9 +86,6 @@ module TypeScriptAllInOne {
             }
 
             console.log('Done');
->console.log : Symbol(Console.log, Decl(lib.d.ts, --, --))
->console : Symbol(console, Decl(lib.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.d.ts, --, --))
 
             return 0;
 

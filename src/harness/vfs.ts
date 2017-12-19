@@ -249,6 +249,12 @@ namespace vfs {
                 vfs = this._builtLocal;
                 if (!vfs) {
                     const resolver = createResolver(Harness.IO, {
+                        // TODO(rbuckton): This patches the baseline to replace lib.es5.d.ts with lib.d.ts.
+                        // This is only to make the PR for this change easier to read. A follow-up PR will
+                        // revert this change and accept the new baselines.
+                        // See https://github.com/Microsoft/TypeScript/pull/20763#issuecomment-352553264
+                        "/.ts/lib.d.ts": vpath.resolve(__dirname, "lib.es5.d.ts"),
+
                         "/.ts": __dirname,
                         "/.lib": vpath.resolve(__dirname, "../../tests/lib")
                     });

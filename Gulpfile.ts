@@ -609,7 +609,7 @@ gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUse
 });
 
 gulp.task("typemock", () => {
-    const typemock = tsc.createProject("scripts/typemock/src/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
+    const typemock = tsc.createProject("scripts/typemock/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
     return typemock.src()
         .pipe(sourcemaps.init())
         .pipe(newer("scripts/typemock/dist"))

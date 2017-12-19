@@ -1,4 +1,3 @@
-// @lib: es5
 
 function foo(x:any) {
 	return x();

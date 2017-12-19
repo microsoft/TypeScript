@@ -19,7 +19,6 @@ var a: any;
 
 var w = window;
 >w : Symbol(w, Decl(incrementAndDecrement.ts, 4, 3))
->window : Symbol(window, Decl(lib.d.ts, --, --))
 
 // Assign to expression++
 x++ = 4; // Error

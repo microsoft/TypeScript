@@ -5,6 +5,11 @@
         "strict": true,
         "declaration": true,
         "sourceMap": true,
-        "types": ["mocha"]
-    }
+        "types": ["mocha"],
+        "newLine": "LF",
+        "outDir": "dist"
+    },
+    "include": [
+        "src/**/*"
+    ]
 }

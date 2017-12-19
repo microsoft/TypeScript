@@ -3,5 +3,4 @@ var x = function () { }
 >x : Symbol(x, Decl(parserNoASIOnCallAfterFunctionExpression1.ts, 0, 3))
 
 (<any>window).foo;
->window : Symbol(window, Decl(lib.d.ts, --, --))
 

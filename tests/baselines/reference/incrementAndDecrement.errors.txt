@@ -1,3 +1,4 @@
+tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(5,9): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(8,5): error TS1005: ';' expected.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(11,5): error TS1005: ';' expected.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(14,5): error TS1005: ';' expected.
@@ -26,30 +27,24 @@ tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(46,4): er
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(46,6): error TS1109: Expression expected.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(47,4): error TS1005: ';' expected.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(47,6): error TS1109: Expression expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(51,1): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(52,1): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(53,3): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(54,3): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(55,3): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(55,4): error TS1005: ';' expected.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(55,6): error TS1109: Expression expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(56,3): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(56,4): error TS1005: ';' expected.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(56,6): error TS1109: Expression expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(57,3): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(57,4): error TS1005: ';' expected.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(57,6): error TS1109: Expression expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(58,3): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(58,4): error TS1005: ';' expected.
 tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(58,6): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/expressions/operators/incrementAndDecrement.ts (44 errors) ====
+==== tests/cases/conformance/expressions/operators/incrementAndDecrement.ts (37 errors) ====
     enum E { A, B, C };
     var x = 4;
     var e = E.B;
     var a: any;
     var w = window;
+            ~~~~~~
+!!! error TS2304: Cannot find name 'window'.
     
     // Assign to expression++
     x++ = 4; // Error
@@ -152,41 +147,25 @@ tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(58,6): er
     
     // Pre and postfix++ on other types
     w++; // Error
-    ~
-!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     w--; // Error
-    ~
-!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     ++w; // Error
-      ~
-!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     --w; // Error
-      ~
-!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     ++w++; // Error
-      ~
-!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
        ~~
 !!! error TS1005: ';' expected.
          ~
 !!! error TS1109: Expression expected.
     --w--; // Error
-      ~
-!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
        ~~
 !!! error TS1005: ';' expected.
          ~
 !!! error TS1109: Expression expected.
     ++w--; // Error
-      ~
-!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
        ~~
 !!! error TS1005: ';' expected.
          ~
 !!! error TS1109: Expression expected.
     --w++; // Error
-      ~
-!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
        ~~
 !!! error TS1005: ';' expected.
          ~

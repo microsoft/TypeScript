@@ -13,8 +13,8 @@ var x = IgnoreRulesSpecific.
 
 var y = Position.IgnoreRulesSpecific;
 > : any
->y : any
->Position.IgnoreRulesSpecific : any
->Position : { new (): Position; prototype: Position; }
->IgnoreRulesSpecific : any
+>y : Position
+>Position.IgnoreRulesSpecific : Position
+>Position : typeof Position
+>IgnoreRulesSpecific : Position
 

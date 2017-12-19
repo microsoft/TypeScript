@@ -19,8 +19,8 @@ var a: any;
 >a : any
 
 var w = window;
->w : Window
->window : Window
+>w : any
+>window : any
 
 // Assign to expression++
 x++ = 4; // Error
@@ -173,41 +173,41 @@ a--;
 // Pre and postfix++ on other types
 w++; // Error
 >w++ : number
->w : Window
+>w : any
 
 w--; // Error
 >w-- : number
->w : Window
+>w : any
 
 ++w; // Error
 >++w : number
->w : Window
+>w : any
 
 --w; // Error
 >--w : number
->w : Window
+>w : any
 
 ++w++; // Error
 >++w : number
->w : Window
+>w : any
 >++ : number
 > : any
 
 --w--; // Error
 >--w : number
->w : Window
+>w : any
 >-- : number
 > : any
 
 ++w--; // Error
 >++w : number
->w : Window
+>w : any
 >-- : number
 > : any
 
 --w++; // Error
 >--w : number
->w : Window
+>w : any
 >++ : number
 > : any
 

@@ -1,4 +1,3 @@
-// @lib: es5
 // @sourcemap: true
 declare var console: {
     log(msg: any): void;

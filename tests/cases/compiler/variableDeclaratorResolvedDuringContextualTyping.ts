@@ -1,4 +1,3 @@
-// @lib: es5
 module WinJS {
     export interface ValueCallback {
         (value: any): any;

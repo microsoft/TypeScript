@@ -2485,39 +2485,39 @@ define(function () {
     };
 
     impl.getDeviceSmallerSide = function () {
->impl.getDeviceSmallerSide = function () {        return window.screen.width < window.screen.height ?            window.screen.width :            window.screen.height;    } : () => number
+>impl.getDeviceSmallerSide = function () {        return window.screen.width < window.screen.height ?            window.screen.width :            window.screen.height;    } : () => any
 >impl.getDeviceSmallerSide : any
 >impl : {}
 >getDeviceSmallerSide : any
->function () {        return window.screen.width < window.screen.height ?            window.screen.width :            window.screen.height;    } : () => number
+>function () {        return window.screen.width < window.screen.height ?            window.screen.width :            window.screen.height;    } : () => any
 
         return window.screen.width < window.screen.height ?
->window.screen.width < window.screen.height ?            window.screen.width :            window.screen.height : number
+>window.screen.width < window.screen.height ?            window.screen.width :            window.screen.height : any
 >window.screen.width < window.screen.height : boolean
->window.screen.width : number
->window.screen : Screen
->window : Window
->screen : Screen
->width : number
->window.screen.height : number
->window.screen : Screen
->window : Window
->screen : Screen
->height : number
+>window.screen.width : any
+>window.screen : any
+>window : any
+>screen : any
+>width : any
+>window.screen.height : any
+>window.screen : any
+>window : any
+>screen : any
+>height : any
 
             window.screen.width :
->window.screen.width : number
->window.screen : Screen
->window : Window
->screen : Screen
->width : number
+>window.screen.width : any
+>window.screen : any
+>window : any
+>screen : any
+>width : any
 
             window.screen.height;
->window.screen.height : number
->window.screen : Screen
->window : Window
->screen : Screen
->height : number
+>window.screen.height : any
+>window.screen : any
+>window : any
+>screen : any
+>height : any
 
     };
 
@@ -3186,14 +3186,14 @@ define(function () {
 
     // environment-dependent
     if (typeof window !== 'undefined' && window.screen) {
->typeof window !== 'undefined' && window.screen : Screen
+>typeof window !== 'undefined' && window.screen : any
 >typeof window !== 'undefined' : boolean
 >typeof window : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->window : Window
+>window : any
 >'undefined' : "undefined"
->window.screen : Screen
->window : Window
->screen : Screen
+>window.screen : any
+>window : any
+>screen : any
 
         MobileDetect.isPhoneSized = function (maxPhoneWidth) {
 >MobileDetect.isPhoneSized = function (maxPhoneWidth) {            return maxPhoneWidth < 0 ? undefined : impl.getDeviceSmallerSide() <= maxPhoneWidth;        } : (maxPhoneWidth: any) => any
@@ -3287,7 +3287,7 @@ define(function () {
     } else if (typeof window !== 'undefined') {
 >typeof window !== 'undefined' : boolean
 >typeof window : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->window : Window
+>window : any
 >'undefined' : "undefined"
 
         return function (factory) { window.MobileDetect = factory(); };
@@ -3295,7 +3295,7 @@ define(function () {
 >factory : any
 >window.MobileDetect = factory() : any
 >window.MobileDetect : any
->window : Window
+>window : any
 >MobileDetect : any
 >factory() : any
 >factory : any

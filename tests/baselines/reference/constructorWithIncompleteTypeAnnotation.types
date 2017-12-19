@@ -127,10 +127,10 @@ module TypeScriptAllInOne {
 >e : any
 
                 console.log(e);
->console.log(e) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
->console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>console.log(e) : any
+>console.log : any
+>console : any
+>log : any
 >e : any
             }
             finally {
@@ -138,10 +138,10 @@ module TypeScriptAllInOne {
             }
 
             console.log('Done');
->console.log('Done') : void
->console.log : (message?: any, ...optionalParams: any[]) => void
->console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>console.log('Done') : any
+>console.log : any
+>console : any
+>log : any
 >'Done' : "Done"
 
             return 0;

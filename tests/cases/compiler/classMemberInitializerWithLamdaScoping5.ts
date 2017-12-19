@@ -1,4 +1,3 @@
-// @lib: es5
 declare var console: {
     log(message?: any, ...optionalParams: any[]): void;
 };

@@ -1,4 +1,3 @@
-// @lib: es5
 // @sourcemap: true
 interface Robot {
     name: string;

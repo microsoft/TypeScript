@@ -1,4 +1,3 @@
-// @lib: es5
 // @target: ES3
 // @sourcemap: true
 

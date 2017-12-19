@@ -1,4 +1,3 @@
-// @lib: es5
 var names = ["list", "table1", "table2", "table3", "summary"];
 
 interface HTMLElement {

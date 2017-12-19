@@ -1,4 +1,3 @@
-// @lib: es5
 const enum E {
     A
 }

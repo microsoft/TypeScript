@@ -1,4 +1,3 @@
-// @lib: es5
 // @Filename: classMemberInitializerWithLamdaScoping2_0.ts
 var field1: string;
 

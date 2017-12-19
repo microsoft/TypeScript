@@ -9,6 +9,7 @@ export function foo() { return "foo" }
 export function backup() { return "backup"; }
 
 // @filename: 2.ts
+declare var console: any;
 class C {
     private myModule = import("./0");
     method() {

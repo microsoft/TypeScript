@@ -27,7 +27,7 @@ anyVar<number>();
 anyVar<Window>(undefined);
 >anyVar<Window>(undefined) : any
 >anyVar : any
->Window : Window
+>Window : No type information available!
 >undefined : undefined
 
 

@@ -1,4 +1,3 @@
-// @lib: es5
 module M
 {
     export class Test

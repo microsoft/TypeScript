@@ -1,4 +1,3 @@
-// @lib: es5
 declare var console: any;
  
 var x = 1;

@@ -14,7 +14,7 @@ class C {
 >v : Symbol(v, Decl(computedPropertyNames3_ES6.ts, 5, 17))
 
     static get [<String>""]() { }
->String : Symbol(String, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --) ... and 1 more)
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 
     static set [id.toString()](v) { }
 >id : Symbol(id, Decl(computedPropertyNames3_ES6.ts, 0, 3))
