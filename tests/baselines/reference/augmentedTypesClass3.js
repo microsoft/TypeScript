@@ -46,4 +46,4 @@ var c5c = /** @class */ (function () {
     c5c.prototype.foo = function () { };
     return c5c;
 }());
-//import c5c = require(''); 
+//import c5c = require('');

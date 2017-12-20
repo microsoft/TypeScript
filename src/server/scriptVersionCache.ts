@@ -2,6 +2,7 @@
 /// <reference path="..\services\services.ts" />
 /// <reference path="session.ts" />
 
+/*@internal*/
 namespace ts.server {
     const lineCollectionCapacity = 4;
 
@@ -9,7 +10,7 @@ namespace ts.server {
         charCount(): number;
         lineCount(): number;
         isLeaf(): this is LineLeaf;
-        walk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker): void;
+        walk(rangeStart: number, rangeLength: number, walkFns: LineIndexWalker): void;
     }
 
     export interface AbsolutePositionAndLineText {
@@ -26,7 +27,7 @@ namespace ts.server {
         PostEnd
     }
 
-    interface ILineIndexWalker {
+    interface LineIndexWalker {
         goSubtree: boolean;
         done: boolean;
         leaf(relativeStart: number, relativeLength: number, lineCollection: LineLeaf): void;
@@ -36,7 +37,7 @@ namespace ts.server {
             parent: LineNode, nodeType: CharRangeSection): void;
     }
 
-    class EditWalker implements ILineIndexWalker {
+    class EditWalker implements LineIndexWalker {
         goSubtree = true;
         get done() { return false; }
 
@@ -285,24 +286,6 @@ namespace ts.server {
             }
         }
 
-        // reload whole script, leaving no change history behind reload
-        reload(script: string) {
-            this.currentVersion++;
-            this.changes = []; // history wiped out by reload
-            const snap = new LineIndexSnapshot(this.currentVersion, this, new LineIndex());
-
-            // delete all versions
-            for (let i = 0; i < this.versions.length; i++) {
-                this.versions[i] = undefined;
-            }
-
-            this.versions[this.currentVersionToIndex()] = snap;
-            const lm = LineIndex.linesFromText(script);
-            snap.index.load(lm.lines);
-
-            this.minVersion = this.currentVersion;
-        }
-
         getSnapshot(): IScriptSnapshot { return this._getSnapshot(); }
 
         private _getSnapshot(): LineIndexSnapshot {
@@ -446,7 +429,7 @@ namespace ts.server {
             }
         }
 
-        walk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker) {
+        walk(rangeStart: number, rangeLength: number, walkFns: LineIndexWalker) {
             this.root.walk(rangeStart, rangeLength, walkFns);
         }
 
@@ -475,7 +458,7 @@ namespace ts.server {
             const walkFns = {
                 goSubtree: true,
                 done: false,
-                leaf(this: ILineIndexWalker, relativeStart: number, relativeLength: number, ll: LineLeaf) {
+                leaf(this: LineIndexWalker, relativeStart: number, relativeLength: number, ll: LineLeaf) {
                     if (!f(ll, relativeStart, relativeLength)) {
                         this.done = true;
                     }
@@ -597,7 +580,7 @@ namespace ts.server {
             }
         }
 
-        private execWalk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker, childIndex: number, nodeType: CharRangeSection) {
+        private execWalk(rangeStart: number, rangeLength: number, walkFns: LineIndexWalker, childIndex: number, nodeType: CharRangeSection) {
             if (walkFns.pre) {
                 walkFns.pre(rangeStart, rangeLength, this.children[childIndex], this, nodeType);
             }
@@ -613,14 +596,14 @@ namespace ts.server {
             return walkFns.done;
         }
 
-        private skipChild(relativeStart: number, relativeLength: number, childIndex: number, walkFns: ILineIndexWalker, nodeType: CharRangeSection) {
+        private skipChild(relativeStart: number, relativeLength: number, childIndex: number, walkFns: LineIndexWalker, nodeType: CharRangeSection) {
             if (walkFns.pre && (!walkFns.done)) {
                 walkFns.pre(relativeStart, relativeLength, this.children[childIndex], this, nodeType);
                 walkFns.goSubtree = true;
             }
         }
 
-        walk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker) {
+        walk(rangeStart: number, rangeLength: number, walkFns: LineIndexWalker) {
             // assume (rangeStart < this.totalChars) && (rangeLength <= this.totalChars)
             let childIndex = 0;
             let childCharCount = this.children[childIndex].charCount();
@@ -831,7 +814,7 @@ namespace ts.server {
             return true;
         }
 
-        walk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker) {
+        walk(rangeStart: number, rangeLength: number, walkFns: LineIndexWalker) {
             walkFns.leaf(rangeStart, rangeLength, this);
         }
 

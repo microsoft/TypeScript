@@ -10,7 +10,7 @@
 //// }/*f1b*/
 
 goTo.select('f1a', 'f1b');
-verify.not.refactorAvailable('Extract Method');
+verify.not.refactorAvailable('Extract Symbol');
 goTo.select('g1a', 'g1b');
-verify.not.refactorAvailable('Extract Method');
+verify.not.refactorAvailable('Extract Symbol');
 

@@ -55,6 +55,7 @@ namespace ts {
             printsCorrectly("removeComments", { removeComments: true }, printer => printer.printFile(sourceFile));
 
             // github #14948
+            // tslint:disable-next-line no-invalid-template-strings
             printsCorrectly("templateLiteral", {}, printer => printer.printFile(createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ScriptTarget.ES2017)));
 
             // github #18071
@@ -110,6 +111,31 @@ namespace ts {
                 createSourceFile("source.ts", "", ScriptTarget.ES2015)
             ));
 
+            printsCorrectly("newExpressionWithPropertyAccessOnCallExpression", {}, printer => printer.printNode(
+                EmitHint.Unspecified,
+                createNew(
+                    createPropertyAccess(
+                        createCall(
+                            createIdentifier("f"), /*typeArguments*/ undefined, /*argumentsArray*/ undefined),
+                            "x"),
+                    /*typeArguments*/ undefined,
+                    /*argumentsArray*/ undefined
+                ),
+                createSourceFile("source.ts", "", ScriptTarget.ESNext))
+            );
+
+            printsCorrectly("newExpressionOnConditionalExpression", {}, printer => printer.printNode(
+                EmitHint.Unspecified,
+                createNew(
+                    createConditional(
+                        createIdentifier("x"), createToken(SyntaxKind.QuestionToken),
+                        createIdentifier("y"), createToken(SyntaxKind.ColonToken),
+                        createIdentifier("z")),
+                    /*typeArguments*/ undefined,
+                    /*argumentsArray*/ undefined
+                ),
+                createSourceFile("source.ts", "", ScriptTarget.ESNext))
+            );
 
             printsCorrectly("emptyGlobalAugmentation", {}, printer => printer.printNode(
                 EmitHint.Unspecified,

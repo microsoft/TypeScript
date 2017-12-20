@@ -17,16 +17,16 @@ namespace ts.refactor.convertFunctionToES6Class {
             return undefined;
         }
 
-        const start = context.startPosition;
-        const node = getTokenAtPosition(context.file, start, /*includeJsDocComment*/ false);
-        const checker = context.program.getTypeChecker();
-        let symbol = checker.getSymbolAtLocation(node);
+        let symbol = getConstructorSymbol(context);
+        if (!symbol) {
+            return undefined;
+        }
 
-        if (symbol && isDeclarationOfFunctionOrClassExpression(symbol)) {
+        if (isDeclarationOfFunctionOrClassExpression(symbol)) {
             symbol = (symbol.valueDeclaration as VariableDeclaration).initializer.symbol;
         }
 
-        if (symbol && (symbol.flags & SymbolFlags.Function) && symbol.members && (symbol.members.size > 0)) {
+        if ((symbol.flags & SymbolFlags.Function) && symbol.members && (symbol.members.size > 0)) {
             return [
                 {
                     name: convertFunctionToES6Class.name,
@@ -48,12 +48,8 @@ namespace ts.refactor.convertFunctionToES6Class {
             return undefined;
         }
 
-        const start = context.startPosition;
-        const sourceFile = context.file;
-        const checker = context.program.getTypeChecker();
-        const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
-        const ctorSymbol = checker.getSymbolAtLocation(token);
-        const newLine = context.rulesProvider.getFormatOptions().newLineCharacter;
+        const { file: sourceFile } = context;
+        const ctorSymbol = getConstructorSymbol(context);
 
         const deletedNodes: Node[] = [];
         const deletes: (() => any)[] = [];
@@ -91,7 +87,7 @@ namespace ts.refactor.convertFunctionToES6Class {
         }
 
         // Because the preceding node could be touched, we need to insert nodes before delete nodes.
-        changeTracker.insertNodeAfter(sourceFile, precedingNode, newClassDeclaration, { suffix: newLine });
+        changeTracker.insertNodeAfter(sourceFile, precedingNode, newClassDeclaration);
         for (const deleteCallback of deletes) {
             deleteCallback();
         }
@@ -172,7 +168,8 @@ namespace ts.refactor.convertFunctionToES6Class {
                 switch (assignmentBinaryExpression.right.kind) {
                     case SyntaxKind.FunctionExpression: {
                         const functionExpression = assignmentBinaryExpression.right as FunctionExpression;
-                        const method = createMethod(/*decorators*/ undefined, modifiers, /*asteriskToken*/ undefined, memberDeclaration.name, /*questionToken*/ undefined,
+                        const fullModifiers = concatenate(modifiers, getModifierKindFromSource(functionExpression, SyntaxKind.AsyncKeyword));
+                        const method = createMethod(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, memberDeclaration.name, /*questionToken*/ undefined,
                             /*typeParameters*/ undefined, functionExpression.parameters, /*type*/ undefined, functionExpression.body);
                         copyComments(assignmentBinaryExpression, method);
                         return method;
@@ -192,7 +189,8 @@ namespace ts.refactor.convertFunctionToES6Class {
                             const expression = arrowFunctionBody as Expression;
                             bodyBlock = createBlock([createReturn(expression)]);
                         }
-                        const method = createMethod(/*decorators*/ undefined, modifiers, /*asteriskToken*/ undefined, memberDeclaration.name, /*questionToken*/ undefined,
+                        const fullModifiers = concatenate(modifiers, getModifierKindFromSource(arrowFunction, SyntaxKind.AsyncKeyword));
+                        const method = createMethod(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, memberDeclaration.name, /*questionToken*/ undefined,
                             /*typeParameters*/ undefined, arrowFunction.parameters, /*type*/ undefined, bodyBlock);
                         copyComments(assignmentBinaryExpression, method);
                         return method;
@@ -243,7 +241,8 @@ namespace ts.refactor.convertFunctionToES6Class {
                 memberElements.unshift(createConstructor(/*decorators*/ undefined, /*modifiers*/ undefined, initializer.parameters, initializer.body));
             }
 
-            const cls = createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, node.name,
+            const modifiers = getModifierKindFromSource(precedingNode, SyntaxKind.ExportKeyword);
+            const cls = createClassDeclaration(/*decorators*/ undefined, modifiers, node.name,
                 /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements);
             // Don't call copyComments here because we'll already leave them in place
             return cls;
@@ -255,10 +254,21 @@ namespace ts.refactor.convertFunctionToES6Class {
                 memberElements.unshift(createConstructor(/*decorators*/ undefined, /*modifiers*/ undefined, node.parameters, node.body));
             }
 
-            const cls = createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, node.name,
+            const modifiers = getModifierKindFromSource(node, SyntaxKind.ExportKeyword);
+            const cls = createClassDeclaration(/*decorators*/ undefined, modifiers, node.name,
                 /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements);
             // Don't call copyComments here because we'll already leave them in place
             return cls;
         }
+
+        function getModifierKindFromSource(source: Node, kind: SyntaxKind) {
+            return filter(source.modifiers, modifier => modifier.kind === kind);
+        }
+    }
+
+    function getConstructorSymbol({ startPosition, file, program }: RefactorContext): Symbol {
+        const checker = program.getTypeChecker();
+        const token = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
+        return checker.getSymbolAtLocation(token);
     }
 }

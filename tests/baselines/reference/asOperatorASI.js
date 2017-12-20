@@ -12,6 +12,10 @@ as(Foo); // should emit
 
 
 //// [asOperatorASI.js]
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
 var Foo = /** @class */ (function () {
     function Foo() {
     }
@@ -19,8 +23,7 @@ var Foo = /** @class */ (function () {
 }());
 // Example 1
 var x = 10;
-(_a = ["Hello world"], _a.raw = ["Hello world"], as(_a)); // should not error
+as(__makeTemplateObject(["Hello world"], ["Hello world"])); // should not error
 // Example 2
 var y = 20;
 as(Foo); // should emit
-var _a;

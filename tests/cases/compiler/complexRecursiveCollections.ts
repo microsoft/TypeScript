@@ -1,5 +1,6 @@
+// @skipLibCheck: true
 // @lib: es6
-// @Filename: complex.d.ts
+// @Filename: complex.ts
 interface Ara<T> { t: T }
 interface Collection<K, V> {
     map<M>(mapper: (value: V, key: K, iter: this) => M): Collection<K, M>;
@@ -20,7 +21,7 @@ interface N2<T> extends N1<T> {
     flatMap<M>(mapper: (value: T, key: void, iter: this) => Ara<M>, context?: any): N2<M>;
     toSeq(): N2<T>;
 }
-// @Filename: immutable.d.ts
+// @Filename: immutable.ts
 // Test that complex recursive collections can pass the `extends` assignability check without
 // running out of memory. This bug was exposed in Typescript 2.4 when more generic signatures
 // started being checked.

@@ -2,7 +2,5 @@
 var v : x.void;
 >v : any
 >x : any
-> : No type information available!
->void : undefined
-> : any
+>void : No type information available!
 

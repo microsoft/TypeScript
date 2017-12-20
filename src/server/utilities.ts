@@ -19,18 +19,19 @@ namespace ts.server {
         info(s: string): void;
         startGroup(): void;
         endGroup(): void;
-        msg(s: string, type?: Msg.Types): void;
+        msg(s: string, type?: Msg): void;
         getLogFileName(): string;
     }
 
+    // TODO: Use a const enum (https://github.com/Microsoft/TypeScript/issues/16804)
+    export enum Msg {
+        Err = "Err",
+        Info = "Info",
+        Perf = "Perf",
+    }
     export namespace Msg {
-        export type Err = "Err";
-        export const Err: Err = "Err";
-        export type Info = "Info";
-        export const Info: Info = "Info";
-        export type Perf = "Perf";
-        export const Perf: Perf = "Perf";
-        export type Types = Err | Info | Perf;
+        /** @deprecated Only here for backwards-compatibility. Prefer just `Msg`. */
+        export type Types = Msg;
     }
 
     function getProjectRootPath(project: Project): Path {
@@ -42,7 +43,7 @@ namespace ts.server {
                 return <Path>"";
             case ProjectKind.External:
                 const projectName = normalizeSlashes(project.getProjectName());
-                return project.projectService.host.fileExists(projectName) ? <Path>getDirectoryPath(projectName) : <Path>projectName;
+                return <Path>getDirectoryPath(projectName);
         }
     }
 
@@ -50,7 +51,7 @@ namespace ts.server {
         return {
             projectName: project.getProjectName(),
             fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true).concat(project.getExcludedFiles() as NormalizedPath[]),
-            compilerOptions: project.getCompilerOptions(),
+            compilerOptions: project.getCompilationSettings(),
             typeAcquisition,
             unresolvedImports,
             projectRootPath: getProjectRootPath(project),
@@ -173,10 +174,15 @@ namespace ts.server {
     export function createSortedArray<T>(): SortedArray<T> {
         return [] as SortedArray<T>;
     }
+}
 
+/* @internal */
+namespace ts.server {
     export class ThrottledOperations {
-        private pendingTimeouts: Map<any> = createMap<any>();
-        constructor(private readonly host: ServerHost) {
+        private readonly pendingTimeouts: Map<any> = createMap<any>();
+        private readonly logger?: Logger | undefined;
+        constructor(private readonly host: ServerHost, logger: Logger) {
+            this.logger = logger.hasLevel(LogLevel.verbose) && logger;
         }
 
         /**
@@ -193,10 +199,16 @@ namespace ts.server {
             }
             // schedule new operation, pass arguments
             this.pendingTimeouts.set(operationId, this.host.setTimeout(ThrottledOperations.run, delay, this, operationId, cb));
+            if (this.logger) {
+                this.logger.info(`Scheduled: ${operationId}${pendingTimeout ? ", Cancelled earlier one" : ""}`);
+            }
         }
 
         private static run(self: ThrottledOperations, operationId: string, cb: () => void) {
             self.pendingTimeouts.delete(operationId);
+            if (self.logger) {
+                self.logger.info(`Running: ${operationId}`);
+            }
             cb();
         }
     }
@@ -227,17 +239,19 @@ namespace ts.server {
             }
         }
     }
-}
 
-/* @internal */
-namespace ts.server {
+    export function getBaseConfigFileName(configFilePath: NormalizedPath): "tsconfig.json" | "jsconfig.json" | undefined {
+        const base = getBaseFileName(configFilePath);
+        return base === "tsconfig.json" || base === "jsconfig.json" ? base : undefined;
+    }
+
     export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void {
         if (array.length === 0) {
             array.push(insert);
             return;
         }
 
-        const insertIndex = binarySearch(array, insert, compare);
+        const insertIndex = binarySearch(array, insert, identity, compare);
         if (insertIndex < 0) {
             array.splice(~insertIndex, 0, insert);
         }
@@ -253,7 +267,7 @@ namespace ts.server {
             return;
         }
 
-        const removeIndex = binarySearch(array, remove, compare);
+        const removeIndex = binarySearch(array, remove, identity, compare);
         if (removeIndex >= 0) {
             array.splice(removeIndex, 1);
         }
@@ -275,8 +289,7 @@ namespace ts.server {
         return index === 0 || value !== array[index - 1];
     }
 
-    export function enumerateInsertsAndDeletes<T>(newItems: SortedReadonlyArray<T>, oldItems: SortedReadonlyArray<T>, inserted: (newItem: T) => void, deleted: (oldItem: T) => void, compare?: Comparer<T>) {
-        compare = compare || compareValues;
+    export function enumerateInsertsAndDeletes<T>(newItems: SortedReadonlyArray<T>, oldItems: SortedReadonlyArray<T>, inserted: (newItem: T) => void, deleted: (oldItem: T) => void, comparer: Comparer<T>) {
         let newIndex = 0;
         let oldIndex = 0;
         const newLen = newItems.length;
@@ -284,7 +297,7 @@ namespace ts.server {
         while (newIndex < newLen && oldIndex < oldLen) {
             const newItem = newItems[newIndex];
             const oldItem = oldItems[oldIndex];
-            const compareResult = compare(newItem, oldItem);
+            const compareResult = comparer(newItem, oldItem);
             if (compareResult === Comparison.LessThan) {
                 inserted(newItem);
                 newIndex++;
@@ -304,5 +317,16 @@ namespace ts.server {
         while (oldIndex < oldLen) {
             deleted(oldItems[oldIndex++]);
         }
+    }
+
+    /* @internal */
+    export function indent(str: string): string {
+        return "\n    " + str;
+    }
+
+    /** Put stringified JSON on the next line, indented. */
+    /* @internal */
+    export function stringifyIndented(json: {}): string {
+        return "\n    " + JSON.stringify(json);
     }
 }

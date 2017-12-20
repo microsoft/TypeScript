@@ -33,8 +33,8 @@ verify.quickInfoAt("1", 'import a1 = require("./externalModuleWithExportAssignme
 verify.quickInfoAt("2", "var a: {\n    (): a1.connectExport;\n    test1: a1.connectModule;\n    test2(): a1.connectModule;\n}", undefined);
 
 goTo.marker('3');
-verify.quickInfoIs("(property) test1: a1.connectModule(res: any, req: any, next: any) => void", undefined);
-verify.completionListContains("test1", "(property) test1: a1.connectModule(res: any, req: any, next: any) => void", undefined);
+verify.quickInfoIs("(property) test1: a1.connectModule\n(res: any, req: any, next: any) => void", undefined);
+verify.completionListContains("test1", "(property) test1: a1.connectModule\n(res: any, req: any, next: any) => void", undefined);
 verify.completionListContains("test2", "(method) test2(): a1.connectModule", undefined);
 verify.not.completionListContains("connectModule");
 verify.not.completionListContains("connectExport");
@@ -53,8 +53,8 @@ verify.currentSignatureHelpIs("a(): a1.connectExport");
 verify.quickInfoAt("8", "var r2: a1.connectExport", undefined);
 
 goTo.marker('9');
-verify.quickInfoIs("(property) test1: a1.connectModule(res: any, req: any, next: any) => void", undefined);
-verify.completionListContains("test1", "(property) test1: a1.connectModule(res: any, req: any, next: any) => void", undefined);
+verify.quickInfoIs("(property) test1: a1.connectModule\n(res: any, req: any, next: any) => void", undefined);
+verify.completionListContains("test1", "(property) test1: a1.connectModule\n(res: any, req: any, next: any) => void", undefined);
 verify.completionListContains("test2", "(method) test2(): a1.connectModule", undefined);
 verify.not.completionListContains("connectModule");
 verify.not.completionListContains("connectExport");

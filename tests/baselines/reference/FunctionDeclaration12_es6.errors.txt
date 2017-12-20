@@ -1,5 +1,5 @@
 tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration12_es6.ts(1,20): error TS1005: '(' expected.
-tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration12_es6.ts(1,25): error TS1005: '=' expected.
+tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration12_es6.ts(1,25): error TS1005: ',' expected.
 tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration12_es6.ts(1,28): error TS1005: '=>' expected.
 
 
@@ -8,6 +8,6 @@ tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration12_es6.ts(1,
                        ~~~~~
 !!! error TS1005: '(' expected.
                             ~
-!!! error TS1005: '=' expected.
+!!! error TS1005: ',' expected.
                                ~
 !!! error TS1005: '=>' expected.

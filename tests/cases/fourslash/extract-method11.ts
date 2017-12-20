@@ -20,9 +20,9 @@
 
 for (const m of ['1', '2', '3', '4', '5']) {
     goTo.select(m + 'a', m + 'b');
-    verify.not.refactorAvailable('Extract Method');
+    verify.not.refactorAvailable('Extract Symbol');
 }
 
 // Verify we can still extract the entire class
 goTo.select('oka', 'okb');
-verify.refactorAvailable('Extract Method');
+verify.refactorAvailable('Extract Symbol', 'function_scope_0');

@@ -7,6 +7,6 @@
 //// interface Test {
 ////   /*destination*/prop2: number
 //// }
-//// bar<Test>(({pr/*goto*/op2})=>{});
+//// bar<Test>(({[|pr/*goto*/op2|]})=>{});
 
 verify.goToDefinition("goto", "destination");

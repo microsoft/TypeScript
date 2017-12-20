@@ -21,7 +21,8 @@ namespace ts {
 
         const {
             startLexicalEnvironment,
-            endLexicalEnvironment
+            endLexicalEnvironment,
+            hoistVariableDeclaration
         } = context;
 
         const compilerOptions = context.getCompilerOptions();
@@ -56,7 +57,7 @@ namespace ts {
          * @param node The SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
-            if (node.isDeclarationFile || !(isExternalModule(node) || compilerOptions.isolatedModules || node.transformFlags & TransformFlags.ContainsDynamicImport)) {
+            if (node.isDeclarationFile || !(isEffectiveExternalModule(node, compilerOptions) || node.transformFlags & TransformFlags.ContainsDynamicImport)) {
                 return node;
             }
 
@@ -90,7 +91,7 @@ namespace ts {
             startLexicalEnvironment();
 
             const statements: Statement[] = [];
-            const ensureUseStrict = compilerOptions.alwaysStrict || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
+            const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
             const statementOffset = addPrologue(statements, node.statements, ensureUseStrict, sourceElementVisitor);
 
             if (shouldEmitUnderscoreUnderscoreESModule()) {
@@ -519,18 +520,20 @@ namespace ts {
         }
 
         function visitImportCallExpression(node: ImportCall): Expression {
+            const argument = visitNode(firstOrUndefined(node.arguments), importCallExpressionVisitor);
+            const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
             switch (compilerOptions.module) {
                 case ModuleKind.AMD:
-                    return transformImportCallExpressionAMD(node);
+                    return createImportCallExpressionAMD(argument, containsLexicalThis);
                 case ModuleKind.UMD:
-                    return transformImportCallExpressionUMD(node);
+                    return createImportCallExpressionUMD(argument, containsLexicalThis);
                 case ModuleKind.CommonJS:
                 default:
-                    return transformImportCallExpressionCommonJS(node);
+                    return createImportCallExpressionCommonJS(argument, containsLexicalThis);
             }
         }
 
-        function transformImportCallExpressionUMD(node: ImportCall): Expression {
+        function createImportCallExpressionUMD(arg: Expression | undefined, containsLexicalThis: boolean): Expression {
             // (function (factory) {
             //      ... (regular UMD)
             // }
@@ -545,14 +548,25 @@ namespace ts {
             //          : new Promise(function (_a, _b) { require([x], _a, _b); }); /*Amd Require*/
             // });
             needUMDDynamicImportHelper = true;
-            return createConditional(
-                /*condition*/ createIdentifier("__syncRequire"),
-                /*whenTrue*/ transformImportCallExpressionCommonJS(node),
-                /*whenFalse*/ transformImportCallExpressionAMD(node)
-            );
+            if (isSimpleCopiableExpression(arg)) {
+                const argClone = isGeneratedIdentifier(arg) ? arg : isStringLiteral(arg) ? createLiteral(arg) : setEmitFlags(setTextRange(getSynthesizedClone(arg), arg), EmitFlags.NoComments);
+                return createConditional(
+                    /*condition*/ createIdentifier("__syncRequire"),
+                    /*whenTrue*/ createImportCallExpressionCommonJS(arg, containsLexicalThis),
+                    /*whenFalse*/ createImportCallExpressionAMD(argClone, containsLexicalThis)
+                );
+            }
+            else {
+                const temp = createTempVariable(hoistVariableDeclaration);
+                return createComma(createAssignment(temp, arg), createConditional(
+                    /*condition*/ createIdentifier("__syncRequire"),
+                    /*whenTrue*/ createImportCallExpressionCommonJS(temp, containsLexicalThis),
+                    /*whenFalse*/ createImportCallExpressionAMD(temp, containsLexicalThis)
+                ));
+            }
         }
 
-        function transformImportCallExpressionAMD(node: ImportCall): Expression {
+        function createImportCallExpressionAMD(arg: Expression | undefined, containsLexicalThis: boolean): Expression {
             // improt("./blah")
             // emit as
             // define(["require", "exports", "blah"], function (require, exports) {
@@ -561,46 +575,89 @@ namespace ts {
             // });
             const resolve = createUniqueName("resolve");
             const reject = createUniqueName("reject");
-            return createNew(
-                createIdentifier("Promise"),
-                /*typeArguments*/ undefined,
-                [createFunctionExpression(
+            const parameters = [
+                createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve),
+                createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ reject)
+            ];
+            const body = createBlock([
+                createStatement(
+                    createCall(
+                        createIdentifier("require"),
+                        /*typeArguments*/ undefined,
+                        [createArrayLiteral([arg || createOmittedExpression()]), resolve, reject]
+                    )
+                )
+            ]);
+
+            let func: FunctionExpression | ArrowFunction;
+            if (languageVersion >= ScriptTarget.ES2015) {
+                func = createArrowFunction(
+                    /*modifiers*/ undefined,
+                    /*typeParameters*/ undefined,
+                    parameters,
+                    /*type*/ undefined,
+                    /*equalsGreaterThanToken*/ undefined,
+                    body);
+            }
+            else {
+                func = createFunctionExpression(
                     /*modifiers*/ undefined,
                     /*asteriskToken*/ undefined,
                     /*name*/ undefined,
                     /*typeParameters*/ undefined,
-                    [createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve),
-                     createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ reject)],
+                    parameters,
                     /*type*/ undefined,
-                    createBlock([createStatement(
-                        createCall(
-                            createIdentifier("require"),
-                            /*typeArguments*/ undefined,
-                            [createArrayLiteral([firstOrUndefined(node.arguments) || createOmittedExpression()]), resolve, reject]
-                        ))])
-            )]);
+                    body);
+
+                // if there is a lexical 'this' in the import call arguments, ensure we indicate
+                // that this new function expression indicates it captures 'this' so that the
+                // es2015 transformer will properly substitute 'this' with '_this'.
+                if (containsLexicalThis) {
+                    setEmitFlags(func, EmitFlags.CapturesThis);
+                }
+            }
+
+            return createNew(createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
         }
 
-    function transformImportCallExpressionCommonJS(node: ImportCall): Expression {
+        function createImportCallExpressionCommonJS(arg: Expression | undefined, containsLexicalThis: boolean): Expression {
             // import("./blah")
             // emit as
             // Promise.resolve().then(function () { return require(x); }) /*CommonJs Require*/
             // We have to wrap require in then callback so that require is done in asynchronously
             // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
-            return createCall(
-                createPropertyAccess(
-                    createCall(createPropertyAccess(createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []),
-                    "then"),
-                /*typeArguments*/ undefined,
-                [createFunctionExpression(
+            const promiseResolveCall = createCall(createPropertyAccess(createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []);
+            const requireCall = createCall(createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : []);
+
+            let func: FunctionExpression | ArrowFunction;
+            if (languageVersion >= ScriptTarget.ES2015) {
+                func = createArrowFunction(
+                    /*modifiers*/ undefined,
+                    /*typeParameters*/ undefined,
+                    /*parameters*/ [],
+                    /*type*/ undefined,
+                    /*equalsGreaterThanToken*/ undefined,
+                    requireCall);
+            }
+            else {
+                func = createFunctionExpression(
                     /*modifiers*/ undefined,
                     /*asteriskToken*/ undefined,
                     /*name*/ undefined,
                     /*typeParameters*/ undefined,
-                    /*parameters*/ undefined,
+                    /*parameters*/ [],
                     /*type*/ undefined,
-                    createBlock([createReturn(createCall(createIdentifier("require"), /*typeArguments*/ undefined, node.arguments))])
-                )]);
+                    createBlock([createReturn(requireCall)]));
+
+                // if there is a lexical 'this' in the import call arguments, ensure we indicate
+                // that this new function expression indicates it captures 'this' so that the
+                // es2015 transformer will properly substitute 'this' with '_this'.
+                if (containsLexicalThis) {
+                    setEmitFlags(func, EmitFlags.CapturesThis);
+                }
+            }
+
+            return createCall(createPropertyAccess(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
         }
 
         /**
@@ -861,10 +918,10 @@ namespace ts {
             if (original && hasAssociatedEndOfDeclarationMarker(original)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportStatement(deferredExports[id], createIdentifier("default"), node.expression, /*location*/ node, /*allowComments*/ true);
+                deferredExports[id] = appendExportStatement(deferredExports[id], createIdentifier("default"), visitNode(node.expression, importCallExpressionVisitor), /*location*/ node, /*allowComments*/ true);
             }
             else {
-                statements = appendExportStatement(statements, createIdentifier("default"), node.expression, /*location*/ node, /*allowComments*/ true);
+                statements = appendExportStatement(statements, createIdentifier("default"), visitNode(node.expression, importCallExpressionVisitor), /*location*/ node, /*allowComments*/ true);
             }
 
             return singleOrMany(statements);
@@ -1231,7 +1288,7 @@ namespace ts {
          */
         function appendExportsOfDeclaration(statements: Statement[] | undefined, decl: Declaration): Statement[] | undefined {
             const name = getDeclarationName(decl);
-            const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(unescapeLeadingUnderscores(name.escapedText));
+            const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(idText(name));
             if (exportSpecifiers) {
                 for (const exportSpecifier of exportSpecifiers) {
                     statements = appendExportStatement(statements, exportSpecifier.name, name, /*location*/ exportSpecifier.name);

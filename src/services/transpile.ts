@@ -139,7 +139,7 @@ namespace ts {
 
             const value = options[opt.name];
             // Value should be a key of opt.type
-            if (typeof value === "string") {
+            if (isString(value)) {
                 // If value is not a string, this will fail
                 options[opt.name] = parseCustomTypeOption(opt, value, diagnostics);
             }

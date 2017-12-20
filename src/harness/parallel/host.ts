@@ -38,27 +38,63 @@ namespace Harness.Parallel.Host {
         return undefined;
     }
 
-    function hashName(runner: TestRunnerKind, test: string) {
+    function hashName(runner: TestRunnerKind | "unittest", test: string) {
         return `tsrunner-${runner}://${test}`;
     }
 
+    let tasks: { runner: TestRunnerKind | "unittest", file: string, size: number }[] = [];
+    const newTasks: { runner: TestRunnerKind | "unittest", file: string, size: number }[] = [];
+    let unknownValue: string | undefined;
     export function start() {
-        initializeProgressBarsDependencies();
-        console.log("Discovering tests...");
-        const discoverStart = +(new Date());
-        const { statSync }: { statSync(path: string): { size: number }; } = require("fs");
-        let tasks: { runner: TestRunnerKind, file: string, size: number }[] = [];
-        const newTasks: { runner: TestRunnerKind, file: string, size: number }[] = [];
         const perfData = readSavedPerfData(configOption);
         let totalCost = 0;
-        let unknownValue: string | undefined;
+        if (runUnitTests) {
+            (global as any).describe = (suiteName: string) => {
+                // Note, sub-suites are not indexed (we assume such granularity is not required)
+                let size = 0;
+                if (perfData) {
+                    size = perfData[hashName("unittest", suiteName)];
+                    if (size === undefined) {
+                        newTasks.push({ runner: "unittest", file: suiteName, size: 0 });
+                        unknownValue = suiteName;
+                        return;
+                    }
+                }
+                tasks.push({ runner: "unittest", file: suiteName, size });
+                totalCost += size;
+            };
+        }
+        else {
+            (global as any).describe = ts.noop;
+        }
+
+        setTimeout(() => startDelayed(perfData, totalCost), 0); // Do real startup on next tick, so all unit tests have been collected
+    }
+
+    function startDelayed(perfData: {[testHash: string]: number}, totalCost: number) {
+        initializeProgressBarsDependencies();
+        console.log(`Discovered ${tasks.length} unittest suites` + (newTasks.length ? ` and ${newTasks.length} new suites.` : "."));
+        console.log("Discovering runner-based tests...");
+        const discoverStart = +(new Date());
+        const { statSync }: { statSync(path: string): { size: number }; } = require("fs");
+        const path: { join: (...args: string[]) => string } = require("path");
         for (const runner of runners) {
-            const files = runner.enumerateTestFiles();
-            for (const file of files) {
+            for (const file of runner.enumerateTestFiles()) {
                 let size: number;
                 if (!perfData) {
-                    size = statSync(file).size;
-
+                    try {
+                        size = statSync(path.join(runner.workingDirectory, file)).size;
+                    }
+                    catch {
+                        // May be a directory
+                        try {
+                            size = Harness.IO.listFiles(path.join(runner.workingDirectory, file), /.*/g, { recursive: true }).reduce((acc, elem) => acc + statSync(elem).size, 0);
+                        }
+                        catch {
+                            // Unknown test kind, just return 0 and let the historical analysis take over after one run
+                            size = 0;
+                        }
+                    }
                 }
                 else {
                     const hashedName = hashName(runner.kind(), file);
@@ -76,8 +112,7 @@ namespace Harness.Parallel.Host {
         }
         tasks.sort((a, b) => a.size - b.size);
         tasks = tasks.concat(newTasks);
-        // 1 fewer batches than threads to account for unittests running on the final thread
-        const batchCount = runners.length === 1 ? workerCount : workerCount - 1;
+        const batchCount = workerCount;
         const packfraction = 0.9;
         const chunkSize = 1000; // ~1KB or 1s for sending batches near the end of a test
         const batchSize = (totalCost / workerCount) * packfraction; // Keep spare tests for unittest thread in reserve
@@ -102,7 +137,7 @@ namespace Harness.Parallel.Host {
         let closedWorkers = 0;
         for (let i = 0; i < workerCount; i++) {
             // TODO: Just send the config over the IPC channel or in the command line arguments
-            const config: TestConfig = { light: Harness.lightMode, listenForWork: true, runUnitTests: runners.length === 1 ? false : i === workerCount - 1 };
+            const config: TestConfig = { light: Harness.lightMode, listenForWork: true, runUnitTests };
             const configPath = ts.combinePaths(taskConfigsFolder, `task-config${i}.json`);
             Harness.IO.writeFile(configPath, JSON.stringify(config));
             const child = fork(__filename, [`--config="${configPath}"`]);
@@ -120,7 +155,7 @@ namespace Harness.Parallel.Host {
             child.on("message", (data: ParallelClientMessage) => {
                 switch (data.type) {
                     case "error": {
-                        console.error(`Test worker encounted unexpected error and was forced to close:
+                        console.error(`Test worker encounted unexpected error${data.payload.name ? ` during the execution of test ${data.payload.name}` : ""} and was forced to close:
         Message: ${data.payload.error}
         Stack: ${data.payload.stack}`);
                         return process.exit(2);
@@ -173,10 +208,10 @@ namespace Harness.Parallel.Host {
             workers.push(child);
         }
 
-        // It's only really worth doing an initial batching if there are a ton of files to go through
-        if (totalFiles > 1000) {
+        // It's only really worth doing an initial batching if there are a ton of files to go through (and they have estimates)
+        if (totalFiles > 1000 && batchSize > 0) {
             console.log("Batching initial test lists...");
-            const batches: { runner: TestRunnerKind, file: string, size: number }[][] = new Array(batchCount);
+            const batches: { runner: TestRunnerKind | "unittest", file: string, size: number }[][] = new Array(batchCount);
             const doneBatching = new Array(batchCount);
             let scheduledTotal = 0;
             batcher: while (true) {
@@ -219,7 +254,7 @@ namespace Harness.Parallel.Host {
                 if (payload) {
                     worker.send({ type: "batch", payload });
                 }
-                else { // Unittest thread - send off just one test
+                else { // Out of batches, send off just one test
                     const payload = tasks.pop();
                     ts.Debug.assert(!!payload); // The reserve kept above should ensure there is always an initial task available, even in suboptimal scenarios
                     worker.send({ type: "test", payload });
@@ -239,15 +274,15 @@ namespace Harness.Parallel.Host {
         function completeBar() {
             const isPartitionFail = failingFiles !== 0;
             const summaryColor = isPartitionFail ? "fail" : "green";
-            const summarySymbol = isPartitionFail ? Base.symbols.err : Base.symbols.ok;
+            const summarySymbol = isPartitionFail ? base.symbols.err : base.symbols.ok;
 
             const summaryTests = (isPartitionFail ? totalPassing + "/" + (errorResults.length + totalPassing) : totalPassing) + " passing";
             const summaryDuration = "(" + ms(duration) + ")";
-            const savedUseColors = Base.useColors;
-            Base.useColors = !noColors;
+            const savedUseColors = base.useColors;
+            base.useColors = !noColors;
 
             const summary = color(summaryColor, summarySymbol + " " + summaryTests) + " " + color("light", summaryDuration);
-            Base.useColors = savedUseColors;
+            base.useColors = savedUseColors;
 
             updateProgress(1, summary);
         }
@@ -272,22 +307,21 @@ namespace Harness.Parallel.Host {
             completeBar();
             progressBars.disable();
 
-            const reporter = new Base();
+            const reporter = new base();
             const stats = reporter.stats;
             const failures = reporter.failures;
             stats.passes = totalPassing;
             stats.failures = errorResults.length;
             stats.tests = totalPassing + errorResults.length;
             stats.duration = duration;
-            for (let j = 0; j < errorResults.length; j++) {
-                const failure = errorResults[j];
+            for (const failure of errorResults) {
                 failures.push(makeMochaTest(failure));
             }
             if (noColors) {
-                const savedUseColors = Base.useColors;
-                Base.useColors = false;
+                const savedUseColors = base.useColors;
+                base.useColors = false;
                 reporter.epilogue();
-                Base.useColors = savedUseColors;
+                base.useColors = savedUseColors;
             }
             else {
                 reporter.epilogue();
@@ -301,6 +335,9 @@ namespace Harness.Parallel.Host {
         function makeMochaTest(test: ErrorInfo) {
             return {
                 fullTitle: () => {
+                    return test.name.join(" ");
+                },
+                titlePath: () => {
                     return test.name;
                 },
                 err: {
@@ -315,8 +352,8 @@ namespace Harness.Parallel.Host {
         return;
     }
 
-    let Mocha: any;
-    let Base: any;
+    let mocha: any;
+    let base: any;
     let color: any;
     let cursor: any;
     let readline: any;
@@ -357,10 +394,10 @@ namespace Harness.Parallel.Host {
     }
 
     function initializeProgressBarsDependencies() {
-        Mocha = require("mocha");
-        Base = Mocha.reporters.Base;
-        color = Base.color;
-        cursor = Base.cursor;
+        mocha = require("mocha");
+        base = mocha.reporters.Base;
+        color = base.color;
+        cursor = base.cursor;
         readline = require("readline");
         os = require("os");
         tty = require("tty");
@@ -377,8 +414,8 @@ namespace Harness.Parallel.Host {
             const open = options.open || "[";
             const close = options.close || "]";
             const complete = options.complete || "▬";
-            const incomplete = options.incomplete || Base.symbols.dot;
-            const maxWidth = Base.window.width - open.length - close.length - 34;
+            const incomplete = options.incomplete || base.symbols.dot;
+            const maxWidth = base.window.width - open.length - close.length - 34;
             const width = minMax(options.width || maxWidth, 10, maxWidth);
             this._options = {
                 open,

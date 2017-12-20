@@ -112,3 +112,29 @@ const c4_v2 = new C4();
 >new C4() : {}
 >C4 : () => any
 
+var c5_v1;
+>c5_v1 : any
+
+c5_v1 = function f() { };
+>c5_v1 = function f() { } : () => void
+>c5_v1 : any
+>function f() { } : () => void
+>f : () => void
+
+new c5_v1();
+>new c5_v1() : any
+>c5_v1 : () => void
+
+var c5_v2;
+>c5_v2 : any
+
+c5_v2 = class { };
+>c5_v2 = class { } : typeof (Anonymous class)
+>c5_v2 : any
+>class { } : typeof (Anonymous class)
+
+new c5_v2();
+>new c5_v2() : (Anonymous class)
+>c5_v2 : typeof (Anonymous class)
+
+

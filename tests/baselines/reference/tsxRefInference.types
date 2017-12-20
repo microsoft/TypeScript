@@ -559,7 +559,7 @@ declare namespace React {
 >P : P
 
         contextTypes?: ValidationMap<any>;
->contextTypes : any
+>contextTypes : { [x: string]: (object: any, key: string, componentName: string, ...rest: any[]) => Error; }
 >ValidationMap : { [K in keyof T]?: (object: T, key: string, componentName: string, ...rest: any[]) => Error; }
 
         defaultProps?: Partial<P>;
@@ -608,11 +608,11 @@ declare namespace React {
 >P : P
 
         contextTypes?: ValidationMap<any>;
->contextTypes : any
+>contextTypes : { [x: string]: (object: any, key: string, componentName: string, ...rest: any[]) => Error; }
 >ValidationMap : { [K in keyof T]?: (object: T, key: string, componentName: string, ...rest: any[]) => Error; }
 
         childContextTypes?: ValidationMap<any>;
->childContextTypes : any
+>childContextTypes : { [x: string]: (object: any, key: string, componentName: string, ...rest: any[]) => Error; }
 >ValidationMap : { [K in keyof T]?: (object: T, key: string, componentName: string, ...rest: any[]) => Error; }
 
         defaultProps?: Partial<P>;

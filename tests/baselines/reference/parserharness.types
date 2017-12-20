@@ -1581,7 +1581,7 @@ module Harness {
                     var metadata: IScenarioMetadata = { id: undefined, desc: this.description, pass: false, bugs: assert.bugIds };
 >metadata : IScenarioMetadata
 >IScenarioMetadata : IScenarioMetadata
->{ id: undefined, desc: this.description, pass: false, bugs: assert.bugIds } : { id: undefined; desc: any; pass: false; bugs: any; }
+>{ id: undefined, desc: this.description, pass: false, bugs: assert.bugIds } : { id: undefined; desc: any; pass: boolean; bugs: any; }
 >id : undefined
 >undefined : undefined
 >desc : any
@@ -4868,9 +4868,9 @@ module Harness {
 >lines = lines.concat(v.file.lines) : any[]
 >lines : any[]
 >lines.concat(v.file.lines) : any[]
->lines.concat : { (...items: ReadonlyArray<any>[]): any[]; (...items: any[]): any[]; }
+>lines.concat : { (...items: (any[] | ReadonlyArray<any>)[]): any[]; (...items: any[]): any[]; }
 >lines : any[]
->concat : { (...items: ReadonlyArray<any>[]): any[]; (...items: any[]): any[]; }
+>concat : { (...items: (any[] | ReadonlyArray<any>)[]): any[]; (...items: any[]): any[]; }
 >v.file.lines : string[]
 >v.file : WriterAggregator
 >v : { filename: string; file: WriterAggregator; }
@@ -6604,7 +6604,7 @@ module Harness {
             var minDistFromStart = entries.map(x => x.editRange.minChar).reduce((prev, current) => Math.min(prev, current));
 >minDistFromStart : any
 >entries.map(x => x.editRange.minChar).reduce((prev, current) => Math.min(prev, current)) : any
->entries.map(x => x.editRange.minChar).reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
+>entries.map(x => x.editRange.minChar).reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any): any; (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
 >entries.map(x => x.editRange.minChar) : any[]
 >entries.map : <U>(callbackfn: (value: { length: number; editRange: any; }, index: number, array: { length: number; editRange: any; }[]) => U, thisArg?: any) => U[]
 >entries : { length: number; editRange: any; }[]
@@ -6616,7 +6616,7 @@ module Harness {
 >x : { length: number; editRange: any; }
 >editRange : any
 >minChar : any
->reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
+>reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any): any; (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
 >(prev, current) => Math.min(prev, current) : (prev: any, current: any) => number
 >prev : any
 >current : any
@@ -6630,7 +6630,7 @@ module Harness {
             var minDistFromEnd = entries.map(x => x.length - x.editRange.limChar).reduce((prev, current) => Math.min(prev, current));
 >minDistFromEnd : number
 >entries.map(x => x.length - x.editRange.limChar).reduce((prev, current) => Math.min(prev, current)) : number
->entries.map(x => x.length - x.editRange.limChar).reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue?: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>entries.map(x => x.length - x.editRange.limChar).reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
 >entries.map(x => x.length - x.editRange.limChar) : number[]
 >entries.map : <U>(callbackfn: (value: { length: number; editRange: any; }, index: number, array: { length: number; editRange: any; }[]) => U, thisArg?: any) => U[]
 >entries : { length: number; editRange: any; }[]
@@ -6646,7 +6646,7 @@ module Harness {
 >x : { length: number; editRange: any; }
 >editRange : any
 >limChar : any
->reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue?: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
 >(prev, current) => Math.min(prev, current) : (prev: number, current: number) => number
 >prev : number
 >current : number
@@ -6660,7 +6660,7 @@ module Harness {
             var aggDelta = entries.map(x => x.editRange.delta).reduce((prev, current) => prev + current);
 >aggDelta : any
 >entries.map(x => x.editRange.delta).reduce((prev, current) => prev + current) : any
->entries.map(x => x.editRange.delta).reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
+>entries.map(x => x.editRange.delta).reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any): any; (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
 >entries.map(x => x.editRange.delta) : any[]
 >entries.map : <U>(callbackfn: (value: { length: number; editRange: any; }, index: number, array: { length: number; editRange: any; }[]) => U, thisArg?: any) => U[]
 >entries : { length: number; editRange: any; }[]
@@ -6672,7 +6672,7 @@ module Harness {
 >x : { length: number; editRange: any; }
 >editRange : any
 >delta : any
->reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
+>reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any): any; (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
 >(prev, current) => prev + current : (prev: any, current: any) => any
 >prev : any
 >current : any

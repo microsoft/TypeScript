@@ -23,20 +23,23 @@ function f1() {
 
     x = {};
 >x : Symbol(x, Decl(neverTypeErrors1.ts, 1, 7))
+
+    x();
+>x : Symbol(x, Decl(neverTypeErrors1.ts, 1, 7))
 }
 
 function f2(): never {
->f2 : Symbol(f2, Decl(neverTypeErrors1.ts, 8, 1))
+>f2 : Symbol(f2, Decl(neverTypeErrors1.ts, 9, 1))
 
     return;
 }
 
 function f3(): never {
->f3 : Symbol(f3, Decl(neverTypeErrors1.ts, 12, 1))
+>f3 : Symbol(f3, Decl(neverTypeErrors1.ts, 13, 1))
 
     return 1;
 }
 
 function f4(): never {
->f4 : Symbol(f4, Decl(neverTypeErrors1.ts, 16, 1))
+>f4 : Symbol(f4, Decl(neverTypeErrors1.ts, 17, 1))
 }

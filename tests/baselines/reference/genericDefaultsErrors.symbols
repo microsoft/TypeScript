@@ -136,3 +136,9 @@ interface i10<T = number> {}
 >i10 : Symbol(i10, Decl(genericDefaultsErrors.ts, 35, 30), Decl(genericDefaultsErrors.ts, 37, 23))
 >T : Symbol(T, Decl(genericDefaultsErrors.ts, 38, 14))
 
+// https://github.com/Microsoft/TypeScript/issues/16221
+interface SelfReference<T = SelfReference> {}
+>SelfReference : Symbol(SelfReference, Decl(genericDefaultsErrors.ts, 38, 28))
+>T : Symbol(T, Decl(genericDefaultsErrors.ts, 41, 24))
+>SelfReference : Symbol(SelfReference, Decl(genericDefaultsErrors.ts, 38, 28))
+

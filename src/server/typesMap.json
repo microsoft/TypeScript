@@ -10,7 +10,7 @@
             "types": ["winjs"]
         },
         "Kendo": {
-            "match": "^(.*\\/kendo)\\/kendo\\.all\\.min\\.js$",
+            "match": "^(.*\\/kendo(-ui)?)\\/kendo\\.all(\\.min)?\\.js$",
             "exclude": [["^", 1, "/.*"]],
             "types": ["kendo-ui"]
         },
@@ -19,8 +19,8 @@
             "exclude": [["^", 1, "/.*"]],
             "types": ["office"]
         },
-        "Minified files": {
-            "match": "^(.+\\.min\\.js)$",
+        "References": {
+            "match": "^(.*\\/_references\\.js)$",
             "exclude": [["^", 1, "$"]]
         }
     },

@@ -1,4 +1,7 @@
 /// <reference path='fourslash.ts' />
 //// var f: { [K in keyof number]: [|*|] };
 
-verify.rangeAfterCodeFix("any");
+verify.codeFix({
+    description: "Change '*' to 'any'",
+    newRangeContent: "any",
+});

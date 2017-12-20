@@ -13,7 +13,7 @@
 ////        x: number;
 ////    }
 ////
-////    var x: /*Part2Use*/IA;
+////    var x: [|/*Part2Use*/IA|];
 ////}
 
 verify.goToDefinition("Part2Use", ["Part1Definition", "Part2Definition"]);

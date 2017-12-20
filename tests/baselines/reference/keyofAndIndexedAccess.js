@@ -1101,7 +1101,9 @@ declare type Handlers<T> = {
     [K in keyof T]: (t: T[K]) => void;
 };
 declare function on<T>(handlerHash: Handlers<T>): T;
-declare var hashOfEmpty1: {};
+declare var hashOfEmpty1: {
+    test: {};
+};
 declare var hashOfEmpty2: {
     test: boolean;
 };

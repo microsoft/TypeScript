@@ -5,4 +5,8 @@
 ////    use(x);
 ////}
 
-verify.rangeAfterCodeFix("greeter(x)", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
+verify.codeFix({
+    description: "Remove declaration for: 'y'",
+    index: 0,
+    newRangeContent: "greeter(x)",
+});

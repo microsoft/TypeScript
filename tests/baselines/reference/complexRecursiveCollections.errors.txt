@@ -1,18 +1,18 @@
-tests/cases/compiler/immutable.d.ts(341,22): error TS2430: Interface 'Keyed<K, V>' incorrectly extends interface 'Collection<K, V>'.
+tests/cases/compiler/immutable.ts(341,22): error TS2430: Interface 'Keyed<K, V>' incorrectly extends interface 'Collection<K, V>'.
   Types of property 'toSeq' are incompatible.
     Type '() => Keyed<K, V>' is not assignable to type '() => this'.
       Type 'Keyed<K, V>' is not assignable to type 'this'.
-tests/cases/compiler/immutable.d.ts(359,22): error TS2430: Interface 'Indexed<T>' incorrectly extends interface 'Collection<number, T>'.
+tests/cases/compiler/immutable.ts(359,22): error TS2430: Interface 'Indexed<T>' incorrectly extends interface 'Collection<number, T>'.
   Types of property 'toSeq' are incompatible.
     Type '() => Indexed<T>' is not assignable to type '() => this'.
       Type 'Indexed<T>' is not assignable to type 'this'.
-tests/cases/compiler/immutable.d.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends interface 'Collection<never, T>'.
+tests/cases/compiler/immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends interface 'Collection<never, T>'.
   Types of property 'toSeq' are incompatible.
     Type '() => Set<T>' is not assignable to type '() => this'.
       Type 'Set<T>' is not assignable to type 'this'.
 
 
-==== tests/cases/compiler/complex.d.ts (0 errors) ====
+==== tests/cases/compiler/complex.ts (0 errors) ====
     interface Ara<T> { t: T }
     interface Collection<K, V> {
         map<M>(mapper: (value: V, key: K, iter: this) => M): Collection<K, M>;
@@ -33,7 +33,7 @@ tests/cases/compiler/immutable.d.ts(391,22): error TS2430: Interface 'Set<T>' in
         flatMap<M>(mapper: (value: T, key: void, iter: this) => Ara<M>, context?: any): N2<M>;
         toSeq(): N2<T>;
     }
-==== tests/cases/compiler/immutable.d.ts (3 errors) ====
+==== tests/cases/compiler/immutable.ts (3 errors) ====
     // Test that complex recursive collections can pass the `extends` assignability check without
     // running out of memory. This bug was exposed in Typescript 2.4 when more generic signatures
     // started being checked.

@@ -74,3 +74,23 @@ const c4_v2 = new C4();
 >c4_v2 : Symbol(c4_v2, Decl(index.js, 30, 5))
 >C4 : Symbol(C4, Decl(index.js, 25, 3))
 
+var c5_v1;
+>c5_v1 : Symbol(c5_v1, Decl(index.js, 32, 3))
+
+c5_v1 = function f() { };
+>c5_v1 : Symbol(c5_v1, Decl(index.js, 32, 3))
+>f : Symbol(f, Decl(index.js, 33, 7))
+
+new c5_v1();
+>c5_v1 : Symbol(c5_v1, Decl(index.js, 32, 3))
+
+var c5_v2;
+>c5_v2 : Symbol(c5_v2, Decl(index.js, 36, 3))
+
+c5_v2 = class { };
+>c5_v2 : Symbol(c5_v2, Decl(index.js, 36, 3))
+
+new c5_v2();
+>c5_v2 : Symbol(c5_v2, Decl(index.js, 36, 3))
+
+

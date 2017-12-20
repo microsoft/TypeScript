@@ -4,14 +4,14 @@
 
 //// namespace ns {
 ////     /*a*/export function fn() {
-//// 
+////
 ////     }
 ////     fn();
 ////     /*b*/
 //// }
 
 goTo.select('a', 'b');
-verify.not.refactorAvailable("Extract Method");
+verify.not.refactorAvailable("Extract Symbol");
 edit.deleteAtCaret('export'.length);
 goTo.select('a', 'b');
-verify.refactorAvailable("Extract Method");
+verify.refactorAvailable("Extract Symbol", 'function_scope_0');

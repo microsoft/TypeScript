@@ -144,6 +144,11 @@ namespace ts {
 `/**
 * @type
 */`);
+
+                parsesIncorrectly("@augments with no type",
+`/**
+ * @augments
+ */`);
             });
 
             describe("parsesCorrectly", () => {
@@ -295,6 +300,11 @@ namespace ts {
   * @property {number} age
   * @property {string} name
   */`);
+                parsesCorrectly("less-than and greater-than characters",
+`/**
+ * @param x hi
+< > still part of the previous comment
+ */`);
             });
         });
         describe("getFirstToken", () => {

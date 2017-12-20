@@ -5,4 +5,7 @@
 ////    [|private greeting: string;|]
 ////}
 
-verify.rangeAfterCodeFix("");
+verify.codeFix({
+    description: "Remove declaration for: 'greeting'",
+    newRangeContent: "",
+});

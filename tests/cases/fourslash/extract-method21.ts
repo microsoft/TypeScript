@@ -10,19 +10,19 @@
 
 goTo.select('start', 'end')
 
-verify.refactorAvailable('Extract Method');
+verify.refactorAvailable('Extract Symbol', 'function_scope_1');
 
 edit.applyRefactor({
-    refactorName: "Extract Method",
-    actionName: "scope_0",
+    refactorName: "Extract Symbol",
+    actionName: "function_scope_1",
     actionDescription: "Extract to method in class 'Foo'",
     newContent:
 `class Foo {
     static method() {
-        return Foo./*RENAME*/newFunction();
+        return Foo./*RENAME*/newMethod();
     }
 
-    private static newFunction() {
+    private static newMethod() {
         return 1;
     }
 }`

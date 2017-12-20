@@ -2,4 +2,8 @@
 ////class C {
 ////    p: [|*|] = 12;
 ////}
-verify.rangeAfterCodeFix("any");
+
+verify.codeFix({
+    description: "Change '*' to 'any'",
+    newRangeContent: "any",
+});

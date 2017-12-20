@@ -8,7 +8,7 @@ declare namespace Reflect {
     function getPrototypeOf(target: object): object;
     function has(target: object, propertyKey: PropertyKey): boolean;
     function isExtensible(target: object): boolean;
-    function ownKeys(target: object): Array<PropertyKey>;
+    function ownKeys(target: object): PropertyKey[];
     function preventExtensions(target: object): boolean;
     function set(target: object, propertyKey: PropertyKey, value: any, receiver?: any): boolean;
     function setPrototypeOf(target: object, proto: any): boolean;

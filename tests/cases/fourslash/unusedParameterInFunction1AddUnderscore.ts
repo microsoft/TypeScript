@@ -1,7 +1,10 @@
 /// <reference path='fourslash.ts' />
 
 // @noUnusedParameters: true
-////function [|greeter( x) |] {
-////}
+////function greeter(x) {}
 
-verify.rangeAfterCodeFix("greeter( _x)", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 1);
+verify.codeFix({
+    description: "Prefix 'x' with an underscore",
+    index: 1,
+    newFileContent: "function greeter(_x) {}",
+});

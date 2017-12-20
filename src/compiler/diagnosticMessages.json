@@ -491,23 +491,23 @@
         "category": "Error",
         "code": 1164
     },
-    "A computed property name in an ambient context must directly refer to a built-in symbol.": {
+    "A computed property name in an ambient context must refer to an expression whose type is a literal type or a 'unique symbol' type.": {
         "category": "Error",
         "code": 1165
     },
-    "A computed property name in a class property declaration must directly refer to a built-in symbol.": {
+    "A computed property name in a class property declaration must refer to an expression whose type is a literal type or a 'unique symbol' type.": {
         "category": "Error",
         "code": 1166
     },
-    "A computed property name in a method overload must directly refer to a built-in symbol.": {
+    "A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.": {
         "category": "Error",
         "code": 1168
     },
-    "A computed property name in an interface must directly refer to a built-in symbol.": {
+    "A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.": {
         "category": "Error",
         "code": 1169
     },
-    "A computed property name in a type literal must directly refer to a built-in symbol.": {
+    "A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.": {
         "category": "Error",
         "code": 1170
     },
@@ -831,6 +831,10 @@
         "category": "Error",
         "code": 1254
     },
+    "A definite assignment assertion '!' is not permitted in this context.": {
+        "category": "Error",
+        "code": 1255
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -906,6 +910,34 @@
     "Property value can only be string literal, numeric literal, 'true', 'false', 'null', object literal or array literal.": {
         "category": "Error",
         "code": 1328
+    },
+    "'{0}' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@{0}()'?": {
+        "category": "Error",
+        "code": 1329
+    },
+    "A property of an interface or type literal whose type is a 'unique symbol' type must be 'readonly'.": {
+        "category": "Error",
+        "code": 1330
+    },
+    "A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.": {
+        "category": "Error",
+        "code": 1331
+    },
+    "A variable whose type is a 'unique symbol' type must be 'const'.": {
+        "category": "Error",
+        "code": 1332
+    },
+    "'unique symbol' types may not be used on a variable declaration with a binding name.": {
+        "category": "Error",
+        "code": 1333
+    },
+    "'unique symbol' types are only allowed on variables in a variable statement.": {
+        "category": "Error",
+        "code": 1334
+    },
+    "'unique symbol' types are not allowed here.": {
+        "category": "Error",
+        "code": 1335
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1712,7 +1744,7 @@
         "category": "Error",
         "code": 2510
     },
-    "Cannot create an instance of the abstract class '{0}'.": {
+    "Cannot create an instance of an abstract class.": {
         "category": "Error",
         "code": 2511
     },
@@ -1776,7 +1808,7 @@
         "category": "Error",
         "code": 2526
     },
-    "The inferred type of '{0}' references an inaccessible 'this' type. A type annotation is necessary.": {
+    "The inferred type of '{0}' references an inaccessible '{1}' type. A type annotation is necessary.": {
         "category": "Error",
         "code": 2527
     },
@@ -1892,11 +1924,11 @@
         "category": "Error",
         "code": 2555
     },
-    "Expected {0} arguments, but got a minimum of {1}.": {
+    "Expected {0} arguments, but got {1} or more.": {
         "category": "Error",
         "code": 2556
     },
-    "Expected at least {0} arguments, but got a minimum of {1}.": {
+    "Expected at least {0} arguments, but got {1} or more.": {
         "category": "Error",
         "code": 2557
     },
@@ -1923,6 +1955,14 @@
     "The containing function or module body is too large for control flow analysis.": {
         "category": "Error",
         "code": 2563
+    },
+    "Property '{0}' has no initializer and is not definitely assigned in the constructor.": {
+        "category": "Error",
+        "code": 2564
+    },
+    "Property '{0}' is used before being assigned.": {
+        "category": "Error",
+        "code": 2565
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -2216,6 +2256,30 @@
         "category": "Error",
         "code": 2714
     },
+    "Abstract property '{0}' in class '{1}' cannot be accessed in the constructor.": {
+        "category": "Error",
+        "code": 2715
+    },
+    "Type parameter '{0}' has a circular default.": {
+        "category": "Error",
+        "code": 2716
+    },
+    "Subsequent property declarations must have the same type.  Property '{0}' must be of type '{1}', but here has type '{2}'.": {
+        "category": "Error",
+        "code": 2717
+    },
+    "Duplicate declaration '{0}'.": {
+        "category": "Error",
+        "code": 2718
+    },
+    "Type '{0}' is not assignable to type '{1}'. Two different types with this name exist, but they are unrelated.": {
+        "category": "Error",
+        "code": 2719
+    },
+    "Class '{0}' incorrectly implements class '{1}'. Did you mean to extend '{1}' and inherit its members as a subclass?": {
+        "category": "Error",
+        "code": 2720
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2309,43 +2373,43 @@
         "category": "Error",
         "code": 4033
     },
-    "Parameter '{0}' of public static property setter from exported class has or is using name '{1}' from private module '{2}'.": {
+    "Parameter type of public static setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 4034
     },
-    "Parameter '{0}' of public static property setter from exported class has or is using private name '{1}'.": {
+    "Parameter type of public static setter '{0}' from exported class has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4035
     },
-    "Parameter '{0}' of public property setter from exported class has or is using name '{1}' from private module '{2}'.": {
+    "Parameter type of public setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 4036
     },
-    "Parameter '{0}' of public property setter from exported class has or is using private name '{1}'.": {
+    "Parameter type of public setter '{0}' from exported class has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4037
     },
-    "Return type of public static property getter from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
+    "Return type of public static getter '{0}' from exported class has or is using name '{1}' from external module {2} but cannot be named.": {
         "category": "Error",
         "code": 4038
     },
-    "Return type of public static property getter from exported class has or is using name '{0}' from private module '{1}'.": {
+    "Return type of public static getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 4039
     },
-    "Return type of public static property getter from exported class has or is using private name '{0}'.": {
+    "Return type of public static getter '{0}' from exported class has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4040
     },
-    "Return type of public property getter from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
+    "Return type of public getter '{0}' from exported class has or is using name '{1}' from external module {2} but cannot be named.": {
         "category": "Error",
         "code": 4041
     },
-    "Return type of public property getter from exported class has or is using name '{0}' from private module '{1}'.": {
+    "Return type of public getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 4042
     },
-    "Return type of public property getter from exported class has or is using private name '{0}'.": {
+    "Return type of public getter '{0}' from exported class has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4043
     },
@@ -2518,6 +2582,39 @@
         "code": 4094
     },
 
+    "Public static method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 4095
+    },
+    "Public static method '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4096
+    },
+    "Public static method '{0}' of exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4097
+    },
+    "Public method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 4098
+    },
+    "Public method '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4099
+    },
+    "Public method '{0}' of exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4100
+    },
+    "Method '{0}' of exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4101
+    },
+    "Method '{0}' of exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4102
+    },
+
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
@@ -2529,10 +2626,6 @@
     "File specification cannot end in a recursive directory wildcard ('**'): '{0}'.": {
         "category": "Error",
         "code": 5010
-    },
-    "File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'.": {
-        "category": "Error",
-        "code": 5011
     },
     "Cannot read file '{0}': {1}.": {
         "category": "Error",
@@ -2630,6 +2723,11 @@
         "category": "Error",
         "code": 5067
     },
+    "Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.": {
+        "category": "Error",
+        "code": 5068
+    },
+
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -2682,7 +2780,7 @@
         "category": "Message",
         "code": 6013
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'.": {
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'.": {
         "category": "Message",
         "code": 6015
     },
@@ -2729,6 +2827,10 @@
     "Insert command line options and files from a file.": {
         "category": "Message",
         "code": 6030
+    },
+    "Starting compilation in watch mode...": {
+        "category": "Message",
+        "code": 6031
     },
     "File change detected. Starting incremental compilation...": {
         "category": "Message",
@@ -3090,10 +3192,6 @@
         "category": "Message",
         "code": 6128
     },
-    "The config file '{0}' found doesn't contain any source files.": {
-        "category": "Error",
-        "code": 6129
-    },
     "Resolving real path for '{0}', result '{1}'.": {
         "category": "Message",
         "code": 6130
@@ -3314,6 +3412,22 @@
         "category": "Message",
         "code": 6185
     },
+    "Enable strict checking of function types.": {
+        "category": "Message",
+        "code": 6186
+    },
+    "Enable strict checking of property initialization in classes.": {
+        "category": "Message",
+        "code": 6187
+    },
+    "Numeric separators are not allowed here.": {
+        "category": "Error",
+        "code": 6188
+    },
+    "Multiple consecutive numeric separators are not permitted.": {
+        "category": "Error",
+        "code": 6189
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3507,6 +3621,38 @@
         "category": "Error",
         "code": 8020
     },
+    "JSDoc '@typedef' tag should either have a type annotation or be followed by '@property' or '@member' tags.": {
+        "category": "Error",
+        "code": 8021
+    },
+    "JSDoc '@{0}' is not attached to a class.": {
+        "category": "Error",
+        "code": 8022
+    },
+    "JSDoc '@{0} {1}' does not match the 'extends {2}' clause.": {
+        "category": "Error",
+        "code": 8023
+    },
+    "JSDoc '@param' tag has name '{0}', but there is no parameter with that name.": {
+        "category": "Error",
+        "code": 8024
+    },
+    "Class declarations cannot have more than one `@augments` or `@extends` tag.": {
+        "category": "Error",
+        "code": 8025
+    },
+    "Expected {0} type arguments; provide these with an '@extends' tag.": {
+        "category": "Error",
+        "code": 8026
+    },
+    "Expected {0}-{1} type arguments; provide these with an '@extends' tag.": {
+        "category": "Error",
+        "code": 8027
+    },
+    "JSDoc '...' may only appear in the last parameter of a signature.": {
+        "category": "Error",
+        "code": 8028
+    },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
         "code": 9002
@@ -3575,6 +3721,18 @@
         "category": "Error",
         "code": 17013
     },
+    "JSX fragment has no corresponding closing tag.": {
+        "category": "Error",
+        "code": 17014
+    },
+    "Expected corresponding closing tag for JSX fragment.": {
+        "category": "Error",
+        "code": 17015
+    },
+    "JSX fragment is not supported when using --jsxFactory": {
+        "category": "Error",
+        "code": 17016
+    },
 
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
@@ -3593,99 +3751,98 @@
         "code": 18003
     },
 
-    "Add missing 'super()' call.": {
+    "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
     },
-    "Make 'super()' call the first statement in the constructor.": {
+    "Make 'super()' call the first statement in the constructor": {
         "category": "Message",
         "code": 90002
     },
-    "Change 'extends' to 'implements'.": {
+    "Change 'extends' to 'implements'": {
         "category": "Message",
         "code": 90003
     },
-    "Remove declaration for: '{0}'.": {
+    "Remove declaration for: '{0}'": {
         "category": "Message",
         "code": 90004
     },
-    "Implement interface '{0}'.": {
+    "Implement interface '{0}'": {
         "category": "Message",
         "code": 90006
     },
-    "Implement inherited abstract class.": {
+    "Implement inherited abstract class": {
         "category": "Message",
         "code": 90007
     },
-    "Add 'this.' to unresolved variable.": {
+    "Add 'this.' to unresolved variable": {
         "category": "Message",
         "code": 90008
     },
-    "Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.": {
-        "category": "Error",
-        "code": 90009
-    },
-    "Type '{0}' is not assignable to type '{1}'. Two different types with this name exist, but they are unrelated.": {
-        "category": "Error",
-        "code": 90010
-    },
-    "Import {0} from {1}.": {
+    "Import '{0}' from module \"{1}\"": {
         "category": "Message",
         "code": 90013
     },
-    "Change {0} to {1}.": {
+    "Change '{0}' to '{1}'": {
         "category": "Message",
         "code": 90014
     },
-    "Add {0} to existing import declaration from {1}.": {
+    "Add '{0}' to existing import declaration from \"{1}\"": {
         "category": "Message",
         "code": 90015
     },
-    "Declare property '{0}'.": {
+    "Declare property '{0}'": {
         "category": "Message",
         "code": 90016
     },
-    "Add index signature for property '{0}'.": {
+    "Add index signature for property '{0}'": {
         "category": "Message",
         "code": 90017
     },
-    "Disable checking for this file.": {
+    "Disable checking for this file": {
         "category": "Message",
         "code": 90018
     },
-    "Ignore this error message.": {
+    "Ignore this error message": {
         "category": "Message",
         "code": 90019
     },
-    "Initialize property '{0}' in the constructor.": {
+    "Initialize property '{0}' in the constructor": {
         "category": "Message",
         "code": 90020
     },
-    "Initialize static property '{0}'.": {
+    "Initialize static property '{0}'": {
         "category": "Message",
         "code": 90021
     },
-    "Change spelling to '{0}'.": {
+    "Change spelling to '{0}'": {
         "category": "Message",
         "code": 90022
     },
-    "Declare method '{0}'.": {
+    "Declare method '{0}'": {
         "category": "Message",
         "code": 90023
     },
-    "Declare static method '{0}'.": {
+    "Declare static method '{0}'": {
         "category": "Message",
         "code": 90024
     },
-    "Prefix '{0}' with an underscore.": {
+    "Prefix '{0}' with an underscore": {
         "category": "Message",
         "code": 90025
     },
-    "Rewrite as the indexed access type '{0}'.": {
+    "Rewrite as the indexed access type '{0}'": {
         "category": "Message",
         "code": 90026
     },
-
+    "Declare static property '{0}'": {
+        "category": "Message",
+        "code": 90027
+    },
+    "Call decorator expression": {
+        "category": "Message",
+        "code": 90028
+    },
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001
@@ -3694,14 +3851,52 @@
         "category": "Message",
         "code": 95002
     },
-
-    "Extract function": {
+    "Extract symbol": {
         "category": "Message",
         "code": 95003
     },
-
-    "Extract to {0}": {
+    "Extract to {0} in {1}": {
         "category": "Message",
         "code": 95004
+    },
+    "Extract function": {
+        "category": "Message",
+        "code": 95005
+    },
+    "Extract constant": {
+        "category": "Message",
+        "code": 95006
+    },
+    "Extract to {0} in enclosing scope": {
+        "category": "Message",
+        "code": 95007
+    },
+    "Extract to {0} in {1} scope": {
+        "category": "Message",
+        "code": 95008
+    },
+    "Annotate with type from JSDoc": {
+        "category": "Message",
+        "code": 95009
+    },
+    "Annotate with types from JSDoc": {
+        "category": "Message",
+        "code": 95010
+    },
+    "Infer type of '{0}' from usage": {
+        "category": "Message",
+        "code": 95011
+    },
+    "Infer parameter types from usage": {
+        "category": "Message",
+        "code": 95012
+    },
+    "Convert to default import": {
+        "category": "Message",
+        "code": 95013
+    },
+    "Install '{0}'": {
+        "category": "Message",
+        "code": 95014
     }
 }

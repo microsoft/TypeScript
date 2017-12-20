@@ -12,6 +12,7 @@
         "stripInternal": true,
         "sourceMap": true,
         "target": "es5",
+        "newLine": "lf",
         "types": []
     }
 }

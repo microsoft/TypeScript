@@ -11,8 +11,8 @@
 //// }
 goTo.select('start', 'end')
 edit.applyRefactor({
-    refactorName: "Extract Method",
-    actionName: "scope_2",
+    refactorName: "Extract Symbol",
+    actionName: "function_scope_3",
     actionDescription: "Extract to function in global scope",
     newContent:
 `namespace NS {
@@ -24,6 +24,7 @@ edit.applyRefactor({
         }
     }
 }
+
 function newFunction(m: number, j: string, k: { x: string; }) {
     return m + j + k;
 }

@@ -158,8 +158,8 @@ s = "hello";
 >s : string
 >"hello" : "hello"
 
-interface Tuple<A, B> {
->Tuple : Tuple<A, B>
+interface AB<A, B> {
+>AB : AB<A, B>
 >A : A
 >B : B
 
@@ -172,17 +172,17 @@ interface Tuple<A, B> {
 >B : B
 }
 
-type Pair<T> = Tuple<T, T>;
->Pair : Tuple<T, T>
+type Pair<T> = AB<T, T>;
+>Pair : AB<T, T>
 >T : T
->Tuple : Tuple<A, B>
+>AB : AB<A, B>
 >T : T
 >T : T
 
 interface TaggedPair<T> extends Pair<T> {
 >TaggedPair : TaggedPair<T>
 >T : T
->Pair : Tuple<T, T>
+>Pair : AB<T, T>
 >T : T
 
     tag: string;

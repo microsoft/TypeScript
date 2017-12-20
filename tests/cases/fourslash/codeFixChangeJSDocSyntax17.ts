@@ -1,3 +1,7 @@
 /// <reference path='fourslash.ts' />
 //// declare function index(ix: number): [|*|];
-verify.rangeAfterCodeFix("any");
+
+verify.codeFix({
+    description: "Change '*' to 'any'",
+    newRangeContent: "any",
+});

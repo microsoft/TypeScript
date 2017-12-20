@@ -1,9 +1,9 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: b.ts
-////@/*decoratorUse*/decorator
+////@[|/*decoratorUse*/decorator|]
 ////class C {
-////    @decora/*decoratorFactoryUse*/torFactory(a, "22", true)
+////    @[|decora/*decoratorFactoryUse*/torFactory|](a, "22", true)
 ////    method() {}
 ////}
 

@@ -5,7 +5,7 @@
 
 // @Filename: b.ts
 ////import [|{| "isWriteAccess": true, "isDefinition": true |}g|] from "./a";
-/////*ref*/[|g|]();
+////[|/*ref*/g|]();
 
 // @Filename: c.ts
 ////import { f } from "./a";

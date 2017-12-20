@@ -1,4 +1,7 @@
 /// <reference path='fourslash.ts' />
 //// var x: [|*|] = 12;
 
-verify.rangeAfterCodeFix("any");
+verify.codeFix({
+    description: "Change '*' to 'any'",
+    newRangeContent: "any",
+});

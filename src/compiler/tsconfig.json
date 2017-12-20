@@ -36,7 +36,11 @@
         "sourcemap.ts",
         "declarationEmitter.ts",
         "emitter.ts",
+        "watchUtilities.ts",
         "program.ts",
+        "builder.ts",
+        "resolutionCache.ts",
+        "watch.ts",
         "commandLineParser.ts",
         "tsc.ts",
         "diagnosticInformationMap.generated.ts"

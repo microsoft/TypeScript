@@ -2,4 +2,8 @@
 ////declare class C {
 ////    p: [|*|];
 ////}
-verify.rangeAfterCodeFix("any");
+
+verify.codeFix({
+    description: "Change '*' to 'any'",
+    newRangeContent: "any",
+});

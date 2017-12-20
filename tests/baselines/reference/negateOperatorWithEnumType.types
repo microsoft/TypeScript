@@ -31,7 +31,7 @@ var ResultIsNumber3 = -(ENUM1.B + ENUM1[""]);
 >ENUM1.B : ENUM1.B
 >ENUM1 : typeof ENUM1
 >B : ENUM1.B
->ENUM1[""] : ENUM1.""
+>ENUM1[""] : ENUM1.
 >ENUM1 : typeof ENUM1
 >"" : ""
 

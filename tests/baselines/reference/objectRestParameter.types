@@ -77,7 +77,7 @@ class C {
 }
 function foobar({ bar={}, ...opts }: any = {}) {
 >foobar : ({ bar, ...opts }?: any) => void
->bar : {}
+>bar : any
 >{} : {}
 >opts : any
 >{} : {}

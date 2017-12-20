@@ -11,16 +11,16 @@
 
 goTo.select('a', 'b');
 edit.applyRefactor({
-    refactorName: "Extract Method",
-    actionName: "scope_0",
+    refactorName: "Extract Symbol",
+    actionName: "function_scope_0",
     actionDescription: "Extract to method in class 'C'",
     newContent:
 `class C {
     static j = 1 + 1;
-    constructor(q: string = C./*RENAME*/newFunction()) {
+    constructor(q: string = C./*RENAME*/newMethod()) {
     }
 
-    private static newFunction(): string {
+    private static newMethod(): string {
         return "hello";
     }
 }`
@@ -28,30 +28,30 @@ edit.applyRefactor({
 
 verify.currentFileContentIs(`class C {
     static j = 1 + 1;
-    constructor(q: string = C.newFunction()) {
+    constructor(q: string = C.newMethod()) {
     }
 
-    private static newFunction(): string {
+    private static newMethod(): string {
         return "hello";
     }
 }`);
 
 goTo.select('c', 'd');
 edit.applyRefactor({
-    refactorName: "Extract Method",
-    actionName: "scope_0",
+    refactorName: "Extract Symbol",
+    actionName: "function_scope_0",
     actionDescription: "Extract to method in class 'C'",
     newContent:
 `class C {
-    static j = C./*RENAME*/newFunction_1();
-    constructor(q: string = C.newFunction()) {
+    static j = C./*RENAME*/newMethod_1();
+    constructor(q: string = C.newMethod()) {
     }
 
-    private static newFunction_1() {
+    private static newMethod_1() {
         return 1 + 1;
     }
 
-    private static newFunction(): string {
+    private static newMethod(): string {
         return "hello";
     }
 }`

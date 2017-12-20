@@ -7,5 +7,8 @@
 ////     }
 //// }
 
-verify.rangeAfterCodeFix("const {} of ", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
-
+verify.codeFix({
+    description: "Remove declaration for: 'elem'",
+    index: 0,
+    newRangeContent: "const {} of",
+});

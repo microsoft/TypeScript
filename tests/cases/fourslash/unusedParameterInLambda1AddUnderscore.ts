@@ -1,9 +1,10 @@
 /// <reference path='fourslash.ts' />
 
-// @noUnusedLocals: true
 // @noUnusedParameters: true
-//// function f1() {
-////     [|return (x:number) => {} |]
-//// }
+////(x: number) => {}
 
-verify.rangeAfterCodeFix("return (_x:number) => {}", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 1);
+verify.codeFix({
+    description: "Prefix 'x' with an underscore",
+    index: 1,
+    newFileContent: "(_x: number) => {}",
+});

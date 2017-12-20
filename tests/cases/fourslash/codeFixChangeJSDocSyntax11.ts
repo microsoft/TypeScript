@@ -2,4 +2,10 @@
 /// <reference path='fourslash.ts' />
 //// var f = function f(x: [|string?|]) {
 //// }
-verify.rangeAfterCodeFix("string | null | undefined", /*includeWhiteSpace*/ false, /*errorCode*/ 8020, 1);
+
+verify.codeFix({
+    description: "Change 'string?' to 'string | null | undefined'",
+    errorCode: 8020,
+    index: 1,
+    newRangeContent: "string | null | undefined",
+});

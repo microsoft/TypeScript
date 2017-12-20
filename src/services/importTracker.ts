@@ -3,7 +3,7 @@
 namespace ts.FindAllReferences {
     export interface ImportsResult {
         /** For every import of the symbol, the location and local symbol for the import. */
-        importSearches: Array<[Identifier, Symbol]>;
+        importSearches: [Identifier, Symbol][];
         /** For rename imports/exports `{ foo as bar }`, `foo` is not a local, so it may be added as a reference immediately without further searching. */
         singleReferences: Identifier[];
         /** List of source files that may (or may not) use the symbol via a namespace. (For UMD modules this is every file.) */
@@ -180,7 +180,7 @@ namespace ts.FindAllReferences {
      * But re-exports will be placed in 'singleReferences' since they cannot be locally referenced.
      */
     function getSearchesFromDirectImports(directImports: Importer[], exportSymbol: Symbol, exportKind: ExportKind, checker: TypeChecker, isForRename: boolean): Pick<ImportsResult, "importSearches" | "singleReferences"> {
-        const importSearches: Array<[Identifier, Symbol]> = [];
+        const importSearches: [Identifier, Symbol][] = [];
         const singleReferences: Identifier[] = [];
         function addSearch(location: Identifier, symbol: Symbol): void {
             importSearches.push([location, symbol]);
@@ -290,7 +290,7 @@ namespace ts.FindAllReferences {
 
         function isNameMatch(name: __String): boolean {
             // Use name of "default" even in `export =` case because we may have allowSyntheticDefaultImports
-            return name === exportSymbol.escapedName || exportKind !== ExportKind.Named && name === "default";
+            return name === exportSymbol.escapedName || exportKind !== ExportKind.Named && name === InternalSymbolName.Default;
         }
     }
 
@@ -534,7 +534,7 @@ namespace ts.FindAllReferences {
             // If `importedName` is undefined, do continue searching as the export is anonymous.
             // (All imports returned from this function will be ignored anyway if we are in rename and this is a not a named export.)
             const importedName = symbolName(importedSymbol);
-            if (importedName === undefined || importedName === "default" || importedName === symbol.escapedName) {
+            if (importedName === undefined || importedName === InternalSymbolName.Default || importedName === symbol.escapedName) {
                 return { kind: ImportExport.Import, symbol: importedSymbol, ...isImport };
             }
         }
@@ -604,14 +604,11 @@ namespace ts.FindAllReferences {
     }
 
     function symbolName(symbol: Symbol): __String | undefined {
-        if (symbol.escapedName !== "default") {
+        if (symbol.escapedName !== InternalSymbolName.Default) {
             return symbol.escapedName;
         }
 
         return forEach(symbol.declarations, decl => {
-            if (isExportAssignment(decl)) {
-                return isIdentifier(decl.expression) ? decl.expression.escapedText : undefined;
-            }
             const name = getNameOfDeclaration(decl);
             return name && name.kind === SyntaxKind.Identifier && name.escapedText;
         });

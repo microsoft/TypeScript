@@ -8,4 +8,7 @@
 ////    }
 ////}
 
-verify.rangeAfterCodeFix(`let a = "dummy entry", b;`);
+verify.codeFix({
+    description: "Remove declaration for: 'c'",
+    newRangeContent: 'let a = "dummy entry", b;',
+});

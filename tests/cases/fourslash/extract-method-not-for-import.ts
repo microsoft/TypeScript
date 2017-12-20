@@ -7,4 +7,4 @@
 ////export default function f() {}
 
 goTo.marker("");
-verify.not.refactorAvailable('Extract Method');
+verify.not.refactorAvailable('Extract Symbol');

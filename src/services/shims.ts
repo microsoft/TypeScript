@@ -16,7 +16,7 @@
 /// <reference path='services.ts' />
 
 /* @internal */
-let debugObjectHost = (function (this: any) { return this; })();
+let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { return this; })();
 
 // We need to use 'null' to interface with the managed side.
 /* tslint:disable:no-null-keyword */
@@ -106,7 +106,7 @@ namespace ts {
     ///
     // Note: This is being using by the host (VS) and is marshaled back and forth.
     // When changing this make sure the changes are reflected in the managed side as well
-    export interface IFileReference {
+    export interface ShimsFileReference {
         path: string;
         position: number;
         length: number;
@@ -119,13 +119,13 @@ namespace ts {
     }
 
     export interface Shim {
-        dispose(_dummy: any): void;
+        dispose(_dummy: {}): void;
     }
 
     export interface LanguageServiceShim extends Shim {
         languageService: LanguageService;
 
-        dispose(_dummy: any): void;
+        dispose(_dummy: {}): void;
 
         refresh(throwOnError: boolean): void;
 
@@ -140,8 +140,9 @@ namespace ts {
         getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string;
         getEncodedSemanticClassifications(fileName: string, start: number, length: number): string;
 
-        getCompletionsAtPosition(fileName: string, position: number): string;
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string): string;
+        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): string;
+        // tslint:disable-next-line type-operator-spacing (false positive)
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined): string;
 
         getQuickInfoAtPosition(fileName: string, position: number): string;
 
@@ -169,6 +170,8 @@ namespace ts {
          * Or undefined value if no definition can be found.
          */
         getDefinitionAtPosition(fileName: string, position: number): string;
+
+        getDefinitionAndBoundSpan(fileName: string, position: number): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -328,7 +331,7 @@ namespace ts {
             // if shimHost is a COM object then property check will become method call with no arguments.
             // 'in' does not have this effect.
             if ("getModuleResolutionsForFile" in this.shimHost) {
-                this.resolveModuleNames = (moduleNames: string[], containingFile: string) => {
+                this.resolveModuleNames = (moduleNames: string[], containingFile: string): ResolvedModuleFull[] => {
                     const resolutionsInFile = <MapLike<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
                     return map(moduleNames, name => {
                         const result = getProperty(resolutionsInFile, name);
@@ -417,7 +420,7 @@ namespace ts {
             return this.shimHost.getScriptVersion(fileName);
         }
 
-        public getLocalizedDiagnosticMessages(): any {
+        public getLocalizedDiagnosticMessages() {
             const diagnosticMessagesJson = this.shimHost.getLocalizedDiagnosticMessages();
             if (diagnosticMessagesJson === null || diagnosticMessagesJson === "") {
                 return null;
@@ -515,7 +518,7 @@ namespace ts {
         }
     }
 
-    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any, logPerformance: boolean): any {
+    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => {}, logPerformance: boolean): {} {
         let start: number;
         if (logPerformance) {
             logger.log(actionDescription);
@@ -527,7 +530,7 @@ namespace ts {
         if (logPerformance) {
             const end = timestamp();
             logger.log(`${actionDescription} completed in ${end - start} msec`);
-            if (typeof result === "string") {
+            if (isString(result)) {
                 let str = result;
                 if (str.length > 128) {
                     str = str.substring(0, 128) + "...";
@@ -539,14 +542,14 @@ namespace ts {
         return result;
     }
 
-    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any, logPerformance: boolean): string {
+    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => {}, logPerformance: boolean): string {
         return <string>forwardCall(logger, actionDescription, /*returnJson*/ true, action, logPerformance);
     }
 
     function forwardCall<T>(logger: Logger, actionDescription: string, returnJson: boolean, action: () => T, logPerformance: boolean): T | string {
         try {
             const result = simpleForwardCall(logger, actionDescription, action, logPerformance);
-            return returnJson ? JSON.stringify({ result }) : result;
+            return returnJson ? JSON.stringify({ result }) : result as T;
         }
         catch (err) {
             if (err instanceof OperationCanceledException) {
@@ -563,16 +566,23 @@ namespace ts {
         constructor(private factory: ShimFactory) {
             factory.registerShim(this);
         }
-        public dispose(_dummy: any): void {
+        public dispose(_dummy: {}): void {
             this.factory.unregisterShim(this);
         }
     }
 
-    export function realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, newLine: string): { message: string; start: number; length: number; category: string; code: number; }[] {
+    interface RealizedDiagnostic {
+        message: string;
+        start: number;
+        length: number;
+        category: string;
+        code: number;
+    }
+    export function realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, newLine: string): RealizedDiagnostic[] {
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
     }
 
-    function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): { message: string; start: number; length: number; category: string; code: number; } {
+    function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): RealizedDiagnostic {
         return {
             message: flattenDiagnosticMessageText(diagnostic.messageText, newLine),
             start: diagnostic.start,
@@ -594,7 +604,7 @@ namespace ts {
             this.logger = this.host;
         }
 
-        public forwardJSONCall(actionDescription: string, action: () => any): string {
+        public forwardJSONCall(actionDescription: string, action: () => {}): string {
             return forwardJSONCall(this.logger, actionDescription, action, this.logPerformance);
         }
 
@@ -604,7 +614,7 @@ namespace ts {
          * Ensure (almost) deterministic release of internal Javascript resources when
          * some external native objects holds onto us (e.g. Com/Interop).
          */
-        public dispose(dummy: any): void {
+        public dispose(dummy: {}): void {
             this.logger.log("dispose()");
             this.languageService.dispose();
             this.languageService = null;
@@ -628,7 +638,7 @@ namespace ts {
         public refresh(throwOnError: boolean): void {
             this.forwardJSONCall(
                 `refresh(${throwOnError})`,
-                () => <any>null
+                () => null
             );
         }
 
@@ -637,7 +647,7 @@ namespace ts {
                 "cleanupSemanticCache()",
                 () => {
                     this.languageService.cleanupSemanticCache();
-                    return <any>null;
+                    return null;
                 });
         }
 
@@ -765,6 +775,17 @@ namespace ts {
             );
         }
 
+        /**
+         * Computes the definition location and file for the symbol
+         * at the requested position.
+         */
+        public getDefinitionAndBoundSpan(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `getDefinitionAndBoundSpan('${fileName}', ${position})`,
+                () => this.languageService.getDefinitionAndBoundSpan(fileName, position)
+            );
+        }
+
         /// GOTO Type
 
         /**
@@ -878,18 +899,22 @@ namespace ts {
          * to provide at the given source position and providing a member completion
          * list if requested.
          */
-        public getCompletionsAtPosition(fileName: string, position: number) {
+        public getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined) {
             return this.forwardJSONCall(
-                `getCompletionsAtPosition('${fileName}', ${position})`,
-                () => this.languageService.getCompletionsAtPosition(fileName, position)
+                `getCompletionsAtPosition('${fileName}', ${position}, ${options})`,
+                () => this.languageService.getCompletionsAtPosition(fileName, position, options)
             );
         }
 
         /** Get a string based representation of a completion list entry details */
-        public getCompletionEntryDetails(fileName: string, position: number, entryName: string) {
+        // tslint:disable-next-line type-operator-spacing (false positive)
+        public getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined) {
             return this.forwardJSONCall(
                 `getCompletionEntryDetails('${fileName}', ${position}, '${entryName}')`,
-                () => this.languageService.getCompletionEntryDetails(fileName, position, entryName)
+                () => {
+                    const localOptions: ts.FormatCodeOptions = options === undefined ? undefined : JSON.parse(options);
+                    return this.languageService.getCompletionEntryDetails(fileName, position, entryName, localOptions, source);
+                }
             );
         }
 
@@ -973,13 +998,13 @@ namespace ts {
             );
         }
 
-        public getEmitOutputObject(fileName: string): any {
+        public getEmitOutputObject(fileName: string): EmitOutput {
             return forwardCall(
                 this.logger,
                 `getEmitOutput('${fileName}')`,
                 /*returnJson*/ false,
                 () => this.languageService.getEmitOutput(fileName),
-                this.logPerformance);
+                this.logPerformance) as EmitOutput;
         }
     }
 
@@ -1023,7 +1048,7 @@ namespace ts {
             super(factory);
         }
 
-        private forwardJSONCall(actionDescription: string, action: () => any): any {
+        private forwardJSONCall(actionDescription: string, action: () => {}): string {
             return forwardJSONCall(this.logger, actionDescription, action, this.logPerformance);
         }
 
@@ -1081,11 +1106,11 @@ namespace ts {
             );
         }
 
-        private convertFileReferences(refs: FileReference[]): IFileReference[] {
+        private convertFileReferences(refs: FileReference[]): ShimsFileReference[] {
             if (!refs) {
                 return undefined;
             }
-            const result: IFileReference[] = [];
+            const result: ShimsFileReference[] = [];
             for (const ref of refs) {
                 result.push({
                     path: normalizeSlashes(ref.fileName),
@@ -1214,7 +1239,7 @@ namespace ts {
 
     // Here we expose the TypeScript services as an external module
     // so that it may be consumed easily like a node module.
-    declare const module: any;
+    declare const module: { exports: {} };
     if (typeof module !== "undefined" && module.exports) {
         module.exports = ts;
     }
@@ -1234,4 +1259,4 @@ namespace TypeScript.Services {
 // TODO: it should be moved into a namespace though.
 
 /* @internal */
-const toolsVersion = "2.6";
+const toolsVersion = ts.versionMajorMinor;

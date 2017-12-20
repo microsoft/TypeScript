@@ -9,8 +9,8 @@
 
 goTo.select('a', 'b')
 edit.applyRefactor({
-    refactorName: "Extract Method",
-    actionName: "scope_0",
+    refactorName: "Extract Symbol",
+    actionName: "function_scope_0",
     actionDescription: "Extract to inner function in function 'fn'",
     newContent:
 `function fn() {

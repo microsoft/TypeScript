@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "lib": ["es2015"],
+        "types": []
+    },
+    "files": [
+        "index.ts",
+        "node_modules/zone.js/dist/zone.js.d.ts"
+    ]
+}

@@ -6,4 +6,7 @@
 //// [|var x: string;
 //// export var y: string;|]
 
-verify.rangeAfterCodeFix("export var y: string;");
+verify.codeFix({
+    description: "Remove declaration for: 'x'",
+    newRangeContent: "export var y: string;",
+});
