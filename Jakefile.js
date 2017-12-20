@@ -779,18 +779,21 @@ task("LKG", ["clean", "release", "local"].concat(libraryTargets), function () {
 // Test directory
 directory(builtLocalDirectory);
 
-task("typemock", function () {
-    var startCompileTime = mark();
-    execCompiler(/*useBuiltCompiler*/ true, ["-p", "scripts/typemock/tsconfig.json"], function (error) {
-        if (error) {
-            fail("Compilation unsuccessful.");
-        }
-        else {
-            complete();
-        }
-        measure(startCompileTime);
-    });
-}, { async: true });
+// NOTE: This build task is currently commented out as the approach to including typemock as a private
+// package does not seem to work in Node 6. If this issue cannot be resolved, this will be removed.
+//// task("typemock", function () {
+////     var startCompileTime = mark();
+////     execCompiler(/*useBuiltCompiler*/ true, ["-p", "scripts/typemock/tsconfig.json"], function (error) {
+////         if (error) {
+////             fail("Compilation unsuccessful.");
+////         }
+////         else {
+////             complete();
+////         }
+////         measure(startCompileTime);
+////     });
+//// }, { async: true });
+task("typemock");
 
 // Task to build the tests infrastructure using the built compiler
 var run = path.join(builtLocalDirectory, "run.js");
