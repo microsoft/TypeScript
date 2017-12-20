@@ -1223,7 +1223,7 @@ namespace Harness {
                 options.rootDirs = ts.map(options.rootDirs, d => ts.getNormalizedAbsolutePath(d, currentDirectory));
             }
 
-            const useCaseSensitiveFileNames = options.useCaseSensitiveFileNames !== undefined ? options.useCaseSensitiveFileNames : Harness.IO.useCaseSensitiveFileNames();
+            const useCaseSensitiveFileNames = options.useCaseSensitiveFileNames !== undefined ? options.useCaseSensitiveFileNames : true;
             const programFileNames = inputFiles.map(file => file.unitName);
 
             // Files from built\local that are requested by test "@includeBuiltFiles" to be in the context.
@@ -2020,11 +2020,7 @@ namespace Harness {
                 else {
                     IO.writeFile(actualFileName, encodedActual);
                 }
-                throw new _chai.AssertionError(`The baseline file ${relativeFileName} has changed.`, {
-                    expected,
-                    actual,
-                    showDiff: true
-                });
+                throw new Error(`The baseline file ${relativeFileName} has changed.`);
             }
         }
 

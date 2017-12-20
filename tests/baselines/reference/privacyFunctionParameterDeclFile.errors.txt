@@ -1,3 +1,23 @@
+tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(164,21): error TS4065: Parameter 'param' of constructor signature from exported interface has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(165,17): error TS4067: Parameter 'param' of call signature from exported interface has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(166,25): error TS4075: Parameter 'param' of method from exported interface has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(188,44): error TS4070: Parameter 'param' of public static method from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(192,31): error TS4073: Parameter 'param' of public method from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(196,28): error TS4063: Parameter 'param' of constructor from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(196,58): error TS4063: Parameter 'param1' of constructor from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(196,87): error TS4063: Parameter 'param2' of constructor from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(239,67): error TS4078: Parameter 'param' of exported function has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(248,82): error TS4078: Parameter 'param' of exported function has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(254,21): error TS4065: Parameter 'param' of constructor signature from exported interface has or is using private name 'privateModule'.
+tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(255,17): error TS4067: Parameter 'param' of call signature from exported interface has or is using private name 'privateModule'.
+tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(256,25): error TS4075: Parameter 'param' of method from exported interface has or is using private name 'privateModule'.
+tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(259,44): error TS4070: Parameter 'param' of public static method from exported class has or is using private name 'privateModule'.
+tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(261,31): error TS4073: Parameter 'param' of public method from exported class has or is using private name 'privateModule'.
+tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(263,28): error TS4063: Parameter 'param' of constructor from exported class has or is using private name 'privateModule'.
+tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(263,71): error TS4063: Parameter 'param1' of constructor from exported class has or is using private name 'privateModule'.
+tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(263,113): error TS4063: Parameter 'param2' of constructor from exported class has or is using private name 'privateModule'.
+tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(266,74): error TS4078: Parameter 'param' of exported function has or is using private name 'privateModule'.
+tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(268,89): error TS4078: Parameter 'param' of exported function has or is using private name 'privateModule'.
 tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(8,17): error TS4065: Parameter 'param' of constructor signature from exported interface has or is using private name 'privateClass'.
 tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(9,13): error TS4067: Parameter 'param' of call signature from exported interface has or is using private name 'privateClass'.
 tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(10,21): error TS4075: Parameter 'param' of method from exported interface has or is using private name 'privateClass'.
@@ -38,26 +58,6 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(239,71):
 tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(239,113): error TS4063: Parameter 'param2' of constructor from exported class has or is using private name 'privateModule'.
 tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(242,74): error TS4078: Parameter 'param' of exported function has or is using private name 'privateModule'.
 tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(244,89): error TS4078: Parameter 'param' of exported function has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(164,21): error TS4065: Parameter 'param' of constructor signature from exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(165,17): error TS4067: Parameter 'param' of call signature from exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(166,25): error TS4075: Parameter 'param' of method from exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(188,44): error TS4070: Parameter 'param' of public static method from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(192,31): error TS4073: Parameter 'param' of public method from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(196,28): error TS4063: Parameter 'param' of constructor from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(196,58): error TS4063: Parameter 'param1' of constructor from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(196,87): error TS4063: Parameter 'param2' of constructor from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(239,67): error TS4078: Parameter 'param' of exported function has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(248,82): error TS4078: Parameter 'param' of exported function has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(254,21): error TS4065: Parameter 'param' of constructor signature from exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(255,17): error TS4067: Parameter 'param' of call signature from exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(256,25): error TS4075: Parameter 'param' of method from exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(259,44): error TS4070: Parameter 'param' of public static method from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(261,31): error TS4073: Parameter 'param' of public method from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(263,28): error TS4063: Parameter 'param' of constructor from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(263,71): error TS4063: Parameter 'param1' of constructor from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(263,113): error TS4063: Parameter 'param2' of constructor from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(266,74): error TS4078: Parameter 'param' of exported function has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts(268,89): error TS4078: Parameter 'param' of exported function has or is using private name 'privateModule'.
 
 
 ==== tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts (40 errors) ====

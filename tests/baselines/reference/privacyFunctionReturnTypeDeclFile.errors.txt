@@ -1,3 +1,25 @@
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(281,17): error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(282,13): error TS4047: Return type of call signature from exported interface has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(283,22): error TS4049: Return type of index signature from exported interface has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(284,21): error TS4057: Return type of method from exported interface has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(309,40): error TS4052: Return type of public static method from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(315,27): error TS4055: Return type of public method from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(321,16): error TS4052: Return type of public static method from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(327,9): error TS4055: Return type of public method from exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(416,63): error TS4060: Return type of exported function has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(428,21): error TS4060: Return type of exported function has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(441,78): error TS4060: Return type of exported function has or is using private name 'privateClass'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(447,17): error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(448,13): error TS4047: Return type of call signature from exported interface has or is using private name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(449,22): error TS4049: Return type of index signature from exported interface has or is using private name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(450,21): error TS4057: Return type of method from exported interface has or is using private name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(453,40): error TS4052: Return type of public static method from exported class has or is using private name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(456,27): error TS4055: Return type of public method from exported class has or is using private name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(459,16): error TS4051: Return type of public static method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(462,9): error TS4054: Return type of public method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(466,70): error TS4060: Return type of exported function has or is using private name 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(469,21): error TS4059: Return type of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(472,85): error TS4060: Return type of exported function has or is using private name 'privateModule'.
 tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(8,13): error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateClass'.
 tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(9,9): error TS4047: Return type of call signature from exported interface has or is using private name 'privateClass'.
 tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(10,18): error TS4049: Return type of index signature from exported interface has or is using private name 'privateClass'.
@@ -42,28 +64,6 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(418,9):
 tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(422,70): error TS4060: Return type of exported function has or is using private name 'privateModule'.
 tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(425,21): error TS4059: Return type of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
 tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(428,85): error TS4060: Return type of exported function has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(281,17): error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(282,13): error TS4047: Return type of call signature from exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(283,22): error TS4049: Return type of index signature from exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(284,21): error TS4057: Return type of method from exported interface has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(309,40): error TS4052: Return type of public static method from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(315,27): error TS4055: Return type of public method from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(321,16): error TS4052: Return type of public static method from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(327,9): error TS4055: Return type of public method from exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(416,63): error TS4060: Return type of exported function has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(428,21): error TS4060: Return type of exported function has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(441,78): error TS4060: Return type of exported function has or is using private name 'privateClass'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(447,17): error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(448,13): error TS4047: Return type of call signature from exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(449,22): error TS4049: Return type of index signature from exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(450,21): error TS4057: Return type of method from exported interface has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(453,40): error TS4052: Return type of public static method from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(456,27): error TS4055: Return type of public method from exported class has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(459,16): error TS4051: Return type of public static method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(462,9): error TS4054: Return type of public method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(466,70): error TS4060: Return type of exported function has or is using private name 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(469,21): error TS4059: Return type of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts(472,85): error TS4060: Return type of exported function has or is using private name 'privateModule'.
 
 
 ==== tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts (44 errors) ====
