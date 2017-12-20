@@ -57,7 +57,8 @@ namespace ts.Completions {
             // In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,
             // instead of simply giving unknown value, the completion will return the tag-name of an associated opening-element.
             // For example:
-            //     var x = <div> </ /*1*/>  completion list at "1" will contain "div" with type any
+            //     var x = <div> </ /*1*/>
+            // The completion list at "1" will contain "div" with type any
             const tagName = (<JsxElement>location.parent.parent).openingElement.tagName;
             return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false,
                 entries: [{
@@ -76,7 +77,7 @@ namespace ts.Completions {
                 // If the current position is a jsDoc tag, only tags should be provided for completion
                 ? JsDoc.getJSDocTagCompletions()
                 : JsDoc.getJSDocParameterNameCompletions(request.tag);
-            return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false,  entries };
+            return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
         }
 
         const entries: CompletionEntry[] = [];
@@ -1558,7 +1559,7 @@ namespace ts.Completions {
                 switch (contextToken.kind) {
                     case SyntaxKind.OpenParenToken:
                     case SyntaxKind.CommaToken:
-                        return  isConstructorDeclaration(contextToken.parent) && contextToken.parent;
+                        return isConstructorDeclaration(contextToken.parent) && contextToken.parent;
 
                     default:
                         if (isConstructorParameterCompletion(contextToken)) {

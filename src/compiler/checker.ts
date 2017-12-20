@@ -1217,7 +1217,7 @@ namespace ts {
                         !checkAndReportErrorForExtendingInterface(errorLocation) &&
                         !checkAndReportErrorForUsingTypeAsNamespace(errorLocation, name, meaning) &&
                         !checkAndReportErrorForUsingTypeAsValue(errorLocation, name, meaning) &&
-                        !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning))  {
+                        !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning)) {
                         let suggestion: string | undefined;
                         if (suggestedNameNotFoundMessage && suggestionCount < maximumSuggestionCount) {
                             suggestion = getSuggestionForNonexistentSymbol(originalLocation, name, meaning);
@@ -9612,7 +9612,7 @@ namespace ts {
                     }
                     if (target.flags & TypeFlags.Union) {
                         const discriminantType = findMatchingDiscriminantType(source, target as UnionType);
-                        if (discriminantType)  {
+                        if (discriminantType) {
                             // check excess properties against discriminant type only, not the entire union
                             return hasExcessProperties(source, discriminantType, reportErrors);
                         }
@@ -11785,7 +11785,7 @@ namespace ts {
                 const container = (node as BindingElement).parent.parent;
                 const key = container.kind === SyntaxKind.BindingElement ? getFlowCacheKey(container) : (container.initializer && getFlowCacheKey(container.initializer));
                 const text = getBindingElementNameText(node as BindingElement);
-                const result =  key && text && (key + "." + text);
+                const result = key && text && (key + "." + text);
                 return result;
             }
             return undefined;
@@ -12708,7 +12708,7 @@ namespace ts {
                         firstAntecedentType = flowType;
                     }
                     const type = getTypeFromFlowType(flowType);
-                    // If we see a value appear in the cache it is a sign that control flow  analysis
+                    // If we see a value appear in the cache it is a sign that control flow analysis
                     // was restarted and completed by checkExpressionCached. We can simply pick up
                     // the resulting type and bail out.
                     const cached = cache.get(key);
@@ -21862,7 +21862,7 @@ namespace ts {
             checkGrammarForInOrForOfStatement(node);
 
             const rightType = checkNonNullExpression(node.expression);
-            // TypeScript 1.0 spec  (April 2014): 5.4
+            // TypeScript 1.0 spec (April 2014): 5.4
             // In a 'for-in' statement of the form
             // for (let VarDecl in Expr) Statement
             //   VarDecl must be a variable declaration without a type annotation that declares a variable of type Any,
@@ -24800,7 +24800,7 @@ namespace ts {
                             // AND
                             //   - binding is not declared in loop, should be renamed to avoid name reuse across siblings
                             //     let a, b
-                            //     { let x = 1; a = () => x;  }
+                            //     { let x = 1; a = () => x; }
                             //     { let x = 100; b = () => x; }
                             //     console.log(a()); // should print '1'
                             //     console.log(b()); // should print '100'
@@ -25261,7 +25261,7 @@ namespace ts {
 
                 // walk the parent chain for symbols to make sure that top level parent symbol is in the global scope
                 // external modules cannot define or contribute to type declaration files
-                let current =  symbol;
+                let current = symbol;
                 while (true) {
                     const parent = getParentOfSymbol(current);
                     if (parent) {

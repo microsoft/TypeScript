@@ -197,7 +197,7 @@ namespace ts.SignatureHelp {
     function getArgumentIndex(argumentsList: Node, node: Node) {
         // The list we got back can include commas.  In the presence of errors it may
         // also just have nodes without commas.  For example "Foo(a b c)" will have 3
-        // args without commas.   We want to find what index we're at.  So we count
+        // args without commas. We want to find what index we're at.  So we count
         // forward until we hit ourselves, only incrementing the index if it isn't a
         // comma.
         //
@@ -224,12 +224,12 @@ namespace ts.SignatureHelp {
         // The argument count for a list is normally the number of non-comma children it has.
         // For example, if you have "Foo(a,b)" then there will be three children of the arg
         // list 'a' '<comma>' 'b'.  So, in this case the arg count will be 2.  However, there
-        // is a small subtlety.  If you have  "Foo(a,)", then the child list will just have
+        // is a small subtlety.  If you have "Foo(a,)", then the child list will just have
         // 'a' '<comma>'.  So, in the case where the last child is a comma, we increase the
         // arg count by one to compensate.
         //
-        // Note: this subtlety only applies to the last comma.  If you had "Foo(a,,"  then
-        // we'll have:  'a' '<comma>' '<missing>'
+        // Note: this subtlety only applies to the last comma.  If you had "Foo(a,," then
+        // we'll have: 'a' '<comma>' '<missing>'
         // That will give us 2 non-commas.  We then add one for the last comma, giving us an
         // arg count of 3.
         const listChildren = argumentsList.getChildren();
@@ -309,7 +309,6 @@ namespace ts.SignatureHelp {
         //
         //      `  ${ 1 + 1        foo(10)
         //       |        |
-        //
         // This is because a Missing node has no width. However, what we actually want is to include trivia
         // leading up to the next token in case the user is about to type in a TemplateMiddle or TemplateTail.
         if (template.kind === SyntaxKind.TemplateExpression) {

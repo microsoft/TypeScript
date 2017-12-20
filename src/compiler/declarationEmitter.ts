@@ -1199,7 +1199,7 @@ namespace ts {
                         write(">");
                     }
                 }
-                else  {
+                else {
                     emitHeritageClause([baseTypeNode], /*isImplementsList*/ false);
                 }
             }
