@@ -1374,7 +1374,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Annotate with type from JSDoc]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dodaj adnotację przy użyciu typu z JSDoc]]></Val>
+            <Val><![CDATA[Dodaj adnotację z typem z danych JSDoc]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1383,7 +1383,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Annotate with types from JSDoc]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dodaj adnotację przy użyciu typów z JSDoc]]></Val>
+            <Val><![CDATA[Dodaj adnotację z typami z danych JSDoc]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

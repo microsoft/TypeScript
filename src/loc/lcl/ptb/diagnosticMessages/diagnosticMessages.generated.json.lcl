@@ -276,7 +276,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A decorator can only decorate a method implementation, not an overload.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Um decorador pode decoras somente uma implementação de método, não uma sobrecarga.]]></Val>
+            <Val><![CDATA[Um decorador pode decorar somente uma implementação de método, não uma sobrecarga.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -411,7 +411,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O inicializador de um membro em uma declaração enum não pode referenciar membros declarados depois dele, inclusive membros definidos em outros enums.]]></Val>
+            <Val><![CDATA[O inicializador de um membro em uma declaração de enumeração não pode referenciar membros declarados depois dele, inclusive membros definidos em outras enumerações.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1050,7 +1050,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An arithmetic operand must be of type 'any', 'number' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Um operando aritmético deve ser do tipo 'any', 'number' ou um tipo enum.]]></Val>
+            <Val><![CDATA[Um operando aritmético deve ser do tipo 'any', 'number' ou um tipo de enumeração.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1095,7 +1095,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An enum member cannot have a numeric name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Um membro enum não pode ter um nome numérico.]]></Val>
+            <Val><![CDATA[Um membro de enumeração não pode ter um nome numérico.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2184,7 +2184,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Computed values are not permitted in an enum with string valued members.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Os valores computados não são permitidos em um enum com membros de valor de cadeia de caracteres.]]></Val>
+            <Val><![CDATA[Os valores computados não são permitidos em uma enumeração com membros de valor de cadeia de caracteres.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2907,7 +2907,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum '{0}' used before its declaration.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Enum '{0}' usada antes de sua declaração.]]></Val>
+            <Val><![CDATA[A enumeração '{0}' usada antes de sua declaração.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2916,7 +2916,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum declarations must all be const or non-const.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Declarações enum devem ser const ou não const.]]></Val>
+            <Val><![CDATA[Declarações de enumeração devem ser const ou não const.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2925,7 +2925,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum member expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Membro enum esperado.]]></Val>
+            <Val><![CDATA[Membro de enumeração esperado.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2934,7 +2934,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum member must have initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O membro enum deve ter um inicializador.]]></Val>
+            <Val><![CDATA[O membro de enumeração deve ter um inicializador.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2943,7 +2943,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum name cannot be '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O nome de enum não pode ser '{0}'.]]></Val>
+            <Val><![CDATA[O nome de enumeração não pode ser '{0}'.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Enum name cannot be '{0}']]></Val>
@@ -2955,7 +2955,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum type '{0}' has members with initializers that are not literals.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O tipo Enum '{0}' tem membros com inicializadores que não são literais.]]></Val>
+            <Val><![CDATA[O tipo de Enumeração '{0}' tem membros com inicializadores que não são literais.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3876,7 +3876,7 @@
         <Str Cat="Text">
           <Val><![CDATA[In ambient enum declarations member initializer must be constant expression.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Em declarações enum de ambiente, o inicializador de membro deve ser uma expressão de constante.]]></Val>
+            <Val><![CDATA[Em declarações de enumeração de ambiente, o inicializador de membro deve ser uma expressão de constante.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3885,7 +3885,7 @@
         <Str Cat="Text">
           <Val><![CDATA[In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Em um enum com várias declarações, somente uma declaração pode omitir um inicializador para o primeiro elemento enum.]]></Val>
+            <Val><![CDATA[Em uma enumeração com várias declarações, somente uma declaração pode omitir um inicializador para o primeiro elemento de enumeração.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6936,7 +6936,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O lado esquerdo de uma operação aritmética deve ser do tipo 'any', 'number' ou enum.]]></Val>
+            <Val><![CDATA[O lado esquerdo de uma operação aritmética deve ser do tipo 'any', 'number' ou de enumeração.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7074,7 +7074,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O lado direito de uma operação aritmética deve ser do tipo 'any', 'number' ou enum.]]></Val>
+            <Val><![CDATA[O lado direito de uma operação aritmética deve ser do tipo 'any', 'number' ou de enumeração.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

@@ -2276,6 +2276,10 @@
         "category": "Error",
         "code": 2719
     },
+    "Class '{0}' incorrectly implements class '{1}'. Did you mean to extend '{1}' and inherit its members as a subclass?": {
+        "category": "Error",
+        "code": 2720
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
