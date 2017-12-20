@@ -2020,7 +2020,11 @@ namespace Harness {
                 else {
                     IO.writeFile(actualFileName, encodedActual);
                 }
-                throw new Error(`The baseline file ${relativeFileName} has changed.`);
+                throw new _chai.AssertionError(`The baseline file ${relativeFileName} has changed.`, {
+                    expected,
+                    actual,
+                    showDiff: true
+                });
             }
         }
 
