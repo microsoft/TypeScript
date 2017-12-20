@@ -2198,7 +2198,7 @@ namespace ts {
             }
 
             function isUMDExportSymbol(symbol: Symbol) {
-                return symbol && symbol.declarations && symbol.declarations[0] && isNamespaceExportDeclaration(symbol.declarations[0]);
+                return symbol && symbol.declarations && symbol.declarations.length && every(symbol.declarations, d => isNamespaceExportDeclaration(d));
             }
 
             function trySymbolTable(symbols: SymbolTable) {

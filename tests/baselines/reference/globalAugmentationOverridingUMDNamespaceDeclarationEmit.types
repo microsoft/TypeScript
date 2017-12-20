@@ -1,0 +1,48 @@
+=== tests/cases/compiler/package.d.ts ===
+declare namespace thing {
+>thing : { x: MyInterface; }
+
+    export interface MyInterface {}
+>MyInterface : MyInterface
+}
+declare var thing: {
+>thing : { x: thing.MyInterface; }
+
+    x: thing.MyInterface;
+>x : thing.MyInterface
+>thing : any
+>MyInterface : thing.MyInterface
+
+};
+export = thing;
+>thing : { x: thing.MyInterface; }
+
+export as namespace thing;
+>thing : { x: thing.MyInterface; }
+
+=== tests/cases/compiler/globalize.d.ts ===
+import * as thingAlias from "./package";
+>thingAlias : { x: thingAlias.MyInterface; }
+
+declare global {
+>global : typeof global
+
+    namespace thing {
+>thing : { x: thingAlias.MyInterface; }
+
+        export type MyInterface = thingAlias.MyInterface;
+>MyInterface : thingAlias.MyInterface
+>thingAlias : any
+>MyInterface : thingAlias.MyInterface
+    }
+    const thing: typeof thingAlias;
+>thing : { x: thingAlias.MyInterface; }
+>thingAlias : { x: thingAlias.MyInterface; }
+}
+=== tests/cases/compiler/usage.ts ===
+export const num = thing.x;
+>num : thing.MyInterface
+>thing.x : thing.MyInterface
+>thing : { x: thing.MyInterface; }
+>x : thing.MyInterface
+
