@@ -1403,7 +1403,7 @@ namespace ts.tscWatch {
                 writeFileSpy1
                     .verify(_ => _("/a/b/projects/myProject/dist/file1.js", file1Output, Arg.any()), Times.once())
                     .verify(_ => _("/a/b/projects/myProject/dist/file2.js", file2Output, Arg.any()), Times.once())
-                    .verify(_ => _(Arg.nor("/a/b/projects/myProject/dist/file1.js", "/a/b/projects/myProject/dist/file2.js"), Arg.string(), Arg.any()), Times.none())
+                    .verify(_ => _(Arg.not(Arg.or("/a/b/projects/myProject/dist/file1.js", "/a/b/projects/myProject/dist/file2.js")), Arg.string(), Arg.any()), Times.none())
                     .revoke();
 
                 // spy on calls to writeFile when triggering synchronization

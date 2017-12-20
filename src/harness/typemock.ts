@@ -6,7 +6,7 @@
 //       support the eventual conversion of harness into a modular system.
 
 // NOTE: The commented code below is intended to support loading 'typemock' as a private package.
-//       However, this does not seem to work in Node 6. If this issue cannot be resolved, the 
+//       However, this does not seem to work in Node 6. If this issue cannot be resolved, the
 //       comment below will be removed.
 
 //// // typemock library
@@ -20,7 +20,7 @@
 ////     typemock.Timers = module.Timers;
 ////     typemock.spy = module.spy;
 //// }
-//// 
+////
 //// declare module "typemock_" {
 ////     import * as typemock_ from "typemock";
 ////     global {
@@ -167,7 +167,7 @@ namespace typemock {
         public static includes(value: string): string & string[] & Arg;
         public static includes<T>(value: T): T[] & Arg;
         public static includes<T>(value: T): Arg {
-            return new Arg(value_ => Array.isArray(value_) ? value_.indexOf(value) >= 0 : typeof value_ === "string" && value_.includes("" + value), `contains ${value}`);
+            return new Arg(_value => Array.isArray(_value) ? _value.indexOf(value) >= 0 : typeof _value === "string" && _value.includes("" + value), `contains ${value}`);
         }
 
         public static array<T>(values: (T | T & Arg)[]): T[] & Arg {
@@ -270,27 +270,11 @@ namespace typemock {
         }
 
         /**
-         * Combines conditions, where no condition may be `true`.
-         */
-        public static nand<T = any>(...args: ((T & Arg) | T)[]): T & Arg {
-            const conditions = args.map(Arg.from);
-            return <any>new Arg(value => !conditions.every(condition => condition._validate(value)), "not " + conditions.map(condition => condition._message).join(" and "));
-        }
-
-        /**
          * Combines conditions, where any conditions may be `true`.
          */
         public static or<T = any>(...args: ((T & Arg) | T)[]): T & Arg {
             const conditions = args.map(Arg.from);
             return <any>new Arg(value => conditions.some(condition => condition._validate(value)), conditions.map(condition => condition._message).join(" or "));
-        }
-
-        /**
-         * Combines conditions, where all conditions must be `true`.
-         */
-        public static nor<T = any>(...args: ((T & Arg) | T)[]): T & Arg {
-            const conditions = args.map(Arg.from);
-            return <any>new Arg(value => !conditions.some(condition => condition._validate(value)), "neither " + conditions.map(condition => condition._message).join(" nor "));
         }
 
         /**
@@ -474,34 +458,34 @@ namespace typemock {
 
     const weakHandler = new WeakMap<object, MockHandler<object>>();
     const weakMock = new WeakMap<object, Mock<object>>();
-    
-    function noop() {}
+
+    function noop() { /*does nothing*/ }
     const empty = {};
-    
+
     export type Callable = (...args: any[]) => any;
-    
+
     export type Constructable = new (...args: any[]) => any;
-    
+
     export interface ThisArg {
         this: any;
     }
-    
+
     export interface Returns<U> {
         return: U;
     }
-    
+
     export interface Fallback {
         fallback: true;
     }
-    
+
     export interface Throws {
         throw: any;
     }
-    
+
     export interface Callback {
         callback: Callable;
     }
-    
+
     export type Setup<U> =
         | Returns<U> & (ThisArg & Callback | ThisArg | Callback)
         | Returns<U>
@@ -512,7 +496,7 @@ namespace typemock {
         | ThisArg & Callback
         | ThisArg
         | Callback;
-    
+
     /**
      * A mock version of another oject
      */
@@ -520,7 +504,7 @@ namespace typemock {
         private _handler: MockHandler<T>;
         private _proxy: T;
         private _revoke: () => void;
-    
+
         /**
          * A mock version of another object
          * @param target The object to mock.
@@ -530,40 +514,41 @@ namespace typemock {
             this._handler = typeof target === "function"
                 ? new MockFunctionHandler<T & (Callable | Constructable)>()
                 : new MockHandler<T>();
-    
+
             const { proxy, revoke } = Proxy.revocable<T>(target, this._handler);
             this._proxy = proxy;
             this._revoke = revoke;
-    
+
             weakHandler.set(proxy, this._handler);
             weakMock.set(proxy, this);
-    
+
             if (setups) {
                 this.setup(setups);
             }
         }
-    
+
         /**
          * Gets the mock version of the target
          */
         public get proxy(): T {
             return this._proxy;
         }
-    
+
         /**
          * Creates an empty Mock object.
          */
         public static object<T extends object = any>() {
             return new Mock(<T>{});
         }
-    
+
         /**
          * Creates an empty Mock function.
          */
         public static function<T extends Callable | Constructable = Callable & Constructable>() {
-            return new Mock(<T>function () {});
+            // arrow functions don't have a [[Construct]]
+            return new Mock(<T>function () { /*does nothing*/ }); // tslint:disable-line:only-arrow-functions
         }
-    
+
         /**
          * Creates a function spy.
          */
@@ -583,7 +568,7 @@ namespace typemock {
                 ? new Spy(object, propertyKey)
                 : new Mock(object || noop);
         }
-    
+
         /**
          * Gets the mock for an object.
          * @param target The target.
@@ -591,7 +576,7 @@ namespace typemock {
         public static from<T extends object>(target: T) {
             return <Mock<T> | undefined>weakMock.get(target);
         }
-    
+
         /**
          * Performs setup of the mock object, overriding the target object's functionality with that provided by the setup
          * @param callback A function used to set up a method result.
@@ -614,7 +599,7 @@ namespace typemock {
             }
             return this;
         }
-    
+
         /**
          * Performs verification that a specific action occurred at least once.
          * @param callback A callback that simulates the expected action.
@@ -647,7 +632,7 @@ namespace typemock {
             this._handler.verify(callback, <Times>times, message);
             return this;
         }
-    
+
         public revoke() {
             weakMock.delete(this._proxy);
             weakHandler.delete(this._proxy);
@@ -655,31 +640,31 @@ namespace typemock {
             this._revoke();
         }
     }
-    
+
     export class Spy<T extends { [P in K]: (...args: any[]) => any }, K extends keyof T> extends Mock<T[K]> {
         private _spy: Inject<any, any> | undefined;
-    
+
         constructor(target: T, propertyKey: K) {
             super(target[propertyKey]);
             this._spy = new Inject(target, propertyKey, this.proxy);
             this._spy.install();
         }
-    
+
         public get installed() {
             return this._spy ? this._spy.installed : false;
         }
-    
+
         public install() {
             if (!this._spy) throw new Error("Cannot install a revoked spy.");
             this._spy.install();
             return this;
         }
-    
+
         public uninstall() {
             if (this._spy) this._spy.uninstall();
             return this;
         }
-    
+
         public revoke() {
             if (this._spy) {
                 this._spy.uninstall();
@@ -688,7 +673,7 @@ namespace typemock {
             super.revoke();
         }
     }
-    
+
     class Recording {
         public static readonly noThisArg = {};
         public readonly trap: string;
@@ -698,11 +683,11 @@ namespace typemock {
         public readonly newTarget: any;
         public readonly result: Partial<Returns<any> & Throws & Fallback> | undefined;
         public readonly callback: Callable | undefined;
-    
+
         private _thisCondition: Arg | undefined;
         private _newTargetCondition: Arg | undefined;
         private _conditions: ReadonlyArray<Arg> | undefined;
-    
+
         constructor(trap: string, name: PropertyKey | undefined, thisArg: any, argArray: ReadonlyArray<any>, newTarget: any, result: Partial<Returns<any> & Throws & Fallback> | undefined, callback: Callable | undefined) {
             this.trap = trap;
             this.name = name;
@@ -712,19 +697,19 @@ namespace typemock {
             this.result = result;
             this.callback = callback;
         }
-    
+
         public get thisCondition() {
             return this._thisCondition || (this._thisCondition = this.thisArg === Recording.noThisArg ? Arg.any() : Arg.from(this.thisArg));
         }
-    
+
         public get newTargetCondition() {
             return this._newTargetCondition || (this._newTargetCondition = Arg.from(this.newTarget));
         }
-    
+
         public get argConditions() {
             return this._conditions || (this._conditions = this.argArray.map(Arg.from));
         }
-    
+
         public get kind() {
             switch (this.trap) {
                 case "apply": return "function";
@@ -734,11 +719,11 @@ namespace typemock {
                 case "set": return "property";
             }
         }
-    
+
         public static select(setups: ReadonlyArray<Recording>, kind: Recording["kind"], name: PropertyKey | undefined) {
             return setups.filter(setup => setup.kind === kind && setup.name === name);
         }
-    
+
         public static evaluate(setups: ReadonlyArray<Recording> | undefined, trap: string, name: PropertyKey | undefined, thisArg: any, argArray: any[], newTarget: any, fallback: () => any) {
             if (setups && setups.length > 0) {
                 for (const setup of setups) {
@@ -747,7 +732,7 @@ namespace typemock {
                         if (callback) {
                             Reflect.apply(callback, thisArg, argArray);
                         }
-    
+
                         const result = setup.getResult(fallback);
                         return trap === "set" ? true : result;
                     }
@@ -756,11 +741,11 @@ namespace typemock {
             }
             return fallback();
         }
-    
+
         public toString(): string {
             return `${this.trap} ${this.name || ""}(${this.argConditions.join(", ")})${this.newTarget ? ` [${this.newTarget.name}]` : ``}`;
         }
-    
+
         public match(trap: string, name: PropertyKey | undefined, thisArg: any, argArray: any, newTarget: any) {
             return this.trap === trap
                 && this.name === name
@@ -768,23 +753,23 @@ namespace typemock {
                 && Arg.validateAll(this.argConditions, argArray)
                 && Arg.validate(this.newTargetCondition, newTarget);
         }
-    
+
         public matchRecording(recording: Recording) {
             return this.match(recording.trap, recording.name, recording.thisArg, recording.argArray, recording.newTarget)
                 && this.matchResult(recording.result);
         }
-    
+
         private matchThisArg(thisArg: any) {
             return thisArg === Recording.noThisArg
                 || Arg.validate(this.thisCondition, thisArg);
         }
-    
+
         private matchResult(result: Partial<Returns<any> & Throws> | undefined) {
             return !this.result
                 || this.result.return === (result && result.return)
                 && this.result.throw === (result && result.throw);
         }
-    
+
         private getResult(fallback: () => any) {
             if (hasOwn(this.result, "throw")) throw this.result.throw;
             if (hasOwn(this.result, "return")) return this.result.return;
@@ -792,15 +777,15 @@ namespace typemock {
             return undefined;
         }
     }
-    
+
     class MockHandler<T extends object> implements ProxyHandler<T> {
-        protected readonly overrides = Object.create(null);
+        protected readonly overrides = Object.create(/*o*/ null); // tslint:disable-line:no-null-keyword
         protected readonly recordings: Recording[] = [];
         protected readonly setups: Recording[] = [];
         protected readonly methodTargets = new WeakMap<Function, Function>();
         protected readonly methodProxies = new Map<PropertyKey, Function>();
         protected readonly methodRevocations = new Set<() => void>();
-    
+
         public get(target: T, name: PropertyKey, receiver: any = target): any {
             const setups = Recording.select(this.setups, "property", name);
             const result: Partial<Returns<any> & Throws> = {};
@@ -815,12 +800,12 @@ namespace typemock {
                 throw result.throw = e;
             }
         }
-    
+
         public set(target: T, name: PropertyKey, value: any, receiver: any = target): boolean {
             if (typeof value === "function" && this.methodTargets.has(value)) {
                 value = this.methodTargets.get(value);
             }
-    
+
             const setups = Recording.select(this.setups, "property", name);
             const result: Partial<Returns<any> & Throws> = {};
             const recording = new Recording("set", name, target, [value], /*newTarget*/ undefined, result, /*callback*/ undefined);
@@ -835,7 +820,7 @@ namespace typemock {
                 throw result.throw = e;
             }
         }
-    
+
         public invoke(proxy: T, name: PropertyKey, method: Function, argArray: any[]): any {
             const setups = Recording.select(this.setups, "method", name);
             const result: Partial<Returns<any> & Throws> = {};
@@ -849,7 +834,7 @@ namespace typemock {
                 throw result.throw = e;
             }
         }
-    
+
         public setupCall(callback: (value: any) => any, result: Setup<any> | undefined) {
             const recording = this.capture(callback, result);
             const existing = this.setups.find(setup => setup.name === recording.name);
@@ -866,10 +851,10 @@ namespace typemock {
                     this.defineAccessor(recording.name);
                 }
             }
-    
+
             this.setups.push(recording);
         }
-    
+
         public setupMembers(setup: object) {
             for (const propertyKey of Reflect.ownKeys(setup)) {
                 const descriptor = Reflect.getOwnPropertyDescriptor(setup, propertyKey);
@@ -881,24 +866,24 @@ namespace typemock {
                 }
             }
         }
-    
+
         public verify<U>(callback: (value: T) => U, times: Times, message?: string): void {
             const expectation = this.capture(callback, /*result*/ undefined);
-    
-            let count: number = 0;
+
+            let count = 0;
             for (const recording of this.recordings) {
                 if (expectation.matchRecording(recording)) {
                     count++;
                 }
             }
-    
+
             times.check(count, message || `An error occured when verifying expectation: ${expectation}`);
         }
-    
+
         public getTarget(target: T, name: PropertyKey) {
             return name in this.overrides ? this.overrides : target;
         }
-    
+
         public getMethod(name: PropertyKey, value: Function): Function {
             const proxy = this.methodProxies.get(name);
             if (proxy && this.methodTargets.get(proxy) === value) {
@@ -912,15 +897,15 @@ namespace typemock {
                 return proxy;
             }
         }
-    
+
         public revoke() {
             this.methodRevocations.forEach(revoke => { revoke(); });
         }
-    
+
         protected capture<U>(callback: (value: T) => U, result: Setup<any> | undefined) {
             return this.captureCore(<T>empty, new CapturingHandler<T, U>(result), callback);
         }
-    
+
         protected captureCore<T extends object, U>(target: T, handler: CapturingHandler<T, U>, callback: (value: T) => U): Recording {
             const { proxy, revoke } = Proxy.revocable<T>(target, handler);
             try {
@@ -934,7 +919,7 @@ namespace typemock {
                 revoke();
             }
         }
-    
+
         private defineMethod(name: PropertyKey) {
             const setups = this.setups;
             this.setupMembers({
@@ -943,7 +928,7 @@ namespace typemock {
                 }
             });
         }
-    
+
         private defineAccessor(name: PropertyKey) {
             const setups = this.setups;
             this.setupMembers({
@@ -956,7 +941,7 @@ namespace typemock {
             });
         }
     }
-    
+
     class MockFunctionHandler<T extends Callable | Constructable> extends MockHandler<T> {
         public apply(target: T, thisArg: any, argArray: any[]): any {
             const setups = Recording.select(this.setups, "function", /*name*/ undefined);
@@ -971,7 +956,7 @@ namespace typemock {
                 throw result.throw = e;
             }
         }
-    
+
         public construct(target: T, argArray: any[], newTarget?: any): any {
             const setups = Recording.select(this.setups, "function", /*name*/ undefined);
             const result: Partial<Returns<any> & Throws> = {};
@@ -985,19 +970,19 @@ namespace typemock {
                 throw result.throw = e;
             }
         }
-    
+
         protected capture<U>(callback: (value: T) => U, result: Returns<any> & ThisArg | Returns<any> | Throws & ThisArg | Throws | ThisArg | undefined) {
             return this.captureCore(<T>noop, new CapturingFunctionHandler<T, U>(result), callback);
         }
     }
-    
+
     class MethodHandler {
         public name: PropertyKey;
-    
+
         constructor(name: PropertyKey) {
             this.name = name;
         }
-    
+
         public apply(target: Function, thisArgument: any, argumentsList: any[]): any {
             const handler = weakHandler.get(thisArgument);
             return handler
@@ -1005,14 +990,14 @@ namespace typemock {
                 : Reflect.apply(target, thisArgument, argumentsList);
         }
     }
-    
+
     class CapturingHandler<T extends object, U> implements ProxyHandler<T> {
         public recording: Recording | undefined;
-    
+
         protected readonly callback: Callable | undefined;
         protected readonly thisArg: any;
         protected readonly result: Returns<U> | Throws | Fallback | undefined;
-    
+
         constructor(result: Partial<Returns<U> & Throws & ThisArg & Callback & Fallback> | undefined) {
             this.thisArg = hasOwn(result, "this") ? result.this : Recording.noThisArg;
             this.callback = hasOwn(result, "callback") ? result.callback : undefined;
@@ -1021,30 +1006,30 @@ namespace typemock {
                 hasOwn(result, "fallback") && result.fallback ? { fallback: true } :
                 undefined;
         }
-    
+
         public get(_target: T, name: PropertyKey, _receiver: any): any {
             this.recording = new Recording("get", name, this.thisArg, [], /*newTarget*/ undefined, this.result, this.callback);
             return (...argArray: any[]) => { this.recording = new Recording("invoke", name, this.thisArg, argArray, /*newTarget*/ undefined, this.result, this.callback); };
         }
-    
+
         public set(_target: T, name: PropertyKey, value: any, _receiver: any): boolean {
             this.recording = new Recording("set", name, this.thisArg, [value], /*newTarget*/ undefined, this.result, this.callback);
             return true;
         }
     }
-    
+
     class CapturingFunctionHandler<T extends Callable | Constructable, U> extends CapturingHandler<T, U> {
         public apply(_target: T, _thisArg: any, argArray: any[]): any {
             this.recording = new Recording("apply", /*name*/ undefined, this.thisArg, argArray, /*newTarget*/ undefined, this.result, this.callback);
             return undefined;
         }
-    
+
         public construct(_target: T, argArray: any[], newTarget?: any): any {
             this.recording = new Recording("construct", /*name*/ undefined, /*thisArg*/ undefined, argArray, newTarget, this.result, this.callback);
             return undefined;
         }
     }
-    
+
     function hasOwn<T extends object, K extends keyof T>(object: Partial<T> | undefined, key: K): object is (T | T & never) & { [P in K]: T[P] } {
         return object !== undefined
             && Object.prototype.hasOwnProperty.call(object, key);
@@ -1056,14 +1041,14 @@ namespace typemock {
         readonly callback: (...args: any[]) => void;
         readonly args: ReadonlyArray<any>;
     }
-    
+
     export interface Timeout {
         readonly kind: "timeout";
         readonly handle: number;
         readonly callback: (...args: any[]) => void;
         readonly args: ReadonlyArray<any>;
     }
-    
+
     export interface Interval {
         readonly kind: "interval";
         readonly handle: number;
@@ -1071,17 +1056,17 @@ namespace typemock {
         readonly args: ReadonlyArray<any>;
         readonly interval: number;
     }
-    
+
     export interface AnimationFrame {
         readonly kind: "frame";
         readonly handle: number;
         readonly callback: (time: number) => void;
     }
-    
+
     export type Timer = Immediate | Timeout | Interval | AnimationFrame;
-    
+
     type NonImmediateTimer = Timeout | Interval | AnimationFrame;
-    
+
     interface Due<T extends Timer> {
         timer: T;
         due: number;
@@ -1089,17 +1074,17 @@ namespace typemock {
         enabled?: boolean;
         timeline?: boolean;
     }
-    
+
     const MAX_INT32 = 2 ** 31 - 1;
     const MIN_TIMEOUT_VALUE = 4;
     const CLAMP_TIMEOUT_NESTING_LEVEL = 5;
-    
+
     /**
      * Programmatic control over timers.
      */
     export class Timers {
         public static readonly MAX_DEPTH = MAX_INT32;
-    
+
         private _nextHandle = 1;
         private _immediates = new Map<number, Due<Immediate>>();
         private _timeouts = new Map<number, Due<Timeout>>();
@@ -1108,10 +1093,10 @@ namespace typemock {
         private _timeline: Due<NonImmediateTimer>[] = [];
         private _time: number;
         private _depth = 0;
-    
+
         constructor() {
             this._time = 0;
-    
+
             // bind each timer method so that it can be detached from this instance.
             this.setImmediate = this.setImmediate.bind(this);
             this.clearImmedate = this.clearImmedate.bind(this);
@@ -1122,14 +1107,14 @@ namespace typemock {
             this.requestAnimationFrame = this.requestAnimationFrame.bind(this);
             this.cancelAnimationFrame = this.cancelAnimationFrame.bind(this);
         }
-    
+
         /**
          * Get the current time.
          */
         public get time(): number {
             return this._time;
         }
-    
+
         /**
          * Gets the time of the last scheduled timer (not including repeating intervals).
          */
@@ -1138,14 +1123,14 @@ namespace typemock {
                 ? this._timeline[this._timeline.length - 1].due
                 : this._time;
         }
-    
+
         /**
          * Gets the estimated time remaining.
          */
         public get remainingTime(): number {
             return this.endTime - this.time;
         }
-    
+
         public getPending(options: { kind: "immediate", ms?: number }): Immediate[];
         public getPending(options: { kind: "timeout", ms?: number }): Timeout[];
         public getPending(options: { kind: "interval", ms?: number }): Interval[];
@@ -1154,20 +1139,20 @@ namespace typemock {
         public getPending(options: { kind?: Timer["kind"], ms?: number } = {}): Timer[] {
             const { kind, ms = 0 } = options;
             if (ms < 0) throw new TypeError("Argument 'ms' out of range.");
-    
+
             const dueTimers: Due<Timer>[] = [];
-    
+
             if (!kind || kind === "immediate") {
                 this.copyImmediates(dueTimers);
             }
-    
+
             if (kind !== "immediate") {
                 this.copyTimelineBefore(dueTimers, this._time + ms, kind);
             }
-    
+
             return dueTimers.map(dueTimer => dueTimer.timer);
         }
-    
+
         /**
          * Advance the current time and trigger callbacks, returning the number of callbacks triggered.
          * @param ms The number of milliseconds to advance.
@@ -1185,7 +1170,7 @@ namespace typemock {
                     count += this.executeImmediates(maxDepth);
                     maxDepth--;
                 }
-    
+
                 const dueTimer = this.dequeueIfBefore(endTime);
                 if (dueTimer) {
                     this._time = dueTimer.due;
@@ -1198,7 +1183,7 @@ namespace typemock {
                 }
             }
         }
-    
+
         /**
          * Advance the current time to the estimated end time and trigger callbacks, returning the number of callbacks triggered.
          * @param maxDepth The maximum depth for nested `setImmediate` calls to continue processing.
@@ -1208,7 +1193,7 @@ namespace typemock {
         public advanceToEnd(maxDepth = 0) {
             return this.advance(this.remainingTime, maxDepth);
         }
-    
+
         /**
          * Execute any pending immediate timers, returning the number of timers triggered.
          * @param maxDepth The maximum depth for nested `setImmediate` calls to continue processing.
@@ -1225,43 +1210,43 @@ namespace typemock {
             }
             return count;
         }
-    
+
         public setImmediate(callback: (...args: any[]) => void, ...args: any[]): any {
             if (this._depth >= Timers.MAX_DEPTH) {
                 throw new Error("callback nested too deeply.");
             }
-    
+
             const timer: Immediate = { kind: "immediate", handle: this._nextHandle++, callback, args };
             const dueTimer: Due<Immediate> = { timer, due: -1 };
             this.addTimer(this._immediates, dueTimer);
             return timer.handle;
         }
-    
+
         public clearImmedate(timerId: any): void {
             const dueTimer = this._immediates.get(timerId);
             if (dueTimer) {
                 this.deleteTimer(this._immediates, dueTimer);
             }
         }
-    
+
         public setTimeout(callback: (...args: any[]) => void, timeout: number, ...args: any[]): any {
             if (this._depth >= Timers.MAX_DEPTH) {
                 throw new Error("callback nested too deeply.");
             }
-    
+
             if ((timeout |= 0) < 0) timeout = 0;
-    
+
             if (this._depth >= CLAMP_TIMEOUT_NESTING_LEVEL && timeout < MIN_TIMEOUT_VALUE) {
                 timeout = MIN_TIMEOUT_VALUE;
             }
-    
+
             const timer: Timeout = { kind: "timeout", handle: this._nextHandle++, callback, args };
             const dueTimer: Due<Timeout> = { timer, due: this._time + timeout };
             this.addTimer(this._timeouts, dueTimer);
             this.addToTimeline(dueTimer);
             return timer.handle;
         }
-    
+
         public clearTimeout(timerId: any): void {
             const dueTimer = this._timeouts.get(timerId);
             if (dueTimer) {
@@ -1269,12 +1254,12 @@ namespace typemock {
                 this.removeFromTimeline(dueTimer);
             }
         }
-    
+
         public setInterval(callback: (...args: any[]) => void, interval: number, ...args: any[]): any {
             if (this._depth >= Timers.MAX_DEPTH) {
                 throw new Error("callback nested too deeply.");
             }
-    
+
             if ((interval |= 0) < 10) interval = 10;
             const timer: Interval = { kind: "interval", handle: this._nextHandle++, callback, args, interval };
             const dueTimer: Due<Interval> = { timer, due: this._time + interval };
@@ -1282,7 +1267,7 @@ namespace typemock {
             this.addToTimeline(dueTimer);
             return timer.handle;
         }
-    
+
         public clearInterval(timerId: any): void {
             const dueTimer = this._intervals.get(timerId);
             if (dueTimer) {
@@ -1290,19 +1275,19 @@ namespace typemock {
                 this.removeFromTimeline(dueTimer);
             }
         }
-    
+
         public requestAnimationFrame(callback: (time: number) => void): any {
             if (this._depth >= Timers.MAX_DEPTH) {
                 throw new Error("callback nested too deeply.");
             }
-    
+
             const timer: AnimationFrame = { kind: "frame", handle: this._nextHandle++, callback };
             const dueTimer: Due<AnimationFrame> = { timer, due: this.nextFrameDueTime() };
             this.addTimer(this._frames, dueTimer);
             this.addToTimeline(dueTimer);
             return timer.handle;
         }
-    
+
         public cancelAnimationFrame(timerId: any): void {
             const dueTimer = this._frames.get(timerId);
             if (dueTimer) {
@@ -1310,28 +1295,28 @@ namespace typemock {
                 this.removeFromTimeline(dueTimer);
             }
         }
-    
+
         private nextFrameDueTime() {
             return this._time + this.nextFrameDelta();
         }
-    
+
         private nextFrameDelta() {
             return 16 - this._time % 16;
         }
-    
+
         private addTimer<T extends Timer>(timers: Map<number, Due<T>>, dueTimer: Due<T>) {
             if (dueTimer.enabled) return;
             timers.set(dueTimer.timer.handle, dueTimer);
             dueTimer.depth = this._depth + 1;
             dueTimer.enabled = true;
         }
-    
+
         private deleteTimer<T extends Timer>(timers: Map<number, Due<T>>, dueTimer: Due<T>) {
             if (!dueTimer.enabled) return;
             timers.delete(dueTimer.timer.handle);
             dueTimer.enabled = false;
         }
-    
+
         private executeTimers(dueTimers: Due<Timer>[]) {
             let count = 0;
             for (const dueTimer of dueTimers) {
@@ -1340,7 +1325,7 @@ namespace typemock {
             }
             return count;
         }
-    
+
         private executeTimer(dueTimer: Due<Timer>) {
             switch (dueTimer.timer.kind) {
                 case "immediate": return this.executeImmediate(<Due<Immediate>>dueTimer);
@@ -1349,42 +1334,42 @@ namespace typemock {
                 case "frame": return this.executeAnimationFrame(<Due<AnimationFrame>>dueTimer);
             }
         }
-    
+
         private executeImmediate(dueTimer: Due<Immediate>) {
             if (!dueTimer.enabled) return;
-    
+
             this.deleteTimer(this._immediates, dueTimer);
             this.executeCallback(dueTimer.depth, dueTimer.timer.callback, ...dueTimer.timer.args);
         }
-    
+
         private executeTimeout(dueTimer: Due<Timeout>) {
             if (!dueTimer.enabled) return;
-    
+
             this.deleteTimer(this._timeouts, dueTimer);
             this.removeFromTimeline(dueTimer);
             this.executeCallback(dueTimer.depth, dueTimer.timer.callback, ...dueTimer.timer.args);
         }
-    
+
         private executeInterval(dueTimer: Due<Interval>) {
             if (!dueTimer.enabled) return;
-    
+
             this.removeFromTimeline(dueTimer);
             this.executeCallback(dueTimer.depth, dueTimer.timer.callback, ...dueTimer.timer.args);
-    
+
             if (dueTimer.enabled) {
                 dueTimer.due += dueTimer.timer.interval;
                 this.addToTimeline(dueTimer);
             }
         }
-    
+
         private executeAnimationFrame(dueTimer: Due<AnimationFrame>) {
             if (!dueTimer.enabled) return;
-    
+
             this.deleteTimer(this._frames, dueTimer);
             this.removeFromTimeline(dueTimer);
             this.executeCallback(dueTimer.depth, dueTimer.timer.callback, this._time);
         }
-    
+
         private executeCallback(depth = 0, callback: (...args: any[]) => void, ...args: any[]) {
             const savedDepth = this._depth;
             this._depth = depth;
@@ -1395,7 +1380,7 @@ namespace typemock {
                 this._depth = savedDepth;
             }
         }
-    
+
         private dequeueIfBefore(dueTime: number) {
             if (this._timeline.length > 0) {
                 const dueTimer = this._timeline[0];
@@ -1406,11 +1391,11 @@ namespace typemock {
                 }
             }
         }
-    
+
         private copyImmediates(dueTimers: Due<Timer>[]) {
             this._immediates.forEach(dueTimer => { dueTimers.push(dueTimer); });
         }
-    
+
         private copyTimelineBefore(dueTimers: Due<Timer>[], dueTime: number, kind?: Timer["kind"]) {
             for (const dueTimer of this._timeline) {
                 if (dueTimer.due <= dueTime && (!kind || dueTimer.timer.kind === kind)) {
@@ -1418,10 +1403,10 @@ namespace typemock {
                 }
             }
         }
-    
+
         private addToTimeline(dueTimer: Due<NonImmediateTimer>) {
             if (dueTimer.timeline) return;
-    
+
             let index = binarySearch(this._timeline, dueTimer, getDueTime, compareTimestamps);
             if (index < 0) {
                 index = ~index;
@@ -1434,11 +1419,11 @@ namespace typemock {
                     index++;
                 }
             }
-    
+
             insertAt(this._timeline, index, dueTimer);
             dueTimer.timeline = true;
         }
-    
+
         private removeFromTimeline(dueTimer: Due<NonImmediateTimer>) {
             if (dueTimer.timeline) {
                 let index = binarySearch(this._timeline, dueTimer, getDueTime, compareTimestamps);
@@ -1460,20 +1445,20 @@ namespace typemock {
             return false;
         }
     }
-    
+
     function getDueTime(v: Due<Timer>) {
         return v.due;
     }
-    
+
     function compareTimestamps(a: number, b: number) {
         return a - b;
     }
-    
+
     function binarySearch<T, U>(array: ReadonlyArray<T>, value: T, keySelector: (v: T) => U, keyComparer: (a: U, b: U) => number): number {
         if (array.length === 0) {
             return -1;
         }
-    
+
         let low = 0;
         let high = array.length - 1;
         const key = keySelector(value);
@@ -1491,10 +1476,10 @@ namespace typemock {
                 return middle;
             }
         }
-    
+
         return ~low;
     }
-    
+
     function removeAt<T>(array: T[], index: number): void {
         if (array.length === 0) {
             return;
@@ -1512,7 +1497,7 @@ namespace typemock {
             array.length--;
         }
     }
-    
+
     function insertAt<T>(array: T[], index: number, value: T): void {
         if (index === 0) {
             array.unshift(value);
@@ -1527,7 +1512,7 @@ namespace typemock {
             array[index] = value;
         }
     }
-    
+
     /**
      * Temporarily injects a value into an object property
      */
@@ -1536,7 +1521,7 @@ namespace typemock {
         private _key: K;
         private _value: any;
         private _originalValue: any;
-        private _installed: boolean = false;
+        private _installed = false;
 
         /**
          * Temporarily injects a value into an object property
@@ -1606,7 +1591,7 @@ namespace typemock {
             if (!this._installed) return;
             this._target[this._key] = this._originalValue;
             this._installed = false;
-            this._originalValue = null;
+            this._originalValue = undefined;
         }
 
         public static exec<T extends object, K extends keyof T, V>(target: T, propertyKey: K, value: T[K], action: () => V) {

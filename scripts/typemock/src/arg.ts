@@ -217,27 +217,11 @@ export class Arg {
     }
 
     /**
-     * Combines conditions, where no condition may be `true`.
-     */
-    public static nand<T = any>(...args: ((T & Arg) | T)[]): T & Arg {
-        const conditions = args.map(Arg.from);
-        return <any>new Arg(value => !conditions.every(condition => condition._validate(value)), "not " + conditions.map(condition => condition._message).join(" and "));
-    }
-
-    /**
      * Combines conditions, where any conditions may be `true`.
      */
     public static or<T = any>(...args: ((T & Arg) | T)[]): T & Arg {
         const conditions = args.map(Arg.from);
         return <any>new Arg(value => conditions.some(condition => condition._validate(value)), conditions.map(condition => condition._message).join(" or "));
-    }
-
-    /**
-     * Combines conditions, where all conditions must be `true`.
-     */
-    public static nor<T = any>(...args: ((T & Arg) | T)[]): T & Arg {
-        const conditions = args.map(Arg.from);
-        return <any>new Arg(value => !conditions.some(condition => condition._validate(value)), "neither " + conditions.map(condition => condition._message).join(" nor "));
     }
 
     /**
