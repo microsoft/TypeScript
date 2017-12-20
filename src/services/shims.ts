@@ -141,6 +141,7 @@ namespace ts {
         getEncodedSemanticClassifications(fileName: string, start: number, length: number): string;
 
         getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): string;
+        // tslint:disable-next-line type-operator-spacing (false positive)
         getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined): string;
 
         getQuickInfoAtPosition(fileName: string, position: number): string;
@@ -906,6 +907,7 @@ namespace ts {
         }
 
         /** Get a string based representation of a completion list entry details */
+        // tslint:disable-next-line type-operator-spacing (false positive)
         public getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined) {
             return this.forwardJSONCall(
                 `getCompletionEntryDetails('${fileName}', ${position}, '${entryName}')`,
