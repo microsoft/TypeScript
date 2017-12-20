@@ -1,6 +1,5 @@
 import "./sourceMapSupport";
 import { Mock } from "../mock";
-import { Inject } from "../inject";
 import { Arg } from "../arg";
 import { Times } from "../times";
 import { recordError } from "./utils";
@@ -107,7 +106,7 @@ describe("mock", () => {
                 // arrange
                 const target = { a: 1 };
                 const error = new Error("error");
-                const mock = new Mock(target, { set a(value: number) { throw error; } });
+                const mock = new Mock(target, { set a(_: number) { throw error; } });
 
                 // act
                 const e = recordError(() => mock.proxy.a = 2);
@@ -218,7 +217,7 @@ describe("mock", () => {
             });
             it("function", () => {
                 // arrange
-                const mock = new Mock<(x: number) => number>(x => 0);
+                const mock = new Mock<(x: number) => number>(_ => 0);
                 mock.setup(_ => _(Arg.number()), { return: 2 });
 
                 // act
@@ -248,7 +247,7 @@ describe("mock", () => {
                     // arrange
                     const target = { a: 1 };
                     const mock = new Mock(target);
-                    const result = mock.proxy.a;
+                    mock.proxy.a;
 
                     // act
                     const e = recordError(() => mock.verify(_ => _.a, Times.once()));
@@ -298,7 +297,7 @@ describe("mock", () => {
                     // arrange
                     const target = { a() { return 1; } };
                     const mock = new Mock(target);
-                    const result = mock.proxy.a();
+                    mock.proxy.a();
 
                     // act
                     const e = recordError(() => mock.verify(_ => _.a(), Times.once()));
@@ -321,7 +320,7 @@ describe("mock", () => {
                 it("called passes", () => {
                     // arrange
                     const mock = Mock.function();
-                    const result = mock.proxy();
+                    mock.proxy();
 
                     // act
                     const e = recordError(() => mock.verify(_ => _(), Times.once()));
@@ -335,7 +334,7 @@ describe("mock", () => {
             // arrange
             const target = { a: 1 };
             const mock = new Mock(target, { get a() { return 2 } });
-            const result = mock.proxy.a;
+            mock.proxy.a;
 
             // act
             const e = recordError(() => mock.verify(_ => _.a, Times.once()));
@@ -351,7 +350,7 @@ describe("mock", () => {
                     return x + 2;
                 }
             });
-            const result = mock.proxy.a(3);
+            mock.proxy.a(3);
 
             // act
             const e = recordError(() => mock.verify(_ => _.a(Arg.number()), Times.once()));

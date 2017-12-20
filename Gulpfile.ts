@@ -608,18 +608,15 @@ gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUse
     return runSequence("LKGInternal", "VerifyLKG");
 });
 
-// NOTE: This build task is currently commented out as the approach to including typemock as a private
-// package does not seem to work in Node 6. If this issue cannot be resolved, this will be removed.
-//// gulp.task("typemock", () => {
-////     const typemock = tsc.createProject("scripts/typemock/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
-////     return typemock.src()
-////         .pipe(sourcemaps.init())
-////         .pipe(newer("scripts/typemock/dist"))
-////         .pipe(typemock())
-////         .pipe(sourcemaps.write(".", <any>{ includeContent: false, destPath: "scripts/typemock/dist" }))
-////         .pipe(gulp.dest("scripts/typemock/dist"));
-//// });
-gulp.task("typemock");
+gulp.task("typemock", () => {
+    const typemock = tsc.createProject("scripts/typemock/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ false));
+    return typemock.src()
+        .pipe(sourcemaps.init())
+        .pipe(newer("scripts/typemock/dist"))
+        .pipe(typemock())
+        .pipe(sourcemaps.write(".", <any>{ includeContent: false, destPath: "scripts/typemock/dist" }))
+        .pipe(gulp.dest("scripts/typemock/dist"));
+});
 
 // Task to build the tests infrastructure using the built compiler
 const run = path.join(builtLocalDirectory, "run.js");

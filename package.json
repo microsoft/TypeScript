@@ -91,6 +91,7 @@
         "build": "npm run build:compiler && npm run build:tests",
         "build:compiler": "jake local",
         "build:tests": "jake tests",
+        "build:typemock": "jake typemock",
         "start": "node lib/tsc",
         "clean": "jake clean",
         "gulp": "gulp",

@@ -174,7 +174,7 @@ export class Mock<T extends object> {
         if (times === undefined) {
             times = Times.atLeastOnce();
         }
-        this._handler.verify(callback, times);
+        this._handler.verify(callback, times, message);
         return this;
     }
 
@@ -294,7 +294,7 @@ class Recording {
     public match(trap: string, name: PropertyKey | undefined, thisArg: any, argArray: any, newTarget: any) {
         return this.trap === trap
             && this.name === name
-            && Arg.validate(this.thisCondition, thisArg)
+            && this.matchThisArg(thisArg)
             && Arg.validateAll(this.argConditions, argArray)
             && Arg.validate(this.newTargetCondition, newTarget);
     }

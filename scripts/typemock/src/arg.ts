@@ -114,7 +114,7 @@ export class Arg {
     public static includes(value: string): string & string[] & Arg;
     public static includes<T>(value: T): T[] & Arg;
     public static includes<T>(value: T): Arg {
-        return new Arg(value_ => Array.isArray(value_) ? value_.includes(value) : typeof value_ === "string" && value_.includes("" + value), `contains ${value}`);
+        return new Arg(value_ => Array.isArray(value_) ? value_.indexOf(value) >= 0 : typeof value_ === "string" && value_.includes("" + value), `contains ${value}`);
     }
 
     public static array<T>(values: (T | T & Arg)[]): T[] & Arg {

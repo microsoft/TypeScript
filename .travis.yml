@@ -23,6 +23,11 @@ install:
   - npm uninstall typescript --no-save
   - npm uninstall tslint --no-save
   - npm install
+  - if [ "$TRAVIS_NODE_VERSION" = "6" ]; then
+      npm uninstall typemock --no-save;
+      npm run build:typemock;
+      npm install file:scripts/typemock --no-save;
+    fi
 
 cache:
   directories:

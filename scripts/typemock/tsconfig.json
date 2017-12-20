@@ -1,10 +1,12 @@
 {
     "compilerOptions": {
         "module": "commonjs",
-        "target": "es2017",
+        "target": "es2015",
         "strict": true,
         "declaration": true,
         "sourceMap": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
         "types": ["mocha"],
         "newLine": "LF",
         "outDir": "dist"
