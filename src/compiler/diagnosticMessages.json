@@ -3413,25 +3413,33 @@
         "code": 6186
     },
 
-    "Project references may not form a circular graph. Cycle detected: {0}": {
-        "category": "Error",
-        "code": 6300
-    },
     "Projects to reference": {
         "category": "Message",
         "code": 6301
     },
-    "Referenced project '{0}' must have 'declaration': true": {
-        "category": "Error",
+    "Enable project compilation": {
+        "category": "Message",
         "code": 6302
     },
-    "Referenced project '{0}' must have an explicit 'rootDir' setting": {
+    "Project references may not form a circular graph. Cycle detected: {0}": {
         "category": "Error",
         "code": 6303
     },
-    "Output file '{0}' has not been built from source file '{1}'": {
+    "Projects may not disable declaration emit.": {
         "category": "Error",
-        "code": 6404
+        "code": 6304
+    },
+    "Output file '{0}' has not been built from source file '{1}'.": {
+        "category": "Error",
+        "code": 6305
+    },
+    "Referenced project '{0}' must have setting \"project\": true.": {
+        "category": "Error",
+        "code": 6306
+    },
+    "File '{0}' is not in project file list. Projects must list all files or use an 'include' pattern.": {
+        "category": "Error",
+        "code": 6307
     },
 
     "Enable strict checking of property initialization in classes.": {

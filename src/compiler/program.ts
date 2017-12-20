@@ -612,6 +612,17 @@ namespace ts {
 
         Debug.assert(!!missingFilePaths);
 
+        // List of collected files is complete; validate exhautiveness if this is a project with a file list
+        if (options.project && rootNames.length < files.length) {
+            const normalizedRootNames = rootNames.map(r => normalizePath(r));
+            const sourceFiles = files.filter(f => !f.isDeclarationFile).map(f => normalizePath(f.path));
+            for (const file of sourceFiles) {
+                if (normalizedRootNames.every(r => r !== file)) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern, file));
+                }
+            }
+        }
+
         // unconditionally set moduleResolutionCache to undefined to avoid unnecessary leaks
         moduleResolutionCache = undefined;
 
@@ -674,7 +685,11 @@ namespace ts {
         function getCommonSourceDirectory() {
             if (commonSourceDirectory === undefined) {
                 const emittedFiles = filter(files, file => sourceFileMayBeEmitted(file, options, isSourceFileFromExternalLibrary));
-                if (options.rootDir && checkSourceFilesBelongToPath(emittedFiles, options.rootDir)) {
+                if (options.project) {
+                    // Project compilations never infer their root from the input source paths
+                    commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir || ".", currentDirectory);
+                }
+                else if (options.rootDir && checkSourceFilesBelongToPath(emittedFiles, options.rootDir)) {
                     // If a rootDir is specified and is valid use it as the commonSourceDirectory
                     commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, currentDirectory);
                 }
@@ -1101,7 +1116,7 @@ namespace ts {
             // otherwise, using options specified in '--lib' instead of '--target' default library file
             const equalityComparer = host.useCaseSensitiveFileNames() ? equateStringsCaseSensitive : equateStringsCaseInsensitive;
             if (!options.lib) {
-               return equalityComparer(file.fileName, getDefaultLibraryFileName());
+                return equalityComparer(file.fileName, getDefaultLibraryFileName());
             }
             else {
                 return forEach(options.lib, libFileName => equalityComparer(file.fileName, combinePaths(defaultLibraryPath, libFileName)));
@@ -2065,10 +2080,9 @@ namespace ts {
             const result = createMap<string>();
             walkProjectReferenceGraph(host, rootOptions, createMapping);
 
-            function createMapping(_resolvedFile: string, referencedProject: CompilerOptions) {
-                // No rootDir in target set; this will be an error later on in the process
-                if (referencedProject.rootDir === undefined) return;
-                result.set(referencedProject.rootDir, referencedProject.outDir);
+            function createMapping(resolvedFile: string, referencedProject: CompilerOptions) {
+                const rootDir = normalizePath(referencedProject.rootDir || getDirectoryPath(resolvedFile));
+                result.set(rootDir, referencedProject.outDir);
                 // If this project uses outFile, add the outFile to our compilation
                 if (referencedProject.outFile) {
                     const outFile = combinePaths(referencedProject.outDir, referencedProject.outFile);
@@ -2080,10 +2094,8 @@ namespace ts {
 
         function checkProjectReferenceGraph() {
             // Checks the following conditions:
-            //  * Any referenced project has declaration: true
-            //  * Any referenced project has an explicit rootDir
+            //  * Any referenced project has project: true
             //  * No circularities exist
-            //  * TODO No project root is a subfolder of any other project root
 
             const illegalRefs = createMap<true>();
             const cycleName: string[] = [options.configFilePath || host.getCurrentDirectory()];
@@ -2100,11 +2112,8 @@ namespace ts {
                     Debug.fail("Options cannot be undefined");
                     return;
                 }
-                if (!opts.declaration) {
-                    createDiagnosticForOptionName(Diagnostics.Referenced_project_0_must_have_declaration_Colon_true, fileName);
-                }
-                if (!opts.rootDir) {
-                    createDiagnosticForOptionName(Diagnostics.Referenced_project_0_must_have_an_explicit_rootDir_setting, fileName);
+                if (!opts.project) {
+                    createDiagnosticForOptionName(Diagnostics.Referenced_project_0_must_have_setting_project_Colon_true, fileName);
                 }
                 illegalRefs.set(normalizedPath, true);
                 cycleName.push(normalizedPath);
@@ -2144,6 +2153,12 @@ namespace ts {
 
             if (options.paths && options.baseUrl === undefined) {
                 createDiagnosticForOptionName(Diagnostics.Option_paths_cannot_be_used_without_specifying_baseUrl_option, "paths");
+            }
+
+            if (options.project) {
+                if (options.declaration === false) {
+                    createDiagnosticForOptionName(Diagnostics.Projects_may_not_disable_declaration_emit, "declaration");
+                }
             }
 
             if (options.paths) {

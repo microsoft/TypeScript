@@ -4,9 +4,10 @@
 namespace ts {
     interface TestProjectSpecification {
         configFileName?: string;
-        references: string[];
+        references?: string[];
         files: { [fileName: string]: string };
         outputFiles?: { [fileName: string]: string };
+        config?: object;
         options?: Partial<CompilerOptions>;
     }
     interface TestSpecification {
@@ -52,11 +53,11 @@ namespace ts {
             const options = {
                 compilerOptions: {
                     references: sp.references.map(r => ({ path: r })),
-                    declaration: true,
-                    rootDir: ".",
+                    project: true,
                     outDir: "bin",
                     ...sp.options
-                }
+                },
+                ...sp.config
             };
             const configContent = JSON.stringify(options);
             const outDir = options.compilerOptions.outDir;
@@ -123,35 +124,42 @@ namespace ts {
      * Validate that we enforce the basic settings constraints for referenced projects
      */
     describe("project-references constraint checking for settings", () => {
-        const spec: TestSpecification = {
-            "/primary": {
-                files: { "/primary/a.ts": emptyModule },
-                references: ["../secondary"]
-            },
-            "/secondary": {
-                files: { "/secondary/b.ts": moduleImporting("../primary/a") },
-                references: [],
-                options: {
-                    declaration: false
-                }
-            }
-        };
         it("errors when declaration = false", () => {
-            testProjectReferences(spec, "/primary/tsconfig.json", program => {
-                const errs = program.getOptionsDiagnostics();
-                assertHasError("Reports an error about the wrong decl setting", errs, Diagnostics.Referenced_project_0_must_have_declaration_Colon_true);
-            });
-        });
+            const spec: TestSpecification = {
+                "/primary": {
+                    files: { "/primary/a.ts": emptyModule },
+                    references: [],
+                    options: {
+                        declaration: false
+                    }
+                }
+            };
 
-        it("errors when rootDir is not set", () => {
-            spec["/secondary"].options.declaration = true;
-            spec["/secondary"].options.rootDir = undefined;
             testProjectReferences(spec, "/primary/tsconfig.json", program => {
                 const errs = program.getOptionsDiagnostics();
-                assertHasError("Reports an error about the wrong decl setting", errs, Diagnostics.Referenced_project_0_must_have_an_explicit_rootDir_setting);
+                assertHasError("Reports an error about the wrong decl setting", errs, Diagnostics.Projects_may_not_disable_declaration_emit);
             });
         });
-        //  * TODO No project root is a subfolder of any other project root
+        //  * TODO Projects must list all files or none
+        it("errors when the file list is not exhaustive", () => {
+            const spec: TestSpecification = {
+                "/primary": {
+                    files: {
+                        "/primary/a.ts": "import * as b from './b'",
+                        "/primary/b.ts": "export {}"
+                    },
+                    references: [],
+                    config: {
+                        files: ["a.ts"]
+                    }
+                }
+            };
+
+            testProjectReferences(spec, "/primary/tsconfig.json", program => {
+                const errs = program.getOptionsDiagnostics();
+                assertHasError("Reports an error about b.ts not being in the list", errs, Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern);
+            });
+        });
     });
 
     /**
@@ -190,7 +198,7 @@ namespace ts {
         it("redirects to the output .d.ts file", () => {
             const spec: TestSpecification = {
                 "/alpha": {
-                    files: { "/alpha/a.ts": "export const m: number;" },
+                    files: { "/alpha/a.ts": "export const m: number = 3;" },
                     references: [],
                     outputFiles: { "a.d.ts": emptyModule }
                 },
