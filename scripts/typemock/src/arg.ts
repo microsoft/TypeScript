@@ -2,11 +2,11 @@
  * Represents an argument condition used during verification.
  */
 export class Arg {
-    private _validate: (value: any) => boolean;
-    private _message: string;
+    private _validate: (arg: any) => boolean;
+    private _message: string | Message | List;
     private _rest: boolean;
 
-    private constructor(condition: (value: any) => boolean, message: string, rest = false) {
+    private constructor(condition: (arg: any) => boolean, message: string | Message | List, rest = false) {
         this._validate = condition;
         this._message = message;
         this._rest = rest;
@@ -15,62 +15,66 @@ export class Arg {
     /**
      * Allows any value.
      */
-    public static any<T = any>(): T & Arg {
-        return <any>new Arg(() => true, `any`);
+    public static any<T = any>() {
+        return <T & Arg>new Arg(_ => true, `any`);
     }
 
     /**
      * Allows a value that matches the specified condition.
-     * @param match The condition used to match the value.
+     * @param constraint The condition used to match the value.
      */
-    public static is<T = any>(match: (value: T) => boolean): T & Arg {
-        return <any>new Arg(match, `is`);
+    public static is<T = any>(constraint: (arg: T) => boolean) {
+        return <T & Arg>new Arg(constraint, `is`);
     }
 
     /**
      * Allows only a null value.
      */
-    public static null<T = any>(): T & Arg {
-        return <any>new Arg(value => value === null, `null`);
+    public static null<T = null>() {
+        return <T & Arg>new Arg(arg => arg === null, `null`);
     }
 
     /**
      * Allows only a non-null value.
      */
-    public static notNull<T = any>(): T & Arg {
-        return Arg.not(Arg.null());
+    public static notNull<T = any>() {
+        return <T & Arg>Arg.not(Arg.null());
     }
 
     /**
      * Allows only an undefined value.
      */
-    public static undefined<T = any>(): T & Arg {
-        return <any>new Arg(value => value === undefined, `undefined`);
+    public static undefined<T = undefined>() {
+        return <T & Arg>new Arg(arg => arg === undefined, `undefined`);
     }
 
     /**
      * Allows only a non-undefined value.
      */
-    public static notUndefined<T = any>(): T & Arg {
-        return Arg.not(Arg.undefined());
+    public static notUndefined<T = any>() {
+        return <T & Arg>Arg.not(Arg.undefined());
     }
 
     /**
      * Allows only an undefined or null value.
      */
-    public static nullOrUndefined<T = any>(): T & Arg {
-        return Arg.or(Arg.null(), Arg.undefined());
+    public static nullOrUndefined<T = null | undefined>() {
+        return <T & Arg>Arg.or(Arg.null(), Arg.undefined());
     }
 
     /**
      * Allows only a non-undefined, non-null value.
      */
-    public static notNullOrUndefined<T = any>(): T & Arg {
-        return Arg.not(Arg.nullOrUndefined());
+    public static notNullOrUndefined<T = any>() {
+        return <T & Arg>Arg.not(Arg.nullOrUndefined());
     }
 
-    public static optional<T = any>(condition: T | T & Arg): T & Arg {
-        return Arg.or(condition, Arg.undefined());
+    /**
+     * Allows a value that matches either the specified condition, or `undefined`.
+     * @param condition The condition to match.
+     */
+    public static optional<T = any>(condition: T | T & Arg) {
+        return <T & Arg>Arg.or(condition, Arg.undefined());
     }
 
     /**
@@ -78,48 +82,64 @@ export class Arg {
      * @param min The minimum value.
      * @param max The maximum value.
      */
-    public static between<T = any>(min: T, max: T): T & Arg {
-        return <any>new Arg(value => min <= value && value <= max, `between ${min} and ${max}`);
+    public static between<T = any>(min: T, max: T) {
+        return <T & Arg>new Arg(arg => min <= arg && arg <= max, message`between ${min} and ${max}`);
     }
 
     /**
      * Allows any value in the provided array.
      */
-    public static in<T = any>(values: T[]): T & Arg {
-        return <any>new Arg(value => values.indexOf(value) > -1, `in ${values.join(", ")}`);
+    public static in<T = any>(values: object & Iterable<T>) {
+        return <T & Arg>new Arg(arg => includes(values, arg), message`in ${list(values, ", ")}`);
     }
 
     /**
      * Allows any value not in the provided array.
      */
-    public static notIn<T = any>(values: T[]): T & Arg {
-        return Arg.not(Arg.in(values));
+    public static notIn<T = any>(values: T[]) {
+        return <T & Arg>Arg.not(Arg.in(values));
     }
 
     /**
      * Allows any value that matches the provided pattern.
      */
-    public static match<T = any>(pattern: RegExp): T & Arg {
-        return <any>new Arg(value => pattern.test(value), `matches ${pattern}`);
+    public static match<T = any>(pattern: RegExp) {
+        return <T & Arg>new Arg(arg => pattern.test(arg), message`matches ${pattern}`);
     }
 
-    public static startsWith(text: string): string & Arg {
-        return <any>new Arg(value => typeof value === "string" && value.startsWith(text), `starts with ${text}`);
+    /**
+     * Allows any string that starts with the specified substring.
+     */
+    public static startsWith(text: string) {
+        return <string & Arg>new Arg(arg => typeof arg === "string" && arg.startsWith(text), message`starts with ${text}`);
     }
 
-    public static endsWith(text: string): string & Arg {
-        return <any>new Arg(value => typeof value === "string" && value.endsWith(text), `ends with ${text}`);
+    /**
+     * Allows any string that ends with the specified substring.
+     */
+    public static endsWith(text: string) {
+        return <string & Arg>new Arg(arg => typeof arg === "string" && arg.endsWith(text), message`ends with ${text}`);
     }
 
-    public static includes(value: string): string & string[] & Arg;
-    public static includes<T>(value: T): T[] & Arg;
-    public static includes<T>(value: T): Arg {
-        return new Arg(value_ => Array.isArray(value_) ? value_.indexOf(value) >= 0 : typeof value_ === "string" && value_.includes("" + value), `contains ${value}`);
+    /**
+     * Allows any string that includes the specified substring.
+     */
+    public static stringIncludes(text: string) {
+        return <string & Arg>new Arg(arg => arg.includes(text), message`includes ${text}`);
     }
 
+    /**
+     * Allows any array that contains the specified value.
+     */
+    public static arrayIncludes<T>(value: T | T & Arg) {
+        return <T[] & Arg>new Arg(arg => includes(arg, value), message`contains ${value}`);
+    }
+    
+    /**
+     * Allows an array that matches the specified values (or `Arg` conditions), in the same order.
+     */
     public static array<T>(values: (T | T & Arg)[]): T[] & Arg {
-        const conditions = values.map(Arg.from);
-        return <any>new Arg(value => value.length === conditions.length && Arg.validateAll(conditions, value), `array [${conditions.join(", ")}]`);
+        return <any>new Arg(arg => Array.isArray(arg) && Arg.validateAll(values.map(Arg.from), arg), message`array [${list(values, ", ")}]`);
     }
 
     /**
@@ -141,7 +161,7 @@ export class Arg {
     /**
      * Allows any value with the provided `typeof` tag.
      */
-    public static typeof(tag: "object"): object & Arg;
+    public static typeof(tag: "object"): object & null & Arg;
     /**
      * Allows any value with the provided `typeof` tag.
      */
@@ -154,74 +174,93 @@ export class Arg {
      * Allows any value with the provided `typeof` tag.
      */
     public static typeof<T = any>(tag: string): T & Arg;
-    public static typeof(tag: string): any {
-        return <any>new Arg(value => typeof value === tag, `typeof ${tag}`);
+    public static typeof<T = any>(tag: string) {
+        return <T & Arg>new Arg(arg => typeof arg === tag, message`typeof ${tag}`);
     }
 
+    /**
+     * Allows any `string`.
+     */
     public static string() { return this.typeof("string"); }
+
+    /**
+     * Allows any `number`.
+     */
     public static number() { return this.typeof("number"); }
+
+    /**
+     * Allows any `boolean`.
+     */
     public static boolean() { return this.typeof("boolean"); }
+
+    /**
+     * Allows any `symbol`.
+     */
     public static symbol() { return this.typeof("symbol"); }
-    public static object() { return this.typeof("object"); }
+
+    /**
+     * Allows any `object` (including functions but excluding `null`).
+     */
+    public static object<T extends object = object>() { 
+        return <T & Arg>new Arg(arg => typeof arg === "object" && arg !== null || typeof arg === "function", `object`);
+    }
+
+    /**
+     * Allows any `Function` value.
+     */
     public static function() { return this.typeof("function"); }
 
     /**
      * Allows any value that is an instance of the provided function.
      * @param type The expected constructor.
      */
-    public static instanceof<TClass extends { new (...args: any[]): object; prototype: object; }>(type: TClass): TClass["prototype"] & Arg {
-        return <any>new Arg(value => value instanceof type, `instanceof ${type.name}`);
+    public static instanceof<TClass extends { new (...args: any[]): object; prototype: object; }>(type: TClass) {
+        return <TClass["prototype"] & Arg>new Arg(arg => arg instanceof type, message`instanceof ${type.name}`);
     }
 
     /**
      * Allows any value that has the provided property names in its prototype chain.
      */
-    public static has<T>(...names: string[]): T & Arg {
-        return <any>new Arg(value => names.filter(name => name in value).length === names.length, `has ${names.join(", ")}`);
+    public static has<T>(...names: string[]) {
+        return <T & Arg>new Arg(arg => count(names, name => has(arg, name)) === names.length, message`has ${list(names, ", ")}`);
     }
 
     /**
      * Allows any value that has the provided property names on itself but not its prototype chain.
      */
-    public static hasOwn<T>(...names: string[]): T & Arg {
-        return <any>new Arg(value => names.filter(name => Object.prototype.hasOwnProperty.call(value, name)).length === names.length, `hasOwn ${names.join(", ")}`);
+    public static hasOwn<T>(...names: string[]) {
+        return <T & Arg>new Arg(arg => count(names, name => hasOwn(arg, name)) === names.length, message`hasOwn ${list(names, ", ")}`);
     }
 
     /**
      * Allows any value that matches the provided condition for the rest of the arguments in the call.
      * @param condition The optional condition for each other element.
      */
-    public static rest<T>(condition?: T | (T & Arg)): T & Arg {
-        if (condition === undefined) {
-            return <any>new Arg(() => true, `rest`, /*rest*/ true);
-        }
-
-        const arg = Arg.from(condition);
-        return <any>new Arg(value => arg._validate(value), `rest ${arg._message}`, /*rest*/ true);
+    public static rest<T>(condition?: T | (T & Arg)) {
+        return arguments.length === 0
+            ? <T & Arg>new Arg(() => true, `rest`, /*rest*/ true)
+            : <T & Arg>new Arg(arg => Arg.from(condition)._validate(arg), message`rest ${condition}`, /*rest*/ true);
     }
 
     /**
      * Negates a condition.
      */
-    public static not<T = any>(value: T | (T & Arg)): T & Arg {
-        const arg = Arg.from(value);
-        return <any>new Arg(value => !arg._validate(value), `not ${arg._message}`);
+    public static not<T = any>(condition: T | (T & Arg)) {
+        return <T & Arg>new Arg(arg => !Arg.from(condition)._validate(arg), message`not ${condition}`);
     }
 
     /**
      * Combines conditions, where all conditions must be `true`.
      */
-    public static and<T = any>(...args: ((T & Arg) | T)[]): T & Arg {
-        const conditions = args.map(Arg.from);
-        return <any>new Arg(value => conditions.every(condition => condition._validate(value)), conditions.map(condition => condition._message).join(" and "));
+    public static and<T = any>(...conditions: ((T & Arg) | T)[]) {
+        return <T & Arg>new Arg(arg => conditions.every(condition => Arg.from(condition)._validate(arg)), list(conditions, " and "));
     }
 
     /**
      * Combines conditions, where any conditions may be `true`.
      */
-    public static or<T = any>(...args: ((T & Arg) | T)[]): T & Arg {
-        const conditions = args.map(Arg.from);
-        return <any>new Arg(value => conditions.some(condition => condition._validate(value)), conditions.map(condition => condition._message).join(" or "));
+    public static or<T = any>(...conditions: ((T & Arg) | T)[]) {
+        return <T & Arg>new Arg(arg => conditions.some(condition => Arg.from(condition)._validate(arg)), list(conditions, " or "));
     }
 
     /**
@@ -229,11 +268,11 @@ export class Arg {
      * @param value The value to coerce
      * @returns The condition
      */
-    public static from<T>(value: T): T & Arg {
+    public static from<T>(value: T) {
         return value instanceof Arg ? value :
             value === undefined ? Arg.undefined() :
             value === null ? Arg.null() :
-            <any>new Arg(v => is(v, value), JSON.stringify(value));
+            new Arg(arg => is(arg, value), new Message(() => JSON.stringify(value)));
     }
 
     /**
@@ -267,6 +306,13 @@ export class Arg {
     }
 
     /**
+     * Gets the message associated with the provided `Arg`.
+     */
+    public static messageFor(arg: Arg) {
+        return typeof arg._message === "string" ? arg._message : arg._message.toString();
+    }
+
+    /**
      * Gets a string that represents this condition.
      */
     public toString(): string {
@@ -279,4 +325,103 @@ export class Arg {
  */
 function is(x: any, y: any) {
     return (x === y) ? (x !== 0 || 1 / x === 1 / y) : (x !== x && y !== y);
+}
+
+function message(strings: TemplateStringsArray, ...args: any[]) {
+    return args.some(isDeferred)
+        ? new Message(() => String.raw(strings, ...args.map(formatArg)))
+        : String.raw(strings, ...args.map(formatArg));
+}
+
+class Message {
+    private _callback: () => string;
+    private _message: string | undefined;
+
+    constructor(callback: () => string) {
+        this._callback = callback;
+    }
+
+    public toString(): string {
+        if (this._message === undefined) this._message = this._callback();
+        return this._message;
+    }
+}
+
+function list(list: Iterable<any>, separator: string) {
+    return some(list, isDeferred)
+        ? new List(list, separator)
+        : formatIterableObject(list, separator);
+}
+
+class List {
+    private _items: Iterable<any>;
+    private _separator: string;
+    private _message: string | undefined;
+
+    constructor(items: Iterable<any>, separator: string) {
+        this._items = items;
+        this._separator = separator;
+    }
+
+    public toString() {
+        if (this._message === undefined) this._message = formatIterableObject(this._items, this._separator);
+        return this._message;
+    }
+}
+
+function isDeferred(arg: any): boolean {
+    return arg instanceof Message || arg instanceof List || arg instanceof Arg;
+}
+
+function isIterableObject(value: any): value is Iterable<any> {
+    return typeof value === "object" && value !== null && typeof value[Symbol.iterator] === "function";
+}
+
+function formatArg(arg: any) {
+    return isIterableObject(arg) ? formatIterableObject(arg, ", ") : 
+        arg instanceof Arg ? Arg.messageFor(arg) : 
+        arg;
+}
+
+function formatIterableObject(arg: Iterable<any>, separator: string) {
+    let result = "";
+    for (const item of arg) {
+        if (result) result += separator;
+        result += item instanceof Arg ? Arg.messageFor(item) : item;
+    }
+    return result;
+}
+
+function count<T>(array: T[], predicate: (value: T) => boolean): number {
+    let result = 0;
+    for (const item of array) {
+        if (predicate(item)) result++;
+    }
+    return result;
+}
+
+function has(object: any, key: PropertyKey) {
+    return Reflect.has(object, key);
+}
+
+function hasOwn(object: any, key: PropertyKey) {
+    return Object.prototype.hasOwnProperty.call(object, key);
+}
+
+function includes<T>(object: Iterable<T>, condition: T) {
+    if (condition instanceof Arg) {
+        for (const item of object) if (Arg.validate(condition, item)) return true;
+        return false;
+    }
+
+    if (Array.isArray(object)) return object.indexOf(condition) >= 0;
+    if (object instanceof Set) return object.has(condition);
+    for (const item of object) if (is(item, condition)) return true;
+    return false;
+}
+
+function some<T>(object: Iterable<T>, predicate: (a: T) => boolean) {
+    if (Array.isArray(object)) return object.some(predicate);
+    for (const item of object) if (predicate(item)) return true;
+    return false;
 }
