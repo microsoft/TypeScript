@@ -1776,9 +1776,9 @@ namespace ts.server {
             const path = normalizedPathToPath(fileName, currentDirectory, this.toCanonicalFileName);
             let info = this.getScriptInfoForPath(path);
             if (!info) {
-                Debug.assert(isRootedDiskPath(fileName) || openedByClient, "Script info with relative file name can only be open script info");
-                Debug.assert(!isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)), "Open script files with non rooted disk path opened with current directory context cannot have same canonical names");
                 const isDynamic = isDynamicFileName(fileName);
+                Debug.assert(isRootedDiskPath(fileName) || isDynamic || openedByClient, "Script info with non-dynamic relative file name can only be open script info");
+                Debug.assert(!isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)), "Open script files with non rooted disk path opened with current directory context cannot have same canonical names");
                 // If the file is not opened by client and the file doesnot exist on the disk, return
                 if (!openedByClient && !isDynamic && !(hostToQueryFileExistsOn || this.host).fileExists(fileName)) {
                     return;
