@@ -186,7 +186,11 @@ namespace ts {
             },
             isValidPropertyAccess: (node, propertyName) => {
                 node = getParseTreeNode(node, isPropertyAccessOrQualifiedName);
-                return node ? isValidPropertyAccess(node, escapeLeadingUnderscores(propertyName)) : false;
+                return !!node && isValidPropertyAccess(node, escapeLeadingUnderscores(propertyName));
+            },
+            isValidPropertyAccessForCompletions: (node, type, property) => {
+                node = getParseTreeNode(node, isPropertyAccessExpression);
+                return !!node && isValidPropertyAccessForCompletions(node, type, property);
             },
             getSignatureFromDeclaration: declaration => {
                 declaration = getParseTreeNode(declaration, isFunctionLike);
@@ -4678,6 +4682,7 @@ namespace ts {
                 }
                 else if (isJSDocPropertyTag(declaration)
                     || isPropertyAccessExpression(declaration)
+                    || isIdentifier(declaration)
                     || isMethodDeclaration(declaration) && !isObjectLiteralMethod(declaration)) {
                     // TODO: Mimics old behavior from incorrect usage of getWidenedTypeForVariableLikeDeclaration, but seems incorrect
                     type = tryGetTypeFromEffectiveTypeNode(declaration) || anyType;
@@ -16042,11 +16047,22 @@ namespace ts {
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: __String): boolean {
-            const left = node.kind === SyntaxKind.PropertyAccessExpression
-                ? (<PropertyAccessExpression>node).expression
-                : (<QualifiedName>node).left;
-
+            const left = node.kind === SyntaxKind.PropertyAccessExpression ? node.expression : node.left;
             return isValidPropertyAccessWithType(node, left, propertyName, getWidenedType(checkExpression(left)));
+        }
+
+        function isValidPropertyAccessForCompletions(node: PropertyAccessExpression, type: Type, property: Symbol): boolean {
+            return isValidPropertyAccessWithType(node, node.expression, property.escapedName, type)
+                && (!(property.flags & ts.SymbolFlags.Method) || isValidMethodAccess(property, type));
+        }
+        function isValidMethodAccess(method: Symbol, type: Type) {
+            const propType = getTypeOfFuncClassEnumModule(method);
+            const signatures = getSignaturesOfType(propType, SignatureKind.Call);
+            Debug.assert(signatures.length !== 0);
+            return signatures.some(sig => {
+                const thisType = getThisTypeOfSignature(sig);
+                return !thisType || isTypeAssignableTo(type, thisType);
+            });
         }
 
         function isValidPropertyAccessWithType(
@@ -22724,7 +22740,12 @@ namespace ts {
                         const t = getTypeFromTypeNode(typeRefNode);
                         if (t !== unknownType) {
                             if (isValidBaseType(t)) {
-                                checkTypeAssignableTo(typeWithThis, getTypeWithThisArgument(t, type.thisType), node.name || node, Diagnostics.Class_0_incorrectly_implements_interface_1);
+                                checkTypeAssignableTo(typeWithThis,
+                                    getTypeWithThisArgument(t, type.thisType),
+                                    node.name || node,
+                                    t.symbol.flags & SymbolFlags.Class ?
+                                        Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass :
+                                        Diagnostics.Class_0_incorrectly_implements_interface_1);
                             }
                             else {
                                 error(typeRefNode, Diagnostics.A_class_may_only_implement_another_class_or_interface);

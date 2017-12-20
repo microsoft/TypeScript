@@ -436,7 +436,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A mixin class must have a constructor with a single rest parameter of type 'any[]5D;'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una clase mixin debe tener un constructor con un parámetro de REST sencillo del tipo "any[]5D;".]]></Val>
+            <Val><![CDATA[Una clase mixin debe tener un constructor con un solo parámetro rest de tipo "any[]5D;"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -523,7 +523,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A path in an 'extends' option must be relative or rooted, but '{0}' is not.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una ruta de acceso en una opción "extiende" debe ser relativa o raíz, pero no '{0}'.]]></Val>
+            <Val><![CDATA[Una ruta de acceso en una opción "extiende" debe ser relativa o raíz, pero no "{0}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1420,7 +1420,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Argument for '{0}' option must be: {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El argumento para la opción '{0}' debe ser: {1}.]]></Val>
+            <Val><![CDATA[El argumento para la opción "{0}" debe ser {1}.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Argument for '{0}' option must be: {1}]]></Val>
@@ -1432,7 +1432,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Argument of type '{0}' is not assignable to parameter of type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No se puede asignar un argumento de tipo '{0}' al parámetro de tipo '{1}'.]]></Val>
+            <Val><![CDATA[No se puede asignar un argumento de tipo "{0}" al parámetro de tipo "{1}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3461,15 +3461,6 @@
           <Val><![CDATA[File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[La especificación del archivo no puede contener un directorio primario ('..') que aparezca después de un comodín de directorios recursivo ('**'): '{0}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0_5011" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La especificación de archivo no puede contener varios comodines de directorio recursivo ('**'): '{0}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
