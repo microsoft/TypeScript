@@ -124,17 +124,10 @@ export class Arg {
     /**
      * Allows any string that includes the specified substring.
      */
-    public static stringIncludes(text: string) {
-        return <string & Arg>new Arg(arg => arg.includes(text), message`includes ${text}`);
+    public static includes(text: string) {
+        return <string & Arg>new Arg(arg => typeof arg === "string" && arg.includes(text), message`includes ${text}`);
     }
 
-    /**
-     * Allows any array that contains the specified value.
-     */
-    public static arrayIncludes<T>(value: T | T & Arg) {
-        return <T[] & Arg>new Arg(arg => includes(arg, value), message`contains ${value}`);
-    }
-    
     /**
      * Allows an array that matches the specified values (or `Arg` conditions), in the same order.
      */
@@ -201,7 +194,7 @@ export class Arg {
     /**
      * Allows any `object` (including functions but excluding `null`).
      */
-    public static object<T extends object = object>() { 
+    public static object<T extends object = object>() {
         return <T & Arg>new Arg(arg => typeof arg === "object" && arg !== null || typeof arg === "function", `object`);
     }
 
@@ -230,6 +223,13 @@ export class Arg {
      */
     public static hasOwn<T>(...names: string[]) {
         return <T & Arg>new Arg(arg => count(names, name => hasOwn(arg, name)) === names.length, message`hasOwn ${list(names, ", ")}`);
+    }
+
+    /**
+     * Allows any array that contains the specified value.
+     */
+    public static hasElement<T>(value: T | T & Arg) {
+        return <T[] & Arg>new Arg(arg => includes(arg, value), message`has element ${value}`);
     }
 
     /**
@@ -378,8 +378,8 @@ function isIterableObject(value: any): value is Iterable<any> {
 }
 
 function formatArg(arg: any) {
-    return isIterableObject(arg) ? formatIterableObject(arg, ", ") : 
-        arg instanceof Arg ? Arg.messageFor(arg) : 
+    return isIterableObject(arg) ? formatIterableObject(arg, ", ") :
+        arg instanceof Arg ? Arg.messageFor(arg) :
         arg;
 }
 

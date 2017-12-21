@@ -9,7 +9,10 @@
 //       support the eventual conversion of harness into a modular system.
 
 namespace compiler {
-    export class CompilerHost {
+    /**
+     * A `ts.CompilerHost` that leverages a virtual file system.
+     */
+    export class CompilerHost implements ts.CompilerHost {
         public readonly vfs: vfs.VirtualFileSystem;
         public readonly defaultLibLocation: string;
         public readonly outputs: documents.TextDocument[] = [];
@@ -63,15 +66,13 @@ namespace compiler {
         }
 
         public readFile(path: string): string | undefined {
-            const entry = this.vfs.getFile(path);
-            const content = entry && entry.content && core.removeByteOrderMark(entry.content);
+            const content = this.vfs.readFile(path);
             return content === undefined ? undefined :
-                vpath.extname(path) === ".json" ? utils.removeComments(content, utils.CommentRemoval.leadingAndTrailing) :
-                content;
+                vpath.extname(path) === ".json" ? utils.removeComments(core.removeByteOrderMark(content), utils.CommentRemoval.leadingAndTrailing) :
+                core.removeByteOrderMark(content);
         }
 
         public writeFile(fileName: string, content: string, writeByteOrderMark: boolean) {
-            // NOTE(rbuckton): Old harness emits "\u00EF\u00BB\u00BF" for UTF8 BOM, but compiler emits "\uFEFF". Compiler is wrong, as "\uFEFF" is a UTF16 BOM.
             if (writeByteOrderMark) content = "\u00EF\u00BB\u00BF" + content;
             const entry = this.vfs.addFile(fileName, content, { overwrite: true });
             if (entry) {
@@ -129,44 +130,51 @@ namespace compiler {
             const existing = this._sourceFiles.get(canonicalFileName);
             if (existing) return existing;
             const file = this.vfs.getFile(canonicalFileName);
-            if (file) {
-                let content = file.content;
-                if (content !== undefined) {
-                    content = core.removeByteOrderMark(content);
+            if (!file) return undefined;
 
-                    const cacheKey = file.shadowRoot && `SourceFile[languageVersion=${languageVersion},setParentNodes=${this._setParentNodes}]`;
-                    if (cacheKey) {
-                        const sourceFileFromMetadata = file.metadata.get(cacheKey) as ts.SourceFile | undefined;
-                        if (sourceFileFromMetadata) {
-                            this._sourceFiles.set(canonicalFileName, sourceFileFromMetadata);
-                            return sourceFileFromMetadata;
-                        }
-                    }
-
-                    const parsed = ts.createSourceFile(fileName, content, languageVersion, this._setParentNodes || this.shouldAssertInvariants);
-                    if (this.shouldAssertInvariants) {
-                        Utils.assertInvariants(parsed, /*parent*/ undefined);
-                    }
-
-                    this._sourceFiles.set(canonicalFileName, parsed);
-
-                    if (cacheKey) {
-                        // store the cached source file on the unshadowed file with the same version.
-                        let rootFile = file;
-                        while (rootFile.shadowRoot && rootFile.shadowRoot.version === file.version) {
-                            rootFile = rootFile.shadowRoot;
-                        }
-
-                        rootFile.metadata.set(cacheKey, parsed);
-                    }
-
-                    return parsed;
+            // A virtual file system may shadow another existing virtual file system. This
+            // allows us to reuse a common virtual file system structure across multiple
+            // tests. If a virtual file is a shadow, it is likely that the file will be
+            // reused across multiple tests. In that case, we cache the SourceFile we parse
+            // so that it can be reused across multiple tests to avoid the cost of
+            // repeatedly parsing the same file over and over (such as lib.d.ts).
+            const cacheKey = file.shadowRoot && `SourceFile[languageVersion=${languageVersion},setParentNodes=${this._setParentNodes}]`;
+            if (cacheKey) {
+                const sourceFileFromMetadata = file.metadata.get(cacheKey) as ts.SourceFile | undefined;
+                if (sourceFileFromMetadata) {
+                    this._sourceFiles.set(canonicalFileName, sourceFileFromMetadata);
+                    return sourceFileFromMetadata;
                 }
             }
+
+            if (file.content === undefined) return undefined;
+            const content = core.removeByteOrderMark(file.content);
+            const parsed = ts.createSourceFile(fileName, content, languageVersion, this._setParentNodes || this.shouldAssertInvariants);
+            if (this.shouldAssertInvariants) {
+                Utils.assertInvariants(parsed, /*parent*/ undefined);
+            }
+
+            this._sourceFiles.set(canonicalFileName, parsed);
+
+            if (cacheKey) {
+                // store the cached source file on the unshadowed file with the same version.
+                let rootFile = file;
+                while (rootFile.shadowRoot && rootFile.shadowRoot.version === file.version) {
+                    rootFile = rootFile.shadowRoot;
+                }
+                if (rootFile !== file) {
+                    rootFile.metadata.set(cacheKey, parsed);
+                }
+            }
+
+            return parsed;
         }
     }
 
-    export class ParseConfigHost {
+    /**
+     * A `ts.ParseConfigHost` that leverages a virtual file system.
+     */
+    export class ParseConfigHost implements ts.ParseConfigHost {
         public readonly vfs: vfs.VirtualFileSystem;
 
         constructor(vfs: vfs.VirtualFileSystem) {
@@ -231,8 +239,11 @@ namespace compiler {
         }
     }
 
+    /**
+     * Correlates compilation inputs and outputs
+     */
     export interface CompilationOutput {
-        readonly input: documents.TextDocument;
+        readonly inputs: ReadonlyArray<documents.TextDocument>;
         readonly js: documents.TextDocument | undefined;
         readonly dts: documents.TextDocument | undefined;
         readonly map: documents.TextDocument | undefined;
@@ -250,11 +261,6 @@ namespace compiler {
 
         private _inputs: documents.TextDocument[] = [];
         private _inputsAndOutputs: core.KeyedCollection<string, CompilationOutput>;
-
-        // from CompilerResult
-        public readonly files: ReadonlyArray<documents.TextDocument>;
-        public readonly declFilesCode: ReadonlyArray<documents.TextDocument>;
-        public readonly sourceMaps: ReadonlyArray<documents.TextDocument>;
 
         constructor(host: CompilerHost, options: ts.CompilerOptions, program: ts.Program | undefined, result: ts.EmitResult | undefined, diagnostics: ts.Diagnostic[]) {
             this.host = host;
@@ -282,31 +288,58 @@ namespace compiler {
             // correlate inputs and outputs
             this._inputsAndOutputs = new core.KeyedCollection<string, CompilationOutput>(this.vfs.pathComparer);
             if (program) {
-                for (const sourceFile of program.getSourceFiles()) {
-                    if (sourceFile) {
-                        const input = new documents.TextDocument(sourceFile.fileName, sourceFile.text);
-                        this._inputs.push(input);
-                        if (!vpath.isDeclaration(sourceFile.fileName)) {
-                            const outputs = {
-                                input,
-                                js: js.get(this.getOutputPath(sourceFile.fileName, ts.getOutputExtension(sourceFile, this.options))),
-                                dts: dts.get(this.getOutputPath(sourceFile.fileName, ".d.ts", this.options.declarationDir)),
-                                map: maps.get(this.getOutputPath(sourceFile.fileName, ts.getOutputExtension(sourceFile, this.options) + ".map"))
-                            };
+                if (this.options.out || this.options.outFile) {
+                    const outFile = vpath.resolve(this.vfs.currentDirectory, this.options.outFile || this.options.out);
+                    const inputs: documents.TextDocument[] = [];
+                    for (const sourceFile of program.getSourceFiles()) {
+                        if (sourceFile) {
+                            const input = new documents.TextDocument(sourceFile.fileName, sourceFile.text);
+                            this._inputs.push(input);
+                            if (!vpath.isDeclaration(sourceFile.fileName)) {
+                                inputs.push(input);
+                            }
+                        }
+                    }
 
-                            this._inputsAndOutputs.set(sourceFile.fileName, outputs);
-                            if (outputs.js) this._inputsAndOutputs.set(outputs.js.file, outputs);
-                            if (outputs.dts) this._inputsAndOutputs.set(outputs.dts.file, outputs);
-                            if (outputs.map) this._inputsAndOutputs.set(outputs.map.file, outputs);
+                    const outputs: CompilationOutput = {
+                        inputs,
+                        js: js.get(outFile),
+                        dts: dts.get(vpath.changeExtension(outFile, ".d.ts")),
+                        map: maps.get(outFile + ".map")
+                    };
+
+                    if (outputs.js) this._inputsAndOutputs.set(outputs.js.file, outputs);
+                    if (outputs.dts) this._inputsAndOutputs.set(outputs.dts.file, outputs);
+                    if (outputs.map) this._inputsAndOutputs.set(outputs.map.file, outputs);
+
+                    for (const input of inputs) {
+                        this._inputsAndOutputs.set(input.file, outputs);
+                    }
+                }
+                else {
+                    for (const sourceFile of program.getSourceFiles()) {
+                        if (sourceFile) {
+                            const input = new documents.TextDocument(sourceFile.fileName, sourceFile.text);
+                            this._inputs.push(input);
+                            if (!vpath.isDeclaration(sourceFile.fileName)) {
+                                const extname = ts.getOutputExtension(sourceFile, this.options);
+                                const outputs: CompilationOutput = {
+                                    inputs: [input],
+                                    js: js.get(this.getOutputPath(sourceFile.fileName, extname)),
+                                    dts: dts.get(this.getOutputPath(sourceFile.fileName, ".d.ts")),
+                                    map: maps.get(this.getOutputPath(sourceFile.fileName, extname + ".map"))
+                                };
+
+                                this._inputsAndOutputs.set(sourceFile.fileName, outputs);
+                                if (outputs.js) this._inputsAndOutputs.set(outputs.js.file, outputs);
+                                if (outputs.dts) this._inputsAndOutputs.set(outputs.dts.file, outputs);
+                                if (outputs.map) this._inputsAndOutputs.set(outputs.map.file, outputs);
+                            }
                         }
                     }
                 }
             }
 
-            // from CompilerResult
-            this.files = Array.from(this.js.values());
-            this.declFilesCode = Array.from(this.dts.values());
-            this.sourceMaps = Array.from(this.maps.values());
             this.diagnostics = diagnostics;
         }
 
@@ -343,9 +376,9 @@ namespace compiler {
             return this._inputsAndOutputs.get(vpath.resolve(this.vfs.currentDirectory, path));
         }
 
-        public getInput(path: string): documents.TextDocument | undefined {
+        public getInputs(path: string): ReadonlyArray<documents.TextDocument> | undefined {
             const outputs = this.getInputsAndOutputs(path);
-            return outputs && outputs.input;
+            return outputs && outputs.inputs;
         }
 
         public getOutput(path: string, kind: "js" | "dts" | "map"): documents.TextDocument | undefined {
@@ -355,7 +388,7 @@ namespace compiler {
 
         public getSourceMapRecord(): string | undefined {
             if (this.result.sourceMaps && this.result.sourceMaps.length > 0) {
-                return Harness.SourceMapRecorder.getSourceMapRecord(this.result.sourceMaps, this.program, this.files);
+                return Harness.SourceMapRecorder.getSourceMapRecord(this.result.sourceMaps, this.program, this.js.values());
             }
         }
 
@@ -371,17 +404,22 @@ namespace compiler {
             }
         }
 
-        public getOutputPath(path: string, ext: string, outDir: string | undefined = this.options.outDir): string {
-            if (outDir) {
-                path = vpath.resolve(this.vfs.currentDirectory, path);
-                const common = this.commonSourceDirectory;
-                if (!common) return vpath.changeExtension(path, ext);
-                path = vpath.relative(common, path, !this.vfs.useCaseSensitiveFileNames);
-                path = vpath.combine(vpath.resolve(this.vfs.currentDirectory, outDir), path);
-                return vpath.changeExtension(path, ext);
+        public getOutputPath(path: string, ext: string): string {
+            if (this.options.outFile || this.options.out) {
+                path = vpath.resolve(this.vfs.currentDirectory, this.options.outFile || this.options.out);
             }
-            const outFile = vpath.resolve(this.vfs.currentDirectory, this.options.outFile || this.options.out || path);
-            return vpath.changeExtension(outFile, ext);
+            else {
+                path = vpath.resolve(this.vfs.currentDirectory, path);
+                const outDir = ext === ".d.ts" ? this.options.declarationDir || this.options.outDir : this.options.outDir;
+                if (outDir) {
+                    const common = this.commonSourceDirectory;
+                    if (common) {
+                        path = vpath.relative(common, path, !this.vfs.useCaseSensitiveFileNames);
+                        path = vpath.combine(vpath.resolve(this.vfs.currentDirectory, this.options.outDir), path);
+                    }
+                }
+            }
+            return vpath.changeExtension(path, ext);
         }
     }
 

@@ -169,27 +169,27 @@ namespace RWC {
 
             it("has the expected emitted code", () => {
                 Harness.Baseline.runMultifileBaseline(baseName, "", () => {
-                    return Harness.Compiler.iterateOutputs(compilerResult.files);
+                    return Harness.Compiler.iterateOutputs(compilerResult.js.values());
                 }, baselineOpts, [".js", ".jsx"]);
             });
 
             it("has the expected declaration file content", () => {
                 Harness.Baseline.runMultifileBaseline(baseName, "", () => {
-                    if (!compilerResult.declFilesCode.length) {
+                    if (!compilerResult.dts.size) {
                         return null;
                     }
 
-                    return Harness.Compiler.iterateOutputs(compilerResult.declFilesCode);
+                    return Harness.Compiler.iterateOutputs(compilerResult.dts.values());
                 }, baselineOpts, [".d.ts"]);
             });
 
             it("has the expected source maps", () => {
                 Harness.Baseline.runMultifileBaseline(baseName, "", () => {
-                    if (!compilerResult.sourceMaps.length) {
+                    if (!compilerResult.maps.size) {
                         return null;
                     }
 
-                    return Harness.Compiler.iterateOutputs(compilerResult.sourceMaps);
+                    return Harness.Compiler.iterateOutputs(compilerResult.maps.values());
                 }, baselineOpts, [".map"]);
             });
 

@@ -1267,7 +1267,7 @@ namespace Harness {
             options: ts.CompilerOptions,
             // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
             currentDirectory: string): DeclarationCompilationContext | undefined {
-            if (options.declaration && result.diagnostics.length === 0 && result.declFilesCode.length !== result.files.length) {
+            if (options.declaration && result.diagnostics.length === 0 && result.dts.size !== result.js.size) {
                 throw new Error("There were no errors and declFiles generated did not match number of js files generated");
             }
 
@@ -1275,7 +1275,7 @@ namespace Harness {
             const declOtherFiles: TestFile[] = [];
 
             // if the .d.ts is non-empty, confirm it compiles correctly as well
-            if (options.declaration && result.diagnostics.length === 0 && result.declFilesCode.length > 0) {
+            if (options.declaration && result.diagnostics.length === 0 && result.dts.size > 0) {
                 ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
                 ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
                 return { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory: currentDirectory || harnessSettings.currentDirectory };
@@ -1315,8 +1315,7 @@ namespace Harness {
                 }
 
                 const dTsFileName = ts.removeFileExtension(sourceFileName) + ts.Extension.Dts;
-
-                return ts.forEach(result.declFilesCode, declFile => declFile.file === dTsFileName ? declFile : undefined);
+                return result.dts.get(dTsFileName);
             }
 
             function findUnit(fileName: string, units: TestFile[]) {
@@ -1627,18 +1626,18 @@ namespace Harness {
 
         export function doSourcemapBaseline(baselinePath: string, options: ts.CompilerOptions, result: compiler.CompilationResult, harnessSettings: Harness.TestCaseParser.CompilerSettings) {
             if (options.inlineSourceMap) {
-                if (result.sourceMaps.length > 0) {
+                if (result.maps.size > 0) {
                     throw new Error("No sourcemap files should be generated if inlineSourceMaps was set.");
                 }
                 return;
             }
             else if (options.sourceMap) {
-                if (result.sourceMaps.length !== result.files.length) {
+                if (result.maps.size !== result.js.size) {
                     throw new Error("Number of sourcemap files should be same as js files.");
                 }
 
                 Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ".js.map"), () => {
-                    if ((options.noEmitOnError && result.diagnostics.length !== 0) || result.sourceMaps.length === 0) {
+                    if ((options.noEmitOnError && result.diagnostics.length !== 0) || result.maps.size === 0) {
                         // We need to return null here or the runBaseLine will actually create a empty file.
                         // Baselining isn't required here because there is no output.
                         /* tslint:disable:no-null-keyword */
@@ -1647,9 +1646,9 @@ namespace Harness {
                     }
 
                     let sourceMapCode = "";
-                    for (const sourceMap of result.sourceMaps) {
+                    result.maps.forEach(sourceMap => {
                         sourceMapCode += fileOutput(sourceMap, harnessSettings);
-                    }
+                    });
 
                     return sourceMapCode;
                 });
@@ -1657,7 +1656,7 @@ namespace Harness {
         }
 
         export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: compiler.CompilationResult, tsConfigFiles: ReadonlyArray<Harness.Compiler.TestFile>, toBeCompiled: ReadonlyArray<Harness.Compiler.TestFile>, otherFiles: ReadonlyArray<Harness.Compiler.TestFile>, harnessSettings: Harness.TestCaseParser.CompilerSettings) {
-            if (!options.noEmit && result.files.length === 0 && result.diagnostics.length === 0) {
+            if (!options.noEmit && result.js.size === 0 && result.diagnostics.length === 0) {
                 throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
             }
 
@@ -1674,15 +1673,15 @@ namespace Harness {
                 }
 
                 let jsCode = "";
-                for (const file of result.files) {
+                result.js.forEach(file => {
                     jsCode += fileOutput(file, harnessSettings);
-                }
+                });
 
-                if (result.declFilesCode.length > 0) {
+                if (result.dts.size > 0) {
                     jsCode += "\r\n\r\n";
-                    for (const declFile of result.declFilesCode) {
+                    result.dts.forEach(declFile => {
                         jsCode += fileOutput(declFile, harnessSettings);
-                    }
+                    });
                 }
 
                 const declFileContext = Harness.Compiler.prepareDeclarationCompilationContext(
@@ -1728,12 +1727,13 @@ namespace Harness {
             return result;
         }
 
-        export function *iterateOutputs(outputFiles: ReadonlyArray<documents.TextDocument>): IterableIterator<[string, string]> {
+        export function* iterateOutputs(outputFiles: Iterable<documents.TextDocument>): IterableIterator<[string, string]> {
             // Collect, test, and sort the fileNames
-            outputFiles.slice().sort((a, b) => ts.compareStringsCaseSensitive(cleanName(a.file), cleanName(b.file)));
+            const files = Array.from(outputFiles);
+            files.slice().sort((a, b) => ts.compareStringsCaseSensitive(cleanName(a.file), cleanName(b.file)));
             const dupeCase = ts.createMap<number>();
             // Yield them
-            for (const outputFile of outputFiles) {
+            for (const outputFile of files) {
                 yield [checkDuplicatedFileName(outputFile.file, dupeCase), "/*====== " + outputFile.file + " ======*/\r\n" + core.removeByteOrderMark(outputFile.text)];
             }
 

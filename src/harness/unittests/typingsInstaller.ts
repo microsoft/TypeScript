@@ -568,7 +568,7 @@ namespace ts.projectSystem {
 
             const installer = new Installer(host, { throttleLimit: 1, typesRegistry: createTypesRegistry("commander", "jquery", "lodash", "cordova", "gulp", "grunt") });
             const installWorkerSpy = spy(installer, "installWorker")
-                .setup(_ => _(Arg.any(), Arg.includes(typingsName("commander")), Arg.any(), Arg.any()), {
+                .setup(_ => _(Arg.any(), Arg.hasElement(typingsName("commander")), Arg.any(), Arg.any()), {
                     callback: (_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) => {
                         executeCommand(installer, host, [commander.typings, jquery.typings, lodash.typings, cordova.typings], [commander, jquery, lodash, cordova], cb);
                     }
