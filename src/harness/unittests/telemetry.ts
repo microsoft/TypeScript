@@ -5,18 +5,20 @@
 namespace ts.projectSystem {
     describe("project telemetry", () => {
         it("does nothing for inferred project", () => {
-            const host = new fakes.FakeServerHost();
-            host.vfs.writeFile("/a.js", "");
+            const host = new fakes.FakeServerHost({}, /*files*/ {
+                "/a.js": "",
+            });
             const et = new TestServerEventManager(host);
             et.service.openClientFile("/a.js");
             et.hasZeroEvent(ts.server.ProjectInfoTelemetryEvent);
         });
 
         it("only sends an event once", () => {
-            const host = new fakes.FakeServerHost();
-            host.vfs.writeFile("/a/a.ts", ``);
-            host.vfs.writeFile("/b.ts", ``);
-            host.vfs.writeFile("/a/tsconfig.json", `{}`);
+            const host = new fakes.FakeServerHost({}, /*files*/ {
+                "/a/a.ts": ``,
+                "/b.ts": ``,
+                "/a/tsconfig.json": `{}`,
+            });
 
             const et = new TestServerEventManager(host);
             et.service.openClientFile("/a/a.ts");
@@ -38,16 +40,17 @@ namespace ts.projectSystem {
 
         it("counts files by extension", () => {
             const compilerOptions: ts.CompilerOptions = { allowJs: true };
-            const host = new fakes.FakeServerHost();
-            host.vfs.writeFile("/src/ts.ts", ``);
-            host.vfs.writeFile("/src/tsx.tsx", ``);
-            host.vfs.writeFile("/src/moo.ts", ``);
-            host.vfs.writeFile("/src/dts.d.ts", ``);
-            host.vfs.writeFile("/src/jsx.jsx", ``);
-            host.vfs.writeFile("/src/js.js", ``);
-            host.vfs.writeFile("/src/badExtension.badExtension", ``);
-            host.vfs.writeFile("/bin/ts.js", ``);
-            host.vfs.writeFile("/tsconfig.json", JSON.stringify({ compilerOptions, include: ["src"] }));
+            const host = new fakes.FakeServerHost({}, /*files*/ {
+                "/src/ts.ts": ``,
+                "/src/tsx.tsx": ``,
+                "/src/moo.ts": ``,
+                "/src/dts.d.ts": ``,
+                "/src/jsx.jsx": ``,
+                "/src/js.js": ``,
+                "/src/badExtension.badExtension": ``,
+                "/bin/ts.js": ``,
+                "/tsconfig.json": JSON.stringify({ compilerOptions, include: ["src"] }),
+            });
 
             const et = new TestServerEventManager(host);
             et.service.openClientFile("/src/ts.ts");
@@ -59,8 +62,9 @@ namespace ts.projectSystem {
         });
 
         it("works with external project", () => {
-            const host = new fakes.FakeServerHost();
-            host.vfs.writeFile("/a.ts", ``);
+            const host = new fakes.FakeServerHost({}, /*files*/ {
+                "/a.ts": ``,
+            });
 
             const et = new TestServerEventManager(host);
             const compilerOptions: ts.server.protocol.CompilerOptions = { strict: true };
@@ -157,9 +161,10 @@ namespace ts.projectSystem {
             };
             (compilerOptions as any).unknownCompilerOption = "hunter2"; // These are always ignored.
 
-            const host = new fakes.FakeServerHost();
-            host.vfs.writeFile("/a.ts", ``);
-            host.vfs.writeFile("/tsconfig.json", JSON.stringify({ compilerOptions, files: ["/a.ts"] }));
+            const host = new fakes.FakeServerHost({}, /*files*/ {
+                "/a.ts": ``,
+                "/tsconfig.json": JSON.stringify({ compilerOptions, files: ["/a.ts"] }),
+            });
 
             const et = new TestServerEventManager(host);
             et.service.openClientFile("/a.ts");
@@ -171,16 +176,17 @@ namespace ts.projectSystem {
         });
 
         it("sends telemetry for extends, files, include, exclude, and compileOnSave", () => {
-            const host = new fakes.FakeServerHost();
-            host.vfs.writeFile("/hunter2/a.ts", ``);
-            host.vfs.writeFile("/tsconfig.json", JSON.stringify({
-                compilerOptions: {},
-                extends: "hunter2.json",
-                files: ["hunter2/a.ts"],
-                include: ["hunter2"],
-                exclude: ["hunter2"],
-                compileOnSave: true,
-            }));
+            const host = new fakes.FakeServerHost({}, /*files*/ {
+                "/hunter2/a.ts": ``,
+                "/tsconfig.json": JSON.stringify({
+                    compilerOptions: {},
+                    extends: "hunter2.json",
+                    files: ["hunter2/a.ts"],
+                    include: ["hunter2"],
+                    exclude: ["hunter2"],
+                    compileOnSave: true,
+                })
+            });
 
             const et = new TestServerEventManager(host);
             et.service.openClientFile("/hunter2/a.ts");
@@ -202,17 +208,18 @@ namespace ts.projectSystem {
         };
 
         it("sends telemetry for typeAcquisition settings", () => {
-            const host = new fakes.FakeServerHost();
-            host.vfs.writeFile("/a.js", ``);
-            host.vfs.writeFile("/jsconfig.json", JSON.stringify({
-                compilerOptions: {},
-                typeAcquisition: {
-                    enable: true,
-                    enableAutoDiscovery: false,
-                    include: ["hunter2", "hunter3"],
-                    exclude: [],
-                },
-            }));
+            const host = new fakes.FakeServerHost({}, /*files*/ {
+                "/a.js": ``,
+                "/jsconfig.json": JSON.stringify({
+                    compilerOptions: {},
+                    typeAcquisition: {
+                        enable: true,
+                        enableAutoDiscovery: false,
+                        include: ["hunter2", "hunter3"],
+                        exclude: [],
+                    },
+                })
+            });
             const et = new TestServerEventManager(host);
             et.service.openClientFile("/a.js");
             et.assertProjectInfoTelemetryEvent({
@@ -229,9 +236,10 @@ namespace ts.projectSystem {
         });
 
         it("detects whether language service was disabled", () => {
-            const host = new fakes.FakeServerHost();
-            host.vfs.writeFile("/a.js", ``);
-            host.vfs.writeFile("/jsconfig.json", `{}`);
+            const host = new fakes.FakeServerHost({}, /*files*/ {
+                "/a.js": ``,
+                "/jsconfig.json": `{}`,
+            });
 
             const et = new TestServerEventManager(host);
             et.host.getFileSize = () => server.maxProgramSizeForNonTsFiles + 1;

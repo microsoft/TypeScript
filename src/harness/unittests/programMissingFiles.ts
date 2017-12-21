@@ -37,7 +37,7 @@ namespace ts {
         );
 
         const testCompilerHost = new compiler.CompilerHost(
-            vfs.VirtualFileSystem.createFromDocuments(
+            vfsutils.createFromDocuments(
                 /*useCaseSensitiveFileNames*/ false,
                 [emptyFile, referenceFile],
                 { currentDirectory: "d:\\pretend\\" }),

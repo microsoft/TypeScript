@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "es2015",
+        "module": "commonjs",
+        "outDir": "dist",
+        "types": ["node"],
+        "declaration": true,
+        "sourceMap": true,
+        "strict": true,
+        "preserveConstEnums": true
+    },
+    "include": [
+        "src/**/*"
+    ]
+}

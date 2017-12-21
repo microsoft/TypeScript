@@ -926,29 +926,37 @@ namespace ts {
             verifyProgramIsUptoDate(program, fileNames, options);
         }
 
-        function verifyProgram(vfs: vfs.VirtualFileSystem, rootFiles: string[], options: CompilerOptions, configFile: string) {
+        function verifyProgram(vfs: vfs.FileSystem, rootFiles: string[], options: CompilerOptions, configFile: string) {
             const watchingSystemHost = createWatchingSystemHost(new fakes.FakeServerHost({ vfs }));
             verifyProgramWithoutConfigFile(watchingSystemHost, rootFiles, options);
             verifyProgramWithConfigFile(watchingSystemHost, configFile);
         }
 
         it("has empty options", () => {
-            const fs = new vfs.VirtualFileSystem("/", /*useCaseSensitiveFileNames*/ true);
-            const file1 = fs.addFile("/a/b/file1.ts", "let x = 1");
-            const file2 = fs.addFile("/a/b/file2.ts", "let y = 1");
-            const configFile = fs.addFile("/a/b/tsconfig.json", "{}");
-            fs.addFile(fakes.FakeServerHost.libPath, fakes.FakeServerHost.libContent);
-            verifyProgram(fs, [file1.path, file2.path], {}, configFile.path);
+            const file1 = "/a/b/file1.ts";
+            const file2 = "/a/b/file2.ts";
+            const configFile = "/a/b/tsconfig.json";
+            const fs = new vfs.FileSystem(/*ignoreCase*/ false, { cwd: "/", files: {
+                [file1]: "let x = 1",
+                [file2]: "let y = 1",
+                [configFile]: "{}",
+                [fakes.FakeServerHost.libPath]: fakes.FakeServerHost.libContent,
+            }});
+
+            verifyProgram(fs, [file1, file2], {}, configFile);
         });
 
         it("has lib specified in the options", () => {
+            const app = "/src/app.ts";
+            const configFile = "/src/tsconfig.json";
             const compilerOptions: CompilerOptions = { lib: ["es5", "es2015.promise"] };
-            const fs = new vfs.VirtualFileSystem("/", /*useCaseSensitiveFileNames*/ true);
-            const app = fs.addFile("/src/app.ts", "var x: Promise<string>;");
-            const configFile = fs.addFile("/src/tsconfig.json", JSON.stringify({ compilerOptions }));
-            fs.addFile("/compiler/lib.es5.d.ts", "declare const eval: any;");
-            fs.addFile("/compiler/lib.es2015.promise.d.ts", "declare class Promise<T> {}");
-            verifyProgram(fs, [app.path], compilerOptions, configFile.path);
+            const fs = new vfs.FileSystem(/*ignoreCase*/ false, { cwd: "/", files: {
+                [app]: "var x: Promise<string>;",
+                [configFile]: JSON.stringify({ compilerOptions }),
+                "/compiler/lib.es5.d.ts": "declare const eval: any;",
+                "/compiler/lib.es2015.promise.d.ts": "declare class Promise<T> {}",
+            }});
+            verifyProgram(fs, [app], compilerOptions, configFile);
         });
 
         it("has paths specified in the options", () => {
@@ -962,23 +970,26 @@ namespace ts {
                     ]
                 }
             };
-            const fs = new vfs.VirtualFileSystem("/", /*useCaseSensitiveFileNames*/ true);
-            const app = fs.addFile("/src/packages/framework/app.ts",
-                `import classC from "module1/lib/file1";\n` +
-                `import classD from "module3/file3";\n` +
-                `let x = new classC();\n` +
-                `let y = new classD();`);
-            fs.addFile("/src/packages/mail/data/module1/lib/file1.ts",
-                `import classC from "module2/file2";\n` +
-                `export default classC;`);
-            fs.addFile("/src/packages/mail/data/module1/lib/module2/file2.ts",
-                `class classC { method2() { return "hello"; } }\n` +
-                `export default classC;`);
-            fs.addFile("/src/packages/styles/module3/file3.ts",
-                `class classD { method() { return 10; } }\n` +
-                `export default classD;`);
-            const configFile = fs.addFile("/src/tsconfig.json", JSON.stringify({ compilerOptions }));
-            verifyProgram(fs, [app.path], compilerOptions, configFile.path);
+            const app = "/src/packages/framework/app.ts";
+            const configFile = "/src/tsconfig.json";
+            const fs = new vfs.FileSystem(/*ignoreCase*/ false, { cwd: "/", files: {
+                [app]:
+                    `import classC from "module1/lib/file1";\n` +
+                    `import classD from "module3/file3";\n` +
+                    `let x = new classC();\n` +
+                    `let y = new classD();`,
+                "/src/packages/mail/data/module1/lib/file1.ts":
+                    `import classC from "module2/file2";\n` +
+                    `export default classC;`,
+                "/src/packages/mail/data/module1/lib/module2/file2.ts":
+                    `class classC { method2() { return "hello"; } }\n` +
+                    `export default classC;`,
+                "/src/packages/styles/module3/file3.ts":
+                    `class classD { method() { return 10; } }\n` +
+                    `export default classD;`,
+                [configFile]: JSON.stringify({ compilerOptions }),
+            }});
+            verifyProgram(fs, [app], compilerOptions, configFile);
         });
 
         it("has include paths specified in tsconfig file", () => {
@@ -992,25 +1003,27 @@ namespace ts {
                     ]
                 }
             };
-            const fs = new vfs.VirtualFileSystem("/", /*useCaseSensitiveFileNames*/ true);
-            fs.addFile("/src/packages/framework/app.ts",
-                `import classC from "module1/lib/file1";\n` +
-                `import classD from "module3/file3";\n` +
-                `let x = new classC();\n` +
-                `let y = new classD();`);
-            fs.addFile("/src/packages/mail/data/module1/lib/file1.ts",
-                `import classC from "module2/file2";\n` +
-                `export default classC;`);
-            fs.addFile("/src/packages/mail/data/module1/lib/module2/file2.ts",
-                `class classC { method2() { return "hello"; } }\n` +
-                `export default classC;`);
-            fs.addFile("/src/packages/styles/module3/file3.ts",
-                `class classD { method() { return 10; } }\n` +
-                `export default classD;`);
-            const configFile = fs.addFile("/src/tsconfig.json",
-                JSON.stringify({ compilerOptions, include: ["packages/**/ *.ts"] }));
+            const configFile = "/src/tsconfig.json";
+            const fs = new vfs.FileSystem(/*ignoreCase*/ false, { cwd: "/", files: {
+                "/src/packages/framework/app.ts":
+                    `import classC from "module1/lib/file1";\n` +
+                    `import classD from "module3/file3";\n` +
+                    `let x = new classC();\n` +
+                    `let y = new classD();`,
+                "/src/packages/mail/data/module1/lib/file1.ts":
+                    `import classC from "module2/file2";\n` +
+                    `export default classC;`,
+                "/src/packages/mail/data/module1/lib/module2/file2.ts":
+                    `class classC { method2() { return "hello"; } }\n` +
+                    `export default classC;`,
+                "/src/packages/styles/module3/file3.ts":
+                    `class classD { method() { return 10; } }\n` +
+                    `export default classD;`,
+                [configFile]:
+                    JSON.stringify({ compilerOptions, include: ["packages/**/ *.ts"] }),
+            }});
             const watchingSystemHost = createWatchingSystemHost(new fakes.FakeServerHost({ vfs: fs }));
-            verifyProgramWithConfigFile(watchingSystemHost, configFile.path);
+            verifyProgramWithConfigFile(watchingSystemHost, configFile);
         });
     });
 }

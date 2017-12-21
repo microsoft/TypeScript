@@ -13,7 +13,7 @@ namespace fakes {
          * The `VirtualFleSystem` to use. If not specified, a new case-sensitive `VirtualFileSystem`
          * is created.
          */
-        vfs?: vfs.VirtualFileSystem | { currentDirectory?: string, useCaseSensitiveFileNames?: boolean };
+        vfs?: vfs.FileSystem | { currentDirectory?: string, useCaseSensitiveFileNames?: boolean };
         /**
          * The virtual path to tsc.js. If not specified, a default of `"/.ts/tsc.js"` is used.
          */
@@ -67,8 +67,10 @@ namespace fakes {
             `interface Array<T> {}`;
 
         public readonly timers = new typemock.Timers();
-        public readonly vfs: vfs.VirtualFileSystem;
+        public readonly vfs: vfs.FileSystem;
         public exitCode: number;
+        public watchFiles = true;
+        public watchDirectories = true;
 
         private static readonly processExitSentinel = new Error("System exit");
         private readonly _output: string[] = [];
@@ -76,8 +78,14 @@ namespace fakes {
         private readonly _executingFilePath: string;
         private readonly _getCanonicalFileName: (file: string) => string;
         private _screenClears = 0;
+        private _watchedFiles: core.KeyedCollection<string, number> | undefined;
+        private _watchedFilesSet: core.SortedSet<string> | undefined;
+        private _watchedRecursiveDirectories: core.KeyedCollection<string, number> | undefined;
+        private _watchedRecursiveDirectoriesSet: core.SortedSet<string> | undefined;
+        private _watchedNonRecursiveDirectories: core.KeyedCollection<string, number> | undefined;
+        private _watchedNonRecursiveDirectoriesSet: core.SortedSet<string> | undefined;
 
-        constructor(options: FakeServerHostOptions = {}) {
+        constructor(options: FakeServerHostOptions = {}, files?: vfs.FileMap) {
             const {
                 dos = false,
                 vfs: _vfs = {},
@@ -86,43 +94,49 @@ namespace fakes {
                     : FakeServerHost.defaultExecutingFilePath,
                 newLine = "\n",
                 safeList = false,
-                lib = false
+                lib = false,
             } = options;
 
-            const {
-                currentDirectory = dos
-                    ? FakeServerHost.dosDefaultCurrentDirectory
-                    : FakeServerHost.defaultCurrentDirectory,
-                useCaseSensitiveFileNames = false
-            } = _vfs;
+            const currentDirectory = _vfs instanceof vfs.FileSystem ? _vfs.cwd() :
+                _vfs.currentDirectory !== undefined ? _vfs.currentDirectory :
+                dos ? FakeServerHost.dosDefaultCurrentDirectory :
+                FakeServerHost.defaultCurrentDirectory;
 
-            this.vfs = _vfs instanceof vfs.VirtualFileSystem
+            const useCaseSensitiveFileNames = _vfs instanceof vfs.FileSystem ? !_vfs.ignoreCase :
+                _vfs.useCaseSensitiveFileNames !== undefined ? _vfs.useCaseSensitiveFileNames :
+                false;
+
+            this.vfs = _vfs instanceof vfs.FileSystem
                 ? _vfs
-                : new vfs.VirtualFileSystem(currentDirectory, useCaseSensitiveFileNames);
+                : new vfs.FileSystem(!useCaseSensitiveFileNames, { cwd: currentDirectory });
 
-            if (this.vfs.isReadOnly) {
+            if (this.vfs.isReadonly) {
                 this.vfs = this.vfs.shadow();
             }
 
-            this.vfs.addDirectory(this.vfs.currentDirectory);
+            this.vfs.mkdirpSync(currentDirectory);
+            this.vfs.chdir(currentDirectory);
 
-            this.useCaseSensitiveFileNames = this.vfs.useCaseSensitiveFileNames;
+            this.useCaseSensitiveFileNames = !this.vfs.ignoreCase;
             this.newLine = newLine;
             this._executingFilePath = executingFilePath;
             this._getCanonicalFileName = ts.createGetCanonicalFileName(this.useCaseSensitiveFileNames);
 
+            if (files) {
+                this.vfs.apply(files);
+            }
+
             if (safeList) {
-                this.vfs.addFile(
-                    dos ? FakeServerHost.dosSafeListPath : FakeServerHost.safeListPath,
-                    FakeServerHost.safeListContent);
+                const safeListPath = dos ? FakeServerHost.dosSafeListPath : FakeServerHost.safeListPath;
+                this.vfs.mkdirpSync(vpath.dirname(safeListPath));
+                this.vfs.writeFileSync(safeListPath, FakeServerHost.safeListContent);
             }
 
             if (lib) {
-                this.vfs.addFile(
-                    dos ? FakeServerHost.dosLibPath : FakeServerHost.libPath,
-                    FakeServerHost.libContent);
+                const libPath = dos ? FakeServerHost.dosLibPath : FakeServerHost.libPath;
+                this.vfs.mkdirpSync(vpath.dirname(libPath));
+                this.vfs.writeFileSync(libPath, FakeServerHost.libContent);
             }
-
         }
 
         // #region DirectoryStructureHost members
@@ -134,36 +148,36 @@ namespace fakes {
         }
 
         public readFile(path: string) {
-            return this.vfs.readFile(path);
+            return vfsutils.readFile(this.vfs, path);
         }
 
         public writeFile(path: string, data: string, writeByteOrderMark?: boolean): void {
-            this.vfs.writeFile(path, writeByteOrderMark ? core.addUTF8ByteOrderMark(data) : data);
+            vfsutils.writeFile(this.vfs, path, data, writeByteOrderMark);
         }
 
         public fileExists(path: string) {
-            return this.vfs.fileExists(path);
+            return vfsutils.fileExists(this.vfs, path);
         }
 
         public directoryExists(path: string) {
-            return this.vfs.directoryExists(path);
+            return vfsutils.directoryExists(this.vfs, path);
         }
 
         public createDirectory(path: string): void {
-            this.vfs.addDirectory(path);
+            this.vfs.mkdirpSync(path);
         }
 
         public getCurrentDirectory() {
-            return this.vfs.currentDirectory;
+            return this.vfs.cwd();
         }
 
         public getDirectories(path: string) {
-            return this.vfs.getDirectoryNames(path);
+            return vfsutils.getDirectories(this.vfs, path);
         }
 
         public readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
-            return ts.matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.vfs.currentDirectory, depth, path => {
-                return this.vfs.getAccessibleFileSystemEntries(path);
+            return ts.matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.vfs.cwd(), depth, path => {
+                return vfsutils.getAccessibleFileSystemEntries(this.vfs, path);
             });
         }
 
@@ -183,24 +197,86 @@ namespace fakes {
         public readonly args: string[] = [];
 
         public getFileSize(path: string) {
-            const stats = this.vfs.getStats(path);
-            return stats && stats.isFile() ? stats.size : 0;
+            return vfsutils.getFileSize(this.vfs, path);
         }
 
         public watchFile(path: string, cb: ts.FileWatcherCallback) {
-            return this.vfs.watchFile(path, (path, change) => {
-                cb(path, change === "added" ? ts.FileWatcherEventKind.Created :
-                    change === "removed" ? ts.FileWatcherEventKind.Deleted :
-                    ts.FileWatcherEventKind.Changed);
+            if (!this._watchedFiles) this._watchedFiles = new core.KeyedCollection<string, number>(this.vfs.stringComparer);
+            if (!this._watchedFilesSet) this._watchedFilesSet = new core.SortedSet<string>(this.vfs.stringComparer);
+
+            const previousCount = this._watchedFiles.get(path) || 0;
+            if (previousCount === 0) {
+                this._watchedFilesSet.add(path);
+            }
+
+            this._watchedFiles.set(path, previousCount + 1);
+
+            let watching = true;
+            const watcher = vfsutils.watchFile(this.vfs, path, (fileName, eventKind) => {
+                if (this.watchFiles) cb(fileName, eventKind);
             });
+            return {
+                close: () => {
+                    if (watching) {
+                        const previousCount = this._watchedFiles.get(path) || 0;
+                        if (previousCount === 1) {
+                            this._watchedFiles.delete(path);
+                            this._watchedFilesSet.delete(path);
+                        }
+                        else {
+                            this._watchedFiles.set(path, previousCount - 1);
+                        }
+                        watcher.close();
+                        watching = false;
+                    }
+                }
+            }
         }
 
         public watchDirectory(path: string, cb: ts.DirectoryWatcherCallback, recursive: boolean): ts.FileWatcher {
-            return this.vfs.watchDirectory(path, cb, recursive);
+            const watchedDirectories = recursive
+                ? this._watchedRecursiveDirectories || (this._watchedRecursiveDirectories = new core.KeyedCollection(this.vfs.stringComparer))
+                : this._watchedNonRecursiveDirectories || (this._watchedNonRecursiveDirectories = new core.KeyedCollection(this.vfs.stringComparer));
+
+            const watchedDirectoriesSet = recursive
+                ? this._watchedRecursiveDirectoriesSet || (this._watchedRecursiveDirectoriesSet = new core.SortedSet(this.vfs.stringComparer))
+                : this._watchedNonRecursiveDirectoriesSet || (this._watchedNonRecursiveDirectoriesSet = new core.SortedSet(this.vfs.stringComparer));
+
+            const previousCount = watchedDirectories.get(path) || 0;
+            if (previousCount === 0) {
+                watchedDirectoriesSet.add(path);
+            }
+
+            watchedDirectories.set(path, previousCount + 1);
+
+            let watcher: ts.FileWatcher | undefined = vfsutils.watchDirectory(this.vfs, path, fileName => {
+                if (this.watchDirectories) {
+                    cb(fileName);
+                }
+            });
+
+            return {
+                close: () => {
+                    if (watcher) {
+                        console.trace(`watchDirectory.close(path: "${path}", recursive: ${recursive})`);
+                        const previousCount = watchedDirectories.get(path) || 0;
+                        if (previousCount === 1) {
+                            watchedDirectories.delete(path);
+                            watchedDirectoriesSet.delete(path);
+                        }
+                        else {
+                            watchedDirectories.set(path, previousCount - 1);
+                        }
+
+                        watcher.close();
+                        watcher = undefined;
+                    }
+                }
+            }
         }
 
         public resolvePath(path: string) {
-            return vpath.resolve(this.vfs.currentDirectory, path);
+            return vpath.resolve(this.vfs.cwd(), path);
         }
 
         public getExecutingFilePath() {
@@ -208,8 +284,7 @@ namespace fakes {
         }
 
         public getModifiedTime(path: string) {
-            const stats = this.vfs.getStats(path);
-            return stats && stats.mtime;
+            return vfsutils.getModifiedTime(this.vfs, path);
         }
 
         public createHash(data: string): string {
@@ -217,7 +292,7 @@ namespace fakes {
         }
 
         public realpath(path: string) {
-            return this.vfs.realpath(path);
+            return this.vfs.realpathSync(path);
         }
 
         public getEnvironmentVariable(_name: string): string | undefined {
@@ -327,11 +402,11 @@ namespace fakes {
         }
 
         public checkWatchedFiles(expected: Iterable<string>) {
-            return checkSortedSet(this.vfs.watchedFiles, expected);
+            return checkSortedSet(this._watchedFilesSet, expected);
         }
 
         public checkWatchedDirectories(expected: Iterable<string>, recursive = false) {
-            return checkSortedSet(recursive ? this.vfs.watchedRecursiveDirectories : this.vfs.watchedNonRecursiveDirectories, expected);
+            return checkSortedSet(recursive ? this._watchedRecursiveDirectoriesSet : this._watchedNonRecursiveDirectoriesSet, expected);
         }
 
         public checkScreenClears(expected: number) {
@@ -339,11 +414,14 @@ namespace fakes {
         }
     }
 
-    function checkSortedSet<T>(set: ReadonlySet<T>, values: Iterable<T>) {
+    function checkSortedSet<T>(set: ReadonlySet<T> | undefined, values: Iterable<T>) {
         const array = Array.from(values);
-        assert.strictEqual(set.size, array.length, `Actual: ${Array.from(set)}, expected: ${array}.`);
-        for (const value of array) {
-            assert.isTrue(set.has(value));
+        const size = set ? set.size : 0;
+        assert.strictEqual(size, array.length, `Actual: ${set ? Array.from(set) : []}, expected: ${array}.`);
+        if (set) {
+            for (const value of array) {
+                assert.isTrue(set.has(value));
+            }
         }
     }
 }

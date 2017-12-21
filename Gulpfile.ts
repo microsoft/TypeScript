@@ -43,7 +43,7 @@ const constEnumCaptureRegexp = /^(\s*)(export )?const enum (\S+) {(\s*)$/gm;
 const constEnumReplacement = "$1$2enum $3 {$4";
 
 const cmdLineOptions = minimist(process.argv.slice(2), {
-    boolean: ["debug", "inspect", "light", "colors", "lint", "soft"],
+    boolean: ["debug", "inspect", "light", "colors", "lint", "soft", "bail"],
     string: ["browser", "tests", "host", "reporter", "stackTraceLimit", "timeout"],
     alias: {
         "b": "browser",
@@ -68,6 +68,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         runners: process.env.runners || process.env.runner || process.env.ru,
         light: process.env.light === undefined || process.env.light !== "false",
         reporter: process.env.reporter || process.env.r,
+        bail: false,
         lint: process.env.lint || true,
         files: process.env.f || process.env.file || process.env.files || "",
         workers: process.env.workerCount || os.cpus().length,
@@ -609,18 +610,60 @@ gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUse
 });
 
 gulp.task("typemock", () => {
-    const typemock = tsc.createProject("scripts/typemock/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ false));
-    return typemock.src()
+    const project = tsc.createProject("scripts/typemock/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ false));
+    return project.src()
         .pipe(sourcemaps.init())
-        .pipe(newer("scripts/typemock/dist"))
-        .pipe(typemock())
-        .pipe(sourcemaps.write(".", <any>{ includeContent: false, destPath: "scripts/typemock/dist" }))
+        .pipe(newer("scripts/typemock/dist/index.js"))
+        .pipe(project())
+        .pipe(sourcemaps.write(".", <any>{ sourceRoot: "../src", includeContent: false, destPath: "scripts/typemock/dist" }))
         .pipe(gulp.dest("scripts/typemock/dist"));
 });
 
+gulp.task("vfs-core", () => {
+    const project = tsc.createProject("scripts/vfs-core/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ false));
+    return project.src()
+        .pipe(sourcemaps.init())
+        .pipe(newer("scripts/vfs-core/dist/index.js"))
+        .pipe(project())
+        .pipe(sourcemaps.write(".", <any>{ sourceRoot: "../src", includeContent: false, destPath: "scripts/vfs-core/dist" }))
+        .pipe(gulp.dest("scripts/vfs-core/dist"));
+});
+
+gulp.task("vfs-errors", () => {
+    const project = tsc.createProject("scripts/vfs-errors/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ false));
+    return project.src()
+        .pipe(sourcemaps.init())
+        .pipe(newer("scripts/vfs-errors/dist/index.js"))
+        .pipe(project())
+        .pipe(sourcemaps.write(".", <any>{ sourceRoot: "../src", includeContent: false, destPath: "scripts/vfs-errors/dist" }))
+        .pipe(gulp.dest("scripts/vfs-errors/dist"));
+});
+
+gulp.task("vfs-path", ["vfs-core", "vfs-errors"], () => {
+    const project = tsc.createProject("scripts/vfs-path/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ false));
+    return project.src()
+        .pipe(sourcemaps.init())
+        .pipe(newer("scripts/vfs-path/dist/index.js"))
+        .pipe(project())
+        .pipe(sourcemaps.write(".", <any>{ sourceRoot: "../src", includeContent: false, destPath: "scripts/vfs-path/dist" }))
+        .pipe(gulp.dest("scripts/vfs-path/dist"));
+});
+
+gulp.task("vfs", ["vfs-core", "vfs-errors", "vfs-path"], () => {
+    const project = tsc.createProject("scripts/vfs/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ false));
+    return project.src()
+        .pipe(sourcemaps.init())
+        .pipe(newer("scripts/vfs/dist/index.js"))
+        .pipe(project())
+        .pipe(sourcemaps.write(".", <any>{ sourceRoot: "../src", includeContent: false, destPath: "scripts/vfs/dist" }))
+        .pipe(gulp.dest("scripts/vfs/dist"));
+});
+
+gulp.task("private-packages", ["typemock", "vfs"]);
+
 // Task to build the tests infrastructure using the built compiler
 const run = path.join(builtLocalDirectory, "run.js");
-gulp.task(run, /*help*/ false, [servicesFile, tsserverLibraryFile, "typemock"], () => {
+gulp.task(run, /*help*/ false, [servicesFile, tsserverLibraryFile, "private-packages"], () => {
     const testProject = tsc.createProject("src/harness/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
     return testProject.src()
         .pipe(newer(run))
@@ -670,6 +713,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
         const runners = cmdLineOptions.runners;
         const light = cmdLineOptions.light;
         const stackTraceLimit = cmdLineOptions.stackTraceLimit;
+        const bail = cmdLineOptions.bail;
         const testConfigFile = "test.config";
         if (fs.existsSync(testConfigFile)) {
             fs.unlinkSync(testConfigFile);
@@ -721,6 +765,9 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             }
             else {
                 args.push("-t", testTimeout);
+            }
+            if (bail) {
+                args.push("--bail");
             }
             args.push(run);
             setNodeEnvToDevelopment();

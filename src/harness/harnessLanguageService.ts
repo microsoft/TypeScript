@@ -124,7 +124,7 @@ namespace Harness.LanguageService {
 
     export abstract class LanguageServiceAdapterHost {
         public typesRegistry: ts.Map<void> | undefined;
-        public readonly vfs = new vfs.VirtualFileSystem(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/ false);
+        public readonly vfs = new vfs.FileSystem(/*ignoreCase*/ true, { cwd: virtualFileSystemRoot });
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.instance,
             protected settings = ts.getDefaultCompilerOptions()) {
@@ -136,32 +136,44 @@ namespace Harness.LanguageService {
 
         public getFilenames(): string[] {
             const fileNames: string[] = [];
-            for (const virtualEntry of this.vfs.getDirectory("/").getFiles({ recursive: true })) {
-                const scriptInfo = virtualEntry.metadata.get("scriptInfo") as ScriptInfo;
-                if (scriptInfo && scriptInfo.isRootFile) {
-                    // only include root files here
-                    // usually it means that we won't include lib.d.ts in the list of root files so it won't mess the computation of compilation root dir.
-                    fileNames.push(scriptInfo.fileName);
+            this.vfs.scanSync("/", "descendants-or-self", {
+                accept: (path, stats) => {
+                    if (stats.isFile()) {
+                        const scriptInfo = this.vfs.filemeta(path).get("scriptInfo") as ScriptInfo;
+                        if (scriptInfo && scriptInfo.isRootFile) {
+                            // only include root files here
+                            // usually it means that we won't include lib.d.ts in the list of root files so it won't mess the computation of compilation root dir.
+                            fileNames.push(scriptInfo.fileName);
+                        }
+                    }
+                    return false;
                 }
-            }
+            });
             return fileNames;
         }
 
         public getScriptInfo(fileName: string): ScriptInfo {
-            const fileEntry = this.vfs.getFile(fileName);
-            return fileEntry ? fileEntry.metadata.get("scriptInfo") : undefined;
+            try {
+                const meta = this.vfs.filemeta(fileName);
+                return meta ? meta.get("scriptInfo") : undefined;
+            }
+            catch {
+                return undefined;
+            }
         }
 
         public addScript(fileName: string, content: string, isRootFile: boolean): void {
-            this.vfs.addFile(fileName, content, { overwrite: true }).metadata.set("scriptInfo", new ScriptInfo(fileName, content, isRootFile));
+            this.vfs.mkdirpSync(vpath.dirname(fileName));
+            this.vfs.writeFileSync(fileName, content);
+            this.vfs.filemeta(fileName).set("scriptInfo", new ScriptInfo(fileName, content, isRootFile));
         }
 
         public editScript(fileName: string, start: number, end: number, newText: string) {
-            const file = this.vfs.getFile(fileName);
-            const script = file && file.metadata.get("scriptInfo") as ScriptInfo;
+            const script = this.getScriptInfo(fileName);
             if (script) {
                 script.editContent(start, end, newText);
-                file.content = script.content;
+                this.vfs.mkdirpSync(vpath.dirname(fileName));
+                this.vfs.writeFileSync(fileName, script.content);
                 return;
             }
 
@@ -195,11 +207,7 @@ namespace Harness.LanguageService {
         getCancellationToken() { return this.cancellationToken; }
 
         getDirectories(path: string): string[] {
-            const dir = this.vfs.getDirectory(path);
-            if (dir) {
-                return ts.map(dir.getDirectories(), (d) => ts.combinePaths(path, d.name));
-            }
-            return [];
+            return vfsutils.getDirectories(this.vfs, path).map(name => vpath.combine(path, name));
         }
 
         getCurrentDirectory(): string { return virtualFileSystemRoot; }
@@ -223,11 +231,11 @@ namespace Harness.LanguageService {
         }
 
         directoryExists(dirName: string): boolean {
-            return this.vfs.directoryExists(dirName);
+            return vfsutils.directoryExists(this.vfs, dirName);
         }
 
         fileExists(fileName: string): boolean {
-            return this.vfs.fileExists(fileName);
+            return vfsutils.fileExists(this.vfs, fileName);
         }
 
         readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
@@ -235,15 +243,15 @@ namespace Harness.LanguageService {
                 /*useCaseSensitiveFileNames*/ false,
                 this.getCurrentDirectory(),
                 depth,
-                (p) => this.vfs.getAccessibleFileSystemEntries(p));
+                (p) => vfsutils.getAccessibleFileSystemEntries(this.vfs, p));
         }
 
         readFile(path: string): string | undefined {
-            return this.vfs.readFile(path);
+            return vfsutils.readFile(this.vfs, path);
         }
 
         realpath(path: string): string {
-            return this.vfs.realpath(path);
+            return this.vfs.realpathSync(path);
         }
 
         getTypeRootsVersion() {

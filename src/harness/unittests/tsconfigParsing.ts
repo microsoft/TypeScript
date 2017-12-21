@@ -1,5 +1,7 @@
 /// <reference path="..\harness.ts" />
 /// <reference path="..\..\compiler\commandLineParser.ts" />
+/// <reference path="../compiler.ts" />
+/// <reference path="../vfs.ts" />
 
 namespace ts {
     describe("parseConfigFileTextToJson", () => {
@@ -31,13 +33,15 @@ namespace ts {
 
         function getParsedCommandJson(jsonText: string, configFileName: string, basePath: string, allFileList: string[]) {
             const parsed = ts.parseConfigFileTextToJson(configFileName, jsonText);
-            const host: ParseConfigHost = new Utils.MockParseConfigHost(basePath, true, allFileList);
+            const files = allFileList.reduce((files, value) => (files[value] = "", files), {} as vfs.FileMap);
+            const host: ParseConfigHost = new compiler.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: basePath, files: { "/": {}, ...files } }));
             return ts.parseJsonConfigFileContent(parsed.config, host, basePath, /*existingOptions*/ undefined, configFileName);
         }
 
         function getParsedCommandJsonNode(jsonText: string, configFileName: string, basePath: string, allFileList: string[]) {
             const parsed = ts.parseJsonText(configFileName, jsonText);
-            const host: ParseConfigHost = new Utils.MockParseConfigHost(basePath, true, allFileList);
+            const files = allFileList.reduce((files, value) => (files[value] = "", files), {} as vfs.FileMap);
+            const host: ParseConfigHost = new compiler.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: basePath, files: { "/": {}, ...files } }));
             return ts.parseJsonSourceFileConfigFileContent(parsed, host, basePath, /*existingOptions*/ undefined, configFileName);
         }
 
@@ -109,7 +113,7 @@ namespace ts {
                         "xx//file.d.ts"
                     ]
                 }`, { config: { exclude: ["xx//file.d.ts"] } });
-         assertParseResult(
+            assertParseResult(
                 `{
                     "exclude": [
                         "xx/*file.d.ts*/"

@@ -155,8 +155,8 @@ namespace ts {
         }
 
         function makeProgram(f: {path: string, content: string }, includeLib?: boolean) {
-            const host = new fakes.FakeServerHost({ lib: includeLib }); // libFile is expensive to parse repeatedly - only test when required
-            host.vfs.writeFile(f.path, f.content);
+            // libFile is expensive to parse repeatedly - only test when required
+            const host = new fakes.FakeServerHost({ lib: includeLib }, /*files*/ { [f.path]: f.content });
             const projectService = projectSystem.createProjectService(host);
             projectService.openClientFile(f.path);
             const program = projectService.inferredProjects[0].getLanguageService().getProgram();
@@ -176,8 +176,7 @@ namespace ts {
             if (!selectionRange) {
                 throw new Error(`Test ${caption} does not specify selection range`);
             }
-            const host = new fakes.FakeServerHost({ lib: true });
-            host.vfs.writeFile("/a.ts", t.source);
+            const host = new fakes.FakeServerHost({ lib: true }, /*files*/ { "/a.ts": t.source });
             const projectService = projectSystem.createProjectService(host);
             projectService.openClientFile("/a.ts");
             const program = projectService.inferredProjects[0].getLanguageService().getProgram();
