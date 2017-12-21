@@ -979,6 +979,12 @@ namespace ts.server {
         allowLocalPluginLoads
     };
 
+    if (logger.hasLevel(LogLevel.normal)) {
+        logger.info(`Starting TS Server`);
+        logger.info(`Version: ${versionMajorMinor}`);
+        logger.info(`Arguments: ${process.argv.join(" ")}`);
+    }
+
     const ioSession = new IOSession(options);
     process.on("uncaughtException", err => {
         ioSession.logError(err, "unknown");
