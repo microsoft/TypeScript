@@ -27,18 +27,13 @@ function walk(ctx: Lint.WalkContext<void>): void {
         rgx.lastIndex = firstNonSpace.index;
         const doubleSpace = rgx.exec(line);
         // Also allow to align comments after `@param`
-        // If there are more than 5 double spaces on a line, probably intentional
-        if (doubleSpace !== null && !line.includes("@param") && countDoubleSpaces(line.slice(firstNonSpace.index)) <= 5) {
+        if (doubleSpace !== null && !line.includes("@param")) {
             const pos = lines.slice(0, idx).reduce((len, line) => len + 1 + line.length, 0) + doubleSpace.index;
             if (!strings.some(s => s.getStart() <= pos && s.end > pos)) {
                 ctx.addFailureAt(pos + 1, 2, "Use only one space.");
             }
         }
     });
-}
-
-function countDoubleSpaces(line: string): number {
-    return (line.match(/\s\s/g) || []).length;
 }
 
 function getLiterals(sourceFile: ts.SourceFile): ReadonlyArray<ts.Node> {

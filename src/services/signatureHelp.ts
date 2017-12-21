@@ -253,9 +253,11 @@ namespace ts.SignatureHelp {
         //          not enough to put us in the substitution expression; we should consider ourselves part of
         //          the *next* span's expression by offsetting the index (argIndex = (spanIndex + 1) + 1).
         //
+        // tslint:disable no-double-space
         // Example: f  `# abcd $#{#  1 + 1#  }# efghi ${ #"#hello"#  }  #  `
         //              ^       ^ ^       ^   ^          ^ ^      ^     ^
         // Case:        1       1 3       2   1          3 2      2     1
+        // tslint:enable no-double-space
         Debug.assert(position >= node.getStart(), "Assumed 'position' could not occur before node.");
         if (isTemplateLiteralKind(node.kind)) {
             if (isInsideTemplateLiteral(<LiteralExpression>node, position)) {
@@ -307,8 +309,8 @@ namespace ts.SignatureHelp {
         // Otherwise, we will not show signature help past the expression.
         // For example,
         //
-        //      `  ${ 1 + 1        foo(10)
-        //       |        |
+        //      ` ${ 1 + 1 foo(10)
+        //       |       |
         // This is because a Missing node has no width. However, what we actually want is to include trivia
         // leading up to the next token in case the user is about to type in a TemplateMiddle or TemplateTail.
         if (template.kind === SyntaxKind.TemplateExpression) {
