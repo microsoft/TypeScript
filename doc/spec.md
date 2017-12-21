@@ -1536,7 +1536,7 @@ For the key query type `keyof T`:
 * If *T* is a type parameter, or is a union or intersection containing a type parameter, the result is a key query type of *T*.
 * If *T* is a mapped type, the result is the *constraint type* of the mapped type (see [#mapped-types]).
 * If *T* is the Any type, or *T* has a string index signature, the result is the type string.
-* Otherwise, the result is a union of string literal types, where each member of the union corresponds to a property of *T*.
+* Otherwise, the result is a union of string literal types, where each member of the union corresponds to a property name of the apparent type of *T*.
 
 ```ts
 function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
