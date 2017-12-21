@@ -22743,7 +22743,7 @@ namespace ts {
                                 checkTypeAssignableTo(typeWithThis,
                                     getTypeWithThisArgument(t, type.thisType),
                                     node.name || node,
-                                    t.symbol.flags & SymbolFlags.Class ?
+                                    t.symbol && t.symbol.flags & SymbolFlags.Class ?
                                         Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass :
                                         Diagnostics.Class_0_incorrectly_implements_interface_1);
                             }
