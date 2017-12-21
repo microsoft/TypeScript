@@ -1,0 +1,20 @@
+=== tests/cases/compiler/declarationUsesKeyofAliasWherePossible.ts ===
+var Foo = class Foo {
+>Foo : typeof Foo
+>class Foo {    method<T extends keyof ElementTagNameMap>() {};} : typeof Foo
+>Foo : typeof Foo
+
+    method<T extends keyof ElementTagNameMap>() {};
+>method : <T extends keyof ElementTagNameMap>() => void
+>T : T
+>ElementTagNameMap : ElementTagNameMap
+}
+
+class Bar {
+>Bar : Bar
+
+    method<T extends keyof ElementTagNameMap>() {};
+>method : <T extends keyof ElementTagNameMap>() => void
+>T : T
+>ElementTagNameMap : ElementTagNameMap
+}

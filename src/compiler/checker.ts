@@ -2609,7 +2609,11 @@ namespace ts {
                 if (!inTypeAlias && type.aliasSymbol && isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration)) {
                     const name = symbolToTypeReferenceName(type.aliasSymbol);
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
-                    return createTypeReferenceNode(name, typeArgumentNodes);
+                    const ref = createTypeReferenceNode(name, typeArgumentNodes);
+                    if (type.aliasKind === AliasKind.KeyOf) {
+                        return createTypeOperatorNode(ref);
+                    }
+                    return ref;
                 }
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
                     const types = type.flags & TypeFlags.Union ? formatUnionTypes((<UnionType>type).types) : (<IntersectionType>type).types;
@@ -3369,6 +3373,10 @@ namespace ts {
                     }
                     else if (!(flags & TypeFormatFlags.InTypeAlias) && type.aliasSymbol &&
                         ((flags & TypeFormatFlags.UseAliasDefinedOutsideCurrentScope) || isTypeSymbolAccessible(type.aliasSymbol, enclosingDeclaration))) {
+                        if (type.aliasKind === AliasKind.KeyOf) {
+                            writer.writeKeyword("keyof");
+                            writeSpace(writer);
+                        }
                         const typeArguments = type.aliasTypeArguments;
                         writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, length(typeArguments), nextFlags);
                     }
@@ -7886,7 +7894,7 @@ namespace ts {
         // expression constructs such as array literals and the || and ?: operators). Named types can
         // circularly reference themselves and therefore cannot be subtype reduced during their declaration.
         // For example, "type Item = string | (() => Item" is a named type that circularly references itself.
-        function getUnionType(types: Type[], unionReduction: UnionReduction = UnionReduction.Literal, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+        function getUnionType(types: Type[], unionReduction: UnionReduction = UnionReduction.Literal, aliasSymbol?: Symbol, aliasTypeArguments?: Type[], aliasKind?: AliasKind): Type {
             if (types.length === 0) {
                 return neverType;
             }
@@ -7913,7 +7921,7 @@ namespace ts {
                     typeSet.containsUndefined ? typeSet.containsNonWideningType ? undefinedType : undefinedWideningType :
                         neverType;
             }
-            return getUnionTypeFromSortedList(typeSet, aliasSymbol, aliasTypeArguments);
+            return getUnionTypeFromSortedList(typeSet, aliasSymbol, aliasTypeArguments, aliasKind);
         }
 
         function getUnionTypePredicate(signatures: ReadonlyArray<Signature>): TypePredicate {
@@ -7953,7 +7961,7 @@ namespace ts {
         }
 
         // This function assumes the constituent type list is sorted and deduplicated.
-        function getUnionTypeFromSortedList(types: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+        function getUnionTypeFromSortedList(types: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: Type[], aliasKind?: AliasKind): Type {
             if (types.length === 0) {
                 return neverType;
             }
@@ -7975,6 +7983,7 @@ namespace ts {
                 */
                 type.aliasSymbol = aliasSymbol;
                 type.aliasTypeArguments = aliasTypeArguments;
+                type.aliasKind = aliasKind;
             }
             return type;
         }
@@ -8096,7 +8105,19 @@ namespace ts {
         }
 
         function getLiteralTypeFromPropertyNames(type: Type) {
-            return getUnionType(map(getPropertiesOfType(type), getLiteralTypeFromPropertyName));
+            let aliasSymbol: Symbol;
+            let aliasTypeArguments: Type[];
+            if (type.aliasSymbol && !type.aliasKind) {
+                aliasSymbol = type.aliasSymbol;
+                aliasTypeArguments = type.aliasTypeArguments;
+            }
+            else if (type.aliasSymbol && type.aliasKind === AliasKind.KeyOf) {
+                aliasSymbol = getGlobalSymbol("String" as __String, SymbolFlags.Type, /*diagnostic*/ undefined);
+            }
+            else if (type.symbol && type.symbol.flags & SymbolFlags.Interface) {
+                aliasSymbol = type.symbol;
+            }
+            return getUnionType(map(getPropertiesOfType(type), getLiteralTypeFromPropertyName), UnionReduction.Literal, aliasSymbol, aliasTypeArguments, AliasKind.KeyOf);
         }
 
         function getIndexType(type: Type): Type {

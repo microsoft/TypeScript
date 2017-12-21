@@ -3449,6 +3449,12 @@ namespace ts {
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
         aliasSymbol?: Symbol;            // Alias associated with type
         aliasTypeArguments?: Type[];     // Alias type arguments (if any)
+        aliasKind?: AliasKind;           // Is eg, `keyof AliasSymbol<AliasTypeArguments>` and not `AliasSymbol<AliasTypeArguments>`
+    }
+
+    export const enum AliasKind {
+        None,
+        KeyOf
     }
 
     /* @internal */

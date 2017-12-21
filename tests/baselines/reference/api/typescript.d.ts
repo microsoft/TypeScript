@@ -2037,6 +2037,11 @@ declare namespace ts {
         pattern?: DestructuringPattern;
         aliasSymbol?: Symbol;
         aliasTypeArguments?: Type[];
+        aliasKind?: AliasKind;
+    }
+    enum AliasKind {
+        None = 0,
+        KeyOf = 1,
     }
     interface LiteralType extends Type {
         value: string | number;

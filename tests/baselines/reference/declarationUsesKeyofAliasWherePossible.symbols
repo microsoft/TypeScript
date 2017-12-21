@@ -1,0 +1,19 @@
+=== tests/cases/compiler/declarationUsesKeyofAliasWherePossible.ts ===
+var Foo = class Foo {
+>Foo : Symbol(Foo, Decl(declarationUsesKeyofAliasWherePossible.ts, 0, 3))
+>Foo : Symbol(Foo, Decl(declarationUsesKeyofAliasWherePossible.ts, 0, 9))
+
+    method<T extends keyof ElementTagNameMap>() {};
+>method : Symbol(Foo.method, Decl(declarationUsesKeyofAliasWherePossible.ts, 0, 21))
+>T : Symbol(T, Decl(declarationUsesKeyofAliasWherePossible.ts, 1, 11))
+>ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --))
+}
+
+class Bar {
+>Bar : Symbol(Bar, Decl(declarationUsesKeyofAliasWherePossible.ts, 2, 1))
+
+    method<T extends keyof ElementTagNameMap>() {};
+>method : Symbol(Bar.method, Decl(declarationUsesKeyofAliasWherePossible.ts, 4, 11))
+>T : Symbol(T, Decl(declarationUsesKeyofAliasWherePossible.ts, 5, 11))
+>ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --))
+}

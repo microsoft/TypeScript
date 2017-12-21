@@ -26,27 +26,27 @@ type T00 = keyof K0;  // Error
 >K0 : No type information available!
 
 type T01 = keyof Object;
->T01 : "toString" | "constructor" | "toLocaleString" | "valueOf" | "hasOwnProperty" | "isPrototypeOf" | "propertyIsEnumerable"
+>T01 : keyof Object
 >Object : Object
 
 type T02 = keyof keyof Object;
->T02 : "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
+>T02 : keyof String
 >Object : Object
 
 type T03 = keyof keyof keyof Object;
->T03 : "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
+>T03 : keyof String
 >Object : Object
 
 type T04 = keyof keyof keyof keyof Object;
->T04 : "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
+>T04 : keyof String
 >Object : Object
 
 type T05 = keyof keyof keyof keyof keyof Object;
->T05 : "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
+>T05 : keyof String
 >Object : Object
 
 type T06 = keyof keyof keyof keyof keyof keyof Object;
->T06 : "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
+>T06 : keyof String
 >Object : Object
 
 type T10 = Shape["name"];

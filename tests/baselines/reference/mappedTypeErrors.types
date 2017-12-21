@@ -75,7 +75,7 @@ type T13 = Pick<Shape, keyof Named>;
 >Named : Named
 
 type T14 = Pick<Shape, keyof Point>;  // Error
->T14 : Pick<Shape, "x" | "y">
+>T14 : Pick<Shape, keyof Point>
 >Pick : Pick<T, K>
 >Shape : Shape
 >Point : Point
@@ -117,7 +117,7 @@ function f2<T extends string | number>(x: T) {
 }
 
 function f3<T extends keyof Shape>(x: T) {
->f3 : <T extends "name" | "width" | "height" | "visible">(x: T) => void
+>f3 : <T extends keyof Shape>(x: T) => void
 >T : T
 >Shape : Shape
 >x : T

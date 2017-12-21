@@ -88,7 +88,7 @@ type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
 >Shape : Shape
 
 type K11 = keyof Shape[];  // "length" | "toString" | ...
->K11 : "length" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
+>K11 : keyof Array
 >Shape : Shape
 
 type K12 = keyof Dictionary<Shape>;  // string
@@ -100,7 +100,7 @@ type K13 = keyof {};  // never
 >K13 : never
 
 type K14 = keyof Object;  // "constructor" | "toString" | ...
->K14 : "toString" | "toLocaleString" | "valueOf" | "constructor" | "hasOwnProperty" | "isPrototypeOf" | "propertyIsEnumerable"
+>K14 : keyof Object
 >Object : Object
 
 type K15 = keyof E;  // "toString" | "toFixed" | "toExponential" | ...
