@@ -11401,23 +11401,6 @@ namespace ts {
                         }
                         return;
                     }
-                    else if (target.flags & TypeFlags.IndexedAccess) {
-                        const targetConstraint = (<IndexedAccessType>target).objectType;
-                        const inference = getInferenceInfoForType(targetConstraint);
-                        if (inference) {
-                            if (!inference.isFixed) {
-                                // Instantiates instance of `type PartialInference<T, Keys extends string> = ({[K in Keys]: {[K1 in K]: T}})[Keys];`
-                                // Where `T` is `source` and `Keys` is `target.indexType`
-                                const inferenceTypeSymbol = getGlobalSymbol("PartialInference" as __String, SymbolFlags.Type, Diagnostics.Cannot_find_global_type_0);
-                                const inferenceType = getDeclaredTypeOfSymbol(inferenceTypeSymbol);
-                                if (inferenceType !== unknownType) {
-                                    const mapper = createTypeMapper(getSymbolLinks(inferenceTypeSymbol).typeParameters, [source, (target as IndexedAccessType).indexType]);
-                                    (inference.indexes || (inference.indexes = [])).push(instantiateType(inferenceType, mapper));
-                                }
-                            }
-                            return;
-                        }
-                    }
                 }
                 if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
                     // If source and target are references to the same generic type, infer from type arguments
@@ -11448,6 +11431,23 @@ namespace ts {
                 else if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
                     inferFromTypes((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType);
                     inferFromTypes((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType);
+                }
+                else if (target.flags & TypeFlags.IndexedAccess) {
+                    const targetConstraint = (<IndexedAccessType>target).objectType;
+                    const inference = getInferenceInfoForType(targetConstraint);
+                    if (inference) {
+                        if (!inference.isFixed) {
+                            // Instantiates instance of `type PartialInference<T, Keys extends string> = ({[K in Keys]: {[K1 in K]: T}})[Keys];`
+                            // Where `T` is `source` and `Keys` is `target.indexType`
+                            const inferenceTypeSymbol = getGlobalSymbol("PartialInference" as __String, SymbolFlags.Type, Diagnostics.Cannot_find_global_type_0);
+                            const inferenceType = getDeclaredTypeOfSymbol(inferenceTypeSymbol);
+                            if (inferenceType !== unknownType) {
+                                const mapper = createTypeMapper(getSymbolLinks(inferenceTypeSymbol).typeParameters, [source, (target as IndexedAccessType).indexType]);
+                                (inference.indexes || (inference.indexes = [])).push(instantiateType(inferenceType, mapper));
+                            }
+                        }
+                        return;
+                    }
                 }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     const targetTypes = (<UnionOrIntersectionType>target).types;
