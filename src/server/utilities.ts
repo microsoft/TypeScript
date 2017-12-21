@@ -56,7 +56,8 @@ namespace ts.server {
             unresolvedImports,
             projectRootPath: getProjectRootPath(project),
             cachePath,
-            kind: "discover"
+            kind: "discover",
+            containsCommonJsRequire: project.containsCommonJsRequire(),
         };
     }
 

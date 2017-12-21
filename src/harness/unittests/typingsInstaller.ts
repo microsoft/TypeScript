@@ -1114,6 +1114,26 @@ namespace ts.projectSystem {
     describe("discover typings", () => {
         const emptySafeList = emptyMap;
 
+        it("should include node if this is commonjs", () => {
+            const app: FileOrFolder = {
+                path: "/app.js",
+                content: 'require("something")',
+            };
+            const safeList = createMapFromTemplate({ something: "something" });
+            const host = createServerHost([app]);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(app.path);
+            assert(first(projectService.inferredProjects).containsCommonJsRequire());
+            const logger = trackingLogger();
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), safeList, emptyMap, { enable: true }, ["something"], /*commonjs*/ true);
+            const finish = logger.finish();
+            assert.deepEqual(finish, [
+                'Inferred typings from unresolved imports: ["something"]',
+                'Result: {"cachedTypingPaths":[],"newTypingNames":["node","something"],"filesToWatch":["/bower_components","/node_modules"]}',
+            ]);
+            assert.deepEqual(result.newTypingNames, ["node", "something"]);
+        });
+
         it("should use mappings from safe list", () => {
             const app = {
                 path: "/a/b/app.js",
@@ -1132,7 +1152,7 @@ namespace ts.projectSystem {
 
             const host = createServerHost([app, jquery, chroma]);
             const logger = trackingLogger();
-            const result = JsTyping.discoverTypings(host, logger.log, [app.path, jquery.path, chroma.path], getDirectoryPath(<Path>app.path), safeList, emptyMap, { enable: true }, emptyArray);
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path, jquery.path, chroma.path], getDirectoryPath(<Path>app.path), safeList, emptyMap, { enable: true }, emptyArray, /*commonjs*/ false);
             const finish = logger.finish();
             assert.deepEqual(finish, [
                 'Inferred typings from file names: ["jquery","chroma-js"]',
@@ -1152,7 +1172,7 @@ namespace ts.projectSystem {
 
             for (const name of JsTyping.nodeCoreModuleList) {
                 const logger = trackingLogger();
-                const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, [name, "somename"]);
+                const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, [name, "somename"], /*commonjs*/ false);
                 assert.deepEqual(logger.finish(), [
                     'Inferred typings from unresolved imports: ["node","somename"]',
                     'Result: {"cachedTypingPaths":[],"newTypingNames":["node","somename"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
@@ -1173,7 +1193,7 @@ namespace ts.projectSystem {
             const host = createServerHost([f, node]);
             const cache = createMapFromTemplate<string>({ node: node.path });
             const logger = trackingLogger();
-            const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, ["fs", "bar"]);
+            const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, ["fs", "bar"], /*commonjs*/ false);
             assert.deepEqual(logger.finish(), [
                 'Inferred typings from unresolved imports: ["node","bar"]',
                 'Result: {"cachedTypingPaths":["/a/b/node.d.ts"],"newTypingNames":["bar"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
@@ -1198,7 +1218,7 @@ namespace ts.projectSystem {
             const host = createServerHost([app, a, b]);
             const cache = createMap<string>();
             const logger = trackingLogger();
-            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ []);
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ [], /*commonjs*/ false);
             assert.deepEqual(logger.finish(), [
                 'Searching for typing names in /node_modules; all files: ["/node_modules/a/package.json"]',
                 '    Found package names: ["a"]',

@@ -3968,6 +3968,7 @@ namespace ts {
         typeAcquisition: TypeAcquisition;               // Used to customize the type acquisition process
         compilerOptions: CompilerOptions;               // Used as a source for typing inference
         unresolvedImports: ReadonlyArray<string>;       // List of unresolved module ids from imports
+        containsCommonJsRequire: boolean;               // True if there is a `require()` call somewhere in the program
     }
 
     export enum ModuleKind {

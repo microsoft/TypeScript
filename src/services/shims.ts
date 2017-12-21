@@ -1163,7 +1163,8 @@ namespace ts {
                     this.safeList,
                     info.packageNameToTypingLocation,
                     info.typeAcquisition,
-                    info.unresolvedImports);
+                    info.unresolvedImports,
+                    info.containsCommonJsRequire);
             });
         }
     }
