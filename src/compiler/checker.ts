@@ -24452,6 +24452,7 @@ namespace ts {
                     return undefined;
 
                 case SyntaxKind.StringLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
                     // 1). import x = require("./mo/*gotToDefinitionHere*/d")
                     // 2). External module name in an import declaration
                     // 3). Dynamic import call or require in javascript
