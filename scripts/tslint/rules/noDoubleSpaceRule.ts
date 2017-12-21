@@ -19,7 +19,7 @@ function walk(ctx: Lint.WalkContext<void>): void {
         }
         // Allow common uses of double spaces
         // * To align `=` or `!=` signs
-        // * To alling comments at the end of lines
+        // * To align comments at the end of lines
         // * To indent inside a comment
         // * To use two spaces after a period
         // * To include aligned `->` in a comment
@@ -28,7 +28,7 @@ function walk(ctx: Lint.WalkContext<void>): void {
         const doubleSpace = rgx.exec(line);
         // Also allow to align comments after `@param`
         // If there are more than 5 double spaces on a line, probably intentional
-        if (doubleSpace !== null && !line.includes("@param") && countDoubleSpaces(line) <= 5) {
+        if (doubleSpace !== null && !line.includes("@param") && countDoubleSpaces(line.slice(firstNonSpace.index)) <= 5) {
             const pos = lines.slice(0, idx).reduce((len, line) => len + 1 + line.length, 0) + doubleSpace.index;
             if (!strings.some(s => s.getStart() <= pos && s.end > pos)) {
                 ctx.addFailureAt(pos + 1, 2, "Use only one space.");
@@ -38,17 +38,7 @@ function walk(ctx: Lint.WalkContext<void>): void {
 }
 
 function countDoubleSpaces(line: string): number {
-    let count = 0;
-    let idx = 0;
-    while (true) {
-        idx = line.indexOf("  ", idx);
-        if (idx === -1) {
-            return count;
-        }
-        // Start searching at the *next* character
-        idx++;
-        count++;
-    }
+    return (line.match(/\s\s/g) || []).length;
 }
 
 function getLiterals(sourceFile: ts.SourceFile): ReadonlyArray<ts.Node> {
