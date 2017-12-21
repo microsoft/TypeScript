@@ -873,7 +873,7 @@ namespace FourSlash {
             });
         }
 
-        public verifyCompletionListContains(entryId: ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean, options?: FourSlashInterface.VerifyCompletionListContainsOptions) {
+        public verifyCompletionListContains(entryId: ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string | { kind?: string, kindModifiers?: string }, spanIndex?: number, hasAction?: boolean, options?: FourSlashInterface.VerifyCompletionListContainsOptions) {
             const completions = this.getCompletionListAtCaret(options);
             if (completions) {
                 this.assertItemInCompletionList(completions.entries, entryId, text, documentation, kind, spanIndex, hasAction, options);
@@ -894,7 +894,7 @@ namespace FourSlash {
          * @param expectedKind the kind of symbol (see ScriptElementKind)
          * @param spanIndex the index of the range that the completion item's replacement text span should match
          */
-        public verifyCompletionListDoesNotContain(entryId: ts.Completions.CompletionEntryIdentifier, expectedText?: string, expectedDocumentation?: string, expectedKind?: string, spanIndex?: number, options?: FourSlashInterface.CompletionsAtOptions) {
+        public verifyCompletionListDoesNotContain(entryId: ts.Completions.CompletionEntryIdentifier, expectedText?: string, expectedDocumentation?: string, expectedKind?: string | { kind?: string, kindModifiers?: string }, spanIndex?: number, options?: FourSlashInterface.CompletionsAtOptions) {
             let replacementSpan: ts.TextSpan;
             if (spanIndex !== undefined) {
                 replacementSpan = this.getTextSpanForRangeAtIndex(spanIndex);
@@ -903,7 +903,7 @@ namespace FourSlash {
             const completions = this.getCompletionListAtCaret(options);
             if (completions) {
                 let filterCompletions = completions.entries.filter(e => e.name === entryId.name && e.source === entryId.source);
-                filterCompletions = expectedKind ? filterCompletions.filter(e => e.kind === expectedKind) : filterCompletions;
+                filterCompletions = expectedKind ? filterCompletions.filter(e => e.kind === expectedKind || (typeof expectedKind === "object" && e.kind === expectedKind.kind)) : filterCompletions;
                 filterCompletions = filterCompletions.filter(entry => {
                     const details = this.getCompletionEntryDetails(entry.name);
                     const documentation = details && ts.displayPartsToString(details.documentation);
@@ -3090,7 +3090,7 @@ Actual: ${stringify(fullActual)}`);
             entryId: ts.Completions.CompletionEntryIdentifier,
             text: string | undefined,
             documentation: string | undefined,
-            kind: string | undefined,
+            kind: string | undefined | { kind?: string, kindModifiers?: string },
             spanIndex: number | undefined,
             hasAction: boolean | undefined,
             options: FourSlashInterface.VerifyCompletionListContainsOptions | undefined,
@@ -3124,8 +3124,20 @@ Actual: ${stringify(fullActual)}`);
             }
 
             if (kind !== undefined) {
-                assert.equal(item.kind, kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + entryId));
+                if (typeof kind === "string") {
+                    assert.equal(item.kind, kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + entryId));
+                }
+                else {
+                    if (kind.kind) {
+                        assert.equal(item.kind, kind.kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + entryId));
+                    }
+                    if (kind.kindModifiers !== undefined) {
+                        assert.equal(item.kindModifiers, kind.kindModifiers, this.assertionMessageAtLastKnownMarker("completion item kindModifiers for " + entryId));
+                    }
+                }
             }
+
+
 
             if (spanIndex !== undefined) {
                 const span = this.getTextSpanForRangeAtIndex(spanIndex);
@@ -3840,7 +3852,7 @@ namespace FourSlashInterface {
 
         // Verifies the completion list contains the specified symbol. The
         // completion list is brought up if necessary
-        public completionListContains(entryId: string | ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean, options?: VerifyCompletionListContainsOptions) {
+        public completionListContains(entryId: string | ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string | { kind?: string, kindModifiers?: string }, spanIndex?: number, hasAction?: boolean, options?: VerifyCompletionListContainsOptions) {
             if (typeof entryId === "string") {
                 entryId = { name: entryId, source: undefined };
             }

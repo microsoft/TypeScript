@@ -145,7 +145,7 @@ declare namespace FourSlashInterface {
             entryId: string | { name: string, source?: string },
             text?: string,
             documentation?: string,
-            kind?: string,
+            kind?: string | { kind?: string, kindModifiers?: string },
             spanIndex?: number,
             hasAction?: boolean,
             options?: { includeExternalModuleExports?: boolean, sourceDisplay?: string, isRecommended?: true },
