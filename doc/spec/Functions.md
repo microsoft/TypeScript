@@ -22,13 +22,15 @@ When a function has both overloads and an implementation, the overloads must pre
 ## Function Overloads { #function-overloads }
 
 Function overloads allow a more accurate specification of the patterns of invocation supported by a function than is possible with a single signature.
-The compile-time processing of a call to an overloaded function chooses the best candidate overload for the particular arguments and the return type of that overload becomes the result type the function call expression.
-Thus, using overloads it is possible to statically describe the manner in which a function's return type varies based on its arguments.
+A call to an overloaded function chooses the best overload for the provided arguments and the return type of that overload becomes the type of the function call expression.
+Thus, using overloads, it is possible to statically describe the way a function's return type varies based on its arguments.
 Overload resolution in function calls is described further in section [#function-calls]<!--4.15-->.
 
-Function overloads are purely a compile-time construct. They have no impact on the emitted JavaScript and thus no run-time cost.
+Function overloads are purely a compile-time construct.
+They have no impact on the emitted JavaScript and thus no run-time cost.
 
-The parameter list of a function overload cannot specify default values for parameters. In other words, an overload may use only the `?` form when specifying optional parameters.
+The parameter list of a function overload cannot specify default values for parameters.
+In other words, an overload may use only the `?` form when specifying optional parameters.
 
 The following is an example of a function with overloads.
 
@@ -46,7 +48,8 @@ function attr(nameOrMap: any, value?: string): any {
 }
 ```
 
-Note that each overload and the final implementation specify the same identifier. The type of the local variable 'attr' introduced by this declaration is
+Each overload and the final implementation specify the same identifier.
+The type of the local variable 'attr' introduced by this declaration is
 
 ```TypeScript
 var attr: {
@@ -56,7 +59,7 @@ var attr: {
 };
 ```
 
-Note that the signature of the actual function implementation is not included in the type.
+The signature of the function implementation is not included in the type.
 
 ## Function Implementations { #function-implementations }
 
