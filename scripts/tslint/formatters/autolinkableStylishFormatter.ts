@@ -1,5 +1,5 @@
 import * as Lint from "tslint";
-import * as colors from "colors";
+import chalk from "chalk";
 import { sep } from "path";
 function groupBy<T>(array: ReadonlyArray<T> | undefined, getGroupId: (elem: T, index: number) => number | string): T[][] {
     if (!array) {
@@ -52,7 +52,7 @@ function getLink(failure: Lint.RuleFailure, color: boolean): string {
     if (path.indexOf("/") === -1 && path.indexOf("\\") === -1) {
         path = `.${sep}${path}`;
     }
-    return `${color ? (sev === "WARNING" ? colors.blue(sev) : colors.red(sev)) : sev}: ${path}:${lineAndCharacter.line + 1}:${lineAndCharacter.character + 1}`;
+    return `${color ? (sev === "WARNING" ? chalk.blue(sev) : chalk.red(sev)) : sev}: ${path}:${lineAndCharacter.line + 1}:${lineAndCharacter.character + 1}`;
 }
 
 function getLinkMaxSize(failures: Lint.RuleFailure[]): number {
@@ -91,7 +91,7 @@ export class Formatter extends Lint.Formatters.AbstractFormatter {
             const nameMaxSize = getNameMaxSize(group);
             return `
 ${currentFile}
-${group.map(f => `${pad(getLink(f, /*color*/ true), getLink(f, /*color*/ false).length, linkMaxSize)} ${colors.grey(pad(f.getRuleName(), f.getRuleName().length, nameMaxSize))} ${colors.yellow(f.getFailure())}`).join("\n")}`;
+${group.map(f => `${pad(getLink(f, /*color*/ true), getLink(f, /*color*/ false).length, linkMaxSize)} ${chalk.grey(pad(f.getRuleName(), f.getRuleName().length, nameMaxSize))} ${chalk.yellow(f.getFailure())}`).join("\n")}`;
         }).join("\n");
     }
 }

@@ -89,3 +89,17 @@ class SelfAssert {
         }
     }
 }
+
+interface Indexed {
+    [s: string]: any;
+}
+
+function f(i: Indexed) {
+    if ("a" in i) {
+        return i.a;
+    }
+    else if ("b" in i) {
+        return i.b;
+    }
+    return "c" in i && i.c;
+}

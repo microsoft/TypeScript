@@ -176,7 +176,8 @@ namespace Harness.LanguageService {
          */
         public positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter {
             const script: ScriptInfo = this.getScriptInfo(fileName);
-            assert(!!script);
+            assert.isOk(script);
+
             return ts.computeLineAndCharacterOfPosition(script.getLineMap(), position);
         }
     }
@@ -378,7 +379,7 @@ namespace Harness.LanguageService {
                     classification: parseInt(result[i + 1])
                 };
 
-                assert(t.length > 0, "Result length should be greater than 0, got :" + t.length);
+                assert.isTrue(t.length > 0, "Result length should be greater than 0, got :" + t.length);
                 position += t.length;
             }
             const finalLexState = parseInt(result[result.length - 1]);
@@ -521,9 +522,10 @@ namespace Harness.LanguageService {
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): ts.TextSpan {
             return unwrapJSONCallResult(this.shim.getSpanOfEnclosingComment(fileName, position, onlyMultiLine));
         }
-        getCodeFixesAtPosition(): ts.CodeAction[] {
+        getCodeFixesAtPosition(): never {
             throw new Error("Not supported on the shim.");
         }
+        getCombinedCodeFix = ts.notImplemented;
         applyCodeActionCommand = ts.notImplemented;
         getCodeFixDiagnostics(): ts.Diagnostic[] {
             throw new Error("Not supported on the shim.");
