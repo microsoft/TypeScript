@@ -5123,11 +5123,11 @@ namespace ts {
             return type.resolvedBaseTypes;
         }
 
-        function resolveBaseTypesOfClass(type: InterfaceType): void {
-            type.resolvedBaseTypes = emptyArray;
+        function resolveBaseTypesOfClass(type: InterfaceType) {
+            type.resolvedBaseTypes = resolvingEmptyArray;
             const baseConstructorType = getApparentType(getBaseConstructorTypeOfClass(type));
             if (!(baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.Any))) {
-                return;
+                return type.resolvedBaseTypes = emptyArray;
             }
             const baseTypeNode = getBaseTypeNodeOfClass(type);
             const typeArgs = typeArgumentsFromTypeReferenceNode(baseTypeNode);
@@ -5150,24 +5150,31 @@ namespace ts {
                 const constructors = getInstantiatedConstructorsForTypeArguments(baseConstructorType, baseTypeNode.typeArguments, baseTypeNode);
                 if (!constructors.length) {
                     error(baseTypeNode.expression, Diagnostics.No_base_constructor_has_the_specified_number_of_type_arguments);
-                    return;
+                    return type.resolvedBaseTypes = emptyArray;
                 }
                 baseType = getReturnTypeOfSignature(constructors[0]);
             }
 
             if (baseType === unknownType) {
-                return;
+                return type.resolvedBaseTypes = emptyArray;
             }
             if (!isValidBaseType(baseType)) {
                 error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_a_class_or_interface_type, typeToString(baseType));
-                return;
+                return type.resolvedBaseTypes = emptyArray;
             }
             if (type === baseType || hasBaseType(baseType, type)) {
                 error(type.symbol.valueDeclaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type,
                     typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
-                return;
+                return type.resolvedBaseTypes = emptyArray;
             }
-            type.resolvedBaseTypes = [baseType];
+            if (type.resolvedBaseTypes === resolvingEmptyArray) {
+                // Circular reference, likely through instantiation of default parameters
+                // (otherwise there'd be an error from hasBaseType) - this is fine, but `.members` should be reset
+                // as `getIndexedAccessType` via `instantiateType` via `getTypeFromClassOrInterfaceReference` forces a
+                // partial instantiation of the members without the base types fully resolved
+                (type as Type as ResolvedType).members = undefined;
+            }
+            return type.resolvedBaseTypes = [baseType];
         }
 
         function areAllOuterTypeParametersApplied(type: Type): boolean {
