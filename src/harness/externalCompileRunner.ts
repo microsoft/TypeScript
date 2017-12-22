@@ -60,6 +60,9 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                     if (fs.existsSync(path.join(cwd, "package-lock.json"))) {
                         fs.unlinkSync(path.join(cwd, "package-lock.json"));
                     }
+                    if (fs.existsSync(path.join(cwd, "node_modules"))) {
+                        require("del").sync(path.join(cwd, "node_modules"));
+                    }
                     const install = cp.spawnSync(`npm`, ["i"], { cwd, timeout, shell: true, stdio });
                     if (install.status !== 0) throw new Error(`NPM Install for ${directoryName} failed: ${install.stderr.toString()}`);
                 }
