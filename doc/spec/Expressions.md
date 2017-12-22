@@ -434,34 +434,30 @@ If *func* has apparent call signatures (section [#apparent-members]<!--3.11.1-->
 
 ### Overload Resolution { #overload-resolution }
 
-The purpose of overload resolution in a function call is to ensure that at least one signature is applicable, to provide contextual types for the arguments, and to determine the result type of the function call, which could differ between the multiple applicable signatures. Overload resolution has no impact on the run-time behavior of a function call. Since JavaScript doesn't support function overloading, all that matters at run-time is the name of the function.
+The purpose of overload resolution in a function call is to ensure that at least one signature is applicable, to provide contextual types for the arguments, and to determine the result type of the function call, which could differ between the multiple applicable signatures.
+Overload resolution has no impact on the run-time behavior of a function call.
+Since JavaScript doesn't support function overloading, all that matters at run-time is the name of the function.
 
 *TODO: Describe use of [wildcard function types](https://github.com/Microsoft/TypeScript/issues/3970) in overload resolution*.
+(Jason meant "anyFunctionType", which has weird effects all over overload resolution and inference)
 
-The compile-time processing of a typed function call consists of the following steps:
+Processing a typed function call consists of the following steps:
 
-* First, a list of candidate signatures is constructed from the call signatures in the function type in declaration order. For classes and interfaces, inherited signatures are considered to follow explicitly declared signatures in `extends` clause order.
-  * A non-generic signature is a candidate when
-    * the function call has no type arguments, and
-    * the signature is applicable with respect to the argument list of the function call.
-  * A generic signature is a candidate in a function call without type arguments when
-    * type inference (section [#type-argument-inference]<!--4.15.2-->) succeeds for each type parameter,
-    * once the inferred type arguments are substituted for their associated type parameters, the signature is applicable with respect to the argument list of the function call.
-  * A generic signature is a candidate in a function call with type arguments when
-    * The signature has the same number of type parameters as were supplied in the type argument list,
-    * the type arguments satisfy their constraints, and
-    * once the type arguments are substituted for their associated type parameters, the signature is applicable with respect to the argument list of the function call.
-* If the list of candidate signatures is empty, the function call is an error.
-* Otherwise, if the candidate list contains one or more signatures for which the type of each argument expression is a subtype of each corresponding parameter type, the return type of the first of those signatures becomes the return type of the function call.
-* Otherwise, the return type of the first signature in the candidate list becomes the return type of the function call.
+* A list of signatures is constructed from the call signatures in the function type in declaration order. For classes and interfaces, inherited signatures are considered to follow explicitly declared signatures in `extends` clause order.
+* Signatures that are not applicable are removed.
+* If the list of signatures is empty, the function call is an error.
+* Otherwise, if the list contains one or more signatures for which the type of each argument expression is a subtype of each corresponding parameter type after type arguments are substituted for their associated type parameters, the return type of the first of those signatures becomes the type of the function call.
+* Otherwise, the return type of the first signature in the list becomes the type of the function call.
 
 A signature is said to be an ***applicable signature*** with respect to an argument list when
 
 * the number of arguments is not less than the number of required parameters,
-* the number of arguments is not greater than the number of parameters, and
-* for each argument expression *e* and its corresponding parameter *P,* when *e* is contextually typed (section [#contextually-typed-expressions]<!--4.23-->) by the type of *P*, no errors ensue and the type of *e* is assignable to (section [#assignment-compatibility]<!--3.11.4-->) the type of *P*.
+* the number of arguments is not greater than the number of parameters, or the last parameter is a rest parameter.
+* the number of type arguments, if provided, is not less than the number of required type parameters,
+* the number of type arguments, if provided, is not greater than the number of type parameters,
+* for each argument expression *e* and its corresponding parameter *p,* when *e* is contextually typed (section [#contextually-typed-expressions]<!--4.23-->) by the *T*, no errors ensue and the type of *e* is assignable to (section [#assignment-compatibility]<!--3.11.4-->) *T*, where *T* is the type of *p* for signatures without type parameters, and the type of *p* after type arguments are substituted for their associated type parameters otherwise.
 
-*TODO: [Spread operator in function calls](https://github.com/Microsoft/TypeScript/pull/1931) and spreading an [iterator](https://github.com/Microsoft/TypeScript/pull/2498) into a function call*.
+*TODO: Spreading an [iterator](https://github.com/Microsoft/TypeScript/pull/2498) into a function call*.
 
 ### Type Argument Inference { #type-argument-inference }
 
