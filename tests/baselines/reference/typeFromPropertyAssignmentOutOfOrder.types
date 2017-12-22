@@ -1,0 +1,42 @@
+=== tests/cases/conformance/salsa/index.js ===
+Common.Item = class I {}
+>Common.Item = class I {} : typeof I
+>Common.Item : any
+>Common : any
+>Item : any
+>class I {} : typeof I
+>I : typeof I
+
+Common.Object = class extends Common.Item {}
+>Common.Object = class extends Common.Item {} : typeof (Anonymous class)
+>Common.Object : any
+>Common : any
+>Object : any
+>class extends Common.Item {} : typeof (Anonymous class)
+>Common.Item : any
+>Common : any
+>Item : any
+
+Workspace.Object = class extends Common.Object {}
+>Workspace.Object = class extends Common.Object {} : typeof (Anonymous class)
+>Workspace.Object : any
+>Workspace : any
+>Object : any
+>class extends Common.Object {} : typeof (Anonymous class)
+>Common.Object : any
+>Common : any
+>Object : any
+
+/** @type {Workspace.Object} */
+var am;
+>am : (Anonymous class)
+
+=== tests/cases/conformance/salsa/roots.js ===
+var Common = {};
+>Common : any
+>{} : { [x: string]: any; }
+
+var Workspace = {};
+>Workspace : any
+>{} : { [x: string]: any; }
+

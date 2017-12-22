@@ -228,6 +228,37 @@ namespace ts.projectSystem {
             projectService.checkNumberOfProjects({ externalProjects: 1 });
         });
 
+        it("external project - deduplicate from local @types packages", () => {
+            const appJs = {
+                path: "/a/b/app.js",
+                content: ""
+            };
+            const nodeDts = {
+                path: "/node_modules/@types/node/index.d.ts",
+                content: "declare var node;"
+            };
+            const host = createServerHost([appJs, nodeDts]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { typesRegistry: createTypesRegistry("node") });
+                }
+                installWorker() {
+                    assert(false, "nothing should get installed");
+                }
+            })();
+
+            const projectFileName = "/a/app/test.csproj";
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openExternalProject({
+                projectFileName,
+                options: {},
+                rootFiles: [toExternalFile(appJs.path)],
+                typeAcquisition: { enable: true, include: ["node"] }
+            });
+            installer.checkPendingCommands(/*expectedCount*/ 0);
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+        });
+
         it("external project - no auto in typing acquisition, no .d.ts/js files", () => {
             const file1 = {
                 path: "/a/b/app.ts",
@@ -978,7 +1009,7 @@ namespace ts.projectSystem {
             installer.installAll(/*expectedCount*/ 1);
         });
 
-        it("cached unresolved typings are not recomputed if program structure did not change", () => {
+        it("should recompute resolutions after typings are installed", () => {
             const host = createServerHost([]);
             const session = createSession(host);
             const f = {
@@ -1020,7 +1051,7 @@ namespace ts.projectSystem {
             session.executeCommand(changeRequest);
             host.checkTimeoutQueueLengthAndRun(2); // This enqueues the updategraph and refresh inferred projects
             const version2 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
-            assert.equal(version1, version2, "set of unresolved imports should not change");
+            assert.notEqual(version1, version2, "set of unresolved imports should change");
         });
     });
 

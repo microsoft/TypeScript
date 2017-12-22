@@ -138,7 +138,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a class property declaration must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Um nome de propriedade computado em uma declaração de propriedade de classe deve se referir a uma expressão cujo tipo é um tipo literal ou um 'símbolo exclusivo'.]]></Val>
+            <Val><![CDATA[Um nome de propriedade computado em uma declaração de propriedade de classe deve se referir a uma expressão cujo tipo é um tipo literal ou um 'unique symbol'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -147,7 +147,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Um nome de propriedade computado em uma sobrecarga do método deve se referir a uma expressão cujo tipo é um tipo literal ou um 'símbolo exclusivo'.]]></Val>
+            <Val><![CDATA[Um nome de propriedade computado em uma sobrecarga do método deve se referir a uma expressão cujo tipo é um tipo literal ou um 'unique symbol'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -156,7 +156,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Um nome de propriedade computado em um tipo literal deve se referir a uma expressão cujo tipo é um tipo literal ou um 'símbolo exclusivo'.]]></Val>
+            <Val><![CDATA[Um nome de propriedade computado em um tipo literal deve se referir a uma expressão cujo tipo é um tipo literal ou um 'unique symbol'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -165,7 +165,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in an ambient context must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Um nome de propriedade computado em um contexto de ambiente deve se referir a uma expressão cujo tipo é um tipo literal ou um 'símbolo exclusivo'.]]></Val>
+            <Val><![CDATA[Um nome de propriedade computado em um contexto de ambiente deve se referir a uma expressão cujo tipo é um tipo literal ou um 'unique symbol'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -174,7 +174,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Um nome de propriedade computado em uma interface deve se referir a uma expressão cujo tipo é um tipo literal ou um 'símbolo exclusivo'.]]></Val>
+            <Val><![CDATA[Um nome de propriedade computado em uma interface deve se referir a uma expressão cujo tipo é um tipo literal ou um 'unique symbol'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -210,7 +210,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'const' initializer in an ambient context must be a string or numeric literal.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Um inicializador "const" em um contexto de ambiente deve ser uma cadeia ou um literal numérico.]]></Val>
+            <Val><![CDATA[Um inicializador 'const' em um contexto de ambiente deve ser uma cadeia ou um literal numérico.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -276,7 +276,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A decorator can only decorate a method implementation, not an overload.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Um decorador pode decoras somente uma implementação de método, não uma sobrecarga.]]></Val>
+            <Val><![CDATA[Um decorador pode decorar somente uma implementação de método, não uma sobrecarga.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -411,7 +411,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O inicializador de um membro em uma declaração enum não pode referenciar membros declarados depois dele, inclusive membros definidos em outros enums.]]></Val>
+            <Val><![CDATA[O inicializador de um membro em uma declaração de enumeração não pode referenciar membros declarados depois dele, inclusive membros definidos em outras enumerações.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -525,7 +525,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Uma propriedade de uma classe cujo tipo é um tipo de 'símbolo exclusivo' deve ser 'estática' e 'somente leitura'.]]></Val>
+            <Val><![CDATA[Uma propriedade de uma classe cujo tipo é um tipo de 'unique symbol' deve ser 'static' e 'readonly'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -534,7 +534,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A property of an interface or type literal whose type is a 'unique symbol' type must be 'readonly'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Uma propriedade de uma interface ou tipo literal cujo tipo é um tipo de 'símbolo exclusivo' deve ser 'somente leitura'.]]></Val>
+            <Val><![CDATA[Uma propriedade de uma interface ou tipo literal cujo tipo é um tipo de 'unique symbol' deve ser 'readonly'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -786,7 +786,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A variable whose type is a 'unique symbol' type must be 'const'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Uma variável cujo tipo é um tipo de 'símbolo exclusivo' deve ser 'const'.]]></Val>
+            <Val><![CDATA[Uma variável cujo tipo é um tipo de 'unique symbol' deve ser 'const'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -856,48 +856,57 @@
       </Item>
       <Item ItemId=";Add_0_to_existing_import_declaration_from_1_90015" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add '{0}' to existing import declaration from "{1}".]]></Val>
+          <Val><![CDATA[Add '{0}' to existing import declaration from "{1}"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Adicione "{0}" à declaração de importação existente de "{1}".]]></Val>
+            <Val><![CDATA[Adicionar '{0}' à declaração de importação existente de "{1}"]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Add {0} to existing import declaration from {1}.]]></Val>
+            <Val><![CDATA[Add '{0}' to existing import declaration from "{1}".]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_index_signature_for_property_0_90017" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add index signature for property '{0}'.]]></Val>
+          <Val><![CDATA[Add index signature for property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Adicione assinatura de índice para a propriedade '{0}'.]]></Val>
+            <Val><![CDATA[Adicionar assinatura de índice para a propriedade '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Add index signature for property '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_missing_super_call_90001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add missing 'super()' call.]]></Val>
+          <Val><![CDATA[Add missing 'super()' call]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Adicionar chamada 'super()' ausente.]]></Val>
+            <Val><![CDATA[Adicionar chamada 'super()' ausente]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Add missing 'super()' call.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_this_to_unresolved_variable_90008" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add 'this.' to unresolved variable.]]></Val>
+          <Val><![CDATA[Add 'this.' to unresolved variable]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Adicione 'this.' a uma variável não resolvida.]]></Val>
+            <Val><![CDATA[Adicionar 'this.' a uma variável não resolvida]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Add 'this.' to unresolved variable.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript__90009" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript__5068" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Adicionar um arquivo tsconfig.json ajuda a organizar projetos que contêm arquivos TypeScript e JavaScript. Saiba mais em https://aka.ms/tsconfig.]]></Val>
+            <Val><![CDATA[Adicionar um arquivo tsconfig.json ajudará a organizar projetos que contêm arquivos TypeScript e JavaScript. Saiba mais em https://aka.ms/tsconfig.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1041,7 +1050,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An arithmetic operand must be of type 'any', 'number' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Um operando aritmético deve ser do tipo 'any', 'number' ou um tipo enum.]]></Val>
+            <Val><![CDATA[Um operando aritmético deve ser do tipo 'any', 'number' ou um tipo de enumeração.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1086,7 +1095,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An enum member cannot have a numeric name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Um membro enum não pode ter um nome numérico.]]></Val>
+            <Val><![CDATA[Um membro de enumeração não pode ter um nome numérico.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1528,10 +1537,13 @@
       </Item>
       <Item ItemId=";Call_decorator_expression_90028" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Call decorator expression.]]></Val>
+          <Val><![CDATA[Call decorator expression]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Chamar expressão decoradora.]]></Val>
+            <Val><![CDATA[Chamar expressão do decorador]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Call decorator expression.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1942,31 +1954,37 @@
       </Item>
       <Item ItemId=";Change_0_to_1_90014" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Change '{0}' to '{1}'.]]></Val>
+          <Val><![CDATA[Change '{0}' to '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Alterar '{0}' para '{1}'.]]></Val>
+            <Val><![CDATA[Alterar '{0}' para '{1}']]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Change {0} to {1}.]]></Val>
+            <Val><![CDATA[Change '{0}' to '{1}'.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Change_extends_to_implements_90003" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Change 'extends' to 'implements'.]]></Val>
+          <Val><![CDATA[Change 'extends' to 'implements']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Altere 'extends' para 'implements'.]]></Val>
+            <Val><![CDATA[Alterar 'extends' para 'implements']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Change 'extends' to 'implements'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Change_spelling_to_0_90022" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Change spelling to '{0}'.]]></Val>
+          <Val><![CDATA[Change spelling to '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Alterar ortografia para '{0}'.]]></Val>
+            <Val><![CDATA[Alterar ortografia para '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Change spelling to '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2166,7 +2184,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Computed values are not permitted in an enum with string valued members.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Os valores computados não são permitidos em um enum com membros de valor de cadeia de caracteres.]]></Val>
+            <Val><![CDATA[Os valores computados não são permitidos em uma enumeração com membros de valor de cadeia de caracteres.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2338,37 +2356,49 @@
       </Item>
       <Item ItemId=";Declare_method_0_90023" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Declare method '{0}'.]]></Val>
+          <Val><![CDATA[Declare method '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Declare o método '{0}'.]]></Val>
+            <Val><![CDATA[Declarar método '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Declare method '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Declare_property_0_90016" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Declare property '{0}'.]]></Val>
+          <Val><![CDATA[Declare property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Declare a propriedade '{0}'.]]></Val>
+            <Val><![CDATA[Declarar propriedade '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Declare property '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Declare_static_method_0_90024" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Declare static method '{0}'.]]></Val>
+          <Val><![CDATA[Declare static method '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Declare o método estático '{0}'.]]></Val>
+            <Val><![CDATA[Declarar método estático '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Declare static method '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Declare_static_property_0_90027" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Declare static property '{0}'.]]></Val>
+          <Val><![CDATA[Declare static property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Declare a propriedade estática "{0}".]]></Val>
+            <Val><![CDATA[Declarar propriedade estática '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Declare static property '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2446,10 +2476,13 @@
       </Item>
       <Item ItemId=";Disable_checking_for_this_file_90018" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable checking for this file.]]></Val>
+          <Val><![CDATA[Disable checking for this file]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Desabilitar a verificação para esse arquivo.]]></Val>
+            <Val><![CDATA[Desabilitar a verificação para esse arquivo]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disable checking for this file.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2874,7 +2907,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum '{0}' used before its declaration.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Enum '{0}' usada antes de sua declaração.]]></Val>
+            <Val><![CDATA[A enumeração '{0}' usada antes de sua declaração.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2883,7 +2916,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum declarations must all be const or non-const.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Declarações enum devem ser const ou não const.]]></Val>
+            <Val><![CDATA[Declarações de enumeração devem ser const ou não const.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2892,7 +2925,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum member expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Membro enum esperado.]]></Val>
+            <Val><![CDATA[Membro de enumeração esperado.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2901,7 +2934,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum member must have initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O membro enum deve ter um inicializador.]]></Val>
+            <Val><![CDATA[O membro de enumeração deve ter um inicializador.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2910,7 +2943,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum name cannot be '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O nome de enum não pode ser '{0}'.]]></Val>
+            <Val><![CDATA[O nome de enumeração não pode ser '{0}'.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Enum name cannot be '{0}']]></Val>
@@ -2922,7 +2955,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum type '{0}' has members with initializers that are not literals.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O tipo Enum '{0}' tem membros com inicializadores que não são literais.]]></Val>
+            <Val><![CDATA[O tipo de Enumeração '{0}' tem membros com inicializadores que não são literais.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3413,15 +3446,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0_5011" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[A especificação de arquivo não pode conter vários curingas do diretório recursivo ('**'): '{0}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0_5010" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[File specification cannot end in a recursive directory wildcard ('**'): '{0}'.]]></Val>
@@ -3715,28 +3739,37 @@
       </Item>
       <Item ItemId=";Ignore_this_error_message_90019" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Ignore this error message.]]></Val>
+          <Val><![CDATA[Ignore this error message]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ignore essa mensagem de erro.]]></Val>
+            <Val><![CDATA[Ignorar essa mensagem de erro]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Ignore this error message.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Implement_inherited_abstract_class_90007" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Implement inherited abstract class.]]></Val>
+          <Val><![CDATA[Implement inherited abstract class]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Implemente a classe abstrata herdada.]]></Val>
+            <Val><![CDATA[Implementar classe abstrata herdada]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Implement inherited abstract class.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Implement_interface_0_90006" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Implement interface '{0}'.]]></Val>
+          <Val><![CDATA[Implement interface '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Implemente a interface '{0}'.]]></Val>
+            <Val><![CDATA[Implementar a interface '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Implement interface '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3751,10 +3784,13 @@
       </Item>
       <Item ItemId=";Import_0_from_module_1_90013" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Import '{0}' from module "{1}".]]></Val>
+          <Val><![CDATA[Import '{0}' from module "{1}"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Importar '{0}' do módulo "{1}".]]></Val>
+            <Val><![CDATA[Importar '{0}' do módulo "{1}"]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Import '{0}' from module "{1}".]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3840,7 +3876,7 @@
         <Str Cat="Text">
           <Val><![CDATA[In ambient enum declarations member initializer must be constant expression.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Em declarações enum de ambiente, o inicializador de membro deve ser uma expressão de constante.]]></Val>
+            <Val><![CDATA[Em declarações de enumeração de ambiente, o inicializador de membro deve ser uma expressão de constante.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3849,7 +3885,7 @@
         <Str Cat="Text">
           <Val><![CDATA[In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Em um enum com várias declarações, somente uma declaração pode omitir um inicializador para o primeiro elemento enum.]]></Val>
+            <Val><![CDATA[Em uma enumeração com várias declarações, somente uma declaração pode omitir um inicializador para o primeiro elemento de enumeração.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3858,7 +3894,7 @@
         <Str Cat="Text">
           <Val><![CDATA[In 'const' enum declarations member initializer must be constant expression.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Em declarações enum 'const', o inicializador de membro deve ser uma expressão de constante.]]></Val>
+            <Val><![CDATA[Em declarações de enumeração 'const', o inicializador de membro deve ser uma expressão de constante.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3901,37 +3937,49 @@
       </Item>
       <Item ItemId=";Infer_parameter_types_from_usage_95012" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Infer parameter types from usage.]]></Val>
+          <Val><![CDATA[Infer parameter types from usage]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Inferir os tipos de parâmetro do uso.]]></Val>
+            <Val><![CDATA[Inferir tipos de parâmetro pelo uso]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Infer parameter types from usage.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Infer_type_of_0_from_usage_95011" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Infer type of '{0}' from usage.]]></Val>
+          <Val><![CDATA[Infer type of '{0}' from usage]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Inferir o tipo de '{0}' do uso.]]></Val>
+            <Val><![CDATA[Inferir tipo de '{0}' pelo uso]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Infer type of '{0}' from usage.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Initialize_property_0_in_the_constructor_90020" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Initialize property '{0}' in the constructor.]]></Val>
+          <Val><![CDATA[Initialize property '{0}' in the constructor]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Inicializar a propriedade '{0}' no construtor.]]></Val>
+            <Val><![CDATA[Inicializar a propriedade '{0}' no construtor]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Initialize property '{0}' in the constructor.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Initialize_static_property_0_90021" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Initialize static property '{0}'.]]></Val>
+          <Val><![CDATA[Initialize static property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Inicializar a propriedade estática '{0}'.]]></Val>
+            <Val><![CDATA[Inicializar a propriedade estática '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Initialize static property '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4462,10 +4510,13 @@
       </Item>
       <Item ItemId=";Make_super_call_the_first_statement_in_the_constructor_90002" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Make 'super()' call the first statement in the constructor.]]></Val>
+          <Val><![CDATA[Make 'super()' call the first statement in the constructor]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tornar a chamada 'super()' a primeira instrução no construtor.]]></Val>
+            <Val><![CDATA[Tornar a chamada 'super()' a primeira instrução no construtor]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Make 'super()' call the first statement in the constructor.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4682,6 +4733,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Multiple_consecutive_numeric_separators_are_not_permitted_6189" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Multiple consecutive numeric separators are not permitted.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Não são permitidos vários separadores numéricos consecutivos.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Multiple_constructor_implementations_are_not_allowed_2392" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Multiple constructor implementations are not allowed.]]></Val>
@@ -4768,6 +4828,15 @@
           <Val><![CDATA[Numeric index type '{0}' is not assignable to string index type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[O tipo de índice numérico '{0}' não é atribuível ao tipo de índice de cadeia de caracteres '{1}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Numeric_separators_are_not_allowed_here_6188" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Numeric separators are not allowed here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Separadores numéricos não são permitidos aqui.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5374,10 +5443,13 @@
       </Item>
       <Item ItemId=";Prefix_0_with_an_underscore_90025" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Prefix '{0}' with an underscore.]]></Val>
+          <Val><![CDATA[Prefix '{0}' with an underscore]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Prefixo '{0}' com um sublinhado.]]></Val>
+            <Val><![CDATA[Prefixo '{0}' com um sublinhado]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Prefix '{0}' with an underscore.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5421,7 +5493,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' does not exist on 'const' enum '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[A propriedade '{0}' não existe no enum 'const' '{1}'.]]></Val>
+            <Val><![CDATA[A propriedade '{0}' não existe na enumeração 'const' '{1}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5827,10 +5899,13 @@
       </Item>
       <Item ItemId=";Remove_declaration_for_Colon_0_90004" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Remove declaration for: '{0}'.]]></Val>
+          <Val><![CDATA[Remove declaration for: '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Remover declaração para: '{0}'.]]></Val>
+            <Val><![CDATA[Remover declaração para: '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Remove declaration for: '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6250,10 +6325,13 @@
       </Item>
       <Item ItemId=";Rewrite_as_the_indexed_access_type_0_90026" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Rewrite as the indexed access type '{0}'.]]></Val>
+          <Val><![CDATA[Rewrite as the indexed access type '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Regravar como o tipo de acesso indexado '{0}'.]]></Val>
+            <Val><![CDATA[Reescrever como o tipo de acesso indexado '{0}']]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Rewrite as the indexed access type '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6365,11 +6443,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_or_ESNEXT_6015" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_or_ESNEXT_6015" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'.]]></Val>
+          <Val><![CDATA[Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Especifique a versão de destino do ECMAScript: 'ES3' (padrão), 'ES5', 'ES2015', 'ES2016', 'ES2017' ou 'ESNEXT'.]]></Val>
+            <Val><![CDATA[Especifique a versão de destino do ECMAScript: 'ES3' (padrão), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018' ou 'ESNEXT'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6476,6 +6554,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Starting_compilation_in_watch_mode_6031" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Starting compilation in watch mode...]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Iniciando compilação no modo de inspeção...]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Statement_expected_1129" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Statement expected.]]></Val>
@@ -6554,6 +6641,9 @@
       <Item ItemId=";Subsequent_property_declarations_must_have_the_same_type_Property_0_must_be_of_type_1_but_here_has_t_2717" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Subsequent property declarations must have the same type.  Property '{0}' must be of type '{1}', but here has type '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Declarações de propriedade subsequentes devem ter o mesmo tipo. A propriedade '{0}' deve ser do tipo '{1}', mas aqui tem o tipo '{2}'.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6846,7 +6936,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O lado esquerdo de uma operação aritmética deve ser do tipo 'any', 'number' ou enum.]]></Val>
+            <Val><![CDATA[O lado esquerdo de uma operação aritmética deve ser do tipo 'any', 'number' ou de enumeração.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6984,7 +7074,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O lado direito de uma operação aritmética deve ser do tipo 'any', 'number' ou enum.]]></Val>
+            <Val><![CDATA[O lado direito de uma operação aritmética deve ser do tipo 'any', 'number' ou de enumeração.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7322,11 +7412,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated_90010" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated_2719" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is not assignable to type '{1}'. Two different types with this name exist, but they are unrelated.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O tipo '{0}' não é atribuível ao tipo '{1}'. Dois tipos diferentes com esse nome existem, mas eles não são relacionados.]]></Val>
+            <Val><![CDATA[O tipo '{0}' não é atribuível ao tipo '{1}'. Dois tipos diferentes com esse nome existem, mas eles não estão relacionados.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8346,7 +8436,7 @@
         <Str Cat="Text">
           <Val><![CDATA['const' declarations can only be declared inside a block.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[declarações 'const' só podem ser declaradas dentro de um bloco.]]></Val>
+            <Val><![CDATA[Declarações 'const' só podem ser declaradas dentro de um bloco.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8355,7 +8445,7 @@
         <Str Cat="Text">
           <Val><![CDATA['const' declarations must be initialized.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[As declarações 'const' devem ser inicializadas.]]></Val>
+            <Val><![CDATA[Declarações 'const' devem ser inicializadas.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA['const' declarations must be initialized]]></Val>
@@ -8367,7 +8457,7 @@
         <Str Cat="Text">
           <Val><![CDATA['const' enum member initializer was evaluated to a non-finite value.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O inicializador de membro enum 'const' foi avaliado como um valor não finito.]]></Val>
+            <Val><![CDATA[O inicializador de membro de enumeração 'const' foi avaliado como um valor não finito.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8376,7 +8466,7 @@
         <Str Cat="Text">
           <Val><![CDATA['const' enum member initializer was evaluated to disallowed value 'NaN'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O inicializador de membro enum 'const' foi avaliado como o valor não permitido 'NaN'.]]></Val>
+            <Val><![CDATA[O inicializador de membro de enumeração 'const' foi avaliado como o valor não permitido 'NaN'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8385,7 +8475,7 @@
         <Str Cat="Text">
           <Val><![CDATA['const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Enums 'const' só podem ser usados em expressões de acesso de índice ou propriedade, ou do lado direito de uma declaração de importação ou atribuição de exportação.]]></Val>
+            <Val><![CDATA[Enumerações 'const' só podem ser usadas em expressões de acesso de índice ou propriedade, ou do lado direito de uma declaração de importação ou atribuição de exportação.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8838,7 +8928,7 @@
         <Str Cat="Text">
           <Val><![CDATA['unique symbol' types are not allowed here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[tipos de 'símbolo exclusivo' não são permitidos aqui.]]></Val>
+            <Val><![CDATA[Tipos de 'unique symbol' não são permitidos aqui.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8847,7 +8937,7 @@
         <Str Cat="Text">
           <Val><![CDATA['unique symbol' types are only allowed on variables in a variable statement.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[tipos de 'símbolo exclusivo' são permitidos apenas em variáveis em uma declaração de variável.]]></Val>
+            <Val><![CDATA[Tipos de 'unique symbol' são permitidos apenas em variáveis em uma declaração de variável.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8856,7 +8946,7 @@
         <Str Cat="Text">
           <Val><![CDATA['unique symbol' types may not be used on a variable declaration with a binding name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[tipos de 'símbolo exclusivo' não podem ser usados em uma declaração de variável com um nome associado.]]></Val>
+            <Val><![CDATA[Tipos de 'unique symbol' não podem ser usados em uma declaração de variável com um nome associado.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

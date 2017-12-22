@@ -436,7 +436,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A mixin class must have a constructor with a single rest parameter of type 'any[]5D;'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una clase mixin debe tener un constructor con un parámetro de REST sencillo del tipo "any[]5D;".]]></Val>
+            <Val><![CDATA[Una clase mixin debe tener un constructor con un solo parámetro rest de tipo "any[]5D;"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -523,7 +523,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A path in an 'extends' option must be relative or rooted, but '{0}' is not.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una ruta de acceso en una opción "extiende" debe ser relativa o raíz, pero no '{0}'.]]></Val>
+            <Val><![CDATA[Una ruta de acceso en una opción "extiende" debe ser relativa o raíz, pero no "{0}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -875,52 +875,58 @@
       </Item>
       <Item ItemId=";Add_0_to_existing_import_declaration_from_1_90015" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add '{0}' to existing import declaration from "{1}".]]></Val>
+          <Val><![CDATA[Add '{0}' to existing import declaration from "{1}"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Agregue "{0}" a una declaración de importación existente desde "{1}".]]></Val>
+            <Val><![CDATA[Agregar "{0}" a una declaración de importación existente desde "{1}"]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Add {0} to existing import declaration from {1}.]]></Val>
+            <Val><![CDATA[Add '{0}' to existing import declaration from "{1}".]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_index_signature_for_property_0_90017" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add index signature for property '{0}'.]]></Val>
+          <Val><![CDATA[Add index signature for property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Agregue una firma de índice para la propiedad "{0}".]]></Val>
+            <Val><![CDATA[Agregar una signatura de índice para la propiedad "{0}"]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Add index signature for property '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_missing_super_call_90001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add missing 'super()' call.]]></Val>
+          <Val><![CDATA[Add missing 'super()' call]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Agregue la llamada a "super()" que falta.]]></Val>
+            <Val><![CDATA[Agregar la llamada a "super()" que falta]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Add missing 'super()' call.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_this_to_unresolved_variable_90008" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add 'this.' to unresolved variable.]]></Val>
+          <Val><![CDATA[Add 'this.' to unresolved variable]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Agrega "this." a una variable no resuelta.]]></Val>
+            <Val><![CDATA[Agregar "this." a una variable no resuelta]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Add 'this.' to unresolved variable.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript__90009" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript__5068" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Agregar un archivo tsconfig.json ayuda a organizar los proyectos que contienen archivos TypeScript y JavaScript. Más información en https://aka.ms/tsconfig.]]></Val>
           </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig]]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1414,7 +1420,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Argument for '{0}' option must be: {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El argumento para la opción '{0}' debe ser: {1}.]]></Val>
+            <Val><![CDATA[El argumento para la opción "{0}" debe ser {1}.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Argument for '{0}' option must be: {1}]]></Val>
@@ -1426,7 +1432,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Argument of type '{0}' is not assignable to parameter of type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No se puede asignar un argumento de tipo '{0}' al parámetro de tipo '{1}'.]]></Val>
+            <Val><![CDATA[No se puede asignar un argumento de tipo "{0}" al parámetro de tipo "{1}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1550,10 +1556,13 @@
       </Item>
       <Item ItemId=";Call_decorator_expression_90028" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Call decorator expression.]]></Val>
+          <Val><![CDATA[Call decorator expression]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Llame a la expresión decorador.]]></Val>
+            <Val><![CDATA[Llamar a la expresión decorador]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Call decorator expression.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1964,34 +1973,37 @@
       </Item>
       <Item ItemId=";Change_0_to_1_90014" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Change '{0}' to '{1}'.]]></Val>
+          <Val><![CDATA[Change '{0}' to '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Cambie "{0}" a "{1}".]]></Val>
+            <Val><![CDATA[Cambiar "{0}" a "{1}"]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Change {0} to {1}.]]></Val>
+            <Val><![CDATA[Change '{0}' to '{1}'.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Change_extends_to_implements_90003" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Change 'extends' to 'implements'.]]></Val>
+          <Val><![CDATA[Change 'extends' to 'implements']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Cambiar "extends" por "implements".]]></Val>
+            <Val><![CDATA[Cambiar "extends" a "implements"]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Change 'extends' to 'implements']]></Val>
+            <Val><![CDATA[Change 'extends' to 'implements'.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Change_spelling_to_0_90022" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Change spelling to '{0}'.]]></Val>
+          <Val><![CDATA[Change spelling to '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Cambiar la ortografía a "{0}".]]></Val>
+            <Val><![CDATA[Cambiar la ortografía a "{0}"]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Change spelling to '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2363,37 +2375,49 @@
       </Item>
       <Item ItemId=";Declare_method_0_90023" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Declare method '{0}'.]]></Val>
+          <Val><![CDATA[Declare method '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Declare el método "{0}".]]></Val>
+            <Val><![CDATA[Declarar el método "{0}"]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Declare method '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Declare_property_0_90016" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Declare property '{0}'.]]></Val>
+          <Val><![CDATA[Declare property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Declare la propiedad "{0}".]]></Val>
+            <Val><![CDATA[Declarar la propiedad "{0}"]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Declare property '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Declare_static_method_0_90024" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Declare static method '{0}'.]]></Val>
+          <Val><![CDATA[Declare static method '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Declare el método estático "{0}".]]></Val>
+            <Val><![CDATA[Declarar el método estático "{0}"]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Declare static method '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Declare_static_property_0_90027" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Declare static property '{0}'.]]></Val>
+          <Val><![CDATA[Declare static property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Declare la propiedad "{0}" estática.]]></Val>
+            <Val><![CDATA[Declarar la propiedad estática "{0}"]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Declare static property '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2471,10 +2495,13 @@
       </Item>
       <Item ItemId=";Disable_checking_for_this_file_90018" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable checking for this file.]]></Val>
+          <Val><![CDATA[Disable checking for this file]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Deshabilite la comprobación para este archivo.]]></Val>
+            <Val><![CDATA[Deshabilitar la comprobación para este archivo]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disable checking for this file.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3438,15 +3465,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0_5011" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La especificación de archivo no puede contener varios comodines de directorio recursivo ('**'): '{0}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0_5010" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[File specification cannot end in a recursive directory wildcard ('**'): '{0}'.]]></Val>
@@ -3740,31 +3758,37 @@
       </Item>
       <Item ItemId=";Ignore_this_error_message_90019" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Ignore this error message.]]></Val>
+          <Val><![CDATA[Ignore this error message]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ignore este mensaje de error.]]></Val>
+            <Val><![CDATA[Ignorar este mensaje de error]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Ignore this error message.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Implement_inherited_abstract_class_90007" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Implement inherited abstract class.]]></Val>
+          <Val><![CDATA[Implement inherited abstract class]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Implementar clase abstracta heredada.]]></Val>
+            <Val><![CDATA[Implementar clase abstracta heredada]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Implement inherited abstract class]]></Val>
+            <Val><![CDATA[Implement inherited abstract class.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Implement_interface_0_90006" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Implement interface '{0}'.]]></Val>
+          <Val><![CDATA[Implement interface '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Implementar interfaz "{0}".]]></Val>
+            <Val><![CDATA[Implementar la interfaz "{0}"]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Implement interface '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3779,10 +3803,13 @@
       </Item>
       <Item ItemId=";Import_0_from_module_1_90013" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Import '{0}' from module "{1}".]]></Val>
+          <Val><![CDATA[Import '{0}' from module "{1}"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Importar "{0}" desde el módulo "{1}".]]></Val>
+            <Val><![CDATA[Importar "{0}" desde el módulo "{1}"]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Import '{0}' from module "{1}".]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3929,37 +3956,49 @@
       </Item>
       <Item ItemId=";Infer_parameter_types_from_usage_95012" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Infer parameter types from usage.]]></Val>
+          <Val><![CDATA[Infer parameter types from usage]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Infiera los tipos de parámetro del uso.]]></Val>
+            <Val><![CDATA[Deducir los tipos de parámetro del uso]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Infer parameter types from usage.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Infer_type_of_0_from_usage_95011" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Infer type of '{0}' from usage.]]></Val>
+          <Val><![CDATA[Infer type of '{0}' from usage]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Infiera el tipo de "{0}" del uso.]]></Val>
+            <Val><![CDATA[Deducir el tipo de "{0}" del uso]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Infer type of '{0}' from usage.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Initialize_property_0_in_the_constructor_90020" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Initialize property '{0}' in the constructor.]]></Val>
+          <Val><![CDATA[Initialize property '{0}' in the constructor]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Inicialice la propiedad "{0}" en el constructor.]]></Val>
+            <Val><![CDATA[Inicializar la propiedad "{0}" en el constructor]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Initialize property '{0}' in the constructor.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Initialize_static_property_0_90021" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Initialize static property '{0}'.]]></Val>
+          <Val><![CDATA[Initialize static property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Inicialice la propiedad estática "{0}".]]></Val>
+            <Val><![CDATA[Inicializar la propiedad estática "{0}"]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Initialize static property '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4490,10 +4529,13 @@
       </Item>
       <Item ItemId=";Make_super_call_the_first_statement_in_the_constructor_90002" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Make 'super()' call the first statement in the constructor.]]></Val>
+          <Val><![CDATA[Make 'super()' call the first statement in the constructor]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Haga que la llamada a "super()" sea la primera instrucción del constructor.]]></Val>
+            <Val><![CDATA[Hacer que la llamada a "super()" sea la primera instrucción del constructor]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Make 'super()' call the first statement in the constructor.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4710,6 +4752,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Multiple_consecutive_numeric_separators_are_not_permitted_6189" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Multiple consecutive numeric separators are not permitted.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[No se permiten varios separadores numéricos consecutivos.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Multiple_constructor_implementations_are_not_allowed_2392" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Multiple constructor implementations are not allowed.]]></Val>
@@ -4796,6 +4847,15 @@
           <Val><![CDATA[Numeric index type '{0}' is not assignable to string index type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[El tipo de índice numérico '{0}' no se puede asignar a un tipo de índice de cadena '{1}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Numeric_separators_are_not_allowed_here_6188" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Numeric separators are not allowed here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aquí no se permiten separadores numéricos.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5405,10 +5465,13 @@
       </Item>
       <Item ItemId=";Prefix_0_with_an_underscore_90025" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Prefix '{0}' with an underscore.]]></Val>
+          <Val><![CDATA[Prefix '{0}' with an underscore]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Prefijo '{0}' con guion bajo.]]></Val>
+            <Val><![CDATA[Prefijo "{0}" con guion bajo]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Prefix '{0}' with an underscore.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5858,10 +5921,13 @@
       </Item>
       <Item ItemId=";Remove_declaration_for_Colon_0_90004" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Remove declaration for: '{0}'.]]></Val>
+          <Val><![CDATA[Remove declaration for: '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Quitar declaración de: "{0}".]]></Val>
+            <Val><![CDATA[Quitar declaración de: "{0}"]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Remove declaration for: '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6284,10 +6350,13 @@
       </Item>
       <Item ItemId=";Rewrite_as_the_indexed_access_type_0_90026" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Rewrite as the indexed access type '{0}'.]]></Val>
+          <Val><![CDATA[Rewrite as the indexed access type '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Reescribir como el tipo de acceso indexado "{0}".]]></Val>
+            <Val><![CDATA[Reescribir como tipo de acceso indexado "{0}"]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Rewrite as the indexed access type '{0}'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6399,15 +6468,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_or_ESNEXT_6015" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_or_ESNEXT_6015" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'.]]></Val>
+          <Val><![CDATA[Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Especifique la versión de ECMAScript de destino: "ES3" (valor predeterminado), "ES5", "ES2015", "ES2016", "ES2017" o "ESNEXT".]]></Val>
+            <Val><![CDATA[Especifique la versión de ECMAScript de destino: "ES3" (valor predeterminado), "ES5", "ES2015", "ES2016", "ES2017", "ES2018" o "ESNEXT".]]></Val>
           </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT']]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6513,6 +6579,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Starting_compilation_in_watch_mode_6031" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Starting compilation in watch mode...]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Iniciando la compilación en modo de inspección...]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Statement_expected_1129" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Statement expected.]]></Val>
@@ -6591,6 +6666,9 @@
       <Item ItemId=";Subsequent_property_declarations_must_have_the_same_type_Property_0_must_be_of_type_1_but_here_has_t_2717" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Subsequent property declarations must have the same type.  Property '{0}' must be of type '{1}', but here has type '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Las declaraciones de propiedad subsiguientes deben tener el mismo tipo. La propiedad "{0}" debe ser de tipo "{1}", pero aquí tiene el tipo "{2}".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7359,7 +7437,7 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated_90010" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated_2719" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is not assignable to type '{1}'. Two different types with this name exist, but they are unrelated.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">

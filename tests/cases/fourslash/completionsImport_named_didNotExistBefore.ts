@@ -17,7 +17,7 @@ verify.not.completionListContains({ name: "Test2", source: "/a" }, undefined, un
 verify.applyCodeActionFromCompletion("", {
     name: "Test1",
     source: "/a",
-    description: `Add 'Test1' to existing import declaration from "./a".`,
+    description: `Add 'Test1' to existing import declaration from "./a"`,
     newFileContent: `import { Test2, Test1 } from "./a";
 t`,
 });

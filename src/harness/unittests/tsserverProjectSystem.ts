@@ -473,7 +473,7 @@ namespace ts.projectSystem {
         }
     }
 
-    describe("tsserverProjectSystem", () => {
+    describe("tsserverProjectSystem general functionality", () => {
         const commonFile1: FileOrFolder = {
             path: "/a/b/commonFile1.ts",
             content: "let x = 1"
@@ -2806,7 +2806,7 @@ namespace ts.projectSystem {
 
     });
 
-    describe("Proper errors", () => {
+    describe("tsserverProjectSystem Proper errors", () => {
         it("document is not contained in project", () => {
             const file1 = {
                 path: "/a/b/app.ts",
@@ -2960,7 +2960,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("autoDiscovery", () => {
+    describe("tsserverProjectSystem autoDiscovery", () => {
         it("does not depend on extension", () => {
             const file1 = {
                 path: "/a/b/app.html",
@@ -2983,7 +2983,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("extra resolution pass in lshost", () => {
+    describe("tsserverProjectSystem extra resolution pass in lshost", () => {
         it("can load typings that are proper modules", () => {
             const file1 = {
                 path: "/a/b/app.js",
@@ -3025,7 +3025,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("navigate-to for javascript project", () => {
+    describe("tsserverProjectSystem navigate-to for javascript project", () => {
         function containsNavToItem(items: protocol.NavtoItem[], itemName: string, itemKind: string) {
             return find(items, item => item.name === itemName && item.kind === itemKind) !== undefined;
         }
@@ -3054,7 +3054,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("external projects", () => {
+    describe("tsserverProjectSystem external projects", () => {
         it("correctly handling add/remove tsconfig - 1", () => {
             const f1 = {
                 path: "/a/b/app.ts",
@@ -3280,7 +3280,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("prefer typings to js", () => {
+    describe("tsserverProjectSystem prefer typings to js", () => {
         it("during second resolution pass", () => {
             const typingsCacheLocation = "/a/typings";
             const f1 = {
@@ -3308,7 +3308,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("format settings", () => {
+    describe("tsserverProjectSystem format settings", () => {
         it("can be set globally", () => {
             const f1 = {
                 path: "/a/b/app.ts",
@@ -3349,7 +3349,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("watching @types", () => {
+    describe("tsserverProjectSystem watching @types", () => {
         it("works correctly when typings are added or removed", () => {
             const f1 = {
                 path: "/a/b/app.ts",
@@ -3395,7 +3395,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("Open-file", () => {
+    describe("tsserverProjectSystem Open-file", () => {
         it("can be reloaded with empty content", () => {
             const f = {
                 path: "/a/b/app.ts",
@@ -3470,7 +3470,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("Language service", () => {
+    describe("tsserverProjectSystem Language service", () => {
         it("should work correctly on case-sensitive file systems", () => {
             const lib = {
                 path: "/a/Lib/lib.d.ts",
@@ -3488,7 +3488,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("rename a module file and rename back", () => {
+    describe("tsserverProjectSystem rename a module file and rename back", () => {
         it("should restore the states for inferred projects", () => {
             const moduleFile = {
                 path: "/a/b/moduleFile.ts",
@@ -3623,7 +3623,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("add the missing module file for inferred project", () => {
+    describe("tsserverProjectSystem add the missing module file for inferred project", () => {
         it("should remove the `module not found` error", () => {
             const moduleFile = {
                 path: "/a/b/moduleFile.ts",
@@ -3729,7 +3729,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("Configure file diagnostics events", () => {
+    describe("tsserverProjectSystem Configure file diagnostics events", () => {
 
         it("are generated when the config file has errors", () => {
             const file = {
@@ -3845,7 +3845,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("skipLibCheck", () => {
+    describe("tsserverProjectSystem skipLibCheck", () => {
         it("should be turned on for js-only inferred projects", () => {
             const file1 = {
                 path: "/a/b/file1.js",
@@ -4073,7 +4073,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("non-existing directories listed in config file input array", () => {
+    describe("tsserverProjectSystem non-existing directories listed in config file input array", () => {
         it("should be tolerated without crashing the server", () => {
             const configFile = {
                 path: "/a/b/tsconfig.json",
@@ -4128,7 +4128,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("reload", () => {
+    describe("tsserverProjectSystem reload", () => {
         it("should work with temp file", () => {
             const f1 = {
                 path: "/a/b/app.ts",
@@ -4267,7 +4267,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("Inferred projects", () => {
+    describe("tsserverProjectSystem Inferred projects", () => {
         it("should support files without extensions", () => {
             const f = {
                 path: "/a/compile",
@@ -4495,7 +4495,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("No overwrite emit error", () => {
+    describe("tsserverProjectSystem No overwrite emit error", () => {
         it("for inferred project", () => {
             const f1 = {
                 path: "/a/b/f1.js",
@@ -4578,7 +4578,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("emit with outFile or out setting", () => {
+    describe("tsserverProjectSystem emit with outFile or out setting", () => {
         function test(opts: CompilerOptions, expectedUsesOutFile: boolean) {
             const f1 = {
                 path: "/a/a.ts",
@@ -4626,7 +4626,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("import helpers", () => {
+    describe("tsserverProjectSystem import helpers", () => {
         it("should not crash in tsserver", () => {
             const f1 = {
                 path: "/a/app.ts",
@@ -4643,7 +4643,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("searching for config file", () => {
+    describe("tsserverProjectSystem searching for config file", () => {
         it("should stop at projectRootPath if given", () => {
             const f1 = {
                 path: "/a/file1.ts",
@@ -4735,7 +4735,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("cancellationToken", () => {
+    describe("tsserverProjectSystem cancellationToken", () => {
         // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
         let oldPrepare: ts.AnyFunction;
         before(() => {
@@ -4998,7 +4998,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("occurence highlight on string", () => {
+    describe("tsserverProjectSystem occurence highlight on string", () => {
         it("should be marked if only on string values", () => {
             const file1: FileOrFolder = {
                 path: "/a/b/file1.ts",
@@ -5044,7 +5044,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("maxNodeModuleJsDepth for inferred projects", () => {
+    describe("tsserverProjectSystem maxNodeModuleJsDepth for inferred projects", () => {
         it("should be set to 2 if the project has js root files", () => {
             const file1: FileOrFolder = {
                 path: "/a/b/file1.js",
@@ -5098,7 +5098,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("Options Diagnostic locations reported correctly with changes in configFile contents", () => {
+    describe("tsserverProjectSystem Options Diagnostic locations reported correctly with changes in configFile contents", () => {
         it("when options change", () => {
             const file = {
                 path: "/a/b/app.ts",
@@ -5162,7 +5162,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("refactors", () => {
+    describe("tsserverProjectSystem refactors", () => {
         it("use formatting options", () => {
             const file = {
                 path: "/a.ts",
@@ -5218,7 +5218,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("CachingFileSystemInformation", () => {
+    describe("tsserverProjectSystem CachingFileSystemInformation", () => {
         enum CalledMapsWithSingleArg {
             fileExists = "fileExists",
             directoryExists = "directoryExists",
@@ -5835,7 +5835,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("ProjectsChangedInBackground", () => {
+    describe("tsserverProjectSystem ProjectsChangedInBackground", () => {
         function verifyFiles(caption: string, actual: ReadonlyArray<string>, expected: ReadonlyArray<string>) {
             assert.equal(actual.length, expected.length, `Incorrect number of ${caption}. Actual: ${actual} Expected: ${expected}`);
             const seen = createMap<true>();
@@ -6431,7 +6431,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("Watched recursive directories with windows style file system", () => {
+    describe("tsserverProjectSystem Watched recursive directories with windows style file system", () => {
         function verifyWatchedDirectories(useProjectAtRoot: boolean) {
             const root = useProjectAtRoot ? "c:/" : "c:/myfolder/allproject/";
             const configFile: FileOrFolder = {

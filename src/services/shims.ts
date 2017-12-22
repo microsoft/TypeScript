@@ -141,7 +141,8 @@ namespace ts {
         getEncodedSemanticClassifications(fileName: string, start: number, length: number): string;
 
         getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): string;
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/, source: string | undefined): string;
+        // tslint:disable-next-line type-operator-spacing (false positive)
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined): string;
 
         getQuickInfoAtPosition(fileName: string, position: number): string;
 
@@ -330,7 +331,7 @@ namespace ts {
             // if shimHost is a COM object then property check will become method call with no arguments.
             // 'in' does not have this effect.
             if ("getModuleResolutionsForFile" in this.shimHost) {
-                this.resolveModuleNames = (moduleNames: string[], containingFile: string) => {
+                this.resolveModuleNames = (moduleNames: string[], containingFile: string): ResolvedModuleFull[] => {
                     const resolutionsInFile = <MapLike<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
                     return map(moduleNames, name => {
                         const result = getProperty(resolutionsInFile, name);
@@ -906,11 +907,12 @@ namespace ts {
         }
 
         /** Get a string based representation of a completion list entry details */
-        public getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/, source: string | undefined) {
+        // tslint:disable-next-line type-operator-spacing (false positive)
+        public getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined) {
             return this.forwardJSONCall(
                 `getCompletionEntryDetails('${fileName}', ${position}, '${entryName}')`,
                 () => {
-                    const localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    const localOptions: ts.FormatCodeOptions = options === undefined ? undefined : JSON.parse(options);
                     return this.languageService.getCompletionEntryDetails(fileName, position, entryName, localOptions, source);
                 }
             );

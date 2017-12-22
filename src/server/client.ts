@@ -200,7 +200,7 @@ namespace ts.server {
             const response = this.processResponse<protocol.CompletionDetailsResponse>(request);
             Debug.assert(response.body.length === 1, "Unexpected length of completion details response body.");
 
-            const convertedCodeActions = map(response.body[0].codeActions, codeAction => this.convertCodeActions(codeAction, fileName));
+            const convertedCodeActions = map(response.body[0].codeActions, ({ description, changes }) => ({ description, changes: this.convertChanges(changes, fileName) }));
             return { ...response.body[0], codeActions: convertedCodeActions };
         }
 
@@ -553,14 +553,17 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getCodeFixesAtPosition(file: string, start: number, end: number, errorCodes: number[]): CodeAction[] {
+        getCodeFixesAtPosition(file: string, start: number, end: number, errorCodes: ReadonlyArray<number>): ReadonlyArray<CodeFixAction> {
             const args: protocol.CodeFixRequestArgs = { ...this.createFileRangeRequestArgs(file, start, end), errorCodes };
 
             const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixes, args);
             const response = this.processResponse<protocol.CodeFixResponse>(request);
 
-            return response.body.map(entry => this.convertCodeActions(entry, file));
+            // TODO: GH#20538 shouldn't need cast
+            return (response.body as ReadonlyArray<protocol.CodeFixAction>).map(({ description, changes, fixId }) => ({ description, changes: this.convertChanges(changes, file), fixId }));
         }
+
+        getCombinedCodeFix = notImplemented;
 
         applyCodeActionCommand = notImplemented;
 
@@ -638,14 +641,11 @@ namespace ts.server {
             });
         }
 
-        convertCodeActions(entry: protocol.CodeAction, fileName: string): CodeAction {
-            return {
-                description: entry.description,
-                changes: entry.changes.map(change => ({
-                    fileName: change.fileName,
-                    textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, fileName))
-                }))
-            };
+        private convertChanges(changes: protocol.FileCodeEdits[], fileName: string): FileTextChanges[] {
+            return changes.map(change => ({
+                fileName: change.fileName,
+                textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, fileName))
+            }));
         }
 
         convertTextChangeToCodeEdit(change: protocol.CodeEdit, fileName: string): ts.TextChange {

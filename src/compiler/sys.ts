@@ -72,6 +72,7 @@ namespace ts {
         /*@internal*/ debugMode?: boolean;
         setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         clearTimeout?(timeoutId: any): void;
+        clearScreen?(): void;
     }
 
     export interface FileWatcher {
@@ -436,6 +437,9 @@ namespace ts {
             }
 
             const nodeSystem: System = {
+                clearScreen: () => {
+                    process.stdout.write("\x1Bc");
+                },
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
                 useCaseSensitiveFileNames,

@@ -181,6 +181,7 @@ namespace ts {
          */
         readDirectory?(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
         readFile?(path: string, encoding?: string): string | undefined;
+        realpath?(path: string): string;
         fileExists?(path: string): boolean;
 
         /*
@@ -294,7 +295,11 @@ namespace ts {
 
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
 
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
+        // TODO: GH#20538 return `ReadonlyArray<CodeFixAction>`
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings): ReadonlyArray<CodeAction>;
+        // TODO: GH#20538
+        /* @internal */
+        getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions;
         applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
@@ -321,6 +326,10 @@ namespace ts {
 
         dispose(): void;
     }
+
+    // TODO: GH#20538
+    /* @internal */
+    export interface CombinedCodeFixScope { type: "file"; fileName: string; }
 
     export interface GetCompletionsAtPositionOptions {
         includeExternalModuleExports: boolean;
@@ -407,6 +416,23 @@ namespace ts {
          * This allows the language service to have side effects (e.g. installing dependencies) upon a code fix.
          */
         commands?: CodeActionCommand[];
+    }
+
+    // TODO: GH#20538
+    /* @internal */
+    export interface CodeFixAction extends CodeAction {
+        /**
+         * If present, one may call 'getCombinedCodeFix' with this fixId.
+         * This may be omitted to indicate that the code fix can't be applied in a group.
+         */
+        fixId?: {};
+    }
+
+    // TODO: GH#20538
+    /* @internal */
+    export interface CombinedCodeActions {
+        changes: ReadonlyArray<FileTextChanges>;
+        commands: ReadonlyArray<CodeActionCommand> | undefined;
     }
 
     // Publicly, this type is just `{}`. Internally it is a union of all the actions we use.
