@@ -2614,11 +2614,19 @@ namespace ts {
                     }
                     else {
                         context.flags |= NodeBuilderFlags.InTypeAlias;
+                        context.encounteredError = true; // Alias not visible
                         return typeToTypeNodeHelper((type as AliasType).typeArguments ? getTypeAliasInstantiation(type.symbol, (type as AliasType).typeArguments) : getDeclaredTypeOfSymbol(type.symbol), context);
                     }
                 }
                 if (!inTypeAlias && type.alternativeRepresentation) {
-                    return typeToTypeNodeHelper(type.alternativeRepresentation, context);
+                    const originalHadError = context.encounteredError;
+                    context.encounteredError = false;
+                    const alt = typeToTypeNodeHelper(type.alternativeRepresentation, context);
+                    if (!context.encounteredError) {
+                        // Only use the alternative representation if it can be made without error
+                        return alt;
+                    }
+                    context.encounteredError = originalHadError;
                 }
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
                     const types = type.flags & TypeFlags.Union ? formatUnionTypes((<UnionType>type).types) : (<IntersectionType>type).types;
@@ -3339,6 +3347,67 @@ namespace ts {
                 }
             }
 
+            type RecordingWriter = SymbolWriter & { playback(writer: SymbolWriter): void, encounteredError?: boolean };
+            function getRecordingSymbolWriter(): RecordingWriter {
+                const log: [keyof SymbolWriter, any[]][] = [];
+                return {
+                    writeKeyword(text) {
+                        log.push(["writeKeyword", [text]]);
+                    },
+                    writeOperator(text) {
+                        log.push(["writeOperator", [text]]);
+                    },
+                    writePunctuation(text) {
+                        log.push(["writePunctuation", [text]]);
+                    },
+                    writeSpace(text) {
+                        log.push(["writeSpace", [text]]);
+                    },
+                    writeStringLiteral(text) {
+                        log.push(["writeStringLiteral", [text]]);
+                    },
+                    writeParameter(text) {
+                        log.push(["writeParameter", [text]]);
+                    },
+                    writeProperty(text) {
+                        log.push(["writeProperty", [text]]);
+                    },
+                    writeSymbol(text, symbol) {
+                        log.push(["writeSymbol", [text, symbol]]);
+                    },
+                    writeLine() {
+                        log.push(["writeLine", []]);
+                    },
+                    increaseIndent() {
+                        log.push(["increaseIndent", []]);
+                    },
+                    decreaseIndent() {
+                        log.push(["decreaseIndent", []]);
+                    },
+                    clear() {
+                        log.push(["clear", []]);
+                    },
+                    trackSymbol(symbol, enclosingDeclaration, meaning) {
+                        log.push(["trackSymbol", [symbol, enclosingDeclaration, meaning]]);
+                    },
+                    reportInaccessibleThisError() {
+                        log.push(["reportInaccessibleThisError", []]);
+                    },
+                    reportPrivateInBaseOfClassExpression(propertyName) {
+                        log.push(["reportPrivateInBaseOfClassExpression", [propertyName]]);
+                    },
+                    reportInaccessibleUniqueSymbolError() {
+                        log.push(["reportInaccessibleUniqueSymbolError", []]);
+                    },
+                    playback(writer) {
+                        let entry: [keyof SymbolWriter, any[]];
+                        while (entry = log.shift()) {
+                            writer[entry[0]].call(writer, ...entry[1]);
+                        }
+                    }
+                };
+            }
+
             function buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 const globalFlagsToPass = globalFlags & (TypeFormatFlags.WriteOwnNameForAnyLike | TypeFormatFlags.WriteClassExpressionAsTypeLiteral);
                 let inObjectTypeLiteral = false;
@@ -3352,17 +3421,20 @@ namespace ts {
                         writer.writeKeyword(!(globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike) && isTypeAny(type)
                             ? "any"
                             : (<IntrinsicType>type).intrinsicName);
+                        return;
                     }
-                    else if (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType) {
+                    if (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType) {
                         if (inObjectTypeLiteral) {
                             writer.reportInaccessibleThisError();
                         }
                         writer.writeKeyword("this");
+                        return;
                     }
-                    else if (getObjectFlags(type) & ObjectFlags.Reference) {
+                    if (getObjectFlags(type) & ObjectFlags.Reference) {
                         writeTypeReference(<TypeReference>type, nextFlags);
+                        return;
                     }
-                    else if (type.flags & TypeFlags.EnumLiteral && !(type.flags & TypeFlags.Union)) {
+                    if (type.flags & TypeFlags.EnumLiteral && !(type.flags & TypeFlags.Union)) {
                         const parent = getParentOfSymbol(type.symbol);
                         buildSymbolDisplay(parent, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
                         // In a literal enum type with a single member E { A }, E and E.A denote the
@@ -3371,31 +3443,44 @@ namespace ts {
                             writePunctuation(writer, SyntaxKind.DotToken);
                             appendSymbolNameOnly(type.symbol, writer);
                         }
+                        return;
                     }
-                    else if (getObjectFlags(type) & ObjectFlags.ClassOrInterface || type.flags & (TypeFlags.EnumLike | TypeFlags.TypeParameter)) {
+                    if (getObjectFlags(type) & ObjectFlags.ClassOrInterface || type.flags & (TypeFlags.EnumLike | TypeFlags.TypeParameter)) {
                         // The specified symbol flags need to be reinterpreted as type flags
                         buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
+                        return;
                     }
-                    else if (type.flags & TypeFlags.Alias) {
+                    if (type.flags & TypeFlags.Alias) {
                         if (((flags & TypeFormatFlags.UseAliasDefinedOutsideCurrentScope) || isTypeSymbolAccessible(type.symbol, enclosingDeclaration))) {
                             const typeArguments = (type as AliasType).typeArguments;
                             writeSymbolTypeReference(type.symbol, typeArguments, 0, length(typeArguments), nextFlags);
                         }
                         else {
+                            if ((writer as RecordingWriter).playback) {
+                                (writer as RecordingWriter).encounteredError = true;
+                            }
                             const instance = (type as AliasType).typeArguments ? getTypeAliasInstantiation(type.symbol, (type as AliasType).typeArguments) : getDeclaredTypeOfSymbol(type.symbol);
                             writeType(instance, nextFlags | TypeFormatFlags.InTypeAlias);
                         }
+                        return;
                     }
-                    else if (!(flags & TypeFormatFlags.InTypeAlias) && type.alternativeRepresentation) {
-                        writeType(type.alternativeRepresentation, flags);
+                    if (!(flags & TypeFormatFlags.InTypeAlias) && type.alternativeRepresentation) {
+                        const subwriter = getRecordingSymbolWriter();
+                        buildTypeDisplay(type.alternativeRepresentation, subwriter, enclosingDeclaration, nextFlags, symbolStack);
+                        if (!subwriter.encounteredError) {
+                            subwriter.playback(writer);
+                            return;
+                        }
                     }
-                    else if (type.flags & TypeFlags.UnionOrIntersection) {
+                    if (type.flags & TypeFlags.UnionOrIntersection) {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, nextFlags);
+                        return;
                     }
-                    else if (getObjectFlags(type) & (ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
+                    if (getObjectFlags(type) & (ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
                         writeAnonymousType(<ObjectType>type, nextFlags);
+                        return;
                     }
-                    else if (type.flags & TypeFlags.UniqueESSymbol) {
+                    if (type.flags & TypeFlags.UniqueESSymbol) {
                         if (flags & TypeFormatFlags.AllowUniqueESSymbolType) {
                             writeKeyword(writer, SyntaxKind.UniqueKeyword);
                             writeSpace(writer);
@@ -3404,11 +3489,13 @@ namespace ts {
                             writer.reportInaccessibleUniqueSymbolError();
                         }
                         writeKeyword(writer, SyntaxKind.SymbolKeyword);
+                        return;
                     }
-                    else if (type.flags & TypeFlags.StringOrNumberLiteral) {
+                    if (type.flags & TypeFlags.StringOrNumberLiteral) {
                         writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
+                        return;
                     }
-                    else if (type.flags & TypeFlags.Index) {
+                    if (type.flags & TypeFlags.Index) {
                         if (flags & TypeFormatFlags.InElementType) {
                             writePunctuation(writer, SyntaxKind.OpenParenToken);
                         }
@@ -3418,22 +3505,22 @@ namespace ts {
                         if (flags & TypeFormatFlags.InElementType) {
                             writePunctuation(writer, SyntaxKind.CloseParenToken);
                         }
+                        return;
                     }
-                    else if (type.flags & TypeFlags.IndexedAccess) {
+                    if (type.flags & TypeFlags.IndexedAccess) {
                         writeType((<IndexedAccessType>type).objectType, TypeFormatFlags.InElementType);
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
                         writeType((<IndexedAccessType>type).indexType, TypeFormatFlags.None);
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
+                        return;
                     }
-                    else {
-                        // Should never get here
-                        // { ... }
-                        writePunctuation(writer, SyntaxKind.OpenBraceToken);
-                        writeSpace(writer);
-                        writePunctuation(writer, SyntaxKind.DotDotDotToken);
-                        writeSpace(writer);
-                        writePunctuation(writer, SyntaxKind.CloseBraceToken);
-                    }
+                    // Should never get here
+                    // { ... }
+                    writePunctuation(writer, SyntaxKind.OpenBraceToken);
+                    writeSpace(writer);
+                    writePunctuation(writer, SyntaxKind.DotDotDotToken);
+                    writeSpace(writer);
+                    writePunctuation(writer, SyntaxKind.CloseBraceToken);
                 }
 
 
@@ -8120,7 +8207,7 @@ namespace ts {
 
         function getLiteralTypeFromPropertyNames(type: Type) {
             let alternative: Type;
-            if (type.flags & TypeFlags.Index) {
+            if (type.flags & TypeFlags.Index || type.alternativeRepresentation && type.alternativeRepresentation.flags & TypeFlags.Index) {
                 const index = <IndexType>createType(TypeFlags.Index);
                 index.type = globalStringType;
                 alternative = index;

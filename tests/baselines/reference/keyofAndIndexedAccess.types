@@ -84,11 +84,11 @@ type K07 = keyof never;  // never
 >K07 : never
 
 type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
->K10 : "name" | "width" | "height" | "visible"
+>K10 : keyof Shape
 >Shape : Shape
 
 type K11 = keyof Shape[];  // "length" | "toString" | ...
->K11 : keyof Array
+>K11 : keyof Shape[]
 >Shape : Shape
 
 type K12 = keyof Dictionary<Shape>;  // string
@@ -131,7 +131,7 @@ type KeyOf<T> = keyof T;
 >T : T
 
 type K20 = KeyOf<Shape>;  // "name" | "width" | "height" | "visible"
->K20 : "name" | "width" | "height" | "visible"
+>K20 : keyof Shape
 >KeyOf : keyof T
 >Shape : Shape
 
@@ -452,17 +452,17 @@ function f20(component: Component<Shape>) {
     let name = component.getProperty("name");  // string
 >name : string
 >component.getProperty("name") : string
->component.getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>component.getProperty : <K extends keyof Shape>(key: K) => Shape[K]
 >component : Component<Shape>
->getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>getProperty : <K extends keyof Shape>(key: K) => Shape[K]
 >"name" : "name"
 
     let widthOrHeight = component.getProperty(cond ? "width" : "height");  // number
 >widthOrHeight : number
 >component.getProperty(cond ? "width" : "height") : number
->component.getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>component.getProperty : <K extends keyof Shape>(key: K) => Shape[K]
 >component : Component<Shape>
->getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>getProperty : <K extends keyof Shape>(key: K) => Shape[K]
 >cond ? "width" : "height" : "width" | "height"
 >cond : boolean
 >"width" : "width"
@@ -471,9 +471,9 @@ function f20(component: Component<Shape>) {
     let nameOrVisible = component.getProperty(cond ? "name" : "visible");  // string | boolean
 >nameOrVisible : string | boolean
 >component.getProperty(cond ? "name" : "visible") : string | boolean
->component.getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>component.getProperty : <K extends keyof Shape>(key: K) => Shape[K]
 >component : Component<Shape>
->getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>getProperty : <K extends keyof Shape>(key: K) => Shape[K]
 >cond ? "name" : "visible" : "name" | "visible"
 >cond : boolean
 >"name" : "name"
@@ -481,17 +481,17 @@ function f20(component: Component<Shape>) {
 
     component.setProperty("name", "rectangle");
 >component.setProperty("name", "rectangle") : void
->component.setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>component.setProperty : <K extends keyof Shape>(key: K, value: Shape[K]) => void
 >component : Component<Shape>
->setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>setProperty : <K extends keyof Shape>(key: K, value: Shape[K]) => void
 >"name" : "name"
 >"rectangle" : "rectangle"
 
     component.setProperty(cond ? "width" : "height", 10)
 >component.setProperty(cond ? "width" : "height", 10) : void
->component.setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>component.setProperty : <K extends keyof Shape>(key: K, value: Shape[K]) => void
 >component : Component<Shape>
->setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>setProperty : <K extends keyof Shape>(key: K, value: Shape[K]) => void
 >cond ? "width" : "height" : "width" | "height"
 >cond : boolean
 >"width" : "width"
@@ -500,9 +500,9 @@ function f20(component: Component<Shape>) {
 
     component.setProperty(cond ? "name" : "visible", true);  // Technically not safe
 >component.setProperty(cond ? "name" : "visible", true) : void
->component.setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>component.setProperty : <K extends keyof Shape>(key: K, value: Shape[K]) => void
 >component : Component<Shape>
->setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>setProperty : <K extends keyof Shape>(key: K, value: Shape[K]) => void
 >cond ? "name" : "visible" : "name" | "visible"
 >cond : boolean
 >"name" : "name"
@@ -563,7 +563,7 @@ function f30(shapes: Shape[]) {
 }
 
 function f31<K extends keyof Shape>(key: K) {
->f31 : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>f31 : <K extends keyof Shape>(key: K) => Shape[K]
 >K : K
 >Shape : Shape
 >key : K

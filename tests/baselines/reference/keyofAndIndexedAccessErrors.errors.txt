@@ -16,12 +16,12 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(36,21): error
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(41,31): error TS2538: Type 'boolean' cannot be used as an index type.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(46,16): error TS2538: Type 'boolean' cannot be used as an index type.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(49,12): error TS1122: A tuple type element list cannot be empty.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(63,33): error TS2345: Argument of type '"size"' is not assignable to parameter of type '"name" | "width" | "height" | "visible"'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(64,33): error TS2345: Argument of type '"name" | "size"' is not assignable to parameter of type '"name" | "width" | "height" | "visible"'.
-  Type '"size"' is not assignable to type '"name" | "width" | "height" | "visible"'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(66,24): error TS2345: Argument of type '"size"' is not assignable to parameter of type '"name" | "width" | "height" | "visible"'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(67,24): error TS2345: Argument of type '"name" | "size"' is not assignable to parameter of type '"name" | "width" | "height" | "visible"'.
-  Type '"size"' is not assignable to type '"name" | "width" | "height" | "visible"'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(63,33): error TS2345: Argument of type '"size"' is not assignable to parameter of type 'keyof Shape'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(64,33): error TS2345: Argument of type '"name" | "size"' is not assignable to parameter of type 'keyof Shape'.
+  Type '"size"' is not assignable to type 'keyof Shape'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(66,24): error TS2345: Argument of type '"size"' is not assignable to parameter of type 'keyof Shape'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(67,24): error TS2345: Argument of type '"name" | "size"' is not assignable to parameter of type 'keyof Shape'.
+  Type '"size"' is not assignable to type 'keyof Shape'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(72,5): error TS2536: Type 'keyof (T & U)' cannot be used to index type 'T | U'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(76,5): error TS2322: Type 'T | U' is not assignable to type 'T & U'.
   Type 'T' is not assignable to type 'T & U'.
@@ -130,19 +130,19 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(77,5): error 
         let x1 = getProperty(shape, "name");
         let x2 = getProperty(shape, "size");  // Error
                                     ~~~~~~
-!!! error TS2345: Argument of type '"size"' is not assignable to parameter of type '"name" | "width" | "height" | "visible"'.
+!!! error TS2345: Argument of type '"size"' is not assignable to parameter of type 'keyof Shape'.
         let x3 = getProperty(shape, cond ? "name" : "size");  // Error
                                     ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '"name" | "size"' is not assignable to parameter of type '"name" | "width" | "height" | "visible"'.
-!!! error TS2345:   Type '"size"' is not assignable to type '"name" | "width" | "height" | "visible"'.
+!!! error TS2345: Argument of type '"name" | "size"' is not assignable to parameter of type 'keyof Shape'.
+!!! error TS2345:   Type '"size"' is not assignable to type 'keyof Shape'.
         setProperty(shape, "name", "rectangle");
         setProperty(shape, "size", 10);  // Error
                            ~~~~~~
-!!! error TS2345: Argument of type '"size"' is not assignable to parameter of type '"name" | "width" | "height" | "visible"'.
+!!! error TS2345: Argument of type '"size"' is not assignable to parameter of type 'keyof Shape'.
         setProperty(shape, cond ? "name" : "size", 10);  // Error
                            ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '"name" | "size"' is not assignable to parameter of type '"name" | "width" | "height" | "visible"'.
-!!! error TS2345:   Type '"size"' is not assignable to type '"name" | "width" | "height" | "visible"'.
+!!! error TS2345: Argument of type '"name" | "size"' is not assignable to parameter of type 'keyof Shape'.
+!!! error TS2345:   Type '"size"' is not assignable to type 'keyof Shape'.
     }
     
     function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {

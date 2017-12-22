@@ -41,9 +41,9 @@ const flowtypes = <A>(b: B) => {
 }
 
 const {combined, literal} = flowtypes<{a: string}>({b: 'b-value'})
->combined : (fn: (combined: { a: string; } & B) => void) => any
->literal : (fn: (aPlusB: { a: string; } & B) => void) => any
->flowtypes<{a: string}>({b: 'b-value'}) : { combined: (fn: (combined: { a: string; } & B) => void) => any; literal: (fn: (aPlusB: { a: string; } & B) => void) => any; }
+>combined : (fn: (combined: A & B) => void) => any
+>literal : (fn: (aPlusB: A & B) => void) => any
+>flowtypes<{a: string}>({b: 'b-value'}) : { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
 >flowtypes : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
 >a : string
 >{b: 'b-value'} : { b: string; }
@@ -52,36 +52,36 @@ const {combined, literal} = flowtypes<{a: string}>({b: 'b-value'})
 
 literal(aPlusB => {
 >literal(aPlusB => {  aPlusB.b  aPlusB.a}) : any
->literal : (fn: (aPlusB: { a: string; } & B) => void) => any
->aPlusB => {  aPlusB.b  aPlusB.a} : (aPlusB: { a: string; } & B) => void
->aPlusB : { a: string; } & B
+>literal : (fn: (aPlusB: A & B) => void) => any
+>aPlusB => {  aPlusB.b  aPlusB.a} : (aPlusB: A & B) => void
+>aPlusB : A & B
 
   aPlusB.b
 >aPlusB.b : string
->aPlusB : { a: string; } & B
+>aPlusB : A & B
 >b : string
 
   aPlusB.a
 >aPlusB.a : string
->aPlusB : { a: string; } & B
+>aPlusB : A & B
 >a : string
 
 })
 
 combined(comb => {
 >combined(comb => {  comb.b  comb.a}) : any
->combined : (fn: (combined: { a: string; } & B) => void) => any
->comb => {  comb.b  comb.a} : (comb: { a: string; } & B) => void
->comb : { a: string; } & B
+>combined : (fn: (combined: A & B) => void) => any
+>comb => {  comb.b  comb.a} : (comb: A & B) => void
+>comb : A & B
 
   comb.b
 >comb.b : string
->comb : { a: string; } & B
+>comb : A & B
 >b : string
 
   comb.a
 >comb.a : string
->comb : { a: string; } & B
+>comb : A & B
 >a : string
 
 })
