@@ -438,12 +438,11 @@ The purpose of overload resolution in a function call is to ensure that at least
 Overload resolution has no impact on the run-time behavior of a function call.
 Since JavaScript doesn't support function overloading, all that matters at run-time is the name of the function.
 
-*TODO: Describe use of [wildcard function types](https://github.com/Microsoft/TypeScript/issues/3970) in overload resolution*.
-(Jason meant "anyFunctionType", which has weird effects all over overload resolution and inference)
+*TODO: Describe use of [wildcard function types](https://github.com/Microsoft/TypeScript/issues/3970) in overload resolution, as well as progressive inference of contextually typed arguments generally*.
 
 Processing a typed function call consists of the following steps:
 
-* A list of signatures is constructed from the call signatures in the function type in declaration order. For classes and interfaces, inherited signatures are considered to follow explicitly declared signatures in `extends` clause order.
+* A list of signatures is constructed from the call signatures in the function type in declaration order. For classes and interfaces, inherited signatures are considered to follow explicitly declared signatures in `extends` clause order. Signatures that contain literal types always come before signatures that do not.
 * Signatures that are not applicable are removed.
 * If the list of signatures is empty, the function call is an error.
 * Otherwise, if the list contains one or more signatures for which the type of each argument expression is a subtype of each corresponding parameter type after type arguments are substituted for their associated type parameters, the return type of the first of those signatures becomes the type of the function call.
@@ -456,8 +455,6 @@ A signature is said to be an ***applicable signature*** with respect to an argum
 * the number of type arguments, if provided, is not less than the number of required type parameters,
 * the number of type arguments, if provided, is not greater than the number of type parameters,
 * for each argument expression *e* and its corresponding parameter *p,* when *e* is contextually typed (section [#contextually-typed-expressions]<!--4.23-->) by the *T*, no errors ensue and the type of *e* is assignable to (section [#assignment-compatibility]<!--3.11.4-->) *T*, where *T* is the type of *p* for signatures without type parameters, and the type of *p* after type arguments are substituted for their associated type parameters otherwise.
-
-*TODO: Spreading an [iterator](https://github.com/Microsoft/TypeScript/pull/2498) into a function call*.
 
 ### Type Argument Inference { #type-argument-inference }
 

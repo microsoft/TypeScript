@@ -163,8 +163,6 @@ Enum types are assignable to the Number primitive type, and vice versa, but diff
 
 ### String Literal Types { #string-literal-types }
 
-Specialized signatures (section [#specialized-signatures]<!--3.9.2.4-->) permit string literals to be used as types in parameter type annotations. String literal types are permitted only in that context and nowhere else.
-
 All string literal types are subtypes of the String primitive type.
 
 *TODO: Update to reflect [expanded support for string literal types](https://github.com/Microsoft/TypeScript/pull/5185)*.
@@ -274,8 +272,6 @@ Properties are either ***public***, ***private***, or ***protected*** and are ei
 
 * Properties in a class declaration may be designated public, private, or protected, while properties declared in other contexts are always considered public. Private members are only accessible within their declaring class, as described in section [#accessibility]<!--8.2.2-->, and private properties match only themselves in subtype and assignment compatibility checks, as described in section [#type-relationships]<!--3.11-->. Protected members are only accessible within their declaring class and classes derived from it, as described in section [#accessibility]<!--8.2.2-->, and protected properties match only themselves and overrides in subtype and assignment compatibility checks, as described in section [#type-relationships]<!--3.11-->.
 * Properties in an object type literal or interface declaration may be designated required or optional, while properties declared in other contexts are always considered required. Properties that are optional in the target type of an assignment may be omitted from source objects, as described in section [#assignment-compatibility]<!--3.11.4-->.
-
-Call and construct signatures may be ***specialized*** (section [#specialized-signatures]<!--3.9.2.4-->) by including parameters with string literal types. Specialized signatures are used to express patterns where specific string values for some parameters cause the types of other parameters or the function result to become further specialized.
 
 ## Union Types { #union-types }
 
@@ -962,8 +958,6 @@ A parameter is permitted to include a `public`, `private`, or `protected` modifi
 
 A type annotation for a rest parameter must denote an array type.
 
-When a parameter type annotation specifies a string literal type, the containing signature is a specialized signature (section [#specialized-signatures]<!--3.9.2.4-->). Specialized signatures are not permitted in conjunction with a function body, i.e. the *FunctionExpression*, *FunctionImplementation*, *MemberFunctionImplementation*, and *ConstructorImplementation* grammar productions do not permit parameters with string literal types.
-
 A parameter can be marked optional by following its name or binding pattern with a question mark (`?`) or by including an initializer. Initializers (including binding property or element initializers) are permitted only when the parameter list occurs in conjunction with a function body, i.e. only in a *FunctionExpression*, *FunctionImplementation*, *MemberFunctionImplementation*, or *ConstructorImplementation* grammar production.
 
 *TODO: Update to reflect [binding parameter cannot be optional in implementation signature](https://github.com/Microsoft/TypeScript/issues/2797)*.
@@ -977,28 +971,6 @@ If present, a call signature's return type annotation specifies the type of the 
 When a call signature with no return type annotation occurs in a context without a function body, the return type is assumed to be the Any type.
 
 When a call signature with no return type annotation occurs in a context that has a function body (specifically, a function implementation, a member function implementation, or a member accessor declaration), the return type is inferred from the function body as described in section [#function-implementations]<!--6.3-->.
-
-#### Specialized Signatures { #specialized-signatures }
-
-When a parameter type annotation specifies a string literal type (section [#string-literal-types]<!--3.2.9-->), the containing signature is considered a specialized signature. Specialized signatures are used to express patterns where specific string values for some parameters cause the types of other parameters or the function result to become further specialized. For example, the declaration
-
-```TypeScript
-interface Document {
-    createElement(tagName: "div"): HTMLDivElement;
-    createElement(tagName: "span"): HTMLSpanElement;
-    createElement(tagName: "canvas"): HTMLCanvasElement;
-    createElement(tagName: string): HTMLElement;
-}
-```
-
-states that calls to 'createElement' with the string literals "div", "span", and "canvas" return values of type 'HTMLDivElement', 'HTMLSpanElement', and 'HTMLCanvasElement' respectively, and that calls with all other string expressions return values of type 'HTMLElement'.
-
-When writing overloaded declarations such as the one above it is important to list the non-specialized signature last.
-This is because overload resolution (section [#overload-resolution]<!--4.15.1-->) processes the candidates in declaration order and picks the first one that matches.
-
-TODO: This part might be wrong now
-Every specialized call or construct signature in an object type must be assignable to at least one non-specialized call or construct signature in the same object type (where a call signature *A* is considered assignable to another call signature *B* if an object type containing only *A* would be assignable to an object type containing only *B*).
-For example, the 'createElement' property in the example above is of a type that contains three specialized signatures, all of which are assignable to the non-specialized signature in the type.
 
 ### Construct Signatures { #construct-signatures }
 
@@ -1258,7 +1230,7 @@ the variables 'a' and 'b' are of identical types because the two type references
     * the type of *N* is a subtype of that of *M*,
     * if *M* is a required property, *N* is also a required property, and
     * *M* and *N* are both public, *M* and *N* are both private and originate in the same declaration, *M* and *N* are both protected and originate in the same declaration, or *M* is protected and *N* is declared in a class derived from the class in which *M* is declared.
-  * *M* is a non-specialized call or construct signature and *S* has an apparent call or construct signature *N* where, when *M* and *N* are instantiated using type Any as the type argument for all type parameters declared by *M* and *N* (if any),
+  * *M* is a call or construct signature and *S* has an apparent call or construct signature *N* where, when *M* and *N* are instantiated using type Any as the type argument for all type parameters declared by *M* and *N* (if any),
     * the signatures are of the same kind (call or construct),
     * *M* has a rest parameter or the number of non-optional parameters in *N* is less than or equal to the total number of parameters in *M*,
     * for parameter positions that are present in both signatures, each parameter type in *N* is a subtype or supertype of the corresponding parameter type in *M*, and
@@ -1267,8 +1239,6 @@ the variables 'a' and 'b' are of identical types because the two type references
   * *M* is a numeric index signature of type *U*, and *U* is the Any type or *S* has an apparent string or numeric index signature of a type that is a subtype of *U*.
 
 When comparing call or construct signatures, parameter names are ignored and rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
-
-Note that specialized call and construct signatures (section [#specialized-signatures]<!--3.9.2.4-->) are not significant when determining subtype and supertype relationships.
 
 Also note that type parameters are not considered object types. Thus, the only subtypes of a type parameter *T* are *T* itself and other type parameters that are directly or indirectly constrained to *T*.
 
@@ -1296,7 +1266,7 @@ Types are required to be assignment compatible in certain circumstances, such as
     * if *M* is a required property, *N* is also a required property, and
     * *M* and *N* are both public, *M* and *N* are both private and originate in the same declaration, *M* and *N* are both protected and originate in the same declaration, or *M* is protected and *N* is declared in a class derived from the class in which *M* is declared.
   * *M* is an optional property and *S* has no apparent property of the same name as *M*.
-  * *M* is a non-specialized call or construct signature and *S* has an apparent call or construct signature *N* where, when *M* and *N* are instantiated using type Any as the type argument for all type parameters declared by *M* and *N* (if any),
+  * *M* is a call or construct signature and *S* has an apparent call or construct signature *N* where, when *M* and *N* are instantiated using type Any as the type argument for all type parameters declared by *M* and *N* (if any),
     * the signatures are of the same kind (call or construct),
     * *M* has a rest parameter or the number of non-optional parameters in *N* is less than or equal to the total number of parameters in *M*,
     * for parameter positions that are present in both signatures, each parameter type in *N* is assignable to or from the corresponding parameter type in *M*, and
@@ -1305,8 +1275,6 @@ Types are required to be assignment compatible in certain circumstances, such as
   * *M* is a numeric index signature of type *U*, and *U* is the Any type or *S* has an apparent string or numeric index signature of a type that is assignable to *U*.
 
 When comparing call or construct signatures, parameter names are ignored and rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
-
-Note that specialized call and construct signatures (section [#specialized-signatures]<!--3.9.2.4-->) are not significant when determining assignment compatibility.
 
 The assignment compatibility and subtyping rules differ only in that
 

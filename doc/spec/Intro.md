@@ -404,8 +404,6 @@ In the following screen shot, a programming tool combines information from overl
 
 &emsp;&emsp;![](images/image4.png)
 
-Section [#specialized-signatures]<!--3.9.2.4--> provides details on how to use string literals in function signatures.
-
 ## Generic Types and Functions { #generic-types-and-functions }
 
 Like overloading on string parameters, *generic types* make it easier for TypeScript to accurately capture the behavior of JavaScript libraries. Because they enable type information to flow from client code, through library code, and back into client code, generic types may do more than any other TypeScript feature to support detailed API descriptions.
