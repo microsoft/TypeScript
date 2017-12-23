@@ -36,6 +36,7 @@ interface Array<T> {}`
         currentDirectory?: string;
         newLine?: string;
         useWindowsStylePaths?: boolean;
+        environmentVariables?: Map<string>;
     }
 
     export function createWatchedSystem(fileOrFolderList: ReadonlyArray<FileOrFolder>, params?: TestServerHostCreationParameters): TestServerHost {
@@ -48,7 +49,8 @@ interface Array<T> {}`
             params.currentDirectory || "/",
             fileOrFolderList,
             params.newLine,
-            params.useWindowsStylePaths);
+            params.useWindowsStylePaths,
+            params.environmentVariables);
         return host;
     }
 
@@ -62,7 +64,8 @@ interface Array<T> {}`
             params.currentDirectory || "/",
             fileOrFolderList,
             params.newLine,
-            params.useWindowsStylePaths);
+            params.useWindowsStylePaths,
+            params.environmentVariables);
         return host;
     }
 
@@ -75,6 +78,7 @@ interface Array<T> {}`
     interface FSEntry {
         path: Path;
         fullPath: string;
+        modifiedTime: Date;
     }
 
     interface File extends FSEntry {
@@ -259,7 +263,7 @@ interface Array<T> {}`
         private readonly executingFilePath: string;
         private readonly currentDirectory: string;
 
-        constructor(public withSafeList: boolean, public useCaseSensitiveFileNames: boolean, executingFilePath: string, currentDirectory: string, fileOrFolderList: ReadonlyArray<FileOrFolder>, public readonly newLine = "\n", public readonly useWindowsStylePath?: boolean) {
+        constructor(public withSafeList: boolean, public useCaseSensitiveFileNames: boolean, executingFilePath: string, currentDirectory: string, fileOrFolderList: ReadonlyArray<FileOrFolder>, public readonly newLine = "\n", public readonly useWindowsStylePath?: boolean, private readonly environmentVariables?: Map<string>) {
             this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
             this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
             this.executingFilePath = this.getHostSpecificPath(executingFilePath);
@@ -307,6 +311,7 @@ interface Array<T> {}`
                             // Update file
                             if (currentEntry.content !== fileOrDirectory.content) {
                                 currentEntry.content = fileOrDirectory.content;
+                                currentEntry.modifiedTime = new Date();
                                 if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
                                     this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
                                 }
@@ -326,6 +331,7 @@ interface Array<T> {}`
                         }
                         else {
                             // Folder update: Nothing to do.
+                            currentEntry.modifiedTime = new Date();
                         }
                     }
                 }
@@ -416,6 +422,7 @@ interface Array<T> {}`
 
         private addFileOrFolderInFolder(folder: Folder, fileOrDirectory: File | Folder, ignoreWatch?: boolean) {
             folder.entries.push(fileOrDirectory);
+            folder.modifiedTime = new Date();
             this.fs.set(fileOrDirectory.path, fileOrDirectory);
 
             if (ignoreWatch) {
@@ -432,6 +439,7 @@ interface Array<T> {}`
             const baseFolder = this.fs.get(basePath) as Folder;
             if (basePath !== fileOrDirectory.path) {
                 Debug.assert(!!baseFolder);
+                baseFolder.modifiedTime = new Date();
                 filterMutate(baseFolder.entries, entry => entry !== fileOrDirectory);
             }
             this.fs.delete(fileOrDirectory.path);
@@ -493,28 +501,37 @@ interface Array<T> {}`
             }
         }
 
-        private toFile(fileOrDirectory: FileOrFolder): File {
-            const fullPath = getNormalizedAbsolutePath(fileOrDirectory.path, this.currentDirectory);
-            return {
-                path: this.toPath(fullPath),
-                content: fileOrDirectory.content,
-                fullPath,
-                fileSize: fileOrDirectory.fileSize
-            };
-        }
-
-        private toFolder(path: string): Folder {
+        private toFsEntry(path: string): FSEntry {
             const fullPath = getNormalizedAbsolutePath(path, this.currentDirectory);
             return {
                 path: this.toPath(fullPath),
-                entries: [],
-                fullPath
+                fullPath,
+                modifiedTime: new Date()
             };
+        }
+
+        private toFile(fileOrDirectory: FileOrFolder): File {
+            const file = this.toFsEntry(fileOrDirectory.path) as File;
+            file.content = fileOrDirectory.content;
+            file.fileSize = fileOrDirectory.fileSize;
+            return file;
+        }
+
+        private toFolder(path: string): Folder {
+            const folder = this.toFsEntry(path) as Folder;
+            folder.entries = [];
+            return folder;
         }
 
         fileExists(s: string) {
             const path = this.toFullPath(s);
             return isFile(this.fs.get(path));
+        }
+
+        getModifiedTime(s: string) {
+            const path = this.toFullPath(s);
+            const fsEntry = this.fs.get(path);
+            return fsEntry && fsEntry.modifiedTime;
         }
 
         readFile(s: string) {
@@ -624,7 +641,7 @@ interface Array<T> {}`
                 this.timeoutCallbacks.invoke(timeoutId);
             }
             catch (e) {
-                if (e.message === this.existMessage) {
+                if (e.message === this.exitMessage) {
                     return;
                 }
                 throw e;
@@ -682,15 +699,17 @@ interface Array<T> {}`
             clear(this.output);
         }
 
-        readonly existMessage = "System Exit";
+        readonly exitMessage = "System Exit";
         exitCode: number;
         readonly resolvePath = (s: string) => s;
         readonly getExecutingFilePath = () => this.executingFilePath;
         readonly getCurrentDirectory = () => this.currentDirectory;
         exit(exitCode?: number) {
             this.exitCode = exitCode;
-            throw new Error(this.existMessage);
+            throw new Error(this.exitMessage);
         }
-        readonly getEnvironmentVariable = notImplemented;
+        getEnvironmentVariable(name: string) {
+            return this.environmentVariables && this.environmentVariables.get(name);
+        }
     }
 }

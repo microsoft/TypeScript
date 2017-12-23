@@ -60,6 +60,17 @@ namespace ts {
 
     /* @internal */
     export const missingFileModifiedTime = new Date(0); // Any subsequent modification will occur after this time
+
+    const chunkSizeOrUnchangedThresholdsForPriority = getPriorityValues(32);
+    function chunkSize(watchPriority: WatchPriority) {
+        return chunkSizeOrUnchangedThresholdsForPriority[watchPriority];
+    }
+
+    /*@internal*/
+    export function unChangedThreshold(watchPriority: WatchPriority) {
+        return chunkSizeOrUnchangedThresholdsForPriority[watchPriority];
+    }
+
     /* @internal */
     export function createDynamicPriorityPollingStatsSet(host: System): DynamicPriorityPollingStatsSet {
         if (!host.getModifiedTime || !host.setTimeout) {
@@ -74,10 +85,9 @@ namespace ts {
         interface WatchPriorityQueue extends Array<WatchedFile> {
             watchPriority: WatchPriority;
             pollIndex: number;
+            pollScheduled: boolean;
         }
 
-        const chunkSizes = getPriorityValues(32);
-        const unChangedThresholds = getPriorityValues(32);
         const watchedFiles: WatchedFile[] = [];
         const changedFilesInLastPoll: WatchedFile[] = [];
         const priorityQueues = [createPriorityQueue(WatchPriority.High), createPriorityQueue(WatchPriority.Medium), createPriorityQueue(WatchPriority.Low)];
@@ -109,18 +119,20 @@ namespace ts {
             const queue = [] as WatchPriorityQueue;
             queue.watchPriority = watchPriority;
             queue.pollIndex = 0;
+            queue.pollScheduled = false;
             return queue;
         }
 
         function pollPriorityQueue(queue: WatchPriorityQueue) {
             const priority = queue.watchPriority;
-            queue.pollIndex = pollQueue(queue, priority, queue.pollIndex, chunkSizes[priority]);
+            queue.pollIndex = pollQueue(queue, priority, queue.pollIndex, chunkSize(priority));
             // Set the next polling index and timeout
             if (queue.length) {
                 scheduleNextPoll(priority);
             }
             else {
                 Debug.assert(queue.pollIndex === 0);
+                queue.pollScheduled = false;
             }
         }
 
@@ -132,7 +144,7 @@ namespace ts {
             pollPriorityQueue(queue);
             // Schedule poll if there are files in changedFilesInLastPoll but no files in the actual queue
             // as pollPriorityQueue wont schedule for next poll
-            if (!queue.length && changedFilesInLastPoll.length) {
+            if (!queue.pollScheduled && changedFilesInLastPoll.length) {
                 scheduleNextPoll(WatchPriority.High);
             }
         }
@@ -141,7 +153,6 @@ namespace ts {
             // Max visit would be all elements of the queue
             let needsVisit = queue.length;
             let definedValueCopyToIndex = pollIndex;
-            const unChangedThreshold = unChangedThresholds[priority];
             for (let polled = 0; polled < chunkSize && needsVisit > 0; nextPollIndex(), needsVisit--) {
                 const watchedFile = queue[pollIndex];
                 if (!watchedFile) {
@@ -161,17 +172,18 @@ namespace ts {
                 else if (fileChanged) {
                     watchedFile.unchangedPolls = 0;
                     // Changed files go to changedFilesInLastPoll queue
-                    if (queue !== changedFilesInLastPoll && priority !== WatchPriority.High) {
+                    if (queue !== changedFilesInLastPoll) {
                         queue[pollIndex] = undefined;
                         addChangedFileToHighPriorityQueue(watchedFile);
                     }
                 }
-                else if (watchedFile.unchangedPolls !== unChangedThreshold) {
+                else if (watchedFile.unchangedPolls !== unChangedThreshold(priority)) {
                     watchedFile.unchangedPolls++;
                 }
                 else if (queue === changedFilesInLastPoll) {
                     // Restart unchangedPollCount for unchanged file and move to high priority queue
-                    watchedFile.unchangedPolls = 0;
+                    watchedFile.unchangedPolls = 1;
+                    queue[pollIndex] = undefined;
                     addToPriorityQueue(watchedFile, WatchPriority.High);
                 }
                 else if (priority !== WatchPriority.Low) {
@@ -207,19 +219,23 @@ namespace ts {
         }
 
         function addToPriorityQueue(file: WatchedFile, priority: WatchPriority) {
-            if (priorityQueues[priority].push(file) === 1) {
+            priorityQueues[priority].push(file);
+            scheduleNextPollIfNotAlreadyScheduled(priority);
+        }
+
+        function addChangedFileToHighPriorityQueue(file: WatchedFile) {
+            changedFilesInLastPoll.push(file);
+            scheduleNextPollIfNotAlreadyScheduled(WatchPriority.High);
+        }
+
+        function scheduleNextPollIfNotAlreadyScheduled(priority: WatchPriority) {
+            if (!priorityQueues[priority].pollScheduled) {
                 scheduleNextPoll(priority);
             }
         }
 
-        function addChangedFileToHighPriorityQueue(file: WatchedFile) {
-            if (changedFilesInLastPoll.push(file) === 1 && !priorityQueues[WatchPriority.High].length) {
-                scheduleNextPoll(WatchPriority.High);
-            }
-        }
-
         function scheduleNextPoll(priority: WatchPriority) {
-            host.setTimeout(priority === WatchPriority.High ? pollHighPriorityQueue : pollPriorityQueue, pollingInterval(priority), priorityQueues[priority]);
+            priorityQueues[priority].pollScheduled = host.setTimeout(priority === WatchPriority.High ? pollHighPriorityQueue : pollPriorityQueue, pollingInterval(priority), priorityQueues[priority]);
         }
 
         function getModifiedTime(fileName: string) {

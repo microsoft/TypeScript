@@ -2113,4 +2113,67 @@ declare module "fs" {
             host.checkScreenClears(2);
         });
     });
+
+    describe("tsc-watch with different polling/non polling options", () => {
+        it("watchFile using dynamic priority polling", () => {
+            const projectFolder = "/a/username/project";
+            const file1: FileOrFolder = {
+                path: `${projectFolder}/typescript.ts`,
+                content: "var z = 10;"
+            };
+            const files = [file1, libFile];
+            const environmentVariables = createMap<string>();
+            environmentVariables.set("TSC_WATCHFILE", "DynamicPriorityPolling");
+            const host = createWatchedSystem(files, { environmentVariables });
+            const watch = createWatchModeWithoutConfigFile([file1.path], host);
+
+            const initialProgram = watch();
+            verifyProgram();
+
+            const mediumPriorityThreshold = unChangedThreshold(WatchPriority.Medium);
+            for (let index = 0; index < mediumPriorityThreshold; index++) {
+                // Transition libFile and file1 to low priority queue
+                host.checkTimeoutQueueLengthAndRun(1);
+                assert.deepEqual(watch(), initialProgram);
+            }
+
+            // Make a change to file
+            file1.content = "var zz30 = 100;";
+            host.reloadFS(files);
+
+            // This should detect change in the file
+            host.checkTimeoutQueueLengthAndRun(1);
+            assert.deepEqual(watch(), initialProgram);
+
+            // Callbacks: medium priority + high priority queue and scheduled program update
+            host.checkTimeoutQueueLengthAndRun(3);
+            // During this timeout the file would be detected as unchanged
+            let fileUnchangeDetected = 1;
+            const newProgram = watch();
+            assert.notStrictEqual(newProgram, initialProgram);
+
+            verifyProgram();
+            const outputFile1 = changeExtension(file1.path, ".js");
+            assert.isTrue(host.fileExists(outputFile1));
+            assert.equal(host.readFile(outputFile1), file1.content + host.newLine);
+
+            const newThreshold = unChangedThreshold(WatchPriority.High) + mediumPriorityThreshold;
+            for (; fileUnchangeDetected < newThreshold; fileUnchangeDetected++) {
+                // For low + Medium/high priority
+                host.checkTimeoutQueueLengthAndRun(2);
+                assert.deepEqual(watch(), newProgram);
+            }
+
+            // Everything goes in low priority queue
+            host.checkTimeoutQueueLengthAndRun(1);
+            assert.deepEqual(watch(), newProgram);
+
+            function verifyProgram() {
+                checkProgramActualFiles(watch(), files.map(f => f.path));
+                checkWatchedFiles(host, []);
+                checkWatchedDirectories(host, [], /*recursive*/ false);
+                checkWatchedDirectories(host, [], /*recursive*/ true);
+            }
+        });
+    });
 }

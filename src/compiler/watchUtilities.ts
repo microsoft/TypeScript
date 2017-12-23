@@ -108,7 +108,7 @@ namespace ts {
     }
 
     export function getWatchFactory<X = undefined, Y = undefined>(host: System, watchLogLevel: WatchLogLevel, log: (s: string) => void, getDetailWatchInfo?: GetDetailWatchInfo<X, Y>): WatchFactory<X, Y> {
-        const value = host.getEnvironmentVariable("TSC_WATCHFILE");
+        const value = host.getEnvironmentVariable && host.getEnvironmentVariable("TSC_WATCHFILE");
         switch (value) {
             case "PriorityPollingInterval":
                 // Use polling interval based on priority when create watch using host.watchFile
