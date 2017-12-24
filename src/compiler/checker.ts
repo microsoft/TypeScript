@@ -22633,9 +22633,11 @@ namespace ts {
                     // type parameter at this position, we report an error.
                     const sourceConstraint = source.constraint && getTypeFromTypeNode(source.constraint);
                     const targetConstraint = getConstraintFromTypeParameter(target);
-                    if ((sourceConstraint || targetConstraint) &&
-                        (!sourceConstraint || !targetConstraint || !isTypeIdenticalTo(sourceConstraint, targetConstraint))) {
-                        return false;
+                    if (sourceConstraint) {
+                        // relax check if later interface augmentation has no constraint
+                        if (!targetConstraint || !isTypeIdenticalTo(sourceConstraint, targetConstraint)) {
+                            return false;
+                        }
                     }
 
                     // If the type parameter node has a default and it is not identical to the default
