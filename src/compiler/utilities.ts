@@ -1597,6 +1597,35 @@ namespace ts {
             node.expression.right;
     }
 
+    export function getContainingSingleInitializerOfVariableStatement(node: Node): Node | undefined {
+        if (!node) return;
+
+        let initializer: Node;
+        let declarationType: TypeNode;
+
+        return findAncestor(node.parent, (n: Node) => {
+            if (isVariableStatement(n) && n.declarationList.declarations.length > 0) {
+                if (initializer && initializer.kind === SyntaxKind.AsExpression &&
+                    n.declarationList.declarations[0].initializer === initializer) {
+                    return true;
+                }
+                if (declarationType && n.declarationList.declarations[0].type === declarationType) {
+                    return true;
+                }
+                return "quit";
+            }
+            if (isFunctionLike(n)) {
+                return "quit";
+            }
+            if (isVariableDeclaration(n)) {
+                initializer = n.initializer;
+                declarationType = n.type;
+            }
+
+            return false;
+        });
+    }
+
     export function getSingleInitializerOfVariableStatement(node: Node, child?: Node): Node {
         return isVariableStatement(node) &&
             node.declarationList.declarations.length > 0 &&
@@ -1644,6 +1673,18 @@ namespace ts {
             if (isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) !== SpecialPropertyAssignmentKind.None ||
                 node.kind === SyntaxKind.PropertyAccessExpression && node.parent && node.parent.kind === SyntaxKind.ExpressionStatement) {
                 getJSDocCommentsAndTagsWorker(parent);
+            }
+
+            // Try to recognize this pattern when node is initializer of variable declaration with as expression or type annotation and JSDoc comments are on containing variable statement.
+            // /**
+            //   * @param {number} name
+            //   * @returns {number}
+            //   */
+            // var x = someFunction as (name: number) => void;
+            // var x: (name: number) => void = someFunction;
+            let containingVariableStatement: Node;
+            if (containingVariableStatement = getContainingSingleInitializerOfVariableStatement(node)) {
+                getJSDocCommentsAndTagsWorker(containingVariableStatement);
             }
 
             // Pull parameter comments from declaring function as well
