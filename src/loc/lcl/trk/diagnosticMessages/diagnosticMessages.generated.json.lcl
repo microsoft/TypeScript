@@ -2991,7 +2991,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expected {0}-{1} type arguments; provide these with an '@extends' tag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{0}-{1} türünde bağımsız değişkenler bekleniyordu; bunları bir '@extends' etiketiyle sağlayın.]]></Val>
+            <Val><![CDATA[{0}-{1} tür bağımsız değişkeni bekleniyordu; bunları bir '@extends' etiketiyle sağlayın.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3018,7 +3018,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expected {0} type arguments, but got {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{0} türünde bağımsız değişkenler bekleniyordu ancak {1} alındı.]]></Val>
+            <Val><![CDATA[{0} tür bağımsız değişkeni bekleniyordu ancak {1} alındı.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3027,7 +3027,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expected {0} type arguments; provide these with an '@extends' tag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{0} türünde bağımsız değişkenler bekleniyordu; bunları bir '@extends' etiketiyle sağlayın.]]></Val>
+            <Val><![CDATA[{0} tür bağımsız değişkeni bekleniyordu; bunları bir '@extends' etiketiyle sağlayın.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3174,7 +3174,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Exported variable '{0}' has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan '{0}' değişkeni, {2} dış modülündeki '{1}' özel adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan '{0}' değişkeni, {2} dış modülündeki '{1}' adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3183,7 +3183,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Exported variable '{0}' has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan '{0}' değişkeni, '{2}' özel modüldeki '{1}' özel adına sahip veya bu adı kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan '{0}' değişkeni, '{2}' özel modüldeki '{1}' adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4689,7 +4689,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module Resolution Options]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modül Çözünürlüğü Seçenekleri]]></Val>
+            <Val><![CDATA[Modül Çözümleme Seçenekleri]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5217,7 +5217,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki oluşturucunun '{0}' parametresi, {2} dış modülündeki '{1}' özel adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki oluşturucunun '{0}' parametresi, {2} dış modülündeki '{1}' adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5262,7 +5262,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of exported function has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan işlevin '{0}' parametresi, {2} dış modülündeki '{1}' özel adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan işlevin '{0}' parametresi, {2} dış modülündeki '{1}' adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5325,7 +5325,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public method from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki ortak metodun '{0}' parametresi, {2} dış modülündeki '{1}' özel adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki ortak metodun '{0}' parametresi, {2} dış modülündeki '{1}' adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5352,7 +5352,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public static method from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki ortak metodun '{0}' parametresi, {2} dış modülündeki '{1}' özel adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki ortak metodun '{0}' parametresi, {2} dış modülündeki '{1}' adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5397,7 +5397,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel ayarlayıcı '{0}' için parametre türü, '{2}' özel modülündeki '{1}' adını taşıyor veya kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel ayarlayıcı '{0}' için parametre türü, '{2}' özel modülündeki '{1}' adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5406,7 +5406,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public setter '{0}' from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel ayarlayıcı '{0}' için parametre türü, '{1}' özel adını taşıyor veya kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel ayarlayıcı '{0}' için parametre türü, '{1}' özel adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5415,7 +5415,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public static setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik ayarlayıcı '{0}' için parametre türü, '{2}' özel modülündeki '{1}' adını taşıyor veya kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik ayarlayıcı '{0}' için parametre türü, '{2}' özel modülündeki '{1}' adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5424,7 +5424,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public static setter '{0}' from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik ayarlayıcı '{0}' için parametre türü, '{1}' özel adını taşıyor veya kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik ayarlayıcı '{0}' için parametre türü, '{1}' özel adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5805,7 +5805,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public property '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıfın '{0}' ortak özelliği, {2} dış modülündeki '{1}' özel adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıfın '{0}' ortak özelliği, {2} dış modülündeki '{1}' adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5832,7 +5832,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public static method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıfın '{0}' genel statik metodu, {2} dış modülündeki '{1}' özel adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıfın '{0}' genel statik metodu, {2} dış modülündeki '{1}' adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5859,7 +5859,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public static property '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıfın '{0}' ortak statik özelliği, {2} dış modülündeki '{1}' özel adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıfın '{0}' ortak statik özelliği, {2} dış modülündeki '{1}' adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6216,7 +6216,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel alıcı '{0}' için dönüş türü, '{2}' dış modülündeki '{1}' adını taşıyor veya kullanıyor ancak adlandırılamıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel alıcı '{0}' için dönüş türü, '{2}' dış modülündeki '{1}' adına sahip veya bu adı kullanıyor ancak adlandırılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6225,7 +6225,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel alıcı '{0}' için dönüş türü, '{2}' özel modülündeki '{1}' adını taşıyor veya kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel alıcı '{0}' için dönüş türü, '{2}' özel modülündeki '{1}' adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6234,7 +6234,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel alıcı '{0}' için dönüş türü, '{1}' özel adını taşıyor veya kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel alıcı '{0}' için dönüş türü, '{1}' özel adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6270,7 +6270,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik alıcı '{0}' için dönüş türü, '{2}' dış modülündeki '{1}' adını taşıyor veya kullanıyor ancak adlandırılamıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik alıcı '{0}' için dönüş türü, '{2}' dış modülündeki '{1}' adına sahip veya bu adı kullanıyor ancak adlandırılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6279,7 +6279,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik alıcı '{0}' için dönüş türü, '{2}' özel modülündeki '{1}' adını taşıyor veya kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik alıcı '{0}' için dönüş türü, '{2}' özel modülündeki '{1}' adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6288,7 +6288,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik alıcı '{0}' için dönüş türü, '{1}' özel adını taşıyor veya kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik alıcı '{0}' için dönüş türü, '{1}' özel adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6324,7 +6324,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Reusing module resolutions originating in '{0}' since resolutions are unchanged from old program.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Eski programdaki çözmeler değişmediğinden '{0}' kaynaklı modül çözmeleri yeniden kullanılıyor.]]></Val>
+            <Val><![CDATA[Eski programdaki çözümlemeler değişmediğinden '{0}' kaynaklı modül çözümlemeleri yeniden kullanılıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6564,7 +6564,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Spread types may only be created from object types.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Spread türleri yalnızca nesne türlerinden oluşturulabilir.]]></Val>
+            <Val><![CDATA[Yayılma türleri yalnızca nesne türlerinden oluşturulabilir.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8562,7 +8562,7 @@
         <Str Cat="Text">
           <Val><![CDATA['extends' clause of exported interface '{0}' has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan '{0}' arabirimin 'extends' yan tümcesi, '{1}' özel adına sahip veya bu adı kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan '{0}' arabiriminin 'extends' yan tümcesi, '{1}' özel adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
