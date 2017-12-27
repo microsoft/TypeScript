@@ -1192,6 +1192,28 @@ namespace ts.projectSystem {
             checkNumberOfInferredProjects(projectService, 0);
         });
 
+        it("external project for dynamic file", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "let x =1;"
+            };
+            const externalProjectName = "^ScriptDocument1 file1.ts";
+            const externalFiles = toExternalFiles(["^ScriptDocument1 file1.ts"]);
+            const host = createServerHost([file1]);
+            const projectService = createProjectService(host);
+            projectService.openExternalProject({
+                rootFiles: externalFiles,
+                options: {},
+                projectFileName: externalProjectName
+            });
+
+            checkNumberOfExternalProjects(projectService, 1);
+            checkNumberOfInferredProjects(projectService, 0);
+
+            externalFiles[0].content = "let x =1;";
+            projectService.applyChangesInOpenFiles(externalFiles, [], []);
+        });
+
         it("external project that included config files", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
