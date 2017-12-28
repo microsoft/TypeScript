@@ -619,7 +619,7 @@ namespace ts.formatting {
     }
 
     function isJsxExpressionContext(context: FormattingContext): boolean {
-        return context.contextNode.kind === SyntaxKind.JsxExpression;
+        return context.contextNode.kind === SyntaxKind.JsxExpression || context.contextNode.kind === SyntaxKind.JsxSpreadAttribute;
     }
 
     function isNextTokenParentJsxAttribute(context: FormattingContext): boolean {
