@@ -15872,6 +15872,9 @@ namespace ts {
          * In that case we won't consider it used before its declaration, because it gets its value from the superclass' declaration.
          */
         function isPropertyDeclaredInAncestorClass(prop: Symbol): boolean {
+            if (!(prop.parent.flags & SymbolFlags.Class)) {
+                return false;
+            }
             let classType = getTypeOfSymbol(prop.parent) as InterfaceType;
             while (true) {
                 classType = getSuperClass(classType);
