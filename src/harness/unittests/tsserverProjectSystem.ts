@@ -1193,13 +1193,9 @@ namespace ts.projectSystem {
         });
 
         it("external project for dynamic file", () => {
-            const file1 = {
-                path: "/a/b/f1.ts",
-                content: "let x =1;"
-            };
             const externalProjectName = "^ScriptDocument1 file1.ts";
             const externalFiles = toExternalFiles(["^ScriptDocument1 file1.ts"]);
-            const host = createServerHost([file1]);
+            const host = createServerHost([]);
             const projectService = createProjectService(host);
             projectService.openExternalProject({
                 rootFiles: externalFiles,
