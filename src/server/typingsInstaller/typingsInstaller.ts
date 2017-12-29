@@ -55,7 +55,7 @@ namespace ts.server.typingsInstaller {
         try {
             if (fileExists) {
                 const content = <TypeDeclarationTimestampFile>JSON.parse(host.readFile(typeDeclarationTimestampFilePath));
-                return content.entries;
+                return content.entries || {};
             }
             else {
                 host.writeFile(typeDeclarationTimestampFilePath, "{}");
@@ -247,10 +247,11 @@ namespace ts.server.typingsInstaller {
                             continue;
                         }
                         const existingTypingFile = this.packageNameToTypingLocation.get(packageName);
-                        if (existingTypingFile.typingLocation === typingFile) {
-                            continue;
-                        }
                         if (existingTypingFile) {
+                            if (existingTypingFile.typingLocation === typingFile) {
+                                continue;
+                            }
+
                             if (this.log.isEnabled()) {
                                 this.log.writeLine(`New typing for package ${packageName} from '${typingFile}' conflicts with existing typing file '${existingTypingFile}'`);
                             }
