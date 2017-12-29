@@ -3448,7 +3448,7 @@ namespace ts {
         /* @internal */ checker: TypeChecker;
         symbol?: Symbol;                 // Symbol associated with type (if any)
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
-        alternativeRepresentation?: Type;// Alternative representation of the type, prefered when printing; not to be used for comparisons or equality
+        alternativeRepresentation?: Type; // Alternative representation of the type, prefered when printing; not to be used for comparisons or equality
     }
 
     export interface AliasType extends Type {

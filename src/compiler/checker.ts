@@ -9034,7 +9034,7 @@ namespace ts {
                     return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper));
                 }
                 if (type.flags & TypeFlags.Alias) {
-                    return createAliasType(type.symbol, instantiateTypes((type as AliasType).typeArguments, mapper))
+                    return createAliasType(type.symbol, instantiateTypes((type as AliasType).typeArguments, mapper));
                 }
             }
             return type;
