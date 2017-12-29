@@ -52,8 +52,8 @@ namespace ts {
             const configFileName = combineAllPaths("/", key, sp.configFileName || "tsconfig.json");
             const options = {
                 compilerOptions: {
-                    references: sp.references.map(r => ({ path: r })),
-                    project: true,
+                    references: (sp.references || []).map(r => ({ path: r })),
+                    referenceTarget: true,
                     outDir: "bin",
                     ...sp.options
                 },
@@ -140,7 +140,27 @@ namespace ts {
                 assertHasError("Reports an error about the wrong decl setting", errs, Diagnostics.Projects_may_not_disable_declaration_emit);
             });
         });
-        //  * TODO Projects must list all files or none
+
+        it("errors when the referenced project doesn't have referenceTarget:true", () => {
+            const spec: TestSpecification = {
+                "/primary": {
+                    files: { "/primary/a.ts": emptyModule },
+                    references: [],
+                    options: {
+                        referenceTarget: false
+                    }
+                },
+                "/reference": {
+                    files: { "/secondary/b.ts": moduleImporting("../primary/a") },
+                    references: ["../primary"]
+                }
+            };
+            testProjectReferences(spec, "/reference/tsconfig.json", program => {
+                const errs = program.getOptionsDiagnostics();
+                assertHasError("Reports an error about 'referenceTarget' not being set", errs, Diagnostics.Referenced_project_0_must_have_setting_referenceTarget_Colon_true);
+            });
+        });
+
         it("errors when the file list is not exhaustive", () => {
             const spec: TestSpecification = {
                 "/primary": {
@@ -148,7 +168,6 @@ namespace ts {
                         "/primary/a.ts": "import * as b from './b'",
                         "/primary/b.ts": "export {}"
                     },
-                    references: [],
                     config: {
                         files: ["a.ts"]
                     }

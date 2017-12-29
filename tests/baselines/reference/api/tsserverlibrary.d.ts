@@ -2285,6 +2285,7 @@ declare namespace ts {
         reactNamespace?: string;
         jsxFactory?: string;
         references?: ProjectReference[];
+        referenceTarget?: boolean;
         removeComments?: boolean;
         rootDir?: string;
         rootDirs?: string[];

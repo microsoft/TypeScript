@@ -218,7 +218,7 @@ namespace ts {
             description: Diagnostics.Specify_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir,
         },
         {
-            name: "project",
+            name: "referenceTarget",
             type: "boolean",
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Enable_project_compilation,

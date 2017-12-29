@@ -3433,7 +3433,7 @@
         "category": "Error",
         "code": 6305
     },
-    "Referenced project '{0}' must have setting \"project\": true.": {
+    "Referenced project '{0}' must have setting \"referenceTarget\": true.": {
         "category": "Error",
         "code": 6306
     },
