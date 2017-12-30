@@ -14507,7 +14507,7 @@ namespace ts {
                                 if (patternElement.kind !== SyntaxKind.OmittedExpression) {
                                     error(patternElement, Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
                                 }
-                                elementTypes.push(unknownType);
+                                elementTypes.push(emptyObjectType);
                             }
                         }
                     }
