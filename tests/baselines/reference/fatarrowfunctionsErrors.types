@@ -39,10 +39,10 @@ var y = x:number => x*x;
 >x : any
 
 false? (() => null): null;
->false? (() => null): null : () => any
+>false? (() => null): null : () => null
 >false : false
->(() => null) : () => any
->() => null : () => any
+>(() => null) : () => null
+>() => null : () => null
 >null : null
 >null : null
 

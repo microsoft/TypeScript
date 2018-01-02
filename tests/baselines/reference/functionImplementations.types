@@ -112,8 +112,8 @@ var nu = null;
 
 var nu = function () {
 >nu : any
->function () {    return null;} () : any
->function () {    return null;} : () => any
+>function () {    return null;} () : null
+>function () {    return null;} : () => null
 
     return null;
 >null : null
@@ -127,8 +127,8 @@ var un = undefined;
 
 var un = function () {
 >un : any
->function () {    return undefined;} () : any
->function () {    return undefined;} : () => any
+>function () {    return undefined;} () : undefined
+>function () {    return undefined;} : () => undefined
 
     return undefined;
 >undefined : undefined

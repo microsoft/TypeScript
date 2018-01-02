@@ -18251,7 +18251,7 @@ namespace ts {
                 type = getWidenedLiteralLikeTypeForContextualType(type, contextualType);
             }
 
-            const widenedType = getWidenedType(type);
+            const widenedType = (isFunctionExpression(func) && !func.name) || isArrowFunction(func) ? type : getWidenedType(type);
             switch (functionFlags & FunctionFlags.AsyncGenerator) {
                 case FunctionFlags.AsyncGenerator:
                     return createAsyncIterableIteratorType(widenedType);

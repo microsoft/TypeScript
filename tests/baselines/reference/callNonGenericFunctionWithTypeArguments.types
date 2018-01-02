@@ -14,15 +14,15 @@ var r = f<string>(1);
 >1 : 1
 
 var f2 = (x: number) => { return null; }
->f2 : (x: number) => any
->(x: number) => { return null; } : (x: number) => any
+>f2 : (x: number) => null
+>(x: number) => { return null; } : (x: number) => null
 >x : number
 >null : null
 
 var r2 = f2<string>(1);
 >r2 : any
->f2<string>(1) : any
->f2 : (x: number) => any
+>f2<string>(1) : null
+>f2 : (x: number) => null
 >1 : 1
 
 var f3: { (x: number): any; }

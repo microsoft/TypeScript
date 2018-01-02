@@ -6,8 +6,8 @@ type B = {b: string}
 >b : string
 
 const flowtypes = <A>(b: B) => {
->flowtypes : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
-><A>(b: B) => {  type Combined = A & B  const combined = (fn: (combined: Combined) => void) => null  const literal = (fn: (aPlusB: A & B) => void) => null  return {combined, literal}} : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
+>flowtypes : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => null; literal: (fn: (aPlusB: A & B) => void) => null; }
+><A>(b: B) => {  type Combined = A & B  const combined = (fn: (combined: Combined) => void) => null  const literal = (fn: (aPlusB: A & B) => void) => null  return {combined, literal}} : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => null; literal: (fn: (aPlusB: A & B) => void) => null; }
 >A : A
 >b : B
 >B : B
@@ -18,16 +18,16 @@ const flowtypes = <A>(b: B) => {
 >B : B
 
   const combined = (fn: (combined: Combined) => void) => null
->combined : (fn: (combined: A & B) => void) => any
->(fn: (combined: Combined) => void) => null : (fn: (combined: A & B) => void) => any
+>combined : (fn: (combined: A & B) => void) => null
+>(fn: (combined: Combined) => void) => null : (fn: (combined: A & B) => void) => null
 >fn : (combined: A & B) => void
 >combined : A & B
 >Combined : A & B
 >null : null
 
   const literal = (fn: (aPlusB: A & B) => void) => null
->literal : (fn: (aPlusB: A & B) => void) => any
->(fn: (aPlusB: A & B) => void) => null : (fn: (aPlusB: A & B) => void) => any
+>literal : (fn: (aPlusB: A & B) => void) => null
+>(fn: (aPlusB: A & B) => void) => null : (fn: (aPlusB: A & B) => void) => null
 >fn : (aPlusB: A & B) => void
 >aPlusB : A & B
 >A : A
@@ -35,24 +35,24 @@ const flowtypes = <A>(b: B) => {
 >null : null
 
   return {combined, literal}
->{combined, literal} : { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
->combined : (fn: (combined: A & B) => void) => any
->literal : (fn: (aPlusB: A & B) => void) => any
+>{combined, literal} : { combined: (fn: (combined: A & B) => void) => null; literal: (fn: (aPlusB: A & B) => void) => null; }
+>combined : (fn: (combined: A & B) => void) => null
+>literal : (fn: (aPlusB: A & B) => void) => null
 }
 
 const {combined, literal} = flowtypes<{a: string}>({b: 'b-value'})
->combined : (fn: (combined: { a: string; } & B) => void) => any
->literal : (fn: (aPlusB: { a: string; } & B) => void) => any
->flowtypes<{a: string}>({b: 'b-value'}) : { combined: (fn: (combined: { a: string; } & B) => void) => any; literal: (fn: (aPlusB: { a: string; } & B) => void) => any; }
->flowtypes : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
+>combined : (fn: (combined: { a: string; } & B) => void) => null
+>literal : (fn: (aPlusB: { a: string; } & B) => void) => null
+>flowtypes<{a: string}>({b: 'b-value'}) : { combined: (fn: (combined: { a: string; } & B) => void) => null; literal: (fn: (aPlusB: { a: string; } & B) => void) => null; }
+>flowtypes : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => null; literal: (fn: (aPlusB: A & B) => void) => null; }
 >a : string
 >{b: 'b-value'} : { b: string; }
 >b : string
 >'b-value' : "b-value"
 
 literal(aPlusB => {
->literal(aPlusB => {  aPlusB.b  aPlusB.a}) : any
->literal : (fn: (aPlusB: { a: string; } & B) => void) => any
+>literal(aPlusB => {  aPlusB.b  aPlusB.a}) : null
+>literal : (fn: (aPlusB: { a: string; } & B) => void) => null
 >aPlusB => {  aPlusB.b  aPlusB.a} : (aPlusB: { a: string; } & B) => void
 >aPlusB : { a: string; } & B
 
@@ -69,8 +69,8 @@ literal(aPlusB => {
 })
 
 combined(comb => {
->combined(comb => {  comb.b  comb.a}) : any
->combined : (fn: (combined: { a: string; } & B) => void) => any
+>combined(comb => {  comb.b  comb.a}) : null
+>combined : (fn: (combined: { a: string; } & B) => void) => null
 >comb => {  comb.b  comb.a} : (comb: { a: string; } & B) => void
 >comb : { a: string; } & B
 

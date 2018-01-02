@@ -1,0 +1,17 @@
+tests/cases/compiler/arrowFunctionMakesStrictLiteralCheck.ts(6,17): error TS2322: Type '() => { x: number; y: number; }' is not assignable to type 'XGetter'.
+  Type '{ x: number; y: number; }' is not assignable to type 'X'.
+    Object literal may only specify known properties, and 'y' does not exist in type 'X'.
+
+
+==== tests/cases/compiler/arrowFunctionMakesStrictLiteralCheck.ts (1 errors) ====
+    interface X { x: number; }
+    
+    type XGetter = () => X;
+    
+    const getX2: XGetter = () => {
+    	return { x: 1, y: 2 }; // Expect excess property error on `y`
+    	               ~~~~
+!!! error TS2322: Type '() => { x: number; y: number; }' is not assignable to type 'XGetter'.
+!!! error TS2322:   Type '{ x: number; y: number; }' is not assignable to type 'X'.
+!!! error TS2322:     Object literal may only specify known properties, and 'y' does not exist in type 'X'.
+    }

@@ -36,7 +36,7 @@ window.setTimeout(() => null, 100);
 >window.setTimeout : any
 >window : any
 >setTimeout : any
->() => null : () => any
+>() => null : () => null
 >null : null
 >100 : 100
 
@@ -139,7 +139,7 @@ module M2 {
 >window.setTimeout : any
 >window : any
 >setTimeout : any
->() => null : () => any
+>() => null : () => null
 >null : null
 >100 : 100
 

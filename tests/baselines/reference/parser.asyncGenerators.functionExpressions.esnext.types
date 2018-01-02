@@ -142,8 +142,8 @@ const f15 = async function * () {
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldStarWithValueIsOk.ts ===
 const f16 = async function * () {
->f16 : () => AsyncIterableIterator<any>
->async function * () {    yield * [];} : () => AsyncIterableIterator<any>
+>f16 : () => AsyncIterableIterator<undefined>
+>async function * () {    yield * [];} : () => AsyncIterableIterator<undefined>
 
     yield * [];
 >yield * [] : any

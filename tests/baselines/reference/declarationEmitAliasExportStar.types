@@ -9,8 +9,8 @@ import * as things from "./things";
 >things : typeof things
 
 export const thing2 = (param: things.ThingB) => null;
->thing2 : (param: things.ThingB) => any
->(param: things.ThingB) => null : (param: things.ThingB) => any
+>thing2 : (param: things.ThingB) => null
+>(param: things.ThingB) => null : (param: things.ThingB) => null
 >param : things.ThingB
 >things : any
 >ThingB : things.ThingB

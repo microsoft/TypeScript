@@ -36,9 +36,9 @@ var arr_any: any[] = [];
 >[] : undefined[]
 
 arr_any = function () { return null;} // should be an error - is
->arr_any = function () { return null;} : () => any
+>arr_any = function () { return null;} : () => null
 >arr_any : any[]
->function () { return null;} : () => any
+>function () { return null;} : () => null
 >null : null
 
 arr_any = c3; // should be an error - is

@@ -34,8 +34,8 @@ class Foo<T> {
 >null : null
 
     static e = function (x: T) { return null; }
->e : (x: any) => any
->function (x: T) { return null; } : (x: any) => any
+>e : (x: any) => null
+>function (x: T) { return null; } : (x: any) => null
 >x : any
 >T : No type information available!
 >null : null

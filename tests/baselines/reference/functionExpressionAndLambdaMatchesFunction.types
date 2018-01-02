@@ -11,7 +11,7 @@ class CDoc {
         doSomething(() => undefined);
 >doSomething(() => undefined) : void
 >doSomething : (a: Function) => void
->() => undefined : () => any
+>() => undefined : () => undefined
 >undefined : undefined
 
         doSomething(function () { });

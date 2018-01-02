@@ -149,9 +149,9 @@ arr_any = f1; // should be an error - is
 >f1 : () => C1
 
 arr_any = function () { return null;} // should be an error - is
->arr_any = function () { return null;} : () => any
+>arr_any = function () { return null;} : () => null
 >arr_any : any[]
->function () { return null;} : () => any
+>function () { return null;} : () => null
 >null : null
 
 arr_any = o1; // should be an error - is

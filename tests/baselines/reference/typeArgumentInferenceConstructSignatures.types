@@ -190,7 +190,7 @@ new someGenerics3<Window>(() => undefined);
 >new someGenerics3<Window>(() => undefined) : any
 >someGenerics3 : someGenerics3
 >Window : No type information available!
->() => undefined : () => any
+>() => undefined : () => undefined
 >undefined : undefined
 
 new someGenerics3<number>(() => 3);
@@ -220,7 +220,7 @@ new someGenerics4(4, () => null);
 >new someGenerics4(4, () => null) : any
 >someGenerics4 : someGenerics4
 >4 : 4
->() => null : () => any
+>() => null : () => null
 >null : null
 
 new someGenerics4<string, number>('', () => 3);
@@ -265,7 +265,7 @@ new someGenerics5(4, () => null);
 >new someGenerics5(4, () => null) : any
 >someGenerics5 : someGenerics5
 >4 : 4
->() => null : () => any
+>() => null : () => null
 >null : null
 
 new someGenerics5<number, string>('', () => 3);
