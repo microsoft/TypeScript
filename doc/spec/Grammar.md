@@ -45,6 +45,7 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;*PredefinedType*
 &emsp;&emsp;&emsp;*TypeReference*
 &emsp;&emsp;&emsp;*ObjectType*
+&emsp;&emsp;&emsp;*MappedObjectType*
 &emsp;&emsp;&emsp;*ArrayType*
 &emsp;&emsp;&emsp;*TupleType*
 &emsp;&emsp;&emsp;*TypeQuery*
@@ -74,6 +75,9 @@ This appendix contains a summary of the grammar found in the main document. As d
 
 &emsp;&emsp;*ObjectType:*
 &emsp;&emsp;&emsp;`{`&emsp;*TypeBody<sub>opt</sub>*&emsp;`}`
+
+&emsp;&emsp;*MappedObjectType:*
+&emsp;&emsp;&emsp;`{`&emsp;`readonly`*<sub>opt</sub>*&emsp;`[`*Identifier*&emsp;`in`&emsp;*Type*`]`&emsp;`?`*<sub>opt</sub>*&emsp;*TypeAnnotation<sub>opt</sub>* `}`
 
 &emsp;&emsp;*TypeBody:*
 &emsp;&emsp;&emsp;*TypeMemberList*&emsp;`;`*<sub>opt</sub>*

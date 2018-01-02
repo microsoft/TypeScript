@@ -527,6 +527,154 @@ is indistinguishable from the type
 { first: string; second: Entity; }
 ```
 
+
+# Mapped Object Types { #mapped-object-types }
+
+&emsp;&emsp;*MappedObjectType:*
+&emsp;&emsp;&emsp;`{`&emsp;`readonly`*<sub>opt</sub>*&emsp;`[`*Identifier*&emsp;`in`&emsp;*Type*`]`&emsp;`?`*<sub>opt</sub>*&emsp;*TypeAnnotation<sub>opt</sub>* `}`
+
+A ***mapped object type*** is a type operator that operates on types assignable to the string type, but primarily on unions of string literal types.
+
+In the above syntax,
+
+* The first *Type* (immediately following the `in` keyword) is the operand *K* of a mapped type.
+* The second *Type* forms the *property type template* of a mapped type, *T*.
+* The *Identifier* forms a type variable *P* that is scoped only in *T*, and is bound and constrained to *K*.
+
+Mapped object types are primarily meant to iterate over a union of string literal types, and to generate a new object type containing properties whose names are based on each string literal within that union.
+For example, in the below example, the type aliases `Foo` and `Bar` are equivalent even though `Foo` aliases an object type literal, and `Bar` aliases a mapped object type.
+
+```ts
+type Foo = { hello: string, beautiful: string, world: string; };
+
+type Bar = { [P in "hello" | "beautiful" | "world"]: string };
+```
+
+The operand is not required to be a union of string literal types, but is only required to be a assignable to string.
+
+```ts
+type A1 = { [P in "hello"]: string };
+type A2 = { hello: string };
+
+type B1 = { [P in string]: number };
+type B2 = { [P in any]: number };
+type B3 = { [propName: string]: number };
+```
+
+In the above, `A1` is equivalent to `A2`, and both types contain only a single property named `hello` of type `string.
+`B1`, `B2`, and `B3` are also equivalent, and introduce object types with only a string index signature.
+
+Like with property names, mapped object type allow the `readonly` and the `?` optionality modifiers to be specified as well.
+Specifying a `readonly` modifier on a mapped type results in each property or index signature of the mapped object type becoming read-only.
+Similarly, specifying a `?` results in each property becoming optional, or in the case where an index signature is generated, an index signature whose type forms a union with the Undefined type.
+In the below example, `A1` is equivalent to `A2`, `B1` is equivalent to `B2`, and `C1` is equivalent to `C2`.
+
+```ts
+type A1 = { readonly [P in "hello" | "world" ]: string };
+type A2 = {
+    readonly hello: string,
+    readonly world: string,
+}
+
+type B1 = { [P in "foo" | "bar"]?: number };
+type B2 = {
+    foo?: number,
+    bar?: number,
+};
+
+type C1 = { readonly [P in string]?: boolean };
+type C2 = {
+    readonly [propName: string]: boolean | undefined;
+};
+```
+
+As mentioned, mapped object types introduce a type variable *P*.
+When *K* is not a generic type, as seen thus far, then when generating each property of a mapped object type, the type of that property is *T* with instances of *P* substituted with a string literal type whose contents are equivalent to the property name itself.
+Similarly, when generating an index signature, the type of that index signature prior to accounting for optionality is *T* with instances of *P* substituted with *K*.
+In the following example, each pair `A1` and `A2`, `B1` and `B2`, `C1` and `C2`, `D1` and `D2`, are respectively equivalent.
+
+```ts
+type A1 = { [P in "hello" | "world"]: P };
+type A2 = {
+    hello: "hello",
+    world: "world",
+};
+
+type B1 = { [P in "hello" | "world"]: P | boolean };
+type B2 = {
+    hello: "hello" | boolean,
+    world: "world" | boolean,
+};
+
+type C1 = { [P in string]: P };
+type C2 = {
+    [propName: string]: string,
+};
+
+type D1 = { [P in any]: P };
+type D2 = {
+    [propName: string]: any,
+};
+```
+
+This can be powerfully combined with key query types, and indexed access types:
+
+```ts
+interface TypeMap {
+    "str": string,
+    "num": number,
+    "bool": boolean,
+}
+
+interface SchemaType {
+    foo: "str",
+    bar: "num",
+    baz: "bool",
+}
+
+type TypeScriptType = {
+    [P in keyof SchemaType]: TypeMap[P]
+};
+
+// Equivalent to...
+interface TypeScriptType {
+    foo: string,
+    bar: number,
+    baz: boolean,
+}
+```
+
+## Homomorphic Mapped Object Types { #homomorphic-mapped-object types }
+
+A ***homomorphic mapped object type*** is a mapped type of a particular form, where the operand *K* is a type query `keyof` *O*.
+
+In such instances, TypeScript will consult the type `O` when generating each property and index signature for respective modifiers.
+If a modifier is not specified in the mapped type itself, but is specified for a given property in *O*, then the resulting property inherits that same modifier.
+For example, in the following, `A` and `B` are equivalent types, but `C` is not because it does not represent a homomorphic mapped type.
+As a result, the `baz` property is `readonly` in `A` and `B`, but not in `C`.
+
+```ts
+interface T {
+    foo?: number
+    bar: number;
+    readonly baz?: string;
+}
+
+type A = {
+    foo?: number;
+    bar: number;
+    readonly baz?: string;
+}
+
+type B = {
+    [P in keyof T]?: T[P];
+}
+
+type C = {
+    [P in "foo" | "bar" | "baz"]?: T[P];
+}
+```
+
 ## Specifying Types { #specifying-types }
 
 Types are specified either by referencing their keyword or name, or by writing object type literals, array type literals, tuple type literals, function type literals, constructor type literals, or type queries.
@@ -549,6 +697,7 @@ Types are specified either by referencing their keyword or name, or by writing o
 &emsp;&emsp;&emsp;*PredefinedType*
 &emsp;&emsp;&emsp;*TypeReference*
 &emsp;&emsp;&emsp;*ObjectType*
+&emsp;&emsp;&emsp;*MappedObjectType*
 &emsp;&emsp;&emsp;*ArrayType*
 &emsp;&emsp;&emsp;*TupleType*
 &emsp;&emsp;&emsp;*TypeQuery*
