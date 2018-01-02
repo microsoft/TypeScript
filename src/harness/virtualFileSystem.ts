@@ -222,9 +222,16 @@ namespace Utils {
     }
 
     export class MockProjectReferenceCompilerHost implements ts.CompilerHost {
-        public configHost: ts.ParseConfigHost = new MockParseConfigHost(this.currentDirectory, this.ignoreCase, this.files);
+        public emittedFiles: {fileName: string, contents: string}[] = [];
+        public configHost: ts.ParseConfigHost;
         private readonly getCanonicalFileNameImpl = ts.createGetCanonicalFileName(!this.ignoreCase);
         constructor(private currentDirectory: string, private ignoreCase: boolean, private files: ts.Map<string> | string[]) {
+            this.reset();
+        }
+
+        reset() {
+            this.configHost = new MockParseConfigHost(this.currentDirectory, this.ignoreCase, this.files);
+            this.emittedFiles = [];
         }
 
         getCanonicalFileName = (fileName: string): string => {
@@ -269,7 +276,11 @@ namespace Utils {
         getDefaultLibFileName(options: ts.CompilerOptions): string {
             return ts.getDefaultLibFileName(options);
         }
-        writeFile: ts.WriteFileCallback;
+
+        writeFile: ts.WriteFileCallback = (fileName, contents) => {
+            this.emittedFiles.push({ fileName, contents });
+        }
+
         getCurrentDirectory = (): string => {
             return this.currentDirectory;
         }

@@ -45,7 +45,7 @@ namespace ts {
         return names.map((n, i) => `import * as mod_${i} from ${n}`).join("\r\n");
     }
 
-    function testProjectReferences(spec: TestSpecification, entryPointConfigFileName: string, checkResult: (prog: Program) => void) {
+    function testProjectReferences(spec: TestSpecification, entryPointConfigFileName: string, checkResult: (prog: Program, host: Utils.MockProjectReferenceCompilerHost) => void) {
         const files = createMap<string>();
         for (const key in spec) {
             const sp = spec[key];
@@ -81,7 +81,7 @@ namespace ts {
         const file = ts.parseJsonConfigFileContent(config, host.configHost, getDirectoryPath(entryPointConfigFileName), {}, entryPointConfigFileName);
         file.options.configFilePath = entryPointConfigFileName;
         const prog = ts.createProgram(file.fileNames, file.options, host);
-        checkResult(prog);
+        checkResult(prog, host);
     }
 
     describe("project-references meta check", () => {
@@ -232,4 +232,26 @@ namespace ts {
             });
         });
     });
+
+    /**
+     * referenceTarget behavior
+     */
+    describe("project-references behavior changes under referenceTarget: true", () => {
+        it("doesn't infer the rootDir from source paths", () => {
+            const spec: TestSpecification = {
+                "/alpha": {
+                    files: { "/alpha/src/a.ts": "export const m: number = 3;" },
+                    options: {
+                        outDir: "bin"
+                    },
+                    references: []
+                }
+            };
+            testProjectReferences(spec, "/alpha/tsconfig.json", (program, host) => {
+                program.emit();
+                assert.deepEqual(host.emittedFiles.map(e => e.fileName).sort(), ["/alpha/bin/src/a.d.ts", "/alpha/bin/src/a.js"]);
+            });
+        });
+    });
+
 }

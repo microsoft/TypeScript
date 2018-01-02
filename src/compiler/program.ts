@@ -614,8 +614,8 @@ namespace ts {
 
         // List of collected files is complete; validate exhautiveness if this is a project with a file list
         if (options.referenceTarget && rootNames.length < files.length) {
-            const normalizedRootNames = rootNames.map(r => normalizePath(r));
-            const sourceFiles = files.filter(f => !f.isDeclarationFile).map(f => normalizePath(f.path));
+            const normalizedRootNames = rootNames.map(r => normalizePathAndRoot(r));
+            const sourceFiles = files.filter(f => !f.isDeclarationFile).map(f => normalizePathAndRoot(f.path));
             for (const file of sourceFiles) {
                 if (normalizedRootNames.every(r => r !== file)) {
                     programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern, file));
@@ -687,7 +687,7 @@ namespace ts {
                 const emittedFiles = filter(files, file => sourceFileMayBeEmitted(file, options, isSourceFileFromExternalLibrary));
                 if (options.referenceTarget) {
                     // Project compilations never infer their root from the input source paths
-                    commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir || ".", currentDirectory);
+                    commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir || getDirectoryPath(options.configFilePath), currentDirectory);
                 }
                 else if (options.rootDir && checkSourceFilesBelongToPath(emittedFiles, options.rootDir)) {
                     // If a rootDir is specified and is valid use it as the commonSourceDirectory
