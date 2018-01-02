@@ -17,5 +17,14 @@
 // @Filename: /src/folder/b.ts
 ////import {} from "x//*2*/";
 
+// @Filename: /src/folder/c.ts
+////const foo = require("x//*3*/");
+
+// @Filename: /src/folder/4.ts
+////const foo = require(`x//*4*/`);
+
 verify.completionsAt("1", ["y", "x"]);
 verify.completionsAt("2", ["bar", "foo"]);
+verify.completionsAt("3", ["bar", "foo"]);
+verify.completionsAt("4", ["bar", "foo"]);
+
