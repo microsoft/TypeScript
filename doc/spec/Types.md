@@ -125,7 +125,7 @@ The only possible values for the Void type are `null` and `undefined`. The Void 
 
 ### Unit Types { #unit-types }
 
-Unit types are types with a single value. The unit types in TypeScript are `null`, `undefined`, string literal types, number literal types and boolean literal types.
+Unit types are types with a single value. The unit types in TypeScript are `null`, `undefined`, enum member types, string literal types, number literal types, and boolean literal types.
 
 TODO: Update the null and undefined sections in my other draft PR.
 
