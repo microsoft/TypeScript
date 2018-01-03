@@ -403,8 +403,9 @@ namespace ts.SignatureHelp {
             const returnTypeParts = mapToDisplayParts(writer => {
                 writer.writePunctuation(":");
                 writer.writeSpace(" ");
-                if (candidateSignature.typePredicate) {
-                    typeChecker.typePredicateToString(candidateSignature.typePredicate, invocation, /*flags*/ undefined, writer);
+                const predicate = typeChecker.getTypePredicateOfSignature(candidateSignature);
+                if (predicate) {
+                    typeChecker.typePredicateToString(predicate, invocation, /*flags*/ undefined, writer);
                 }
                 else {
                     typeChecker.typeToString(typeChecker.getReturnTypeOfSignature(candidateSignature), invocation, /*flags*/ undefined, writer);

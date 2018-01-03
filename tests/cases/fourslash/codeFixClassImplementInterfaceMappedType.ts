@@ -5,11 +5,6 @@
 ////}
 ////class C<Y> implements I<Y> {}
 
-<<<<<<< HEAD
-verify.rangeAfterCodeFix(`
-x: { readonly [K in keyof Y]: Y[K]; };
-`); 
-=======
 verify.codeFix({
     description: "Implement interface 'I<Y>'",
     // TODO: GH#18445
@@ -18,7 +13,6 @@ verify.codeFix({
     x: { readonly [K in keyof X]: X[K] };
 }
 class C<Y> implements I<Y> {\r
-    x: { readonly [K in keyof X]: Y[K]; };\r
+    x: { readonly [K in keyof Y]: Y[K]; };\r
 }`,
 });
->>>>>>> master

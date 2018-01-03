@@ -281,6 +281,7 @@ namespace ts {
             },
             getJsxNamespace: () => unescapeLeadingUnderscores(getJsxNamespace()),
             getAccessibleSymbolChain,
+            getTypePredicateOfSignature,
         };
 
         const tupleTypes: GenericType[] = [];
@@ -3180,7 +3181,10 @@ namespace ts {
                     /*questionToken*/ undefined,
                     indexerTypeNode,
                     /*initializer*/ undefined);
-                const typeNode = typeToTypeNodeHelper(indexInfo.type, context);
+                const typeNode = indexInfo.type ? typeToTypeNodeHelper(indexInfo.type, context) : typeToTypeNodeHelper(anyType, context);
+                if (!indexInfo.type && !(context.flags & NodeBuilderFlags.AllowEmptyIndexInfoType)) {
+                    context.encounteredError = true;
+                }
                 return createIndexSignature(
                     /*decorators*/ undefined,
                     indexInfo.isReadonly ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined,

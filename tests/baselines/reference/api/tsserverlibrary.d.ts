@@ -1813,8 +1813,9 @@ declare namespace ts {
         AllowEmptyUnionOrIntersection = 262144,
         AllowEmptyTuple = 524288,
         AllowUniqueESSymbolType = 1048576,
-        IgnoreErrors = 1015808,
-        InObjectTypeLiteral = 2097152,
+        AllowEmptyIndexInfoType = 2097152,
+        IgnoreErrors = 3112960,
+        InObjectTypeLiteral = 4194304,
         InTypeAlias = 8388608,
     }
     /**
