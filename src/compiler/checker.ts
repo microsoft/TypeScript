@@ -24667,36 +24667,28 @@ namespace ts {
         }
 
         function getRootSymbols(symbol: Symbol): Symbol[] {
+            const roots = getImmediateRootSymbols(symbol);
+            return roots ? flatMap(roots, getRootSymbols) : [symbol];
+        }
+        function getImmediateRootSymbols(symbol: Symbol): ReadonlyArray<Symbol> | undefined {
             if (getCheckFlags(symbol) & CheckFlags.Synthetic) {
-                const symbols: Symbol[] = [];
-                const name = symbol.escapedName;
-                forEach(getSymbolLinks(symbol).containingType.types, t => {
-                    const symbol = getPropertyOfType(t, name);
-                    if (symbol) {
-                        symbols.push(symbol);
-                    }
-                });
-                return symbols;
+                return mapDefined(getSymbolLinks(symbol).containingType.types, type => getPropertyOfType(type, symbol.escapedName));
             }
             else if (symbol.flags & SymbolFlags.Transient) {
-                const transient = symbol as TransientSymbol;
-                if (transient.leftSpread) {
-                    return [...getRootSymbols(transient.leftSpread), ...getRootSymbols(transient.rightSpread)];
-                }
-                if (transient.syntheticOrigin) {
-                    return getRootSymbols(transient.syntheticOrigin);
-                }
-
-                let target: Symbol;
-                let next = symbol;
-                while (next = getSymbolLinks(next).target) {
-                   target = next;
-                }
-                if (target) {
-                    return [target];
-                }
+                const { leftSpread, rightSpread, syntheticOrigin } = symbol as TransientSymbol;
+                return leftSpread ? [leftSpread, rightSpread]
+                    : syntheticOrigin ? [syntheticOrigin]
+                    : singleElementArray(tryGetAliasTarget(symbol));
             }
-            return [symbol];
+            return undefined;
+        }
+        function tryGetAliasTarget(symbol: Symbol): Symbol | undefined {
+            let target: Symbol | undefined;
+            let next = symbol;
+            while (next = getSymbolLinks(next).target) {
+               target = next;
+            }
+            return target;
         }
 
         // Emitter support
