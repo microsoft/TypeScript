@@ -5993,9 +5993,13 @@ namespace ts {
                 getIntersectionType([info1.type, info2.type]), info1.isReadonly && info2.isReadonly);
         }
 
-        function unionSpreadIndexInfos(info1: IndexInfo, info2: IndexInfo): IndexInfo {
-            return info1 && info2 && createIndexInfo(
-                getUnionType([info1.type, info2.type]), info1.isReadonly || info2.isReadonly);
+        function unionSpreadIndexInfos(info1: IndexInfo, info2: IndexInfo, looseIndexes: boolean): IndexInfo {
+            if (info1 && info2) {
+                return createIndexInfo(getUnionType([info1.type, info2.type]), info1.isReadonly || info2.isReadonly);
+            }
+            if (looseIndexes) {
+                return info1 ? info1 : info2 ? info2 : undefined;
+            }
         }
 
         function includeMixinType(type: Type, types: Type[], index: number): Type {
@@ -8355,7 +8359,7 @@ namespace ts {
          * this function should be called in a left folding style, with left = previous result of getSpreadType
          * and right = the new element to be spread.
          */
-        function getSpreadType(left: Type, right: Type, symbol: Symbol, propagatedFlags: TypeFlags): Type {
+        function getSpreadType(left: Type, right: Type, symbol: Symbol, propagatedFlags: TypeFlags, looseIndexes: boolean): Type {
             if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
                 return anyType;
             }
@@ -8366,10 +8370,10 @@ namespace ts {
                 return left;
             }
             if (left.flags & TypeFlags.Union) {
-                return mapType(left, t => getSpreadType(t, right, symbol, propagatedFlags));
+                return mapType(left, t => getSpreadType(t, right, symbol, propagatedFlags, looseIndexes));
             }
             if (right.flags & TypeFlags.Union) {
-                return mapType(right, t => getSpreadType(left, t, symbol, propagatedFlags));
+                return mapType(right, t => getSpreadType(left, t, symbol, propagatedFlags, looseIndexes));
             }
             if (right.flags & (TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive)) {
                 return left;
@@ -8385,8 +8389,8 @@ namespace ts {
                 numberIndexInfo = getIndexInfoOfType(right, IndexKind.Number);
             }
             else {
-                stringIndexInfo = unionSpreadIndexInfos(getIndexInfoOfType(left, IndexKind.String), getIndexInfoOfType(right, IndexKind.String));
-                numberIndexInfo = unionSpreadIndexInfos(getIndexInfoOfType(left, IndexKind.Number), getIndexInfoOfType(right, IndexKind.Number));
+                stringIndexInfo = unionSpreadIndexInfos(getIndexInfoOfType(left, IndexKind.String), getIndexInfoOfType(right, IndexKind.String), looseIndexes);
+                numberIndexInfo = unionSpreadIndexInfos(getIndexInfoOfType(left, IndexKind.Number), getIndexInfoOfType(right, IndexKind.Number), looseIndexes);
             }
 
             for (const rightProp of getPropertiesOfType(right)) {
@@ -14618,13 +14622,14 @@ namespace ts {
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
+            let hasUnionedComputedProperty = false;
             const isInJSFile = isInJavaScriptFile(node);
 
             let offset = 0;
             for (let i = 0; i < node.properties.length; i++) {
                 const memberDecl = node.properties[i];
                 let member = getSymbolOfNode(memberDecl);
-                let literalName: __String | undefined;
+                let literalName: __String[] | __String | undefined;
                 if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
                     memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
                     isObjectLiteralMethod(memberDecl)) {
@@ -14638,7 +14643,10 @@ namespace ts {
                         if (memberDecl.name.kind === SyntaxKind.ComputedPropertyName) {
                             const t = checkComputedPropertyName(<ComputedPropertyName>memberDecl.name);
                             if (t.flags & TypeFlags.Literal) {
-                                literalName = escapeLeadingUnderscores("" + (t as LiteralType).value);
+                                literalName = getLiteralPropertyName(t);
+                            }
+                            else if (t.flags & TypeFlags.Union && (t as UnionType).types.every(t2 => !!(t2.flags & TypeFlags.Literal))) {
+                                literalName = (t as UnionType).types.map(getLiteralPropertyName);
                             }
                         }
                         type = checkPropertyAssignment(<PropertyAssignment>memberDecl, checkMode);
@@ -14657,66 +14665,27 @@ namespace ts {
                     }
 
                     typeFlags |= type.flags;
-
-                    const nameType = hasLateBindableName(memberDecl) ? checkComputedPropertyName(memberDecl.name) : undefined;
-                    const prop = nameType && isTypeUsableAsLateBoundName(nameType)
-                        ? createSymbol(SymbolFlags.Property | member.flags, getLateBoundNameFromType(nameType), CheckFlags.Late)
-                        : createSymbol(SymbolFlags.Property | member.flags, literalName || member.escapedName);
-
-                    if (inDestructuringPattern) {
-                        // If object literal is an assignment pattern and if the assignment pattern specifies a default value
-                        // for the property, make the property optional.
-                        const isOptional =
-                            (memberDecl.kind === SyntaxKind.PropertyAssignment && hasDefaultValue((<PropertyAssignment>memberDecl).initializer)) ||
-                            (memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment && (<ShorthandPropertyAssignment>memberDecl).objectAssignmentInitializer);
-                        if (isOptional) {
-                            prop.flags |= SymbolFlags.Optional;
-                        }
-                        if (!literalName && hasDynamicName(memberDecl)) {
-                            patternWithComputedProperties = true;
-                        }
-                    }
-                    else if (contextualTypeHasPattern && !(getObjectFlags(contextualType) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
-                        // If object literal is contextually typed by the implied type of a binding pattern, and if the
-                        // binding pattern specifies a default value for the property, make the property optional.
-                        const impliedProp = getPropertyOfType(contextualType, member.escapedName);
-                        if (impliedProp) {
-                            prop.flags |= impliedProp.flags & SymbolFlags.Optional;
-                        }
-
-                        else if (!compilerOptions.suppressExcessPropertyErrors && !getIndexInfoOfType(contextualType, IndexKind.String)) {
-                            error(memberDecl.name, Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
-                                symbolToString(member), typeToString(contextualType));
-                        }
-                    }
-                    prop.declarations = member.declarations;
-                    prop.parent = member.parent;
-                    if (member.valueDeclaration) {
-                        prop.valueDeclaration = member.valueDeclaration;
+                    if (isArray(literalName)) {
+                        hasUnionedComputedProperty = true;
+                        next(createUnion(memberDecl, member, literalName, type));
+                        continue;
                     }
 
-                    prop.type = type;
-                    prop.target = member;
-                    member = prop;
+                    member = createProperty(memberDecl, member, literalName, type);
                 }
                 else if (memberDecl.kind === SyntaxKind.SpreadAssignment) {
                     if (languageVersion < ScriptTarget.ES2015) {
                         checkExternalEmitHelpers(memberDecl, ExternalEmitHelpers.Assign);
                     }
                     if (propertiesArray.length > 0) {
-                        spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags);
-                        propertiesArray = [];
-                        propertiesTable = createSymbolTable();
-                        hasComputedStringProperty = false;
-                        hasComputedNumberProperty = false;
-                        typeFlags = 0;
+                        next(getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, /*looseIndexes*/ false));
                     }
                     const type = checkExpression((memberDecl as SpreadAssignment).expression);
                     if (!isValidSpreadType(type)) {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
-                    spread = getSpreadType(spread, type, node.symbol, propagatedFlags);
+                    spread = getSpreadType(spread, type, node.symbol, propagatedFlags, /*looseIndexes*/ false);
                     offset = i + 1;
                     continue;
                 }
@@ -14761,12 +14730,81 @@ namespace ts {
 
             if (spread !== emptyObjectType) {
                 if (propertiesArray.length > 0) {
-                    spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags);
+                    // TODO: This is now insufficient; sometimes the spread is a result of a computed property with type union of literal type
+                    // getSpreadType will *sometimes* work here, but not always
+                    spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, /*looseIndexes*/ hasUnionedComputedProperty);
                 }
                 return spread;
             }
 
             return createObjectLiteralType();
+
+            function getLiteralPropertyName(type: Type): __String {
+                if (type.flags & TypeFlags.Intrinsic) {
+                    return (type as IntrinsicType).intrinsicName as __String;
+                }
+                return escapeLeadingUnderscores("" + (type as LiteralType).value);
+            }
+
+            function next(type: Type) {
+                spread = type;
+                propertiesArray = [];
+                propertiesTable = createSymbolTable();
+            }
+
+            function createUnion(memberDecl: ObjectLiteralElementLike, member: Symbol, literalNames: __String[], type: Type) {
+                const types: Type[] = [];
+                for (const literalName of literalNames) {
+                    const prop = createProperty(memberDecl, member, literalName, type);
+                    propertiesArray.push(prop);
+                    propertiesTable.set(prop.escapedName, prop);
+                    types.push(createObjectLiteralType());
+                    propertiesArray.pop();
+                    propertiesTable.delete(prop.escapedName); // Probably fine??
+                }
+                // TODO: Spread maybe isn't right, because it's so weird
+                return getSpreadType(spread, getUnionType(types), node.symbol, propagatedFlags, /*looseIndexes*/ true);
+            }
+
+            // TODO: Probably don't need the second parameter
+            function createProperty(memberDecl: ObjectLiteralElementLike, member: Symbol, literalName: __String, type: Type) {
+                const nameType = hasLateBindableName(memberDecl) ? checkComputedPropertyName(memberDecl.name) : undefined;
+                const prop = nameType && isTypeUsableAsLateBoundName(nameType)
+                    ? createSymbol(SymbolFlags.Property | member.flags, getLateBoundNameFromType(nameType), CheckFlags.Late)
+                    : createSymbol(SymbolFlags.Property | member.flags, literalName || member.escapedName);
+                if (inDestructuringPattern) {
+                    // If object literal is an assignment pattern and if the assignment pattern specifies a default value
+                    // for the property, make the property optional.
+                    const isOptional = (memberDecl.kind === SyntaxKind.PropertyAssignment && hasDefaultValue((<PropertyAssignment>memberDecl).initializer)) ||
+                        (memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment && (<ShorthandPropertyAssignment>memberDecl).objectAssignmentInitializer);
+                    if (isOptional) {
+
+                        prop.flags |= SymbolFlags.Optional;
+                    }
+                    if (!literalName && hasDynamicName(memberDecl)) {
+                        patternWithComputedProperties = true;
+                    }
+                }
+                else if (contextualTypeHasPattern && !(getObjectFlags(contextualType) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
+                    // If object literal is contextually typed by the implied type of a binding pattern, and if the
+                    // binding pattern specifies a default value for the property, make the property optional.
+                    const impliedProp = getPropertyOfType(contextualType, member.escapedName);
+                    if (impliedProp) {
+                        prop.flags |= impliedProp.flags & SymbolFlags.Optional;
+                    }
+                    else if (!compilerOptions.suppressExcessPropertyErrors && !getIndexInfoOfType(contextualType, IndexKind.String)) {
+                        error(memberDecl.name, Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1, symbolToString(member), typeToString(contextualType));
+                    }
+                }
+                prop.declarations = member.declarations;
+                prop.parent = member.parent;
+                if (member.valueDeclaration) {
+                    prop.valueDeclaration = member.valueDeclaration;
+                }
+                prop.type = type;
+                prop.target = member;
+                return prop;
+            }
 
             function createObjectLiteralType() {
                 const stringIndexInfo = isJSObjectLiteral ? jsObjectLiteralIndexInfo : hasComputedStringProperty ? getObjectLiteralIndexInfo(node.properties, offset, propertiesArray, IndexKind.String) : undefined;
@@ -14894,7 +14932,7 @@ namespace ts {
                 else {
                     Debug.assert(attributeDecl.kind === SyntaxKind.JsxSpreadAttribute);
                     if (attributesTable.size > 0) {
-                        spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, TypeFlags.JsxAttributes);
+                        spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, TypeFlags.JsxAttributes, /*looseIndexes*/ false);
                         attributesTable = createSymbolTable();
                     }
                     const exprType = checkExpressionCached(attributeDecl.expression, checkMode);
@@ -14902,7 +14940,7 @@ namespace ts {
                         hasSpreadAnyType = true;
                     }
                     if (isValidSpreadType(exprType)) {
-                        spread = getSpreadType(spread, exprType, openingLikeElement.symbol, TypeFlags.JsxAttributes);
+                        spread = getSpreadType(spread, exprType, openingLikeElement.symbol, TypeFlags.JsxAttributes, /*looseIndexes*/ false);
                     }
                     else {
                         typeToIntersect = typeToIntersect ? getIntersectionType([typeToIntersect, exprType]) : exprType;
@@ -14912,7 +14950,7 @@ namespace ts {
 
             if (!hasSpreadAnyType) {
                 if (attributesTable.size > 0) {
-                    spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, TypeFlags.JsxAttributes);
+                    spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, TypeFlags.JsxAttributes, /*looseIndexes*/ false);
                 }
             }
 
@@ -14937,7 +14975,7 @@ namespace ts {
                         createArrayType(getUnionType(childrenTypes));
                     const childPropMap = createSymbolTable();
                     childPropMap.set(jsxChildrenPropertyName, childrenPropSymbol);
-                    spread = getSpreadType(spread, createAnonymousType(attributes.symbol, childPropMap, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined), attributes.symbol, TypeFlags.JsxAttributes);
+                    spread = getSpreadType(spread, createAnonymousType(attributes.symbol, childPropMap, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined), attributes.symbol, TypeFlags.JsxAttributes, /*looseIndexes*/ false);
 
                 }
             }
