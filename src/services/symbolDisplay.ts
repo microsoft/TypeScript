@@ -115,6 +115,7 @@ namespace ts.SymbolDisplay {
         let hasAddedSymbolInfo: boolean;
         const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isExpression(location);
         let type: Type;
+        let printer: Printer;
 
         // Class at constructor site need to be shown as constructor apart from property,method, vars
         if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Alias) {
@@ -418,9 +419,8 @@ namespace ts.SymbolDisplay {
                         // If the type is type parameter, format it specially
                         if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter) {
                             const typeParameterParts = mapToDisplayParts(writer => {
-                                const printer = createPrinter({ removeComments: true });
                                 const param = typeChecker.typeParameterToDeclaration(type as TypeParameter, enclosingDeclaration);
-                                printer.writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
+                                getPrinter().writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
                             });
                             addRange(displayParts, typeParameterParts);
                         }
@@ -475,6 +475,13 @@ namespace ts.SymbolDisplay {
         }
 
         return { displayParts, documentation, symbolKind, tags };
+
+        function getPrinter() {
+            if (!printer) {
+                printer = createPrinter({ removeComments: true });
+            }
+            return printer;
+        }
 
         function addNewLineIfDisplayPartsExist() {
             if (displayParts.length) {
@@ -539,9 +546,8 @@ namespace ts.SymbolDisplay {
 
         function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node) {
             const typeParameterParts = mapToDisplayParts(writer => {
-                const printer = createPrinter({ removeComments: true });
                 const params = typeChecker.symbolToTypeParameterDeclarations(symbol, enclosingDeclaration);
-                printer.writeList(ListFormat.TypeParameters, params, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
+                getPrinter().writeList(ListFormat.TypeParameters, params, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
             });
             addRange(displayParts, typeParameterParts);
         }
