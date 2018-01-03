@@ -238,7 +238,7 @@ namespace ts.Completions {
 
     function getStringLiteralCompletionEntries(sourceFile: SourceFile, position: number, typeChecker: TypeChecker, compilerOptions: CompilerOptions, host: LanguageServiceHost, log: Log): CompletionInfo | undefined {
         const node = findPrecedingToken(position, sourceFile);
-        if (!node || (node.kind !== SyntaxKind.StringLiteral && node.kind !== SyntaxKind.NoSubstitutionTemplateLiteral)) {
+        if (!node || !isStringLiteral(node) && !isNoSubstitutionTemplateLiteral(node)) {
             return undefined;
         }
 
@@ -277,20 +277,8 @@ namespace ts.Completions {
             //      import x = require("/*completion position*/");
             //      var y = require("/*completion position*/");
             //      export * from "/*completion position*/";
-            const entries = PathCompletions.getStringLiteralCompletionsFromModuleNames(<StringLiteral>node, compilerOptions, host, typeChecker);
+            const entries = PathCompletions.getStringLiteralCompletionsFromModuleNames(node, compilerOptions, host, typeChecker);
             return pathCompletionsInfo(entries);
-        }
-        else if (isEqualityExpression(node.parent)) {
-            // Get completions from the type of the other operand
-            // i.e. switch (a) {
-            //         case '/*completion position*/'
-            //      }
-            return getStringLiteralCompletionEntriesFromType(typeChecker.getTypeAtLocation(node.parent.left === node ? node.parent.right : node.parent.left), typeChecker);
-        }
-        else if (isCaseOrDefaultClause(node.parent)) {
-            // Get completions from the type of the switch expression
-            // i.e. x === '/*completion position'
-            return getStringLiteralCompletionEntriesFromType(typeChecker.getTypeAtLocation((<SwitchStatement>node.parent.parent.parent).expression), typeChecker);
         }
         else {
             const argumentInfo = SignatureHelp.getImmediatelyContainingArgumentInfo(node, position, sourceFile);
@@ -303,7 +291,7 @@ namespace ts.Completions {
 
             // Get completion for string literal from string literal type
             // i.e. var x: "hi" | "hello" = "/*completion position*/"
-            return getStringLiteralCompletionEntriesFromType(typeChecker.getContextualType(<LiteralExpression>node), typeChecker);
+            return getStringLiteralCompletionEntriesFromType(getContextualTypeFromParent(node, typeChecker), typeChecker);
         }
     }
 
@@ -602,13 +590,55 @@ namespace ts.Completions {
     }
     type Request = { kind: "JsDocTagName" } | { kind: "JsDocTag" } | { kind: "JsDocParameterName", tag: JSDocParameterTag };
 
-    function getRecommendedCompletion(currentToken: Node, checker: TypeChecker/*, symbolToOriginInfoMap: SymbolOriginInfoMap*/): Symbol | undefined {
-        const ty = checker.getContextualType(currentToken as Expression);
+    function getRecommendedCompletion(currentToken: Node, checker: TypeChecker): Symbol | undefined {
+        const ty = getContextualType(currentToken, checker);
         const symbol = ty && ty.symbol;
         // Don't include make a recommended completion for an abstract class
         return symbol && (symbol.flags & SymbolFlags.Enum || symbol.flags & SymbolFlags.Class && !isAbstractConstructorSymbol(symbol))
             ? getFirstSymbolInChain(symbol, currentToken, checker)
             : undefined;
+    }
+
+    function getContextualType(currentToken: Node, checker: ts.TypeChecker): Type | undefined {
+        const { parent } = currentToken;
+        switch (currentToken.kind) {
+            case ts.SyntaxKind.Identifier:
+                return getContextualTypeFromParent(currentToken as ts.Identifier, checker);
+            case ts.SyntaxKind.EqualsToken:
+                return ts.isVariableDeclaration(parent) ? checker.getContextualType(parent.initializer) :
+                    ts.isBinaryExpression(parent) ? checker.getTypeAtLocation(parent.left) : undefined;
+            case ts.SyntaxKind.NewKeyword:
+                return checker.getContextualType(parent as ts.Expression);
+            case ts.SyntaxKind.CaseKeyword:
+                return getSwitchedType(cast(currentToken.parent, isCaseClause), checker);
+            default:
+                return isEqualityOperatorKind(currentToken.kind) && ts.isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind)
+                    // completion at `x ===/**/` should be for the right side
+                    ? checker.getTypeAtLocation(parent.left)
+                    : checker.getContextualType(currentToken as ts.Expression);
+        }
+    }
+
+    function getContextualTypeFromParent(node: ts.Expression, checker: ts.TypeChecker): Type | undefined {
+        const { parent } = node;
+        switch (parent.kind) {
+            case ts.SyntaxKind.NewExpression:
+                return checker.getContextualType(parent as ts.NewExpression);
+            case ts.SyntaxKind.BinaryExpression: {
+                const { left, operatorToken, right } = parent as ts.BinaryExpression;
+                return isEqualityOperatorKind(operatorToken.kind)
+                    ? checker.getTypeAtLocation(node === right ? left : right)
+                    : checker.getContextualType(node);
+            }
+            case ts.SyntaxKind.CaseClause:
+                return (parent as ts.CaseClause).expression === node ? getSwitchedType(parent as ts.CaseClause, checker) : undefined;
+            default:
+                return checker.getContextualType(node);
+        }
+    }
+
+    function getSwitchedType(caseClause: ts.CaseClause, checker: ts.TypeChecker): ts.Type {
+        return checker.getTypeAtLocation(caseClause.parent.parent.expression);
     }
 
     function getFirstSymbolInChain(symbol: Symbol, enclosingDeclaration: Node, checker: TypeChecker): Symbol | undefined {
@@ -851,7 +881,7 @@ namespace ts.Completions {
 
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
-        const recommendedCompletion = getRecommendedCompletion(previousToken, typeChecker);
+        const recommendedCompletion = previousToken && getRecommendedCompletion(previousToken, typeChecker);
         return { symbols, isGlobalCompletion, isMemberCompletion, allowStringLiteral, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), request, keywordFilters, symbolToOriginInfoMap, recommendedCompletion, previousToken };
 
         type JSDocTagWithTypeExpression = JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag;
@@ -2081,15 +2111,16 @@ namespace ts.Completions {
         return isConstructorParameterCompletionKeyword(stringToToken(text));
     }
 
-    function isEqualityExpression(node: Node): node is BinaryExpression {
-        return isBinaryExpression(node) && isEqualityOperatorKind(node.operatorToken.kind);
-    }
-
-    function isEqualityOperatorKind(kind: SyntaxKind) {
-        return kind === SyntaxKind.EqualsEqualsToken ||
-            kind === SyntaxKind.ExclamationEqualsToken ||
-            kind === SyntaxKind.EqualsEqualsEqualsToken ||
-            kind === SyntaxKind.ExclamationEqualsEqualsToken;
+    function isEqualityOperatorKind(kind: ts.SyntaxKind): kind is EqualityOperator {
+        switch (kind) {
+            case ts.SyntaxKind.EqualsEqualsEqualsToken:
+            case ts.SyntaxKind.EqualsEqualsToken:
+            case ts.SyntaxKind.ExclamationEqualsEqualsToken:
+            case ts.SyntaxKind.ExclamationEqualsToken:
+                return true;
+            default:
+                return false;
+        }
     }
 
     /** Get the corresponding JSDocTag node if the position is in a jsDoc comment */
