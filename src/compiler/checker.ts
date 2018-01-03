@@ -8218,8 +8218,8 @@ namespace ts {
                 alternative = index;
             }
             else if (type.symbol && type.symbol.flags & (SymbolFlags.Interface | SymbolFlags.Class)) {
-                // This is restricted to interface and class symbols just because `keyof {a: number, b: number}` because
-                //  while correct, it's much more confusing and ugly than just havig no alternative and printing `"a" | "b"`
+                // This is restricted to interface and class symbols just because `keyof {a: number, b: number}`,
+                //  while correct, is much more confusing and ugly than just having no alternative and printing `"a" | "b"`
                 const index = <IndexType>createType(TypeFlags.Index);
                 index.type = type;
                 alternative = index;
