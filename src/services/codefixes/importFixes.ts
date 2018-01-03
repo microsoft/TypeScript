@@ -227,6 +227,10 @@ namespace ts.codefix {
         return literal;
     }
 
+    function usesJsExtensionOnImports(sourceFile: SourceFile): boolean {
+        return firstDefined(sourceFile.imports, ({ text }) => pathIsRelative(text) ? fileExtensionIs(text, Extension.Js) : undefined) || false;
+    }
+
     function createImportClauseOfKind(kind: ImportKind.Default | ImportKind.Named | ImportKind.Namespace, symbolName: string) {
         const id = createIdentifier(symbolName);
         switch (kind) {
@@ -250,18 +254,19 @@ namespace ts.codefix {
         host: LanguageServiceHost,
     ): ReadonlyArray<NewImportInfo> {
         const { baseUrl, paths, rootDirs } = options;
+        const addJsExtension = usesJsExtensionOnImports(sourceFile);
         const choicesForEachExportingModule = flatMap<SymbolExportInfo, NewImportInfo[]>(moduleSymbols, ({ moduleSymbol, importKind }) => {
             const modulePathsGroups = getAllModulePaths(program, moduleSymbol.valueDeclaration.getSourceFile()).map(moduleFileName => {
                 const sourceDirectory = getDirectoryPath(sourceFile.fileName);
                 const global = tryGetModuleNameFromAmbientModule(moduleSymbol)
-                    || tryGetModuleNameFromTypeRoots(options, host, getCanonicalFileName, moduleFileName)
+                    || tryGetModuleNameFromTypeRoots(options, host, getCanonicalFileName, moduleFileName, addJsExtension)
                     || tryGetModuleNameAsNodeModule(options, moduleFileName, host, getCanonicalFileName, sourceDirectory)
                     || rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName);
                 if (global) {
                     return [global];
                 }
 
-                const relativePath = removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), options);
+                const relativePath = removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), options, addJsExtension);
                 if (!baseUrl) {
                     return [relativePath];
                 }
@@ -271,7 +276,7 @@ namespace ts.codefix {
                     return [relativePath];
                 }
 
-                const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, options);
+                const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, options, addJsExtension);
                 if (paths) {
                     const fromPaths = tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
                     if (fromPaths) {
@@ -382,12 +387,13 @@ namespace ts.codefix {
         host: GetEffectiveTypeRootsHost,
         getCanonicalFileName: (file: string) => string,
         moduleFileName: string,
+        addJsExtension: boolean,
     ): string | undefined {
         const roots = getEffectiveTypeRoots(options, host);
         return roots && firstDefined(roots, unNormalizedTypeRoot => {
             const typeRoot = toPath(unNormalizedTypeRoot, /*basePath*/ undefined, getCanonicalFileName);
             if (startsWith(moduleFileName, typeRoot)) {
-                return removeExtensionAndIndexPostFix(moduleFileName.substring(typeRoot.length + 1), options);
+                return removeExtensionAndIndexPostFix(moduleFileName.substring(typeRoot.length + 1), options, addJsExtension);
             }
         });
     }
@@ -521,9 +527,13 @@ namespace ts.codefix {
         return firstDefined(rootDirs, rootDir => getRelativePathIfInDirectory(path, rootDir, getCanonicalFileName));
     }
 
-    function removeExtensionAndIndexPostFix(fileName: string, options: CompilerOptions): string {
+    function removeExtensionAndIndexPostFix(fileName: string, options: CompilerOptions, addJsExtension: boolean): string {
         const noExtension = removeFileExtension(fileName);
-        return getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs ? removeSuffix(noExtension, "/index") : noExtension;
+        return addJsExtension
+            ? noExtension + ".js"
+            : getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs
+                ? removeSuffix(noExtension, "/index")
+                : noExtension;
     }
 
     function getRelativePathIfInDirectory(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName): string | undefined {
