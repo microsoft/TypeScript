@@ -15043,7 +15043,7 @@ namespace ts {
          * element is not a class element, or the class element type cannot be determined, returns 'undefined'.
          * For example, in the element <MyClass>, the element instance type is `MyClass` (not `typeof MyClass`).
          */
-        function getJsxElementInstanceType(node: JsxOpeningLikeElement, valueType: Type) {
+        function getJsxElementInstanceType(node: JsxOpeningLikeElement, valueType: Type, sourceAttributesType: Type) {
             Debug.assert(!(valueType.flags & TypeFlags.Union));
             if (isTypeAny(valueType)) {
                 // Short-circuit if the class tag is using an element type 'any'
@@ -15066,7 +15066,8 @@ namespace ts {
             for (const signature of signatures) {
                 if (signature.typeParameters) {
                     const isJavascript = isInJavaScriptFile(node);
-                    const typeArguments = fillMissingTypeArguments(/*typeArguments*/ undefined, signature.typeParameters, /*minTypeArgumentCount*/ 0, isJavascript);
+                    const inferenceContext = createInferenceContext(signature, /*flags*/ isJavascript ? InferenceFlags.AnyDefault : 0);
+                    const typeArguments = inferJsxTypeArguments(signature, sourceAttributesType, inferenceContext);
                     instantiatedSignatures.push(getSignatureInstantiation(signature, typeArguments, isJavascript));
                 }
                 else {
@@ -15251,6 +15252,7 @@ namespace ts {
          *
          * @param openingLikeElement a non-intrinsic JSXOPeningLikeElement
          * @param shouldIncludeAllStatelessAttributesType a boolean indicating whether to include all attributes types from all stateless function signature
+         * @param sourceAttributesType Is the attributes type the user passed, and is used to create inferences in the target type if present
          * @param elementType an instance type of the given opening-like element. If undefined, the function will check type openinglikeElement's tagname.
          * @param elementClassType a JSX-ElementClass type. This is a result of looking up ElementClass interface in the JSX global (imported from react.d.ts)
          * @return attributes type if able to resolve the type of node
@@ -15259,13 +15261,14 @@ namespace ts {
          */
         function resolveCustomJsxElementAttributesType(openingLikeElement: JsxOpeningLikeElement,
             shouldIncludeAllStatelessAttributesType: boolean,
-            elementType: Type = checkExpression(openingLikeElement.tagName),
+            sourceAttributesType: Type | undefined,
+            elementType: Type,
             elementClassType?: Type): Type {
 
             if (elementType.flags & TypeFlags.Union) {
                 const types = (elementType as UnionType).types;
                 return getUnionType(types.map(type => {
-                    return resolveCustomJsxElementAttributesType(openingLikeElement, shouldIncludeAllStatelessAttributesType, type, elementClassType);
+                    return resolveCustomJsxElementAttributesType(openingLikeElement, shouldIncludeAllStatelessAttributesType, sourceAttributesType, type, elementClassType);
                 }), UnionReduction.Subtype);
             }
 
@@ -15296,7 +15299,7 @@ namespace ts {
             }
 
             // Get the element instance type (the result of newing or invoking this tag)
-            const elemInstanceType = getJsxElementInstanceType(openingLikeElement, elementType);
+            const elemInstanceType = getJsxElementInstanceType(openingLikeElement, elementType, sourceAttributesType || emptyObjectType);
 
             // If we should include all stateless attributes type, then get all attributes type from all stateless function signature.
             // Otherwise get only attributes type from the signature picked by choose-overload logic.
@@ -15309,7 +15312,7 @@ namespace ts {
             }
 
             // Issue an error if this return type isn't assignable to JSX.ElementClass
-            if (elementClassType) {
+            if (elementClassType && sourceAttributesType) {
                 checkTypeRelatedTo(elemInstanceType, elementClassType, assignableRelation, openingLikeElement, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
             }
 
@@ -15392,14 +15395,20 @@ namespace ts {
          * @param node a custom JSX opening-like element
          * @param shouldIncludeAllStatelessAttributesType a boolean value used by language service to get all possible attributes type from an overload stateless function component
          */
-        function getCustomJsxElementAttributesType(node: JsxOpeningLikeElement, shouldIncludeAllStatelessAttributesType: boolean): Type {
-            const links = getNodeLinks(node);
-            const linkLocation = shouldIncludeAllStatelessAttributesType ? "resolvedJsxElementAllAttributesType" : "resolvedJsxElementAttributesType";
-            if (!links[linkLocation]) {
-                const elemClassType = getJsxGlobalElementClassType();
-                return links[linkLocation] = resolveCustomJsxElementAttributesType(node, shouldIncludeAllStatelessAttributesType, /*elementType*/ undefined, elemClassType);
+        function getCustomJsxElementAttributesType(node: JsxOpeningLikeElement, sourceAttributesType: Type, shouldIncludeAllStatelessAttributesType: boolean): Type {
+            if (!sourceAttributesType) {
+                // This ensures we cache non-inference uses of this calculation (ie, contextual types or services)
+                const links = getNodeLinks(node);
+                const linkLocation = shouldIncludeAllStatelessAttributesType ? "resolvedJsxElementAllAttributesType" : "resolvedJsxElementAttributesType";
+                if (!links[linkLocation]) {
+                    const elemClassType = getJsxGlobalElementClassType();
+                    return links[linkLocation] = resolveCustomJsxElementAttributesType(node, shouldIncludeAllStatelessAttributesType, sourceAttributesType, checkExpression(node.tagName), elemClassType);
+                }
+                return links[linkLocation];
             }
-            return links[linkLocation];
+            else {
+                return resolveCustomJsxElementAttributesType(node, shouldIncludeAllStatelessAttributesType, sourceAttributesType, checkExpression(node.tagName), getJsxGlobalElementClassType());
+            }
         }
 
         /**
@@ -15414,7 +15423,7 @@ namespace ts {
             else {
                 // Because in language service, the given JSX opening-like element may be incomplete and therefore,
                 // we can't resolve to exact signature if the element is a stateless function component so the best thing to do is return all attributes type from all overloads.
-                return getCustomJsxElementAttributesType(node, /*shouldIncludeAllStatelessAttributesType*/ true);
+                return getCustomJsxElementAttributesType(node, /*sourceAttributesType*/ undefined, /*shouldIncludeAllStatelessAttributesType*/ true);
             }
         }
 
@@ -15428,7 +15437,7 @@ namespace ts {
                 return getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node);
             }
             else {
-                return getCustomJsxElementAttributesType(node, /*shouldIncludeAllStatelessAttributesType*/ false);
+                return getCustomJsxElementAttributesType(node, /*sourceAttributesType*/ undefined, /*shouldIncludeAllStatelessAttributesType*/ false);
             }
         }
 
@@ -15567,15 +15576,16 @@ namespace ts {
             //      2. Solved JSX attributes type given by users, sourceAttributesType, which is by resolving "attributes" property of the JSX opening-like element.
             //      3. Check if the two are assignable to each other
 
-            // targetAttributesType is a type of an attributes from resolving tagName of an opening-like JSX element.
-            const targetAttributesType = isJsxIntrinsicIdentifier(openingLikeElement.tagName) ?
-                getIntrinsicAttributesTypeFromJsxOpeningLikeElement(openingLikeElement) :
-                getCustomJsxElementAttributesType(openingLikeElement, /*shouldIncludeAllStatelessAttributesType*/ false);
 
             // sourceAttributesType is a type of an attributes properties.
             // i.e <div attr1={10} attr2="string" />
             //     attr1 and attr2 are treated as JSXAttributes attached in the JsxOpeningLikeElement as "attributes".
             const sourceAttributesType = createJsxAttributesTypeFromAttributesProperty(openingLikeElement, checkMode);
+
+            // targetAttributesType is a type of an attributes from resolving tagName of an opening-like JSX element.
+            const targetAttributesType = isJsxIntrinsicIdentifier(openingLikeElement.tagName) ?
+                getIntrinsicAttributesTypeFromJsxOpeningLikeElement(openingLikeElement) :
+                getCustomJsxElementAttributesType(openingLikeElement, sourceAttributesType, /*shouldIncludeAllStatelessAttributesType*/ false);
 
             // If the targetAttributesType is an emptyObjectType, indicating that there is no property named 'props' on this instance type.
             // but there exists a sourceAttributesType, we need to explicitly give an error as normal assignability check allow excess properties and will pass.
@@ -16432,6 +16442,13 @@ namespace ts {
                 inferTypes(context.inferences, getReturnTypeOfSignature(contextualSignature), getReturnTypeOfSignature(signature), InferencePriority.ReturnType);
             }
             return getSignatureInstantiation(signature, getInferredTypes(context), isInJavaScriptFile(contextualSignature.declaration));
+        }
+
+        function inferJsxTypeArguments(signature: Signature, sourceAttributesType: Type, context: InferenceContext): Type[] {
+            const paramType = getTypeAtPosition(signature, 0);
+            inferTypes(context.inferences, sourceAttributesType, paramType);
+
+            return getInferredTypes(context);
         }
 
         function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: ReadonlyArray<Expression>, excludeArgument: boolean[], context: InferenceContext): Type[] {
