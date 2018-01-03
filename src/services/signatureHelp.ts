@@ -359,6 +359,7 @@ namespace ts.SignatureHelp {
         const callTarget = getInvokedExpression(invocation);
         const callTargetSymbol = typeChecker.getSymbolAtLocation(callTarget);
         const callTargetDisplayParts = callTargetSymbol && symbolToDisplayParts(typeChecker, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
+        const printer = createPrinter({ removeComments: true });
         const items: SignatureHelpItem[] = map(candidates, candidateSignature => {
             let signatureHelpParameters: SignatureHelpParameter[];
             const prefixDisplayParts: SymbolDisplayPart[] = [];
@@ -376,7 +377,6 @@ namespace ts.SignatureHelp {
                 signatureHelpParameters = typeParameters && typeParameters.length > 0 ? map(typeParameters, createSignatureHelpParameterForTypeParameter) : emptyArray;
                 suffixDisplayParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
                 const parameterParts = mapToDisplayParts(writer => {
-                    const printer = createPrinter({ removeComments: true });
                     const flags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors;
                     const thisParameter = candidateSignature.thisParameter ? [typeChecker.symbolToParameterDeclaration(candidateSignature.thisParameter, invocation, flags)] : [];
                     const params = createNodeArray([...thisParameter, ...map(candidateSignature.parameters, param => typeChecker.symbolToParameterDeclaration(param, invocation, flags))]);
@@ -386,9 +386,9 @@ namespace ts.SignatureHelp {
             }
             else {
                 isVariadic = candidateSignature.hasRestParameter;
+                let printer: Printer;
                 const typeParameterParts = mapToDisplayParts(writer => {
                     if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
-                        const printer = createPrinter({ removeComments: true });
                         const args = createNodeArray(map(candidateSignature.typeParameters, p => typeChecker.typeParameterToDeclaration(p, invocation)));
                         printer.writeList(ListFormat.TypeParameters, args, getSourceFileOfNode(getParseTreeNode(invocation)), writer);
                     }
@@ -435,7 +435,6 @@ namespace ts.SignatureHelp {
 
         function createSignatureHelpParameterForParameter(parameter: Symbol): SignatureHelpParameter {
             const displayParts = mapToDisplayParts(writer => {
-                const printer = createPrinter({ removeComments: true });
                 const param = typeChecker.symbolToParameterDeclaration(parameter, invocation, NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors);
                 printer.writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(invocation)), writer);
             });
@@ -450,7 +449,6 @@ namespace ts.SignatureHelp {
 
         function createSignatureHelpParameterForTypeParameter(typeParameter: TypeParameter): SignatureHelpParameter {
             const displayParts = mapToDisplayParts(writer => {
-                const printer = createPrinter({ removeComments: true });
                 const param = typeChecker.typeParameterToDeclaration(typeParameter, invocation);
                 printer.writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(invocation)), writer);
             });
