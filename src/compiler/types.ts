@@ -3501,6 +3501,7 @@ namespace ts {
         EvolvingArray    = 1 << 8,  // Evolving array type
         ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
         ContainsSpread   = 1 << 10, // Object literal contains spread operation
+        Deferred = 1 << 11, // Object contains a deferred inferred property
         ClassOrInterface = Class | Interface
     }
 
@@ -3606,6 +3607,13 @@ namespace ts {
     export interface EvolvingArrayType extends ObjectType {
         elementType: Type;      // Element expressions of evolving array type
         finalArrayType?: Type;  // Final array type of evolving array type
+    }
+
+    /* @internal */
+    export interface DeferredMappedType extends ObjectType {
+        targetIndexInfo?: IndexInfo;
+        mappedType: MappedType;
+        sourceProperties: Symbol[];
     }
 
     /* @internal */

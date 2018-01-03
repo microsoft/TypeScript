@@ -6114,6 +6114,23 @@ namespace ts {
             }
         }
 
+        function resolveDeferredMappedTypeMembers(type: DeferredMappedType) {
+            const indexInfo = type.targetIndexInfo;
+            const readonlyMask = type.mappedType.declaration.readonlyToken ? false : true;
+            const optionalMask = type.mappedType.declaration.questionToken ? 0 : SymbolFlags.Optional;
+            const stringIndexInfo = indexInfo && createIndexInfo(inferDeferredMappedType(indexInfo.type, type.mappedType), readonlyMask && indexInfo.isReadonly);
+            const members = createSymbolTable();
+            for (const prop of type.sourceProperties) {
+                const checkFlags = CheckFlags.Deferred | (readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0);
+                const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.escapedName, checkFlags) as DeferredTransientSymbol;
+                inferredProp.declarations = prop.declarations;
+                inferredProp.propertyType = getTypeOfSymbol(prop);
+                inferredProp.mappedType = type.mappedType;
+                members.set(prop.escapedName, inferredProp);
+            }
+            setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, undefined);
+        }
+
         /** Resolve the members of a mapped type { [P in K]: T } */
         function resolveMappedTypeMembers(type: MappedType) {
             const members: SymbolTable = createSymbolTable();
@@ -6252,6 +6269,9 @@ namespace ts {
                     }
                     else if ((<ObjectType>type).objectFlags & ObjectFlags.ClassOrInterface) {
                         resolveClassOrInterfaceMembers(<InterfaceType>type);
+                    }
+                    else if ((<DeferredMappedType>type).objectFlags & ObjectFlags.Deferred) {
+                        resolveDeferredMappedTypeMembers(type as DeferredMappedType);
                     }
                     else if ((<ObjectType>type).objectFlags & ObjectFlags.Anonymous) {
                         resolveAnonymousTypeMembers(<AnonymousType>type);
@@ -11291,35 +11311,23 @@ namespace ts {
         }
 
         function createDeferredMappedType(source: Type, target: MappedType) {
-                const properties = getPropertiesOfType(source);
-                let indexInfo = getIndexInfoOfType(source, IndexKind.String);
-                if (properties.length === 0 && !indexInfo) {
+            const properties = getPropertiesOfType(source);
+            let indexInfo = getIndexInfoOfType(source, IndexKind.String);
+            if (properties.length === 0 && !indexInfo) {
+                return undefined;
+            }
+            // If any property contains context sensitive functions that have been skipped, the source type
+            // is incomplete and we can't infer a meaningful input type.
+            for (const prop of properties) {
+                if (getTypeOfSymbol(prop).flags & TypeFlags.ContainsAnyFunctionType) {
                     return undefined;
                 }
-                const readonlyMask = target.declaration.readonlyToken ? false : true;
-                const optionalMask = target.declaration.questionToken ? 0 : SymbolFlags.Optional;
-                const members = createSymbolTable();
-                for (const prop of properties) {
-                    const propType = getTypeOfSymbol(prop);
-                    // If any property contains context sensitive functions that have been skipped, the source type
-                    // is incomplete and we can't infer a meaningful input type.
-                    if (propType.flags & TypeFlags.ContainsAnyFunctionType) {
-                        return undefined;
-                    }
-                    const checkFlags = CheckFlags.Deferred | (readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0);
-                    const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.escapedName, checkFlags) as DeferredTransientSymbol;
-                    inferredProp.declarations = prop.declarations;
-                    inferredProp.propertyType = propType;
-                    inferredProp.mappedType = target;
-                    members.set(prop.escapedName, inferredProp);
-                }
-                if (indexInfo) {
-                    // TODO: Defer this too.
-                    // (probably the simplest way is to have a special type that defers the creation of (at least) its index info in
-                    // resolveStructuredTypeMembers
-                    indexInfo = createIndexInfo(inferDeferredMappedType(indexInfo.type, target), readonlyMask && indexInfo.isReadonly);
-                }
-                return createAnonymousType(undefined, members, emptyArray, emptyArray, indexInfo, undefined);
+            }
+            const deferred = createObjectType(ObjectFlags.Deferred | ObjectFlags.Anonymous, undefined) as DeferredMappedType;
+            deferred.mappedType = target;
+            deferred.sourceProperties = properties;
+            deferred.targetIndexInfo = indexInfo;
+            return deferred;
         }
 
         function inferDeferredMappedType(sourceType: Type, target: MappedType): Type {
