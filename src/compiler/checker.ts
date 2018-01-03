@@ -2627,48 +2627,7 @@ namespace ts {
         }
 
         function toNodeBuilderFlags(flags?: TypeFormatFlags): NodeBuilderFlags {
-            let result = NodeBuilderFlags.None;
-            if (!flags) {
-                return result;
-            }
-            if (flags & TypeFormatFlags.NoTruncation) {
-                result |= NodeBuilderFlags.NoTruncation;
-            }
-            if (flags & TypeFormatFlags.UseFullyQualifiedType) {
-                result |= NodeBuilderFlags.UseFullyQualifiedType;
-            }
-            if (flags & TypeFormatFlags.SuppressAnyReturnType) {
-                result |= NodeBuilderFlags.SuppressAnyReturnType;
-            }
-            if (flags & TypeFormatFlags.WriteArrayAsGenericType) {
-                result |= NodeBuilderFlags.WriteArrayAsGenericType;
-            }
-            if (flags & TypeFormatFlags.WriteTypeArgumentsOfSignature) {
-                result |= NodeBuilderFlags.WriteTypeArgumentsOfSignature;
-            }
-            if (flags & TypeFormatFlags.MultilineObjectLiterals) {
-                result |= NodeBuilderFlags.MultilineObjectLiterals;
-            }
-            if (flags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral) {
-                result |= NodeBuilderFlags.WriteClassExpressionAsTypeLiteral;
-            }
-            if (flags & TypeFormatFlags.UseTypeOfFunction) {
-                result |= NodeBuilderFlags.UseTypeOfFunction;
-            }
-            if (flags & TypeFormatFlags.OmitParameterModifiers) {
-                result |= NodeBuilderFlags.OmitParameterModifiers;
-            }
-            if (flags & TypeFormatFlags.UseAliasDefinedOutsideCurrentScope) {
-                result |= NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
-            }
-            if (flags & TypeFormatFlags.WriteDefaultSymbolWithoutName) {
-                result |= NodeBuilderFlags.WriteDefaultSymbolWithoutName;
-            }
-            if (flags & TypeFormatFlags.AllowUniqueESSymbolType) {
-                result |= NodeBuilderFlags.AllowUniqueESSymbolType;
-            }
-
-            return result;
+            return flags & TypeFormatFlags.NodeBuilderFlagsMask;
         }
 
         function createNodeBuilder() {

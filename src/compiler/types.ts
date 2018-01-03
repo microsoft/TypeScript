@@ -2907,6 +2907,7 @@ namespace ts {
         NoTruncation                            = 1 << 0,   // Don't truncate result
         WriteArrayAsGenericType                 = 1 << 1,   // Write Array<T> instead T[]
         WriteDefaultSymbolWithoutName           = 1 << 2,   // Write `default`-named symbols as `default` instead of how they were written
+        // empty space
         WriteTypeArgumentsOfSignature           = 1 << 5,   // Write the type arguments instead of type parameters of the signature
         UseFullyQualifiedType                   = 1 << 6,   // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         UseOnlyExternalAliasing                 = 1 << 7,   // Only use external aliases for a symbol
@@ -2932,6 +2933,64 @@ namespace ts {
         // State
         InObjectTypeLiteral                     = 1 << 22,
         InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
+    }
+
+    // Ensure the shared flags between this and `NodeBuilderFlags` stay in alignment
+    export const enum TypeFormatFlags {
+        None                                    = 0,
+        NoTruncation                            = 1 << 0,  // Don't truncate typeToString result
+        WriteArrayAsGenericType                 = 1 << 1,  // Write Array<T> instead T[]
+        WriteDefaultSymbolWithoutName           = 1 << 2,  // Write all `defaut`-named symbols as `default` instead of their written name
+        // hole because there's a hole in node builder flags
+        WriteTypeArgumentsOfSignature           = 1 << 5,  // Write the type arguments instead of type parameters of the signature
+        UseFullyQualifiedType                   = 1 << 6,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
+        // hole because `UseOnlyExternalAliasing` is here in node builder flags, but functions which take old flags use `SymbolFormatFlags` instead
+        SuppressAnyReturnType                   = 1 << 8,  // If the return type is any-like, don't offer a return type.
+        // hole because `WriteTypeParametersInQualifiedName` is here in node builder flags, but functions which take old flags use `SymbolFormatFlags` for this instead
+        MultilineObjectLiterals                 = 1 << 10, // Always print object literals across multiple lines (only used to map into node builder flags)
+        WriteClassExpressionAsTypeLiteral       = 1 << 11, // Write a type literal instead of (Anonymous class)
+        UseTypeOfFunction                       = 1 << 12, // Write typeof instead of function type literal
+        OmitParameterModifiers                  = 1 << 13, // Omit modifiers on parameters
+        UseAliasDefinedOutsideCurrentScope      = 1 << 14, // For a `type T = ... ` defined in a different file, write `T` instead of its value,
+                                                           // even though `T` can't be accessed in the current scope.
+
+        // Error Handling
+        AllowUniqueESSymbolType                 = 1 << 20, // This is bit 20 to align with the same bit in `NodeBuilderFlags`
+
+        // TypeFormatFlags exclusive
+        AddUndefined                            = 1 << 17, // Add undefined to types of initialized, non-optional parameters
+        WriteArrowStyleSignature                = 1 << 18, // Write arrow style signature
+
+        // State
+        InArrayType                             = 1 << 19, // Writing an array element type
+        InElementType                           = 1 << 21, // Writing an array or union element type
+        InFirstTypeArgument                     = 1 << 22, // Writing first type argument of the instantiated type
+        InTypeAlias                             = 1 << 23, // Writing type in type alias declaration
+
+        /** @deprecated */ WriteOwnNameForAnyLike  = 0,  // Does nothing
+
+        NodeBuilderFlagsMask = 
+            NoTruncation | WriteArrayAsGenericType | WriteDefaultSymbolWithoutName | WriteTypeArgumentsOfSignature |
+            UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
+            UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias,
+    }
+
+    export const enum SymbolFormatFlags {
+        None = 0x00000000,
+
+        // Write symbols's type argument if it is instantiated symbol
+        // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
+        //     var a: C<number>;
+        //     var p = a.p;  <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
+        WriteTypeParametersOrArguments = 0x00000001,
+
+        // Use only external alias information to get the symbol name in the given context
+        // eg.  module m { export class c { } } import x = m.c;
+        // When this flag is specified m.c will be used to refer to the class instead of alias symbol x
+        UseOnlyExternalAliasing = 0x00000002,
+
+        // Build symbol name using property accesses and element accesses, instead of an entity name
+        AllowAnyNodeKind = 0x00000004,
     }
 
     /* @internal */
@@ -2975,48 +3034,6 @@ namespace ts {
         increaseIndent(): void;
         decreaseIndent(): void;
         clear(): void;
-    }
-
-    export const enum TypeFormatFlags {
-        None                            = 0,
-        WriteArrayAsGenericType         = 1 << 0,  // Write Array<T> instead T[]
-        WriteDefaultSymbolWithoutName   = 1 << 1,  // Write all `defaut`-named symbols as `default` instead of their written name
-        UseTypeOfFunction               = 1 << 2,  // Write typeof instead of function type literal
-        NoTruncation                    = 1 << 3,  // Don't truncate typeToString result
-        WriteArrowStyleSignature        = 1 << 4,  // Write arrow style signature
-        WriteOwnNameForAnyLike          = 1 << 5,  // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
-        WriteTypeArgumentsOfSignature   = 1 << 6,  // Write the type arguments instead of type parameters of the signature
-        InElementType                   = 1 << 7,  // Writing an array or union element type
-        UseFullyQualifiedType           = 1 << 8,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
-        InFirstTypeArgument             = 1 << 9,  // Writing first type argument of the instantiated type
-        InTypeAlias                     = 1 << 10,  // Writing type in type alias declaration
-        SuppressAnyReturnType           = 1 << 12,  // If the return type is any-like, don't offer a return type.
-        AddUndefined                    = 1 << 13,  // Add undefined to types of initialized, non-optional parameters
-        WriteClassExpressionAsTypeLiteral = 1 << 14, // Write a type literal instead of (Anonymous class)
-        InArrayType                     = 1 << 15,  // Writing an array element type
-        UseAliasDefinedOutsideCurrentScope = 1 << 16, // For a `type T = ... ` defined in a different file, write `T` instead of its value,
-                                                      // even though `T` can't be accessed in the current scope.
-        MultilineObjectLiterals         = 1 << 17,   // Always print object literals across multiple lines (only used to map into node builder flags)
-        OmitParameterModifiers          = 1 << 18,   // Omit modifiers on parameters
-        AllowUniqueESSymbolType         = 1 << 19,
-    }
-
-    export const enum SymbolFormatFlags {
-        None = 0x00000000,
-
-        // Write symbols's type argument if it is instantiated symbol
-        // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
-        //     var a: C<number>;
-        //     var p = a.p;  <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
-        WriteTypeParametersOrArguments = 0x00000001,
-
-        // Use only external alias information to get the symbol name in the given context
-        // eg.  module m { export class c { } } import x = m.c;
-        // When this flag is specified m.c will be used to refer to the class instead of alias symbol x
-        UseOnlyExternalAliasing = 0x00000002,
-
-        // Build symbol name using property accesses and element accesses, instead of an entity name
-        AllowAnyNodeKind = 0x00000004,
     }
 
     /* @internal */
