@@ -8442,7 +8442,7 @@ namespace ts {
         function getExtendsType(checkType: Type, extendsType: Type): Type {
             // sys.write(`getExtendsType(${typeToString(checkType)}, ${typeToString(extendsType)})\n`);
             if (checkType.flags & TypeFlags.Union) {
-                return getUnionType(map((<UnionType>checkType).types, t => getExtendsType(t, extendsType)), /*subtypeReduction*/ false);
+                return getUnionType(map((<UnionType>checkType).types, t => getExtendsType(t, extendsType)));
             }
             if (checkType.flags & TypeFlags.Any) {
                 return booleanType;
@@ -8501,7 +8501,7 @@ namespace ts {
          * this function should be called in a left folding style, with left = previous result of getSpreadType
          * and right = the new element to be spread.
          */
-        function getSpreadType(left: Type, right: Type, symbol: Symbol, propagatedFlags: TypeFlags): Type {
+        function getSpreadType(left: Type, right: Type, symbol: Symbol, typeFlags: TypeFlags, objectFlags: ObjectFlags): Type {
             if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
                 return anyType;
             }
@@ -8512,10 +8512,10 @@ namespace ts {
                 return left;
             }
             if (left.flags & TypeFlags.Union) {
-                return mapType(left, t => getSpreadType(t, right, symbol, propagatedFlags));
+                return mapType(left, t => getSpreadType(t, right, symbol, typeFlags, objectFlags));
             }
             if (right.flags & TypeFlags.Union) {
-                return mapType(right, t => getSpreadType(left, t, symbol, propagatedFlags));
+                return mapType(right, t => getSpreadType(left, t, symbol, typeFlags, objectFlags));
             }
             if (right.flags & (TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive)) {
                 return left;
@@ -8578,8 +8578,8 @@ namespace ts {
                 emptyArray,
                 getNonReadonlyIndexSignature(stringIndexInfo),
                 getNonReadonlyIndexSignature(numberIndexInfo));
-            spread.flags |= propagatedFlags | TypeFlags.ContainsObjectLiteral;
-            (spread as ObjectType).objectFlags |= (ObjectFlags.ObjectLiteral | ObjectFlags.ContainsSpread);
+            spread.flags |= typeFlags | TypeFlags.ContainsObjectLiteral;
+            (spread as ObjectType).objectFlags |= objectFlags | (ObjectFlags.ObjectLiteral | ObjectFlags.ContainsSpread);
             return spread;
         }
 
@@ -9552,7 +9552,7 @@ namespace ts {
         }
 
         function isIgnoredJsxProperty(source: Type, sourceProp: Symbol, targetMemberType: Type | undefined) {
-            return source.flags & TypeFlags.JsxAttributes && !(isUnhyphenatedJsxName(sourceProp.escapedName) || targetMemberType);
+            return getObjectFlags(source) & ObjectFlags.JsxAttributes && !(isUnhyphenatedJsxName(sourceProp.escapedName) || targetMemberType);
         }
 
         /**
@@ -14905,7 +14905,7 @@ namespace ts {
                         checkExternalEmitHelpers(memberDecl, ExternalEmitHelpers.Assign);
                     }
                     if (propertiesArray.length > 0) {
-                        spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags);
+                        spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, 0);
                         propertiesArray = [];
                         propertiesTable = createSymbolTable();
                         hasComputedStringProperty = false;
@@ -14917,7 +14917,7 @@ namespace ts {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
-                    spread = getSpreadType(spread, type, node.symbol, propagatedFlags);
+                    spread = getSpreadType(spread, type, node.symbol, propagatedFlags, 0);
                     offset = i + 1;
                     continue;
                 }
@@ -14962,7 +14962,7 @@ namespace ts {
 
             if (spread !== emptyObjectType) {
                 if (propertiesArray.length > 0) {
-                    spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags);
+                    spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, 0);
                 }
                 return spread;
             }
@@ -15095,7 +15095,7 @@ namespace ts {
                 else {
                     Debug.assert(attributeDecl.kind === SyntaxKind.JsxSpreadAttribute);
                     if (attributesTable.size > 0) {
-                        spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, TypeFlags.JsxAttributes);
+                        spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, 0, ObjectFlags.JsxAttributes);
                         attributesTable = createSymbolTable();
                     }
                     const exprType = checkExpressionCached(attributeDecl.expression, checkMode);
@@ -15103,7 +15103,7 @@ namespace ts {
                         hasSpreadAnyType = true;
                     }
                     if (isValidSpreadType(exprType)) {
-                        spread = getSpreadType(spread, exprType, openingLikeElement.symbol, TypeFlags.JsxAttributes);
+                        spread = getSpreadType(spread, exprType, openingLikeElement.symbol, 0, ObjectFlags.JsxAttributes);
                     }
                     else {
                         typeToIntersect = typeToIntersect ? getIntersectionType([typeToIntersect, exprType]) : exprType;
@@ -15113,7 +15113,7 @@ namespace ts {
 
             if (!hasSpreadAnyType) {
                 if (attributesTable.size > 0) {
-                    spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, TypeFlags.JsxAttributes);
+                    spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, 0, ObjectFlags.JsxAttributes);
                 }
             }
 
@@ -15138,7 +15138,8 @@ namespace ts {
                         createArrayType(getUnionType(childrenTypes));
                     const childPropMap = createSymbolTable();
                     childPropMap.set(jsxChildrenPropertyName, childrenPropSymbol);
-                    spread = getSpreadType(spread, createAnonymousType(attributes.symbol, childPropMap, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined), attributes.symbol, TypeFlags.JsxAttributes);
+                    spread = getSpreadType(spread, createAnonymousType(attributes.symbol, childPropMap, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined),
+                        attributes.symbol, 0, ObjectFlags.JsxAttributes);
 
                 }
             }
