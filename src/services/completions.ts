@@ -605,11 +605,8 @@ namespace ts.Completions {
             case ts.SyntaxKind.Identifier:
                 return getContextualTypeFromParent(currentToken as ts.Identifier, checker);
             case ts.SyntaxKind.EqualsToken:
-                return ts.isVariableDeclaration(parent)
-                    ? checker.getContextualType(parent.initializer)
-                    : ts.isBinaryExpression(parent)
-                    ? checker.getTypeAtLocation(parent.left)
-                    : undefined;
+                return ts.isVariableDeclaration(parent) ? checker.getContextualType(parent.initializer) :
+                    ts.isBinaryExpression(parent) ? checker.getTypeAtLocation(parent.left) : undefined;
             case ts.SyntaxKind.NewKeyword:
                 return checker.getContextualType(parent as ts.Expression);
             case ts.SyntaxKind.CaseKeyword:
