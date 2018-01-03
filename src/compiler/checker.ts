@@ -6115,12 +6115,12 @@ namespace ts {
         }
 
         function resolveDeferredMappedTypeMembers(type: DeferredMappedType) {
-            const indexInfo = type.targetIndexInfo;
+            const indexInfo = getIndexInfoOfType(type.source, IndexKind.String);
             const readonlyMask = type.mappedType.declaration.readonlyToken ? false : true;
             const optionalMask = type.mappedType.declaration.questionToken ? 0 : SymbolFlags.Optional;
             const stringIndexInfo = indexInfo && createIndexInfo(inferDeferredMappedType(indexInfo.type, type.mappedType), readonlyMask && indexInfo.isReadonly);
             const members = createSymbolTable();
-            for (const prop of type.sourceProperties) {
+            for (const prop of getPropertiesOfType(type.source)) {
                 const checkFlags = CheckFlags.Deferred | (readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0);
                 const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.escapedName, checkFlags) as DeferredTransientSymbol;
                 inferredProp.declarations = prop.declarations;
@@ -11312,8 +11312,7 @@ namespace ts {
 
         function createDeferredMappedType(source: Type, target: MappedType) {
             const properties = getPropertiesOfType(source);
-            let indexInfo = getIndexInfoOfType(source, IndexKind.String);
-            if (properties.length === 0 && !indexInfo) {
+            if (properties.length === 0 && !getIndexInfoOfType(source, IndexKind.String)) {
                 return undefined;
             }
             // If any property contains context sensitive functions that have been skipped, the source type
@@ -11324,9 +11323,8 @@ namespace ts {
                 }
             }
             const deferred = createObjectType(ObjectFlags.Deferred | ObjectFlags.Anonymous, undefined) as DeferredMappedType;
+            deferred.source = source;
             deferred.mappedType = target;
-            deferred.sourceProperties = properties;
-            deferred.targetIndexInfo = indexInfo;
             return deferred;
         }
 

@@ -3611,9 +3611,8 @@ namespace ts {
 
     /* @internal */
     export interface DeferredMappedType extends ObjectType {
-        targetIndexInfo?: IndexInfo;
+        source: Type;
         mappedType: MappedType;
-        sourceProperties: Symbol[];
     }
 
     /* @internal */
