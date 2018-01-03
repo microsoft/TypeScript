@@ -1143,7 +1143,7 @@ namespace ts {
             getColumn: () => 0,
             getLine: () => 0,
             isAtStartOfLine: () => false,
-            rawWrite: noop,
+            rawWrite: notImplemented,
             getIndent: () => indent,
             increaseIndent: () => { indent++; },
             decreaseIndent: () => { indent--; },

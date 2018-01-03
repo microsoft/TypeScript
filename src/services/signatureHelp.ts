@@ -386,7 +386,6 @@ namespace ts.SignatureHelp {
             }
             else {
                 isVariadic = candidateSignature.hasRestParameter;
-                let printer: Printer;
                 const typeParameterParts = mapToDisplayParts(writer => {
                     if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
                         const args = createNodeArray(map(candidateSignature.typeParameters, p => typeChecker.typeParameterToDeclaration(p, invocation)));
