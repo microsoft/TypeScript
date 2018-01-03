@@ -444,7 +444,9 @@ namespace ts.Completions {
 
     function getSymbolName(symbol: Symbol, origin: SymbolOriginInfo | undefined, target: ScriptTarget): string {
         return origin && origin.isDefaultExport && symbol.escapedName === InternalSymbolName.Default
-            ? codefix.moduleSymbolToValidIdentifier(origin.moduleSymbol, target)
+            // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
+            ? firstDefined(symbol.declarations, d => isExportAssignment(d) && isIdentifier(d.expression) ? d.expression.text : undefined)
+                || codefix.moduleSymbolToValidIdentifier(origin.moduleSymbol, target)
             : symbol.name;
     }
 
@@ -1143,8 +1145,6 @@ namespace ts.Completions {
 
             codefix.forEachExternalModuleToImportFrom(typeChecker, sourceFile, allSourceFiles, moduleSymbol => {
                 for (let symbol of typeChecker.getExportsOfModule(moduleSymbol)) {
-                    let { name } = symbol;
-
                     // Don't add a completion for a re-export, only for the original.
                     // If `symbol.parent !== moduleSymbol`, this comes from an `export * from "foo"` re-export. Those don't create new symbols.
                     // If `some(...)`, this comes from an `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
@@ -1152,19 +1152,13 @@ namespace ts.Completions {
                         continue;
                     }
 
-                    const isDefaultExport = name === InternalSymbolName.Default;
+                    const isDefaultExport = symbol.name === InternalSymbolName.Default;
                     if (isDefaultExport) {
-                        const localSymbol = getLocalSymbolForExportDefault(symbol);
-                        if (localSymbol) {
-                            symbol = localSymbol;
-                            name = localSymbol.name;
-                        }
-                        else {
-                            name = codefix.moduleSymbolToValidIdentifier(moduleSymbol, target);
-                        }
+                        symbol = getLocalSymbolForExportDefault(symbol) || symbol;
                     }
 
-                    if (stringContainsCharactersInOrder(name.toLowerCase(), tokenTextLowerCase)) {
+                    const origin: SymbolOriginInfo = { moduleSymbol, isDefaultExport };
+                    if (stringContainsCharactersInOrder(getSymbolName(symbol, origin, target).toLowerCase(), tokenTextLowerCase)) {
                         symbols.push(symbol);
                         symbolToOriginInfoMap[getSymbolId(symbol)] = { moduleSymbol, isDefaultExport };
                     }
