@@ -1,0 +1,46 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyUnionLiftsToUnionType.ts ===
+declare var ab: 'a' | 'b';
+>ab : Symbol(ab, Decl(computedPropertyUnionLiftsToUnionType.ts, 0, 11))
+
+declare var cd: 'c' | 'd';
+>cd : Symbol(cd, Decl(computedPropertyUnionLiftsToUnionType.ts, 1, 11))
+
+// More cases:
+//   add spreads
+//   other literal types: number, boolean, enum (string and number)
+//   multiple unions
+//   union, spread (with union inside), union
+//   methods and other stuff that would get mangled by spread (since I use spread internally)
+const x: { a: string } | { b: string } = { [ab]: 'hi' }
+>x : Symbol(x, Decl(computedPropertyUnionLiftsToUnionType.ts, 8, 5))
+>a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 8, 10))
+>b : Symbol(b, Decl(computedPropertyUnionLiftsToUnionType.ts, 8, 26))
+>ab : Symbol(ab, Decl(computedPropertyUnionLiftsToUnionType.ts, 0, 11))
+
+const y: { a: string, c: string } | { a: string, d: string } | { b: string, c: string } | { b: string, d: string } =
+>y : Symbol(y, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 5))
+>a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 10))
+>c : Symbol(c, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 21))
+>a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 37))
+>d : Symbol(d, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 48))
+>b : Symbol(b, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 64))
+>c : Symbol(c, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 75))
+>b : Symbol(b, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 91))
+>d : Symbol(d, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 102))
+
+    { [ab]: 'hi', [cd]: 'there' }
+>ab : Symbol(ab, Decl(computedPropertyUnionLiftsToUnionType.ts, 0, 11))
+>cd : Symbol(cd, Decl(computedPropertyUnionLiftsToUnionType.ts, 1, 11))
+
+//   in destructuring???!!
+/*
+declare let o: { [t]: string }
+declare let u: { a: string } | { b: string }
+const { [t]: doo } = o
+const { [t]: duo } = u
+var t: 'a' | 'b' = doo
+var t: 'a' | 'b' = duo
+*/
+
+
+

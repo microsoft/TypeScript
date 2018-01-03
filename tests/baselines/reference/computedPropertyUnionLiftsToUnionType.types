@@ -1,0 +1,51 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyUnionLiftsToUnionType.ts ===
+declare var ab: 'a' | 'b';
+>ab : "a" | "b"
+
+declare var cd: 'c' | 'd';
+>cd : "c" | "d"
+
+// More cases:
+//   add spreads
+//   other literal types: number, boolean, enum (string and number)
+//   multiple unions
+//   union, spread (with union inside), union
+//   methods and other stuff that would get mangled by spread (since I use spread internally)
+const x: { a: string } | { b: string } = { [ab]: 'hi' }
+>x : { a: string; } | { b: string; }
+>a : string
+>b : string
+>{ [ab]: 'hi' } : { [ab]: string; } | { [ab]: string; }
+>ab : "a" | "b"
+>'hi' : "hi"
+
+const y: { a: string, c: string } | { a: string, d: string } | { b: string, c: string } | { b: string, d: string } =
+>y : { a: string; c: string; } | { a: string; d: string; } | { b: string; c: string; } | { b: string; d: string; }
+>a : string
+>c : string
+>a : string
+>d : string
+>b : string
+>c : string
+>b : string
+>d : string
+
+    { [ab]: 'hi', [cd]: 'there' }
+>{ [ab]: 'hi', [cd]: 'there' } : { [cd]: string; [ab]: string; } | { [cd]: string; [ab]: string; } | { [cd]: string; [ab]: string; } | { [cd]: string; [ab]: string; }
+>ab : "a" | "b"
+>'hi' : "hi"
+>cd : "c" | "d"
+>'there' : "there"
+
+//   in destructuring???!!
+/*
+declare let o: { [t]: string }
+declare let u: { a: string } | { b: string }
+const { [t]: doo } = o
+const { [t]: duo } = u
+var t: 'a' | 'b' = doo
+var t: 'a' | 'b' = duo
+*/
+
+
+
