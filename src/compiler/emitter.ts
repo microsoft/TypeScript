@@ -2534,13 +2534,9 @@ namespace ts {
         }
 
         function emitTypeParameters(parentNode: SignatureDeclaration | InterfaceDeclaration | TypeAliasDeclaration | ClassDeclaration | ClassExpression, typeParameters: NodeArray<TypeParameterDeclaration>) {
-            if (parentNode.kind !== SyntaxKind.InterfaceDeclaration &&
-                parentNode.kind !== SyntaxKind.TypeAliasDeclaration &&
-                parentNode.kind !== SyntaxKind.ClassDeclaration &&
-                parentNode.kind !== SyntaxKind.ClassExpression &&
-                parentNode.typeArguments) { // Quick info uses type arguments in place of type parameters on instantiated signatures
-                    return emitTypeArguments(parentNode, parentNode.typeArguments);
-                }
+            if (isFunctionLike(parentNode) && parentNode.typeArguments) { // Quick info uses type arguments in place of type parameters on instantiated signatures
+                return emitTypeArguments(parentNode, parentNode.typeArguments);
+            }
             emitList(parentNode, typeParameters, ListFormat.TypeParameters);
         }
 

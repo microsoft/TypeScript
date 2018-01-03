@@ -950,7 +950,8 @@ namespace ts {
         | IndexSignatureDeclaration
         | MethodSignature
         | ConstructSignatureDeclaration
-        | CallSignatureDeclaration;
+        | CallSignatureDeclaration
+        | JSDocFunctionType;
 
     export interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement {
         kind: SyntaxKind.FunctionDeclaration;
