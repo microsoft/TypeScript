@@ -519,34 +519,50 @@ export const o2: T0 = o1;
 >o1 : { [c4]: number; [c5]: string; [s2]: boolean; }
 
 // recursive declarations
-declare const rI: RI;
->rI : RI
->RI : RI
+// (type parameter indirection courtesy of #20400)
+declare const rI: RI<"a">;
+>rI : RI<"a">
+>RI : RI<T>
 
-interface RI {
->RI : RI
-
-    x: "a";
+rI.x
+>rI.x : "a"
+>rI : RI<"a">
 >x : "a"
+
+interface RI<T extends "a" | "b"> {
+>RI : RI<T>
+>T : T
+
+    x: T;
+>x : T
+>T : T
 
     [rI.x]: "b";
 >rI.x : "a"
->rI : RI
+>rI : RI<"a">
 >x : "a"
 }
 
-declare const rC: RC;
->rC : RC
->RC : RC
+declare const rC: RC<"a">;
+>rC : RC<"a">
+>RC : RC<T>
 
-declare class RC {
->RC : RC
-
-    x: "a";
+rC.x
+>rC.x : "a"
+>rC : RC<"a">
 >x : "a"
+
+declare class RC<T extends "a" | "b"> {
+>RC : RC<T>
+>T : T
+
+    x: T;
+>x : T
+>T : T
 
     [rC.x]: "b";
 >rC.x : "a"
->rC : RC
+>rC : RC<"a">
 >x : "a"
 }
+

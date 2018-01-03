@@ -93,12 +93,12 @@ for (var x in (<T>(x: T) => x)) { }
 
 for (var x in function (x: string, y: number) { return x + y }) { }
 >x : string
->function (x: string, y: number) { return x + y } : (x: string, y: string) => string
+>function (x: string, y: number) { return x + y } : (x: string, y: number) => string
 >x : string
->y : string
+>y : number
 >x + y : string
 >x : string
->y : string
+>y : number
 
 class A {
 >A : A

@@ -1004,7 +1004,7 @@ namespace ts.refactor.extractSymbol {
         const localNameText = getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file.text);
         const isJS = isInJavaScriptFile(scope);
 
-        const variableType = isJS
+        const variableType = isJS || !checker.isContextSensitive(node)
             ? undefined
             : checker.typeToTypeNode(checker.getContextualType(node), scope, NodeBuilderFlags.NoTruncation);
 
@@ -1077,10 +1077,10 @@ namespace ts.refactor.extractSymbol {
                 // Declare
                 const nodeToInsertBefore = getNodeToInsertConstantBefore(node, scope);
                 if (nodeToInsertBefore.pos === 0) {
-                    changeTracker.insertNodeAtTopOfFile(context.file, newVariableStatement);
+                    changeTracker.insertNodeAtTopOfFile(context.file, newVariableStatement, /*blankLineBetween*/ false);
                 }
                 else {
-                    changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariableStatement, /*blankLineBetween*/ true);
+                    changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariableStatement, /*blankLineBetween*/ false);
                 }
 
                 // Consume

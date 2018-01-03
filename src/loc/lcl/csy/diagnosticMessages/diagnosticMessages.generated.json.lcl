@@ -2079,6 +2079,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclas_2720" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class '{0}' incorrectly implements class '{1}'. Did you mean to extend '{1}' and inherit its members as a subclass?]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Class_0_incorrectly_implements_interface_1_2420" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Class '{0}' incorrectly implements interface '{1}'.]]></Val>
@@ -2101,7 +2107,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Class declarations cannot have more than one `@augments` or `@extends` tag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Deklarace tříd nemůžou obsahovat více než jednu značku @augments nebo @extends.]]></Val>
+            <Val><![CDATA[Deklarace tříd nemůžou mít více než jednu značku @augments nebo @extends.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2863,7 +2869,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enable strict checking of function types.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Povolte striktní kontrolu typů funkcí.]]></Val>
+            <Val><![CDATA[Povolí striktní kontrolu typů funkcí.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3461,15 +3467,6 @@
           <Val><![CDATA[File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Specifikace souboru nemůže obsahovat nadřazený adresář (..), který se vyskytuje za rekurzivním zástupným znakem adresáře (**): {0}.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0_5011" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Specifikace souboru nemůže obsahovat víc než jeden rekurzivní zástupný znak adresáře (**): {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4225,7 +4222,7 @@
         <Str Cat="Text">
           <Val><![CDATA[JSDoc '@param' tag has name '{0}', but there is no parameter with that name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Značka JSDoc @param má název {0}, ale žádný parametr s tímto názvem neexistuje.]]></Val>
+            <Val><![CDATA[Značka JSDoc @param má název {0}, ale neexistuje žádný parametr s tímto názvem.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4234,7 +4231,7 @@
         <Str Cat="Text">
           <Val><![CDATA[JSDoc '@typedef' tag should either have a type annotation or be followed by '@property' or '@member' tags.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Značka JSDoc @typedef by měla mít anotaci typu nebo by za ní měla následovat značka @property nebo @member.]]></Val>
+            <Val><![CDATA[Značka JSDoc @typedef by měla mít poznámku k typu nebo by za ní měly následovat značky @property nebo @member.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4764,6 +4761,9 @@
       <Item ItemId=";Multiple_consecutive_numeric_separators_are_not_permitted_6189" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Multiple consecutive numeric separators are not permitted.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Více po sobě jdoucích číselných oddělovačů se nepovoluje.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4860,6 +4860,9 @@
       <Item ItemId=";Numeric_separators_are_not_allowed_here_6188" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Numeric separators are not allowed here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Číselné oddělovače tady nejsou povolené.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6430,7 +6433,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Signature '{0}' must be a type predicate.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Podpis {0} musí být predikát typu.]]></Val>
+            <Val><![CDATA[Signatura {0} musí být predikát typu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8719,7 +8722,7 @@
         <Str Cat="Text">
           <Val><![CDATA['package.json' does not have a '{0}' field.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[package.json nemá pole {0}.]]></Val>
+            <Val><![CDATA[Soubor package.json neobsahuje pole {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

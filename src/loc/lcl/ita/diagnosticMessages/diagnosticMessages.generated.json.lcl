@@ -1060,7 +1060,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An arithmetic operand must be of type 'any', 'number' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un operando aritmetico deve essere di tipo 'any', 'number' o un tipo di enum.]]></Val>
+            <Val><![CDATA[Un operando aritmetico deve essere di tipo 'any', 'number' o un tipo di enumerazione.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1105,7 +1105,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An enum member cannot have a numeric name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Il nome di un membro enum non può essere numerico.]]></Val>
+            <Val><![CDATA[Il nome di un membro di enumerazione non può essere numerico.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1978,7 +1978,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Change 'extends' to 'implements']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Cambia 'extends' in 'implements']]></Val>
+            <Val><![CDATA[Cambiare 'extends' in 'implements']]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Change 'extends' to 'implements'.]]></Val>
@@ -2066,6 +2066,15 @@
           <Val><![CDATA[Class '{0}' incorrectly extends base class '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[La classe '{0}' estende in modo errato la classe di base '{1}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclas_2720" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class '{0}' incorrectly implements class '{1}'. Did you mean to extend '{1}' and inherit its members as a subclass?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La classe '{0}' implementa in modo errato la classe '{1}'. Si intendeva estendere '{1}' ed ereditarne i membri come sottoclasse?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2158,7 +2167,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Compile the project given the path to its configuration file, or to a folder with a 'tsconfig.json'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Compila il progetto di cui è stato specificato il percorso del file di configurazione o di una cartella contenente un file 'tsconfig.json'.]]></Val>
+            <Val><![CDATA[Compila il progetto in base al percorso del file di configurazione o della cartella contenente un file 'tsconfig.json'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2581,7 +2590,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Do not erase const enum declarations in generated code.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Non cancella le dichiarazioni enum const nel codice generato.]]></Val>
+            <Val><![CDATA[Non cancella le dichiarazioni di enumerazione const nel codice generato.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2827,7 +2836,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Emit a single file with source maps instead of having a separate file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Crea un unico file con i mapping d origine invece di file separati.]]></Val>
+            <Val><![CDATA[Crea un unico file con i mapping di origine invece di file separati.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2854,7 +2863,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enable strict checking of function types.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Abilitare il controllo tassativo dei tipi funzione.]]></Val>
+            <Val><![CDATA[Abilita il controllo tassativo dei tipi funzione.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2926,7 +2935,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum declarations must all be const or non-const.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le dichiarazioni enum devono essere tutte const o tutte non const.]]></Val>
+            <Val><![CDATA[Le dichiarazioni di enumerazione devono essere tutte const o tutte non const.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2935,7 +2944,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum member expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[È previsto il membro enum.]]></Val>
+            <Val><![CDATA[È previsto il membro di enumerazione.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2944,7 +2953,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum member must have initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Il membro enum deve contenere l'inizializzatore.]]></Val>
+            <Val><![CDATA[Il membro di enumerazione deve contenere l'inizializzatore.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3028,7 +3037,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expected {0} type arguments; provide these with an '@extends' tag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Sono previsti argomento tipo {0}. Per specificarli, usare un tag '@extends'.]]></Val>
+            <Val><![CDATA[Sono previsti {0} argomenti tipo. Per specificarli, usare un tag '@extends'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3046,7 +3055,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expected at least {0} arguments, but got {1} or more.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Sono previsti almeno {0} argomenti, ma ne sono stati ottenuti più di {1}.]]></Val>
+            <Val><![CDATA[Sono previsti almeno {0} argomenti, ma ne sono stati ottenuti {1} o più.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3456,15 +3465,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0_5011" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La specifica del file non può contenere più caratteri jolly ('**') di directory ricorsiva: '{0}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0_5010" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[File specification cannot end in a recursive directory wildcard ('**'): '{0}'.]]></Val>
@@ -3772,7 +3772,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Implement inherited abstract class]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Implementa la classe astratta ereditata]]></Val>
+            <Val><![CDATA[Implementare la classe astratta ereditata]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Implement inherited abstract class.]]></Val>
@@ -3895,7 +3895,7 @@
         <Str Cat="Text">
           <Val><![CDATA[In ambient enum declarations member initializer must be constant expression.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nelle dichiarazioni enum dell'ambiente l'inizializzatore di membro deve essere un'espressione costante.]]></Val>
+            <Val><![CDATA[Nelle dichiarazioni di enumerazione dell'ambiente l'inizializzatore di membro deve essere un'espressione costante.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3904,7 +3904,7 @@
         <Str Cat="Text">
           <Val><![CDATA[In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[In un'enumerazione con più dichiarazioni solo una di queste può omettere un inizializzatore per il primo elemento enum.]]></Val>
+            <Val><![CDATA[In un'enumerazione con più dichiarazioni solo una di queste può omettere un inizializzatore per il primo elemento dell'enumerazione.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3913,7 +3913,7 @@
         <Str Cat="Text">
           <Val><![CDATA[In 'const' enum declarations member initializer must be constant expression.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nelle dichiarazioni enum 'const' l'inizializzatore di membro deve essere un'espressione costante.]]></Val>
+            <Val><![CDATA[Nelle dichiarazioni di enumerazione 'const' l'inizializzatore di membro deve essere un'espressione costante.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4752,6 +4752,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Multiple_consecutive_numeric_separators_are_not_permitted_6189" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Multiple consecutive numeric separators are not permitted.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Non sono consentiti più separatori numerici consecutivi.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Multiple_constructor_implementations_are_not_allowed_2392" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Multiple constructor implementations are not allowed.]]></Val>
@@ -4845,6 +4854,9 @@
       <Item ItemId=";Numeric_separators_are_not_allowed_here_6188" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Numeric separators are not allowed here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[I separatori numerici non sono consentiti in questa posizione.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6286,7 +6298,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Il tipo restituito del getter di proprietà pubblico '{0}' della classe esportata contiene o usa il nome privato '{1}'.]]></Val>
+            <Val><![CDATA[Il tipo restituito del getter statico pubblico '{0}' della classe esportata contiene o usa il nome privato '{1}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7138,7 +7150,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The target of an object rest assignment must be a variable or a property access.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La destinazione di un'assegnazione rimanente dell'oggetto deve essere una variabile o un accesso a proprietà.]]></Val>
+            <Val><![CDATA[La destinazione di un'assegnazione REST di oggetto deve essere una variabile o un accesso a proprietà.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8470,7 +8482,7 @@
         <Str Cat="Text">
           <Val><![CDATA['const' enum member initializer was evaluated to a non-finite value.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[L'inizializzatore di membro enum 'const' è stato valutato come valore non finito.]]></Val>
+            <Val><![CDATA[L'inizializzatore del membro di enumerazione 'const' è stato valutato come valore non finito.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8479,7 +8491,7 @@
         <Str Cat="Text">
           <Val><![CDATA['const' enum member initializer was evaluated to disallowed value 'NaN'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[L'inizializzatore di membro enum 'const' è stato valutato come valore non consentito 'NaN'.]]></Val>
+            <Val><![CDATA[L'inizializzatore del membro di enumerazione 'const' è stato valutato come valore non consentito 'NaN'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
