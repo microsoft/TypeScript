@@ -609,8 +609,8 @@ namespace ts.codefix {
         return addJsExtension
             ? noExtension + ".js"
             : getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs
-            ? removeSuffix(noExtension, "/index")
-            : noExtension;
+                ? removeSuffix(noExtension, "/index")
+                : noExtension;
     }
 
     function getRelativePathIfInDirectory(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName): string | undefined {
