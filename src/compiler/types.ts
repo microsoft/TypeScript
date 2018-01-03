@@ -2969,7 +2969,7 @@ namespace ts {
 
         /** @deprecated */ WriteOwnNameForAnyLike  = 0,  // Does nothing
 
-        NodeBuilderFlagsMask = 
+        NodeBuilderFlagsMask =
             NoTruncation | WriteArrayAsGenericType | WriteDefaultSymbolWithoutName | WriteTypeArgumentsOfSignature |
             UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
             UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias,
@@ -2989,7 +2989,7 @@ namespace ts {
         // When this flag is specified m.c will be used to refer to the class instead of alias symbol x
         UseOnlyExternalAliasing = 0x00000002,
 
-        // Build symbol name using property accesses and element accesses, instead of an entity name
+        // Build symbol name using any nodes needed, instead of just components of an entity name
         AllowAnyNodeKind = 0x00000004,
     }
 
