@@ -270,7 +270,7 @@ namespace ts.codefix {
 
     function typeToString(type: Type, enclosingDeclaration: Declaration, checker: TypeChecker): string {
         const writer = getTypeAccessiblityWriter(checker);
-        checker.typeToString(type, enclosingDeclaration, /*flags*/ undefined, writer);
+        checker.writeType(type, enclosingDeclaration, /*flags*/ undefined, writer);
         return writer.getText();
     }
 

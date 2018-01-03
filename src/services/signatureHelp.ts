@@ -404,10 +404,10 @@ namespace ts.SignatureHelp {
                 writer.writeSpace(" ");
                 const predicate = typeChecker.getTypePredicateOfSignature(candidateSignature);
                 if (predicate) {
-                    typeChecker.typePredicateToString(predicate, invocation, /*flags*/ undefined, writer);
+                    typeChecker.writeTypePredicate(predicate, invocation, /*flags*/ undefined, writer);
                 }
                 else {
-                    typeChecker.typeToString(typeChecker.getReturnTypeOfSignature(candidateSignature), invocation, /*flags*/ undefined, writer);
+                    typeChecker.writeType(typeChecker.getReturnTypeOfSignature(candidateSignature), invocation, /*flags*/ undefined, writer);
                 }
             });
             addRange(suffixDisplayParts, returnTypeParts);

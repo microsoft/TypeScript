@@ -982,7 +982,7 @@ namespace ts {
                 emit(node.type);
             }
             else {
-                emitAsTypeAnnotation(node.type);
+                emitTypeAnnotation(node.type);
             }
             emitInitializer(node.initializer);
         }
@@ -1001,7 +1001,7 @@ namespace ts {
             emitModifiers(node, node.modifiers);
             emitNodeWithWriter(node.name, writeProperty);
             emitIfPresent(node.questionToken);
-            emitAsTypeAnnotation(node.type);
+            emitTypeAnnotation(node.type);
             writeSemicolon();
         }
 
@@ -1010,7 +1010,7 @@ namespace ts {
             emitModifiers(node, node.modifiers);
             emit(node.name);
             emitIfPresent(node.questionToken);
-            emitAsTypeAnnotation(node.type);
+            emitTypeAnnotation(node.type);
             emitInitializer(node.initializer);
             writeSemicolon();
         }
@@ -1022,7 +1022,7 @@ namespace ts {
             emitIfPresent(node.questionToken);
             emitTypeParameters(node, node.typeParameters);
             emitParameters(node, node.parameters);
-            emitAsTypeAnnotation(node.type);
+            emitTypeAnnotation(node.type);
             writeSemicolon();
         }
 
@@ -1055,7 +1055,7 @@ namespace ts {
             emitModifiers(node, node.modifiers);
             emitTypeParameters(node, node.typeParameters);
             emitParameters(node, node.parameters);
-            emitAsTypeAnnotation(node.type);
+            emitTypeAnnotation(node.type);
             writeSemicolon();
         }
 
@@ -1066,7 +1066,7 @@ namespace ts {
             writeSpace();
             emitTypeParameters(node, node.typeParameters);
             emitParameters(node, node.parameters);
-            emitAsTypeAnnotation(node.type);
+            emitTypeAnnotation(node.type);
             writeSemicolon();
         }
 
@@ -1074,7 +1074,7 @@ namespace ts {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             emitParametersForIndexSignature(node, node.parameters);
-            emitAsTypeAnnotation(node.type);
+            emitTypeAnnotation(node.type);
             writeSemicolon();
         }
 
@@ -1402,7 +1402,7 @@ namespace ts {
         function emitArrowFunctionHead(node: ArrowFunction) {
             emitTypeParameters(node, node.typeParameters);
             emitParametersForArrow(node, node.parameters);
-            emitAsTypeAnnotation(node.type);
+            emitTypeAnnotation(node.type);
             writeSpace();
             emit(node.equalsGreaterThanToken);
         }
@@ -1773,7 +1773,7 @@ namespace ts {
 
         function emitVariableDeclaration(node: VariableDeclaration) {
             emit(node.name);
-            emitAsTypeAnnotation(node.type);
+            emitTypeAnnotation(node.type);
             emitInitializer(node.initializer);
         }
 
@@ -1840,7 +1840,7 @@ namespace ts {
         function emitSignatureHead(node: FunctionDeclaration | FunctionExpression | MethodDeclaration | AccessorDeclaration | ConstructorDeclaration) {
             emitTypeParameters(node, node.typeParameters);
             emitParameters(node, node.parameters);
-            emitAsTypeAnnotation(node.type);
+            emitTypeAnnotation(node.type);
         }
 
         function shouldEmitBlockFunctionBodyOnSingleLine(body: Block) {
@@ -2491,7 +2491,7 @@ namespace ts {
             }
         }
 
-        function emitAsTypeAnnotation(node: TypeNode | undefined) {
+        function emitTypeAnnotation(node: TypeNode | undefined) {
             if (node) {
                 writePunctuation(":");
                 writeSpace();

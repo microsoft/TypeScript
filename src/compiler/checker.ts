@@ -160,16 +160,28 @@ namespace ts {
                 location = getParseTreeNode(location, isIdentifier);
                 return location ? getPropertySymbolOfDestructuringAssignment(location) : undefined;
             },
-            signatureToString: (signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind, writer?: EmitTextWriter) => {
+            signatureToString: (signature, enclosingDeclaration, flags, kind) => {
+                return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind);
+            },
+            typeToString: (type, enclosingDeclaration, flags) => {
+                return typeToString(type, getParseTreeNode(enclosingDeclaration), flags);
+            },
+            symbolToString: (symbol, enclosingDeclaration, meaning, flags) => {
+                return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags);
+            },
+            typePredicateToString: (predicate, enclosingDeclaration, flags) => {
+                return typePredicateToString(predicate, getParseTreeNode(enclosingDeclaration), flags);
+            },
+            writeSignature: (signature, enclosingDeclaration, flags, kind, writer) => {
                 return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind, writer);
             },
-            typeToString: (type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter) => {
+            writeType: (type, enclosingDeclaration, flags, writer) => {
                 return typeToString(type, getParseTreeNode(enclosingDeclaration), flags, writer);
             },
-            symbolToString: (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, writer?: EmitTextWriter) => {
+            writeSymbol: (symbol, enclosingDeclaration, meaning, flags, writer) => {
                 return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags, writer);
             },
-            typePredicateToString: (predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter) => {
+            writeTypePredicate: (predicate, enclosingDeclaration, flags, writer) => {
                 return typePredicateToString(predicate, getParseTreeNode(enclosingDeclaration), flags, writer);
             },
             getSymbolDisplayBuilder, // TODO (weswigham): Remove once deprecation process is complete
