@@ -2060,6 +2060,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclas_2720" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class '{0}' incorrectly implements class '{1}'. Did you mean to extend '{1}' and inherit its members as a subclass?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Klasa „{0}” niepoprawnie implementuje klasę „{1}”. Czy chodziło o rozszerzenie „{1}” i odziedziczenie jego elementów członkowskich jako podklasy?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Class_0_incorrectly_implements_interface_1_2420" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Class '{0}' incorrectly implements interface '{1}'.]]></Val>
