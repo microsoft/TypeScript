@@ -19,6 +19,8 @@ namespace ts.server.typingsInstaller {
         writeLine: noop
     };
 
+    const timestampsFile = "timestamps.json";
+
     function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost, log: Log): string {
         try {
             const result = resolveModuleName(packageName, combinePaths(cachePath, "index.d.ts"), { moduleResolution: ModuleResolutionKind.NodeJs }, installTypingHost);
@@ -223,7 +225,7 @@ namespace ts.server.typingsInstaller {
                 }
                 return;
             }
-            const timestampJson = combinePaths(cacheLocation, "timestamps.json");
+            const timestampJson = combinePaths(cacheLocation, timestampsFile);
             this.typeDeclarationTimestamps = loadTypeDeclarationTimestampFile(timestampJson, this.installTypingHost, this.log);
             const packageJson = combinePaths(cacheLocation, "package.json");
             if (this.log.isEnabled()) {
@@ -264,6 +266,9 @@ namespace ts.server.typingsInstaller {
                             // defaults to old behavior of never updating if we ever use a host without getModifiedTime in the future
                             const timestamp = this.installTypingHost.getModifiedTime === undefined ? Date.now() : this.installTypingHost.getModifiedTime(typingFile).getTime();
                             this.typeDeclarationTimestamps[key] = timestamp;
+                            if (this.log.isEnabled()) {
+                                this.log.writeLine(`Adding entry into timestamp cache: '${key}' => '${timestamp}'`);
+                            }
                         }
                         // timestamp guaranteed to not be undefined by above check
                         const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, timestamp: getProperty(this.typeDeclarationTimestamps, key) };
@@ -360,6 +365,7 @@ namespace ts.server.typingsInstaller {
                         this.log.writeLine(`Installed typings ${JSON.stringify(scopedTypings)}`);
                     }
                     const installedTypingFiles: string[] = [];
+                    const typesPackageName = (packageName: string) => `@types/${packageName}`;
                     for (const packageName of filteredTypings) {
                         const typingFile = typingToFileName(cachePath, packageName, this.installTypingHost, this.log);
                         if (!typingFile) {
@@ -370,7 +376,7 @@ namespace ts.server.typingsInstaller {
                         const newTimestamp = Date.now();
                         const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, timestamp: newTimestamp };
                         this.packageNameToTypingLocation.set(packageName, newTyping);
-                        this.typeDeclarationTimestamps[packageName] = newTimestamp;
+                        this.typeDeclarationTimestamps[typesPackageName(packageName)] = newTimestamp;
                         installedTypingFiles.push(typingFile);
                     }
                     if (this.log.isEnabled()) {
@@ -378,7 +384,8 @@ namespace ts.server.typingsInstaller {
                     }
 
                     const newFileContents: TypeDeclarationTimestampFile = { entries: this.typeDeclarationTimestamps };
-                    writeTypeDeclarationTimestampFile(cachePath, newFileContents, this.installTypingHost, this.log); // WRONG PATH
+                    const timestampJson = combinePaths(cachePath, timestampsFile);
+                    writeTypeDeclarationTimestampFile(timestampJson, newFileContents, this.installTypingHost, this.log);
 
                     this.sendResponse(this.createSetTypings(req, currentlyCachedTypings.concat(installedTypingFiles)));
                 }

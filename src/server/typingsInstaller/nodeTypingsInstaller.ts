@@ -185,7 +185,7 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(packageNames)}'.`);
             }
-            const command = `${this.npmPath} install@latest --ignore-scripts ${packageNames.join(" ")} --save-dev --force --user-agent="typesInstaller/${version}"`;
+            const command = `${this.npmPath} install --ignore-scripts ${packageNames.join(" ")} --save-dev --user-agent="typesInstaller/${version}"`;
             const start = Date.now();
             const hasError = this.execSyncAndLog(command, { cwd });
             if (this.log.isEnabled()) {

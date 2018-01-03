@@ -31,10 +31,16 @@ namespace ts.JsTyping {
         timestamp: number;
     }
 
-    const typingLifetime = new Date(0, 1);
-
     export function isTypingExpired(typing: JsTyping.CachedTyping | undefined) {
-        return typing && Date.now() - typingLifetime.getTime() < typing.timestamp;
+        const comparisonDate = new Date();
+        const currentMonth = comparisonDate.getMonth();
+        if (currentMonth) {
+            comparisonDate.setMonth(11);
+            comparisonDate.setFullYear(comparisonDate.getFullYear() - 1);
+        } else {
+            comparisonDate.setMonth(currentMonth - 1);
+        }
+        return !typing || typing.timestamp < comparisonDate.getTime();
     }
 
     /* @internal */
