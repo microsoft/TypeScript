@@ -1581,7 +1581,7 @@ module Harness {
                     var metadata: IScenarioMetadata = { id: undefined, desc: this.description, pass: false, bugs: assert.bugIds };
 >metadata : IScenarioMetadata
 >IScenarioMetadata : IScenarioMetadata
->{ id: undefined, desc: this.description, pass: false, bugs: assert.bugIds } : { id: undefined; desc: any; pass: false; bugs: any; }
+>{ id: undefined, desc: this.description, pass: false, bugs: assert.bugIds } : { id: undefined; desc: any; pass: boolean; bugs: any; }
 >id : undefined
 >undefined : undefined
 >desc : any
@@ -4868,9 +4868,9 @@ module Harness {
 >lines = lines.concat(v.file.lines) : any[]
 >lines : any[]
 >lines.concat(v.file.lines) : any[]
->lines.concat : { (...items: ReadonlyArray<any>[]): any[]; (...items: any[]): any[]; }
+>lines.concat : { (...items: (any[] | ReadonlyArray<any>)[]): any[]; (...items: any[]): any[]; }
 >lines : any[]
->concat : { (...items: ReadonlyArray<any>[]): any[]; (...items: any[]): any[]; }
+>concat : { (...items: (any[] | ReadonlyArray<any>)[]): any[]; (...items: any[]): any[]; }
 >v.file.lines : string[]
 >v.file : WriterAggregator
 >v : { filename: string; file: WriterAggregator; }

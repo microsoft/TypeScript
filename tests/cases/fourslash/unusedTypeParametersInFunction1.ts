@@ -4,6 +4,6 @@
 //// [|function f1<T>() {}|]
 
 verify.codeFix({
-    description: "Remove declaration for: 'T'.",
+    description: "Remove declaration for: 'T'",
     newRangeContent: "function f1() {}",
 });

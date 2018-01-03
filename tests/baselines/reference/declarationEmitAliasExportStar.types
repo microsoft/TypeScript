@@ -1,0 +1,18 @@
+=== tests/cases/compiler/thingB.ts ===
+export interface ThingB { }
+>ThingB : ThingB
+
+=== tests/cases/compiler/things.ts ===
+export * from "./thingB";
+No type information for this code.=== tests/cases/compiler/index.ts ===
+import * as things from "./things";
+>things : typeof things
+
+export const thing2 = (param: things.ThingB) => null;
+>thing2 : (param: things.ThingB) => any
+>(param: things.ThingB) => null : (param: things.ThingB) => any
+>param : things.ThingB
+>things : any
+>ThingB : things.ThingB
+>null : null
+
