@@ -391,15 +391,15 @@ function f6(s: string) {
 
     });
     let v = unboxify(b);
->v : { [x: string]: string | number | boolean; }
->unboxify(b) : { [x: string]: string | number | boolean; }
+>v : {}
+>unboxify(b) : {}
 >unboxify : <T>(obj: Boxified<T>) => T
 >b : { [x: string]: Box<number> | Box<string> | Box<boolean>; }
 
     let x: string | number | boolean = v[s];
 >x : string | number | boolean
 >v[s] : string | number | boolean
->v : { [x: string]: string | number | boolean; }
+>v : {}
 >s : string
 }
 

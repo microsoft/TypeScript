@@ -59,18 +59,42 @@ out.a.a.a.a.a.a.a
 >a : Symbol(a, Decl(mappedTypeRecursiveInference.ts, 0, 13))
 >a : Symbol(a, Decl(mappedTypeRecursiveInference.ts, 0, 13))
 
+
+interface B { [s: string]: B }
+>B : Symbol(B, Decl(mappedTypeRecursiveInference.ts, 7, 17))
+>s : Symbol(s, Decl(mappedTypeRecursiveInference.ts, 10, 15))
+>B : Symbol(B, Decl(mappedTypeRecursiveInference.ts, 7, 17))
+
+declare let b: B;
+>b : Symbol(b, Decl(mappedTypeRecursiveInference.ts, 11, 11))
+>B : Symbol(B, Decl(mappedTypeRecursiveInference.ts, 7, 17))
+
+const oub = foo(b);
+>oub : Symbol(oub, Decl(mappedTypeRecursiveInference.ts, 12, 5))
+>foo : Symbol(foo, Decl(mappedTypeRecursiveInference.ts, 2, 45))
+>b : Symbol(b, Decl(mappedTypeRecursiveInference.ts, 11, 11))
+
+oub.b
+>oub : Symbol(oub, Decl(mappedTypeRecursiveInference.ts, 12, 5))
+
+oub.b.b
+>oub : Symbol(oub, Decl(mappedTypeRecursiveInference.ts, 12, 5))
+
+oub.b.a.n.a.n.a
+>oub : Symbol(oub, Decl(mappedTypeRecursiveInference.ts, 12, 5))
+
 let xhr: XMLHttpRequest;
->xhr : Symbol(xhr, Decl(mappedTypeRecursiveInference.ts, 9, 3))
+>xhr : Symbol(xhr, Decl(mappedTypeRecursiveInference.ts, 17, 3))
 >XMLHttpRequest : Symbol(XMLHttpRequest, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 
 const out2 = foo(xhr);
->out2 : Symbol(out2, Decl(mappedTypeRecursiveInference.ts, 10, 5))
+>out2 : Symbol(out2, Decl(mappedTypeRecursiveInference.ts, 18, 5))
 >foo : Symbol(foo, Decl(mappedTypeRecursiveInference.ts, 2, 45))
->xhr : Symbol(xhr, Decl(mappedTypeRecursiveInference.ts, 9, 3))
+>xhr : Symbol(xhr, Decl(mappedTypeRecursiveInference.ts, 17, 3))
 
 out2.responseXML
 >out2.responseXML : Symbol(responseXML, Decl(lib.dom.d.ts, --, --))
->out2 : Symbol(out2, Decl(mappedTypeRecursiveInference.ts, 10, 5))
+>out2 : Symbol(out2, Decl(mappedTypeRecursiveInference.ts, 18, 5))
 >responseXML : Symbol(responseXML, Decl(lib.dom.d.ts, --, --))
 
 out2.responseXML.activeElement.className.length
@@ -78,7 +102,7 @@ out2.responseXML.activeElement.className.length
 >out2.responseXML.activeElement.className : Symbol(className, Decl(lib.dom.d.ts, --, --))
 >out2.responseXML.activeElement : Symbol(activeElement, Decl(lib.dom.d.ts, --, --))
 >out2.responseXML : Symbol(responseXML, Decl(lib.dom.d.ts, --, --))
->out2 : Symbol(out2, Decl(mappedTypeRecursiveInference.ts, 10, 5))
+>out2 : Symbol(out2, Decl(mappedTypeRecursiveInference.ts, 18, 5))
 >responseXML : Symbol(responseXML, Decl(lib.dom.d.ts, --, --))
 >activeElement : Symbol(activeElement, Decl(lib.dom.d.ts, --, --))
 >className : Symbol(className, Decl(lib.dom.d.ts, --, --))

@@ -2066,6 +2066,7 @@ declare namespace ts {
         EvolvingArray = 256,
         ObjectLiteralPatternWithComputedProperties = 512,
         ContainsSpread = 1024,
+        Deferred = 2048,
         ClassOrInterface = 3,
     }
     interface ObjectType extends Type {

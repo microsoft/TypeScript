@@ -60,6 +60,49 @@ out.a.a.a.a.a.a.a
 >a : { a: {}; }
 >a : { a: {}; }
 
+
+interface B { [s: string]: B }
+>B : B
+>s : string
+>B : B
+
+declare let b: B;
+>b : B
+>B : B
+
+const oub = foo(b);
+>oub : {}
+>foo(b) : {}
+>foo : <T>(deep: Deep<T>) => T
+>b : B
+
+oub.b
+>oub.b : {}
+>oub : {}
+>b : {}
+
+oub.b.b
+>oub.b.b : {}
+>oub.b : {}
+>oub : {}
+>b : {}
+>b : {}
+
+oub.b.a.n.a.n.a
+>oub.b.a.n.a.n.a : {}
+>oub.b.a.n.a.n : {}
+>oub.b.a.n.a : {}
+>oub.b.a.n : {}
+>oub.b.a : {}
+>oub.b : {}
+>oub : {}
+>b : {}
+>a : {}
+>n : {}
+>a : {}
+>n : {}
+>a : {}
+
 let xhr: XMLHttpRequest;
 >xhr : XMLHttpRequest
 >XMLHttpRequest : XMLHttpRequest
