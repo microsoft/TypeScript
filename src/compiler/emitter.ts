@@ -970,10 +970,7 @@ namespace ts {
             emitModifiers(node, node.modifiers);
             emitIfPresent(node.dotDotDotToken);
             if (node.name) {
-                const savedWrite = write;
-                write = writeParameter;
-                emit(node.name);
-                write = savedWrite;
+                emitNodeWithWriter(node, writeParameter);
             }
             emitIfPresent(node.questionToken);
             if (node.parent && node.parent.kind === SyntaxKind.JSDocFunctionType && !node.name) {
@@ -997,10 +994,7 @@ namespace ts {
         function emitPropertySignature(node: PropertySignature) {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
-            const savedWrite = write;
-            write = writeProperty;
-            emit(node.name);
-            write = savedWrite;
+            emitNodeWithWriter(node.name, writeProperty);
             emitIfPresent(node.questionToken);
             emitAsTypeAnnotation(node.type);
             writePunctuation(";");
@@ -2470,6 +2464,13 @@ namespace ts {
         //
         // Helpers
         //
+
+        function emitNodeWithWriter(node: Node, writer: typeof write) {
+            const savedWrite = write;
+            write = writer;
+            emit(node);
+            write = savedWrite;
+        }
 
         function emitModifiers(node: Node, modifiers: NodeArray<Modifier>) {
             if (modifiers && modifiers.length) {
