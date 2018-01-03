@@ -2860,8 +2860,11 @@ namespace ts {
                     for (const signature of resolvedType.constructSignatures) {
                         typeElements.push(<ConstructSignatureDeclaration>signatureToSignatureDeclarationHelper(signature, SyntaxKind.ConstructSignature, context));
                     }
-                    if (resolvedType.stringIndexInfo) {
-                        typeElements.push(indexInfoToIndexSignatureDeclarationHelper(resolvedType.stringIndexInfo, IndexKind.String, context));
+                    if (resolvedType.stringIndexInfo && !(resolvedType.objectFlags & ObjectFlags.Deferred)) {
+                        const indexInfo = resolvedType.objectFlags & ObjectFlags.Deferred ?
+                            createIndexInfo(emptyObjectType, resolvedType.stringIndexInfo.isReadonly, resolvedType.stringIndexInfo.declaration) :
+                            resolvedType.stringIndexInfo;
+                        typeElements.push(indexInfoToIndexSignatureDeclarationHelper(indexInfo, IndexKind.String, context));
                     }
                     if (resolvedType.numberIndexInfo) {
                         typeElements.push(indexInfoToIndexSignatureDeclarationHelper(resolvedType.numberIndexInfo, IndexKind.Number, context));
