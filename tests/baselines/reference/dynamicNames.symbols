@@ -443,34 +443,50 @@ export const o2: T0 = o1;
 >o1 : Symbol(o1, Decl(main.ts, 101, 12))
 
 // recursive declarations
-declare const rI: RI;
->rI : Symbol(rI, Decl(main.ts, 115, 13))
->RI : Symbol(RI, Decl(main.ts, 115, 21))
+// (type parameter indirection courtesy of #20400)
+declare const rI: RI<"a">;
+>rI : Symbol(rI, Decl(main.ts, 116, 13))
+>RI : Symbol(RI, Decl(main.ts, 117, 4))
 
-interface RI {
->RI : Symbol(RI, Decl(main.ts, 115, 21))
+rI.x
+>rI.x : Symbol(RI.x, Decl(main.ts, 118, 35))
+>rI : Symbol(rI, Decl(main.ts, 116, 13))
+>x : Symbol(RI.x, Decl(main.ts, 118, 35))
 
-    x: "a";
->x : Symbol(RI.x, Decl(main.ts, 116, 14))
+interface RI<T extends "a" | "b"> {
+>RI : Symbol(RI, Decl(main.ts, 117, 4))
+>T : Symbol(T, Decl(main.ts, 118, 13))
+
+    x: T;
+>x : Symbol(RI.x, Decl(main.ts, 118, 35))
+>T : Symbol(T, Decl(main.ts, 118, 13))
 
     [rI.x]: "b";
->rI.x : Symbol(RI.x, Decl(main.ts, 116, 14))
->rI : Symbol(rI, Decl(main.ts, 115, 13))
->x : Symbol(RI.x, Decl(main.ts, 116, 14))
+>rI.x : Symbol(RI.x, Decl(main.ts, 118, 35))
+>rI : Symbol(rI, Decl(main.ts, 116, 13))
+>x : Symbol(RI.x, Decl(main.ts, 118, 35))
 }
 
-declare const rC: RC;
->rC : Symbol(rC, Decl(main.ts, 121, 13))
->RC : Symbol(RC, Decl(main.ts, 121, 21))
+declare const rC: RC<"a">;
+>rC : Symbol(rC, Decl(main.ts, 123, 13))
+>RC : Symbol(RC, Decl(main.ts, 124, 4))
 
-declare class RC {
->RC : Symbol(RC, Decl(main.ts, 121, 21))
+rC.x
+>rC.x : Symbol(RC.x, Decl(main.ts, 125, 39))
+>rC : Symbol(rC, Decl(main.ts, 123, 13))
+>x : Symbol(RC.x, Decl(main.ts, 125, 39))
 
-    x: "a";
->x : Symbol(RC.x, Decl(main.ts, 122, 18))
+declare class RC<T extends "a" | "b"> {
+>RC : Symbol(RC, Decl(main.ts, 124, 4))
+>T : Symbol(T, Decl(main.ts, 125, 17))
+
+    x: T;
+>x : Symbol(RC.x, Decl(main.ts, 125, 39))
+>T : Symbol(T, Decl(main.ts, 125, 17))
 
     [rC.x]: "b";
->rC.x : Symbol(RC.x, Decl(main.ts, 122, 18))
->rC : Symbol(rC, Decl(main.ts, 121, 13))
->x : Symbol(RC.x, Decl(main.ts, 122, 18))
+>rC.x : Symbol(RC.x, Decl(main.ts, 125, 39))
+>rC : Symbol(rC, Decl(main.ts, 123, 13))
+>x : Symbol(RC.x, Decl(main.ts, 125, 39))
 }
+

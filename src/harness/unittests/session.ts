@@ -170,6 +170,19 @@ namespace ts.server {
                         allowNonTsExtensions: true // injected by tsserver
                     });
             });
+
+            it("Status request gives ts.version", () => {
+                const req: protocol.StatusRequest = {
+                    command: CommandNames.Status,
+                    seq: 0,
+                    type: "request"
+                };
+
+                const expected: protocol.StatusResponseBody = {
+                     version: ts.version
+                };
+                assert.deepEqual(session.executeCommand(req).response, expected);
+            });
         });
 
         describe("onMessage", () => {
@@ -221,6 +234,7 @@ namespace ts.server {
                 CommandNames.Saveto,
                 CommandNames.SignatureHelp,
                 CommandNames.SignatureHelpFull,
+                CommandNames.Status,
                 CommandNames.TypeDefinition,
                 CommandNames.ProjectInfo,
                 CommandNames.ReloadProjects,

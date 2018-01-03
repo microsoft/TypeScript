@@ -711,12 +711,11 @@ namespace ts {
     export function convertEnableAutoDiscoveryToEnable(typeAcquisition: TypeAcquisition): TypeAcquisition {
         // Convert deprecated typingOptions.enableAutoDiscovery to typeAcquisition.enable
         if (typeAcquisition && typeAcquisition.enableAutoDiscovery !== undefined && typeAcquisition.enable === undefined) {
-            const result: TypeAcquisition = {
+            return {
                 enable: typeAcquisition.enableAutoDiscovery,
                 include: typeAcquisition.include || [],
                 exclude: typeAcquisition.exclude || []
             };
-            return result;
         }
         return typeAcquisition;
     }
@@ -1799,9 +1798,8 @@ namespace ts {
         return options;
     }
 
-    function getDefaultTypeAcquisition(configFileName?: string) {
-        const options: TypeAcquisition = { enable: getBaseFileName(configFileName) === "jsconfig.json", include: [], exclude: [] };
-        return options;
+    function getDefaultTypeAcquisition(configFileName?: string): TypeAcquisition {
+        return { enable: getBaseFileName(configFileName) === "jsconfig.json", include: [], exclude: [] };
     }
 
     function convertTypeAcquisitionFromJsonWorker(jsonOptions: any,
@@ -1907,21 +1905,6 @@ namespace ts {
      *  \/?$        # matches an optional trailing directory separator at the end of the string.
      */
     const invalidTrailingRecursionPattern = /(^|\/)\*\*\/?$/;
-
-    /**
-     * Tests for a path with multiple recursive directory wildcards.
-     * Matches **\** and **\a\**, but not **\a**b.
-     *
-     * NOTE: used \ in place of / above to avoid issues with multiline comments.
-     *
-     * Breakdown:
-     *  (^|\/)      # matches either the beginning of the string or a directory separator.
-     *  \*\*\/      # matches a recursive directory wildcard "**" followed by a directory separator.
-     *  (.*\/)?     # optionally matches any number of characters followed by a directory separator.
-     *  \*\*        # matches a recursive directory wildcard "**"
-     *  ($|\/)      # matches either the end of the string or a directory separator.
-     */
-    const invalidMultipleRecursionPatterns = /(^|\/)\*\*\/(.*\/)?\*\*($|\/)/;
 
     /**
      * Tests for a path where .. appears after a recursive directory wildcard.
@@ -2116,9 +2099,6 @@ namespace ts {
     function specToDiagnostic(spec: string, allowTrailingRecursion: boolean): ts.DiagnosticMessage | undefined {
         if (!allowTrailingRecursion && invalidTrailingRecursionPattern.test(spec)) {
             return Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0;
-        }
-        else if (invalidMultipleRecursionPatterns.test(spec)) {
-            return Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0;
         }
         else if (invalidDotDotAfterRecursiveWildcardPattern.test(spec)) {
             return Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0;

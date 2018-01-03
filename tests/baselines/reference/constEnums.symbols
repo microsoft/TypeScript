@@ -73,271 +73,275 @@ const enum Enum1 {
 >P : Symbol(Enum1.P, Decl(constEnums.ts, 20, 15))
 >E : Symbol(Enum1.E, Decl(constEnums.ts, 9, 14))
 
+    PQ = E ** 2,
+>PQ : Symbol(Enum1.PQ, Decl(constEnums.ts, 21, 15))
+>E : Symbol(Enum1.E, Decl(constEnums.ts, 9, 14))
+
     Q = -D,
->Q : Symbol(Enum1.Q, Decl(constEnums.ts, 21, 15))
+>Q : Symbol(Enum1.Q, Decl(constEnums.ts, 22, 16))
 >D : Symbol(Enum1.D, Decl(constEnums.ts, 8, 11))
 
     R = C & 5,
->R : Symbol(Enum1.R, Decl(constEnums.ts, 22, 11))
+>R : Symbol(Enum1.R, Decl(constEnums.ts, 23, 11))
 >C : Symbol(Enum1.C, Decl(constEnums.ts, 7, 6))
 
     S = 5 & C,
->S : Symbol(Enum1.S, Decl(constEnums.ts, 23, 14))
+>S : Symbol(Enum1.S, Decl(constEnums.ts, 24, 14))
 >C : Symbol(Enum1.C, Decl(constEnums.ts, 7, 6))
 
     T = C | D,
->T : Symbol(Enum1.T, Decl(constEnums.ts, 24, 14))
+>T : Symbol(Enum1.T, Decl(constEnums.ts, 25, 14))
 >C : Symbol(Enum1.C, Decl(constEnums.ts, 7, 6))
 >D : Symbol(Enum1.D, Decl(constEnums.ts, 8, 11))
 
     U = C | 1,
->U : Symbol(Enum1.U, Decl(constEnums.ts, 25, 14))
+>U : Symbol(Enum1.U, Decl(constEnums.ts, 26, 14))
 >C : Symbol(Enum1.C, Decl(constEnums.ts, 7, 6))
 
     V = 10 | D,
->V : Symbol(Enum1.V, Decl(constEnums.ts, 26, 14))
+>V : Symbol(Enum1.V, Decl(constEnums.ts, 27, 14))
 >D : Symbol(Enum1.D, Decl(constEnums.ts, 8, 11))
 
     W = Enum1.V,
->W : Symbol(Enum1.W, Decl(constEnums.ts, 27, 15))
->Enum1.V : Symbol(Enum1.V, Decl(constEnums.ts, 26, 14))
+>W : Symbol(Enum1.W, Decl(constEnums.ts, 28, 15))
+>Enum1.V : Symbol(Enum1.V, Decl(constEnums.ts, 27, 14))
 >Enum1 : Symbol(Enum1, Decl(constEnums.ts, 0, 0), Decl(constEnums.ts, 2, 1))
->V : Symbol(Enum1.V, Decl(constEnums.ts, 26, 14))
+>V : Symbol(Enum1.V, Decl(constEnums.ts, 27, 14))
 
     // correct cases: reference to the enum member from different enum declaration
     W1 = A0,
->W1 : Symbol(Enum1.W1, Decl(constEnums.ts, 28, 16))
+>W1 : Symbol(Enum1.W1, Decl(constEnums.ts, 29, 16))
 >A0 : Symbol(Enum1.A0, Decl(constEnums.ts, 0, 18))
 
     W2 = Enum1.A0,
->W2 : Symbol(Enum1.W2, Decl(constEnums.ts, 31, 12))
+>W2 : Symbol(Enum1.W2, Decl(constEnums.ts, 32, 12))
 >Enum1.A0 : Symbol(Enum1.A0, Decl(constEnums.ts, 0, 18))
 >Enum1 : Symbol(Enum1, Decl(constEnums.ts, 0, 0), Decl(constEnums.ts, 2, 1))
 >A0 : Symbol(Enum1.A0, Decl(constEnums.ts, 0, 18))
 
     W3 = Enum1["A0"],
->W3 : Symbol(Enum1.W3, Decl(constEnums.ts, 32, 18))
+>W3 : Symbol(Enum1.W3, Decl(constEnums.ts, 33, 18))
 >Enum1 : Symbol(Enum1, Decl(constEnums.ts, 0, 0), Decl(constEnums.ts, 2, 1))
 >"A0" : Symbol(Enum1.A0, Decl(constEnums.ts, 0, 18))
 
     W4 = Enum1["W"],
->W4 : Symbol(Enum1.W4, Decl(constEnums.ts, 33, 21))
+>W4 : Symbol(Enum1.W4, Decl(constEnums.ts, 34, 21))
 >Enum1 : Symbol(Enum1, Decl(constEnums.ts, 0, 0), Decl(constEnums.ts, 2, 1))
->"W" : Symbol(Enum1.W, Decl(constEnums.ts, 27, 15))
+>"W" : Symbol(Enum1.W, Decl(constEnums.ts, 28, 15))
 }
 
 
 module A {
->A : Symbol(A, Decl(constEnums.ts, 35, 1), Decl(constEnums.ts, 47, 1))
+>A : Symbol(A, Decl(constEnums.ts, 36, 1), Decl(constEnums.ts, 48, 1))
 
     export module B {
->B : Symbol(B, Decl(constEnums.ts, 38, 10), Decl(constEnums.ts, 49, 10))
+>B : Symbol(B, Decl(constEnums.ts, 39, 10), Decl(constEnums.ts, 50, 10))
 
         export module C {
->C : Symbol(C, Decl(constEnums.ts, 39, 21), Decl(constEnums.ts, 50, 21))
+>C : Symbol(C, Decl(constEnums.ts, 40, 21), Decl(constEnums.ts, 51, 21))
 
             export const enum E {
->E : Symbol(E, Decl(constEnums.ts, 40, 25), Decl(constEnums.ts, 51, 25))
+>E : Symbol(E, Decl(constEnums.ts, 41, 25), Decl(constEnums.ts, 52, 25))
 
                 V1 = 1,
->V1 : Symbol(I.V1, Decl(constEnums.ts, 41, 33))
+>V1 : Symbol(I.V1, Decl(constEnums.ts, 42, 33))
 
                 V2 = A.B.C.E.V1 | 100
->V2 : Symbol(I.V2, Decl(constEnums.ts, 42, 23))
->A.B.C.E.V1 : Symbol(I.V1, Decl(constEnums.ts, 41, 33))
->A.B.C.E : Symbol(E, Decl(constEnums.ts, 40, 25), Decl(constEnums.ts, 51, 25))
->A.B.C : Symbol(C, Decl(constEnums.ts, 39, 21), Decl(constEnums.ts, 50, 21))
->A.B : Symbol(B, Decl(constEnums.ts, 38, 10), Decl(constEnums.ts, 49, 10))
->A : Symbol(A, Decl(constEnums.ts, 35, 1), Decl(constEnums.ts, 47, 1))
->B : Symbol(B, Decl(constEnums.ts, 38, 10), Decl(constEnums.ts, 49, 10))
->C : Symbol(C, Decl(constEnums.ts, 39, 21), Decl(constEnums.ts, 50, 21))
->E : Symbol(E, Decl(constEnums.ts, 40, 25), Decl(constEnums.ts, 51, 25))
->V1 : Symbol(I.V1, Decl(constEnums.ts, 41, 33))
+>V2 : Symbol(I.V2, Decl(constEnums.ts, 43, 23))
+>A.B.C.E.V1 : Symbol(I.V1, Decl(constEnums.ts, 42, 33))
+>A.B.C.E : Symbol(E, Decl(constEnums.ts, 41, 25), Decl(constEnums.ts, 52, 25))
+>A.B.C : Symbol(C, Decl(constEnums.ts, 40, 21), Decl(constEnums.ts, 51, 21))
+>A.B : Symbol(B, Decl(constEnums.ts, 39, 10), Decl(constEnums.ts, 50, 10))
+>A : Symbol(A, Decl(constEnums.ts, 36, 1), Decl(constEnums.ts, 48, 1))
+>B : Symbol(B, Decl(constEnums.ts, 39, 10), Decl(constEnums.ts, 50, 10))
+>C : Symbol(C, Decl(constEnums.ts, 40, 21), Decl(constEnums.ts, 51, 21))
+>E : Symbol(E, Decl(constEnums.ts, 41, 25), Decl(constEnums.ts, 52, 25))
+>V1 : Symbol(I.V1, Decl(constEnums.ts, 42, 33))
             }
         }
     }
 }
 
 module A {
->A : Symbol(A, Decl(constEnums.ts, 35, 1), Decl(constEnums.ts, 47, 1))
+>A : Symbol(A, Decl(constEnums.ts, 36, 1), Decl(constEnums.ts, 48, 1))
 
     export module B {
->B : Symbol(B, Decl(constEnums.ts, 38, 10), Decl(constEnums.ts, 49, 10))
+>B : Symbol(B, Decl(constEnums.ts, 39, 10), Decl(constEnums.ts, 50, 10))
 
         export module C {
->C : Symbol(C, Decl(constEnums.ts, 39, 21), Decl(constEnums.ts, 50, 21))
+>C : Symbol(C, Decl(constEnums.ts, 40, 21), Decl(constEnums.ts, 51, 21))
 
             export const enum E {
->E : Symbol(E, Decl(constEnums.ts, 40, 25), Decl(constEnums.ts, 51, 25))
+>E : Symbol(E, Decl(constEnums.ts, 41, 25), Decl(constEnums.ts, 52, 25))
 
                 V3 = A.B.C.E["V2"] & 200,
->V3 : Symbol(I.V3, Decl(constEnums.ts, 52, 33))
->A.B.C.E : Symbol(E, Decl(constEnums.ts, 40, 25), Decl(constEnums.ts, 51, 25))
->A.B.C : Symbol(C, Decl(constEnums.ts, 39, 21), Decl(constEnums.ts, 50, 21))
->A.B : Symbol(B, Decl(constEnums.ts, 38, 10), Decl(constEnums.ts, 49, 10))
->A : Symbol(A, Decl(constEnums.ts, 35, 1), Decl(constEnums.ts, 47, 1))
->B : Symbol(B, Decl(constEnums.ts, 38, 10), Decl(constEnums.ts, 49, 10))
->C : Symbol(C, Decl(constEnums.ts, 39, 21), Decl(constEnums.ts, 50, 21))
->E : Symbol(E, Decl(constEnums.ts, 40, 25), Decl(constEnums.ts, 51, 25))
->"V2" : Symbol(I.V2, Decl(constEnums.ts, 42, 23))
+>V3 : Symbol(I.V3, Decl(constEnums.ts, 53, 33))
+>A.B.C.E : Symbol(E, Decl(constEnums.ts, 41, 25), Decl(constEnums.ts, 52, 25))
+>A.B.C : Symbol(C, Decl(constEnums.ts, 40, 21), Decl(constEnums.ts, 51, 21))
+>A.B : Symbol(B, Decl(constEnums.ts, 39, 10), Decl(constEnums.ts, 50, 10))
+>A : Symbol(A, Decl(constEnums.ts, 36, 1), Decl(constEnums.ts, 48, 1))
+>B : Symbol(B, Decl(constEnums.ts, 39, 10), Decl(constEnums.ts, 50, 10))
+>C : Symbol(C, Decl(constEnums.ts, 40, 21), Decl(constEnums.ts, 51, 21))
+>E : Symbol(E, Decl(constEnums.ts, 41, 25), Decl(constEnums.ts, 52, 25))
+>"V2" : Symbol(I.V2, Decl(constEnums.ts, 43, 23))
             }
         }
     }
 }
 
 module A1 {
->A1 : Symbol(A1, Decl(constEnums.ts, 57, 1))
+>A1 : Symbol(A1, Decl(constEnums.ts, 58, 1))
 
     export module B {
->B : Symbol(B, Decl(constEnums.ts, 59, 11))
+>B : Symbol(B, Decl(constEnums.ts, 60, 11))
 
         export module C {
->C : Symbol(C, Decl(constEnums.ts, 60, 21))
+>C : Symbol(C, Decl(constEnums.ts, 61, 21))
 
             export const enum E {
->E : Symbol(E, Decl(constEnums.ts, 61, 25))
+>E : Symbol(E, Decl(constEnums.ts, 62, 25))
 
                 V1 = 10,
->V1 : Symbol(E.V1, Decl(constEnums.ts, 62, 33))
+>V1 : Symbol(E.V1, Decl(constEnums.ts, 63, 33))
 
                 V2 = 110,
->V2 : Symbol(E.V2, Decl(constEnums.ts, 63, 24))
+>V2 : Symbol(E.V2, Decl(constEnums.ts, 64, 24))
             }
         }
     }
 }
 
 module A2 {
->A2 : Symbol(A2, Decl(constEnums.ts, 68, 1))
+>A2 : Symbol(A2, Decl(constEnums.ts, 69, 1))
 
     export module B {
->B : Symbol(B, Decl(constEnums.ts, 70, 11))
+>B : Symbol(B, Decl(constEnums.ts, 71, 11))
 
         export module C {
->C : Symbol(C, Decl(constEnums.ts, 71, 21), Decl(constEnums.ts, 77, 9))
+>C : Symbol(C, Decl(constEnums.ts, 72, 21), Decl(constEnums.ts, 78, 9))
 
             export const enum E {
->E : Symbol(E, Decl(constEnums.ts, 72, 25))
+>E : Symbol(E, Decl(constEnums.ts, 73, 25))
 
                 V1 = 10,
->V1 : Symbol(E.V1, Decl(constEnums.ts, 73, 33))
+>V1 : Symbol(E.V1, Decl(constEnums.ts, 74, 33))
 
                 V2 = 110,
->V2 : Symbol(E.V2, Decl(constEnums.ts, 74, 24))
+>V2 : Symbol(E.V2, Decl(constEnums.ts, 75, 24))
             }
         }
         // module C will be classified as value
         export module C {
->C : Symbol(C, Decl(constEnums.ts, 71, 21), Decl(constEnums.ts, 77, 9))
+>C : Symbol(C, Decl(constEnums.ts, 72, 21), Decl(constEnums.ts, 78, 9))
 
             var x = 1
->x : Symbol(x, Decl(constEnums.ts, 80, 15))
+>x : Symbol(x, Decl(constEnums.ts, 81, 15))
         }
     }
 }
 
 import I = A.B.C.E;
->I : Symbol(I, Decl(constEnums.ts, 83, 1))
->A : Symbol(A, Decl(constEnums.ts, 35, 1), Decl(constEnums.ts, 47, 1))
->B : Symbol(A.B, Decl(constEnums.ts, 38, 10), Decl(constEnums.ts, 49, 10))
->C : Symbol(A.B.C, Decl(constEnums.ts, 39, 21), Decl(constEnums.ts, 50, 21))
->E : Symbol(I, Decl(constEnums.ts, 40, 25), Decl(constEnums.ts, 51, 25))
+>I : Symbol(I, Decl(constEnums.ts, 84, 1))
+>A : Symbol(A, Decl(constEnums.ts, 36, 1), Decl(constEnums.ts, 48, 1))
+>B : Symbol(A.B, Decl(constEnums.ts, 39, 10), Decl(constEnums.ts, 50, 10))
+>C : Symbol(A.B.C, Decl(constEnums.ts, 40, 21), Decl(constEnums.ts, 51, 21))
+>E : Symbol(I, Decl(constEnums.ts, 41, 25), Decl(constEnums.ts, 52, 25))
 
 import I1 = A1.B;
->I1 : Symbol(I1, Decl(constEnums.ts, 85, 19))
->A1 : Symbol(A1, Decl(constEnums.ts, 57, 1))
->B : Symbol(I1, Decl(constEnums.ts, 59, 11))
+>I1 : Symbol(I1, Decl(constEnums.ts, 86, 19))
+>A1 : Symbol(A1, Decl(constEnums.ts, 58, 1))
+>B : Symbol(I1, Decl(constEnums.ts, 60, 11))
 
 import I2 = A2.B;
->I2 : Symbol(I2, Decl(constEnums.ts, 86, 17))
->A2 : Symbol(A2, Decl(constEnums.ts, 68, 1))
->B : Symbol(I2, Decl(constEnums.ts, 70, 11))
+>I2 : Symbol(I2, Decl(constEnums.ts, 87, 17))
+>A2 : Symbol(A2, Decl(constEnums.ts, 69, 1))
+>B : Symbol(I2, Decl(constEnums.ts, 71, 11))
 
 function foo0(e: I): void {
->foo0 : Symbol(foo0, Decl(constEnums.ts, 87, 17))
->e : Symbol(e, Decl(constEnums.ts, 89, 14))
->I : Symbol(I, Decl(constEnums.ts, 83, 1))
+>foo0 : Symbol(foo0, Decl(constEnums.ts, 88, 17))
+>e : Symbol(e, Decl(constEnums.ts, 90, 14))
+>I : Symbol(I, Decl(constEnums.ts, 84, 1))
 
     if (e === I.V1) {
->e : Symbol(e, Decl(constEnums.ts, 89, 14))
->I.V1 : Symbol(I.V1, Decl(constEnums.ts, 41, 33))
->I : Symbol(I, Decl(constEnums.ts, 83, 1))
->V1 : Symbol(I.V1, Decl(constEnums.ts, 41, 33))
+>e : Symbol(e, Decl(constEnums.ts, 90, 14))
+>I.V1 : Symbol(I.V1, Decl(constEnums.ts, 42, 33))
+>I : Symbol(I, Decl(constEnums.ts, 84, 1))
+>V1 : Symbol(I.V1, Decl(constEnums.ts, 42, 33))
     }
     else if (e === I.V2) {
->e : Symbol(e, Decl(constEnums.ts, 89, 14))
->I.V2 : Symbol(I.V2, Decl(constEnums.ts, 42, 23))
->I : Symbol(I, Decl(constEnums.ts, 83, 1))
->V2 : Symbol(I.V2, Decl(constEnums.ts, 42, 23))
+>e : Symbol(e, Decl(constEnums.ts, 90, 14))
+>I.V2 : Symbol(I.V2, Decl(constEnums.ts, 43, 23))
+>I : Symbol(I, Decl(constEnums.ts, 84, 1))
+>V2 : Symbol(I.V2, Decl(constEnums.ts, 43, 23))
     }
 }
 
 function foo1(e: I1.C.E): void {
->foo1 : Symbol(foo1, Decl(constEnums.ts, 94, 1))
->e : Symbol(e, Decl(constEnums.ts, 96, 14))
->I1 : Symbol(I1, Decl(constEnums.ts, 85, 19))
->C : Symbol(I1.C, Decl(constEnums.ts, 60, 21))
->E : Symbol(I1.C.E, Decl(constEnums.ts, 61, 25))
+>foo1 : Symbol(foo1, Decl(constEnums.ts, 95, 1))
+>e : Symbol(e, Decl(constEnums.ts, 97, 14))
+>I1 : Symbol(I1, Decl(constEnums.ts, 86, 19))
+>C : Symbol(I1.C, Decl(constEnums.ts, 61, 21))
+>E : Symbol(I1.C.E, Decl(constEnums.ts, 62, 25))
 
     if (e === I1.C.E.V1) {
->e : Symbol(e, Decl(constEnums.ts, 96, 14))
->I1.C.E.V1 : Symbol(I1.C.E.V1, Decl(constEnums.ts, 62, 33))
->I1.C.E : Symbol(I1.C.E, Decl(constEnums.ts, 61, 25))
->I1.C : Symbol(I1.C, Decl(constEnums.ts, 60, 21))
->I1 : Symbol(I1, Decl(constEnums.ts, 85, 19))
->C : Symbol(I1.C, Decl(constEnums.ts, 60, 21))
->E : Symbol(I1.C.E, Decl(constEnums.ts, 61, 25))
->V1 : Symbol(I1.C.E.V1, Decl(constEnums.ts, 62, 33))
+>e : Symbol(e, Decl(constEnums.ts, 97, 14))
+>I1.C.E.V1 : Symbol(I1.C.E.V1, Decl(constEnums.ts, 63, 33))
+>I1.C.E : Symbol(I1.C.E, Decl(constEnums.ts, 62, 25))
+>I1.C : Symbol(I1.C, Decl(constEnums.ts, 61, 21))
+>I1 : Symbol(I1, Decl(constEnums.ts, 86, 19))
+>C : Symbol(I1.C, Decl(constEnums.ts, 61, 21))
+>E : Symbol(I1.C.E, Decl(constEnums.ts, 62, 25))
+>V1 : Symbol(I1.C.E.V1, Decl(constEnums.ts, 63, 33))
     }
     else if (e === I1.C.E.V2) {
->e : Symbol(e, Decl(constEnums.ts, 96, 14))
->I1.C.E.V2 : Symbol(I1.C.E.V2, Decl(constEnums.ts, 63, 24))
->I1.C.E : Symbol(I1.C.E, Decl(constEnums.ts, 61, 25))
->I1.C : Symbol(I1.C, Decl(constEnums.ts, 60, 21))
->I1 : Symbol(I1, Decl(constEnums.ts, 85, 19))
->C : Symbol(I1.C, Decl(constEnums.ts, 60, 21))
->E : Symbol(I1.C.E, Decl(constEnums.ts, 61, 25))
->V2 : Symbol(I1.C.E.V2, Decl(constEnums.ts, 63, 24))
+>e : Symbol(e, Decl(constEnums.ts, 97, 14))
+>I1.C.E.V2 : Symbol(I1.C.E.V2, Decl(constEnums.ts, 64, 24))
+>I1.C.E : Symbol(I1.C.E, Decl(constEnums.ts, 62, 25))
+>I1.C : Symbol(I1.C, Decl(constEnums.ts, 61, 21))
+>I1 : Symbol(I1, Decl(constEnums.ts, 86, 19))
+>C : Symbol(I1.C, Decl(constEnums.ts, 61, 21))
+>E : Symbol(I1.C.E, Decl(constEnums.ts, 62, 25))
+>V2 : Symbol(I1.C.E.V2, Decl(constEnums.ts, 64, 24))
     }
 }
 
 function foo2(e: I2.C.E): void {
->foo2 : Symbol(foo2, Decl(constEnums.ts, 101, 1))
->e : Symbol(e, Decl(constEnums.ts, 103, 14))
->I2 : Symbol(I2, Decl(constEnums.ts, 86, 17))
->C : Symbol(I2.C, Decl(constEnums.ts, 71, 21), Decl(constEnums.ts, 77, 9))
->E : Symbol(I2.C.E, Decl(constEnums.ts, 72, 25))
+>foo2 : Symbol(foo2, Decl(constEnums.ts, 102, 1))
+>e : Symbol(e, Decl(constEnums.ts, 104, 14))
+>I2 : Symbol(I2, Decl(constEnums.ts, 87, 17))
+>C : Symbol(I2.C, Decl(constEnums.ts, 72, 21), Decl(constEnums.ts, 78, 9))
+>E : Symbol(I2.C.E, Decl(constEnums.ts, 73, 25))
 
     if (e === I2.C.E.V1) {
->e : Symbol(e, Decl(constEnums.ts, 103, 14))
->I2.C.E.V1 : Symbol(I2.C.E.V1, Decl(constEnums.ts, 73, 33))
->I2.C.E : Symbol(I2.C.E, Decl(constEnums.ts, 72, 25))
->I2.C : Symbol(I2.C, Decl(constEnums.ts, 71, 21), Decl(constEnums.ts, 77, 9))
->I2 : Symbol(I2, Decl(constEnums.ts, 86, 17))
->C : Symbol(I2.C, Decl(constEnums.ts, 71, 21), Decl(constEnums.ts, 77, 9))
->E : Symbol(I2.C.E, Decl(constEnums.ts, 72, 25))
->V1 : Symbol(I2.C.E.V1, Decl(constEnums.ts, 73, 33))
+>e : Symbol(e, Decl(constEnums.ts, 104, 14))
+>I2.C.E.V1 : Symbol(I2.C.E.V1, Decl(constEnums.ts, 74, 33))
+>I2.C.E : Symbol(I2.C.E, Decl(constEnums.ts, 73, 25))
+>I2.C : Symbol(I2.C, Decl(constEnums.ts, 72, 21), Decl(constEnums.ts, 78, 9))
+>I2 : Symbol(I2, Decl(constEnums.ts, 87, 17))
+>C : Symbol(I2.C, Decl(constEnums.ts, 72, 21), Decl(constEnums.ts, 78, 9))
+>E : Symbol(I2.C.E, Decl(constEnums.ts, 73, 25))
+>V1 : Symbol(I2.C.E.V1, Decl(constEnums.ts, 74, 33))
     }
     else if (e === I2.C.E.V2) {
->e : Symbol(e, Decl(constEnums.ts, 103, 14))
->I2.C.E.V2 : Symbol(I2.C.E.V2, Decl(constEnums.ts, 74, 24))
->I2.C.E : Symbol(I2.C.E, Decl(constEnums.ts, 72, 25))
->I2.C : Symbol(I2.C, Decl(constEnums.ts, 71, 21), Decl(constEnums.ts, 77, 9))
->I2 : Symbol(I2, Decl(constEnums.ts, 86, 17))
->C : Symbol(I2.C, Decl(constEnums.ts, 71, 21), Decl(constEnums.ts, 77, 9))
->E : Symbol(I2.C.E, Decl(constEnums.ts, 72, 25))
->V2 : Symbol(I2.C.E.V2, Decl(constEnums.ts, 74, 24))
+>e : Symbol(e, Decl(constEnums.ts, 104, 14))
+>I2.C.E.V2 : Symbol(I2.C.E.V2, Decl(constEnums.ts, 75, 24))
+>I2.C.E : Symbol(I2.C.E, Decl(constEnums.ts, 73, 25))
+>I2.C : Symbol(I2.C, Decl(constEnums.ts, 72, 21), Decl(constEnums.ts, 78, 9))
+>I2 : Symbol(I2, Decl(constEnums.ts, 87, 17))
+>C : Symbol(I2.C, Decl(constEnums.ts, 72, 21), Decl(constEnums.ts, 78, 9))
+>E : Symbol(I2.C.E, Decl(constEnums.ts, 73, 25))
+>V2 : Symbol(I2.C.E.V2, Decl(constEnums.ts, 75, 24))
     }
 }
 
 
 function foo(x: Enum1) {
->foo : Symbol(foo, Decl(constEnums.ts, 108, 1))
->x : Symbol(x, Decl(constEnums.ts, 111, 13))
+>foo : Symbol(foo, Decl(constEnums.ts, 109, 1))
+>x : Symbol(x, Decl(constEnums.ts, 112, 13))
 >Enum1 : Symbol(Enum1, Decl(constEnums.ts, 0, 0), Decl(constEnums.ts, 2, 1))
 
     switch (x) {
->x : Symbol(x, Decl(constEnums.ts, 111, 13))
+>x : Symbol(x, Decl(constEnums.ts, 112, 13))
 
         case Enum1.A:
 >Enum1.A : Symbol(Enum1.A, Decl(constEnums.ts, 4, 18))
@@ -419,106 +423,111 @@ function foo(x: Enum1) {
 >Enum1 : Symbol(Enum1, Decl(constEnums.ts, 0, 0), Decl(constEnums.ts, 2, 1))
 >P : Symbol(Enum1.P, Decl(constEnums.ts, 20, 15))
 
-        case Enum1.Q:
->Enum1.Q : Symbol(Enum1.Q, Decl(constEnums.ts, 21, 15))
+        case Enum1.PQ:
+>Enum1.PQ : Symbol(Enum1.PQ, Decl(constEnums.ts, 21, 15))
 >Enum1 : Symbol(Enum1, Decl(constEnums.ts, 0, 0), Decl(constEnums.ts, 2, 1))
->Q : Symbol(Enum1.Q, Decl(constEnums.ts, 21, 15))
+>PQ : Symbol(Enum1.PQ, Decl(constEnums.ts, 21, 15))
+
+        case Enum1.Q:
+>Enum1.Q : Symbol(Enum1.Q, Decl(constEnums.ts, 22, 16))
+>Enum1 : Symbol(Enum1, Decl(constEnums.ts, 0, 0), Decl(constEnums.ts, 2, 1))
+>Q : Symbol(Enum1.Q, Decl(constEnums.ts, 22, 16))
 
         case Enum1.R:
->Enum1.R : Symbol(Enum1.R, Decl(constEnums.ts, 22, 11))
+>Enum1.R : Symbol(Enum1.R, Decl(constEnums.ts, 23, 11))
 >Enum1 : Symbol(Enum1, Decl(constEnums.ts, 0, 0), Decl(constEnums.ts, 2, 1))
->R : Symbol(Enum1.R, Decl(constEnums.ts, 22, 11))
+>R : Symbol(Enum1.R, Decl(constEnums.ts, 23, 11))
 
         case Enum1.S:
->Enum1.S : Symbol(Enum1.S, Decl(constEnums.ts, 23, 14))
+>Enum1.S : Symbol(Enum1.S, Decl(constEnums.ts, 24, 14))
 >Enum1 : Symbol(Enum1, Decl(constEnums.ts, 0, 0), Decl(constEnums.ts, 2, 1))
->S : Symbol(Enum1.S, Decl(constEnums.ts, 23, 14))
+>S : Symbol(Enum1.S, Decl(constEnums.ts, 24, 14))
 
         case Enum1["T"]:
 >Enum1 : Symbol(Enum1, Decl(constEnums.ts, 0, 0), Decl(constEnums.ts, 2, 1))
->"T" : Symbol(Enum1.T, Decl(constEnums.ts, 24, 14))
+>"T" : Symbol(Enum1.T, Decl(constEnums.ts, 25, 14))
 
         case Enum1.U:
->Enum1.U : Symbol(Enum1.U, Decl(constEnums.ts, 25, 14))
+>Enum1.U : Symbol(Enum1.U, Decl(constEnums.ts, 26, 14))
 >Enum1 : Symbol(Enum1, Decl(constEnums.ts, 0, 0), Decl(constEnums.ts, 2, 1))
->U : Symbol(Enum1.U, Decl(constEnums.ts, 25, 14))
+>U : Symbol(Enum1.U, Decl(constEnums.ts, 26, 14))
 
         case Enum1.V:
->Enum1.V : Symbol(Enum1.V, Decl(constEnums.ts, 26, 14))
+>Enum1.V : Symbol(Enum1.V, Decl(constEnums.ts, 27, 14))
 >Enum1 : Symbol(Enum1, Decl(constEnums.ts, 0, 0), Decl(constEnums.ts, 2, 1))
->V : Symbol(Enum1.V, Decl(constEnums.ts, 26, 14))
+>V : Symbol(Enum1.V, Decl(constEnums.ts, 27, 14))
 
         case Enum1.W:
->Enum1.W : Symbol(Enum1.W, Decl(constEnums.ts, 27, 15))
+>Enum1.W : Symbol(Enum1.W, Decl(constEnums.ts, 28, 15))
 >Enum1 : Symbol(Enum1, Decl(constEnums.ts, 0, 0), Decl(constEnums.ts, 2, 1))
->W : Symbol(Enum1.W, Decl(constEnums.ts, 27, 15))
+>W : Symbol(Enum1.W, Decl(constEnums.ts, 28, 15))
 
         case Enum1.W1:
->Enum1.W1 : Symbol(Enum1.W1, Decl(constEnums.ts, 28, 16))
+>Enum1.W1 : Symbol(Enum1.W1, Decl(constEnums.ts, 29, 16))
 >Enum1 : Symbol(Enum1, Decl(constEnums.ts, 0, 0), Decl(constEnums.ts, 2, 1))
->W1 : Symbol(Enum1.W1, Decl(constEnums.ts, 28, 16))
+>W1 : Symbol(Enum1.W1, Decl(constEnums.ts, 29, 16))
 
         case Enum1.W2:
->Enum1.W2 : Symbol(Enum1.W2, Decl(constEnums.ts, 31, 12))
+>Enum1.W2 : Symbol(Enum1.W2, Decl(constEnums.ts, 32, 12))
 >Enum1 : Symbol(Enum1, Decl(constEnums.ts, 0, 0), Decl(constEnums.ts, 2, 1))
->W2 : Symbol(Enum1.W2, Decl(constEnums.ts, 31, 12))
+>W2 : Symbol(Enum1.W2, Decl(constEnums.ts, 32, 12))
 
         case Enum1.W3:
->Enum1.W3 : Symbol(Enum1.W3, Decl(constEnums.ts, 32, 18))
+>Enum1.W3 : Symbol(Enum1.W3, Decl(constEnums.ts, 33, 18))
 >Enum1 : Symbol(Enum1, Decl(constEnums.ts, 0, 0), Decl(constEnums.ts, 2, 1))
->W3 : Symbol(Enum1.W3, Decl(constEnums.ts, 32, 18))
+>W3 : Symbol(Enum1.W3, Decl(constEnums.ts, 33, 18))
 
         case Enum1.W4:
->Enum1.W4 : Symbol(Enum1.W4, Decl(constEnums.ts, 33, 21))
+>Enum1.W4 : Symbol(Enum1.W4, Decl(constEnums.ts, 34, 21))
 >Enum1 : Symbol(Enum1, Decl(constEnums.ts, 0, 0), Decl(constEnums.ts, 2, 1))
->W4 : Symbol(Enum1.W4, Decl(constEnums.ts, 33, 21))
+>W4 : Symbol(Enum1.W4, Decl(constEnums.ts, 34, 21))
 
             break;
     }
 }
 
 function bar(e: A.B.C.E): number {
->bar : Symbol(bar, Decl(constEnums.ts, 142, 1))
->e : Symbol(e, Decl(constEnums.ts, 144, 13))
->A : Symbol(A, Decl(constEnums.ts, 35, 1), Decl(constEnums.ts, 47, 1))
->B : Symbol(A.B, Decl(constEnums.ts, 38, 10), Decl(constEnums.ts, 49, 10))
->C : Symbol(A.B.C, Decl(constEnums.ts, 39, 21), Decl(constEnums.ts, 50, 21))
->E : Symbol(I, Decl(constEnums.ts, 40, 25), Decl(constEnums.ts, 51, 25))
+>bar : Symbol(bar, Decl(constEnums.ts, 144, 1))
+>e : Symbol(e, Decl(constEnums.ts, 146, 13))
+>A : Symbol(A, Decl(constEnums.ts, 36, 1), Decl(constEnums.ts, 48, 1))
+>B : Symbol(A.B, Decl(constEnums.ts, 39, 10), Decl(constEnums.ts, 50, 10))
+>C : Symbol(A.B.C, Decl(constEnums.ts, 40, 21), Decl(constEnums.ts, 51, 21))
+>E : Symbol(I, Decl(constEnums.ts, 41, 25), Decl(constEnums.ts, 52, 25))
 
     switch (e) {
->e : Symbol(e, Decl(constEnums.ts, 144, 13))
+>e : Symbol(e, Decl(constEnums.ts, 146, 13))
 
         case A.B.C.E.V1: return 1;
->A.B.C.E.V1 : Symbol(I.V1, Decl(constEnums.ts, 41, 33))
->A.B.C.E : Symbol(I, Decl(constEnums.ts, 40, 25), Decl(constEnums.ts, 51, 25))
->A.B.C : Symbol(A.B.C, Decl(constEnums.ts, 39, 21), Decl(constEnums.ts, 50, 21))
->A.B : Symbol(A.B, Decl(constEnums.ts, 38, 10), Decl(constEnums.ts, 49, 10))
->A : Symbol(A, Decl(constEnums.ts, 35, 1), Decl(constEnums.ts, 47, 1))
->B : Symbol(A.B, Decl(constEnums.ts, 38, 10), Decl(constEnums.ts, 49, 10))
->C : Symbol(A.B.C, Decl(constEnums.ts, 39, 21), Decl(constEnums.ts, 50, 21))
->E : Symbol(I, Decl(constEnums.ts, 40, 25), Decl(constEnums.ts, 51, 25))
->V1 : Symbol(I.V1, Decl(constEnums.ts, 41, 33))
+>A.B.C.E.V1 : Symbol(I.V1, Decl(constEnums.ts, 42, 33))
+>A.B.C.E : Symbol(I, Decl(constEnums.ts, 41, 25), Decl(constEnums.ts, 52, 25))
+>A.B.C : Symbol(A.B.C, Decl(constEnums.ts, 40, 21), Decl(constEnums.ts, 51, 21))
+>A.B : Symbol(A.B, Decl(constEnums.ts, 39, 10), Decl(constEnums.ts, 50, 10))
+>A : Symbol(A, Decl(constEnums.ts, 36, 1), Decl(constEnums.ts, 48, 1))
+>B : Symbol(A.B, Decl(constEnums.ts, 39, 10), Decl(constEnums.ts, 50, 10))
+>C : Symbol(A.B.C, Decl(constEnums.ts, 40, 21), Decl(constEnums.ts, 51, 21))
+>E : Symbol(I, Decl(constEnums.ts, 41, 25), Decl(constEnums.ts, 52, 25))
+>V1 : Symbol(I.V1, Decl(constEnums.ts, 42, 33))
 
         case A.B.C.E.V2: return 1;
->A.B.C.E.V2 : Symbol(I.V2, Decl(constEnums.ts, 42, 23))
->A.B.C.E : Symbol(I, Decl(constEnums.ts, 40, 25), Decl(constEnums.ts, 51, 25))
->A.B.C : Symbol(A.B.C, Decl(constEnums.ts, 39, 21), Decl(constEnums.ts, 50, 21))
->A.B : Symbol(A.B, Decl(constEnums.ts, 38, 10), Decl(constEnums.ts, 49, 10))
->A : Symbol(A, Decl(constEnums.ts, 35, 1), Decl(constEnums.ts, 47, 1))
->B : Symbol(A.B, Decl(constEnums.ts, 38, 10), Decl(constEnums.ts, 49, 10))
->C : Symbol(A.B.C, Decl(constEnums.ts, 39, 21), Decl(constEnums.ts, 50, 21))
->E : Symbol(I, Decl(constEnums.ts, 40, 25), Decl(constEnums.ts, 51, 25))
->V2 : Symbol(I.V2, Decl(constEnums.ts, 42, 23))
+>A.B.C.E.V2 : Symbol(I.V2, Decl(constEnums.ts, 43, 23))
+>A.B.C.E : Symbol(I, Decl(constEnums.ts, 41, 25), Decl(constEnums.ts, 52, 25))
+>A.B.C : Symbol(A.B.C, Decl(constEnums.ts, 40, 21), Decl(constEnums.ts, 51, 21))
+>A.B : Symbol(A.B, Decl(constEnums.ts, 39, 10), Decl(constEnums.ts, 50, 10))
+>A : Symbol(A, Decl(constEnums.ts, 36, 1), Decl(constEnums.ts, 48, 1))
+>B : Symbol(A.B, Decl(constEnums.ts, 39, 10), Decl(constEnums.ts, 50, 10))
+>C : Symbol(A.B.C, Decl(constEnums.ts, 40, 21), Decl(constEnums.ts, 51, 21))
+>E : Symbol(I, Decl(constEnums.ts, 41, 25), Decl(constEnums.ts, 52, 25))
+>V2 : Symbol(I.V2, Decl(constEnums.ts, 43, 23))
 
         case A.B.C.E.V3: return 1;
->A.B.C.E.V3 : Symbol(I.V3, Decl(constEnums.ts, 52, 33))
->A.B.C.E : Symbol(I, Decl(constEnums.ts, 40, 25), Decl(constEnums.ts, 51, 25))
->A.B.C : Symbol(A.B.C, Decl(constEnums.ts, 39, 21), Decl(constEnums.ts, 50, 21))
->A.B : Symbol(A.B, Decl(constEnums.ts, 38, 10), Decl(constEnums.ts, 49, 10))
->A : Symbol(A, Decl(constEnums.ts, 35, 1), Decl(constEnums.ts, 47, 1))
->B : Symbol(A.B, Decl(constEnums.ts, 38, 10), Decl(constEnums.ts, 49, 10))
->C : Symbol(A.B.C, Decl(constEnums.ts, 39, 21), Decl(constEnums.ts, 50, 21))
->E : Symbol(I, Decl(constEnums.ts, 40, 25), Decl(constEnums.ts, 51, 25))
->V3 : Symbol(I.V3, Decl(constEnums.ts, 52, 33))
+>A.B.C.E.V3 : Symbol(I.V3, Decl(constEnums.ts, 53, 33))
+>A.B.C.E : Symbol(I, Decl(constEnums.ts, 41, 25), Decl(constEnums.ts, 52, 25))
+>A.B.C : Symbol(A.B.C, Decl(constEnums.ts, 40, 21), Decl(constEnums.ts, 51, 21))
+>A.B : Symbol(A.B, Decl(constEnums.ts, 39, 10), Decl(constEnums.ts, 50, 10))
+>A : Symbol(A, Decl(constEnums.ts, 36, 1), Decl(constEnums.ts, 48, 1))
+>B : Symbol(A.B, Decl(constEnums.ts, 39, 10), Decl(constEnums.ts, 50, 10))
+>C : Symbol(A.B.C, Decl(constEnums.ts, 40, 21), Decl(constEnums.ts, 51, 21))
+>E : Symbol(I, Decl(constEnums.ts, 41, 25), Decl(constEnums.ts, 52, 25))
+>V3 : Symbol(I.V3, Decl(constEnums.ts, 53, 33))
     }
 }

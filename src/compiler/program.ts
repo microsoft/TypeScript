@@ -241,22 +241,28 @@ namespace ts {
         return errorMessage;
     }
 
-    const redForegroundEscapeSequence = "\u001b[91m";
-    const yellowForegroundEscapeSequence = "\u001b[93m";
-    const blueForegroundEscapeSequence = "\u001b[93m";
+    /** @internal */
+    export enum ForegroundColorEscapeSequences {
+        Grey = "\u001b[90m",
+        Red = "\u001b[91m",
+        Yellow = "\u001b[93m",
+        Blue = "\u001b[94m",
+        Cyan = "\u001b[96m"
+    }
     const gutterStyleSequence = "\u001b[30;47m";
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
     function getCategoryFormat(category: DiagnosticCategory): string {
         switch (category) {
-            case DiagnosticCategory.Warning: return yellowForegroundEscapeSequence;
-            case DiagnosticCategory.Error: return redForegroundEscapeSequence;
-            case DiagnosticCategory.Message: return blueForegroundEscapeSequence;
+            case DiagnosticCategory.Warning: return ForegroundColorEscapeSequences.Yellow;
+            case DiagnosticCategory.Error: return ForegroundColorEscapeSequences.Red;
+            case DiagnosticCategory.Message: return ForegroundColorEscapeSequences.Blue;
         }
     }
 
-    function formatAndReset(text: string, formatStyle: string) {
+    /** @internal */
+    export function formatColorAndReset(text: string, formatStyle: string) {
         return formatStyle + text + resetEscapeSequence;
     }
 
@@ -289,7 +295,7 @@ namespace ts {
                     // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
                     // so we'll skip ahead to the second-to-last line.
                     if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
-                        context += formatAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + host.getNewLine();
+                        context += formatColorAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + host.getNewLine();
                         i = lastLine - 1;
                     }
 
@@ -300,12 +306,12 @@ namespace ts {
                     lineContent = lineContent.replace("\t", " ");    // convert tabs to single spaces
 
                     // Output the gutter and the actual contents of the line.
-                    context += formatAndReset(padLeft(i + 1 + "", gutterWidth), gutterStyleSequence) + gutterSeparator;
+                    context += formatColorAndReset(padLeft(i + 1 + "", gutterWidth), gutterStyleSequence) + gutterSeparator;
                     context += lineContent + host.getNewLine();
 
                     // Output the gutter and the error span for the line using tildes.
-                    context += formatAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
-                    context += redForegroundEscapeSequence;
+                    context += formatColorAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
+                    context += ForegroundColorEscapeSequences.Red;
                     if (i === firstLine) {
                         // If we're on the last line, then limit it to the last character of the last line.
                         // Otherwise, we'll just squiggle the rest of the line, giving 'slice' no end position.
@@ -324,13 +330,19 @@ namespace ts {
                     context += resetEscapeSequence;
                 }
 
-                output += host.getNewLine();
-                output += `${ relativeFileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
+                output += formatColorAndReset(relativeFileName, ForegroundColorEscapeSequences.Cyan);
+                output += "(";
+                output += formatColorAndReset(`${ firstLine + 1 }`, ForegroundColorEscapeSequences.Yellow);
+                output += ",";
+                output += formatColorAndReset(`${ firstLineChar + 1 }`, ForegroundColorEscapeSequences.Yellow);
+                output += "): ";
             }
 
             const categoryColor = getCategoryFormat(diagnostic.category);
             const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-            output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine()) }`;
+            output += formatColorAndReset(category, categoryColor);
+            output += formatColorAndReset(` TS${ diagnostic.code }: `, ForegroundColorEscapeSequences.Grey);
+            output += flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine());
 
             if (diagnostic.file) {
                 output += host.getNewLine();
@@ -339,7 +351,7 @@ namespace ts {
 
             output += host.getNewLine();
         }
-        return output;
+        return output + host.getNewLine();
     }
 
     export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string {
@@ -704,7 +716,7 @@ namespace ts {
 
         interface OldProgramState {
             program: Program | undefined;
-            file: SourceFile;
+            oldSourceFile: SourceFile | undefined;
             /** The collection of paths modified *since* the old program. */
             modifiedFilePaths: Path[];
         }
@@ -753,7 +765,6 @@ namespace ts {
             let reusedNames: string[];
             /** A transient placeholder used to mark predicted resolution in the result list. */
             const predictedToResolveToAmbientModuleMarker: ResolvedModuleFull = <any>{};
-
 
             for (let i = 0; i < moduleNames.length; i++) {
                 const moduleName = moduleNames[i];
@@ -825,9 +836,13 @@ namespace ts {
             // If we change our policy of rechecking failed lookups on each program create,
             // we should adjust the value returned here.
             function moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName: string, oldProgramState: OldProgramState): boolean {
-                const resolutionToFile = getResolvedModule(oldProgramState.file, moduleName);
-                if (resolutionToFile) {
-                    // module used to be resolved to file - ignore it
+                const resolutionToFile = getResolvedModule(oldProgramState.oldSourceFile, moduleName);
+                const resolvedFile = resolutionToFile && oldProgramState.program && oldProgramState.program.getSourceFile(resolutionToFile.resolvedFileName);
+                if (resolutionToFile && resolvedFile && !resolvedFile.externalModuleIndicator) {
+                    // In the old program, we resolved to an ambient module that was in the same
+                    //   place as we expected to find an actual module file.
+                    // We actually need to return 'false' here even though this seems like a 'true' case
+                    //   because the normal module resolution algorithm will find this anyway.
                     return false;
                 }
                 const ambientModule = oldProgramState.program && oldProgramState.program.getTypeChecker().tryFindAmbientModuleWithoutAugmentations(moduleName);
@@ -1001,7 +1016,7 @@ namespace ts {
                 const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory);
                 if (resolveModuleNamesWorker) {
                     const moduleNames = getModuleNames(newSourceFile);
-                    const oldProgramState = { program: oldProgram, file: oldSourceFile, modifiedFilePaths };
+                    const oldProgramState: OldProgramState = { program: oldProgram, oldSourceFile, modifiedFilePaths };
                     const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFilePath, newSourceFile, oldProgramState);
                     // ensure that module resolution results are still correct
                     const resolutionsChanged = hasChangesInResolutions(moduleNames, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo);
@@ -1945,7 +1960,7 @@ namespace ts {
             if (file.imports.length || file.moduleAugmentations.length) {
                 // Because global augmentation doesn't have string literal name, we can check for global augmentation as such.
                 const moduleNames = getModuleNames(file);
-                const oldProgramState = { program: oldProgram, file, modifiedFilePaths };
+                const oldProgramState: OldProgramState = { program: oldProgram, oldSourceFile: oldProgram && oldProgram.getSourceFile(file.fileName), modifiedFilePaths };
                 const resolutions = resolveModuleNamesReusingOldState(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory), file, oldProgramState);
                 Debug.assert(resolutions.length === moduleNames.length);
                 for (let i = 0; i < moduleNames.length; i++) {
