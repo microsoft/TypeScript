@@ -21,8 +21,8 @@ namespace ts.codefix {
         getAllCodeActions: context => {
             const seenNames = createMap<true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
-                const { newLineCharacter, program } = context;
-                const info = getInfo(diag.file!, diag.start!, context.program.getTypeChecker());
+                const { program } = context;
+                const info = getInfo(diag.file!, diag.start!, program.getTypeChecker());
                 if (!info) return;
                 const { classDeclaration, classDeclarationSourceFile, inJs, makeStatic, token, call } = info;
                 if (!addToSeen(seenNames, token.text)) {
@@ -31,15 +31,15 @@ namespace ts.codefix {
 
                 // Always prefer to add a method declaration if possible.
                 if (call) {
-                    addMethodDeclaration(changes, classDeclarationSourceFile, classDeclaration, token, call, newLineCharacter, makeStatic, inJs);
+                    addMethodDeclaration(changes, classDeclarationSourceFile, classDeclaration, token, call, makeStatic, inJs);
                 }
                 else {
                     if (inJs) {
-                        addMissingMemberInJs(changes, classDeclarationSourceFile, classDeclaration, token.text, makeStatic, newLineCharacter);
+                        addMissingMemberInJs(changes, classDeclarationSourceFile, classDeclaration, token.text, makeStatic);
                     }
                     else {
                         const typeNode = getTypeNode(program.getTypeChecker(), classDeclaration, token);
-                        addPropertyDeclaration(changes, classDeclarationSourceFile, classDeclaration, token.text, typeNode, makeStatic, newLineCharacter);
+                        addPropertyDeclaration(changes, classDeclarationSourceFile, classDeclaration, token.text, typeNode, makeStatic);
                     }
                 }
             });
@@ -96,20 +96,20 @@ namespace ts.codefix {
     }
 
     function getActionsForAddMissingMemberInJavaScriptFile(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, makeStatic: boolean): CodeFixAction | undefined {
-        const changes = textChanges.ChangeTracker.with(context, t => addMissingMemberInJs(t, classDeclarationSourceFile, classDeclaration, tokenName, makeStatic, context.newLineCharacter));
+        const changes = textChanges.ChangeTracker.with(context, t => addMissingMemberInJs(t, classDeclarationSourceFile, classDeclaration, tokenName, makeStatic));
         if (changes.length === 0) return undefined;
         const description = formatStringFromArgs(getLocaleSpecificMessage(makeStatic ? Diagnostics.Initialize_static_property_0 : Diagnostics.Initialize_property_0_in_the_constructor), [tokenName]);
         return { description, changes, fixId };
     }
 
-    function addMissingMemberInJs(changeTracker: textChanges.ChangeTracker, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, makeStatic: boolean, newLineCharacter: string): void {
+    function addMissingMemberInJs(changeTracker: textChanges.ChangeTracker, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, makeStatic: boolean): void {
         if (makeStatic) {
             if (classDeclaration.kind === SyntaxKind.ClassExpression) {
                 return;
             }
             const className = classDeclaration.name!.getText();
             const staticInitialization = initializePropertyToUndefined(createIdentifier(className), tokenName);
-            changeTracker.insertNodeAfter(classDeclarationSourceFile, classDeclaration, staticInitialization, { prefix: newLineCharacter, suffix: newLineCharacter });
+            changeTracker.insertNodeAfter(classDeclarationSourceFile, classDeclaration, staticInitialization);
         }
         else {
             const classConstructor = getFirstConstructorWithBody(classDeclaration);
@@ -117,7 +117,7 @@ namespace ts.codefix {
                 return;
             }
             const propertyInitialization = initializePropertyToUndefined(createThis(), tokenName);
-            changeTracker.insertNodeBefore(classDeclarationSourceFile, classConstructor.body!.getLastToken()!, propertyInitialization, { suffix: newLineCharacter });
+            changeTracker.insertNodeAtConstructorEnd(classDeclarationSourceFile, classConstructor, propertyInitialization);
         }
     }
 
@@ -142,13 +142,13 @@ namespace ts.codefix {
         return typeNode || createKeywordTypeNode(SyntaxKind.AnyKeyword);
     }
 
-    function createAddPropertyDeclarationAction(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, makeStatic: boolean, tokenName: string, typeNode: TypeNode): CodeFixAction {
+    function createAddPropertyDeclarationAction(context: textChanges.TextChangesContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, makeStatic: boolean, tokenName: string, typeNode: TypeNode): CodeFixAction {
         const description = formatStringFromArgs(getLocaleSpecificMessage(makeStatic ? Diagnostics.Declare_static_property_0 : Diagnostics.Declare_property_0), [tokenName]);
-        const changes = textChanges.ChangeTracker.with(context, t => addPropertyDeclaration(t, classDeclarationSourceFile, classDeclaration, tokenName, typeNode, makeStatic, context.newLineCharacter));
+        const changes = textChanges.ChangeTracker.with(context, t => addPropertyDeclaration(t, classDeclarationSourceFile, classDeclaration, tokenName, typeNode, makeStatic));
         return { description, changes, fixId };
     }
 
-    function addPropertyDeclaration(changeTracker: textChanges.ChangeTracker, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, typeNode: TypeNode, makeStatic: boolean, newLineCharacter: string): void {
+    function addPropertyDeclaration(changeTracker: textChanges.ChangeTracker, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, typeNode: TypeNode, makeStatic: boolean): void {
         const property = createProperty(
             /*decorators*/ undefined,
             /*modifiers*/ makeStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
@@ -156,10 +156,10 @@ namespace ts.codefix {
             /*questionToken*/ undefined,
             typeNode,
             /*initializer*/ undefined);
-        changeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, property, newLineCharacter);
+        changeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, property);
     }
 
-    function createAddIndexSignatureAction(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, typeNode: TypeNode): CodeFixAction {
+    function createAddIndexSignatureAction(context: textChanges.TextChangesContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, typeNode: TypeNode): CodeFixAction {
         // Index signatures cannot have the static modifier.
         const stringTypeNode = createKeywordTypeNode(SyntaxKind.StringKeyword);
         const indexingParameter = createParameter(
@@ -176,19 +176,19 @@ namespace ts.codefix {
             [indexingParameter],
             typeNode);
 
-        const changes = textChanges.ChangeTracker.with(context, t => t.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, indexSignature, context.newLineCharacter));
+        const changes = textChanges.ChangeTracker.with(context, t => t.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, indexSignature));
         // No fixId here because code-fix-all currently only works on adding individual named properties.
         return { description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_signature_for_property_0), [tokenName]), changes, fixId: undefined };
     }
 
-    function getActionForMethodDeclaration(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, token: Identifier, callExpression: CallExpression, makeStatic: boolean, inJs: boolean): CodeFixAction | undefined {
+    function getActionForMethodDeclaration(context: textChanges.TextChangesContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, token: Identifier, callExpression: CallExpression, makeStatic: boolean, inJs: boolean): CodeFixAction | undefined {
         const description = formatStringFromArgs(getLocaleSpecificMessage(makeStatic ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0), [token.text]);
-        const changes = textChanges.ChangeTracker.with(context, t => addMethodDeclaration(t, classDeclarationSourceFile, classDeclaration, token, callExpression, context.newLineCharacter, makeStatic, inJs));
+        const changes = textChanges.ChangeTracker.with(context, t => addMethodDeclaration(t, classDeclarationSourceFile, classDeclaration, token, callExpression, makeStatic, inJs));
         return { description, changes, fixId };
     }
 
-    function addMethodDeclaration(changeTracker: textChanges.ChangeTracker, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, token: Identifier, callExpression: CallExpression, newLineCharacter: string, makeStatic: boolean, inJs: boolean) {
+    function addMethodDeclaration(changeTracker: textChanges.ChangeTracker, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, token: Identifier, callExpression: CallExpression, makeStatic: boolean, inJs: boolean) {
         const methodDeclaration = createMethodFromCallExpression(callExpression, token.text, inJs, makeStatic);
-        changeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, methodDeclaration, newLineCharacter);
+        changeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, methodDeclaration);
     }
 }

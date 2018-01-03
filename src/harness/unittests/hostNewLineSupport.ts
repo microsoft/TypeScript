@@ -47,7 +47,7 @@ namespace ts {
             assert(!result.emitSkipped, "emit was skipped");
             assert(result.outputFiles.length === 1, "a number of files other than 1 was output");
             assert(result.outputFiles[0].name === "input.js", `Expected output file name input.js, but got ${result.outputFiles[0].name}`);
-            assert.isDefined(result.outputFiles[0].text.match(options.newLine === NewLineKind.CarriageReturnLineFeed ? /\r\n/ : /[^\r]\n/), "expected to find appropriate newlines");
+            assert(result.outputFiles[0].text.match(options.newLine === NewLineKind.CarriageReturnLineFeed ? /\r\n/ : /[^\r]\n/), "expected to find appropriate newlines");
             assert(!result.outputFiles[0].text.match(options.newLine === NewLineKind.CarriageReturnLineFeed ? /[^\r]\n/ : /\r\n/), "expected not to find inappropriate newlines");
         }
 

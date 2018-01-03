@@ -5,30 +5,30 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
-            const { sourceFile } = context;
-            const nodes = getNodes(sourceFile, context.span.start);
+            const { sourceFile, span } = context;
+            const nodes = getNodes(sourceFile, span.start);
             if (!nodes) return undefined;
             const { constructor, superCall } = nodes;
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, constructor, superCall, context.newLineCharacter));
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, constructor, superCall));
             return [{ description: getLocaleSpecificMessage(Diagnostics.Make_super_call_the_first_statement_in_the_constructor), changes, fixId }];
         },
         fixIds: [fixId],
         getAllCodeActions(context) {
-            const { newLineCharacter, sourceFile } = context;
+            const { sourceFile } = context;
             const seenClasses = createMap<true>(); // Ensure we only do this once per class.
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const nodes = getNodes(diag.file!, diag.start!);
                 if (!nodes) return;
                 const { constructor, superCall } = nodes;
                 if (addToSeen(seenClasses, getNodeId(constructor.parent))) {
-                    doChange(changes, sourceFile, constructor, superCall, newLineCharacter);
+                    doChange(changes, sourceFile, constructor, superCall);
                 }
             });
         },
     });
 
-    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, constructor: ConstructorDeclaration, superCall: ExpressionStatement, newLineCharacter: string): void {
-        changes.insertNodeAtConstructorStart(sourceFile, constructor, superCall, newLineCharacter);
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, constructor: ConstructorDeclaration, superCall: ExpressionStatement): void {
+        changes.insertNodeAtConstructorStart(sourceFile, constructor, superCall);
         changes.deleteNode(sourceFile, superCall);
     }
 

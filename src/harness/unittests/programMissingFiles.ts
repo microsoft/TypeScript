@@ -6,7 +6,7 @@ namespace ts {
         const map = arrayToSet(expected) as Map<boolean>;
         for (const missing of missingPaths) {
             const value = map.get(missing);
-            assert.equal(value, true, `${missing} to be ${value === undefined ? "not present" : "present only once"}, in actual: ${missingPaths} expected: ${expected}`);
+            assert.isTrue(value, `${missing} to be ${value === undefined ? "not present" : "present only once"}, in actual: ${missingPaths} expected: ${expected}`);
             map.set(missing, false);
         }
         const notFound = arrayFrom(mapDefinedIterator(map.keys(), k => map.get(k) === true ? k : undefined));

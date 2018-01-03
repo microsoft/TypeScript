@@ -663,11 +663,10 @@ namespace ts.refactor.extractSymbol {
             case SyntaxKind.Constructor:
                 return "constructor";
             case SyntaxKind.FunctionExpression:
-                return scope.name
-                    ? `function expression '${scope.name.text}'`
-                    : "anonymous function expression";
             case SyntaxKind.FunctionDeclaration:
-                return `function '${scope.name!.text}'`; // TODO: GH#18217
+                return scope.name
+                    ? `function '${scope.name!.text}'`
+                    : "anonymous function";
             case SyntaxKind.ArrowFunction:
                 return "arrow function";
             case SyntaxKind.MethodDeclaration:
@@ -816,13 +815,10 @@ namespace ts.refactor.extractSymbol {
         const minInsertionPos = (isReadonlyArray(range.range) ? last(range.range) : range.range).end;
         const nodeToInsertBefore = getNodeToInsertFunctionBefore(minInsertionPos, scope);
         if (nodeToInsertBefore) {
-            changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newFunction, { suffix: context.newLineCharacter + context.newLineCharacter });
+            changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newFunction, /*blankLineBetween*/ true);
         }
         else {
-            changeTracker.insertNodeBefore(context.file, scope.getLastToken()!, newFunction, {
-                prefix: isLineBreak(file.text.charCodeAt(scope.getLastToken()!.pos)) ? context.newLineCharacter : context.newLineCharacter + context.newLineCharacter,
-                suffix: context.newLineCharacter
-            });
+            changeTracker.insertNodeAtEndOfScope(context.file, scope, newFunction);
         }
 
         const newNodes: Node[] = [];
@@ -965,10 +961,12 @@ namespace ts.refactor.extractSymbol {
             }
         }
 
-        const replacementRange = isReadonlyArray(range.range)
-            ? { pos: first(range.range).getStart(), end: last(range.range).end }
-            : { pos: range.range.getStart(), end: range.range.end };
-        changeTracker.replaceRangeWithNodes(context.file, replacementRange, newNodes, { nodeSeparator: context.newLineCharacter });
+        if (isReadonlyArray(range.range)) {
+            changeTracker.replaceNodesWithNodes(context.file, range.range, newNodes);
+        }
+        else {
+            changeTracker.replaceNodeWithNodes(context.file, range.range, newNodes);
+        }
 
         const edits = changeTracker.getChanges();
         const renameRange = isReadonlyArray(range.range) ? first(range.range) : range.range;
@@ -1011,7 +1009,7 @@ namespace ts.refactor.extractSymbol {
         const localNameText = getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file.text);
         const isJS = isInJavaScriptFile(scope);
 
-        const variableType = isJS
+        const variableType = isJS || !checker.isContextSensitive(node)
             ? undefined
             : checker.typeToTypeNode(checker.getContextualType(node)!, scope, NodeBuilderFlags.NoTruncation); // TODO: GH#18217
 
@@ -1046,7 +1044,7 @@ namespace ts.refactor.extractSymbol {
             // Declare
             const maxInsertionPos = node.pos;
             const nodeToInsertBefore = getNodeToInsertPropertyBefore(maxInsertionPos, scope);
-            changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariable, { suffix: context.newLineCharacter + context.newLineCharacter });
+            changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariable, /*blankLineBetween*/ true);
 
             // Consume
             changeTracker.replaceRange(context.file, { pos: node.getStart(), end: node.end }, localReference);
@@ -1061,8 +1059,8 @@ namespace ts.refactor.extractSymbol {
             const oldVariableDeclaration = getContainingVariableDeclarationIfInList(node, scope);
             if (oldVariableDeclaration) {
                 // Declare
-                // CONSIDER: could detect that each is on a separate line
-                changeTracker.insertNodeAt(context.file, oldVariableDeclaration.getStart(), newVariableDeclaration, { suffix: ", " });
+                // CONSIDER: could detect that each is on a separate line (See `extractConstant_VariableList_MultipleLines` in `extractConstants.ts`)
+                changeTracker.insertNodeBefore(context.file, oldVariableDeclaration, newVariableDeclaration);
 
                 // Consume
                 const localReference = createIdentifier(localNameText);
@@ -1084,17 +1082,10 @@ namespace ts.refactor.extractSymbol {
                 // Declare
                 const nodeToInsertBefore = getNodeToInsertConstantBefore(node, scope);
                 if (nodeToInsertBefore.pos === 0) {
-                    // If we're at the beginning of the file, we need to take care not to insert before header comments
-                    // (e.g. copyright, triple-slash references).  Fortunately, this problem has already been solved
-                    // for imports.
-                    const insertionPos = getSourceFileImportLocation(file);
-                    changeTracker.insertNodeAt(context.file, insertionPos, newVariableStatement, {
-                        prefix: insertionPos === 0 ? undefined : context.newLineCharacter,
-                        suffix: isLineBreak(file.text.charCodeAt(insertionPos)) ? context.newLineCharacter : context.newLineCharacter + context.newLineCharacter
-                    });
+                    changeTracker.insertNodeAtTopOfFile(context.file, newVariableStatement, /*blankLineBetween*/ false);
                 }
                 else {
-                    changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariableStatement, { suffix: context.newLineCharacter + context.newLineCharacter });
+                    changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariableStatement, /*blankLineBetween*/ false);
                 }
 
                 // Consume
@@ -1291,12 +1282,12 @@ namespace ts.refactor.extractSymbol {
      * If `scope` contains a function after `minPos`, then return the first such function.
      * Otherwise, return `undefined`.
      */
-    function getNodeToInsertFunctionBefore(minPos: number, scope: Scope): Node | undefined {
+    function getNodeToInsertFunctionBefore(minPos: number, scope: Scope): Statement | ClassElement | undefined {
         return find<Statement | ClassElement>(getStatementsOrClassElements(scope), child =>
             child.pos >= minPos && isFunctionLikeDeclaration(child) && !isConstructorDeclaration(child));
     }
 
-    function getNodeToInsertPropertyBefore(maxPos: number, scope: ClassLikeDeclaration): Node {
+    function getNodeToInsertPropertyBefore(maxPos: number, scope: ClassLikeDeclaration): ClassElement {
         const members = scope.members;
         Debug.assert(members.length > 0); // There must be at least one child, since we extracted from one.
 
@@ -1322,7 +1313,7 @@ namespace ts.refactor.extractSymbol {
         return prevMember!;
     }
 
-    function getNodeToInsertConstantBefore(node: Node, scope: Scope): Node {
+    function getNodeToInsertConstantBefore(node: Node, scope: Scope): Statement {
         Debug.assert(!isClassLike(scope));
 
         let prevScope: Scope | undefined = undefined;

@@ -64,7 +64,7 @@ namespace ts {
         let currentIdentifiers: Map<string>;
         let isCurrentFileExternalModule: boolean;
         let reportedDeclarationError = false;
-        let errorNameNode: DeclarationName | undefined;
+        let errorNameNode: DeclarationName | QualifiedName | undefined;
         const emitJsDocComments = compilerOptions.removeComments ? noop : writeJsDocComments;
         const emit = compilerOptions.stripInternal ? stripInternal : emitNode;
         let needsDeclare = true;
@@ -1374,9 +1374,9 @@ namespace ts {
             // if this is property of type literal,
             // or is parameter of method/call/construct/index signature of type literal
             // emit only if type is specified
-            if (node.type) {
+            if (hasType(node)) {
                 write(": ");
-                emitType(node.type);
+                emitType(node.type!);
             }
         }
 

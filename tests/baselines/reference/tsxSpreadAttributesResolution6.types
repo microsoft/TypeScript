@@ -44,7 +44,7 @@ const textProps: TextProps = {
 >{    editable: false} : { editable: false; }
 
     editable: false
->editable : boolean
+>editable : false
 >false : false
 
 };

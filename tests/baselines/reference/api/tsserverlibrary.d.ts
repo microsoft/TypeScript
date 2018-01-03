@@ -453,6 +453,9 @@ declare namespace ts {
     interface JSDocContainer {
     }
     type HasJSDoc = ParameterDeclaration | CallSignatureDeclaration | ConstructSignatureDeclaration | MethodSignature | PropertySignature | ArrowFunction | ParenthesizedExpression | SpreadAssignment | ShorthandPropertyAssignment | PropertyAssignment | FunctionExpression | LabeledStatement | ExpressionStatement | VariableStatement | FunctionDeclaration | ConstructorDeclaration | MethodDeclaration | PropertyDeclaration | AccessorDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumMember | EnumDeclaration | ModuleDeclaration | ImportEqualsDeclaration | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | JSDocFunctionType | EndOfFileToken;
+    type HasType = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration | TypePredicateNode | ParenthesizedTypeNode | TypeOperatorNode | MappedTypeNode | AssertionExpression | TypeAliasDeclaration | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocOptionalType | JSDocVariadicType;
+    type HasInitializer = HasExpressionInitializer | ForStatement | ForInStatement | ForOfStatement | JsxAttribute;
+    type HasExpressionInitializer = VariableDeclaration | ParameterDeclaration | BindingElement | PropertySignature | PropertyDeclaration | PropertyAssignment | EnumMember;
     interface NodeArray<T extends Node> extends ReadonlyArray<T>, TextRange {
         hasTrailingComma?: boolean;
     }
@@ -604,15 +607,7 @@ declare namespace ts {
         kind: SyntaxKind.SpreadAssignment;
         expression: Expression;
     }
-    interface VariableLikeDeclaration extends NamedDeclaration {
-        propertyName?: PropertyName;
-        dotDotDotToken?: DotDotDotToken;
-        name: DeclarationName;
-        questionToken?: QuestionToken;
-        exclamationToken?: ExclamationToken;
-        type?: TypeNode;
-        initializer?: Expression;
-    }
+    type VariableLikeDeclaration = VariableDeclaration | ParameterDeclaration | BindingElement | PropertyDeclaration | PropertyAssignment | PropertySignature | JsxAttribute | ShorthandPropertyAssignment | EnumMember | JSDocPropertyTag | JSDocParameterTag;
     interface PropertyLikeDeclaration extends NamedDeclaration {
         name: PropertyName;
     }
@@ -7098,7 +7093,7 @@ declare namespace ts.server {
         private getCombinedCodeFix({scope, fixId}, simplifiedResult);
         private applyCodeActionCommand(args);
         private getStartAndEndPosition(args, scriptInfo);
-        private mapCodeAction({description, changes: unmappedChanges, commands}, scriptInfo);
+        private mapCodeAction(project, {description, changes: unmappedChanges, commands});
         private mapTextChangesToCodeEdits(project, textChanges);
         private mapTextChangesToCodeEditsUsingScriptinfo(textChanges, scriptInfo);
         private convertTextChangeToCodeEdit(change, scriptInfo);
@@ -7241,6 +7236,7 @@ declare namespace ts.server {
         private program;
         private externalFiles;
         private missingFilesMap;
+        private plugins;
         private cachedUnresolvedImportsPerFile;
         private lastCachedUnresolvedImportsList;
         protected languageService: LanguageService;
@@ -7356,6 +7352,9 @@ declare namespace ts.server {
         filesToString(writeProjectFileNames: boolean): string;
         setCompilerOptions(compilerOptions: CompilerOptions): void;
         protected removeRoot(info: ScriptInfo): void;
+        protected enableGlobalPlugins(): void;
+        protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]): void;
+        private enableProxy(pluginModuleFactory, configEntry);
     }
     /**
      * If a file is opened and no tsconfig (or jsconfig) is found,
@@ -7384,7 +7383,6 @@ declare namespace ts.server {
         private typeAcquisition;
         private directoriesWatchedForWildcards;
         readonly canonicalConfigFilePath: NormalizedPath;
-        private plugins;
         /** Ref count to the project when opened from external project */
         private externalProjectRefCount;
         private projectErrors;
@@ -7395,8 +7393,6 @@ declare namespace ts.server {
         updateGraph(): boolean;
         getConfigFilePath(): NormalizedPath;
         enablePlugins(): void;
-        private enablePlugin(pluginConfigEntry, searchPaths);
-        private enableProxy(pluginModuleFactory, configEntry);
         /**
          * Get the errors that dont have any file name associated
          */
@@ -7408,7 +7404,6 @@ declare namespace ts.server {
         setProjectErrors(projectErrors: Diagnostic[]): void;
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void;
         getTypeAcquisition(): TypeAcquisition;
-        getExternalFiles(): SortedReadonlyArray<string>;
         close(): void;
         getEffectiveTypeRoots(): string[];
     }

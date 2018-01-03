@@ -1230,7 +1230,7 @@ namespace ts.server {
                 return project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source);
             });
             return simplifiedResult
-                ? result.map<protocol.CompletionEntryDetails>(details => ({ ...details, codeActions: map(details.codeActions, action => this.mapCodeAction(action, scriptInfo)) }))
+                ? result.map(details => ({ ...details, codeActions: map(details.codeActions, action => this.mapCodeAction(project, action)) }))
                 : result;
         }
 
@@ -1560,7 +1560,7 @@ namespace ts.server {
                 return undefined;
             }
             if (simplifiedResult) {
-                return codeActions.map(codeAction => this.mapCodeAction(codeAction, scriptInfo));
+                return codeActions.map(codeAction => this.mapCodeAction(project, codeAction));
             }
             else {
                 return codeActions;
@@ -1613,8 +1613,8 @@ namespace ts.server {
             return { startPosition, endPosition };
         }
 
-        private mapCodeAction({ description, changes: unmappedChanges, commands }: CodeAction, scriptInfo: ScriptInfo): protocol.CodeAction {
-            const changes = unmappedChanges.map(change => this.mapTextChangesToCodeEditsUsingScriptinfo(change, scriptInfo));
+        private mapCodeAction(project: Project, { description, changes: unmappedChanges, commands }: CodeAction): protocol.CodeAction {
+            const changes = unmappedChanges.map(change => this.mapTextChangesToCodeEditsUsingScriptinfo(change, project.getScriptInfoForNormalizedPath(toNormalizedPath(change.fileName))!));
             return { description, changes, commands };
         }
 

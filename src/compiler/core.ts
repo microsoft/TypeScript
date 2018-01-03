@@ -288,6 +288,8 @@ namespace ts {
         return undefined;
     }
 
+    export function findLast<T, U extends T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => element is U): U | undefined;
+    export function findLast<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined;
     export function findLast<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined {
         for (let i = array.length - 1; i >= 0; i--) {
             const value = array[i];
@@ -1450,8 +1452,8 @@ namespace ts {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
     }
 
-    export function toArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T>;
     export function toArray<T>(value: T | T[]): T[];
+    export function toArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T>;
     export function toArray<T>(value: T | T[]): T[] {
         return isArray(value) ? value : [value];
     }
@@ -2023,11 +2025,6 @@ namespace ts {
         return /^\.\.?($|[\\/])/.test(path);
     }
 
-    /** @deprecated Use `!isExternalModuleNameRelative(moduleName)` instead. */
-    export function moduleHasNonRelativeName(moduleName: string): boolean {
-        return !isExternalModuleNameRelative(moduleName);
-    }
-
     export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
         return compilerOptions.target || ScriptTarget.ES3;
     }
@@ -2412,7 +2409,6 @@ namespace ts {
 
     function getSubPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude", { singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter }: WildcardMatcher): string | undefined {
         let subpattern = "";
-        let hasRecursiveDirectoryWildcard = false;
         let hasWrittenComponent = false;
         const components = getNormalizedPathComponents(spec, basePath);
         const lastComponent = last(components);
@@ -2431,12 +2427,7 @@ namespace ts {
         let optionalCount = 0;
         for (let component of components) {
             if (component === "**") {
-                if (hasRecursiveDirectoryWildcard) {
-                    return undefined;
-                }
-
                 subpattern += doubleAsteriskRegexFragment;
-                hasRecursiveDirectoryWildcard = true;
             }
             else {
                 if (usage === "directories") {
@@ -3295,5 +3286,9 @@ namespace ts {
         function clearCache() {
             cachedReadDirectoryResult.clear();
         }
+    }
+
+    export function singleElementArray<T>(t: T | undefined): T[] | undefined {
+        return t === undefined ? undefined : [t];
     }
 }

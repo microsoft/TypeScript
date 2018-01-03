@@ -496,7 +496,7 @@ namespace ts.SymbolDisplay {
             addNewLineIfDisplayPartsExist();
             if (symbolKind) {
                 pushTypePart(symbolKind);
-                if (!some(symbol.declarations, d => isArrowFunction(d) || (isFunctionExpression(d) || isClassExpression(d)) && !d.name)) {
+                if (symbol && !some(symbol.declarations, d => isArrowFunction(d) || (isFunctionExpression(d) || isClassExpression(d)) && !d.name)) {
                     displayParts.push(spacePart());
                     addFullSymbolName(symbol);
                 }

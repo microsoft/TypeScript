@@ -3,6 +3,7 @@
 /* @internal */
 namespace ts {
     export const emptyArray: never[] = [] as never[];
+    export const resolvingEmptyArray: never[] = [] as never[];
     export const emptyMap: ReadonlyMap<never> = createMap<never>();
 
     export const externalHelpersModuleNameText = "tslib";
@@ -346,7 +347,7 @@ namespace ts {
     export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
-        if (!nodeIsSynthesized(node) && node.parent) {
+        if (!nodeIsSynthesized(node) && node.parent && !(isNumericLiteral(node) && node.numericLiteralFlags! & TokenFlags.ContainsSeparator)) {
             return getSourceTextOfNodeFromSourceFile(sourceFile, node);
         }
 
@@ -546,7 +547,7 @@ namespace ts {
     // Return display name of an identifier
     // Computed property names will just be emitted as "[<expr>]", where <expr> is the source
     // text of the expression in the computed property.
-    export function declarationNameToString(name: DeclarationName) {
+    export function declarationNameToString(name: DeclarationName | QualifiedName) {
         return getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
     }
 
@@ -567,7 +568,7 @@ namespace ts {
                 }
                 return undefined!; // TODO: GH#18217 Almost all uses of this assume the result to be defined!
             default:
-                Debug.assertNever(name);
+                return undefined!; // TODO: GH#18217 Debug.assertNever(name);
         }
     }
 
@@ -787,7 +788,7 @@ namespace ts {
                     case SyntaxKind.PropertySignature:
                     case SyntaxKind.Parameter:
                     case SyntaxKind.VariableDeclaration:
-                        return node === (<VariableLikeDeclaration>parent).type;
+                        return node === (parent as HasType).type;
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
@@ -1350,7 +1351,7 @@ namespace ts {
             case SyntaxKind.EnumMember:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.BindingElement:
-                return (<VariableLikeDeclaration>parent).initializer === node;
+                return (parent as HasInitializer).initializer === node;
             case SyntaxKind.ExpressionStatement:
             case SyntaxKind.IfStatement:
             case SyntaxKind.DoStatement:
@@ -1659,8 +1660,11 @@ namespace ts {
                 result = addRange(result, getJSDocParameterTags(node as ParameterDeclaration));
             }
 
-            if (isVariableLike(node) && node.initializer && hasJSDocNodes(node.initializer)) {
-                result = addRange(result, node.initializer.jsDoc);
+            if (isVariableLike(node) && hasInitializer(node)) {
+                const initializer = node.initializer!;
+                if (hasJSDocNodes(initializer)) {
+                    result = addRange(result, initializer.jsDoc);
+                }
             }
 
             if (hasJSDocNodes(node)) {
@@ -2833,8 +2837,8 @@ namespace ts {
      * Gets the effective type annotation of a variable, parameter, or property. If the node was
      * parsed in a JavaScript file, gets the type annotation from JSDoc.
      */
-    export function getEffectiveTypeAnnotationNode(node: VariableLikeDeclaration, checkJSDoc?: boolean): TypeNode | undefined {
-        if (node.type) {
+    export function getEffectiveTypeAnnotationNode(node: Node, checkJSDoc?: boolean): TypeNode | undefined {
+        if (hasType(node)) {
             return node.type;
         }
         if (checkJSDoc || isInJavaScriptFile(node)) {
@@ -5256,6 +5260,18 @@ namespace ts {
         return node && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor);
     }
 
+    /* @internal */
+    export function isMethodOrAccessor(node: Node): node is MethodDeclaration | AccessorDeclaration {
+        switch (node.kind) {
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     // Type members
 
     export function isTypeElement(node: Node): node is TypeElement {
@@ -5836,5 +5852,23 @@ namespace ts {
     export function hasJSDocNodes(node: Node): node is HasJSDoc {
         const { jsDoc } = node as JSDocContainer;
         return !!jsDoc && jsDoc.length > 0;
+    }
+
+    /** True if has type node attached to it. */
+    /* @internal */
+    export function hasType(node: Node): node is HasType {
+        return !!(node as HasType).type;
+    }
+
+    /** True if has initializer node attached to it. */
+    /* @internal */
+    export function hasInitializer(node: Node): node is HasInitializer {
+        return !!(node as HasInitializer).initializer;
+    }
+
+    /** True if has initializer node attached to it. */
+    /* @internal */
+    export function hasOnlyExpressionInitializer(node: Node): node is HasExpressionInitializer {
+        return hasInitializer(node) && !isForStatement(node) && !isForInStatement(node) && !isForOfStatement(node) && !isJsxAttribute(node);
     }
 }
