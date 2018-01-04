@@ -383,9 +383,11 @@ interface Array<T> {}`
         ensureFileOrFolder(fileOrDirectory: FileOrFolder, ignoreWatchInvokedWithTriggerAsFileCreate?: boolean) {
             if (isString(fileOrDirectory.content)) {
                 const file = this.toFile(fileOrDirectory);
-                Debug.assert(!this.fs.get(file.path));
-                const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath));
-                this.addFileOrFolderInFolder(baseFolder, file, ignoreWatchInvokedWithTriggerAsFileCreate);
+                // file may already exist when updating existing type declaration file
+                if (!this.fs.get(file.path)) {
+                    const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath));
+                    this.addFileOrFolderInFolder(baseFolder, file, ignoreWatchInvokedWithTriggerAsFileCreate);
+                }
             }
             else {
                 const fullPath = getNormalizedAbsolutePath(fileOrDirectory.path, this.currentDirectory);

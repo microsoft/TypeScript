@@ -243,9 +243,11 @@ namespace ts.projectSystem {
         }
     }
 
-    export function createSession(host: server.ServerHost, opts: Partial<server.SessionOptions> = {}) {
+    export function createSession(host: TestServerHost, opts: Partial<server.SessionOptions> = {}) {
         if (opts.typingsInstaller === undefined) {
-            opts.typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/ 5, host);
+            const globalTypingsCacheLocation = "/a/data";
+            host.ensureFileOrFolder({ path: globalTypingsCacheLocation });
+            opts.typingsInstaller = new TestTypingsInstaller(globalTypingsCacheLocation, /*throttleLimit*/ 5, host);
         }
 
         if (opts.eventHandler !== undefined) {

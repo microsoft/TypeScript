@@ -37,7 +37,8 @@ namespace ts.JsTyping {
         if (currentMonth) {
             comparisonDate.setMonth(11);
             comparisonDate.setFullYear(comparisonDate.getFullYear() - 1);
-        } else {
+        }
+        else {
             comparisonDate.setMonth(currentMonth - 1);
         }
         return !typing || typing.timestamp < comparisonDate.getTime();
