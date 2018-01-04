@@ -2094,7 +2094,7 @@ namespace ts {
         }
 
         // A reserved member name starts with two underscores, but the third character cannot be an underscore
-        // or the @ symbol. A third underscore indicates an escaped form of an identifer that started
+        // or the @ symbol. A third underscore indicates an escaped form of an identifier that started
         // with at least two underscores. The @ character indicates that the name is denoted by a well known ES
         // Symbol instance.
         function isReservedMemberName(name: __String) {
@@ -3187,6 +3187,13 @@ namespace ts {
                 const declaration = symbol.declarations[0];
                 const name = getNameOfDeclaration(declaration);
                 if (name) {
+                    if (name.kind === SyntaxKind.ComputedPropertyName &&
+                        symbol.flags & SymbolFlags.Transient &&
+                        !((symbol as TransientSymbol).checkFlags & CheckFlags.Late) &&
+                        !isWellKnownSymbolSyntactically((name as ComputedPropertyName).expression) &&
+                        symbol.escapedName) {
+                        return "[\"" + unescapeLeadingUnderscores(symbol.escapedName) + "\"]";
+                    }
                     return declarationNameToString(name);
                 }
                 if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
@@ -14611,7 +14618,7 @@ namespace ts {
 
             let propertiesTable = createSymbolTable();
             let propertiesArray: Symbol[] = [];
-            let spread: Type = emptyObjectType;
+            let intermediate: Type = emptyObjectType;
             let propagatedFlags: TypeFlags = TypeFlags.FreshLiteral;
 
             const contextualType = getApparentTypeOfContextualType(node);
@@ -14667,7 +14674,7 @@ namespace ts {
                     typeFlags |= type.flags;
                     if (isArray(literalName)) {
                         hasUnionedComputedProperty = true;
-                        next(createUnion(memberDecl, member, literalName, type));
+                        updateIntermediateType(getUnionFromLiteralUnion(memberDecl, member, literalName, type));
                         continue;
                     }
 
@@ -14678,14 +14685,14 @@ namespace ts {
                         checkExternalEmitHelpers(memberDecl, ExternalEmitHelpers.Assign);
                     }
                     if (propertiesArray.length > 0) {
-                        next(getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, /*looseIndexes*/ false));
+                        updateIntermediateType(getSpreadType(intermediate, createObjectLiteralType(), node.symbol, propagatedFlags, /*looseIndexes*/ false));
                     }
                     const type = checkExpression((memberDecl as SpreadAssignment).expression);
                     if (!isValidSpreadType(type)) {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
-                    spread = getSpreadType(spread, type, node.symbol, propagatedFlags, /*looseIndexes*/ false);
+                    intermediate = getSpreadType(intermediate, type, node.symbol, propagatedFlags, /*looseIndexes*/ false);
                     offset = i + 1;
                     continue;
                 }
@@ -14717,7 +14724,7 @@ namespace ts {
             // type with those properties for which the binding pattern specifies a default value.
             if (contextualTypeHasPattern) {
                 for (const prop of getPropertiesOfType(contextualType)) {
-                    if (!propertiesTable.get(prop.escapedName) && !(spread && getPropertyOfType(spread, prop.escapedName))) {
+                    if (!propertiesTable.get(prop.escapedName) && !(intermediate && getPropertyOfType(intermediate, prop.escapedName))) {
                         if (!(prop.flags & SymbolFlags.Optional)) {
                             error(prop.valueDeclaration || (<TransientSymbol>prop).bindingElement,
                                 Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
@@ -14728,13 +14735,11 @@ namespace ts {
                 }
             }
 
-            if (spread !== emptyObjectType) {
+            if (intermediate !== emptyObjectType) {
                 if (propertiesArray.length > 0) {
-                    // TODO: This is now insufficient; sometimes the spread is a result of a computed property with type union of literal type
-                    // getSpreadType will *sometimes* work here, but not always
-                    spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, /*looseIndexes*/ hasUnionedComputedProperty);
+                    intermediate = getSpreadType(intermediate, createObjectLiteralType(), node.symbol, propagatedFlags, /*looseIndexes*/ hasUnionedComputedProperty);
                 }
-                return spread;
+                return intermediate;
             }
 
             return createObjectLiteralType();
@@ -14746,24 +14751,34 @@ namespace ts {
                 return escapeLeadingUnderscores("" + (type as LiteralType).value);
             }
 
-            function next(type: Type) {
-                spread = type;
+            function updateIntermediateType(type: Type) {
+                intermediate = type;
                 propertiesArray = [];
                 propertiesTable = createSymbolTable();
             }
 
-            function createUnion(memberDecl: ObjectLiteralElementLike, member: Symbol, literalNames: __String[], type: Type) {
+            function getUnionFromLiteralUnion(memberDecl: ObjectLiteralElementLike, member: Symbol, literalNames: __String[], type: Type) {
                 const types: Type[] = [];
                 for (const literalName of literalNames) {
                     const prop = createProperty(memberDecl, member, literalName, type);
                     propertiesArray.push(prop);
+                    let duplicate: Symbol;
+                    if (propertiesTable.has(prop.escapedName)) {
+                        duplicate = propertiesTable.get(prop.escapedName);
+                    }
                     propertiesTable.set(prop.escapedName, prop);
+
                     types.push(createObjectLiteralType());
+
                     propertiesArray.pop();
-                    propertiesTable.delete(prop.escapedName); // Probably fine??
+                    if (duplicate) {
+                        propertiesTable.set(prop.escapedName, duplicate);
+                    }
+                    else {
+                        propertiesTable.delete(prop.escapedName);
+                    }
                 }
-                // TODO: Spread maybe isn't right, because it's so weird
-                return getSpreadType(spread, getUnionType(types), node.symbol, propagatedFlags, /*looseIndexes*/ true);
+                return getSpreadType(intermediate, getUnionType(types), node.symbol, propagatedFlags, /*looseIndexes*/ true);
             }
 
             // TODO: Probably don't need the second parameter
