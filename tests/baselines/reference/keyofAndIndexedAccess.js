@@ -1105,7 +1105,7 @@ declare var hashOfEmpty1: {
     test: {};
 };
 declare var hashOfEmpty2: {
-    test: boolean;
+    test: {};
 };
 interface Options1<Data, Computed> {
     data?: Data;
