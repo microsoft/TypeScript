@@ -798,6 +798,7 @@ namespace ts.codefix {
                         }
                     }
                     else if (isExportSpecifier(declaration)) {
+                        Debug.assert(declaration.name.escapedText === InternalSymbolName.Default);
                         if (declaration.propertyName) {
                             return declaration.propertyName.escapedText;
                         }
