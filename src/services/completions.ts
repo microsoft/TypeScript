@@ -2062,7 +2062,8 @@ namespace ts.Completions {
                 // TODO: GH#18169
                 return { name: JSON.stringify(name), needsConvertPropertyAccess: false };
             case CompletionKind.PropertyAccess:
-                return { name, needsConvertPropertyAccess: true };
+                // Don't add a completion for a name starting with a space. See https://github.com/Microsoft/TypeScript/pull/20547
+                return name.charCodeAt(0) === CharacterCodes.space ? undefined : { name, needsConvertPropertyAccess: true };
             case CompletionKind.String:
                 return validIdentiferResult;
             default:
