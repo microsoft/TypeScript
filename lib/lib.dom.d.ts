@@ -3728,6 +3728,14 @@ interface EventTarget {
     removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
+interface FileReaderTarget extends EventTarget {
+    readonly result: Blob | string;
+}
+
+interface FileReaderLoadEvent extends Event {
+    readonly target: FileReaderTarget;
+}
+
 declare var EventTarget: {
     prototype: EventTarget;
     new(): EventTarget;
@@ -14075,7 +14083,7 @@ interface LinkStyle {
 interface MSBaseReaderEventMap {
     "abort": Event;
     "error": ErrorEvent;
-    "load": Event;
+    "load": FileReaderLoadEvent;
     "loadend": ProgressEvent;
     "loadstart": Event;
     "progress": ProgressEvent;
