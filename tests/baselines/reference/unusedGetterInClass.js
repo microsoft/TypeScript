@@ -2,9 +2,10 @@
 class Employee {
     private _fullName: string;
 
-    get fullName(): string {
+    private get fullName(): string {
         return this._fullName;
     }
+    private set setter(_: string) {}
 }
 
 //// [unusedGetterInClass.js]
@@ -15,6 +16,11 @@ var Employee = /** @class */ (function () {
         get: function () {
             return this._fullName;
         },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Employee.prototype, "setter", {
+        set: function (_) { },
         enumerable: true,
         configurable: true
     });

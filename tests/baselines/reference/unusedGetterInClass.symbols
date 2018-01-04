@@ -5,7 +5,7 @@ class Employee {
     private _fullName: string;
 >_fullName : Symbol(Employee._fullName, Decl(unusedGetterInClass.ts, 0, 16))
 
-    get fullName(): string {
+    private get fullName(): string {
 >fullName : Symbol(Employee.fullName, Decl(unusedGetterInClass.ts, 1, 30))
 
         return this._fullName;
@@ -13,4 +13,7 @@ class Employee {
 >this : Symbol(Employee, Decl(unusedGetterInClass.ts, 0, 0))
 >_fullName : Symbol(Employee._fullName, Decl(unusedGetterInClass.ts, 0, 16))
     }
+    private set setter(_: string) {}
+>setter : Symbol(Employee.setter, Decl(unusedGetterInClass.ts, 5, 5))
+>_ : Symbol(_, Decl(unusedGetterInClass.ts, 6, 23))
 }

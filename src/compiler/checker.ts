@@ -21222,17 +21222,27 @@ namespace ts {
             if (compilerOptions.noUnusedLocals && !(node.flags & NodeFlags.Ambient)) {
                 if (node.members) {
                     for (const member of node.members) {
-                        if (member.kind === SyntaxKind.MethodDeclaration || member.kind === SyntaxKind.PropertyDeclaration) {
-                            if (!member.symbol.isReferenced && hasModifier(member, ModifierFlags.Private)) {
-                                error(member.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(member.symbol));
-                            }
-                        }
-                        else if (member.kind === SyntaxKind.Constructor) {
-                            for (const parameter of (<ConstructorDeclaration>member).parameters) {
-                                if (!parameter.symbol.isReferenced && hasModifier(parameter, ModifierFlags.Private)) {
-                                    error(parameter.name, Diagnostics.Property_0_is_declared_but_its_value_is_never_read, symbolName(parameter.symbol));
+                        switch (member.kind) {
+                            case SyntaxKind.MethodDeclaration:
+                            case SyntaxKind.PropertyDeclaration:
+                            case SyntaxKind.GetAccessor:
+                            case SyntaxKind.SetAccessor:
+                                if (!member.symbol.isReferenced && hasModifier(member, ModifierFlags.Private)) {
+                                    error(member.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(member.symbol));
                                 }
-                            }
+                                break;
+                            case SyntaxKind.Constructor:
+                                for (const parameter of (<ConstructorDeclaration>member).parameters) {
+                                    if (!parameter.symbol.isReferenced && hasModifier(parameter, ModifierFlags.Private)) {
+                                        error(parameter.name, Diagnostics.Property_0_is_declared_but_its_value_is_never_read, symbolName(parameter.symbol));
+                                    }
+                                }
+                                break;
+                            case SyntaxKind.IndexSignature:
+                                // Can't be private
+                                break;
+                            default:
+                                Debug.fail();
                         }
                     }
                 }
