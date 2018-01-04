@@ -275,7 +275,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function isModuleReferenceLocation(node: ts.Node): boolean {
-        if (node.kind !== SyntaxKind.StringLiteral) {
+        if (node.kind !== SyntaxKind.StringLiteral && node.kind !== SyntaxKind.NoSubstitutionTemplateLiteral) {
             return false;
         }
         switch (node.parent.kind) {
