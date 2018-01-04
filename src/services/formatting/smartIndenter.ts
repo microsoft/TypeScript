@@ -508,6 +508,7 @@ namespace ts.formatting {
                 case SyntaxKind.ArrayBindingPattern:
                 case SyntaxKind.ObjectBindingPattern:
                 case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.JsxOpeningFragment:
                 case SyntaxKind.JsxSelfClosingElement:
                 case SyntaxKind.JsxExpression:
                 case SyntaxKind.MethodSignature:
@@ -554,6 +555,8 @@ namespace ts.formatting {
                         (!!(<ImportClause>child).namedBindings && (<ImportClause>child).namedBindings.kind !== SyntaxKind.NamedImports);
                 case SyntaxKind.JsxElement:
                     return childKind !== SyntaxKind.JsxClosingElement;
+                case SyntaxKind.JsxFragment:
+                    return childKind !== SyntaxKind.JsxClosingFragment;
             }
             // No explicit rule for given nodes so the result will follow the default value argument
             return indentByDefault;
