@@ -19,7 +19,7 @@ namespace ts.server.typingsInstaller {
         writeLine: noop
     };
 
-    const timestampsFile = "timestamps.json";
+    const timestampsFileName = "timestamps.json";
 
     function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost, log: Log): string {
         try {
@@ -44,60 +44,37 @@ namespace ts.server.typingsInstaller {
     }
 
     interface TypeDeclarationTimestampFile {
+        // entries maps from package names (e.g. "@types/node") to timestamp values (as produced by Date#getTime)
         entries: MapLike<number>;
     }
 
     function loadTypeDeclarationTimestampFile(typeDeclarationTimestampFilePath: string, host: InstallTypingHost, log: Log): MapLike<number> {
-        const fileExists = host.fileExists(typeDeclarationTimestampFilePath);
-        if (!fileExists) {
-            if (log.isEnabled()) {
-                log.writeLine(`Type declaration timestamp file '${typeDeclarationTimestampFilePath}' does not exist`);
-            }
-        }
         try {
-            if (fileExists) {
-                const content = <TypeDeclarationTimestampFile>JSON.parse(host.readFile(typeDeclarationTimestampFilePath));
-                return content.entries || {};
+            if (log.isEnabled()) {
+                log.writeLine("Loading type declaration timestamp file.");
             }
-            else {
-                host.writeFile(typeDeclarationTimestampFilePath, "{}");
-                if (log.isEnabled()) {
-                    log.writeLine("Type declaration timestamp file was created.");
-                }
-                return {};
-            }
+            const content = <TypeDeclarationTimestampFile>JSON.parse(host.readFile(typeDeclarationTimestampFilePath));
+            return content.entries || {};
         }
         catch (e) {
             if (log.isEnabled()) {
                 log.writeLine(`Error when loading type declaration timestamp file '${typeDeclarationTimestampFilePath}': ${(<Error>e).message}, ${(<Error>e).stack}`);
             }
+            // If file cannot be read, we update all requested type declarations.
             return {};
         }
     }
 
     function writeTypeDeclarationTimestampFile(typeDeclarationTimestampFilePath: string, newContents: TypeDeclarationTimestampFile, host: InstallTypingHost, log: Log): void {
-        const fileExists = host.fileExists(typeDeclarationTimestampFilePath);
-        if (!fileExists) {
-            if (log.isEnabled()) {
-                log.writeLine(`Type declaration timestamp file '${typeDeclarationTimestampFilePath}' does not exist`);
-            }
-        }
         try {
-            if (fileExists) {
-                host.writeFile(typeDeclarationTimestampFilePath, JSON.stringify(newContents));
-                return;
+            if (log.isEnabled()) {
+                log.writeLine("Writing type declaration timestamp file.");
             }
-            else {
-                host.writeFile(typeDeclarationTimestampFilePath, JSON.stringify(newContents));
-                if (log.isEnabled()) {
-                    log.writeLine("Type declaration time stamp file was created.");
-                }
-                return;
-            }
+            host.writeFile(typeDeclarationTimestampFilePath, JSON.stringify(newContents));
         }
         catch (e) {
             if (log.isEnabled()) {
-                log.writeLine(`Error when writing new type declaration timestamp file '${typeDeclarationTimestampFilePath}': ${(<Error>e).message}, ${(<Error>e).stack}`);
+                log.writeLine(`Error when writing type declaration timestamp file '${typeDeclarationTimestampFilePath}': ${(<Error>e).message}, ${(<Error>e).stack}`);
             }
             return;
         }
@@ -162,11 +139,12 @@ namespace ts.server.typingsInstaller {
             }
 
             // load existing typing information from the cache
+            const timestampsFilePath = combinePaths(req.cachePath || this.globalCachePath, timestampsFileName);
             if (req.cachePath) {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Request specifies cache path '${req.cachePath}', loading cached information...`);
                 }
-                this.processCacheLocation(req.cachePath);
+                this.processCacheLocation(req.cachePath, timestampsFilePath);
             }
 
             if (this.safeList === undefined) {
@@ -191,7 +169,7 @@ namespace ts.server.typingsInstaller {
 
             // install typings
             if (discoverTypingsResult.newTypingNames.length) {
-                this.installTypings(req, req.cachePath || this.globalCachePath, discoverTypingsResult.cachedTypingPaths, discoverTypingsResult.newTypingNames);
+                this.installTypings(req, req.cachePath || this.globalCachePath, discoverTypingsResult.cachedTypingPaths, discoverTypingsResult.newTypingNames, timestampsFilePath);
             }
             else {
                 this.sendResponse(this.createSetTypings(req, discoverTypingsResult.cachedTypingPaths));
@@ -215,7 +193,7 @@ namespace ts.server.typingsInstaller {
             this.safeList = JsTyping.loadSafeList(this.installTypingHost, this.safeListPath);
         }
 
-        private processCacheLocation(cacheLocation: string) {
+        private processCacheLocation(cacheLocation: string, timestampsFilePath?: string) {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Processing cache location '${cacheLocation}'`);
             }
@@ -225,8 +203,7 @@ namespace ts.server.typingsInstaller {
                 }
                 return;
             }
-            const timestampJson = combinePaths(cacheLocation, timestampsFile);
-            this.typeDeclarationTimestamps = loadTypeDeclarationTimestampFile(timestampJson, this.installTypingHost, this.log);
+            this.typeDeclarationTimestamps = loadTypeDeclarationTimestampFile(timestampsFilePath || combinePaths(cacheLocation, timestampsFileName), this.installTypingHost, this.log);
             const packageJson = combinePaths(cacheLocation, "package.json");
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Trying to find '${packageJson}'...`);
@@ -321,7 +298,7 @@ namespace ts.server.typingsInstaller {
             }
         }
 
-        private installTypings(req: DiscoverTypings, cachePath: string, currentlyCachedTypings: string[], typingsToInstall: string[]) {
+        private installTypings(req: DiscoverTypings, cachePath: string, currentlyCachedTypings: string[], typingsToInstall: string[], timestampsFilePath: string) {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Installing typings ${JSON.stringify(typingsToInstall)}`);
             }
@@ -384,8 +361,7 @@ namespace ts.server.typingsInstaller {
                     }
 
                     const newFileContents: TypeDeclarationTimestampFile = { entries: this.typeDeclarationTimestamps };
-                    const timestampJson = combinePaths(cachePath, timestampsFile);
-                    writeTypeDeclarationTimestampFile(timestampJson, newFileContents, this.installTypingHost, this.log);
+                    writeTypeDeclarationTimestampFile(timestampsFilePath, newFileContents, this.installTypingHost, this.log);
 
                     this.sendResponse(this.createSetTypings(req, currentlyCachedTypings.concat(installedTypingFiles)));
                 }

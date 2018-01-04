@@ -1,6 +1,6 @@
 /// <reference path="../harness.ts" />
 /// <reference path="./tsserverProjectSystem.ts" />
-/// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />import { deepEqual } from "assert";import { deepEqual } from "assert";
+/// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 
 
 

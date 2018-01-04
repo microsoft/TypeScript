@@ -32,16 +32,8 @@ namespace ts.JsTyping {
     }
 
     export function isTypingExpired(typing: JsTyping.CachedTyping | undefined) {
-        const comparisonDate = new Date();
-        const currentMonth = comparisonDate.getMonth();
-        if (currentMonth) {
-            comparisonDate.setMonth(11);
-            comparisonDate.setFullYear(comparisonDate.getFullYear() - 1);
-        }
-        else {
-            comparisonDate.setMonth(currentMonth - 1);
-        }
-        return !typing || typing.timestamp < comparisonDate.getTime();
+        const msPerMonth = 1000 * 60 * 60 * 24 * 30; // ms/second * second/minute * minutes/hour * hours/day * days/month
+        return !typing || typing.timestamp < Date.now() - msPerMonth;
     }
 
     /* @internal */
