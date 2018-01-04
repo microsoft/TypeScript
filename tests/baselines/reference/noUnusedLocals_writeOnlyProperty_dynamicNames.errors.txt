@@ -1,4 +1,4 @@
-tests/cases/compiler/noUnusedLocals_writeOnlyProperty_dynamicNames.ts(4,13): error TS6133: '__@x@207' is declared but its value is never read.
+tests/cases/compiler/noUnusedLocals_writeOnlyProperty_dynamicNames.ts(4,13): error TS6133: '[x]' is declared but its value is never read.
 
 
 ==== tests/cases/compiler/noUnusedLocals_writeOnlyProperty_dynamicNames.ts (1 errors) ====
@@ -7,7 +7,7 @@ tests/cases/compiler/noUnusedLocals_writeOnlyProperty_dynamicNames.ts(4,13): err
     class C {
         private [x]: number;
                 ~~~
-!!! error TS6133: '__@x@207' is declared but its value is never read.
+!!! error TS6133: '[x]' is declared but its value is never read.
         private [y]: number;
         m() {
             this[x] = 0; // write-only
