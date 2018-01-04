@@ -63,12 +63,12 @@ namespace ts.FindAllReferences {
     export function getImplementationsAtPosition(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number): ImplementationLocation[] {
         // A node in a JSDoc comment can't have an implementation anyway.
         const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ false);
-        const referenceEntries = getImplementationReferenceEntries(program, cancellationToken, sourceFiles, node);
+        const referenceEntries = getImplementationReferenceEntries(program, cancellationToken, sourceFiles, node, position);
         const checker = program.getTypeChecker();
         return map(referenceEntries, entry => toImplementationLocation(entry, checker));
     }
 
-    function getImplementationReferenceEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, node: Node): Entry[] | undefined {
+    function getImplementationReferenceEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, node: Node, position: number): Entry[] | undefined {
         if (node.kind === SyntaxKind.SourceFile) {
             return undefined;
         }
@@ -89,7 +89,7 @@ namespace ts.FindAllReferences {
         }
         else {
             // Perform "Find all References" and retrieve only those that are implementations
-            return getReferenceEntriesForNode(node, program, sourceFiles, cancellationToken, { implementations: true });
+            return getReferenceEntriesForNode(position, node, program, sourceFiles, cancellationToken, { implementations: true });
         }
     }
 
@@ -98,13 +98,13 @@ namespace ts.FindAllReferences {
         return map(x, toReferenceEntry);
     }
 
-    export function getReferenceEntriesForNode(node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options = {}): Entry[] | undefined {
-        return flattenEntries(Core.getReferencedSymbolsForNode(node, program, sourceFiles, cancellationToken, options));
+    export function getReferenceEntriesForNode(position: number, node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options = {}): Entry[] | undefined {
+        return flattenEntries(Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options));
     }
 
     function findAllReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number, options?: Options): SymbolAndEntries[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
-        return Core.getReferencedSymbolsForNode(node, program, sourceFiles, cancellationToken, options);
+        return Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options);
     }
 
     function flattenEntries(referenceSymbols: SymbolAndEntries[]): Entry[] {
@@ -253,9 +253,10 @@ namespace ts.FindAllReferences {
 /* @internal */
 namespace ts.FindAllReferences.Core {
     /** Core find-all-references algorithm. Handles special cases before delegating to `getReferencedSymbolsForSymbol`. */
-    export function getReferencedSymbolsForNode(node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options = {}): SymbolAndEntries[] | undefined {
-        if (node.kind === ts.SyntaxKind.SourceFile) {
-            return undefined;
+    export function getReferencedSymbolsForNode(position: number, node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options = {}): SymbolAndEntries[] | undefined {
+        if (isSourceFile(node)) {
+            const reference = GoToDefinition.getReferenceAtPosition(node, position, program);
+            return reference && getReferencedSymbolsForModule(program, program.getTypeChecker().getMergedSymbol(reference.file.symbol), sourceFiles);
         }
 
         if (!options.implementations) {
@@ -271,11 +272,7 @@ namespace ts.FindAllReferences.Core {
         // Could not find a symbol e.g. unknown identifier
         if (!symbol) {
             // String literal might be a property (and thus have a symbol), so do this here rather than in getReferencedSymbolsSpecial.
-            if (!options.implementations && node.kind === SyntaxKind.StringLiteral) {
-                return getReferencesForStringLiteral(<StringLiteral>node, sourceFiles, cancellationToken);
-            }
-            // Can't have references to something that we have no symbol for.
-            return undefined;
+            return !options.implementations && isStringLiteral(node) ? getReferencesForStringLiteral(node, sourceFiles, cancellationToken) : undefined;
         }
 
         if (symbol.flags & SymbolFlags.Module && isModuleReferenceLocation(node)) {
