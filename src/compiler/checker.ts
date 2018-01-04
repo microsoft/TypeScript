@@ -3685,7 +3685,10 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
-                    buildIndexSignatureDisplay(resolved.stringIndexInfo, writer, IndexKind.String, enclosingDeclaration, globalFlags, symbolStack);
+                    const stringIndexInfo = resolved.objectFlags & ObjectFlags.Deferred && resolved.stringIndexInfo ?
+                        createIndexInfo(emptyObjectType, resolved.stringIndexInfo.isReadonly, resolved.stringIndexInfo.declaration) :
+                        resolved.stringIndexInfo;
+                    buildIndexSignatureDisplay(stringIndexInfo, writer, IndexKind.String, enclosingDeclaration, globalFlags, symbolStack);
                     buildIndexSignatureDisplay(resolved.numberIndexInfo, writer, IndexKind.Number, enclosingDeclaration, globalFlags, symbolStack);
                     for (const p of resolved.properties) {
                         if (globalFlags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral) {
@@ -3696,7 +3699,7 @@ namespace ts {
                                 writer.reportPrivateInBaseOfClassExpression(symbolName(p));
                             }
                         }
-                        const t = getTypeOfSymbol(p);
+                        const t = getCheckFlags(p) & CheckFlags.Deferred ? emptyObjectType : getTypeOfSymbol(p);
                         if (p.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(t).length) {
                             const signatures = getSignaturesOfType(t, SignatureKind.Call);
                             for (const signature of signatures) {
@@ -11325,7 +11328,7 @@ namespace ts {
                     return undefined;
                 }
             }
-            const deferred = createObjectType(ObjectFlags.Deferred | ObjectFlags.Anonymous, undefined) as DeferredMappedType;
+            const deferred = createObjectType(ObjectFlags.Deferred | ObjectFlags.Anonymous, /*symbol*/ undefined) as DeferredMappedType;
             deferred.source = source;
             deferred.mappedType = target;
             return deferred;
