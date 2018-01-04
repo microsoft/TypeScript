@@ -1278,19 +1278,6 @@ namespace ts {
         });
     }
 
-    export function getDeclaredName(typeChecker: TypeChecker, symbol: Symbol, location: Node): string {
-        // If this is an export or import specifier it could have been renamed using the 'as' syntax.
-        // If so we want to search for whatever is under the cursor.
-        if (isImportOrExportSpecifierName(location) || isStringOrNumericLiteral(location) && location.parent.kind === SyntaxKind.ComputedPropertyName) {
-            return getTextOfIdentifierOrLiteral(location);
-        }
-
-        // Try to get the local symbol if we're dealing with an 'export default'
-        // since that symbol has the "true" name.
-        const localExportDefaultSymbol = getLocalSymbolForExportDefault(symbol);
-        return typeChecker.symbolToString(localExportDefaultSymbol || symbol);
-    }
-
     export function isImportOrExportSpecifierName(location: Node): location is Identifier {
         return location.parent &&
             (location.parent.kind === SyntaxKind.ImportSpecifier || location.parent.kind === SyntaxKind.ExportSpecifier) &&
