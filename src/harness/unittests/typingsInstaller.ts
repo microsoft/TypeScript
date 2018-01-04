@@ -1,6 +1,10 @@
 /// <reference path="../harness.ts" />
 /// <reference path="./tsserverProjectSystem.ts" />
-/// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
+/// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />import { deepEqual } from "assert";import { deepEqual } from "assert";
+
+
+
+
 
 namespace ts.projectSystem {
     import TI = server.typingsInstaller;
@@ -1117,6 +1121,7 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(p, [file1.path, jquery.path]);
+            assert(host.readFile(timestamps.path) !== JSON.stringify({ entries: { "@types/jquery": date.getTime() } }), "timestamps content should be updated");
         });
 
         it("non-expired cache entry (inferred project, should not install typings)", () => {
