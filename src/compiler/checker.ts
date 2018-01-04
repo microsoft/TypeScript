@@ -2862,7 +2862,7 @@ namespace ts {
                     }
                     if (resolvedType.stringIndexInfo) {
                         const indexInfo = resolvedType.objectFlags & ObjectFlags.Deferred ?
-                            createIndexInfo(emptyObjectType, resolvedType.stringIndexInfo.isReadonly, resolvedType.stringIndexInfo.declaration) :
+                            createIndexInfo(anyType, resolvedType.stringIndexInfo.isReadonly, resolvedType.stringIndexInfo.declaration) :
                             resolvedType.stringIndexInfo;
                         typeElements.push(indexInfoToIndexSignatureDeclarationHelper(indexInfo, IndexKind.String, context));
                     }
@@ -2876,7 +2876,7 @@ namespace ts {
                     }
 
                     for (const propertySymbol of properties) {
-                        const propertyType = getCheckFlags(propertySymbol) & CheckFlags.Deferred ? emptyObjectType : getTypeOfSymbol(propertySymbol);
+                        const propertyType = getCheckFlags(propertySymbol) & CheckFlags.Deferred ? anyType : getTypeOfSymbol(propertySymbol);
                         const saveEnclosingDeclaration = context.enclosingDeclaration;
                         context.enclosingDeclaration = undefined;
                         const propertyName = symbolToName(propertySymbol, context, SymbolFlags.Value, /*expectsIdentifier*/ true);
@@ -3686,7 +3686,7 @@ namespace ts {
                         writer.writeLine();
                     }
                     const stringIndexInfo = resolved.objectFlags & ObjectFlags.Deferred && resolved.stringIndexInfo ?
-                        createIndexInfo(emptyObjectType, resolved.stringIndexInfo.isReadonly, resolved.stringIndexInfo.declaration) :
+                        createIndexInfo(anyType, resolved.stringIndexInfo.isReadonly, resolved.stringIndexInfo.declaration) :
                         resolved.stringIndexInfo;
                     buildIndexSignatureDisplay(stringIndexInfo, writer, IndexKind.String, enclosingDeclaration, globalFlags, symbolStack);
                     buildIndexSignatureDisplay(resolved.numberIndexInfo, writer, IndexKind.Number, enclosingDeclaration, globalFlags, symbolStack);
@@ -3699,7 +3699,7 @@ namespace ts {
                                 writer.reportPrivateInBaseOfClassExpression(symbolName(p));
                             }
                         }
-                        const t = getCheckFlags(p) & CheckFlags.Deferred ? emptyObjectType : getTypeOfSymbol(p);
+                        const t = getCheckFlags(p) & CheckFlags.Deferred ? anyType : getTypeOfSymbol(p);
                         if (p.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(t).length) {
                             const signatures = getSignaturesOfType(t, SignatureKind.Call);
                             for (const signature of signatures) {

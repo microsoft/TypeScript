@@ -1793,16 +1793,16 @@ declare function on<T>(handlerHash: Handlers<T>): T
 >T : T
 
 var hashOfEmpty1 = on({ test: () => {} });  // {}
->hashOfEmpty1 : { test: {}; }
->on({ test: () => {} }) : { test: {}; }
+>hashOfEmpty1 : { test: any; }
+>on({ test: () => {} }) : { test: any; }
 >on : <T>(handlerHash: Handlers<T>) => T
 >{ test: () => {} } : { test: () => void; }
 >test : () => void
 >() => {} : () => void
 
 var hashOfEmpty2 = on({ test: (x: boolean) => {} });  // { test: boolean }
->hashOfEmpty2 : { test: {}; }
->on({ test: (x: boolean) => {} }) : { test: {}; }
+>hashOfEmpty2 : { test: any; }
+>on({ test: (x: boolean) => {} }) : { test: any; }
 >on : <T>(handlerHash: Handlers<T>) => T
 >{ test: (x: boolean) => {} } : { test: (x: boolean) => void; }
 >test : (x: boolean) => void

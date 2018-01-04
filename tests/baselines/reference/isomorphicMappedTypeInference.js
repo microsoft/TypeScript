@@ -310,11 +310,11 @@ declare type Spec<T> = {
  */
 declare function applySpec<T>(obj: Spec<T>): (...args: any[]) => T;
 declare var g1: (...args: any[]) => {
-    sum: {};
-    nested: {};
+    sum: any;
+    nested: any;
 };
 declare var g2: (...args: any[]) => {
-    foo: {};
+    foo: any;
 };
 declare const foo: <T>(object: T, partial: Partial<T>) => T;
 declare let o: {

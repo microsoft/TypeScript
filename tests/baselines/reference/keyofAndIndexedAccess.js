@@ -1102,10 +1102,10 @@ declare type Handlers<T> = {
 };
 declare function on<T>(handlerHash: Handlers<T>): T;
 declare var hashOfEmpty1: {
-    test: {};
+    test: any;
 };
 declare var hashOfEmpty2: {
-    test: {};
+    test: any;
 };
 interface Options1<Data, Computed> {
     data?: Data;
