@@ -2,10 +2,6 @@
 /// <reference path="./tsserverProjectSystem.ts" />
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 
-
-
-
-
 namespace ts.projectSystem {
     import TI = server.typingsInstaller;
     import validatePackageName = JsTyping.validatePackageName;
