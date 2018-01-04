@@ -1,4 +1,4 @@
-tests/cases/compiler/classImplementsClass4.ts(5,7): error TS2420: Class 'C' incorrectly implements interface 'A'.
+tests/cases/compiler/classImplementsClass4.ts(5,7): error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
   Property 'x' is missing in type 'C'.
 tests/cases/compiler/classImplementsClass4.ts(16,1): error TS2322: Type 'C' is not assignable to type 'C2'.
   Property 'x' is missing in type 'C'.
@@ -11,8 +11,8 @@ tests/cases/compiler/classImplementsClass4.ts(16,1): error TS2322: Type 'C' is n
     }
     class C implements A {
           ~
-!!! error TS2420: Class 'C' incorrectly implements interface 'A'.
-!!! error TS2420:   Property 'x' is missing in type 'C'.
+!!! error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
+!!! error TS2720:   Property 'x' is missing in type 'C'.
         foo() {
             return 1;
         }

@@ -3,6 +3,7 @@
 /* @internal */
 namespace ts {
     export const emptyArray: never[] = [] as never[];
+    export const resolvingEmptyArray: never[] = [] as never[];
     export const emptyMap: ReadonlyMap<never> = createMap<never>();
 
     export const externalHelpersModuleNameText = "tslib";
@@ -5231,6 +5232,18 @@ namespace ts {
 
     export function isAccessor(node: Node): node is AccessorDeclaration {
         return node && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor);
+    }
+
+    /* @internal */
+    export function isMethodOrAccessor(node: Node): node is MethodDeclaration | AccessorDeclaration {
+        switch (node.kind) {
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return true;
+            default:
+                return false;
+        }
     }
 
     // Type members

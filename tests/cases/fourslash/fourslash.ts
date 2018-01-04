@@ -122,7 +122,8 @@ declare namespace FourSlashInterface {
     }
     class goTo {
         marker(name?: string | Marker): void;
-        eachMarker(action: () => void): void;
+        eachMarker(markers: ReadonlyArray<string>, action: (marker: Marker, index: number) => void): void;
+        eachMarker(action: (marker: Marker, index: number) => void): void;
         rangeStart(range: Range): void;
         eachRange(action: () => void): void;
         bof(): void;

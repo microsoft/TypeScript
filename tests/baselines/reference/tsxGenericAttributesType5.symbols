@@ -34,12 +34,11 @@ class B<U> extends React.Component<U, {}> {
     render() {
 >render : Symbol(B.render, Decl(file.tsx, 8, 13))
 
-        // Should be an ok but as of 2.3.3 this will be an error as we will instantiate B1.props to be empty object
         return <B1 {...this.props} x="hi" />;
 >B1 : Symbol(B1, Decl(file.tsx, 0, 32))
 >this.props : Symbol(B.props, Decl(file.tsx, 7, 43))
 >this : Symbol(B, Decl(file.tsx, 6, 1))
 >props : Symbol(B.props, Decl(file.tsx, 7, 43))
->x : Symbol(x, Decl(file.tsx, 11, 34))
+>x : Symbol(x, Decl(file.tsx, 10, 34))
     }
 }

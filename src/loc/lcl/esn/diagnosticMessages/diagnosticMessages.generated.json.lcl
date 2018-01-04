@@ -427,7 +427,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un inicializador de miembro de una declaración enum no puede hacer referencia a los miembros que se declaran después de este, incluidos aquellos definidos en otras enumeraciones.]]></Val>
+            <Val><![CDATA[Un inicializador de miembro de una declaración de enumeración no puede hacer referencia a los miembros que se declaran después de este, incluidos aquellos definidos en otras enumeraciones.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -436,7 +436,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A mixin class must have a constructor with a single rest parameter of type 'any[]5D;'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una clase mixin debe tener un constructor con un parámetro de REST sencillo del tipo "any[]5D;".]]></Val>
+            <Val><![CDATA[Una clase mixin debe tener un constructor con un solo parámetro rest de tipo "any[]5D;"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -523,7 +523,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A path in an 'extends' option must be relative or rooted, but '{0}' is not.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una ruta de acceso en una opción "extiende" debe ser relativa o raíz, pero no '{0}'.]]></Val>
+            <Val><![CDATA[Una ruta de acceso en una opción "extiende" debe ser relativa o raíz, pero no "{0}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1069,7 +1069,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An arithmetic operand must be of type 'any', 'number' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un operando aritmético debe ser de tipo "any", "number" o de tipo enum.]]></Val>
+            <Val><![CDATA[Un operando aritmético debe ser de tipo "any", "number" o un tipo de enumeración.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1420,7 +1420,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Argument for '{0}' option must be: {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El argumento para la opción '{0}' debe ser: {1}.]]></Val>
+            <Val><![CDATA[El argumento para la opción "{0}" debe ser {1}.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Argument for '{0}' option must be: {1}]]></Val>
@@ -1432,7 +1432,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Argument of type '{0}' is not assignable to parameter of type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No se puede asignar un argumento de tipo '{0}' al parámetro de tipo '{1}'.]]></Val>
+            <Val><![CDATA[No se puede asignar un argumento de tipo "{0}" al parámetro de tipo "{1}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2076,6 +2076,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[La clase '{0}' extiende la clase base '{1}' de forma incorrecta.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclas_2720" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class '{0}' incorrectly implements class '{1}'. Did you mean to extend '{1}' and inherit its members as a subclass?]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2935,7 +2941,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum declarations must all be const or non-const.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Todas las declaraciones enum deben ser de tipo const o no const.]]></Val>
+            <Val><![CDATA[Todas las declaraciones de enumeración deben ser de tipo const o no const.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2974,7 +2980,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum type '{0}' has members with initializers that are not literals.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tipo enum '{0}' tiene miembros con inicializadores que no son literales.]]></Val>
+            <Val><![CDATA[El tipo de enumeración "{0}" tiene miembros con inicializadores que no son literales.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3465,15 +3471,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0_5011" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La especificación de archivo no puede contener varios comodines de directorio recursivo ('**'): '{0}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0_5010" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[File specification cannot end in a recursive directory wildcard ('**'): '{0}'.]]></Val>
@@ -3904,7 +3901,7 @@
         <Str Cat="Text">
           <Val><![CDATA[In ambient enum declarations member initializer must be constant expression.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[En las declaraciones enum de ambiente, el inicializador de miembro debe ser una expresión constante.]]></Val>
+            <Val><![CDATA[En las declaraciones de enumeración de ambiente, el inicializador de miembro debe ser una expresión constante.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6970,7 +6967,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La parte izquierda de una operación aritmética debe ser de tipo "any", "number" o un tipo enum.]]></Val>
+            <Val><![CDATA[La parte izquierda de una operación aritmética debe ser de tipo "any", "number" o un tipo de enumeración.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7108,7 +7105,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La parte derecha de una operación aritmética debe ser de tipo "any", "number" o un tipo enum.]]></Val>
+            <Val><![CDATA[La parte derecha de una operación aritmética debe ser de tipo "any", "number" o un tipo de enumeración.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
