@@ -17,40 +17,40 @@
 //// oub.b.a.n.a.n.a/*10*/
 
 verify.quickInfoAt('1', `const out: {
-    a: {};
+    a: any;
 }`);
 verify.quickInfoAt('2', `function foo<{
-    a: {};
+    a: any;
 }>(deep: Deep<{
-    a: {};
+    a: any;
 }>): {
-    a: {};
+    a: any;
 }`);
 verify.quickInfoAt('3', `(property) a: {
-    a: {};
+    a: any;
 }`);
 verify.quickInfoAt('4', `(property) a: {
-    a: {};
+    a: any;
 }`);
 verify.quickInfoAt('5', `(property) a: {
-    a: {};
+    a: any;
 }`);
 verify.quickInfoAt('6', `const oub: {
-    [x: string]: {};
+    [x: string]: any;
 }`);
 verify.quickInfoAt('7', `function foo<{
-    [x: string]: {};
+    [x: string]: any;
 }>(deep: Deep<{
-    [x: string]: {};
+    [x: string]: any;
 }>): {
-    [x: string]: {};
+    [x: string]: any;
 }`);
 verify.quickInfoAt('8', `{
-    [x: string]: {};
+    [x: string]: any;
 }`);
 verify.quickInfoAt('9', `{
-    [x: string]: {};
+    [x: string]: any;
 }`);
 verify.quickInfoAt('10', `{
-    [x: string]: {};
+    [x: string]: any;
 }`);
