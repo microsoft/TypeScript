@@ -2860,7 +2860,7 @@ namespace ts {
                     for (const signature of resolvedType.constructSignatures) {
                         typeElements.push(<ConstructSignatureDeclaration>signatureToSignatureDeclarationHelper(signature, SyntaxKind.ConstructSignature, context));
                     }
-                    if (resolvedType.stringIndexInfo && !(resolvedType.objectFlags & ObjectFlags.Deferred)) {
+                    if (resolvedType.stringIndexInfo) {
                         const indexInfo = resolvedType.objectFlags & ObjectFlags.Deferred ?
                             createIndexInfo(emptyObjectType, resolvedType.stringIndexInfo.isReadonly, resolvedType.stringIndexInfo.declaration) :
                             resolvedType.stringIndexInfo;

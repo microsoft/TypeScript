@@ -71,37 +71,37 @@ declare let b: B;
 >B : B
 
 const oub = foo(b);
->oub : {}
->foo(b) : {}
+>oub : { [x: string]: {}; }
+>foo(b) : { [x: string]: {}; }
 >foo : <T>(deep: Deep<T>) => T
 >b : B
 
 oub.b
->oub.b : {}
->oub : {}
->b : {}
+>oub.b : { [x: string]: {}; }
+>oub : { [x: string]: {}; }
+>b : { [x: string]: {}; }
 
 oub.b.b
->oub.b.b : {}
->oub.b : {}
->oub : {}
->b : {}
->b : {}
+>oub.b.b : { [x: string]: {}; }
+>oub.b : { [x: string]: {}; }
+>oub : { [x: string]: {}; }
+>b : { [x: string]: {}; }
+>b : { [x: string]: {}; }
 
 oub.b.a.n.a.n.a
->oub.b.a.n.a.n.a : {}
->oub.b.a.n.a.n : {}
->oub.b.a.n.a : {}
->oub.b.a.n : {}
->oub.b.a : {}
->oub.b : {}
->oub : {}
->b : {}
->a : {}
->n : {}
->a : {}
->n : {}
->a : {}
+>oub.b.a.n.a.n.a : { [x: string]: {}; }
+>oub.b.a.n.a.n : { [x: string]: {}; }
+>oub.b.a.n.a : { [x: string]: {}; }
+>oub.b.a.n : { [x: string]: {}; }
+>oub.b.a : { [x: string]: {}; }
+>oub.b : { [x: string]: {}; }
+>oub : { [x: string]: {}; }
+>b : { [x: string]: {}; }
+>a : { [x: string]: {}; }
+>n : { [x: string]: {}; }
+>a : { [x: string]: {}; }
+>n : { [x: string]: {}; }
+>a : { [x: string]: {}; }
 
 let xhr: XMLHttpRequest;
 >xhr : XMLHttpRequest
