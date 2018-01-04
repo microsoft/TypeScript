@@ -5,7 +5,8 @@ class Employee {
     private get fullName(): string {
         return this._fullName;
     }
-    private set setter(_: string) {}
+    // Will not also error on the setter
+    private set fullName(_: string) {}
 }
 
 //// [unusedGetterInClass.js]
@@ -16,10 +17,7 @@ var Employee = /** @class */ (function () {
         get: function () {
             return this._fullName;
         },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Employee.prototype, "setter", {
+        // Will not also error on the setter
         set: function (_) { },
         enumerable: true,
         configurable: true

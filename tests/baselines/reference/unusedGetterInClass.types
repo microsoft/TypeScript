@@ -13,7 +13,8 @@ class Employee {
 >this : this
 >_fullName : string
     }
-    private set setter(_: string) {}
->setter : string
+    // Will not also error on the setter
+    private set fullName(_: string) {}
+>fullName : string
 >_ : string
 }

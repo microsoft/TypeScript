@@ -6,14 +6,15 @@ class Employee {
 >_fullName : Symbol(Employee._fullName, Decl(unusedGetterInClass.ts, 0, 16))
 
     private get fullName(): string {
->fullName : Symbol(Employee.fullName, Decl(unusedGetterInClass.ts, 1, 30))
+>fullName : Symbol(Employee.fullName, Decl(unusedGetterInClass.ts, 1, 30), Decl(unusedGetterInClass.ts, 5, 5))
 
         return this._fullName;
 >this._fullName : Symbol(Employee._fullName, Decl(unusedGetterInClass.ts, 0, 16))
 >this : Symbol(Employee, Decl(unusedGetterInClass.ts, 0, 0))
 >_fullName : Symbol(Employee._fullName, Decl(unusedGetterInClass.ts, 0, 16))
     }
-    private set setter(_: string) {}
->setter : Symbol(Employee.setter, Decl(unusedGetterInClass.ts, 5, 5))
->_ : Symbol(_, Decl(unusedGetterInClass.ts, 6, 23))
+    // Will not also error on the setter
+    private set fullName(_: string) {}
+>fullName : Symbol(Employee.fullName, Decl(unusedGetterInClass.ts, 1, 30), Decl(unusedGetterInClass.ts, 5, 5))
+>_ : Symbol(_, Decl(unusedGetterInClass.ts, 7, 25))
 }

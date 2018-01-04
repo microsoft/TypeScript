@@ -8,5 +8,6 @@ class Employee {
     private get fullName(): string {
         return this._fullName;
     }
-    private set setter(_: string) {}
+    // Will not also error on the setter
+    private set fullName(_: string) {}
 }
