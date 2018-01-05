@@ -2704,6 +2704,11 @@ declare namespace ts {
 }
 declare namespace ts {
     function isExternalModuleNameRelative(moduleName: string): boolean;
+    interface FileSystemEntries {
+        readonly files: ReadonlyArray<string>;
+        readonly directories: ReadonlyArray<string>;
+    }
+    function matchFiles(path: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string>, includes: ReadonlyArray<string>, useCaseSensitiveFileNames: boolean, currentDirectory: string, depth: number | undefined, getFileSystemEntries: (path: string) => FileSystemEntries): string[];
 }
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
