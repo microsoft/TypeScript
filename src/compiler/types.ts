@@ -3225,7 +3225,7 @@ namespace ts {
         bindingElement?: BindingElement;    // Binding element associated with property symbol
         exportsSomeValue?: boolean;         // True if module exports some value (not just types)
         enumKind?: EnumKind;                // Enum declaration classification
-        originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is poisoned
+        originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
     }
 
