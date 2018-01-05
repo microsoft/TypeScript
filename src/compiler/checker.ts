@@ -16035,26 +16035,26 @@ namespace ts {
         }
 
         function markPropertyAsReferenced(prop: Symbol, nodeForCheckWriteOnly: Node | undefined, isThisAccess: boolean) {
-            if (prop &&
-                noUnusedIdentifiers &&
-                (prop.flags & SymbolFlags.ClassMember) &&
-                prop.valueDeclaration && hasModifier(prop.valueDeclaration, ModifierFlags.Private)
-                && !(nodeForCheckWriteOnly && isWriteOnlyAccess(nodeForCheckWriteOnly))) {
+            if (!prop || !noUnusedIdentifiers || !(prop.flags & SymbolFlags.ClassMember) || !prop.valueDeclaration || !hasModifier(prop.valueDeclaration, ModifierFlags.Private)) {
+                return;
+            }
+            if (nodeForCheckWriteOnly && isWriteOnlyAccess(nodeForCheckWriteOnly) && !(prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor))) {
+                return;
+            }
 
-                if (isThisAccess) {
-                    // Find any FunctionLikeDeclaration because those create a new 'this' binding. But this should only matter for methods (or getters/setters).
-                    const containingMethod = findAncestor(nodeForCheckWriteOnly, isFunctionLikeDeclaration);
-                    if (containingMethod && containingMethod.symbol === prop) {
-                        return;
-                    }
+            if (isThisAccess) {
+                // Find any FunctionLikeDeclaration because those create a new 'this' binding. But this should only matter for methods (or getters/setters).
+                const containingMethod = findAncestor(nodeForCheckWriteOnly, isFunctionLikeDeclaration);
+                if (containingMethod && containingMethod.symbol === prop) {
+                    return;
                 }
+            }
 
-                if (getCheckFlags(prop) & CheckFlags.Instantiated) {
-                    getSymbolLinks(prop).target.isReferenced = true;
-                }
-                else {
-                    prop.isReferenced = true;
-                }
+            if (getCheckFlags(prop) & CheckFlags.Instantiated) {
+                getSymbolLinks(prop).target.isReferenced = true;
+            }
+            else {
+                prop.isReferenced = true;
             }
         }
 
@@ -21223,18 +21223,32 @@ namespace ts {
             if (compilerOptions.noUnusedLocals && !(node.flags & NodeFlags.Ambient)) {
                 if (node.members) {
                     for (const member of node.members) {
-                        if (member.kind === SyntaxKind.MethodDeclaration || member.kind === SyntaxKind.PropertyDeclaration) {
-                            const symbol = getSymbolOfNode(member);
-                            if (!symbol.isReferenced && hasModifier(member, ModifierFlags.Private)) {
-                                error(member.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolToString(symbol));
-                            }
-                        }
-                        else if (member.kind === SyntaxKind.Constructor) {
-                            for (const parameter of (<ConstructorDeclaration>member).parameters) {
-                                if (!parameter.symbol.isReferenced && hasModifier(parameter, ModifierFlags.Private)) {
-                                    error(parameter.name, Diagnostics.Property_0_is_declared_but_its_value_is_never_read, symbolName(parameter.symbol));
+                        switch (member.kind) {
+                            case SyntaxKind.MethodDeclaration:
+                            case SyntaxKind.PropertyDeclaration:
+                            case SyntaxKind.GetAccessor:
+                            case SyntaxKind.SetAccessor:
+                                if (member.kind === SyntaxKind.SetAccessor && member.symbol.flags & SymbolFlags.GetAccessor) {
+                                    // Already would have reported an error on the getter.
+                                    break;
                                 }
-                            }
+                                const symbol = getSymbolOfNode(member);
+                                if (!symbol.isReferenced && hasModifier(member, ModifierFlags.Private)) {
+                                    error(member.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolToString(symbol));
+                                }
+                                break;
+                            case SyntaxKind.Constructor:
+                                for (const parameter of (<ConstructorDeclaration>member).parameters) {
+                                    if (!parameter.symbol.isReferenced && hasModifier(parameter, ModifierFlags.Private)) {
+                                        error(parameter.name, Diagnostics.Property_0_is_declared_but_its_value_is_never_read, symbolName(parameter.symbol));
+                                    }
+                                }
+                                break;
+                            case SyntaxKind.IndexSignature:
+                                // Can't be private
+                                break;
+                            default:
+                                Debug.fail();
                         }
                     }
                 }
