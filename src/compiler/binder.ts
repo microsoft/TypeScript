@@ -746,11 +746,11 @@ namespace ts {
         }
 
         function isNarrowingTypeofOperands(expr1: Expression, expr2: Expression) {
-            return expr1.kind === SyntaxKind.TypeOfExpression && isNarrowableOperand((<TypeOfExpression>expr1).expression) && expr2.kind === SyntaxKind.StringLiteral;
+            return expr1.kind === SyntaxKind.TypeOfExpression && isNarrowableOperand((<TypeOfExpression>expr1).expression) && (expr2.kind === SyntaxKind.StringLiteral || expr2.kind === SyntaxKind.NoSubstitutionTemplateLiteral);
         }
 
         function isNarrowableInOperands(left: Expression, right: Expression) {
-            return left.kind === SyntaxKind.StringLiteral && isNarrowingExpression(right);
+            return (left.kind === SyntaxKind.StringLiteral || left.kind === SyntaxKind.NoSubstitutionTemplateLiteral) && isNarrowingExpression(right);
         }
 
         function isNarrowingBinaryExpression(expr: BinaryExpression) {
