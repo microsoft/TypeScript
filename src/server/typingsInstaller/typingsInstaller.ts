@@ -19,8 +19,6 @@ namespace ts.server.typingsInstaller {
         writeLine: noop
     };
 
-    const timestampsFileName = "timestamps.json";
-
     function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost, log: Log): string {
         try {
             const result = resolveModuleName(packageName, combinePaths(cachePath, "index.d.ts"), { moduleResolution: ModuleResolutionKind.NodeJs }, installTypingHost);
@@ -43,12 +41,14 @@ namespace ts.server.typingsInstaller {
         onRequestCompleted: RequestCompletedAction;
     }
 
+    const timestampsFileName = "timestamps.json";
+    type TypingsTimestamps = MapLike<number>;
     interface TypeDeclarationTimestampFile {
         // entries maps from package names (e.g. "@types/node") to timestamp values (as produced by Date#getTime)
-        entries: MapLike<number>;
+        entries: TypingsTimestamps;
     }
 
-    function loadTypeDeclarationTimestampFile(typeDeclarationTimestampFilePath: string, host: InstallTypingHost, log: Log): MapLike<number> {
+    function loadTypeDeclarationTimestampFile(typeDeclarationTimestampFilePath: string, host: InstallTypingHost, log: Log): TypingsTimestamps {
         try {
             if (log.isEnabled()) {
                 log.writeLine("Loading type declaration timestamp file.");
@@ -82,11 +82,10 @@ namespace ts.server.typingsInstaller {
     export abstract class TypingsInstaller {
         private readonly packageNameToTypingLocation: Map<JsTyping.CachedTyping> = createMap<JsTyping.CachedTyping>();
         private readonly missingTypingsSet: Map<true> = createMap<true>();
-        private readonly knownCachesSet: Map<true> = createMap<true>();
+        private readonly knownCacheToTimestamps: Map<TypingsTimestamps> = createMap<TypingsTimestamps>();
         private readonly projectWatchers: Map<FileWatcher[]> = createMap<FileWatcher[]>();
         private safeList: JsTyping.SafeList | undefined;
         readonly pendingRunRequests: PendingRequest[] = [];
-        private globalTypeDeclarationTimestamps: MapLike<number> = {};
 
         private installRunCount = 1;
         private inFlightRequestCount = 0;
@@ -103,7 +102,7 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Global cache location '${globalCachePath}', safe file path '${safeListPath}', types map path ${typesMapLocation}`);
             }
-            this.globalTypeDeclarationTimestamps = this.processCacheLocation(this.globalCachePath);
+            this.processCacheLocation(this.globalCachePath);
         }
 
         closeProject(req: CloseProject) {
@@ -139,12 +138,11 @@ namespace ts.server.typingsInstaller {
 
             // load existing typing information from the cache
             const timestampsFilePath = combinePaths(req.cachePath || this.globalCachePath, timestampsFileName);
-            let localTimestamps: MapLike<number>;
             if (req.cachePath) {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Request specifies cache path '${req.cachePath}', loading cached information...`);
                 }
-                localTimestamps = this.processCacheLocation(req.cachePath, timestampsFilePath);
+                this.processCacheLocation(req.cachePath, timestampsFilePath);
             }
 
             if (this.safeList === undefined) {
@@ -169,7 +167,7 @@ namespace ts.server.typingsInstaller {
 
             // install typings
             if (discoverTypingsResult.newTypingNames.length) {
-                this.installTypings(req, req.cachePath || this.globalCachePath, discoverTypingsResult.cachedTypingPaths, discoverTypingsResult.newTypingNames, timestampsFilePath, localTimestamps || this.globalTypeDeclarationTimestamps);
+                this.installTypings(req, req.cachePath || this.globalCachePath, discoverTypingsResult.cachedTypingPaths, discoverTypingsResult.newTypingNames, timestampsFilePath);
             }
             else {
                 this.sendResponse(this.createSetTypings(req, discoverTypingsResult.cachedTypingPaths));
@@ -193,17 +191,17 @@ namespace ts.server.typingsInstaller {
             this.safeList = JsTyping.loadSafeList(this.installTypingHost, this.safeListPath);
         }
 
-        private processCacheLocation(cacheLocation: string, timestampsFilePath?: string): MapLike<number> {
+        private processCacheLocation(cacheLocation: string, timestampsFilePath?: string) {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Processing cache location '${cacheLocation}'`);
             }
-            if (this.knownCachesSet.get(cacheLocation)) {
+            if (this.knownCacheToTimestamps.has(cacheLocation)) {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Cache location was already processed...`);
                 }
                 return;
             }
-            const typeDeclarationTimestamps: MapLike<number> = loadTypeDeclarationTimestampFile(timestampsFilePath || combinePaths(cacheLocation, timestampsFileName), this.installTypingHost, this.log);
+            const typeDeclarationTimestamps = loadTypeDeclarationTimestampFile(timestampsFilePath || combinePaths(cacheLocation, timestampsFileName), this.installTypingHost, this.log);
             const packageJson = combinePaths(cacheLocation, "package.json");
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Trying to find '${packageJson}'...`);
@@ -256,8 +254,7 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Finished processing cache location '${cacheLocation}'`);
             }
-            this.knownCachesSet.set(cacheLocation, true);
-            return typeDeclarationTimestamps;
+            this.knownCacheToTimestamps.set(cacheLocation, typeDeclarationTimestamps);
         }
 
         private filterTypings(typingsToInstall: ReadonlyArray<string>): ReadonlyArray<string> {
@@ -299,7 +296,7 @@ namespace ts.server.typingsInstaller {
             }
         }
 
-        private installTypings(req: DiscoverTypings, cachePath: string, currentlyCachedTypings: string[], typingsToInstall: string[], timestampsFilePath: string, typeDeclarationTimestamps: MapLike<number>) {
+        private installTypings(req: DiscoverTypings, cachePath: string, currentlyCachedTypings: string[], typingsToInstall: string[], timestampsFilePath: string) {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Installing typings ${JSON.stringify(typingsToInstall)}`);
             }
@@ -342,6 +339,7 @@ namespace ts.server.typingsInstaller {
                     if (this.log.isEnabled()) {
                         this.log.writeLine(`Installed typings ${JSON.stringify(scopedTypings)}`);
                     }
+                    const typeDeclarationTimestamps = this.knownCacheToTimestamps.get(cachePath);
                     const installedTypingFiles: string[] = [];
                     const typesPackageName = (packageName: string) => `@types/${packageName}`;
                     for (const packageName of filteredTypings) {
@@ -363,6 +361,7 @@ namespace ts.server.typingsInstaller {
 
                     const newFileContents: TypeDeclarationTimestampFile = { entries: typeDeclarationTimestamps };
                     writeTypeDeclarationTimestampFile(timestampsFilePath, newFileContents, this.installTypingHost, this.log);
+                    this.knownCacheToTimestamps.set(cachePath, typeDeclarationTimestamps);
 
                     this.sendResponse(this.createSetTypings(req, currentlyCachedTypings.concat(installedTypingFiles)));
                 }
