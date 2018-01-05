@@ -1,14 +1,10 @@
-tests/cases/compiler/genericSpecializations2.ts(7,7): error TS2720: Class 'IntFooBad' incorrectly implements class 'IFoo<number>'. Did you mean to extend 'IFoo<number>' and inherit its members as a subclass?
-  Types of property 'foo' are incompatible.
-    Type '<string>(x: string) => string' is not assignable to type '<T>(x: T) => T'.
-      Types of parameters 'x' and 'x' are incompatible.
-        Type 'T' is not assignable to type 'string'.
+tests/cases/compiler/genericSpecializations2.ts(8,5): error TS2421: Class member of type '<string>(x: string) => string' is not assignable to implementing interface member of type '<T>(x: T) => T'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'T' is not assignable to type 'string'.
 tests/cases/compiler/genericSpecializations2.ts(8,9): error TS2368: Type parameter name cannot be 'string'.
-tests/cases/compiler/genericSpecializations2.ts(11,7): error TS2720: Class 'StringFoo2' incorrectly implements class 'IFoo<string>'. Did you mean to extend 'IFoo<string>' and inherit its members as a subclass?
-  Types of property 'foo' are incompatible.
-    Type '<string>(x: string) => string' is not assignable to type '<T>(x: T) => T'.
-      Types of parameters 'x' and 'x' are incompatible.
-        Type 'T' is not assignable to type 'string'.
+tests/cases/compiler/genericSpecializations2.ts(12,5): error TS2421: Class member of type '<string>(x: string) => string' is not assignable to implementing interface member of type '<T>(x: T) => T'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'T' is not assignable to type 'string'.
 tests/cases/compiler/genericSpecializations2.ts(12,9): error TS2368: Type parameter name cannot be 'string'.
 
 
@@ -20,25 +16,21 @@ tests/cases/compiler/genericSpecializations2.ts(12,9): error TS2368: Type parame
     }
     
     class IntFooBad implements IFoo<number> {
-          ~~~~~~~~~
-!!! error TS2720: Class 'IntFooBad' incorrectly implements class 'IFoo<number>'. Did you mean to extend 'IFoo<number>' and inherit its members as a subclass?
-!!! error TS2720:   Types of property 'foo' are incompatible.
-!!! error TS2720:     Type '<string>(x: string) => string' is not assignable to type '<T>(x: T) => T'.
-!!! error TS2720:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2720:         Type 'T' is not assignable to type 'string'.
         foo<string>(x: string): string { return null; }
+        ~~~
+!!! error TS2421: Class member of type '<string>(x: string) => string' is not assignable to implementing interface member of type '<T>(x: T) => T'.
+!!! error TS2421:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2421:     Type 'T' is not assignable to type 'string'.
             ~~~~~~
 !!! error TS2368: Type parameter name cannot be 'string'.
     }
     
     class StringFoo2 implements IFoo<string> {
-          ~~~~~~~~~~
-!!! error TS2720: Class 'StringFoo2' incorrectly implements class 'IFoo<string>'. Did you mean to extend 'IFoo<string>' and inherit its members as a subclass?
-!!! error TS2720:   Types of property 'foo' are incompatible.
-!!! error TS2720:     Type '<string>(x: string) => string' is not assignable to type '<T>(x: T) => T'.
-!!! error TS2720:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2720:         Type 'T' is not assignable to type 'string'.
         foo<string>(x: string): string { return null; }
+        ~~~
+!!! error TS2421: Class member of type '<string>(x: string) => string' is not assignable to implementing interface member of type '<T>(x: T) => T'.
+!!! error TS2421:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2421:     Type 'T' is not assignable to type 'string'.
             ~~~~~~
 !!! error TS2368: Type parameter name cannot be 'string'.
     }

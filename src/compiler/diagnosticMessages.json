@@ -1396,6 +1396,10 @@
         "category": "Error",
         "code": 2415
     },
+    "Class member of type '{0}' is not assignable to base class member of type '{1}'.": {
+        "category": "Error",
+        "code": 2416
+    },
     "Class static side '{0}' incorrectly extends base class static side '{1}'.": {
         "category": "Error",
         "code": 2417
@@ -1403,6 +1407,10 @@
     "Class '{0}' incorrectly implements interface '{1}'.": {
         "category": "Error",
         "code": 2420
+    },
+    "Class member of type '{0}' is not assignable to implementing interface member of type '{1}'.": {
+        "category": "Error",
+        "code": 2421
     },
     "A class may only implement another class or interface.": {
         "category": "Error",

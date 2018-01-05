@@ -1,21 +1,9 @@
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(12,7): error TS2415: Class 'B' incorrectly extends base class 'A'.
-  Types of property 'bar' are incompatible.
-    Type 'string' is not assignable to type 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(22,7): error TS2415: Class 'B2' incorrectly extends base class 'A2'.
-  Types of property '2.0' are incompatible.
-    Type 'string' is not assignable to type 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(32,7): error TS2415: Class 'B3' incorrectly extends base class 'A3'.
-  Types of property ''2.0'' are incompatible.
-    Type 'string' is not assignable to type 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(43,11): error TS2415: Class 'B' incorrectly extends base class 'A'.
-  Types of property 'bar' are incompatible.
-    Type 'string' is not assignable to type 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(53,11): error TS2415: Class 'B2' incorrectly extends base class 'A2'.
-  Types of property '2.0' are incompatible.
-    Type 'string' is not assignable to type 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(63,11): error TS2415: Class 'B3' incorrectly extends base class 'A3'.
-  Types of property ''2.0'' are incompatible.
-    Type 'string' is not assignable to type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(14,5): error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(24,5): error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(34,5): error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(45,9): error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(55,9): error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(65,9): error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts (6 errors) ====
@@ -31,12 +19,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     }
     
     class B extends A {
-          ~
-!!! error TS2415: Class 'B' incorrectly extends base class 'A'.
-!!! error TS2415:   Types of property 'bar' are incompatible.
-!!! error TS2415:     Type 'string' is not assignable to type 'Base'.
         foo: Derived; // ok
         bar: string; // error
+        ~~~
+!!! error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
     }
     
     class A2 {
@@ -45,12 +31,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     }
     
     class B2 extends A2 {
-          ~~
-!!! error TS2415: Class 'B2' incorrectly extends base class 'A2'.
-!!! error TS2415:   Types of property '2.0' are incompatible.
-!!! error TS2415:     Type 'string' is not assignable to type 'Base'.
         1: Derived; // ok
         2: string; // error
+        ~
+!!! error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
     }
     
     class A3 {
@@ -59,12 +43,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     }
     
     class B3 extends A3 {
-          ~~
-!!! error TS2415: Class 'B3' incorrectly extends base class 'A3'.
-!!! error TS2415:   Types of property ''2.0'' are incompatible.
-!!! error TS2415:     Type 'string' is not assignable to type 'Base'.
         '1': Derived; // ok
         '2.0': string; // error
+        ~~~~~
+!!! error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
     }
     
     module TwoLevels {
@@ -74,12 +56,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         }
     
         class B extends A {
-              ~
-!!! error TS2415: Class 'B' incorrectly extends base class 'A'.
-!!! error TS2415:   Types of property 'bar' are incompatible.
-!!! error TS2415:     Type 'string' is not assignable to type 'Base'.
             foo: Derived2; // ok
             bar: string; // error
+            ~~~
+!!! error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
         }
     
         class A2 {
@@ -88,12 +68,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         }
     
         class B2 extends A2 {
-              ~~
-!!! error TS2415: Class 'B2' incorrectly extends base class 'A2'.
-!!! error TS2415:   Types of property '2.0' are incompatible.
-!!! error TS2415:     Type 'string' is not assignable to type 'Base'.
             1: Derived2; // ok
             2: string; // error
+            ~
+!!! error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
         }
     
         class A3 {
@@ -102,11 +80,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         }
     
         class B3 extends A3 {
-              ~~
-!!! error TS2415: Class 'B3' incorrectly extends base class 'A3'.
-!!! error TS2415:   Types of property ''2.0'' are incompatible.
-!!! error TS2415:     Type 'string' is not assignable to type 'Base'.
             '1': Derived2; // ok
             '2.0': string; // error
+            ~~~~~
+!!! error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
         }
     }

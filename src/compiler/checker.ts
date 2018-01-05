@@ -22742,7 +22742,10 @@ namespace ts {
                             }
                         }
                     }
-                    checkTypeAssignableTo(typeWithThis, getTypeWithThisArgument(baseType, type.thisType), node.name || node, Diagnostics.Class_0_incorrectly_extends_base_class_1);
+                    const baseWithThis = getTypeWithThisArgument(baseType, type.thisType);
+                    if (!checkTypeAssignableTo(typeWithThis, baseWithThis, /*errorNode*/ undefined)) {
+                        issueMemberSpecificError(node, typeWithThis, baseWithThis, Diagnostics.Class_member_of_type_0_is_not_assignable_to_base_class_member_of_type_1, Diagnostics.Class_0_incorrectly_extends_base_class_1);
+                    }
                     checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
                         Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
                     if (baseConstructorType.flags & TypeFlags.TypeVariable && !isMixinConstructorType(staticType)) {
@@ -22774,12 +22777,13 @@ namespace ts {
                         const t = getTypeFromTypeNode(typeRefNode);
                         if (t !== unknownType) {
                             if (isValidBaseType(t)) {
-                                checkTypeAssignableTo(typeWithThis,
-                                    getTypeWithThisArgument(t, type.thisType),
-                                    node.name || node,
-                                    t.symbol && t.symbol.flags & SymbolFlags.Class ?
-                                        Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass :
-                                        Diagnostics.Class_0_incorrectly_implements_interface_1);
+                                const genericDiag = t.symbol && t.symbol.flags & SymbolFlags.Class ?
+                                    Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass :
+                                    Diagnostics.Class_0_incorrectly_implements_interface_1;
+                                const baseWithThis = getTypeWithThisArgument(t, type.thisType);
+                                if (!checkTypeAssignableTo(typeWithThis, baseWithThis, /*errorNode*/ undefined)) {
+                                    issueMemberSpecificError(node, typeWithThis, baseWithThis, Diagnostics.Class_member_of_type_0_is_not_assignable_to_implementing_interface_member_of_type_1, genericDiag);
+                                }
                             }
                             else {
                                 error(typeRefNode, Diagnostics.A_class_may_only_implement_another_class_or_interface);
@@ -22793,6 +22797,30 @@ namespace ts {
                 checkIndexConstraints(type);
                 checkTypeForDuplicateIndexSignatures(node);
                 checkPropertyInitialization(node);
+            }
+        }
+
+        function issueMemberSpecificError(node: ClassLikeDeclaration, typeWithThis: Type, baseWithThis: Type, specificDiag: DiagnosticMessage, broadDiag: DiagnosticMessage) {
+            // iterate over all implemented properties and issue errors on each one which isn't compatible, ratehr than the class as a whole, if possible
+            let issuedMemberError = false;
+            for (const member of node.members) {
+                if (hasStaticModifier(member)) {
+                    continue;
+                }
+                const declaredProp = member.name && getSymbolAtLocation(member.name) || getSymbolAtLocation(member);
+                if (declaredProp) {
+                    const prop = getPropertyOfType(typeWithThis, declaredProp.escapedName);
+                    const baseProp = getPropertyOfType(baseWithThis, declaredProp.escapedName);
+                    if (prop && baseProp) {
+                        if (!checkTypeAssignableTo(getTypeOfSymbol(prop), getTypeOfSymbol(baseProp), member.name || member, specificDiag)) {
+                            issuedMemberError = true;
+                        }
+                    }
+                }
+            }
+            if (!issuedMemberError) {
+                // check again with diagnostics to generate a less-specific error
+                checkTypeAssignableTo(typeWithThis, baseWithThis, node.name || node, broadDiag);
             }
         }
 
