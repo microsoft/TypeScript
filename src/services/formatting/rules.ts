@@ -198,7 +198,7 @@ namespace ts.formatting {
                 RuleAction.Delete),
 
             // decorators
-            rule("SpaceBeforeAt", anyToken, SyntaxKind.AtToken, [isNonJsxSameLineTokenContext], RuleAction.Space),
+            rule("SpaceBeforeAt", [SyntaxKind.CloseParenToken, SyntaxKind.Identifier], SyntaxKind.AtToken, [isNonJsxSameLineTokenContext], RuleAction.Space),
             rule("NoSpaceAfterAt", SyntaxKind.AtToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.Delete),
             // Insert space after @ in decorator
             rule("SpaceAfterDecorator",
@@ -231,8 +231,8 @@ namespace ts.formatting {
             rule("SpaceAfterConstructor", SyntaxKind.ConstructorKeyword, SyntaxKind.OpenParenToken, [isOptionEnabled("insertSpaceAfterConstructor"), isNonJsxSameLineTokenContext], RuleAction.Space),
             rule("NoSpaceAfterConstructor", SyntaxKind.ConstructorKeyword, SyntaxKind.OpenParenToken, [isOptionDisabledOrUndefined("insertSpaceAfterConstructor"), isNonJsxSameLineTokenContext], RuleAction.Delete),
 
-            rule("SpaceAfterComma", SyntaxKind.CommaToken, anyToken, [isOptionEnabled("insertSpaceAfterCommaDelimiter"), isNonJsxSameLineTokenContext, isNonJsxElementContext, isNextTokenNotCloseBracket], RuleAction.Space),
-            rule("NoSpaceAfterComma", SyntaxKind.CommaToken, anyToken, [isOptionDisabledOrUndefined("insertSpaceAfterCommaDelimiter"), isNonJsxSameLineTokenContext, isNonJsxElementContext], RuleAction.Delete),
+            rule("SpaceAfterComma", SyntaxKind.CommaToken, anyToken, [isOptionEnabled("insertSpaceAfterCommaDelimiter"), isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext, isNextTokenNotCloseBracket], RuleAction.Space),
+            rule("NoSpaceAfterComma", SyntaxKind.CommaToken, anyToken, [isOptionDisabledOrUndefined("insertSpaceAfterCommaDelimiter"), isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext], RuleAction.Delete),
 
             // Insert space after function keyword for anonymous functions
             rule("SpaceAfterAnonymousFunctionKeyword", SyntaxKind.FunctionKeyword, SyntaxKind.OpenParenToken, [isOptionEnabled("insertSpaceAfterFunctionKeywordForAnonymousFunctions"), isFunctionDeclContext], RuleAction.Space),
@@ -319,7 +319,7 @@ namespace ts.formatting {
                 "SpaceBetweenStatements",
                 [SyntaxKind.CloseParenToken, SyntaxKind.DoKeyword, SyntaxKind.ElseKeyword, SyntaxKind.CaseKeyword],
                 anyToken,
-                [isNonJsxSameLineTokenContext, isNonJsxElementContext, isNotForContext],
+                [isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext, isNotForContext],
                 RuleAction.Space),
             // This low-pri rule takes care of "try {" and "finally {" in case the rule SpaceBeforeOpenBraceInControl didn't execute on FormatOnEnter.
             rule("SpaceAfterTryFinally", [SyntaxKind.TryKeyword, SyntaxKind.FinallyKeyword], SyntaxKind.OpenBraceToken, [isNonJsxSameLineTokenContext], RuleAction.Space),
@@ -614,8 +614,8 @@ namespace ts.formatting {
         return context.TokensAreOnSameLine() && context.contextNode.kind !== SyntaxKind.JsxText;
     }
 
-    function isNonJsxElementContext(context: FormattingContext): boolean {
-        return context.contextNode.kind !== SyntaxKind.JsxElement;
+    function isNonJsxElementOrFragmentContext(context: FormattingContext): boolean {
+        return context.contextNode.kind !== SyntaxKind.JsxElement && context.contextNode.kind !== SyntaxKind.JsxFragment;
     }
 
     function isJsxExpressionContext(context: FormattingContext): boolean {

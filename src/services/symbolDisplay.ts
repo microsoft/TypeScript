@@ -91,9 +91,14 @@ namespace ts.SymbolDisplay {
     }
 
     export function getSymbolModifiers(symbol: Symbol): string {
-        return symbol && symbol.declarations && symbol.declarations.length > 0
+        const nodeModifiers = symbol && symbol.declarations && symbol.declarations.length > 0
             ? getNodeModifiers(symbol.declarations[0])
             : ScriptElementKindModifier.none;
+
+        const symbolModifiers = symbol && symbol.flags & SymbolFlags.Optional ?
+            ScriptElementKindModifier.optionalModifier
+            : ScriptElementKindModifier.none;
+        return nodeModifiers && symbolModifiers ? nodeModifiers + "," + symbolModifiers : nodeModifiers || symbolModifiers;
     }
 
     interface SymbolDisplayPartsDocumentationAndSymbolKind {
