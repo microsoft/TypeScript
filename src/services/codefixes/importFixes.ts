@@ -432,20 +432,28 @@ namespace ts.codefix {
                     continue;
                 }
                 else if (indexOfStar !== -1) {
-                    const prefix = pattern.substr(0, indexOfStar);
-                    const suffix = pattern.substr(indexOfStar + 1);
+                    const prefix = removeLeadingDotSlash(pattern.substr(0, indexOfStar));
+                    const suffix = removeFileExtension(pattern.substr(indexOfStar + 1));
                     if (relativeName.length >= prefix.length + suffix.length &&
                         startsWith(relativeName, prefix) &&
                         endsWith(relativeName, suffix)) {
                         const matchedStar = relativeName.substr(prefix.length, relativeName.length - suffix.length);
-                        return key.replace("\*", matchedStar);
+                        return key.replace("*", matchedStar);
                     }
                 }
-                else if (pattern === relativeName || pattern === relativeNameWithIndex) {
-                    return key;
+                else {
+                    const cleanPattern = removeLeadingDotSlash(removeFileExtension(pattern));
+                    if (cleanPattern === relativeName || cleanPattern === relativeNameWithIndex) {
+                        return key;
+                    }
                 }
             }
         }
+    }
+
+    /** Convert "./x" to "x". */
+    function removeLeadingDotSlash(path: string): string {
+        return startsWith(path, "./") || startsWith(path, ".\\") ? path.slice(2) : path;
     }
 
     function tryGetModuleNameFromRootDirs(rootDirs: ReadonlyArray<string>, moduleFileName: string, sourceDirectory: string, getCanonicalFileName: (file: string) => string): string | undefined {
