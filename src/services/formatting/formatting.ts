@@ -782,8 +782,7 @@ namespace ts.formatting {
 
                 let inheritedIndentation = Constants.Unknown;
                 let lastChildEndLine = Constants.Unknown;
-                for (let i = 0; i < nodes.length; i++) {
-                    const child = nodes[i];
+                for (const child of nodes) {
                     inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, lastChildEndLine);
                     lastChildEndLine = sourceFile.getLineAndCharacterOfPosition(child.getEnd()).line;
                 }
