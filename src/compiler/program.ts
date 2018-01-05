@@ -331,11 +331,11 @@ namespace ts {
                 }
 
                 output += formatColorAndReset(relativeFileName, ForegroundColorEscapeSequences.Cyan);
-                output += "(";
+                output += ":";
                 output += formatColorAndReset(`${ firstLine + 1 }`, ForegroundColorEscapeSequences.Yellow);
-                output += ",";
+                output += ":";
                 output += formatColorAndReset(`${ firstLineChar + 1 }`, ForegroundColorEscapeSequences.Yellow);
-                output += "): ";
+                output += " - ";
             }
 
             const categoryColor = getCategoryFormat(diagnostic.category);
