@@ -17985,7 +17985,6 @@ namespace ts {
         }
 
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, checkMode?: CheckMode): Type {
-            const contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
             if (!func.body) {
                 return unknownType;
             }
@@ -18003,9 +18002,9 @@ namespace ts {
                 }
             }
             else {
-                let types: Type[];
+                let types = checkAndAggregateReturnExpressionTypes(func, checkMode);
                 if (functionFlags & FunctionFlags.Generator) { // Generator or AsyncGenerator function
-                    types = concatenate(checkAndAggregateYieldOperandTypes(func, checkMode), checkAndAggregateReturnExpressionTypes(func, checkMode));
+                    types = concatenate(checkAndAggregateYieldOperandTypes(func, checkMode), types);
                     if (!types || types.length === 0) {
                         const iterableIteratorAny = functionFlags & FunctionFlags.Async
                             ? createAsyncIterableIteratorType(anyType) // AsyncGenerator function
@@ -18018,7 +18017,6 @@ namespace ts {
                     }
                 }
                 else {
-                    types = checkAndAggregateReturnExpressionTypes(func, checkMode);
                     if (!types) {
                         // For an async function, the return type will not be never, but rather a Promise for never.
                         return functionFlags & FunctionFlags.Async
@@ -18037,6 +18035,7 @@ namespace ts {
                 type = getUnionType(types, UnionReduction.Subtype);
             }
 
+            const contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
             if (!contextualSignature) {
                 reportErrorsFromWidening(func, type);
             }
@@ -18126,7 +18125,8 @@ namespace ts {
             return true;
         }
 
-        function checkAndAggregateReturnExpressionTypes(func: FunctionLikeDeclaration, checkMode: CheckMode): Type[] {
+        /** NOTE: Return value of `[]` means a different thing than `undefined`. `[]` means return `void`, `undefined` means return `never`. */
+        function checkAndAggregateReturnExpressionTypes(func: FunctionLikeDeclaration, checkMode: CheckMode): Type[] | undefined {
             const functionFlags = getFunctionFlags(func);
             const aggregatedTypes: Type[] = [];
             let hasReturnWithNoExpression = functionHasImplicitReturn(func);
@@ -18151,14 +18151,24 @@ namespace ts {
                     hasReturnWithNoExpression = true;
                 }
             });
-            if (aggregatedTypes.length === 0 && !hasReturnWithNoExpression && (hasReturnOfTypeNever ||
-                func.kind === SyntaxKind.FunctionExpression || func.kind === SyntaxKind.ArrowFunction)) {
+            if (aggregatedTypes.length === 0 && !hasReturnWithNoExpression && (hasReturnOfTypeNever || mayReturnNever(func))) {
                 return undefined;
             }
             if (strictNullChecks && aggregatedTypes.length && hasReturnWithNoExpression) {
                 pushIfUnique(aggregatedTypes, undefinedType);
             }
             return aggregatedTypes;
+        }
+        function mayReturnNever(func: FunctionLikeDeclaration): boolean {
+            switch (func.kind) {
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                    return true;
+                case SyntaxKind.MethodDeclaration:
+                    return func.parent.kind === SyntaxKind.ObjectLiteralExpression;
+                default:
+                    return false;
+            }
         }
 
         /**
