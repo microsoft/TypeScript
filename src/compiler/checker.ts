@@ -25736,10 +25736,6 @@ namespace ts {
         }
 
         function checkGrammarTypeParameterList(typeParameters: NodeArray<TypeParameterDeclaration>, file: SourceFile): boolean {
-            if (checkGrammarForDisallowedTrailingComma(typeParameters)) {
-                return true;
-            }
-
             if (typeParameters && typeParameters.length === 0) {
                 const start = typeParameters.pos - "<".length;
                 const end = skipTrivia(file.text, typeParameters.end) + ">".length;
