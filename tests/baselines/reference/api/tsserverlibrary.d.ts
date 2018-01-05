@@ -4505,6 +4505,7 @@ declare namespace ts {
         ambientModifier = "declare",
         staticModifier = "static",
         abstractModifier = "abstract",
+        optionalModifier = "optional",
     }
     enum ClassificationTypeNames {
         comment = "comment",
