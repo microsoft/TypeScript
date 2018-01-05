@@ -339,7 +339,7 @@ namespace ts {
         const jsObjectLiteralIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
 
         const globals = createSymbolTable();
-        const deferredInferenceCache = createMap<Type | undefined>();
+        const reverseMappedCache = createMap<Type | undefined>();
         let ambientModulesCache: Symbol[] | undefined;
         /**
          * List of every ambient module with a "*" wildcard.
@@ -2861,7 +2861,7 @@ namespace ts {
                         typeElements.push(<ConstructSignatureDeclaration>signatureToSignatureDeclarationHelper(signature, SyntaxKind.ConstructSignature, context));
                     }
                     if (resolvedType.stringIndexInfo) {
-                        const indexInfo = resolvedType.objectFlags & ObjectFlags.Deferred ?
+                        const indexInfo = resolvedType.objectFlags & ObjectFlags.ReverseMapped ?
                             createIndexInfo(anyType, resolvedType.stringIndexInfo.isReadonly, resolvedType.stringIndexInfo.declaration) :
                             resolvedType.stringIndexInfo;
                         typeElements.push(indexInfoToIndexSignatureDeclarationHelper(indexInfo, IndexKind.String, context));
@@ -2876,7 +2876,7 @@ namespace ts {
                     }
 
                     for (const propertySymbol of properties) {
-                        const propertyType = getCheckFlags(propertySymbol) & CheckFlags.Deferred ? anyType : getTypeOfSymbol(propertySymbol);
+                        const propertyType = getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped ? anyType : getTypeOfSymbol(propertySymbol);
                         const saveEnclosingDeclaration = context.enclosingDeclaration;
                         context.enclosingDeclaration = undefined;
                         const propertyName = symbolToName(propertySymbol, context, SymbolFlags.Value, /*expectsIdentifier*/ true);
@@ -3685,7 +3685,7 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
-                    const stringIndexInfo = resolved.objectFlags & ObjectFlags.Deferred && resolved.stringIndexInfo ?
+                    const stringIndexInfo = resolved.objectFlags & ObjectFlags.ReverseMapped && resolved.stringIndexInfo ?
                         createIndexInfo(anyType, resolved.stringIndexInfo.isReadonly, resolved.stringIndexInfo.declaration) :
                         resolved.stringIndexInfo;
                     buildIndexSignatureDisplay(stringIndexInfo, writer, IndexKind.String, enclosingDeclaration, globalFlags, symbolStack);
@@ -3699,7 +3699,7 @@ namespace ts {
                                 writer.reportPrivateInBaseOfClassExpression(symbolName(p));
                             }
                         }
-                        const t = getCheckFlags(p) & CheckFlags.Deferred ? anyType : getTypeOfSymbol(p);
+                        const t = getCheckFlags(p) & CheckFlags.ReverseMapped ? anyType : getTypeOfSymbol(p);
                         if (p.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(t).length) {
                             const signatures = getSignaturesOfType(t, SignatureKind.Call);
                             for (const signature of signatures) {
@@ -4907,8 +4907,8 @@ namespace ts {
             if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
                 return getTypeOfInstantiatedSymbol(symbol);
             }
-            if (getCheckFlags(symbol) & CheckFlags.Deferred) {
-                return inferDeferredMappedType((symbol as DeferredTransientSymbol).propertyType, (symbol as DeferredTransientSymbol).mappedType);
+            if (getCheckFlags(symbol) & CheckFlags.ReverseMapped) {
+                return getTypeOfReverseMappedSymbol(symbol as ReverseMappedSymbol);
             }
             if (symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property)) {
                 return getTypeOfVariableOrParameterOrProperty(symbol);
@@ -6120,15 +6120,15 @@ namespace ts {
             }
         }
 
-        function resolveDeferredMappedTypeMembers(type: DeferredMappedType) {
+        function resolveReverseMappedTypeMembers(type: ReverseMappedType) {
             const indexInfo = getIndexInfoOfType(type.source, IndexKind.String);
             const readonlyMask = type.mappedType.declaration.readonlyToken ? false : true;
             const optionalMask = type.mappedType.declaration.questionToken ? 0 : SymbolFlags.Optional;
-            const stringIndexInfo = indexInfo && createIndexInfo(inferDeferredMappedType(indexInfo.type, type.mappedType), readonlyMask && indexInfo.isReadonly);
+            const stringIndexInfo = indexInfo && createIndexInfo(inferReverseMappedType(indexInfo.type, type.mappedType), readonlyMask && indexInfo.isReadonly);
             const members = createSymbolTable();
             for (const prop of getPropertiesOfType(type.source)) {
-                const checkFlags = CheckFlags.Deferred | (readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0);
-                const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.escapedName, checkFlags) as DeferredTransientSymbol;
+                const checkFlags = CheckFlags.ReverseMapped | (readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0);
+                const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.escapedName, checkFlags) as ReverseMappedSymbol;
                 inferredProp.declarations = prop.declarations;
                 inferredProp.propertyType = getTypeOfSymbol(prop);
                 inferredProp.mappedType = type.mappedType;
@@ -6276,8 +6276,8 @@ namespace ts {
                     else if ((<ObjectType>type).objectFlags & ObjectFlags.ClassOrInterface) {
                         resolveClassOrInterfaceMembers(<InterfaceType>type);
                     }
-                    else if ((<DeferredMappedType>type).objectFlags & ObjectFlags.Deferred) {
-                        resolveDeferredMappedTypeMembers(type as DeferredMappedType);
+                    else if ((<ReverseMappedType>type).objectFlags & ObjectFlags.ReverseMapped) {
+                        resolveReverseMappedTypeMembers(type as ReverseMappedType);
                     }
                     else if ((<ObjectType>type).objectFlags & ObjectFlags.Anonymous) {
                         resolveAnonymousTypeMembers(<AnonymousType>type);
@@ -11307,16 +11307,16 @@ namespace ts {
          */
         function inferTypeForHomomorphicMappedType(source: Type, target: MappedType): Type {
             const key = source.id + "," + target.id;
-            if (deferredInferenceCache.has(key)) {
-                return deferredInferenceCache.get(key);
+            if (reverseMappedCache.has(key)) {
+                return reverseMappedCache.get(key);
             }
-            deferredInferenceCache.set(key, undefined);
-            const type = createDeferredMappedType(source, target);
-            deferredInferenceCache.set(key, type);
+            reverseMappedCache.set(key, undefined);
+            const type = createReverseMappedType(source, target);
+            reverseMappedCache.set(key, type);
             return type;
         }
 
-        function createDeferredMappedType(source: Type, target: MappedType) {
+        function createReverseMappedType(source: Type, target: MappedType) {
             const properties = getPropertiesOfType(source);
             if (properties.length === 0 && !getIndexInfoOfType(source, IndexKind.String)) {
                 return undefined;
@@ -11328,13 +11328,17 @@ namespace ts {
                     return undefined;
                 }
             }
-            const deferred = createObjectType(ObjectFlags.Deferred | ObjectFlags.Anonymous, /*symbol*/ undefined) as DeferredMappedType;
-            deferred.source = source;
-            deferred.mappedType = target;
-            return deferred;
+            const reversed = createObjectType(ObjectFlags.ReverseMapped | ObjectFlags.Anonymous, /*symbol*/ undefined) as ReverseMappedType;
+            reversed.source = source;
+            reversed.mappedType = target;
+            return reversed;
         }
 
-        function inferDeferredMappedType(sourceType: Type, target: MappedType): Type {
+        function getTypeOfReverseMappedSymbol(symbol: ReverseMappedSymbol) {
+            return inferReverseMappedType(symbol.propertyType, symbol.mappedType);
+        }
+
+        function inferReverseMappedType(sourceType: Type, target: MappedType): Type {
             const typeParameter = <TypeParameter>getIndexedAccessType((<IndexType>getConstraintTypeFromMappedType(target)).type, getTypeParameterFromMappedType(target));
             const templateType = getTemplateTypeFromMappedType(target);
             const inference = createInferenceInfo(typeParameter);

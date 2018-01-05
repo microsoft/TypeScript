@@ -3251,7 +3251,7 @@ namespace ts {
         ContainsPrivate   = 1 << 8,         // Synthetic property with private constituent(s)
         ContainsStatic    = 1 << 9,         // Synthetic property with static constituent(s)
         Late              = 1 << 10,        // Late-bound symbol for a computed property with a dynamic name
-        Deferred          = 1 << 11,        // Deferred inferred property of homomorphic mapped type.
+        ReverseMapped     = 1 << 11,        // property of reverse-inferred homomorphic mapped type.
         Synthetic = SyntheticProperty | SyntheticMethod
     }
 
@@ -3262,7 +3262,7 @@ namespace ts {
     }
 
     /* @internal */
-    export interface DeferredTransientSymbol extends TransientSymbol {
+    export interface ReverseMappedSymbol extends TransientSymbol {
         propertyType: Type;
         mappedType: MappedType;
     }
@@ -3501,7 +3501,7 @@ namespace ts {
         EvolvingArray    = 1 << 8,  // Evolving array type
         ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
         ContainsSpread   = 1 << 10, // Object literal contains spread operation
-        Deferred = 1 << 11, // Object contains a deferred inferred property
+        ReverseMapped = 1 << 11,    // Object contains a property from a reverse-mapped type
         ClassOrInterface = Class | Interface
     }
 
@@ -3610,7 +3610,7 @@ namespace ts {
     }
 
     /* @internal */
-    export interface DeferredMappedType extends ObjectType {
+    export interface ReverseMappedType extends ObjectType {
         source: Type;
         mappedType: MappedType;
     }
