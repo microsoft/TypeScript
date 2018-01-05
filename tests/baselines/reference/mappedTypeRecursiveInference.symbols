@@ -30,3 +30,12 @@ const out = foo(a);
 >foo : Symbol(foo, Decl(mappedTypeRecursiveInference.ts, 2, 45))
 >a : Symbol(a, Decl(mappedTypeRecursiveInference.ts, 1, 11))
 
+let xhr: XMLHttpRequest;
+>xhr : Symbol(xhr, Decl(mappedTypeRecursiveInference.ts, 6, 3))
+>XMLHttpRequest : Symbol(XMLHttpRequest, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+const out2 = foo(xhr);
+>out2 : Symbol(out2, Decl(mappedTypeRecursiveInference.ts, 7, 5))
+>foo : Symbol(foo, Decl(mappedTypeRecursiveInference.ts, 2, 45))
+>xhr : Symbol(xhr, Decl(mappedTypeRecursiveInference.ts, 6, 3))
+
