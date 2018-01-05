@@ -1,7 +1,5 @@
 /// <reference path="fourslash.ts" />
 
-// @noLib: true
-
 // @Filename: /a.d.ts
 ////declare namespace N {
 ////    export const foo = 0;
