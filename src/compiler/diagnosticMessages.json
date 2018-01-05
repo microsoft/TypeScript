@@ -3536,7 +3536,7 @@
         "category": "Error",
         "code": 7036
     },
-    "Enables emit interoperability bewteen commonjs and ES Modules via creation of namespace objects for all imports. Implies `allowSyntheticDefaultImports`.": {
+    "Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'.": {
         "category": "Message",
         "code": 7037
     },
