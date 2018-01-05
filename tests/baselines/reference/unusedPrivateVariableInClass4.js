@@ -5,16 +5,16 @@ class greeter {
     public  z: string;
 
     public method1() {
-        this.x = "dummy value";
+        this.x;
     }
 }
 
 //// [unusedPrivateVariableInClass4.js]
-var greeter = (function () {
+var greeter = /** @class */ (function () {
     function greeter() {
     }
     greeter.prototype.method1 = function () {
-        this.x = "dummy value";
+        this.x;
     };
     return greeter;
 }());

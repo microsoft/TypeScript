@@ -42,13 +42,13 @@ function myFunction(myType: MyType) {
 
         [1, 2, 3].forEach(function(j) { use(x); })
 >[1, 2, 3].forEach(function(j) { use(x); }) : void
->[1, 2, 3].forEach : { (callbackfn: (this: void, value: number, index: number, array: number[]) => void): void; (callbackfn: (this: void, value: number, index: number, array: number[]) => void, thisArg: undefined): void; <Z>(callbackfn: (this: Z, value: number, index: number, array: number[]) => void, thisArg: Z): void; }
+>[1, 2, 3].forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
 >[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
->forEach : { (callbackfn: (this: void, value: number, index: number, array: number[]) => void): void; (callbackfn: (this: void, value: number, index: number, array: number[]) => void, thisArg: undefined): void; <Z>(callbackfn: (this: Z, value: number, index: number, array: number[]) => void, thisArg: Z): void; }
->function(j) { use(x); } : (this: void, j: number) => void
+>forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>function(j) { use(x); } : (j: number) => void
 >j : number
 >use(x) : any
 >use : (s: any) => any

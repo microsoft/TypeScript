@@ -1,0 +1,61 @@
+=== tests/cases/compiler/staticVisibility.ts ===
+class C1 {
+>C1 : Symbol(C1, Decl(staticVisibility.ts, 0, 0))
+    
+    p: any;
+>p : Symbol(C1.p, Decl(staticVisibility.ts, 0, 10))
+
+    static s: any;
+>s : Symbol(C1.s, Decl(staticVisibility.ts, 2, 11))
+
+    constructor() {
+        var v = 0;
+>v : Symbol(v, Decl(staticVisibility.ts, 6, 11))
+
+        s = 1; // should be error
+        C1.s = 1; // should be ok
+>C1.s : Symbol(C1.s, Decl(staticVisibility.ts, 2, 11))
+>C1 : Symbol(C1, Decl(staticVisibility.ts, 0, 0))
+>s : Symbol(C1.s, Decl(staticVisibility.ts, 2, 11))
+
+        b(); // should be error
+        C1.b(); // should be ok
+>C1.b : Symbol(C1.b, Decl(staticVisibility.ts, 13, 5))
+>C1 : Symbol(C1, Decl(staticVisibility.ts, 0, 0))
+>b : Symbol(C1.b, Decl(staticVisibility.ts, 13, 5))
+    }
+
+    static b() {
+>b : Symbol(C1.b, Decl(staticVisibility.ts, 13, 5))
+
+        v = 1; // should be error
+        this.p = 0; // should be error
+>this : Symbol(C1, Decl(staticVisibility.ts, 0, 0))
+
+        C1.s = 1; // should be ok
+>C1.s : Symbol(C1.s, Decl(staticVisibility.ts, 2, 11))
+>C1 : Symbol(C1, Decl(staticVisibility.ts, 0, 0))
+>s : Symbol(C1.s, Decl(staticVisibility.ts, 2, 11))
+    }
+}
+
+class C2 {
+>C2 : Symbol(C2, Decl(staticVisibility.ts, 20, 1))
+ 
+barback:string = "";
+>barback : Symbol(C2.barback, Decl(staticVisibility.ts, 22, 10))
+ 
+
+
+
+static get Bar() {return "bar";} // ok
+>Bar : Symbol(C2.Bar, Decl(staticVisibility.ts, 24, 20), Decl(staticVisibility.ts, 29, 32))
+ 
+static set Bar(bar:string) {barback = bar;} // not ok
+>Bar : Symbol(C2.Bar, Decl(staticVisibility.ts, 24, 20), Decl(staticVisibility.ts, 29, 32))
+>bar : Symbol(bar, Decl(staticVisibility.ts, 31, 15))
+>bar : Symbol(bar, Decl(staticVisibility.ts, 31, 15))
+
+}
+
+

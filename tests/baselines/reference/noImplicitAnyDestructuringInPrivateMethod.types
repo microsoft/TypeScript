@@ -10,7 +10,7 @@ export class Bar {
 >Bar : Bar
 
     private bar({ a, }: Arg): number {
->bar : ({a}: { a: number; }) => number
+>bar : ({ a, }: { a: number; }) => number
 >a : number
 >Arg : { a: number; }
 
@@ -22,6 +22,6 @@ export declare class Bar2 {
 >Bar2 : Bar2
 
     private bar({ a, });
->bar : ({a}: { a: any; }) => any
+>bar : ({ a, }: { a: any; }) => any
 >a : any
 }

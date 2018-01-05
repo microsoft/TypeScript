@@ -1,4 +1,4 @@
-tests/cases/compiler/unusedVariablesinForLoop4.ts(4,13): error TS6133: 'x' is declared but never used.
+tests/cases/compiler/unusedVariablesinForLoop4.ts(4,13): error TS6133: 'x' is declared but its value is never read.
 
 
 ==== tests/cases/compiler/unusedVariablesinForLoop4.ts (1 errors) ====
@@ -7,6 +7,6 @@ tests/cases/compiler/unusedVariablesinForLoop4.ts(4,13): error TS6133: 'x' is de
             elem;
             var x = 20;
                 ~
-!!! error TS6133: 'x' is declared but never used.
+!!! error TS6133: 'x' is declared but its value is never read.
         }
     }

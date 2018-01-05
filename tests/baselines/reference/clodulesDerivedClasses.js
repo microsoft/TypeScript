@@ -33,7 +33,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Shape = (function () {
+var Shape = /** @class */ (function () {
     function Shape() {
     }
     return Shape;
@@ -45,7 +45,7 @@ var Shape = (function () {
         Utils.convert = convert;
     })(Utils = Shape.Utils || (Shape.Utils = {}));
 })(Shape || (Shape = {}));
-var Path = (function (_super) {
+var Path = /** @class */ (function (_super) {
     __extends(Path, _super);
     function Path() {
         return _super !== null && _super.apply(this, arguments) || this;

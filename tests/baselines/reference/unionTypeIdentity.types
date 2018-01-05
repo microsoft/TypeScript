@@ -1,0 +1,21 @@
+=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/unionTypeIdentity.ts ===
+// Two types are considered identical when
+// they are union types with identical sets of constituent types, or
+var strOrNum: string | boolean;
+>strOrNum : string | boolean
+
+var strOrNum: boolean | string;
+>strOrNum : string | boolean
+
+var strOrNum: boolean | string | boolean;
+>strOrNum : string | boolean
+
+var strOrNum: string; // error
+>strOrNum : string | boolean
+
+var strOrNum: boolean; // error
+>strOrNum : string | boolean
+
+var strOrNum: number; // error
+>strOrNum : string | boolean
+

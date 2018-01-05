@@ -30,7 +30,7 @@ y3 = ext3; // ok
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;
@@ -40,7 +40,7 @@ define(["require", "exports"], function (require, exports) {
 //// [externalModuleAssignToVar_core_require2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;
@@ -50,7 +50,7 @@ define(["require", "exports"], function (require, exports) {
 //// [externalModuleAssignToVar_ext.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var D = (function () {
+    var D = /** @class */ (function () {
         function D() {
         }
         return D;

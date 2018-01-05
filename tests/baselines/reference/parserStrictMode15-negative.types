@@ -1,0 +1,10 @@
+=== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode15-negative.ts ===
+"use strict";
+>"use strict" : "use strict"
+
+delete a[b];
+>delete a[b] : boolean
+>a[b] : any
+>a : any
+>b : any
+

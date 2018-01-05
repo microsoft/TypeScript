@@ -38,6 +38,43 @@ getter.a = 12;
 // functions result in { }
 let spreadFunc = { ...(function () { }) };
 
+type Header = { head: string, body: string, authToken: string }
+function from16326(this: { header: Header }, header: Header, authToken: string): Header {
+    return {
+        ...this.header,
+        ...header,
+        ...authToken && { authToken }
+    }
+}
+// boolean && T results in Partial<T>
+function conditionalSpreadBoolean(b: boolean) : { x: number, y: number } {
+    let o = { x: 12, y: 13 }
+    o = {
+        ...o,
+        ...b && { x: 14 }
+    }
+    let o2 = { ...b && { x: 21 }}
+    return o;
+}
+function conditionalSpreadNumber(nt: number): { x: number, y: number } {
+    let o = { x: 15, y: 16 }
+    o = {
+        ...o,
+        ...nt && { x: nt }
+    }
+    let o2 = { ...nt && { x: nt }}
+    return o;
+}
+function conditionalSpreadString(st: string): { x: string, y: number } {
+    let o = { x: 'hi', y: 17 }
+    o = {
+        ...o,
+        ...st && { x: st }
+    }
+    let o2 = { ...st && { x: st }}
+    return o;
+}
+
 // any results in any
 let anything: any;
 let spreadAny = { ...anything };
@@ -60,21 +97,23 @@ let changeTypeBoth: { a: string, b: number } =
     { ...o, ...swap };
 
 // optional
-let definiteBoolean: { sn: boolean };
-let definiteString: { sn: string };
-let optionalString: { sn?: string };
-let optionalNumber: { sn?: number };
-let optionalUnionStops: { sn: string | number | boolean } = { ...definiteBoolean, ...definiteString, ...optionalNumber };
-let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
-let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
+function container(
+    definiteBoolean: { sn: boolean },
+    definiteString: { sn: string },
+    optionalString: { sn?: string },
+    optionalNumber: { sn?: number }) {
+    let optionalUnionStops: { sn: string | number | boolean } = { ...definiteBoolean, ...definiteString, ...optionalNumber };
+    let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
+    let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
 
-// computed property
-let computedFirst: { a: number, b: string, "before everything": number } =
-    { ['before everything']: 12, ...o, b: 'yes' }
-let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number } =
-    { ...o, ['in the middle']: 13, b: 'maybe?', ...o2 }
-let computedAfter: { a: number, b: string, "at the end": number } =
-    { ...o, b: 'yeah', ['at the end']: 14 }
+    // computed property
+    let computedFirst: { a: number, b: string, "before everything": number } =
+        { ['before everything']: 12, ...o, b: 'yes' }
+    let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number } =
+        { ...o, ['in the middle']: 13, b: 'maybe?', ...o2 }
+    let computedAfter: { a: number, b: string, "at the end": number } =
+        { ...o, b: 'yeah', ['at the end']: 14 }
+}
 // shortcut syntax
 let a = 12;
 let shortCutted: { a: number, b: string } = { ...o, a }
@@ -114,11 +153,33 @@ var getter = __assign({}, op, { c: 7 });
 getter.a = 12;
 // functions result in { }
 var spreadFunc = __assign({}, (function () { }));
+function from16326(header, authToken) {
+    return __assign({}, this.header, header, authToken && { authToken: authToken });
+}
+// boolean && T results in Partial<T>
+function conditionalSpreadBoolean(b) {
+    var o = { x: 12, y: 13 };
+    o = __assign({}, o, b && { x: 14 });
+    var o2 = __assign({}, b && { x: 21 });
+    return o;
+}
+function conditionalSpreadNumber(nt) {
+    var o = { x: 15, y: 16 };
+    o = __assign({}, o, nt && { x: nt });
+    var o2 = __assign({}, nt && { x: nt });
+    return o;
+}
+function conditionalSpreadString(st) {
+    var o = { x: 'hi', y: 17 };
+    o = __assign({}, o, st && { x: st });
+    var o2 = __assign({}, st && { x: st });
+    return o;
+}
 // any results in any
 var anything;
 var spreadAny = __assign({}, anything);
 // methods are not enumerable
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.p = 1;
     }
@@ -135,20 +196,18 @@ var changeTypeAfter = __assign({}, o, { a: 'wrong type?' });
 var changeTypeBefore = __assign({ a: 'wrong type?' }, o);
 var changeTypeBoth = __assign({}, o, swap);
 // optional
-var definiteBoolean;
-var definiteString;
-var optionalString;
-var optionalNumber;
-var optionalUnionStops = __assign({}, definiteBoolean, definiteString, optionalNumber);
-var optionalUnionDuplicates = __assign({}, definiteBoolean, definiteString, optionalString, optionalNumber);
-var allOptional = __assign({}, optionalString, optionalNumber);
-// computed property
-var computedFirst = __assign((_a = {}, _a['before everything'] = 12, _a), o, { b: 'yes' });
-var computedMiddle = __assign({}, o, (_b = {}, _b['in the middle'] = 13, _b.b = 'maybe?', _b), o2);
-var computedAfter = __assign({}, o, (_c = { b: 'yeah' }, _c['at the end'] = 14, _c));
+function container(definiteBoolean, definiteString, optionalString, optionalNumber) {
+    var optionalUnionStops = __assign({}, definiteBoolean, definiteString, optionalNumber);
+    var optionalUnionDuplicates = __assign({}, definiteBoolean, definiteString, optionalString, optionalNumber);
+    var allOptional = __assign({}, optionalString, optionalNumber);
+    // computed property
+    var computedFirst = __assign((_a = {}, _a['before everything'] = 12, _a), o, { b: 'yes' });
+    var computedMiddle = __assign({}, o, (_b = {}, _b['in the middle'] = 13, _b.b = 'maybe?', _b), o2);
+    var computedAfter = __assign({}, o, (_c = { b: 'yeah' }, _c['at the end'] = 14, _c));
+    var _a, _b, _c;
+}
 // shortcut syntax
 var a = 12;
 var shortCutted = __assign({}, o, { a: a });
 // non primitive
 var spreadNonPrimitive = __assign({}, {});
-var _a, _b, _c;

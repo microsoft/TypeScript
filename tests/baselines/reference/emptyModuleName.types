@@ -1,0 +1,8 @@
+=== tests/cases/compiler/emptyModuleName.ts ===
+import * as A from "";
+>A : any
+
+class B extends A {
+>B : B
+>A : any
+}

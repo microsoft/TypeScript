@@ -21,7 +21,8 @@ namespace ts {
 
         const {
             startLexicalEnvironment,
-            endLexicalEnvironment
+            endLexicalEnvironment,
+            hoistVariableDeclaration
         } = context;
 
         const compilerOptions = context.getCompilerOptions();
@@ -46,6 +47,7 @@ namespace ts {
         let currentSourceFile: SourceFile; // The current file.
         let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
         let noSubstitution: boolean[]; // Set of nodes for which substitution rules should be ignored.
+        let needUMDDynamicImportHelper: boolean;
 
         return transformSourceFile;
 
@@ -55,7 +57,7 @@ namespace ts {
          * @param node The SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
-            if (node.isDeclarationFile || !(isExternalModule(node) || compilerOptions.isolatedModules)) {
+            if (node.isDeclarationFile || !(isEffectiveExternalModule(node, compilerOptions) || node.transformFlags & TransformFlags.ContainsDynamicImport)) {
                 return node;
             }
 
@@ -66,9 +68,9 @@ namespace ts {
             // Perform the transformation.
             const transformModule = getTransformModuleDelegate(moduleKind);
             const updated = transformModule(node);
-
             currentSourceFile = undefined;
             currentModuleInfo = undefined;
+            needUMDDynamicImportHelper = false;
             return aggregateTransformFlags(updated);
         }
 
@@ -89,7 +91,7 @@ namespace ts {
             startLexicalEnvironment();
 
             const statements: Statement[] = [];
-            const ensureUseStrict = compilerOptions.alwaysStrict || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
+            const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
             const statementOffset = addPrologue(statements, node.statements, ensureUseStrict, sourceElementVisitor);
 
             if (shouldEmitUnderscoreUnderscoreESModule()) {
@@ -102,11 +104,12 @@ namespace ts {
             addRange(statements, endLexicalEnvironment());
 
             const updated = updateSourceFileNode(node, setTextRange(createNodeArray(statements), node.statements));
-            if (currentModuleInfo.hasExportStarsToExportValues) {
+            if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
                 // If we have any `export * from ...` declarations
                 // we need to inform the emitter to add the __export helper.
                 addEmitHelper(updated, exportStarHelper);
             }
+            addEmitHelpers(updated, context.readEmitHelpers());
             return updated;
         }
 
@@ -198,6 +201,7 @@ namespace ts {
          */
         function transformUMDModule(node: SourceFile) {
             const { aliasedModuleNames, unaliasedModuleNames, importAliasNames } = collectAsynchronousDependencies(node, /*includeNonAmdDependencies*/ false);
+            const moduleName = tryGetModuleNameFromFile(node, host, compilerOptions);
             const umdHeader = createFunctionExpression(
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
@@ -258,6 +262,8 @@ namespace ts {
                                                 createIdentifier("define"),
                                                 /*typeArguments*/ undefined,
                                                 [
+                                                    // Add the module name (if provided).
+                                                    ...(moduleName ? [moduleName] : []),
                                                     createArrayLiteral([
                                                         createLiteral("require"),
                                                         createLiteral("exports"),
@@ -406,10 +412,13 @@ namespace ts {
             addRange(statements, endLexicalEnvironment());
 
             const body = createBlock(statements, /*multiLine*/ true);
-            if (currentModuleInfo.hasExportStarsToExportValues) {
+            if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
                 // If we have any `export * from ...` declarations
                 // we need to inform the emitter to add the __export helper.
                 addEmitHelper(body, exportStarHelper);
+            }
+            if (needUMDDynamicImportHelper) {
+                addEmitHelper(body, dynamicImportUMDHelper);
             }
 
             return body;
@@ -425,26 +434,29 @@ namespace ts {
          */
         function addExportEqualsIfNeeded(statements: Statement[], emitAsReturn: boolean) {
             if (currentModuleInfo.exportEquals) {
-                if (emitAsReturn) {
-                    const statement = createReturn(currentModuleInfo.exportEquals.expression);
-                    setTextRange(statement, currentModuleInfo.exportEquals);
-                    setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoComments);
-                    statements.push(statement);
-                }
-                else {
-                    const statement = createStatement(
-                        createAssignment(
-                            createPropertyAccess(
-                                createIdentifier("module"),
-                                "exports"
-                            ),
-                            currentModuleInfo.exportEquals.expression
-                        )
-                    );
+                const expressionResult = visitNode(currentModuleInfo.exportEquals.expression, importCallExpressionVisitor);
+                if (expressionResult) {
+                    if (emitAsReturn) {
+                        const statement = createReturn(expressionResult);
+                        setTextRange(statement, currentModuleInfo.exportEquals);
+                        setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoComments);
+                        statements.push(statement);
+                    }
+                    else {
+                        const statement = createStatement(
+                            createAssignment(
+                                createPropertyAccess(
+                                    createIdentifier("module"),
+                                    "exports"
+                                ),
+                                expressionResult
+                            )
+                        );
 
-                    setTextRange(statement, currentModuleInfo.exportEquals);
-                    setEmitFlags(statement, EmitFlags.NoComments);
-                    statements.push(statement);
+                        setTextRange(statement, currentModuleInfo.exportEquals);
+                        setEmitFlags(statement, EmitFlags.NoComments);
+                        statements.push(statement);
+                    }
                 }
             }
         }
@@ -488,10 +500,164 @@ namespace ts {
                     return visitEndOfDeclarationMarker(<EndOfDeclarationMarker>node);
 
                 default:
-                    // This visitor does not descend into the tree, as export/import statements
-                    // are only transformed at the top level of a file.
-                    return node;
+                    return visitEachChild(node, importCallExpressionVisitor, context);
             }
+        }
+
+        function importCallExpressionVisitor(node: Expression): VisitResult<Expression> {
+            // This visitor does not need to descend into the tree if there is no dynamic import,
+            // as export/import statements are only transformed at the top level of a file.
+            if (!(node.transformFlags & TransformFlags.ContainsDynamicImport)) {
+                return node;
+            }
+
+            if (isImportCall(node)) {
+                return visitImportCallExpression(<ImportCall>node);
+            }
+            else {
+                return visitEachChild(node, importCallExpressionVisitor, context);
+            }
+        }
+
+        function visitImportCallExpression(node: ImportCall): Expression {
+            const argument = visitNode(firstOrUndefined(node.arguments), importCallExpressionVisitor);
+            const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
+            switch (compilerOptions.module) {
+                case ModuleKind.AMD:
+                    return createImportCallExpressionAMD(argument, containsLexicalThis);
+                case ModuleKind.UMD:
+                    return createImportCallExpressionUMD(argument, containsLexicalThis);
+                case ModuleKind.CommonJS:
+                default:
+                    return createImportCallExpressionCommonJS(argument, containsLexicalThis);
+            }
+        }
+
+        function createImportCallExpressionUMD(arg: Expression | undefined, containsLexicalThis: boolean): Expression {
+            // (function (factory) {
+            //      ... (regular UMD)
+            // }
+            // })(function (require, exports, useSyncRequire) {
+            //      "use strict";
+            //      Object.defineProperty(exports, "__esModule", { value: true });
+            //      var __syncRequire = typeof module === "object" && typeof module.exports === "object";
+            //      var __resolved = new Promise(function (resolve) { resolve(); });
+            //      .....
+            //      __syncRequire
+            //          ? __resolved.then(function () { return require(x); }) /*CommonJs Require*/
+            //          : new Promise(function (_a, _b) { require([x], _a, _b); }); /*Amd Require*/
+            // });
+            needUMDDynamicImportHelper = true;
+            if (isSimpleCopiableExpression(arg)) {
+                const argClone = isGeneratedIdentifier(arg) ? arg : isStringLiteral(arg) ? createLiteral(arg) : setEmitFlags(setTextRange(getSynthesizedClone(arg), arg), EmitFlags.NoComments);
+                return createConditional(
+                    /*condition*/ createIdentifier("__syncRequire"),
+                    /*whenTrue*/ createImportCallExpressionCommonJS(arg, containsLexicalThis),
+                    /*whenFalse*/ createImportCallExpressionAMD(argClone, containsLexicalThis)
+                );
+            }
+            else {
+                const temp = createTempVariable(hoistVariableDeclaration);
+                return createComma(createAssignment(temp, arg), createConditional(
+                    /*condition*/ createIdentifier("__syncRequire"),
+                    /*whenTrue*/ createImportCallExpressionCommonJS(temp, containsLexicalThis),
+                    /*whenFalse*/ createImportCallExpressionAMD(temp, containsLexicalThis)
+                ));
+            }
+        }
+
+        function createImportCallExpressionAMD(arg: Expression | undefined, containsLexicalThis: boolean): Expression {
+            // improt("./blah")
+            // emit as
+            // define(["require", "exports", "blah"], function (require, exports) {
+            //     ...
+            //     new Promise(function (_a, _b) { require([x], _a, _b); }); /*Amd Require*/
+            // });
+            const resolve = createUniqueName("resolve");
+            const reject = createUniqueName("reject");
+            const parameters = [
+                createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve),
+                createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ reject)
+            ];
+            const body = createBlock([
+                createStatement(
+                    createCall(
+                        createIdentifier("require"),
+                        /*typeArguments*/ undefined,
+                        [createArrayLiteral([arg || createOmittedExpression()]), resolve, reject]
+                    )
+                )
+            ]);
+
+            let func: FunctionExpression | ArrowFunction;
+            if (languageVersion >= ScriptTarget.ES2015) {
+                func = createArrowFunction(
+                    /*modifiers*/ undefined,
+                    /*typeParameters*/ undefined,
+                    parameters,
+                    /*type*/ undefined,
+                    /*equalsGreaterThanToken*/ undefined,
+                    body);
+            }
+            else {
+                func = createFunctionExpression(
+                    /*modifiers*/ undefined,
+                    /*asteriskToken*/ undefined,
+                    /*name*/ undefined,
+                    /*typeParameters*/ undefined,
+                    parameters,
+                    /*type*/ undefined,
+                    body);
+
+                // if there is a lexical 'this' in the import call arguments, ensure we indicate
+                // that this new function expression indicates it captures 'this' so that the
+                // es2015 transformer will properly substitute 'this' with '_this'.
+                if (containsLexicalThis) {
+                    setEmitFlags(func, EmitFlags.CapturesThis);
+                }
+            }
+
+            return createNew(createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
+        }
+
+        function createImportCallExpressionCommonJS(arg: Expression | undefined, containsLexicalThis: boolean): Expression {
+            // import("./blah")
+            // emit as
+            // Promise.resolve().then(function () { return require(x); }) /*CommonJs Require*/
+            // We have to wrap require in then callback so that require is done in asynchronously
+            // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
+            const promiseResolveCall = createCall(createPropertyAccess(createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []);
+            const requireCall = createCall(createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : []);
+
+            let func: FunctionExpression | ArrowFunction;
+            if (languageVersion >= ScriptTarget.ES2015) {
+                func = createArrowFunction(
+                    /*modifiers*/ undefined,
+                    /*typeParameters*/ undefined,
+                    /*parameters*/ [],
+                    /*type*/ undefined,
+                    /*equalsGreaterThanToken*/ undefined,
+                    requireCall);
+            }
+            else {
+                func = createFunctionExpression(
+                    /*modifiers*/ undefined,
+                    /*asteriskToken*/ undefined,
+                    /*name*/ undefined,
+                    /*typeParameters*/ undefined,
+                    /*parameters*/ [],
+                    /*type*/ undefined,
+                    createBlock([createReturn(requireCall)]));
+
+                // if there is a lexical 'this' in the import call arguments, ensure we indicate
+                // that this new function expression indicates it captures 'this' so that the
+                // es2015 transformer will properly substitute 'this' with '_this'.
+                if (containsLexicalThis) {
+                    setEmitFlags(func, EmitFlags.CapturesThis);
+                }
+            }
+
+            return createCall(createPropertyAccess(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
         }
 
         /**
@@ -730,15 +896,7 @@ namespace ts {
                 // export * from "mod";
                 return setTextRange(
                     createStatement(
-                        createCall(
-                            createIdentifier("__export"),
-                            /*typeArguments*/ undefined,
-                            [
-                                moduleKind !== ModuleKind.AMD
-                                    ? createRequireCall(node)
-                                    : generatedName
-                            ]
-                        )
+                        createExportStarHelper(context, moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName)
                     ),
                     node
                 );
@@ -760,10 +918,10 @@ namespace ts {
             if (original && hasAssociatedEndOfDeclarationMarker(original)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportStatement(deferredExports[id], createIdentifier("default"), node.expression, /*location*/ node, /*allowComments*/ true);
+                deferredExports[id] = appendExportStatement(deferredExports[id], createIdentifier("default"), visitNode(node.expression, importCallExpressionVisitor), /*location*/ node, /*allowComments*/ true);
             }
             else {
-                statements = appendExportStatement(statements, createIdentifier("default"), node.expression, /*location*/ node, /*allowComments*/ true);
+                statements = appendExportStatement(statements, createIdentifier("default"), visitNode(node.expression, importCallExpressionVisitor), /*location*/ node, /*allowComments*/ true);
             }
 
             return singleOrMany(statements);
@@ -786,9 +944,9 @@ namespace ts {
                                 node.asteriskToken,
                                 getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
-                                node.parameters,
+                                visitNodes(node.parameters, importCallExpressionVisitor),
                                 /*type*/ undefined,
-                                node.body
+                                visitEachChild(node.body, importCallExpressionVisitor, context)
                             ),
                             /*location*/ node
                         ),
@@ -797,7 +955,7 @@ namespace ts {
                 );
             }
             else {
-                statements = append(statements, node);
+                statements = append(statements, visitEachChild(node, importCallExpressionVisitor, context));
             }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
@@ -828,8 +986,8 @@ namespace ts {
                                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                                 getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
-                                node.heritageClauses,
-                                node.members
+                                visitNodes(node.heritageClauses, importCallExpressionVisitor),
+                                visitNodes(node.members, importCallExpressionVisitor)
                             ),
                             node
                         ),
@@ -838,7 +996,7 @@ namespace ts {
                 );
             }
             else {
-                statements = append(statements, node);
+                statements = append(statements, visitEachChild(node, importCallExpressionVisitor, context));
             }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
@@ -890,7 +1048,7 @@ namespace ts {
                 }
             }
             else {
-                statements = append(statements, node);
+                statements = append(statements, visitEachChild(node, importCallExpressionVisitor, context));
             }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
@@ -913,7 +1071,7 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration): Expression {
             if (isBindingPattern(node.name)) {
                 return flattenDestructuringAssignment(
-                    node,
+                    visitNode(node, importCallExpressionVisitor),
                     /*visitor*/ undefined,
                     context,
                     FlattenLevel.All,
@@ -930,7 +1088,7 @@ namespace ts {
                         ),
                         /*location*/ node.name
                     ),
-                    node.initializer
+                    visitNode(node.initializer, importCallExpressionVisitor)
                 );
             }
         }
@@ -1109,7 +1267,7 @@ namespace ts {
             }
 
             if (hasModifier(decl, ModifierFlags.Export)) {
-                const exportName = hasModifier(decl, ModifierFlags.Default) ? createIdentifier("default") : decl.name;
+                const exportName = hasModifier(decl, ModifierFlags.Default) ? createIdentifier("default") : getDeclarationName(decl);
                 statements = appendExportStatement(statements, exportName, getLocalName(decl), /*location*/ decl);
             }
 
@@ -1130,7 +1288,7 @@ namespace ts {
          */
         function appendExportsOfDeclaration(statements: Statement[] | undefined, decl: Declaration): Statement[] | undefined {
             const name = getDeclarationName(decl);
-            const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(name.text);
+            const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(idText(name));
             if (exportSpecifiers) {
                 for (const exportSpecifier of exportSpecifiers) {
                     statements = appendExportStatement(statements, exportSpecifier.name, name, /*location*/ exportSpecifier.name);
@@ -1495,6 +1653,22 @@ namespace ts {
         text: `
             function __export(m) {
                 for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-            }`
+            }
+        `
+    };
+
+    function createExportStarHelper(context: TransformationContext, module: Expression) {
+        const compilerOptions = context.getCompilerOptions();
+        return compilerOptions.importHelpers
+            ? createCall(getHelperName("__exportStar"), /*typeArguments*/ undefined, [module, createIdentifier("exports")])
+            : createCall(createIdentifier("__export"), /*typeArguments*/ undefined, [module]);
+    }
+
+    // emit helper for dynamic import
+    const dynamicImportUMDHelper: EmitHelper = {
+        name: "typescript:dynamicimport-sync-require",
+        scoped: true,
+        text: `
+            var __syncRequire = typeof module === "object" && typeof module.exports === "object";`
     };
 }

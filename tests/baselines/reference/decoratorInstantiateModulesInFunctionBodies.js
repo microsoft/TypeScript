@@ -40,14 +40,14 @@ function filter(handler) {
         // ...
     };
 }
-var Wat = (function () {
+var Wat = /** @class */ (function () {
     function Wat() {
     }
     Wat.whatever = function () {
         // ...
     };
+    __decorate([
+        filter(function () { return a_1.test == 'abc'; })
+    ], Wat, "whatever", null);
     return Wat;
 }());
-__decorate([
-    filter(function () { return a_1.test == 'abc'; })
-], Wat, "whatever", null);

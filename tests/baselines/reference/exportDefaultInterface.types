@@ -1,0 +1,33 @@
+=== tests/cases/compiler/a.ts ===
+export default interface A { value: number; }
+>A : A
+>value : number
+
+var a: A;
+>a : A
+>A : A
+
+a.value.toExponential();
+>a.value.toExponential() : string
+>a.value.toExponential : (fractionDigits?: number) => string
+>a.value : number
+>a : A
+>value : number
+>toExponential : (fractionDigits?: number) => string
+
+=== tests/cases/compiler/b.ts ===
+import A from './a';
+>A : any
+
+var a: A;
+>a : A
+>A : A
+
+a.value.toExponential();
+>a.value.toExponential() : string
+>a.value.toExponential : (fractionDigits?: number) => string
+>a.value : number
+>a : A
+>value : number
+>toExponential : (fractionDigits?: number) => string
+

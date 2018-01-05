@@ -1,0 +1,6 @@
+=== tests/cases/compiler/unusedTypeParameterInInterface1.ts ===
+interface int<T> {
+>int : Symbol(int, Decl(unusedTypeParameterInInterface1.ts, 0, 0))
+>T : Symbol(T, Decl(unusedTypeParameterInInterface1.ts, 0, 14))
+
+}

@@ -3,4 +3,7 @@
 // @noUnusedLocals: true
 //// [|function f1<T>() {}|]
 
-verify.rangeAfterCodeFix("function f1() {}");
+verify.codeFix({
+    description: "Remove declaration for: 'T'",
+    newRangeContent: "function f1() {}",
+});

@@ -1,0 +1,18 @@
+=== tests/cases/compiler/server.ts ===
+var a = 10;
+>a : Symbol(a, Decl(server.ts, 0, 3))
+
+export default a;
+>a : Symbol(a, Decl(server.ts, 0, 3))
+
+=== tests/cases/compiler/client.ts ===
+export import defaultBinding from "server";
+>defaultBinding : Symbol(defaultBinding, Decl(client.ts, 0, 13))
+
+export var x = defaultBinding;
+>x : Symbol(x, Decl(client.ts, 1, 10))
+>defaultBinding : Symbol(defaultBinding, Decl(client.ts, 0, 13))
+
+export import defaultBinding2 from "server"; // non referenced
+>defaultBinding2 : Symbol(defaultBinding2, Decl(client.ts, 2, 13))
+

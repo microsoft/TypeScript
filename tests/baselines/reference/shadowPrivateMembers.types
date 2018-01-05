@@ -1,0 +1,10 @@
+=== tests/cases/compiler/shadowPrivateMembers.ts ===
+class base { private n() {} }
+>base : base
+>n : () => void
+
+class derived extends base { private n() {} }
+>derived : derived
+>base : base
+>n : () => void
+

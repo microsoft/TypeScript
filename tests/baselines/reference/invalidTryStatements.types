@@ -1,0 +1,24 @@
+=== tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts ===
+function fn() {
+>fn : () => void
+
+    try {
+    } catch (x) {
+>x : any
+
+        var x: string; // ensure x is 'Any'
+>x : string
+    }
+
+    // no type annotation allowed
+    try { } catch (z: any) { }
+>z : any
+
+    try { } catch (a: number) { }
+>a : any
+
+    try { } catch (y: string) { }
+>y : any
+}
+
+

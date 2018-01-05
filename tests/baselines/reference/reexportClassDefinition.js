@@ -19,7 +19,7 @@ class x extends foo2.x {}
 
 //// [foo1.js]
 "use strict";
-var x = (function () {
+var x = /** @class */ (function () {
     function x() {
     }
     return x;
@@ -45,7 +45,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var foo2 = require("./foo2");
-var x = (function (_super) {
+var x = /** @class */ (function (_super) {
     __extends(x, _super);
     function x() {
         return _super !== null && _super.apply(this, arguments) || this;

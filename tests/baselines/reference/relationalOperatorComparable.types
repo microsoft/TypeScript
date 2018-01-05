@@ -1,0 +1,81 @@
+=== tests/cases/compiler/relationalOperatorComparable.ts ===
+function f(onethree: 1 | 3, two: 2) {
+>f : (onethree: 1 | 3, two: 2) => void
+>onethree : 1 | 3
+>two : 2
+
+    const t = true;
+>t : true
+>true : true
+
+    const f = false;
+>f : false
+>false : false
+
+    let a1 = onethree < two; // ok
+>a1 : boolean
+>onethree < two : boolean
+>onethree : 1 | 3
+>two : 2
+
+    let a2 = onethree < true; // error, number and boolean
+>a2 : boolean
+>onethree < true : boolean
+>onethree : 1 | 3
+>true : true
+
+    let a3 = onethree <= false; // error, number and boolean
+>a3 : boolean
+>onethree <= false : boolean
+>onethree : 1 | 3
+>false : false
+
+    let a4 = onethree >= t; // error, number and boolean
+>a4 : boolean
+>onethree >= t : boolean
+>onethree : 1 | 3
+>t : true
+
+    let a5 = onethree > f; // error, number and boolean
+>a5 : boolean
+>onethree > f : boolean
+>onethree : 1 | 3
+>f : false
+
+    let a6 = true < onethree; // error, boolean and number
+>a6 : boolean
+>true < onethree : boolean
+>true : true
+>onethree : 1 | 3
+
+    let a7 = false < two; // error, boolean and number
+>a7 : boolean
+>false < two : boolean
+>false : false
+>two : 2
+
+    let a8 = 'foo' < onethree; // error, string and number
+>a8 : boolean
+>'foo' < onethree : boolean
+>'foo' : "foo"
+>onethree : 1 | 3
+
+    let a9 = onethree < 1; // ok
+>a9 : boolean
+>onethree < 1 : boolean
+>onethree : 1 | 3
+>1 : 1
+
+    let a10 = 1 < two; // ok
+>a10 : boolean
+>1 < two : boolean
+>1 : 1
+>two : 2
+
+    let a11 = 2 < 1; // ok
+>a11 : boolean
+>2 < 1 : boolean
+>2 : 2
+>1 : 1
+}
+

@@ -31,7 +31,7 @@ module test {
 // Boolean primitive type.
 var test;
 (function (test) {
-    var Object = (function () {
+    var Object = /** @class */ (function () {
         function Object() {
         }
         return Object;

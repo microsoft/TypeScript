@@ -1,0 +1,121 @@
+=== tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts ===
+module TypeScript {
+>TypeScript : Symbol(TypeScript, Decl(genericRecursiveImplicitConstructorErrors3.ts, 0, 0), Decl(genericRecursiveImplicitConstructorErrors3.ts, 5, 1))
+
+    export class MemberName <A,B,C>{
+>MemberName : Symbol(MemberName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 0, 19))
+>A : Symbol(A, Decl(genericRecursiveImplicitConstructorErrors3.ts, 1, 29))
+>B : Symbol(B, Decl(genericRecursiveImplicitConstructorErrors3.ts, 1, 31))
+>C : Symbol(C, Decl(genericRecursiveImplicitConstructorErrors3.ts, 1, 33))
+
+        static create<A,B,C>(arg1: any, arg2?: any, arg3?: any): MemberName {
+>create : Symbol(MemberName.create, Decl(genericRecursiveImplicitConstructorErrors3.ts, 1, 36))
+>A : Symbol(A, Decl(genericRecursiveImplicitConstructorErrors3.ts, 2, 22))
+>B : Symbol(B, Decl(genericRecursiveImplicitConstructorErrors3.ts, 2, 24))
+>C : Symbol(C, Decl(genericRecursiveImplicitConstructorErrors3.ts, 2, 26))
+>arg1 : Symbol(arg1, Decl(genericRecursiveImplicitConstructorErrors3.ts, 2, 29))
+>arg2 : Symbol(arg2, Decl(genericRecursiveImplicitConstructorErrors3.ts, 2, 39))
+>arg3 : Symbol(arg3, Decl(genericRecursiveImplicitConstructorErrors3.ts, 2, 51))
+>MemberName : Symbol(MemberName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 0, 19))
+        }
+    }
+}
+ 
+module TypeScript {
+>TypeScript : Symbol(TypeScript, Decl(genericRecursiveImplicitConstructorErrors3.ts, 0, 0), Decl(genericRecursiveImplicitConstructorErrors3.ts, 5, 1))
+
+    export class PullSymbol <A,B,C>{
+>PullSymbol : Symbol(PullSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 7, 19))
+>A : Symbol(A, Decl(genericRecursiveImplicitConstructorErrors3.ts, 8, 29))
+>B : Symbol(B, Decl(genericRecursiveImplicitConstructorErrors3.ts, 8, 31))
+>C : Symbol(C, Decl(genericRecursiveImplicitConstructorErrors3.ts, 8, 33))
+
+        public type: PullTypeSymbol = null;
+>type : Symbol(PullSymbol.type, Decl(genericRecursiveImplicitConstructorErrors3.ts, 8, 36))
+>PullTypeSymbol : Symbol(PullTypeSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 10, 5))
+    }
+    export class PullTypeSymbol <A,B,C>extends PullSymbol {
+>PullTypeSymbol : Symbol(PullTypeSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 10, 5))
+>A : Symbol(A, Decl(genericRecursiveImplicitConstructorErrors3.ts, 11, 33))
+>B : Symbol(B, Decl(genericRecursiveImplicitConstructorErrors3.ts, 11, 35))
+>C : Symbol(C, Decl(genericRecursiveImplicitConstructorErrors3.ts, 11, 37))
+>PullSymbol : Symbol(PullSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 7, 19))
+
+        private _elementType: PullTypeSymbol = null;
+>_elementType : Symbol(PullTypeSymbol._elementType, Decl(genericRecursiveImplicitConstructorErrors3.ts, 11, 59))
+>PullTypeSymbol : Symbol(PullTypeSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 10, 5))
+
+        public toString<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean) {
+>toString : Symbol(PullTypeSymbol.toString, Decl(genericRecursiveImplicitConstructorErrors3.ts, 12, 52))
+>A : Symbol(A, Decl(genericRecursiveImplicitConstructorErrors3.ts, 13, 24))
+>B : Symbol(B, Decl(genericRecursiveImplicitConstructorErrors3.ts, 13, 26))
+>C : Symbol(C, Decl(genericRecursiveImplicitConstructorErrors3.ts, 13, 28))
+>scopeSymbol : Symbol(scopeSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 13, 31))
+>PullSymbol : Symbol(PullSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 7, 19))
+>useConstraintInName : Symbol(useConstraintInName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 13, 56))
+
+            var s = this.getScopedNameEx(scopeSymbol, useConstraintInName).toString();
+>s : Symbol(s, Decl(genericRecursiveImplicitConstructorErrors3.ts, 14, 15))
+>this.getScopedNameEx : Symbol(PullTypeSymbol.getScopedNameEx, Decl(genericRecursiveImplicitConstructorErrors3.ts, 16, 9))
+>this : Symbol(PullTypeSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 10, 5))
+>getScopedNameEx : Symbol(PullTypeSymbol.getScopedNameEx, Decl(genericRecursiveImplicitConstructorErrors3.ts, 16, 9))
+>scopeSymbol : Symbol(scopeSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 13, 31))
+>useConstraintInName : Symbol(useConstraintInName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 13, 56))
+
+            return s;
+>s : Symbol(s, Decl(genericRecursiveImplicitConstructorErrors3.ts, 14, 15))
+        }
+        public getScopedNameEx<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) {
+>getScopedNameEx : Symbol(PullTypeSymbol.getScopedNameEx, Decl(genericRecursiveImplicitConstructorErrors3.ts, 16, 9))
+>A : Symbol(A, Decl(genericRecursiveImplicitConstructorErrors3.ts, 17, 31))
+>B : Symbol(B, Decl(genericRecursiveImplicitConstructorErrors3.ts, 17, 33))
+>C : Symbol(C, Decl(genericRecursiveImplicitConstructorErrors3.ts, 17, 35))
+>scopeSymbol : Symbol(scopeSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 17, 38))
+>PullSymbol : Symbol(PullSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 7, 19))
+>useConstraintInName : Symbol(useConstraintInName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 17, 63))
+>getPrettyTypeName : Symbol(getPrettyTypeName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 17, 94))
+>getTypeParamMarkerInfo : Symbol(getTypeParamMarkerInfo, Decl(genericRecursiveImplicitConstructorErrors3.ts, 17, 123))
+
+            if (this.isArray()) {
+>this : Symbol(PullTypeSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 10, 5))
+
+                var elementMemberName = this._elementType ?
+>elementMemberName : Symbol(elementMemberName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 19, 19))
+>this._elementType : Symbol(PullTypeSymbol._elementType, Decl(genericRecursiveImplicitConstructorErrors3.ts, 11, 59))
+>this : Symbol(PullTypeSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 10, 5))
+>_elementType : Symbol(PullTypeSymbol._elementType, Decl(genericRecursiveImplicitConstructorErrors3.ts, 11, 59))
+
+                (this._elementType.isArray() || this._elementType.isNamedTypeSymbol() ?
+>this._elementType : Symbol(PullTypeSymbol._elementType, Decl(genericRecursiveImplicitConstructorErrors3.ts, 11, 59))
+>this : Symbol(PullTypeSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 10, 5))
+>_elementType : Symbol(PullTypeSymbol._elementType, Decl(genericRecursiveImplicitConstructorErrors3.ts, 11, 59))
+>this._elementType : Symbol(PullTypeSymbol._elementType, Decl(genericRecursiveImplicitConstructorErrors3.ts, 11, 59))
+>this : Symbol(PullTypeSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 10, 5))
+>_elementType : Symbol(PullTypeSymbol._elementType, Decl(genericRecursiveImplicitConstructorErrors3.ts, 11, 59))
+
+                this._elementType.getScopedNameEx(scopeSymbol, false, getPrettyTypeName, getTypeParamMarkerInfo) :
+>this._elementType : Symbol(PullTypeSymbol._elementType, Decl(genericRecursiveImplicitConstructorErrors3.ts, 11, 59))
+>this : Symbol(PullTypeSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 10, 5))
+>_elementType : Symbol(PullTypeSymbol._elementType, Decl(genericRecursiveImplicitConstructorErrors3.ts, 11, 59))
+>scopeSymbol : Symbol(scopeSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 17, 38))
+>getPrettyTypeName : Symbol(getPrettyTypeName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 17, 94))
+>getTypeParamMarkerInfo : Symbol(getTypeParamMarkerInfo, Decl(genericRecursiveImplicitConstructorErrors3.ts, 17, 123))
+
+                this._elementType.getMemberTypeNameEx(false, scopeSymbol, getPrettyTypeName)) : 1
+>this._elementType : Symbol(PullTypeSymbol._elementType, Decl(genericRecursiveImplicitConstructorErrors3.ts, 11, 59))
+>this : Symbol(PullTypeSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 10, 5))
+>_elementType : Symbol(PullTypeSymbol._elementType, Decl(genericRecursiveImplicitConstructorErrors3.ts, 11, 59))
+>scopeSymbol : Symbol(scopeSymbol, Decl(genericRecursiveImplicitConstructorErrors3.ts, 17, 38))
+>getPrettyTypeName : Symbol(getPrettyTypeName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 17, 94))
+
+                return MemberName.create(elementMemberName, "", "[]");
+>MemberName.create : Symbol(MemberName.create, Decl(genericRecursiveImplicitConstructorErrors3.ts, 1, 36))
+>MemberName : Symbol(MemberName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 0, 19))
+>create : Symbol(MemberName.create, Decl(genericRecursiveImplicitConstructorErrors3.ts, 1, 36))
+>elementMemberName : Symbol(elementMemberName, Decl(genericRecursiveImplicitConstructorErrors3.ts, 19, 19))
+            }
+        }
+    }
+}
+ 
+

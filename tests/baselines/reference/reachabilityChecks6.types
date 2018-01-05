@@ -1,0 +1,242 @@
+=== tests/cases/compiler/reachabilityChecks6.ts ===
+function f0(x) {
+>f0 : (x: any) => void
+>x : any
+
+    while (true);
+>true : true
+}
+
+function f1(x) {
+>f1 : (x: any) => number
+>x : any
+
+    if (x) {
+>x : any
+
+        return 1
+>1 : 1
+    }
+}
+
+function f2(x) {
+>f2 : (x: any) => number
+>x : any
+
+    while (x) {
+>x : any
+
+        throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+    }
+    return 1;
+>1 : 1
+}
+
+function f3(x) {
+>f3 : (x: any) => void
+>x : any
+
+    while (x) {
+>x : any
+
+        throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+    }
+}
+
+function f3_1 (x) {
+>f3_1 : (x: any) => void
+>x : any
+
+    while (x) {
+>x : any
+    }
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+function f4(x) {
+>f4 : (x: any) => number
+>x : any
+
+    try {
+        if (x) {
+>x : any
+
+            return 1;
+>1 : 1
+        }
+    }
+    catch (e) {
+>e : any
+    }
+}
+
+function f5(x) {
+>f5 : (x: any) => 1 | 2
+>x : any
+
+    try {
+        if (x) {
+>x : any
+
+            return 1;
+>1 : 1
+        }
+    }
+    catch (e) {
+>e : any
+
+        return 2;
+>2 : 2
+    }
+}
+
+function f6(x) {
+>f6 : (x: any) => number
+>x : any
+
+    try {
+        if (x) {
+>x : any
+
+            return 1;
+>1 : 1
+        }
+        else 
+        {
+            throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+        }
+    }
+    catch (e) {
+>e : any
+    }
+}
+
+function f7(x) {
+>f7 : (x: any) => number
+>x : any
+
+    try {
+        if (x) {
+>x : any
+
+            return 1;
+>1 : 1
+        }
+        else {
+            throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+        }
+    }
+    catch (e) {
+>e : any
+
+        return 1;
+>1 : 1
+    }
+}
+
+function f8(x) {
+>f8 : (x: any) => number
+>x : any
+
+    try {
+        if (true) {
+>true : true
+
+            x++;
+>x++ : number
+>x : any
+        }
+        else {
+            return 1;
+>1 : 1
+        }
+    }
+    catch (e) {
+>e : any
+
+        return 1;
+>1 : 1
+    }
+}
+
+function f9(x) {
+>f9 : (x: any) => number
+>x : any
+
+    try {
+        while (false) {
+>false : false
+
+            return 1;
+>1 : 1
+        }
+    }
+    catch (e) {
+>e : any
+
+        return 1;
+>1 : 1
+    }
+}
+
+function f10(x) {
+>f10 : (x: any) => number
+>x : any
+
+    try {
+        do {
+            x++;
+>x++ : number
+>x : any
+
+        } while (true);
+>true : true
+    }
+    catch (e) {
+>e : any
+
+        return 1;
+>1 : 1
+    }
+}
+
+function f11(x) {
+>f11 : (x: any) => number
+>x : any
+
+    test:
+>test : any
+
+    try {
+        do {
+            do {
+                break test;
+>test : any
+
+            } while (true);
+>true : true
+
+            x++;
+>x++ : number
+>x : any
+
+        } while (true);
+>true : true
+    }
+    catch (e) {
+>e : any
+
+        return 1;
+>1 : 1
+    }
+}

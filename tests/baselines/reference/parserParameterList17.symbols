@@ -1,0 +1,11 @@
+=== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList17.ts ===
+class C {
+>C : Symbol(C, Decl(parserParameterList17.ts, 0, 0))
+
+   constructor(a = 4);
+>a : Symbol(a, Decl(parserParameterList17.ts, 1, 15))
+
+   constructor(a, b) { }
+>a : Symbol(a, Decl(parserParameterList17.ts, 2, 15))
+>b : Symbol(b, Decl(parserParameterList17.ts, 2, 17))
+}

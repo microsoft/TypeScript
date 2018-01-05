@@ -42,7 +42,7 @@ module Generic {
 //// [staticPropertyNotInClassType.js]
 var NonGeneric;
 (function (NonGeneric) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C(a, b) {
             this.a = a;
             this.b = b;
@@ -67,7 +67,7 @@ var NonGeneric;
 })(NonGeneric || (NonGeneric = {}));
 var Generic;
 (function (Generic) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C(a, b) {
             this.a = a;
             this.b = b;

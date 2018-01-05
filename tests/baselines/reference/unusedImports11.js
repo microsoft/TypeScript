@@ -20,7 +20,7 @@ new r.Member();
 //// [b.js]
 "use strict";
 exports.__esModule = true;
-var Member = (function () {
+var Member = /** @class */ (function () {
     function Member() {
     }
     return Member;

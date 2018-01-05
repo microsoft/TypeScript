@@ -1,0 +1,44 @@
+=== tests/cases/compiler/recursiveBaseCheck.ts ===
+declare module Module {
+>Module : typeof Module
+
+    class C extends D {
+>C : C
+>D : typeof D
+    }
+    export class B extends Module.C {
+>B : B
+>Module.C : typeof C
+>Module : typeof Module
+>C : typeof C
+    }
+    export class A extends Module.B {
+>A : A
+>Module.B : typeof B
+>Module : typeof Module
+>B : typeof B
+    }
+    export class AmChart extends Module.A {
+>AmChart : AmChart
+>Module.A : typeof A
+>Module : typeof Module
+>A : typeof A
+    }
+    export class D extends AmChart {
+>D : D
+>AmChart : typeof AmChart
+    }
+    export class E extends Module.D {
+>E : E
+>Module.D : D
+>Module : typeof Module
+>D : typeof D
+    }
+    export class F extends Module.E {
+>F : F
+>Module.E : E
+>Module : typeof Module
+>E : typeof E
+    }
+}
+

@@ -1,3 +1,10 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts(45,9): error TS2322: Type 'new (x: number) => string[]' is not assignable to type 'new <T, U>(x: T) => U[]'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'T' is not assignable to type 'number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts(49,9): error TS2322: Type 'new (x: (arg: Base) => Derived) => (r: Base) => Derived2' is not assignable to type 'new <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Types of parameters 'arg' and 'arg' are incompatible.
+      Type 'Base' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts(52,9): error TS2322: Type 'new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U' is not assignable to type 'new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived'.
   Types of parameters 'y' and 'y' are incompatible.
     Types of parameters 'arg2' and 'arg2' are incompatible.
@@ -5,11 +12,34 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         Types of property 'foo' are incompatible.
           Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts(53,9): error TS2322: Type 'new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived' is not assignable to type 'new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U'.
-  Types of parameters 'y' and 'y' are incompatible.
-    Types of parameters 'arg2' and 'arg2' are incompatible.
-      Type 'Base' is not assignable to type '{ foo: number; }'.
-        Types of property 'foo' are incompatible.
-          Type 'string' is not assignable to type 'number'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Types of parameters 'arg' and 'arg' are incompatible.
+      Type 'Base' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts(58,9): error TS2322: Type 'new (...x: Base[]) => Base' is not assignable to type 'new <T extends Derived>(...x: T[]) => T'.
+  Type 'Base' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts(62,9): error TS2322: Type 'new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base' is not assignable to type 'new <T extends Derived>(x: T, y: T) => T'.
+  Type 'Base' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts(66,9): error TS2322: Type 'new (x: Base[], y: Derived2[]) => Derived[]' is not assignable to type 'new <T extends Derived2[]>(x: Base[], y: Base[]) => T'.
+  Type 'Derived[]' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts(69,9): error TS2322: Type 'new <T>(x: { a: T; b: T; }) => T' is not assignable to type 'new (x: { a: string; b: number; }) => number'.
+  Type 'string | number' is not assignable to type 'number'.
+    Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts(70,9): error TS2322: Type 'new (x: { a: string; b: number; }) => number' is not assignable to type 'new <T>(x: { a: T; b: T; }) => T'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type '{ a: T; b: T; }' is not assignable to type '{ a: string; b: number; }'.
+      Types of property 'a' are incompatible.
+        Type 'T' is not assignable to type 'string'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts(73,9): error TS2322: Type 'new <T extends Base>(x: { a: T; b: T; }) => number' is not assignable to type 'new (x: { a: string; b: number; }) => number'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type '{ a: string; b: number; }' is not assignable to type '{ a: Base; b: Base; }'.
+      Types of property 'a' are incompatible.
+        Type 'string' is not assignable to type 'Base'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts(74,9): error TS2322: Type 'new (x: { a: string; b: number; }) => number' is not assignable to type 'new <T extends Base>(x: { a: T; b: T; }) => number'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type '{ a: T; b: T; }' is not assignable to type '{ a: string; b: number; }'.
+      Types of property 'a' are incompatible.
+        Type 'T' is not assignable to type 'string'.
+          Type 'Base' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts(77,9): error TS2322: Type 'new <T>(x: (a: T) => T) => T[]' is not assignable to type '{ new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }'.
   Types of parameters 'x' and 'x' are incompatible.
     Type '{ new (a: number): number; new (a?: number): number; }' is not assignable to type '(a: any) => any'.
@@ -26,9 +56,21 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
   Types of parameters 'x' and 'x' are incompatible.
     Type '(a: any) => any' is not assignable to type '{ new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }'.
       Type '(a: any) => any' provides no match for the signature 'new <T extends Derived>(a: T): T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts(89,9): error TS2322: Type 'new <T>(x: T) => string[]' is not assignable to type 'new <T>(x: T) => T[]'.
+  Type 'string[]' is not assignable to type 'T[]'.
+    Type 'string' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts(90,9): error TS2322: Type 'new <T>(x: T) => T[]' is not assignable to type 'new <T>(x: T) => string[]'.
+  Type 'T[]' is not assignable to type 'string[]'.
+    Type 'T' is not assignable to type 'string'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts(95,9): error TS2322: Type 'new <T>(x: T) => T[]' is not assignable to type 'new <T>(x: T) => string[]'.
+  Type 'T[]' is not assignable to type 'string[]'.
+    Type 'T' is not assignable to type 'string'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts(96,9): error TS2322: Type 'new <T>(x: T) => string[]' is not assignable to type 'new <T>(x: T) => T[]'.
+  Type 'string[]' is not assignable to type 'T[]'.
+    Type 'string' is not assignable to type 'T'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts (6 errors) ====
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts (19 errors) ====
     // checking assignment compatibility relations for function types.
     
     module Errors {
@@ -74,10 +116,19 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
             var b2: new <T, U>(x: T) => U[]; 
             a2 = b2; // ok
             b2 = a2; // ok
+            ~~
+!!! error TS2322: Type 'new (x: number) => string[]' is not assignable to type 'new <T, U>(x: T) => U[]'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'T' is not assignable to type 'number'.
     
             var b7: new <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V;
             a7 = b7; // ok
             b7 = a7; // ok
+            ~~
+!!! error TS2322: Type 'new (x: (arg: Base) => Derived) => (r: Base) => Derived2' is not assignable to type 'new <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Types of parameters 'arg' and 'arg' are incompatible.
+!!! error TS2322:       Type 'Base' is not assignable to type 'T'.
     
             var b8: new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U; 
             a8 = b8; // error, type mismatch
@@ -91,32 +142,62 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
             b8 = a8; // error
             ~~
 !!! error TS2322: Type 'new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived' is not assignable to type 'new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U'.
-!!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
-!!! error TS2322:     Types of parameters 'arg2' and 'arg2' are incompatible.
-!!! error TS2322:       Type 'Base' is not assignable to type '{ foo: number; }'.
-!!! error TS2322:         Types of property 'foo' are incompatible.
-!!! error TS2322:           Type 'string' is not assignable to type 'number'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Types of parameters 'arg' and 'arg' are incompatible.
+!!! error TS2322:       Type 'Base' is not assignable to type 'T'.
     
             
             var b10: new <T extends Derived>(...x: T[]) => T; 
             a10 = b10; // ok
             b10 = a10; // ok
+            ~~~
+!!! error TS2322: Type 'new (...x: Base[]) => Base' is not assignable to type 'new <T extends Derived>(...x: T[]) => T'.
+!!! error TS2322:   Type 'Base' is not assignable to type 'T'.
     
             var b11: new <T extends Derived>(x: T, y: T) => T; 
             a11 = b11; // ok
             b11 = a11; // ok
+            ~~~
+!!! error TS2322: Type 'new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base' is not assignable to type 'new <T extends Derived>(x: T, y: T) => T'.
+!!! error TS2322:   Type 'Base' is not assignable to type 'T'.
     
             var b12: new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; 
             a12 = b12; // ok
             b12 = a12; // ok
+            ~~~
+!!! error TS2322: Type 'new (x: Base[], y: Derived2[]) => Derived[]' is not assignable to type 'new <T extends Derived2[]>(x: Base[], y: Base[]) => T'.
+!!! error TS2322:   Type 'Derived[]' is not assignable to type 'T'.
     
             var b15: new <T>(x: { a: T; b: T }) => T; 
             a15 = b15; // ok
+            ~~~
+!!! error TS2322: Type 'new <T>(x: { a: T; b: T; }) => T' is not assignable to type 'new (x: { a: string; b: number; }) => number'.
+!!! error TS2322:   Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
             b15 = a15; // ok
+            ~~~
+!!! error TS2322: Type 'new (x: { a: string; b: number; }) => number' is not assignable to type 'new <T>(x: { a: T; b: T; }) => T'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type '{ a: T; b: T; }' is not assignable to type '{ a: string; b: number; }'.
+!!! error TS2322:       Types of property 'a' are incompatible.
+!!! error TS2322:         Type 'T' is not assignable to type 'string'.
     
             var b15a: new <T extends Base>(x: { a: T; b: T }) => number; 
             a15 = b15a; // ok
+            ~~~
+!!! error TS2322: Type 'new <T extends Base>(x: { a: T; b: T; }) => number' is not assignable to type 'new (x: { a: string; b: number; }) => number'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type '{ a: string; b: number; }' is not assignable to type '{ a: Base; b: Base; }'.
+!!! error TS2322:       Types of property 'a' are incompatible.
+!!! error TS2322:         Type 'string' is not assignable to type 'Base'.
             b15a = a15; // ok
+            ~~~~
+!!! error TS2322: Type 'new (x: { a: string; b: number; }) => number' is not assignable to type 'new <T extends Base>(x: { a: T; b: T; }) => number'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type '{ a: T; b: T; }' is not assignable to type '{ a: string; b: number; }'.
+!!! error TS2322:       Types of property 'a' are incompatible.
+!!! error TS2322:         Type 'T' is not assignable to type 'string'.
+!!! error TS2322:           Type 'Base' is not assignable to type 'string'.
     
             var b16: new <T>(x: (a: T) => T) => T[];
             a16 = b16; // error
@@ -152,12 +233,28 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
             var a2: new <T>(x: T) => T[];
             var b2: new <T>(x: T) => string[];
             a2 = b2; // ok
+            ~~
+!!! error TS2322: Type 'new <T>(x: T) => string[]' is not assignable to type 'new <T>(x: T) => T[]'.
+!!! error TS2322:   Type 'string[]' is not assignable to type 'T[]'.
+!!! error TS2322:     Type 'string' is not assignable to type 'T'.
             b2 = a2; // ok
+            ~~
+!!! error TS2322: Type 'new <T>(x: T) => T[]' is not assignable to type 'new <T>(x: T) => string[]'.
+!!! error TS2322:   Type 'T[]' is not assignable to type 'string[]'.
+!!! error TS2322:     Type 'T' is not assignable to type 'string'.
     
             // target type has generic call signature
             var a3: new <T>(x: T) => string[];
             var b3: new <T>(x: T) => T[]; 
             a3 = b3; // ok
+            ~~
+!!! error TS2322: Type 'new <T>(x: T) => T[]' is not assignable to type 'new <T>(x: T) => string[]'.
+!!! error TS2322:   Type 'T[]' is not assignable to type 'string[]'.
+!!! error TS2322:     Type 'T' is not assignable to type 'string'.
             b3 = a3; // ok
+            ~~
+!!! error TS2322: Type 'new <T>(x: T) => string[]' is not assignable to type 'new <T>(x: T) => T[]'.
+!!! error TS2322:   Type 'string[]' is not assignable to type 'T[]'.
+!!! error TS2322:     Type 'string' is not assignable to type 'T'.
         }
     }

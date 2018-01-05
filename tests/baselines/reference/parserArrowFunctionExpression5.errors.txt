@@ -1,0 +1,15 @@
+tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression5.ts(1,2): error TS2304: Cannot find name 'bar'.
+tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression5.ts(1,6): error TS2304: Cannot find name 'x'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression5.ts (2 errors) ====
+    (bar(x,
+     ~~~
+!!! error TS2304: Cannot find name 'bar'.
+         ~
+!!! error TS2304: Cannot find name 'x'.
+        () => {},
+        () => {}
+      )
+    )
+    

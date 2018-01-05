@@ -5,7 +5,7 @@ class Foo {
 
 
 //// [parameterPropertyReferencingOtherParameter.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo(x, y) {
         if (y === void 0) { y = x; }
         this.x = x;

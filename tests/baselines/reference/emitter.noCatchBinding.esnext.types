@@ -1,0 +1,10 @@
+=== tests/cases/conformance/emitter/esnext/noCatchBinding/emitter.noCatchBinding.esnext.ts ===
+function f() {
+>f : () => void
+
+    try { } catch { }
+    try { } catch { 
+        try { } catch { }
+    }
+    try { } catch { } finally { }
+}

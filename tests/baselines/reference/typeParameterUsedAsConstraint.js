@@ -36,32 +36,32 @@ var a6: { <T, U extends T, V extends U>(): void }
 
 
 //// [typeParameterUsedAsConstraint.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     return C2;
 }());
-var C3 = (function () {
+var C3 = /** @class */ (function () {
     function C3() {
     }
     return C3;
 }());
-var C4 = (function () {
+var C4 = /** @class */ (function () {
     function C4() {
     }
     return C4;
 }());
-var C5 = (function () {
+var C5 = /** @class */ (function () {
     function C5() {
     }
     return C5;
 }());
-var C6 = (function () {
+var C6 = /** @class */ (function () {
     function C6() {
     }
     return C6;

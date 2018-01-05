@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser566700.ts ===
+var v = ()({});
+>v : Symbol(v, Decl(parser566700.ts, 0, 3))
+

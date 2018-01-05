@@ -1,0 +1,24 @@
+=== tests/cases/conformance/parser/ecmascript5/parserNotRegex2.ts ===
+declare const A: any;
+>A : Symbol(A, Decl(parserNotRegex2.ts, 0, 13))
+
+declare const B: any;
+>B : Symbol(B, Decl(parserNotRegex2.ts, 1, 13))
+
+declare const C: any;
+>C : Symbol(C, Decl(parserNotRegex2.ts, 2, 13))
+
+const x = (A / 2);
+>x : Symbol(x, Decl(parserNotRegex2.ts, 3, 5))
+>A : Symbol(A, Decl(parserNotRegex2.ts, 0, 13))
+
+B(
+>B : Symbol(B, Decl(parserNotRegex2.ts, 1, 13))
+
+    C(),
+>C : Symbol(C, Decl(parserNotRegex2.ts, 2, 13))
+
+    () => { },
+    () => { }
+);
+

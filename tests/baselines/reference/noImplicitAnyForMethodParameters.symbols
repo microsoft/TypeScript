@@ -1,0 +1,31 @@
+=== tests/cases/compiler/noImplicitAnyForMethodParameters.ts ===
+declare class A {
+>A : Symbol(A, Decl(noImplicitAnyForMethodParameters.ts, 0, 0))
+
+    private foo(a); // OK - ambient class and private method - no error
+>foo : Symbol(A.foo, Decl(noImplicitAnyForMethodParameters.ts, 0, 17))
+>a : Symbol(a, Decl(noImplicitAnyForMethodParameters.ts, 1, 16))
+}
+
+declare class B {
+>B : Symbol(B, Decl(noImplicitAnyForMethodParameters.ts, 2, 1))
+
+    public foo(a); // OK - ambient class and public method - error
+>foo : Symbol(B.foo, Decl(noImplicitAnyForMethodParameters.ts, 4, 17))
+>a : Symbol(a, Decl(noImplicitAnyForMethodParameters.ts, 5, 15))
+}
+
+class C {
+>C : Symbol(C, Decl(noImplicitAnyForMethodParameters.ts, 6, 1))
+
+    private foo(a) { } // OK - non-ambient class and private method - error
+>foo : Symbol(C.foo, Decl(noImplicitAnyForMethodParameters.ts, 8, 9))
+>a : Symbol(a, Decl(noImplicitAnyForMethodParameters.ts, 9, 16))
+}
+class D {
+>D : Symbol(D, Decl(noImplicitAnyForMethodParameters.ts, 10, 1))
+
+    public foo(a) { } // OK - non-ambient class and public method - error
+>foo : Symbol(D.foo, Decl(noImplicitAnyForMethodParameters.ts, 11, 9))
+>a : Symbol(a, Decl(noImplicitAnyForMethodParameters.ts, 12, 15))
+}

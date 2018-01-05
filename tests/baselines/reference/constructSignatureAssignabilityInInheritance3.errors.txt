@@ -11,9 +11,31 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/construc
           Type '{ foo: number; }' is not assignable to type 'Base'.
             Types of property 'foo' are incompatible.
               Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance3.ts(66,19): error TS2430: Interface 'I6' incorrectly extends interface 'A'.
+  Types of property 'a15' are incompatible.
+    Type 'new <T>(x: { a: T; b: T; }) => T' is not assignable to type 'new (x: { a: string; b: number; }) => number'.
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance3.ts(70,19): error TS2430: Interface 'I7' incorrectly extends interface 'A'.
+  Types of property 'a15' are incompatible.
+    Type 'new <T extends Base>(x: { a: T; b: T; }) => number' is not assignable to type 'new (x: { a: string; b: number; }) => number'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type '{ a: string; b: number; }' is not assignable to type '{ a: Base; b: Base; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'Base'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance3.ts(86,19): error TS2430: Interface 'I6' incorrectly extends interface 'B'.
+  Types of property 'a2' are incompatible.
+    Type 'new <T>(x: T) => string[]' is not assignable to type 'new <T>(x: T) => T[]'.
+      Type 'string[]' is not assignable to type 'T[]'.
+        Type 'string' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance3.ts(95,19): error TS2430: Interface 'I7' incorrectly extends interface 'C'.
+  Types of property 'a2' are incompatible.
+    Type 'new <T>(x: T) => T[]' is not assignable to type 'new <T>(x: T) => string[]'.
+      Type 'T[]' is not assignable to type 'string[]'.
+        Type 'T' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance3.ts (2 errors) ====
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance3.ts (6 errors) ====
     // checking subtype relations for function types as it relates to contextual signature instantiation
     // error cases
     
@@ -95,10 +117,24 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/construc
             }
     
             interface I6 extends A {
+                      ~~
+!!! error TS2430: Interface 'I6' incorrectly extends interface 'A'.
+!!! error TS2430:   Types of property 'a15' are incompatible.
+!!! error TS2430:     Type 'new <T>(x: { a: T; b: T; }) => T' is not assignable to type 'new (x: { a: string; b: number; }) => number'.
+!!! error TS2430:       Type 'string | number' is not assignable to type 'number'.
+!!! error TS2430:         Type 'string' is not assignable to type 'number'.
                 a15: new <T>(x: { a: T; b: T }) => T; // error, T is {} which isn't an acceptable return type
             }
     
             interface I7 extends A {
+                      ~~
+!!! error TS2430: Interface 'I7' incorrectly extends interface 'A'.
+!!! error TS2430:   Types of property 'a15' are incompatible.
+!!! error TS2430:     Type 'new <T extends Base>(x: { a: T; b: T; }) => number' is not assignable to type 'new (x: { a: string; b: number; }) => number'.
+!!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2430:         Type '{ a: string; b: number; }' is not assignable to type '{ a: Base; b: Base; }'.
+!!! error TS2430:           Types of property 'a' are incompatible.
+!!! error TS2430:             Type 'string' is not assignable to type 'Base'.
                 a15: new <T extends Base>(x: { a: T; b: T }) => number; // error, T defaults to Base, which is not compatible with number or string
             }
     
@@ -115,6 +151,12 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/construc
             }
     
             interface I6 extends B {
+                      ~~
+!!! error TS2430: Interface 'I6' incorrectly extends interface 'B'.
+!!! error TS2430:   Types of property 'a2' are incompatible.
+!!! error TS2430:     Type 'new <T>(x: T) => string[]' is not assignable to type 'new <T>(x: T) => T[]'.
+!!! error TS2430:       Type 'string[]' is not assignable to type 'T[]'.
+!!! error TS2430:         Type 'string' is not assignable to type 'T'.
                 a2: new <T>(x: T) => string[]; // error
             }
     
@@ -124,6 +166,12 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/construc
             }
     
             interface I7 extends C {
+                      ~~
+!!! error TS2430: Interface 'I7' incorrectly extends interface 'C'.
+!!! error TS2430:   Types of property 'a2' are incompatible.
+!!! error TS2430:     Type 'new <T>(x: T) => T[]' is not assignable to type 'new <T>(x: T) => string[]'.
+!!! error TS2430:       Type 'T[]' is not assignable to type 'string[]'.
+!!! error TS2430:         Type 'T' is not assignable to type 'string'.
                 a2: new <T>(x: T) => T[]; // error
             }
     

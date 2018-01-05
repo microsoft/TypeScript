@@ -1,0 +1,7 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck60.ts ===
+function* g() {
+>g : Symbol(g, Decl(generatorTypeCheck60.ts, 0, 0))
+
+    class C extends (yield) {};
+>C : Symbol(C, Decl(generatorTypeCheck60.ts, 0, 15))
+}

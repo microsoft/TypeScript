@@ -8,12 +8,12 @@ function Goo() {return {a:1,b:2};}
 
 
 //// [unexpectedStatementBlockTerminator.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;
 }());
-var Bar = (function () {
+var Bar = /** @class */ (function () {
     function Bar() {
     }
     return Bar;

@@ -92,7 +92,7 @@ var Portal;
     (function (Controls) {
         var Validators;
         (function (Validators) {
-            var Validator = (function () {
+            var Validator = /** @class */ (function () {
                 function Validator(message) {
                 }
                 Validator.prototype.destroy = function () { };
@@ -111,7 +111,7 @@ var PortalFx;
         (function (Controls) {
             var Validators;
             (function (Validators) {
-                var Validator = (function (_super) {
+                var Validator = /** @class */ (function (_super) {
                     __extends(Validator, _super);
                     function Validator(message) {
                         return _super.call(this, message) || this;
@@ -123,7 +123,7 @@ var PortalFx;
         })(Controls = ViewModels.Controls || (ViewModels.Controls = {}));
     })(ViewModels = PortalFx.ViewModels || (PortalFx.ViewModels = {}));
 })(PortalFx || (PortalFx = {}));
-var ViewModel = (function () {
+var ViewModel = /** @class */ (function () {
     function ViewModel() {
         this.validators = ko.observableArray();
     }

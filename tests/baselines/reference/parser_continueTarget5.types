@@ -1,0 +1,18 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/ContinueStatements/parser_continueTarget5.ts ===
+target:
+>target : any
+
+while (true) {
+>true : true
+
+  function f() {
+>f : () => void
+
+    while (true) {
+>true : true
+
+      continue target;
+>target : any
+    }
+  }
+}

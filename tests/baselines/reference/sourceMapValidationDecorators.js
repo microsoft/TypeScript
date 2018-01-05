@@ -64,7 +64,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var Greeter = (function () {
+var Greeter = /** @class */ (function () {
     function Greeter(greeting) {
         var b = [];
         for (var _i = 1; _i < arguments.length; _i++) {
@@ -88,37 +88,37 @@ var Greeter = (function () {
         enumerable: true,
         configurable: true
     });
+    Greeter.x1 = 10;
+    __decorate([
+        PropertyDecorator1,
+        PropertyDecorator2(40)
+    ], Greeter.prototype, "greet", null);
+    __decorate([
+        PropertyDecorator1,
+        PropertyDecorator2(50)
+    ], Greeter.prototype, "x", void 0);
+    __decorate([
+        __param(0, ParameterDecorator1),
+        __param(0, ParameterDecorator2(70))
+    ], Greeter.prototype, "fn", null);
+    __decorate([
+        PropertyDecorator1,
+        PropertyDecorator2(80),
+        __param(0, ParameterDecorator1),
+        __param(0, ParameterDecorator2(90))
+    ], Greeter.prototype, "greetings", null);
+    __decorate([
+        PropertyDecorator1,
+        PropertyDecorator2(60)
+    ], Greeter, "x1", void 0);
+    Greeter = __decorate([
+        ClassDecorator1,
+        ClassDecorator2(10),
+        __param(0, ParameterDecorator1),
+        __param(0, ParameterDecorator2(20)),
+        __param(1, ParameterDecorator1),
+        __param(1, ParameterDecorator2(30))
+    ], Greeter);
     return Greeter;
 }());
-Greeter.x1 = 10;
-__decorate([
-    PropertyDecorator1,
-    PropertyDecorator2(40)
-], Greeter.prototype, "greet", null);
-__decorate([
-    PropertyDecorator1,
-    PropertyDecorator2(50)
-], Greeter.prototype, "x", void 0);
-__decorate([
-    __param(0, ParameterDecorator1),
-    __param(0, ParameterDecorator2(70))
-], Greeter.prototype, "fn", null);
-__decorate([
-    PropertyDecorator1,
-    PropertyDecorator2(80),
-    __param(0, ParameterDecorator1),
-    __param(0, ParameterDecorator2(90))
-], Greeter.prototype, "greetings", null);
-__decorate([
-    PropertyDecorator1,
-    PropertyDecorator2(60)
-], Greeter, "x1", void 0);
-Greeter = __decorate([
-    ClassDecorator1,
-    ClassDecorator2(10),
-    __param(0, ParameterDecorator1),
-    __param(0, ParameterDecorator2(20)),
-    __param(1, ParameterDecorator1),
-    __param(1, ParameterDecorator2(30))
-], Greeter);
 //# sourceMappingURL=sourceMapValidationDecorators.js.map

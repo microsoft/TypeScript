@@ -49,7 +49,7 @@ i.explicitThis = function(m) {
 
 
 //// [looseThisTypeInFunctions.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.explicitThis = function (m) {

@@ -26,7 +26,7 @@ var c3 = new C<number>();
 var c4: C<any> = new C();
 >c4 : C<any>
 >C : C<T>
->new C() : C<{}>
+>new C() : C<any>
 >C : typeof C
 
 class D<T> {

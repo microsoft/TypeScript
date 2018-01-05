@@ -12,7 +12,7 @@ let buttonProps : {[attributeName: string]: ''}
 
 let k = <button {...buttonProps} className={cx('class1', { class2: true })} />;
 >k : Symbol(k, Decl(0.tsx, 5, 3))
->button : Symbol(JSX.IntrinsicElements.button, Decl(react.d.ts, 2385, 43))
+>button : Symbol(JSX.IntrinsicElements.button, Decl(react.d.ts, 2386, 43))
 >buttonProps : Symbol(buttonProps, Decl(0.tsx, 4, 3))
 >className : Symbol(className, Decl(0.tsx, 5, 32))
 >cx : Symbol(cx, Decl(0.tsx, 1, 6))

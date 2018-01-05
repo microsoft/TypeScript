@@ -127,7 +127,7 @@ function d1(_a) {
 function d2(_a) {
     var x = _a.x, y = _a.y, z = _a.z;
 } // Error, binding pattern can't be optional in implementation signature
-var C4 = (function () {
+var C4 = /** @class */ (function () {
     function C4() {
     }
     C4.prototype.d3 = function (_a) {

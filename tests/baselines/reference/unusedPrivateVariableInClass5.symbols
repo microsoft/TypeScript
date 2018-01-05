@@ -1,0 +1,20 @@
+=== tests/cases/compiler/unusedPrivateVariableInClass5.ts ===
+class greeter {
+>greeter : Symbol(greeter, Decl(unusedPrivateVariableInClass5.ts, 0, 0))
+
+    private x: string;
+>x : Symbol(greeter.x, Decl(unusedPrivateVariableInClass5.ts, 0, 15))
+
+    private y: string;
+>y : Symbol(greeter.y, Decl(unusedPrivateVariableInClass5.ts, 1, 22))
+
+    public  z: string;
+>z : Symbol(greeter.z, Decl(unusedPrivateVariableInClass5.ts, 2, 22))
+
+    constructor() {
+        this.x;
+>this.x : Symbol(greeter.x, Decl(unusedPrivateVariableInClass5.ts, 0, 15))
+>this : Symbol(greeter, Decl(unusedPrivateVariableInClass5.ts, 0, 0))
+>x : Symbol(greeter.x, Decl(unusedPrivateVariableInClass5.ts, 0, 15))
+    }
+}

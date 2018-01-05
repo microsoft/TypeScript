@@ -1,0 +1,43 @@
+=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts ===
+var id: number = 10000;
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 0, 3))
+
+var name: string = "my name";
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 1, 3))
+
+var person: { b: string; id: number } = { name, id };  // error
+>person : Symbol(person, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 3, 3))
+>b : Symbol(b, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 3, 13))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 3, 24))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 3, 41))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 3, 47))
+
+function bar(name: string, id: number): { name: number, id: string } { return { name, id }; }  // error
+>bar : Symbol(bar, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 3, 53))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 4, 13))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 4, 26))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 4, 41))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 4, 55))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 4, 79))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 4, 85))
+
+function foo(name: string, id: number): { name: string, id: number } { return { name, id }; }  // error
+>foo : Symbol(foo, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 4, 93))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 5, 13))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 5, 26))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 5, 41))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 5, 55))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 5, 79))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 5, 85))
+
+var person1: { name, id }; // ok
+>person1 : Symbol(person1, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 6, 3))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 6, 14))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 6, 20))
+
+var person2: { name: string, id: number } = bar("hello", 5);
+>person2 : Symbol(person2, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 7, 3))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 7, 14))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 7, 28))
+>bar : Symbol(bar, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 3, 53))
+

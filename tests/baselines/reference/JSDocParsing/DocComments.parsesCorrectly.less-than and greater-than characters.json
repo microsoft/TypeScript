@@ -1,0 +1,35 @@
+{
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 61,
+    "tags": {
+        "0": {
+            "kind": "JSDocParameterTag",
+            "pos": 7,
+            "end": 16,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 7,
+                "end": 8
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 8,
+                "end": 13,
+                "escapedText": "param"
+            },
+            "name": {
+                "kind": "Identifier",
+                "pos": 14,
+                "end": 15,
+                "escapedText": "x"
+            },
+            "isNameFirst": true,
+            "isBracketed": false,
+            "comment": "hi\n< > still part of the previous comment"
+        },
+        "length": 1,
+        "pos": 7,
+        "end": 16
+    }
+}

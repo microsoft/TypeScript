@@ -4,10 +4,10 @@ switch (`abc${0}abc`) {
 >0 : 0
 
     case `abc`:
->`abc` : string
+>`abc` : "abc"
 
     case `123`:
->`123` : string
+>`123` : "123"
 
     case `abc${0}abc`:
 >`abc${0}abc` : string

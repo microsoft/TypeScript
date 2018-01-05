@@ -25,7 +25,7 @@ define(["require", "exports"], function (require, exports) {
     exports.__esModule = true;
     var Models;
     (function (Models) {
-        var Person = (function () {
+        var Person = /** @class */ (function () {
             function Person(name) {
             }
             return Person;
@@ -39,7 +39,7 @@ define(["require", "exports", "requireEmitSemicolon_0"], function (require, expo
     exports.__esModule = true;
     var Database;
     (function (Database) {
-        var DB = (function () {
+        var DB = /** @class */ (function () {
             function DB() {
             }
             DB.prototype.findPerson = function (id) {

@@ -25,7 +25,7 @@ System.register("ref/a", [], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            A = (function () {
+            A = /** @class */ (function () {
                 function A() {
                 }
                 return A;
@@ -45,7 +45,7 @@ System.register("b", ["ref/a"], function (exports_2, context_2) {
             }
         ],
         execute: function () {
-            B = (function (_super) {
+            B = /** @class */ (function (_super) {
                 __extends(B, _super);
                 function B() {
                     return _super !== null && _super.apply(this, arguments) || this;

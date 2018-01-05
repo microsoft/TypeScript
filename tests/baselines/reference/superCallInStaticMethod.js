@@ -57,14 +57,14 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Doing = (function () {
+var Doing = /** @class */ (function () {
     function Doing() {
     }
     Doing.staticMethod = function () {
     };
     return Doing;
 }());
-var Other = (function (_super) {
+var Other = /** @class */ (function (_super) {
     __extends(Other, _super);
     function Other() {
         return _super !== null && _super.apply(this, arguments) || this;

@@ -1,0 +1,4 @@
+=== /src/index.ts ===
+import { y } from "../node_modules/foo";
+>y : Symbol(y, Decl(index.ts, 0, 8))
+

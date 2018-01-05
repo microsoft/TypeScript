@@ -1,0 +1,3 @@
+=== tests/cases/conformance/statements/for-ofStatements/ES5For-of12.ts ===
+for ([""] of [[""]]) { }
+No type information for this code.

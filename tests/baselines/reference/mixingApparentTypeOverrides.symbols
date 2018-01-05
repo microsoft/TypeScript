@@ -1,0 +1,67 @@
+=== tests/cases/compiler/mixingApparentTypeOverrides.ts ===
+type Constructor<T> = new(...args: any[]) => T;
+>Constructor : Symbol(Constructor, Decl(mixingApparentTypeOverrides.ts, 0, 0))
+>T : Symbol(T, Decl(mixingApparentTypeOverrides.ts, 0, 17))
+>args : Symbol(args, Decl(mixingApparentTypeOverrides.ts, 0, 26))
+>T : Symbol(T, Decl(mixingApparentTypeOverrides.ts, 0, 17))
+
+function Tagged<T extends Constructor<{}>>(Base: T) {
+>Tagged : Symbol(Tagged, Decl(mixingApparentTypeOverrides.ts, 0, 47))
+>T : Symbol(T, Decl(mixingApparentTypeOverrides.ts, 1, 16))
+>Constructor : Symbol(Constructor, Decl(mixingApparentTypeOverrides.ts, 0, 0))
+>Base : Symbol(Base, Decl(mixingApparentTypeOverrides.ts, 1, 43))
+>T : Symbol(T, Decl(mixingApparentTypeOverrides.ts, 1, 16))
+
+  return class extends Base {
+>Base : Symbol(Base, Decl(mixingApparentTypeOverrides.ts, 1, 43))
+
+    _tag: string;
+>_tag : Symbol((Anonymous class)._tag, Decl(mixingApparentTypeOverrides.ts, 2, 29))
+
+    constructor(...args: any[]) {
+>args : Symbol(args, Decl(mixingApparentTypeOverrides.ts, 4, 16))
+
+      super(...args);
+>super : Symbol(T, Decl(mixingApparentTypeOverrides.ts, 1, 16))
+>args : Symbol(args, Decl(mixingApparentTypeOverrides.ts, 4, 16))
+
+      this._tag = "";
+>this._tag : Symbol((Anonymous class)._tag, Decl(mixingApparentTypeOverrides.ts, 2, 29))
+>this : Symbol((Anonymous class), Decl(mixingApparentTypeOverrides.ts, 2, 8))
+>_tag : Symbol((Anonymous class)._tag, Decl(mixingApparentTypeOverrides.ts, 2, 29))
+    }
+  };
+}
+
+class A {
+>A : Symbol(A, Decl(mixingApparentTypeOverrides.ts, 9, 1))
+
+  toString () {
+>toString : Symbol(A.toString, Decl(mixingApparentTypeOverrides.ts, 11, 9))
+
+    return "class A";
+  }
+}
+
+class B extends Tagged(A) {
+>B : Symbol(B, Decl(mixingApparentTypeOverrides.ts, 15, 1))
+>Tagged : Symbol(Tagged, Decl(mixingApparentTypeOverrides.ts, 0, 47))
+>A : Symbol(A, Decl(mixingApparentTypeOverrides.ts, 9, 1))
+
+  toString () { // Should not be an error
+>toString : Symbol(B.toString, Decl(mixingApparentTypeOverrides.ts, 17, 27))
+
+    return "class B";
+  }
+}
+
+class C extends A {
+>C : Symbol(C, Decl(mixingApparentTypeOverrides.ts, 21, 1))
+>A : Symbol(A, Decl(mixingApparentTypeOverrides.ts, 9, 1))
+
+  toString () { // Should not be an error
+>toString : Symbol(C.toString, Decl(mixingApparentTypeOverrides.ts, 23, 19))
+
+    return "class C";
+  }
+}

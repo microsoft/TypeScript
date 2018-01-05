@@ -44,7 +44,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var React = require("react");
-var Button = (function (_super) {
+var Button = /** @class */ (function (_super) {
     __extends(Button, _super);
     function Button() {
         return _super !== null && _super.apply(this, arguments) || this;

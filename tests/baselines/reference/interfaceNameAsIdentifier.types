@@ -1,0 +1,26 @@
+=== tests/cases/compiler/interfaceNameAsIdentifier.ts ===
+interface C {
+>C : C
+
+    (): void;
+}
+C();
+>C() : any
+>C : any
+
+module m2 {
+>m2 : any
+
+    export interface C {
+>C : C
+
+        (): void;
+    }
+}
+
+m2.C();
+>m2.C() : any
+>m2.C : any
+>m2 : any
+>C : any
+

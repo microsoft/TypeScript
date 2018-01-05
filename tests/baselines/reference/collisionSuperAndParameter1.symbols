@@ -1,0 +1,18 @@
+=== tests/cases/compiler/collisionSuperAndParameter1.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(collisionSuperAndParameter1.ts, 0, 0))
+}
+
+class Foo2 extends Foo {
+>Foo2 : Symbol(Foo2, Decl(collisionSuperAndParameter1.ts, 1, 1))
+>Foo : Symbol(Foo, Decl(collisionSuperAndParameter1.ts, 0, 0))
+
+    x() {
+>x : Symbol(Foo2.x, Decl(collisionSuperAndParameter1.ts, 3, 24))
+
+        var lambda = (_super: number) => { // Error 
+>lambda : Symbol(lambda, Decl(collisionSuperAndParameter1.ts, 5, 11))
+>_super : Symbol(_super, Decl(collisionSuperAndParameter1.ts, 5, 22))
+        }
+    }
+}

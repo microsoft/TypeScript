@@ -70,7 +70,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var RoyalGuard = (function () {
+var RoyalGuard = /** @class */ (function () {
     function RoyalGuard() {
     }
     RoyalGuard.prototype.isLeader = function () {
@@ -81,7 +81,7 @@ var RoyalGuard = (function () {
     };
     return RoyalGuard;
 }());
-var LeadGuard = (function (_super) {
+var LeadGuard = /** @class */ (function (_super) {
     __extends(LeadGuard, _super);
     function LeadGuard() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -90,7 +90,7 @@ var LeadGuard = (function (_super) {
     ;
     return LeadGuard;
 }(RoyalGuard));
-var FollowerGuard = (function (_super) {
+var FollowerGuard = /** @class */ (function (_super) {
     __extends(FollowerGuard, _super);
     function FollowerGuard() {
         return _super !== null && _super.apply(this, arguments) || this;

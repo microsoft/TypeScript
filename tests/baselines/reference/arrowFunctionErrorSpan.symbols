@@ -1,0 +1,81 @@
+=== tests/cases/compiler/arrowFunctionErrorSpan.ts ===
+function f(a: () => number) { }
+>f : Symbol(f, Decl(arrowFunctionErrorSpan.ts, 0, 0))
+>a : Symbol(a, Decl(arrowFunctionErrorSpan.ts, 0, 11))
+
+// oneliner
+f(() => { });
+>f : Symbol(f, Decl(arrowFunctionErrorSpan.ts, 0, 0))
+
+// multiline, body
+f(() => {
+>f : Symbol(f, Decl(arrowFunctionErrorSpan.ts, 0, 0))
+
+});
+
+// multiline 2, body
+f(() => {
+>f : Symbol(f, Decl(arrowFunctionErrorSpan.ts, 0, 0))
+
+});
+
+// multiline 3, arrow on a new line
+f(()
+>f : Symbol(f, Decl(arrowFunctionErrorSpan.ts, 0, 0))
+
+    => { });
+
+// multiline 4, arguments
+f((a,
+>f : Symbol(f, Decl(arrowFunctionErrorSpan.ts, 0, 0))
+>a : Symbol(a, Decl(arrowFunctionErrorSpan.ts, 20, 3))
+
+    b,
+>b : Symbol(b, Decl(arrowFunctionErrorSpan.ts, 20, 5))
+
+    c,
+>c : Symbol(c, Decl(arrowFunctionErrorSpan.ts, 21, 6))
+
+    d) => { });
+>d : Symbol(d, Decl(arrowFunctionErrorSpan.ts, 22, 6))
+
+// single line with a comment
+f(/*
+>f : Symbol(f, Decl(arrowFunctionErrorSpan.ts, 0, 0))
+
+    */() => { });
+
+// multi line with a comment
+f(/*
+>f : Symbol(f, Decl(arrowFunctionErrorSpan.ts, 0, 0))
+
+    */() => { });
+
+// multi line with a comment 2
+f(/*
+>f : Symbol(f, Decl(arrowFunctionErrorSpan.ts, 0, 0))
+
+    */() => { 
+
+    });
+
+// multi line with a comment 3
+f(  // comment 1
+>f : Symbol(f, Decl(arrowFunctionErrorSpan.ts, 0, 0))
+
+    // comment 2
+    () =>
+    // comment 3
+    {
+        // comment 4
+    }
+    // comment 5
+); 
+
+// body is not a block
+f(_ => 1 +
+>f : Symbol(f, Decl(arrowFunctionErrorSpan.ts, 0, 0))
+>_ : Symbol(_, Decl(arrowFunctionErrorSpan.ts, 51, 2))
+
+    2);
+

@@ -10,7 +10,8 @@ class P {
 }
 
 //// [thisInConstructorParameter2.js]
-var P = (function () {
+var _this = this;
+var P = /** @class */ (function () {
     function P(z, zz) {
         if (z === void 0) { z = this; }
         if (zz === void 0) { zz = this; }
@@ -25,6 +26,6 @@ var P = (function () {
         if (zz === void 0) { zz = this; }
         zz.y;
     };
+    P.y = this;
     return P;
 }());
-P.y = this;

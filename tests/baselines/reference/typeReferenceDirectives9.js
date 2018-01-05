@@ -34,7 +34,7 @@ export const bar = Cls.bar();
 //// [main.js]
 "use strict";
 exports.__esModule = true;
-var Cls = (function () {
+var Cls = /** @class */ (function () {
     function Cls() {
     }
     return Cls;

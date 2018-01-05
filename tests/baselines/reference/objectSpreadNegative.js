@@ -29,12 +29,13 @@ spread = b; // error, missing 's'
 let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
 let duplicatedSpread = { ...o, ...o }
 
-// primitives are not allowed
+// primitives are not allowed, except for falsy ones
 let spreadNum = { ...12 };
 let spreadSum = { ...1 + 1 };
-spreadSum.toFixed(); // error, no methods from number
-let spreadBool = { ...false };
-spreadBool.valueOf(); // error, what were you thinking?
+let spreadZero = { ...0 };
+spreadZero.toFixed(); // error, no methods even from a falsy number
+let spreadBool = { ...true };
+spreadBool.valueOf();
 let spreadStr = { ...'foo' };
 spreadStr.length; // error, no 'length'
 spreadStr.charAt(1); // error, no methods either
@@ -73,6 +74,16 @@ let overlapConflict: { id:string, a: string } =
 let overwriteId: { id: string, a: number, c: number, d: string } =
     f({ a: 1, id: true }, { c: 1, d: 'no' })
 
+// excess property checks
+type A = { a: string, b: string };
+type Extra = { a: string, b: string, extra: string };
+const extra1: A = { a: "a", b: "b", extra: "extra" };
+const extra2 = { a: "a", b: "b", extra: "extra" };
+const a1: A = { ...extra1 }; // error spans should be here
+const a2: A = { ...extra2 }; // not on the symbol declarations above
+const extra3: Extra = { a: "a", b: "b", extra: "extra" };
+const a3: A = { ...extra3 }; // same here
+
 
 //// [objectSpreadNegative.js]
 var __assign = (this && this.__assign) || Object.assign || function(t) {
@@ -85,12 +96,12 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 };
 var o = { a: 1, b: 'no' };
 /// private propagates
-var PrivateOptionalX = (function () {
+var PrivateOptionalX = /** @class */ (function () {
     function PrivateOptionalX() {
     }
     return PrivateOptionalX;
 }());
-var PublicX = (function () {
+var PublicX = /** @class */ (function () {
     function PublicX() {
     }
     return PublicX;
@@ -111,12 +122,13 @@ spread = b; // error, missing 's'
 // literal repeats are not allowed, but spread repeats are fine
 var duplicated = __assign({ b: 'bad' }, o, { b: 'bad' }, o2, { b: 'bad' });
 var duplicatedSpread = __assign({}, o, o);
-// primitives are not allowed
+// primitives are not allowed, except for falsy ones
 var spreadNum = __assign({}, 12);
 var spreadSum = __assign({}, 1 + 1);
-spreadSum.toFixed(); // error, no methods from number
-var spreadBool = __assign({}, false);
-spreadBool.valueOf(); // error, what were you thinking?
+var spreadZero = __assign({}, 0);
+spreadZero.toFixed(); // error, no methods even from a falsy number
+var spreadBool = __assign({}, true);
+spreadBool.valueOf();
 var spreadStr = __assign({}, 'foo');
 spreadStr.length; // error, no 'length'
 spreadStr.charAt(1); // error, no methods either
@@ -127,7 +139,7 @@ spreadFunc(); // error, no call signature
 var setterOnly = __assign({ set b(bad) { } });
 setterOnly.b = 12; // error, 'b' does not exist
 // methods are skipped because they aren't enumerable
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.p = 1;
     }
@@ -152,3 +164,9 @@ var exclusive = f({ a: 1, b: 'yes' }, { c: 'no', d: false });
 var overlap = f({ a: 1 }, { a: 2, b: 'extra' });
 var overlapConflict = f({ a: 1 }, { a: 'mismatch' });
 var overwriteId = f({ a: 1, id: true }, { c: 1, d: 'no' });
+var extra1 = { a: "a", b: "b", extra: "extra" };
+var extra2 = { a: "a", b: "b", extra: "extra" };
+var a1 = __assign({}, extra1); // error spans should be here
+var a2 = __assign({}, extra2); // not on the symbol declarations above
+var extra3 = { a: "a", b: "b", extra: "extra" };
+var a3 = __assign({}, extra3); // same here

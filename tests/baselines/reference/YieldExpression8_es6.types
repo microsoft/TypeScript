@@ -1,0 +1,14 @@
+=== tests/cases/conformance/es6/yieldExpressions/YieldExpression8_es6.ts ===
+yield(foo);
+>yield(foo) : any
+>yield : any
+>foo : () => IterableIterator<typeof foo>
+
+function* foo() {
+>foo : () => IterableIterator<typeof foo>
+
+  yield(foo);
+>yield(foo) : any
+>(foo) : () => IterableIterator<typeof foo>
+>foo : () => IterableIterator<typeof foo>
+}

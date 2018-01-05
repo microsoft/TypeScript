@@ -13,18 +13,17 @@ namespace ts {
         if (updated !== original) {
             setOriginalNode(updated, original);
             setTextRange(updated, original);
-            if (original.startsOnNewLine) {
-                updated.startsOnNewLine = true;
-            }
             aggregateTransformFlags(updated);
         }
         return updated;
     }
 
+    /* @internal */ export function createNodeArray<T extends Node>(elements?: T[], hasTrailingComma?: boolean): MutableNodeArray<T>;
+    export function createNodeArray<T extends Node>(elements?: ReadonlyArray<T>, hasTrailingComma?: boolean): NodeArray<T>;
     /**
      * Make `elements` into a `NodeArray<T>`. If `elements` is `undefined`, returns an empty `NodeArray<T>`.
      */
-    export function createNodeArray<T extends Node>(elements?: T[], hasTrailingComma?: boolean): NodeArray<T> {
+    export function createNodeArray<T extends Node>(elements?: ReadonlyArray<T>, hasTrailingComma?: boolean): NodeArray<T> {
         if (elements) {
             if (isNodeArray(elements)) {
                 return elements;
@@ -45,10 +44,15 @@ namespace ts {
      * Creates a shallow, memberwise clone of a node with no source map location.
      */
     /* @internal */
-    export function getSynthesizedClone<T extends Node>(node: T | undefined): T {
+    export function getSynthesizedClone<T extends Node>(node: T | undefined): T | undefined {
         // We don't use "clone" from core.ts here, as we need to preserve the prototype chain of
         // the original node. We also need to exclude specific properties and only include own-
         // properties (to skip members already defined on the shared prototype).
+
+        if (node === undefined) {
+            return undefined;
+        }
+
         const clone = <T>createSynthesizedNode(node.kind);
         clone.flags |= node.flags;
         setOriginalNode(clone, node);
@@ -66,11 +70,10 @@ namespace ts {
 
     // Literals
 
-    export function createLiteral(value: string): StringLiteral;
+    /** If a node is passed, creates a string literal whose source text is read from a source node during emit. */
+    export function createLiteral(value: string | StringLiteral | NumericLiteral | Identifier): StringLiteral;
     export function createLiteral(value: number): NumericLiteral;
     export function createLiteral(value: boolean): BooleanLiteral;
-    /** Create a string literal whose source text is read from a source node during emit. */
-    export function createLiteral(sourceNode: StringLiteral | NumericLiteral | Identifier): StringLiteral;
     export function createLiteral(value: string | number | boolean): PrimaryExpression;
     export function createLiteral(value: string | number | boolean | StringLiteral | NumericLiteral | Identifier): PrimaryExpression {
         if (typeof value === "number") {
@@ -79,7 +82,7 @@ namespace ts {
         if (typeof value === "boolean") {
             return value ? createTrue() : createFalse();
         }
-        if (typeof value === "string") {
+        if (isString(value)) {
             return createStringLiteral(value);
         }
         return createLiteralFromNode(value);
@@ -99,7 +102,7 @@ namespace ts {
     }
 
     function createLiteralFromNode(sourceNode: StringLiteral | NumericLiteral | Identifier): StringLiteral {
-        const node = createStringLiteral(sourceNode.text);
+        const node = createStringLiteral(getTextOfIdentifierOrLiteral(sourceNode));
         node.textSourceNode = sourceNode;
         return node;
     }
@@ -109,10 +112,11 @@ namespace ts {
 
     export function createIdentifier(text: string): Identifier;
     /* @internal */
-    export function createIdentifier(text: string, typeArguments: TypeNode[]): Identifier;
-    export function createIdentifier(text: string, typeArguments?: TypeNode[]): Identifier {
+    // tslint:disable-next-line unified-signatures
+    export function createIdentifier(text: string, typeArguments: ReadonlyArray<TypeNode>): Identifier;
+    export function createIdentifier(text: string, typeArguments?: ReadonlyArray<TypeNode>): Identifier {
         const node = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
-        node.text = escapeIdentifier(text);
+        node.escapedText = escapeLeadingUnderscores(text);
         node.originalKeywordKind = text ? stringToToken(text) : SyntaxKind.Unknown;
         node.autoGenerateKind = GeneratedIdentifierKind.None;
         node.autoGenerateId = 0;
@@ -124,7 +128,7 @@ namespace ts {
 
     export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode> | undefined): Identifier {
         return node.typeArguments !== typeArguments
-        ? updateNode(createIdentifier(node.text, typeArguments), node)
+        ? updateNode(createIdentifier(idText(node), typeArguments), node)
         : node;
     }
 
@@ -161,11 +165,15 @@ namespace ts {
     }
 
     /** Create a unique name generated for a node. */
-    export function getGeneratedNameForNode(node: Node): Identifier {
+    export function getGeneratedNameForNode(node: Node): Identifier;
+    // tslint:disable-next-line unified-signatures
+    /*@internal*/ export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier;
+    export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier {
         const name = createIdentifier("");
         name.autoGenerateKind = GeneratedIdentifierKind.Node;
         name.autoGenerateId = nextAutoGenerateId;
         name.original = node;
+        name.skipNameGenerationScope = !!shouldSkipNameGenerationScope;
         nextAutoGenerateId++;
         return name;
     }
@@ -228,7 +236,7 @@ namespace ts {
 
     // Signature elements
 
-    export function createTypeParameterDeclaration(name: string | Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined) {
+    export function createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.TypeParameter) as TypeParameterDeclaration;
         node.name = asName(name);
         node.constraint = constraint;
@@ -244,7 +252,14 @@ namespace ts {
             : node;
     }
 
-    export function createParameter(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression) {
+    export function createParameter(
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        dotDotDotToken: DotDotDotToken | undefined,
+        name: string | BindingName,
+        questionToken?: QuestionToken,
+        type?: TypeNode,
+        initializer?: Expression) {
         const node = <ParameterDeclaration>createSynthesizedNode(SyntaxKind.Parameter);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
@@ -256,7 +271,15 @@ namespace ts {
         return node;
     }
 
-    export function updateParameter(node: ParameterDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
+    export function updateParameter(
+        node: ParameterDeclaration,
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        dotDotDotToken: DotDotDotToken | undefined,
+        name: string | BindingName,
+        questionToken: QuestionToken | undefined,
+        type: TypeNode | undefined,
+        initializer: Expression | undefined) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.dotDotDotToken !== dotDotDotToken
@@ -264,7 +287,7 @@ namespace ts {
             || node.questionToken !== questionToken
             || node.type !== type
             || node.initializer !== initializer
-            ? updateNode(createParameter(decorators, modifiers, dotDotDotToken, name, node.questionToken, type, initializer), node)
+            ? updateNode(createParameter(decorators, modifiers, dotDotDotToken, name, questionToken, type, initializer), node)
             : node;
     }
 
@@ -283,7 +306,12 @@ namespace ts {
 
     // Type Elements
 
-    export function createPropertySignature(modifiers: Modifier[] | undefined, name: PropertyName | string, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertySignature {
+    export function createPropertySignature(
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: PropertyName | string,
+        questionToken: QuestionToken | undefined,
+        type: TypeNode | undefined,
+        initializer: Expression | undefined): PropertySignature {
         const node = createSynthesizedNode(SyntaxKind.PropertySignature) as PropertySignature;
         node.modifiers = asNodeArray(modifiers);
         node.name = asName(name);
@@ -293,7 +321,13 @@ namespace ts {
         return node;
     }
 
-    export function updatePropertySignature(node: PropertySignature, modifiers: Modifier[] | undefined, name: PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
+    export function updatePropertySignature(
+        node: PropertySignature,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: PropertyName,
+        questionToken: QuestionToken | undefined,
+        type: TypeNode | undefined,
+        initializer: Expression | undefined) {
         return node.modifiers !== modifiers
             || node.name !== name
             || node.questionToken !== questionToken
@@ -303,7 +337,13 @@ namespace ts {
             : node;
     }
 
-    export function createProperty(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression) {
+    export function createProperty(
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: string | PropertyName,
+        questionToken: QuestionToken | undefined,
+        type: TypeNode | undefined,
+        initializer: Expression | undefined) {
         const node = <PropertyDeclaration>createSynthesizedNode(SyntaxKind.PropertyDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
@@ -314,17 +354,30 @@ namespace ts {
         return node;
     }
 
-    export function updateProperty(node: PropertyDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: PropertyName, type: TypeNode | undefined, initializer: Expression) {
+    export function updateProperty(
+        node: PropertyDeclaration,
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: string | PropertyName,
+        questionToken: QuestionToken | undefined,
+        type: TypeNode | undefined,
+        initializer: Expression | undefined) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.name !== name
+            || node.questionToken !== questionToken
             || node.type !== type
             || node.initializer !== initializer
-            ? updateNode(createProperty(decorators, modifiers, name, node.questionToken, type, initializer), node)
+            ? updateNode(createProperty(decorators, modifiers, name, questionToken, type, initializer), node)
             : node;
     }
 
-    export function createMethodSignature(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined) {
+    export function createMethodSignature(
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        name: string | PropertyName,
+        questionToken: QuestionToken | undefined) {
         const node = createSignatureDeclaration(SyntaxKind.MethodSignature, typeParameters, parameters, type) as MethodSignature;
         node.name = asName(name);
         node.questionToken = questionToken;
@@ -341,7 +394,16 @@ namespace ts {
             : node;
     }
 
-    export function createMethod(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) {
+    export function createMethod(
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        asteriskToken: AsteriskToken | undefined,
+        name: string | PropertyName,
+        questionToken: QuestionToken | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        body: Block | undefined) {
         const node = <MethodDeclaration>createSynthesizedNode(SyntaxKind.MethodDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
@@ -355,11 +417,22 @@ namespace ts {
         return node;
     }
 
-    export function updateMethod(node: MethodDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: PropertyName, questionToken: QuestionToken | undefined, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) {
+    export function updateMethod(
+        node: MethodDeclaration,
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        asteriskToken: AsteriskToken | undefined,
+        name: PropertyName,
+        questionToken: QuestionToken | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        body: Block | undefined) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.asteriskToken !== asteriskToken
             || node.name !== name
+            || node.questionToken !== questionToken
             || node.typeParameters !== typeParameters
             || node.parameters !== parameters
             || node.type !== type
@@ -368,7 +441,7 @@ namespace ts {
             : node;
     }
 
-    export function createConstructor(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, parameters: ParameterDeclaration[], body: Block | undefined) {
+    export function createConstructor(decorators: ReadonlyArray<Decorator> | undefined, modifiers: ReadonlyArray<Modifier> | undefined, parameters: ReadonlyArray<ParameterDeclaration>, body: Block | undefined) {
         const node = <ConstructorDeclaration>createSynthesizedNode(SyntaxKind.Constructor);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
@@ -379,7 +452,12 @@ namespace ts {
         return node;
     }
 
-    export function updateConstructor(node: ConstructorDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, parameters: ParameterDeclaration[], body: Block | undefined) {
+    export function updateConstructor(
+        node: ConstructorDeclaration,
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        body: Block | undefined) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.parameters !== parameters
@@ -388,7 +466,13 @@ namespace ts {
             : node;
     }
 
-    export function createGetAccessor(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | PropertyName, parameters: ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) {
+    export function createGetAccessor(
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: string | PropertyName,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        body: Block | undefined) {
         const node = <GetAccessorDeclaration>createSynthesizedNode(SyntaxKind.GetAccessor);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
@@ -400,7 +484,14 @@ namespace ts {
         return node;
     }
 
-    export function updateGetAccessor(node: GetAccessorDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: PropertyName, parameters: ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) {
+    export function updateGetAccessor(
+        node: GetAccessorDeclaration,
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: PropertyName,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        body: Block | undefined) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.name !== name
@@ -411,7 +502,12 @@ namespace ts {
             : node;
     }
 
-    export function createSetAccessor(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | PropertyName, parameters: ParameterDeclaration[], body: Block | undefined) {
+    export function createSetAccessor(
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: string | PropertyName,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        body: Block | undefined) {
         const node = <SetAccessorDeclaration>createSynthesizedNode(SyntaxKind.SetAccessor);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
@@ -422,7 +518,13 @@ namespace ts {
         return node;
     }
 
-    export function updateSetAccessor(node: SetAccessorDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: PropertyName, parameters: ParameterDeclaration[], body: Block | undefined) {
+    export function updateSetAccessor(
+        node: SetAccessorDeclaration,
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: PropertyName,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        body: Block | undefined) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.name !== name
@@ -448,7 +550,11 @@ namespace ts {
         return updateSignatureDeclaration(node, typeParameters, parameters, type);
     }
 
-    export function createIndexSignature(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, parameters: ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration {
+    export function createIndexSignature(
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode): IndexSignatureDeclaration {
         const node = createSynthesizedNode(SyntaxKind.IndexSignature) as IndexSignatureDeclaration;
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
@@ -457,7 +563,12 @@ namespace ts {
         return node;
     }
 
-    export function updateIndexSignature(node: IndexSignatureDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, parameters: ParameterDeclaration[], type: TypeNode) {
+    export function updateIndexSignature(
+        node: IndexSignatureDeclaration,
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode) {
         return node.parameters !== parameters
             || node.type !== type
             || node.decorators !== decorators
@@ -467,7 +578,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function createSignatureDeclaration(kind: SyntaxKind, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined) {
+    export function createSignatureDeclaration(kind: SyntaxKind, typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined, parameters: ReadonlyArray<ParameterDeclaration>, type: TypeNode | undefined) {
         const node = createSynthesizedNode(kind) as SignatureDeclaration;
         node.typeParameters = asNodeArray(typeParameters);
         node.parameters = asNodeArray(parameters);
@@ -503,7 +614,7 @@ namespace ts {
             : node;
     }
 
-    export function createTypeReferenceNode(typeName: string | EntityName, typeArguments: TypeNode[] | undefined) {
+    export function createTypeReferenceNode(typeName: string | EntityName, typeArguments: ReadonlyArray<TypeNode> | undefined) {
         const node = createSynthesizedNode(SyntaxKind.TypeReference) as TypeReferenceNode;
         node.typeName = asName(typeName);
         node.typeArguments = typeArguments && parenthesizeTypeParameters(typeArguments);
@@ -545,7 +656,7 @@ namespace ts {
             : node;
     }
 
-    export function createTypeLiteralNode(members: TypeElement[]) {
+    export function createTypeLiteralNode(members: ReadonlyArray<TypeElement>) {
         const node = createSynthesizedNode(SyntaxKind.TypeLiteral) as TypeLiteralNode;
         node.members = createNodeArray(members);
         return node;
@@ -559,7 +670,7 @@ namespace ts {
 
     export function createArrayTypeNode(elementType: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.ArrayType) as ArrayTypeNode;
-        node.elementType = parenthesizeElementTypeMember(elementType);
+        node.elementType = parenthesizeArrayTypeMember(elementType);
         return node;
     }
 
@@ -569,13 +680,13 @@ namespace ts {
             : node;
     }
 
-    export function createTupleTypeNode(elementTypes: TypeNode[]) {
+    export function createTupleTypeNode(elementTypes: ReadonlyArray<TypeNode>) {
         const node = createSynthesizedNode(SyntaxKind.TupleType) as TupleTypeNode;
         node.elementTypes = createNodeArray(elementTypes);
         return node;
     }
 
-    export function updateTypleTypeNode(node: TupleTypeNode, elementTypes: TypeNode[]) {
+    export function updateTypleTypeNode(node: TupleTypeNode, elementTypes: ReadonlyArray<TypeNode>) {
         return node.elementTypes !== elementTypes
             ? updateNode(createTupleTypeNode(elementTypes), node)
             : node;
@@ -597,7 +708,7 @@ namespace ts {
         return updateUnionOrIntersectionTypeNode(node, types);
     }
 
-    export function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: TypeNode[]) {
+    export function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: ReadonlyArray<TypeNode>) {
         const node = createSynthesizedNode(kind) as UnionTypeNode | IntersectionTypeNode;
         node.types = parenthesizeElementTypeMembers(types);
         return node;
@@ -625,15 +736,17 @@ namespace ts {
         return <ThisTypeNode>createSynthesizedNode(SyntaxKind.ThisType);
     }
 
-    export function createTypeOperatorNode(type: TypeNode) {
+    export function createTypeOperatorNode(type: TypeNode): TypeOperatorNode;
+    export function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword, type: TypeNode): TypeOperatorNode;
+    export function createTypeOperatorNode(operatorOrType: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | TypeNode, type?: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.TypeOperator) as TypeOperatorNode;
-        node.operator = SyntaxKind.KeyOfKeyword;
-        node.type = parenthesizeElementTypeMember(type);
+        node.operator = typeof operatorOrType === "number" ? operatorOrType : SyntaxKind.KeyOfKeyword;
+        node.type = parenthesizeElementTypeMember(typeof operatorOrType === "number" ? type : operatorOrType);
         return node;
     }
 
     export function updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode) {
-        return node.type !== type ? updateNode(createTypeOperatorNode(type), node) : node;
+        return node.type !== type ? updateNode(createTypeOperatorNode(node.operator, type), node) : node;
     }
 
     export function createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode) {
@@ -668,13 +781,13 @@ namespace ts {
             : node;
     }
 
-    export function createLiteralTypeNode(literal: Expression) {
+    export function createLiteralTypeNode(literal: LiteralTypeNode["literal"]) {
         const node = createSynthesizedNode(SyntaxKind.LiteralType) as LiteralTypeNode;
         node.literal = literal;
         return node;
     }
 
-    export function updateLiteralTypeNode(node: LiteralTypeNode, literal: Expression) {
+    export function updateLiteralTypeNode(node: LiteralTypeNode, literal: LiteralTypeNode["literal"]) {
         return node.literal !== literal
             ? updateNode(createLiteralTypeNode(literal), node)
             : node;
@@ -682,25 +795,25 @@ namespace ts {
 
     // Binding Patterns
 
-    export function createObjectBindingPattern(elements: BindingElement[]) {
+    export function createObjectBindingPattern(elements: ReadonlyArray<BindingElement>) {
         const node = <ObjectBindingPattern>createSynthesizedNode(SyntaxKind.ObjectBindingPattern);
         node.elements = createNodeArray(elements);
         return node;
     }
 
-    export function updateObjectBindingPattern(node: ObjectBindingPattern, elements: BindingElement[]) {
+    export function updateObjectBindingPattern(node: ObjectBindingPattern, elements: ReadonlyArray<BindingElement>) {
         return node.elements !== elements
             ? updateNode(createObjectBindingPattern(elements), node)
             : node;
     }
 
-    export function createArrayBindingPattern(elements: ArrayBindingElement[]) {
+    export function createArrayBindingPattern(elements: ReadonlyArray<ArrayBindingElement>) {
         const node = <ArrayBindingPattern>createSynthesizedNode(SyntaxKind.ArrayBindingPattern);
         node.elements = createNodeArray(elements);
         return node;
     }
 
-    export function updateArrayBindingPattern(node: ArrayBindingPattern, elements: ArrayBindingElement[]) {
+    export function updateArrayBindingPattern(node: ArrayBindingPattern, elements: ReadonlyArray<ArrayBindingElement>) {
         return node.elements !== elements
             ? updateNode(createArrayBindingPattern(elements), node)
             : node;
@@ -726,27 +839,27 @@ namespace ts {
 
     // Expression
 
-    export function createArrayLiteral(elements?: Expression[], multiLine?: boolean) {
+    export function createArrayLiteral(elements?: ReadonlyArray<Expression>, multiLine?: boolean) {
         const node = <ArrayLiteralExpression>createSynthesizedNode(SyntaxKind.ArrayLiteralExpression);
         node.elements = parenthesizeListElements(createNodeArray(elements));
         if (multiLine) node.multiLine = true;
         return node;
     }
 
-    export function updateArrayLiteral(node: ArrayLiteralExpression, elements: Expression[]) {
+    export function updateArrayLiteral(node: ArrayLiteralExpression, elements: ReadonlyArray<Expression>) {
         return node.elements !== elements
             ? updateNode(createArrayLiteral(elements, node.multiLine), node)
             : node;
     }
 
-    export function createObjectLiteral(properties?: ObjectLiteralElementLike[], multiLine?: boolean) {
+    export function createObjectLiteral(properties?: ReadonlyArray<ObjectLiteralElementLike>, multiLine?: boolean) {
         const node = <ObjectLiteralExpression>createSynthesizedNode(SyntaxKind.ObjectLiteralExpression);
         node.properties = createNodeArray(properties);
         if (multiLine) node.multiLine = true;
         return node;
     }
 
-    export function updateObjectLiteral(node: ObjectLiteralExpression, properties: ObjectLiteralElementLike[]) {
+    export function updateObjectLiteral(node: ObjectLiteralExpression, properties: ReadonlyArray<ObjectLiteralElementLike>) {
         return node.properties !== properties
             ? updateNode(createObjectLiteral(properties, node.multiLine), node)
             : node;
@@ -783,7 +896,7 @@ namespace ts {
             : node;
     }
 
-    export function createCall(expression: Expression, typeArguments: TypeNode[] | undefined, argumentsArray: Expression[]) {
+    export function createCall(expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression>) {
         const node = <CallExpression>createSynthesizedNode(SyntaxKind.CallExpression);
         node.expression = parenthesizeForAccess(expression);
         node.typeArguments = asNodeArray(typeArguments);
@@ -791,7 +904,7 @@ namespace ts {
         return node;
     }
 
-    export function updateCall(node: CallExpression, expression: Expression, typeArguments: TypeNode[] | undefined, argumentsArray: Expression[]) {
+    export function updateCall(node: CallExpression, expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression>) {
         return node.expression !== expression
             || node.typeArguments !== typeArguments
             || node.arguments !== argumentsArray
@@ -799,7 +912,7 @@ namespace ts {
             : node;
     }
 
-    export function createNew(expression: Expression, typeArguments: TypeNode[] | undefined, argumentsArray: Expression[] | undefined) {
+    export function createNew(expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined) {
         const node = <NewExpression>createSynthesizedNode(SyntaxKind.NewExpression);
         node.expression = parenthesizeForNew(expression);
         node.typeArguments = asNodeArray(typeArguments);
@@ -807,7 +920,7 @@ namespace ts {
         return node;
     }
 
-    export function updateNew(node: NewExpression, expression: Expression, typeArguments: TypeNode[] | undefined, argumentsArray: Expression[] | undefined) {
+    export function updateNew(node: NewExpression, expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined) {
         return node.expression !== expression
             || node.typeArguments !== typeArguments
             || node.arguments !== argumentsArray
@@ -855,7 +968,14 @@ namespace ts {
             : node;
     }
 
-    export function createFunctionExpression(modifiers: Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, body: Block) {
+    export function createFunctionExpression(
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        asteriskToken: AsteriskToken | undefined,
+        name: string | Identifier | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        body: Block) {
         const node = <FunctionExpression>createSynthesizedNode(SyntaxKind.FunctionExpression);
         node.modifiers = asNodeArray(modifiers);
         node.asteriskToken = asteriskToken;
@@ -867,7 +987,15 @@ namespace ts {
         return node;
     }
 
-    export function updateFunctionExpression(node: FunctionExpression, modifiers: Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, body: Block) {
+    export function updateFunctionExpression(
+        node: FunctionExpression,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        asteriskToken: AsteriskToken | undefined,
+        name: Identifier | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        body: Block) {
         return node.name !== name
             || node.modifiers !== modifiers
             || node.asteriskToken !== asteriskToken
@@ -879,7 +1007,13 @@ namespace ts {
             : node;
     }
 
-    export function createArrowFunction(modifiers: Modifier[] | undefined, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, equalsGreaterThanToken: EqualsGreaterThanToken | undefined, body: ConciseBody) {
+    export function createArrowFunction(
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        equalsGreaterThanToken: EqualsGreaterThanToken | undefined,
+        body: ConciseBody) {
         const node = <ArrowFunction>createSynthesizedNode(SyntaxKind.ArrowFunction);
         node.modifiers = asNodeArray(modifiers);
         node.typeParameters = asNodeArray(typeParameters);
@@ -890,13 +1024,49 @@ namespace ts {
         return node;
     }
 
-    export function updateArrowFunction(node: ArrowFunction, modifiers: Modifier[] | undefined, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, body: ConciseBody) {
+    /* @deprecated */ export function updateArrowFunction(
+        node: ArrowFunction,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        body: ConciseBody): ArrowFunction;
+    export function updateArrowFunction(
+        node: ArrowFunction,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken>,
+        body: ConciseBody): ArrowFunction;
+    export function updateArrowFunction(
+        node: ArrowFunction,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        equalsGreaterThanTokenOrBody: Token<SyntaxKind.EqualsGreaterThanToken> | ConciseBody,
+        bodyOrUndefined?: ConciseBody,
+    ): ArrowFunction {
+        let equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken>;
+        let body: ConciseBody;
+        if (bodyOrUndefined === undefined) {
+            equalsGreaterThanToken = node.equalsGreaterThanToken;
+            body = cast(equalsGreaterThanTokenOrBody, isConciseBody);
+        }
+        else {
+            equalsGreaterThanToken = cast(equalsGreaterThanTokenOrBody, (n): n is Token<SyntaxKind.EqualsGreaterThanToken> =>
+                n.kind === SyntaxKind.EqualsGreaterThanToken);
+            body = bodyOrUndefined;
+        }
+
         return node.modifiers !== modifiers
             || node.typeParameters !== typeParameters
             || node.parameters !== parameters
             || node.type !== type
+            || node.equalsGreaterThanToken !== equalsGreaterThanToken
             || node.body !== body
-            ? updateNode(createArrowFunction(modifiers, typeParameters, parameters, type, node.equalsGreaterThanToken, body), node)
+            ? updateNode(createArrowFunction(modifiers, typeParameters, parameters, type, equalsGreaterThanToken, body), node)
             : node;
     }
 
@@ -1003,26 +1173,70 @@ namespace ts {
         return node;
     }
 
-    export function updateConditional(node: ConditionalExpression, condition: Expression, whenTrue: Expression, whenFalse: Expression) {
+    /* @deprecated */ export function updateConditional(
+        node: ConditionalExpression,
+        condition: Expression,
+        whenTrue: Expression,
+        whenFalse: Expression): ConditionalExpression;
+    export function updateConditional(
+        node: ConditionalExpression,
+        condition: Expression,
+        questionToken: Token<SyntaxKind.QuestionToken>,
+        whenTrue: Expression,
+        colonToken: Token<SyntaxKind.ColonToken>,
+        whenFalse: Expression): ConditionalExpression;
+    export function updateConditional(node: ConditionalExpression, condition: Expression, ...args: any[]) {
+        if (args.length === 2) {
+            const [whenTrue, whenFalse] = args;
+            return updateConditional(node, condition, node.questionToken, whenTrue, node.colonToken, whenFalse);
+        }
+        Debug.assert(args.length === 4);
+        const [questionToken, whenTrue, colonToken, whenFalse] = args;
         return node.condition !== condition
+            || node.questionToken !== questionToken
             || node.whenTrue !== whenTrue
+            || node.colonToken !== colonToken
             || node.whenFalse !== whenFalse
-            ? updateNode(createConditional(condition, node.questionToken, whenTrue, node.colonToken, whenFalse), node)
+            ? updateNode(createConditional(condition, questionToken, whenTrue, colonToken, whenFalse), node)
             : node;
     }
 
-    export function createTemplateExpression(head: TemplateHead, templateSpans: TemplateSpan[]) {
+    export function createTemplateExpression(head: TemplateHead, templateSpans: ReadonlyArray<TemplateSpan>) {
         const node = <TemplateExpression>createSynthesizedNode(SyntaxKind.TemplateExpression);
         node.head = head;
         node.templateSpans = createNodeArray(templateSpans);
         return node;
     }
 
-    export function updateTemplateExpression(node: TemplateExpression, head: TemplateHead, templateSpans: TemplateSpan[]) {
+    export function updateTemplateExpression(node: TemplateExpression, head: TemplateHead, templateSpans: ReadonlyArray<TemplateSpan>) {
         return node.head !== head
             || node.templateSpans !== templateSpans
             ? updateNode(createTemplateExpression(head, templateSpans), node)
             : node;
+    }
+
+    export function createTemplateHead(text: string) {
+        const node = <TemplateHead>createSynthesizedNode(SyntaxKind.TemplateHead);
+        node.text = text;
+        return node;
+    }
+
+    export function createTemplateMiddle(text: string) {
+        const node = <TemplateMiddle>createSynthesizedNode(SyntaxKind.TemplateMiddle);
+        node.text = text;
+        return node;
+    }
+
+    export function createTemplateTail(text: string) {
+        const node = <TemplateTail>createSynthesizedNode(SyntaxKind.TemplateTail);
+        node.text = text;
+        return node;
+    }
+
+    export function createNoSubstitutionTemplateLiteral(text: string) {
+        const node = <NoSubstitutionTemplateLiteral>createSynthesizedNode(SyntaxKind.NoSubstitutionTemplateLiteral);
+        node.text = text;
+        return node;
     }
 
     export function createYield(expression?: Expression): YieldExpression;
@@ -1053,7 +1267,12 @@ namespace ts {
             : node;
     }
 
-    export function createClassExpression(modifiers: Modifier[] | undefined, name: string | Identifier | undefined, typeParameters: TypeParameterDeclaration[] | undefined, heritageClauses: HeritageClause[], members: ClassElement[]) {
+    export function createClassExpression(
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: string | Identifier | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        heritageClauses: ReadonlyArray<HeritageClause>,
+        members: ReadonlyArray<ClassElement>) {
         const node = <ClassExpression>createSynthesizedNode(SyntaxKind.ClassExpression);
         node.decorators = undefined;
         node.modifiers = asNodeArray(modifiers);
@@ -1064,7 +1283,13 @@ namespace ts {
         return node;
     }
 
-    export function updateClassExpression(node: ClassExpression, modifiers: Modifier[] | undefined, name: Identifier | undefined, typeParameters: TypeParameterDeclaration[] | undefined, heritageClauses: HeritageClause[], members: ClassElement[]) {
+    export function updateClassExpression(
+        node: ClassExpression,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: Identifier | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        heritageClauses: ReadonlyArray<HeritageClause>,
+        members: ReadonlyArray<ClassElement>) {
         return node.modifiers !== modifiers
             || node.name !== name
             || node.typeParameters !== typeParameters
@@ -1078,14 +1303,14 @@ namespace ts {
         return <OmittedExpression>createSynthesizedNode(SyntaxKind.OmittedExpression);
     }
 
-    export function createExpressionWithTypeArguments(typeArguments: TypeNode[], expression: Expression) {
+    export function createExpressionWithTypeArguments(typeArguments: ReadonlyArray<TypeNode>, expression: Expression) {
         const node = <ExpressionWithTypeArguments>createSynthesizedNode(SyntaxKind.ExpressionWithTypeArguments);
         node.expression = parenthesizeForAccess(expression);
         node.typeArguments = asNodeArray(typeArguments);
         return node;
     }
 
-    export function updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, typeArguments: TypeNode[], expression: Expression) {
+    export function updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, typeArguments: ReadonlyArray<TypeNode>, expression: Expression) {
         return node.typeArguments !== typeArguments
             || node.expression !== expression
             ? updateNode(createExpressionWithTypeArguments(typeArguments, expression), node)
@@ -1153,20 +1378,20 @@ namespace ts {
 
     // Element
 
-    export function createBlock(statements: Statement[], multiLine?: boolean): Block {
+    export function createBlock(statements: ReadonlyArray<Statement>, multiLine?: boolean): Block {
         const block = <Block>createSynthesizedNode(SyntaxKind.Block);
         block.statements = createNodeArray(statements);
         if (multiLine) block.multiLine = multiLine;
         return block;
     }
 
-    export function updateBlock(node: Block, statements: Statement[]) {
+    export function updateBlock(node: Block, statements: ReadonlyArray<Statement>) {
         return node.statements !== statements
             ? updateNode(createBlock(statements, node.multiLine), node)
             : node;
     }
 
-    export function createVariableStatement(modifiers: Modifier[] | undefined, declarationList: VariableDeclarationList | VariableDeclaration[]) {
+    export function createVariableStatement(modifiers: ReadonlyArray<Modifier> | undefined, declarationList: VariableDeclarationList | ReadonlyArray<VariableDeclaration>) {
         const node = <VariableStatement>createSynthesizedNode(SyntaxKind.VariableStatement);
         node.decorators = undefined;
         node.modifiers = asNodeArray(modifiers);
@@ -1174,7 +1399,7 @@ namespace ts {
         return node;
     }
 
-    export function updateVariableStatement(node: VariableStatement, modifiers: Modifier[] | undefined, declarationList: VariableDeclarationList) {
+    export function updateVariableStatement(node: VariableStatement, modifiers: ReadonlyArray<Modifier> | undefined, declarationList: VariableDeclarationList) {
         return node.modifiers !== modifiers
             || node.declarationList !== declarationList
             ? updateNode(createVariableStatement(modifiers, declarationList), node)
@@ -1419,20 +1644,28 @@ namespace ts {
             : node;
     }
 
-    export function createVariableDeclarationList(declarations: VariableDeclaration[], flags?: NodeFlags) {
+    export function createVariableDeclarationList(declarations: ReadonlyArray<VariableDeclaration>, flags?: NodeFlags) {
         const node = <VariableDeclarationList>createSynthesizedNode(SyntaxKind.VariableDeclarationList);
         node.flags |= flags & NodeFlags.BlockScoped;
         node.declarations = createNodeArray(declarations);
         return node;
     }
 
-    export function updateVariableDeclarationList(node: VariableDeclarationList, declarations: VariableDeclaration[]) {
+    export function updateVariableDeclarationList(node: VariableDeclarationList, declarations: ReadonlyArray<VariableDeclaration>) {
         return node.declarations !== declarations
             ? updateNode(createVariableDeclarationList(declarations, node.flags), node)
             : node;
     }
 
-    export function createFunctionDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) {
+    export function createFunctionDeclaration(
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        asteriskToken: AsteriskToken | undefined,
+        name: string | Identifier | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        body: Block | undefined) {
         const node = <FunctionDeclaration>createSynthesizedNode(SyntaxKind.FunctionDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
@@ -1445,7 +1678,16 @@ namespace ts {
         return node;
     }
 
-    export function updateFunctionDeclaration(node: FunctionDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) {
+    export function updateFunctionDeclaration(
+        node: FunctionDeclaration,
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        asteriskToken: AsteriskToken | undefined,
+        name: Identifier | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        parameters: ReadonlyArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+        body: Block | undefined) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.asteriskToken !== asteriskToken
@@ -1458,7 +1700,13 @@ namespace ts {
             : node;
     }
 
-    export function createClassDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | Identifier | undefined, typeParameters: TypeParameterDeclaration[] | undefined, heritageClauses: HeritageClause[], members: ClassElement[]) {
+    export function createClassDeclaration(
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: string | Identifier | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        heritageClauses: ReadonlyArray<HeritageClause>,
+        members: ReadonlyArray<ClassElement>) {
         const node = <ClassDeclaration>createSynthesizedNode(SyntaxKind.ClassDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
@@ -1469,7 +1717,14 @@ namespace ts {
         return node;
     }
 
-    export function updateClassDeclaration(node: ClassDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: Identifier | undefined, typeParameters: TypeParameterDeclaration[] | undefined, heritageClauses: HeritageClause[], members: ClassElement[]) {
+    export function updateClassDeclaration(
+        node: ClassDeclaration,
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: Identifier | undefined,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        heritageClauses: ReadonlyArray<HeritageClause>,
+        members: ReadonlyArray<ClassElement>) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.name !== name
@@ -1480,7 +1735,13 @@ namespace ts {
             : node;
     }
 
-    export function createInterfaceDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | Identifier, typeParameters: TypeParameterDeclaration[] | undefined, heritageClauses: HeritageClause[] | undefined, members: TypeElement[]) {
+    export function createInterfaceDeclaration(
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: string | Identifier,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        heritageClauses: ReadonlyArray<HeritageClause> | undefined,
+        members: ReadonlyArray<TypeElement>) {
         const node = <InterfaceDeclaration>createSynthesizedNode(SyntaxKind.InterfaceDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
@@ -1491,7 +1752,14 @@ namespace ts {
         return node;
     }
 
-    export function updateInterfaceDeclaration(node: InterfaceDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: Identifier, typeParameters: TypeParameterDeclaration[] | undefined, heritageClauses: HeritageClause[] | undefined, members: TypeElement[]) {
+    export function updateInterfaceDeclaration(
+        node: InterfaceDeclaration,
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: Identifier,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        heritageClauses: ReadonlyArray<HeritageClause> | undefined,
+        members: ReadonlyArray<TypeElement>) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.name !== name
@@ -1502,7 +1770,12 @@ namespace ts {
             : node;
     }
 
-    export function createTypeAliasDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
+    export function createTypeAliasDeclaration(
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: string | Identifier,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        type: TypeNode) {
         const node = <TypeAliasDeclaration>createSynthesizedNode(SyntaxKind.TypeAliasDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
@@ -1512,7 +1785,13 @@ namespace ts {
         return node;
     }
 
-    export function updateTypeAliasDeclaration(node: TypeAliasDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
+    export function updateTypeAliasDeclaration(
+        node: TypeAliasDeclaration,
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: Identifier,
+        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
+        type: TypeNode) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.name !== name
@@ -1522,7 +1801,11 @@ namespace ts {
             : node;
     }
 
-    export function createEnumDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | Identifier, members: EnumMember[]) {
+    export function createEnumDeclaration(
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: string | Identifier,
+        members: ReadonlyArray<EnumMember>) {
         const node = <EnumDeclaration>createSynthesizedNode(SyntaxKind.EnumDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
@@ -1531,7 +1814,12 @@ namespace ts {
         return node;
     }
 
-    export function updateEnumDeclaration(node: EnumDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: Identifier, members: EnumMember[]) {
+    export function updateEnumDeclaration(
+        node: EnumDeclaration,
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        name: Identifier,
+        members: ReadonlyArray<EnumMember>) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.name !== name
@@ -1540,7 +1828,7 @@ namespace ts {
             : node;
     }
 
-    export function createModuleDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags) {
+    export function createModuleDeclaration(decorators: ReadonlyArray<Decorator> | undefined, modifiers: ReadonlyArray<Modifier> | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags) {
         const node = <ModuleDeclaration>createSynthesizedNode(SyntaxKind.ModuleDeclaration);
         node.flags |= flags & (NodeFlags.Namespace | NodeFlags.NestedNamespace | NodeFlags.GlobalAugmentation);
         node.decorators = asNodeArray(decorators);
@@ -1550,7 +1838,7 @@ namespace ts {
         return node;
     }
 
-    export function updateModuleDeclaration(node: ModuleDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined) {
+    export function updateModuleDeclaration(node: ModuleDeclaration, decorators: ReadonlyArray<Decorator> | undefined, modifiers: ReadonlyArray<Modifier> | undefined, name: ModuleName, body: ModuleBody | undefined) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.name !== name
@@ -1559,25 +1847,25 @@ namespace ts {
             : node;
     }
 
-    export function createModuleBlock(statements: Statement[]) {
+    export function createModuleBlock(statements: ReadonlyArray<Statement>) {
         const node = <ModuleBlock>createSynthesizedNode(SyntaxKind.ModuleBlock);
         node.statements = createNodeArray(statements);
         return node;
     }
 
-    export function updateModuleBlock(node: ModuleBlock, statements: Statement[]) {
+    export function updateModuleBlock(node: ModuleBlock, statements: ReadonlyArray<Statement>) {
         return node.statements !== statements
             ? updateNode(createModuleBlock(statements), node)
             : node;
     }
 
-    export function createCaseBlock(clauses: CaseOrDefaultClause[]): CaseBlock {
+    export function createCaseBlock(clauses: ReadonlyArray<CaseOrDefaultClause>): CaseBlock {
         const node = <CaseBlock>createSynthesizedNode(SyntaxKind.CaseBlock);
         node.clauses = createNodeArray(clauses);
         return node;
     }
 
-    export function updateCaseBlock(node: CaseBlock, clauses: CaseOrDefaultClause[]) {
+    export function updateCaseBlock(node: CaseBlock, clauses: ReadonlyArray<CaseOrDefaultClause>) {
         return node.clauses !== clauses
             ? updateNode(createCaseBlock(clauses), node)
             : node;
@@ -1595,7 +1883,7 @@ namespace ts {
             : node;
     }
 
-    export function createImportEqualsDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | Identifier, moduleReference: ModuleReference) {
+    export function createImportEqualsDeclaration(decorators: ReadonlyArray<Decorator> | undefined, modifiers: ReadonlyArray<Modifier> | undefined, name: string | Identifier, moduleReference: ModuleReference) {
         const node = <ImportEqualsDeclaration>createSynthesizedNode(SyntaxKind.ImportEqualsDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
@@ -1604,7 +1892,7 @@ namespace ts {
         return node;
     }
 
-    export function updateImportEqualsDeclaration(node: ImportEqualsDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: Identifier, moduleReference: ModuleReference) {
+    export function updateImportEqualsDeclaration(node: ImportEqualsDeclaration, decorators: ReadonlyArray<Decorator> | undefined, modifiers: ReadonlyArray<Modifier> | undefined, name: Identifier, moduleReference: ModuleReference) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.name !== name
@@ -1613,7 +1901,11 @@ namespace ts {
             : node;
     }
 
-    export function createImportDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier?: Expression): ImportDeclaration {
+    export function createImportDeclaration(
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        importClause: ImportClause | undefined,
+        moduleSpecifier?: Expression): ImportDeclaration {
         const node = <ImportDeclaration>createSynthesizedNode(SyntaxKind.ImportDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
@@ -1622,7 +1914,12 @@ namespace ts {
         return node;
     }
 
-    export function updateImportDeclaration(node: ImportDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression | undefined) {
+    export function updateImportDeclaration(
+        node: ImportDeclaration,
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        importClause: ImportClause | undefined,
+        moduleSpecifier: Expression | undefined) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.importClause !== importClause
@@ -1657,13 +1954,13 @@ namespace ts {
             : node;
     }
 
-    export function createNamedImports(elements: ImportSpecifier[]): NamedImports {
+    export function createNamedImports(elements: ReadonlyArray<ImportSpecifier>): NamedImports {
         const node = <NamedImports>createSynthesizedNode(SyntaxKind.NamedImports);
         node.elements = createNodeArray(elements);
         return node;
     }
 
-    export function updateNamedImports(node: NamedImports, elements: ImportSpecifier[]) {
+    export function updateNamedImports(node: NamedImports, elements: ReadonlyArray<ImportSpecifier>) {
         return node.elements !== elements
             ? updateNode(createNamedImports(elements), node)
             : node;
@@ -1683,16 +1980,16 @@ namespace ts {
             : node;
     }
 
-    export function createExportAssignment(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, isExportEquals: boolean, expression: Expression) {
+    export function createExportAssignment(decorators: ReadonlyArray<Decorator> | undefined, modifiers: ReadonlyArray<Modifier> | undefined, isExportEquals: boolean, expression: Expression) {
         const node = <ExportAssignment>createSynthesizedNode(SyntaxKind.ExportAssignment);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
         node.isExportEquals = isExportEquals;
-        node.expression = expression;
+        node.expression = isExportEquals ? parenthesizeBinaryOperand(SyntaxKind.EqualsToken, expression, /*isLeftSideOfBinary*/ false, /*leftOperand*/ undefined) : parenthesizeDefaultExpression(expression);
         return node;
     }
 
-    export function updateExportAssignment(node: ExportAssignment, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, expression: Expression) {
+    export function updateExportAssignment(node: ExportAssignment, decorators: ReadonlyArray<Decorator> | undefined, modifiers: ReadonlyArray<Modifier> | undefined, expression: Expression) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.expression !== expression
@@ -1700,7 +1997,7 @@ namespace ts {
             : node;
     }
 
-    export function createExportDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, exportClause: NamedExports | undefined, moduleSpecifier?: Expression) {
+    export function createExportDeclaration(decorators: ReadonlyArray<Decorator> | undefined, modifiers: ReadonlyArray<Modifier> | undefined, exportClause: NamedExports | undefined, moduleSpecifier?: Expression) {
         const node = <ExportDeclaration>createSynthesizedNode(SyntaxKind.ExportDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
@@ -1709,7 +2006,12 @@ namespace ts {
         return node;
     }
 
-    export function updateExportDeclaration(node: ExportDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, exportClause: NamedExports | undefined, moduleSpecifier: Expression | undefined) {
+    export function updateExportDeclaration(
+        node: ExportDeclaration,
+        decorators: ReadonlyArray<Decorator> | undefined,
+        modifiers: ReadonlyArray<Modifier> | undefined,
+        exportClause: NamedExports | undefined,
+        moduleSpecifier: Expression | undefined) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.exportClause !== exportClause
@@ -1718,13 +2020,13 @@ namespace ts {
             : node;
     }
 
-    export function createNamedExports(elements: ExportSpecifier[]) {
+    export function createNamedExports(elements: ReadonlyArray<ExportSpecifier>) {
         const node = <NamedExports>createSynthesizedNode(SyntaxKind.NamedExports);
         node.elements = createNodeArray(elements);
         return node;
     }
 
-    export function updateNamedExports(node: NamedExports, elements: ExportSpecifier[]) {
+    export function updateNamedExports(node: NamedExports, elements: ReadonlyArray<ExportSpecifier>) {
         return node.elements !== elements
             ? updateNode(createNamedExports(elements), node)
             : node;
@@ -1760,7 +2062,7 @@ namespace ts {
 
     // JSX
 
-    export function createJsxElement(openingElement: JsxOpeningElement, children: JsxChild[], closingElement: JsxClosingElement) {
+    export function createJsxElement(openingElement: JsxOpeningElement, children: ReadonlyArray<JsxChild>, closingElement: JsxClosingElement) {
         const node = <JsxElement>createSynthesizedNode(SyntaxKind.JsxElement);
         node.openingElement = openingElement;
         node.children = createNodeArray(children);
@@ -1768,7 +2070,7 @@ namespace ts {
         return node;
     }
 
-    export function updateJsxElement(node: JsxElement, openingElement: JsxOpeningElement, children: JsxChild[], closingElement: JsxClosingElement) {
+    export function updateJsxElement(node: JsxElement, openingElement: JsxOpeningElement, children: ReadonlyArray<JsxChild>, closingElement: JsxClosingElement) {
         return node.openingElement !== openingElement
             || node.children !== children
             || node.closingElement !== closingElement
@@ -1816,6 +2118,22 @@ namespace ts {
             : node;
     }
 
+    export function createJsxFragment(openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment) {
+        const node = <JsxFragment>createSynthesizedNode(SyntaxKind.JsxFragment);
+        node.openingFragment = openingFragment;
+        node.children = createNodeArray(children);
+        node.closingFragment = closingFragment;
+        return node;
+    }
+
+    export function updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment) {
+        return node.openingFragment !== openingFragment
+            || node.children !== children
+            || node.closingFragment !== closingFragment
+            ? updateNode(createJsxFragment(openingFragment, children, closingFragment), node)
+            : node;
+    }
+
     export function createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression) {
         const node = <JsxAttribute>createSynthesizedNode(SyntaxKind.JsxAttribute);
         node.name = name;
@@ -1830,13 +2148,13 @@ namespace ts {
             : node;
     }
 
-    export function createJsxAttributes(properties: JsxAttributeLike[]) {
+    export function createJsxAttributes(properties: ReadonlyArray<JsxAttributeLike>) {
         const node = <JsxAttributes>createSynthesizedNode(SyntaxKind.JsxAttributes);
         node.properties = createNodeArray(properties);
         return node;
     }
 
-    export function updateJsxAttributes(node: JsxAttributes, properties: JsxAttributeLike[]) {
+    export function updateJsxAttributes(node: JsxAttributes, properties: ReadonlyArray<JsxAttributeLike>) {
         return node.properties !== properties
             ? updateNode(createJsxAttributes(properties), node)
             : node;
@@ -1869,53 +2187,53 @@ namespace ts {
 
     // Clauses
 
-    export function createCaseClause(expression: Expression, statements: Statement[]) {
+    export function createCaseClause(expression: Expression, statements: ReadonlyArray<Statement>) {
         const node = <CaseClause>createSynthesizedNode(SyntaxKind.CaseClause);
         node.expression = parenthesizeExpressionForList(expression);
         node.statements = createNodeArray(statements);
         return node;
     }
 
-    export function updateCaseClause(node: CaseClause, expression: Expression, statements: Statement[]) {
+    export function updateCaseClause(node: CaseClause, expression: Expression, statements: ReadonlyArray<Statement>) {
         return node.expression !== expression
             || node.statements !== statements
             ? updateNode(createCaseClause(expression, statements), node)
             : node;
     }
 
-    export function createDefaultClause(statements: Statement[]) {
+    export function createDefaultClause(statements: ReadonlyArray<Statement>) {
         const node = <DefaultClause>createSynthesizedNode(SyntaxKind.DefaultClause);
         node.statements = createNodeArray(statements);
         return node;
     }
 
-    export function updateDefaultClause(node: DefaultClause, statements: Statement[]) {
+    export function updateDefaultClause(node: DefaultClause, statements: ReadonlyArray<Statement>) {
         return node.statements !== statements
             ? updateNode(createDefaultClause(statements), node)
             : node;
     }
 
-    export function createHeritageClause(token: HeritageClause["token"], types: ExpressionWithTypeArguments[]) {
+    export function createHeritageClause(token: HeritageClause["token"], types: ReadonlyArray<ExpressionWithTypeArguments>) {
         const node = <HeritageClause>createSynthesizedNode(SyntaxKind.HeritageClause);
         node.token = token;
         node.types = createNodeArray(types);
         return node;
     }
 
-    export function updateHeritageClause(node: HeritageClause, types: ExpressionWithTypeArguments[]) {
+    export function updateHeritageClause(node: HeritageClause, types: ReadonlyArray<ExpressionWithTypeArguments>) {
         return node.types !== types
             ? updateNode(createHeritageClause(node.token, types), node)
             : node;
     }
 
-    export function createCatchClause(variableDeclaration: string | VariableDeclaration, block: Block) {
+    export function createCatchClause(variableDeclaration: string | VariableDeclaration | undefined, block: Block) {
         const node = <CatchClause>createSynthesizedNode(SyntaxKind.CatchClause);
-        node.variableDeclaration = typeof variableDeclaration === "string" ? createVariableDeclaration(variableDeclaration) : variableDeclaration;
+        node.variableDeclaration = isString(variableDeclaration) ? createVariableDeclaration(variableDeclaration) : variableDeclaration;
         node.block = block;
         return node;
     }
 
-    export function updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration, block: Block) {
+    export function updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration | undefined, block: Block) {
         return node.variableDeclaration !== variableDeclaration
             || node.block !== block
             ? updateNode(createCatchClause(variableDeclaration, block), node)
@@ -1983,7 +2301,7 @@ namespace ts {
 
     // Top-level nodes
 
-    export function updateSourceFileNode(node: SourceFile, statements: Statement[]) {
+    export function updateSourceFileNode(node: SourceFile, statements: ReadonlyArray<Statement>) {
         if (node.statements !== statements) {
             const updated = <SourceFile>createSynthesizedNode(SyntaxKind.SourceFile);
             updated.flags |= node.flags;
@@ -2095,7 +2413,7 @@ namespace ts {
         return node;
     }
 
-    function flattenCommaElements(node: Expression): Expression | Expression[] {
+    function flattenCommaElements(node: Expression): Expression | ReadonlyArray<Expression> {
         if (nodeIsSynthesized(node) && !isParseTreeNode(node) && !node.original && !node.emitNode && !node.id) {
             if (node.kind === SyntaxKind.CommaListExpression) {
                 return (<CommaListExpression>node).elements;
@@ -2107,25 +2425,25 @@ namespace ts {
         return node;
     }
 
-    export function createCommaList(elements: Expression[]) {
+    export function createCommaList(elements: ReadonlyArray<Expression>) {
         const node = <CommaListExpression>createSynthesizedNode(SyntaxKind.CommaListExpression);
         node.elements = createNodeArray(sameFlatMap(elements, flattenCommaElements));
         return node;
     }
 
-    export function updateCommaList(node: CommaListExpression, elements: Expression[]) {
+    export function updateCommaList(node: CommaListExpression, elements: ReadonlyArray<Expression>) {
         return node.elements !== elements
             ? updateNode(createCommaList(elements), node)
             : node;
     }
 
-    export function createBundle(sourceFiles: SourceFile[]) {
+    export function createBundle(sourceFiles: ReadonlyArray<SourceFile>) {
         const node = <Bundle>createNode(SyntaxKind.Bundle);
         node.sourceFiles = sourceFiles;
         return node;
     }
 
-    export function updateBundle(node: Bundle, sourceFiles: SourceFile[]) {
+    export function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>) {
         if (node.sourceFiles !== sourceFiles) {
             return createBundle(sourceFiles);
         }
@@ -2133,6 +2451,42 @@ namespace ts {
     }
 
     // Compound nodes
+
+    export function createImmediatelyInvokedFunctionExpression(statements: Statement[]): CallExpression;
+    export function createImmediatelyInvokedFunctionExpression(statements: Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
+    export function createImmediatelyInvokedFunctionExpression(statements: Statement[], param?: ParameterDeclaration, paramValue?: Expression) {
+        return createCall(
+            createFunctionExpression(
+                /*modifiers*/ undefined,
+                /*asteriskToken*/ undefined,
+                /*name*/ undefined,
+                /*typeParameters*/ undefined,
+                /*parameters*/ param ? [param] : [],
+                /*type*/ undefined,
+                createBlock(statements, /*multiLine*/ true)
+            ),
+            /*typeArguments*/ undefined,
+            /*argumentsArray*/ paramValue ? [paramValue] : []
+        );
+    }
+
+    export function createImmediatelyInvokedArrowFunction(statements: Statement[]): CallExpression;
+    export function createImmediatelyInvokedArrowFunction(statements: Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
+    export function createImmediatelyInvokedArrowFunction(statements: Statement[], param?: ParameterDeclaration, paramValue?: Expression) {
+        return createCall(
+            createArrowFunction(
+                /*modifiers*/ undefined,
+                /*typeParameters*/ undefined,
+                /*parameters*/ param ? [param] : [],
+                /*type*/ undefined,
+                /*equalsGreaterThanToken*/ undefined,
+                createBlock(statements, /*multiLine*/ true)
+            ),
+            /*typeArguments*/ undefined,
+            /*argumentsArray*/ paramValue ? [paramValue] : []
+        );
+    }
+
 
     export function createComma(left: Expression, right: Expression) {
         return <Expression>createBinary(left, SyntaxKind.CommaToken, right);
@@ -2200,14 +2554,14 @@ namespace ts {
     function asName(name: string | EntityName): EntityName;
     function asName(name: string | Identifier | ThisTypeNode): Identifier | ThisTypeNode;
     function asName(name: string | Identifier | BindingName | PropertyName | QualifiedName | ThisTypeNode) {
-        return typeof name === "string" ? createIdentifier(name) : name;
+        return isString(name) ? createIdentifier(name) : name;
     }
 
     function asExpression(value: string | number | Expression) {
-        return typeof value === "string" || typeof value === "number" ? createLiteral(value) : value;
+        return isString(value) || typeof value === "number" ? createLiteral(value) : value;
     }
 
-    function asNodeArray<T extends Node>(array: T[] | undefined): NodeArray<T> | undefined {
+    function asNodeArray<T extends Node>(array: ReadonlyArray<T> | undefined): NodeArray<T> | undefined {
         return array ? createNodeArray(array) : undefined;
     }
 
@@ -2270,14 +2624,6 @@ namespace ts {
     }
 
     /**
-     * Gets flags that control emit behavior of a node.
-     */
-    export function getEmitFlags(node: Node): EmitFlags | undefined {
-        const emitNode = node.emitNode;
-        return emitNode && emitNode.flags;
-    }
-
-    /**
      * Sets flags that control emit behavior of a node.
      */
     export function setEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags) {
@@ -2286,9 +2632,19 @@ namespace ts {
     }
 
     /**
+     * Sets flags that control emit behavior of a node.
+     */
+    /* @internal */
+    export function addEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags) {
+        const emitNode = getOrCreateEmitNode(node);
+        emitNode.flags = emitNode.flags | emitFlags;
+        return node;
+    }
+
+    /**
      * Gets a custom text range to use when emitting source maps.
      */
-    export function getSourceMapRange(node: Node) {
+    export function getSourceMapRange(node: Node): SourceMapRange {
         const emitNode = node.emitNode;
         return (emitNode && emitNode.sourceMapRange) || node;
     }
@@ -2296,15 +2652,25 @@ namespace ts {
     /**
      * Sets a custom text range to use when emitting source maps.
      */
-    export function setSourceMapRange<T extends Node>(node: T, range: TextRange | undefined) {
+    export function setSourceMapRange<T extends Node>(node: T, range: SourceMapRange | undefined) {
         getOrCreateEmitNode(node).sourceMapRange = range;
         return node;
+    }
+
+    // tslint:disable-next-line variable-name
+    let SourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
+
+    /**
+     * Create an external source map source file reference
+     */
+    export function createSourceMapSource(fileName: string, text: string, skipTrivia?: (pos: number) => number): SourceMapSource {
+        return new (SourceMapSource || (SourceMapSource = objectAllocator.getSourceMapSourceConstructor()))(fileName, text, skipTrivia);
     }
 
     /**
      * Gets the TextRange to use for source maps for a token of a node.
      */
-    export function getTokenSourceMapRange(node: Node, token: SyntaxKind): TextRange | undefined {
+    export function getTokenSourceMapRange(node: Node, token: SyntaxKind): SourceMapRange | undefined {
         const emitNode = node.emitNode;
         const tokenSourceMapRanges = emitNode && emitNode.tokenSourceMapRanges;
         return tokenSourceMapRanges && tokenSourceMapRanges[token];
@@ -2313,10 +2679,28 @@ namespace ts {
     /**
      * Sets the TextRange to use for source maps for a token of a node.
      */
-    export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange | undefined) {
+    export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: SourceMapRange | undefined) {
         const emitNode = getOrCreateEmitNode(node);
         const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = []);
         tokenSourceMapRanges[token] = range;
+        return node;
+    }
+
+    /**
+     * Gets a custom text range to use when emitting comments.
+     */
+    /*@internal*/
+    export function getStartsOnNewLine(node: Node) {
+        const emitNode = node.emitNode;
+        return emitNode && emitNode.startsOnNewLine;
+    }
+
+    /**
+     * Sets a custom text range to use when emitting comments.
+     */
+    /*@internal*/
+    export function setStartsOnNewLine<T extends Node>(node: T, newLine: boolean) {
+        getOrCreateEmitNode(node).startsOnNewLine = newLine;
         return node;
     }
 
@@ -2347,7 +2731,7 @@ namespace ts {
     }
 
     export function addSyntheticLeadingComment<T extends Node>(node: T, kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia, text: string, hasTrailingNewLine?: boolean) {
-        return setSyntheticLeadingComments(node, append(getSyntheticLeadingComments(node), <SynthesizedComment>{ kind, pos: -1, end: -1, hasTrailingNewLine, text }));
+        return setSyntheticLeadingComments(node, append<SynthesizedComment>(getSyntheticLeadingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }));
     }
 
     export function getSyntheticTrailingComments(node: Node): SynthesizedComment[] | undefined {
@@ -2361,7 +2745,7 @@ namespace ts {
     }
 
     export function addSyntheticTrailingComment<T extends Node>(node: T, kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia, text: string, hasTrailingNewLine?: boolean) {
-        return setSyntheticTrailingComments(node, append(getSyntheticTrailingComments(node), <SynthesizedComment>{ kind, pos: -1, end: -1, hasTrailingNewLine, text }));
+        return setSyntheticTrailingComments(node, append<SynthesizedComment>(getSyntheticTrailingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }));
     }
 
     /**
@@ -2397,9 +2781,7 @@ namespace ts {
         if (some(helpers)) {
             const emitNode = getOrCreateEmitNode(node);
             for (const helper of helpers) {
-                if (!contains(emitNode.helpers, helper)) {
-                    emitNode.helpers = append(emitNode.helpers, helper);
-                }
+                emitNode.helpers = appendIfUnique(emitNode.helpers, helper);
             }
         }
         return node;
@@ -2441,9 +2823,7 @@ namespace ts {
             const helper = sourceEmitHelpers[i];
             if (predicate(helper)) {
                 helpersRemoved++;
-                if (!contains(targetEmitNode.helpers, helper)) {
-                    targetEmitNode.helpers = append(targetEmitNode.helpers, helper);
-                }
+                targetEmitNode.helpers = appendIfUnique(targetEmitNode.helpers, helper);
             }
             else if (helpersRemoved > 0) {
                 sourceEmitHelpers[i - helpersRemoved] = helper;
@@ -2482,9 +2862,11 @@ namespace ts {
             sourceMapRange,
             tokenSourceMapRanges,
             constantValue,
-            helpers
+            helpers,
+            startsOnNewLine,
         } = sourceEmitNode;
         if (!destEmitNode) destEmitNode = {};
+        // We are using `.slice()` here in case `destEmitNode.leadingComments` is pushed to later.
         if (leadingComments) destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
         if (trailingComments) destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
         if (flags) destEmitNode.flags = flags;
@@ -2493,6 +2875,7 @@ namespace ts {
         if (tokenSourceMapRanges) destEmitNode.tokenSourceMapRanges = mergeTokenSourceMapRanges(tokenSourceMapRanges, destEmitNode.tokenSourceMapRanges);
         if (constantValue !== undefined) destEmitNode.constantValue = constantValue;
         if (helpers) destEmitNode.helpers = addRange(destEmitNode.helpers, helpers);
+        if (startsOnNewLine !== undefined) destEmitNode.startsOnNewLine = startsOnNewLine;
         return destEmitNode;
     }
 
@@ -2553,7 +2936,7 @@ namespace ts {
         }
     }
 
-    export function createFunctionCall(func: Expression, thisArg: Expression, argumentsList: Expression[], location?: TextRange) {
+    export function createFunctionCall(func: Expression, thisArg: Expression, argumentsList: ReadonlyArray<Expression>, location?: TextRange) {
         return setTextRange(
             createCall(
                 createPropertyAccess(func, "call"),
@@ -2608,7 +2991,7 @@ namespace ts {
         );
     }
 
-    function createReactNamespace(reactNamespace: string, parent: JsxOpeningLikeElement) {
+    function createReactNamespace(reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment) {
         // To ensure the emit resolver can properly resolve the namespace, we need to
         // treat this identifier as if it were a source tree node by clearing the `Synthesized`
         // flag and setting a parent node.
@@ -2620,19 +3003,19 @@ namespace ts {
         return react;
     }
 
-    function createJsxFactoryExpressionFromEntityName(jsxFactory: EntityName, parent: JsxOpeningLikeElement): Expression {
+    function createJsxFactoryExpressionFromEntityName(jsxFactory: EntityName, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
         if (isQualifiedName(jsxFactory)) {
             const left = createJsxFactoryExpressionFromEntityName(jsxFactory.left, parent);
-            const right = createIdentifier(jsxFactory.right.text);
-            right.text = jsxFactory.right.text;
+            const right = createIdentifier(idText(jsxFactory.right));
+            right.escapedText = jsxFactory.right.escapedText;
             return createPropertyAccess(left, right);
         }
         else {
-            return createReactNamespace(jsxFactory.text, parent);
+            return createReactNamespace(idText(jsxFactory), parent);
         }
     }
 
-    function createJsxFactoryExpression(jsxFactoryEntity: EntityName, reactNamespace: string, parent: JsxOpeningLikeElement): Expression {
+    function createJsxFactoryExpression(jsxFactoryEntity: EntityName, reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
         return jsxFactoryEntity ?
             createJsxFactoryExpressionFromEntityName(jsxFactoryEntity, parent) :
             createPropertyAccess(
@@ -2654,7 +3037,38 @@ namespace ts {
 
             if (children.length > 1) {
                 for (const child of children) {
-                    child.startsOnNewLine = true;
+                    startOnNewLine(child);
+                    argumentsList.push(child);
+                }
+            }
+            else {
+                argumentsList.push(children[0]);
+            }
+        }
+
+        return setTextRange(
+            createCall(
+                createJsxFactoryExpression(jsxFactoryEntity, reactNamespace, parentElement),
+                /*typeArguments*/ undefined,
+                argumentsList
+            ),
+            location
+        );
+    }
+
+    export function createExpressionForJsxFragment(jsxFactoryEntity: EntityName, reactNamespace: string, children: Expression[], parentElement: JsxOpeningFragment, location: TextRange): LeftHandSideExpression {
+        const tagName = createPropertyAccess(
+            createReactNamespace(reactNamespace, parentElement),
+            "Fragment"
+        );
+
+        const argumentsList = [<Expression>tagName];
+        argumentsList.push(createNull());
+
+        if (children && children.length > 0) {
+            if (children.length > 1) {
+                for (const child of children) {
+                    startOnNewLine(child);
                     argumentsList.push(child);
                 }
             }
@@ -3216,8 +3630,28 @@ namespace ts {
         return isBlock(node) ? node : setTextRange(createBlock([setTextRange(createReturn(node), node)], multiLine), node);
     }
 
+    export function convertFunctionDeclarationToExpression(node: FunctionDeclaration) {
+        Debug.assert(!!node.body);
+        const updated = createFunctionExpression(
+            node.modifiers,
+            node.asteriskToken,
+            node.name,
+            node.typeParameters,
+            node.parameters,
+            node.type,
+            node.body
+        );
+        setOriginalNode(updated, node);
+        setTextRange(updated, node);
+        if (getStartsOnNewLine(node)) {
+            setStartsOnNewLine(updated, /*newLine*/ true);
+        }
+        aggregateTransformFlags(updated);
+        return updated;
+    }
+
     function isUseStrictPrologue(node: ExpressionStatement): boolean {
-        return (node.expression as StringLiteral).text === "use strict";
+        return isStringLiteral(node.expression) && node.expression.text === "use strict";
     }
 
     /**
@@ -3231,7 +3665,7 @@ namespace ts {
      * @param ensureUseStrict: boolean determining whether the function need to add prologue-directives
      * @param visitor: Optional callback used to visit any custom prologue directives.
      */
-    export function addPrologue(target: Statement[], source: Statement[], ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number {
+    export function addPrologue(target: Statement[], source: ReadonlyArray<Statement>, ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number {
         const offset = addStandardPrologue(target, source, ensureUseStrict);
         return addCustomPrologue(target, source, offset, visitor);
     }
@@ -3242,7 +3676,7 @@ namespace ts {
      * This function needs to be called whenever we transform the statement
      * list of a source file, namespace, or function-like body.
      */
-    export function addStandardPrologue(target: Statement[], source: Statement[], ensureUseStrict?: boolean): number {
+    export function addStandardPrologue(target: Statement[], source: ReadonlyArray<Statement>, ensureUseStrict?: boolean): number {
         Debug.assert(target.length === 0, "Prologue directives should be at the first statement in the target statements array");
         let foundUseStrict = false;
         let statementOffset = 0;
@@ -3272,12 +3706,12 @@ namespace ts {
      * This function needs to be called whenever we transform the statement
      * list of a source file, namespace, or function-like body.
      */
-    export function addCustomPrologue(target: Statement[], source: Statement[], statementOffset: number, visitor?: (node: Node) => VisitResult<Node>): number {
+    export function addCustomPrologue(target: Statement[], source: ReadonlyArray<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node>): number {
         const numStatements = source.length;
         while (statementOffset < numStatements) {
             const statement = source[statementOffset];
             if (getEmitFlags(statement) & EmitFlags.CustomPrologue) {
-                target.push(visitor ? visitNode(statement, visitor, isStatement) : statement);
+                append(target, visitor ? visitNode(statement, visitor, isStatement) : statement);
             }
             else {
                 break;
@@ -3287,7 +3721,7 @@ namespace ts {
         return statementOffset;
     }
 
-    export function startsWithUseStrict(statements: Statement[]) {
+    export function startsWithUseStrict(statements: ReadonlyArray<Statement>) {
         const firstStatement = firstOrUndefined(statements);
         return firstStatement !== undefined
             && isPrologueDirective(firstStatement)
@@ -3523,21 +3957,42 @@ namespace ts {
     }
 
     /**
+     *  [Per the spec](https://tc39.github.io/ecma262/#prod-ExportDeclaration), `export default` accepts _AssigmentExpression_ but
+     *  has a lookahead restriction for `function`, `async function`, and `class`.
+     *
+     * Basically, that means we need to parenthesize in the following cases:
+     *
+     * - BinaryExpression of CommaToken
+     * - CommaList (synthetic list of multiple comma expressions)
+     * - FunctionExpression
+     * - ClassExpression
+     */
+    export function parenthesizeDefaultExpression(e: Expression) {
+        const check = skipPartiallyEmittedExpressions(e);
+        return (check.kind === SyntaxKind.ClassExpression ||
+            check.kind === SyntaxKind.FunctionExpression ||
+            check.kind === SyntaxKind.CommaListExpression ||
+            isBinaryExpression(check) && check.operatorToken.kind === SyntaxKind.CommaToken)
+            ? createParen(e)
+            : e;
+    }
+
+    /**
      * Wraps an expression in parentheses if it is needed in order to use the expression
      * as the expression of a NewExpression node.
      *
      * @param expression The Expression node.
      */
     export function parenthesizeForNew(expression: Expression): LeftHandSideExpression {
-        const emittedExpression = skipPartiallyEmittedExpressions(expression);
-        switch (emittedExpression.kind) {
+        const leftmostExpr = getLeftmostExpression(expression, /*stopAtCallExpressions*/ true);
+        switch (leftmostExpr.kind) {
             case SyntaxKind.CallExpression:
                 return createParen(expression);
 
             case SyntaxKind.NewExpression:
-                return (<NewExpression>emittedExpression).arguments
-                    ? <LeftHandSideExpression>expression
-                    : createParen(expression);
+                return !(leftmostExpr as NewExpression).arguments
+                    ? createParen(expression)
+                    : <LeftHandSideExpression>expression;
         }
 
         return parenthesizeForAccess(expression);
@@ -3614,14 +4069,13 @@ namespace ts {
             if (kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction) {
                 const mutableCall = getMutableClone(emittedExpression);
                 mutableCall.expression = setTextRange(createParen(callee), callee);
-                return recreatePartiallyEmittedExpressions(expression, mutableCall);
+                return recreateOuterExpressions(expression, mutableCall, OuterExpressionKinds.PartiallyEmittedExpressions);
             }
         }
-        else {
-            const leftmostExpressionKind = getLeftmostExpression(emittedExpression).kind;
-            if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
-                return setTextRange(createParen(expression), expression);
-            }
+
+        const leftmostExpressionKind = getLeftmostExpression(emittedExpression, /*stopAtCallExpressions*/ false).kind;
+        if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
+            return setTextRange(createParen(expression), expression);
         }
 
         return expression;
@@ -3638,41 +4092,34 @@ namespace ts {
         return member;
     }
 
-    export function parenthesizeElementTypeMembers(members: TypeNode[]) {
+    export function parenthesizeArrayTypeMember(member: TypeNode) {
+        switch (member.kind) {
+            case SyntaxKind.TypeQuery:
+            case SyntaxKind.TypeOperator:
+                return createParenthesizedType(member);
+        }
+        return parenthesizeElementTypeMember(member);
+    }
+
+    export function parenthesizeElementTypeMembers(members: ReadonlyArray<TypeNode>) {
         return createNodeArray(sameMap(members, parenthesizeElementTypeMember));
     }
 
-    export function parenthesizeTypeParameters(typeParameters: TypeNode[]) {
+    export function parenthesizeTypeParameters(typeParameters: ReadonlyArray<TypeNode>) {
         if (some(typeParameters)) {
-            const nodeArray = createNodeArray() as NodeArray<TypeNode>;
+            const params: TypeNode[] = [];
             for (let i = 0; i < typeParameters.length; ++i) {
                 const entry = typeParameters[i];
-                nodeArray.push(i === 0 && isFunctionOrConstructorTypeNode(entry) && entry.typeParameters ?
+                params.push(i === 0 && isFunctionOrConstructorTypeNode(entry) && entry.typeParameters ?
                     createParenthesizedType(entry) :
                     entry);
             }
 
-            return nodeArray;
+            return createNodeArray(params);
         }
     }
 
-    /**
-     * Clones a series of not-emitted expressions with a new inner expression.
-     *
-     * @param originalOuterExpression The original outer expression.
-     * @param newInnerExpression The new inner expression.
-     */
-    function recreatePartiallyEmittedExpressions(originalOuterExpression: Expression, newInnerExpression: Expression) {
-        if (isPartiallyEmittedExpression(originalOuterExpression)) {
-            const clone = getMutableClone(originalOuterExpression);
-            clone.expression = recreatePartiallyEmittedExpressions(clone.expression, newInnerExpression);
-            return clone;
-        }
-
-        return newInnerExpression;
-    }
-
-    function getLeftmostExpression(node: Expression): Expression {
+    function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {
         while (true) {
             switch (node.kind) {
                 case SyntaxKind.PostfixUnaryExpression:
@@ -3688,6 +4135,10 @@ namespace ts {
                     continue;
 
                 case SyntaxKind.CallExpression:
+                    if (stopAtCallExpressions) {
+                        return node;
+                    }
+                    // falls through
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.PropertyAccessExpression:
                     node = (<CallExpression | PropertyAccessExpression | ElementAccessExpression>node).expression;
@@ -3700,10 +4151,11 @@ namespace ts {
 
             return node;
         }
+
     }
 
     export function parenthesizeConciseBody(body: ConciseBody): ConciseBody {
-        if (!isBlock(body) && getLeftmostExpression(body).kind === SyntaxKind.ObjectLiteralExpression) {
+        if (!isBlock(body) && getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression) {
             return setTextRange(createParen(<Expression>body), body);
         }
 
@@ -3716,6 +4168,22 @@ namespace ts {
         PartiallyEmittedExpressions = 1 << 2,
 
         All = Parentheses | Assertions | PartiallyEmittedExpressions
+    }
+
+    export type OuterExpression = ParenthesizedExpression | TypeAssertion | AsExpression | NonNullExpression | PartiallyEmittedExpression;
+
+    export function isOuterExpression(node: Node, kinds = OuterExpressionKinds.All): node is OuterExpression {
+        switch (node.kind) {
+            case SyntaxKind.ParenthesizedExpression:
+                return (kinds & OuterExpressionKinds.Parentheses) !== 0;
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.AsExpression:
+            case SyntaxKind.NonNullExpression:
+                return (kinds & OuterExpressionKinds.Assertions) !== 0;
+            case SyntaxKind.PartiallyEmittedExpression:
+                return (kinds & OuterExpressionKinds.PartiallyEmittedExpressions) !== 0;
+        }
+        return false;
     }
 
     export function skipOuterExpressions(node: Expression, kinds?: OuterExpressionKinds): Expression;
@@ -3754,26 +4222,58 @@ namespace ts {
     export function skipAssertions(node: Expression): Expression;
     export function skipAssertions(node: Node): Node;
     export function skipAssertions(node: Node): Node {
-        while (isAssertionExpression(node)) {
-            node = (<AssertionExpression>node).expression;
+        while (isAssertionExpression(node) || node.kind === SyntaxKind.NonNullExpression) {
+            node = (<AssertionExpression | NonNullExpression>node).expression;
         }
 
         return node;
     }
 
-    export function skipPartiallyEmittedExpressions(node: Expression): Expression;
-    export function skipPartiallyEmittedExpressions(node: Node): Node;
-    export function skipPartiallyEmittedExpressions(node: Node) {
-        while (node.kind === SyntaxKind.PartiallyEmittedExpression) {
-            node = (<PartiallyEmittedExpression>node).expression;
+    function updateOuterExpression(outerExpression: OuterExpression, expression: Expression) {
+        switch (outerExpression.kind) {
+            case SyntaxKind.ParenthesizedExpression: return updateParen(outerExpression, expression);
+            case SyntaxKind.TypeAssertionExpression: return updateTypeAssertion(outerExpression, outerExpression.type, expression);
+            case SyntaxKind.AsExpression: return updateAsExpression(outerExpression, expression, outerExpression.type);
+            case SyntaxKind.NonNullExpression: return updateNonNullExpression(outerExpression, expression);
+            case SyntaxKind.PartiallyEmittedExpression: return updatePartiallyEmittedExpression(outerExpression, expression);
         }
+    }
 
-        return node;
+    /**
+     * Determines whether a node is a parenthesized expression that can be ignored when recreating outer expressions.
+     *
+     * A parenthesized expression can be ignored when all of the following are true:
+     *
+     * - It's `pos` and `end` are not -1
+     * - It does not have a custom source map range
+     * - It does not have a custom comment range
+     * - It does not have synthetic leading or trailing comments
+     *
+     * If an outermost parenthesized expression is ignored, but the containing expression requires a parentheses around
+     * the expression to maintain precedence, a new parenthesized expression should be created automatically when
+     * the containing expression is created/updated.
+     */
+    function isIgnorableParen(node: Expression) {
+        return node.kind === SyntaxKind.ParenthesizedExpression
+            && nodeIsSynthesized(node)
+            && nodeIsSynthesized(getSourceMapRange(node))
+            && nodeIsSynthesized(getCommentRange(node))
+            && !some(getSyntheticLeadingComments(node))
+            && !some(getSyntheticTrailingComments(node));
+    }
+
+    export function recreateOuterExpressions(outerExpression: Expression | undefined, innerExpression: Expression, kinds = OuterExpressionKinds.All): Expression {
+        if (outerExpression && isOuterExpression(outerExpression, kinds) && !isIgnorableParen(outerExpression)) {
+            return updateOuterExpression(
+                outerExpression,
+                recreateOuterExpressions(outerExpression.expression, innerExpression)
+            );
+        }
+        return innerExpression;
     }
 
     export function startOnNewLine<T extends Node>(node: T): T {
-        node.startsOnNewLine = true;
-        return node;
+        return setStartsOnNewLine(node, /*newLine*/ true);
     }
 
     export function getExternalHelpersModuleName(node: SourceFile) {
@@ -3782,22 +4282,34 @@ namespace ts {
         return emitNode && emitNode.externalHelpersModuleName;
     }
 
-    export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions) {
-        if (compilerOptions.importHelpers && (isExternalModule(node) || compilerOptions.isolatedModules)) {
+    export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean) {
+        if (compilerOptions.importHelpers && isEffectiveExternalModule(node, compilerOptions)) {
             const externalHelpersModuleName = getExternalHelpersModuleName(node);
             if (externalHelpersModuleName) {
                 return externalHelpersModuleName;
             }
 
-            const helpers = getEmitHelpers(node);
-            if (helpers) {
-                for (const helper of helpers) {
-                    if (!helper.scoped) {
-                        const parseNode = getOriginalNode(node, isSourceFile);
-                        const emitNode = getOrCreateEmitNode(parseNode);
-                        return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = createUniqueName(externalHelpersModuleNameText));
+            const moduleKind = getEmitModuleKind(compilerOptions);
+            let create = hasExportStarsToExportValues
+                && moduleKind !== ModuleKind.System
+                && moduleKind !== ModuleKind.ES2015
+                && moduleKind !== ModuleKind.ESNext;
+            if (!create) {
+                const helpers = getEmitHelpers(node);
+                if (helpers) {
+                    for (const helper of helpers) {
+                        if (!helper.scoped) {
+                            create = true;
+                            break;
+                        }
                     }
                 }
+            }
+
+            if (create) {
+                const parseNode = getOriginalNode(node, isSourceFile);
+                const emitNode = getOrCreateEmitNode(parseNode);
+                return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = createUniqueName(externalHelpersModuleNameText));
             }
         }
     }
@@ -3809,7 +4321,7 @@ namespace ts {
         const namespaceDeclaration = getNamespaceDeclarationNode(node);
         if (namespaceDeclaration && !isDefaultImport(node)) {
             const name = namespaceDeclaration.name;
-            return isGeneratedIdentifier(name) ? name : createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, namespaceDeclaration.name));
+            return isGeneratedIdentifier(name) ? name : createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, name) || idText(name));
         }
         if (node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).importClause) {
             return getGeneratedNameForNode(node);
@@ -3908,7 +4420,7 @@ namespace ts {
             return bindingElement.right;
         }
 
-        if (isSpreadExpression(bindingElement)) {
+        if (isSpreadElement(bindingElement)) {
             // Recovery consistent with existing emit.
             return getInitializerOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
         }
@@ -3976,7 +4488,7 @@ namespace ts {
             return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.left);
         }
 
-        if (isSpreadExpression(bindingElement)) {
+        if (isSpreadElement(bindingElement)) {
             // `a` in `[...a] = ...`
             return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
         }
@@ -4059,18 +4571,18 @@ namespace ts {
     /**
      * Gets the elements of a BindingOrAssignmentPattern
      */
-    export function getElementsOfBindingOrAssignmentPattern(name: BindingOrAssignmentPattern): BindingOrAssignmentElement[] {
+    export function getElementsOfBindingOrAssignmentPattern(name: BindingOrAssignmentPattern): ReadonlyArray<BindingOrAssignmentElement> {
         switch (name.kind) {
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
             case SyntaxKind.ArrayLiteralExpression:
                 // `a` in `{a}`
                 // `a` in `[a]`
-                return <BindingOrAssignmentElement[]>name.elements;
+                return <ReadonlyArray<BindingOrAssignmentElement>>name.elements;
 
             case SyntaxKind.ObjectLiteralExpression:
                 // `a` in `{a}`
-                return <BindingOrAssignmentElement[]>name.properties;
+                return <ReadonlyArray<BindingOrAssignmentElement>>name.properties;
         }
     }
 
@@ -4159,178 +4671,5 @@ namespace ts {
 
         Debug.assertNode(node, isExpression);
         return <Expression>node;
-    }
-
-    export interface ExternalModuleInfo {
-        externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]; // imports of other external modules
-        externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
-        exportSpecifiers: Map<ExportSpecifier[]>; // export specifiers by name
-        exportedBindings: Identifier[][]; // exported names of local declarations
-        exportedNames: Identifier[]; // all exported names local to module
-        exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
-        hasExportStarsToExportValues: boolean; // whether this module contains export*
-    }
-
-    export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
-        const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
-        const exportSpecifiers = createMultiMap<ExportSpecifier>();
-        const exportedBindings: Identifier[][] = [];
-        const uniqueExports = createMap<boolean>();
-        let exportedNames: Identifier[];
-        let hasExportDefault = false;
-        let exportEquals: ExportAssignment = undefined;
-        let hasExportStarsToExportValues = false;
-
-        const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions);
-        const externalHelpersImportDeclaration = externalHelpersModuleName && createImportDeclaration(
-            /*decorators*/ undefined,
-            /*modifiers*/ undefined,
-            createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
-            createLiteral(externalHelpersModuleNameText));
-
-        if (externalHelpersImportDeclaration) {
-            externalImports.push(externalHelpersImportDeclaration);
-        }
-
-        for (const node of sourceFile.statements) {
-            switch (node.kind) {
-                case SyntaxKind.ImportDeclaration:
-                    // import "mod"
-                    // import x from "mod"
-                    // import * as x from "mod"
-                    // import { x, y } from "mod"
-                    externalImports.push(<ImportDeclaration>node);
-                    break;
-
-                case SyntaxKind.ImportEqualsDeclaration:
-                    if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference) {
-                        // import x = require("mod")
-                        externalImports.push(<ImportEqualsDeclaration>node);
-                    }
-
-                    break;
-
-                case SyntaxKind.ExportDeclaration:
-                    if ((<ExportDeclaration>node).moduleSpecifier) {
-                        if (!(<ExportDeclaration>node).exportClause) {
-                            // export * from "mod"
-                            externalImports.push(<ExportDeclaration>node);
-                            hasExportStarsToExportValues = true;
-                        }
-                        else {
-                            // export { x, y } from "mod"
-                            externalImports.push(<ExportDeclaration>node);
-                        }
-                    }
-                    else {
-                        // export { x, y }
-                        for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
-                            if (!uniqueExports.get(specifier.name.text)) {
-                                const name = specifier.propertyName || specifier.name;
-                                exportSpecifiers.add(name.text, specifier);
-
-                                const decl = resolver.getReferencedImportDeclaration(name)
-                                    || resolver.getReferencedValueDeclaration(name);
-
-                                if (decl) {
-                                    multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
-                                }
-
-                                uniqueExports.set(specifier.name.text, true);
-                                exportedNames = append(exportedNames, specifier.name);
-                            }
-                        }
-                    }
-                    break;
-
-                case SyntaxKind.ExportAssignment:
-                    if ((<ExportAssignment>node).isExportEquals && !exportEquals) {
-                        // export = x
-                        exportEquals = <ExportAssignment>node;
-                    }
-                    break;
-
-                case SyntaxKind.VariableStatement:
-                    if (hasModifier(node, ModifierFlags.Export)) {
-                        for (const decl of (<VariableStatement>node).declarationList.declarations) {
-                            exportedNames = collectExportedVariableInfo(decl, uniqueExports, exportedNames);
-                        }
-                    }
-                    break;
-
-                case SyntaxKind.FunctionDeclaration:
-                    if (hasModifier(node, ModifierFlags.Export)) {
-                        if (hasModifier(node, ModifierFlags.Default)) {
-                            // export default function() { }
-                            if (!hasExportDefault) {
-                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<FunctionDeclaration>node));
-                                hasExportDefault = true;
-                            }
-                        }
-                        else {
-                            // export function x() { }
-                            const name = (<FunctionDeclaration>node).name;
-                            if (!uniqueExports.get(name.text)) {
-                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports.set(name.text, true);
-                                exportedNames = append(exportedNames, name);
-                            }
-                        }
-                    }
-                    break;
-
-                case SyntaxKind.ClassDeclaration:
-                    if (hasModifier(node, ModifierFlags.Export)) {
-                        if (hasModifier(node, ModifierFlags.Default)) {
-                            // export default class { }
-                            if (!hasExportDefault) {
-                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<ClassDeclaration>node));
-                                hasExportDefault = true;
-                            }
-                        }
-                        else {
-                            // export class x { }
-                            const name = (<ClassDeclaration>node).name;
-                            if (!uniqueExports.get(name.text)) {
-                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports.set(name.text, true);
-                                exportedNames = append(exportedNames, name);
-                            }
-                        }
-                    }
-                    break;
-            }
-        }
-
-        return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames, externalHelpersImportDeclaration };
-    }
-
-    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<boolean>, exportedNames: Identifier[]) {
-        if (isBindingPattern(decl.name)) {
-            for (const element of decl.name.elements) {
-                if (!isOmittedExpression(element)) {
-                    exportedNames = collectExportedVariableInfo(element, uniqueExports, exportedNames);
-                }
-            }
-        }
-        else if (!isGeneratedIdentifier(decl.name)) {
-            if (!uniqueExports.get(decl.name.text)) {
-                uniqueExports.set(decl.name.text, true);
-                exportedNames = append(exportedNames, decl.name);
-            }
-        }
-        return exportedNames;
-    }
-
-    /** Use a sparse array as a multi-map. */
-    function multiMapSparseArrayAdd<V>(map: V[][], key: number, value: V): V[] {
-        let values = map[key];
-        if (values) {
-            values.push(value);
-        }
-        else {
-            map[key] = values = [value];
-        }
-        return values;
     }
 }

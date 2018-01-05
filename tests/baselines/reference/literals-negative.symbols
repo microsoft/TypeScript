@@ -1,0 +1,20 @@
+=== tests/cases/compiler/literals-negative.ts ===
+// Type type of the null literal is the Null type.
+// Null can be converted to anything except Void
+var n = <number>(null);
+>n : Symbol(n, Decl(literals-negative.ts, 2, 3))
+
+var s = <string>(null);
+>s : Symbol(s, Decl(literals-negative.ts, 3, 3))
+
+var b = <boolean>(n);
+>b : Symbol(b, Decl(literals-negative.ts, 4, 3))
+>n : Symbol(n, Decl(literals-negative.ts, 2, 3))
+
+function isVoid() : void { }
+>isVoid : Symbol(isVoid, Decl(literals-negative.ts, 4, 21))
+
+// Expected error: Values of type null and void cannot be compared
+if(null === isVoid()) { }
+>isVoid : Symbol(isVoid, Decl(literals-negative.ts, 4, 21))
+

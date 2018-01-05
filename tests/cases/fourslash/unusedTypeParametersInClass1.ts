@@ -4,4 +4,7 @@
 ////[|class greeter<T> |] {
 ////}
 
-verify.rangeAfterCodeFix("class greeter");
+verify.codeFix({
+    description: "Remove declaration for: 'T'",
+    newRangeContent: "class greeter ",
+});

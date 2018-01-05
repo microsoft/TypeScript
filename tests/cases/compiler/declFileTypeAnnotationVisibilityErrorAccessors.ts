@@ -13,7 +13,7 @@ module m {
         export class public2 {
         }
     }
-    
+
     export class c {
         // getter with annotation
         get foo1(): private1 {
@@ -42,7 +42,7 @@ module m {
         }
         set foo5(param: private1) {
         }
-    
+
         // getter with annotation
         get foo11(): public1 {
             return;

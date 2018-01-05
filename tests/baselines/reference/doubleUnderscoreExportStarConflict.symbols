@@ -1,0 +1,12 @@
+=== tests/cases/compiler/index.tsx ===
+export * from "./b";
+No type information for this code.export * from "./c";
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/b.ts ===
+export function __foo(): number | void {}
+>__foo : Symbol(__foo, Decl(b.ts, 0, 0))
+
+=== tests/cases/compiler/c.ts ===
+export function __foo(): string | void {}
+>__foo : Symbol(__foo, Decl(c.ts, 0, 0))
+

@@ -147,7 +147,7 @@ var o = {
         }); });
     }
 };
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.m1 = function () {

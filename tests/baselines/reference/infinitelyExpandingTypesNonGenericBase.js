@@ -35,17 +35,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Functionality = (function () {
+var Functionality = /** @class */ (function () {
     function Functionality() {
     }
     return Functionality;
 }());
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base() {
     }
     return Base;
 }());
-var A = (function (_super) {
+var A = /** @class */ (function (_super) {
     __extends(A, _super);
     function A() {
         return _super !== null && _super.apply(this, arguments) || this;

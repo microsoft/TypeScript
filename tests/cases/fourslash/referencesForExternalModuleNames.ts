@@ -3,7 +3,7 @@
 // Global interface reference.
 
 // @Filename: referencesForGlobals_1.ts
-////declare module "[|{| "isDefinition": true |}foo|]" {
+////declare module "[|{| "isWriteAccess": true, "isDefinition": true |}foo|]" {
 ////    var f: number;
 ////}
 

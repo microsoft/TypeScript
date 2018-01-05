@@ -1,0 +1,67 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(file.tsx, 0, 20))
+
+	interface IntrinsicElements { }
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 1, 22))
+}
+
+// Error
+var Div = 3;
+>Div : Symbol(Div, Decl(file.tsx, 6, 3))
+
+<Div />;
+>Div : Symbol(Div, Decl(file.tsx, 6, 3))
+
+// OK
+function Fact(): any { return null; }
+>Fact : Symbol(Fact, Decl(file.tsx, 7, 8))
+
+<Fact />
+>Fact : Symbol(Fact, Decl(file.tsx, 7, 8))
+
+// Error
+function Fnum(): number{ return 42; }
+>Fnum : Symbol(Fnum, Decl(file.tsx, 11, 8))
+
+<Fnum />
+>Fnum : Symbol(Fnum, Decl(file.tsx, 11, 8))
+
+interface Obj1 {
+>Obj1 : Symbol(Obj1, Decl(file.tsx, 15, 8), Decl(file.tsx, 21, 3))
+
+	new(): {};
+	(): number;
+}
+var Obj1: Obj1;
+>Obj1 : Symbol(Obj1, Decl(file.tsx, 15, 8), Decl(file.tsx, 21, 3))
+>Obj1 : Symbol(Obj1, Decl(file.tsx, 15, 8), Decl(file.tsx, 21, 3))
+
+<Obj1 />; // OK, prefer construct signatures
+>Obj1 : Symbol(Obj1, Decl(file.tsx, 15, 8), Decl(file.tsx, 21, 3))
+
+interface Obj2 {
+>Obj2 : Symbol(Obj2, Decl(file.tsx, 22, 9), Decl(file.tsx, 27, 3))
+
+	(): number;
+}
+var Obj2: Obj2;
+>Obj2 : Symbol(Obj2, Decl(file.tsx, 22, 9), Decl(file.tsx, 27, 3))
+>Obj2 : Symbol(Obj2, Decl(file.tsx, 22, 9), Decl(file.tsx, 27, 3))
+
+<Obj2 />; // Error
+>Obj2 : Symbol(Obj2, Decl(file.tsx, 22, 9), Decl(file.tsx, 27, 3))
+
+interface Obj3 {
+>Obj3 : Symbol(Obj3, Decl(file.tsx, 28, 9), Decl(file.tsx, 32, 3))
+}
+var Obj3: Obj3;
+>Obj3 : Symbol(Obj3, Decl(file.tsx, 28, 9), Decl(file.tsx, 32, 3))
+>Obj3 : Symbol(Obj3, Decl(file.tsx, 28, 9), Decl(file.tsx, 32, 3))
+
+<Obj3 />; // Error
+>Obj3 : Symbol(Obj3, Decl(file.tsx, 28, 9), Decl(file.tsx, 32, 3))
+

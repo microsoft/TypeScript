@@ -11,8 +11,8 @@ declare function ComponentWithTwoAttributes<K,V>(l: {key1: K, value: V}): JSX.El
 >K : Symbol(K, Decl(file.tsx, 2, 44))
 >value : Symbol(value, Decl(file.tsx, 2, 61))
 >V : Symbol(V, Decl(file.tsx, 2, 46))
->JSX : Symbol(JSX, Decl(react.d.ts, 2352, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2355, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 
 // OK
 function Baz<T,U>(key1: T, value: U) {
@@ -48,8 +48,8 @@ declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
 >func : Symbol(func, Decl(file.tsx, 10, 29))
 >arg : Symbol(arg, Decl(file.tsx, 10, 36))
 >U : Symbol(U, Decl(file.tsx, 10, 22))
->JSX : Symbol(JSX, Decl(react.d.ts, 2352, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2355, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 
 // OK
 function createLink(func: (a: number)=>void) {
@@ -97,8 +97,8 @@ declare function InferParamComponent<T>(attr: InferParamProp<T>): JSX.Element;
 >attr : Symbol(attr, Decl(file.tsx, 26, 40))
 >InferParamProp : Symbol(InferParamProp, Decl(file.tsx, 19, 1))
 >T : Symbol(T, Decl(file.tsx, 26, 37))
->JSX : Symbol(JSX, Decl(react.d.ts, 2352, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2355, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 
 // OK
 let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} />;

@@ -1,0 +1,144 @@
+=== tests/cases/compiler/indexTypeCheck.ts ===
+interface Red {
+>Red : Symbol(Red, Decl(indexTypeCheck.ts, 0, 0))
+
+	[n:number]; // ok
+>n : Symbol(n, Decl(indexTypeCheck.ts, 1, 2))
+
+	[s:string]; // ok
+>s : Symbol(s, Decl(indexTypeCheck.ts, 2, 2))
+}
+
+interface Blue {
+>Blue : Symbol(Blue, Decl(indexTypeCheck.ts, 3, 1))
+
+	[n:number]: any; // ok
+>n : Symbol(n, Decl(indexTypeCheck.ts, 6, 2))
+
+	[s:string]: any; // ok
+>s : Symbol(s, Decl(indexTypeCheck.ts, 7, 2))
+}
+
+interface Yellow {
+>Yellow : Symbol(Yellow, Decl(indexTypeCheck.ts, 8, 1))
+
+	[n:number]: Red; // ok
+>n : Symbol(n, Decl(indexTypeCheck.ts, 11, 2))
+>Red : Symbol(Red, Decl(indexTypeCheck.ts, 0, 0))
+
+	[s:string]: Red; // ok
+>s : Symbol(s, Decl(indexTypeCheck.ts, 12, 2))
+>Red : Symbol(Red, Decl(indexTypeCheck.ts, 0, 0))
+}
+
+interface Orange {
+>Orange : Symbol(Orange, Decl(indexTypeCheck.ts, 13, 1))
+
+	[n:number]: number; // ok
+>n : Symbol(n, Decl(indexTypeCheck.ts, 16, 2))
+
+	[s:string]: string; // error
+>s : Symbol(s, Decl(indexTypeCheck.ts, 17, 2))
+}
+
+interface Green {
+>Green : Symbol(Green, Decl(indexTypeCheck.ts, 18, 1))
+
+	[n:number]: Orange; // error
+>n : Symbol(n, Decl(indexTypeCheck.ts, 21, 2))
+>Orange : Symbol(Orange, Decl(indexTypeCheck.ts, 13, 1))
+
+	[s:string]: Yellow; // ok
+>s : Symbol(s, Decl(indexTypeCheck.ts, 22, 2))
+>Yellow : Symbol(Yellow, Decl(indexTypeCheck.ts, 8, 1))
+}
+
+interface Cyan {
+>Cyan : Symbol(Cyan, Decl(indexTypeCheck.ts, 23, 1))
+
+	[n:number]: number; // error
+>n : Symbol(n, Decl(indexTypeCheck.ts, 26, 2))
+
+	[s:string]: string; // ok
+>s : Symbol(s, Decl(indexTypeCheck.ts, 27, 2))
+}
+
+interface Purple {
+>Purple : Symbol(Purple, Decl(indexTypeCheck.ts, 28, 1))
+
+	[n:number, s:string]; // error
+>n : Symbol(n, Decl(indexTypeCheck.ts, 31, 2))
+>s : Symbol(s, Decl(indexTypeCheck.ts, 31, 11))
+}
+
+interface Magenta {
+>Magenta : Symbol(Magenta, Decl(indexTypeCheck.ts, 32, 1))
+
+	[p:Purple]; // error
+>p : Symbol(p, Decl(indexTypeCheck.ts, 35, 2))
+>Purple : Symbol(Purple, Decl(indexTypeCheck.ts, 28, 1))
+}
+
+var yellow: Yellow;
+>yellow : Symbol(yellow, Decl(indexTypeCheck.ts, 38, 3))
+>Yellow : Symbol(Yellow, Decl(indexTypeCheck.ts, 8, 1))
+
+var blue: Blue;
+>blue : Symbol(blue, Decl(indexTypeCheck.ts, 39, 3))
+>Blue : Symbol(Blue, Decl(indexTypeCheck.ts, 3, 1))
+
+var s = "some string";
+>s : Symbol(s, Decl(indexTypeCheck.ts, 40, 3))
+
+yellow[5]; // ok
+>yellow : Symbol(yellow, Decl(indexTypeCheck.ts, 38, 3))
+
+yellow["hue"]; // ok
+>yellow : Symbol(yellow, Decl(indexTypeCheck.ts, 38, 3))
+
+yellow[<any>{}]; // ok
+>yellow : Symbol(yellow, Decl(indexTypeCheck.ts, 38, 3))
+
+s[0]; // error
+>s : Symbol(s, Decl(indexTypeCheck.ts, 40, 3))
+
+s["s"]; // ok
+>s : Symbol(s, Decl(indexTypeCheck.ts, 40, 3))
+
+s[<any>{}]; // ok
+>s : Symbol(s, Decl(indexTypeCheck.ts, 40, 3))
+
+yellow[blue]; // error
+>yellow : Symbol(yellow, Decl(indexTypeCheck.ts, 38, 3))
+>blue : Symbol(blue, Decl(indexTypeCheck.ts, 39, 3))
+
+var x:number[];
+>x : Symbol(x, Decl(indexTypeCheck.ts, 52, 3))
+
+x[0];
+>x : Symbol(x, Decl(indexTypeCheck.ts, 52, 3))
+
+class Benchmark {
+>Benchmark : Symbol(Benchmark, Decl(indexTypeCheck.ts, 53, 5))
+
+    public results: { [x:string]: any; } = <{ [x:string]: any; }>{};
+>results : Symbol(Benchmark.results, Decl(indexTypeCheck.ts, 55, 17))
+>x : Symbol(x, Decl(indexTypeCheck.ts, 57, 23))
+>x : Symbol(x, Decl(indexTypeCheck.ts, 57, 47))
+
+    public addTimingFor(name: string, timing: number) {
+>addTimingFor : Symbol(Benchmark.addTimingFor, Decl(indexTypeCheck.ts, 57, 68))
+>name : Symbol(name, Decl(indexTypeCheck.ts, 59, 24))
+>timing : Symbol(timing, Decl(indexTypeCheck.ts, 59, 37))
+
+        this.results[name] = this.results[name];
+>this.results : Symbol(Benchmark.results, Decl(indexTypeCheck.ts, 55, 17))
+>this : Symbol(Benchmark, Decl(indexTypeCheck.ts, 53, 5))
+>results : Symbol(Benchmark.results, Decl(indexTypeCheck.ts, 55, 17))
+>name : Symbol(name, Decl(indexTypeCheck.ts, 59, 24))
+>this.results : Symbol(Benchmark.results, Decl(indexTypeCheck.ts, 55, 17))
+>this : Symbol(Benchmark, Decl(indexTypeCheck.ts, 53, 5))
+>results : Symbol(Benchmark.results, Decl(indexTypeCheck.ts, 55, 17))
+>name : Symbol(name, Decl(indexTypeCheck.ts, 59, 24))
+    }
+}

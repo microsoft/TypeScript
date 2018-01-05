@@ -1,0 +1,8 @@
+=== tests/cases/compiler/conditionalExpressionNewLine1.ts ===
+var v = a ? b : c;
+>v : any
+>a ? b : c : any
+>a : any
+>b : any
+>c : any
+

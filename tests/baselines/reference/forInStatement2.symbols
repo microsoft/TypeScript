@@ -1,0 +1,8 @@
+=== tests/cases/compiler/forInStatement2.ts ===
+var expr: number;
+>expr : Symbol(expr, Decl(forInStatement2.ts, 0, 3))
+
+for (var a in expr) {
+>a : Symbol(a, Decl(forInStatement2.ts, 1, 8))
+>expr : Symbol(expr, Decl(forInStatement2.ts, 0, 3))
+}

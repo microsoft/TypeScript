@@ -2,8 +2,8 @@ language: node_js
 
 node_js:
   - 'stable'
+  - '8'
   - '6'
-  - '4'
 
 sudo: false
 
@@ -16,13 +16,12 @@ matrix:
 branches:
   only:
   - master
-  - release-2.1
-  - release-2.2
-  - release-2.3
+  - release-2.5
+  - release-2.6
 
 install:
-  - npm uninstall typescript
-  - npm uninstall tslint
+  - npm uninstall typescript --no-save
+  - npm uninstall tslint --no-save
   - npm install
 
 cache:

@@ -1,0 +1,22 @@
+=== tests/cases/compiler/qualifiedModuleLocals.ts ===
+module A {
+>A : typeof A
+
+  function b() {}
+>b : () => void
+
+  export function a(){  A.b();  } // A.b should be an unresolved symbol error
+>a : () => void
+>A.b() : any
+>A.b : any
+>A : typeof A
+>b : any
+
+}
+
+A.a();
+>A.a() : void
+>A.a : () => void
+>A : typeof A
+>a : () => void
+

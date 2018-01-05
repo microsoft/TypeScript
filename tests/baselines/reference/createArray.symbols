@@ -1,0 +1,33 @@
+=== tests/cases/compiler/createArray.ts ===
+var na=new number[];
+>na : Symbol(na, Decl(createArray.ts, 0, 3))
+
+class C {
+>C : Symbol(C, Decl(createArray.ts, 0, 20))
+}
+
+new C[];
+>C : Symbol(C, Decl(createArray.ts, 0, 20))
+
+var ba=new boolean[];
+>ba : Symbol(ba, Decl(createArray.ts, 6, 3))
+
+var sa=new string[];
+>sa : Symbol(sa, Decl(createArray.ts, 7, 3))
+
+function f(s:string):number { return 0;
+>f : Symbol(f, Decl(createArray.ts, 7, 20))
+>s : Symbol(s, Decl(createArray.ts, 8, 11))
+}
+if (ba[14]) {
+>ba : Symbol(ba, Decl(createArray.ts, 6, 3))
+
+    na[2]=f(sa[3]);
+>na : Symbol(na, Decl(createArray.ts, 0, 3))
+>f : Symbol(f, Decl(createArray.ts, 7, 20))
+>sa : Symbol(sa, Decl(createArray.ts, 7, 3))
+}
+
+new C[1]; // not an error
+>C : Symbol(C, Decl(createArray.ts, 0, 20))
+

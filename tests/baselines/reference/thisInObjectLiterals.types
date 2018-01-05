@@ -40,7 +40,7 @@ var obj = {
 
         return this.spaaace;
 >this.spaaace : any
->this : any
+>this : { f(): any; }
 >spaaace : any
     }
 };

@@ -38,14 +38,14 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var User = (function () {
+var User = /** @class */ (function () {
     function User() {
     }
     User.prototype.sayHello = function () {
     };
     return User;
 }());
-var RegisteredUser = (function (_super) {
+var RegisteredUser = /** @class */ (function (_super) {
     __extends(RegisteredUser, _super);
     function RegisteredUser() {
         return _super !== null && _super.apply(this, arguments) || this;

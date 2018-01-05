@@ -301,7 +301,7 @@ module TypeScript {
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
-    var BlockIntrinsics = (function () {
+    var BlockIntrinsics = /** @class */ (function () {
         function BlockIntrinsics() {
             this.prototype = undefined;
             this.toString = undefined;
@@ -316,7 +316,7 @@ var TypeScript;
         return BlockIntrinsics;
     }());
     TypeScript.BlockIntrinsics = BlockIntrinsics;
-    var StringHashTable = (function () {
+    var StringHashTable = /** @class */ (function () {
         function StringHashTable() {
             this.itemCount = 0;
             this.table = new BlockIntrinsics();
@@ -393,7 +393,7 @@ var TypeScript;
     // The resident table is expected to reference the same table object, whereas the 
     // transientTable may reference different objects over time
     // REVIEW:  WARNING:  For performance reasons, neither the primary nor secondary table may be null
-    var DualStringHashTable = (function () {
+    var DualStringHashTable = /** @class */ (function () {
         function DualStringHashTable(primaryTable, secondaryTable) {
             this.primaryTable = primaryTable;
             this.secondaryTable = secondaryTable;
@@ -457,7 +457,7 @@ var TypeScript;
         return key2 ^ ((key1 >> 5) + key1);
     }
     TypeScript.combineHashes = combineHashes;
-    var HashEntry = (function () {
+    var HashEntry = /** @class */ (function () {
         function HashEntry(key, data) {
             this.key = key;
             this.data = data;
@@ -465,7 +465,7 @@ var TypeScript;
         return HashEntry;
     }());
     TypeScript.HashEntry = HashEntry;
-    var HashTable = (function () {
+    var HashTable = /** @class */ (function () {
         function HashTable(size, hashFn, equalsFn) {
             this.size = size;
             this.hashFn = hashFn;
@@ -529,7 +529,7 @@ var TypeScript;
     }());
     TypeScript.HashTable = HashTable;
     // Simple Hash table with list of keys and values matching each other at the given index
-    var SimpleHashTable = (function () {
+    var SimpleHashTable = /** @class */ (function () {
         function SimpleHashTable() {
             this.keys = [];
             this.values = [];

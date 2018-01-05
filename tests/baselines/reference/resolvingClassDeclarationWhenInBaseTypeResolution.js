@@ -1032,7 +1032,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var rionegrensis;
 (function (rionegrensis) {
-    var caniventer = (function (_super) {
+    var caniventer = /** @class */ (function (_super) {
         __extends(caniventer, _super);
         function caniventer() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1070,7 +1070,7 @@ var rionegrensis;
         return caniventer;
     }(Lanthanum.nitidus));
     rionegrensis.caniventer = caniventer;
-    var veraecrucis = (function (_super) {
+    var veraecrucis = /** @class */ (function (_super) {
         __extends(veraecrucis, _super);
         function veraecrucis() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1111,13 +1111,13 @@ var rionegrensis;
 })(rionegrensis || (rionegrensis = {}));
 var julianae;
 (function (julianae) {
-    var steerii = (function () {
+    var steerii = /** @class */ (function () {
         function steerii() {
         }
         return steerii;
     }());
     julianae.steerii = steerii;
-    var nudicaudus = (function () {
+    var nudicaudus = /** @class */ (function () {
         function nudicaudus() {
         }
         nudicaudus.prototype.brandtii = function () {
@@ -1153,7 +1153,7 @@ var julianae;
         return nudicaudus;
     }());
     julianae.nudicaudus = nudicaudus;
-    var galapagoensis = (function () {
+    var galapagoensis = /** @class */ (function () {
         function galapagoensis() {
         }
         galapagoensis.prototype.isabellae = function () {
@@ -1201,7 +1201,7 @@ var julianae;
         return galapagoensis;
     }());
     julianae.galapagoensis = galapagoensis;
-    var albidens = (function () {
+    var albidens = /** @class */ (function () {
         function albidens() {
         }
         albidens.prototype.mattheyi = function () {
@@ -1249,7 +1249,7 @@ var julianae;
         return albidens;
     }());
     julianae.albidens = albidens;
-    var oralis = (function (_super) {
+    var oralis = /** @class */ (function (_super) {
         __extends(oralis, _super);
         function oralis() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1335,7 +1335,7 @@ var julianae;
         return oralis;
     }(caurinus.psilurus));
     julianae.oralis = oralis;
-    var sumatrana = (function (_super) {
+    var sumatrana = /** @class */ (function (_super) {
         __extends(sumatrana, _super);
         function sumatrana() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1385,7 +1385,7 @@ var julianae;
         return sumatrana;
     }(Lanthanum.jugularis));
     julianae.sumatrana = sumatrana;
-    var gerbillus = (function () {
+    var gerbillus = /** @class */ (function () {
         function gerbillus() {
         }
         gerbillus.prototype.pundti = function () {
@@ -1457,7 +1457,7 @@ var julianae;
         return gerbillus;
     }());
     julianae.gerbillus = gerbillus;
-    var acariensis = (function () {
+    var acariensis = /** @class */ (function () {
         function acariensis() {
         }
         acariensis.prototype.levicula = function () {
@@ -1535,7 +1535,7 @@ var julianae;
         return acariensis;
     }());
     julianae.acariensis = acariensis;
-    var durangae = (function (_super) {
+    var durangae = /** @class */ (function (_super) {
         __extends(durangae, _super);
         function durangae() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1564,7 +1564,7 @@ var julianae;
 })(julianae || (julianae = {}));
 var ruatanica;
 (function (ruatanica) {
-    var hector = (function () {
+    var hector = /** @class */ (function () {
         function hector() {
         }
         hector.prototype.humulis = function () {
@@ -1585,7 +1585,7 @@ var ruatanica;
 })(ruatanica || (ruatanica = {}));
 var Lanthanum;
 (function (Lanthanum) {
-    var suillus = (function () {
+    var suillus = /** @class */ (function () {
         function suillus() {
         }
         suillus.prototype.spilosoma = function () {
@@ -1609,7 +1609,7 @@ var Lanthanum;
         return suillus;
     }());
     Lanthanum.suillus = suillus;
-    var nitidus = (function (_super) {
+    var nitidus = /** @class */ (function (_super) {
         __extends(nitidus, _super);
         function nitidus() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1677,7 +1677,7 @@ var Lanthanum;
         return nitidus;
     }(argurus.gilbertii));
     Lanthanum.nitidus = nitidus;
-    var megalonyx = (function (_super) {
+    var megalonyx = /** @class */ (function (_super) {
         __extends(megalonyx, _super);
         function megalonyx() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1733,7 +1733,7 @@ var Lanthanum;
         return megalonyx;
     }(caurinus.johorensis));
     Lanthanum.megalonyx = megalonyx;
-    var jugularis = (function () {
+    var jugularis = /** @class */ (function () {
         function jugularis() {
         }
         jugularis.prototype.torrei = function () {
@@ -1826,7 +1826,7 @@ var Lanthanum;
 })(Lanthanum || (Lanthanum = {}));
 var rendalli;
 (function (rendalli) {
-    var zuluensis = (function (_super) {
+    var zuluensis = /** @class */ (function (_super) {
         __extends(zuluensis, _super);
         function zuluensis() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1918,7 +1918,7 @@ var rendalli;
         return zuluensis;
     }(julianae.steerii));
     rendalli.zuluensis = zuluensis;
-    var moojeni = (function () {
+    var moojeni = /** @class */ (function () {
         function moojeni() {
         }
         moojeni.prototype.floweri = function () {
@@ -1984,7 +1984,7 @@ var rendalli;
         return moojeni;
     }());
     rendalli.moojeni = moojeni;
-    var crenulata = (function (_super) {
+    var crenulata = /** @class */ (function (_super) {
         __extends(crenulata, _super);
         function crenulata() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -2013,7 +2013,7 @@ var rendalli;
 })(rendalli || (rendalli = {}));
 var trivirgatus;
 (function (trivirgatus) {
-    var tumidifrons = (function () {
+    var tumidifrons = /** @class */ (function () {
         function tumidifrons() {
         }
         tumidifrons.prototype.nivalis = function () {
@@ -2067,7 +2067,7 @@ var trivirgatus;
         return tumidifrons;
     }());
     trivirgatus.tumidifrons = tumidifrons;
-    var mixtus = (function (_super) {
+    var mixtus = /** @class */ (function (_super) {
         __extends(mixtus, _super);
         function mixtus() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -2117,7 +2117,7 @@ var trivirgatus;
         return mixtus;
     }(argurus.pygmaea));
     trivirgatus.mixtus = mixtus;
-    var lotor = (function () {
+    var lotor = /** @class */ (function () {
         function lotor() {
         }
         lotor.prototype.balensis = function () {
@@ -2135,7 +2135,7 @@ var trivirgatus;
         return lotor;
     }());
     trivirgatus.lotor = lotor;
-    var falconeri = (function () {
+    var falconeri = /** @class */ (function () {
         function falconeri() {
         }
         falconeri.prototype.cabrali = function () {
@@ -2183,7 +2183,7 @@ var trivirgatus;
         return falconeri;
     }());
     trivirgatus.falconeri = falconeri;
-    var oconnelli = (function () {
+    var oconnelli = /** @class */ (function () {
         function oconnelli() {
         }
         oconnelli.prototype.youngsoni = function () {
@@ -2276,7 +2276,7 @@ var trivirgatus;
 })(trivirgatus || (trivirgatus = {}));
 var quasiater;
 (function (quasiater) {
-    var bobrinskoi = (function () {
+    var bobrinskoi = /** @class */ (function () {
         function bobrinskoi() {
         }
         bobrinskoi.prototype.crassicaudatus = function () {
@@ -2308,7 +2308,7 @@ var quasiater;
     quasiater.bobrinskoi = bobrinskoi;
 })(quasiater || (quasiater = {}));
 (function (ruatanica) {
-    var americanus = (function (_super) {
+    var americanus = /** @class */ (function (_super) {
         __extends(americanus, _super);
         function americanus() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -2343,7 +2343,7 @@ var quasiater;
 })(ruatanica || (ruatanica = {}));
 var lavali;
 (function (lavali) {
-    var wilsoni = (function (_super) {
+    var wilsoni = /** @class */ (function (_super) {
         __extends(wilsoni, _super);
         function wilsoni() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -2429,13 +2429,13 @@ var lavali;
         return wilsoni;
     }(Lanthanum.nitidus));
     lavali.wilsoni = wilsoni;
-    var beisa = (function () {
+    var beisa = /** @class */ (function () {
         function beisa() {
         }
         return beisa;
     }());
     lavali.beisa = beisa;
-    var otion = (function (_super) {
+    var otion = /** @class */ (function (_super) {
         __extends(otion, _super);
         function otion() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -2521,7 +2521,7 @@ var lavali;
         return otion;
     }(howi.coludo));
     lavali.otion = otion;
-    var xanthognathus = (function () {
+    var xanthognathus = /** @class */ (function () {
         function xanthognathus() {
         }
         xanthognathus.prototype.nanulus = function () {
@@ -2599,7 +2599,7 @@ var lavali;
         return xanthognathus;
     }());
     lavali.xanthognathus = xanthognathus;
-    var thaeleri = (function (_super) {
+    var thaeleri = /** @class */ (function (_super) {
         __extends(thaeleri, _super);
         function thaeleri() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -2655,7 +2655,7 @@ var lavali;
         return thaeleri;
     }(argurus.oreas));
     lavali.thaeleri = thaeleri;
-    var lepturus = (function (_super) {
+    var lepturus = /** @class */ (function (_super) {
         __extends(lepturus, _super);
         function lepturus() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -2678,7 +2678,7 @@ var lavali;
 })(lavali || (lavali = {}));
 var dogramacii;
 (function (dogramacii) {
-    var robustulus = (function (_super) {
+    var robustulus = /** @class */ (function (_super) {
         __extends(robustulus, _super);
         function robustulus() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -2740,7 +2740,7 @@ var dogramacii;
         return robustulus;
     }(lavali.wilsoni));
     dogramacii.robustulus = robustulus;
-    var koepckeae = (function () {
+    var koepckeae = /** @class */ (function () {
         function koepckeae() {
         }
         koepckeae.prototype.culturatus = function () {
@@ -2752,7 +2752,7 @@ var dogramacii;
         return koepckeae;
     }());
     dogramacii.koepckeae = koepckeae;
-    var kaiseri = (function () {
+    var kaiseri = /** @class */ (function () {
         function kaiseri() {
         }
         kaiseri.prototype.bedfordiae = function () {
@@ -2836,7 +2836,7 @@ var dogramacii;
         return kaiseri;
     }());
     dogramacii.kaiseri = kaiseri;
-    var aurata = (function () {
+    var aurata = /** @class */ (function () {
         function aurata() {
         }
         aurata.prototype.grunniens = function () {
@@ -2893,7 +2893,7 @@ var dogramacii;
 })(dogramacii || (dogramacii = {}));
 var lutreolus;
 (function (lutreolus) {
-    var schlegeli = (function (_super) {
+    var schlegeli = /** @class */ (function (_super) {
         __extends(schlegeli, _super);
         function schlegeli() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -2988,7 +2988,7 @@ var lutreolus;
 })(lutreolus || (lutreolus = {}));
 var argurus;
 (function (argurus) {
-    var dauricus = (function () {
+    var dauricus = /** @class */ (function () {
         function dauricus() {
         }
         dauricus.prototype.chinensis = function () {
@@ -3063,7 +3063,7 @@ var argurus;
 })(argurus || (argurus = {}));
 var nigra;
 (function (nigra) {
-    var dolichurus = (function () {
+    var dolichurus = /** @class */ (function () {
         function dolichurus() {
         }
         dolichurus.prototype.solomonis = function () {
@@ -3120,7 +3120,7 @@ var nigra;
 })(nigra || (nigra = {}));
 var panglima;
 (function (panglima) {
-    var amphibius = (function (_super) {
+    var amphibius = /** @class */ (function (_super) {
         __extends(amphibius, _super);
         function amphibius() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -3164,7 +3164,7 @@ var panglima;
         return amphibius;
     }(caurinus.johorensis));
     panglima.amphibius = amphibius;
-    var fundatus = (function (_super) {
+    var fundatus = /** @class */ (function (_super) {
         __extends(fundatus, _super);
         function fundatus() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -3190,7 +3190,7 @@ var panglima;
         return fundatus;
     }(lutreolus.schlegeli));
     panglima.fundatus = fundatus;
-    var abidi = (function (_super) {
+    var abidi = /** @class */ (function (_super) {
         __extends(abidi, _super);
         function abidi() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -3230,7 +3230,7 @@ var panglima;
     panglima.abidi = abidi;
 })(panglima || (panglima = {}));
 (function (quasiater) {
-    var carolinensis = (function () {
+    var carolinensis = /** @class */ (function () {
         function carolinensis() {
         }
         carolinensis.prototype.concinna = function () {
@@ -3281,7 +3281,7 @@ var panglima;
 })(quasiater || (quasiater = {}));
 var minutus;
 (function (minutus) {
-    var himalayana = (function (_super) {
+    var himalayana = /** @class */ (function (_super) {
         __extends(himalayana, _super);
         function himalayana() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -3364,7 +3364,7 @@ var minutus;
 })(minutus || (minutus = {}));
 var caurinus;
 (function (caurinus) {
-    var mahaganus = (function (_super) {
+    var mahaganus = /** @class */ (function (_super) {
         __extends(mahaganus, _super);
         function mahaganus() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -3423,7 +3423,7 @@ var caurinus;
 })(caurinus || (caurinus = {}));
 var macrorhinos;
 (function (macrorhinos) {
-    var marmosurus = (function () {
+    var marmosurus = /** @class */ (function () {
         function marmosurus() {
         }
         marmosurus.prototype.tansaniana = function () {
@@ -3438,7 +3438,7 @@ var macrorhinos;
 })(macrorhinos || (macrorhinos = {}));
 var howi;
 (function (howi) {
-    var angulatus = (function (_super) {
+    var angulatus = /** @class */ (function (_super) {
         __extends(angulatus, _super);
         function angulatus() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -3455,7 +3455,7 @@ var howi;
 })(howi || (howi = {}));
 var daubentonii;
 (function (daubentonii) {
-    var nesiotes = (function () {
+    var nesiotes = /** @class */ (function () {
         function nesiotes() {
         }
         return nesiotes;
@@ -3463,7 +3463,7 @@ var daubentonii;
     daubentonii.nesiotes = nesiotes;
 })(daubentonii || (daubentonii = {}));
 (function (nigra) {
-    var thalia = (function () {
+    var thalia = /** @class */ (function () {
         function thalia() {
         }
         thalia.prototype.dichotomus = function () {
@@ -3520,7 +3520,7 @@ var daubentonii;
 })(nigra || (nigra = {}));
 var sagitta;
 (function (sagitta) {
-    var walkeri = (function (_super) {
+    var walkeri = /** @class */ (function (_super) {
         __extends(walkeri, _super);
         function walkeri() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -3536,7 +3536,7 @@ var sagitta;
     sagitta.walkeri = walkeri;
 })(sagitta || (sagitta = {}));
 (function (minutus) {
-    var inez = (function (_super) {
+    var inez = /** @class */ (function (_super) {
         __extends(inez, _super);
         function inez() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -3552,7 +3552,7 @@ var sagitta;
     minutus.inez = inez;
 })(minutus || (minutus = {}));
 (function (macrorhinos) {
-    var konganensis = (function (_super) {
+    var konganensis = /** @class */ (function (_super) {
         __extends(konganensis, _super);
         function konganensis() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -3563,7 +3563,7 @@ var sagitta;
 })(macrorhinos || (macrorhinos = {}));
 var panamensis;
 (function (panamensis) {
-    var linulus = (function (_super) {
+    var linulus = /** @class */ (function (_super) {
         __extends(linulus, _super);
         function linulus() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -3627,7 +3627,7 @@ var panamensis;
     panamensis.linulus = linulus;
 })(panamensis || (panamensis = {}));
 (function (nigra) {
-    var gracilis = (function () {
+    var gracilis = /** @class */ (function () {
         function gracilis() {
         }
         gracilis.prototype.weddellii = function () {
@@ -3714,7 +3714,7 @@ var panamensis;
 })(nigra || (nigra = {}));
 var samarensis;
 (function (samarensis) {
-    var pelurus = (function (_super) {
+    var pelurus = /** @class */ (function (_super) {
         __extends(pelurus, _super);
         function pelurus() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -3800,7 +3800,7 @@ var samarensis;
         return pelurus;
     }(sagitta.stolzmanni));
     samarensis.pelurus = pelurus;
-    var fuscus = (function (_super) {
+    var fuscus = /** @class */ (function (_super) {
         __extends(fuscus, _super);
         function fuscus() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -3892,7 +3892,7 @@ var samarensis;
         return fuscus;
     }(macrorhinos.daphaenodon));
     samarensis.fuscus = fuscus;
-    var pallidus = (function () {
+    var pallidus = /** @class */ (function () {
         function pallidus() {
         }
         pallidus.prototype.oblativa = function () {
@@ -3922,7 +3922,7 @@ var samarensis;
         return pallidus;
     }());
     samarensis.pallidus = pallidus;
-    var cahirinus = (function () {
+    var cahirinus = /** @class */ (function () {
         function cahirinus() {
         }
         cahirinus.prototype.alashanicus = function () {
@@ -3960,7 +3960,7 @@ var samarensis;
     samarensis.cahirinus = cahirinus;
 })(samarensis || (samarensis = {}));
 (function (sagitta) {
-    var leptoceros = (function (_super) {
+    var leptoceros = /** @class */ (function (_super) {
         __extends(leptoceros, _super);
         function leptoceros() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -4000,7 +4000,7 @@ var samarensis;
     sagitta.leptoceros = leptoceros;
 })(sagitta || (sagitta = {}));
 (function (daubentonii) {
-    var nigricans = (function (_super) {
+    var nigricans = /** @class */ (function (_super) {
         __extends(nigricans, _super);
         function nigricans() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -4017,7 +4017,7 @@ var samarensis;
 })(daubentonii || (daubentonii = {}));
 var dammermani;
 (function (dammermani) {
-    var siberu = (function () {
+    var siberu = /** @class */ (function () {
         function siberu() {
         }
         return siberu;
@@ -4025,7 +4025,7 @@ var dammermani;
     dammermani.siberu = siberu;
 })(dammermani || (dammermani = {}));
 (function (argurus) {
-    var pygmaea = (function (_super) {
+    var pygmaea = /** @class */ (function (_super) {
         __extends(pygmaea, _super);
         function pygmaea() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -4054,7 +4054,7 @@ var dammermani;
 })(argurus || (argurus = {}));
 var chrysaeolus;
 (function (chrysaeolus) {
-    var sarasinorum = (function (_super) {
+    var sarasinorum = /** @class */ (function (_super) {
         __extends(sarasinorum, _super);
         function sarasinorum() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -4106,7 +4106,7 @@ var chrysaeolus;
     chrysaeolus.sarasinorum = sarasinorum;
 })(chrysaeolus || (chrysaeolus = {}));
 (function (argurus) {
-    var wetmorei = (function () {
+    var wetmorei = /** @class */ (function () {
         function wetmorei() {
         }
         wetmorei.prototype.leucoptera = function () {
@@ -4156,7 +4156,7 @@ var chrysaeolus;
     argurus.wetmorei = wetmorei;
 })(argurus || (argurus = {}));
 (function (argurus) {
-    var oreas = (function (_super) {
+    var oreas = /** @class */ (function (_super) {
         __extends(oreas, _super);
         function oreas() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -4214,7 +4214,7 @@ var chrysaeolus;
     argurus.oreas = oreas;
 })(argurus || (argurus = {}));
 (function (daubentonii) {
-    var arboreus = (function () {
+    var arboreus = /** @class */ (function () {
         function arboreus() {
         }
         arboreus.prototype.capreolus = function () {
@@ -4295,7 +4295,7 @@ var chrysaeolus;
 })(daubentonii || (daubentonii = {}));
 var patas;
 (function (patas) {
-    var uralensis = (function () {
+    var uralensis = /** @class */ (function () {
         function uralensis() {
         }
         uralensis.prototype.cartilagonodus = function () {
@@ -4382,7 +4382,7 @@ var patas;
 })(patas || (patas = {}));
 var provocax;
 (function (provocax) {
-    var melanoleuca = (function (_super) {
+    var melanoleuca = /** @class */ (function (_super) {
         __extends(melanoleuca, _super);
         function melanoleuca() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -4404,7 +4404,7 @@ var provocax;
     provocax.melanoleuca = melanoleuca;
 })(provocax || (provocax = {}));
 (function (sagitta) {
-    var sicarius = (function () {
+    var sicarius = /** @class */ (function () {
         function sicarius() {
         }
         sicarius.prototype.Chlorine = function () {
@@ -4424,7 +4424,7 @@ var provocax;
     sagitta.sicarius = sicarius;
 })(sagitta || (sagitta = {}));
 (function (howi) {
-    var marcanoi = (function (_super) {
+    var marcanoi = /** @class */ (function (_super) {
         __extends(marcanoi, _super);
         function marcanoi() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -4518,7 +4518,7 @@ var provocax;
     howi.marcanoi = marcanoi;
 })(howi || (howi = {}));
 (function (argurus) {
-    var gilbertii = (function () {
+    var gilbertii = /** @class */ (function () {
         function gilbertii() {
         }
         gilbertii.prototype.nasutus = function () {
@@ -4599,7 +4599,7 @@ var provocax;
 })(argurus || (argurus = {}));
 var petrophilus;
 (function (petrophilus) {
-    var minutilla = (function () {
+    var minutilla = /** @class */ (function () {
         function minutilla() {
         }
         return minutilla;
@@ -4607,7 +4607,7 @@ var petrophilus;
     petrophilus.minutilla = minutilla;
 })(petrophilus || (petrophilus = {}));
 (function (lutreolus) {
-    var punicus = (function () {
+    var punicus = /** @class */ (function () {
         function punicus() {
         }
         punicus.prototype.strandi = function () {
@@ -4693,7 +4693,7 @@ var petrophilus;
     lutreolus.punicus = punicus;
 })(lutreolus || (lutreolus = {}));
 (function (macrorhinos) {
-    var daphaenodon = (function () {
+    var daphaenodon = /** @class */ (function () {
         function daphaenodon() {
         }
         daphaenodon.prototype.bredanensis = function () {
@@ -4737,7 +4737,7 @@ var petrophilus;
     macrorhinos.daphaenodon = daphaenodon;
 })(macrorhinos || (macrorhinos = {}));
 (function (sagitta) {
-    var cinereus = (function () {
+    var cinereus = /** @class */ (function () {
         function cinereus() {
         }
         cinereus.prototype.zunigae = function () {
@@ -4817,7 +4817,7 @@ var petrophilus;
     sagitta.cinereus = cinereus;
 })(sagitta || (sagitta = {}));
 (function (nigra) {
-    var caucasica = (function () {
+    var caucasica = /** @class */ (function () {
         function caucasica() {
         }
         return caucasica;
@@ -4826,7 +4826,7 @@ var petrophilus;
 })(nigra || (nigra = {}));
 var gabriellae;
 (function (gabriellae) {
-    var klossii = (function (_super) {
+    var klossii = /** @class */ (function (_super) {
         __extends(klossii, _super);
         function klossii() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -4834,7 +4834,7 @@ var gabriellae;
         return klossii;
     }(imperfecta.lasiurus));
     gabriellae.klossii = klossii;
-    var amicus = (function () {
+    var amicus = /** @class */ (function () {
         function amicus() {
         }
         amicus.prototype.pirrensis = function () {
@@ -4900,7 +4900,7 @@ var gabriellae;
         return amicus;
     }());
     gabriellae.amicus = amicus;
-    var echinatus = (function () {
+    var echinatus = /** @class */ (function () {
         function echinatus() {
         }
         echinatus.prototype.tenuipes = function () {
@@ -4915,7 +4915,7 @@ var gabriellae;
 })(gabriellae || (gabriellae = {}));
 var imperfecta;
 (function (imperfecta) {
-    var lasiurus = (function () {
+    var lasiurus = /** @class */ (function () {
         function lasiurus() {
         }
         lasiurus.prototype.marisae = function () {
@@ -4957,7 +4957,7 @@ var imperfecta;
         return lasiurus;
     }());
     imperfecta.lasiurus = lasiurus;
-    var subspinosus = (function () {
+    var subspinosus = /** @class */ (function () {
         function subspinosus() {
         }
         subspinosus.prototype.monticularis = function () {
@@ -5029,7 +5029,7 @@ var imperfecta;
         return subspinosus;
     }());
     imperfecta.subspinosus = subspinosus;
-    var ciliolabrum = (function (_super) {
+    var ciliolabrum = /** @class */ (function (_super) {
         __extends(ciliolabrum, _super);
         function ciliolabrum() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -5057,7 +5057,7 @@ var imperfecta;
     imperfecta.ciliolabrum = ciliolabrum;
 })(imperfecta || (imperfecta = {}));
 (function (quasiater) {
-    var wattsi = (function () {
+    var wattsi = /** @class */ (function () {
         function wattsi() {
         }
         wattsi.prototype.lagotis = function () {
@@ -5089,7 +5089,7 @@ var imperfecta;
     quasiater.wattsi = wattsi;
 })(quasiater || (quasiater = {}));
 (function (petrophilus) {
-    var sodyi = (function (_super) {
+    var sodyi = /** @class */ (function (_super) {
         __extends(sodyi, _super);
         function sodyi() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -5153,7 +5153,7 @@ var imperfecta;
     petrophilus.sodyi = sodyi;
 })(petrophilus || (petrophilus = {}));
 (function (caurinus) {
-    var megaphyllus = (function (_super) {
+    var megaphyllus = /** @class */ (function (_super) {
         __extends(megaphyllus, _super);
         function megaphyllus() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -5211,7 +5211,7 @@ var imperfecta;
     caurinus.megaphyllus = megaphyllus;
 })(caurinus || (caurinus = {}));
 (function (minutus) {
-    var portoricensis = (function () {
+    var portoricensis = /** @class */ (function () {
         function portoricensis() {
         }
         portoricensis.prototype.relictus = function () {
@@ -5237,7 +5237,7 @@ var imperfecta;
     minutus.portoricensis = portoricensis;
 })(minutus || (minutus = {}));
 (function (lutreolus) {
-    var foina = (function () {
+    var foina = /** @class */ (function () {
         function foina() {
         }
         foina.prototype.tarfayensis = function () {
@@ -5323,7 +5323,7 @@ var imperfecta;
     lutreolus.foina = foina;
 })(lutreolus || (lutreolus = {}));
 (function (lutreolus) {
-    var cor = (function (_super) {
+    var cor = /** @class */ (function (_super) {
         __extends(cor, _super);
         function cor() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -5393,7 +5393,7 @@ var imperfecta;
     lutreolus.cor = cor;
 })(lutreolus || (lutreolus = {}));
 (function (howi) {
-    var coludo = (function () {
+    var coludo = /** @class */ (function () {
         function coludo() {
         }
         coludo.prototype.bernhardi = function () {
@@ -5413,7 +5413,7 @@ var imperfecta;
     howi.coludo = coludo;
 })(howi || (howi = {}));
 (function (argurus) {
-    var germaini = (function (_super) {
+    var germaini = /** @class */ (function (_super) {
         __extends(germaini, _super);
         function germaini() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -5435,7 +5435,7 @@ var imperfecta;
     argurus.germaini = germaini;
 })(argurus || (argurus = {}));
 (function (sagitta) {
-    var stolzmanni = (function () {
+    var stolzmanni = /** @class */ (function () {
         function stolzmanni() {
         }
         stolzmanni.prototype.riparius = function () {
@@ -5509,7 +5509,7 @@ var imperfecta;
     sagitta.stolzmanni = stolzmanni;
 })(sagitta || (sagitta = {}));
 (function (dammermani) {
-    var melanops = (function (_super) {
+    var melanops = /** @class */ (function (_super) {
         __extends(melanops, _super);
         function melanops() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -5597,7 +5597,7 @@ var imperfecta;
     dammermani.melanops = melanops;
 })(dammermani || (dammermani = {}));
 (function (argurus) {
-    var peninsulae = (function (_super) {
+    var peninsulae = /** @class */ (function (_super) {
         __extends(peninsulae, _super);
         function peninsulae() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -5655,7 +5655,7 @@ var imperfecta;
     argurus.peninsulae = peninsulae;
 })(argurus || (argurus = {}));
 (function (argurus) {
-    var netscheri = (function () {
+    var netscheri = /** @class */ (function () {
         function netscheri() {
         }
         netscheri.prototype.gravis = function () {
@@ -5741,7 +5741,7 @@ var imperfecta;
     argurus.netscheri = netscheri;
 })(argurus || (argurus = {}));
 (function (ruatanica) {
-    var Praseodymium = (function (_super) {
+    var Praseodymium = /** @class */ (function (_super) {
         __extends(Praseodymium, _super);
         function Praseodymium() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -5829,7 +5829,7 @@ var imperfecta;
     ruatanica.Praseodymium = Praseodymium;
 })(ruatanica || (ruatanica = {}));
 (function (caurinus) {
-    var johorensis = (function (_super) {
+    var johorensis = /** @class */ (function (_super) {
         __extends(johorensis, _super);
         function johorensis() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -5845,7 +5845,7 @@ var imperfecta;
     caurinus.johorensis = johorensis;
 })(caurinus || (caurinus = {}));
 (function (argurus) {
-    var luctuosa = (function () {
+    var luctuosa = /** @class */ (function () {
         function luctuosa() {
         }
         luctuosa.prototype.loriae = function () {
@@ -5859,7 +5859,7 @@ var imperfecta;
     argurus.luctuosa = luctuosa;
 })(argurus || (argurus = {}));
 (function (panamensis) {
-    var setulosus = (function () {
+    var setulosus = /** @class */ (function () {
         function setulosus() {
         }
         setulosus.prototype.duthieae = function () {
@@ -5915,7 +5915,7 @@ var imperfecta;
     panamensis.setulosus = setulosus;
 })(panamensis || (panamensis = {}));
 (function (petrophilus) {
-    var rosalia = (function () {
+    var rosalia = /** @class */ (function () {
         function rosalia() {
         }
         rosalia.prototype.palmeri = function () {
@@ -5953,7 +5953,7 @@ var imperfecta;
     petrophilus.rosalia = rosalia;
 })(petrophilus || (petrophilus = {}));
 (function (caurinus) {
-    var psilurus = (function (_super) {
+    var psilurus = /** @class */ (function (_super) {
         __extends(psilurus, _super);
         function psilurus() {
             return _super !== null && _super.apply(this, arguments) || this;

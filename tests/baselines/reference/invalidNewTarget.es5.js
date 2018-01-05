@@ -27,7 +27,7 @@ const O = {
 //// [invalidNewTarget.es5.js]
 var a = _newTarget;
 var b = function () { return _newTarget; };
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         var _newTarget = this.constructor;
         this.f = function () { return _newTarget; };
@@ -56,9 +56,9 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
+    C.j = function () { return _newTarget; };
     return C;
 }());
-C.j = function () { return _newTarget; };
 var O = (_a = {},
     _a[_newTarget] = undefined,
     _a.k = function () { var _newTarget = void 0; return _newTarget; },

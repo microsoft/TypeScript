@@ -18,17 +18,17 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(721,62): e
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(724,29): error TS2304: Cannot find name 'ITextWriter'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(754,53): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(764,56): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(765,37): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(767,47): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(776,13): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(776,42): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(765,37): error TS2304: Cannot find name 'TypeScript'.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(767,47): error TS2304: Cannot find name 'TypeScript'.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(776,13): error TS2304: Cannot find name 'TypeScript'.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(776,42): error TS2304: Cannot find name 'TypeScript'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(781,23): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(794,49): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(795,49): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(987,53): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(987,89): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(794,49): error TS2304: Cannot find name 'TypeScript'.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(795,49): error TS2304: Cannot find name 'TypeScript'.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(987,53): error TS2304: Cannot find name 'TypeScript'.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(987,89): error TS2304: Cannot find name 'TypeScript'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(987,115): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(987,145): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(987,145): error TS2304: Cannot find name 'TypeScript'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(988,43): error TS2304: Cannot find name 'TypeScript'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(999,40): error TS2503: Cannot find namespace 'TypeScript'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1041,43): error TS2503: Cannot find namespace 'TypeScript'.
@@ -917,11 +917,11 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
 !!! error TS2503: Cannot find namespace 'TypeScript'.
                 var compiler = c || new TypeScript.TypeScriptCompiler(stderr);
                                         ~~~~~~~~~~
-!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+!!! error TS2304: Cannot find name 'TypeScript'.
                 compiler.parser.errorRecovery = true;
                 compiler.settings.codeGenTarget = TypeScript.CodeGenTarget.ES5;
                                                   ~~~~~~~~~~
-!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+!!! error TS2304: Cannot find name 'TypeScript'.
                 compiler.settings.controlFlow = true;
                 compiler.settings.controlFlowUseDef = true;
                 if (Harness.usePull) {
@@ -932,9 +932,9 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
                 compiler.parseEmitOption(stdout);
                 TypeScript.moduleGenTarget = TypeScript.ModuleGenTarget.Synchronous;
                 ~~~~~~~~~~
-!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+!!! error TS2304: Cannot find name 'TypeScript'.
                                              ~~~~~~~~~~
-!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+!!! error TS2304: Cannot find name 'TypeScript'.
                 compiler.addUnit(Harness.Compiler.libText, "lib.d.ts", true);
                 return compiler;
             }
@@ -956,10 +956,10 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
                         // requires unit to already exist in the compiler
                         compiler.pullUpdateUnit(new TypeScript.StringSourceText(""), filename, true);
                                                     ~~~~~~~~~~
-!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+!!! error TS2304: Cannot find name 'TypeScript'.
                         compiler.pullUpdateUnit(new TypeScript.StringSourceText(code), filename, true);
                                                     ~~~~~~~~~~
-!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+!!! error TS2304: Cannot find name 'TypeScript'.
                     }
                 }
                 else {
@@ -1153,13 +1153,13 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
                             var script = compiler.scripts.members[m];
                             var enclosingScopeContext = TypeScript.findEnclosingScopeAt(new TypeScript.NullLogger(), <TypeScript.Script>script, new TypeScript.StringSourceText(code), 0, false);
                                                         ~~~~~~~~~~
-!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+!!! error TS2304: Cannot find name 'TypeScript'.
                                                                                             ~~~~~~~~~~
-!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+!!! error TS2304: Cannot find name 'TypeScript'.
                                                                                                                       ~~~~~~~~~~
 !!! error TS2503: Cannot find namespace 'TypeScript'.
                                                                                                                                                     ~~~~~~~~~~
-!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+!!! error TS2304: Cannot find name 'TypeScript'.
                             var entries = new TypeScript.ScopeTraversal(compiler).getScopeEntries(enclosingScopeContext);
                                               ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeScript'.

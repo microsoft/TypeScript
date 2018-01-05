@@ -16,7 +16,7 @@ export = x;
 exports.__esModule = true;
 var a;
 (function (a) {
-    var c = (function () {
+    var c = /** @class */ (function () {
         function c() {
         }
         return c;

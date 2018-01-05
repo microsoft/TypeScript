@@ -8,13 +8,13 @@ class A {
 }
 
 //// [noEmitHelpers2.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A(a, b) {
     }
+    A = __decorate([
+        decorator,
+        __param(1, decorator),
+        __metadata("design:paramtypes", [Number, String])
+    ], A);
     return A;
 }());
-A = __decorate([
-    decorator,
-    __param(1, decorator),
-    __metadata("design:paramtypes", [Number, String])
-], A);

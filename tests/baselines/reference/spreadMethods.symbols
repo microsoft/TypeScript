@@ -1,0 +1,109 @@
+=== tests/cases/conformance/types/spread/spreadMethods.ts ===
+class K { p = 12; m() { } }
+>K : Symbol(K, Decl(spreadMethods.ts, 0, 0))
+>p : Symbol(K.p, Decl(spreadMethods.ts, 0, 9))
+>m : Symbol(K.m, Decl(spreadMethods.ts, 0, 17))
+
+interface I { p: number, m(): void }
+>I : Symbol(I, Decl(spreadMethods.ts, 0, 27))
+>p : Symbol(I.p, Decl(spreadMethods.ts, 1, 13))
+>m : Symbol(I.m, Decl(spreadMethods.ts, 1, 24))
+
+let k = new K()
+>k : Symbol(k, Decl(spreadMethods.ts, 2, 3))
+>K : Symbol(K, Decl(spreadMethods.ts, 0, 0))
+
+let sk = { ...k };
+>sk : Symbol(sk, Decl(spreadMethods.ts, 3, 3))
+>k : Symbol(k, Decl(spreadMethods.ts, 2, 3))
+
+let ssk = { ...k, ...k };
+>ssk : Symbol(ssk, Decl(spreadMethods.ts, 4, 3))
+>k : Symbol(k, Decl(spreadMethods.ts, 2, 3))
+>k : Symbol(k, Decl(spreadMethods.ts, 2, 3))
+
+sk.p;
+>sk.p : Symbol(K.p, Decl(spreadMethods.ts, 0, 9))
+>sk : Symbol(sk, Decl(spreadMethods.ts, 3, 3))
+>p : Symbol(K.p, Decl(spreadMethods.ts, 0, 9))
+
+sk.m(); // error
+>sk : Symbol(sk, Decl(spreadMethods.ts, 3, 3))
+
+ssk.p;
+>ssk.p : Symbol(K.p, Decl(spreadMethods.ts, 0, 9))
+>ssk : Symbol(ssk, Decl(spreadMethods.ts, 4, 3))
+>p : Symbol(K.p, Decl(spreadMethods.ts, 0, 9))
+
+ssk.m(); // error
+>ssk : Symbol(ssk, Decl(spreadMethods.ts, 4, 3))
+
+let i: I = { p: 12, m() { } };
+>i : Symbol(i, Decl(spreadMethods.ts, 9, 3))
+>I : Symbol(I, Decl(spreadMethods.ts, 0, 27))
+>p : Symbol(p, Decl(spreadMethods.ts, 9, 12))
+>m : Symbol(m, Decl(spreadMethods.ts, 9, 19))
+
+let si = { ...i };
+>si : Symbol(si, Decl(spreadMethods.ts, 10, 3))
+>i : Symbol(i, Decl(spreadMethods.ts, 9, 3))
+
+let ssi = { ...i, ...i };
+>ssi : Symbol(ssi, Decl(spreadMethods.ts, 11, 3))
+>i : Symbol(i, Decl(spreadMethods.ts, 9, 3))
+>i : Symbol(i, Decl(spreadMethods.ts, 9, 3))
+
+si.p;
+>si.p : Symbol(I.p, Decl(spreadMethods.ts, 1, 13))
+>si : Symbol(si, Decl(spreadMethods.ts, 10, 3))
+>p : Symbol(I.p, Decl(spreadMethods.ts, 1, 13))
+
+si.m(); // ok
+>si.m : Symbol(I.m, Decl(spreadMethods.ts, 1, 24))
+>si : Symbol(si, Decl(spreadMethods.ts, 10, 3))
+>m : Symbol(I.m, Decl(spreadMethods.ts, 1, 24))
+
+ssi.p;
+>ssi.p : Symbol(I.p, Decl(spreadMethods.ts, 1, 13))
+>ssi : Symbol(ssi, Decl(spreadMethods.ts, 11, 3))
+>p : Symbol(I.p, Decl(spreadMethods.ts, 1, 13))
+
+ssi.m(); // ok
+>ssi.m : Symbol(I.m, Decl(spreadMethods.ts, 1, 24))
+>ssi : Symbol(ssi, Decl(spreadMethods.ts, 11, 3))
+>m : Symbol(I.m, Decl(spreadMethods.ts, 1, 24))
+
+let o = { p: 12, m() { } };
+>o : Symbol(o, Decl(spreadMethods.ts, 16, 3))
+>p : Symbol(p, Decl(spreadMethods.ts, 16, 9))
+>m : Symbol(m, Decl(spreadMethods.ts, 16, 16))
+
+let so = { ...o };
+>so : Symbol(so, Decl(spreadMethods.ts, 17, 3))
+>o : Symbol(o, Decl(spreadMethods.ts, 16, 3))
+
+let sso = { ...o, ...o };
+>sso : Symbol(sso, Decl(spreadMethods.ts, 18, 3))
+>o : Symbol(o, Decl(spreadMethods.ts, 16, 3))
+>o : Symbol(o, Decl(spreadMethods.ts, 16, 3))
+
+so.p;
+>so.p : Symbol(p, Decl(spreadMethods.ts, 16, 9))
+>so : Symbol(so, Decl(spreadMethods.ts, 17, 3))
+>p : Symbol(p, Decl(spreadMethods.ts, 16, 9))
+
+so.m(); // ok
+>so.m : Symbol(m, Decl(spreadMethods.ts, 16, 16))
+>so : Symbol(so, Decl(spreadMethods.ts, 17, 3))
+>m : Symbol(m, Decl(spreadMethods.ts, 16, 16))
+
+sso.p;
+>sso.p : Symbol(p, Decl(spreadMethods.ts, 16, 9))
+>sso : Symbol(sso, Decl(spreadMethods.ts, 18, 3))
+>p : Symbol(p, Decl(spreadMethods.ts, 16, 9))
+
+sso.m(); // ok
+>sso.m : Symbol(m, Decl(spreadMethods.ts, 16, 16))
+>sso : Symbol(sso, Decl(spreadMethods.ts, 18, 3))
+>m : Symbol(m, Decl(spreadMethods.ts, 16, 16))
+

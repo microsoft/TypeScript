@@ -1,0 +1,14 @@
+=== tests/cases/compiler/unusedClassesinNamespace2.ts ===
+namespace Validation {
+>Validation : typeof Validation
+
+    class c1 {
+>c1 : c1
+
+    }
+
+    export class c2 {
+>c2 : c2
+
+    }
+}

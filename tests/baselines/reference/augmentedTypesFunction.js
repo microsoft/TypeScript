@@ -49,13 +49,13 @@ function y2a() { } // error
 var y2a = function () { }; // error
 // function then class
 function y3() { } // error
-var y3 = (function () {
+var y3 = /** @class */ (function () {
     function y3() {
     }
     return y3;
 }()); // error
 function y3a() { } // error
-var y3a = (function () {
+var y3a = /** @class */ (function () {
     function y3a() {
     }
     y3a.prototype.foo = function () { };
@@ -79,4 +79,4 @@ function y5b() { }
 function y5c() { }
 // function then import, messes with other errors
 //function y6() { }
-//import y6 = require(''); 
+//import y6 = require('');

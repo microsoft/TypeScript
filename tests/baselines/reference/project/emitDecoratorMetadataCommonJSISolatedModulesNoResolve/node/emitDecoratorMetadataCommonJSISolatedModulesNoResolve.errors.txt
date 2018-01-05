@@ -1,6 +1,21 @@
 main.ts(1,21): error TS2307: Cannot find module 'angular2/core'.
 
 
+==== tsconfig.json (0 errors) ====
+    {
+      "compileOnSave": true,
+      "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "isolatedModules": true,
+        "noResolve": true
+      },
+      "files": [
+        "main.ts"
+      ]
+    }
 ==== main.ts (1 errors) ====
     import * as ng from "angular2/core";
                         ~~~~~~~~~~~~~~~

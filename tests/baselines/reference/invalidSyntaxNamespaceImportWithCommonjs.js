@@ -9,7 +9,7 @@ import * from Zero from "./0"
 //// [0.js]
 "use strict";
 exports.__esModule = true;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

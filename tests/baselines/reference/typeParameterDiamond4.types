@@ -1,0 +1,48 @@
+=== tests/cases/compiler/typeParameterDiamond4.ts ===
+function diamondTop<Top>() {
+>diamondTop : <Top>() => void
+>Top : Top
+
+    function diamondMiddle<T, U>() {
+>diamondMiddle : <T, U>() => void
+>T : T
+>U : U
+
+        function diamondBottom<Bottom extends Top | T | U>() {
+>diamondBottom : <Bottom extends Top | T | U>() => void
+>Bottom : Bottom
+>Top : Top
+>T : T
+>U : U
+
+            var top: Top;
+>top : Top
+>Top : Top
+
+            var middle: Top | T | U;
+>middle : Top | T | U
+>Top : Top
+>T : T
+>U : U
+
+            var bottom: Bottom;
+>bottom : Bottom
+>Bottom : Bottom
+
+            top = middle;
+>top = middle : Top | T | U
+>top : Top
+>middle : Top | T | U
+
+            middle = bottom;
+>middle = bottom : Bottom
+>middle : Top | T | U
+>bottom : Bottom
+
+            top = bottom;
+>top = bottom : Bottom
+>top : Top
+>bottom : Bottom
+        }
+    }
+}

@@ -1,0 +1,6 @@
+=== tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment8.ts ===
+export = B;
+
+export class C {
+>C : Symbol(C, Decl(parserExportAssignment8.ts, 0, 11))
+}

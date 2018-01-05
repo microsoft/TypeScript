@@ -1,0 +1,120 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(4,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(6,5): error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(48,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(71,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(93,22): error TS2565: Property 'a' is used before being assigned.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(94,23): error TS2565: Property 'b' is used before being assigned.
+
+
+==== tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts (6 errors) ====
+    // Properties with non-undefined types require initialization
+    
+    class C1 {
+        a: number;  // Error
+        ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+        b: number | undefined;
+        c: number | null;  // Error
+        ~
+!!! error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
+        d?: number;
+    }
+    
+    // No strict initialization checks in ambient contexts
+    
+    declare class C2 {
+        a: number;
+        b: number | undefined;
+        c: number | null;
+        d?: number;
+    }
+    
+    // No strict initialization checks for static members
+    
+    class C3 {
+        static a: number;
+        static b: number | undefined;
+        static c: number | null;
+        static d?: number;
+    }
+    
+    // Initializer satisfies strict initialization check
+    
+    class C4 {
+        a = 0;
+        b: number = 0;
+        c: string = "abc";
+    }
+    
+    // Assignment in constructor satisfies strict initialization check
+    
+    class C5 {
+        a: number;
+        constructor() {
+            this.a = 0;
+        }
+    }
+    
+    // All code paths must contain assignment
+    
+    class C6 {
+        a: number;  // Error
+        ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+        constructor(cond: boolean) {
+            if (cond) {
+                return;
+            }
+            this.a = 0;
+        }
+    }
+    
+    class C7 {
+        a: number;
+        constructor(cond: boolean) {
+            if (cond) {
+                this.a = 1;
+                return;
+            }
+            this.a = 0;
+        }
+    }
+    
+    // Properties with string literal names aren't checked
+    
+    class C8 {
+        a: number;  // Error
+        ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+        "b": number;
+        0: number;
+    }
+    
+    // No strict initialization checks for abstract members
+    
+    abstract class C9 {
+        abstract a: number;
+        abstract b: number | undefined;
+        abstract c: number | null;
+        abstract d?: number;
+    }
+    
+    // Properties with non-undefined types must be assigned before they can be accessed
+    // within their constructor
+    
+    class C10 {
+        a: number;
+        b: number;
+        c?: number;
+        constructor() {
+            let x = this.a;  // Error
+                         ~
+!!! error TS2565: Property 'a' is used before being assigned.
+            this.a = this.b;  // Error
+                          ~
+!!! error TS2565: Property 'b' is used before being assigned.
+            this.b = x;
+            let y = this.c;
+        }
+    }
+    

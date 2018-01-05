@@ -1,0 +1,25 @@
+=== tests/cases/conformance/types/typeParameters/typeParameterAsBaseType.ts ===
+// type parameters cannot be used as base types
+// these are all errors
+
+class C<T> extends T { }
+>C : Symbol(C, Decl(typeParameterAsBaseType.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterAsBaseType.ts, 3, 8))
+
+class C2<T, U> extends U { }
+>C2 : Symbol(C2, Decl(typeParameterAsBaseType.ts, 3, 24))
+>T : Symbol(T, Decl(typeParameterAsBaseType.ts, 4, 9))
+>U : Symbol(U, Decl(typeParameterAsBaseType.ts, 4, 11))
+
+interface I<T> extends T { }
+>I : Symbol(I, Decl(typeParameterAsBaseType.ts, 4, 28))
+>T : Symbol(T, Decl(typeParameterAsBaseType.ts, 6, 12))
+>T : Symbol(T, Decl(typeParameterAsBaseType.ts, 6, 12))
+
+interface I2<T, U> extends U { }
+>I2 : Symbol(I2, Decl(typeParameterAsBaseType.ts, 6, 28))
+>T : Symbol(T, Decl(typeParameterAsBaseType.ts, 7, 13))
+>U : Symbol(U, Decl(typeParameterAsBaseType.ts, 7, 15))
+>U : Symbol(U, Decl(typeParameterAsBaseType.ts, 7, 15))
+
+

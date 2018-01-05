@@ -1,0 +1,20 @@
+=== tests/cases/compiler/evalAfter0.ts ===
+(0,eval)("10"); // fine: special case for eval
+>(0,eval)("10") : any
+>(0,eval) : (x: string) => any
+>0,eval : (x: string) => any
+>0 : 0
+>eval : (x: string) => any
+>"10" : "10"
+
+declare var eva;
+>eva : any
+
+(0,eva)("10"); // error: no side effect left of comma (suspect of missing method name or something)
+>(0,eva)("10") : any
+>(0,eva) : any
+>0,eva : any
+>0 : 0
+>eva : any
+>"10" : "10"
+

@@ -1,0 +1,39 @@
+=== tests/cases/compiler/a.js ===
+// @ts-check
+class A {
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+  constructor() {
+
+  }
+  foo() {
+>foo : Symbol(A.foo, Decl(a.js, 4, 3))
+
+    return 4;
+  }
+}
+
+class B extends A {
+>B : Symbol(B, Decl(a.js, 8, 1))
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+  constructor() {
+    super();
+>super : Symbol(A, Decl(a.js, 0, 0))
+
+    this.foo = () => 3;
+>this.foo : Symbol(B.foo, Decl(a.js, 12, 12))
+>this : Symbol(B, Decl(a.js, 8, 1))
+>foo : Symbol(B.foo, Decl(a.js, 12, 12))
+  }
+}
+
+const i = new B();
+>i : Symbol(i, Decl(a.js, 17, 5))
+>B : Symbol(B, Decl(a.js, 8, 1))
+
+i.foo();
+>i.foo : Symbol(B.foo, Decl(a.js, 12, 12))
+>i : Symbol(i, Decl(a.js, 17, 5))
+>foo : Symbol(B.foo, Decl(a.js, 12, 12))
+

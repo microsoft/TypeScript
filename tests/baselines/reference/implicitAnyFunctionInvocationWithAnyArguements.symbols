@@ -1,0 +1,117 @@
+=== tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts ===
+// this should be errors
+var arg0 = null;  // error at "arg0"
+>arg0 : Symbol(arg0, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 1, 3))
+
+var anyArray = [null, undefined];  // error at array literal
+>anyArray : Symbol(anyArray, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 2, 3))
+>undefined : Symbol(undefined)
+
+var objL: { v; w; }             // error at "y,z"
+>objL : Symbol(objL, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 3, 3))
+>v : Symbol(v, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 3, 11))
+>w : Symbol(w, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 3, 14))
+
+var funcL: (y2) => number;
+>funcL : Symbol(funcL, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 4, 3))
+>y2 : Symbol(y2, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 4, 12))
+
+function temp1(arg1) { }  // error at "temp1"
+>temp1 : Symbol(temp1, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 4, 26))
+>arg1 : Symbol(arg1, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 5, 15))
+
+function testFunctionExprC(subReplace: (s: string, ...arg: any[]) => string) { }
+>testFunctionExprC : Symbol(testFunctionExprC, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 5, 24))
+>subReplace : Symbol(subReplace, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 6, 27))
+>s : Symbol(s, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 6, 40))
+>arg : Symbol(arg, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 6, 50))
+
+function testFunctionExprC2(eq: (v1: any, v2: any) => number) { };
+>testFunctionExprC2 : Symbol(testFunctionExprC2, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 6, 80))
+>eq : Symbol(eq, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 7, 28))
+>v1 : Symbol(v1, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 7, 33))
+>v2 : Symbol(v2, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 7, 41))
+
+function testObjLiteral(objLit: { v: any; w: any }) { }; 
+>testObjLiteral : Symbol(testObjLiteral, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 7, 66))
+>objLit : Symbol(objLit, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 8, 24))
+>v : Symbol(v, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 8, 33))
+>w : Symbol(w, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 8, 41))
+
+function testFuncLiteral(funcLit: (y2) => number) { };
+>testFuncLiteral : Symbol(testFuncLiteral, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 8, 56))
+>funcLit : Symbol(funcLit, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 9, 25))
+>y2 : Symbol(y2, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 9, 35))
+
+// this should not be an error
+testFunctionExprC2((v1, v2) => 1);
+>testFunctionExprC2 : Symbol(testFunctionExprC2, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 6, 80))
+>v1 : Symbol(v1, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 12, 20))
+>v2 : Symbol(v2, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 12, 23))
+
+testObjLiteral(objL);
+>testObjLiteral : Symbol(testObjLiteral, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 7, 66))
+>objL : Symbol(objL, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 3, 3))
+
+testFuncLiteral(funcL);
+>testFuncLiteral : Symbol(testFuncLiteral, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 8, 56))
+>funcL : Symbol(funcL, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 4, 3))
+
+var k = temp1(null);
+>k : Symbol(k, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 16, 3))
+>temp1 : Symbol(temp1, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 4, 26))
+
+var result = temp1(arg0);
+>result : Symbol(result, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 17, 3))
+>temp1 : Symbol(temp1, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 4, 26))
+>arg0 : Symbol(arg0, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 1, 3))
+
+var result1 = temp1(anyArray);
+>result1 : Symbol(result1, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 18, 3))
+>temp1 : Symbol(temp1, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 4, 26))
+>anyArray : Symbol(anyArray, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 2, 3))
+
+function noError(variable: any, array?: any) { }
+>noError : Symbol(noError, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 18, 30))
+>variable : Symbol(variable, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 20, 17))
+>array : Symbol(array, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 20, 31))
+
+noError(null, []);
+>noError : Symbol(noError, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 18, 30))
+
+noError(undefined, <any>[]);
+>noError : Symbol(noError, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 18, 30))
+>undefined : Symbol(undefined)
+
+noError(null, [null, undefined]);
+>noError : Symbol(noError, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 18, 30))
+>undefined : Symbol(undefined)
+
+noError(undefined, anyArray);
+>noError : Symbol(noError, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 18, 30))
+>undefined : Symbol(undefined)
+>anyArray : Symbol(anyArray, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 2, 3))
+
+class C {
+>C : Symbol(C, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 24, 29))
+
+    constructor(emtpyArray: any, variable: any) {
+>emtpyArray : Symbol(emtpyArray, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 27, 16))
+>variable : Symbol(variable, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 27, 32))
+    }
+}
+
+var newC = new C([], undefined);
+>newC : Symbol(newC, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 31, 3))
+>C : Symbol(C, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 24, 29))
+>undefined : Symbol(undefined)
+
+var newC1 = new C([], arg0);
+>newC1 : Symbol(newC1, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 32, 3))
+>C : Symbol(C, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 24, 29))
+>arg0 : Symbol(arg0, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 1, 3))
+
+var newC2 = new C(<any>[], null) 
+>newC2 : Symbol(newC2, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 33, 3))
+>C : Symbol(C, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 24, 29))
+

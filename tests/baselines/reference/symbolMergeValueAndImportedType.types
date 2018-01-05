@@ -1,0 +1,21 @@
+=== tests/cases/compiler/main.ts ===
+import { X } from "./other";
+>X : 42
+
+const X = 42;
+>X : 42
+>42 : 42
+
+console.log('X is ' + X);
+>console.log('X is ' + X) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>'X is ' + X : string
+>'X is ' : "X is "
+>X : 42
+
+=== tests/cases/compiler/other.ts ===
+export type X = {};
+>X : X
+

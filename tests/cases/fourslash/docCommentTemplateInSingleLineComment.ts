@@ -8,4 +8,6 @@
 //// // We also want to check EOF handling at the end of a comment
 //// // /*2*/
 
-goTo.eachMarker(() => verify.noDocCommentTemplate());
+for (const marker of test.markers()) {
+    verify.noDocCommentTemplateAt(marker);
+}

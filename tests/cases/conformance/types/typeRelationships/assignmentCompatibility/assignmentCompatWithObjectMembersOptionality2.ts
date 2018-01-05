@@ -29,20 +29,20 @@ module TargetHasOptional {
     var e: E;
     var f: F;
 
-    // all ok
+    // disallowed by weak type checking
     c = d;
     c = e;
     c = f;
-    c = a;
-
     a = d;
     a = e;
     a = f;
-    a = c;
-
     b = d;
     b = e;
     b = f;
+
+    // ok
+    c = a;
+    a = c;
     b = a;
     b = c;
 }

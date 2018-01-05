@@ -1,0 +1,22 @@
+=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInAModule.ts ===
+module M {
+>M : Symbol(M, Decl(classAbstractInAModule.ts, 0, 0))
+
+    export abstract class A {}
+>A : Symbol(A, Decl(classAbstractInAModule.ts, 0, 10))
+
+    export class B extends A {}
+>B : Symbol(B, Decl(classAbstractInAModule.ts, 1, 30))
+>A : Symbol(A, Decl(classAbstractInAModule.ts, 0, 10))
+}
+
+new M.A;
+>M.A : Symbol(M.A, Decl(classAbstractInAModule.ts, 0, 10))
+>M : Symbol(M, Decl(classAbstractInAModule.ts, 0, 0))
+>A : Symbol(M.A, Decl(classAbstractInAModule.ts, 0, 10))
+
+new M.B;
+>M.B : Symbol(M.B, Decl(classAbstractInAModule.ts, 1, 30))
+>M : Symbol(M, Decl(classAbstractInAModule.ts, 0, 0))
+>B : Symbol(M.B, Decl(classAbstractInAModule.ts, 1, 30))
+

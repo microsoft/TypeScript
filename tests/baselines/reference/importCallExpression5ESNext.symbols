@@ -1,0 +1,39 @@
+=== tests/cases/conformance/dynamicImport/0.ts ===
+export class B {
+>B : Symbol(B, Decl(0.ts, 0, 0))
+
+    print() { return "I am B"}
+>print : Symbol(B.print, Decl(0.ts, 0, 16))
+}
+
+export function foo() { return "foo" }
+>foo : Symbol(foo, Decl(0.ts, 2, 1))
+
+=== tests/cases/conformance/dynamicImport/1.ts ===
+export function backup() { return "backup"; }
+>backup : Symbol(backup, Decl(1.ts, 0, 0))
+
+=== tests/cases/conformance/dynamicImport/2.ts ===
+declare function bar(): boolean;
+>bar : Symbol(bar, Decl(2.ts, 0, 0))
+
+const specify = bar() ? "./0" : undefined;
+>specify : Symbol(specify, Decl(2.ts, 1, 5))
+>bar : Symbol(bar, Decl(2.ts, 0, 0))
+>undefined : Symbol(undefined)
+
+let myModule = import(specify);
+>myModule : Symbol(myModule, Decl(2.ts, 2, 3))
+>specify : Symbol(specify, Decl(2.ts, 1, 5))
+
+let myModule1 = import(undefined);
+>myModule1 : Symbol(myModule1, Decl(2.ts, 3, 3))
+>undefined : Symbol(undefined)
+
+let myModule2 = import(bar() ? "./1" : null);
+>myModule2 : Symbol(myModule2, Decl(2.ts, 4, 3))
+>bar : Symbol(bar, Decl(2.ts, 0, 0))
+
+let myModule3 = import(null);
+>myModule3 : Symbol(myModule3, Decl(2.ts, 5, 3))
+

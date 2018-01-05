@@ -12,7 +12,7 @@ class Chain<T> {
 
 
 //// [promiseChaining.js]
-var Chain = (function () {
+var Chain = /** @class */ (function () {
     function Chain(value) {
         this.value = value;
     }

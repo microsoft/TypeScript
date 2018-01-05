@@ -1,0 +1,6 @@
+=== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments02.ts ===
+var a = () => arguments;
+>a : () => IArguments
+>() => arguments : () => IArguments
+>arguments : IArguments
+

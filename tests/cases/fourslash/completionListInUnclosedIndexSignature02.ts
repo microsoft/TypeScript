@@ -7,7 +7,7 @@
 
 goTo.marker("1");
 verify.completionListContains("C");
-verify.completionListContains("foo"); // ideally this shouldn't show up for a type
+verify.not.completionListContains("foo"); // ideally this shouldn't show up for a type
 edit.insert("typeof ");
 verify.completionListContains("C");
 verify.completionListContains("foo");

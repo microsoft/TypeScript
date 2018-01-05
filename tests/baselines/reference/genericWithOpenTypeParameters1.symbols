@@ -1,0 +1,60 @@
+=== tests/cases/compiler/genericWithOpenTypeParameters1.ts ===
+class B<T> {
+>B : Symbol(B, Decl(genericWithOpenTypeParameters1.ts, 0, 0))
+>T : Symbol(T, Decl(genericWithOpenTypeParameters1.ts, 0, 8))
+
+   foo(x: T): T { return null; }
+>foo : Symbol(B.foo, Decl(genericWithOpenTypeParameters1.ts, 0, 12))
+>x : Symbol(x, Decl(genericWithOpenTypeParameters1.ts, 1, 7))
+>T : Symbol(T, Decl(genericWithOpenTypeParameters1.ts, 0, 8))
+>T : Symbol(T, Decl(genericWithOpenTypeParameters1.ts, 0, 8))
+}
+
+var x: B<number>;
+>x : Symbol(x, Decl(genericWithOpenTypeParameters1.ts, 4, 3))
+>B : Symbol(B, Decl(genericWithOpenTypeParameters1.ts, 0, 0))
+
+x.foo(1); // no error
+>x.foo : Symbol(B.foo, Decl(genericWithOpenTypeParameters1.ts, 0, 12))
+>x : Symbol(x, Decl(genericWithOpenTypeParameters1.ts, 4, 3))
+>foo : Symbol(B.foo, Decl(genericWithOpenTypeParameters1.ts, 0, 12))
+
+var f = <T>(x: B<T>) => { return x.foo(1); } // error
+>f : Symbol(f, Decl(genericWithOpenTypeParameters1.ts, 6, 3))
+>T : Symbol(T, Decl(genericWithOpenTypeParameters1.ts, 6, 9))
+>x : Symbol(x, Decl(genericWithOpenTypeParameters1.ts, 6, 12))
+>B : Symbol(B, Decl(genericWithOpenTypeParameters1.ts, 0, 0))
+>T : Symbol(T, Decl(genericWithOpenTypeParameters1.ts, 6, 9))
+>x.foo : Symbol(B.foo, Decl(genericWithOpenTypeParameters1.ts, 0, 12))
+>x : Symbol(x, Decl(genericWithOpenTypeParameters1.ts, 6, 12))
+>foo : Symbol(B.foo, Decl(genericWithOpenTypeParameters1.ts, 0, 12))
+
+var f2 = <T>(x: B<T>) => { return x.foo<T>(1); } // error
+>f2 : Symbol(f2, Decl(genericWithOpenTypeParameters1.ts, 7, 3))
+>T : Symbol(T, Decl(genericWithOpenTypeParameters1.ts, 7, 10))
+>x : Symbol(x, Decl(genericWithOpenTypeParameters1.ts, 7, 13))
+>B : Symbol(B, Decl(genericWithOpenTypeParameters1.ts, 0, 0))
+>T : Symbol(T, Decl(genericWithOpenTypeParameters1.ts, 7, 10))
+>x.foo : Symbol(B.foo, Decl(genericWithOpenTypeParameters1.ts, 0, 12))
+>x : Symbol(x, Decl(genericWithOpenTypeParameters1.ts, 7, 13))
+>foo : Symbol(B.foo, Decl(genericWithOpenTypeParameters1.ts, 0, 12))
+>T : Symbol(T, Decl(genericWithOpenTypeParameters1.ts, 7, 10))
+
+var f3 = <T>(x: B<T>) => { return x.foo<number>(1); } // error
+>f3 : Symbol(f3, Decl(genericWithOpenTypeParameters1.ts, 8, 3))
+>T : Symbol(T, Decl(genericWithOpenTypeParameters1.ts, 8, 10))
+>x : Symbol(x, Decl(genericWithOpenTypeParameters1.ts, 8, 13))
+>B : Symbol(B, Decl(genericWithOpenTypeParameters1.ts, 0, 0))
+>T : Symbol(T, Decl(genericWithOpenTypeParameters1.ts, 8, 10))
+>x.foo : Symbol(B.foo, Decl(genericWithOpenTypeParameters1.ts, 0, 12))
+>x : Symbol(x, Decl(genericWithOpenTypeParameters1.ts, 8, 13))
+>foo : Symbol(B.foo, Decl(genericWithOpenTypeParameters1.ts, 0, 12))
+
+var f4 = (x: B<number>) => { return x.foo(1); } // no error
+>f4 : Symbol(f4, Decl(genericWithOpenTypeParameters1.ts, 9, 3))
+>x : Symbol(x, Decl(genericWithOpenTypeParameters1.ts, 9, 10))
+>B : Symbol(B, Decl(genericWithOpenTypeParameters1.ts, 0, 0))
+>x.foo : Symbol(B.foo, Decl(genericWithOpenTypeParameters1.ts, 0, 12))
+>x : Symbol(x, Decl(genericWithOpenTypeParameters1.ts, 9, 10))
+>foo : Symbol(B.foo, Decl(genericWithOpenTypeParameters1.ts, 0, 12))
+

@@ -80,7 +80,7 @@ function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {
 }
 
 //// [keyofAndIndexedAccessErrors.js]
-var Shape = (function () {
+var Shape = /** @class */ (function () {
     function Shape() {
     }
     return Shape;

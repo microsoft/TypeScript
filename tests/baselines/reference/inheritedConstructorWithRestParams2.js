@@ -45,24 +45,24 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var IBaseBase = (function () {
+var IBaseBase = /** @class */ (function () {
     function IBaseBase(x) {
     }
     return IBaseBase;
 }());
-var BaseBase2 = (function () {
+var BaseBase2 = /** @class */ (function () {
     function BaseBase2(x) {
     }
     return BaseBase2;
 }());
-var Base = (function (_super) {
+var Base = /** @class */ (function (_super) {
     __extends(Base, _super);
     function Base() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Base;
 }(BaseBase));
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;

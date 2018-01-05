@@ -53,13 +53,13 @@ var ObjectLiteral;
         }
     };
 })(ObjectLiteral || (ObjectLiteral = {}));
-var F = (function () {
+var F = /** @class */ (function () {
     function F() {
     }
     F.prototype.test = function () { return ""; };
     return F;
 }());
-var SuperObjectTest = (function (_super) {
+var SuperObjectTest = /** @class */ (function (_super) {
     __extends(SuperObjectTest, _super);
     function SuperObjectTest() {
         return _super !== null && _super.apply(this, arguments) || this;

@@ -7,7 +7,7 @@ export default class C {}
 exports.__esModule = true;
 function bar() { }
 exports["default"] = bar;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

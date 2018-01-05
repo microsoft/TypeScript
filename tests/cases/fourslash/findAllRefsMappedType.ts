@@ -7,9 +7,4 @@
 ////declare const u: U;
 ////u.[|a|];
 
-const ranges = test.ranges();
-const [r0, r1, r2] = ranges;
-verify.referenceGroups([r0, r1], [{ definition: "(property) T.a: number", ranges }]);
-verify.referenceGroups(r2, [
-    { definition: "(property) T.a: number", ranges: [r0, r1] },
-    { definition: "(property) a: string", ranges: [r2] }]);
+verify.singleReferenceGroup("(property) T.a: number");

@@ -3,9 +3,9 @@ var regexMatchList = ['', ''];
 >regexMatchList : Symbol(regexMatchList, Decl(noImplicitAnyInContextuallyTypesFunctionParamter.ts, 0, 3))
 
 regexMatchList.forEach(match => ''.replace(match, ''));
->regexMatchList.forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>regexMatchList.forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
 >regexMatchList : Symbol(regexMatchList, Decl(noImplicitAnyInContextuallyTypesFunctionParamter.ts, 0, 3))
->forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
 >match : Symbol(match, Decl(noImplicitAnyInContextuallyTypesFunctionParamter.ts, 1, 23))
 >''.replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))

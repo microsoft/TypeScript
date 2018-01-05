@@ -44,15 +44,15 @@ export async function runSampleWorks<A, B, C, D, E>(
 >bluebird : typeof bluebird
 >all : bluebird<any>[]
 >[a, b, c, d, e].filter(el => !!el) : bluebird<A>[]
->[a, b, c, d, e].filter : { (callbackfn: (this: void, value: bluebird<A>, index: number, array: bluebird<A>[]) => any): bluebird<A>[]; (callbackfn: (this: void, value: bluebird<A>, index: number, array: bluebird<A>[]) => any, thisArg: undefined): bluebird<A>[]; <Z>(callbackfn: (this: Z, value: bluebird<A>, index: number, array: bluebird<A>[]) => any, thisArg: Z): bluebird<A>[]; }
+>[a, b, c, d, e].filter : { <S extends bluebird<A>>(callbackfn: (value: bluebird<A>, index: number, array: bluebird<A>[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: bluebird<A>, index: number, array: bluebird<A>[]) => any, thisArg?: any): bluebird<A>[]; }
 >[a, b, c, d, e] : bluebird<A>[]
 >a : bluebird<A>
 >b : bluebird<B>
 >c : bluebird<C>
 >d : bluebird<D>
 >e : bluebird<E>
->filter : { (callbackfn: (this: void, value: bluebird<A>, index: number, array: bluebird<A>[]) => any): bluebird<A>[]; (callbackfn: (this: void, value: bluebird<A>, index: number, array: bluebird<A>[]) => any, thisArg: undefined): bluebird<A>[]; <Z>(callbackfn: (this: Z, value: bluebird<A>, index: number, array: bluebird<A>[]) => any, thisArg: Z): bluebird<A>[]; }
->el => !!el : (this: void, el: bluebird<A>) => boolean
+>filter : { <S extends bluebird<A>>(callbackfn: (value: bluebird<A>, index: number, array: bluebird<A>[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: bluebird<A>, index: number, array: bluebird<A>[]) => any, thisArg?: any): bluebird<A>[]; }
+>el => !!el : (el: bluebird<A>) => boolean
 >el : bluebird<A>
 >!!el : boolean
 >!el : boolean
@@ -129,15 +129,15 @@ export async function runSampleBreaks<A, B, C, D, E>(
 >bluebird : typeof bluebird
 >all : bluebird<any>[]
 >[a, b, c, d, e].filter(el => !!el) : bluebird<A>[]
->[a, b, c, d, e].filter : { (callbackfn: (this: void, value: bluebird<A>, index: number, array: bluebird<A>[]) => any): bluebird<A>[]; (callbackfn: (this: void, value: bluebird<A>, index: number, array: bluebird<A>[]) => any, thisArg: undefined): bluebird<A>[]; <Z>(callbackfn: (this: Z, value: bluebird<A>, index: number, array: bluebird<A>[]) => any, thisArg: Z): bluebird<A>[]; }
+>[a, b, c, d, e].filter : { <S extends bluebird<A>>(callbackfn: (value: bluebird<A>, index: number, array: bluebird<A>[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: bluebird<A>, index: number, array: bluebird<A>[]) => any, thisArg?: any): bluebird<A>[]; }
 >[a, b, c, d, e] : bluebird<A>[]
 >a : bluebird<A>
 >b : bluebird<B>
 >c : bluebird<C>
 >d : bluebird<D>
 >e : bluebird<E>
->filter : { (callbackfn: (this: void, value: bluebird<A>, index: number, array: bluebird<A>[]) => any): bluebird<A>[]; (callbackfn: (this: void, value: bluebird<A>, index: number, array: bluebird<A>[]) => any, thisArg: undefined): bluebird<A>[]; <Z>(callbackfn: (this: Z, value: bluebird<A>, index: number, array: bluebird<A>[]) => any, thisArg: Z): bluebird<A>[]; }
->el => !!el : (this: void, el: bluebird<A>) => boolean
+>filter : { <S extends bluebird<A>>(callbackfn: (value: bluebird<A>, index: number, array: bluebird<A>[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: bluebird<A>, index: number, array: bluebird<A>[]) => any, thisArg?: any): bluebird<A>[]; }
+>el => !!el : (el: bluebird<A>) => boolean
 >el : bluebird<A>
 >!!el : boolean
 >!el : boolean

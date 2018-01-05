@@ -1,0 +1,39 @@
+=== tests/cases/compiler/assignmentCompatability13.ts ===
+module __test1__ {
+>__test1__ : Symbol(__test1__, Decl(assignmentCompatability13.ts, 0, 0))
+
+    export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
+>interfaceWithPublicAndOptional : Symbol(interfaceWithPublicAndOptional, Decl(assignmentCompatability13.ts, 0, 18))
+>T : Symbol(T, Decl(assignmentCompatability13.ts, 1, 52))
+>U : Symbol(U, Decl(assignmentCompatability13.ts, 1, 54))
+>one : Symbol(interfaceWithPublicAndOptional.one, Decl(assignmentCompatability13.ts, 1, 58))
+>T : Symbol(T, Decl(assignmentCompatability13.ts, 1, 52))
+>two : Symbol(interfaceWithPublicAndOptional.two, Decl(assignmentCompatability13.ts, 1, 66))
+>U : Symbol(U, Decl(assignmentCompatability13.ts, 1, 54))
+>obj4 : Symbol(obj4, Decl(assignmentCompatability13.ts, 1, 83))
+>interfaceWithPublicAndOptional : Symbol(interfaceWithPublicAndOptional, Decl(assignmentCompatability13.ts, 0, 18))
+>one : Symbol(one, Decl(assignmentCompatability13.ts, 1, 139))
+
+    export var __val__obj4 = obj4;
+>__val__obj4 : Symbol(__val__obj4, Decl(assignmentCompatability13.ts, 2, 14))
+>obj4 : Symbol(obj4, Decl(assignmentCompatability13.ts, 1, 83))
+}
+module __test2__ {
+>__test2__ : Symbol(__test2__, Decl(assignmentCompatability13.ts, 3, 1))
+
+    export var obj = {two: "1"};
+>obj : Symbol(obj, Decl(assignmentCompatability13.ts, 5, 14))
+>two : Symbol(two, Decl(assignmentCompatability13.ts, 5, 22))
+
+    export var __val__obj = obj;
+>__val__obj : Symbol(__val__obj, Decl(assignmentCompatability13.ts, 6, 14))
+>obj : Symbol(obj, Decl(assignmentCompatability13.ts, 5, 14))
+}
+__test2__.__val__obj = __test1__.__val__obj4
+>__test2__.__val__obj : Symbol(__test2__.__val__obj, Decl(assignmentCompatability13.ts, 6, 14))
+>__test2__ : Symbol(__test2__, Decl(assignmentCompatability13.ts, 3, 1))
+>__val__obj : Symbol(__test2__.__val__obj, Decl(assignmentCompatability13.ts, 6, 14))
+>__test1__.__val__obj4 : Symbol(__test1__.__val__obj4, Decl(assignmentCompatability13.ts, 2, 14))
+>__test1__ : Symbol(__test1__, Decl(assignmentCompatability13.ts, 0, 0))
+>__val__obj4 : Symbol(__test1__.__val__obj4, Decl(assignmentCompatability13.ts, 2, 14))
+

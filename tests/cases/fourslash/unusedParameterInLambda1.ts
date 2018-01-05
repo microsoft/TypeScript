@@ -6,4 +6,8 @@
 ////     [|return (x:number) => {}|]
 //// }
 
-verify.rangeAfterCodeFix("return () => {}");
+verify.codeFix({
+    description: "Remove declaration for: 'x'",
+    index: 0,
+    newRangeContent: "return () => {}",
+});

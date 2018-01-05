@@ -54,7 +54,7 @@ var ANY;
 var ANY1;
 var ANY2 = ["", ""];
 var obj = { x: 1, y: null };
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;

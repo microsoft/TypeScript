@@ -21,19 +21,19 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     return B;
 }());
-var C = (function (_super) {
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(B));
-var C2 = (function (_super) {
+var C2 = /** @class */ (function (_super) {
     __extends(C2, _super);
     function C2() {
         return _super !== null && _super.apply(this, arguments) || this;

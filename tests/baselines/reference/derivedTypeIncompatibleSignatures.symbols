@@ -1,0 +1,60 @@
+=== tests/cases/compiler/derivedTypeIncompatibleSignatures.ts ===
+interface A {
+>A : Symbol(A, Decl(derivedTypeIncompatibleSignatures.ts, 0, 0))
+
+    (a: string): string;
+>a : Symbol(a, Decl(derivedTypeIncompatibleSignatures.ts, 1, 5))
+}
+
+interface B extends A {
+>B : Symbol(B, Decl(derivedTypeIncompatibleSignatures.ts, 2, 1))
+>A : Symbol(A, Decl(derivedTypeIncompatibleSignatures.ts, 0, 0))
+
+    (a: string): number; // Number is not a subtype of string.  Should error.
+>a : Symbol(a, Decl(derivedTypeIncompatibleSignatures.ts, 5, 5))
+}
+
+interface C {
+>C : Symbol(C, Decl(derivedTypeIncompatibleSignatures.ts, 6, 1))
+
+    new (a: string): string;
+>a : Symbol(a, Decl(derivedTypeIncompatibleSignatures.ts, 9, 9))
+}
+
+interface D extends C {
+>D : Symbol(D, Decl(derivedTypeIncompatibleSignatures.ts, 10, 1))
+>C : Symbol(C, Decl(derivedTypeIncompatibleSignatures.ts, 6, 1))
+
+    new (a: string): number; // Number is not a subtype of string.  Should error.
+>a : Symbol(a, Decl(derivedTypeIncompatibleSignatures.ts, 13, 9))
+}
+
+interface E {
+>E : Symbol(E, Decl(derivedTypeIncompatibleSignatures.ts, 14, 1))
+
+    [a: string]: string;
+>a : Symbol(a, Decl(derivedTypeIncompatibleSignatures.ts, 17, 5))
+}
+
+interface F extends E {
+>F : Symbol(F, Decl(derivedTypeIncompatibleSignatures.ts, 18, 1))
+>E : Symbol(E, Decl(derivedTypeIncompatibleSignatures.ts, 14, 1))
+
+    [a: string]: number; // Number is not a subtype of string.  Should error.
+>a : Symbol(a, Decl(derivedTypeIncompatibleSignatures.ts, 21, 5))
+}
+
+interface G {
+>G : Symbol(G, Decl(derivedTypeIncompatibleSignatures.ts, 22, 1))
+
+    [a: number]: string;
+>a : Symbol(a, Decl(derivedTypeIncompatibleSignatures.ts, 25, 5))
+}
+
+interface H extends G {
+>H : Symbol(H, Decl(derivedTypeIncompatibleSignatures.ts, 26, 1))
+>G : Symbol(G, Decl(derivedTypeIncompatibleSignatures.ts, 22, 1))
+
+    [a: number]: number; // Should error for the same reason
+>a : Symbol(a, Decl(derivedTypeIncompatibleSignatures.ts, 29, 5))
+}

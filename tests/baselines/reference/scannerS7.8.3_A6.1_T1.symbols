@@ -1,0 +1,17 @@
+=== tests/cases/conformance/scanner/ecmascript5/scannerS7.8.3_A6.1_T1.ts ===
+// Copyright 2009 the Sputnik authors.  All rights reserved.
+No type information for this code.// This code is governed by the BSD license found in the LICENSE file.
+No type information for this code.
+No type information for this code./**
+No type information for this code. * HexIntegerLiteral :: 0(x/X) is incorrect
+No type information for this code. *
+No type information for this code. * @path ch07/7.8/7.8.3/S7.8.3_A6.1_T1.js
+No type information for this code. * @description Checking if execution of "0x" passes
+No type information for this code. * @negative
+No type information for this code. */
+No type information for this code.
+No type information for this code.//CHECK#1
+No type information for this code.0x
+No type information for this code.
+No type information for this code.
+No type information for this code.

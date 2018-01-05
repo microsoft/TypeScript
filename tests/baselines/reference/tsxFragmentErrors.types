@@ -1,0 +1,24 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+
+	interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+		[s: string]: any;
+>s : string
+	}
+}
+declare var React: any;
+>React : any
+
+<>hi</div> // Error
+><>hi</div> // Error<>eof   // Error : JSX.Element
+><>hi</div> : JSX.Element
+
+<>eof   // Error
+><>eof   // Error : JSX.Element
+

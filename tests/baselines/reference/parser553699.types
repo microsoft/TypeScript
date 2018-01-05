@@ -1,0 +1,18 @@
+=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser553699.ts ===
+class Foo {
+>Foo : Foo
+
+  constructor() { }
+  public banana (x: public) { }
+>banana : (x: any) => void
+>x : any
+>public : No type information available!
+}
+
+class Bar {
+>Bar : Bar
+
+  constructor(c: Bar) { }
+>c : Bar
+>Bar : Bar
+}

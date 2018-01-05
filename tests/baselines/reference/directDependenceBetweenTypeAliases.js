@@ -44,14 +44,14 @@ var zz: { x: T11 }
 
 //// [directDependenceBetweenTypeAliases.js]
 // It is an error for the type specified in a type alias to depend on that type alias
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
 // A type query directly depends on the type of the referenced entity.
 var x = [];
-var C1 = (function () {
+var C1 = /** @class */ (function () {
     function C1() {
     }
     return C1;

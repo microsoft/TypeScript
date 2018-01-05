@@ -60,7 +60,7 @@ var A;
     var Origin = "0,0";
     var Utils;
     (function (Utils) {
-        var Plane = (function () {
+        var Plane = /** @class */ (function () {
             function Plane(tl, br) {
                 this.tl = tl;
                 this.br = br;

@@ -30,20 +30,20 @@ module TargetHasOptional {
     var e: E;
     var f: F;
 
-    // all ok
+    // disallowed by weak type checking
     c = d;
     c = e;
     c = f;
-    c = a;
-
     a = d;
     a = e;
     a = f;
-    a = c;
-
     b = d;
     b = e;
     b = f;
+
+    // ok
+    c = a;
+    a = c;
     b = a;
     b = c;
 }
@@ -89,6 +89,7 @@ module SourceHasOptional {
     b = c; // ok
 }
 
+
 //// [assignmentCompatWithObjectMembersOptionality2.js]
 // M is optional and S contains no property with the same name as M
 // N is optional and T contains no property with the same name as N
@@ -102,19 +103,19 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base() {
     }
     return Base;
 }());
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived;
 }(Base));
-var Derived2 = (function (_super) {
+var Derived2 = /** @class */ (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -129,18 +130,19 @@ var TargetHasOptional;
     var d;
     var e;
     var f;
-    // all ok
+    // disallowed by weak type checking
     c = d;
     c = e;
     c = f;
-    c = a;
     a = d;
     a = e;
     a = f;
-    a = c;
     b = d;
     b = e;
     b = f;
+    // ok
+    c = a;
+    a = c;
     b = a;
     b = c;
 })(TargetHasOptional || (TargetHasOptional = {}));

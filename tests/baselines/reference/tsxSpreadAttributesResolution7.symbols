@@ -13,17 +13,17 @@ type TextProps = { editable: false }
 
 class TextComponent extends React.Component<TextProps, {}> {
 >TextComponent : Symbol(TextComponent, Decl(file.tsx, 3, 71))
->React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->Component : Symbol(React.Component, Decl(react.d.ts, 158, 55))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >TextProps : Symbol(TextProps, Decl(file.tsx, 0, 32))
 
     render() {
 >render : Symbol(TextComponent.render, Decl(file.tsx, 5, 60))
 
         return <span>Some Text..</span>;
->span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2460, 51))
->span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2460, 51))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2461, 51))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2461, 51))
     }
 }
 

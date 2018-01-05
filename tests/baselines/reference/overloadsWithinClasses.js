@@ -24,20 +24,20 @@ class X {
 
 
 //// [overloadsWithinClasses.js]
-var foo = (function () {
+var foo = /** @class */ (function () {
     function foo() {
     }
     foo.fnOverload = function () { };
     foo.fnOverload = function (foo) { }; // error
     return foo;
 }());
-var bar = (function () {
+var bar = /** @class */ (function () {
     function bar() {
     }
     bar.fnOverload = function (foo) { }; // no error
     return bar;
 }());
-var X = (function () {
+var X = /** @class */ (function () {
     function X() {
     }
     X.prototype.attr = function (first, second) {

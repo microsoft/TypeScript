@@ -1,0 +1,10 @@
+=== tests/cases/compiler/file1.ts ===
+var var1 = 0;
+>var1 : number
+>0 : 0
+
+=== tests/cases/compiler/file2.ts ===
+let var1 = 0;
+>var1 : number
+>0 : 0
+

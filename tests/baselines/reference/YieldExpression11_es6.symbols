@@ -1,0 +1,10 @@
+=== tests/cases/conformance/es6/yieldExpressions/YieldExpression11_es6.ts ===
+class C {
+>C : Symbol(C, Decl(YieldExpression11_es6.ts, 0, 0))
+
+  *foo() {
+>foo : Symbol(C.foo, Decl(YieldExpression11_es6.ts, 0, 9))
+
+    yield(foo);
+  }
+}

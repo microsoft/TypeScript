@@ -1,6 +1,5 @@
-declare const require: any, process: any;
-const fs: any = require("fs");
-const path: any = require("path");
+import fs = require("fs");
+import path = require("path");
 
 function instrumentForRecording(fn: string, tscPath: string) {
     instrument(tscPath, `
@@ -39,7 +38,9 @@ function instrument(tscPath: string, prepareCode: string, cleanupCode = "") {
 
                     const index2 = index1 + invocationLine.length;
                     const newContent = tscContent.substr(0, index1) + loggerContent + prepareCode + invocationLine + cleanupCode + tscContent.substr(index2) + "\r\n";
-                    fs.writeFile(tscPath, newContent);
+                    fs.writeFile(tscPath, newContent, err => {
+                        if (err) throw err;
+                    });
                 });
             });
         });

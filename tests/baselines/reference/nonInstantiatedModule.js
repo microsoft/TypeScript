@@ -73,7 +73,7 @@ var p2;
 var p2;
 var M3;
 (function (M3) {
-    var Utils = (function () {
+    var Utils = /** @class */ (function () {
         function Utils() {
         }
         return Utils;

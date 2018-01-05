@@ -1,0 +1,3 @@
+=== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression2.ts ===
+href.match(/:\/\/(.[^/]+)/)[1];
+No type information for this code.

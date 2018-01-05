@@ -41,7 +41,7 @@ class C {
 //// [privateInstanceVisibility.js]
 var Test;
 (function (Test) {
-    var Example = (function () {
+    var Example = /** @class */ (function () {
         function Example() {
         }
         Example.prototype.doSomething = function () {
@@ -54,7 +54,7 @@ var Test;
     }());
     Test.Example = Example;
 })(Test || (Test = {}));
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.getX = function () { return this.x; };

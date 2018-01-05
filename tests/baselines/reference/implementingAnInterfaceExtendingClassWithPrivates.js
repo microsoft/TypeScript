@@ -25,27 +25,27 @@ class Bar4 implements I { // error
 }
 
 //// [implementingAnInterfaceExtendingClassWithPrivates.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;
 }());
-var Bar = (function () {
+var Bar = /** @class */ (function () {
     function Bar() {
     }
     return Bar;
 }());
-var Bar2 = (function () {
+var Bar2 = /** @class */ (function () {
     function Bar2() {
     }
     return Bar2;
 }());
-var Bar3 = (function () {
+var Bar3 = /** @class */ (function () {
     function Bar3() {
     }
     return Bar3;
 }());
-var Bar4 = (function () {
+var Bar4 = /** @class */ (function () {
     function Bar4() {
     }
     return Bar4;

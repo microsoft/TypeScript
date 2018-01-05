@@ -7,7 +7,7 @@ function foo2(y = class {[x] = x}, x = 1) {
 
 //// [capturedParametersInInitializers2.js]
 function foo(y, x) {
-    if (y === void 0) { y = (_a = (function () {
+    if (y === void 0) { y = (_a = /** @class */ (function () {
             function class_1() {
             }
             return class_1;
@@ -19,11 +19,14 @@ function foo(y, x) {
     var _a;
 }
 function foo2(y, x) {
-    if (y === void 0) { y = (function () {
-        function class_2() {
-            this[x] = x;
-        }
-        return class_2;
-    }()); }
+    if (y === void 0) { y = (_a = /** @class */ (function () {
+            function class_2() {
+                this[_b] = x;
+            }
+            return class_2;
+        }()),
+        _b = x,
+        _a); }
     if (x === void 0) { x = 1; }
+    var _b, _a;
 }

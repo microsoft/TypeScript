@@ -1,0 +1,9 @@
+=== tests/cases/compiler/yieldStringLiteral.ts ===
+function yieldString() {
+>yieldString : () => void
+
+    yield 'literal';
+>yield 'literal' : any
+>'literal' : "literal"
+}
+

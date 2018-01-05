@@ -51,14 +51,14 @@ class B extends A {
 }
 
 //// [asyncMethodWithSuper_es5.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A.prototype.x = function () {
     };
     return A;
 }());
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;

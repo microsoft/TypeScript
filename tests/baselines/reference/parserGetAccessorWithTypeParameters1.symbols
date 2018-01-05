@@ -1,0 +1,8 @@
+=== tests/cases/conformance/parser/ecmascript5/Accessors/parserGetAccessorWithTypeParameters1.ts ===
+class C {
+>C : Symbol(C, Decl(parserGetAccessorWithTypeParameters1.ts, 0, 0))
+
+  get foo<T>() { }
+>foo : Symbol(C.foo, Decl(parserGetAccessorWithTypeParameters1.ts, 0, 9))
+>T : Symbol(T, Decl(parserGetAccessorWithTypeParameters1.ts, 1, 10))
+}

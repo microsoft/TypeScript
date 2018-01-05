@@ -1,0 +1,7 @@
+=== tests/cases/compiler/es6ExportEquals.ts ===
+export function f() { }
+>f : () => void
+
+export = f;
+>f : () => void
+

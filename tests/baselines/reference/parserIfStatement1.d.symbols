@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/parserIfStatement1.d.ts ===
+if (foo) {
+No type information for this code.}
+No type information for this code.

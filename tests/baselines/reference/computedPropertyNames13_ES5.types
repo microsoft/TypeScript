@@ -45,7 +45,7 @@ class C {
 >true : true
 
     [`hello bye`]() { }
->`hello bye` : string
+>`hello bye` : "hello bye"
 
     static [`hello ${a} bye`]() { }
 >`hello ${a} bye` : string

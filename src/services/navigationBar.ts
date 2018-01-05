@@ -209,17 +209,24 @@ namespace ts.NavigationBar {
 
             case SyntaxKind.BindingElement:
             case SyntaxKind.VariableDeclaration:
-                const decl = <VariableDeclaration>node;
-                const name = decl.name;
+                const { name, initializer } = <VariableDeclaration | BindingElement>node;
                 if (isBindingPattern(name)) {
                     addChildrenRecursively(name);
                 }
-                else if (decl.initializer && isFunctionOrClassExpression(decl.initializer)) {
-                    // For `const x = function() {}`, just use the function node, not the const.
-                    addChildrenRecursively(decl.initializer);
+                else if (initializer && isFunctionOrClassExpression(initializer)) {
+                    if (initializer.name) {
+                        // Don't add a node for the VariableDeclaration, just for the initializer.
+                        addChildrenRecursively(initializer);
+                    }
+                    else {
+                        // Add a node for the VariableDeclaration, but not for the initializer.
+                        startNode(node);
+                        forEachChild(initializer, addChildrenRecursively);
+                        endNode();
+                    }
                 }
                 else {
-                    addNodeWithRecursiveChild(decl, decl.initializer);
+                    addNodeWithRecursiveChild(node, initializer);
                 }
                 break;
 
@@ -262,14 +269,34 @@ namespace ts.NavigationBar {
                 addLeafNode(node);
                 break;
 
+            case SyntaxKind.BinaryExpression: {
+                const special = getSpecialPropertyAssignmentKind(node as BinaryExpression);
+                switch (special) {
+                    case SpecialPropertyAssignmentKind.ExportsProperty:
+                    case SpecialPropertyAssignmentKind.ModuleExports:
+                    case SpecialPropertyAssignmentKind.PrototypeProperty:
+                        addNodeWithRecursiveChild(node, (node as BinaryExpression).right);
+                        break;
+                    case SpecialPropertyAssignmentKind.ThisProperty:
+                    case SpecialPropertyAssignmentKind.Property:
+                    case SpecialPropertyAssignmentKind.None:
+                        break;
+                    default:
+                        Debug.assertNever(special);
+                }
+            }
+            // falls through
+
             default:
-                forEach(node.jsDoc, jsDoc => {
-                    forEach(jsDoc.tags, tag => {
-                        if (tag.kind === SyntaxKind.JSDocTypedefTag) {
-                            addLeafNode(tag);
-                        }
+                if (hasJSDocNodes(node)) {
+                    forEach(node.jsDoc, jsDoc => {
+                        forEach(jsDoc.tags, tag => {
+                            if (tag.kind === SyntaxKind.JSDocTypedefTag) {
+                                addLeafNode(tag);
+                            }
+                        });
                     });
-                });
+                }
 
                 forEachChild(node, addChildrenRecursively);
         }
@@ -309,46 +336,53 @@ namespace ts.NavigationBar {
                 nameToItems.set(name, [itemWithSameName, child]);
                 return true;
             }
-
-            function tryMerge(a: NavigationBarNode, b: NavigationBarNode): boolean {
-                if (shouldReallyMerge(a.node, b.node)) {
-                    merge(a, b);
-                    return true;
-                }
-                return false;
-            }
         });
+    }
 
-        /** a and b have the same name, but they may not be mergeable. */
-        function shouldReallyMerge(a: Node, b: Node): boolean {
-            return a.kind === b.kind && (a.kind !== SyntaxKind.ModuleDeclaration || areSameModule(<ModuleDeclaration>a, <ModuleDeclaration>b));
+    function tryMerge(a: NavigationBarNode, b: NavigationBarNode): boolean {
+        if (shouldReallyMerge(a.node, b.node)) {
+            merge(a, b);
+            return true;
+        }
+        return false;
+    }
 
-            // We use 1 NavNode to represent 'A.B.C', but there are multiple source nodes.
-            // Only merge module nodes that have the same chain. Don't merge 'A.B.C' with 'A'!
-            function areSameModule(a: ModuleDeclaration, b: ModuleDeclaration): boolean {
-                if (a.body.kind !== b.body.kind) {
-                    return false;
-                }
-                if (a.body.kind !== SyntaxKind.ModuleDeclaration) {
-                    return true;
-                }
-                return areSameModule(<ModuleDeclaration>a.body, <ModuleDeclaration>b.body);
-            }
+    /** a and b have the same name, but they may not be mergeable. */
+    function shouldReallyMerge(a: Node, b: Node): boolean {
+        if (a.kind !== b.kind) {
+            return false;
+        }
+        switch (a.kind) {
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return hasModifier(a, ModifierFlags.Static) === hasModifier(b, ModifierFlags.Static);
+            case SyntaxKind.ModuleDeclaration:
+                return areSameModule(<ModuleDeclaration>a, <ModuleDeclaration>b);
+            default:
+                return true;
+        }
+    }
+
+    // We use 1 NavNode to represent 'A.B.C', but there are multiple source nodes.
+    // Only merge module nodes that have the same chain. Don't merge 'A.B.C' with 'A'!
+    function areSameModule(a: ModuleDeclaration, b: ModuleDeclaration): boolean {
+        return a.body.kind === b.body.kind && (a.body.kind !== SyntaxKind.ModuleDeclaration || areSameModule(<ModuleDeclaration>a.body, <ModuleDeclaration>b.body));
+    }
+
+    /** Merge source into target. Source should be thrown away after this is called. */
+    function merge(target: NavigationBarNode, source: NavigationBarNode): void {
+        target.additionalNodes = target.additionalNodes || [];
+        target.additionalNodes.push(source.node);
+        if (source.additionalNodes) {
+            target.additionalNodes.push(...source.additionalNodes);
         }
 
-        /** Merge source into target. Source should be thrown away after this is called. */
-        function merge(target: NavigationBarNode, source: NavigationBarNode): void {
-            target.additionalNodes = target.additionalNodes || [];
-            target.additionalNodes.push(source.node);
-            if (source.additionalNodes) {
-                target.additionalNodes.push(...source.additionalNodes);
-            }
-
-            target.children = concatenate(target.children, source.children);
-            if (target.children) {
-                mergeChildren(target.children);
-                sortChildren(target.children);
-            }
+        target.children = concatenate(target.children, source.children);
+        if (target.children) {
+            mergeChildren(target.children);
+            sortChildren(target.children);
         }
     }
 
@@ -357,15 +391,9 @@ namespace ts.NavigationBar {
         children.sort(compareChildren);
     }
 
-    function compareChildren(child1: NavigationBarNode, child2: NavigationBarNode): number {
-        const name1 = tryGetName(child1.node), name2 = tryGetName(child2.node);
-        if (name1 && name2) {
-            const cmp = ts.compareStringsCaseInsensitive(name1, name2);
-            return cmp !== 0 ? cmp : navigationBarNodeKind(child1) - navigationBarNodeKind(child2);
-        }
-        else {
-            return name1 ? 1 : name2 ? -1 : navigationBarNodeKind(child1) - navigationBarNodeKind(child2);
-        }
+    function compareChildren(child1: NavigationBarNode, child2: NavigationBarNode) {
+        return compareStringsCaseSensitiveUI(tryGetName(child1.node), tryGetName(child2.node))
+            || compareValues(navigationBarNodeKind(child1), navigationBarNodeKind(child2));
     }
 
     /**
@@ -380,7 +408,7 @@ namespace ts.NavigationBar {
 
         const declName = getNameOfDeclaration(<Declaration>node);
         if (declName) {
-            return getPropertyNameForPropertyNameNode(declName);
+            return unescapeLeadingUnderscores(getPropertyNameForPropertyNameNode(declName));
         }
         switch (node.kind) {
             case SyntaxKind.FunctionExpression:
@@ -450,7 +478,7 @@ namespace ts.NavigationBar {
                 if ((<VariableStatement>parentNode).declarationList.declarations.length > 0) {
                     const nameIdentifier = (<VariableStatement>parentNode).declarationList.declarations[0].name;
                     if (nameIdentifier.kind === SyntaxKind.Identifier) {
-                        return (<Identifier>nameIdentifier).text;
+                        return nameIdentifier.text;
                     }
                 }
             }
@@ -580,12 +608,12 @@ namespace ts.NavigationBar {
         // Otherwise, we need to aggregate each identifier to build up the qualified name.
         const result: string[] = [];
 
-        result.push(moduleDeclaration.name.text);
+        result.push(getTextOfIdentifierOrLiteral(moduleDeclaration.name));
 
         while (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
             moduleDeclaration = <ModuleDeclaration>moduleDeclaration.body;
 
-            result.push(moduleDeclaration.name.text);
+            result.push(getTextOfIdentifierOrLiteral(moduleDeclaration.name));
         }
 
         return result.join(".");
@@ -642,7 +670,14 @@ namespace ts.NavigationBar {
         }
     }
 
-    function isFunctionOrClassExpression(node: Node): boolean {
-        return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction || node.kind === SyntaxKind.ClassExpression;
+    function isFunctionOrClassExpression(node: Node): node is ArrowFunction | FunctionExpression | ClassExpression {
+        switch (node.kind) {
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ClassExpression:
+                return true;
+            default:
+                return false;
+        }
     }
 }

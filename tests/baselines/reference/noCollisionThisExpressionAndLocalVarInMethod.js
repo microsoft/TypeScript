@@ -21,7 +21,7 @@ class a {
 
 //// [noCollisionThisExpressionAndLocalVarInMethod.js]
 var _this = 2;
-var a = (function () {
+var a = /** @class */ (function () {
     function a() {
     }
     a.prototype.method1 = function () {

@@ -13,7 +13,7 @@ class A
 }
 
 //// [es5-amd.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A.prototype.B = function () {

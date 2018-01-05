@@ -1,0 +1,32 @@
+=== tests/cases/compiler/constDeclarationShadowedByVarDeclaration.ts ===
+// Error as declaration of var would cause a write to the const value
+var x = 0;
+>x : Symbol(x, Decl(constDeclarationShadowedByVarDeclaration.ts, 1, 3), Decl(constDeclarationShadowedByVarDeclaration.ts, 5, 7))
+{
+    const x = 0;
+>x : Symbol(x, Decl(constDeclarationShadowedByVarDeclaration.ts, 3, 9))
+
+    var x = 0;
+>x : Symbol(x, Decl(constDeclarationShadowedByVarDeclaration.ts, 1, 3), Decl(constDeclarationShadowedByVarDeclaration.ts, 5, 7))
+}
+
+
+var y = 0;
+>y : Symbol(y, Decl(constDeclarationShadowedByVarDeclaration.ts, 9, 3), Decl(constDeclarationShadowedByVarDeclaration.ts, 13, 11))
+{
+    const y = 0;
+>y : Symbol(y, Decl(constDeclarationShadowedByVarDeclaration.ts, 11, 9))
+    {
+        var y = 0;
+>y : Symbol(y, Decl(constDeclarationShadowedByVarDeclaration.ts, 9, 3), Decl(constDeclarationShadowedByVarDeclaration.ts, 13, 11))
+    }
+}
+
+
+{
+  const z = 0;
+>z : Symbol(z, Decl(constDeclarationShadowedByVarDeclaration.ts, 19, 7))
+
+  var z = 0
+>z : Symbol(z, Decl(constDeclarationShadowedByVarDeclaration.ts, 20, 5))
+}

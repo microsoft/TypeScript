@@ -1,0 +1,4 @@
+=== /a.ts ===
+import jsx from "./jsx";
+>jsx : Symbol(jsx, Decl(a.ts, 0, 6))
+

@@ -10,6 +10,7 @@ interface A {
 }
 
 //// [app.js]
+/// <reference types="lib"/>
 
 
 //// [app.d.ts]

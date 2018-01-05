@@ -8,6 +8,6 @@
 // @Filename: /js.js
 
 // @Filename: /a.ts
-import tsx from "./tsx";
-import jsx from "./jsx";
-import js from "./js";
+import tsx from "./tsx"; // Not allowed.
+import jsx from "./jsx"; // Not allowed.
+import js from "./js"; // OK because it's an untyped module.

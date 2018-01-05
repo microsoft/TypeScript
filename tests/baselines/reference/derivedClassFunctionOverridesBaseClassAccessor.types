@@ -1,0 +1,28 @@
+=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassFunctionOverridesBaseClassAccessor.ts ===
+class Base {
+>Base : Base
+
+    get x() {
+>x : number
+
+        return 1;
+>1 : 1
+    }
+    set x(v) {
+>x : number
+>v : number
+    }
+}
+
+// error
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    x() {
+>x : () => number
+
+        return 1;
+>1 : 1
+    }
+}

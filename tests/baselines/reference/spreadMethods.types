@@ -1,0 +1,131 @@
+=== tests/cases/conformance/types/spread/spreadMethods.ts ===
+class K { p = 12; m() { } }
+>K : K
+>p : number
+>12 : 12
+>m : () => void
+
+interface I { p: number, m(): void }
+>I : I
+>p : number
+>m : () => void
+
+let k = new K()
+>k : K
+>new K() : K
+>K : typeof K
+
+let sk = { ...k };
+>sk : { p: number; }
+>{ ...k } : { p: number; }
+>k : K
+
+let ssk = { ...k, ...k };
+>ssk : { p: number; }
+>{ ...k, ...k } : { p: number; }
+>k : K
+>k : K
+
+sk.p;
+>sk.p : number
+>sk : { p: number; }
+>p : number
+
+sk.m(); // error
+>sk.m() : any
+>sk.m : any
+>sk : { p: number; }
+>m : any
+
+ssk.p;
+>ssk.p : number
+>ssk : { p: number; }
+>p : number
+
+ssk.m(); // error
+>ssk.m() : any
+>ssk.m : any
+>ssk : { p: number; }
+>m : any
+
+let i: I = { p: 12, m() { } };
+>i : I
+>I : I
+>{ p: 12, m() { } } : { p: number; m(): void; }
+>p : number
+>12 : 12
+>m : () => void
+
+let si = { ...i };
+>si : { p: number; m(): void; }
+>{ ...i } : { p: number; m(): void; }
+>i : I
+
+let ssi = { ...i, ...i };
+>ssi : { p: number; m(): void; }
+>{ ...i, ...i } : { p: number; m(): void; }
+>i : I
+>i : I
+
+si.p;
+>si.p : number
+>si : { p: number; m(): void; }
+>p : number
+
+si.m(); // ok
+>si.m() : void
+>si.m : () => void
+>si : { p: number; m(): void; }
+>m : () => void
+
+ssi.p;
+>ssi.p : number
+>ssi : { p: number; m(): void; }
+>p : number
+
+ssi.m(); // ok
+>ssi.m() : void
+>ssi.m : () => void
+>ssi : { p: number; m(): void; }
+>m : () => void
+
+let o = { p: 12, m() { } };
+>o : { p: number; m(): void; }
+>{ p: 12, m() { } } : { p: number; m(): void; }
+>p : number
+>12 : 12
+>m : () => void
+
+let so = { ...o };
+>so : { p: number; m(): void; }
+>{ ...o } : { p: number; m(): void; }
+>o : { p: number; m(): void; }
+
+let sso = { ...o, ...o };
+>sso : { p: number; m(): void; }
+>{ ...o, ...o } : { p: number; m(): void; }
+>o : { p: number; m(): void; }
+>o : { p: number; m(): void; }
+
+so.p;
+>so.p : number
+>so : { p: number; m(): void; }
+>p : number
+
+so.m(); // ok
+>so.m() : void
+>so.m : () => void
+>so : { p: number; m(): void; }
+>m : () => void
+
+sso.p;
+>sso.p : number
+>sso : { p: number; m(): void; }
+>p : number
+
+sso.m(); // ok
+>sso.m() : void
+>sso.m : () => void
+>sso : { p: number; m(): void; }
+>m : () => void
+

@@ -10,7 +10,7 @@ var c = new C<number>();
 var r: string = c.x;
 
 //// [genericGetter.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "x", {

@@ -1,11 +1,7 @@
-tests/cases/conformance/jsx/file.tsx(15,14): error TS2605: JSX element type 'Element' is not a constructor function for JSX elements.
-  Property 'render' is missing in type 'Element'.
-tests/cases/conformance/jsx/file.tsx(15,15): error TS2453: The type argument for type parameter 'U' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-  Type argument candidate 'number' is not a valid type argument because it is not a supertype of candidate '"hello"'.
 tests/cases/conformance/jsx/file.tsx(16,42): error TS2339: Property 'prop1' does not exist on type 'IntrinsicAttributes & { prop: number; }'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
     import React = require('react')
     
     declare function Component<U>(l: U): JSX.Element;
@@ -21,12 +17,6 @@ tests/cases/conformance/jsx/file.tsx(16,42): error TS2339: Property 'prop1' does
         let a1 = <ComponentSpecific {...arg} ignore-prop="hi" />;  // U is number
         let a2 = <ComponentSpecific1 {...arg} ignore-prop={10} />;  // U is number
         let a3 = <ComponentSpecific {...arg} prop="hello" />;   // U is "hello"
-                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2605: JSX element type 'Element' is not a constructor function for JSX elements.
-!!! error TS2605:   Property 'render' is missing in type 'Element'.
-                  ~~~~~~~~~~~~~~~~~
-!!! error TS2453: The type argument for type parameter 'U' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-!!! error TS2453:   Type argument candidate 'number' is not a valid type argument because it is not a supertype of candidate '"hello"'.
         let a4 = <ComponentSpecific {...arg} prop1="hello" />;   // U is "hello"
                                              ~~~~~~~~~~~~~
 !!! error TS2339: Property 'prop1' does not exist on type 'IntrinsicAttributes & { prop: number; }'.

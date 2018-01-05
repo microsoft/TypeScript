@@ -18,7 +18,7 @@ class greeter {
 }
 
 //// [unusedPrivateMethodInClass4.js]
-var greeter = (function () {
+var greeter = /** @class */ (function () {
     function greeter() {
     }
     greeter.prototype.function1 = function () {

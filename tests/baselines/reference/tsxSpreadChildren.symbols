@@ -58,9 +58,9 @@ function TodoList({ todos }: TodoListProps) {
 >div : Symbol(JSX.IntrinsicElements, Decl(tsxSpreadChildren.tsx, 1, 22))
 
         {...todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>)}
->todos.map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>todos.map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >todos : Symbol(todos, Decl(tsxSpreadChildren.tsx, 18, 19))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >todo : Symbol(todo, Decl(tsxSpreadChildren.tsx, 20, 22))
 >Todo : Symbol(Todo, Decl(tsxSpreadChildren.tsx, 14, 1))
 >key : Symbol(key, Decl(tsxSpreadChildren.tsx, 20, 35))

@@ -4,12 +4,12 @@ tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(9,4): error TS
   Property 'doStuff' is missing in type '{ value: string; }'.
 tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(10,17): error TS2345: Argument of type '{ value: string; what: number; }' is not assignable to parameter of type 'I2'.
   Object literal may only specify known properties, and 'what' does not exist in type 'I2'.
-tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(11,4): error TS2345: Argument of type '{ toString: (s: any) => any; }' is not assignable to parameter of type 'I2'.
-  Property 'value' is missing in type '{ toString: (s: any) => any; }'.
-tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(12,4): error TS2345: Argument of type '{ toString: (s: string) => string; }' is not assignable to parameter of type 'I2'.
-  Property 'value' is missing in type '{ toString: (s: string) => string; }'.
-tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(13,4): error TS2345: Argument of type '{ value: string; toString: (s: any) => any; }' is not assignable to parameter of type 'I2'.
-  Property 'doStuff' is missing in type '{ value: string; toString: (s: any) => any; }'.
+tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(11,6): error TS2345: Argument of type '{ toString: (s: any) => any; }' is not assignable to parameter of type 'I2'.
+  Object literal may only specify known properties, and 'toString' does not exist in type 'I2'.
+tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(12,6): error TS2345: Argument of type '{ toString: (s: string) => string; }' is not assignable to parameter of type 'I2'.
+  Object literal may only specify known properties, and 'toString' does not exist in type 'I2'.
+tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(13,17): error TS2345: Argument of type '{ value: string; toString: (s: any) => any; }' is not assignable to parameter of type 'I2'.
+  Object literal may only specify known properties, and 'toString' does not exist in type 'I2'.
 
 
 ==== tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts (6 errors) ====
@@ -33,14 +33,14 @@ tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(13,4): error T
 !!! error TS2345: Argument of type '{ value: string; what: number; }' is not assignable to parameter of type 'I2'.
 !!! error TS2345:   Object literal may only specify known properties, and 'what' does not exist in type 'I2'.
     f2({ toString: (s) => s }) 
-       ~~~~~~~~~~~~~~~~~~~~~~
+         ~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ toString: (s: any) => any; }' is not assignable to parameter of type 'I2'.
-!!! error TS2345:   Property 'value' is missing in type '{ toString: (s: any) => any; }'.
+!!! error TS2345:   Object literal may only specify known properties, and 'toString' does not exist in type 'I2'.
     f2({ toString: (s: string) => s }) 
-       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ toString: (s: string) => string; }' is not assignable to parameter of type 'I2'.
-!!! error TS2345:   Property 'value' is missing in type '{ toString: (s: string) => string; }'.
+!!! error TS2345:   Object literal may only specify known properties, and 'toString' does not exist in type 'I2'.
     f2({ value: '', toString: (s) => s.uhhh }) 
-       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ value: string; toString: (s: any) => any; }' is not assignable to parameter of type 'I2'.
-!!! error TS2345:   Property 'doStuff' is missing in type '{ value: string; toString: (s: any) => any; }'.
+!!! error TS2345:   Object literal may only specify known properties, and 'toString' does not exist in type 'I2'.

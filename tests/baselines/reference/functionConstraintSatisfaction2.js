@@ -47,13 +47,13 @@ foo(1);
 foo(function () { }, 1);
 foo(1, function () { });
 function foo2(x) { return x; }
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
 var b;
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     return C2;

@@ -11,7 +11,7 @@ var o1 = {get Foo(){return 0;}, set Foo(val){}}; // ok - types agree (inference)
 var o2 = {get Foo(){return 0;}, set Foo(val:number){}}; // ok - types agree
 
 //// [gettersAndSettersTypesAgree.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "Foo", {

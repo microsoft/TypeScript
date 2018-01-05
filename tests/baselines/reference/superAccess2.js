@@ -35,14 +35,15 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var P = (function () {
+var _this = this;
+var P = /** @class */ (function () {
     function P() {
     }
     P.prototype.x = function () { };
     P.y = function () { };
     return P;
 }());
-var Q = (function (_super) {
+var Q = /** @class */ (function (_super) {
     __extends(Q, _super);
     // Super is not allowed in constructor args
     function Q(z, zz, zzz) {
@@ -64,6 +65,6 @@ var Q = (function (_super) {
         _super.x.call(this); // error
         _super.y.call(this);
     };
+    Q.yy = _super.; // error for static initializer accessing super
     return Q;
 }(P));
-Q.yy = _super.; // error for static initializer accessing super

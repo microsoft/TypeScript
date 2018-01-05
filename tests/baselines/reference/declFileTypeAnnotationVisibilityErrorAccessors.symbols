@@ -1,0 +1,181 @@
+=== tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts ===
+module m {
+>m : Symbol(m, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 0, 0))
+
+    class private1 {
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 0, 10))
+    }
+
+    export class public1 {
+>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 2, 5))
+    }
+
+    module m2 {
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 5, 5))
+
+        export class public2 {
+>public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 7, 15))
+        }
+    }
+
+    export class c {
+>c : Symbol(c, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 10, 5))
+
+        // getter with annotation
+        get foo1(): private1 {
+>foo1 : Symbol(c.foo1, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 12, 20))
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 0, 10))
+
+            return;
+        }
+
+        // getter without annotation
+        get foo2() {
+>foo2 : Symbol(c.foo2, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 16, 9))
+
+            return new private1();
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 0, 10))
+        }
+
+        // setter with annotation
+        set foo3(param: private1) {
+>foo3 : Symbol(c.foo3, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 21, 9))
+>param : Symbol(param, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 24, 17))
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 0, 10))
+        }
+
+        // Both - getter without annotation, setter with annotation
+        get foo4() {
+>foo4 : Symbol(c.foo4, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 25, 9), Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 30, 9))
+
+            return new private1();
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 0, 10))
+        }
+        set foo4(param: private1) {
+>foo4 : Symbol(c.foo4, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 25, 9), Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 30, 9))
+>param : Symbol(param, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 31, 17))
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 0, 10))
+        }
+
+        // Both - with annotation
+        get foo5(): private1 {
+>foo5 : Symbol(c.foo5, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 32, 9), Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 37, 9))
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 0, 10))
+
+            return;
+        }
+        set foo5(param: private1) {
+>foo5 : Symbol(c.foo5, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 32, 9), Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 37, 9))
+>param : Symbol(param, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 38, 17))
+>private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 0, 10))
+        }
+
+        // getter with annotation
+        get foo11(): public1 {
+>foo11 : Symbol(c.foo11, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 39, 9))
+>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 2, 5))
+
+            return;
+        }
+
+        // getter without annotation
+        get foo12() {
+>foo12 : Symbol(c.foo12, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 44, 9))
+
+            return new public1();
+>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 2, 5))
+        }
+
+        // setter with annotation
+        set foo13(param: public1) {
+>foo13 : Symbol(c.foo13, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 49, 9))
+>param : Symbol(param, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 52, 18))
+>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 2, 5))
+        }
+
+        // Both - getter without annotation, setter with annotation
+        get foo14() {
+>foo14 : Symbol(c.foo14, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 53, 9), Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 58, 9))
+
+            return new public1();
+>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 2, 5))
+        }
+        set foo14(param: public1) {
+>foo14 : Symbol(c.foo14, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 53, 9), Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 58, 9))
+>param : Symbol(param, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 59, 18))
+>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 2, 5))
+        }
+
+        // Both - with annotation
+        get foo15(): public1 {
+>foo15 : Symbol(c.foo15, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 60, 9), Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 65, 9))
+>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 2, 5))
+
+            return;
+        }
+        set foo15(param: public1) {
+>foo15 : Symbol(c.foo15, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 60, 9), Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 65, 9))
+>param : Symbol(param, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 66, 18))
+>public1 : Symbol(public1, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 2, 5))
+        }
+
+        // getter with annotation
+        get foo111(): m2.public2 {
+>foo111 : Symbol(c.foo111, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 67, 9))
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 5, 5))
+>public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 7, 15))
+
+            return;
+        }
+
+        // getter without annotation
+        get foo112() {
+>foo112 : Symbol(c.foo112, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 72, 9))
+
+            return new m2.public2();
+>m2.public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 7, 15))
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 5, 5))
+>public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 7, 15))
+        }
+
+        // setter with annotation
+        set foo113(param: m2.public2) {
+>foo113 : Symbol(c.foo113, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 77, 9))
+>param : Symbol(param, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 80, 19))
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 5, 5))
+>public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 7, 15))
+        }
+
+        // Both - getter without annotation, setter with annotation
+        get foo114() {
+>foo114 : Symbol(c.foo114, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 81, 9), Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 86, 9))
+
+            return new m2.public2();
+>m2.public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 7, 15))
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 5, 5))
+>public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 7, 15))
+        }
+        set foo114(param: m2.public2) {
+>foo114 : Symbol(c.foo114, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 81, 9), Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 86, 9))
+>param : Symbol(param, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 87, 19))
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 5, 5))
+>public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 7, 15))
+        }
+
+        // Both - with annotation
+        get foo115(): m2.public2 {
+>foo115 : Symbol(c.foo115, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 88, 9), Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 93, 9))
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 5, 5))
+>public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 7, 15))
+
+            return;
+        }
+        set foo115(param: m2.public2) {
+>foo115 : Symbol(c.foo115, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 88, 9), Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 93, 9))
+>param : Symbol(param, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 94, 19))
+>m2 : Symbol(m2, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 5, 5))
+>public2 : Symbol(m2.public2, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 7, 15))
+        }
+    }
+}
+

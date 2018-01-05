@@ -4,7 +4,7 @@ function foo() {}
 
 
 //// [classOverloadForFunction.js]
-var foo = (function () {
+var foo = /** @class */ (function () {
     function foo() {
     }
     return foo;

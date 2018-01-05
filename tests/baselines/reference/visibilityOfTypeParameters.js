@@ -8,7 +8,7 @@ export class MyClass {
 //// [visibilityOfTypeParameters.js]
 "use strict";
 exports.__esModule = true;
-var MyClass = (function () {
+var MyClass = /** @class */ (function () {
     function MyClass() {
     }
     MyClass.prototype.myMethod = function (val) {

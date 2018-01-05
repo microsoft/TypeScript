@@ -565,24 +565,24 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Shape = (function () {
+var Shape = /** @class */ (function () {
     function Shape() {
     }
     return Shape;
 }());
-var TaggedShape = (function (_super) {
+var TaggedShape = /** @class */ (function (_super) {
     __extends(TaggedShape, _super);
     function TaggedShape() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return TaggedShape;
 }(Shape));
-var Item = (function () {
+var Item = /** @class */ (function () {
     function Item() {
     }
     return Item;
 }());
-var Options = (function () {
+var Options = /** @class */ (function () {
     function Options() {
     }
     return Options;
@@ -615,7 +615,7 @@ function f13(foo, bar) {
     var y = getProperty(foo, "100"); // any
     var z = getProperty(foo, bar); // any
 }
-var Component = (function () {
+var Component = /** @class */ (function () {
     function Component() {
     }
     Component.prototype.getProperty = function (key) {
@@ -659,7 +659,7 @@ function f34(ts) {
     var tag1 = f33(ts, "tag");
     var tag2 = getProperty(ts, "tag");
 }
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
@@ -751,7 +751,7 @@ function f84() {
     var x1 = f83({ foo: { x: "hello" } }, "foo"); // string
     var x2 = f83({ bar: { x: 42 } }, "bar"); // number
 }
-var C1 = (function () {
+var C1 = /** @class */ (function () {
     function C1() {
     }
     C1.prototype.get = function (key) {
@@ -791,7 +791,7 @@ function f90(x1, x2, x3, x4) {
     x4.length;
 }
 // Repros from #12011
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base() {
     }
     Base.prototype.get = function (prop) {
@@ -802,7 +802,7 @@ var Base = (function () {
     };
     return Base;
 }());
-var Person = (function (_super) {
+var Person = /** @class */ (function (_super) {
     __extends(Person, _super);
     function Person(parts) {
         var _this = _super.call(this) || this;
@@ -814,7 +814,7 @@ var Person = (function (_super) {
     };
     return Person;
 }(Base));
-var OtherPerson = (function () {
+var OtherPerson = /** @class */ (function () {
     function OtherPerson(parts) {
         setProperty(this, "parts", parts);
     }
@@ -883,12 +883,12 @@ function updateIds2(obj, key, stringMap) {
     stringMap[x]; // Should be OK.
 }
 // Repro from #13604
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -899,7 +899,7 @@ var B = (function (_super) {
     return B;
 }(A));
 // Repro from #13749
-var Form = (function () {
+var Form = /** @class */ (function () {
     function Form() {
     }
     Form.prototype.set = function (prop, value) {
@@ -908,13 +908,13 @@ var Form = (function () {
     return Form;
 }());
 // Repro from #13787
-var SampleClass = (function () {
+var SampleClass = /** @class */ (function () {
     function SampleClass(props) {
         this.props = Object.freeze(props);
     }
     return SampleClass;
 }());
-var AnotherSampleClass = (function (_super) {
+var AnotherSampleClass = /** @class */ (function (_super) {
     __extends(AnotherSampleClass, _super);
     function AnotherSampleClass(props) {
         var _this = this;
@@ -1101,7 +1101,9 @@ declare type Handlers<T> = {
     [K in keyof T]: (t: T[K]) => void;
 };
 declare function on<T>(handlerHash: Handlers<T>): T;
-declare var hashOfEmpty1: {};
+declare var hashOfEmpty1: {
+    test: {};
+};
 declare var hashOfEmpty2: {
     test: boolean;
 };

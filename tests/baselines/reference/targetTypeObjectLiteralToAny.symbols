@@ -9,9 +9,9 @@ function suggest(){
 >result : Symbol(result, Decl(targetTypeObjectLiteralToAny.ts, 2, 4))
 					
 	TypeScriptKeywords.forEach(function(keyword) {						
->TypeScriptKeywords.forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>TypeScriptKeywords.forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
 >TypeScriptKeywords : Symbol(TypeScriptKeywords, Decl(targetTypeObjectLiteralToAny.ts, 1, 4))
->forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
 >keyword : Symbol(keyword, Decl(targetTypeObjectLiteralToAny.ts, 4, 37))
 
 		result.push({text:keyword, type:"keyword"}); // this should not cause a crash - push should be typed to any

@@ -91,7 +91,7 @@ class C7_public {
 //// [privacyGloGetter.js]
 var m1;
 (function (m1) {
-    var C1_public = (function () {
+    var C1_public = /** @class */ (function () {
         function C1_public() {
         }
         C1_public.prototype.f1 = function () {
@@ -99,12 +99,12 @@ var m1;
         return C1_public;
     }());
     m1.C1_public = C1_public;
-    var C2_private = (function () {
+    var C2_private = /** @class */ (function () {
         function C2_private() {
         }
         return C2_private;
     }());
-    var C3_public = (function () {
+    var C3_public = /** @class */ (function () {
         function C3_public() {
         }
         Object.defineProperty(C3_public.prototype, "p1_private", {
@@ -146,7 +146,7 @@ var m1;
         return C3_public;
     }());
     m1.C3_public = C3_public;
-    var C4_private = (function () {
+    var C4_private = /** @class */ (function () {
         function C4_private() {
         }
         Object.defineProperty(C4_private.prototype, "p1_private", {
@@ -188,12 +188,12 @@ var m1;
         return C4_private;
     }());
 })(m1 || (m1 = {}));
-var C6_public = (function () {
+var C6_public = /** @class */ (function () {
     function C6_public() {
     }
     return C6_public;
 }());
-var C7_public = (function () {
+var C7_public = /** @class */ (function () {
     function C7_public() {
     }
     Object.defineProperty(C7_public.prototype, "p1_private", {

@@ -1,0 +1,14 @@
+=== tests/cases/compiler/conflictMarkerDiff3Trivia1.ts ===
+class C {
+>C : Symbol(C, Decl(conflictMarkerDiff3Trivia1.ts, 0, 0))
+
+<<<<<<< HEAD
+    v = 1;
+>v : Symbol(C.v, Decl(conflictMarkerDiff3Trivia1.ts, 0, 9))
+
+||||||| merged common ancestors
+    v = 3;
+=======
+    v = 2;
+>>>>>>> Branch-a
+}

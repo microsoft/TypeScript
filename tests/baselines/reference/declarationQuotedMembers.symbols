@@ -1,0 +1,9 @@
+=== tests/cases/compiler/declarationQuotedMembers.ts ===
+export declare const mapped: { [K in 'a-b-c']: number }
+>mapped : Symbol(mapped, Decl(declarationQuotedMembers.ts, 0, 20))
+>K : Symbol(K, Decl(declarationQuotedMembers.ts, 0, 32))
+
+export const example = mapped;
+>example : Symbol(example, Decl(declarationQuotedMembers.ts, 1, 12))
+>mapped : Symbol(mapped, Decl(declarationQuotedMembers.ts, 0, 20))
+

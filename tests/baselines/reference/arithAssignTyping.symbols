@@ -1,0 +1,40 @@
+=== tests/cases/compiler/arithAssignTyping.ts ===
+class f { }
+>f : Symbol(f, Decl(arithAssignTyping.ts, 0, 0))
+
+f += ''; // error
+>f : Symbol(f, Decl(arithAssignTyping.ts, 0, 0))
+
+f += 1; // error
+>f : Symbol(f, Decl(arithAssignTyping.ts, 0, 0))
+
+f -= 1; // error
+>f : Symbol(f, Decl(arithAssignTyping.ts, 0, 0))
+
+f *= 1; // error
+>f : Symbol(f, Decl(arithAssignTyping.ts, 0, 0))
+
+f /= 1; // error
+>f : Symbol(f, Decl(arithAssignTyping.ts, 0, 0))
+
+f %= 1; // error
+>f : Symbol(f, Decl(arithAssignTyping.ts, 0, 0))
+
+f &= 1; // error
+>f : Symbol(f, Decl(arithAssignTyping.ts, 0, 0))
+
+f |= 1; // error
+>f : Symbol(f, Decl(arithAssignTyping.ts, 0, 0))
+
+f <<= 1; // error
+>f : Symbol(f, Decl(arithAssignTyping.ts, 0, 0))
+
+f >>= 1; // error
+>f : Symbol(f, Decl(arithAssignTyping.ts, 0, 0))
+
+f >>>= 1; // error
+>f : Symbol(f, Decl(arithAssignTyping.ts, 0, 0))
+
+f ^= 1; // error
+>f : Symbol(f, Decl(arithAssignTyping.ts, 0, 0))
+

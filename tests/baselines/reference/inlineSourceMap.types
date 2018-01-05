@@ -1,0 +1,12 @@
+=== tests/cases/compiler/inlineSourceMap.ts ===
+var x = 0;
+>x : number
+>0 : 0
+
+console.log(x);
+>console.log(x) : any
+>console.log : any
+>console : any
+>log : any
+>x : number
+

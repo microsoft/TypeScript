@@ -2,6 +2,7 @@
 // @jsx: preserve
 // @module: amd
 // @noLib: true
+// @skipLibCheck: true
 // @libFiles: react.d.ts,lib.d.ts
 
 import React = require('react')
@@ -38,10 +39,10 @@ declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JS
 
 // OK
 const e1 = <TestingOptional />
-const e2 = <TestingOptional extra-prop/>
 const e3 = <TestingOptional y1="hello"/>
 const e4 = <TestingOptional y1="hello" y2={1000} />
 const e5 = <TestingOptional y1 y3/>
 const e6 = <TestingOptional y1 y3 y2={10} />
+const e2 = <TestingOptional y1 y3 extra-prop/>
 
 

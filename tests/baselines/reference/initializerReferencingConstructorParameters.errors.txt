@@ -2,7 +2,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencin
 tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(5,15): error TS2304: Cannot find name 'x'.
 tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(10,9): error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
 tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(11,15): error TS2304: Cannot find name 'x'.
-tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(17,15): error TS1003: Identifier expected.
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(17,15): error TS2304: Cannot find name 'this'.
 tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(23,9): error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
 
 
@@ -33,7 +33,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencin
         a = this.x; // ok
         b: typeof this.x; // error
                   ~~~~
-!!! error TS1003: Identifier expected.
+!!! error TS2304: Cannot find name 'this'.
         constructor(public x) { }
     }
     

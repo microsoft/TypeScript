@@ -3,7 +3,7 @@
 //// class Foo {
 ////     constructor(public [|{| "isWriteAccess": true, "isDefinition": true |}publicParam|]: number) {
 ////         let localPublic = [|publicParam|];
-////         this.[|publicParam|] += 10;
+////         this.[|{| "isWriteAccess": true |}publicParam|] += 10;
 ////     }
 //// }
 

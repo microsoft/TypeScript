@@ -4,87 +4,137 @@ namespace ts.server {
 
     /* @internal */
     export class TextStorage {
+        /**
+         * Generated only on demand (based on edits, or information requested)
+         * The property text is set to undefined when edits happen on the cache
+         */
         private svc: ScriptVersionCache | undefined;
         private svcVersion = 0;
 
+        /**
+         * Stores the text when there are no changes to the script version cache
+         * The script version cache is generated on demand and text is still retained.
+         * Only on edits to the script version cache, the text will be set to undefined
+         */
         private text: string;
+        /**
+         * Line map for the text when there is no script version cache present
+         */
         private lineMap: number[];
         private textVersion = 0;
+
+        /**
+         * True if the text is for the file thats open in the editor
+         */
+        public isOpen: boolean;
+        /**
+         * True if the text present is the text from the file on the disk
+         */
+        private ownFileText: boolean;
+        /**
+         * True when reloading contents of file from the disk is pending
+         */
+        private pendingReloadFromDisk: boolean;
 
         constructor(private readonly host: ServerHost, private readonly fileName: NormalizedPath) {
         }
 
         public getVersion() {
             return this.svc
-                ? `SVC-${this.svcVersion}-${this.svc.getSnapshot().version}`
+                ? `SVC-${this.svcVersion}-${this.svc.getSnapshotVersion()}`
                 : `Text-${this.textVersion}`;
         }
 
-        public hasScriptVersionCache() {
+        public hasScriptVersionCache_TestOnly() {
             return this.svc !== undefined;
         }
 
-        public useScriptVersionCache(newText?: string) {
-            this.switchToScriptVersionCache(newText);
+        public useScriptVersionCache_TestOnly() {
+            this.switchToScriptVersionCache();
         }
 
         public useText(newText?: string) {
             this.svc = undefined;
-            this.setText(newText);
+            this.text = newText;
+            this.lineMap = undefined;
+            this.textVersion++;
         }
 
         public edit(start: number, end: number, newText: string) {
             this.switchToScriptVersionCache().edit(start, end - start, newText);
+            this.ownFileText = false;
+            this.text = undefined;
+            this.lineMap = undefined;
         }
 
-        public reload(text: string) {
-            if (this.svc) {
-                this.svc.reload(text);
-            }
-            else {
-                this.setText(text);
+        /**
+         * Set the contents as newText
+         * returns true if text changed
+         */
+        public reload(newText: string) {
+            Debug.assert(newText !== undefined);
+
+            // Reload always has fresh content
+            this.pendingReloadFromDisk = false;
+
+            // If text changed set the text
+            // This also ensures that if we had switched to version cache,
+            // we are switching back to text.
+            // The change to version cache will happen when needed
+            // Thus avoiding the computation if there are no changes
+            if (this.text !== newText) {
+                this.useText(newText);
+                // We cant guarantee new text is own file text
+                this.ownFileText = false;
+                return true;
             }
         }
 
-        public reloadFromFile(tempFileName?: string) {
-            if (this.svc || (tempFileName !== this.fileName)) {
-                this.reload(this.getFileText(tempFileName));
+        /**
+         * Reads the contents from tempFile(if supplied) or own file and sets it as contents
+         * returns true if text changed
+         */
+        public reloadWithFileText(tempFileName?: string) {
+            const reloaded = this.reload(this.getFileText(tempFileName));
+            this.ownFileText = !tempFileName || tempFileName === this.fileName;
+            return reloaded;
+        }
+
+        /**
+         * Reloads the contents from the file if there is no pending reload from disk or the contents of file are same as file text
+         * returns true if text changed
+         */
+        public reloadFromDisk() {
+            if (!this.pendingReloadFromDisk && !this.ownFileText) {
+                return this.reloadWithFileText();
             }
-            else {
-                this.setText(undefined);
-            }
+            return false;
+        }
+
+        public delayReloadFromFileIntoText() {
+            this.pendingReloadFromDisk = true;
         }
 
         public getSnapshot(): IScriptSnapshot {
-            return this.svc
+            return this.useScriptVersionCacheIfValidOrOpen()
                 ? this.svc.getSnapshot()
                 : ScriptSnapshot.fromString(this.getOrLoadText());
         }
 
-        public getLineInfo(line: number) {
-            return this.switchToScriptVersionCache().getSnapshot().index.lineNumberToInfo(line);
+        public getLineInfo(line: number): AbsolutePositionAndLineText {
+            return this.switchToScriptVersionCache().getLineInfo(line);
         }
         /**
          *  @param line 0 based index
          */
-        lineToTextSpan(line: number) {
-            if (!this.svc) {
+        lineToTextSpan(line: number): TextSpan {
+            if (!this.useScriptVersionCacheIfValidOrOpen()) {
                 const lineMap = this.getLineMap();
                 const start = lineMap[line]; // -1 since line is 1-based
                 const end = line + 1 < lineMap.length ? lineMap[line + 1] : this.text.length;
-                return ts.createTextSpanFromBounds(start, end);
+                return createTextSpanFromBounds(start, end);
             }
-            const index = this.svc.getSnapshot().index;
-            const lineInfo = index.lineNumberToInfo(line + 1);
-            let len: number;
-            if (lineInfo.leaf) {
-                len = lineInfo.leaf.text.length;
-            }
-            else {
-                const nextLineInfo = index.lineNumberToInfo(line + 2);
-                len = nextLineInfo.offset - lineInfo.offset;
-            }
-            return ts.createTextSpan(lineInfo.offset, len);
+            return this.svc.lineToTextSpan(line);
         }
 
         /**
@@ -92,93 +142,87 @@ namespace ts.server {
          * @param offset 1 based index
          */
         lineOffsetToPosition(line: number, offset: number): number {
-            if (!this.svc) {
-                return computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1);
+            if (!this.useScriptVersionCacheIfValidOrOpen()) {
+                return computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1, this.text);
             }
-            const index = this.svc.getSnapshot().index;
 
-            const lineInfo = index.lineNumberToInfo(line);
             // TODO: assert this offset is actually on the line
-            return (lineInfo.offset + offset - 1);
+            return this.svc.lineOffsetToPosition(line, offset);
         }
 
-        /**
-         * @param line 1-based index
-         * @param offset 1-based index
-         */
-        positionToLineOffset(position: number): ILineInfo {
-            if (!this.svc) {
+        positionToLineOffset(position: number): protocol.Location {
+            if (!this.useScriptVersionCacheIfValidOrOpen()) {
                 const { line, character } = computeLineAndCharacterOfPosition(this.getLineMap(), position);
                 return { line: line + 1, offset: character + 1 };
             }
-            const index = this.svc.getSnapshot().index;
-            const lineOffset = index.charOffsetToLineNumberAndPos(position);
-            return { line: lineOffset.line, offset: lineOffset.offset + 1 };
+            return this.svc.positionToLineOffset(position);
         }
 
         private getFileText(tempFileName?: string) {
             return this.host.readFile(tempFileName || this.fileName) || "";
         }
 
-        private ensureNoScriptVersionCache() {
-            Debug.assert(!this.svc, "ScriptVersionCache should not be set");
-        }
-
-        private switchToScriptVersionCache(newText?: string): ScriptVersionCache {
-            if (!this.svc) {
-                this.svc = ScriptVersionCache.fromString(this.host, newText !== undefined ? newText : this.getOrLoadText());
+        private switchToScriptVersionCache(): ScriptVersionCache {
+            if (!this.svc || this.pendingReloadFromDisk) {
+                this.svc = ScriptVersionCache.fromString(this.getOrLoadText());
                 this.svcVersion++;
-                this.text = undefined;
             }
             return this.svc;
         }
 
+        private useScriptVersionCacheIfValidOrOpen(): ScriptVersionCache | undefined {
+            // If this is open script, use the cache
+            if (this.isOpen) {
+                return this.switchToScriptVersionCache();
+            }
+
+            // Else if the svc is uptodate with the text, we are good
+            return !this.pendingReloadFromDisk && this.svc;
+        }
+
         private getOrLoadText() {
-            this.ensureNoScriptVersionCache();
-            if (this.text === undefined) {
-                this.setText(this.getFileText());
+            if (this.text === undefined || this.pendingReloadFromDisk) {
+                Debug.assert(!this.svc || this.pendingReloadFromDisk, "ScriptVersionCache should not be set when reloading from disk");
+                this.reloadWithFileText();
             }
             return this.text;
         }
 
         private getLineMap() {
-            this.ensureNoScriptVersionCache();
+            Debug.assert(!this.svc, "ScriptVersionCache should not be set");
             return this.lineMap || (this.lineMap = computeLineStarts(this.getOrLoadText()));
-        }
-
-        private setText(newText: string) {
-            this.ensureNoScriptVersionCache();
-            if (newText === undefined || this.text !== newText) {
-                this.text = newText;
-                this.lineMap = undefined;
-                this.textVersion++;
-            }
         }
     }
 
+    /*@internal*/
+    export function isDynamicFileName(fileName: NormalizedPath) {
+        return getBaseFileName(fileName)[0] === "^";
+    }
 
     export class ScriptInfo {
         /**
          * All projects that include this file
          */
         readonly containingProjects: Project[] = [];
-        private formatCodeSettings: ts.FormatCodeSettings;
-        readonly path: Path;
+        private formatCodeSettings: FormatCodeSettings;
 
-        private fileWatcher: FileWatcher;
+        /* @internal */
+        fileWatcher: FileWatcher;
         private textStorage: TextStorage;
 
-        private isOpen: boolean;
+        /*@internal*/
+        readonly isDynamic: boolean;
 
         constructor(
             private readonly host: ServerHost,
             readonly fileName: NormalizedPath,
             readonly scriptKind: ScriptKind,
-            public hasMixedContent = false) {
+            public readonly hasMixedContent: boolean,
+            readonly path: Path) {
+            this.isDynamic = isDynamicFileName(fileName);
 
-            this.path = toPath(fileName, host.getCurrentDirectory(), createGetCanonicalFileName(host.useCaseSensitiveFileNames));
             this.textStorage = new TextStorage(host, fileName);
-            if (hasMixedContent) {
+            if (hasMixedContent || this.isDynamic) {
                 this.textStorage.reload("");
             }
             this.scriptKind = scriptKind
@@ -186,20 +230,34 @@ namespace ts.server {
                 : getScriptKindFromFileName(fileName);
         }
 
+        /*@internal*/
+        public isDynamicOrHasMixedContent() {
+            return this.hasMixedContent || this.isDynamic;
+        }
+
         public isScriptOpen() {
-            return this.isOpen;
+            return this.textStorage.isOpen;
         }
 
         public open(newText: string) {
-            this.isOpen = true;
-            this.textStorage.useScriptVersionCache(newText);
-            this.markContainingProjectsAsDirty();
+            this.textStorage.isOpen = true;
+            if (newText !== undefined &&
+                this.textStorage.reload(newText)) {
+                // reload new contents only if the existing contents changed
+                this.markContainingProjectsAsDirty();
+            }
         }
 
-        public close() {
-            this.isOpen = false;
-            this.textStorage.useText(this.hasMixedContent ? "" : undefined);
-            this.markContainingProjectsAsDirty();
+        public close(fileExists = true) {
+            this.textStorage.isOpen = false;
+            if (this.isDynamicOrHasMixedContent() || !fileExists) {
+                if (this.textStorage.reload("")) {
+                    this.markContainingProjectsAsDirty();
+                }
+            }
+            else if (this.textStorage.reloadFromDisk()) {
+                this.markContainingProjectsAsDirty();
+            }
         }
 
         public getSnapshot() {
@@ -247,17 +305,26 @@ namespace ts.server {
                     }
                     break;
                 default:
-                    removeItemFromSet(this.containingProjects, project);
+                    unorderedRemoveItem(this.containingProjects, project);
                     break;
             }
         }
 
         detachAllProjects() {
             for (const p of this.containingProjects) {
+                if (p.projectKind === ProjectKind.Configured) {
+                    (p.directoryStructureHost as CachedDirectoryStructureHost).addOrDeleteFile(this.fileName, this.path, FileWatcherEventKind.Deleted);
+                }
+                const isInfoRoot = p.isRoot(this);
                 // detach is unnecessary since we'll clean the list of containing projects anyways
-                p.removeFile(this, /*detachFromProjects*/ false);
+                p.removeFile(this, /*fileExists*/ false, /*detachFromProjects*/ false);
+                // If the info was for the external or configured project's root,
+                // add missing file as the root
+                if (isInfoRoot && p.projectKind !== ProjectKind.Inferred) {
+                    p.addMissingFileRoot(this.fileName);
+                }
             }
-            this.containingProjects.length = 0;
+            clear(this.containingProjects);
         }
 
         getDefaultProject() {
@@ -298,25 +365,8 @@ namespace ts.server {
             }
         }
 
-        setWatcher(watcher: FileWatcher): void {
-            this.stopWatcher();
-            this.fileWatcher = watcher;
-        }
-
-        stopWatcher() {
-            if (this.fileWatcher) {
-                this.fileWatcher.close();
-                this.fileWatcher = undefined;
-            }
-        }
-
         getLatestVersion() {
             return this.textStorage.getVersion();
-        }
-
-        reload(script: string) {
-            this.textStorage.reload(script);
-            this.markContainingProjectsAsDirty();
         }
 
         saveTo(fileName: string) {
@@ -324,17 +374,27 @@ namespace ts.server {
             this.host.writeFile(fileName, snap.getText(0, snap.getLength()));
         }
 
+        /*@internal*/
+        delayReloadNonMixedContentFile() {
+            Debug.assert(!this.isDynamicOrHasMixedContent());
+            this.textStorage.delayReloadFromFileIntoText();
+            this.markContainingProjectsAsDirty();
+        }
+
         reloadFromFile(tempFileName?: NormalizedPath) {
-            if (this.hasMixedContent) {
-                this.reload("");
+            if (this.isDynamicOrHasMixedContent()) {
+                this.textStorage.reload("");
+                this.markContainingProjectsAsDirty();
             }
             else {
-                this.textStorage.reloadFromFile(tempFileName);
-                this.markContainingProjectsAsDirty();
+                if (this.textStorage.reloadWithFileText(tempFileName)) {
+                    this.markContainingProjectsAsDirty();
+                }
             }
         }
 
-        getLineInfo(line: number) {
+        /*@internal*/
+        getLineInfo(line: number): AbsolutePositionAndLineText {
             return this.textStorage.getLineInfo(line);
         }
 
@@ -347,6 +407,10 @@ namespace ts.server {
             for (const p of this.containingProjects) {
                 p.markAsDirty();
             }
+        }
+
+        isOrphan() {
+            return this.containingProjects.length === 0;
         }
 
         /**
@@ -364,11 +428,7 @@ namespace ts.server {
             return this.textStorage.lineOffsetToPosition(line, offset);
         }
 
-        /**
-         * @param line 1-based index
-         * @param offset 1-based index
-         */
-        positionToLineOffset(position: number): ILineInfo {
+        positionToLineOffset(position: number): protocol.Location {
             return this.textStorage.positionToLineOffset(position);
         }
 

@@ -1,0 +1,6 @@
+=== tests/cases/compiler/contextualTyping5.ts ===
+class foo { public bar:{id:number;} = { }; }
+>foo : Symbol(foo, Decl(contextualTyping5.ts, 0, 0))
+>bar : Symbol(foo.bar, Decl(contextualTyping5.ts, 0, 11))
+>id : Symbol(id, Decl(contextualTyping5.ts, 0, 24))
+

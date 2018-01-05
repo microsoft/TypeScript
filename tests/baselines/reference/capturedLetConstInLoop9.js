@@ -164,7 +164,7 @@ var _loop_1 = function (x) {
     while (1 == 1) {
         _loop_2();
     }
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         A.prototype.m = function () {
@@ -271,7 +271,7 @@ function foo2() {
         }
     }
 }
-var C = (function () {
+var C = /** @class */ (function () {
     function C(N) {
         this.N = N;
     }

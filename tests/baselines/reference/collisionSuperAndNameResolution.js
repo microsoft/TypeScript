@@ -24,12 +24,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var console;
 var _super = 10; // No error
-var base = (function () {
+var base = /** @class */ (function () {
     function base() {
     }
     return base;
 }());
-var Foo = (function (_super) {
+var Foo = /** @class */ (function (_super) {
     __extends(Foo, _super);
     function Foo() {
         return _super !== null && _super.apply(this, arguments) || this;

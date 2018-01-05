@@ -1,0 +1,89 @@
+=== tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts ===
+class Foo {
+>Foo : Foo
+
+     constructor(public x: number) { }
+>x : number
+}
+
+class Bar {
+>Bar : Bar
+
+    public constructor(public x: number) { }
+>x : number
+}
+
+class Baz {
+>Baz : Baz
+
+    protected constructor(public x: number) { }
+>x : number
+}
+
+class Qux {
+>Qux : Qux
+
+     private constructor(public x: number) { }
+>x : number
+}
+
+// b is public
+let a = Foo;
+>a : typeof Foo
+>Foo : typeof Foo
+
+a = Bar;
+>a = Bar : typeof Bar
+>a : typeof Foo
+>Bar : typeof Bar
+
+a = Baz; // error Baz is protected
+>a = Baz : typeof Baz
+>a : typeof Foo
+>Baz : typeof Baz
+
+a = Qux; // error Qux is private
+>a = Qux : typeof Qux
+>a : typeof Foo
+>Qux : typeof Qux
+
+// b is protected
+let b = Baz;
+>b : typeof Baz
+>Baz : typeof Baz
+
+b = Foo;
+>b = Foo : typeof Foo
+>b : typeof Baz
+>Foo : typeof Foo
+
+b = Bar;
+>b = Bar : typeof Bar
+>b : typeof Baz
+>Bar : typeof Bar
+
+b = Qux; // error Qux is private
+>b = Qux : typeof Qux
+>b : typeof Baz
+>Qux : typeof Qux
+
+// c is private
+let c = Qux;
+>c : typeof Qux
+>Qux : typeof Qux
+
+c = Foo;
+>c = Foo : typeof Foo
+>c : typeof Qux
+>Foo : typeof Foo
+
+c = Bar;
+>c = Bar : typeof Bar
+>c : typeof Qux
+>Bar : typeof Bar
+
+c = Baz;
+>c = Baz : typeof Baz
+>c : typeof Qux
+>Baz : typeof Baz
+

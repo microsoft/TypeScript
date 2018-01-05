@@ -18,7 +18,7 @@ declare module "./a" {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         A.prototype.getF = function () { return this._f; };

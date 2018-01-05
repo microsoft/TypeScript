@@ -1,0 +1,362 @@
+=== tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts ===
+class Base {
+>Base : Symbol(Base, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 0))
+
+    protected x: string;
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+
+    method() {
+>method : Symbol(Base.method, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 1, 24))
+
+        class A {
+>A : Symbol(A, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 2, 14))
+
+            methoda() {
+>methoda : Symbol(A.methoda, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 3, 17))
+
+                var b: Base;
+>b : Symbol(b, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 5, 19))
+>Base : Symbol(Base, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 0))
+
+                var d1: Derived1;
+>d1 : Symbol(d1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 6, 19))
+>Derived1 : Symbol(Derived1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 19, 1))
+
+                var d2: Derived2;
+>d2 : Symbol(d2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 7, 19))
+>Derived2 : Symbol(Derived2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 39, 1))
+
+                var d3: Derived3;
+>d3 : Symbol(d3, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 8, 19))
+>Derived3 : Symbol(Derived3, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 59, 1))
+
+                var d4: Derived4;
+>d4 : Symbol(d4, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 9, 19))
+>Derived4 : Symbol(Derived4, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 80, 1))
+
+                b.x;            // OK, accessed within their declaring class
+>b.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>b : Symbol(b, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 5, 19))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+
+                d1.x;           // OK, accessed within their declaring class
+>d1.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>d1 : Symbol(d1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 6, 19))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+
+                d2.x;           // OK, accessed within their declaring class
+>d2.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>d2 : Symbol(d2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 7, 19))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+
+                d3.x;           // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+>d3.x : Symbol(Derived3.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 61, 33))
+>d3 : Symbol(d3, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 8, 19))
+>x : Symbol(Derived3.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 61, 33))
+
+                d4.x;           // OK, accessed within their declaring class
+>d4.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>d4 : Symbol(d4, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 9, 19))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+            }
+        }
+    }
+}
+
+class Derived1 extends Base {
+>Derived1 : Symbol(Derived1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 19, 1))
+>Base : Symbol(Base, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 0))
+
+    method1() {
+>method1 : Symbol(Derived1.method1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 21, 29))
+
+        class B {
+>B : Symbol(B, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 22, 15))
+
+            method1b() {
+>method1b : Symbol(B.method1b, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 23, 17))
+
+                var b: Base;
+>b : Symbol(b, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 25, 19))
+>Base : Symbol(Base, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 0))
+
+                var d1: Derived1;
+>d1 : Symbol(d1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 26, 19))
+>Derived1 : Symbol(Derived1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 19, 1))
+
+                var d2: Derived2;
+>d2 : Symbol(d2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 27, 19))
+>Derived2 : Symbol(Derived2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 39, 1))
+
+                var d3: Derived3;
+>d3 : Symbol(d3, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 28, 19))
+>Derived3 : Symbol(Derived3, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 59, 1))
+
+                var d4: Derived4;
+>d4 : Symbol(d4, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 29, 19))
+>Derived4 : Symbol(Derived4, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 80, 1))
+
+                b.x;            // Error, isn't accessed through an instance of the enclosing class
+>b.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>b : Symbol(b, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 25, 19))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+
+                d1.x;           // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
+>d1.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>d1 : Symbol(d1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 26, 19))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+
+                d2.x;           // Error, isn't accessed through an instance of the enclosing class
+>d2.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>d2 : Symbol(d2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 27, 19))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+
+                d3.x;           // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+>d3.x : Symbol(Derived3.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 61, 33))
+>d3 : Symbol(d3, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 28, 19))
+>x : Symbol(Derived3.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 61, 33))
+
+                d4.x;           // Error, isn't accessed through an instance of the enclosing class
+>d4.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>d4 : Symbol(d4, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 29, 19))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+            }
+        }
+    }
+}
+
+class Derived2 extends Base {
+>Derived2 : Symbol(Derived2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 39, 1))
+>Base : Symbol(Base, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 0))
+
+    method2() {
+>method2 : Symbol(Derived2.method2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 41, 29))
+
+        class C {
+>C : Symbol(C, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 42, 15))
+
+            method2c() {
+>method2c : Symbol(C.method2c, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 43, 17))
+
+                var b: Base;
+>b : Symbol(b, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 45, 19))
+>Base : Symbol(Base, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 0))
+
+                var d1: Derived1;
+>d1 : Symbol(d1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 46, 19))
+>Derived1 : Symbol(Derived1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 19, 1))
+
+                var d2: Derived2;
+>d2 : Symbol(d2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 47, 19))
+>Derived2 : Symbol(Derived2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 39, 1))
+
+                var d3: Derived3;
+>d3 : Symbol(d3, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 48, 19))
+>Derived3 : Symbol(Derived3, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 59, 1))
+
+                var d4: Derived4;
+>d4 : Symbol(d4, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 49, 19))
+>Derived4 : Symbol(Derived4, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 80, 1))
+
+                b.x;            // Error, isn't accessed through an instance of the enclosing class
+>b.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>b : Symbol(b, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 45, 19))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+
+                d1.x;           // Error, isn't accessed through an instance of the enclosing class
+>d1.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>d1 : Symbol(d1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 46, 19))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+
+                d2.x;           // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
+>d2.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>d2 : Symbol(d2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 47, 19))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+
+                d3.x;           // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+>d3.x : Symbol(Derived3.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 61, 33))
+>d3 : Symbol(d3, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 48, 19))
+>x : Symbol(Derived3.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 61, 33))
+
+                d4.x;           // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class or one of its subclasses
+>d4.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>d4 : Symbol(d4, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 49, 19))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+            }
+        }
+    }
+}
+
+class Derived3 extends Derived1 {
+>Derived3 : Symbol(Derived3, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 59, 1))
+>Derived1 : Symbol(Derived1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 19, 1))
+
+    protected x: string;
+>x : Symbol(Derived3.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 61, 33))
+
+    method3() {
+>method3 : Symbol(Derived3.method3, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 62, 24))
+
+        class D {
+>D : Symbol(D, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 63, 15))
+
+            method3d() {
+>method3d : Symbol(D.method3d, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 64, 17))
+
+                var b: Base;
+>b : Symbol(b, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 66, 19))
+>Base : Symbol(Base, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 0))
+
+                var d1: Derived1;
+>d1 : Symbol(d1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 67, 19))
+>Derived1 : Symbol(Derived1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 19, 1))
+
+                var d2: Derived2;
+>d2 : Symbol(d2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 68, 19))
+>Derived2 : Symbol(Derived2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 39, 1))
+
+                var d3: Derived3;
+>d3 : Symbol(d3, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 69, 19))
+>Derived3 : Symbol(Derived3, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 59, 1))
+
+                var d4: Derived4;
+>d4 : Symbol(d4, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 70, 19))
+>Derived4 : Symbol(Derived4, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 80, 1))
+
+                b.x;            // Error, isn't accessed through an instance of the enclosing class
+>b.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>b : Symbol(b, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 66, 19))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+
+                d1.x;           // Error, isn't accessed through an instance of the enclosing class
+>d1.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>d1 : Symbol(d1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 67, 19))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+
+                d2.x;           // Error, isn't accessed through an instance of the enclosing class
+>d2.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>d2 : Symbol(d2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 68, 19))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+
+                d3.x;           // OK, accessed within their declaring class
+>d3.x : Symbol(Derived3.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 61, 33))
+>d3 : Symbol(d3, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 69, 19))
+>x : Symbol(Derived3.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 61, 33))
+
+                d4.x;           // Error, isn't accessed through an instance of the enclosing class
+>d4.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>d4 : Symbol(d4, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 70, 19))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+            }
+        }
+    }
+}
+
+class Derived4 extends Derived2 {
+>Derived4 : Symbol(Derived4, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 80, 1))
+>Derived2 : Symbol(Derived2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 39, 1))
+
+    method4() {
+>method4 : Symbol(Derived4.method4, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 82, 33))
+
+        class E {
+>E : Symbol(E, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 83, 15))
+
+            method4e() {
+>method4e : Symbol(E.method4e, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 84, 17))
+
+                var b: Base;
+>b : Symbol(b, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 86, 19))
+>Base : Symbol(Base, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 0))
+
+                var d1: Derived1;
+>d1 : Symbol(d1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 87, 19))
+>Derived1 : Symbol(Derived1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 19, 1))
+
+                var d2: Derived2;
+>d2 : Symbol(d2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 88, 19))
+>Derived2 : Symbol(Derived2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 39, 1))
+
+                var d3: Derived3;
+>d3 : Symbol(d3, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 89, 19))
+>Derived3 : Symbol(Derived3, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 59, 1))
+
+                var d4: Derived4;
+>d4 : Symbol(d4, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 90, 19))
+>Derived4 : Symbol(Derived4, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 80, 1))
+
+                b.x;            // Error, isn't accessed through an instance of the enclosing class
+>b.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>b : Symbol(b, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 86, 19))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+
+                d1.x;           // Error, isn't accessed through an instance of the enclosing class
+>d1.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>d1 : Symbol(d1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 87, 19))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+
+                d2.x;           // Error, isn't accessed through an instance of the enclosing class
+>d2.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>d2 : Symbol(d2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 88, 19))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+
+                d3.x;           // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+>d3.x : Symbol(Derived3.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 61, 33))
+>d3 : Symbol(d3, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 89, 19))
+>x : Symbol(Derived3.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 61, 33))
+
+                d4.x;           // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
+>d4.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>d4 : Symbol(d4, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 90, 19))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+            }
+        }
+    }
+}
+
+
+var b: Base;
+>b : Symbol(b, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 103, 3))
+>Base : Symbol(Base, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 0))
+
+var d1: Derived1;
+>d1 : Symbol(d1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 104, 3))
+>Derived1 : Symbol(Derived1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 19, 1))
+
+var d2: Derived2;
+>d2 : Symbol(d2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 105, 3))
+>Derived2 : Symbol(Derived2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 39, 1))
+
+var d3: Derived3;
+>d3 : Symbol(d3, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 106, 3))
+>Derived3 : Symbol(Derived3, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 59, 1))
+
+var d4: Derived4;
+>d4 : Symbol(d4, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 107, 3))
+>Derived4 : Symbol(Derived4, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 80, 1))
+
+b.x;                    // Error, neither within their declaring class nor classes derived from their declaring class
+>b.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>b : Symbol(b, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 103, 3))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+
+d1.x;                   // Error, neither within their declaring class nor classes derived from their declaring class
+>d1.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>d1 : Symbol(d1, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 104, 3))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+
+d2.x;                   // Error, neither within their declaring class nor classes derived from their declaring class
+>d2.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>d2 : Symbol(d2, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 105, 3))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+
+d3.x;                   // Error, neither within their declaring class nor classes derived from their declaring class
+>d3.x : Symbol(Derived3.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 61, 33))
+>d3 : Symbol(d3, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 106, 3))
+>x : Symbol(Derived3.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 61, 33))
+
+d4.x;                   // Error, neither within their declaring class nor classes derived from their declaring class
+>d4.x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+>d4 : Symbol(d4, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 107, 3))
+>x : Symbol(Base.x, Decl(protectedClassPropertyAccessibleWithinNestedSubclass1.ts, 0, 12))
+

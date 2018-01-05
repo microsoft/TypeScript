@@ -10,6 +10,16 @@ export class C {}
 declare type T = number;
 export = T;
 
+// @Filename: /node_modules/foo/bar.d.ts
+export type T = number;
+
+// @Filename: /node_modules/foo/index.d.ts
+export { T } from "./bar"; // In a declaration file, so not an error.
+
+// @Filename: /node_modules/baz/index.d.ts
+declare module "baz" {
+    export { T } from "foo"; // Also allowed.
+}
 
 // @Filename: /user.ts
 // Error, can't re-export something that's only a type.

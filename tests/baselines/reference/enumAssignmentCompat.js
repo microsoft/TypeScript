@@ -41,7 +41,7 @@ var p: W.D;
 //// [enumAssignmentCompat.js]
 var W;
 (function (W) {
-    var D = (function () {
+    var D = /** @class */ (function () {
         function D() {
         }
         return D;

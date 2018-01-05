@@ -61,7 +61,7 @@
     }
 
     function f({} = a, [] = a, { p: {} = a} = a) {
->f : ({}?: any, []?: any, {p: {}}?: any) => ({}?: any, []?: any, {p: {}}?: any) => any
+>f : ({}?: any, []?: any, { p: {} }?: any) => ({}?: any, []?: any, { p: {} }?: any) => any
 >a : any
 >a : any
 >p : any
@@ -69,7 +69,7 @@
 >a : any
 
         return ({} = a, [] = a, { p: {} = a } = a) => a;
->({} = a, [] = a, { p: {} = a } = a) => a : ({}?: any, []?: any, {p: {}}?: any) => any
+>({} = a, [] = a, { p: {} = a } = a) => a : ({}?: any, []?: any, { p: {} }?: any) => any
 >a : any
 >a : any
 >p : any

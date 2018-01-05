@@ -1,0 +1,3 @@
+=== tests/cases/conformance/ambient/ambientExternalModuleInsideNonAmbientExternalModule.ts ===
+export declare module "M" { }
+No type information for this code.

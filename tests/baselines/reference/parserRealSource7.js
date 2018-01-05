@@ -839,7 +839,7 @@ module TypeScript {
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
-    var Continuation = (function () {
+    var Continuation = /** @class */ (function () {
         function Continuation(normalBlock) {
             this.normalBlock = normalBlock;
             this.exceptionBlock = -1;

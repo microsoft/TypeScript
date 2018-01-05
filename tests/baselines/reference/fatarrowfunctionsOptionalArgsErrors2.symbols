@@ -1,0 +1,10 @@
+=== tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts ===
+var tt1 = (a, (b, c)) => a+b+c;
+>tt1 : Symbol(tt1, Decl(fatarrowfunctionsOptionalArgsErrors2.ts, 0, 3))
+
+var tt2 = ((a), b, c) => a+b+c;
+>tt2 : Symbol(tt2, Decl(fatarrowfunctionsOptionalArgsErrors2.ts, 1, 3))
+
+var tt3 = ((a)) => a;
+>tt3 : Symbol(tt3, Decl(fatarrowfunctionsOptionalArgsErrors2.ts, 3, 3))
+

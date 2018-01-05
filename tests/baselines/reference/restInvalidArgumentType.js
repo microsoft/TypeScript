@@ -12,27 +12,22 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
     var union_generic: T | { a: number };
     var union_primitive: { a: number } | number;
-
     var intersection_generic: T & { a: number };
-    var intersection_premitive: { a: number } | string;
-
+    var intersection_primitive: { a: number } & string;
     var num: number;
-    var str: number;
+    var str: string;
+    var literal_string: "string";
+    var literal_number: 42;
+    var e: E;
 
     var u: undefined;
     var n: null;
 
     var a: any;
 
-    var literal_string: "string";
-    var literal_number: 42;
-
-    var e: E;
-
     var {...r1} = p1;   // Error, generic type paramterre
     var {...r2} = p2;   // OK
     var {...r3} = t;   // Error, generic type paramter
-
     var {...r4} = i;   // Error, index access
     var {...r5} = k;   // Error, index
 
@@ -43,13 +38,13 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
     var {...r9} = union_primitive;  // Error, union with generic type parameter
 
     var {...r10} = intersection_generic;  // Error, intersection with generic type parameter
-    var {...r11} = intersection_premitive;  // Error, intersection with generic type parameter
+    var {...r11} = intersection_primitive;  // Error, intersection with generic type parameter
 
     var {...r12} = num;  // Error
     var {...r13} = str;  // Error
 
-    var {...r14} = u;  // OK
-    var {...r15} = n;  // OK
+    var {...r14} = u;  // error, undefined-only not allowed
+    var {...r15} = n;  // error, null-only not allowed
 
     var {...r16} = a;  // OK
 
@@ -58,6 +53,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
     var {...r19} = e;  // Error, enum
 }
+
 
 //// [restInvalidArgumentType.js]
 var __rest = (this && this.__rest) || function (s, e) {
@@ -84,15 +80,15 @@ function f(p1, p2) {
     var union_generic;
     var union_primitive;
     var intersection_generic;
-    var intersection_premitive;
+    var intersection_primitive;
     var num;
     var str;
-    var u;
-    var n;
-    var a;
     var literal_string;
     var literal_number;
     var e;
+    var u;
+    var n;
+    var a;
     var r1 = __rest(p1, []); // Error, generic type paramterre
     var r2 = __rest(p2, []); // OK
     var r3 = __rest(t, []); // Error, generic type paramter
@@ -103,11 +99,11 @@ function f(p1, p2) {
     var r8 = __rest(union_generic, []); // Error, union with generic type parameter
     var r9 = __rest(union_primitive, []); // Error, union with generic type parameter
     var r10 = __rest(intersection_generic, []); // Error, intersection with generic type parameter
-    var r11 = __rest(intersection_premitive, []); // Error, intersection with generic type parameter
+    var r11 = __rest(intersection_primitive, []); // Error, intersection with generic type parameter
     var r12 = __rest(num, []); // Error
     var r13 = __rest(str, []); // Error
-    var r14 = __rest(u, []); // OK
-    var r15 = __rest(n, []); // OK
+    var r14 = __rest(u, []); // error, undefined-only not allowed
+    var r15 = __rest(n, []); // error, null-only not allowed
     var r16 = __rest(a, []); // OK
     var r17 = __rest(literal_string, []); // Error
     var r18 = __rest(literal_number, []); // Error

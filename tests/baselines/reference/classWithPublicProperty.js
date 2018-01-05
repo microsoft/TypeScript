@@ -22,7 +22,7 @@ var r7: string = C.f();
 var r8: string = C.g();
 
 //// [classWithPublicProperty.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.a = '';
         this.b = '';
@@ -30,9 +30,9 @@ var C = (function () {
     }
     C.prototype.c = function () { return ''; };
     C.f = function () { return ''; };
+    C.g = function () { return ''; };
     return C;
 }());
-C.g = function () { return ''; };
 // all of these are valid
 var c = new C();
 var r1 = c.x;

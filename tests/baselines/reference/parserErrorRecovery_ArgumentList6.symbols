@@ -1,0 +1,3 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList6.ts ===
+Foo(,
+No type information for this code.

@@ -5,5 +5,5 @@
 ////}
 
 goTo.marker();
-verify.completionListContains('parseInt');
-
+verify.not.completionListContains('parseInt');
+verify.completionListContains('encoder');

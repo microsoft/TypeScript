@@ -1,0 +1,296 @@
+=== tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts ===
+// -- operator on any type
+var ANY1: any;
+>ANY1 : any
+
+var ANY2: any[] = ["", ""];
+>ANY2 : any[]
+>["", ""] : string[]
+>"" : ""
+>"" : ""
+
+var obj: () => {}
+>obj : () => {}
+
+var obj1 = { x: "", y: () => { } };
+>obj1 : { x: string; y: () => void; }
+>{ x: "", y: () => { } } : { x: string; y: () => void; }
+>x : string
+>"" : ""
+>y : () => void
+>() => { } : () => void
+
+function foo(): any {
+>foo : () => any
+
+    var a;
+>a : any
+
+    return a;
+>a : any
+}
+class A {
+>A : A
+
+    public a: any;
+>a : any
+
+    static foo(): any {
+>foo : () => any
+
+        var a;
+>a : any
+
+        return a;
+>a : any
+    }
+}
+module M {
+>M : typeof M
+
+    export var n: any;
+>n : any
+}
+var objA = new A();
+>objA : A
+>new A() : A
+>A : typeof A
+
+// any type var
+var ResultIsNumber1 = --ANY2;
+>ResultIsNumber1 : number
+>--ANY2 : number
+>ANY2 : any[]
+
+var ResultIsNumber2 = --A;
+>ResultIsNumber2 : number
+>--A : number
+>A : any
+
+var ResultIsNumber3 = --M;
+>ResultIsNumber3 : number
+>--M : number
+>M : any
+
+var ResultIsNumber4 = --obj;
+>ResultIsNumber4 : number
+>--obj : number
+>obj : () => {}
+
+var ResultIsNumber5 = --obj1;
+>ResultIsNumber5 : number
+>--obj1 : number
+>obj1 : { x: string; y: () => void; }
+
+var ResultIsNumber6 = ANY2--;
+>ResultIsNumber6 : number
+>ANY2-- : number
+>ANY2 : any[]
+
+var ResultIsNumber7 = A--;
+>ResultIsNumber7 : number
+>A-- : number
+>A : any
+
+var ResultIsNumber8 = M--;
+>ResultIsNumber8 : number
+>M-- : number
+>M : any
+
+var ResultIsNumber9 = obj--;
+>ResultIsNumber9 : number
+>obj-- : number
+>obj : () => {}
+
+var ResultIsNumber10 = obj1--;
+>ResultIsNumber10 : number
+>obj1-- : number
+>obj1 : { x: string; y: () => void; }
+
+// any type literal
+var ResultIsNumber11 = --{};
+>ResultIsNumber11 : number
+>--{} : number
+>{} : {}
+
+var ResultIsNumber12 = --null;
+>ResultIsNumber12 : number
+>--null : number
+>null : null
+
+var ResultIsNumber13 = --undefined;
+>ResultIsNumber13 : number
+>--undefined : number
+>undefined : any
+
+var ResultIsNumber14 = null--;
+>ResultIsNumber14 : number
+>null-- : number
+>null : null
+
+var ResultIsNumber15 = {}--;
+>ResultIsNumber15 : number
+>{}-- : number
+>{} : {}
+
+var ResultIsNumber16 = undefined--;
+>ResultIsNumber16 : number
+>undefined-- : number
+>undefined : any
+
+// any type expressions
+var ResultIsNumber17 = --foo();
+>ResultIsNumber17 : number
+>--foo() : number
+>foo() : any
+>foo : () => any
+
+var ResultIsNumber18 = --A.foo();
+>ResultIsNumber18 : number
+>--A.foo() : number
+>A.foo() : any
+>A.foo : () => any
+>A : typeof A
+>foo : () => any
+
+var ResultIsNumber19 = --(null + undefined);
+>ResultIsNumber19 : number
+>--(null + undefined) : number
+>(null + undefined) : any
+>null + undefined : any
+>null : null
+>undefined : undefined
+
+var ResultIsNumber20 = --(null + null);
+>ResultIsNumber20 : number
+>--(null + null) : number
+>(null + null) : any
+>null + null : any
+>null : null
+>null : null
+
+var ResultIsNumber21 = --(undefined + undefined);
+>ResultIsNumber21 : number
+>--(undefined + undefined) : number
+>(undefined + undefined) : any
+>undefined + undefined : any
+>undefined : undefined
+>undefined : undefined
+
+var ResultIsNumber22 = --obj1.x;
+>ResultIsNumber22 : number
+>--obj1.x : number
+>obj1.x : string
+>obj1 : { x: string; y: () => void; }
+>x : string
+
+var ResultIsNumber23 = --obj1.y;
+>ResultIsNumber23 : number
+>--obj1.y : number
+>obj1.y : () => void
+>obj1 : { x: string; y: () => void; }
+>y : () => void
+
+var ResultIsNumber24 = foo()--;
+>ResultIsNumber24 : number
+>foo()-- : number
+>foo() : any
+>foo : () => any
+
+var ResultIsNumber25 = A.foo()--;
+>ResultIsNumber25 : number
+>A.foo()-- : number
+>A.foo() : any
+>A.foo : () => any
+>A : typeof A
+>foo : () => any
+
+var ResultIsNumber26 = (null + undefined)--;
+>ResultIsNumber26 : number
+>(null + undefined)-- : number
+>(null + undefined) : any
+>null + undefined : any
+>null : null
+>undefined : undefined
+
+var ResultIsNumber27 = (null + null)--;
+>ResultIsNumber27 : number
+>(null + null)-- : number
+>(null + null) : any
+>null + null : any
+>null : null
+>null : null
+
+var ResultIsNumber28 = (undefined + undefined)--;
+>ResultIsNumber28 : number
+>(undefined + undefined)-- : number
+>(undefined + undefined) : any
+>undefined + undefined : any
+>undefined : undefined
+>undefined : undefined
+
+var ResultIsNumber29 = obj1.x--;
+>ResultIsNumber29 : number
+>obj1.x-- : number
+>obj1.x : string
+>obj1 : { x: string; y: () => void; }
+>x : string
+
+var ResultIsNumber30 = obj1.y--;
+>ResultIsNumber30 : number
+>obj1.y-- : number
+>obj1.y : () => void
+>obj1 : { x: string; y: () => void; }
+>y : () => void
+
+// miss assignment operators
+--ANY2;
+>--ANY2 : number
+>ANY2 : any[]
+
+ANY2--;
+>ANY2-- : number
+>ANY2 : any[]
+
+--ANY1--;
+>--ANY1 : number
+>ANY1 : any
+>-- : number
+> : any
+
+--ANY1++;
+>--ANY1 : number
+>ANY1 : any
+>++ : number
+> : any
+
+++ANY1--;
+>++ANY1 : number
+>ANY1 : any
+>-- : number
+> : any
+
+--ANY2[0]--;
+>--ANY2[0] : number
+>ANY2[0] : any
+>ANY2 : any[]
+>0 : 0
+>-- : number
+> : any
+
+--ANY2[0]++;
+>--ANY2[0] : number
+>ANY2[0] : any
+>ANY2 : any[]
+>0 : 0
+>++ : number
+> : any
+
+++ANY2[0]--;
+>++ANY2[0] : number
+>ANY2[0] : any
+>ANY2 : any[]
+>0 : 0
+>-- : number
+> : any
+

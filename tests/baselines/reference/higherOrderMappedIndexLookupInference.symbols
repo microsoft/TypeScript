@@ -1,0 +1,98 @@
+=== tests/cases/compiler/higherOrderMappedIndexLookupInference.ts ===
+// @strict
+
+function f1(a: <T>() => keyof T, b: <U>() => keyof U) {
+>f1 : Symbol(f1, Decl(higherOrderMappedIndexLookupInference.ts, 0, 0))
+>a : Symbol(a, Decl(higherOrderMappedIndexLookupInference.ts, 2, 12))
+>T : Symbol(T, Decl(higherOrderMappedIndexLookupInference.ts, 2, 16))
+>T : Symbol(T, Decl(higherOrderMappedIndexLookupInference.ts, 2, 16))
+>b : Symbol(b, Decl(higherOrderMappedIndexLookupInference.ts, 2, 32))
+>U : Symbol(U, Decl(higherOrderMappedIndexLookupInference.ts, 2, 37))
+>U : Symbol(U, Decl(higherOrderMappedIndexLookupInference.ts, 2, 37))
+
+    a = b;
+>a : Symbol(a, Decl(higherOrderMappedIndexLookupInference.ts, 2, 12))
+>b : Symbol(b, Decl(higherOrderMappedIndexLookupInference.ts, 2, 32))
+
+    b = a;
+>b : Symbol(b, Decl(higherOrderMappedIndexLookupInference.ts, 2, 32))
+>a : Symbol(a, Decl(higherOrderMappedIndexLookupInference.ts, 2, 12))
+}
+
+function f2(a: <T, K extends keyof T>() => T[K], b: <U, L extends keyof U>() => U[L]) {
+>f2 : Symbol(f2, Decl(higherOrderMappedIndexLookupInference.ts, 5, 1))
+>a : Symbol(a, Decl(higherOrderMappedIndexLookupInference.ts, 7, 12))
+>T : Symbol(T, Decl(higherOrderMappedIndexLookupInference.ts, 7, 16))
+>K : Symbol(K, Decl(higherOrderMappedIndexLookupInference.ts, 7, 18))
+>T : Symbol(T, Decl(higherOrderMappedIndexLookupInference.ts, 7, 16))
+>T : Symbol(T, Decl(higherOrderMappedIndexLookupInference.ts, 7, 16))
+>K : Symbol(K, Decl(higherOrderMappedIndexLookupInference.ts, 7, 18))
+>b : Symbol(b, Decl(higherOrderMappedIndexLookupInference.ts, 7, 48))
+>U : Symbol(U, Decl(higherOrderMappedIndexLookupInference.ts, 7, 53))
+>L : Symbol(L, Decl(higherOrderMappedIndexLookupInference.ts, 7, 55))
+>U : Symbol(U, Decl(higherOrderMappedIndexLookupInference.ts, 7, 53))
+>U : Symbol(U, Decl(higherOrderMappedIndexLookupInference.ts, 7, 53))
+>L : Symbol(L, Decl(higherOrderMappedIndexLookupInference.ts, 7, 55))
+
+    a = b;
+>a : Symbol(a, Decl(higherOrderMappedIndexLookupInference.ts, 7, 12))
+>b : Symbol(b, Decl(higherOrderMappedIndexLookupInference.ts, 7, 48))
+
+    b = a;
+>b : Symbol(b, Decl(higherOrderMappedIndexLookupInference.ts, 7, 48))
+>a : Symbol(a, Decl(higherOrderMappedIndexLookupInference.ts, 7, 12))
+}
+
+function f3(a: <T>() => { [K in keyof T]: T[K] }, b: <U>() => { [K in keyof U]: U[K] }) {
+>f3 : Symbol(f3, Decl(higherOrderMappedIndexLookupInference.ts, 10, 1))
+>a : Symbol(a, Decl(higherOrderMappedIndexLookupInference.ts, 12, 12))
+>T : Symbol(T, Decl(higherOrderMappedIndexLookupInference.ts, 12, 16))
+>K : Symbol(K, Decl(higherOrderMappedIndexLookupInference.ts, 12, 27))
+>T : Symbol(T, Decl(higherOrderMappedIndexLookupInference.ts, 12, 16))
+>T : Symbol(T, Decl(higherOrderMappedIndexLookupInference.ts, 12, 16))
+>K : Symbol(K, Decl(higherOrderMappedIndexLookupInference.ts, 12, 27))
+>b : Symbol(b, Decl(higherOrderMappedIndexLookupInference.ts, 12, 49))
+>U : Symbol(U, Decl(higherOrderMappedIndexLookupInference.ts, 12, 54))
+>K : Symbol(K, Decl(higherOrderMappedIndexLookupInference.ts, 12, 65))
+>U : Symbol(U, Decl(higherOrderMappedIndexLookupInference.ts, 12, 54))
+>U : Symbol(U, Decl(higherOrderMappedIndexLookupInference.ts, 12, 54))
+>K : Symbol(K, Decl(higherOrderMappedIndexLookupInference.ts, 12, 65))
+
+    a = b;
+>a : Symbol(a, Decl(higherOrderMappedIndexLookupInference.ts, 12, 12))
+>b : Symbol(b, Decl(higherOrderMappedIndexLookupInference.ts, 12, 49))
+
+    b = a;
+>b : Symbol(b, Decl(higherOrderMappedIndexLookupInference.ts, 12, 49))
+>a : Symbol(a, Decl(higherOrderMappedIndexLookupInference.ts, 12, 12))
+}
+
+// Repro from #18338
+
+type IdMapped<T> = { [K in keyof T]: T[K] }
+>IdMapped : Symbol(IdMapped, Decl(higherOrderMappedIndexLookupInference.ts, 15, 1))
+>T : Symbol(T, Decl(higherOrderMappedIndexLookupInference.ts, 19, 14))
+>K : Symbol(K, Decl(higherOrderMappedIndexLookupInference.ts, 19, 22))
+>T : Symbol(T, Decl(higherOrderMappedIndexLookupInference.ts, 19, 14))
+>T : Symbol(T, Decl(higherOrderMappedIndexLookupInference.ts, 19, 14))
+>K : Symbol(K, Decl(higherOrderMappedIndexLookupInference.ts, 19, 22))
+
+declare const f: <T>() => IdMapped<T>;
+>f : Symbol(f, Decl(higherOrderMappedIndexLookupInference.ts, 21, 13))
+>T : Symbol(T, Decl(higherOrderMappedIndexLookupInference.ts, 21, 18))
+>IdMapped : Symbol(IdMapped, Decl(higherOrderMappedIndexLookupInference.ts, 15, 1))
+>T : Symbol(T, Decl(higherOrderMappedIndexLookupInference.ts, 21, 18))
+
+declare const g: <U>() => { [K in keyof U]: U[K] };
+>g : Symbol(g, Decl(higherOrderMappedIndexLookupInference.ts, 22, 13))
+>U : Symbol(U, Decl(higherOrderMappedIndexLookupInference.ts, 22, 18))
+>K : Symbol(K, Decl(higherOrderMappedIndexLookupInference.ts, 22, 29))
+>U : Symbol(U, Decl(higherOrderMappedIndexLookupInference.ts, 22, 18))
+>U : Symbol(U, Decl(higherOrderMappedIndexLookupInference.ts, 22, 18))
+>K : Symbol(K, Decl(higherOrderMappedIndexLookupInference.ts, 22, 29))
+
+const h: typeof g = f;
+>h : Symbol(h, Decl(higherOrderMappedIndexLookupInference.ts, 24, 5))
+>g : Symbol(g, Decl(higherOrderMappedIndexLookupInference.ts, 22, 13))
+>f : Symbol(f, Decl(higherOrderMappedIndexLookupInference.ts, 21, 13))
+

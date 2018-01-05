@@ -23,7 +23,7 @@ define(["require", "exports"], function (require, exports) {
         (function (Strasse) {
             var Street;
             (function (Street) {
-                var Rue = (function () {
+                var Rue = /** @class */ (function () {
                     function Rue() {
                     }
                     return Rue;

@@ -1,0 +1,40 @@
+=== tests/cases/conformance/expressions/elementAccess/stringEnumInElementAccess01.ts ===
+enum E {
+>E : Symbol(E, Decl(stringEnumInElementAccess01.ts, 0, 0))
+
+    A = "a",
+>A : Symbol(E.A, Decl(stringEnumInElementAccess01.ts, 0, 8))
+
+    B = "b",
+>B : Symbol(E.B, Decl(stringEnumInElementAccess01.ts, 1, 12))
+
+    C = "c",
+>C : Symbol(E.C, Decl(stringEnumInElementAccess01.ts, 2, 12))
+}
+
+interface Item {
+>Item : Symbol(Item, Decl(stringEnumInElementAccess01.ts, 4, 1))
+
+    a: string;
+>a : Symbol(Item.a, Decl(stringEnumInElementAccess01.ts, 6, 16))
+
+    b: number;
+>b : Symbol(Item.b, Decl(stringEnumInElementAccess01.ts, 7, 14))
+
+    c: boolean;
+>c : Symbol(Item.c, Decl(stringEnumInElementAccess01.ts, 8, 14))
+}
+
+declare const item: Item;
+>item : Symbol(item, Decl(stringEnumInElementAccess01.ts, 12, 13))
+>Item : Symbol(Item, Decl(stringEnumInElementAccess01.ts, 4, 1))
+
+declare const e: E;
+>e : Symbol(e, Decl(stringEnumInElementAccess01.ts, 13, 13))
+>E : Symbol(E, Decl(stringEnumInElementAccess01.ts, 0, 0))
+
+const snb: string | number | boolean = item[e];
+>snb : Symbol(snb, Decl(stringEnumInElementAccess01.ts, 14, 5))
+>item : Symbol(item, Decl(stringEnumInElementAccess01.ts, 12, 13))
+>e : Symbol(e, Decl(stringEnumInElementAccess01.ts, 13, 13))
+

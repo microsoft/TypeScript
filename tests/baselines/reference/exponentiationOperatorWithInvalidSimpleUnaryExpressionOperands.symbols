@@ -1,0 +1,81 @@
+=== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts ===
+var temp: any;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+// Error: incorrect type on left-hand side 
+(! --temp) ** 3;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+(!temp--) ** 3;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+(!3) ** 4;
+(!temp++) ** 4;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+(!temp--) ** 4;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+(! --temp) ** 3 ** 1;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+(!temp--) ** 3 ** 1;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+(!3) ** 4 ** 1;
+(!temp++) ** 4 ** 1;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+(!temp--) ** 4 ** 1;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+(typeof --temp) ** 3;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+(typeof temp--) ** 3;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+(typeof 3) ** 4;
+(typeof temp++) ** 4;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+(typeof temp--) ** 4;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+1 ** (typeof --temp) ** 3;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+1 ** (typeof temp--) ** 3;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+1 ** (typeof 3) ** 4;
+1 ** (typeof temp++) ** 4;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+1 ** (typeof temp--) ** 4;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+(delete --temp) ** 3;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+(delete ++temp) ** 3;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+(delete temp--) ** 3;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+(delete temp++) ** 3;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+1 ** (delete --temp) ** 3;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+1 ** (delete ++temp) ** 3;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+1 ** (delete temp--) ** 3;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+
+1 ** (delete temp++) ** 3;
+>temp : Symbol(temp, Decl(exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts, 0, 3))
+

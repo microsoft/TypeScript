@@ -1,6 +1,7 @@
 // @experimentalDecorators: true
 // @emitDecoratorMetadata: true
 // @target: es5
+// @skipLibCheck: true
 // @includeBuiltFile: lib.d.ts
 
 // @filename: event.ts

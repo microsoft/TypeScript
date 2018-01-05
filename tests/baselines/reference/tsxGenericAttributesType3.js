@@ -26,7 +26,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var React = require("react");
-var B1 = (function (_super) {
+var B1 = /** @class */ (function (_super) {
     __extends(B1, _super);
     function B1() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -36,7 +36,7 @@ var B1 = (function (_super) {
     };
     return B1;
 }(React.Component));
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;

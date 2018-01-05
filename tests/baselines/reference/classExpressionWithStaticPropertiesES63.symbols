@@ -30,9 +30,9 @@ for (let i = 0; i < 3; i++) {
     });
 }
 arr.forEach(C => console.log(C.y()));
->arr.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arr.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >arr : Symbol(arr, Decl(classExpressionWithStaticPropertiesES63.ts, 1, 5))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >C : Symbol(C, Decl(classExpressionWithStaticPropertiesES63.ts, 8, 12))
 >console : Symbol(console, Decl(classExpressionWithStaticPropertiesES63.ts, 0, 11))
 >C.y : Symbol(y, Decl(classExpressionWithStaticPropertiesES63.ts, 1, 12))

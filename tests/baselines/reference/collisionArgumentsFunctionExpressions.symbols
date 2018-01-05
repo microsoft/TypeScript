@@ -1,0 +1,94 @@
+=== tests/cases/compiler/collisionArgumentsFunctionExpressions.ts ===
+function foo() {
+>foo : Symbol(foo, Decl(collisionArgumentsFunctionExpressions.ts, 0, 0))
+
+    function f1(arguments: number, ...restParameters) { //arguments is error
+>f1 : Symbol(f1, Decl(collisionArgumentsFunctionExpressions.ts, 0, 16))
+>arguments : Symbol(arguments, Decl(collisionArgumentsFunctionExpressions.ts, 1, 16), Decl(collisionArgumentsFunctionExpressions.ts, 2, 11))
+>restParameters : Symbol(restParameters, Decl(collisionArgumentsFunctionExpressions.ts, 1, 34))
+
+        var arguments = 10; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsFunctionExpressions.ts, 1, 16), Decl(collisionArgumentsFunctionExpressions.ts, 2, 11))
+    }
+    function f12(i: number, ...arguments) { //arguments is error
+>f12 : Symbol(f12, Decl(collisionArgumentsFunctionExpressions.ts, 3, 5))
+>i : Symbol(i, Decl(collisionArgumentsFunctionExpressions.ts, 4, 17))
+>arguments : Symbol(arguments, Decl(collisionArgumentsFunctionExpressions.ts, 4, 27), Decl(collisionArgumentsFunctionExpressions.ts, 5, 11))
+
+        var arguments: any[]; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsFunctionExpressions.ts, 4, 27), Decl(collisionArgumentsFunctionExpressions.ts, 5, 11))
+    }
+    function f1NoError(arguments: number) { // no error
+>f1NoError : Symbol(f1NoError, Decl(collisionArgumentsFunctionExpressions.ts, 6, 5))
+>arguments : Symbol(arguments, Decl(collisionArgumentsFunctionExpressions.ts, 7, 23), Decl(collisionArgumentsFunctionExpressions.ts, 8, 11))
+
+        var arguments = 10; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsFunctionExpressions.ts, 7, 23), Decl(collisionArgumentsFunctionExpressions.ts, 8, 11))
+    }
+
+    function f3(...restParameters) {
+>f3 : Symbol(f3, Decl(collisionArgumentsFunctionExpressions.ts, 9, 5))
+>restParameters : Symbol(restParameters, Decl(collisionArgumentsFunctionExpressions.ts, 11, 16))
+
+        var arguments = 10; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsFunctionExpressions.ts, 12, 11))
+    }
+    function f3NoError() {
+>f3NoError : Symbol(f3NoError, Decl(collisionArgumentsFunctionExpressions.ts, 13, 5))
+
+        var arguments = 10; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsFunctionExpressions.ts, 15, 11))
+    }
+
+    function f4(arguments: number, ...rest); // no codegen no error
+>f4 : Symbol(f4, Decl(collisionArgumentsFunctionExpressions.ts, 16, 5), Decl(collisionArgumentsFunctionExpressions.ts, 18, 44), Decl(collisionArgumentsFunctionExpressions.ts, 19, 44))
+>arguments : Symbol(arguments, Decl(collisionArgumentsFunctionExpressions.ts, 18, 16))
+>rest : Symbol(rest, Decl(collisionArgumentsFunctionExpressions.ts, 18, 34))
+
+    function f4(arguments: string, ...rest); // no codegen no error
+>f4 : Symbol(f4, Decl(collisionArgumentsFunctionExpressions.ts, 16, 5), Decl(collisionArgumentsFunctionExpressions.ts, 18, 44), Decl(collisionArgumentsFunctionExpressions.ts, 19, 44))
+>arguments : Symbol(arguments, Decl(collisionArgumentsFunctionExpressions.ts, 19, 16))
+>rest : Symbol(rest, Decl(collisionArgumentsFunctionExpressions.ts, 19, 34))
+
+    function f4(arguments: any, ...rest) { // error
+>f4 : Symbol(f4, Decl(collisionArgumentsFunctionExpressions.ts, 16, 5), Decl(collisionArgumentsFunctionExpressions.ts, 18, 44), Decl(collisionArgumentsFunctionExpressions.ts, 19, 44))
+>arguments : Symbol(arguments, Decl(collisionArgumentsFunctionExpressions.ts, 20, 16), Decl(collisionArgumentsFunctionExpressions.ts, 21, 11))
+>rest : Symbol(rest, Decl(collisionArgumentsFunctionExpressions.ts, 20, 31))
+
+        var arguments: any; // No error
+>arguments : Symbol(arguments, Decl(collisionArgumentsFunctionExpressions.ts, 20, 16), Decl(collisionArgumentsFunctionExpressions.ts, 21, 11))
+    }
+    function f42(i: number, ...arguments); // no codegen no error
+>f42 : Symbol(f42, Decl(collisionArgumentsFunctionExpressions.ts, 22, 5), Decl(collisionArgumentsFunctionExpressions.ts, 23, 42), Decl(collisionArgumentsFunctionExpressions.ts, 24, 42))
+>i : Symbol(i, Decl(collisionArgumentsFunctionExpressions.ts, 23, 17))
+>arguments : Symbol(arguments, Decl(collisionArgumentsFunctionExpressions.ts, 23, 27))
+
+    function f42(i: string, ...arguments); // no codegen no error
+>f42 : Symbol(f42, Decl(collisionArgumentsFunctionExpressions.ts, 22, 5), Decl(collisionArgumentsFunctionExpressions.ts, 23, 42), Decl(collisionArgumentsFunctionExpressions.ts, 24, 42))
+>i : Symbol(i, Decl(collisionArgumentsFunctionExpressions.ts, 24, 17))
+>arguments : Symbol(arguments, Decl(collisionArgumentsFunctionExpressions.ts, 24, 27))
+
+    function f42(i: any, ...arguments) { // error
+>f42 : Symbol(f42, Decl(collisionArgumentsFunctionExpressions.ts, 22, 5), Decl(collisionArgumentsFunctionExpressions.ts, 23, 42), Decl(collisionArgumentsFunctionExpressions.ts, 24, 42))
+>i : Symbol(i, Decl(collisionArgumentsFunctionExpressions.ts, 25, 17))
+>arguments : Symbol(arguments, Decl(collisionArgumentsFunctionExpressions.ts, 25, 24), Decl(collisionArgumentsFunctionExpressions.ts, 26, 11))
+
+        var arguments: any[]; // No error
+>arguments : Symbol(arguments, Decl(collisionArgumentsFunctionExpressions.ts, 25, 24), Decl(collisionArgumentsFunctionExpressions.ts, 26, 11))
+    }
+    function f4NoError(arguments: number); // no error
+>f4NoError : Symbol(f4NoError, Decl(collisionArgumentsFunctionExpressions.ts, 27, 5), Decl(collisionArgumentsFunctionExpressions.ts, 28, 42), Decl(collisionArgumentsFunctionExpressions.ts, 29, 42))
+>arguments : Symbol(arguments, Decl(collisionArgumentsFunctionExpressions.ts, 28, 23))
+
+    function f4NoError(arguments: string); // no error
+>f4NoError : Symbol(f4NoError, Decl(collisionArgumentsFunctionExpressions.ts, 27, 5), Decl(collisionArgumentsFunctionExpressions.ts, 28, 42), Decl(collisionArgumentsFunctionExpressions.ts, 29, 42))
+>arguments : Symbol(arguments, Decl(collisionArgumentsFunctionExpressions.ts, 29, 23))
+
+    function f4NoError(arguments: any) { // no error
+>f4NoError : Symbol(f4NoError, Decl(collisionArgumentsFunctionExpressions.ts, 27, 5), Decl(collisionArgumentsFunctionExpressions.ts, 28, 42), Decl(collisionArgumentsFunctionExpressions.ts, 29, 42))
+>arguments : Symbol(arguments, Decl(collisionArgumentsFunctionExpressions.ts, 30, 23), Decl(collisionArgumentsFunctionExpressions.ts, 31, 11))
+
+        var arguments: any; // No error
+>arguments : Symbol(arguments, Decl(collisionArgumentsFunctionExpressions.ts, 30, 23), Decl(collisionArgumentsFunctionExpressions.ts, 31, 11))
+    }
+}

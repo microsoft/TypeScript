@@ -38,7 +38,7 @@ module test {
 // it is an error to have duplicate index signatures of the same kind in a type
 var test;
 (function (test) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;

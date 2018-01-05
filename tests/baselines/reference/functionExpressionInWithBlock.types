@@ -1,0 +1,16 @@
+=== tests/cases/compiler/functionExpressionInWithBlock.ts ===
+function x() {
+>x : () => void
+
+ with({}) {
+>{} : {}
+
+  function f() {
+>f : any
+
+   () => this;
+>() => this : any
+>this : any
+  }
+ }
+}

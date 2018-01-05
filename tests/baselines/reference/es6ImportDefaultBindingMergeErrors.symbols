@@ -1,0 +1,30 @@
+=== tests/cases/compiler/es6ImportDefaultBindingMergeErrors_0.ts ===
+var a = 10;
+>a : Symbol(a, Decl(es6ImportDefaultBindingMergeErrors_0.ts, 0, 3))
+
+export default a;
+>a : Symbol(a, Decl(es6ImportDefaultBindingMergeErrors_0.ts, 0, 3))
+
+=== tests/cases/compiler/es6ImportDefaultBindingMergeErrors_1.ts ===
+import defaultBinding from "./es6ImportDefaultBindingMergeErrors_0";
+>defaultBinding : Symbol(defaultBinding, Decl(es6ImportDefaultBindingMergeErrors_1.ts, 0, 6), Decl(es6ImportDefaultBindingMergeErrors_1.ts, 0, 68))
+
+interface defaultBinding { // This is ok
+>defaultBinding : Symbol(defaultBinding, Decl(es6ImportDefaultBindingMergeErrors_1.ts, 0, 6), Decl(es6ImportDefaultBindingMergeErrors_1.ts, 0, 68))
+}
+var x = defaultBinding;
+>x : Symbol(x, Decl(es6ImportDefaultBindingMergeErrors_1.ts, 3, 3))
+>defaultBinding : Symbol(defaultBinding, Decl(es6ImportDefaultBindingMergeErrors_1.ts, 0, 6), Decl(es6ImportDefaultBindingMergeErrors_1.ts, 0, 68))
+
+import defaultBinding2 from "./es6ImportDefaultBindingMergeErrors_0"; // Should be error
+>defaultBinding2 : Symbol(defaultBinding2, Decl(es6ImportDefaultBindingMergeErrors_1.ts, 4, 6), Decl(es6ImportDefaultBindingMergeErrors_1.ts, 5, 3))
+
+var defaultBinding2 = "hello world"; 
+>defaultBinding2 : Symbol(defaultBinding2, Decl(es6ImportDefaultBindingMergeErrors_1.ts, 4, 6), Decl(es6ImportDefaultBindingMergeErrors_1.ts, 5, 3))
+
+import defaultBinding3 from "./es6ImportDefaultBindingMergeErrors_0"; // Should be error
+>defaultBinding3 : Symbol(defaultBinding3, Decl(es6ImportDefaultBindingMergeErrors_1.ts, 6, 6))
+
+import defaultBinding3 from "./es6ImportDefaultBindingMergeErrors_0"; // SHould be error
+>defaultBinding3 : Symbol(defaultBinding3, Decl(es6ImportDefaultBindingMergeErrors_1.ts, 7, 6))
+

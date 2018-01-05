@@ -23,7 +23,7 @@ while (0) {
 // note: repros with `while (0);` too
 // but it's less inscrutable and more obvious to put it *inside* the loop
 while (0) {
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         A.prototype.methodA = function () {
@@ -31,7 +31,7 @@ while (0) {
         };
         return A;
     }());
-    var B = (function () {
+    var B = /** @class */ (function () {
         function B() {
         }
         B.prototype.methodB = function () {

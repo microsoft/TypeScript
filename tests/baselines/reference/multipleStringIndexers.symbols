@@ -1,0 +1,66 @@
+=== tests/cases/conformance/types/objectTypeLiteral/indexSignatures/multipleStringIndexers.ts ===
+// Multiple indexers of the same type are an error
+
+class C {
+>C : Symbol(C, Decl(multipleStringIndexers.ts, 0, 0))
+
+    [x: string]: string;
+>x : Symbol(x, Decl(multipleStringIndexers.ts, 3, 5))
+
+    [x: string]: string;
+>x : Symbol(x, Decl(multipleStringIndexers.ts, 4, 5))
+}
+
+interface I {
+>I : Symbol(I, Decl(multipleStringIndexers.ts, 5, 1))
+
+    [x: string]: string;
+>x : Symbol(x, Decl(multipleStringIndexers.ts, 8, 5))
+
+    [x: string]: string;
+>x : Symbol(x, Decl(multipleStringIndexers.ts, 9, 5))
+}
+
+var a: {
+>a : Symbol(a, Decl(multipleStringIndexers.ts, 12, 3))
+
+    [x: string]: string;
+>x : Symbol(x, Decl(multipleStringIndexers.ts, 13, 5))
+
+    [x: string]: string;
+>x : Symbol(x, Decl(multipleStringIndexers.ts, 14, 5))
+}
+
+var b: {
+>b : Symbol(b, Decl(multipleStringIndexers.ts, 17, 3))
+
+    [x: string]: string;
+>x : Symbol(x, Decl(multipleStringIndexers.ts, 18, 5))
+
+    [x: string]: string;
+>x : Symbol(x, Decl(multipleStringIndexers.ts, 19, 5))
+
+} = { y: '' }
+>y : Symbol(y, Decl(multipleStringIndexers.ts, 20, 5))
+
+class C2<T> {
+>C2 : Symbol(C2, Decl(multipleStringIndexers.ts, 20, 13))
+>T : Symbol(T, Decl(multipleStringIndexers.ts, 22, 9))
+
+    [x: string]: string;
+>x : Symbol(x, Decl(multipleStringIndexers.ts, 23, 5))
+
+    [x: string]: string;
+>x : Symbol(x, Decl(multipleStringIndexers.ts, 24, 5))
+}
+
+interface I2<T> {
+>I2 : Symbol(I2, Decl(multipleStringIndexers.ts, 25, 1))
+>T : Symbol(T, Decl(multipleStringIndexers.ts, 27, 13))
+
+    [x: string]: string;
+>x : Symbol(x, Decl(multipleStringIndexers.ts, 28, 5))
+
+    [x: string]: string;
+>x : Symbol(x, Decl(multipleStringIndexers.ts, 29, 5))
+}

@@ -160,8 +160,8 @@
 ////fo/*37q*/oBar(/*37*/"foo",/*38*/"bar");
 /////** This is a comment */
 ////var x;
-/////** 
-////  * This is a comment 
+/////**
+////  * This is a comment
 ////  */
 ////var y;
 /////** this is jsdoc style function with param tag as well as inline parameter help
@@ -173,7 +173,7 @@
 ////}
 /////*44*/jsD/*40q*/ocParamTest(/*40*/30, /*41*/40, /*42*/50, /*43*/60);
 /////** This is function comment
-////  * And properly aligned comment 
+////  * And properly aligned comment
 ////  */
 ////function jsDocCommentAlignmentTest1() {
 ////}
@@ -334,39 +334,40 @@ goTo.marker('27');
 verify.completionListContains("multiply", "function multiply(a: number, b: number, c?: number, d?: any, e?: any): void", "This is multiplication function");
 verify.completionListContains("f1", "function f1(a: number): any (+1 overload)", "fn f1 with number");
 
+const subtractDoc = "This is subtract function";
 goTo.marker('28');
-verify.currentSignatureHelpDocCommentIs("This is subtract function{ () => string; } } f this is optional param f");
+verify.currentSignatureHelpDocCommentIs(subtractDoc);
 verify.currentParameterHelpArgumentDocCommentIs("");
 verify.quickInfos({
     "28q": [
         "function subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void",
-        "This is subtract function{ () => string; } } f this is optional param f"
+        subtractDoc,
     ],
     "28aq": "(parameter) a: number"
 });
 
 goTo.marker('29');
-verify.currentSignatureHelpDocCommentIs("This is subtract function{ () => string; } } f this is optional param f");
+verify.currentSignatureHelpDocCommentIs(subtractDoc);
 verify.currentParameterHelpArgumentDocCommentIs("this is about b");
 verify.quickInfoAt("29aq", "(parameter) b: number", "this is about b");
 
 goTo.marker('30');
-verify.currentSignatureHelpDocCommentIs("This is subtract function{ () => string; } } f this is optional param f");
+verify.currentSignatureHelpDocCommentIs(subtractDoc);
 verify.currentParameterHelpArgumentDocCommentIs("this is optional param c");
 verify.quickInfoAt("30aq", "(parameter) c: () => string", "this is optional param c");
 
 goTo.marker('31');
-verify.currentSignatureHelpDocCommentIs("This is subtract function{ () => string; } } f this is optional param f");
+verify.currentSignatureHelpDocCommentIs(subtractDoc);
 verify.currentParameterHelpArgumentDocCommentIs("this is optional param d");
 verify.quickInfoAt("31aq", "(parameter) d: () => string", "this is optional param d");
 
 goTo.marker('32');
-verify.currentSignatureHelpDocCommentIs("This is subtract function{ () => string; } } f this is optional param f");
+verify.currentSignatureHelpDocCommentIs(subtractDoc);
 verify.currentParameterHelpArgumentDocCommentIs("this is optional param e");
 verify.quickInfoAt("32aq", "(parameter) e: () => string", "this is optional param e");
 
 goTo.marker('33');
-verify.currentSignatureHelpDocCommentIs("This is subtract function{ () => string; } } f this is optional param f");
+verify.currentSignatureHelpDocCommentIs(subtractDoc);
 verify.currentParameterHelpArgumentDocCommentIs("");
 verify.quickInfoAt("33aq", "(parameter) f: () => string");
 
@@ -454,11 +455,11 @@ verify.quickInfoAt("43aq", "(parameter) d: number");
 goTo.marker('44');
 verify.completionListContains("jsDocParamTest", "function jsDocParamTest(a: number, b: number, c: number, d: number): number", "this is jsdoc style function with param tag as well as inline parameter help");
 verify.completionListContains("x", "var x: any", "This is a comment ");
-verify.completionListContains("y", "var y: any", "This is a comment ");
+verify.completionListContains("y", "var y: any", "This is a comment");
 
 goTo.marker('45');
-verify.currentSignatureHelpDocCommentIs("This is function comment\nAnd properly aligned comment ");
-verify.quickInfoAt("45q", "function jsDocCommentAlignmentTest1(): void", "This is function comment\nAnd properly aligned comment ");
+verify.currentSignatureHelpDocCommentIs("This is function comment\nAnd properly aligned comment");
+verify.quickInfoAt("45q", "function jsDocCommentAlignmentTest1(): void", "This is function comment\nAnd properly aligned comment");
 
 goTo.marker('46');
 verify.currentSignatureHelpDocCommentIs("This is function comment\n    And aligned with 4 space char margin");

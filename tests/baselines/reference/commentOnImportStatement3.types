@@ -1,0 +1,7 @@
+=== tests/cases/compiler/commentOnImportStatement3.ts ===
+/* copyright */
+
+/* not copyright */
+import foo = require('./foo');
+>foo : any
+

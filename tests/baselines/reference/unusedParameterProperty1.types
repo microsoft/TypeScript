@@ -1,0 +1,18 @@
+=== tests/cases/compiler/unusedParameterProperty1.ts ===
+class A {
+>A : A
+
+    constructor(private used: string) {
+>used : string
+
+        let foge = used;
+>foge : string
+>used : string
+
+        foge += "";
+>foge += "" : string
+>foge : string
+>"" : ""
+    }
+}
+

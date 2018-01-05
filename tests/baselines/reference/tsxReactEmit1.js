@@ -55,7 +55,7 @@ var openClosed2 = React.createElement("div", { n: 'm' }, "foo");
 var openClosed3 = React.createElement("div", { n: 'm' }, p);
 var openClosed4 = React.createElement("div", { n: 'm' }, p < p);
 var openClosed5 = React.createElement("div", { n: 'm', b: true }, p > p);
-var SomeClass = (function () {
+var SomeClass = /** @class */ (function () {
     function SomeClass() {
     }
     SomeClass.prototype.f = function () {

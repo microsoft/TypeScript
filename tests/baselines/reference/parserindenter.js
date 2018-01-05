@@ -759,7 +759,7 @@ module Formatting {
 ///<reference path='formatting.ts' />
 var Formatting;
 (function (Formatting) {
-    var Indenter = (function () {
+    var Indenter = /** @class */ (function () {
         function Indenter(logger, tree, snapshot, languageHostIndentation, editorOptions, firstToken, smartIndent) {
             this.logger = logger;
             this.tree = tree;

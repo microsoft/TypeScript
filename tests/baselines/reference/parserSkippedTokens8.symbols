@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens8.ts ===
+;
+No type information for this code./*foo*/ \ /*bar*/
+No type information for this code.

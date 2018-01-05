@@ -247,7 +247,7 @@ function goo(x: X) {
 
         x.y;
 >x.y : string
->x : Y
+>x : X & Y
 >y : string
     }
     x;

@@ -1,0 +1,5 @@
+=== tests/cases/compiler/throwWithoutNewLine2.ts ===
+throw
+a;
+>a : any
+

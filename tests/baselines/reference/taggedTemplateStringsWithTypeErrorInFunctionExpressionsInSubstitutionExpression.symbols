@@ -1,0 +1,11 @@
+=== tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts ===
+function foo(...rest: any[]) {
+>foo : Symbol(foo, Decl(taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts, 0, 0))
+>rest : Symbol(rest, Decl(taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts, 0, 13))
+}
+
+foo `${function (x: number) { x = "bad"; } }`;
+>foo : Symbol(foo, Decl(taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts, 0, 0))
+>x : Symbol(x, Decl(taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts, 3, 17))
+>x : Symbol(x, Decl(taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts, 3, 17))
+

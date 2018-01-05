@@ -112,6 +112,11 @@
 ////class N extends B {
 ////    async /*classThatHasWrittenAsyncKeyword*/
 ////}
+////class O extends B {
+////    constructor(public a) {
+////    }, 
+////    /*classElementAfterConstructorSeparatedByComma*/
+////}
 
 const allowedKeywordCount = verify.allowedClassElementKeywords.length;
 type CompletionInfo = [string, string];
@@ -220,7 +225,8 @@ const classInstanceElementLocations = [
     "classThatStartedWritingIdentifierOfGetAccessor",
     "classThatStartedWritingIdentifierOfSetAccessor",
     "classThatStartedWritingIdentifierAfterModifier",
-    "classThatHasWrittenAsyncKeyword"
+    "classThatHasWrittenAsyncKeyword",
+    "classElementAfterConstructorSeparatedByComma"
 ];
 verifyClassElementLocations(instanceMemberInfo, classInstanceElementLocations);
 

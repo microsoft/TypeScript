@@ -8,7 +8,7 @@ var b: C<Y>;
 a = b; // Not ok - return types of "f" are different
 
 //// [generics4.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

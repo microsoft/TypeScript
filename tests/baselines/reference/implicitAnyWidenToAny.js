@@ -34,7 +34,7 @@ var x1 = undefined; // error at "x1"
 var widenArray = [null, undefined]; // error at "widenArray"
 var emptyArray = [];
 // these should not be error
-var AnimalObj = (function () {
+var AnimalObj = /** @class */ (function () {
     function AnimalObj() {
     }
     return AnimalObj;

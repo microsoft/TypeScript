@@ -1,0 +1,12 @@
+=== tests/cases/compiler/unresolvedTypeAssertionSymbol.ts ===
+var x = 1;
+>x : number
+>1 : 1
+
+var y = <asdf>x;
+>y : any
+><asdf>x : any
+>asdf : No type information available!
+>x : number
+ 
+

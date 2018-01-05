@@ -34,7 +34,7 @@ M.f();
 //// [statics.js]
 var M;
 (function (M) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C(c1, c2, c3) {
             var _this = this;
             this.c1 = c1;
@@ -45,11 +45,11 @@ var M;
         C.f = function (n) {
             return "wow: " + (n + C.y + C.pub + C.priv);
         };
+        C.priv = 2;
+        C.pub = 3;
+        C.y = C.priv;
         return C;
     }());
-    C.priv = 2;
-    C.pub = 3;
-    C.y = C.priv;
     M.C = C;
     var c = C.y;
     function f() {

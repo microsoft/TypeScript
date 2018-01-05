@@ -1,7 +1,7 @@
 //// [file.tsx]
 import React = require('react');
 
-export function makeP<P>(Ctor: React.ComponentClass<P>): React.ComponentClass<P> {
+export function makeP<P>(Ctor: React.ComponentClass<P>) {
 	return class extends React.PureComponent<P, void> {
 		public render(): JSX.Element {
 			return (
@@ -10,6 +10,8 @@ export function makeP<P>(Ctor: React.ComponentClass<P>): React.ComponentClass<P>
 		}
 	};
 }
+
+
 
 //// [file.jsx]
 "use strict";
@@ -26,7 +28,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 var React = require("react");
 function makeP(Ctor) {
-    return (function (_super) {
+    return /** @class */ (function (_super) {
         __extends(class_1, _super);
         function class_1() {
             return _super !== null && _super.apply(this, arguments) || this;

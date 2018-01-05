@@ -7,13 +7,13 @@
 ////         protected [|{| "isWriteAccess": true, "isDefinition": true, "type": "boolean" |}protectedParam|]: boolean) {
 ////
 ////         let localPrivate = [|privateParam|];
-////         this.[|privateParam|] += 10;
+////         this.[|{| "isWriteAccess": true |}privateParam|] += 10;
 ////
 ////         let localPublic = [|publicParam|];
-////         this.[|publicParam|] += " Hello!";
+////         this.[|{| "isWriteAccess": true |}publicParam|] += " Hello!";
 ////
 ////         let localProtected = [|protectedParam|];
-////         this.[|protectedParam|] = false;
+////         this.[|{| "isWriteAccess": true |}protectedParam|] = false;
 ////     }
 //// }
 

@@ -1,0 +1,22 @@
+=== tests/cases/compiler/genericCallsWithoutParens.ts ===
+function f<T>() { }
+>f : Symbol(f, Decl(genericCallsWithoutParens.ts, 0, 0))
+>T : Symbol(T, Decl(genericCallsWithoutParens.ts, 0, 11))
+
+var r = f<number>; // parse error
+>r : Symbol(r, Decl(genericCallsWithoutParens.ts, 1, 3))
+>f : Symbol(f, Decl(genericCallsWithoutParens.ts, 0, 0))
+
+class C<T> {
+>C : Symbol(C, Decl(genericCallsWithoutParens.ts, 1, 18))
+>T : Symbol(T, Decl(genericCallsWithoutParens.ts, 3, 8))
+
+    foo: T;
+>foo : Symbol(C.foo, Decl(genericCallsWithoutParens.ts, 3, 12))
+>T : Symbol(T, Decl(genericCallsWithoutParens.ts, 3, 8))
+}
+var c = new C<number>; // parse error
+>c : Symbol(c, Decl(genericCallsWithoutParens.ts, 6, 3))
+>C : Symbol(C, Decl(genericCallsWithoutParens.ts, 1, 18))
+
+

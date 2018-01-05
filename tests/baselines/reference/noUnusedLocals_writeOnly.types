@@ -1,0 +1,32 @@
+=== tests/cases/compiler/noUnusedLocals_writeOnly.ts ===
+function f(x = 0) {
+>f : (x?: number) => void
+>x : number
+>0 : 0
+
+    x = 1;
+>x = 1 : 1
+>x : number
+>1 : 1
+
+    x++;
+>x++ : number
+>x : number
+
+    x /= 2;
+>x /= 2 : number
+>x : number
+>2 : 2
+
+    let y = 0;
+>y : number
+>0 : 0
+
+    // This is a write access to y, but not a write-*only* access.
+    f(y++);
+>f(y++) : void
+>f : (x?: number) => void
+>y++ : number
+>y : number
+}
+

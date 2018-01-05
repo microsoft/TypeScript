@@ -1,16 +1,16 @@
 === tests/cases/compiler/capturedLetConstInLoop8_ES6.ts ===
 function foo() {
->foo : () => string
+>foo : () => "123" | "456"
 
     l0:
 >l0 : any
 
     for (let z = 0; z < 1; ++z) {
 >z : number
->0 : number
+>0 : 0
 >z < 1 : boolean
 >z : number
->1 : number
+>1 : 1
 >++z : number
 >z : number
 
@@ -19,10 +19,10 @@ function foo() {
 
         for (let x = 0; x < 1; ++x) {
 >x : number
->0 : number
+>0 : 0
 >x < 1 : boolean
 >x : number
->1 : number
+>1 : 1
 >++x : number
 >x : number
 
@@ -31,10 +31,10 @@ function foo() {
 
             for (let y = 0; y < 1; ++y) {
 >y : number
->0 : number
+>0 : 0
 >y < 1 : boolean
 >y : number
->1 : number
+>1 : 1
 >++y : number
 >y : number
 
@@ -113,7 +113,7 @@ function foo() {
 >2 : 2
 
                     return "123"
->"123" : string
+>"123" : "123"
                 }
                 if (x == 3) {
 >x == 3 : boolean
@@ -167,7 +167,7 @@ function foo() {
 >2 : 2
 
                 return "456";
->"456" : string
+>"456" : "456"
             }
             if (x == 3) {
 >x == 3 : boolean
@@ -181,62 +181,62 @@ function foo() {
 }
 
 function foo_c() {
->foo_c : () => string
+>foo_c : () => "123" | "456"
 
     l0:
 >l0 : any
 
     for (const z = 0; z < 1;) {
->z : number
->0 : number
+>z : 0
+>0 : 0
 >z < 1 : boolean
->z : number
->1 : number
+>z : 0
+>1 : 1
 
         l1:
 >l1 : any
 
         for (const x = 0; x < 1;) {
->x : number
->0 : number
+>x : 0
+>0 : 0
 >x < 1 : boolean
->x : number
->1 : number
+>x : 0
+>1 : 1
 
             ll1:
 >ll1 : any
 
             for (const y = 0; y < 1;) {
->y : number
->0 : number
+>y : 0
+>0 : 0
 >y < 1 : boolean
->y : number
->1 : number
+>y : 0
+>1 : 1
 
                 (function() { return x + y });
 >(function() { return x + y }) : () => number
 >function() { return x + y } : () => number
 >x + y : number
->x : number
->y : number
+>x : 0
+>y : 0
 
                 (() => x + y);
 >(() => x + y) : () => number
 >() => x + y : () => number
 >x + y : number
->x : number
->y : number
+>x : 0
+>y : 0
 
                 if (y == 1) {
 >y == 1 : boolean
->y : number
+>y : 0
 >1 : 1
 
                     break;
                 }
                 if (y == 1) {
 >y == 1 : boolean
->y : number
+>y : 0
 >1 : 1
 
                     break l1;
@@ -244,7 +244,7 @@ function foo_c() {
                 }
                 if (y == 1) {
 >y == 1 : boolean
->y : number
+>y : 0
 >1 : 1
 
                     break ll1;
@@ -252,7 +252,7 @@ function foo_c() {
                 }
                 if (y == 1) {
 >y == 1 : boolean
->y : number
+>y : 0
 >1 : 1
 
                     continue l0;
@@ -261,14 +261,14 @@ function foo_c() {
 
                 if (x == 2) {
 >x == 2 : boolean
->x : number
+>x : 0
 >2 : 2
 
                     continue;
                 }
                 if (x == 2) {
 >x == 2 : boolean
->x : number
+>x : 0
 >2 : 2
 
                     continue l1;
@@ -276,7 +276,7 @@ function foo_c() {
                 }
                 if (x == 2) {
 >x == 2 : boolean
->x : number
+>x : 0
 >2 : 2
 
                     continue ll1;
@@ -284,15 +284,15 @@ function foo_c() {
                 }
                 if (x == 2) {
 >x == 2 : boolean
->x : number
+>x : 0
 >2 : 2
 
                     return "123"
->"123" : string
+>"123" : "123"
                 }
                 if (x == 3) {
 >x == 3 : boolean
->x : number
+>x : 0
 >3 : 3
 
                     return;
@@ -300,14 +300,14 @@ function foo_c() {
             }
             if (x == 1) {
 >x == 1 : boolean
->x : number
+>x : 0
 >1 : 1
 
                 break;
             }
             if (x == 1) {
 >x == 1 : boolean
->x : number
+>x : 0
 >1 : 1
 
                 break l1;
@@ -315,14 +315,14 @@ function foo_c() {
             }
             if (x == 2) {
 >x == 2 : boolean
->x : number
+>x : 0
 >2 : 2
 
                 continue;
             }
             if (x == 2) {
 >x == 2 : boolean
->x : number
+>x : 0
 >2 : 2
 
                 continue l1;
@@ -330,7 +330,7 @@ function foo_c() {
             }
             if (x == 2) {
 >x == 2 : boolean
->x : number
+>x : 0
 >2 : 2
 
                 continue l0;
@@ -338,15 +338,15 @@ function foo_c() {
             }
             if (x == 2) {
 >x == 2 : boolean
->x : number
+>x : 0
 >2 : 2
 
                 return "456";
->"456" : string
+>"456" : "456"
             }
             if (x == 3) {
 >x == 3 : boolean
->x : number
+>x : 0
 >3 : 3
 
                 return;

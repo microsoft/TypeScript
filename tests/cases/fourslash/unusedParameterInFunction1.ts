@@ -4,4 +4,8 @@
 ////function [|greeter( x)|] {
 ////}
 
-verify.rangeAfterCodeFix("greeter()");
+verify.codeFix({
+    description: "Remove declaration for: 'x'",
+    index: 0,
+    newRangeContent: "greeter()",
+});

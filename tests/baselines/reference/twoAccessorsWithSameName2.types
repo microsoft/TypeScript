@@ -1,0 +1,38 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts ===
+class C {
+>C : C
+
+    static get x() { return 1; }
+>x : number
+>1 : 1
+
+    static get x() { return 1; } // error
+>x : number
+>1 : 1
+}
+
+class D {
+>D : D
+
+    static set x(v) {  }
+>x : any
+>v : any
+
+    static set x(v) {  } // error
+>x : any
+>v : any
+}
+
+class E {
+>E : E
+
+    static get x() {
+>x : number
+
+        return 1;
+>1 : 1
+    }
+    static set x(v) { }
+>x : number
+>v : number
+}

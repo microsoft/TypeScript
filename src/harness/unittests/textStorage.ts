@@ -21,7 +21,7 @@ namespace ts.textStorage {
             const ts1 = new server.TextStorage(host, server.asNormalizedPath(f.path));
             const ts2 = new server.TextStorage(host, server.asNormalizedPath(f.path));
 
-            ts1.useScriptVersionCache();
+            ts1.useScriptVersionCache_TestOnly();
             ts2.useText();
 
             const lineMap = computeLineStarts(f.content);
@@ -55,16 +55,16 @@ namespace ts.textStorage {
             const ts1 = new server.TextStorage(host, server.asNormalizedPath(f.path));
 
             ts1.getSnapshot();
-            assert.isTrue(!ts1.hasScriptVersionCache(), "should not have script version cache - 1");
+            assert.isTrue(!ts1.hasScriptVersionCache_TestOnly(), "should not have script version cache - 1");
 
             ts1.edit(0, 5, "   ");
-            assert.isTrue(ts1.hasScriptVersionCache(), "have script version cache - 1");
+            assert.isTrue(ts1.hasScriptVersionCache_TestOnly(), "have script version cache - 1");
 
             ts1.useText();
-            assert.isTrue(!ts1.hasScriptVersionCache(), "should not have script version cache - 2");
+            assert.isTrue(!ts1.hasScriptVersionCache_TestOnly(), "should not have script version cache - 2");
 
             ts1.getLineInfo(0);
-            assert.isTrue(ts1.hasScriptVersionCache(), "have script version cache - 2");
+            assert.isTrue(ts1.hasScriptVersionCache_TestOnly(), "have script version cache - 2");
         });
     });
 }

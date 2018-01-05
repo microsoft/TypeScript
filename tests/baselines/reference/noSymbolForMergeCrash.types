@@ -1,0 +1,11 @@
+=== tests/cases/compiler/initial.ts ===
+interface A { }
+>A : A
+
+namespace A {}
+>A : any
+
+=== tests/cases/compiler/final.ts ===
+type A = {}
+>A : {}
+

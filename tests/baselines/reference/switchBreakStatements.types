@@ -1,7 +1,6 @@
 === tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts ===
-
 switch ('') {
->'' : string
+>'' : ""
 
     case 'a':
 >'a' : "a"
@@ -13,7 +12,7 @@ ONE:
 >ONE : any
 
 switch ('') {
->'' : string
+>'' : ""
 
     case 'a':
 >'a' : "a"
@@ -29,7 +28,7 @@ THREE:
 >THREE : any
 
 switch ('') {
->'' : string
+>'' : ""
 
     case 'a':
 >'a' : "a"
@@ -42,7 +41,7 @@ FOUR:
 >FOUR : any
 
 switch ('') {
->'' : string
+>'' : ""
 
     case 'a':
 >'a' : "a"
@@ -51,7 +50,7 @@ switch ('') {
 >FIVE : any
 
         switch ('') {
->'' : string
+>'' : ""
 
             case 'a':
 >'a' : "a"
@@ -62,7 +61,7 @@ switch ('') {
 }
 
 switch ('') {
->'' : string
+>'' : ""
 
     case 'a':
 >'a' : "a"
@@ -71,7 +70,7 @@ switch ('') {
 >SIX : any
 
         switch ('') {
->'' : string
+>'' : ""
 
             case 'a':
 >'a' : "a"
@@ -85,19 +84,19 @@ SEVEN:
 >SEVEN : any
 
 switch ('') {
->'' : string
+>'' : ""
 
     case 'a':
 >'a' : "a"
 
         switch ('') {
->'' : string
+>'' : ""
 
             case 'a':
 >'a' : "a"
 
                 switch ('') {
->'' : string
+>'' : ""
 
                     case 'a':
 >'a' : "a"
@@ -109,7 +108,7 @@ switch ('') {
 >EIGHT : any
 
                         switch ('') {
->'' : string
+>'' : ""
 
                             case 'a':
 >'a' : "a"

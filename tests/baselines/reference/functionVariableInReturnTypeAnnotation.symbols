@@ -1,0 +1,10 @@
+=== tests/cases/compiler/functionVariableInReturnTypeAnnotation.ts ===
+function bar(): typeof b {
+>bar : Symbol(bar, Decl(functionVariableInReturnTypeAnnotation.ts, 0, 0))
+
+    var b = 1;
+>b : Symbol(b, Decl(functionVariableInReturnTypeAnnotation.ts, 1, 7))
+
+    return undefined;
+>undefined : Symbol(undefined)
+}

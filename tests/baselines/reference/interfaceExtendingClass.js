@@ -20,7 +20,7 @@ var f: Foo = i;
 i = f;
 
 //// [interfaceExtendingClass.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     Foo.prototype.y = function () { };

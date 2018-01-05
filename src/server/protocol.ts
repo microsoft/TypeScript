@@ -8,18 +8,24 @@ namespace ts.server.protocol {
         /* @internal */
         BraceFull = "brace-full",
         BraceCompletion = "braceCompletion",
+        GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
         Change = "change",
         Close = "close",
         Completions = "completions",
         /* @internal */
         CompletionsFull = "completions-full",
         CompletionDetails = "completionEntryDetails",
+        /* @internal */
+        CompletionDetailsFull = "completionEntryDetails-full",
         CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList",
         CompileOnSaveEmitFile = "compileOnSaveEmitFile",
         Configure = "configure",
         Definition = "definition",
         /* @internal */
         DefinitionFull = "definition-full",
+        DefinitionAndBoundSpan = "definitionAndBoundSpan",
+        /* @internal */
+        DefinitionAndBoundSpanFull = "definitionAndBoundSpan-full",
         Implementation = "implementation",
         /* @internal */
         ImplementationFull = "implementation-full",
@@ -65,6 +71,7 @@ namespace ts.server.protocol {
         SignatureHelp = "signatureHelp",
         /* @internal */
         SignatureHelpFull = "signatureHelp-full",
+        Status = "status",
         TypeDefinition = "typeDefinition",
         ProjectInfo = "projectInfo",
         ReloadProjects = "reloadProjects",
@@ -95,11 +102,20 @@ namespace ts.server.protocol {
         GetCodeFixes = "getCodeFixes",
         /* @internal */
         GetCodeFixesFull = "getCodeFixes-full",
+        // TODO: GH#20538
+        /* @internal */
+        GetCombinedCodeFix = "getCombinedCodeFix",
+        /* @internal */
+        GetCombinedCodeFixFull = "getCombinedCodeFix-full",
+        ApplyCodeActionCommand = "applyCodeActionCommand",
         GetSupportedCodeFixes = "getSupportedCodeFixes",
 
         GetApplicableRefactors = "getApplicableRefactors",
-        GetRefactorCodeActions = "getRefactorCodeActions",
-        GetRefactorCodeActionsFull = "getRefactorCodeActions-full",
+        GetEditsForRefactor = "getEditsForRefactor",
+        /* @internal */
+        GetEditsForRefactorFull = "getEditsForRefactor-full",
+
+        // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
     }
 
     /**
@@ -121,6 +137,8 @@ namespace ts.server.protocol {
      * Client-initiated request message
      */
     export interface Request extends Message {
+        type: "request";
+
         /**
          * The command to execute
          */
@@ -143,6 +161,8 @@ namespace ts.server.protocol {
      * Server-initiated event message
      */
     export interface Event extends Message {
+        type: "event";
+
         /**
          * Name of event
          */
@@ -158,6 +178,8 @@ namespace ts.server.protocol {
      * Response by server to client request message.
      */
     export interface Response extends Message {
+        type: "response";
+
         /**
          * Sequence number of the request message.
          */
@@ -174,7 +196,8 @@ namespace ts.server.protocol {
         command: string;
 
         /**
-         * Contains error message if success === false.
+         * If success === false, this should always be provided.
+         * Otherwise, may (or may not) contain a success message.
          */
         message?: string;
 
@@ -197,6 +220,24 @@ namespace ts.server.protocol {
         * Optional name of project that contains file
         */
         projectFileName?: string;
+    }
+
+    export interface StatusRequest extends Request {
+        command: CommandTypes.Status;
+    }
+
+    export interface StatusResponseBody {
+        /**
+         * The TypeScript version (`ts.version`).
+         */
+        version: string;
+    }
+
+    /**
+     * Response to StatusRequest
+     */
+    export interface StatusResponse extends Response {
+        body: StatusResponseBody;
     }
 
     /**
@@ -236,6 +277,21 @@ namespace ts.server.protocol {
      */
     export interface TodoCommentsResponse extends Response {
         body?: TodoComment[];
+    }
+
+    /**
+     * A request to determine if the caret is inside a comment.
+     */
+    export interface SpanOfEnclosingCommentRequest extends FileLocationRequest {
+        command: CommandTypes.GetSpanOfEnclosingComment;
+        arguments: SpanOfEnclosingCommentRequestArgs;
+    }
+
+    export interface SpanOfEnclosingCommentRequestArgs extends FileLocationRequestArgs {
+        /**
+         * Requires that the enclosing span be a multi-line comment, or else the request returns undefined.
+         */
+        onlyMultiLine: boolean;
     }
 
     /**
@@ -401,50 +457,96 @@ namespace ts.server.protocol {
 
     export type FileLocationOrRangeRequestArgs = FileLocationRequestArgs | FileRangeRequestArgs;
 
+    /**
+     * Request refactorings at a given position or selection area.
+     */
     export interface GetApplicableRefactorsRequest extends Request {
         command: CommandTypes.GetApplicableRefactors;
         arguments: GetApplicableRefactorsRequestArgs;
     }
-
     export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs;
 
-    export interface ApplicableRefactorInfo {
-        name: string;
-        description: string;
-    }
-
+    /**
+     * Response is a list of available refactorings.
+     * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
+     */
     export interface GetApplicableRefactorsResponse extends Response {
         body?: ApplicableRefactorInfo[];
     }
 
-    export interface GetRefactorCodeActionsRequest extends Request {
-        command: CommandTypes.GetRefactorCodeActions;
-        arguments: GetRefactorCodeActionsRequestArgs;
+    /**
+     * A set of one or more available refactoring actions, grouped under a parent refactoring.
+     */
+    export interface ApplicableRefactorInfo {
+        /**
+         * The programmatic name of the refactoring
+         */
+        name: string;
+        /**
+         * A description of this refactoring category to show to the user.
+         * If the refactoring gets inlined (see below), this text will not be visible.
+         */
+        description: string;
+        /**
+         * Inlineable refactorings can have their actions hoisted out to the top level
+         * of a context menu. Non-inlineanable refactorings should always be shown inside
+         * their parent grouping.
+         *
+         * If not specified, this value is assumed to be 'true'
+         */
+        inlineable?: boolean;
+
+        actions: RefactorActionInfo[];
     }
 
-    export type GetRefactorCodeActionsRequestArgs = FileLocationOrRangeRequestArgs & {
-        /* The kind of the applicable refactor */
-        refactorName: string;
-    };
+    /**
+     * Represents a single refactoring action - for example, the "Extract Method..." refactor might
+     * offer several actions, each corresponding to a surround class or closure to extract into.
+     */
+    export interface RefactorActionInfo {
+        /**
+         * The programmatic name of the refactoring action
+         */
+        name: string;
 
-    export type RefactorCodeActions = {
-        actions: protocol.CodeAction[];
-        renameLocation?: number
-    };
-
-    /* @internal */
-    export type RefactorCodeActionsFull = {
-        actions: ts.CodeAction[];
-        renameLocation?: number
-    };
-
-    export interface GetRefactorCodeActionsResponse extends Response {
-        body: RefactorCodeActions;
+        /**
+         * A description of this refactoring action to show to the user.
+         * If the parent refactoring is inlined away, this will be the only text shown,
+         * so this description should make sense by itself if the parent is inlineable=true
+         */
+        description: string;
     }
 
-    /* @internal */
-    export interface GetRefactorCodeActionsFullResponse extends Response {
-        body: RefactorCodeActionsFull;
+    export interface GetEditsForRefactorRequest extends Request {
+        command: CommandTypes.GetEditsForRefactor;
+        arguments: GetEditsForRefactorRequestArgs;
+    }
+
+    /**
+     * Request the edits that a particular refactoring action produces.
+     * Callers must specify the name of the refactor and the name of the action.
+     */
+    export type GetEditsForRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
+        /* The 'name' property from the refactoring that offered this action */
+        refactor: string;
+        /* The 'name' property from the refactoring action */
+        action: string;
+    };
+
+
+    export interface GetEditsForRefactorResponse extends Response {
+        body?: RefactorEditInfo;
+    }
+
+    export interface RefactorEditInfo {
+        edits: FileCodeEdits[];
+
+        /**
+         * An optional location where the editor should start a rename operation once
+         * the refactoring edits have been applied
+         */
+        renameLocation?: Location;
+        renameFilename?: string;
     }
 
     /**
@@ -454,6 +556,27 @@ namespace ts.server.protocol {
         command: CommandTypes.GetCodeFixes;
         arguments: CodeFixRequestArgs;
     }
+
+    // TODO: GH#20538
+    /* @internal */
+    export interface GetCombinedCodeFixRequest extends Request {
+        command: CommandTypes.GetCombinedCodeFix;
+        arguments: GetCombinedCodeFixRequestArgs;
+    }
+
+    // TODO: GH#20538
+    /* @internal */
+    export interface GetCombinedCodeFixResponse  extends Response {
+        body: CombinedCodeActions;
+    }
+
+    export interface ApplyCodeActionCommandRequest extends Request {
+        command: CommandTypes.ApplyCodeActionCommand;
+        arguments: ApplyCodeActionCommandRequestArgs;
+    }
+
+    // All we need is the `success` and `message` fields of Response.
+    export interface ApplyCodeActionCommandResponse extends Response {}
 
     export interface FileRangeRequestArgs extends FileRequestArgs {
         /**
@@ -496,7 +619,26 @@ namespace ts.server.protocol {
         /**
          * Errorcodes we want to get the fixes for.
          */
-        errorCodes?: number[];
+        errorCodes?: ReadonlyArray<number>;
+    }
+
+    // TODO: GH#20538
+    /* @internal */
+    export interface GetCombinedCodeFixRequestArgs {
+        scope: GetCombinedCodeFixScope;
+        fixId: {};
+    }
+
+    // TODO: GH#20538
+    /* @internal */
+    export interface GetCombinedCodeFixScope {
+        type: "file";
+        args: FileRequestArgs;
+    }
+
+    export interface ApplyCodeActionCommandRequestArgs {
+        /** May also be an array of commands. */
+        command: {};
     }
 
     /**
@@ -591,7 +733,7 @@ namespace ts.server.protocol {
     }
 
     /**
-     * Location in source code expressed as (one-based) line and character offset.
+     * Location in source code expressed as (one-based) line and (one-based) column offset.
      */
     export interface Location {
         line: number;
@@ -623,11 +765,20 @@ namespace ts.server.protocol {
         file: string;
     }
 
+    export interface DefinitionInfoAndBoundSpan {
+        definitions: ReadonlyArray<FileSpan>;
+        textSpan: TextSpan;
+    }
+
     /**
      * Definition response message.  Gives text range for definition.
      */
     export interface DefinitionResponse extends Response {
         body?: FileSpan[];
+    }
+
+    export interface DefinitionInfoAndBoundSpanReponse extends Response {
+        body?: DefinitionInfoAndBoundSpan;
     }
 
     /**
@@ -865,7 +1016,7 @@ namespace ts.server.protocol {
         /**
          * An array of span groups (one per file) that refer to the item to be renamed.
          */
-        locs: SpanGroup[];
+        locs: ReadonlyArray<SpanGroup>;
     }
 
     /**
@@ -1255,6 +1406,13 @@ namespace ts.server.protocol {
          * Compiler options to be used with inferred projects.
          */
         options: ExternalProjectCompilerOptions;
+
+        /**
+         * Specifies the project root path used to scope compiler options.
+         * It is an error to provide this property if the server has not been started with
+         * `useInferredProjectPerProjectRoot` enabled.
+         */
+        projectRootPath?: string;
     }
 
     /**
@@ -1461,7 +1619,7 @@ namespace ts.server.protocol {
 
     export interface CodeFixResponse extends Response {
         /** The code actions that are available */
-        body?: CodeAction[];
+        body?: CodeAction[]; // TODO: GH#20538 CodeFixAction[]
     }
 
     export interface CodeAction {
@@ -1469,6 +1627,25 @@ namespace ts.server.protocol {
         description: string;
         /** Text changes to apply to each file as part of the code action */
         changes: FileCodeEdits[];
+        /** A command is an opaque object that should be passed to `ApplyCodeActionCommandRequestArgs` without modification.  */
+        commands?: {}[];
+    }
+
+    // TODO: GH#20538
+    /* @internal */
+    export interface CombinedCodeActions {
+        changes: ReadonlyArray<FileCodeEdits>;
+        commands?: ReadonlyArray<{}>;
+    }
+
+    // TODO: GH#20538
+    /* @internal */
+    export interface CodeFixAction extends CodeAction {
+        /**
+         * If present, one may call 'getCombinedCodeFix' with this fixId.
+         * This may be omitted to indicate that the code fix can't be applied in a group.
+         */
+        fixId?: {};
     }
 
     /**
@@ -1511,6 +1688,11 @@ namespace ts.server.protocol {
          * Optional prefix to apply to possible completions.
          */
         prefix?: string;
+        /**
+         * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
+         * This affects lone identifier completions but not completions on the right hand side of `obj.`.
+         */
+        includeExternalModuleExports: boolean;
     }
 
     /**
@@ -1531,7 +1713,12 @@ namespace ts.server.protocol {
         /**
          * Names of one or more entries for which to obtain details.
          */
-        entryNames: string[];
+        entryNames: (string | CompletionEntryIdentifier)[];
+    }
+
+    export interface CompletionEntryIdentifier {
+        name: string;
+        source: string;
     }
 
     /**
@@ -1582,10 +1769,26 @@ namespace ts.server.protocol {
          */
         sortText: string;
         /**
-         * An optional span that indicates the text to be replaced by this completion item. If present,
-         * this span should be used instead of the default one.
+         * An optional span that indicates the text to be replaced by this completion item.
+         * If present, this span should be used instead of the default one.
+         * It will be set if the required span differs from the one generated by the default replacement behavior.
          */
         replacementSpan?: TextSpan;
+        /**
+         * Indicates whether commiting this completion entry will require additional code actions to be
+         * made to avoid errors. The CompletionEntryDetails will have these actions.
+         */
+        hasAction?: true;
+        /**
+         * Identifier (not necessarily human-readable) identifying where this completion came from.
+         */
+        source?: string;
+        /**
+         * If true, this completion should be highlighted as recommended. There will only be one of these.
+         * This will be set when we know the user should write an expression with a certain type and that type is an enum or constructable class.
+         * Then either that enum/class or a namespace containing it will be the recommended symbol.
+         */
+        isRecommended?: true;
     }
 
     /**
@@ -1618,6 +1821,16 @@ namespace ts.server.protocol {
          * JSDoc tags for the symbol.
          */
         tags: JSDocTagInfo[];
+
+        /**
+         * The associated code actions for this entry
+         */
+        codeActions?: CodeAction[];
+
+        /**
+         * Human-readable description of the `source` from the CompletionEntry.
+         */
+        source?: SymbolDisplayPart[];
     }
 
     export interface CompletionsResponse extends Response {
@@ -1894,6 +2107,13 @@ namespace ts.server.protocol {
         source?: string;
     }
 
+    export interface DiagnosticWithFileName extends Diagnostic {
+        /**
+         * Name of the file the diagnostic is in
+         */
+        fileName: string;
+    }
+
     export interface DiagnosticEventBody {
         /**
          * The file for which diagnostic information is reported.
@@ -1928,7 +2148,7 @@ namespace ts.server.protocol {
         /**
          * An arry of diagnostic information items for the found config file.
          */
-        diagnostics: Diagnostic[];
+        diagnostics: DiagnosticWithFileName[];
     }
 
     /**
@@ -1959,6 +2179,19 @@ namespace ts.server.protocol {
          * and false otherwise.
          */
         languageServiceEnabled: boolean;
+    }
+
+    export type ProjectsUpdatedInBackgroundEventName = "projectsUpdatedInBackground";
+    export interface ProjectsUpdatedInBackgroundEvent extends Event {
+        event: ProjectsUpdatedInBackgroundEventName;
+        body: ProjectsUpdatedInBackgroundEventBody;
+    }
+
+    export interface ProjectsUpdatedInBackgroundEventBody {
+        /**
+         * Current set of open files
+         */
+        openFiles: string[];
     }
 
     /**
@@ -2373,6 +2606,7 @@ namespace ts.server.protocol {
         paths?: MapLike<string[]>;
         plugins?: PluginImport[];
         preserveConstEnums?: boolean;
+        preserveSymlinks?: boolean;
         project?: string;
         reactNamespace?: string;
         removeComments?: boolean;
@@ -2409,6 +2643,7 @@ namespace ts.server.protocol {
         System = "System",
         ES6 = "ES6",
         ES2015 = "ES2015",
+        ESNext = "ESNext"
     }
 
     export const enum ModuleResolutionKind {
@@ -2426,5 +2661,8 @@ namespace ts.server.protocol {
         ES5 = "ES5",
         ES6 = "ES6",
         ES2015 = "ES2015",
+        ES2016 = "ES2016",
+        ES2017 = "ES2017",
+        ESNext = "ESNext"
     }
 }

@@ -1,0 +1,7 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorInAmbientContext4.d.ts ===
+declare module M {
+>M : Symbol(M, Decl(generatorInAmbientContext4.d.ts, 0, 0))
+
+    function *generator(): any;
+>generator : Symbol(generator, Decl(generatorInAmbientContext4.d.ts, 0, 18))
+}

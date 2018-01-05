@@ -1,0 +1,8 @@
+=== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck9.ts ===
+var union: string | string[] | number | symbol;
+>union : Symbol(union, Decl(ES5For-ofTypeCheck9.ts, 0, 3))
+
+for (let v of union) { }
+>v : Symbol(v, Decl(ES5For-ofTypeCheck9.ts, 1, 8))
+>union : Symbol(union, Decl(ES5For-ofTypeCheck9.ts, 0, 3))
+

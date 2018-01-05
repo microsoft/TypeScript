@@ -31,12 +31,12 @@ var x8: B<I2, I1>;
 
 
 //// [typeParamExtendsOtherTypeParam.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     return B;

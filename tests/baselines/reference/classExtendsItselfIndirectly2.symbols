@@ -1,0 +1,68 @@
+=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly2.ts ===
+class C extends N.E { foo: string; } // error
+>C : Symbol(C, Decl(classExtendsItselfIndirectly2.ts, 0, 0))
+>N.E : Symbol(N.E, Decl(classExtendsItselfIndirectly2.ts, 7, 10))
+>N : Symbol(N, Decl(classExtendsItselfIndirectly2.ts, 5, 1))
+>E : Symbol(N.E, Decl(classExtendsItselfIndirectly2.ts, 7, 10))
+>foo : Symbol(C.foo, Decl(classExtendsItselfIndirectly2.ts, 0, 21))
+
+module M {
+>M : Symbol(M, Decl(classExtendsItselfIndirectly2.ts, 0, 36))
+
+    export class D extends C { bar: string; }
+>D : Symbol(D, Decl(classExtendsItselfIndirectly2.ts, 2, 10))
+>C : Symbol(C, Decl(classExtendsItselfIndirectly2.ts, 0, 0))
+>bar : Symbol(D.bar, Decl(classExtendsItselfIndirectly2.ts, 3, 30))
+
+}
+
+module N {
+>N : Symbol(N, Decl(classExtendsItselfIndirectly2.ts, 5, 1))
+
+    export class E extends M.D { baz: number; }
+>E : Symbol(E, Decl(classExtendsItselfIndirectly2.ts, 7, 10))
+>M.D : Symbol(M.D, Decl(classExtendsItselfIndirectly2.ts, 2, 10))
+>M : Symbol(M, Decl(classExtendsItselfIndirectly2.ts, 0, 36))
+>D : Symbol(M.D, Decl(classExtendsItselfIndirectly2.ts, 2, 10))
+>baz : Symbol(E.baz, Decl(classExtendsItselfIndirectly2.ts, 8, 32))
+}
+
+module O {
+>O : Symbol(O, Decl(classExtendsItselfIndirectly2.ts, 9, 1))
+
+    class C2<T> extends Q.E2<T> { foo: T; } // error
+>C2 : Symbol(C2, Decl(classExtendsItselfIndirectly2.ts, 11, 10))
+>T : Symbol(T, Decl(classExtendsItselfIndirectly2.ts, 12, 13))
+>Q.E2 : Symbol(Q.E2, Decl(classExtendsItselfIndirectly2.ts, 18, 14))
+>Q : Symbol(Q, Decl(classExtendsItselfIndirectly2.ts, 16, 5))
+>E2 : Symbol(Q.E2, Decl(classExtendsItselfIndirectly2.ts, 18, 14))
+>T : Symbol(T, Decl(classExtendsItselfIndirectly2.ts, 12, 13))
+>foo : Symbol(C2.foo, Decl(classExtendsItselfIndirectly2.ts, 12, 33))
+>T : Symbol(T, Decl(classExtendsItselfIndirectly2.ts, 12, 13))
+
+    module P {
+>P : Symbol(P, Decl(classExtendsItselfIndirectly2.ts, 12, 43))
+
+        export class D2<T> extends C2<T> { bar: T; }
+>D2 : Symbol(D2, Decl(classExtendsItselfIndirectly2.ts, 14, 14))
+>T : Symbol(T, Decl(classExtendsItselfIndirectly2.ts, 15, 24))
+>C2 : Symbol(C2, Decl(classExtendsItselfIndirectly2.ts, 11, 10))
+>T : Symbol(T, Decl(classExtendsItselfIndirectly2.ts, 15, 24))
+>bar : Symbol(D2.bar, Decl(classExtendsItselfIndirectly2.ts, 15, 42))
+>T : Symbol(T, Decl(classExtendsItselfIndirectly2.ts, 15, 24))
+    }
+
+    module Q {
+>Q : Symbol(Q, Decl(classExtendsItselfIndirectly2.ts, 16, 5))
+
+        export class E2<T> extends P.D2<T> { baz: T; }
+>E2 : Symbol(E2, Decl(classExtendsItselfIndirectly2.ts, 18, 14))
+>T : Symbol(T, Decl(classExtendsItselfIndirectly2.ts, 19, 24))
+>P.D2 : Symbol(P.D2, Decl(classExtendsItselfIndirectly2.ts, 14, 14))
+>P : Symbol(P, Decl(classExtendsItselfIndirectly2.ts, 12, 43))
+>D2 : Symbol(P.D2, Decl(classExtendsItselfIndirectly2.ts, 14, 14))
+>T : Symbol(T, Decl(classExtendsItselfIndirectly2.ts, 19, 24))
+>baz : Symbol(E2.baz, Decl(classExtendsItselfIndirectly2.ts, 19, 44))
+>T : Symbol(T, Decl(classExtendsItselfIndirectly2.ts, 19, 24))
+    }
+}

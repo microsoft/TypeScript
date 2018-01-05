@@ -13,7 +13,7 @@ class Linq {
 
 
 //// [unknownSymbolInGenericReturnType.js]
-var Linq = (function () {
+var Linq = /** @class */ (function () {
     function Linq() {
     }
     Linq.select = function (values, func) {

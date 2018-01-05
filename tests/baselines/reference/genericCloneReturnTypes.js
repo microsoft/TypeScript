@@ -26,7 +26,7 @@ b = b2;
 b = b3;
 
 //// [genericCloneReturnTypes.js]
-var Bar = (function () {
+var Bar = /** @class */ (function () {
     function Bar(x) {
         this.size = x;
     }

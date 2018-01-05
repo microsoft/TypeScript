@@ -1,0 +1,10 @@
+=== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode12.ts ===
+"use strict";
+>"use strict" : "use strict"
+
+var v = { set foo(eval) { } }
+>v : { foo: any; }
+>{ set foo(eval) { } } : { foo: any; }
+>foo : any
+>eval : any
+

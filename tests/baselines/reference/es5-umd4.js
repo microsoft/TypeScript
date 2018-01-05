@@ -26,7 +26,7 @@ export = A;
     }
 })(function (require, exports) {
     "use strict";
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         A.prototype.B = function () {

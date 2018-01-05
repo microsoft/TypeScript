@@ -1,0 +1,121 @@
+=== tests/cases/compiler/enumAssignmentCompat2.ts ===
+enum W {
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+
+    a, b, c,
+>a : Symbol(W.a, Decl(enumAssignmentCompat2.ts, 0, 8))
+>b : Symbol(W.b, Decl(enumAssignmentCompat2.ts, 2, 6))
+>c : Symbol(W.c, Decl(enumAssignmentCompat2.ts, 2, 9))
+
+}
+
+module W {
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+
+    export class D { }
+>D : Symbol(D, Decl(enumAssignmentCompat2.ts, 6, 10))
+}
+
+interface WStatic {
+>WStatic : Symbol(WStatic, Decl(enumAssignmentCompat2.ts, 8, 1))
+
+    a: W;
+>a : Symbol(WStatic.a, Decl(enumAssignmentCompat2.ts, 10, 19))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+
+    b: W;
+>b : Symbol(WStatic.b, Decl(enumAssignmentCompat2.ts, 12, 9))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+
+    c: W;
+>c : Symbol(WStatic.c, Decl(enumAssignmentCompat2.ts, 14, 9))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+
+}
+
+
+
+var x: WStatic = W;
+>x : Symbol(x, Decl(enumAssignmentCompat2.ts, 22, 3))
+>WStatic : Symbol(WStatic, Decl(enumAssignmentCompat2.ts, 8, 1))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+
+var y: typeof W = W;
+>y : Symbol(y, Decl(enumAssignmentCompat2.ts, 23, 3))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+
+var z: number = W; // error
+>z : Symbol(z, Decl(enumAssignmentCompat2.ts, 24, 3))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+
+var a: number = W.a;
+>a : Symbol(a, Decl(enumAssignmentCompat2.ts, 25, 3))
+>W.a : Symbol(W.a, Decl(enumAssignmentCompat2.ts, 0, 8))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+>a : Symbol(W.a, Decl(enumAssignmentCompat2.ts, 0, 8))
+
+var b: typeof W = W.a; // error
+>b : Symbol(b, Decl(enumAssignmentCompat2.ts, 26, 3))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+>W.a : Symbol(W.a, Decl(enumAssignmentCompat2.ts, 0, 8))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+>a : Symbol(W.a, Decl(enumAssignmentCompat2.ts, 0, 8))
+
+var c: typeof W.a = W.a;
+>c : Symbol(c, Decl(enumAssignmentCompat2.ts, 27, 3))
+>W.a : Symbol(W.a, Decl(enumAssignmentCompat2.ts, 0, 8))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+>a : Symbol(W.a, Decl(enumAssignmentCompat2.ts, 0, 8))
+>W.a : Symbol(W.a, Decl(enumAssignmentCompat2.ts, 0, 8))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+>a : Symbol(W.a, Decl(enumAssignmentCompat2.ts, 0, 8))
+
+var d: typeof W = 3; // error
+>d : Symbol(d, Decl(enumAssignmentCompat2.ts, 28, 3))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+
+var e: typeof W.a = 4;
+>e : Symbol(e, Decl(enumAssignmentCompat2.ts, 29, 3))
+>W.a : Symbol(W.a, Decl(enumAssignmentCompat2.ts, 0, 8))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+>a : Symbol(W.a, Decl(enumAssignmentCompat2.ts, 0, 8))
+
+var f: WStatic = W.a; // error
+>f : Symbol(f, Decl(enumAssignmentCompat2.ts, 30, 3))
+>WStatic : Symbol(WStatic, Decl(enumAssignmentCompat2.ts, 8, 1))
+>W.a : Symbol(W.a, Decl(enumAssignmentCompat2.ts, 0, 8))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+>a : Symbol(W.a, Decl(enumAssignmentCompat2.ts, 0, 8))
+
+var g: WStatic = 5; // error
+>g : Symbol(g, Decl(enumAssignmentCompat2.ts, 31, 3))
+>WStatic : Symbol(WStatic, Decl(enumAssignmentCompat2.ts, 8, 1))
+
+var h: W = 3;
+>h : Symbol(h, Decl(enumAssignmentCompat2.ts, 32, 3))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+
+var i: W = W.a;
+>i : Symbol(i, Decl(enumAssignmentCompat2.ts, 33, 3))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+>W.a : Symbol(W.a, Decl(enumAssignmentCompat2.ts, 0, 8))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+>a : Symbol(W.a, Decl(enumAssignmentCompat2.ts, 0, 8))
+
+i = W.a;
+>i : Symbol(i, Decl(enumAssignmentCompat2.ts, 33, 3))
+>W.a : Symbol(W.a, Decl(enumAssignmentCompat2.ts, 0, 8))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+>a : Symbol(W.a, Decl(enumAssignmentCompat2.ts, 0, 8))
+
+W.D;
+>W.D : Symbol(W.D, Decl(enumAssignmentCompat2.ts, 6, 10))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+>D : Symbol(W.D, Decl(enumAssignmentCompat2.ts, 6, 10))
+
+var p: W.D;
+>p : Symbol(p, Decl(enumAssignmentCompat2.ts, 36, 3))
+>W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
+>D : Symbol(W.D, Decl(enumAssignmentCompat2.ts, 6, 10))
+

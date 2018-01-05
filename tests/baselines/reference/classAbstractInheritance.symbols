@@ -1,0 +1,43 @@
+=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInheritance.ts ===
+abstract class A {}
+>A : Symbol(A, Decl(classAbstractInheritance.ts, 0, 0))
+
+abstract class B extends A {}
+>B : Symbol(B, Decl(classAbstractInheritance.ts, 0, 19))
+>A : Symbol(A, Decl(classAbstractInheritance.ts, 0, 0))
+
+class C extends A {}
+>C : Symbol(C, Decl(classAbstractInheritance.ts, 2, 29))
+>A : Symbol(A, Decl(classAbstractInheritance.ts, 0, 0))
+
+abstract class AA {
+>AA : Symbol(AA, Decl(classAbstractInheritance.ts, 4, 20))
+
+    abstract foo();
+>foo : Symbol(AA.foo, Decl(classAbstractInheritance.ts, 6, 19))
+}
+
+abstract class BB extends AA {}
+>BB : Symbol(BB, Decl(classAbstractInheritance.ts, 8, 1))
+>AA : Symbol(AA, Decl(classAbstractInheritance.ts, 4, 20))
+
+class CC extends AA {}
+>CC : Symbol(CC, Decl(classAbstractInheritance.ts, 10, 31))
+>AA : Symbol(AA, Decl(classAbstractInheritance.ts, 4, 20))
+
+class DD extends BB {}
+>DD : Symbol(DD, Decl(classAbstractInheritance.ts, 12, 22))
+>BB : Symbol(BB, Decl(classAbstractInheritance.ts, 8, 1))
+
+abstract class EE extends BB {}
+>EE : Symbol(EE, Decl(classAbstractInheritance.ts, 14, 22))
+>BB : Symbol(BB, Decl(classAbstractInheritance.ts, 8, 1))
+
+class FF extends CC {}
+>FF : Symbol(FF, Decl(classAbstractInheritance.ts, 16, 31))
+>CC : Symbol(CC, Decl(classAbstractInheritance.ts, 10, 31))
+
+abstract class GG extends CC {}
+>GG : Symbol(GG, Decl(classAbstractInheritance.ts, 18, 22))
+>CC : Symbol(CC, Decl(classAbstractInheritance.ts, 10, 31))
+

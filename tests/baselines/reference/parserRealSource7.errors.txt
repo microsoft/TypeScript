@@ -11,11 +11,11 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(34,54): error TS
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(34,68): error TS2304: Cannot find name 'TypeCollectionContext'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(35,25): error TS2304: Cannot find name 'ValueLocation'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(36,30): error TS2304: Cannot find name 'TypeLink'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(41,17): error TS2552: Cannot find name 'FieldSymbol'. Did you mean 'fieldSymbol'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(41,17): error TS2304: Cannot find name 'FieldSymbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(43,31): error TS2304: Cannot find name 'SymbolFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(43,54): error TS2304: Cannot find name 'SymbolFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(49,58): error TS2304: Cannot find name 'Type'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(50,29): error TS2552: Cannot find name 'Signature'. Did you mean 'signature'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(50,29): error TS2304: Cannot find name 'Signature'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(51,36): error TS2304: Cannot find name 'TypeLink'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(55,30): error TS2304: Cannot find name 'SignatureGroup'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(59,66): error TS2304: Cannot find name 'Type'.
@@ -46,7 +46,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(154,27): error T
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(155,26): error TS2304: Cannot find name 'hasFlag'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(155,55): error TS2304: Cannot find name 'VarFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(165,28): error TS2304: Cannot find name 'ModuleType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(169,26): error TS2552: Cannot find name 'TypeSymbol'. Did you mean 'typeSymbol'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(169,26): error TS2304: Cannot find name 'TypeSymbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(186,48): error TS2304: Cannot find name 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(186,61): error TS2304: Cannot find name 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(186,75): error TS2304: Cannot find name 'TypeCollectionContext'.
@@ -81,8 +81,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(212,46): error T
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(212,64): error TS2304: Cannot find name 'DualStringHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(212,88): error TS2304: Cannot find name 'StringHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(212,111): error TS2304: Cannot find name 'StringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(216,30): error TS2552: Cannot find name 'TypeSymbol'. Did you mean 'typeSymbol'?
-tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(231,72): error TS2552: Cannot find name 'NodeType'. Did you mean 'modType'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(216,30): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(231,72): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(234,27): error TS2304: Cannot find name 'TypeSymbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(238,80): error TS2304: Cannot find name 'StringHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(239,37): error TS2304: Cannot find name 'ScopedMembers'.
@@ -142,7 +142,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(349,47): error T
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(349,65): error TS2304: Cannot find name 'DualStringHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(349,89): error TS2304: Cannot find name 'StringHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(349,112): error TS2304: Cannot find name 'StringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(350,30): error TS2552: Cannot find name 'TypeSymbol'. Did you mean 'typeSymbol'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(350,30): error TS2304: Cannot find name 'TypeSymbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(360,37): error TS2304: Cannot find name 'SymbolFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(364,37): error TS2304: Cannot find name 'SymbolFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(368,37): error TS2304: Cannot find name 'SymbolFlags'.
@@ -196,7 +196,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(476,57): error T
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(477,29): error TS2304: Cannot find name 'ValueLocation'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(478,29): error TS2304: Cannot find name 'hasFlag'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(478,55): error TS2304: Cannot find name 'VarFlags'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(480,21): error TS2552: Cannot find name 'FieldSymbol'. Did you mean 'fieldSymbol'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(480,21): error TS2304: Cannot find name 'FieldSymbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(482,34): error TS2304: Cannot find name 'hasFlag'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(482,60): error TS2304: Cannot find name 'VarFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(492,30): error TS2304: Cannot find name 'getTypeLink'.
@@ -218,7 +218,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(507,26): error T
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(507,52): error TS2304: Cannot find name 'ASTFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(518,22): error TS2304: Cannot find name 'FieldSymbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(531,29): error TS2304: Cannot find name 'ValueLocation'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(533,21): error TS2552: Cannot find name 'FieldSymbol'. Did you mean 'fieldSymbol'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(533,21): error TS2304: Cannot find name 'FieldSymbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(535,53): error TS2304: Cannot find name 'VarFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(535,75): error TS2304: Cannot find name 'VarFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(539,38): error TS2304: Cannot find name 'SymbolFlags'.
@@ -372,7 +372,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
             var fieldSymbol =
                 new FieldSymbol("prototype", ast.minChar,
                     ~~~~~~~~~~~
-!!! error TS2552: Cannot find name 'FieldSymbol'. Did you mean 'fieldSymbol'?
+!!! error TS2304: Cannot find name 'FieldSymbol'.
                                 context.checker.locationInfo.unitIndex, true, field);
             fieldSymbol.flags |= (SymbolFlags.Property | SymbolFlags.BuiltIn);
                                   ~~~~~~~~~~~
@@ -389,7 +389,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
 !!! error TS2304: Cannot find name 'Type'.
             var signature = new Signature();
                                 ~~~~~~~~~
-!!! error TS2552: Cannot find name 'Signature'. Did you mean 'signature'?
+!!! error TS2304: Cannot find name 'Signature'.
             signature.returnType = new TypeLink();
                                        ~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeLink'.
@@ -570,7 +570,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
     
             typeSymbol = new TypeSymbol(importDecl.id.text, importDecl.minChar,
                              ~~~~~~~~~~
-!!! error TS2552: Cannot find name 'TypeSymbol'. Did you mean 'typeSymbol'?
+!!! error TS2304: Cannot find name 'TypeSymbol'.
                                         context.checker.locationInfo.unitIndex, modType);
     
             typeSymbol.aliasLink = importDecl;
@@ -687,7 +687,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
     
                 typeSymbol = new TypeSymbol(modName, moduleDecl.minChar,
                                  ~~~~~~~~~~
-!!! error TS2552: Cannot find name 'TypeSymbol'. Did you mean 'typeSymbol'?
+!!! error TS2304: Cannot find name 'TypeSymbol'.
                                             context.checker.locationInfo.unitIndex, modType);
     
                 if (context.scopeChain.moduleDecl) {
@@ -704,7 +704,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
             else {
                 if (symbol && symbol.declAST && symbol.declAST.nodeType != NodeType.ModuleDeclaration) {
                                                                            ~~~~~~~~
-!!! error TS2552: Cannot find name 'NodeType'. Did you mean 'modType'?
+!!! error TS2304: Cannot find name 'NodeType'.
                     context.checker.errorReporter.simpleError(moduleDecl, "Conflicting symbol name for module '" + modName + "'");
                 }
                 typeSymbol = <TypeSymbol>symbol;
@@ -943,7 +943,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
 !!! error TS2304: Cannot find name 'StringHashTable'.
                 typeSymbol = new TypeSymbol(className, classDecl.minChar,
                                  ~~~~~~~~~~
-!!! error TS2552: Cannot find name 'TypeSymbol'. Did you mean 'typeSymbol'?
+!!! error TS2304: Cannot find name 'TypeSymbol'.
                                             context.checker.locationInfo.unitIndex, classType);
                 typeSymbol.declAST = classDecl;
                 typeSymbol.instanceType = instanceType;
@@ -1181,7 +1181,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
                 var fieldSymbol =
                     new FieldSymbol(argDecl.id.text, argDecl.minChar,
                         ~~~~~~~~~~~
-!!! error TS2552: Cannot find name 'FieldSymbol'. Did you mean 'fieldSymbol'?
+!!! error TS2304: Cannot find name 'FieldSymbol'.
                                     context.checker.locationInfo.unitIndex,
                                     !hasFlag(argDecl.varFlags, VarFlags.Readonly),
                                      ~~~~~~~
@@ -1278,7 +1278,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
                 var fieldSymbol =
                     new FieldSymbol(varDecl.id.text, varDecl.minChar,
                         ~~~~~~~~~~~
-!!! error TS2552: Cannot find name 'FieldSymbol'. Did you mean 'fieldSymbol'?
+!!! error TS2304: Cannot find name 'FieldSymbol'.
                                     context.checker.locationInfo.unitIndex,
                                     (varDecl.varFlags & VarFlags.Readonly) == VarFlags.None,
                                                         ~~~~~~~~

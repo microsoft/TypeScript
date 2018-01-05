@@ -44,7 +44,7 @@ tsc app.ts # Should write to library-a/index.js, library-b/index.js, and app.js
 // When symlinked files are in node_modules, they are resolved with realpath;
 // so a linked file does not create a duplicate SourceFile of the real one.
 exports.__esModule = true;
-var MyClass = (function () {
+var MyClass = /** @class */ (function () {
     function MyClass() {
     }
     return MyClass;

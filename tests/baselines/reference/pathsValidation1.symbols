@@ -1,0 +1,4 @@
+=== tests/cases/compiler/a.ts ===
+let x = 1;
+>x : Symbol(x, Decl(a.ts, 0, 3))
+

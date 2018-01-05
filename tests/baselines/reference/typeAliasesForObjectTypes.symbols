@@ -1,0 +1,35 @@
+=== tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts ===
+type T1 = { x: string }
+>T1 : Symbol(T1, Decl(typeAliasesForObjectTypes.ts, 0, 0))
+>x : Symbol(x, Decl(typeAliasesForObjectTypes.ts, 0, 11))
+
+// An interface can be named in an extends or implements clause, but a type alias for an object type literal cannot.
+interface I1 extends T1 { y: string }
+>I1 : Symbol(I1, Decl(typeAliasesForObjectTypes.ts, 0, 23))
+>T1 : Symbol(T1, Decl(typeAliasesForObjectTypes.ts, 0, 0))
+>y : Symbol(I1.y, Decl(typeAliasesForObjectTypes.ts, 3, 25))
+
+class C1 implements T1 {
+>C1 : Symbol(C1, Decl(typeAliasesForObjectTypes.ts, 3, 37))
+>T1 : Symbol(T1, Decl(typeAliasesForObjectTypes.ts, 0, 0))
+
+    x: string;
+>x : Symbol(C1.x, Decl(typeAliasesForObjectTypes.ts, 4, 24))
+}
+
+// An interface can have multiple merged declarations, but a type alias for an object type literal cannot.
+type T2 = { x: string }
+>T2 : Symbol(T2, Decl(typeAliasesForObjectTypes.ts, 6, 1))
+>x : Symbol(x, Decl(typeAliasesForObjectTypes.ts, 9, 11))
+
+type T2 = { y: number }
+>T2 : Symbol(T2, Decl(typeAliasesForObjectTypes.ts, 9, 23))
+>y : Symbol(y, Decl(typeAliasesForObjectTypes.ts, 10, 11))
+
+// An interface can have type parameters, but a type alias for an object type literal cannot.
+type T3<T> = { x: T }
+>T3 : Symbol(T3, Decl(typeAliasesForObjectTypes.ts, 10, 23))
+>T : Symbol(T, Decl(typeAliasesForObjectTypes.ts, 13, 8))
+>x : Symbol(x, Decl(typeAliasesForObjectTypes.ts, 13, 14))
+>T : Symbol(T, Decl(typeAliasesForObjectTypes.ts, 13, 8))
+

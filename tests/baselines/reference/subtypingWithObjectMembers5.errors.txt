@@ -4,9 +4,12 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
   Property '1' is missing in type 'B2'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts(32,11): error TS2420: Class 'B3' incorrectly implements interface 'A3'.
   Property ''1'' is missing in type 'B3'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts(43,11): error TS2559: Type 'B' has no properties in common with type 'A'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts(51,11): error TS2559: Type 'B2' has no properties in common with type 'A2'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts(59,11): error TS2559: Type 'B3' has no properties in common with type 'A3'.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts (3 errors) ====
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts (6 errors) ====
     interface Base {
         foo: string;
     }
@@ -59,7 +62,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         }
     
         class B implements A {
-            fooo: Derived; // ok
+              ~
+!!! error TS2559: Type 'B' has no properties in common with type 'A'.
+            fooo: Derived; // weak type error
         }
     
         interface A2 {
@@ -67,7 +72,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         }
     
         class B2 implements A2 {
-            2: Derived; // ok
+              ~~
+!!! error TS2559: Type 'B2' has no properties in common with type 'A2'.
+            2: Derived; // weak type error
         }
     
         interface A3 {
@@ -75,6 +82,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         }
     
         class B3 implements A3 {
-            '1.0': Derived; // ok
+              ~~
+!!! error TS2559: Type 'B3' has no properties in common with type 'A3'.
+            '1.0': Derived; // weak type error
         }
     }
+    

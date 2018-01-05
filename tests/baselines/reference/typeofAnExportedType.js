@@ -56,7 +56,7 @@ export var r13: typeof foo;
 exports.__esModule = true;
 exports.x = 1;
 exports.y = { foo: '' };
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
@@ -67,7 +67,7 @@ var i2;
 var M;
 (function (M) {
     M.foo = '';
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;
@@ -83,7 +83,7 @@ function foo() { }
 exports.foo = foo;
 (function (foo) {
     foo.y = 1;
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;

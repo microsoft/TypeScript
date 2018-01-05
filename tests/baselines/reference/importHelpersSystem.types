@@ -6,6 +6,7 @@ export class A { }
 import { A } from "./a";
 >A : typeof A
 
+export * from "./a";
 export class B extends A { }
 >B : B
 >A : A

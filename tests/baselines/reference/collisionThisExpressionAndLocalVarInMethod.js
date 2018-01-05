@@ -19,7 +19,7 @@ class a {
 }
 
 //// [collisionThisExpressionAndLocalVarInMethod.js]
-var a = (function () {
+var a = /** @class */ (function () {
     function a() {
     }
     a.prototype.method1 = function () {

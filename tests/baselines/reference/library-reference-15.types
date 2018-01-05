@@ -1,0 +1,18 @@
+=== /a/b/consumer.ts ===
+$.foo(); // should OK
+>$.foo() : void
+>$.foo : () => void
+>$ : { foo(): void; }
+>foo : () => void
+
+$2.foo(); // should error
+>$2.foo() : any
+>$2.foo : any
+>$2 : any
+>foo : any
+
+=== /a/types/jquery/index.d.ts ===
+declare var $: { foo(): void };
+>$ : { foo(): void; }
+>foo : () => void
+

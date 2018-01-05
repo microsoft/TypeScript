@@ -101,6 +101,8 @@ namespace ts {
                     return visitExpressionStatement(node as ExpressionStatement);
                 case SyntaxKind.ParenthesizedExpression:
                     return visitParenthesizedExpression(node as ParenthesizedExpression, noDestructuringValue);
+                case SyntaxKind.CatchClause:
+                    return visitCatchClause(node as CatchClause);
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -156,8 +158,8 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function chunkObjectLiteralElements(elements: ObjectLiteralElement[]): Expression[] {
-            let chunkObject: (ShorthandPropertyAssignment | PropertyAssignment)[];
+        function chunkObjectLiteralElements(elements: ReadonlyArray<ObjectLiteralElementLike>): Expression[] {
+            let chunkObject: ObjectLiteralElementLike[];
             const objects: Expression[] = [];
             for (const e of elements) {
                 if (e.kind === SyntaxKind.SpreadAssignment) {
@@ -177,7 +179,7 @@ namespace ts {
                         chunkObject.push(createPropertyAssignment(p.name, visitNode(p.initializer, visitor, isExpression)));
                     }
                     else {
-                        chunkObject.push(e as ShorthandPropertyAssignment);
+                        chunkObject.push(visitNode(e, visitor, isObjectLiteralElementLike));
                     }
                 }
             }
@@ -210,6 +212,17 @@ namespace ts {
 
         function visitParenthesizedExpression(node: ParenthesizedExpression, noDestructuringValue: boolean): ParenthesizedExpression {
             return visitEachChild(node, noDestructuringValue ? visitorNoDestructuringValue : visitor, context);
+        }
+
+        function visitCatchClause(node: CatchClause): CatchClause {
+            if (!node.variableDeclaration) {
+                return updateCatchClause(
+                    node,
+                    createVariableDeclaration(createTempVariable(/*recordTempVariable*/ undefined)),
+                    visitNode(node.block, visitor, isBlock)
+                );
+            }
+            return visitEachChild(node, visitor, context);
         }
 
         /**
@@ -351,8 +364,10 @@ namespace ts {
             );
         }
 
-        function awaitAsYield(expression: Expression) {
-            return createYield(/*asteriskToken*/ undefined, enclosingFunctionFlags & FunctionFlags.Generator ? createAwaitHelper(context, expression) : expression);
+        function createDownlevelAwait(expression: Expression) {
+            return enclosingFunctionFlags & FunctionFlags.Generator
+                ? createYield(/*asteriskToken*/ undefined, createAwaitHelper(context, expression))
+                : createAwait(expression);
         }
 
         function transformForAwaitOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement) {
@@ -363,7 +378,7 @@ namespace ts {
             const catchVariable = getGeneratedNameForNode(errorRecord);
             const returnMethod = createTempVariable(/*recordTempVariable*/ undefined);
             const callValues = createAsyncValuesHelper(context, expression, /*location*/ node.expression);
-            const callNext = createCall(createPropertyAccess(iterator, "next" ), /*typeArguments*/ undefined, []);
+            const callNext = createCall(createPropertyAccess(iterator, "next"), /*typeArguments*/ undefined, []);
             const getDone = createPropertyAccess(result, "done");
             const getValue = createPropertyAccess(result, "value");
             const callReturn = createFunctionCall(returnMethod, iterator, []);
@@ -385,11 +400,11 @@ namespace ts {
                             EmitFlags.NoHoisting
                         ),
                         /*condition*/ createComma(
-                            createAssignment(result, awaitAsYield(callNext)),
+                            createAssignment(result, createDownlevelAwait(callNext)),
                             createLogicalNot(getDone)
                         ),
                         /*incrementor*/ undefined,
-                        /*statement*/ convertForOfStatementHead(node, awaitAsYield(getValue))
+                        /*statement*/ convertForOfStatementHead(node, createDownlevelAwait(getValue))
                     ),
                     /*location*/ node
                 ),
@@ -434,7 +449,7 @@ namespace ts {
                                             createPropertyAccess(iterator, "return")
                                         )
                                     ),
-                                    createStatement(awaitAsYield(callReturn))
+                                    createStatement(createDownlevelAwait(callReturn))
                                 ),
                                 EmitFlags.SingleLine
                             )
@@ -580,7 +595,8 @@ namespace ts {
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                transformFunctionBody(node)
+                node.equalsGreaterThanToken,
+                transformFunctionBody(node),
             );
             enclosingFunctionFlags = savedEnclosingFunctionFlags;
             return updated;
@@ -774,7 +790,7 @@ namespace ts {
         function substitutePropertyAccessExpression(node: PropertyAccessExpression) {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return createSuperAccessInAsyncMethod(
-                    createLiteral(node.name.text),
+                    createLiteral(idText(node.name)),
                     node
                 );
             }
@@ -952,7 +968,7 @@ namespace ts {
         name: "typescript:asyncValues",
         scoped: false,
         text: `
-            var __asyncValues = (this && this.__asyncIterator) || function (o) {
+            var __asyncValues = (this && this.__asyncValues) || function (o) {
                 if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
                 var m = o[Symbol.asyncIterator];
                 return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();

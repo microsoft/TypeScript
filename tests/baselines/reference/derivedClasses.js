@@ -41,7 +41,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Red = (function (_super) {
+var Red = /** @class */ (function (_super) {
     __extends(Red, _super);
     function Red() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -53,14 +53,14 @@ var Red = (function (_super) {
     };
     return Red;
 }(Color));
-var Color = (function () {
+var Color = /** @class */ (function () {
     function Color() {
     }
     Color.prototype.shade = function () { return "some shade"; };
     Color.prototype.hue = function () { return "some hue"; };
     return Color;
 }());
-var Blue = (function (_super) {
+var Blue = /** @class */ (function (_super) {
     __extends(Blue, _super);
     function Blue() {
         return _super !== null && _super.apply(this, arguments) || this;

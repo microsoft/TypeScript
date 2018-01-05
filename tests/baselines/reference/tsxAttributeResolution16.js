@@ -38,7 +38,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var React = require("react");
-var AddressComp = (function (_super) {
+var AddressComp = /** @class */ (function (_super) {
     __extends(AddressComp, _super);
     function AddressComp() {
         return _super !== null && _super.apply(this, arguments) || this;

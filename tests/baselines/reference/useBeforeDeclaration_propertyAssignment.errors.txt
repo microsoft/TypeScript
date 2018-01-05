@@ -1,0 +1,11 @@
+tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts(2,27): error TS2448: Block-scoped variable 'b' used before its declaration.
+
+
+==== tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts (1 errors) ====
+    export class C {
+        public a =  { b: this.b };
+                              ~
+!!! error TS2448: Block-scoped variable 'b' used before its declaration.
+        private b = 0;
+    }
+    

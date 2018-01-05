@@ -16,7 +16,7 @@ class e {
 }
 
 //// [functionOverloadsOutOfOrder.js]
-var d = (function () {
+var d = /** @class */ (function () {
     function d() {
     }
     d.prototype.foo = function (ns) {
@@ -24,7 +24,7 @@ var d = (function () {
     };
     return d;
 }());
-var e = (function () {
+var e = /** @class */ (function () {
     function e() {
     }
     e.prototype.foo = function (ns) {

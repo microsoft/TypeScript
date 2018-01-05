@@ -1,0 +1,9 @@
+=== tests/cases/compiler/constructorArgsErrors2.ts ===
+class foo {
+>foo : foo
+
+    constructor (public static a: number) {
+>a : number
+    }
+}
+

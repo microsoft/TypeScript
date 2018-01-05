@@ -1,21 +1,26 @@
-﻿<html>
+<!DOCTYPE html>
+<html>
 <head>
   <meta charset="utf-8">
   <title>Mocha Tests</title>
   <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
   <link rel="icon" href="./webhost/favicon-32x32.png"/>
+  <style>
+.btn {
+  color: #ffffff;
+  background: #3498db;
+  border-radius: 30px;
+  font-size: 50px;
+}
+.btn:hover { background: #50c7ff; }
+.btn:focus { background: #50c7ff; }
+  </style>
 </head>
 <body>
   <div id='setup'>
-    <div>
-      <button id='selectCompilerBtn' onclick='location.href="http://localhost:8888/tests/webTestResults.html?grep=compiler"'>Select Compiler Tests</button>
-      <button id='selectFourslashBtn' onclick='location.href="http://localhost:8888/tests/webTestResults.html?grep=fourslash"'>Select Fourslash Tests</button>
-    </div>
-    <button id='runTestBtn' onclick='runTests()'>Run Tests</button>
+    <button id='runTestBtn' onclick='runTests()' type="button" class="btn">Run Tests</button>
   </div>
-
   <div id="mocha"></div>
-  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.0.js"></script>
   <script src="../node_modules/mocha/mocha.js"></script>
   <script>mocha.setup('bdd')</script>
   <script src="../built/local/bundle.js"></script>

@@ -1,0 +1,10 @@
+=== tests/cases/compiler/ambientExternalModuleWithRelativeModuleName.ts ===
+declare module "./relativeModule" {
+    var x: string;
+>x : Symbol(x, Decl(ambientExternalModuleWithRelativeModuleName.ts, 1, 7))
+}
+
+declare module ".\\relativeModule" {
+    var x: string;
+>x : Symbol(x, Decl(ambientExternalModuleWithRelativeModuleName.ts, 5, 7))
+}

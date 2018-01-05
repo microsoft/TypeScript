@@ -4,8 +4,8 @@
 // @noUnusedParameters: true
 ////class greeter {
 ////    public function1() {
-////       [| var /*0*/x,/*1*/ y = 10; |]
-////        y++;
+////        [| var /*0*/x,/*1*/ y = 10; |]
+////        use(y);
 ////    }
 ////}
 

@@ -18,6 +18,13 @@
             "problemMatcher": [
                 "$tsc"
             ]
+        },
+        {
+            "taskName": "tests",
+            "showOutput": "silent",
+            "problemMatcher": [
+                "$tsc"
+            ]
         }
     ]
 }

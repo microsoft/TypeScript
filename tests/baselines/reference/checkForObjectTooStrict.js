@@ -44,21 +44,21 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Foo;
 (function (Foo) {
-    var Object = (function () {
+    var Object = /** @class */ (function () {
         function Object() {
         }
         return Object;
     }());
     Foo.Object = Object;
 })(Foo || (Foo = {}));
-var Bar = (function (_super) {
+var Bar = /** @class */ (function (_super) {
     __extends(Bar, _super);
     function Bar() {
         return _super.call(this) || this;
     }
     return Bar;
 }(Foo.Object));
-var Baz = (function (_super) {
+var Baz = /** @class */ (function (_super) {
     __extends(Baz, _super);
     function Baz() {
         return _super.call(this) || this;

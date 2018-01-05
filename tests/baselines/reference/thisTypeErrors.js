@@ -64,25 +64,25 @@ function f1(x) {
     var y;
     return this;
 }
-var C1 = (function () {
+var C1 = /** @class */ (function () {
     function C1() {
     }
     return C1;
 }());
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     C2.foo = function (x) {
         return undefined;
     };
+    C2.y = undefined;
     return C2;
 }());
-C2.y = undefined;
 var N1;
 (function (N1) {
     N1.y = this;
 })(N1 || (N1 = {}));
-var C3 = (function () {
+var C3 = /** @class */ (function () {
     function C3() {
         this.x1 = {
             g: function (x) {

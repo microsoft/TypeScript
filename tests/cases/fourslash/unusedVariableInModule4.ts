@@ -7,4 +7,8 @@
 //// x;
 //// export var y: string;
 
-verify.rangeAfterCodeFix(`var x = function f1() {}`);
+verify.codeFix({
+    description: "Remove declaration for: 'm'",
+    index: 0,
+    newRangeContent: `var x = function f1() {}`,
+});

@@ -5,7 +5,7 @@ class foo<T> {
 } 
 
 //// [typeParametersInStaticAccessors.js]
-var foo = (function () {
+var foo = /** @class */ (function () {
     function foo() {
     }
     Object.defineProperty(foo, "Foo", {

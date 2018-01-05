@@ -4,10 +4,10 @@ tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration1
 tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration15_es5.ts(9,23): error TS1055: Type 'PromiseLike' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
 tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration15_es5.ts(10,23): error TS1055: Type 'typeof Thenable' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
 tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration15_es5.ts(10,23): error TS1055: Type 'typeof Thenable' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
-  Type 'Thenable' is not assignable to type 'PromiseLike<any>'.
+  Type 'Thenable' is not assignable to type 'PromiseLike<T>'.
     Types of property 'then' are incompatible.
-      Type '() => void' is not assignable to type '<TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
-        Type 'void' is not assignable to type 'PromiseLike<any>'.
+      Type '() => void' is not assignable to type '<TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
+        Type 'void' is not assignable to type 'PromiseLike<TResult1 | TResult2>'.
 tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration15_es5.ts(17,16): error TS1058: The return type of an async function must either be a valid promise or must not contain a callable 'then' member.
 tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration15_es5.ts(23,25): error TS1320: Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.
 
@@ -35,10 +35,10 @@ tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration1
 !!! error TS1055: Type 'typeof Thenable' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
                           ~~~~~~~~
 !!! error TS1055: Type 'typeof Thenable' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
-!!! error TS1055:   Type 'Thenable' is not assignable to type 'PromiseLike<any>'.
+!!! error TS1055:   Type 'Thenable' is not assignable to type 'PromiseLike<T>'.
 !!! error TS1055:     Types of property 'then' are incompatible.
-!!! error TS1055:       Type '() => void' is not assignable to type '<TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
-!!! error TS1055:         Type 'void' is not assignable to type 'PromiseLike<any>'.
+!!! error TS1055:       Type '() => void' is not assignable to type '<TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
+!!! error TS1055:         Type 'void' is not assignable to type 'PromiseLike<TResult1 | TResult2>'.
     async function fn7() { return; } // valid: Promise<void>
     async function fn8() { return 1; } // valid: Promise<number>
     async function fn9() { return null; } // valid: Promise<any>

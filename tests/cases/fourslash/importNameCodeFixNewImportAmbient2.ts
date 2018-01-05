@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-////[|/*
+////[|/*!
 //// * I'm a license or something
 //// */
 ////f1/*0*/();|]
@@ -12,9 +12,10 @@
 //// }
 
 verify.importFixAtPosition([
-`/*
+`/*!
  * I'm a license or something
  */
+
 import { f1 } from "ambient-module";
 
 f1();`

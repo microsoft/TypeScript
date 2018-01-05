@@ -47,25 +47,25 @@
 // rest parameters
 ((...numbers) => numbers.every(n => n > 0))(5,6,7);
 >numbers : Symbol(numbers, Decl(contextuallyTypedIife.ts, 17, 2))
->numbers.every : Symbol(Array.every, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>numbers.every : Symbol(Array.every, Decl(lib.d.ts, --, --))
 >numbers : Symbol(numbers, Decl(contextuallyTypedIife.ts, 17, 2))
->every : Symbol(Array.every, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.d.ts, --, --))
 >n : Symbol(n, Decl(contextuallyTypedIife.ts, 17, 31))
 >n : Symbol(n, Decl(contextuallyTypedIife.ts, 17, 31))
 
 ((...mixed) => mixed.every(n => !!n))(5,'oops','oh no');
 >mixed : Symbol(mixed, Decl(contextuallyTypedIife.ts, 18, 2))
->mixed.every : Symbol(Array.every, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>mixed.every : Symbol(Array.every, Decl(lib.d.ts, --, --))
 >mixed : Symbol(mixed, Decl(contextuallyTypedIife.ts, 18, 2))
->every : Symbol(Array.every, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.d.ts, --, --))
 >n : Symbol(n, Decl(contextuallyTypedIife.ts, 18, 27))
 >n : Symbol(n, Decl(contextuallyTypedIife.ts, 18, 27))
 
 ((...noNumbers) => noNumbers.some(n => n > 0))();
 >noNumbers : Symbol(noNumbers, Decl(contextuallyTypedIife.ts, 19, 2))
->noNumbers.some : Symbol(Array.some, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>noNumbers.some : Symbol(Array.some, Decl(lib.d.ts, --, --))
 >noNumbers : Symbol(noNumbers, Decl(contextuallyTypedIife.ts, 19, 2))
->some : Symbol(Array.some, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>some : Symbol(Array.some, Decl(lib.d.ts, --, --))
 >n : Symbol(n, Decl(contextuallyTypedIife.ts, 19, 34))
 >n : Symbol(n, Decl(contextuallyTypedIife.ts, 19, 34))
 
@@ -73,9 +73,9 @@
 >first : Symbol(first, Decl(contextuallyTypedIife.ts, 20, 2))
 >rest : Symbol(rest, Decl(contextuallyTypedIife.ts, 20, 8))
 >first : Symbol(first, Decl(contextuallyTypedIife.ts, 20, 2))
->rest.map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>rest.map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >rest : Symbol(rest, Decl(contextuallyTypedIife.ts, 20, 8))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >n : Symbol(n, Decl(contextuallyTypedIife.ts, 20, 43))
 >n : Symbol(n, Decl(contextuallyTypedIife.ts, 20, 43))
 

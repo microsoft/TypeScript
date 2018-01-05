@@ -6,10 +6,11 @@ class C {
 }
 
 //// [ClassDeclaration26.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.foo = 10;
     }
     return C;
 }());
-var constructor = function () { };
+var constructor;
+(function () { });

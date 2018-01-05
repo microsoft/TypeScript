@@ -1,0 +1,7 @@
+=== tests/cases/compiler/selfReferencingFile.ts ===
+///<reference path='selfReferencingFile.ts'/>
+
+class selfReferencingFile {
+>selfReferencingFile : selfReferencingFile
+
+}

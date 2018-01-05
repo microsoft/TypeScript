@@ -1,0 +1,10 @@
+=== tests/cases/compiler/jsdocCastCommentEmit.ts ===
+// allowJs: true
+// checkJs: true
+// outDir: out/
+// filename: input.js
+function f() {
+>f : Symbol(f, Decl(jsdocCastCommentEmit.ts, 0, 0))
+
+    return /* @type {number} */ 42;
+}
