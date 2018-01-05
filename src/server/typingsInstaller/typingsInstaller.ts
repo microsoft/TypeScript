@@ -65,6 +65,20 @@ namespace ts.server.typingsInstaller {
         }
     }
 
+    function updateTypeDeclarationTimestampFile(typeDeclarationTimestampFilePath: string, timestampsInProcess: TypingsTimestamps, host: InstallTypingHost, log: Log): TypingsTimestamps {
+        const timestampsOnDisk = loadTypeDeclarationTimestampFile(typeDeclarationTimestampFilePath, host, log);
+        for (const packageName in timestampsOnDisk) {
+            const timestampForPackageInProcess = getProperty(timestampsInProcess, packageName);
+            if (timestampForPackageInProcess) {
+                timestampsInProcess[packageName] = Math.max(timestampForPackageInProcess, timestampsOnDisk[packageName]);
+            }
+            else {
+                timestampsInProcess[packageName] = timestampsOnDisk[packageName];
+            }
+        }
+        return timestampsInProcess;
+    }
+
     function writeTypeDeclarationTimestampFile(typeDeclarationTimestampFilePath: string, newContents: TypeDeclarationTimestampFile, host: InstallTypingHost, log: Log): void {
         try {
             if (log.isEnabled()) {
@@ -359,9 +373,10 @@ namespace ts.server.typingsInstaller {
                         this.log.writeLine(`Installed typing files ${JSON.stringify(installedTypingFiles)}`);
                     }
 
-                    const newFileContents: TypeDeclarationTimestampFile = { entries: typeDeclarationTimestamps };
+                    const updatedTypeDeclarationTimestamps = updateTypeDeclarationTimestampFile(timestampsFilePath, typeDeclarationTimestamps, this.installTypingHost, this.log);
+                    const newFileContents: TypeDeclarationTimestampFile = { entries: updatedTypeDeclarationTimestamps };
                     writeTypeDeclarationTimestampFile(timestampsFilePath, newFileContents, this.installTypingHost, this.log);
-                    this.knownCacheToTimestamps.set(cachePath, typeDeclarationTimestamps);
+                    this.knownCacheToTimestamps.set(cachePath, updatedTypeDeclarationTimestamps);
 
                     this.sendResponse(this.createSetTypings(req, currentlyCachedTypings.concat(installedTypingFiles)));
                 }
