@@ -1174,7 +1174,7 @@ namespace ts {
             && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.ThisKeyword;
     }
 
-   export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNameExpression {
+    export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNameExpression {
         switch (node.kind) {
             case SyntaxKind.TypeReference:
                 return (<TypeReferenceNode>node).typeName;
