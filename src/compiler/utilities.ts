@@ -3702,18 +3702,6 @@ namespace ts {
     export function forSomeAncestorDirectory(directory: string, callback: (directory: string) => boolean): boolean {
         return !!forEachAncestorDirectory(directory, d => callback(d) ? true : undefined);
     }
-
-    export function showSymbol(symbol: Symbol): string {
-        if (getCheckFlags(symbol) & CheckFlags.Late) {
-            for (const d of symbol.declarations) {
-                const name = getNameOfDeclaration(d);
-                if (name.kind === ts.SyntaxKind.ComputedPropertyName) {
-                    return getTextOfNode(name);
-                }
-            }
-        }
-        return symbolName(symbol);
-    }
 }
 
 namespace ts {

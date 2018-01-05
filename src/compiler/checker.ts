@@ -21226,7 +21226,7 @@ namespace ts {
                         if (member.kind === SyntaxKind.MethodDeclaration || member.kind === SyntaxKind.PropertyDeclaration) {
                             const symbol = getSymbolOfNode(member);
                             if (!symbol.isReferenced && hasModifier(member, ModifierFlags.Private)) {
-                                error(member.name, Diagnostics._0_is_declared_but_its_value_is_never_read, showSymbol(symbol));
+                                error(member.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolToString(symbol));
                             }
                         }
                         else if (member.kind === SyntaxKind.Constructor) {
