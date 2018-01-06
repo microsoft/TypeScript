@@ -1,21 +1,14 @@
 /// <reference path="fourslash.ts" />
 
-// @allowJs: true
-// @checkJs: true
-
-// @Filename: /lib.js
+// @Filename: /lib.ts
 ////class Base { }
 ////export default Base;
 
-// @Filename: /test.js
+// @Filename: /test.ts
 ////[|class Derived extends Base { }|]
 
-goTo.file("/test.js");
+goTo.file("/test.ts");
 verify.importFixAtPosition([
-`// @ts-ignore
-class Derived extends Base { }`,
-`// @ts-nocheck
-class Derived extends Base { }`,
 `import Base from "./lib";
 
 class Derived extends Base { }`,]);
