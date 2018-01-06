@@ -4303,22 +4303,39 @@ namespace ts {
                     // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
                     const name = declaration.propertyName || <Identifier>declaration.name;
                     if (isComputedNonLiteralName(name)) {
-                        // computed properties with non-literal names are treated as 'any'
-                        return anyType;
+                        const computedType = checkComputedPropertyName(<ComputedPropertyName>name);
+                        if (!computedType) {
+                            return anyType;
+                        }
+                        else if (computedType.flags & TypeFlags.Literal) {
+                            const text = getTextOfPropertyLiteralType(computedType);
+                            const declaredType = getTypeOfPropertyOfType(parentType, text);
+                            type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
+                                computedType.flags & TypeFlags.NumberLiteral && getIndexTypeOfType(parentType, IndexKind.Number) ||
+                                getIndexTypeOfType(parentType, IndexKind.String);
+                        }
+                        else if (computedType.flags & TypeFlags.Union && (computedType as UnionType).types.every(t => !!(t.flags & TypeFlags.Literal))) {
+                            type = (computedType as UnionType).types.every(t => !!(t.flags & TypeFlags.NumberLiteral)) && getIndexTypeOfType(parentType, IndexKind.Number) ||
+                                getIndexTypeOfType(parentType, IndexKind.String);
+                        }
+                        else {
+                            return anyType;
+                        }
                     }
+                    else {
+                        // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
+                        // or otherwise the type of the string index signature.
+                        const text = getTextOfPropertyName(name);
 
-                    // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
-                    // or otherwise the type of the string index signature.
-                    const text = getTextOfPropertyName(name);
-
-                    // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
-                    if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
-                        parentType = getNonNullableType(parentType);
+                        // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
+                        if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
+                            parentType = getNonNullableType(parentType);
+                        }
+                        const declaredType = getTypeOfPropertyOfType(parentType, text);
+                        type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
+                            isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
+                            getIndexTypeOfType(parentType, IndexKind.String);
                     }
-                    const declaredType = getTypeOfPropertyOfType(parentType, text);
-                    type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
-                        isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
-                        getIndexTypeOfType(parentType, IndexKind.String);
                     if (!type) {
                         error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
                         return unknownType;
@@ -4547,17 +4564,23 @@ namespace ts {
             let hasComputedProperties = false;
             forEach(pattern.elements, e => {
                 const name = e.propertyName || <Identifier>e.name;
-                if (isComputedNonLiteralName(name)) {
-                    // do not include computed properties in the implied type
-                    hasComputedProperties = true;
-                    return;
-                }
+                let text: __String;
                 if (e.dotDotDotToken) {
                     stringIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
                     return;
                 }
-
-                const text = getTextOfPropertyName(name);
+                if (isComputedNonLiteralName(name)) {
+                    // only include computed properties with literal types in the implied type
+                    const computedType = checkComputedPropertyName(<ComputedPropertyName>name);
+                    if (!computedType || !(computedType.flags & TypeFlags.Literal)) {
+                        hasComputedProperties = true;
+                        return;
+                    }
+                    text = getTextOfPropertyLiteralType(computedType);
+                }
+                else {
+                    text = getTextOfPropertyName(name);
+                }
                 const flags = SymbolFlags.Property | (e.initializer ? SymbolFlags.Optional : 0);
                 const symbol = createSymbol(flags, text);
                 symbol.type = getTypeFromBindingElement(e, includePatternInType, reportErrors);
@@ -14648,12 +14671,12 @@ namespace ts {
                     let type: Type;
                     if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
                         if (memberDecl.name.kind === SyntaxKind.ComputedPropertyName) {
-                            const t = checkComputedPropertyName(<ComputedPropertyName>memberDecl.name);
-                            if (t.flags & TypeFlags.Literal) {
-                                literalName = getLiteralPropertyName(t);
+                            const computedType = checkComputedPropertyName(<ComputedPropertyName>memberDecl.name);
+                            if (computedType.flags & TypeFlags.Literal) {
+                                literalName = getTextOfPropertyLiteralType(computedType);
                             }
-                            else if (t.flags & TypeFlags.Union && (t as UnionType).types.every(t2 => !!(t2.flags & TypeFlags.Literal))) {
-                                literalName = (t as UnionType).types.map(getLiteralPropertyName);
+                            else if (computedType.flags & TypeFlags.Union && (computedType as UnionType).types.every(t => !!(t.flags & TypeFlags.Literal))) {
+                                literalName = (computedType as UnionType).types.map(getTextOfPropertyLiteralType);
                             }
                         }
                         type = checkPropertyAssignment(<PropertyAssignment>memberDecl, checkMode);
@@ -14744,13 +14767,6 @@ namespace ts {
 
             return createObjectLiteralType();
 
-            function getLiteralPropertyName(type: Type): __String {
-                if (type.flags & TypeFlags.Intrinsic) {
-                    return (type as IntrinsicType).intrinsicName as __String;
-                }
-                return escapeLeadingUnderscores("" + (type as LiteralType).value);
-            }
-
             function updateIntermediateType(type: Type) {
                 intermediate = type;
                 propertiesArray = [];
@@ -14839,6 +14855,13 @@ namespace ts {
                 }
                 return result;
             }
+        }
+
+        function getTextOfPropertyLiteralType(type: Type): __String {
+            if (type.flags & TypeFlags.Intrinsic) {
+                return (type as IntrinsicType).intrinsicName as __String;
+            }
+            return escapeLeadingUnderscores("" + (type as LiteralType).value);
         }
 
         function isValidSpreadType(type: Type): boolean {
@@ -18636,19 +18659,38 @@ namespace ts {
         function checkObjectLiteralDestructuringPropertyAssignment(objectLiteralType: Type, property: ObjectLiteralElementLike, allProperties?: ReadonlyArray<ObjectLiteralElementLike>) {
             if (property.kind === SyntaxKind.PropertyAssignment || property.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 const name = <PropertyName>(<PropertyAssignment>property).name;
-                if (name.kind === SyntaxKind.ComputedPropertyName) {
-                    checkComputedPropertyName(<ComputedPropertyName>name);
-                }
+                const computedType = name.kind === SyntaxKind.ComputedPropertyName ? checkComputedPropertyName(<ComputedPropertyName>name) : undefined;
+                let type: Type;
                 if (isComputedNonLiteralName(name)) {
-                    return undefined;
+                    if (!computedType) {
+                        return undefined;
+                    }
+                    else if (computedType.flags & TypeFlags.Literal) {
+                        const text = getTextOfPropertyLiteralType(computedType);
+                        type = isTypeAny(objectLiteralType)
+                            ? objectLiteralType
+                            : getTypeOfPropertyOfType(objectLiteralType, text) ||
+                            computedType.flags & TypeFlags.NumberLiteral && getIndexTypeOfType(objectLiteralType, IndexKind.Number) ||
+                            getIndexTypeOfType(objectLiteralType, IndexKind.String);
+                    }
+                    else if (computedType.flags & TypeFlags.Union && (computedType as UnionType).types.every(t => !!(t.flags & TypeFlags.Literal))) {
+                        type = isTypeAny(objectLiteralType)
+                            ? objectLiteralType
+                            : (computedType as UnionType).types.every(t => !!(t.flags & TypeFlags.NumberLiteral)) && getIndexTypeOfType(objectLiteralType, IndexKind.Number) ||
+                            getIndexTypeOfType(objectLiteralType, IndexKind.String);
+                    }
+                    else {
+                        return undefined;
+                    }
                 }
-
-                const text = getTextOfPropertyName(name);
-                const type = isTypeAny(objectLiteralType)
-                    ? objectLiteralType
-                    : getTypeOfPropertyOfType(objectLiteralType, text) ||
-                    isNumericLiteralName(text) && getIndexTypeOfType(objectLiteralType, IndexKind.Number) ||
-                    getIndexTypeOfType(objectLiteralType, IndexKind.String);
+                else {
+                    const text = getTextOfPropertyName(name);
+                    type = isTypeAny(objectLiteralType)
+                        ? objectLiteralType
+                        : getTypeOfPropertyOfType(objectLiteralType, text) ||
+                        isNumericLiteralName(text) && getIndexTypeOfType(objectLiteralType, IndexKind.Number) ||
+                        getIndexTypeOfType(objectLiteralType, IndexKind.String);
+                }
                 if (type) {
                     if (property.kind === SyntaxKind.ShorthandPropertyAssignment) {
                         return checkDestructuringAssignment(<ShorthandPropertyAssignment>property, type);
@@ -24662,8 +24704,11 @@ namespace ts {
             //    [{ property1: p1, property2 }] = elems;
             const typeOfArrayLiteral = getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(<Expression>expr.parent);
             const elementType = checkIteratedTypeOrElementType(typeOfArrayLiteral || unknownType, expr.parent, /*allowStringInput*/ false, /*allowAsyncIterables*/ false) || unknownType;
-            return checkArrayLiteralDestructuringElementAssignment(<ArrayLiteralExpression>expr.parent, typeOfArrayLiteral,
-                indexOf((<ArrayLiteralExpression>expr.parent).elements, expr), elementType || unknownType);
+            return checkArrayLiteralDestructuringElementAssignment(
+                <ArrayLiteralExpression>expr.parent,
+                typeOfArrayLiteral,
+                indexOf((<ArrayLiteralExpression>expr.parent).elements, expr),
+                elementType || unknownType);
         }
 
         // Gets the property symbol corresponding to the property in destructuring assignment
