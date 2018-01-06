@@ -5,42 +5,177 @@ declare var ab: 'a' | 'b';
 declare var cd: 'c' | 'd';
 >cd : Symbol(cd, Decl(computedPropertyUnionLiftsToUnionType.ts, 1, 11))
 
-// More cases:
-//   add spreads
-//   other literal types: number, boolean, enum (string and number)
-//   multiple unions
-//   union, spread (with union inside), union
-//   methods and other stuff that would get mangled by spread (since I use spread internally)
+declare var onetwo: 1 | 2;
+>onetwo : Symbol(onetwo, Decl(computedPropertyUnionLiftsToUnionType.ts, 2, 11))
+
+enum Alphabet {
+>Alphabet : Symbol(Alphabet, Decl(computedPropertyUnionLiftsToUnionType.ts, 2, 26))
+
+    Aleph,
+>Aleph : Symbol(Alphabet.Aleph, Decl(computedPropertyUnionLiftsToUnionType.ts, 3, 15))
+
+    Bet,
+>Bet : Symbol(Alphabet.Bet, Decl(computedPropertyUnionLiftsToUnionType.ts, 4, 10))
+}
+declare var alphabet: Alphabet;
+>alphabet : Symbol(alphabet, Decl(computedPropertyUnionLiftsToUnionType.ts, 7, 11))
+>Alphabet : Symbol(Alphabet, Decl(computedPropertyUnionLiftsToUnionType.ts, 2, 26))
+
 const x: { a: string } | { b: string } = { [ab]: 'hi' }
->x : Symbol(x, Decl(computedPropertyUnionLiftsToUnionType.ts, 8, 5))
->a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 8, 10))
->b : Symbol(b, Decl(computedPropertyUnionLiftsToUnionType.ts, 8, 26))
+>x : Symbol(x, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 5))
+>a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 10))
+>b : Symbol(b, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 26))
 >ab : Symbol(ab, Decl(computedPropertyUnionLiftsToUnionType.ts, 0, 11))
 
-const y: { a: string, c: string } | { a: string, d: string } | { b: string, c: string } | { b: string, d: string } =
->y : Symbol(y, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 5))
->a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 10))
->c : Symbol(c, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 21))
->a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 37))
->d : Symbol(d, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 48))
->b : Symbol(b, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 64))
->c : Symbol(c, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 75))
->b : Symbol(b, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 91))
->d : Symbol(d, Decl(computedPropertyUnionLiftsToUnionType.ts, 9, 102))
+//   multiple unions
+const y: { a: string, m: number, c: string }
+>y : Symbol(y, Decl(computedPropertyUnionLiftsToUnionType.ts, 11, 5))
+>a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 11, 10))
+>m : Symbol(m, Decl(computedPropertyUnionLiftsToUnionType.ts, 11, 21))
+>c : Symbol(c, Decl(computedPropertyUnionLiftsToUnionType.ts, 11, 32))
 
-    { [ab]: 'hi', [cd]: 'there' }
+    | { a: string, m: number, d: string }
+>a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 12, 7))
+>m : Symbol(m, Decl(computedPropertyUnionLiftsToUnionType.ts, 12, 18))
+>d : Symbol(d, Decl(computedPropertyUnionLiftsToUnionType.ts, 12, 29))
+
+    | { b: string, m: number, c: string }
+>b : Symbol(b, Decl(computedPropertyUnionLiftsToUnionType.ts, 13, 7))
+>m : Symbol(m, Decl(computedPropertyUnionLiftsToUnionType.ts, 13, 18))
+>c : Symbol(c, Decl(computedPropertyUnionLiftsToUnionType.ts, 13, 29))
+
+    | { b: string, m: number, d: string } = { [ab]: 'hi', m: 1, [cd]: 'there' }
+>b : Symbol(b, Decl(computedPropertyUnionLiftsToUnionType.ts, 14, 7))
+>m : Symbol(m, Decl(computedPropertyUnionLiftsToUnionType.ts, 14, 18))
+>d : Symbol(d, Decl(computedPropertyUnionLiftsToUnionType.ts, 14, 29))
+>ab : Symbol(ab, Decl(computedPropertyUnionLiftsToUnionType.ts, 0, 11))
+>m : Symbol(m, Decl(computedPropertyUnionLiftsToUnionType.ts, 14, 57))
+>cd : Symbol(cd, Decl(computedPropertyUnionLiftsToUnionType.ts, 1, 11))
+
+//   union, spread (with union inside), union
+const s: { a: string, c: string } | { b: string, c: string } = { [ab]: 'hi', ...{ c: 'no' }}
+>s : Symbol(s, Decl(computedPropertyUnionLiftsToUnionType.ts, 16, 5))
+>a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 16, 10))
+>c : Symbol(c, Decl(computedPropertyUnionLiftsToUnionType.ts, 16, 21))
+>b : Symbol(b, Decl(computedPropertyUnionLiftsToUnionType.ts, 16, 37))
+>c : Symbol(c, Decl(computedPropertyUnionLiftsToUnionType.ts, 16, 48))
+>ab : Symbol(ab, Decl(computedPropertyUnionLiftsToUnionType.ts, 0, 11))
+>c : Symbol(c, Decl(computedPropertyUnionLiftsToUnionType.ts, 16, 81))
+
+const sd: { a: string } | { b: string } = { [ab]: 'hi', ...{ a: 'no' }}
+>sd : Symbol(sd, Decl(computedPropertyUnionLiftsToUnionType.ts, 17, 5))
+>a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 17, 11))
+>b : Symbol(b, Decl(computedPropertyUnionLiftsToUnionType.ts, 17, 27))
+>ab : Symbol(ab, Decl(computedPropertyUnionLiftsToUnionType.ts, 0, 11))
+>a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 17, 60))
+
+const sn: { a: string, c: string }
+>sn : Symbol(sn, Decl(computedPropertyUnionLiftsToUnionType.ts, 18, 5))
+>a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 18, 11))
+>c : Symbol(c, Decl(computedPropertyUnionLiftsToUnionType.ts, 18, 22))
+
+    | { a: string, d: string }
+>a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 19, 7))
+>d : Symbol(d, Decl(computedPropertyUnionLiftsToUnionType.ts, 19, 18))
+
+    | { b: string, c: string }
+>b : Symbol(b, Decl(computedPropertyUnionLiftsToUnionType.ts, 20, 7))
+>c : Symbol(c, Decl(computedPropertyUnionLiftsToUnionType.ts, 20, 18))
+
+    | { b: string, d: string } = { [ab]: 'hi', ...{ [cd]: 'no' }}
+>b : Symbol(b, Decl(computedPropertyUnionLiftsToUnionType.ts, 21, 7))
+>d : Symbol(d, Decl(computedPropertyUnionLiftsToUnionType.ts, 21, 18))
 >ab : Symbol(ab, Decl(computedPropertyUnionLiftsToUnionType.ts, 0, 11))
 >cd : Symbol(cd, Decl(computedPropertyUnionLiftsToUnionType.ts, 1, 11))
 
-//   in destructuring???!!
-/*
-declare let o: { [t]: string }
+// methods
+const m: { a: string, m(): number, p: number } | { b: string, m(): number, p: number } =
+>m : Symbol(m, Decl(computedPropertyUnionLiftsToUnionType.ts, 23, 5))
+>a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 23, 10))
+>m : Symbol(m, Decl(computedPropertyUnionLiftsToUnionType.ts, 23, 21))
+>p : Symbol(p, Decl(computedPropertyUnionLiftsToUnionType.ts, 23, 34))
+>b : Symbol(b, Decl(computedPropertyUnionLiftsToUnionType.ts, 23, 50))
+>m : Symbol(m, Decl(computedPropertyUnionLiftsToUnionType.ts, 23, 61))
+>p : Symbol(p, Decl(computedPropertyUnionLiftsToUnionType.ts, 23, 74))
+
+    { [ab]: 'hi', m() { return 1 }, get p() { return 2 } }
+>ab : Symbol(ab, Decl(computedPropertyUnionLiftsToUnionType.ts, 0, 11))
+>m : Symbol(m, Decl(computedPropertyUnionLiftsToUnionType.ts, 24, 17))
+>p : Symbol(p, Decl(computedPropertyUnionLiftsToUnionType.ts, 24, 35))
+
+//   other literal types: number, enum (string and number)
+const n: { "1": string } | { "2": string } = { [onetwo]: 'hi' }
+>n : Symbol(n, Decl(computedPropertyUnionLiftsToUnionType.ts, 26, 5))
+>onetwo : Symbol(onetwo, Decl(computedPropertyUnionLiftsToUnionType.ts, 2, 11))
+
+const e: { "0": string } | { "1": string } = { [alphabet]: 'hi' }
+>e : Symbol(e, Decl(computedPropertyUnionLiftsToUnionType.ts, 27, 5))
+>alphabet : Symbol(alphabet, Decl(computedPropertyUnionLiftsToUnionType.ts, 7, 11))
+
+//   destructuring
 declare let u: { a: string } | { b: string }
-const { [t]: doo } = o
-const { [t]: duo } = u
-var t: 'a' | 'b' = doo
-var t: 'a' | 'b' = duo
-*/
+>u : Symbol(u, Decl(computedPropertyUnionLiftsToUnionType.ts, 30, 11))
+>a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 30, 16))
+>b : Symbol(b, Decl(computedPropertyUnionLiftsToUnionType.ts, 30, 32))
+
+({ [ab]: du } = u) // implicit any error
+>ab : Symbol(ab, Decl(computedPropertyUnionLiftsToUnionType.ts, 0, 11))
+>du : Symbol(du, Decl(computedPropertyUnionLiftsToUnionType.ts, 32, 3))
+>u : Symbol(u, Decl(computedPropertyUnionLiftsToUnionType.ts, 30, 11))
+
+var du: any
+>du : Symbol(du, Decl(computedPropertyUnionLiftsToUnionType.ts, 32, 3))
+
+declare let sig: { [s: string]: string }
+>sig : Symbol(sig, Decl(computedPropertyUnionLiftsToUnionType.ts, 33, 11))
+>s : Symbol(s, Decl(computedPropertyUnionLiftsToUnionType.ts, 33, 20))
+
+({ [ab]: ds } = sig) // fine, comes from index signature
+>ab : Symbol(ab, Decl(computedPropertyUnionLiftsToUnionType.ts, 0, 11))
+>ds : Symbol(ds, Decl(computedPropertyUnionLiftsToUnionType.ts, 35, 3))
+>sig : Symbol(sig, Decl(computedPropertyUnionLiftsToUnionType.ts, 33, 11))
+
+var ds: string
+>ds : Symbol(ds, Decl(computedPropertyUnionLiftsToUnionType.ts, 35, 3))
+
+var duo: any
+>duo : Symbol(duo, Decl(computedPropertyUnionLiftsToUnionType.ts, 37, 3), Decl(computedPropertyUnionLiftsToUnionType.ts, 39, 5))
+
+var dso: string
+>dso : Symbol(dso, Decl(computedPropertyUnionLiftsToUnionType.ts, 38, 3), Decl(computedPropertyUnionLiftsToUnionType.ts, 40, 5))
+
+var { [ab]: duo } = u   // implicit any error (or similar to the singleton one)
+>ab : Symbol(ab, Decl(computedPropertyUnionLiftsToUnionType.ts, 0, 11))
+>duo : Symbol(duo, Decl(computedPropertyUnionLiftsToUnionType.ts, 37, 3), Decl(computedPropertyUnionLiftsToUnionType.ts, 39, 5))
+>u : Symbol(u, Decl(computedPropertyUnionLiftsToUnionType.ts, 30, 11))
+
+var { [ab]: dso } = sig // fine
+>ab : Symbol(ab, Decl(computedPropertyUnionLiftsToUnionType.ts, 0, 11))
+>dso : Symbol(dso, Decl(computedPropertyUnionLiftsToUnionType.ts, 38, 3), Decl(computedPropertyUnionLiftsToUnionType.ts, 40, 5))
+>sig : Symbol(sig, Decl(computedPropertyUnionLiftsToUnionType.ts, 33, 11))
+
+// number index signatures
+declare let sin: { [n: number]: number }
+>sin : Symbol(sin, Decl(computedPropertyUnionLiftsToUnionType.ts, 43, 11))
+>n : Symbol(n, Decl(computedPropertyUnionLiftsToUnionType.ts, 43, 20))
+
+var dn: number
+>dn : Symbol(dn, Decl(computedPropertyUnionLiftsToUnionType.ts, 44, 3))
+
+({ [onetwo]: dn } = sin) // fine, from index signature
+>onetwo : Symbol(onetwo, Decl(computedPropertyUnionLiftsToUnionType.ts, 2, 11))
+>dn : Symbol(dn, Decl(computedPropertyUnionLiftsToUnionType.ts, 44, 3))
+>sin : Symbol(sin, Decl(computedPropertyUnionLiftsToUnionType.ts, 43, 11))
+
+var dno: number
+>dno : Symbol(dno, Decl(computedPropertyUnionLiftsToUnionType.ts, 46, 3), Decl(computedPropertyUnionLiftsToUnionType.ts, 47, 5))
+
+var { [onetwo]: dno } = sin // fine, from index signature
+>onetwo : Symbol(onetwo, Decl(computedPropertyUnionLiftsToUnionType.ts, 2, 11))
+>dno : Symbol(dno, Decl(computedPropertyUnionLiftsToUnionType.ts, 46, 3), Decl(computedPropertyUnionLiftsToUnionType.ts, 47, 5))
+>sin : Symbol(sin, Decl(computedPropertyUnionLiftsToUnionType.ts, 43, 11))
+
+
 
 
 

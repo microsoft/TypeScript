@@ -19,7 +19,7 @@ x[1].toExponential();
 x[2].toExponential();
 >x[2].toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(literalsInComputedProperties1.ts, 0, 3))
->2 : Symbol([2], Decl(literalsInComputedProperties1.ts, 1, 8))
+>2 : Symbol(["2"], Decl(literalsInComputedProperties1.ts, 1, 8))
 >toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
 
 x[3].toExponential();

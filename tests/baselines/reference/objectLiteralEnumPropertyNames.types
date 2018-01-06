@@ -52,7 +52,7 @@ const ux = {
 const y: TestStrs = {
 >y : TestStrs
 >TestStrs : TestStrs
->{    ['a']: 'yo',    ['b']: 'ye'} : { ['a']: string; ['b']: string; }
+>{    ['a']: 'yo',    ['b']: 'ye'} : { ["a"]: string; ["b"]: string; }
 
     ['a']: 'yo',
 >'a' : "a"
