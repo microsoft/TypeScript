@@ -2,8 +2,8 @@ tests/cases/conformance/types/regexValidated/regexValidated.stringLiterals.negat
 tests/cases/conformance/types/regexValidated/regexValidated.stringLiterals.negative.ts(3,5): error TS2322: Type '"cat,fish,dog,fosh,cat"' is not assignable to type '/^(dog|cat|fish)(,(dog|cat|fish))*$/'.
 tests/cases/conformance/types/regexValidated/regexValidated.stringLiterals.negative.ts(5,5): error TS2322: Type '"02338374729O"' is not assignable to type '/^[0-9]+$/'.
 tests/cases/conformance/types/regexValidated/regexValidated.stringLiterals.negative.ts(7,5): error TS2322: Type '"X0F12A"' is not assignable to type '/^([0-9]|[A-F])+$/'.
-tests/cases/conformance/types/regexValidated/regexValidated.stringLiterals.negative.ts(10,5): error TS2322: Type '"type★script@microsoft.com"' is not assignable to type '/^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i'.
-tests/cases/conformance/types/regexValidated/regexValidated.stringLiterals.negative.ts(13,5): error TS2322: Type '"example@GMAIL.ORG"' is not assignable to type '/^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@gmail\.com$/i'.
+tests/cases/conformance/types/regexValidated/regexValidated.stringLiterals.negative.ts(10,5): error TS2322: Type '"type★script@microsoft.com"' is not assignable to type 'Email'.
+tests/cases/conformance/types/regexValidated/regexValidated.stringLiterals.negative.ts(13,5): error TS2322: Type '"example@GMAIL.ORG"' is not assignable to type 'Gmail'.
 
 
 ==== tests/cases/conformance/types/regexValidated/regexValidated.stringLiterals.negative.ts (6 errors) ====
@@ -26,12 +26,12 @@ tests/cases/conformance/types/regexValidated/regexValidated.stringLiterals.negat
     type Email = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
     let address: Email = 'type★script@microsoft.com'; // ★ isn't part of the validated range for addresses
         ~~~~~~~
-!!! error TS2322: Type '"type★script@microsoft.com"' is not assignable to type '/^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i'.
+!!! error TS2322: Type '"type★script@microsoft.com"' is not assignable to type 'Email'.
     
     type Gmail = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@gmail\.com$/i;
     let gmailAddress: Gmail = 'example@GMAIL.ORG'; // wrong tld
         ~~~~~~~~~~~~
-!!! error TS2322: Type '"example@GMAIL.ORG"' is not assignable to type '/^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@gmail\.com$/i'.
+!!! error TS2322: Type '"example@GMAIL.ORG"' is not assignable to type 'Gmail'.
     
     
     

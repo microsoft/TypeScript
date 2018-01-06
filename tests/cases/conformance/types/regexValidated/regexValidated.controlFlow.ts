@@ -1,3 +1,4 @@
+// @declaration: true
 const isA = /a/i;
 let mustBeA: /a/i;
 declare var s: string;

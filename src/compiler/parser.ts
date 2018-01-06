@@ -2765,6 +2765,7 @@ namespace ts {
                 case SyntaxKind.QuestionToken:
                 case SyntaxKind.ExclamationToken:
                 case SyntaxKind.DotDotDotToken:
+                case SyntaxKind.SlashToken:
                     return true;
                 case SyntaxKind.MinusToken:
                     return !inStartOfParameter && lookAhead(nextTokenIsNumericLiteral);

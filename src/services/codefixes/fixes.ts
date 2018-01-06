@@ -15,3 +15,4 @@
 /// <reference path='disableJsDiagnostics.ts' />
 /// <reference path='helpers.ts' />
 /// <reference path='inferFromUsage.ts' />
+/// <reference path="addRequiredLiteralCastToAssignToRegexpType.ts" />

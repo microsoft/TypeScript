@@ -42,3 +42,13 @@ var mustBeBAndA;
 if (isB.test(s) && isA.test(s)) {
     mustBeBOrA = s;
 }
+
+
+//// [regexValidated.controlFlow.d.ts]
+declare const isA: RegExp</a/i>;
+declare let mustBeA: /a/i;
+declare var s: string;
+declare const isB: RegExp</b/i>;
+declare let mustBeB: /b/i;
+declare let mustBeBOrA: /b/i | /a/i;
+declare let mustBeBAndA: /b/i & /a/i;

@@ -1,3 +1,4 @@
+// @declaration: true
 let fontColor: /^#([0-9a-f]{3}|[0-9a-f]{6})$/i = '#000';
 
 let catdogfish: /^(dog|cat|fish)(,(dog|cat|fish))*$/ = 'cat,fish,dog,fish,cat';
