@@ -149,21 +149,21 @@ var x = 0;`, {
             `import {foo} from "SomeName";\n` +
             `declare function use(a: any);\n` +
             `use(foo);`, {
-                options: { compilerOptions: { module: ModuleKind.System, newLine: NewLineKind.LineFeed }, renamedDependencies: { "SomeName": "SomeOtherName" } }
+                options: { compilerOptions: { module: ModuleKind.System, newLine: NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } }
             });
 
         transpilesCorrectly("Rename dependencies - AMD",
             `import {foo} from "SomeName";\n` +
             `declare function use(a: any);\n` +
             `use(foo);`, {
-                options: { compilerOptions: { module: ModuleKind.AMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { "SomeName": "SomeOtherName" } }
+                options: { compilerOptions: { module: ModuleKind.AMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } }
             });
 
         transpilesCorrectly("Rename dependencies - UMD",
             `import {foo} from "SomeName";\n` +
             `declare function use(a: any);\n` +
             `use(foo);`, {
-                options: { compilerOptions: { module: ModuleKind.UMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { "SomeName": "SomeOtherName" } }
+                options: { compilerOptions: { module: ModuleKind.UMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } }
             });
 
         transpilesCorrectly("Transpile with emit decorators and emit metadata",

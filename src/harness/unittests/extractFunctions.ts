@@ -195,12 +195,12 @@ namespace ts {
     function G<U extends T[]>(t2: U) {
         [#|t2.toString();|]
     }
-}`);
+}`, /*includeLib*/ true);
         // Confirm that the contextual type of an extracted expression counts as a use.
         testExtractFunction("extractFunction16",
             `function F<T>() {
     const array: T[] = [#|[]|];
-}`);
+}`, /*includeLib*/ true);
         // Class type parameter
         testExtractFunction("extractFunction17",
             `class C<T1, T2> {
@@ -219,7 +219,7 @@ namespace ts {
         testExtractFunction("extractFunction19",
             `function F<T, U extends T[], V extends U[]>(v: V) {
     [#|v.toString()|];
-}`);
+}`, /*includeLib*/ true);
 
         testExtractFunction("extractFunction20",
         `const _ = class {
@@ -362,27 +362,32 @@ function parsePrimaryExpression(): any {
 }`);
 
         testExtractFunction("extractFunction_VariableDeclaration_Var", `
-[#|var x = 1;|]
+[#|var x = 1;
+"hello"|]
 x;
 `);
 
         testExtractFunction("extractFunction_VariableDeclaration_Let_Type", `
-[#|let x: number = 1;|]
+[#|let x: number = 1;
+"hello";|]
 x;
 `);
 
         testExtractFunction("extractFunction_VariableDeclaration_Let_NoType", `
-[#|let x = 1;|]
+[#|let x = 1;
+"hello";|]
 x;
 `);
 
         testExtractFunction("extractFunction_VariableDeclaration_Const_Type", `
-[#|const x: number = 1;|]
+[#|const x: number = 1;
+"hello";|]
 x;
 `);
 
         testExtractFunction("extractFunction_VariableDeclaration_Const_NoType", `
-[#|const x = 1;|]
+[#|const x = 1;
+"hello";|]
 x;
 `);
 
@@ -404,7 +409,8 @@ x; y; z;
 `);
 
         testExtractFunction("extractFunction_VariableDeclaration_ConsumedTwice", `
-[#|const x: number = 1;|]
+[#|const x: number = 1;
+"hello";|]
 x; x;
 `);
 
@@ -542,7 +548,7 @@ var q = /*b*/ //c
     /*m*/; /*n*/ //o`);
     });
 
-    function testExtractFunction(caption: string, text: string) {
-        testExtractSymbol(caption, text, "extractFunction", Diagnostics.Extract_function);
+    function testExtractFunction(caption: string, text: string, includeLib?: boolean) {
+        testExtractSymbol(caption, text, "extractFunction", Diagnostics.Extract_function, includeLib);
     }
 }

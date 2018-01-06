@@ -290,7 +290,7 @@ namespace ts.FindAllReferences {
 
         function isNameMatch(name: __String): boolean {
             // Use name of "default" even in `export =` case because we may have allowSyntheticDefaultImports
-            return name === exportSymbol.escapedName || exportKind !== ExportKind.Named && name === "default";
+            return name === exportSymbol.escapedName || exportKind !== ExportKind.Named && name === InternalSymbolName.Default;
         }
     }
 
@@ -534,7 +534,7 @@ namespace ts.FindAllReferences {
             // If `importedName` is undefined, do continue searching as the export is anonymous.
             // (All imports returned from this function will be ignored anyway if we are in rename and this is a not a named export.)
             const importedName = symbolName(importedSymbol);
-            if (importedName === undefined || importedName === "default" || importedName === symbol.escapedName) {
+            if (importedName === undefined || importedName === InternalSymbolName.Default || importedName === symbol.escapedName) {
                 return { kind: ImportExport.Import, symbol: importedSymbol, ...isImport };
             }
         }
@@ -604,7 +604,7 @@ namespace ts.FindAllReferences {
     }
 
     function symbolName(symbol: Symbol): __String | undefined {
-        if (symbol.escapedName !== "default") {
+        if (symbol.escapedName !== InternalSymbolName.Default) {
             return symbol.escapedName;
         }
 

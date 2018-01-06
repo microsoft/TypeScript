@@ -342,49 +342,67 @@ define(function () {
 >call : Symbol(Function.call, Decl(lib.d.ts, --, --))
 >value : Symbol(value, Decl(fixSignatureCaching.ts, 297, 34))
 
+    isArray = 'isArray' in Array
+>isArray : Symbol(isArray, Decl(fixSignatureCaching.ts, 289, 53))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+        ? function (value) { return Object.prototype.toString.call(value) === '[object Array]'; }
+>value : Symbol(value, Decl(fixSignatureCaching.ts, 299, 20))
+>Object.prototype.toString.call : Symbol(Function.call, Decl(lib.d.ts, --, --))
+>Object.prototype.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>call : Symbol(Function.call, Decl(lib.d.ts, --, --))
+>value : Symbol(value, Decl(fixSignatureCaching.ts, 299, 20))
+
+        : Array.isArray;
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
     function equalIC(a, b) {
->equalIC : Symbol(equalIC, Decl(fixSignatureCaching.ts, 297, 112))
->a : Symbol(a, Decl(fixSignatureCaching.ts, 299, 21))
->b : Symbol(b, Decl(fixSignatureCaching.ts, 299, 23))
+>equalIC : Symbol(equalIC, Decl(fixSignatureCaching.ts, 300, 24))
+>a : Symbol(a, Decl(fixSignatureCaching.ts, 302, 21))
+>b : Symbol(b, Decl(fixSignatureCaching.ts, 302, 23))
 
         return a != null && b != null && a.toLowerCase() === b.toLowerCase();
->a : Symbol(a, Decl(fixSignatureCaching.ts, 299, 21))
->b : Symbol(b, Decl(fixSignatureCaching.ts, 299, 23))
->a : Symbol(a, Decl(fixSignatureCaching.ts, 299, 21))
->b : Symbol(b, Decl(fixSignatureCaching.ts, 299, 23))
+>a : Symbol(a, Decl(fixSignatureCaching.ts, 302, 21))
+>b : Symbol(b, Decl(fixSignatureCaching.ts, 302, 23))
+>a : Symbol(a, Decl(fixSignatureCaching.ts, 302, 21))
+>b : Symbol(b, Decl(fixSignatureCaching.ts, 302, 23))
     }
 
     function containsIC(array, value) {
->containsIC : Symbol(containsIC, Decl(fixSignatureCaching.ts, 301, 5))
->array : Symbol(array, Decl(fixSignatureCaching.ts, 303, 24))
->value : Symbol(value, Decl(fixSignatureCaching.ts, 303, 30))
+>containsIC : Symbol(containsIC, Decl(fixSignatureCaching.ts, 304, 5))
+>array : Symbol(array, Decl(fixSignatureCaching.ts, 306, 24))
+>value : Symbol(value, Decl(fixSignatureCaching.ts, 306, 30))
 
         var valueLC, i, len = array.length;
->valueLC : Symbol(valueLC, Decl(fixSignatureCaching.ts, 304, 11))
->i : Symbol(i, Decl(fixSignatureCaching.ts, 304, 20))
->len : Symbol(len, Decl(fixSignatureCaching.ts, 304, 23))
->array : Symbol(array, Decl(fixSignatureCaching.ts, 303, 24))
+>valueLC : Symbol(valueLC, Decl(fixSignatureCaching.ts, 307, 11))
+>i : Symbol(i, Decl(fixSignatureCaching.ts, 307, 20))
+>len : Symbol(len, Decl(fixSignatureCaching.ts, 307, 23))
+>array : Symbol(array, Decl(fixSignatureCaching.ts, 306, 24))
 
         if (!len || !value) {
->len : Symbol(len, Decl(fixSignatureCaching.ts, 304, 23))
->value : Symbol(value, Decl(fixSignatureCaching.ts, 303, 30))
+>len : Symbol(len, Decl(fixSignatureCaching.ts, 307, 23))
+>value : Symbol(value, Decl(fixSignatureCaching.ts, 306, 30))
 
             return false;
         }
         valueLC = value.toLowerCase();
->valueLC : Symbol(valueLC, Decl(fixSignatureCaching.ts, 304, 11))
->value : Symbol(value, Decl(fixSignatureCaching.ts, 303, 30))
+>valueLC : Symbol(valueLC, Decl(fixSignatureCaching.ts, 307, 11))
+>value : Symbol(value, Decl(fixSignatureCaching.ts, 306, 30))
 
         for (i = 0; i < len; ++i) {
->i : Symbol(i, Decl(fixSignatureCaching.ts, 304, 20))
->i : Symbol(i, Decl(fixSignatureCaching.ts, 304, 20))
->len : Symbol(len, Decl(fixSignatureCaching.ts, 304, 23))
->i : Symbol(i, Decl(fixSignatureCaching.ts, 304, 20))
+>i : Symbol(i, Decl(fixSignatureCaching.ts, 307, 20))
+>i : Symbol(i, Decl(fixSignatureCaching.ts, 307, 20))
+>len : Symbol(len, Decl(fixSignatureCaching.ts, 307, 23))
+>i : Symbol(i, Decl(fixSignatureCaching.ts, 307, 20))
 
             if (valueLC === array[i].toLowerCase()) {
->valueLC : Symbol(valueLC, Decl(fixSignatureCaching.ts, 304, 11))
->array : Symbol(array, Decl(fixSignatureCaching.ts, 303, 24))
->i : Symbol(i, Decl(fixSignatureCaching.ts, 304, 20))
+>valueLC : Symbol(valueLC, Decl(fixSignatureCaching.ts, 307, 11))
+>array : Symbol(array, Decl(fixSignatureCaching.ts, 306, 24))
+>i : Symbol(i, Decl(fixSignatureCaching.ts, 307, 20))
 
                 return true;
             }
@@ -393,139 +411,139 @@ define(function () {
     }
 
     function convertPropsToRegExp(object) {
->convertPropsToRegExp : Symbol(convertPropsToRegExp, Decl(fixSignatureCaching.ts, 315, 5))
->object : Symbol(object, Decl(fixSignatureCaching.ts, 317, 34))
+>convertPropsToRegExp : Symbol(convertPropsToRegExp, Decl(fixSignatureCaching.ts, 318, 5))
+>object : Symbol(object, Decl(fixSignatureCaching.ts, 320, 34))
 
         for (var key in object) {
->key : Symbol(key, Decl(fixSignatureCaching.ts, 318, 16))
->object : Symbol(object, Decl(fixSignatureCaching.ts, 317, 34))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 321, 16))
+>object : Symbol(object, Decl(fixSignatureCaching.ts, 320, 34))
 
             if (hasOwnProp.call(object, key)) {
 >hasOwnProp.call : Symbol(Function.call, Decl(lib.d.ts, --, --))
 >hasOwnProp : Symbol(hasOwnProp, Decl(fixSignatureCaching.ts, 289, 7))
 >call : Symbol(Function.call, Decl(lib.d.ts, --, --))
->object : Symbol(object, Decl(fixSignatureCaching.ts, 317, 34))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 318, 16))
+>object : Symbol(object, Decl(fixSignatureCaching.ts, 320, 34))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 321, 16))
 
                 object[key] = new RegExp(object[key], 'i');
->object : Symbol(object, Decl(fixSignatureCaching.ts, 317, 34))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 318, 16))
+>object : Symbol(object, Decl(fixSignatureCaching.ts, 320, 34))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 321, 16))
 >RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->object : Symbol(object, Decl(fixSignatureCaching.ts, 317, 34))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 318, 16))
+>object : Symbol(object, Decl(fixSignatureCaching.ts, 320, 34))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 321, 16))
             }
         }
     }
 
     (function init() {
->init : Symbol(init, Decl(fixSignatureCaching.ts, 325, 5))
+>init : Symbol(init, Decl(fixSignatureCaching.ts, 328, 5))
 
         var key, values, value, i, len, verPos, mobileDetectRules = impl.mobileDetectRules;
->key : Symbol(key, Decl(fixSignatureCaching.ts, 326, 11))
->values : Symbol(values, Decl(fixSignatureCaching.ts, 326, 16))
->value : Symbol(value, Decl(fixSignatureCaching.ts, 326, 24))
->i : Symbol(i, Decl(fixSignatureCaching.ts, 326, 31))
->len : Symbol(len, Decl(fixSignatureCaching.ts, 326, 34))
->verPos : Symbol(verPos, Decl(fixSignatureCaching.ts, 326, 39))
->mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 326, 47))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 329, 11))
+>values : Symbol(values, Decl(fixSignatureCaching.ts, 329, 16))
+>value : Symbol(value, Decl(fixSignatureCaching.ts, 329, 24))
+>i : Symbol(i, Decl(fixSignatureCaching.ts, 329, 31))
+>len : Symbol(len, Decl(fixSignatureCaching.ts, 329, 34))
+>verPos : Symbol(verPos, Decl(fixSignatureCaching.ts, 329, 39))
+>mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 329, 47))
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
 
         for (key in mobileDetectRules.props) {
->key : Symbol(key, Decl(fixSignatureCaching.ts, 326, 11))
->mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 326, 47))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 329, 11))
+>mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 329, 47))
 
             if (hasOwnProp.call(mobileDetectRules.props, key)) {
 >hasOwnProp.call : Symbol(Function.call, Decl(lib.d.ts, --, --))
 >hasOwnProp : Symbol(hasOwnProp, Decl(fixSignatureCaching.ts, 289, 7))
 >call : Symbol(Function.call, Decl(lib.d.ts, --, --))
->mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 326, 47))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 326, 11))
+>mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 329, 47))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 329, 11))
 
                 values = mobileDetectRules.props[key];
->values : Symbol(values, Decl(fixSignatureCaching.ts, 326, 16))
->mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 326, 47))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 326, 11))
+>values : Symbol(values, Decl(fixSignatureCaching.ts, 329, 16))
+>mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 329, 47))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 329, 11))
 
                 if (!isArray(values)) {
 >isArray : Symbol(isArray, Decl(fixSignatureCaching.ts, 289, 53))
->values : Symbol(values, Decl(fixSignatureCaching.ts, 326, 16))
+>values : Symbol(values, Decl(fixSignatureCaching.ts, 329, 16))
 
                     values = [values];
->values : Symbol(values, Decl(fixSignatureCaching.ts, 326, 16))
->values : Symbol(values, Decl(fixSignatureCaching.ts, 326, 16))
+>values : Symbol(values, Decl(fixSignatureCaching.ts, 329, 16))
+>values : Symbol(values, Decl(fixSignatureCaching.ts, 329, 16))
                 }
                 len = values.length;
->len : Symbol(len, Decl(fixSignatureCaching.ts, 326, 34))
->values : Symbol(values, Decl(fixSignatureCaching.ts, 326, 16))
+>len : Symbol(len, Decl(fixSignatureCaching.ts, 329, 34))
+>values : Symbol(values, Decl(fixSignatureCaching.ts, 329, 16))
 
                 for (i = 0; i < len; ++i) {
->i : Symbol(i, Decl(fixSignatureCaching.ts, 326, 31))
->i : Symbol(i, Decl(fixSignatureCaching.ts, 326, 31))
->len : Symbol(len, Decl(fixSignatureCaching.ts, 326, 34))
->i : Symbol(i, Decl(fixSignatureCaching.ts, 326, 31))
+>i : Symbol(i, Decl(fixSignatureCaching.ts, 329, 31))
+>i : Symbol(i, Decl(fixSignatureCaching.ts, 329, 31))
+>len : Symbol(len, Decl(fixSignatureCaching.ts, 329, 34))
+>i : Symbol(i, Decl(fixSignatureCaching.ts, 329, 31))
 
                     value = values[i];
->value : Symbol(value, Decl(fixSignatureCaching.ts, 326, 24))
->values : Symbol(values, Decl(fixSignatureCaching.ts, 326, 16))
->i : Symbol(i, Decl(fixSignatureCaching.ts, 326, 31))
+>value : Symbol(value, Decl(fixSignatureCaching.ts, 329, 24))
+>values : Symbol(values, Decl(fixSignatureCaching.ts, 329, 16))
+>i : Symbol(i, Decl(fixSignatureCaching.ts, 329, 31))
 
                     verPos = value.indexOf('[VER]');
->verPos : Symbol(verPos, Decl(fixSignatureCaching.ts, 326, 39))
->value : Symbol(value, Decl(fixSignatureCaching.ts, 326, 24))
+>verPos : Symbol(verPos, Decl(fixSignatureCaching.ts, 329, 39))
+>value : Symbol(value, Decl(fixSignatureCaching.ts, 329, 24))
 
                     if (verPos >= 0) {
->verPos : Symbol(verPos, Decl(fixSignatureCaching.ts, 326, 39))
+>verPos : Symbol(verPos, Decl(fixSignatureCaching.ts, 329, 39))
 
                         value = value.substring(0, verPos) + '([\\w._\\+]+)' + value.substring(verPos + 5);
->value : Symbol(value, Decl(fixSignatureCaching.ts, 326, 24))
->value : Symbol(value, Decl(fixSignatureCaching.ts, 326, 24))
->verPos : Symbol(verPos, Decl(fixSignatureCaching.ts, 326, 39))
->value : Symbol(value, Decl(fixSignatureCaching.ts, 326, 24))
->verPos : Symbol(verPos, Decl(fixSignatureCaching.ts, 326, 39))
+>value : Symbol(value, Decl(fixSignatureCaching.ts, 329, 24))
+>value : Symbol(value, Decl(fixSignatureCaching.ts, 329, 24))
+>verPos : Symbol(verPos, Decl(fixSignatureCaching.ts, 329, 39))
+>value : Symbol(value, Decl(fixSignatureCaching.ts, 329, 24))
+>verPos : Symbol(verPos, Decl(fixSignatureCaching.ts, 329, 39))
                     }
                     values[i] = new RegExp(value, 'i');
->values : Symbol(values, Decl(fixSignatureCaching.ts, 326, 16))
->i : Symbol(i, Decl(fixSignatureCaching.ts, 326, 31))
+>values : Symbol(values, Decl(fixSignatureCaching.ts, 329, 16))
+>i : Symbol(i, Decl(fixSignatureCaching.ts, 329, 31))
 >RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->value : Symbol(value, Decl(fixSignatureCaching.ts, 326, 24))
+>value : Symbol(value, Decl(fixSignatureCaching.ts, 329, 24))
                 }
                 mobileDetectRules.props[key] = values;
->mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 326, 47))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 326, 11))
->values : Symbol(values, Decl(fixSignatureCaching.ts, 326, 16))
+>mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 329, 47))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 329, 11))
+>values : Symbol(values, Decl(fixSignatureCaching.ts, 329, 16))
             }
         }
         convertPropsToRegExp(mobileDetectRules.oss);
->convertPropsToRegExp : Symbol(convertPropsToRegExp, Decl(fixSignatureCaching.ts, 315, 5))
->mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 326, 47))
+>convertPropsToRegExp : Symbol(convertPropsToRegExp, Decl(fixSignatureCaching.ts, 318, 5))
+>mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 329, 47))
 
         convertPropsToRegExp(mobileDetectRules.phones);
->convertPropsToRegExp : Symbol(convertPropsToRegExp, Decl(fixSignatureCaching.ts, 315, 5))
->mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 326, 47))
+>convertPropsToRegExp : Symbol(convertPropsToRegExp, Decl(fixSignatureCaching.ts, 318, 5))
+>mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 329, 47))
 
         convertPropsToRegExp(mobileDetectRules.tablets);
->convertPropsToRegExp : Symbol(convertPropsToRegExp, Decl(fixSignatureCaching.ts, 315, 5))
->mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 326, 47))
+>convertPropsToRegExp : Symbol(convertPropsToRegExp, Decl(fixSignatureCaching.ts, 318, 5))
+>mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 329, 47))
 
         convertPropsToRegExp(mobileDetectRules.uas);
->convertPropsToRegExp : Symbol(convertPropsToRegExp, Decl(fixSignatureCaching.ts, 315, 5))
->mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 326, 47))
+>convertPropsToRegExp : Symbol(convertPropsToRegExp, Decl(fixSignatureCaching.ts, 318, 5))
+>mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 329, 47))
 
         convertPropsToRegExp(mobileDetectRules.utils);
->convertPropsToRegExp : Symbol(convertPropsToRegExp, Decl(fixSignatureCaching.ts, 315, 5))
->mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 326, 47))
+>convertPropsToRegExp : Symbol(convertPropsToRegExp, Decl(fixSignatureCaching.ts, 318, 5))
+>mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 329, 47))
 
         // copy some patterns to oss0 which are tested first (see issue#15)
         mobileDetectRules.oss0 = {
->mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 326, 47))
+>mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 329, 47))
 
             WindowsPhoneOS: mobileDetectRules.oss.WindowsPhoneOS,
->WindowsPhoneOS : Symbol(WindowsPhoneOS, Decl(fixSignatureCaching.ts, 352, 34))
->mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 326, 47))
+>WindowsPhoneOS : Symbol(WindowsPhoneOS, Decl(fixSignatureCaching.ts, 355, 34))
+>mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 329, 47))
 
             WindowsMobileOS: mobileDetectRules.oss.WindowsMobileOS
->WindowsMobileOS : Symbol(WindowsMobileOS, Decl(fixSignatureCaching.ts, 353, 65))
->mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 326, 47))
+>WindowsMobileOS : Symbol(WindowsMobileOS, Decl(fixSignatureCaching.ts, 356, 65))
+>mobileDetectRules : Symbol(mobileDetectRules, Decl(fixSignatureCaching.ts, 329, 47))
 
         };
     }());
@@ -539,27 +557,27 @@ define(function () {
      */
     impl.findMatch = function(rules, userAgent) {
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->rules : Symbol(rules, Decl(fixSignatureCaching.ts, 365, 30))
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 365, 36))
+>rules : Symbol(rules, Decl(fixSignatureCaching.ts, 368, 30))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 368, 36))
 
         for (var key in rules) {
->key : Symbol(key, Decl(fixSignatureCaching.ts, 366, 16))
->rules : Symbol(rules, Decl(fixSignatureCaching.ts, 365, 30))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 369, 16))
+>rules : Symbol(rules, Decl(fixSignatureCaching.ts, 368, 30))
 
             if (hasOwnProp.call(rules, key)) {
 >hasOwnProp.call : Symbol(Function.call, Decl(lib.d.ts, --, --))
 >hasOwnProp : Symbol(hasOwnProp, Decl(fixSignatureCaching.ts, 289, 7))
 >call : Symbol(Function.call, Decl(lib.d.ts, --, --))
->rules : Symbol(rules, Decl(fixSignatureCaching.ts, 365, 30))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 366, 16))
+>rules : Symbol(rules, Decl(fixSignatureCaching.ts, 368, 30))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 369, 16))
 
                 if (rules[key].test(userAgent)) {
->rules : Symbol(rules, Decl(fixSignatureCaching.ts, 365, 30))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 366, 16))
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 365, 36))
+>rules : Symbol(rules, Decl(fixSignatureCaching.ts, 368, 30))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 369, 16))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 368, 36))
 
                     return key;
->key : Symbol(key, Decl(fixSignatureCaching.ts, 366, 16))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 369, 16))
                 }
             }
         }
@@ -575,38 +593,38 @@ define(function () {
      */
     impl.findMatches = function(rules, userAgent) {
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->rules : Symbol(rules, Decl(fixSignatureCaching.ts, 383, 32))
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 383, 38))
+>rules : Symbol(rules, Decl(fixSignatureCaching.ts, 386, 32))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 386, 38))
 
         var result = [];
->result : Symbol(result, Decl(fixSignatureCaching.ts, 384, 11))
+>result : Symbol(result, Decl(fixSignatureCaching.ts, 387, 11))
 
         for (var key in rules) {
->key : Symbol(key, Decl(fixSignatureCaching.ts, 385, 16))
->rules : Symbol(rules, Decl(fixSignatureCaching.ts, 383, 32))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 388, 16))
+>rules : Symbol(rules, Decl(fixSignatureCaching.ts, 386, 32))
 
             if (hasOwnProp.call(rules, key)) {
 >hasOwnProp.call : Symbol(Function.call, Decl(lib.d.ts, --, --))
 >hasOwnProp : Symbol(hasOwnProp, Decl(fixSignatureCaching.ts, 289, 7))
 >call : Symbol(Function.call, Decl(lib.d.ts, --, --))
->rules : Symbol(rules, Decl(fixSignatureCaching.ts, 383, 32))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 385, 16))
+>rules : Symbol(rules, Decl(fixSignatureCaching.ts, 386, 32))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 388, 16))
 
                 if (rules[key].test(userAgent)) {
->rules : Symbol(rules, Decl(fixSignatureCaching.ts, 383, 32))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 385, 16))
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 383, 38))
+>rules : Symbol(rules, Decl(fixSignatureCaching.ts, 386, 32))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 388, 16))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 386, 38))
 
                     result.push(key);
 >result.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
->result : Symbol(result, Decl(fixSignatureCaching.ts, 384, 11))
+>result : Symbol(result, Decl(fixSignatureCaching.ts, 387, 11))
 >push : Symbol(Array.push, Decl(lib.d.ts, --, --))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 385, 16))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 388, 16))
                 }
             }
         }
         return result;
->result : Symbol(result, Decl(fixSignatureCaching.ts, 384, 11))
+>result : Symbol(result, Decl(fixSignatureCaching.ts, 387, 11))
 
     };
 
@@ -620,50 +638,50 @@ define(function () {
      */
     impl.getVersionStr = function (propertyName, userAgent) {
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->propertyName : Symbol(propertyName, Decl(fixSignatureCaching.ts, 403, 35))
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 403, 48))
+>propertyName : Symbol(propertyName, Decl(fixSignatureCaching.ts, 406, 35))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 406, 48))
 
         var props = impl.mobileDetectRules.props, patterns, i, len, match;
->props : Symbol(props, Decl(fixSignatureCaching.ts, 404, 11))
+>props : Symbol(props, Decl(fixSignatureCaching.ts, 407, 11))
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->patterns : Symbol(patterns, Decl(fixSignatureCaching.ts, 404, 49))
->i : Symbol(i, Decl(fixSignatureCaching.ts, 404, 59))
->len : Symbol(len, Decl(fixSignatureCaching.ts, 404, 62))
->match : Symbol(match, Decl(fixSignatureCaching.ts, 404, 67))
+>patterns : Symbol(patterns, Decl(fixSignatureCaching.ts, 407, 49))
+>i : Symbol(i, Decl(fixSignatureCaching.ts, 407, 59))
+>len : Symbol(len, Decl(fixSignatureCaching.ts, 407, 62))
+>match : Symbol(match, Decl(fixSignatureCaching.ts, 407, 67))
 
         if (hasOwnProp.call(props, propertyName)) {
 >hasOwnProp.call : Symbol(Function.call, Decl(lib.d.ts, --, --))
 >hasOwnProp : Symbol(hasOwnProp, Decl(fixSignatureCaching.ts, 289, 7))
 >call : Symbol(Function.call, Decl(lib.d.ts, --, --))
->props : Symbol(props, Decl(fixSignatureCaching.ts, 404, 11))
->propertyName : Symbol(propertyName, Decl(fixSignatureCaching.ts, 403, 35))
+>props : Symbol(props, Decl(fixSignatureCaching.ts, 407, 11))
+>propertyName : Symbol(propertyName, Decl(fixSignatureCaching.ts, 406, 35))
 
             patterns = props[propertyName];
->patterns : Symbol(patterns, Decl(fixSignatureCaching.ts, 404, 49))
->props : Symbol(props, Decl(fixSignatureCaching.ts, 404, 11))
->propertyName : Symbol(propertyName, Decl(fixSignatureCaching.ts, 403, 35))
+>patterns : Symbol(patterns, Decl(fixSignatureCaching.ts, 407, 49))
+>props : Symbol(props, Decl(fixSignatureCaching.ts, 407, 11))
+>propertyName : Symbol(propertyName, Decl(fixSignatureCaching.ts, 406, 35))
 
             len = patterns.length;
->len : Symbol(len, Decl(fixSignatureCaching.ts, 404, 62))
->patterns : Symbol(patterns, Decl(fixSignatureCaching.ts, 404, 49))
+>len : Symbol(len, Decl(fixSignatureCaching.ts, 407, 62))
+>patterns : Symbol(patterns, Decl(fixSignatureCaching.ts, 407, 49))
 
             for (i = 0; i < len; ++i) {
->i : Symbol(i, Decl(fixSignatureCaching.ts, 404, 59))
->i : Symbol(i, Decl(fixSignatureCaching.ts, 404, 59))
->len : Symbol(len, Decl(fixSignatureCaching.ts, 404, 62))
->i : Symbol(i, Decl(fixSignatureCaching.ts, 404, 59))
+>i : Symbol(i, Decl(fixSignatureCaching.ts, 407, 59))
+>i : Symbol(i, Decl(fixSignatureCaching.ts, 407, 59))
+>len : Symbol(len, Decl(fixSignatureCaching.ts, 407, 62))
+>i : Symbol(i, Decl(fixSignatureCaching.ts, 407, 59))
 
                 match = patterns[i].exec(userAgent);
->match : Symbol(match, Decl(fixSignatureCaching.ts, 404, 67))
->patterns : Symbol(patterns, Decl(fixSignatureCaching.ts, 404, 49))
->i : Symbol(i, Decl(fixSignatureCaching.ts, 404, 59))
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 403, 48))
+>match : Symbol(match, Decl(fixSignatureCaching.ts, 407, 67))
+>patterns : Symbol(patterns, Decl(fixSignatureCaching.ts, 407, 49))
+>i : Symbol(i, Decl(fixSignatureCaching.ts, 407, 59))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 406, 48))
 
                 if (match !== null) {
->match : Symbol(match, Decl(fixSignatureCaching.ts, 404, 67))
+>match : Symbol(match, Decl(fixSignatureCaching.ts, 407, 67))
 
                     return match[1];
->match : Symbol(match, Decl(fixSignatureCaching.ts, 404, 67))
+>match : Symbol(match, Decl(fixSignatureCaching.ts, 407, 67))
                 }
             }
         }
@@ -681,19 +699,19 @@ define(function () {
      */
     impl.getVersion = function (propertyName, userAgent) {
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->propertyName : Symbol(propertyName, Decl(fixSignatureCaching.ts, 427, 32))
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 427, 45))
+>propertyName : Symbol(propertyName, Decl(fixSignatureCaching.ts, 430, 32))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 430, 45))
 
         var version = impl.getVersionStr(propertyName, userAgent);
->version : Symbol(version, Decl(fixSignatureCaching.ts, 428, 11))
+>version : Symbol(version, Decl(fixSignatureCaching.ts, 431, 11))
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->propertyName : Symbol(propertyName, Decl(fixSignatureCaching.ts, 427, 32))
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 427, 45))
+>propertyName : Symbol(propertyName, Decl(fixSignatureCaching.ts, 430, 32))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 430, 45))
 
         return version ? impl.prepareVersionNo(version) : NaN;
->version : Symbol(version, Decl(fixSignatureCaching.ts, 428, 11))
+>version : Symbol(version, Decl(fixSignatureCaching.ts, 431, 11))
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->version : Symbol(version, Decl(fixSignatureCaching.ts, 428, 11))
+>version : Symbol(version, Decl(fixSignatureCaching.ts, 431, 11))
 >NaN : Symbol(NaN, Decl(lib.d.ts, --, --))
 
     };
@@ -707,120 +725,120 @@ define(function () {
      */
     impl.prepareVersionNo = function (version) {
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->version : Symbol(version, Decl(fixSignatureCaching.ts, 439, 38))
+>version : Symbol(version, Decl(fixSignatureCaching.ts, 442, 38))
 
         var numbers;
->numbers : Symbol(numbers, Decl(fixSignatureCaching.ts, 440, 11))
+>numbers : Symbol(numbers, Decl(fixSignatureCaching.ts, 443, 11))
 
         numbers = version.split(/[a-z._ \/\-]/i);
->numbers : Symbol(numbers, Decl(fixSignatureCaching.ts, 440, 11))
->version : Symbol(version, Decl(fixSignatureCaching.ts, 439, 38))
+>numbers : Symbol(numbers, Decl(fixSignatureCaching.ts, 443, 11))
+>version : Symbol(version, Decl(fixSignatureCaching.ts, 442, 38))
 
         if (numbers.length === 1) {
->numbers : Symbol(numbers, Decl(fixSignatureCaching.ts, 440, 11))
+>numbers : Symbol(numbers, Decl(fixSignatureCaching.ts, 443, 11))
 
             version = numbers[0];
->version : Symbol(version, Decl(fixSignatureCaching.ts, 439, 38))
->numbers : Symbol(numbers, Decl(fixSignatureCaching.ts, 440, 11))
+>version : Symbol(version, Decl(fixSignatureCaching.ts, 442, 38))
+>numbers : Symbol(numbers, Decl(fixSignatureCaching.ts, 443, 11))
         }
         if (numbers.length > 1) {
->numbers : Symbol(numbers, Decl(fixSignatureCaching.ts, 440, 11))
+>numbers : Symbol(numbers, Decl(fixSignatureCaching.ts, 443, 11))
 
             version = numbers[0] + '.';
->version : Symbol(version, Decl(fixSignatureCaching.ts, 439, 38))
->numbers : Symbol(numbers, Decl(fixSignatureCaching.ts, 440, 11))
+>version : Symbol(version, Decl(fixSignatureCaching.ts, 442, 38))
+>numbers : Symbol(numbers, Decl(fixSignatureCaching.ts, 443, 11))
 
             numbers.shift();
->numbers : Symbol(numbers, Decl(fixSignatureCaching.ts, 440, 11))
+>numbers : Symbol(numbers, Decl(fixSignatureCaching.ts, 443, 11))
 
             version += numbers.join('');
->version : Symbol(version, Decl(fixSignatureCaching.ts, 439, 38))
->numbers : Symbol(numbers, Decl(fixSignatureCaching.ts, 440, 11))
+>version : Symbol(version, Decl(fixSignatureCaching.ts, 442, 38))
+>numbers : Symbol(numbers, Decl(fixSignatureCaching.ts, 443, 11))
         }
         return Number(version);
 >Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->version : Symbol(version, Decl(fixSignatureCaching.ts, 439, 38))
+>version : Symbol(version, Decl(fixSignatureCaching.ts, 442, 38))
 
     };
 
     impl.isMobileFallback = function (userAgent) {
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 454, 38))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 457, 38))
 
         return impl.detectMobileBrowsers.fullPattern.test(userAgent) ||
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 454, 38))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 457, 38))
 
             impl.detectMobileBrowsers.shortPattern.test(userAgent.substr(0,4));
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 454, 38))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 457, 38))
 
     };
 
     impl.isTabletFallback = function (userAgent) {
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 459, 38))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 462, 38))
 
         return impl.detectMobileBrowsers.tabletPattern.test(userAgent);
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 459, 38))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 462, 38))
 
     };
 
     impl.prepareDetectionCache = function (cache, userAgent, maxPhoneWidth) {
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 463, 49))
->maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 463, 60))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 466, 49))
+>maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 466, 60))
 
         if (cache.mobile !== undefined) {
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
 >undefined : Symbol(undefined, Decl(fixSignatureCaching.ts, 2, 18))
 
             return;
         }
         var phone, tablet, phoneSized;
->phone : Symbol(phone, Decl(fixSignatureCaching.ts, 467, 11))
->tablet : Symbol(tablet, Decl(fixSignatureCaching.ts, 467, 18))
->phoneSized : Symbol(phoneSized, Decl(fixSignatureCaching.ts, 467, 26))
+>phone : Symbol(phone, Decl(fixSignatureCaching.ts, 470, 11))
+>tablet : Symbol(tablet, Decl(fixSignatureCaching.ts, 470, 18))
+>phoneSized : Symbol(phoneSized, Decl(fixSignatureCaching.ts, 470, 26))
 
         // first check for stronger tablet rules, then phone (see issue#5)
         tablet = impl.findMatch(impl.mobileDetectRules.tablets, userAgent);
->tablet : Symbol(tablet, Decl(fixSignatureCaching.ts, 467, 18))
+>tablet : Symbol(tablet, Decl(fixSignatureCaching.ts, 470, 18))
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 463, 49))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 466, 49))
 
         if (tablet) {
->tablet : Symbol(tablet, Decl(fixSignatureCaching.ts, 467, 18))
+>tablet : Symbol(tablet, Decl(fixSignatureCaching.ts, 470, 18))
 
             cache.mobile = cache.tablet = tablet;
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
->tablet : Symbol(tablet, Decl(fixSignatureCaching.ts, 467, 18))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
+>tablet : Symbol(tablet, Decl(fixSignatureCaching.ts, 470, 18))
 
             cache.phone = null;
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
 
             return; // unambiguously identified as tablet
         }
 
         phone = impl.findMatch(impl.mobileDetectRules.phones, userAgent);
->phone : Symbol(phone, Decl(fixSignatureCaching.ts, 467, 11))
+>phone : Symbol(phone, Decl(fixSignatureCaching.ts, 470, 11))
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 463, 49))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 466, 49))
 
         if (phone) {
->phone : Symbol(phone, Decl(fixSignatureCaching.ts, 467, 11))
+>phone : Symbol(phone, Decl(fixSignatureCaching.ts, 470, 11))
 
             cache.mobile = cache.phone = phone;
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
->phone : Symbol(phone, Decl(fixSignatureCaching.ts, 467, 11))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
+>phone : Symbol(phone, Decl(fixSignatureCaching.ts, 470, 11))
 
             cache.tablet = null;
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
 
             return; // unambiguously identified as phone
         }
@@ -828,70 +846,70 @@ define(function () {
         // our rules haven't found a match -> try more general fallback rules
         if (impl.isMobileFallback(userAgent)) {
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 463, 49))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 466, 49))
 
             phoneSized = MobileDetect.isPhoneSized(maxPhoneWidth);
->phoneSized : Symbol(phoneSized, Decl(fixSignatureCaching.ts, 467, 26))
->MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 641, 6))
->maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 463, 60))
+>phoneSized : Symbol(phoneSized, Decl(fixSignatureCaching.ts, 470, 26))
+>MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 644, 6))
+>maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 466, 60))
 
             if (phoneSized === undefined) {
->phoneSized : Symbol(phoneSized, Decl(fixSignatureCaching.ts, 467, 26))
+>phoneSized : Symbol(phoneSized, Decl(fixSignatureCaching.ts, 470, 26))
 >undefined : Symbol(undefined, Decl(fixSignatureCaching.ts, 2, 18))
 
                 cache.mobile = impl.FALLBACK_MOBILE;
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
 
                 cache.tablet = cache.phone = null;
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
 
             } else if (phoneSized) {
->phoneSized : Symbol(phoneSized, Decl(fixSignatureCaching.ts, 467, 26))
+>phoneSized : Symbol(phoneSized, Decl(fixSignatureCaching.ts, 470, 26))
 
                 cache.mobile = cache.phone = impl.FALLBACK_PHONE;
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
 
                 cache.tablet = null;
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
 
             } else {
                 cache.mobile = cache.tablet = impl.FALLBACK_TABLET;
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
 
                 cache.phone = null;
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
             }
         } else if (impl.isTabletFallback(userAgent)) {
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 463, 49))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 466, 49))
 
             cache.mobile = cache.tablet = impl.FALLBACK_TABLET;
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
 
             cache.phone = null;
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
 
         } else {
             // not mobile at all!
             cache.mobile = cache.tablet = cache.phone = null;
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
->cache : Symbol(cache, Decl(fixSignatureCaching.ts, 463, 43))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
+>cache : Symbol(cache, Decl(fixSignatureCaching.ts, 466, 43))
         }
     };
 
     // t is a reference to a MobileDetect instance
     impl.mobileGrade = function (t) {
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
         // impl note:
         // To keep in sync w/ Mobile_Detect.php easily, the following code is tightly aligned to the PHP version.
@@ -902,136 +920,136 @@ define(function () {
         //     isIOS() / os('iOS')
         //     [reg] / (nothing)   <-- jsdelivr complaining about unescaped unicode character U+00AE
         var $isMobile = t.mobile() !== null;
->$isMobile : Symbol($isMobile, Decl(fixSignatureCaching.ts, 516, 11))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>$isMobile : Symbol($isMobile, Decl(fixSignatureCaching.ts, 519, 11))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
         if (
             // Apple iOS 3.2-5.1 - Tested on the original iPad (4.3 / 5.0), iPad 2 (4.3), iPad 3 (5.1), original iPhone (3.1), iPhone 3 (3.2), 3GS (4.3), 4 (4.3 / 5.0), and 4S (5.1)
             t.os('iOS') && t.version('iPad')>=4.3 ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             t.os('iOS') && t.version('iPhone')>=3.1 ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             t.os('iOS') && t.version('iPod')>=3.1 ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // Android 2.1-2.3 - Tested on the HTC Incredible (2.2), original Droid (2.2), HTC Aria (2.1), Google Nexus S (2.3). Functional on 1.5 & 1.6 but performance may be sluggish, tested on Google G1 (1.5)
             // Android 3.1 (Honeycomb)  - Tested on the Samsung Galaxy Tab 10.1 and Motorola XOOM
             // Android 4.0 (ICS)  - Tested on a Galaxy Nexus. Note: transition performance can be poor on upgraded devices
             // Android 4.1 (Jelly Bean)  - Tested on a Galaxy Nexus and Galaxy 7
             ( t.version('Android')>2.1 && t.is('Webkit') ) ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // Windows Phone 7-7.5 - Tested on the HTC Surround (7.0) HTC Trophy (7.5), LG-E900 (7.5), Nokia Lumia 800
             t.version('Windows Phone OS')>=7.0 ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // Blackberry 7 - Tested on BlackBerry Torch 9810
             // Blackberry 6.0 - Tested on the Torch 9800 and Style 9670
             t.is('BlackBerry') && t.version('BlackBerry')>=6.0 ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // Blackberry Playbook (1.0-2.0) - Tested on PlayBook
             t.match('Playbook.*Tablet') ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // Palm WebOS (1.4-2.0) - Tested on the Palm Pixi (1.4), Pre (1.4), Pre 2 (2.0)
             ( t.version('webOS')>=1.4 && t.match('Palm|Pre|Pixi') ) ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // Palm WebOS 3.0  - Tested on HP TouchPad
             t.match('hp.*TouchPad') ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // Firefox Mobile (12 Beta) - Tested on Android 2.3 device
             ( t.is('Firefox') && t.version('Firefox')>=12 ) ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // Chrome for Android - Tested on Android 4.0, 4.1 device
             ( t.is('Chrome') && t.is('AndroidOS') && t.version('Android')>=4.0 ) ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // Skyfire 4.1 - Tested on Android 2.3 device
             ( t.is('Skyfire') && t.version('Skyfire')>=4.1 && t.is('AndroidOS') && t.version('Android')>=2.3 ) ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // Opera Mobile 11.5-12: Tested on Android 2.3
             ( t.is('Opera') && t.version('Opera Mobi')>11 && t.is('AndroidOS') ) ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // Meego 1.2 - Tested on Nokia 950 and N9
             t.is('MeeGoOS') ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // Tizen (pre-release) - Tested on early hardware
             t.is('Tizen') ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // Samsung Bada 2.0 - Tested on a Samsung Wave 3, Dolphin browser
             // @todo: more tests here!
             t.is('Dolfin') && t.version('Bada')>=2.0 ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // UC Browser - Tested on Android 2.3 device
             ( (t.is('UC Browser') || t.is('Dolfin')) && t.version('Android')>=2.3 ) ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // Kindle 3 and Fire  - Tested on the built-in WebKit browser for each
             ( t.match('Kindle Fire') ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
                 t.is('Kindle') && t.version('Kindle')>=3.0 ) ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // Nook Color 1.4.1 - Tested on original Nook Color, not Nook Tablet
             t.is('AndroidOS') && t.is('NookTablet') ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // Chrome Desktop 11-21 - Tested on OS X 10.7 and Windows 7
             t.version('Chrome')>=11 && !$isMobile ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->$isMobile : Symbol($isMobile, Decl(fixSignatureCaching.ts, 516, 11))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>$isMobile : Symbol($isMobile, Decl(fixSignatureCaching.ts, 519, 11))
 
             // Safari Desktop 4-5 - Tested on OS X 10.7 and Windows 7
             t.version('Safari')>=5.0 && !$isMobile ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->$isMobile : Symbol($isMobile, Decl(fixSignatureCaching.ts, 516, 11))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>$isMobile : Symbol($isMobile, Decl(fixSignatureCaching.ts, 519, 11))
 
             // Firefox Desktop 4-13 - Tested on OS X 10.7 and Windows 7
             t.version('Firefox')>=4.0 && !$isMobile ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->$isMobile : Symbol($isMobile, Decl(fixSignatureCaching.ts, 516, 11))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>$isMobile : Symbol($isMobile, Decl(fixSignatureCaching.ts, 519, 11))
 
             // Internet Explorer 7-9 - Tested on Windows XP, Vista and 7
             t.version('MSIE')>=7.0 && !$isMobile ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->$isMobile : Symbol($isMobile, Decl(fixSignatureCaching.ts, 516, 11))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>$isMobile : Symbol($isMobile, Decl(fixSignatureCaching.ts, 519, 11))
 
             // Opera Desktop 10-12 - Tested on OS X 10.7 and Windows 7
             // @reference: http://my.opera.com/community/openweb/idopera/
             t.version('Opera')>=10 && !$isMobile
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->$isMobile : Symbol($isMobile, Decl(fixSignatureCaching.ts, 516, 11))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>$isMobile : Symbol($isMobile, Decl(fixSignatureCaching.ts, 519, 11))
 
             ){
             return 'A';
@@ -1039,40 +1057,40 @@ define(function () {
 
         if (
             t.os('iOS') && t.version('iPad')<4.3 ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             t.os('iOS') && t.version('iPhone')<3.1 ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             t.os('iOS') && t.version('iPod')<3.1 ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // Blackberry 5.0: Tested on the Storm 2 9550, Bold 9770
             t.is('Blackberry') && t.version('BlackBerry')>=5 && t.version('BlackBerry')<6 ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             //Opera Mini (5.0-6.5) - Tested on iOS 3.2/4.3 and Android 2.3
             ( t.version('Opera Mini')>=5.0 && t.version('Opera Mini')<=6.5 &&
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
                 (t.version('Android')>=2.3 || t.is('iOS')) ) ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // Nokia Symbian^3 - Tested on Nokia N8 (Symbian^3), C7 (Symbian^3), also works on N97 (Symbian^1)
             t.match('NokiaN8|NokiaC7|N97.*Series60|Symbian/3') ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // @todo: report this (tested on Nokia N71)
             t.version('Opera Mobi')>=11 && t.is('SymbianOS')
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             ){
             return 'B';
@@ -1081,12 +1099,12 @@ define(function () {
         if (
         // Blackberry 4.x - Tested on the Curve 8330
             t.version('BlackBerry')<5.0 ||
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             // Windows Mobile - Tested on the HTC Leo (WinMo 5.2)
             t.match('MSIEMobile|Windows CE.*Mobile') || t.version('Windows Mobile')<=5.2
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
->t : Symbol(t, Decl(fixSignatureCaching.ts, 507, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
+>t : Symbol(t, Decl(fixSignatureCaching.ts, 510, 33))
 
             ){
             return 'C';
@@ -1099,17 +1117,17 @@ define(function () {
 
     impl.detectOS = function (ua) {
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->ua : Symbol(ua, Decl(fixSignatureCaching.ts, 632, 30))
+>ua : Symbol(ua, Decl(fixSignatureCaching.ts, 635, 30))
 
         return impl.findMatch(impl.mobileDetectRules.oss0, ua) ||
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->ua : Symbol(ua, Decl(fixSignatureCaching.ts, 632, 30))
+>ua : Symbol(ua, Decl(fixSignatureCaching.ts, 635, 30))
 
             impl.findMatch(impl.mobileDetectRules.oss, ua);
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->ua : Symbol(ua, Decl(fixSignatureCaching.ts, 632, 30))
+>ua : Symbol(ua, Decl(fixSignatureCaching.ts, 635, 30))
 
     };
 
@@ -1149,27 +1167,27 @@ define(function () {
      * @global
      */
     function MobileDetect(userAgent, maxPhoneWidth) {
->MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 641, 6))
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 670, 26))
->maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 670, 36))
+>MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 644, 6))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 673, 26))
+>maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 673, 36))
 
         this.ua = userAgent || '';
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 670, 26))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 673, 26))
 
         this._cache = {};
         //600dp is typical 7" tablet minimum width
         this.maxPhoneWidth = maxPhoneWidth || 600;
->maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 670, 36))
+>maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 673, 36))
     }
 
     MobileDetect.prototype = {
 >MobileDetect.prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
->MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 641, 6))
+>MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 644, 6))
 >prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
 
         constructor: MobileDetect,
->constructor : Symbol(constructor, Decl(fixSignatureCaching.ts, 677, 30))
->MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 641, 6))
+>constructor : Symbol(constructor, Decl(fixSignatureCaching.ts, 680, 30))
+>MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 644, 6))
 
         /**
          * Returns the detected phone or tablet type or <tt>null</tt> if it is not a mobile device.
@@ -1194,7 +1212,7 @@ define(function () {
          * @function MobileDetect#mobile
          */
         mobile: function () {
->mobile : Symbol(mobile, Decl(fixSignatureCaching.ts, 678, 34))
+>mobile : Symbol(mobile, Decl(fixSignatureCaching.ts, 681, 34))
 
             impl.prepareDetectionCache(this._cache, this.ua, this.maxPhoneWidth);
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
@@ -1228,7 +1246,7 @@ define(function () {
          * @function MobileDetect#phone
          */
         phone: function () {
->phone : Symbol(phone, Decl(fixSignatureCaching.ts, 705, 10))
+>phone : Symbol(phone, Decl(fixSignatureCaching.ts, 708, 10))
 
             impl.prepareDetectionCache(this._cache, this.ua, this.maxPhoneWidth);
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
@@ -1281,7 +1299,7 @@ define(function () {
          * @function MobileDetect#tablet
          */
         tablet: function () {
->tablet : Symbol(tablet, Decl(fixSignatureCaching.ts, 735, 10))
+>tablet : Symbol(tablet, Decl(fixSignatureCaching.ts, 738, 10))
 
             impl.prepareDetectionCache(this._cache, this.ua, this.maxPhoneWidth);
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
@@ -1306,7 +1324,7 @@ define(function () {
          * @function MobileDetect#userAgent
          */
         userAgent: function () {
->userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 784, 10))
+>userAgent : Symbol(userAgent, Decl(fixSignatureCaching.ts, 787, 10))
 
             if (this._cache.userAgent === undefined) {
 >undefined : Symbol(undefined, Decl(fixSignatureCaching.ts, 2, 18))
@@ -1335,7 +1353,7 @@ define(function () {
          * @function MobileDetect#userAgents
          */
         userAgents: function () {
->userAgents : Symbol(userAgents, Decl(fixSignatureCaching.ts, 807, 10))
+>userAgents : Symbol(userAgents, Decl(fixSignatureCaching.ts, 810, 10))
 
             if (this._cache.userAgents === undefined) {
 >undefined : Symbol(undefined, Decl(fixSignatureCaching.ts, 2, 18))
@@ -1358,7 +1376,7 @@ define(function () {
          * @function MobileDetect#os
          */
         os: function () {
->os : Symbol(os, Decl(fixSignatureCaching.ts, 830, 10))
+>os : Symbol(os, Decl(fixSignatureCaching.ts, 833, 10))
 
             if (this._cache.os === undefined) {
 >undefined : Symbol(undefined, Decl(fixSignatureCaching.ts, 2, 18))
@@ -1388,12 +1406,12 @@ define(function () {
          * @function MobileDetect#version
          */
         version: function (key) {
->version : Symbol(version, Decl(fixSignatureCaching.ts, 847, 10))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 867, 27))
+>version : Symbol(version, Decl(fixSignatureCaching.ts, 850, 10))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 870, 27))
 
             return impl.getVersion(key, this.ua);
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 867, 27))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 870, 27))
 
         },
 
@@ -1415,12 +1433,12 @@ define(function () {
          * @function MobileDetect#versionStr
          */
         versionStr: function (key) {
->versionStr : Symbol(versionStr, Decl(fixSignatureCaching.ts, 869, 10))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 888, 30))
+>versionStr : Symbol(versionStr, Decl(fixSignatureCaching.ts, 872, 10))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 891, 30))
 
             return impl.getVersionStr(key, this.ua);
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 888, 30))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 891, 30))
 
         },
 
@@ -1439,30 +1457,30 @@ define(function () {
          * @function MobileDetect#is
          */
         is: function (key) {
->is : Symbol(is, Decl(fixSignatureCaching.ts, 890, 10))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 906, 22))
+>is : Symbol(is, Decl(fixSignatureCaching.ts, 893, 10))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 909, 22))
 
             return containsIC(this.userAgents(), key) ||
->containsIC : Symbol(containsIC, Decl(fixSignatureCaching.ts, 301, 5))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 906, 22))
+>containsIC : Symbol(containsIC, Decl(fixSignatureCaching.ts, 304, 5))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 909, 22))
 
                    equalIC(key, this.os()) ||
->equalIC : Symbol(equalIC, Decl(fixSignatureCaching.ts, 297, 112))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 906, 22))
+>equalIC : Symbol(equalIC, Decl(fixSignatureCaching.ts, 300, 24))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 909, 22))
 
                    equalIC(key, this.phone()) ||
->equalIC : Symbol(equalIC, Decl(fixSignatureCaching.ts, 297, 112))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 906, 22))
+>equalIC : Symbol(equalIC, Decl(fixSignatureCaching.ts, 300, 24))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 909, 22))
 
                    equalIC(key, this.tablet()) ||
->equalIC : Symbol(equalIC, Decl(fixSignatureCaching.ts, 297, 112))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 906, 22))
+>equalIC : Symbol(equalIC, Decl(fixSignatureCaching.ts, 300, 24))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 909, 22))
 
                    containsIC(impl.findMatches(impl.mobileDetectRules.utils, this.ua), key);
->containsIC : Symbol(containsIC, Decl(fixSignatureCaching.ts, 301, 5))
+>containsIC : Symbol(containsIC, Decl(fixSignatureCaching.ts, 304, 5))
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->key : Symbol(key, Decl(fixSignatureCaching.ts, 906, 22))
+>key : Symbol(key, Decl(fixSignatureCaching.ts, 909, 22))
 
         },
 
@@ -1475,20 +1493,20 @@ define(function () {
          * @function MobileDetect#match
          */
         match: function (pattern) {
->match : Symbol(match, Decl(fixSignatureCaching.ts, 912, 10))
->pattern : Symbol(pattern, Decl(fixSignatureCaching.ts, 922, 25))
+>match : Symbol(match, Decl(fixSignatureCaching.ts, 915, 10))
+>pattern : Symbol(pattern, Decl(fixSignatureCaching.ts, 925, 25))
 
             if (!(pattern instanceof RegExp)) {
->pattern : Symbol(pattern, Decl(fixSignatureCaching.ts, 922, 25))
+>pattern : Symbol(pattern, Decl(fixSignatureCaching.ts, 925, 25))
 >RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
                 pattern = new RegExp(pattern, 'i');
->pattern : Symbol(pattern, Decl(fixSignatureCaching.ts, 922, 25))
+>pattern : Symbol(pattern, Decl(fixSignatureCaching.ts, 925, 25))
 >RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->pattern : Symbol(pattern, Decl(fixSignatureCaching.ts, 922, 25))
+>pattern : Symbol(pattern, Decl(fixSignatureCaching.ts, 925, 25))
             }
             return pattern.test(this.ua);
->pattern : Symbol(pattern, Decl(fixSignatureCaching.ts, 922, 25))
+>pattern : Symbol(pattern, Decl(fixSignatureCaching.ts, 925, 25))
 
         },
 
@@ -1503,12 +1521,12 @@ define(function () {
          *          Will always return <code>undefined</code> server-side.
          */
         isPhoneSized: function (maxPhoneWidth) {
->isPhoneSized : Symbol(isPhoneSized, Decl(fixSignatureCaching.ts, 927, 10))
->maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 939, 32))
+>isPhoneSized : Symbol(isPhoneSized, Decl(fixSignatureCaching.ts, 930, 10))
+>maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 942, 32))
 
             return MobileDetect.isPhoneSized(maxPhoneWidth || this.maxPhoneWidth);
->MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 641, 6))
->maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 939, 32))
+>MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 644, 6))
+>maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 942, 32))
 
         },
 
@@ -1519,7 +1537,7 @@ define(function () {
          * @function MobileDetect#mobileGrade
          */
         mobileGrade: function () {
->mobileGrade : Symbol(mobileGrade, Decl(fixSignatureCaching.ts, 941, 10))
+>mobileGrade : Symbol(mobileGrade, Decl(fixSignatureCaching.ts, 944, 10))
 
             if (this._cache.grade === undefined) {
 >undefined : Symbol(undefined, Decl(fixSignatureCaching.ts, 2, 18))
@@ -1534,47 +1552,47 @@ define(function () {
     // environment-dependent
     if (typeof window !== 'undefined' && window.screen) {
         MobileDetect.isPhoneSized = function (maxPhoneWidth) {
->MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 641, 6))
->maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 959, 46))
+>MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 644, 6))
+>maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 962, 46))
 
             return maxPhoneWidth < 0 ? undefined : impl.getDeviceSmallerSide() <= maxPhoneWidth;
->maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 959, 46))
+>maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 962, 46))
 >undefined : Symbol(undefined, Decl(fixSignatureCaching.ts, 2, 18))
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
->maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 959, 46))
+>maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 962, 46))
 
         };
     } else {
         MobileDetect.isPhoneSized = function () {};
->MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 641, 6))
+>MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 644, 6))
     }
 
     // should not be replaced by a completely new object - just overwrite existing methods
     MobileDetect._impl = impl;
->MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 641, 6))
+>MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 644, 6))
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
-    
+
     MobileDetect.version = '1.3.3 2016-07-31';
->MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 641, 6))
+>MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 644, 6))
 
     return MobileDetect;
->MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 641, 6))
+>MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 644, 6))
 
 }); // end of call of define()
 })((function (undefined) {
->undefined : Symbol(undefined, Decl(fixSignatureCaching.ts, 973, 14))
+>undefined : Symbol(undefined, Decl(fixSignatureCaching.ts, 976, 14))
 
     if (typeof module !== 'undefined' && module.exports) {
         return function (factory) { module.exports = factory(); };
->factory : Symbol(factory, Decl(fixSignatureCaching.ts, 975, 25))
->factory : Symbol(factory, Decl(fixSignatureCaching.ts, 975, 25))
+>factory : Symbol(factory, Decl(fixSignatureCaching.ts, 978, 25))
+>factory : Symbol(factory, Decl(fixSignatureCaching.ts, 978, 25))
 
     } else if (typeof define === 'function' && define.amd) {
         return define;
     } else if (typeof window !== 'undefined') {
         return function (factory) { window.MobileDetect = factory(); };
->factory : Symbol(factory, Decl(fixSignatureCaching.ts, 979, 25))
->factory : Symbol(factory, Decl(fixSignatureCaching.ts, 979, 25))
+>factory : Symbol(factory, Decl(fixSignatureCaching.ts, 982, 25))
+>factory : Symbol(factory, Decl(fixSignatureCaching.ts, 982, 25))
 
     } else {
         // please file a bug if you get this error!

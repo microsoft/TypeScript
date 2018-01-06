@@ -38,7 +38,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{string} "
+        }
+      ]
     }
   },
   {
@@ -80,7 +85,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{number} "
+        }
+      ]
     }
   },
   {
@@ -122,7 +132,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{boolean} "
+        }
+      ]
     }
   },
   {
@@ -164,7 +179,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{void} "
+        }
+      ]
     }
   },
   {
@@ -206,7 +226,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{undefined} "
+        }
+      ]
     }
   },
   {
@@ -248,7 +273,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{null} "
+        }
+      ]
     }
   },
   {
@@ -298,7 +328,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{array} "
+        }
+      ]
     }
   },
   {
@@ -352,7 +387,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{promise} "
+        }
+      ]
     }
   },
   {
@@ -394,7 +434,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{?number} "
+        }
+      ]
     }
   },
   {
@@ -436,7 +481,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{function} "
+        }
+      ]
     }
   },
   {
@@ -514,7 +564,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{function (number): number} "
+        }
+      ]
     }
   },
   {
@@ -572,7 +627,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "type",
+          "text": "{string | number} "
+        }
+      ]
     }
   }
 ]

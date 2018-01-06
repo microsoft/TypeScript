@@ -1,7 +1,15 @@
 /// <reference path="project.ts"/>
 
 namespace ts.server {
+    export interface InstallPackageOptionsWithProject extends InstallPackageOptions {
+        projectName: string;
+        projectRootPath: Path;
+    }
+
+    // tslint:disable-next-line interface-name (for backwards-compatibility)
     export interface ITypingsInstaller {
+        isKnownTypesPackageName(name: string): boolean;
+        installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult>;
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
@@ -9,6 +17,9 @@ namespace ts.server {
     }
 
     export const nullTypingsInstaller: ITypingsInstaller = {
+        isKnownTypesPackageName: returnFalse,
+        // Should never be called because we never provide a types registry.
+        installPackage: notImplemented,
         enqueueInstallTypingsRequest: noop,
         attach: noop,
         onProjectClosed: noop,
@@ -75,6 +86,14 @@ namespace ts.server {
         private readonly perProjectCache: Map<TypingsCacheEntry> = createMap<TypingsCacheEntry>();
 
         constructor(private readonly installer: ITypingsInstaller) {
+        }
+
+        isKnownTypesPackageName(name: string): boolean {
+            return this.installer.isKnownTypesPackageName(name);
+        }
+
+        installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult> {
+            return this.installer.installPackage(options);
         }
 
         getTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string>, forceRefresh: boolean): SortedReadonlyArray<string> {

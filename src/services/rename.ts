@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.Rename {
-    export function getRenameInfo(typeChecker: TypeChecker, defaultLibFileName: string, getCanonicalFileName: (fileName: string) => string, sourceFile: SourceFile, position: number): RenameInfo {
+    export function getRenameInfo(typeChecker: TypeChecker, defaultLibFileName: string, getCanonicalFileName: GetCanonicalFileName, sourceFile: SourceFile, position: number): RenameInfo {
         const getCanonicalDefaultLibName = memoize(() => getCanonicalFileName(ts.normalizePath(defaultLibFileName)));
         const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ true);
         const renameInfo = node && nodeIsEligibleForRename(node)

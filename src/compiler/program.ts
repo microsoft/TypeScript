@@ -6,19 +6,11 @@
 namespace ts {
     const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?)/;
 
-    export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string {
-        while (true) {
-            const fileName = combinePaths(searchPath, configName);
-            if (fileExists(fileName)) {
-                return fileName;
-            }
-            const parentPath = getDirectoryPath(searchPath);
-            if (parentPath === searchPath) {
-                break;
-            }
-            searchPath = parentPath;
-        }
-        return undefined;
+    export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string | undefined {
+        return forEachAncestorDirectory(searchPath, ancestor => {
+            const fileName = combinePaths(ancestor, configName);
+            return fileExists(fileName) ? fileName : undefined;
+        });
     }
 
     export function resolveTripleslashReference(moduleName: string, containingFile: string): string {
@@ -28,7 +20,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function computeCommonSourceDirectoryOfFilenames(fileNames: string[], currentDirectory: string, getCanonicalFileName: (fileName: string) => string): string {
+    export function computeCommonSourceDirectoryOfFilenames(fileNames: string[], currentDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
         let commonPathComponents: string[];
         const failed = forEach(fileNames, sourceFile => {
             // Each file contributes into common source file path
@@ -249,22 +241,28 @@ namespace ts {
         return errorMessage;
     }
 
-    const redForegroundEscapeSequence = "\u001b[91m";
-    const yellowForegroundEscapeSequence = "\u001b[93m";
-    const blueForegroundEscapeSequence = "\u001b[93m";
+    /** @internal */
+    export enum ForegroundColorEscapeSequences {
+        Grey = "\u001b[90m",
+        Red = "\u001b[91m",
+        Yellow = "\u001b[93m",
+        Blue = "\u001b[94m",
+        Cyan = "\u001b[96m"
+    }
     const gutterStyleSequence = "\u001b[30;47m";
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
     function getCategoryFormat(category: DiagnosticCategory): string {
         switch (category) {
-            case DiagnosticCategory.Warning: return yellowForegroundEscapeSequence;
-            case DiagnosticCategory.Error: return redForegroundEscapeSequence;
-            case DiagnosticCategory.Message: return blueForegroundEscapeSequence;
+            case DiagnosticCategory.Warning: return ForegroundColorEscapeSequences.Yellow;
+            case DiagnosticCategory.Error: return ForegroundColorEscapeSequences.Red;
+            case DiagnosticCategory.Message: return ForegroundColorEscapeSequences.Blue;
         }
     }
 
-    function formatAndReset(text: string, formatStyle: string) {
+    /** @internal */
+    export function formatColorAndReset(text: string, formatStyle: string) {
         return formatStyle + text + resetEscapeSequence;
     }
 
@@ -297,7 +295,7 @@ namespace ts {
                     // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
                     // so we'll skip ahead to the second-to-last line.
                     if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
-                        context += formatAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + host.getNewLine();
+                        context += formatColorAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + host.getNewLine();
                         i = lastLine - 1;
                     }
 
@@ -308,12 +306,12 @@ namespace ts {
                     lineContent = lineContent.replace("\t", " ");    // convert tabs to single spaces
 
                     // Output the gutter and the actual contents of the line.
-                    context += formatAndReset(padLeft(i + 1 + "", gutterWidth), gutterStyleSequence) + gutterSeparator;
+                    context += formatColorAndReset(padLeft(i + 1 + "", gutterWidth), gutterStyleSequence) + gutterSeparator;
                     context += lineContent + host.getNewLine();
 
                     // Output the gutter and the error span for the line using tildes.
-                    context += formatAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
-                    context += redForegroundEscapeSequence;
+                    context += formatColorAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
+                    context += ForegroundColorEscapeSequences.Red;
                     if (i === firstLine) {
                         // If we're on the last line, then limit it to the last character of the last line.
                         // Otherwise, we'll just squiggle the rest of the line, giving 'slice' no end position.
@@ -332,13 +330,19 @@ namespace ts {
                     context += resetEscapeSequence;
                 }
 
-                output += host.getNewLine();
-                output += `${ relativeFileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
+                output += formatColorAndReset(relativeFileName, ForegroundColorEscapeSequences.Cyan);
+                output += ":";
+                output += formatColorAndReset(`${ firstLine + 1 }`, ForegroundColorEscapeSequences.Yellow);
+                output += ":";
+                output += formatColorAndReset(`${ firstLineChar + 1 }`, ForegroundColorEscapeSequences.Yellow);
+                output += " - ";
             }
 
             const categoryColor = getCategoryFormat(diagnostic.category);
             const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-            output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine()) }`;
+            output += formatColorAndReset(category, categoryColor);
+            output += formatColorAndReset(` TS${ diagnostic.code }: `, ForegroundColorEscapeSequences.Grey);
+            output += flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine());
 
             if (diagnostic.file) {
                 output += host.getNewLine();
@@ -347,7 +351,7 @@ namespace ts {
 
             output += host.getNewLine();
         }
-        return output;
+        return output + host.getNewLine();
     }
 
     export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string {
@@ -712,7 +716,7 @@ namespace ts {
 
         interface OldProgramState {
             program: Program | undefined;
-            file: SourceFile;
+            oldSourceFile: SourceFile | undefined;
             /** The collection of paths modified *since* the old program. */
             modifiedFilePaths: Path[];
         }
@@ -761,7 +765,6 @@ namespace ts {
             let reusedNames: string[];
             /** A transient placeholder used to mark predicted resolution in the result list. */
             const predictedToResolveToAmbientModuleMarker: ResolvedModuleFull = <any>{};
-
 
             for (let i = 0; i < moduleNames.length; i++) {
                 const moduleName = moduleNames[i];
@@ -833,9 +836,13 @@ namespace ts {
             // If we change our policy of rechecking failed lookups on each program create,
             // we should adjust the value returned here.
             function moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName: string, oldProgramState: OldProgramState): boolean {
-                const resolutionToFile = getResolvedModule(oldProgramState.file, moduleName);
-                if (resolutionToFile) {
-                    // module used to be resolved to file - ignore it
+                const resolutionToFile = getResolvedModule(oldProgramState.oldSourceFile, moduleName);
+                const resolvedFile = resolutionToFile && oldProgramState.program && oldProgramState.program.getSourceFile(resolutionToFile.resolvedFileName);
+                if (resolutionToFile && resolvedFile && !resolvedFile.externalModuleIndicator) {
+                    // In the old program, we resolved to an ambient module that was in the same
+                    //   place as we expected to find an actual module file.
+                    // We actually need to return 'false' here even though this seems like a 'true' case
+                    //   because the normal module resolution algorithm will find this anyway.
                     return false;
                 }
                 const ambientModule = oldProgramState.program && oldProgramState.program.getTypeChecker().tryFindAmbientModuleWithoutAugmentations(moduleName);
@@ -1009,7 +1016,7 @@ namespace ts {
                 const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory);
                 if (resolveModuleNamesWorker) {
                     const moduleNames = getModuleNames(newSourceFile);
-                    const oldProgramState = { program: oldProgram, file: oldSourceFile, modifiedFilePaths };
+                    const oldProgramState: OldProgramState = { program: oldProgram, oldSourceFile, modifiedFilePaths };
                     const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFilePath, newSourceFile, oldProgramState);
                     // ensure that module resolution results are still correct
                     const resolutionsChanged = hasChangesInResolutions(moduleNames, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo);
@@ -1049,6 +1056,10 @@ namespace ts {
             // update fileName -> file mapping
             for (let i = 0; i < newSourceFiles.length; i++) {
                 filesByName.set(filePaths[i], newSourceFiles[i]);
+                // Set the file as found during node modules search if it was found that way in old progra,
+                if (oldProgram.isSourceFileFromExternalLibrary(oldProgram.getSourceFileByPath(filePaths[i]))) {
+                    sourceFilesFoundSearchingNodeModules.set(filePaths[i], true);
+                }
             }
 
             files = newSourceFiles;
@@ -1097,11 +1108,12 @@ namespace ts {
 
             // If '--lib' is not specified, include default library file according to '--target'
             // otherwise, using options specified in '--lib' instead of '--target' default library file
+            const equalityComparer = host.useCaseSensitiveFileNames() ? equateStringsCaseSensitive : equateStringsCaseInsensitive;
             if (!options.lib) {
-               return compareStrings(file.fileName, getDefaultLibraryFileName(), /*ignoreCase*/ !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
+               return equalityComparer(file.fileName, getDefaultLibraryFileName());
             }
             else {
-                return forEach(options.lib, libFileName => compareStrings(file.fileName, combinePaths(defaultLibraryPath, libFileName), /*ignoreCase*/ !host.useCaseSensitiveFileNames()) === Comparison.EqualTo);
+                return forEach(options.lib, libFileName => equalityComparer(file.fileName, combinePaths(defaultLibraryPath, libFileName)));
             }
         }
 
@@ -1182,11 +1194,11 @@ namespace ts {
             return emitResult;
         }
 
-        function getSourceFile(fileName: string): SourceFile {
+        function getSourceFile(fileName: string): SourceFile | undefined {
             return getSourceFileByPath(toPath(fileName));
         }
 
-        function getSourceFileByPath(path: Path): SourceFile {
+        function getSourceFileByPath(path: Path): SourceFile | undefined {
             return filesByName.get(path);
         }
 
@@ -1230,9 +1242,6 @@ namespace ts {
             if (isSourceFileJavaScript(sourceFile)) {
                 if (!sourceFile.additionalSyntacticDiagnostics) {
                     sourceFile.additionalSyntacticDiagnostics = getJavaScriptSyntacticDiagnosticsForFile(sourceFile);
-                    if (isCheckJsEnabledForFile(sourceFile, options)) {
-                        sourceFile.additionalSyntacticDiagnostics = concatenate(sourceFile.additionalSyntacticDiagnostics, sourceFile.jsDocDiagnostics);
-                    }
                 }
                 return concatenate(sourceFile.additionalSyntacticDiagnostics, sourceFile.parseDiagnostics);
             }
@@ -1278,14 +1287,19 @@ namespace ts {
                 const typeChecker = getDiagnosticsProducingTypeChecker();
 
                 Debug.assert(!!sourceFile.bindDiagnostics);
-                // For JavaScript files, we don't want to report semantic errors unless explicitly requested.
-                const includeBindAndCheckDiagnostics = !isSourceFileJavaScript(sourceFile) || isCheckJsEnabledForFile(sourceFile, options);
+
+                const isCheckJs = isCheckJsEnabledForFile(sourceFile, options);
+                // By default, only type-check .ts, .tsx, and 'External' files (external files are added by plugins)
+                const includeBindAndCheckDiagnostics = sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX ||
+                    sourceFile.scriptKind === ScriptKind.External || isCheckJs;
                 const bindDiagnostics = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
                 const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
-
-                const diagnostics = bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
+                let diagnostics = bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
+                if (isCheckJs) {
+                    diagnostics = concatenate(diagnostics, sourceFile.jsDocDiagnostics);
+                }
                 return filter(diagnostics, shouldReportDiagnostic);
             });
         }
@@ -1946,7 +1960,7 @@ namespace ts {
             if (file.imports.length || file.moduleAugmentations.length) {
                 // Because global augmentation doesn't have string literal name, we can check for global augmentation as such.
                 const moduleNames = getModuleNames(file);
-                const oldProgramState = { program: oldProgram, file, modifiedFilePaths };
+                const oldProgramState: OldProgramState = { program: oldProgram, oldSourceFile: oldProgram && oldProgram.getSourceFile(file.fileName), modifiedFilePaths };
                 const resolutions = resolveModuleNamesReusingOldState(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory), file, oldProgramState);
                 Debug.assert(resolutions.length === moduleNames.length);
                 for (let i = 0; i < moduleNames.length; i++) {
@@ -2125,7 +2139,7 @@ namespace ts {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "lib", "noLib");
             }
 
-            if (options.noImplicitUseStrict && (options.alwaysStrict === undefined ? options.strict : options.alwaysStrict)) {
+            if (options.noImplicitUseStrict && getStrictOptionValue(options, "alwaysStrict")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noImplicitUseStrict", "alwaysStrict");
             }
 
@@ -2354,7 +2368,7 @@ namespace ts {
             return options.jsx ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set;
         }
         function needAllowJs() {
-            return options.allowJs || !options.noImplicitAny ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
+            return options.allowJs || !getStrictOptionValue(options, "noImplicitAny") ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
         }
     }
 

@@ -1,34 +1,27 @@
 /* @internal */
 namespace ts.Completions.PathCompletions {
-    export function getStringLiteralCompletionEntriesFromModuleNames(node: StringLiteral, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): CompletionInfo {
+    export function getStringLiteralCompletionsFromModuleNames(node: LiteralExpression, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): CompletionEntry[] {
         const literalValue = normalizeSlashes(node.text);
 
         const scriptPath = node.getSourceFile().path;
         const scriptDirectory = getDirectoryPath(scriptPath);
 
         const span = getDirectoryFragmentTextSpan((<StringLiteral>node).text, node.getStart() + 1);
-        let entries: CompletionEntry[];
         if (isPathRelativeToScript(literalValue) || isRootedDiskPath(literalValue)) {
             const extensions = getSupportedExtensions(compilerOptions);
             if (compilerOptions.rootDirs) {
-                entries = getCompletionEntriesForDirectoryFragmentWithRootDirs(
+                return getCompletionEntriesForDirectoryFragmentWithRootDirs(
                     compilerOptions.rootDirs, literalValue, scriptDirectory, extensions, /*includeExtensions*/ false, span, compilerOptions, host, scriptPath);
             }
             else {
-                entries = getCompletionEntriesForDirectoryFragment(
+                return getCompletionEntriesForDirectoryFragment(
                     literalValue, scriptDirectory, extensions, /*includeExtensions*/ false, span, host, scriptPath);
             }
         }
         else {
             // Check for node modules
-            entries = getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, span, compilerOptions, host, typeChecker);
+            return getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, span, compilerOptions, host, typeChecker);
         }
-        return {
-            isGlobalCompletion: false,
-            isMemberCompletion: false,
-            isNewIdentifierLocation: true,
-            entries
-        };
     }
 
     /**
@@ -37,14 +30,17 @@ namespace ts.Completions.PathCompletions {
      */
     function getBaseDirectoriesFromRootDirs(rootDirs: string[], basePath: string, scriptPath: string, ignoreCase: boolean): string[] {
         // Make all paths absolute/normalized if they are not already
-        rootDirs = map(rootDirs, rootDirectory => normalizePath(isRootedDiskPath(rootDirectory) ? rootDirectory : combinePaths(basePath, rootDirectory)));
+        rootDirs = rootDirs.map(rootDirectory => normalizePath(isRootedDiskPath(rootDirectory) ? rootDirectory : combinePaths(basePath, rootDirectory)));
 
         // Determine the path to the directory containing the script relative to the root directory it is contained within
-        const relativeDirectory = forEach(rootDirs, rootDirectory =>
+        const relativeDirectory = firstDefined(rootDirs, rootDirectory =>
             containsPath(rootDirectory, scriptPath, basePath, ignoreCase) ? scriptPath.substr(rootDirectory.length) : undefined);
 
         // Now find a path for each potential directory that is to be merged with the one containing the script
-        return deduplicate(map(rootDirs, rootDirectory => combinePaths(rootDirectory, relativeDirectory)));
+        return deduplicate(
+            rootDirs.map(rootDirectory => combinePaths(rootDirectory, relativeDirectory)),
+            equateStringsCaseSensitive,
+            compareStringsCaseSensitive);
     }
 
     function getCompletionEntriesForDirectoryFragmentWithRootDirs(rootDirs: string[], fragment: string, scriptPath: string, extensions: ReadonlyArray<string>, includeExtensions: boolean, span: TextSpan, compilerOptions: CompilerOptions, host: LanguageServiceHost, exclude?: string): CompletionEntry[] {
@@ -142,38 +138,44 @@ namespace ts.Completions.PathCompletions {
     function getCompletionEntriesForNonRelativeModules(fragment: string, scriptPath: string, span: TextSpan, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): CompletionEntry[] {
         const { baseUrl, paths } = compilerOptions;
 
-        let result: CompletionEntry[];
+        const result: CompletionEntry[] = [];
 
+        const fileExtensions = getSupportedExtensions(compilerOptions);
         if (baseUrl) {
-            const fileExtensions = getSupportedExtensions(compilerOptions);
             const projectDir = compilerOptions.project || host.getCurrentDirectory();
             const absolute = isRootedDiskPath(baseUrl) ? baseUrl : combinePaths(projectDir, baseUrl);
-            result = getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/ false, span, host);
+            getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/ false, span, host, /*exclude*/ undefined, result);
 
-            if (paths) {
-                for (const path in paths) {
-                    if (paths.hasOwnProperty(path)) {
-                        if (path === "*") {
-                            if (paths[path]) {
-                                for (const pattern of paths[path]) {
-                                    for (const match of getModulesForPathsPattern(fragment, baseUrl, pattern, fileExtensions, host)) {
-                                        result.push(createCompletionEntryForModule(match, ScriptElementKind.externalModuleName, span));
-                                    }
-                                }
-                            }
+            for (const path in paths) {
+                if (!paths.hasOwnProperty(path)) continue;
+                const patterns = paths[path];
+                if (!patterns) continue;
+
+                if (path === "*") {
+                    for (const pattern of patterns) {
+                        for (const match of getModulesForPathsPattern(fragment, baseUrl, pattern, fileExtensions, host)) {
+                            // Path mappings may provide a duplicate way to get to something we've already added, so don't add again.
+                            if (result.some(entry => entry.name === match)) continue;
+                            result.push(createCompletionEntryForModule(match, ScriptElementKind.externalModuleName, span));
                         }
-                        else if (startsWith(path, fragment)) {
-                            const entry = paths[path] && paths[path].length === 1 && paths[path][0];
-                            if (entry) {
-                                result.push(createCompletionEntryForModule(path, ScriptElementKind.externalModuleName, span));
-                            }
-                        }
+                    }
+                }
+                else if (startsWith(path, fragment)) {
+                    if (patterns.length === 1) {
+                        if (result.some(entry => entry.name === path)) continue;
+                        result.push(createCompletionEntryForModule(path, ScriptElementKind.externalModuleName, span));
                     }
                 }
             }
         }
-        else {
-            result = [];
+
+        if (compilerOptions.moduleResolution === ts.ModuleResolutionKind.NodeJs) {
+            forEachAncestorDirectory(scriptPath, ancestor => {
+                const nodeModules = combinePaths(ancestor, "node_modules");
+                if (host.directoryExists(nodeModules)) {
+                    getCompletionEntriesForDirectoryFragment(fragment, nodeModules, fileExtensions, /*includeExtensions*/ false, span, host, /*exclude*/ undefined, result);
+                }
+            });
         }
 
         getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, span, result);
@@ -271,64 +273,38 @@ namespace ts.Completions.PathCompletions {
             }
         }
 
-        return deduplicate(nonRelativeModuleNames);
+        return deduplicate(nonRelativeModuleNames, equateStringsCaseSensitive, compareStringsCaseSensitive);
     }
 
-    export function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: number, compilerOptions: CompilerOptions, host: LanguageServiceHost): CompletionInfo {
+    export function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: number, compilerOptions: CompilerOptions, host: LanguageServiceHost): CompletionEntry[] | undefined {
         const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
-        if (!token) {
-            return undefined;
-        }
-        const commentRanges: CommentRange[] = getLeadingCommentRanges(sourceFile.text, token.pos);
-
-        if (!commentRanges || !commentRanges.length) {
-            return undefined;
-        }
-
-        const range = forEach(commentRanges, commentRange => position >= commentRange.pos && position <= commentRange.end && commentRange);
-
+        const commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
+        const range = commentRanges && find(commentRanges, commentRange => position >= commentRange.pos && position <= commentRange.end);
         if (!range) {
             return undefined;
         }
-
-        const completionInfo: CompletionInfo = {
-            /**
-             * We don't want the editor to offer any other completions, such as snippets, inside a comment.
-             */
-            isGlobalCompletion: false,
-            isMemberCompletion: false,
-            /**
-             * The user may type in a path that doesn't yet exist, creating a "new identifier"
-             * with respect to the collection of identifiers the server is aware of.
-             */
-            isNewIdentifierLocation: true,
-
-            entries: []
-        };
-
-        const text = sourceFile.text.substr(range.pos, position - range.pos);
-
+        const text = sourceFile.text.slice(range.pos, position);
         const match = tripleSlashDirectiveFragmentRegex.exec(text);
-
-        if (match) {
-            const prefix = match[1];
-            const kind = match[2];
-            const toComplete = match[3];
-
-            const scriptPath = getDirectoryPath(sourceFile.path);
-            if (kind === "path") {
-                // Give completions for a relative path
-                const span: TextSpan = getDirectoryFragmentTextSpan(toComplete, range.pos + prefix.length);
-                completionInfo.entries = getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getSupportedExtensions(compilerOptions), /*includeExtensions*/ true, span, host, sourceFile.path);
-            }
-            else {
-                // Give completions based on the typings available
-                const span: TextSpan = { start: range.pos + prefix.length, length: match[0].length - prefix.length };
-                completionInfo.entries = getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, span);
-            }
+        if (!match) {
+            return undefined;
         }
 
-        return completionInfo;
+        const [, prefix, kind, toComplete] = match;
+        const scriptPath = getDirectoryPath(sourceFile.path);
+        switch (kind) {
+            case "path": {
+                // Give completions for a relative path
+                const span = getDirectoryFragmentTextSpan(toComplete, range.pos + prefix.length);
+                return getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getSupportedExtensions(compilerOptions), /*includeExtensions*/ true, span, host, sourceFile.path);
+            }
+            case "types": {
+                // Give completions based on the typings available
+                const span = createTextSpan(range.pos + prefix.length, match[0].length - prefix.length);
+                return getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, span);
+            }
+            default:
+                return undefined;
+        }
     }
 
     function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, span: TextSpan, result: CompletionEntry[] = []): CompletionEntry[] {
@@ -339,12 +315,11 @@ namespace ts.Completions.PathCompletions {
             }
         }
         else if (host.getDirectories) {
-            let typeRoots: string[];
+            let typeRoots: ReadonlyArray<string>;
             try {
-                // Wrap in try catch because getEffectiveTypeRoots touches the filesystem
                 typeRoots = getEffectiveTypeRoots(options, host);
             }
-            catch (e) {}
+            catch { /* Wrap in try catch because getEffectiveTypeRoots touches the filesystem */ }
 
             if (typeRoots) {
                 for (const root of typeRoots) {
@@ -376,26 +351,15 @@ namespace ts.Completions.PathCompletions {
         }
     }
 
-    function findPackageJsons(currentDir: string, host: LanguageServiceHost): string[] {
+    function findPackageJsons(directory: string, host: LanguageServiceHost): string[] {
         const paths: string[] = [];
-        let currentConfigPath: string;
-        while (true) {
-            currentConfigPath = findConfigFile(currentDir, (f) => tryFileExists(host, f), "package.json");
-            if (currentConfigPath) {
-                paths.push(currentConfigPath);
-
-                currentDir = getDirectoryPath(currentConfigPath);
-                const parent = getDirectoryPath(currentDir);
-                if (currentDir === parent) {
-                    break;
-                }
-                currentDir = parent;
+        forEachAncestorDirectory(directory, ancestor => {
+            const currentConfigPath = findConfigFile(ancestor, (f) => tryFileExists(host, f), "package.json");
+            if (!currentConfigPath) {
+                return true; // break out
             }
-            else {
-                break;
-            }
-        }
-
+            paths.push(currentConfigPath);
+        });
         return paths;
     }
 
@@ -516,7 +480,7 @@ namespace ts.Completions.PathCompletions {
         try {
             return directoryProbablyExists(path, host);
         }
-        catch (e) {}
+        catch { /*ignore*/ }
         return undefined;
     }
 
@@ -524,7 +488,7 @@ namespace ts.Completions.PathCompletions {
         try {
             return toApply && toApply.apply(host, args);
         }
-        catch (e) {}
+        catch { /*ignore*/ }
         return undefined;
     }
 }

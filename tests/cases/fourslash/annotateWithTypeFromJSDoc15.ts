@@ -27,4 +27,4 @@ verify.fileAfterApplyingRefactorAtMarker('9',
  * @param {promise<String>} zeta
  */
 function f(x: boolean, y: string, z: number, alpha: object, beta: Date, gamma: Promise<any>, delta: Array<any>, epsilon: Array<number>, zeta: Promise<string>) {
-}`, 'Annotate with types from JSDoc', 'annotate');
+}`, 'Annotate with type from JSDoc', 'annotate');

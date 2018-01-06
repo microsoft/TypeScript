@@ -118,10 +118,12 @@ declare namespace FourSlashInterface {
         rangesByText(): ts.Map<Range[]>;
         markerByName(s: string): Marker;
         symbolsInScope(range: Range): any[];
+        setTypesRegistry(map: { [key: string]: void }): void;
     }
     class goTo {
         marker(name?: string | Marker): void;
-        eachMarker(action: () => void): void;
+        eachMarker(markers: ReadonlyArray<string>, action: (marker: Marker, index: number) => void): void;
+        eachMarker(action: (marker: Marker, index: number) => void): void;
         rangeStart(range: Range): void;
         eachRange(action: () => void): void;
         bof(): void;
@@ -140,7 +142,15 @@ declare namespace FourSlashInterface {
         allowedConstructorParameterKeywords: string[];
         constructor(negative?: boolean);
         completionListCount(expectedCount: number): void;
-        completionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number): void;
+        completionListContains(
+            entryId: string | { name: string, source?: string },
+            text?: string,
+            documentation?: string,
+            kind?: string | { kind?: string, kindModifiers?: string },
+            spanIndex?: number,
+            hasAction?: boolean,
+            options?: { includeExternalModuleExports?: boolean, sourceDisplay?: string, isRecommended?: true },
+        ): void;
         completionListItemsCountIsGreaterThan(count: number): void;
         completionListIsEmpty(): void;
         completionListContainsClassElementKeywords(): void;
@@ -162,17 +172,37 @@ declare namespace FourSlashInterface {
             errorCode?: number,
             index?: number,
         });
-        codeFixAvailable(): void;
+        codeFixAvailable(options: Array<{ description: string, actions?: Array<{ type: string, data: {} }>, commands?: {}[] }>): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
 
-        refactorAvailable(name: string, actionName?: string);
+        refactorAvailable(name: string, actionName?: string): void;
+        refactor(options: {
+            name: string;
+            actionName: string;
+            refactors: any[];
+        }): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
         completionsAt(markerName: string, completions: string[], options?: { isNewIdentifierLocation?: boolean }): void;
+        completionsAndDetailsAt(
+            markerName: string,
+            completions: {
+                excludes?: ReadonlyArray<string>,
+                //TODO: better type
+                entries: ReadonlyArray<{ entry: any, details: any }>,
+            },
+        ): void; //TODO: better type
+        applyCodeActionFromCompletion(markerName: string, options: {
+            name: string,
+            source?: string,
+            description: string,
+            newFileContent?: string,
+            newRangeContent?: string,
+        });
         indentationIs(numberOfSpaces: number): void;
         indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle, baseIndentSize?: number): void;
         textAtCaretIs(text: string): void;
@@ -193,6 +223,7 @@ declare namespace FourSlashInterface {
          * `verify.goToDefinition("a", ["b", "bb"]);` verifies that "a" has multiple definitions available.
          */
         goToDefinition(startMarkerNames: string | string[], endMarkerNames: string | string[]): void;
+        goToDefinition(startMarkerNames: string | string[], endMarkerNames: string | string[], range: Range): void;
         /** Performs `goToDefinition` for each pair. */
         goToDefinition(startsAndEnds: [string | string[], string | string[]][]): void;
         /** Performs `goToDefinition` on each key and value. */
@@ -253,9 +284,11 @@ declare namespace FourSlashInterface {
         docCommentTemplateAt(markerName: string | FourSlashInterface.Marker, expectedOffset: number, expectedText: string): void;
         noDocCommentTemplateAt(markerName: string | FourSlashInterface.Marker): void;
         rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void;
+        codeFixAll(options: { fixId: string, newFileContent: string, commands?: {}[] }): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, actionName: string, formattingOptions?: FormatCodeOptions): void;
         rangeIs(expectedText: string, includeWhiteSpace?: boolean): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: FormatCodeOptions): void;
+        getAndApplyCodeFix(errorCode?: number, index?: number): void;
         importFixAtPosition(expectedTextArray: string[], errorCode?: number): void;
 
         navigationBar(json: any, options?: { checkSpans?: boolean }): void;
@@ -267,7 +300,7 @@ declare namespace FourSlashInterface {
         rangesAreDocumentHighlights(ranges?: Range[]): void;
         rangesWithSameTextAreDocumentHighlights(): void;
         documentHighlightsOf(startRange: Range, ranges: Range[]): void;
-        completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string): void;
+        completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]): void;
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
          */
@@ -327,7 +360,7 @@ declare namespace FourSlashInterface {
         printCurrentFileStateWithoutCaret(): void;
         printCurrentQuickInfo(): void;
         printCurrentSignatureHelp(): void;
-        printCompletionListMembers(): void;
+        printCompletionListMembers(options?: { includeExternalModuleExports: boolean }): void;
         printAvailableCodeFixes(): void;
         printBreakpointLocation(pos: number): void;
         printBreakpointAtCurrentLocation(): void;

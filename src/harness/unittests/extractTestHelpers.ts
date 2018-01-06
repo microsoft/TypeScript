@@ -67,37 +67,38 @@ namespace ts {
     }
 
     export const newLineCharacter = "\n";
-    export function getRuleProvider(action?: (opts: FormatCodeSettings) => void) {
-        const options = {
-            indentSize: 4,
-            tabSize: 4,
-            newLineCharacter,
-            convertTabsToSpaces: true,
-            indentStyle: ts.IndentStyle.Smart,
-            insertSpaceAfterConstructor: false,
-            insertSpaceAfterCommaDelimiter: true,
-            insertSpaceAfterSemicolonInForStatements: true,
-            insertSpaceBeforeAndAfterBinaryOperators: true,
-            insertSpaceAfterKeywordsInControlFlowStatements: true,
-            insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-            insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-            insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-            insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
-            insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-            insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
-            insertSpaceBeforeFunctionParenthesis: false,
-            placeOpenBraceOnNewLineForFunctions: false,
-            placeOpenBraceOnNewLineForControlBlocks: false,
-        };
-        if (action) {
-            action(options);
-        }
-        const rulesProvider = new formatting.RulesProvider();
-        rulesProvider.ensureUpToDate(options);
-        return rulesProvider;
-    }
+    export const testFormatOptions: ts.FormatCodeSettings = {
+        indentSize: 4,
+        tabSize: 4,
+        newLineCharacter,
+        convertTabsToSpaces: true,
+        indentStyle: ts.IndentStyle.Smart,
+        insertSpaceAfterConstructor: false,
+        insertSpaceAfterCommaDelimiter: true,
+        insertSpaceAfterSemicolonInForStatements: true,
+        insertSpaceBeforeAndAfterBinaryOperators: true,
+        insertSpaceAfterKeywordsInControlFlowStatements: true,
+        insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
+        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
+        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
+        insertSpaceBeforeFunctionParenthesis: false,
+        placeOpenBraceOnNewLineForFunctions: false,
+        placeOpenBraceOnNewLineForControlBlocks: false,
+    };
 
-    export function testExtractSymbol(caption: string, text: string, baselineFolder: string, description: DiagnosticMessage) {
+    const notImplementedHost: LanguageServiceHost = {
+        getCompilationSettings: notImplemented,
+        getScriptFileNames: notImplemented,
+        getScriptVersion: notImplemented,
+        getScriptSnapshot: notImplemented,
+        getDefaultLibFileName: notImplemented,
+        getCurrentDirectory: notImplemented,
+    };
+
+    export function testExtractSymbol(caption: string, text: string, baselineFolder: string, description: DiagnosticMessage, includeLib?: boolean) {
         const t = extractTest(text);
         const selectionRange = t.ranges.get("selection");
         if (!selectionRange) {
@@ -109,7 +110,7 @@ namespace ts {
 
         function runBaseline(extension: Extension) {
             const path = "/a" + extension;
-            const program = makeProgram({ path, content: t.source });
+            const program = makeProgram({ path, content: t.source }, includeLib);
 
             if (hasSyntacticDiagnostics(program)) {
                 // Don't bother generating JS baselines for inputs that aren't valid JS.
@@ -119,13 +120,14 @@ namespace ts {
 
             const sourceFile = program.getSourceFile(path);
             const context: RefactorContext = {
-                cancellationToken: { throwIfCancellationRequested() { }, isCancellationRequested() { return false; } },
+                cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
                 newLineCharacter,
                 program,
                 file: sourceFile,
                 startPosition: selectionRange.start,
                 endPosition: selectionRange.end,
-                rulesProvider: getRuleProvider()
+                host: notImplementedHost,
+                formatContext: formatting.getFormatContext(testFormatOptions),
             };
             const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
             assert.equal(rangeToExtract.errors, undefined, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);
@@ -144,15 +146,15 @@ namespace ts {
                     const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
                     data.push(newTextWithRename);
 
-                    const diagProgram = makeProgram({ path, content: newText });
+                    const diagProgram = makeProgram({ path, content: newText }, includeLib);
                     assert.isFalse(hasSyntacticDiagnostics(diagProgram));
                 }
                 return data.join(newLineCharacter);
             });
         }
 
-        function makeProgram(f: {path: string, content: string }) {
-            const host = projectSystem.createServerHost([f, projectSystem.libFile]);
+        function makeProgram(f: {path: string, content: string }, includeLib?: boolean) {
+            const host = projectSystem.createServerHost(includeLib ? [f, projectSystem.libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
             const projectService = projectSystem.createProjectService(host);
             projectService.openClientFile(f.path);
             const program = projectService.inferredProjects[0].getLanguageService().getProgram();
@@ -182,13 +184,14 @@ namespace ts {
             const program = projectService.inferredProjects[0].getLanguageService().getProgram();
             const sourceFile = program.getSourceFile(f.path);
             const context: RefactorContext = {
-                cancellationToken: { throwIfCancellationRequested() { }, isCancellationRequested() { return false; } },
+                cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
                 newLineCharacter,
                 program,
                 file: sourceFile,
                 startPosition: selectionRange.start,
                 endPosition: selectionRange.end,
-                rulesProvider: getRuleProvider()
+                host: notImplementedHost,
+                formatContext: formatting.getFormatContext(testFormatOptions),
             };
             const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
             assert.isUndefined(rangeToExtract.errors, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);

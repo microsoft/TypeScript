@@ -53,95 +53,48 @@ namespace ts.DocumentHighlights {
         return [{ fileName: sourceFile.fileName, highlightSpans }];
     }
 
-    // returns true if 'node' is defined and has a matching 'kind'.
-    function hasKind(node: Node, kind: SyntaxKind) {
-        return node !== undefined && node.kind === kind;
-    }
-
-    // Null-propagating 'parent' function.
-    function parent(node: Node): Node {
-        return node && node.parent;
-    }
-
-    function getHighlightSpans(node: Node, sourceFile: SourceFile): HighlightSpan[] {
-        if (!node) {
-            return undefined;
-        }
-
+    function getHighlightSpans(node: Node, sourceFile: SourceFile): HighlightSpan[] | undefined {
         switch (node.kind) {
             case SyntaxKind.IfKeyword:
             case SyntaxKind.ElseKeyword:
-                if (hasKind(node.parent, SyntaxKind.IfStatement)) {
-                    return getIfElseOccurrences(<IfStatement>node.parent, sourceFile);
-                }
-                break;
+                return isIfStatement(node.parent) ? getIfElseOccurrences(node.parent, sourceFile) : undefined;
             case SyntaxKind.ReturnKeyword:
-                if (hasKind(node.parent, SyntaxKind.ReturnStatement)) {
-                    return highlightSpans(getReturnOccurrences(<ReturnStatement>node.parent));
-                }
-                break;
+                return useParent(node.parent, isReturnStatement, getReturnOccurrences);
             case SyntaxKind.ThrowKeyword:
-                if (hasKind(node.parent, SyntaxKind.ThrowStatement)) {
-                    return highlightSpans(getThrowOccurrences(<ThrowStatement>node.parent));
-                }
-                break;
+                return useParent(node.parent, isThrowStatement, getThrowOccurrences);
             case SyntaxKind.TryKeyword:
             case SyntaxKind.CatchKeyword:
             case SyntaxKind.FinallyKeyword:
-                const tryStatement = node.kind === SyntaxKind.CatchKeyword ? parent(parent(node)) : parent(node);
-                if (hasKind(tryStatement, SyntaxKind.TryStatement)) {
-                    return highlightSpans(getTryCatchFinallyOccurrences(<TryStatement>tryStatement, sourceFile));
-                }
-                break;
+                const tryStatement = node.kind === SyntaxKind.CatchKeyword ? node.parent.parent : node.parent;
+                return useParent(tryStatement, isTryStatement, getTryCatchFinallyOccurrences);
             case SyntaxKind.SwitchKeyword:
-                if (hasKind(node.parent, SyntaxKind.SwitchStatement)) {
-                    return highlightSpans(getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent));
-                }
-                break;
+                return useParent(node.parent, isSwitchStatement, getSwitchCaseDefaultOccurrences);
             case SyntaxKind.CaseKeyword:
             case SyntaxKind.DefaultKeyword:
-                if (hasKind(parent(parent(parent(node))), SyntaxKind.SwitchStatement)) {
-                    return highlightSpans(getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent.parent.parent));
-                }
-                break;
+                return useParent(node.parent.parent.parent, isSwitchStatement, getSwitchCaseDefaultOccurrences);
             case SyntaxKind.BreakKeyword:
             case SyntaxKind.ContinueKeyword:
-                if (hasKind(node.parent, SyntaxKind.BreakStatement) || hasKind(node.parent, SyntaxKind.ContinueStatement)) {
-                    return highlightSpans(getBreakOrContinueStatementOccurrences(<BreakOrContinueStatement>node.parent));
-                }
-                break;
+                return useParent(node.parent, isBreakOrContinueStatement, getBreakOrContinueStatementOccurrences);
             case SyntaxKind.ForKeyword:
-                if (hasKind(node.parent, SyntaxKind.ForStatement) ||
-                    hasKind(node.parent, SyntaxKind.ForInStatement) ||
-                    hasKind(node.parent, SyntaxKind.ForOfStatement)) {
-                    return highlightSpans(getLoopBreakContinueOccurrences(<IterationStatement>node.parent));
-                }
-                break;
             case SyntaxKind.WhileKeyword:
             case SyntaxKind.DoKeyword:
-                if (hasKind(node.parent, SyntaxKind.WhileStatement) || hasKind(node.parent, SyntaxKind.DoStatement)) {
-                    return highlightSpans(getLoopBreakContinueOccurrences(<IterationStatement>node.parent));
-                }
-                break;
+                return useParent(node.parent, (n): n is IterationStatement => isIterationStatement(n, /*lookInLabeledStatements*/ true), getLoopBreakContinueOccurrences);
             case SyntaxKind.ConstructorKeyword:
-                if (hasKind(node.parent, SyntaxKind.Constructor)) {
-                    return highlightSpans(getConstructorOccurrences(<ConstructorDeclaration>node.parent));
-                }
-                break;
+                return useParent(node.parent, isConstructorDeclaration, getConstructorOccurrences);
             case SyntaxKind.GetKeyword:
             case SyntaxKind.SetKeyword:
-                if (hasKind(node.parent, SyntaxKind.GetAccessor) || hasKind(node.parent, SyntaxKind.SetAccessor)) {
-                    return highlightSpans(getGetAndSetOccurrences(<AccessorDeclaration>node.parent));
-                }
-                break;
+                return useParent(node.parent, isAccessor, getGetAndSetOccurrences);
             default:
-                if (isModifierKind(node.kind) && node.parent &&
-                    (isDeclaration(node.parent) || node.parent.kind === SyntaxKind.VariableStatement)) {
-                    return highlightSpans(getModifierOccurrences(node.kind, node.parent));
-                }
+                return isModifierKind(node.kind) && (isDeclaration(node.parent) || isVariableStatement(node.parent))
+                    ? highlightSpans(getModifierOccurrences(node.kind, node.parent))
+                    : undefined;
         }
 
-        function highlightSpans(nodes: Node[]): HighlightSpan[] {
+        function useParent<T extends Node>(node: Node, nodeTest: (node: Node) => node is T, getNodes: (node: T, sourceFile: SourceFile) => Node[] | undefined): HighlightSpan[] | undefined {
+            return nodeTest(node) ? highlightSpans(getNodes(node, sourceFile)) : undefined;
+        }
+
+        function highlightSpans(nodes: Node[] | undefined): HighlightSpan[] | undefined {
             return nodes && nodes.map(node => getHighlightSpanForNode(node, sourceFile));
         }
     }
@@ -156,23 +109,21 @@ namespace ts.DocumentHighlights {
         return statementAccumulator;
 
         function aggregate(node: Node): void {
-            if (node.kind === SyntaxKind.ThrowStatement) {
-                statementAccumulator.push(<ThrowStatement>node);
+            if (isThrowStatement(node)) {
+                statementAccumulator.push(node);
             }
-            else if (node.kind === SyntaxKind.TryStatement) {
-                const tryStatement = <TryStatement>node;
-
-                if (tryStatement.catchClause) {
-                    aggregate(tryStatement.catchClause);
+            else if (isTryStatement(node)) {
+                if (node.catchClause) {
+                    aggregate(node.catchClause);
                 }
                 else {
                     // Exceptions thrown within a try block lacking a catch clause
                     // are "owned" in the current context.
-                    aggregate(tryStatement.tryBlock);
+                    aggregate(node.tryBlock);
                 }
 
-                if (tryStatement.finallyBlock) {
-                    aggregate(tryStatement.finallyBlock);
+                if (node.finallyBlock) {
+                    aggregate(node.finallyBlock);
                 }
             }
             // Do not cross function boundaries.
@@ -236,11 +187,11 @@ namespace ts.DocumentHighlights {
     }
 
     function getBreakOrContinueOwner(statement: BreakOrContinueStatement): Node {
-        for (let node = statement.parent; node; node = node.parent) {
+        return findAncestor(statement, node => {
             switch (node.kind) {
                 case SyntaxKind.SwitchStatement:
                     if (statement.kind === SyntaxKind.ContinueStatement) {
-                        continue;
+                        return false;
                     }
                     // falls through
                 case SyntaxKind.ForStatement:
@@ -248,20 +199,13 @@ namespace ts.DocumentHighlights {
                 case SyntaxKind.ForOfStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.DoStatement:
-                    if (!statement.label || isLabeledBy(node, statement.label.text)) {
-                        return node;
-                    }
-                    break;
+                    return !statement.label || isLabeledBy(node, statement.label.text);
                 default:
                     // Don't cross function boundaries.
-                    if (isFunctionLike(node)) {
-                        return undefined;
-                    }
-                    break;
+                    // TODO: GH#20090
+                    return (isFunctionLike(node) && "quit") as false | "quit";
             }
-        }
-
-        return undefined;
+        });
     }
 
     function getModifierOccurrences(modifier: SyntaxKind, declaration: Node): Node[] {
@@ -494,16 +438,14 @@ namespace ts.DocumentHighlights {
         return keywords;
     }
 
-    function getReturnOccurrences(returnStatement: ReturnStatement): Node[] {
+    function getReturnOccurrences(returnStatement: ReturnStatement): Node[] | undefined {
         const func = <FunctionLikeDeclaration>getContainingFunction(returnStatement);
-
-        // If we didn't find a containing function with a block body, bail out.
-        if (!(func && hasKind(func.body, SyntaxKind.Block))) {
+        if (!func) {
             return undefined;
         }
 
         const keywords: Node[] = [];
-        forEachReturnStatement(<Block>func.body, returnStatement => {
+        forEachReturnStatement(cast(func.body, isBlock), returnStatement => {
             pushKeywordIf(keywords, returnStatement.getFirstToken(), SyntaxKind.ReturnKeyword);
         });
 
@@ -516,32 +458,7 @@ namespace ts.DocumentHighlights {
     }
 
     function getIfElseOccurrences(ifStatement: IfStatement, sourceFile: SourceFile): HighlightSpan[] {
-        const keywords: Node[] = [];
-
-        // Traverse upwards through all parent if-statements linked by their else-branches.
-        while (hasKind(ifStatement.parent, SyntaxKind.IfStatement) && (<IfStatement>ifStatement.parent).elseStatement === ifStatement) {
-            ifStatement = <IfStatement>ifStatement.parent;
-        }
-
-        // Now traverse back down through the else branches, aggregating if/else keywords of if-statements.
-        while (ifStatement) {
-            const children = ifStatement.getChildren();
-            pushKeywordIf(keywords, children[0], SyntaxKind.IfKeyword);
-
-            // Generally the 'else' keyword is second-to-last, so we traverse backwards.
-            for (let i = children.length - 1; i >= 0; i--) {
-                if (pushKeywordIf(keywords, children[i], SyntaxKind.ElseKeyword)) {
-                    break;
-                }
-            }
-
-            if (!hasKind(ifStatement.elseStatement, SyntaxKind.IfStatement)) {
-                break;
-            }
-
-            ifStatement = <IfStatement>ifStatement.elseStatement;
-        }
-
+        const keywords = getIfElseKeywords(ifStatement, sourceFile);
         const result: HighlightSpan[] = [];
 
         // We'd like to highlight else/ifs together if they are only separated by whitespace
@@ -551,17 +468,17 @@ namespace ts.DocumentHighlights {
                 const elseKeyword = keywords[i];
                 const ifKeyword = keywords[i + 1]; // this *should* always be an 'if' keyword.
 
-                let shouldCombindElseAndIf = true;
+                let shouldCombineElseAndIf = true;
 
                 // Avoid recalculating getStart() by iterating backwards.
-                for (let j = ifKeyword.getStart() - 1; j >= elseKeyword.end; j--) {
+                for (let j = ifKeyword.getStart(sourceFile) - 1; j >= elseKeyword.end; j--) {
                     if (!isWhiteSpaceSingleLine(sourceFile.text.charCodeAt(j))) {
-                        shouldCombindElseAndIf = false;
+                        shouldCombineElseAndIf = false;
                         break;
                     }
                 }
 
-                if (shouldCombindElseAndIf) {
+                if (shouldCombineElseAndIf) {
                     result.push({
                         fileName: sourceFile.fileName,
                         textSpan: createTextSpanFromBounds(elseKeyword.getStart(), ifKeyword.end),
@@ -577,6 +494,36 @@ namespace ts.DocumentHighlights {
         }
 
         return result;
+    }
+
+    function getIfElseKeywords(ifStatement: IfStatement, sourceFile: SourceFile): Node[] {
+        const keywords: Node[] = [];
+
+        // Traverse upwards through all parent if-statements linked by their else-branches.
+        while (isIfStatement(ifStatement.parent) && ifStatement.parent.elseStatement === ifStatement) {
+            ifStatement = ifStatement.parent;
+        }
+
+        // Now traverse back down through the else branches, aggregating if/else keywords of if-statements.
+        while (true) {
+            const children = ifStatement.getChildren(sourceFile);
+            pushKeywordIf(keywords, children[0], SyntaxKind.IfKeyword);
+
+            // Generally the 'else' keyword is second-to-last, so we traverse backwards.
+            for (let i = children.length - 1; i >= 0; i--) {
+                if (pushKeywordIf(keywords, children[i], SyntaxKind.ElseKeyword)) {
+                    break;
+                }
+            }
+
+            if (!ifStatement.elseStatement || !isIfStatement(ifStatement.elseStatement)) {
+                break;
+            }
+
+            ifStatement = ifStatement.elseStatement;
+        }
+
+        return keywords;
     }
 
     /**

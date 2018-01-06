@@ -57,7 +57,7 @@ namespace ts.projectSystem {
                 });
 
                 checkNumberOfProjects(projectService, { externalProjects: 1 });
-                const diags = session.executeCommand(compilerOptionsRequest).response;
+                const diags = session.executeCommand(compilerOptionsRequest).response as server.protocol.DiagnosticWithLinePosition[];
                 // only file1 exists - expect error
                 checkDiagnosticsWithLinePos(diags, ["File '/a/b/applib.ts' not found."]);
             }
@@ -65,7 +65,7 @@ namespace ts.projectSystem {
             {
                 // only file2 exists - expect error
                 checkNumberOfProjects(projectService, { externalProjects: 1 });
-                const diags = session.executeCommand(compilerOptionsRequest).response;
+                const diags = session.executeCommand(compilerOptionsRequest).response as server.protocol.DiagnosticWithLinePosition[];
                 checkDiagnosticsWithLinePos(diags, ["File '/a/b/app.ts' not found."]);
             }
 
@@ -73,7 +73,7 @@ namespace ts.projectSystem {
             {
                 // both files exist - expect no errors
                 checkNumberOfProjects(projectService, { externalProjects: 1 });
-                const diags = session.executeCommand(compilerOptionsRequest).response;
+                const diags = session.executeCommand(compilerOptionsRequest).response as server.protocol.DiagnosticWithLinePosition[];
                 checkDiagnosticsWithLinePos(diags, []);
             }
         });
@@ -103,13 +103,13 @@ namespace ts.projectSystem {
                 seq: 2,
                 arguments: { projectFileName: project.getProjectName() }
             };
-            let diags = session.executeCommand(compilerOptionsRequest).response;
+            let diags = session.executeCommand(compilerOptionsRequest).response as server.protocol.DiagnosticWithLinePosition[];
             checkDiagnosticsWithLinePos(diags, ["File '/a/b/applib.ts' not found."]);
 
             host.reloadFS([file1, file2, config, libFile]);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            diags = session.executeCommand(compilerOptionsRequest).response;
+            diags = session.executeCommand(compilerOptionsRequest).response as server.protocol.DiagnosticWithLinePosition[];
             checkDiagnosticsWithLinePos(diags, []);
         });
 

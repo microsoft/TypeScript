@@ -5,16 +5,9 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
     const annotateTypeFromJSDoc: Refactor = {
         name: "Annotate with type from JSDoc",
         description: Diagnostics.Annotate_with_type_from_JSDoc.message,
-        getEditsForAction: getEditsForAnnotation,
+        getEditsForAction,
         getAvailableActions
     };
-    const annotateFunctionFromJSDoc: Refactor = {
-        name: "Annotate with types from JSDoc",
-        description: Diagnostics.Annotate_with_types_from_JSDoc.message,
-        getEditsForAction: getEditsForFunctionAnnotation,
-        getAvailableActions
-    };
-
     type DeclarationWithType =
         | FunctionLikeDeclaration
         | VariableDeclaration
@@ -23,7 +16,6 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         | PropertyDeclaration;
 
     registerRefactor(annotateTypeFromJSDoc);
-    registerRefactor(annotateFunctionFromJSDoc);
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
         if (isInJavaScriptFile(context.file)) {
@@ -31,34 +23,53 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         }
 
         const node = getTokenAtPosition(context.file, context.startPosition, /*includeJsDocComment*/ false);
+        if (hasUsableJSDoc(findAncestor(node, isDeclarationWithType))) {
+            return [{
+                name: annotateTypeFromJSDoc.name,
+                description: annotateTypeFromJSDoc.description,
+                actions: [
+                    {
+                        description: annotateTypeFromJSDoc.description,
+                        name: actionName
+                    }
+                ]
+            }];
+        }
+    }
+
+    function hasUsableJSDoc(decl: DeclarationWithType): boolean {
+        if (!decl) {
+            return false;
+        }
+        if (isFunctionLikeDeclaration(decl)) {
+            return decl.parameters.some(hasUsableJSDoc) || (!decl.type && !!getJSDocReturnType(decl));
+        }
+        return !decl.type && !!getJSDocType(decl);
+    }
+
+    function getEditsForAction(context: RefactorContext, action: string): RefactorEditInfo | undefined {
+        if (actionName !== action) {
+            return Debug.fail(`actionName !== action: ${actionName} !== ${action}`);
+        }
+        const node = getTokenAtPosition(context.file, context.startPosition, /*includeJsDocComment*/ false);
         const decl = findAncestor(node, isDeclarationWithType);
         if (!decl || decl.type) {
             return undefined;
         }
         const jsdocType = getJSDocType(decl);
         const isFunctionWithJSDoc = isFunctionLikeDeclaration(decl) && (getJSDocReturnType(decl) || decl.parameters.some(p => !!getJSDocType(p)));
-        const refactor = (isFunctionWithJSDoc || jsdocType && decl.kind === SyntaxKind.Parameter) ? annotateFunctionFromJSDoc :
-            jsdocType ? annotateTypeFromJSDoc :
-            undefined;
-        if (refactor) {
-            return [{
-                name: refactor.name,
-                description: refactor.description,
-                actions: [
-                    {
-                    description: refactor.description,
-                    name: actionName
-                }
-                ]
-            }];
+        if (isFunctionWithJSDoc || jsdocType && decl.kind === SyntaxKind.Parameter) {
+            return getEditsForFunctionAnnotation(context);
+        }
+        else if (jsdocType) {
+            return getEditsForAnnotation(context);
+        }
+        else {
+            Debug.assert(!!refactor, "No applicable refactor found.");
         }
     }
 
-    function getEditsForAnnotation(context: RefactorContext, action: string): RefactorEditInfo | undefined {
-        if (actionName !== action) {
-            return Debug.fail(`actionName !== action: ${actionName} !== ${action}`);
-        }
-
+    function getEditsForAnnotation(context: RefactorContext): RefactorEditInfo | undefined {
         const sourceFile = context.file;
         const token = getTokenAtPosition(sourceFile, context.startPosition, /*includeJsDocComment*/ false);
         const decl = findAncestor(token, isDeclarationWithType);
@@ -78,11 +89,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         };
     }
 
-    function getEditsForFunctionAnnotation(context: RefactorContext, action: string): RefactorEditInfo | undefined {
-        if (actionName !== action) {
-            return Debug.fail(`actionName !== action: ${actionName} !== ${action}`);
-        }
-
+    function getEditsForFunctionAnnotation(context: RefactorContext): RefactorEditInfo | undefined {
         const sourceFile = context.file;
         const token = getTokenAtPosition(sourceFile, context.startPosition, /*includeJsDocComment*/ false);
         const decl = findAncestor(token, isFunctionLikeDeclaration);
@@ -166,7 +173,9 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
             case SyntaxKind.TypeReference:
                 return transformJSDocTypeReference(node as TypeReferenceNode);
             default:
-                return visitEachChild(node, transformJSDocType, /*context*/ undefined) as TypeNode;
+                const visited = visitEachChild(node, transformJSDocType, /*context*/ undefined) as TypeNode;
+                setEmitFlags(visited, EmitFlags.SingleLine);
+                return visited;
         }
     }
 
@@ -199,6 +208,9 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         let name = node.typeName;
         let args = node.typeArguments;
         if (isIdentifier(node.typeName)) {
+            if (isJSDocIndexSignature(node)) {
+                return transformJSDocIndexSignature(node);
+            }
             let text = node.typeName.text;
             switch (node.typeName.text) {
                 case "String":
@@ -222,5 +234,19 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
             }
         }
         return createTypeReferenceNode(name, args);
+    }
+
+    function transformJSDocIndexSignature(node: TypeReferenceNode) {
+        const index = createParameter(
+            /*decorators*/ undefined,
+            /*modifiers*/ undefined,
+            /*dotDotDotToken*/ undefined,
+            node.typeArguments[0].kind === SyntaxKind.NumberKeyword ? "n" : "s",
+            /*questionToken*/ undefined,
+            createTypeReferenceNode(node.typeArguments[0].kind === SyntaxKind.NumberKeyword ? "number" : "string", []),
+            /*initializer*/ undefined);
+        const indexSignature = createTypeLiteralNode([createIndexSignature(/*decorators*/ undefined, /*modifiers*/ undefined, [index], node.typeArguments[1])]);
+        setEmitFlags(indexSignature, EmitFlags.SingleLine);
+        return indexSignature;
     }
 }

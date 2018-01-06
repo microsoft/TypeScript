@@ -1,10 +1,17 @@
 /// <reference path="harness.ts" />
 
 namespace ts.TestFSWithWatch {
-    const { content: libFileContent } = Harness.getDefaultLibraryFile(Harness.IO);
     export const libFile: FileOrFolder = {
         path: "/a/lib/lib.d.ts",
-        content: libFileContent
+        content: `/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> {}`
     };
 
     export const safeList = {
@@ -28,6 +35,7 @@ namespace ts.TestFSWithWatch {
         executingFilePath?: string;
         currentDirectory?: string;
         newLine?: string;
+        useWindowsStylePaths?: boolean;
     }
 
     export function createWatchedSystem(fileOrFolderList: ReadonlyArray<FileOrFolder>, params?: TestServerHostCreationParameters): TestServerHost {
@@ -39,7 +47,8 @@ namespace ts.TestFSWithWatch {
             params.executingFilePath || getExecutingFilePathFromLibFile(),
             params.currentDirectory || "/",
             fileOrFolderList,
-            params.newLine);
+            params.newLine,
+            params.useWindowsStylePaths);
         return host;
     }
 
@@ -52,7 +61,8 @@ namespace ts.TestFSWithWatch {
             params.executingFilePath || getExecutingFilePathFromLibFile(),
             params.currentDirectory || "/",
             fileOrFolderList,
-            params.newLine);
+            params.newLine,
+            params.useWindowsStylePaths);
         return host;
     }
 
@@ -134,9 +144,9 @@ namespace ts.TestFSWithWatch {
     }
 
     export function checkFileNames(caption: string, actualFileNames: ReadonlyArray<string>, expectedFileNames: string[]) {
-        assert.equal(actualFileNames.length, expectedFileNames.length, `${caption}: incorrect actual number of files, expected ${expectedFileNames}, got ${actualFileNames}`);
+        assert.equal(actualFileNames.length, expectedFileNames.length, `${caption}: incorrect actual number of files, expected:\r\n${expectedFileNames.join("\r\n")}\r\ngot: ${actualFileNames.join("\r\n")}`);
         for (const f of expectedFileNames) {
-            assert.isTrue(contains(actualFileNames, f), `${caption}: expected to find ${f} in ${actualFileNames}`);
+            assert.equal(true, contains(actualFileNames, f), `${caption}: expected to find ${f} in ${actualFileNames}`);
         }
     }
 
@@ -158,7 +168,7 @@ namespace ts.TestFSWithWatch {
                 mapSeen.set(f, true);
             }
         }
-        assert.equal(mapExpected.size, 0, `Output has missing ${JSON.stringify(flatMapIter(mapExpected.keys(), key => key))} in ${JSON.stringify(host.getOutput())}`);
+        assert.equal(mapExpected.size, 0, `Output has missing ${JSON.stringify(arrayFrom(mapExpected.keys()))} in ${JSON.stringify(host.getOutput())}`);
     }
 
     export function checkOutputDoesNotContain(host: TestServerHost, expectedToBeAbsent: string[] | ReadonlyArray<string>) {
@@ -171,6 +181,10 @@ namespace ts.TestFSWithWatch {
     class Callbacks {
         private map: TimeOutCallback[] = [];
         private nextId = 1;
+
+        getNextId() {
+            return this.nextId;
+        }
 
         register(cb: (...args: any[]) => void, args: any[]) {
             const timeoutId = this.nextId;
@@ -193,7 +207,13 @@ namespace ts.TestFSWithWatch {
             return n;
         }
 
-        invoke() {
+        invoke(invokeKey?: number) {
+            if (invokeKey) {
+                this.map[invokeKey]();
+                delete this.map[invokeKey];
+                return;
+            }
+
             // Note: invoking a callback may result in new callbacks been queued,
             // so do not clear the entire callback list regardless. Only remove the
             // ones we have invoked.
@@ -216,7 +236,12 @@ namespace ts.TestFSWithWatch {
         directoryName: string;
     }
 
-    export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost {
+    export interface ReloadWatchInvokeOptions {
+        invokeDirectoryWatcherInsteadOfFileChanged: boolean;
+        ignoreWatchInvokedWithTriggerAsFileCreate: boolean;
+    }
+
+    export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
         args: string[] = [];
 
         private readonly output: string[] = [];
@@ -226,15 +251,19 @@ namespace ts.TestFSWithWatch {
         private toPath: (f: string) => Path;
         private timeoutCallbacks = new Callbacks();
         private immediateCallbacks = new Callbacks();
+        private screenClears = 0;
 
         readonly watchedDirectories = createMultiMap<TestDirectoryWatcher>();
         readonly watchedDirectoriesRecursive = createMultiMap<TestDirectoryWatcher>();
         readonly watchedFiles = createMultiMap<TestFileWatcher>();
+        private readonly executingFilePath: string;
+        private readonly currentDirectory: string;
 
-        constructor(public withSafeList: boolean, public useCaseSensitiveFileNames: boolean, private executingFilePath: string, private currentDirectory: string, fileOrFolderList: ReadonlyArray<FileOrFolder>, public readonly newLine = "\n") {
+        constructor(public withSafeList: boolean, public useCaseSensitiveFileNames: boolean, executingFilePath: string, currentDirectory: string, fileOrFolderList: ReadonlyArray<FileOrFolder>, public readonly newLine = "\n", public readonly useWindowsStylePath?: boolean) {
             this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
             this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
-
+            this.executingFilePath = this.getHostSpecificPath(executingFilePath);
+            this.currentDirectory = this.getHostSpecificPath(currentDirectory);
             this.reloadFS(fileOrFolderList);
         }
 
@@ -250,11 +279,24 @@ namespace ts.TestFSWithWatch {
             return this.toPath(this.toNormalizedAbsolutePath(s));
         }
 
-        reloadFS(fileOrFolderList: ReadonlyArray<FileOrFolder>) {
+        getHostSpecificPath(s: string) {
+            if (this.useWindowsStylePath && s.startsWith(directorySeparator)) {
+                return "c:/" + s.substring(1);
+            }
+            return s;
+        }
+
+        reloadFS(fileOrFolderList: ReadonlyArray<FileOrFolder>, options?: Partial<ReloadWatchInvokeOptions>) {
             const mapNewLeaves = createMap<true>();
             const isNewFs = this.fs.size === 0;
-            // always inject safelist file in the list of files
-            for (const fileOrDirectory of fileOrFolderList.concat(this.withSafeList ? safeList : [])) {
+            fileOrFolderList = fileOrFolderList.concat(this.withSafeList ? safeList : []);
+            const filesOrFoldersToLoad: ReadonlyArray<FileOrFolder> = !this.useWindowsStylePath ? fileOrFolderList :
+                fileOrFolderList.map<FileOrFolder>(f => {
+                    const result = clone(f);
+                    result.path = this.getHostSpecificPath(f.path);
+                    return result;
+                });
+            for (const fileOrDirectory of filesOrFoldersToLoad) {
                 const path = this.toFullPath(fileOrDirectory.path);
                 mapNewLeaves.set(path, true);
                 // If its a change
@@ -265,7 +307,12 @@ namespace ts.TestFSWithWatch {
                             // Update file
                             if (currentEntry.content !== fileOrDirectory.content) {
                                 currentEntry.content = fileOrDirectory.content;
-                                this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
+                                if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
+                                    this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
+                                }
+                                else {
+                                    this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
+                                }
                             }
                         }
                         else {
@@ -283,7 +330,7 @@ namespace ts.TestFSWithWatch {
                     }
                 }
                 else {
-                    this.ensureFileOrFolder(fileOrDirectory);
+                    this.ensureFileOrFolder(fileOrDirectory, options && options.ignoreWatchInvokedWithTriggerAsFileCreate);
                 }
             }
 
@@ -300,12 +347,45 @@ namespace ts.TestFSWithWatch {
             }
         }
 
-        ensureFileOrFolder(fileOrDirectory: FileOrFolder) {
+        renameFolder(folderName: string, newFolderName: string) {
+            const fullPath = getNormalizedAbsolutePath(folderName, this.currentDirectory);
+            const path = this.toPath(fullPath);
+            const folder = this.fs.get(path) as Folder;
+            Debug.assert(!!folder);
+
+            // Only remove the folder
+            this.removeFileOrFolder(folder, returnFalse, /*isRenaming*/ true);
+
+            // Add updated folder with new folder name
+            const newFullPath = getNormalizedAbsolutePath(newFolderName, this.currentDirectory);
+            const newFolder = this.toFolder(newFullPath);
+            const newPath = newFolder.path;
+            const basePath = getDirectoryPath(path);
+            Debug.assert(basePath !== path);
+            Debug.assert(basePath === getDirectoryPath(newPath));
+            const baseFolder = this.fs.get(basePath) as Folder;
+            this.addFileOrFolderInFolder(baseFolder, newFolder);
+
+            // Invoke watches for files in the folder as deleted (from old path)
+            for (const entry of folder.entries) {
+                Debug.assert(isFile(entry));
+                this.fs.delete(entry.path);
+                this.invokeFileWatcher(entry.fullPath, FileWatcherEventKind.Deleted);
+
+                entry.fullPath = combinePaths(newFullPath, getBaseFileName(entry.fullPath));
+                entry.path = this.toPath(entry.fullPath);
+                newFolder.entries.push(entry);
+                this.fs.set(entry.path, entry);
+                this.invokeFileWatcher(entry.fullPath, FileWatcherEventKind.Created);
+            }
+        }
+
+        ensureFileOrFolder(fileOrDirectory: FileOrFolder, ignoreWatchInvokedWithTriggerAsFileCreate?: boolean) {
             if (isString(fileOrDirectory.content)) {
                 const file = this.toFile(fileOrDirectory);
                 Debug.assert(!this.fs.get(file.path));
                 const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath));
-                this.addFileOrFolderInFolder(baseFolder, file);
+                this.addFileOrFolderInFolder(baseFolder, file, ignoreWatchInvokedWithTriggerAsFileCreate);
             }
             else {
                 const fullPath = getNormalizedAbsolutePath(fileOrDirectory.path, this.currentDirectory);
@@ -334,17 +414,20 @@ namespace ts.TestFSWithWatch {
             return folder;
         }
 
-        private addFileOrFolderInFolder(folder: Folder, fileOrDirectory: File | Folder) {
+        private addFileOrFolderInFolder(folder: Folder, fileOrDirectory: File | Folder, ignoreWatch?: boolean) {
             folder.entries.push(fileOrDirectory);
             this.fs.set(fileOrDirectory.path, fileOrDirectory);
 
+            if (ignoreWatch) {
+                return;
+            }
             if (isFile(fileOrDirectory)) {
                 this.invokeFileWatcher(fileOrDirectory.fullPath, FileWatcherEventKind.Created);
             }
             this.invokeDirectoryWatcher(folder.fullPath, fileOrDirectory.fullPath);
         }
 
-        private removeFileOrFolder(fileOrDirectory: File | Folder, isRemovableLeafFolder: (folder: Folder) => boolean) {
+        private removeFileOrFolder(fileOrDirectory: File | Folder, isRemovableLeafFolder: (folder: Folder) => boolean, isRenaming?: boolean) {
             const basePath = getDirectoryPath(fileOrDirectory.path);
             const baseFolder = this.fs.get(basePath) as Folder;
             if (basePath !== fileOrDirectory.path) {
@@ -357,7 +440,7 @@ namespace ts.TestFSWithWatch {
                 this.invokeFileWatcher(fileOrDirectory.fullPath, FileWatcherEventKind.Deleted);
             }
             else {
-                Debug.assert(fileOrDirectory.entries.length === 0);
+                Debug.assert(fileOrDirectory.entries.length === 0 || isRenaming);
                 const relativePath = this.getRelativePathToDirectory(fileOrDirectory.fullPath, fileOrDirectory.fullPath);
                 // Invoke directory and recursive directory watcher for the folder
                 // Here we arent invoking recursive directory watchers for the base folders
@@ -514,8 +597,16 @@ namespace ts.TestFSWithWatch {
             return this.timeoutCallbacks.register(callback, args);
         }
 
+        getNextTimeoutId() {
+            return this.timeoutCallbacks.getNextId();
+        }
+
         clearTimeout(timeoutId: any): void {
             this.timeoutCallbacks.unregister(timeoutId);
+        }
+
+        clearScreen(): void {
+            this.screenClears += 1;
         }
 
         checkTimeoutQueueLengthAndRun(expected: number) {
@@ -528,9 +619,9 @@ namespace ts.TestFSWithWatch {
             assert.equal(callbacksCount, expected, `expected ${expected} timeout callbacks queued but found ${callbacksCount}.`);
         }
 
-        runQueuedTimeoutCallbacks() {
+        runQueuedTimeoutCallbacks(timeoutId?: number) {
             try {
-                this.timeoutCallbacks.invoke();
+                this.timeoutCallbacks.invoke(timeoutId);
             }
             catch (e) {
                 if (e.message === this.existMessage) {
@@ -550,6 +641,10 @@ namespace ts.TestFSWithWatch {
 
         clearImmediate(timeoutId: any): void {
             this.immediateCallbacks.unregister(timeoutId);
+        }
+
+        checkScreenClears(expected: number): void {
+            assert.equal(this.screenClears, expected);
         }
 
         createDirectory(directoryName: string): void {

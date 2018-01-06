@@ -19,18 +19,19 @@ namespace ts.server {
         info(s: string): void;
         startGroup(): void;
         endGroup(): void;
-        msg(s: string, type?: Msg.Types): void;
+        msg(s: string, type?: Msg): void;
         getLogFileName(): string;
     }
 
+    // TODO: Use a const enum (https://github.com/Microsoft/TypeScript/issues/16804)
+    export enum Msg {
+        Err = "Err",
+        Info = "Info",
+        Perf = "Perf",
+    }
     export namespace Msg {
-        export type Err = "Err";
-        export const Err: Err = "Err";
-        export type Info = "Info";
-        export const Info: Info = "Info";
-        export type Perf = "Perf";
-        export const Perf: Perf = "Perf";
-        export type Types = Err | Info | Perf;
+        /** @deprecated Only here for backwards-compatibility. Prefer just `Msg`. */
+        export type Types = Msg;
     }
 
     function getProjectRootPath(project: Project): Path {
@@ -42,7 +43,7 @@ namespace ts.server {
                 return <Path>"";
             case ProjectKind.External:
                 const projectName = normalizeSlashes(project.getProjectName());
-                return project.projectService.host.fileExists(projectName) ? <Path>getDirectoryPath(projectName) : <Path>projectName;
+                return <Path>getDirectoryPath(projectName);
         }
     }
 
@@ -250,7 +251,7 @@ namespace ts.server {
             return;
         }
 
-        const insertIndex = binarySearch(array, insert, compare);
+        const insertIndex = binarySearch(array, insert, identity, compare);
         if (insertIndex < 0) {
             array.splice(~insertIndex, 0, insert);
         }
@@ -266,7 +267,7 @@ namespace ts.server {
             return;
         }
 
-        const removeIndex = binarySearch(array, remove, compare);
+        const removeIndex = binarySearch(array, remove, identity, compare);
         if (removeIndex >= 0) {
             array.splice(removeIndex, 1);
         }
@@ -288,8 +289,7 @@ namespace ts.server {
         return index === 0 || value !== array[index - 1];
     }
 
-    export function enumerateInsertsAndDeletes<T>(newItems: SortedReadonlyArray<T>, oldItems: SortedReadonlyArray<T>, inserted: (newItem: T) => void, deleted: (oldItem: T) => void, compare?: Comparer<T>) {
-        compare = compare || compareValues;
+    export function enumerateInsertsAndDeletes<T>(newItems: SortedReadonlyArray<T>, oldItems: SortedReadonlyArray<T>, inserted: (newItem: T) => void, deleted: (oldItem: T) => void, comparer: Comparer<T>) {
         let newIndex = 0;
         let oldIndex = 0;
         const newLen = newItems.length;
@@ -297,7 +297,7 @@ namespace ts.server {
         while (newIndex < newLen && oldIndex < oldLen) {
             const newItem = newItems[newIndex];
             const oldItem = oldItems[oldIndex];
-            const compareResult = compare(newItem, oldItem);
+            const compareResult = comparer(newItem, oldItem);
             if (compareResult === Comparison.LessThan) {
                 inserted(newItem);
                 newIndex++;
@@ -317,5 +317,16 @@ namespace ts.server {
         while (oldIndex < oldLen) {
             deleted(oldItems[oldIndex++]);
         }
+    }
+
+    /* @internal */
+    export function indent(str: string): string {
+        return "\n    " + str;
+    }
+
+    /** Put stringified JSON on the next line, indented. */
+    /* @internal */
+    export function stringifyIndented(json: {}): string {
+        return "\n    " + JSON.stringify(json);
     }
 }

@@ -27,14 +27,53 @@ function main(): void {
 
     function visitDirectory(name: string) {
         const inputFilePath = path.join(inputPath, name, "diagnosticMessages", "diagnosticMessages.generated.json.lcl");
-        const outputFilePath = path.join(outputPath, name, "diagnosticMessages.generated.json");
+
         fs.readFile(inputFilePath, (err, data) => {
             handleError(err);
             xml2js.parseString(data.toString(), (err, result) => {
                 handleError(err);
-                writeFile(outputFilePath, xmlObjectToString(result));
+                if (!result || !result.LCX || !result.LCX.$ || !result.LCX.$.TgtCul) {
+                    console.error("Unexpected XML file structure. Expected to find result.LCX.$.TgtCul.");
+                    process.exit(1);
+                }
+                const outputDirectoryName = getPreferedLocaleName(result.LCX.$.TgtCul);
+                if (!outputDirectoryName) {
+                    console.error(`Invalid output locale name for '${result.LCX.$.TgtCul}'.`);
+                    process.exit(1);
+                }
+                writeFile(path.join(outputPath, outputDirectoryName, "diagnosticMessages.generated.json"), xmlObjectToString(result));
             });
         });
+    }
+
+    /**
+     * A locale name is based on the language tagging conventions of RFC 4646 (Windows Vista
+     * and later), and is represented by LOCALE_SNAME.
+     * Generally, the pattern <language>-<REGION> is used. Here, language is a lowercase ISO 639
+     * language code. The codes from ISO 639-1 are used when available. Otherwise, codes from
+     * ISO 639-2/T are used. REGION specifies an uppercase ISO 3166-1 country/region identifier.
+     * For example, the locale name for English (United States) is "en-US" and the locale name
+     * for Divehi (Maldives) is "dv-MV".
+     *
+     * If the locale is a neutral locale (no region), the LOCALE_SNAME value follows the
+     * pattern <language>. If it is a neutral locale for which the script is significant, the
+     * pattern is <language>-<Script>.
+     *
+     * More at https://msdn.microsoft.com/en-us/library/windows/desktop/dd373814(v=vs.85).aspx
+     *
+     * Most of the languages we support are neutral locales, so we want to use the language name.
+     * There are three exceptions, zh-CN, zh-TW and pt-BR.
+     */
+    function getPreferedLocaleName(localeName: string) {
+        localeName = localeName.toLowerCase();
+        switch (localeName) {
+            case "zh-cn":
+            case "zh-tw":
+            case "pt-br":
+                return localeName;
+            default:
+                return localeName.split("-")[0];
+        }
     }
 
     function handleError(err: null | object) {
@@ -46,11 +85,11 @@ function main(): void {
 
     function xmlObjectToString(o: any) {
         const out: any = {};
-        for (const item of o["LCX"]["Item"][0]["Item"][0]["Item"]) {
-            let ItemId = item["$"]["ItemId"];
-            let Val = item["Str"][0]["Tgt"] ? item["Str"][0]["Tgt"][0]["Val"][0] : item["Str"][0]["Val"][0];
+        for (const item of o.LCX.Item[0].Item[0].Item) {
+            let ItemId = item.$.ItemId;
+            let val = item.Str[0].Tgt ? item.Str[0].Tgt[0].Val[0] : item.Str[0].Val[0];
 
-            if (typeof ItemId !== "string" || typeof Val !== "string") {
+            if (typeof ItemId !== "string" || typeof val !== "string") {
                 console.error("Unexpected XML file structure");
                 process.exit(1);
             }
@@ -59,8 +98,8 @@ function main(): void {
                 ItemId = ItemId.slice(1); // remove leading semicolon
             }
 
-            Val = Val.replace(/]5D;/, "]"); // unescape `]`
-            out[ItemId] = Val;
+            val = val.replace(/]5D;/, "]"); // unescape `]`
+            out[ItemId] = val;
         }
         return JSON.stringify(out, undefined, 2);
     }

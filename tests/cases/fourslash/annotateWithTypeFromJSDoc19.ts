@@ -16,4 +16,4 @@ verify.fileAfterApplyingRefactorAtMarker('1',
  * @param {T} b
  */
 function f<T>(a: number, b: T) {
-}`, 'Annotate with types from JSDoc', 'annotate');
+}`, 'Annotate with type from JSDoc', 'annotate');

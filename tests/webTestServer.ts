@@ -61,7 +61,6 @@ function getRootLength(path: string): number {
     }
     if (path.charAt(1) === ":") {
         if (path.charAt(2) === directorySeparator) return 3;
-        return 2;
     }
     // Per RFC 1738 'file' URI schema has the shape file://<host>/<path>
     // if <host> is omitted then it is assumed that host value is 'localhost',

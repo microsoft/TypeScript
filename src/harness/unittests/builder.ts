@@ -46,28 +46,20 @@ namespace ts {
     function makeAssertChanges(getProgram: () => Program): (fileNames: ReadonlyArray<string>) => void  {
         const builder = createBuilder({
             getCanonicalFileName: identity,
-            getEmitOutput: getFileEmitOutput,
-            computeHash: identity,
-            shouldEmitFile: returnTrue,
+            computeHash: identity
         });
         return fileNames => {
             const program = getProgram();
             builder.updateProgram(program);
-            const changedFiles = builder.emitChangedFiles(program);
-            assert.deepEqual(changedFileNames(changedFiles), fileNames);
+            const outputFileNames: string[] = [];
+            builder.emitChangedFiles(program, fileName => outputFileNames.push(fileName));
+            assert.deepEqual(outputFileNames, fileNames);
         };
     }
 
     function updateProgramFile(program: ProgramWithSourceTexts, fileName: string, fileContent: string): ProgramWithSourceTexts {
         return updateProgram(program, program.getRootFileNames(), program.getCompilerOptions(), files => {
             updateProgramText(files, fileName, fileContent);
-        });
-    }
-
-    function changedFileNames(changedFiles: ReadonlyArray<EmitOutputDetailed>): string[] {
-        return changedFiles.map(f => {
-            assert.lengthOf(f.outputFiles, 1);
-            return f.outputFiles[0].name;
         });
     }
 }

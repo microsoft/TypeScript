@@ -20,9 +20,6 @@ verify.fileAfterApplyingRefactorAtMarker('1',
  * @param alpha - the other best parameter
  * @param {*} beta - I have no idea how this got here
  */
-function f(x: number, y: {
-    a: string;
-    b: Date;
-}, z: string, alpha, beta: any) {
-}`, 'Annotate with types from JSDoc', 'annotate');
+function f(x: number, y: { a: string; b: Date; }, z: string, alpha, beta: any) {
+}`, 'Annotate with type from JSDoc', 'annotate');
 

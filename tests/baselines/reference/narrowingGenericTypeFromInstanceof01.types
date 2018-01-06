@@ -43,7 +43,7 @@ function test<T>(x: A<T> | B<T>) {
         acceptA(x);
 >acceptA(x) : any
 >acceptA : <T>(a: A<T>) => void
->x : A<T> | B<T>
+>x : B<T>
     }
 
     if (x instanceof A) {
@@ -65,7 +65,7 @@ function test<T>(x: A<T> | B<T>) {
         acceptB(x);
 >acceptB(x) : void
 >acceptB : <T>(b: B<T>) => void
->x : A<T> | B<T>
+>x : B<T>
     }
 
     if (x instanceof B) {
@@ -76,6 +76,6 @@ function test<T>(x: A<T> | B<T>) {
         acceptB(x);
 >acceptB(x) : void
 >acceptB : <T>(b: B<T>) => void
->x : A<T> | B<T>
+>x : B<T>
     }
 }

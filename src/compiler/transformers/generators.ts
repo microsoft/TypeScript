@@ -1077,7 +1077,7 @@ namespace ts {
                 const visited = visitNode(expression, visitor, isExpression);
                 if (visited) {
                     if (multiLine) {
-                        visited.startsOnNewLine = true;
+                        startOnNewLine(visited);
                     }
                     expressions.push(visited);
                 }
@@ -2683,8 +2683,7 @@ namespace ts {
             if (clauses) {
                 const labelExpression = createPropertyAccess(state, "label");
                 const switchStatement = createSwitch(labelExpression, createCaseBlock(clauses));
-                switchStatement.startsOnNewLine = true;
-                return [switchStatement];
+                return [startOnNewLine(switchStatement)];
             }
 
             if (statements) {

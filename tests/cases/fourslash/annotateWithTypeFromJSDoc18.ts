@@ -8,4 +8,4 @@ verify.fileAfterApplyingRefactorAtMarker('1',
 `class C {
     /** @param {number} value */
     set c(value: number) { return 12; }
-}`, 'Annotate with types from JSDoc', 'annotate');
+}`, 'Annotate with type from JSDoc', 'annotate');

@@ -72,6 +72,7 @@ namespace ts {
         /*@internal*/ debugMode?: boolean;
         setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         clearTimeout?(timeoutId: any): void;
+        clearScreen?(): void;
     }
 
     export interface FileWatcher {
@@ -124,14 +125,16 @@ namespace ts {
         getEnvironmentVariable?(name: string): string;
     };
 
-    export let sys: System = (function() {
+    export let sys: System = (() => {
+        const utf8ByteOrderMark = "\u00EF\u00BB\u00BF";
+
         function getNodeSystem(): System {
             const _fs = require("fs");
             const _path = require("path");
             const _os = require("os");
             const _crypto = require("crypto");
 
-            const useNonPollingWatchers = process.env["TSC_NONPOLLING_WATCHER"];
+            const useNonPollingWatchers = process.env.TSC_NONPOLLING_WATCHER;
 
             function createWatchedFileSet() {
                 const dirWatchers = createMap<DirectoryWatcher>();
@@ -348,7 +351,7 @@ namespace ts {
             function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
                 // If a BOM is required, emit one
                 if (writeByteOrderMark) {
-                    data = "\uFEFF" + data;
+                    data = utf8ByteOrderMark + data;
                 }
 
                 let fd: number;
@@ -434,6 +437,9 @@ namespace ts {
             }
 
             const nodeSystem: System = {
+                clearScreen: () => {
+                    process.stdout.write("\x1Bc");
+                },
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
                 useCaseSensitiveFileNames,
@@ -511,7 +517,7 @@ namespace ts {
                             return stat.size;
                         }
                     }
-                    catch (e) { }
+                    catch { /*ignore*/ }
                     return 0;
                 },
                 exit(exitCode?: number): void {
@@ -525,7 +531,7 @@ namespace ts {
                     try {
                         require("source-map-support").install();
                     }
-                    catch (e) {
+                    catch {
                         // Could not enable source maps.
                     }
                 },
@@ -549,7 +555,7 @@ namespace ts {
                 writeFile(path: string, data: string, writeByteOrderMark?: boolean) {
                     // If a BOM is required, emit one
                     if (writeByteOrderMark) {
-                        data = "\uFEFF" + data;
+                        data = utf8ByteOrderMark + data;
                     }
 
                     ChakraHost.writeFile(path, data);
@@ -573,7 +579,7 @@ namespace ts {
 
         function recursiveCreateDirectory(directoryPath: string, sys: System) {
             const basePath = getDirectoryPath(directoryPath);
-            const shouldCreateParent = directoryPath !== basePath && !sys.directoryExists(basePath);
+            const shouldCreateParent = basePath !== "" && directoryPath !== basePath && !sys.directoryExists(basePath);
             if (shouldCreateParent) {
                 recursiveCreateDirectory(basePath, sys);
             }
@@ -594,7 +600,7 @@ namespace ts {
         if (sys) {
             // patch writefile to create folder before writing the file
             const originalWriteFile = sys.writeFile;
-            sys.writeFile = function(path, data, writeBom) {
+            sys.writeFile = (path, data, writeBom) => {
                 const directoryPath = getDirectoryPath(normalizeSlashes(path));
                 if (directoryPath && !sys.directoryExists(directoryPath)) {
                     recursiveCreateDirectory(directoryPath, sys);

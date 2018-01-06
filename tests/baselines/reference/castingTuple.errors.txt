@@ -1,13 +1,21 @@
-tests/cases/conformance/types/tuple/castingTuple.ts(28,10): error TS2352: Type '[number, string]' cannot be converted to type '[number, number]'.
+tests/cases/conformance/types/tuple/castingTuple.ts(13,23): error TS2352: Type '[number, string]' cannot be converted to type '[number, string, boolean]'.
+  Property '2' is missing in type '[number, string]'.
+tests/cases/conformance/types/tuple/castingTuple.ts(14,15): error TS2352: Type '[number, string, boolean]' cannot be converted to type '[number, string]'.
+  Types of property 'length' are incompatible.
+    Type '3' is not comparable to type '2'.
+tests/cases/conformance/types/tuple/castingTuple.ts(15,14): error TS2352: Type '[number, string]' cannot be converted to type '[number, string, boolean]'.
+tests/cases/conformance/types/tuple/castingTuple.ts(18,21): error TS2352: Type '[C, D]' cannot be converted to type '[C, D, A]'.
+  Property '2' is missing in type '[C, D]'.
+tests/cases/conformance/types/tuple/castingTuple.ts(30,10): error TS2352: Type '[number, string]' cannot be converted to type '[number, number]'.
   Type 'string' is not comparable to type 'number'.
-tests/cases/conformance/types/tuple/castingTuple.ts(29,10): error TS2352: Type '[C, D]' cannot be converted to type '[A, I]'.
+tests/cases/conformance/types/tuple/castingTuple.ts(31,10): error TS2352: Type '[C, D]' cannot be converted to type '[A, I]'.
   Type 'C' is not comparable to type 'A'.
     Property 'a' is missing in type 'C'.
-tests/cases/conformance/types/tuple/castingTuple.ts(30,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.
-tests/cases/conformance/types/tuple/castingTuple.ts(31,1): error TS2304: Cannot find name 't4'.
+tests/cases/conformance/types/tuple/castingTuple.ts(32,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.
+tests/cases/conformance/types/tuple/castingTuple.ts(33,1): error TS2304: Cannot find name 't4'.
 
 
-==== tests/cases/conformance/types/tuple/castingTuple.ts (4 errors) ====
+==== tests/cases/conformance/types/tuple/castingTuple.ts (8 errors) ====
     interface I { }
     class A { a = 10; }
     class C implements I { c };
@@ -21,9 +29,23 @@ tests/cases/conformance/types/tuple/castingTuple.ts(31,1): error TS2304: Cannot 
     var numStrTuple: [number, string] = [5, "foo"];
     var emptyObjTuple = <[{}, {}]>numStrTuple;
     var numStrBoolTuple = <[number, string, boolean]>numStrTuple;
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Type '[number, string]' cannot be converted to type '[number, string, boolean]'.
+!!! error TS2352:   Property '2' is missing in type '[number, string]'.
+    var shorter = numStrBoolTuple as [number, string]
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Type '[number, string, boolean]' cannot be converted to type '[number, string]'.
+!!! error TS2352:   Types of property 'length' are incompatible.
+!!! error TS2352:     Type '3' is not comparable to type '2'.
+    var longer = numStrTuple as [number, string, boolean]
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Type '[number, string]' cannot be converted to type '[number, string, boolean]'.
     var classCDTuple: [C, D] = [new C(), new D()];
     var interfaceIITuple = <[I, I]>classCDTuple;
     var classCDATuple = <[C, D, A]>classCDTuple;
+                        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Type '[C, D]' cannot be converted to type '[C, D, A]'.
+!!! error TS2352:   Property '2' is missing in type '[C, D]'.
     var eleFromCDA1 = classCDATuple[2]; // A
     var eleFromCDA2 = classCDATuple[5]; // C | D | A
     var t10: [E1, E2] = [E1.one, E2.one];

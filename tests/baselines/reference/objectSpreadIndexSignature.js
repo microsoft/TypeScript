@@ -12,6 +12,10 @@ ii[1001];
 declare const b: boolean;
 indexed3 = { ...b ? indexed3 : undefined };
 
+declare var roindex: { readonly [x:string]: number };
+var writable = { ...roindex };
+writable.a = 0;  // should be ok.
+
 
 //// [objectSpreadIndexSignature.js]
 "use strict";
@@ -30,3 +34,5 @@ var ii = __assign({}, indexed1, indexed2);
 // both have indexer, so i[1001]: number | boolean
 ii[1001];
 indexed3 = __assign({}, b ? indexed3 : undefined);
+var writable = __assign({}, roindex);
+writable.a = 0; // should be ok.

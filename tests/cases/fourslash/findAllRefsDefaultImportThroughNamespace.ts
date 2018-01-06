@@ -15,7 +15,7 @@
 
 const [r0, r1, r2, r3, r4] = test.ranges();
 
-verify.referenceGroups([r0], [{ definition: "function f(): void", ranges: [r1, r2] }]);
+verify.referenceGroups([r0], [{ definition: "function f(): void", ranges: [r0, r2] }]);
 verify.singleReferenceGroup("function f(): void", [r1, r2]);
 verify.singleReferenceGroup("(property) default: number", [r3, r4]);
 

@@ -88,7 +88,7 @@ namespace ts.GoToDefinition {
         //      }
         //      bar<Test>(({pr/*goto*/op1})=>{});
         if (isPropertyName(node) && isBindingElement(node.parent) && isObjectBindingPattern(node.parent.parent) &&
-             (node === (node.parent.propertyName || node.parent.name))) {
+            (node === (node.parent.propertyName || node.parent.name))) {
             const type = typeChecker.getTypeAtLocation(node.parent.parent);
             if (type) {
                 const propSymbols = getPropertySymbolsFromType(type, node);
@@ -147,6 +147,28 @@ namespace ts.GoToDefinition {
         }
 
         return getDefinitionFromSymbol(typeChecker, type.symbol, node);
+    }
+
+    export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFile, position: number): DefinitionInfoAndBoundSpan {
+        const definitions = getDefinitionAtPosition(program, sourceFile, position);
+
+        if (!definitions || definitions.length === 0) {
+            return undefined;
+        }
+
+        // Check if position is on triple slash reference.
+        const comment = findReferenceInPosition(sourceFile.referencedFiles, position) || findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
+        if (comment) {
+            return {
+                definitions,
+                textSpan: createTextSpanFromBounds(comment.pos, comment.end)
+            };
+        }
+
+        const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
+        const textSpan = createTextSpan(node.getStart(), node.getWidth());
+
+        return { definitions, textSpan };
     }
 
     // Go to the original declaration for cases:

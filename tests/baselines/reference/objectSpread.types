@@ -31,7 +31,7 @@ let addAfter: { a: number, b: string, c: boolean } =
 >c : boolean
 
     { ...o, c: false }
->{ ...o, c: false } : { c: false; a: number; b: string; }
+>{ ...o, c: false } : { c: boolean; a: number; b: string; }
 >o : { a: number; b: string; }
 >c : boolean
 >false : false
@@ -43,7 +43,7 @@ let addBefore: { a: number, b: string, c: boolean } =
 >c : boolean
 
     { c: false, ...o }
->{ c: false, ...o } : { a: number; b: string; c: false; }
+>{ c: false, ...o } : { a: number; b: string; c: boolean; }
 >c : boolean
 >false : false
 >o : { a: number; b: string; }
@@ -78,11 +78,11 @@ let nested: { a: number, b: boolean, c: string } =
 >c : string
 
     { ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' }
->{ ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' } : { c: string; b: false; a: number; }
->{ a: 3, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
+>{ ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' } : { c: string; b: boolean; a: number; }
+>{ a: 3, ...{ b: false, c: 'overriden' } } : { b: boolean; c: string; a: number; }
 >a : number
 >3 : 3
->{ b: false, c: 'overriden' } : { b: false; c: string; }
+>{ b: false, c: 'overriden' } : { b: boolean; c: string; }
 >b : boolean
 >false : false
 >c : string
@@ -148,11 +148,11 @@ let combinedNested: { a: number, b: boolean, c: string, d: string } =
 >d : string
 
     { ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } }
->{ ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } } : { a: number; d: string; b: false; c: string; }
->{ a: 4, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
+>{ ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } } : { a: number; d: string; b: boolean; c: string; }
+>{ a: 4, ...{ b: false, c: 'overriden' } } : { b: boolean; c: string; a: number; }
 >a : number
 >4 : 4
->{ b: false, c: 'overriden' } : { b: false; c: string; }
+>{ b: false, c: 'overriden' } : { b: boolean; c: string; }
 >b : boolean
 >false : false
 >c : string
@@ -172,11 +172,11 @@ let combinedNestedChangeType: { a: number, b: boolean, c: number } =
 >c : number
 
     { ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 }
->{ ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 } : { c: number; b: false; a: number; }
->{ a: 1, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
+>{ ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 } : { c: number; b: boolean; a: number; }
+>{ a: 1, ...{ b: false, c: 'overriden' } } : { b: boolean; c: string; a: number; }
 >a : number
 >1 : 1
->{ b: false, c: 'overriden' } : { b: false; c: string; }
+>{ b: false, c: 'overriden' } : { b: boolean; c: string; }
 >b : boolean
 >false : false
 >c : string
@@ -295,7 +295,7 @@ function conditionalSpreadBoolean(b: boolean) : { x: number, y: number } {
 >14 : 14
     }
     let o2 = { ...b && { x: 21 }}
->o2 : {} | { x: number; }
+>o2 : {}
 >{ ...b && { x: 21 }} : {} | { x: number; }
 >b && { x: 21 } : false | { x: number; }
 >b : boolean
@@ -336,7 +336,7 @@ function conditionalSpreadNumber(nt: number): { x: number, y: number } {
 >nt : number
     }
     let o2 = { ...nt && { x: nt }}
->o2 : {} | { x: number; }
+>o2 : {}
 >{ ...nt && { x: nt }} : {} | { x: number; }
 >nt && { x: nt } : 0 | { x: number; }
 >nt : number
@@ -377,7 +377,7 @@ function conditionalSpreadString(st: string): { x: string, y: number } {
 >st : string
     }
     let o2 = { ...st && { x: st }}
->o2 : {} | { x: string; }
+>o2 : {}
 >{ ...st && { x: st }} : {} | { x: string; }
 >st && { x: st } : "" | { x: string; }
 >st : string
@@ -571,8 +571,8 @@ let shortCutted: { a: number, b: string } = { ...o, a }
 
 // non primitive
 let spreadNonPrimitive = { ...<object>{}};
->spreadNonPrimitive : object
->{ ...<object>{}} : object
+>spreadNonPrimitive : {}
+>{ ...<object>{}} : {}
 ><object>{} : object
 >{} : {}
 

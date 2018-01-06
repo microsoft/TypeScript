@@ -43,20 +43,12 @@ namespace ts {
         return s;
     }
 
-    function isJSONSupported() {
-        return typeof JSON === "object" && typeof JSON.parse === "function";
-    }
-
     export function executeCommandLine(args: string[]): void {
         const commandLine = parseCommandLine(args);
 
         // Configuration file name (if any)
         let configFileName: string;
         if (commandLine.options.locale) {
-            if (!isJSONSupported()) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
-                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-            }
             validateLocaleAndSetLanguage(commandLine.options.locale, sys, commandLine.errors);
         }
 
@@ -84,10 +76,6 @@ namespace ts {
         }
 
         if (commandLine.options.project) {
-            if (!isJSONSupported()) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"));
-                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-            }
             if (commandLine.fileNames.length !== 0) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
@@ -109,7 +97,7 @@ namespace ts {
                 }
             }
         }
-        else if (commandLine.fileNames.length === 0 && isJSONSupported()) {
+        else if (commandLine.fileNames.length === 0) {
             const searchPath = normalizePath(sys.getCurrentDirectory());
             configFileName = findConfigFile(searchPath, sys.fileExists);
         }
@@ -306,7 +294,7 @@ namespace ts {
 
         // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
         const optsList = showAllOptions ?
-            optionDeclarations.slice().sort((a, b) => compareValues<string>(a.name.toLowerCase(), b.name.toLowerCase())) :
+            sort(optionDeclarations, (a, b) => compareStringsCaseInsensitive(a.name, b.name)) :
             filter(optionDeclarations.slice(), v => v.showInSimplifiedHelpView);
 
         // We want our descriptions to align at the same column in our output,
@@ -317,9 +305,7 @@ namespace ts {
 
         const optionsDescriptionMap = createMap<string[]>();  // Map between option.description and list of option.type if it is a kind
 
-        for (let i = 0; i < optsList.length; i++) {
-            const option = optsList[i];
-
+        for (const option of optsList) {
             // If an option lacks a description,
             // it is not officially supported.
             if (!option.description) {

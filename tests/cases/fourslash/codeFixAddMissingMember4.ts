@@ -13,11 +13,11 @@
 ////}
 
 verify.codeFix({
-    description: "Initialize property 'foo' in the constructor.",
+    description: "Initialize property 'foo' in the constructor",
     index: 0,
     // TODO: GH#18445
     newFileContent: `class C {
-    constructor() {
+    constructor() {\r
         this.foo = undefined;\r
     }
     method() {

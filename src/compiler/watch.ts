@@ -48,6 +48,15 @@ namespace ts {
         };
     }
 
+    /** @internal */
+    export function createWatchDiagnosticReporterWithColor(system = sys): DiagnosticReporter {
+        return diagnostic => {
+            let output = `[${ formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey) }] `;
+            output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${system.newLine + system.newLine + system.newLine}`;
+            system.write(output);
+        };
+    }
+
     export function reportDiagnostics(diagnostics: Diagnostic[], reportDiagnostic: DiagnosticReporter): void {
         for (const diagnostic of diagnostics) {
             reportDiagnostic(diagnostic);
@@ -131,7 +140,7 @@ namespace ts {
         reportWatchDiagnostic?: DiagnosticReporter
     ): WatchingSystemHost {
         reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system, pretty ? reportDiagnosticWithColorAndContext : reportDiagnosticSimply);
-        reportWatchDiagnostic = reportWatchDiagnostic || createWatchDiagnosticReporter(system);
+        reportWatchDiagnostic = reportWatchDiagnostic || pretty ? createWatchDiagnosticReporterWithColor(system) : createWatchDiagnosticReporter(system);
         parseConfigFile = parseConfigFile || ts.parseConfigFile;
         return {
             system,
@@ -144,13 +153,14 @@ namespace ts {
 
         function compileWatchedProgram(host: DirectoryStructureHost, program: Program, builder: Builder) {
             // First get and report any syntactic errors.
-            let diagnostics = program.getSyntacticDiagnostics().slice();
+            const diagnostics = program.getSyntacticDiagnostics().slice();
             let reportSemanticDiagnostics = false;
 
             // If we didn't have any syntactic errors, then also try getting the global and
             // semantic errors.
             if (diagnostics.length === 0) {
-                diagnostics = program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
+                addRange(diagnostics, program.getOptionsDiagnostics());
+                addRange(diagnostics, program.getGlobalDiagnostics());
 
                 if (diagnostics.length === 0) {
                     reportSemanticDiagnostics = true;
@@ -162,7 +172,7 @@ namespace ts {
             let sourceMaps: SourceMapData[];
             let emitSkipped: boolean;
 
-            const result = builder.emitChangedFiles(program);
+            const result = builder.emitChangedFiles(program, writeFile);
             if (result.length === 0) {
                 emitSkipped = true;
             }
@@ -171,14 +181,13 @@ namespace ts {
                     if (emitOutput.emitSkipped) {
                         emitSkipped = true;
                     }
-                    diagnostics = concatenate(diagnostics, emitOutput.diagnostics);
+                    addRange(diagnostics, emitOutput.diagnostics);
                     sourceMaps = concatenate(sourceMaps, emitOutput.sourceMaps);
-                    writeOutputFiles(emitOutput.outputFiles);
                 }
             }
 
             if (reportSemanticDiagnostics) {
-                diagnostics = diagnostics.concat(builder.getSemanticDiagnostics(program));
+                addRange(diagnostics, builder.getSemanticDiagnostics(program));
             }
             return handleEmitOutputAndReportErrors(host, program, emittedFiles, emitSkipped,
                 diagnostics, reportDiagnostic);
@@ -191,31 +200,23 @@ namespace ts {
                 }
             }
 
-            function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
+            function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
                 try {
                     performance.mark("beforeIOWrite");
                     ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
 
-                    host.writeFile(fileName, data, writeByteOrderMark);
+                    host.writeFile(fileName, text, writeByteOrderMark);
 
                     performance.mark("afterIOWrite");
                     performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
+
+                    if (emittedFiles) {
+                        emittedFiles.push(fileName);
+                    }
                 }
                 catch (e) {
-                    return createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, e);
-                }
-            }
-
-            function writeOutputFiles(outputFiles: OutputFile[]) {
-                if (outputFiles) {
-                    for (const outputFile of outputFiles) {
-                        const error = writeFile(outputFile.name, outputFile.text, outputFile.writeByteOrderMark);
-                        if (error) {
-                            diagnostics.push(error);
-                        }
-                        if (emittedFiles) {
-                            emittedFiles.push(outputFile.name);
-                        }
+                    if (onError) {
+                        onError(e.message);
                     }
                 }
             }
@@ -238,7 +239,7 @@ namespace ts {
 
     function createWatchMode(rootFileNames: string[], compilerOptions: CompilerOptions, watchingHost?: WatchingSystemHost, configFileName?: string, configFileSpecs?: ConfigFileSpecs, configFileWildCardDirectories?: MapLike<WatchDirectoryFlags>, optionsToExtendForConfigFile?: CompilerOptions) {
         let program: Program;
-        let needsReload: boolean;                                           // true if the config file changed and needs to reload it from the disk
+        let reloadLevel: ConfigFileProgramReloadLevel;                      // level to indicate if the program needs to be reloaded from config file/just filenames etc
         let missingFilesMap: Map<FileWatcher>;                              // Map of file watchers for the missing files
         let watchedWildcardDirectories: Map<WildcardDirectoryWatcher>;      // map of watchers for the wild card directories in the config file
         let timerToUpdateProgram: any;                                      // timer callback to recompile the program
@@ -308,8 +309,10 @@ namespace ts {
             getCurrentDirectory()
         );
         // There is no extra check needed since we can just rely on the program to decide emit
-        const builder = createBuilder({ getCanonicalFileName, getEmitOutput: getFileEmitOutput, computeHash, shouldEmitFile: () => true });
+        const builder = createBuilder({ getCanonicalFileName, computeHash });
 
+        clearHostScreen();
+        reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Starting_compilation_in_watch_mode));
         synchronizeProgram();
 
         // Update the wild card directory watch
@@ -496,25 +499,46 @@ namespace ts {
 
         function scheduleProgramReload() {
             Debug.assert(!!configFileName);
-            needsReload = true;
+            reloadLevel = ConfigFileProgramReloadLevel.Full;
             scheduleProgramUpdate();
         }
 
+        function clearHostScreen() {
+            if (watchingHost.system.clearScreen) {
+                watchingHost.system.clearScreen();
+            }
+        }
+
         function updateProgram() {
+            clearHostScreen();
+
             timerToUpdateProgram = undefined;
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
 
-            if (needsReload) {
-                reloadConfigFile();
+            switch (reloadLevel) {
+                case ConfigFileProgramReloadLevel.Partial:
+                    return reloadFileNamesFromConfigFile();
+                case ConfigFileProgramReloadLevel.Full:
+                    return reloadConfigFile();
+                default:
+                    return synchronizeProgram();
             }
-            else {
-                synchronizeProgram();
+        }
+
+        function reloadFileNamesFromConfigFile() {
+            const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), compilerOptions, directoryStructureHost);
+            if (!configFileSpecs.filesSpecs && result.fileNames.length === 0) {
+                reportDiagnostic(getErrorForNoInputFiles(configFileSpecs, configFileName));
             }
+            rootFileNames = result.fileNames;
+
+            // Update the program
+            synchronizeProgram();
         }
 
         function reloadConfigFile() {
             writeLog(`Reloading config file: ${configFileName}`);
-            needsReload = false;
+            reloadLevel = ConfigFileProgramReloadLevel.None;
 
             const cachedHost = directoryStructureHost as CachedDirectoryStructureHost;
             cachedHost.clearCache();
@@ -605,23 +629,28 @@ namespace ts {
                     const fileOrDirectoryPath = toPath(fileOrDirectory);
 
                     // Since the file existance changed, update the sourceFiles cache
-                    (directoryStructureHost as CachedDirectoryStructureHost).addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
-                    removeSourceFile(fileOrDirectoryPath);
+                    const result = (directoryStructureHost as CachedDirectoryStructureHost).addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
+
+                    // Instead of deleting the file, mark it as changed instead
+                    // Many times node calls add/remove/file when watching directories recursively
+                    const hostSourceFile = sourceFilesCache.get(fileOrDirectoryPath);
+                    if (hostSourceFile && !isString(hostSourceFile) && (result ? result.fileExists : directoryStructureHost.fileExists(fileOrDirectory))) {
+                        hostSourceFile.version++;
+                    }
+                    else {
+                        removeSourceFile(fileOrDirectoryPath);
+                    }
 
                     // If the the added or created file or directory is not supported file name, ignore the file
                     // But when watched directory is added/removed, we need to reload the file list
-                    if (fileOrDirectoryPath !== directory && !isSupportedSourceFileName(fileOrDirectory, compilerOptions)) {
+                    if (fileOrDirectoryPath !== directory && hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, compilerOptions)) {
                         writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
                         return;
                     }
 
                     // Reload is pending, do the reload
-                    if (!needsReload) {
-                        const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), compilerOptions, directoryStructureHost);
-                        if (!configFileSpecs.filesSpecs && result.fileNames.length === 0) {
-                            reportDiagnostic(getErrorForNoInputFiles(configFileSpecs, configFileName));
-                        }
-                        rootFileNames = result.fileNames;
+                    if (reloadLevel !== ConfigFileProgramReloadLevel.Full) {
+                        reloadLevel = ConfigFileProgramReloadLevel.Partial;
 
                         // Schedule Update the program
                         scheduleProgramUpdate();

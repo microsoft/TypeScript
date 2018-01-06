@@ -17,16 +17,16 @@ namespace ts.refactor.convertFunctionToES6Class {
             return undefined;
         }
 
-        const start = context.startPosition;
-        const node = getTokenAtPosition(context.file, start, /*includeJsDocComment*/ false);
-        const checker = context.program.getTypeChecker();
-        let symbol = checker.getSymbolAtLocation(node);
+        let symbol = getConstructorSymbol(context);
+        if (!symbol) {
+            return undefined;
+        }
 
-        if (symbol && isDeclarationOfFunctionOrClassExpression(symbol)) {
+        if (isDeclarationOfFunctionOrClassExpression(symbol)) {
             symbol = (symbol.valueDeclaration as VariableDeclaration).initializer.symbol;
         }
 
-        if (symbol && (symbol.flags & SymbolFlags.Function) && symbol.members && (symbol.members.size > 0)) {
+        if ((symbol.flags & SymbolFlags.Function) && symbol.members && (symbol.members.size > 0)) {
             return [
                 {
                     name: convertFunctionToES6Class.name,
@@ -48,12 +48,8 @@ namespace ts.refactor.convertFunctionToES6Class {
             return undefined;
         }
 
-        const start = context.startPosition;
-        const sourceFile = context.file;
-        const checker = context.program.getTypeChecker();
-        const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
-        const ctorSymbol = checker.getSymbolAtLocation(token);
-        const newLine = context.rulesProvider.getFormatOptions().newLineCharacter;
+        const { file: sourceFile } = context;
+        const ctorSymbol = getConstructorSymbol(context);
 
         const deletedNodes: Node[] = [];
         const deletes: (() => any)[] = [];
@@ -91,7 +87,7 @@ namespace ts.refactor.convertFunctionToES6Class {
         }
 
         // Because the preceding node could be touched, we need to insert nodes before delete nodes.
-        changeTracker.insertNodeAfter(sourceFile, precedingNode, newClassDeclaration, { suffix: newLine });
+        changeTracker.insertNodeAfter(sourceFile, precedingNode, newClassDeclaration);
         for (const deleteCallback of deletes) {
             deleteCallback();
         }
@@ -268,5 +264,11 @@ namespace ts.refactor.convertFunctionToES6Class {
         function getModifierKindFromSource(source: Node, kind: SyntaxKind) {
             return filter(source.modifiers, modifier => modifier.kind === kind);
         }
+    }
+
+    function getConstructorSymbol({ startPosition, file, program }: RefactorContext): Symbol {
+        const checker = program.getTypeChecker();
+        const token = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
+        return checker.getSymbolAtLocation(token);
     }
 }

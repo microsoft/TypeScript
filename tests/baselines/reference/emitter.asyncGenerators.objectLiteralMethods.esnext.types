@@ -22,11 +22,11 @@ const o2 = {
 }
 === tests/cases/conformance/emitter/esnext/asyncGenerators/O3.ts ===
 const o3 = {
->o3 : { f(): AsyncIterableIterator<1>; }
->{    async * f() {        const x = yield 1;    }} : { f(): AsyncIterableIterator<1>; }
+>o3 : { f(): AsyncIterableIterator<number>; }
+>{    async * f() {        const x = yield 1;    }} : { f(): AsyncIterableIterator<number>; }
 
     async * f() {
->f : () => AsyncIterableIterator<1>
+>f : () => AsyncIterableIterator<number>
 
         const x = yield 1;
 >x : any
@@ -51,18 +51,18 @@ const o4 = {
 }
 === tests/cases/conformance/emitter/esnext/asyncGenerators/O5.ts ===
 const o5 = {
->o5 : { f(): AsyncIterableIterator<1>; }
->{    async * f() {        const x = yield* (async function*() { yield 1; })();    }} : { f(): AsyncIterableIterator<1>; }
+>o5 : { f(): AsyncIterableIterator<number>; }
+>{    async * f() {        const x = yield* (async function*() { yield 1; })();    }} : { f(): AsyncIterableIterator<number>; }
 
     async * f() {
->f : () => AsyncIterableIterator<1>
+>f : () => AsyncIterableIterator<number>
 
         const x = yield* (async function*() { yield 1; })();
 >x : any
 >yield* (async function*() { yield 1; })() : any
->(async function*() { yield 1; })() : AsyncIterableIterator<1>
->(async function*() { yield 1; }) : () => AsyncIterableIterator<1>
->async function*() { yield 1; } : () => AsyncIterableIterator<1>
+>(async function*() { yield 1; })() : AsyncIterableIterator<number>
+>(async function*() { yield 1; }) : () => AsyncIterableIterator<number>
+>async function*() { yield 1; } : () => AsyncIterableIterator<number>
 >yield 1 : any
 >1 : 1
     }
@@ -83,11 +83,11 @@ const o6 = {
 }
 === tests/cases/conformance/emitter/esnext/asyncGenerators/O7.ts ===
 const o7 = {
->o7 : { f(): AsyncIterableIterator<1>; }
->{    async * f() {        return 1;    }} : { f(): AsyncIterableIterator<1>; }
+>o7 : { f(): AsyncIterableIterator<number>; }
+>{    async * f() {        return 1;    }} : { f(): AsyncIterableIterator<number>; }
 
     async * f() {
->f : () => AsyncIterableIterator<1>
+>f : () => AsyncIterableIterator<number>
 
         return 1;
 >1 : 1

@@ -5,7 +5,7 @@
 
 // @Filename: b.ts
 //// import /*3*/n = require('a');
-//// var x = new /*1*/n.Foo();
+//// var x = new [|/*1*/n|].Foo();
 
 // Won't-fixed: Should go to '2' instead
 verify.goToDefinition("1", "3");

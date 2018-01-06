@@ -856,3 +856,61 @@ function f76<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P i
 >x : { [P in K]: T[P]; }
 }
 
+function f80<T>(t: T): Partial<T> {
+>f80 : <T>(t: T) => Partial<T>
+>T : T
+>t : T
+>T : T
+>Partial : Partial<T>
+>T : T
+
+    return t;
+>t : T
+}
+
+function f81<T, K extends keyof T>(t: T, k: K): Partial<T[K]> {
+>f81 : <T, K extends keyof T>(t: T, k: K) => Partial<T[K]>
+>T : T
+>K : K
+>T : T
+>t : T
+>T : T
+>k : K
+>K : K
+>Partial : Partial<T>
+>T : T
+>K : K
+
+    return t[k];
+>t[k] : T[K]
+>t : T
+>k : K
+}
+
+function f82<T, K1 extends keyof T, K2 extends keyof T[K1]>(t: T, k1: K1, k2: K2): Partial<T[K1][K2]> {
+>f82 : <T, K1 extends keyof T, K2 extends keyof T[K1]>(t: T, k1: K1, k2: K2) => Partial<T[K1][K2]>
+>T : T
+>K1 : K1
+>T : T
+>K2 : K2
+>T : T
+>K1 : K1
+>t : T
+>T : T
+>k1 : K1
+>K1 : K1
+>k2 : K2
+>K2 : K2
+>Partial : Partial<T>
+>T : T
+>K1 : K1
+>K2 : K2
+
+    return t[k1][k2];
+>t[k1][k2] : T[K1][K2]
+>t[k1] : T[K1]
+>t : T
+>k1 : K1
+>k2 : K2
+}
+
