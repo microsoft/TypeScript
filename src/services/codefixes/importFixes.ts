@@ -789,9 +789,7 @@ namespace ts.codefix {
             }
 
             function getEscapedNameForExportDefault(symbol: Symbol): __String | undefined {
-                const declarations = symbol.declarations;
-                if (length(declarations) > 0) {
-                    const declaration = declarations[0];
+                return firstDefined(symbol.declarations, declaration => {
                     if (isExportAssignment(declaration)) {
                         if (isIdentifier(declaration.expression)) {
                             return declaration.expression.escapedText;
@@ -803,7 +801,7 @@ namespace ts.codefix {
                             return declaration.propertyName.escapedText;
                         }
                     }
-                }
+                });
             }
         });
 
