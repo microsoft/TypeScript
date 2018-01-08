@@ -385,7 +385,7 @@ namespace ts {
         }
 
         function isPathWithDefaultFailedLookupExtension(path: Path) {
-            return fileExtensionIsOneOf(path, failedLookupDefaultExtensions);
+            return failedLookupDefaultExtensions.some(e => fileExtensionIs(path, e));
         }
 
         function watchAndStopWatchDiffFailedLookupLocations(resolution: ResolutionWithFailedLookupLocations, existingResolution: ResolutionWithFailedLookupLocations) {
