@@ -1,4 +1,4 @@
-// @ESModuleInterop: true
+// @esModuleInterop: true
 // @filename: hybrid/index.d.ts
 export function sayHello(): string;
 // @filename: path.d.ts

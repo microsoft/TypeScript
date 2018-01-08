@@ -401,7 +401,7 @@ namespace ts {
             description: Diagnostics.Allow_default_imports_from_modules_with_no_default_export_This_does_not_affect_code_emit_just_typechecking
         },
         {
-            name: "ESModuleInterop",
+            name: "esModuleInterop",
             type: "boolean",
             showInSimplifiedHelpView: true,
             category: Diagnostics.Module_Resolution_Options,
@@ -710,7 +710,7 @@ namespace ts {
         module: ModuleKind.CommonJS,
         target: ScriptTarget.ES5,
         strict: true,
-        ESModuleInterop: true
+        esModuleInterop: true
     };
 
     let optionNameMapCache: OptionNameMap;

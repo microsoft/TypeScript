@@ -1,5 +1,5 @@
 /// <reference path='fourslash.ts' />
-// @ESModuleInterop: true
+// @esModuleInterop: true
 // @module: amd
 // @Filename: foo.d.ts
 ////declare function foo(): void;

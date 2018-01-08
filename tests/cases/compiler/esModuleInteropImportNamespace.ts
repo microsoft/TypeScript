@@ -1,4 +1,4 @@
-// @ESModuleInterop: true
+// @esModuleInterop: true
 // @Filename: foo.d.ts
 declare function foo(): void;
 declare namespace foo {}

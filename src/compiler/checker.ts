@@ -1928,7 +1928,7 @@ namespace ts {
                     error(moduleReferenceExpression, Diagnostics.Module_0_resolves_to_a_non_module_entity_and_cannot_be_imported_using_this_construct, symbolToString(moduleSymbol));
                     return symbol;
                 }
-                if (compilerOptions.ESModuleInterop) {
+                if (compilerOptions.esModuleInterop) {
                     const referenceParent = moduleReferenceExpression.parent;
                     if (
                         (referenceParent.kind === SyntaxKind.ImportDeclaration && getNamespaceDeclarationNode(referenceParent as ImportDeclaration)) ||

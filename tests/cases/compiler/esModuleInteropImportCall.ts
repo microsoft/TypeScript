@@ -1,4 +1,4 @@
-// @ESModuleInterop: true
+// @esModuleInterop: true
 // @lib: es6
 // @Filename: foo.d.ts
 declare function foo(): void;

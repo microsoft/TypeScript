@@ -2016,7 +2016,7 @@ namespace ts {
         const moduleKind = getEmitModuleKind(compilerOptions);
         return compilerOptions.allowSyntheticDefaultImports !== undefined
             ? compilerOptions.allowSyntheticDefaultImports
-            : compilerOptions.ESModuleInterop
+            : compilerOptions.esModuleInterop
                 ? moduleKind !== ModuleKind.None && moduleKind < ModuleKind.ES2015
                 : moduleKind === ModuleKind.System;
     }

@@ -639,7 +639,7 @@ namespace ts {
             }
 
             const promise = createNew(createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
-            if (compilerOptions.ESModuleInterop) {
+            if (compilerOptions.esModuleInterop) {
                 context.requestEmitHelper(importStarHelper);
                 return createCall(createPropertyAccess(promise, createIdentifier("then")), /*typeArguments*/ undefined, [getHelperName("__importStar")]);
             }
@@ -654,7 +654,7 @@ namespace ts {
             // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
             const promiseResolveCall = createCall(createPropertyAccess(createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []);
             let requireCall = createCall(createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : []);
-            if (compilerOptions.ESModuleInterop) {
+            if (compilerOptions.esModuleInterop) {
                 context.requestEmitHelper(importStarHelper);
                 requireCall = createCall(getHelperName("__importStar"), /*typeArguments*/ undefined, [requireCall]);
             }
@@ -692,7 +692,7 @@ namespace ts {
 
 
         function getHelperExpressionForImport(node: ImportDeclaration, innerExpr: Expression) {
-            if (!compilerOptions.ESModuleInterop || node.transformFlags & TransformFlags.NeverApplyImportHelper) {
+            if (!compilerOptions.esModuleInterop || node.transformFlags & TransformFlags.NeverApplyImportHelper) {
                 return innerExpr;
             }
             if (getNamespaceDeclarationNode(node)) {
