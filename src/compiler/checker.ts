@@ -1927,7 +1927,7 @@ namespace ts {
                 if (compilerOptions.esModuleInterop) {
                     const referenceParent = moduleReferenceExpression.parent;
                     if (
-                        (referenceParent.kind === SyntaxKind.ImportDeclaration && getNamespaceDeclarationNode(referenceParent as ImportDeclaration)) ||
+                        (isImportDeclaration(referenceParent) && getNamespaceDeclarationNode(referenceParent)) ||
                         isImportCall(referenceParent)
                     ) {
                         const type = getTypeOfSymbol(symbol);
@@ -1942,7 +1942,7 @@ namespace ts {
                             result.declarations = symbol.declarations ? symbol.declarations.slice() : [];
                             result.parent = symbol.parent;
                             result.target = symbol;
-                            result.originatingImport = referenceParent as ImportDeclaration | ImportCall;
+                            result.originatingImport = referenceParent;
                             if (symbol.valueDeclaration) result.valueDeclaration = symbol.valueDeclaration;
                             if (symbol.constEnumOnlyModule) result.constEnumOnlyModule = true;
                             if (symbol.members) result.members = cloneMap(symbol.members);
