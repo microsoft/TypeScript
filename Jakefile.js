@@ -214,6 +214,7 @@ var es2018LibrarySourceMap = es2018LibrarySource.map(function (source) {
 
 var esnextLibrarySource = [
     "esnext.asynciterable.d.ts",
+    "esnext.array.d.ts",
     "esnext.promise.d.ts"
 ];
 
