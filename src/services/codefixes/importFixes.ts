@@ -424,7 +424,7 @@ namespace ts.codefix {
         }
     }
 
-    function tryGetModuleNameFromPaths(relativeNameWithIndex: string, relativeName: string, paths: MapLike<ReadonlyArray<string>>): string | undefined {
+    function tryGetModuleNameFromPaths(relativeToBaseUrlWithIndex: string, relativeToBaseUrl: string, paths: MapLike<ReadonlyArray<string>>): string | undefined {
         for (const key in paths) {
             for (const pattern of paths[key]) {
                 const indexOfStar = pattern.indexOf("*");
@@ -434,16 +434,16 @@ namespace ts.codefix {
                 else if (indexOfStar !== -1) {
                     const prefix = removeLeadingDotSlash(pattern.substr(0, indexOfStar));
                     const suffix = removeFileExtension(pattern.substr(indexOfStar + 1));
-                    if (relativeName.length >= prefix.length + suffix.length &&
-                        startsWith(relativeName, prefix) &&
-                        endsWith(relativeName, suffix)) {
-                        const matchedStar = relativeName.substr(prefix.length, relativeName.length - suffix.length);
+                    if (relativeToBaseUrl.length >= prefix.length + suffix.length &&
+                        startsWith(relativeToBaseUrl, prefix) &&
+                        endsWith(relativeToBaseUrl, suffix)) {
+                        const matchedStar = relativeToBaseUrl.substr(prefix.length, relativeToBaseUrl.length - suffix.length);
                         return key.replace("*", matchedStar);
                     }
                 }
                 else {
                     const cleanPattern = removeLeadingDotSlash(removeFileExtension(pattern));
-                    if (cleanPattern === relativeName || cleanPattern === relativeNameWithIndex) {
+                    if (cleanPattern === relativeToBaseUrl || cleanPattern === relativeToBaseUrlWithIndex) {
                         return key;
                     }
                 }
