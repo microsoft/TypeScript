@@ -414,9 +414,10 @@ declare var EventTarget: {
 };
 
 interface File extends Blob {
-    readonly lastModifiedDate: any;
+    readonly lastModifiedDate: Date;
     readonly name: string;
     readonly webkitRelativePath: string;
+    readonly lastModified: number;
 }
 
 declare var File: {
@@ -1061,7 +1062,7 @@ interface URL {
 
 declare var URL: {
     prototype: URL;
-    new(url: string, base?: string): URL;
+    new(url: string, base?: string | URL): URL;
     createObjectURL(object: any, options?: ObjectURLOptions): string;
     revokeObjectURL(url: string): void;
 };
