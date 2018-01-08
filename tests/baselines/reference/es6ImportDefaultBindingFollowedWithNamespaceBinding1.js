@@ -20,3 +20,4 @@ var x = defaultBinding;
 declare var a: number;
 export default a;
 //// [es6ImportDefaultBindingFollowedWithNamespaceBinding_1.d.ts]
+export {};
