@@ -939,6 +939,14 @@
         "category": "Error",
         "code": 1335
     },
+    "An index signature parameter type cannot be a type alias. Consider writing '[{0}: {1}]: {2}' instead.": {
+        "category": "Error",
+        "code": 1336
+    },
+    "An index signature parameter type cannot be a union type. Consider using a mapped object type instead.": {
+        "category": "Error",
+        "code": 1337
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -2275,6 +2283,10 @@
     "Type '{0}' is not assignable to type '{1}'. Two different types with this name exist, but they are unrelated.": {
         "category": "Error",
         "code": 2719
+    },
+    "Class '{0}' incorrectly implements class '{1}'. Did you mean to extend '{1}' and inherit its members as a subclass?": {
+        "category": "Error",
+        "code": 2720
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

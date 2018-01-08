@@ -1107,10 +1107,6 @@ namespace ts {
         seen.set(key, true);
         return true;
     }
-
-    export function singleElementArray<T>(t: T | undefined): T[] {
-        return t === undefined ? undefined : [t];
-    }
 }
 
 // Display-part writer helpers
@@ -1304,10 +1300,14 @@ namespace ts {
      */
     export function stripQuotes(name: string) {
         const length = name.length;
-        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && isSingleOrDoubleQuote(name.charCodeAt(0))) {
+        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && startsWithQuote(name)) {
             return name.substring(1, length - 1);
         }
         return name;
+    }
+
+    export function startsWithQuote(name: string): boolean {
+        return isSingleOrDoubleQuote(name.charCodeAt(0));
     }
 
     export function scriptKindIs(fileName: string, host: LanguageServiceHost, ...scriptKinds: ScriptKind[]): boolean {

@@ -837,7 +837,7 @@ namespace ts {
                 return ClassificationType.keyword;
             }
 
-            // Special case < and >  If they appear in a generic context they are punctuation,
+            // Special case `<` and `>`: If they appear in a generic context they are punctuation,
             // not operators.
             if (tokenKind === SyntaxKind.LessThanToken || tokenKind === SyntaxKind.GreaterThanToken) {
                 // If the node owning the token has a type argument list or type parameter list, then

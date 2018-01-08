@@ -43,7 +43,7 @@ namespace ts {
         });
     });
 
-    function makeAssertChanges(getProgram: () => Program): (fileNames: ReadonlyArray<string>) => void  {
+    function makeAssertChanges(getProgram: () => Program): (fileNames: ReadonlyArray<string>) => void {
         const builder = createBuilder({
             getCanonicalFileName: identity,
             computeHash: identity

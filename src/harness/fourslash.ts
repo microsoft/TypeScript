@@ -265,7 +265,7 @@ namespace FourSlash {
             ts.forEach(testData.files, file => {
                 // Create map between fileName and its content for easily looking up when resolveReference flag is specified
                 this.inputFiles.set(file.fileName, file.content);
-                if (ts.getBaseFileName(file.fileName).toLowerCase() === "tsconfig.json") {
+                if (isTsconfig(file)) {
                     const configJson = ts.parseConfigFileTextToJson(file.fileName, file.content);
                     if (configJson.config === undefined) {
                         throw new Error(`Failed to parse test tsconfig.json: ${configJson.error.messageText}`);
@@ -381,6 +381,7 @@ namespace FourSlash {
                 insertSpaceAfterTypeAssertion: false,
                 placeOpenBraceOnNewLineForFunctions: false,
                 placeOpenBraceOnNewLineForControlBlocks: false,
+                insertSpaceBeforeTypeAnnotation: false
             };
 
             // Open the first file by default
@@ -441,12 +442,11 @@ namespace FourSlash {
             this.goToPosition(marker.position);
         }
 
-        public goToEachMarker(action: () => void) {
-            const markers = this.getMarkers();
+        public goToEachMarker(markers: ReadonlyArray<Marker>, action: (marker: FourSlash.Marker, index: number) => void) {
             assert(markers.length);
-            for (const marker of markers) {
-                this.goToMarker(marker);
-                action();
+            for (let i = 0; i < markers.length; i++) {
+                this.goToMarker(markers[i]);
+                action(markers[i], i);
             }
         }
 
@@ -873,7 +873,7 @@ namespace FourSlash {
             });
         }
 
-        public verifyCompletionListContains(entryId: ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean, options?: FourSlashInterface.VerifyCompletionListContainsOptions) {
+        public verifyCompletionListContains(entryId: ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string | { kind?: string, kindModifiers?: string }, spanIndex?: number, hasAction?: boolean, options?: FourSlashInterface.VerifyCompletionListContainsOptions) {
             const completions = this.getCompletionListAtCaret(options);
             if (completions) {
                 this.assertItemInCompletionList(completions.entries, entryId, text, documentation, kind, spanIndex, hasAction, options);
@@ -894,7 +894,7 @@ namespace FourSlash {
          * @param expectedKind the kind of symbol (see ScriptElementKind)
          * @param spanIndex the index of the range that the completion item's replacement text span should match
          */
-        public verifyCompletionListDoesNotContain(entryId: ts.Completions.CompletionEntryIdentifier, expectedText?: string, expectedDocumentation?: string, expectedKind?: string, spanIndex?: number, options?: FourSlashInterface.CompletionsAtOptions) {
+        public verifyCompletionListDoesNotContain(entryId: ts.Completions.CompletionEntryIdentifier, expectedText?: string, expectedDocumentation?: string, expectedKind?: string | { kind?: string, kindModifiers?: string }, spanIndex?: number, options?: FourSlashInterface.CompletionsAtOptions) {
             let replacementSpan: ts.TextSpan;
             if (spanIndex !== undefined) {
                 replacementSpan = this.getTextSpanForRangeAtIndex(spanIndex);
@@ -903,7 +903,7 @@ namespace FourSlash {
             const completions = this.getCompletionListAtCaret(options);
             if (completions) {
                 let filterCompletions = completions.entries.filter(e => e.name === entryId.name && e.source === entryId.source);
-                filterCompletions = expectedKind ? filterCompletions.filter(e => e.kind === expectedKind) : filterCompletions;
+                filterCompletions = expectedKind ? filterCompletions.filter(e => e.kind === expectedKind || (typeof expectedKind === "object" && e.kind === expectedKind.kind)) : filterCompletions;
                 filterCompletions = filterCompletions.filter(entry => {
                     const details = this.getCompletionEntryDetails(entry.name);
                     const documentation = details && ts.displayPartsToString(details.documentation);
@@ -3090,7 +3090,7 @@ Actual: ${stringify(fullActual)}`);
             entryId: ts.Completions.CompletionEntryIdentifier,
             text: string | undefined,
             documentation: string | undefined,
-            kind: string | undefined,
+            kind: string | undefined | { kind?: string, kindModifiers?: string },
             spanIndex: number | undefined,
             hasAction: boolean | undefined,
             options: FourSlashInterface.VerifyCompletionListContainsOptions | undefined,
@@ -3124,8 +3124,20 @@ Actual: ${stringify(fullActual)}`);
             }
 
             if (kind !== undefined) {
-                assert.equal(item.kind, kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + entryId));
+                if (typeof kind === "string") {
+                    assert.equal(item.kind, kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + entryId));
+                }
+                else {
+                    if (kind.kind) {
+                        assert.equal(item.kind, kind.kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + entryId));
+                    }
+                    if (kind.kindModifiers !== undefined) {
+                        assert.equal(item.kindModifiers, kind.kindModifiers, this.assertionMessageAtLastKnownMarker("completion item kindModifiers for " + entryId));
+                    }
+                }
             }
+
+
 
             if (spanIndex !== undefined) {
                 const span = this.getTextSpanForRangeAtIndex(spanIndex);
@@ -3373,7 +3385,7 @@ ${code}
         }
 
         // @Filename is the only directive that can be used in a test that contains tsconfig.json file.
-        if (containTSConfigJson(files)) {
+        if (files.some(isTsconfig)) {
             let directive = getNonFileNameOptionInFileList(files);
             if (!directive) {
                 directive = getNonFileNameOptionInObject(globalOptions);
@@ -3392,8 +3404,8 @@ ${code}
         };
     }
 
-    function containTSConfigJson(files: FourSlashFile[]): boolean {
-        return ts.forEach(files, f => f.fileOptions.Filename === "tsconfig.json");
+    function isTsconfig(file: FourSlashFile): boolean {
+        return ts.getBaseFileName(file.fileName).toLowerCase() === "tsconfig.json";
     }
 
     function getNonFileNameOptionInFileList(files: FourSlashFile[]): string {
@@ -3764,8 +3776,11 @@ namespace FourSlashInterface {
             this.state.goToMarker(name);
         }
 
-        public eachMarker(action: () => void) {
-            this.state.goToEachMarker(action);
+        public eachMarker(markers: ReadonlyArray<string>, action: (marker: FourSlash.Marker, index: number) => void): void;
+        public eachMarker(action: (marker: FourSlash.Marker, index: number) => void): void;
+        public eachMarker(a: ReadonlyArray<string> | ((marker: FourSlash.Marker, index: number) => void), b?: (marker: FourSlash.Marker, index: number) => void): void {
+            const markers = typeof a === "function" ? this.state.getMarkers() : a.map(m => this.state.getMarkerByName(m));
+            this.state.goToEachMarker(markers, typeof a === "function" ? a : b);
         }
 
         public rangeStart(range: FourSlash.Range) {
@@ -3840,7 +3855,7 @@ namespace FourSlashInterface {
 
         // Verifies the completion list contains the specified symbol. The
         // completion list is brought up if necessary
-        public completionListContains(entryId: string | ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean, options?: VerifyCompletionListContainsOptions) {
+        public completionListContains(entryId: string | ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string | { kind?: string, kindModifiers?: string }, spanIndex?: number, hasAction?: boolean, options?: VerifyCompletionListContainsOptions) {
             if (typeof entryId === "string") {
                 entryId = { name: entryId, source: undefined };
             }

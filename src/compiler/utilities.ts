@@ -3,6 +3,7 @@
 /* @internal */
 namespace ts {
     export const emptyArray: never[] = [] as never[];
+    export const resolvingEmptyArray: never[] = [] as never[];
     export const emptyMap: ReadonlyMap<never> = createMap<never>();
 
     export const externalHelpersModuleNameText = "tslib";
@@ -802,7 +803,7 @@ namespace ts {
                         return node === (<TypeAssertion>parent).type;
                     case SyntaxKind.CallExpression:
                     case SyntaxKind.NewExpression:
-                        return (<CallExpression>parent).typeArguments && indexOf((<CallExpression>parent).typeArguments, node) >= 0;
+                        return contains((<CallExpression>parent).typeArguments, node);
                     case SyntaxKind.TaggedTemplateExpression:
                         // TODO (drosen): TaggedTemplateExpressions may eventually support type arguments.
                         return false;
@@ -2116,6 +2117,10 @@ namespace ts {
 
     export function getPropertyNameForKnownSymbolName(symbolName: string): __String {
         return "__@" + symbolName as __String;
+    }
+
+    export function isKnownSymbol(symbol: Symbol): boolean {
+        return startsWith(symbol.escapedName as string, "__@");
     }
 
     /**
@@ -3916,8 +3921,8 @@ namespace ts {
             //
             // {
             //      oldStart3: Min(oldStart1, oldStart2),
-            //      oldEnd3  : Max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1)),
-            //      newEnd3  : Max(newEnd2, newEnd2 + (newEnd1 - oldEnd2))
+            //      oldEnd3: Max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1)),
+            //      newEnd3: Max(newEnd2, newEnd2 + (newEnd1 - oldEnd2))
             // }
 
             const oldStart1 = oldStartN;
@@ -4402,7 +4407,7 @@ namespace ts {
         return node.kind === SyntaxKind.RegularExpressionLiteral;
     }
 
-    export function isNoSubstitutionTemplateLiteral(node: Node): node is LiteralExpression {
+    export function isNoSubstitutionTemplateLiteral(node: Node): node is NoSubstitutionTemplateLiteral {
         return node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
@@ -5233,6 +5238,18 @@ namespace ts {
         return node && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor);
     }
 
+    /* @internal */
+    export function isMethodOrAccessor(node: Node): node is MethodDeclaration | AccessorDeclaration {
+        switch (node.kind) {
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     // Type members
 
     export function isTypeElement(node: Node): node is TypeElement {
@@ -5829,5 +5846,20 @@ namespace ts {
     /* @internal */
     export function hasOnlyExpressionInitializer(node: Node): node is HasExpressionInitializer {
         return hasInitializer(node) && !isForStatement(node) && !isForInStatement(node) && !isForOfStatement(node) && !isJsxAttribute(node);
+    }
+
+    export function isObjectLiteralElement(node: Node): node is ObjectLiteralElement {
+        switch (node.kind) {
+            case SyntaxKind.JsxAttribute:
+            case SyntaxKind.JsxSpreadAttribute:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return true;
+            default:
+                return false;
+        }
     }
 }

@@ -146,6 +146,7 @@ namespace ts {
                     "es2017.typedarrays": "lib.es2017.typedarrays.d.ts",
                     "esnext.array": "lib.esnext.array.d.ts",
                     "esnext.asynciterable": "lib.esnext.asynciterable.d.ts",
+                    "esnext.promise": "lib.esnext.promise.d.ts",
                 }),
             },
             showInSimplifiedHelpView: true,
@@ -1864,7 +1865,7 @@ namespace ts {
         return normalizeNonListOptionValue(option, basePath, value);
     }
 
-    function normalizeNonListOptionValue(option: CommandLineOption, basePath: string, value: any): CompilerOptionsValue  {
+    function normalizeNonListOptionValue(option: CommandLineOption, basePath: string, value: any): CompilerOptionsValue {
         if (option.isFilePath) {
             value = normalizePath(combinePaths(basePath, value));
             if (value === "") {
