@@ -14658,15 +14658,11 @@ namespace ts {
             let offset = 0;
             for (let i = 0; i < node.properties.length; i++) {
                 const memberDecl = node.properties[i];
-                let member = getSymbolOfNode(memberDecl);
+                let member: Symbol;
                 let literalName: __String[] | __String | undefined;
                 if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
                     memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
                     isObjectLiteralMethod(memberDecl)) {
-                    let jsdocType: Type;
-                    if (isInJSFile) {
-                        jsdocType = getTypeForDeclarationFromJSDocComment(memberDecl);
-                    }
 
                     let type: Type;
                     if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
@@ -14689,19 +14685,22 @@ namespace ts {
                         type = checkExpressionForMutableLocation((<ShorthandPropertyAssignment>memberDecl).name, checkMode);
                     }
 
-                    if (jsdocType) {
-                        checkTypeAssignableTo(type, jsdocType, memberDecl);
-                        type = jsdocType;
+                    if (isInJSFile) {
+                        const jsdocType = getTypeForDeclarationFromJSDocComment(memberDecl);
+                        if (jsdocType) {
+                            checkTypeAssignableTo(type, jsdocType, memberDecl);
+                            type = jsdocType;
+                        }
                     }
 
                     typeFlags |= type.flags;
                     if (isArray(literalName)) {
                         hasUnionedComputedProperty = true;
-                        updateIntermediateType(getUnionFromLiteralUnion(memberDecl, member, literalName, type));
+                        updateIntermediateType(getUnionFromLiteralUnion(memberDecl, literalName, type));
                         continue;
                     }
 
-                    member = createProperty(memberDecl, member, literalName, type);
+                    member = createProperty(memberDecl, literalName, type);
                 }
                 else if (memberDecl.kind === SyntaxKind.SpreadAssignment) {
                     if (languageVersion < ScriptTarget.ES2015) {
@@ -14729,6 +14728,7 @@ namespace ts {
                     checkNodeDeferred(memberDecl);
                 }
 
+                member = member || getSymbolOfNode(memberDecl);
                 if (!literalName && hasNonBindableDynamicName(memberDecl)) {
                     if (isNumericName(memberDecl.name)) {
                         hasComputedNumberProperty = true;
@@ -14773,10 +14773,10 @@ namespace ts {
                 propertiesTable = createSymbolTable();
             }
 
-            function getUnionFromLiteralUnion(memberDecl: ObjectLiteralElementLike, member: Symbol, literalNames: __String[], type: Type) {
+            function getUnionFromLiteralUnion(memberDecl: ObjectLiteralElementLike, literalNames: __String[], type: Type) {
                 const types: Type[] = [];
                 for (const literalName of literalNames) {
-                    const prop = createProperty(memberDecl, member, literalName, type);
+                    const prop = createProperty(memberDecl, literalName, type);
                     propertiesArray.push(prop);
                     let duplicate: Symbol;
                     if (propertiesTable.has(prop.escapedName)) {
@@ -14797,8 +14797,8 @@ namespace ts {
                 return getSpreadType(intermediate, getUnionType(types), node.symbol, propagatedFlags, /*fromComputedProperty*/ true);
             }
 
-            // TODO: Probably don't need the second parameter
-            function createProperty(memberDecl: ObjectLiteralElementLike, member: Symbol, literalName: __String, type: Type) {
+            function createProperty(memberDecl: ObjectLiteralElementLike, literalName: __String, type: Type) {
+                const member = getSymbolOfNode(memberDecl);
                 const nameType = hasLateBindableName(memberDecl) ? checkComputedPropertyName(memberDecl.name) : undefined;
                 const prop = nameType && isTypeUsableAsLateBoundName(nameType)
                     ? createSymbol(SymbolFlags.Property | member.flags, getLateBoundNameFromType(nameType), CheckFlags.Late)
