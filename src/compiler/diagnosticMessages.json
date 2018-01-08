@@ -803,10 +803,6 @@
         "category": "Error",
         "code": 1247
     },
-    "A class member cannot have the '{0}' keyword.": {
-        "category": "Error",
-        "code": 1248
-    },
     "A decorator can only decorate a method implementation, not an overload.": {
         "category": "Error",
         "code": 1249
