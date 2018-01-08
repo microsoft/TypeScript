@@ -11,6 +11,6 @@
 
 const [r0, r1, r2] = test.ranges();
 const defs = { definition: "(property) A: typeof (Anonymous class)", ranges: [r0] };
-const imports = { definition: "import A", ranges: [r1, r2] };
+const imports = { definition: "(alias) (property) A: typeof (Anonymous class)\nimport A", ranges: [r1, r2] };
 verify.referenceGroups([r0], [defs, imports]);
 verify.referenceGroups([r1, r2], [imports, defs]);

@@ -58,6 +58,7 @@ internal/
 !tests/baselines/reference/project/nodeModules*/**/*
 .idea
 yarn.lock
+yarn-error.log
 .parallelperf.*
 tests/cases/user/*/package-lock.json
 tests/cases/user/*/node_modules/
