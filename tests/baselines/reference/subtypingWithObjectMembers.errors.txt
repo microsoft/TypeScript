@@ -1,9 +1,15 @@
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(14,5): error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(24,5): error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(34,5): error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(45,9): error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(55,9): error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(65,9): error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(14,5): error TS2416: Property 'bar' in type 'B' is not assignable to the same property in base type 'Base'.
+  Type 'string' is not assignable to type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(24,5): error TS2416: Property '2' in type 'B2' is not assignable to the same property in base type 'Base'.
+  Type 'string' is not assignable to type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(34,5): error TS2416: Property '2.0' in type 'B3' is not assignable to the same property in base type 'Base'.
+  Type 'string' is not assignable to type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(45,9): error TS2416: Property 'bar' in type 'B' is not assignable to the same property in base type 'Base'.
+  Type 'string' is not assignable to type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(55,9): error TS2416: Property '2' in type 'B2' is not assignable to the same property in base type 'Base'.
+  Type 'string' is not assignable to type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(65,9): error TS2416: Property '2.0' in type 'B3' is not assignable to the same property in base type 'Base'.
+  Type 'string' is not assignable to type 'Base'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts (6 errors) ====
@@ -22,7 +28,8 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         foo: Derived; // ok
         bar: string; // error
         ~~~
-!!! error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
+!!! error TS2416: Property 'bar' in type 'B' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'string' is not assignable to type 'Base'.
     }
     
     class A2 {
@@ -34,7 +41,8 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         1: Derived; // ok
         2: string; // error
         ~
-!!! error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
+!!! error TS2416: Property '2' in type 'B2' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'string' is not assignable to type 'Base'.
     }
     
     class A3 {
@@ -46,7 +54,8 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         '1': Derived; // ok
         '2.0': string; // error
         ~~~~~
-!!! error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
+!!! error TS2416: Property '2.0' in type 'B3' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'string' is not assignable to type 'Base'.
     }
     
     module TwoLevels {
@@ -59,7 +68,8 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
             foo: Derived2; // ok
             bar: string; // error
             ~~~
-!!! error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
+!!! error TS2416: Property 'bar' in type 'B' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'string' is not assignable to type 'Base'.
         }
     
         class A2 {
@@ -71,7 +81,8 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
             1: Derived2; // ok
             2: string; // error
             ~
-!!! error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
+!!! error TS2416: Property '2' in type 'B2' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'string' is not assignable to type 'Base'.
         }
     
         class A3 {
@@ -83,6 +94,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
             '1': Derived2; // ok
             '2.0': string; // error
             ~~~~~
-!!! error TS2416: Class member of type 'string' is not assignable to base class member of type 'Base'.
+!!! error TS2416: Property '2.0' in type 'B3' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'string' is not assignable to type 'Base'.
         }
     }

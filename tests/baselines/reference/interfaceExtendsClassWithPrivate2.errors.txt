@@ -2,11 +2,11 @@ tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(10,7): error TS2415: C
   Types have separate declarations of a private property 'x'.
 tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(10,7): error TS2420: Class 'D' incorrectly implements interface 'I'.
   Types have separate declarations of a private property 'x'.
-tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(20,13): error TS2416: Class member of type 'string' is not assignable to base class member of type 'number'.
-tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(20,13): error TS2421: Class member of type 'string' is not assignable to implementing interface member of type 'number'.
+tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(20,13): error TS2416: Property 'x' in type 'D2' is not assignable to the same property in base type 'number'.
+  Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts (4 errors) ====
+==== tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts (3 errors) ====
     class C {
         public foo(x: any) { return x; }
         private x = 1;
@@ -34,9 +34,8 @@ tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(20,13): error TS2421: 
         public foo(x: any) { return x; }
         private x = "";
                 ~
-!!! error TS2416: Class member of type 'string' is not assignable to base class member of type 'number'.
-                ~
-!!! error TS2421: Class member of type 'string' is not assignable to implementing interface member of type 'number'.
+!!! error TS2416: Property 'x' in type 'D2' is not assignable to the same property in base type 'number'.
+!!! error TS2416:   Type 'string' is not assignable to type 'number'.
         other(x: any) { return x; }
         bar() { }
     } 

@@ -1,8 +1,10 @@
 tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(8,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(8,9): error TS2416: Class member of type 'string' is not assignable to base class member of type '() => string'.
+tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(8,9): error TS2416: Property 'x' in type 'b' is not assignable to the same property in base type '() => string'.
+  Type 'string' is not assignable to type '() => string'.
 tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(8,9): error TS2423: Class 'a' defines instance member function 'x', but extended class 'b' defines it as instance member accessor.
 tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(11,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(11,9): error TS2416: Class member of type 'string' is not assignable to base class member of type '() => string'.
+tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(11,9): error TS2416: Property 'x' in type 'b' is not assignable to the same property in base type '() => string'.
+  Type 'string' is not assignable to type '() => string'.
 
 
 ==== tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts (5 errors) ====
@@ -17,7 +19,8 @@ tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(11,9): error T
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             ~
-!!! error TS2416: Class member of type 'string' is not assignable to base class member of type '() => string'.
+!!! error TS2416: Property 'x' in type 'b' is not assignable to the same property in base type '() => string'.
+!!! error TS2416:   Type 'string' is not assignable to type '() => string'.
             ~
 !!! error TS2423: Class 'a' defines instance member function 'x', but extended class 'b' defines it as instance member accessor.
             return "20";
@@ -26,7 +29,8 @@ tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(11,9): error T
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             ~
-!!! error TS2416: Class member of type 'string' is not assignable to base class member of type '() => string'.
+!!! error TS2416: Property 'x' in type 'b' is not assignable to the same property in base type '() => string'.
+!!! error TS2416:   Type 'string' is not assignable to type '() => string'.
     
         }
     }

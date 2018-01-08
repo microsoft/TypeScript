@@ -1,4 +1,5 @@
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(8,5): error TS2416: Class member of type 'U' is not assignable to base class member of type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(8,5): error TS2416: Property 'foo' in type 'D1<T, U>' is not assignable to the same property in base type 'T'.
+  Type 'U' is not assignable to type 'T'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts (1 errors) ====
@@ -11,7 +12,8 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
     class D1<T, U> extends C3<T> {
         foo: U; // error
         ~~~
-!!! error TS2416: Class member of type 'U' is not assignable to base class member of type 'T'.
+!!! error TS2416: Property 'foo' in type 'D1<T, U>' is not assignable to the same property in base type 'T'.
+!!! error TS2416:   Type 'U' is not assignable to type 'T'.
     }
     
     function f1<T, U>(x: T, y: U) {

@@ -1,5 +1,6 @@
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classIsSubtypeOfBaseType.ts(12,5): error TS2416: Class member of type '{ bar?: string; }' is not assignable to base class member of type '{ bar: string; }'.
-  Property 'bar' is optional in type '{ bar?: string; }' but required in type '{ bar: string; }'.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classIsSubtypeOfBaseType.ts(12,5): error TS2416: Property 'foo' in type 'Derived2' is not assignable to the same property in base type '{ bar: string; }'.
+  Type '{ bar?: string; }' is not assignable to type '{ bar: string; }'.
+    Property 'bar' is optional in type '{ bar?: string; }' but required in type '{ bar: string; }'.
 
 
 ==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classIsSubtypeOfBaseType.ts (1 errors) ====
@@ -16,8 +17,9 @@ tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/cla
     class Derived2 extends Base<{ bar: string; }> {
         foo: {
         ~~~
-!!! error TS2416: Class member of type '{ bar?: string; }' is not assignable to base class member of type '{ bar: string; }'.
-!!! error TS2416:   Property 'bar' is optional in type '{ bar?: string; }' but required in type '{ bar: string; }'.
+!!! error TS2416: Property 'foo' in type 'Derived2' is not assignable to the same property in base type '{ bar: string; }'.
+!!! error TS2416:   Type '{ bar?: string; }' is not assignable to type '{ bar: string; }'.
+!!! error TS2416:     Property 'bar' is optional in type '{ bar?: string; }' but required in type '{ bar: string; }'.
             bar?: string; // error
         }
     }

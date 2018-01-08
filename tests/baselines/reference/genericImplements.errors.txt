@@ -1,5 +1,6 @@
-tests/cases/compiler/genericImplements.ts(9,5): error TS2421: Class member of type '<T extends B>() => T' is not assignable to implementing interface member of type '<T extends A>() => T'.
-  Type 'B' is not assignable to type 'T'.
+tests/cases/compiler/genericImplements.ts(9,5): error TS2416: Property 'f' in type 'X' is not assignable to the same property in base type '<T extends A>() => T'.
+  Type '<T extends B>() => T' is not assignable to type '<T extends A>() => T'.
+    Type 'B' is not assignable to type 'T'.
 
 
 ==== tests/cases/compiler/genericImplements.ts (1 errors) ====
@@ -13,8 +14,9 @@ tests/cases/compiler/genericImplements.ts(9,5): error TS2421: Class member of ty
     class X implements I {  
         f<T extends B>(): T { return undefined; }
         ~
-!!! error TS2421: Class member of type '<T extends B>() => T' is not assignable to implementing interface member of type '<T extends A>() => T'.
-!!! error TS2421:   Type 'B' is not assignable to type 'T'.
+!!! error TS2416: Property 'f' in type 'X' is not assignable to the same property in base type '<T extends A>() => T'.
+!!! error TS2416:   Type '<T extends B>() => T' is not assignable to type '<T extends A>() => T'.
+!!! error TS2416:     Type 'B' is not assignable to type 'T'.
     } // { f: () => { b; } }
     
     // OK

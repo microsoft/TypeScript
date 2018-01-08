@@ -9054,7 +9054,7 @@ namespace ts {
             return isTypeComparableTo(type1, type2) || isTypeComparableTo(type2, type1);
         }
 
-        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: DiagnosticMessageChain): boolean {
+        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
             return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage, containingMessageChain);
         }
 
@@ -9062,7 +9062,7 @@ namespace ts {
          * This is *not* a bi-directional relationship.
          * If one needs to check both directions for comparability, use a second call to this function or 'isTypeComparableTo'.
          */
-        function checkTypeComparableTo(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: DiagnosticMessageChain): boolean {
+        function checkTypeComparableTo(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
             return checkTypeRelatedTo(source, target, comparableRelation, errorNode, headMessage, containingMessageChain);
         }
 
@@ -9396,7 +9396,7 @@ namespace ts {
             relation: Map<RelationComparisonResult>,
             errorNode: Node,
             headMessage?: DiagnosticMessage,
-            containingMessageChain?: DiagnosticMessageChain): boolean {
+            containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
 
             let errorInfo: DiagnosticMessageChain;
             let maybeKeys: string[];
@@ -9416,7 +9416,10 @@ namespace ts {
             }
             else if (errorInfo) {
                 if (containingMessageChain) {
-                    errorInfo = concatenateDiagnosticMessageChains(containingMessageChain, errorInfo);
+                    const chain = containingMessageChain();
+                    if (chain) {
+                        errorInfo = concatenateDiagnosticMessageChains(chain, errorInfo);
+                    }
                 }
 
                 diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo));
@@ -16533,7 +16536,7 @@ namespace ts {
                 const constraint = getConstraintOfTypeParameter(typeParameters[i]);
                 if (!constraint) continue;
 
-                const errorInfo = reportErrors && headMessage && chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                const errorInfo = reportErrors && headMessage && (() => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Type_0_does_not_satisfy_the_constraint_1));
                 const typeArgumentHeadMessage = headMessage || Diagnostics.Type_0_does_not_satisfy_the_constraint_1;
                 if (!mapper) {
                     mapper = createTypeMapper(typeParameters, typeArgumentTypes);
@@ -19513,7 +19516,7 @@ namespace ts {
                             Diagnostics.A_type_predicate_cannot_reference_a_rest_parameter);
                     }
                     else {
-                        const leadingError = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.A_type_predicate_s_type_must_be_assignable_to_its_parameter_s_type);
+                        const leadingError = () => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.A_type_predicate_s_type_must_be_assignable_to_its_parameter_s_type);
                         checkTypeAssignableTo(typePredicate.type,
                             getTypeOfNode(parent.parameters[typePredicate.parameterIndex]),
                             node.type,
@@ -20818,7 +20821,7 @@ namespace ts {
                 expectedReturnType,
                 node,
                 headMessage,
-                errorInfo);
+                () => errorInfo);
         }
 
         /**
@@ -22744,7 +22747,7 @@ namespace ts {
                     }
                     const baseWithThis = getTypeWithThisArgument(baseType, type.thisType);
                     if (!checkTypeAssignableTo(typeWithThis, baseWithThis, /*errorNode*/ undefined)) {
-                        issueMemberSpecificError(node, typeWithThis, baseWithThis, Diagnostics.Class_member_of_type_0_is_not_assignable_to_base_class_member_of_type_1, Diagnostics.Class_0_incorrectly_extends_base_class_1);
+                        issueMemberSpecificError(node, typeWithThis, baseWithThis, Diagnostics.Class_0_incorrectly_extends_base_class_1);
                     }
                     checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
                         Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
@@ -22782,7 +22785,7 @@ namespace ts {
                                     Diagnostics.Class_0_incorrectly_implements_interface_1;
                                 const baseWithThis = getTypeWithThisArgument(t, type.thisType);
                                 if (!checkTypeAssignableTo(typeWithThis, baseWithThis, /*errorNode*/ undefined)) {
-                                    issueMemberSpecificError(node, typeWithThis, baseWithThis, Diagnostics.Class_member_of_type_0_is_not_assignable_to_implementing_interface_member_of_type_1, genericDiag);
+                                    issueMemberSpecificError(node, typeWithThis, baseWithThis, genericDiag);
                                 }
                             }
                             else {
@@ -22800,7 +22803,7 @@ namespace ts {
             }
         }
 
-        function issueMemberSpecificError(node: ClassLikeDeclaration, typeWithThis: Type, baseWithThis: Type, specificDiag: DiagnosticMessage, broadDiag: DiagnosticMessage) {
+        function issueMemberSpecificError(node: ClassLikeDeclaration, typeWithThis: Type, baseWithThis: Type, broadDiag: DiagnosticMessage) {
             // iterate over all implemented properties and issue errors on each one which isn't compatible, ratehr than the class as a whole, if possible
             let issuedMemberError = false;
             for (const member of node.members) {
@@ -22812,7 +22815,14 @@ namespace ts {
                     const prop = getPropertyOfType(typeWithThis, declaredProp.escapedName);
                     const baseProp = getPropertyOfType(baseWithThis, declaredProp.escapedName);
                     if (prop && baseProp) {
-                        if (!checkTypeAssignableTo(getTypeOfSymbol(prop), getTypeOfSymbol(baseProp), member.name || member, specificDiag)) {
+                        const rootChain = () => chainDiagnosticMessages(
+                            /*details*/ undefined,
+                            Diagnostics.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2,
+                            unescapeLeadingUnderscores(declaredProp.escapedName),
+                            typeToString(typeWithThis),
+                            typeToString(getTypeOfSymbol(baseProp))
+                        );
+                        if (!checkTypeAssignableTo(getTypeOfSymbol(prop), getTypeOfSymbol(baseProp), member.name || member, /*message*/ undefined, rootChain)) {
                             issuedMemberError = true;
                         }
                     }

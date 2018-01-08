@@ -1,50 +1,62 @@
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(68,9): error TS2416: Class member of type 'U' is not assignable to base class member of type 'T'.
-  Type 'Foo<T>' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(68,9): error TS2416: Property 'foo' in type 'D2<T, U, V>' is not assignable to the same property in base type 'T'.
+  Type 'U' is not assignable to type 'T'.
+    Type 'Foo<T>' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(68,9): error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(73,9): error TS2416: Class member of type 'V' is not assignable to base class member of type 'T'.
-  Type 'Foo<V>' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(73,9): error TS2416: Property 'foo' in type 'D3<T, U, V>' is not assignable to the same property in base type 'T'.
+  Type 'V' is not assignable to type 'T'.
+    Type 'Foo<V>' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(73,9): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(78,9): error TS2416: Class member of type 'T' is not assignable to base class member of type 'U'.
-  Type 'Foo<U>' is not assignable to type 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(78,9): error TS2416: Property 'foo' in type 'D4<T, U, V>' is not assignable to the same property in base type 'U'.
+  Type 'T' is not assignable to type 'U'.
+    Type 'Foo<U>' is not assignable to type 'U'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(78,9): error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'U'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(88,9): error TS2416: Class member of type 'V' is not assignable to base class member of type 'U'.
-  Type 'Foo<V>' is not assignable to type 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(88,9): error TS2416: Property 'foo' in type 'D6<T, U, V>' is not assignable to the same property in base type 'U'.
+  Type 'V' is not assignable to type 'U'.
+    Type 'Foo<V>' is not assignable to type 'U'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(88,9): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(93,9): error TS2416: Class member of type 'T' is not assignable to base class member of type 'V'.
-  Type 'Foo<U>' is not assignable to type 'V'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(93,9): error TS2416: Property 'foo' in type 'D7<T, U, V>' is not assignable to the same property in base type 'V'.
+  Type 'T' is not assignable to type 'V'.
+    Type 'Foo<U>' is not assignable to type 'V'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(93,9): error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'V'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(98,9): error TS2416: Class member of type 'U' is not assignable to base class member of type 'V'.
-  Type 'Foo<T>' is not assignable to type 'V'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(98,9): error TS2416: Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'V'.
+  Type 'U' is not assignable to type 'V'.
+    Type 'Foo<T>' is not assignable to type 'V'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(98,9): error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'V'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(115,9): error TS2416: Class member of type 'T' is not assignable to base class member of type 'Foo<T>'.
-  Type 'Foo<U>' is not assignable to type 'Foo<T>'.
-    Type 'U' is not assignable to type 'T'.
-      Type 'Foo<T>' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(115,9): error TS2416: Property 'foo' in type 'D1<T, U, V>' is not assignable to the same property in base type 'Foo<T>'.
+  Type 'T' is not assignable to type 'Foo<T>'.
+    Type 'Foo<U>' is not assignable to type 'Foo<T>'.
+      Type 'U' is not assignable to type 'T'.
+        Type 'Foo<T>' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(120,9): error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(125,9): error TS2416: Class member of type 'V' is not assignable to base class member of type 'Foo<T>'.
-  Type 'Foo<V>' is not assignable to type 'Foo<T>'.
-    Type 'V' is not assignable to type 'T'.
-      Type 'Foo<V>' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(125,9): error TS2416: Property 'foo' in type 'D3<T, U, V>' is not assignable to the same property in base type 'Foo<T>'.
+  Type 'V' is not assignable to type 'Foo<T>'.
+    Type 'Foo<V>' is not assignable to type 'Foo<T>'.
+      Type 'V' is not assignable to type 'T'.
+        Type 'Foo<V>' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(125,9): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(130,9): error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'U'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(135,9): error TS2416: Class member of type 'U' is not assignable to base class member of type 'Foo<U>'.
-  Type 'Foo<T>' is not assignable to type 'Foo<U>'.
-    Type 'T' is not assignable to type 'U'.
-      Type 'Foo<U>' is not assignable to type 'U'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(140,9): error TS2416: Class member of type 'V' is not assignable to base class member of type 'Foo<U>'.
-  Type 'Foo<V>' is not assignable to type 'Foo<U>'.
-    Type 'V' is not assignable to type 'U'.
-      Type 'Foo<V>' is not assignable to type 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(135,9): error TS2416: Property 'foo' in type 'D5<T, U, V>' is not assignable to the same property in base type 'Foo<U>'.
+  Type 'U' is not assignable to type 'Foo<U>'.
+    Type 'Foo<T>' is not assignable to type 'Foo<U>'.
+      Type 'T' is not assignable to type 'U'.
+        Type 'Foo<U>' is not assignable to type 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(140,9): error TS2416: Property 'foo' in type 'D6<T, U, V>' is not assignable to the same property in base type 'Foo<U>'.
+  Type 'V' is not assignable to type 'Foo<U>'.
+    Type 'Foo<V>' is not assignable to type 'Foo<U>'.
+      Type 'V' is not assignable to type 'U'.
+        Type 'Foo<V>' is not assignable to type 'U'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(140,9): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(145,9): error TS2416: Class member of type 'T' is not assignable to base class member of type 'Foo<V>'.
-  Type 'Foo<U>' is not assignable to type 'Foo<V>'.
-    Type 'U' is not assignable to type 'V'.
-      Type 'Foo<T>' is not assignable to type 'V'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(145,9): error TS2416: Property 'foo' in type 'D7<T, U, V>' is not assignable to the same property in base type 'Foo<V>'.
+  Type 'T' is not assignable to type 'Foo<V>'.
+    Type 'Foo<U>' is not assignable to type 'Foo<V>'.
+      Type 'U' is not assignable to type 'V'.
+        Type 'Foo<T>' is not assignable to type 'V'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(145,9): error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'V'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(150,9): error TS2416: Class member of type 'U' is not assignable to base class member of type 'Foo<V>'.
-  Type 'Foo<T>' is not assignable to type 'Foo<V>'.
-    Type 'T' is not assignable to type 'V'.
-      Type 'Foo<U>' is not assignable to type 'V'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(150,9): error TS2416: Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'Foo<V>'.
+  Type 'U' is not assignable to type 'Foo<V>'.
+    Type 'Foo<T>' is not assignable to type 'Foo<V>'.
+      Type 'T' is not assignable to type 'V'.
+        Type 'Foo<U>' is not assignable to type 'V'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(150,9): error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'V'.
 
 
@@ -118,8 +130,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
             [x: string]: T;
             foo: U
             ~~~
-!!! error TS2416: Class member of type 'U' is not assignable to base class member of type 'T'.
-!!! error TS2416:   Type 'Foo<T>' is not assignable to type 'T'.
+!!! error TS2416: Property 'foo' in type 'D2<T, U, V>' is not assignable to the same property in base type 'T'.
+!!! error TS2416:   Type 'U' is not assignable to type 'T'.
+!!! error TS2416:     Type 'Foo<T>' is not assignable to type 'T'.
             ~~~~~~
 !!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
         }
@@ -128,8 +141,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
             [x: string]: T;
             foo: V
             ~~~
-!!! error TS2416: Class member of type 'V' is not assignable to base class member of type 'T'.
-!!! error TS2416:   Type 'Foo<V>' is not assignable to type 'T'.
+!!! error TS2416: Property 'foo' in type 'D3<T, U, V>' is not assignable to the same property in base type 'T'.
+!!! error TS2416:   Type 'V' is not assignable to type 'T'.
+!!! error TS2416:     Type 'Foo<V>' is not assignable to type 'T'.
             ~~~~~~
 !!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
         }
@@ -138,8 +152,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
             [x: string]: U;
             foo: T
             ~~~
-!!! error TS2416: Class member of type 'T' is not assignable to base class member of type 'U'.
-!!! error TS2416:   Type 'Foo<U>' is not assignable to type 'U'.
+!!! error TS2416: Property 'foo' in type 'D4<T, U, V>' is not assignable to the same property in base type 'U'.
+!!! error TS2416:   Type 'T' is not assignable to type 'U'.
+!!! error TS2416:     Type 'Foo<U>' is not assignable to type 'U'.
             ~~~~~~
 !!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'U'.
         }
@@ -153,8 +168,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
             [x: string]: U;
             foo: V
             ~~~
-!!! error TS2416: Class member of type 'V' is not assignable to base class member of type 'U'.
-!!! error TS2416:   Type 'Foo<V>' is not assignable to type 'U'.
+!!! error TS2416: Property 'foo' in type 'D6<T, U, V>' is not assignable to the same property in base type 'U'.
+!!! error TS2416:   Type 'V' is not assignable to type 'U'.
+!!! error TS2416:     Type 'Foo<V>' is not assignable to type 'U'.
             ~~~~~~
 !!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
         }
@@ -163,8 +179,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
             [x: string]: V;
             foo: T
             ~~~
-!!! error TS2416: Class member of type 'T' is not assignable to base class member of type 'V'.
-!!! error TS2416:   Type 'Foo<U>' is not assignable to type 'V'.
+!!! error TS2416: Property 'foo' in type 'D7<T, U, V>' is not assignable to the same property in base type 'V'.
+!!! error TS2416:   Type 'T' is not assignable to type 'V'.
+!!! error TS2416:     Type 'Foo<U>' is not assignable to type 'V'.
             ~~~~~~
 !!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'V'.
         }
@@ -173,8 +190,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
             [x: string]: V;
             foo: U
             ~~~
-!!! error TS2416: Class member of type 'U' is not assignable to base class member of type 'V'.
-!!! error TS2416:   Type 'Foo<T>' is not assignable to type 'V'.
+!!! error TS2416: Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'V'.
+!!! error TS2416:   Type 'U' is not assignable to type 'V'.
+!!! error TS2416:     Type 'Foo<T>' is not assignable to type 'V'.
             ~~~~~~
 !!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'V'.
         }
@@ -195,10 +213,11 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
             [x: string]: T;
             foo: T
             ~~~
-!!! error TS2416: Class member of type 'T' is not assignable to base class member of type 'Foo<T>'.
-!!! error TS2416:   Type 'Foo<U>' is not assignable to type 'Foo<T>'.
-!!! error TS2416:     Type 'U' is not assignable to type 'T'.
-!!! error TS2416:       Type 'Foo<T>' is not assignable to type 'T'.
+!!! error TS2416: Property 'foo' in type 'D1<T, U, V>' is not assignable to the same property in base type 'Foo<T>'.
+!!! error TS2416:   Type 'T' is not assignable to type 'Foo<T>'.
+!!! error TS2416:     Type 'Foo<U>' is not assignable to type 'Foo<T>'.
+!!! error TS2416:       Type 'U' is not assignable to type 'T'.
+!!! error TS2416:         Type 'Foo<T>' is not assignable to type 'T'.
         }
     
         class D2<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
@@ -212,10 +231,11 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
             [x: string]: T;
             foo: V
             ~~~
-!!! error TS2416: Class member of type 'V' is not assignable to base class member of type 'Foo<T>'.
-!!! error TS2416:   Type 'Foo<V>' is not assignable to type 'Foo<T>'.
-!!! error TS2416:     Type 'V' is not assignable to type 'T'.
-!!! error TS2416:       Type 'Foo<V>' is not assignable to type 'T'.
+!!! error TS2416: Property 'foo' in type 'D3<T, U, V>' is not assignable to the same property in base type 'Foo<T>'.
+!!! error TS2416:   Type 'V' is not assignable to type 'Foo<T>'.
+!!! error TS2416:     Type 'Foo<V>' is not assignable to type 'Foo<T>'.
+!!! error TS2416:       Type 'V' is not assignable to type 'T'.
+!!! error TS2416:         Type 'Foo<V>' is not assignable to type 'T'.
             ~~~~~~
 !!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
         }
@@ -231,20 +251,22 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
             [x: string]: U;
             foo: U
             ~~~
-!!! error TS2416: Class member of type 'U' is not assignable to base class member of type 'Foo<U>'.
-!!! error TS2416:   Type 'Foo<T>' is not assignable to type 'Foo<U>'.
-!!! error TS2416:     Type 'T' is not assignable to type 'U'.
-!!! error TS2416:       Type 'Foo<U>' is not assignable to type 'U'.
+!!! error TS2416: Property 'foo' in type 'D5<T, U, V>' is not assignable to the same property in base type 'Foo<U>'.
+!!! error TS2416:   Type 'U' is not assignable to type 'Foo<U>'.
+!!! error TS2416:     Type 'Foo<T>' is not assignable to type 'Foo<U>'.
+!!! error TS2416:       Type 'T' is not assignable to type 'U'.
+!!! error TS2416:         Type 'Foo<U>' is not assignable to type 'U'.
         }
     
         class D6<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
             [x: string]: U;
             foo: V
             ~~~
-!!! error TS2416: Class member of type 'V' is not assignable to base class member of type 'Foo<U>'.
-!!! error TS2416:   Type 'Foo<V>' is not assignable to type 'Foo<U>'.
-!!! error TS2416:     Type 'V' is not assignable to type 'U'.
-!!! error TS2416:       Type 'Foo<V>' is not assignable to type 'U'.
+!!! error TS2416: Property 'foo' in type 'D6<T, U, V>' is not assignable to the same property in base type 'Foo<U>'.
+!!! error TS2416:   Type 'V' is not assignable to type 'Foo<U>'.
+!!! error TS2416:     Type 'Foo<V>' is not assignable to type 'Foo<U>'.
+!!! error TS2416:       Type 'V' is not assignable to type 'U'.
+!!! error TS2416:         Type 'Foo<V>' is not assignable to type 'U'.
             ~~~~~~
 !!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
         }
@@ -253,10 +275,11 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
             [x: string]: V;
             foo: T
             ~~~
-!!! error TS2416: Class member of type 'T' is not assignable to base class member of type 'Foo<V>'.
-!!! error TS2416:   Type 'Foo<U>' is not assignable to type 'Foo<V>'.
-!!! error TS2416:     Type 'U' is not assignable to type 'V'.
-!!! error TS2416:       Type 'Foo<T>' is not assignable to type 'V'.
+!!! error TS2416: Property 'foo' in type 'D7<T, U, V>' is not assignable to the same property in base type 'Foo<V>'.
+!!! error TS2416:   Type 'T' is not assignable to type 'Foo<V>'.
+!!! error TS2416:     Type 'Foo<U>' is not assignable to type 'Foo<V>'.
+!!! error TS2416:       Type 'U' is not assignable to type 'V'.
+!!! error TS2416:         Type 'Foo<T>' is not assignable to type 'V'.
             ~~~~~~
 !!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'V'.
         }
@@ -265,10 +288,11 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
             [x: string]: V;
             foo: U
             ~~~
-!!! error TS2416: Class member of type 'U' is not assignable to base class member of type 'Foo<V>'.
-!!! error TS2416:   Type 'Foo<T>' is not assignable to type 'Foo<V>'.
-!!! error TS2416:     Type 'T' is not assignable to type 'V'.
-!!! error TS2416:       Type 'Foo<U>' is not assignable to type 'V'.
+!!! error TS2416: Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'Foo<V>'.
+!!! error TS2416:   Type 'U' is not assignable to type 'Foo<V>'.
+!!! error TS2416:     Type 'Foo<T>' is not assignable to type 'Foo<V>'.
+!!! error TS2416:       Type 'T' is not assignable to type 'V'.
+!!! error TS2416:         Type 'Foo<U>' is not assignable to type 'V'.
             ~~~~~~
 !!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'V'.
         }

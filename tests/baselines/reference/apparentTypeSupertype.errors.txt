@@ -1,6 +1,7 @@
-tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSupertype.ts(10,5): error TS2416: Class member of type 'U' is not assignable to base class member of type 'string'.
-  Type 'String' is not assignable to type 'string'.
-    'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
+tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSupertype.ts(10,5): error TS2416: Property 'x' in type 'Derived<U>' is not assignable to the same property in base type 'string'.
+  Type 'U' is not assignable to type 'string'.
+    Type 'String' is not assignable to type 'string'.
+      'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
 
 
 ==== tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSupertype.ts (1 errors) ====
@@ -15,7 +16,8 @@ tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSuperty
     class Derived<U extends String> extends Base { // error
         x: U;
         ~
-!!! error TS2416: Class member of type 'U' is not assignable to base class member of type 'string'.
-!!! error TS2416:   Type 'String' is not assignable to type 'string'.
-!!! error TS2416:     'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
+!!! error TS2416: Property 'x' in type 'Derived<U>' is not assignable to the same property in base type 'string'.
+!!! error TS2416:   Type 'U' is not assignable to type 'string'.
+!!! error TS2416:     Type 'String' is not assignable to type 'string'.
+!!! error TS2416:       'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
     }
