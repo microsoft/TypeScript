@@ -9470,9 +9470,8 @@ namespace ts {
 
                 diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo));
             }
-            const answer = result !== Ternary.False;
             // Check if we should issue an extra diagnostic to produce a quickfix for a slightly incorrect import statement
-            if (headMessage && errorNode && !answer && source.symbol) {
+            if (headMessage && errorNode && !result && source.symbol) {
                 const links = getSymbolLinks(source.symbol);
                 if (links.originatingImport && !isImportCall(links.originatingImport)) {
                     const helpfulRetry = checkTypeRelatedTo(getTypeOfSymbol(links.target), target, relation, /*errorNode*/ undefined);
@@ -9482,7 +9481,7 @@ namespace ts {
                     }
                 }
             }
-            return answer;
+            return result !== Ternary.False;
 
             function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): void {
                 Debug.assert(!!errorNode);
