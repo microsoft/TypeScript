@@ -128,6 +128,8 @@ namespace Harness.Parallel.Worker {
             skip() { return this; },
             timeout(n) {
                 timeout = n as number;
+                const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: timeout } };
+                process.send(timeoutMsg);
                 return this;
             },
             retries() { return this; },
@@ -145,20 +147,22 @@ namespace Harness.Parallel.Worker {
             }
         }
         if (callback.length === 0) {
-            setTimeoutAndExecute(timeout, () => {
-                try {
-                    // TODO: If we ever start using async test completions, polyfill promise return handling
-                    callback.call(fakeContext);
+            try {
+                // TODO: If we ever start using async test completions, polyfill promise return handling
+                callback.call(fakeContext);
+            }
+            catch (error) {
+                errors.push({ error: error.message, stack: error.stack, name: [...namestack] });
+                return;
+            }
+            finally {
+                namestack.pop();
+                if (timeout !== undefined) {
+                    const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: "reset" } };
+                    process.send(timeoutMsg);
                 }
-                catch (error) {
-                    errors.push({ error: error.message, stack: error.stack, name: [...namestack] });
-                    return;
-                }
-                finally {
-                    namestack.pop();
-                }
-                passing++;
-            });
+            }
+            passing++;
         }
         else {
             // Uses `done` callback
@@ -183,6 +187,10 @@ namespace Harness.Parallel.Worker {
             }
             finally {
                 namestack.pop();
+                if (timeout !== undefined) {
+                    const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: "reset" } };
+                    process.send(timeoutMsg);
+                }
             }
             if (!completed) {
                 errors.push({ error: "Test completes asynchronously, which is unsupported by the parallel harness", stack: "", name: [...namestack] });

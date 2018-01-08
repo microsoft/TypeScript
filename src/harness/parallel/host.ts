@@ -151,7 +151,7 @@ namespace Harness.Parallel.Host {
             let currentTimeout = defaultTimeout;
             const killChild = () => {
                 child.kill();
-                console.error(`Worker exceeded timeout ${child.currentTasks && child.currentTasks.length ? `while running test '${child.currentTasks[0].file}'.` : `during test setup.`}`);
+                console.error(`Worker exceeded ${currentTimeout}ms timeout ${child.currentTasks && child.currentTasks.length ? `while running test '${child.currentTasks[0].file}'.` : `during test setup.`}`);
                 return process.exit(2);
             };
             let timer = setTimeout(killChild, currentTimeout);
@@ -176,6 +176,7 @@ namespace Harness.Parallel.Host {
                         return process.exit(2);
                     }
                     case "timeout": {
+                        clearTimeout(timer);
                         if (data.payload.duration === "reset") {
                             currentTimeout = timeoutStack.pop() || defaultTimeout;
                         }
@@ -183,6 +184,7 @@ namespace Harness.Parallel.Host {
                             timeoutStack.push(currentTimeout);
                             currentTimeout = data.payload.duration;
                         }
+                        timer = setTimeout(killChild, currentTimeout); // Reset timeout on timeout update, for when a timeout changes while a suite is executing
                         break;
                     }
                     case "progress":
