@@ -1,0 +1,24 @@
+=== tests/cases/conformance/types/regexValidated/regexValidated.declarations.ts ===
+type Apple = /apple/i;
+>Apple : Symbol(Apple, Decl(regexValidated.declarations.ts, 0, 0))
+
+export type Banana = /banana/i;
+>Banana : Symbol(Banana, Decl(regexValidated.declarations.ts, 0, 22))
+
+const x = {
+>x : Symbol(x, Decl(regexValidated.declarations.ts, 2, 5))
+
+    a: "apple" as Apple,
+>a : Symbol(a, Decl(regexValidated.declarations.ts, 2, 11))
+>Apple : Symbol(Apple, Decl(regexValidated.declarations.ts, 0, 0))
+
+    b: "banana" as Banana,
+>b : Symbol(b, Decl(regexValidated.declarations.ts, 3, 24))
+>Banana : Symbol(Banana, Decl(regexValidated.declarations.ts, 0, 22))
+
+    c: "banana" as /banana/i
+>c : Symbol(c, Decl(regexValidated.declarations.ts, 4, 26))
+}
+export default x;
+>x : Symbol(x, Decl(regexValidated.declarations.ts, 2, 5))
+

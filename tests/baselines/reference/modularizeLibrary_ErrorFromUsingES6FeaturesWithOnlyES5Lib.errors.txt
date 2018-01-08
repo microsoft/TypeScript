@@ -6,7 +6,7 @@ tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.t
 tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(29,18): error TS2304: Cannot find name 'Symbol'.
 tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(33,13): error TS2304: Cannot find name 'Proxy'.
 tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(36,1): error TS2304: Cannot find name 'Reflect'.
-tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(40,5): error TS2339: Property 'flags' does not exist on type 'RegExp'.
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(40,5): error TS2339: Property 'flags' does not exist on type 'RegExp<string>'.
 tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(44,5): error TS2339: Property 'includes' does not exist on type 'string'.
 tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(47,9): error TS2304: Cannot find name 'Symbol'.
 tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(51,6): error TS2304: Cannot find name 'Symbol'.
@@ -70,7 +70,7 @@ tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.t
     var reg = new RegExp("/s");
     reg.flags;
         ~~~~~
-!!! error TS2339: Property 'flags' does not exist on type 'RegExp'.
+!!! error TS2339: Property 'flags' does not exist on type 'RegExp<string>'.
     
     // Using ES6 string
     var str = "Hello world";

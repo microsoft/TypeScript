@@ -5,6 +5,6 @@ href.match(/:\/\/(.[^/]+)/)[1];
 >href.match : any
 >href : any
 >match : any
->/:\/\/(.[^/]+)/ : RegExp
+>/:\/\/(.[^/]+)/ : RegExp</:\/\/(.[^/]+)/>
 >1 : 1
 

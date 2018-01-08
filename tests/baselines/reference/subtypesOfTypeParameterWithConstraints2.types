@@ -319,25 +319,25 @@ function f8<T extends Date>(x: T) {
 }
 
 function f9<T extends RegExp>(x: T) {
->f9 : <T extends RegExp>(x: T) => void
+>f9 : <T extends RegExp<string>>(x: T) => void
 >T : T
->RegExp : RegExp
+>RegExp : RegExp<T>
 >x : T
 >T : T
 
     var r5 = true ? /1/ : x; // ok
->r5 : RegExp
->true ? /1/ : x : RegExp
+>r5 : T | RegExp</1/>
+>true ? /1/ : x : T | RegExp</1/>
 >true : true
->/1/ : RegExp
+>/1/ : RegExp</1/>
 >x : T
 
     var r5 = true ? x : /1/; // ok
->r5 : RegExp
->true ? x : /1/ : RegExp
+>r5 : T | RegExp</1/>
+>true ? x : /1/ : T | RegExp</1/>
 >true : true
 >x : T
->/1/ : RegExp
+>/1/ : RegExp</1/>
 }
 
 function f10<T extends { foo: number }>(x: T) {

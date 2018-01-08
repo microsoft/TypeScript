@@ -1,22 +1,22 @@
 === tests/cases/conformance/controlFlow/controlFlowIfStatement.ts ===
 let x: string | number | boolean | RegExp;
->x : string | number | boolean | RegExp
->RegExp : RegExp
+>x : string | number | boolean | RegExp<string>
+>RegExp : RegExp<T>
 
 let cond: boolean;
 >cond : boolean
 
 x = /a/;
->x = /a/ : RegExp
->x : string | number | boolean | RegExp
->/a/ : RegExp
+>x = /a/ : RegExp</a/>
+>x : string | number | boolean | RegExp<string>
+>/a/ : RegExp</a/>
 
 if (x /* RegExp */, (x = true)) {
 >x /* RegExp */, (x = true) : true
->x : RegExp
+>x : RegExp<string>
 >(x = true) : true
 >x = true : true
->x : string | number | boolean | RegExp
+>x : string | number | boolean | RegExp<string>
 >true : true
 
     x; // boolean
@@ -24,7 +24,7 @@ if (x /* RegExp */, (x = true)) {
 
     x = "";
 >x = "" : ""
->x : string | number | boolean | RegExp
+>x : string | number | boolean | RegExp<string>
 >"" : ""
 }
 else {
@@ -33,7 +33,7 @@ else {
 
     x = 42;
 >x = 42 : 42
->x : string | number | boolean | RegExp
+>x : string | number | boolean | RegExp<string>
 >42 : 42
 }
 x; // string | number

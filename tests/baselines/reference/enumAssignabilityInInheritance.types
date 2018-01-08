@@ -111,13 +111,13 @@ var r4 = foo4(E.A);
 >A : E
 
 declare function foo5(x: RegExp): RegExp;
->foo5 : { (x: RegExp): RegExp; (x: E): E; }
->x : RegExp
->RegExp : RegExp
->RegExp : RegExp
+>foo5 : { (x: RegExp<string>): RegExp<string>; (x: E): E; }
+>x : RegExp<string>
+>RegExp : RegExp<T>
+>RegExp : RegExp<T>
 
 declare function foo5(x: E): E;
->foo5 : { (x: RegExp): RegExp; (x: E): E; }
+>foo5 : { (x: RegExp<string>): RegExp<string>; (x: E): E; }
 >x : E
 >E : E
 >E : E
@@ -125,7 +125,7 @@ declare function foo5(x: E): E;
 var r4 = foo5(E.A);
 >r4 : E
 >foo5(E.A) : E
->foo5 : { (x: RegExp): RegExp; (x: E): E; }
+>foo5 : { (x: RegExp<string>): RegExp<string>; (x: E): E; }
 >E.A : E
 >E : typeof E
 >A : E

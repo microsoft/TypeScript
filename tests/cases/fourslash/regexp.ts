@@ -2,4 +2,4 @@
 
 ////var /**/x = /aa/;
 
-verify.quickInfoAt("", "var x: RegExp");
+verify.quickInfoAt("", "var x: RegExp</aa/>");

@@ -243,8 +243,8 @@ module TypeScriptAllInOne {
 >"'" : "'"
 
             var reg = /\w*/;
->reg : RegExp
->/\w*/ : RegExp
+>reg : RegExp</\w*/>
+>/\w*/ : RegExp</\w*/>
 
             var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; },  instanceof : () => 'objLit{42}' };
 >objLit : { "var": number; equals: (x: any) => boolean; instanceof: () => string; }
@@ -292,7 +292,7 @@ module TypeScriptAllInOne {
 >toString : (radix?: number) => string
 >reg.toString() : string
 >reg.toString : () => string
->reg : RegExp
+>reg : RegExp</\w*/>
 >toString : () => string
 >objLit : { "var": number; equals: (x: any) => boolean; instanceof: () => string; }
 >weekday : Weekdays.Monday

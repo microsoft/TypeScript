@@ -4,12 +4,12 @@ var x = 5;
 >5 : 5
 
 var r = /yo/;
->r : RegExp
->/yo/ : RegExp
+>r : RegExp</yo/>
+>/yo/ : RegExp</yo/>
 
 r.source;
 >r.source : string
->r : RegExp
+>r : RegExp</yo/>
 >source : string
 
 x.toBAZ();
@@ -57,9 +57,9 @@ var f: Function = (x: string) => x.length;
 >length : number
 
 var r2: RegExp = /./g;
->r2 : RegExp
->RegExp : RegExp
->/./g : RegExp
+>r2 : RegExp<string>
+>RegExp : RegExp<T>
+>/./g : RegExp</./g>
 
 var n2: Number = 34;
 >n2 : Number

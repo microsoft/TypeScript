@@ -44,14 +44,14 @@ var k = 'q\tq';
 >'q\tq' : "q\tq"
 
 var m = /q/;
->m : RegExp
->/q/ : RegExp
+>m : RegExp</q/>
+>/q/ : RegExp</q/>
 
 var n = /\d+/g;
->n : RegExp
->/\d+/g : RegExp
+>n : RegExp</\d+/g>
+>/\d+/g : RegExp</\d+/g>
 
 var o = /[3-5]+/i;
->o : RegExp
->/[3-5]+/i : RegExp
+>o : RegExp</[3-5]+/i>
+>/[3-5]+/i : RegExp</[3-5]+/i>
 

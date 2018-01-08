@@ -29,7 +29,7 @@ func(x); // string
 >x : any
 
 var func2: {
->func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }
+>func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp<string>; (s: any, t: any): string; }
 
     (s: string, t: string): number;
 >s : string
@@ -42,7 +42,7 @@ var func2: {
     (s: string, t: any): RegExp;
 >s : string
 >t : any
->RegExp : RegExp
+>RegExp : RegExp<T>
 
     (s: any, t: any): string;
 >s : any
@@ -51,25 +51,25 @@ var func2: {
 
 func2(x, x); // string
 >func2(x, x) : string
->func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }
+>func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp<string>; (s: any, t: any): string; }
 >x : any
 >x : any
 
 func2("", ""); // number
 >func2("", "") : number
->func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }
+>func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp<string>; (s: any, t: any): string; }
 >"" : ""
 >"" : ""
 
 func2(x, ""); // boolean
 >func2(x, "") : boolean
->func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }
+>func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp<string>; (s: any, t: any): string; }
 >x : any
 >"" : ""
 
 func2("", x); // RegExp
->func2("", x) : RegExp
->func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }
+>func2("", x) : RegExp<string>
+>func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp<string>; (s: any, t: any): string; }
 >"" : ""
 >x : any
 

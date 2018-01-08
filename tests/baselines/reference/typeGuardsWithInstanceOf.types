@@ -26,6 +26,6 @@ if (!(result instanceof RegExp)) {
 } else if (!result.global) {
 >!result.global : boolean
 >result.global : (string & true) | (string & false)
->result : I & RegExp
+>result : I & RegExp<string>
 >global : (string & true) | (string & false)
 }

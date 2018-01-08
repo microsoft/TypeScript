@@ -6,15 +6,15 @@
 >M : typeof M
 
     export function RegExp(pattern: string): RegExp;
->RegExp : { (pattern: string): RegExp; (pattern: string, flags: string): RegExp; }
+>RegExp : { (pattern: string): RegExp<string>; (pattern: string, flags: string): RegExp<string>; }
 >pattern : string
->RegExp : RegExp
+>RegExp : RegExp<T>
 
     export function RegExp(pattern: string, flags: string): RegExp;
->RegExp : { (pattern: string): RegExp; (pattern: string, flags: string): RegExp; }
+>RegExp : { (pattern: string): RegExp<string>; (pattern: string, flags: string): RegExp<string>; }
 >pattern : string
 >flags : string
->RegExp : RegExp
+>RegExp : RegExp<T>
 
     export class RegExp {
 >RegExp : M.RegExp

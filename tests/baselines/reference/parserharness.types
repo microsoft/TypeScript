@@ -46,10 +46,10 @@ function switchToForwardSlashes(path: string) {
 
     return path.replace(/\\/g, "/");
 >path.replace(/\\/g, "/") : string
->path.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>path.replace : { (searchValue: string | RegExp<string>, replaceValue: string): string; (searchValue: string | RegExp<string>, replacer: (substring: string, ...args: any[]) => string): string; }
 >path : string
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->/\\/g : RegExp
+>replace : { (searchValue: string | RegExp<string>, replaceValue: string): string; (searchValue: string | RegExp<string>, replacer: (substring: string, ...args: any[]) => string): string; }
+>/\\/g : RegExp</\\/g>
 >"/" : "/"
 }
 
@@ -67,9 +67,9 @@ function filePath(fullPath: string) {
     var components = fullPath.split("/");
 >components : string[]
 >fullPath.split("/") : string[]
->fullPath.split : (separator: string | RegExp, limit?: number) => string[]
+>fullPath.split : (separator: string | RegExp<string>, limit?: number) => string[]
 >fullPath : string
->split : (separator: string | RegExp, limit?: number) => string[]
+>split : (separator: string | RegExp<string>, limit?: number) => string[]
 >"/" : "/"
 
     var path: string[] = components.slice(0, components.length - 1);
@@ -287,10 +287,10 @@ module Harness {
             var bugs = content.match(/\bbug (\d+)/i);
 >bugs : RegExpMatchArray
 >content.match(/\bbug (\d+)/i) : RegExpMatchArray
->content.match : (regexp: string | RegExp) => RegExpMatchArray
+>content.match : (regexp: string | RegExp<string>) => RegExpMatchArray
 >content : string
->match : (regexp: string | RegExp) => RegExpMatchArray
->/\bbug (\d+)/i : RegExp
+>match : (regexp: string | RegExp<string>) => RegExpMatchArray
+>/\bbug (\d+)/i : RegExp</\bbug (\d+)/i>
 
             if (bugs) {
 >bugs : RegExpMatchArray
@@ -535,10 +535,10 @@ module Harness {
 >text1.replace : any
 >text1 : any
 >replace : any
->/^\s+|\s+$/g : RegExp
+>/^\s+|\s+$/g : RegExp</^\s+|\s+$/g>
 >"" : ""
 >replace : any
->/\r\n?/g : RegExp
+>/\r\n?/g : RegExp</\r\n?/g>
 >"\n" : "\n"
 
             text2 = text2.replace(/^\s+|\s+$/g, "").replace(/\r\n?/g, "\n");
@@ -550,10 +550,10 @@ module Harness {
 >text2.replace : any
 >text2 : any
 >replace : any
->/^\s+|\s+$/g : RegExp
+>/^\s+|\s+$/g : RegExp</^\s+|\s+$/g>
 >"" : ""
 >replace : any
->/\r\n?/g : RegExp
+>/\r\n?/g : RegExp</\r\n?/g>
 >"\n" : "\n"
 
             if (text1 !== text2) {
@@ -571,7 +571,7 @@ module Harness {
 >text1.split : any
 >text1 : any
 >split : any
->/\n/ : RegExp
+>/\n/ : RegExp</\n/>
 
                 var text2Lines = text2.split(/\n/);
 >text2Lines : any
@@ -579,7 +579,7 @@ module Harness {
 >text2.split : any
 >text2 : any
 >split : any
->/\n/ : RegExp
+>/\n/ : RegExp</\n/>
 
                 for (var i = 0; i < text1Lines.length; i++) {
 >i : number
@@ -782,9 +782,9 @@ module Harness {
         var lines = content.split('\r\n');
 >lines : string[]
 >content.split('\r\n') : string[]
->content.split : (separator: string | RegExp, limit?: number) => string[]
+>content.split : (separator: string | RegExp<string>, limit?: number) => string[]
 >content : string
->split : (separator: string | RegExp, limit?: number) => string[]
+>split : (separator: string | RegExp<string>, limit?: number) => string[]
 >'\r\n' : "\r\n"
 
         if (lines.length === 1) {
@@ -798,9 +798,9 @@ module Harness {
 >lines = content.split('\n') : string[]
 >lines : string[]
 >content.split('\n') : string[]
->content.split : (separator: string | RegExp, limit?: number) => string[]
+>content.split : (separator: string | RegExp<string>, limit?: number) => string[]
 >content : string
->split : (separator: string | RegExp, limit?: number) => string[]
+>split : (separator: string | RegExp<string>, limit?: number) => string[]
 >'\n' : "\n"
         }
         return lines;
@@ -2925,9 +2925,9 @@ module Harness {
 
             return /\.d\.ts$/.test(filename);
 >/\.d\.ts$/.test(filename) : boolean
->/\.d\.ts$/.test : (string: string) => boolean
->/\.d\.ts$/ : RegExp
->test : (string: string) => boolean
+>/\.d\.ts$/.test : (string: string) => string is /\.d\.ts$/
+>/\.d\.ts$/ : RegExp</\.d\.ts$/>
+>test : (string: string) => string is /\.d\.ts$/
 >filename : string
         }
 
@@ -4940,12 +4940,12 @@ module Harness {
                         var match = errorLines[i].match(/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/);
 >match : RegExpMatchArray
 >errorLines[i].match(/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/) : RegExpMatchArray
->errorLines[i].match : (regexp: string | RegExp) => RegExpMatchArray
+>errorLines[i].match : (regexp: string | RegExp<string>) => RegExpMatchArray
 >errorLines[i] : string
 >errorLines : string[]
 >i : number
->match : (regexp: string | RegExp) => RegExpMatchArray
->/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/ : RegExp
+>match : (regexp: string | RegExp<string>) => RegExpMatchArray
+>/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/ : RegExp</([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/>
 
                         if (match) {
 >match : RegExpMatchArray
@@ -5374,10 +5374,10 @@ module Harness {
 >filename : string
 >path.match(/[^\/]*$/)[0] : string
 >path.match(/[^\/]*$/) : RegExpMatchArray
->path.match : (regexp: string | RegExp) => RegExpMatchArray
+>path.match : (regexp: string | RegExp<string>) => RegExpMatchArray
 >path : string
->match : (regexp: string | RegExp) => RegExpMatchArray
->/[^\/]*$/ : RegExp
+>match : (regexp: string | RegExp<string>) => RegExpMatchArray
+>/[^\/]*$/ : RegExp</[^\/]*$/>
 >0 : 0
 
             var code = readFile(path);
@@ -5562,14 +5562,14 @@ module Harness {
 >unitName : string
 >switchToForwardSlashes(lastUnit.name).match(/[^\/]*$/)[0] : string
 >switchToForwardSlashes(lastUnit.name).match(/[^\/]*$/) : RegExpMatchArray
->switchToForwardSlashes(lastUnit.name).match : (regexp: string | RegExp) => RegExpMatchArray
+>switchToForwardSlashes(lastUnit.name).match : (regexp: string | RegExp<string>) => RegExpMatchArray
 >switchToForwardSlashes(lastUnit.name) : string
 >switchToForwardSlashes : (path: string) => string
 >lastUnit.name : string
 >lastUnit : TestCaseParser.TestUnitData
 >name : string
->match : (regexp: string | RegExp) => RegExpMatchArray
->/[^\/]*$/ : RegExp
+>match : (regexp: string | RegExp<string>) => RegExpMatchArray
+>/[^\/]*$/ : RegExp</[^\/]*$/>
 >0 : 0
 
             var dependencies = units.slice(0, units.length - 1);
@@ -5936,9 +5936,9 @@ module Harness {
 
         // Regex for parsing options in the format "@Alpha: Value of any sort"
         private optionRegex = /^[\/]{2}\s*@(\w+):\s*(\S*)/gm;  // multiple matches on multiple lines
->optionRegex = /^[\/]{2}\s*@(\w+):\s*(\S*)/gm : RegExp
+>optionRegex = /^[\/]{2}\s*@(\w+):\s*(\S*)/gm : RegExp</^[\/]{2}\s*@(\w+):\s*(\S*)/gm>
 >optionRegex : any
->/^[\/]{2}\s*@(\w+):\s*(\S*)/gm : RegExp
+>/^[\/]{2}\s*@(\w+):\s*(\S*)/gm : RegExp</^[\/]{2}\s*@(\w+):\s*(\S*)/gm>
 
         // List of allowed metadata names
         var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out"];
@@ -6064,9 +6064,9 @@ module Harness {
                 var isTripleSlashReference = /[\/]{3}\s*<reference path/.test(line);
 >isTripleSlashReference : boolean
 >/[\/]{3}\s*<reference path/.test(line) : boolean
->/[\/]{3}\s*<reference path/.test : (string: string) => boolean
->/[\/]{3}\s*<reference path/ : RegExp
->test : (string: string) => boolean
+>/[\/]{3}\s*<reference path/.test : (string: string) => string is /[\/]{3}\s*<reference path/
+>/[\/]{3}\s*<reference path/ : RegExp</[\/]{3}\s*<reference path/>
+>test : (string: string) => string is /[\/]{3}\s*<reference path/
 >line : string
 
                 var testMetaData = optionRegex.exec(line);
@@ -6084,10 +6084,10 @@ module Harness {
                     var isRef = line.match(/reference\spath='(\w*_?\w*\.?d?\.ts)'/);
 >isRef : RegExpMatchArray
 >line.match(/reference\spath='(\w*_?\w*\.?d?\.ts)'/) : RegExpMatchArray
->line.match : (regexp: string | RegExp) => RegExpMatchArray
+>line.match : (regexp: string | RegExp<string>) => RegExpMatchArray
 >line : string
->match : (regexp: string | RegExp) => RegExpMatchArray
->/reference\spath='(\w*_?\w*\.?d?\.ts)'/ : RegExp
+>match : (regexp: string | RegExp<string>) => RegExpMatchArray
+>/reference\spath='(\w*_?\w*\.?d?\.ts)'/ : RegExp</reference\spath='(\w*_?\w*\.?d?\.ts)'/>
 
                     if (isRef) {
 >isRef : RegExpMatchArray
@@ -7840,10 +7840,10 @@ module Harness {
 >path : string
 >path.match(/[^\/]*$/)[0] : string
 >path.match(/[^\/]*$/) : RegExpMatchArray
->path.match : (regexp: string | RegExp) => RegExpMatchArray
+>path.match : (regexp: string | RegExp<string>) => RegExpMatchArray
 >path : string
->match : (regexp: string | RegExp) => RegExpMatchArray
->/[^\/]*$/ : RegExp
+>match : (regexp: string | RegExp<string>) => RegExpMatchArray
+>/[^\/]*$/ : RegExp</[^\/]*$/>
 >0 : 0
 >callback : (error: Error, result: any) => void
         }
@@ -8203,9 +8203,9 @@ module Harness {
 >reportContent = reportContent.replace(htmlTrailer, '') : string
 >reportContent : string
 >reportContent.replace(htmlTrailer, '') : string
->reportContent.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>reportContent.replace : { (searchValue: string | RegExp<string>, replaceValue: string): string; (searchValue: string | RegExp<string>, replacer: (substring: string, ...args: any[]) => string): string; }
 >reportContent : string
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>replace : { (searchValue: string | RegExp<string>, replaceValue: string): string; (searchValue: string | RegExp<string>, replacer: (substring: string, ...args: any[]) => string): string; }
 >htmlTrailer : string
 >'' : ""
 
@@ -8375,20 +8375,20 @@ module Harness {
 >expected = expected.replace(/\r\n?/g, '\n') : string
 >expected : string
 >expected.replace(/\r\n?/g, '\n') : string
->expected.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>expected.replace : { (searchValue: string | RegExp<string>, replaceValue: string): string; (searchValue: string | RegExp<string>, replacer: (substring: string, ...args: any[]) => string): string; }
 >expected : string
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->/\r\n?/g : RegExp
+>replace : { (searchValue: string | RegExp<string>, replaceValue: string): string; (searchValue: string | RegExp<string>, replacer: (substring: string, ...args: any[]) => string): string; }
+>/\r\n?/g : RegExp</\r\n?/g>
 >'\n' : "\n"
 
                 actual = actual.replace(/\r\n?/g, '\n')
 >actual = actual.replace(/\r\n?/g, '\n') : string
 >actual : string
 >actual.replace(/\r\n?/g, '\n') : string
->actual.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>actual.replace : { (searchValue: string | RegExp<string>, replaceValue: string): string; (searchValue: string | RegExp<string>, replacer: (substring: string, ...args: any[]) => string): string; }
 >actual : string
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->/\r\n?/g : RegExp
+>replace : { (searchValue: string | RegExp<string>, replaceValue: string): string; (searchValue: string | RegExp<string>, replacer: (substring: string, ...args: any[]) => string): string; }
+>/\r\n?/g : RegExp</\r\n?/g>
 >'\n' : "\n"
             }
 

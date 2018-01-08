@@ -1,7 +1,7 @@
 === tests/cases/conformance/controlFlow/controlFlowForInStatement.ts ===
 let x: string | number | boolean | RegExp | Function;
->x : string | number | boolean | Function | RegExp
->RegExp : RegExp
+>x : string | number | boolean | Function | RegExp<string>
+>RegExp : RegExp<T>
 >Function : Function
 
 let obj: any;
@@ -11,9 +11,9 @@ let cond: boolean;
 >cond : boolean
 
 x = /a/;
->x = /a/ : RegExp
->x : string | number | boolean | Function | RegExp
->/a/ : RegExp
+>x = /a/ : RegExp</a/>
+>x : string | number | boolean | Function | RegExp<string>
+>/a/ : RegExp</a/>
 
 for (let y in obj) {
 >y : string
@@ -21,7 +21,7 @@ for (let y in obj) {
 
     x = y;
 >x = y : string
->x : string | number | boolean | Function | RegExp
+>x : string | number | boolean | Function | RegExp<string>
 >y : string
 
     if (cond) {
@@ -29,7 +29,7 @@ for (let y in obj) {
 
         x = 42;
 >x = 42 : 42
->x : string | number | boolean | Function | RegExp
+>x : string | number | boolean | Function | RegExp<string>
 >42 : 42
 
         continue;
@@ -39,12 +39,12 @@ for (let y in obj) {
 
         x = true;
 >x = true : true
->x : string | number | boolean | Function | RegExp
+>x : string | number | boolean | Function | RegExp<string>
 >true : true
 
         break;
     }
 }
 x; // RegExp | string | number | boolean
->x : string | number | true | RegExp
+>x : string | number | true | RegExp<string>
 

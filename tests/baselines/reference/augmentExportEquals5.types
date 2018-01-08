@@ -36,8 +36,8 @@ declare module "express" {
 >T : T
 
             (name: string|RegExp, ...handlers: RequestHandler[]): T;
->name : string | RegExp
->RegExp : RegExp
+>name : string | RegExp<string>
+>RegExp : RegExp<T>
 >handlers : RequestHandler[]
 >RequestHandler : RequestHandler
 >T : T

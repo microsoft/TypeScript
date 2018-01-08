@@ -184,14 +184,14 @@ Reflect.isExtensible({});
 
 // Using Es6 regexp
 var reg = new RegExp("/s");
->reg : RegExp
->new RegExp("/s") : RegExp
+>reg : RegExp<string>
+>new RegExp("/s") : RegExp<string>
 >RegExp : RegExpConstructor
 >"/s" : "/s"
 
 reg.flags;
 >reg.flags : string
->reg : RegExp
+>reg : RegExp<string>
 >flags : string
 
 // Using ES6 string

@@ -18,17 +18,17 @@ if (Ca.test(c.href) || Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) && !/(\\?
 >c : any
 >href : any
 >/(\\?|&)adurl=/.test(c.href) : boolean
->/(\\?|&)adurl=/.test : (string: string) => boolean
->/(\\?|&)adurl=/ : RegExp
->test : (string: string) => boolean
+>/(\\?|&)adurl=/.test : (string: string) => string is /(\\?|&)adurl=/
+>/(\\?|&)adurl=/ : RegExp</(\\?|&)adurl=/>
+>test : (string: string) => string is /(\\?|&)adurl=/
 >c.href : any
 >c : any
 >href : any
 >!/(\\?|&)q=/.test(c.href) : boolean
 >/(\\?|&)q=/.test(c.href) : boolean
->/(\\?|&)q=/.test : (string: string) => boolean
->/(\\?|&)q=/ : RegExp
->test : (string: string) => boolean
+>/(\\?|&)q=/.test : (string: string) => string is /(\\?|&)q=/
+>/(\\?|&)q=/ : RegExp</(\\?|&)q=/>
+>test : (string: string) => string is /(\\?|&)q=/
 >c.href : any
 >c : any
 >href : any
@@ -36,9 +36,9 @@ if (Ca.test(c.href) || Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) && !/(\\?
 >/ (\\ ? | & ) rct = j / .test(c.href) || (d += "&rct=j"), /(\\?|&)q=/.test(c.href) || (d += "&q=" + encodeURIComponent(W("q") || W("as_q") || A), d = d.substring(0, 1948 - c.href.length)) : any
 >/ (\\ ? | & ) rct = j / .test(c.href) || (d += "&rct=j") : string | true
 >/ (\\ ? | & ) rct = j / .test(c.href) : boolean
->/ (\\ ? | & ) rct = j / .test : (string: string) => boolean
->/ (\\ ? | & ) rct = j / : RegExp
->test : (string: string) => boolean
+>/ (\\ ? | & ) rct = j / .test : (string: string) => string is / (\\ ? | & ) rct = j /
+>/ (\\ ? | & ) rct = j / : RegExp</ (\\ ? | & ) rct = j />
+>test : (string: string) => string is / (\\ ? | & ) rct = j /
 >c.href : any
 >c : any
 >href : any
@@ -48,9 +48,9 @@ if (Ca.test(c.href) || Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) && !/(\\?
 >"&rct=j" : "&rct=j"
 >/(\\?|&)q=/.test(c.href) || (d += "&q=" + encodeURIComponent(W("q") || W("as_q") || A), d = d.substring(0, 1948 - c.href.length)) : any
 >/(\\?|&)q=/.test(c.href) : boolean
->/(\\?|&)q=/.test : (string: string) => boolean
->/(\\?|&)q=/ : RegExp
->test : (string: string) => boolean
+>/(\\?|&)q=/.test : (string: string) => string is /(\\?|&)q=/
+>/(\\?|&)q=/ : RegExp</(\\?|&)q=/>
+>test : (string: string) => string is /(\\?|&)q=/
 >c.href : any
 >c : any
 >href : any

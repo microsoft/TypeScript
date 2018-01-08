@@ -34,6 +34,37 @@ namespace ts {
             (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
     }
 
+    /**
+     * A breakdown of the below regex:
+     * - ^ matches start of string
+     * - \/ matches opening slash
+     * - (.*) matches the contents of the regex
+     * - \/ matches the closing slash
+     * - ([im]*?)$ matches the flags at the end (non-greedy to ensure it goes from final slash), but only if they only consist of `m` and/or `i`
+     */
+    const regexpFlagExtractionRegExp = /^\/(.*)\/([im]*?)$/;
+    const noMatchesRegExp = /.^/; // Start of match after any character matches nothing
+
+    /* @internal */
+    export function getRegularExpressionForRegularExpressionValidatedType(t: RegularExpressionValidatedLiteralType) {
+        if (!t.regex) {
+            try {
+                const parts = regexpFlagExtractionRegExp.exec(t.value);
+                t.regex = parts ? new RegExp(parts[1], parts[2]) : noMatchesRegExp;
+            }
+            catch {
+                // RegExp pattern or flags unsupported by host; do not enable matching string literal types for this type
+                t.regex = noMatchesRegExp;
+            }
+        }
+        return t.regex;
+    }
+
+    /* @internal */
+    export function getRegularExpressionValidatedTypeIsExecutable(t: RegularExpressionValidatedLiteralType): boolean {
+        return getRegularExpressionForRegularExpressionValidatedType(t) !== noMatchesRegExp;
+    }
+
     export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
         // Cancellation that controls whether or not we can cancel in the middle of type checking.
         // In general cancelling is *not* safe for the type checker.  We might be in the middle of
@@ -2596,6 +2627,14 @@ namespace ts {
                     }
                     return createThis();
                 }
+                if (!inTypeAlias && type.aliasSymbol && isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration)) {
+                    const name = symbolToTypeReferenceName(type.aliasSymbol);
+                    const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
+                    return createTypeReferenceNode(name, typeArgumentNodes);
+                }
+                if (type.flags & TypeFlags.RegularExpressionValidated) {
+                    return createLiteralTypeNode(createRegularExpressionLiteral((type as LiteralType).value as string));
+                }
 
                 const objectFlags = getObjectFlags(type);
 
@@ -2607,11 +2646,6 @@ namespace ts {
                     const name = type.symbol ? symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false) : createIdentifier("?");
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
-                }
-                if (!inTypeAlias && type.aliasSymbol && isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration)) {
-                    const name = symbolToTypeReferenceName(type.aliasSymbol);
-                    const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
-                    return createTypeReferenceNode(name, typeArgumentNodes);
                 }
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
                     const types = type.flags & TypeFlags.Union ? formatUnionTypes((<UnionType>type).types) : (<IntersectionType>type).types;
@@ -3393,7 +3427,7 @@ namespace ts {
                         }
                         writeKeyword(writer, SyntaxKind.SymbolKeyword);
                     }
-                    else if (type.flags & TypeFlags.StringOrNumberLiteral) {
+                    else if (type.flags & (TypeFlags.StringOrNumberLiteral | TypeFlags.RegularExpressionValidated)) {
                         writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
                     }
                     else if (type.flags & TypeFlags.Index) {
@@ -5316,6 +5350,9 @@ namespace ts {
                 let type = typeNode ? getTypeFromTypeNode(typeNode) : unknownType;
 
                 if (popTypeResolution()) {
+                    if (type.flags & TypeFlags.RegularExpressionValidated && !type.aliasSymbol) {
+                        type.aliasSymbol = symbol;
+                    }
                     const typeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
                     if (typeParameters) {
                         // Initialize the instantiation cache for generic type aliases. The declared type corresponds to
@@ -8518,6 +8555,15 @@ namespace ts {
             return type.flags & TypeFlags.StringOrNumberLiteral && type.flags & TypeFlags.FreshLiteral ? (<LiteralType>type).regularType : type;
         }
 
+        function getRegularExpressionType(value: string) {
+            const key = "/" + value;
+            let type = literalTypes.get(key);
+            if (!type) {
+                literalTypes.set(key, type = createLiteralType(TypeFlags.RegularExpressionValidated, value, /*symbol*/ undefined));
+            }
+            return type;
+        }
+
         function getLiteralType(value: string | number, enumId?: number, symbol?: Symbol) {
             // We store all literal types in a single map with keys of the form '#NNN' and '@SSS',
             // where NNN is the text representation of a numeric literal and SSS are the characters
@@ -8536,7 +8582,12 @@ namespace ts {
         function getTypeFromLiteralTypeNode(node: LiteralTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getRegularTypeOfLiteralType(checkExpression(node.literal));
+                if (isRegularExpressionLiteral(node.literal)) {
+                    links.resolvedType = getRegularExpressionType(node.literal.text);
+                }
+                else {
+                    links.resolvedType = getRegularTypeOfLiteralType(checkExpression(node.literal));
+                }
             }
             return links.resolvedType;
         }
@@ -9355,6 +9406,7 @@ namespace ts {
             if (s & TypeFlags.StringLiteral && s & TypeFlags.EnumLiteral &&
                 t & TypeFlags.StringLiteral && !(t & TypeFlags.EnumLiteral) &&
                 (<LiteralType>source).value === (<LiteralType>target).value) return true;
+            if (s & TypeFlags.StringLiteral && t & TypeFlags.RegularExpressionValidated) return getRegularExpressionForRegularExpressionValidatedType(target as RegularExpressionValidatedLiteralType).test((source as StringLiteralType).value);
             if (s & TypeFlags.NumberLike && t & TypeFlags.Number) return true;
             if (s & TypeFlags.NumberLiteral && s & TypeFlags.EnumLiteral &&
                 t & TypeFlags.NumberLiteral && !(t & TypeFlags.EnumLiteral) &&
@@ -9372,6 +9424,7 @@ namespace ts {
             if (s & TypeFlags.Null && (!strictNullChecks || t & TypeFlags.Null)) return true;
             if (s & TypeFlags.Object && t & TypeFlags.NonPrimitive) return true;
             if (s & TypeFlags.UniqueESSymbol || t & TypeFlags.UniqueESSymbol) return false;
+            if (s & TypeFlags.RegularExpressionValidated && t & TypeFlags.RegularExpressionValidated) return false;
             if (relation === assignableRelation || relation === comparableRelation) {
                 if (s & TypeFlags.Any) return true;
                 // Type number or any numeric literal type is assignable to any numeric enum type or any
@@ -9473,6 +9526,9 @@ namespace ts {
                     }
                     else if (sourceType === targetType) {
                         message = Diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated;
+                    }
+                    else if (source.flags & TypeFlags.StringLiteral && target.flags & TypeFlags.RegularExpressionValidated && !getRegularExpressionValidatedTypeIsExecutable(target as RegularExpressionValidatedLiteralType)) {
+                        message = Diagnostics.Type_0_is_not_assignable_to_type_1_1_is_not_an_executable_regular_expression_so_a_cast_must_be_performed;
                     }
                     else {
                         message = Diagnostics.Type_0_is_not_assignable_to_type_1;
@@ -19157,6 +19213,13 @@ namespace ts {
             return stringType;
         }
 
+        function checkRegularExpressionLiteral(node: RegularExpressionLiteral): Type {
+            if (length((<InterfaceType>globalRegExpType).typeParameters) !== 1) {
+                return globalRegExpType;
+            }
+            return createTypeFromGenericGlobalType(globalRegExpType as GenericType, [getRegularExpressionType(node.text)]);
+        }
+
         function checkExpressionWithContextualType(node: Expression, contextualType: Type, contextualMapper: TypeMapper | undefined): Type {
             const saveContextualType = node.contextualType;
             const saveContextualMapper = node.contextualMapper;
@@ -19222,7 +19285,7 @@ namespace ts {
                 }
                 // If the contextual type is a literal of a particular primitive type, we consider this a
                 // literal context for all literals of that primitive type.
-                return contextualType.flags & (TypeFlags.StringLiteral | TypeFlags.Index) && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
+                return contextualType.flags & (TypeFlags.StringLiteral | TypeFlags.Index | TypeFlags.RegularExpressionValidated) && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
                     contextualType.flags & TypeFlags.NumberLiteral && maybeTypeOfKind(candidateType, TypeFlags.NumberLiteral) ||
                     contextualType.flags & TypeFlags.BooleanLiteral && maybeTypeOfKind(candidateType, TypeFlags.BooleanLiteral) ||
                     contextualType.flags & TypeFlags.UniqueESSymbol && maybeTypeOfKind(candidateType, TypeFlags.UniqueESSymbol);
@@ -19384,7 +19447,7 @@ namespace ts {
                 case SyntaxKind.TemplateExpression:
                     return checkTemplateExpression(<TemplateExpression>node);
                 case SyntaxKind.RegularExpressionLiteral:
-                    return globalRegExpType;
+                    return checkRegularExpressionLiteral(<RegularExpressionLiteral>node);
                 case SyntaxKind.ArrayLiteralExpression:
                     return checkArrayLiteral(<ArrayLiteralExpression>node, checkMode);
                 case SyntaxKind.ObjectLiteralExpression:
@@ -25395,7 +25458,11 @@ namespace ts {
             globalStringType = getGlobalType("String" as __String, /*arity*/ 0, /*reportErrors*/ true);
             globalNumberType = getGlobalType("Number" as __String, /*arity*/ 0, /*reportErrors*/ true);
             globalBooleanType = getGlobalType("Boolean" as __String, /*arity*/ 0, /*reportErrors*/ true);
-            globalRegExpType = getGlobalType("RegExp" as __String, /*arity*/ 0, /*reportErrors*/ true);
+            // RegExp is handled in a special manner below in order to allow it to be defined as 0-arity or 1-arity. 0-arity will disable a regex-validated guard on `.test`
+            const globalRegExpSymbol = getGlobalTypeSymbol("RegExp" as __String, /*reportErrors*/ true);
+            if (globalRegExpSymbol) {
+                globalRegExpType = getDeclaredTypeOfSymbol(globalRegExpSymbol) as ObjectType;
+            }
             anyArrayType = createArrayType(anyType);
 
             autoArrayType = createArrayType(autoType);

@@ -2015,11 +2015,12 @@ declare namespace ts {
         IndexedAccess = 1048576,
         NonPrimitive = 33554432,
         MarkerType = 134217728,
+        RegularExpressionValidated = 268435456,
         Literal = 224,
         Unit = 13536,
         StringOrNumberLiteral = 96,
         PossiblyFalsy = 14574,
-        StringLike = 524322,
+        StringLike = 268959778,
         NumberLike = 84,
         BooleanLike = 136,
         EnumLike = 272,
@@ -2028,7 +2029,7 @@ declare namespace ts {
         StructuredType = 458752,
         StructuredOrTypeVariable = 2064384,
         TypeVariable = 1081344,
-        Narrowable = 35620607,
+        Narrowable = 304056063,
         NotUnionOrUnit = 33620481,
     }
     type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -2049,6 +2050,10 @@ declare namespace ts {
     }
     interface StringLiteralType extends LiteralType {
         value: string;
+    }
+    interface RegularExpressionValidatedLiteralType extends LiteralType {
+        value: string;
+        regex?: RegExp;
     }
     interface NumberLiteralType extends LiteralType {
         value: number;
@@ -3292,6 +3297,7 @@ declare namespace ts {
     function createLiteral(value: boolean): BooleanLiteral;
     function createLiteral(value: string | number | boolean): PrimaryExpression;
     function createNumericLiteral(value: string): NumericLiteral;
+    function createRegularExpressionLiteral(text: string): RegularExpressionLiteral;
     function createIdentifier(text: string): Identifier;
     function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode> | undefined): Identifier;
     /** Create a unique temporary variable. */

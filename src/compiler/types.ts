@@ -3429,6 +3429,7 @@ namespace ts {
         /* @internal */
         JsxAttributes           = 1 << 26,  // Jsx attributes type
         MarkerType              = 1 << 27,  // Marker type used for variance probing
+        RegularExpressionValidated = 1 << 28,  // Type for strings matching a specific regular expression
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -3444,7 +3445,7 @@ namespace ts {
         Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
         /* @internal */
         Primitive = String | Number | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol,
-        StringLike = String | StringLiteral | Index,
+        StringLike = String | StringLiteral | Index | RegularExpressionValidated,
         NumberLike = Number | NumberLiteral | Enum,
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
@@ -3498,6 +3499,11 @@ namespace ts {
 
     export interface StringLiteralType extends LiteralType {
         value: string;
+    }
+
+    export interface RegularExpressionValidatedLiteralType extends LiteralType {
+        value: string;
+        regex?: RegExp;
     }
 
     export interface NumberLiteralType extends LiteralType {

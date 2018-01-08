@@ -56,7 +56,7 @@ declare var a;
 (<any>/regexp/g); 
 >(<any>/regexp/g) : any
 ><any>/regexp/g : any
->/regexp/g : RegExp
+>/regexp/g : RegExp</regexp/g>
 
 (<any>false); 
 >(<any>false) : any

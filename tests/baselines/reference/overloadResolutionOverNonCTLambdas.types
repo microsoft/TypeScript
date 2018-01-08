@@ -15,10 +15,10 @@ module Bugs {
     var result= message.replace(/\{(\d+)\}/g, function(match, ...rest) {
 >result : string
 >message.replace(/\{(\d+)\}/g, function(match, ...rest) {      var index= rest[0];      return typeof args[index] !== 'undefined'        ? args[index]        : match;    }) : string
->message.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>message.replace : { (searchValue: string | RegExp<string>, replaceValue: string): string; (searchValue: string | RegExp<string>, replacer: (substring: string, ...args: any[]) => string): string; }
 >message : string
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->/\{(\d+)\}/g : RegExp
+>replace : { (searchValue: string | RegExp<string>, replaceValue: string): string; (searchValue: string | RegExp<string>, replacer: (substring: string, ...args: any[]) => string): string; }
+>/\{(\d+)\}/g : RegExp</\{(\d+)\}/g>
 >function(match, ...rest) {      var index= rest[0];      return typeof args[index] !== 'undefined'        ? args[index]        : match;    } : (match: string, ...rest: any[]) => any
 >match : string
 >rest : any[]

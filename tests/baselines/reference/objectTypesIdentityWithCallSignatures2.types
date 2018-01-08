@@ -57,11 +57,11 @@ var a: { foo(x: Date): string }
 >Date : Date
 
 var b = { foo(x: RegExp) { return ''; } };
->b : { foo(x: RegExp): string; }
->{ foo(x: RegExp) { return ''; } } : { foo(x: RegExp): string; }
->foo : (x: RegExp) => string
->x : RegExp
->RegExp : RegExp
+>b : { foo(x: RegExp<string>): string; }
+>{ foo(x: RegExp) { return ''; } } : { foo(x: RegExp<string>): string; }
+>foo : (x: RegExp<string>) => string
+>x : RegExp<string>
+>RegExp : RegExp<T>
 >'' : ""
 
 function foo1(x: A);
@@ -135,17 +135,17 @@ function foo3(x: any) { }
 >x : any
 
 function foo4(x: typeof b);
->foo4 : { (x: { foo(x: RegExp): string; }): any; (x: { foo(x: RegExp): string; }): any; }
->x : { foo(x: RegExp): string; }
->b : { foo(x: RegExp): string; }
+>foo4 : { (x: { foo(x: RegExp<string>): string; }): any; (x: { foo(x: RegExp<string>): string; }): any; }
+>x : { foo(x: RegExp<string>): string; }
+>b : { foo(x: RegExp<string>): string; }
 
 function foo4(x: typeof b); // error
->foo4 : { (x: { foo(x: RegExp): string; }): any; (x: { foo(x: RegExp): string; }): any; }
->x : { foo(x: RegExp): string; }
->b : { foo(x: RegExp): string; }
+>foo4 : { (x: { foo(x: RegExp<string>): string; }): any; (x: { foo(x: RegExp<string>): string; }): any; }
+>x : { foo(x: RegExp<string>): string; }
+>b : { foo(x: RegExp<string>): string; }
 
 function foo4(x: any) { }
->foo4 : { (x: { foo(x: RegExp): string; }): any; (x: { foo(x: RegExp): string; }): any; }
+>foo4 : { (x: { foo(x: RegExp<string>): string; }): any; (x: { foo(x: RegExp<string>): string; }): any; }
 >x : any
 
 function foo5(x: A);
@@ -247,17 +247,17 @@ function foo10(x: any) { }
 >x : any
 
 function foo11(x: B);
->foo11 : { (x: B): any; (x: { foo(x: RegExp): string; }): any; }
+>foo11 : { (x: B): any; (x: { foo(x: RegExp<string>): string; }): any; }
 >x : B
 >B : B
 
 function foo11(x: typeof b); // ok
->foo11 : { (x: B): any; (x: { foo(x: RegExp): string; }): any; }
->x : { foo(x: RegExp): string; }
->b : { foo(x: RegExp): string; }
+>foo11 : { (x: B): any; (x: { foo(x: RegExp<string>): string; }): any; }
+>x : { foo(x: RegExp<string>): string; }
+>b : { foo(x: RegExp<string>): string; }
 
 function foo11(x: any) { }
->foo11 : { (x: B): any; (x: { foo(x: RegExp): string; }): any; }
+>foo11 : { (x: B): any; (x: { foo(x: RegExp<string>): string; }): any; }
 >x : any
 
 function foo12(x: I);
@@ -303,17 +303,17 @@ function foo13(x: any) { }
 >x : any
 
 function foo14(x: I);
->foo14 : { (x: I): any; (x: { foo(x: RegExp): string; }): any; }
+>foo14 : { (x: I): any; (x: { foo(x: RegExp<string>): string; }): any; }
 >x : I
 >I : I
 
 function foo14(x: typeof b); // ok
->foo14 : { (x: I): any; (x: { foo(x: RegExp): string; }): any; }
->x : { foo(x: RegExp): string; }
->b : { foo(x: RegExp): string; }
+>foo14 : { (x: I): any; (x: { foo(x: RegExp<string>): string; }): any; }
+>x : { foo(x: RegExp<string>): string; }
+>b : { foo(x: RegExp<string>): string; }
 
 function foo14(x: any) { }
->foo14 : { (x: I): any; (x: { foo(x: RegExp): string; }): any; }
+>foo14 : { (x: I): any; (x: { foo(x: RegExp<string>): string; }): any; }
 >x : any
 
 function foo15(x: I2<string>);

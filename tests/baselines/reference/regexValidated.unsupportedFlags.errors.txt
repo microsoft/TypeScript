@@ -1,0 +1,10 @@
+tests/cases/conformance/types/regexValidated/regexValidated.unsupportedFlags.ts(1,5): error TS2729: Type '"a"' is not assignable to type '/a/l'. '/a/l' is not an executable regular expression, so a cast must be performed.
+
+
+==== tests/cases/conformance/types/regexValidated/regexValidated.unsupportedFlags.ts (1 errors) ====
+    let a: /a/l = "a"; // Should error, runtime has no `l` flag, so type cannot be matched
+        ~
+!!! error TS2729: Type '"a"' is not assignable to type '/a/l'. '/a/l' is not an executable regular expression, so a cast must be performed.
+    
+    let b: /b/l = "b" as /b/l; // Should be fine, cast can work around inoperable flags
+    

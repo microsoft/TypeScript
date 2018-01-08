@@ -244,35 +244,35 @@ function foo12b(x: any) { }
 >x : any
 
 function foo13(x: I<string, Date, RegExp, Date>);
->foo13 : { (x: I<string, Date, RegExp, Date>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }
->x : I<string, Date, RegExp, Date>
+>foo13 : { (x: I<string, Date, RegExp<string>, Date>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }
+>x : I<string, Date, RegExp<string>, Date>
 >I : I<X, Y, Z, A>
 >Date : Date
->RegExp : RegExp
+>RegExp : RegExp<T>
 >Date : Date
 
 function foo13(x: typeof a); // ok
->foo13 : { (x: I<string, Date, RegExp, Date>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }
+>foo13 : { (x: I<string, Date, RegExp<string>, Date>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }
 >x : new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>
 >a : new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>
 
 function foo13(x: any) { }
->foo13 : { (x: I<string, Date, RegExp, Date>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }
+>foo13 : { (x: I<string, Date, RegExp<string>, Date>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }
 >x : any
 
 function foo14(x: I<string, Date, RegExp, boolean>);
->foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }
->x : I<string, Date, RegExp, boolean>
+>foo14 : { (x: I<string, Date, RegExp<string>, boolean>): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }
+>x : I<string, Date, RegExp<string>, boolean>
 >I : I<X, Y, Z, A>
 >Date : Date
->RegExp : RegExp
+>RegExp : RegExp<T>
 
 function foo14(x: typeof b); // ok
->foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }
+>foo14 : { (x: I<string, Date, RegExp<string>, boolean>): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }
 >x : { new<A, B, C, D, E, F>(x: A): A; }
 >b : { new<A, B, C, D, E, F>(x: A): A; }
 
 function foo14(x: any) { }
->foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }
+>foo14 : { (x: I<string, Date, RegExp<string>, boolean>): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }
 >x : any
 

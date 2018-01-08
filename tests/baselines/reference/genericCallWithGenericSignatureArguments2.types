@@ -98,9 +98,9 @@ module onlyT {
     }
 
     function other3<T extends RegExp>(x: T) {
->other3 : <T extends RegExp>(x: T) => void
+>other3 : <T extends RegExp<string>>(x: T) => void
 >T : T
->RegExp : RegExp
+>RegExp : RegExp<T>
 >x : T
 >T : T
 
@@ -278,9 +278,9 @@ module TU {
     }
 
     function other3<T extends RegExp>(x: T) {
->other3 : <T extends RegExp>(x: T) => void
+>other3 : <T extends RegExp<string>>(x: T) => void
 >T : T
->RegExp : RegExp
+>RegExp : RegExp<T>
 >x : T
 >T : T
 

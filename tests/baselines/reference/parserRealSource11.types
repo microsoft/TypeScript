@@ -11391,11 +11391,11 @@ module TypeScript {
 >this : this
 >text : string[]
 >this.content.split("\n") : string[]
->this.content.split : (separator: string | RegExp, limit?: number) => string[]
+>this.content.split : (separator: string | RegExp<string>, limit?: number) => string[]
 >this.content : string
 >this : this
 >content : string
->split : (separator: string | RegExp, limit?: number) => string[]
+>split : (separator: string | RegExp<string>, limit?: number) => string[]
 >"\n" : "\n"
 
                     for (var i = 0; i < this.text.length; i++) {
@@ -11419,14 +11419,14 @@ module TypeScript {
 >text : string[]
 >i : number
 >this.text[i].replace(/^\s+|\s+$/g, '') : string
->this.text[i].replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>this.text[i].replace : { (searchValue: string | RegExp<string>, replaceValue: string): string; (searchValue: string | RegExp<string>, replacer: (substring: string, ...args: any[]) => string): string; }
 >this.text[i] : string
 >this.text : string[]
 >this : this
 >text : string[]
 >i : number
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->/^\s+|\s+$/g : RegExp
+>replace : { (searchValue: string | RegExp<string>, replaceValue: string): string; (searchValue: string | RegExp<string>, replacer: (substring: string, ...args: any[]) => string): string; }
+>/^\s+|\s+$/g : RegExp</^\s+|\s+$/g>
 >'' : ""
                     }
                 }
@@ -11439,12 +11439,12 @@ module TypeScript {
 >[(this.content.replace(/^\s+|\s+$/g, ''))] : string[]
 >(this.content.replace(/^\s+|\s+$/g, '')) : string
 >this.content.replace(/^\s+|\s+$/g, '') : string
->this.content.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>this.content.replace : { (searchValue: string | RegExp<string>, replaceValue: string): string; (searchValue: string | RegExp<string>, replacer: (substring: string, ...args: any[]) => string): string; }
 >this.content : string
 >this : this
 >content : string
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->/^\s+|\s+$/g : RegExp
+>replace : { (searchValue: string | RegExp<string>, replaceValue: string): string; (searchValue: string | RegExp<string>, replacer: (substring: string, ...args: any[]) => string): string; }
+>/^\s+|\s+$/g : RegExp</^\s+|\s+$/g>
 >'' : ""
                 }
             }

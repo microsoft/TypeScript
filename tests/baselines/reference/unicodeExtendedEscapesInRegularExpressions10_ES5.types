@@ -4,6 +4,6 @@
 // Although we should just get back a single code point value of 0xD800,
 // this is a useful edge-case test.
 var x = /\u{D800}/g;
->x : RegExp
->/\u{D800}/g : RegExp
+>x : RegExp</\u{D800}/g>
+>/\u{D800}/g : RegExp</\u{D800}/g>
 

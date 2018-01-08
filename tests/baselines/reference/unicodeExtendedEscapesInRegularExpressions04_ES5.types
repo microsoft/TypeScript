@@ -1,5 +1,5 @@
 === tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInRegularExpressions04_ES5.ts ===
 var x = /\u{00000000}/g;
->x : RegExp
->/\u{00000000}/g : RegExp
+>x : RegExp</\u{00000000}/g>
+>/\u{00000000}/g : RegExp</\u{00000000}/g>
 

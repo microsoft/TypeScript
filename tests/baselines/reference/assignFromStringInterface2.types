@@ -42,48 +42,48 @@ interface NotString {
 >that : string
 
     match(regexp: string): string[];
->match : { (regexp: string): string[]; (regexp: RegExp): string[]; }
+>match : { (regexp: string): string[]; (regexp: RegExp<string>): string[]; }
 >regexp : string
 
     match(regexp: RegExp): string[];
->match : { (regexp: string): string[]; (regexp: RegExp): string[]; }
->regexp : RegExp
->RegExp : RegExp
+>match : { (regexp: string): string[]; (regexp: RegExp<string>): string[]; }
+>regexp : RegExp<string>
+>RegExp : RegExp<T>
 
     replace(searchValue: string, replaceValue: string): string;
->replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
+>replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp<string>, replaceValue: string): string; (searchValue: RegExp<string>, replaceValue: (substring: string, ...args: any[]) => string): string; }
 >searchValue : string
 >replaceValue : string
 
     replace(searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string;
->replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
+>replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp<string>, replaceValue: string): string; (searchValue: RegExp<string>, replaceValue: (substring: string, ...args: any[]) => string): string; }
 >searchValue : string
 >replaceValue : (substring: string, ...args: any[]) => string
 >substring : string
 >args : any[]
 
     replace(searchValue: RegExp, replaceValue: string): string;
->replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
->searchValue : RegExp
->RegExp : RegExp
+>replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp<string>, replaceValue: string): string; (searchValue: RegExp<string>, replaceValue: (substring: string, ...args: any[]) => string): string; }
+>searchValue : RegExp<string>
+>RegExp : RegExp<T>
 >replaceValue : string
 
     replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
->replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
->searchValue : RegExp
->RegExp : RegExp
+>replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp<string>, replaceValue: string): string; (searchValue: RegExp<string>, replaceValue: (substring: string, ...args: any[]) => string): string; }
+>searchValue : RegExp<string>
+>RegExp : RegExp<T>
 >replaceValue : (substring: string, ...args: any[]) => string
 >substring : string
 >args : any[]
 
     search(regexp: string): number;
->search : { (regexp: string): number; (regexp: RegExp): number; }
+>search : { (regexp: string): number; (regexp: RegExp<string>): number; }
 >regexp : string
 
     search(regexp: RegExp): number;
->search : { (regexp: string): number; (regexp: RegExp): number; }
->regexp : RegExp
->RegExp : RegExp
+>search : { (regexp: string): number; (regexp: RegExp<string>): number; }
+>regexp : RegExp<string>
+>RegExp : RegExp<T>
 
     slice(start?: number, end?: number): string;
 >slice : (start?: number, end?: number) => string
@@ -91,14 +91,14 @@ interface NotString {
 >end : number
 
     split(separator: string, limit?: number): string[];
->split : { (separator: string, limit?: number): string[]; (separator: RegExp, limit?: number): string[]; }
+>split : { (separator: string, limit?: number): string[]; (separator: RegExp<string>, limit?: number): string[]; }
 >separator : string
 >limit : number
 
     split(separator: RegExp, limit?: number): string[];
->split : { (separator: string, limit?: number): string[]; (separator: RegExp, limit?: number): string[]; }
->separator : RegExp
->RegExp : RegExp
+>split : { (separator: string, limit?: number): string[]; (separator: RegExp<string>, limit?: number): string[]; }
+>separator : RegExp<string>
+>RegExp : RegExp<T>
 >limit : number
 
     substring(start: number, end?: number): string;

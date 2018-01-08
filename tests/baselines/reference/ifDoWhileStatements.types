@@ -151,13 +151,13 @@ do { }while('')
 >'' : ""
 
 if (/[a-z]/) { }
->/[a-z]/ : RegExp
+>/[a-z]/ : RegExp</[a-z]/>
 
 while (/[a-z]/) { }
->/[a-z]/ : RegExp
+>/[a-z]/ : RegExp</[a-z]/>
 
 do { }while(/[a-z]/)
->/[a-z]/ : RegExp
+>/[a-z]/ : RegExp</[a-z]/>
 
 if ([]) { }
 >[] : undefined[]
@@ -332,17 +332,17 @@ do { }while(f)
 >f : string
 
 var g = /[a-z]/
->g : RegExp
->/[a-z]/ : RegExp
+>g : RegExp</[a-z]/>
+>/[a-z]/ : RegExp</[a-z]/>
 
 if (g) { }
->g : RegExp
+>g : RegExp</[a-z]/>
 
 while (g) { }
->g : RegExp
+>g : RegExp</[a-z]/>
 
 do { }while(g)
->g : RegExp
+>g : RegExp</[a-z]/>
 
 var h = [];
 >h : any[]

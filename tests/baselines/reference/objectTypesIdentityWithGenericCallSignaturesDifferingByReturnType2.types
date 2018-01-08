@@ -55,12 +55,12 @@ interface I2 {
 >I2 : I2
 
     foo<T extends Date>(x: T): RegExp;
->foo : <T extends Date>(x: T) => RegExp
+>foo : <T extends Date>(x: T) => RegExp<string>
 >T : T
 >Date : Date
 >x : T
 >T : T
->RegExp : RegExp
+>RegExp : RegExp<T>
 }
 
 var a: { foo<T extends Date>(x: T): T }

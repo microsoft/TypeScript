@@ -36,5 +36,5 @@ var x7: typeof function f() { };
 var x8: typeof /123/;
 >x8 : any
 > : any
->/123/ : RegExp
+>/123/ : RegExp</123/>
 

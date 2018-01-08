@@ -107,6 +107,12 @@ namespace ts {
         return node;
     }
 
+    export function createRegularExpressionLiteral(text: string) {
+        const node = <RegularExpressionLiteral>createSynthesizedNode(SyntaxKind.RegularExpressionLiteral);
+        node.text = text;
+        return node;
+    }
+
 
     // Identifiers
 

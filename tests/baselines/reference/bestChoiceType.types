@@ -7,10 +7,10 @@
 >(''.match(/ /) || []) : RegExpMatchArray
 >''.match(/ /) || [] : RegExpMatchArray
 >''.match(/ /) : RegExpMatchArray | null
->''.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>''.match : (regexp: string | RegExp<string>) => RegExpMatchArray | null
 >'' : ""
->match : (regexp: string | RegExp) => RegExpMatchArray | null
->/ / : RegExp
+>match : (regexp: string | RegExp<string>) => RegExpMatchArray | null
+>/ / : RegExp</ />
 >[] : never[]
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
 >s => s.toLowerCase() : (s: string) => string
@@ -28,10 +28,10 @@ function f1() {
     let x = ''.match(/ /);
 >x : RegExpMatchArray | null
 >''.match(/ /) : RegExpMatchArray | null
->''.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>''.match : (regexp: string | RegExp<string>) => RegExpMatchArray | null
 >'' : ""
->match : (regexp: string | RegExp) => RegExpMatchArray | null
->/ / : RegExp
+>match : (regexp: string | RegExp<string>) => RegExpMatchArray | null
+>/ / : RegExp</ />
 
     let y = x || [];
 >y : RegExpMatchArray
@@ -59,10 +59,10 @@ function f2() {
     let x = ''.match(/ /);
 >x : RegExpMatchArray | null
 >''.match(/ /) : RegExpMatchArray | null
->''.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>''.match : (regexp: string | RegExp<string>) => RegExpMatchArray | null
 >'' : ""
->match : (regexp: string | RegExp) => RegExpMatchArray | null
->/ / : RegExp
+>match : (regexp: string | RegExp<string>) => RegExpMatchArray | null
+>/ / : RegExp</ />
 
     let y = x ? x : [];
 >y : RegExpMatchArray

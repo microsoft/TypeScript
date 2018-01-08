@@ -92,18 +92,18 @@ var r4 = true ? null : new Date();
 >Date : DateConstructor
 
 var r5 = true ? /1/ : null;
->r5 : RegExp
->true ? /1/ : null : RegExp
+>r5 : RegExp</1/>
+>true ? /1/ : null : RegExp</1/>
 >true : true
->/1/ : RegExp
+>/1/ : RegExp</1/>
 >null : null
 
 var r5 = true ? null : /1/;
->r5 : RegExp
->true ? null : /1/ : RegExp
+>r5 : RegExp</1/>
+>true ? null : /1/ : RegExp</1/>
 >true : true
 >null : null
->/1/ : RegExp
+>/1/ : RegExp</1/>
 
 var r6 = true ? { foo: 1 } : null;
 >r6 : { foo: number; }
