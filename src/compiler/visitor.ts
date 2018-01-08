@@ -1466,9 +1466,7 @@ namespace ts {
      * Aggregates the TransformFlags for a Node and its subtree.
      */
     export function aggregateTransformFlags<T extends Node>(node: T): T {
-        const stickyFlags = node.transformFlags & TransformFlags.StickyFlags;
         aggregateTransformFlagsForNode(node);
-        node.transformFlags |= stickyFlags;
         return node;
     }
 

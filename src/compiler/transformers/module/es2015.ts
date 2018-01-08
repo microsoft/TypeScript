@@ -31,7 +31,7 @@ namespace ts {
                         createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
                         createLiteral(externalHelpersModuleNameText)
                     );
-                    tslibImport.transformFlags |= TransformFlags.NeverApplyImportHelper;
+                    addEmitFlags(tslibImport, EmitFlags.NeverApplyImportHelper);
                     append(statements, tslibImport);
 
                     addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));

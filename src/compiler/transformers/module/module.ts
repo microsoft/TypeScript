@@ -692,7 +692,7 @@ namespace ts {
 
 
         function getHelperExpressionForImport(node: ImportDeclaration, innerExpr: Expression) {
-            if (!compilerOptions.esModuleInterop || node.transformFlags & TransformFlags.NeverApplyImportHelper) {
+            if (!compilerOptions.esModuleInterop || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
                 return innerExpr;
             }
             if (getNamespaceDeclarationNode(node)) {
