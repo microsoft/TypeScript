@@ -25,7 +25,7 @@ namespace ts.projectSystem {
 
                 const actualResultSingleProjectFileNameList = actualResultSingleProject.fileNames.sort();
                 const expectedResultSingleProjectFileNameList = map(expectedResultSingleProject.files, f => f.path).sort();
-                assert(
+                assert.isTrue(
                     arrayIsEqualTo(actualResultSingleProjectFileNameList, expectedResultSingleProjectFileNameList),
                     `For project ${actualResultSingleProject.projectFileName}, the actual result is ${actualResultSingleProjectFileNameList}, while expected ${expectedResultSingleProjectFileNameList}`);
             }
@@ -563,7 +563,7 @@ namespace ts.projectSystem {
             session.executeCommand(compileFileRequest);
 
             const expectedEmittedFileName = "/a/b/f1.js";
-            assert(host.fileExists(expectedEmittedFileName));
+            assert.isTrue(host.fileExists(expectedEmittedFileName));
             assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nexports.__esModule = true;\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
         });
 
@@ -600,11 +600,11 @@ namespace ts.projectSystem {
             session.executeCommand(emitRequest);
 
             const expectedOutFileName = "/a/b/dist.js";
-            assert(host.fileExists(expectedOutFileName));
+            assert.isTrue(host.fileExists(expectedOutFileName));
             const outFileContent = host.readFile(expectedOutFileName);
-            assert(outFileContent.indexOf(file1.content) !== -1);
-            assert(outFileContent.indexOf(file2.content) === -1);
-            assert(outFileContent.indexOf(file3.content) === -1);
+            assert.isTrue(outFileContent.indexOf(file1.content) !== -1);
+            assert.isTrue(outFileContent.indexOf(file2.content) === -1);
+            assert.isTrue(outFileContent.indexOf(file3.content) === -1);
         });
 
         it("should use project root as current directory so that compile on save results in correct file mapping", () => {
@@ -634,19 +634,19 @@ namespace ts.projectSystem {
 
             // Verify js file
             const expectedOutFileName = "/root/TypeScriptProject3/TypeScriptProject3/" + outFileName;
-            assert(host.fileExists(expectedOutFileName));
+            assert.isTrue(host.fileExists(expectedOutFileName));
             const outFileContent = host.readFile(expectedOutFileName);
             verifyContentHasString(outFileContent, file1.content);
             verifyContentHasString(outFileContent, `//# ${"sourceMappingURL"}=${outFileName}.map`); // Sometimes tools can sometimes see this line as a source mapping url comment, so we obfuscate it a little
 
             // Verify map file
             const expectedMapFileName = expectedOutFileName + ".map";
-            assert(host.fileExists(expectedMapFileName));
+            assert.isTrue(host.fileExists(expectedMapFileName));
             const mapFileContent = host.readFile(expectedMapFileName);
             verifyContentHasString(mapFileContent, `"sources":["${inputFileName}"]`);
 
             function verifyContentHasString(content: string, str: string) {
-                assert(stringContains(content, str), `Expected "${content}" to have "${str}"`);
+                assert.isTrue(stringContains(content, str), `Expected "${content}" to have "${str}"`);
             }
         });
     });

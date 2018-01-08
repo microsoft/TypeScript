@@ -4,9 +4,9 @@ namespace ts {
     export function checkResolvedModule(expected: ResolvedModuleFull, actual: ResolvedModuleFull): boolean {
         if (!expected === !actual) {
             if (expected) {
-                assert(expected.resolvedFileName === actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
-                assert(expected.extension === actual.extension, `'ext': expected '${expected.extension}' to be equal to '${actual.extension}'`);
-                assert(expected.isExternalLibraryImport === actual.isExternalLibraryImport, `'isExternalLibraryImport': expected '${expected.isExternalLibraryImport}' to be equal to '${actual.isExternalLibraryImport}'`);
+                assert.isTrue(expected.resolvedFileName === actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
+                assert.isTrue(expected.extension === actual.extension, `'ext': expected '${expected.extension}' to be equal to '${actual.extension}'`);
+                assert.isTrue(expected.isExternalLibraryImport === actual.isExternalLibraryImport, `'isExternalLibraryImport': expected '${expected.isExternalLibraryImport}' to be equal to '${actual.isExternalLibraryImport}'`);
             }
             return true;
         }
@@ -14,7 +14,7 @@ namespace ts {
     }
 
     export function checkResolvedModuleWithFailedLookupLocations(actual: ResolvedModuleWithFailedLookupLocations, expectedResolvedModule: ResolvedModuleFull, expectedFailedLookupLocations: string[]): void {
-        assert(actual.resolvedModule !== undefined, "module should be resolved");
+        assert.isTrue(actual.resolvedModule !== undefined, "module should be resolved");
         checkResolvedModule(actual.resolvedModule, expectedResolvedModule);
         assert.deepEqual(actual.failedLookupLocations, expectedFailedLookupLocations);
     }
@@ -58,7 +58,7 @@ namespace ts {
                 realpath,
                 directoryExists: path => directories.has(path),
                 fileExists: path => {
-                    assert(directories.has(getDirectoryPath(path)), `'fileExists' '${path}' request in non-existing directory`);
+                    assert.isTrue(directories.has(getDirectoryPath(path)), `'fileExists' '${path}' request in non-existing directory`);
                     return map.has(path);
                 }
             };
@@ -313,7 +313,7 @@ namespace ts {
                 const host = createModuleResolutionHost(/*hasDirectoryExists*/ true, { name: realFileName, symlinks: [symlinkFileName] });
                 const resolution = nodeModuleNameResolver("linked", "/app/app.ts", { preserveSymlinks }, host);
                 const resolvedFileName = preserveSymlinks ? symlinkFileName : realFileName;
-                checkResolvedModule(resolution.resolvedModule, { resolvedFileName, isExternalLibraryImport: true, extension: Extension.Dts });
+                checkResolvedModule(resolution.resolvedModule, createResolvedModule(resolvedFileName, /*isExternalLibraryImport*/ true));
             });
         }
     });
@@ -338,7 +338,7 @@ namespace ts {
                     const path = normalizePath(combinePaths(currentDirectory, fileName));
                     return files.has(path);
                 },
-                readFile: notImplemented
+                readFile: notImplemented,
             };
 
             const program = createProgram(rootFiles, options, host);
@@ -351,7 +351,7 @@ namespace ts {
 
             // try to get file using a relative name
             for (const relativeFileName of relativeNamesToCheck) {
-                assert(program.getSourceFile(relativeFileName) !== undefined, `expected to get file by relative name, got undefined`);
+                assert.isTrue(program.getSourceFile(relativeFileName) !== undefined, `expected to get file by relative name, got undefined`);
             }
         }
 
@@ -426,7 +426,7 @@ export = C;
                     const path = getCanonicalFileName(normalizePath(combinePaths(currentDirectory, fileName)));
                     return files.has(path);
                 },
-                readFile: notImplemented
+                readFile: notImplemented,
             };
             const program = createProgram(rootFiles, options, host);
             const diagnostics = sortAndDeduplicateDiagnostics([...program.getSemanticDiagnostics(), ...program.getOptionsDiagnostics()]);
@@ -441,7 +441,7 @@ export = C;
                 "/a/b/c.ts": `/// <reference path="d.ts"/>`,
                 "/a/b/d.ts": "var x"
             });
-            test(files, { module: ts.ModuleKind.AMD },  "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "/a/b/d.ts"], []);
+            test(files, { module: ts.ModuleKind.AMD }, "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "/a/b/d.ts"], []);
         });
 
         it("should fail when two files used in program differ only in casing (tripleslash references)", () => {
@@ -449,7 +449,7 @@ export = C;
                 "/a/b/c.ts": `/// <reference path="D.ts"/>`,
                 "/a/b/d.ts": "var x"
             });
-            test(files, { module: ts.ModuleKind.AMD, forceConsistentCasingInFileNames: true },  "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], [1149]);
+            test(files, { module: ts.ModuleKind.AMD, forceConsistentCasingInFileNames: true }, "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], [1149]);
         });
 
         it("should fail when two files used in program differ only in casing (imports)", () => {
@@ -457,7 +457,7 @@ export = C;
                 "/a/b/c.ts": `import {x} from "D"`,
                 "/a/b/d.ts": "export var x"
             });
-            test(files, { module: ts.ModuleKind.AMD, forceConsistentCasingInFileNames: true },  "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], [1149]);
+            test(files, { module: ts.ModuleKind.AMD, forceConsistentCasingInFileNames: true }, "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], [1149]);
         });
 
         it("should fail when two files used in program differ only in casing (imports, relative module names)", () => {
@@ -465,7 +465,7 @@ export = C;
                 "moduleA.ts": `import {x} from "./ModuleB"`,
                 "moduleB.ts": "export var x"
             });
-            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "", /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts"], [1149]);
+            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "", /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts"], [1149]);
         });
 
         it("should fail when two files exist on disk that differs only in casing", () => {
@@ -474,7 +474,7 @@ export = C;
                 "/a/b/D.ts": "export var x",
                 "/a/b/d.ts": "export var y"
             });
-            test(files, { module: ts.ModuleKind.AMD },  "/a/b", /*useCaseSensitiveFileNames*/ true, ["c.ts", "d.ts"], [1149]);
+            test(files, { module: ts.ModuleKind.AMD }, "/a/b", /*useCaseSensitiveFileNames*/ true, ["c.ts", "d.ts"], [1149]);
         });
 
         it("should fail when module name in 'require' calls has inconsistent casing", () => {
@@ -483,7 +483,7 @@ export = C;
                 "moduleB.ts": `import a = require("./moduleC")`,
                 "moduleC.ts": "export var x"
             });
-            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "", /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts", "moduleC.ts"], [1149, 1149]);
+            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "", /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts", "moduleC.ts"], [1149, 1149]);
         });
 
         it("should fail when module names in 'require' calls has inconsistent casing and current directory has uppercase chars", () => {
@@ -496,7 +496,7 @@ import a = require("./moduleA");
 import b = require("./moduleB");
                 `
             });
-            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], [1149]);
+            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], [1149]);
         });
         it("should not fail when module names in 'require' calls has consistent casing and current directory has uppercase chars", () => {
             const files = createMapFromTemplate({
@@ -508,7 +508,7 @@ import a = require("./moduleA");
 import b = require("./moduleB");
                 `
             });
-            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], []);
+            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], []);
         });
     });
 
@@ -1067,14 +1067,14 @@ import b = require("./moduleB");
                 readFile: fileName => {
                     const file = sourceFiles.get(fileName);
                     return file && file.text;
-                }
+                },
             };
             const program1 = createProgram(names, {}, compilerHost);
             const diagnostics1 = program1.getFileProcessingDiagnostics().getDiagnostics();
             assert.equal(diagnostics1.length, 1, "expected one diagnostic");
 
             createProgram(names, {}, compilerHost, program1);
-            assert(program1.structureIsReused === StructureIsReused.Completely);
+            assert.isTrue(program1.structureIsReused === StructureIsReused.Completely);
             const diagnostics2 = program1.getFileProcessingDiagnostics().getDiagnostics();
             assert.equal(diagnostics2.length, 1, "expected one diagnostic");
             assert.equal(diagnostics1[0].messageText, diagnostics2[0].messageText, "expected one diagnostic");

@@ -3831,13 +3831,13 @@ namespace ts {
                 if (isLeftSideOfBinary) {
                     // No need to parenthesize the left operand when the binary operator is
                     // left associative:
-                    //  (a*b)/x    ->  a*b/x
-                    //  (a**b)/x   ->  a**b/x
+                    //  (a*b)/x    -> a*b/x
+                    //  (a**b)/x   -> a**b/x
                     //
                     // Parentheses are needed for the left operand when the binary operator is
                     // right associative:
-                    //  (a/b)**x   ->  (a/b)**x
-                    //  (a**b)**x  ->  (a**b)**x
+                    //  (a/b)**x   -> (a/b)**x
+                    //  (a**b)**x  -> (a**b)**x
                     return binaryOperatorAssociativity === Associativity.Right;
                 }
                 else {

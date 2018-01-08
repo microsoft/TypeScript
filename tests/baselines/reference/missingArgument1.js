@@ -2,4 +2,4 @@
 foo(a,,b);
 
 //// [missingArgument1.js]
-foo(a, , b);
+foo(a, b);

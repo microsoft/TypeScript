@@ -50,7 +50,6 @@ namespace ts.refactor.convertFunctionToES6Class {
 
         const { file: sourceFile } = context;
         const ctorSymbol = getConstructorSymbol(context);
-        const newLine = context.formatContext.options.newLineCharacter;
 
         const deletedNodes: Node[] = [];
         const deletes: (() => any)[] = [];
@@ -88,7 +87,7 @@ namespace ts.refactor.convertFunctionToES6Class {
         }
 
         // Because the preceding node could be touched, we need to insert nodes before delete nodes.
-        changeTracker.insertNodeAfter(sourceFile, precedingNode, newClassDeclaration, { suffix: newLine });
+        changeTracker.insertNodeAfter(sourceFile, precedingNode, newClassDeclaration);
         for (const deleteCallback of deletes) {
             deleteCallback();
         }
