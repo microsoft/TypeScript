@@ -15744,7 +15744,7 @@ namespace ts {
             if (flags & ModifierFlags.Static) {
                 return true;
             }
-             if (type.flags & TypeFlags.TypeParameter) {
+            if (type.flags & TypeFlags.TypeParameter) {
                 // get the original type -- represented as the type constraint of the 'this' type
                 type = (type as TypeParameter).isThisType ? getConstraintOfTypeParameter(<TypeParameter>type) : getBaseConstraintOfType(<TypeParameter>type);
             }

@@ -3777,7 +3777,7 @@ namespace FourSlashInterface {
 
         public eachMarker(markers: ReadonlyArray<string>, action: (marker: FourSlash.Marker, index: number) => void): void;
         public eachMarker(action: (marker: FourSlash.Marker, index: number) => void): void;
-        public eachMarker(a: ReadonlyArray<string> | ((marker: FourSlash.Marker, index: number) => void), b?: (marker: FourSlash.Marker, index: number) => void): void  {
+        public eachMarker(a: ReadonlyArray<string> | ((marker: FourSlash.Marker, index: number) => void), b?: (marker: FourSlash.Marker, index: number) => void): void {
             const markers = typeof a === "function" ? this.state.getMarkers() : a.map(m => this.state.getMarkerByName(m));
             this.state.goToEachMarker(markers, typeof a === "function" ? a : b);
         }

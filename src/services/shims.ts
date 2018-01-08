@@ -482,7 +482,7 @@ namespace ts {
         public useCaseSensitiveFileNames: boolean;
 
         constructor(private shimHost: CoreServicesShimHost) {
-        this.useCaseSensitiveFileNames = this.shimHost.useCaseSensitiveFileNames ? this.shimHost.useCaseSensitiveFileNames() : false;
+            this.useCaseSensitiveFileNames = this.shimHost.useCaseSensitiveFileNames ? this.shimHost.useCaseSensitiveFileNames() : false;
             if ("directoryExists" in this.shimHost) {
                 this.directoryExists = directoryName => this.shimHost.directoryExists(directoryName);
             }

@@ -78,15 +78,17 @@ namespace ts {
             // 0.ts --jsx
             assertParseResult(["0.ts", "--jsx"],
                 {
-                    errors: [{
-                        messageText: "Compiler option 'jsx' expects an argument.",
-                        category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
-                        code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
+                    errors: [
+                        {
+                            messageText: "Compiler option 'jsx' expects an argument.",
+                            category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
+                            code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
 
-                        file: undefined,
-                        start: undefined,
-                        length: undefined,
-                    }, {
+                            file: undefined,
+                            start: undefined,
+                            length: undefined,
+                        },
+                        {
                             messageText: "Argument for '--jsx' option must be: 'preserve', 'react-native', 'react'.",
                             category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                             code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
@@ -94,7 +96,8 @@ namespace ts {
                             file: undefined,
                             start: undefined,
                             length: undefined,
-                        }],
+                        },
+                    ],
                     fileNames: ["0.ts"],
                     options: {}
                 });
@@ -104,15 +107,17 @@ namespace ts {
             // 0.ts --
             assertParseResult(["0.ts", "--module"],
                 {
-                    errors: [{
-                        messageText: "Compiler option 'module' expects an argument.",
-                        category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
-                        code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
+                    errors: [
+                        {
+                            messageText: "Compiler option 'module' expects an argument.",
+                            category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
+                            code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
 
-                        file: undefined,
-                        start: undefined,
-                        length: undefined,
-                    }, {
+                            file: undefined,
+                            start: undefined,
+                            length: undefined,
+                        },
+                        {
                             messageText: "Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'esnext'.",
                             category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                             code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
@@ -120,7 +125,8 @@ namespace ts {
                             file: undefined,
                             start: undefined,
                             length: undefined,
-                        }],
+                        },
+                    ],
                     fileNames: ["0.ts"],
                     options: {}
                 });
@@ -130,15 +136,17 @@ namespace ts {
             // 0.ts --newLine
             assertParseResult(["0.ts", "--newLine"],
                 {
-                    errors: [{
-                        messageText: "Compiler option 'newLine' expects an argument.",
-                        category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
-                        code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
+                    errors: [
+                        {
+                            messageText: "Compiler option 'newLine' expects an argument.",
+                            category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
+                            code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
 
-                        file: undefined,
-                        start: undefined,
-                        length: undefined,
-                    }, {
+                            file: undefined,
+                            start: undefined,
+                            length: undefined,
+                        },
+                        {
                             messageText: "Argument for '--newLine' option must be: 'crlf', 'lf'.",
                             category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                             code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
@@ -146,7 +154,8 @@ namespace ts {
                             file: undefined,
                             start: undefined,
                             length: undefined,
-                        }],
+                        },
+                    ],
                     fileNames: ["0.ts"],
                     options: {}
                 });
@@ -156,15 +165,17 @@ namespace ts {
             // 0.ts --target
             assertParseResult(["0.ts", "--target"],
                 {
-                    errors: [{
-                        messageText: "Compiler option 'target' expects an argument.",
-                        category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
-                        code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
+                    errors: [
+                        {
+                            messageText: "Compiler option 'target' expects an argument.",
+                            category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
+                            code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
 
-                        file: undefined,
-                        start: undefined,
-                        length: undefined,
-                    }, {
+                            file: undefined,
+                            start: undefined,
+                            length: undefined,
+                        },
+                        {
                             messageText: "Argument for '--target' option must be: 'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'esnext'.",
                             category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                             code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
@@ -172,7 +183,8 @@ namespace ts {
                             file: undefined,
                             start: undefined,
                             length: undefined,
-                        }],
+                        },
+                    ],
                     fileNames: ["0.ts"],
                     options: {}
                 });
@@ -182,15 +194,17 @@ namespace ts {
             // 0.ts --moduleResolution
             assertParseResult(["0.ts", "--moduleResolution"],
                 {
-                    errors: [{
-                        messageText: "Compiler option 'moduleResolution' expects an argument.",
-                        category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
-                        code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
+                    errors: [
+                        {
+                            messageText: "Compiler option 'moduleResolution' expects an argument.",
+                            category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
+                            code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
 
-                        file: undefined,
-                        start: undefined,
-                        length: undefined,
-                    }, {
+                            file: undefined,
+                            start: undefined,
+                            length: undefined,
+                        },
+                        {
                             messageText: "Argument for '--moduleResolution' option must be: 'node', 'classic'.",
                             category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                             code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
@@ -198,7 +212,8 @@ namespace ts {
                             file: undefined,
                             start: undefined,
                             length: undefined,
-                        }],
+                        },
+                    ],
                     fileNames: ["0.ts"],
                     options: {}
                 });

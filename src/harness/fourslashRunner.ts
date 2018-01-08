@@ -51,7 +51,7 @@ class FourSlashRunner extends RunnerBase {
         describe(this.testSuiteName + " tests", () => {
             this.tests.forEach((fn: string) => {
                  describe(fn, () => {
-                       fn = ts.normalizeSlashes(fn);
+                        fn = ts.normalizeSlashes(fn);
                         const justName = fn.replace(/^.*[\\\/]/, "");
 
                         // Convert to relative path

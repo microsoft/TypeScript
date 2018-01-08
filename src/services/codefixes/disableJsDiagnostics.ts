@@ -15,23 +15,25 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            return [{
-                description: getLocaleSpecificMessage(Diagnostics.Ignore_this_error_message),
-                changes: [createFileTextChanges(sourceFile.fileName, [getIgnoreCommentLocationForLocation(sourceFile, span.start, newLineCharacter)])],
-                fixId,
-            },
-            {
-                description: getLocaleSpecificMessage(Diagnostics.Disable_checking_for_this_file),
-                changes: [createFileTextChanges(sourceFile.fileName, [{
-                    span: {
-                        start: sourceFile.checkJsDirective ? sourceFile.checkJsDirective.pos : 0,
-                        length: sourceFile.checkJsDirective ? sourceFile.checkJsDirective.end - sourceFile.checkJsDirective.pos : 0
-                    },
-                    newText: `// @ts-nocheck${newLineCharacter}`
-                }])],
-                // fixId unnecessary because adding `// @ts-nocheck` even once will ignore every error in the file.
-                fixId: undefined,
-            }];
+            return [
+                {
+                    description: getLocaleSpecificMessage(Diagnostics.Ignore_this_error_message),
+                    changes: [createFileTextChanges(sourceFile.fileName, [getIgnoreCommentLocationForLocation(sourceFile, span.start, newLineCharacter)])],
+                    fixId,
+                },
+                {
+                    description: getLocaleSpecificMessage(Diagnostics.Disable_checking_for_this_file),
+                    changes: [createFileTextChanges(sourceFile.fileName, [{
+                        span: {
+                            start: sourceFile.checkJsDirective ? sourceFile.checkJsDirective.pos : 0,
+                            length: sourceFile.checkJsDirective ? sourceFile.checkJsDirective.end - sourceFile.checkJsDirective.pos : 0
+                        },
+                        newText: `// @ts-nocheck${newLineCharacter}`
+                    }])],
+                    // fixId unnecessary because adding `// @ts-nocheck` even once will ignore every error in the file.
+                    fixId: undefined,
+                },
+            ];
         },
         fixIds: [fixId], // No point applying as a group, doing it once will fix all errors
         getAllCodeActions: context => codeFixAllWithTextChanges(context, errorCodes, (changes, err) => {

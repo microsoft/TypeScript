@@ -109,7 +109,7 @@ namespace ts {
                         "xx//file.d.ts"
                     ]
                 }`, { config: { exclude: ["xx//file.d.ts"] } });
-         assertParseResult(
+            assertParseResult(
                 `{
                     "exclude": [
                         "xx/*file.d.ts*/"
