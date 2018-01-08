@@ -36,11 +36,28 @@ namespace Harness.Parallel.Worker {
         }) as Mocha.ITestDefinition;
     }
 
+    function setTimeoutAndExecute(timeout: number | undefined, f: () => void) {
+        if (timeout !== undefined) {
+            const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: timeout } };
+            process.send(timeoutMsg);
+        }
+        f();
+        if (timeout !== undefined) {
+            // Reset timeout
+            const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: "reset" } };
+            process.send(timeoutMsg);
+        }
+    }
+
     function executeSuiteCallback(name: string, callback: MochaCallback) {
+        let timeout: number;
         const fakeContext: Mocha.ISuiteCallbackContext = {
             retries() { return this; },
             slow() { return this; },
-            timeout() { return this; },
+            timeout(n) {
+                timeout = n;
+                return this;
+            },
         };
         namestack.push(name);
         let beforeFunc: Callable;
@@ -71,7 +88,10 @@ namespace Harness.Parallel.Worker {
         finally {
             beforeFunc = undefined;
         }
-        testList.forEach(({ name, callback, kind }) => executeCallback(name, callback, kind));
+
+        setTimeoutAndExecute(timeout, () => {
+            testList.forEach(({ name, callback, kind }) => executeCallback(name, callback, kind));
+        });
 
         try {
             if (afterFunc) {
@@ -103,9 +123,13 @@ namespace Harness.Parallel.Worker {
     }
 
     function executeTestCallback(name: string, callback: MochaCallback) {
+        let timeout: number;
         const fakeContext: Mocha.ITestCallbackContext = {
             skip() { return this; },
-            timeout() { return this; },
+            timeout(n) {
+                timeout = n;
+                return this;
+            },
             retries() { return this; },
             slow() { return this; },
         };
@@ -121,18 +145,20 @@ namespace Harness.Parallel.Worker {
             }
         }
         if (callback.length === 0) {
-            try {
-                // TODO: If we ever start using async test completions, polyfill promise return handling
-                callback.call(fakeContext);
-            }
-            catch (error) {
-                errors.push({ error: error.message, stack: error.stack, name: [...namestack] });
-                return;
-            }
-            finally {
-                namestack.pop();
-            }
-            passing++;
+            setTimeoutAndExecute(timeout, () => {
+                try {
+                    // TODO: If we ever start using async test completions, polyfill promise return handling
+                    callback.call(fakeContext);
+                }
+                catch (error) {
+                    errors.push({ error: error.message, stack: error.stack, name: [...namestack] });
+                    return;
+                }
+                finally {
+                    namestack.pop();
+                }
+                passing++;
+            });
         }
         else {
             // Uses `done` callback
