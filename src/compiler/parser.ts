@@ -3504,7 +3504,9 @@ namespace ts {
             node.whenTrue = doOutsideOfContext(disallowInAndDecoratorContext, parseAssignmentExpressionOrHigher);
             node.colonToken = parseExpectedToken(SyntaxKind.ColonToken, /*reportAtCurrentPosition*/ false,
                 Diagnostics._0_expected, tokenToString(SyntaxKind.ColonToken));
-            node.whenFalse = parseAssignmentExpressionOrHigher();
+            node.whenFalse = nodeIsPresent(node.colonToken)
+                ? parseAssignmentExpressionOrHigher()
+                : createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.ColonToken));
             return finishNode(node);
         }
 
