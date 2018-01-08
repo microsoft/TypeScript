@@ -69,10 +69,10 @@ namespace ts.formatting {
             rule("NoSpaceBeforeUnaryPostdecrementOperator", unaryPostdecrementExpressions, SyntaxKind.MinusMinusToken, [isNonJsxSameLineTokenContext], RuleAction.Delete),
 
             // More unary operator special-casing.
-            // DevDiv 181814:  Be careful when removing leading whitespace
+            // DevDiv 181814: Be careful when removing leading whitespace
             // around unary operators.  Examples:
-            //      1 - -2  --X-->  1--2
-            //      a + ++b --X-->  a+++b
+            //      1 - -2  --X--> 1--2
+            //      a + ++b --X--> a+++b
             rule("SpaceAfterPostincrementWhenFollowedByAdd", SyntaxKind.PlusPlusToken, SyntaxKind.PlusToken, [isNonJsxSameLineTokenContext, isBinaryOpContext], RuleAction.Space),
             rule("SpaceAfterAddWhenFollowedByUnaryPlus", SyntaxKind.PlusToken, SyntaxKind.PlusToken, [isNonJsxSameLineTokenContext, isBinaryOpContext], RuleAction.Space),
             rule("SpaceAfterAddWhenFollowedByPreincrement", SyntaxKind.PlusToken, SyntaxKind.PlusPlusToken, [isNonJsxSameLineTokenContext, isBinaryOpContext], RuleAction.Space),
@@ -80,7 +80,7 @@ namespace ts.formatting {
             rule("SpaceAfterSubtractWhenFollowedByUnaryMinus", SyntaxKind.MinusToken, SyntaxKind.MinusToken, [isNonJsxSameLineTokenContext, isBinaryOpContext], RuleAction.Space),
             rule("SpaceAfterSubtractWhenFollowedByPredecrement", SyntaxKind.MinusToken, SyntaxKind.MinusMinusToken, [isNonJsxSameLineTokenContext, isBinaryOpContext], RuleAction.Space),
 
-            rule("NoSpaceAfterCloseBrace", SyntaxKind.CloseBraceToken, [SyntaxKind.CloseBracketToken, SyntaxKind.CommaToken, SyntaxKind.SemicolonToken], [isNonJsxSameLineTokenContext], RuleAction.Delete),
+            rule("NoSpaceAfterCloseBrace", SyntaxKind.CloseBraceToken, [SyntaxKind.CommaToken, SyntaxKind.SemicolonToken], [isNonJsxSameLineTokenContext], RuleAction.Delete),
             // For functions and control block place } on a new line [multi-line rule]
             rule("NewLineBeforeCloseBraceInBlockContext", anyTokenIncludingMultilineComments, SyntaxKind.CloseBraceToken, [isMultilineBlockContext], RuleAction.NewLine),
 
@@ -619,7 +619,7 @@ namespace ts.formatting {
     }
 
     function isJsxExpressionContext(context: FormattingContext): boolean {
-        return context.contextNode.kind === SyntaxKind.JsxExpression;
+        return context.contextNode.kind === SyntaxKind.JsxExpression || context.contextNode.kind === SyntaxKind.JsxSpreadAttribute;
     }
 
     function isNextTokenParentJsxAttribute(context: FormattingContext): boolean {

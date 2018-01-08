@@ -2053,7 +2053,7 @@ namespace ts {
             }
 
             function getTodoCommentsRegExp(): RegExp {
-                // NOTE: ?:  means 'non-capture group'.  It allows us to have groups without having to
+                // NOTE: `?:` means 'non-capture group'.  It allows us to have groups without having to
                 // filter them out later in the final result array.
 
                 // TODO comments can appear in one of the following forms:

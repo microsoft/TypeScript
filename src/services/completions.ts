@@ -57,7 +57,8 @@ namespace ts.Completions {
             // In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,
             // instead of simply giving unknown value, the completion will return the tag-name of an associated opening-element.
             // For example:
-            //     var x = <div> </ /*1*/>  completion list at "1" will contain "div" with type any
+            //     var x = <div> </ /*1*/>
+            // The completion list at "1" will contain "div" with type any
             const tagName = (<JsxElement>location.parent.parent).openingElement.tagName;
             return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false,
                 entries: [{
@@ -76,7 +77,7 @@ namespace ts.Completions {
                 // If the current position is a jsDoc tag, only tags should be provided for completion
                 ? JsDoc.getJSDocTagCompletions()
                 : JsDoc.getJSDocParameterNameCompletions(request.tag);
-            return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false,  entries };
+            return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
         }
 
         const entries: CompletionEntry[] = [];
@@ -264,7 +265,8 @@ namespace ts.Completions {
             // }
             // let a: A;
             // a['/*completion position*/']
-            return getStringLiteralCompletionEntriesFromElementAccess(node.parent, typeChecker, compilerOptions.target, log);
+            const type = typeChecker.getTypeAtLocation(node.parent.expression);
+            return getStringLiteralCompletionEntriesFromElementAccessOrIndexedAccess(node, type, typeChecker, compilerOptions.target, log);
         }
         else if (node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration
             || isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false) || isImportCall(node.parent)
@@ -277,6 +279,16 @@ namespace ts.Completions {
             //      export * from "/*completion position*/";
             const entries = PathCompletions.getStringLiteralCompletionsFromModuleNames(node, compilerOptions, host, typeChecker);
             return pathCompletionsInfo(entries);
+        }
+        else if (isIndexedAccessTypeNode(node.parent.parent)) {
+            // Get all apparent property names
+            // i.e. interface Foo {
+            //          foo: string;
+            //          bar: string;
+            //      }
+            //      let x: Foo["/*completion position*/"]
+            const type = typeChecker.getTypeFromTypeNode(node.parent.parent.objectType);
+            return getStringLiteralCompletionEntriesFromElementAccessOrIndexedAccess(node, type, typeChecker, compilerOptions.target, log);
         }
         else {
             const argumentInfo = SignatureHelp.getImmediatelyContainingArgumentInfo(node, position, sourceFile);
@@ -334,11 +346,10 @@ namespace ts.Completions {
         return undefined;
     }
 
-    function getStringLiteralCompletionEntriesFromElementAccess(node: ElementAccessExpression, typeChecker: TypeChecker, target: ScriptTarget, log: Log): CompletionInfo | undefined {
-        const type = typeChecker.getTypeAtLocation(node.expression);
+    function getStringLiteralCompletionEntriesFromElementAccessOrIndexedAccess(stringLiteralNode: StringLiteral | NoSubstitutionTemplateLiteral, type: Type, typeChecker: TypeChecker, target: ScriptTarget, log: Log): CompletionInfo | undefined {
         const entries: CompletionEntry[] = [];
         if (type) {
-            getCompletionEntriesFromSymbols(type.getApparentProperties(), entries, node, /*performCharacterChecks*/ false, typeChecker, target, log, /*allowStringLiteral*/ true);
+            getCompletionEntriesFromSymbols(type.getApparentProperties(), entries, stringLiteralNode, /*performCharacterChecks*/ false, typeChecker, target, log, /*allowStringLiteral*/ true);
             if (entries.length) {
                 return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: true, entries };
             }
@@ -1583,7 +1594,7 @@ namespace ts.Completions {
                 switch (contextToken.kind) {
                     case SyntaxKind.OpenParenToken:
                     case SyntaxKind.CommaToken:
-                        return  isConstructorDeclaration(contextToken.parent) && contextToken.parent;
+                        return isConstructorDeclaration(contextToken.parent) && contextToken.parent;
 
                     default:
                         if (isConstructorParameterCompletion(contextToken)) {

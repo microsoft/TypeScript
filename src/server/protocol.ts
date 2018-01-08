@@ -566,7 +566,7 @@ namespace ts.server.protocol {
 
     // TODO: GH#20538
     /* @internal */
-    export interface GetCombinedCodeFixResponse  extends Response {
+    export interface GetCombinedCodeFixResponse extends Response {
         body: CombinedCodeActions;
     }
 

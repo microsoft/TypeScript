@@ -438,24 +438,24 @@ namespace ts {
     }
 
     export const enum NodeFlags {
-        None =               0,
-        Let =                1 << 0,  // Variable declaration
-        Const =              1 << 1,  // Variable declaration
-        NestedNamespace =    1 << 2,  // Namespace declaration
-        Synthesized =        1 << 3,  // Node was synthesized during transformation
-        Namespace =          1 << 4,  // Namespace declaration
-        ExportContext =      1 << 5,  // Export context (initialized by binding)
-        ContainsThis =       1 << 6,  // Interface contains references to "this"
-        HasImplicitReturn =  1 << 7,  // If function implicitly returns on one of codepaths (initialized by binding)
-        HasExplicitReturn =  1 << 8,  // If function has explicit reachable return on one of codepaths (initialized by binding)
+        None               = 0,
+        Let                = 1 << 0,  // Variable declaration
+        Const              = 1 << 1,  // Variable declaration
+        NestedNamespace    = 1 << 2,  // Namespace declaration
+        Synthesized        = 1 << 3,  // Node was synthesized during transformation
+        Namespace          = 1 << 4,  // Namespace declaration
+        ExportContext      = 1 << 5,  // Export context (initialized by binding)
+        ContainsThis       = 1 << 6,  // Interface contains references to "this"
+        HasImplicitReturn  = 1 << 7,  // If function implicitly returns on one of codepaths (initialized by binding)
+        HasExplicitReturn  = 1 << 8,  // If function has explicit reachable return on one of codepaths (initialized by binding)
         GlobalAugmentation = 1 << 9,  // Set if module declaration is an augmentation for the global scope
-        HasAsyncFunctions =  1 << 10, // If the file has async functions (initialized by binding)
-        DisallowInContext =  1 << 11, // If node was parsed in a context where 'in-expressions' are not allowed
-        YieldContext =       1 << 12, // If node was parsed in the 'yield' context created when parsing a generator
-        DecoratorContext =   1 << 13, // If node was parsed as part of a decorator
-        AwaitContext =       1 << 14, // If node was parsed in the 'await' context created when parsing an async function
-        ThisNodeHasError =   1 << 15, // If the parser encountered an error when parsing the code that created this node
-        JavaScriptFile =     1 << 16, // If node was parsed in a JavaScript
+        HasAsyncFunctions  = 1 << 10, // If the file has async functions (initialized by binding)
+        DisallowInContext  = 1 << 11, // If node was parsed in a context where 'in-expressions' are not allowed
+        YieldContext       = 1 << 12, // If node was parsed in the 'yield' context created when parsing a generator
+        DecoratorContext   = 1 << 13, // If node was parsed as part of a decorator
+        AwaitContext       = 1 << 14, // If node was parsed in the 'await' context created when parsing an async function
+        ThisNodeHasError   = 1 << 15, // If the parser encountered an error when parsing the code that created this node
+        JavaScriptFile     = 1 << 16, // If node was parsed in a JavaScript
         ThisNodeOrAnySubNodesHasError = 1 << 17, // If this node or any of its children had an error
         HasAggregatedChildData = 1 << 18, // If we've computed data from children and cached it in this node
 
@@ -1394,7 +1394,7 @@ namespace ts {
 
     export type BinaryOperatorToken = Token<BinaryOperator>;
 
-    export interface BinaryExpression extends Expression, Declaration  {
+    export interface BinaryExpression extends Expression, Declaration {
         kind: SyntaxKind.BinaryExpression;
         left: Expression;
         operatorToken: BinaryOperatorToken;
@@ -2540,7 +2540,7 @@ namespace ts {
     export interface ParseConfigHost {
         useCaseSensitiveFileNames: boolean;
 
-        readDirectory(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string>, includes: ReadonlyArray<string>, depth: number): string[];
+        readDirectory(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string>, depth?: number): string[];
 
         /**
          * Gets a value indicating whether the specified path exists and is a file.
@@ -2977,9 +2977,9 @@ namespace ts {
         None = 0x00000000,
 
         // Write symbols's type argument if it is instantiated symbol
-        // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
+        // eg. class C<T> { p: T } <-- Show p as C<T>.p here
         //     var a: C<number>;
-        //     var p = a.p;  <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
+        //     var p = a.p; <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
         WriteTypeParametersOrArguments = 0x00000001,
 
         // Use only external alias information to get the symbol name in the given context
@@ -3251,6 +3251,7 @@ namespace ts {
         ContainsPrivate   = 1 << 8,         // Synthetic property with private constituent(s)
         ContainsStatic    = 1 << 9,         // Synthetic property with static constituent(s)
         Late              = 1 << 10,        // Late-bound symbol for a computed property with a dynamic name
+        ReverseMapped     = 1 << 11,        // property of reverse-inferred homomorphic mapped type.
         Synthetic = SyntheticProperty | SyntheticMethod
     }
 
@@ -3258,6 +3259,12 @@ namespace ts {
     export interface TransientSymbol extends Symbol, SymbolLinks {
         checkFlags: CheckFlags;
         isRestParameter?: boolean;
+    }
+
+    /* @internal */
+    export interface ReverseMappedSymbol extends TransientSymbol {
+        propertyType: Type;
+        mappedType: MappedType;
     }
 
     export const enum InternalSymbolName {
@@ -3365,7 +3372,7 @@ namespace ts {
         resolvedJsxElementAttributesType?: Type;  // resolved element attributes type of a JSX openinglike element
         resolvedJsxElementAllAttributesType?: Type;  // resolved all element attributes type of a JSX openinglike element
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
-        superCall?: ExpressionStatement;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
+        superCall?: SuperCall;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
         switchTypes?: Type[];             // Cached array of switch case expression types
     }
 
@@ -3494,6 +3501,7 @@ namespace ts {
         EvolvingArray    = 1 << 8,  // Evolving array type
         ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
         ContainsSpread   = 1 << 10, // Object literal contains spread operation
+        ReverseMapped = 1 << 11,    // Object contains a property from a reverse-mapped type
         ClassOrInterface = Class | Interface
     }
 
@@ -3602,6 +3610,12 @@ namespace ts {
     }
 
     /* @internal */
+    export interface ReverseMappedType extends ObjectType {
+        source: Type;
+        mappedType: MappedType;
+    }
+
+    /* @internal */
     // Resolved object, union, or intersection type
     export interface ResolvedType extends ObjectType, UnionOrIntersectionType {
         members: SymbolTable;              // Properties by name
@@ -3614,7 +3628,7 @@ namespace ts {
 
     /* @internal */
     // Object literals are initially marked fresh. Freshness disappears following an assignment,
-    // before a type assertion, or when  an object literal's type is widened. The regular
+    // before a type assertion, or when an object literal's type is widened. The regular
     // version of a fresh type is identical except for the TypeFlags.FreshObjectLiteral flag.
     export interface FreshObjectLiteralType extends ResolvedType {
         regularType: ResolvedType;  // Regular version of fresh type
@@ -4366,11 +4380,11 @@ namespace ts {
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
          * 'throw new Error("NotImplemented")'
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): (ResolvedModule | undefined)[];
         /**
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
-        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): (ResolvedTypeReferenceDirective | undefined)[];
         getEnvironmentVariable?(name: string): string;
         /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions): void;
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
