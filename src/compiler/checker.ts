@@ -1513,7 +1513,7 @@ namespace ts {
                     exportDefaultSymbol = resolveExportByName(moduleSymbol, InternalSymbolName.Default, dontResolveAlias);
                 }
 
-                const file = forEach(moduleSymbol.declarations, sourceFileOrUndefined);
+                const file = find(moduleSymbol.declarations, isSourceFile);
                 const hasSyntheticDefault = canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias);
                 if (!exportDefaultSymbol && !hasSyntheticDefault) {
                     error(node.name, Diagnostics.Module_0_has_no_default_export, symbolToString(moduleSymbol));
@@ -1524,10 +1524,6 @@ namespace ts {
                 }
                 return exportDefaultSymbol;
             }
-        }
-
-        function sourceFileOrUndefined(d: Declaration) {
-            return isSourceFile(d) ? d : undefined;
         }
 
         function getTargetOfNamespaceImport(node: NamespaceImport, dontResolveAlias: boolean): Symbol {
@@ -17839,7 +17835,8 @@ namespace ts {
             if (allowSyntheticDefaultImports && type && type !== unknownType) {
                 const synthType = type as SyntheticDefaultModuleType;
                 if (!synthType.syntheticType) {
-                    const hasSyntheticDefault = canHaveSyntheticDefault(forEach(originalSymbol.declarations, sourceFileOrUndefined), originalSymbol, /*dontResolveAlias*/ false);
+                    const file = find(originalSymbol.declarations, isSourceFile);
+                    const hasSyntheticDefault = canHaveSyntheticDefault(file, originalSymbol, /*dontResolveAlias*/ false);
                     if (hasSyntheticDefault) {
                         const memberTable = createSymbolTable();
                         const newSymbol = createSymbol(SymbolFlags.Alias, InternalSymbolName.Default);
