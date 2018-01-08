@@ -3946,7 +3946,7 @@ namespace ts {
             // treated as the invocation of "new Foo".  We disambiguate that in code (to match
             // the original grammar) by making sure that if we see an ObjectCreationExpression
             // we always consume arguments if they are there. So we treat "new Foo()" as an
-            // object creation only, and not at all as an invocation). Another way to think
+            // object creation only, and not at all as an invocation.  Another way to think
             // about this is that for every "new" that we see, we will consume an argument list if
             // it is there as part of the *associated* object creation node.  Any additional
             // argument lists we see, will become invocation expressions.
