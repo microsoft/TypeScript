@@ -277,7 +277,7 @@ namespace ts.Completions {
             //      import x = require("/*completion position*/");
             //      var y = require("/*completion position*/");
             //      export * from "/*completion position*/";
-            const entries = PathCompletions.getStringLiteralCompletionsFromModuleNames(node, compilerOptions, host, typeChecker);
+            const entries = PathCompletions.getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker);
             return pathCompletionsInfo(entries);
         }
         else if (isIndexedAccessTypeNode(node.parent.parent)) {

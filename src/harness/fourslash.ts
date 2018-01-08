@@ -265,7 +265,7 @@ namespace FourSlash {
             ts.forEach(testData.files, file => {
                 // Create map between fileName and its content for easily looking up when resolveReference flag is specified
                 this.inputFiles.set(file.fileName, file.content);
-                if (ts.getBaseFileName(file.fileName).toLowerCase() === "tsconfig.json") {
+                if (isTsconfig(file)) {
                     const configJson = ts.parseConfigFileTextToJson(file.fileName, file.content);
                     if (configJson.config === undefined) {
                         throw new Error(`Failed to parse test tsconfig.json: ${configJson.error.messageText}`);
@@ -3384,7 +3384,7 @@ ${code}
         }
 
         // @Filename is the only directive that can be used in a test that contains tsconfig.json file.
-        if (containTSConfigJson(files)) {
+        if (files.some(isTsconfig)) {
             let directive = getNonFileNameOptionInFileList(files);
             if (!directive) {
                 directive = getNonFileNameOptionInObject(globalOptions);
@@ -3403,8 +3403,8 @@ ${code}
         };
     }
 
-    function containTSConfigJson(files: FourSlashFile[]): boolean {
-        return ts.forEach(files, f => f.fileOptions.Filename === "tsconfig.json");
+    function isTsconfig(file: FourSlashFile): boolean {
+        return ts.getBaseFileName(file.fileName).toLowerCase() === "tsconfig.json";
     }
 
     function getNonFileNameOptionInFileList(files: FourSlashFile[]): string {
