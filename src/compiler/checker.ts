@@ -3192,7 +3192,7 @@ namespace ts {
                         !((symbol as TransientSymbol).checkFlags & CheckFlags.Late) &&
                         !isWellKnownSymbolSyntactically((name as ComputedPropertyName).expression) &&
                         symbol.escapedName) {
-                        return "[\"" + unescapeLeadingUnderscores(symbol.escapedName) + "\"]";
+                        return '["' + unescapeLeadingUnderscores(symbol.escapedName) + '"]';
                     }
                     return declarationNameToString(name);
                 }
@@ -6023,11 +6023,11 @@ namespace ts {
                 getIntersectionType([info1.type, info2.type]), info1.isReadonly && info2.isReadonly);
         }
 
-        function unionSpreadIndexInfos(info1: IndexInfo, info2: IndexInfo, looseIndexes: boolean): IndexInfo {
+        function unionSpreadIndexInfos(info1: IndexInfo, info2: IndexInfo, allowSingleIndex: boolean): IndexInfo {
             if (info1 && info2) {
                 return createIndexInfo(getUnionType([info1.type, info2.type]), info1.isReadonly || info2.isReadonly);
             }
-            if (looseIndexes) {
+            if (allowSingleIndex) {
                 return info1 ? info1 : info2 ? info2 : undefined;
             }
         }
@@ -8389,7 +8389,7 @@ namespace ts {
          * this function should be called in a left folding style, with left = previous result of getSpreadType
          * and right = the new element to be spread.
          */
-        function getSpreadType(left: Type, right: Type, symbol: Symbol, propagatedFlags: TypeFlags, looseIndexes: boolean): Type {
+        function getSpreadType(left: Type, right: Type, symbol: Symbol, propagatedFlags: TypeFlags, fromComputedProperty: boolean): Type {
             if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
                 return anyType;
             }
@@ -8400,10 +8400,10 @@ namespace ts {
                 return left;
             }
             if (left.flags & TypeFlags.Union) {
-                return mapType(left, t => getSpreadType(t, right, symbol, propagatedFlags, looseIndexes));
+                return mapType(left, t => getSpreadType(t, right, symbol, propagatedFlags, fromComputedProperty));
             }
             if (right.flags & TypeFlags.Union) {
-                return mapType(right, t => getSpreadType(left, t, symbol, propagatedFlags, looseIndexes));
+                return mapType(right, t => getSpreadType(left, t, symbol, propagatedFlags, fromComputedProperty));
             }
             if (right.flags & (TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive)) {
                 return left;
@@ -8419,8 +8419,8 @@ namespace ts {
                 numberIndexInfo = getIndexInfoOfType(right, IndexKind.Number);
             }
             else {
-                stringIndexInfo = unionSpreadIndexInfos(getIndexInfoOfType(left, IndexKind.String), getIndexInfoOfType(right, IndexKind.String), looseIndexes);
-                numberIndexInfo = unionSpreadIndexInfos(getIndexInfoOfType(left, IndexKind.Number), getIndexInfoOfType(right, IndexKind.Number), looseIndexes);
+                stringIndexInfo = unionSpreadIndexInfos(getIndexInfoOfType(left, IndexKind.String), getIndexInfoOfType(right, IndexKind.String), fromComputedProperty);
+                numberIndexInfo = unionSpreadIndexInfos(getIndexInfoOfType(left, IndexKind.Number), getIndexInfoOfType(right, IndexKind.Number), fromComputedProperty);
             }
 
             for (const rightProp of getPropertiesOfType(right)) {
@@ -14708,14 +14708,14 @@ namespace ts {
                         checkExternalEmitHelpers(memberDecl, ExternalEmitHelpers.Assign);
                     }
                     if (propertiesArray.length > 0) {
-                        updateIntermediateType(getSpreadType(intermediate, createObjectLiteralType(), node.symbol, propagatedFlags, /*looseIndexes*/ false));
+                        updateIntermediateType(getSpreadType(intermediate, createObjectLiteralType(), node.symbol, propagatedFlags, /*fromComputedProperty*/ false));
                     }
                     const type = checkExpression((memberDecl as SpreadAssignment).expression);
                     if (!isValidSpreadType(type)) {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
-                    intermediate = getSpreadType(intermediate, type, node.symbol, propagatedFlags, /*looseIndexes*/ false);
+                    intermediate = getSpreadType(intermediate, type, node.symbol, propagatedFlags, /*fromComputedProperty*/ false);
                     offset = i + 1;
                     continue;
                 }
@@ -14760,7 +14760,7 @@ namespace ts {
 
             if (intermediate !== emptyObjectType) {
                 if (propertiesArray.length > 0) {
-                    intermediate = getSpreadType(intermediate, createObjectLiteralType(), node.symbol, propagatedFlags, /*looseIndexes*/ hasUnionedComputedProperty);
+                    intermediate = getSpreadType(intermediate, createObjectLiteralType(), node.symbol, propagatedFlags, /*fromComputedProperty*/ hasUnionedComputedProperty);
                 }
                 return intermediate;
             }
@@ -14794,7 +14794,7 @@ namespace ts {
                         propertiesTable.delete(prop.escapedName);
                     }
                 }
-                return getSpreadType(intermediate, getUnionType(types), node.symbol, propagatedFlags, /*looseIndexes*/ true);
+                return getSpreadType(intermediate, getUnionType(types), node.symbol, propagatedFlags, /*fromComputedProperty*/ true);
             }
 
             // TODO: Probably don't need the second parameter
@@ -14970,7 +14970,7 @@ namespace ts {
                 else {
                     Debug.assert(attributeDecl.kind === SyntaxKind.JsxSpreadAttribute);
                     if (attributesTable.size > 0) {
-                        spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, TypeFlags.JsxAttributes, /*looseIndexes*/ false);
+                        spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, TypeFlags.JsxAttributes, /*fromComputedProperty*/ false);
                         attributesTable = createSymbolTable();
                     }
                     const exprType = checkExpressionCached(attributeDecl.expression, checkMode);
@@ -14978,7 +14978,7 @@ namespace ts {
                         hasSpreadAnyType = true;
                     }
                     if (isValidSpreadType(exprType)) {
-                        spread = getSpreadType(spread, exprType, openingLikeElement.symbol, TypeFlags.JsxAttributes, /*looseIndexes*/ false);
+                        spread = getSpreadType(spread, exprType, openingLikeElement.symbol, TypeFlags.JsxAttributes, /*fromComputedProperty*/ false);
                     }
                     else {
                         typeToIntersect = typeToIntersect ? getIntersectionType([typeToIntersect, exprType]) : exprType;
@@ -14988,7 +14988,7 @@ namespace ts {
 
             if (!hasSpreadAnyType) {
                 if (attributesTable.size > 0) {
-                    spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, TypeFlags.JsxAttributes, /*looseIndexes*/ false);
+                    spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, TypeFlags.JsxAttributes, /*fromComputedProperty*/ false);
                 }
             }
 
@@ -15013,7 +15013,7 @@ namespace ts {
                         createArrayType(getUnionType(childrenTypes));
                     const childPropMap = createSymbolTable();
                     childPropMap.set(jsxChildrenPropertyName, childrenPropSymbol);
-                    spread = getSpreadType(spread, createAnonymousType(attributes.symbol, childPropMap, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined), attributes.symbol, TypeFlags.JsxAttributes, /*looseIndexes*/ false);
+                    spread = getSpreadType(spread, createAnonymousType(attributes.symbol, childPropMap, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined), attributes.symbol, TypeFlags.JsxAttributes, /*fromComputedProperty*/ false);
 
                 }
             }
