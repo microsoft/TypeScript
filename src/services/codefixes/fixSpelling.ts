@@ -9,7 +9,7 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions(context) {
             const { sourceFile } = context;
-            const info = getInfo(sourceFile, context.span.start,  context.program.getTypeChecker());
+            const info = getInfo(sourceFile, context.span.start, context.program.getTypeChecker());
             if (!info) return undefined;
             const { node, suggestion } = info;
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestion));

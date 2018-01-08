@@ -262,8 +262,8 @@ namespace ts.BreakpointResolver {
                         }
 
                         // Set breakpoint on identifier element of destructuring pattern
-                        // a or ...c  or d: x from
-                        // [a, b, ...c] or { a, b } or { d: x } from destructuring pattern
+                        // `a` or `...c` or `d: x` from
+                        // `[a, b, ...c]` or `{ a, b }` or `{ d: x }` from destructuring pattern
                         if ((node.kind === SyntaxKind.Identifier ||
                             node.kind === SyntaxKind.SpreadElement ||
                             node.kind === SyntaxKind.PropertyAssignment ||

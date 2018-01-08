@@ -333,7 +333,7 @@ namespace ts.SymbolDisplay {
                     else if (declaration.kind === SyntaxKind.TypeAliasDeclaration) {
                         // Type alias type parameter
                         // For example
-                        //      type list<T> = T[];  // Both T will go through same code path
+                        //      type list<T> = T[]; // Both T will go through same code path
                         addInPrefix();
                         displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
                         displayParts.push(spacePart());

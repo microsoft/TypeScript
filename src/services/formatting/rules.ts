@@ -69,10 +69,10 @@ namespace ts.formatting {
             rule("NoSpaceBeforeUnaryPostdecrementOperator", unaryPostdecrementExpressions, SyntaxKind.MinusMinusToken, [isNonJsxSameLineTokenContext], RuleAction.Delete),
 
             // More unary operator special-casing.
-            // DevDiv 181814:  Be careful when removing leading whitespace
+            // DevDiv 181814: Be careful when removing leading whitespace
             // around unary operators.  Examples:
-            //      1 - -2  --X-->  1--2
-            //      a + ++b --X-->  a+++b
+            //      1 - -2  --X--> 1--2
+            //      a + ++b --X--> a+++b
             rule("SpaceAfterPostincrementWhenFollowedByAdd", SyntaxKind.PlusPlusToken, SyntaxKind.PlusToken, [isNonJsxSameLineTokenContext, isBinaryOpContext], RuleAction.Space),
             rule("SpaceAfterAddWhenFollowedByUnaryPlus", SyntaxKind.PlusToken, SyntaxKind.PlusToken, [isNonJsxSameLineTokenContext, isBinaryOpContext], RuleAction.Space),
             rule("SpaceAfterAddWhenFollowedByPreincrement", SyntaxKind.PlusToken, SyntaxKind.PlusPlusToken, [isNonJsxSameLineTokenContext, isBinaryOpContext], RuleAction.Space),
