@@ -37,11 +37,11 @@ foo({
 >{    type: 'y',    value: 'done',    method() {        this;        this.type;        this.value;    }} : { type: "y"; value: "done"; method(): void; }
 
     type: 'y',
->type : string
+>type : "y"
 >'y' : "y"
 
     value: 'done',
->value : string
+>value : "done"
 >'done' : "done"
 
     method() {
@@ -100,11 +100,11 @@ foo2({
 >{    type2: 'y',    value: 'done',    method() {        this;        this.value;    }} : { type2: "y"; value: "done"; method(): void; }
 
     type2: 'y',
->type2 : string
+>type2 : "y"
 >'y' : "y"
 
     value: 'done',
->value : string
+>value : "done"
 >'done' : "done"
 
     method() {
@@ -153,11 +153,11 @@ let xy: X3 | Y3 = {
 >{    type: 'y',    value: 11,    ytra: 12} : { type: "y"; value: 11; ytra: number; }
 
     type: 'y',
->type : string
+>type : "y"
 >'y' : "y"
 
     value: 11,
->value : number
+>value : 11
 >11 : 11
 
     ytra: 12
@@ -209,11 +209,11 @@ let xyz: LikeA | LikeB = {
 >{    x: 'x',    y: 'y',    value: "foo",    method() {        this;        this.x;        this.y;        this.value;    }} : { x: "x"; y: "y"; value: string; method(): void; }
 
     x: 'x',
->x : string
+>x : "x"
 >'x' : "x"
 
     y: 'y',
->y : string
+>y : "y"
 >'y' : "y"
 
     value: "foo",

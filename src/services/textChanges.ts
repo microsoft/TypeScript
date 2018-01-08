@@ -332,17 +332,22 @@ namespace ts.textChanges {
             return this;
         }
 
-        public insertNodeAtTopOfFile(sourceFile: SourceFile, newNode: Statement): void {
+        public insertNodeAtTopOfFile(sourceFile: SourceFile, newNode: Statement, blankLineBetween: boolean): void {
             const pos = getInsertionPositionAtSourceFileTop(sourceFile);
             this.insertNodeAt(sourceFile, pos, newNode, {
                 prefix: pos === 0 ? undefined : this.newLineCharacter,
-                suffix: isLineBreak(sourceFile.text.charCodeAt(pos)) ? this.newLineCharacter : this.newLineCharacter + this.newLineCharacter,
+                suffix: (isLineBreak(sourceFile.text.charCodeAt(pos)) ? "" : this.newLineCharacter) + (blankLineBetween ? this.newLineCharacter : ""),
             });
         }
 
         public insertNodeBefore(sourceFile: SourceFile, before: Node, newNode: Node, blankLineBetween = false) {
             const startPosition = getAdjustedStartPosition(sourceFile, before, {}, Position.Start);
             return this.replaceWithSingle(sourceFile, startPosition, startPosition, newNode, this.getOptionsForInsertNodeBefore(before, blankLineBetween));
+        }
+
+        public changeIdentifierToPropertyAccess(sourceFile: SourceFile, prefix: string, node: Identifier): void {
+            const startPosition = getAdjustedStartPosition(sourceFile, node, {}, Position.Start);
+            this.replaceWithSingle(sourceFile, startPosition, startPosition, createPropertyAccess(createIdentifier(prefix), ""), {});
         }
 
         private getOptionsForInsertNodeBefore(before: Node, doubleNewlines: boolean): ChangeNodeOptions {

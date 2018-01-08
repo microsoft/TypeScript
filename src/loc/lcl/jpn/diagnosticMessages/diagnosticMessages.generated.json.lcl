@@ -418,7 +418,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[enum 宣言のメンバー初期化子は、他の enum で定義されたメンバーを含め、その後で宣言されたメンバーを参照できません。]]></Val>
+            <Val><![CDATA[列挙型宣言のメンバー初期化子は、他の列挙型で定義されたメンバーを含め、その後で宣言されたメンバーを参照できません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1105,7 +1105,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An enum member cannot have a numeric name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[列挙メンバーに数値名を含めることはできません。]]></Val>
+            <Val><![CDATA[列挙型メンバーに数値名を含めることはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2070,6 +2070,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclas_2720" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class '{0}' incorrectly implements class '{1}'. Did you mean to extend '{1}' and inherit its members as a subclass?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[クラス '{0}' はクラス '{1}' を正しく実装していません。'{1}' を拡張し、そのメンバーをサブクラスとして継承しますか?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Class_0_incorrectly_implements_interface_1_2420" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Class '{0}' incorrectly implements interface '{1}'.]]></Val>
@@ -2185,7 +2194,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Computed property names are not allowed in enums.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[計算されたプロパティ名は列挙では使用できません。]]></Val>
+            <Val><![CDATA[計算されたプロパティ名は列挙型では使用できません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2194,7 +2203,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Computed values are not permitted in an enum with string valued members.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[文字列値のメンバーを持つ列挙では、計算値は許可されません。]]></Val>
+            <Val><![CDATA[文字列値のメンバーを持つ列挙型では、計算値は許可されません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2434,7 +2443,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Default export of the module has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[モジュールの既定エクスポートがプライベート名 '{0}' を使用しています。]]></Val>
+            <Val><![CDATA[モジュールの既定エクスポートがプライベート名 '{0}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2581,7 +2590,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Do not erase const enum declarations in generated code.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[生成されたコード内で const enum 宣言を消去しないでください。]]></Val>
+            <Val><![CDATA[生成されたコード内で const 列挙型宣言を消去しないでください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2845,7 +2854,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enable all strict type-checking options.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[strict 型チェックのオプションをすべて有効にします。]]></Val>
+            <Val><![CDATA[厳密な型チェックのオプションをすべて有効にします。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2926,7 +2935,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum declarations must all be const or non-const.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[enum 宣言は、すべてが定数、またはすべてが非定数でなければなりません。]]></Val>
+            <Val><![CDATA[列挙型宣言は、すべてが定数、またはすべてが非定数でなければなりません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2944,7 +2953,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum member must have initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[列挙メンバーには初期化子が必要です。]]></Val>
+            <Val><![CDATA[列挙型メンバーには初期化子が必要です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3175,7 +3184,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Exported variable '{0}' has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされた変数 '{0}' が外部モジュール {2} の名前 '{1}' を使用していますが、名前を指定することはできません。]]></Val>
+            <Val><![CDATA[エクスポートされた変数 '{0}' が外部モジュール {2} の名前 '{1}' を持っているか使用していますが、名前を指定することはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3184,7 +3193,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Exported variable '{0}' has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされた変数 '{0}' がプライベート モジュール '{2}' の名前 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされた変数 '{0}' がプライベート モジュール '{2}' の名前 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3193,7 +3202,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Exported variable '{0}' has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされた変数 '{0}' がプライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされた変数 '{0}' がプライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3452,15 +3461,6 @@
           <Val><![CDATA[File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[ファイルの指定で再帰ディレクトリのワイルドカード ('**') の後に親ディレクトリ ('..') を指定することはできません: '{0}'。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0_5011" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ファイルの指定に複数の再帰的なディレクトリのワイルドカード ('**') を含めることはできません: '{0}'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3796,7 +3796,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Implements clause of exported class '{0}' has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラス '{0}' の Implements 句がプライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラス '{0}' の Implements 句がプライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3904,7 +3904,7 @@
         <Str Cat="Text">
           <Val><![CDATA[In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[複数の宣言がある列挙で、最初の列挙要素の初期化子を省略できる宣言は 1 つのみです。]]></Val>
+            <Val><![CDATA[複数の宣言がある列挙型で、最初の列挙要素の初期化子を省略できる宣言は 1 つのみです。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4588,7 +4588,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Method '{0}' of exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスのメソッド '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスのメソッド '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4597,7 +4597,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Method '{0}' of exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスのメソッド '{0}' がプライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスのメソッド '{0}' がプライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4755,6 +4755,9 @@
       <Item ItemId=";Multiple_consecutive_numeric_separators_are_not_permitted_6189" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Multiple consecutive numeric separators are not permitted.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[複数の連続した数値区切り記号を指定することはできません。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4851,6 +4854,9 @@
       <Item ItemId=";Numeric_separators_are_not_allowed_here_6188" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Numeric separators are not allowed here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[数値の区切り記号は、ここでは使用できません。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4930,7 +4936,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Octal literals are not allowed in enums members initializer. Use the syntax '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[8 進数のリテラルは、列挙メンバーの初期化子では許可されていません。構文 '{0}' を使用してください。]]></Val>
+            <Val><![CDATA[8 進数のリテラルは、列挙型メンバーの初期化子では許可されていません。構文 '{0}' を使用してください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5203,7 +5209,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of call signature from exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスの呼び出しシグネチャのパラメーター '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスの呼び出しシグネチャのパラメーター '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5212,7 +5218,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of call signature from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスの呼び出しシグネチャのパラメーター '{0}' が、プライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスの呼び出しシグネチャのパラメーター '{0}' が、プライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5221,7 +5227,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのコンストラクターのパラメーター '{0}' が外部モジュール {2} の名前 '{1}' を使用していますが、名前を指定することはできません。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのコンストラクターのパラメーター '{0}' が外部モジュール {2} の名前 '{1}' を持っているか使用していますが、名前を指定することはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5230,7 +5236,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのコンストラクターのパラメーター '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのコンストラクターのパラメーター '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5239,7 +5245,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのコンストラクターのパラメーター '{0}' がプライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのコンストラクターのパラメーター '{0}' がプライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5248,7 +5254,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor signature from exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスのコンストラクター シグネチャのパラメーター '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスのコンストラクター シグネチャのパラメーター '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5257,7 +5263,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスのコンストラクター シグネチャのパラメーター '{0}' が、プライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスのコンストラクター シグネチャのパラメーター '{0}' が、プライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5266,7 +5272,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of exported function has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされた関数のパラメーター '{0}' が外部モジュール {2} の名前 '{1}' を使用していますが、名前を指定することはできません。]]></Val>
+            <Val><![CDATA[エクスポートされた関数のパラメーター '{0}' が外部モジュール {2} の名前 '{1}' を持っているか使用していますが、名前を指定することはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5275,7 +5281,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of exported function has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされた関数のパラメーター '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされた関数のパラメーター '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5284,7 +5290,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of exported function has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされた関数のパラメーター '{0}' がプライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされた関数のパラメーター '{0}' がプライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5311,7 +5317,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of method from exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスのメソッドのパラメーター '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスのメソッドのパラメーター '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5320,7 +5326,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of method from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスのメソッドのパラメーター '{0}' がプライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスのメソッドのパラメーター '{0}' がプライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5329,7 +5335,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public method from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック メソッドのパラメーター '{0}' が外部モジュール {2} の名前 '{1}' を使用していますが、名前を指定することはできません。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック メソッドのパラメーター '{0}' が外部モジュール {2} の名前 '{1}' を持っているか使用していますが、名前を指定することはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5338,7 +5344,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public method from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック メソッドのパラメーター '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック メソッドのパラメーター '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5347,7 +5353,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public method from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック メソッドのパラメーター '{0}' がプライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック メソッドのパラメーター '{0}' がプライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5356,7 +5362,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public static method from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック静的メソッドのパラメーター '{0}' が外部モジュール {2} の名前 '{1}' を使用していますが、名前を指定することはできません。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック静的メソッドのパラメーター '{0}' が外部モジュール {2} の名前 '{1}' を持っているか使用していますが、名前を指定することはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5365,7 +5371,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public static method from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック静的メソッドのパラメーター '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック静的メソッドのパラメーター '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5374,7 +5380,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public static method from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック静的メソッドのパラメーター '{0}' が、プライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック静的メソッドのパラメーター '{0}' が、プライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5401,7 +5407,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック セッター '{0}' のパラメーター型が、プライベート モジュール '{2}' の名前 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック セッター '{0}' のパラメーター型が、プライベート モジュール '{2}' の名前 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5410,7 +5416,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public setter '{0}' from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック セッター '{0}' のパラメーター型が、プライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック セッター '{0}' のパラメーター型が、プライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5419,7 +5425,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public static setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック静的セッター '{0}' のパラメーター型が、プライベート モジュール '{2}' の名前 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック静的セッター '{0}' のパラメーター型が、プライベート モジュール '{2}' の名前 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5428,7 +5434,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public static setter '{0}' from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック静的セッター '{0}' のパラメーター型が、プライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック静的セッター '{0}' のパラメーター型が、プライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5509,7 +5515,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' does not exist on 'const' enum '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プロパティ '{0}' が 'const' 列挙 '{1}' に存在しません。]]></Val>
+            <Val><![CDATA[プロパティ '{0}' が 'const' 列挙型 '{1}' に存在しません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5701,7 +5707,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' of exported interface has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスのプロパティ '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスのプロパティ '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5710,7 +5716,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' of exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスのプロパティ '{0}' が、プライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスのプロパティ '{0}' が、プライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5782,7 +5788,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック メソッド '{0}' が外部モジュール {2} の名前 '{1}' を使用していますが、名前を指定することはできません。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック メソッド '{0}' が外部モジュール {2} の名前 '{1}' を持っているか使用していますが、名前を指定することはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5791,7 +5797,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public method '{0}' of exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック メソッド '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック メソッド '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5800,7 +5806,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public method '{0}' of exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック メソッド '{0}' がプライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック メソッド '{0}' がプライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5809,7 +5815,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public property '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック プロパティ '{0}' が外部モジュール {2} の名前 '{1}' を使用していますが、名前を指定することはできません。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック プロパティ '{0}' が外部モジュール {2} の名前 '{1}' を持っているか使用していますが、名前を指定することはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5818,7 +5824,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public property '{0}' of exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック プロパティ '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック プロパティ '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5827,7 +5833,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public property '{0}' of exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック プロパティ '{0}' が、プライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック プロパティ '{0}' が、プライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5836,7 +5842,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public static method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック静的メソッド '{0}' が外部モジュール {2} の名前 '{1}' を使用していますが、名前を指定することはできません。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック静的メソッド '{0}' が外部モジュール {2} の名前 '{1}' を持っているか使用していますが、名前を指定することはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5845,7 +5851,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public static method '{0}' of exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック静的メソッド '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック静的メソッド '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5854,7 +5860,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public static method '{0}' of exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック静的メソッド '{0}' が、プライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック静的メソッド '{0}' が、プライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5863,7 +5869,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public static property '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック静的プロパティ '{0}' が外部モジュール {2} の名前 '{1}' を使用していますが、名前を指定することはできません。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック静的プロパティ '{0}' が外部モジュール {2} の名前 '{1}' を持っているか使用していますが、名前を指定することはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5872,7 +5878,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public static property '{0}' of exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック静的プロパティ '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック静的プロパティ '{0}' が、プライベート モジュール '{2}' の名前 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5881,7 +5887,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public static property '{0}' of exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック静的プロパティ '{0}' が、プライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック静的プロパティ '{0}' が、プライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6109,7 +6115,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of call signature from exported interface has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスの呼び出しシグネチャの戻り値の型が、プライベート モジュール '{1}' の名前 '{0}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスの呼び出しシグネチャの戻り値の型が、プライベート モジュール '{1}' の名前 '{0}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6118,7 +6124,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of call signature from exported interface has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスの呼び出しシグネチャの戻り値の型が、プライベート名 '{0}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスの呼び出しシグネチャの戻り値の型が、プライベート名 '{0}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6127,7 +6133,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of constructor signature from exported interface has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスのコンストラクター シグネチャの戻り値の型が、プライベート モジュール '{1}' の名前 '{0}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスのコンストラクター シグネチャの戻り値の型が、プライベート モジュール '{1}' の名前 '{0}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6136,7 +6142,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of constructor signature from exported interface has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスのコンストラクター シグネチャの戻り値の型が、プライベート名 '{0}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスのコンストラクター シグネチャの戻り値の型が、プライベート名 '{0}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6157,7 +6163,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of exported function has or is using name '{0}' from external module {1} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされた関数の戻り値の型が外部モジュール {1} の名前 '{0}' を使用していますが、名前を指定することはできません。]]></Val>
+            <Val><![CDATA[エクスポートされた関数の戻り値の型が外部モジュール {1} の名前 '{0}' を持っているか使用していますが、名前を指定することはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6166,7 +6172,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of exported function has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされた関数の戻り値の型が、プライベート モジュール '{1}' の名前 '{0}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされた関数の戻り値の型が、プライベート モジュール '{1}' の名前 '{0}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6175,7 +6181,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of exported function has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされた関数の戻り値の型が、プライベート名 '{0}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされた関数の戻り値の型が、プライベート名 '{0}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6184,7 +6190,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of index signature from exported interface has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスのインデックス シグネチャの戻り値の型が、プライベート モジュール '{1}' の名前 '{0}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスのインデックス シグネチャの戻り値の型が、プライベート モジュール '{1}' の名前 '{0}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6193,7 +6199,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of index signature from exported interface has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスのインデックス シグネチャの戻り値の型が、プライベート名 '{0}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスのインデックス シグネチャの戻り値の型が、プライベート名 '{0}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6202,7 +6208,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of method from exported interface has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスのメソッドの戻り値の型が、プライベート モジュール '{1}' の名前 '{0}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスのメソッドの戻り値の型が、プライベート モジュール '{1}' の名前 '{0}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6211,7 +6217,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of method from exported interface has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスのメソッドの戻り値の型が、プライベート名 '{0}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスのメソッドの戻り値の型が、プライベート名 '{0}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6220,7 +6226,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック ゲッター '{0}' の戻り値の型が外部モジュール {2} の名前 '{1}' を使用していますが、名前を指定することはできません。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック ゲッター '{0}' の戻り値の型が外部モジュール {2} の名前 '{1}' を持っているか使用していますが、名前を指定することはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6229,7 +6235,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック ゲッター '{0}' の戻り値の型が、プライベート モジュール '{2}' の名前 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック ゲッター '{0}' の戻り値の型が、プライベート モジュール '{2}' の名前 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6238,7 +6244,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック ゲッター '{0}' の戻り値の型が、プライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック ゲッター '{0}' の戻り値の型が、プライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6247,7 +6253,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public method from exported class has or is using name '{0}' from external module {1} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック メソッドの戻り値の型が外部モジュール {1} の名前 '{0}' を使用していますが、名前を指定することはできません。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック メソッドの戻り値の型が外部モジュール {1} の名前 '{0}' を持っているか使用していますが、名前を指定することはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6256,7 +6262,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public method from exported class has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック メソッドの戻り値の型が、プライベート モジュール '{1}' の名前 '{0}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック メソッドの戻り値の型が、プライベート モジュール '{1}' の名前 '{0}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6265,7 +6271,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public method from exported class has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック メソッドの戻り値の型が、プライベート名 '{0}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック メソッドの戻り値の型が、プライベート名 '{0}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6274,7 +6280,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック静的ゲッター '{0}' の戻り値の型が外部モジュール {2} の名前 '{1}' を使用していますが、名前を指定することはできません。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック静的ゲッター '{0}' の戻り値の型が外部モジュール {2} の名前 '{1}' を持っているか使用していますが、名前を指定することはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6283,7 +6289,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック静的ゲッター '{0}' の戻り値の型が、プライベート モジュール '{2}' の名前 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック静的ゲッター '{0}' の戻り値の型が、プライベート モジュール '{2}' の名前 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6292,7 +6298,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック静的ゲッター '{0}' の戻り値の型が、プライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック静的ゲッター '{0}' の戻り値の型が、プライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6301,7 +6307,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static method from exported class has or is using name '{0}' from external module {1} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック静的メソッドの戻り値の型が外部モジュール {1} の名前 '{0}' を使用していますが、名前を指定することはできません。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック静的メソッドの戻り値の型が外部モジュール {1} の名前 '{0}' を持っているか使用していますが、名前を指定することはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6310,7 +6316,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static method from exported class has or is using name '{0}' from private module '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック静的メソッドの戻り値の型が、プライベート モジュール '{1}' の名前 '{0}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック静的メソッドの戻り値の型が、プライベート モジュール '{1}' の名前 '{0}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6319,7 +6325,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static method from exported class has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック静的メソッドの戻り値の型が、プライベート名 '{0}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック静的メソッドの戻り値の型が、プライベート名 '{0}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6835,7 +6841,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The containing function or module body is too large for control flow analysis.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[制御フロー解析に含まれている関数またはモジュールの本体が大きすぎます。]]></Val>
+            <Val><![CDATA[含まれている関数またはモジュールの本体は、制御フロー解析には大きすぎます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7630,7 +7636,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of call signature from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスの呼び出しシグネチャの型パラメーター '{0}' が、プライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスの呼び出しシグネチャの型パラメーター '{0}' が、プライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7639,7 +7645,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスのコンストラクター シグネチャの型パラメーター '{0}' が、プライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスのコンストラクター シグネチャの型パラメーター '{0}' が、プライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7648,7 +7654,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスの型パラメーター '{0}' が、プライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスの型パラメーター '{0}' が、プライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7657,7 +7663,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of exported function has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされた関数の型パラメーター '{0}' が、プライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされた関数の型パラメーター '{0}' が、プライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7666,7 +7672,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスの型パラメーター '{0}' が、プライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスの型パラメーター '{0}' が、プライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7684,7 +7690,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of method from exported interface has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイスのメソッドの型パラメーター '{0}' が、プライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイスのメソッドの型パラメーター '{0}' が、プライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7693,7 +7699,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of public method from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック メソッドの型パラメーター '{0}' が、プライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック メソッドの型パラメーター '{0}' が、プライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7702,7 +7708,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' of public static method from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラスのパブリック静的メソッドの型パラメーター '{0}' が、プライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラスのパブリック静的メソッドの型パラメーター '{0}' が、プライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8476,7 +8482,7 @@
         <Str Cat="Text">
           <Val><![CDATA['const' enum member initializer was evaluated to a non-finite value.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['const' 列挙メンバーの初期化子が、無限値に評価されました。]]></Val>
+            <Val><![CDATA['const' 列挙型メンバーの初期化子が、無限値に評価されました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8485,7 +8491,7 @@
         <Str Cat="Text">
           <Val><![CDATA['const' enum member initializer was evaluated to disallowed value 'NaN'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['const' 列挙メンバーの初期化子が、許可されない値 'NaN' に評価されました。]]></Val>
+            <Val><![CDATA['const' 列挙型メンバーの初期化子が、許可されない値 'NaN' に評価されました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8512,7 +8518,7 @@
         <Str Cat="Text">
           <Val><![CDATA['enum declarations' can only be used in a .ts file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['enum 宣言' を使用できるのは .ts ファイル内のみです。]]></Val>
+            <Val><![CDATA['列挙型宣言' を使用できるのは .ts ファイル内のみです。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8557,7 +8563,7 @@
         <Str Cat="Text">
           <Val><![CDATA['extends' clause of exported class '{0}' has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたクラス '{0}' の 'extends' 句がプライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたクラス '{0}' の 'extends' 句がプライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8566,7 +8572,7 @@
         <Str Cat="Text">
           <Val><![CDATA['extends' clause of exported interface '{0}' has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされたインターフェイス '{0}' の 'extends' 句がプライベート名 '{1}' を使用しています。]]></Val>
+            <Val><![CDATA[エクスポートされたインターフェイス '{0}' の 'extends' 句がプライベート名 '{1}' を持っているか、使用しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

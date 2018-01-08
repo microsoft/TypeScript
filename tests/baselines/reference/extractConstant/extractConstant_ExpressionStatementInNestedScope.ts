@@ -16,7 +16,6 @@ function F() {
 
 let i = 0;
 const /*RENAME*/newLocal = i++;
-
 function F() {
     
 }

@@ -47,7 +47,7 @@ const nestedSingle = nested({fields: "z"})
 >nested({fields: "z"}) : Record<"z", string>
 >nested : <A extends string>(a: { fields: A; }) => Record<A, string>
 >{fields: "z"} : { fields: "z"; }
->fields : string
+>fields : "z"
 >"z" : "z"
 
 const nestedUnionSingle = nestedUnion({fields: "z"})
@@ -55,7 +55,7 @@ const nestedUnionSingle = nestedUnion({fields: "z"})
 >nestedUnion({fields: "z"}) : Record<"z", string>
 >nestedUnion : <A extends string>(a: { fields: A | A[]; }) => Record<A, string>
 >{fields: "z"} : { fields: "z"; }
->fields : string
+>fields : "z"
 >"z" : "z"
 
 const nestedUnionArray = nestedUnion({fields: ["z", "y"]})

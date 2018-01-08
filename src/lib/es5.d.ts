@@ -992,7 +992,6 @@ interface ReadonlyArray<T> {
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    // TODO: https://github.com/Microsoft/TypeScript/issues/20454
     concat(...items: (T[] | ReadonlyArray<T>)[]): T[];
     /**
       * Combines two or more arrays.

@@ -31,7 +31,6 @@
     "devDependencies": {
         "@types/browserify": "latest",
         "@types/chai": "latest",
-        "@types/colors": "latest",
         "@types/convert-source-map": "latest",
         "@types/del": "latest",
         "@types/glob": "latest",
@@ -45,7 +44,7 @@
         "@types/minimist": "latest",
         "@types/mkdirp": "latest",
         "@types/mocha": "latest",
-        "@types/node": "latest",
+        "@types/node": "8.5.5",
         "@types/q": "latest",
         "@types/run-sequence": "latest",
         "@types/through2": "latest",
@@ -80,7 +79,7 @@
         "ts-node": "latest",
         "tslint": "latest",
         "vinyl": "latest",
-        "colors": "latest",
+        "chalk": "latest",
         "typescript": "next"
     },
     "scripts": {

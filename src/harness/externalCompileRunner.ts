@@ -42,21 +42,29 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                 const stdio = isWorker ? "pipe" : "inherit";
                 let types: string[];
                 if (fs.existsSync(path.join(cwd, "test.json"))) {
-                    const update = cp.spawnSync("git", ["submodule", "update", "--remote"], { cwd, timeout, shell: true, stdio });
-                    if (update.status !== 0) throw new Error(`git submodule update for ${directoryName} failed!`);
+                    const submoduleDir = path.join(cwd, directoryName);
+                    const reset = cp.spawnSync("git", ["reset", "HEAD", "--hard"], { cwd: submoduleDir, timeout, shell: true, stdio });
+                    if (reset.status !== 0) throw new Error(`git reset for ${directoryName} failed: ${reset.stderr.toString()}`);
+                    const clean = cp.spawnSync("git", ["clean", "-f"], { cwd: submoduleDir, timeout, shell: true, stdio });
+                    if (clean.status !== 0) throw new Error(`git clean for ${directoryName} failed: ${clean.stderr.toString()}`);
+                    const update = cp.spawnSync("git", ["submodule", "update", "--remote", "."], { cwd: submoduleDir, timeout, shell: true, stdio });
+                    if (update.status !== 0) throw new Error(`git submodule update for ${directoryName} failed: ${update.stderr.toString()}`);
 
                     const config = JSON.parse(fs.readFileSync(path.join(cwd, "test.json"), { encoding: "utf8" })) as UserConfig;
                     ts.Debug.assert(!!config.types, "Bad format from test.json: Types field must be present.");
                     types = config.types;
 
-                    cwd = path.join(cwd, directoryName);
+                    cwd = submoduleDir;
                 }
                 if (fs.existsSync(path.join(cwd, "package.json"))) {
                     if (fs.existsSync(path.join(cwd, "package-lock.json"))) {
                         fs.unlinkSync(path.join(cwd, "package-lock.json"));
                     }
+                    if (fs.existsSync(path.join(cwd, "node_modules"))) {
+                        require("del").sync(path.join(cwd, "node_modules"));
+                    }
                     const install = cp.spawnSync(`npm`, ["i"], { cwd, timeout, shell: true, stdio });
-                    if (install.status !== 0) throw new Error(`NPM Install for ${directoryName} failed!`);
+                    if (install.status !== 0) throw new Error(`NPM Install for ${directoryName} failed: ${install.stderr.toString()}`);
                 }
                 const args = [path.join(__dirname, "tsc.js")];
                 if (types) {

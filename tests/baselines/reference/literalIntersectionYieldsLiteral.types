@@ -1,37 +1,9 @@
 === tests/cases/compiler/literalIntersectionYieldsLiteral.ts ===
-export type BaseAttribute<T> = {
->BaseAttribute : BaseAttribute<T>
->T : T
-
-    type?: string;
+const x: { type: string } & { type: "string" } = { type: "string" };
+>x : { type: string; } & { type: "string"; }
 >type : string
-}
-export type StringAttribute = BaseAttribute<string> & {
->StringAttribute : StringAttribute
->BaseAttribute : BaseAttribute<T>
-
-    type: "string";
 >type : "string"
-}
-export type NumberAttribute = BaseAttribute<string> & {
->NumberAttribute : NumberAttribute
->BaseAttribute : BaseAttribute<T>
-
-    type: "number";
->type : "number"
-}
-export type Attribute = StringAttribute | NumberAttribute;
->Attribute : Attribute
->StringAttribute : StringAttribute
->NumberAttribute : NumberAttribute
-
-const foo: Attribute = {
->foo : Attribute
->Attribute : Attribute
->{    type: "string"} : { type: "string"; }
-
-    type: "string"
->type : string
+>{ type: "string" } : { type: "string"; }
+>type : "string"
 >"string" : "string"
-}
 

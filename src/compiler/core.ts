@@ -335,17 +335,6 @@ namespace ts {
         return false;
     }
 
-    export function indexOf<T>(array: ReadonlyArray<T>, value: T): number {
-        if (array) {
-            for (let i = 0; i < array.length; i++) {
-                if (array[i] === value) {
-                    return i;
-                }
-            }
-        }
-        return -1;
-    }
-
     export function indexOfAnyCharCode(text: string, charCodes: ReadonlyArray<number>, start?: number): number {
         for (let i = start || 0; i < text.length; i++) {
             if (contains(charCodes, text.charCodeAt(i))) {
@@ -1419,8 +1408,8 @@ namespace ts {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
     }
 
-    export function toArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T>;
     export function toArray<T>(value: T | T[]): T[];
+    export function toArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T>;
     export function toArray<T>(value: T | T[]): T[] {
         return isArray(value) ? value : [value];
     }
@@ -2080,7 +2069,7 @@ namespace ts {
 
     function getNormalizedPathComponentsOfUrl(url: string) {
         // Get root length of http://www.website.com/folder1/folder2/
-        // In this example the root is:  http://www.website.com/
+        // In this example the root is: http://www.website.com/
         // normalized path components should be ["http://www.website.com/", "folder1", "folder2"]
 
         const urlLength = url.length;
@@ -2113,7 +2102,7 @@ namespace ts {
         }
         else {
             // Can't find the host assume the rest of the string as component
-            // but make sure we append "/"  to it as root is not joined using "/"
+            // but make sure we append "/" to it as root is not joined using "/"
             // eg. if url passed in was http://website.com we want to use root as [http://website.com/]
             // so that other path manipulations will be correct and it can be merged with relative paths correctly
             return [url + directorySeparator];
@@ -2134,7 +2123,7 @@ namespace ts {
         const directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, currentDirectory);
         if (directoryComponents.length > 1 && lastOrUndefined(directoryComponents) === "") {
             // If the directory path given was of type test/cases/ then we really need components of directory to be only till its name
-            // that is  ["test", "cases", ""] needs to be actually ["test", "cases"]
+            // that is ["test", "cases", ""] needs to be actually ["test", "cases"]
             directoryComponents.pop();
         }
 
@@ -2376,7 +2365,6 @@ namespace ts {
 
     function getSubPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude", { singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter }: WildcardMatcher): string | undefined {
         let subpattern = "";
-        let hasRecursiveDirectoryWildcard = false;
         let hasWrittenComponent = false;
         const components = getNormalizedPathComponents(spec, basePath);
         const lastComponent = lastOrUndefined(components);
@@ -2395,12 +2383,7 @@ namespace ts {
         let optionalCount = 0;
         for (let component of components) {
             if (component === "**") {
-                if (hasRecursiveDirectoryWildcard) {
-                    return undefined;
-                }
-
                 subpattern += doubleAsteriskRegexFragment;
-                hasRecursiveDirectoryWildcard = true;
             }
             else {
                 if (usage === "directories") {
@@ -3262,5 +3245,9 @@ namespace ts {
         function clearCache() {
             cachedReadDirectoryResult.clear();
         }
+    }
+
+    export function singleElementArray<T>(t: T | undefined): T[] | undefined {
+        return t === undefined ? undefined : [t];
     }
 }
