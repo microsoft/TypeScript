@@ -29,8 +29,22 @@
 ////var v1: a1./*15*/connectExport;
 
 goTo.file("externalModuleWithExportAssignment_file1.ts");
-verify.quickInfoAt("1", 'import a1 = require("./externalModuleWithExportAssignment_file0")');
-verify.quickInfoAt("2", "var a: {\n    (): a1.connectExport;\n    test1: a1.connectModule;\n    test2(): a1.connectModule;\n}", undefined);
+verify.quickInfoAt("1", [
+    "(alias) namespace a1",
+    "(alias) var a1: {",
+    "    (): connectExport;",
+    "    test1: connectModule;",
+    "    test2(): connectModule;",
+    "}",
+    'import a1 = require("./externalModuleWithExportAssignment_file0")'
+].join("\n"));
+verify.quickInfoAt("2", [
+    "var a: {",
+    "    (): a1.connectExport;",
+    "    test1: a1.connectModule;",
+    "    test2(): a1.connectModule;",
+    "}"
+].join("\n"), undefined);
 
 goTo.marker('3');
 verify.quickInfoIs("(property) test1: a1.connectModule\n(res: any, req: any, next: any) => void", undefined);
