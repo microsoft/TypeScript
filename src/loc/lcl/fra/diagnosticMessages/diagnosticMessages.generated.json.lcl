@@ -2079,6 +2079,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclas_2720" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class '{0}' incorrectly implements class '{1}'. Did you mean to extend '{1}' and inherit its members as a subclass?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La classe '{0}' implémente de manière incorrecte la classe '{1}'. Voulez-vous vraiment étendre '{1}' et hériter de ses membres en tant que sous-classe ?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Class_0_incorrectly_implements_interface_1_2420" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Class '{0}' incorrectly implements interface '{1}'.]]></Val>
@@ -3461,15 +3470,6 @@
           <Val><![CDATA[File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[La spécification de fichier ne peut pas contenir un répertoire parent ('..') après un caractère générique de répertoire récursif ('**') : '{0}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0_5011" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Une spécification de fichier ne peut pas contenir plusieurs caractères génériques de répertoires récursifs ('**') : '{0}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4945,7 +4945,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Octal literals are not allowed in enums members initializer. Use the syntax '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Les littéraux octaux ne sont pas autorisés dans l'initialiseur des membres d'énumérations. Utilisez la syntaxe '{0}'.]]></Val>
+            <Val><![CDATA[Les littéraux octaux ne sont pas autorisés dans l'initialiseur des membres d'enums. Utilisez la syntaxe '{0}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5524,7 +5524,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' does not exist on 'const' enum '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La propriété '{0}' n'existe pas sur l'énumération 'const' '{1}'.]]></Val>
+            <Val><![CDATA[La propriété '{0}' n'existe pas sur l'enum 'const' '{1}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

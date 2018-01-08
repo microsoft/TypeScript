@@ -112,7 +112,7 @@ namespace ts.JsDoc {
     function forEachUnique<T, U>(array: T[], callback: (element: T, index: number) => U): U {
         if (array) {
             for (let i = 0; i < array.length; i++) {
-                if (indexOf(array, array[i]) === i) {
+                if (array.indexOf(array[i]) === i) {
                     const result = callback(array[i], i);
                     if (result) {
                         return result;

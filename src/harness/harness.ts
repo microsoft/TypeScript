@@ -63,7 +63,7 @@ declare var window: {};
 declare var XMLHttpRequest: {
     new(): XMLHttpRequest;
 };
-interface XMLHttpRequest  {
+interface XMLHttpRequest {
     readonly readyState: number;
     readonly responseText: string;
     readonly status: number;
@@ -874,7 +874,7 @@ namespace Harness {
         // Cache of lib files from "built/local"
         let libFileNameSourceFileMap: ts.Map<ts.SourceFile> | undefined;
 
-        // Cache of lib files from  "tests/lib/"
+        // Cache of lib files from "tests/lib/"
         const testLibFileNameSourceFileMap = ts.createMap<ts.SourceFile>();
         const es6TestLibFileNameSourceFileMap = ts.createMap<ts.SourceFile>();
 

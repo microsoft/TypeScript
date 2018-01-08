@@ -1,0 +1,24 @@
+tests/cases/compiler/implementsIncorrectlyNoAssertion.ts(8,7): error TS2420: Class 'Baz' incorrectly implements interface 'Foo & Bar'.
+  Type 'Baz' is not assignable to type 'Foo'.
+    Types of property 'x' are incompatible.
+      Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/implementsIncorrectlyNoAssertion.ts (1 errors) ====
+    declare class Foo {
+        x: string;
+    }
+    declare class Bar {
+        y: string;
+    }
+    type Wrapper = Foo & Bar;
+    class Baz implements Wrapper {
+          ~~~
+!!! error TS2420: Class 'Baz' incorrectly implements interface 'Foo & Bar'.
+!!! error TS2420:   Type 'Baz' is not assignable to type 'Foo'.
+!!! error TS2420:     Types of property 'x' are incompatible.
+!!! error TS2420:       Type 'number' is not assignable to type 'string'.
+        x: number;
+        y: string;
+    }
+    

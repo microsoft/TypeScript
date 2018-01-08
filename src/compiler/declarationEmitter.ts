@@ -1199,7 +1199,7 @@ namespace ts {
                         write(">");
                     }
                 }
-                else  {
+                else {
                     emitHeritageClause([baseTypeNode], /*isImplementsList*/ false);
                 }
             }
@@ -1866,6 +1866,7 @@ namespace ts {
                     // it allows emitSeparatedList to write separator appropriately)
                     // Example:
                     //      original: function foo([, x, ,]) {}
+                    //      tslint:disable-next-line no-double-space
                     //      emit    : function foo([ , x,  , ]) {}
                     write(" ");
                 }

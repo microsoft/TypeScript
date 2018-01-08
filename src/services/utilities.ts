@@ -1107,10 +1107,6 @@ namespace ts {
         seen.set(key, true);
         return true;
     }
-
-    export function singleElementArray<T>(t: T | undefined): T[] {
-        return t === undefined ? undefined : [t];
-    }
 }
 
 // Display-part writer helpers
