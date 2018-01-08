@@ -450,8 +450,7 @@ namespace FourSlash {
             }
         }
 
-        public goToEachRange(action: () => void) {
-            const ranges = this.getRanges();
+        public goToEachRange(ranges: ReadonlyArray<Range>, action: () => void) {
             assert(ranges.length);
             for (const range of ranges) {
                 this.goToRangeStart(range);
@@ -3787,8 +3786,12 @@ namespace FourSlashInterface {
             this.state.goToRangeStart(range);
         }
 
-        public eachRange(action: () => void) {
-            this.state.goToEachRange(action);
+        public eachRange(action: () => void): void;
+        public eachRange(ranges: ReadonlyArray<FourSlash.Range>, action: () => void): void;
+        public eachRange(a: {}, b?: {}) {
+            const ranges = b === undefined ? this.state.getRanges() : a as ReadonlyArray<FourSlash.Range>;
+            const action = (b === undefined ? a : b) as () => void;
+            this.state.goToEachRange(ranges, action);
         }
 
         public bof() {

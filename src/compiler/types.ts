@@ -2893,6 +2893,7 @@ namespace ts {
         /* @internal */ getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined;
 
         /* @internal */ resolveExternalModuleSymbol(symbol: Symbol): Symbol;
+        /* @internal */ nodeHasBadModifier(node: Node): boolean;
     }
 
     /* @internal */

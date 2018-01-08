@@ -1,6 +1,7 @@
 /* @internal */
 namespace ts.DocumentHighlights {
-    export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] | undefined {
+    type HasBadModifier = TypeChecker["nodeHasBadModifier"];
+    export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: SourceFile[], hasBadModifier: HasBadModifier): DocumentHighlights[] | undefined {
         const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ true);
 
         if (node.parent && (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent))) {
@@ -10,7 +11,7 @@ namespace ts.DocumentHighlights {
             return [{ fileName: sourceFile.fileName, highlightSpans }];
         }
 
-        return getSemanticDocumentHighlights(position, node, program, cancellationToken, sourceFilesToSearch) || getSyntacticDocumentHighlights(node, sourceFile);
+        return getSemanticDocumentHighlights(position, node, program, cancellationToken, sourceFilesToSearch) || getSyntacticDocumentHighlights(node, sourceFile, hasBadModifier);
     }
 
     function getHighlightSpanForNode(node: Node, sourceFile: SourceFile): HighlightSpan {
@@ -40,8 +41,8 @@ namespace ts.DocumentHighlights {
         return arrayFrom(fileNameToDocumentHighlights.entries(), ([fileName, highlightSpans ]) => ({ fileName, highlightSpans }));
     }
 
-    function getSyntacticDocumentHighlights(node: Node, sourceFile: SourceFile): DocumentHighlights[] {
-        const highlightSpans = getHighlightSpans(node, sourceFile);
+    function getSyntacticDocumentHighlights(node: Node, sourceFile: SourceFile, hasBadModifier: HasBadModifier): DocumentHighlights[] {
+        const highlightSpans = getHighlightSpans(node, sourceFile, hasBadModifier);
         if (!highlightSpans || highlightSpans.length === 0) {
             return undefined;
         }
@@ -49,7 +50,7 @@ namespace ts.DocumentHighlights {
         return [{ fileName: sourceFile.fileName, highlightSpans }];
     }
 
-    function getHighlightSpans(node: Node, sourceFile: SourceFile): HighlightSpan[] | undefined {
+    function getHighlightSpans(node: Node, sourceFile: SourceFile, hasBadModifier: HasBadModifier): HighlightSpan[] | undefined {
         switch (node.kind) {
             case SyntaxKind.IfKeyword:
             case SyntaxKind.ElseKeyword:
@@ -82,7 +83,7 @@ namespace ts.DocumentHighlights {
                 return useParent(node.parent, isAccessor, getGetAndSetOccurrences);
             default:
                 return isModifierKind(node.kind) && (isDeclaration(node.parent) || isVariableStatement(node.parent))
-                    ? highlightSpans(getModifierOccurrences(node.kind, node.parent))
+                    ? highlightSpans(getModifierOccurrences(node.kind, node.parent, hasBadModifier))
                     : undefined;
         }
 
@@ -204,9 +205,9 @@ namespace ts.DocumentHighlights {
         });
     }
 
-    function getModifierOccurrences(modifier: SyntaxKind, declaration: Node): Node[] {
+    function getModifierOccurrences(modifier: SyntaxKind, declaration: Declaration | VariableStatement, hasBadModifier: HasBadModifier): Node[] | undefined {
         // Make sure we only highlight the keyword when it makes sense to do so.
-        if (!isLegalModifier(modifier, declaration)) {
+        if (hasBadModifier(declaration)) {
             return undefined;
         }
 
@@ -220,7 +221,7 @@ namespace ts.DocumentHighlights {
         });
     }
 
-    function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): ReadonlyArray<Node> {
+    function getNodesToSearchForModifier(declaration: Declaration | VariableStatement, modifierFlag: ModifierFlags): ReadonlyArray<Node> {
         const container = declaration.parent;
         switch (container.kind) {
             case SyntaxKind.ModuleBlock:
@@ -228,9 +229,8 @@ namespace ts.DocumentHighlights {
             case SyntaxKind.Block:
             case SyntaxKind.CaseClause:
             case SyntaxKind.DefaultClause:
-                // Container is either a class declaration or the declaration is a classDeclaration
-                if (modifierFlag & ModifierFlags.Abstract) {
-                    return [...(<ClassDeclaration>declaration).members, declaration];
+                if (modifierFlag & ModifierFlags.Abstract && isClassDeclaration(declaration)) {
+                    return [...declaration.members, declaration];
                 }
                 else {
                     return (<ModuleBlock | SourceFile | Block | CaseClause | DefaultClause>container).statements;
@@ -255,33 +255,6 @@ namespace ts.DocumentHighlights {
                 return nodes;
             default:
                 Debug.fail("Invalid container kind.");
-        }
-    }
-
-    function isLegalModifier(modifier: SyntaxKind, declaration: Node): boolean {
-        const container = declaration.parent;
-        switch (modifier) {
-            case SyntaxKind.PrivateKeyword:
-            case SyntaxKind.ProtectedKeyword:
-            case SyntaxKind.PublicKeyword:
-                switch (container.kind) {
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.ClassExpression:
-                        return true;
-                    case SyntaxKind.Constructor:
-                        return declaration.kind === SyntaxKind.Parameter;
-                    default:
-                        return false;
-                }
-            case SyntaxKind.StaticKeyword:
-                return container.kind === SyntaxKind.ClassDeclaration || container.kind === SyntaxKind.ClassExpression;
-            case SyntaxKind.ExportKeyword:
-            case SyntaxKind.DeclareKeyword:
-                return container.kind === SyntaxKind.ModuleBlock || container.kind === SyntaxKind.SourceFile;
-            case SyntaxKind.AbstractKeyword:
-                return container.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.ClassDeclaration;
-            default:
-                return false;
         }
     }
 
