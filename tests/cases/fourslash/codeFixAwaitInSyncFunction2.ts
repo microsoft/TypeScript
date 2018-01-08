@@ -7,10 +7,9 @@
 
 verify.codeFix({
     description: "Convert to async",
-    index: 0,
     newFileContent:
-`const f = async function() {\r
-    await Promise.resolve();\r
-    await Promise.resolve();\r
+`const f = async function() {
+    await Promise.resolve();
+    await Promise.resolve();
 }`,
 });

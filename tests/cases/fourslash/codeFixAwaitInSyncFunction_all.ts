@@ -11,10 +11,11 @@
 verify.codeFixAll({
     fixId: "fixAwaitInSyncFunction",
     newFileContent:
-`async function f() {\r
-    await Promise.resolve();\r
+`async function f() {
+    await Promise.resolve();
 }
-const g = async () => {\r
-    await f();\r
+
+const g = async () => {
+    await f();
 }`,
 });

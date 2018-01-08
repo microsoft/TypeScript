@@ -3845,7 +3845,7 @@
     },
     "Convert to async": {
         "category": "Message",
-        "code": 90028
+        "code": 90029
     },
     "Convert function to an ES2015 class": {
         "category": "Message",

@@ -9,44 +9,33 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions(context) {
             const { sourceFile, span } = context;
-            const node = getNode(sourceFile, span.start);
+            const node = getNodeToInsertBefore(sourceFile, span.start);
             if (!node) return undefined;
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node));
             return [{ description: getLocaleSpecificMessage(Diagnostics.Convert_to_async), changes, fixId }];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) =>
-            doChange(changes, context.sourceFile, getNode(diag.file, diag.start!))),
+            doChange(changes, context.sourceFile, getNodeToInsertBefore(diag.file, diag.start!))),
     });
 
-    function getNode(sourceFile: SourceFile, pos: number): FunctionLikeDeclaration {
+    function getNodeToInsertBefore(sourceFile: SourceFile, pos: number): Node | undefined {//name
         const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
         const containingFunction = getContainingFunction(token);
-        if (!isFunctionLikeDeclaration(containingFunction) ||
-            isConstructorDeclaration(containingFunction) ||
-            isGetAccessorDeclaration(containingFunction) ||
-            isSetAccessorDeclaration(containingFunction)) return;
-        return containingFunction;
+        switch (containingFunction.kind) {
+            case SyntaxKind.MethodDeclaration:
+                return containingFunction.name;
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.FunctionDeclaration:
+                return findChildOfKind(containingFunction, SyntaxKind.FunctionKeyword, sourceFile);
+            case SyntaxKind.ArrowFunction:
+                return findChildOfKind(containingFunction, SyntaxKind.OpenParenToken, sourceFile) || first(containingFunction.parameters);
+            default:
+                return undefined;
+        }
     }
 
-    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, decl: FunctionLikeDeclaration) {
-        const asyncToken = createToken(SyntaxKind.AsyncKeyword);
-        const modifiers = decl.modifiers ? decl.modifiers.concat(asyncToken) : createNodeArray([asyncToken]);
-        let changed;
-        switch (decl.kind) {
-            case SyntaxKind.MethodDeclaration:
-                changed = createMethod(decl.decorators, modifiers, decl.asteriskToken, decl.name, decl.questionToken, decl.typeParameters, decl.parameters, decl.type, decl.body);
-                break;
-            case SyntaxKind.FunctionExpression:
-                changed = createFunctionExpression(modifiers, decl.asteriskToken, decl.name, decl.typeParameters, decl.parameters, decl.type, decl.body);
-                break;
-            case SyntaxKind.FunctionDeclaration:
-                changed = createFunctionDeclaration(decl.decorators, modifiers, decl.asteriskToken, decl.name, decl.typeParameters, decl.parameters, decl.type, decl.body);
-                break;
-            case SyntaxKind.ArrowFunction:
-                changed = createArrowFunction(modifiers, decl.typeParameters, decl.parameters, decl.type, decl.equalsGreaterThanToken, decl.body);
-                break;
-        }
-        changes.replaceNode(sourceFile, decl, changed);
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, insertBefore: Node): void {
+        changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, insertBefore);
     }
 }

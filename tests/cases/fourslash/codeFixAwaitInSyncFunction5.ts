@@ -8,10 +8,10 @@
 
 verify.codeFix({
     description: "Convert to async",
-    index: 0,
     newFileContent:
 `class Foo {
-    async bar() {\r
-        await Promise.resolve();\r
-    }}`,
+    async bar() {
+        await Promise.resolve();
+    }
+}`,
 });
