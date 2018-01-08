@@ -21239,34 +21239,32 @@ namespace ts {
 
         function checkUnusedClassMembers(node: ClassDeclaration | ClassExpression): void {
             if (compilerOptions.noUnusedLocals && !(node.flags & NodeFlags.Ambient)) {
-                if (node.members) {
-                    for (const member of node.members) {
-                        switch (member.kind) {
-                            case SyntaxKind.MethodDeclaration:
-                            case SyntaxKind.PropertyDeclaration:
-                            case SyntaxKind.GetAccessor:
-                            case SyntaxKind.SetAccessor:
-                                if (member.kind === SyntaxKind.SetAccessor && member.symbol.flags & SymbolFlags.GetAccessor) {
-                                    // Already would have reported an error on the getter.
-                                    break;
-                                }
-                                if (!member.symbol.isReferenced && hasModifier(member, ModifierFlags.Private)) {
-                                    error(member.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(member.symbol));
-                                }
+                for (const member of node.members) {
+                    switch (member.kind) {
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.PropertyDeclaration:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                            if (member.kind === SyntaxKind.SetAccessor && member.symbol.flags & SymbolFlags.GetAccessor) {
+                                // Already would have reported an error on the getter.
                                 break;
-                            case SyntaxKind.Constructor:
-                                for (const parameter of (<ConstructorDeclaration>member).parameters) {
-                                    if (!parameter.symbol.isReferenced && hasModifier(parameter, ModifierFlags.Private)) {
-                                        error(parameter.name, Diagnostics.Property_0_is_declared_but_its_value_is_never_read, symbolName(parameter.symbol));
-                                    }
+                            }
+                            if (!member.symbol.isReferenced && hasModifier(member, ModifierFlags.Private)) {
+                                error(member.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(member.symbol));
+                            }
+                            break;
+                        case SyntaxKind.Constructor:
+                            for (const parameter of (<ConstructorDeclaration>member).parameters) {
+                                if (!parameter.symbol.isReferenced && hasModifier(parameter, ModifierFlags.Private)) {
+                                    error(parameter.name, Diagnostics.Property_0_is_declared_but_its_value_is_never_read, symbolName(parameter.symbol));
                                 }
-                                break;
-                            case SyntaxKind.IndexSignature:
-                                // Can't be private
-                                break;
-                            default:
-                                Debug.fail();
-                        }
+                            }
+                            break;
+                        case SyntaxKind.IndexSignature:
+                            // Can't be private
+                            break;
+                        default:
+                            Debug.fail();
                     }
                 }
             }
