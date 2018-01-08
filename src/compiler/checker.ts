@@ -19918,24 +19918,6 @@ namespace ts {
                 return;
             }
 
-            function containsSuperCallAsComputedPropertyName(n: Declaration): boolean {
-                const name = getNameOfDeclaration(n);
-                return name && containsSuperCall(name);
-            }
-
-            function containsSuperCall(n: Node): boolean {
-                if (isSuperCall(n)) {
-                    return true;
-                }
-                else if (isFunctionLike(n)) {
-                    return false;
-                }
-                else if (isClassLike(n)) {
-                    return forEach((<ClassLikeDeclaration>n).members, containsSuperCallAsComputedPropertyName);
-                }
-                return forEachChild(n, containsSuperCall);
-            }
-
             function isInstancePropertyWithInitializer(n: Node): boolean {
                 return n.kind === SyntaxKind.PropertyDeclaration &&
                     !hasModifier(n, ModifierFlags.Static) &&
