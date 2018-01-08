@@ -475,9 +475,9 @@ module TypeScriptAllInOne {
             for (var x in { x: 0, y: 1 }) {
 >x : string
 >{ x: 0, y: 1 } : { x: number; y: number; }
->x : string
+>x : number
 >0 : 0
->y : string
+>y : number
 >1 : 1
 
              ! 

@@ -550,7 +550,7 @@ interface Math {
       */
     atan2(y: number, x: number): number;
     /**
-      * Returns the smallest number greater than or equal to its numeric argument.
+      * Returns the smallest integer greater than or equal to its numeric argument.
       * @param x A numeric expression.
       */
     ceil(x: number): number;
@@ -565,7 +565,7 @@ interface Math {
       */
     exp(x: number): number;
     /**
-      * Returns the greatest number less than or equal to its numeric argument.
+      * Returns the greatest integer less than or equal to its numeric argument.
       * @param x A numeric expression.
       */
     floor(x: number): number;
@@ -992,7 +992,6 @@ interface ReadonlyArray<T> {
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    // TODO: https://github.com/Microsoft/TypeScript/issues/20454
     concat(...items: (T[] | ReadonlyArray<T>)[]): T[];
     /**
       * Combines two or more arrays.

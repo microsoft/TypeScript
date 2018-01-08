@@ -289,3 +289,33 @@ class SelfAssert {
         }
     }
 }
+
+interface Indexed {
+>Indexed : Symbol(Indexed, Decl(typeGuardOfFromPropNameInUnionType.ts, 90, 1))
+
+    [s: string]: any;
+>s : Symbol(s, Decl(typeGuardOfFromPropNameInUnionType.ts, 93, 5))
+}
+
+function f(i: Indexed) {
+>f : Symbol(f, Decl(typeGuardOfFromPropNameInUnionType.ts, 94, 1))
+>i : Symbol(i, Decl(typeGuardOfFromPropNameInUnionType.ts, 96, 11))
+>Indexed : Symbol(Indexed, Decl(typeGuardOfFromPropNameInUnionType.ts, 90, 1))
+
+    if ("a" in i) {
+>i : Symbol(i, Decl(typeGuardOfFromPropNameInUnionType.ts, 96, 11))
+
+        return i.a;
+>i : Symbol(i, Decl(typeGuardOfFromPropNameInUnionType.ts, 96, 11))
+    }
+    else if ("b" in i) {
+>i : Symbol(i, Decl(typeGuardOfFromPropNameInUnionType.ts, 96, 11))
+
+        return i.b;
+>i : Symbol(i, Decl(typeGuardOfFromPropNameInUnionType.ts, 96, 11))
+    }
+    return "c" in i && i.c;
+>i : Symbol(i, Decl(typeGuardOfFromPropNameInUnionType.ts, 96, 11))
+>i : Symbol(i, Decl(typeGuardOfFromPropNameInUnionType.ts, 96, 11))
+}
+

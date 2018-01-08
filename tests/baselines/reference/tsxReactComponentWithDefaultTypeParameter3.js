@@ -10,19 +10,22 @@ declare class MyComp<P extends Prop> extends React.Component<P, {}> {
     internalProp: P;
 }
 
-// OK: we fille in missing type argument with empty object
+// Error
 let x1 = <MyComp />
 
-// Error
+// OK
 let x = <MyComp a={10} b="hi" />
+
+// Error
 let x2 = <MyComp a="hi"/>
 
 //// [file.jsx]
 "use strict";
 exports.__esModule = true;
 var React = require("react");
-// OK: we fille in missing type argument with empty object
-var x1 = <MyComp />;
 // Error
+var x1 = <MyComp />;
+// OK
 var x = <MyComp a={10} b="hi"/>;
+// Error
 var x2 = <MyComp a="hi"/>;

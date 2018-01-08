@@ -141,7 +141,7 @@ namespace ts {
         getEncodedSemanticClassifications(fileName: string, start: number, length: number): string;
 
         getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): string;
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/, source: string | undefined): string;
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined): string;
 
         getQuickInfoAtPosition(fileName: string, position: number): string;
 
@@ -906,11 +906,11 @@ namespace ts {
         }
 
         /** Get a string based representation of a completion list entry details */
-        public getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/, source: string | undefined) {
+        public getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined) {
             return this.forwardJSONCall(
                 `getCompletionEntryDetails('${fileName}', ${position}, '${entryName}')`,
                 () => {
-                    const localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    const localOptions: ts.FormatCodeOptions = options === undefined ? undefined : JSON.parse(options);
                     return this.languageService.getCompletionEntryDetails(fileName, position, entryName, localOptions, source);
                 }
             );

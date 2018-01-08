@@ -939,6 +939,14 @@
         "category": "Error",
         "code": 1335
     },
+    "An index signature parameter type cannot be a type alias. Consider writing '[{0}: {1}]: {2}' instead.": {
+        "category": "Error",
+        "code": 1336
+    },
+    "An index signature parameter type cannot be a union type. Consider using a mapped object type instead.": {
+        "category": "Error",
+        "code": 1337
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -2276,6 +2284,10 @@
         "category": "Error",
         "code": 2719
     },
+    "Class '{0}' incorrectly implements class '{1}'. Did you mean to extend '{1}' and inherit its members as a subclass?": {
+        "category": "Error",
+        "code": 2720
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2622,10 +2634,6 @@
     "File specification cannot end in a recursive directory wildcard ('**'): '{0}'.": {
         "category": "Error",
         "code": 5010
-    },
-    "File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'.": {
-        "category": "Error",
-        "code": 5011
     },
     "Cannot read file '{0}': {1}.": {
         "category": "Error",
@@ -3419,6 +3427,14 @@
     "Enable strict checking of property initialization in classes.": {
         "category": "Message",
         "code": 6187
+    },
+    "Numeric separators are not allowed here.": {
+        "category": "Error",
+        "code": 6188
+    },
+    "Multiple consecutive numeric separators are not permitted.": {
+        "category": "Error",
+        "code": 6189
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

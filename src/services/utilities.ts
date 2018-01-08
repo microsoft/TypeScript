@@ -445,7 +445,7 @@ namespace ts {
         return position < candidate.end || !isCompletedNode(candidate, sourceFile);
     }
 
-    export function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
+    function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
         if (nodeIsMissing(n)) {
             return false;
         }
@@ -512,7 +512,7 @@ namespace ts {
 
             case SyntaxKind.ExpressionStatement:
                 return isCompletedNode((<ExpressionStatement>n).expression, sourceFile) ||
-                    hasChildOfKind(n, SyntaxKind.SemicolonToken);
+                    hasChildOfKind(n, SyntaxKind.SemicolonToken, sourceFile);
 
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.ArrayBindingPattern:
@@ -540,11 +540,9 @@ namespace ts {
                 return isCompletedNode((<IterationStatement>n).statement, sourceFile);
             case SyntaxKind.DoStatement:
                 // rough approximation: if DoStatement has While keyword - then if node is completed is checking the presence of ')';
-                const hasWhileKeyword = findChildOfKind(n, SyntaxKind.WhileKeyword, sourceFile);
-                if (hasWhileKeyword) {
-                    return nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile);
-                }
-                return isCompletedNode((<DoStatement>n).statement, sourceFile);
+                return hasChildOfKind(n, SyntaxKind.WhileKeyword, sourceFile)
+                    ? nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile)
+                    : isCompletedNode((<DoStatement>n).statement, sourceFile);
 
             case SyntaxKind.TypeQuery:
                 return isCompletedNode((<TypeQueryNode>n).exprName, sourceFile);
@@ -619,12 +617,12 @@ namespace ts {
         };
     }
 
-    export function hasChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): boolean {
+    export function hasChildOfKind(n: Node, kind: SyntaxKind, sourceFile: SourceFile): boolean {
         return !!findChildOfKind(n, kind, sourceFile);
     }
 
-    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFileLike): Node | undefined {
-        return forEach(n.getChildren(sourceFile), c => c.kind === kind && c);
+    export function findChildOfKind<T extends Node>(n: Node, kind: T["kind"], sourceFile: SourceFileLike): T | undefined {
+        return find(n.getChildren(sourceFile), (c): c is T => c.kind === kind);
     }
 
     export function findContainingList(node: Node): SyntaxList | undefined {
@@ -1109,14 +1107,6 @@ namespace ts {
         seen.set(key, true);
         return true;
     }
-
-    export function singleElementArray<T>(t: T | undefined): T[] {
-        return t === undefined ? undefined : [t];
-    }
-
-    export function getFirstChildOfKind(node: Node, sourceFile: SourceFile, kind: SyntaxKind): Node | undefined {
-        return find(node.getChildren(sourceFile), c => c.kind === kind);
-    }
 }
 
 // Display-part writer helpers
@@ -1310,10 +1300,14 @@ namespace ts {
      */
     export function stripQuotes(name: string) {
         const length = name.length;
-        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && isSingleOrDoubleQuote(name.charCodeAt(0))) {
+        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && startsWithQuote(name)) {
             return name.substring(1, length - 1);
         }
         return name;
+    }
+
+    export function startsWithQuote(name: string): boolean {
+        return isSingleOrDoubleQuote(name.charCodeAt(0));
     }
 
     export function scriptKindIs(fileName: string, host: LanguageServiceHost, ...scriptKinds: ScriptKind[]): boolean {
@@ -1336,48 +1330,6 @@ namespace ts {
             position += 1;
         }
         return position;
-    }
-
-    export function getSourceFileImportLocation({ text }: SourceFile) {
-        const shebang = getShebang(text);
-        let position = 0;
-        if (shebang !== undefined) {
-            position = shebang.length;
-            advancePastLineBreak();
-        }
-
-        // For a source file, it is possible there are detached comments we should not skip
-        let ranges = getLeadingCommentRanges(text, position);
-        if (!ranges) return position;
-        // However we should still skip a pinned comment at the top
-        if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0])) {
-            position = ranges[0].end;
-            advancePastLineBreak();
-            ranges = ranges.slice(1);
-        }
-        // As well as any triple slash references
-        for (const range of ranges) {
-            if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment(text, range.pos, range.end)) {
-                position = range.end;
-                advancePastLineBreak();
-                continue;
-            }
-            break;
-        }
-        return position;
-
-        function advancePastLineBreak() {
-            if (position < text.length) {
-                const charCode = text.charCodeAt(position);
-                if (isLineBreak(charCode)) {
-                    position++;
-
-                    if (position < text.length && charCode === CharacterCodes.carriageReturn && text.charCodeAt(position) === CharacterCodes.lineFeed) {
-                        position++;
-                    }
-                }
-            }
-        }
     }
 
     /**
