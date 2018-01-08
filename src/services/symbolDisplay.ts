@@ -91,9 +91,14 @@ namespace ts.SymbolDisplay {
     }
 
     export function getSymbolModifiers(symbol: Symbol): string {
-        return symbol && symbol.declarations && symbol.declarations.length > 0
+        const nodeModifiers = symbol && symbol.declarations && symbol.declarations.length > 0
             ? getNodeModifiers(symbol.declarations[0])
             : ScriptElementKindModifier.none;
+
+        const symbolModifiers = symbol && symbol.flags & SymbolFlags.Optional ?
+            ScriptElementKindModifier.optionalModifier
+            : ScriptElementKindModifier.none;
+        return nodeModifiers && symbolModifiers ? nodeModifiers + "," + symbolModifiers : nodeModifiers || symbolModifiers;
     }
 
     interface SymbolDisplayPartsDocumentationAndSymbolKind {
@@ -328,7 +333,7 @@ namespace ts.SymbolDisplay {
                     else if (declaration.kind === SyntaxKind.TypeAliasDeclaration) {
                         // Type alias type parameter
                         // For example
-                        //      type list<T> = T[];  // Both T will go through same code path
+                        //      type list<T> = T[]; // Both T will go through same code path
                         addInPrefix();
                         displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
                         displayParts.push(spacePart());
@@ -496,7 +501,7 @@ namespace ts.SymbolDisplay {
             addNewLineIfDisplayPartsExist();
             if (symbolKind) {
                 pushTypePart(symbolKind);
-                if (!some(symbol.declarations, d => isArrowFunction(d) || (isFunctionExpression(d) || isClassExpression(d)) && !d.name)) {
+                if (symbol && !some(symbol.declarations, d => isArrowFunction(d) || (isFunctionExpression(d) || isClassExpression(d)) && !d.name)) {
                     displayParts.push(spacePart());
                     addFullSymbolName(symbol);
                 }

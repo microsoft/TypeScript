@@ -12,8 +12,8 @@ tests/cases/conformance/jsx/file.tsx(20,19): error TS2322: Type '{ x: number; y:
   Type '{ x: number; y: "2"; }' is not assignable to type 'PoisonedProp'.
     Types of property 'x' are incompatible.
       Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(21,20): error TS2322: Type '{ X: "hi"; x: number; y: "2"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'.
-  Type '{ X: "hi"; x: number; y: "2"; }' is not assignable to type 'PoisonedProp'.
+tests/cases/conformance/jsx/file.tsx(21,20): error TS2322: Type '{ X: string; x: number; y: "2"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'.
+  Type '{ X: string; x: number; y: "2"; }' is not assignable to type 'PoisonedProp'.
     Types of property 'x' are incompatible.
       Type 'number' is not assignable to type 'string'.
 
@@ -59,7 +59,7 @@ tests/cases/conformance/jsx/file.tsx(21,20): error TS2322: Type '{ X: "hi"; x: n
 !!! error TS2322:       Type 'number' is not assignable to type 'string'.
     let w1 = <Poisoned {...{x: 5, y: "2"}} X="hi" />;
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ X: "hi"; x: number; y: "2"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'.
-!!! error TS2322:   Type '{ X: "hi"; x: number; y: "2"; }' is not assignable to type 'PoisonedProp'.
+!!! error TS2322: Type '{ X: string; x: number; y: "2"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'.
+!!! error TS2322:   Type '{ X: string; x: number; y: "2"; }' is not assignable to type 'PoisonedProp'.
 !!! error TS2322:     Types of property 'x' are incompatible.
 !!! error TS2322:       Type 'number' is not assignable to type 'string'.

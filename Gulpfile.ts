@@ -150,7 +150,8 @@ const es2018LibrarySourceMap = es2018LibrarySource.map(source =>
     ({ target: "lib." + source, sources: ["header.d.ts", source] }));
 
 const esnextLibrarySource = [
-    "esnext.asynciterable.d.ts"
+    "esnext.asynciterable.d.ts",
+    "esnext.promise.d.ts"
 ];
 
 const esnextLibrarySourceMap = esnextLibrarySource.map(source =>

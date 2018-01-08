@@ -25,5 +25,5 @@ verify.referenceGroups(r2, [
 ]);
 verify.referenceGroups(r4, [
     { definition: "(property) I.property1: number", ranges: [r0, r1, r2, r3] },
-    { definition: "(property) property1: I", ranges: [r4] }
+    { definition: "(property) property1: any", ranges: [r4] }
 ]);

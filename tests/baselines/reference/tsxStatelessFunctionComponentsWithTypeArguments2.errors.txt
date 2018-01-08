@@ -1,7 +1,7 @@
-tests/cases/conformance/jsx/file.tsx(8,34): error TS2322: Type 'T & { ignore-prop: 10; }' is not assignable to type 'IntrinsicAttributes & { prop: number; "ignore-prop": string; }'.
-  Type 'T & { ignore-prop: 10; }' is not assignable to type '{ prop: number; "ignore-prop": string; }'.
+tests/cases/conformance/jsx/file.tsx(8,34): error TS2322: Type 'T & { ignore-prop: number; }' is not assignable to type 'IntrinsicAttributes & { prop: number; "ignore-prop": string; }'.
+  Type 'T & { ignore-prop: number; }' is not assignable to type '{ prop: number; "ignore-prop": string; }'.
     Types of property '"ignore-prop"' are incompatible.
-      Type '10' is not assignable to type 'string'.
+      Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(13,34): error TS2322: Type 'T' is not assignable to type 'IntrinsicAttributes & { prop: {}; "ignore-prop": string; }'.
   Type 'T' is not assignable to type '{ prop: {}; "ignore-prop": string; }'.
 tests/cases/conformance/jsx/file.tsx(20,19): error TS2322: Type '{ func: (a: number, b: string) => void; }' is not assignable to type 'IntrinsicAttributes & { func: (arg: number) => void; }'.
@@ -26,10 +26,10 @@ tests/cases/conformance/jsx/file.tsx(31,30): error TS2322: Type '{ values: numbe
     function Bar<T extends {prop: number}>(arg: T) {
         let a1 = <ComponentSpecific1 {...arg} ignore-prop={10} />;
                                      ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'T & { ignore-prop: 10; }' is not assignable to type 'IntrinsicAttributes & { prop: number; "ignore-prop": string; }'.
-!!! error TS2322:   Type 'T & { ignore-prop: 10; }' is not assignable to type '{ prop: number; "ignore-prop": string; }'.
+!!! error TS2322: Type 'T & { ignore-prop: number; }' is not assignable to type 'IntrinsicAttributes & { prop: number; "ignore-prop": string; }'.
+!!! error TS2322:   Type 'T & { ignore-prop: number; }' is not assignable to type '{ prop: number; "ignore-prop": string; }'.
 !!! error TS2322:     Types of property '"ignore-prop"' are incompatible.
-!!! error TS2322:       Type '10' is not assignable to type 'string'.
+!!! error TS2322:       Type 'number' is not assignable to type 'string'.
      }
     
     // Error
