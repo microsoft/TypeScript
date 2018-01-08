@@ -1429,9 +1429,13 @@ namespace ts {
                     return token() === SyntaxKind.CommaToken || token() === SyntaxKind.DotDotDotToken || isIdentifierOrPattern();
                 case ParsingContext.TypeParameters:
                     return isIdentifier();
-                case ParsingContext.ArgumentExpressions:
                 case ParsingContext.ArrayLiteralMembers:
-                    return token() === SyntaxKind.CommaToken || token() === SyntaxKind.DotDotDotToken || isStartOfExpression();
+                    if (token() === SyntaxKind.CommaToken) {
+                        return true;
+                    }
+                    // falls through
+                case ParsingContext.ArgumentExpressions:
+                    return token() === SyntaxKind.DotDotDotToken || isStartOfExpression();
                 case ParsingContext.Parameters:
                     return isStartOfParameter();
                 case ParsingContext.TypeArguments:
