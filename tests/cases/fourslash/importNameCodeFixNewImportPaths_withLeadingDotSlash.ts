@@ -11,7 +11,7 @@
 ////    "compilerOptions": {
 ////        "baseUrl": ".",
 ////        "paths": {
-////            "foo": ["./thisHasPathMapping"]
+////            "foo": ["././thisHasPathMapping"]
 ////        }
 ////    }
 ////}

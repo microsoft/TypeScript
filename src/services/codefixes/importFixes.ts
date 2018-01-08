@@ -451,9 +451,9 @@ namespace ts.codefix {
         }
     }
 
-    /** Convert "./x" to "x". */
+    /** Convert "./x" (and "././x") to "x". */
     function removeLeadingDotSlash(path: string): string {
-        return startsWith(path, "./") || startsWith(path, ".\\") ? path.slice(2) : path;
+        return startsWith(path, "./") || startsWith(path, ".\\") ? removeLeadingDotSlash(path.slice(2)) : path;
     }
 
     function tryGetModuleNameFromRootDirs(rootDirs: ReadonlyArray<string>, moduleFileName: string, sourceDirectory: string, getCanonicalFileName: (file: string) => string): string | undefined {
