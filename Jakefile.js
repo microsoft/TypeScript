@@ -1204,6 +1204,7 @@ var tslintRules = [
     "debugAssertRule",
     "nextLineRule",
     "noBomRule",
+    "noDoubleSpaceRule",
     "noIncrementDecrementRule",
     "noInOperatorRule",
     "noTypeAssertionWhitespaceRule",
