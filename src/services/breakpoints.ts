@@ -427,8 +427,9 @@ namespace ts.BreakpointResolver {
                 }
                 else {
                     const functionDeclaration = <FunctionLikeDeclaration>parameter.parent;
-                    const indexOfParameter = indexOf(functionDeclaration.parameters, parameter);
-                    if (indexOfParameter) {
+                    const indexOfParameter = functionDeclaration.parameters.indexOf(parameter);
+                    Debug.assert(indexOfParameter !== -1);
+                    if (indexOfParameter !== 0) {
                         // Not a first parameter, go to previous parameter
                         return spanInParameterDeclaration(functionDeclaration.parameters[indexOfParameter - 1]);
                     }

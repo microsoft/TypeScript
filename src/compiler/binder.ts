@@ -303,7 +303,7 @@ namespace ts {
                     // without names can only come from JSDocFunctionTypes.
                     Debug.assert(node.parent.kind === SyntaxKind.JSDocFunctionType);
                     const functionType = <JSDocFunctionType>node.parent;
-                    const index = indexOf(functionType.parameters, node);
+                    const index = functionType.parameters.indexOf(node as ParameterDeclaration);
                     return "arg" + index as __String;
                 case SyntaxKind.JSDocTypedefTag:
                     const name = getNameOfJSDocTypedef(node as JSDocTypedefTag);
@@ -2538,7 +2538,7 @@ namespace ts {
             }
 
             if (isBindingPattern(node.name)) {
-                bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, "__" + indexOf(node.parent.parameters, node) as __String);
+                bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, "__" + node.parent.parameters.indexOf(node) as __String);
             }
             else {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);

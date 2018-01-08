@@ -845,7 +845,7 @@ namespace ts {
                     return true;
                 }
                 const sourceFiles = host.getSourceFiles();
-                return indexOf(sourceFiles, declarationFile) <= indexOf(sourceFiles, useFile);
+                return sourceFiles.indexOf(declarationFile) <= sourceFiles.indexOf(useFile);
             }
 
             if (declaration.pos <= usage.pos) {
@@ -4336,7 +4336,7 @@ namespace ts {
                 }
                 else {
                     // Use specific property type when parent is a tuple or numeric index type when parent is an array
-                    const propName = "" + indexOf(pattern.elements, declaration);
+                    const propName = "" + pattern.elements.indexOf(declaration);
                     type = isTupleLikeType(parentType)
                         ? getTypeOfPropertyOfType(parentType, propName as __String)
                         : elementType;
@@ -6758,7 +6758,7 @@ namespace ts {
             if (node.initializer) {
                 const signatureDeclaration = <SignatureDeclaration>node.parent;
                 const signature = getSignatureFromDeclaration(signatureDeclaration);
-                const parameterIndex = ts.indexOf(signatureDeclaration.parameters, node);
+                const parameterIndex = signatureDeclaration.parameters.indexOf(node);
                 Debug.assert(parameterIndex >= 0);
                 return parameterIndex >= signature.minArgumentCount;
             }
@@ -6766,7 +6766,7 @@ namespace ts {
             if (iife) {
                 return !node.type &&
                     !node.dotDotDotToken &&
-                    indexOf((node.parent as SignatureDeclaration).parameters, node) >= iife.arguments.length;
+                    node.parent.parameters.indexOf(node) >= iife.arguments.length;
             }
 
             return false;
@@ -8707,7 +8707,7 @@ namespace ts {
          * This is used during inference when instantiating type parameter defaults.
          */
         function createBackreferenceMapper(typeParameters: TypeParameter[], index: number): TypeMapper {
-            return t => indexOf(typeParameters, t) >= index ? emptyObjectType : t;
+            return t => typeParameters.indexOf(t) >= index ? emptyObjectType : t;
         }
 
         function isInferenceContext(mapper: TypeMapper): mapper is InferenceContext {
@@ -10550,7 +10550,7 @@ namespace ts {
             let result = "" + type.target.id;
             for (const t of type.typeArguments) {
                 if (isUnconstrainedTypeParameter(t)) {
-                    let index = indexOf(typeParameters, t);
+                    let index = typeParameters.indexOf(t);
                     if (index < 0) {
                         index = typeParameters.length;
                         typeParameters.push(t);
@@ -12120,7 +12120,7 @@ namespace ts {
         }
 
         function getAssignedTypeOfArrayLiteralElement(node: ArrayLiteralExpression, element: Expression): Type {
-            return getTypeOfDestructuredArrayElement(getAssignedType(node), indexOf(node.elements, element));
+            return getTypeOfDestructuredArrayElement(getAssignedType(node), node.elements.indexOf(element));
         }
 
         function getAssignedTypeOfSpreadExpression(node: SpreadElement): Type {
@@ -12164,7 +12164,7 @@ namespace ts {
             const type = pattern.kind === SyntaxKind.ObjectBindingPattern ?
                 getTypeOfDestructuredProperty(parentType, node.propertyName || <Identifier>node.name) :
                 !node.dotDotDotToken ?
-                    getTypeOfDestructuredArrayElement(parentType, indexOf(pattern.elements, node)) :
+                    getTypeOfDestructuredArrayElement(parentType, pattern.elements.indexOf(node)) :
                     getTypeOfDestructuredSpreadExpression(parentType);
             return getTypeWithDefault(type, node.initializer);
         }
@@ -13918,7 +13918,7 @@ namespace ts {
             if (isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
                 const iife = getImmediatelyInvokedFunctionExpression(func);
                 if (iife && iife.arguments) {
-                    const indexOfParameter = indexOf(func.parameters, parameter);
+                    const indexOfParameter = func.parameters.indexOf(parameter);
                     if (parameter.dotDotDotToken) {
                         const restTypes: Type[] = [];
                         for (let i = indexOfParameter; i < iife.arguments.length; i++) {
@@ -13939,7 +13939,7 @@ namespace ts {
                 if (contextualSignature) {
                     const funcHasRestParameters = hasRestParameter(func);
                     const len = func.parameters.length - (funcHasRestParameters ? 1 : 0);
-                    let indexOfParameter = indexOf(func.parameters, parameter);
+                    let indexOfParameter = func.parameters.indexOf(parameter);
                     if (getThisParameter(func) !== undefined && !contextualSignature.thisParameter) {
                         Debug.assert(indexOfParameter !== 0); // Otherwise we should not have called `getContextuallyTypedParameterType`.
                         indexOfParameter -= 1;
@@ -14070,7 +14070,7 @@ namespace ts {
         // In a typed function call, an argument or substitution expression is contextually typed by the type of the corresponding parameter.
         function getContextualTypeForArgument(callTarget: CallLikeExpression, arg: Expression): Type {
             const args = getEffectiveCallArguments(callTarget);
-            const argIndex = indexOf(args, arg);
+            const argIndex = args.indexOf(arg);
             if (argIndex >= 0) {
                 // If we're already in the process of resolving the given signature, don't resolve again as
                 // that could cause infinite recursion. Instead, return anySignature.
@@ -17236,7 +17236,7 @@ namespace ts {
                         }
                         excludeCount--;
                         if (excludeCount > 0) {
-                            excludeArgument[indexOf(excludeArgument, /*value*/ true)] = false;
+                            excludeArgument[excludeArgument.indexOf(/*value*/ true)] = false;
                         }
                         else {
                             excludeArgument = undefined;
@@ -19497,7 +19497,7 @@ namespace ts {
                 error(node, Diagnostics.A_binding_pattern_parameter_cannot_be_optional_in_an_implementation_signature);
             }
             if (node.name && isIdentifier(node.name) && (node.name.escapedText === "this" || node.name.escapedText === "new")) {
-                if (indexOf(func.parameters, node) !== 0) {
+                if (func.parameters.indexOf(node) !== 0) {
                     error(node, Diagnostics.A_0_parameter_must_be_the_first_parameter, node.name.escapedText as string);
                 }
                 if (func.kind === SyntaxKind.Constructor || func.kind === SyntaxKind.ConstructSignature || func.kind === SyntaxKind.ConstructorType) {
@@ -20604,7 +20604,7 @@ namespace ts {
 
             const promisedType = getPromisedTypeOfPromise(type);
             if (promisedType) {
-                if (type.id === promisedType.id || indexOf(awaitedTypeStack, promisedType.id) >= 0) {
+                if (type.id === promisedType.id || awaitedTypeStack.indexOf(promisedType.id) >= 0) {
                     // Verify that we don't have a bad actor in the form of a promise whose
                     // promised type is the same as the promise type, or a mutually recursive
                     // promise. If so, we return undefined as we cannot guess the shape. If this
@@ -24651,7 +24651,7 @@ namespace ts {
             const typeOfArrayLiteral = getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(<Expression>expr.parent);
             const elementType = checkIteratedTypeOrElementType(typeOfArrayLiteral || unknownType, expr.parent, /*allowStringInput*/ false, /*allowAsyncIterables*/ false) || unknownType;
             return checkArrayLiteralDestructuringElementAssignment(<ArrayLiteralExpression>expr.parent, typeOfArrayLiteral,
-                indexOf((<ArrayLiteralExpression>expr.parent).elements, expr), elementType || unknownType);
+                (<ArrayLiteralExpression>expr.parent).elements.indexOf(expr), elementType || unknownType);
         }
 
         // Gets the property symbol corresponding to the property in destructuring assignment

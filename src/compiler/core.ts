@@ -335,17 +335,6 @@ namespace ts {
         return false;
     }
 
-    export function indexOf<T>(array: ReadonlyArray<T>, value: T): number {
-        if (array) {
-            for (let i = 0; i < array.length; i++) {
-                if (array[i] === value) {
-                    return i;
-                }
-            }
-        }
-        return -1;
-    }
-
     export function indexOfAnyCharCode(text: string, charCodes: ReadonlyArray<number>, start?: number): number {
         for (let i = start || 0; i < text.length; i++) {
             if (contains(charCodes, text.charCodeAt(i))) {

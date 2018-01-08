@@ -803,7 +803,7 @@ namespace ts {
                         return node === (<TypeAssertion>parent).type;
                     case SyntaxKind.CallExpression:
                     case SyntaxKind.NewExpression:
-                        return (<CallExpression>parent).typeArguments && indexOf((<CallExpression>parent).typeArguments, node) >= 0;
+                        return contains((<CallExpression>parent).typeArguments, node);
                     case SyntaxKind.TaggedTemplateExpression:
                         // TODO (drosen): TaggedTemplateExpressions may eventually support type arguments.
                         return false;
