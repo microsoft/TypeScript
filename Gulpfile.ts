@@ -151,6 +151,7 @@ const es2018LibrarySourceMap = es2018LibrarySource.map(source =>
 
 const esnextLibrarySource = [
     "esnext.asynciterable.d.ts",
+    "esnext.array.d.ts",
     "esnext.promise.d.ts"
 ];
 
