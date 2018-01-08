@@ -1988,36 +1988,17 @@ namespace ts.Completions {
 
     /**
      * Get the name to be display in completion from a given symbol.
-     *
-     * @return undefined if the name is of external module
      */
     function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean, allowStringLiteral: boolean, origin: SymbolOriginInfo | undefined): string | undefined {
         const name = getSymbolName(symbol, origin, target);
-        if (!name) return undefined;
-
-        // First check of the displayName is not external module; if it is an external module, it is not valid entry
-        if (symbol.flags & SymbolFlags.Namespace) {
-            const firstCharCode = name.charCodeAt(0);
-            if (isSingleOrDoubleQuote(firstCharCode)) {
-                // If the symbol is external module, don't show it in the completion list
-                // (i.e declare module "http" { const x; } | // <= request completion here, "http" should not be there)
-                return undefined;
-            }
-        }
-
-        // If the symbol is for a member of an object type and is the internal name of an ES
-        // symbol, it is not a valid entry. Internal names for ES symbols start with "__@"
-        if (symbol.flags & SymbolFlags.ClassMember) {
-            const escapedName = symbol.escapedName as string;
-            if (escapedName.length >= 3 &&
-                escapedName.charCodeAt(0) === CharacterCodes._ &&
-                escapedName.charCodeAt(1) === CharacterCodes._ &&
-                escapedName.charCodeAt(2) === CharacterCodes.at) {
-                return undefined;
-            }
-        }
-
-        return getCompletionEntryDisplayName(name, target, performCharacterChecks, allowStringLiteral);
+        return name === undefined
+            // If the symbol is external module, don't show it in the completion list
+            // (i.e declare module "http" { const x; } | // <= request completion here, "http" should not be there)
+            || symbol.flags & SymbolFlags.Module && startsWithQuote(name)
+            // If the symbol is the internal name of an ES symbol, it is not a valid entry. Internal names for ES symbols start with "__@"
+            || isKnownSymbol(symbol)
+            ? undefined
+            : getCompletionEntryDisplayName(name, target, performCharacterChecks, allowStringLiteral);
     }
 
     /**

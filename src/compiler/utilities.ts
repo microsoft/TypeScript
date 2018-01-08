@@ -2119,6 +2119,10 @@ namespace ts {
         return "__@" + symbolName as __String;
     }
 
+    export function isKnownSymbol(symbol: Symbol): boolean {
+        return startsWith(symbol.escapedName as string, "__@");
+    }
+
     /**
      * Includes the word "Symbol" with unicode escapes
      */
