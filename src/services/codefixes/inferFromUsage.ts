@@ -70,7 +70,6 @@ namespace ts.codefix {
             return undefined;
         }
 
-        const containingFunction = getContainingFunction(token);
         switch (errorCode) {
             // Variable and Property declarations
             case Diagnostics.Member_0_implicitly_has_an_1_type.code:
@@ -81,6 +80,13 @@ namespace ts.codefix {
                 const symbol = program.getTypeChecker().getSymbolAtLocation(token);
                 return symbol && symbol.valueDeclaration && getCodeActionForVariableDeclaration(<VariableDeclaration>symbol.valueDeclaration, program, cancellationToken);
             }
+        }
+
+        const containingFunction = getContainingFunction(token);
+        if (containingFunction === undefined) {
+            return undefined;
+        }
+        switch (errorCode) {
 
             // Parameter declarations
             case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
@@ -148,6 +154,11 @@ namespace ts.codefix {
             containingFunction.parameters.map(p => isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : undefined);
         if (!types) return undefined;
 
+        // We didn't actually find a set of type inference positions matching each parameter position
+        if (containingFunction.parameters.length !== types.length) {
+            return undefined;
+        }
+
         const textChanges = arrayFrom(mapDefinedIterator(zipToIterator(containingFunction.parameters, types), ([parameter, type]) =>
             type && !parameter.type && !parameter.initializer ? makeChange(containingFunction, parameter.end, type, program) : undefined));
         return textChanges.length ? { declaration: parameterDeclaration, textChanges } : undefined;
@@ -170,7 +181,7 @@ namespace ts.codefix {
         }
 
         const type = inferTypeForVariableFromUsage(getAccessorDeclaration.name, program, cancellationToken);
-        const closeParenToken = getFirstChildOfKind(getAccessorDeclaration, sourceFile, SyntaxKind.CloseParenToken);
+        const closeParenToken = findChildOfKind(getAccessorDeclaration, SyntaxKind.CloseParenToken, sourceFile);
         return makeFix(getAccessorDeclaration, closeParenToken.getEnd(), type, program);
     }
 
@@ -184,7 +195,8 @@ namespace ts.codefix {
     }
 
     function getReferences(token: PropertyName | Token<SyntaxKind.ConstructorKeyword>, program: Program, cancellationToken: CancellationToken): ReadonlyArray<Identifier> {
-        return mapDefined(FindAllReferences.getReferenceEntriesForNode(token, program, program.getSourceFiles(), cancellationToken), entry =>
+        // Position shouldn't matter since token is not a SourceFile.
+        return mapDefined(FindAllReferences.getReferenceEntriesForNode(-1, token, program, program.getSourceFiles(), cancellationToken), entry =>
             entry.type === "node" ? tryCast(entry.node, isIdentifier) : undefined);
     }
 
@@ -200,7 +212,7 @@ namespace ts.codefix {
             case SyntaxKind.MethodDeclaration:
                 const isConstructor = containingFunction.kind === SyntaxKind.Constructor;
                 const searchToken = isConstructor ?
-                    <Token<SyntaxKind.ConstructorKeyword>>getFirstChildOfKind(containingFunction, sourceFile, SyntaxKind.ConstructorKeyword) :
+                    findChildOfKind<Token<SyntaxKind.ConstructorKeyword>>(containingFunction, SyntaxKind.ConstructorKeyword, sourceFile) :
                     containingFunction.name;
                 if (searchToken) {
                     return InferFromReference.inferTypeForParametersFromReferences(getReferences(searchToken, program, cancellationToken), containingFunction, program.getTypeChecker(), cancellationToken);
@@ -272,6 +284,10 @@ namespace ts.codefix {
         }
 
         export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier>, declaration: FunctionLikeDeclaration, checker: TypeChecker, cancellationToken: CancellationToken): (Type | undefined)[] | undefined {
+            if (references.length === 0) {
+                return undefined;
+            }
+
             if (!declaration.parameters) {
                 return undefined;
             }
@@ -303,7 +319,7 @@ namespace ts.codefix {
                 if (!types.length) {
                     return undefined;
                 }
-                const type = checker.getWidenedType(checker.getUnionType(types, /*subtypeReduction*/ true));
+                const type = checker.getWidenedType(checker.getUnionType(types, UnionReduction.Subtype));
                 return isRestParameter ? checker.createArrayType(type) : type;
             });
         }
@@ -535,12 +551,12 @@ namespace ts.codefix {
                 return checker.getStringType();
             }
             else if (usageContext.candidateTypes) {
-                return checker.getWidenedType(checker.getUnionType(map(usageContext.candidateTypes, t => checker.getBaseTypeOfLiteralType(t)), /*subtypeReduction*/ true));
+                return checker.getWidenedType(checker.getUnionType(map(usageContext.candidateTypes, t => checker.getBaseTypeOfLiteralType(t)), UnionReduction.Subtype));
             }
             else if (usageContext.properties && hasCallContext(usageContext.properties.get("then" as __String))) {
                 const paramType = getParameterTypeFromCallContexts(0, usageContext.properties.get("then" as __String).callContexts, /*isRestParameter*/ false, checker);
                 const types = paramType.getCallSignatures().map(c => c.getReturnType());
-                return checker.createPromiseType(types.length ? checker.getUnionType(types, /*subtypeReduction*/ true) : checker.getAnyType());
+                return checker.createPromiseType(types.length ? checker.getUnionType(types, UnionReduction.Subtype) : checker.getAnyType());
             }
             else if (usageContext.properties && hasCallContext(usageContext.properties.get("push" as __String))) {
                 return checker.createArrayType(getParameterTypeFromCallContexts(0, usageContext.properties.get("push" as __String).callContexts, /*isRestParameter*/ false, checker));
@@ -603,7 +619,7 @@ namespace ts.codefix {
             }
 
             if (types.length) {
-                const type = checker.getWidenedType(checker.getUnionType(types, /*subtypeReduction*/ true));
+                const type = checker.getWidenedType(checker.getUnionType(types, UnionReduction.Subtype));
                 return isRestParameter ? checker.createArrayType(type) : type;
             }
             return undefined;

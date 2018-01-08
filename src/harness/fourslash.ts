@@ -297,7 +297,7 @@ namespace FourSlash {
                 const host = new Utils.MockParseConfigHost(baseDir, /*ignoreCase*/ false, this.inputFiles);
 
                 const configJsonObj = ts.parseConfigFileTextToJson(configFileName, this.inputFiles.get(configFileName));
-                assert(configJsonObj.config !== undefined);
+                assert.isTrue(configJsonObj.config !== undefined);
 
                 const { options, errors } = ts.parseJsonConfigFileContent(configJsonObj.config, host, baseDir);
 
@@ -441,18 +441,17 @@ namespace FourSlash {
             this.goToPosition(marker.position);
         }
 
-        public goToEachMarker(action: () => void) {
-            const markers = this.getMarkers();
-            assert(markers.length !== 0);
-            for (const marker of markers) {
-                this.goToMarker(marker);
-                action();
+        public goToEachMarker(markers: ReadonlyArray<Marker>, action: (marker: FourSlash.Marker, index: number) => void) {
+            assert(markers.length);
+            for (let i = 0; i < markers.length; i++) {
+                this.goToMarker(markers[i]);
+                action(markers[i], i);
             }
         }
 
         public goToEachRange(action: () => void) {
             const ranges = this.getRanges();
-            assert(ranges.length !== 0);
+            assert(ranges.length);
             for (const range of ranges) {
                 this.goToRangeStart(range);
                 action();
@@ -799,7 +798,7 @@ namespace FourSlash {
             }
 
             const entries = this.getCompletionListAtCaret().entries;
-            assert(items.length <= entries.length, `Amount of expected items in completion list [ ${items.length} ] is greater than actual number of items in list [ ${entries.length} ]`);
+            assert.isTrue(items.length <= entries.length, `Amount of expected items in completion list [ ${items.length} ] is greater than actual number of items in list [ ${entries.length} ]`);
             ts.zipWith(entries, items, (entry, item) => {
                 assert.equal(entry.name, item, `Unexpected item in completion list`);
             });
@@ -873,7 +872,7 @@ namespace FourSlash {
             });
         }
 
-        public verifyCompletionListContains(entryId: ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean, options?: FourSlashInterface.VerifyCompletionListContainsOptions) {
+        public verifyCompletionListContains(entryId: ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string | { kind?: string, kindModifiers?: string }, spanIndex?: number, hasAction?: boolean, options?: FourSlashInterface.VerifyCompletionListContainsOptions) {
             const completions = this.getCompletionListAtCaret(options);
             if (completions) {
                 this.assertItemInCompletionList(completions.entries, entryId, text, documentation, kind, spanIndex, hasAction, options);
@@ -894,7 +893,7 @@ namespace FourSlash {
          * @param expectedKind the kind of symbol (see ScriptElementKind)
          * @param spanIndex the index of the range that the completion item's replacement text span should match
          */
-        public verifyCompletionListDoesNotContain(entryId: ts.Completions.CompletionEntryIdentifier, expectedText?: string, expectedDocumentation?: string, expectedKind?: string, spanIndex?: number, options?: FourSlashInterface.CompletionsAtOptions) {
+        public verifyCompletionListDoesNotContain(entryId: ts.Completions.CompletionEntryIdentifier, expectedText?: string, expectedDocumentation?: string, expectedKind?: string | { kind?: string, kindModifiers?: string }, spanIndex?: number, options?: FourSlashInterface.CompletionsAtOptions) {
             let replacementSpan: ts.TextSpan;
             if (spanIndex !== undefined) {
                 replacementSpan = this.getTextSpanForRangeAtIndex(spanIndex);
@@ -903,7 +902,7 @@ namespace FourSlash {
             const completions = this.getCompletionListAtCaret(options);
             if (completions) {
                 let filterCompletions = completions.entries.filter(e => e.name === entryId.name && e.source === entryId.source);
-                filterCompletions = expectedKind ? filterCompletions.filter(e => e.kind === expectedKind) : filterCompletions;
+                filterCompletions = expectedKind ? filterCompletions.filter(e => e.kind === expectedKind || (typeof expectedKind === "object" && e.kind === expectedKind.kind)) : filterCompletions;
                 filterCompletions = filterCompletions.filter(entry => {
                     const details = this.getCompletionEntryDetails(entry.name);
                     const documentation = details && ts.displayPartsToString(details.documentation);
@@ -953,7 +952,7 @@ namespace FourSlash {
         public verifyCompletionEntryDetails(entryName: string, expectedText: string, expectedDocumentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]) {
             const details = this.getCompletionEntryDetails(entryName);
 
-            assert.isDefined(details, "no completion entry available");
+            assert(details, "no completion entry available");
 
             assert.equal(ts.displayPartsToString(details.displayParts), expectedText, this.assertionMessageAtLastKnownMarker("completion entry details text"));
 
@@ -1088,7 +1087,7 @@ namespace FourSlash {
 
         public verifyRangesReferenceEachOther(ranges?: Range[]) {
             ranges = ranges || this.getRanges();
-            assert(ranges.length !== 0);
+            assert(ranges.length);
             for (const range of ranges) {
                 this.verifyReferencesOf(range, ranges);
             }
@@ -1374,6 +1373,7 @@ Actual: ${stringify(fullActual)}`);
 
         public verifyCurrentParameterIsVariable(isVariable: boolean) {
             const signature = this.getActiveSignatureHelpItem();
+            assert.isOk(signature);
             assert.equal(isVariable, signature.isVariadic);
         }
 
@@ -2024,7 +2024,7 @@ Actual: ${stringify(fullActual)}`);
             const implementations = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition);
 
             if (negative) {
-                assert(implementations && implementations.length > 0, "Expected at least one implementation but got 0");
+                assert.isTrue(implementations && implementations.length > 0, "Expected at least one implementation but got 0");
             }
             else {
                 assert.isUndefined(implementations, "Expected implementation list to be empty but implementations returned");
@@ -3089,7 +3089,7 @@ Actual: ${stringify(fullActual)}`);
             entryId: ts.Completions.CompletionEntryIdentifier,
             text: string | undefined,
             documentation: string | undefined,
-            kind: string | undefined,
+            kind: string | undefined | { kind?: string, kindModifiers?: string },
             spanIndex: number | undefined,
             hasAction: boolean | undefined,
             options: FourSlashInterface.VerifyCompletionListContainsOptions | undefined,
@@ -3123,12 +3123,24 @@ Actual: ${stringify(fullActual)}`);
             }
 
             if (kind !== undefined) {
-                assert.equal(item.kind, kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + entryId));
+                if (typeof kind === "string") {
+                    assert.equal(item.kind, kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + entryId));
+                }
+                else {
+                    if (kind.kind) {
+                        assert.equal(item.kind, kind.kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + entryId));
+                    }
+                    if (kind.kindModifiers !== undefined) {
+                        assert.equal(item.kindModifiers, kind.kindModifiers, this.assertionMessageAtLastKnownMarker("completion item kindModifiers for " + entryId));
+                    }
+                }
             }
+
+
 
             if (spanIndex !== undefined) {
                 const span = this.getTextSpanForRangeAtIndex(spanIndex);
-                assert(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + entryId));
+                assert.isTrue(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + entryId));
             }
 
             assert.equal(item.hasAction, hasAction);
@@ -3763,8 +3775,11 @@ namespace FourSlashInterface {
             this.state.goToMarker(name);
         }
 
-        public eachMarker(action: () => void) {
-            this.state.goToEachMarker(action);
+        public eachMarker(markers: ReadonlyArray<string>, action: (marker: FourSlash.Marker, index: number) => void): void;
+        public eachMarker(action: (marker: FourSlash.Marker, index: number) => void): void;
+        public eachMarker(a: ReadonlyArray<string> | ((marker: FourSlash.Marker, index: number) => void), b?: (marker: FourSlash.Marker, index: number) => void): void {
+            const markers = typeof a === "function" ? this.state.getMarkers() : a.map(m => this.state.getMarkerByName(m));
+            this.state.goToEachMarker(markers, typeof a === "function" ? a : b);
         }
 
         public rangeStart(range: FourSlash.Range) {
@@ -3839,7 +3854,7 @@ namespace FourSlashInterface {
 
         // Verifies the completion list contains the specified symbol. The
         // completion list is brought up if necessary
-        public completionListContains(entryId: string | ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string, spanIndex?: number, hasAction?: boolean, options?: VerifyCompletionListContainsOptions) {
+        public completionListContains(entryId: string | ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string | { kind?: string, kindModifiers?: string }, spanIndex?: number, hasAction?: boolean, options?: VerifyCompletionListContainsOptions) {
             if (typeof entryId === "string") {
                 entryId = { name: entryId, source: undefined };
             }
