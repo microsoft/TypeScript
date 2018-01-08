@@ -2874,6 +2874,8 @@ namespace ts {
          * This should be called in a loop climbing parents of the symbol, so we'll get `N`.
          */
         /* @internal */ getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined;
+
+        /* @internal */ resolveExternalModuleSymbol(symbol: Symbol): Symbol;
     }
 
     /* @internal */
