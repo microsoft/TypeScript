@@ -1,5 +1,7 @@
 /// <reference path="..\harness.ts" />
 
+const expect: typeof _chai.expect = _chai.expect;
+
 namespace ts.server {
     let lastWrittenToHost: string;
     const noopFileWatcher: FileWatcher = { close: noop };
@@ -83,7 +85,7 @@ namespace ts.server {
                     }
                 };
 
-                assert.throws(() => session.executeCommand(req));
+                expect(() => session.executeCommand(req)).to.throw();
             });
             it("should output an error response when a command does not exist", () => {
                 const req: protocol.Request = {
@@ -102,7 +104,7 @@ namespace ts.server {
                     request_seq: 0,
                     success: false
                 };
-                assert.deepEqual(lastSent, expected);
+                expect(lastSent).to.deep.equal(expected);
             });
             it("should return a tuple containing the response and if a response is required on success", () => {
                 const req: protocol.ConfigureRequest = {
@@ -117,18 +119,17 @@ namespace ts.server {
                     }
                 };
 
-                assert.deepEqual(session.executeCommand(req), {
+                expect(session.executeCommand(req)).to.deep.equal({
                     responseRequired: false
                 });
-                const expected: protocol.Response = {
+                expect(lastSent).to.deep.equal({
                     command: CommandNames.Configure,
                     type: "response",
                     success: true,
                     request_seq: 0,
                     seq: 0,
                     body: undefined
-                };
-                assert.deepEqual(lastSent, expected);
+                });
             });
             it("should handle literal types in request", () => {
                 const configureRequest: protocol.ConfigureRequest = {
@@ -313,15 +314,14 @@ namespace ts.server {
 
                 session.onMessage(JSON.stringify(req));
 
-                const expected: protocol.ConfigureResponse = {
+                expect(lastSent).to.deep.equal(<protocol.ConfigureResponse>{
                     command: CommandNames.Configure,
                     type: "response",
                     success: true,
                     request_seq: 0,
                     seq: 0,
                     body: undefined
-                };
-                assert.deepEqual(lastSent, expected);
+                });
             });
         });
 
@@ -333,9 +333,9 @@ namespace ts.server {
                 const resultMsg = `Content-Length: ${len}\r\n\r\n${strmsg}\n`;
 
                 session.send = Session.prototype.send;
-                assert.isDefined(session.send);
-                session.send(msg);
-                assert.equal(lastWrittenToHost, resultMsg);
+                assert(session.send);
+                expect(session.send(msg)).to.not.exist; // tslint:disable-line no-unused-expression
+                expect(lastWrittenToHost).to.equal(resultMsg);
             });
         });
 
@@ -352,7 +352,11 @@ namespace ts.server {
 
                 session.addProtocolHandler(command, () => result);
 
-                assert.deepEqual(session.executeCommand({ command, seq: 0, type: "request" }), result);
+                expect(session.executeCommand({
+                    command,
+                    seq: 0,
+                    type: "request"
+                })).to.deep.equal(result);
             });
             it("throws when a duplicate handler is passed", () => {
                 const respBody = {
@@ -366,7 +370,8 @@ namespace ts.server {
 
                 session.addProtocolHandler(command, () => resp);
 
-                assert.throws(() => session.addProtocolHandler(command, () => resp), `Protocol handler already exists for command "${command}"`);
+                expect(() => session.addProtocolHandler(command, () => resp))
+                    .to.throw(`Protocol handler already exists for command "${command}"`);
             });
         });
 
@@ -379,13 +384,12 @@ namespace ts.server {
 
                 session.event(info, evt);
 
-                const expected: protocol.Event = {
+                expect(lastSent).to.deep.equal({
                     type: "event",
                     seq: 0,
                     event: evt,
                     body: info
-                };
-                assert.deepEqual(lastSent, expected);
+                });
             });
         });
 
@@ -400,15 +404,14 @@ namespace ts.server {
 
                 session.output(body, command, /*reqSeq*/ 0);
 
-                const expected: protocol.Response = {
+                expect(lastSent).to.deep.equal({
                     seq: 0,
                     request_seq: 0,
                     type: "response",
                     command,
                     body,
                     success: true
-                };
-                assert.deepEqual(lastSent, expected);
+                });
             });
         });
     });
@@ -469,16 +472,14 @@ namespace ts.server {
             session.onMessage(JSON.stringify(request));
             const lastSent = session.lastSent as protocol.Response;
 
-            assert.deepEqual({ ...lastSent, message: undefined }, {
-                request_seq: 0,
+            expect(lastSent).to.contain({
                 seq: 0,
                 type: "response",
                 command,
-                success: false,
-                message: undefined,
+                success: false
             });
 
-            assert(ts.stringContains(lastSent.message, "myMessage") && ts.stringContains(lastSent.message, "f1"));
+            expect(lastSent.message).has.string("myMessage").and.has.string("f1");
         });
     });
 
@@ -518,24 +519,23 @@ namespace ts.server {
 
             session.output(body, command, /*reqSeq*/ 0);
 
-            const expected: protocol.Response = {
+            expect(session.lastSent).to.deep.equal({
                 seq: 0,
                 request_seq: 0,
                 type: "response",
                 command,
                 body,
                 success: true
-            };
-            assert.deepEqual(session.lastSent, expected);
+            });
         });
         it("can add and respond to new protocol handlers", () => {
             const session = new TestSession();
 
-            assert.deepEqual(session.executeCommand({
+            expect(session.executeCommand({
                 seq: 0,
                 type: "request",
                 command: session.customHandler
-            }), {
+            })).to.deep.equal({
                 response: undefined,
                 responseRequired: true
             });
@@ -545,7 +545,8 @@ namespace ts.server {
             new class extends TestSession {
                 constructor() {
                     super();
-                    assert(this.projectService instanceof ProjectService);
+                    assert(this.projectService);
+                    expect(this.projectService).to.be.instanceOf(ProjectService);
                 }
             }();
         });
@@ -669,9 +670,9 @@ namespace ts.server {
 
             // Add an event handler
             cli.on("testevent", (eventinfo) => {
-                assert.equal(eventinfo, toEvent);
+                expect(eventinfo).to.equal(toEvent);
                 responses++;
-                assert.equal(responses, 1);
+                expect(responses).to.equal(1);
             });
 
             // Trigger said event from the server
@@ -681,8 +682,8 @@ namespace ts.server {
             cli.execute("echo", toEcho, (resp) => {
                 assert(resp.success, resp.message);
                 responses++;
-                assert.equal(responses, 2);
-                assert.deepEqual(resp.body, toEcho);
+                expect(responses).to.equal(2);
+                expect(resp.body).to.deep.equal(toEcho);
             });
 
             // Queue a configure command
@@ -694,7 +695,7 @@ namespace ts.server {
             }, (resp) => {
                 assert(resp.success, resp.message);
                 responses++;
-                assert.equal(responses, 3);
+                expect(responses).to.equal(3);
                 done();
             });
 

@@ -130,6 +130,7 @@ var harnessSources = harnessCoreSources.concat([
     "textStorage.ts",
     "moduleResolution.ts",
     "tsconfigParsing.ts",
+    "asserts.ts",
     "builder.ts",
     "commandLineParsing.ts",
     "configurationExtension.ts",
@@ -212,7 +213,8 @@ var es2018LibrarySourceMap = es2018LibrarySource.map(function (source) {
 });
 
 var esnextLibrarySource = [
-    "esnext.asynciterable.d.ts"
+    "esnext.asynciterable.d.ts",
+    "esnext.promise.d.ts"
 ];
 
 var esnextLibrarySourceMap = esnextLibrarySource.map(function (source) {
@@ -795,7 +797,7 @@ compileFile(
     /*prereqs*/[builtLocalDirectory, tscFile, tsserverLibraryFile].concat(libraryTargets).concat(servicesSources).concat(harnessSources),
     /*prefixes*/[],
     /*useBuiltCompiler:*/ true,
-    /*opts*/ { types: ["node", "mocha"], lib: "es6" });
+    /*opts*/ { types: ["node", "mocha", "chai"], lib: "es6" });
 
 var internalTests = "internal/";
 
@@ -1195,22 +1197,12 @@ task("update-sublime", ["local", serverFile], function () {
 });
 
 var tslintRuleDir = "scripts/tslint/rules";
-var tslintRules = [
-    "booleanTriviaRule",
-    "debugAssertRule",
-    "nextLineRule",
-    "noBomRule",
-    "noIncrementDecrementRule",
-    "noInOperatorRule",
-    "noTypeAssertionWhitespaceRule",
-    "objectLiteralSurroundingSpaceRule",
-    "typeOperatorSpacingRule",
-];
+var tslintRules = fs.readdirSync(tslintRuleDir);
 var tslintRulesFiles = tslintRules.map(function (p) {
-    return path.join(tslintRuleDir, p + ".ts");
+    return path.join(tslintRuleDir, p);
 });
 var tslintRulesOutFiles = tslintRules.map(function (p) {
-    return path.join(builtLocalDirectory, "tslint/rules", p + ".js");
+    return path.join(builtLocalDirectory, "tslint/rules", p.replace(".ts", ".js"));
 });
 var tslintFormattersDir = "scripts/tslint/formatters";
 var tslintFormatters = [

@@ -158,8 +158,12 @@ namespace ts {
         };
     }
 
+    function createWatchStatusReporter(options: CompilerOptions) {
+        return ts.createWatchStatusReporter(sys, !!options.pretty);
+    }
+
     function createWatchOfConfigFile(configParseResult: ParsedCommandLine, optionsToExtend: CompilerOptions) {
-        const watchCompilerHost = ts.createWatchCompilerHostOfConfigFile(configParseResult.options.configFilePath, optionsToExtend, sys, reportDiagnostic);
+        const watchCompilerHost = ts.createWatchCompilerHostOfConfigFile(configParseResult.options.configFilePath, optionsToExtend, sys, reportDiagnostic, createWatchStatusReporter(configParseResult.options));
         updateWatchCompilationHost(watchCompilerHost);
         watchCompilerHost.rootFiles = configParseResult.fileNames;
         watchCompilerHost.options = configParseResult.options;
@@ -169,7 +173,7 @@ namespace ts {
     }
 
     function createWatchOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions) {
-        const watchCompilerHost = ts.createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, sys, reportDiagnostic);
+        const watchCompilerHost = ts.createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, sys, reportDiagnostic, createWatchStatusReporter(options));
         updateWatchCompilationHost(watchCompilerHost);
         createWatchProgram(watchCompilerHost);
     }

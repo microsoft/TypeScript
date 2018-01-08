@@ -27,11 +27,26 @@ namespace ts.codefix {
     }
 
     function doChanges(changes: textChanges.ChangeTracker, sourceFile: SourceFile, extendsToken: Node, heritageClauses: ReadonlyArray<HeritageClause>): void {
-        changes.replaceNode(sourceFile, extendsToken, createToken(SyntaxKind.ImplementsKeyword));
-        // We replace existing keywords with commas.
-        for (let i = 1; i < heritageClauses.length; i++) {
-            const keywordToken = heritageClauses[i].getFirstToken()!;
-            changes.replaceNode(sourceFile, keywordToken, createToken(SyntaxKind.CommaToken));
+        changes.replaceRange(sourceFile, { pos: extendsToken.getStart(), end: extendsToken.end }, createToken(SyntaxKind.ImplementsKeyword));
+
+        // If there is already an implements clause, replace the implements keyword with a comma.
+        if (heritageClauses.length === 2 &&
+            heritageClauses[0].token === SyntaxKind.ExtendsKeyword &&
+            heritageClauses[1].token === SyntaxKind.ImplementsKeyword) {
+
+            const implementsToken = heritageClauses[1].getFirstToken()!;
+            const implementsFullStart = implementsToken.getFullStart();
+            changes.replaceRange(sourceFile, { pos: implementsFullStart, end: implementsFullStart }, createToken(SyntaxKind.CommaToken));
+
+            // Rough heuristic: delete trailing whitespace after keyword so that it's not excessive.
+            // (Trailing because leading might be indentation, which is more sensitive.)
+            const text = sourceFile.text;
+            let end = implementsToken.end;
+            while (end < text.length && ts.isWhiteSpaceSingleLine(text.charCodeAt(end))) {
+                end++;
+            }
+
+            changes.deleteRange(sourceFile, { pos: implementsToken.getStart(), end });
         }
     }
 }

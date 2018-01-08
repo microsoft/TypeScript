@@ -31,6 +31,31 @@ namespace ts {
         };
     }
 
+    function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic) {
+        if (system.clearScreen && diagnostic.code !== Diagnostics.Compilation_complete_Watching_for_file_changes.code) {
+            system.clearScreen();
+        }
+    }
+
+    /**
+     * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
+     */
+    export function createWatchStatusReporter(system: System, pretty?: boolean): WatchStatusReporter {
+        return pretty ?
+        (diagnostic: Diagnostic, newLine: string) => {
+            clearScreenIfNotWatchingForFileChanges(system, diagnostic);
+            let output = `[${ formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey) }] `;
+            output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine + newLine}`;
+            system.write(output);
+        } :
+        (diagnostic: Diagnostic, newLine: string) => {
+            clearScreenIfNotWatchingForFileChanges(system, diagnostic);
+            let output = new Date().toLocaleTimeString() + " - ";
+            output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine + newLine}`;
+            system.write(output);
+        };
+    }
+
     /**
      * Interface extending ParseConfigHost to support ParseConfigFile that reads config file and reports errors
      */
@@ -151,7 +176,7 @@ namespace ts {
     /**
      * Creates the watch compiler host that can be extended with config file or root file names and options host
      */
-    function createWatchCompilerHost(system = sys, reportDiagnostic: DiagnosticReporter): WatchCompilerHost {
+    function createWatchCompilerHost(system = sys, reportDiagnostic: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHost {
         let host: DirectoryStructureHost = system;
         const useCaseSensitiveFileNames = () => system.useCaseSensitiveFileNames;
         const writeFileName = (s: string) => system.write(s + system.newLine);
@@ -173,12 +198,13 @@ namespace ts {
             getDirectories: path => system.getDirectories(path),
             readDirectory: (path, extensions, exclude, include, depth) => system.readDirectory(path, extensions, exclude, include, depth),
             realpath: system.realpath && (path => system.realpath(path)),
+            getEnvironmentVariable: system.getEnvironmentVariable && (name => system.getEnvironmentVariable(name)),
             watchFile: system.watchFile ? ((path, callback, pollingInterval) => system.watchFile(path, callback, pollingInterval)) : () => noopFileWatcher,
             watchDirectory: system.watchDirectory ? ((path, callback, recursive) => system.watchDirectory(path, callback, recursive)) : () => noopFileWatcher,
             setTimeout: system.setTimeout ? ((callback, ms, ...args: any[]) => system.setTimeout.call(system, callback, ms, ...args)) : noop,
             clearTimeout: system.clearTimeout ? (timeoutId => system.clearTimeout(timeoutId)) : noop,
             trace: s => system.write(s),
-            onWatchStatusChange,
+            onWatchStatusChange: reportWatchStatus || createWatchStatusReporter(system),
             createDirectory: path => system.createDirectory(path),
             writeFile: (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
             onCachedDirectoryStructureHostCreate: cacheHost => host = cacheHost || system,
@@ -187,13 +213,6 @@ namespace ts {
 
         function getDefaultLibLocation() {
             return getDirectoryPath(normalizePath(system.getExecutingFilePath()));
-        }
-
-        function onWatchStatusChange(diagnostic: Diagnostic, newLine: string) {
-            if (system.clearScreen && diagnostic.code !== Diagnostics.Compilation_complete_Watching_for_file_changes.code) {
-                system.clearScreen();
-            }
-            system.write(`${new Date().toLocaleTimeString()} - ${flattenDiagnosticMessageText(diagnostic.messageText, newLine)}${newLine + newLine + newLine}`);
         }
 
         function emitFilesAndReportErrorUsingBuilder(program: Program) {
@@ -238,9 +257,9 @@ namespace ts {
     /**
      * Creates the watch compiler host from system for config file in watch mode
      */
-    export function createWatchCompilerHostOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, reportDiagnostic: DiagnosticReporter | undefined): WatchCompilerHostOfConfigFile {
+    export function createWatchCompilerHostOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, reportDiagnostic: DiagnosticReporter | undefined, reportWatchStatus: WatchStatusReporter | undefined): WatchCompilerHostOfConfigFile {
         reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system);
-        const host = createWatchCompilerHost(system, reportDiagnostic) as WatchCompilerHostOfConfigFile;
+        const host = createWatchCompilerHost(system, reportDiagnostic, reportWatchStatus) as WatchCompilerHostOfConfigFile;
         host.onConfigFileDiagnostic = reportDiagnostic;
         host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, reportDiagnostic, diagnostic);
         host.configFileName = configFileName;
@@ -251,8 +270,8 @@ namespace ts {
     /**
      * Creates the watch compiler host from system for compiling root files and options in watch mode
      */
-    export function createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions, system: System, reportDiagnostic: DiagnosticReporter | undefined): WatchCompilerHostOfFilesAndCompilerOptions {
-        const host = createWatchCompilerHost(system, reportDiagnostic || createDiagnosticReporter(system)) as WatchCompilerHostOfFilesAndCompilerOptions;
+    export function createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions, system: System, reportDiagnostic: DiagnosticReporter | undefined, reportWatchStatus: WatchStatusReporter | undefined): WatchCompilerHostOfFilesAndCompilerOptions {
+        const host = createWatchCompilerHost(system, reportDiagnostic || createDiagnosticReporter(system), reportWatchStatus) as WatchCompilerHostOfFilesAndCompilerOptions;
         host.rootFiles = rootFiles;
         host.options = options;
         return host;
@@ -261,6 +280,7 @@ namespace ts {
 
 namespace ts {
     export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
+    export type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string) => void;
 
     export interface WatchCompilerHost {
         /** If provided, callback to invoke before each program creation */
@@ -299,11 +319,13 @@ namespace ts {
         realpath?(path: string): string;
         /** If provided would be used to write log about compilation */
         trace?(s: string): void;
+        /** If provided is used to get the environment variable */
+        getEnvironmentVariable?(name: string): string;
 
         /** If provided, used to resolve the module names, otherwise typescript's default module resolution */
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
         /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
-        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): (ResolvedTypeReferenceDirective | undefined)[];
 
         /** Used to watch changes in source files, missing files needed to update the program or config file */
         watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
@@ -403,15 +425,15 @@ namespace ts {
     /**
      * Create the watched program for config file
      */
-    export function createWatchOfConfigFile(configFileName: string, optionsToExtend?: CompilerOptions, system = sys, reportDiagnostic?: DiagnosticReporter): WatchOfConfigFile<Program> {
-        return createWatchProgram(createWatchCompilerHostOfConfigFile(configFileName, optionsToExtend, system, reportDiagnostic));
+    export function createWatchOfConfigFile(configFileName: string, optionsToExtend?: CompilerOptions, system = sys, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchOfConfigFile<Program> {
+        return createWatchProgram(createWatchCompilerHostOfConfigFile(configFileName, optionsToExtend, system, reportDiagnostic, reportWatchStatus));
     }
 
     /**
      * Create the watched program for root files and compiler options
      */
-    export function createWatchOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions, system = sys, reportDiagnostic?: DiagnosticReporter): WatchOfFilesAndCompilerOptions<Program> {
-        return createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, system, reportDiagnostic));
+    export function createWatchOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions, system = sys, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchOfFilesAndCompilerOptions<Program> {
+        return createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, system, reportDiagnostic, reportWatchStatus));
     }
 
     /**
@@ -498,6 +520,7 @@ namespace ts {
             directoryExists: directoryStructureHost.directoryExists && (path => directoryStructureHost.directoryExists(path)),
             getDirectories: directoryStructureHost.getDirectories && (path => directoryStructureHost.getDirectories(path)),
             realpath: host.realpath && (s => host.realpath(s)),
+            getEnvironmentVariable: host.getEnvironmentVariable ? (name => host.getEnvironmentVariable(name)) : (() => ""),
             onReleaseOldSourceFile,
             // Members for ResolutionCacheHost
             toPath,

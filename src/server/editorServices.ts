@@ -547,9 +547,11 @@ namespace ts.server {
             }
             switch (response.kind) {
                 case ActionSet:
+                    project.resolutionCache.clear();
                     this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typeAcquisition, response.unresolvedImports, response.typings);
                     break;
                 case ActionInvalidate:
+                    project.resolutionCache.clear();
                     this.typingsCache.deleteTypingsForProject(response.projectName);
                     break;
             }
@@ -1774,9 +1776,10 @@ namespace ts.server {
             const path = normalizedPathToPath(fileName, currentDirectory, this.toCanonicalFileName);
             let info = this.getScriptInfoForPath(path);
             if (!info) {
-                Debug.assert(isRootedDiskPath(fileName) || openedByClient, "Script info with relative file name can only be open script info");
-                Debug.assert(!isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)), "Open script files with non rooted disk path opened with current directory context cannot have same canonical names");
                 const isDynamic = isDynamicFileName(fileName);
+                Debug.assert(isRootedDiskPath(fileName) || isDynamic || openedByClient, "Script info with non-dynamic relative file name can only be open script info");
+                Debug.assert(!isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)), "Open script files with non rooted disk path opened with current directory context cannot have same canonical names");
+                Debug.assert(!isDynamic || this.currentDirectory === currentDirectory, "Dynamic files must always have current directory context since containing external project name will always match the script info name.");
                 // If the file is not opened by client and the file doesnot exist on the disk, return
                 if (!openedByClient && !isDynamic && !(hostToQueryFileExistsOn || this.host).fileExists(fileName)) {
                     return;
