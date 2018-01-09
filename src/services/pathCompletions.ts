@@ -94,7 +94,7 @@ namespace ts.Completions.PathCompletions {
                  *
                  * both foo.ts and foo.tsx become foo
                  */
-                const foundFiles = createMap<boolean>();
+                const foundFiles = createMap<true>();
                 for (let filePath of files) {
                     filePath = normalizePath(filePath);
                     if (exclude && comparePaths(filePath, exclude, scriptPath, ignoreCase) === Comparison.EqualTo) {
@@ -103,7 +103,7 @@ namespace ts.Completions.PathCompletions {
 
                     const foundFileName = includeExtensions ? getBaseFileName(filePath) : removeFileExtension(getBaseFileName(filePath));
 
-                    if (!foundFiles.get(foundFileName)) {
+                    if (!foundFiles.has(foundFileName)) {
                         foundFiles.set(foundFileName, true);
                     }
                 }
@@ -226,8 +226,9 @@ namespace ts.Completions.PathCompletions {
         const includeGlob = normalizedSuffix ? "**/*" : "./*";
 
         const matches = tryReadDirectory(host, baseDirectory, fileExtensions, /*exclude*/ undefined, [includeGlob]);
+        const directories = tryGetDirectories(host, baseDirectory);
         // Trim away prefix and suffix
-        return mapDefined(matches, match => {
+        return mapDefined(concatenate(matches, directories), match => {
             const normalizedMatch = normalizePath(match);
             if (!endsWith(normalizedMatch, normalizedSuffix) || !startsWith(normalizedMatch, completePrefix)) {
                 return;
@@ -468,7 +469,7 @@ namespace ts.Completions.PathCompletions {
         return tryIOAndConsumeErrors(host, host.getDirectories, directoryName);
     }
 
-    function tryReadDirectory(host: LanguageServiceHost, path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>): string[] {
+    function tryReadDirectory(host: LanguageServiceHost, path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>): string[] | undefined {
         return tryIOAndConsumeErrors(host, host.readDirectory, path, extensions, exclude, include);
     }
 
