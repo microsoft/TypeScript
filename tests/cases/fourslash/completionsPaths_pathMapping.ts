@@ -3,6 +3,9 @@
 // @Filename: /src/b.ts
 ////export const x = 0;
 
+// @Filename: /src/dir/x.ts
+/////export const x = 0;
+
 // @Filename: /src/a.ts
 ////import {} from "foo/[|/**/|]";
 
@@ -17,4 +20,8 @@
 ////}
 
 const [replacementSpan] = test.ranges();
-verify.completionsAt("", [{ name: "a", replacementSpan }, { name: "b", replacementSpan }]);
+verify.completionsAt("", [
+    { name: "a", replacementSpan },
+    { name: "b", replacementSpan },
+    { name: "dir", replacementSpan },
+]);
