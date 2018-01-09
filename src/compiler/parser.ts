@@ -786,15 +786,7 @@ namespace ts {
             const comments = getJSDocCommentRanges(node, sourceFile.text);
             if (comments) {
                 for (const comment of comments) {
-                    const jsDoc = JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos);
-                    if (jsDoc) {
-                        if (!node.jsDoc) {
-                            node.jsDoc = [jsDoc];
-                        }
-                        else {
-                            node.jsDoc.push(jsDoc);
-                        }
-                    }
+                    node.jsDoc = append(node.jsDoc, JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
                 }
             }
 
