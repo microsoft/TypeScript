@@ -1404,6 +1404,10 @@
         "category": "Error",
         "code": 2415
     },
+    "Property '{0}' in type '{1}' is not assignable to the same property in base type '{2}'.": {
+        "category": "Error",
+        "code": 2416
+    },
     "Class static side '{0}' incorrectly extends base class static side '{1}'.": {
         "category": "Error",
         "code": 2417
