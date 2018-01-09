@@ -326,29 +326,28 @@ namespace ts.Completions.PathCompletions {
 
             if (typeRoots) {
                 for (const root of typeRoots) {
-                    getCompletionEntriesFromDirectories(host, root, span, result);
+                    getCompletionEntriesFromDirectories(root);
                 }
             }
-        }
 
-        if (host.getDirectories) {
             // Also get all @types typings installed in visible node_modules directories
             for (const packageJson of findPackageJsons(scriptPath, host)) {
                 const typesDir = combinePaths(getDirectoryPath(packageJson), "node_modules/@types");
-                getCompletionEntriesFromDirectories(host, typesDir, span, result);
+                getCompletionEntriesFromDirectories(typesDir);
             }
         }
 
         return result;
-    }
 
-    function getCompletionEntriesFromDirectories(host: LanguageServiceHost, directory: string, span: TextSpan, result: Push<CompletionEntry>) {
-        if (host.getDirectories && tryDirectoryExists(host, directory)) {
-            const directories = tryGetDirectories(host, directory);
-            if (directories) {
-                for (let typeDirectory of directories) {
-                    typeDirectory = normalizePath(typeDirectory);
-                    result.push(createCompletionEntryForModule(getBaseFileName(typeDirectory), ScriptElementKind.externalModuleName, span));
+        function getCompletionEntriesFromDirectories(directory: string) {
+            Debug.assert(!!host.getDirectories);
+            if (tryDirectoryExists(host, directory)) {
+                const directories = tryGetDirectories(host, directory);
+                if (directories) {
+                    for (let typeDirectory of directories) {
+                        typeDirectory = normalizePath(typeDirectory);
+                        result.push(createCompletionEntryForModule(getBaseFileName(typeDirectory), ScriptElementKind.externalModuleName, span));
+                    }
                 }
             }
         }
