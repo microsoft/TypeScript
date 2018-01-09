@@ -19,7 +19,7 @@ namespace ts {
         cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitOutput {
         const outputFiles: OutputFile[] = [];
         const emitResult = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
-            return { outputFiles, emitSkipped: emitResult.emitSkipped };
+        return { outputFiles, emitSkipped: emitResult.emitSkipped };
 
         function writeFile(fileName: string, text: string, writeByteOrderMark: boolean) {
             outputFiles.push({ name: fileName, writeByteOrderMark, text });

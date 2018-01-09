@@ -60,13 +60,17 @@ namespace ts.Completions {
             //     var x = <div> </ /*1*/>
             // The completion list at "1" will contain "div" with type any
             const tagName = (<JsxElement>location.parent.parent).openingElement.tagName;
-            return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false,
+            return {
+                isGlobalCompletion: false,
+                isMemberCompletion: true,
+                isNewIdentifierLocation: false,
                 entries: [{
                     name: (<JsxTagNameExpression>tagName).getFullText(),
                     kind: ScriptElementKind.classElement,
                     kindModifiers: undefined,
                     sortText: "0",
-                }]};
+                }],
+            };
         }
 
         if (request) {

@@ -37,8 +37,12 @@ describe("PreProcessFile:", () => {
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
-                    referencedFiles: [{ fileName: "refFile1.ts", pos: 22, end: 33 }, { fileName: "refFile2.ts", pos: 59, end: 70 },
-                        { fileName: "refFile3.ts", pos: 94, end: 105 }, { fileName: "..\\refFile4d.ts", pos: 131, end: 146 }],
+                    referencedFiles: [
+                        { fileName: "refFile1.ts", pos: 22, end: 33 },
+                        { fileName: "refFile2.ts", pos: 59, end: 70 },
+                        { fileName: "refFile3.ts", pos: 94, end: 105 },
+                        { fileName: "..\\refFile4d.ts", pos: 131, end: 146 },
+                    ],
                     importedFiles: <ts.FileReference[]>[],
                     typeReferenceDirectives: [],
                     ambientExternalModules: undefined,
@@ -66,8 +70,13 @@ describe("PreProcessFile:", () => {
                 {
                     referencedFiles: <ts.FileReference[]>[],
                     typeReferenceDirectives: [],
-                    importedFiles: [{ fileName: "r1.ts", pos: 20, end: 25 }, { fileName: "r2.ts", pos: 49, end: 54 }, { fileName: "r3.ts", pos: 78, end: 83 },
-                        { fileName: "r4.ts", pos: 106, end: 111 }, { fileName: "r5.ts", pos: 138, end: 143 }],
+                    importedFiles: [
+                        { fileName: "r1.ts", pos: 20, end: 25 },
+                        { fileName: "r2.ts", pos: 49, end: 54 },
+                        { fileName: "r3.ts", pos: 78, end: 83 },
+                        { fileName: "r4.ts", pos: 106, end: 111 },
+                        { fileName: "r5.ts", pos: 138, end: 143 },
+                    ],
                     ambientExternalModules: undefined,
                     isLibFile: false
                 });

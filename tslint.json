@@ -88,6 +88,9 @@
         "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
 
         // TODO
+        "align2": true,
+        //"align": [true, "statements", "members", "elements"],
+        "align": false,
         "arrow-parens": false, // [true, "ban-single-arg-parens"]
         "arrow-return-shorthand": false,
         "ban-types": false,
@@ -109,7 +112,6 @@
         "trailing-comma": false,
 
         // These should be done automatically by a formatter. https://github.com/Microsoft/TypeScript/issues/18340
-        "align": false,
         "eofline": false,
         "max-line-length": false,
         "no-consecutive-blank-lines": false,
