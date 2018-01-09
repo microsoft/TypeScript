@@ -1,0 +1,11 @@
+=== tests/cases/compiler/destructuringAssignmentWithStrictNullChecks.ts ===
+let bar: {};
+>bar : {}
+
+({ ...bar } = {});
+>({ ...bar } = {}) : {}
+>{ ...bar } = {} : {}
+>{ ...bar } : {}
+>bar : {}
+>{} : {}
+

@@ -130,6 +130,7 @@ var harnessSources = harnessCoreSources.concat([
     "textStorage.ts",
     "moduleResolution.ts",
     "tsconfigParsing.ts",
+    "asserts.ts",
     "builder.ts",
     "commandLineParsing.ts",
     "configurationExtension.ts",
@@ -205,8 +206,16 @@ var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };
 });
 
+var es2018LibrarySource = [];
+
+var es2018LibrarySourceMap = es2018LibrarySource.map(function (source) {
+    return { target: "lib." + source, sources: ["header.d.ts", source] };
+});
+
 var esnextLibrarySource = [
-    "esnext.asynciterable.d.ts"
+    "esnext.asynciterable.d.ts",
+    "esnext.array.d.ts",
+    "esnext.promise.d.ts"
 ];
 
 var esnextLibrarySourceMap = esnextLibrarySource.map(function (source) {
@@ -227,6 +236,7 @@ var librarySourceMap = [
     { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
     { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
     { target: "lib.es2017.d.ts", sources: ["header.d.ts", "es2017.d.ts"] },
+    { target: "lib.es2018.d.ts", sources: ["header.d.ts", "es2018.d.ts"] },
     { target: "lib.esnext.d.ts", sources: ["header.d.ts", "esnext.d.ts"] },
 
     // JavaScript + all host library
@@ -234,8 +244,9 @@ var librarySourceMap = [
     { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") },
     { target: "lib.es2016.full.d.ts", sources: ["header.d.ts", "es2016.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
     { target: "lib.es2017.full.d.ts", sources: ["header.d.ts", "es2017.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
+    { target: "lib.es2018.full.d.ts", sources: ["header.d.ts", "es2018.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
     { target: "lib.esnext.full.d.ts", sources: ["header.d.ts", "esnext.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap, esnextLibrarySourceMap);
+].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap, es2018LibrarySourceMap, esnextLibrarySourceMap);
 
 var libraryTargets = librarySourceMap.map(function (f) {
     return path.join(builtLocalDirectory, f.target);
@@ -848,7 +859,7 @@ function cleanTestDirs() {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, colors) {
+function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, colors, testTimeout) {
     var testConfigContents = JSON.stringify({
         runners: runners ? runners.split(",") : undefined,
         test: tests ? [tests] : undefined,
@@ -856,7 +867,8 @@ function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCou
         workerCount: workerCount,
         taskConfigsFolder: taskConfigsFolder,
         stackTraceLimit: stackTraceLimit,
-        noColor: !colors
+        noColor: !colors,
+        timeout: testTimeout
     });
     fs.writeFileSync('test.config', testConfigContents);
 }
@@ -898,12 +910,12 @@ function runConsoleTests(defaultReporter, runInParallel) {
         workerCount = process.env.workerCount || process.env.p || os.cpus().length;
     }
 
-    if (tests || runners || light || taskConfigsFolder) {
-        writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, colors);
-    }
-
     if (tests && tests.toLocaleLowerCase() === "rwc") {
         testTimeout = 800000;
+    }
+
+    if (tests || runners || light || testTimeout || taskConfigsFolder) {
+        writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, colors, testTimeout);
     }
 
     var colorsFlag = process.env.color || process.env.colors;
@@ -1192,6 +1204,7 @@ var tslintRules = [
     "debugAssertRule",
     "nextLineRule",
     "noBomRule",
+    "noDoubleSpaceRule",
     "noIncrementDecrementRule",
     "noInOperatorRule",
     "noTypeAssertionWhitespaceRule",

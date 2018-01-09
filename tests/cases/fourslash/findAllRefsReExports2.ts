@@ -10,5 +10,5 @@ verify.noErrors();
 const [r0, r1, r2] = test.ranges();
 verify.referenceGroups(r0, [
     { definition: "function foo(): void", ranges: [r0, r1] },
-    { definition: "import oof", ranges: [r2] }
+    { definition: "(alias) function oof(): void\nimport oof", ranges: [r2] }
 ]);

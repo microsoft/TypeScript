@@ -97,6 +97,7 @@ declare namespace FourSlashInterface {
         InsertSpaceAfterTypeAssertion: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
+        insertSpaceBeforeTypeAnnotation: boolean;
         [s: string]: boolean | number | string | undefined;
     }
     interface Range {
@@ -122,7 +123,8 @@ declare namespace FourSlashInterface {
     }
     class goTo {
         marker(name?: string | Marker): void;
-        eachMarker(action: () => void): void;
+        eachMarker(markers: ReadonlyArray<string>, action: (marker: Marker, index: number) => void): void;
+        eachMarker(action: (marker: Marker, index: number) => void): void;
         rangeStart(range: Range): void;
         eachRange(action: () => void): void;
         bof(): void;
@@ -146,10 +148,10 @@ declare namespace FourSlashInterface {
             entryId: string | { name: string, source?: string },
             text?: string,
             documentation?: string,
-            kind?: string,
+            kind?: string | { kind?: string, kindModifiers?: string },
             spanIndex?: number,
             hasAction?: boolean,
-            options?: { includeExternalModuleExports?: boolean, sourceDisplay?: string },
+            options?: { includeExternalModuleExports?: boolean, sourceDisplay?: string, isRecommended?: true },
         ): void;
         completionListItemsCountIsGreaterThan(count: number): void;
         completionListIsEmpty(): void;
@@ -172,7 +174,7 @@ declare namespace FourSlashInterface {
             errorCode?: number,
             index?: number,
         });
-        codeFixAvailable(options: Array<{ description: string, actions: Array<{ type: string, data: {} }> }>): void;
+        codeFixAvailable(options: Array<{ description: string, actions?: Array<{ type: string, data: {} }>, commands?: {}[] }>): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
@@ -187,7 +189,10 @@ declare namespace FourSlashInterface {
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
-        completionsAt(markerName: string, completions: string[], options?: { isNewIdentifierLocation?: boolean }): void;
+        completionsAt(markerName: string, completions: ReadonlyArray<string | { name: string, insertText?: string, replacementSpan?: Range }>, options?: {
+            isNewIdentifierLocation?: boolean;
+            includeInsertTextCompletions?: boolean;
+        }): void;
         completionsAndDetailsAt(
             markerName: string,
             completions: {
@@ -284,6 +289,7 @@ declare namespace FourSlashInterface {
         docCommentTemplateAt(markerName: string | FourSlashInterface.Marker, expectedOffset: number, expectedText: string): void;
         noDocCommentTemplateAt(markerName: string | FourSlashInterface.Marker): void;
         rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void;
+        codeFixAll(options: { fixId: string, newFileContent: string, commands?: {}[] }): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, actionName: string, formattingOptions?: FormatCodeOptions): void;
         rangeIs(expectedText: string, includeWhiteSpace?: boolean): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: FormatCodeOptions): void;

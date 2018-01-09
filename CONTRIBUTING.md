@@ -8,7 +8,14 @@ Issues that ask questions answered in the FAQ will be closed without elaboration
 
 ## 2. Search for Duplicates
 
-[Search the existing issues](https://github.com/Microsoft/TypeScript/issues?utf8=%E2%9C%93&q=is%3Aissue) before logging a new one.
+[Search the existing issues](https://github.com/Microsoft/TypeScript/search?type=Issues) before logging a new one.
+
+Some search tips:
+ * *Don't* restrict your search to only open issues. An issue with a title similar to yours may have been closed as a duplicate of one with a less-findable title.
+ * Check for synonyms. For example, if your bug involves an interface, it likely also occurs with type aliases or classes.
+ * Search for the title of the issue you're about to log. This sounds obvious but 80% of the time this is sufficient to find a duplicate when one exists.
+ * Read more than the first page of results. Many bugs here use the same words so relevancy sorting is not particularly strong.
+ * If you have a crash, search for the first few topmost function names shown in the call stack.
 
 ## 3. Do you have a question?
 
@@ -183,3 +190,10 @@ jake baseline-accept
 ```
 
 to establish the new baselines as the desired behavior. This will change the files in `tests\baselines\reference`, which should be included as part of your commit. It's important to carefully validate changes in the baselines.
+
+## Localization
+
+All strings the user may see are stored in [`diagnosticMessages.json`](./src/compiler/diagnosticMessages.json).
+If you make changes to it, run `jake generate-diagnostics` to push them to the `Diagnostic` interface in [`diagnosticInformationMap.generated.ts`](./src/compiler/diagnosticInformationMap.generated.ts).
+
+See [coding guidelines on diagnostic messages](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines#diagnostic-messages).

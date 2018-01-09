@@ -168,7 +168,7 @@ interface Array<T> {}`
                 mapSeen.set(f, true);
             }
         }
-        assert.equal(mapExpected.size, 0, `Output has missing ${JSON.stringify(flatMapIter(mapExpected.keys(), key => key))} in ${JSON.stringify(host.getOutput())}`);
+        assert.equal(mapExpected.size, 0, `Output has missing ${JSON.stringify(arrayFrom(mapExpected.keys()))} in ${JSON.stringify(host.getOutput())}`);
     }
 
     export function checkOutputDoesNotContain(host: TestServerHost, expectedToBeAbsent: string[] | ReadonlyArray<string>) {
@@ -241,7 +241,7 @@ interface Array<T> {}`
         ignoreWatchInvokedWithTriggerAsFileCreate: boolean;
     }
 
-    export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost {
+    export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
         args: string[] = [];
 
         private readonly output: string[] = [];
@@ -251,6 +251,7 @@ interface Array<T> {}`
         private toPath: (f: string) => Path;
         private timeoutCallbacks = new Callbacks();
         private immediateCallbacks = new Callbacks();
+        private screenClears = 0;
 
         readonly watchedDirectories = createMultiMap<TestDirectoryWatcher>();
         readonly watchedDirectoriesRecursive = createMultiMap<TestDirectoryWatcher>();
@@ -604,6 +605,10 @@ interface Array<T> {}`
             this.timeoutCallbacks.unregister(timeoutId);
         }
 
+        clearScreen(): void {
+            this.screenClears += 1;
+        }
+
         checkTimeoutQueueLengthAndRun(expected: number) {
             this.checkTimeoutQueueLength(expected);
             this.runQueuedTimeoutCallbacks();
@@ -636,6 +641,10 @@ interface Array<T> {}`
 
         clearImmediate(timeoutId: any): void {
             this.immediateCallbacks.unregister(timeoutId);
+        }
+
+        checkScreenClears(expected: number): void {
+            assert.equal(this.screenClears, expected);
         }
 
         createDirectory(directoryName: string): void {

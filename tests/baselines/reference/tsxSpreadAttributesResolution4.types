@@ -39,7 +39,7 @@ const obj: PoisonedProp = {
 >"hello world" : "hello world"
 
     y: 2
->y : number
+>y : 2
 >2 : 2
 
 };

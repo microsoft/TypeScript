@@ -9,7 +9,7 @@
 ////}
 
 goTo.marker("1");
-verify.completionListContains("x", "import x = M", undefined);
+verify.completionListContains("x", "(alias) namespace x\nimport x = M", undefined);
 
 goTo.marker("2");
 verify.completionListContains("value");

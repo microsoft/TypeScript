@@ -2,6 +2,7 @@
 namespace ts {
     export function createGetSymbolWalker(
         getRestTypeOfSignature: (sig: Signature) => Type,
+        getTypePredicateOfSignature: (sig: Signature) => TypePredicate | undefined,
         getReturnTypeOfSignature: (sig: Signature) => Type,
         getBaseTypes: (type: Type) => Type[],
         resolveStructuredTypeMembers: (type: ObjectType) => ResolvedType,
@@ -117,8 +118,9 @@ namespace ts {
             }
 
             function visitSignature(signature: Signature): void {
-                if (signature.typePredicate) {
-                    visitType(signature.typePredicate.type);
+                const typePredicate = getTypePredicateOfSignature(signature);
+                if (typePredicate) {
+                    visitType(typePredicate.type);
                 }
                 forEach(signature.typeParameters, visitType);
 

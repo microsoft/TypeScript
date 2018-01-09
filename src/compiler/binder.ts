@@ -303,7 +303,7 @@ namespace ts {
                     // without names can only come from JSDocFunctionTypes.
                     Debug.assert(node.parent.kind === SyntaxKind.JSDocFunctionType);
                     const functionType = <JSDocFunctionType>node.parent;
-                    const index = indexOf(functionType.parameters, node);
+                    const index = functionType.parameters.indexOf(node as ParameterDeclaration);
                     return "arg" + index as __String;
                 case SyntaxKind.JSDocTypedefTag:
                     const name = getNameOfJSDocTypedef(node as JSDocTypedefTag);
@@ -746,7 +746,11 @@ namespace ts {
         }
 
         function isNarrowingTypeofOperands(expr1: Expression, expr2: Expression) {
-            return expr1.kind === SyntaxKind.TypeOfExpression && isNarrowableOperand((<TypeOfExpression>expr1).expression) && expr2.kind === SyntaxKind.StringLiteral;
+            return expr1.kind === SyntaxKind.TypeOfExpression && isNarrowableOperand((<TypeOfExpression>expr1).expression) && (expr2.kind === SyntaxKind.StringLiteral || expr2.kind === SyntaxKind.NoSubstitutionTemplateLiteral);
+        }
+
+        function isNarrowableInOperands(left: Expression, right: Expression) {
+            return (left.kind === SyntaxKind.StringLiteral || left.kind === SyntaxKind.NoSubstitutionTemplateLiteral) && isNarrowingExpression(right);
         }
 
         function isNarrowingBinaryExpression(expr: BinaryExpression) {
@@ -761,6 +765,8 @@ namespace ts {
                         isNarrowingTypeofOperands(expr.right, expr.left) || isNarrowingTypeofOperands(expr.left, expr.right);
                 case SyntaxKind.InstanceOfKeyword:
                     return isNarrowableOperand(expr.left);
+                case SyntaxKind.InKeyword:
+                    return isNarrowableInOperands(expr.left, expr.right);
                 case SyntaxKind.CommaToken:
                     return isNarrowingExpression(expr.right);
             }
@@ -1627,7 +1633,7 @@ namespace ts {
             // to the one we would get for: { <...>(...): T }
             //
             // We do that by making an anonymous type literal symbol, and then setting the function
-            // symbol as its sole member. To the rest of the system, this symbol will be  indistinguishable
+            // symbol as its sole member. To the rest of the system, this symbol will be indistinguishable
             // from an actual type literal symbol you would have gotten had you used the long form.
             const symbol = createSymbol(SymbolFlags.Signature, getDeclarationName(node));
             addDeclarationToSymbol(symbol, node, SymbolFlags.Signature);
@@ -2404,7 +2410,7 @@ namespace ts {
             if (!isPrototypeProperty && (!targetSymbol || !(targetSymbol.flags & SymbolFlags.Namespace)) && isLegalPosition) {
                 Debug.assert(isIdentifier(propertyAccess.expression));
                 const identifier = propertyAccess.expression as Identifier;
-                const flags =  SymbolFlags.Module | SymbolFlags.JSContainer;
+                const flags = SymbolFlags.Module | SymbolFlags.JSContainer;
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.JSContainer;
                 if (targetSymbol) {
                     addDeclarationToSymbol(symbol, identifier, flags);
@@ -2511,7 +2517,7 @@ namespace ts {
             }
 
             if (isBindingPattern(node.name)) {
-                bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, "__" + indexOf(node.parent.parameters, node) as __String);
+                bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, "__" + node.parent.parameters.indexOf(node) as __String);
             }
             else {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);

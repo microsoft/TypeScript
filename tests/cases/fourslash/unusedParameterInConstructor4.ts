@@ -6,7 +6,7 @@
 //// }
 
 verify.codeFix({
-    description: "Remove declaration for: 'p2'.",
+    description: "Remove declaration for: 'p2'",
     index: 0,
     newRangeContent: "constructor(p5)",
 });

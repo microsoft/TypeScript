@@ -11,7 +11,7 @@
 ////     /**
 ////      * @param {string} foo A value.
 ////      * @returns {number} Another value
-////      * @mytag 
+////      * @mytag
 ////      */
 ////     method4(foo: string) { return 3; }
 //// }
