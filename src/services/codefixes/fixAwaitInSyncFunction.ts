@@ -19,7 +19,7 @@ namespace ts.codefix {
             doChange(changes, context.sourceFile, getNodeToInsertBefore(diag.file, diag.start!))),
     });
 
-    function getNodeToInsertBefore(sourceFile: SourceFile, pos: number): Node | undefined {//name
+    function getNodeToInsertBefore(sourceFile: SourceFile, pos: number): Node | undefined {
         const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
         const containingFunction = getContainingFunction(token);
         switch (containingFunction.kind) {
