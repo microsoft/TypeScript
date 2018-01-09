@@ -454,7 +454,7 @@ namespace FourSlash {
             const ranges = this.getRanges();
             assert(ranges.length);
             for (const range of ranges) {
-                this.goToRangeStart(range);
+                this.selectRange(range);
                 action();
             }
         }
@@ -480,6 +480,11 @@ namespace FourSlash {
             }
             this.goToPosition(start.position);
             this.selectionEnd = end.position;
+        }
+
+        public selectRange(range: Range): void {
+            this.goToRangeStart(range);
+            this.selectionEnd = range.end;
         }
 
         public moveCaretRight(count = 1) {
@@ -3834,6 +3839,10 @@ namespace FourSlashInterface {
 
         public select(startMarker: string, endMarker: string) {
             this.state.select(startMarker, endMarker);
+        }
+
+        public selectRange(range: FourSlash.Range): void {
+            this.state.selectRange(range);
         }
     }
 

@@ -412,12 +412,14 @@ namespace ts {
         return result;
     }
 
+
     export function mapIterator<T, U>(iter: Iterator<T>, mapFn: (x: T) => U): Iterator<U> {
-        return { next };
-        function next(): { value: U, done: false } | { value: never, done: true } {
-            const iterRes = iter.next();
-            return iterRes.done ? iterRes : { value: mapFn(iterRes.value), done: false };
-        }
+        return {
+            next() {
+                const iterRes = iter.next();
+                return iterRes.done ? iterRes : { value: mapFn(iterRes.value), done: false };
+            }
+        };
     }
 
     // Maps from T to T and avoids allocation if all elements map to themselves
@@ -551,12 +553,23 @@ namespace ts {
         return result || array;
     }
 
+    export function mapAllOrFail<T, U>(array: ReadonlyArray<T>, mapFn: (x: T, i: number) => U | undefined): U[] | undefined {
+        const result: U[] = [];
+        for (let i = 0; i < array.length; i++) {
+            const mapped = mapFn(array[i], i);
+            if (mapped === undefined) {
+                return undefined;
+            }
+            result.push(mapped);
+        }
+        return result;
+    }
+
     export function mapDefined<T, U>(array: ReadonlyArray<T> | undefined, mapFn: (x: T, i: number) => U | undefined): U[] {
         const result: U[] = [];
         if (array) {
             for (let i = 0; i < array.length; i++) {
-                const item = array[i];
-                const mapped = mapFn(item, i);
+                const mapped = mapFn(array[i], i);
                 if (mapped !== undefined) {
                     result.push(mapped);
                 }
