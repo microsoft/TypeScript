@@ -780,8 +780,11 @@ namespace ts.codefix {
             const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
             if (defaultExport) {
                 const localSymbol = getLocalSymbolForExportDefault(defaultExport);
-                if ((localSymbol && localSymbol.escapedName === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, context.compilerOptions.target) === symbolName)
-                    && checkSymbolHasMeaning(localSymbol || defaultExport, currentTokenMeaning)) {
+                if ((
+                        localSymbol && localSymbol.escapedName === symbolName ||
+                        getEscapedNameForExportDefault(defaultExport) === symbolName ||
+                        moduleSymbolToValidIdentifier(moduleSymbol, context.compilerOptions.target) === symbolName
+                    ) && checkSymbolHasMeaning(localSymbol || defaultExport, currentTokenMeaning)) {
                     // check if this symbol is already used
                     const symbolId = getUniqueSymbolId(localSymbol || defaultExport, checker);
                     symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, { ...context, kind: ImportKind.Default }));
@@ -793,6 +796,22 @@ namespace ts.codefix {
             if (exportSymbolWithIdenticalName && checkSymbolHasMeaning(exportSymbolWithIdenticalName, currentTokenMeaning)) {
                 const symbolId = getUniqueSymbolId(exportSymbolWithIdenticalName, checker);
                 symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, { ...context, kind: ImportKind.Named }));
+            }
+
+            function getEscapedNameForExportDefault(symbol: Symbol): __String | undefined {
+                return firstDefined(symbol.declarations, declaration => {
+                    if (isExportAssignment(declaration)) {
+                        if (isIdentifier(declaration.expression)) {
+                            return declaration.expression.escapedText;
+                        }
+                    }
+                    else if (isExportSpecifier(declaration)) {
+                        Debug.assert(declaration.name.escapedText === InternalSymbolName.Default);
+                        if (declaration.propertyName) {
+                            return declaration.propertyName.escapedText;
+                        }
+                    }
+                });
             }
         });
 

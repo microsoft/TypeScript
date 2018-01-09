@@ -38,9 +38,17 @@ namespace ts.Rename {
                     return undefined;
                 }
 
-                const displayName = stripQuotes(getDeclaredName(typeChecker, symbol, node));
                 const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);
-                return kind ? getRenameInfoSuccess(displayName, typeChecker.getFullyQualifiedName(symbol), kind, SymbolDisplay.getSymbolModifiers(symbol), node, sourceFile) : undefined;
+                if (!kind) {
+                    return undefined;
+                }
+
+                const specifierName = (isImportOrExportSpecifierName(node) || isStringOrNumericLiteral(node) && node.parent.kind === SyntaxKind.ComputedPropertyName)
+                    ? stripQuotes(getTextOfIdentifierOrLiteral(node))
+                    : undefined;
+                const displayName = specifierName || typeChecker.symbolToString(symbol);
+                const fullDisplayName = specifierName || typeChecker.getFullyQualifiedName(symbol);
+                return getRenameInfoSuccess(displayName, fullDisplayName, kind, SymbolDisplay.getSymbolModifiers(symbol), node, sourceFile);
             }
         }
         else if (node.kind === SyntaxKind.StringLiteral) {
