@@ -1679,6 +1679,11 @@ namespace ts {
                 return undefined;
             }
 
+            if ((node as JSDocContainer).jsDocCache) {
+                // jsDocCache may include tags from parent nodes, which might have been modified.
+                (node as JSDocContainer).jsDocCache = undefined;
+            }
+
             return node;
         }
 
