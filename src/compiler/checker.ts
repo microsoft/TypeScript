@@ -18847,7 +18847,7 @@ namespace ts {
                 let type: Type;
                 if (isComputedNonLiteralName(name)) {
                     type = checkComputedDestructuredProperty(objectLiteralType, name, text => {
-                        return isTypeAny(objectLiteralType) ? anyType : getTypeOfPropertyOfType(objectLiteralType, text)
+                        return isTypeAny(objectLiteralType) ? anyType : getTypeOfPropertyOfType(objectLiteralType, text);
                     });
                     if (!type) {
                         return undefined;
