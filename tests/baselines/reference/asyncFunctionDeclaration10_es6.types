@@ -1,0 +1,14 @@
+=== tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration10_es6.ts ===
+async function foo(a = await => await): Promise<void> {
+>foo : (a?: any) => any
+>a : any
+>await : any
+> : any
+>await : any
+>Promise<void> {} : boolean
+>Promise<void : boolean
+>Promise : PromiseConstructor
+>void : undefined
+> : any
+>{} : {}
+}

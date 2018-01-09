@@ -4,7 +4,7 @@ class C {
 }
 
 //// [parserMemberVariableDeclaration5.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

@@ -1,0 +1,32 @@
+=== tests/cases/conformance/parser/ecmascript5/parserUnicode1.ts ===
+try {
+  var \u0078x = 6;
+>\u0078x : number
+>6 : 6
+
+  if (xx !== 6) {
+>xx !== 6 : boolean
+>xx : number
+>6 : 6
+
+    $ERROR('#6.1: var \\u0078x = 1; xx === 6. Actual: ' + (xx));
+>$ERROR('#6.1: var \\u0078x = 1; xx === 6. Actual: ' + (xx)) : any
+>$ERROR : any
+>'#6.1: var \\u0078x = 1; xx === 6. Actual: ' + (xx) : string
+>'#6.1: var \\u0078x = 1; xx === 6. Actual: ' : "#6.1: var \\u0078x = 1; xx === 6. Actual: "
+>(xx) : number
+>xx : number
+  }
+}
+catch (e) {
+>e : any
+
+    $ERROR('#6.2: var \\u0078x = 1; xx === 6. Actual: ' + (xx));
+>$ERROR('#6.2: var \\u0078x = 1; xx === 6. Actual: ' + (xx)) : any
+>$ERROR : any
+>'#6.2: var \\u0078x = 1; xx === 6. Actual: ' + (xx) : string
+>'#6.2: var \\u0078x = 1; xx === 6. Actual: ' : "#6.2: var \\u0078x = 1; xx === 6. Actual: "
+>(xx) : number
+>xx : number
+
+}

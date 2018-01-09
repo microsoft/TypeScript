@@ -1,0 +1,101 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer.ts ===
+// Derived type indexer must be subtype of base type indexer
+
+interface Base { foo: string; }
+>Base : Symbol(Base, Decl(subtypingWithStringIndexer.ts, 0, 0))
+>foo : Symbol(Base.foo, Decl(subtypingWithStringIndexer.ts, 2, 16))
+
+interface Derived extends Base { bar: string; }
+>Derived : Symbol(Derived, Decl(subtypingWithStringIndexer.ts, 2, 31))
+>Base : Symbol(Base, Decl(subtypingWithStringIndexer.ts, 0, 0))
+>bar : Symbol(Derived.bar, Decl(subtypingWithStringIndexer.ts, 3, 32))
+
+interface Derived2 extends Derived { baz: string; }
+>Derived2 : Symbol(Derived2, Decl(subtypingWithStringIndexer.ts, 3, 47))
+>Derived : Symbol(Derived, Decl(subtypingWithStringIndexer.ts, 2, 31))
+>baz : Symbol(Derived2.baz, Decl(subtypingWithStringIndexer.ts, 4, 36))
+
+class A {
+>A : Symbol(A, Decl(subtypingWithStringIndexer.ts, 4, 51))
+
+    [x: string]: Base;
+>x : Symbol(x, Decl(subtypingWithStringIndexer.ts, 7, 5))
+>Base : Symbol(Base, Decl(subtypingWithStringIndexer.ts, 0, 0))
+}
+
+class B extends A {
+>B : Symbol(B, Decl(subtypingWithStringIndexer.ts, 8, 1))
+>A : Symbol(A, Decl(subtypingWithStringIndexer.ts, 4, 51))
+
+    [x: string]: Derived; // ok
+>x : Symbol(x, Decl(subtypingWithStringIndexer.ts, 11, 5))
+>Derived : Symbol(Derived, Decl(subtypingWithStringIndexer.ts, 2, 31))
+}
+
+class B2 extends A {
+>B2 : Symbol(B2, Decl(subtypingWithStringIndexer.ts, 12, 1))
+>A : Symbol(A, Decl(subtypingWithStringIndexer.ts, 4, 51))
+
+    [x: string]: Derived2; // ok
+>x : Symbol(x, Decl(subtypingWithStringIndexer.ts, 15, 5))
+>Derived2 : Symbol(Derived2, Decl(subtypingWithStringIndexer.ts, 3, 47))
+}
+
+module Generics {
+>Generics : Symbol(Generics, Decl(subtypingWithStringIndexer.ts, 16, 1))
+
+    class A<T extends Base> {
+>A : Symbol(A, Decl(subtypingWithStringIndexer.ts, 18, 17))
+>T : Symbol(T, Decl(subtypingWithStringIndexer.ts, 19, 12))
+>Base : Symbol(Base, Decl(subtypingWithStringIndexer.ts, 0, 0))
+
+        [x: string]: T;
+>x : Symbol(x, Decl(subtypingWithStringIndexer.ts, 20, 9))
+>T : Symbol(T, Decl(subtypingWithStringIndexer.ts, 19, 12))
+    }
+
+    class B extends A<Base> {
+>B : Symbol(B, Decl(subtypingWithStringIndexer.ts, 21, 5))
+>A : Symbol(A, Decl(subtypingWithStringIndexer.ts, 18, 17))
+>Base : Symbol(Base, Decl(subtypingWithStringIndexer.ts, 0, 0))
+
+        [x: string]: Derived; // ok
+>x : Symbol(x, Decl(subtypingWithStringIndexer.ts, 24, 9))
+>Derived : Symbol(Derived, Decl(subtypingWithStringIndexer.ts, 2, 31))
+    }
+
+    class B2 extends A<Base> {
+>B2 : Symbol(B2, Decl(subtypingWithStringIndexer.ts, 25, 5))
+>A : Symbol(A, Decl(subtypingWithStringIndexer.ts, 18, 17))
+>Base : Symbol(Base, Decl(subtypingWithStringIndexer.ts, 0, 0))
+
+        [x: string]: Derived2; // ok
+>x : Symbol(x, Decl(subtypingWithStringIndexer.ts, 28, 9))
+>Derived2 : Symbol(Derived2, Decl(subtypingWithStringIndexer.ts, 3, 47))
+    }
+
+    class B3<T extends Base> extends A<T> {
+>B3 : Symbol(B3, Decl(subtypingWithStringIndexer.ts, 29, 5))
+>T : Symbol(T, Decl(subtypingWithStringIndexer.ts, 31, 13))
+>Base : Symbol(Base, Decl(subtypingWithStringIndexer.ts, 0, 0))
+>A : Symbol(A, Decl(subtypingWithStringIndexer.ts, 18, 17))
+>T : Symbol(T, Decl(subtypingWithStringIndexer.ts, 31, 13))
+
+        [x: string]: Derived; // error
+>x : Symbol(x, Decl(subtypingWithStringIndexer.ts, 32, 9))
+>Derived : Symbol(Derived, Decl(subtypingWithStringIndexer.ts, 2, 31))
+    }
+
+    class B4<T extends Base> extends A<T> {
+>B4 : Symbol(B4, Decl(subtypingWithStringIndexer.ts, 33, 5))
+>T : Symbol(T, Decl(subtypingWithStringIndexer.ts, 35, 13))
+>Base : Symbol(Base, Decl(subtypingWithStringIndexer.ts, 0, 0))
+>A : Symbol(A, Decl(subtypingWithStringIndexer.ts, 18, 17))
+>T : Symbol(T, Decl(subtypingWithStringIndexer.ts, 35, 13))
+
+        [x: string]: Derived2; // error
+>x : Symbol(x, Decl(subtypingWithStringIndexer.ts, 36, 9))
+>Derived2 : Symbol(Derived2, Decl(subtypingWithStringIndexer.ts, 3, 47))
+    }
+}
+

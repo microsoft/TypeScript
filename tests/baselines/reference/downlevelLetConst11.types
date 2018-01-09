@@ -1,0 +1,7 @@
+=== tests/cases/compiler/downlevelLetConst11.ts ===
+"use strict";
+>"use strict" : "use strict"
+
+let
+>let : any
+

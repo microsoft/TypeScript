@@ -1,0 +1,8 @@
+=== tests/cases/compiler/a.js ===
+/**
+  * @type {number}
+  * @type {string}
+  */
+var v;
+>v : number
+

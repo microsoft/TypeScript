@@ -1,0 +1,70 @@
+=== tests/cases/conformance/types/members/duplicateStringIndexers.ts ===
+// it is an error to have duplicate index signatures of the same kind in a type
+
+module test {
+>test : Symbol(test, Decl(duplicateStringIndexers.ts, 0, 0))
+
+    interface Number {
+>Number : Symbol(Number, Decl(duplicateStringIndexers.ts, 2, 13))
+
+        [x: string]: string;
+>x : Symbol(x, Decl(duplicateStringIndexers.ts, 4, 9))
+
+        [x: string]: string;
+>x : Symbol(x, Decl(duplicateStringIndexers.ts, 5, 9))
+    }
+
+    interface String {
+>String : Symbol(String, Decl(duplicateStringIndexers.ts, 6, 5))
+
+        [x: string]: string;
+>x : Symbol(x, Decl(duplicateStringIndexers.ts, 9, 9))
+
+        [x: string]: string;
+>x : Symbol(x, Decl(duplicateStringIndexers.ts, 10, 9))
+    }
+
+    interface Array<T> {
+>Array : Symbol(Array, Decl(duplicateStringIndexers.ts, 11, 5))
+>T : Symbol(T, Decl(duplicateStringIndexers.ts, 13, 20))
+
+        [x: string]: T;
+>x : Symbol(x, Decl(duplicateStringIndexers.ts, 14, 9))
+>T : Symbol(T, Decl(duplicateStringIndexers.ts, 13, 20))
+
+        [x: string]: T;
+>x : Symbol(x, Decl(duplicateStringIndexers.ts, 15, 9))
+>T : Symbol(T, Decl(duplicateStringIndexers.ts, 13, 20))
+    }
+
+    class C {
+>C : Symbol(C, Decl(duplicateStringIndexers.ts, 16, 5))
+
+        [x: string]: string;
+>x : Symbol(x, Decl(duplicateStringIndexers.ts, 19, 9))
+
+        [x: string]: string;
+>x : Symbol(x, Decl(duplicateStringIndexers.ts, 20, 9))
+    }
+
+    interface I {
+>I : Symbol(I, Decl(duplicateStringIndexers.ts, 21, 5))
+
+        [x: string]: string;
+>x : Symbol(x, Decl(duplicateStringIndexers.ts, 24, 9))
+
+        [x: string]: string;
+>x : Symbol(x, Decl(duplicateStringIndexers.ts, 25, 9))
+    }
+
+    var a: {
+>a : Symbol(a, Decl(duplicateStringIndexers.ts, 28, 7))
+
+        [x: string]: string;
+>x : Symbol(x, Decl(duplicateStringIndexers.ts, 29, 9))
+
+        [x: string]: string;
+>x : Symbol(x, Decl(duplicateStringIndexers.ts, 30, 9))
+    }
+}
+

@@ -1,8 +1,11 @@
 /// <reference path="types.ts" />
 
 namespace ts.server {
+    // tslint:disable variable-name
     export const ActionSet: ActionSet = "action::set";
     export const ActionInvalidate: ActionInvalidate = "action::invalidate";
+    export const ActionPackageInstalled: ActionPackageInstalled = "action::packageInstalled";
+    export const EventTypesRegistry: EventTypesRegistry = "event::typesRegistry";
     export const EventBeginInstallTypes: EventBeginInstallTypes = "event::beginInstallTypes";
     export const EventEndInstallTypes: EventEndInstallTypes = "event::endInstallTypes";
     export const EventInitializationFailed: EventInitializationFailed = "event::initializationFailed";
@@ -12,6 +15,7 @@ namespace ts.server {
         export const LogFile = "--logFile";
         export const EnableTelemetry = "--enableTelemetry";
         export const TypingSafeListLocation = "--typingSafeListLocation";
+        export const TypesMapLocation = "--typesMapLocation";
         /**
          * This argument specifies the location of the NPM executable.
          * typingsInstaller will run the command with `${npmLocation} install ...`.

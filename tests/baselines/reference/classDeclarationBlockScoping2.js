@@ -11,14 +11,14 @@ function f() {
 
 //// [classDeclarationBlockScoping2.js]
 function f() {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;
     }());
     var c1 = C;
     {
-        var C_1 = (function () {
+        var C_1 = /** @class */ (function () {
             function C() {
             }
             return C;

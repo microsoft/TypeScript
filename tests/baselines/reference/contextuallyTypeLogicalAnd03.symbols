@@ -1,0 +1,15 @@
+=== tests/cases/conformance/types/contextualTypes/logicalAnd/contextuallyTypeLogicalAnd03.ts ===
+let x: (a: string) => string;
+>x : Symbol(x, Decl(contextuallyTypeLogicalAnd03.ts, 0, 3))
+>a : Symbol(a, Decl(contextuallyTypeLogicalAnd03.ts, 0, 8))
+
+let y = true;
+>y : Symbol(y, Decl(contextuallyTypeLogicalAnd03.ts, 1, 3))
+
+x = (a => a) && (b => b);
+>x : Symbol(x, Decl(contextuallyTypeLogicalAnd03.ts, 0, 3))
+>a : Symbol(a, Decl(contextuallyTypeLogicalAnd03.ts, 3, 5))
+>a : Symbol(a, Decl(contextuallyTypeLogicalAnd03.ts, 3, 5))
+>b : Symbol(b, Decl(contextuallyTypeLogicalAnd03.ts, 3, 17))
+>b : Symbol(b, Decl(contextuallyTypeLogicalAnd03.ts, 3, 17))
+

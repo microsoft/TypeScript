@@ -52,14 +52,14 @@ var FooBar;
 (function (FooBar) {
     FooBar.member2 = 42;
 })(FooBar = exports.FooBar || (exports.FooBar = {}));
-var Kettle = (function () {
+var Kettle = /** @class */ (function () {
     function Kettle() {
         this.member1 = 2;
     }
     return Kettle;
 }());
 exports.Kettle = Kettle;
-var Kettle = (function () {
+var Kettle = /** @class */ (function () {
     function Kettle() {
         this.member2 = 42;
     }

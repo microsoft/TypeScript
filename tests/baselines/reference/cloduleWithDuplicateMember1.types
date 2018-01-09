@@ -1,0 +1,34 @@
+=== tests/cases/compiler/cloduleWithDuplicateMember1.ts ===
+class C {
+>C : C
+
+    get x() { return 1; }
+>x : number
+>1 : 1
+
+    static get x() {
+>x : string
+
+        return '';
+>'' : ""
+    }
+    static foo() { }
+>foo : () => void
+}
+
+module C {
+>C : typeof C
+
+    export var x = 1;
+>x : number
+>1 : 1
+}
+module C {
+>C : typeof C
+
+    export function foo() { }
+>foo : () => void
+
+    export function x() { }
+>x : () => void
+}

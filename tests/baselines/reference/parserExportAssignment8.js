@@ -6,7 +6,7 @@ export class C {
 
 //// [parserExportAssignment8.js]
 "use strict";
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

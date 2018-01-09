@@ -1,0 +1,42 @@
+=== tests/cases/compiler/mergedDeclarationExports.ts ===
+// OK -- one is type, one is value
+interface b {}
+>b : Symbol(b, Decl(mergedDeclarationExports.ts, 0, 0), Decl(mergedDeclarationExports.ts, 2, 12))
+
+export const b = 1;
+>b : Symbol(b, Decl(mergedDeclarationExports.ts, 2, 12))
+
+// OK -- one is a type, one is a namespace, one is a value.
+type t = 0;
+>t : Symbol(t, Decl(mergedDeclarationExports.ts, 2, 19), Decl(mergedDeclarationExports.ts, 5, 11), Decl(mergedDeclarationExports.ts, 7, 12))
+
+namespace t { interface I {} }
+>t : Symbol(t, Decl(mergedDeclarationExports.ts, 2, 19), Decl(mergedDeclarationExports.ts, 5, 11), Decl(mergedDeclarationExports.ts, 7, 12))
+>I : Symbol(I, Decl(mergedDeclarationExports.ts, 6, 13))
+
+export const t = 0;
+>t : Symbol(t, Decl(mergedDeclarationExports.ts, 7, 12))
+
+// Should get errors if they have some meaning in common.
+
+// both types
+interface c {}
+>c : Symbol(c, Decl(mergedDeclarationExports.ts, 7, 19), Decl(mergedDeclarationExports.ts, 12, 14))
+
+export interface c {}
+>c : Symbol(c, Decl(mergedDeclarationExports.ts, 12, 14))
+
+// both types (class is also value, but that doesn't matter)
+interface d {}
+>d : Symbol(d, Decl(mergedDeclarationExports.ts, 13, 21), Decl(mergedDeclarationExports.ts, 16, 14))
+
+export class d {}
+>d : Symbol(d, Decl(mergedDeclarationExports.ts, 16, 14))
+
+// both namespaces
+namespace N { }
+>N : Symbol(N, Decl(mergedDeclarationExports.ts, 17, 17), Decl(mergedDeclarationExports.ts, 20, 15))
+
+export namespace N {}
+>N : Symbol(N, Decl(mergedDeclarationExports.ts, 20, 15))
+

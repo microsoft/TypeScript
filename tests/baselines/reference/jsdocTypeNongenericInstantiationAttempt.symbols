@@ -1,0 +1,100 @@
+=== tests/cases/compiler/index.js ===
+/**
+ * @param {<T>(m: Boolean<T>) => string} somebody
+ */
+function sayHello(somebody) {
+>sayHello : Symbol(sayHello, Decl(index.js, 0, 0))
+>somebody : Symbol(somebody, Decl(index.js, 3, 18))
+
+    return 'Hello ' + somebody;
+>somebody : Symbol(somebody, Decl(index.js, 3, 18))
+}
+
+=== tests/cases/compiler/index2.js ===
+/**
+ * @param {<T>(m: Void<T>) => string} somebody
+ */
+function sayHello2(somebody) {
+>sayHello2 : Symbol(sayHello2, Decl(index2.js, 0, 0))
+>somebody : Symbol(somebody, Decl(index2.js, 3, 19))
+
+    return 'Hello ' + somebody;
+>somebody : Symbol(somebody, Decl(index2.js, 3, 19))
+}
+
+
+=== tests/cases/compiler/index3.js ===
+/**
+ * @param {<T>(m: Undefined<T>) => string} somebody
+ */
+function sayHello3(somebody) {
+>sayHello3 : Symbol(sayHello3, Decl(index3.js, 0, 0))
+>somebody : Symbol(somebody, Decl(index3.js, 3, 19))
+
+    return 'Hello ' + somebody;
+>somebody : Symbol(somebody, Decl(index3.js, 3, 19))
+}
+
+
+=== tests/cases/compiler/index4.js ===
+/**
+ * @param {<T>(m: Function<T>) => string} somebody
+ */
+function sayHello4(somebody) {
+>sayHello4 : Symbol(sayHello4, Decl(index4.js, 0, 0))
+>somebody : Symbol(somebody, Decl(index4.js, 3, 19))
+
+    return 'Hello ' + somebody;
+>somebody : Symbol(somebody, Decl(index4.js, 3, 19))
+}
+
+
+=== tests/cases/compiler/index5.js ===
+/**
+ * @param {<T>(m: String<T>) => string} somebody
+ */
+function sayHello5(somebody) {
+>sayHello5 : Symbol(sayHello5, Decl(index5.js, 0, 0))
+>somebody : Symbol(somebody, Decl(index5.js, 3, 19))
+
+    return 'Hello ' + somebody;
+>somebody : Symbol(somebody, Decl(index5.js, 3, 19))
+}
+
+
+=== tests/cases/compiler/index6.js ===
+/**
+ * @param {<T>(m: Number<T>) => string} somebody
+ */
+function sayHello6(somebody) {
+>sayHello6 : Symbol(sayHello6, Decl(index6.js, 0, 0))
+>somebody : Symbol(somebody, Decl(index6.js, 3, 19))
+
+    return 'Hello ' + somebody;
+>somebody : Symbol(somebody, Decl(index6.js, 3, 19))
+}
+
+
+=== tests/cases/compiler/index7.js ===
+/**
+ * @param {<T>(m: Object<T>) => string} somebody
+ */
+function sayHello7(somebody) {
+>sayHello7 : Symbol(sayHello7, Decl(index7.js, 0, 0))
+>somebody : Symbol(somebody, Decl(index7.js, 3, 19))
+
+    return 'Hello ' + somebody;
+>somebody : Symbol(somebody, Decl(index7.js, 3, 19))
+}
+
+=== tests/cases/compiler/index8.js ===
+function fn() {}
+>fn : Symbol(fn, Decl(index8.js, 0, 0))
+
+/**
+ * @param {fn<T>} somebody
+ */
+function sayHello8(somebody) { }
+>sayHello8 : Symbol(sayHello8, Decl(index8.js, 0, 16))
+>somebody : Symbol(somebody, Decl(index8.js, 5, 19))
+

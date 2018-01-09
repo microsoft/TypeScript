@@ -38,26 +38,26 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
-var C = (function (_super) {
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(A));
-var D = (function (_super) {
+var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -65,7 +65,7 @@ var D = (function (_super) {
     D.prototype.foo = function () { };
     return D;
 }(A));
-var E = (function (_super) {
+var E = /** @class */ (function (_super) {
     __extends(E, _super);
     function E() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -73,26 +73,26 @@ var E = (function (_super) {
     E.prototype.foo = function () { };
     return E;
 }(A));
-var AA = (function () {
+var AA = /** @class */ (function () {
     function AA() {
     }
     return AA;
 }());
-var BB = (function (_super) {
+var BB = /** @class */ (function (_super) {
     __extends(BB, _super);
     function BB() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return BB;
 }(AA));
-var CC = (function (_super) {
+var CC = /** @class */ (function (_super) {
     __extends(CC, _super);
     function CC() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return CC;
 }(AA));
-var DD = (function (_super) {
+var DD = /** @class */ (function (_super) {
     __extends(DD, _super);
     function DD() {
         return _super !== null && _super.apply(this, arguments) || this;

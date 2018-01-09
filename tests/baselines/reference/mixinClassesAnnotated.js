@@ -77,14 +77,14 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base(x, y) {
         this.x = x;
         this.y = y;
     }
     return Base;
 }());
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived(x, y, z) {
         var _this = _super.call(this, x, y) || this;
@@ -93,7 +93,7 @@ var Derived = (function (_super) {
     }
     return Derived;
 }(Base));
-var Printable = function (superClass) { return _a = (function (_super) {
+var Printable = function (superClass) { return _a = /** @class */ (function (_super) {
         __extends(class_1, _super);
         function class_1() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -106,7 +106,7 @@ var Printable = function (superClass) { return _a = (function (_super) {
     _a.message = "hello",
     _a; var _a; };
 function Tagged(superClass) {
-    var C = (function (_super) {
+    var C = /** @class */ (function (_super) {
         __extends(C, _super);
         function C() {
             var args = [];
@@ -135,7 +135,7 @@ function f2() {
     thing._tag;
     thing.print();
 }
-var Thing3 = (function (_super) {
+var Thing3 = /** @class */ (function (_super) {
     __extends(Thing3, _super);
     function Thing3(tag) {
         var _this = _super.call(this, 10, 20, 30) || this;

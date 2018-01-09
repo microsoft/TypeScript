@@ -5,6 +5,7 @@ internal
 issue_template.md
 jenkins.sh
 lib/README.md
+lib/enu
 netci.groovy
 pull_request_template.md
 scripts
@@ -17,3 +18,4 @@ Jakefile.js
 .settings/
 .travis.yml
 .vscode/
+test.config

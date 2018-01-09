@@ -1,0 +1,10 @@
+=== tests/cases/compiler/a.ts ===
+// --out and --outFile error
+
+class A { }
+>A : A
+
+=== tests/cases/compiler/b.ts ===
+class B { }
+>B : B
+

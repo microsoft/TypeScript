@@ -7,7 +7,7 @@ module foo {
 
 
 //// [genericMergedDeclarationUsingTypeParameter2.js]
-var foo = (function () {
+var foo = /** @class */ (function () {
     function foo(x) {
     }
     return foo;

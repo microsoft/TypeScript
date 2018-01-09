@@ -11,6 +11,7 @@ sourceFile:contextualTyping.ts
 >>>// CONTEXT: Class property declaration
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                      ^^->
 1 >// DEFAULT INTERFACES
   >interface IFoo {
   >    n: number;
@@ -28,12 +29,12 @@ sourceFile:contextualTyping.ts
 1 >Emitted(1, 1) Source(13, 1) + SourceIndex(0)
 2 >Emitted(1, 39) Source(13, 39) + SourceIndex(0)
 ---
->>>var C1T5 = (function () {
-1 >
+>>>var C1T5 = /** @class */ (function () {
+1->
 2 >^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+1->
   >
-1 >Emitted(2, 1) Source(14, 1) + SourceIndex(0)
+1->Emitted(2, 1) Source(14, 1) + SourceIndex(0)
 ---
 >>>    function C1T5() {
 1->^^^^
@@ -936,6 +937,7 @@ sourceFile:contextualTyping.ts
 >>>// CONTEXT: Class property assignment
 1->
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                     ^^^->
 1->
   >
   >
@@ -943,12 +945,12 @@ sourceFile:contextualTyping.ts
 1->Emitted(40, 1) Source(55, 1) + SourceIndex(0)
 2 >Emitted(40, 38) Source(55, 38) + SourceIndex(0)
 ---
->>>var C4T5 = (function () {
-1 >
+>>>var C4T5 = /** @class */ (function () {
+1->
 2 >^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+1->
   >
-1 >Emitted(41, 1) Source(56, 1) + SourceIndex(0)
+1->Emitted(41, 1) Source(56, 1) + SourceIndex(0)
 ---
 >>>    function C4T5() {
 1->^^^^
@@ -2298,7 +2300,7 @@ sourceFile:contextualTyping.ts
 >>>// CONTEXT: Newing a class
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                          ^->
+3 >                          ^^^^^^^^^^^^^^^->
 1 >
   >
   >
@@ -2306,7 +2308,7 @@ sourceFile:contextualTyping.ts
 1 >Emitted(93, 1) Source(154, 1) + SourceIndex(0)
 2 >Emitted(93, 27) Source(154, 27) + SourceIndex(0)
 ---
->>>var C11t5 = (function () {
+>>>var C11t5 = /** @class */ (function () {
 1->
 2 >^^^^^^^^^^^^^^^^^^^^^^^^->
 1->

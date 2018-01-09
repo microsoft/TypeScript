@@ -1,0 +1,49 @@
+=== tests/cases/compiler/downlevelLetConst19.ts ===
+'use strict'
+>'use strict' : "use strict"
+
+declare function use(a: any);
+>use : (a: any) => any
+>a : any
+
+var x;
+>x : any
+
+function a() {
+>a : () => void
+  {
+    let x;
+>x : any
+
+    use(x);
+>use(x) : any
+>use : (a: any) => any
+>x : any
+
+    function b() {
+>b : () => void
+        {
+            let x;
+>x : any
+
+            use(x);
+>use(x) : any
+>use : (a: any) => any
+>x : any
+        }
+        use(x);
+>use(x) : any
+>use : (a: any) => any
+>x : any
+    }
+  }
+  use(x)
+>use(x) : any
+>use : (a: any) => any
+>x : any
+}
+use(x)
+>use(x) : any
+>use : (a: any) => any
+>x : any
+

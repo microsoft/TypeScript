@@ -1,0 +1,23 @@
+=== tests/cases/compiler/namedFunctionExpressionCallErrors.ts ===
+var recurser = function foo() {
+>recurser : Symbol(recurser, Decl(namedFunctionExpressionCallErrors.ts, 0, 3))
+>foo : Symbol(foo, Decl(namedFunctionExpressionCallErrors.ts, 0, 14))
+
+};
+
+// Error: foo should not be visible here
+foo();
+
+// recurser should be
+recurser();
+>recurser : Symbol(recurser, Decl(namedFunctionExpressionCallErrors.ts, 0, 3))
+
+(function bar() {
+>bar : Symbol(bar, Decl(namedFunctionExpressionCallErrors.ts, 9, 1))
+
+    // Error: foo should not be visible here either
+    foo();
+});
+
+// Error: bar should not be visible
+bar();

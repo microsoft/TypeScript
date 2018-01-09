@@ -40,7 +40,7 @@ g = f1; // OK
 g = f2; // Error
 g = f3; // Error
 g = f4; // Error
-var C = (function () {
+var C = /** @class */ (function () {
     function C(x) {
     }
     return C;

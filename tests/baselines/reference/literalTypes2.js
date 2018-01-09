@@ -251,7 +251,7 @@ function f3() {
     var x7 = c7;
     var x8 = c8;
 }
-var C1 = (function () {
+var C1 = /** @class */ (function () {
     function C1() {
         this.x1 = 1;
         this.x2 = -123;
@@ -304,7 +304,7 @@ function f12() {
         return "two";
     }
 }
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     C2.prototype.foo = function () {

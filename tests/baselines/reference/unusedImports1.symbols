@@ -1,0 +1,10 @@
+=== tests/cases/compiler/file1.ts ===
+export class Calculator {
+>Calculator : Symbol(Calculator, Decl(file1.ts, 0, 0))
+
+}
+
+=== tests/cases/compiler/file2.ts ===
+import {Calculator} from "./file1"
+>Calculator : Symbol(Calculator, Decl(file2.ts, 0, 8))
+

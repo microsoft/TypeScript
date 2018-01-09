@@ -1,4 +1,5 @@
 ﻿// @module: commonjs
+// @skipLibCheck: true
 // @includebuiltfile: typescript_standalone.d.ts
 // @noImplicitAny:true
 // @strictNullChecks:true

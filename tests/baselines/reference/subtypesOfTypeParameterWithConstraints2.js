@@ -185,12 +185,12 @@ function f3(x, y) {
     var r3 = true ? y : new Date();
     var r3 = true ? new Date() : y;
 }
-var C1 = (function () {
+var C1 = /** @class */ (function () {
     function C1() {
     }
     return C1;
 }());
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     return C2;
@@ -203,7 +203,7 @@ function f() { }
 (function (f) {
     f.bar = 1;
 })(f || (f = {}));
-var c = (function () {
+var c = /** @class */ (function () {
     function c() {
     }
     return c;

@@ -1,0 +1,23 @@
+=== tests/cases/compiler/typeValueConflict1.ts ===
+module M1 {
+>M1 : Symbol(M1, Decl(typeValueConflict1.ts, 0, 0))
+
+ export class A {
+>A : Symbol(A, Decl(typeValueConflict1.ts, 0, 11))
+ }
+}
+module M2 {
+>M2 : Symbol(M2, Decl(typeValueConflict1.ts, 3, 1))
+
+ var M1 = 0;
+>M1 : Symbol(M1, Decl(typeValueConflict1.ts, 5, 4))
+
+ // Should error.  M1 should bind to the variable, not to the module.
+ class B extends M1.A {
+>B : Symbol(B, Decl(typeValueConflict1.ts, 5, 12))
+>M1.A : Symbol(M1.A, Decl(typeValueConflict1.ts, 0, 11))
+>M1 : Symbol(M1, Decl(typeValueConflict1.ts, 0, 0))
+>A : Symbol(M1.A, Decl(typeValueConflict1.ts, 0, 11))
+ }
+}
+

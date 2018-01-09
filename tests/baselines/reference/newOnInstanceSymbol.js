@@ -4,7 +4,7 @@ var x = new C(); // should be ok
 new x(); // should error
 
 //// [newOnInstanceSymbol.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

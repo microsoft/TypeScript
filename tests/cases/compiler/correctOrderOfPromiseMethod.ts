@@ -1,3 +1,4 @@
+// @skipLibCheck: true
 // @lib: dom, es7
 
 interface A {

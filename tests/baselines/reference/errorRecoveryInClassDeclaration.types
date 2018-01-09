@@ -1,0 +1,21 @@
+=== tests/cases/compiler/errorRecoveryInClassDeclaration.ts ===
+class C {
+>C : C
+
+    public bar() {
+>bar : () => void
+
+        var v = foo(
+>v : any
+>foo(            public blaz() {}            ) : any
+>foo : any
+
+            public blaz() {}
+>public : any
+>blaz() : any
+>blaz : any
+>{} : {}
+
+            );
+    }
+}

@@ -12,7 +12,7 @@ class foo {
 
 
 //// [reassignStaticProp.js]
-var foo = (function () {
+var foo = /** @class */ (function () {
     function foo() {
     }
     foo.bar = 1;

@@ -53,9 +53,9 @@ const y = (a) => a + 1;
 >a : any
 >1 : 1
 
-x(1);
->x(1) : any
->x : Function
+y(1);
+>y(1) : any
+>y : Function
 >1 : 1
 
 /** @type {function (number)} */

@@ -6,7 +6,7 @@ class C {
 }
 
 //// [noImplicitReturnInConstructors.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         return;
     }

@@ -8,7 +8,7 @@ class A {
 
 
 //// [unusedParameterProperty1.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A(used) {
         this.used = used;
         var foge = used;

@@ -23,13 +23,13 @@ var catBag = new CatBag(catThing);
 //// [prespecializedGenericMembers1.js]
 "use strict";
 exports.__esModule = true;
-var Cat = (function () {
+var Cat = /** @class */ (function () {
     function Cat() {
     }
     return Cat;
 }());
 exports.Cat = Cat;
-var CatBag = (function () {
+var CatBag = /** @class */ (function () {
     function CatBag(cats) {
     }
     return CatBag;

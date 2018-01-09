@@ -1,0 +1,72 @@
+=== tests/cases/compiler/overloadOnConstNoAnyImplementation2.ts ===
+interface I {
+>I : Symbol(I, Decl(overloadOnConstNoAnyImplementation2.ts, 0, 0))
+
+    x1(a: number, callback: (x: 'hi') => number);
+>x1 : Symbol(I.x1, Decl(overloadOnConstNoAnyImplementation2.ts, 0, 13))
+>a : Symbol(a, Decl(overloadOnConstNoAnyImplementation2.ts, 1, 7))
+>callback : Symbol(callback, Decl(overloadOnConstNoAnyImplementation2.ts, 1, 17))
+>x : Symbol(x, Decl(overloadOnConstNoAnyImplementation2.ts, 1, 29))
+}
+
+class C {
+>C : Symbol(C, Decl(overloadOnConstNoAnyImplementation2.ts, 2, 1))
+
+    x1(a: number, callback: (x: 'hi') => number);
+>x1 : Symbol(C.x1, Decl(overloadOnConstNoAnyImplementation2.ts, 4, 9), Decl(overloadOnConstNoAnyImplementation2.ts, 5, 49))
+>a : Symbol(a, Decl(overloadOnConstNoAnyImplementation2.ts, 5, 7))
+>callback : Symbol(callback, Decl(overloadOnConstNoAnyImplementation2.ts, 5, 17))
+>x : Symbol(x, Decl(overloadOnConstNoAnyImplementation2.ts, 5, 29))
+
+    x1(a: number, callback: (x: string) => number) {
+>x1 : Symbol(C.x1, Decl(overloadOnConstNoAnyImplementation2.ts, 4, 9), Decl(overloadOnConstNoAnyImplementation2.ts, 5, 49))
+>a : Symbol(a, Decl(overloadOnConstNoAnyImplementation2.ts, 6, 7))
+>callback : Symbol(callback, Decl(overloadOnConstNoAnyImplementation2.ts, 6, 17))
+>x : Symbol(x, Decl(overloadOnConstNoAnyImplementation2.ts, 6, 29))
+
+        callback('hi');
+>callback : Symbol(callback, Decl(overloadOnConstNoAnyImplementation2.ts, 6, 17))
+
+        callback('bye');
+>callback : Symbol(callback, Decl(overloadOnConstNoAnyImplementation2.ts, 6, 17))
+
+        var hm = "hm";
+>hm : Symbol(hm, Decl(overloadOnConstNoAnyImplementation2.ts, 9, 11))
+
+        callback(hm);
+>callback : Symbol(callback, Decl(overloadOnConstNoAnyImplementation2.ts, 6, 17))
+>hm : Symbol(hm, Decl(overloadOnConstNoAnyImplementation2.ts, 9, 11))
+
+        callback(1); // error
+>callback : Symbol(callback, Decl(overloadOnConstNoAnyImplementation2.ts, 6, 17))
+    }
+}
+
+var c: C;
+>c : Symbol(c, Decl(overloadOnConstNoAnyImplementation2.ts, 15, 3))
+>C : Symbol(C, Decl(overloadOnConstNoAnyImplementation2.ts, 2, 1))
+
+c.x1(1, (x: 'hi') => { return 1; } );
+>c.x1 : Symbol(C.x1, Decl(overloadOnConstNoAnyImplementation2.ts, 4, 9), Decl(overloadOnConstNoAnyImplementation2.ts, 5, 49))
+>c : Symbol(c, Decl(overloadOnConstNoAnyImplementation2.ts, 15, 3))
+>x1 : Symbol(C.x1, Decl(overloadOnConstNoAnyImplementation2.ts, 4, 9), Decl(overloadOnConstNoAnyImplementation2.ts, 5, 49))
+>x : Symbol(x, Decl(overloadOnConstNoAnyImplementation2.ts, 16, 9))
+
+c.x1(1, (x: 'bye') => { return 1; } );
+>c.x1 : Symbol(C.x1, Decl(overloadOnConstNoAnyImplementation2.ts, 4, 9), Decl(overloadOnConstNoAnyImplementation2.ts, 5, 49))
+>c : Symbol(c, Decl(overloadOnConstNoAnyImplementation2.ts, 15, 3))
+>x1 : Symbol(C.x1, Decl(overloadOnConstNoAnyImplementation2.ts, 4, 9), Decl(overloadOnConstNoAnyImplementation2.ts, 5, 49))
+>x : Symbol(x, Decl(overloadOnConstNoAnyImplementation2.ts, 17, 9))
+
+c.x1(1, (x) => { return 1; } );
+>c.x1 : Symbol(C.x1, Decl(overloadOnConstNoAnyImplementation2.ts, 4, 9), Decl(overloadOnConstNoAnyImplementation2.ts, 5, 49))
+>c : Symbol(c, Decl(overloadOnConstNoAnyImplementation2.ts, 15, 3))
+>x1 : Symbol(C.x1, Decl(overloadOnConstNoAnyImplementation2.ts, 4, 9), Decl(overloadOnConstNoAnyImplementation2.ts, 5, 49))
+>x : Symbol(x, Decl(overloadOnConstNoAnyImplementation2.ts, 18, 9))
+
+c.x1(1, (x: number) => { return 1; } );
+>c.x1 : Symbol(C.x1, Decl(overloadOnConstNoAnyImplementation2.ts, 4, 9), Decl(overloadOnConstNoAnyImplementation2.ts, 5, 49))
+>c : Symbol(c, Decl(overloadOnConstNoAnyImplementation2.ts, 15, 3))
+>x1 : Symbol(C.x1, Decl(overloadOnConstNoAnyImplementation2.ts, 4, 9), Decl(overloadOnConstNoAnyImplementation2.ts, 5, 49))
+>x : Symbol(x, Decl(overloadOnConstNoAnyImplementation2.ts, 20, 9))
+

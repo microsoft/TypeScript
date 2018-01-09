@@ -16,7 +16,6 @@
     },
     "files": [
         "editorServices.ts",
-        "lsHost.ts",
         "project.ts",
         "protocol.ts",
         "scriptInfo.ts",

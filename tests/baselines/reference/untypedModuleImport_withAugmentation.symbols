@@ -1,0 +1,11 @@
+=== /a.ts ===
+declare module "foo" {
+    export const x: number;
+>x : Symbol(x, Decl(a.ts, 1, 16))
+}
+import { x } from "foo";
+>x : Symbol(x, Decl(a.ts, 3, 8))
+
+x;
+>x : Symbol(x, Decl(a.ts, 3, 8))
+

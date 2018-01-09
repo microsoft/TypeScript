@@ -1,0 +1,35 @@
+=== tests/cases/conformance/jsdoc/prefixPostfix.js ===
+/**
+ * @param {number![]} x - number[]
+ * @param {!number[]} y - number[]
+ * @param {(number[])!} z - number[]
+ * @param {number?[]} a - (number | null)[]
+ * @param {?number[]} b - number[] | null
+ * @param {(number[])?} c - number[] | null
+ * @param {?...number} d - number[] | null
+ * @param {...?number} e - (number | null)[]
+ * @param {...number?} f - number[] | null
+ * @param {...number!?} g - number[] | null
+ * @param {...number?!} h - number[] | null
+ * @param {...number[]} i - number[][]
+ * @param {...number![]?} j - number[][] | null
+ * @param {...number?[]!} k - (number[] | null)[]
+ */
+function f(x, y, z, a, b, c, d, e, f, g, h, i, j, k) {
+>f : Symbol(f, Decl(prefixPostfix.js, 0, 0))
+>x : Symbol(x, Decl(prefixPostfix.js, 16, 11))
+>y : Symbol(y, Decl(prefixPostfix.js, 16, 13))
+>z : Symbol(z, Decl(prefixPostfix.js, 16, 16))
+>a : Symbol(a, Decl(prefixPostfix.js, 16, 19))
+>b : Symbol(b, Decl(prefixPostfix.js, 16, 22))
+>c : Symbol(c, Decl(prefixPostfix.js, 16, 25))
+>d : Symbol(d, Decl(prefixPostfix.js, 16, 28))
+>e : Symbol(e, Decl(prefixPostfix.js, 16, 31))
+>f : Symbol(f, Decl(prefixPostfix.js, 16, 34))
+>g : Symbol(g, Decl(prefixPostfix.js, 16, 37))
+>h : Symbol(h, Decl(prefixPostfix.js, 16, 40))
+>i : Symbol(i, Decl(prefixPostfix.js, 16, 43))
+>j : Symbol(j, Decl(prefixPostfix.js, 16, 46))
+>k : Symbol(k, Decl(prefixPostfix.js, 16, 49))
+}
+

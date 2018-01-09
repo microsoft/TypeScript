@@ -61,7 +61,6 @@ function getRootLength(path: string): number {
     }
     if (path.charAt(1) === ":") {
         if (path.charAt(2) === directorySeparator) return 3;
-        return 2;
     }
     // Per RFC 1738 'file' URI schema has the shape file://<host>/<path>
     // if <host> is omitted then it is assumed that host value is 'localhost',
@@ -124,22 +123,6 @@ function dir(dirPath: string, spec?: string, options?: any) {
         return paths;
     }
 }
-
-// fs.rmdirSync won't delete directories with files in it
-function deleteFolderRecursive(dirPath: string) {
-    if (fs.existsSync(dirPath)) {
-        fs.readdirSync(dirPath).forEach((file) => {
-            const curPath = path.join(dirPath, file);
-            if (fs.statSync(curPath).isDirectory()) { // recurse
-                deleteFolderRecursive(curPath);
-            }
-            else { // delete file
-                fs.unlinkSync(curPath);
-            }
-        });
-        fs.rmdirSync(dirPath);
-    }
-};
 
 function writeFile(path: string, data: any) {
     ensureDirectoriesExist(getDirectoryPath(path));
@@ -304,7 +287,7 @@ console.log(`Static file server running at\n  => http://localhost:${port}/\nCTRL
 
 http.createServer((req: http.ServerRequest, res: http.ServerResponse) => {
     log(`${req.method} ${req.url}`);
-    const uri = url.parse(req.url).pathname;
+    const uri = decodeURIComponent(url.parse(req.url).pathname);
     const reqPath = path.join(process.cwd(), uri);
     const operation = getRequestOperation(req);
     handleRequestOperation(req, res, operation, reqPath);

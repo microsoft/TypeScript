@@ -1,0 +1,69 @@
+=== tests/cases/compiler/optionalPropertiesSyntax.ts ===
+interface fnSigs {
+>fnSigs : Symbol(fnSigs, Decl(optionalPropertiesSyntax.ts, 0, 0))
+
+    //functions signatures can be optional
+    fn(): void;
+>fn : Symbol(fnSigs.fn, Decl(optionalPropertiesSyntax.ts, 0, 18), Decl(optionalPropertiesSyntax.ts, 2, 15))
+
+    fn?(): void; //err
+>fn : Symbol(fnSigs.fn, Decl(optionalPropertiesSyntax.ts, 0, 18), Decl(optionalPropertiesSyntax.ts, 2, 15))
+
+    fn2?(): void;
+>fn2 : Symbol(fnSigs.fn2, Decl(optionalPropertiesSyntax.ts, 3, 16))
+}
+
+interface callSig {
+>callSig : Symbol(callSig, Decl(optionalPropertiesSyntax.ts, 5, 1))
+
+    //Call signatures can't be optional
+    (): any;
+    ()?: any; //err
+>any : Symbol(callSig.any, Decl(optionalPropertiesSyntax.ts, 10, 8))
+
+    ?(): any; //err
+}
+
+interface constructSig {
+>constructSig : Symbol(constructSig, Decl(optionalPropertiesSyntax.ts, 12, 1))
+
+    //Construct signatures can't be optional
+    new (): any;
+    new ()?: any; //err
+>any : Symbol(constructSig.any, Decl(optionalPropertiesSyntax.ts, 17, 12))
+
+    new ?(): any; //err
+>new : Symbol(constructSig.new, Decl(optionalPropertiesSyntax.ts, 17, 17))
+}
+
+interface propertySig {
+>propertySig : Symbol(propertySig, Decl(optionalPropertiesSyntax.ts, 19, 1))
+
+    //Property signatures can be optional
+    prop: any;
+>prop : Symbol(propertySig.prop, Decl(optionalPropertiesSyntax.ts, 21, 23), Decl(optionalPropertiesSyntax.ts, 23, 14))
+
+    prop?: any;
+>prop : Symbol(propertySig.prop, Decl(optionalPropertiesSyntax.ts, 21, 23), Decl(optionalPropertiesSyntax.ts, 23, 14))
+
+    prop2?: any;
+>prop2 : Symbol(propertySig.prop2, Decl(optionalPropertiesSyntax.ts, 24, 15))
+}
+
+interface indexSig {
+>indexSig : Symbol(indexSig, Decl(optionalPropertiesSyntax.ts, 26, 1))
+
+    //Index signatures can't be optional
+    [idx: number]: any;
+>idx : Symbol(idx, Decl(optionalPropertiesSyntax.ts, 30, 5))
+
+    [idx: number]?: any; //err
+>idx : Symbol(idx, Decl(optionalPropertiesSyntax.ts, 31, 5))
+>any : Symbol(indexSig.any, Decl(optionalPropertiesSyntax.ts, 31, 19))
+
+    ? [idx: number]: any; //err
+>idx : Symbol(idx, Decl(optionalPropertiesSyntax.ts, 32, 7))
+
+    [idx?: number]: any; //err
+>idx : Symbol(idx, Decl(optionalPropertiesSyntax.ts, 33, 5))
+}

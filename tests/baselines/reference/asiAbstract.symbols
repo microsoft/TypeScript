@@ -1,0 +1,27 @@
+=== tests/cases/compiler/asiAbstract.ts ===
+abstract
+class NonAbstractClass {
+>NonAbstractClass : Symbol(NonAbstractClass, Decl(asiAbstract.ts, 0, 8))
+
+  abstract s();
+>s : Symbol(NonAbstractClass.s, Decl(asiAbstract.ts, 1, 24))
+}
+
+class C2 {
+>C2 : Symbol(C2, Decl(asiAbstract.ts, 3, 1))
+
+    abstract
+>abstract : Symbol(C2.abstract, Decl(asiAbstract.ts, 5, 10))
+
+    nonAbstractFunction() {
+>nonAbstractFunction : Symbol(C2.nonAbstractFunction, Decl(asiAbstract.ts, 6, 12))
+    }
+}
+
+class C3 {
+>C3 : Symbol(C3, Decl(asiAbstract.ts, 9, 1))
+
+    abstract
+>abstract : Symbol(C3.abstract, Decl(asiAbstract.ts, 11, 10))
+}
+

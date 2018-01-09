@@ -15,6 +15,21 @@ declare var console: any;
 class C {
     private myModule = import("./0");
     method() {
+        const loadAsync = import("./0");
+        this.myModule.then(Zero => {
+            console.log(Zero.foo());
+        }, async err => {
+            console.log(err);
+            let one = await import("./1");
+            console.log(one.backup());
+        });
+    }
+}
+
+export class D {
+    private myModule = import("./0");
+    method() {
+        const loadAsync = import("./0");
         this.myModule.then(Zero => {
             console.log(Zero.foo());
         }, async err => {
@@ -56,8 +71,9 @@ System.register([], function (exports_1, context_1) {
 });
 //// [2.js]
 System.register([], function (exports_1, context_1) {
+    "use strict";
     var __moduleName = context_1 && context_1.id;
-    var C;
+    var C, D;
     return {
         setters: [],
         execute: function () {
@@ -66,6 +82,7 @@ System.register([], function (exports_1, context_1) {
                     this.myModule = context_1.import("./0");
                 }
                 method() {
+                    const loadAsync = context_1.import("./0");
                     this.myModule.then(Zero => {
                         console.log(Zero.foo());
                     }, async (err) => {
@@ -75,6 +92,22 @@ System.register([], function (exports_1, context_1) {
                     });
                 }
             };
+            D = class D {
+                constructor() {
+                    this.myModule = context_1.import("./0");
+                }
+                method() {
+                    const loadAsync = context_1.import("./0");
+                    this.myModule.then(Zero => {
+                        console.log(Zero.foo());
+                    }, async (err) => {
+                        console.log(err);
+                        let one = await context_1.import("./1");
+                        console.log(one.backup());
+                    });
+                }
+            };
+            exports_1("D", D);
         }
     };
 });

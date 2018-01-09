@@ -1,6 +1,9 @@
 /// <reference path="fourslash.ts" />
 
 // @jsx: react
+// @allowSyntheticDefaultImports: false
+// @module: es2015
+// @moduleResolution: node
 
 // @Filename: /node_modules/@types/react/index.d.ts
 ////export = React;

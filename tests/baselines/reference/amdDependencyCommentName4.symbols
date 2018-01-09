@@ -1,0 +1,35 @@
+=== tests/cases/compiler/amdDependencyCommentName4.ts ===
+///<amd-dependency path='aliasedModule5' name='n1'/>
+///<amd-dependency path='unaliasedModule3'/>
+///<amd-dependency path='aliasedModule6' name='n2'/>
+///<amd-dependency path='unaliasedModule4'/>
+
+import "unaliasedModule1";
+
+import r1 = require("aliasedModule1");
+>r1 : Symbol(r1, Decl(amdDependencyCommentName4.ts, 5, 26))
+
+r1;
+>r1 : Symbol(r1, Decl(amdDependencyCommentName4.ts, 5, 26))
+
+import {p1, p2, p3} from "aliasedModule2";
+>p1 : Symbol(p1, Decl(amdDependencyCommentName4.ts, 10, 8))
+>p2 : Symbol(p2, Decl(amdDependencyCommentName4.ts, 10, 11))
+>p3 : Symbol(p3, Decl(amdDependencyCommentName4.ts, 10, 15))
+
+p1;
+>p1 : Symbol(p1, Decl(amdDependencyCommentName4.ts, 10, 8))
+
+import d from "aliasedModule3";
+>d : Symbol(d, Decl(amdDependencyCommentName4.ts, 13, 6))
+
+d;
+>d : Symbol(d, Decl(amdDependencyCommentName4.ts, 13, 6))
+
+import * as ns from "aliasedModule4";
+>ns : Symbol(ns, Decl(amdDependencyCommentName4.ts, 16, 6))
+
+ns;
+>ns : Symbol(ns, Decl(amdDependencyCommentName4.ts, 16, 6))
+
+import "unaliasedModule2";

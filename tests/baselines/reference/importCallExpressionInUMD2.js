@@ -52,5 +52,5 @@ foo(import("./0"));
             b.print();
         });
     }
-    foo(__syncRequire ? Promise.resolve().then(function () { return require("./0"); }) : new Promise(function (resolve_1, reject_1) { require(["./0"], resolve_1, reject_1); }));
+    foo(__syncRequire ? Promise.resolve().then(() => require("./0")) : new Promise((resolve_1, reject_1) => { require(["./0"], resolve_1, reject_1); }));
 });

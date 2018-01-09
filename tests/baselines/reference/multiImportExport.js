@@ -27,7 +27,7 @@ export = Adder;
 
 //// [Adder.js]
 "use strict";
-var Adder = (function () {
+var Adder = /** @class */ (function () {
     function Adder() {
     }
     Adder.prototype.add = function (a, b) {
@@ -67,3 +67,4 @@ export = Math;
 //// [Drawing.d.ts]
 export import Math = require('./Math/Math');
 //// [consumer.d.ts]
+export {};

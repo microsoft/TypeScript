@@ -22,13 +22,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Foo = (function (_super) {
+var Foo = /** @class */ (function (_super) {
     __extends(Foo, _super);
     function Foo() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Foo;
-}(createComponentClass(function () { return (function (_super) {
+}(createComponentClass(function () { return /** @class */ (function (_super) {
     __extends(class_1, _super);
     function class_1() {
         return _super !== null && _super.apply(this, arguments) || this;

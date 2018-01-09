@@ -11,12 +11,12 @@ var jq:JQuery={ 0: { id : "a" }, 1: { id : "b" } };
 jq[0].id;
 
 //// [indexerA.js]
-var JQueryElement = (function () {
+var JQueryElement = /** @class */ (function () {
     function JQueryElement() {
     }
     return JQueryElement;
 }());
-var JQuery = (function () {
+var JQuery = /** @class */ (function () {
     function JQuery() {
     }
     return JQuery;

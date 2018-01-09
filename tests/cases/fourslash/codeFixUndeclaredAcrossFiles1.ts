@@ -23,7 +23,7 @@ verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
 verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
 
 verify.rangeIs(`
-    y: { [x: string]: any; };
+    y: {};
     m1(): any {
         throw new Error("Method not implemented.");
     }

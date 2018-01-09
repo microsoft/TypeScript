@@ -76,7 +76,7 @@ function test1(x) {
     var g1 = x.g && x.g();
     var g2 = x.g ? x.g() : 0;
 }
-var Bar = (function () {
+var Bar = /** @class */ (function () {
     function Bar(d, e) {
         if (e === void 0) { e = 10; }
         this.d = d;
@@ -105,12 +105,12 @@ function test2(x) {
     var h1 = x.h && x.h();
     var h2 = x.h ? x.h() : 0;
 }
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base() {
     }
     return Base;
 }());
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

@@ -2,14 +2,15 @@
 /// <reference path="..\services\services.ts" />
 /// <reference path="session.ts" />
 
+/*@internal*/
 namespace ts.server {
     const lineCollectionCapacity = 4;
 
-    export interface LineCollection {
+    interface LineCollection {
         charCount(): number;
         lineCount(): number;
         isLeaf(): this is LineLeaf;
-        walk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker): void;
+        walk(rangeStart: number, rangeLength: number, walkFns: LineIndexWalker): void;
     }
 
     export interface AbsolutePositionAndLineText {
@@ -17,7 +18,7 @@ namespace ts.server {
         lineText: string | undefined;
     }
 
-    export enum CharRangeSection {
+    const enum CharRangeSection {
         PreStart,
         Start,
         Entire,
@@ -26,7 +27,7 @@ namespace ts.server {
         PostEnd
     }
 
-    export interface ILineIndexWalker {
+    interface LineIndexWalker {
         goSubtree: boolean;
         done: boolean;
         leaf(relativeStart: number, relativeLength: number, lineCollection: LineLeaf): void;
@@ -36,7 +37,7 @@ namespace ts.server {
             parent: LineNode, nodeType: CharRangeSection): void;
     }
 
-    class EditWalker implements ILineIndexWalker {
+    class EditWalker implements LineIndexWalker {
         goSubtree = true;
         get done() { return false; }
 
@@ -243,7 +244,7 @@ namespace ts.server {
     }
 
     // text change information
-    export class TextChange {
+    class TextChange {
         constructor(public pos: number, public deleteLen: number, public insertedText?: string) {
         }
 
@@ -256,7 +257,7 @@ namespace ts.server {
     export class ScriptVersionCache {
         private changes: TextChange[] = [];
         private readonly versions: LineIndexSnapshot[] = new Array<LineIndexSnapshot>(ScriptVersionCache.maxVersions);
-        private minVersion = 0;  // no versions earlier than min version will maintain change history
+        private minVersion = 0; // no versions earlier than min version will maintain change history
 
         private currentVersion = 0;
 
@@ -285,36 +286,9 @@ namespace ts.server {
             }
         }
 
-        latest() {
-            return this.versions[this.currentVersionToIndex()];
-        }
+        getSnapshot(): IScriptSnapshot { return this._getSnapshot(); }
 
-        latestVersion() {
-            if (this.changes.length > 0) {
-                this.getSnapshot();
-            }
-            return this.currentVersion;
-        }
-
-        // reload whole script, leaving no change history behind reload
-        reload(script: string) {
-            this.currentVersion++;
-            this.changes = []; // history wiped out by reload
-            const snap = new LineIndexSnapshot(this.currentVersion, this, new LineIndex());
-
-            // delete all versions
-            for (let i = 0; i < this.versions.length; i++) {
-                this.versions[i] = undefined;
-            }
-
-            this.versions[this.currentVersionToIndex()] = snap;
-            const lm = LineIndex.linesFromText(script);
-            snap.index.load(lm.lines);
-
-            this.minVersion = this.currentVersion;
-        }
-
-        getSnapshot() {
+        private _getSnapshot(): LineIndexSnapshot {
             let snap = this.versions[this.currentVersionToIndex()];
             if (this.changes.length > 0) {
                 let snapIndex = snap.index;
@@ -332,6 +306,29 @@ namespace ts.server {
                 }
             }
             return snap;
+        }
+
+        getSnapshotVersion(): number {
+            return this._getSnapshot().version;
+        }
+
+        getLineInfo(line: number): AbsolutePositionAndLineText {
+            return this._getSnapshot().index.lineNumberToInfo(line);
+        }
+
+        lineOffsetToPosition(line: number, column: number): number {
+            return this._getSnapshot().index.absolutePositionOfStartOfLine(line) + (column - 1);
+        }
+
+        positionToLineOffset(position: number): protocol.Location {
+            return this._getSnapshot().index.positionToLineOffset(position);
+        }
+
+        lineToTextSpan(line: number): TextSpan {
+            const index = this._getSnapshot().index;
+            const { lineText, absolutePosition } = index.lineNumberToInfo(line + 1);
+            const len = lineText !== undefined ? lineText.length : index.absolutePositionOfStartOfLine(line + 2) - absolutePosition;
+            return createTextSpan(absolutePosition, len);
         }
 
         getTextChangesBetweenVersions(oldVersion: number, newVersion: number) {
@@ -365,7 +362,7 @@ namespace ts.server {
         }
     }
 
-    export class LineIndexSnapshot implements IScriptSnapshot {
+    class LineIndexSnapshot implements IScriptSnapshot {
         constructor(readonly version: number, readonly cache: ScriptVersionCache, readonly index: LineIndex, readonly changesSincePreviousVersion: ReadonlyArray<TextChange> = emptyArray) {
         }
 
@@ -389,6 +386,7 @@ namespace ts.server {
         }
     }
 
+    /* @internal */
     export class LineIndex {
         root: LineNode;
         // set this to true to check each edit for accuracy
@@ -431,7 +429,7 @@ namespace ts.server {
             }
         }
 
-        walk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker) {
+        walk(rangeStart: number, rangeLength: number, walkFns: LineIndexWalker) {
             this.root.walk(rangeStart, rangeLength, walkFns);
         }
 
@@ -460,7 +458,7 @@ namespace ts.server {
             const walkFns = {
                 goSubtree: true,
                 done: false,
-                leaf(this: ILineIndexWalker, relativeStart: number, relativeLength: number, ll: LineLeaf) {
+                leaf(this: LineIndexWalker, relativeStart: number, relativeLength: number, ll: LineLeaf) {
                     if (!f(ll, relativeStart, relativeLength)) {
                         this.done = true;
                     }
@@ -561,7 +559,7 @@ namespace ts.server {
         }
     }
 
-    export class LineNode implements LineCollection {
+    class LineNode implements LineCollection {
         totalChars = 0;
         totalLines = 0;
 
@@ -582,7 +580,7 @@ namespace ts.server {
             }
         }
 
-        private execWalk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker, childIndex: number, nodeType: CharRangeSection) {
+        private execWalk(rangeStart: number, rangeLength: number, walkFns: LineIndexWalker, childIndex: number, nodeType: CharRangeSection) {
             if (walkFns.pre) {
                 walkFns.pre(rangeStart, rangeLength, this.children[childIndex], this, nodeType);
             }
@@ -598,14 +596,14 @@ namespace ts.server {
             return walkFns.done;
         }
 
-        private skipChild(relativeStart: number, relativeLength: number, childIndex: number, walkFns: ILineIndexWalker, nodeType: CharRangeSection) {
+        private skipChild(relativeStart: number, relativeLength: number, childIndex: number, walkFns: LineIndexWalker, nodeType: CharRangeSection) {
             if (walkFns.pre && (!walkFns.done)) {
                 walkFns.pre(relativeStart, relativeLength, this.children[childIndex], this, nodeType);
                 walkFns.goSubtree = true;
             }
         }
 
-        walk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker) {
+        walk(rangeStart: number, rangeLength: number, walkFns: LineIndexWalker) {
             // assume (rangeStart < this.totalChars) && (rangeLength <= this.totalChars)
             let childIndex = 0;
             let childCharCount = this.children[childIndex].charCount();
@@ -660,45 +658,29 @@ namespace ts.server {
         // Input position is relative to the start of this node.
         // Output line number is absolute.
         charOffsetToLineInfo(lineNumberAccumulator: number, relativePosition: number): { oneBasedLine: number, zeroBasedColumn: number, lineText: string | undefined } {
-            const childInfo = this.childFromCharOffset(lineNumberAccumulator, relativePosition);
-            if (!childInfo.child) {
-                return {
-                    oneBasedLine: lineNumberAccumulator,
-                    zeroBasedColumn: relativePosition,
-                    lineText: undefined,
-                };
+            if (this.children.length === 0) {
+                // Root node might have no children if this is an empty document.
+                return { oneBasedLine: lineNumberAccumulator, zeroBasedColumn: relativePosition, lineText: undefined };
             }
-            else if (childInfo.childIndex < this.children.length) {
-                if (childInfo.child.isLeaf()) {
-                    return {
-                        oneBasedLine: childInfo.lineNumberAccumulator,
-                        zeroBasedColumn: childInfo.relativePosition,
-                        lineText: childInfo.child.text,
-                    };
+
+            for (const child of this.children) {
+                if (child.charCount() > relativePosition) {
+                    if (child.isLeaf()) {
+                        return { oneBasedLine: lineNumberAccumulator, zeroBasedColumn: relativePosition, lineText: child.text };
+                    }
+                    else {
+                        return (<LineNode>child).charOffsetToLineInfo(lineNumberAccumulator, relativePosition);
+                    }
                 }
                 else {
-                    const lineNode = <LineNode>(childInfo.child);
-                    return lineNode.charOffsetToLineInfo(childInfo.lineNumberAccumulator, childInfo.relativePosition);
+                    relativePosition -= child.charCount();
+                    lineNumberAccumulator += child.lineCount();
                 }
             }
-            else {
-                const lineInfo = this.lineNumberToInfo(this.lineCount(), 0);
-                return { oneBasedLine: this.lineCount(), zeroBasedColumn: lineInfo.leaf.charCount(), lineText: undefined };
-            }
-        }
 
-        lineNumberToInfo(relativeOneBasedLine: number, positionAccumulator: number): { position: number, leaf: LineLeaf | undefined } {
-            const childInfo = this.childFromLineNumber(relativeOneBasedLine, positionAccumulator);
-            if (!childInfo.child) {
-                return { position: positionAccumulator, leaf: undefined };
-            }
-            else if (childInfo.child.isLeaf()) {
-                return { position: childInfo.positionAccumulator, leaf: childInfo.child };
-            }
-            else {
-                const lineNode = <LineNode>(childInfo.child);
-                return lineNode.lineNumberToInfo(childInfo.relativeOneBasedLine, childInfo.positionAccumulator);
-            }
+            // Skipped all children
+            const { leaf } = this.lineNumberToInfo(this.lineCount(), 0);
+            return { oneBasedLine: this.lineCount(), zeroBasedColumn: leaf.charCount(), lineText: undefined };
         }
 
         /**
@@ -706,39 +688,19 @@ namespace ts.server {
          * Output line number is relative to the child.
          * positionAccumulator will be an absolute position once relativeLineNumber reaches 0.
          */
-        private childFromLineNumber(relativeOneBasedLine: number, positionAccumulator: number): { child: LineCollection, relativeOneBasedLine: number, positionAccumulator: number } {
-            let child: LineCollection;
-            let i: number;
-            for (i = 0; i < this.children.length; i++) {
-                child = this.children[i];
+        lineNumberToInfo(relativeOneBasedLine: number, positionAccumulator: number): { position: number, leaf: LineLeaf | undefined } {
+            for (const child of this.children) {
                 const childLineCount = child.lineCount();
                 if (childLineCount >= relativeOneBasedLine) {
-                    break;
+                    return child.isLeaf() ? { position: positionAccumulator, leaf: child } : (<LineNode>child).lineNumberToInfo(relativeOneBasedLine, positionAccumulator);
                 }
                 else {
                     relativeOneBasedLine -= childLineCount;
                     positionAccumulator += child.charCount();
                 }
             }
-            return { child, relativeOneBasedLine, positionAccumulator };
-        }
 
-        private childFromCharOffset(lineNumberAccumulator: number, relativePosition: number
-            ): { child: LineCollection, childIndex: number, relativePosition: number, lineNumberAccumulator: number } {
-            let child: LineCollection;
-            let i: number;
-            let len: number;
-            for (i = 0, len = this.children.length; i < len; i++) {
-                child = this.children[i];
-                if (child.charCount() > relativePosition) {
-                    break;
-                }
-                else {
-                    relativePosition -= child.charCount();
-                    lineNumberAccumulator += child.lineCount();
-                }
-            }
-            return { child, childIndex: i, relativePosition, lineNumberAccumulator };
+            return { position: positionAccumulator, leaf: undefined };
         }
 
         private splitAfter(childIndex: number) {
@@ -844,7 +806,7 @@ namespace ts.server {
         }
     }
 
-    export class LineLeaf implements LineCollection {
+    class LineLeaf implements LineCollection {
         constructor(public text: string) {
         }
 
@@ -852,7 +814,7 @@ namespace ts.server {
             return true;
         }
 
-        walk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker) {
+        walk(rangeStart: number, rangeLength: number, walkFns: LineIndexWalker) {
             walkFns.leaf(rangeStart, rangeLength, this);
         }
 

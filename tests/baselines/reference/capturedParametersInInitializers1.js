@@ -18,7 +18,7 @@ function foo3(y = { x: <typeof z>a }, z = 1) {
 //// [capturedParametersInInitializers1.js]
 // ok - usage is deferred
 function foo1(y, x) {
-    if (y === void 0) { y = (function () {
+    if (y === void 0) { y = /** @class */ (function () {
         function class_1() {
             this.c = x;
         }

@@ -1,0 +1,26 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement2.ts ===
+var a;
+>a : any
+
+var b = [];
+>b : any[]
+>[] : undefined[]
+
+var c;
+>c : any
+
+for (a in b[c] = b[c] || [], d) {
+>a : any
+>b[c] = b[c] || [], d : any
+>b[c] = b[c] || [] : any
+>b[c] : any
+>b : any[]
+>c : any
+>b[c] || [] : any
+>b[c] : any
+>b : any[]
+>c : any
+>[] : undefined[]
+>d : any
+
+}

@@ -1,0 +1,8 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of2.ts ===
+const v;
+>v : any
+
+for (v of []) { }
+>v : any
+>[] : undefined[]
+

@@ -1,0 +1,8 @@
+=== tests/cases/compiler/MemberAccessorDeclaration15.ts ===
+class C {
+>C : C
+
+   set Foo(public a: number) { }
+>Foo : number
+>a : number
+}

@@ -15,7 +15,7 @@ function test(strInput: string & MyBrand) {
 
 
 //// [switchComparableCompatForBrands.js]
-var MyBrand = (function () {
+var MyBrand = /** @class */ (function () {
     function MyBrand() {
     }
     return MyBrand;

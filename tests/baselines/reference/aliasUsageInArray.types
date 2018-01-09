@@ -18,13 +18,13 @@ interface IHasVisualizationModel {
 var xs: IHasVisualizationModel[] = [moduleA];
 >xs : IHasVisualizationModel[]
 >IHasVisualizationModel : IHasVisualizationModel
->[moduleA] : typeof moduleA[]
+>[moduleA] : (typeof moduleA)[]
 >moduleA : typeof moduleA
 
 var xs2: typeof moduleA[] = [moduleA];
->xs2 : typeof moduleA[]
+>xs2 : (typeof moduleA)[]
 >moduleA : typeof moduleA
->[moduleA] : typeof moduleA[]
+>[moduleA] : (typeof moduleA)[]
 >moduleA : typeof moduleA
 
 === tests/cases/compiler/aliasUsageInArray_backbone.ts ===

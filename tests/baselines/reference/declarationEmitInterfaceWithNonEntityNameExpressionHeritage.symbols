@@ -1,0 +1,8 @@
+=== tests/cases/compiler/declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts ===
+class A { }
+>A : Symbol(A, Decl(declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts, 0, 0))
+
+interface Class extends (typeof A) { }
+>Class : Symbol(Class, Decl(declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts, 0, 11))
+>A : Symbol(A, Decl(declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts, 0, 0))
+

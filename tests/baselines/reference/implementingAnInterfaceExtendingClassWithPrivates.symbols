@@ -1,0 +1,50 @@
+=== tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 0, 0))
+
+    private x: string;
+>x : Symbol(Foo.x, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 0, 11))
+}
+
+interface I extends Foo {
+>I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 2, 1))
+>Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 0, 0))
+
+    y: number;
+>y : Symbol(I.y, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 4, 25))
+}
+
+class Bar implements I { // error
+>Bar : Symbol(Bar, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 6, 1))
+>I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 2, 1))
+}
+
+class Bar2 implements I { // error
+>Bar2 : Symbol(Bar2, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 9, 1))
+>I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 2, 1))
+
+    y: number;
+>y : Symbol(Bar2.y, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 11, 25))
+}
+
+class Bar3 implements I { // error
+>Bar3 : Symbol(Bar3, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 13, 1))
+>I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 2, 1))
+
+    x: string;
+>x : Symbol(Bar3.x, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 15, 25))
+
+    y: number;
+>y : Symbol(Bar3.y, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 16, 14))
+}
+
+class Bar4 implements I { // error
+>Bar4 : Symbol(Bar4, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 18, 1))
+>I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 2, 1))
+
+    private x: string;
+>x : Symbol(Bar4.x, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 20, 25))
+
+    y: number;
+>y : Symbol(Bar4.y, Decl(implementingAnInterfaceExtendingClassWithPrivates.ts, 21, 22))
+}

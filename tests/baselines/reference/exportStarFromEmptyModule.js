@@ -25,7 +25,7 @@ X.A.r; // Error
 //// [exportStarFromEmptyModule_module1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
@@ -41,7 +41,7 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./exportStarFromEmptyModule_module2"));
 __export(require("./exportStarFromEmptyModule_module1"));
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
@@ -68,3 +68,4 @@ export declare class A {
     static q: any;
 }
 //// [exportStarFromEmptyModule_module4.d.ts]
+export {};

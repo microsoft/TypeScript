@@ -1,0 +1,20 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+
+	interface IntrinsicElements { }
+>IntrinsicElements : IntrinsicElements
+}
+
+var div: any;
+>div : any
+
+// Still an error
+<div n='x' />;
+><div n='x' /> : JSX.Element
+>div : any
+>n : string
+

@@ -9,6 +9,7 @@
 /////*insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets*/[1  ]; [ ]; []; [,];
 /////*insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces*/`${1}`;`${   1  }`
 /////*insertSpaceAfterTypeAssertion*/const bar = <Bar>    Thing.getFoo();
+/////*insertSpaceBeforeTypeAnnotation*/const bar   :   number = 1;
 /////*placeOpenBraceOnNewLineForFunctions*/class   foo   { 
 ////}
 /////*placeOpenBraceOnNewLineForControlBlocks*/if (true)   {
@@ -26,6 +27,7 @@ runTest("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis", "    ( 1 )
 runTest("insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets", "[ 1 ];[];[];[ , ];", "[1];[];[];[,];");
 runTest("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces", "`${ 1 }`; `${ 1 }`", "`${1}`; `${1}`");
 runTest("insertSpaceAfterTypeAssertion", "const bar = <Bar> Thing.getFoo();", "const bar = <Bar>Thing.getFoo();");
+runTest("insertSpaceBeforeTypeAnnotation", "const bar : number = 1;", "const bar: number = 1;");
 runTest("placeOpenBraceOnNewLineForFunctions", "class foo", "class foo {");
 runTest("placeOpenBraceOnNewLineForControlBlocks", "if (true)", "if (true) {");
 runTest("insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces", "{ var t = 1 }; var { a, b } = { a: 'sw', b: 'r' }; function f({ a, b }) { }", "{var t = 1}; var {a, b} = {a: 'sw', b: 'r'}; function f({a, b}) {}");

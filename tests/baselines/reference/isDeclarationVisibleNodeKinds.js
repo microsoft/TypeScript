@@ -127,7 +127,7 @@ var schema;
     schema_8.createValidator8 = createValidator8;
 })(schema || (schema = {}));
 (function (schema) {
-    var T = (function () {
+    var T = /** @class */ (function () {
         function T() {
         }
         Object.defineProperty(T.prototype, "createValidator9", {

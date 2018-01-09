@@ -1,0 +1,75 @@
+=== tests/cases/conformance/classes/members/accessibility/classPropertyIsPublicByDefault.ts ===
+class C {
+>C : Symbol(C, Decl(classPropertyIsPublicByDefault.ts, 0, 0))
+
+    x: string;
+>x : Symbol(C.x, Decl(classPropertyIsPublicByDefault.ts, 0, 9))
+
+    get y() { return null; }
+>y : Symbol(C.y, Decl(classPropertyIsPublicByDefault.ts, 1, 14), Decl(classPropertyIsPublicByDefault.ts, 2, 28))
+
+    set y(x) { }
+>y : Symbol(C.y, Decl(classPropertyIsPublicByDefault.ts, 1, 14), Decl(classPropertyIsPublicByDefault.ts, 2, 28))
+>x : Symbol(x, Decl(classPropertyIsPublicByDefault.ts, 3, 10))
+
+    foo() { }
+>foo : Symbol(C.foo, Decl(classPropertyIsPublicByDefault.ts, 3, 16))
+
+    static a: string;
+>a : Symbol(C.a, Decl(classPropertyIsPublicByDefault.ts, 4, 13))
+
+    static get b() { return null; }
+>b : Symbol(C.b, Decl(classPropertyIsPublicByDefault.ts, 6, 21), Decl(classPropertyIsPublicByDefault.ts, 7, 35))
+
+    static set b(x) { }
+>b : Symbol(C.b, Decl(classPropertyIsPublicByDefault.ts, 6, 21), Decl(classPropertyIsPublicByDefault.ts, 7, 35))
+>x : Symbol(x, Decl(classPropertyIsPublicByDefault.ts, 8, 17))
+
+    static foo() { }
+>foo : Symbol(C.foo, Decl(classPropertyIsPublicByDefault.ts, 8, 23))
+}
+
+var c: C;
+>c : Symbol(c, Decl(classPropertyIsPublicByDefault.ts, 12, 3))
+>C : Symbol(C, Decl(classPropertyIsPublicByDefault.ts, 0, 0))
+
+c.x;
+>c.x : Symbol(C.x, Decl(classPropertyIsPublicByDefault.ts, 0, 9))
+>c : Symbol(c, Decl(classPropertyIsPublicByDefault.ts, 12, 3))
+>x : Symbol(C.x, Decl(classPropertyIsPublicByDefault.ts, 0, 9))
+
+c.y;
+>c.y : Symbol(C.y, Decl(classPropertyIsPublicByDefault.ts, 1, 14), Decl(classPropertyIsPublicByDefault.ts, 2, 28))
+>c : Symbol(c, Decl(classPropertyIsPublicByDefault.ts, 12, 3))
+>y : Symbol(C.y, Decl(classPropertyIsPublicByDefault.ts, 1, 14), Decl(classPropertyIsPublicByDefault.ts, 2, 28))
+
+c.y = 1;
+>c.y : Symbol(C.y, Decl(classPropertyIsPublicByDefault.ts, 1, 14), Decl(classPropertyIsPublicByDefault.ts, 2, 28))
+>c : Symbol(c, Decl(classPropertyIsPublicByDefault.ts, 12, 3))
+>y : Symbol(C.y, Decl(classPropertyIsPublicByDefault.ts, 1, 14), Decl(classPropertyIsPublicByDefault.ts, 2, 28))
+
+c.foo();
+>c.foo : Symbol(C.foo, Decl(classPropertyIsPublicByDefault.ts, 3, 16))
+>c : Symbol(c, Decl(classPropertyIsPublicByDefault.ts, 12, 3))
+>foo : Symbol(C.foo, Decl(classPropertyIsPublicByDefault.ts, 3, 16))
+
+C.a;
+>C.a : Symbol(C.a, Decl(classPropertyIsPublicByDefault.ts, 4, 13))
+>C : Symbol(C, Decl(classPropertyIsPublicByDefault.ts, 0, 0))
+>a : Symbol(C.a, Decl(classPropertyIsPublicByDefault.ts, 4, 13))
+
+C.b();
+>C.b : Symbol(C.b, Decl(classPropertyIsPublicByDefault.ts, 6, 21), Decl(classPropertyIsPublicByDefault.ts, 7, 35))
+>C : Symbol(C, Decl(classPropertyIsPublicByDefault.ts, 0, 0))
+>b : Symbol(C.b, Decl(classPropertyIsPublicByDefault.ts, 6, 21), Decl(classPropertyIsPublicByDefault.ts, 7, 35))
+
+C.b = 1;
+>C.b : Symbol(C.b, Decl(classPropertyIsPublicByDefault.ts, 6, 21), Decl(classPropertyIsPublicByDefault.ts, 7, 35))
+>C : Symbol(C, Decl(classPropertyIsPublicByDefault.ts, 0, 0))
+>b : Symbol(C.b, Decl(classPropertyIsPublicByDefault.ts, 6, 21), Decl(classPropertyIsPublicByDefault.ts, 7, 35))
+
+C.foo();
+>C.foo : Symbol(C.foo, Decl(classPropertyIsPublicByDefault.ts, 8, 23))
+>C : Symbol(C, Decl(classPropertyIsPublicByDefault.ts, 0, 0))
+>foo : Symbol(C.foo, Decl(classPropertyIsPublicByDefault.ts, 8, 23))
+

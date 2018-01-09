@@ -26,37 +26,37 @@ export var x6 = new m();
 //// [server.js]
 "use strict";
 exports.__esModule = true;
-var a = (function () {
+var a = /** @class */ (function () {
     function a() {
     }
     return a;
 }());
 exports.a = a;
-var x = (function () {
+var x = /** @class */ (function () {
     function x() {
     }
     return x;
 }());
 exports.x = x;
-var m = (function () {
+var m = /** @class */ (function () {
     function m() {
     }
     return m;
 }());
 exports.m = m;
-var a11 = (function () {
+var a11 = /** @class */ (function () {
     function a11() {
     }
     return a11;
 }());
 exports.a11 = a11;
-var a12 = (function () {
+var a12 = /** @class */ (function () {
     function a12() {
     }
     return a12;
 }());
 exports.a12 = a12;
-var x11 = (function () {
+var x11 = /** @class */ (function () {
     function x11() {
     }
     return x11;

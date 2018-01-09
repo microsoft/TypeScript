@@ -1,0 +1,6 @@
+=== tests/cases/compiler/objectLiteralReferencingInternalProperties.ts ===
+var a = { b: 10, c: b }; // Should give error for attempting to reference b.
+>a : Symbol(a, Decl(objectLiteralReferencingInternalProperties.ts, 0, 3))
+>b : Symbol(b, Decl(objectLiteralReferencingInternalProperties.ts, 0, 9))
+>c : Symbol(c, Decl(objectLiteralReferencingInternalProperties.ts, 0, 16))
+

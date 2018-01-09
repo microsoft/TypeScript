@@ -22,7 +22,7 @@ x = <foo>x</foo>, x = <foo/>;
 
 
 //// [jsxAndTypeAssertion.jsx]
-var foo = (function () {
+var foo = /** @class */ (function () {
     function foo() {
     }
     return foo;

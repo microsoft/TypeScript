@@ -13,6 +13,3 @@ tests/cases/conformance/dynamicImport/1.ts(3,10): error TS1326: Dynamic import c
     var p2 = import<>("./0");  // error
              ~~~~~~~~~~~~~~~
 !!! error TS1326: Dynamic import cannot have type arguments
-    // p1.then(value => {
-    //     value.anyFunction();
-    // })

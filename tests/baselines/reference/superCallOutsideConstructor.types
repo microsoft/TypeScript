@@ -1,0 +1,47 @@
+=== tests/cases/compiler/superCallOutsideConstructor.ts ===
+class C {
+>C : C
+
+    foo() { }
+>foo : () => void
+}
+ 
+class D extends C {
+>D : D
+>C : C
+
+    x = super(); 
+>x : void
+>super() : void
+>super : any
+ 
+    constructor() {
+        super();
+>super() : void
+>super : typeof C
+ 
+        var y = () => {
+>y : () => void
+>() => {            super();         } : () => void
+
+            super(); 
+>super() : void
+>super : any
+        }
+
+        var y2 = function() {
+>y2 : () => void
+>function() {            super();        } : () => void
+
+            super();
+>super() : void
+>super : any
+        }
+    }
+}
+ 
+var d = new D();
+>d : D
+>new D() : D
+>D : typeof D
+

@@ -1,0 +1,172 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts ===
+// type parameter lists must exactly match type argument lists
+// all of these invocations are errors
+
+function f<T, U>(x: T, y: U): T { return null; }
+>f : Symbol(f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 0, 0))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 3, 11))
+>U : Symbol(U, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 3, 13))
+>x : Symbol(x, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 3, 17))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 3, 11))
+>y : Symbol(y, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 3, 22))
+>U : Symbol(U, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 3, 13))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 3, 11))
+
+var r1 = f<number>(1, '');
+>r1 : Symbol(r1, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 4, 3))
+>f : Symbol(f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 0, 0))
+
+var r1b = f<number, string, number>(1, '');
+>r1b : Symbol(r1b, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 5, 3))
+>f : Symbol(f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 0, 0))
+
+var f2 = <T, U>(x: T, y: U): T => { return null; }
+>f2 : Symbol(f2, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 7, 3))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 7, 10))
+>U : Symbol(U, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 7, 12))
+>x : Symbol(x, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 7, 16))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 7, 10))
+>y : Symbol(y, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 7, 21))
+>U : Symbol(U, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 7, 12))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 7, 10))
+
+var r2 = f2<number>(1, '');
+>r2 : Symbol(r2, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 8, 3))
+>f2 : Symbol(f2, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 7, 3))
+
+var r2b = f2<number, string, number>(1, '');
+>r2b : Symbol(r2b, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 9, 3))
+>f2 : Symbol(f2, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 7, 3))
+
+var f3: { <T, U>(x: T, y: U): T; }
+>f3 : Symbol(f3, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 11, 3))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 11, 11))
+>U : Symbol(U, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 11, 13))
+>x : Symbol(x, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 11, 17))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 11, 11))
+>y : Symbol(y, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 11, 22))
+>U : Symbol(U, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 11, 13))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 11, 11))
+
+var r3 = f3<number>(1, '');
+>r3 : Symbol(r3, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 12, 3))
+>f3 : Symbol(f3, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 11, 3))
+
+var r3b = f3<number, string, number>(1, '');
+>r3b : Symbol(r3b, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 13, 3))
+>f3 : Symbol(f3, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 11, 3))
+
+class C {
+>C : Symbol(C, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 13, 44))
+
+    f<T, U>(x: T, y: U): T {
+>f : Symbol(C.f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 15, 9))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 16, 6))
+>U : Symbol(U, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 16, 8))
+>x : Symbol(x, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 16, 12))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 16, 6))
+>y : Symbol(y, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 16, 17))
+>U : Symbol(U, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 16, 8))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 16, 6))
+
+        return null;
+    }
+}
+var r4 = (new C()).f<number>(1, '');
+>r4 : Symbol(r4, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 20, 3))
+>(new C()).f : Symbol(C.f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 15, 9))
+>C : Symbol(C, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 13, 44))
+>f : Symbol(C.f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 15, 9))
+
+var r4b = (new C()).f<number, string, number>(1, '');
+>r4b : Symbol(r4b, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 21, 3))
+>(new C()).f : Symbol(C.f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 15, 9))
+>C : Symbol(C, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 13, 44))
+>f : Symbol(C.f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 15, 9))
+
+interface I {
+>I : Symbol(I, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 21, 53))
+
+    f<T, U>(x: T, y: U): T;
+>f : Symbol(I.f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 23, 13))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 24, 6))
+>U : Symbol(U, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 24, 8))
+>x : Symbol(x, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 24, 12))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 24, 6))
+>y : Symbol(y, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 24, 17))
+>U : Symbol(U, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 24, 8))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 24, 6))
+}
+var i: I;
+>i : Symbol(i, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 26, 3))
+>I : Symbol(I, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 21, 53))
+
+var r5 = i.f<number>(1, '');
+>r5 : Symbol(r5, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 27, 3))
+>i.f : Symbol(I.f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 23, 13))
+>i : Symbol(i, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 26, 3))
+>f : Symbol(I.f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 23, 13))
+
+var r5b = i.f<number, string, number>(1, '');
+>r5b : Symbol(r5b, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 28, 3))
+>i.f : Symbol(I.f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 23, 13))
+>i : Symbol(i, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 26, 3))
+>f : Symbol(I.f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 23, 13))
+
+class C2<T, U> {
+>C2 : Symbol(C2, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 28, 45))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 30, 9))
+>U : Symbol(U, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 30, 11))
+
+    f(x: T, y: U): T {
+>f : Symbol(C2.f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 30, 16))
+>x : Symbol(x, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 31, 6))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 30, 9))
+>y : Symbol(y, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 31, 11))
+>U : Symbol(U, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 30, 11))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 30, 9))
+
+        return null;
+    }
+}
+var r6 = (new C2()).f<number>(1, '');
+>r6 : Symbol(r6, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 35, 3))
+>(new C2()).f : Symbol(C2.f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 30, 16))
+>C2 : Symbol(C2, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 28, 45))
+>f : Symbol(C2.f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 30, 16))
+
+var r6b = (new C2()).f<number, string, number>(1, '');
+>r6b : Symbol(r6b, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 36, 3))
+>(new C2()).f : Symbol(C2.f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 30, 16))
+>C2 : Symbol(C2, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 28, 45))
+>f : Symbol(C2.f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 30, 16))
+
+interface I2<T, U> {
+>I2 : Symbol(I2, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 36, 54))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 38, 13))
+>U : Symbol(U, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 38, 15))
+
+    f(x: T, y: U): T;
+>f : Symbol(I2.f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 38, 20))
+>x : Symbol(x, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 39, 6))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 38, 13))
+>y : Symbol(y, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 39, 11))
+>U : Symbol(U, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 38, 15))
+>T : Symbol(T, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 38, 13))
+}
+var i2: I2<number, string>;
+>i2 : Symbol(i2, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 41, 3))
+>I2 : Symbol(I2, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 36, 54))
+
+var r7 = i2.f<number>(1, '');
+>r7 : Symbol(r7, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 42, 3))
+>i2.f : Symbol(I2.f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 38, 20))
+>i2 : Symbol(i2, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 41, 3))
+>f : Symbol(I2.f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 38, 20))
+
+var r7b = i2.f<number, string, number>(1, '');
+>r7b : Symbol(r7b, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 43, 3))
+>i2.f : Symbol(I2.f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 38, 20))
+>i2 : Symbol(i2, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 41, 3))
+>f : Symbol(I2.f, Decl(callGenericFunctionWithIncorrectNumberOfTypeArguments.ts, 38, 20))
+

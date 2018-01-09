@@ -1,0 +1,224 @@
+=== tests/cases/compiler/collisionThisExpressionAndParameter.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(collisionThisExpressionAndParameter.ts, 0, 0))
+
+    x() {
+>x : Symbol(Foo.x, Decl(collisionThisExpressionAndParameter.ts, 0, 11))
+
+        var _this = 10; // Local var. No this capture in x(), so no conflict.
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 2, 11))
+
+        function inner(_this: number) { // Error 
+>inner : Symbol(inner, Decl(collisionThisExpressionAndParameter.ts, 2, 23))
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 3, 23))
+
+            return x => this;   // New scope.  So should inject new _this capture into function inner
+>x : Symbol(x, Decl(collisionThisExpressionAndParameter.ts, 4, 18))
+        }
+    }
+    y() {
+>y : Symbol(Foo.y, Decl(collisionThisExpressionAndParameter.ts, 6, 5))
+
+        var lamda = (_this: number) => { // Error 
+>lamda : Symbol(lamda, Decl(collisionThisExpressionAndParameter.ts, 8, 11))
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 8, 21))
+
+            return x => this;   // New scope.  So should inject new _this capture
+>x : Symbol(x, Decl(collisionThisExpressionAndParameter.ts, 9, 18))
+>this : Symbol(Foo, Decl(collisionThisExpressionAndParameter.ts, 0, 0))
+        }
+    }
+    z(_this: number) { // Error 
+>z : Symbol(Foo.z, Decl(collisionThisExpressionAndParameter.ts, 11, 5))
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 12, 6))
+
+        var lambda = () => {
+>lambda : Symbol(lambda, Decl(collisionThisExpressionAndParameter.ts, 13, 11))
+
+            return x => this;   // New scope.  So should inject new _this capture
+>x : Symbol(x, Decl(collisionThisExpressionAndParameter.ts, 14, 18))
+>this : Symbol(Foo, Decl(collisionThisExpressionAndParameter.ts, 0, 0))
+        }
+    }
+
+    x1() {
+>x1 : Symbol(Foo.x1, Decl(collisionThisExpressionAndParameter.ts, 16, 5))
+
+        var _this = 10; // Local var. No this capture in x(), so no conflict.
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 19, 11))
+
+        function inner(_this: number) { // No Error 
+>inner : Symbol(inner, Decl(collisionThisExpressionAndParameter.ts, 19, 23))
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 20, 23))
+        }
+    }
+    y1() {
+>y1 : Symbol(Foo.y1, Decl(collisionThisExpressionAndParameter.ts, 22, 5))
+
+        var lamda = (_this: number) => { // No Error 
+>lamda : Symbol(lamda, Decl(collisionThisExpressionAndParameter.ts, 24, 11))
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 24, 21))
+        }
+    }
+    z1(_this: number) { // No Error 
+>z1 : Symbol(Foo.z1, Decl(collisionThisExpressionAndParameter.ts, 26, 5))
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 27, 7))
+
+        var lambda = () => {
+>lambda : Symbol(lambda, Decl(collisionThisExpressionAndParameter.ts, 28, 11))
+        }
+    }
+}
+class Foo1 {
+>Foo1 : Symbol(Foo1, Decl(collisionThisExpressionAndParameter.ts, 31, 1))
+
+    constructor(_this: number) { // Error
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 33, 16))
+
+        var x2 = {
+>x2 : Symbol(x2, Decl(collisionThisExpressionAndParameter.ts, 34, 11))
+
+            doStuff: (callback) => () => {
+>doStuff : Symbol(doStuff, Decl(collisionThisExpressionAndParameter.ts, 34, 18))
+>callback : Symbol(callback, Decl(collisionThisExpressionAndParameter.ts, 35, 22))
+
+                return callback(this);
+>callback : Symbol(callback, Decl(collisionThisExpressionAndParameter.ts, 35, 22))
+>this : Symbol(Foo1, Decl(collisionThisExpressionAndParameter.ts, 31, 1))
+            }
+        }
+    }
+}
+declare var console: {
+>console : Symbol(console, Decl(collisionThisExpressionAndParameter.ts, 41, 11), Decl(collisionThisExpressionAndParameter.ts, 74, 11))
+
+    log(msg: any);
+>log : Symbol(log, Decl(collisionThisExpressionAndParameter.ts, 41, 22))
+>msg : Symbol(msg, Decl(collisionThisExpressionAndParameter.ts, 42, 8))
+}
+
+function f1(_this: number) {
+>f1 : Symbol(f1, Decl(collisionThisExpressionAndParameter.ts, 43, 1))
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 45, 12))
+
+    x => { console.log(this.x); };
+>x : Symbol(x, Decl(collisionThisExpressionAndParameter.ts, 45, 28))
+>console.log : Symbol(log, Decl(collisionThisExpressionAndParameter.ts, 41, 22))
+>console : Symbol(console, Decl(collisionThisExpressionAndParameter.ts, 41, 11), Decl(collisionThisExpressionAndParameter.ts, 74, 11))
+>log : Symbol(log, Decl(collisionThisExpressionAndParameter.ts, 41, 22))
+}
+
+declare class Foo2 {
+>Foo2 : Symbol(Foo2, Decl(collisionThisExpressionAndParameter.ts, 47, 1))
+
+    constructor(_this: number); // no error - no code gen
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 50, 16))
+
+    z(_this: number); // no error - no code gen
+>z : Symbol(Foo2.z, Decl(collisionThisExpressionAndParameter.ts, 50, 31))
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 51, 6))
+}
+declare function f2(_this: number); // no error
+>f2 : Symbol(f2, Decl(collisionThisExpressionAndParameter.ts, 52, 1))
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 53, 20))
+
+class Foo3 {
+>Foo3 : Symbol(Foo3, Decl(collisionThisExpressionAndParameter.ts, 53, 35))
+
+    constructor(_this: string); // no code gen - no error
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 56, 16))
+
+    constructor(_this: number); // no code gen - no error
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 57, 16))
+
+    constructor(_this: any) { // Error
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 58, 16))
+
+        var x2 = {
+>x2 : Symbol(x2, Decl(collisionThisExpressionAndParameter.ts, 59, 11))
+
+            doStuff: (callback) => () => {
+>doStuff : Symbol(doStuff, Decl(collisionThisExpressionAndParameter.ts, 59, 18))
+>callback : Symbol(callback, Decl(collisionThisExpressionAndParameter.ts, 60, 22))
+
+                return callback(this);
+>callback : Symbol(callback, Decl(collisionThisExpressionAndParameter.ts, 60, 22))
+>this : Symbol(Foo3, Decl(collisionThisExpressionAndParameter.ts, 53, 35))
+            }
+        }
+    }
+
+    z(_this: string); // no code gen - no error
+>z : Symbol(Foo3.z, Decl(collisionThisExpressionAndParameter.ts, 64, 5), Decl(collisionThisExpressionAndParameter.ts, 66, 21), Decl(collisionThisExpressionAndParameter.ts, 67, 21))
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 66, 6))
+
+    z(_this: number); // no code gen - no error
+>z : Symbol(Foo3.z, Decl(collisionThisExpressionAndParameter.ts, 64, 5), Decl(collisionThisExpressionAndParameter.ts, 66, 21), Decl(collisionThisExpressionAndParameter.ts, 67, 21))
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 67, 6))
+
+    z(_this: any) { // Error 
+>z : Symbol(Foo3.z, Decl(collisionThisExpressionAndParameter.ts, 64, 5), Decl(collisionThisExpressionAndParameter.ts, 66, 21), Decl(collisionThisExpressionAndParameter.ts, 67, 21))
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 68, 6))
+
+        var lambda = () => {
+>lambda : Symbol(lambda, Decl(collisionThisExpressionAndParameter.ts, 69, 11))
+
+            return x => this;   // New scope.  So should inject new _this capture
+>x : Symbol(x, Decl(collisionThisExpressionAndParameter.ts, 70, 18))
+>this : Symbol(Foo3, Decl(collisionThisExpressionAndParameter.ts, 53, 35))
+        }
+    }
+}
+declare var console: {
+>console : Symbol(console, Decl(collisionThisExpressionAndParameter.ts, 41, 11), Decl(collisionThisExpressionAndParameter.ts, 74, 11))
+
+    log(msg: any);
+>log : Symbol(log, Decl(collisionThisExpressionAndParameter.ts, 74, 22))
+>msg : Symbol(msg, Decl(collisionThisExpressionAndParameter.ts, 75, 8))
+}
+
+function f3(_this: number); // no code gen - no error
+>f3 : Symbol(f3, Decl(collisionThisExpressionAndParameter.ts, 76, 1), Decl(collisionThisExpressionAndParameter.ts, 78, 27), Decl(collisionThisExpressionAndParameter.ts, 79, 27))
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 78, 12))
+
+function f3(_this: string); // no code gen - no error
+>f3 : Symbol(f3, Decl(collisionThisExpressionAndParameter.ts, 76, 1), Decl(collisionThisExpressionAndParameter.ts, 78, 27), Decl(collisionThisExpressionAndParameter.ts, 79, 27))
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 79, 12))
+
+function f3(_this: any) {
+>f3 : Symbol(f3, Decl(collisionThisExpressionAndParameter.ts, 76, 1), Decl(collisionThisExpressionAndParameter.ts, 78, 27), Decl(collisionThisExpressionAndParameter.ts, 79, 27))
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 80, 12))
+
+    x => { console.log(this.x); };
+>x : Symbol(x, Decl(collisionThisExpressionAndParameter.ts, 80, 25))
+>console.log : Symbol(log, Decl(collisionThisExpressionAndParameter.ts, 41, 22))
+>console : Symbol(console, Decl(collisionThisExpressionAndParameter.ts, 41, 11), Decl(collisionThisExpressionAndParameter.ts, 74, 11))
+>log : Symbol(log, Decl(collisionThisExpressionAndParameter.ts, 41, 22))
+}
+
+declare class Foo4 {
+>Foo4 : Symbol(Foo4, Decl(collisionThisExpressionAndParameter.ts, 82, 1))
+
+    constructor(_this: string); // no code gen - no error
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 85, 16))
+
+    constructor(_this: number); // no code gen - no error
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 86, 16))
+
+    z(_this: string); // no code gen - no error
+>z : Symbol(Foo4.z, Decl(collisionThisExpressionAndParameter.ts, 86, 31), Decl(collisionThisExpressionAndParameter.ts, 87, 21))
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 87, 6))
+
+    z(_this: number); // no code gen - no error
+>z : Symbol(Foo4.z, Decl(collisionThisExpressionAndParameter.ts, 86, 31), Decl(collisionThisExpressionAndParameter.ts, 87, 21))
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 88, 6))
+}
+
+declare function f4(_this: number); // no code gen - no error
+>f4 : Symbol(f4, Decl(collisionThisExpressionAndParameter.ts, 89, 1), Decl(collisionThisExpressionAndParameter.ts, 91, 35))
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 91, 20))
+
+declare function f4(_this: string); // no code gen - no error
+>f4 : Symbol(f4, Decl(collisionThisExpressionAndParameter.ts, 89, 1), Decl(collisionThisExpressionAndParameter.ts, 91, 35))
+>_this : Symbol(_this, Decl(collisionThisExpressionAndParameter.ts, 92, 20))
+

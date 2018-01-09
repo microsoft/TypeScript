@@ -19,6 +19,8 @@
     "Loading module '@be/bop/e/z' from 'node_modules' folder, target file type 'TypeScript ('.ts' preferred)'.",
     "Scoped package detected, looking in 'be__bop/e/z'",
     "File '/node_modules/@types/be__bop/e/z/package.json' does not exist.",
+    "File '/node_modules/@types/be__bop/package.json' does not exist.",
+    "File '/node_modules/@types/be__bop/e/z.d.ts' does not exist.",
     "File '/node_modules/@types/be__bop/e/z/index.d.ts' exist - use it as a name resolution result.",
     "Resolving real path for '/node_modules/@types/be__bop/e/z/index.d.ts', result '/node_modules/@types/be__bop/e/z/index.d.ts'.",
     "======== Module name '@be/bop/e/z' was successfully resolved to '/node_modules/@types/be__bop/e/z/index.d.ts'. ========"

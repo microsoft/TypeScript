@@ -10,7 +10,7 @@ class arrTest {
 
 
 //// [trailingCommaInHeterogenousArrayLiteral1.js]
-var arrTest = (function () {
+var arrTest = /** @class */ (function () {
     function arrTest() {
     }
     arrTest.prototype.test = function (arg1) { };

@@ -9,7 +9,7 @@ declare namespace ts.server {
         data: any;
     }
 
-    type RequireResult = { module: {}, error: undefined } | { module: undefined, error: {} };
+    type RequireResult = { module: {}, error: undefined } | { module: undefined, error: { stack?: string, message?: string } };
     export interface ServerHost extends System {
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         clearTimeout(timeoutId: any): void;
@@ -20,16 +20,22 @@ declare namespace ts.server {
         require?(initialPath: string, moduleName: string): RequireResult;
     }
 
+    export interface SortedArray<T> extends Array<T> {
+        " __sortedArrayBrand": any;
+    }
+
     export interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
-        " __sortedReadonlyArrayBrand": any;
+        " __sortedArrayBrand": any;
     }
 
-    export interface TypingInstallerRequest {
+    export interface TypingInstallerRequestWithProjectName {
         readonly projectName: string;
-        readonly kind: "discover" | "closeProject";
     }
 
-    export interface DiscoverTypings extends TypingInstallerRequest {
+    /* @internal */
+    export type TypingInstallerRequestUnion = DiscoverTypings | CloseProject | TypesRegistryRequest | InstallPackageRequest;
+
+    export interface DiscoverTypings extends TypingInstallerRequestWithProjectName {
         readonly fileNames: string[];
         readonly projectRootPath: Path;
         readonly compilerOptions: CompilerOptions;
@@ -39,18 +45,45 @@ declare namespace ts.server {
         readonly kind: "discover";
     }
 
-    export interface CloseProject extends TypingInstallerRequest {
+    export interface CloseProject extends TypingInstallerRequestWithProjectName {
         readonly kind: "closeProject";
+    }
+
+    export interface TypesRegistryRequest {
+        readonly kind: "typesRegistry";
+    }
+
+    export interface InstallPackageRequest extends TypingInstallerRequestWithProjectName {
+        readonly kind: "installPackage";
+        readonly fileName: Path;
+        readonly packageName: string;
+        readonly projectRootPath: Path;
     }
 
     export type ActionSet = "action::set";
     export type ActionInvalidate = "action::invalidate";
+    export type ActionPackageInstalled = "action::packageInstalled";
+    export type EventTypesRegistry = "event::typesRegistry";
     export type EventBeginInstallTypes = "event::beginInstallTypes";
     export type EventEndInstallTypes = "event::endInstallTypes";
     export type EventInitializationFailed = "event::initializationFailed";
 
     export interface TypingInstallerResponse {
-        readonly kind: ActionSet | ActionInvalidate | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
+        readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
+    }
+    /* @internal */
+    export type TypingInstallerResponseUnion = SetTypings | InvalidateCachedTypings | TypesRegistryResponse | PackageInstalledResponse | InstallTypes | InitializationFailedResponse;
+
+    /* @internal */
+    export interface TypesRegistryResponse extends TypingInstallerResponse {
+        readonly kind: EventTypesRegistry;
+        readonly typesRegistry: MapLike<void>;
+    }
+
+    export interface PackageInstalledResponse extends ProjectResponse {
+        readonly kind: ActionPackageInstalled;
+        readonly success: boolean;
+        readonly message: string;
     }
 
     export interface InitializationFailedResponse extends TypingInstallerResponse {

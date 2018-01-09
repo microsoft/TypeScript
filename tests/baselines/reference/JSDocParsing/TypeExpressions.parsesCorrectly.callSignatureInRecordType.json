@@ -1,30 +1,28 @@
 {
-    "kind": "JSDocRecordType",
+    "kind": "TypeLiteral",
     "pos": 1,
     "end": 13,
-    "literal": {
-        "kind": "TypeLiteral",
-        "pos": 1,
-        "end": 13,
-        "members": {
-            "0": {
-                "kind": "CallSignature",
-                "pos": 2,
-                "end": 12,
-                "parameters": {
-                    "length": 0,
-                    "pos": 3,
-                    "end": 3
-                },
-                "type": {
-                    "kind": "NumberKeyword",
-                    "pos": 5,
-                    "end": 12
-                }
-            },
-            "length": 1,
+    "flags": "JSDoc",
+    "members": {
+        "0": {
+            "kind": "CallSignature",
             "pos": 2,
-            "end": 12
-        }
+            "end": 12,
+            "flags": "JSDoc",
+            "parameters": {
+                "length": 0,
+                "pos": 3,
+                "end": 3
+            },
+            "type": {
+                "kind": "NumberKeyword",
+                "pos": 5,
+                "end": 12,
+                "flags": "JSDoc"
+            }
+        },
+        "length": 1,
+        "pos": 2,
+        "end": 12
     }
 }

@@ -11,19 +11,13 @@ const enum CompilerTestType {
 class CompilerBaselineRunner extends RunnerBase {
     private basePath = "tests/cases";
     private testSuiteName: TestRunnerKind;
-    private errors: boolean;
     private emit: boolean;
-    private decl: boolean;
-    private output: boolean;
 
     public options: string;
 
     constructor(public testType: CompilerTestType) {
         super();
-        this.errors = true;
         this.emit = true;
-        this.decl = true;
-        this.output = true;
         if (testType === CompilerTestType.Conformance) {
             this.testSuiteName = "conformance";
         }
@@ -54,7 +48,7 @@ class CompilerBaselineRunner extends RunnerBase {
     }
 
     public checkTestCodeOutput(fileName: string) {
-        describe("compiler tests for " + fileName, () => {
+        describe(`${this.testSuiteName} tests for ${fileName}`, () => {
             // Mocha holds onto the closure environment of the describe callback even after the test is done.
             // Everything declared here should be cleared out in the "after" callback.
             let justName: string;
@@ -86,9 +80,9 @@ class CompilerBaselineRunner extends RunnerBase {
                     tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData, rootDir, ts.combinePaths(rootDir, tsConfigOptions.configFilePath)));
                 }
                 else {
-                    const baseUrl = harnessSettings["baseUrl"];
+                    const baseUrl = harnessSettings.baseUrl;
                     if (baseUrl !== undefined && !ts.isRootedDiskPath(baseUrl)) {
-                        harnessSettings["baseUrl"] = ts.getNormalizedAbsolutePath(baseUrl, rootDir);
+                        harnessSettings.baseUrl = ts.getNormalizedAbsolutePath(baseUrl, rootDir);
                     }
                 }
 
@@ -100,7 +94,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 toBeCompiled = [];
                 otherFiles = [];
 
-                if (testCaseContent.settings["noImplicitReferences"] || /require\(/.test(lastUnit.content) || /reference\spath/.test(lastUnit.content)) {
+                if (testCaseContent.settings.noImplicitReferences || /require\(/.test(lastUnit.content) || /reference\spath/.test(lastUnit.content)) {
                     toBeCompiled.push(this.createHarnessTestFile(lastUnit, rootDir));
                     units.forEach(unit => {
                         if (unit.name !== lastUnit.name) {
@@ -120,7 +114,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
 
                 const output = Harness.Compiler.compileFiles(
-                    toBeCompiled, otherFiles, harnessSettings, /*options*/ tsConfigOptions, /*currentDirectory*/ harnessSettings["currentDirectory"]);
+                    toBeCompiled, otherFiles, harnessSettings, /*options*/ tsConfigOptions, /*currentDirectory*/ harnessSettings.currentDirectory);
 
                 options = output.options;
                 result = output.result;
@@ -141,7 +135,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
             // check errors
             it("Correct errors for " + fileName, () => {
-                Harness.Compiler.doErrorBaseline(justName, tsConfigFiles.concat(toBeCompiled, otherFiles), result.errors);
+                Harness.Compiler.doErrorBaseline(justName, tsConfigFiles.concat(toBeCompiled, otherFiles), result.errors, !!options.pretty);
             });
 
             it (`Correct module resolution tracing for ${fileName}`, () => {
@@ -183,7 +177,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     return;
                 }
 
-                Harness.Compiler.doTypeAndSymbolBaseline(justName, result, toBeCompiled.concat(otherFiles).filter(file => !!result.program.getSourceFile(file.unitName)));
+                Harness.Compiler.doTypeAndSymbolBaseline(justName, result.program, toBeCompiled.concat(otherFiles).filter(file => !!result.program.getSourceFile(file.unitName)));
             });
         });
     }
@@ -214,25 +208,13 @@ class CompilerBaselineRunner extends RunnerBase {
 
     private parseOptions() {
         if (this.options && this.options.length > 0) {
-            this.errors = false;
             this.emit = false;
-            this.decl = false;
-            this.output = false;
 
             const opts = this.options.split(",");
-            for (let i = 0; i < opts.length; i++) {
-                switch (opts[i]) {
-                    case "error":
-                        this.errors = true;
-                        break;
+            for (const opt of opts) {
+                switch (opt) {
                     case "emit":
                         this.emit = true;
-                        break;
-                    case "decl":
-                        this.decl = true;
-                        break;
-                    case "output":
-                        this.output = true;
                         break;
                     default:
                         throw new Error("unsupported flag");

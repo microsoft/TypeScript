@@ -25,9 +25,9 @@ namespace ts {
         },
         "/dev/configs/tests.json": {
             compilerOptions: {
-                "preserveConstEnums": true,
-                "removeComments": false,
-                "sourceMap": true
+                preserveConstEnums: true,
+                removeComments: false,
+                sourceMap: true
             },
             exclude: [
                 "../tests/baselines",
@@ -52,7 +52,7 @@ namespace ts {
         "/dev/missing.json": {
             extends: "./missing2",
             compilerOptions: {
-                "types": []
+                types: []
             }
         },
         "/dev/failure.json": {
@@ -78,6 +78,23 @@ namespace ts {
             },
             include: ["../supplemental.*"]
         },
+        "/dev/configs/third.json": {
+            extends: "./second",
+            compilerOptions: {
+                // tslint:disable-next-line:no-null-keyword
+                module: null
+            },
+            include: ["../supplemental.*"]
+        },
+        "/dev/configs/fourth.json": {
+            extends: "./third",
+            compilerOptions: {
+                module: "system"
+            },
+            // tslint:disable-next-line:no-null-keyword
+            include: null,
+            files: ["../main.ts"]
+        },
         "/dev/extends.json": { extends: 42 },
         "/dev/extends2.json": { extends: "configs/base" },
         "/dev/main.ts": "",
@@ -87,7 +104,7 @@ namespace ts {
         "/dev/tests/scenarios/first.json": "",
         "/dev/tests/baselines/first/output.ts": ""
     });
-    const testContents = mapEntries(testContentsJson, (k, v) => [k, typeof v === "string" ? v : JSON.stringify(v)]);
+    const testContents = mapEntries(testContentsJson, (k, v) => [k, isString(v) ? v : JSON.stringify(v)]);
 
     const caseInsensitiveBasePath = "c:/dev/";
     const caseInsensitiveHost = new Utils.MockParseConfigHost(caseInsensitiveBasePath, /*useCaseSensitiveFileNames*/ false, mapEntries(testContents, (key, content) => [`c:${key}`, content]));
@@ -106,7 +123,7 @@ namespace ts {
         }
     }
 
-    describe("Configuration Extension", () => {
+    describe("configurationExtension", () => {
         forEach<[string, string, Utils.MockParseConfigHost], void>([
             ["under a case insensitive host", caseInsensitiveBasePath, caseInsensitiveHost],
             ["under a case sensitive host", caseSensitiveBasePath, caseSensitiveHost]
@@ -206,6 +223,24 @@ namespace ts {
                     category: DiagnosticCategory.Error,
                     messageText: `A path in an 'extends' option must be relative or rooted, but 'configs/base' is not.`
                 }]);
+
+                testSuccess("can overwrite compiler options using extended 'null'", "configs/third.json", {
+                    allowJs: true,
+                    noImplicitAny: true,
+                    strictNullChecks: true,
+                    module: undefined // Technically, this is distinct from the key never being set; but within the compiler we don't make the distinction
+                }, [
+                    combinePaths(basePath, "supplemental.ts")
+                ]);
+
+                testSuccess("can overwrite top-level options using extended 'null'", "configs/fourth.json", {
+                    allowJs: true,
+                    noImplicitAny: true,
+                    strictNullChecks: true,
+                    module: ModuleKind.System
+                }, [
+                    combinePaths(basePath, "main.ts")
+                ]);
             });
         });
     });

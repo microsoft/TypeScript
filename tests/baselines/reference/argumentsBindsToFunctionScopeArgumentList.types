@@ -1,0 +1,14 @@
+=== tests/cases/compiler/argumentsBindsToFunctionScopeArgumentList.ts ===
+var arguments = 10;
+>arguments : number
+>10 : 10
+
+function foo(a) {
+>foo : (a: any) => void
+>a : any
+
+    arguments = 10;  /// This shouldnt be of type number and result in error.
+>arguments = 10 : 10
+>arguments : IArguments
+>10 : 10
+}

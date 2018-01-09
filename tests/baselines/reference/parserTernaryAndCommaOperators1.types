@@ -1,0 +1,13 @@
+=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parserTernaryAndCommaOperators1.ts ===
+b.src ? 1 : 2, c && d;
+>b.src ? 1 : 2, c && d : any
+>b.src ? 1 : 2 : 1 | 2
+>b.src : any
+>b : any
+>src : any
+>1 : 1
+>2 : 2
+>c && d : any
+>c : any
+>d : any
+

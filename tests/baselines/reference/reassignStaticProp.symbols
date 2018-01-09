@@ -1,0 +1,15 @@
+=== tests/cases/compiler/reassignStaticProp.ts ===
+class foo {
+>foo : Symbol(foo, Decl(reassignStaticProp.ts, 0, 0))
+ 
+    static bar = 1;
+>bar : Symbol(foo.bar, Decl(reassignStaticProp.ts, 0, 11), Decl(reassignStaticProp.ts, 2, 19))
+ 
+    static bar:string; // errror - duplicate id
+>bar : Symbol(foo.bar, Decl(reassignStaticProp.ts, 0, 11), Decl(reassignStaticProp.ts, 2, 19))
+ 
+}
+ 
+ 
+
+

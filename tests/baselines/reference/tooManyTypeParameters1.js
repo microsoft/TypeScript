@@ -16,7 +16,7 @@ function f() { }
 f();
 var x = function () { };
 x();
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

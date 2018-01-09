@@ -7,7 +7,7 @@ class C<T> {
 }
 
 //// [declFileForTypeParameters.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.foo = function (a) {

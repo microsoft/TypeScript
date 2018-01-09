@@ -16,7 +16,7 @@
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 16,
-                "text": "returns"
+                "escapedText": "returns"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",

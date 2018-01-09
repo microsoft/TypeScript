@@ -29,7 +29,7 @@ class TestClass2 {
 
 
 //// [ambiguousCallsWhereReturnTypesAgree.js]
-var TestClass = (function () {
+var TestClass = /** @class */ (function () {
     function TestClass() {
     }
     TestClass.prototype.bar = function (x) {
@@ -39,7 +39,7 @@ var TestClass = (function () {
     };
     return TestClass;
 }());
-var TestClass2 = (function () {
+var TestClass2 = /** @class */ (function () {
     function TestClass2() {
     }
     TestClass2.prototype.bar = function (x) {

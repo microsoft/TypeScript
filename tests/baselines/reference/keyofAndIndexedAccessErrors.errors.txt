@@ -15,6 +15,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(35,21): error
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(36,21): error TS2538: Type 'boolean' cannot be used as an index type.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(41,31): error TS2538: Type 'boolean' cannot be used as an index type.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(46,16): error TS2538: Type 'boolean' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(49,12): error TS1122: A tuple type element list cannot be empty.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(63,33): error TS2345: Argument of type '"size"' is not assignable to parameter of type '"name" | "width" | "height" | "visible"'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(64,33): error TS2345: Argument of type '"name" | "size"' is not assignable to parameter of type '"name" | "width" | "height" | "visible"'.
   Type '"size"' is not assignable to type '"name" | "width" | "height" | "visible"'.
@@ -28,7 +29,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(76,5): error 
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(77,5): error TS2322: Type 'keyof (T & U)' is not assignable to type 'keyof (T | U)'.
 
 
-==== tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts (24 errors) ====
+==== tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts (25 errors) ====
     class Shape {
         name: string;
         width: number;
@@ -112,6 +113,8 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(77,5): error 
     
     type T60 = {}["toString"];
     type T61 = []["toString"];
+               ~~
+!!! error TS1122: A tuple type element list cannot be empty.
     
     declare let cond: boolean;
     

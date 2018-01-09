@@ -9,10 +9,10 @@
 namespace ts.JsTyping {
 
     export interface TypingResolutionHost {
-        directoryExists: (path: string) => boolean;
-        fileExists: (fileName: string) => boolean;
-        readFile: (path: string, encoding?: string) => string;
-        readDirectory: (rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string>, includes: ReadonlyArray<string>, depth?: number) => string[];
+        directoryExists(path: string): boolean;
+        fileExists(fileName: string): boolean;
+        readFile(path: string, encoding?: string): string | undefined;
+        readDirectory(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string>, includes: ReadonlyArray<string>, depth?: number): string[];
     }
 
     interface PackageJson {
@@ -22,12 +22,9 @@ namespace ts.JsTyping {
         name?: string;
         optionalDependencies?: MapLike<string>;
         peerDependencies?: MapLike<string>;
+        types?: string;
         typings?: string;
     }
-
-    // A map of loose file names to library names
-    // that we are confident require typings
-    let safeList: Map<string>;
 
     /* @internal */
     export const nodeCoreModuleList: ReadonlyArray<string> = [
@@ -38,7 +35,25 @@ namespace ts.JsTyping {
         "crypto", "stream", "util", "assert", "tty", "domain",
         "constants", "process", "v8", "timers", "console"];
 
-    const nodeCoreModules = arrayToMap(<string[]>nodeCoreModuleList, x => x);
+    const nodeCoreModules = arrayToSet(nodeCoreModuleList);
+
+    /**
+     * A map of loose file names to library names that we are confident require typings
+     */
+    export type SafeList = ReadonlyMap<string>;
+
+    export function loadSafeList(host: TypingResolutionHost, safeListPath: Path): SafeList {
+        const result = readConfigFile(safeListPath, path => host.readFile(path));
+        return createMapFromTemplate<string>(result.config);
+    }
+
+    export function loadTypesMap(host: TypingResolutionHost, typesMapPath: Path): SafeList | undefined {
+        const result = readConfigFile(typesMapPath, path => host.readFile(path));
+        if (result.config) {
+            return createMapFromTemplate<string>(result.config.simpleMap);
+        }
+        return undefined;
+    }
 
     /**
      * @param host is the object providing I/O related operations.
@@ -54,8 +69,8 @@ namespace ts.JsTyping {
         log: ((message: string) => void) | undefined,
         fileNames: string[],
         projectRootPath: Path,
-        safeListPath: Path,
-        packageNameToTypingLocation: Map<string>,
+        safeList: SafeList,
+        packageNameToTypingLocation: ReadonlyMap<string>,
         typeAcquisition: TypeAcquisition,
         unresolvedImports: ReadonlyArray<string>):
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
@@ -75,21 +90,13 @@ namespace ts.JsTyping {
             }
         });
 
-        if (!safeList) {
-            const result = readConfigFile(safeListPath, (path: string) => host.readFile(path));
-            safeList = createMapFromTemplate<string>(result.config);
-        }
-
         const filesToWatch: string[] = [];
 
-        forEach(typeAcquisition.include, addInferredTyping);
+        if (typeAcquisition.include) addInferredTypings(typeAcquisition.include, "Explicitly included types");
         const exclude = typeAcquisition.exclude || [];
 
         // Directories to search for package.json, bower.json and other typing information
-        const possibleSearchDirs = createMap<true>();
-        for (const f of fileNames) {
-            possibleSearchDirs.set(getDirectoryPath(f), true);
-        }
+        const possibleSearchDirs = arrayToSet(fileNames, getDirectoryPath);
         possibleSearchDirs.set(projectRootPath, true);
         possibleSearchDirs.forEach((_true, searchDir) => {
             const packageJsonPath = combinePaths(searchDir, "package.json");
@@ -108,13 +115,11 @@ namespace ts.JsTyping {
 
         // add typings for unresolved imports
         if (unresolvedImports) {
-            const x = unresolvedImports.map(moduleId => nodeCoreModules.has(moduleId) ? "node" : moduleId);
-            if (x.length && log) log(`Inferred typings from unresolved imports: ${JSON.stringify(x)}`);
-            for (const typingName of x) {
-                if (!inferredTypings.has(typingName)) {
-                    inferredTypings.set(typingName, undefined);
-                }
-            }
+            const module = deduplicate(
+                unresolvedImports.map(moduleId => nodeCoreModules.has(moduleId) ? "node" : moduleId),
+                equateStringsCaseSensitive,
+                compareStringsCaseSensitive);
+            addInferredTypings(module, "Inferred typings from unresolved imports");
         }
         // Add the cached typing locations for inferred typings that are already installed
         packageNameToTypingLocation.forEach((typingLocation, name) => {
@@ -125,7 +130,8 @@ namespace ts.JsTyping {
 
         // Remove typings that the user has added to the exclude list
         for (const excludeTypingName of exclude) {
-            inferredTypings.delete(excludeTypingName);
+            const didDelete = inferredTypings.delete(excludeTypingName);
+            if (didDelete && log) log(`Typing for ${excludeTypingName} is in exclude list, will be ignored.`);
         }
 
         const newTypingNames: string[] = [];
@@ -147,6 +153,10 @@ namespace ts.JsTyping {
                 inferredTypings.set(typingName, undefined);
             }
         }
+        function addInferredTypings(typingNames: ReadonlyArray<string>, message: string) {
+            if (log) log(`${message}: ${JSON.stringify(typingNames)}`);
+            forEach(typingNames, addInferredTyping);
+        }
 
         /**
          * Get the typing info from common package manager json files like package.json or bower.json
@@ -157,20 +167,9 @@ namespace ts.JsTyping {
             }
 
             filesToWatch.push(jsonPath);
-            if (log) log(`Searching for typing names in '${jsonPath}' dependencies`);
-            const jsonConfig: PackageJson = readConfigFile(jsonPath, (path: string) => host.readFile(path)).config;
-            addInferredTypingsFromKeys(jsonConfig.dependencies);
-            addInferredTypingsFromKeys(jsonConfig.devDependencies);
-            addInferredTypingsFromKeys(jsonConfig.optionalDependencies);
-            addInferredTypingsFromKeys(jsonConfig.peerDependencies);
-
-            function addInferredTypingsFromKeys(map: MapLike<string> | undefined): void {
-                for (const key in map) {
-                    if (ts.hasProperty(map, key)) {
-                        addInferredTyping(key);
-                    }
-                }
-            }
+            const jsonConfig: PackageJson = readConfigFile(jsonPath, path => host.readFile(path)).config;
+            const jsonTypingNames = flatMap([jsonConfig.dependencies, jsonConfig.devDependencies, jsonConfig.optionalDependencies, jsonConfig.peerDependencies], getOwnKeys);
+            addInferredTypings(jsonTypingNames, `Typing names in '${jsonPath}' dependencies`);
         }
 
         /**
@@ -184,14 +183,11 @@ namespace ts.JsTyping {
                 if (!hasJavaScriptFileExtension(j)) return undefined;
 
                 const inferredTypingName = removeFileExtension(getBaseFileName(j.toLowerCase()));
-                const cleanedTypingName = inferredTypingName.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, "");
+                const cleanedTypingName = removeMinAndVersionNumbers(inferredTypingName);
                 return safeList.get(cleanedTypingName);
             });
             if (fromFileNames.length) {
-                if (log) log(`Inferred typings from file names: ${JSON.stringify(fromFileNames)}`);
-                for (const safe of fromFileNames) {
-                    addInferredTyping(safe);
-                }
+                addInferredTypings(fromFileNames, "Inferred typings from file names");
             }
 
             const hasJsxFile = some(fileNames, f => fileExtensionIs(f, Extension.Jsx));
@@ -214,8 +210,9 @@ namespace ts.JsTyping {
             }
 
             // depth of 2, so we access `node_modules/foo` but not `node_modules/foo/bar`
-            const fileNames = host.readDirectory(packagesFolderPath, [".json"], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
+            const fileNames = host.readDirectory(packagesFolderPath, [Extension.Json], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
             if (log) log(`Searching for typing names in ${packagesFolderPath}; all files: ${JSON.stringify(fileNames)}`);
+            const packageNames: string[] = [];
             for (const fileName of fileNames) {
                 const normalizedFileName = normalizePath(fileName);
                 const baseFileName = getBaseFileName(normalizedFileName);
@@ -238,15 +235,79 @@ namespace ts.JsTyping {
                 if (!packageJson.name) {
                     continue;
                 }
-                if (packageJson.typings) {
-                    const absolutePath = getNormalizedAbsolutePath(packageJson.typings, getDirectoryPath(normalizedFileName));
+                const ownTypes = packageJson.types || packageJson.typings;
+                if (ownTypes) {
+                    const absolutePath = getNormalizedAbsolutePath(ownTypes, getDirectoryPath(normalizedFileName));
+                    if (log) log(`    Package '${packageJson.name}' provides its own types.`);
                     inferredTypings.set(packageJson.name, absolutePath);
                 }
                 else {
-                    addInferredTyping(packageJson.name);
+                    packageNames.push(packageJson.name);
                 }
             }
+            addInferredTypings(packageNames, "    Found package names");
         }
 
+    }
+
+    export const enum PackageNameValidationResult {
+        Ok,
+        ScopedPackagesNotSupported,
+        EmptyName,
+        NameTooLong,
+        NameStartsWithDot,
+        NameStartsWithUnderscore,
+        NameContainsNonURISafeCharacters
+    }
+
+    const maxPackageNameLength = 214;
+
+    /**
+     * Validates package name using rules defined at https://docs.npmjs.com/files/package.json
+     */
+    export function validatePackageName(packageName: string): PackageNameValidationResult {
+        if (!packageName) {
+            return PackageNameValidationResult.EmptyName;
+        }
+        if (packageName.length > maxPackageNameLength) {
+            return PackageNameValidationResult.NameTooLong;
+        }
+        if (packageName.charCodeAt(0) === CharacterCodes.dot) {
+            return PackageNameValidationResult.NameStartsWithDot;
+        }
+        if (packageName.charCodeAt(0) === CharacterCodes._) {
+            return PackageNameValidationResult.NameStartsWithUnderscore;
+        }
+        // check if name is scope package like: starts with @ and has one '/' in the middle
+        // scoped packages are not currently supported
+        // TODO: when support will be added we'll need to split and check both scope and package name
+        if (/^@[^/]+\/[^/]+$/.test(packageName)) {
+            return PackageNameValidationResult.ScopedPackagesNotSupported;
+        }
+        if (encodeURIComponent(packageName) !== packageName) {
+            return PackageNameValidationResult.NameContainsNonURISafeCharacters;
+        }
+        return PackageNameValidationResult.Ok;
+    }
+
+    export function renderPackageNameValidationFailure(result: PackageNameValidationResult, typing: string): string {
+        switch (result) {
+            case PackageNameValidationResult.EmptyName:
+                return `Package name '${typing}' cannot be empty`;
+            case PackageNameValidationResult.NameTooLong:
+                return `Package name '${typing}' should be less than ${maxPackageNameLength} characters`;
+            case PackageNameValidationResult.NameStartsWithDot:
+                return `Package name '${typing}' cannot start with '.'`;
+            case PackageNameValidationResult.NameStartsWithUnderscore:
+                return `Package name '${typing}' cannot start with '_'`;
+            case PackageNameValidationResult.ScopedPackagesNotSupported:
+                return `Package '${typing}' is scoped and currently is not supported`;
+            case PackageNameValidationResult.NameContainsNonURISafeCharacters:
+                return `Package name '${typing}' contains non URI safe characters`;
+            case PackageNameValidationResult.Ok:
+                throw Debug.fail(); // Shouldn't have called this.
+            default:
+                Debug.assertNever(result);
+        }
     }
 }

@@ -1,0 +1,23 @@
+=== tests/cases/compiler/es6ImportNameSpaceImportMergeErrors_0.ts ===
+export var a = 10;
+>a : Symbol(a, Decl(es6ImportNameSpaceImportMergeErrors_0.ts, 0, 10))
+
+=== tests/cases/compiler/es6ImportNameSpaceImportMergeErrors_1.ts ===
+import * as nameSpaceBinding from "./es6ImportNameSpaceImportMergeErrors_0"; 
+>nameSpaceBinding : Symbol(nameSpaceBinding, Decl(es6ImportNameSpaceImportMergeErrors_1.ts, 0, 6), Decl(es6ImportNameSpaceImportMergeErrors_1.ts, 0, 76))
+
+interface nameSpaceBinding { } // this should be ok
+>nameSpaceBinding : Symbol(nameSpaceBinding, Decl(es6ImportNameSpaceImportMergeErrors_1.ts, 0, 6), Decl(es6ImportNameSpaceImportMergeErrors_1.ts, 0, 76))
+
+import * as nameSpaceBinding1 from "./es6ImportNameSpaceImportMergeErrors_0"; // should be error
+>nameSpaceBinding1 : Symbol(nameSpaceBinding1, Decl(es6ImportNameSpaceImportMergeErrors_1.ts, 3, 6))
+
+import * as nameSpaceBinding1 from "./es6ImportNameSpaceImportMergeErrors_0"; // should be error
+>nameSpaceBinding1 : Symbol(nameSpaceBinding1, Decl(es6ImportNameSpaceImportMergeErrors_1.ts, 4, 6))
+
+import * as nameSpaceBinding3 from "./es6ImportNameSpaceImportMergeErrors_0"; // should be error
+>nameSpaceBinding3 : Symbol(nameSpaceBinding3, Decl(es6ImportNameSpaceImportMergeErrors_1.ts, 6, 6), Decl(es6ImportNameSpaceImportMergeErrors_1.ts, 7, 3))
+
+var nameSpaceBinding3 = 10;
+>nameSpaceBinding3 : Symbol(nameSpaceBinding3, Decl(es6ImportNameSpaceImportMergeErrors_1.ts, 6, 6), Decl(es6ImportNameSpaceImportMergeErrors_1.ts, 7, 3))
+

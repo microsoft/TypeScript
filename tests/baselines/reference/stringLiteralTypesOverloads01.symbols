@@ -3,35 +3,35 @@ type PrimitiveName = 'string' | 'number' | 'boolean';
 >PrimitiveName : Symbol(PrimitiveName, Decl(stringLiteralTypesOverloads01.ts, 0, 0))
 
 function getFalsyPrimitive(x: "string"): string;
->getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70), Decl(stringLiteralTypesOverloads01.ts, 6, 70), Decl(stringLiteralTypesOverloads01.ts, 7, 68), Decl(stringLiteralTypesOverloads01.ts, 8, 90))
+>getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70) ... and 3 more)
 >x : Symbol(x, Decl(stringLiteralTypesOverloads01.ts, 2, 27))
 
 function getFalsyPrimitive(x: "number"): number;
->getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70), Decl(stringLiteralTypesOverloads01.ts, 6, 70), Decl(stringLiteralTypesOverloads01.ts, 7, 68), Decl(stringLiteralTypesOverloads01.ts, 8, 90))
+>getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70) ... and 3 more)
 >x : Symbol(x, Decl(stringLiteralTypesOverloads01.ts, 3, 27))
 
 function getFalsyPrimitive(x: "boolean"): boolean;
->getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70), Decl(stringLiteralTypesOverloads01.ts, 6, 70), Decl(stringLiteralTypesOverloads01.ts, 7, 68), Decl(stringLiteralTypesOverloads01.ts, 8, 90))
+>getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70) ... and 3 more)
 >x : Symbol(x, Decl(stringLiteralTypesOverloads01.ts, 4, 27))
 
 function getFalsyPrimitive(x: "boolean" | "string"): boolean | string;
->getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70), Decl(stringLiteralTypesOverloads01.ts, 6, 70), Decl(stringLiteralTypesOverloads01.ts, 7, 68), Decl(stringLiteralTypesOverloads01.ts, 8, 90))
+>getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70) ... and 3 more)
 >x : Symbol(x, Decl(stringLiteralTypesOverloads01.ts, 5, 27))
 
 function getFalsyPrimitive(x: "boolean" | "number"): boolean | number;
->getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70), Decl(stringLiteralTypesOverloads01.ts, 6, 70), Decl(stringLiteralTypesOverloads01.ts, 7, 68), Decl(stringLiteralTypesOverloads01.ts, 8, 90))
+>getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70) ... and 3 more)
 >x : Symbol(x, Decl(stringLiteralTypesOverloads01.ts, 6, 27))
 
 function getFalsyPrimitive(x: "number" | "string"): number | string;
->getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70), Decl(stringLiteralTypesOverloads01.ts, 6, 70), Decl(stringLiteralTypesOverloads01.ts, 7, 68), Decl(stringLiteralTypesOverloads01.ts, 8, 90))
+>getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70) ... and 3 more)
 >x : Symbol(x, Decl(stringLiteralTypesOverloads01.ts, 7, 27))
 
 function getFalsyPrimitive(x: "number" | "string" | "boolean"): number | string | boolean;
->getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70), Decl(stringLiteralTypesOverloads01.ts, 6, 70), Decl(stringLiteralTypesOverloads01.ts, 7, 68), Decl(stringLiteralTypesOverloads01.ts, 8, 90))
+>getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70) ... and 3 more)
 >x : Symbol(x, Decl(stringLiteralTypesOverloads01.ts, 8, 27))
 
 function getFalsyPrimitive(x: PrimitiveName): number | string | boolean {
->getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70), Decl(stringLiteralTypesOverloads01.ts, 6, 70), Decl(stringLiteralTypesOverloads01.ts, 7, 68), Decl(stringLiteralTypesOverloads01.ts, 8, 90))
+>getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70) ... and 3 more)
 >x : Symbol(x, Decl(stringLiteralTypesOverloads01.ts, 9, 27))
 >PrimitiveName : Symbol(PrimitiveName, Decl(stringLiteralTypesOverloads01.ts, 0, 0))
 
@@ -60,15 +60,15 @@ namespace Consts1 {
 
     const EMPTY_STRING = getFalsyPrimitive("string");
 >EMPTY_STRING : Symbol(EMPTY_STRING, Decl(stringLiteralTypesOverloads01.ts, 25, 9))
->getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70), Decl(stringLiteralTypesOverloads01.ts, 6, 70), Decl(stringLiteralTypesOverloads01.ts, 7, 68), Decl(stringLiteralTypesOverloads01.ts, 8, 90))
+>getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70) ... and 3 more)
 
     const ZERO = getFalsyPrimitive('number');
 >ZERO : Symbol(ZERO, Decl(stringLiteralTypesOverloads01.ts, 26, 9))
->getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70), Decl(stringLiteralTypesOverloads01.ts, 6, 70), Decl(stringLiteralTypesOverloads01.ts, 7, 68), Decl(stringLiteralTypesOverloads01.ts, 8, 90))
+>getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70) ... and 3 more)
 
     const FALSE = getFalsyPrimitive("boolean");
 >FALSE : Symbol(FALSE, Decl(stringLiteralTypesOverloads01.ts, 27, 9))
->getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70), Decl(stringLiteralTypesOverloads01.ts, 6, 70), Decl(stringLiteralTypesOverloads01.ts, 7, 68), Decl(stringLiteralTypesOverloads01.ts, 8, 90))
+>getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70) ... and 3 more)
 }
 
 const string: "string" = "string"
@@ -105,37 +105,37 @@ namespace Consts2 {
 
     const EMPTY_STRING = getFalsyPrimitive(string);
 >EMPTY_STRING : Symbol(EMPTY_STRING, Decl(stringLiteralTypesOverloads01.ts, 40, 9))
->getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70), Decl(stringLiteralTypesOverloads01.ts, 6, 70), Decl(stringLiteralTypesOverloads01.ts, 7, 68), Decl(stringLiteralTypesOverloads01.ts, 8, 90))
+>getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70) ... and 3 more)
 >string : Symbol(string, Decl(stringLiteralTypesOverloads01.ts, 30, 5))
 
     const ZERO = getFalsyPrimitive(number);
 >ZERO : Symbol(ZERO, Decl(stringLiteralTypesOverloads01.ts, 41, 9))
->getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70), Decl(stringLiteralTypesOverloads01.ts, 6, 70), Decl(stringLiteralTypesOverloads01.ts, 7, 68), Decl(stringLiteralTypesOverloads01.ts, 8, 90))
+>getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70) ... and 3 more)
 >number : Symbol(number, Decl(stringLiteralTypesOverloads01.ts, 31, 5))
 
     const FALSE = getFalsyPrimitive(boolean);
 >FALSE : Symbol(FALSE, Decl(stringLiteralTypesOverloads01.ts, 42, 9))
->getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70), Decl(stringLiteralTypesOverloads01.ts, 6, 70), Decl(stringLiteralTypesOverloads01.ts, 7, 68), Decl(stringLiteralTypesOverloads01.ts, 8, 90))
+>getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70) ... and 3 more)
 >boolean : Symbol(boolean, Decl(stringLiteralTypesOverloads01.ts, 32, 5))
 
     const a = getFalsyPrimitive(stringOrNumber);
 >a : Symbol(a, Decl(stringLiteralTypesOverloads01.ts, 44, 9))
->getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70), Decl(stringLiteralTypesOverloads01.ts, 6, 70), Decl(stringLiteralTypesOverloads01.ts, 7, 68), Decl(stringLiteralTypesOverloads01.ts, 8, 90))
+>getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70) ... and 3 more)
 >stringOrNumber : Symbol(stringOrNumber, Decl(stringLiteralTypesOverloads01.ts, 34, 5))
 
     const b = getFalsyPrimitive(stringOrBoolean);
 >b : Symbol(b, Decl(stringLiteralTypesOverloads01.ts, 45, 9))
->getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70), Decl(stringLiteralTypesOverloads01.ts, 6, 70), Decl(stringLiteralTypesOverloads01.ts, 7, 68), Decl(stringLiteralTypesOverloads01.ts, 8, 90))
+>getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70) ... and 3 more)
 >stringOrBoolean : Symbol(stringOrBoolean, Decl(stringLiteralTypesOverloads01.ts, 35, 5))
 
     const c = getFalsyPrimitive(booleanOrNumber);
 >c : Symbol(c, Decl(stringLiteralTypesOverloads01.ts, 46, 9))
->getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70), Decl(stringLiteralTypesOverloads01.ts, 6, 70), Decl(stringLiteralTypesOverloads01.ts, 7, 68), Decl(stringLiteralTypesOverloads01.ts, 8, 90))
+>getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70) ... and 3 more)
 >booleanOrNumber : Symbol(booleanOrNumber, Decl(stringLiteralTypesOverloads01.ts, 36, 5))
 
     const d = getFalsyPrimitive(stringOrBooleanOrNumber);
 >d : Symbol(d, Decl(stringLiteralTypesOverloads01.ts, 47, 9))
->getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70), Decl(stringLiteralTypesOverloads01.ts, 6, 70), Decl(stringLiteralTypesOverloads01.ts, 7, 68), Decl(stringLiteralTypesOverloads01.ts, 8, 90))
+>getFalsyPrimitive : Symbol(getFalsyPrimitive, Decl(stringLiteralTypesOverloads01.ts, 0, 53), Decl(stringLiteralTypesOverloads01.ts, 2, 48), Decl(stringLiteralTypesOverloads01.ts, 3, 48), Decl(stringLiteralTypesOverloads01.ts, 4, 50), Decl(stringLiteralTypesOverloads01.ts, 5, 70) ... and 3 more)
 >stringOrBooleanOrNumber : Symbol(stringOrBooleanOrNumber, Decl(stringLiteralTypesOverloads01.ts, 37, 5))
 }
 

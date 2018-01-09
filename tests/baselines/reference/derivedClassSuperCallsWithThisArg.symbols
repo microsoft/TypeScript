@@ -1,0 +1,59 @@
+=== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts ===
+class Base {
+>Base : Symbol(Base, Decl(derivedClassSuperCallsWithThisArg.ts, 0, 0))
+
+    x: string;
+>x : Symbol(Base.x, Decl(derivedClassSuperCallsWithThisArg.ts, 0, 12))
+
+    constructor(a) { }
+>a : Symbol(a, Decl(derivedClassSuperCallsWithThisArg.ts, 2, 16))
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(derivedClassSuperCallsWithThisArg.ts, 3, 1))
+>Base : Symbol(Base, Decl(derivedClassSuperCallsWithThisArg.ts, 0, 0))
+
+    constructor() {
+        super(this); // ok
+>super : Symbol(Base, Decl(derivedClassSuperCallsWithThisArg.ts, 0, 0))
+>this : Symbol(Derived, Decl(derivedClassSuperCallsWithThisArg.ts, 3, 1))
+    }
+}
+
+class Derived2 extends Base {
+>Derived2 : Symbol(Derived2, Decl(derivedClassSuperCallsWithThisArg.ts, 9, 1))
+>Base : Symbol(Base, Decl(derivedClassSuperCallsWithThisArg.ts, 0, 0))
+
+    constructor(public a: string) {
+>a : Symbol(Derived2.a, Decl(derivedClassSuperCallsWithThisArg.ts, 12, 16))
+
+        super(this); // error
+>super : Symbol(Base, Decl(derivedClassSuperCallsWithThisArg.ts, 0, 0))
+>this : Symbol(Derived2, Decl(derivedClassSuperCallsWithThisArg.ts, 9, 1))
+    }
+}
+
+class Derived3 extends Base {
+>Derived3 : Symbol(Derived3, Decl(derivedClassSuperCallsWithThisArg.ts, 15, 1))
+>Base : Symbol(Base, Decl(derivedClassSuperCallsWithThisArg.ts, 0, 0))
+
+    constructor(public a: string) {
+>a : Symbol(Derived3.a, Decl(derivedClassSuperCallsWithThisArg.ts, 18, 16))
+
+        super(() => this); // error
+>super : Symbol(Base, Decl(derivedClassSuperCallsWithThisArg.ts, 0, 0))
+>this : Symbol(Derived3, Decl(derivedClassSuperCallsWithThisArg.ts, 15, 1))
+    }
+}
+
+class Derived4 extends Base {
+>Derived4 : Symbol(Derived4, Decl(derivedClassSuperCallsWithThisArg.ts, 21, 1))
+>Base : Symbol(Base, Decl(derivedClassSuperCallsWithThisArg.ts, 0, 0))
+
+    constructor(public a: string) {
+>a : Symbol(Derived4.a, Decl(derivedClassSuperCallsWithThisArg.ts, 24, 16))
+
+        super(function () { return this; }); // ok
+>super : Symbol(Base, Decl(derivedClassSuperCallsWithThisArg.ts, 0, 0))
+    }
+}

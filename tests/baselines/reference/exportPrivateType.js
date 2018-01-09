@@ -33,12 +33,12 @@ var y = foo.g; // Exported variable 'y' has or is using private type 'foo.C2'.
 //// [exportPrivateType.js]
 var foo;
 (function (foo) {
-    var C1 = (function () {
+    var C1 = /** @class */ (function () {
         function C1() {
         }
         return C1;
     }());
-    var C2 = (function () {
+    var C2 = /** @class */ (function () {
         function C2() {
         }
         C2.prototype.test = function () { return true; };

@@ -1,0 +1,34 @@
+=== tests/cases/conformance/expressions/propertyAccess/propertyAccessStringIndexSignature.ts ===
+interface Flags { [name: string]: boolean };
+>Flags : Symbol(Flags, Decl(propertyAccessStringIndexSignature.ts, 0, 0))
+>name : Symbol(name, Decl(propertyAccessStringIndexSignature.ts, 0, 19))
+
+let flags: Flags;
+>flags : Symbol(flags, Decl(propertyAccessStringIndexSignature.ts, 1, 3))
+>Flags : Symbol(Flags, Decl(propertyAccessStringIndexSignature.ts, 0, 0))
+
+flags.b;
+>flags : Symbol(flags, Decl(propertyAccessStringIndexSignature.ts, 1, 3))
+
+flags.f;
+>flags : Symbol(flags, Decl(propertyAccessStringIndexSignature.ts, 1, 3))
+
+flags.isNotNecessarilyNeverFalse;
+>flags : Symbol(flags, Decl(propertyAccessStringIndexSignature.ts, 1, 3))
+
+flags['this is fine'];
+>flags : Symbol(flags, Decl(propertyAccessStringIndexSignature.ts, 1, 3))
+
+interface Empty { }
+>Empty : Symbol(Empty, Decl(propertyAccessStringIndexSignature.ts, 5, 22))
+
+let empty: Empty;
+>empty : Symbol(empty, Decl(propertyAccessStringIndexSignature.ts, 8, 3))
+>Empty : Symbol(Empty, Decl(propertyAccessStringIndexSignature.ts, 5, 22))
+
+empty.nope;
+>empty : Symbol(empty, Decl(propertyAccessStringIndexSignature.ts, 8, 3))
+
+empty["that's ok"];
+>empty : Symbol(empty, Decl(propertyAccessStringIndexSignature.ts, 8, 3))
+

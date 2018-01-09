@@ -1,0 +1,14 @@
+tests/cases/conformance/types/tuple/wideningTuples4.ts(3,9): error TS2322: Type '[undefined, null]' is not assignable to type '[any]'.
+  Types of property 'length' are incompatible.
+    Type '2' is not assignable to type '1'.
+
+
+==== tests/cases/conformance/types/tuple/wideningTuples4.ts (1 errors) ====
+    var a: [any];
+    
+    var b = a = [undefined, null];
+            ~
+!!! error TS2322: Type '[undefined, null]' is not assignable to type '[any]'.
+!!! error TS2322:   Types of property 'length' are incompatible.
+!!! error TS2322:     Type '2' is not assignable to type '1'.
+    b = ["", ""];

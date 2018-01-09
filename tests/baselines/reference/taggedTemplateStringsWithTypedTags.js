@@ -32,15 +32,18 @@ f.thisIsNotATag(`abc${1}def${2}ghi`);
 
 
 //// [taggedTemplateStringsWithTypedTags.js]
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
 var f;
-(_a = ["abc"], _a.raw = ["abc"], f(_a));
-(_b = ["abc", "def", "ghi"], _b.raw = ["abc", "def", "ghi"], f(_b, 1, 2));
-(_c = ["abc"], _c.raw = ["abc"], f(_c)).member;
-(_d = ["abc", "def", "ghi"], _d.raw = ["abc", "def", "ghi"], f(_d, 1, 2)).member;
-(_e = ["abc"], _e.raw = ["abc"], f(_e))["member"];
-(_f = ["abc", "def", "ghi"], _f.raw = ["abc", "def", "ghi"], f(_f, 1, 2))["member"];
-(_g = ["abc", "def", "ghi"], _g.raw = ["abc", "def", "ghi"], (_h = ["abc"], _h.raw = ["abc"], f(_h))[0].member(_g, 1, 2));
-(_j = ["abc", "def", "ghi"], _j.raw = ["abc", "def", "ghi"], (_k = ["abc", "def", "ghi"], _k.raw = ["abc", "def", "ghi"], f(_k, 1, 2))["member"].member(_j, 1, 2));
+f(__makeTemplateObject(["abc"], ["abc"]));
+f(__makeTemplateObject(["abc", "def", "ghi"], ["abc", "def", "ghi"]), 1, 2);
+f(__makeTemplateObject(["abc"], ["abc"])).member;
+f(__makeTemplateObject(["abc", "def", "ghi"], ["abc", "def", "ghi"]), 1, 2).member;
+f(__makeTemplateObject(["abc"], ["abc"]))["member"];
+f(__makeTemplateObject(["abc", "def", "ghi"], ["abc", "def", "ghi"]), 1, 2)["member"];
+f(__makeTemplateObject(["abc"], ["abc"]))[0].member(__makeTemplateObject(["abc", "def", "ghi"], ["abc", "def", "ghi"]), 1, 2);
+f(__makeTemplateObject(["abc", "def", "ghi"], ["abc", "def", "ghi"]), 1, 2)["member"].member(__makeTemplateObject(["abc", "def", "ghi"], ["abc", "def", "ghi"]), 1, 2);
 f.thisIsNotATag("abc");
 f.thisIsNotATag("abc" + 1 + "def" + 2 + "ghi");
-var _a, _b, _c, _d, _e, _f, _h, _g, _k, _j;

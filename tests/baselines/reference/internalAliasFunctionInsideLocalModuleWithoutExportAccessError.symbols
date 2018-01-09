@@ -1,0 +1,33 @@
+=== tests/cases/compiler/internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts ===
+export module a {
+>a : Symbol(a, Decl(internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts, 0, 0))
+
+    export function foo(x: number) {
+>foo : Symbol(foo, Decl(internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts, 0, 17))
+>x : Symbol(x, Decl(internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts, 1, 24))
+
+        return x;
+>x : Symbol(x, Decl(internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts, 1, 24))
+    }
+}
+
+export module c {
+>c : Symbol(c, Decl(internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts, 4, 1))
+
+    import b = a.foo;
+>b : Symbol(b, Decl(internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts, 6, 17))
+>a : Symbol(a, Decl(internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts, 0, 0))
+>foo : Symbol(b, Decl(internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts, 0, 17))
+
+    var bVal = b(10);
+>bVal : Symbol(bVal, Decl(internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts, 8, 7))
+>b : Symbol(b, Decl(internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts, 6, 17))
+
+    export var bVal2 = b;
+>bVal2 : Symbol(bVal2, Decl(internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts, 9, 14))
+>b : Symbol(b, Decl(internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts, 6, 17))
+}
+var d = c.b(11);
+>d : Symbol(d, Decl(internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts, 11, 3))
+>c : Symbol(c, Decl(internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts, 4, 1))
+

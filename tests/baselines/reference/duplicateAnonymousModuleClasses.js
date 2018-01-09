@@ -59,7 +59,7 @@ module Gar {
 //// [duplicateAnonymousModuleClasses.js]
 var F;
 (function (F) {
-    var Helper = (function () {
+    var Helper = /** @class */ (function () {
         function Helper() {
         }
         return Helper;
@@ -67,7 +67,7 @@ var F;
 })(F || (F = {}));
 (function (F) {
     // Should not be an error
-    var Helper = (function () {
+    var Helper = /** @class */ (function () {
         function Helper() {
         }
         return Helper;
@@ -75,7 +75,7 @@ var F;
 })(F || (F = {}));
 var Foo;
 (function (Foo) {
-    var Helper = (function () {
+    var Helper = /** @class */ (function () {
         function Helper() {
         }
         return Helper;
@@ -83,7 +83,7 @@ var Foo;
 })(Foo || (Foo = {}));
 (function (Foo) {
     // Should not be an error
-    var Helper = (function () {
+    var Helper = /** @class */ (function () {
         function Helper() {
         }
         return Helper;
@@ -93,7 +93,7 @@ var Gar;
 (function (Gar) {
     var Foo;
     (function (Foo) {
-        var Helper = (function () {
+        var Helper = /** @class */ (function () {
             function Helper() {
             }
             return Helper;
@@ -101,7 +101,7 @@ var Gar;
     })(Foo || (Foo = {}));
     (function (Foo) {
         // Should not be an error
-        var Helper = (function () {
+        var Helper = /** @class */ (function () {
             function Helper() {
             }
             return Helper;

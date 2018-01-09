@@ -1,0 +1,13 @@
+=== tests/cases/compiler/augmentedClassWithPrototypePropertyOnModule.ts ===
+declare module m {
+>m : typeof m
+
+    var f;
+>f : any
+
+    var prototype; // This should be error since prototype would be static property on class m
+>prototype : any
+}
+declare class m {
+>m : m
+}

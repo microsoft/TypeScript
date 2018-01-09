@@ -1,0 +1,9 @@
+=== tests/cases/conformance/es6/templates/templateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts ===
+`${function (x: number) { x = "bad"; } }`;
+>`${function (x: number) { x = "bad"; } }` : string
+>function (x: number) { x = "bad"; } : (x: number) => void
+>x : number
+>x = "bad" : "bad"
+>x : number
+>"bad" : "bad"
+

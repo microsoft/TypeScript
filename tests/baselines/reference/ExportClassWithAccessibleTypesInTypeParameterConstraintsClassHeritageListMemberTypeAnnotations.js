@@ -33,14 +33,14 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var A;
 (function (A) {
-    var Point = (function () {
+    var Point = /** @class */ (function () {
         function Point() {
         }
         return Point;
     }());
     A.Point = Point;
     A.Origin = { x: 0, y: 0 };
-    var Point3d = (function (_super) {
+    var Point3d = /** @class */ (function (_super) {
         __extends(Point3d, _super);
         function Point3d() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -49,7 +49,7 @@ var A;
     }(Point));
     A.Point3d = Point3d;
     A.Origin3d = { x: 0, y: 0, z: 0 };
-    var Line = (function () {
+    var Line = /** @class */ (function () {
         function Line(start, end) {
             this.start = start;
             this.end = end;

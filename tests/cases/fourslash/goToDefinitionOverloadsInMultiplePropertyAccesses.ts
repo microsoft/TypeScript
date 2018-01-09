@@ -9,6 +9,6 @@
 ////        export function f(value: number | string) {}
 ////    }
 ////}
-////A.B./*2*/f("");
+////A.B.[|/*2*/f|]("");
 
 verify.goToDefinition("2", "1");

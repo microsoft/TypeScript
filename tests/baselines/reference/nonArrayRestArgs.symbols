@@ -1,0 +1,12 @@
+=== tests/cases/compiler/nonArrayRestArgs.ts ===
+function foo(...rest: number) { // error
+>foo : Symbol(foo, Decl(nonArrayRestArgs.ts, 0, 0))
+>rest : Symbol(rest, Decl(nonArrayRestArgs.ts, 0, 13))
+
+	var x: string = rest[0];
+>x : Symbol(x, Decl(nonArrayRestArgs.ts, 1, 4))
+>rest : Symbol(rest, Decl(nonArrayRestArgs.ts, 0, 13))
+
+	return x;
+>x : Symbol(x, Decl(nonArrayRestArgs.ts, 1, 4))
+}

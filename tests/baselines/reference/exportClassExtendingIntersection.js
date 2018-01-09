@@ -38,7 +38,7 @@ const AnotherMixedClass = MyMixin(MyExtendedClass);
 //// [BaseClass.js]
 "use strict";
 exports.__esModule = true;
-var MyBaseClass = (function () {
+var MyBaseClass = /** @class */ (function () {
     function MyBaseClass(value) {
     }
     return MyBaseClass;
@@ -58,7 +58,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 function MyMixin(base) {
-    return (function (_super) {
+    return /** @class */ (function (_super) {
         __extends(class_1, _super);
         function class_1() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -82,7 +82,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 var BaseClass_1 = require("./BaseClass");
 var MixinClass_1 = require("./MixinClass");
-var MyExtendedClass = (function (_super) {
+var MyExtendedClass = /** @class */ (function (_super) {
     __extends(MyExtendedClass, _super);
     function MyExtendedClass() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -119,3 +119,4 @@ export declare class MyExtendedClass extends MyExtendedClass_base<string> {
     extendedClassProperty: number;
 }
 //// [Main.d.ts]
+export {};

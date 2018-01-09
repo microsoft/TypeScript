@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-var RM = (function () {
+var RM = /** @class */ (function () {
     function RM() {
     }
     RM.prototype.getName = function () {

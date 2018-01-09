@@ -2,6 +2,7 @@
 // @jsx: react
 // @moduleResolution: node
 // @noImplicitAny: true
+// @skipLibCheck: true
 // @libFiles: react.d.ts,lib.d.ts
 
 // @filename: declaration.d.ts

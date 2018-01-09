@@ -1,0 +1,20 @@
+=== /index.ts ===
+import Foo from "foo/Foo";
+>Foo : Symbol(Foo, Decl(index.ts, 0, 6))
+
+import { x } from "foo/Bar";
+>x : Symbol(x, Decl(index.ts, 1, 8))
+
+=== /node_modules/foo/Foo.d.ts ===
+export default class Foo {
+>Foo : Symbol(Foo, Decl(Foo.d.ts, 0, 0))
+
+    protected source: boolean;
+>source : Symbol(Foo.source, Decl(Foo.d.ts, 0, 26))
+}
+
+=== /node_modules/foo/Bar.d.ts ===
+// This is *not* the same!
+export const x: number;
+>x : Symbol(x, Decl(Bar.d.ts, 1, 12))
+

@@ -1,0 +1,39 @@
+=== tests/cases/compiler/duplicateIdentifierInCatchBlock.ts ===
+var v;
+>v : Symbol(v, Decl(duplicateIdentifierInCatchBlock.ts, 0, 3))
+
+try { } catch (e) {
+>e : Symbol(e, Decl(duplicateIdentifierInCatchBlock.ts, 1, 15))
+
+    function v() { }
+>v : Symbol(v, Decl(duplicateIdentifierInCatchBlock.ts, 1, 19))
+}
+
+function w() { }
+>w : Symbol(w, Decl(duplicateIdentifierInCatchBlock.ts, 3, 1))
+
+try { } catch (e) {
+>e : Symbol(e, Decl(duplicateIdentifierInCatchBlock.ts, 6, 15))
+
+    var w;
+>w : Symbol(w, Decl(duplicateIdentifierInCatchBlock.ts, 7, 7))
+}
+
+try { } catch (e) {
+>e : Symbol(e, Decl(duplicateIdentifierInCatchBlock.ts, 10, 15))
+
+    var x;
+>x : Symbol(x, Decl(duplicateIdentifierInCatchBlock.ts, 11, 7))
+
+    function x() { } // error
+>x : Symbol(x, Decl(duplicateIdentifierInCatchBlock.ts, 11, 10))
+
+    function e() { } // error
+>e : Symbol(e, Decl(duplicateIdentifierInCatchBlock.ts, 12, 20))
+
+    var p: string;
+>p : Symbol(p, Decl(duplicateIdentifierInCatchBlock.ts, 14, 7), Decl(duplicateIdentifierInCatchBlock.ts, 15, 7))
+
+    var p: number; // error
+>p : Symbol(p, Decl(duplicateIdentifierInCatchBlock.ts, 14, 7), Decl(duplicateIdentifierInCatchBlock.ts, 15, 7))
+}

@@ -1,0 +1,29 @@
+=== tests/cases/compiler/derivedClassOverridesPrivateFunction1.ts ===
+class BaseClass {
+>BaseClass : Symbol(BaseClass, Decl(derivedClassOverridesPrivateFunction1.ts, 0, 0))
+
+    constructor() {
+        this._init();
+>this._init : Symbol(BaseClass._init, Decl(derivedClassOverridesPrivateFunction1.ts, 3, 5))
+>this : Symbol(BaseClass, Decl(derivedClassOverridesPrivateFunction1.ts, 0, 0))
+>_init : Symbol(BaseClass._init, Decl(derivedClassOverridesPrivateFunction1.ts, 3, 5))
+    }
+    private _init() {
+>_init : Symbol(BaseClass._init, Decl(derivedClassOverridesPrivateFunction1.ts, 3, 5))
+    }
+}
+class DerivedClass extends BaseClass {
+>DerivedClass : Symbol(DerivedClass, Decl(derivedClassOverridesPrivateFunction1.ts, 6, 1))
+>BaseClass : Symbol(BaseClass, Decl(derivedClassOverridesPrivateFunction1.ts, 0, 0))
+
+    constructor() {
+        super();
+>super : Symbol(BaseClass, Decl(derivedClassOverridesPrivateFunction1.ts, 0, 0))
+    }
+    private _init() {
+>_init : Symbol(DerivedClass._init, Decl(derivedClassOverridesPrivateFunction1.ts, 10, 5))
+    }
+}
+new DerivedClass();
+>DerivedClass : Symbol(DerivedClass, Decl(derivedClassOverridesPrivateFunction1.ts, 6, 1))
+

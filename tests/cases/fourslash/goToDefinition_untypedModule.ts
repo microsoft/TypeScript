@@ -5,6 +5,6 @@
 
 // @Filename: /a.ts
 ////import { /*def*/f } from "foo";
-/////*use*/f();
+////[|/*use*/f|]();
 
 verify.goToDefinition("use", "def");

@@ -209,7 +209,7 @@ function f20() {
 function f21() {
     // Not okay; union does not contain void or any
 }
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "m1", {

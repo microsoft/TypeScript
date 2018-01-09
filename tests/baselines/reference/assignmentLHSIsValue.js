@@ -84,7 +84,7 @@ var __extends = (this && this.__extends) || (function () {
 // expected error for all the LHS of assignments
 var value;
 // this
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this = value;
     }
@@ -120,7 +120,7 @@ value;
 // array literals
 '' = value[0], '' = value[1];
 // super
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         var _this = _super.call(this) || this;

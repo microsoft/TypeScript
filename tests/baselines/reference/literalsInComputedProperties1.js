@@ -67,7 +67,7 @@ y[1].toExponential();
 y[2].toExponential();
 y[3].toExponential();
 y[4].toExponential();
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
@@ -89,4 +89,4 @@ var X;
 var a = X["foo"];
 var a0 = X["bar"];
 var _a;
-// TODO: make sure that enum still disallow template literals as member names 
+// TODO: make sure that enum still disallow template literals as member names

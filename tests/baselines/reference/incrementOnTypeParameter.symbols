@@ -1,0 +1,27 @@
+=== tests/cases/compiler/incrementOnTypeParameter.ts ===
+class C<T> {
+>C : Symbol(C, Decl(incrementOnTypeParameter.ts, 0, 0))
+>T : Symbol(T, Decl(incrementOnTypeParameter.ts, 0, 8))
+
+    a: T;
+>a : Symbol(C.a, Decl(incrementOnTypeParameter.ts, 0, 12))
+>T : Symbol(T, Decl(incrementOnTypeParameter.ts, 0, 8))
+
+    foo() {
+>foo : Symbol(C.foo, Decl(incrementOnTypeParameter.ts, 1, 9))
+
+        this.a++; 
+>this.a : Symbol(C.a, Decl(incrementOnTypeParameter.ts, 0, 12))
+>this : Symbol(C, Decl(incrementOnTypeParameter.ts, 0, 0))
+>a : Symbol(C.a, Decl(incrementOnTypeParameter.ts, 0, 12))
+
+        for (var i: T, j = 0; j < 10; i++) { 
+>i : Symbol(i, Decl(incrementOnTypeParameter.ts, 4, 16))
+>T : Symbol(T, Decl(incrementOnTypeParameter.ts, 0, 8))
+>j : Symbol(j, Decl(incrementOnTypeParameter.ts, 4, 22))
+>j : Symbol(j, Decl(incrementOnTypeParameter.ts, 4, 22))
+>i : Symbol(i, Decl(incrementOnTypeParameter.ts, 4, 16))
+        }
+    }
+}
+

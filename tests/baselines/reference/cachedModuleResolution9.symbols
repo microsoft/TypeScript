@@ -1,0 +1,9 @@
+=== /a/b/c/lib.ts ===
+import {x} from "foo";
+>x : Symbol(x, Decl(lib.ts, 0, 8))
+
+
+=== /a/b/c/d/e/app.ts ===
+import {x} from "foo";
+>x : Symbol(x, Decl(app.ts, 0, 8))
+

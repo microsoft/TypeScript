@@ -1,0 +1,25 @@
+=== tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclarationCapturesArguments_es5.ts ===
+class C {
+>C : C
+
+   method() {
+>method : () => void
+
+      function other() {}
+>other : () => void
+
+      async function fn () {
+>fn : () => Promise<void>
+
+           await other.apply(this, arguments);
+>await other.apply(this, arguments) : any
+>other.apply(this, arguments) : any
+>other.apply : (this: Function, thisArg: any, argArray?: any) => any
+>other : () => void
+>apply : (this: Function, thisArg: any, argArray?: any) => any
+>this : any
+>arguments : IArguments
+      }
+   }
+}
+

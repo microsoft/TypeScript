@@ -1,0 +1,29 @@
+=== tests/cases/compiler/objectSpreadWithinMethodWithinObjectWithSpread.ts ===
+const obj = {};
+>obj : {}
+>{} : {}
+
+const a = {
+>a : { prop(): { metadata: number; }; }
+>{    ...obj,    prop() {        return {            ...obj,            metadata: 213        };    }} : { prop(): { metadata: number; }; }
+
+    ...obj,
+>obj : {}
+
+    prop() {
+>prop : () => { metadata: number; }
+
+        return {
+>{            ...obj,            metadata: 213        } : { metadata: number; }
+
+            ...obj,
+>obj : {}
+
+            metadata: 213
+>metadata : number
+>213 : 213
+
+        };
+    }
+};
+

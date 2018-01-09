@@ -1,0 +1,110 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts ===
+// Generic call with constraints infering type parameter from object member properties
+
+class C {
+>C : Symbol(C, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 0, 0))
+
+    x: string;
+>x : Symbol(C.x, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 2, 9))
+}
+
+class D {
+>D : Symbol(D, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 4, 1))
+
+    x: string;
+>x : Symbol(D.x, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 6, 9))
+
+    y: string;
+>y : Symbol(D.y, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 7, 14))
+}
+
+function foo<T, U extends T>(t: T, t2: U) {
+>foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 9, 1))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 11, 13))
+>U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 11, 15))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 11, 13))
+>t : Symbol(t, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 11, 29))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 11, 13))
+>t2 : Symbol(t2, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 11, 34))
+>U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 11, 15))
+
+    return (x: T) => t2;
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 12, 12))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 11, 13))
+>t2 : Symbol(t2, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 11, 34))
+}
+
+var c: C;
+>c : Symbol(c, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 15, 3))
+>C : Symbol(C, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 0, 0))
+
+var d: D;
+>d : Symbol(d, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 16, 3))
+>D : Symbol(D, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 4, 1))
+
+var r = foo(c, d);
+>r : Symbol(r, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 17, 3))
+>foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 9, 1))
+>c : Symbol(c, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 15, 3))
+>d : Symbol(d, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 16, 3))
+
+var r2 = foo(d, c); // error because C does not extend D
+>r2 : Symbol(r2, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 18, 3))
+>foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 9, 1))
+>d : Symbol(d, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 16, 3))
+>c : Symbol(c, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 15, 3))
+
+var r3 = foo(c, { x: '', foo: c });
+>r3 : Symbol(r3, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 19, 3))
+>foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 9, 1))
+>c : Symbol(c, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 15, 3))
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 19, 17))
+>foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 19, 24))
+>c : Symbol(c, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 15, 3))
+
+var r4 = foo(null, null);
+>r4 : Symbol(r4, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 20, 3))
+>foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 9, 1))
+
+var r5 = foo({}, null);
+>r5 : Symbol(r5, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 21, 3))
+>foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 9, 1))
+
+var r6 = foo(null, {});
+>r6 : Symbol(r6, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 22, 3))
+>foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 9, 1))
+
+var r7 = foo({}, {});
+>r7 : Symbol(r7, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 23, 3))
+>foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 9, 1))
+
+var r8 = foo(() => { }, () => { });
+>r8 : Symbol(r8, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 24, 3))
+>foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 9, 1))
+
+var r9 = foo(() => { }, () => 1);
+>r9 : Symbol(r9, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 25, 3))
+>foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 9, 1))
+
+function other<T, U extends T>() {
+>other : Symbol(other, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 25, 33))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 27, 15))
+>U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 27, 17))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 27, 15))
+
+    var r4 = foo(c, d);
+>r4 : Symbol(r4, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 28, 7))
+>foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 9, 1))
+>c : Symbol(c, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 15, 3))
+>d : Symbol(d, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 16, 3))
+
+    var r5 = foo<T, U>(c, d); // error
+>r5 : Symbol(r5, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 29, 7))
+>foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 9, 1))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 27, 15))
+>U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 27, 17))
+>c : Symbol(c, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 15, 3))
+>d : Symbol(d, Decl(genericCallWithObjectTypeArgsAndConstraints4.ts, 16, 3))
+}
+
+

@@ -1,0 +1,73 @@
+=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures2.ts ===
+// String literal types are only valid in overload signatures
+
+function foo(x: any);
+>foo : Symbol(foo, Decl(stringLiteralTypesInImplementationSignatures2.ts, 0, 0), Decl(stringLiteralTypesInImplementationSignatures2.ts, 2, 21))
+>x : Symbol(x, Decl(stringLiteralTypesInImplementationSignatures2.ts, 2, 13))
+
+function foo(x: 'hi') { }
+>foo : Symbol(foo, Decl(stringLiteralTypesInImplementationSignatures2.ts, 0, 0), Decl(stringLiteralTypesInImplementationSignatures2.ts, 2, 21))
+>x : Symbol(x, Decl(stringLiteralTypesInImplementationSignatures2.ts, 3, 13))
+
+class C {
+>C : Symbol(C, Decl(stringLiteralTypesInImplementationSignatures2.ts, 3, 25))
+
+    foo(x: string);
+>foo : Symbol(C.foo, Decl(stringLiteralTypesInImplementationSignatures2.ts, 5, 9), Decl(stringLiteralTypesInImplementationSignatures2.ts, 6, 19))
+>x : Symbol(x, Decl(stringLiteralTypesInImplementationSignatures2.ts, 6, 8))
+
+    foo(x: 'hi') { }
+>foo : Symbol(C.foo, Decl(stringLiteralTypesInImplementationSignatures2.ts, 5, 9), Decl(stringLiteralTypesInImplementationSignatures2.ts, 6, 19))
+>x : Symbol(x, Decl(stringLiteralTypesInImplementationSignatures2.ts, 7, 8))
+}
+
+interface I {
+>I : Symbol(I, Decl(stringLiteralTypesInImplementationSignatures2.ts, 8, 1))
+
+    (x: 'a');
+>x : Symbol(x, Decl(stringLiteralTypesInImplementationSignatures2.ts, 11, 5))
+
+    (x: 'hi');
+>x : Symbol(x, Decl(stringLiteralTypesInImplementationSignatures2.ts, 12, 5))
+
+    foo(x: 'a', y: 'a');
+>foo : Symbol(I.foo, Decl(stringLiteralTypesInImplementationSignatures2.ts, 12, 14), Decl(stringLiteralTypesInImplementationSignatures2.ts, 13, 24))
+>x : Symbol(x, Decl(stringLiteralTypesInImplementationSignatures2.ts, 13, 8))
+>y : Symbol(y, Decl(stringLiteralTypesInImplementationSignatures2.ts, 13, 15))
+
+    foo(x: 'hi', y: 'hi');
+>foo : Symbol(I.foo, Decl(stringLiteralTypesInImplementationSignatures2.ts, 12, 14), Decl(stringLiteralTypesInImplementationSignatures2.ts, 13, 24))
+>x : Symbol(x, Decl(stringLiteralTypesInImplementationSignatures2.ts, 14, 8))
+>y : Symbol(y, Decl(stringLiteralTypesInImplementationSignatures2.ts, 14, 16))
+}
+
+var a: {
+>a : Symbol(a, Decl(stringLiteralTypesInImplementationSignatures2.ts, 17, 3))
+
+    (x: 'hi');
+>x : Symbol(x, Decl(stringLiteralTypesInImplementationSignatures2.ts, 18, 5))
+
+    (x: 'a');
+>x : Symbol(x, Decl(stringLiteralTypesInImplementationSignatures2.ts, 19, 5))
+
+    foo(x: 'hi');
+>foo : Symbol(foo, Decl(stringLiteralTypesInImplementationSignatures2.ts, 19, 13), Decl(stringLiteralTypesInImplementationSignatures2.ts, 20, 17))
+>x : Symbol(x, Decl(stringLiteralTypesInImplementationSignatures2.ts, 20, 8))
+
+    foo(x: 'a');
+>foo : Symbol(foo, Decl(stringLiteralTypesInImplementationSignatures2.ts, 19, 13), Decl(stringLiteralTypesInImplementationSignatures2.ts, 20, 17))
+>x : Symbol(x, Decl(stringLiteralTypesInImplementationSignatures2.ts, 21, 8))
+}
+
+var b = {
+>b : Symbol(b, Decl(stringLiteralTypesInImplementationSignatures2.ts, 24, 3))
+
+    foo(x: 'hi') { },
+>foo : Symbol(foo, Decl(stringLiteralTypesInImplementationSignatures2.ts, 24, 9), Decl(stringLiteralTypesInImplementationSignatures2.ts, 25, 21))
+>x : Symbol(x, Decl(stringLiteralTypesInImplementationSignatures2.ts, 25, 8))
+
+    foo(x: 'a') { },
+>foo : Symbol(foo, Decl(stringLiteralTypesInImplementationSignatures2.ts, 24, 9), Decl(stringLiteralTypesInImplementationSignatures2.ts, 25, 21))
+>x : Symbol(x, Decl(stringLiteralTypesInImplementationSignatures2.ts, 26, 8))
+}
+

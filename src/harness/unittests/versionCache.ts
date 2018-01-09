@@ -49,6 +49,12 @@ var q:Point=<Point>p;`;
             validateEditAtLineCharIndex = undefined;
         });
 
+        it("handles empty lines array", () => {
+            const lineIndex = new server.LineIndex();
+            lineIndex.load([]);
+            assert.deepEqual(lineIndex.positionToLineOffset(0), { line: 1, offset: 1 });
+        });
+
         it(`change 9 1 0 1 {"y"}`, () => {
             validateEditAtLineCharIndex(9, 1, 0, "y");
         });

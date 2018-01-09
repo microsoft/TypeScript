@@ -6,7 +6,7 @@ class abstract {
 new abstract;
 
 //// [classAbstractAsIdentifier.js]
-var abstract = (function () {
+var abstract = /** @class */ (function () {
     function abstract() {
     }
     abstract.prototype.foo = function () { return 1; };

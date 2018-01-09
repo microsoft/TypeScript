@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleResolutionWithExtensions_notSupported3.ts] ////
 
 //// [jsx.jsx]
-// Test the error message if we have `--jsx` but not `--allowJw`.
+// If we have "--jsx" set and not "--allowJs", it's an implicit-any module.
 
 
 //// [a.ts]

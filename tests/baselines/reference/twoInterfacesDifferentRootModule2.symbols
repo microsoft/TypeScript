@@ -1,0 +1,98 @@
+=== tests/cases/conformance/interfaces/declarationMerging/twoInterfacesDifferentRootModule2.ts ===
+// two interfaces with different root modules should not merge
+
+module M {
+>M : Symbol(M, Decl(twoInterfacesDifferentRootModule2.ts, 0, 0))
+
+    export interface A {
+>A : Symbol(A, Decl(twoInterfacesDifferentRootModule2.ts, 2, 10))
+
+        foo: string;
+>foo : Symbol(A.foo, Decl(twoInterfacesDifferentRootModule2.ts, 3, 24))
+    }
+
+    export interface B<T> {
+>B : Symbol(B, Decl(twoInterfacesDifferentRootModule2.ts, 5, 5))
+>T : Symbol(T, Decl(twoInterfacesDifferentRootModule2.ts, 7, 23))
+
+        foo: T;
+>foo : Symbol(B.foo, Decl(twoInterfacesDifferentRootModule2.ts, 7, 27))
+>T : Symbol(T, Decl(twoInterfacesDifferentRootModule2.ts, 7, 23))
+    }
+
+    module M2 {
+>M2 : Symbol(M2, Decl(twoInterfacesDifferentRootModule2.ts, 9, 5))
+
+        export interface A {
+>A : Symbol(A, Decl(twoInterfacesDifferentRootModule2.ts, 11, 15))
+
+            bar: number;
+>bar : Symbol(A.bar, Decl(twoInterfacesDifferentRootModule2.ts, 12, 28))
+        }
+
+        var a: A;
+>a : Symbol(a, Decl(twoInterfacesDifferentRootModule2.ts, 16, 11))
+>A : Symbol(A, Decl(twoInterfacesDifferentRootModule2.ts, 11, 15))
+
+        var r1 = a.foo; // error
+>r1 : Symbol(r1, Decl(twoInterfacesDifferentRootModule2.ts, 17, 11))
+>a : Symbol(a, Decl(twoInterfacesDifferentRootModule2.ts, 16, 11))
+
+        var r2 = a.bar;
+>r2 : Symbol(r2, Decl(twoInterfacesDifferentRootModule2.ts, 18, 11))
+>a.bar : Symbol(A.bar, Decl(twoInterfacesDifferentRootModule2.ts, 12, 28))
+>a : Symbol(a, Decl(twoInterfacesDifferentRootModule2.ts, 16, 11))
+>bar : Symbol(A.bar, Decl(twoInterfacesDifferentRootModule2.ts, 12, 28))
+
+        export interface B<T> {
+>B : Symbol(B, Decl(twoInterfacesDifferentRootModule2.ts, 18, 23))
+>T : Symbol(T, Decl(twoInterfacesDifferentRootModule2.ts, 20, 27))
+
+            bar: T;
+>bar : Symbol(B.bar, Decl(twoInterfacesDifferentRootModule2.ts, 20, 31))
+>T : Symbol(T, Decl(twoInterfacesDifferentRootModule2.ts, 20, 27))
+        }
+
+        var b: B<string>;
+>b : Symbol(b, Decl(twoInterfacesDifferentRootModule2.ts, 24, 11))
+>B : Symbol(B, Decl(twoInterfacesDifferentRootModule2.ts, 18, 23))
+
+        var r3 = b.foo; // error
+>r3 : Symbol(r3, Decl(twoInterfacesDifferentRootModule2.ts, 25, 11))
+>b : Symbol(b, Decl(twoInterfacesDifferentRootModule2.ts, 24, 11))
+
+        var r4 = b.bar;
+>r4 : Symbol(r4, Decl(twoInterfacesDifferentRootModule2.ts, 26, 11))
+>b.bar : Symbol(B.bar, Decl(twoInterfacesDifferentRootModule2.ts, 20, 31))
+>b : Symbol(b, Decl(twoInterfacesDifferentRootModule2.ts, 24, 11))
+>bar : Symbol(B.bar, Decl(twoInterfacesDifferentRootModule2.ts, 20, 31))
+    }
+
+    var a: A;
+>a : Symbol(a, Decl(twoInterfacesDifferentRootModule2.ts, 29, 7))
+>A : Symbol(A, Decl(twoInterfacesDifferentRootModule2.ts, 2, 10))
+
+    var r1 = a.foo; 
+>r1 : Symbol(r1, Decl(twoInterfacesDifferentRootModule2.ts, 30, 7))
+>a.foo : Symbol(A.foo, Decl(twoInterfacesDifferentRootModule2.ts, 3, 24))
+>a : Symbol(a, Decl(twoInterfacesDifferentRootModule2.ts, 29, 7))
+>foo : Symbol(A.foo, Decl(twoInterfacesDifferentRootModule2.ts, 3, 24))
+
+    var r2 = a.bar; // error
+>r2 : Symbol(r2, Decl(twoInterfacesDifferentRootModule2.ts, 31, 7))
+>a : Symbol(a, Decl(twoInterfacesDifferentRootModule2.ts, 29, 7))
+
+    var b: B<string>;
+>b : Symbol(b, Decl(twoInterfacesDifferentRootModule2.ts, 33, 7))
+>B : Symbol(B, Decl(twoInterfacesDifferentRootModule2.ts, 5, 5))
+
+    var r3 = b.foo; 
+>r3 : Symbol(r3, Decl(twoInterfacesDifferentRootModule2.ts, 34, 7))
+>b.foo : Symbol(B.foo, Decl(twoInterfacesDifferentRootModule2.ts, 7, 27))
+>b : Symbol(b, Decl(twoInterfacesDifferentRootModule2.ts, 33, 7))
+>foo : Symbol(B.foo, Decl(twoInterfacesDifferentRootModule2.ts, 7, 27))
+
+    var r4 = b.bar; // error
+>r4 : Symbol(r4, Decl(twoInterfacesDifferentRootModule2.ts, 35, 7))
+>b : Symbol(b, Decl(twoInterfacesDifferentRootModule2.ts, 33, 7))
+}

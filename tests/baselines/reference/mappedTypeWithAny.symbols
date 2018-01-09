@@ -1,0 +1,71 @@
+=== tests/cases/conformance/types/mapped/mappedTypeWithAny.ts ===
+type Item = { value: string };
+>Item : Symbol(Item, Decl(mappedTypeWithAny.ts, 0, 0))
+>value : Symbol(value, Decl(mappedTypeWithAny.ts, 0, 13))
+
+type ItemMap<T> = { [P in keyof T]: Item };
+>ItemMap : Symbol(ItemMap, Decl(mappedTypeWithAny.ts, 0, 30))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 1, 13))
+>P : Symbol(P, Decl(mappedTypeWithAny.ts, 1, 21))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 1, 13))
+>Item : Symbol(Item, Decl(mappedTypeWithAny.ts, 0, 0))
+
+declare let x0: keyof any;
+>x0 : Symbol(x0, Decl(mappedTypeWithAny.ts, 3, 11))
+
+declare let x1: { [P in any]: Item };
+>x1 : Symbol(x1, Decl(mappedTypeWithAny.ts, 4, 11))
+>P : Symbol(P, Decl(mappedTypeWithAny.ts, 4, 19))
+>Item : Symbol(Item, Decl(mappedTypeWithAny.ts, 0, 0))
+
+declare let x2: { [P in string]: Item };
+>x2 : Symbol(x2, Decl(mappedTypeWithAny.ts, 5, 11))
+>P : Symbol(P, Decl(mappedTypeWithAny.ts, 5, 19))
+>Item : Symbol(Item, Decl(mappedTypeWithAny.ts, 0, 0))
+
+declare let x3: { [P in keyof any]: Item };
+>x3 : Symbol(x3, Decl(mappedTypeWithAny.ts, 6, 11))
+>P : Symbol(P, Decl(mappedTypeWithAny.ts, 6, 19))
+>Item : Symbol(Item, Decl(mappedTypeWithAny.ts, 0, 0))
+
+declare let x4: ItemMap<any>;
+>x4 : Symbol(x4, Decl(mappedTypeWithAny.ts, 7, 11))
+>ItemMap : Symbol(ItemMap, Decl(mappedTypeWithAny.ts, 0, 30))
+
+// Repro from #19152
+
+type Data = {
+>Data : Symbol(Data, Decl(mappedTypeWithAny.ts, 7, 29))
+
+  value: string;
+>value : Symbol(value, Decl(mappedTypeWithAny.ts, 11, 13))
+}
+
+type StrictDataMap<T> = {
+>StrictDataMap : Symbol(StrictDataMap, Decl(mappedTypeWithAny.ts, 13, 1))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 15, 19))
+
+  [P in keyof T]: Data
+>P : Symbol(P, Decl(mappedTypeWithAny.ts, 16, 3))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 15, 19))
+>Data : Symbol(Data, Decl(mappedTypeWithAny.ts, 7, 29))
+}
+
+declare let z: StrictDataMap<any>;
+>z : Symbol(z, Decl(mappedTypeWithAny.ts, 19, 11))
+>StrictDataMap : Symbol(StrictDataMap, Decl(mappedTypeWithAny.ts, 13, 1))
+
+for (let id in z) {
+>id : Symbol(id, Decl(mappedTypeWithAny.ts, 20, 8))
+>z : Symbol(z, Decl(mappedTypeWithAny.ts, 19, 11))
+
+  let data = z[id];
+>data : Symbol(data, Decl(mappedTypeWithAny.ts, 21, 5))
+>z : Symbol(z, Decl(mappedTypeWithAny.ts, 19, 11))
+>id : Symbol(id, Decl(mappedTypeWithAny.ts, 20, 8))
+
+  let x = data.notAValue;  // Error
+>x : Symbol(x, Decl(mappedTypeWithAny.ts, 22, 5))
+>data : Symbol(data, Decl(mappedTypeWithAny.ts, 21, 5))
+}
+

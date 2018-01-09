@@ -297,6 +297,9 @@ define(function () {
 
     isArray = ('isArray' in Array) ?
         Array.isArray : function (value) { return Object.prototype.toString.call(value) === '[object Array]'; };
+    isArray = 'isArray' in Array
+        ? function (value) { return Object.prototype.toString.call(value) === '[object Array]'; }
+        : Array.isArray;
 
     function equalIC(a, b) {
         return a != null && b != null && a.toLowerCase() === b.toLowerCase();
@@ -967,7 +970,7 @@ define(function () {
 
     // should not be replaced by a completely new object - just overwrite existing methods
     MobileDetect._impl = impl;
-    
+
     MobileDetect.version = '1.3.3 2016-07-31';
 
     return MobileDetect;
@@ -1276,6 +1279,9 @@ define(function () {
         impl.FALLBACK_MOBILE = 'UnknownMobile';
         isArray = ('isArray' in Array) ?
             Array.isArray : function (value) { return Object.prototype.toString.call(value) === '[object Array]'; };
+        isArray = 'isArray' in Array
+            ? function (value) { return Object.prototype.toString.call(value) === '[object Array]'; }
+            : Array.isArray;
         function equalIC(a, b) {
             return a != null && b != null && a.toLowerCase() === b.toLowerCase();
         }

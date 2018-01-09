@@ -1,0 +1,32 @@
+=== tests/cases/compiler/classExtendsNull.ts ===
+class C extends null {
+>C : C
+>null : null
+
+    constructor() {
+        super();
+>super() : void
+>super : any
+
+        return Object.create(null);
+>Object.create(null) : any
+>Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object : ObjectConstructor
+>create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>null : null
+    }
+}
+
+class D extends null {
+>D : D
+>null : null
+
+    constructor() {
+        return Object.create(null);
+>Object.create(null) : any
+>Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object : ObjectConstructor
+>create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>null : null
+    }
+}

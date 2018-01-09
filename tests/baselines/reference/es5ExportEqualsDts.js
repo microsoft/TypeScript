@@ -14,7 +14,7 @@ export = A
 
 //// [es5ExportEqualsDts.js]
 "use strict";
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A.prototype.foo = function () {

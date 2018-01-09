@@ -1,0 +1,26 @@
+=== tests/cases/compiler/implicitAnyDeclareMemberWithoutType.ts ===
+// this should be an error
+interface IFace {
+>IFace : Symbol(IFace, Decl(implicitAnyDeclareMemberWithoutType.ts, 0, 0))
+
+    member1;  // error at "member1"
+>member1 : Symbol(IFace.member1, Decl(implicitAnyDeclareMemberWithoutType.ts, 1, 17))
+
+    member2: string;
+>member2 : Symbol(IFace.member2, Decl(implicitAnyDeclareMemberWithoutType.ts, 2, 12))
+
+    constructor(c1, c2: string, c3);  // error at "c1, c3, "constructor"
+>constructor : Symbol(IFace.constructor, Decl(implicitAnyDeclareMemberWithoutType.ts, 3, 20))
+>c1 : Symbol(c1, Decl(implicitAnyDeclareMemberWithoutType.ts, 4, 16))
+>c2 : Symbol(c2, Decl(implicitAnyDeclareMemberWithoutType.ts, 4, 19))
+>c3 : Symbol(c3, Decl(implicitAnyDeclareMemberWithoutType.ts, 4, 31))
+
+    funcOfIFace(f1, f2, f3: number);   // error at "f1, f2, funcOfIFace"
+>funcOfIFace : Symbol(IFace.funcOfIFace, Decl(implicitAnyDeclareMemberWithoutType.ts, 4, 36))
+>f1 : Symbol(f1, Decl(implicitAnyDeclareMemberWithoutType.ts, 5, 16))
+>f2 : Symbol(f2, Decl(implicitAnyDeclareMemberWithoutType.ts, 5, 19))
+>f3 : Symbol(f3, Decl(implicitAnyDeclareMemberWithoutType.ts, 5, 23))
+
+    new ();
+}
+

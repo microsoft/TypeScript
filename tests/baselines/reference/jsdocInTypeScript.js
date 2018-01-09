@@ -50,7 +50,7 @@ const obj = { foo: (a, b) => a + b };
 
 
 //// [jsdocInTypeScript.js]
-var T = (function () {
+var T = /** @class */ (function () {
     function T() {
     }
     return T;

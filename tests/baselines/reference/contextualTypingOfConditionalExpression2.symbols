@@ -1,0 +1,33 @@
+=== tests/cases/compiler/contextualTypingOfConditionalExpression2.ts ===
+class A {
+>A : Symbol(A, Decl(contextualTypingOfConditionalExpression2.ts, 0, 0))
+
+    foo: number;
+>foo : Symbol(A.foo, Decl(contextualTypingOfConditionalExpression2.ts, 0, 9))
+}
+class B extends A {
+>B : Symbol(B, Decl(contextualTypingOfConditionalExpression2.ts, 2, 1))
+>A : Symbol(A, Decl(contextualTypingOfConditionalExpression2.ts, 0, 0))
+
+    bar: number;
+>bar : Symbol(B.bar, Decl(contextualTypingOfConditionalExpression2.ts, 3, 19))
+}
+class C extends A {
+>C : Symbol(C, Decl(contextualTypingOfConditionalExpression2.ts, 5, 1))
+>A : Symbol(A, Decl(contextualTypingOfConditionalExpression2.ts, 0, 0))
+
+    baz: number;
+>baz : Symbol(C.baz, Decl(contextualTypingOfConditionalExpression2.ts, 6, 19))
+}
+
+var x2: (a: A) => void = true ? (a: C) => a.foo : (b: number) => { };
+>x2 : Symbol(x2, Decl(contextualTypingOfConditionalExpression2.ts, 10, 3))
+>a : Symbol(a, Decl(contextualTypingOfConditionalExpression2.ts, 10, 9))
+>A : Symbol(A, Decl(contextualTypingOfConditionalExpression2.ts, 0, 0))
+>a : Symbol(a, Decl(contextualTypingOfConditionalExpression2.ts, 10, 33))
+>C : Symbol(C, Decl(contextualTypingOfConditionalExpression2.ts, 5, 1))
+>a.foo : Symbol(A.foo, Decl(contextualTypingOfConditionalExpression2.ts, 0, 9))
+>a : Symbol(a, Decl(contextualTypingOfConditionalExpression2.ts, 10, 33))
+>foo : Symbol(A.foo, Decl(contextualTypingOfConditionalExpression2.ts, 0, 9))
+>b : Symbol(b, Decl(contextualTypingOfConditionalExpression2.ts, 10, 51))
+

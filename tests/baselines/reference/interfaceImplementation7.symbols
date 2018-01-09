@@ -1,0 +1,32 @@
+=== tests/cases/compiler/interfaceImplementation7.ts ===
+interface i1{ name(): { s: string; }; }
+>i1 : Symbol(i1, Decl(interfaceImplementation7.ts, 0, 0))
+>name : Symbol(i1.name, Decl(interfaceImplementation7.ts, 0, 13))
+>s : Symbol(s, Decl(interfaceImplementation7.ts, 0, 23))
+
+interface i2{ name(): { n: number; }; }
+>i2 : Symbol(i2, Decl(interfaceImplementation7.ts, 0, 39))
+>name : Symbol(i2.name, Decl(interfaceImplementation7.ts, 1, 13))
+>n : Symbol(n, Decl(interfaceImplementation7.ts, 1, 23))
+
+interface i3 extends i1, i2 { }
+>i3 : Symbol(i3, Decl(interfaceImplementation7.ts, 1, 39))
+>i1 : Symbol(i1, Decl(interfaceImplementation7.ts, 0, 0))
+>i2 : Symbol(i2, Decl(interfaceImplementation7.ts, 0, 39))
+
+interface i4 extends i1, i2 { name(): { s: string; n: number; }; }
+>i4 : Symbol(i4, Decl(interfaceImplementation7.ts, 3, 31))
+>i1 : Symbol(i1, Decl(interfaceImplementation7.ts, 0, 0))
+>i2 : Symbol(i2, Decl(interfaceImplementation7.ts, 0, 39))
+>name : Symbol(i4.name, Decl(interfaceImplementation7.ts, 4, 29))
+>s : Symbol(s, Decl(interfaceImplementation7.ts, 4, 39))
+>n : Symbol(n, Decl(interfaceImplementation7.ts, 4, 50))
+
+class C1 implements i4 {
+>C1 : Symbol(C1, Decl(interfaceImplementation7.ts, 4, 66))
+>i4 : Symbol(i4, Decl(interfaceImplementation7.ts, 3, 31))
+
+    public name(): string { return ""; }
+>name : Symbol(C1.name, Decl(interfaceImplementation7.ts, 6, 24))
+}
+

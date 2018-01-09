@@ -69,7 +69,7 @@ function boxify<T>(obj: T): Boxified<T> {
 
         result[k] = box(obj[k]);
 >result[k] = box(obj[k]) : Box<T[keyof T]>
->result[k] : Box<T[keyof T]>
+>result[k] : Boxified<T>[keyof T]
 >result : Boxified<T>
 >k : keyof T
 >box(obj[k]) : Box<T[keyof T]>
@@ -107,7 +107,7 @@ function unboxify<T>(obj: Boxified<T>): T {
 >k : keyof T
 >unbox(obj[k]) : T[keyof T]
 >unbox : <T>(x: Box<T>) => T
->obj[k] : Box<T[keyof T]>
+>obj[k] : Boxified<T>[keyof T]
 >obj : Boxified<T>
 >k : keyof T
     }
@@ -131,7 +131,7 @@ function assignBoxified<T>(obj: Boxified<T>, values: T) {
         obj[k].value = values[k];
 >obj[k].value = values[k] : T[keyof T]
 >obj[k].value : T[keyof T]
->obj[k] : Box<T[keyof T]>
+>obj[k] : Boxified<T>[keyof T]
 >obj : Boxified<T>
 >k : keyof T
 >value : T[keyof T]
@@ -203,15 +203,15 @@ function f2() {
 
     };
     let v = unboxify(b);
->v : { a: number; b: string; c: boolean; }
->unboxify(b) : { a: number; b: string; c: boolean; }
+>v : { a: any; b: any; c: any; }
+>unboxify(b) : { a: any; b: any; c: any; }
 >unboxify : <T>(obj: Boxified<T>) => T
 >b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
 
     let x: number = v.a;
 >x : number
 >v.a : number
->v : { a: number; b: string; c: boolean; }
+>v : { a: any; b: any; c: any; }
 >a : number
 }
 
@@ -245,7 +245,7 @@ function f3() {
 >assignBoxified(b, { c: false }) : void
 >assignBoxified : <T>(obj: Boxified<T>, values: T) => void
 >b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
->{ c: false } : { c: false; }
+>{ c: false } : { c: boolean; }
 >c : boolean
 >false : false
 }
@@ -277,11 +277,11 @@ function f4() {
 
     };
     b = boxify(unboxify(b));
->b = boxify(unboxify(b)) : Boxified<{ a: number; b: string; c: boolean; }>
+>b = boxify(unboxify(b)) : Boxified<{ a: any; b: any; c: any; }>
 >b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
->boxify(unboxify(b)) : Boxified<{ a: number; b: string; c: boolean; }>
+>boxify(unboxify(b)) : Boxified<{ a: any; b: any; c: any; }>
 >boxify : <T>(obj: T) => Boxified<T>
->unboxify(b) : { a: number; b: string; c: boolean; }
+>unboxify(b) : { a: any; b: any; c: any; }
 >unboxify : <T>(obj: Boxified<T>) => T
 >b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
 
@@ -338,15 +338,15 @@ function f5(s: string) {
 
     });
     let v = unboxify(b);
->v : { a: string | number | boolean; b: string | number | boolean; c: string | number | boolean; }
->unboxify(b) : { a: string | number | boolean; b: string | number | boolean; c: string | number | boolean; }
+>v : { a: any; b: any; c: any; }
+>unboxify(b) : { a: any; b: any; c: any; }
 >unboxify : <T>(obj: Boxified<T>) => T
 >b : { a: Box<number> | Box<string> | Box<boolean>; b: Box<number> | Box<string> | Box<boolean>; c: Box<number> | Box<string> | Box<boolean>; }
 
     let x: string | number | boolean = v.a;
 >x : string | number | boolean
 >v.a : string | number | boolean
->v : { a: string | number | boolean; b: string | number | boolean; c: string | number | boolean; }
+>v : { a: any; b: any; c: any; }
 >a : string | number | boolean
 }
 
@@ -391,15 +391,15 @@ function f6(s: string) {
 
     });
     let v = unboxify(b);
->v : { [x: string]: string | number | boolean; }
->unboxify(b) : { [x: string]: string | number | boolean; }
+>v : { [x: string]: any; }
+>unboxify(b) : { [x: string]: any; }
 >unboxify : <T>(obj: Boxified<T>) => T
 >b : { [x: string]: Box<number> | Box<string> | Box<boolean>; }
 
     let x: string | number | boolean = v[s];
 >x : string | number | boolean
 >v[s] : string | number | boolean
->v : { [x: string]: string | number | boolean; }
+>v : { [x: string]: any; }
 >s : string
 }
 
@@ -449,20 +449,20 @@ function f10(foo: Foo) {
 >Foo : Foo
 
     let x = validate(foo);  // { a: number, readonly b: string }
->x : { a: number; readonly b: string; }
->validate(foo) : { a: number; readonly b: string; }
+>x : { a: any; readonly b: any; }
+>validate(foo) : { a: any; readonly b: any; }
 >validate : <T>(obj: { [P in keyof T]?: T[P] | undefined; }) => T
 >foo : Foo
 
     let y = clone(foo);  // { a?: number, b: string }
->y : { a?: number | undefined; b: string; }
->clone(foo) : { a?: number | undefined; b: string; }
+>y : { a?: any; b: any; }
+>clone(foo) : { a?: any; b: any; }
 >clone : <T>(obj: { readonly [P in keyof T]: T[P]; }) => T
 >foo : Foo
 
     let z = validateAndClone(foo);  // { a: number, b: string }
->z : { a: number; b: string; }
->validateAndClone(foo) : { a: number; b: string; }
+>z : { a: any; b: any; }
+>validateAndClone(foo) : { a: any; b: any; }
 >validateAndClone : <T>(obj: { readonly [P in keyof T]?: T[P] | undefined; }) => T
 >foo : Foo
 }
@@ -507,8 +507,8 @@ declare function applySpec<T>(obj: Spec<T>): (...args: any[]) => T;
 
 // Infers g1: (...args: any[]) => { sum: number, nested: { mul: string } }
 var g1 = applySpec({
->g1 : (...args: any[]) => { sum: number; nested: { mul: string; }; }
->applySpec({    sum: (a: any) => 3,    nested: {        mul: (b: any) => "n"    }}) : (...args: any[]) => { sum: number; nested: { mul: string; }; }
+>g1 : (...args: any[]) => { sum: any; nested: any; }
+>applySpec({    sum: (a: any) => 3,    nested: {        mul: (b: any) => "n"    }}) : (...args: any[]) => { sum: any; nested: any; }
 >applySpec : <T>(obj: Spec<T>) => (...args: any[]) => T
 >{    sum: (a: any) => 3,    nested: {        mul: (b: any) => "n"    }} : { sum: (a: any) => number; nested: { mul: (b: any) => string; }; }
 
@@ -532,8 +532,8 @@ var g1 = applySpec({
 
 // Infers g2: (...args: any[]) => { foo: { bar: { baz: boolean } } }
 var g2 = applySpec({ foo: { bar: { baz: (x: any) => true } } });
->g2 : (...args: any[]) => { foo: { bar: { baz: boolean; }; }; }
->applySpec({ foo: { bar: { baz: (x: any) => true } } }) : (...args: any[]) => { foo: { bar: { baz: boolean; }; }; }
+>g2 : (...args: any[]) => { foo: any; }
+>applySpec({ foo: { bar: { baz: (x: any) => true } } }) : (...args: any[]) => { foo: any; }
 >applySpec : <T>(obj: Spec<T>) => (...args: any[]) => T
 >{ foo: { bar: { baz: (x: any) => true } } } : { foo: { bar: { baz: (x: any) => boolean; }; }; }
 >foo : { bar: { baz: (x: any) => boolean; }; }

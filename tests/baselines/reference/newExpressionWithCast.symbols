@@ -1,0 +1,26 @@
+=== tests/cases/compiler/newExpressionWithCast.ts ===
+function Test() { }
+>Test : Symbol(Test, Decl(newExpressionWithCast.ts, 0, 0))
+
+// valid but error with noImplicitAny
+var test = new Test();
+>test : Symbol(test, Decl(newExpressionWithCast.ts, 2, 3))
+>Test : Symbol(Test, Decl(newExpressionWithCast.ts, 0, 0))
+
+function Test2() { }
+>Test2 : Symbol(Test2, Decl(newExpressionWithCast.ts, 2, 22))
+
+// parse error
+var test2 = new <any>Test2();
+>test2 : Symbol(test2, Decl(newExpressionWithCast.ts, 6, 3))
+>Test2 : Symbol(Test2, Decl(newExpressionWithCast.ts, 2, 22))
+
+function Test3() { }
+>Test3 : Symbol(Test3, Decl(newExpressionWithCast.ts, 6, 29))
+
+// valid with noImplicitAny
+var test3 = new (<any>Test3)();
+>test3 : Symbol(test3, Decl(newExpressionWithCast.ts, 10, 3))
+>Test3 : Symbol(Test3, Decl(newExpressionWithCast.ts, 6, 29))
+
+

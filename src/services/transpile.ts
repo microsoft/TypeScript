@@ -78,11 +78,11 @@ namespace ts {
             getSourceFile: (fileName) => fileName === normalizePath(inputFileName) ? sourceFile : undefined,
             writeFile: (name, text) => {
                 if (fileExtensionIs(name, ".map")) {
-                    Debug.assert(sourceMapText === undefined, `Unexpected multiple source map outputs for the file '${name}'`);
+                    Debug.assertEqual(sourceMapText, undefined, "Unexpected multiple source map outputs, file:", name);
                     sourceMapText = text;
                 }
                 else {
-                    Debug.assert(outputText === undefined, `Unexpected multiple outputs for the file: '${name}'`);
+                    Debug.assertEqual(outputText, undefined, "Unexpected multiple outputs, file:", name);
                     outputText = text;
                 }
             },
@@ -139,7 +139,7 @@ namespace ts {
 
             const value = options[opt.name];
             // Value should be a key of opt.type
-            if (typeof value === "string") {
+            if (isString(value)) {
                 // If value is not a string, this will fail
                 options[opt.name] = parseCustomTypeOption(opt, value, diagnostics);
             }

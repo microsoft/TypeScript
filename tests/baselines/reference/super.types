@@ -1,0 +1,99 @@
+=== tests/cases/compiler/super.ts ===
+class Base {
+>Base : Base
+
+    constructor() {
+        var x;
+>x : any
+    }
+    public foo() {
+>foo : () => string
+
+        return "base";
+>"base" : "base"
+    }
+
+    public bar() {
+>bar : () => string
+
+        return "basebar";
+>"basebar" : "basebar"
+    }
+}
+
+class Sub1 extends Base {
+>Sub1 : Sub1
+>Base : Base
+
+    public foo() {
+>foo : () => string
+
+        return "sub1" + super.foo() + super.bar();
+>"sub1" + super.foo() + super.bar() : string
+>"sub1" + super.foo() : string
+>"sub1" : "sub1"
+>super.foo() : string
+>super.foo : () => string
+>super : Base
+>foo : () => string
+>super.bar() : string
+>super.bar : () => string
+>super : Base
+>bar : () => string
+    }
+}
+
+
+class SubSub1 extends Sub1 {
+>SubSub1 : SubSub1
+>Sub1 : Sub1
+
+    public foo() {
+>foo : () => string
+
+        return "subsub1" + super.foo();
+>"subsub1" + super.foo() : string
+>"subsub1" : "subsub1"
+>super.foo() : string
+>super.foo : () => string
+>super : Sub1
+>foo : () => string
+    }
+}
+
+class Base2 {
+>Base2 : Base2
+
+    public foo() {
+>foo : () => void
+
+        super.foo();
+>super.foo() : any
+>super.foo : any
+>super : any
+>foo : any
+    }
+}
+
+var s = new Sub1();
+>s : Sub1
+>new Sub1() : Sub1
+>Sub1 : typeof Sub1
+
+var ss = new SubSub1();
+>ss : SubSub1
+>new SubSub1() : SubSub1
+>SubSub1 : typeof SubSub1
+
+s.foo() + ss.foo();
+>s.foo() + ss.foo() : string
+>s.foo() : string
+>s.foo : () => string
+>s : Sub1
+>foo : () => string
+>ss.foo() : string
+>ss.foo : () => string
+>ss : SubSub1
+>foo : () => string
+
+

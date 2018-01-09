@@ -1,5 +1,6 @@
 // @target: es2015
 // @module: commonjs
+// @skipLibCheck: true
 // @lib: es2015,dom
 // @filename: main.ts
 import { X } from "./other";

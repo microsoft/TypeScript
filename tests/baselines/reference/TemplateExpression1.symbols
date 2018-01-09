@@ -1,0 +1,4 @@
+=== tests/cases/conformance/es6/templates/TemplateExpression1.ts ===
+var v = `foo ${ a 
+>v : Symbol(v, Decl(TemplateExpression1.ts, 0, 3))
+

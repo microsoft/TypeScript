@@ -1,7 +1,7 @@
 EmitSkipped: false
 FileName : /tests/cases/fourslash/shims/inputFile1.js
 var x = 5;
-var Bar = (function () {
+var Bar = /** @class */ (function () {
     function Bar() {
     }
     return Bar;
@@ -16,7 +16,7 @@ declare class Bar {
 EmitSkipped: false
 FileName : /tests/cases/fourslash/shims/inputFile2.js
 var x1 = "hello world";
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;

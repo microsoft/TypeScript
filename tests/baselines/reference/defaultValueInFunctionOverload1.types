@@ -1,0 +1,11 @@
+=== tests/cases/compiler/defaultValueInFunctionOverload1.ts ===
+function foo(x: string = '');
+>foo : (x?: string) => any
+>x : string
+>'' : ""
+
+function foo(x = '') { }
+>foo : (x?: string) => any
+>x : string
+>'' : ""
+

@@ -1,0 +1,18 @@
+=== tests/cases/compiler/switchStatementsWithMultipleDefaults1.ts ===
+    var x = 10;
+>x : Symbol(x, Decl(switchStatementsWithMultipleDefaults1.ts, 0, 7))
+    
+    switch (x) {
+>x : Symbol(x, Decl(switchStatementsWithMultipleDefaults1.ts, 0, 7))
+
+        case 1:
+        case 2:
+        default:    // No issues.
+            break;
+        default:    // Error; second 'default' clause.
+        default:    // Error; third 'default' clause.
+        case 3:
+            x *= x;
+>x : Symbol(x, Decl(switchStatementsWithMultipleDefaults1.ts, 0, 7))
+>x : Symbol(x, Decl(switchStatementsWithMultipleDefaults1.ts, 0, 7))
+    }

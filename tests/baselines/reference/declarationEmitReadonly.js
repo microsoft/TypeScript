@@ -4,7 +4,7 @@ class C {
 }
 
 //// [declarationEmitReadonly.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C(x) {
         this.x = x;
     }

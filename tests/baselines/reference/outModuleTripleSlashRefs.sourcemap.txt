@@ -21,17 +21,18 @@ sourceFile:tests/cases/compiler/ref/b.ts
 >>>/// <reference path="./c.d.ts" />
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                 ^^^^^^->
 1 >
 2 >/// <reference path="./c.d.ts" />
 1 >Emitted(11, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(11, 34) Source(1, 34) + SourceIndex(0)
 ---
->>>var Foo = (function () {
-1 >
+>>>var Foo = /** @class */ (function () {
+1->
 2 >^^^^^^^^^^^^^^^^^^^^^->
-1 >
+1->
   >
-1 >Emitted(12, 1) Source(2, 1) + SourceIndex(0)
+1->Emitted(12, 1) Source(2, 1) + SourceIndex(0)
 ---
 >>>    function Foo() {
 1->^^^^
@@ -85,17 +86,18 @@ sourceFile:tests/cases/compiler/ref/a.ts
 >>>    /// <reference path="./b.ts" />
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                   ^^^^^^->
 1->
 2 >    /// <reference path="./b.ts" />
 1->Emitted(20, 5) Source(1, 1) + SourceIndex(1)
 2 >Emitted(20, 36) Source(1, 32) + SourceIndex(1)
 ---
->>>    var A = (function () {
-1 >^^^^
+>>>    var A = /** @class */ (function () {
+1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^->
-1 >
+1->
   >
-1 >Emitted(21, 5) Source(2, 1) + SourceIndex(1)
+1->Emitted(21, 5) Source(2, 1) + SourceIndex(1)
 ---
 >>>        function A() {
 1->^^^^^^^^
@@ -155,7 +157,7 @@ sourceFile:tests/cases/compiler/b.ts
 >>>define("b", ["require", "exports", "ref/a"], function (require, exports, a_1) {
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
->>>    var B = (function (_super) {
+>>>    var B = /** @class */ (function (_super) {
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >import {A} from "./ref/a";

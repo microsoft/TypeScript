@@ -1,0 +1,43 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignability01.ts ===
+function f(x: "foo"): number;
+>f : (x: "foo") => number
+>x : "foo"
+
+function f(x: string): number {
+>f : (x: "foo") => number
+>x : string
+
+    return 0;
+>0 : 0
+}
+
+function g(x: "bar"): number;
+>g : (x: "bar") => number
+>x : "bar"
+
+function g(x: string): number {
+>g : (x: "bar") => number
+>x : string
+
+    return 0;
+>0 : 0
+}
+
+let a = f;
+>a : (x: "foo") => number
+>f : (x: "foo") => number
+
+let b = g;
+>b : (x: "bar") => number
+>g : (x: "bar") => number
+
+a = b;
+>a = b : (x: "bar") => number
+>a : (x: "foo") => number
+>b : (x: "bar") => number
+
+b = a;
+>b = a : (x: "foo") => number
+>b : (x: "bar") => number
+>a : (x: "foo") => number
+

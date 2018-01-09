@@ -12,13 +12,13 @@
 
 For the latest stable version:
 
-```
+```bash
 npm install -g typescript
 ```
 
 For our nightly builds:
 
-```
+```bash
 npm install -g typescript@next
 ```
 
@@ -50,19 +50,19 @@ In order to build the TypeScript compiler, ensure that you have [Git](https://gi
 
 Clone a copy of the repo:
 
-```
+```bash
 git clone https://github.com/Microsoft/TypeScript.git
 ```
 
 Change to the TypeScript directory:
 
-```
+```bash
 cd TypeScript
 ```
 
 Install Gulp tools and dev dependencies:
 
-```
+```bash
 npm install -g gulp
 npm install
 ```
@@ -88,7 +88,7 @@ gulp help             # List the above commands.
 
 ## Usage
 
-```shell
+```bash
 node built/local/tsc.js hello.ts
 ```
 

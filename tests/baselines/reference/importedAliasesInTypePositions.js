@@ -30,7 +30,7 @@ define(["require", "exports"], function (require, exports) {
             (function (mod) {
                 var name;
                 (function (name) {
-                    var ReferredTo = (function () {
+                    var ReferredTo = /** @class */ (function () {
                         function ReferredTo() {
                         }
                         ReferredTo.prototype.doSomething = function () {
@@ -49,7 +49,7 @@ define(["require", "exports"], function (require, exports) {
     exports.__esModule = true;
     var ImportingModule;
     (function (ImportingModule) {
-        var UsesReferredType = (function () {
+        var UsesReferredType = /** @class */ (function () {
             function UsesReferredType(referred) {
                 this.referred = referred;
             }

@@ -1,0 +1,43 @@
+=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInheritance.ts ===
+abstract class A {}
+>A : A
+
+abstract class B extends A {}
+>B : B
+>A : A
+
+class C extends A {}
+>C : C
+>A : A
+
+abstract class AA {
+>AA : AA
+
+    abstract foo();
+>foo : () => any
+}
+
+abstract class BB extends AA {}
+>BB : BB
+>AA : AA
+
+class CC extends AA {}
+>CC : CC
+>AA : AA
+
+class DD extends BB {}
+>DD : DD
+>BB : BB
+
+abstract class EE extends BB {}
+>EE : EE
+>BB : BB
+
+class FF extends CC {}
+>FF : FF
+>CC : CC
+
+abstract class GG extends CC {}
+>GG : GG
+>CC : CC
+

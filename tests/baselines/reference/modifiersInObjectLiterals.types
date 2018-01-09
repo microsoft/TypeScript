@@ -1,0 +1,40 @@
+=== tests/cases/compiler/modifiersInObjectLiterals.ts ===
+let data = {
+>data : { foo: string; bar: string; baz: string; noWay: string; }
+>{	public foo: 'hey',	private bar: 'nay',	protected baz: 'oh my',	abstract noWay: 'yes'	} : { foo: string; bar: string; baz: string; noWay: string; }
+
+	public foo: 'hey',
+>foo : string
+>'hey' : "hey"
+
+	private bar: 'nay',
+>bar : string
+>'nay' : "nay"
+
+	protected baz: 'oh my',
+>baz : string
+>'oh my' : "oh my"
+
+	abstract noWay: 'yes'	
+>noWay : string
+>'yes' : "yes"
+
+};
+
+data.foo + data.bar + data.baz + data.noWay
+>data.foo + data.bar + data.baz + data.noWay : string
+>data.foo + data.bar + data.baz : string
+>data.foo + data.bar : string
+>data.foo : string
+>data : { foo: string; bar: string; baz: string; noWay: string; }
+>foo : string
+>data.bar : string
+>data : { foo: string; bar: string; baz: string; noWay: string; }
+>bar : string
+>data.baz : string
+>data : { foo: string; bar: string; baz: string; noWay: string; }
+>baz : string
+>data.noWay : string
+>data : { foo: string; bar: string; baz: string; noWay: string; }
+>noWay : string
+

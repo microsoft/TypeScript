@@ -597,7 +597,7 @@ var TypeScript;
     // Helper class representing a path from a root ast node to a (grand)child ast node.
     // This is helpful as our tree don't have parents.
     //
-    var AstPath = (function () {
+    var AstPath = /** @class */ (function () {
         function AstPath() {
             this.asts = [];
             this.top = -1;
@@ -950,7 +950,7 @@ var TypeScript;
         return true;
     }
     TypeScript.isValidAstNode = isValidAstNode;
-    var AstPathContext = (function () {
+    var AstPathContext = /** @class */ (function () {
         function AstPathContext() {
             this.path = new TypeScript.AstPath();
         }

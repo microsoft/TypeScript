@@ -10,7 +10,7 @@ class DebugClass {
 }
 
 //// [commentsOnReturnStatement1.js]
-var DebugClass = (function () {
+var DebugClass = /** @class */ (function () {
     function DebugClass() {
     }
     DebugClass.debugFunc = function () {

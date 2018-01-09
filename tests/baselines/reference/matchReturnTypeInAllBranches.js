@@ -37,7 +37,7 @@ cookieMonster = new IceCreamMonster("Chocolate Chip", false, "COOOOOKIE", "Cooki
 
 //// [matchReturnTypeInAllBranches.js]
 // Represents a monster who enjoys ice cream
-var IceCreamMonster = (function () {
+var IceCreamMonster = /** @class */ (function () {
     function IceCreamMonster(iceCreamFlavor, wantsSprinkles, soundsWhenEating, name) {
         this.iceCreamFlavor = iceCreamFlavor;
         this.iceCreamRemaining = 100;

@@ -1,0 +1,38 @@
+=== tests/cases/compiler/optionalParamAssignmentCompat.ts ===
+interface I1 {
+>I1 : Symbol(I1, Decl(optionalParamAssignmentCompat.ts, 0, 0))
+
+    (p1: number, p2: string): void;
+>p1 : Symbol(p1, Decl(optionalParamAssignmentCompat.ts, 1, 5))
+>p2 : Symbol(p2, Decl(optionalParamAssignmentCompat.ts, 1, 16))
+}
+interface I2 {
+>I2 : Symbol(I2, Decl(optionalParamAssignmentCompat.ts, 2, 1))
+
+    p1: I1;
+>p1 : Symbol(I2.p1, Decl(optionalParamAssignmentCompat.ts, 3, 14))
+>I1 : Symbol(I1, Decl(optionalParamAssignmentCompat.ts, 0, 0))
+
+    m1(p1?: string): I1;
+>m1 : Symbol(I2.m1, Decl(optionalParamAssignmentCompat.ts, 4, 11))
+>p1 : Symbol(p1, Decl(optionalParamAssignmentCompat.ts, 5, 7))
+>I1 : Symbol(I1, Decl(optionalParamAssignmentCompat.ts, 0, 0))
+}
+var i2: I2;
+>i2 : Symbol(i2, Decl(optionalParamAssignmentCompat.ts, 7, 3))
+>I2 : Symbol(I2, Decl(optionalParamAssignmentCompat.ts, 2, 1))
+
+var c: I1 = i2.p1; // should be ok
+>c : Symbol(c, Decl(optionalParamAssignmentCompat.ts, 8, 3))
+>I1 : Symbol(I1, Decl(optionalParamAssignmentCompat.ts, 0, 0))
+>i2.p1 : Symbol(I2.p1, Decl(optionalParamAssignmentCompat.ts, 3, 14))
+>i2 : Symbol(i2, Decl(optionalParamAssignmentCompat.ts, 7, 3))
+>p1 : Symbol(I2.p1, Decl(optionalParamAssignmentCompat.ts, 3, 14))
+
+var d: I1 = i2.m1; // should error
+>d : Symbol(d, Decl(optionalParamAssignmentCompat.ts, 9, 3))
+>I1 : Symbol(I1, Decl(optionalParamAssignmentCompat.ts, 0, 0))
+>i2.m1 : Symbol(I2.m1, Decl(optionalParamAssignmentCompat.ts, 4, 11))
+>i2 : Symbol(i2, Decl(optionalParamAssignmentCompat.ts, 7, 3))
+>m1 : Symbol(I2.m1, Decl(optionalParamAssignmentCompat.ts, 4, 11))
+

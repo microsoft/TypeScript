@@ -26,20 +26,20 @@
 ////     /**
 ////      * @mytag1 some comments
 ////      * some more comments about mytag1
-////      * @mytag2 
+////      * @mytag2
 ////      * here all the comments are on a new line
-////      * @mytag3 
+////      * @mytag3
 ////      * @mytag
 ////      */
 ////     property2: number;
-////     /** 
+////     /**
 ////      * @returns {number} a value
 ////      */
 ////     method3(): number { return 3; }
 ////     /**
 ////      * @param {string} foo A value.
 ////      * @returns {number} Another value
-////      * @mytag 
+////      * @mytag
 ////      */
 ////     method4(foo: string): number { return 3; }
 ////     /** @mytag */
@@ -69,7 +69,12 @@ verify.currentSignatureHelpTagsAre([{name: "mytag", text:"comment1 comment2"}])
 goTo.marker("12");
 verify.currentSignatureHelpTagsAre([{name: "mytag", text:""}])
 goTo.marker("13");
-verify.currentSignatureHelpTagsAre([])
+verify.currentSignatureHelpTagsAre([{ name: "returns", text: "a value" }])
 
 goTo.marker('14');
-verify.completionEntryDetailIs("newMethod", "(method) Foo.newMethod(): void", "method documentation", "method", [{name: "mytag", text: "a JSDoc tag"}]);
+verify.completionEntryDetailIs(
+    "newMethod",
+    "(method) Foo.newMethod(): void",
+    "method documentation",
+    "method",
+    [{name: "mytag", text: "a JSDoc tag"}]);

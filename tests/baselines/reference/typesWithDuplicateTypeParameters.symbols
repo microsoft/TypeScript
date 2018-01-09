@@ -1,0 +1,34 @@
+=== tests/cases/conformance/types/typeParameters/typeParameterLists/typesWithDuplicateTypeParameters.ts ===
+class C<T, T> { }
+>C : Symbol(C, Decl(typesWithDuplicateTypeParameters.ts, 0, 0))
+>T : Symbol(T, Decl(typesWithDuplicateTypeParameters.ts, 0, 8), Decl(typesWithDuplicateTypeParameters.ts, 0, 10))
+>T : Symbol(T, Decl(typesWithDuplicateTypeParameters.ts, 0, 8), Decl(typesWithDuplicateTypeParameters.ts, 0, 10))
+
+class C2<T, U, T> { }
+>C2 : Symbol(C2, Decl(typesWithDuplicateTypeParameters.ts, 0, 17))
+>T : Symbol(T, Decl(typesWithDuplicateTypeParameters.ts, 1, 9), Decl(typesWithDuplicateTypeParameters.ts, 1, 14))
+>U : Symbol(U, Decl(typesWithDuplicateTypeParameters.ts, 1, 11))
+>T : Symbol(T, Decl(typesWithDuplicateTypeParameters.ts, 1, 9), Decl(typesWithDuplicateTypeParameters.ts, 1, 14))
+
+interface I<T, T> { }
+>I : Symbol(I, Decl(typesWithDuplicateTypeParameters.ts, 1, 21))
+>T : Symbol(T, Decl(typesWithDuplicateTypeParameters.ts, 3, 12), Decl(typesWithDuplicateTypeParameters.ts, 3, 14))
+>T : Symbol(T, Decl(typesWithDuplicateTypeParameters.ts, 3, 12), Decl(typesWithDuplicateTypeParameters.ts, 3, 14))
+
+interface I2<T, U, T> { }
+>I2 : Symbol(I2, Decl(typesWithDuplicateTypeParameters.ts, 3, 21))
+>T : Symbol(T, Decl(typesWithDuplicateTypeParameters.ts, 4, 13), Decl(typesWithDuplicateTypeParameters.ts, 4, 18))
+>U : Symbol(U, Decl(typesWithDuplicateTypeParameters.ts, 4, 15))
+>T : Symbol(T, Decl(typesWithDuplicateTypeParameters.ts, 4, 13), Decl(typesWithDuplicateTypeParameters.ts, 4, 18))
+
+function f<T, T>() { }
+>f : Symbol(f, Decl(typesWithDuplicateTypeParameters.ts, 4, 25))
+>T : Symbol(T, Decl(typesWithDuplicateTypeParameters.ts, 6, 11), Decl(typesWithDuplicateTypeParameters.ts, 6, 13))
+>T : Symbol(T, Decl(typesWithDuplicateTypeParameters.ts, 6, 11), Decl(typesWithDuplicateTypeParameters.ts, 6, 13))
+
+function f2<T, U, T>() { }
+>f2 : Symbol(f2, Decl(typesWithDuplicateTypeParameters.ts, 6, 22))
+>T : Symbol(T, Decl(typesWithDuplicateTypeParameters.ts, 7, 12), Decl(typesWithDuplicateTypeParameters.ts, 7, 17))
+>U : Symbol(U, Decl(typesWithDuplicateTypeParameters.ts, 7, 14))
+>T : Symbol(T, Decl(typesWithDuplicateTypeParameters.ts, 7, 12), Decl(typesWithDuplicateTypeParameters.ts, 7, 17))
+

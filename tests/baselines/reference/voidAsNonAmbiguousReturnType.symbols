@@ -1,0 +1,25 @@
+=== tests/cases/compiler/voidAsNonAmbiguousReturnType_1.ts ===
+///<reference path='voidAsNonAmbiguousReturnType_0.ts'/>
+import fs = require("./voidAsNonAmbiguousReturnType_0");
+>fs : Symbol(fs, Decl(voidAsNonAmbiguousReturnType_1.ts, 0, 0))
+
+function main() {
+>main : Symbol(main, Decl(voidAsNonAmbiguousReturnType_1.ts, 1, 56))
+
+ fs.mkdirSync('test'); // should not error - return types are the same
+>fs.mkdirSync : Symbol(fs.mkdirSync, Decl(voidAsNonAmbiguousReturnType_0.ts, 0, 0), Decl(voidAsNonAmbiguousReturnType_0.ts, 0, 61))
+>fs : Symbol(fs, Decl(voidAsNonAmbiguousReturnType_1.ts, 0, 0))
+>mkdirSync : Symbol(fs.mkdirSync, Decl(voidAsNonAmbiguousReturnType_0.ts, 0, 0), Decl(voidAsNonAmbiguousReturnType_0.ts, 0, 61))
+}
+
+=== tests/cases/compiler/voidAsNonAmbiguousReturnType_0.ts ===
+export function mkdirSync(path: string, mode?: number): void;
+>mkdirSync : Symbol(mkdirSync, Decl(voidAsNonAmbiguousReturnType_0.ts, 0, 0), Decl(voidAsNonAmbiguousReturnType_0.ts, 0, 61))
+>path : Symbol(path, Decl(voidAsNonAmbiguousReturnType_0.ts, 0, 26))
+>mode : Symbol(mode, Decl(voidAsNonAmbiguousReturnType_0.ts, 0, 39))
+
+export function mkdirSync(path: string, mode?: string): void {}
+>mkdirSync : Symbol(mkdirSync, Decl(voidAsNonAmbiguousReturnType_0.ts, 0, 0), Decl(voidAsNonAmbiguousReturnType_0.ts, 0, 61))
+>path : Symbol(path, Decl(voidAsNonAmbiguousReturnType_0.ts, 1, 26))
+>mode : Symbol(mode, Decl(voidAsNonAmbiguousReturnType_0.ts, 1, 39))
+

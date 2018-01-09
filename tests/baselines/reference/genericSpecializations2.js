@@ -20,7 +20,7 @@ class StringFoo3 implements IFoo<string> {
 
 
 //// [genericSpecializations2.js]
-var IFoo = (function () {
+var IFoo = /** @class */ (function () {
     function IFoo() {
     }
     IFoo.prototype.foo = function (x) {
@@ -28,19 +28,19 @@ var IFoo = (function () {
     };
     return IFoo;
 }());
-var IntFooBad = (function () {
+var IntFooBad = /** @class */ (function () {
     function IntFooBad() {
     }
     IntFooBad.prototype.foo = function (x) { return null; };
     return IntFooBad;
 }());
-var StringFoo2 = (function () {
+var StringFoo2 = /** @class */ (function () {
     function StringFoo2() {
     }
     StringFoo2.prototype.foo = function (x) { return null; };
     return StringFoo2;
 }());
-var StringFoo3 = (function () {
+var StringFoo3 = /** @class */ (function () {
     function StringFoo3() {
     }
     StringFoo3.prototype.foo = function (x) { return null; };

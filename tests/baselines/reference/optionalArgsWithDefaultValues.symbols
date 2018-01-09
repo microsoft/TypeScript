@@ -1,0 +1,33 @@
+=== tests/cases/compiler/optionalArgsWithDefaultValues.ts ===
+function foo(x: number, y?:boolean=false, z?=0) {}
+>foo : Symbol(foo, Decl(optionalArgsWithDefaultValues.ts, 0, 0))
+>x : Symbol(x, Decl(optionalArgsWithDefaultValues.ts, 0, 13))
+>y : Symbol(y, Decl(optionalArgsWithDefaultValues.ts, 0, 23))
+>z : Symbol(z, Decl(optionalArgsWithDefaultValues.ts, 0, 41))
+
+class CCC {
+>CCC : Symbol(CCC, Decl(optionalArgsWithDefaultValues.ts, 0, 50))
+
+    public foo(x: number, y?:boolean=false, z?=0) {}
+>foo : Symbol(CCC.foo, Decl(optionalArgsWithDefaultValues.ts, 2, 11))
+>x : Symbol(x, Decl(optionalArgsWithDefaultValues.ts, 3, 15))
+>y : Symbol(y, Decl(optionalArgsWithDefaultValues.ts, 3, 25))
+>z : Symbol(z, Decl(optionalArgsWithDefaultValues.ts, 3, 43))
+
+    static foo2(x: number, y?:boolean=false, z?=0) {}
+>foo2 : Symbol(CCC.foo2, Decl(optionalArgsWithDefaultValues.ts, 3, 52))
+>x : Symbol(x, Decl(optionalArgsWithDefaultValues.ts, 4, 16))
+>y : Symbol(y, Decl(optionalArgsWithDefaultValues.ts, 4, 26))
+>z : Symbol(z, Decl(optionalArgsWithDefaultValues.ts, 4, 44))
+}
+
+var a = (x?=0) => { return 1; };
+>a : Symbol(a, Decl(optionalArgsWithDefaultValues.ts, 7, 3))
+>x : Symbol(x, Decl(optionalArgsWithDefaultValues.ts, 7, 9))
+
+var b = (x, y?:number = 2) => { x; };
+>b : Symbol(b, Decl(optionalArgsWithDefaultValues.ts, 8, 3))
+>x : Symbol(x, Decl(optionalArgsWithDefaultValues.ts, 8, 9))
+>y : Symbol(y, Decl(optionalArgsWithDefaultValues.ts, 8, 11))
+>x : Symbol(x, Decl(optionalArgsWithDefaultValues.ts, 8, 9))
+

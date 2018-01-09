@@ -1,8 +1,6 @@
 ///<reference path='services.ts' />
 /* @internal */
 namespace ts.SignatureHelp {
-    const emptyArray: any[] = [];
-
     export const enum ArgumentListKind {
         TypeArguments,
         CallArguments,
@@ -67,14 +65,14 @@ namespace ts.SignatureHelp {
                 ? (<PropertyAccessExpression>expression).name
                 : undefined;
 
-        if (!name || !name.text) {
+        if (!name || !name.escapedText) {
             return undefined;
         }
 
         const typeChecker = program.getTypeChecker();
         for (const sourceFile of program.getSourceFiles()) {
             const nameToDeclarations = sourceFile.getNamedDeclarations();
-            const declarations = nameToDeclarations.get(unescapeLeadingUnderscores(name.text));
+            const declarations = nameToDeclarations.get(name.text);
 
             if (declarations) {
                 for (const declaration of declarations) {
@@ -138,7 +136,9 @@ namespace ts.SignatureHelp {
 
             const kind = invocation.typeArguments && invocation.typeArguments.pos === list.pos ? ArgumentListKind.TypeArguments : ArgumentListKind.CallArguments;
             const argumentCount = getArgumentCount(list);
-            Debug.assert(argumentIndex === 0 || argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`);
+            if (argumentIndex !== 0) {
+                Debug.assertLessThan(argumentIndex, argumentCount);
+            }
             const argumentsSpan = getApplicableSpanForArguments(list, sourceFile);
             return { kind, invocation, argumentsSpan, argumentIndex, argumentCount };
         }
@@ -197,7 +197,7 @@ namespace ts.SignatureHelp {
     function getArgumentIndex(argumentsList: Node, node: Node) {
         // The list we got back can include commas.  In the presence of errors it may
         // also just have nodes without commas.  For example "Foo(a b c)" will have 3
-        // args without commas.   We want to find what index we're at.  So we count
+        // args without commas. We want to find what index we're at.  So we count
         // forward until we hit ourselves, only incrementing the index if it isn't a
         // comma.
         //
@@ -224,12 +224,12 @@ namespace ts.SignatureHelp {
         // The argument count for a list is normally the number of non-comma children it has.
         // For example, if you have "Foo(a,b)" then there will be three children of the arg
         // list 'a' '<comma>' 'b'.  So, in this case the arg count will be 2.  However, there
-        // is a small subtlety.  If you have  "Foo(a,)", then the child list will just have
+        // is a small subtlety.  If you have "Foo(a,)", then the child list will just have
         // 'a' '<comma>'.  So, in the case where the last child is a comma, we increase the
         // arg count by one to compensate.
         //
-        // Note: this subtlety only applies to the last comma.  If you had "Foo(a,,"  then
-        // we'll have:  'a' '<comma>' '<missing>'
+        // Note: this subtlety only applies to the last comma.  If you had "Foo(a,," then
+        // we'll have: 'a' '<comma>' '<missing>'
         // That will give us 2 non-commas.  We then add one for the last comma, giving us an
         // arg count of 3.
         const listChildren = argumentsList.getChildren();
@@ -253,9 +253,11 @@ namespace ts.SignatureHelp {
         //          not enough to put us in the substitution expression; we should consider ourselves part of
         //          the *next* span's expression by offsetting the index (argIndex = (spanIndex + 1) + 1).
         //
+        // tslint:disable no-double-space
         // Example: f  `# abcd $#{#  1 + 1#  }# efghi ${ #"#hello"#  }  #  `
         //              ^       ^ ^       ^   ^          ^ ^      ^     ^
         // Case:        1       1 3       2   1          3 2      2     1
+        // tslint:enable no-double-space
         Debug.assert(position >= node.getStart(), "Assumed 'position' could not occur before node.");
         if (isTemplateLiteralKind(node.kind)) {
             if (isInsideTemplateLiteral(<LiteralExpression>node, position)) {
@@ -272,7 +274,9 @@ namespace ts.SignatureHelp {
             ? 1
             : (<TemplateExpression>tagExpression.template).templateSpans.length + 1;
 
-        Debug.assert(argumentIndex === 0 || argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`);
+        if (argumentIndex !== 0) {
+            Debug.assertLessThan(argumentIndex, argumentCount);
+        }
         return {
             kind: ArgumentListKind.TaggedTemplateArguments,
             invocation: tagExpression,
@@ -305,9 +309,8 @@ namespace ts.SignatureHelp {
         // Otherwise, we will not show signature help past the expression.
         // For example,
         //
-        //      `  ${ 1 + 1        foo(10)
-        //       |        |
-        //
+        //      ` ${ 1 + 1 foo(10)
+        //       |       |
         // This is because a Missing node has no width. However, what we actually want is to include trivia
         // leading up to the next token in case the user is about to type in a TemplateMiddle or TemplateTail.
         if (template.kind === SyntaxKind.TemplateExpression) {
@@ -370,8 +373,7 @@ namespace ts.SignatureHelp {
             if (isTypeParameterList) {
                 isVariadic = false; // type parameter lists are not variadic
                 prefixDisplayParts.push(punctuationPart(SyntaxKind.LessThanToken));
-                // Use `.mapper` to ensure we get the generic type arguments even if this is an instantiated version of the signature.
-                const typeParameters = candidateSignature.mapper ? candidateSignature.mapper.mappedTypes : candidateSignature.typeParameters;
+                const typeParameters = (candidateSignature.target || candidateSignature).typeParameters;
                 signatureHelpParameters = typeParameters && typeParameters.length > 0 ? map(typeParameters, createSignatureHelpParameterForTypeParameter) : emptyArray;
                 suffixDisplayParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
                 const parameterParts = mapToDisplayParts(writer =>
@@ -399,12 +401,14 @@ namespace ts.SignatureHelp {
                 suffixDisplayParts,
                 separatorDisplayParts: [punctuationPart(SyntaxKind.CommaToken), spacePart()],
                 parameters: signatureHelpParameters,
-                documentation: candidateSignature.getDocumentationComment(),
+                documentation: candidateSignature.getDocumentationComment(typeChecker),
                 tags: candidateSignature.getJsDocTags()
             };
         });
 
-        Debug.assert(argumentIndex === 0 || argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`);
+        if (argumentIndex !== 0) {
+            Debug.assertLessThan(argumentIndex, argumentCount);
+        }
 
         const selectedItemIndex = candidates.indexOf(resolvedSignature);
         Debug.assert(selectedItemIndex !== -1); // If candidates is non-empty it should always include bestSignature. We check for an empty candidates before calling this function.
@@ -416,8 +420,8 @@ namespace ts.SignatureHelp {
                 typeChecker.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, invocation));
 
             return {
-                name: parameter.getUnescapedName(),
-                documentation: parameter.getDocumentationComment(),
+                name: parameter.name,
+                documentation: parameter.getDocumentationComment(typeChecker),
                 displayParts,
                 isOptional: typeChecker.isOptionalParameter(<ParameterDeclaration>parameter.valueDeclaration)
             };
@@ -428,7 +432,7 @@ namespace ts.SignatureHelp {
                 typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplay(typeParameter, writer, invocation));
 
             return {
-                name: typeParameter.symbol.getUnescapedName(),
+                name: typeParameter.symbol.name,
                 documentation: emptyArray,
                 displayParts,
                 isOptional: false

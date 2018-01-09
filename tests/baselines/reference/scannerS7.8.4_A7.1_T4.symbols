@@ -1,0 +1,17 @@
+=== tests/cases/conformance/scanner/ecmascript5/scannerS7.8.4_A7.1_T4.ts ===
+// Copyright 2009 the Sputnik authors.  All rights reserved.
+No type information for this code.// This code is governed by the BSD license found in the LICENSE file.
+No type information for this code.
+No type information for this code./**
+No type information for this code. * EscapeSequence :: UnicodeEscapeSequence :: u HexDigit HexDigit HexDigit HexDigit
+No type information for this code. *
+No type information for this code. * @path ch07/7.8/7.8.4/S7.8.4_A7.1_T4.js
+No type information for this code. * @description UnicodeEscapeSequence :: u000G is incorrect
+No type information for this code. * @negative
+No type information for this code. */
+No type information for this code.
+No type information for this code.//CHECK#
+No type information for this code."\u000G"
+No type information for this code.
+No type information for this code.
+No type information for this code.

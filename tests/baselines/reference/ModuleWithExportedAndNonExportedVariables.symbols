@@ -1,0 +1,26 @@
+=== tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedVariables.ts ===
+module A {
+>A : Symbol(A, Decl(ModuleWithExportedAndNonExportedVariables.ts, 0, 0))
+
+    export var x = 'hello world'
+>x : Symbol(x, Decl(ModuleWithExportedAndNonExportedVariables.ts, 1, 14))
+
+    var y = 12;
+>y : Symbol(y, Decl(ModuleWithExportedAndNonExportedVariables.ts, 2, 7))
+}
+
+
+var x: string;
+>x : Symbol(x, Decl(ModuleWithExportedAndNonExportedVariables.ts, 6, 3), Decl(ModuleWithExportedAndNonExportedVariables.ts, 7, 3))
+
+var x = A.x;
+>x : Symbol(x, Decl(ModuleWithExportedAndNonExportedVariables.ts, 6, 3), Decl(ModuleWithExportedAndNonExportedVariables.ts, 7, 3))
+>A.x : Symbol(A.x, Decl(ModuleWithExportedAndNonExportedVariables.ts, 1, 14))
+>A : Symbol(A, Decl(ModuleWithExportedAndNonExportedVariables.ts, 0, 0))
+>x : Symbol(A.x, Decl(ModuleWithExportedAndNonExportedVariables.ts, 1, 14))
+
+// Error, since y is not exported
+var y = A.y;
+>y : Symbol(y, Decl(ModuleWithExportedAndNonExportedVariables.ts, 10, 3))
+>A : Symbol(A, Decl(ModuleWithExportedAndNonExportedVariables.ts, 0, 0))
+

@@ -1,0 +1,9 @@
+=== tests/cases/compiler/thisInModule.ts ===
+module myMod {
+>myMod : Symbol(myMod, Decl(thisInModule.ts, 0, 0))
+
+    var x;
+>x : Symbol(x, Decl(thisInModule.ts, 1, 7))
+
+    this.x = 5;
+}

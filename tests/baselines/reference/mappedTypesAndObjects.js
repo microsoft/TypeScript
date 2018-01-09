@@ -59,7 +59,7 @@ function f3(x) {
 }
 ;
 // Repro from #13747
-var Form = (function () {
+var Form = /** @class */ (function () {
     function Form() {
         this.values = {};
     }

@@ -30,12 +30,12 @@ var __extends = (this && this.__extends) || (function () {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var C1 = (function () {
+    var C1 = /** @class */ (function () {
         function C1() {
         }
         return C1;
     }());
-    var Test1 = (function (_super) {
+    var Test1 = /** @class */ (function (_super) {
         __extends(Test1, _super);
         function Test1() {
             return _super !== null && _super.apply(this, arguments) || this;

@@ -47,7 +47,7 @@ b.foo;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         return A;
@@ -91,3 +91,4 @@ export declare class A {
 }
 //// [withImportDecl_1.d.ts]
 /// <reference path="withImportDecl_0.d.ts" />
+export {};

@@ -6,7 +6,7 @@ class Foo {
 
 
 //// [staticGetterAndSetter.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     Object.defineProperty(Foo, "Foo", {

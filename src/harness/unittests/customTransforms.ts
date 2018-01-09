@@ -3,12 +3,11 @@
 
 namespace ts {
     describe("customTransforms", () => {
-        function emitsCorrectly(name: string, sources: { file: string, text: string }[], customTransformers: CustomTransformers) {
+        function emitsCorrectly(name: string, sources: { file: string, text: string }[], customTransformers: CustomTransformers, options: CompilerOptions = {}) {
             it(name, () => {
                 const roots = sources.map(source => createSourceFile(source.file, source.text, ScriptTarget.ES2015));
                 const fileMap = arrayToMap(roots, file => file.fileName);
                 const outputs = createMap<string>();
-                const options: CompilerOptions = {};
                 const host: CompilerHost = {
                     getSourceFile: (fileName) => fileMap.get(fileName),
                     getDefaultLibFileName: () => "lib.d.ts",
@@ -82,5 +81,25 @@ namespace ts {
         emitsCorrectly("before", sources, { before: [before] });
         emitsCorrectly("after", sources, { after: [after] });
         emitsCorrectly("both", sources, { before: [before], after: [after] });
+
+        emitsCorrectly("before+decorators", [{
+            file: "source.ts",
+            text: `
+                declare const dec: any;
+                class B {}
+                @dec export class C { constructor(b: B) { } }
+                'change'
+            `
+        }], {before: [
+            context => node => visitNode(node, function visitor(node: Node): Node {
+                if (isStringLiteral(node) && node.text === "change") return createLiteral("changed");
+                return visitEachChild(node, visitor, context);
+            })
+        ]}, {
+            target: ScriptTarget.ES5,
+            module: ModuleKind.ES2015,
+            emitDecoratorMetadata: true,
+            experimentalDecorators: true
+         });
     });
 }

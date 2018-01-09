@@ -31,6 +31,11 @@ class C {
     method() {
 >method : () => void
 
+        const loadAsync = import ("./0");
+>loadAsync : Promise<typeof "tests/cases/conformance/dynamicImport/0">
+>import ("./0") : Promise<typeof "tests/cases/conformance/dynamicImport/0">
+>"./0" : "./0"
+
         this.myModule.then(Zero => {
 >this.myModule.then(Zero => {            console.log(Zero.foo());        }, async err => {            console.log(err);            let one = await import("./1");            console.log(one.backup());        }) : Promise<void>
 >this.myModule.then : <TResult1 = typeof "tests/cases/conformance/dynamicImport/0", TResult2 = never>(onfulfilled?: (value: typeof "tests/cases/conformance/dynamicImport/0") => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>

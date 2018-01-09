@@ -1,0 +1,42 @@
+=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethod1.ts ===
+abstract class A {
+>A : Symbol(A, Decl(classAbstractUsingAbstractMethod1.ts, 0, 0))
+
+    abstract foo() : number;
+>foo : Symbol(A.foo, Decl(classAbstractUsingAbstractMethod1.ts, 0, 18))
+}
+
+class B extends A {
+>B : Symbol(B, Decl(classAbstractUsingAbstractMethod1.ts, 2, 1))
+>A : Symbol(A, Decl(classAbstractUsingAbstractMethod1.ts, 0, 0))
+
+    foo() { return 1; }
+>foo : Symbol(B.foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
+}
+
+abstract class C extends A  {
+>C : Symbol(C, Decl(classAbstractUsingAbstractMethod1.ts, 6, 1))
+>A : Symbol(A, Decl(classAbstractUsingAbstractMethod1.ts, 0, 0))
+
+    abstract foo() : number;
+>foo : Symbol(C.foo, Decl(classAbstractUsingAbstractMethod1.ts, 8, 29))
+}
+
+var a = new B;
+>a : Symbol(a, Decl(classAbstractUsingAbstractMethod1.ts, 12, 3))
+>B : Symbol(B, Decl(classAbstractUsingAbstractMethod1.ts, 2, 1))
+
+a.foo();
+>a.foo : Symbol(B.foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
+>a : Symbol(a, Decl(classAbstractUsingAbstractMethod1.ts, 12, 3))
+>foo : Symbol(B.foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
+
+a = new C; // error, cannot instantiate abstract class.
+>a : Symbol(a, Decl(classAbstractUsingAbstractMethod1.ts, 12, 3))
+>C : Symbol(C, Decl(classAbstractUsingAbstractMethod1.ts, 6, 1))
+
+a.foo();
+>a.foo : Symbol(B.foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
+>a : Symbol(a, Decl(classAbstractUsingAbstractMethod1.ts, 12, 3))
+>foo : Symbol(B.foo, Decl(classAbstractUsingAbstractMethod1.ts, 4, 19))
+

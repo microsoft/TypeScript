@@ -1,0 +1,285 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts ===
+// members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
+
+module TargetIsPublic {
+>TargetIsPublic : Symbol(TargetIsPublic, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 0, 0), Decl(assignmentCompatWithObjectMembersAccessibility.ts, 53, 1))
+
+    // targets
+    class Base {
+>Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 2, 23))
+
+        public foo: string;
+>foo : Symbol(Base.foo, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 4, 16))
+    }
+
+    interface I {
+>I : Symbol(I, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 6, 5))
+
+        foo: string;
+>foo : Symbol(I.foo, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 8, 17))
+    }
+
+    var a: { foo: string; }
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 12, 7))
+>foo : Symbol(foo, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 12, 12))
+
+    var b: Base;
+>b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 13, 7))
+>Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 2, 23))
+
+    var i: I;
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 14, 7))
+>I : Symbol(I, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 6, 5))
+
+    // sources
+    class D {
+>D : Symbol(D, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 14, 13))
+
+        public foo: string;
+>foo : Symbol(D.foo, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 17, 13))
+    }
+
+    class E {
+>E : Symbol(E, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 19, 5))
+
+        private foo: string;
+>foo : Symbol(E.foo, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 21, 13))
+    }
+    var d: D;
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 24, 7))
+>D : Symbol(D, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 14, 13))
+
+    var e: E;
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 25, 7))
+>E : Symbol(E, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 19, 5))
+
+    a = b;
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 12, 7))
+>b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 13, 7))
+
+    a = i;
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 12, 7))
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 14, 7))
+
+    a = d;
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 12, 7))
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 24, 7))
+
+    a = e; // error
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 12, 7))
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 25, 7))
+
+    b = a;
+>b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 13, 7))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 12, 7))
+
+    b = i;
+>b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 13, 7))
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 14, 7))
+
+    b = d;
+>b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 13, 7))
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 24, 7))
+
+    b = e; // error
+>b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 13, 7))
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 25, 7))
+
+    i = a;
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 14, 7))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 12, 7))
+
+    i = b;
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 14, 7))
+>b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 13, 7))
+
+    i = d;
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 14, 7))
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 24, 7))
+
+    i = e; // error
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 14, 7))
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 25, 7))
+
+    d = a;
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 24, 7))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 12, 7))
+
+    d = b;
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 24, 7))
+>b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 13, 7))
+
+    d = i;
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 24, 7))
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 14, 7))
+
+    d = e; // error
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 24, 7))
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 25, 7))
+
+    e = a; // errror
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 25, 7))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 12, 7))
+
+    e = b; // errror
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 25, 7))
+>b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 13, 7))
+
+    e = i; // errror
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 25, 7))
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 14, 7))
+
+    e = d; // errror
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 25, 7))
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 24, 7))
+
+    e = e; 
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 25, 7))
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 25, 7))
+
+}
+
+module TargetIsPublic {
+>TargetIsPublic : Symbol(TargetIsPublic, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 0, 0), Decl(assignmentCompatWithObjectMembersAccessibility.ts, 53, 1))
+
+    // targets
+    class Base {
+>Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 55, 23))
+
+        private foo: string;
+>foo : Symbol(Base.foo, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 57, 16))
+    }
+
+    interface I extends Base {
+>I : Symbol(I, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 59, 5))
+>Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 55, 23))
+    }
+
+    var a: { foo: string; }
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 64, 7))
+>foo : Symbol(foo, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 64, 12))
+
+    var b: Base;
+>b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 65, 7))
+>Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 55, 23))
+
+    var i: I;
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 66, 7))
+>I : Symbol(I, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 59, 5))
+
+    // sources
+    class D {
+>D : Symbol(D, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 66, 13))
+
+        public foo: string;
+>foo : Symbol(D.foo, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 69, 13))
+    }
+
+    class E {
+>E : Symbol(E, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 71, 5))
+
+        private foo: string;
+>foo : Symbol(E.foo, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 73, 13))
+    }
+
+    var d: D;
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 77, 7))
+>D : Symbol(D, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 66, 13))
+
+    var e: E;
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 78, 7))
+>E : Symbol(E, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 71, 5))
+
+    a = b; // error
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 64, 7))
+>b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 65, 7))
+
+    a = i; // error
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 64, 7))
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 66, 7))
+
+    a = d;
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 64, 7))
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 77, 7))
+
+    a = e; // error
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 64, 7))
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 78, 7))
+
+    b = a; // error
+>b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 65, 7))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 64, 7))
+
+    b = i;
+>b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 65, 7))
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 66, 7))
+
+    b = d; // error
+>b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 65, 7))
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 77, 7))
+
+    b = e; // error
+>b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 65, 7))
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 78, 7))
+
+    b = b;
+>b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 65, 7))
+>b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 65, 7))
+    
+    i = a; // error
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 66, 7))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 64, 7))
+
+    i = b;
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 66, 7))
+>b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 65, 7))
+
+    i = d; // error
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 66, 7))
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 77, 7))
+
+    i = e; // error
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 66, 7))
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 78, 7))
+
+    i = i;
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 66, 7))
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 66, 7))
+
+    d = a;
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 77, 7))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 64, 7))
+
+    d = b; // error
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 77, 7))
+>b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 65, 7))
+
+    d = i; // error
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 77, 7))
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 66, 7))
+
+    d = e; // error
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 77, 7))
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 78, 7))
+
+    e = a; // errror
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 78, 7))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 64, 7))
+
+    e = b; // errror
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 78, 7))
+>b : Symbol(b, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 65, 7))
+
+    e = i; // errror
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 78, 7))
+>i : Symbol(i, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 66, 7))
+
+    e = d; // errror
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 78, 7))
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 77, 7))
+
+    e = e;
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 78, 7))
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersAccessibility.ts, 78, 7))
+
+}

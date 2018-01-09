@@ -34,3 +34,12 @@ var C4 = function () {
 
 const c4_v1 = C4();
 const c4_v2 = new C4();
+
+var c5_v1;
+c5_v1 = function f() { };
+new c5_v1();
+
+var c5_v2;
+c5_v2 = class { };
+new c5_v2();
+

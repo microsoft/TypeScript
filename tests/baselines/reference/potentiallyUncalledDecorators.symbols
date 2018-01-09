@@ -1,0 +1,200 @@
+=== tests/cases/compiler/potentiallyUncalledDecorators.ts ===
+// Angular-style Input/Output API:
+declare function Input(bindingPropertyName?: string): any;
+>Input : Symbol(Input, Decl(potentiallyUncalledDecorators.ts, 0, 0))
+>bindingPropertyName : Symbol(bindingPropertyName, Decl(potentiallyUncalledDecorators.ts, 1, 23))
+
+class FooComponent {
+>FooComponent : Symbol(FooComponent, Decl(potentiallyUncalledDecorators.ts, 1, 58))
+
+    @Input foo: string;
+>Input : Symbol(Input, Decl(potentiallyUncalledDecorators.ts, 0, 0))
+>foo : Symbol(FooComponent.foo, Decl(potentiallyUncalledDecorators.ts, 2, 20))
+}
+
+// Glimmer-style tracked API:
+declare const tracked: PropertyDecorator & { (...watchedProperties: string[]): any; }
+>tracked : Symbol(tracked, Decl(potentiallyUncalledDecorators.ts, 7, 13))
+>PropertyDecorator : Symbol(PropertyDecorator, Decl(lib.es5.d.ts, --, --))
+>watchedProperties : Symbol(watchedProperties, Decl(potentiallyUncalledDecorators.ts, 7, 46))
+
+class Person {
+>Person : Symbol(Person, Decl(potentiallyUncalledDecorators.ts, 7, 85))
+
+    @tracked person; any;
+>tracked : Symbol(tracked, Decl(potentiallyUncalledDecorators.ts, 7, 13))
+>person : Symbol(Person.person, Decl(potentiallyUncalledDecorators.ts, 9, 14))
+>any : Symbol(Person.any, Decl(potentiallyUncalledDecorators.ts, 10, 20))
+}
+
+class MultiplyByTwo {
+>MultiplyByTwo : Symbol(MultiplyByTwo, Decl(potentiallyUncalledDecorators.ts, 11, 1))
+
+    args: any;
+>args : Symbol(MultiplyByTwo.args, Decl(potentiallyUncalledDecorators.ts, 13, 21))
+
+    @tracked('args')
+>tracked : Symbol(tracked, Decl(potentiallyUncalledDecorators.ts, 7, 13))
+
+    get multiplied() {
+>multiplied : Symbol(MultiplyByTwo.multiplied, Decl(potentiallyUncalledDecorators.ts, 14, 14))
+
+        return this.args.number * 2;
+>this.args : Symbol(MultiplyByTwo.args, Decl(potentiallyUncalledDecorators.ts, 13, 21))
+>this : Symbol(MultiplyByTwo, Decl(potentiallyUncalledDecorators.ts, 11, 1))
+>args : Symbol(MultiplyByTwo.args, Decl(potentiallyUncalledDecorators.ts, 13, 21))
+    }
+}
+
+// Other fun stuff.
+
+interface OmniDecorator extends MethodDecorator, ClassDecorator, PropertyDecorator {
+>OmniDecorator : Symbol(OmniDecorator, Decl(potentiallyUncalledDecorators.ts, 19, 1))
+>MethodDecorator : Symbol(MethodDecorator, Decl(lib.es5.d.ts, --, --))
+>ClassDecorator : Symbol(ClassDecorator, Decl(lib.es5.d.ts, --, --))
+>PropertyDecorator : Symbol(PropertyDecorator, Decl(lib.es5.d.ts, --, --))
+}
+
+declare function noArgs(): OmniDecorator;
+>noArgs : Symbol(noArgs, Decl(potentiallyUncalledDecorators.ts, 24, 1))
+>OmniDecorator : Symbol(OmniDecorator, Decl(potentiallyUncalledDecorators.ts, 19, 1))
+
+declare function allRest(...args: any[]): OmniDecorator;
+>allRest : Symbol(allRest, Decl(potentiallyUncalledDecorators.ts, 26, 41))
+>args : Symbol(args, Decl(potentiallyUncalledDecorators.ts, 27, 25))
+>OmniDecorator : Symbol(OmniDecorator, Decl(potentiallyUncalledDecorators.ts, 19, 1))
+
+declare function oneOptional(x?: any): OmniDecorator;
+>oneOptional : Symbol(oneOptional, Decl(potentiallyUncalledDecorators.ts, 27, 56))
+>x : Symbol(x, Decl(potentiallyUncalledDecorators.ts, 28, 29))
+>OmniDecorator : Symbol(OmniDecorator, Decl(potentiallyUncalledDecorators.ts, 19, 1))
+
+declare function twoOptional(x?: any, y?: any): OmniDecorator;
+>twoOptional : Symbol(twoOptional, Decl(potentiallyUncalledDecorators.ts, 28, 53))
+>x : Symbol(x, Decl(potentiallyUncalledDecorators.ts, 29, 29))
+>y : Symbol(y, Decl(potentiallyUncalledDecorators.ts, 29, 37))
+>OmniDecorator : Symbol(OmniDecorator, Decl(potentiallyUncalledDecorators.ts, 19, 1))
+
+declare function threeOptional(x?: any, y?: any, z?: any): OmniDecorator;
+>threeOptional : Symbol(threeOptional, Decl(potentiallyUncalledDecorators.ts, 29, 62))
+>x : Symbol(x, Decl(potentiallyUncalledDecorators.ts, 30, 31))
+>y : Symbol(y, Decl(potentiallyUncalledDecorators.ts, 30, 39))
+>z : Symbol(z, Decl(potentiallyUncalledDecorators.ts, 30, 48))
+>OmniDecorator : Symbol(OmniDecorator, Decl(potentiallyUncalledDecorators.ts, 19, 1))
+
+declare function oneOptionalWithRest(x?: any, ...args: any[]): OmniDecorator;
+>oneOptionalWithRest : Symbol(oneOptionalWithRest, Decl(potentiallyUncalledDecorators.ts, 30, 73))
+>x : Symbol(x, Decl(potentiallyUncalledDecorators.ts, 31, 37))
+>args : Symbol(args, Decl(potentiallyUncalledDecorators.ts, 31, 45))
+>OmniDecorator : Symbol(OmniDecorator, Decl(potentiallyUncalledDecorators.ts, 19, 1))
+
+declare const anyDec: any;
+>anyDec : Symbol(anyDec, Decl(potentiallyUncalledDecorators.ts, 32, 13))
+
+@noArgs
+>noArgs : Symbol(noArgs, Decl(potentiallyUncalledDecorators.ts, 24, 1))
+
+class A {
+>A : Symbol(A, Decl(potentiallyUncalledDecorators.ts, 32, 26))
+
+    @noArgs foo: any;
+>noArgs : Symbol(noArgs, Decl(potentiallyUncalledDecorators.ts, 24, 1))
+>foo : Symbol(A.foo, Decl(potentiallyUncalledDecorators.ts, 35, 9))
+
+    @noArgs bar() { }
+>noArgs : Symbol(noArgs, Decl(potentiallyUncalledDecorators.ts, 24, 1))
+>bar : Symbol(A.bar, Decl(potentiallyUncalledDecorators.ts, 36, 21))
+}
+
+@allRest
+>allRest : Symbol(allRest, Decl(potentiallyUncalledDecorators.ts, 26, 41))
+
+class B {
+>B : Symbol(B, Decl(potentiallyUncalledDecorators.ts, 38, 1))
+
+    @allRest foo: any;
+>allRest : Symbol(allRest, Decl(potentiallyUncalledDecorators.ts, 26, 41))
+>foo : Symbol(B.foo, Decl(potentiallyUncalledDecorators.ts, 41, 9))
+
+    @allRest bar() { }
+>allRest : Symbol(allRest, Decl(potentiallyUncalledDecorators.ts, 26, 41))
+>bar : Symbol(B.bar, Decl(potentiallyUncalledDecorators.ts, 42, 22))
+}
+
+@oneOptional
+>oneOptional : Symbol(oneOptional, Decl(potentiallyUncalledDecorators.ts, 27, 56))
+
+class C {
+>C : Symbol(C, Decl(potentiallyUncalledDecorators.ts, 44, 1))
+
+    @oneOptional foo: any;
+>oneOptional : Symbol(oneOptional, Decl(potentiallyUncalledDecorators.ts, 27, 56))
+>foo : Symbol(C.foo, Decl(potentiallyUncalledDecorators.ts, 47, 9))
+
+    @oneOptional bar() { }
+>oneOptional : Symbol(oneOptional, Decl(potentiallyUncalledDecorators.ts, 27, 56))
+>bar : Symbol(C.bar, Decl(potentiallyUncalledDecorators.ts, 48, 26))
+}
+
+@twoOptional
+>twoOptional : Symbol(twoOptional, Decl(potentiallyUncalledDecorators.ts, 28, 53))
+
+class D {
+>D : Symbol(D, Decl(potentiallyUncalledDecorators.ts, 50, 1))
+
+    @twoOptional foo: any;
+>twoOptional : Symbol(twoOptional, Decl(potentiallyUncalledDecorators.ts, 28, 53))
+>foo : Symbol(D.foo, Decl(potentiallyUncalledDecorators.ts, 53, 9))
+
+    @twoOptional bar() { }
+>twoOptional : Symbol(twoOptional, Decl(potentiallyUncalledDecorators.ts, 28, 53))
+>bar : Symbol(D.bar, Decl(potentiallyUncalledDecorators.ts, 54, 26))
+}
+
+@threeOptional
+>threeOptional : Symbol(threeOptional, Decl(potentiallyUncalledDecorators.ts, 29, 62))
+
+class E {
+>E : Symbol(E, Decl(potentiallyUncalledDecorators.ts, 56, 1))
+
+    @threeOptional foo: any;
+>threeOptional : Symbol(threeOptional, Decl(potentiallyUncalledDecorators.ts, 29, 62))
+>foo : Symbol(E.foo, Decl(potentiallyUncalledDecorators.ts, 59, 9))
+
+    @threeOptional bar() { }
+>threeOptional : Symbol(threeOptional, Decl(potentiallyUncalledDecorators.ts, 29, 62))
+>bar : Symbol(E.bar, Decl(potentiallyUncalledDecorators.ts, 60, 28))
+}
+
+@oneOptionalWithRest
+>oneOptionalWithRest : Symbol(oneOptionalWithRest, Decl(potentiallyUncalledDecorators.ts, 30, 73))
+
+class F {
+>F : Symbol(F, Decl(potentiallyUncalledDecorators.ts, 62, 1))
+
+    @oneOptionalWithRest foo: any;
+>oneOptionalWithRest : Symbol(oneOptionalWithRest, Decl(potentiallyUncalledDecorators.ts, 30, 73))
+>foo : Symbol(F.foo, Decl(potentiallyUncalledDecorators.ts, 65, 9))
+
+    @oneOptionalWithRest bar() { }
+>oneOptionalWithRest : Symbol(oneOptionalWithRest, Decl(potentiallyUncalledDecorators.ts, 30, 73))
+>bar : Symbol(F.bar, Decl(potentiallyUncalledDecorators.ts, 66, 34))
+}
+
+@anyDec
+>anyDec : Symbol(anyDec, Decl(potentiallyUncalledDecorators.ts, 32, 13))
+
+class G {
+>G : Symbol(G, Decl(potentiallyUncalledDecorators.ts, 68, 1))
+
+    @anyDec foo: any;
+>anyDec : Symbol(anyDec, Decl(potentiallyUncalledDecorators.ts, 32, 13))
+>foo : Symbol(G.foo, Decl(potentiallyUncalledDecorators.ts, 71, 9))
+
+    @anyDec bar() { }
+>anyDec : Symbol(anyDec, Decl(potentiallyUncalledDecorators.ts, 32, 13))
+>bar : Symbol(G.bar, Decl(potentiallyUncalledDecorators.ts, 72, 21))
+}
+
+export { };
+

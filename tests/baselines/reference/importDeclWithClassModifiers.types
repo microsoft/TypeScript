@@ -1,0 +1,27 @@
+=== tests/cases/compiler/importDeclWithClassModifiers.ts ===
+module x {
+>x : any
+
+    interface c {
+>c : c
+    }
+}
+export public import a = x.c;
+>a : any
+>x : any
+>c : No type information available!
+
+export private import b = x.c;
+>b : any
+>x : any
+>c : No type information available!
+
+export static import c = x.c;
+>c : any
+>x : any
+>c : No type information available!
+
+var b: a;
+>b : any
+>a : any
+

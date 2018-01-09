@@ -1,0 +1,150 @@
+=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithDuplicateParameters.ts ===
+// Duplicate parameter names are always an error
+
+function foo(x, x) { }
+>foo : Symbol(foo, Decl(callSignaturesWithDuplicateParameters.ts, 0, 0))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 2, 13))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 2, 15))
+
+var f = function foo(x, x) { }
+>f : Symbol(f, Decl(callSignaturesWithDuplicateParameters.ts, 3, 3))
+>foo : Symbol(foo, Decl(callSignaturesWithDuplicateParameters.ts, 3, 7))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 3, 21))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 3, 23))
+
+var f2 = function (x, x) { }
+>f2 : Symbol(f2, Decl(callSignaturesWithDuplicateParameters.ts, 4, 3))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 4, 19))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 4, 21))
+
+var f3 = (x, x) => { }
+>f3 : Symbol(f3, Decl(callSignaturesWithDuplicateParameters.ts, 5, 3))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 5, 10))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 5, 12))
+
+var f4 = <T>(x: T, x: T) => { }
+>f4 : Symbol(f4, Decl(callSignaturesWithDuplicateParameters.ts, 6, 3))
+>T : Symbol(T, Decl(callSignaturesWithDuplicateParameters.ts, 6, 10))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 6, 13))
+>T : Symbol(T, Decl(callSignaturesWithDuplicateParameters.ts, 6, 10))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 6, 18))
+>T : Symbol(T, Decl(callSignaturesWithDuplicateParameters.ts, 6, 10))
+
+function foo2(x: string, x: number) { }
+>foo2 : Symbol(foo2, Decl(callSignaturesWithDuplicateParameters.ts, 6, 31))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 8, 14))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 8, 24))
+
+var f5 = function foo(x: string, x: number) { }
+>f5 : Symbol(f5, Decl(callSignaturesWithDuplicateParameters.ts, 9, 3))
+>foo : Symbol(foo, Decl(callSignaturesWithDuplicateParameters.ts, 9, 8))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 9, 22))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 9, 32))
+
+var f6 = function (x: string, x: number) { }
+>f6 : Symbol(f6, Decl(callSignaturesWithDuplicateParameters.ts, 10, 3))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 10, 19))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 10, 29))
+
+var f7 = (x: string, x: number) => { }
+>f7 : Symbol(f7, Decl(callSignaturesWithDuplicateParameters.ts, 11, 3))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 11, 10))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 11, 20))
+
+var f8 = <T>(x: T, y: T) => { }
+>f8 : Symbol(f8, Decl(callSignaturesWithDuplicateParameters.ts, 12, 3))
+>T : Symbol(T, Decl(callSignaturesWithDuplicateParameters.ts, 12, 10))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 12, 13))
+>T : Symbol(T, Decl(callSignaturesWithDuplicateParameters.ts, 12, 10))
+>y : Symbol(y, Decl(callSignaturesWithDuplicateParameters.ts, 12, 18))
+>T : Symbol(T, Decl(callSignaturesWithDuplicateParameters.ts, 12, 10))
+
+class C {
+>C : Symbol(C, Decl(callSignaturesWithDuplicateParameters.ts, 12, 31))
+
+    foo(x, x) { }
+>foo : Symbol(C.foo, Decl(callSignaturesWithDuplicateParameters.ts, 14, 9))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 15, 8))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 15, 10))
+
+    foo2(x: number, x: string) { }
+>foo2 : Symbol(C.foo2, Decl(callSignaturesWithDuplicateParameters.ts, 15, 17))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 16, 9))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 16, 19))
+
+    foo3<T>(x: T, x: T) { }
+>foo3 : Symbol(C.foo3, Decl(callSignaturesWithDuplicateParameters.ts, 16, 34))
+>T : Symbol(T, Decl(callSignaturesWithDuplicateParameters.ts, 17, 9))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 17, 12))
+>T : Symbol(T, Decl(callSignaturesWithDuplicateParameters.ts, 17, 9))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 17, 17))
+>T : Symbol(T, Decl(callSignaturesWithDuplicateParameters.ts, 17, 9))
+}
+
+interface I {
+>I : Symbol(I, Decl(callSignaturesWithDuplicateParameters.ts, 18, 1))
+
+    (x, x);
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 21, 5))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 21, 7))
+
+    (x: string, x: number);
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 22, 5))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 22, 15))
+
+    foo(x, x);
+>foo : Symbol(I.foo, Decl(callSignaturesWithDuplicateParameters.ts, 22, 27), Decl(callSignaturesWithDuplicateParameters.ts, 23, 14))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 23, 8))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 23, 10))
+
+    foo(x: number, x: string);
+>foo : Symbol(I.foo, Decl(callSignaturesWithDuplicateParameters.ts, 22, 27), Decl(callSignaturesWithDuplicateParameters.ts, 23, 14))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 24, 8))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 24, 18))
+
+    foo3<T>(x: T, x: T);
+>foo3 : Symbol(I.foo3, Decl(callSignaturesWithDuplicateParameters.ts, 24, 30))
+>T : Symbol(T, Decl(callSignaturesWithDuplicateParameters.ts, 25, 9))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 25, 12))
+>T : Symbol(T, Decl(callSignaturesWithDuplicateParameters.ts, 25, 9))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 25, 17))
+>T : Symbol(T, Decl(callSignaturesWithDuplicateParameters.ts, 25, 9))
+}
+
+var a: {
+>a : Symbol(a, Decl(callSignaturesWithDuplicateParameters.ts, 28, 3))
+
+    foo(x, x);
+>foo : Symbol(foo, Decl(callSignaturesWithDuplicateParameters.ts, 28, 8))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 29, 8))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 29, 10))
+
+    foo2(x: number, x: string);
+>foo2 : Symbol(foo2, Decl(callSignaturesWithDuplicateParameters.ts, 29, 14))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 30, 9))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 30, 19))
+
+};
+
+var b = {
+>b : Symbol(b, Decl(callSignaturesWithDuplicateParameters.ts, 33, 3))
+
+    foo(x, x) { },
+>foo : Symbol(foo, Decl(callSignaturesWithDuplicateParameters.ts, 33, 9))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 34, 8))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 34, 10))
+
+    a: function foo(x: number, x: string) { },
+>a : Symbol(a, Decl(callSignaturesWithDuplicateParameters.ts, 34, 18))
+>foo : Symbol(foo, Decl(callSignaturesWithDuplicateParameters.ts, 35, 6))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 35, 20))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 35, 30))
+
+    b: <T>(x: T, x: T) => { }
+>b : Symbol(b, Decl(callSignaturesWithDuplicateParameters.ts, 35, 46))
+>T : Symbol(T, Decl(callSignaturesWithDuplicateParameters.ts, 36, 8))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 36, 11))
+>T : Symbol(T, Decl(callSignaturesWithDuplicateParameters.ts, 36, 8))
+>x : Symbol(x, Decl(callSignaturesWithDuplicateParameters.ts, 36, 16))
+>T : Symbol(T, Decl(callSignaturesWithDuplicateParameters.ts, 36, 8))
+}

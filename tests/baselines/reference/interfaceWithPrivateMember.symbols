@@ -1,0 +1,25 @@
+=== tests/cases/conformance/types/namedTypes/interfaceWithPrivateMember.ts ===
+// interfaces do not permit private members, these are errors
+
+interface I {
+>I : Symbol(I, Decl(interfaceWithPrivateMember.ts, 0, 0))
+
+    private x: string;
+>x : Symbol(I.x, Decl(interfaceWithPrivateMember.ts, 2, 13))
+}
+
+interface I2<T> {
+>I2 : Symbol(I2, Decl(interfaceWithPrivateMember.ts, 4, 1))
+>T : Symbol(T, Decl(interfaceWithPrivateMember.ts, 6, 13))
+
+    private y: T;
+>y : Symbol(I2.y, Decl(interfaceWithPrivateMember.ts, 6, 17))
+>T : Symbol(T, Decl(interfaceWithPrivateMember.ts, 6, 13))
+}
+
+var x: {
+>x : Symbol(x, Decl(interfaceWithPrivateMember.ts, 10, 3))
+
+    private y: string;
+>y : Symbol(y, Decl(interfaceWithPrivateMember.ts, 10, 8))
+}

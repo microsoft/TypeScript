@@ -16,7 +16,7 @@ assert(Foo.CONSTANT === "Foo");
 //// [es3defaultAliasQuoted_file0.js]
 "use strict";
 exports.__esModule = true;
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     Foo.CONSTANT = "Foo";

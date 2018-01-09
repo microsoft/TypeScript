@@ -1,0 +1,22 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES6.ts ===
+var id;
+>id : Symbol(id, Decl(computedPropertyNames3_ES6.ts, 0, 3))
+
+class C {
+>C : Symbol(C, Decl(computedPropertyNames3_ES6.ts, 0, 7))
+
+    [0 + 1]() { }
+    static [() => { }]() { }
+    get [delete id]() { }
+>id : Symbol(id, Decl(computedPropertyNames3_ES6.ts, 0, 3))
+
+    set [[0, 1]](v) { }
+>v : Symbol(v, Decl(computedPropertyNames3_ES6.ts, 5, 17))
+
+    static get [<String>""]() { }
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+
+    static set [id.toString()](v) { }
+>id : Symbol(id, Decl(computedPropertyNames3_ES6.ts, 0, 3))
+>v : Symbol(v, Decl(computedPropertyNames3_ES6.ts, 7, 31))
+}

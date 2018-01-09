@@ -1,0 +1,44 @@
+=== tests/cases/compiler/collisionThisExpressionAndLocalVarInConstructor.ts ===
+class class1 {
+>class1 : Symbol(class1, Decl(collisionThisExpressionAndLocalVarInConstructor.ts, 0, 0))
+
+    constructor() {
+        var x2 = {
+>x2 : Symbol(x2, Decl(collisionThisExpressionAndLocalVarInConstructor.ts, 2, 11))
+
+            doStuff: (callback) => () => {
+>doStuff : Symbol(doStuff, Decl(collisionThisExpressionAndLocalVarInConstructor.ts, 2, 18))
+>callback : Symbol(callback, Decl(collisionThisExpressionAndLocalVarInConstructor.ts, 3, 22))
+
+                var _this = 2;
+>_this : Symbol(_this, Decl(collisionThisExpressionAndLocalVarInConstructor.ts, 4, 19))
+
+                return callback(this);
+>callback : Symbol(callback, Decl(collisionThisExpressionAndLocalVarInConstructor.ts, 3, 22))
+>this : Symbol(class1, Decl(collisionThisExpressionAndLocalVarInConstructor.ts, 0, 0))
+            }
+        }
+    }
+}
+
+class class2 {
+>class2 : Symbol(class2, Decl(collisionThisExpressionAndLocalVarInConstructor.ts, 9, 1))
+
+    constructor() {
+        var _this = 2;
+>_this : Symbol(_this, Decl(collisionThisExpressionAndLocalVarInConstructor.ts, 13, 11))
+
+        var x2 = {
+>x2 : Symbol(x2, Decl(collisionThisExpressionAndLocalVarInConstructor.ts, 14, 11))
+
+            doStuff: (callback) => () => {
+>doStuff : Symbol(doStuff, Decl(collisionThisExpressionAndLocalVarInConstructor.ts, 14, 18))
+>callback : Symbol(callback, Decl(collisionThisExpressionAndLocalVarInConstructor.ts, 15, 22))
+
+                return callback(this);
+>callback : Symbol(callback, Decl(collisionThisExpressionAndLocalVarInConstructor.ts, 15, 22))
+>this : Symbol(class2, Decl(collisionThisExpressionAndLocalVarInConstructor.ts, 9, 1))
+            }
+        }
+    }
+}

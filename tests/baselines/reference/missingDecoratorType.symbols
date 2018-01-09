@@ -1,0 +1,44 @@
+=== tests/cases/conformance/decorators/a.ts ===
+interface Object { }
+>Object : Symbol(Object, Decl(a.ts, 0, 0))
+
+interface Array<T> { }
+>Array : Symbol(Array, Decl(a.ts, 0, 20))
+>T : Symbol(T, Decl(a.ts, 1, 16))
+
+interface String { }
+>String : Symbol(String, Decl(a.ts, 1, 22))
+
+interface Boolean { }
+>Boolean : Symbol(Boolean, Decl(a.ts, 2, 20))
+
+interface Number { }
+>Number : Symbol(Number, Decl(a.ts, 3, 21))
+
+interface Function { }
+>Function : Symbol(Function, Decl(a.ts, 4, 20))
+
+interface RegExp { }
+>RegExp : Symbol(RegExp, Decl(a.ts, 5, 22))
+
+interface IArguments { }
+>IArguments : Symbol(IArguments, Decl(a.ts, 6, 20))
+
+=== tests/cases/conformance/decorators/b.ts ===
+declare function dec(t, k, d);
+>dec : Symbol(dec, Decl(b.ts, 0, 0))
+>t : Symbol(t, Decl(b.ts, 0, 21))
+>k : Symbol(k, Decl(b.ts, 0, 23))
+>d : Symbol(d, Decl(b.ts, 0, 26))
+
+class C {
+>C : Symbol(C, Decl(b.ts, 0, 30))
+
+    @dec
+>dec : Symbol(dec, Decl(b.ts, 0, 0))
+
+    method() {}
+>method : Symbol(C.method, Decl(b.ts, 2, 9))
+}
+
+

@@ -1,0 +1,49 @@
+=== tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments2.ts ===
+function f<T, U>(y: T, y1: U, p: (z: U) => T, p1: (x: T) => U): [T, U] { return [y, p1(y)]; }
+>f : Symbol(f, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 11))
+>U : Symbol(U, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 13))
+>y : Symbol(y, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 17))
+>T : Symbol(T, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 11))
+>y1 : Symbol(y1, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 22))
+>U : Symbol(U, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 13))
+>p : Symbol(p, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 29))
+>z : Symbol(z, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 34))
+>U : Symbol(U, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 13))
+>T : Symbol(T, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 11))
+>p1 : Symbol(p1, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 45))
+>x : Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 51))
+>T : Symbol(T, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 11))
+>U : Symbol(U, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 13))
+>T : Symbol(T, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 11))
+>U : Symbol(U, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 13))
+>y : Symbol(y, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 17))
+>p1 : Symbol(p1, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 45))
+>y : Symbol(y, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 17))
+
+interface A { a: A; }
+>A : Symbol(A, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 93))
+>a : Symbol(A.a, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 1, 13))
+>A : Symbol(A, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 93))
+
+interface B extends A { b; }
+>B : Symbol(B, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 1, 21))
+>A : Symbol(A, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 93))
+>b : Symbol(B.b, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 2, 23))
+
+var a: A, b: B;
+>a : Symbol(a, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 4, 3))
+>A : Symbol(A, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 93))
+>b : Symbol(b, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 4, 9))
+>B : Symbol(B, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 1, 21))
+
+var d = f(a, b, x => x, x => x); // A => A not assignable to A => B
+>d : Symbol(d, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 6, 3))
+>f : Symbol(f, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 0))
+>a : Symbol(a, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 4, 3))
+>b : Symbol(b, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 4, 9))
+>x : Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 6, 15))
+>x : Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 6, 15))
+>x : Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 6, 23))
+>x : Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 6, 23))
+

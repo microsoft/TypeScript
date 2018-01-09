@@ -166,12 +166,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var ts;
 (function (ts) {
-    var Symbol = (function () {
+    var Symbol = /** @class */ (function () {
         function Symbol() {
         }
         return Symbol;
     }());
-    var Type = (function (_super) {
+    var Type = /** @class */ (function (_super) {
         __extends(Type, _super);
         function Type() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -235,7 +235,7 @@ var ts;
         };
         return Type;
     }(Symbol));
-    var Property = (function (_super) {
+    var Property = /** @class */ (function (_super) {
         __extends(Property, _super);
         function Property(name, type, flags) {
             var _this = _super.call(this) || this;
@@ -256,7 +256,7 @@ var ts;
         PropertyFlags[PropertyFlags["Optional"] = 1] = "Optional";
         PropertyFlags[PropertyFlags["Private"] = 2] = "Private";
     })(PropertyFlags || (PropertyFlags = {}));
-    var Signature = (function (_super) {
+    var Signature = /** @class */ (function (_super) {
         __extends(Signature, _super);
         function Signature(typeParameters, parameters, returnType) {
             var _this = _super.call(this) || this;
@@ -277,7 +277,7 @@ var ts;
         };
         return Signature;
     }(Symbol));
-    var Parameter = (function (_super) {
+    var Parameter = /** @class */ (function (_super) {
         __extends(Parameter, _super);
         function Parameter(name, type, flags) {
             var _this = _super.call(this) || this;

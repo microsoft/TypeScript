@@ -1,0 +1,19 @@
+=== tests/cases/compiler/commentsOnObjectLiteral2.ts ===
+var Person = makeClass( 
+>Person : Symbol(Person, Decl(commentsOnObjectLiteral2.ts, 0, 3))
+   { 
+       /** 
+        This is just another way to define a constructor. 
+        @constructs 
+        @param {string} name The name of the person. 
+        */ 
+       initialize: function(name) { 
+>initialize : Symbol(initialize, Decl(commentsOnObjectLiteral2.ts, 1, 4))
+>name : Symbol(name, Decl(commentsOnObjectLiteral2.ts, 7, 28))
+
+           this.name = name; 
+>name : Symbol(name, Decl(commentsOnObjectLiteral2.ts, 7, 28))
+
+       } /* trailing comment 1*/, 
+   } 
+);

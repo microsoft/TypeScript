@@ -1,0 +1,12 @@
+=== tests/cases/conformance/externalModules/multipleExportDefault1.ts ===
+export default function Foo (){
+>Foo : Symbol(Foo, Decl(multipleExportDefault1.ts, 0, 0))
+    
+}
+
+export default {
+    uhoh: "another default",
+>uhoh : Symbol(uhoh, Decl(multipleExportDefault1.ts, 4, 16))
+
+};
+

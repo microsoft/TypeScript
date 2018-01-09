@@ -1,0 +1,6 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement7.ts ===
+for (new foo() in b) {
+>new foo() : any
+>foo : any
+>b : any
+}

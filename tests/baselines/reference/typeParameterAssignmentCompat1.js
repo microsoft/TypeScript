@@ -26,7 +26,7 @@ function f() {
     x = y; // should be an error
     return x;
 }
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.f = function () {

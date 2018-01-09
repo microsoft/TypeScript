@@ -27,13 +27,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base() {
         this.instance1 = new Base(); // allowed
     }
     return Base;
 }());
-var Subclass = (function (_super) {
+var Subclass = /** @class */ (function (_super) {
     __extends(Subclass, _super);
     function Subclass() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -43,7 +43,7 @@ var Subclass = (function (_super) {
     }
     return Subclass;
 }(Base));
-var SubclassOfSubclass = (function (_super) {
+var SubclassOfSubclass = /** @class */ (function (_super) {
     __extends(SubclassOfSubclass, _super);
     function SubclassOfSubclass() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

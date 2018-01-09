@@ -1,0 +1,102 @@
+=== tests/cases/compiler/mergedDeclarations3.ts ===
+module M {
+>M : typeof M
+
+ export enum Color {
+>Color : Color
+
+   Red, Green
+>Red : Color.Red
+>Green : Color.Green
+ }
+}
+module M {
+>M : typeof M
+
+ export module Color {
+>Color : typeof Color
+
+   export var Blue = 4;
+>Blue : number
+>4 : 4
+  }
+}
+var p = M.Color.Blue; // ok
+>p : number
+>M.Color.Blue : number
+>M.Color : typeof M.Color
+>M : typeof M
+>Color : typeof M.Color
+>Blue : number
+
+module M {
+>M : typeof M
+
+    export function foo() {
+>foo : typeof foo
+    }
+}
+
+module M {
+>M : typeof M
+
+    module foo {
+>foo : typeof foo
+
+        export var x = 1;
+>x : number
+>1 : 1
+    }
+}
+
+module M {
+>M : typeof M
+
+    export module foo {
+>foo : typeof foo
+
+        export var y = 2
+>y : number
+>2 : 2
+    }
+}
+
+module M {
+>M : typeof M
+
+    module foo {
+>foo : typeof foo
+
+        export var z = 1;
+>z : number
+>1 : 1
+    }
+}
+
+M.foo() // ok
+>M.foo() : void
+>M.foo : typeof M.foo
+>M : typeof M
+>foo : typeof M.foo
+
+M.foo.x // error
+>M.foo.x : any
+>M.foo : typeof M.foo
+>M : typeof M
+>foo : typeof M.foo
+>x : any
+
+M.foo.y // ok
+>M.foo.y : number
+>M.foo : typeof M.foo
+>M : typeof M
+>foo : typeof M.foo
+>y : number
+
+M.foo.z // error
+>M.foo.z : any
+>M.foo : typeof M.foo
+>M : typeof M
+>foo : typeof M.foo
+>z : any
+

@@ -1,0 +1,38 @@
+=== tests/cases/compiler/commalist.ts ===
+export default {
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.    ['foo'+'']: 42,
+No type information for this code.};
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/comma.ts ===
+export default {
+    ['foo']: 42
+>'foo' : Symbol(['foo'], Decl(comma.ts, 0, 16))
+
+};
+
+=== tests/cases/compiler/functionexpression.ts ===
+export default () => 42;
+No type information for this code.
+No type information for this code.

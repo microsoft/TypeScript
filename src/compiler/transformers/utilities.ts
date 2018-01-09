@@ -58,9 +58,9 @@ namespace ts {
                     else {
                         // export { x, y }
                         for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
-                            if (!uniqueExports.get(unescapeLeadingUnderscores(specifier.name.text))) {
+                            if (!uniqueExports.get(idText(specifier.name))) {
                                 const name = specifier.propertyName || specifier.name;
-                                exportSpecifiers.add(unescapeLeadingUnderscores(name.text), specifier);
+                                exportSpecifiers.add(idText(name), specifier);
 
                                 const decl = resolver.getReferencedImportDeclaration(name)
                                     || resolver.getReferencedValueDeclaration(name);
@@ -69,7 +69,7 @@ namespace ts {
                                     multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
                                 }
 
-                                uniqueExports.set(unescapeLeadingUnderscores(specifier.name.text), true);
+                                uniqueExports.set(idText(specifier.name), true);
                                 exportedNames = append(exportedNames, specifier.name);
                             }
                         }
@@ -103,9 +103,9 @@ namespace ts {
                         else {
                             // export function x() { }
                             const name = (<FunctionDeclaration>node).name;
-                            if (!uniqueExports.get(unescapeLeadingUnderscores(name.text))) {
+                            if (!uniqueExports.get(idText(name))) {
                                 multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports.set(unescapeLeadingUnderscores(name.text), true);
+                                uniqueExports.set(idText(name), true);
                                 exportedNames = append(exportedNames, name);
                             }
                         }
@@ -124,9 +124,9 @@ namespace ts {
                         else {
                             // export class x { }
                             const name = (<ClassDeclaration>node).name;
-                            if (!uniqueExports.get(unescapeLeadingUnderscores(name.text))) {
+                            if (name && !uniqueExports.get(idText(name))) {
                                 multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports.set(unescapeLeadingUnderscores(name.text), true);
+                                uniqueExports.set(idText(name), true);
                                 exportedNames = append(exportedNames, name);
                             }
                         }
@@ -143,6 +143,7 @@ namespace ts {
             createLiteral(externalHelpersModuleNameText));
 
         if (externalHelpersImportDeclaration) {
+            addEmitFlags(externalHelpersImportDeclaration, EmitFlags.NeverApplyImportHelper);
             externalImports.unshift(externalHelpersImportDeclaration);
         }
 
@@ -158,8 +159,9 @@ namespace ts {
             }
         }
         else if (!isGeneratedIdentifier(decl.name)) {
-            if (!uniqueExports.get(unescapeLeadingUnderscores(decl.name.text))) {
-                uniqueExports.set(unescapeLeadingUnderscores(decl.name.text), true);
+            const text = idText(decl.name);
+            if (!uniqueExports.get(text)) {
+                uniqueExports.set(text, true);
                 exportedNames = append(exportedNames, decl.name);
             }
         }
@@ -176,5 +178,18 @@ namespace ts {
             map[key] = values = [value];
         }
         return values;
+    }
+
+    /**
+     * Used in the module transformer to check if an expression is reasonably without sideeffect,
+     *  and thus better to copy into multiple places rather than to cache in a temporary variable
+     *  - this is mostly subjective beyond the requirement that the expression not be sideeffecting
+     */
+    export function isSimpleCopiableExpression(expression: Expression) {
+        return expression.kind === SyntaxKind.StringLiteral ||
+            expression.kind === SyntaxKind.NumericLiteral ||
+            expression.kind === SyntaxKind.NoSubstitutionTemplateLiteral ||
+            isKeyword(expression.kind) ||
+            isIdentifier(expression);
     }
 }

@@ -7,4 +7,7 @@
 //// z;
 //// export var y: string;
 
-verify.rangeAfterCodeFix("var z: number;");
+verify.codeFix({
+    description: "Remove declaration for: 'x'",
+    newRangeContent: "var z: number;",
+});

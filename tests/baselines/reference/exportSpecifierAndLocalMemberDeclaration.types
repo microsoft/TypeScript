@@ -1,0 +1,27 @@
+=== tests/cases/compiler/exportSpecifierAndLocalMemberDeclaration.ts ===
+declare module "m2" {
+    module X {
+>X : any
+
+        interface I { }
+>I : I
+    }
+    function Y();
+>Y : () => any
+
+    export { Y as X };
+>Y : () => any
+>X : () => any
+
+    function Z(): X.I;
+>Z : () => X.I
+>X : any
+>I : X.I
+}
+
+declare module "m2" {
+    function Z2(): X.I;
+>Z2 : () => any
+>X : any
+>I : No type information available!
+}

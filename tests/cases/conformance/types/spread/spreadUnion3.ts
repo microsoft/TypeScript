@@ -12,3 +12,8 @@ function g(t?: { a: number } | null): void {
 g()
 g(undefined)
 g(null)
+
+// spreading nothing but null and undefined is not allowed
+declare const nullAndUndefinedUnion: null | undefined;
+var x = { ...nullAndUndefinedUnion, ...nullAndUndefinedUnion };
+var y = { ...nullAndUndefinedUnion };

@@ -26,18 +26,18 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Validation;
 (function (Validation) {
-    var c1 = (function () {
+    var c1 = /** @class */ (function () {
         function c1() {
         }
         return c1;
     }());
-    var c2 = (function () {
+    var c2 = /** @class */ (function () {
         function c2() {
         }
         return c2;
     }());
     Validation.c2 = c2;
-    var c3 = (function (_super) {
+    var c3 = /** @class */ (function (_super) {
         __extends(c3, _super);
         function c3() {
             return _super !== null && _super.apply(this, arguments) || this;

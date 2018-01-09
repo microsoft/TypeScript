@@ -22,7 +22,7 @@ class class2 {
 }
 
 //// [collisionThisExpressionAndLocalVarInConstructor.js]
-var class1 = (function () {
+var class1 = /** @class */ (function () {
     function class1() {
         var _this = this;
         var x2 = {
@@ -34,7 +34,7 @@ var class1 = (function () {
     }
     return class1;
 }());
-var class2 = (function () {
+var class2 = /** @class */ (function () {
     function class2() {
         var _this = this;
         var _this = 2;

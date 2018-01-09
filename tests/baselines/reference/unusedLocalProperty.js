@@ -13,7 +13,7 @@ class Animal {
 
 
 //// [unusedLocalProperty.js]
-var Animal = (function () {
+var Animal = /** @class */ (function () {
     function Animal(species) {
         this.species = species;
     }

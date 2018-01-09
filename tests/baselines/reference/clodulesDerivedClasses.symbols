@@ -1,0 +1,41 @@
+=== tests/cases/compiler/clodulesDerivedClasses.ts ===
+class Shape {
+>Shape : Symbol(Shape, Decl(clodulesDerivedClasses.ts, 0, 0), Decl(clodulesDerivedClasses.ts, 2, 1))
+
+    id: number;
+>id : Symbol(Shape.id, Decl(clodulesDerivedClasses.ts, 0, 13))
+}
+
+module Shape.Utils {
+>Shape : Symbol(Shape, Decl(clodulesDerivedClasses.ts, 0, 0), Decl(clodulesDerivedClasses.ts, 2, 1))
+>Utils : Symbol(Utils, Decl(clodulesDerivedClasses.ts, 4, 13))
+
+    export function convert(): Shape { return null;}
+>convert : Symbol(convert, Decl(clodulesDerivedClasses.ts, 4, 20))
+>Shape : Symbol(Shape, Decl(clodulesDerivedClasses.ts, 0, 0), Decl(clodulesDerivedClasses.ts, 2, 1))
+}
+
+class Path extends Shape {
+>Path : Symbol(Path, Decl(clodulesDerivedClasses.ts, 6, 1), Decl(clodulesDerivedClasses.ts, 11, 1))
+>Shape : Symbol(Shape, Decl(clodulesDerivedClasses.ts, 0, 0), Decl(clodulesDerivedClasses.ts, 2, 1))
+
+    name: string;
+>name : Symbol(Path.name, Decl(clodulesDerivedClasses.ts, 8, 26))
+
+}
+
+module Path.Utils {
+>Path : Symbol(Path, Decl(clodulesDerivedClasses.ts, 6, 1), Decl(clodulesDerivedClasses.ts, 11, 1))
+>Utils : Symbol(Utils, Decl(clodulesDerivedClasses.ts, 13, 12))
+
+    export function convert2(): Path {
+>convert2 : Symbol(convert2, Decl(clodulesDerivedClasses.ts, 13, 19))
+>Path : Symbol(Path, Decl(clodulesDerivedClasses.ts, 6, 1), Decl(clodulesDerivedClasses.ts, 11, 1))
+
+        return null;
+    }
+}
+
+
+
+

@@ -10,7 +10,7 @@ class X {
 }
 
 //// [thisCapture1.js]
-var X = (function () {
+var X = /** @class */ (function () {
     function X() {
         this.y = 0;
     }

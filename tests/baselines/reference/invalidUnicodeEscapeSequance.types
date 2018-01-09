@@ -1,0 +1,5 @@
+=== tests/cases/compiler/invalidUnicodeEscapeSequance.ts ===
+var arg\u003
+>arg : any
+>u003 : any
+

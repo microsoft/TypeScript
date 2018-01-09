@@ -19,7 +19,7 @@ var __test1__;
 })(__test1__ || (__test1__ = {}));
 var __test2__;
 (function (__test2__) {
-    var classWithTwoPublic = (function () {
+    var classWithTwoPublic = /** @class */ (function () {
         function classWithTwoPublic(one, two) {
             this.one = one;
             this.two = two;

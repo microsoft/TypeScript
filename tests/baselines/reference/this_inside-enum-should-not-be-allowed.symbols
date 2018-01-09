@@ -1,0 +1,18 @@
+=== tests/cases/compiler/this_inside-enum-should-not-be-allowed.ts ===
+enum TopLevelEnum {
+>TopLevelEnum : Symbol(TopLevelEnum, Decl(this_inside-enum-should-not-be-allowed.ts, 0, 0))
+
+    ThisWasAllowedButShouldNotBe = this // Should not be allowed
+>ThisWasAllowedButShouldNotBe : Symbol(TopLevelEnum.ThisWasAllowedButShouldNotBe, Decl(this_inside-enum-should-not-be-allowed.ts, 0, 19))
+}
+
+module ModuleEnum {
+>ModuleEnum : Symbol(ModuleEnum, Decl(this_inside-enum-should-not-be-allowed.ts, 2, 1))
+
+    enum EnumInModule {
+>EnumInModule : Symbol(EnumInModule, Decl(this_inside-enum-should-not-be-allowed.ts, 4, 19))
+
+        WasADifferentError = this // this was handled as if this was in a module
+>WasADifferentError : Symbol(EnumInModule.WasADifferentError, Decl(this_inside-enum-should-not-be-allowed.ts, 5, 23))
+    }
+}

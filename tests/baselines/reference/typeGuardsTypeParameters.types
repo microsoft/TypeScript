@@ -84,15 +84,15 @@ function fun<T>(item: { [P in keyof T]: T[P] }) {
 >item : { [P in keyof T]: T[P]; }
 
         const value = item[key];
->value : T[keyof T]
->item[key] : T[keyof T]
+>value : { [P in keyof T]: T[P]; }[keyof T]
+>item[key] : { [P in keyof T]: T[P]; }[keyof T]
 >item : { [P in keyof T]: T[P]; }
 >key : keyof T
 
         if (typeof value === "string") {
 >typeof value === "string" : boolean
 >typeof value : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->value : T[keyof T]
+>value : { [P in keyof T]: T[P]; }[keyof T]
 >"string" : "string"
 
             strings.push(value);
@@ -100,7 +100,7 @@ function fun<T>(item: { [P in keyof T]: T[P] }) {
 >strings.push : (...items: string[]) => number
 >strings : string[]
 >push : (...items: string[]) => number
->value : T[keyof T] & string
+>value : { [P in keyof T]: T[P]; }[keyof T] & string
         }
     }
 }

@@ -1,0 +1,18 @@
+=== tests/cases/conformance/decorators/invalid/decoratorOnImportEquals2_1.ts ===
+@dec
+>dec : Symbol(dec, Decl(decoratorOnImportEquals2_1.ts, 1, 53))
+
+import lib = require('./decoratorOnImportEquals2_0');
+>lib : Symbol(lib, Decl(decoratorOnImportEquals2_1.ts, 0, 0))
+
+declare function dec<T>(target: T): T;
+>dec : Symbol(dec, Decl(decoratorOnImportEquals2_1.ts, 1, 53))
+>T : Symbol(T, Decl(decoratorOnImportEquals2_1.ts, 3, 21))
+>target : Symbol(target, Decl(decoratorOnImportEquals2_1.ts, 3, 24))
+>T : Symbol(T, Decl(decoratorOnImportEquals2_1.ts, 3, 21))
+>T : Symbol(T, Decl(decoratorOnImportEquals2_1.ts, 3, 21))
+
+=== tests/cases/conformance/decorators/invalid/decoratorOnImportEquals2_0.ts ===
+export var X;
+>X : Symbol(X, Decl(decoratorOnImportEquals2_0.ts, 0, 10))
+
