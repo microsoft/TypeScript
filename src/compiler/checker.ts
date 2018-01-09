@@ -22804,7 +22804,7 @@ namespace ts {
         }
 
         function issueMemberSpecificError(node: ClassLikeDeclaration, typeWithThis: Type, baseWithThis: Type, broadDiag: DiagnosticMessage) {
-            // iterate over all implemented properties and issue errors on each one which isn't compatible, ratehr than the class as a whole, if possible
+            // iterate over all implemented properties and issue errors on each one which isn't compatible, rather than the class as a whole, if possible
             let issuedMemberError = false;
             for (const member of node.members) {
                 if (hasStaticModifier(member)) {
