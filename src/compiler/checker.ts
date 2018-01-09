@@ -4310,18 +4310,15 @@ namespace ts {
                         if (!computedType) {
                             return anyType;
                         }
-                        else if (computedType.flags & TypeFlags.Literal) {
-                            const text = getTextOfPropertyLiteralType(computedType);
-                            const declaredType = getTypeOfPropertyOfType(parentType, text);
+                        else if (isLiteralType(computedType)) {
+                            const text = !(computedType.flags & TypeFlags.Union) && getTextOfPropertyLiteralType(computedType);
+                            const declaredType = text && getTypeOfPropertyOfType(parentType, text);
+                            const isNumeric = computedType.flags & TypeFlags.NumberLiteral ||
+                                computedType.flags & TypeFlags.Union && (computedType as UnionType).types.every(t => !!(t.flags & TypeFlags.NumberLiteral));
                             type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
-                                computedType.flags & TypeFlags.NumberLiteral && getIndexTypeOfType(parentType, IndexKind.Number) ||
+                                isNumeric && getIndexTypeOfType(parentType, IndexKind.Number) ||
                                 getIndexTypeOfType(parentType, IndexKind.String);
-                            errorName = text;
-                        }
-                        else if (computedType.flags & TypeFlags.Union && (computedType as UnionType).types.every(t => !!(t.flags & TypeFlags.Literal))) {
-                            type = (computedType as UnionType).types.every(t => !!(t.flags & TypeFlags.NumberLiteral)) && getIndexTypeOfType(parentType, IndexKind.Number) ||
-                                getIndexTypeOfType(parentType, IndexKind.String);
-                            errorName = (computedType as UnionType).types[0] && getTextOfPropertyLiteralType((computedType as UnionType).types[0]);
+                            errorName = computedType.flags & TypeFlags.Union && (computedType as UnionType).types.length ? getTextOfPropertyLiteralType((computedType as UnionType).types[0]) : text;
                         }
                         else if (computedType.flags & TypeFlags.Number) {
                             type = getIndexTypeOfType(parentType, IndexKind.Number) || getIndexTypeOfType(parentType, IndexKind.String);
@@ -14689,11 +14686,10 @@ namespace ts {
                     if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
                         if (memberDecl.name.kind === SyntaxKind.ComputedPropertyName) {
                             const computedType = checkComputedPropertyName(<ComputedPropertyName>memberDecl.name);
-                            if (computedType.flags & TypeFlags.Literal) {
-                                literalName = getTextOfPropertyLiteralType(computedType);
-                            }
-                            else if (computedType.flags & TypeFlags.Union && (computedType as UnionType).types.every(t => !!(t.flags & TypeFlags.Literal))) {
-                                literalName = (computedType as UnionType).types.map(getTextOfPropertyLiteralType);
+                            if (isLiteralType(computedType)) {
+                                literalName = computedType.flags & TypeFlags.Union ?
+                                    (computedType as UnionType).types.map(getTextOfPropertyLiteralType) :
+                                    getTextOfPropertyLiteralType(computedType);
                             }
                         }
                         type = checkPropertyAssignment(<PropertyAssignment>memberDecl, checkMode);
@@ -18686,21 +18682,16 @@ namespace ts {
                     if (!computedType) {
                         return undefined;
                     }
-                    else if (computedType.flags & TypeFlags.Literal) {
-                        const text = getTextOfPropertyLiteralType(computedType);
+                    else if (isLiteralType(computedType)) {
+                        const text = !(computedType.flags & TypeFlags.Union) && getTextOfPropertyLiteralType(computedType);
+                        const isNumeric = computedType.flags & TypeFlags.NumberLiteral ||
+                            computedType.flags & TypeFlags.Union && (computedType as UnionType).types.every(t => !!(t.flags & TypeFlags.NumberLiteral));
                         type = isTypeAny(objectLiteralType)
                             ? objectLiteralType
-                            : getTypeOfPropertyOfType(objectLiteralType, text) ||
-                            computedType.flags & TypeFlags.NumberLiteral && getIndexTypeOfType(objectLiteralType, IndexKind.Number) ||
+                            : text && getTypeOfPropertyOfType(objectLiteralType, text) ||
+                            isNumeric && getIndexTypeOfType(objectLiteralType, IndexKind.Number) ||
                             getIndexTypeOfType(objectLiteralType, IndexKind.String);
-                        errorName = text;
-                    }
-                    else if (computedType.flags & TypeFlags.Union && (computedType as UnionType).types.every(t => !!(t.flags & TypeFlags.Literal))) {
-                        type = isTypeAny(objectLiteralType)
-                            ? objectLiteralType
-                            : (computedType as UnionType).types.every(t => !!(t.flags & TypeFlags.NumberLiteral)) && getIndexTypeOfType(objectLiteralType, IndexKind.Number) ||
-                            getIndexTypeOfType(objectLiteralType, IndexKind.String);
-                        errorName = (computedType as UnionType).types[0] && getTextOfPropertyLiteralType((computedType as UnionType).types[0]);
+                        errorName = computedType.flags & TypeFlags.Union && (computedType as UnionType).types.length ? getTextOfPropertyLiteralType((computedType as UnionType).types[0]) : text;
                     }
                     else if (computedType.flags & TypeFlags.Number) {
                         type = getIndexTypeOfType(objectLiteralType, IndexKind.Number) || getIndexTypeOfType(objectLiteralType, IndexKind.String);
@@ -18721,7 +18712,6 @@ namespace ts {
                         }
                         return undefined;
                     }
-
                 }
                 else {
                     const text = getTextOfPropertyName(name);
