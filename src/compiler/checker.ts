@@ -3191,8 +3191,10 @@ namespace ts {
                         symbol.flags & SymbolFlags.Transient &&
                         !((symbol as TransientSymbol).checkFlags & CheckFlags.Late) &&
                         !isWellKnownSymbolSyntactically((name as ComputedPropertyName).expression) &&
-                        symbol.escapedName) {
-                        return '["' + unescapeLeadingUnderscores(symbol.escapedName) + '"]';
+                        symbol.escapedName !== undefined) {
+                        return isNumericLiteralName(symbol.escapedName) ?
+                            "[" + symbol.escapedName + "]" :
+                            '["' + unescapeLeadingUnderscores(symbol.escapedName) + '"]';
                     }
                     return declarationNameToString(name);
                 }

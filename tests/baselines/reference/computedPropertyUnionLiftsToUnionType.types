@@ -128,13 +128,13 @@ const m: { a: string, m(): number, p: number } | { b: string, m(): number, p: nu
 //   other literal types: number, enum (string and number)
 const n: { "1": string } | { "2": string } = { [onetwo]: 'hi' }
 >n : { "1": string; } | { "2": string; }
->{ [onetwo]: 'hi' } : { ["2"]: string; } | { ["1"]: string; }
+>{ [onetwo]: 'hi' } : { [2]: string; } | { [1]: string; }
 >onetwo : 2 | 1
 >'hi' : "hi"
 
 const e: { "0": string } | { "1": string } = { [alphabet]: 'hi' }
 >e : { "0": string; } | { "1": string; }
->{ [alphabet]: 'hi' } : { ["0"]: string; } | { ["1"]: string; }
+>{ [alphabet]: 'hi' } : { [0]: string; } | { [1]: string; }
 >alphabet : Alphabet
 >'hi' : "hi"
 
@@ -197,7 +197,7 @@ var dn: number
 ({ [onetwo]: dn } = sin) // fine, from index signature
 >({ [onetwo]: dn } = sin) : { [n: number]: number; }
 >{ [onetwo]: dn } = sin : { [n: number]: number; }
->{ [onetwo]: dn } : { ["2"]: number; } | { ["1"]: number; }
+>{ [onetwo]: dn } : { [2]: number; } | { [1]: number; }
 >onetwo : 2 | 1
 >dn : number
 >sin : { [n: number]: number; }
