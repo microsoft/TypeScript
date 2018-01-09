@@ -2005,7 +2005,9 @@ namespace ts {
         const moduleKind = getEmitModuleKind(compilerOptions);
         return compilerOptions.allowSyntheticDefaultImports !== undefined
             ? compilerOptions.allowSyntheticDefaultImports
-            : moduleKind === ModuleKind.System;
+            : compilerOptions.esModuleInterop
+                ? moduleKind !== ModuleKind.None && moduleKind < ModuleKind.ES2015
+                : moduleKind === ModuleKind.System;
     }
 
     export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictPropertyInitialization" | "alwaysStrict";

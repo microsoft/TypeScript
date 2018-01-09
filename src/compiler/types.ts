@@ -3248,6 +3248,7 @@ namespace ts {
         bindingElement?: BindingElement;    // Binding element associated with property symbol
         exportsSomeValue?: boolean;         // True if module exports some value (not just types)
         enumKind?: EnumKind;                // Enum declaration classification
+        originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
     }
 
@@ -3978,6 +3979,7 @@ namespace ts {
         typeRoots?: string[];
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
+        esModuleInterop?: boolean;
 
         [option: string]: CompilerOptionsValue | JsonSourceFile | undefined;
     }
@@ -4545,6 +4547,7 @@ namespace ts {
         Iterator = 1 << 23,                     // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
         NoAsciiEscaping = 1 << 24,              // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
         /*@internal*/ TypeScriptClassWrapper = 1 << 25, // The node is an IIFE class wrapper created by the ts transform.
+        /*@internal*/ NeverApplyImportHelper = 1 << 26, // Indicates the node should never be wrapped with an import star helper (because, for example, it imports tslib itself)
     }
 
     export interface EmitHelper {

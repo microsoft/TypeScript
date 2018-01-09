@@ -1471,6 +1471,43 @@ namespace ts {
             return getSymbolOfPartOfRightHandSideOfImportEquals(<EntityName>node.moduleReference, dontResolveAlias);
         }
 
+        function resolveExportByName(moduleSymbol: Symbol, name: __String, dontResolveAlias: boolean) {
+            const exportValue = moduleSymbol.exports.get(InternalSymbolName.ExportEquals);
+            return exportValue
+                ? getPropertyOfType(getTypeOfSymbol(exportValue), name)
+                : resolveSymbol(moduleSymbol.exports.get(name), dontResolveAlias);
+        }
+
+        function canHaveSyntheticDefault(file: SourceFile | undefined, moduleSymbol: Symbol, dontResolveAlias: boolean) {
+            if (!allowSyntheticDefaultImports) {
+                return false;
+            }
+            // Declaration files (and ambient modules)
+            if (!file || file.isDeclarationFile) {
+                // Definitely cannot have a synthetic default if they have a default member specified
+                if (resolveExportByName(moduleSymbol, InternalSymbolName.Default, dontResolveAlias)) {
+                    return false;
+                }
+                // It _might_ still be incorrect to assume there is no __esModule marker on the import at runtime, even if there is no `default` member
+                // So we check a bit more,
+                if (resolveExportByName(moduleSymbol, escapeLeadingUnderscores("__esModule"), dontResolveAlias)) {
+                    // If there is an `__esModule` specified in the declaration (meaning someone explicitly added it or wrote it in their code),
+                    // it definitely is a module and does not have a synthetic default
+                    return false;
+                }
+                // There are _many_ declaration files not written with esmodules in mind that still get compiled into a format with __esModule set
+                // Meaning there may be no default at runtime - however to be on the permissive side, we allow access to a synthetic default member
+                // as there is no marker to indicate if the accompanying JS has `__esModule` or not, or is even native esm
+                return true;
+            }
+            // TypeScript files never have a synthetic default (as they are always emitted with an __esModule marker) _unless_ they contain an export= statement
+            if (!isSourceFileJavaScript(file)) {
+                return hasExportAssignmentSymbol(moduleSymbol);
+            }
+            // JS files have a synthetic default if they do not contain ES2015+ module syntax (export = is not valid in js) _and_ do not have an __esModule marker
+            return !file.externalModuleIndicator && !resolveExportByName(moduleSymbol, escapeLeadingUnderscores("__esModule"), dontResolveAlias);
+        }
+
         function getTargetOfImportClause(node: ImportClause, dontResolveAlias: boolean): Symbol {
             const moduleSymbol = resolveExternalModuleName(node, (<ImportDeclaration>node.parent).moduleSpecifier);
 
@@ -1480,16 +1517,16 @@ namespace ts {
                     exportDefaultSymbol = moduleSymbol;
                 }
                 else {
-                    const exportValue = moduleSymbol.exports.get("export=" as __String);
-                    exportDefaultSymbol = exportValue
-                        ? getPropertyOfType(getTypeOfSymbol(exportValue), InternalSymbolName.Default)
-                        : resolveSymbol(moduleSymbol.exports.get(InternalSymbolName.Default), dontResolveAlias);
+                    exportDefaultSymbol = resolveExportByName(moduleSymbol, InternalSymbolName.Default, dontResolveAlias);
                 }
 
-                if (!exportDefaultSymbol && !allowSyntheticDefaultImports) {
+                const file = find(moduleSymbol.declarations, isSourceFile);
+                const hasSyntheticDefault = canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias);
+                if (!exportDefaultSymbol && !hasSyntheticDefault) {
                     error(node.name, Diagnostics.Module_0_has_no_default_export, symbolToString(moduleSymbol));
                 }
-                else if (!exportDefaultSymbol && allowSyntheticDefaultImports) {
+                else if (!exportDefaultSymbol && hasSyntheticDefault) {
+                    // per emit behavior, a synthetic default overrides a "real" .default member if `__esModule` is not present
                     return resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) || resolveSymbol(moduleSymbol, dontResolveAlias);
                 }
                 return exportDefaultSymbol;
@@ -1889,8 +1926,40 @@ namespace ts {
         // combine other declarations with the module or variable (e.g. a class/module, function/module, interface/variable).
         function resolveESModuleSymbol(moduleSymbol: Symbol, moduleReferenceExpression: Expression, dontResolveAlias: boolean): Symbol {
             const symbol = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias);
-            if (!dontResolveAlias && symbol && !(symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable))) {
-                error(moduleReferenceExpression, Diagnostics.Module_0_resolves_to_a_non_module_entity_and_cannot_be_imported_using_this_construct, symbolToString(moduleSymbol));
+            if (!dontResolveAlias && symbol) {
+                if (!(symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable))) {
+                    error(moduleReferenceExpression, Diagnostics.Module_0_resolves_to_a_non_module_entity_and_cannot_be_imported_using_this_construct, symbolToString(moduleSymbol));
+                    return symbol;
+                }
+                if (compilerOptions.esModuleInterop) {
+                    const referenceParent = moduleReferenceExpression.parent;
+                    if (
+                        (isImportDeclaration(referenceParent) && getNamespaceDeclarationNode(referenceParent)) ||
+                        isImportCall(referenceParent)
+                    ) {
+                        const type = getTypeOfSymbol(symbol);
+                        let sigs = getSignaturesOfStructuredType(type, SignatureKind.Call);
+                        if (!sigs || !sigs.length) {
+                            sigs = getSignaturesOfStructuredType(type, SignatureKind.Construct);
+                        }
+                        if (sigs && sigs.length) {
+                            const moduleType = getTypeWithSyntheticDefaultImportType(type, symbol, moduleSymbol);
+                            // Create a new symbol which has the module's type less the call and construct signatures
+                            const result = createSymbol(symbol.flags, symbol.escapedName);
+                            result.declarations = symbol.declarations ? symbol.declarations.slice() : [];
+                            result.parent = symbol.parent;
+                            result.target = symbol;
+                            result.originatingImport = referenceParent;
+                            if (symbol.valueDeclaration) result.valueDeclaration = symbol.valueDeclaration;
+                            if (symbol.constEnumOnlyModule) result.constEnumOnlyModule = true;
+                            if (symbol.members) result.members = cloneMap(symbol.members);
+                            if (symbol.exports) result.exports = cloneMap(symbol.exports);
+                            const resolvedModuleType = resolveStructuredTypeMembers(moduleType as StructuredType); // Should already be resolved from the signature checks above
+                            result.type = createAnonymousType(result, resolvedModuleType.members, emptyArray, emptyArray, resolvedModuleType.stringIndexInfo, resolvedModuleType.numberIndexInfo);
+                            return result;
+                        }
+                    }
+                }
             }
             return symbol;
         }
@@ -9451,6 +9520,17 @@ namespace ts {
                 }
 
                 diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo));
+            }
+            // Check if we should issue an extra diagnostic to produce a quickfix for a slightly incorrect import statement
+            if (headMessage && errorNode && !result && source.symbol) {
+                const links = getSymbolLinks(source.symbol);
+                if (links.originatingImport && !isImportCall(links.originatingImport)) {
+                    const helpfulRetry = checkTypeRelatedTo(getTypeOfSymbol(links.target), target, relation, /*errorNode*/ undefined);
+                    if (helpfulRetry) {
+                        // Likely an incorrect import. Issue a helpful diagnostic to produce a quickfix to change the import
+                        diagnostics.add(createDiagnosticForNode(links.originatingImport, Diagnostics.A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime));
+                    }
+                }
             }
             return result !== Ternary.False;
 
@@ -17320,7 +17400,7 @@ namespace ts {
                     error(node, Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new, typeToString(funcType));
                 }
                 else {
-                    error(node, Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures, typeToString(apparentType));
+                    invocationError(node, apparentType, SignatureKind.Call);
                 }
                 return resolveErrorCall(node);
             }
@@ -17410,7 +17490,7 @@ namespace ts {
                 return signature;
             }
 
-            error(node, Diagnostics.Cannot_use_new_with_an_expression_whose_type_lacks_a_call_or_construct_signature);
+            invocationError(node, expressionType, SignatureKind.Construct);
             return resolveErrorCall(node);
         }
 
@@ -17457,6 +17537,28 @@ namespace ts {
             return true;
         }
 
+        function invocationError(node: Node, apparentType: Type, kind: SignatureKind) {
+            error(node, kind === SignatureKind.Call
+                ? Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures
+                : Diagnostics.Cannot_use_new_with_an_expression_whose_type_lacks_a_call_or_construct_signature
+            , typeToString(apparentType));
+            invocationErrorRecovery(apparentType, kind);
+        }
+
+        function invocationErrorRecovery(apparentType: Type, kind: SignatureKind) {
+            if (!apparentType.symbol) {
+                return;
+            }
+            const importNode = getSymbolLinks(apparentType.symbol).originatingImport;
+            // Create a diagnostic on the originating import if possible onto which we can attach a quickfix
+            //  An import call expression cannot be rewritten into another form to correct the error - the only solution is to use `.default` at the use-site
+            if (importNode && !isImportCall(importNode)) {
+                const sigs = getSignaturesOfType(getTypeOfSymbol(getSymbolLinks(apparentType.symbol).target), kind);
+                if (!sigs || !sigs.length) return;
+                error(importNode, Diagnostics.A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime);
+            }
+        }
+
         function resolveTaggedTemplateExpression(node: TaggedTemplateExpression, candidatesOutArray: Signature[]): Signature {
             const tagType = checkExpression(node.tag);
             const apparentType = getApparentType(tagType);
@@ -17474,7 +17576,7 @@ namespace ts {
             }
 
             if (!callSignatures.length) {
-                error(node, Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures, typeToString(apparentType));
+                invocationError(node, apparentType, SignatureKind.Call);
                 return resolveErrorCall(node);
             }
 
@@ -17531,6 +17633,7 @@ namespace ts {
                 errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures, typeToString(apparentType));
                 errorInfo = chainDiagnosticMessages(errorInfo, headMessage);
                 diagnostics.add(createDiagnosticForNodeFromMessageChain(node, errorInfo));
+                invocationErrorRecovery(apparentType, SignatureKind.Call);
                 return resolveErrorCall(node);
             }
 
@@ -17785,17 +17888,19 @@ namespace ts {
             if (moduleSymbol) {
                 const esModuleSymbol = resolveESModuleSymbol(moduleSymbol, specifier, /*dontRecursivelyResolve*/ true);
                 if (esModuleSymbol) {
-                    return createPromiseReturnType(node, getTypeWithSyntheticDefaultImportType(getTypeOfSymbol(esModuleSymbol), esModuleSymbol));
+                    return createPromiseReturnType(node, getTypeWithSyntheticDefaultImportType(getTypeOfSymbol(esModuleSymbol), esModuleSymbol, moduleSymbol));
                 }
             }
             return createPromiseReturnType(node, anyType);
         }
 
-        function getTypeWithSyntheticDefaultImportType(type: Type, symbol: Symbol): Type {
+        function getTypeWithSyntheticDefaultImportType(type: Type, symbol: Symbol, originalSymbol: Symbol): Type {
             if (allowSyntheticDefaultImports && type && type !== unknownType) {
                 const synthType = type as SyntheticDefaultModuleType;
                 if (!synthType.syntheticType) {
-                    if (!getPropertyOfType(type, InternalSymbolName.Default)) {
+                    const file = find(originalSymbol.declarations, isSourceFile);
+                    const hasSyntheticDefault = canHaveSyntheticDefault(file, originalSymbol, /*dontResolveAlias*/ false);
+                    if (hasSyntheticDefault) {
                         const memberTable = createSymbolTable();
                         const newSymbol = createSymbol(SymbolFlags.Alias, InternalSymbolName.Default);
                         newSymbol.target = resolveSymbol(symbol);
@@ -17803,7 +17908,7 @@ namespace ts {
                         const anonymousSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
                         const defaultContainingObject = createAnonymousType(anonymousSymbol, memberTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
                         anonymousSymbol.type = defaultContainingObject;
-                        synthType.syntheticType = getIntersectionType([type, defaultContainingObject]);
+                        synthType.syntheticType = (type.flags & TypeFlags.StructuredType && type.symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable)) ? getSpreadType(type, defaultContainingObject, anonymousSymbol, /*propegatedFlags*/ 0) : defaultContainingObject;
                     }
                     else {
                         synthType.syntheticType = type;

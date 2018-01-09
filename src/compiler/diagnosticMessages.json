@@ -3548,6 +3548,14 @@
         "category": "Error",
         "code": 7036
     },
+    "Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'.": {
+        "category": "Message",
+        "code": 7037
+    },
+    "A namespace-style import cannot be called or constructed, and will cause a failure at runtime.": {
+        "category": "Error",
+        "code": 7038
+    },
 
     "You cannot rename this element.": {
         "category": "Error",
@@ -3906,5 +3914,13 @@
     "Install '{0}'": {
         "category": "Message",
         "code": 95014
+    },
+    "Replace import with '{0}'.": {
+        "category": "Message",
+        "code": 95015
+    },
+    "Use synthetic 'default' member.": {
+        "category": "Message",
+        "code": 95016
     }
 }
