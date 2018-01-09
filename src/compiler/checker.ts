@@ -1187,7 +1187,7 @@ namespace ts {
                         }
                         break;
                 }
-                if (location.kind !== SyntaxKind.Block) {
+                if (isNonBlockLocation(location)) {
                     lastNonBlockLocation = location;
                 }
                 lastLocation = location;
@@ -1195,7 +1195,7 @@ namespace ts {
             }
 
             // We just climbed up parents looking for the name, meaning that we started in a descendant node of `lastLocation`.
-            // If `result === lastLocation.symbol`, that means that we are somewhere inside `lastLocation` looking up a name, and resolving to `lastLocation` itself.
+            // If `result === lastNonBlockLocation.symbol`, that means that we are somewhere inside `lastNonBlockLocation` looking up a name, and resolving to `lastLocation` itself.
             // That means that this is a self-reference of `lastLocation`, and shouldn't count this when considering whether `lastLocation` is used.
             if (isUse && result && nameNotFoundMessage && noUnusedIdentifiers && result !== lastNonBlockLocation.symbol) {
                 result.isReferenced = true;
@@ -1276,6 +1276,20 @@ namespace ts {
                 }
             }
             return result;
+        }
+
+        function isNonBlockLocation({ kind }: Node): boolean {
+            switch (kind) {
+                case SyntaxKind.Block:
+                case SyntaxKind.ModuleBlock:
+                case SyntaxKind.SwitchStatement:
+                case SyntaxKind.CaseBlock:
+                case SyntaxKind.CaseClause:
+                case SyntaxKind.DefaultClause:
+                    return false;
+                default:
+                    return true;
+            }
         }
 
         function diagnosticName(nameArg: __String | Identifier) {
