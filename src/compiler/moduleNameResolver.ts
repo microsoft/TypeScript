@@ -1097,11 +1097,16 @@ namespace ts {
     export function getPackageNameFromAtTypesDirectory(mangledName: string): string {
         const withoutAtTypePrefix = removePrefix(mangledName, "@types/");
         if (withoutAtTypePrefix !== mangledName) {
-            return stringContains(withoutAtTypePrefix, mangledScopedPackageSeparator) ?
-                "@" + withoutAtTypePrefix.replace(mangledScopedPackageSeparator, ts.directorySeparator) :
-                withoutAtTypePrefix;
+            return getPackageNameFromAtTypesDirectoryWithoutPrefix(withoutAtTypePrefix);
         }
         return mangledName;
+    }
+
+    /* @internal */
+    export function getPackageNameFromAtTypesDirectoryWithoutPrefix(withoutAtTypePrefix: string): string {
+        return stringContains(withoutAtTypePrefix, mangledScopedPackageSeparator) ?
+            "@" + withoutAtTypePrefix.replace(mangledScopedPackageSeparator, ts.directorySeparator) :
+            withoutAtTypePrefix;
     }
 
     function tryFindNonRelativeModuleNameInCache(cache: PerModuleNameCache | undefined, moduleName: string, containingDirectory: string, traceEnabled: boolean, host: ModuleResolutionHost): SearchResult<Resolved> {

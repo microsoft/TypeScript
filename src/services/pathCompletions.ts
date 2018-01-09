@@ -313,7 +313,8 @@ namespace ts.Completions.PathCompletions {
     function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, span: TextSpan, result: CompletionEntry[] = []): CompletionEntry[] {
         // Check for typings specified in compiler options
         if (options.types) {
-            for (const moduleName of options.types) {
+            for (const typesName of options.types) {
+                const moduleName = getPackageNameFromAtTypesDirectoryWithoutPrefix(typesName);
                 result.push(createCompletionEntryForModule(moduleName, ScriptElementKind.externalModuleName, span));
             }
         }
@@ -346,7 +347,9 @@ namespace ts.Completions.PathCompletions {
                 if (directories) {
                     for (let typeDirectory of directories) {
                         typeDirectory = normalizePath(typeDirectory);
-                        result.push(createCompletionEntryForModule(getBaseFileName(typeDirectory), ScriptElementKind.externalModuleName, span));
+                        const directoryName = getBaseFileName(typeDirectory);
+                        const moduleName = getPackageNameFromAtTypesDirectoryWithoutPrefix(directoryName);
+                        result.push(createCompletionEntryForModule(moduleName, ScriptElementKind.externalModuleName, span));
                     }
                 }
             }
