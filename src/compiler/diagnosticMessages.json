@@ -2288,7 +2288,18 @@
         "category": "Error",
         "code": 2720
     },
-
+    "Cannot invoke an object which is possibly 'null'.": {
+        "category": "Error",
+        "code": 2721
+    },
+    "Cannot invoke an object which is possibly 'undefined'.": {
+        "category": "Error",
+        "code": 2722
+    },
+    "Cannot invoke an object which is possibly 'null' or 'undefined'.": {
+        "category": "Error",
+        "code": 2723
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
