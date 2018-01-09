@@ -6,7 +6,7 @@
 
 // should not change type if it's incorrectly set
 verify.codeFix({
-    description: "Convert to async",
+    description: "Add async modifier to containing function",
     newFileContent:
 `const f: string = async () => {
     await Promise.resolve('foo');

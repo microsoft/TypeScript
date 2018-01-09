@@ -5,7 +5,7 @@
 ////}
 
 verify.codeFix({
-    description: "Convert to async",
+    description: "Add async modifier to containing function",
     newFileContent:
 `const f: () => Promise<Array<number | string>> = async function() {
     await Promise.resolve([]);

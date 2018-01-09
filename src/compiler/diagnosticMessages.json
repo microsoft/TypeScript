@@ -3843,7 +3843,7 @@
         "category": "Message",
         "code": 90028
     },
-    "Convert to async": {
+    "Add async modifier to containing function": {
         "category": "Message",
         "code": 90029
     },

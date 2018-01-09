@@ -12,7 +12,7 @@ namespace ts.codefix {
             const nodes = getNodes(sourceFile, span.start);
             if (!nodes) return undefined;
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, nodes));
-            return [{ description: getLocaleSpecificMessage(Diagnostics.Convert_to_async), changes, fixId }];
+            return [{ description: getLocaleSpecificMessage(Diagnostics.Add_async_modifier_to_containing_function), changes, fixId }];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {

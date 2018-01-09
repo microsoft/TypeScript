@@ -7,7 +7,7 @@
 ////}
 
 verify.codeFix({
-    description: "Convert to async",
+    description: "Add async modifier to containing function",
     newFileContent:
 `class Foo {
     async bar() {
