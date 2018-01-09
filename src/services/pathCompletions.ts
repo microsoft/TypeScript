@@ -216,7 +216,8 @@ namespace ts.Completions.PathCompletions {
         const expandedPrefixDirectory = fragmentHasPath ? combinePaths(normalizedPrefixDirectory, normalizedPrefixBase + getDirectoryPath(fragment)) : normalizedPrefixDirectory;
 
         const normalizedSuffix = normalizePath(parsed.suffix);
-        const baseDirectory = combinePaths(baseUrl, expandedPrefixDirectory);
+        // Need to normalize after combining: If we combinePaths("a", "../b"), we want "b" and not "a/../b".
+        const baseDirectory = normalizePath(combinePaths(baseUrl, expandedPrefixDirectory));
         const completePrefix = fragmentHasPath ? baseDirectory : ensureTrailingDirectorySeparator(baseDirectory) + normalizedPrefixBase;
 
         // If we have a suffix, then we need to read the directory all the way down. We could create a glob
