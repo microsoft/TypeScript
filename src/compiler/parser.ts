@@ -6454,10 +6454,11 @@ namespace ts {
                         // a badly malformed tag should not be added to the list of tags
                         return;
                     }
-                    addTag(tag, parseTagComments(indent + tag.end - tag.pos));
+                    tag.comment = parseTagComments(indent + tag.end - tag.pos);
+                    addTag(tag);
                 }
 
-                function parseTagComments(indent: number) {
+                function parseTagComments(indent: number): string {
                     const comments: string[] = [];
                     let state = JSDocState.BeginningOfLine;
                     let margin: number | undefined;
@@ -6514,7 +6515,7 @@ namespace ts {
 
                     removeLeadingNewlines(comments);
                     removeTrailingNewlines(comments);
-                    return comments;
+                    return comments.join("");
                 }
 
                 function parseUnknownTag(atToken: AtToken, tagName: Identifier) {
@@ -6524,9 +6525,7 @@ namespace ts {
                     return finishNode(result);
                 }
 
-                function addTag(tag: JSDocTag, comments: string[]): void {
-                    tag.comment = comments.join("");
-
+                function addTag(tag: JSDocTag): void {
                     if (!tags) {
                         tags = [tag];
                         tagsPos = tag.pos;
@@ -6571,9 +6570,7 @@ namespace ts {
                     }
                 }
 
-                function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, target: PropertyLikeParse.Parameter): JSDocParameterTag;
-                function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, target: PropertyLikeParse.Property): JSDocPropertyTag;
-                function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, target: PropertyLikeParse): JSDocPropertyLikeTag {
+                function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, target: PropertyLikeParse): JSDocParameterTag | JSDocPropertyTag {
                     let typeExpression = tryParseTypeExpression();
                     let isNameFirst = !typeExpression;
                     skipWhitespace();
@@ -6585,7 +6582,7 @@ namespace ts {
                         typeExpression = tryParseTypeExpression();
                     }
 
-                    const result: JSDocPropertyLikeTag = target === PropertyLikeParse.Parameter ?
+                    const result = target === PropertyLikeParse.Parameter ?
                         <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos) :
                         <JSDocPropertyTag>createNode(SyntaxKind.JSDocPropertyTag, atToken.pos);
                     const nestedTypeLiteral = parseNestedTypeLiteral(typeExpression, name);
@@ -6600,7 +6597,6 @@ namespace ts {
                     result.isNameFirst = isNameFirst;
                     result.isBracketed = isBracketed;
                     return finishNode(result);
-
                 }
 
                 function parseNestedTypeLiteral(typeExpression: JSDocTypeExpression, name: EntityName) {
@@ -6829,18 +6825,28 @@ namespace ts {
                     if (!tagName) {
                         return false;
                     }
+                    let t: PropertyLikeParse;
                     switch (tagName.escapedText) {
                         case "type":
                             return target === PropertyLikeParse.Property && parseTypeTag(atToken, tagName);
                         case "prop":
                         case "property":
-                            return target === PropertyLikeParse.Property && parseParameterOrPropertyTag(atToken, tagName, target);
+                            t = PropertyLikeParse.Property;
+                            break;
                         case "arg":
                         case "argument":
                         case "param":
-                            return target === PropertyLikeParse.Parameter && parseParameterOrPropertyTag(atToken, tagName, target);
+                            t = PropertyLikeParse.Parameter;
+                            break;
+                        default:
+                            return false;
                     }
-                    return false;
+                    if (target !== t) {
+                        return false;
+                    }
+                    const tag = parseParameterOrPropertyTag(atToken, tagName, target);
+                    tag.comment = parseTagComments(tag.end - tag.pos);
+                    return tag;
                 }
 
                 function parseTemplateTag(atToken: AtToken, tagName: Identifier): JSDocTemplateTag | undefined {

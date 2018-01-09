@@ -52,18 +52,32 @@ namespace ts.JsDoc {
         // Eg. const a: Array<string> | Array<number>; a.length
         // The property length will have two declarations of property length coming
         // from Array<T> - Array<string> and Array<number>
-        const documentationComment = <SymbolDisplayPart[]>[];
+        const documentationComment: SymbolDisplayPart[] = [];
         forEachUnique(declarations, declaration => {
-            forEach(getAllJSDocs(declaration), doc => {
-                if (doc.comment) {
-                    if (documentationComment.length) {
-                        documentationComment.push(lineBreakPart());
-                    }
-                    documentationComment.push(textPart(doc.comment));
+            for (const comment of getCommentsFromDeclaration(declaration)) {
+                if (documentationComment.length) {
+                    documentationComment.push(lineBreakPart());
                 }
-            });
+                documentationComment.push(textPart(comment));
+            }
         });
         return documentationComment;
+    }
+
+    function getCommentsFromDeclaration(declaration: Declaration): string[] {
+        switch (declaration.kind) {
+            case SyntaxKind.JSDocPropertyTag:
+                return [(declaration as JSDocPropertyTag).comment];
+            default:
+                return mapDefined(getAllJSDocs(declaration), doc => doc.comment);
+        }
+    }
+
+    function getAllJSDocs(node: Node): (JSDoc | JSDocTag)[] {
+        if (isJSDocTypedefTag(node)) {
+            return [node.parent];
+        }
+        return getJSDocCommentsAndTags(node);
     }
 
     export function getJsDocTagsFromDeclarations(declarations?: Declaration[]): JSDocTagInfo[] {
