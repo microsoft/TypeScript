@@ -10,7 +10,7 @@
 const ranges = test.ranges();
 const [r0, r1, r2] = ranges;
 const vars = { definition: "var a: any", ranges: [r0] };
-const imports = { definition: "import a", ranges: [r1, r2] };
+const imports = { definition: "(alias) var a: any\nimport a", ranges: [r1, r2] };
 verify.referenceGroups(r0, [vars, imports]);
 verify.referenceGroups(r1, [imports, vars]);
 verify.referenceGroups(r2, [imports, vars]);

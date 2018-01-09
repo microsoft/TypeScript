@@ -616,7 +616,7 @@ namespace ts.FindAllReferences {
 
     /** If at an export specifier, go to the symbol it refers to. */
     function skipExportSpecifierSymbol(symbol: Symbol, checker: TypeChecker): Symbol {
-        // For `export { foo } from './bar", there's nothing to skip, because it does  not create a new alias. But `export { foo } does.
+        // For `export { foo } from './bar", there's nothing to skip, because it does not create a new alias. But `export { foo } does.
         if (symbol.declarations) {
             for (const declaration of symbol.declarations) {
                 if (isExportSpecifier(declaration) && !(declaration as ExportSpecifier).propertyName && !(declaration as ExportSpecifier).parent.parent.moduleSpecifier) {

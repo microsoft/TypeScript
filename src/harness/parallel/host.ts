@@ -9,6 +9,8 @@ namespace Harness.Parallel.Host {
         on(event: "error", listener: (err: Error) => void): this;
         on(event: "exit", listener: (code: number, signal: string) => void): this;
         on(event: "message", listener: (message: ParallelClientMessage) => void): this;
+        kill(signal?: string): void;
+        currentTasks?: {file: string}[]; // Custom monkeypatch onto child process handle
     }
 
     interface ProgressBarsOptions {
@@ -134,6 +136,11 @@ namespace Harness.Parallel.Host {
         const newPerfData: {[testHash: string]: number} = {};
 
         const workers: ChildProcessPartial[] = [];
+        const defaultTimeout = globalTimeout !== undefined
+            ? globalTimeout
+            : mocha && mocha.suite && mocha.suite._timeout
+                ? mocha.suite._timeout
+                : 20000; // 20 seconds
         let closedWorkers = 0;
         for (let i = 0; i < workerCount; i++) {
             // TODO: Just send the config over the IPC channel or in the command line arguments
@@ -141,6 +148,14 @@ namespace Harness.Parallel.Host {
             const configPath = ts.combinePaths(taskConfigsFolder, `task-config${i}.json`);
             Harness.IO.writeFile(configPath, JSON.stringify(config));
             const child = fork(__filename, [`--config="${configPath}"`]);
+            let currentTimeout = defaultTimeout;
+            const killChild = () => {
+                child.kill();
+                console.error(`Worker exceeded ${currentTimeout}ms timeout ${child.currentTasks && child.currentTasks.length ? `while running test '${child.currentTasks[0].file}'.` : `during test setup.`}`);
+                return process.exit(2);
+            };
+            let timer = setTimeout(killChild, currentTimeout);
+            const timeoutStack: number[] = [];
             child.on("error", err => {
                 console.error("Unexpected error in child process:");
                 console.error(err);
@@ -160,8 +175,25 @@ namespace Harness.Parallel.Host {
         Stack: ${data.payload.stack}`);
                         return process.exit(2);
                     }
+                    case "timeout": {
+                        clearTimeout(timer);
+                        if (data.payload.duration === "reset") {
+                            currentTimeout = timeoutStack.pop() || defaultTimeout;
+                        }
+                        else {
+                            timeoutStack.push(currentTimeout);
+                            currentTimeout = data.payload.duration;
+                        }
+                        timer = setTimeout(killChild, currentTimeout); // Reset timeout on timeout update, for when a timeout changes while a suite is executing
+                        break;
+                    }
                     case "progress":
                     case "result": {
+                        clearTimeout(timer);
+                        timer = setTimeout(killChild, currentTimeout);
+                        if (child.currentTasks) {
+                            child.currentTasks.shift();
+                        }
                         totalPassing += data.payload.passing;
                         if (data.payload.errors.length) {
                             errorResults = errorResults.concat(data.payload.errors);
@@ -195,6 +227,7 @@ namespace Harness.Parallel.Host {
                             while (tasks.length && taskList.reduce((p, c) => p + c.size, 0) < chunkSize) {
                                 taskList.push(tasks.pop());
                             }
+                            child.currentTasks = taskList;
                             if (taskList.length === 1) {
                                 child.send({ type: "test", payload: taskList[0] });
                             }
@@ -252,18 +285,22 @@ namespace Harness.Parallel.Host {
             for (const worker of workers) {
                 const payload = batches.pop();
                 if (payload) {
+                    worker.currentTasks = payload;
                     worker.send({ type: "batch", payload });
                 }
                 else { // Out of batches, send off just one test
                     const payload = tasks.pop();
                     ts.Debug.assert(!!payload); // The reserve kept above should ensure there is always an initial task available, even in suboptimal scenarios
+                    worker.currentTasks = [payload];
                     worker.send({ type: "test", payload });
                 }
             }
         }
         else {
             for (let i = 0; i < workerCount; i++) {
-                workers[i].send({ type: "test", payload: tasks.pop() });
+                const task = tasks.pop();
+                workers[i].currentTasks = [task];
+                workers[i].send({ type: "test", payload: task });
             }
         }
 
