@@ -31,6 +31,7 @@
             "check-else"
         ],
         "no-bom": true,
+        "no-double-space": true,
         "no-in-operator": true,
         "no-increment-decrement": true,
         "no-inferrable-types": true,

@@ -36,7 +36,6 @@ declare global  {
     }
 }
 export {  };
-export {};
 //// [f2.d.ts]
 declare global  {
     interface Something {
@@ -44,7 +43,6 @@ declare global  {
     }
 }
 export {  };
-export {};
 //// [f3.d.ts]
 import "./f1";
 import "./f2";
