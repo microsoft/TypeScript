@@ -16,20 +16,20 @@ for (var x of Object.values(o)) {
 >x : Symbol(x, Decl(useObjectValuesAndEntries1.ts, 2, 8))
 }
 
-var entries = Object.entries(o);  // <-- entries: ['a' | 'b', number][]
+var entries = Object.entries(o);
 >entries : Symbol(entries, Decl(useObjectValuesAndEntries1.ts, 6, 3))
 >Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 >o : Symbol(o, Decl(useObjectValuesAndEntries1.ts, 0, 3))
 
-var entries1 = Object.entries(1); // <-- entries: [string, any][]
+var entries1 = Object.entries(1);
 >entries1 : Symbol(entries1, Decl(useObjectValuesAndEntries1.ts, 7, 3))
 >Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 
-var entries2 = Object.entries({a: true, b: 2}) // ['a' | 'b', number | boolean][]
+var entries2 = Object.entries({a: true, b: 2})
 >entries2 : Symbol(entries2, Decl(useObjectValuesAndEntries1.ts, 8, 3))
 >Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
@@ -37,7 +37,7 @@ var entries2 = Object.entries({a: true, b: 2}) // ['a' | 'b', number | boolean][
 >a : Symbol(a, Decl(useObjectValuesAndEntries1.ts, 8, 31))
 >b : Symbol(b, Decl(useObjectValuesAndEntries1.ts, 8, 39))
 
-var entries3 = Object.entries({}) // [never, any][]
+var entries3 = Object.entries({})
 >entries3 : Symbol(entries3, Decl(useObjectValuesAndEntries1.ts, 9, 3))
 >Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

@@ -9,3 +9,4 @@ var _b, _c, _d, _e;
 
 
 //// [bindingPatternOmittedExpressionNesting.d.ts]
+export {};

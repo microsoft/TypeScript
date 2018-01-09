@@ -45,3 +45,4 @@ var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_6.default;
 declare var a: number;
 export default a;
 //// [es6ImportDefaultBindingFollowedWithNamedImport1InEs5_1.d.ts]
+export {};

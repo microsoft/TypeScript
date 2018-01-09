@@ -47,7 +47,7 @@ namespace ts.formatting {
             rule("IgnoreBeforeComment", anyToken, comments, anyContext, RuleAction.Ignore),
             rule("IgnoreAfterLineComment", SyntaxKind.SingleLineCommentTrivia, anyToken, anyContext, RuleAction.Ignore),
 
-            rule("NoSpaceBeforeColon", anyToken, SyntaxKind.ColonToken, [isNonJsxSameLineTokenContext, isNotBinaryOpContext], RuleAction.Delete),
+            rule("NotSpaceBeforeColon", anyToken, SyntaxKind.ColonToken, [isNonJsxSameLineTokenContext, isNotBinaryOpContext, isNotTypeAnnotationContext], RuleAction.Delete),
             rule("SpaceAfterColon", SyntaxKind.ColonToken, anyToken, [isNonJsxSameLineTokenContext, isNotBinaryOpContext], RuleAction.Space),
             rule("NoSpaceBeforeQuestionMark", anyToken, SyntaxKind.QuestionToken, [isNonJsxSameLineTokenContext, isNotBinaryOpContext], RuleAction.Delete),
             // insert space after '?' only when it is used in conditional operator
@@ -69,10 +69,10 @@ namespace ts.formatting {
             rule("NoSpaceBeforeUnaryPostdecrementOperator", unaryPostdecrementExpressions, SyntaxKind.MinusMinusToken, [isNonJsxSameLineTokenContext], RuleAction.Delete),
 
             // More unary operator special-casing.
-            // DevDiv 181814:  Be careful when removing leading whitespace
+            // DevDiv 181814: Be careful when removing leading whitespace
             // around unary operators.  Examples:
-            //      1 - -2  --X-->  1--2
-            //      a + ++b --X-->  a+++b
+            //      1 - -2  --X--> 1--2
+            //      a + ++b --X--> a+++b
             rule("SpaceAfterPostincrementWhenFollowedByAdd", SyntaxKind.PlusPlusToken, SyntaxKind.PlusToken, [isNonJsxSameLineTokenContext, isBinaryOpContext], RuleAction.Space),
             rule("SpaceAfterAddWhenFollowedByUnaryPlus", SyntaxKind.PlusToken, SyntaxKind.PlusToken, [isNonJsxSameLineTokenContext, isBinaryOpContext], RuleAction.Space),
             rule("SpaceAfterAddWhenFollowedByPreincrement", SyntaxKind.PlusToken, SyntaxKind.PlusPlusToken, [isNonJsxSameLineTokenContext, isBinaryOpContext], RuleAction.Space),
@@ -300,6 +300,9 @@ namespace ts.formatting {
 
             rule("SpaceAfterTypeAssertion", SyntaxKind.GreaterThanToken, anyToken, [isOptionEnabled("insertSpaceAfterTypeAssertion"), isNonJsxSameLineTokenContext, isTypeAssertionContext], RuleAction.Space),
             rule("NoSpaceAfterTypeAssertion", SyntaxKind.GreaterThanToken, anyToken, [isOptionDisabledOrUndefined("insertSpaceAfterTypeAssertion"), isNonJsxSameLineTokenContext, isTypeAssertionContext], RuleAction.Delete),
+
+            rule("SpaceBeforeTypeAnnotation", anyToken, SyntaxKind.ColonToken, [isOptionEnabled("insertSpaceBeforeTypeAnnotation"), isNonJsxSameLineTokenContext, isTypeAnnotationContext], RuleAction.Space),
+            rule("NoSpaceBeforeTypeAnnotation", anyToken, SyntaxKind.ColonToken, [isOptionDisabledOrUndefined("insertSpaceBeforeTypeAnnotation"), isNonJsxSameLineTokenContext, isTypeAnnotationContext], RuleAction.Delete),
         ];
 
         // These rules are lower in priority than user-configurable. Rules earlier in this list have priority over rules later in the list.
@@ -439,6 +442,19 @@ namespace ts.formatting {
 
     function isNotBinaryOpContext(context: FormattingContext): boolean {
         return !isBinaryOpContext(context);
+    }
+
+    function isNotTypeAnnotationContext(context: FormattingContext): boolean {
+        return !isTypeAnnotationContext(context);
+    }
+
+    function isTypeAnnotationContext(context: FormattingContext): boolean {
+        const contextKind = context.contextNode.kind;
+        return contextKind === SyntaxKind.PropertyDeclaration ||
+            contextKind === SyntaxKind.PropertySignature ||
+            contextKind === SyntaxKind.Parameter ||
+            contextKind === SyntaxKind.VariableDeclaration ||
+            isFunctionLikeKind(contextKind);
     }
 
     function isConditionalOperatorContext(context: FormattingContext): boolean {

@@ -169,3 +169,4 @@ export declare module m4 {
     function fooExport(): number;
 }
 //// [commentsExternalModules_1.d.ts]
+export {};

@@ -1,12 +1,12 @@
 /* @internal */
 namespace ts.Completions.PathCompletions {
-    export function getStringLiteralCompletionsFromModuleNames(node: LiteralExpression, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): CompletionEntry[] {
+    export function getStringLiteralCompletionsFromModuleNames(sourceFile: SourceFile, node: LiteralExpression, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): CompletionEntry[] {
         const literalValue = normalizeSlashes(node.text);
 
         const scriptPath = node.getSourceFile().path;
         const scriptDirectory = getDirectoryPath(scriptPath);
 
-        const span = getDirectoryFragmentTextSpan((<StringLiteral>node).text, node.getStart() + 1);
+        const span = getDirectoryFragmentTextSpan((<StringLiteral>node).text, node.getStart(sourceFile) + 1);
         if (isPathRelativeToScript(literalValue) || isRootedDiskPath(literalValue)) {
             const extensions = getSupportedExtensions(compilerOptions);
             if (compilerOptions.rootDirs) {
@@ -147,23 +147,13 @@ namespace ts.Completions.PathCompletions {
             getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/ false, span, host, /*exclude*/ undefined, result);
 
             for (const path in paths) {
-                if (!paths.hasOwnProperty(path)) continue;
                 const patterns = paths[path];
-                if (!patterns) continue;
-
-                if (path === "*") {
-                    for (const pattern of patterns) {
-                        for (const match of getModulesForPathsPattern(fragment, baseUrl, pattern, fileExtensions, host)) {
-                            // Path mappings may provide a duplicate way to get to something we've already added, so don't add again.
-                            if (result.some(entry => entry.name === match)) continue;
-                            result.push(createCompletionEntryForModule(match, ScriptElementKind.externalModuleName, span));
+                if (paths.hasOwnProperty(path) && patterns) {
+                    for (const pathCompletion of getCompletionsForPathMapping(path, patterns, fragment, baseUrl, fileExtensions, host)) {
+                        // Path mappings may provide a duplicate way to get to something we've already added, so don't add again.
+                        if (!result.some(entry => entry.name === pathCompletion)) {
+                            result.push(createCompletionEntryForModule(pathCompletion, ScriptElementKind.externalModuleName, span));
                         }
-                    }
-                }
-                else if (startsWith(path, fragment)) {
-                    if (patterns.length === 1) {
-                        if (result.some(entry => entry.name === path)) continue;
-                        result.push(createCompletionEntryForModule(path, ScriptElementKind.externalModuleName, span));
                     }
                 }
             }
@@ -187,52 +177,66 @@ namespace ts.Completions.PathCompletions {
         return result;
     }
 
-    function getModulesForPathsPattern(fragment: string, baseUrl: string, pattern: string, fileExtensions: ReadonlyArray<string>, host: LanguageServiceHost): string[] {
-        if (host.readDirectory) {
-            const parsed = hasZeroOrOneAsteriskCharacter(pattern) ? tryParsePattern(pattern) : undefined;
-            if (parsed) {
-                // The prefix has two effective parts: the directory path and the base component after the filepath that is not a
-                // full directory component. For example: directory/path/of/prefix/base*
-                const normalizedPrefix = normalizeAndPreserveTrailingSlash(parsed.prefix);
-                const normalizedPrefixDirectory = getDirectoryPath(normalizedPrefix);
-                const normalizedPrefixBase = getBaseFileName(normalizedPrefix);
-
-                const fragmentHasPath = stringContains(fragment, directorySeparator);
-
-                // Try and expand the prefix to include any path from the fragment so that we can limit the readDirectory call
-                const expandedPrefixDirectory = fragmentHasPath ? combinePaths(normalizedPrefixDirectory, normalizedPrefixBase + getDirectoryPath(fragment)) : normalizedPrefixDirectory;
-
-                const normalizedSuffix = normalizePath(parsed.suffix);
-                const baseDirectory = combinePaths(baseUrl, expandedPrefixDirectory);
-                const completePrefix = fragmentHasPath ? baseDirectory : ensureTrailingDirectorySeparator(baseDirectory) + normalizedPrefixBase;
-
-                // If we have a suffix, then we need to read the directory all the way down. We could create a glob
-                // that encodes the suffix, but we would have to escape the character "?" which readDirectory
-                // doesn't support. For now, this is safer but slower
-                const includeGlob = normalizedSuffix ? "**/*" : "./*";
-
-                const matches = tryReadDirectory(host, baseDirectory, fileExtensions, /*exclude*/ undefined, [includeGlob]);
-                if (matches) {
-                    const result: string[] = [];
-
-                    // Trim away prefix and suffix
-                    for (const match of matches) {
-                        const normalizedMatch = normalizePath(match);
-                        if (!endsWith(normalizedMatch, normalizedSuffix) || !startsWith(normalizedMatch, completePrefix)) {
-                            continue;
-                        }
-
-                        const start = completePrefix.length;
-                        const length = normalizedMatch.length - start - normalizedSuffix.length;
-
-                        result.push(removeFileExtension(normalizedMatch.substr(start, length)));
-                    }
-                    return result;
-                }
-            }
+    function getCompletionsForPathMapping(
+        path: string, patterns: ReadonlyArray<string>, fragment: string, baseUrl: string, fileExtensions: ReadonlyArray<string>, host: LanguageServiceHost,
+    ): string[] {
+        if (!endsWith(path, "*")) {
+            // For a path mapping "foo": ["/x/y/z.ts"], add "foo" itself as a completion.
+            return !stringContains(path, "*") && startsWith(path, fragment) ? [path] : emptyArray;
         }
 
-        return undefined;
+        const pathPrefix = path.slice(0, path.length - 1);
+        if (!startsWith(fragment, pathPrefix)) {
+            return emptyArray;
+        }
+
+        const remainingFragment = fragment.slice(pathPrefix.length);
+        return flatMap(patterns, pattern => getModulesForPathsPattern(remainingFragment, baseUrl, pattern, fileExtensions, host));
+    }
+
+    function getModulesForPathsPattern(fragment: string, baseUrl: string, pattern: string, fileExtensions: ReadonlyArray<string>, host: LanguageServiceHost): string[] | undefined {
+        if (!host.readDirectory) {
+            return undefined;
+        }
+
+        const parsed = hasZeroOrOneAsteriskCharacter(pattern) ? tryParsePattern(pattern) : undefined;
+        if (!parsed) {
+            return undefined;
+        }
+
+        // The prefix has two effective parts: the directory path and the base component after the filepath that is not a
+        // full directory component. For example: directory/path/of/prefix/base*
+        const normalizedPrefix = normalizeAndPreserveTrailingSlash(parsed.prefix);
+        const normalizedPrefixDirectory = getDirectoryPath(normalizedPrefix);
+        const normalizedPrefixBase = getBaseFileName(normalizedPrefix);
+
+        const fragmentHasPath = stringContains(fragment, directorySeparator);
+
+        // Try and expand the prefix to include any path from the fragment so that we can limit the readDirectory call
+        const expandedPrefixDirectory = fragmentHasPath ? combinePaths(normalizedPrefixDirectory, normalizedPrefixBase + getDirectoryPath(fragment)) : normalizedPrefixDirectory;
+
+        const normalizedSuffix = normalizePath(parsed.suffix);
+        // Need to normalize after combining: If we combinePaths("a", "../b"), we want "b" and not "a/../b".
+        const baseDirectory = normalizePath(combinePaths(baseUrl, expandedPrefixDirectory));
+        const completePrefix = fragmentHasPath ? baseDirectory : ensureTrailingDirectorySeparator(baseDirectory) + normalizedPrefixBase;
+
+        // If we have a suffix, then we need to read the directory all the way down. We could create a glob
+        // that encodes the suffix, but we would have to escape the character "?" which readDirectory
+        // doesn't support. For now, this is safer but slower
+        const includeGlob = normalizedSuffix ? "**/*" : "./*";
+
+        const matches = tryReadDirectory(host, baseDirectory, fileExtensions, /*exclude*/ undefined, [includeGlob]);
+        // Trim away prefix and suffix
+        return mapDefined(matches, match => {
+            const normalizedMatch = normalizePath(match);
+            if (!endsWith(normalizedMatch, normalizedSuffix) || !startsWith(normalizedMatch, completePrefix)) {
+                return;
+            }
+
+            const start = completePrefix.length;
+            const length = normalizedMatch.length - start - normalizedSuffix.length;
+            return removeFileExtension(normalizedMatch.substr(start, length));
+        });
     }
 
     function enumeratePotentialNonRelativeModules(fragment: string, scriptPath: string, options: CompilerOptions, typeChecker: TypeChecker, host: LanguageServiceHost): string[] {
