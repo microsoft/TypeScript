@@ -56,7 +56,3 @@ tests/cases/conformance/es6/computedProperties/computedPropertyUnionLiftsToUnion
     var dno: number
     var { [onetwo]: dno } = sin // fine, from index signature
     
-    
-    
-    
-    

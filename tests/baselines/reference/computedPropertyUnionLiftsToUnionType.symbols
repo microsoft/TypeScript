@@ -175,7 +175,3 @@ var { [onetwo]: dno } = sin // fine, from index signature
 >dno : Symbol(dno, Decl(computedPropertyUnionLiftsToUnionType.ts, 46, 3), Decl(computedPropertyUnionLiftsToUnionType.ts, 47, 5))
 >sin : Symbol(sin, Decl(computedPropertyUnionLiftsToUnionType.ts, 43, 11))
 
-
-
-
-

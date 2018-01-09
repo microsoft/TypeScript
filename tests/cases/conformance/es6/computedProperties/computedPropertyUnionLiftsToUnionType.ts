@@ -1,5 +1,6 @@
 // @noImplicitAny: true
 // @target: es6
+// @declaration: true
 declare var ab: 'a' | 'b';
 declare var cd: 'c' | 'd';
 declare var onetwo: 1 | 2;
@@ -49,6 +50,11 @@ var dn: number
 var dno: number
 var { [onetwo]: dno } = sin // fine, from index signature
 
+declare const textMap: {[key: string]: string}
 
-
-
+function getText (s: string, n: number) {
+    var { [s]: rawText = s } = sig;
+    var { [n]: rawNumber = n } = sin;
+    ({ [s]: rawText } = sig);
+    ({ [n]: rawNumber } = sin);
+}

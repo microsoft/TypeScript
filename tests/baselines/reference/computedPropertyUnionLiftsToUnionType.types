@@ -210,7 +210,3 @@ var { [onetwo]: dno } = sin // fine, from index signature
 >dno : number
 >sin : { [n: number]: number; }
 
-
-
-
-

@@ -4320,6 +4320,12 @@ namespace ts {
                             type = (computedType as UnionType).types.every(t => !!(t.flags & TypeFlags.NumberLiteral)) && getIndexTypeOfType(parentType, IndexKind.Number) ||
                                 getIndexTypeOfType(parentType, IndexKind.String);
                         }
+                        else if (computedType.flags & TypeFlags.Number) {
+                            type = getIndexTypeOfType(parentType, IndexKind.Number) || getIndexTypeOfType(parentType, IndexKind.String);
+                        }
+                        else if (computedType.flags & TypeFlags.String) {
+                            type = getIndexTypeOfType(parentType, IndexKind.String);
+                        }
                         else {
                             return anyType;
                         }
@@ -14811,7 +14817,6 @@ namespace ts {
                     const isOptional = (memberDecl.kind === SyntaxKind.PropertyAssignment && hasDefaultValue((<PropertyAssignment>memberDecl).initializer)) ||
                         (memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment && (<ShorthandPropertyAssignment>memberDecl).objectAssignmentInitializer);
                     if (isOptional) {
-
                         prop.flags |= SymbolFlags.Optional;
                     }
                     if (!literalName && hasDynamicName(memberDecl)) {
@@ -18680,6 +18685,12 @@ namespace ts {
                             ? objectLiteralType
                             : (computedType as UnionType).types.every(t => !!(t.flags & TypeFlags.NumberLiteral)) && getIndexTypeOfType(objectLiteralType, IndexKind.Number) ||
                             getIndexTypeOfType(objectLiteralType, IndexKind.String);
+                    }
+                    else if (computedType.flags & TypeFlags.Number) {
+                        type = getIndexTypeOfType(objectLiteralType, IndexKind.Number) || getIndexTypeOfType(objectLiteralType, IndexKind.String);
+                    }
+                    else if (computedType.flags & TypeFlags.String) {
+                        type = getIndexTypeOfType(objectLiteralType, IndexKind.String);
                     }
                     else {
                         return undefined;

@@ -49,10 +49,6 @@ var dno: number
 var { [onetwo]: dno } = sin // fine, from index signature
 
 
-
-
-
-
 //// [computedPropertyUnionLiftsToUnionType.js]
 var Alphabet;
 (function (Alphabet) {
@@ -83,3 +79,100 @@ var dn;
 ({ [onetwo]: dn } = sin); // fine, from index signature
 var dno;
 var { [onetwo]: dno } = sin; // fine, from index signature
+
+
+//// [computedPropertyUnionLiftsToUnionType.d.ts]
+declare var ab: 'a' | 'b';
+declare var cd: 'c' | 'd';
+declare var onetwo: 1 | 2;
+declare enum Alphabet {
+    Aleph = 0,
+    Bet = 1,
+}
+declare var alphabet: Alphabet;
+declare const x: {
+    a: string;
+} | {
+    b: string;
+};
+declare const y: {
+    a: string;
+    m: number;
+    c: string;
+} | {
+    a: string;
+    m: number;
+    d: string;
+} | {
+    b: string;
+    m: number;
+    c: string;
+} | {
+    b: string;
+    m: number;
+    d: string;
+};
+declare const s: {
+    a: string;
+    c: string;
+} | {
+    b: string;
+    c: string;
+};
+declare const sd: {
+    a: string;
+} | {
+    b: string;
+};
+declare const sn: {
+    a: string;
+    c: string;
+} | {
+    a: string;
+    d: string;
+} | {
+    b: string;
+    c: string;
+} | {
+    b: string;
+    d: string;
+};
+declare const m: {
+    a: string;
+    m(): number;
+    p: number;
+} | {
+    b: string;
+    m(): number;
+    p: number;
+};
+declare const n: {
+    "1": string;
+} | {
+    "2": string;
+};
+declare const e: {
+    "0": string;
+} | {
+    "1": string;
+};
+declare let u: {
+    a: string;
+} | {
+    b: string;
+};
+declare var du: any;
+declare let sig: {
+    [s: string]: string;
+};
+declare var ds: string;
+declare var duo: any;
+declare var dso: string;
+declare var duo: any;
+declare var dso: string;
+declare let sin: {
+    [n: number]: number;
+};
+declare var dn: number;
+declare var dno: number;
+declare var dno: number;
