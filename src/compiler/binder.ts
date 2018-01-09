@@ -3337,8 +3337,10 @@ namespace ts {
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
             case SyntaxKind.PartiallyEmittedExpression:
+                // These nodes are TypeScript syntax.
+                transformFlags |= TransformFlags.AssertTypeScript;
                 excludeFlags = TransformFlags.OuterExpressionExcludes;
-                // fallthrough
+                break;
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.PrivateKeyword:
             case SyntaxKind.ProtectedKeyword:
