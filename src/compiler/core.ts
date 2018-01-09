@@ -335,17 +335,6 @@ namespace ts {
         return false;
     }
 
-    export function indexOf<T>(array: ReadonlyArray<T>, value: T): number {
-        if (array) {
-            for (let i = 0; i < array.length; i++) {
-                if (array[i] === value) {
-                    return i;
-                }
-            }
-        }
-        return -1;
-    }
-
     export function indexOfAnyCharCode(text: string, charCodes: ReadonlyArray<number>, start?: number): number {
         for (let i = start || 0; i < text.length; i++) {
             if (contains(charCodes, text.charCodeAt(i))) {
@@ -423,12 +412,14 @@ namespace ts {
         return result;
     }
 
+
     export function mapIterator<T, U>(iter: Iterator<T>, mapFn: (x: T) => U): Iterator<U> {
-        return { next };
-        function next(): { value: U, done: false } | { value: never, done: true } {
-            const iterRes = iter.next();
-            return iterRes.done ? iterRes : { value: mapFn(iterRes.value), done: false };
-        }
+        return {
+            next() {
+                const iterRes = iter.next();
+                return iterRes.done ? iterRes : { value: mapFn(iterRes.value), done: false };
+            }
+        };
     }
 
     // Maps from T to T and avoids allocation if all elements map to themselves
@@ -562,12 +553,23 @@ namespace ts {
         return result || array;
     }
 
+    export function mapAllOrFail<T, U>(array: ReadonlyArray<T>, mapFn: (x: T, i: number) => U | undefined): U[] | undefined {
+        const result: U[] = [];
+        for (let i = 0; i < array.length; i++) {
+            const mapped = mapFn(array[i], i);
+            if (mapped === undefined) {
+                return undefined;
+            }
+            result.push(mapped);
+        }
+        return result;
+    }
+
     export function mapDefined<T, U>(array: ReadonlyArray<T> | undefined, mapFn: (x: T, i: number) => U | undefined): U[] {
         const result: U[] = [];
         if (array) {
             for (let i = 0; i < array.length; i++) {
-                const item = array[i];
-                const mapped = mapFn(item, i);
+                const mapped = mapFn(array[i], i);
                 if (mapped !== undefined) {
                     result.push(mapped);
                 }
@@ -2016,7 +2018,9 @@ namespace ts {
         const moduleKind = getEmitModuleKind(compilerOptions);
         return compilerOptions.allowSyntheticDefaultImports !== undefined
             ? compilerOptions.allowSyntheticDefaultImports
-            : moduleKind === ModuleKind.System;
+            : compilerOptions.esModuleInterop
+                ? moduleKind !== ModuleKind.None && moduleKind < ModuleKind.ES2015
+                : moduleKind === ModuleKind.System;
     }
 
     export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictPropertyInitialization" | "alwaysStrict";
@@ -2080,7 +2084,7 @@ namespace ts {
 
     function getNormalizedPathComponentsOfUrl(url: string) {
         // Get root length of http://www.website.com/folder1/folder2/
-        // In this example the root is:  http://www.website.com/
+        // In this example the root is: http://www.website.com/
         // normalized path components should be ["http://www.website.com/", "folder1", "folder2"]
 
         const urlLength = url.length;
@@ -2113,7 +2117,7 @@ namespace ts {
         }
         else {
             // Can't find the host assume the rest of the string as component
-            // but make sure we append "/"  to it as root is not joined using "/"
+            // but make sure we append "/" to it as root is not joined using "/"
             // eg. if url passed in was http://website.com we want to use root as [http://website.com/]
             // so that other path manipulations will be correct and it can be merged with relative paths correctly
             return [url + directorySeparator];
@@ -2134,7 +2138,7 @@ namespace ts {
         const directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, currentDirectory);
         if (directoryComponents.length > 1 && lastOrUndefined(directoryComponents) === "") {
             // If the directory path given was of type test/cases/ then we really need components of directory to be only till its name
-            // that is  ["test", "cases", ""] needs to be actually ["test", "cases"]
+            // that is ["test", "cases", ""] needs to be actually ["test", "cases"]
             directoryComponents.pop();
         }
 

@@ -257,7 +257,7 @@ namespace ts.server {
     export class ScriptVersionCache {
         private changes: TextChange[] = [];
         private readonly versions: LineIndexSnapshot[] = new Array<LineIndexSnapshot>(ScriptVersionCache.maxVersions);
-        private minVersion = 0;  // no versions earlier than min version will maintain change history
+        private minVersion = 0; // no versions earlier than min version will maintain change history
 
         private currentVersion = 0;
 

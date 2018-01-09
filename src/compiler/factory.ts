@@ -71,11 +71,11 @@ namespace ts {
     // Literals
 
     /** If a node is passed, creates a string literal whose source text is read from a source node during emit. */
-    export function createLiteral(value: string | StringLiteral | NumericLiteral | Identifier): StringLiteral;
+    export function createLiteral(value: string | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier): StringLiteral;
     export function createLiteral(value: number): NumericLiteral;
     export function createLiteral(value: boolean): BooleanLiteral;
     export function createLiteral(value: string | number | boolean): PrimaryExpression;
-    export function createLiteral(value: string | number | boolean | StringLiteral | NumericLiteral | Identifier): PrimaryExpression {
+    export function createLiteral(value: string | number | boolean | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier): PrimaryExpression {
         if (typeof value === "number") {
             return createNumericLiteral(value + "");
         }
@@ -101,7 +101,7 @@ namespace ts {
         return node;
     }
 
-    function createLiteralFromNode(sourceNode: StringLiteral | NumericLiteral | Identifier): StringLiteral {
+    function createLiteralFromNode(sourceNode: StringLiteralLike | NumericLiteral | Identifier): StringLiteral {
         const node = createStringLiteral(getTextOfIdentifierOrLiteral(sourceNode));
         node.textSourceNode = sourceNode;
         return node;
@@ -3629,7 +3629,7 @@ namespace ts {
         return qualifiedName;
     }
 
-    export function convertToFunctionBody(node: ConciseBody, multiLine?: boolean) {
+    export function convertToFunctionBody(node: ConciseBody, multiLine?: boolean): Block {
         return isBlock(node) ? node : setTextRange(createBlock([setTextRange(createReturn(node), node)], multiLine), node);
     }
 
@@ -3834,13 +3834,13 @@ namespace ts {
                 if (isLeftSideOfBinary) {
                     // No need to parenthesize the left operand when the binary operator is
                     // left associative:
-                    //  (a*b)/x    ->  a*b/x
-                    //  (a**b)/x   ->  a**b/x
+                    //  (a*b)/x    -> a*b/x
+                    //  (a**b)/x   -> a**b/x
                     //
                     // Parentheses are needed for the left operand when the binary operator is
                     // right associative:
-                    //  (a/b)**x   ->  (a/b)**x
-                    //  (a**b)**x  ->  (a**b)**x
+                    //  (a/b)**x   -> (a/b)**x
+                    //  (a**b)**x  -> (a**b)**x
                     return binaryOperatorAssociativity === Associativity.Right;
                 }
                 else {

@@ -262,8 +262,8 @@ namespace ts.BreakpointResolver {
                         }
 
                         // Set breakpoint on identifier element of destructuring pattern
-                        // a or ...c  or d: x from
-                        // [a, b, ...c] or { a, b } or { d: x } from destructuring pattern
+                        // `a` or `...c` or `d: x` from
+                        // `[a, b, ...c]` or `{ a, b }` or `{ d: x }` from destructuring pattern
                         if ((node.kind === SyntaxKind.Identifier ||
                             node.kind === SyntaxKind.SpreadElement ||
                             node.kind === SyntaxKind.PropertyAssignment ||
@@ -427,8 +427,9 @@ namespace ts.BreakpointResolver {
                 }
                 else {
                     const functionDeclaration = <FunctionLikeDeclaration>parameter.parent;
-                    const indexOfParameter = indexOf(functionDeclaration.parameters, parameter);
-                    if (indexOfParameter) {
+                    const indexOfParameter = functionDeclaration.parameters.indexOf(parameter);
+                    Debug.assert(indexOfParameter !== -1);
+                    if (indexOfParameter !== 0) {
                         // Not a first parameter, go to previous parameter
                         return spanInParameterDeclaration(functionDeclaration.parameters[indexOfParameter - 1]);
                     }

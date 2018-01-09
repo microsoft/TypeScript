@@ -1246,27 +1246,15 @@ namespace ts {
         //
 
         function emitObjectBindingPattern(node: ObjectBindingPattern) {
-            const elements = node.elements;
-            if (elements.length === 0) {
-                writePunctuation("{}");
-            }
-            else {
-                writePunctuation("{");
-                emitList(node, elements, ListFormat.ObjectBindingPatternElements);
-                writePunctuation("}");
-            }
+            writePunctuation("{");
+            emitList(node, node.elements, ListFormat.ObjectBindingPatternElements);
+            writePunctuation("}");
         }
 
         function emitArrayBindingPattern(node: ArrayBindingPattern) {
-            const elements = node.elements;
-            if (elements.length === 0) {
-                writePunctuation("[]");
-            }
-            else {
-                writePunctuation("[");
-                emitList(node, node.elements, ListFormat.ArrayBindingPatternElements);
-                writePunctuation("]");
-            }
+            writePunctuation("[");
+            emitList(node, node.elements, ListFormat.ArrayBindingPatternElements);
+            writePunctuation("]");
         }
 
         function emitBindingElement(node: BindingElement) {

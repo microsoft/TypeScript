@@ -58,6 +58,23 @@ namespace ts {
         end: number;
     }
 
+    export type JsDocSyntaxKind =
+        | SyntaxKind.EndOfFileToken
+        | SyntaxKind.WhitespaceTrivia
+        | SyntaxKind.AtToken
+        | SyntaxKind.NewLineTrivia
+        | SyntaxKind.AsteriskToken
+        | SyntaxKind.OpenBraceToken
+        | SyntaxKind.CloseBraceToken
+        | SyntaxKind.LessThanToken
+        | SyntaxKind.OpenBracketToken
+        | SyntaxKind.CloseBracketToken
+        | SyntaxKind.EqualsToken
+        | SyntaxKind.CommaToken
+        | SyntaxKind.DotToken
+        | SyntaxKind.Identifier
+        | SyntaxKind.Unknown;
+
     // token > SyntaxKind.Identifer => token is a keyword
     // Also, If you add a new SyntaxKind be sure to keep the `Markers` section at the bottom in sync
     export const enum SyntaxKind {
@@ -438,24 +455,24 @@ namespace ts {
     }
 
     export const enum NodeFlags {
-        None =               0,
-        Let =                1 << 0,  // Variable declaration
-        Const =              1 << 1,  // Variable declaration
-        NestedNamespace =    1 << 2,  // Namespace declaration
-        Synthesized =        1 << 3,  // Node was synthesized during transformation
-        Namespace =          1 << 4,  // Namespace declaration
-        ExportContext =      1 << 5,  // Export context (initialized by binding)
-        ContainsThis =       1 << 6,  // Interface contains references to "this"
-        HasImplicitReturn =  1 << 7,  // If function implicitly returns on one of codepaths (initialized by binding)
-        HasExplicitReturn =  1 << 8,  // If function has explicit reachable return on one of codepaths (initialized by binding)
+        None               = 0,
+        Let                = 1 << 0,  // Variable declaration
+        Const              = 1 << 1,  // Variable declaration
+        NestedNamespace    = 1 << 2,  // Namespace declaration
+        Synthesized        = 1 << 3,  // Node was synthesized during transformation
+        Namespace          = 1 << 4,  // Namespace declaration
+        ExportContext      = 1 << 5,  // Export context (initialized by binding)
+        ContainsThis       = 1 << 6,  // Interface contains references to "this"
+        HasImplicitReturn  = 1 << 7,  // If function implicitly returns on one of codepaths (initialized by binding)
+        HasExplicitReturn  = 1 << 8,  // If function has explicit reachable return on one of codepaths (initialized by binding)
         GlobalAugmentation = 1 << 9,  // Set if module declaration is an augmentation for the global scope
-        HasAsyncFunctions =  1 << 10, // If the file has async functions (initialized by binding)
-        DisallowInContext =  1 << 11, // If node was parsed in a context where 'in-expressions' are not allowed
-        YieldContext =       1 << 12, // If node was parsed in the 'yield' context created when parsing a generator
-        DecoratorContext =   1 << 13, // If node was parsed as part of a decorator
-        AwaitContext =       1 << 14, // If node was parsed in the 'await' context created when parsing an async function
-        ThisNodeHasError =   1 << 15, // If the parser encountered an error when parsing the code that created this node
-        JavaScriptFile =     1 << 16, // If node was parsed in a JavaScript
+        HasAsyncFunctions  = 1 << 10, // If the file has async functions (initialized by binding)
+        DisallowInContext  = 1 << 11, // If node was parsed in a context where 'in-expressions' are not allowed
+        YieldContext       = 1 << 12, // If node was parsed in the 'yield' context created when parsing a generator
+        DecoratorContext   = 1 << 13, // If node was parsed as part of a decorator
+        AwaitContext       = 1 << 14, // If node was parsed in the 'await' context created when parsing an async function
+        ThisNodeHasError   = 1 << 15, // If the parser encountered an error when parsing the code that created this node
+        JavaScriptFile     = 1 << 16, // If node was parsed in a JavaScript
         ThisNodeOrAnySubNodesHasError = 1 << 17, // If this node or any of its children had an error
         HasAggregatedChildData = 1 << 18, // If we've computed data from children and cached it in this node
 
@@ -1134,10 +1151,12 @@ namespace ts {
 
     export interface StringLiteral extends LiteralExpression {
         kind: SyntaxKind.StringLiteral;
-        /* @internal */ textSourceNode?: Identifier | StringLiteral | NumericLiteral; // Allows a StringLiteral to get its text from another node (used by transforms).
+        /* @internal */ textSourceNode?: Identifier | StringLiteralLike | NumericLiteral; // Allows a StringLiteral to get its text from another node (used by transforms).
         /** Note: this is only set when synthesizing a node, not during parsing. */
         /* @internal */ singleQuote?: boolean;
     }
+
+    /* @internal */ export type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
     // Consider 'Expression'.  Without the brand, 'Expression' is actually no different
@@ -1396,7 +1415,7 @@ namespace ts {
 
     export type BinaryOperatorToken = Token<BinaryOperator>;
 
-    export interface BinaryExpression extends Expression, Declaration  {
+    export interface BinaryExpression extends Expression, Declaration {
         kind: SyntaxKind.BinaryExpression;
         left: Expression;
         operatorToken: BinaryOperatorToken;
@@ -1484,6 +1503,7 @@ namespace ts {
         kind: SyntaxKind.ArrowFunction;
         equalsGreaterThanToken: EqualsGreaterThanToken;
         body: ConciseBody;
+        name: never;
     }
 
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
@@ -2141,6 +2161,7 @@ namespace ts {
     export interface ExportDeclaration extends DeclarationStatement {
         kind: SyntaxKind.ExportDeclaration;
         parent?: SourceFile | ModuleBlock;
+        /** Will not be assigned in the case of `export * from "foo";` */
         exportClause?: NamedExports;
         /** If this is not a StringLiteral it will be a grammar error. */
         moduleSpecifier?: Expression;
@@ -2542,7 +2563,7 @@ namespace ts {
     export interface ParseConfigHost {
         useCaseSensitiveFileNames: boolean;
 
-        readDirectory(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string>, includes: ReadonlyArray<string>, depth: number): string[];
+        readDirectory(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string>, depth?: number): string[];
 
         /**
          * Gets a value indicating whether the specified path exists and is a file.
@@ -2881,7 +2902,7 @@ namespace ts {
          */
         /* @internal */ isArrayLikeType(type: Type): boolean;
         /* @internal */ getAllPossiblePropertiesOfTypes(type: ReadonlyArray<Type>): Symbol[];
-        /* @internal */ resolveName(name: string, location: Node, meaning: SymbolFlags): Symbol | undefined;
+        /* @internal */ resolveName(name: string, location: Node, meaning: SymbolFlags, excludeGlobals: boolean): Symbol | undefined;
         /* @internal */ getJsxNamespace(): string;
 
         /**
@@ -2895,6 +2916,7 @@ namespace ts {
          */
         /* @internal */ getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined;
         /* @internal */ getTypePredicateOfSignature(signature: Signature): TypePredicate;
+        /* @internal */ resolveExternalModuleSymbol(symbol: Symbol): Symbol;
     }
 
     /* @internal */
@@ -3280,6 +3302,7 @@ namespace ts {
         bindingElement?: BindingElement;    // Binding element associated with property symbol
         exportsSomeValue?: boolean;         // True if module exports some value (not just types)
         enumKind?: EnumKind;                // Enum declaration classification
+        originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
     }
 
@@ -3302,6 +3325,7 @@ namespace ts {
         ContainsPrivate   = 1 << 8,         // Synthetic property with private constituent(s)
         ContainsStatic    = 1 << 9,         // Synthetic property with static constituent(s)
         Late              = 1 << 10,        // Late-bound symbol for a computed property with a dynamic name
+        ReverseMapped     = 1 << 11,        // property of reverse-inferred homomorphic mapped type.
         Synthetic = SyntheticProperty | SyntheticMethod
     }
 
@@ -3309,6 +3333,12 @@ namespace ts {
     export interface TransientSymbol extends Symbol, SymbolLinks {
         checkFlags: CheckFlags;
         isRestParameter?: boolean;
+    }
+
+    /* @internal */
+    export interface ReverseMappedSymbol extends TransientSymbol {
+        propertyType: Type;
+        mappedType: MappedType;
     }
 
     export const enum InternalSymbolName {
@@ -3416,7 +3446,7 @@ namespace ts {
         resolvedJsxElementAttributesType?: Type;  // resolved element attributes type of a JSX openinglike element
         resolvedJsxElementAllAttributesType?: Type;  // resolved all element attributes type of a JSX openinglike element
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
-        superCall?: ExpressionStatement;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
+        superCall?: SuperCall;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
         switchTypes?: Type[];             // Cached array of switch case expression types
     }
 
@@ -3545,6 +3575,7 @@ namespace ts {
         EvolvingArray    = 1 << 8,  // Evolving array type
         ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
         ContainsSpread   = 1 << 10, // Object literal contains spread operation
+        ReverseMapped = 1 << 11,    // Object contains a property from a reverse-mapped type
         ClassOrInterface = Class | Interface
     }
 
@@ -3653,6 +3684,12 @@ namespace ts {
     }
 
     /* @internal */
+    export interface ReverseMappedType extends ObjectType {
+        source: Type;
+        mappedType: MappedType;
+    }
+
+    /* @internal */
     // Resolved object, union, or intersection type
     export interface ResolvedType extends ObjectType, UnionOrIntersectionType {
         members: SymbolTable;              // Properties by name
@@ -3665,7 +3702,7 @@ namespace ts {
 
     /* @internal */
     // Object literals are initially marked fresh. Freshness disappears following an assignment,
-    // before a type assertion, or when  an object literal's type is widened. The regular
+    // before a type assertion, or when an object literal's type is widened. The regular
     // version of a fresh type is identical except for the TypeFlags.FreshObjectLiteral flag.
     export interface FreshObjectLiteralType extends ResolvedType {
         regularType: ResolvedType;  // Regular version of fresh type
@@ -3996,6 +4033,7 @@ namespace ts {
         typeRoots?: string[];
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
+        esModuleInterop?: boolean;
 
         [option: string]: CompilerOptionsValue | JsonSourceFile | undefined;
     }
@@ -4417,11 +4455,11 @@ namespace ts {
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
          * 'throw new Error("NotImplemented")'
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): (ResolvedModule | undefined)[];
         /**
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
-        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): (ResolvedTypeReferenceDirective | undefined)[];
         getEnvironmentVariable?(name: string): string;
         /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions): void;
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
@@ -4563,6 +4601,7 @@ namespace ts {
         Iterator = 1 << 23,                     // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
         NoAsciiEscaping = 1 << 24,              // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
         /*@internal*/ TypeScriptClassWrapper = 1 << 25, // The node is an IIFE class wrapper created by the ts transform.
+        /*@internal*/ NeverApplyImportHelper = 1 << 26, // Indicates the node should never be wrapped with an import star helper (because, for example, it imports tslib itself)
     }
 
     export interface EmitHelper {
@@ -4975,8 +5014,8 @@ namespace ts {
         TupleTypeElements = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented,
         UnionTypeConstituents = BarDelimited | SpaceBetweenSiblings | SingleLine,
         IntersectionTypeConstituents = AmpersandDelimited | SpaceBetweenSiblings | SingleLine,
-        ObjectBindingPatternElements = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings,
-        ArrayBindingPatternElements = SingleLine | AllowTrailingComma | CommaDelimited | SpaceBetweenSiblings,
+        ObjectBindingPatternElements = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings | NoSpaceIfEmpty,
+        ArrayBindingPatternElements = SingleLine | AllowTrailingComma | CommaDelimited | SpaceBetweenSiblings | NoSpaceIfEmpty,
         ObjectLiteralExpressionProperties = PreserveLines | CommaDelimited | SpaceBetweenSiblings | SpaceBetweenBraces | Indented | Braces | NoSpaceIfEmpty,
         ArrayLiteralExpressionElements = PreserveLines | CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | Indented | SquareBrackets,
         CommaListElements = CommaDelimited | SpaceBetweenSiblings | SingleLine,

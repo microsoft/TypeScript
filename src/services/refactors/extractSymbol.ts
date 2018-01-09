@@ -1692,7 +1692,7 @@ namespace ts.refactor.extractSymbol {
             }
             for (let i = 0; i < scopes.length; i++) {
                 const scope = scopes[i];
-                const resolvedSymbol = checker.resolveName(symbol.name, scope, symbol.flags);
+                const resolvedSymbol = checker.resolveName(symbol.name, scope, symbol.flags, /*excludeGlobals*/ false);
                 if (resolvedSymbol === symbol) {
                     continue;
                 }

@@ -35,7 +35,7 @@ namespace ts {
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(): SyntaxKind;
         scanJsxToken(): SyntaxKind;
-        scanJSDocToken(): SyntaxKind;
+        scanJSDocToken(): JsDocSyntaxKind;
         scan(): SyntaxKind;
         getText(): string;
         // Sets the text for the scanner to scan.  An optional subrange starting point and length
@@ -193,7 +193,7 @@ namespace ts {
     /*
         As per ECMAScript Language Specification 3th Edition, Section 7.6: Identifiers
         IdentifierStart ::
-            Can contain Unicode 3.0.0  categories:
+            Can contain Unicode 3.0.0 categories:
             Uppercase letter (Lu),
             Lowercase letter (Ll),
             Titlecase letter (Lt),
@@ -201,7 +201,7 @@ namespace ts {
             Other letter (Lo), or
             Letter number (Nl).
         IdentifierPart :: =
-            Can contain IdentifierStart + Unicode 3.0.0  categories:
+            Can contain IdentifierStart + Unicode 3.0.0 categories:
             Non-spacing mark (Mn),
             Combining spacing mark (Mc),
             Decimal number (Nd), or
@@ -216,7 +216,7 @@ namespace ts {
     /*
         As per ECMAScript Language Specification 5th Edition, Section 7.6: ISyntaxToken Names and Identifiers
         IdentifierStart ::
-            Can contain Unicode 6.2  categories:
+            Can contain Unicode 6.2 categories:
             Uppercase letter (Lu),
             Lowercase letter (Ll),
             Titlecase letter (Lt),
@@ -224,7 +224,7 @@ namespace ts {
             Other letter (Lo), or
             Letter number (Nl).
         IdentifierPart ::
-            Can contain IdentifierStart + Unicode 6.2  categories:
+            Can contain IdentifierStart + Unicode 6.2 categories:
             Non-spacing mark (Mn),
             Combining spacing mark (Mc),
             Decimal number (Nd),
@@ -1594,7 +1594,7 @@ namespace ts {
                         return token = SyntaxKind.NumericLiteral;
                     case CharacterCodes.colon:
                         pos++;
-                        return  token = SyntaxKind.ColonToken;
+                        return token = SyntaxKind.ColonToken;
                     case CharacterCodes.semicolon:
                         pos++;
                         return token = SyntaxKind.SemicolonToken;
@@ -1905,7 +1905,7 @@ namespace ts {
                         break;
                     }
                 }
-                tokenValue += text.substr(firstCharPosition, pos - firstCharPosition);
+                tokenValue += text.substring(firstCharPosition, pos);
             }
             return token;
         }
@@ -1924,7 +1924,7 @@ namespace ts {
             }
         }
 
-        function scanJSDocToken(): SyntaxKind {
+        function scanJSDocToken(): JsDocSyntaxKind {
             if (pos >= end) {
                 return token = SyntaxKind.EndOfFileToken;
             }
@@ -1933,6 +1933,7 @@ namespace ts {
             tokenPos = pos;
 
             const ch = text.charCodeAt(pos);
+            pos++;
             switch (ch) {
                 case CharacterCodes.tab:
                 case CharacterCodes.verticalTab:
@@ -1943,56 +1944,31 @@ namespace ts {
                     }
                     return token = SyntaxKind.WhitespaceTrivia;
                 case CharacterCodes.at:
-                    pos++;
                     return token = SyntaxKind.AtToken;
                 case CharacterCodes.lineFeed:
                 case CharacterCodes.carriageReturn:
-                    pos++;
                     return token = SyntaxKind.NewLineTrivia;
                 case CharacterCodes.asterisk:
-                    pos++;
                     return token = SyntaxKind.AsteriskToken;
                 case CharacterCodes.openBrace:
-                    pos++;
                     return token = SyntaxKind.OpenBraceToken;
                 case CharacterCodes.closeBrace:
-                    pos++;
                     return token = SyntaxKind.CloseBraceToken;
                 case CharacterCodes.openBracket:
-                    pos++;
                     return token = SyntaxKind.OpenBracketToken;
                 case CharacterCodes.closeBracket:
-                    pos++;
                     return token = SyntaxKind.CloseBracketToken;
                 case CharacterCodes.lessThan:
-                    pos++;
                     return token = SyntaxKind.LessThanToken;
-                case CharacterCodes.greaterThan:
-                    pos++;
-                    return token = SyntaxKind.GreaterThanToken;
                 case CharacterCodes.equals:
-                    pos++;
                     return token = SyntaxKind.EqualsToken;
                 case CharacterCodes.comma:
-                    pos++;
                     return token = SyntaxKind.CommaToken;
                 case CharacterCodes.dot:
-                    pos++;
-                    if (text.substr(tokenPos, pos + 2) === "...") {
-                        pos += 2;
-                        return token = SyntaxKind.DotDotDotToken;
-                    }
                     return token = SyntaxKind.DotToken;
-                case CharacterCodes.exclamation:
-                    pos++;
-                    return token = SyntaxKind.ExclamationToken;
-                case CharacterCodes.question:
-                    pos++;
-                    return token = SyntaxKind.QuestionToken;
             }
 
             if (isIdentifierStart(ch, ScriptTarget.Latest)) {
-                pos++;
                 while (isIdentifierPart(text.charCodeAt(pos), ScriptTarget.Latest) && pos < end) {
                     pos++;
                 }
@@ -2000,7 +1976,7 @@ namespace ts {
                 return token = SyntaxKind.Identifier;
             }
             else {
-                return pos += 1, token = SyntaxKind.Unknown;
+                return token = SyntaxKind.Unknown;
             }
         }
 

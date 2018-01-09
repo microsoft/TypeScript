@@ -5,6 +5,7 @@ namespace ts {
     export const emptyArray: never[] = [] as never[];
     export const resolvingEmptyArray: never[] = [] as never[];
     export const emptyMap: ReadonlyMap<never> = createMap<never>();
+    export const emptyUnderscoreEscapedMap: ReadonlyUnderscoreEscapedMap<never> = emptyMap as ReadonlyUnderscoreEscapedMap<never>;
 
     export const externalHelpersModuleNameText = "tslib";
 
@@ -808,7 +809,7 @@ namespace ts {
                         return node === (<TypeAssertion>parent).type;
                     case SyntaxKind.CallExpression:
                     case SyntaxKind.NewExpression:
-                        return (<CallExpression>parent).typeArguments && indexOf((<CallExpression>parent).typeArguments, node) >= 0;
+                        return contains((<CallExpression>parent).typeArguments, node);
                     case SyntaxKind.TaggedTemplateExpression:
                         // TODO (drosen): TaggedTemplateExpressions may eventually support type arguments.
                         return false;
@@ -1424,6 +1425,8 @@ namespace ts {
      * exactly one argument (of the form 'require("name")').
      * This function does not test if the node is in a JavaScript file or not.
      */
+    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteral: true): callExpression is CallExpression & { expression: Identifier, arguments: [StringLiteralLike] };
+    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteral: boolean): callExpression is CallExpression;
     export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteral: boolean): callExpression is CallExpression {
         if (callExpression.kind !== SyntaxKind.CallExpression) {
             return false;
@@ -1461,7 +1464,7 @@ namespace ts {
         return false;
     }
 
-    export function getRightMostAssignedExpression(node: Node) {
+    export function getRightMostAssignedExpression(node: Expression): Expression {
         while (isAssignmentExpression(node, /*excludeCompoundAssignements*/ true)) {
             node = node.right;
         }
@@ -2122,6 +2125,10 @@ namespace ts {
 
     export function getPropertyNameForKnownSymbolName(symbolName: string): __String {
         return "__@" + symbolName as __String;
+    }
+
+    export function isKnownSymbol(symbol: Symbol): boolean {
+        return startsWith(symbol.escapedName as string, "__@");
     }
 
     /**
@@ -3934,8 +3941,8 @@ namespace ts {
             //
             // {
             //      oldStart3: Min(oldStart1, oldStart2),
-            //      oldEnd3  : Max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1)),
-            //      newEnd3  : Max(newEnd2, newEnd2 + (newEnd1 - oldEnd2))
+            //      oldEnd3: Max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1)),
+            //      newEnd3: Max(newEnd2, newEnd2 + (newEnd1 - oldEnd2))
             // }
 
             const oldStart1 = oldStartN;
@@ -4420,7 +4427,7 @@ namespace ts {
         return node.kind === SyntaxKind.RegularExpressionLiteral;
     }
 
-    export function isNoSubstitutionTemplateLiteral(node: Node): node is LiteralExpression {
+    export function isNoSubstitutionTemplateLiteral(node: Node): node is NoSubstitutionTemplateLiteral {
         return node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
@@ -5859,5 +5866,20 @@ namespace ts {
     /* @internal */
     export function hasOnlyExpressionInitializer(node: Node): node is HasExpressionInitializer {
         return hasInitializer(node) && !isForStatement(node) && !isForInStatement(node) && !isForOfStatement(node) && !isJsxAttribute(node);
+    }
+
+    export function isObjectLiteralElement(node: Node): node is ObjectLiteralElement {
+        switch (node.kind) {
+            case SyntaxKind.JsxAttribute:
+            case SyntaxKind.JsxSpreadAttribute:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return true;
+            default:
+                return false;
+        }
     }
 }
