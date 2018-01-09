@@ -3941,5 +3941,9 @@
     "Mapped object type implicitly has an 'any' template type.": {
         "category": "Error",
         "code": 95017
+    },
+    "Convert to ES6 module": {
+        "category": "Message",
+        "code": 95017
     }
 }
