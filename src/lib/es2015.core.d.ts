@@ -118,8 +118,9 @@ interface Math {
     log1p(x: number): number;
 
     /**
-     * Returns the result of (e^x - 1) of x (e raised to the power of x, where e is the base of
-     * the natural logarithms).
+     * Returns the result of (e^x - 1), which is an implementation-dependent approximation to
+     * subtracting 1 from the exponential function of x (e raised to the power of x, where e
+     * is the base of the natural logarithms).
      * @param x A numeric expression.
      */
     expm1(x: number): number;

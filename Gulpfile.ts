@@ -151,6 +151,7 @@ const es2018LibrarySourceMap = es2018LibrarySource.map(source =>
 
 const esnextLibrarySource = [
     "esnext.asynciterable.d.ts",
+    "esnext.array.d.ts",
     "esnext.promise.d.ts"
 ];
 
@@ -680,12 +681,12 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             workerCount = cmdLineOptions.workers;
         }
 
-        if (tests || runners || light || taskConfigsFolder) {
-            writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit);
-        }
-
         if (tests && tests.toLocaleLowerCase() === "rwc") {
             testTimeout = 400000;
+        }
+
+        if (tests || runners || light || testTimeout || taskConfigsFolder) {
+            writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout);
         }
 
         const colors = cmdLineOptions.colors;
@@ -872,8 +873,17 @@ function cleanTestDirs(done: (e?: any) => void) {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests: string, runners: string, light: boolean, taskConfigsFolder?: string, workerCount?: number, stackTraceLimit?: string) {
-    const testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, runner: runners ? runners.split(",") : undefined, light, workerCount, stackTraceLimit, taskConfigsFolder, noColor: !cmdLineOptions.colors });
+function writeTestConfigFile(tests: string, runners: string, light: boolean, taskConfigsFolder?: string, workerCount?: number, stackTraceLimit?: string, timeout?: number) {
+    const testConfigContents = JSON.stringify({
+        test: tests ? [tests] : undefined,
+        runner: runners ? runners.split(",") : undefined,
+        light,
+        workerCount,
+        stackTraceLimit,
+        taskConfigsFolder,
+        noColor: !cmdLineOptions.colors,
+        timeout,
+    });
     console.log("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);
 }

@@ -420,7 +420,7 @@ namespace ts {
                 host.getCanonicalFileName,
                 /*isAbsolutePathAnUrl*/ true);
 
-            sourceMapSourceIndex = indexOf(sourceMapData.sourceMapSources, source);
+            sourceMapSourceIndex = sourceMapData.sourceMapSources.indexOf(source);
             if (sourceMapSourceIndex === -1) {
                 sourceMapSourceIndex = sourceMapData.sourceMapSources.length;
                 sourceMapData.sourceMapSources.push(source);

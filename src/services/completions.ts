@@ -67,7 +67,7 @@ namespace ts.Completions {
     }
 
     function jsdocCompletionInfo(entries: CompletionEntry[]): CompletionInfo {
-        return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false,  entries };
+        return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
     }
 
     function completionInfoFromData(sourceFile: SourceFile, typeChecker: TypeChecker, compilerOptions: CompilerOptions, log: Log, completionData: CompletionData, includeInsertTextCompletions: boolean): CompletionInfo {
@@ -77,7 +77,8 @@ namespace ts.Completions {
             // In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,
             // instead of simply giving unknown value, the completion will return the tag-name of an associated opening-element.
             // For example:
-            //     var x = <div> </ /*1*/>  completion list at "1" will contain "div" with type any
+            //     var x = <div> </ /*1*/>
+            // The completion list at "1" will contain "div" with type any
             const tagName = location.parent.parent.openingElement.tagName;
             return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false,
                 entries: [{
@@ -290,7 +291,8 @@ namespace ts.Completions {
             // }
             // let a: A;
             // a['/*completion position*/']
-            return getStringLiteralCompletionEntriesFromElementAccess(node.parent, sourceFile, typeChecker, compilerOptions.target, log);
+            const type = typeChecker.getTypeAtLocation(node.parent.expression);
+            return getStringLiteralCompletionEntriesFromElementAccessOrIndexedAccess(node, sourceFile, type, typeChecker, compilerOptions.target, log);
         }
         else if (node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration
             || isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false) || isImportCall(node.parent)
@@ -301,8 +303,18 @@ namespace ts.Completions {
             //      import x = require("/*completion position*/");
             //      var y = require("/*completion position*/");
             //      export * from "/*completion position*/";
-            const entries = PathCompletions.getStringLiteralCompletionsFromModuleNames(node, compilerOptions, host, typeChecker);
+            const entries = PathCompletions.getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker);
             return pathCompletionsInfo(entries);
+        }
+        else if (isIndexedAccessTypeNode(node.parent.parent)) {
+            // Get all apparent property names
+            // i.e. interface Foo {
+            //          foo: string;
+            //          bar: string;
+            //      }
+            //      let x: Foo["/*completion position*/"]
+            const type = typeChecker.getTypeFromTypeNode(node.parent.parent.objectType);
+            return getStringLiteralCompletionEntriesFromElementAccessOrIndexedAccess(node, sourceFile, type, typeChecker, compilerOptions.target, log);
         }
         else {
             const argumentInfo = SignatureHelp.getImmediatelyContainingArgumentInfo(node, position, sourceFile);
@@ -360,11 +372,10 @@ namespace ts.Completions {
         return undefined;
     }
 
-    function getStringLiteralCompletionEntriesFromElementAccess(node: ElementAccessExpression, sourceFile: SourceFile, typeChecker: TypeChecker, target: ScriptTarget, log: Log): CompletionInfo | undefined {
-        const type = typeChecker.getTypeAtLocation(node.expression);
+    function getStringLiteralCompletionEntriesFromElementAccessOrIndexedAccess(stringLiteralNode: StringLiteral | NoSubstitutionTemplateLiteral, sourceFile: SourceFile, type: Type, typeChecker: TypeChecker, target: ScriptTarget, log: Log): CompletionInfo | undefined {
         const entries: CompletionEntry[] = [];
         if (type) {
-            getCompletionEntriesFromSymbols(type.getApparentProperties(), entries, node, sourceFile, typeChecker, target, log, CompletionKind.String);
+            getCompletionEntriesFromSymbols(type.getApparentProperties(), entries, stringLiteralNode, sourceFile, typeChecker, target, log, CompletionKind.String);
             if (entries.length) {
                 return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: true, entries };
             }
@@ -469,7 +480,7 @@ namespace ts.Completions {
             const origin = symbolToOriginInfoMap[getSymbolId(symbol)];
             const info = getCompletionEntryDisplayNameForSymbol(symbol, compilerOptions.target, origin, completionKind);
             return info && info.name === name && getSourceFromOrigin(origin) === source ? { type: "symbol" as "symbol", symbol, location, symbolToOriginInfoMap, previousToken } : undefined;
-        }) ||  { type: "none" };
+        }) || { type: "none" };
     }
 
     function getSymbolName(symbol: Symbol, origin: SymbolOriginInfo | undefined, target: ScriptTarget): string {
@@ -1187,9 +1198,10 @@ namespace ts.Completions {
             codefix.forEachExternalModuleToImportFrom(typeChecker, sourceFile, allSourceFiles, moduleSymbol => {
                 for (let symbol of typeChecker.getExportsOfModule(moduleSymbol)) {
                     // Don't add a completion for a re-export, only for the original.
-                    // If `symbol.parent !== moduleSymbol`, this comes from an `export * from "foo"` re-export. Those don't create new symbols.
+                    // If `symbol.parent !== ...`, this comes from an `export * from "foo"` re-export. Those don't create new symbols.
                     // If `some(...)`, this comes from an `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
-                    if (symbol.parent !== moduleSymbol || some(symbol.declarations, d => isExportSpecifier(d) && !!d.parent.parent.moduleSpecifier)) {
+                    if (symbol.parent !== typeChecker.resolveExternalModuleSymbol(moduleSymbol)
+                        || some(symbol.declarations, d => isExportSpecifier(d) && !!d.parent.parent.moduleSpecifier)) {
                         continue;
                     }
 
@@ -1625,7 +1637,7 @@ namespace ts.Completions {
                 switch (contextToken.kind) {
                     case SyntaxKind.OpenParenToken:
                     case SyntaxKind.CommaToken:
-                        return  isConstructorDeclaration(contextToken.parent) && contextToken.parent;
+                        return isConstructorDeclaration(contextToken.parent) && contextToken.parent;
 
                     default:
                         if (isConstructorParameterCompletion(contextToken)) {
@@ -2027,28 +2039,13 @@ namespace ts.Completions {
         kind: CompletionKind,
     ): CompletionEntryDisplayNameForSymbol | undefined {
         const name = getSymbolName(symbol, origin, target);
-        if (!name) return undefined;
-
-        // First check of the displayName is not external module; if it is an external module, it is not valid entry
-        if (symbol.flags & SymbolFlags.Namespace) {
-            const firstCharCode = name.charCodeAt(0);
-            if (isSingleOrDoubleQuote(firstCharCode)) {
-                // If the symbol is external module, don't show it in the completion list
-                // (i.e declare module "http" { const x; } | // <= request completion here, "http" should not be there)
-                return undefined;
-            }
-        }
-
-        // If the symbol is for a member of an object type and is the internal name of an ES
-        // symbol, it is not a valid entry. Internal names for ES symbols start with "__@"
-        if (symbol.flags & SymbolFlags.ClassMember) {
-            const escapedName = symbol.escapedName as string;
-            if (escapedName.length >= 3 &&
-                escapedName.charCodeAt(0) === CharacterCodes._ &&
-                escapedName.charCodeAt(1) === CharacterCodes._ &&
-                escapedName.charCodeAt(2) === CharacterCodes.at) {
-                return undefined;
-            }
+        if (name === undefined
+            // If the symbol is external module, don't show it in the completion list
+            // (i.e declare module "http" { const x; } | // <= request completion here, "http" should not be there)
+            || symbol.flags & SymbolFlags.Module && startsWithQuote(name)
+            // If the symbol is the internal name of an ES symbol, it is not a valid entry. Internal names for ES symbols start with "__@"
+            || isKnownSymbol(symbol)) {
+            return undefined;
         }
 
         const validIdentiferResult: CompletionEntryDisplayNameForSymbol = { name, needsConvertPropertyAccess: false };

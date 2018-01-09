@@ -14,9 +14,9 @@ const ranges = test.ranges();
 const [r0, r1, r2] = ranges;
 verify.referenceGroups(r0, [
     { definition: "function f(): void", ranges: [r0] },
-    { definition: "import g", ranges: [r1, r2] }
+    { definition: "(alias) function g(): void\nimport g", ranges: [r1, r2] }
 ]);
-verify.referenceGroups(r1, [{ definition: "import g", ranges: [r1, r2] }]);
+verify.referenceGroups(r1, [{ definition: "(alias) function g(): void\nimport g", ranges: [r1, r2] }]);
 verify.referenceGroups(r2, [{ definition: "(alias) g(): void\nimport g", ranges: [r1, r2] }]);
 
 verify.goToDefinition("ref", "def");

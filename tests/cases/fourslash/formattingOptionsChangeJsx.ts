@@ -1,14 +1,21 @@
 ///<reference path="fourslash.ts"/>
 
 //@Filename: file.tsx
-/////*InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces*/<Madoka homu={                true    } saya={   (true)  } />;
+/////*1*/<Madoka homu={                true    } saya={   (true)  } />;
+////
+////<PrimaryButton
+////    /*2*/{    ...this._getButtonProps()    }
+/////>
 
-runTest("InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces", "<Madoka homu={ true } saya={ (true) } />;", "<Madoka homu={true} saya={(true)} />;");
+runTest("1", "<Madoka homu={ true } saya={ (true) } />;", "<Madoka homu={true} saya={(true)} />;");
+runTest("2", "    { ...this._getButtonProps() }", "    {...this._getButtonProps()}");
 
 
-function runTest(propertyName: string, expectedStringWhenTrue: string, expectedStringWhenFalse: string) {
+function runTest(markerName: string, expectedStringWhenTrue: string, expectedStringWhenFalse: string) {
+    const propertyName = "InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces";
+
     // Go to the correct file
-    goTo.marker(propertyName);
+    goTo.marker(markerName);
 
     // Set the option to false first
     format.setOption(propertyName, false);
@@ -17,7 +24,7 @@ function runTest(propertyName: string, expectedStringWhenTrue: string, expectedS
     format.document();
 
     // Verify
-    goTo.marker(propertyName);
+    goTo.marker(markerName);
     verify.currentLineContentIs(expectedStringWhenFalse);
 
     // Set the option to true
@@ -27,6 +34,6 @@ function runTest(propertyName: string, expectedStringWhenTrue: string, expectedS
     format.document();
 
     // Verify
-    goTo.marker(propertyName);
+    goTo.marker(markerName);
     verify.currentLineContentIs(expectedStringWhenTrue);
 }

@@ -110,7 +110,7 @@ namespace ts.SymbolDisplay {
 
     // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
     export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node,
-        location: Node, semanticMeaning = getMeaningFromLocation(location)): SymbolDisplayPartsDocumentationAndSymbolKind {
+        location: Node, semanticMeaning = getMeaningFromLocation(location), alias?: Symbol): SymbolDisplayPartsDocumentationAndSymbolKind {
 
         const displayParts: SymbolDisplayPart[] = [];
         let documentation: SymbolDisplayPart[];
@@ -120,6 +120,7 @@ namespace ts.SymbolDisplay {
         let hasAddedSymbolInfo: boolean;
         const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isExpression(location);
         let type: Type;
+        let documentationFromAlias: SymbolDisplayPart[];
 
         // Class at constructor site need to be shown as constructor apart from property,method, vars
         if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Alias) {
@@ -248,6 +249,7 @@ namespace ts.SymbolDisplay {
             }
         }
         if (symbolFlags & SymbolFlags.Class && !hasAddedSymbolInfo && !isThisExpression) {
+            addAliasPrefixIfNecessary();
             if (getDeclarationOfKind(symbol, SyntaxKind.ClassExpression)) {
                 // Special case for class expressions because we would like to indicate that
                 // the class name is local to the class body (similar to function expression)
@@ -263,14 +265,14 @@ namespace ts.SymbolDisplay {
             writeTypeParametersOfSymbol(symbol, sourceFile);
         }
         if ((symbolFlags & SymbolFlags.Interface) && (semanticMeaning & SemanticMeaning.Type)) {
-            addNewLineIfDisplayPartsExist();
+            prefixNextMeaning();
             displayParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
             displayParts.push(spacePart());
             addFullSymbolName(symbol);
             writeTypeParametersOfSymbol(symbol, sourceFile);
         }
         if (symbolFlags & SymbolFlags.TypeAlias) {
-            addNewLineIfDisplayPartsExist();
+            prefixNextMeaning();
             displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
             displayParts.push(spacePart());
             addFullSymbolName(symbol);
@@ -281,7 +283,7 @@ namespace ts.SymbolDisplay {
             addRange(displayParts, typeToDisplayParts(typeChecker, typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
         }
         if (symbolFlags & SymbolFlags.Enum) {
-            addNewLineIfDisplayPartsExist();
+            prefixNextMeaning();
             if (forEach(symbol.declarations, isConstEnumDeclaration)) {
                 displayParts.push(keywordPart(SyntaxKind.ConstKeyword));
                 displayParts.push(spacePart());
@@ -291,7 +293,7 @@ namespace ts.SymbolDisplay {
             addFullSymbolName(symbol);
         }
         if (symbolFlags & SymbolFlags.Module) {
-            addNewLineIfDisplayPartsExist();
+            prefixNextMeaning();
             const declaration = getDeclarationOfKind<ModuleDeclaration>(symbol, SyntaxKind.ModuleDeclaration);
             const isNamespace = declaration && declaration.name && declaration.name.kind === SyntaxKind.Identifier;
             displayParts.push(keywordPart(isNamespace ? SyntaxKind.NamespaceKeyword : SyntaxKind.ModuleKeyword));
@@ -299,7 +301,7 @@ namespace ts.SymbolDisplay {
             addFullSymbolName(symbol);
         }
         if ((symbolFlags & SymbolFlags.TypeParameter) && (semanticMeaning & SemanticMeaning.Type)) {
-            addNewLineIfDisplayPartsExist();
+            prefixNextMeaning();
             displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
             displayParts.push(textPart("type parameter"));
             displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
@@ -333,7 +335,7 @@ namespace ts.SymbolDisplay {
                     else if (declaration.kind === SyntaxKind.TypeAliasDeclaration) {
                         // Type alias type parameter
                         // For example
-                        //      type list<T> = T[];  // Both T will go through same code path
+                        //      type list<T> = T[]; // Both T will go through same code path
                         addInPrefix();
                         displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
                         displayParts.push(spacePart());
@@ -359,7 +361,32 @@ namespace ts.SymbolDisplay {
             }
         }
         if (symbolFlags & SymbolFlags.Alias) {
-            addNewLineIfDisplayPartsExist();
+            prefixNextMeaning();
+            if (!hasAddedSymbolInfo) {
+                const resolvedSymbol = typeChecker.getAliasedSymbol(symbol);
+                if (resolvedSymbol !== symbol && resolvedSymbol.declarations && resolvedSymbol.declarations.length > 0) {
+                    const resolvedNode = resolvedSymbol.declarations[0];
+                    const declarationName = ts.getNameOfDeclaration(resolvedNode);
+                    if (declarationName) {
+                        const isExternalModuleDeclaration =
+                            ts.isModuleWithStringLiteralName(resolvedNode) &&
+                            ts.hasModifier(resolvedNode, ModifierFlags.Ambient);
+                        const shouldUseAliasName = symbol.name !== "default" && !isExternalModuleDeclaration;
+                        const resolvedInfo = getSymbolDisplayPartsDocumentationAndSymbolKind(
+                            typeChecker,
+                            resolvedSymbol,
+                            ts.getSourceFileOfNode(resolvedNode),
+                            resolvedNode,
+                            declarationName,
+                            semanticMeaning,
+                            shouldUseAliasName ? symbol : resolvedSymbol);
+                        displayParts.push(...resolvedInfo.displayParts);
+                        displayParts.push(lineBreakPart());
+                        documentationFromAlias = resolvedInfo.documentation;
+                    }
+                }
+            }
+
             switch (symbol.declarations[0].kind) {
                 case SyntaxKind.NamespaceExportDeclaration:
                     displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
@@ -405,7 +432,7 @@ namespace ts.SymbolDisplay {
             if (symbolKind !== ScriptElementKind.unknown) {
                 if (type) {
                     if (isThisExpression) {
-                        addNewLineIfDisplayPartsExist();
+                        prefixNextMeaning();
                         displayParts.push(keywordPart(SyntaxKind.ThisKeyword));
                     }
                     else {
@@ -477,11 +504,23 @@ namespace ts.SymbolDisplay {
             }
         }
 
+        if (documentation.length === 0 && documentationFromAlias) {
+            documentation = documentationFromAlias;
+        }
+
         return { displayParts, documentation, symbolKind, tags };
 
-        function addNewLineIfDisplayPartsExist() {
+        function prefixNextMeaning() {
             if (displayParts.length) {
                 displayParts.push(lineBreakPart());
+            }
+            addAliasPrefixIfNecessary();
+        }
+
+        function addAliasPrefixIfNecessary() {
+            if (alias) {
+                pushTypePart(ScriptElementKind.alias);
+                displayParts.push(spacePart());
             }
         }
 
@@ -491,14 +530,17 @@ namespace ts.SymbolDisplay {
             displayParts.push(spacePart());
         }
 
-        function addFullSymbolName(symbol: Symbol, enclosingDeclaration?: Node) {
-            const fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbol, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
+        function addFullSymbolName(symbolToDisplay: Symbol, enclosingDeclaration?: Node) {
+            if (alias && symbolToDisplay === symbol) {
+                symbolToDisplay = alias;
+            }
+            const fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
                 SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing);
             addRange(displayParts, fullSymbolDisplayParts);
         }
 
         function addPrefixForAnyFunctionOrVar(symbol: Symbol, symbolKind: string) {
-            addNewLineIfDisplayPartsExist();
+            prefixNextMeaning();
             if (symbolKind) {
                 pushTypePart(symbolKind);
                 if (symbol && !some(symbol.declarations, d => isArrowFunction(d) || (isFunctionExpression(d) || isClassExpression(d)) && !d.name)) {
