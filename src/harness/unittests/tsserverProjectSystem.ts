@@ -6423,7 +6423,7 @@ namespace ts.projectSystem {
                 path: `${currentDirectory}/package.json`,
                 content: JSON.stringify({
                     devDependencies: {
-                        "pkgcurrentdirectory": ""
+                        pkgcurrentdirectory: ""
                     },
                 })
             };
@@ -6475,6 +6475,9 @@ namespace ts.projectSystem {
 
             // Ensure that we use result from types cache when getting ls
             assert.isDefined(project.getLanguageService());
+
+            // Verify that the pkgcurrentdirectory from the current directory isnt picked up
+            checkProjectActualFiles(project, [file.path]);
         });
     });
 }

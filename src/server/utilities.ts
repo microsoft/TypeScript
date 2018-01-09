@@ -33,19 +33,6 @@ namespace ts.server {
         export type Types = Err | Info | Perf;
     }
 
-    function getProjectRootPath(project: Project): Path {
-        switch (project.projectKind) {
-            case ProjectKind.Configured:
-                return <Path>getDirectoryPath(project.getProjectName());
-            case ProjectKind.Inferred:
-                // TODO: fixme
-                return <Path>"";
-            case ProjectKind.External:
-                const projectName = normalizeSlashes(project.getProjectName());
-                return project.projectService.host.fileExists(projectName) ? <Path>getDirectoryPath(projectName) : <Path>projectName;
-        }
-    }
-
     export function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings {
         return {
             projectName: project.getProjectName(),
@@ -53,7 +40,7 @@ namespace ts.server {
             compilerOptions: project.getCompilationSettings(),
             typeAcquisition,
             unresolvedImports,
-            projectRootPath: getProjectRootPath(project),
+            projectRootPath: project.getCurrentDirectory() as Path,
             cachePath,
             kind: "discover"
         };
