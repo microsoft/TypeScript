@@ -4305,8 +4305,8 @@ namespace ts {
                     // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
                     const name = declaration.propertyName || <Identifier>declaration.name;
                     if (isComputedNonLiteralName(name)) {
-                        type = checkComputedDestructuredProperty(parentType, name, (source, text) => {
-                            const declaredType = getTypeOfPropertyOfType(source, text);
+                        type = checkComputedDestructuredProperty(parentType, name, text => {
+                            const declaredType = getTypeOfPropertyOfType(parentType, text);
                             return declaredType && getFlowTypeOfReference(declaration, declaredType);
                         });
                         if (!type) {
@@ -18650,8 +18650,8 @@ namespace ts {
                 const name = <PropertyName>(<PropertyAssignment>property).name;
                 let type: Type;
                 if (isComputedNonLiteralName(name)) {
-                    type = checkComputedDestructuredProperty(objectLiteralType, name, (source, text) => {
-                        return isTypeAny(source) ? anyType : getTypeOfPropertyOfType(source, text)
+                    type = checkComputedDestructuredProperty(objectLiteralType, name, text => {
+                        return isTypeAny(objectLiteralType) ? anyType : getTypeOfPropertyOfType(objectLiteralType, text)
                     });
                     if (!type) {
                         return undefined;
@@ -18696,7 +18696,7 @@ namespace ts {
             }
         }
 
-        function checkComputedDestructuredProperty(source: Type, name: ComputedPropertyName, getSourcePropertyType: (source: Type, text: __String) => Type | undefined) {
+        function checkComputedDestructuredProperty(source: Type, name: ComputedPropertyName, getSourcePropertyType: (text: __String) => Type | undefined) {
             const computedType = checkComputedPropertyName(name);
             const isLiteral = isLiteralType(computedType);
             const isNumeric = isLiteral && (computedType.flags & TypeFlags.NumberLiteral ||
@@ -18714,7 +18714,7 @@ namespace ts {
                 errorName = computedType.flags & TypeFlags.Union && (computedType as UnionType).types.length ?
                     getTextOfPropertyLiteralType((computedType as UnionType).types[0]) :
                     text;
-                type = text && getSourcePropertyType(source, text) || type;
+                type = text && getSourcePropertyType(text) || type;
             }
             if (!type) {
                 if (noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors) {
