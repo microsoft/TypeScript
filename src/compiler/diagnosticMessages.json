@@ -3571,7 +3571,10 @@
         "category": "Error",
         "code": 7038
     },
-
+    "Mapped object type implicitly has an 'any' template type.": {
+        "category": "Error",
+        "code": 7039
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
@@ -3938,12 +3941,8 @@
         "category": "Message",
         "code": 95016
     },
-    "Mapped object type implicitly has an 'any' template type.": {
-        "category": "Error",
-        "code": 95017
-    },
     "Convert to ES6 module": {
         "category": "Message",
-        "code": 95018
+        "code": 95017
     }
 }
