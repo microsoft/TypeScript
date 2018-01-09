@@ -4,7 +4,7 @@
 ////export const x = 0;
 
 // @Filename: /src/a.ts
-////import {} from "foo//**/";
+////import {} from "foo/[|/**/|]";
 
 // @Filename: /tsconfig.json
 ////{
@@ -16,4 +16,5 @@
 ////    }
 ////}
 
-verify.completionsAt("", ["a", "b"]);
+const [replacementSpan] = test.ranges();
+verify.completionsAt("", [{ name: "a", replacementSpan }, { name: "b", replacementSpan }]);
