@@ -20316,7 +20316,7 @@ namespace ts {
             checkSourceElement(node.typeParameter);
             checkSourceElement(node.type);
 
-            if (noImplicitAny && nodeIsMissing(node.type)) {
+            if (noImplicitAny && !node.type) {
                 reportImplicitAnyError(node, anyType);
             }
 

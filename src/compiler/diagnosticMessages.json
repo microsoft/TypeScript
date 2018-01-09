@@ -3571,7 +3571,7 @@
         "category": "Error",
         "code": 7038
     },
-    "Mapped object type implicitly has an 'any' template type.": {
+    "Mapped object type implicitly has an '{0}' template type.": {
         "category": "Error",
         "code": 7039
     },
