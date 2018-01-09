@@ -3006,7 +3006,7 @@ namespace ts {
         // Write symbols's type argument if it is instantiated symbol
         // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
         //     var a: C<number>;
-        //     var p = a.p;  <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
+        //     var p = a.p; <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
         WriteTypeParametersOrArguments = 0x00000001,
 
         // Use only external alias information to get the symbol name in the given context
