@@ -4306,6 +4306,7 @@ namespace ts {
                     const name = declaration.propertyName || <Identifier>declaration.name;
                     if (isComputedNonLiteralName(name)) {
                         const computedType = checkComputedPropertyName(<ComputedPropertyName>name);
+                        let errorName: __String | undefined;
                         if (!computedType) {
                             return anyType;
                         }
@@ -4315,18 +4316,30 @@ namespace ts {
                             type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
                                 computedType.flags & TypeFlags.NumberLiteral && getIndexTypeOfType(parentType, IndexKind.Number) ||
                                 getIndexTypeOfType(parentType, IndexKind.String);
+                            errorName = text;
                         }
                         else if (computedType.flags & TypeFlags.Union && (computedType as UnionType).types.every(t => !!(t.flags & TypeFlags.Literal))) {
                             type = (computedType as UnionType).types.every(t => !!(t.flags & TypeFlags.NumberLiteral)) && getIndexTypeOfType(parentType, IndexKind.Number) ||
                                 getIndexTypeOfType(parentType, IndexKind.String);
+                            errorName = (computedType as UnionType).types[0] && getTextOfPropertyLiteralType((computedType as UnionType).types[0]);
                         }
                         else if (computedType.flags & TypeFlags.Number) {
                             type = getIndexTypeOfType(parentType, IndexKind.Number) || getIndexTypeOfType(parentType, IndexKind.String);
+                            errorName = undefined;
                         }
                         else if (computedType.flags & TypeFlags.String) {
                             type = getIndexTypeOfType(parentType, IndexKind.String);
+                            errorName = undefined;
                         }
-                        else {
+                        if (!type) {
+                            if (noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors) {
+                                if (errorName) {
+                                    error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), unescapeLeadingUnderscores(errorName));
+                                }
+                                else {
+                                    error(name, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(parentType));
+                                }
+                            }
                             return anyType;
                         }
                     }
@@ -18669,6 +18682,7 @@ namespace ts {
                 const computedType = name.kind === SyntaxKind.ComputedPropertyName ? checkComputedPropertyName(<ComputedPropertyName>name) : undefined;
                 let type: Type;
                 if (isComputedNonLiteralName(name)) {
+                    let errorName: __String | undefined;
                     if (!computedType) {
                         return undefined;
                     }
@@ -18679,22 +18693,35 @@ namespace ts {
                             : getTypeOfPropertyOfType(objectLiteralType, text) ||
                             computedType.flags & TypeFlags.NumberLiteral && getIndexTypeOfType(objectLiteralType, IndexKind.Number) ||
                             getIndexTypeOfType(objectLiteralType, IndexKind.String);
+                        errorName = text;
                     }
                     else if (computedType.flags & TypeFlags.Union && (computedType as UnionType).types.every(t => !!(t.flags & TypeFlags.Literal))) {
                         type = isTypeAny(objectLiteralType)
                             ? objectLiteralType
                             : (computedType as UnionType).types.every(t => !!(t.flags & TypeFlags.NumberLiteral)) && getIndexTypeOfType(objectLiteralType, IndexKind.Number) ||
                             getIndexTypeOfType(objectLiteralType, IndexKind.String);
+                        errorName = (computedType as UnionType).types[0] && getTextOfPropertyLiteralType((computedType as UnionType).types[0]);
                     }
                     else if (computedType.flags & TypeFlags.Number) {
                         type = getIndexTypeOfType(objectLiteralType, IndexKind.Number) || getIndexTypeOfType(objectLiteralType, IndexKind.String);
+                        errorName = undefined;
                     }
                     else if (computedType.flags & TypeFlags.String) {
                         type = getIndexTypeOfType(objectLiteralType, IndexKind.String);
+                        errorName = undefined;
                     }
-                    else {
+                    if (!type) {
+                        if (noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors) {
+                            if (errorName) {
+                                error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(objectLiteralType), unescapeLeadingUnderscores(errorName));
+                            }
+                            else {
+                                error(name, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(objectLiteralType));
+                            }
+                        }
                         return undefined;
                     }
+
                 }
                 else {
                     const text = getTextOfPropertyName(name);

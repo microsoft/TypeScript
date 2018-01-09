@@ -175,3 +175,44 @@ var { [onetwo]: dno } = sin // fine, from index signature
 >dno : Symbol(dno, Decl(computedPropertyUnionLiftsToUnionType.ts, 46, 3), Decl(computedPropertyUnionLiftsToUnionType.ts, 47, 5))
 >sin : Symbol(sin, Decl(computedPropertyUnionLiftsToUnionType.ts, 43, 11))
 
+// # 16789
+declare const textMap: {[key: string]: string}
+>textMap : Symbol(textMap, Decl(computedPropertyUnionLiftsToUnionType.ts, 50, 13))
+>key : Symbol(key, Decl(computedPropertyUnionLiftsToUnionType.ts, 50, 25))
+
+function getText (s: string, n: number) {
+>getText : Symbol(getText, Decl(computedPropertyUnionLiftsToUnionType.ts, 50, 46))
+>s : Symbol(s, Decl(computedPropertyUnionLiftsToUnionType.ts, 52, 18))
+>n : Symbol(n, Decl(computedPropertyUnionLiftsToUnionType.ts, 52, 28))
+
+    var { [s]: rawText = s } = sig;
+>s : Symbol(s, Decl(computedPropertyUnionLiftsToUnionType.ts, 52, 18))
+>rawText : Symbol(rawText, Decl(computedPropertyUnionLiftsToUnionType.ts, 53, 9))
+>s : Symbol(s, Decl(computedPropertyUnionLiftsToUnionType.ts, 52, 18))
+>sig : Symbol(sig, Decl(computedPropertyUnionLiftsToUnionType.ts, 33, 11))
+
+    var { [n]: rawNumber = n } = sin;
+>n : Symbol(n, Decl(computedPropertyUnionLiftsToUnionType.ts, 52, 28))
+>rawNumber : Symbol(rawNumber, Decl(computedPropertyUnionLiftsToUnionType.ts, 54, 9))
+>n : Symbol(n, Decl(computedPropertyUnionLiftsToUnionType.ts, 52, 28))
+>sin : Symbol(sin, Decl(computedPropertyUnionLiftsToUnionType.ts, 43, 11))
+
+    ({ [s]: rawText } = sig);
+>s : Symbol(s, Decl(computedPropertyUnionLiftsToUnionType.ts, 52, 18))
+>rawText : Symbol(rawText, Decl(computedPropertyUnionLiftsToUnionType.ts, 53, 9))
+>sig : Symbol(sig, Decl(computedPropertyUnionLiftsToUnionType.ts, 33, 11))
+
+    ({ [n]: rawNumber } = sin);
+>n : Symbol(n, Decl(computedPropertyUnionLiftsToUnionType.ts, 52, 28))
+>rawNumber : Symbol(rawNumber, Decl(computedPropertyUnionLiftsToUnionType.ts, 54, 9))
+>sin : Symbol(sin, Decl(computedPropertyUnionLiftsToUnionType.ts, 43, 11))
+
+    var { [s]: noSig } = {};
+>s : Symbol(s, Decl(computedPropertyUnionLiftsToUnionType.ts, 52, 18))
+>noSig : Symbol(noSig, Decl(computedPropertyUnionLiftsToUnionType.ts, 57, 9))
+
+    ({ [s]: noSig } = {});
+>s : Symbol(s, Decl(computedPropertyUnionLiftsToUnionType.ts, 52, 18))
+>noSig : Symbol(noSig, Decl(computedPropertyUnionLiftsToUnionType.ts, 57, 9))
+}
+

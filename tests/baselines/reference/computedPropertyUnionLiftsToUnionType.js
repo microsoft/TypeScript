@@ -48,6 +48,18 @@ var dn: number
 var dno: number
 var { [onetwo]: dno } = sin // fine, from index signature
 
+// # 16789
+declare const textMap: {[key: string]: string}
+
+function getText (s: string, n: number) {
+    var { [s]: rawText = s } = sig;
+    var { [n]: rawNumber = n } = sin;
+    ({ [s]: rawText } = sig);
+    ({ [n]: rawNumber } = sin);
+    var { [s]: noSig } = {};
+    ({ [s]: noSig } = {});
+}
+
 
 //// [computedPropertyUnionLiftsToUnionType.js]
 var Alphabet;
@@ -79,6 +91,14 @@ var dn;
 ({ [onetwo]: dn } = sin); // fine, from index signature
 var dno;
 var { [onetwo]: dno } = sin; // fine, from index signature
+function getText(s, n) {
+    var { [s]: rawText = s } = sig;
+    var { [n]: rawNumber = n } = sin;
+    ({ [s]: rawText } = sig);
+    ({ [n]: rawNumber } = sin);
+    var { [s]: noSig } = {};
+    ({ [s]: noSig } = {});
+}
 
 
 //// [computedPropertyUnionLiftsToUnionType.d.ts]
@@ -176,3 +196,7 @@ declare let sin: {
 declare var dn: number;
 declare var dno: number;
 declare var dno: number;
+declare const textMap: {
+    [key: string]: string;
+};
+declare function getText(s: string, n: number): void;

@@ -50,6 +50,7 @@ var dn: number
 var dno: number
 var { [onetwo]: dno } = sin // fine, from index signature
 
+// # 16789
 declare const textMap: {[key: string]: string}
 
 function getText (s: string, n: number) {
@@ -57,4 +58,6 @@ function getText (s: string, n: number) {
     var { [n]: rawNumber = n } = sin;
     ({ [s]: rawText } = sig);
     ({ [n]: rawNumber } = sin);
+    var { [s]: noSig } = {};
+    ({ [s]: noSig } = {});
 }

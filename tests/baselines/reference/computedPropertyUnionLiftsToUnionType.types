@@ -210,3 +210,55 @@ var { [onetwo]: dno } = sin // fine, from index signature
 >dno : number
 >sin : { [n: number]: number; }
 
+// # 16789
+declare const textMap: {[key: string]: string}
+>textMap : { [key: string]: string; }
+>key : string
+
+function getText (s: string, n: number) {
+>getText : (s: string, n: number) => void
+>s : string
+>n : number
+
+    var { [s]: rawText = s } = sig;
+>s : string
+>rawText : string
+>s : string
+>sig : { [s: string]: string; }
+
+    var { [n]: rawNumber = n } = sin;
+>n : number
+>rawNumber : number
+>n : number
+>sin : { [n: number]: number; }
+
+    ({ [s]: rawText } = sig);
+>({ [s]: rawText } = sig) : { [s: string]: string; }
+>{ [s]: rawText } = sig : { [s: string]: string; }
+>{ [s]: rawText } : { [x: string]: string; }
+>s : string
+>rawText : string
+>sig : { [s: string]: string; }
+
+    ({ [n]: rawNumber } = sin);
+>({ [n]: rawNumber } = sin) : { [n: number]: number; }
+>{ [n]: rawNumber } = sin : { [n: number]: number; }
+>{ [n]: rawNumber } : { [x: number]: number; }
+>n : number
+>rawNumber : number
+>sin : { [n: number]: number; }
+
+    var { [s]: noSig } = {};
+>s : string
+>noSig : any
+>{} : {}
+
+    ({ [s]: noSig } = {});
+>({ [s]: noSig } = {}) : {}
+>{ [s]: noSig } = {} : {}
+>{ [s]: noSig } : { [x: string]: any; }
+>s : string
+>noSig : any
+>{} : {}
+}
+
