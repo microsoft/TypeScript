@@ -9,59 +9,63 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions(context) {
             const { sourceFile, span } = context;
-            const token = getTokenAtPosition(sourceFile, span.start, /*includeJsDocComment*/ false);
-            const containingFunction = getContainingFunction(token);
-            const insertBefore = getNodeToInsertBefore(sourceFile, containingFunction);
-            const returnType = getReturnTypeNode(containingFunction);
-            if (!insertBefore) return undefined;
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, insertBefore, returnType));
+            const nodes = getNodes(sourceFile, span.start);
+            if (!nodes) return undefined;
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, nodes));
             return [{ description: getLocaleSpecificMessage(Diagnostics.Convert_to_async), changes, fixId }];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-            const token = getTokenAtPosition(diag.file, diag.start!, /*includeJsDocComment*/ false);
-            const containingFunction = getContainingFunction(token);
-            const insertBefore = getNodeToInsertBefore(diag.file, containingFunction);
-            const returnType = getReturnTypeNode(containingFunction);
-            if (insertBefore) {
-                doChange(changes, context.sourceFile, insertBefore, returnType);
-            }
+            const nodes = getNodes(diag.file, diag.start);
+            if (!nodes) return;
+            doChange(changes, context.sourceFile, nodes);
         }),
     });
 
-    function getReturnTypeNode(containingFunction: FunctionLike): TypeNode | undefined {
-        switch (containingFunction.kind) {
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.FunctionDeclaration:
-                return containingFunction.type;
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.ArrowFunction:
-                if (isVariableDeclaration(containingFunction.parent) &&
-                    containingFunction.parent.type &&
-                    isFunctionTypeNode(containingFunction.parent.type)) {
-                    return containingFunction.parent.type.type;
-                }
+    function getReturnType(expr: FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction) {
+        if (expr.type) {
+            return expr.type;
+        }
+        if (isVariableDeclaration(expr.parent) &&
+            expr.parent.type &&
+            isFunctionTypeNode(expr.parent.type)) {
+            return expr.parent.type.type;
         }
     }
 
-    function getNodeToInsertBefore(sourceFile: SourceFile, containingFunction: FunctionLike): Node | undefined {
+    function getNodes(sourceFile: SourceFile, start: number): { insertBefore: Node, returnType: TypeNode | undefined } | undefined {
+        const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
+        const containingFunction = getContainingFunction(token);
+        let insertBefore: Node | undefined;
         switch (containingFunction.kind) {
             case SyntaxKind.MethodDeclaration:
-                return containingFunction.name;
-            case SyntaxKind.FunctionExpression:
+                insertBefore = containingFunction.name;
+                break;
             case SyntaxKind.FunctionDeclaration:
-                return findChildOfKind(containingFunction, SyntaxKind.FunctionKeyword, sourceFile);
+            case SyntaxKind.FunctionExpression:
+                insertBefore = findChildOfKind(containingFunction, SyntaxKind.FunctionKeyword, sourceFile);
+                break;
             case SyntaxKind.ArrowFunction:
-                return findChildOfKind(containingFunction, SyntaxKind.OpenParenToken, sourceFile) || first(containingFunction.parameters);
+                insertBefore = findChildOfKind(containingFunction, SyntaxKind.OpenParenToken, sourceFile) || first(containingFunction.parameters);
+                break;
             default:
-                return undefined;
+                return;
         }
+
+        return {
+            insertBefore,
+            returnType: getReturnType(containingFunction)
+        };
     }
 
-    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, insertBefore: Node, returnType: TypeNode | undefined): void {
+    function doChange(
+        changes: textChanges.ChangeTracker,
+        sourceFile: SourceFile,
+        { insertBefore, returnType }: { insertBefore: Node | undefined, returnType: TypeNode | undefined }): void {
+
         if (returnType) {
             const entityName = getEntityNameFromTypeNode(returnType);
-            if (!entityName || entityName.getText() !== "Promise") {
+            if (!entityName || entityName.kind !== SyntaxKind.Identifier || entityName.text !== "Promise") {
                 changes.replaceNode(sourceFile, returnType, createTypeReferenceNode("Promise", createNodeArray([returnType])));
             }
         }
