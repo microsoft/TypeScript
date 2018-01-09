@@ -1,0 +1,45 @@
+=== tests/cases/compiler/contextualTypingFunctionReturningFunction3.ts ===
+declare function f(n: number): void;
+>f : Symbol(f, Decl(contextualTypingFunctionReturningFunction3.ts, 0, 0), Decl(contextualTypingFunctionReturningFunction3.ts, 0, 36))
+>n : Symbol(n, Decl(contextualTypingFunctionReturningFunction3.ts, 0, 19))
+
+declare function f(cb: () => (n: number) => number): void;
+>f : Symbol(f, Decl(contextualTypingFunctionReturningFunction3.ts, 0, 0), Decl(contextualTypingFunctionReturningFunction3.ts, 0, 36))
+>cb : Symbol(cb, Decl(contextualTypingFunctionReturningFunction3.ts, 1, 19))
+>n : Symbol(n, Decl(contextualTypingFunctionReturningFunction3.ts, 1, 30))
+
+f(() => {
+>f : Symbol(f, Decl(contextualTypingFunctionReturningFunction3.ts, 0, 0), Decl(contextualTypingFunctionReturningFunction3.ts, 0, 36))
+
+    if (1)
+        return n => n;
+>n : Symbol(n, Decl(contextualTypingFunctionReturningFunction3.ts, 5, 14))
+>n : Symbol(n, Decl(contextualTypingFunctionReturningFunction3.ts, 5, 14))
+
+    else
+        return n => n + 1;
+>n : Symbol(n, Decl(contextualTypingFunctionReturningFunction3.ts, 7, 14))
+>n : Symbol(n, Decl(contextualTypingFunctionReturningFunction3.ts, 7, 14))
+
+});
+
+// Is context sensitive if *any* return expression is.
+function notContextSensitive(n: number): number { return n; }
+>notContextSensitive : Symbol(notContextSensitive, Decl(contextualTypingFunctionReturningFunction3.ts, 8, 3))
+>n : Symbol(n, Decl(contextualTypingFunctionReturningFunction3.ts, 11, 29))
+>n : Symbol(n, Decl(contextualTypingFunctionReturningFunction3.ts, 11, 29))
+
+f(() => {
+>f : Symbol(f, Decl(contextualTypingFunctionReturningFunction3.ts, 0, 0), Decl(contextualTypingFunctionReturningFunction3.ts, 0, 36))
+
+    if (1)
+        return notContextSensitive;
+>notContextSensitive : Symbol(notContextSensitive, Decl(contextualTypingFunctionReturningFunction3.ts, 8, 3))
+
+    else
+        return n => n + 1;
+>n : Symbol(n, Decl(contextualTypingFunctionReturningFunction3.ts, 16, 14))
+>n : Symbol(n, Decl(contextualTypingFunctionReturningFunction3.ts, 16, 14))
+
+});
+

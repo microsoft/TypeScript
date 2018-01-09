@@ -9091,8 +9091,7 @@ namespace ts {
                 }
             }
 
-            // TODO(anhans): A block should be context-sensitive if it has a context-sensitive return value.
-            return node.body.kind === SyntaxKind.Block ? false : isContextSensitive(node.body);
+            return isBlock(node.body) ? forEachReturnStatement(node.body, rs => rs.expression && isContextSensitive(rs.expression)) : isContextSensitive(node.body);
         }
 
         function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {

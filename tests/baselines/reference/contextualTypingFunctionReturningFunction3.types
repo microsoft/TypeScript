@@ -1,0 +1,60 @@
+=== tests/cases/compiler/contextualTypingFunctionReturningFunction3.ts ===
+declare function f(n: number): void;
+>f : { (n: number): void; (cb: () => (n: number) => number): void; }
+>n : number
+
+declare function f(cb: () => (n: number) => number): void;
+>f : { (n: number): void; (cb: () => (n: number) => number): void; }
+>cb : () => (n: number) => number
+>n : number
+
+f(() => {
+>f(() => {    if (1)        return n => n;    else        return n => n + 1;}) : void
+>f : { (n: number): void; (cb: () => (n: number) => number): void; }
+>() => {    if (1)        return n => n;    else        return n => n + 1;} : () => (n: number) => number
+
+    if (1)
+>1 : 1
+
+        return n => n;
+>n => n : (n: number) => number
+>n : number
+>n : number
+
+    else
+        return n => n + 1;
+>n => n + 1 : (n: number) => number
+>n : number
+>n + 1 : number
+>n : number
+>1 : 1
+
+});
+
+// Is context sensitive if *any* return expression is.
+function notContextSensitive(n: number): number { return n; }
+>notContextSensitive : (n: number) => number
+>n : number
+>n : number
+
+f(() => {
+>f(() => {    if (1)        return notContextSensitive;    else        return n => n + 1;}) : void
+>f : { (n: number): void; (cb: () => (n: number) => number): void; }
+>() => {    if (1)        return notContextSensitive;    else        return n => n + 1;} : () => (n: number) => number
+
+    if (1)
+>1 : 1
+
+        return notContextSensitive;
+>notContextSensitive : (n: number) => number
+
+    else
+        return n => n + 1;
+>n => n + 1 : (n: number) => number
+>n : number
+>n + 1 : number
+>n : number
+>1 : 1
+
+});
+
