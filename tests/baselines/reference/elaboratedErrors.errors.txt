@@ -1,4 +1,4 @@
-tests/cases/compiler/elaboratedErrors.ts(11,3): error TS2416: Property 'read' in type 'WorkerFS' is not assignable to the same property in base type 'number'.
+tests/cases/compiler/elaboratedErrors.ts(11,3): error TS2416: Property 'read' in type 'WorkerFS' is not assignable to the same property in base type 'FileSystem'.
   Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/elaboratedErrors.ts(20,1): error TS2322: Type 'Beta' is not assignable to type 'Alpha'.
   Property 'x' is missing in type 'Beta'.
@@ -21,7 +21,7 @@ tests/cases/compiler/elaboratedErrors.ts(25,1): error TS2322: Type 'Alpha' is no
     class WorkerFS implements FileSystem {
       read: string;
       ~~~~
-!!! error TS2416: Property 'read' in type 'WorkerFS' is not assignable to the same property in base type 'number'.
+!!! error TS2416: Property 'read' in type 'WorkerFS' is not assignable to the same property in base type 'FileSystem'.
 !!! error TS2416:   Type 'string' is not assignable to type 'number'.
     }
     

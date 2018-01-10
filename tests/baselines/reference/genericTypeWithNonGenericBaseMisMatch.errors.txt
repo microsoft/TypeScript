@@ -1,4 +1,4 @@
-tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts(5,2): error TS2416: Property 'f' in type 'X<T>' is not assignable to the same property in base type '(a: { a: number; }) => void'.
+tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts(5,2): error TS2416: Property 'f' in type 'X<T>' is not assignable to the same property in base type 'I'.
   Type '(a: T) => void' is not assignable to type '(a: { a: number; }) => void'.
     Types of parameters 'a' and 'a' are incompatible.
       Type '{ a: number; }' is not assignable to type 'T'.
@@ -18,7 +18,7 @@ tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts(8,5): error TS2322
     class X<T extends { a: string }> implements I {
     	f(a: T): void { }
     	~
-!!! error TS2416: Property 'f' in type 'X<T>' is not assignable to the same property in base type '(a: { a: number; }) => void'.
+!!! error TS2416: Property 'f' in type 'X<T>' is not assignable to the same property in base type 'I'.
 !!! error TS2416:   Type '(a: T) => void' is not assignable to type '(a: { a: number; }) => void'.
 !!! error TS2416:     Types of parameters 'a' and 'a' are incompatible.
 !!! error TS2416:       Type '{ a: number; }' is not assignable to type 'T'.
