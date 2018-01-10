@@ -21836,9 +21836,9 @@ namespace ts {
             if (isBindingPattern(node.name)) {
                 // Don't validate for-in initializer as it is already an error
                 if (node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
-                    const initializerType = checkExpressionCached(node.initializer);
+                    let initializerType = checkExpressionCached(node.initializer);
                     if (strictNullChecks && node.name.elements.length === 0) {
-                        checkNonNullType(initializerType, node);
+                        initializerType = checkNonNullType(initializerType, node);
                     }
                     checkTypeAssignableTo(initializerType, getWidenedTypeForVariableLikeDeclaration(node), node, /*headMessage*/ undefined);
                     checkParameterInitializer(node);
