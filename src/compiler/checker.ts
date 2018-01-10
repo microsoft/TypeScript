@@ -6351,7 +6351,7 @@ namespace ts {
             return getObjectFlags(type) & ObjectFlags.Mapped && !!(<MappedType>type).declaration.questionToken;
         }
 
-        function isGenericMappedType(type: Type) {
+        function isGenericMappedType(type: Type): type is MappedType {
             return getObjectFlags(type) & ObjectFlags.Mapped && isGenericIndexType(getConstraintTypeFromMappedType(<MappedType>type));
         }
 
@@ -6463,14 +6463,12 @@ namespace ts {
         }
 
         function getConstraintOfIndexedAccess(type: IndexedAccessType) {
-            const transformed = getTransformedIndexedAccessType(type);
+            const transformed = simplifyIndexedAccessType(type);
             if (transformed) {
                 return transformed;
             }
             const baseObjectType = getBaseConstraintOfType(type.objectType);
-            const keepTypeParameterForMappedType = baseObjectType && getObjectFlags(baseObjectType) & ObjectFlags.Mapped &&
-                type.indexType.flags & TypeFlags.TypeParameter;
-            const baseIndexType = !keepTypeParameterForMappedType && getBaseConstraintOfType(type.indexType);
+            const baseIndexType = getBaseConstraintOfType(type.indexType);
             if (baseIndexType === stringType && !getIndexInfoOfType(baseObjectType || type.objectType, IndexKind.String)) {
                 // getIndexedAccessType returns `any` for X[string] where X doesn't have an index signature.
                 // to avoid this, return `undefined`.
@@ -6546,7 +6544,7 @@ namespace ts {
                     return stringType;
                 }
                 if (t.flags & TypeFlags.IndexedAccess) {
-                    const transformed = getTransformedIndexedAccessType(<IndexedAccessType>t);
+                    const transformed = simplifyIndexedAccessType(<IndexedAccessType>t);
                     if (transformed) {
                         return getBaseConstraint(transformed);
                     }
@@ -6554,6 +6552,9 @@ namespace ts {
                     const baseIndexType = getBaseConstraint((<IndexedAccessType>t).indexType);
                     const baseIndexedAccess = baseObjectType && baseIndexType ? getIndexedAccessType(baseObjectType, baseIndexType) : undefined;
                     return baseIndexedAccess && baseIndexedAccess !== unknownType ? getBaseConstraint(baseIndexedAccess) : undefined;
+                }
+                if (isGenericMappedType(t)) {
+                    return emptyObjectType;
                 }
                 return t;
             }
@@ -8355,7 +8356,7 @@ namespace ts {
 
         // Transform an indexed access to a simpler form, if possible. Return the simpler form, or return
         // undefined if no transformation is possible.
-        function getTransformedIndexedAccessType(type: IndexedAccessType): Type {
+        function simplifyIndexedAccessType(type: IndexedAccessType): Type {
             const objectType = type.objectType;
             // Given an indexed access type T[K], if T is an intersection containing one or more generic types and one or
             // more object types with only a string index signature, e.g. '(U & V & { [x: string]: D })[K]', return a
@@ -8381,12 +8382,22 @@ namespace ts {
             // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
             // construct the type Box<T[X]>.
             if (isGenericMappedType(objectType)) {
-                const mapper = createTypeMapper([getTypeParameterFromMappedType(<MappedType>objectType)], [type.indexType]);
-                const objectTypeMapper = (<MappedType>objectType).mapper;
-                const templateMapper = objectTypeMapper ? combineTypeMappers(objectTypeMapper, mapper) : mapper;
-                return instantiateType(getTemplateTypeFromMappedType(<MappedType>objectType), templateMapper);
+                return substituteIndexedMappedType(objectType, type);
+            }
+            if (objectType.flags & TypeFlags.TypeParameter) {
+                const constraint = getConstraintFromTypeParameter(objectType as TypeParameter);
+                if (constraint && isGenericMappedType(constraint)) {
+                    return substituteIndexedMappedType(constraint, type);
+                }
             }
             return undefined;
+        }
+
+        function substituteIndexedMappedType(objectType: MappedType, type: IndexedAccessType) {
+            const mapper = createTypeMapper([getTypeParameterFromMappedType(<MappedType>objectType)], [type.indexType]);
+            const objectTypeMapper = (<MappedType>objectType).mapper;
+            const templateMapper = objectTypeMapper ? combineTypeMappers(objectTypeMapper, mapper) : mapper;
+            return instantiateType(getTemplateTypeFromMappedType(<MappedType>objectType), templateMapper);
         }
 
         function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode): Type {
