@@ -11,8 +11,8 @@ namespace ts.formatting {
         for (let token = SyntaxKind.FirstToken; token <= SyntaxKind.LastToken; token++) {
             allTokens.push(token);
         }
-        function anyTokenExcept(token: SyntaxKind): TokenRange {
-            return { tokens: allTokens.filter(t => t !== token), isSpecific: false };
+        function anyTokenExcept(...tokens: SyntaxKind[]): TokenRange {
+            return { tokens: allTokens.filter(t => !tokens.some(t2 => t2 === t)), isSpecific: false };
         }
 
         const anyToken: TokenRange = { tokens: allTokens, isSpecific: false };
@@ -316,6 +316,11 @@ namespace ts.formatting {
 
             rule("NoSpaceBeforeComma", anyToken, SyntaxKind.CommaToken, [isNonJsxSameLineTokenContext], RuleAction.Delete),
 
+            // No space before and after indexer `x[]`
+            rule("NoSpaceBeforeOpenBracket", anyTokenExcept(SyntaxKind.AsyncKeyword, SyntaxKind.CaseKeyword), SyntaxKind.OpenBracketToken, [isNonJsxSameLineTokenContext], RuleAction.Delete),
+            rule("NoSpaceAfterCloseBracket", SyntaxKind.CloseBracketToken, anyToken, [isNonJsxSameLineTokenContext, isNotBeforeBlockInFunctionDeclarationContext], RuleAction.Delete),
+            rule("SpaceAfterSemicolon", SyntaxKind.SemicolonToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.Space),
+
             // Add a space between statements. All keywords except (do,else,case) has open/close parens after them.
             // So, we have a rule to add a space for [),Any], [do,Any], [else,Any], and [case,Any]
             rule(
@@ -326,11 +331,6 @@ namespace ts.formatting {
                 RuleAction.Space),
             // This low-pri rule takes care of "try {" and "finally {" in case the rule SpaceBeforeOpenBraceInControl didn't execute on FormatOnEnter.
             rule("SpaceAfterTryFinally", [SyntaxKind.TryKeyword, SyntaxKind.FinallyKeyword], SyntaxKind.OpenBraceToken, [isNonJsxSameLineTokenContext], RuleAction.Space),
-
-            // No space before and after indexer `x[]`
-            rule("NoSpaceBeforeOpenBracket", anyTokenExcept(SyntaxKind.AsyncKeyword), SyntaxKind.OpenBracketToken, [isNonJsxSameLineTokenContext], RuleAction.Delete),
-            rule("NoSpaceAfterCloseBracket", SyntaxKind.CloseBracketToken, anyToken, [isNonJsxSameLineTokenContext, isNotBeforeBlockInFunctionDeclarationContext], RuleAction.Delete),
-            rule("SpaceAfterSemicolon", SyntaxKind.SemicolonToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.Space),
         ];
 
         return [
