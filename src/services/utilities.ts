@@ -1354,6 +1354,10 @@ namespace ts {
         return visited;
     }
 
+    export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
+        return nodes && createNodeArray(nodes.map(getSynthesizedDeepClone), nodes.hasTrailingComma);
+    }
+
     /**
      * Sets EmitFlags to suppress leading and trailing trivia on the node.
      */

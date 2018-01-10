@@ -268,8 +268,8 @@ namespace ts {
             getSuggestionForNonexistentSymbol: (location, name, meaning) => getSuggestionForNonexistentSymbol(location, escapeLeadingUnderscores(name), meaning),
             getBaseConstraintOfType,
             getDefaultFromTypeParameter: type => type && type.flags & TypeFlags.TypeParameter ? getDefaultFromTypeParameter(type as TypeParameter) : undefined,
-            resolveName(name, location, meaning) {
-                return resolveName(location, escapeLeadingUnderscores(name), meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
+            resolveName(name, location, meaning, excludeGlobals) {
+                return resolveName(location, escapeLeadingUnderscores(name), meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false, excludeGlobals);
             },
             getJsxNamespace: () => unescapeLeadingUnderscores(getJsxNamespace()),
             getAccessibleSymbolChain,
@@ -952,8 +952,9 @@ namespace ts {
             nameNotFoundMessage: DiagnosticMessage | undefined,
             nameArg: __String | Identifier,
             isUse: boolean,
+            excludeGlobals = false,
             suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol {
-            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, getSymbol, suggestedNameNotFoundMessage);
+            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSymbol, suggestedNameNotFoundMessage);
         }
 
         function resolveNameHelper(
@@ -963,6 +964,7 @@ namespace ts {
             nameNotFoundMessage: DiagnosticMessage,
             nameArg: __String | Identifier,
             isUse: boolean,
+            excludeGlobals: boolean,
             lookup: typeof getSymbol,
             suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol {
             const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
@@ -1209,7 +1211,9 @@ namespace ts {
                     }
                 }
 
-                result = lookup(globals, name, meaning);
+                if (!excludeGlobals) {
+                    result = lookup(globals, name, meaning);
+                }
             }
 
             if (!result) {
@@ -11277,6 +11281,9 @@ namespace ts {
                     }
                     diagnostic = Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type;
                     break;
+                case SyntaxKind.MappedType:
+                    error(declaration, Diagnostics.Mapped_object_type_implicitly_has_an_any_template_type);
+                    return;
                 default:
                     diagnostic = Diagnostics.Variable_0_implicitly_has_an_1_type;
             }
@@ -11889,6 +11896,7 @@ namespace ts {
                         Diagnostics.Cannot_find_name_0,
                         node,
                         !isWriteOnlyAccess(node),
+                        /*excludeGlobals*/ false,
                         Diagnostics.Cannot_find_name_0_Did_you_mean_1) || unknownSymbol;
             }
             return links.resolvedSymbol;
@@ -15154,7 +15162,7 @@ namespace ts {
          * element is not a class element, or the class element type cannot be determined, returns 'undefined'.
          * For example, in the element <MyClass>, the element instance type is `MyClass` (not `typeof MyClass`).
          */
-        function getJsxElementInstanceType(node: JsxOpeningLikeElement, valueType: Type, sourceAttributesType: Type) {
+        function getJsxElementInstanceType(node: JsxOpeningLikeElement, valueType: Type, sourceAttributesType: Type | undefined) {
             Debug.assert(!(valueType.flags & TypeFlags.Union));
             if (isTypeAny(valueType)) {
                 // Short-circuit if the class tag is using an element type 'any'
@@ -15173,20 +15181,27 @@ namespace ts {
                 }
             }
 
-            const instantiatedSignatures = [];
-            for (const signature of signatures) {
-                if (signature.typeParameters) {
-                    const isJavascript = isInJavaScriptFile(node);
-                    const inferenceContext = createInferenceContext(signature, /*flags*/ isJavascript ? InferenceFlags.AnyDefault : 0);
-                    const typeArguments = inferJsxTypeArguments(signature, sourceAttributesType, inferenceContext);
-                    instantiatedSignatures.push(getSignatureInstantiation(signature, typeArguments, isJavascript));
+            if (sourceAttributesType) {
+                // Instantiate in context of source type
+                const instantiatedSignatures = [];
+                for (const signature of signatures) {
+                    if (signature.typeParameters) {
+                        const isJavascript = isInJavaScriptFile(node);
+                        const inferenceContext = createInferenceContext(signature, /*flags*/ isJavascript ? InferenceFlags.AnyDefault : 0);
+                        const typeArguments = inferJsxTypeArguments(signature, sourceAttributesType, inferenceContext);
+                        instantiatedSignatures.push(getSignatureInstantiation(signature, typeArguments, isJavascript));
+                    }
+                    else {
+                        instantiatedSignatures.push(signature);
+                    }
                 }
-                else {
-                    instantiatedSignatures.push(signature);
-                }
-            }
 
-            return getUnionType(map(instantiatedSignatures, getReturnTypeOfSignature), UnionReduction.Subtype);
+                return getUnionType(map(instantiatedSignatures, getReturnTypeOfSignature), UnionReduction.Subtype);
+            }
+            else {
+                // Do not instantiate if no source type is provided - type parameters and their constraints will be used by contextual typing
+                return getUnionType(map(signatures, getReturnTypeOfSignature), UnionReduction.Subtype);
+            }
         }
 
         /**
@@ -15410,7 +15425,7 @@ namespace ts {
             }
 
             // Get the element instance type (the result of newing or invoking this tag)
-            const elemInstanceType = getJsxElementInstanceType(openingLikeElement, elementType, sourceAttributesType || emptyObjectType);
+            const elemInstanceType = getJsxElementInstanceType(openingLikeElement, elementType, sourceAttributesType);
 
             // If we should include all stateless attributes type, then get all attributes type from all stateless function signature.
             // Otherwise get only attributes type from the signature picked by choose-overload logic.
@@ -16068,7 +16083,7 @@ namespace ts {
 
         function getSuggestionForNonexistentSymbol(location: Node, outerName: __String, meaning: SymbolFlags): string {
             Debug.assert(outerName !== undefined, "outername should always be defined");
-            const result = resolveNameHelper(location, outerName, meaning, /*nameNotFoundMessage*/ undefined, outerName, /*isUse*/ false, (symbols, name, meaning) => {
+            const result = resolveNameHelper(location, outerName, meaning, /*nameNotFoundMessage*/ undefined, outerName, /*isUse*/ false, /*excludeGlobals*/ false, (symbols, name, meaning) => {
                 Debug.assertEqual(outerName, name, "name should equal outerName");
                 const symbol = getSymbol(symbols, name, meaning);
                 // Sometimes the symbol is found when location is a return type of a function: `typeof x` and `x` is declared in the body of the function
@@ -20307,6 +20322,11 @@ namespace ts {
         function checkMappedType(node: MappedTypeNode) {
             checkSourceElement(node.typeParameter);
             checkSourceElement(node.type);
+
+            if (noImplicitAny && !node.type) {
+                reportImplicitAnyError(node, anyType);
+            }
+
             const type = <MappedType>getTypeFromMappedTypeNode(node);
             const constraintType = getConstraintTypeFromMappedType(type);
             checkTypeAssignableTo(constraintType, stringType, node.typeParameter.constraint);
@@ -22985,7 +23005,7 @@ namespace ts {
                             Diagnostics.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2,
                             unescapeLeadingUnderscores(declaredProp.escapedName),
                             typeToString(typeWithThis),
-                            typeToString(getTypeOfSymbol(baseProp))
+                            typeToString(baseWithThis)
                         );
                         if (!checkTypeAssignableTo(getTypeOfSymbol(prop), getTypeOfSymbol(baseProp), member.name || member, /*message*/ undefined, rootChain)) {
                             issuedMemberError = true;

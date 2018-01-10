@@ -1,4 +1,4 @@
-tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSupertype.ts(10,5): error TS2416: Property 'x' in type 'Derived<U>' is not assignable to the same property in base type 'string'.
+tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSupertype.ts(10,5): error TS2416: Property 'x' in type 'Derived<U>' is not assignable to the same property in base type 'Base'.
   Type 'U' is not assignable to type 'string'.
     Type 'String' is not assignable to type 'string'.
       'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
@@ -16,7 +16,7 @@ tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSuperty
     class Derived<U extends String> extends Base { // error
         x: U;
         ~
-!!! error TS2416: Property 'x' in type 'Derived<U>' is not assignable to the same property in base type 'string'.
+!!! error TS2416: Property 'x' in type 'Derived<U>' is not assignable to the same property in base type 'Base'.
 !!! error TS2416:   Type 'U' is not assignable to type 'string'.
 !!! error TS2416:     Type 'String' is not assignable to type 'string'.
 !!! error TS2416:       'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.

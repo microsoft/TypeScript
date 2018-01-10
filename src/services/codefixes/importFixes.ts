@@ -746,7 +746,7 @@ namespace ts.codefix {
         }
         else if (isJsxOpeningLikeElement(symbolToken.parent) && symbolToken.parent.tagName === symbolToken) {
             // The error wasn't for the symbolAtLocation, it was for the JSX tag itself, which needs access to e.g. `React`.
-            symbol = checker.getAliasedSymbol(checker.resolveName(checker.getJsxNamespace(), symbolToken.parent.tagName, SymbolFlags.Value));
+            symbol = checker.getAliasedSymbol(checker.resolveName(checker.getJsxNamespace(), symbolToken.parent.tagName, SymbolFlags.Value, /*excludeGlobals*/ false));
             symbolName = symbol.name;
         }
         else {
@@ -867,7 +867,7 @@ namespace ts.codefix {
         return moduleSpecifierToValidIdentifier(removeFileExtension(getBaseFileName(moduleSymbol.name)), target);
     }
 
-    function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget): string {
+    export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget): string {
         let res = "";
         let lastCharWasValid = true;
         const firstCharCode = moduleSpecifier.charCodeAt(0);

@@ -11,6 +11,7 @@
 /// <reference path="fixForgottenThisPropertyAccess.ts" />
 /// <reference path='fixUnusedIdentifier.ts' />
 /// <reference path='fixJSDocTypes.ts' />
+/// <reference path='fixAwaitInSyncFunction.ts' />
 /// <reference path='importFixes.ts' />
 /// <reference path='disableJsDiagnostics.ts' />
 /// <reference path='helpers.ts' />

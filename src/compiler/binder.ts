@@ -2289,30 +2289,13 @@ namespace ts {
             declareSymbol(file.symbol.exports, file.symbol, <PropertyAccessExpression>node.left, SymbolFlags.Property | SymbolFlags.ExportValue, SymbolFlags.None);
         }
 
-        function isExportsOrModuleExportsOrAlias(node: Node): boolean {
-            return isExportsIdentifier(node) ||
-                isModuleExportsPropertyAccessExpression(node) ||
-                isIdentifier(node) && isNameOfExportsOrModuleExportsAliasDeclaration(node);
-        }
-
-        function isNameOfExportsOrModuleExportsAliasDeclaration(node: Identifier): boolean {
-            const symbol = lookupSymbolForName(node.escapedText);
-            return symbol && symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) &&
-                symbol.valueDeclaration.initializer && isExportsOrModuleExportsOrAliasOrAssignment(symbol.valueDeclaration.initializer);
-        }
-
-        function isExportsOrModuleExportsOrAliasOrAssignment(node: Node): boolean {
-            return isExportsOrModuleExportsOrAlias(node) ||
-                (isAssignmentExpression(node, /*excludeCompoundAssignements*/ true) && (isExportsOrModuleExportsOrAliasOrAssignment(node.left) || isExportsOrModuleExportsOrAliasOrAssignment(node.right)));
-        }
-
         function bindModuleExportsAssignment(node: BinaryExpression) {
             // A common practice in node modules is to set 'export = module.exports = {}', this ensures that 'exports'
             // is still pointing to 'module.exports'.
             // We do not want to consider this as 'export=' since a module can have only one of these.
             // Similarly we do not want to treat 'module.exports = exports' as an 'export='.
             const assignedExpression = getRightMostAssignedExpression(node.right);
-            if (isEmptyObjectLiteral(assignedExpression) || isExportsOrModuleExportsOrAlias(assignedExpression)) {
+            if (isEmptyObjectLiteral(assignedExpression) || container === file && isExportsOrModuleExportsOrAlias(file, assignedExpression)) {
                 // Mark it as a module in case there are no other exports in the file
                 setCommonJsModuleIndicator(node);
                 return;
@@ -2393,7 +2376,7 @@ namespace ts {
                 if (node.kind === SyntaxKind.BinaryExpression) {
                     leftSideOfAssignment.parent = node;
                 }
-                if (isNameOfExportsOrModuleExportsAliasDeclaration(target)) {
+                if (container === file && isNameOfExportsOrModuleExportsAliasDeclaration(file, target)) {
                     // This can be an alias for the 'exports' or 'module.exports' names, e.g.
                     //    var util = module.exports;
                     //    util.property = function ...
@@ -2406,11 +2389,7 @@ namespace ts {
         }
 
         function lookupSymbolForName(name: __String) {
-            const local = container.locals && container.locals.get(name);
-            if (local) {
-                return local.exportSymbol || local;
-            }
-            return container.symbol && container.symbol.exports && container.symbol.exports.get(name);
+            return lookupSymbolForNameWorker(container, name);
         }
 
         function bindPropertyAssignment(functionName: __String, propertyAccess: PropertyAccessExpression, isPrototypeProperty: boolean) {
@@ -2647,6 +2626,33 @@ namespace ts {
             }
             return true;
         }
+    }
+
+    /* @internal */
+    export function isExportsOrModuleExportsOrAlias(sourceFile: SourceFile, node: Expression): boolean {
+        return isExportsIdentifier(node) ||
+            isModuleExportsPropertyAccessExpression(node) ||
+            isIdentifier(node) && isNameOfExportsOrModuleExportsAliasDeclaration(sourceFile, node);
+    }
+
+    function isNameOfExportsOrModuleExportsAliasDeclaration(sourceFile: SourceFile, node: Identifier): boolean {
+        const symbol = lookupSymbolForNameWorker(sourceFile, node.escapedText);
+        return symbol && symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) &&
+            symbol.valueDeclaration.initializer && isExportsOrModuleExportsOrAliasOrAssignment(sourceFile, symbol.valueDeclaration.initializer);
+    }
+
+    function isExportsOrModuleExportsOrAliasOrAssignment(sourceFile: SourceFile, node: Expression): boolean {
+        return isExportsOrModuleExportsOrAlias(sourceFile, node) ||
+            (isAssignmentExpression(node, /*excludeCompoundAssignements*/ true) && (
+                isExportsOrModuleExportsOrAliasOrAssignment(sourceFile, node.left) || isExportsOrModuleExportsOrAliasOrAssignment(sourceFile, node.right)));
+    }
+
+    function lookupSymbolForNameWorker(container: Node, name: __String): Symbol | undefined {
+        const local = container.locals && container.locals.get(name);
+        if (local) {
+            return local.exportSymbol || local;
+        }
+        return container.symbol && container.symbol.exports && container.symbol.exports.get(name);
     }
 
     /**

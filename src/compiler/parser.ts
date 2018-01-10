@@ -786,15 +786,7 @@ namespace ts {
             const comments = getJSDocCommentRanges(node, sourceFile.text);
             if (comments) {
                 for (const comment of comments) {
-                    const jsDoc = JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos);
-                    if (jsDoc) {
-                        if (!node.jsDoc) {
-                            node.jsDoc = [jsDoc];
-                        }
-                        else {
-                            node.jsDoc.push(jsDoc);
-                        }
-                    }
+                    node.jsDoc = append(node.jsDoc, JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
                 }
             }
 
@@ -6499,7 +6491,7 @@ namespace ts {
                                 if (state === JSDocState.BeginningOfLine) {
                                     // leading asterisks start recording on the *next* (non-whitespace) token
                                     state = JSDocState.SawAsterisk;
-                                    indent += scanner.getTokenText().length;
+                                    indent += 1;
                                     break;
                                 }
                                 // record the * as a comment
@@ -6611,10 +6603,7 @@ namespace ts {
                         const start = scanner.getStartPos();
                         let children: JSDocParameterTag[];
                         while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.Parameter, name))) {
-                            if (!children) {
-                                children = [];
-                            }
-                            children.push(child);
+                            children = append(children, child);
                         }
                         if (children) {
                             jsdocTypeLiteral = <JSDocTypeLiteral>createNode(SyntaxKind.JSDocTypeLiteral, start);
@@ -6731,10 +6720,7 @@ namespace ts {
                                 }
                             }
                             else {
-                                if (!jsdocTypeLiteral.jsDocPropertyTags) {
-                                    jsdocTypeLiteral.jsDocPropertyTags = [] as MutableNodeArray<JSDocPropertyTag>;
-                                }
-                                (jsdocTypeLiteral.jsDocPropertyTags as MutableNodeArray<JSDocPropertyTag>).push(child);
+                                jsdocTypeLiteral.jsDocPropertyTags = append(jsdocTypeLiteral.jsDocPropertyTags as MutableNodeArray<JSDocPropertyTag>, child);
                             }
                         }
                         if (jsdocTypeLiteral) {

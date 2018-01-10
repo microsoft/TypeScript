@@ -5,6 +5,7 @@ namespace ts {
     export const emptyArray: never[] = [] as never[];
     export const resolvingEmptyArray: never[] = [] as never[];
     export const emptyMap: ReadonlyMap<never> = createMap<never>();
+    export const emptyUnderscoreEscapedMap: ReadonlyUnderscoreEscapedMap<never> = emptyMap as ReadonlyUnderscoreEscapedMap<never>;
 
     export const externalHelpersModuleNameText = "tslib";
 
@@ -1419,6 +1420,8 @@ namespace ts {
      * exactly one argument (of the form 'require("name")').
      * This function does not test if the node is in a JavaScript file or not.
      */
+    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteral: true): callExpression is CallExpression & { expression: Identifier, arguments: [StringLiteralLike] };
+    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteral: boolean): callExpression is CallExpression;
     export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteral: boolean): callExpression is CallExpression {
         if (callExpression.kind !== SyntaxKind.CallExpression) {
             return false;
@@ -1456,7 +1459,7 @@ namespace ts {
         return false;
     }
 
-    export function getRightMostAssignedExpression(node: Node) {
+    export function getRightMostAssignedExpression(node: Expression): Expression {
         while (isAssignmentExpression(node, /*excludeCompoundAssignements*/ true)) {
             node = node.right;
         }

@@ -6488,4 +6488,76 @@ namespace ts.projectSystem {
             verifyWatchedDirectories(/*useProjectAtRoot*/ false);
         });
     });
+
+    describe("tsserverProjectSystem typingsInstaller on inferred Project", () => {
+        it("when projectRootPath is provided", () => {
+            const projects = "/users/username/projects";
+            const projectRootPath = `${projects}/san2`;
+            const file: FileOrFolder = {
+                path: `${projectRootPath}/x.js`,
+                content: "const aaaaaaav = 1;"
+            };
+
+            const currentDirectory = `${projects}/anotherProject`;
+            const packageJsonInCurrentDirectory: FileOrFolder = {
+                path: `${currentDirectory}/package.json`,
+                content: JSON.stringify({
+                    devDependencies: {
+                        pkgcurrentdirectory: ""
+                    },
+                })
+            };
+            const packageJsonOfPkgcurrentdirectory: FileOrFolder = {
+                path: `${currentDirectory}/node_modules/pkgcurrentdirectory/package.json`,
+                content: JSON.stringify({
+                    name: "pkgcurrentdirectory",
+                    main: "index.js",
+                    typings: "index.d.ts"
+                })
+            };
+            const indexOfPkgcurrentdirectory: FileOrFolder = {
+                path: `${currentDirectory}/node_modules/pkgcurrentdirectory/index.d.ts`,
+                content: "export function foo() { }"
+            };
+
+            const typingsCache = `/users/username/Library/Caches/typescript/2.7`;
+            const typingsCachePackageJson: FileOrFolder = {
+                path: `${typingsCache}/package.json`,
+                content: JSON.stringify({
+                    devDependencies: {
+                    },
+                })
+            };
+
+            const files = [file, packageJsonInCurrentDirectory, packageJsonOfPkgcurrentdirectory, indexOfPkgcurrentdirectory, typingsCachePackageJson];
+            const host = createServerHost(files, { currentDirectory });
+
+            const typesRegistry = createMap<void>();
+            typesRegistry.set("pkgcurrentdirectory", void 0);
+            const typingsInstaller = new TestTypingsInstaller(typingsCache, /*throttleLimit*/ 5, host, typesRegistry);
+
+            const projectService = createProjectService(host, { typingsInstaller });
+
+            projectService.setCompilerOptionsForInferredProjects({
+                module: ModuleKind.CommonJS,
+                target: ScriptTarget.ES2016,
+                jsx: JsxEmit.Preserve,
+                experimentalDecorators: true,
+                allowJs: true,
+                allowSyntheticDefaultImports: true,
+                allowNonTsExtensions: true
+            });
+
+            projectService.openClientFile(file.path, file.content, ScriptKind.JS, projectRootPath);
+
+            const project = projectService.inferredProjects[0];
+            assert.isDefined(project);
+
+            // Ensure that we use result from types cache when getting ls
+            assert.isDefined(project.getLanguageService());
+
+            // Verify that the pkgcurrentdirectory from the current directory isnt picked up
+            checkProjectActualFiles(project, [file.path]);
+        });
+    });
 }
