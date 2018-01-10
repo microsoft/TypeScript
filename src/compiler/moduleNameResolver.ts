@@ -801,7 +801,9 @@ namespace ts {
             }
             const resolvedFromFile = loadModuleFromFile(extensions, candidate, failedLookupLocations, onlyRecordFailures, state);
             if (resolvedFromFile) {
-                return noPackageId(resolvedFromFile);
+                const nm = considerPackageJson ? parseNodeModuleFromPath(resolvedFromFile.path) : undefined;
+                const packageId = nm && getPackageJsonInfo(nm.packageDirectory, nm.subModuleName, failedLookupLocations, /*onlyRecordFailures*/ false, state).packageId;
+                return withPackageId(packageId, resolvedFromFile);
             }
         }
         if (!onlyRecordFailures) {
@@ -814,6 +816,33 @@ namespace ts {
             }
         }
         return loadNodeModuleFromDirectory(extensions, candidate, failedLookupLocations, onlyRecordFailures, state, considerPackageJson);
+    }
+
+    function parseNodeModuleFromPath(path: string): { packageDirectory: string, subModuleName: string } | undefined {
+        const nodeModules = "/node_modules/";
+        const idx = path.indexOf(nodeModules);
+        if (idx === -1) {
+            return undefined;
+        }
+
+        const indexAfterNodeModules = idx + nodeModules.length;
+        let indexAfterPackageName = indexOfNextSlash(path, indexAfterNodeModules);
+        if (path.charCodeAt(indexAfterNodeModules) === CharacterCodes.at) {
+            indexAfterPackageName = indexOfNextSlash(path, indexAfterPackageName);
+        }
+        const packageDirectory = path.slice(0, indexAfterPackageName);
+        const subModuleName = removeExtensionAndIndex(path.slice(indexAfterPackageName));
+        return { packageDirectory, subModuleName };
+    }
+
+    function indexOfNextSlash(s: string, pos: number): number {
+        const x = s.indexOf(directorySeparator, pos);
+        return x === -1 ? pos : x;
+    }
+
+    function removeExtensionAndIndex(fileName: string): string {
+        const noExtension = removeFileExtension(fileName);
+        return noExtension === "index" ? "" : removeSuffix(noExtension, "/index");
     }
 
     /* @internal */
