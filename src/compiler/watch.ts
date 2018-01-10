@@ -48,6 +48,15 @@ namespace ts {
         };
     }
 
+    /** @internal */
+    export function createWatchDiagnosticReporterWithColor(system = sys): DiagnosticReporter {
+        return diagnostic => {
+            let output = `[${ formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey) }] `;
+            output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${system.newLine + system.newLine + system.newLine}`;
+            system.write(output);
+        };
+    }
+
     export function reportDiagnostics(diagnostics: Diagnostic[], reportDiagnostic: DiagnosticReporter): void {
         for (const diagnostic of diagnostics) {
             reportDiagnostic(diagnostic);
@@ -131,7 +140,7 @@ namespace ts {
         reportWatchDiagnostic?: DiagnosticReporter
     ): WatchingSystemHost {
         reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system, pretty ? reportDiagnosticWithColorAndContext : reportDiagnosticSimply);
-        reportWatchDiagnostic = reportWatchDiagnostic || createWatchDiagnosticReporter(system);
+        reportWatchDiagnostic = reportWatchDiagnostic || pretty ? createWatchDiagnosticReporterWithColor(system) : createWatchDiagnosticReporter(system);
         parseConfigFile = parseConfigFile || ts.parseConfigFile;
         return {
             system,
@@ -302,6 +311,8 @@ namespace ts {
         // There is no extra check needed since we can just rely on the program to decide emit
         const builder = createBuilder({ getCanonicalFileName, computeHash });
 
+        clearHostScreen();
+        reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Starting_compilation_in_watch_mode));
         synchronizeProgram();
 
         // Update the wild card directory watch
@@ -492,10 +503,14 @@ namespace ts {
             scheduleProgramUpdate();
         }
 
-        function updateProgram() {
+        function clearHostScreen() {
             if (watchingHost.system.clearScreen) {
                 watchingHost.system.clearScreen();
             }
+        }
+
+        function updateProgram() {
+            clearHostScreen();
 
             timerToUpdateProgram = undefined;
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));

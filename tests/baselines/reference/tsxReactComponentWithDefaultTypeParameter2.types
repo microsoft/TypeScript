@@ -26,7 +26,6 @@ declare class MyComp<P = Prop> extends React.Component<P, {}> {
 >P : P
 }
 
-// Error
 let x = <MyComp />
 >x : JSX.Element
 ><MyComp /> : JSX.Element

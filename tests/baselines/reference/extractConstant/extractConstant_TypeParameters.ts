@@ -5,6 +5,5 @@ function F<T>(t: T) {
 // ==SCOPE::Extract to constant in enclosing scope==
 function F<T>(t: T) {
     const newLocal = t + 1;
-
     let x = /*RENAME*/newLocal;
 }

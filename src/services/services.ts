@@ -488,6 +488,7 @@ namespace ts {
         parameters: Symbol[];
         thisParameter: Symbol;
         resolvedReturnType: Type;
+        resolvedTypePredicate: TypePredicate | undefined;
         minTypeArgumentCount: number;
         minArgumentCount: number;
         hasRestParameter: boolean;
@@ -1268,6 +1269,7 @@ namespace ts {
                     }
                     return host.readFile && host.readFile(fileName);
                 },
+                realpath: host.realpath && (path => host.realpath(path)),
                 directoryExists: directoryName => {
                     return directoryProbablyExists(directoryName, host);
                 },
@@ -1430,7 +1432,7 @@ namespace ts {
             return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
         }
 
-        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = { includeExternalModuleExports: false }): CompletionInfo {
+        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = { includeExternalModuleExports: false, includeInsertTextCompletions: false }): CompletionInfo {
             synchronizeHostData();
             return Completions.getCompletionsAtPosition(
                 host,
@@ -1446,7 +1448,7 @@ namespace ts {
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions?: FormatCodeSettings, source?: string): CompletionEntryDetails {
             synchronizeHostData();
             return Completions.getCompletionEntryDetails(
-                program.getTypeChecker(),
+                program,
                 log,
                 program.getCompilerOptions(),
                 getValidSourceFile(fileName),
@@ -1881,7 +1883,7 @@ namespace ts {
             return [];
         }
 
-        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[] {
+        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings): ReadonlyArray<CodeFixAction> {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const span = createTextSpanFromBounds(start, end);
@@ -1892,6 +1894,16 @@ namespace ts {
                 cancellationToken.throwIfCancellationRequested();
                 return codefix.getFixes({ errorCode, sourceFile, span, program, newLineCharacter, host, cancellationToken, formatContext });
             });
+        }
+
+        function getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions {
+            synchronizeHostData();
+            Debug.assert(scope.type === "file");
+            const sourceFile = getValidSourceFile(scope.fileName);
+            const newLineCharacter = getNewLineOrDefaultFromHost(host);
+            const formatContext = formatting.getFormatContext(formatOptions);
+
+            return codefix.getAllFixes({ fixId, sourceFile, program, newLineCharacter, host, cancellationToken, formatContext });
         }
 
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
@@ -2041,7 +2053,7 @@ namespace ts {
             }
 
             function getTodoCommentsRegExp(): RegExp {
-                // NOTE: ?:  means 'non-capture group'.  It allows us to have groups without having to
+                // NOTE: `?:` means 'non-capture group'.  It allows us to have groups without having to
                 // filter them out later in the final result array.
 
                 // TODO comments can appear in one of the following forms:
@@ -2188,6 +2200,7 @@ namespace ts {
             isValidBraceCompletionAtPosition,
             getSpanOfEnclosingComment,
             getCodeFixesAtPosition,
+            getCombinedCodeFix,
             applyCodeActionCommand,
             getEmitOutput,
             getNonBoundSourceFile,
@@ -2236,20 +2249,6 @@ namespace ts {
             node.parent.kind === SyntaxKind.ExternalModuleReference ||
             isArgumentOfElementAccessExpression(node) ||
             isLiteralComputedPropertyDeclarationName(node);
-    }
-
-    function isObjectLiteralElement(node: Node): node is ObjectLiteralElement {
-        switch (node.kind) {
-            case SyntaxKind.JsxAttribute:
-            case SyntaxKind.JsxSpreadAttribute:
-            case SyntaxKind.PropertyAssignment:
-            case SyntaxKind.ShorthandPropertyAssignment:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-                return true;
-        }
-        return false;
     }
 
     /**

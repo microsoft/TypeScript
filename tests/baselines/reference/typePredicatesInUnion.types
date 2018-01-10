@@ -1,0 +1,41 @@
+=== tests/cases/compiler/typePredicatesInUnion.ts ===
+interface A {
+>A : A
+
+    pred(x: {}): x is boolean;
+>pred : (x: {}) => x is boolean
+>x : {}
+>x : any
+}
+interface B {
+>B : B
+
+    pred(x: {}): x is string;
+>pred : (x: {}) => x is string
+>x : {}
+>x : any
+}
+
+type Or = A | B;
+>Or : Or
+>A : A
+>B : B
+
+function f(o: Or, x: {}) {
+>f : (o: Or, x: {}) => void
+>o : Or
+>Or : Or
+>x : {}
+
+    if (o.pred(x)) {
+>o.pred(x) : boolean
+>o.pred : ((x: {}) => x is boolean) | ((x: {}) => x is string)
+>o : Or
+>pred : ((x: {}) => x is boolean) | ((x: {}) => x is string)
+>x : {}
+
+        x;
+>x : string | boolean
+    }
+}
+

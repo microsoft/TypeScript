@@ -55,7 +55,7 @@ invoke({
 >{    kind: "a",    method(a) {        return +a;    }} : { kind: "a"; method(a: string): number; }
 
     kind: "a",
->kind : string
+>kind : "a"
 >"a" : "a"
 
     method(a) {
