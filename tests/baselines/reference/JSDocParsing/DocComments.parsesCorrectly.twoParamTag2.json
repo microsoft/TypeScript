@@ -35,8 +35,7 @@
                 "escapedText": "name1"
             },
             "isNameFirst": false,
-            "isBracketed": false,
-            "comment": ""
+            "isBracketed": false
         },
         "1": {
             "kind": "JSDocParameterTag",
@@ -70,8 +69,7 @@
                 "escapedText": "name2"
             },
             "isNameFirst": false,
-            "isBracketed": false,
-            "comment": ""
+            "isBracketed": false
         },
         "length": 2,
         "pos": 8,

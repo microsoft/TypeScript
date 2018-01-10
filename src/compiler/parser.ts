@@ -6268,7 +6268,6 @@ namespace ts {
                 scanner.scanRange(start + 3, length - 5, () => {
                     // Initially we can parse out a tag.  We also have seen a starting asterisk.
                     // This is so that /** * @type */ doesn't parse.
-                    let advanceToken = true;
                     let state = JSDocState.SawAsterisk;
                     let margin: number | undefined = undefined;
                     // + 4 for leading '/** '
@@ -6300,7 +6299,6 @@ namespace ts {
                                     // Real-world comments may break this rule, so "BeginningOfLine" will not be a real line beginning
                                     // for malformed examples like `/** @param {string} x @returns {number} the length */`
                                     state = JSDocState.BeginningOfLine;
-                                    advanceToken = false;
                                     margin = undefined;
                                     indent++;
                                 }
@@ -6352,13 +6350,7 @@ namespace ts {
                                 pushComment(scanner.getTokenText());
                                 break;
                         }
-                        if (advanceToken) {
-                            t = nextJSDocToken();
-                        }
-                        else {
-                            advanceToken = true;
-                            t = currentToken as JsDocSyntaxKind;
-                        }
+                        t = nextJSDocToken();
                     }
                     removeLeadingNewlines(comments);
                     removeTrailingNewlines(comments);
@@ -6458,7 +6450,7 @@ namespace ts {
                     addTag(tag);
                 }
 
-                function parseTagComments(indent: number): string {
+                function parseTagComments(indent: number): string | undefined {
                     const comments: string[] = [];
                     let state = JSDocState.BeginningOfLine;
                     let margin: number | undefined;
@@ -6480,6 +6472,8 @@ namespace ts {
                                 indent = 0;
                                 break;
                             case SyntaxKind.AtToken:
+                                scanner.setTextPos(scanner.getTextPos() - 1);
+                                // falls through
                             case SyntaxKind.EndOfFileToken:
                                 // Done
                                 break loop;
@@ -6515,7 +6509,7 @@ namespace ts {
 
                     removeLeadingNewlines(comments);
                     removeTrailingNewlines(comments);
-                    return comments.join("");
+                    return comments.length === 0 ? undefined : comments.join("");
                 }
 
                 function parseUnknownTag(atToken: AtToken, tagName: Identifier) {

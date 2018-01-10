@@ -54,7 +54,8 @@ namespace ts.JsDoc {
         // from Array<T> - Array<string> and Array<number>
         const documentationComment: SymbolDisplayPart[] = [];
         forEachUnique(declarations, declaration => {
-            for (const comment of getCommentsFromDeclaration(declaration)) {
+            for (const { comment } of getCommentHavingNodes(declaration)) {
+                if (comment === undefined) continue;
                 if (documentationComment.length) {
                     documentationComment.push(lineBreakPart());
                 }
@@ -64,20 +65,15 @@ namespace ts.JsDoc {
         return documentationComment;
     }
 
-    function getCommentsFromDeclaration(declaration: Declaration): string[] {
+    function getCommentHavingNodes(declaration: Declaration): ReadonlyArray<JSDoc | JSDocTag> {
         switch (declaration.kind) {
             case SyntaxKind.JSDocPropertyTag:
-                return [(declaration as JSDocPropertyTag).comment];
+                return [declaration as JSDocPropertyTag];
+            case SyntaxKind.JSDocTypedefTag:
+                return [(declaration as JSDocTypedefTag).parent];
             default:
-                return mapDefined(getAllJSDocs(declaration), doc => doc.comment);
+                return getJSDocCommentsAndTags(declaration);
         }
-    }
-
-    function getAllJSDocs(node: Node): (JSDoc | JSDocTag)[] {
-        if (isJSDocTypedefTag(node)) {
-            return [node.parent];
-        }
-        return getJSDocCommentsAndTags(node);
     }
 
     export function getJsDocTagsFromDeclarations(declarations?: Declaration[]): JSDocTagInfo[] {
@@ -91,7 +87,7 @@ namespace ts.JsDoc {
         return tags;
     }
 
-    function getCommentText(tag: JSDocTag): string {
+    function getCommentText(tag: JSDocTag): string | undefined {
         const { comment } = tag;
         switch (tag.kind) {
             case SyntaxKind.JSDocAugmentsTag:
@@ -106,15 +102,19 @@ namespace ts.JsDoc {
                 const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag;
                 return name ? withNode(name) : comment;
             default:
-                return comment;
+                return comment || "";
         }
 
         function withNode(node: Node) {
-            return `${node.getText()} ${comment}`;
+            return addComment(node.getText());
         }
 
         function withList(list: NodeArray<Node>): string {
-            return `${list.map(x => x.getText())} ${comment}`;
+            return addComment(list.map(x => x.getText()).join(", "));
+        }
+
+        function addComment(s: string) {
+            return comment === undefined ? s : `${s} ${comment}`;
         }
     }
 

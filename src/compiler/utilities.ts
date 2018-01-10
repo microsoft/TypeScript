@@ -1614,7 +1614,7 @@ namespace ts {
             (node as ModuleDeclaration).body;
     }
 
-    export function getJSDocCommentsAndTags(node: Node): (JSDoc | JSDocTag)[] {
+    export function getJSDocCommentsAndTags(node: Node): ReadonlyArray<JSDoc | JSDocTag> {
         let result: (JSDoc | JSDocTag)[] | undefined;
         getJSDocCommentsAndTagsWorker(node);
         return result || emptyArray;
