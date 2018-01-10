@@ -11281,6 +11281,9 @@ namespace ts {
                     }
                     diagnostic = Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type;
                     break;
+                case SyntaxKind.MappedType:
+                    error(declaration, Diagnostics.Mapped_object_type_implicitly_has_an_any_template_type);
+                    return;
                 default:
                     diagnostic = Diagnostics.Variable_0_implicitly_has_an_1_type;
             }
@@ -20312,6 +20315,11 @@ namespace ts {
         function checkMappedType(node: MappedTypeNode) {
             checkSourceElement(node.typeParameter);
             checkSourceElement(node.type);
+
+            if (noImplicitAny && !node.type) {
+                reportImplicitAnyError(node, anyType);
+            }
+
             const type = <MappedType>getTypeFromMappedTypeNode(node);
             const constraintType = getConstraintTypeFromMappedType(type);
             checkTypeAssignableTo(constraintType, stringType, node.typeParameter.constraint);

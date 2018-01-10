@@ -3571,7 +3571,10 @@
         "category": "Error",
         "code": 7038
     },
-
+    "Mapped object type implicitly has an 'any' template type.": {
+        "category": "Error",
+        "code": 7039
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
