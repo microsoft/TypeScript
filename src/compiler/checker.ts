@@ -6466,12 +6466,17 @@ namespace ts {
         }
 
         function getConstraintOfIndexedAccess(type: IndexedAccessType) {
-            const transformed = getTransformedIndexedAccessType(type);
+            const transformed = getSimplifiedIndexedAccessType(type);
             if (transformed) {
                 return transformed;
             }
             const baseObjectType = getBaseConstraintOfType(type.objectType);
             const baseIndexType = getBaseConstraintOfType(type.indexType);
+            if (baseIndexType === stringType && !getIndexInfoOfType(baseObjectType || type.objectType, IndexKind.String)) {
+                // getIndexedAccessType returns `any` for X[string] where X doesn't have an index signature.
+                // to avoid this, return `undefined`.
+                return undefined;
+            }
             return baseObjectType || baseIndexType ? getIndexedAccessType(baseObjectType || type.objectType, baseIndexType || type.indexType) : undefined;
         }
 
@@ -6521,8 +6526,9 @@ namespace ts {
             function computeBaseConstraint(t: Type): Type {
                 if (t.flags & TypeFlags.TypeParameter) {
                     const constraint = getConstraintFromTypeParameter(<TypeParameter>t);
-                    return (<TypeParameter>t).isThisType ? constraint :
-                        constraint ? getBaseConstraint(constraint) : undefined;
+                    return (t as TypeParameter).isThisType || !constraint ?
+                        constraint :
+                        getBaseConstraint(constraint);
                 }
                 if (t.flags & TypeFlags.UnionOrIntersection) {
                     const types = (<UnionOrIntersectionType>t).types;
@@ -6541,7 +6547,7 @@ namespace ts {
                     return stringType;
                 }
                 if (t.flags & TypeFlags.IndexedAccess) {
-                    const transformed = getTransformedIndexedAccessType(<IndexedAccessType>t);
+                    const transformed = getSimplifiedIndexedAccessType(<IndexedAccessType>t);
                     if (transformed) {
                         return getBaseConstraint(transformed);
                     }
@@ -8353,7 +8359,7 @@ namespace ts {
 
         // Transform an indexed access to a simpler form, if possible. Return the simpler form, or return
         // undefined if no transformation is possible.
-        function getTransformedIndexedAccessType(type: IndexedAccessType): Type {
+        function getSimplifiedIndexedAccessType(type: IndexedAccessType): Type {
             const objectType = type.objectType;
             // Given an indexed access type T[K], if T is an intersection containing one or more generic types and one or
             // more object types with only a string index signature, e.g. '(U & V & { [x: string]: D })[K]', return a
@@ -8379,12 +8385,22 @@ namespace ts {
             // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
             // construct the type Box<T[X]>.
             if (isGenericMappedType(objectType)) {
-                const mapper = createTypeMapper([getTypeParameterFromMappedType(<MappedType>objectType)], [type.indexType]);
-                const objectTypeMapper = (<MappedType>objectType).mapper;
-                const templateMapper = objectTypeMapper ? combineTypeMappers(objectTypeMapper, mapper) : mapper;
-                return instantiateType(getTemplateTypeFromMappedType(<MappedType>objectType), templateMapper);
+                return substituteIndexedMappedType(objectType, type);
+            }
+            if (objectType.flags & TypeFlags.TypeParameter) {
+                const constraint = getConstraintFromTypeParameter(objectType as TypeParameter);
+                if (constraint && isGenericMappedType(constraint)) {
+                    return substituteIndexedMappedType(constraint, type);
+                }
             }
             return undefined;
+        }
+
+        function substituteIndexedMappedType(objectType: MappedType, type: IndexedAccessType) {
+            const mapper = createTypeMapper([getTypeParameterFromMappedType(<MappedType>objectType)], [type.indexType]);
+            const objectTypeMapper = (<MappedType>objectType).mapper;
+            const templateMapper = objectTypeMapper ? combineTypeMappers(objectTypeMapper, mapper) : mapper;
+            return instantiateType(getTemplateTypeFromMappedType(<MappedType>objectType), templateMapper);
         }
 
         function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode): Type {
@@ -10062,7 +10078,7 @@ namespace ts {
                 }
                 else if (target.flags & TypeFlags.IndexedAccess) {
                     // A type S is related to a type T[K] if S is related to A[K], where K is string-like and
-                    // A is the apparent type of S.
+                    // A is the apparent type of T.
                     const constraint = getConstraintOfIndexedAccess(<IndexedAccessType>target);
                     if (constraint) {
                         if (result = isRelatedTo(source, constraint, reportErrors)) {
