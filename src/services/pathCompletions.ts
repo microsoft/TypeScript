@@ -315,7 +315,7 @@ namespace ts.Completions.PathCompletions {
         const seen = createMap<true>();
         if (options.types) {
             for (const typesName of options.types) {
-                const moduleName = getPackageNameFromAtTypesDirectoryWithoutPrefix(typesName);
+                const moduleName = getUnmangledNameForScopedPackage(typesName);
                 pushResult(moduleName);
             }
         }
@@ -349,7 +349,7 @@ namespace ts.Completions.PathCompletions {
                     for (let typeDirectory of directories) {
                         typeDirectory = normalizePath(typeDirectory);
                         const directoryName = getBaseFileName(typeDirectory);
-                        const moduleName = getPackageNameFromAtTypesDirectoryWithoutPrefix(directoryName);
+                        const moduleName = getUnmangledNameForScopedPackage(directoryName);
                         pushResult(moduleName);
                     }
                 }
