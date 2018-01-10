@@ -21842,8 +21842,8 @@ namespace ts {
                     }
                     else {
                         checkTypeAssignableTo(initializerType, getWidenedTypeForVariableLikeDeclaration(node), node, /*headMessage*/ undefined);
-                        checkParameterInitializer(node);
                     }
+                    checkParameterInitializer(node);
                 }
                 return;
             }
