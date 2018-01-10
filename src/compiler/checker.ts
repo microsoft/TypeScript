@@ -6463,7 +6463,7 @@ namespace ts {
         }
 
         function getConstraintOfIndexedAccess(type: IndexedAccessType) {
-            const transformed = simplifyIndexedAccessType(type);
+            const transformed = getSimplifiedIndexedAccessType(type);
             if (transformed) {
                 return transformed;
             }
@@ -6544,7 +6544,7 @@ namespace ts {
                     return stringType;
                 }
                 if (t.flags & TypeFlags.IndexedAccess) {
-                    const transformed = simplifyIndexedAccessType(<IndexedAccessType>t);
+                    const transformed = getSimplifiedIndexedAccessType(<IndexedAccessType>t);
                     if (transformed) {
                         return getBaseConstraint(transformed);
                     }
@@ -8356,7 +8356,7 @@ namespace ts {
 
         // Transform an indexed access to a simpler form, if possible. Return the simpler form, or return
         // undefined if no transformation is possible.
-        function simplifyIndexedAccessType(type: IndexedAccessType): Type {
+        function getSimplifiedIndexedAccessType(type: IndexedAccessType): Type {
             const objectType = type.objectType;
             // Given an indexed access type T[K], if T is an intersection containing one or more generic types and one or
             // more object types with only a string index signature, e.g. '(U & V & { [x: string]: D })[K]', return a
