@@ -312,10 +312,11 @@ namespace ts.Completions.PathCompletions {
 
     function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, span: TextSpan, result: CompletionEntry[] = []): CompletionEntry[] {
         // Check for typings specified in compiler options
+        let seen = createMap<true>();
         if (options.types) {
             for (const typesName of options.types) {
                 const moduleName = getPackageNameFromAtTypesDirectoryWithoutPrefix(typesName);
-                result.push(createCompletionEntryForModule(moduleName, ScriptElementKind.externalModuleName, span));
+                pushResult(moduleName);
             }
         }
         else if (host.getDirectories) {
@@ -349,9 +350,16 @@ namespace ts.Completions.PathCompletions {
                         typeDirectory = normalizePath(typeDirectory);
                         const directoryName = getBaseFileName(typeDirectory);
                         const moduleName = getPackageNameFromAtTypesDirectoryWithoutPrefix(directoryName);
-                        result.push(createCompletionEntryForModule(moduleName, ScriptElementKind.externalModuleName, span));
+                        pushResult(moduleName);
                     }
                 }
+            }
+        }
+
+        function pushResult(moduleName: string) {
+            if (!seen.has(moduleName)) {
+                result.push(createCompletionEntryForModule(moduleName, ScriptElementKind.externalModuleName, span));
+                seen.set(moduleName, true);
             }
         }
     }
