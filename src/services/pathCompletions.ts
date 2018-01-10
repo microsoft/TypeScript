@@ -312,7 +312,7 @@ namespace ts.Completions.PathCompletions {
 
     function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, span: TextSpan, result: CompletionEntry[] = []): CompletionEntry[] {
         // Check for typings specified in compiler options
-        let seen = createMap<true>();
+        const seen = createMap<true>();
         if (options.types) {
             for (const typesName of options.types) {
                 const moduleName = getPackageNameFromAtTypesDirectoryWithoutPrefix(typesName);
