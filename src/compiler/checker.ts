@@ -18908,6 +18908,9 @@ namespace ts {
                 target = (<BinaryExpression>target).left;
             }
             if (target.kind === SyntaxKind.ObjectLiteralExpression) {
+                if (strictNullChecks && (<ObjectLiteralExpression>target).properties.length === 0) {
+                    return checkNonNullType(sourceType, target);
+                }
                 return checkObjectLiteralAssignment(<ObjectLiteralExpression>target, sourceType);
             }
             if (target.kind === SyntaxKind.ArrayLiteralExpression) {
@@ -21833,7 +21836,11 @@ namespace ts {
             if (isBindingPattern(node.name)) {
                 // Don't validate for-in initializer as it is already an error
                 if (node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
-                    checkTypeAssignableTo(checkExpressionCached(node.initializer), getWidenedTypeForVariableLikeDeclaration(node), node, /*headMessage*/ undefined);
+                    const initializerType = checkExpressionCached(node.initializer);
+                    if (strictNullChecks && node.name.elements.length === 0) {
+                        checkNonNullType(initializerType, node);
+                    }
+                    checkTypeAssignableTo(initializerType, getWidenedTypeForVariableLikeDeclaration(node), node, /*headMessage*/ undefined);
                     checkParameterInitializer(node);
                 }
                 return;
