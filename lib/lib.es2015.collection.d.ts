@@ -78,7 +78,7 @@ interface ReadonlySet<T> {
     readonly size: number;
 }
 
-interface WeakSet<T> {
+interface WeakSet<T extends object> {
     add(value: T): this;
     delete(value: T): boolean;
     has(value: T): boolean;

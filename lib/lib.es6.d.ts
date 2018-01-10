@@ -4704,7 +4704,7 @@ interface ReadonlySet<T> {
     readonly size: number;
 }
 
-interface WeakSet<T> {
+interface WeakSet<T extends object> {
     add(value: T): this;
     delete(value: T): boolean;
     has(value: T): boolean;
@@ -4954,7 +4954,7 @@ interface SetConstructor {
     new <T>(iterable: Iterable<T>): Set<T>;
 }
 
-interface WeakSet<T> { }
+interface WeakSet<T extends object> { }
 
 interface WeakSetConstructor {
     new <T extends object>(iterable: Iterable<T>): WeakSet<T>;
@@ -5649,7 +5649,7 @@ interface Set<T> {
     readonly [Symbol.toStringTag]: "Set";
 }
 
-interface WeakSet<T> {
+interface WeakSet<T extends object> {
     readonly [Symbol.toStringTag]: "WeakSet";
 }
 
