@@ -6301,9 +6301,9 @@ namespace ts {
                 (type.typeParameter = getDeclaredTypeOfTypeParameter(getSymbolOfNode(type.declaration.typeParameter)));
         }
 
-        function getConstraintTypeFromMappedType(type: MappedType) {
+        function getConstraintTypeFromMappedType(type: MappedType, typeStack?: Type[]) {
             return type.constraintType ||
-                (type.constraintType = instantiateType(getConstraintOfTypeParameter(getTypeParameterFromMappedType(type)), type.mapper || identityMapper) || unknownType);
+                (type.constraintType = instantiateType(getConstraintOfTypeParameter(getTypeParameterFromMappedType(type), typeStack), type.mapper || identityMapper) || unknownType);
         }
 
         function getTemplateTypeFromMappedType(type: MappedType) {
@@ -6351,8 +6351,8 @@ namespace ts {
             return getObjectFlags(type) & ObjectFlags.Mapped && !!(<MappedType>type).declaration.questionToken;
         }
 
-        function isGenericMappedType(type: Type) {
-            return getObjectFlags(type) & ObjectFlags.Mapped && isGenericIndexType(getConstraintTypeFromMappedType(<MappedType>type));
+        function isGenericMappedType(type: Type, typeStack?: Type[]): type is MappedType {
+            return getObjectFlags(type) & ObjectFlags.Mapped && isGenericIndexType(getConstraintTypeFromMappedType(<MappedType>type, typeStack));
         }
 
         function resolveStructuredTypeMembers(type: StructuredType): ResolvedType {
@@ -6458,7 +6458,10 @@ namespace ts {
                     getBaseConstraintOfType(type);
         }
 
-        function getConstraintOfTypeParameter(typeParameter: TypeParameter): Type {
+        function getConstraintOfTypeParameter(typeParameter: TypeParameter, typeStack?: Type[]): Type {
+            if (typeStack) {
+                return !contains(typeStack, typeParameter) && getConstraintFromTypeParameter(typeParameter);
+            }
             return hasNonCircularBaseConstraint(typeParameter) ? getConstraintFromTypeParameter(typeParameter) : undefined;
         }
 
@@ -6547,7 +6550,7 @@ namespace ts {
                     const baseIndexedAccess = baseObjectType && baseIndexType ? getIndexedAccessType(baseObjectType, baseIndexType) : undefined;
                     return baseIndexedAccess && baseIndexedAccess !== unknownType ? getBaseConstraint(baseIndexedAccess) : undefined;
                 }
-                if (isGenericMappedType(t)) {
+                if (isGenericMappedType(t, typeStack)) {
                     return emptyObjectType;
                 }
                 return t;
