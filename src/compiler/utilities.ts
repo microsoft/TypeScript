@@ -1586,42 +1586,35 @@ namespace ts {
             ((node as JSDocFunctionType).parameters[0].name as Identifier).escapedText === "new";
     }
 
-    export function getAllJSDocs(node: Node): (JSDoc | JSDocTag)[] {
-        if (isJSDocTypedefTag(node)) {
-            return [node.parent];
-        }
-        return getJSDocCommentsAndTags(node);
-    }
-
-    export function getSourceOfAssignment(node: Node): Node {
+    function getSourceOfAssignment(node: Node): Node {
         return isExpressionStatement(node) &&
             node.expression && isBinaryExpression(node.expression) &&
             node.expression.operatorToken.kind === SyntaxKind.EqualsToken &&
             node.expression.right;
     }
 
-    export function getSingleInitializerOfVariableStatement(node: Node, child?: Node): Node {
+    function getSingleInitializerOfVariableStatement(node: Node, child?: Node): Node {
         return isVariableStatement(node) &&
             node.declarationList.declarations.length > 0 &&
             (!child || node.declarationList.declarations[0].initializer === child) &&
             node.declarationList.declarations[0].initializer;
     }
 
-    export function getSingleVariableOfVariableStatement(node: Node, child?: Node): Node {
+    function getSingleVariableOfVariableStatement(node: Node, child?: Node): Node {
         return isVariableStatement(node) &&
             node.declarationList.declarations.length > 0 &&
             (!child || node.declarationList.declarations[0] === child) &&
             node.declarationList.declarations[0];
     }
 
-    export function getNestedModuleDeclaration(node: Node): Node {
+    function getNestedModuleDeclaration(node: Node): Node {
         return node.kind === SyntaxKind.ModuleDeclaration &&
             (node as ModuleDeclaration).body &&
             (node as ModuleDeclaration).body.kind === SyntaxKind.ModuleDeclaration &&
             (node as ModuleDeclaration).body;
     }
 
-    export function getJSDocCommentsAndTags(node: Node): (JSDoc | JSDocTag)[] {
+    export function getJSDocCommentsAndTags(node: Node): ReadonlyArray<JSDoc | JSDocTag> {
         let result: (JSDoc | JSDocTag)[] | undefined;
         getJSDocCommentsAndTagsWorker(node);
         return result || emptyArray;
