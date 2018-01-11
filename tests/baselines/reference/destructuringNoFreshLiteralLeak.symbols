@@ -1,0 +1,17 @@
+=== tests/cases/compiler/destructuringNoFreshLiteralLeak.ts ===
+const { x = () => ({a: 12}) } = { x: () => ({a: 24, b: 12}) };
+>x : Symbol(x, Decl(destructuringNoFreshLiteralLeak.ts, 0, 7))
+>a : Symbol(a, Decl(destructuringNoFreshLiteralLeak.ts, 0, 20))
+>x : Symbol(x, Decl(destructuringNoFreshLiteralLeak.ts, 0, 33))
+>a : Symbol(a, Decl(destructuringNoFreshLiteralLeak.ts, 0, 45))
+>b : Symbol(b, Decl(destructuringNoFreshLiteralLeak.ts, 0, 51))
+
+declare function f(x: {a: number}): void;
+>f : Symbol(f, Decl(destructuringNoFreshLiteralLeak.ts, 0, 62))
+>x : Symbol(x, Decl(destructuringNoFreshLiteralLeak.ts, 1, 19))
+>a : Symbol(a, Decl(destructuringNoFreshLiteralLeak.ts, 1, 23))
+
+f(x());
+>f : Symbol(f, Decl(destructuringNoFreshLiteralLeak.ts, 0, 62))
+>x : Symbol(x, Decl(destructuringNoFreshLiteralLeak.ts, 0, 7))
+

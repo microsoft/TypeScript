@@ -14021,7 +14021,7 @@ namespace ts {
         }
 
         // Return contextual type of parameter or undefined if no contextual type is available
-        function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type | undefined {
+        function getContextuallyTypedParameterType(parameter: ParameterDeclaration, omitBindingPatterns?: boolean): Type | undefined {
             const func = parameter.parent;
             if (isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
                 const iife = getImmediatelyInvokedFunctionExpression(func);
@@ -14043,7 +14043,7 @@ namespace ts {
                     links.resolvedSignature = cached;
                     return type;
                 }
-                const contextualSignature = getContextualSignature(func);
+                const contextualSignature = getContextualSignature(func, omitBindingPatterns);
                 if (contextualSignature) {
                     const funcHasRestParameters = hasRestParameter(func);
                     const len = func.parameters.length - (funcHasRestParameters ? 1 : 0);
@@ -14076,7 +14076,7 @@ namespace ts {
         //   the contextual type of an initializer expression is the type implied by the binding pattern.
         // Otherwise, in a binding pattern inside a variable or parameter declaration,
         //   the contextual type of an initializer expression is the type annotation of the containing declaration, if present.
-        function getContextualTypeForInitializerExpression(node: Expression): Type {
+        function getContextualTypeForInitializerExpression(node: Expression, omitBindingPatterns?: boolean): Type {
             const declaration = <VariableLikeDeclaration>node.parent;
             if (hasInitializer(declaration) && node === declaration.initializer) {
                 const typeNode = getEffectiveTypeAnnotationNode(declaration);
@@ -14084,12 +14084,12 @@ namespace ts {
                     return getTypeFromTypeNode(typeNode);
                 }
                 if (declaration.kind === SyntaxKind.Parameter) {
-                    const type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
+                    const type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration, omitBindingPatterns);
                     if (type) {
                         return type;
                     }
                 }
-                if (isBindingPattern(declaration.name)) {
+                if (isBindingPattern(declaration.name) && !omitBindingPatterns) {
                     return getTypeFromBindingPattern(<BindingPattern>declaration.name, /*includePatternInType*/ true, /*reportErrors*/ false);
                 }
                 if (isBindingPattern(declaration.parent)) {
@@ -14109,7 +14109,7 @@ namespace ts {
             return undefined;
         }
 
-        function getContextualTypeForReturnExpression(node: Expression): Type {
+        function getContextualTypeForReturnExpression(node: Expression, omitBindingPatterns?: boolean): Type {
             const func = getContainingFunction(node);
             if (func) {
                 const functionFlags = getFunctionFlags(func);
@@ -14117,7 +14117,7 @@ namespace ts {
                     return undefined;
                 }
 
-                const contextualReturnType = getContextualReturnType(func);
+                const contextualReturnType = getContextualReturnType(func, omitBindingPatterns);
                 return functionFlags & FunctionFlags.Async
                     ? contextualReturnType && getAwaitedTypeOfPromise(contextualReturnType) // Async function
                     : contextualReturnType; // Regular function
@@ -14125,11 +14125,11 @@ namespace ts {
             return undefined;
         }
 
-        function getContextualTypeForYieldOperand(node: YieldExpression): Type {
+        function getContextualTypeForYieldOperand(node: YieldExpression, omitBindingPatterns?: boolean): Type {
             const func = getContainingFunction(node);
             if (func) {
                 const functionFlags = getFunctionFlags(func);
-                const contextualReturnType = getContextualReturnType(func);
+                const contextualReturnType = getContextualReturnType(func, omitBindingPatterns);
                 if (contextualReturnType) {
                     return node.asteriskToken
                         ? contextualReturnType
@@ -14156,7 +14156,7 @@ namespace ts {
             return false;
         }
 
-        function getContextualReturnType(functionDecl: FunctionLike): Type {
+        function getContextualReturnType(functionDecl: FunctionLike, omitBindingPatterns?: boolean): Type {
             // If the containing function has a return type annotation, is a constructor, or is a get accessor whose
             // corresponding set accessor has a type annotation, return statements in the function are contextually typed
             if (functionDecl.kind === SyntaxKind.Constructor ||
@@ -14167,7 +14167,7 @@ namespace ts {
 
             // Otherwise, if the containing function is contextually typed by a function type with exactly one call signature
             // and that call signature is non-generic, return statements are contextually typed by the return type of the signature
-            const signature = getContextualSignatureForFunctionLikeDeclaration(<FunctionExpression>functionDecl);
+            const signature = getContextualSignatureForFunctionLikeDeclaration(<FunctionExpression>functionDecl, omitBindingPatterns);
             if (signature && !isResolvingReturnTypeOfSignature(signature)) {
                 return getReturnTypeOfSignature(signature);
             }
@@ -14196,7 +14196,7 @@ namespace ts {
             return undefined;
         }
 
-        function getContextualTypeForBinaryOperand(node: Expression): Type | undefined {
+        function getContextualTypeForBinaryOperand(node: Expression, omitBindingPatterns?: boolean): Type | undefined {
             const binaryExpression = <BinaryExpression>node.parent;
             const { left, operatorToken, right } = binaryExpression;
             switch (operatorToken.kind) {
@@ -14205,11 +14205,11 @@ namespace ts {
                 case SyntaxKind.BarBarToken:
                     // When an || expression has a contextual type, the operands are contextually typed by that type. When an ||
                     // expression has no contextual type, the right operand is contextually typed by the type of the left operand.
-                    const type = getContextualType(binaryExpression);
+                    const type = getContextualType(binaryExpression, omitBindingPatterns);
                     return !type && node === right ? getTypeOfExpression(left, /*cache*/ true) : type;
                 case SyntaxKind.AmpersandAmpersandToken:
                 case SyntaxKind.CommaToken:
-                    return node === right ? getContextualType(binaryExpression) : undefined;
+                    return node === right ? getContextualType(binaryExpression, omitBindingPatterns) : undefined;
                 default:
                     return undefined;
             }
@@ -14254,19 +14254,19 @@ namespace ts {
         // In an object literal contextually typed by a type T, the contextual type of a property assignment is the type of
         // the matching property in T, if one exists. Otherwise, it is the type of the numeric index signature in T, if one
         // exists. Otherwise, it is the type of the string index signature in T, if one exists.
-        function getContextualTypeForObjectLiteralMethod(node: MethodDeclaration): Type {
+        function getContextualTypeForObjectLiteralMethod(node: MethodDeclaration, omitBindingPatterns?: boolean): Type {
             Debug.assert(isObjectLiteralMethod(node));
             if (node.flags & NodeFlags.InWithStatement) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
             }
 
-            return getContextualTypeForObjectLiteralElement(node);
+            return getContextualTypeForObjectLiteralElement(node, omitBindingPatterns);
         }
 
-        function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike) {
+        function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike, omitBindingPatterns?: boolean) {
             const objectLiteral = <ObjectLiteralExpression>element.parent;
-            const type = getApparentTypeOfContextualType(objectLiteral);
+            const type = getApparentTypeOfContextualType(objectLiteral, omitBindingPatterns);
             if (type) {
                 if (!hasNonBindableDynamicName(element)) {
                     // For a (non-symbol) computed property, there is no reason to look up the name
@@ -14298,12 +14298,12 @@ namespace ts {
         }
 
         // In a contextually typed conditional expression, the true/false expressions are contextually typed by the same type.
-        function getContextualTypeForConditionalOperand(node: Expression): Type {
+        function getContextualTypeForConditionalOperand(node: Expression, omitBindingPatterns?: boolean): Type {
             const conditional = <ConditionalExpression>node.parent;
-            return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional) : undefined;
+            return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional, omitBindingPatterns) : undefined;
         }
 
-        function getContextualTypeForJsxExpression(node: JsxExpression): Type {
+        function getContextualTypeForJsxExpression(node: JsxExpression, omitBindingPatterns?: boolean): Type {
             // JSX expression can appear in two position : JSX Element's children or JSX attribute
             const jsxAttributes = isJsxAttributeLike(node.parent) ?
                 node.parent.parent :
@@ -14318,7 +14318,7 @@ namespace ts {
             // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give its attributes a contextual type
             // which is a type of the parameter of the signature we are trying out.
             // If there is no contextual type (e.g. we are trying to resolve stateful component), get attributes type from resolving element's tagName
-            const attributesType = getContextualType(jsxAttributes);
+            const attributesType = getContextualType(jsxAttributes, omitBindingPatterns);
 
             if (!attributesType || isTypeAny(attributesType)) {
                 return undefined;
@@ -14339,11 +14339,11 @@ namespace ts {
             }
         }
 
-        function getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute) {
+        function getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute, omitBindingPatterns?: boolean) {
             // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give its attributes a contextual type
             // which is a type of the parameter of the signature we are trying out.
             // If there is no contextual type (e.g. we are trying to resolve stateful component), get attributes type from resolving element's tagName
-            const attributesType = getContextualType(<Expression>attribute.parent);
+            const attributesType = getContextualType(<Expression>attribute.parent, omitBindingPatterns);
 
             if (isJsxAttribute(attribute)) {
                 if (!attributesType || isTypeAny(attributesType)) {
@@ -14358,8 +14358,8 @@ namespace ts {
 
         // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
         // be "pushed" onto a node using the contextualType property.
-        function getApparentTypeOfContextualType(node: Expression): Type {
-            let contextualType = getContextualType(node);
+        function getApparentTypeOfContextualType(node: Expression, omitBindingPatterns?: boolean): Type {
+            let contextualType = getContextualType(node, omitBindingPatterns);
             contextualType = contextualType && mapType(contextualType, getApparentType);
             if (!(contextualType && contextualType.flags & TypeFlags.Union && isObjectLiteralExpression(node))) {
                 return contextualType;
@@ -14404,7 +14404,7 @@ namespace ts {
          * @param node the expression whose contextual type will be returned.
          * @returns the contextual type of an expression.
          */
-        function getContextualType(node: Expression): Type | undefined {
+        function getContextualType(node: Expression, omitBindingPatterns?: boolean): Type | undefined {
             if (node.flags & NodeFlags.InWithStatement) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
@@ -14419,12 +14419,12 @@ namespace ts {
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.BindingElement:
-                    return getContextualTypeForInitializerExpression(node);
+                    return getContextualTypeForInitializerExpression(node, omitBindingPatterns);
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.ReturnStatement:
-                    return getContextualTypeForReturnExpression(node);
+                    return getContextualTypeForReturnExpression(node, omitBindingPatterns);
                 case SyntaxKind.YieldExpression:
-                    return getContextualTypeForYieldOperand(<YieldExpression>parent);
+                    return getContextualTypeForYieldOperand(<YieldExpression>parent, omitBindingPatterns);
                     case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                     return getContextualTypeForArgument(<CallExpression | NewExpression>parent, node);
@@ -14432,32 +14432,32 @@ namespace ts {
                 case SyntaxKind.AsExpression:
                     return getTypeFromTypeNode((<AssertionExpression>parent).type);
                 case SyntaxKind.BinaryExpression:
-                    return getContextualTypeForBinaryOperand(node);
+                    return getContextualTypeForBinaryOperand(node, omitBindingPatterns);
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    return getContextualTypeForObjectLiteralElement(<ObjectLiteralElementLike>parent);
+                    return getContextualTypeForObjectLiteralElement(<ObjectLiteralElementLike>parent, omitBindingPatterns);
                 case SyntaxKind.SpreadAssignment:
-                    return getApparentTypeOfContextualType(parent.parent as ObjectLiteralExpression);
+                    return getApparentTypeOfContextualType(parent.parent as ObjectLiteralExpression, omitBindingPatterns);
                 case SyntaxKind.ArrayLiteralExpression: {
                     const arrayLiteral = <ArrayLiteralExpression>parent;
-                    const type = getApparentTypeOfContextualType(arrayLiteral);
+                    const type = getApparentTypeOfContextualType(arrayLiteral, omitBindingPatterns);
                     return getContextualTypeForElementExpression(type, indexOfNode(arrayLiteral.elements, node));
                 }
                 case SyntaxKind.ConditionalExpression:
-                    return getContextualTypeForConditionalOperand(node);
+                    return getContextualTypeForConditionalOperand(node, omitBindingPatterns);
                 case SyntaxKind.TemplateSpan:
                     Debug.assert(parent.parent.kind === SyntaxKind.TemplateExpression);
                     return getContextualTypeForSubstitutionExpression(<TemplateExpression>parent.parent, node);
                 case SyntaxKind.ParenthesizedExpression: {
                     // Like in `checkParenthesizedExpression`, an `/** @type {xyz} */` comment before a parenthesized expression acts as a type cast.
                     const tag = isInJavaScriptFile(parent) ? getJSDocTypeTag(parent) : undefined;
-                    return tag ? getTypeFromTypeNode(tag.typeExpression.type) : getContextualType(<ParenthesizedExpression>parent);
+                    return tag ? getTypeFromTypeNode(tag.typeExpression.type) : getContextualType(<ParenthesizedExpression>parent, omitBindingPatterns);
                 }
                 case SyntaxKind.JsxExpression:
-                    return getContextualTypeForJsxExpression(<JsxExpression>parent);
+                    return getContextualTypeForJsxExpression(<JsxExpression>parent, omitBindingPatterns);
                 case SyntaxKind.JsxAttribute:
                 case SyntaxKind.JsxSpreadAttribute:
-                    return getContextualTypeForJsxAttribute(<JsxAttribute | JsxSpreadAttribute>parent);
+                    return getContextualTypeForJsxAttribute(<JsxAttribute | JsxSpreadAttribute>parent, omitBindingPatterns);
                 case SyntaxKind.JsxOpeningElement:
                 case SyntaxKind.JsxSelfClosingElement:
                     return getAttributesTypeFromJsxOpeningLikeElement(<JsxOpeningLikeElement>parent);
@@ -14502,17 +14502,17 @@ namespace ts {
             return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction;
         }
 
-        function getContextualSignatureForFunctionLikeDeclaration(node: FunctionLikeDeclaration): Signature {
+        function getContextualSignatureForFunctionLikeDeclaration(node: FunctionLikeDeclaration, omitBindingPatterns?: boolean): Signature {
             // Only function expressions, arrow functions, and object literal methods are contextually typed.
             return isFunctionExpressionOrArrowFunction(node) || isObjectLiteralMethod(node)
-                ? getContextualSignature(<FunctionExpression>node)
+                ? getContextualSignature(<FunctionExpression>node, omitBindingPatterns)
                 : undefined;
         }
 
-        function getContextualTypeForFunctionLikeDeclaration(node: FunctionExpression | ArrowFunction | MethodDeclaration) {
+        function getContextualTypeForFunctionLikeDeclaration(node: FunctionExpression | ArrowFunction | MethodDeclaration, omitBindingPatterns?: boolean) {
             return isObjectLiteralMethod(node) ?
-                getContextualTypeForObjectLiteralMethod(node) :
-                getApparentTypeOfContextualType(node);
+                getContextualTypeForObjectLiteralMethod(node, omitBindingPatterns) :
+                getApparentTypeOfContextualType(node, omitBindingPatterns);
         }
 
         // Return the contextual signature for a given expression node. A contextual type provides a
@@ -14520,9 +14520,9 @@ namespace ts {
         // If the contextual type is a union type, get the signature from each type possible and if they are
         // all identical ignoring their return type, the result is same signature but with return type as
         // union type of return types from these signatures
-        function getContextualSignature(node: FunctionExpression | ArrowFunction | MethodDeclaration): Signature {
+        function getContextualSignature(node: FunctionExpression | ArrowFunction | MethodDeclaration, omitBindingPatterns?: boolean): Signature {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
-            const type = getContextualTypeForFunctionLikeDeclaration(node);
+            const type = getContextualTypeForFunctionLikeDeclaration(node, omitBindingPatterns);
             if (!type) {
                 return undefined;
             }
@@ -18226,7 +18226,7 @@ namespace ts {
                 type = getUnionType(types, UnionReduction.Subtype);
             }
 
-            const contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
+            const contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func, /*omitBindingPatterns*/ true);
             if (!contextualSignature) {
                 reportErrorsFromWidening(func, type);
             }
@@ -18251,7 +18251,7 @@ namespace ts {
                 type = getWidenedLiteralLikeTypeForContextualType(type, contextualType);
             }
 
-            const widenedType = ((isFunctionExpression(func) && !func.name) || isArrowFunction(func)) && getContextualType(func) ? type : getWidenedType(type);
+            const widenedType = ((isFunctionExpression(func) && !func.name) || isArrowFunction(func)) && contextualSignature ? type : getWidenedType(type);
             switch (functionFlags & FunctionFlags.AsyncGenerator) {
                 case FunctionFlags.AsyncGenerator:
                     return createAsyncIterableIteratorType(widenedType);

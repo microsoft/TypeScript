@@ -67,7 +67,7 @@ import {C1, C2} from "./m3";
 >C2 : typeof C2
 
 (<any>Cls.prototype).baz1 = function() { return undefined };
->(<any>Cls.prototype).baz1 = function() { return undefined } : () => undefined
+>(<any>Cls.prototype).baz1 = function() { return undefined } : () => any
 >(<any>Cls.prototype).baz1 : any
 >(<any>Cls.prototype) : any
 ><any>Cls.prototype : any
@@ -75,11 +75,11 @@ import {C1, C2} from "./m3";
 >Cls : typeof Cls
 >prototype : Cls
 >baz1 : any
->function() { return undefined } : () => undefined
+>function() { return undefined } : () => any
 >undefined : undefined
 
 (<any>Cls.prototype).baz2 = function() { return undefined };
->(<any>Cls.prototype).baz2 = function() { return undefined } : () => undefined
+>(<any>Cls.prototype).baz2 = function() { return undefined } : () => any
 >(<any>Cls.prototype).baz2 : any
 >(<any>Cls.prototype) : any
 ><any>Cls.prototype : any
@@ -87,7 +87,7 @@ import {C1, C2} from "./m3";
 >Cls : typeof Cls
 >prototype : Cls
 >baz2 : any
->function() { return undefined } : () => undefined
+>function() { return undefined } : () => any
 >undefined : undefined
 
 declare module "./m1" {
