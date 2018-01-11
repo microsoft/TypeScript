@@ -34,8 +34,7 @@ namespace ts.projectSystem {
     }
 
     class Installer extends TestTypingsInstaller {
-        constructor(host: TestServerHost, p?: InstallerParams, log?: TI.Log) {
-            host.ensureFileOrFolder({ path: (p && p.globalTypingsCacheLocation) || "/a/data" });
+        constructor(host: server.ServerHost, p?: InstallerParams, log?: TI.Log) {
             super(
                 (p && p.globalTypingsCacheLocation) || "/a/data",
                 (p && p.throttleLimit) || 5,
