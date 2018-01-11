@@ -16,16 +16,6 @@ namespace ts {
         }
     }
 
-    /**
-     * djb2 hashing algorithm
-     * http://www.cse.yorku.ca/~oz/hash.html
-     */
-    /* @internal */
-    export function generateDjb2Hash(data: string): string {
-      const chars = data.split("").map(str => str.charCodeAt(0));
-      return `${chars.reduce((prev, curr) => ((prev << 5) + prev) + curr, 5381)}`;
-    }
-
     export enum FileWatcherEventKind {
         Created,
         Changed,
@@ -149,6 +139,21 @@ namespace ts {
             }
 
             const useNonPollingWatchers = process.env.TSC_NONPOLLING_WATCHER;
+
+            /**
+             * djb2 hashing algorithm
+             * http://www.cse.yorku.ca/~oz/hash.html
+             */
+            function generateDjb2Hash(data: string): string {
+              const chars = data.split("").map(str => str.charCodeAt(0));
+              return `${chars.reduce((prev, curr) => ((prev << 5) + prev) + curr, 5381)}`;
+            }
+
+            function createMD5HashUsingNativeCrypto(data: string) {
+              const hash = _crypto.createHash("md5");
+              hash.update(data);
+              return hash.digest("hex");
+            }
 
             function createWatchedFileSet() {
                 const dirWatchers = createMap<DirectoryWatcher>();
@@ -510,18 +515,7 @@ namespace ts {
                         return undefined;
                     }
                 },
-                createHash(data) {
-                    let hash: any;
-                    if (_crypto) {
-                      hash = _crypto.createHash("md5");
-                      hash.update(data);
-                      hash.digest("hex");
-                    }
-                    else {
-                      hash = generateDjb2Hash(data);
-                    }
-                    return hash;
-                },
+                createHash: _crypto ? createMD5HashUsingNativeCrypto : generateDjb2Hash,
                 getMemoryUsage() {
                     if (global.gc) {
                         global.gc();

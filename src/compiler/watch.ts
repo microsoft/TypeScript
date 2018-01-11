@@ -642,7 +642,7 @@ namespace ts {
         }
 
         function computeHash(data: string) {
-            return system.createHash ? system.createHash(data) : generateDjb2Hash(data);
+            return system.createHash ? system.createHash(data) : data;
         }
     }
 }
