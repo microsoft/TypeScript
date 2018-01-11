@@ -4,6 +4,7 @@
 /// <reference path='../compiler/types.ts' />
 /// <reference path='../compiler/core.ts' />
 /// <reference path='../compiler/commandLineParser.ts' />
+/// <reference path='../services/semver.ts' />
 
 /* @internal */
 namespace ts.JsTyping {
@@ -29,6 +30,7 @@ namespace ts.JsTyping {
     export interface CachedTyping {
         typingLocation: string;
         timestamp: number;
+        version: Semver;
     }
 
     export function isTypingExpired(typing: JsTyping.CachedTyping | undefined) {
@@ -70,7 +72,7 @@ namespace ts.JsTyping {
      * @param fileNames are the file names that belong to the same project
      * @param projectRootPath is the path to the project root directory
      * @param safeListPath is the path used to retrieve the safe list
-     * @param packageNameToTypingLocation is the map of package names to their cached typing locations and time of caching
+     * @param packageNameToTypingLocation is the map of package names to their cached typing locations and time of caching and versions
      * @param typeAcquisition is used to customize the typing acquisition process
      * @param compilerOptions are used as a source for typing inference
      */

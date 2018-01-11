@@ -1,6 +1,7 @@
 /// <reference path="../harness.ts" />
 /// <reference path="./tsserverProjectSystem.ts" />
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
+/// <reference path="../../services/semver.ts" />
 
 namespace ts.projectSystem {
     import TI = server.typingsInstaller;
@@ -10,13 +11,24 @@ namespace ts.projectSystem {
     interface InstallerParams {
         globalTypingsCacheLocation?: string;
         throttleLimit?: number;
-        typesRegistry?: Map<void>;
+        typesRegistry?: Map<MapLike<string>>;
     }
 
-    function createTypesRegistry(...list: string[]): Map<void> {
-        const map = createMap<void>();
+    function createTypesRegistry(...list: string[]): Map<MapLike<string>> {
+        const versionMap = {
+            "latest": "1.3.0",
+            "ts2.0": "1.0.0",
+            "ts2.1": "1.0.0",
+            "ts2.2": "1.2.0",
+            "ts2.3": "1.3.0",
+            "ts2.4": "1.3.0",
+            "ts2.5": "1.3.0",
+            "ts2.6": "1.3.0",
+            "ts2.7": "1.3.0"
+        };
+        const map = createMap<MapLike<string>>();
         for (const l of list) {
-            map.set(l, undefined);
+            map.set(l, versionMap);
         }
         return map;
     }
@@ -51,7 +63,7 @@ namespace ts.projectSystem {
         const logs: string[] = [];
         return {
             log(message) {
-               logs.push(message);
+                logs.push(message);
             },
             finish() {
                 return logs;
@@ -1149,7 +1161,17 @@ namespace ts.projectSystem {
                         "types-registry": "^0.1.317"
                     },
                     devDependencies: {
-                        "@types/jquery": "^3.2.16"
+                        "@types/jquery": "^1.3.0"
+                    }
+                })
+            };
+            const cacheLockConfig = {
+                path: "/a/data/package-lock.json",
+                content: JSON.stringify({
+                    dependencies: {
+                        "@types/jquery": {
+                            version: "1.3.0"
+                        }
                     }
                 })
             };
@@ -1157,7 +1179,7 @@ namespace ts.projectSystem {
                 path: "/a/data/node_modules/@types/jquery/index.d.ts",
                 content: "declare const $: { x: number }"
             };
-            const host = createServerHost([file1, packageJson, timestamps, cacheConfig, jquery]);
+            const host = createServerHost([file1, packageJson, timestamps, cacheConfig, cacheLockConfig, jquery]);
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery") });
@@ -1299,7 +1321,7 @@ namespace ts.projectSystem {
                 content: ""
             };
             const host = createServerHost([f, node]);
-            const cache = createMapFromTemplate<JsTyping.CachedTyping>({ node: { typingLocation: node.path, timestamp: Date.now() } });
+            const cache = createMapFromTemplate<JsTyping.CachedTyping>({ node: { typingLocation: node.path, timestamp: Date.now(), version: new Semver(1, 0, 0, /*isPrerelease*/ false) } });
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, ["fs", "bar"]);
             assert.deepEqual(logger.finish(), [
@@ -1359,8 +1381,8 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([app]);
             const cache = createMapFromTemplate<JsTyping.CachedTyping>({
-                node: { typingLocation: node.path, timestamp: Date.now() },
-                commander: { typingLocation: commander.path, timestamp: date.getTime() }
+                node: { typingLocation: node.path, timestamp: Date.now(), version: new Semver(1, 0, 0, /*isPrerelease*/ false) },
+                commander: { typingLocation: commander.path, timestamp: date.getTime(), version: new Semver(1, 0, 0, /*isPrerelease*/ false) }
             });
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), emptySafeList, cache, { enable: true }, ["http", "commander"]);
@@ -1433,12 +1455,22 @@ namespace ts.projectSystem {
                 path: "/a/package.json",
                 content: JSON.stringify({ dependencies: { commander: "1.0.0" } })
             };
+            const packageLockFile = {
+                path: "/a/cache/package-lock.json",
+                content: JSON.stringify({
+                    dependencies: {
+                        "@types/commander": {
+                            version: "1.0.0"
+                        }
+                    }
+                })
+            };
             const cachePath = "/a/cache/";
             const commander = {
                 path: cachePath + "node_modules/@types/commander/index.d.ts",
                 content: "export let x: number"
             };
-            const host = createServerHost([f1, packageFile]);
+            const host = createServerHost([f1, packageFile, packageLockFile]);
             let beginEvent: server.BeginInstallTypes;
             let endEvent: server.EndInstallTypes;
             const installer = new (class extends Installer {

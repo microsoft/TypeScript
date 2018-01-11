@@ -1,12 +1,17 @@
 /// <reference path="../../compiler/core.ts" />
 /// <reference path="../../compiler/moduleNameResolver.ts" />
 /// <reference path="../../services/jsTyping.ts"/>
+/// <reference path="../../services/semver.ts"/>
 /// <reference path="../types.ts"/>
 /// <reference path="../shared.ts"/>
 
 namespace ts.server.typingsInstaller {
     interface NpmConfig {
         devDependencies: MapLike<any>;
+    }
+
+    interface NpmLock {
+        dependencies: { [packageName: string]: { version: string } };
     }
 
     export interface Log {
@@ -104,7 +109,7 @@ namespace ts.server.typingsInstaller {
         private installRunCount = 1;
         private inFlightRequestCount = 0;
 
-        abstract readonly typesRegistry: Map<void>;
+        abstract readonly typesRegistry: Map<MapLike<string>>;
 
         constructor(
             protected readonly installTypingHost: InstallTypingHost,
@@ -217,15 +222,18 @@ namespace ts.server.typingsInstaller {
             }
             const typeDeclarationTimestamps = loadTypeDeclarationTimestampFile(timestampsFilePath || combinePaths(cacheLocation, timestampsFileName), this.installTypingHost, this.log);
             const packageJson = combinePaths(cacheLocation, "package.json");
+            const packageLockJson = combinePaths(cacheLocation, "package-lock.json");
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Trying to find '${packageJson}'...`);
             }
-            if (this.installTypingHost.fileExists(packageJson)) {
+            if (this.installTypingHost.fileExists(packageJson) && this.installTypingHost.fileExists(packageLockJson)) {
                 const npmConfig = <NpmConfig>JSON.parse(this.installTypingHost.readFile(packageJson));
+                const npmLock = <NpmLock>JSON.parse(this.installTypingHost.readFile(packageLockJson));
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Loaded content of '${packageJson}': ${JSON.stringify(npmConfig)}`);
+                    this.log.writeLine(`Loaded content of '${packageLockJson}'`);
                 }
-                if (npmConfig.devDependencies) {
+                if (npmConfig.devDependencies && npmLock.dependencies) {
                     for (const key in npmConfig.devDependencies) {
                         // key is @types/<package name>
                         const packageName = getBaseFileName(key);
@@ -259,8 +267,11 @@ namespace ts.server.typingsInstaller {
                                 this.log.writeLine(`Adding entry into timestamp cache: '${key}' => '${timestamp}'`);
                             }
                         }
+                        const info = getProperty(npmLock.dependencies, key);
+                        const version = info && info.version;
+                        const semver = Semver.parse(version);
                         // timestamp guaranteed to not be undefined by above check
-                        const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, timestamp: getProperty(typeDeclarationTimestamps, key) };
+                        const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, timestamp: getProperty(typeDeclarationTimestamps, key), version: semver };
                         this.packageNameToTypingLocation.set(packageName, newTyping);
                     }
                 }
@@ -277,10 +288,6 @@ namespace ts.server.typingsInstaller {
                     if (this.log.isEnabled()) this.log.writeLine(`'${typing}' is in missingTypingsSet - skipping...`);
                     return false;
                 }
-                if (this.packageNameToTypingLocation.get(typing) && !JsTyping.isTypingExpired(this.packageNameToTypingLocation.get(typing))) {
-                    if (this.log.isEnabled()) this.log.writeLine(`'${typing}' already has a typing - skipping...`);
-                    return false;
-                }
                 const validationResult = JsTyping.validatePackageName(typing);
                 if (validationResult !== JsTyping.PackageNameValidationResult.Ok) {
                     // add typing name to missing set so we won't process it again
@@ -292,8 +299,17 @@ namespace ts.server.typingsInstaller {
                     if (this.log.isEnabled()) this.log.writeLine(`Entry for package '${typing}' does not exist in local types registry - skipping...`);
                     return false;
                 }
+                if (this.packageNameToTypingLocation.get(typing) && isTypingUpToDate(this.packageNameToTypingLocation.get(typing), this.typesRegistry.get(typing))) {
+                    if (this.log.isEnabled()) this.log.writeLine(`'${typing}' already has an up-to-date typing - skipping...`);
+                    return false;
+                }
                 return true;
             });
+
+            function isTypingUpToDate(cachedTyping: JsTyping.CachedTyping, availableTypingVersions: MapLike<string>) {
+                const availableVersion = Semver.parse(getProperty(availableTypingVersions, `ts${ts.version}`));
+                return !availableVersion.greaterThan(cachedTyping.version);
+            }
         }
 
         protected ensurePackageDirectoryExists(directory: string) {
@@ -364,7 +380,8 @@ namespace ts.server.typingsInstaller {
                         }
 
                         const newTimestamp = Date.now();
-                        const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, timestamp: newTimestamp };
+                        const newVersion = Semver.parse(this.typesRegistry.get(packageName)[`ts${ts.versionMajorMinor}`]);
+                        const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, timestamp: newTimestamp, version: newVersion };
                         this.packageNameToTypingLocation.set(packageName, newTyping);
                         typeDeclarationTimestamps[typesPackageName(packageName)] = newTimestamp;
                         installedTypingFiles.push(typingFile);
