@@ -2659,6 +2659,8 @@ namespace ts {
         /* @internal */ sourceFileToPackageName: Map<string>;
         /** Set of all source files that some other source file redirects to. */
         /* @internal */ redirectTargetsSet: Map<true>;
+        /** Is the file emitted file */
+        /* @internal */ isEmittedFile(file: string): boolean;
     }
 
     /* @internal */

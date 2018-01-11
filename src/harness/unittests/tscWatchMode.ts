@@ -1096,7 +1096,7 @@ namespace ts.tscWatch {
             assert.isTrue(host.fileExists("build/src/file2.js"));
 
             // This should be 0
-            host.checkTimeoutQueueLengthAndRun(1);
+            host.checkTimeoutQueueLengthAndRun(0);
         });
     });
 

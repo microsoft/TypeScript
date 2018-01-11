@@ -305,6 +305,7 @@ namespace ts {
                 scheduleProgramUpdate();
             },
             maxNumberOfFilesToIterateForInvalidation: watchingHost.maxNumberOfFilesToIterateForInvalidation,
+            getCurrentProgram,
             writeLog
         };
         // Cache for the module resolution
@@ -322,7 +323,11 @@ namespace ts {
         // Update the wild card directory watch
         watchConfigFileWildCardDirectories();
 
-        return () => program;
+        return getCurrentProgram;
+
+        function getCurrentProgram() {
+            return program;
+        }
 
         function synchronizeProgram() {
             writeLog(`Synchronizing program`);
