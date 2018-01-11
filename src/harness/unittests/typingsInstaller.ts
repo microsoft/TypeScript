@@ -14,25 +14,6 @@ namespace ts.projectSystem {
         typesRegistry?: Map<MapLike<string>>;
     }
 
-    function createTypesRegistry(...list: string[]): Map<MapLike<string>> {
-        const versionMap = {
-            "latest": "1.3.0",
-            "ts2.0": "1.0.0",
-            "ts2.1": "1.0.0",
-            "ts2.2": "1.2.0",
-            "ts2.3": "1.3.0",
-            "ts2.4": "1.3.0",
-            "ts2.5": "1.3.0",
-            "ts2.6": "1.3.0",
-            "ts2.7": "1.3.0"
-        };
-        const map = createMap<MapLike<string>>();
-        for (const l of list) {
-            map.set(l, versionMap);
-        }
-        return map;
-    }
-
     class Installer extends TestTypingsInstaller {
         constructor(host: server.ServerHost, p?: InstallerParams, log?: TI.Log) {
             super(
