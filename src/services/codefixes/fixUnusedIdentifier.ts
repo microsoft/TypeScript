@@ -121,9 +121,20 @@ namespace ts.codefix {
                 break;
 
             case SyntaxKind.Parameter:
-                const functionDeclaration = <FunctionDeclaration>parent.parent;
-                if (functionDeclaration.parameters.length === 1) {
-                    changes.deleteNode(sourceFile, parent);
+                const oldFunction = parent.parent;
+                if (isArrowFunction(oldFunction) && oldFunction.parameters.length === 1) {
+                    const newFunction = updateArrowFunction(
+                        oldFunction,
+                        oldFunction.modifiers,
+                        oldFunction.typeParameters,
+                        /*parameters*/ undefined,
+                        oldFunction.type,
+                        oldFunction.equalsGreaterThanToken,
+                        oldFunction.body);
+
+                    suppressLeadingAndTrailingTrivia(newFunction);
+
+                    changes.replaceRange(sourceFile, { pos: oldFunction.getStart(), end: oldFunction.end }, newFunction);
                 }
                 else {
                     changes.deleteNodeInList(sourceFile, parent);
