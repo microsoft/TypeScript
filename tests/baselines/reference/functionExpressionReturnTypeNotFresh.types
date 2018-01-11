@@ -1,0 +1,28 @@
+=== tests/cases/compiler/functionExpressionReturnTypeNotFresh.ts ===
+const a = () => ({
+>a : () => { a: number; b: number; }
+>() => ({    a: 12,    b: 11}) : () => { a: number; b: number; }
+>({    a: 12,    b: 11}) : { a: number; b: number; }
+>{    a: 12,    b: 11} : { a: number; b: number; }
+
+    a: 12,
+>a : number
+>12 : 12
+
+    b: 11
+>b : number
+>11 : 11
+
+});
+
+declare function f(arg: {a: number}): void;
+>f : (arg: { a: number; }) => void
+>arg : { a: number; }
+>a : number
+
+f(a());
+>f(a()) : void
+>f : (arg: { a: number; }) => void
+>a() : { a: number; b: number; }
+>a : () => { a: number; b: number; }
+

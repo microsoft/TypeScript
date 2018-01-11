@@ -41,8 +41,8 @@ function f6(arg?, _arg?) {
 }
 
 var f7 = _ => undefined;
->f7 : (_: any) => undefined
->_ => undefined : (_: any) => undefined
+>f7 : (_: any) => any
+>_ => undefined : (_: any) => any
 >_ : any
 >undefined : undefined
 

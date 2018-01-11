@@ -28,4 +28,4 @@ export interface ThingB {
 export * from "./thingB";
 //// [index.d.ts]
 import * as things from "./things";
-export declare const thing2: (param: things.ThingB) => null;
+export declare const thing2: (param: things.ThingB) => any;

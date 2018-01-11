@@ -15,8 +15,8 @@ function foo() {
 >foo : () => any
 
     var seriesExtent = (series) => null;
->seriesExtent : (series: any) => null
->(series) => null : (series: any) => null
+>seriesExtent : (series: any) => any
+>(series) => null : (series: any) => any
 >series : any
 >null : null
 
@@ -28,7 +28,7 @@ function foo() {
 >series2.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >series2 : number[]
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->seriesExtent : (series: any) => null
+>seriesExtent : (series: any) => any
 
     return null;
 >null : null
