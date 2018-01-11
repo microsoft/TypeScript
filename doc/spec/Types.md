@@ -125,9 +125,8 @@ The only possible values for the Void type are `null` and `undefined`. The Void 
 
 ### Unit Types { #unit-types }
 
-Unit types are types with a single value. The unit types in TypeScript are `null`, `undefined`, enum member types, string literal types, number literal types, and boolean literal types.
-
-TODO: Update the null and undefined sections in my other draft PR.
+Unit types are types with a single value.
+The unit types in TypeScript are `null`, `undefined`, enum member types, string literal types, number literal types, and boolean literal types.
 
 #### The Null Type { #the-null-type }
 
@@ -163,12 +162,13 @@ var e: Undefined;       // Error, can't reference Undefined type
 
 #### Literal types { #literal-types }
 
-TypeScript supports string, number and boolean literal types, but not regular expression literal types.
+TypeScript supports string, number, and boolean literal types.
 
 Literal types use the syntax of their respective literal values and have the identities of their respective literal values.
 For example, `10` and `1e1` are the same type, even though the two are written differently.
+In the same way, `'a'` and `"a"` are the same type.
 
-Similarly, literal types are subclasses of their respective literal values' types:
+Literal types are subclasses of their respective base primitive type:
 
 * The supertype of the literal types `true` and `false` is the Boolean primitive type.
 * The supertype of numeric literal types is the Number primitive type.
@@ -207,7 +207,7 @@ Enum types are distinct user defined subtypes of the Number primitive type. Enum
 
 Enum types are assignable to the Number primitive type, and vice versa, but different enum types are not assignable to each other.
 
-TODO: This section should be updated to discuss:
+*TODO: This section should be updated to discuss:*
 1. Normal versus Const enums
 2. Computed versus Union enums
 3. Exceptions to enum nominality
@@ -1505,7 +1505,7 @@ var name = "Steve";
 
 infers the type of 'name' to be the String primitive type since that is the type of the value used to initialize it.
 When inferring the type of a variable, property or function result from an expression, the ***widened*** form of the source type is used as the inferred type of the target.
-The widened form of a type is the type in which all literal types have been replaced with their base types, according to the following rule:
+The widened form of a type is the type in which all literal types have been replaced with their base primitive types, according to the following rule:
 
 If the type is:
 * A string literal type, the result is the String type
@@ -1522,7 +1522,7 @@ Literal types widen in the following locations:
 
 Literal types that arise from expressions, except the expression of a case clause, widen in the following locations:
 
-* An argument to an immediately invoked function expression widens before providing the contextual type to the IIFE's parameter.
+* An argument to an immediately invoked function expression (IIFE) widens before providing the contextual type to the IIFE's parameter.
 * Declaration initializers, except for `const` declarations, `readonly` declarations that are not parameter properties, or initializers that are type assertions.
 * The returned expression of a function, unless the expression is contextually typed by a related literal type.
 * Property assignments and shorthand property assignments in object literals, unless the assignment is contextually typed by a related literal type.
