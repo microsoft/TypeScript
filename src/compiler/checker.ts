@@ -530,6 +530,7 @@ namespace ts {
             ResolvedBaseConstructorType,
             DeclaredType,
             ResolvedReturnType,
+            ResolvedBaseConstraint,
         }
 
         const enum CheckMode {
@@ -4254,7 +4255,7 @@ namespace ts {
             return -1;
         }
 
-        function hasType(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): Type {
+        function hasType(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): Type | boolean {
             if (propertyName === TypeSystemPropertyName.Type) {
                 return getSymbolLinks(<Symbol>target).type;
             }
@@ -4266,6 +4267,10 @@ namespace ts {
             }
             if (propertyName === TypeSystemPropertyName.ResolvedReturnType) {
                 return (<Signature>target).resolvedReturnType;
+            }
+            if (propertyName === TypeSystemPropertyName.ResolvedBaseConstraint) {
+                const bc = (<TypeParameter | UnionOrIntersectionType>target).resolvedBaseConstraint;
+                return bc && bc !== circularConstraintType;
             }
 
             Debug.fail("Unhandled TypeSystemPropertyName " + propertyName);
@@ -6500,23 +6505,23 @@ namespace ts {
          * circularly references the type variable.
          */
         function getResolvedBaseConstraint(type: TypeVariable | UnionOrIntersectionType): Type {
-            let typeStack: Type[];
             let circular: boolean;
             if (!type.resolvedBaseConstraint) {
-                typeStack = [];
                 const constraint = getBaseConstraint(type);
                 type.resolvedBaseConstraint = circular ? circularConstraintType : getTypeWithThisArgument(constraint || noConstraintType, type);
             }
             return type.resolvedBaseConstraint;
 
             function getBaseConstraint(t: Type): Type {
-                if (contains(typeStack, t)) {
+                if (!pushTypeResolution(t, TypeSystemPropertyName.ResolvedBaseConstraint)) {
                     circular = true;
                     return undefined;
                 }
-                typeStack.push(t);
                 const result = computeBaseConstraint(t);
-                typeStack.pop();
+                if (!popTypeResolution()) {
+                    circular = true;
+                    return undefined;
+                }
                 return result;
             }
 
