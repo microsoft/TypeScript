@@ -30,8 +30,9 @@ namespace ts.tscWatch {
         return ts.parseConfigFile(configFileName, {}, watchingSystemHost.system, watchingSystemHost.reportDiagnostic, watchingSystemHost.reportWatchDiagnostic);
     }
 
-    function createWatchModeWithConfigFile(configFilePath: string, host: WatchedSystem) {
+    function createWatchModeWithConfigFile(configFilePath: string, host: WatchedSystem, maxNumberOfFilesToIterateForInvalidation?: number) {
         const watchingSystemHost = createWatchingSystemHost(host);
+        watchingSystemHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
         const configFileResult = parseConfigFile(configFilePath, watchingSystemHost);
         return ts.createWatchModeWithConfigFile(configFileResult, {}, watchingSystemHost);
     }
@@ -1066,6 +1067,36 @@ namespace ts.tscWatch {
             checkOutputErrors(host, nowErrors, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
             assert.equal(nowErrors[0].start, intialErrors[0].start - configFileContentComment.length);
             assert.equal(nowErrors[1].start, intialErrors[1].start - configFileContentComment.length);
+        });
+
+        it("should not trigger recompilation because of program emit", () => {
+            const proj = "/user/username/projects/myproject";
+            const file1: FileOrFolder = {
+                path: `${proj}/file1.ts`,
+                content: "export const c = 30;"
+            };
+            const file2: FileOrFolder = {
+                path: `${proj}/src/file2.ts`,
+                content: `import {c} from "file1"; export const d = 30;`
+            };
+            const tsconfig: FileOrFolder = {
+                path: `${proj}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        module: "amd",
+                        outDir: "build"
+                    }
+                })
+            };
+            const host = createWatchedSystem([file1, file2, libFile, tsconfig], { currentDirectory: proj });
+            const watch = createWatchModeWithConfigFile(tsconfig.path, host, /*maxNumberOfFilesToIterateForInvalidation*/1);
+            checkProgramActualFiles(watch(), [file1.path, file2.path, libFile.path]);
+
+            assert.isTrue(host.fileExists("build/file1.js"));
+            assert.isTrue(host.fileExists("build/src/file2.js"));
+
+            // This should be 0
+            host.checkTimeoutQueueLengthAndRun(1);
         });
     });
 
