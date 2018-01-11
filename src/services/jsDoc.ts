@@ -102,7 +102,7 @@ namespace ts.JsDoc {
                 const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag;
                 return name ? withNode(name) : comment;
             default:
-                return comment || "";
+                return comment;
         }
 
         function withNode(node: Node) {
