@@ -530,6 +530,7 @@ namespace ts {
             ResolvedBaseConstructorType,
             DeclaredType,
             ResolvedReturnType,
+            ResolvedBaseConstraint,
         }
 
         const enum CheckMode {
@@ -4254,7 +4255,7 @@ namespace ts {
             return -1;
         }
 
-        function hasType(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): Type {
+        function hasType(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): Type | boolean {
             if (propertyName === TypeSystemPropertyName.Type) {
                 return getSymbolLinks(<Symbol>target).type;
             }
@@ -4266,6 +4267,10 @@ namespace ts {
             }
             if (propertyName === TypeSystemPropertyName.ResolvedReturnType) {
                 return (<Signature>target).resolvedReturnType;
+            }
+            if (propertyName === TypeSystemPropertyName.ResolvedBaseConstraint) {
+                const bc = (<TypeParameter | UnionOrIntersectionType>target).resolvedBaseConstraint;
+                return bc && bc !== circularConstraintType;
             }
 
             Debug.fail("Unhandled TypeSystemPropertyName " + propertyName);
@@ -6301,9 +6306,9 @@ namespace ts {
                 (type.typeParameter = getDeclaredTypeOfTypeParameter(getSymbolOfNode(type.declaration.typeParameter)));
         }
 
-        function getConstraintTypeFromMappedType(type: MappedType, typeStack?: Type[]) {
+        function getConstraintTypeFromMappedType(type: MappedType) {
             return type.constraintType ||
-                (type.constraintType = instantiateType(getConstraintOfTypeParameter(getTypeParameterFromMappedType(type), typeStack), type.mapper || identityMapper) || unknownType);
+                (type.constraintType = instantiateType(getConstraintOfTypeParameter(getTypeParameterFromMappedType(type)), type.mapper || identityMapper) || unknownType);
         }
 
         function getTemplateTypeFromMappedType(type: MappedType) {
@@ -6351,8 +6356,8 @@ namespace ts {
             return getObjectFlags(type) & ObjectFlags.Mapped && !!(<MappedType>type).declaration.questionToken;
         }
 
-        function isGenericMappedType(type: Type, typeStack?: Type[]): type is MappedType {
-            return getObjectFlags(type) & ObjectFlags.Mapped && isGenericIndexType(getConstraintTypeFromMappedType(<MappedType>type, typeStack));
+        function isGenericMappedType(type: Type): type is MappedType {
+            return getObjectFlags(type) & ObjectFlags.Mapped && isGenericIndexType(getConstraintTypeFromMappedType(<MappedType>type));
         }
 
         function resolveStructuredTypeMembers(type: StructuredType): ResolvedType {
@@ -6458,10 +6463,7 @@ namespace ts {
                     getBaseConstraintOfType(type);
         }
 
-        function getConstraintOfTypeParameter(typeParameter: TypeParameter, typeStack?: Type[]): Type {
-            if (typeStack) {
-                return !contains(typeStack, typeParameter) && getConstraintFromTypeParameter(typeParameter);
-            }
+        function getConstraintOfTypeParameter(typeParameter: TypeParameter): Type {
             return hasNonCircularBaseConstraint(typeParameter) ? getConstraintFromTypeParameter(typeParameter) : undefined;
         }
 
@@ -6503,23 +6505,23 @@ namespace ts {
          * circularly references the type variable.
          */
         function getResolvedBaseConstraint(type: TypeVariable | UnionOrIntersectionType): Type {
-            let typeStack: Type[];
             let circular: boolean;
             if (!type.resolvedBaseConstraint) {
-                typeStack = [];
                 const constraint = getBaseConstraint(type);
                 type.resolvedBaseConstraint = circular ? circularConstraintType : getTypeWithThisArgument(constraint || noConstraintType, type);
             }
             return type.resolvedBaseConstraint;
 
             function getBaseConstraint(t: Type): Type {
-                if (contains(typeStack, t)) {
+                if (!pushTypeResolution(t, TypeSystemPropertyName.ResolvedBaseConstraint)) {
                     circular = true;
                     return undefined;
                 }
-                typeStack.push(t);
                 const result = computeBaseConstraint(t);
-                typeStack.pop();
+                if (!popTypeResolution()) {
+                    circular = true;
+                    return undefined;
+                }
                 return result;
             }
 
@@ -6556,7 +6558,7 @@ namespace ts {
                     const baseIndexedAccess = baseObjectType && baseIndexType ? getIndexedAccessType(baseObjectType, baseIndexType) : undefined;
                     return baseIndexedAccess && baseIndexedAccess !== unknownType ? getBaseConstraint(baseIndexedAccess) : undefined;
                 }
-                if (isGenericMappedType(t, typeStack)) {
+                if (isGenericMappedType(t)) {
                     return emptyObjectType;
                 }
                 return t;
