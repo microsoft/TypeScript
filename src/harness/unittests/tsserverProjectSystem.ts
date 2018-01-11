@@ -245,7 +245,7 @@ namespace ts.projectSystem {
 
     export function createSession(host: server.ServerHost, opts: Partial<server.SessionOptions> = {}) {
         if (opts.typingsInstaller === undefined) {
-            opts.typingsInstaller = new TestTypingsInstaller("/a/data", /*throttleLimit*/ 5, host);
+            opts.typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/ 5, host);
         }
 
         if (opts.eventHandler !== undefined) {
@@ -6532,7 +6532,7 @@ namespace ts.projectSystem {
             const files = [file, packageJsonInCurrentDirectory, packageJsonOfPkgcurrentdirectory, indexOfPkgcurrentdirectory, typingsCachePackageJson];
             const host = createServerHost(files, { currentDirectory });
 
-            const typesRegistry = createMap<void>();
+            const typesRegistry = createMap<MapLike<string>>();
             typesRegistry.set("pkgcurrentdirectory", void 0);
             const typingsInstaller = new TestTypingsInstaller(typingsCache, /*throttleLimit*/ 5, host, typesRegistry);
 
