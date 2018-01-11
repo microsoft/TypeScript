@@ -5870,19 +5870,19 @@ namespace ts {
             return symbol;
         }
 
-        function getTypeWithThisArgument(type: Type, thisArgument?: Type, apparentType?: boolean): Type {
+        function getTypeWithThisArgument(type: Type, thisArgument?: Type, needApparentType?: boolean): Type {
             if (getObjectFlags(type) & ObjectFlags.Reference) {
                 const target = (<TypeReference>type).target;
                 const typeArguments = (<TypeReference>type).typeArguments;
                 if (length(target.typeParameters) === length(typeArguments)) {
                     const ref = createTypeReference(target, concatenate(typeArguments, [thisArgument || target.thisType]));
-                    return apparentType ? getApparentType(ref) : ref;
+                    return needApparentType ? getApparentType(ref) : ref;
                 }
             }
             else if (type.flags & TypeFlags.Intersection) {
-                return getIntersectionType(map((<IntersectionType>type).types, t => getTypeWithThisArgument(t, thisArgument, apparentType)));
+                return getIntersectionType(map((<IntersectionType>type).types, t => getTypeWithThisArgument(t, thisArgument, needApparentType)));
             }
-            return apparentType ? getApparentType(type) : type;
+            return needApparentType ? getApparentType(type) : type;
         }
 
         function resolveObjectTypeMembers(type: ObjectType, source: InterfaceTypeWithDeclaredMembers, typeParameters: TypeParameter[], typeArguments: Type[]) {
