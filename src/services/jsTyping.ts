@@ -29,13 +29,13 @@ namespace ts.JsTyping {
 
     export interface CachedTyping {
         typingLocation: string;
-        timestamp: number;
         version: Semver;
     }
 
-    export function isTypingExpired(typing: JsTyping.CachedTyping | undefined) {
-        const msPerMonth = 1000 * 60 * 60 * 24 * 30; // ms/second * second/minute * minutes/hour * hours/day * days/month
-        return !typing || typing.timestamp < Date.now() - msPerMonth;
+    /* @internal */
+    export function isTypingUpToDate(cachedTyping: JsTyping.CachedTyping, availableTypingVersions: MapLike<string>) {
+        const availableVersion = Semver.parse(getProperty(availableTypingVersions, `ts${ts.versionMajorMinor}`));
+        return !availableVersion.greaterThan(cachedTyping.version);
     }
 
     /* @internal */
@@ -72,7 +72,7 @@ namespace ts.JsTyping {
      * @param fileNames are the file names that belong to the same project
      * @param projectRootPath is the path to the project root directory
      * @param safeListPath is the path used to retrieve the safe list
-     * @param packageNameToTypingLocation is the map of package names to their cached typing locations and time of caching and versions
+     * @param packageNameToTypingLocation is the map of package names to their cached typing locations and installed versions
      * @param typeAcquisition is used to customize the typing acquisition process
      * @param compilerOptions are used as a source for typing inference
      */
@@ -84,7 +84,8 @@ namespace ts.JsTyping {
         safeList: SafeList,
         packageNameToTypingLocation: ReadonlyMap<CachedTyping>,
         typeAcquisition: TypeAcquisition,
-        unresolvedImports: ReadonlyArray<string>):
+        unresolvedImports: ReadonlyArray<string>,
+        typesRegistry: ReadonlyMap<MapLike<string>>):
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         if (!typeAcquisition || !typeAcquisition.enable) {
@@ -135,7 +136,7 @@ namespace ts.JsTyping {
         }
         // Add the cached typing locations for inferred typings that are already installed
         packageNameToTypingLocation.forEach((typing, name) => {
-            if (inferredTypings.has(name) && inferredTypings.get(name) === undefined && !isTypingExpired(typing)) {
+            if (inferredTypings.has(name) && inferredTypings.get(name) === undefined && isTypingUpToDate(typing, typesRegistry.get(name))) {
                 inferredTypings.set(name, typing.typingLocation);
             }
         });
