@@ -95,6 +95,9 @@ namespace ts {
         /** Gets a portion of the script snapshot specified by [start, end). */
         getText(start: number, end: number): string;
 
+        /* @internal */
+        getFullText(): string;
+
         /** Gets the length of this script snapshot. */
         getLength(): number;
 
@@ -121,6 +124,10 @@ namespace ts {
                 return start === 0 && end === this.text.length
                     ? this.text
                     : this.text.substring(start, end);
+            }
+
+            public getFullText(): string {
+                return this.text;
             }
 
             public getLength(): number {

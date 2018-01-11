@@ -2116,7 +2116,7 @@ namespace ts.projectSystem {
 
             const scriptInfo = project.getScriptInfo(file1.path);
             const snap = scriptInfo.getSnapshot();
-            const actualText = snap.getText(0, snap.getLength());
+            const actualText = snap.getFullText();
             assert.equal(actualText, "", `expected content to be empty string, got "${actualText}"`);
 
             projectService.openClientFile(file1.path, `var x = 1;`);
@@ -2129,7 +2129,7 @@ namespace ts.projectSystem {
 
             const scriptInfo2 = project.getScriptInfo(file1.path);
             const snap2 = scriptInfo2.getSnapshot();
-            const actualText2 = snap2.getText(0, snap.getLength());
+            const actualText2 = snap2.getFullText();
             assert.equal(actualText2, "", `expected content to be empty string, got "${actualText2}"`);
         });
 
@@ -4178,7 +4178,7 @@ namespace ts.projectSystem {
             // verify content
             const projectServiice = session.getProjectService();
             const snap1 = projectServiice.getScriptInfo(f1.path).getSnapshot();
-            assert.equal(snap1.getText(0, snap1.getLength()), tmp.content, "content should be equal to the content of temp file");
+            assert.equal(snap1.getFullText(), tmp.content, "content should be equal to the content of temp file");
 
             // reload from original file file
             session.executeCommand(<server.protocol.ReloadRequest>{
@@ -4190,7 +4190,7 @@ namespace ts.projectSystem {
 
             // verify content
             const snap2 = projectServiice.getScriptInfo(f1.path).getSnapshot();
-            assert.equal(snap2.getText(0, snap2.getLength()), f1.content, "content should be equal to the content of original file");
+            assert.equal(snap2.getFullText(), f1.content, "content should be equal to the content of original file");
 
         });
 
@@ -4280,7 +4280,7 @@ namespace ts.projectSystem {
 
             function checkScriptInfoContents(contentsOfInfo: string, captionForContents: string) {
                 const snap = info.getSnapshot();
-                assert.equal(snap.getText(0, snap.getLength()), contentsOfInfo, "content should be equal to " + captionForContents);
+                assert.equal(snap.getFullText(), contentsOfInfo, "content should be equal to " + captionForContents);
             }
         });
     });

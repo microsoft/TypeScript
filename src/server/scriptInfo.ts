@@ -370,8 +370,7 @@ namespace ts.server {
         }
 
         saveTo(fileName: string) {
-            const snap = this.textStorage.getSnapshot();
-            this.host.writeFile(fileName, snap.getText(0, snap.getLength()));
+            this.host.writeFile(fileName, this.textStorage.getSnapshot().getFullText());
         }
 
         /*@internal*/

@@ -370,8 +370,12 @@ namespace ts.server {
             return this.index.getText(rangeStart, rangeEnd - rangeStart);
         }
 
+        getFullText(): string {
+            return this.getText(0, this.getLength());
+        }
+
         getLength() {
-            return this.index.root.charCount();
+            return this.index.getLength();
         }
 
         getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
