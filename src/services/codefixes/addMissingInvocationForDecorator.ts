@@ -5,7 +5,7 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions: (context) => {
-            const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start));
+            const changes = textChanges.ChangeTracker.with(toTextChangesContext(context), t => makeChange(t, context.sourceFile, context.span.start));
             return [{ description: getLocaleSpecificMessage(Diagnostics.Call_decorator_expression), changes, fixId }];
         },
         fixIds: [fixId],

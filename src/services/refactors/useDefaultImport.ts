@@ -54,7 +54,7 @@ namespace ts.refactor.installTypesForPackage {
         const newImportClause = createImportClause(name, /*namedBindings*/ undefined);
         const newImportStatement = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, newImportClause, moduleSpecifier);
         return {
-            edits: textChanges.ChangeTracker.with(context, t => t.replaceNode(file, importStatement, newImportStatement)),
+            edits: textChanges.ChangeTracker.with(toTextChangesContext(context), t => t.replaceNode(file, importStatement, newImportStatement)),
             renameFilename: undefined,
             renameLocation: undefined,
         };

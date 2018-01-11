@@ -14,12 +14,28 @@ namespace ts {
         getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined;
     }
 
-    export interface RefactorContext extends textChanges.TextChangesContext {
+    export interface RefactorOrCodeFixContext {
+        host: LanguageServiceHost;
+        formatContext: ts.formatting.FormatContext;
+    }
+
+    export function getNewLineFromContext(context: RefactorOrCodeFixContext) {
+        const formatSettings = context.formatContext.options;
+        return formatSettings ? formatSettings.newLineCharacter : context.host.getNewLine();
+    }
+
+    export function toTextChangesContext(context: RefactorOrCodeFixContext): textChanges.TextChangesContext {
+        return {
+            newLineCharacter: getNewLineFromContext(context),
+            formatContext: context.formatContext,
+        };
+    }
+
+    export interface RefactorContext extends RefactorOrCodeFixContext {
         file: SourceFile;
         startPosition: number;
         endPosition?: number;
         program: Program;
-        host: LanguageServiceHost;
         cancellationToken?: CancellationToken;
     }
 

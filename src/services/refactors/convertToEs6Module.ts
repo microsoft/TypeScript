@@ -74,7 +74,7 @@ namespace ts.refactor {
         Debug.assertEqual(actionName, _actionName);
         const { file, program } = context;
         Debug.assert(isSourceFileJavaScript(file));
-        const edits = textChanges.ChangeTracker.with(context, changes => {
+        const edits = textChanges.ChangeTracker.with(toTextChangesContext(context), changes => {
             const moduleExportsChangedToDefault = convertFileToEs6Module(file, program.getTypeChecker(), changes, program.getCompilerOptions().target);
             if (moduleExportsChangedToDefault) {
                 for (const importingFile of program.getSourceFiles()) {

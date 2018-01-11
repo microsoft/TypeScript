@@ -7,10 +7,9 @@ namespace ts {
         getAllCodeActions?(context: CodeFixAllContext): CombinedCodeActions;
     }
 
-    export interface CodeFixContextBase extends textChanges.TextChangesContext {
+    export interface CodeFixContextBase extends RefactorOrCodeFixContext {
         sourceFile: SourceFile;
         program: Program;
-        host: LanguageServiceHost;
         cancellationToken: CancellationToken;
     }
 
@@ -84,7 +83,7 @@ namespace ts {
 
         export function codeFixAll(context: CodeFixAllContext, errorCodes: number[], use: (changes: textChanges.ChangeTracker, error: Diagnostic, commands: Push<CodeActionCommand>) => void): CombinedCodeActions {
             const commands: CodeActionCommand[] = [];
-            const changes = textChanges.ChangeTracker.with(context, t =>
+            const changes = textChanges.ChangeTracker.with(toTextChangesContext(context), t =>
                 eachDiagnostic(context, errorCodes, diag => use(t, diag, commands)));
             return createCombinedCodeActions(changes, commands.length === 0 ? undefined : commands);
         }

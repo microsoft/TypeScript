@@ -9,7 +9,7 @@ namespace ts.codefix {
             const nodes = getNodes(sourceFile, context.span.start);
             if (!nodes) return undefined;
             const { extendsToken, heritageClauses } = nodes;
-            const changes = textChanges.ChangeTracker.with(context, t => doChanges(t, sourceFile, extendsToken, heritageClauses));
+            const changes = textChanges.ChangeTracker.with(toTextChangesContext(context), t => doChanges(t, sourceFile, extendsToken, heritageClauses));
             return [{ description: getLocaleSpecificMessage(Diagnostics.Change_extends_to_implements), changes, fixId }];
         },
         fixIds: [fixId],

@@ -7,7 +7,7 @@ namespace ts.codefix {
         getCodeActions(context) {
             const qualifiedName = getQualifiedName(context.sourceFile, context.span.start);
             if (!qualifiedName) return undefined;
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, qualifiedName));
+            const changes = textChanges.ChangeTracker.with(toTextChangesContext(context), t => doChange(t, context.sourceFile, qualifiedName));
             const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Rewrite_as_the_indexed_access_type_0), [`${qualifiedName.left.text}["${qualifiedName.right.text}"]`]);
             return [{ description, changes, fixId }];
         },

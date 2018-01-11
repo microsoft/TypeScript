@@ -11,7 +11,7 @@ namespace ts.codefix {
             const { sourceFile, span } = context;
             const nodes = getNodes(sourceFile, span.start);
             if (!nodes) return undefined;
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, nodes));
+            const changes = textChanges.ChangeTracker.with(toTextChangesContext(context), t => doChange(t, sourceFile, nodes));
             return [{ description: getLocaleSpecificMessage(Diagnostics.Add_async_modifier_to_containing_function), changes, fixId }];
         },
         fixIds: [fixId],
