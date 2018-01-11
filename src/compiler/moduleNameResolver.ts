@@ -819,6 +819,7 @@ namespace ts {
     }
 
     function parseNodeModuleFromPath(path: string): { packageDirectory: string, subModuleName: string } | undefined {
+        path = normalizePath(path);
         const nodeModules = "/node_modules/";
         const idx = path.indexOf(nodeModules);
         if (idx === -1) {
@@ -826,18 +827,18 @@ namespace ts {
         }
 
         const indexAfterNodeModules = idx + nodeModules.length;
-        let indexAfterPackageName = indexOfNextSlash(path, indexAfterNodeModules);
+        let indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterNodeModules);
         if (path.charCodeAt(indexAfterNodeModules) === CharacterCodes.at) {
-            indexAfterPackageName = indexOfNextSlash(path, indexAfterPackageName);
+            indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterPackageName);
         }
         const packageDirectory = path.slice(0, indexAfterPackageName);
         const subModuleName = removeExtensionAndIndex(path.slice(indexAfterPackageName));
         return { packageDirectory, subModuleName };
     }
 
-    function indexOfNextSlash(s: string, pos: number): number {
-        const x = s.indexOf(directorySeparator, pos);
-        return x === -1 ? pos : x;
+    function moveToNextDirectorySeparatorIfAvailable(path: string, pos: number): number {
+        const indexOfSlash = path.indexOf(directorySeparator, pos);
+        return indexOfSlash === -1 ? pos : indexOfSlash;
     }
 
     function removeExtensionAndIndex(fileName: string): string {
