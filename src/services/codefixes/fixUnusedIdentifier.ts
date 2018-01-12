@@ -123,6 +123,9 @@ namespace ts.codefix {
             case SyntaxKind.Parameter:
                 const oldFunction = parent.parent;
                 if (isArrowFunction(oldFunction) && oldFunction.parameters.length === 1) {
+                    // Lambdas with exactly one parameter are special because, after removal, there
+                    // must be an empty parameter list (i.e. `()`) and this won't necessarily be the
+                    // case if the parameter is simply removed (e.g. in `x => 1`).
                     const newFunction = updateArrowFunction(
                         oldFunction,
                         oldFunction.modifiers,
