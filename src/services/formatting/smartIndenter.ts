@@ -369,12 +369,13 @@ namespace ts.formatting {
 
         function getActualIndentationForListItem(node: Node, sourceFile: SourceFile, options: EditorSettings): number {
             const containingList = getContainingList(node, sourceFile);
-            return containingList ? getActualIndentationFromList(containingList) : Value.Unknown;
-
-            function getActualIndentationFromList(list: ReadonlyArray<Node>): number {
-                const index = indexOf(list, node);
-                return index !== -1 ? deriveActualIndentationFromList(list, index, sourceFile, options) : Value.Unknown;
+            if (containingList) {
+                const index = containingList.indexOf(node);
+                if (index !== -1) {
+                    return deriveActualIndentationFromList(containingList, index, sourceFile, options);
+                }
             }
+            return Value.Unknown;
         }
 
         function getLineIndentationWhenExpressionIsInMultiLine(node: Node, sourceFile: SourceFile, options: EditorSettings): number {
@@ -510,6 +511,7 @@ namespace ts.formatting {
                 case SyntaxKind.ArrayBindingPattern:
                 case SyntaxKind.ObjectBindingPattern:
                 case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.JsxOpeningFragment:
                 case SyntaxKind.JsxSelfClosingElement:
                 case SyntaxKind.JsxExpression:
                 case SyntaxKind.MethodSignature:
@@ -556,6 +558,8 @@ namespace ts.formatting {
                         (!!(<ImportClause>child).namedBindings && (<ImportClause>child).namedBindings!.kind !== SyntaxKind.NamedImports);
                 case SyntaxKind.JsxElement:
                     return childKind !== SyntaxKind.JsxClosingElement;
+                case SyntaxKind.JsxFragment:
+                    return childKind !== SyntaxKind.JsxClosingFragment;
             }
             // No explicit rule for given nodes so the result will follow the default value argument
             return indentByDefault;

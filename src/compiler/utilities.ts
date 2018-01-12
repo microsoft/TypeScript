@@ -5,6 +5,7 @@ namespace ts {
     export const emptyArray: never[] = [] as never[];
     export const resolvingEmptyArray: never[] = [] as never[];
     export const emptyMap: ReadonlyMap<never> = createMap<never>();
+    export const emptyUnderscoreEscapedMap: ReadonlyUnderscoreEscapedMap<never> = emptyMap as ReadonlyUnderscoreEscapedMap<never>;
 
     export const externalHelpersModuleNameText = "tslib";
 
@@ -805,10 +806,8 @@ namespace ts {
                     case SyntaxKind.TypeAssertionExpression:
                         return node === (<TypeAssertion>parent).type;
                     case SyntaxKind.CallExpression:
-                    case SyntaxKind.NewExpression: {
-                        const { typeArguments } = parent as CallExpression | NewExpression;
-                        return !!typeArguments && contains(typeArguments, node);
-                    }
+                    case SyntaxKind.NewExpression:
+                        return contains((<CallExpression>parent).typeArguments, node);
                     case SyntaxKind.TaggedTemplateExpression:
                         // TODO (drosen): TaggedTemplateExpressions may eventually support type arguments.
                         return false;
@@ -1429,6 +1428,8 @@ namespace ts {
      * exactly one argument (of the form 'require("name")').
      * This function does not test if the node is in a JavaScript file or not.
      */
+    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteral: true): callExpression is CallExpression & { expression: Identifier, arguments: [StringLiteralLike] };
+    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteral: boolean): callExpression is CallExpression;
     export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteral: boolean): callExpression is CallExpression {
         if (callExpression.kind !== SyntaxKind.CallExpression) {
             return false;
@@ -1467,7 +1468,7 @@ namespace ts {
         return false;
     }
 
-    export function getRightMostAssignedExpression(node: Node) {
+    export function getRightMostAssignedExpression(node: Expression): Expression {
         while (isAssignmentExpression(node, /*excludeCompoundAssignements*/ true)) {
             node = node.right;
         }
@@ -1592,42 +1593,39 @@ namespace ts {
             ((node as JSDocFunctionType).parameters[0].name as Identifier).escapedText === "new";
     }
 
-    export function getAllJSDocs(node: Node): (JSDoc | JSDocTag)[] {
-        if (isJSDocTypedefTag(node)) {
-            return [node.parent];
-        }
-        return getJSDocCommentsAndTags(node);
-    }
-
-    export function getSourceOfAssignment(node: Node): Expression | undefined {
-        return isExpressionStatement(node)
-            && node.expression && isBinaryExpression(node.expression)
-            && node.expression.operatorToken.kind === SyntaxKind.EqualsToken
+    function getSourceOfAssignment(node: Node): Node | undefined {
+        return isExpressionStatement(node) &&
+            node.expression && isBinaryExpression(node.expression) &&
+            node.expression.operatorToken.kind === SyntaxKind.EqualsToken
             ? node.expression.right
             : undefined;
     }
 
-    export function getSingleInitializerOfVariableStatement(node: Node, child?: Node): Expression | undefined {
-        return isVariableStatement(node)
-            && node.declarationList.declarations.length > 0
-            && (!child || node.declarationList.declarations[0].initializer === child)
+    function getSingleInitializerOfVariableStatement(node: Node, child?: Node): Node | undefined {
+        return isVariableStatement(node) &&
+            node.declarationList.declarations.length > 0 &&
+            (!child || node.declarationList.declarations[0].initializer === child)
             ? node.declarationList.declarations[0].initializer
             : undefined;
     }
 
-    export function getSingleVariableOfVariableStatement(node: Node, child?: Node): VariableDeclaration | undefined {
-        return isVariableStatement(node)
-            && node.declarationList.declarations.length > 0
-            && (!child || node.declarationList.declarations[0] === child)
+    function getSingleVariableOfVariableStatement(node: Node, child?: Node): Node | undefined {
+        return isVariableStatement(node) &&
+            node.declarationList.declarations.length > 0 &&
+            (!child || node.declarationList.declarations[0] === child)
             ? node.declarationList.declarations[0]
             : undefined;
     }
 
-    export function getNestedModuleDeclaration(node: Node): ModuleDeclaration | undefined {
-        return isModuleDeclaration(node) ? tryCast(node.body, isModuleDeclaration) : undefined;
+    function getNestedModuleDeclaration(node: Node): Node | undefined {
+        return isModuleDeclaration(node) &&
+            node.body &&
+            node.body.kind === SyntaxKind.ModuleDeclaration
+            ? node.body
+            : undefined;
     }
 
-    export function getJSDocCommentsAndTags(node: Node): (JSDoc | JSDocTag)[] {
+    export function getJSDocCommentsAndTags(node: Node): ReadonlyArray<JSDoc | JSDocTag> {
         let result: (JSDoc | JSDocTag)[] | undefined;
         getJSDocCommentsAndTagsWorker(node);
         return result || emptyArray;
@@ -2137,6 +2135,10 @@ namespace ts {
 
     export function getPropertyNameForKnownSymbolName(symbolName: string): __String {
         return "__@" + symbolName as __String;
+    }
+
+    export function isKnownSymbol(symbol: Symbol): boolean {
+        return startsWith(symbol.escapedName as string, "__@");
     }
 
     /**
@@ -3937,8 +3939,8 @@ namespace ts {
             //
             // {
             //      oldStart3: Min(oldStart1, oldStart2),
-            //      oldEnd3  : Max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1)),
-            //      newEnd3  : Max(newEnd2, newEnd2 + (newEnd1 - oldEnd2))
+            //      oldEnd3: Max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1)),
+            //      newEnd3: Max(newEnd2, newEnd2 + (newEnd1 - oldEnd2))
             // }
 
             const oldStart1 = oldStartN;
@@ -4430,7 +4432,7 @@ namespace ts {
         return node.kind === SyntaxKind.RegularExpressionLiteral;
     }
 
-    export function isNoSubstitutionTemplateLiteral(node: Node): node is LiteralExpression {
+    export function isNoSubstitutionTemplateLiteral(node: Node): node is NoSubstitutionTemplateLiteral {
         return node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
@@ -5870,5 +5872,20 @@ namespace ts {
     /* @internal */
     export function hasOnlyExpressionInitializer(node: Node): node is HasExpressionInitializer {
         return hasInitializer(node) && !isForStatement(node) && !isForInStatement(node) && !isForOfStatement(node) && !isJsxAttribute(node);
+    }
+
+    export function isObjectLiteralElement(node: Node): node is ObjectLiteralElement {
+        switch (node.kind) {
+            case SyntaxKind.JsxAttribute:
+            case SyntaxKind.JsxSpreadAttribute:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return true;
+            default:
+                return false;
+        }
     }
 }

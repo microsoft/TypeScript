@@ -1,23 +1,9 @@
 /* @internal */
 namespace ts.GoToDefinition {
     export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): DefinitionInfo[] | undefined {
-        /// Triple slash reference comments
-        const comment = findReferenceInPosition(sourceFile.referencedFiles, position);
-        if (comment) {
-            const referenceFile = tryResolveScriptReference(program, sourceFile, comment);
-            if (referenceFile) {
-                return [getDefinitionInfoForFileReference(comment.fileName, referenceFile.fileName)];
-            }
-            // Might still be on jsdoc, so keep looking.
-        }
-
-        // Type reference directives
-        const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
-        if (typeReferenceDirective) {
-            const referenceFile = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName);
-            return referenceFile && referenceFile.resolvedFileName
-                ? [getDefinitionInfoForFileReference(typeReferenceDirective.fileName, referenceFile.resolvedFileName)]
-                : undefined;
+        const reference = getReferenceAtPosition(sourceFile, position, program);
+        if (reference) {
+            return [getDefinitionInfoForFileReference(reference.fileName, reference.file.fileName)];
         }
 
         const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
@@ -115,6 +101,23 @@ namespace ts.GoToDefinition {
                 getDefinitionFromSymbol(typeChecker, propertySymbol, node));
         }
         return getDefinitionFromSymbol(typeChecker, symbol, node);
+    }
+
+    export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { fileName: string, file: SourceFile } | undefined {
+        const referencePath = findReferenceInPosition(sourceFile.referencedFiles, position);
+        if (referencePath) {
+            const file = tryResolveScriptReference(program, sourceFile, referencePath);
+            return file && { fileName: referencePath.fileName, file };
+        }
+
+        const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
+        if (typeReferenceDirective) {
+            const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName);
+            const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
+            return file && { fileName: typeReferenceDirective.fileName, file };
+        }
+
+        return undefined;
     }
 
     /// Goto type
@@ -303,7 +306,7 @@ namespace ts.GoToDefinition {
         return createDefinitionInfo(decl, symbolKind, symbolName, containerName);
     }
 
-    function findReferenceInPosition(refs: ReadonlyArray<FileReference>, pos: number): FileReference | undefined {
+    export function findReferenceInPosition(refs: ReadonlyArray<FileReference>, pos: number): FileReference | undefined {
         for (const ref of refs) {
             if (ref.pos <= pos && pos <= ref.end) {
                 return ref;

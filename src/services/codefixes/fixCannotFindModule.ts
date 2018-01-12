@@ -5,8 +5,8 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions: context => {
-            const action = tryGetCodeActionForInstallPackageTypes(context.host, context.sourceFile.fileName, getModuleName(context.sourceFile, context.span.start));
-            return action && [{ fixId, ...action }];
+            const codeAction = tryGetCodeActionForInstallPackageTypes(context.host, context.sourceFile.fileName, getModuleName(context.sourceFile, context.span.start));
+            return codeAction && [{ fixId, ...codeAction }];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (_, diag, commands) => {

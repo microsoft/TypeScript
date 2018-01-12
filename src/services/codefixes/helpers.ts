@@ -129,7 +129,7 @@ namespace ts.codefix {
             createStubbedMethodBody());
     }
 
-    function createDummyParameters(argCount: number,  names: string[] | undefined, minArgumentCount: number | undefined, inJs: boolean): ParameterDeclaration[] {
+    function createDummyParameters(argCount: number, names: string[] | undefined, minArgumentCount: number | undefined, inJs: boolean): ParameterDeclaration[] {
         const parameters: ParameterDeclaration[] = [];
         for (let i = 0; i < argCount; i++) {
             const newParameter = createParameter(

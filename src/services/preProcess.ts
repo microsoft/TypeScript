@@ -295,7 +295,7 @@ namespace ts {
             //    import "mod";
             //    import d from "mod"
             //    import {a as A } from "mod";
-            //    import * as NS  from "mod"
+            //    import * as NS from "mod"
             //    import d, {a, b as B} from "mod"
             //    import i = require("mod");
             //    import("mod");

@@ -52,8 +52,7 @@ namespace ts.server {
         private getLineMap(fileName: string): number[] {
             let lineMap = this.lineMaps.get(fileName);
             if (!lineMap) {
-                const scriptSnapshot = this.host.getScriptSnapshot(fileName)!;
-                lineMap = computeLineStarts(scriptSnapshot.getText(0, scriptSnapshot.getLength()));
+                lineMap = computeLineStarts(getSnapshotText(this.host.getScriptSnapshot(fileName)!));
                 this.lineMaps.set(fileName, lineMap);
             }
             return lineMap;

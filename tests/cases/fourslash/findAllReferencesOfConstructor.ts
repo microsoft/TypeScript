@@ -48,7 +48,7 @@ verify.referenceGroups(a1, defs("constructor C(): C (+1 overload)"));
 function defs(definition: string) {
     return [
         { definition, ranges: [a0, a1, a2, a3, d0, d1, a4] },
-        { definition: "import C", ranges: [b0] },
-        { definition: "import C", ranges: [c0] }
+        { definition: "(alias) class C\nimport C", ranges: [b0] },
+        { definition: "(alias) class C\nimport C", ranges: [c0] }
     ]
 }

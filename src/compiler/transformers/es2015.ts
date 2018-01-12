@@ -860,7 +860,7 @@ namespace ts {
                 statements.push(
                     setTextRange(
                         createStatement(
-                            createExtendsHelper(context, getLocalName(node))
+                            createExtendsHelper(context, getInternalName(node))
                         ),
                         /*location*/ extendsClauseElement
                     )

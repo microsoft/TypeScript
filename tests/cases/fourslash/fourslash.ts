@@ -97,6 +97,7 @@ declare namespace FourSlashInterface {
         InsertSpaceAfterTypeAssertion: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
+        insertSpaceBeforeTypeAnnotation: boolean;
         [s: string]: boolean | number | string | undefined;
     }
     interface Range {
@@ -122,7 +123,8 @@ declare namespace FourSlashInterface {
     }
     class goTo {
         marker(name?: string | Marker): void;
-        eachMarker(action: () => void): void;
+        eachMarker(markers: ReadonlyArray<string>, action: (marker: Marker, index: number) => void): void;
+        eachMarker(action: (marker: Marker, index: number) => void): void;
         rangeStart(range: Range): void;
         eachRange(action: () => void): void;
         bof(): void;
@@ -133,6 +135,7 @@ declare namespace FourSlashInterface {
         file(index: number, content?: string, scriptKindName?: string): any;
         file(name: string, content?: string, scriptKindName?: string): any;
         select(startMarker: string, endMarker: string): void;
+        selectRange(range: Range): void;
     }
     class verifyNegatable {
         private negative;
@@ -145,7 +148,7 @@ declare namespace FourSlashInterface {
             entryId: string | { name: string, source?: string },
             text?: string,
             documentation?: string,
-            kind?: string,
+            kind?: string | { kind?: string, kindModifiers?: string },
             spanIndex?: number,
             hasAction?: boolean,
             options?: { includeExternalModuleExports?: boolean, sourceDisplay?: string, isRecommended?: true },
@@ -186,7 +189,10 @@ declare namespace FourSlashInterface {
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
-        completionsAt(markerName: string, completions: string[], options?: { isNewIdentifierLocation?: boolean }): void;
+        completionsAt(markerName: string, completions: ReadonlyArray<string | { name: string, insertText?: string, replacementSpan?: Range }>, options?: {
+            isNewIdentifierLocation?: boolean;
+            includeInsertTextCompletions?: boolean;
+        }): void;
         completionsAndDetailsAt(
             markerName: string,
             completions: {

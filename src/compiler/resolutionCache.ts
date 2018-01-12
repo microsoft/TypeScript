@@ -52,6 +52,7 @@ namespace ts {
         getGlobalCache?(): string | undefined;
         writeLog(s: string): void;
         maxNumberOfFilesToIterateForInvalidation?: number;
+        getCurrentProgram(): Program;
     }
 
     interface DirectoryWatchesOfFailedLookup {
@@ -470,6 +471,11 @@ namespace ts {
                 if (resolutionHost.getCachedDirectoryStructureHost) {
                     // Since the file existance changed, update the sourceFiles cache
                     resolutionHost.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
+                }
+
+                // Ignore emits from the program
+                if (isEmittedFileOfProgram(resolutionHost.getCurrentProgram(), fileOrDirectory)) {
+                    return;
                 }
 
                 // If the files are added to project root or node_modules directory, always run through the invalidation process

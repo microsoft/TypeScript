@@ -23,7 +23,7 @@ namespace ts.refactor.installTypesForPackage {
             return undefined;
         }
 
-        const module = ts.getResolvedModule(file, importInfo.moduleSpecifier.text)!; // TODO: GH#18217
+        const module = getResolvedModule(file, importInfo.moduleSpecifier.text)!; // TODO: GH#18217
         const resolvedFile = program.getSourceFile(module.resolvedFileName)!; // TODO: GH#18217
         if (!(resolvedFile.externalModuleIndicator && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals)) {
             return undefined;
@@ -52,7 +52,7 @@ namespace ts.refactor.installTypesForPackage {
         }
         const { importStatement, name, moduleSpecifier } = importInfo;
         const newImportClause = createImportClause(name, /*namedBindings*/ undefined);
-        const newImportStatement = ts.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, newImportClause, moduleSpecifier);
+        const newImportStatement = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, newImportClause, moduleSpecifier);
         return {
             edits: textChanges.ChangeTracker.with(context, t => t.replaceNode(file, importStatement, newImportStatement)),
             renameFilename: undefined,

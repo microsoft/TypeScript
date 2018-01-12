@@ -331,11 +331,11 @@ namespace ts {
                 }
 
                 output += formatColorAndReset(relativeFileName, ForegroundColorEscapeSequences.Cyan);
-                output += "(";
+                output += ":";
                 output += formatColorAndReset(`${ firstLine + 1 }`, ForegroundColorEscapeSequences.Yellow);
-                output += ",";
+                output += ":";
                 output += formatColorAndReset(`${ firstLineChar + 1 }`, ForegroundColorEscapeSequences.Yellow);
-                output += "): ";
+                output += " - ";
             }
 
             const categoryColor = getCategoryFormat(diagnostic.category);
@@ -490,6 +490,7 @@ namespace ts {
      * @param oldProgram - Reuses an old program structure.
      * @returns A 'Program' object.
      */
+    // TODO: GH#18217 Have to write `host!` a lot
     export function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
         let program: Program;
         let files: SourceFile[] = [];
@@ -667,7 +668,8 @@ namespace ts {
             dropDiagnosticsProducingTypeChecker,
             getSourceFileFromReference,
             sourceFileToPackageName,
-            redirectTargetsSet
+            redirectTargetsSet,
+            isEmittedFile
         };
 
         verifyCompilerOptions();
@@ -1601,6 +1603,7 @@ namespace ts {
                 // synthesize 'import "tslib"' declaration
                 const externalHelpersModuleReference = createLiteral(externalHelpersModuleNameText);
                 const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined);
+                addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
                 externalHelpersModuleReference.parent = importDecl;
                 importDecl.parent = file;
                 imports = [externalHelpersModuleReference];
@@ -2341,6 +2344,20 @@ namespace ts {
         function blockEmittingOfFile(emitFileName: string, diag: Diagnostic) {
             hasEmitBlockingDiagnostics.set(toPath(emitFileName), true);
             programDiagnostics.add(diag);
+        }
+
+        function isEmittedFile(file: string): boolean {
+            if (options.noEmit) {
+                return false;
+            }
+
+            return !!forEachEmittedFile(getEmitHost(), ({ jsFilePath, declarationFilePath }) =>
+                isSameFile(jsFilePath, file) ||
+                (declarationFilePath && isSameFile(declarationFilePath, file)));
+        }
+
+        function isSameFile(file1: string, file2: string) {
+            return comparePaths(file1, file2, currentDirectory, !host!.useCaseSensitiveFileNames()) === Comparison.EqualTo;
         }
     }
 

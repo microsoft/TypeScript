@@ -82,6 +82,14 @@ namespace ts {
         }
     }
 
+    export function isEmittedFileOfProgram(program: Program | undefined, file: string) {
+        if (!program) {
+            return false;
+        }
+
+        return program.isEmittedFile(file);
+    }
+
     export function addFileWatcher(host: System, file: string, cb: FileWatcherCallback): FileWatcher {
         return host.watchFile!(file, cb);
     }

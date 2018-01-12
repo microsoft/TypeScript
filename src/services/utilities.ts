@@ -1109,6 +1109,10 @@ namespace ts {
         seen.set(key, true);
         return true;
     }
+
+    export function getSnapshotText(snap: IScriptSnapshot): string {
+        return snap.getText(0, snap.getLength());
+    }
 }
 
 // Display-part writer helpers
@@ -1276,19 +1280,6 @@ namespace ts {
         });
     }
 
-    export function getDeclaredName(typeChecker: TypeChecker, symbol: Symbol, location: Node): string {
-        // If this is an export or import specifier it could have been renamed using the 'as' syntax.
-        // If so we want to search for whatever is under the cursor.
-        if (isImportOrExportSpecifierName(location) || isStringOrNumericLiteral(location) && location.parent.kind === SyntaxKind.ComputedPropertyName) {
-            return getTextOfIdentifierOrLiteral(location);
-        }
-
-        // Try to get the local symbol if we're dealing with an 'export default'
-        // since that symbol has the "true" name.
-        const localExportDefaultSymbol = getLocalSymbolForExportDefault(symbol);
-        return typeChecker.symbolToString(localExportDefaultSymbol || symbol);
-    }
-
     export function isImportOrExportSpecifierName(location: Node): location is Identifier {
         return !!location.parent &&
             (location.parent.kind === SyntaxKind.ImportSpecifier || location.parent.kind === SyntaxKind.ExportSpecifier) &&
@@ -1302,10 +1293,14 @@ namespace ts {
      */
     export function stripQuotes(name: string) {
         const length = name.length;
-        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && isSingleOrDoubleQuote(name.charCodeAt(0))) {
+        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && startsWithQuote(name)) {
             return name.substring(1, length - 1);
         }
         return name;
+    }
+
+    export function startsWithQuote(name: string): boolean {
+        return isSingleOrDoubleQuote(name.charCodeAt(0));
     }
 
     export function scriptKindIs(fileName: string, host: LanguageServiceHost, ...scriptKinds: ScriptKind[]): boolean {
@@ -1365,6 +1360,12 @@ namespace ts {
         visited.parent = undefined!;
 
         return visited;
+    }
+
+    export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>): NodeArray<T>;
+    export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined;
+    export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
+        return nodes && createNodeArray(nodes.map<T>(getSynthesizedDeepClone), nodes.hasTrailingComma);
     }
 
     /**

@@ -7,15 +7,12 @@ tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstra
 tests/cases/compiler/abstractPropertyNegative.ts(15,5): error TS1244: Abstract methods can only appear within an abstract class.
 tests/cases/compiler/abstractPropertyNegative.ts(16,37): error TS1005: '{' expected.
 tests/cases/compiler/abstractPropertyNegative.ts(19,3): error TS2540: Cannot assign to 'ro' because it is a constant or a read-only property.
-tests/cases/compiler/abstractPropertyNegative.ts(24,7): error TS2415: Class 'WrongTypePropertyImpl' incorrectly extends base class 'WrongTypeProperty'.
-  Types of property 'num' are incompatible.
-    Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/abstractPropertyNegative.ts(30,7): error TS2415: Class 'WrongTypeAccessorImpl' incorrectly extends base class 'WrongTypeAccessor'.
-  Types of property 'num' are incompatible.
-    Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/abstractPropertyNegative.ts(33,7): error TS2415: Class 'WrongTypeAccessorImpl2' incorrectly extends base class 'WrongTypeAccessor'.
-  Types of property 'num' are incompatible.
-    Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/abstractPropertyNegative.ts(25,5): error TS2416: Property 'num' in type 'WrongTypePropertyImpl' is not assignable to the same property in base type 'WrongTypeProperty'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/abstractPropertyNegative.ts(31,9): error TS2416: Property 'num' in type 'WrongTypeAccessorImpl' is not assignable to the same property in base type 'WrongTypeAccessor'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/abstractPropertyNegative.ts(34,5): error TS2416: Property 'num' in type 'WrongTypeAccessorImpl2' is not assignable to the same property in base type 'WrongTypeAccessor'.
+  Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/abstractPropertyNegative.ts(38,18): error TS2676: Accessors must both be abstract or non-abstract.
 tests/cases/compiler/abstractPropertyNegative.ts(39,9): error TS2676: Accessors must both be abstract or non-abstract.
 tests/cases/compiler/abstractPropertyNegative.ts(40,9): error TS2676: Accessors must both be abstract or non-abstract.
@@ -65,28 +62,25 @@ tests/cases/compiler/abstractPropertyNegative.ts(41,18): error TS2676: Accessors
         abstract num: number;
     }
     class WrongTypePropertyImpl extends WrongTypeProperty {
-          ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2415: Class 'WrongTypePropertyImpl' incorrectly extends base class 'WrongTypeProperty'.
-!!! error TS2415:   Types of property 'num' are incompatible.
-!!! error TS2415:     Type 'string' is not assignable to type 'number'.
         num = "nope, wrong";
+        ~~~
+!!! error TS2416: Property 'num' in type 'WrongTypePropertyImpl' is not assignable to the same property in base type 'WrongTypeProperty'.
+!!! error TS2416:   Type 'string' is not assignable to type 'number'.
     }
     abstract class WrongTypeAccessor {
         abstract get num(): number;
     }
     class WrongTypeAccessorImpl extends WrongTypeAccessor {
-          ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2415: Class 'WrongTypeAccessorImpl' incorrectly extends base class 'WrongTypeAccessor'.
-!!! error TS2415:   Types of property 'num' are incompatible.
-!!! error TS2415:     Type 'string' is not assignable to type 'number'.
         get num() { return "nope, wrong"; }
+            ~~~
+!!! error TS2416: Property 'num' in type 'WrongTypeAccessorImpl' is not assignable to the same property in base type 'WrongTypeAccessor'.
+!!! error TS2416:   Type 'string' is not assignable to type 'number'.
     }
     class WrongTypeAccessorImpl2 extends WrongTypeAccessor {
-          ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2415: Class 'WrongTypeAccessorImpl2' incorrectly extends base class 'WrongTypeAccessor'.
-!!! error TS2415:   Types of property 'num' are incompatible.
-!!! error TS2415:     Type 'string' is not assignable to type 'number'.
         num = "nope, wrong";
+        ~~~
+!!! error TS2416: Property 'num' in type 'WrongTypeAccessorImpl2' is not assignable to the same property in base type 'WrongTypeAccessor'.
+!!! error TS2416:   Type 'string' is not assignable to type 'number'.
     }
     
     abstract class AbstractAccessorMismatch {
