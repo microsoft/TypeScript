@@ -1534,9 +1534,7 @@ namespace ts.server {
                 let mappedRenameLocation: protocol.Location | undefined;
                 if (renameFilename !== undefined && renameLocation !== undefined) {
                     const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(renameFilename));
-                    const snapshot = renameScriptInfo.getSnapshot();
-                    const oldText = snapshot.getText(0, snapshot.getLength());
-                    mappedRenameLocation = getLocationInNewDocument(oldText, renameFilename, renameLocation, edits);
+                    mappedRenameLocation = getLocationInNewDocument(getSnapshotText(renameScriptInfo.getSnapshot()), renameFilename, renameLocation, edits);
                 }
                 return { renameLocation: mappedRenameLocation, renameFilename, edits: this.mapTextChangesToCodeEdits(project, edits) };
             }

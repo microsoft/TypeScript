@@ -1107,6 +1107,10 @@ namespace ts {
         seen.set(key, true);
         return true;
     }
+
+    export function getSnapshotText(snap: IScriptSnapshot): string {
+        return snap.getText(0, snap.getLength());
+    }
 }
 
 // Display-part writer helpers

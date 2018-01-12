@@ -170,11 +170,7 @@ namespace FourSlash {
     // This function creates IScriptSnapshot object for testing getPreProcessedFileInfo
     // Return object may lack some functionalities for other purposes.
     function createScriptSnapShot(sourceText: string): ts.IScriptSnapshot {
-        return {
-            getText: (start: number, end: number) => sourceText.substr(start, end - start),
-            getLength: () => sourceText.length,
-            getChangeRange: () => undefined
-        };
+        return ts.ScriptSnapshot.fromString(sourceText);
     }
 
     export class TestState {
