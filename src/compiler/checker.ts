@@ -11344,6 +11344,7 @@ namespace ts {
             return {
                 typeParameter,
                 candidates: undefined,
+                contraCandidates: undefined,
                 inferredType: undefined,
                 priority: undefined,
                 topLevel: true,
@@ -11355,6 +11356,7 @@ namespace ts {
             return {
                 typeParameter: inference.typeParameter,
                 candidates: inference.candidates && inference.candidates.slice(),
+                contraCandidates: inference.contraCandidates && inference.contraCandidates.slice(),
                 inferredType: inference.inferredType,
                 priority: inference.priority,
                 topLevel: inference.topLevel,
@@ -11468,6 +11470,7 @@ namespace ts {
         function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0) {
             let symbolStack: Symbol[];
             let visited: Map<boolean>;
+            let contravariant = false;
             inferFromTypes(originalSource, originalTarget);
 
             function inferFromTypes(source: Type, target: Type) {
@@ -11535,18 +11538,20 @@ namespace ts {
                     const inference = getInferenceInfoForType(target);
                     if (inference) {
                         if (!inference.isFixed) {
-                            // We give lowest priority to inferences of implicitNeverType (which is used as the
-                            // element type for empty array literals). Thus, inferences from empty array literals
-                            // only matter when no other inferences are made.
-                            const p = priority | (source === implicitNeverType ? InferencePriority.NeverType : 0);
-                            if (!inference.candidates || p < inference.priority) {
-                                inference.candidates = [source];
-                                inference.priority = p;
+                            if (inference.priority === undefined || priority < inference.priority) {
+                                inference.candidates = undefined;
+                                inference.contraCandidates = undefined;
+                                inference.priority = priority;
                             }
-                            else if (p === inference.priority) {
-                                inference.candidates.push(source);
+                            if (priority === inference.priority) {
+                                if (contravariant) {
+                                    inference.contraCandidates = append(inference.contraCandidates, source);
+                                }
+                                else {
+                                    inference.candidates = append(inference.candidates, source);
+                                }
                             }
-                            if (!(p & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
+                            if (!(priority & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
                                 inference.topLevel = false;
                             }
                         }
@@ -11569,15 +11574,15 @@ namespace ts {
                     }
                 }
                 else if (source.flags & TypeFlags.Index && target.flags & TypeFlags.Index) {
-                    priority ^= InferencePriority.Contravariant;
+                    contravariant = !contravariant;
                     inferFromTypes((<IndexType>source).type, (<IndexType>target).type);
-                    priority ^= InferencePriority.Contravariant;
+                    contravariant = !contravariant;
                 }
                 else if ((isLiteralType(source) || source.flags & TypeFlags.String) && target.flags & TypeFlags.Index) {
                     const empty = createEmptyObjectTypeFromStringLiteral(source);
-                    priority ^= InferencePriority.Contravariant;
+                    contravariant = !contravariant;
                     inferFromTypes(empty, (target as IndexType).type);
-                    priority ^= InferencePriority.Contravariant;
+                    contravariant = !contravariant;
                 }
                 else if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
                     inferFromTypes((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType);
@@ -11646,9 +11651,9 @@ namespace ts {
 
             function inferFromContravariantTypes(source: Type, target: Type) {
                 if (strictFunctionTypes) {
-                    priority ^= InferencePriority.Contravariant;
+                    contravariant = !contravariant;
                     inferFromTypes(source, target);
-                    priority ^= InferencePriority.Contravariant;
+                    contravariant = !contravariant;
                 }
                 else {
                     inferFromTypes(source, target);
@@ -11827,10 +11832,19 @@ namespace ts {
                     // If all inferences were made from contravariant positions, infer a common subtype. Otherwise, if
                     // union types were requested or if all inferences were made from the return type position, infer a
                     // union type. Otherwise, infer a common supertype.
-                    const unwidenedType = inference.priority & InferencePriority.Contravariant ? getCommonSubtype(baseCandidates) :
-                        context.flags & InferenceFlags.InferUnionTypes || inference.priority & InferencePriority.ReturnType ? getUnionType(baseCandidates, UnionReduction.Subtype) :
+                    const unwidenedType = context.flags & InferenceFlags.InferUnionTypes || inference.priority & InferencePriority.ReturnType ?
+                        getUnionType(baseCandidates, UnionReduction.Subtype) :
                         getCommonSupertype(baseCandidates);
                     inferredType = getWidenedType(unwidenedType);
+                    // If we have inferred 'never' but have contravariant candidates. To get a more specific type we
+                    // infer from the contravariant candidates instead.
+                    if (inferredType.flags & TypeFlags.Never && inference.contraCandidates) {
+                        inferredType = getCommonSubtype(inference.contraCandidates);
+                    }
+                }
+                else if (inference.contraCandidates) {
+                    // We only have contravariant inferences, infer the best common subtype of those
+                    inferredType = getCommonSubtype(inference.contraCandidates);
                 }
                 else if (context.flags & InferenceFlags.NoDefault) {
                     // We use silentNeverType as the wildcard that signals no inferences.

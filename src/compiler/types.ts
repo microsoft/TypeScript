@@ -3772,20 +3772,19 @@ namespace ts {
     export type TypeMapper = (t: TypeParameter) => Type;
 
     export const enum InferencePriority {
-        Contravariant     = 1 << 0,  // Inference from contravariant position
-        NakedTypeVariable = 1 << 1,  // Naked type variable in union or intersection type
-        MappedType        = 1 << 2,  // Reverse inference for mapped type
-        ReturnType        = 1 << 3,  // Inference made from return type of generic function
-        NeverType         = 1 << 4,  // Inference made from the never type
+        NakedTypeVariable = 1 << 0,  // Naked type variable in union or intersection type
+        MappedType        = 1 << 1,  // Reverse inference for mapped type
+        ReturnType        = 1 << 2,  // Inference made from return type of generic function
     }
 
     export interface InferenceInfo {
-        typeParameter: TypeParameter;
-        candidates: Type[];
-        inferredType: Type;
-        priority: InferencePriority;
-        topLevel: boolean;
-        isFixed: boolean;
+        typeParameter: TypeParameter;  // Type parameter for which inferences are being made
+        candidates: Type[];            // Candidates in covariant positions (or undefined)
+        contraCandidates: Type[];      // Candidates in contravariant positions (or undefined)
+        inferredType: Type;            // Cache for resolved inferred type
+        priority: InferencePriority;   // Priority of current inference set
+        topLevel: boolean;             // True if all inferences are to top level occurrences
+        isFixed: boolean;              // True if inferences are fixed
     }
 
     export const enum InferenceFlags {
