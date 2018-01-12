@@ -274,6 +274,11 @@ namespace ts {
             getJsxNamespace: () => unescapeLeadingUnderscores(getJsxNamespace()),
             getAccessibleSymbolChain,
             resolveExternalModuleSymbol,
+
+            getTypeArgumentConstraint: node => {
+                node = getParseTreeNode(node, isTypeNode);
+                return node && getTypeArgumentConstraint(node);
+            },
         };
 
         const tupleTypes: GenericType[] = [];
@@ -6897,7 +6902,7 @@ namespace ts {
          * Gets the minimum number of type arguments needed to satisfy all non-optional type
          * parameters.
          */
-        function getMinTypeArgumentCount(typeParameters: TypeParameter[] | undefined): number {
+        function getMinTypeArgumentCount(typeParameters: ReadonlyArray<TypeParameter> | undefined): number {
             let minTypeArgumentCount = 0;
             if (typeParameters) {
                 for (let i = 0; i < typeParameters.length; i++) {
@@ -6917,7 +6922,7 @@ namespace ts {
          * @param typeParameters The requested type parameters.
          * @param minTypeArgumentCount The minimum number of required type arguments.
          */
-        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean) {
+        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: ReadonlyArray<TypeParameter> | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean) {
             const numTypeParameters = length(typeParameters);
             if (numTypeParameters) {
                 const numTypeArguments = length(typeArguments);
@@ -7636,7 +7641,7 @@ namespace ts {
                     type = getTypeReferenceType(node, symbol);
                 }
                 // Cache both the resolved symbol and the resolved type. The resolved symbol is needed in when we check the
-                // type reference in checkTypeReferenceOrExpressionWithTypeArguments.
+                // type reference in checkTypeReferenceNode.
                 links.resolvedSymbol = symbol;
                 links.resolvedType = type;
             }
@@ -8790,7 +8795,7 @@ namespace ts {
             return (t: Type) => t === source1 ? target1 : t === source2 ? target2 : t;
         }
 
-        function makeArrayTypeMapper(sources: Type[], targets: Type[]) {
+        function makeArrayTypeMapper(sources: ReadonlyArray<Type>, targets: ReadonlyArray<Type>) {
             return (t: Type) => {
                 for (let i = 0; i < sources.length; i++) {
                     if (t === sources[i]) {
@@ -8801,7 +8806,7 @@ namespace ts {
             };
         }
 
-        function createTypeMapper(sources: TypeParameter[], targets: Type[]): TypeMapper {
+        function createTypeMapper(sources: ReadonlyArray<TypeParameter>, targets: ReadonlyArray<Type>): TypeMapper {
             Debug.assert(targets === undefined || sources.length === targets.length);
             return sources.length === 1 ? makeUnaryTypeMapper(sources[0], targets ? targets[0] : anyType) :
                 sources.length === 2 ? makeBinaryTypeMapper(sources[0], targets ? targets[0] : anyType, sources[1], targets ? targets[1] : anyType) :
@@ -20220,7 +20225,7 @@ namespace ts {
             checkDecorators(node);
         }
 
-        function checkTypeArgumentConstraints(typeParameters: TypeParameter[], typeArgumentNodes: ReadonlyArray<TypeNode>): boolean {
+        function checkTypeArgumentConstraints(typeParameters: ReadonlyArray<TypeParameter>, typeArgumentNodes: ReadonlyArray<TypeNode>, constraints?: (Type | undefined)[]): boolean {
             const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
             let typeArguments: Type[];
             let mapper: TypeMapper;
@@ -20233,14 +20238,33 @@ namespace ts {
                         mapper = createTypeMapper(typeParameters, typeArguments);
                     }
                     const typeArgument = typeArguments[i];
+                    const instantiatedConstraint = instantiateType(constraint, mapper);
+                    if (constraints) constraints[i] = instantiatedConstraint;
                     result = result && checkTypeAssignableTo(
                         typeArgument,
-                        instantiateType(constraint, mapper),
+                        instantiatedConstraint,
                         typeArgumentNodes[i],
                         Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                 }
             }
             return result;
+        }
+
+        function getTypeArgumentConstraint(node: TypeNode): Type | undefined {
+            const typeReferenceNode = tryCast(node.parent, isTypeReferenceNodeOrExpressionWithTypeArguments);
+            if (!typeReferenceNode) return undefined;
+            const { typeArguments } = typeReferenceNode;
+            const type = getTypeFromTypeReference(typeReferenceNode);
+            if (type === unknownType) return undefined;
+
+            const typeParameters = getTypeParametersFromTypeReference(typeReferenceNode, type);
+            const constraints: Type[] = [];
+            checkTypeArgumentConstraints(typeParameters, typeArguments, constraints);
+            return constraints[typeArguments.indexOf(node)];
+        }
+
+        function isTypeReferenceNodeOrExpressionWithTypeArguments(node: Node): node is TypeReferenceNode | ExpressionWithTypeArguments {
+            return node.kind === SyntaxKind.TypeReference || node.kind === SyntaxKind.ExpressionWithTypeArguments;
         }
 
         function checkTypeReferenceNode(node: TypeReferenceNode | ExpressionWithTypeArguments) {
@@ -20255,28 +20279,32 @@ namespace ts {
                     // Do type argument local checks only if referenced type is successfully resolved
                     forEach(node.typeArguments, checkSourceElement);
                     if (produceDiagnostics) {
-                        const symbol = getNodeLinks(node).resolvedSymbol;
-                        if (!symbol) {
-                            // There is no resolved symbol cached if the type resolved to a builtin
-                            // via JSDoc type reference resolution (eg, Boolean became boolean), none
-                            // of which are generic when they have no associated symbol
-                            // (additionally, JSDoc's index signature syntax, Object<string, T> actually uses generic syntax without being generic)
-                            if (!isJSDocIndexSignature(node)) {
-                                error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
-                            }
-                            return;
+                        const typeParameters = getTypeParametersFromTypeReference(node, type);
+                        if (typeParameters) {
+                            checkTypeArgumentConstraints(typeParameters, node.typeArguments);
                         }
-                        let typeParameters = symbol.flags & SymbolFlags.TypeAlias && getSymbolLinks(symbol).typeParameters;
-                        if (!typeParameters && getObjectFlags(type) & ObjectFlags.Reference) {
-                            typeParameters = (<TypeReference>type).target.localTypeParameters;
-                        }
-                        checkTypeArgumentConstraints(typeParameters, node.typeArguments);
                     }
                 }
                 if (type.flags & TypeFlags.Enum && getNodeLinks(node).resolvedSymbol.flags & SymbolFlags.EnumMember) {
                     error(node, Diagnostics.Enum_type_0_has_members_with_initializers_that_are_not_literals, typeToString(type));
                 }
             }
+        }
+
+        function getTypeParametersFromTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments, typeReferenceType: Type): TypeParameter[] | undefined {
+            const symbol = getNodeLinks(node).resolvedSymbol;
+            if (!symbol) {
+                // There is no resolved symbol cached if the type resolved to a builtin
+                // via JSDoc type reference resolution (eg, Boolean became boolean), none
+                // of which are generic when they have no associated symbol
+                // (additionally, JSDoc's index signature syntax, Object<string, T> actually uses generic syntax without being generic)
+                if (!isJSDocIndexSignature(node)) {
+                    error(node, Diagnostics.Type_0_is_not_generic, typeToString(typeReferenceType));
+                }
+                return;
+            }
+            const typeParameters = symbol.flags & SymbolFlags.TypeAlias && getSymbolLinks(symbol).typeParameters;
+            return !typeParameters && getObjectFlags(typeReferenceType) & ObjectFlags.Reference ? (<TypeReference>typeReferenceType).target.localTypeParameters : typeParameters;
         }
 
         function checkTypeQuery(node: TypeQueryNode) {
