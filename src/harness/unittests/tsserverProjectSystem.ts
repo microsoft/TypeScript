@@ -6604,6 +6604,7 @@ namespace ts.projectSystem {
             const host = createServerHost(files);
             const session = createSession(host);
             const projectService = session.getProjectService();
+            debugger;
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: protocol.CommandTypes.Open,
                 arguments: {
@@ -6637,6 +6638,7 @@ namespace ts.projectSystem {
             assert.isDefined(projectService.configuredProjects.get(aTsconfig.path));
             assert.isDefined(projectService.configuredProjects.get(bTsconfig.path));
 
+            debugger;
             verifyRenameResponse(session.executeCommandSeq<protocol.RenameRequest>({
                 command: protocol.CommandTypes.Rename,
                 arguments: {
@@ -6650,20 +6652,25 @@ namespace ts.projectSystem {
 
             function verifyRenameResponse({ info, locs }: protocol.RenameResponseBody) {
                 assert.isTrue(info.canRename);
-                assert.equal(locs.length, 2); // Currently 2 but needs to be 4
-                assert.deepEqual(locs[0], {
-                    file: aFile.path,
-                    locs: [
-                        { start: { line: 1, offset: 39 }, end: { line: 1, offset: 40 } },
-                        { start: { line: 1, offset: 9 }, end: { line: 1, offset: 10 } }
-                    ]
-                });
-                assert.deepEqual(locs[1], {
-                    file: aFc,
-                    locs: [
-                        { start: { line: 1, offset: 14 }, end: { line: 1, offset: 15 } }
-                    ]
-                });
+                assert.equal(locs.length, 4);
+                verifyLocations(0, aFile.path, aFc);
+                verifyLocations(2, bFile.path, bFc);
+
+                function verifyLocations(locStartIndex: number, firstFile: string, secondFile: string) {
+                    assert.deepEqual(locs[locStartIndex], {
+                        file: firstFile,
+                        locs: [
+                            { start: { line: 1, offset: 39 }, end: { line: 1, offset: 40 } },
+                            { start: { line: 1, offset: 9 }, end: { line: 1, offset: 10 } }
+                        ]
+                    });
+                    assert.deepEqual(locs[locStartIndex + 1], {
+                        file: secondFile,
+                        locs: [
+                            { start: { line: 1, offset: 14 }, end: { line: 1, offset: 15 } }
+                        ]
+                    });
+                }
             }
         });
     });

@@ -7151,6 +7151,7 @@ declare namespace ts.server {
         open(newText: string): void;
         close(fileExists?: boolean): void;
         getSnapshot(): IScriptSnapshot;
+        private ensureRealPath();
         getFormatCodeSettings(): FormatCodeSettings;
         attachToProject(project: Project): boolean;
         isAttached(project: Project): boolean;
@@ -7523,10 +7524,6 @@ declare namespace ts.server {
     function convertCompilerOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): CompilerOptions & protocol.CompileOnSaveMixin;
     function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind;
     function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind.Unknown | ScriptKind.JS | ScriptKind.JSX | ScriptKind.TS | ScriptKind.TSX;
-    /**
-     * This helper function processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
-     */
-    function combineProjectOutput<T>(projects: ReadonlyArray<Project>, action: (project: Project) => ReadonlyArray<T>, comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean): T[];
     interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
         hostInfo: string;
@@ -7662,6 +7659,7 @@ declare namespace ts.server {
          */
         private closeOpenFile(info);
         private deleteOrphanScriptInfoNotInAnyProject();
+        private deleteScriptInfo(info);
         private configFileExists(configFileName, canonicalConfigFilePath, info);
         private setConfigFileExistenceByNewConfiguredProject(project);
         /**
