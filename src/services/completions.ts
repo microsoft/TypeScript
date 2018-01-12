@@ -267,68 +267,88 @@ namespace ts.Completions {
             return undefined;
         }
 
-        if (node.parent.kind === SyntaxKind.PropertyAssignment &&
-            node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression &&
-            (<PropertyAssignment>node.parent).name === node) {
-            // Get quoted name of properties of the object literal expression
-            // i.e. interface ConfigFiles {
-            //          'jspm:dev': string
-            //      }
-            //      let files: ConfigFiles = {
-            //          '/*completion position*/'
-            //      }
-            //
-            //      function foo(c: ConfigFiles) {}
-            //      foo({
-            //          '/*completion position*/'
-            //      });
-            return getStringLiteralCompletionEntriesFromPropertyAssignment(<ObjectLiteralElement>node.parent, sourceFile, typeChecker, compilerOptions.target, log);
-        }
-        else if (isElementAccessExpression(node.parent) && node.parent.argumentExpression === node) {
-            // Get all names of properties on the expression
-            // i.e. interface A {
-            //      'prop1': string
-            // }
-            // let a: A;
-            // a['/*completion position*/']
-            const type = typeChecker.getTypeAtLocation(node.parent.expression);
-            return getStringLiteralCompletionEntriesFromElementAccessOrIndexedAccess(node, sourceFile, type, typeChecker, compilerOptions.target, log);
-        }
-        else if (node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration
-            || isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false) || isImportCall(node.parent)
-            || isExpressionOfExternalModuleImportEqualsDeclaration(node)) {
-            // Get all known external module names or complete a path to a module
-            // i.e. import * as ns from "/*completion position*/";
-            //      var y = import("/*completion position*/");
-            //      import x = require("/*completion position*/");
-            //      var y = require("/*completion position*/");
-            //      export * from "/*completion position*/";
-            const entries = PathCompletions.getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker);
-            return pathCompletionsInfo(entries);
-        }
-        else if (isIndexedAccessTypeNode(node.parent.parent)) {
-            // Get all apparent property names
-            // i.e. interface Foo {
-            //          foo: string;
-            //          bar: string;
-            //      }
-            //      let x: Foo["/*completion position*/"]
-            const type = typeChecker.getTypeFromTypeNode(node.parent.parent.objectType);
-            return getStringLiteralCompletionEntriesFromElementAccessOrIndexedAccess(node, sourceFile, type, typeChecker, compilerOptions.target, log);
-        }
-        else {
-            const argumentInfo = SignatureHelp.getImmediatelyContainingArgumentInfo(node, position, sourceFile);
-            if (argumentInfo) {
-                // Get string literal completions from specialized signatures of the target
-                // i.e. declare function f(a: 'A');
-                // f("/*completion position*/")
-                return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo, typeChecker);
+        switch (node.parent.kind) {
+            case SyntaxKind.LiteralType:
+                switch (node.parent.parent.kind) {
+                    case SyntaxKind.TypeReference:
+                        // TODO: GH#21168
+                        return undefined;
+                    case SyntaxKind.IndexedAccessType:
+                        // Get all apparent property names
+                        // i.e. interface Foo {
+                        //          foo: string;
+                        //          bar: string;
+                        //      }
+                        //      let x: Foo["/*completion position*/"]
+                        const type = typeChecker.getTypeFromTypeNode((node.parent.parent as IndexedAccessTypeNode).objectType);
+                        return getStringLiteralCompletionEntriesFromElementAccessOrIndexedAccess(node, sourceFile, type, typeChecker, compilerOptions.target, log);
+                    default:
+                    return undefined;
+                }
+
+            case SyntaxKind.PropertyAssignment:
+                if (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression &&
+                    (<PropertyAssignment>node.parent).name === node) {
+                    // Get quoted name of properties of the object literal expression
+                    // i.e. interface ConfigFiles {
+                    //          'jspm:dev': string
+                    //      }
+                    //      let files: ConfigFiles = {
+                    //          '/*completion position*/'
+                    //      }
+                    //
+                    //      function foo(c: ConfigFiles) {}
+                    //      foo({
+                    //          '/*completion position*/'
+                    //      });
+                    return getStringLiteralCompletionEntriesFromPropertyAssignment(<PropertyAssignment>node.parent, sourceFile, typeChecker, compilerOptions.target, log);
+                }
+                break;
+
+            case SyntaxKind.ElementAccessExpression: {
+                const { expression, argumentExpression } = node.parent as ElementAccessExpression;
+                if (node === argumentExpression) {
+                    // Get all names of properties on the expression
+                    // i.e. interface A {
+                    //      'prop1': string
+                    // }
+                    // let a: A;
+                    // a['/*completion position*/']
+                    const type = typeChecker.getTypeAtLocation(expression);
+                    return getStringLiteralCompletionEntriesFromElementAccessOrIndexedAccess(node, sourceFile, type, typeChecker, compilerOptions.target, log);
+                }
+                break;
             }
 
-            // Get completion for string literal from string literal type
-            // i.e. var x: "hi" | "hello" = "/*completion position*/"
-            return getStringLiteralCompletionEntriesFromType(getContextualTypeFromParent(node, typeChecker), typeChecker);
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.NewExpression:
+                if (!isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false) && !isImportCall(node.parent)) {
+                    const argumentInfo = SignatureHelp.getImmediatelyContainingArgumentInfo(node, position, sourceFile);
+                    if (argumentInfo) {
+                        // Get string literal completions from specialized signatures of the target
+                        // i.e. declare function f(a: 'A');
+                        // f("/*completion position*/")
+                        return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo, typeChecker);
+                    }
+                    break;
+                }
+                // falls through
+
+            case SyntaxKind.ImportDeclaration:
+            case SyntaxKind.ExportDeclaration:
+            case SyntaxKind.ExternalModuleReference:
+                // Get all known external module names or complete a path to a module
+                // i.e. import * as ns from "/*completion position*/";
+                //      var y = import("/*completion position*/");
+                //      import x = require("/*completion position*/");
+                //      var y = require("/*completion position*/");
+                //      export * from "/*completion position*/";
+                return pathCompletionsInfo(PathCompletions.getStringLiteralCompletionsFromModuleNames(sourceFile, node as StringLiteral, compilerOptions, host, typeChecker));
         }
+
+        // Get completion for string literal from string literal type
+        // i.e. var x: "hi" | "hello" = "/*completion position*/"
+        return getStringLiteralCompletionEntriesFromType(getContextualTypeFromParent(node, typeChecker), typeChecker);
     }
 
     function pathCompletionsInfo(entries: CompletionEntry[]): CompletionInfo {
