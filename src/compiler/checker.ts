@@ -6468,7 +6468,7 @@ namespace ts {
         }
 
         function getConstraintOfIndexedAccess(type: IndexedAccessType) {
-            const transformed = getSimplifiedIndexedAccessType(type);
+            const transformed = getSubstitutedIndexedMappedType(type);
             if (transformed) {
                 return transformed;
             }
@@ -8383,6 +8383,11 @@ namespace ts {
                     getIntersectionType(stringIndexTypes)
                 ]);
             }
+            return getSubstitutedIndexedMappedType(type);
+        }
+
+        function getSubstitutedIndexedMappedType(type: IndexedAccessType): Type {
+            const objectType = type.objectType;
             // If the object type is a mapped type { [P in K]: E }, where K is generic, instantiate E using a mapper
             // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
             // construct the type Box<T[X]>.
