@@ -6902,7 +6902,7 @@ namespace ts {
          * Gets the minimum number of type arguments needed to satisfy all non-optional type
          * parameters.
          */
-        function getMinTypeArgumentCount(typeParameters: ReadonlyArray<TypeParameter> | undefined): number {
+        function getMinTypeArgumentCount(typeParameters: TypeParameter[] | undefined): number {
             let minTypeArgumentCount = 0;
             if (typeParameters) {
                 for (let i = 0; i < typeParameters.length; i++) {
@@ -6922,7 +6922,7 @@ namespace ts {
          * @param typeParameters The requested type parameters.
          * @param minTypeArgumentCount The minimum number of required type arguments.
          */
-        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: ReadonlyArray<TypeParameter> | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean) {
+        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean) {
             const numTypeParameters = length(typeParameters);
             if (numTypeParameters) {
                 const numTypeArguments = length(typeArguments);
@@ -8795,7 +8795,7 @@ namespace ts {
             return (t: Type) => t === source1 ? target1 : t === source2 ? target2 : t;
         }
 
-        function makeArrayTypeMapper(sources: ReadonlyArray<Type>, targets: ReadonlyArray<Type>) {
+        function makeArrayTypeMapper(sources: Type[], targets: Type[]) {
             return (t: Type) => {
                 for (let i = 0; i < sources.length; i++) {
                     if (t === sources[i]) {
@@ -8806,7 +8806,7 @@ namespace ts {
             };
         }
 
-        function createTypeMapper(sources: ReadonlyArray<TypeParameter>, targets: ReadonlyArray<Type>): TypeMapper {
+        function createTypeMapper(sources: TypeParameter[], targets: Type[]): TypeMapper {
             Debug.assert(targets === undefined || sources.length === targets.length);
             return sources.length === 1 ? makeUnaryTypeMapper(sources[0], targets ? targets[0] : anyType) :
                 sources.length === 2 ? makeBinaryTypeMapper(sources[0], targets ? targets[0] : anyType, sources[1], targets ? targets[1] : anyType) :
@@ -20225,7 +20225,7 @@ namespace ts {
             checkDecorators(node);
         }
 
-        function checkTypeArgumentConstraints(typeParameters: ReadonlyArray<TypeParameter>, typeArgumentNodes: ReadonlyArray<TypeNode>, constraints?: (Type | undefined)[]): boolean {
+        function checkTypeArgumentConstraints(typeParameters: TypeParameter[], typeArgumentNodes: ReadonlyArray<TypeNode>, constraints?: (Type | undefined)[]): boolean {
             const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
             let typeArguments: Type[];
             let mapper: TypeMapper;
@@ -20253,11 +20253,11 @@ namespace ts {
         function getTypeArgumentConstraint(node: TypeNode): Type | undefined {
             const typeReferenceNode = tryCast(node.parent, isTypeReferenceType);
             if (!typeReferenceNode) return undefined;
-            const { typeArguments } = typeReferenceNode;
             const type = getTypeFromTypeReference(typeReferenceNode);
             if (type === unknownType) return undefined;
 
             const typeParameters = getTypeParametersFromTypeReference(typeReferenceNode, type, /*reportErrors*/ false);
+            const { typeArguments } = typeReferenceNode;
             const constraints: Type[] = [];
             checkTypeArgumentConstraints(typeParameters, typeArguments, constraints);
             return constraints[typeArguments.indexOf(node)];
@@ -20300,7 +20300,9 @@ namespace ts {
                 return;
             }
             const typeParameters = symbol.flags & SymbolFlags.TypeAlias && getSymbolLinks(symbol).typeParameters;
-            return !typeParameters && getObjectFlags(typeReferenceType) & ObjectFlags.Reference ? (<TypeReference>typeReferenceType).target.localTypeParameters : typeParameters;
+            return !typeParameters && getObjectFlags(typeReferenceType) & ObjectFlags.Reference
+                ? (<TypeReference>typeReferenceType).target.localTypeParameters
+                : typeParameters;
         }
 
         function checkTypeQuery(node: TypeQueryNode) {
