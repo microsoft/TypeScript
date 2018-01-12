@@ -321,15 +321,14 @@ namespace ts.Completions {
 
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
-                const argumentInfo = SignatureHelp.getImmediatelyContainingArgumentInfo(node, position, sourceFile);
-                if (argumentInfo) {
-                    // Get string literal completions from specialized signatures of the target
-                    // i.e. declare function f(a: 'A');
-                    // f("/*completion position*/")
-                    return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo, typeChecker);
-                }
-
                 if (!isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false) && !isImportCall(node.parent)) {
+                    const argumentInfo = SignatureHelp.getImmediatelyContainingArgumentInfo(node, position, sourceFile);
+                    if (argumentInfo) {
+                        // Get string literal completions from specialized signatures of the target
+                        // i.e. declare function f(a: 'A');
+                        // f("/*completion position*/")
+                        return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo, typeChecker);
+                    }
                     break;
                 }
                 // falls through
