@@ -20225,9 +20225,7 @@ namespace ts {
             checkDecorators(node);
         }
 
-        /** @param outputConstraints If present, each constraint (if it exists) will be written to this array, and the return value should be ignored. */
-        function checkTypeArgumentConstraints(typeParameters: TypeParameter[], typeArgumentNodes: ReadonlyArray<TypeNode>, outputConstraints?: (Type | undefined)[]): boolean {
-            const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
+        function checkTypeArgumentConstraints(typeParameters: TypeParameter[], typeArgumentNodes: ReadonlyArray<TypeNode>): boolean {
             let typeArguments: Type[];
             let mapper: TypeMapper;
             let result = true;
@@ -20235,24 +20233,23 @@ namespace ts {
                 const constraint = getConstraintOfTypeParameter(typeParameters[i]);
                 if (constraint) {
                     if (!typeArguments) {
-                        typeArguments = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, minTypeArgumentCount, isInJavaScriptFile(typeArgumentNodes[i]));
-                        mapper = createTypeMapper(typeParameters, typeArguments);
+                        ({ typeArguments, mapper } = getTypeArgumentsAndMapperFromNodes(typeParameters, typeArgumentNodes));
                     }
-                    const typeArgument = typeArguments[i];
-                    const instantiatedConstraint = instantiateType(constraint, mapper);
-                    if (outputConstraints) {
-                        outputConstraints[i] = instantiatedConstraint;
-                    }
-                    else {
-                        result = result && checkTypeAssignableTo(
-                            typeArgument,
-                            instantiatedConstraint,
-                            typeArgumentNodes[i],
-                            Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
-                    }
+                    result = result && checkTypeAssignableTo(
+                        typeArguments[i],
+                        instantiateType(constraint, mapper),
+                        typeArgumentNodes[i],
+                        Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                 }
             }
             return result;
+        }
+
+        function getTypeArgumentsAndMapperFromNodes(typeParameters: TypeParameter[], typeArgumentNodes: ReadonlyArray<TypeNode>): { typeArguments: Type[], mapper: TypeMapper } {
+            const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
+            const typeArguments = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, minTypeArgumentCount, isInJavaScriptFile(first(typeArgumentNodes)));
+            const mapper = createTypeMapper(typeParameters, typeArguments);
+            return { typeArguments, mapper };
         }
 
         function getTypeArgumentConstraint(node: TypeNode): Type | undefined {
@@ -20263,9 +20260,8 @@ namespace ts {
 
             const typeParameters = getTypeParametersFromTypeReference(typeReferenceNode, type, /*reportErrors*/ false);
             const { typeArguments } = typeReferenceNode;
-            const constraints: Type[] = [];
-            checkTypeArgumentConstraints(typeParameters, typeArguments, constraints);
-            return constraints[typeArguments.indexOf(node)];
+            const constraint = getConstraintOfTypeParameter(typeParameters[typeArguments.indexOf(node)]);
+            return constraint && instantiateType(constraint, getTypeArgumentsAndMapperFromNodes(typeParameters, typeArguments).mapper);
         }
 
         function checkTypeReferenceNode(node: TypeReferenceType) {
