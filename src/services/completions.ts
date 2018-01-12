@@ -270,7 +270,7 @@ namespace ts.Completions {
         switch (node.parent.kind) {
             case SyntaxKind.LiteralType:
                 if (isTypeReferenceNode(node.parent.parent)) {
-                    const constraint = typeChecker.getTypeArgumentConstraint(node.parent as LiteralTypeNode);
+                    const constraint = typeChecker.getTypeArgumentConstraint(node.parent as any as TypeParameterDeclaration);
                     return getStringLiteralCompletionEntriesFromType(constraint, typeChecker);
                 }
                 else if (isIndexedAccessTypeNode(node.parent.parent)) {

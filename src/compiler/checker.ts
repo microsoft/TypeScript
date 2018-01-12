@@ -20251,23 +20251,19 @@ namespace ts {
         }
 
         function getTypeArgumentConstraint(node: TypeNode): Type | undefined {
-            const typeReferenceNode = tryCast(node.parent, isTypeReferenceNodeOrExpressionWithTypeArguments);
+            const typeReferenceNode = tryCast(node.parent, isTypeReferenceType);
             if (!typeReferenceNode) return undefined;
             const { typeArguments } = typeReferenceNode;
             const type = getTypeFromTypeReference(typeReferenceNode);
             if (type === unknownType) return undefined;
 
-            const typeParameters = getTypeParametersFromTypeReference(typeReferenceNode, type);
+            const typeParameters = getTypeParametersFromTypeReference(typeReferenceNode, type, /*reportErrors*/ false);
             const constraints: Type[] = [];
             checkTypeArgumentConstraints(typeParameters, typeArguments, constraints);
             return constraints[typeArguments.indexOf(node)];
         }
 
-        function isTypeReferenceNodeOrExpressionWithTypeArguments(node: Node): node is TypeReferenceNode | ExpressionWithTypeArguments {
-            return node.kind === SyntaxKind.TypeReference || node.kind === SyntaxKind.ExpressionWithTypeArguments;
-        }
-
-        function checkTypeReferenceNode(node: TypeReferenceNode | ExpressionWithTypeArguments) {
+        function checkTypeReferenceNode(node: TypeReferenceType) {
             checkGrammarTypeArguments(node, node.typeArguments);
             if (node.kind === SyntaxKind.TypeReference && node.typeName.jsdocDotPos !== undefined && !isInJavaScriptFile(node) && !isInJSDoc(node)) {
                 grammarErrorAtPos(node, node.typeName.jsdocDotPos, 1, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
@@ -20279,7 +20275,7 @@ namespace ts {
                     // Do type argument local checks only if referenced type is successfully resolved
                     forEach(node.typeArguments, checkSourceElement);
                     if (produceDiagnostics) {
-                        const typeParameters = getTypeParametersFromTypeReference(node, type);
+                        const typeParameters = getTypeParametersFromTypeReference(node, type, /*reportErrors*/ true);
                         if (typeParameters) {
                             checkTypeArgumentConstraints(typeParameters, node.typeArguments);
                         }
@@ -20291,14 +20287,14 @@ namespace ts {
             }
         }
 
-        function getTypeParametersFromTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments, typeReferenceType: Type): TypeParameter[] | undefined {
+        function getTypeParametersFromTypeReference(node: TypeReferenceType, typeReferenceType: Type, reportErrors: boolean): TypeParameter[] | undefined {
             const symbol = getNodeLinks(node).resolvedSymbol;
             if (!symbol) {
                 // There is no resolved symbol cached if the type resolved to a builtin
                 // via JSDoc type reference resolution (eg, Boolean became boolean), none
                 // of which are generic when they have no associated symbol
                 // (additionally, JSDoc's index signature syntax, Object<string, T> actually uses generic syntax without being generic)
-                if (!isJSDocIndexSignature(node)) {
+                if (reportErrors && !isJSDocIndexSignature(node)) {
                     error(node, Diagnostics.Type_0_is_not_generic, typeToString(typeReferenceType));
                 }
                 return;
