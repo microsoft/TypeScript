@@ -258,13 +258,13 @@ namespace FourSlash {
             let startResolveFileRef: FourSlashFile;
 
             let configFileName: string;
-            ts.forEach(testData.files, file => {
+            for (const file of testData.files) {
                 // Create map between fileName and its content for easily looking up when resolveReference flag is specified
                 this.inputFiles.set(file.fileName, file.content);
-                if (isTsconfig(file)) {
+                if (isConfig(file)) {
                     const configJson = ts.parseConfigFileTextToJson(file.fileName, file.content);
                     if (configJson.config === undefined) {
-                        throw new Error(`Failed to parse test tsconfig.json: ${configJson.error.messageText}`);
+                        throw new Error(`Failed to parse test ${file.fileName}: ${configJson.error.messageText}`);
                     }
 
                     // Extend our existing compiler options so that we can also support tsconfig only options
@@ -286,7 +286,7 @@ namespace FourSlash {
                     // If entry point for resolving file references is already specified, report duplication error
                     throw new Error("There exists a Fourslash file which has resolveReference flag specified; remove duplicated resolveReference flag");
                 }
-            });
+            }
 
             if (configFileName) {
                 const baseDir = ts.normalizePath(ts.getDirectoryPath(configFileName));
@@ -295,12 +295,7 @@ namespace FourSlash {
                 const configJsonObj = ts.parseConfigFileTextToJson(configFileName, this.inputFiles.get(configFileName));
                 assert.isTrue(configJsonObj.config !== undefined);
 
-                const { options, errors } = ts.parseJsonConfigFileContent(configJsonObj.config, host, baseDir);
-
-                // Extend our existing compiler options so that we can also support tsconfig only options
-                if (!errors || errors.length === 0) {
-                    compilationOptions = ts.extend(compilationOptions, options);
-                }
+                compilationOptions = ts.parseJsonConfigFileContent(configJsonObj.config, host, baseDir, compilationOptions, configFileName).options;
             }
 
 
@@ -3401,13 +3396,14 @@ ${code}
         }
 
         // @Filename is the only directive that can be used in a test that contains tsconfig.json file.
-        if (files.some(isTsconfig)) {
+        const config = ts.find(files, isConfig);
+        if (config) {
             let directive = getNonFileNameOptionInFileList(files);
             if (!directive) {
                 directive = getNonFileNameOptionInObject(globalOptions);
             }
             if (directive) {
-                throw Error("It is not allowed to use tsconfig.json along with directive '" + directive + "'");
+                throw Error(`It is not allowed to use ${config.fileName} along with directive '${directive}'`);
             }
         }
 
@@ -3420,8 +3416,8 @@ ${code}
         };
     }
 
-    function isTsconfig(file: FourSlashFile): boolean {
-        return ts.getBaseFileName(file.fileName).toLowerCase() === "tsconfig.json";
+    function isConfig(file: FourSlashFile): boolean {
+        return Harness.getConfigNameFromFileName(file.fileName) !== undefined;
     }
 
     function getNonFileNameOptionInFileList(files: FourSlashFile[]): string {
