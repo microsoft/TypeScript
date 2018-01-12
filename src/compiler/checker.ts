@@ -20225,7 +20225,8 @@ namespace ts {
             checkDecorators(node);
         }
 
-        function checkTypeArgumentConstraints(typeParameters: TypeParameter[], typeArgumentNodes: ReadonlyArray<TypeNode>, constraints?: (Type | undefined)[]): boolean {
+        /** @param outputConstraints If present, each constraint (if it exists) will be written to this array, and the return value should be ignored. */
+        function checkTypeArgumentConstraints(typeParameters: TypeParameter[], typeArgumentNodes: ReadonlyArray<TypeNode>, outputConstraints?: (Type | undefined)[]): boolean {
             const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
             let typeArguments: Type[];
             let mapper: TypeMapper;
@@ -20239,12 +20240,16 @@ namespace ts {
                     }
                     const typeArgument = typeArguments[i];
                     const instantiatedConstraint = instantiateType(constraint, mapper);
-                    if (constraints) constraints[i] = instantiatedConstraint;
-                    result = result && checkTypeAssignableTo(
-                        typeArgument,
-                        instantiatedConstraint,
-                        typeArgumentNodes[i],
-                        Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                    if (outputConstraints) {
+                        outputConstraints[i] = instantiatedConstraint;
+                    }
+                    else {
+                        result = result && checkTypeAssignableTo(
+                            typeArgument,
+                            instantiatedConstraint,
+                            typeArgumentNodes[i],
+                            Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                    }
                 }
             }
             return result;
