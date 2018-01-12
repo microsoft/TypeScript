@@ -1065,7 +1065,7 @@ namespace ts {
     }
 
     export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean, scriptKind?: ScriptKind): SourceFile {
-        const sourceFile = createSourceFile(fileName, scriptSnapshot.getFullText(), scriptTarget, setNodeParents, scriptKind);
+        const sourceFile = createSourceFile(fileName, getSnapshotText(scriptSnapshot), scriptTarget, setNodeParents, scriptKind);
         setSourceFileFields(sourceFile, scriptSnapshot, version);
         return sourceFile;
     }
@@ -1264,7 +1264,7 @@ namespace ts {
                     const path = toPath(fileName, currentDirectory, getCanonicalFileName);
                     const entry = hostCache.getEntryByPath(path);
                     if (entry) {
-                        return isString(entry) ? undefined : entry.scriptSnapshot.getFullText();
+                        return isString(entry) ? undefined : getSnapshotText(entry.scriptSnapshot);
                     }
                     return host.readFile && host.readFile(fileName);
                 },

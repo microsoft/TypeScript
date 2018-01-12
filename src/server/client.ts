@@ -52,7 +52,7 @@ namespace ts.server {
         private getLineMap(fileName: string): number[] {
             let lineMap = this.lineMaps.get(fileName);
             if (!lineMap) {
-                lineMap = computeLineStarts(this.host.getScriptSnapshot(fileName).getFullText());
+                lineMap = computeLineStarts(getSnapshotText(this.host.getScriptSnapshot(fileName)));
                 this.lineMaps.set(fileName, lineMap);
             }
             return lineMap;

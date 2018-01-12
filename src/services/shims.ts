@@ -28,8 +28,6 @@ namespace ts {
         /** Gets a portion of the script snapshot specified by [start, end). */
         getText(start: number, end: number): string;
 
-        getFullText(): string;
-
         /** Gets the length of this script snapshot. */
         getLength(): number;
 
@@ -292,10 +290,6 @@ namespace ts {
 
         public getText(start: number, end: number): string {
             return this.scriptSnapshotShim.getText(start, end);
-        }
-
-        public getFullText() {
-            return this.scriptSnapshotShim.getFullText();
         }
 
         public getLength(): number {
@@ -1089,7 +1083,7 @@ namespace ts {
                 `getPreProcessedFileInfo('${fileName}')`,
                 () => {
                     // for now treat files as JavaScript
-                    const result = preProcessFile(sourceTextSnapshot.getFullText(), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
+                    const result = preProcessFile(getSnapshotText(sourceTextSnapshot), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
                     return {
                         referencedFiles: this.convertFileReferences(result.referencedFiles),
                         importedFiles: this.convertFileReferences(result.importedFiles),
@@ -1129,7 +1123,7 @@ namespace ts {
             return this.forwardJSONCall(
                 `getTSConfigFileInfo('${fileName}')`,
                 () => {
-                    const result = parseJsonText(fileName, sourceTextSnapshot.getFullText());
+                    const result = parseJsonText(fileName, getSnapshotText(sourceTextSnapshot));
                     const normalizedFileName = normalizeSlashes(fileName);
                     const configFile = parseJsonSourceFileConfigFileContent(result, this.host, getDirectoryPath(normalizedFileName), /*existingOptions*/ {}, normalizedFileName);
 

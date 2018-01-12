@@ -370,7 +370,7 @@ namespace ts.server {
         }
 
         saveTo(fileName: string) {
-            this.host.writeFile(fileName, this.textStorage.getSnapshot().getFullText());
+            this.host.writeFile(fileName, getSnapshotText(this.textStorage.getSnapshot()));
         }
 
         /*@internal*/

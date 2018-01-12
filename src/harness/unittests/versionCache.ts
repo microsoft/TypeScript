@@ -284,7 +284,7 @@ and grew 1cm per day`;
                 svc.edit(ersa[i], elas[i], insertString);
                 checkText = editFlat(ersa[i], elas[i], insertString, checkText);
                 if (0 === (i % 4)) {
-                    assert.equal(checkText, svc.getSnapshot().getFullText());
+                    assert.equal(checkText, getSnapshotText(svc.getSnapshot()));
                 }
             }
         });

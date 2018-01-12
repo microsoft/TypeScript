@@ -73,10 +73,6 @@ namespace Harness.LanguageService {
             return this.textSnapshot.substring(start, end);
         }
 
-        public getFullText(): string {
-            return this.textSnapshot;
-        }
-
         public getLength(): number {
             return this.textSnapshot.length;
         }
@@ -93,10 +89,6 @@ namespace Harness.LanguageService {
 
         public getText(start: number, end: number): string {
             return this.scriptSnapshot.getText(start, end);
-        }
-
-        public getFullText() {
-            return this.scriptSnapshot.getFullText();
         }
 
         public getLength(): number {
@@ -238,7 +230,7 @@ namespace Harness.LanguageService {
         }
         readFile(path: string): string | undefined {
             const target = this.symlinks.get(path);
-            return target !== undefined ? this.readFile(target) : this.getScriptSnapshot(path).getFullText();
+            return target !== undefined ? this.readFile(target) : ts.getSnapshotText(this.getScriptSnapshot(path));
         }
         addSymlink(from: string, target: string) { this.symlinks.set(from, target); }
         realpath(path: string): string {
@@ -347,7 +339,7 @@ namespace Harness.LanguageService {
         fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }
         readFile(fileName: string) {
             const snapshot = this.nativeHost.getScriptSnapshot(fileName);
-            return snapshot && snapshot.getFullText();
+            return snapshot && ts.getSnapshotText(snapshot);
         }
         log(s: string): void { this.nativeHost.log(s); }
         trace(s: string): void { this.nativeHost.trace(s); }
@@ -651,7 +643,7 @@ namespace Harness.LanguageService {
             }
 
             const snapshot = this.host.getScriptSnapshot(fileName);
-            return snapshot && snapshot.getFullText();
+            return snapshot && ts.getSnapshotText(snapshot);
         }
 
         writeFile = ts.noop;

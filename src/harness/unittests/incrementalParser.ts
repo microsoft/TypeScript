@@ -5,7 +5,7 @@ namespace ts {
     ts.disableIncrementalParsing = false;
 
     function withChange(text: IScriptSnapshot, start: number, length: number, newText: string): { text: IScriptSnapshot; textChangeRange: TextChangeRange; } {
-        const contents = text.getFullText();
+        const contents = getSnapshotText(text);
         const newContents = contents.substr(0, start) + newText + contents.substring(start + length);
 
         return { text: ScriptSnapshot.fromString(newContents), textChangeRange: createTextChangeRange(createTextSpan(start, length), newText.length) };
@@ -105,7 +105,7 @@ namespace ts {
             const newTextAndChange = withDelete(oldText, index, 1);
             const newTree = compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1, oldTree).incrementalNewTree;
 
-            source = newTextAndChange.text.getFullText();
+            source = getSnapshotText(newTextAndChange.text);
             oldTree = newTree;
         }
     }
@@ -118,7 +118,7 @@ namespace ts {
             const newTextAndChange = withInsert(oldText, index + i, toInsert.charAt(i));
             const newTree = compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1, oldTree).incrementalNewTree;
 
-            source = newTextAndChange.text.getFullText();
+            source = getSnapshotText(newTextAndChange.text);
             oldTree = newTree;
         }
     }
