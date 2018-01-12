@@ -14,7 +14,7 @@ verify.codeFix({
     abstract x: this;
 }
 
-class C extends A {\r
-    x: this;\r
+class C extends A {
+    x: this;
 }`,
 });

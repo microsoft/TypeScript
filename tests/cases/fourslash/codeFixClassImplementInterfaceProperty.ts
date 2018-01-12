@@ -22,10 +22,10 @@ interface I {
     z: symbol;
     w: object;
 }
-class C implements I {\r
-    x: E;\r
-    y: E.a;\r
-    z: symbol;\r
-    w: object;\r
+class C implements I {
+    x: E;
+    y: E.a;
+    z: symbol;
+    w: object;
 }`,
 });

@@ -24,9 +24,9 @@ interface I1 {
     f1();
 }
 
-class C1 implements N1.I1 {\r
-    f1(): string {\r
-        throw new Error("Method not implemented.");\r
-    }\r
+class C1 implements N1.I1 {
+    f1(): string {
+        throw new Error("Method not implemented.");
+    }
 }`,
 });

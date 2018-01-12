@@ -14,7 +14,7 @@ verify.codeFix({
     [Ƚ: string]: X;
 }
 
-class C implements I<number> {\r
-    [Ƚ: string]: number;\r
+class C implements I<number> {
+    [Ƚ: string]: number;
 }`,
 });

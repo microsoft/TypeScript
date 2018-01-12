@@ -18,7 +18,7 @@ verify.codeFix({
     static method() {
         ()=>{ this.foo === 10 };
     }
-}\r
-C.foo = undefined;\r
+}
+C.foo = undefined;
 `
 });

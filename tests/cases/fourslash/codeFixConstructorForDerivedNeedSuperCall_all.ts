@@ -11,13 +11,13 @@ verify.codeFixAll({
     fixId: "constructorForDerivedNeedSuperCall",
     // TODO: GH#18445
     newFileContent: `class C extends Object {
-    constructor() {\r
-        super();\r
+    constructor() {
+        super();
     }
 }
 class D extends Object {
-    constructor() {\r
-        super();\r
+    constructor() {
+        super();
     }
 }`,
 });

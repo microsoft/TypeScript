@@ -8,7 +8,7 @@ verify.codeFix({
     // TODO: GH#18445
     newFileContent:
 `interface I { x: number; }
-export default class implements I {\r
-    x: number;\r
+export default class implements I {
+    x: number;
 }`,
 });

@@ -12,9 +12,9 @@ verify.codeFix({
 `interface I {
     f<T extends number>(x: T);
 }
-class C implements I {\r
-    f<T extends number>(x: T) {\r
-        throw new Error("Method not implemented.");\r
-    }\r
+class C implements I {
+    f<T extends number>(x: T) {
+        throw new Error("Method not implemented.");
+    }
 }`,
 });

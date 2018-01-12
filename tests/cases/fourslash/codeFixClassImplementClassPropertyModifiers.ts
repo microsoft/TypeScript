@@ -20,9 +20,9 @@ verify.codeFix({
     public w: number;
 }
 
-class C implements A {\r
-    x: number;\r
-    protected z: number;\r
-    public w: number;\r
+class C implements A {
+    x: number;
+    protected z: number;
+    public w: number;
 }`,
 });

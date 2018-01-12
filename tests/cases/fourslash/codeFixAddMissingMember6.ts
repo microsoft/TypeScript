@@ -15,8 +15,8 @@ verify.codeFix({
     index: 0,
     // TODO: GH#18445
     newFileContent: `class C {
-    constructor() {\r
-        this.foo = undefined;\r
+    constructor() {
+        this.foo = undefined;
     }
     prop = ()=>{ this.foo === 10 };
 }`

@@ -12,7 +12,7 @@ verify.codeFix({
 `interface I<T> {
     x: { y: T, z: T[] };
 }
-class C implements I<number> {\r
-    x: { y: number; z: number[]; };\r
+class C implements I<number> {
+    x: { y: number; z: number[]; };
 }`,
 });

@@ -12,7 +12,7 @@ verify.codeFix({
 `namespace N {
     export interface I { y: I; }
 }
-class C1 implements N.I {\r
-    y: N.I;\r
+class C1 implements N.I {
+    y: N.I;
 }`,
 });

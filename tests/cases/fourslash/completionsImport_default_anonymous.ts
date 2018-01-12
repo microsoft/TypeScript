@@ -23,8 +23,8 @@ verify.applyCodeActionFromCompletion("1", {
     source: "/src/foo-bar",
     description: `Import 'fooBar' from module "./foo-bar"`,
     // TODO: GH#18445
-    newFileContent: `import fooBar from "./foo-bar";\r
-\r
+    newFileContent: `import fooBar from "./foo-bar";
+
 def
 fooB`,
 });

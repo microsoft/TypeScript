@@ -14,7 +14,7 @@ verify.codeFix({
     // TODO: GH#18445
     newFileContent: `class C {
     static p = ()=>{ this.foo === 10 };
-}\r
-C.foo = undefined;\r
+}
+C.foo = undefined;
 `
 });

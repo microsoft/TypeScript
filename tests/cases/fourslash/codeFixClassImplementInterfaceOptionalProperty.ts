@@ -14,8 +14,8 @@ verify.codeFix({
     name: string;
     birthday?: string;
 }
-class Person implements IPerson {\r
-    name: string;\r
-    birthday?: string;\r
+class Person implements IPerson {
+    name: string;
+    birthday?: string;
 }`,
 });

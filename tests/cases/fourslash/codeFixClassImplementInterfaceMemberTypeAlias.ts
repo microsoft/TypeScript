@@ -10,10 +10,10 @@ verify.codeFix({
     newFileContent:
 `type MyType = [string, number];
 interface I { x: MyType; test(a: MyType): void; }
-class C implements I {\r
-    x: [string, number];\r
-    test(a: [string, number]): void {\r
-        throw new Error("Method not implemented.");\r
-    }\r
+class C implements I {
+    x: [string, number];
+    test(a: [string, number]): void {
+        throw new Error("Method not implemented.");
+    }
 }`,
 });

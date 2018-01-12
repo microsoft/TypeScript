@@ -19,6 +19,6 @@ verify.applyCodeActionFromCompletion("", {
     description: `Import 'foo' from module "./a"`,
     // TODO: GH#18445
     newFileContent: `import f_o_o from "./a";
-import foo from "./a";\r
+import foo from "./a";
 f;`,
 });

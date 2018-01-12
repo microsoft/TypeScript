@@ -14,9 +14,9 @@ verify.codeFix({
     f() {}
 }
 
-class B implements A {\r
-    f(): void {\r
-        throw new Error("Method not implemented.");\r
-    }\r
+class B implements A {
+    f(): void {
+        throw new Error("Method not implemented.");
+    }
 }`,
 });

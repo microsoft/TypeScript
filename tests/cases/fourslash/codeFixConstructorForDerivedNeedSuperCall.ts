@@ -13,8 +13,8 @@ verify.codeFix({
 `class Base{
 }
 class C extends Base{
-    constructor() {\r
-        super();\r
+    constructor() {
+        super();
     }
 }`,
 });

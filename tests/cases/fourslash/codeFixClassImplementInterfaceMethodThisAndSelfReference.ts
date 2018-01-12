@@ -14,9 +14,9 @@ verify.codeFix({
     f(x: number, y: this): I
 }
 
-class C implements I {\r
-    f(x: number, y: this): I {\r
-        throw new Error("Method not implemented.");\r
-    }\r
+class C implements I {
+    f(x: number, y: this): I {
+        throw new Error("Method not implemented.");
+    }
 }`,
 });

@@ -12,7 +12,7 @@ verify.codeFix({
 `class A {
     A: typeof A;
 }
-class D implements A {\r
-    A: typeof A;\r
+class D implements A {
+    A: typeof A;
 }`,
 });

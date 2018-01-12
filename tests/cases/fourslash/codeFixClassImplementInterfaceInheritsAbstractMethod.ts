@@ -16,9 +16,9 @@ abstract class C2 {
     abstract fＡ<T extends number>();
 }
 interface I1 extends C1, C2 { }
-class C3 implements I1 {\r
-    fＡ<T extends number>() {\r
-        throw new Error("Method not implemented.");\r
-    }\r
+class C3 implements I1 {
+    fＡ<T extends number>() {
+        throw new Error("Method not implemented.");
+    }
 }`,
 });

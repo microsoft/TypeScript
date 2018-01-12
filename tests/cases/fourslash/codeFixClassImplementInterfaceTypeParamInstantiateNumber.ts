@@ -8,7 +8,7 @@ verify.codeFix({
     // TODO: GH#18445
     newFileContent:
 `interface I<T> { x: T; }
-class C implements I<number> {\r
-    x: number;\r
+class C implements I<number> {
+    x: number;
 }`
 });

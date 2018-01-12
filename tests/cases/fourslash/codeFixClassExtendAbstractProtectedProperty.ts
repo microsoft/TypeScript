@@ -14,7 +14,7 @@ verify.codeFix({
     protected abstract x: number;
 }
 
-class C extends A {\r
-    protected x: number;\r
+class C extends A {
+    protected x: number;
 }`,
 });

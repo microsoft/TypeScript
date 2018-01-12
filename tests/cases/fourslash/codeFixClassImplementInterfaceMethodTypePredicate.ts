@@ -16,11 +16,11 @@ verify.codeFix({
     f(): this is I;
 }
 
-class C implements I {\r
-    f(i: any): i is I;\r
-    f(): this is I;\r
-    f(i?: any) {\r
-        throw new Error("Method not implemented.");\r
-    }\r
+class C implements I {
+    f(i: any): i is I;
+    f(): this is I;
+    f(i?: any) {
+        throw new Error("Method not implemented.");
+    }
 }`,
 });

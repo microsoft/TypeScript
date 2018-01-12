@@ -11,7 +11,7 @@ verify.codeFix({
     index: 0,
     // TODO: GH#18445
     newFileContent: `class C {
-    foo: number;\r
+    foo: number;
     method() {
         this.foo = 10;
     }
