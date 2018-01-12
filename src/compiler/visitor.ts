@@ -86,7 +86,7 @@ namespace ts {
             return nodes;
         }
 
-        let updated: NodeArray<T>;
+        let updated: MutableNodeArray<T>;
 
         // Ensure start and count have valid values
         const length = nodes.length;
@@ -270,6 +270,7 @@ namespace ts {
                     nodesVisitor((<PropertyDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<PropertyDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<PropertyDeclaration>node).name, visitor, isPropertyName),
+                    visitNode((<PropertyDeclaration>node).questionToken, tokenVisitor, isToken),
                     visitNode((<PropertyDeclaration>node).type, visitor, isTypeNode),
                     visitNode((<PropertyDeclaration>node).initializer, visitor, isExpression));
 
@@ -487,6 +488,7 @@ namespace ts {
                     nodesVisitor((<ArrowFunction>node).typeParameters, visitor, isTypeParameterDeclaration),
                     visitParameterList((<ArrowFunction>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<ArrowFunction>node).type, visitor, isTypeNode),
+                    visitNode((<ArrowFunction>node).equalsGreaterThanToken, visitor, isToken),
                     visitFunctionBody((<ArrowFunction>node).body, visitor, context));
 
             case SyntaxKind.DeleteExpression:
@@ -522,7 +524,9 @@ namespace ts {
             case SyntaxKind.ConditionalExpression:
                 return updateConditional(<ConditionalExpression>node,
                     visitNode((<ConditionalExpression>node).condition, visitor, isExpression),
+                    visitNode((<ConditionalExpression>node).questionToken, visitor, isToken),
                     visitNode((<ConditionalExpression>node).whenTrue, visitor, isExpression),
+                    visitNode((<ConditionalExpression>node).colonToken, visitor, isToken),
                     visitNode((<ConditionalExpression>node).whenFalse, visitor, isExpression));
 
             case SyntaxKind.TemplateExpression:
@@ -618,7 +622,7 @@ namespace ts {
 
             case SyntaxKind.ForOfStatement:
                 return updateForOf(<ForOfStatement>node,
-                    (<ForOfStatement>node).awaitModifier,
+                    visitNode((<ForOfStatement>node).awaitModifier, visitor, isToken),
                     visitNode((<ForOfStatement>node).initializer, visitor, isForInitializer),
                     visitNode((<ForOfStatement>node).expression, visitor, isExpression),
                     visitNode((<ForOfStatement>node).statement, visitor, isStatement, liftToBlock));
@@ -815,6 +819,12 @@ namespace ts {
                 return updateJsxClosingElement(<JsxClosingElement>node,
                     visitNode((<JsxClosingElement>node).tagName, visitor, isJsxTagNameExpression));
 
+            case SyntaxKind.JsxFragment:
+                return updateJsxFragment(<JsxFragment>node,
+                    visitNode((<JsxFragment>node).openingFragment, visitor, isJsxOpeningFragment),
+                    nodesVisitor((<JsxFragment>node).children, visitor, isJsxChild),
+                    visitNode((<JsxFragment>node).closingFragment, visitor, isJsxClosingFragment));
+
             case SyntaxKind.JsxAttribute:
                 return updateJsxAttribute(<JsxAttribute>node,
                     visitNode((<JsxAttribute>node).name, visitor, isIdentifier),
@@ -900,7 +910,7 @@ namespace ts {
      *
      * @param nodes The NodeArray.
      */
-    function extractSingleNode(nodes: Node[]): Node {
+    function extractSingleNode(nodes: ReadonlyArray<Node>): Node {
         Debug.assert(nodes.length <= 1, "Too many nodes written to output.");
         return singleOrUndefined(nodes);
     }
@@ -1148,10 +1158,6 @@ namespace ts {
                 result = reduceNode((<AsExpression>node).type, cbNode, result);
                 break;
 
-            case SyntaxKind.NonNullExpression:
-                result = reduceNode((<NonNullExpression>node).expression, cbNode, result);
-                break;
-
             // Misc
             case SyntaxKind.TemplateSpan:
                 result = reduceNode((<TemplateSpan>node).expression, cbNode, result);
@@ -1334,6 +1340,12 @@ namespace ts {
                 result = reduceNode((<JsxElement>node).closingElement, cbNode, result);
                 break;
 
+            case SyntaxKind.JsxFragment:
+                result = reduceNode((<JsxFragment>node).openingFragment, cbNode, result);
+                result = reduceLeft((<JsxFragment>node).children, cbNode, result);
+                result = reduceNode((<JsxFragment>node).closingFragment, cbNode, result);
+                break;
+
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxOpeningElement:
                 result = reduceNode((<JsxSelfClosingElement | JsxOpeningElement>node).tagName, cbNode, result);
@@ -1424,13 +1436,13 @@ namespace ts {
     /**
      * Merges generated lexical declarations into a new statement list.
      */
-    export function mergeLexicalEnvironment(statements: NodeArray<Statement>, declarations: Statement[]): NodeArray<Statement>;
+    export function mergeLexicalEnvironment(statements: NodeArray<Statement>, declarations: ReadonlyArray<Statement>): NodeArray<Statement>;
 
     /**
      * Appends generated lexical declarations to an array of statements.
      */
-    export function mergeLexicalEnvironment(statements: Statement[], declarations: Statement[]): Statement[];
-    export function mergeLexicalEnvironment(statements: Statement[], declarations: Statement[]) {
+    export function mergeLexicalEnvironment(statements: Statement[], declarations: ReadonlyArray<Statement>): Statement[];
+    export function mergeLexicalEnvironment(statements: Statement[] | NodeArray<Statement>, declarations: ReadonlyArray<Statement>) {
         if (!some(declarations)) {
             return statements;
         }
@@ -1445,7 +1457,7 @@ namespace ts {
      *
      * @param nodes The NodeArray.
      */
-    export function liftToBlock(nodes: Node[]): Statement {
+    export function liftToBlock(nodes: ReadonlyArray<Node>): Statement {
         Debug.assert(every(nodes, isStatement), "Cannot lift nodes to a Block.");
         return <Statement>singleOrUndefined(nodes) || createBlock(<NodeArray<Statement>>nodes);
     }
@@ -1573,13 +1585,13 @@ namespace ts {
 
             // Add additional properties in debug mode to assist with debugging.
             Object.defineProperties(objectAllocator.getSymbolConstructor().prototype, {
-                "__debugFlags": { get(this: Symbol) { return formatSymbolFlags(this.flags); } }
+                __debugFlags: { get(this: Symbol) { return formatSymbolFlags(this.flags); } }
             });
 
             Object.defineProperties(objectAllocator.getTypeConstructor().prototype, {
-                "__debugFlags": { get(this: Type) { return formatTypeFlags(this.flags); } },
-                "__debugObjectFlags": { get(this: Type) { return this.flags & TypeFlags.Object ? formatObjectFlags((<ObjectType>this).objectFlags) : ""; } },
-                "__debugTypeToString": { value(this: Type) { return this.checker.typeToString(this); } },
+                __debugFlags: { get(this: Type) { return formatTypeFlags(this.flags); } },
+                __debugObjectFlags: { get(this: Type) { return this.flags & TypeFlags.Object ? formatObjectFlags((<ObjectType>this).objectFlags) : ""; } },
+                __debugTypeToString: { value(this: Type) { return this.checker.typeToString(this); } },
             });
 
             const nodeConstructors = [
@@ -1592,11 +1604,11 @@ namespace ts {
             for (const ctor of nodeConstructors) {
                 if (!ctor.prototype.hasOwnProperty("__debugKind")) {
                     Object.defineProperties(ctor.prototype, {
-                        "__debugKind": { get(this: Node) { return formatSyntaxKind(this.kind); } },
-                        "__debugModifierFlags": { get(this: Node) { return formatModifierFlags(getModifierFlagsNoCache(this)); } },
-                        "__debugTransformFlags": { get(this: Node) { return formatTransformFlags(this.transformFlags); } },
-                        "__debugEmitFlags": { get(this: Node) { return formatEmitFlags(getEmitFlags(this)); } },
-                        "__debugGetText": {
+                        __debugKind: { get(this: Node) { return formatSyntaxKind(this.kind); } },
+                        __debugModifierFlags: { get(this: Node) { return formatModifierFlags(getModifierFlagsNoCache(this)); } },
+                        __debugTransformFlags: { get(this: Node) { return formatTransformFlags(this.transformFlags); } },
+                        __debugEmitFlags: { get(this: Node) { return formatEmitFlags(getEmitFlags(this)); } },
+                        __debugGetText: {
                             value(this: Node, includeTrivia?: boolean) {
                                 if (nodeIsSynthesized(this)) return "";
                                 const parseNode = getParseTreeNode(this);

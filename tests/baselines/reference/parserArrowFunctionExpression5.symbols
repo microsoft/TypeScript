@@ -1,0 +1,8 @@
+=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression5.ts ===
+(bar(x,
+No type information for this code.    () => {},
+No type information for this code.    () => {}
+No type information for this code.  )
+No type information for this code.)
+No type information for this code.
+No type information for this code.

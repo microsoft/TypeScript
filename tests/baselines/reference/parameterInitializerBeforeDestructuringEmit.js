@@ -37,7 +37,7 @@ function foobar(_a) {
     var _b = _a.bar, bar = _b === void 0 ? {} : _b, opts = __rest(_a, ["bar"]);
     opts.baz(bar);
 }
-var C = (function () {
+var C = /** @class */ (function () {
     function C(_a) {
         "use strict";
         "Some other prologue";

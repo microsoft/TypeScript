@@ -13,7 +13,7 @@
  * @param {...*} args The arguments to invoke `func` with.
  * @returns {*} Returns the result of `func`.
  */
-function apply(func, thisArg, args) {
+function apply(func, thisArg, ...args) {
     var length = args.length;
     switch (length) {
         case 0: return func.call(thisArg);

@@ -10,7 +10,7 @@ export var x = new nameSpaceBinding.a();
 //// [server.js]
 "use strict";
 exports.__esModule = true;
-var a = (function () {
+var a = /** @class */ (function () {
     function a() {
     }
     return a;

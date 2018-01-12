@@ -1,0 +1,1 @@
+import isobject = require("isobject");

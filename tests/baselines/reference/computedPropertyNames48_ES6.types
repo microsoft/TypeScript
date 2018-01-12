@@ -28,7 +28,7 @@ extractIndexer({
 extractIndexer({
 >extractIndexer({    [E.x]: ""}) : string
 >extractIndexer : <T>(p: { [n: number]: T; }) => T
->{    [E.x]: ""} : { [x: number]: string; }
+>{    [E.x]: ""} : { [E.x]: string; }
 
     [E.x]: ""
 >E.x : E
@@ -41,7 +41,7 @@ extractIndexer({
 extractIndexer({
 >extractIndexer({    ["" || 0]: ""}) : string
 >extractIndexer : <T>(p: { [n: number]: T; }) => T
->{    ["" || 0]: ""} : { [x: number]: string; }
+>{    ["" || 0]: ""} : { ["" || 0]: string; }
 
     ["" || 0]: ""
 >"" || 0 : 0

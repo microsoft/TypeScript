@@ -1,0 +1,12 @@
+=== tests/cases/compiler/test.ts ===
+import {foo} from './foo';
+>foo : Symbol(foo, Decl(test.ts, 0, 8))
+
+const baz = 42;
+>baz : Symbol(baz, Decl(test.ts, 1, 5))
+
+const bar = { foo, baz };
+>bar : Symbol(bar, Decl(test.ts, 2, 5))
+>foo : Symbol(foo, Decl(test.ts, 2, 13))
+>baz : Symbol(baz, Decl(test.ts, 2, 18))
+

@@ -1,7 +1,6 @@
 tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(2,6): error TS2339: Property 'length' does not exist on type '{}'.
 tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(5,6): error TS2339: Property 'length' does not exist on type 'Object'.
-tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(8,14): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-  Type argument candidate '1' is not a valid type argument because it is not a supertype of candidate '""'.
+tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(8,24): error TS2345: Argument of type '""' is not assignable to parameter of type '1'.
 
 
 ==== tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts (3 errors) ====
@@ -17,9 +16,8 @@ tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts(8,14): error TS2453: The
     
     function concat<T>(x: T, y: T): T { return null; }
     var result = concat(1, ""); // error
-                 ~~~~~~
-!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-!!! error TS2453:   Type argument candidate '1' is not a valid type argument because it is not a supertype of candidate '""'.
+                           ~~
+!!! error TS2345: Argument of type '""' is not assignable to parameter of type '1'.
     var elementCount = result.length; 
     
     function concat2<T, U>(x: T, y: U) { return null; }

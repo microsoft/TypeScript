@@ -1,0 +1,16 @@
+=== tests/cases/compiler/multipleClassPropertyModifiers.ts ===
+class C {
+>C : C
+
+    public static p1;
+>p1 : any
+
+    static public p2;
+>p2 : any
+
+    private static p3;
+>p3 : any
+
+    static private p4;
+>p4 : any
+}

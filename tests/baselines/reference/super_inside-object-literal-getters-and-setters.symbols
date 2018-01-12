@@ -1,0 +1,55 @@
+=== tests/cases/compiler/super_inside-object-literal-getters-and-setters.ts ===
+module ObjectLiteral {
+>ObjectLiteral : Symbol(ObjectLiteral, Decl(super_inside-object-literal-getters-and-setters.ts, 0, 0))
+
+    var ThisInObjectLiteral = {
+>ThisInObjectLiteral : Symbol(ThisInObjectLiteral, Decl(super_inside-object-literal-getters-and-setters.ts, 1, 7))
+
+        _foo: '1',
+>_foo : Symbol(_foo, Decl(super_inside-object-literal-getters-and-setters.ts, 1, 31))
+
+        get foo(): string {
+>foo : Symbol(foo, Decl(super_inside-object-literal-getters-and-setters.ts, 2, 18), Decl(super_inside-object-literal-getters-and-setters.ts, 5, 10))
+
+            return super._foo;
+        },
+        set foo(value: string) {
+>foo : Symbol(foo, Decl(super_inside-object-literal-getters-and-setters.ts, 2, 18), Decl(super_inside-object-literal-getters-and-setters.ts, 5, 10))
+>value : Symbol(value, Decl(super_inside-object-literal-getters-and-setters.ts, 6, 16))
+
+            super._foo = value;
+>value : Symbol(value, Decl(super_inside-object-literal-getters-and-setters.ts, 6, 16))
+
+        },
+        test: function () {
+>test : Symbol(test, Decl(super_inside-object-literal-getters-and-setters.ts, 8, 10))
+
+            return super._foo;
+        }
+    }
+}
+
+class F { public test(): string { return ""; } }
+>F : Symbol(F, Decl(super_inside-object-literal-getters-and-setters.ts, 13, 1))
+>test : Symbol(F.test, Decl(super_inside-object-literal-getters-and-setters.ts, 15, 9))
+
+class SuperObjectTest extends F {
+>SuperObjectTest : Symbol(SuperObjectTest, Decl(super_inside-object-literal-getters-and-setters.ts, 15, 48))
+>F : Symbol(F, Decl(super_inside-object-literal-getters-and-setters.ts, 13, 1))
+
+    public testing() {
+>testing : Symbol(SuperObjectTest.testing, Decl(super_inside-object-literal-getters-and-setters.ts, 16, 33))
+
+        var test = {
+>test : Symbol(test, Decl(super_inside-object-literal-getters-and-setters.ts, 18, 11))
+
+            get F() {
+>F : Symbol(F, Decl(super_inside-object-literal-getters-and-setters.ts, 18, 20))
+
+                return super.test();
+            }
+        };
+    }
+}
+
+

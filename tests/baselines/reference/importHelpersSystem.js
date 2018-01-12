@@ -25,7 +25,7 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            A = (function () {
+            A = /** @class */ (function () {
                 function A() {
                 }
                 return A;
@@ -60,7 +60,7 @@ System.register(["tslib", "./a"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
-            B = (function (_super) {
+            B = /** @class */ (function (_super) {
                 tslib_1.__extends(B, _super);
                 function B() {
                     return _super !== null && _super.apply(this, arguments) || this;

@@ -1,0 +1,10 @@
+=== tests/cases/compiler/illegalModifiersOnClassElements.ts ===
+class C {
+>C : Symbol(C, Decl(illegalModifiersOnClassElements.ts, 0, 0))
+
+    declare foo = 1;
+>foo : Symbol(C.foo, Decl(illegalModifiersOnClassElements.ts, 0, 9))
+
+    export bar = 1;
+>bar : Symbol(C.bar, Decl(illegalModifiersOnClassElements.ts, 1, 20))
+}

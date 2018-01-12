@@ -32,7 +32,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var K = (function () {
+var K = /** @class */ (function () {
     function K() {
     }
     K.prototype.privateMethod = function () { };
@@ -42,7 +42,7 @@ var K = (function () {
     };
     return K;
 }());
-var C = (function (_super) {
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;

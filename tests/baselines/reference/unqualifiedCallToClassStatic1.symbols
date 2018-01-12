@@ -1,0 +1,11 @@
+=== tests/cases/compiler/unqualifiedCallToClassStatic1.ts ===
+class Vector {
+>Vector : Symbol(Vector, Decl(unqualifiedCallToClassStatic1.ts, 0, 0))
+
+ static foo = () => {
+>foo : Symbol(Vector.foo, Decl(unqualifiedCallToClassStatic1.ts, 0, 14))
+
+  // 'foo' cannot be called in an unqualified manner.
+  foo();
+ }
+}

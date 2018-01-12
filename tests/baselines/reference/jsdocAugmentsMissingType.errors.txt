@@ -1,0 +1,20 @@
+/a.js(2,14): error TS1003: Identifier expected.
+/a.js(2,14): error TS8023: JSDoc '@augments ' does not match the 'extends A' clause.
+/a.js(5,14): error TS2339: Property 'x' does not exist on type 'B'.
+
+
+==== /a.js (3 errors) ====
+    class A { constructor() { this.x = 0; } }
+    /** @augments */
+                 
+!!! error TS1003: Identifier expected.
+                 
+!!! error TS8023: JSDoc '@augments ' does not match the 'extends A' clause.
+    class B extends A {
+        m() {
+            this.x
+                 ~
+!!! error TS2339: Property 'x' does not exist on type 'B'.
+        }
+    }
+    

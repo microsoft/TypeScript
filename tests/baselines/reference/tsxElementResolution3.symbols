@@ -1,0 +1,26 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(file.tsx, 0, 20))
+
+	interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 1, 22))
+
+	    [x: string]: { n: string; };
+>x : Symbol(x, Decl(file.tsx, 3, 6))
+>n : Symbol(n, Decl(file.tsx, 3, 19))
+	}
+}
+
+// OK
+<div n='x' />;
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>n : Symbol(n, Decl(file.tsx, 8, 4))
+
+// Error
+<span w='err' />;
+>span : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>w : Symbol(w, Decl(file.tsx, 11, 5))
+

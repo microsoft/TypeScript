@@ -10,7 +10,7 @@ class C {
 }
 
 //// [overloadOnConstInCallback1.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.x1 = function (a, callback) {

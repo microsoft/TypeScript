@@ -87,6 +87,8 @@ function foo7(x) {
     return typeof x === "string"
         || ((z = x) // number | boolean
             || (typeof x === "number"
+                // change value of x
                 ? ((x = 10) && x.toString()) // number | boolean | string
+                // do not change value
                 : ((y = x) && x.toString()))); // number | boolean | string
 }

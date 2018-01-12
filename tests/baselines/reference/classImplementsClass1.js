@@ -3,12 +3,12 @@ class A { }
 class C implements A { }
 
 //// [classImplementsClass1.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

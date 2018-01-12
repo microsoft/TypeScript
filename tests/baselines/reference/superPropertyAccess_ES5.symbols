@@ -1,0 +1,79 @@
+=== tests/cases/compiler/superPropertyAccess_ES5.ts ===
+class MyBase {
+>MyBase : Symbol(MyBase, Decl(superPropertyAccess_ES5.ts, 0, 0))
+
+  getValue(): number { return 1; }
+>getValue : Symbol(MyBase.getValue, Decl(superPropertyAccess_ES5.ts, 0, 14))
+
+  get value(): number { return 1; }
+>value : Symbol(MyBase.value, Decl(superPropertyAccess_ES5.ts, 1, 34))
+}
+
+class MyDerived extends MyBase {
+>MyDerived : Symbol(MyDerived, Decl(superPropertyAccess_ES5.ts, 3, 1))
+>MyBase : Symbol(MyBase, Decl(superPropertyAccess_ES5.ts, 0, 0))
+
+  constructor() {
+    super();
+>super : Symbol(MyBase, Decl(superPropertyAccess_ES5.ts, 0, 0))
+
+    const f1 = super.getValue();
+>f1 : Symbol(f1, Decl(superPropertyAccess_ES5.ts, 9, 9))
+>super.getValue : Symbol(MyBase.getValue, Decl(superPropertyAccess_ES5.ts, 0, 14))
+>super : Symbol(MyBase, Decl(superPropertyAccess_ES5.ts, 0, 0))
+>getValue : Symbol(MyBase.getValue, Decl(superPropertyAccess_ES5.ts, 0, 14))
+
+    const f2 = super.value;
+>f2 : Symbol(f2, Decl(superPropertyAccess_ES5.ts, 10, 9))
+>super.value : Symbol(MyBase.value, Decl(superPropertyAccess_ES5.ts, 1, 34))
+>super : Symbol(MyBase, Decl(superPropertyAccess_ES5.ts, 0, 0))
+>value : Symbol(MyBase.value, Decl(superPropertyAccess_ES5.ts, 1, 34))
+  }
+}
+
+var d = new MyDerived();
+>d : Symbol(d, Decl(superPropertyAccess_ES5.ts, 14, 3))
+>MyDerived : Symbol(MyDerived, Decl(superPropertyAccess_ES5.ts, 3, 1))
+
+var f3 = d.value;
+>f3 : Symbol(f3, Decl(superPropertyAccess_ES5.ts, 15, 3))
+>d.value : Symbol(MyBase.value, Decl(superPropertyAccess_ES5.ts, 1, 34))
+>d : Symbol(d, Decl(superPropertyAccess_ES5.ts, 14, 3))
+>value : Symbol(MyBase.value, Decl(superPropertyAccess_ES5.ts, 1, 34))
+
+class A {
+>A : Symbol(A, Decl(superPropertyAccess_ES5.ts, 15, 17))
+
+    private _property: string;
+>_property : Symbol(A._property, Decl(superPropertyAccess_ES5.ts, 17, 9))
+
+    get property() { return this._property; }
+>property : Symbol(A.property, Decl(superPropertyAccess_ES5.ts, 18, 30), Decl(superPropertyAccess_ES5.ts, 19, 45))
+>this._property : Symbol(A._property, Decl(superPropertyAccess_ES5.ts, 17, 9))
+>this : Symbol(A, Decl(superPropertyAccess_ES5.ts, 15, 17))
+>_property : Symbol(A._property, Decl(superPropertyAccess_ES5.ts, 17, 9))
+
+    set property(value: string) { this._property = value }
+>property : Symbol(A.property, Decl(superPropertyAccess_ES5.ts, 18, 30), Decl(superPropertyAccess_ES5.ts, 19, 45))
+>value : Symbol(value, Decl(superPropertyAccess_ES5.ts, 20, 17))
+>this._property : Symbol(A._property, Decl(superPropertyAccess_ES5.ts, 17, 9))
+>this : Symbol(A, Decl(superPropertyAccess_ES5.ts, 15, 17))
+>_property : Symbol(A._property, Decl(superPropertyAccess_ES5.ts, 17, 9))
+>value : Symbol(value, Decl(superPropertyAccess_ES5.ts, 20, 17))
+}
+
+class B extends A {
+>B : Symbol(B, Decl(superPropertyAccess_ES5.ts, 21, 1))
+>A : Symbol(A, Decl(superPropertyAccess_ES5.ts, 15, 17))
+
+    set property(value: string) {
+>property : Symbol(B.property, Decl(superPropertyAccess_ES5.ts, 23, 19))
+>value : Symbol(value, Decl(superPropertyAccess_ES5.ts, 24, 17))
+
+        super.property = value + " addition";
+>super.property : Symbol(A.property, Decl(superPropertyAccess_ES5.ts, 18, 30), Decl(superPropertyAccess_ES5.ts, 19, 45))
+>super : Symbol(A, Decl(superPropertyAccess_ES5.ts, 15, 17))
+>property : Symbol(A.property, Decl(superPropertyAccess_ES5.ts, 18, 30), Decl(superPropertyAccess_ES5.ts, 19, 45))
+>value : Symbol(value, Decl(superPropertyAccess_ES5.ts, 24, 17))
+    }
+}

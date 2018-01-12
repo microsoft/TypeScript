@@ -1,0 +1,128 @@
+=== tests/cases/compiler/abstractPropertyInConstructor.ts ===
+abstract class AbstractClass {
+>AbstractClass : AbstractClass
+
+    constructor(str: string, other: AbstractClass) {
+>str : string
+>other : AbstractClass
+>AbstractClass : AbstractClass
+
+        this.method(parseInt(str));
+>this.method(parseInt(str)) : void
+>this.method : (num: number) => void
+>this : this
+>method : (num: number) => void
+>parseInt(str) : number
+>parseInt : (s: string, radix?: number) => number
+>str : string
+
+        let val = this.prop.toLowerCase();
+>val : string
+>this.prop.toLowerCase() : string
+>this.prop.toLowerCase : () => string
+>this.prop : string
+>this : this
+>prop : string
+>toLowerCase : () => string
+
+        if (!str) {
+>!str : boolean
+>str : string
+
+            this.prop = "Hello World";
+>this.prop = "Hello World" : "Hello World"
+>this.prop : string
+>this : this
+>prop : string
+>"Hello World" : "Hello World"
+        }
+        this.cb(str);
+>this.cb(str) : void
+>this.cb : (s: string) => void
+>this : this
+>cb : (s: string) => void
+>str : string
+
+        // OK, reference is inside function
+        const innerFunction = () => {
+>innerFunction : () => string
+>() => {            return this.prop;        } : () => string
+
+            return this.prop;
+>this.prop : string
+>this : this
+>prop : string
+        }
+
+        // OK, references are to another instance
+        other.cb(other.prop);
+>other.cb(other.prop) : void
+>other.cb : (s: string) => void
+>other : AbstractClass
+>cb : (s: string) => void
+>other.prop : string
+>other : AbstractClass
+>prop : string
+    }
+
+    abstract prop: string;
+>prop : string
+
+    abstract cb: (s: string) => void;
+>cb : (s: string) => void
+>s : string
+
+    abstract method(num: number): void;
+>method : (num: number) => void
+>num : number
+
+    method2() {
+>method2 : () => void
+
+        this.prop = this.prop + "!";
+>this.prop = this.prop + "!" : string
+>this.prop : string
+>this : this
+>prop : string
+>this.prop + "!" : string
+>this.prop : string
+>this : this
+>prop : string
+>"!" : "!"
+    }
+}
+
+class User {
+>User : User
+
+    constructor(a: AbstractClass) {
+>a : AbstractClass
+>AbstractClass : AbstractClass
+
+        a.prop;
+>a.prop : string
+>a : AbstractClass
+>prop : string
+
+        a.cb("hi");
+>a.cb("hi") : void
+>a.cb : (s: string) => void
+>a : AbstractClass
+>cb : (s: string) => void
+>"hi" : "hi"
+
+        a.method(12);
+>a.method(12) : void
+>a.method : (num: number) => void
+>a : AbstractClass
+>method : (num: number) => void
+>12 : 12
+
+        a.method2();
+>a.method2() : void
+>a.method2 : () => void
+>a : AbstractClass
+>method2 : () => void
+    }
+}
+

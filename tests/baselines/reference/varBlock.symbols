@@ -1,0 +1,93 @@
+=== tests/cases/compiler/varBlock.ts ===
+module m2 {
+>m2 : Symbol(m2, Decl(varBlock.ts, 0, 0))
+
+    export var a, b2: number = 10, b;
+>a : Symbol(a, Decl(varBlock.ts, 2, 14))
+>b2 : Symbol(b2, Decl(varBlock.ts, 2, 17))
+>b : Symbol(b, Decl(varBlock.ts, 2, 34))
+}
+
+declare module m3 {
+>m3 : Symbol(m3, Decl(varBlock.ts, 3, 1), Decl(varBlock.ts, 21, 24))
+
+    var a, b, c;
+>a : Symbol(a, Decl(varBlock.ts, 6, 7))
+>b : Symbol(b, Decl(varBlock.ts, 6, 10))
+>c : Symbol(c, Decl(varBlock.ts, 6, 13))
+
+    var a1, b1 = 10;
+>a1 : Symbol(a1, Decl(varBlock.ts, 7, 7))
+>b1 : Symbol(b1, Decl(varBlock.ts, 7, 11))
+
+    class C {
+>C : Symbol(C, Decl(varBlock.ts, 7, 20))
+
+        constructor (public c = 10);
+>c : Symbol(C.c, Decl(varBlock.ts, 10, 21))
+    }
+}
+
+declare var b = 10;
+>b : Symbol(b, Decl(varBlock.ts, 14, 11))
+
+declare var a2, b2, c2;
+>a2 : Symbol(a2, Decl(varBlock.ts, 16, 11))
+>b2 : Symbol(b2, Decl(varBlock.ts, 16, 15))
+>c2 : Symbol(c2, Decl(varBlock.ts, 16, 19))
+
+
+
+declare var da = 10;
+>da : Symbol(da, Decl(varBlock.ts, 20, 11))
+
+declare var d3, d4 = 10;
+>d3 : Symbol(d3, Decl(varBlock.ts, 21, 11))
+>d4 : Symbol(d4, Decl(varBlock.ts, 21, 15))
+
+module m3 {
+>m3 : Symbol(m3, Decl(varBlock.ts, 3, 1), Decl(varBlock.ts, 21, 24))
+
+    declare var d = 10;
+>d : Symbol(d, Decl(varBlock.ts, 24, 15))
+
+    declare var d2, d3 = 10, d4 = 10;
+>d2 : Symbol(d2, Decl(varBlock.ts, 25, 15))
+>d3 : Symbol(d3, Decl(varBlock.ts, 25, 19))
+>d4 : Symbol(d4, Decl(varBlock.ts, 25, 28))
+
+    export declare var dE = 10;
+>dE : Symbol(dE, Decl(varBlock.ts, 26, 22))
+
+    export declare var d2E, d3E = 10, d4E = 10;
+>d2E : Symbol(d2E, Decl(varBlock.ts, 27, 22))
+>d3E : Symbol(d3E, Decl(varBlock.ts, 27, 27))
+>d4E : Symbol(d4E, Decl(varBlock.ts, 27, 37))
+}
+
+declare module m4 {
+>m4 : Symbol(m4, Decl(varBlock.ts, 28, 1))
+
+    var d = 10;
+>d : Symbol(d, Decl(varBlock.ts, 31, 7))
+
+    var d2, d3 = 10, d4 =10;
+>d2 : Symbol(d2, Decl(varBlock.ts, 32, 7))
+>d3 : Symbol(d3, Decl(varBlock.ts, 32, 11))
+>d4 : Symbol(d4, Decl(varBlock.ts, 32, 20))
+
+    export var dE = 10;
+>dE : Symbol(dE, Decl(varBlock.ts, 33, 14))
+
+    export var d2E, d3E = 10, d4E = 10;
+>d2E : Symbol(d2E, Decl(varBlock.ts, 34, 14))
+>d3E : Symbol(d3E, Decl(varBlock.ts, 34, 19))
+>d4E : Symbol(d4E, Decl(varBlock.ts, 34, 29))
+}
+
+declare var c;
+>c : Symbol(c, Decl(varBlock.ts, 37, 11), Decl(varBlock.ts, 38, 11))
+
+declare var c = 10;
+>c : Symbol(c, Decl(varBlock.ts, 37, 11), Decl(varBlock.ts, 38, 11))
+

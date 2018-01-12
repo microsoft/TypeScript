@@ -15,7 +15,7 @@ define("SecondModuleName", ["require", "exports"], function (require, exports) {
     "use strict";
     ///<amd-module name='FirstModuleName'/>
     ///<amd-module name='SecondModuleName'/>
-    var Foo = (function () {
+    var Foo = /** @class */ (function () {
         function Foo() {
             this.x = 5;
         }

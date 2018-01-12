@@ -1,0 +1,4 @@
+=== tests/cases/compiler/indexWithoutParamType.ts ===
+var y: { []; } // Error
+>y : {}
+

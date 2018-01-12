@@ -29,6 +29,11 @@ p1.then(zero => {
 
 });
 
+export var p2 = import("./0");
+>p2 : Promise<typeof "tests/cases/conformance/dynamicImport/0">
+>import("./0") : Promise<typeof "tests/cases/conformance/dynamicImport/0">
+>"./0" : "./0"
+
 function foo() {
 >foo : () => void
 
@@ -36,4 +41,30 @@ function foo() {
 >p2 : Promise<typeof "tests/cases/conformance/dynamicImport/0">
 >import("./0") : Promise<typeof "tests/cases/conformance/dynamicImport/0">
 >"./0" : "./0"
+}
+
+class C {
+>C : C
+
+    method() {
+>method : () => void
+
+        const loadAsync = import ("./0");
+>loadAsync : Promise<typeof "tests/cases/conformance/dynamicImport/0">
+>import ("./0") : Promise<typeof "tests/cases/conformance/dynamicImport/0">
+>"./0" : "./0"
+    }
+}
+
+export class D {
+>D : D
+
+    method() {
+>method : () => void
+
+        const loadAsync = import ("./0");
+>loadAsync : Promise<typeof "tests/cases/conformance/dynamicImport/0">
+>import ("./0") : Promise<typeof "tests/cases/conformance/dynamicImport/0">
+>"./0" : "./0"
+    }
 }

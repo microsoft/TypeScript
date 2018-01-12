@@ -54,7 +54,7 @@ var obj3 = {
     y: false,
     overwrite: "hi"
 };
-var OverWriteAttr = (function (_super) {
+var OverWriteAttr = /** @class */ (function (_super) {
     __extends(OverWriteAttr, _super);
     function OverWriteAttr() {
         return _super !== null && _super.apply(this, arguments) || this;

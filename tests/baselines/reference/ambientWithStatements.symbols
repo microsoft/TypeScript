@@ -1,0 +1,40 @@
+=== tests/cases/compiler/ambientWithStatements.ts ===
+declare module M {
+>M : Symbol(M, Decl(ambientWithStatements.ts, 0, 0))
+
+    break;
+    continue;
+    debugger;
+    do { } while (true);
+    var x;
+>x : Symbol(x, Decl(ambientWithStatements.ts, 5, 7))
+
+    for (x in null) { }
+>x : Symbol(x, Decl(ambientWithStatements.ts, 5, 7))
+
+    if (true) { } else { }
+    1;
+    L: var y;
+>y : Symbol(y, Decl(ambientWithStatements.ts, 9, 10))
+
+    return;
+    switch (x) {
+>x : Symbol(x, Decl(ambientWithStatements.ts, 5, 7))
+
+        case 1:
+            break;
+        default:
+            break;
+    }
+    throw "nooo";
+    try {
+    }
+    catch (e) {
+>e : Symbol(e, Decl(ambientWithStatements.ts, 20, 11))
+    }
+    finally {
+    }
+    with (x) {
+>x : Symbol(x, Decl(ambientWithStatements.ts, 5, 7))
+    }
+}

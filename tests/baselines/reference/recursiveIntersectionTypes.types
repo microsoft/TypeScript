@@ -1,0 +1,80 @@
+=== tests/cases/conformance/types/intersection/recursiveIntersectionTypes.ts ===
+type LinkedList<T> = T & { next: LinkedList<T> };
+>LinkedList : LinkedList<T>
+>T : T
+>T : T
+>next : LinkedList<T>
+>LinkedList : LinkedList<T>
+>T : T
+
+interface Entity {
+>Entity : Entity
+
+    name: string;
+>name : string
+}
+
+interface Product extends Entity {
+>Product : Product
+>Entity : Entity
+
+    price: number;
+>price : number
+}
+
+var entityList: LinkedList<Entity>;
+>entityList : LinkedList<Entity>
+>LinkedList : LinkedList<T>
+>Entity : Entity
+
+var s = entityList.name;
+>s : string
+>entityList.name : string
+>entityList : LinkedList<Entity>
+>name : string
+
+var s = entityList.next.name;
+>s : string
+>entityList.next.name : string
+>entityList.next : LinkedList<Entity>
+>entityList : LinkedList<Entity>
+>next : LinkedList<Entity>
+>name : string
+
+var s = entityList.next.next.name;
+>s : string
+>entityList.next.next.name : string
+>entityList.next.next : LinkedList<Entity>
+>entityList.next : LinkedList<Entity>
+>entityList : LinkedList<Entity>
+>next : LinkedList<Entity>
+>next : LinkedList<Entity>
+>name : string
+
+var s = entityList.next.next.next.name;
+>s : string
+>entityList.next.next.next.name : string
+>entityList.next.next.next : LinkedList<Entity>
+>entityList.next.next : LinkedList<Entity>
+>entityList.next : LinkedList<Entity>
+>entityList : LinkedList<Entity>
+>next : LinkedList<Entity>
+>next : LinkedList<Entity>
+>next : LinkedList<Entity>
+>name : string
+
+var productList: LinkedList<Product>;
+>productList : LinkedList<Product>
+>LinkedList : LinkedList<T>
+>Product : Product
+
+entityList = productList;
+>entityList = productList : LinkedList<Product>
+>entityList : LinkedList<Entity>
+>productList : LinkedList<Product>
+
+productList = entityList;  // Error
+>productList = entityList : LinkedList<Entity>
+>productList : LinkedList<Product>
+>entityList : LinkedList<Entity>
+

@@ -1,0 +1,207 @@
+=== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts ===
+// A parameter declaration may specify either an identifier or a binding pattern.
+// The identifiers specified in parameter declarations and binding patterns
+// in a parameter list must be unique within that parameter list.
+
+// If the declaration includes a type annotation, the parameter is of that type
+function a0([a, b, [[c]]]: [number, number, string[][]]) { }
+>a0 : Symbol(a0, Decl(destructuringParameterDeclaration2.ts, 0, 0))
+>a : Symbol(a, Decl(destructuringParameterDeclaration2.ts, 5, 13))
+>b : Symbol(b, Decl(destructuringParameterDeclaration2.ts, 5, 15))
+>c : Symbol(c, Decl(destructuringParameterDeclaration2.ts, 5, 21))
+
+a0([1, "string", [["world"]]);      // Error
+>a0 : Symbol(a0, Decl(destructuringParameterDeclaration2.ts, 0, 0))
+
+a0([1, 2, [["world"]], "string"]);  // Error
+>a0 : Symbol(a0, Decl(destructuringParameterDeclaration2.ts, 0, 0))
+
+
+// If the declaration includes an initializer expression (which is permitted only
+// when the parameter list occurs in conjunction with a function body),
+// the parameter type is the widened form (section 3.11) of the type of the initializer expression.
+
+interface F1 {
+>F1 : Symbol(F1, Decl(destructuringParameterDeclaration2.ts, 7, 34))
+
+    b0(z = 10, [[a, b], d, {u}] = [[1, 2], "string", { u: false }]);  // Error, no function body
+>b0 : Symbol(F1.b0, Decl(destructuringParameterDeclaration2.ts, 14, 14))
+>z : Symbol(z, Decl(destructuringParameterDeclaration2.ts, 15, 7))
+>a : Symbol(a, Decl(destructuringParameterDeclaration2.ts, 15, 17))
+>b : Symbol(b, Decl(destructuringParameterDeclaration2.ts, 15, 19))
+>d : Symbol(d, Decl(destructuringParameterDeclaration2.ts, 15, 23))
+>u : Symbol(u, Decl(destructuringParameterDeclaration2.ts, 15, 28))
+>u : Symbol(u, Decl(destructuringParameterDeclaration2.ts, 15, 54))
+}
+
+function b1(z = null, o = { x: 0, y: undefined }) { }
+>b1 : Symbol(b1, Decl(destructuringParameterDeclaration2.ts, 16, 1))
+>z : Symbol(z, Decl(destructuringParameterDeclaration2.ts, 18, 12))
+>o : Symbol(o, Decl(destructuringParameterDeclaration2.ts, 18, 21))
+>x : Symbol(x, Decl(destructuringParameterDeclaration2.ts, 18, 27))
+>y : Symbol(y, Decl(destructuringParameterDeclaration2.ts, 18, 33))
+>undefined : Symbol(undefined)
+
+function b2([a, z, y] = [undefined, null, undefined]) { }
+>b2 : Symbol(b2, Decl(destructuringParameterDeclaration2.ts, 18, 53))
+>a : Symbol(a, Decl(destructuringParameterDeclaration2.ts, 19, 13))
+>z : Symbol(z, Decl(destructuringParameterDeclaration2.ts, 19, 15))
+>y : Symbol(y, Decl(destructuringParameterDeclaration2.ts, 19, 18))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+function b3([[a], b, [[c, d]]] = [[undefined], undefined, [[undefined, undefined]]]) { }
+>b3 : Symbol(b3, Decl(destructuringParameterDeclaration2.ts, 19, 57))
+>a : Symbol(a, Decl(destructuringParameterDeclaration2.ts, 20, 14))
+>b : Symbol(b, Decl(destructuringParameterDeclaration2.ts, 20, 17))
+>c : Symbol(c, Decl(destructuringParameterDeclaration2.ts, 20, 23))
+>d : Symbol(d, Decl(destructuringParameterDeclaration2.ts, 20, 25))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+b1("string", { x: "string", y: true });  // Error
+>b1 : Symbol(b1, Decl(destructuringParameterDeclaration2.ts, 16, 1))
+>x : Symbol(x, Decl(destructuringParameterDeclaration2.ts, 22, 14))
+>y : Symbol(y, Decl(destructuringParameterDeclaration2.ts, 22, 27))
+
+// If the declaration specifies a binding pattern, the parameter type is the implied type of that binding pattern (section 5.1.3)
+function c0({z: {x, y: {j}}}) { }
+>c0 : Symbol(c0, Decl(destructuringParameterDeclaration2.ts, 22, 39))
+>z : Symbol(z)
+>x : Symbol(x, Decl(destructuringParameterDeclaration2.ts, 25, 17))
+>y : Symbol(y)
+>j : Symbol(j, Decl(destructuringParameterDeclaration2.ts, 25, 24))
+
+function c1({z} = { z: 10 }) { }
+>c1 : Symbol(c1, Decl(destructuringParameterDeclaration2.ts, 25, 33))
+>z : Symbol(z, Decl(destructuringParameterDeclaration2.ts, 26, 13))
+>z : Symbol(z, Decl(destructuringParameterDeclaration2.ts, 26, 19))
+
+function c2({z = 10}) { }
+>c2 : Symbol(c2, Decl(destructuringParameterDeclaration2.ts, 26, 32))
+>z : Symbol(z, Decl(destructuringParameterDeclaration2.ts, 27, 13))
+
+function c3({b}: { b: number|string } = { b: "hello" }) { }
+>c3 : Symbol(c3, Decl(destructuringParameterDeclaration2.ts, 27, 25))
+>b : Symbol(b, Decl(destructuringParameterDeclaration2.ts, 28, 13))
+>b : Symbol(b, Decl(destructuringParameterDeclaration2.ts, 28, 18))
+>b : Symbol(b, Decl(destructuringParameterDeclaration2.ts, 28, 41))
+
+function c4([z], z: number) { }  // Error Duplicate identifier
+>c4 : Symbol(c4, Decl(destructuringParameterDeclaration2.ts, 28, 59))
+>z : Symbol(z, Decl(destructuringParameterDeclaration2.ts, 29, 13))
+>z : Symbol(z, Decl(destructuringParameterDeclaration2.ts, 29, 16))
+
+function c5([a, b, [[c]]]) { }
+>c5 : Symbol(c5, Decl(destructuringParameterDeclaration2.ts, 29, 31))
+>a : Symbol(a, Decl(destructuringParameterDeclaration2.ts, 30, 13))
+>b : Symbol(b, Decl(destructuringParameterDeclaration2.ts, 30, 15))
+>c : Symbol(c, Decl(destructuringParameterDeclaration2.ts, 30, 21))
+
+function c6([a, b, [[c = 1]]]) { }
+>c6 : Symbol(c6, Decl(destructuringParameterDeclaration2.ts, 30, 30))
+>a : Symbol(a, Decl(destructuringParameterDeclaration2.ts, 31, 13))
+>b : Symbol(b, Decl(destructuringParameterDeclaration2.ts, 31, 15))
+>c : Symbol(c, Decl(destructuringParameterDeclaration2.ts, 31, 21))
+
+c0({ z: 1 });      // Error, implied type is { z: {x: any, y: {j: any}} }
+>c0 : Symbol(c0, Decl(destructuringParameterDeclaration2.ts, 22, 39))
+>z : Symbol(z, Decl(destructuringParameterDeclaration2.ts, 33, 4))
+
+c1({});            // Error, implied type is {z:number}?
+>c1 : Symbol(c1, Decl(destructuringParameterDeclaration2.ts, 25, 33))
+
+c1({ z: true });   // Error, implied type is {z:number}?
+>c1 : Symbol(c1, Decl(destructuringParameterDeclaration2.ts, 25, 33))
+>z : Symbol(z, Decl(destructuringParameterDeclaration2.ts, 35, 4))
+
+c2({ z: false });  // Error, implied type is {z?: number}
+>c2 : Symbol(c2, Decl(destructuringParameterDeclaration2.ts, 26, 32))
+>z : Symbol(z, Decl(destructuringParameterDeclaration2.ts, 36, 4))
+
+c3({ b: true });   // Error, implied type is { b: number|string }. 
+>c3 : Symbol(c3, Decl(destructuringParameterDeclaration2.ts, 27, 25))
+>b : Symbol(b, Decl(destructuringParameterDeclaration2.ts, 37, 4))
+
+c5([1, 2, false, true]);   // Error, implied type is [any, any, [[any]]]
+>c5 : Symbol(c5, Decl(destructuringParameterDeclaration2.ts, 29, 31))
+
+c6([1, 2, [["string"]]]);  // Error, implied type is [any, any, [[number]]]  // Use initializer
+>c6 : Symbol(c6, Decl(destructuringParameterDeclaration2.ts, 30, 30))
+
+// A parameter can be marked optional by following its name or binding pattern with a question mark (?)
+// or by including an initializer.  Initializers (including binding property or element initializers) are
+// permitted only when the parameter list occurs in conjunction with a function body
+
+function d1([a, b, c]?) { }  // Error, binding pattern can't be optional in implementation signature
+>d1 : Symbol(d1, Decl(destructuringParameterDeclaration2.ts, 39, 25))
+>a : Symbol(a, Decl(destructuringParameterDeclaration2.ts, 45, 13))
+>b : Symbol(b, Decl(destructuringParameterDeclaration2.ts, 45, 15))
+>c : Symbol(c, Decl(destructuringParameterDeclaration2.ts, 45, 18))
+
+function d2({x, y, z}?) { }  // Error, binding pattern can't be optional in implementation signature
+>d2 : Symbol(d2, Decl(destructuringParameterDeclaration2.ts, 45, 27))
+>x : Symbol(x, Decl(destructuringParameterDeclaration2.ts, 46, 13))
+>y : Symbol(y, Decl(destructuringParameterDeclaration2.ts, 46, 15))
+>z : Symbol(z, Decl(destructuringParameterDeclaration2.ts, 46, 18))
+
+interface F2 {
+>F2 : Symbol(F2, Decl(destructuringParameterDeclaration2.ts, 46, 27))
+
+    d3([a, b, c]?);
+>d3 : Symbol(F2.d3, Decl(destructuringParameterDeclaration2.ts, 48, 14))
+>a : Symbol(a, Decl(destructuringParameterDeclaration2.ts, 49, 8))
+>b : Symbol(b, Decl(destructuringParameterDeclaration2.ts, 49, 10))
+>c : Symbol(c, Decl(destructuringParameterDeclaration2.ts, 49, 13))
+
+    d4({x, y, z}?);
+>d4 : Symbol(F2.d4, Decl(destructuringParameterDeclaration2.ts, 49, 19))
+>x : Symbol(x, Decl(destructuringParameterDeclaration2.ts, 50, 8))
+>y : Symbol(y, Decl(destructuringParameterDeclaration2.ts, 50, 10))
+>z : Symbol(z, Decl(destructuringParameterDeclaration2.ts, 50, 13))
+
+    e0([a, b, c]);
+>e0 : Symbol(F2.e0, Decl(destructuringParameterDeclaration2.ts, 50, 19))
+>a : Symbol(a, Decl(destructuringParameterDeclaration2.ts, 51, 8))
+>b : Symbol(b, Decl(destructuringParameterDeclaration2.ts, 51, 10))
+>c : Symbol(c, Decl(destructuringParameterDeclaration2.ts, 51, 13))
+}
+
+class C4 implements F2 {
+>C4 : Symbol(C4, Decl(destructuringParameterDeclaration2.ts, 52, 1))
+>F2 : Symbol(F2, Decl(destructuringParameterDeclaration2.ts, 46, 27))
+
+    d3([a, b, c]?) { }  // Error, binding pattern can't be optional in implementation signature
+>d3 : Symbol(C4.d3, Decl(destructuringParameterDeclaration2.ts, 54, 24))
+>a : Symbol(a, Decl(destructuringParameterDeclaration2.ts, 55, 8))
+>b : Symbol(b, Decl(destructuringParameterDeclaration2.ts, 55, 10))
+>c : Symbol(c, Decl(destructuringParameterDeclaration2.ts, 55, 13))
+
+    d4({x, y, c}) { }
+>d4 : Symbol(C4.d4, Decl(destructuringParameterDeclaration2.ts, 55, 22))
+>x : Symbol(x, Decl(destructuringParameterDeclaration2.ts, 56, 8))
+>y : Symbol(y, Decl(destructuringParameterDeclaration2.ts, 56, 10))
+>c : Symbol(c, Decl(destructuringParameterDeclaration2.ts, 56, 13))
+
+    e0([a, b, q]) { }
+>e0 : Symbol(C4.e0, Decl(destructuringParameterDeclaration2.ts, 56, 21))
+>a : Symbol(a, Decl(destructuringParameterDeclaration2.ts, 57, 8))
+>b : Symbol(b, Decl(destructuringParameterDeclaration2.ts, 57, 10))
+>q : Symbol(q, Decl(destructuringParameterDeclaration2.ts, 57, 13))
+}
+
+// Destructuring parameter declarations do not permit type annotations on the individual binding patterns,
+// as such annotations would conflict with the already established meaning of colons in object literals.
+// Type annotations must instead be written on the top- level parameter declaration
+
+function e0({x: [number, number, number]}) { }  // error, duplicate identifier;
+>e0 : Symbol(e0, Decl(destructuringParameterDeclaration2.ts, 58, 1))
+>x : Symbol(x)
+>number : Symbol(number, Decl(destructuringParameterDeclaration2.ts, 64, 17))
+>number : Symbol(number, Decl(destructuringParameterDeclaration2.ts, 64, 24))
+>number : Symbol(number, Decl(destructuringParameterDeclaration2.ts, 64, 32))
+
+
+

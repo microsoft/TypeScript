@@ -145,7 +145,7 @@ namespace ts {
 
             // Initialize source map data
             sourceMapData = {
-                sourceMapFilePath: sourceMapFilePath,
+                sourceMapFilePath,
                 jsSourceMappingURL: !compilerOptions.inlineSourceMap ? getBaseFileName(normalizeSlashes(sourceMapFilePath)) : undefined,
                 sourceMapFile: getBaseFileName(normalizeSlashes(filePath)),
                 sourceMapSourceRoot: compilerOptions.sourceRoot || "",
@@ -292,8 +292,8 @@ namespace ts {
 
                 // New span
                 lastRecordedSourceMapSpan = {
-                    emittedLine: emittedLine,
-                    emittedColumn: emittedColumn,
+                    emittedLine,
+                    emittedColumn,
                     sourceLine: sourceLinePos.line,
                     sourceColumn: sourceLinePos.character,
                     sourceIndex: sourceMapSourceIndex
@@ -420,7 +420,7 @@ namespace ts {
                 host.getCanonicalFileName,
                 /*isAbsolutePathAnUrl*/ true);
 
-            sourceMapSourceIndex = indexOf(sourceMapData.sourceMapSources, source);
+            sourceMapSourceIndex = sourceMapData.sourceMapSources.indexOf(source);
             if (sourceMapSourceIndex === -1) {
                 sourceMapSourceIndex = sourceMapData.sourceMapSources.length;
                 sourceMapData.sourceMapSources.push(source);

@@ -24,7 +24,7 @@ declare namespace A {
 // #15734 failed when test.ts comes before typings.d.ts
 var C;
 (function (C) {
-    var Name = (function () {
+    var Name = /** @class */ (function () {
         function Name(parameters) {
         }
         Name.funcData = A.AA.func();

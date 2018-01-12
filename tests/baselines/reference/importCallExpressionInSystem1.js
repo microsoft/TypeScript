@@ -10,6 +10,8 @@ p1.then(zero => {
     return zero.foo();
 });
 
+export var p2 = import("./0");
+
 function foo() {
     const p2 = import("./0");
 }
@@ -28,11 +30,12 @@ System.register([], function (exports_1, context_1) {
 });
 //// [1.js]
 System.register([], function (exports_1, context_1) {
+    "use strict";
     var __moduleName = context_1 && context_1.id;
     function foo() {
         const p2 = context_1.import("./0");
     }
-    var p1;
+    var p1, p2;
     return {
         setters: [],
         execute: function () {
@@ -41,6 +44,7 @@ System.register([], function (exports_1, context_1) {
             p1.then(zero => {
                 return zero.foo();
             });
+            exports_1("p2", p2 = context_1.import("./0"));
         }
     };
 });

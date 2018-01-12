@@ -1,0 +1,31 @@
+=== tests/cases/compiler/dynamicImportWithNestedThis_es5.ts ===
+// https://github.com/Microsoft/TypeScript/issues/17564
+class C {
+>C : C
+
+	private _path = './other';
+>_path : string
+>'./other' : "./other"
+
+	dynamic() {
+>dynamic : () => Promise<any>
+
+		return import(this._path);
+>import(this._path) : Promise<any>
+>this._path : string
+>this : this
+>_path : string
+	}
+}
+
+const c = new C();
+>c : C
+>new C() : C
+>C : typeof C
+
+c.dynamic();
+>c.dynamic() : Promise<any>
+>c.dynamic : () => Promise<any>
+>c : C
+>dynamic : () => Promise<any>
+

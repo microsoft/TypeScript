@@ -1,0 +1,143 @@
+=== tests/cases/compiler/objectCreationOfElementAccessExpression.ts ===
+class Food {
+>Food : Symbol(Food, Decl(objectCreationOfElementAccessExpression.ts, 0, 0))
+
+    private amount: number;
+>amount : Symbol(Food.amount, Decl(objectCreationOfElementAccessExpression.ts, 0, 12))
+
+    constructor(public name: string) {
+>name : Symbol(Food.name, Decl(objectCreationOfElementAccessExpression.ts, 2, 16))
+
+        this.amount = 100;
+>this.amount : Symbol(Food.amount, Decl(objectCreationOfElementAccessExpression.ts, 0, 12))
+>this : Symbol(Food, Decl(objectCreationOfElementAccessExpression.ts, 0, 0))
+>amount : Symbol(Food.amount, Decl(objectCreationOfElementAccessExpression.ts, 0, 12))
+    }
+    public eat(amountToEat: number): boolean {
+>eat : Symbol(Food.eat, Decl(objectCreationOfElementAccessExpression.ts, 4, 5))
+>amountToEat : Symbol(amountToEat, Decl(objectCreationOfElementAccessExpression.ts, 5, 15))
+
+        this.amount -= amountToEat;
+>this.amount : Symbol(Food.amount, Decl(objectCreationOfElementAccessExpression.ts, 0, 12))
+>this : Symbol(Food, Decl(objectCreationOfElementAccessExpression.ts, 0, 0))
+>amount : Symbol(Food.amount, Decl(objectCreationOfElementAccessExpression.ts, 0, 12))
+>amountToEat : Symbol(amountToEat, Decl(objectCreationOfElementAccessExpression.ts, 5, 15))
+
+        if (this.amount <= 0) {
+>this.amount : Symbol(Food.amount, Decl(objectCreationOfElementAccessExpression.ts, 0, 12))
+>this : Symbol(Food, Decl(objectCreationOfElementAccessExpression.ts, 0, 0))
+>amount : Symbol(Food.amount, Decl(objectCreationOfElementAccessExpression.ts, 0, 12))
+
+            this.amount = 0;
+>this.amount : Symbol(Food.amount, Decl(objectCreationOfElementAccessExpression.ts, 0, 12))
+>this : Symbol(Food, Decl(objectCreationOfElementAccessExpression.ts, 0, 0))
+>amount : Symbol(Food.amount, Decl(objectCreationOfElementAccessExpression.ts, 0, 12))
+
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+}
+class MonsterFood extends Food {
+>MonsterFood : Symbol(MonsterFood, Decl(objectCreationOfElementAccessExpression.ts, 15, 1))
+>Food : Symbol(Food, Decl(objectCreationOfElementAccessExpression.ts, 0, 0))
+
+    constructor(name: string, public flavor: string) {
+>name : Symbol(name, Decl(objectCreationOfElementAccessExpression.ts, 17, 16))
+>flavor : Symbol(MonsterFood.flavor, Decl(objectCreationOfElementAccessExpression.ts, 17, 29))
+
+        super(name);
+>super : Symbol(Food, Decl(objectCreationOfElementAccessExpression.ts, 0, 0))
+>name : Symbol(name, Decl(objectCreationOfElementAccessExpression.ts, 17, 16))
+    }
+}
+class IceCream extends MonsterFood {
+>IceCream : Symbol(IceCream, Decl(objectCreationOfElementAccessExpression.ts, 20, 1))
+>MonsterFood : Symbol(MonsterFood, Decl(objectCreationOfElementAccessExpression.ts, 15, 1))
+
+    private isDairyFree: boolean;
+>isDairyFree : Symbol(IceCream.isDairyFree, Decl(objectCreationOfElementAccessExpression.ts, 21, 36))
+
+    constructor(public flavor: string) {
+>flavor : Symbol(IceCream.flavor, Decl(objectCreationOfElementAccessExpression.ts, 23, 16))
+
+        super("Ice Cream", flavor);
+>super : Symbol(MonsterFood, Decl(objectCreationOfElementAccessExpression.ts, 15, 1))
+>flavor : Symbol(flavor, Decl(objectCreationOfElementAccessExpression.ts, 23, 16))
+    }
+}
+class Cookie extends MonsterFood {
+>Cookie : Symbol(Cookie, Decl(objectCreationOfElementAccessExpression.ts, 26, 1))
+>MonsterFood : Symbol(MonsterFood, Decl(objectCreationOfElementAccessExpression.ts, 15, 1))
+
+    constructor(public flavor: string, public isGlutenFree: boolean) {
+>flavor : Symbol(Cookie.flavor, Decl(objectCreationOfElementAccessExpression.ts, 28, 16))
+>isGlutenFree : Symbol(Cookie.isGlutenFree, Decl(objectCreationOfElementAccessExpression.ts, 28, 38))
+
+        super("Cookie", flavor);
+>super : Symbol(MonsterFood, Decl(objectCreationOfElementAccessExpression.ts, 15, 1))
+>flavor : Symbol(flavor, Decl(objectCreationOfElementAccessExpression.ts, 28, 16))
+    }
+}
+class PetFood extends Food {
+>PetFood : Symbol(PetFood, Decl(objectCreationOfElementAccessExpression.ts, 31, 1))
+>Food : Symbol(Food, Decl(objectCreationOfElementAccessExpression.ts, 0, 0))
+
+    constructor(name: string, public whereToBuy: number) {
+>name : Symbol(name, Decl(objectCreationOfElementAccessExpression.ts, 33, 16))
+>whereToBuy : Symbol(PetFood.whereToBuy, Decl(objectCreationOfElementAccessExpression.ts, 33, 29))
+
+        super(name);
+>super : Symbol(Food, Decl(objectCreationOfElementAccessExpression.ts, 0, 0))
+>name : Symbol(name, Decl(objectCreationOfElementAccessExpression.ts, 33, 16))
+    }
+}
+class ExpensiveOrganicDogFood extends PetFood {
+>ExpensiveOrganicDogFood : Symbol(ExpensiveOrganicDogFood, Decl(objectCreationOfElementAccessExpression.ts, 36, 1))
+>PetFood : Symbol(PetFood, Decl(objectCreationOfElementAccessExpression.ts, 31, 1))
+
+    constructor(public whereToBuy: number) {
+>whereToBuy : Symbol(ExpensiveOrganicDogFood.whereToBuy, Decl(objectCreationOfElementAccessExpression.ts, 38, 16))
+
+        super("Origen", whereToBuy);
+>super : Symbol(PetFood, Decl(objectCreationOfElementAccessExpression.ts, 31, 1))
+>whereToBuy : Symbol(whereToBuy, Decl(objectCreationOfElementAccessExpression.ts, 38, 16))
+    }
+}
+class ExpensiveOrganicCatFood extends PetFood {
+>ExpensiveOrganicCatFood : Symbol(ExpensiveOrganicCatFood, Decl(objectCreationOfElementAccessExpression.ts, 41, 1))
+>PetFood : Symbol(PetFood, Decl(objectCreationOfElementAccessExpression.ts, 31, 1))
+
+    constructor(public whereToBuy: number, public containsFish: boolean) {
+>whereToBuy : Symbol(ExpensiveOrganicCatFood.whereToBuy, Decl(objectCreationOfElementAccessExpression.ts, 43, 16))
+>containsFish : Symbol(ExpensiveOrganicCatFood.containsFish, Decl(objectCreationOfElementAccessExpression.ts, 43, 42))
+
+        super("Nature's Logic", whereToBuy);
+>super : Symbol(PetFood, Decl(objectCreationOfElementAccessExpression.ts, 31, 1))
+>whereToBuy : Symbol(whereToBuy, Decl(objectCreationOfElementAccessExpression.ts, 43, 16))
+    }
+}
+class Slug {
+>Slug : Symbol(Slug, Decl(objectCreationOfElementAccessExpression.ts, 46, 1))
+
+    // This is NOT a food!!!
+}
+
+// ElementAccessExpressions can only contain one expression.  There should be a parse error here.
+var foods = new PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)];
+>foods : Symbol(foods, Decl(objectCreationOfElementAccessExpression.ts, 52, 3))
+>PetFood : Symbol(PetFood, Decl(objectCreationOfElementAccessExpression.ts, 31, 1))
+>IceCream : Symbol(IceCream, Decl(objectCreationOfElementAccessExpression.ts, 20, 1))
+>Cookie : Symbol(Cookie, Decl(objectCreationOfElementAccessExpression.ts, 26, 1))
+>Cookie : Symbol(Cookie, Decl(objectCreationOfElementAccessExpression.ts, 26, 1))
+
+var foods2: MonsterFood[] = new PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)];
+>foods2 : Symbol(foods2, Decl(objectCreationOfElementAccessExpression.ts, 53, 3))
+>MonsterFood : Symbol(MonsterFood, Decl(objectCreationOfElementAccessExpression.ts, 15, 1))
+>PetFood : Symbol(PetFood, Decl(objectCreationOfElementAccessExpression.ts, 31, 1))
+>IceCream : Symbol(IceCream, Decl(objectCreationOfElementAccessExpression.ts, 20, 1))
+>Cookie : Symbol(Cookie, Decl(objectCreationOfElementAccessExpression.ts, 26, 1))
+>Cookie : Symbol(Cookie, Decl(objectCreationOfElementAccessExpression.ts, 26, 1))
+

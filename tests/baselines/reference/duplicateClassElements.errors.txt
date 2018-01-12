@@ -16,7 +16,7 @@ tests/cases/compiler/duplicateClassElements.ts(26,9): error TS2300: Duplicate id
 tests/cases/compiler/duplicateClassElements.ts(29,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/duplicateClassElements.ts(32,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/duplicateClassElements.ts(34,12): error TS2300: Duplicate identifier 'x2'.
-tests/cases/compiler/duplicateClassElements.ts(34,12): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x2' must be of type 'number', but here has type 'any'.
+tests/cases/compiler/duplicateClassElements.ts(34,12): error TS2717: Subsequent property declarations must have the same type.  Property 'x2' must be of type 'number', but here has type 'any'.
 tests/cases/compiler/duplicateClassElements.ts(36,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/duplicateClassElements.ts(36,9): error TS2300: Duplicate identifier 'z2'.
 tests/cases/compiler/duplicateClassElements.ts(39,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -96,7 +96,7 @@ tests/cases/compiler/duplicateClassElements.ts(41,12): error TS2300: Duplicate i
                ~~
 !!! error TS2300: Duplicate identifier 'x2'.
                ~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x2' must be of type 'number', but here has type 'any'.
+!!! error TS2717: Subsequent property declarations must have the same type.  Property 'x2' must be of type 'number', but here has type 'any'.
     
         get z2() {
             ~~

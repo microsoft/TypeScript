@@ -1,0 +1,99 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts ===
+interface I<T, U> {
+>I : Symbol(I, Decl(genericCallWithTupleType.ts, 0, 0))
+>T : Symbol(T, Decl(genericCallWithTupleType.ts, 0, 12))
+>U : Symbol(U, Decl(genericCallWithTupleType.ts, 0, 14))
+
+    tuple1: [T, U];
+>tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+>T : Symbol(T, Decl(genericCallWithTupleType.ts, 0, 12))
+>U : Symbol(U, Decl(genericCallWithTupleType.ts, 0, 14))
+} 
+
+var i1: I<string, number>;
+>i1 : Symbol(i1, Decl(genericCallWithTupleType.ts, 4, 3))
+>I : Symbol(I, Decl(genericCallWithTupleType.ts, 0, 0))
+
+var i2: I<{}, {}>;
+>i2 : Symbol(i2, Decl(genericCallWithTupleType.ts, 5, 3))
+>I : Symbol(I, Decl(genericCallWithTupleType.ts, 0, 0))
+
+// no error
+i1.tuple1 = ["foo", 5];
+>i1.tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+>i1 : Symbol(i1, Decl(genericCallWithTupleType.ts, 4, 3))
+>tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+
+var e1 = i1.tuple1[0];  // string
+>e1 : Symbol(e1, Decl(genericCallWithTupleType.ts, 9, 3))
+>i1.tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+>i1 : Symbol(i1, Decl(genericCallWithTupleType.ts, 4, 3))
+>tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+>0 : Symbol(0)
+
+var e2 = i1.tuple1[1];  // number
+>e2 : Symbol(e2, Decl(genericCallWithTupleType.ts, 10, 3))
+>i1.tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+>i1 : Symbol(i1, Decl(genericCallWithTupleType.ts, 4, 3))
+>tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+>1 : Symbol(1)
+
+i1.tuple1 = ["foo", 5, false, true];
+>i1.tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+>i1 : Symbol(i1, Decl(genericCallWithTupleType.ts, 4, 3))
+>tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+
+var e3 = i1.tuple1[2];  // {}
+>e3 : Symbol(e3, Decl(genericCallWithTupleType.ts, 12, 3))
+>i1.tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+>i1 : Symbol(i1, Decl(genericCallWithTupleType.ts, 4, 3))
+>tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+
+i1.tuple1[3] = { a: "string" };
+>i1.tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+>i1 : Symbol(i1, Decl(genericCallWithTupleType.ts, 4, 3))
+>tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+>a : Symbol(a, Decl(genericCallWithTupleType.ts, 13, 16))
+
+var e4 = i1.tuple1[3];  // {}
+>e4 : Symbol(e4, Decl(genericCallWithTupleType.ts, 14, 3))
+>i1.tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+>i1 : Symbol(i1, Decl(genericCallWithTupleType.ts, 4, 3))
+>tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+
+i2.tuple1 = ["foo", 5];
+>i2.tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+>i2 : Symbol(i2, Decl(genericCallWithTupleType.ts, 5, 3))
+>tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+
+i2.tuple1 = ["foo", "bar"];
+>i2.tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+>i2 : Symbol(i2, Decl(genericCallWithTupleType.ts, 5, 3))
+>tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+
+i2.tuple1 = [5, "bar"];
+>i2.tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+>i2 : Symbol(i2, Decl(genericCallWithTupleType.ts, 5, 3))
+>tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+
+i2.tuple1 = [{}, {}];
+>i2.tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+>i2 : Symbol(i2, Decl(genericCallWithTupleType.ts, 5, 3))
+>tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+
+// error
+i1.tuple1 = [5, "foo"];
+>i1.tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+>i1 : Symbol(i1, Decl(genericCallWithTupleType.ts, 4, 3))
+>tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+
+i1.tuple1 = [{}, {}];
+>i1.tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+>i1 : Symbol(i1, Decl(genericCallWithTupleType.ts, 4, 3))
+>tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+
+i2.tuple1 = [{}];
+>i2.tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+>i2 : Symbol(i2, Decl(genericCallWithTupleType.ts, 5, 3))
+>tuple1 : Symbol(I.tuple1, Decl(genericCallWithTupleType.ts, 0, 19))
+

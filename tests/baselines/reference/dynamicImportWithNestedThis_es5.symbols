@@ -1,0 +1,27 @@
+=== tests/cases/compiler/dynamicImportWithNestedThis_es5.ts ===
+// https://github.com/Microsoft/TypeScript/issues/17564
+class C {
+>C : Symbol(C, Decl(dynamicImportWithNestedThis_es5.ts, 0, 0))
+
+	private _path = './other';
+>_path : Symbol(C._path, Decl(dynamicImportWithNestedThis_es5.ts, 1, 9))
+
+	dynamic() {
+>dynamic : Symbol(C.dynamic, Decl(dynamicImportWithNestedThis_es5.ts, 2, 27))
+
+		return import(this._path);
+>this._path : Symbol(C._path, Decl(dynamicImportWithNestedThis_es5.ts, 1, 9))
+>this : Symbol(C, Decl(dynamicImportWithNestedThis_es5.ts, 0, 0))
+>_path : Symbol(C._path, Decl(dynamicImportWithNestedThis_es5.ts, 1, 9))
+	}
+}
+
+const c = new C();
+>c : Symbol(c, Decl(dynamicImportWithNestedThis_es5.ts, 9, 5))
+>C : Symbol(C, Decl(dynamicImportWithNestedThis_es5.ts, 0, 0))
+
+c.dynamic();
+>c.dynamic : Symbol(C.dynamic, Decl(dynamicImportWithNestedThis_es5.ts, 2, 27))
+>c : Symbol(c, Decl(dynamicImportWithNestedThis_es5.ts, 9, 5))
+>dynamic : Symbol(C.dynamic, Decl(dynamicImportWithNestedThis_es5.ts, 2, 27))
+

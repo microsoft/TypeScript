@@ -1,8 +1,9 @@
 {
-    "kind": "JSDocTupleType",
+    "kind": "TupleType",
     "pos": 1,
     "end": 3,
-    "types": {
+    "flags": "JSDoc",
+    "elementTypes": {
         "length": 0,
         "pos": 2,
         "end": 2

@@ -8,7 +8,7 @@ sources: ../tests/cases/compiler/a.ts
 emittedFile:out/a.js
 sourceFile:../tests/cases/compiler/a.ts
 -------------------------------------------------------------------
->>>var c = (function () {
+>>>var c = /** @class */ (function () {
 1 >
 2 >^^^^^^^^^^^^^^^^^^^->
 1 >

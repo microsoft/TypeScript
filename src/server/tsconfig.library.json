@@ -2,6 +2,7 @@
     "compilerOptions": {
         "noImplicitAny": true,
         "noImplicitThis": true,
+        "alwaysStrict": true,
         "preserveConstEnums": true,
         "pretty": true,
         "outFile": "../../built/local/tsserverlibrary.js",
@@ -15,7 +16,6 @@
     },
     "files": [
         "editorServices.ts",
-        "lsHost.ts",
         "project.ts",
         "protocol.ts",
         "scriptInfo.ts",

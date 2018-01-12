@@ -1,13 +1,11 @@
-=== tests/cases/conformance/jsdoc/jsdocTemplateTag.ts ===
+=== tests/cases/conformance/jsdoc/forgot.js ===
 /**
  * @param {T} a
  * @template T
  */
-function f<T>(a: T) {
+function f(a) {
 >f : <T>(a: T) => () => T
->T : T
 >a : T
->T : T
 
     return () => a
 >() => a : () => T
@@ -25,11 +23,9 @@ let n = f(1)()
  * @template T
  * @returns {function(): T}
  */
-function g<T>(a: T) {
+function g(a) {
 >g : <T>(a: T) => () => T
->T : T
 >a : T
->T : T
 
     return () => a
 >() => a : () => T

@@ -536,7 +536,7 @@ module TypeScript {
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
-    var AstWalkOptions = (function () {
+    var AstWalkOptions = /** @class */ (function () {
         function AstWalkOptions() {
             this.goChildren = true;
             this.goNextSibling = true;
@@ -550,7 +550,7 @@ var TypeScript;
         return AstWalkOptions;
     }());
     TypeScript.AstWalkOptions = AstWalkOptions;
-    var AstWalker = (function () {
+    var AstWalker = /** @class */ (function () {
         function AstWalker(childrenWalkers, pre, post, options, state) {
             this.childrenWalkers = childrenWalkers;
             this.pre = pre;
@@ -587,7 +587,7 @@ var TypeScript;
         };
         return AstWalker;
     }());
-    var AstWalkerFactory = (function () {
+    var AstWalkerFactory = /** @class */ (function () {
         function AstWalkerFactory() {
             this.childrenWalkers = [];
             this.initChildrenWalkers();

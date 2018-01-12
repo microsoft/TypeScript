@@ -1,0 +1,19 @@
+=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveAsProperty.ts ===
+interface WithNonPrimitive {
+>WithNonPrimitive : Symbol(WithNonPrimitive, Decl(nonPrimitiveAsProperty.ts, 0, 0))
+
+    foo: object
+>foo : Symbol(WithNonPrimitive.foo, Decl(nonPrimitiveAsProperty.ts, 0, 28))
+}
+
+var a: WithNonPrimitive = { foo: {bar: "bar"} };
+>a : Symbol(a, Decl(nonPrimitiveAsProperty.ts, 4, 3))
+>WithNonPrimitive : Symbol(WithNonPrimitive, Decl(nonPrimitiveAsProperty.ts, 0, 0))
+>foo : Symbol(foo, Decl(nonPrimitiveAsProperty.ts, 4, 27))
+>bar : Symbol(bar, Decl(nonPrimitiveAsProperty.ts, 4, 34))
+
+var b: WithNonPrimitive = {foo: "bar"}; // expect error
+>b : Symbol(b, Decl(nonPrimitiveAsProperty.ts, 6, 3))
+>WithNonPrimitive : Symbol(WithNonPrimitive, Decl(nonPrimitiveAsProperty.ts, 0, 0))
+>foo : Symbol(foo, Decl(nonPrimitiveAsProperty.ts, 6, 27))
+

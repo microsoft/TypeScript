@@ -21,9 +21,6 @@ namespace ts {
         const compilerOptions = context.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
 
-        // These variables contain state that changes as we descend into the tree.
-        let currentSourceFile: SourceFile;
-
         /**
          * Keeps track of whether expression substitution has been enabled for specific edge cases.
          * They are persisted between each SourceFile transformation and should not be reset.
@@ -51,12 +48,8 @@ namespace ts {
                 return node;
             }
 
-            currentSourceFile = node;
-
             const visited = visitEachChild(node, visitor, context);
             addEmitHelpers(visited, context.readEmitHelpers());
-
-            currentSourceFile = undefined;
             return visited;
         }
 
@@ -197,9 +190,10 @@ namespace ts {
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
+                node.equalsGreaterThanToken,
                 getFunctionFlags(node) & FunctionFlags.Async
                     ? transformAsyncFunctionBody(node)
-                    : visitFunctionBody(node.body, visitor, context)
+                    : visitFunctionBody(node.body, visitor, context),
             );
         }
 
@@ -369,7 +363,7 @@ namespace ts {
         function substitutePropertyAccessExpression(node: PropertyAccessExpression) {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return createSuperAccessInAsyncMethod(
-                    createLiteral(node.name.text),
+                    createLiteral(idText(node.name)),
                     node
                 );
             }
@@ -469,7 +463,7 @@ namespace ts {
         );
 
         // Mark this node as originally an async function
-        (generatorFunc.emitNode || (generatorFunc.emitNode = {})).flags |= EmitFlags.AsyncFunctionBody;
+        (generatorFunc.emitNode || (generatorFunc.emitNode = {})).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
 
         return createCall(
             getHelperName("__awaiter"),

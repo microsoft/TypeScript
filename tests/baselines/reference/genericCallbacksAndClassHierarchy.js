@@ -36,19 +36,19 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var M;
 (function (M) {
-    var C1 = (function () {
+    var C1 = /** @class */ (function () {
         function C1() {
         }
         return C1;
     }());
     M.C1 = C1;
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         return A;
     }());
     M.A = A;
-    var B = (function (_super) {
+    var B = /** @class */ (function (_super) {
         __extends(B, _super);
         function B() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -56,7 +56,7 @@ var M;
         return B;
     }(C1));
     M.B = B;
-    var D = (function () {
+    var D = /** @class */ (function () {
         function D() {
         }
         D.prototype._subscribe = function (viewModel) {

@@ -61,7 +61,7 @@ var B;
 (function (B_1) {
     // re-opened module with colliding name
     // this should add an underscore.
-    var B = (function () {
+    var B = /** @class */ (function () {
         function B() {
         }
         return B;

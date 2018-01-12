@@ -1,0 +1,12 @@
+=== /a.js ===
+export class A {}
+>A : A
+
+=== /b.js ===
+import * as a from "./a";
+>a : typeof a
+
+/** @augments a.A */
+class B {}
+>B : B
+

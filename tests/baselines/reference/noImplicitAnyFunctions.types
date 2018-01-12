@@ -1,0 +1,46 @@
+=== tests/cases/compiler/noImplicitAnyFunctions.ts ===
+declare function f1();
+>f1 : () => any
+
+declare function f2(): any;
+>f2 : () => any
+
+function f3(x) {
+>f3 : (x: any) => void
+>x : any
+}
+
+function f4(x: any) {
+>f4 : (x: any) => any
+>x : any
+
+    return x;
+>x : any
+}
+
+function f5(x: any): any {
+>f5 : (x: any) => any
+>x : any
+
+    return x;
+>x : any
+}
+
+function f6(x: string, y: number);
+>f6 : { (x: string, y: number): any; (x: string, y: string): any; }
+>x : string
+>y : number
+
+function f6(x: string, y: string): any;
+>f6 : { (x: string, y: number): any; (x: string, y: string): any; }
+>x : string
+>y : string
+
+function f6(x: string, y) {
+>f6 : { (x: string, y: number): any; (x: string, y: string): any; }
+>x : string
+>y : any
+
+    return null;
+>null : null
+}

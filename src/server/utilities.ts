@@ -9,7 +9,7 @@ namespace ts.server {
         verbose
     }
 
-    export const emptyArray: ReadonlyArray<any> = [];
+    export const emptyArray: SortedReadonlyArray<never> = createSortedArray<never>();
 
     export interface Logger {
         close(): void;
@@ -19,41 +19,29 @@ namespace ts.server {
         info(s: string): void;
         startGroup(): void;
         endGroup(): void;
-        msg(s: string, type?: Msg.Types): void;
+        msg(s: string, type?: Msg): void;
         getLogFileName(): string;
     }
 
-    export namespace Msg {
-        export type Err = "Err";
-        export const Err: Err = "Err";
-        export type Info = "Info";
-        export const Info: Info = "Info";
-        export type Perf = "Perf";
-        export const Perf: Perf = "Perf";
-        export type Types = Err | Info | Perf;
+    // TODO: Use a const enum (https://github.com/Microsoft/TypeScript/issues/16804)
+    export enum Msg {
+        Err = "Err",
+        Info = "Info",
+        Perf = "Perf",
     }
-
-    function getProjectRootPath(project: Project): Path {
-        switch (project.projectKind) {
-            case ProjectKind.Configured:
-                return <Path>getDirectoryPath(project.getProjectName());
-            case ProjectKind.Inferred:
-                // TODO: fixme
-                return <Path>"";
-            case ProjectKind.External:
-                const projectName = normalizeSlashes(project.getProjectName());
-                return project.projectService.host.fileExists(projectName) ? <Path>getDirectoryPath(projectName) : <Path>projectName;
-        }
+    export namespace Msg {
+        /** @deprecated Only here for backwards-compatibility. Prefer just `Msg`. */
+        export type Types = Msg;
     }
 
     export function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings {
         return {
             projectName: project.getProjectName(),
-            fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true),
-            compilerOptions: project.getCompilerOptions(),
+            fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true).concat(project.getExcludedFiles() as NormalizedPath[]),
+            compilerOptions: project.getCompilationSettings(),
             typeAcquisition,
             unresolvedImports,
-            projectRootPath: getProjectRootPath(project),
+            projectRootPath: project.getCurrentDirectory() as Path,
             cachePath,
             kind: "discover"
         };
@@ -77,7 +65,7 @@ namespace ts.server {
             tabSize: 4,
             newLineCharacter: host.newLine || "\n",
             convertTabsToSpaces: true,
-            indentStyle: ts.IndentStyle.Smart,
+            indentStyle: IndentStyle.Smart,
             insertSpaceAfterConstructor: false,
             insertSpaceAfterCommaDelimiter: true,
             insertSpaceAfterSemicolonInForStatements: true,
@@ -95,29 +83,11 @@ namespace ts.server {
         };
     }
 
-    export function mergeMapLikes(target: MapLike<any>, source: MapLike <any>): void {
+    export function mergeMapLikes(target: MapLike<any>, source: MapLike<any>): void {
         for (const key in source) {
             if (hasProperty(source, key)) {
                 target[key] = source[key];
             }
-        }
-    }
-
-    export function removeItemFromSet<T>(items: T[], itemToRemove: T) {
-        if (items.length === 0) {
-            return;
-        }
-        const index = items.indexOf(itemToRemove);
-        if (index < 0) {
-            return;
-        }
-        if (index ===  items.length - 1) {
-            // last item - pop it
-            items.pop();
-        }
-        else {
-            // non-last item - replace it with the last one
-            items[index] = items.pop();
         }
     }
 
@@ -144,9 +114,7 @@ namespace ts.server {
     }
 
     export function createNormalizedPathMap<T>(): NormalizedPathMap<T> {
-/* tslint:disable:no-null-keyword */
         const map = createMap<T>();
-/* tslint:enable:no-null-keyword */
         return {
             get(path) {
                 return map.get(path);
@@ -190,47 +158,26 @@ namespace ts.server {
         return `/dev/null/inferredProject${counter}*`;
     }
 
-    export function toSortedReadonlyArray(arr: string[]): SortedReadonlyArray<string> {
-        arr.sort();
-        return <any>arr;
+    export function createSortedArray<T>(): SortedArray<T> {
+        return [] as SortedArray<T>;
     }
+}
 
-    export function enumerateInsertsAndDeletes<T>(a: SortedReadonlyArray<T>, b: SortedReadonlyArray<T>, inserted: (item: T) => void, deleted: (item: T) => void, compare?: (a: T, b: T) => Comparison) {
-        compare = compare || ts.compareValues;
-        let aIndex = 0;
-        let bIndex = 0;
-        const aLen = a.length;
-        const bLen = b.length;
-        while (aIndex < aLen && bIndex < bLen) {
-            const aItem = a[aIndex];
-            const bItem = b[bIndex];
-            const compareResult = compare(aItem, bItem);
-            if (compareResult === Comparison.LessThan) {
-                inserted(aItem);
-                aIndex++;
-            }
-            else if (compareResult === Comparison.GreaterThan) {
-                deleted(bItem);
-                bIndex++;
-            }
-            else {
-                aIndex++;
-                bIndex++;
-            }
-        }
-        while (aIndex < aLen) {
-            inserted(a[aIndex++]);
-        }
-        while (bIndex < bLen) {
-            deleted(b[bIndex++]);
-        }
-    }
-
+/* @internal */
+namespace ts.server {
     export class ThrottledOperations {
-        private pendingTimeouts: Map<any> = createMap<any>();
-        constructor(private readonly host: ServerHost) {
+        private readonly pendingTimeouts: Map<any> = createMap<any>();
+        private readonly logger?: Logger | undefined;
+        constructor(private readonly host: ServerHost, logger: Logger) {
+            this.logger = logger.hasLevel(LogLevel.verbose) && logger;
         }
 
+        /**
+         * Wait `number` milliseconds and then invoke `cb`.  If, while waiting, schedule
+         * is called again with the same `operationId`, cancel this operation in favor
+         * of the new one.  (Note that the amount of time the canceled operation had been
+         * waiting does not affect the amount of time that the new operation waits.)
+         */
         public schedule(operationId: string, delay: number, cb: () => void) {
             const pendingTimeout = this.pendingTimeouts.get(operationId);
             if (pendingTimeout) {
@@ -239,10 +186,16 @@ namespace ts.server {
             }
             // schedule new operation, pass arguments
             this.pendingTimeouts.set(operationId, this.host.setTimeout(ThrottledOperations.run, delay, this, operationId, cb));
+            if (this.logger) {
+                this.logger.info(`Scheduled: ${operationId}${pendingTimeout ? ", Cancelled earlier one" : ""}`);
+            }
         }
 
         private static run(self: ThrottledOperations, operationId: string, cb: () => void) {
             self.pendingTimeouts.delete(operationId);
+            if (self.logger) {
+                self.logger.info(`Running: ${operationId}`);
+            }
             cb();
         }
     }
@@ -272,5 +225,95 @@ namespace ts.server {
                 self.logger.perftrc(`GC::before ${before}, after ${after}`);
             }
         }
+    }
+
+    export function getBaseConfigFileName(configFilePath: NormalizedPath): "tsconfig.json" | "jsconfig.json" | undefined {
+        const base = getBaseFileName(configFilePath);
+        return base === "tsconfig.json" || base === "jsconfig.json" ? base : undefined;
+    }
+
+    export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void {
+        if (array.length === 0) {
+            array.push(insert);
+            return;
+        }
+
+        const insertIndex = binarySearch(array, insert, identity, compare);
+        if (insertIndex < 0) {
+            array.splice(~insertIndex, 0, insert);
+        }
+    }
+
+    export function removeSorted<T>(array: SortedArray<T>, remove: T, compare: Comparer<T>): void {
+        if (!array || array.length === 0) {
+            return;
+        }
+
+        if (array[0] === remove) {
+            array.splice(0, 1);
+            return;
+        }
+
+        const removeIndex = binarySearch(array, remove, identity, compare);
+        if (removeIndex >= 0) {
+            array.splice(removeIndex, 1);
+        }
+    }
+
+    export function toSortedArray(arr: string[]): SortedArray<string>;
+    export function toSortedArray<T>(arr: T[], comparer: Comparer<T>): SortedArray<T>;
+    export function toSortedArray<T>(arr: T[], comparer?: Comparer<T>): SortedArray<T> {
+        arr.sort(comparer);
+        return arr as SortedArray<T>;
+    }
+
+    export function toDeduplicatedSortedArray(arr: string[]): SortedArray<string> {
+        arr.sort();
+        filterMutate(arr, isNonDuplicateInSortedArray);
+        return arr as SortedArray<string>;
+    }
+    function isNonDuplicateInSortedArray<T>(value: T, index: number, array: T[]) {
+        return index === 0 || value !== array[index - 1];
+    }
+
+    export function enumerateInsertsAndDeletes<T>(newItems: SortedReadonlyArray<T>, oldItems: SortedReadonlyArray<T>, inserted: (newItem: T) => void, deleted: (oldItem: T) => void, comparer: Comparer<T>) {
+        let newIndex = 0;
+        let oldIndex = 0;
+        const newLen = newItems.length;
+        const oldLen = oldItems.length;
+        while (newIndex < newLen && oldIndex < oldLen) {
+            const newItem = newItems[newIndex];
+            const oldItem = oldItems[oldIndex];
+            const compareResult = comparer(newItem, oldItem);
+            if (compareResult === Comparison.LessThan) {
+                inserted(newItem);
+                newIndex++;
+            }
+            else if (compareResult === Comparison.GreaterThan) {
+                deleted(oldItem);
+                oldIndex++;
+            }
+            else {
+                newIndex++;
+                oldIndex++;
+            }
+        }
+        while (newIndex < newLen) {
+            inserted(newItems[newIndex++]);
+        }
+        while (oldIndex < oldLen) {
+            deleted(oldItems[oldIndex++]);
+        }
+    }
+
+    /* @internal */
+    export function indent(str: string): string {
+        return "\n    " + str;
+    }
+
+    /** Put stringified JSON on the next line, indented. */
+    /* @internal */
+    export function stringifyIndented(json: {}): string {
+        return "\n    " + JSON.stringify(json);
     }
 }

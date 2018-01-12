@@ -1,0 +1,12 @@
+=== tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration2.ts ===
+(function() {
+        var check = function () {
+>check : Symbol(check, Decl(parserVariableDeclaration2.ts, 1, 11))
+        }
+
+        var checkNot = function () {
+>checkNot : Symbol(checkNot, Decl(parserVariableDeclaration2.ts, 4, 11))
+        }
+
+        MUnit.test(a);
+})();

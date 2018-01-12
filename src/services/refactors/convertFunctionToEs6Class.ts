@@ -1,6 +1,6 @@
 /* @internal */
 
-namespace ts.refactor {
+namespace ts.refactor.convertFunctionToES6Class {
     const actionName = "convert";
 
     const convertFunctionToES6Class: Refactor = {
@@ -12,17 +12,21 @@ namespace ts.refactor {
 
     registerRefactor(convertFunctionToES6Class);
 
-    function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] {
-        const start = context.startPosition;
-        const node = getTokenAtPosition(context.file, start, /*includeJsDocComment*/ false);
-        const checker = context.program.getTypeChecker();
-        let symbol = checker.getSymbolAtLocation(node);
+    function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
+        if (!isInJavaScriptFile(context.file)) {
+            return undefined;
+        }
 
-        if (symbol && isDeclarationOfFunctionOrClassExpression(symbol)) {
+        let symbol = getConstructorSymbol(context);
+        if (!symbol) {
+            return undefined;
+        }
+
+        if (isDeclarationOfFunctionOrClassExpression(symbol)) {
             symbol = (symbol.valueDeclaration as VariableDeclaration).initializer.symbol;
         }
 
-        if (symbol && (symbol.flags & SymbolFlags.Function) && symbol.members && (symbol.members.size > 0)) {
+        if ((symbol.flags & SymbolFlags.Function) && symbol.members && (symbol.members.size > 0)) {
             return [
                 {
                     name: convertFunctionToES6Class.name,
@@ -44,12 +48,8 @@ namespace ts.refactor {
             return undefined;
         }
 
-        const start = context.startPosition;
-        const sourceFile = context.file;
-        const checker = context.program.getTypeChecker();
-        const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
-        const ctorSymbol = checker.getSymbolAtLocation(token);
-        const newLine = context.rulesProvider.getFormatOptions().newLineCharacter;
+        const { file: sourceFile } = context;
+        const ctorSymbol = getConstructorSymbol(context);
 
         const deletedNodes: Node[] = [];
         const deletes: (() => any)[] = [];
@@ -59,7 +59,7 @@ namespace ts.refactor {
         }
 
         const ctorDeclaration = ctorSymbol.valueDeclaration;
-        const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context as { newLineCharacter: string, rulesProvider: formatting.RulesProvider });
+        const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
         let precedingNode: Node;
         let newClassDeclaration: ClassDeclaration;
@@ -87,13 +87,15 @@ namespace ts.refactor {
         }
 
         // Because the preceding node could be touched, we need to insert nodes before delete nodes.
-        changeTracker.insertNodeAfter(sourceFile, precedingNode, newClassDeclaration, { suffix: newLine });
+        changeTracker.insertNodeAfter(sourceFile, precedingNode, newClassDeclaration);
         for (const deleteCallback of deletes) {
             deleteCallback();
         }
 
         return {
-            edits: changeTracker.getChanges()
+            edits: changeTracker.getChanges(),
+            renameFilename: undefined,
+            renameLocation: undefined,
         };
 
         function deleteNode(node: Node, inList = false) {
@@ -164,12 +166,16 @@ namespace ts.refactor {
                 }
 
                 switch (assignmentBinaryExpression.right.kind) {
-                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.FunctionExpression: {
                         const functionExpression = assignmentBinaryExpression.right as FunctionExpression;
-                        return createMethod(/*decorators*/ undefined, modifiers, /*asteriskToken*/ undefined, memberDeclaration.name, /*questionToken*/ undefined,
+                        const fullModifiers = concatenate(modifiers, getModifierKindFromSource(functionExpression, SyntaxKind.AsyncKeyword));
+                        const method = createMethod(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, memberDeclaration.name, /*questionToken*/ undefined,
                             /*typeParameters*/ undefined, functionExpression.parameters, /*type*/ undefined, functionExpression.body);
+                        copyComments(assignmentBinaryExpression, method);
+                        return method;
+                    }
 
-                    case SyntaxKind.ArrowFunction:
+                    case SyntaxKind.ArrowFunction: {
                         const arrowFunction = assignmentBinaryExpression.right as ArrowFunction;
                         const arrowFunctionBody = arrowFunction.body;
                         let bodyBlock: Block;
@@ -183,18 +189,41 @@ namespace ts.refactor {
                             const expression = arrowFunctionBody as Expression;
                             bodyBlock = createBlock([createReturn(expression)]);
                         }
-                        return createMethod(/*decorators*/ undefined, modifiers, /*asteriskToken*/ undefined, memberDeclaration.name, /*questionToken*/ undefined,
+                        const fullModifiers = concatenate(modifiers, getModifierKindFromSource(arrowFunction, SyntaxKind.AsyncKeyword));
+                        const method = createMethod(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, memberDeclaration.name, /*questionToken*/ undefined,
                             /*typeParameters*/ undefined, arrowFunction.parameters, /*type*/ undefined, bodyBlock);
+                        copyComments(assignmentBinaryExpression, method);
+                        return method;
+                    }
 
-                    default:
+                    default: {
                         // Don't try to declare members in JavaScript files
                         if (isSourceFileJavaScript(sourceFile)) {
                             return;
                         }
-                        return createProperty(/*decorators*/ undefined, modifiers, memberDeclaration.name, /*questionToken*/ undefined,
+                        const prop = createProperty(/*decorators*/ undefined, modifiers, memberDeclaration.name, /*questionToken*/ undefined,
                             /*type*/ undefined, assignmentBinaryExpression.right);
+                        copyComments(assignmentBinaryExpression.parent, prop);
+                        return prop;
+                    }
                 }
             }
+        }
+
+        function copyComments(sourceNode: Node, targetNode: Node) {
+            forEachLeadingCommentRange(sourceFile.text, sourceNode.pos, (pos, end, kind, htnl) => {
+                if (kind === SyntaxKind.MultiLineCommentTrivia) {
+                    // Remove leading /*
+                    pos += 2;
+                    // Remove trailing */
+                    end -= 2;
+                }
+                else {
+                    // Remove leading //
+                    pos += 2;
+                }
+                addSyntheticLeadingComment(targetNode, kind, sourceFile.text.slice(pos, end), htnl);
+            });
         }
 
         function createClassFromVariableDeclaration(node: VariableDeclaration): ClassDeclaration {
@@ -212,8 +241,11 @@ namespace ts.refactor {
                 memberElements.unshift(createConstructor(/*decorators*/ undefined, /*modifiers*/ undefined, initializer.parameters, initializer.body));
             }
 
-            return createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, node.name,
+            const modifiers = getModifierKindFromSource(precedingNode, SyntaxKind.ExportKeyword);
+            const cls = createClassDeclaration(/*decorators*/ undefined, modifiers, node.name,
                 /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements);
+            // Don't call copyComments here because we'll already leave them in place
+            return cls;
         }
 
         function createClassFromFunctionDeclaration(node: FunctionDeclaration): ClassDeclaration {
@@ -221,8 +253,22 @@ namespace ts.refactor {
             if (node.body) {
                 memberElements.unshift(createConstructor(/*decorators*/ undefined, /*modifiers*/ undefined, node.parameters, node.body));
             }
-            return createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, node.name,
+
+            const modifiers = getModifierKindFromSource(node, SyntaxKind.ExportKeyword);
+            const cls = createClassDeclaration(/*decorators*/ undefined, modifiers, node.name,
                 /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements);
+            // Don't call copyComments here because we'll already leave them in place
+            return cls;
         }
+
+        function getModifierKindFromSource(source: Node, kind: SyntaxKind) {
+            return filter(source.modifiers, modifier => modifier.kind === kind);
+        }
+    }
+
+    function getConstructorSymbol({ startPosition, file, program }: RefactorContext): Symbol {
+        const checker = program.getTypeChecker();
+        const token = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
+        return checker.getSymbolAtLocation(token);
     }
 }

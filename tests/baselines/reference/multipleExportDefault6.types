@@ -1,0 +1,16 @@
+=== tests/cases/conformance/externalModules/multipleExportDefault6.ts ===
+export default {
+>{    lol: 1} : { lol: number; }
+
+    lol: 1
+>lol : number
+>1 : 1
+}
+
+export default {
+>{    lol: 2} : { lol: number; }
+
+    lol: 2
+>lol : number
+>2 : 2
+}

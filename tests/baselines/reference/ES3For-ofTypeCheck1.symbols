@@ -1,0 +1,4 @@
+=== tests/cases/conformance/statements/for-ofStatements/ES3For-ofTypeCheck1.ts ===
+for (var v of "") { }
+>v : Symbol(v, Decl(ES3For-ofTypeCheck1.ts, 0, 8))
+

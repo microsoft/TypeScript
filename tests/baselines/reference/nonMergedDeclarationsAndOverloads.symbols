@@ -1,0 +1,23 @@
+=== tests/cases/compiler/nonMergedDeclarationsAndOverloads.ts ===
+class A {
+>A : Symbol(A, Decl(nonMergedDeclarationsAndOverloads.ts, 0, 0))
+
+    m1: string;
+>m1 : Symbol(A.m1, Decl(nonMergedDeclarationsAndOverloads.ts, 0, 9))
+
+    f() {}
+>f : Symbol(A.f, Decl(nonMergedDeclarationsAndOverloads.ts, 1, 15))
+
+    m1 (a: string): void;
+>m1 : Symbol(A.m1, Decl(nonMergedDeclarationsAndOverloads.ts, 2, 10))
+>a : Symbol(a, Decl(nonMergedDeclarationsAndOverloads.ts, 3, 8))
+
+    m1 (a: number): void;
+>m1 : Symbol(A.m1, Decl(nonMergedDeclarationsAndOverloads.ts, 3, 25))
+>a : Symbol(a, Decl(nonMergedDeclarationsAndOverloads.ts, 4, 8))
+
+    m1 (a: any): void {
+>m1 : Symbol(A.m1, Decl(nonMergedDeclarationsAndOverloads.ts, 4, 25))
+>a : Symbol(a, Decl(nonMergedDeclarationsAndOverloads.ts, 5, 8))
+    }
+}

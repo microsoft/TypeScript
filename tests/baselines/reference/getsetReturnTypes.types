@@ -1,0 +1,29 @@
+=== tests/cases/compiler/getsetReturnTypes.ts ===
+function makePoint(x: number) { 
+>makePoint : (x: number) => { readonly x: number; }
+>x : number
+
+ return { 
+>{   get x() { return x; }  } : { readonly x: number; }
+
+  get x() { return x; } 
+>x : number
+>x : number
+ } 
+}; 
+var x = makePoint(2).x;
+>x : number
+>makePoint(2).x : number
+>makePoint(2) : { readonly x: number; }
+>makePoint : (x: number) => { readonly x: number; }
+>2 : 2
+>x : number
+
+var y: number = makePoint(2).x;
+>y : number
+>makePoint(2).x : number
+>makePoint(2) : { readonly x: number; }
+>makePoint : (x: number) => { readonly x: number; }
+>2 : 2
+>x : number
+

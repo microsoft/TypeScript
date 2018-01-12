@@ -1,0 +1,193 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignaturesWithOptionalParameters.ts ===
+// call signatures in derived types must have the same or fewer optional parameters as the base type
+
+interface Base { 
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 0, 0))
+
+    a: new () => number;
+>a : Symbol(Base.a, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 2, 16))
+
+    a2: new (x?: number) => number;
+>a2 : Symbol(Base.a2, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 3, 24))
+>x : Symbol(x, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 4, 13))
+
+    a3: new (x: number) => number;
+>a3 : Symbol(Base.a3, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 4, 35))
+>x : Symbol(x, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 5, 13))
+
+    a4: new (x: number, y?: number) => number;
+>a4 : Symbol(Base.a4, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 5, 34))
+>x : Symbol(x, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 6, 13))
+>y : Symbol(y, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 6, 23))
+
+    a5: new (x?: number, y?: number) => number;
+>a5 : Symbol(Base.a5, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 6, 46))
+>x : Symbol(x, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 7, 13))
+>y : Symbol(y, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 7, 24))
+}
+
+interface I1 extends Base {
+>I1 : Symbol(I1, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 8, 1))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 0, 0))
+
+    a: new () => number; // ok, same number of required params
+>a : Symbol(I1.a, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 10, 27))
+}
+
+interface I2 extends Base {
+>I2 : Symbol(I2, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 12, 1))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 0, 0))
+
+    a: new (x?: number) => number; // ok, same number of required params
+>a : Symbol(I2.a, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 14, 27))
+>x : Symbol(x, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 15, 12))
+}
+
+interface I3 extends Base {
+>I3 : Symbol(I3, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 16, 1))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 0, 0))
+
+    a: new (x: number) => number; // error, too many required params
+>a : Symbol(I3.a, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 18, 27))
+>x : Symbol(x, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 19, 12))
+}
+
+
+interface I4 extends Base {
+>I4 : Symbol(I4, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 20, 1))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 0, 0))
+
+    a2: new () => number; // ok, same number of required params
+>a2 : Symbol(I4.a2, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 23, 27))
+}
+
+interface I5 extends Base {
+>I5 : Symbol(I5, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 25, 1))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 0, 0))
+
+    a2: new (x?: number) => number; // ok, same number of required params
+>a2 : Symbol(I5.a2, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 27, 27))
+>x : Symbol(x, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 28, 13))
+}
+
+interface I6 extends Base {
+>I6 : Symbol(I6, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 29, 1))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 0, 0))
+
+    a2: new (x: number) => number; // ok, same number of params
+>a2 : Symbol(I6.a2, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 31, 27))
+>x : Symbol(x, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 32, 13))
+}
+
+
+interface I7 extends Base {
+>I7 : Symbol(I7, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 33, 1))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 0, 0))
+
+    a3: new () => number; // ok, fewer required params
+>a3 : Symbol(I7.a3, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 36, 27))
+}
+
+interface I8 extends Base {
+>I8 : Symbol(I8, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 38, 1))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 0, 0))
+
+    a3: new (x?: number) => number; // ok, fewer required params
+>a3 : Symbol(I8.a3, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 40, 27))
+>x : Symbol(x, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 41, 13))
+}
+
+interface I9 extends Base {
+>I9 : Symbol(I9, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 42, 1))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 0, 0))
+
+    a3: new (x: number) => number; // ok, same number of required params
+>a3 : Symbol(I9.a3, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 44, 27))
+>x : Symbol(x, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 45, 13))
+}
+
+interface I10 extends Base {
+>I10 : Symbol(I10, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 46, 1))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 0, 0))
+
+    a3: new (x: number, y: number) => number;  // error, too many required params
+>a3 : Symbol(I10.a3, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 48, 28))
+>x : Symbol(x, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 49, 13))
+>y : Symbol(y, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 49, 23))
+}
+
+
+interface I11 extends Base {
+>I11 : Symbol(I11, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 50, 1))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 0, 0))
+
+    a4: new () => number; // ok, fewer required params
+>a4 : Symbol(I11.a4, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 53, 28))
+}
+
+interface I12 extends Base {
+>I12 : Symbol(I12, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 55, 1))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 0, 0))
+
+    a4: new (x?: number, y?: number) => number; // ok, fewer required params
+>a4 : Symbol(I12.a4, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 57, 28))
+>x : Symbol(x, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 58, 13))
+>y : Symbol(y, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 58, 24))
+}
+
+interface I13 extends Base {
+>I13 : Symbol(I13, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 59, 1))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 0, 0))
+
+    a4: new (x: number) => number; // ok, same number of required params
+>a4 : Symbol(I13.a4, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 61, 28))
+>x : Symbol(x, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 62, 13))
+}
+
+interface I14 extends Base {
+>I14 : Symbol(I14, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 63, 1))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 0, 0))
+
+    a4: new (x: number, y: number) => number;  // ok, same number of params
+>a4 : Symbol(I14.a4, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 65, 28))
+>x : Symbol(x, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 66, 13))
+>y : Symbol(y, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 66, 23))
+}
+
+
+interface I15 extends Base {
+>I15 : Symbol(I15, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 67, 1))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 0, 0))
+
+    a5: new () => number; // ok, fewer required params
+>a5 : Symbol(I15.a5, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 70, 28))
+}
+
+interface I16 extends Base {
+>I16 : Symbol(I16, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 72, 1))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 0, 0))
+
+    a5: new (x?: number, y?: number) => number; // ok, fewer required params
+>a5 : Symbol(I16.a5, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 74, 28))
+>x : Symbol(x, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 75, 13))
+>y : Symbol(y, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 75, 24))
+}
+
+interface I17 extends Base {
+>I17 : Symbol(I17, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 76, 1))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 0, 0))
+
+    a5: new (x: number) => number; // ok, all present params match
+>a5 : Symbol(I17.a5, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 78, 28))
+>x : Symbol(x, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 79, 13))
+}
+
+interface I18 extends Base {
+>I18 : Symbol(I18, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 80, 1))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 0, 0))
+
+    a5: new (x: number, y: number) => number;  // ok, same number of params
+>a5 : Symbol(I18.a5, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 82, 28))
+>x : Symbol(x, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 83, 13))
+>y : Symbol(y, Decl(subtypingWithConstructSignaturesWithOptionalParameters.ts, 83, 23))
+}

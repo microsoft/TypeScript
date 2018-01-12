@@ -1,0 +1,8 @@
+=== tests/cases/conformance/es6/destructuring/nonIterableRestElement3.ts ===
+var c = { bogus: 0 };
+>c : Symbol(c, Decl(nonIterableRestElement3.ts, 0, 3))
+>bogus : Symbol(bogus, Decl(nonIterableRestElement3.ts, 0, 9))
+
+[...c] = ["", 0];
+>c : Symbol(c, Decl(nonIterableRestElement3.ts, 0, 3))
+

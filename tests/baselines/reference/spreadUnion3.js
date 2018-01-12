@@ -13,6 +13,11 @@ g()
 g(undefined)
 g(null)
 
+// spreading nothing but null and undefined is not allowed
+declare const nullAndUndefinedUnion: null | undefined;
+var x = { ...nullAndUndefinedUnion, ...nullAndUndefinedUnion };
+var y = { ...nullAndUndefinedUnion };
+
 
 //// [spreadUnion3.js]
 var __assign = (this && this.__assign) || Object.assign || function(t) {
@@ -34,3 +39,5 @@ function g(t) {
 g();
 g(undefined);
 g(null);
+var x = __assign({}, nullAndUndefinedUnion, nullAndUndefinedUnion);
+var y = __assign({}, nullAndUndefinedUnion);

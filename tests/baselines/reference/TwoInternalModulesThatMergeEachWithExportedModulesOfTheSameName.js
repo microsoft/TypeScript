@@ -55,7 +55,7 @@ var X;
     (function (Y) {
         var Z;
         (function (Z) {
-            var Line = (function () {
+            var Line = /** @class */ (function () {
                 function Line() {
                 }
                 return Line;
@@ -69,7 +69,7 @@ var X;
     (function (Y) {
         var Z;
         (function (Z) {
-            var Line = (function () {
+            var Line = /** @class */ (function () {
                 function Line() {
                 }
                 return Line;

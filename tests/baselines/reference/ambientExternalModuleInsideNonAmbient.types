@@ -1,0 +1,6 @@
+=== tests/cases/conformance/ambient/ambientExternalModuleInsideNonAmbient.ts ===
+module M {
+>M : any
+
+    export declare module "M" { }
+}

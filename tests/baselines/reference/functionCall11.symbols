@@ -1,0 +1,21 @@
+=== tests/cases/compiler/functionCall11.ts ===
+function foo(a:string, b?:number){} 
+>foo : Symbol(foo, Decl(functionCall11.ts, 0, 0))
+>a : Symbol(a, Decl(functionCall11.ts, 0, 13))
+>b : Symbol(b, Decl(functionCall11.ts, 0, 22))
+
+foo('foo', 1); 
+>foo : Symbol(foo, Decl(functionCall11.ts, 0, 0))
+
+foo('foo'); 
+>foo : Symbol(foo, Decl(functionCall11.ts, 0, 0))
+
+foo();
+>foo : Symbol(foo, Decl(functionCall11.ts, 0, 0))
+
+foo(1, 'bar');
+>foo : Symbol(foo, Decl(functionCall11.ts, 0, 0))
+
+foo('foo', 1, 'bar');
+>foo : Symbol(foo, Decl(functionCall11.ts, 0, 0))
+

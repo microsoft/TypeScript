@@ -19,12 +19,5 @@
 ////    }
 //// }
 
-goTo.marker('0');
-verify.completionListContains("jspm");
-verify.completionListAllowsNewIdentifier();
-verify.completionListCount(1);
-
-goTo.marker('1');
-verify.completionListContains("jspm:dev");
-verify.completionListAllowsNewIdentifier();
-verify.completionListCount(4);
+verify.completionsAt("0", ["jspm", '"jspm:browser"', '"jspm:dev"', '"jspm:node"'], { isNewIdentifierLocation: true });
+verify.completionsAt("1", ["jspm", "jspm:browser", "jspm:dev", "jspm:node"], { isNewIdentifierLocation: true });

@@ -50,7 +50,7 @@ exports.__esModule = true;
 //// [exportValue.js]
 "use strict";
 exports.__esModule = true;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

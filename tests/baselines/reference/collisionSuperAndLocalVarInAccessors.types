@@ -1,0 +1,82 @@
+=== tests/cases/compiler/collisionSuperAndLocalVarInAccessors.ts ===
+var _super = 10; // No Error
+>_super : number
+>10 : 10
+
+class Foo {
+>Foo : Foo
+
+    get prop1(): number {
+>prop1 : number
+
+        var _super = 10; // No error
+>_super : number
+>10 : 10
+
+        return 10;
+>10 : 10
+    }
+    set prop1(val: number) {
+>prop1 : number
+>val : number
+
+        var _super = 10; // No error
+>_super : number
+>10 : 10
+    }
+}
+class b extends Foo {
+>b : b
+>Foo : Foo
+
+    get prop2(): number {
+>prop2 : number
+
+        var _super = 10; // Should be error
+>_super : number
+>10 : 10
+
+        return 10;
+>10 : 10
+    }
+    set prop2(val: number) {
+>prop2 : number
+>val : number
+
+        var _super = 10; // Should be error
+>_super : number
+>10 : 10
+    }
+}
+class c extends Foo {
+>c : c
+>Foo : Foo
+
+    get prop2(): number {
+>prop2 : number
+
+        var x = () => {
+>x : () => void
+>() => {            var _super = 10; // Should be error        } : () => void
+
+            var _super = 10; // Should be error
+>_super : number
+>10 : 10
+        }
+        return 10;
+>10 : 10
+    }
+    set prop2(val: number) {
+>prop2 : number
+>val : number
+
+        var x = () => {
+>x : () => void
+>() => {            var _super = 10; // Should be error        } : () => void
+
+            var _super = 10; // Should be error
+>_super : number
+>10 : 10
+        }
+    }
+}

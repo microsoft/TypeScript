@@ -5,5 +5,5 @@ class CtorTag { }
 CtorTag `Hello world!`;
 >CtorTag `Hello world!` : any
 >CtorTag : typeof CtorTag
->`Hello world!` : string
+>`Hello world!` : "Hello world!"
 

@@ -8,6 +8,9 @@ declare var foo: any;
 declare var Bar: any;
 >Bar : any
 
+declare var _Bar: any;
+>_Bar : any
+
 declare var x: any;
 >x : any
 
@@ -37,4 +40,9 @@ declare var x: any;
 >x : any
 >y : number
 >2 : 2
+
+<_Bar { ...x } />;
+><_Bar { ...x } /> : any
+>_Bar : any
+>x : any
 

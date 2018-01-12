@@ -1,0 +1,9 @@
+=== tests/cases/compiler/classHeritageWithTrailingSeparator.ts ===
+class C { foo: number }
+>C : C
+>foo : number
+
+class D extends C, {
+>D : D
+>C : C
+}

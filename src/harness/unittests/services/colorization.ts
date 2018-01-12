@@ -1,12 +1,14 @@
 /// <reference path="..\..\harnessLanguageService.ts" />
 
+// tslint:disable no-invalid-template-strings (lots of tests use quoted code)
+
 interface ClassificationEntry {
     value: any;
     classification: ts.TokenClass;
     position?: number;
 }
 
-describe("Colorization", function () {
+describe("Colorization", () => {
     // Use the shim adapter to ensure test coverage of the shim layer for the classifier
     const languageServiceAdapter = new Harness.LanguageService.ShimLanguageServiceAdapter(/*preprocessToResolve*/ false);
     const classifier = languageServiceAdapter.getClassifier();
@@ -30,13 +32,9 @@ describe("Colorization", function () {
     function identifier(text: string, position?: number) { return createClassification(text, ts.TokenClass.Identifier, position); }
     function numberLiteral(text: string, position?: number) { return createClassification(text, ts.TokenClass.NumberLiteral, position); }
     function stringLiteral(text: string, position?: number) { return createClassification(text, ts.TokenClass.StringLiteral, position); }
-    function finalEndOfLineState(value: number): ClassificationEntry { return { value: value, classification: undefined, position: 0 }; }
-    function createClassification(text: string, tokenClass: ts.TokenClass, position?: number): ClassificationEntry {
-        return {
-            value: text,
-            classification: tokenClass,
-            position: position,
-        };
+    function finalEndOfLineState(value: number): ClassificationEntry { return { value, classification: undefined, position: 0 }; }
+    function createClassification(value: string, classification: ts.TokenClass, position?: number): ClassificationEntry {
+        return { value, classification, position };
     }
 
     function testLexicalClassification(text: string, initialEndOfLineState: ts.EndOfLineState, ...expectedEntries: ClassificationEntry[]): void {
@@ -59,8 +57,8 @@ describe("Colorization", function () {
         }
     }
 
-    describe("test getClassifications", function () {
-        it("Returns correct token classes", function () {
+    describe("test getClassifications", () => {
+        it("Returns correct token classes", () => {
             testLexicalClassification("var x: string = \"foo\"; //Hello",
                 ts.EndOfLineState.None,
                 keyword("var"),
@@ -74,7 +72,7 @@ describe("Colorization", function () {
                 punctuation(";"));
         });
 
-        it("correctly classifies a comment after a divide operator", function () {
+        it("correctly classifies a comment after a divide operator", () => {
             testLexicalClassification("1 / 2 // comment",
                 ts.EndOfLineState.None,
                 numberLiteral("1"),
@@ -84,7 +82,7 @@ describe("Colorization", function () {
                 comment("// comment"));
         });
 
-        it("correctly classifies a literal after a divide operator", function () {
+        it("correctly classifies a literal after a divide operator", () => {
             testLexicalClassification("1 / 2, 3 / 4",
                 ts.EndOfLineState.None,
                 numberLiteral("1"),
@@ -96,131 +94,131 @@ describe("Colorization", function () {
                 operator(","));
         });
 
-        it("correctly classifies a multi-line string with one backslash", function () {
+        it("correctly classifies a multi-line string with one backslash", () => {
             testLexicalClassification("'line1\\",
                 ts.EndOfLineState.None,
                 stringLiteral("'line1\\"),
                 finalEndOfLineState(ts.EndOfLineState.InSingleQuoteStringLiteral));
         });
 
-        it("correctly classifies a multi-line string with three backslashes", function () {
+        it("correctly classifies a multi-line string with three backslashes", () => {
             testLexicalClassification("'line1\\\\\\",
                 ts.EndOfLineState.None,
                 stringLiteral("'line1\\\\\\"),
                 finalEndOfLineState(ts.EndOfLineState.InSingleQuoteStringLiteral));
         });
 
-        it("correctly classifies an unterminated single-line string with no backslashes", function () {
+        it("correctly classifies an unterminated single-line string with no backslashes", () => {
             testLexicalClassification("'line1",
                 ts.EndOfLineState.None,
                 stringLiteral("'line1"),
                 finalEndOfLineState(ts.EndOfLineState.None));
         });
 
-        it("correctly classifies an unterminated single-line string with two backslashes", function () {
+        it("correctly classifies an unterminated single-line string with two backslashes", () => {
             testLexicalClassification("'line1\\\\",
                 ts.EndOfLineState.None,
                 stringLiteral("'line1\\\\"),
                 finalEndOfLineState(ts.EndOfLineState.None));
         });
 
-        it("correctly classifies an unterminated single-line string with four backslashes", function () {
+        it("correctly classifies an unterminated single-line string with four backslashes", () => {
             testLexicalClassification("'line1\\\\\\\\",
                 ts.EndOfLineState.None,
                 stringLiteral("'line1\\\\\\\\"),
                 finalEndOfLineState(ts.EndOfLineState.None));
         });
 
-        it("correctly classifies the continuing line of a multi-line string ending in one backslash", function () {
+        it("correctly classifies the continuing line of a multi-line string ending in one backslash", () => {
             testLexicalClassification("\\",
                 ts.EndOfLineState.InDoubleQuoteStringLiteral,
                 stringLiteral("\\"),
                 finalEndOfLineState(ts.EndOfLineState.InDoubleQuoteStringLiteral));
         });
 
-        it("correctly classifies the continuing line of a multi-line string ending in three backslashes", function () {
+        it("correctly classifies the continuing line of a multi-line string ending in three backslashes", () => {
             testLexicalClassification("\\",
                 ts.EndOfLineState.InDoubleQuoteStringLiteral,
                 stringLiteral("\\"),
                 finalEndOfLineState(ts.EndOfLineState.InDoubleQuoteStringLiteral));
         });
 
-        it("correctly classifies the last line of an unterminated multi-line string ending in no backslashes", function () {
+        it("correctly classifies the last line of an unterminated multi-line string ending in no backslashes", () => {
             testLexicalClassification("  ",
                 ts.EndOfLineState.InDoubleQuoteStringLiteral,
                 stringLiteral("  "),
                 finalEndOfLineState(ts.EndOfLineState.None));
         });
 
-        it("correctly classifies the last line of an unterminated multi-line string ending in two backslashes", function () {
+        it("correctly classifies the last line of an unterminated multi-line string ending in two backslashes", () => {
             testLexicalClassification("\\\\",
                 ts.EndOfLineState.InDoubleQuoteStringLiteral,
                 stringLiteral("\\\\"),
                 finalEndOfLineState(ts.EndOfLineState.None));
         });
 
-        it("correctly classifies the last line of an unterminated multi-line string ending in four backslashes", function () {
+        it("correctly classifies the last line of an unterminated multi-line string ending in four backslashes", () => {
             testLexicalClassification("\\\\\\\\",
                 ts.EndOfLineState.InDoubleQuoteStringLiteral,
                 stringLiteral("\\\\\\\\"),
                 finalEndOfLineState(ts.EndOfLineState.None));
         });
 
-        it("correctly classifies the last line of a multi-line string", function () {
+        it("correctly classifies the last line of a multi-line string", () => {
             testLexicalClassification("'",
                 ts.EndOfLineState.InSingleQuoteStringLiteral,
                 stringLiteral("'"),
                 finalEndOfLineState(ts.EndOfLineState.None));
         });
 
-        it("correctly classifies an unterminated multiline comment", function () {
+        it("correctly classifies an unterminated multiline comment", () => {
             testLexicalClassification("/*",
                 ts.EndOfLineState.None,
                 comment("/*"),
                 finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
         });
 
-        it("correctly classifies the termination of a multiline comment", function () {
+        it("correctly classifies the termination of a multiline comment", () => {
             testLexicalClassification("   */     ",
                 ts.EndOfLineState.InMultiLineCommentTrivia,
                 comment("   */"),
                 finalEndOfLineState(ts.EndOfLineState.None));
         });
 
-        it("correctly classifies the continuation of a multiline comment", function () {
+        it("correctly classifies the continuation of a multiline comment", () => {
             testLexicalClassification("LOREM IPSUM DOLOR   ",
                 ts.EndOfLineState.InMultiLineCommentTrivia,
                 comment("LOREM IPSUM DOLOR   "),
                 finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
         });
 
-        it("correctly classifies an unterminated multiline comment on a line ending in '/*/'", function () {
+        it("correctly classifies an unterminated multiline comment on a line ending in '/*/'", () => {
             testLexicalClassification("   /*/",
                 ts.EndOfLineState.None,
                 comment("/*/"),
                 finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
         });
 
-        it("correctly classifies an unterminated multiline comment with trailing space", function () {
+        it("correctly classifies an unterminated multiline comment with trailing space", () => {
             testLexicalClassification("/* ",
                 ts.EndOfLineState.None,
                 comment("/* "),
                 finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
         });
 
-        it("correctly classifies a keyword after a dot", function () {
+        it("correctly classifies a keyword after a dot", () => {
             testLexicalClassification("a.var",
                 ts.EndOfLineState.None,
                 identifier("var"));
         });
 
-        it("correctly classifies a string literal after a dot", function () {
+        it("correctly classifies a string literal after a dot", () => {
             testLexicalClassification("a.\"var\"",
                 ts.EndOfLineState.None,
                 stringLiteral("\"var\""));
         });
 
-        it("correctly classifies a keyword after a dot separated by comment trivia", function () {
+        it("correctly classifies a keyword after a dot separated by comment trivia", () => {
             testLexicalClassification("a./*hello world*/ var",
                 ts.EndOfLineState.None,
                 identifier("a"),
@@ -229,21 +227,21 @@ describe("Colorization", function () {
                 identifier("var"));
         });
 
-        it("classifies a property access with whitespace around the dot", function () {
+        it("classifies a property access with whitespace around the dot", () => {
             testLexicalClassification("   x  .\tfoo ()",
                 ts.EndOfLineState.None,
                 identifier("x"),
                 identifier("foo"));
         });
 
-        it("classifies a keyword after a dot on previous line", function () {
+        it("classifies a keyword after a dot on previous line", () => {
             testLexicalClassification("var",
                 ts.EndOfLineState.None,
                 keyword("var"),
                 finalEndOfLineState(ts.EndOfLineState.None));
         });
 
-        it("classifies multiple keywords properly", function () {
+        it("classifies multiple keywords properly", () => {
             testLexicalClassification("public static",
                 ts.EndOfLineState.None,
                 keyword("public"),
@@ -357,7 +355,7 @@ describe("Colorization", function () {
             }
         });
 
-        it("classifies partially written generics correctly.", function () {
+        it("classifies partially written generics correctly.", () => {
             testLexicalClassification("Foo<number",
                 ts.EndOfLineState.None,
                 identifier("Foo"),
@@ -470,7 +468,7 @@ class D { }\r\n\
                 finalEndOfLineState(ts.EndOfLineState.None));
         });
 
-        it("'of' keyword", function () {
+        it("'of' keyword", () => {
             testLexicalClassification("for (var of of of) { }",
                 ts.EndOfLineState.None,
                 keyword("for"),

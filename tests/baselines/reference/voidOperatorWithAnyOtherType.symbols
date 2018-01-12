@@ -1,0 +1,178 @@
+=== tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorWithAnyOtherType.ts ===
+// void  operator on any type
+
+var ANY: any;
+>ANY : Symbol(ANY, Decl(voidOperatorWithAnyOtherType.ts, 2, 3))
+
+var ANY1;
+>ANY1 : Symbol(ANY1, Decl(voidOperatorWithAnyOtherType.ts, 3, 3))
+
+var ANY2: any[] = ["", ""];
+>ANY2 : Symbol(ANY2, Decl(voidOperatorWithAnyOtherType.ts, 4, 3))
+
+var obj: () => {}
+>obj : Symbol(obj, Decl(voidOperatorWithAnyOtherType.ts, 5, 3))
+
+var obj1 = {x:"",y:1};
+>obj1 : Symbol(obj1, Decl(voidOperatorWithAnyOtherType.ts, 6, 3))
+>x : Symbol(x, Decl(voidOperatorWithAnyOtherType.ts, 6, 12))
+>y : Symbol(y, Decl(voidOperatorWithAnyOtherType.ts, 6, 17))
+
+function foo(): any {
+>foo : Symbol(foo, Decl(voidOperatorWithAnyOtherType.ts, 6, 22))
+
+    var a;
+>a : Symbol(a, Decl(voidOperatorWithAnyOtherType.ts, 9, 7))
+
+    return a;
+>a : Symbol(a, Decl(voidOperatorWithAnyOtherType.ts, 9, 7))
+}
+class A {
+>A : Symbol(A, Decl(voidOperatorWithAnyOtherType.ts, 11, 1))
+
+    public a: any;
+>a : Symbol(A.a, Decl(voidOperatorWithAnyOtherType.ts, 12, 9))
+
+    static foo() {
+>foo : Symbol(A.foo, Decl(voidOperatorWithAnyOtherType.ts, 13, 18))
+
+        var a;
+>a : Symbol(a, Decl(voidOperatorWithAnyOtherType.ts, 15, 11))
+
+        return a;
+>a : Symbol(a, Decl(voidOperatorWithAnyOtherType.ts, 15, 11))
+    }
+}
+module M {
+>M : Symbol(M, Decl(voidOperatorWithAnyOtherType.ts, 18, 1))
+
+    export var n: any;
+>n : Symbol(n, Decl(voidOperatorWithAnyOtherType.ts, 20, 14))
+}
+var objA = new A();
+>objA : Symbol(objA, Decl(voidOperatorWithAnyOtherType.ts, 22, 3))
+>A : Symbol(A, Decl(voidOperatorWithAnyOtherType.ts, 11, 1))
+
+// any type var
+var ResultIsAny1 = void ANY1;
+>ResultIsAny1 : Symbol(ResultIsAny1, Decl(voidOperatorWithAnyOtherType.ts, 25, 3))
+>ANY1 : Symbol(ANY1, Decl(voidOperatorWithAnyOtherType.ts, 3, 3))
+
+var ResultIsAny2 = void ANY2;
+>ResultIsAny2 : Symbol(ResultIsAny2, Decl(voidOperatorWithAnyOtherType.ts, 26, 3))
+>ANY2 : Symbol(ANY2, Decl(voidOperatorWithAnyOtherType.ts, 4, 3))
+
+var ResultIsAny3 = void A;
+>ResultIsAny3 : Symbol(ResultIsAny3, Decl(voidOperatorWithAnyOtherType.ts, 27, 3))
+>A : Symbol(A, Decl(voidOperatorWithAnyOtherType.ts, 11, 1))
+
+var ResultIsAny4 = void M;
+>ResultIsAny4 : Symbol(ResultIsAny4, Decl(voidOperatorWithAnyOtherType.ts, 28, 3))
+>M : Symbol(M, Decl(voidOperatorWithAnyOtherType.ts, 18, 1))
+
+var ResultIsAny5 = void obj;
+>ResultIsAny5 : Symbol(ResultIsAny5, Decl(voidOperatorWithAnyOtherType.ts, 29, 3))
+>obj : Symbol(obj, Decl(voidOperatorWithAnyOtherType.ts, 5, 3))
+
+var ResultIsAny6 = void obj1;
+>ResultIsAny6 : Symbol(ResultIsAny6, Decl(voidOperatorWithAnyOtherType.ts, 30, 3))
+>obj1 : Symbol(obj1, Decl(voidOperatorWithAnyOtherType.ts, 6, 3))
+
+// any type literal
+var ResultIsAny7 = void undefined;
+>ResultIsAny7 : Symbol(ResultIsAny7, Decl(voidOperatorWithAnyOtherType.ts, 33, 3))
+>undefined : Symbol(undefined)
+
+var ResultIsAny8 = void null;
+>ResultIsAny8 : Symbol(ResultIsAny8, Decl(voidOperatorWithAnyOtherType.ts, 34, 3))
+
+// any type expressions
+var ResultIsAny9 = void ANY2[0]
+>ResultIsAny9 : Symbol(ResultIsAny9, Decl(voidOperatorWithAnyOtherType.ts, 37, 3))
+>ANY2 : Symbol(ANY2, Decl(voidOperatorWithAnyOtherType.ts, 4, 3))
+
+var ResultIsAny10 = void obj1.x;
+>ResultIsAny10 : Symbol(ResultIsAny10, Decl(voidOperatorWithAnyOtherType.ts, 38, 3))
+>obj1.x : Symbol(x, Decl(voidOperatorWithAnyOtherType.ts, 6, 12))
+>obj1 : Symbol(obj1, Decl(voidOperatorWithAnyOtherType.ts, 6, 3))
+>x : Symbol(x, Decl(voidOperatorWithAnyOtherType.ts, 6, 12))
+
+var ResultIsAny11 = void obj1.y;
+>ResultIsAny11 : Symbol(ResultIsAny11, Decl(voidOperatorWithAnyOtherType.ts, 39, 3))
+>obj1.y : Symbol(y, Decl(voidOperatorWithAnyOtherType.ts, 6, 17))
+>obj1 : Symbol(obj1, Decl(voidOperatorWithAnyOtherType.ts, 6, 3))
+>y : Symbol(y, Decl(voidOperatorWithAnyOtherType.ts, 6, 17))
+
+var ResultIsAny12 = void objA.a;
+>ResultIsAny12 : Symbol(ResultIsAny12, Decl(voidOperatorWithAnyOtherType.ts, 40, 3))
+>objA.a : Symbol(A.a, Decl(voidOperatorWithAnyOtherType.ts, 12, 9))
+>objA : Symbol(objA, Decl(voidOperatorWithAnyOtherType.ts, 22, 3))
+>a : Symbol(A.a, Decl(voidOperatorWithAnyOtherType.ts, 12, 9))
+
+var ResultIsAny13 = void M.n;
+>ResultIsAny13 : Symbol(ResultIsAny13, Decl(voidOperatorWithAnyOtherType.ts, 41, 3))
+>M.n : Symbol(M.n, Decl(voidOperatorWithAnyOtherType.ts, 20, 14))
+>M : Symbol(M, Decl(voidOperatorWithAnyOtherType.ts, 18, 1))
+>n : Symbol(M.n, Decl(voidOperatorWithAnyOtherType.ts, 20, 14))
+
+var ResultIsAny14 = void foo();
+>ResultIsAny14 : Symbol(ResultIsAny14, Decl(voidOperatorWithAnyOtherType.ts, 42, 3))
+>foo : Symbol(foo, Decl(voidOperatorWithAnyOtherType.ts, 6, 22))
+
+var ResultIsAny15 = void A.foo();
+>ResultIsAny15 : Symbol(ResultIsAny15, Decl(voidOperatorWithAnyOtherType.ts, 43, 3))
+>A.foo : Symbol(A.foo, Decl(voidOperatorWithAnyOtherType.ts, 13, 18))
+>A : Symbol(A, Decl(voidOperatorWithAnyOtherType.ts, 11, 1))
+>foo : Symbol(A.foo, Decl(voidOperatorWithAnyOtherType.ts, 13, 18))
+
+var ResultIsAny16 = void (ANY + ANY1);
+>ResultIsAny16 : Symbol(ResultIsAny16, Decl(voidOperatorWithAnyOtherType.ts, 44, 3))
+>ANY : Symbol(ANY, Decl(voidOperatorWithAnyOtherType.ts, 2, 3))
+>ANY1 : Symbol(ANY1, Decl(voidOperatorWithAnyOtherType.ts, 3, 3))
+
+var ResultIsAny17 = void (null + undefined);
+>ResultIsAny17 : Symbol(ResultIsAny17, Decl(voidOperatorWithAnyOtherType.ts, 45, 3))
+>undefined : Symbol(undefined)
+
+var ResultIsAny18 = void (null + null);
+>ResultIsAny18 : Symbol(ResultIsAny18, Decl(voidOperatorWithAnyOtherType.ts, 46, 3))
+
+var ResultIsAny19 = void (undefined + undefined);
+>ResultIsAny19 : Symbol(ResultIsAny19, Decl(voidOperatorWithAnyOtherType.ts, 47, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+// multiple void  operators
+var ResultIsAny20 = void void ANY;
+>ResultIsAny20 : Symbol(ResultIsAny20, Decl(voidOperatorWithAnyOtherType.ts, 50, 3))
+>ANY : Symbol(ANY, Decl(voidOperatorWithAnyOtherType.ts, 2, 3))
+
+var ResultIsAny21 = void void void (ANY + ANY1);
+>ResultIsAny21 : Symbol(ResultIsAny21, Decl(voidOperatorWithAnyOtherType.ts, 51, 3))
+>ANY : Symbol(ANY, Decl(voidOperatorWithAnyOtherType.ts, 2, 3))
+>ANY1 : Symbol(ANY1, Decl(voidOperatorWithAnyOtherType.ts, 3, 3))
+
+// miss assignment operators
+void ANY;
+>ANY : Symbol(ANY, Decl(voidOperatorWithAnyOtherType.ts, 2, 3))
+
+void ANY1;
+>ANY1 : Symbol(ANY1, Decl(voidOperatorWithAnyOtherType.ts, 3, 3))
+
+void ANY2[0];
+>ANY2 : Symbol(ANY2, Decl(voidOperatorWithAnyOtherType.ts, 4, 3))
+
+void ANY, ANY1;
+>ANY : Symbol(ANY, Decl(voidOperatorWithAnyOtherType.ts, 2, 3))
+>ANY1 : Symbol(ANY1, Decl(voidOperatorWithAnyOtherType.ts, 3, 3))
+
+void objA.a;
+>objA.a : Symbol(A.a, Decl(voidOperatorWithAnyOtherType.ts, 12, 9))
+>objA : Symbol(objA, Decl(voidOperatorWithAnyOtherType.ts, 22, 3))
+>a : Symbol(A.a, Decl(voidOperatorWithAnyOtherType.ts, 12, 9))
+
+void M.n;
+>M.n : Symbol(M.n, Decl(voidOperatorWithAnyOtherType.ts, 20, 14))
+>M : Symbol(M, Decl(voidOperatorWithAnyOtherType.ts, 18, 1))
+>n : Symbol(M.n, Decl(voidOperatorWithAnyOtherType.ts, 20, 14))
+

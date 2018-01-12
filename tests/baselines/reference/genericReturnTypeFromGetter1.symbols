@@ -1,0 +1,26 @@
+=== tests/cases/compiler/genericReturnTypeFromGetter1.ts ===
+export interface A<T> {
+>A : Symbol(A, Decl(genericReturnTypeFromGetter1.ts, 0, 0))
+>T : Symbol(T, Decl(genericReturnTypeFromGetter1.ts, 0, 19))
+
+   new (dbSet: DbSet<T>): T;
+>dbSet : Symbol(dbSet, Decl(genericReturnTypeFromGetter1.ts, 1, 8))
+>DbSet : Symbol(DbSet, Decl(genericReturnTypeFromGetter1.ts, 2, 1))
+>T : Symbol(T, Decl(genericReturnTypeFromGetter1.ts, 0, 19))
+>T : Symbol(T, Decl(genericReturnTypeFromGetter1.ts, 0, 19))
+}
+export class DbSet<T> {
+>DbSet : Symbol(DbSet, Decl(genericReturnTypeFromGetter1.ts, 2, 1))
+>T : Symbol(T, Decl(genericReturnTypeFromGetter1.ts, 3, 19))
+
+    _entityType: A;
+>_entityType : Symbol(DbSet._entityType, Decl(genericReturnTypeFromGetter1.ts, 3, 23))
+>A : Symbol(A, Decl(genericReturnTypeFromGetter1.ts, 0, 0))
+
+  get entityType() { return this._entityType; }  // used to ICE without return type annotation
+>entityType : Symbol(DbSet.entityType, Decl(genericReturnTypeFromGetter1.ts, 4, 19))
+>this._entityType : Symbol(DbSet._entityType, Decl(genericReturnTypeFromGetter1.ts, 3, 23))
+>this : Symbol(DbSet, Decl(genericReturnTypeFromGetter1.ts, 2, 1))
+>_entityType : Symbol(DbSet._entityType, Decl(genericReturnTypeFromGetter1.ts, 3, 23))
+}
+

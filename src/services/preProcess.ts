@@ -41,13 +41,9 @@ namespace ts {
         }
 
         function getFileReference() {
-            const file = scanner.getTokenValue();
+            const fileName = scanner.getTokenValue();
             const pos = scanner.getTokenPos();
-            return {
-                fileName: file,
-                pos: pos,
-                end: pos + file.length
-            };
+            return { fileName, pos, end: pos + fileName.length };
         }
 
         function recordAmbientExternalModule(): void {
@@ -277,13 +273,11 @@ namespace ts {
 
                 // skip open bracket
                 token = nextToken();
-                let i = 0;
                 // scan until ']' or EOF
                 while (token !== SyntaxKind.CloseBracketToken && token !== SyntaxKind.EndOfFileToken) {
                     // record string literals as module names
                     if (token === SyntaxKind.StringLiteral) {
                         recordModuleName();
-                        i++;
                     }
 
                     token = nextToken();
@@ -301,7 +295,7 @@ namespace ts {
             //    import "mod";
             //    import d from "mod"
             //    import {a as A } from "mod";
-            //    import * as NS  from "mod"
+            //    import * as NS from "mod"
             //    import d, {a, b as B} from "mod"
             //    import i = require("mod");
             //    import("mod");

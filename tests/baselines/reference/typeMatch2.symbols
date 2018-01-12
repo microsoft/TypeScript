@@ -1,0 +1,163 @@
+=== tests/cases/compiler/typeMatch2.ts ===
+function f1() {
+>f1 : Symbol(f1, Decl(typeMatch2.ts, 0, 0))
+
+	var a = { x: 1, y: 2 };
+>a : Symbol(a, Decl(typeMatch2.ts, 1, 4))
+>x : Symbol(x, Decl(typeMatch2.ts, 1, 10))
+>y : Symbol(y, Decl(typeMatch2.ts, 1, 16))
+
+	a = {}; // error
+>a : Symbol(a, Decl(typeMatch2.ts, 1, 4))
+
+    a = { x: 1 }; // error
+>a : Symbol(a, Decl(typeMatch2.ts, 1, 4))
+>x : Symbol(x, Decl(typeMatch2.ts, 3, 9))
+
+	a = { x: 1, y: 2, z: 3 };
+>a : Symbol(a, Decl(typeMatch2.ts, 1, 4))
+>x : Symbol(x, Decl(typeMatch2.ts, 4, 6))
+>y : Symbol(y, Decl(typeMatch2.ts, 4, 12))
+>z : Symbol(z, Decl(typeMatch2.ts, 4, 18))
+
+    a = { x: 1, z: 3 };  // error
+>a : Symbol(a, Decl(typeMatch2.ts, 1, 4))
+>x : Symbol(x, Decl(typeMatch2.ts, 5, 9))
+>z : Symbol(z, Decl(typeMatch2.ts, 5, 15))
+}
+
+class Animal { private a; }
+>Animal : Symbol(Animal, Decl(typeMatch2.ts, 6, 1))
+>a : Symbol(Animal.a, Decl(typeMatch2.ts, 8, 14))
+
+class Giraffe extends Animal { private g; }
+>Giraffe : Symbol(Giraffe, Decl(typeMatch2.ts, 8, 27))
+>Animal : Symbol(Animal, Decl(typeMatch2.ts, 6, 1))
+>g : Symbol(Giraffe.g, Decl(typeMatch2.ts, 9, 30))
+
+function f2() {
+>f2 : Symbol(f2, Decl(typeMatch2.ts, 9, 43))
+
+    var a = new Animal();
+>a : Symbol(a, Decl(typeMatch2.ts, 12, 7))
+>Animal : Symbol(Animal, Decl(typeMatch2.ts, 6, 1))
+
+    var g = new Giraffe();
+>g : Symbol(g, Decl(typeMatch2.ts, 13, 7))
+>Giraffe : Symbol(Giraffe, Decl(typeMatch2.ts, 8, 27))
+
+    var aa = [ a, a, a ];
+>aa : Symbol(aa, Decl(typeMatch2.ts, 14, 7))
+>a : Symbol(a, Decl(typeMatch2.ts, 12, 7))
+>a : Symbol(a, Decl(typeMatch2.ts, 12, 7))
+>a : Symbol(a, Decl(typeMatch2.ts, 12, 7))
+
+    var gg = [ g, g, g ];
+>gg : Symbol(gg, Decl(typeMatch2.ts, 15, 7))
+>g : Symbol(g, Decl(typeMatch2.ts, 13, 7))
+>g : Symbol(g, Decl(typeMatch2.ts, 13, 7))
+>g : Symbol(g, Decl(typeMatch2.ts, 13, 7))
+
+    aa = gg;
+>aa : Symbol(aa, Decl(typeMatch2.ts, 14, 7))
+>gg : Symbol(gg, Decl(typeMatch2.ts, 15, 7))
+
+    gg = aa; // error
+>gg : Symbol(gg, Decl(typeMatch2.ts, 15, 7))
+>aa : Symbol(aa, Decl(typeMatch2.ts, 14, 7))
+
+    var xa = { f1: 5, f2: aa };
+>xa : Symbol(xa, Decl(typeMatch2.ts, 18, 7))
+>f1 : Symbol(f1, Decl(typeMatch2.ts, 18, 14))
+>f2 : Symbol(f2, Decl(typeMatch2.ts, 18, 21))
+>aa : Symbol(aa, Decl(typeMatch2.ts, 14, 7))
+
+    var xb = { f1: 5, f2: gg };
+>xb : Symbol(xb, Decl(typeMatch2.ts, 19, 7))
+>f1 : Symbol(f1, Decl(typeMatch2.ts, 19, 14))
+>f2 : Symbol(f2, Decl(typeMatch2.ts, 19, 21))
+>gg : Symbol(gg, Decl(typeMatch2.ts, 15, 7))
+
+    xa = xb; // Should be ok
+>xa : Symbol(xa, Decl(typeMatch2.ts, 18, 7))
+>xb : Symbol(xb, Decl(typeMatch2.ts, 19, 7))
+
+    xb = xa; // Not ok
+>xb : Symbol(xb, Decl(typeMatch2.ts, 19, 7))
+>xa : Symbol(xa, Decl(typeMatch2.ts, 18, 7))
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(typeMatch2.ts, 22, 1))
+
+    var _any: any = 0;
+>_any : Symbol(_any, Decl(typeMatch2.ts, 25, 7))
+
+    var i = 5;
+>i : Symbol(i, Decl(typeMatch2.ts, 26, 7))
+
+    i = null; 
+>i : Symbol(i, Decl(typeMatch2.ts, 26, 7))
+
+    i = undefined;
+>i : Symbol(i, Decl(typeMatch2.ts, 26, 7))
+>undefined : Symbol(undefined)
+
+    var a = { x: 1, y: 1 };
+>a : Symbol(a, Decl(typeMatch2.ts, 29, 7))
+>x : Symbol(x, Decl(typeMatch2.ts, 29, 13))
+>y : Symbol(y, Decl(typeMatch2.ts, 29, 19))
+
+    a = { x: 1, y: null }; 
+>a : Symbol(a, Decl(typeMatch2.ts, 29, 7))
+>x : Symbol(x, Decl(typeMatch2.ts, 30, 9))
+>y : Symbol(y, Decl(typeMatch2.ts, 30, 15))
+
+    a = { x: 1, y: undefined }; 
+>a : Symbol(a, Decl(typeMatch2.ts, 29, 7))
+>x : Symbol(x, Decl(typeMatch2.ts, 31, 9))
+>y : Symbol(y, Decl(typeMatch2.ts, 31, 15))
+>undefined : Symbol(undefined)
+
+    a = { x: 1, y: _any }; 
+>a : Symbol(a, Decl(typeMatch2.ts, 29, 7))
+>x : Symbol(x, Decl(typeMatch2.ts, 32, 9))
+>y : Symbol(y, Decl(typeMatch2.ts, 32, 15))
+>_any : Symbol(_any, Decl(typeMatch2.ts, 25, 7))
+
+    a = { x: 1, y: _any, z:1 }; 
+>a : Symbol(a, Decl(typeMatch2.ts, 29, 7))
+>x : Symbol(x, Decl(typeMatch2.ts, 33, 9))
+>y : Symbol(y, Decl(typeMatch2.ts, 33, 15))
+>_any : Symbol(_any, Decl(typeMatch2.ts, 25, 7))
+>z : Symbol(z, Decl(typeMatch2.ts, 33, 24))
+
+    a = { x: 1 }; // error
+>a : Symbol(a, Decl(typeMatch2.ts, 29, 7))
+>x : Symbol(x, Decl(typeMatch2.ts, 34, 9))
+
+    var mf = function m(n) { return false; };
+>mf : Symbol(mf, Decl(typeMatch2.ts, 35, 7))
+>m : Symbol(m, Decl(typeMatch2.ts, 35, 12))
+>n : Symbol(n, Decl(typeMatch2.ts, 35, 24))
+
+    var zf = function z(n: number) { return true; };
+>zf : Symbol(zf, Decl(typeMatch2.ts, 36, 7))
+>z : Symbol(z, Decl(typeMatch2.ts, 36, 12))
+>n : Symbol(n, Decl(typeMatch2.ts, 36, 24))
+
+    mf=zf;
+>mf : Symbol(mf, Decl(typeMatch2.ts, 35, 7))
+>zf : Symbol(zf, Decl(typeMatch2.ts, 36, 7))
+
+    mf(_any);
+>mf : Symbol(mf, Decl(typeMatch2.ts, 35, 7))
+>_any : Symbol(_any, Decl(typeMatch2.ts, 25, 7))
+
+    zf(_any);
+>zf : Symbol(zf, Decl(typeMatch2.ts, 36, 7))
+>_any : Symbol(_any, Decl(typeMatch2.ts, 25, 7))
+}
+
+
+

@@ -5,6 +5,6 @@ function f1 (a: number, b: typeof a) {
 >b : Symbol(b, Decl(unusedParameterUsedInTypeOf.ts, 0, 23))
 >a : Symbol(a, Decl(unusedParameterUsedInTypeOf.ts, 0, 13))
 
-    b++;
+    return b;
 >b : Symbol(b, Decl(unusedParameterUsedInTypeOf.ts, 0, 23))
 }

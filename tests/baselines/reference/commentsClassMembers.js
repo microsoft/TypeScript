@@ -219,7 +219,7 @@ cProperties_i.nc_p2 = cProperties_i.nc_p1;
 
 //// [commentsClassMembers.js]
 /** This is comment for c1*/
-var c1 = (function () {
+var c1 = /** @class */ (function () {
     /** Constructor method*/
     function c1() {
     }
@@ -435,7 +435,7 @@ var i1_s_ncr = c1.nc_s2(20);
 var i1_s_ncprop = c1.nc_s3;
 c1.nc_s3 = i1_s_ncprop;
 var i1_c = c1;
-var cProperties = (function () {
+var cProperties = /** @class */ (function () {
     function cProperties() {
         this.x = 10; /*trailing comment for property*/
         this.y = 10; // trailing comment of // style

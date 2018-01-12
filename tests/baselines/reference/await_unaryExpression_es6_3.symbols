@@ -1,0 +1,32 @@
+=== tests/cases/conformance/async/es6/await_unaryExpression_es6_3.ts ===
+async function bar1() {
+>bar1 : Symbol(bar1, Decl(await_unaryExpression_es6_3.ts, 0, 0))
+
+    ++await 42; // Error
+}
+
+async function bar2() {
+>bar2 : Symbol(bar2, Decl(await_unaryExpression_es6_3.ts, 2, 1))
+
+    --await 42; // Error
+}
+
+async function bar3() {
+>bar3 : Symbol(bar3, Decl(await_unaryExpression_es6_3.ts, 6, 1))
+
+    var x = 42;
+>x : Symbol(x, Decl(await_unaryExpression_es6_3.ts, 9, 7))
+
+    await x++; // OK but shouldn't need parenthesis
+>x : Symbol(x, Decl(await_unaryExpression_es6_3.ts, 9, 7))
+}
+
+async function bar4() {
+>bar4 : Symbol(bar4, Decl(await_unaryExpression_es6_3.ts, 11, 1))
+
+    var x = 42;
+>x : Symbol(x, Decl(await_unaryExpression_es6_3.ts, 14, 7))
+
+    await x--; // OK but shouldn't need parenthesis
+>x : Symbol(x, Decl(await_unaryExpression_es6_3.ts, 14, 7))
+}

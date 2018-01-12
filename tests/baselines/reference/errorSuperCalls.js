@@ -86,7 +86,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 //super call in class constructor with no base type
-var NoBase = (function () {
+var NoBase = /** @class */ (function () {
     function NoBase() {
         _this = _super.call(this) || this;
         //super call in class member initializer with no base type
@@ -128,12 +128,12 @@ var NoBase = (function () {
     NoBase.k = _this = _super.call(this) || this;
     return NoBase;
 }());
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base() {
     }
     return Base;
 }());
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     //super call with type arguments 
     function Derived() {
@@ -144,12 +144,12 @@ var Derived = (function (_super) {
     }
     return Derived;
 }(Base));
-var OtherBase = (function () {
+var OtherBase = /** @class */ (function () {
     function OtherBase() {
     }
     return OtherBase;
 }());
-var OtherDerived = (function (_super) {
+var OtherDerived = /** @class */ (function (_super) {
     __extends(OtherDerived, _super);
     function OtherDerived() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

@@ -14,10 +14,10 @@
 ////    constructor (public [|{| "isWriteAccess": true, "isDefinition": true |}clsParam|]: number) {
 ////        //Increments
 ////        [|{| "isWriteAccess": true |}globalVar|]++;
-////        this.[|clsVar|]++;
-////        fooCls.[|clsSVar|]++;
+////        this.[|{| "isWriteAccess": true |}clsVar|]++;
+////        fooCls.[|{| "isWriteAccess": true |}clsSVar|]++;
 ////        // References to a class parameter.
-////        this.[|clsParam|]++;
+////        this.[|{| "isWriteAccess": true |}clsParam|]++;
 ////        modTest.modVar++;
 ////    }
 ////}
@@ -28,7 +28,7 @@
 ////    var [|{| "isWriteAccess": true, "isDefinition": true |}fnVar|] = 1;
 ////
 ////    //Increments
-////    fooCls.[|clsSVar|]++;
+////    fooCls.[|{| "isWriteAccess": true |}clsSVar|]++;
 ////    [|{| "isWriteAccess": true |}globalVar|]++;
 ////    modTest.modVar++;
 ////    [|{| "isWriteAccess": true |}fnVar|]++;
@@ -43,7 +43,7 @@
 ////
 ////    //Increments
 ////    [|{| "isWriteAccess": true |}globalVar|]++;
-////    fooCls.[|clsSVar|]++;
+////    fooCls.[|{| "isWriteAccess": true |}clsSVar|]++;
 ////    modVar++;
 ////
 ////    class testCls {
@@ -55,7 +55,7 @@
 ////
 ////        //Increments
 ////        [|{| "isWriteAccess": true |}globalVar|]++;
-////        fooCls.[|clsSVar|]++;
+////        fooCls.[|{| "isWriteAccess": true |}clsSVar|]++;
 ////        modVar++;
 ////    }
 ////
@@ -74,7 +74,7 @@
 ////[|foo|]([|globalVar|]);
 ////
 //////Increments
-////fooCls.[|clsSVar|]++;
+////fooCls.[|{| "isWriteAccess": true |}clsSVar|]++;
 ////modTest.modVar++;
 ////[|{| "isWriteAccess": true |}globalVar|] = [|globalVar|] + [|globalVar|];
 ////

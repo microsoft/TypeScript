@@ -14,5 +14,5 @@ var tag: I;
 tag `Hello world!`;
 >tag `Hello world!` : any
 >tag : I
->`Hello world!` : string
+>`Hello world!` : "Hello world!"
 

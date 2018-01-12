@@ -1,0 +1,27 @@
+=== tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts ===
+function greeter(person: string, person2: string) {
+>greeter : Symbol(greeter, Decl(unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts, 0, 0))
+>person : Symbol(person, Decl(unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts, 0, 17))
+>person2 : Symbol(person2, Decl(unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts, 0, 32))
+
+    var unused = 20;
+>unused : Symbol(unused, Decl(unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts, 1, 7))
+
+    var maker = function(child: string): void {
+>maker : Symbol(maker, Decl(unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts, 2, 7))
+>child : Symbol(child, Decl(unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts, 2, 25))
+
+        var unused2 = 22;
+>unused2 : Symbol(unused2, Decl(unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts, 3, 11))
+    }
+    var maker2 = function(child2: string): void {
+>maker2 : Symbol(maker2, Decl(unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts, 5, 7))
+>child2 : Symbol(child2, Decl(unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts, 5, 26))
+
+        var unused3 = 23;
+>unused3 : Symbol(unused3, Decl(unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts, 6, 11))
+    }
+    maker2(person2);
+>maker2 : Symbol(maker2, Decl(unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts, 5, 7))
+>person2 : Symbol(person2, Decl(unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts, 0, 32))
+}

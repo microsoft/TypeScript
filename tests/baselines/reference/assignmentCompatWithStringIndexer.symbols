@@ -1,0 +1,156 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer.ts ===
+// index signatures must be compatible in assignments
+
+interface Base { foo: string; }
+>Base : Symbol(Base, Decl(assignmentCompatWithStringIndexer.ts, 0, 0))
+>foo : Symbol(Base.foo, Decl(assignmentCompatWithStringIndexer.ts, 2, 16))
+
+interface Derived extends Base { bar: string; }
+>Derived : Symbol(Derived, Decl(assignmentCompatWithStringIndexer.ts, 2, 31))
+>Base : Symbol(Base, Decl(assignmentCompatWithStringIndexer.ts, 0, 0))
+>bar : Symbol(Derived.bar, Decl(assignmentCompatWithStringIndexer.ts, 3, 32))
+
+interface Derived2 extends Derived { baz: string; }
+>Derived2 : Symbol(Derived2, Decl(assignmentCompatWithStringIndexer.ts, 3, 47))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithStringIndexer.ts, 2, 31))
+>baz : Symbol(Derived2.baz, Decl(assignmentCompatWithStringIndexer.ts, 4, 36))
+
+class A {
+>A : Symbol(A, Decl(assignmentCompatWithStringIndexer.ts, 4, 51))
+
+    [x: string]: Base;
+>x : Symbol(x, Decl(assignmentCompatWithStringIndexer.ts, 7, 5))
+>Base : Symbol(Base, Decl(assignmentCompatWithStringIndexer.ts, 0, 0))
+}
+
+var a: A;
+>a : Symbol(a, Decl(assignmentCompatWithStringIndexer.ts, 10, 3))
+>A : Symbol(A, Decl(assignmentCompatWithStringIndexer.ts, 4, 51))
+
+var b: { [x: string]: Derived; }
+>b : Symbol(b, Decl(assignmentCompatWithStringIndexer.ts, 12, 3))
+>x : Symbol(x, Decl(assignmentCompatWithStringIndexer.ts, 12, 10))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithStringIndexer.ts, 2, 31))
+
+a = b; // ok
+>a : Symbol(a, Decl(assignmentCompatWithStringIndexer.ts, 10, 3))
+>b : Symbol(b, Decl(assignmentCompatWithStringIndexer.ts, 12, 3))
+
+b = a; // error
+>b : Symbol(b, Decl(assignmentCompatWithStringIndexer.ts, 12, 3))
+>a : Symbol(a, Decl(assignmentCompatWithStringIndexer.ts, 10, 3))
+
+var b2: { [x: string]: Derived2; }
+>b2 : Symbol(b2, Decl(assignmentCompatWithStringIndexer.ts, 16, 3))
+>x : Symbol(x, Decl(assignmentCompatWithStringIndexer.ts, 16, 11))
+>Derived2 : Symbol(Derived2, Decl(assignmentCompatWithStringIndexer.ts, 3, 47))
+
+a = b2; // ok
+>a : Symbol(a, Decl(assignmentCompatWithStringIndexer.ts, 10, 3))
+>b2 : Symbol(b2, Decl(assignmentCompatWithStringIndexer.ts, 16, 3))
+
+b2 = a; // error
+>b2 : Symbol(b2, Decl(assignmentCompatWithStringIndexer.ts, 16, 3))
+>a : Symbol(a, Decl(assignmentCompatWithStringIndexer.ts, 10, 3))
+
+module Generics {
+>Generics : Symbol(Generics, Decl(assignmentCompatWithStringIndexer.ts, 18, 7))
+
+    class A<T extends Base> {
+>A : Symbol(A, Decl(assignmentCompatWithStringIndexer.ts, 20, 17))
+>T : Symbol(T, Decl(assignmentCompatWithStringIndexer.ts, 21, 12))
+>Base : Symbol(Base, Decl(assignmentCompatWithStringIndexer.ts, 0, 0))
+
+        [x: string]: T;
+>x : Symbol(x, Decl(assignmentCompatWithStringIndexer.ts, 22, 9))
+>T : Symbol(T, Decl(assignmentCompatWithStringIndexer.ts, 21, 12))
+    }
+
+    class B extends A<Base> {
+>B : Symbol(B, Decl(assignmentCompatWithStringIndexer.ts, 23, 5))
+>A : Symbol(A, Decl(assignmentCompatWithStringIndexer.ts, 20, 17))
+>Base : Symbol(Base, Decl(assignmentCompatWithStringIndexer.ts, 0, 0))
+
+        [x: string]: Derived; // ok
+>x : Symbol(x, Decl(assignmentCompatWithStringIndexer.ts, 26, 9))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithStringIndexer.ts, 2, 31))
+    }
+
+    var b1: { [x: string]: Derived; };
+>b1 : Symbol(b1, Decl(assignmentCompatWithStringIndexer.ts, 29, 7))
+>x : Symbol(x, Decl(assignmentCompatWithStringIndexer.ts, 29, 15))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithStringIndexer.ts, 2, 31))
+
+    var a1: A<Base>;
+>a1 : Symbol(a1, Decl(assignmentCompatWithStringIndexer.ts, 30, 7))
+>A : Symbol(A, Decl(assignmentCompatWithStringIndexer.ts, 20, 17))
+>Base : Symbol(Base, Decl(assignmentCompatWithStringIndexer.ts, 0, 0))
+
+    a1 = b1; // ok
+>a1 : Symbol(a1, Decl(assignmentCompatWithStringIndexer.ts, 30, 7))
+>b1 : Symbol(b1, Decl(assignmentCompatWithStringIndexer.ts, 29, 7))
+
+    b1 = a1; // error
+>b1 : Symbol(b1, Decl(assignmentCompatWithStringIndexer.ts, 29, 7))
+>a1 : Symbol(a1, Decl(assignmentCompatWithStringIndexer.ts, 30, 7))
+
+    class B2 extends A<Base> {
+>B2 : Symbol(B2, Decl(assignmentCompatWithStringIndexer.ts, 32, 12))
+>A : Symbol(A, Decl(assignmentCompatWithStringIndexer.ts, 20, 17))
+>Base : Symbol(Base, Decl(assignmentCompatWithStringIndexer.ts, 0, 0))
+
+        [x: string]: Derived2; // ok
+>x : Symbol(x, Decl(assignmentCompatWithStringIndexer.ts, 35, 9))
+>Derived2 : Symbol(Derived2, Decl(assignmentCompatWithStringIndexer.ts, 3, 47))
+    }
+
+    var b2: { [x: string]: Derived2; };
+>b2 : Symbol(b2, Decl(assignmentCompatWithStringIndexer.ts, 38, 7))
+>x : Symbol(x, Decl(assignmentCompatWithStringIndexer.ts, 38, 15))
+>Derived2 : Symbol(Derived2, Decl(assignmentCompatWithStringIndexer.ts, 3, 47))
+
+    a1 = b2; // ok
+>a1 : Symbol(a1, Decl(assignmentCompatWithStringIndexer.ts, 30, 7))
+>b2 : Symbol(b2, Decl(assignmentCompatWithStringIndexer.ts, 38, 7))
+
+    b2 = a1; // error
+>b2 : Symbol(b2, Decl(assignmentCompatWithStringIndexer.ts, 38, 7))
+>a1 : Symbol(a1, Decl(assignmentCompatWithStringIndexer.ts, 30, 7))
+
+    function foo<T extends Base>() {
+>foo : Symbol(foo, Decl(assignmentCompatWithStringIndexer.ts, 40, 12))
+>T : Symbol(T, Decl(assignmentCompatWithStringIndexer.ts, 42, 17))
+>Base : Symbol(Base, Decl(assignmentCompatWithStringIndexer.ts, 0, 0))
+
+        var b3: { [x: string]: Derived; };
+>b3 : Symbol(b3, Decl(assignmentCompatWithStringIndexer.ts, 43, 11))
+>x : Symbol(x, Decl(assignmentCompatWithStringIndexer.ts, 43, 19))
+>Derived : Symbol(Derived, Decl(assignmentCompatWithStringIndexer.ts, 2, 31))
+
+        var a3: A<T>;
+>a3 : Symbol(a3, Decl(assignmentCompatWithStringIndexer.ts, 44, 11))
+>A : Symbol(A, Decl(assignmentCompatWithStringIndexer.ts, 20, 17))
+>T : Symbol(T, Decl(assignmentCompatWithStringIndexer.ts, 42, 17))
+
+        a3 = b3; // error
+>a3 : Symbol(a3, Decl(assignmentCompatWithStringIndexer.ts, 44, 11))
+>b3 : Symbol(b3, Decl(assignmentCompatWithStringIndexer.ts, 43, 11))
+
+        b3 = a3; // error
+>b3 : Symbol(b3, Decl(assignmentCompatWithStringIndexer.ts, 43, 11))
+>a3 : Symbol(a3, Decl(assignmentCompatWithStringIndexer.ts, 44, 11))
+
+        var b4: { [x: string]: Derived2; };
+>b4 : Symbol(b4, Decl(assignmentCompatWithStringIndexer.ts, 48, 11))
+>x : Symbol(x, Decl(assignmentCompatWithStringIndexer.ts, 48, 19))
+>Derived2 : Symbol(Derived2, Decl(assignmentCompatWithStringIndexer.ts, 3, 47))
+
+        a3 = b4; // error
+>a3 : Symbol(a3, Decl(assignmentCompatWithStringIndexer.ts, 44, 11))
+>b4 : Symbol(b4, Decl(assignmentCompatWithStringIndexer.ts, 48, 11))
+
+        b4 = a3; // error
+>b4 : Symbol(b4, Decl(assignmentCompatWithStringIndexer.ts, 48, 11))
+>a3 : Symbol(a3, Decl(assignmentCompatWithStringIndexer.ts, 44, 11))
+    }
+}

@@ -36,7 +36,7 @@ var r12 = b[1];
 
 
 //// [stringIndexingResults.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.y = '';
     }

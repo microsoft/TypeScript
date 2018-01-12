@@ -8,7 +8,7 @@ namespace ts {
         setWriter(writer: EmitTextWriter): void;
         emitNodeWithComments(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
         emitBodyWithDetachedComments(node: Node, detachedRange: TextRange, emitCallback: (node: Node) => void): void;
-        emitTrailingCommentsOfPosition(pos: number): void;
+        emitTrailingCommentsOfPosition(pos: number, prefixSpace?: boolean): void;
         emitLeadingCommentsOfPosition(pos: number): void;
     }
 
@@ -21,7 +21,7 @@ namespace ts {
         let declarationListContainerEnd = -1;
         let currentSourceFile: SourceFile;
         let currentText: string;
-        let currentLineMap: number[];
+        let currentLineMap: ReadonlyArray<number>;
         let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number}[];
         let hasWrittenComment = false;
         let disabled: boolean = printerOptions.removeComments;
@@ -260,7 +260,7 @@ namespace ts {
             }
         }
 
-        function emitLeadingComment(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
+        function emitLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
             if (!hasWrittenComment) {
                 emitNewLineBeforeLeadingCommentOfPosition(currentLineMap, writer, rangePos, commentPos);
                 hasWrittenComment = true;
@@ -274,7 +274,7 @@ namespace ts {
             if (hasTrailingNewLine) {
                 writer.writeLine();
             }
-            else {
+            else if (kind === SyntaxKind.MultiLineCommentTrivia) {
                 writer.write(" ");
             }
         }
@@ -306,7 +306,7 @@ namespace ts {
             }
         }
 
-        function emitTrailingCommentsOfPosition(pos: number) {
+        function emitTrailingCommentsOfPosition(pos: number, prefixSpace?: boolean) {
             if (disabled) {
                 return;
             }
@@ -315,7 +315,7 @@ namespace ts {
                 performance.mark("beforeEmitTrailingCommentsOfPosition");
             }
 
-            forEachTrailingCommentToEmit(pos, emitTrailingCommentOfPosition);
+            forEachTrailingCommentToEmit(pos, prefixSpace ? emitTrailingComment : emitTrailingCommentOfPosition);
 
             if (extendedDiagnostics) {
                 performance.measure("commentTime", "beforeEmitTrailingCommentsOfPosition");
@@ -415,17 +415,7 @@ namespace ts {
          * @return true if the comment is a triple-slash comment else false
          */
         function isTripleSlashComment(commentPos: number, commentEnd: number) {
-            // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
-            // so that we don't end up computing comment string and doing match for all // comments
-            if (currentText.charCodeAt(commentPos + 1) === CharacterCodes.slash &&
-                commentPos + 2 < commentEnd &&
-                currentText.charCodeAt(commentPos + 2) === CharacterCodes.slash) {
-                const textSubStr = currentText.substring(commentPos, commentEnd);
-                return textSubStr.match(fullTripleSlashReferencePathRegEx) ||
-                    textSubStr.match(fullTripleSlashAMDReferencePathRegEx) ?
-                    true : false;
-            }
-            return false;
+            return isRecognizedTripleSlashComment(currentText, commentPos, commentEnd);
         }
     }
 }

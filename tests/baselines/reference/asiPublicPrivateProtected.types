@@ -1,0 +1,78 @@
+=== tests/cases/compiler/asiPublicPrivateProtected.ts ===
+public
+>public : any
+
+class NonPublicClass {
+>NonPublicClass : NonPublicClass
+
+    public s() {
+>s : () => void
+    }
+}
+
+class NonPublicClass2 {
+>NonPublicClass2 : NonPublicClass2
+
+    public
+>public : any
+
+    private nonPublicFunction() {
+>nonPublicFunction : () => void
+    }
+}
+private
+>private : any
+
+class NonPrivateClass {
+>NonPrivateClass : NonPrivateClass
+
+    private s() {
+>s : () => void
+    }
+}
+
+class NonPrivateClass2 {
+>NonPrivateClass2 : NonPrivateClass2
+
+    private
+>private : any
+
+    public nonPrivateFunction() {
+>nonPrivateFunction : () => void
+    }
+}
+protected
+>protected : any
+
+class NonProtectedClass {
+>NonProtectedClass : NonProtectedClass
+
+  protected s() {
+>s : () => void
+  }
+}
+
+class NonProtectedClass2 {
+>NonProtectedClass2 : NonProtectedClass2
+
+    protected
+>protected : any
+
+    public nonProtectedFunction() {
+>nonProtectedFunction : () => void
+    }
+}
+
+class ClassWithThreeMembers {
+>ClassWithThreeMembers : ClassWithThreeMembers
+
+    public
+>public : any
+
+    private
+>private : any
+
+    protected
+>protected : any
+}
+

@@ -17,7 +17,7 @@ foo("IN " + thingy.me + "!");
 
 //// [unusedImportDeclaration_testerB.js]
 "use strict";
-var TesterB = (function () {
+var TesterB = /** @class */ (function () {
     function TesterB() {
     }
     return TesterB;
@@ -38,3 +38,4 @@ declare class TesterB {
 }
 export = TesterB;
 //// [unusedImportDeclaration_testerA.d.ts]
+export {};

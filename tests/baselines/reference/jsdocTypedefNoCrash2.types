@@ -1,0 +1,12 @@
+=== tests/cases/compiler/export.js ===
+export type foo = 5;
+>foo : 5
+
+/**
+ * @typedef {{
+ * }}
+ */
+export const foo = 5;
+>foo : 5
+>5 : 5
+

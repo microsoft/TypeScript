@@ -5,7 +5,7 @@ class C {
 }
 
 //// [parserClassDeclaration21.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype[1] = function () { };

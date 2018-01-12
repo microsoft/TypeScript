@@ -7,7 +7,7 @@ class X {
 >this['__proto__'] = null : null
 >this['__proto__'] : any
 >this : this
->'__proto__' : "___proto__"
+>'__proto__' : "__proto__"
 >null : null
     }
 }

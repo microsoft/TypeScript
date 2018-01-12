@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 //// class /*classDeclaration*/A {}
-//// function f(/*parameterDeclaration*/parameter: any): /*parameterName*/parameter is /*typeReference*/A {
+//// function f(/*parameterDeclaration*/parameter: any): [|/*parameterName*/parameter|] is [|/*typeReference*/A|] {
 ////     return typeof parameter === "string";
 //// }
 

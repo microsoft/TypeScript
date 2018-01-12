@@ -33,14 +33,14 @@ var r4 = f.y; // error
 
 
 //// [constructorParameterProperties2.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C(y) {
     } // ok
     return C;
 }());
 var c;
 var r = c.y;
-var D = (function () {
+var D = /** @class */ (function () {
     function D(y) {
         this.y = y;
     } // error
@@ -48,7 +48,7 @@ var D = (function () {
 }());
 var d;
 var r2 = d.y;
-var E = (function () {
+var E = /** @class */ (function () {
     function E(y) {
         this.y = y;
     } // error
@@ -56,7 +56,7 @@ var E = (function () {
 }());
 var e;
 var r3 = e.y; // error
-var F = (function () {
+var F = /** @class */ (function () {
     function F(y) {
         this.y = y;
     } // error

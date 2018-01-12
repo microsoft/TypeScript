@@ -1,0 +1,30 @@
+=== tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts ===
+interface I {
+>I : Symbol(I, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 0, 0))
+
+	f: (a: { a: number }) => void
+>f : Symbol(I.f, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 0, 13))
+>a : Symbol(a, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 1, 5))
+>a : Symbol(a, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 1, 9))
+}
+class X<T extends { a: string }> implements I {
+>X : Symbol(X, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 2, 1))
+>T : Symbol(T, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 3, 8))
+>a : Symbol(a, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 3, 19))
+>I : Symbol(I, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 0, 0))
+
+	f(a: T): void { }
+>f : Symbol(X.f, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 3, 47))
+>a : Symbol(a, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 4, 3))
+>T : Symbol(T, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 3, 8))
+}
+var x = new X<{ a: string }>();
+>x : Symbol(x, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 6, 3))
+>X : Symbol(X, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 2, 1))
+>a : Symbol(a, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 6, 15))
+
+var i: I = x; // Should not be allowed -- type of 'f' is incompatible with 'I'
+>i : Symbol(i, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 7, 3))
+>I : Symbol(I, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 0, 0))
+>x : Symbol(x, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 6, 3))
+

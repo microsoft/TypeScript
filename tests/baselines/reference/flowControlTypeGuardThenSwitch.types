@@ -1,0 +1,101 @@
+=== tests/cases/compiler/flowControlTypeGuardThenSwitch.ts ===
+enum Kind {
+>Kind : Kind
+
+    A,
+>A : Kind.A
+
+    B,
+>B : Kind.B
+}
+
+interface Base {
+>Base : Base
+
+    kind: Kind;
+>kind : Kind
+>Kind : Kind
+}
+
+interface A extends Base {
+>A : A
+>Base : Base
+
+    kind: Kind.A;
+>kind : Kind.A
+>Kind : any
+>A : Kind.A
+
+    yar: any;
+>yar : any
+}
+
+interface B extends Base {
+>B : B
+>Base : Base
+
+    kind: Kind.B;
+>kind : Kind.B
+>Kind : any
+>B : Kind.B
+
+    gar: any;
+>gar : any
+}
+
+type Both = A | B;
+>Both : Both
+>A : A
+>B : B
+
+function isBoth(x: Base): x is Both {
+>isBoth : (x: Base) => x is Both
+>x : Base
+>Base : Base
+>x : any
+>Both : Both
+
+    return true;
+>true : true
+}
+
+let foo: Base = undefined;
+>foo : Base
+>Base : Base
+>undefined : undefined
+
+if (isBoth(foo)) {
+>isBoth(foo) : boolean
+>isBoth : (x: Base) => x is Both
+>foo : Base
+
+    switch (foo.kind) {
+>foo.kind : Kind
+>foo : Both
+>kind : Kind
+
+        case Kind.A:
+>Kind.A : Kind.A
+>Kind : typeof Kind
+>A : Kind.A
+
+            const myA: A = foo; // Should not be an error
+>myA : A
+>A : A
+>foo : A
+
+            break;
+        case Kind.B:
+>Kind.B : Kind.B
+>Kind : typeof Kind
+>B : Kind.B
+
+            const myB: B = foo;
+>myB : B
+>B : B
+>foo : B
+
+            break;
+    }
+}
+

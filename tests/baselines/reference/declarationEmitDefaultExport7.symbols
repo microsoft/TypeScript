@@ -1,0 +1,7 @@
+=== tests/cases/compiler/declarationEmitDefaultExport7.ts ===
+class A {}
+>A : Symbol(A, Decl(declarationEmitDefaultExport7.ts, 0, 0))
+
+export default new A();
+>A : Symbol(A, Decl(declarationEmitDefaultExport7.ts, 0, 0))
+

@@ -5,4 +5,8 @@
 ////    [|constructor(private readonly p2: boolean, p5)|] { p5; }
 //// }
 
-verify.rangeAfterCodeFix("constructor(p5)");
+verify.codeFix({
+    description: "Remove declaration for: 'p2'",
+    index: 0,
+    newRangeContent: "constructor(p5)",
+});

@@ -26,7 +26,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var BaseClass = (function () {
+var BaseClass = /** @class */ (function () {
     function BaseClass() {
         this._init();
     }
@@ -34,7 +34,7 @@ var BaseClass = (function () {
     };
     return BaseClass;
 }());
-var DerivedClass = (function (_super) {
+var DerivedClass = /** @class */ (function (_super) {
     __extends(DerivedClass, _super);
     function DerivedClass() {
         return _super.call(this) || this;

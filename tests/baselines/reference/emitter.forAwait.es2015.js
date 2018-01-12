@@ -34,7 +34,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __asyncValues = (this && this.__asyncIterator) || function (o) {
+var __asyncValues = (this && this.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator];
     return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
@@ -66,7 +66,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __asyncValues = (this && this.__asyncIterator) || function (o) {
+var __asyncValues = (this && this.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator];
     return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
@@ -90,7 +90,7 @@ function f2() {
     });
 }
 //// [file3.js]
-var __asyncValues = (this && this.__asyncIterator) || function (o) {
+var __asyncValues = (this && this.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator];
     return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
@@ -126,7 +126,7 @@ function f3() {
     });
 }
 //// [file4.js]
-var __asyncValues = (this && this.__asyncIterator) || function (o) {
+var __asyncValues = (this && this.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator];
     return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();

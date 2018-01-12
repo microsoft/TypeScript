@@ -1,0 +1,14 @@
+=== tests/cases/conformance/externalModules/multipleExportDefault2.ts ===
+export default {
+>{    uhoh: "another default",} : { uhoh: string; }
+
+    uhoh: "another default",
+>uhoh : string
+>"another default" : "another default"
+
+};
+
+export default function Foo() { }
+>Foo : () => void
+
+

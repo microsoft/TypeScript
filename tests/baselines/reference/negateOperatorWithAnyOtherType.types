@@ -4,7 +4,7 @@
 var ANY: any;
 >ANY : any
 
-var ANY1;
+var ANY1: any;
 >ANY1 : any
 
 var ANY2: any[] = ["", ""];
@@ -39,7 +39,7 @@ class A {
     public a: any;
 >a : any
 
-    static foo() {
+    static foo(): any {
 >foo : () => any
 
         var a;

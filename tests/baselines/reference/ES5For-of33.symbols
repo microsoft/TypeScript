@@ -1,0 +1,7 @@
+=== tests/cases/conformance/statements/for-ofStatements/ES5For-of33.ts ===
+for (var v of ['a', 'b', 'c']) {
+>v : Symbol(v, Decl(ES5For-of33.ts, 0, 8))
+
+    console.log(v);
+>v : Symbol(v, Decl(ES5For-of33.ts, 0, 8))
+}

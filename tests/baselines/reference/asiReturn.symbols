@@ -1,0 +1,4 @@
+=== tests/cases/compiler/asiReturn.ts ===
+// This should be an error for using a return outside a function, but ASI should work properly
+No type information for this code.return
+No type information for this code.

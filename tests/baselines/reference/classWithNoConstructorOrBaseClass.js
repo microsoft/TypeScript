@@ -17,14 +17,14 @@ var r2 = D;
 
 
 //// [classWithNoConstructorOrBaseClass.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
 var c = new C();
 var r = C;
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     return D;

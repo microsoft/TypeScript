@@ -7,7 +7,7 @@ export default class C {
 
 
 //// [es6modulekindWithES5Target2.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.p = 1;
     }

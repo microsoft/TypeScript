@@ -18,12 +18,12 @@ var xx = new a(null, 7, new B());
 // The following gives no error
 // Michal saw no error if he used number instead of B, 
 // but I do...
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     return B;
 }());
-var a = (function () {
+var a = /** @class */ (function () {
     function a(x, y, z) {
         this.x = x;
         this.y = y;

@@ -20,22 +20,22 @@ class F<T> {
 }
 
 //// [memberFunctionOverloadMixingStaticAndInstance.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     return D;
 }());
-var E = (function () {
+var E = /** @class */ (function () {
     function E() {
     }
     return E;
 }());
-var F = (function () {
+var F = /** @class */ (function () {
     function F() {
     }
     return F;

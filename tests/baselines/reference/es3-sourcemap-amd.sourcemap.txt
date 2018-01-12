@@ -8,7 +8,7 @@ sources: es3-sourcemap-amd.ts
 emittedFile:tests/cases/compiler/es3-sourcemap-amd.js
 sourceFile:es3-sourcemap-amd.ts
 -------------------------------------------------------------------
->>>var A = (function () {
+>>>var A = /** @class */ (function () {
 1 >
 2 >^^^^^^^^^^^^^^^^^^^->
 1 >

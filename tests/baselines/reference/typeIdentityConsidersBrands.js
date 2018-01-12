@@ -33,22 +33,22 @@ foo2(a2); // should error
 
 
 //// [typeIdentityConsidersBrands.js]
-var X = (function () {
+var X = /** @class */ (function () {
     function X() {
     }
     return X;
 }());
-var Y = (function () {
+var Y = /** @class */ (function () {
     function Y() {
     }
     return Y;
 }());
-var X_1 = (function () {
+var X_1 = /** @class */ (function () {
     function X_1() {
     }
     return X_1;
 }());
-var Y_1 = (function () {
+var Y_1 = /** @class */ (function () {
     function Y_1() {
     }
     return Y_1;

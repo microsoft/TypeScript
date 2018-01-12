@@ -22,13 +22,13 @@
 verify.noErrors();
 const [foo0, foo1, bar0, foo2, defaultC, defaultD, bar1, baz0, defaultE, bang0, boom0, bar2, baz1, bang1, boom1] = test.ranges();
 const a = { definition: "function foo(): void", ranges: [foo0, foo1, foo2] };
-const b = { definition: "import bar", ranges: [bar0] };
-const c = { definition: "import default", ranges: [defaultC, defaultE] };
-const d = { definition: "import default", ranges: [defaultD] };
-const eBar = { definition: "import bar", ranges: [bar1, bar2] };
-const eBaz = { definition: "import baz", ranges: [baz0, baz1] };
-const eBang = { definition: "import bang", ranges: [bang0, bang1] };
-const eBoom = { definition: "import boom", ranges: [boom0, boom1] };
+const b = { definition: "(alias) function bar(): void\nimport bar", ranges: [bar0] };
+const c = { definition: "(alias) function foo(): void\nimport default", ranges: [defaultC, defaultE] };
+const d = { definition: "(alias) function foo(): void\nimport default", ranges: [defaultD] };
+const eBar = { definition: "(alias) function bar(): void\nimport bar", ranges: [bar1, bar2] };
+const eBaz = { definition: "(alias) function baz(): void\nimport baz", ranges: [baz0, baz1] };
+const eBang = { definition: "(alias) function bang(): void\nimport bang", ranges: [bang0, bang1] };
+const eBoom = { definition: "(alias) function boom(): void\nimport boom", ranges: [boom0, boom1] };
 
 verify.referenceGroups([foo0, foo1, foo2], [a, b, eBar, c, d, eBoom, eBaz, eBang]);
 
@@ -39,14 +39,19 @@ verify.referenceGroups(bar2, [{ ...eBar, definition: "(alias) bar(): void\nimpor
 verify.referenceGroups([defaultC], [c, d, eBoom, eBaz, eBang]);
 verify.referenceGroups(defaultD, [d, eBoom, a, b, eBar,c, eBaz, eBang]);
 verify.referenceGroups(defaultE, [c, d, eBoom, eBaz, eBang]);
-verify.referenceGroups(baz0, [eBaz]);
-verify.referenceGroups(baz1, [{ ...eBaz, definition: "(alias) baz(): void\nimport baz" }]);
+verify.referenceGroups(baz0, [eBaz, c, d, eBoom, eBang]);
+verify.referenceGroups(baz1, [
+    { ...eBaz, definition: "(alias) baz(): void\nimport baz" },
+    c, d, eBoom, eBang,
+]);
 
 verify.referenceGroups(bang0, [eBang]);
 verify.referenceGroups(bang1, [{ ...eBang, definition: "(alias) bang(): void\nimport bang" }]);
-
-verify.referenceGroups(boom0, [eBoom]);
-verify.referenceGroups(boom1, [{ ...eBoom, definition: "(alias) boom(): void\nimport boom" }]);
+verify.referenceGroups(boom0, [eBoom, d, a, b, eBar, c, eBaz, eBang]);
+verify.referenceGroups(boom1, [
+    { ...eBoom, definition: "(alias) boom(): void\nimport boom" },
+    d, a, b, eBar, c, eBaz, eBang,
+]);
 
 test.rangesByText().forEach((ranges, text) => {
     if (text === "default") {

@@ -11,7 +11,7 @@ function saySize(message: Message | Message[]) {
 
 
 //// [TypeGuardWithArrayUnion.js]
-var Message = (function () {
+var Message = /** @class */ (function () {
     function Message() {
     }
     return Message;

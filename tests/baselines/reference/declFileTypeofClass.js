@@ -16,7 +16,7 @@ var genericX = genericC;
 
 
 //// [declFileTypeofClass.js]
-var c = (function () {
+var c = /** @class */ (function () {
     function c() {
     }
     return c;
@@ -24,7 +24,7 @@ var c = (function () {
 var x;
 var y = c;
 var z;
-var genericC = (function () {
+var genericC = /** @class */ (function () {
     function genericC() {
     }
     return genericC;

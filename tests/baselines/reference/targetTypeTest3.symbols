@@ -1,0 +1,25 @@
+=== tests/cases/compiler/targetTypeTest3.ts ===
+// Test target typing for array literals and call expressions
+
+
+var a : string[] = [1,2,"3"]; // should produce an error
+>a : Symbol(a, Decl(targetTypeTest3.ts, 3, 3))
+
+
+function func1(stuff:any[]) { return stuff; }
+>func1 : Symbol(func1, Decl(targetTypeTest3.ts, 3, 29))
+>stuff : Symbol(stuff, Decl(targetTypeTest3.ts, 6, 15))
+>stuff : Symbol(stuff, Decl(targetTypeTest3.ts, 6, 15))
+
+function func2(stuff1:string, stuff2:number, stuff3:number) {
+>func2 : Symbol(func2, Decl(targetTypeTest3.ts, 6, 45))
+>stuff1 : Symbol(stuff1, Decl(targetTypeTest3.ts, 8, 15))
+>stuff2 : Symbol(stuff2, Decl(targetTypeTest3.ts, 8, 29))
+>stuff3 : Symbol(stuff3, Decl(targetTypeTest3.ts, 8, 44))
+
+	return func1([stuff1, stuff2, stuff3]);
+>func1 : Symbol(func1, Decl(targetTypeTest3.ts, 3, 29))
+>stuff1 : Symbol(stuff1, Decl(targetTypeTest3.ts, 8, 15))
+>stuff2 : Symbol(stuff2, Decl(targetTypeTest3.ts, 8, 29))
+>stuff3 : Symbol(stuff3, Decl(targetTypeTest3.ts, 8, 44))
+}

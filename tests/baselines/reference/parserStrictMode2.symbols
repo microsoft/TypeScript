@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode2.ts ===
+"use strict";
+No type information for this code.foo1();
+No type information for this code.foo1();
+No type information for this code.foo1();
+No type information for this code.static();
+No type information for this code.

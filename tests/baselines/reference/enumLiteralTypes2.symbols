@@ -85,95 +85,95 @@ function f3(a: Choice.Yes, b: UnknownYesNo) {
 >UnknownYesNo : Symbol(UnknownYesNo, Decl(enumLiteralTypes2.ts, 3, 36))
 
     var x = a + b;
->x : Symbol(x, Decl(enumLiteralTypes2.ts, 20, 7), Decl(enumLiteralTypes2.ts, 21, 7), Decl(enumLiteralTypes2.ts, 22, 7), Decl(enumLiteralTypes2.ts, 23, 7), Decl(enumLiteralTypes2.ts, 24, 7), Decl(enumLiteralTypes2.ts, 25, 7), Decl(enumLiteralTypes2.ts, 26, 7), Decl(enumLiteralTypes2.ts, 27, 7), Decl(enumLiteralTypes2.ts, 28, 7), Decl(enumLiteralTypes2.ts, 29, 7))
+>x : Symbol(x, Decl(enumLiteralTypes2.ts, 20, 7), Decl(enumLiteralTypes2.ts, 21, 7), Decl(enumLiteralTypes2.ts, 22, 7), Decl(enumLiteralTypes2.ts, 23, 7), Decl(enumLiteralTypes2.ts, 24, 7) ... and 5 more)
 >a : Symbol(a, Decl(enumLiteralTypes2.ts, 19, 12))
 >b : Symbol(b, Decl(enumLiteralTypes2.ts, 19, 26))
 
     var x = a - b;
->x : Symbol(x, Decl(enumLiteralTypes2.ts, 20, 7), Decl(enumLiteralTypes2.ts, 21, 7), Decl(enumLiteralTypes2.ts, 22, 7), Decl(enumLiteralTypes2.ts, 23, 7), Decl(enumLiteralTypes2.ts, 24, 7), Decl(enumLiteralTypes2.ts, 25, 7), Decl(enumLiteralTypes2.ts, 26, 7), Decl(enumLiteralTypes2.ts, 27, 7), Decl(enumLiteralTypes2.ts, 28, 7), Decl(enumLiteralTypes2.ts, 29, 7))
+>x : Symbol(x, Decl(enumLiteralTypes2.ts, 20, 7), Decl(enumLiteralTypes2.ts, 21, 7), Decl(enumLiteralTypes2.ts, 22, 7), Decl(enumLiteralTypes2.ts, 23, 7), Decl(enumLiteralTypes2.ts, 24, 7) ... and 5 more)
 >a : Symbol(a, Decl(enumLiteralTypes2.ts, 19, 12))
 >b : Symbol(b, Decl(enumLiteralTypes2.ts, 19, 26))
 
     var x = a * b;
->x : Symbol(x, Decl(enumLiteralTypes2.ts, 20, 7), Decl(enumLiteralTypes2.ts, 21, 7), Decl(enumLiteralTypes2.ts, 22, 7), Decl(enumLiteralTypes2.ts, 23, 7), Decl(enumLiteralTypes2.ts, 24, 7), Decl(enumLiteralTypes2.ts, 25, 7), Decl(enumLiteralTypes2.ts, 26, 7), Decl(enumLiteralTypes2.ts, 27, 7), Decl(enumLiteralTypes2.ts, 28, 7), Decl(enumLiteralTypes2.ts, 29, 7))
+>x : Symbol(x, Decl(enumLiteralTypes2.ts, 20, 7), Decl(enumLiteralTypes2.ts, 21, 7), Decl(enumLiteralTypes2.ts, 22, 7), Decl(enumLiteralTypes2.ts, 23, 7), Decl(enumLiteralTypes2.ts, 24, 7) ... and 5 more)
 >a : Symbol(a, Decl(enumLiteralTypes2.ts, 19, 12))
 >b : Symbol(b, Decl(enumLiteralTypes2.ts, 19, 26))
 
     var x = a / b;
->x : Symbol(x, Decl(enumLiteralTypes2.ts, 20, 7), Decl(enumLiteralTypes2.ts, 21, 7), Decl(enumLiteralTypes2.ts, 22, 7), Decl(enumLiteralTypes2.ts, 23, 7), Decl(enumLiteralTypes2.ts, 24, 7), Decl(enumLiteralTypes2.ts, 25, 7), Decl(enumLiteralTypes2.ts, 26, 7), Decl(enumLiteralTypes2.ts, 27, 7), Decl(enumLiteralTypes2.ts, 28, 7), Decl(enumLiteralTypes2.ts, 29, 7))
+>x : Symbol(x, Decl(enumLiteralTypes2.ts, 20, 7), Decl(enumLiteralTypes2.ts, 21, 7), Decl(enumLiteralTypes2.ts, 22, 7), Decl(enumLiteralTypes2.ts, 23, 7), Decl(enumLiteralTypes2.ts, 24, 7) ... and 5 more)
 >a : Symbol(a, Decl(enumLiteralTypes2.ts, 19, 12))
 >b : Symbol(b, Decl(enumLiteralTypes2.ts, 19, 26))
 
     var x = a % b;
->x : Symbol(x, Decl(enumLiteralTypes2.ts, 20, 7), Decl(enumLiteralTypes2.ts, 21, 7), Decl(enumLiteralTypes2.ts, 22, 7), Decl(enumLiteralTypes2.ts, 23, 7), Decl(enumLiteralTypes2.ts, 24, 7), Decl(enumLiteralTypes2.ts, 25, 7), Decl(enumLiteralTypes2.ts, 26, 7), Decl(enumLiteralTypes2.ts, 27, 7), Decl(enumLiteralTypes2.ts, 28, 7), Decl(enumLiteralTypes2.ts, 29, 7))
+>x : Symbol(x, Decl(enumLiteralTypes2.ts, 20, 7), Decl(enumLiteralTypes2.ts, 21, 7), Decl(enumLiteralTypes2.ts, 22, 7), Decl(enumLiteralTypes2.ts, 23, 7), Decl(enumLiteralTypes2.ts, 24, 7) ... and 5 more)
 >a : Symbol(a, Decl(enumLiteralTypes2.ts, 19, 12))
 >b : Symbol(b, Decl(enumLiteralTypes2.ts, 19, 26))
 
     var x = a | b;
->x : Symbol(x, Decl(enumLiteralTypes2.ts, 20, 7), Decl(enumLiteralTypes2.ts, 21, 7), Decl(enumLiteralTypes2.ts, 22, 7), Decl(enumLiteralTypes2.ts, 23, 7), Decl(enumLiteralTypes2.ts, 24, 7), Decl(enumLiteralTypes2.ts, 25, 7), Decl(enumLiteralTypes2.ts, 26, 7), Decl(enumLiteralTypes2.ts, 27, 7), Decl(enumLiteralTypes2.ts, 28, 7), Decl(enumLiteralTypes2.ts, 29, 7))
+>x : Symbol(x, Decl(enumLiteralTypes2.ts, 20, 7), Decl(enumLiteralTypes2.ts, 21, 7), Decl(enumLiteralTypes2.ts, 22, 7), Decl(enumLiteralTypes2.ts, 23, 7), Decl(enumLiteralTypes2.ts, 24, 7) ... and 5 more)
 >a : Symbol(a, Decl(enumLiteralTypes2.ts, 19, 12))
 >b : Symbol(b, Decl(enumLiteralTypes2.ts, 19, 26))
 
     var x = a & b;
->x : Symbol(x, Decl(enumLiteralTypes2.ts, 20, 7), Decl(enumLiteralTypes2.ts, 21, 7), Decl(enumLiteralTypes2.ts, 22, 7), Decl(enumLiteralTypes2.ts, 23, 7), Decl(enumLiteralTypes2.ts, 24, 7), Decl(enumLiteralTypes2.ts, 25, 7), Decl(enumLiteralTypes2.ts, 26, 7), Decl(enumLiteralTypes2.ts, 27, 7), Decl(enumLiteralTypes2.ts, 28, 7), Decl(enumLiteralTypes2.ts, 29, 7))
+>x : Symbol(x, Decl(enumLiteralTypes2.ts, 20, 7), Decl(enumLiteralTypes2.ts, 21, 7), Decl(enumLiteralTypes2.ts, 22, 7), Decl(enumLiteralTypes2.ts, 23, 7), Decl(enumLiteralTypes2.ts, 24, 7) ... and 5 more)
 >a : Symbol(a, Decl(enumLiteralTypes2.ts, 19, 12))
 >b : Symbol(b, Decl(enumLiteralTypes2.ts, 19, 26))
 
     var x = a ^ b;
->x : Symbol(x, Decl(enumLiteralTypes2.ts, 20, 7), Decl(enumLiteralTypes2.ts, 21, 7), Decl(enumLiteralTypes2.ts, 22, 7), Decl(enumLiteralTypes2.ts, 23, 7), Decl(enumLiteralTypes2.ts, 24, 7), Decl(enumLiteralTypes2.ts, 25, 7), Decl(enumLiteralTypes2.ts, 26, 7), Decl(enumLiteralTypes2.ts, 27, 7), Decl(enumLiteralTypes2.ts, 28, 7), Decl(enumLiteralTypes2.ts, 29, 7))
+>x : Symbol(x, Decl(enumLiteralTypes2.ts, 20, 7), Decl(enumLiteralTypes2.ts, 21, 7), Decl(enumLiteralTypes2.ts, 22, 7), Decl(enumLiteralTypes2.ts, 23, 7), Decl(enumLiteralTypes2.ts, 24, 7) ... and 5 more)
 >a : Symbol(a, Decl(enumLiteralTypes2.ts, 19, 12))
 >b : Symbol(b, Decl(enumLiteralTypes2.ts, 19, 26))
 
     var x = -b;
->x : Symbol(x, Decl(enumLiteralTypes2.ts, 20, 7), Decl(enumLiteralTypes2.ts, 21, 7), Decl(enumLiteralTypes2.ts, 22, 7), Decl(enumLiteralTypes2.ts, 23, 7), Decl(enumLiteralTypes2.ts, 24, 7), Decl(enumLiteralTypes2.ts, 25, 7), Decl(enumLiteralTypes2.ts, 26, 7), Decl(enumLiteralTypes2.ts, 27, 7), Decl(enumLiteralTypes2.ts, 28, 7), Decl(enumLiteralTypes2.ts, 29, 7))
+>x : Symbol(x, Decl(enumLiteralTypes2.ts, 20, 7), Decl(enumLiteralTypes2.ts, 21, 7), Decl(enumLiteralTypes2.ts, 22, 7), Decl(enumLiteralTypes2.ts, 23, 7), Decl(enumLiteralTypes2.ts, 24, 7) ... and 5 more)
 >b : Symbol(b, Decl(enumLiteralTypes2.ts, 19, 26))
 
     var x = ~b;
->x : Symbol(x, Decl(enumLiteralTypes2.ts, 20, 7), Decl(enumLiteralTypes2.ts, 21, 7), Decl(enumLiteralTypes2.ts, 22, 7), Decl(enumLiteralTypes2.ts, 23, 7), Decl(enumLiteralTypes2.ts, 24, 7), Decl(enumLiteralTypes2.ts, 25, 7), Decl(enumLiteralTypes2.ts, 26, 7), Decl(enumLiteralTypes2.ts, 27, 7), Decl(enumLiteralTypes2.ts, 28, 7), Decl(enumLiteralTypes2.ts, 29, 7))
+>x : Symbol(x, Decl(enumLiteralTypes2.ts, 20, 7), Decl(enumLiteralTypes2.ts, 21, 7), Decl(enumLiteralTypes2.ts, 22, 7), Decl(enumLiteralTypes2.ts, 23, 7), Decl(enumLiteralTypes2.ts, 24, 7) ... and 5 more)
 >b : Symbol(b, Decl(enumLiteralTypes2.ts, 19, 26))
 
     var y = a == b;
->y : Symbol(y, Decl(enumLiteralTypes2.ts, 30, 7), Decl(enumLiteralTypes2.ts, 31, 7), Decl(enumLiteralTypes2.ts, 32, 7), Decl(enumLiteralTypes2.ts, 33, 7), Decl(enumLiteralTypes2.ts, 34, 7), Decl(enumLiteralTypes2.ts, 35, 7), Decl(enumLiteralTypes2.ts, 36, 7), Decl(enumLiteralTypes2.ts, 37, 7), Decl(enumLiteralTypes2.ts, 38, 7))
+>y : Symbol(y, Decl(enumLiteralTypes2.ts, 30, 7), Decl(enumLiteralTypes2.ts, 31, 7), Decl(enumLiteralTypes2.ts, 32, 7), Decl(enumLiteralTypes2.ts, 33, 7), Decl(enumLiteralTypes2.ts, 34, 7) ... and 4 more)
 >a : Symbol(a, Decl(enumLiteralTypes2.ts, 19, 12))
 >b : Symbol(b, Decl(enumLiteralTypes2.ts, 19, 26))
 
     var y = a != b;
->y : Symbol(y, Decl(enumLiteralTypes2.ts, 30, 7), Decl(enumLiteralTypes2.ts, 31, 7), Decl(enumLiteralTypes2.ts, 32, 7), Decl(enumLiteralTypes2.ts, 33, 7), Decl(enumLiteralTypes2.ts, 34, 7), Decl(enumLiteralTypes2.ts, 35, 7), Decl(enumLiteralTypes2.ts, 36, 7), Decl(enumLiteralTypes2.ts, 37, 7), Decl(enumLiteralTypes2.ts, 38, 7))
+>y : Symbol(y, Decl(enumLiteralTypes2.ts, 30, 7), Decl(enumLiteralTypes2.ts, 31, 7), Decl(enumLiteralTypes2.ts, 32, 7), Decl(enumLiteralTypes2.ts, 33, 7), Decl(enumLiteralTypes2.ts, 34, 7) ... and 4 more)
 >a : Symbol(a, Decl(enumLiteralTypes2.ts, 19, 12))
 >b : Symbol(b, Decl(enumLiteralTypes2.ts, 19, 26))
 
     var y = a === b;
->y : Symbol(y, Decl(enumLiteralTypes2.ts, 30, 7), Decl(enumLiteralTypes2.ts, 31, 7), Decl(enumLiteralTypes2.ts, 32, 7), Decl(enumLiteralTypes2.ts, 33, 7), Decl(enumLiteralTypes2.ts, 34, 7), Decl(enumLiteralTypes2.ts, 35, 7), Decl(enumLiteralTypes2.ts, 36, 7), Decl(enumLiteralTypes2.ts, 37, 7), Decl(enumLiteralTypes2.ts, 38, 7))
+>y : Symbol(y, Decl(enumLiteralTypes2.ts, 30, 7), Decl(enumLiteralTypes2.ts, 31, 7), Decl(enumLiteralTypes2.ts, 32, 7), Decl(enumLiteralTypes2.ts, 33, 7), Decl(enumLiteralTypes2.ts, 34, 7) ... and 4 more)
 >a : Symbol(a, Decl(enumLiteralTypes2.ts, 19, 12))
 >b : Symbol(b, Decl(enumLiteralTypes2.ts, 19, 26))
 
     var y = a !== b;
->y : Symbol(y, Decl(enumLiteralTypes2.ts, 30, 7), Decl(enumLiteralTypes2.ts, 31, 7), Decl(enumLiteralTypes2.ts, 32, 7), Decl(enumLiteralTypes2.ts, 33, 7), Decl(enumLiteralTypes2.ts, 34, 7), Decl(enumLiteralTypes2.ts, 35, 7), Decl(enumLiteralTypes2.ts, 36, 7), Decl(enumLiteralTypes2.ts, 37, 7), Decl(enumLiteralTypes2.ts, 38, 7))
+>y : Symbol(y, Decl(enumLiteralTypes2.ts, 30, 7), Decl(enumLiteralTypes2.ts, 31, 7), Decl(enumLiteralTypes2.ts, 32, 7), Decl(enumLiteralTypes2.ts, 33, 7), Decl(enumLiteralTypes2.ts, 34, 7) ... and 4 more)
 >a : Symbol(a, Decl(enumLiteralTypes2.ts, 19, 12))
 >b : Symbol(b, Decl(enumLiteralTypes2.ts, 19, 26))
 
     var y = a > b;
->y : Symbol(y, Decl(enumLiteralTypes2.ts, 30, 7), Decl(enumLiteralTypes2.ts, 31, 7), Decl(enumLiteralTypes2.ts, 32, 7), Decl(enumLiteralTypes2.ts, 33, 7), Decl(enumLiteralTypes2.ts, 34, 7), Decl(enumLiteralTypes2.ts, 35, 7), Decl(enumLiteralTypes2.ts, 36, 7), Decl(enumLiteralTypes2.ts, 37, 7), Decl(enumLiteralTypes2.ts, 38, 7))
+>y : Symbol(y, Decl(enumLiteralTypes2.ts, 30, 7), Decl(enumLiteralTypes2.ts, 31, 7), Decl(enumLiteralTypes2.ts, 32, 7), Decl(enumLiteralTypes2.ts, 33, 7), Decl(enumLiteralTypes2.ts, 34, 7) ... and 4 more)
 >a : Symbol(a, Decl(enumLiteralTypes2.ts, 19, 12))
 >b : Symbol(b, Decl(enumLiteralTypes2.ts, 19, 26))
 
     var y = a < b;
->y : Symbol(y, Decl(enumLiteralTypes2.ts, 30, 7), Decl(enumLiteralTypes2.ts, 31, 7), Decl(enumLiteralTypes2.ts, 32, 7), Decl(enumLiteralTypes2.ts, 33, 7), Decl(enumLiteralTypes2.ts, 34, 7), Decl(enumLiteralTypes2.ts, 35, 7), Decl(enumLiteralTypes2.ts, 36, 7), Decl(enumLiteralTypes2.ts, 37, 7), Decl(enumLiteralTypes2.ts, 38, 7))
+>y : Symbol(y, Decl(enumLiteralTypes2.ts, 30, 7), Decl(enumLiteralTypes2.ts, 31, 7), Decl(enumLiteralTypes2.ts, 32, 7), Decl(enumLiteralTypes2.ts, 33, 7), Decl(enumLiteralTypes2.ts, 34, 7) ... and 4 more)
 >a : Symbol(a, Decl(enumLiteralTypes2.ts, 19, 12))
 >b : Symbol(b, Decl(enumLiteralTypes2.ts, 19, 26))
 
     var y = a >= b;
->y : Symbol(y, Decl(enumLiteralTypes2.ts, 30, 7), Decl(enumLiteralTypes2.ts, 31, 7), Decl(enumLiteralTypes2.ts, 32, 7), Decl(enumLiteralTypes2.ts, 33, 7), Decl(enumLiteralTypes2.ts, 34, 7), Decl(enumLiteralTypes2.ts, 35, 7), Decl(enumLiteralTypes2.ts, 36, 7), Decl(enumLiteralTypes2.ts, 37, 7), Decl(enumLiteralTypes2.ts, 38, 7))
+>y : Symbol(y, Decl(enumLiteralTypes2.ts, 30, 7), Decl(enumLiteralTypes2.ts, 31, 7), Decl(enumLiteralTypes2.ts, 32, 7), Decl(enumLiteralTypes2.ts, 33, 7), Decl(enumLiteralTypes2.ts, 34, 7) ... and 4 more)
 >a : Symbol(a, Decl(enumLiteralTypes2.ts, 19, 12))
 >b : Symbol(b, Decl(enumLiteralTypes2.ts, 19, 26))
 
     var y = a <= b;
->y : Symbol(y, Decl(enumLiteralTypes2.ts, 30, 7), Decl(enumLiteralTypes2.ts, 31, 7), Decl(enumLiteralTypes2.ts, 32, 7), Decl(enumLiteralTypes2.ts, 33, 7), Decl(enumLiteralTypes2.ts, 34, 7), Decl(enumLiteralTypes2.ts, 35, 7), Decl(enumLiteralTypes2.ts, 36, 7), Decl(enumLiteralTypes2.ts, 37, 7), Decl(enumLiteralTypes2.ts, 38, 7))
+>y : Symbol(y, Decl(enumLiteralTypes2.ts, 30, 7), Decl(enumLiteralTypes2.ts, 31, 7), Decl(enumLiteralTypes2.ts, 32, 7), Decl(enumLiteralTypes2.ts, 33, 7), Decl(enumLiteralTypes2.ts, 34, 7) ... and 4 more)
 >a : Symbol(a, Decl(enumLiteralTypes2.ts, 19, 12))
 >b : Symbol(b, Decl(enumLiteralTypes2.ts, 19, 26))
 
     var y = !b;
->y : Symbol(y, Decl(enumLiteralTypes2.ts, 30, 7), Decl(enumLiteralTypes2.ts, 31, 7), Decl(enumLiteralTypes2.ts, 32, 7), Decl(enumLiteralTypes2.ts, 33, 7), Decl(enumLiteralTypes2.ts, 34, 7), Decl(enumLiteralTypes2.ts, 35, 7), Decl(enumLiteralTypes2.ts, 36, 7), Decl(enumLiteralTypes2.ts, 37, 7), Decl(enumLiteralTypes2.ts, 38, 7))
+>y : Symbol(y, Decl(enumLiteralTypes2.ts, 30, 7), Decl(enumLiteralTypes2.ts, 31, 7), Decl(enumLiteralTypes2.ts, 32, 7), Decl(enumLiteralTypes2.ts, 33, 7), Decl(enumLiteralTypes2.ts, 34, 7) ... and 4 more)
 >b : Symbol(b, Decl(enumLiteralTypes2.ts, 19, 26))
 }
 

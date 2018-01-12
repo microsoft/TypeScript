@@ -1,0 +1,45 @@
+=== tests/cases/compiler/thisInSuperCall.ts ===
+class Base { 
+>Base : Symbol(Base, Decl(thisInSuperCall.ts, 0, 0))
+
+    constructor(x: any) {}
+>x : Symbol(x, Decl(thisInSuperCall.ts, 1, 16))
+}
+
+class Foo extends Base {
+>Foo : Symbol(Foo, Decl(thisInSuperCall.ts, 2, 1))
+>Base : Symbol(Base, Decl(thisInSuperCall.ts, 0, 0))
+
+    constructor() {
+        super(this); // error: "super" has to be called before "this" accessing
+>super : Symbol(Base, Decl(thisInSuperCall.ts, 0, 0))
+>this : Symbol(Foo, Decl(thisInSuperCall.ts, 2, 1))
+    }
+}
+
+class Foo2 extends Base {
+>Foo2 : Symbol(Foo2, Decl(thisInSuperCall.ts, 8, 1))
+>Base : Symbol(Base, Decl(thisInSuperCall.ts, 0, 0))
+
+    public p = 0;
+>p : Symbol(Foo2.p, Decl(thisInSuperCall.ts, 10, 25))
+
+    constructor() {
+        super(this); // error
+>super : Symbol(Base, Decl(thisInSuperCall.ts, 0, 0))
+>this : Symbol(Foo2, Decl(thisInSuperCall.ts, 8, 1))
+    }
+}
+
+class Foo3 extends Base {
+>Foo3 : Symbol(Foo3, Decl(thisInSuperCall.ts, 15, 1))
+>Base : Symbol(Base, Decl(thisInSuperCall.ts, 0, 0))
+
+    constructor(public p) {
+>p : Symbol(Foo3.p, Decl(thisInSuperCall.ts, 18, 16))
+
+        super(this); // error
+>super : Symbol(Base, Decl(thisInSuperCall.ts, 0, 0))
+>this : Symbol(Foo3, Decl(thisInSuperCall.ts, 15, 1))
+    }
+}

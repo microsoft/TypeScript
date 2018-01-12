@@ -162,7 +162,7 @@ namespace Utils {
         /**
          * Reads the directory at the given path and retrieves a list of file names and a list
          * of directory names within it. Suitable for use with ts.matchFiles()
-         * @param path  The path to the directory to be read
+         * @param path The path to the directory to be read
          */
         getAccessibleFileSystemEntries(path: string) {
             const entry = this.traversePath(path);
@@ -209,15 +209,15 @@ namespace Utils {
             }
         }
 
-        readFile(path: string): string {
+        readFile(path: string): string | undefined {
             const value = this.traversePath(path);
             if (value && value.isFile()) {
                 return value.content.content;
             }
         }
 
-        readDirectory(path: string, extensions: string[], excludes: string[], includes: string[]) {
-            return ts.matchFiles(path, extensions, excludes, includes, this.useCaseSensitiveFileNames, this.currentDirectory, (path: string) => this.getAccessibleFileSystemEntries(path));
+        readDirectory(path: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string>, includes: ReadonlyArray<string>, depth: number) {
+            return ts.matchFiles(path, extensions, excludes, includes, this.useCaseSensitiveFileNames, this.currentDirectory, depth, (path: string) => this.getAccessibleFileSystemEntries(path));
         }
     }
 }

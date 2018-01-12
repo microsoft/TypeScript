@@ -4,7 +4,7 @@ class BlockIntrinsics {
 }
 
 //// [declFileClassWithIndexSignature.js]
-var BlockIntrinsics = (function () {
+var BlockIntrinsics = /** @class */ (function () {
     function BlockIntrinsics() {
     }
     return BlockIntrinsics;

@@ -4,5 +4,5 @@
 // @module: commonjs
 
 // @filename: test.d.ts
-export default "test";
+export default undefined;
 export var __esModule;

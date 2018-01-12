@@ -19,7 +19,7 @@ var c = new C(C.x);
 c.foo = C.foo;
 
 //// [multiModuleClodule1.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C(x) {
     }
     C.prototype.foo = function () { };

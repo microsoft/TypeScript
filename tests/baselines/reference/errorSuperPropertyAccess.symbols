@@ -1,0 +1,275 @@
+=== tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts ===
+//super property access in constructor of class with no base type
+//super property access in instance member function of class with no base type
+//super property access in instance member accessor(get and set) of class with no base type
+class NoBase {
+>NoBase : Symbol(NoBase, Decl(errorSuperPropertyAccess.ts, 0, 0))
+
+    constructor() {
+        var a = super.prototype;
+>a : Symbol(a, Decl(errorSuperPropertyAccess.ts, 5, 11))
+
+        var b = super.hasOwnProperty('');
+>b : Symbol(b, Decl(errorSuperPropertyAccess.ts, 6, 11))
+    }
+
+    fn() {
+>fn : Symbol(NoBase.fn, Decl(errorSuperPropertyAccess.ts, 7, 5))
+
+        var a = super.prototype;
+>a : Symbol(a, Decl(errorSuperPropertyAccess.ts, 10, 11))
+
+        var b = super.hasOwnProperty('');
+>b : Symbol(b, Decl(errorSuperPropertyAccess.ts, 11, 11))
+    }
+
+    m = super.prototype;
+>m : Symbol(NoBase.m, Decl(errorSuperPropertyAccess.ts, 12, 5))
+
+    n = super.hasOwnProperty('');
+>n : Symbol(NoBase.n, Decl(errorSuperPropertyAccess.ts, 14, 24))
+
+    //super static property access in static member function of class with no base type
+    //super static property access in static member accessor(get and set) of class with no base type
+    public static static1() {
+>static1 : Symbol(NoBase.static1, Decl(errorSuperPropertyAccess.ts, 15, 33))
+
+        super.hasOwnProperty('');
+    }
+
+    public static get static2() {
+>static2 : Symbol(NoBase.static2, Decl(errorSuperPropertyAccess.ts, 21, 5), Decl(errorSuperPropertyAccess.ts, 26, 5))
+
+        super.hasOwnProperty('');
+        return '';
+    }
+
+    public static set static2(n) {
+>static2 : Symbol(NoBase.static2, Decl(errorSuperPropertyAccess.ts, 21, 5), Decl(errorSuperPropertyAccess.ts, 26, 5))
+>n : Symbol(n, Decl(errorSuperPropertyAccess.ts, 28, 30))
+
+        super.hasOwnProperty('');
+    }
+}
+
+class SomeBase {
+>SomeBase : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+
+    private privateFunc() { }
+>privateFunc : Symbol(SomeBase.privateFunc, Decl(errorSuperPropertyAccess.ts, 33, 16))
+
+    private privateMember = 0;
+>privateMember : Symbol(SomeBase.privateMember, Decl(errorSuperPropertyAccess.ts, 34, 29))
+
+    public publicFunc() { }
+>publicFunc : Symbol(SomeBase.publicFunc, Decl(errorSuperPropertyAccess.ts, 35, 30))
+
+    public publicMember = 0;
+>publicMember : Symbol(SomeBase.publicMember, Decl(errorSuperPropertyAccess.ts, 37, 27))
+
+    private static privateStaticFunc() { }
+>privateStaticFunc : Symbol(SomeBase.privateStaticFunc, Decl(errorSuperPropertyAccess.ts, 38, 28))
+
+    private static privateStaticMember = 0;
+>privateStaticMember : Symbol(SomeBase.privateStaticMember, Decl(errorSuperPropertyAccess.ts, 40, 42))
+
+    public static publicStaticFunc() { }
+>publicStaticFunc : Symbol(SomeBase.publicStaticFunc, Decl(errorSuperPropertyAccess.ts, 41, 43))
+
+    public static publicStaticMember = 0;
+>publicStaticMember : Symbol(SomeBase.publicStaticMember, Decl(errorSuperPropertyAccess.ts, 43, 40))
+
+}
+
+
+//super.publicInstanceMemberNotFunction in constructor of derived class
+//super.publicInstanceMemberNotFunction in instance member function of derived class
+//super.publicInstanceMemberNotFunction in instance member accessor(get and set) of derived class
+//super property access only available with typed this
+class SomeDerived1 extends SomeBase {
+>SomeDerived1 : Symbol(SomeDerived1, Decl(errorSuperPropertyAccess.ts, 46, 1))
+>SomeBase : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+
+    constructor() {
+        super();
+>super : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+
+        super.publicMember = 1;
+>super.publicMember : Symbol(SomeBase.publicMember, Decl(errorSuperPropertyAccess.ts, 37, 27))
+>super : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+>publicMember : Symbol(SomeBase.publicMember, Decl(errorSuperPropertyAccess.ts, 37, 27))
+    }
+
+    fn() {
+>fn : Symbol(SomeDerived1.fn, Decl(errorSuperPropertyAccess.ts, 57, 5))
+
+        var x = super.publicMember;
+>x : Symbol(x, Decl(errorSuperPropertyAccess.ts, 60, 11))
+>super.publicMember : Symbol(SomeBase.publicMember, Decl(errorSuperPropertyAccess.ts, 37, 27))
+>super : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+>publicMember : Symbol(SomeBase.publicMember, Decl(errorSuperPropertyAccess.ts, 37, 27))
+    }
+
+    get a() {
+>a : Symbol(SomeDerived1.a, Decl(errorSuperPropertyAccess.ts, 61, 5), Decl(errorSuperPropertyAccess.ts, 66, 5))
+
+        var x = super.publicMember;
+>x : Symbol(x, Decl(errorSuperPropertyAccess.ts, 64, 11))
+>super.publicMember : Symbol(SomeBase.publicMember, Decl(errorSuperPropertyAccess.ts, 37, 27))
+>super : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+>publicMember : Symbol(SomeBase.publicMember, Decl(errorSuperPropertyAccess.ts, 37, 27))
+
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+    set a(n) {
+>a : Symbol(SomeDerived1.a, Decl(errorSuperPropertyAccess.ts, 61, 5), Decl(errorSuperPropertyAccess.ts, 66, 5))
+>n : Symbol(n, Decl(errorSuperPropertyAccess.ts, 67, 10))
+
+        n = super.publicMember;
+>n : Symbol(n, Decl(errorSuperPropertyAccess.ts, 67, 10))
+>super.publicMember : Symbol(SomeBase.publicMember, Decl(errorSuperPropertyAccess.ts, 37, 27))
+>super : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+>publicMember : Symbol(SomeBase.publicMember, Decl(errorSuperPropertyAccess.ts, 37, 27))
+    }
+    fn2() {
+>fn2 : Symbol(SomeDerived1.fn2, Decl(errorSuperPropertyAccess.ts, 69, 5))
+
+        function inner() {
+>inner : Symbol(inner, Decl(errorSuperPropertyAccess.ts, 70, 11))
+
+            super.publicFunc();
+        }
+        var x = {
+>x : Symbol(x, Decl(errorSuperPropertyAccess.ts, 74, 11))
+
+            test: function () { return super.publicFunc(); }
+>test : Symbol(test, Decl(errorSuperPropertyAccess.ts, 74, 17))
+        }
+    }
+}
+
+//super.privateProperty in constructor of derived class
+//super.privateProperty in instance member function of derived class
+//super.privateProperty in instance member accessor(get and set) of derived class
+class SomeDerived2 extends SomeBase {
+>SomeDerived2 : Symbol(SomeDerived2, Decl(errorSuperPropertyAccess.ts, 78, 1))
+>SomeBase : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+
+    constructor() {
+        super();
+>super : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+
+        super.privateMember = 1;
+>super.privateMember : Symbol(SomeBase.privateMember, Decl(errorSuperPropertyAccess.ts, 34, 29))
+>super : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+>privateMember : Symbol(SomeBase.privateMember, Decl(errorSuperPropertyAccess.ts, 34, 29))
+    }
+
+    fn() {
+>fn : Symbol(SomeDerived2.fn, Decl(errorSuperPropertyAccess.ts, 87, 5))
+
+        var x = super.privateMember;
+>x : Symbol(x, Decl(errorSuperPropertyAccess.ts, 90, 11))
+>super.privateMember : Symbol(SomeBase.privateMember, Decl(errorSuperPropertyAccess.ts, 34, 29))
+>super : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+>privateMember : Symbol(SomeBase.privateMember, Decl(errorSuperPropertyAccess.ts, 34, 29))
+    }
+
+    get a() {
+>a : Symbol(SomeDerived2.a, Decl(errorSuperPropertyAccess.ts, 91, 5), Decl(errorSuperPropertyAccess.ts, 96, 5))
+
+        var x = super.privateMember;
+>x : Symbol(x, Decl(errorSuperPropertyAccess.ts, 94, 11))
+>super.privateMember : Symbol(SomeBase.privateMember, Decl(errorSuperPropertyAccess.ts, 34, 29))
+>super : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+>privateMember : Symbol(SomeBase.privateMember, Decl(errorSuperPropertyAccess.ts, 34, 29))
+
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+    set a(n) {
+>a : Symbol(SomeDerived2.a, Decl(errorSuperPropertyAccess.ts, 91, 5), Decl(errorSuperPropertyAccess.ts, 96, 5))
+>n : Symbol(n, Decl(errorSuperPropertyAccess.ts, 97, 10))
+
+        n = super.privateMember;
+>n : Symbol(n, Decl(errorSuperPropertyAccess.ts, 97, 10))
+>super.privateMember : Symbol(SomeBase.privateMember, Decl(errorSuperPropertyAccess.ts, 34, 29))
+>super : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+>privateMember : Symbol(SomeBase.privateMember, Decl(errorSuperPropertyAccess.ts, 34, 29))
+    }
+}
+
+//super.publicStaticMemberNotFunction in static member function of derived class
+//super.publicStaticMemberNotFunction in static member accessor(get and set) of derived class
+//super.privateStaticProperty in static member function of derived class
+//super.privateStaticProperty in static member accessor(get and set) of derived class
+class SomeDerived3 extends SomeBase {
+>SomeDerived3 : Symbol(SomeDerived3, Decl(errorSuperPropertyAccess.ts, 100, 1))
+>SomeBase : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+
+    static fn() {
+>fn : Symbol(SomeDerived3.fn, Decl(errorSuperPropertyAccess.ts, 106, 37))
+
+        super.publicStaticMember = 3;
+>super.publicStaticMember : Symbol(SomeBase.publicStaticMember, Decl(errorSuperPropertyAccess.ts, 43, 40))
+>super : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+>publicStaticMember : Symbol(SomeBase.publicStaticMember, Decl(errorSuperPropertyAccess.ts, 43, 40))
+
+        super.privateStaticMember = 3;
+>super.privateStaticMember : Symbol(SomeBase.privateStaticMember, Decl(errorSuperPropertyAccess.ts, 40, 42))
+>super : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+>privateStaticMember : Symbol(SomeBase.privateStaticMember, Decl(errorSuperPropertyAccess.ts, 40, 42))
+
+        super.privateStaticFunc();
+>super.privateStaticFunc : Symbol(SomeBase.privateStaticFunc, Decl(errorSuperPropertyAccess.ts, 38, 28))
+>super : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+>privateStaticFunc : Symbol(SomeBase.privateStaticFunc, Decl(errorSuperPropertyAccess.ts, 38, 28))
+    }
+    static get a() {
+>a : Symbol(SomeDerived3.a, Decl(errorSuperPropertyAccess.ts, 111, 5), Decl(errorSuperPropertyAccess.ts, 117, 5))
+
+        super.publicStaticMember = 3;
+>super.publicStaticMember : Symbol(SomeBase.publicStaticMember, Decl(errorSuperPropertyAccess.ts, 43, 40))
+>super : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+>publicStaticMember : Symbol(SomeBase.publicStaticMember, Decl(errorSuperPropertyAccess.ts, 43, 40))
+
+        super.privateStaticMember = 3;
+>super.privateStaticMember : Symbol(SomeBase.privateStaticMember, Decl(errorSuperPropertyAccess.ts, 40, 42))
+>super : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+>privateStaticMember : Symbol(SomeBase.privateStaticMember, Decl(errorSuperPropertyAccess.ts, 40, 42))
+
+        super.privateStaticFunc();
+>super.privateStaticFunc : Symbol(SomeBase.privateStaticFunc, Decl(errorSuperPropertyAccess.ts, 38, 28))
+>super : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+>privateStaticFunc : Symbol(SomeBase.privateStaticFunc, Decl(errorSuperPropertyAccess.ts, 38, 28))
+
+        return '';
+    }
+    static set a(n) {
+>a : Symbol(SomeDerived3.a, Decl(errorSuperPropertyAccess.ts, 111, 5), Decl(errorSuperPropertyAccess.ts, 117, 5))
+>n : Symbol(n, Decl(errorSuperPropertyAccess.ts, 118, 17))
+
+        super.publicStaticMember = 3;
+>super.publicStaticMember : Symbol(SomeBase.publicStaticMember, Decl(errorSuperPropertyAccess.ts, 43, 40))
+>super : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+>publicStaticMember : Symbol(SomeBase.publicStaticMember, Decl(errorSuperPropertyAccess.ts, 43, 40))
+
+        super.privateStaticMember = 3;
+>super.privateStaticMember : Symbol(SomeBase.privateStaticMember, Decl(errorSuperPropertyAccess.ts, 40, 42))
+>super : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+>privateStaticMember : Symbol(SomeBase.privateStaticMember, Decl(errorSuperPropertyAccess.ts, 40, 42))
+
+        super.privateStaticFunc();
+>super.privateStaticFunc : Symbol(SomeBase.privateStaticFunc, Decl(errorSuperPropertyAccess.ts, 38, 28))
+>super : Symbol(SomeBase, Decl(errorSuperPropertyAccess.ts, 31, 1))
+>privateStaticFunc : Symbol(SomeBase.privateStaticFunc, Decl(errorSuperPropertyAccess.ts, 38, 28))
+    }
+}
+
+// In object literal
+var obj = { n: super.wat, p: super.foo() };
+>obj : Symbol(obj, Decl(errorSuperPropertyAccess.ts, 126, 3))
+>n : Symbol(n, Decl(errorSuperPropertyAccess.ts, 126, 11))
+>p : Symbol(p, Decl(errorSuperPropertyAccess.ts, 126, 25))
+

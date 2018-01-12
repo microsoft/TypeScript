@@ -7,8 +7,7 @@ namespace ts {
     }
 
     function lineColToPosition(lineIndex: server.LineIndex, line: number, col: number) {
-        const lineInfo = lineIndex.lineNumberToInfo(line);
-        return (lineInfo.offset + col - 1);
+        return lineIndex.absolutePositionOfStartOfLine(line) + (col - 1);
     }
 
     function validateEdit(lineIndex: server.LineIndex, sourceText: string, position: number, deleteLength: number, insertString: string): void {
@@ -48,6 +47,12 @@ var q:Point=<Point>p;`;
 
         after(() => {
             validateEditAtLineCharIndex = undefined;
+        });
+
+        it("handles empty lines array", () => {
+            const lineIndex = new server.LineIndex();
+            lineIndex.load([]);
+            assert.deepEqual(lineIndex.positionToLineOffset(0), { line: 1, offset: 1 });
         });
 
         it(`change 9 1 0 1 {"y"}`, () => {
@@ -271,7 +276,7 @@ and grew 1cm per day`;
         });
 
         it("Edit ScriptVersionCache ", () => {
-            const svc = server.ScriptVersionCache.fromString(<server.ServerHost>ts.sys, testContent);
+            const svc = server.ScriptVersionCache.fromString(testContent);
             let checkText = testContent;
 
             for (let i = 0; i < iterationCount; i++) {
@@ -279,9 +284,7 @@ and grew 1cm per day`;
                 svc.edit(ersa[i], elas[i], insertString);
                 checkText = editFlat(ersa[i], elas[i], insertString, checkText);
                 if (0 === (i % 4)) {
-                    const snap = svc.getSnapshot();
-                    const snapText = snap.getText(0, checkText.length);
-                    assert.equal(checkText, snapText);
+                    assert.equal(checkText, getSnapshotText(svc.getSnapshot()));
                 }
             }
         });
@@ -298,20 +301,17 @@ and grew 1cm per day`;
 
         it("Line/offset from pos", () => {
             for (let i = 0; i < iterationCount; i++) {
-                const lp = lineIndex.charOffsetToLineNumberAndPos(rsa[i]);
+                const lp = lineIndex.positionToLineOffset(rsa[i]);
                 const lac = ts.computeLineAndCharacterOfPosition(lineMap, rsa[i]);
                 assert.equal(lac.line + 1, lp.line, "Line number mismatch " + (lac.line + 1) + " " + lp.line + " " + i);
-                assert.equal(lac.character, (lp.offset), "Charachter offset mismatch " + lac.character + " " + lp.offset + " " + i);
+                assert.equal(lac.character, lp.offset - 1, "Character offset mismatch " + lac.character + " " + (lp.offset - 1) + " " + i);
             }
         });
 
         it("Start pos from line", () => {
             for (let i = 0; i < iterationCount; i++) {
                 for (let j = 0; j < lines.length; j++) {
-                    const lineInfo = lineIndex.lineNumberToInfo(j + 1);
-                    const lineIndexOffset = lineInfo.offset;
-                    const lineMapOffset = lineMap[j];
-                    assert.equal(lineIndexOffset, lineMapOffset);
+                    assert.equal(lineIndex.absolutePositionOfStartOfLine(j + 1), lineMap[j]);
                 }
             }
         });

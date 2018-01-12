@@ -62,3 +62,9 @@ tests/cases/compiler/jsdocInTypeScript.ts(42,12): error TS2503: Cannot find name
                ~
 !!! error TS2503: Cannot find namespace 'N'.
     
+    // Not legal JSDoc, but that shouldn't matter in TypeScript.
+    /**
+     * @type {{foo: (function(string, string): string)}}
+     */
+    const obj = { foo: (a, b) => a + b };
+    

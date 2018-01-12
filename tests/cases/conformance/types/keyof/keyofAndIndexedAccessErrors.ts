@@ -77,3 +77,12 @@ function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {
     k1 = k2;  // Error
     k2 = k1;
 }
+
+// Repro from #17166
+function f3<T, K extends keyof T>(obj: T, k: K, value: T[K]): void {
+    for (let key in obj) {
+        k = key // error, keyof T =/=> K
+        value = obj[key]; // error, T[keyof T] =/=> T[K]
+    }
+}
+

@@ -1,0 +1,27 @@
+=== tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target9.ts ===
+import d from "mod";
+>d : any
+
+import {a} from "mod";
+>a : any
+
+import * as M from "mod";
+>M : any
+
+export {a};
+>a : any
+
+export {M};
+>M : any
+
+export {d};
+>d : any
+
+export * from "mod";
+
+export {b} from "mod"
+>b : any
+
+export default d;
+>d : any
+

@@ -22,6 +22,20 @@ class C {
     }
 }
 
+function id<T>(x: T) {
+>id : Symbol(id, Decl(external.ts, 9, 1))
+>T : Symbol(T, Decl(external.ts, 11, 12))
+>x : Symbol(x, Decl(external.ts, 11, 15))
+>T : Symbol(T, Decl(external.ts, 11, 12))
+
+    return x;
+>x : Symbol(x, Decl(external.ts, 11, 15))
+}
+
+export const result = id`hello world`;
+>result : Symbol(result, Decl(external.ts, 15, 12))
+>id : Symbol(id, Decl(external.ts, 9, 1))
+
 === tests/cases/compiler/script.ts ===
 class A { }
 >A : Symbol(A, Decl(script.ts, 0, 0))
@@ -45,6 +59,20 @@ class C {
 >x : Symbol(x, Decl(script.ts, 7, 11))
     }
 }
+
+function id<T>(x: T) {
+>id : Symbol(id, Decl(script.ts, 9, 1))
+>T : Symbol(T, Decl(script.ts, 11, 12))
+>x : Symbol(x, Decl(script.ts, 11, 15))
+>T : Symbol(T, Decl(script.ts, 11, 12))
+
+    return x;
+>x : Symbol(x, Decl(script.ts, 11, 15))
+}
+
+const result = id`hello world`;
+>result : Symbol(result, Decl(script.ts, 15, 5))
+>id : Symbol(id, Decl(script.ts, 9, 1))
 
 === tests/cases/compiler/tslib.d.ts ===
 export declare function __extends(d: Function, b: Function): void;
@@ -88,4 +116,10 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 >Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >generator : Symbol(generator, Decl(tslib.d.ts, --, --))
 >Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+export declare function __makeTemplateObject(cooked: string[], raw: string[]): TemplateStringsArray;
+>__makeTemplateObject : Symbol(__makeTemplateObject, Decl(tslib.d.ts, --, --))
+>cooked : Symbol(cooked, Decl(tslib.d.ts, --, --))
+>raw : Symbol(raw, Decl(tslib.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.d.ts, --, --))
 

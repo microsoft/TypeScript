@@ -37,13 +37,13 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = require("tslib");
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
 exports.A = A;
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     tslib_1.__extends(B, _super);
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -51,7 +51,7 @@ var B = (function (_super) {
     return B;
 }(A));
 exports.B = B;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.method = function (x) {
@@ -69,19 +69,19 @@ var C = (function () {
 }());
 //// [script.js]
 var tslib_1 = require("tslib");
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     tslib_1.__extends(B, _super);
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.method = function (x) {

@@ -1,0 +1,15 @@
+=== tests/cases/compiler/unusedLocalsInMethod3.ts ===
+class greeter {
+>greeter : Symbol(greeter, Decl(unusedLocalsInMethod3.ts, 0, 0))
+
+    public function1() {
+>function1 : Symbol(greeter.function1, Decl(unusedLocalsInMethod3.ts, 0, 15))
+
+        var x, y;
+>x : Symbol(x, Decl(unusedLocalsInMethod3.ts, 2, 11))
+>y : Symbol(y, Decl(unusedLocalsInMethod3.ts, 2, 14))
+
+        y = 1;
+>y : Symbol(y, Decl(unusedLocalsInMethod3.ts, 2, 14))
+    }
+}

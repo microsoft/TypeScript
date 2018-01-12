@@ -7,9 +7,9 @@ function f(x: number, y: number, z: number) {
 >z : Symbol(z, Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 1, 32))
 
     return Array.from(arguments);
->Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->from : Symbol(ArrayConstructor.from, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>from : Symbol(ArrayConstructor.from, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >arguments : Symbol(arguments)
 }
 
@@ -111,7 +111,7 @@ async function out() {
 >out : Symbol(out, Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 44, 37))
 
     return new Promise(function (resolve, reject) {});
->Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >resolve : Symbol(resolve, Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 48, 33))
 >reject : Symbol(reject, Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 48, 41))
 }

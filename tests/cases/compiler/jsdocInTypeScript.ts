@@ -40,3 +40,9 @@ let i: I; // Should succeed thanks to type parameter default
 
 /** @typedef {string} N.Str */
 import M = N; // Error: @typedef does not create namespaces in TypeScript code.
+
+// Not legal JSDoc, but that shouldn't matter in TypeScript.
+/**
+ * @type {{foo: (function(string, string): string)}}
+ */
+const obj = { foo: (a, b) => a + b };

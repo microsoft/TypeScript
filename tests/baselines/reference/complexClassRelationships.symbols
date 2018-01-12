@@ -1,0 +1,117 @@
+=== tests/cases/compiler/complexClassRelationships.ts ===
+// There should be no errors in this file
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(complexClassRelationships.ts, 0, 0))
+>Base : Symbol(Base, Decl(complexClassRelationships.ts, 11, 1))
+
+    public static createEmpty(): Derived {
+>createEmpty : Symbol(Derived.createEmpty, Decl(complexClassRelationships.ts, 1, 28))
+>Derived : Symbol(Derived, Decl(complexClassRelationships.ts, 0, 0))
+
+        var item = new Derived();
+>item : Symbol(item, Decl(complexClassRelationships.ts, 3, 11))
+>Derived : Symbol(Derived, Decl(complexClassRelationships.ts, 0, 0))
+
+        return item;
+>item : Symbol(item, Decl(complexClassRelationships.ts, 3, 11))
+    }
+}
+class BaseCollection<T extends Base> {
+>BaseCollection : Symbol(BaseCollection, Decl(complexClassRelationships.ts, 6, 1))
+>T : Symbol(T, Decl(complexClassRelationships.ts, 7, 21))
+>Base : Symbol(Base, Decl(complexClassRelationships.ts, 11, 1))
+
+    constructor(f: () => T) {
+>f : Symbol(f, Decl(complexClassRelationships.ts, 8, 16))
+>T : Symbol(T, Decl(complexClassRelationships.ts, 7, 21))
+
+        (item: Thing) => { return [item.Components]; };
+>item : Symbol(item, Decl(complexClassRelationships.ts, 9, 9))
+>Thing : Symbol(Thing, Decl(complexClassRelationships.ts, 14, 1))
+>item.Components : Symbol(Thing.Components, Decl(complexClassRelationships.ts, 16, 13))
+>item : Symbol(item, Decl(complexClassRelationships.ts, 9, 9))
+>Components : Symbol(Thing.Components, Decl(complexClassRelationships.ts, 16, 13))
+    }
+}
+class Base {
+>Base : Symbol(Base, Decl(complexClassRelationships.ts, 11, 1))
+
+    ownerCollection: BaseCollection<Base>;
+>ownerCollection : Symbol(Base.ownerCollection, Decl(complexClassRelationships.ts, 12, 12))
+>BaseCollection : Symbol(BaseCollection, Decl(complexClassRelationships.ts, 6, 1))
+>Base : Symbol(Base, Decl(complexClassRelationships.ts, 11, 1))
+}
+
+class Thing {
+>Thing : Symbol(Thing, Decl(complexClassRelationships.ts, 14, 1))
+
+    public get Components(): ComponentCollection<any> { return null }
+>Components : Symbol(Thing.Components, Decl(complexClassRelationships.ts, 16, 13))
+>ComponentCollection : Symbol(ComponentCollection, Decl(complexClassRelationships.ts, 18, 1))
+}
+
+class ComponentCollection<T> {
+>ComponentCollection : Symbol(ComponentCollection, Decl(complexClassRelationships.ts, 18, 1))
+>T : Symbol(T, Decl(complexClassRelationships.ts, 20, 26))
+
+    private static sortComponents(p: Foo) {
+>sortComponents : Symbol(ComponentCollection.sortComponents, Decl(complexClassRelationships.ts, 20, 30))
+>p : Symbol(p, Decl(complexClassRelationships.ts, 21, 34))
+>Foo : Symbol(Foo, Decl(complexClassRelationships.ts, 24, 1))
+
+        return p.prop1;
+>p.prop1 : Symbol(Foo.prop1, Decl(complexClassRelationships.ts, 26, 11))
+>p : Symbol(p, Decl(complexClassRelationships.ts, 21, 34))
+>prop1 : Symbol(Foo.prop1, Decl(complexClassRelationships.ts, 26, 11))
+    }
+}
+
+class Foo {
+>Foo : Symbol(Foo, Decl(complexClassRelationships.ts, 24, 1))
+
+    public get prop1() {
+>prop1 : Symbol(Foo.prop1, Decl(complexClassRelationships.ts, 26, 11))
+
+        return new GenericType<string>(this);
+>GenericType : Symbol(GenericType, Decl(complexClassRelationships.ts, 36, 1))
+>this : Symbol(Foo, Decl(complexClassRelationships.ts, 24, 1))
+    }
+    public populate() {
+>populate : Symbol(Foo.populate, Decl(complexClassRelationships.ts, 29, 5))
+
+        this.prop2;
+>this.prop2 : Symbol(Foo.prop2, Decl(complexClassRelationships.ts, 32, 5))
+>this : Symbol(Foo, Decl(complexClassRelationships.ts, 24, 1))
+>prop2 : Symbol(Foo.prop2, Decl(complexClassRelationships.ts, 32, 5))
+    }
+    public get prop2(): BaseCollection<Derived> {
+>prop2 : Symbol(Foo.prop2, Decl(complexClassRelationships.ts, 32, 5))
+>BaseCollection : Symbol(BaseCollection, Decl(complexClassRelationships.ts, 6, 1))
+>Derived : Symbol(Derived, Decl(complexClassRelationships.ts, 0, 0))
+
+        return new BaseCollection<Derived>(Derived.createEmpty);
+>BaseCollection : Symbol(BaseCollection, Decl(complexClassRelationships.ts, 6, 1))
+>Derived : Symbol(Derived, Decl(complexClassRelationships.ts, 0, 0))
+>Derived.createEmpty : Symbol(Derived.createEmpty, Decl(complexClassRelationships.ts, 1, 28))
+>Derived : Symbol(Derived, Decl(complexClassRelationships.ts, 0, 0))
+>createEmpty : Symbol(Derived.createEmpty, Decl(complexClassRelationships.ts, 1, 28))
+    }
+}
+
+class GenericType<T> {
+>GenericType : Symbol(GenericType, Decl(complexClassRelationships.ts, 36, 1))
+>T : Symbol(T, Decl(complexClassRelationships.ts, 38, 18))
+
+    constructor(parent: FooBase) { }
+>parent : Symbol(parent, Decl(complexClassRelationships.ts, 39, 16))
+>FooBase : Symbol(FooBase, Decl(complexClassRelationships.ts, 40, 1))
+}
+
+class FooBase {
+>FooBase : Symbol(FooBase, Decl(complexClassRelationships.ts, 40, 1))
+
+    public populate() {
+>populate : Symbol(FooBase.populate, Decl(complexClassRelationships.ts, 42, 15))
+
+    }
+}

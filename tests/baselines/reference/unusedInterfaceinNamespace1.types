@@ -1,0 +1,9 @@
+=== tests/cases/compiler/unusedInterfaceinNamespace1.ts ===
+namespace Validation {
+>Validation : any
+
+    interface i1 {
+>i1 : i1
+
+    }
+}

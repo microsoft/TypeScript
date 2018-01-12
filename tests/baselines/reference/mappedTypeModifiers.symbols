@@ -122,47 +122,47 @@ var v03: Pick<TR, keyof TR>;
 >TR : Symbol(TR, Decl(mappedTypeModifiers.ts, 1, 37))
 
 var v04: TPR;
->v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3), Decl(mappedTypeModifiers.ts, 33, 3), Decl(mappedTypeModifiers.ts, 34, 3), Decl(mappedTypeModifiers.ts, 35, 3))
+>v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3) ... and 3 more)
 >TPR : Symbol(TPR, Decl(mappedTypeModifiers.ts, 2, 53))
 
 var v04: { readonly [P in keyof T]?: T[P] };
->v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3), Decl(mappedTypeModifiers.ts, 33, 3), Decl(mappedTypeModifiers.ts, 34, 3), Decl(mappedTypeModifiers.ts, 35, 3))
+>v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3) ... and 3 more)
 >P : Symbol(P, Decl(mappedTypeModifiers.ts, 29, 21))
 >T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
 >P : Symbol(P, Decl(mappedTypeModifiers.ts, 29, 21))
 
 var v04: Partial<TR>;
->v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3), Decl(mappedTypeModifiers.ts, 33, 3), Decl(mappedTypeModifiers.ts, 34, 3), Decl(mappedTypeModifiers.ts, 35, 3))
+>v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3) ... and 3 more)
 >Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
 >TR : Symbol(TR, Decl(mappedTypeModifiers.ts, 1, 37))
 
 var v04: Readonly<TP>;
->v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3), Decl(mappedTypeModifiers.ts, 33, 3), Decl(mappedTypeModifiers.ts, 34, 3), Decl(mappedTypeModifiers.ts, 35, 3))
+>v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3) ... and 3 more)
 >Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
 >TP : Symbol(TP, Decl(mappedTypeModifiers.ts, 0, 34))
 
 var v04: Partial<Readonly<T>>;
->v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3), Decl(mappedTypeModifiers.ts, 33, 3), Decl(mappedTypeModifiers.ts, 34, 3), Decl(mappedTypeModifiers.ts, 35, 3))
+>v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3) ... and 3 more)
 >Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
 >Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
 
 var v04: Readonly<Partial<T>>;
->v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3), Decl(mappedTypeModifiers.ts, 33, 3), Decl(mappedTypeModifiers.ts, 34, 3), Decl(mappedTypeModifiers.ts, 35, 3))
+>v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3) ... and 3 more)
 >Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
 >Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
 
 var v04: { [P in keyof TPR]: TPR[P] }
->v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3), Decl(mappedTypeModifiers.ts, 33, 3), Decl(mappedTypeModifiers.ts, 34, 3), Decl(mappedTypeModifiers.ts, 35, 3))
+>v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3) ... and 3 more)
 >P : Symbol(P, Decl(mappedTypeModifiers.ts, 34, 12))
 >TPR : Symbol(TPR, Decl(mappedTypeModifiers.ts, 2, 53))
 >TPR : Symbol(TPR, Decl(mappedTypeModifiers.ts, 2, 53))
 >P : Symbol(P, Decl(mappedTypeModifiers.ts, 34, 12))
 
 var v04: Pick<TPR, keyof T>;
->v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3), Decl(mappedTypeModifiers.ts, 33, 3), Decl(mappedTypeModifiers.ts, 34, 3), Decl(mappedTypeModifiers.ts, 35, 3))
+>v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3) ... and 3 more)
 >Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
 >TPR : Symbol(TPR, Decl(mappedTypeModifiers.ts, 2, 53))
 >T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
@@ -307,47 +307,47 @@ var b03: Pick<BR, keyof BR>;
 >BR : Symbol(BR, Decl(mappedTypeModifiers.ts, 40, 51))
 
 var b04: BPR;
->b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3), Decl(mappedTypeModifiers.ts, 72, 3), Decl(mappedTypeModifiers.ts, 73, 3), Decl(mappedTypeModifiers.ts, 74, 3))
+>b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3) ... and 3 more)
 >BPR : Symbol(BPR, Decl(mappedTypeModifiers.ts, 41, 67))
 
 var b04: { readonly [P in keyof B]?: B[P] };
->b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3), Decl(mappedTypeModifiers.ts, 72, 3), Decl(mappedTypeModifiers.ts, 73, 3), Decl(mappedTypeModifiers.ts, 74, 3))
+>b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3) ... and 3 more)
 >P : Symbol(P, Decl(mappedTypeModifiers.ts, 68, 21))
 >B : Symbol(B, Decl(mappedTypeModifiers.ts, 37, 51))
 >B : Symbol(B, Decl(mappedTypeModifiers.ts, 37, 51))
 >P : Symbol(P, Decl(mappedTypeModifiers.ts, 68, 21))
 
 var b04: Partial<BR>;
->b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3), Decl(mappedTypeModifiers.ts, 72, 3), Decl(mappedTypeModifiers.ts, 73, 3), Decl(mappedTypeModifiers.ts, 74, 3))
+>b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3) ... and 3 more)
 >Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
 >BR : Symbol(BR, Decl(mappedTypeModifiers.ts, 40, 51))
 
 var b04: Readonly<BP>;
->b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3), Decl(mappedTypeModifiers.ts, 72, 3), Decl(mappedTypeModifiers.ts, 73, 3), Decl(mappedTypeModifiers.ts, 74, 3))
+>b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3) ... and 3 more)
 >Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
 >BP : Symbol(BP, Decl(mappedTypeModifiers.ts, 39, 48))
 
 var b04: Partial<Readonly<B>>;
->b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3), Decl(mappedTypeModifiers.ts, 72, 3), Decl(mappedTypeModifiers.ts, 73, 3), Decl(mappedTypeModifiers.ts, 74, 3))
+>b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3) ... and 3 more)
 >Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
 >Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
 >B : Symbol(B, Decl(mappedTypeModifiers.ts, 37, 51))
 
 var b04: Readonly<Partial<B>>;
->b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3), Decl(mappedTypeModifiers.ts, 72, 3), Decl(mappedTypeModifiers.ts, 73, 3), Decl(mappedTypeModifiers.ts, 74, 3))
+>b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3) ... and 3 more)
 >Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
 >Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
 >B : Symbol(B, Decl(mappedTypeModifiers.ts, 37, 51))
 
 var b04: { [P in keyof BPR]: BPR[P] }
->b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3), Decl(mappedTypeModifiers.ts, 72, 3), Decl(mappedTypeModifiers.ts, 73, 3), Decl(mappedTypeModifiers.ts, 74, 3))
+>b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3) ... and 3 more)
 >P : Symbol(P, Decl(mappedTypeModifiers.ts, 73, 12))
 >BPR : Symbol(BPR, Decl(mappedTypeModifiers.ts, 41, 67))
 >BPR : Symbol(BPR, Decl(mappedTypeModifiers.ts, 41, 67))
 >P : Symbol(P, Decl(mappedTypeModifiers.ts, 73, 12))
 
 var b04: Pick<BPR, keyof BPR>;
->b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3), Decl(mappedTypeModifiers.ts, 72, 3), Decl(mappedTypeModifiers.ts, 73, 3), Decl(mappedTypeModifiers.ts, 74, 3))
+>b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3) ... and 3 more)
 >Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
 >BPR : Symbol(BPR, Decl(mappedTypeModifiers.ts, 41, 67))
 >BPR : Symbol(BPR, Decl(mappedTypeModifiers.ts, 41, 67))

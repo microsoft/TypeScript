@@ -48,24 +48,24 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var someVariable;
-var Class1 = (function () {
+var Class1 = /** @class */ (function () {
     function Class1() {
     }
     return Class1;
 }());
-var Class2 = (function (_super) {
+var Class2 = /** @class */ (function (_super) {
     __extends(Class2, _super);
     function Class2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Class2;
 }(Class1));
-var Class3 = (function () {
+var Class3 = /** @class */ (function () {
     function Class3() {
     }
     return Class3;
 }());
-var Class4 = (function (_super) {
+var Class4 = /** @class */ (function (_super) {
     __extends(Class4, _super);
     function Class4() {
         return _super !== null && _super.apply(this, arguments) || this;

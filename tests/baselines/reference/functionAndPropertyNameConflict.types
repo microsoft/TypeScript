@@ -1,0 +1,14 @@
+=== tests/cases/compiler/functionAndPropertyNameConflict.ts ===
+class C65 {
+>C65 : C65
+
+    public aaaaa() { }
+>aaaaa : () => void
+
+    public get aaaaa() {
+>aaaaa : number
+
+        return 1;
+>1 : 1
+    }
+}

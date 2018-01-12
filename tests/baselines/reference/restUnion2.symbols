@@ -24,28 +24,3 @@ var {...rest3 } = nullUnion;
 >rest3 : Symbol(rest3, Decl(restUnion2.ts, 6, 3), Decl(restUnion2.ts, 7, 5))
 >nullUnion : Symbol(nullUnion, Decl(restUnion2.ts, 5, 13))
 
-
-declare const nullAndUndefinedUnion: null | undefined;
->nullAndUndefinedUnion : Symbol(nullAndUndefinedUnion, Decl(restUnion2.ts, 10, 13))
-
-var rest4: { };
->rest4 : Symbol(rest4, Decl(restUnion2.ts, 11, 3), Decl(restUnion2.ts, 12, 5))
-
-var {...rest4 } = nullAndUndefinedUnion;
->rest4 : Symbol(rest4, Decl(restUnion2.ts, 11, 3), Decl(restUnion2.ts, 12, 5))
->nullAndUndefinedUnion : Symbol(nullAndUndefinedUnion, Decl(restUnion2.ts, 10, 13))
-
-declare const unionWithIntersection: ({ n: number } & { s: string }) & undefined | null;
->unionWithIntersection : Symbol(unionWithIntersection, Decl(restUnion2.ts, 14, 13))
->n : Symbol(n, Decl(restUnion2.ts, 14, 39))
->s : Symbol(s, Decl(restUnion2.ts, 14, 55))
-
-var rest5: { n: number, s: string };
->rest5 : Symbol(rest5, Decl(restUnion2.ts, 15, 3), Decl(restUnion2.ts, 16, 5))
->n : Symbol(n, Decl(restUnion2.ts, 15, 12))
->s : Symbol(s, Decl(restUnion2.ts, 15, 23))
-
-var {...rest5 } = unionWithIntersection;
->rest5 : Symbol(rest5, Decl(restUnion2.ts, 15, 3), Decl(restUnion2.ts, 16, 5))
->unionWithIntersection : Symbol(unionWithIntersection, Decl(restUnion2.ts, 14, 13))
-

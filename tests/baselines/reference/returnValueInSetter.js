@@ -8,7 +8,7 @@ class f {
 
 
 //// [returnValueInSetter.js]
-var f = (function () {
+var f = /** @class */ (function () {
     function f() {
     }
     Object.defineProperty(f.prototype, "x", {

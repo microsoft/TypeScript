@@ -112,26 +112,26 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Errors;
 (function (Errors) {
-    var Base = (function () {
+    var Base = /** @class */ (function () {
         function Base() {
         }
         return Base;
     }());
-    var Derived = (function (_super) {
+    var Derived = /** @class */ (function (_super) {
         __extends(Derived, _super);
         function Derived() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Derived;
     }(Base));
-    var Derived2 = (function (_super) {
+    var Derived2 = /** @class */ (function (_super) {
         __extends(Derived2, _super);
         function Derived2() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return Derived2;
     }(Derived));
-    var OtherDerived = (function (_super) {
+    var OtherDerived = /** @class */ (function (_super) {
         __extends(OtherDerived, _super);
         function OtherDerived() {
             return _super !== null && _super.apply(this, arguments) || this;

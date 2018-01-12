@@ -1,0 +1,13 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of12.ts ===
+var v: string;
+>v : string
+
+for (v of [0, ""].values()) { }
+>v : string
+>[0, ""].values() : IterableIterator<string | number>
+>[0, ""].values : () => IterableIterator<string | number>
+>[0, ""] : (string | number)[]
+>0 : 0
+>"" : ""
+>values : () => IterableIterator<string | number>
+

@@ -1,0 +1,121 @@
+=== tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern.ts ===
+var { } = { x: 5, y: "hello" };
+>{ x: 5, y: "hello" } : { x: number; y: string; }
+>x : number
+>5 : 5
+>y : string
+>"hello" : "hello"
+
+var { x4 } = { x4: 5, y4: "hello" };
+>x4 : number
+>{ x4: 5, y4: "hello" } : { x4: number; y4: string; }
+>x4 : number
+>5 : 5
+>y4 : string
+>"hello" : "hello"
+
+var { y5 } = { x5: 5, y5: "hello" };
+>y5 : string
+>{ x5: 5, y5: "hello" } : { x5: number; y5: string; }
+>x5 : number
+>5 : 5
+>y5 : string
+>"hello" : "hello"
+
+var { x6, y6 } = { x6: 5, y6: "hello" };
+>x6 : number
+>y6 : string
+>{ x6: 5, y6: "hello" } : { x6: number; y6: string; }
+>x6 : number
+>5 : 5
+>y6 : string
+>"hello" : "hello"
+
+var { x7: a1 } = { x7: 5, y7: "hello" };
+>x7 : any
+>a1 : number
+>{ x7: 5, y7: "hello" } : { x7: number; y7: string; }
+>x7 : number
+>5 : 5
+>y7 : string
+>"hello" : "hello"
+
+var { y8: b1 } = { x8: 5, y8: "hello" };
+>y8 : any
+>b1 : string
+>{ x8: 5, y8: "hello" } : { x8: number; y8: string; }
+>x8 : number
+>5 : 5
+>y8 : string
+>"hello" : "hello"
+
+var { x9: a2, y9: b2 } = { x9: 5, y9: "hello" };
+>x9 : any
+>a2 : number
+>y9 : any
+>b2 : string
+>{ x9: 5, y9: "hello" } : { x9: number; y9: string; }
+>x9 : number
+>5 : 5
+>y9 : string
+>"hello" : "hello"
+
+var { a: x11, b: { a: y11, b: { a: z11 }}} = { a: 1, b: { a: "hello", b: { a: true } } };
+>a : any
+>x11 : number
+>b : any
+>a : any
+>y11 : string
+>b : any
+>a : any
+>z11 : boolean
+>{ a: 1, b: { a: "hello", b: { a: true } } } : { a: number; b: { a: string; b: { a: boolean; }; }; }
+>a : number
+>1 : 1
+>b : { a: string; b: { a: boolean; }; }
+>{ a: "hello", b: { a: true } } : { a: string; b: { a: boolean; }; }
+>a : string
+>"hello" : "hello"
+>b : { a: boolean; }
+>{ a: true } : { a: boolean; }
+>a : boolean
+>true : true
+
+function f15() {
+>f15 : () => { a4: string; b4: number; c4: boolean; }
+
+    var a4 = "hello";
+>a4 : string
+>"hello" : "hello"
+
+    var b4 = 1;
+>b4 : number
+>1 : 1
+
+    var c4 = true;
+>c4 : boolean
+>true : true
+
+    return { a4, b4, c4 };
+>{ a4, b4, c4 } : { a4: string; b4: number; c4: boolean; }
+>a4 : string
+>b4 : number
+>c4 : boolean
+}
+var { a4, b4, c4 } = f15();
+>a4 : string
+>b4 : number
+>c4 : boolean
+>f15() : { a4: string; b4: number; c4: boolean; }
+>f15 : () => { a4: string; b4: number; c4: boolean; }
+
+module m {
+>m : typeof m
+
+    export var { a4, b4, c4 } = f15();
+>a4 : string
+>b4 : number
+>c4 : boolean
+>f15() : { a4: string; b4: number; c4: boolean; }
+>f15 : () => { a4: string; b4: number; c4: boolean; }
+}

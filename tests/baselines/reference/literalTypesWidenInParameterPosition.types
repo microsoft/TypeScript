@@ -1,0 +1,32 @@
+=== tests/cases/conformance/types/literal/literalTypesWidenInParameterPosition.ts ===
+class D {
+>D : D
+
+    readonly noWiden = 1
+>noWiden : 1
+>1 : 1
+
+    constructor(readonly widen = 2) {
+>widen : number
+>2 : 2
+
+        this.noWiden = 5; // error
+>this.noWiden = 5 : 5
+>this.noWiden : 1
+>this : this
+>noWiden : 1
+>5 : 5
+
+        this.widen = 6; // ok
+>this.widen = 6 : 6
+>this.widen : number
+>this : this
+>widen : number
+>6 : 6
+    }
+}
+new D(7); // ok
+>new D(7) : D
+>D : typeof D
+>7 : 7
+

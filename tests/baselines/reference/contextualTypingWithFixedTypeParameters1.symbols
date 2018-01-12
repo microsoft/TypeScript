@@ -1,0 +1,24 @@
+=== tests/cases/compiler/contextualTypingWithFixedTypeParameters1.ts ===
+var f10: <T>(x: T, b: () => (a: T) => void, y: T) => T;
+>f10 : Symbol(f10, Decl(contextualTypingWithFixedTypeParameters1.ts, 0, 3))
+>T : Symbol(T, Decl(contextualTypingWithFixedTypeParameters1.ts, 0, 10))
+>x : Symbol(x, Decl(contextualTypingWithFixedTypeParameters1.ts, 0, 13))
+>T : Symbol(T, Decl(contextualTypingWithFixedTypeParameters1.ts, 0, 10))
+>b : Symbol(b, Decl(contextualTypingWithFixedTypeParameters1.ts, 0, 18))
+>a : Symbol(a, Decl(contextualTypingWithFixedTypeParameters1.ts, 0, 29))
+>T : Symbol(T, Decl(contextualTypingWithFixedTypeParameters1.ts, 0, 10))
+>y : Symbol(y, Decl(contextualTypingWithFixedTypeParameters1.ts, 0, 43))
+>T : Symbol(T, Decl(contextualTypingWithFixedTypeParameters1.ts, 0, 10))
+>T : Symbol(T, Decl(contextualTypingWithFixedTypeParameters1.ts, 0, 10))
+
+f10('', () => a => a.foo, ''); // a is ""
+>f10 : Symbol(f10, Decl(contextualTypingWithFixedTypeParameters1.ts, 0, 3))
+>a : Symbol(a, Decl(contextualTypingWithFixedTypeParameters1.ts, 1, 13))
+>a : Symbol(a, Decl(contextualTypingWithFixedTypeParameters1.ts, 1, 13))
+
+var r9 = f10('', () => (a => a.foo), 1); // error
+>r9 : Symbol(r9, Decl(contextualTypingWithFixedTypeParameters1.ts, 2, 3))
+>f10 : Symbol(f10, Decl(contextualTypingWithFixedTypeParameters1.ts, 0, 3))
+>a : Symbol(a, Decl(contextualTypingWithFixedTypeParameters1.ts, 2, 24))
+>a : Symbol(a, Decl(contextualTypingWithFixedTypeParameters1.ts, 2, 24))
+

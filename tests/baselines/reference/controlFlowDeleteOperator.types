@@ -1,5 +1,4 @@
 === tests/cases/conformance/controlFlow/controlFlowDeleteOperator.ts ===
-
 function f() {
 >f : () => void
 

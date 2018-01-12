@@ -1,0 +1,178 @@
+=== tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts ===
+// ! operator on any type
+
+var ANY: any;
+>ANY : Symbol(ANY, Decl(logicalNotOperatorWithAnyOtherType.ts, 2, 3))
+
+var ANY1;
+>ANY1 : Symbol(ANY1, Decl(logicalNotOperatorWithAnyOtherType.ts, 3, 3))
+
+var ANY2: any[] = ["", ""];
+>ANY2 : Symbol(ANY2, Decl(logicalNotOperatorWithAnyOtherType.ts, 4, 3))
+
+var obj: () => {}
+>obj : Symbol(obj, Decl(logicalNotOperatorWithAnyOtherType.ts, 5, 3))
+
+var obj1 = { x: "", y: () => { }};
+>obj1 : Symbol(obj1, Decl(logicalNotOperatorWithAnyOtherType.ts, 6, 3))
+>x : Symbol(x, Decl(logicalNotOperatorWithAnyOtherType.ts, 6, 12))
+>y : Symbol(y, Decl(logicalNotOperatorWithAnyOtherType.ts, 6, 19))
+
+function foo(): any {
+>foo : Symbol(foo, Decl(logicalNotOperatorWithAnyOtherType.ts, 6, 34))
+
+    var a;
+>a : Symbol(a, Decl(logicalNotOperatorWithAnyOtherType.ts, 8, 7))
+
+    return a;
+>a : Symbol(a, Decl(logicalNotOperatorWithAnyOtherType.ts, 8, 7))
+}
+class A {
+>A : Symbol(A, Decl(logicalNotOperatorWithAnyOtherType.ts, 10, 1))
+
+    public a: any;
+>a : Symbol(A.a, Decl(logicalNotOperatorWithAnyOtherType.ts, 11, 9))
+
+    static foo() {
+>foo : Symbol(A.foo, Decl(logicalNotOperatorWithAnyOtherType.ts, 12, 18))
+
+        var a;
+>a : Symbol(a, Decl(logicalNotOperatorWithAnyOtherType.ts, 14, 11))
+
+        return a;
+>a : Symbol(a, Decl(logicalNotOperatorWithAnyOtherType.ts, 14, 11))
+    }
+}
+module M {
+>M : Symbol(M, Decl(logicalNotOperatorWithAnyOtherType.ts, 17, 1))
+
+    export var n: any;
+>n : Symbol(n, Decl(logicalNotOperatorWithAnyOtherType.ts, 19, 14))
+}
+var objA = new A();
+>objA : Symbol(objA, Decl(logicalNotOperatorWithAnyOtherType.ts, 21, 3))
+>A : Symbol(A, Decl(logicalNotOperatorWithAnyOtherType.ts, 10, 1))
+
+// any type var
+var ResultIsBoolean1 = !ANY1;
+>ResultIsBoolean1 : Symbol(ResultIsBoolean1, Decl(logicalNotOperatorWithAnyOtherType.ts, 24, 3))
+>ANY1 : Symbol(ANY1, Decl(logicalNotOperatorWithAnyOtherType.ts, 3, 3))
+
+var ResultIsBoolean2 = !ANY2;
+>ResultIsBoolean2 : Symbol(ResultIsBoolean2, Decl(logicalNotOperatorWithAnyOtherType.ts, 25, 3))
+>ANY2 : Symbol(ANY2, Decl(logicalNotOperatorWithAnyOtherType.ts, 4, 3))
+
+var ResultIsBoolean3 = !A;
+>ResultIsBoolean3 : Symbol(ResultIsBoolean3, Decl(logicalNotOperatorWithAnyOtherType.ts, 26, 3))
+>A : Symbol(A, Decl(logicalNotOperatorWithAnyOtherType.ts, 10, 1))
+
+var ResultIsBoolean4 = !M;
+>ResultIsBoolean4 : Symbol(ResultIsBoolean4, Decl(logicalNotOperatorWithAnyOtherType.ts, 27, 3))
+>M : Symbol(M, Decl(logicalNotOperatorWithAnyOtherType.ts, 17, 1))
+
+var ResultIsBoolean5 = !obj;
+>ResultIsBoolean5 : Symbol(ResultIsBoolean5, Decl(logicalNotOperatorWithAnyOtherType.ts, 28, 3))
+>obj : Symbol(obj, Decl(logicalNotOperatorWithAnyOtherType.ts, 5, 3))
+
+var ResultIsBoolean6 = !obj1;
+>ResultIsBoolean6 : Symbol(ResultIsBoolean6, Decl(logicalNotOperatorWithAnyOtherType.ts, 29, 3))
+>obj1 : Symbol(obj1, Decl(logicalNotOperatorWithAnyOtherType.ts, 6, 3))
+
+// any type literal
+var ResultIsBoolean7 = !undefined;
+>ResultIsBoolean7 : Symbol(ResultIsBoolean7, Decl(logicalNotOperatorWithAnyOtherType.ts, 32, 3))
+>undefined : Symbol(undefined)
+
+var ResultIsBoolean8 = !null;
+>ResultIsBoolean8 : Symbol(ResultIsBoolean8, Decl(logicalNotOperatorWithAnyOtherType.ts, 33, 3))
+
+// any type expressions
+var ResultIsBoolean9 = !ANY2[0];
+>ResultIsBoolean9 : Symbol(ResultIsBoolean9, Decl(logicalNotOperatorWithAnyOtherType.ts, 36, 3))
+>ANY2 : Symbol(ANY2, Decl(logicalNotOperatorWithAnyOtherType.ts, 4, 3))
+
+var ResultIsBoolean10 = !obj1.x;
+>ResultIsBoolean10 : Symbol(ResultIsBoolean10, Decl(logicalNotOperatorWithAnyOtherType.ts, 37, 3))
+>obj1.x : Symbol(x, Decl(logicalNotOperatorWithAnyOtherType.ts, 6, 12))
+>obj1 : Symbol(obj1, Decl(logicalNotOperatorWithAnyOtherType.ts, 6, 3))
+>x : Symbol(x, Decl(logicalNotOperatorWithAnyOtherType.ts, 6, 12))
+
+var ResultIsBoolean11 = !obj1.y;
+>ResultIsBoolean11 : Symbol(ResultIsBoolean11, Decl(logicalNotOperatorWithAnyOtherType.ts, 38, 3))
+>obj1.y : Symbol(y, Decl(logicalNotOperatorWithAnyOtherType.ts, 6, 19))
+>obj1 : Symbol(obj1, Decl(logicalNotOperatorWithAnyOtherType.ts, 6, 3))
+>y : Symbol(y, Decl(logicalNotOperatorWithAnyOtherType.ts, 6, 19))
+
+var ResultIsBoolean12 = !objA.a;
+>ResultIsBoolean12 : Symbol(ResultIsBoolean12, Decl(logicalNotOperatorWithAnyOtherType.ts, 39, 3))
+>objA.a : Symbol(A.a, Decl(logicalNotOperatorWithAnyOtherType.ts, 11, 9))
+>objA : Symbol(objA, Decl(logicalNotOperatorWithAnyOtherType.ts, 21, 3))
+>a : Symbol(A.a, Decl(logicalNotOperatorWithAnyOtherType.ts, 11, 9))
+
+var ResultIsBoolean13 = !M.n;
+>ResultIsBoolean13 : Symbol(ResultIsBoolean13, Decl(logicalNotOperatorWithAnyOtherType.ts, 40, 3))
+>M.n : Symbol(M.n, Decl(logicalNotOperatorWithAnyOtherType.ts, 19, 14))
+>M : Symbol(M, Decl(logicalNotOperatorWithAnyOtherType.ts, 17, 1))
+>n : Symbol(M.n, Decl(logicalNotOperatorWithAnyOtherType.ts, 19, 14))
+
+var ResultIsBoolean14 = !foo();
+>ResultIsBoolean14 : Symbol(ResultIsBoolean14, Decl(logicalNotOperatorWithAnyOtherType.ts, 41, 3))
+>foo : Symbol(foo, Decl(logicalNotOperatorWithAnyOtherType.ts, 6, 34))
+
+var ResultIsBoolean15 = !A.foo();
+>ResultIsBoolean15 : Symbol(ResultIsBoolean15, Decl(logicalNotOperatorWithAnyOtherType.ts, 42, 3))
+>A.foo : Symbol(A.foo, Decl(logicalNotOperatorWithAnyOtherType.ts, 12, 18))
+>A : Symbol(A, Decl(logicalNotOperatorWithAnyOtherType.ts, 10, 1))
+>foo : Symbol(A.foo, Decl(logicalNotOperatorWithAnyOtherType.ts, 12, 18))
+
+var ResultIsBoolean16 = !(ANY + ANY1);
+>ResultIsBoolean16 : Symbol(ResultIsBoolean16, Decl(logicalNotOperatorWithAnyOtherType.ts, 43, 3))
+>ANY : Symbol(ANY, Decl(logicalNotOperatorWithAnyOtherType.ts, 2, 3))
+>ANY1 : Symbol(ANY1, Decl(logicalNotOperatorWithAnyOtherType.ts, 3, 3))
+
+var ResultIsBoolean17 = !(null + undefined);
+>ResultIsBoolean17 : Symbol(ResultIsBoolean17, Decl(logicalNotOperatorWithAnyOtherType.ts, 44, 3))
+>undefined : Symbol(undefined)
+
+var ResultIsBoolean18 = !(null + null);
+>ResultIsBoolean18 : Symbol(ResultIsBoolean18, Decl(logicalNotOperatorWithAnyOtherType.ts, 45, 3))
+
+var ResultIsBoolean19 = !(undefined + undefined);
+>ResultIsBoolean19 : Symbol(ResultIsBoolean19, Decl(logicalNotOperatorWithAnyOtherType.ts, 46, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+// multiple ! operators
+var ResultIsBoolean20 = !!ANY;
+>ResultIsBoolean20 : Symbol(ResultIsBoolean20, Decl(logicalNotOperatorWithAnyOtherType.ts, 49, 3))
+>ANY : Symbol(ANY, Decl(logicalNotOperatorWithAnyOtherType.ts, 2, 3))
+
+var ResultIsBoolean21 = !!!(ANY + ANY1);
+>ResultIsBoolean21 : Symbol(ResultIsBoolean21, Decl(logicalNotOperatorWithAnyOtherType.ts, 50, 3))
+>ANY : Symbol(ANY, Decl(logicalNotOperatorWithAnyOtherType.ts, 2, 3))
+>ANY1 : Symbol(ANY1, Decl(logicalNotOperatorWithAnyOtherType.ts, 3, 3))
+
+// miss assignment operators
+!ANY;
+>ANY : Symbol(ANY, Decl(logicalNotOperatorWithAnyOtherType.ts, 2, 3))
+
+!ANY1;
+>ANY1 : Symbol(ANY1, Decl(logicalNotOperatorWithAnyOtherType.ts, 3, 3))
+
+!ANY2[0];
+>ANY2 : Symbol(ANY2, Decl(logicalNotOperatorWithAnyOtherType.ts, 4, 3))
+
+!ANY, ANY1;
+>ANY : Symbol(ANY, Decl(logicalNotOperatorWithAnyOtherType.ts, 2, 3))
+>ANY1 : Symbol(ANY1, Decl(logicalNotOperatorWithAnyOtherType.ts, 3, 3))
+
+!objA.a;
+>objA.a : Symbol(A.a, Decl(logicalNotOperatorWithAnyOtherType.ts, 11, 9))
+>objA : Symbol(objA, Decl(logicalNotOperatorWithAnyOtherType.ts, 21, 3))
+>a : Symbol(A.a, Decl(logicalNotOperatorWithAnyOtherType.ts, 11, 9))
+
+!M.n;
+>M.n : Symbol(M.n, Decl(logicalNotOperatorWithAnyOtherType.ts, 19, 14))
+>M : Symbol(M, Decl(logicalNotOperatorWithAnyOtherType.ts, 17, 1))
+>n : Symbol(M.n, Decl(logicalNotOperatorWithAnyOtherType.ts, 19, 14))
+

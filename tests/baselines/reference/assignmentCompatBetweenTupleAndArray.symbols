@@ -1,0 +1,49 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatBetweenTupleAndArray.ts ===
+var numStrTuple: [number, string];
+>numStrTuple : Symbol(numStrTuple, Decl(assignmentCompatBetweenTupleAndArray.ts, 0, 3))
+
+var numNumTuple: [number, number];
+>numNumTuple : Symbol(numNumTuple, Decl(assignmentCompatBetweenTupleAndArray.ts, 1, 3))
+
+var numEmptyObjTuple: [number, {}];
+>numEmptyObjTuple : Symbol(numEmptyObjTuple, Decl(assignmentCompatBetweenTupleAndArray.ts, 2, 3))
+
+var emptyObjTuple: [{}];
+>emptyObjTuple : Symbol(emptyObjTuple, Decl(assignmentCompatBetweenTupleAndArray.ts, 3, 3))
+
+var numArray: number[];
+>numArray : Symbol(numArray, Decl(assignmentCompatBetweenTupleAndArray.ts, 5, 3))
+
+var emptyObjArray: {}[];
+>emptyObjArray : Symbol(emptyObjArray, Decl(assignmentCompatBetweenTupleAndArray.ts, 6, 3))
+
+// no error
+numArray = numNumTuple;
+>numArray : Symbol(numArray, Decl(assignmentCompatBetweenTupleAndArray.ts, 5, 3))
+>numNumTuple : Symbol(numNumTuple, Decl(assignmentCompatBetweenTupleAndArray.ts, 1, 3))
+
+emptyObjArray = emptyObjTuple;
+>emptyObjArray : Symbol(emptyObjArray, Decl(assignmentCompatBetweenTupleAndArray.ts, 6, 3))
+>emptyObjTuple : Symbol(emptyObjTuple, Decl(assignmentCompatBetweenTupleAndArray.ts, 3, 3))
+
+emptyObjArray = numStrTuple;
+>emptyObjArray : Symbol(emptyObjArray, Decl(assignmentCompatBetweenTupleAndArray.ts, 6, 3))
+>numStrTuple : Symbol(numStrTuple, Decl(assignmentCompatBetweenTupleAndArray.ts, 0, 3))
+
+emptyObjArray = numNumTuple;
+>emptyObjArray : Symbol(emptyObjArray, Decl(assignmentCompatBetweenTupleAndArray.ts, 6, 3))
+>numNumTuple : Symbol(numNumTuple, Decl(assignmentCompatBetweenTupleAndArray.ts, 1, 3))
+
+emptyObjArray = numEmptyObjTuple;
+>emptyObjArray : Symbol(emptyObjArray, Decl(assignmentCompatBetweenTupleAndArray.ts, 6, 3))
+>numEmptyObjTuple : Symbol(numEmptyObjTuple, Decl(assignmentCompatBetweenTupleAndArray.ts, 2, 3))
+
+// error
+numArray = numStrTuple;
+>numArray : Symbol(numArray, Decl(assignmentCompatBetweenTupleAndArray.ts, 5, 3))
+>numStrTuple : Symbol(numStrTuple, Decl(assignmentCompatBetweenTupleAndArray.ts, 0, 3))
+
+emptyObjTuple = emptyObjArray;
+>emptyObjTuple : Symbol(emptyObjTuple, Decl(assignmentCompatBetweenTupleAndArray.ts, 3, 3))
+>emptyObjArray : Symbol(emptyObjArray, Decl(assignmentCompatBetweenTupleAndArray.ts, 6, 3))
+

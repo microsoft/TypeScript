@@ -7,7 +7,7 @@ class C {
 
 
 //// [asyncArrowFunctionCapturesThis_es5.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.method = function () {

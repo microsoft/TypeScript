@@ -1,0 +1,21 @@
+=== tests/cases/compiler/thisWhenTypeCheckFails.ts ===
+class c {
+>c : c
+
+    public n() {
+>n : () => void
+
+        var k = () => {
+>k : () => void
+>() => {            var s: string = this.n();        } : () => void
+
+            var s: string = this.n();
+>s : string
+>this.n() : void
+>this.n : () => void
+>this : this
+>n : () => void
+        }
+    }    
+}
+

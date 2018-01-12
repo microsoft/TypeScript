@@ -25,23 +25,45 @@
 ////import a = M.A;
 ////
 ////m./*1*/;
+////var tmp: m./*1Type*/;
 ////c./*2*/;
 ////e./*3*/;
 ////n./*4*/;
 ////v./*5*/;
 ////f./*6*/;
 ////a./*7*/;
+////var tmp2: a./*7Type*/;
 
+function getVerify(isTypeLocation?: boolean) {
+    return {
+        verifyValue: isTypeLocation ? verify.not : verify,
+        verifyType: isTypeLocation ? verify : verify.not,
+        verifyValueOrType: verify
+    };
+}
+
+function verifyModuleM(marker: string) {
+    verifyModuleMWorker(marker, /*isTypeLocation*/ false);
+    verifyModuleMWorker(`${marker}Type`, /*isTypeLocation*/ true);
+}
+
+function verifyModuleMWorker(marker: string, isTypeLocation: boolean): void {
+    goTo.marker(marker);
+
+    const { verifyValue, verifyType, verifyValueOrType } = getVerify(isTypeLocation);
+    verifyType.completionListContains("I");
+    verifyValueOrType.completionListContains("C");
+    verifyValueOrType.completionListContains("E");
+    verifyValue.completionListContains("N");
+    verifyValue.completionListContains("V");
+    verifyValue.completionListContains("F");
+    verifyValueOrType.completionListContains("A");
+}
 
 // Module m
 goTo.marker("1");
-verify.completionListContains("I");
-verify.completionListContains("C");
-verify.completionListContains("E");
-verify.completionListContains("N");
-verify.completionListContains("V");
-verify.completionListContains("F");
 verify.completionListContains("A");
+verifyModuleM("1");
 
 // Class C
 goTo.marker("2");
@@ -64,11 +86,4 @@ goTo.marker("6");
 verify.completionListContains("call");
 
 // alias a
-goTo.marker("7");
-verify.completionListContains("I");
-verify.completionListContains("C");
-verify.completionListContains("E");
-verify.completionListContains("N");
-verify.completionListContains("V");
-verify.completionListContains("F");
-verify.completionListContains("A");
+verifyModuleM("7");

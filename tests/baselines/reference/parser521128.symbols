@@ -1,0 +1,3 @@
+=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser521128.ts ===
+module.module { }
+No type information for this code.

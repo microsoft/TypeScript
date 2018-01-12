@@ -1,11 +1,11 @@
-tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(3,16): error TS4038: Return type of public static property getter from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
-tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(9,9): error TS4041: Return type of public property getter from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
-tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(15,16): error TS4038: Return type of public static property getter from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
-tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(21,9): error TS4041: Return type of public property getter from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
-tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(57,16): error TS4038: Return type of public static property getter from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
-tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(60,9): error TS4041: Return type of public property getter from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
-tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(63,16): error TS4038: Return type of public static property getter from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
-tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(66,9): error TS4041: Return type of public property getter from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(3,16): error TS4038: Return type of public static getter 'myPublicStaticMethod' from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
+tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(9,9): error TS4041: Return type of public getter 'myPublicMethod' from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
+tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(15,16): error TS4038: Return type of public static getter 'myPublicStaticMethod1' from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(21,9): error TS4041: Return type of public getter 'myPublicMethod1' from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(57,16): error TS4038: Return type of public static getter 'myPublicStaticMethod' from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
+tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(60,9): error TS4041: Return type of public getter 'myPublicMethod' from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
+tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(63,16): error TS4038: Return type of public static getter 'myPublicStaticMethod1' from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(66,9): error TS4041: Return type of public getter 'myPublicMethod1' from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
 
 
 ==== tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts (8 errors) ====
@@ -13,7 +13,7 @@ tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(66,9): error 
     export class publicClassWithWithPrivateGetAccessorTypes {
         static get myPublicStaticMethod() { // Error
                    ~~~~~~~~~~~~~~~~~~~~
-!!! error TS4038: Return type of public static property getter from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
+!!! error TS4038: Return type of public static getter 'myPublicStaticMethod' from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
             return exporter.createExportedWidget1();
         }
         private static get myPrivateStaticMethod() {
@@ -21,7 +21,7 @@ tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(66,9): error 
         }
         get myPublicMethod() { // Error
             ~~~~~~~~~~~~~~
-!!! error TS4041: Return type of public property getter from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
+!!! error TS4041: Return type of public getter 'myPublicMethod' from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
             return exporter.createExportedWidget1();
         }
         private get myPrivateMethod() {
@@ -29,7 +29,7 @@ tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(66,9): error 
         }
         static get myPublicStaticMethod1() { // Error
                    ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4038: Return type of public static property getter from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4038: Return type of public static getter 'myPublicStaticMethod1' from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
             return exporter.createExportedWidget3();
         }
         private static get myPrivateStaticMethod1() {
@@ -37,7 +37,7 @@ tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(66,9): error 
         }
         get myPublicMethod1() { // Error
             ~~~~~~~~~~~~~~~
-!!! error TS4041: Return type of public property getter from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4041: Return type of public getter 'myPublicMethod1' from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
             return exporter.createExportedWidget3();
         }
         private get myPrivateMethod1() {
@@ -75,22 +75,22 @@ tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts(66,9): error 
     export class publicClassWithPrivateModuleGetAccessorTypes {
         static get myPublicStaticMethod() { // Error
                    ~~~~~~~~~~~~~~~~~~~~
-!!! error TS4038: Return type of public static property getter from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
+!!! error TS4038: Return type of public static getter 'myPublicStaticMethod' from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
             return exporter.createExportedWidget2();
         }
         get myPublicMethod() { // Error
             ~~~~~~~~~~~~~~
-!!! error TS4041: Return type of public property getter from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
+!!! error TS4041: Return type of public getter 'myPublicMethod' from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
             return exporter.createExportedWidget2();
         }
         static get myPublicStaticMethod1() { // Error
                    ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4038: Return type of public static property getter from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4038: Return type of public static getter 'myPublicStaticMethod1' from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
             return exporter.createExportedWidget4();
         }
         get myPublicMethod1() { // Error
             ~~~~~~~~~~~~~~~
-!!! error TS4041: Return type of public property getter from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4041: Return type of public getter 'myPublicMethod1' from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
             return exporter.createExportedWidget4();
         }
     }

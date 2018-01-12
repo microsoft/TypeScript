@@ -233,7 +233,7 @@ var x: B = { };
 
 //// [contextualTyping.js]
 // CONTEXT: Class property declaration
-var C1T5 = (function () {
+var C1T5 = /** @class */ (function () {
     function C1T5() {
         this.foo = function (i) {
             return i;
@@ -272,7 +272,7 @@ var c3t14 = ({
     a: []
 });
 // CONTEXT: Class property assignment
-var C4T5 = (function () {
+var C4T5 = /** @class */ (function () {
     function C4T5() {
         this.foo = function (i, s) {
             return s;
@@ -325,7 +325,7 @@ c9t5(function (n) {
 // CONTEXT: Return statement
 var c10t5 = function () { return function (n) { return ({}); }; };
 // CONTEXT: Newing a class
-var C11t5 = (function () {
+var C11t5 = /** @class */ (function () {
     function C11t5(f) {
     }
     return C11t5;

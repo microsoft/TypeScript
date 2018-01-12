@@ -5,7 +5,7 @@ import jobs.generation.Utilities;
 def project = GithubProject
 def branch = GithubBranchName
 
-def nodeVersions = ['stable', '6', '4']
+def nodeVersions = ['stable', '8', '6']
 
 nodeVersions.each { nodeVer ->
 
@@ -17,6 +17,6 @@ nodeVersions.each { nodeVer ->
     }
     
     Utilities.standardJobSetup(newJob, project, true, "*/${branch}")
-    Utilities.setMachineAffinity(newJob, 'Ubuntu', '20161020')
+    Utilities.setMachineAffinity(newJob, 'Ubuntu14.04', '20161020')
     Utilities.addGithubPRTriggerForBranch(newJob, branch, "TypeScript Test Run ${newJobName}")
 }

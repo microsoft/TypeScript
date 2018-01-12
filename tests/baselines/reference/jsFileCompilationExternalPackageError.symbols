@@ -17,6 +17,7 @@ var a = 10;
 
 === tests/cases/compiler/node_modules/c.js ===
 exports.a = 10;
+>exports.a : Symbol(a, Decl(c.js, 0, 0))
 >exports : Symbol(a, Decl(c.js, 0, 0))
 >a : Symbol(a, Decl(c.js, 0, 0))
 

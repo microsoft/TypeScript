@@ -1,0 +1,147 @@
+=== tests/cases/compiler/implicitAnyCastedValue.ts ===
+var x = function () {
+>x : Symbol(x, Decl(implicitAnyCastedValue.ts, 0, 3))
+
+    return <any>0;  // this should not be an error
+}
+
+function foo() {
+>foo : Symbol(foo, Decl(implicitAnyCastedValue.ts, 2, 1))
+
+    return <any>"hello world";  // this should not be an error
+}
+
+class C {
+>C : Symbol(C, Decl(implicitAnyCastedValue.ts, 6, 1))
+
+    bar = null;  // this should be an error
+>bar : Symbol(C.bar, Decl(implicitAnyCastedValue.ts, 8, 9))
+
+    foo = undefined;  // this should be an error
+>foo : Symbol(C.foo, Decl(implicitAnyCastedValue.ts, 9, 15))
+>undefined : Symbol(undefined)
+
+    public get tempVar() {
+>tempVar : Symbol(C.tempVar, Decl(implicitAnyCastedValue.ts, 10, 20))
+
+        return <any>0;  // this should not be an error
+    }
+
+    public returnBarWithCase() {    // this should not be an error
+>returnBarWithCase : Symbol(C.returnBarWithCase, Decl(implicitAnyCastedValue.ts, 13, 5))
+
+        return <any>this.bar;
+>this.bar : Symbol(C.bar, Decl(implicitAnyCastedValue.ts, 8, 9))
+>this : Symbol(C, Decl(implicitAnyCastedValue.ts, 6, 1))
+>bar : Symbol(C.bar, Decl(implicitAnyCastedValue.ts, 8, 9))
+    }
+
+    public returnFooWithCase() {
+>returnFooWithCase : Symbol(C.returnFooWithCase, Decl(implicitAnyCastedValue.ts, 17, 5))
+
+        return <any>this.foo;  // this should not be an error
+>this.foo : Symbol(C.foo, Decl(implicitAnyCastedValue.ts, 9, 15))
+>this : Symbol(C, Decl(implicitAnyCastedValue.ts, 6, 1))
+>foo : Symbol(C.foo, Decl(implicitAnyCastedValue.ts, 9, 15))
+    }
+}
+
+class C1 {
+>C1 : Symbol(C1, Decl(implicitAnyCastedValue.ts, 22, 1))
+
+    getValue = null;  // this should be an error
+>getValue : Symbol(C1.getValue, Decl(implicitAnyCastedValue.ts, 24, 10))
+
+    public get castedGet() {
+>castedGet : Symbol(C1.castedGet, Decl(implicitAnyCastedValue.ts, 25, 20))
+
+        return <any>this.getValue;  // this should not be an error
+>this.getValue : Symbol(C1.getValue, Decl(implicitAnyCastedValue.ts, 24, 10))
+>this : Symbol(C1, Decl(implicitAnyCastedValue.ts, 22, 1))
+>getValue : Symbol(C1.getValue, Decl(implicitAnyCastedValue.ts, 24, 10))
+    }
+
+    public get notCastedGet() {
+>notCastedGet : Symbol(C1.notCastedGet, Decl(implicitAnyCastedValue.ts, 29, 5))
+
+        return this.getValue;  // this should not be an error
+>this.getValue : Symbol(C1.getValue, Decl(implicitAnyCastedValue.ts, 24, 10))
+>this : Symbol(C1, Decl(implicitAnyCastedValue.ts, 22, 1))
+>getValue : Symbol(C1.getValue, Decl(implicitAnyCastedValue.ts, 24, 10))
+    }
+}
+
+function castedNull() {
+>castedNull : Symbol(castedNull, Decl(implicitAnyCastedValue.ts, 34, 1))
+
+    return <any>null;  // this should not be an error
+}
+
+function notCastedNull() {
+>notCastedNull : Symbol(notCastedNull, Decl(implicitAnyCastedValue.ts, 38, 1))
+
+    return null;  // this should be an error
+}
+
+function returnTypeBar(): any {
+>returnTypeBar : Symbol(returnTypeBar, Decl(implicitAnyCastedValue.ts, 42, 1))
+
+    return null;  // this should not be an error
+}
+
+function undefinedBar() {
+>undefinedBar : Symbol(undefinedBar, Decl(implicitAnyCastedValue.ts, 46, 1))
+
+    return <any>undefined;  // this should not be an error
+>undefined : Symbol(undefined)
+}
+
+function multipleRets1(x) {    // this should not be an error
+>multipleRets1 : Symbol(multipleRets1, Decl(implicitAnyCastedValue.ts, 50, 1))
+>x : Symbol(x, Decl(implicitAnyCastedValue.ts, 52, 23))
+
+    if (x) {
+>x : Symbol(x, Decl(implicitAnyCastedValue.ts, 52, 23))
+
+        return <any>0;
+    }
+    else {
+        return null;
+    }
+}
+
+function multipleRets2(x) {    // this should not be an error
+>multipleRets2 : Symbol(multipleRets2, Decl(implicitAnyCastedValue.ts, 59, 1))
+>x : Symbol(x, Decl(implicitAnyCastedValue.ts, 61, 23))
+
+    if (x) {
+>x : Symbol(x, Decl(implicitAnyCastedValue.ts, 61, 23))
+
+        return null;
+    }
+    else if (x == 1) {
+>x : Symbol(x, Decl(implicitAnyCastedValue.ts, 61, 23))
+
+        return <any>0;
+    }
+    else {
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+}
+
+// this should not be an error
+var bar1 = <any>null;
+>bar1 : Symbol(bar1, Decl(implicitAnyCastedValue.ts, 74, 3))
+
+var bar2 = <any>undefined;
+>bar2 : Symbol(bar2, Decl(implicitAnyCastedValue.ts, 75, 3))
+>undefined : Symbol(undefined)
+
+var bar3 = <any>0;
+>bar3 : Symbol(bar3, Decl(implicitAnyCastedValue.ts, 76, 3))
+
+var array = <any>[null, undefined];
+>array : Symbol(array, Decl(implicitAnyCastedValue.ts, 77, 3))
+>undefined : Symbol(undefined)
+

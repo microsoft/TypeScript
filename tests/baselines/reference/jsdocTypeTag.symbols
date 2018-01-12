@@ -71,9 +71,13 @@ var nullable;
 var Obj;
 >Obj : Symbol(Obj, Decl(a.js, 52, 3), Decl(b.ts, 17, 3))
 
+/** @type {object} */
+var obj;
+>obj : Symbol(obj, Decl(a.js, 55, 3), Decl(b.ts, 18, 3))
+
 /** @type {Function} */
 var Func;
->Func : Symbol(Func, Decl(a.js, 55, 3), Decl(b.ts, 18, 3))
+>Func : Symbol(Func, Decl(a.js, 58, 3), Decl(b.ts, 19, 3))
 
 === tests/cases/conformance/jsdoc/b.ts ===
 var S: string;
@@ -132,7 +136,10 @@ var nullable: number | null;
 var Obj: any;
 >Obj : Symbol(Obj, Decl(a.js, 52, 3), Decl(b.ts, 17, 3))
 
+var obj: any;
+>obj : Symbol(obj, Decl(a.js, 55, 3), Decl(b.ts, 18, 3))
+
 var Func: Function;
->Func : Symbol(Func, Decl(a.js, 55, 3), Decl(b.ts, 18, 3))
+>Func : Symbol(Func, Decl(a.js, 58, 3), Decl(b.ts, 19, 3))
 >Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 

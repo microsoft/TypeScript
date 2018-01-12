@@ -31,7 +31,7 @@ namespace ts.BreakpointResolver {
         }
 
         // Cannot set breakpoint in ambient declarations
-        if (isInAmbientContext(tokenAtLocation)) {
+        if (tokenAtLocation.flags & NodeFlags.Ambient) {
             return undefined;
         }
 
@@ -183,7 +183,7 @@ namespace ts.BreakpointResolver {
 
                     case SyntaxKind.ModuleDeclaration:
                         // span on complete module if it is instantiated
-                        if (getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
+                        if (getModuleInstanceState(node as ModuleDeclaration) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
                         // falls through
@@ -262,8 +262,8 @@ namespace ts.BreakpointResolver {
                         }
 
                         // Set breakpoint on identifier element of destructuring pattern
-                        // a or ...c  or d: x from
-                        // [a, b, ...c] or { a, b } or { d: x } from destructuring pattern
+                        // `a` or `...c` or `d: x` from
+                        // `[a, b, ...c]` or `{ a, b }` or `{ d: x }` from destructuring pattern
                         if ((node.kind === SyntaxKind.Identifier ||
                             node.kind === SyntaxKind.SpreadElement ||
                             node.kind === SyntaxKind.PropertyAssignment ||
@@ -297,7 +297,7 @@ namespace ts.BreakpointResolver {
                             }
                         }
 
-                        if (isPartOfExpression(node)) {
+                        if (isExpressionNode(node)) {
                             switch (node.parent.kind) {
                                 case SyntaxKind.DoStatement:
                                     // Set span as if on while keyword
@@ -427,8 +427,9 @@ namespace ts.BreakpointResolver {
                 }
                 else {
                     const functionDeclaration = <FunctionLikeDeclaration>parameter.parent;
-                    const indexOfParameter = indexOf(functionDeclaration.parameters, parameter);
-                    if (indexOfParameter) {
+                    const indexOfParameter = functionDeclaration.parameters.indexOf(parameter);
+                    Debug.assert(indexOfParameter !== -1);
+                    if (indexOfParameter !== 0) {
                         // Not a first parameter, go to previous parameter
                         return spanInParameterDeclaration(functionDeclaration.parameters[indexOfParameter - 1]);
                     }
@@ -471,7 +472,7 @@ namespace ts.BreakpointResolver {
             function spanInBlock(block: Block): TextSpan {
                 switch (block.parent.kind) {
                     case SyntaxKind.ModuleDeclaration:
-                        if (getModuleInstanceState(block.parent) !== ModuleInstanceState.Instantiated) {
+                        if (getModuleInstanceState(block.parent as ModuleDeclaration) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
                         // falls through
@@ -581,7 +582,7 @@ namespace ts.BreakpointResolver {
                 switch (node.parent.kind) {
                     case SyntaxKind.ModuleBlock:
                         // If this is not an instantiated module block, no bp span
-                        if (getModuleInstanceState(node.parent.parent) !== ModuleInstanceState.Instantiated) {
+                        if (getModuleInstanceState(node.parent.parent as ModuleDeclaration) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
                         // falls through

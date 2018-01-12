@@ -1,0 +1,169 @@
+=== tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts ===
+class BaseA {
+>BaseA : BaseA
+
+    public constructor(public x: number) { }
+>x : number
+
+    createInstance() { new BaseA(1); }
+>createInstance : () => void
+>new BaseA(1) : BaseA
+>BaseA : typeof BaseA
+>1 : 1
+}
+
+class BaseB {
+>BaseB : BaseB
+
+    protected constructor(public x: number) { }
+>x : number
+
+    createInstance() { new BaseB(2); }
+>createInstance : () => void
+>new BaseB(2) : BaseB
+>BaseB : typeof BaseB
+>2 : 2
+}
+
+class BaseC {
+>BaseC : BaseC
+
+    private constructor(public x: number) { }
+>x : number
+
+    createInstance() { new BaseC(3); }
+>createInstance : () => void
+>new BaseC(3) : BaseC
+>BaseC : typeof BaseC
+>3 : 3
+
+    static staticInstance() { new BaseC(4); }
+>staticInstance : () => void
+>new BaseC(4) : BaseC
+>BaseC : typeof BaseC
+>4 : 4
+}
+
+class DerivedA extends BaseA {
+>DerivedA : DerivedA
+>BaseA : BaseA
+
+    constructor(public x: number) { super(x); }
+>x : number
+>super(x) : void
+>super : typeof BaseA
+>x : number
+
+    createInstance() { new DerivedA(5); }
+>createInstance : () => void
+>new DerivedA(5) : DerivedA
+>DerivedA : typeof DerivedA
+>5 : 5
+
+    createBaseInstance() { new BaseA(6); }
+>createBaseInstance : () => void
+>new BaseA(6) : BaseA
+>BaseA : typeof BaseA
+>6 : 6
+
+    static staticBaseInstance() { new BaseA(7); }
+>staticBaseInstance : () => void
+>new BaseA(7) : BaseA
+>BaseA : typeof BaseA
+>7 : 7
+}
+
+class DerivedB extends BaseB {
+>DerivedB : DerivedB
+>BaseB : BaseB
+
+    constructor(public x: number) { super(x); }
+>x : number
+>super(x) : void
+>super : typeof BaseB
+>x : number
+
+    createInstance() { new DerivedB(7); }
+>createInstance : () => void
+>new DerivedB(7) : DerivedB
+>DerivedB : typeof DerivedB
+>7 : 7
+
+    createBaseInstance() { new BaseB(8); } // ok
+>createBaseInstance : () => void
+>new BaseB(8) : BaseB
+>BaseB : typeof BaseB
+>8 : 8
+
+    static staticBaseInstance() { new BaseB(9); } // ok
+>staticBaseInstance : () => void
+>new BaseB(9) : BaseB
+>BaseB : typeof BaseB
+>9 : 9
+}
+
+class DerivedC extends BaseC { // error
+>DerivedC : DerivedC
+>BaseC : BaseC
+
+    constructor(public x: number) { super(x); }
+>x : number
+>super(x) : void
+>super : typeof BaseC
+>x : number
+
+    createInstance() { new DerivedC(9); }
+>createInstance : () => void
+>new DerivedC(9) : DerivedC
+>DerivedC : typeof DerivedC
+>9 : 9
+
+    createBaseInstance() { new BaseC(10); } // error
+>createBaseInstance : () => void
+>new BaseC(10) : any
+>BaseC : typeof BaseC
+>10 : 10
+
+    static staticBaseInstance() { new BaseC(11); } // error
+>staticBaseInstance : () => void
+>new BaseC(11) : any
+>BaseC : typeof BaseC
+>11 : 11
+}
+
+var ba = new BaseA(1);
+>ba : BaseA
+>new BaseA(1) : BaseA
+>BaseA : typeof BaseA
+>1 : 1
+
+var bb = new BaseB(1); // error
+>bb : any
+>new BaseB(1) : any
+>BaseB : typeof BaseB
+>1 : 1
+
+var bc = new BaseC(1); // error
+>bc : any
+>new BaseC(1) : any
+>BaseC : typeof BaseC
+>1 : 1
+
+var da = new DerivedA(1);
+>da : DerivedA
+>new DerivedA(1) : DerivedA
+>DerivedA : typeof DerivedA
+>1 : 1
+
+var db = new DerivedB(1);
+>db : DerivedB
+>new DerivedB(1) : DerivedB
+>DerivedB : typeof DerivedB
+>1 : 1
+
+var dc = new DerivedC(1);
+>dc : DerivedC
+>new DerivedC(1) : DerivedC
+>DerivedC : typeof DerivedC
+>1 : 1
+

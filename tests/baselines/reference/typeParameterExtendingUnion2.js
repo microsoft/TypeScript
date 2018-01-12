@@ -23,20 +23,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Animal = (function () {
+var Animal = /** @class */ (function () {
     function Animal() {
     }
     Animal.prototype.run = function () { };
     return Animal;
 }());
-var Cat = (function (_super) {
+var Cat = /** @class */ (function (_super) {
     __extends(Cat, _super);
     function Cat() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Cat;
 }(Animal));
-var Dog = (function (_super) {
+var Dog = /** @class */ (function (_super) {
     __extends(Dog, _super);
     function Dog() {
         return _super !== null && _super.apply(this, arguments) || this;

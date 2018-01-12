@@ -1,0 +1,58 @@
+=== tests/cases/compiler/enumBasics1.ts ===
+enum E {
+>E : Symbol(E, Decl(enumBasics1.ts, 0, 0))
+
+	A = 1,
+>A : Symbol(E.A, Decl(enumBasics1.ts, 0, 8))
+
+	B,
+>B : Symbol(E.B, Decl(enumBasics1.ts, 1, 7))
+
+	C
+>C : Symbol(E.C, Decl(enumBasics1.ts, 2, 3))
+}
+
+/*
+var a: E;
+var b = E["B"]; // shouldn't error
+
+
+function foo(e: E) {}
+
+foo(a); // shouldn't error
+
+
+class C {
+	public e: E;
+
+	public m(): E { return this.e; } // shouldn't error
+}
+
+
+var e = E; // shouldn't error
+*/
+E.A.A; // should error
+>E.A : Symbol(E.A, Decl(enumBasics1.ts, 0, 8))
+>E : Symbol(E, Decl(enumBasics1.ts, 0, 0))
+>A : Symbol(E.A, Decl(enumBasics1.ts, 0, 8))
+
+
+enum E2 {
+>E2 : Symbol(E2, Decl(enumBasics1.ts, 25, 6), Decl(enumBasics1.ts, 31, 1))
+
+	A,
+>A : Symbol(E2.A, Decl(enumBasics1.ts, 28, 9))
+
+	B,
+>B : Symbol(E2.B, Decl(enumBasics1.ts, 29, 3))
+}
+
+enum E2 { // should error for continued autonumbering
+>E2 : Symbol(E2, Decl(enumBasics1.ts, 25, 6), Decl(enumBasics1.ts, 31, 1))
+
+	C,
+>C : Symbol(E2.C, Decl(enumBasics1.ts, 33, 9))
+
+	D,
+>D : Symbol(E2.D, Decl(enumBasics1.ts, 34, 3))
+}

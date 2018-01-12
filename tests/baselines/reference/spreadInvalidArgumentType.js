@@ -14,28 +14,25 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
     var union_primitive: { a: number } | number;
 
     var intersection_generic: T & { a: number };
-    var intersection_premitive: { a: number } | string;
+    var intersection_primitive: { a: number } | string;
 
     var num: number;
     var str: number;
+    var literal_string: "string";
+    var literal_number: 42;
 
     var u: undefined;
     var n: null;
-
     var a: any;
 
-    var literal_string: "string";
-    var literal_number: 42;
 
     var e: E;
 
     var o1 = { ...p1 };   // Error, generic type paramterre
     var o2 = { ...p2 };   // OK
     var o3 = { ...t };   // Error, generic type paramter
-
     var o4 = { ...i };   // Error, index access
     var o5 = { ...k };   // Error, index
-
     var o6 = { ...mapped_generic }; // Error, generic mapped object type
     var o7 = { ...mapped };  // OK, non-generic mapped type
 
@@ -43,13 +40,13 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
     var o9 = { ...union_primitive };  // Error, union with generic type parameter
 
     var o10 = { ...intersection_generic };  // Error, intersection with generic type parameter
-    var o11 = { ...intersection_premitive };  // Error, intersection with generic type parameter
+    var o11 = { ...intersection_primitive };  // Error, intersection with generic type parameter
 
     var o12 = { ...num };  // Error
     var o13 = { ...str };  // Error
 
-    var o14 = { ...u };  // OK
-    var o15 = { ...n };  // OK
+    var o14 = { ...u };  // error, undefined-only not allowed
+    var o15 = { ...n };  // error, null-only not allowed
 
     var o16 = { ...a };  // OK
 
@@ -58,6 +55,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
     var o19 = { ...e };  // Error, enum
 }
+
 
 //// [spreadInvalidArgumentType.js]
 var __assign = (this && this.__assign) || Object.assign || function(t) {
@@ -83,14 +81,14 @@ function f(p1, p2) {
     var union_generic;
     var union_primitive;
     var intersection_generic;
-    var intersection_premitive;
+    var intersection_primitive;
     var num;
     var str;
+    var literal_string;
+    var literal_number;
     var u;
     var n;
     var a;
-    var literal_string;
-    var literal_number;
     var e;
     var o1 = __assign({}, p1); // Error, generic type paramterre
     var o2 = __assign({}, p2); // OK
@@ -102,11 +100,11 @@ function f(p1, p2) {
     var o8 = __assign({}, union_generic); // Error, union with generic type parameter
     var o9 = __assign({}, union_primitive); // Error, union with generic type parameter
     var o10 = __assign({}, intersection_generic); // Error, intersection with generic type parameter
-    var o11 = __assign({}, intersection_premitive); // Error, intersection with generic type parameter
+    var o11 = __assign({}, intersection_primitive); // Error, intersection with generic type parameter
     var o12 = __assign({}, num); // Error
     var o13 = __assign({}, str); // Error
-    var o14 = __assign({}, u); // OK
-    var o15 = __assign({}, n); // OK
+    var o14 = __assign({}, u); // error, undefined-only not allowed
+    var o15 = __assign({}, n); // error, null-only not allowed
     var o16 = __assign({}, a); // OK
     var o17 = __assign({}, literal_string); // Error
     var o18 = __assign({}, literal_number); // Error

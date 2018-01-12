@@ -1,5 +1,4 @@
-tests/cases/conformance/es6/spread/iteratorSpreadInCall9.ts(31,5): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-  Type argument candidate 'symbol' is not a valid type argument because it is not a supertype of candidate 'string'.
+tests/cases/conformance/es6/spread/iteratorSpreadInCall9.ts(31,32): error TS2345: Argument of type 'string' is not assignable to parameter of type 'symbol'.
 
 
 ==== tests/cases/conformance/es6/spread/iteratorSpreadInCall9.ts (1 errors) ====
@@ -34,7 +33,6 @@ tests/cases/conformance/es6/spread/iteratorSpreadInCall9.ts(31,5): error TS2453:
     }
     
     new Foo(...new SymbolIterator, ...[...new StringIterator]);
-        ~~~
-!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-!!! error TS2453:   Type argument candidate 'symbol' is not a valid type argument because it is not a supertype of candidate 'string'.
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'symbol'.
     

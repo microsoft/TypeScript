@@ -32,7 +32,7 @@ class E<T extends Date> {
 }
 
 //// [typeOfThisInMemberFunctions.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.foo = function () {
@@ -43,7 +43,7 @@ var C = (function () {
     };
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     D.prototype.foo = function () {
@@ -54,7 +54,7 @@ var D = (function () {
     };
     return D;
 }());
-var E = (function () {
+var E = /** @class */ (function () {
     function E() {
     }
     E.prototype.foo = function () {

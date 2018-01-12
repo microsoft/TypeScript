@@ -36,19 +36,19 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var List = (function () {
+var List = /** @class */ (function () {
     function List() {
     }
     return List;
 }());
-var DerivedList = (function (_super) {
+var DerivedList = /** @class */ (function (_super) {
     __extends(DerivedList, _super);
     function DerivedList() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return DerivedList;
 }(List));
-var MyList = (function () {
+var MyList = /** @class */ (function () {
     function MyList() {
     }
     return MyList;

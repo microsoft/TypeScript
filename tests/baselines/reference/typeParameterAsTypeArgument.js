@@ -34,7 +34,7 @@ function foo(x, y) {
     foo(y, y);
     return new C();
 }
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

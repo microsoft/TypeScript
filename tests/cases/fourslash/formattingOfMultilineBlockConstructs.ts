@@ -47,7 +47,7 @@ verify.currentLineContentIs("enum E {");
 goTo.marker('4');
 verify.currentLineContentIs("class MyClass {");
 goTo.marker('cons');
-verify.currentLineContentIs("    constructor()");
+verify.currentLineContentIs("    constructor() { }");
 goTo.marker('5');
 verify.currentLineContentIs("    public MyFunction() {");
 goTo.marker('6');

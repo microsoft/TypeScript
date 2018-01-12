@@ -21,7 +21,7 @@ class MyComponent {
 //// [service.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Service = (function () {
+var Service = /** @class */ (function () {
     function Service() {
     }
     return Service;
@@ -40,7 +40,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var service_1 = require("./service");
-var MyComponent = (function () {
+var MyComponent = /** @class */ (function () {
     function MyComponent(Service) {
         this.Service = Service;
     }

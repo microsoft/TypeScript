@@ -1,0 +1,26 @@
+=== tests/cases/compiler/noImplicitReturnsWithProtectedBlocks2.ts ===
+declare function log(s: string): void;
+>log : Symbol(log, Decl(noImplicitReturnsWithProtectedBlocks2.ts, 0, 0))
+>s : Symbol(s, Decl(noImplicitReturnsWithProtectedBlocks2.ts, 0, 21))
+
+declare function get(): number;
+>get : Symbol(get, Decl(noImplicitReturnsWithProtectedBlocks2.ts, 0, 38))
+
+function main1() : number {
+>main1 : Symbol(main1, Decl(noImplicitReturnsWithProtectedBlocks2.ts, 1, 31))
+
+    try {
+        return get();
+>get : Symbol(get, Decl(noImplicitReturnsWithProtectedBlocks2.ts, 0, 38))
+    }
+    catch(e) {
+>e : Symbol(e, Decl(noImplicitReturnsWithProtectedBlocks2.ts, 7, 10))
+
+        log("in catch");
+>log : Symbol(log, Decl(noImplicitReturnsWithProtectedBlocks2.ts, 0, 0))
+    }
+    finally {
+        log("in finally");
+>log : Symbol(log, Decl(noImplicitReturnsWithProtectedBlocks2.ts, 0, 0))
+    }
+}

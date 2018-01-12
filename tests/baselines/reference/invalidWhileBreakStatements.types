@@ -1,0 +1,73 @@
+=== tests/cases/conformance/statements/breakStatements/invalidWhileBreakStatements.ts ===
+// All errors
+
+// naked break not allowed
+break;
+
+// non-existent label
+ONE:
+>ONE : any
+
+while (true) break TWO;
+>true : true
+>TWO : any
+
+// break from inside function
+TWO:
+>TWO : any
+
+while (true){
+>true : true
+
+    var x = () => {
+>x : () => void
+>() => {        break TWO;    } : () => void
+
+        break TWO;
+>TWO : any
+    }
+}
+
+THREE:
+>THREE : any
+
+while (true) {
+>true : true
+
+    var fn = function () {
+>fn : () => void
+>function () {        break THREE;    } : () => void
+
+        break THREE;
+>THREE : any
+    }
+}
+
+// break forward
+while (true) {
+>true : true
+
+    break FIVE;
+>FIVE : any
+
+    FIVE:
+>FIVE : any
+
+    while (true) { }
+>true : true
+}
+
+// label on non-loop statement
+NINE:
+>NINE : any
+
+var y = 12;
+>y : number
+>12 : 12
+
+while (true) {
+>true : true
+
+    break NINE;
+>NINE : any
+}

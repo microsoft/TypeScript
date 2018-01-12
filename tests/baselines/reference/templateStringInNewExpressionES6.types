@@ -1,0 +1,11 @@
+=== tests/cases/conformance/es6/templates/templateStringInNewExpressionES6.ts ===
+new `abc${0}abc`(`hello ${0} world`, `   `, `1${2}3`);
+>new `abc${0}abc`(`hello ${0} world`, `   `, `1${2}3`) : any
+>`abc${0}abc` : string
+>0 : 0
+>`hello ${0} world` : string
+>0 : 0
+>`   ` : "   "
+>`1${2}3` : string
+>2 : 2
+

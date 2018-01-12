@@ -20,7 +20,7 @@ function z(w3: WinJS) { }
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var Promise = (function () {
+    var Promise = /** @class */ (function () {
         function Promise() {
         }
         Promise.timeout = function (delay) {

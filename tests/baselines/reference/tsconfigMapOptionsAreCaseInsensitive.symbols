@@ -1,0 +1,16 @@
+=== tests/cases/compiler/other.ts ===
+export default 42;
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/index.ts ===
+import Answer from "./other.js";
+>Answer : Symbol(Answer, Decl(index.ts, 0, 6))
+
+const x = 10 + Answer;
+>x : Symbol(x, Decl(index.ts, 1, 5))
+>Answer : Symbol(Answer, Decl(index.ts, 0, 6))
+
+export {
+    x
+>x : Symbol(x, Decl(index.ts, 2, 8))
+
+};

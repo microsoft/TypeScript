@@ -1,0 +1,383 @@
+=== tests/cases/compiler/optionalParamArgsTest.ts ===
+// Optional parameter and default argument tests
+
+// Key:
+// Cx - "Class x"
+// My - "Method x"
+// Az - "Argument z"
+// E.g., C1M1A1 = "Class 1, Method 1, Argument 1"
+
+interface I1 {
+>I1 : Symbol(I1, Decl(optionalParamArgsTest.ts, 0, 0))
+
+    C1M1():number;
+>C1M1 : Symbol(I1.C1M1, Decl(optionalParamArgsTest.ts, 8, 14))
+
+    C1M2(C1M2A1:number):number;
+>C1M2 : Symbol(I1.C1M2, Decl(optionalParamArgsTest.ts, 9, 18))
+>C1M2A1 : Symbol(C1M2A1, Decl(optionalParamArgsTest.ts, 10, 9))
+
+    C1M3(C1M3A1?:number,C1M3A2?:number):number;
+>C1M3 : Symbol(I1.C1M3, Decl(optionalParamArgsTest.ts, 10, 31))
+>C1M3A1 : Symbol(C1M3A1, Decl(optionalParamArgsTest.ts, 11, 9))
+>C1M3A2 : Symbol(C1M3A2, Decl(optionalParamArgsTest.ts, 11, 24))
+
+    C1M4(C1M4A1:number,C1M4A2?:number):number;
+>C1M4 : Symbol(I1.C1M4, Decl(optionalParamArgsTest.ts, 11, 47))
+>C1M4A1 : Symbol(C1M4A1, Decl(optionalParamArgsTest.ts, 12, 9))
+>C1M4A2 : Symbol(C1M4A2, Decl(optionalParamArgsTest.ts, 12, 23))
+}
+
+// test basic configurations
+class C1 {
+>C1 : Symbol(C1, Decl(optionalParamArgsTest.ts, 13, 1))
+
+    constructor(v: number = 1, p: number = 0) { }
+>v : Symbol(v, Decl(optionalParamArgsTest.ts, 17, 16))
+>p : Symbol(p, Decl(optionalParamArgsTest.ts, 17, 30))
+
+    public n:number = 0;
+>n : Symbol(C1.n, Decl(optionalParamArgsTest.ts, 17, 49))
+
+    public C1M1() { return 0; } // returning C1M1A1 will result in "Unresolved symbol C1M1A1"
+>C1M1 : Symbol(C1.C1M1, Decl(optionalParamArgsTest.ts, 18, 24))
+
+    public C1M2(C1M2A1:number) { return C1M2A1; } // will return C1M1A2 without complaint
+>C1M2 : Symbol(C1.C1M2, Decl(optionalParamArgsTest.ts, 20, 31))
+>C1M2A1 : Symbol(C1M2A1, Decl(optionalParamArgsTest.ts, 22, 16))
+>C1M2A1 : Symbol(C1M2A1, Decl(optionalParamArgsTest.ts, 22, 16))
+
+    // C1M3 contains all optional parameters
+    public C1M3(C1M3A1:number=0,C1M3A2:number=C1M3A1) {return C1M3A1 + C1M3A2; }
+>C1M3 : Symbol(C1.C1M3, Decl(optionalParamArgsTest.ts, 22, 49))
+>C1M3A1 : Symbol(C1M3A1, Decl(optionalParamArgsTest.ts, 25, 16))
+>C1M3A2 : Symbol(C1M3A2, Decl(optionalParamArgsTest.ts, 25, 32))
+>C1M3A1 : Symbol(C1M3A1, Decl(optionalParamArgsTest.ts, 25, 16))
+>C1M3A1 : Symbol(C1M3A1, Decl(optionalParamArgsTest.ts, 25, 16))
+>C1M3A2 : Symbol(C1M3A2, Decl(optionalParamArgsTest.ts, 25, 32))
+
+    // C1M4 contains a mix of optional and non-optional parameters
+    public C1M4(C1M4A1:number,C1M4A2?:number) { return C1M4A1 + C1M4A2; }
+>C1M4 : Symbol(C1.C1M4, Decl(optionalParamArgsTest.ts, 25, 80))
+>C1M4A1 : Symbol(C1M4A1, Decl(optionalParamArgsTest.ts, 28, 16))
+>C1M4A2 : Symbol(C1M4A2, Decl(optionalParamArgsTest.ts, 28, 30))
+>C1M4A1 : Symbol(C1M4A1, Decl(optionalParamArgsTest.ts, 28, 16))
+>C1M4A2 : Symbol(C1M4A2, Decl(optionalParamArgsTest.ts, 28, 30))
+
+    public C1M5(C1M5A1:number,C1M5A2:number=0,C1M5A3?:number) { return C1M5A1 + C1M5A2; }
+>C1M5 : Symbol(C1.C1M5, Decl(optionalParamArgsTest.ts, 28, 73), Decl(optionalParamArgsTest.ts, 30, 89))
+>C1M5A1 : Symbol(C1M5A1, Decl(optionalParamArgsTest.ts, 30, 16))
+>C1M5A2 : Symbol(C1M5A2, Decl(optionalParamArgsTest.ts, 30, 30))
+>C1M5A3 : Symbol(C1M5A3, Decl(optionalParamArgsTest.ts, 30, 46))
+>C1M5A1 : Symbol(C1M5A1, Decl(optionalParamArgsTest.ts, 30, 16))
+>C1M5A2 : Symbol(C1M5A2, Decl(optionalParamArgsTest.ts, 30, 30))
+
+    // Uninitialized parameter makes the initialized one required
+    public C1M5(C1M5A1:number,C1M5A2:number=0,C1M5A3:number) { return C1M5A1 + C1M5A2; }
+>C1M5 : Symbol(C1.C1M5, Decl(optionalParamArgsTest.ts, 28, 73), Decl(optionalParamArgsTest.ts, 30, 89))
+>C1M5A1 : Symbol(C1M5A1, Decl(optionalParamArgsTest.ts, 33, 16))
+>C1M5A2 : Symbol(C1M5A2, Decl(optionalParamArgsTest.ts, 33, 30))
+>C1M5A3 : Symbol(C1M5A3, Decl(optionalParamArgsTest.ts, 33, 46))
+>C1M5A1 : Symbol(C1M5A1, Decl(optionalParamArgsTest.ts, 33, 16))
+>C1M5A2 : Symbol(C1M5A2, Decl(optionalParamArgsTest.ts, 33, 30))
+}
+
+class C2 extends C1 {
+>C2 : Symbol(C2, Decl(optionalParamArgsTest.ts, 34, 1))
+>C1 : Symbol(C1, Decl(optionalParamArgsTest.ts, 13, 1))
+
+    constructor(v2: number = 6) {
+>v2 : Symbol(v2, Decl(optionalParamArgsTest.ts, 37, 16))
+
+        super(v2);
+>super : Symbol(C1, Decl(optionalParamArgsTest.ts, 13, 1))
+>v2 : Symbol(v2, Decl(optionalParamArgsTest.ts, 37, 16))
+    }
+}
+
+
+function F1() { return 0; } 
+>F1 : Symbol(F1, Decl(optionalParamArgsTest.ts, 40, 1))
+
+function F2(F2A1:number) { return F2A1; } 
+>F2 : Symbol(F2, Decl(optionalParamArgsTest.ts, 43, 27))
+>F2A1 : Symbol(F2A1, Decl(optionalParamArgsTest.ts, 44, 12))
+>F2A1 : Symbol(F2A1, Decl(optionalParamArgsTest.ts, 44, 12))
+
+function F3(F3A1=0,F3A2=F3A1) {return F3A1 + F3A2; }
+>F3 : Symbol(F3, Decl(optionalParamArgsTest.ts, 44, 41))
+>F3A1 : Symbol(F3A1, Decl(optionalParamArgsTest.ts, 45, 12))
+>F3A2 : Symbol(F3A2, Decl(optionalParamArgsTest.ts, 45, 19))
+>F3A1 : Symbol(F3A1, Decl(optionalParamArgsTest.ts, 45, 12))
+>F3A1 : Symbol(F3A1, Decl(optionalParamArgsTest.ts, 45, 12))
+>F3A2 : Symbol(F3A2, Decl(optionalParamArgsTest.ts, 45, 19))
+
+function F4(F4A1:number,F4A2?:number) { return F4A1 + F4A2; }
+>F4 : Symbol(F4, Decl(optionalParamArgsTest.ts, 45, 52))
+>F4A1 : Symbol(F4A1, Decl(optionalParamArgsTest.ts, 46, 12))
+>F4A2 : Symbol(F4A2, Decl(optionalParamArgsTest.ts, 46, 24))
+>F4A1 : Symbol(F4A1, Decl(optionalParamArgsTest.ts, 46, 12))
+>F4A2 : Symbol(F4A2, Decl(optionalParamArgsTest.ts, 46, 24))
+
+var L1 = function() {return 0;}
+>L1 : Symbol(L1, Decl(optionalParamArgsTest.ts, 48, 3))
+
+var L2 = function (L2A1:number) { return L2A1; } 
+>L2 : Symbol(L2, Decl(optionalParamArgsTest.ts, 49, 3))
+>L2A1 : Symbol(L2A1, Decl(optionalParamArgsTest.ts, 49, 19))
+>L2A1 : Symbol(L2A1, Decl(optionalParamArgsTest.ts, 49, 19))
+
+var L3 = function (L3A1=0,L3A2=L3A1) {return L3A1 + L3A2; }
+>L3 : Symbol(L3, Decl(optionalParamArgsTest.ts, 50, 3))
+>L3A1 : Symbol(L3A1, Decl(optionalParamArgsTest.ts, 50, 19))
+>L3A2 : Symbol(L3A2, Decl(optionalParamArgsTest.ts, 50, 26))
+>L3A1 : Symbol(L3A1, Decl(optionalParamArgsTest.ts, 50, 19))
+>L3A1 : Symbol(L3A1, Decl(optionalParamArgsTest.ts, 50, 19))
+>L3A2 : Symbol(L3A2, Decl(optionalParamArgsTest.ts, 50, 26))
+
+var L4 = function (L4A1:number,L4A2?:number) { return L4A1 + L4A2; }
+>L4 : Symbol(L4, Decl(optionalParamArgsTest.ts, 51, 3))
+>L4A1 : Symbol(L4A1, Decl(optionalParamArgsTest.ts, 51, 19))
+>L4A2 : Symbol(L4A2, Decl(optionalParamArgsTest.ts, 51, 31))
+>L4A1 : Symbol(L4A1, Decl(optionalParamArgsTest.ts, 51, 19))
+>L4A2 : Symbol(L4A2, Decl(optionalParamArgsTest.ts, 51, 31))
+
+var c1o1:C1 = new C1(5);
+>c1o1 : Symbol(c1o1, Decl(optionalParamArgsTest.ts, 53, 3))
+>C1 : Symbol(C1, Decl(optionalParamArgsTest.ts, 13, 1))
+>C1 : Symbol(C1, Decl(optionalParamArgsTest.ts, 13, 1))
+
+var i1o1:I1 = new C1(5);
+>i1o1 : Symbol(i1o1, Decl(optionalParamArgsTest.ts, 54, 3))
+>I1 : Symbol(I1, Decl(optionalParamArgsTest.ts, 0, 0))
+>C1 : Symbol(C1, Decl(optionalParamArgsTest.ts, 13, 1))
+
+// Valid
+c1o1.C1M1();
+>c1o1.C1M1 : Symbol(C1.C1M1, Decl(optionalParamArgsTest.ts, 18, 24))
+>c1o1 : Symbol(c1o1, Decl(optionalParamArgsTest.ts, 53, 3))
+>C1M1 : Symbol(C1.C1M1, Decl(optionalParamArgsTest.ts, 18, 24))
+
+var f1v1=F1();
+>f1v1 : Symbol(f1v1, Decl(optionalParamArgsTest.ts, 57, 3))
+>F1 : Symbol(F1, Decl(optionalParamArgsTest.ts, 40, 1))
+
+var l1v1=L1();
+>l1v1 : Symbol(l1v1, Decl(optionalParamArgsTest.ts, 58, 3))
+>L1 : Symbol(L1, Decl(optionalParamArgsTest.ts, 48, 3))
+
+// Valid
+c1o1.C1M2(1);
+>c1o1.C1M2 : Symbol(C1.C1M2, Decl(optionalParamArgsTest.ts, 20, 31))
+>c1o1 : Symbol(c1o1, Decl(optionalParamArgsTest.ts, 53, 3))
+>C1M2 : Symbol(C1.C1M2, Decl(optionalParamArgsTest.ts, 20, 31))
+
+i1o1.C1M2(1);
+>i1o1.C1M2 : Symbol(I1.C1M2, Decl(optionalParamArgsTest.ts, 9, 18))
+>i1o1 : Symbol(i1o1, Decl(optionalParamArgsTest.ts, 54, 3))
+>C1M2 : Symbol(I1.C1M2, Decl(optionalParamArgsTest.ts, 9, 18))
+
+var f2v1=F2(1);
+>f2v1 : Symbol(f2v1, Decl(optionalParamArgsTest.ts, 63, 3))
+>F2 : Symbol(F2, Decl(optionalParamArgsTest.ts, 43, 27))
+
+var l2v1=L2(1);
+>l2v1 : Symbol(l2v1, Decl(optionalParamArgsTest.ts, 64, 3))
+>L2 : Symbol(L2, Decl(optionalParamArgsTest.ts, 49, 3))
+
+// Valid
+c1o1.C1M3(1,2);
+>c1o1.C1M3 : Symbol(C1.C1M3, Decl(optionalParamArgsTest.ts, 22, 49))
+>c1o1 : Symbol(c1o1, Decl(optionalParamArgsTest.ts, 53, 3))
+>C1M3 : Symbol(C1.C1M3, Decl(optionalParamArgsTest.ts, 22, 49))
+
+i1o1.C1M3(1,2);
+>i1o1.C1M3 : Symbol(I1.C1M3, Decl(optionalParamArgsTest.ts, 10, 31))
+>i1o1 : Symbol(i1o1, Decl(optionalParamArgsTest.ts, 54, 3))
+>C1M3 : Symbol(I1.C1M3, Decl(optionalParamArgsTest.ts, 10, 31))
+
+var f3v1=F3(1,2);
+>f3v1 : Symbol(f3v1, Decl(optionalParamArgsTest.ts, 69, 3))
+>F3 : Symbol(F3, Decl(optionalParamArgsTest.ts, 44, 41))
+
+var l3v1=L3(1,2);
+>l3v1 : Symbol(l3v1, Decl(optionalParamArgsTest.ts, 70, 3))
+>L3 : Symbol(L3, Decl(optionalParamArgsTest.ts, 50, 3))
+
+// Valid
+c1o1.C1M4(1,2);
+>c1o1.C1M4 : Symbol(C1.C1M4, Decl(optionalParamArgsTest.ts, 25, 80))
+>c1o1 : Symbol(c1o1, Decl(optionalParamArgsTest.ts, 53, 3))
+>C1M4 : Symbol(C1.C1M4, Decl(optionalParamArgsTest.ts, 25, 80))
+
+i1o1.C1M4(1,2);
+>i1o1.C1M4 : Symbol(I1.C1M4, Decl(optionalParamArgsTest.ts, 11, 47))
+>i1o1 : Symbol(i1o1, Decl(optionalParamArgsTest.ts, 54, 3))
+>C1M4 : Symbol(I1.C1M4, Decl(optionalParamArgsTest.ts, 11, 47))
+
+var f4v1=F4(1,2);
+>f4v1 : Symbol(f4v1, Decl(optionalParamArgsTest.ts, 75, 3))
+>F4 : Symbol(F4, Decl(optionalParamArgsTest.ts, 45, 52))
+
+var l4v1=L4(1,2);
+>l4v1 : Symbol(l4v1, Decl(optionalParamArgsTest.ts, 76, 3))
+>L4 : Symbol(L4, Decl(optionalParamArgsTest.ts, 51, 3))
+
+// Valid
+c1o1.C1M3(1);
+>c1o1.C1M3 : Symbol(C1.C1M3, Decl(optionalParamArgsTest.ts, 22, 49))
+>c1o1 : Symbol(c1o1, Decl(optionalParamArgsTest.ts, 53, 3))
+>C1M3 : Symbol(C1.C1M3, Decl(optionalParamArgsTest.ts, 22, 49))
+
+i1o1.C1M3(1);
+>i1o1.C1M3 : Symbol(I1.C1M3, Decl(optionalParamArgsTest.ts, 10, 31))
+>i1o1 : Symbol(i1o1, Decl(optionalParamArgsTest.ts, 54, 3))
+>C1M3 : Symbol(I1.C1M3, Decl(optionalParamArgsTest.ts, 10, 31))
+
+var f3v2=F3(1);
+>f3v2 : Symbol(f3v2, Decl(optionalParamArgsTest.ts, 81, 3))
+>F3 : Symbol(F3, Decl(optionalParamArgsTest.ts, 44, 41))
+
+var l3v2=L3(1);
+>l3v2 : Symbol(l3v2, Decl(optionalParamArgsTest.ts, 82, 3))
+>L3 : Symbol(L3, Decl(optionalParamArgsTest.ts, 50, 3))
+
+// Valid 
+c1o1.C1M3();
+>c1o1.C1M3 : Symbol(C1.C1M3, Decl(optionalParamArgsTest.ts, 22, 49))
+>c1o1 : Symbol(c1o1, Decl(optionalParamArgsTest.ts, 53, 3))
+>C1M3 : Symbol(C1.C1M3, Decl(optionalParamArgsTest.ts, 22, 49))
+
+i1o1.C1M3();
+>i1o1.C1M3 : Symbol(I1.C1M3, Decl(optionalParamArgsTest.ts, 10, 31))
+>i1o1 : Symbol(i1o1, Decl(optionalParamArgsTest.ts, 54, 3))
+>C1M3 : Symbol(I1.C1M3, Decl(optionalParamArgsTest.ts, 10, 31))
+
+var f3v3=F3();
+>f3v3 : Symbol(f3v3, Decl(optionalParamArgsTest.ts, 87, 3))
+>F3 : Symbol(F3, Decl(optionalParamArgsTest.ts, 44, 41))
+
+var l3v3=L3();
+>l3v3 : Symbol(l3v3, Decl(optionalParamArgsTest.ts, 88, 3))
+>L3 : Symbol(L3, Decl(optionalParamArgsTest.ts, 50, 3))
+
+// Valid
+c1o1.C1M4(1);
+>c1o1.C1M4 : Symbol(C1.C1M4, Decl(optionalParamArgsTest.ts, 25, 80))
+>c1o1 : Symbol(c1o1, Decl(optionalParamArgsTest.ts, 53, 3))
+>C1M4 : Symbol(C1.C1M4, Decl(optionalParamArgsTest.ts, 25, 80))
+
+i1o1.C1M4(1);
+>i1o1.C1M4 : Symbol(I1.C1M4, Decl(optionalParamArgsTest.ts, 11, 47))
+>i1o1 : Symbol(i1o1, Decl(optionalParamArgsTest.ts, 54, 3))
+>C1M4 : Symbol(I1.C1M4, Decl(optionalParamArgsTest.ts, 11, 47))
+
+var f4v2=F4(1);
+>f4v2 : Symbol(f4v2, Decl(optionalParamArgsTest.ts, 93, 3))
+>F4 : Symbol(F4, Decl(optionalParamArgsTest.ts, 45, 52))
+
+var l4v2=L4(1);
+>l4v2 : Symbol(l4v2, Decl(optionalParamArgsTest.ts, 94, 3))
+>L4 : Symbol(L4, Decl(optionalParamArgsTest.ts, 51, 3))
+
+// Negative tests - we expect these cases to fail
+c1o1.C1M1(1);
+>c1o1.C1M1 : Symbol(C1.C1M1, Decl(optionalParamArgsTest.ts, 18, 24))
+>c1o1 : Symbol(c1o1, Decl(optionalParamArgsTest.ts, 53, 3))
+>C1M1 : Symbol(C1.C1M1, Decl(optionalParamArgsTest.ts, 18, 24))
+
+i1o1.C1M1(1);
+>i1o1.C1M1 : Symbol(I1.C1M1, Decl(optionalParamArgsTest.ts, 8, 14))
+>i1o1 : Symbol(i1o1, Decl(optionalParamArgsTest.ts, 54, 3))
+>C1M1 : Symbol(I1.C1M1, Decl(optionalParamArgsTest.ts, 8, 14))
+
+F1(1);
+>F1 : Symbol(F1, Decl(optionalParamArgsTest.ts, 40, 1))
+
+L1(1);
+>L1 : Symbol(L1, Decl(optionalParamArgsTest.ts, 48, 3))
+
+c1o1.C1M2();
+>c1o1.C1M2 : Symbol(C1.C1M2, Decl(optionalParamArgsTest.ts, 20, 31))
+>c1o1 : Symbol(c1o1, Decl(optionalParamArgsTest.ts, 53, 3))
+>C1M2 : Symbol(C1.C1M2, Decl(optionalParamArgsTest.ts, 20, 31))
+
+i1o1.C1M2();
+>i1o1.C1M2 : Symbol(I1.C1M2, Decl(optionalParamArgsTest.ts, 9, 18))
+>i1o1 : Symbol(i1o1, Decl(optionalParamArgsTest.ts, 54, 3))
+>C1M2 : Symbol(I1.C1M2, Decl(optionalParamArgsTest.ts, 9, 18))
+
+F2();
+>F2 : Symbol(F2, Decl(optionalParamArgsTest.ts, 43, 27))
+
+L2();
+>L2 : Symbol(L2, Decl(optionalParamArgsTest.ts, 49, 3))
+
+c1o1.C1M2(1,2);
+>c1o1.C1M2 : Symbol(C1.C1M2, Decl(optionalParamArgsTest.ts, 20, 31))
+>c1o1 : Symbol(c1o1, Decl(optionalParamArgsTest.ts, 53, 3))
+>C1M2 : Symbol(C1.C1M2, Decl(optionalParamArgsTest.ts, 20, 31))
+
+i1o1.C1M2(1,2);
+>i1o1.C1M2 : Symbol(I1.C1M2, Decl(optionalParamArgsTest.ts, 9, 18))
+>i1o1 : Symbol(i1o1, Decl(optionalParamArgsTest.ts, 54, 3))
+>C1M2 : Symbol(I1.C1M2, Decl(optionalParamArgsTest.ts, 9, 18))
+
+F2(1,2);
+>F2 : Symbol(F2, Decl(optionalParamArgsTest.ts, 43, 27))
+
+L2(1,2);
+>L2 : Symbol(L2, Decl(optionalParamArgsTest.ts, 49, 3))
+
+c1o1.C1M3(1,2,3);
+>c1o1.C1M3 : Symbol(C1.C1M3, Decl(optionalParamArgsTest.ts, 22, 49))
+>c1o1 : Symbol(c1o1, Decl(optionalParamArgsTest.ts, 53, 3))
+>C1M3 : Symbol(C1.C1M3, Decl(optionalParamArgsTest.ts, 22, 49))
+
+i1o1.C1M3(1,2,3);
+>i1o1.C1M3 : Symbol(I1.C1M3, Decl(optionalParamArgsTest.ts, 10, 31))
+>i1o1 : Symbol(i1o1, Decl(optionalParamArgsTest.ts, 54, 3))
+>C1M3 : Symbol(I1.C1M3, Decl(optionalParamArgsTest.ts, 10, 31))
+
+F3(1,2,3);
+>F3 : Symbol(F3, Decl(optionalParamArgsTest.ts, 44, 41))
+
+L3(1,2,3);
+>L3 : Symbol(L3, Decl(optionalParamArgsTest.ts, 50, 3))
+
+c1o1.C1M4();
+>c1o1.C1M4 : Symbol(C1.C1M4, Decl(optionalParamArgsTest.ts, 25, 80))
+>c1o1 : Symbol(c1o1, Decl(optionalParamArgsTest.ts, 53, 3))
+>C1M4 : Symbol(C1.C1M4, Decl(optionalParamArgsTest.ts, 25, 80))
+
+i1o1.C1M4();
+>i1o1.C1M4 : Symbol(I1.C1M4, Decl(optionalParamArgsTest.ts, 11, 47))
+>i1o1 : Symbol(i1o1, Decl(optionalParamArgsTest.ts, 54, 3))
+>C1M4 : Symbol(I1.C1M4, Decl(optionalParamArgsTest.ts, 11, 47))
+
+F4();
+>F4 : Symbol(F4, Decl(optionalParamArgsTest.ts, 45, 52))
+
+L4();
+>L4 : Symbol(L4, Decl(optionalParamArgsTest.ts, 51, 3))
+
+function fnOpt1(id: number, children: number[] = [], expectedPath: number[] = [], isRoot?: boolean): void {}
+>fnOpt1 : Symbol(fnOpt1, Decl(optionalParamArgsTest.ts, 116, 5))
+>id : Symbol(id, Decl(optionalParamArgsTest.ts, 118, 16))
+>children : Symbol(children, Decl(optionalParamArgsTest.ts, 118, 27))
+>expectedPath : Symbol(expectedPath, Decl(optionalParamArgsTest.ts, 118, 52))
+>isRoot : Symbol(isRoot, Decl(optionalParamArgsTest.ts, 118, 81))
+
+function fnOpt2(id: number, children?: number[], expectedPath?: number[], isRoot?: boolean): void {}
+>fnOpt2 : Symbol(fnOpt2, Decl(optionalParamArgsTest.ts, 118, 108))
+>id : Symbol(id, Decl(optionalParamArgsTest.ts, 119, 16))
+>children : Symbol(children, Decl(optionalParamArgsTest.ts, 119, 27))
+>expectedPath : Symbol(expectedPath, Decl(optionalParamArgsTest.ts, 119, 48))
+>isRoot : Symbol(isRoot, Decl(optionalParamArgsTest.ts, 119, 73))
+
+fnOpt1(1, [2, 3], [1], true);
+>fnOpt1 : Symbol(fnOpt1, Decl(optionalParamArgsTest.ts, 116, 5))
+
+fnOpt2(1, [2, 3], [1], true);
+>fnOpt2 : Symbol(fnOpt2, Decl(optionalParamArgsTest.ts, 118, 108))
+

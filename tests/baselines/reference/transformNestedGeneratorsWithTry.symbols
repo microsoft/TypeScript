@@ -36,12 +36,12 @@ declare module "bluebird" {
     type Bluebird<T> = Promise<T>;
 >Bluebird : Symbol(Bluebird, Decl(bluebird.d.ts, 0, 27), Decl(bluebird.d.ts, 2, 9))
 >T : Symbol(T, Decl(bluebird.d.ts, 1, 18))
->Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(bluebird.d.ts, 1, 18))
 
     const Bluebird: typeof Promise;
 >Bluebird : Symbol(Bluebird, Decl(bluebird.d.ts, 0, 27), Decl(bluebird.d.ts, 2, 9))
->Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     export = Bluebird;
 >Bluebird : Symbol(Bluebird, Decl(bluebird.d.ts, 0, 27), Decl(bluebird.d.ts, 2, 9))

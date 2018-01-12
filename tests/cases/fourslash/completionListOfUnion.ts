@@ -16,5 +16,5 @@ verify.completionListContains("b", "(property) b: number | boolean");
 verify.completionListContains("c", "(property) c: string");
 
 goTo.marker("f");
-verify.completionListContains("a", "(property) a: number");
+verify.completionListContains("a", "(property) I.a: number");
 // Also contains array members

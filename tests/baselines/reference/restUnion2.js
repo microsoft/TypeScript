@@ -9,14 +9,6 @@ var rest3: { n: number };
 var {...rest3 } = nullUnion;
 
 
-declare const nullAndUndefinedUnion: null | undefined;
-var rest4: { };
-var {...rest4 } = nullAndUndefinedUnion;
-
-declare const unionWithIntersection: ({ n: number } & { s: string }) & undefined | null;
-var rest5: { n: number, s: string };
-var {...rest5 } = unionWithIntersection;
-
 //// [restUnion2.js]
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
@@ -31,7 +23,3 @@ var rest2;
 var rest2 = __rest(undefinedUnion, []);
 var rest3;
 var rest3 = __rest(nullUnion, []);
-var rest4;
-var rest4 = __rest(nullAndUndefinedUnion, []);
-var rest5;
-var rest5 = __rest(unionWithIntersection, []);

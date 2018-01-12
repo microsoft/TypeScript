@@ -9,5 +9,6 @@ goTo.marker("1");
 verify.not.completionListContains("a");
 
 goTo.marker("2");
+verify.not.completionListContains("b");
+edit.insert("typeof ");
 verify.completionListContains("b");
-

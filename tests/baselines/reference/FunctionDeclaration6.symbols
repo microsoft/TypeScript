@@ -1,0 +1,8 @@
+=== tests/cases/compiler/FunctionDeclaration6.ts ===
+{
+    function foo();
+>foo : Symbol(foo, Decl(FunctionDeclaration6.ts, 0, 1))
+
+    function bar() { }
+>bar : Symbol(bar, Decl(FunctionDeclaration6.ts, 1, 19))
+}

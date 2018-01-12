@@ -1,0 +1,54 @@
+=== tests/cases/compiler/exportEqualErrorType_1.ts ===
+///<reference path='exportEqualErrorType_0.ts'/>
+import connect = require('exportEqualErrorType_0');
+>connect : { (): connect.connectExport; foo: Date; }
+
+connect().use(connect.static('foo')); // Error  1      The property 'static' does not exist on value of type ''.
+>connect().use(connect.static('foo')) : connect.connectExport
+>connect().use : (mod: connect.connectModule) => connect.connectExport
+>connect() : connect.connectExport
+>connect : { (): connect.connectExport; foo: Date; }
+>use : (mod: connect.connectModule) => connect.connectExport
+>connect.static('foo') : any
+>connect.static : any
+>connect : { (): connect.connectExport; foo: Date; }
+>static : any
+>'foo' : "foo"
+
+=== tests/cases/compiler/exportEqualErrorType_0.ts ===
+module server {
+>server : { (): connectExport; foo: Date; }
+
+    export interface connectModule {
+>connectModule : connectModule
+
+        (res, req, next): void;
+>res : any
+>req : any
+>next : any
+    }
+    export interface connectExport {
+>connectExport : connectExport
+
+        use: (mod: connectModule) => connectExport;
+>use : (mod: connectModule) => connectExport
+>mod : connectModule
+>connectModule : connectModule
+>connectExport : connectExport
+    }
+}
+var server: {
+>server : { (): server.connectExport; foo: Date; }
+
+    (): server.connectExport;
+>server : any
+>connectExport : server.connectExport
+
+    foo: Date;
+>foo : Date
+>Date : Date
+
+};
+export = server;
+>server : { (): server.connectExport; foo: Date; }
+ 

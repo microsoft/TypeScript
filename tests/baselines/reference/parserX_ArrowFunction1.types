@@ -1,0 +1,8 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrowFunctions/parserX_ArrowFunction1.ts ===
+var v = (a: ) => {
+>v : (a: any) => void
+>(a: ) => {   } : (a: any) => void
+>a : any
+> : No type information available!
+   
+};

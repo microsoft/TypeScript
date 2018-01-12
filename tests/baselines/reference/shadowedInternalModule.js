@@ -45,7 +45,7 @@ var B;
 })(B || (B = {}));
 var X;
 (function (X) {
-    var Y = (function () {
+    var Y = /** @class */ (function () {
         function Y() {
         }
         return Y;

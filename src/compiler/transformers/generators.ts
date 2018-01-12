@@ -164,12 +164,11 @@ namespace ts {
     }
 
     // A generated code block
-    interface CodeBlock {
-        kind: CodeBlockKind;
-    }
+    type CodeBlock = | ExceptionBlock | LabeledBlock | SwitchBlock | LoopBlock | WithBlock;
 
     // a generated exception block, used for 'try' statements
-    interface ExceptionBlock extends CodeBlock {
+    interface ExceptionBlock {
+        kind: CodeBlockKind.Exception;
         state: ExceptionBlockState;
         startLabel: Label;
         catchVariable?: Identifier;
@@ -179,27 +178,31 @@ namespace ts {
     }
 
     // A generated code that tracks the target for 'break' statements in a LabeledStatement.
-    interface LabeledBlock extends CodeBlock {
+    interface LabeledBlock {
+        kind: CodeBlockKind.Labeled;
         labelText: string;
         isScript: boolean;
         breakLabel: Label;
     }
 
     // a generated block that tracks the target for 'break' statements in a 'switch' statement
-    interface SwitchBlock extends CodeBlock {
+    interface SwitchBlock {
+        kind: CodeBlockKind.Switch;
         isScript: boolean;
         breakLabel: Label;
     }
 
     // a generated block that tracks the targets for 'break' and 'continue' statements, used for iteration statements
-    interface LoopBlock extends CodeBlock {
+    interface LoopBlock {
+        kind: CodeBlockKind.Loop;
         continueLabel: Label;
         isScript: boolean;
         breakLabel: Label;
     }
 
     // a generated block associated with a 'with' statement
-    interface WithBlock extends CodeBlock {
+    interface WithBlock {
+        kind: CodeBlockKind.With;
         expression: Identifier;
         startLabel: Label;
         endLabel: Label;
@@ -241,7 +244,6 @@ namespace ts {
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onSubstituteNode = onSubstituteNode;
 
-        let currentSourceFile: SourceFile;
         let renamedCatchVariables: Map<boolean>;
         let renamedCatchVariableDeclarations: Identifier[];
 
@@ -297,12 +299,9 @@ namespace ts {
                 return node;
             }
 
-            currentSourceFile = node;
 
             const visited = visitEachChild(node, visitor, context);
             addEmitHelpers(visited, context.readEmitHelpers());
-
-            currentSourceFile = undefined;
             return visited;
         }
 
@@ -1078,7 +1077,7 @@ namespace ts {
                 const visited = visitNode(expression, visitor, isExpression);
                 if (visited) {
                     if (multiLine) {
-                        visited.startsOnNewLine = true;
+                        startOnNewLine(visited);
                     }
                     expressions.push(visited);
                 }
@@ -1113,7 +1112,7 @@ namespace ts {
         }
 
         function visitCallExpression(node: CallExpression) {
-            if (forEach(node.arguments, containsYield)) {
+            if (!isImportCall(node) && forEach(node.arguments, containsYield)) {
                 // [source]
                 //      a.b(1, yield, 2);
                 //
@@ -1124,7 +1123,6 @@ namespace ts {
                 //  .yield resumeLabel
                 //  .mark resumeLabel
                 //      _b.apply(_a, _c.concat([%sent%, 2]));
-
                 const { target, thisArg } = createCallBinding(node.expression, hoistVariableDeclaration, languageVersion, /*cacheIdentifiers*/ true);
                 return setOriginalNode(
                     createFunctionApply(
@@ -1176,7 +1174,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function transformAndEmitStatements(statements: Statement[], start = 0) {
+        function transformAndEmitStatements(statements: ReadonlyArray<Statement>, start = 0) {
             const numStatements = statements.length;
             for (let i = start; i < numStatements; i++) {
                 transformAndEmitStatement(statements[i]);
@@ -1635,14 +1633,19 @@ namespace ts {
         }
 
         function transformAndEmitContinueStatement(node: ContinueStatement): void {
-            const label = findContinueTarget(node.label ? node.label.text : undefined);
-            Debug.assert(label > 0, "Expected continue statment to point to a valid Label.");
-            emitBreak(label, /*location*/ node);
+            const label = findContinueTarget(node.label ? idText(node.label) : undefined);
+            if (label > 0) {
+                emitBreak(label, /*location*/ node);
+            }
+            else {
+                // invalid continue without a containing loop. Leave the node as is, per #17875.
+                emitStatement(node);
+            }
         }
 
         function visitContinueStatement(node: ContinueStatement): Statement {
             if (inStatementContainingYield) {
-                const label = findContinueTarget(node.label && node.label.text);
+                const label = findContinueTarget(node.label && idText(node.label));
                 if (label > 0) {
                     return createInlineBreak(label, /*location*/ node);
                 }
@@ -1652,14 +1655,19 @@ namespace ts {
         }
 
         function transformAndEmitBreakStatement(node: BreakStatement): void {
-            const label = findBreakTarget(node.label ? node.label.text : undefined);
-            Debug.assert(label > 0, "Expected break statment to point to a valid Label.");
-            emitBreak(label, /*location*/ node);
+            const label = findBreakTarget(node.label ? idText(node.label) : undefined);
+            if (label > 0) {
+                emitBreak(label, /*location*/ node);
+            }
+            else {
+                // invalid break without a containing loop, switch, or labeled statement. Leave the node as is, per #17875.
+                emitStatement(node);
+            }
         }
 
         function visitBreakStatement(node: BreakStatement): Statement {
             if (inStatementContainingYield) {
-                const label = findBreakTarget(node.label && node.label.text);
+                const label = findBreakTarget(node.label && idText(node.label));
                 if (label > 0) {
                     return createInlineBreak(label, /*location*/ node);
                 }
@@ -1838,7 +1846,7 @@ namespace ts {
                 //      /*body*/
                 //  .endlabeled
                 //  .mark endLabel
-                beginLabeledBlock(node.label.text);
+                beginLabeledBlock(idText(node.label));
                 transformAndEmitEmbeddedStatement(node.statement);
                 endLabeledBlock();
             }
@@ -1849,7 +1857,7 @@ namespace ts {
 
         function visitLabeledStatement(node: LabeledStatement) {
             if (inStatementContainingYield) {
-                beginScriptLabeledBlock(node.label.text);
+                beginScriptLabeledBlock(idText(node.label));
             }
 
             node = visitEachChild(node, visitor, context);
@@ -1950,7 +1958,7 @@ namespace ts {
         }
 
         function substituteExpressionIdentifier(node: Identifier) {
-            if (!isGeneratedIdentifier(node) && renamedCatchVariables && renamedCatchVariables.has(node.text)) {
+            if (!isGeneratedIdentifier(node) && renamedCatchVariables && renamedCatchVariables.has(idText(node))) {
                 const original = getOriginalNode(node);
                 if (isIdentifier(original) && original.parent) {
                     const declaration = resolver.getReferencedValueDeclaration(original);
@@ -2070,7 +2078,7 @@ namespace ts {
             const startLabel = defineLabel();
             const endLabel = defineLabel();
             markLabel(startLabel);
-            beginBlock(<WithBlock>{
+            beginBlock({
                 kind: CodeBlockKind.With,
                 expression,
                 startLabel,
@@ -2087,10 +2095,6 @@ namespace ts {
             markLabel(block.endLabel);
         }
 
-        function isWithBlock(block: CodeBlock): block is WithBlock {
-            return block.kind === CodeBlockKind.With;
-        }
-
         /**
          * Begins a code block for a generated `try` statement.
          */
@@ -2098,7 +2102,7 @@ namespace ts {
             const startLabel = defineLabel();
             const endLabel = defineLabel();
             markLabel(startLabel);
-            beginBlock(<ExceptionBlock>{
+            beginBlock({
                 kind: CodeBlockKind.Exception,
                 state: ExceptionBlockState.Try,
                 startLabel,
@@ -2123,7 +2127,7 @@ namespace ts {
                 hoistVariableDeclaration(variable.name);
             }
             else {
-                const text = (<Identifier>variable.name).text;
+                const text = idText(<Identifier>variable.name);
                 name = declareLocal(text);
                 if (!renamedCatchVariables) {
                     renamedCatchVariables = createMap<boolean>();
@@ -2188,10 +2192,6 @@ namespace ts {
             exception.state = ExceptionBlockState.Done;
         }
 
-        function isExceptionBlock(block: CodeBlock): block is ExceptionBlock {
-            return block.kind === CodeBlockKind.Exception;
-        }
-
         /**
          * Begins a code block that supports `break` or `continue` statements that are defined in
          * the source tree and not from generated code.
@@ -2199,7 +2199,7 @@ namespace ts {
          * @param labelText Names from containing labeled statements.
          */
         function beginScriptLoopBlock(): void {
-            beginBlock(<LoopBlock>{
+            beginBlock({
                 kind: CodeBlockKind.Loop,
                 isScript: true,
                 breakLabel: -1,
@@ -2217,11 +2217,11 @@ namespace ts {
          */
         function beginLoopBlock(continueLabel: Label): Label {
             const breakLabel = defineLabel();
-            beginBlock(<LoopBlock>{
+            beginBlock({
                 kind: CodeBlockKind.Loop,
                 isScript: false,
-                breakLabel: breakLabel,
-                continueLabel: continueLabel
+                breakLabel,
+                continueLabel,
             });
             return breakLabel;
         }
@@ -2245,7 +2245,7 @@ namespace ts {
          *
          */
         function beginScriptSwitchBlock(): void {
-            beginBlock(<SwitchBlock>{
+            beginBlock({
                 kind: CodeBlockKind.Switch,
                 isScript: true,
                 breakLabel: -1
@@ -2259,10 +2259,10 @@ namespace ts {
          */
         function beginSwitchBlock(): Label {
             const breakLabel = defineLabel();
-            beginBlock(<SwitchBlock>{
+            beginBlock({
                 kind: CodeBlockKind.Switch,
                 isScript: false,
-                breakLabel: breakLabel
+                breakLabel,
             });
             return breakLabel;
         }
@@ -2280,7 +2280,7 @@ namespace ts {
         }
 
         function beginScriptLabeledBlock(labelText: string) {
-            beginBlock(<LabeledBlock>{
+            beginBlock({
                 kind: CodeBlockKind.Labeled,
                 isScript: true,
                 labelText,
@@ -2290,7 +2290,7 @@ namespace ts {
 
         function beginLabeledBlock(labelText: string) {
             const breakLabel = defineLabel();
-            beginBlock(<LabeledBlock>{
+            beginBlock({
                 kind: CodeBlockKind.Labeled,
                 isScript: false,
                 labelText,
@@ -2356,27 +2356,27 @@ namespace ts {
          * @param labelText An optional name of a containing labeled statement.
          */
         function findBreakTarget(labelText?: string): Label {
-            Debug.assert(blocks !== undefined);
-            if (labelText) {
-                for (let i = blockStack.length - 1; i >= 0; i--) {
-                    const block = blockStack[i];
-                    if (supportsLabeledBreakOrContinue(block) && block.labelText === labelText) {
-                        return block.breakLabel;
+            if (blockStack) {
+                if (labelText) {
+                    for (let i = blockStack.length - 1; i >= 0; i--) {
+                        const block = blockStack[i];
+                        if (supportsLabeledBreakOrContinue(block) && block.labelText === labelText) {
+                            return block.breakLabel;
+                        }
+                        else if (supportsUnlabeledBreak(block) && hasImmediateContainingLabeledBlock(labelText, i - 1)) {
+                            return block.breakLabel;
+                        }
                     }
-                    else if (supportsUnlabeledBreak(block) && hasImmediateContainingLabeledBlock(labelText, i - 1)) {
-                        return block.breakLabel;
+                }
+                else {
+                    for (let i = blockStack.length - 1; i >= 0; i--) {
+                        const block = blockStack[i];
+                        if (supportsUnlabeledBreak(block)) {
+                            return block.breakLabel;
+                        }
                     }
                 }
             }
-            else {
-                for (let i = blockStack.length - 1; i >= 0; i--) {
-                    const block = blockStack[i];
-                    if (supportsUnlabeledBreak(block)) {
-                        return block.breakLabel;
-                    }
-                }
-            }
-
             return 0;
         }
 
@@ -2386,24 +2386,24 @@ namespace ts {
          * @param labelText An optional name of a containing labeled statement.
          */
         function findContinueTarget(labelText?: string): Label {
-            Debug.assert(blocks !== undefined);
-            if (labelText) {
-                for (let i = blockStack.length - 1; i >= 0; i--) {
-                    const block = blockStack[i];
-                    if (supportsUnlabeledContinue(block) && hasImmediateContainingLabeledBlock(labelText, i - 1)) {
-                        return block.continueLabel;
+            if (blockStack) {
+                if (labelText) {
+                    for (let i = blockStack.length - 1; i >= 0; i--) {
+                        const block = blockStack[i];
+                        if (supportsUnlabeledContinue(block) && hasImmediateContainingLabeledBlock(labelText, i - 1)) {
+                            return block.continueLabel;
+                        }
+                    }
+                }
+                else {
+                    for (let i = blockStack.length - 1; i >= 0; i--) {
+                        const block = blockStack[i];
+                        if (supportsUnlabeledContinue(block)) {
+                            return block.continueLabel;
+                        }
                     }
                 }
             }
-            else {
-                for (let i = blockStack.length - 1; i >= 0; i--) {
-                    const block = blockStack[i];
-                    if (supportsUnlabeledContinue(block)) {
-                        return block.continueLabel;
-                    }
-                }
-            }
-
             return 0;
         }
 
@@ -2448,7 +2448,7 @@ namespace ts {
          * @param location An optional source map location for the statement.
          */
         function createInlineBreak(label: Label, location?: TextRange): ReturnStatement {
-            Debug.assert(label > 0, `Invalid label: ${label}`);
+            Debug.assertLessThan(0, label, "Invalid label");
             return setTextRange(
                 createReturn(
                     createArrayLiteral([
@@ -2683,8 +2683,7 @@ namespace ts {
             if (clauses) {
                 const labelExpression = createPropertyAccess(state, "label");
                 const switchStatement = createSwitch(labelExpression, createCaseBlock(clauses));
-                switchStatement.startsOnNewLine = true;
-                return [switchStatement];
+                return [startOnNewLine(switchStatement)];
             }
 
             if (statements) {
@@ -2878,34 +2877,37 @@ namespace ts {
                 for (; blockIndex < blockActions.length && blockOffsets[blockIndex] <= operationIndex; blockIndex++) {
                     const block = blocks[blockIndex];
                     const blockAction = blockActions[blockIndex];
-                    if (isExceptionBlock(block)) {
-                        if (blockAction === BlockAction.Open) {
-                            if (!exceptionBlockStack) {
-                                exceptionBlockStack = [];
-                            }
+                    switch (block.kind) {
+                        case CodeBlockKind.Exception:
+                            if (blockAction === BlockAction.Open) {
+                                if (!exceptionBlockStack) {
+                                    exceptionBlockStack = [];
+                                }
 
-                            if (!statements) {
-                                statements = [];
-                            }
+                                if (!statements) {
+                                    statements = [];
+                                }
 
-                            exceptionBlockStack.push(currentExceptionBlock);
-                            currentExceptionBlock = block;
-                        }
-                        else if (blockAction === BlockAction.Close) {
-                            currentExceptionBlock = exceptionBlockStack.pop();
-                        }
-                    }
-                    else if (isWithBlock(block)) {
-                        if (blockAction === BlockAction.Open) {
-                            if (!withBlockStack) {
-                                withBlockStack = [];
+                                exceptionBlockStack.push(currentExceptionBlock);
+                                currentExceptionBlock = block;
                             }
+                            else if (blockAction === BlockAction.Close) {
+                                currentExceptionBlock = exceptionBlockStack.pop();
+                            }
+                            break;
+                        case CodeBlockKind.With:
+                            if (blockAction === BlockAction.Open) {
+                                if (!withBlockStack) {
+                                    withBlockStack = [];
+                                }
 
-                            withBlockStack.push(block);
-                        }
-                        else if (blockAction === BlockAction.Close) {
-                            withBlockStack.pop();
-                        }
+                                withBlockStack.push(block);
+                            }
+                            else if (blockAction === BlockAction.Close) {
+                                withBlockStack.pop();
+                            }
+                            break;
+                        // default: do nothing
                     }
                 }
             }
@@ -3188,8 +3190,8 @@ namespace ts {
     // `throw` methods that step through the generator when invoked.
     //
     // parameters:
-    //  thisArg  The value to use as the `this` binding for the transformed generator body.
-    //  body     A function that acts as the transformed generator body.
+    //  @param thisArg  The value to use as the `this` binding for the transformed generator body.
+    //  @param body     A function that acts as the transformed generator body.
     //
     // variables:
     //  _       Persistent state for the generator that is shared between the helper and the

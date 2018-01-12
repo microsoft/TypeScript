@@ -1,0 +1,30 @@
+=== tests/cases/compiler/overloadsWithProvisionalErrors.ts ===
+var func: {
+>func : Symbol(func, Decl(overloadsWithProvisionalErrors.ts, 0, 3))
+
+    (s: string): number;
+>s : Symbol(s, Decl(overloadsWithProvisionalErrors.ts, 1, 5))
+
+    (lambda: (s: string) => { a: number; b: number }): string;
+>lambda : Symbol(lambda, Decl(overloadsWithProvisionalErrors.ts, 2, 5))
+>s : Symbol(s, Decl(overloadsWithProvisionalErrors.ts, 2, 14))
+>a : Symbol(a, Decl(overloadsWithProvisionalErrors.ts, 2, 29))
+>b : Symbol(b, Decl(overloadsWithProvisionalErrors.ts, 2, 40))
+
+};
+
+func(s => ({})); // Error for no applicable overload (object type is missing a and b)
+>func : Symbol(func, Decl(overloadsWithProvisionalErrors.ts, 0, 3))
+>s : Symbol(s, Decl(overloadsWithProvisionalErrors.ts, 5, 5))
+
+func(s => ({ a: blah, b: 3 })); // Only error inside the function, but not outside (since it would be applicable if not for the provisional error)
+>func : Symbol(func, Decl(overloadsWithProvisionalErrors.ts, 0, 3))
+>s : Symbol(s, Decl(overloadsWithProvisionalErrors.ts, 6, 5))
+>a : Symbol(a, Decl(overloadsWithProvisionalErrors.ts, 6, 12))
+>b : Symbol(b, Decl(overloadsWithProvisionalErrors.ts, 6, 21))
+
+func(s => ({ a: blah })); // Two errors here, one for blah not being defined, and one for the overload since it would not be applicable anyway
+>func : Symbol(func, Decl(overloadsWithProvisionalErrors.ts, 0, 3))
+>s : Symbol(s, Decl(overloadsWithProvisionalErrors.ts, 7, 5))
+>a : Symbol(a, Decl(overloadsWithProvisionalErrors.ts, 7, 12))
+

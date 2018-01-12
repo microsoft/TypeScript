@@ -10,7 +10,7 @@ class Foo {
 
 
 //// [privateVisibles.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
         this.pvar = 0;
         var n = this.pvar;

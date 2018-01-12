@@ -8,10 +8,6 @@ declare const nullUnion: { b: number } | null;
 >b : number
 >null : null
 
-declare const nullAndUndefinedUnion: null | undefined;
->nullAndUndefinedUnion : null | undefined
->null : null
-
 var o1: {} | { a: number };
 >o1 : {} | { a: number; }
 >a : number
@@ -30,21 +26,21 @@ var o2 = { ...nullUnion };
 >{ ...nullUnion } : {} | { b: number; }
 >nullUnion : { b: number; } | null
 
-var o3: {} | { b: number } | { a: number } | { a: number, b: number };
->o3 : {} | { b: number; } | { a: number; } | { a: number; b: number; }
->b : number
+var o3: {} | { a: number } | { b: number } | { a: number, b: number };
+>o3 : {} | { a: number; } | { b: number; } | { a: number; b: number; }
 >a : number
+>b : number
 >a : number
 >b : number
 
 var o3 = { ...undefinedUnion, ...nullUnion };
->o3 : {} | { b: number; } | { a: number; } | { a: number; b: number; }
+>o3 : {} | { a: number; } | { b: number; } | { a: number; b: number; }
 >{ ...undefinedUnion, ...nullUnion } : {} | { b: number; } | { a: number; } | { b: number; a: number; }
 >undefinedUnion : { a: number; } | undefined
 >nullUnion : { b: number; } | null
 
 var o3 = { ...nullUnion, ...undefinedUnion };
->o3 : {} | { b: number; } | { a: number; } | { a: number; b: number; }
+>o3 : {} | { a: number; } | { b: number; } | { a: number; b: number; }
 >{ ...nullUnion, ...undefinedUnion } : {} | { a: number; } | { b: number; } | { a: number; b: number; }
 >nullUnion : { b: number; } | null
 >undefinedUnion : { a: number; } | undefined
@@ -69,14 +65,4 @@ var o5 = { ...nullUnion, ...nullUnion };
 >nullUnion : { b: number; } | null
 >nullUnion : { b: number; } | null
 
-var o6 = { ...nullAndUndefinedUnion, ...nullAndUndefinedUnion };
->o6 : {} | {} | {} | {}
->{ ...nullAndUndefinedUnion, ...nullAndUndefinedUnion } : {} | {} | {} | {}
->nullAndUndefinedUnion : null | undefined
->nullAndUndefinedUnion : null | undefined
-
-var o7 = { ...nullAndUndefinedUnion };
->o7 : {} | {}
->{ ...nullAndUndefinedUnion } : {} | {}
->nullAndUndefinedUnion : null | undefined
 

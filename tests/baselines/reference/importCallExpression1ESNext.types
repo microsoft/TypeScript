@@ -29,6 +29,11 @@ p1.then(zero => {
 
 })
 
+export var p2 = import("./0");
+>p2 : Promise<typeof "tests/cases/conformance/dynamicImport/0">
+>import("./0") : Promise<typeof "tests/cases/conformance/dynamicImport/0">
+>"./0" : "./0"
+
 function foo() {
 >foo : () => void
 

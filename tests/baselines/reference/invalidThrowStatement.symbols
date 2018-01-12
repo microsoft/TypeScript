@@ -1,0 +1,6 @@
+=== tests/cases/conformance/statements/throwStatements/invalidThrowStatement.ts ===
+throw; 
+No type information for this code.
+No type information for this code.export throw null;
+No type information for this code.
+No type information for this code.

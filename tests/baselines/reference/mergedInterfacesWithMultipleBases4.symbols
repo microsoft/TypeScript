@@ -1,0 +1,83 @@
+=== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithMultipleBases4.ts ===
+// merged interfaces behave as if all extends clauses from each declaration are merged together
+
+class C<T> {
+>C : Symbol(C, Decl(mergedInterfacesWithMultipleBases4.ts, 0, 0))
+>T : Symbol(T, Decl(mergedInterfacesWithMultipleBases4.ts, 2, 8))
+
+    a: T;
+>a : Symbol(C.a, Decl(mergedInterfacesWithMultipleBases4.ts, 2, 12))
+>T : Symbol(T, Decl(mergedInterfacesWithMultipleBases4.ts, 2, 8))
+}
+
+class C2<T> {
+>C2 : Symbol(C2, Decl(mergedInterfacesWithMultipleBases4.ts, 4, 1))
+>T : Symbol(T, Decl(mergedInterfacesWithMultipleBases4.ts, 6, 9))
+
+    b: T;
+>b : Symbol(C2.b, Decl(mergedInterfacesWithMultipleBases4.ts, 6, 13))
+>T : Symbol(T, Decl(mergedInterfacesWithMultipleBases4.ts, 6, 9))
+}
+
+class C3<T> {
+>C3 : Symbol(C3, Decl(mergedInterfacesWithMultipleBases4.ts, 8, 1))
+>T : Symbol(T, Decl(mergedInterfacesWithMultipleBases4.ts, 10, 9))
+
+    c: T;
+>c : Symbol(C3.c, Decl(mergedInterfacesWithMultipleBases4.ts, 10, 13))
+>T : Symbol(T, Decl(mergedInterfacesWithMultipleBases4.ts, 10, 9))
+}
+
+class C4<T> {
+>C4 : Symbol(C4, Decl(mergedInterfacesWithMultipleBases4.ts, 12, 1))
+>T : Symbol(T, Decl(mergedInterfacesWithMultipleBases4.ts, 14, 9))
+
+    d: T;
+>d : Symbol(C4.d, Decl(mergedInterfacesWithMultipleBases4.ts, 14, 13))
+>T : Symbol(T, Decl(mergedInterfacesWithMultipleBases4.ts, 14, 9))
+}
+
+interface A<T> extends C<string>, C3<string> { // error
+>A : Symbol(A, Decl(mergedInterfacesWithMultipleBases4.ts, 16, 1), Decl(mergedInterfacesWithMultipleBases4.ts, 20, 1))
+>T : Symbol(T, Decl(mergedInterfacesWithMultipleBases4.ts, 18, 12), Decl(mergedInterfacesWithMultipleBases4.ts, 22, 12))
+>C : Symbol(C, Decl(mergedInterfacesWithMultipleBases4.ts, 0, 0))
+>C3 : Symbol(C3, Decl(mergedInterfacesWithMultipleBases4.ts, 8, 1))
+
+    y: T;
+>y : Symbol(A.y, Decl(mergedInterfacesWithMultipleBases4.ts, 18, 46))
+>T : Symbol(T, Decl(mergedInterfacesWithMultipleBases4.ts, 18, 12), Decl(mergedInterfacesWithMultipleBases4.ts, 22, 12))
+}
+
+interface A<T> extends C<number>, C4<string> {
+>A : Symbol(A, Decl(mergedInterfacesWithMultipleBases4.ts, 16, 1), Decl(mergedInterfacesWithMultipleBases4.ts, 20, 1))
+>T : Symbol(T, Decl(mergedInterfacesWithMultipleBases4.ts, 18, 12), Decl(mergedInterfacesWithMultipleBases4.ts, 22, 12))
+>C : Symbol(C, Decl(mergedInterfacesWithMultipleBases4.ts, 0, 0))
+>C4 : Symbol(C4, Decl(mergedInterfacesWithMultipleBases4.ts, 12, 1))
+
+    z: T;
+>z : Symbol(A.z, Decl(mergedInterfacesWithMultipleBases4.ts, 22, 46))
+>T : Symbol(T, Decl(mergedInterfacesWithMultipleBases4.ts, 18, 12), Decl(mergedInterfacesWithMultipleBases4.ts, 22, 12))
+}
+
+class D implements A<boolean> {
+>D : Symbol(D, Decl(mergedInterfacesWithMultipleBases4.ts, 24, 1))
+>A : Symbol(A, Decl(mergedInterfacesWithMultipleBases4.ts, 16, 1), Decl(mergedInterfacesWithMultipleBases4.ts, 20, 1))
+
+    a: string;
+>a : Symbol(D.a, Decl(mergedInterfacesWithMultipleBases4.ts, 26, 31))
+
+    b: string;
+>b : Symbol(D.b, Decl(mergedInterfacesWithMultipleBases4.ts, 27, 14))
+
+    c: string;
+>c : Symbol(D.c, Decl(mergedInterfacesWithMultipleBases4.ts, 28, 14))
+
+    d: string;
+>d : Symbol(D.d, Decl(mergedInterfacesWithMultipleBases4.ts, 29, 14))
+
+    y: boolean;
+>y : Symbol(D.y, Decl(mergedInterfacesWithMultipleBases4.ts, 30, 14))
+
+    z: boolean;
+>z : Symbol(D.z, Decl(mergedInterfacesWithMultipleBases4.ts, 31, 15))
+}

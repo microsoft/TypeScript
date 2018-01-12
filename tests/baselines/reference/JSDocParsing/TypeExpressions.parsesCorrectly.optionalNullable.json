@@ -2,9 +2,11 @@
     "kind": "JSDocOptionalType",
     "pos": 1,
     "end": 3,
+    "flags": "JSDoc",
     "type": {
         "kind": "JSDocUnknownType",
         "pos": 1,
-        "end": 2
+        "end": 2,
+        "flags": "JSDoc"
     }
 }

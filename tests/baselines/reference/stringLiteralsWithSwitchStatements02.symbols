@@ -1,0 +1,43 @@
+=== tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements02.ts ===
+let x: "foo";
+>x : Symbol(x, Decl(stringLiteralsWithSwitchStatements02.ts, 0, 3))
+
+let y: "foo" | "bar";
+>y : Symbol(y, Decl(stringLiteralsWithSwitchStatements02.ts, 1, 3))
+
+let b: boolean;
+>b : Symbol(b, Decl(stringLiteralsWithSwitchStatements02.ts, 3, 3))
+
+b = x == y;
+>b : Symbol(b, Decl(stringLiteralsWithSwitchStatements02.ts, 3, 3))
+>x : Symbol(x, Decl(stringLiteralsWithSwitchStatements02.ts, 0, 3))
+>y : Symbol(y, Decl(stringLiteralsWithSwitchStatements02.ts, 1, 3))
+
+b = "foo" == y
+>b : Symbol(b, Decl(stringLiteralsWithSwitchStatements02.ts, 3, 3))
+>y : Symbol(y, Decl(stringLiteralsWithSwitchStatements02.ts, 1, 3))
+
+b = y == "foo";
+>b : Symbol(b, Decl(stringLiteralsWithSwitchStatements02.ts, 3, 3))
+>y : Symbol(y, Decl(stringLiteralsWithSwitchStatements02.ts, 1, 3))
+
+b = "foo" == "bar";
+>b : Symbol(b, Decl(stringLiteralsWithSwitchStatements02.ts, 3, 3))
+
+b = x != y;
+>b : Symbol(b, Decl(stringLiteralsWithSwitchStatements02.ts, 3, 3))
+>x : Symbol(x, Decl(stringLiteralsWithSwitchStatements02.ts, 0, 3))
+>y : Symbol(y, Decl(stringLiteralsWithSwitchStatements02.ts, 1, 3))
+
+b = "foo" != y
+>b : Symbol(b, Decl(stringLiteralsWithSwitchStatements02.ts, 3, 3))
+>y : Symbol(y, Decl(stringLiteralsWithSwitchStatements02.ts, 1, 3))
+
+b = y != "foo";
+>b : Symbol(b, Decl(stringLiteralsWithSwitchStatements02.ts, 3, 3))
+>y : Symbol(y, Decl(stringLiteralsWithSwitchStatements02.ts, 1, 3))
+
+b = "foo" != "bar";
+>b : Symbol(b, Decl(stringLiteralsWithSwitchStatements02.ts, 3, 3))
+
+

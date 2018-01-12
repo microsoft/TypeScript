@@ -35,13 +35,13 @@ someRest(1, 2, 3);
  * @param {number} x - a thing
  */
 function jsdocced(x) { arguments; }
->jsdocced : (x: number) => void
+>jsdocced : (x: number, ...args: any[]) => void
 >x : number
 >arguments : IArguments
 
 jsdocced(1);
 >jsdocced(1) : void
->jsdocced : (x: number) => void
+>jsdocced : (x: number, ...args: any[]) => void
 >1 : 1
 
 function dontDoubleRest(x, ...y) { arguments; }

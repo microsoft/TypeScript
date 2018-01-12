@@ -1,0 +1,19 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames5_ES6.ts ===
+var b: boolean;
+>b : Symbol(b, Decl(computedPropertyNames5_ES6.ts, 0, 3))
+
+var v = {
+>v : Symbol(v, Decl(computedPropertyNames5_ES6.ts, 1, 3))
+
+    [b]: 0,
+>b : Symbol(b, Decl(computedPropertyNames5_ES6.ts, 0, 3))
+
+    [true]: 1,
+    [[]]: 0,
+    [{}]: 0,
+    [undefined]: undefined,
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+    [null]: null
+}

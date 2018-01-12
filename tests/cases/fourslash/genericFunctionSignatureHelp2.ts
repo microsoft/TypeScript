@@ -4,4 +4,4 @@
 ////f(/**/
 
 goTo.marker();
-verify.currentSignatureHelpIs('f<T>(a: T): T');
+verify.currentSignatureHelpIs('f(a: {}): {}');

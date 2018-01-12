@@ -6,7 +6,7 @@ class C {
 }
 
 //// [computedPropertyNamesDeclarationEmit2_ES5.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C["" + ""] = function () { };

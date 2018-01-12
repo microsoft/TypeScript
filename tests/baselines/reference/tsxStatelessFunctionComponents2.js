@@ -54,7 +54,7 @@ var React = require("react");
 function Greet(x) {
     return <div>Hello, {x}</div>;
 }
-var BigGreeter = (function (_super) {
+var BigGreeter = /** @class */ (function (_super) {
     __extends(BigGreeter, _super);
     function BigGreeter() {
         return _super !== null && _super.apply(this, arguments) || this;

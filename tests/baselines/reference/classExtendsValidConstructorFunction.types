@@ -1,0 +1,13 @@
+=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsValidConstructorFunction.ts ===
+function foo() { }
+>foo : () => void
+
+var x = new foo(); // can be used as a constructor function
+>x : any
+>new foo() : any
+>foo : () => void
+
+class C extends foo { } // error, cannot extend it though
+>C : C
+>foo : () => void
+

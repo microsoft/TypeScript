@@ -1,0 +1,40 @@
+=== tests/cases/compiler/gettersAndSettersErrors.ts ===
+class C {
+>C : C
+
+    public get Foo() { return "foo";} // ok
+>Foo : string
+>"foo" : "foo"
+
+    public set Foo(foo:string) {} // ok
+>Foo : string
+>foo : string
+
+    public Foo = 0; // error - duplicate identifier Foo - confirmed
+>Foo : string
+>0 : 0
+
+    public get Goo(v:string):string {return null;} // error - getters must not have a parameter
+>Goo : string
+>v : string
+>null : null
+
+    public set Goo(v:string):string {} // error - setters must not specify a return type
+>Goo : string
+>v : string
+}
+
+class E {
+>E : E
+
+    private get Baz():number { return 0; }
+>Baz : number
+>0 : 0
+
+    public set Baz(n:number) {} // error - accessors do not agree in visibility
+>Baz : number
+>n : number
+}
+
+
+

@@ -27,7 +27,7 @@ var r2 = foo({ a: <IHasVisualizationModel>null });
 //// [aliasUsageInGenericFunction_backbone.js]
 "use strict";
 exports.__esModule = true;
-var Model = (function () {
+var Model = /** @class */ (function () {
     function Model() {
     }
     return Model;
@@ -47,7 +47,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var Backbone = require("./aliasUsageInGenericFunction_backbone");
-var VisualizationModel = (function (_super) {
+var VisualizationModel = /** @class */ (function (_super) {
     __extends(VisualizationModel, _super);
     function VisualizationModel() {
         return _super !== null && _super.apply(this, arguments) || this;

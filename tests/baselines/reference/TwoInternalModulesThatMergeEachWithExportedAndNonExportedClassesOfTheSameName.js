@@ -43,7 +43,7 @@ var l: X.Y.Z.Line;
 //// [TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.js]
 var A;
 (function (A) {
-    var Point = (function () {
+    var Point = /** @class */ (function () {
         function Point() {
         }
         return Point;
@@ -51,7 +51,7 @@ var A;
     A.Point = Point;
 })(A || (A = {}));
 (function (A) {
-    var Point = (function () {
+    var Point = /** @class */ (function () {
         function Point() {
         }
         Point.prototype.fromCarthesian = function (p) {
@@ -69,7 +69,7 @@ var X;
     (function (Y) {
         var Z;
         (function (Z) {
-            var Line = (function () {
+            var Line = /** @class */ (function () {
                 function Line() {
                 }
                 return Line;
@@ -83,7 +83,7 @@ var X;
     (function (Y) {
         var Z;
         (function (Z) {
-            var Line = (function () {
+            var Line = /** @class */ (function () {
                 function Line() {
                 }
                 return Line;

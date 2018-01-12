@@ -16,7 +16,7 @@
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 14,
-                "text": "param"
+                "escapedText": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
@@ -28,20 +28,14 @@
                     "end": 22
                 }
             },
-            "postParameterName": {
-                "kind": "Identifier",
-                "pos": 24,
-                "end": 29,
-                "text": "name1"
-            },
             "name": {
                 "kind": "Identifier",
                 "pos": 24,
                 "end": 29,
-                "text": "name1"
+                "escapedText": "name1"
             },
-            "isBracketed": false,
-            "comment": ""
+            "isNameFirst": false,
+            "isBracketed": false
         },
         "1": {
             "kind": "JSDocParameterTag",
@@ -56,7 +50,7 @@
                 "kind": "Identifier",
                 "pos": 31,
                 "end": 36,
-                "text": "param"
+                "escapedText": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
@@ -68,20 +62,14 @@
                     "end": 44
                 }
             },
-            "postParameterName": {
-                "kind": "Identifier",
-                "pos": 46,
-                "end": 51,
-                "text": "name2"
-            },
             "name": {
                 "kind": "Identifier",
                 "pos": 46,
                 "end": 51,
-                "text": "name2"
+                "escapedText": "name2"
             },
-            "isBracketed": false,
-            "comment": ""
+            "isNameFirst": false,
+            "isBracketed": false
         },
         "length": 2,
         "pos": 8,

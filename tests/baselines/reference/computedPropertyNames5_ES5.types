@@ -1,0 +1,32 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames5_ES5.ts ===
+var b: boolean;
+>b : boolean
+
+var v = {
+>v : { [x: string]: number; [x: number]: any; [true]: number; }
+>{    [b]: 0,    [true]: 1,    [[]]: 0,    [{}]: 0,    [undefined]: undefined,    [null]: null} : { [x: string]: number; [x: number]: null; [true]: number; }
+
+    [b]: 0,
+>b : boolean
+>0 : 0
+
+    [true]: 1,
+>true : true
+>1 : 1
+
+    [[]]: 0,
+>[] : undefined[]
+>0 : 0
+
+    [{}]: 0,
+>{} : {}
+>0 : 0
+
+    [undefined]: undefined,
+>undefined : undefined
+>undefined : undefined
+
+    [null]: null
+>null : null
+>null : null
+}

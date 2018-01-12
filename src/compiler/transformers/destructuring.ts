@@ -331,11 +331,14 @@ namespace ts {
                 location
             );
         }
-        else if (numElements !== 1 && (flattenContext.level < FlattenLevel.ObjectRest || numElements === 0)) {
+        else if (numElements !== 1 && (flattenContext.level < FlattenLevel.ObjectRest || numElements === 0)
+            || every(elements, isOmittedExpression)) {
             // For anything other than a single-element destructuring we need to generate a temporary
             // to ensure value is evaluated exactly once. Additionally, if we have zero elements
             // we need to emit *something* to ensure that in case a 'var' keyword was already emitted,
             // so in that case, we'll intentionally create that temporary.
+            // Or all the elements of the binding pattern are omitted expression such as "var [,] = [1,2]",
+            // then we will create temporary variable.
             const reuseIdentifierExpressions = !isDeclarationBindingElement(parent) || numElements !== 0;
             value = ensureIdentifier(flattenContext, value, reuseIdentifierExpressions, location);
         }
@@ -406,16 +409,16 @@ namespace ts {
      */
     function createDestructuringPropertyAccess(flattenContext: FlattenContext, value: Expression, propertyName: PropertyName): LeftHandSideExpression {
         if (isComputedPropertyName(propertyName)) {
-            const argumentExpression = ensureIdentifier(flattenContext, propertyName.expression, /*reuseIdentifierExpressions*/ false, /*location*/ propertyName);
+            const argumentExpression = ensureIdentifier(flattenContext, visitNode(propertyName.expression, flattenContext.visitor), /*reuseIdentifierExpressions*/ false, /*location*/ propertyName);
             return createElementAccess(value, argumentExpression);
         }
         else if (isStringOrNumericLiteral(propertyName)) {
             const argumentExpression = getSynthesizedClone(propertyName);
-            argumentExpression.text = unescapeIdentifier(argumentExpression.text);
+            argumentExpression.text = argumentExpression.text;
             return createElementAccess(value, argumentExpression);
         }
         else {
-            const name = createIdentifier(unescapeIdentifier(propertyName.text));
+            const name = createIdentifier(idText(propertyName));
             return createPropertyAccess(value, name);
         }
     }
@@ -492,7 +495,7 @@ namespace ts {
     /** Given value: o, propName: p, pattern: { a, b, ...p } from the original statement
      * `{ a, b, ...p } = o`, create `p = __rest(o, ["a", "b"]);`
      */
-    function createRestCall(context: TransformationContext, value: Expression, elements: BindingOrAssignmentElement[], computedTempVariables: Expression[], location: TextRange): Expression {
+    function createRestCall(context: TransformationContext, value: Expression, elements: ReadonlyArray<BindingOrAssignmentElement>, computedTempVariables: ReadonlyArray<Expression>, location: TextRange): Expression {
         context.requestEmitHelper(restHelper);
         const propertyNames: Expression[] = [];
         let computedTempVariableOffset = 0;

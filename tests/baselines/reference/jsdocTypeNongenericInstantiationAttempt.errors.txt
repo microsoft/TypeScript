@@ -1,0 +1,97 @@
+tests/cases/compiler/index.js(2,19): error TS2315: Type 'boolean' is not generic.
+tests/cases/compiler/index2.js(2,19): error TS2315: Type 'void' is not generic.
+tests/cases/compiler/index3.js(2,19): error TS2315: Type 'undefined' is not generic.
+tests/cases/compiler/index4.js(2,19): error TS2315: Type 'Function' is not generic.
+tests/cases/compiler/index5.js(2,19): error TS2315: Type 'string' is not generic.
+tests/cases/compiler/index6.js(2,19): error TS2315: Type 'number' is not generic.
+tests/cases/compiler/index7.js(2,19): error TS2315: Type 'any' is not generic.
+tests/cases/compiler/index8.js(4,12): error TS2304: Cannot find name 'fn'.
+tests/cases/compiler/index8.js(4,15): error TS2304: Cannot find name 'T'.
+
+
+==== tests/cases/compiler/index.js (1 errors) ====
+    /**
+     * @param {<T>(m: Boolean<T>) => string} somebody
+                      ~~~~~~~~~~
+!!! error TS2315: Type 'boolean' is not generic.
+     */
+    function sayHello(somebody) {
+        return 'Hello ' + somebody;
+    }
+    
+==== tests/cases/compiler/index2.js (1 errors) ====
+    /**
+     * @param {<T>(m: Void<T>) => string} somebody
+                      ~~~~~~~
+!!! error TS2315: Type 'void' is not generic.
+     */
+    function sayHello2(somebody) {
+        return 'Hello ' + somebody;
+    }
+    
+    
+==== tests/cases/compiler/index3.js (1 errors) ====
+    /**
+     * @param {<T>(m: Undefined<T>) => string} somebody
+                      ~~~~~~~~~~~~
+!!! error TS2315: Type 'undefined' is not generic.
+     */
+    function sayHello3(somebody) {
+        return 'Hello ' + somebody;
+    }
+    
+    
+==== tests/cases/compiler/index4.js (1 errors) ====
+    /**
+     * @param {<T>(m: Function<T>) => string} somebody
+                      ~~~~~~~~~~~
+!!! error TS2315: Type 'Function' is not generic.
+     */
+    function sayHello4(somebody) {
+        return 'Hello ' + somebody;
+    }
+    
+    
+==== tests/cases/compiler/index5.js (1 errors) ====
+    /**
+     * @param {<T>(m: String<T>) => string} somebody
+                      ~~~~~~~~~
+!!! error TS2315: Type 'string' is not generic.
+     */
+    function sayHello5(somebody) {
+        return 'Hello ' + somebody;
+    }
+    
+    
+==== tests/cases/compiler/index6.js (1 errors) ====
+    /**
+     * @param {<T>(m: Number<T>) => string} somebody
+                      ~~~~~~~~~
+!!! error TS2315: Type 'number' is not generic.
+     */
+    function sayHello6(somebody) {
+        return 'Hello ' + somebody;
+    }
+    
+    
+==== tests/cases/compiler/index7.js (1 errors) ====
+    /**
+     * @param {<T>(m: Object<T>) => string} somebody
+                      ~~~~~~~~~
+!!! error TS2315: Type 'any' is not generic.
+     */
+    function sayHello7(somebody) {
+        return 'Hello ' + somebody;
+    }
+    
+==== tests/cases/compiler/index8.js (2 errors) ====
+    function fn() {}
+    
+    /**
+     * @param {fn<T>} somebody
+               ~~
+!!! error TS2304: Cannot find name 'fn'.
+                  ~
+!!! error TS2304: Cannot find name 'T'.
+     */
+    function sayHello8(somebody) { }

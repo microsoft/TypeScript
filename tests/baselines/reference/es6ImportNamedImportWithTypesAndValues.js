@@ -22,14 +22,14 @@ export var cVal = new C();
 //// [server.js]
 "use strict";
 exports.__esModule = true;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.prop = "hello";
     }
     return C;
 }());
 exports.C = C;
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
         this.prop2 = "world";
     }

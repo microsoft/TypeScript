@@ -12,7 +12,7 @@ var f4 = (x: B<number>) => { return x.foo(1); } // no error
 
 
 //// [genericWithOpenTypeParameters1.js]
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     B.prototype.foo = function (x) { return null; };

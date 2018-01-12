@@ -23,7 +23,7 @@ class C2<T> implements IFoo2<T> { // error
 //// [implementGenericWithMismatchedTypes.js]
 // no errors because in the derived types the best common type for T's value is Object
 // and that matches the original signature for assignability since we treat its T's as Object
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.foo = function (x) {
@@ -31,7 +31,7 @@ var C = (function () {
     };
     return C;
 }());
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     C2.prototype.foo = function (x) {

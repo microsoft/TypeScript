@@ -1,5 +1,4 @@
-tests/cases/compiler/typeArgInference2WithError.ts(7,10): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-  Type argument candidate '"abc"' is not a valid type argument because it is not a supertype of candidate '5'.
+tests/cases/compiler/typeArgInference2WithError.ts(7,14): error TS2345: Argument of type '"abc"' is not assignable to parameter of type 'Item'.
 
 
 ==== tests/cases/compiler/typeArgInference2WithError.ts (1 errors) ====
@@ -10,6 +9,5 @@ tests/cases/compiler/typeArgInference2WithError.ts(7,10): error TS2453: The type
     declare function foo<T extends Item>(x?: T, y?: T): T;
     
     var z7 = foo("abc", 5); // Error
-             ~~~
-!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-!!! error TS2453:   Type argument candidate '"abc"' is not a valid type argument because it is not a supertype of candidate '5'.
+                 ~~~~~
+!!! error TS2345: Argument of type '"abc"' is not assignable to parameter of type 'Item'.

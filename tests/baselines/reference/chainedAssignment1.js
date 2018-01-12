@@ -23,19 +23,19 @@ c1 = c2 = c3; // a bug made this not report the same error as below
 c2 = c3; // Error TS111: Cannot convert Z to Y
 
 //// [chainedAssignment1.js]
-var X = (function () {
+var X = /** @class */ (function () {
     function X(z) {
         this.z = z;
     }
     return X;
 }());
-var Y = (function () {
+var Y = /** @class */ (function () {
     function Y(z) {
         this.z = z;
     }
     return Y;
 }());
-var Z = (function () {
+var Z = /** @class */ (function () {
     function Z() {
     }
     return Z;

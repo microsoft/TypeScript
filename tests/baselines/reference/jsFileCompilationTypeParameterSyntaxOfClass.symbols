@@ -1,0 +1,5 @@
+=== tests/cases/compiler/a.js ===
+class C<T> { }
+>C : Symbol(C, Decl(a.js, 0, 0))
+>T : Symbol(T, Decl(a.js, 0, 8))
+

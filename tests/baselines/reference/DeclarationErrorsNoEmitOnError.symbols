@@ -1,0 +1,12 @@
+=== tests/cases/compiler/DeclarationErrorsNoEmitOnError.ts ===
+type T = { x : number }
+>T : Symbol(T, Decl(DeclarationErrorsNoEmitOnError.ts, 0, 0))
+>x : Symbol(x, Decl(DeclarationErrorsNoEmitOnError.ts, 0, 10))
+
+export interface I {
+>I : Symbol(I, Decl(DeclarationErrorsNoEmitOnError.ts, 0, 23))
+
+    f: T;   
+>f : Symbol(I.f, Decl(DeclarationErrorsNoEmitOnError.ts, 1, 20))
+>T : Symbol(T, Decl(DeclarationErrorsNoEmitOnError.ts, 0, 0))
+}

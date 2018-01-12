@@ -36,7 +36,7 @@ var f: I;
 f `abc`
 >f `abc` : I
 >f : I
->`abc` : string
+>`abc` : "abc"
 
 f `abc${1}def${2}ghi`;
 >f `abc${1}def${2}ghi` : I
@@ -49,7 +49,7 @@ f `abc`.member
 >f `abc`.member : I
 >f `abc` : I
 >f : I
->`abc` : string
+>`abc` : "abc"
 >member : I
 
 f `abc${1}def${2}ghi`.member;
@@ -65,7 +65,7 @@ f `abc`["member"];
 >f `abc`["member"] : I
 >f `abc` : I
 >f : I
->`abc` : string
+>`abc` : "abc"
 >"member" : "member"
 
 f `abc${1}def${2}ghi`["member"];
@@ -83,7 +83,7 @@ f `abc`[0].member `abc${1}def${2}ghi`;
 >f `abc`[0] : I
 >f `abc` : I
 >f : I
->`abc` : string
+>`abc` : "abc"
 >0 : 0
 >member : I
 >`abc${1}def${2}ghi` : string
@@ -110,7 +110,7 @@ f.thisIsNotATag(`abc`);
 >f.thisIsNotATag : (x: string) => void
 >f : I
 >thisIsNotATag : (x: string) => void
->`abc` : string
+>`abc` : "abc"
 
 f.thisIsNotATag(`abc${1}def${2}ghi`);
 >f.thisIsNotATag(`abc${1}def${2}ghi`) : void

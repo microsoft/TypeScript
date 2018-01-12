@@ -1,0 +1,75 @@
+=== tests/cases/compiler/operatorAddNullUndefined.ts ===
+enum E { x }
+>E : Symbol(E, Decl(operatorAddNullUndefined.ts, 0, 0))
+>x : Symbol(E.x, Decl(operatorAddNullUndefined.ts, 0, 8))
+
+var x1 = null + null;
+>x1 : Symbol(x1, Decl(operatorAddNullUndefined.ts, 1, 3))
+
+var x2 = null + undefined;
+>x2 : Symbol(x2, Decl(operatorAddNullUndefined.ts, 2, 3))
+>undefined : Symbol(undefined)
+
+var x3 = undefined + null;
+>x3 : Symbol(x3, Decl(operatorAddNullUndefined.ts, 3, 3))
+>undefined : Symbol(undefined)
+
+var x4 = undefined + undefined;
+>x4 : Symbol(x4, Decl(operatorAddNullUndefined.ts, 4, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+var x5 = 1 + null;
+>x5 : Symbol(x5, Decl(operatorAddNullUndefined.ts, 5, 3))
+
+var x6 = 1 + undefined;
+>x6 : Symbol(x6, Decl(operatorAddNullUndefined.ts, 6, 3))
+>undefined : Symbol(undefined)
+
+var x7 = null + 1;
+>x7 : Symbol(x7, Decl(operatorAddNullUndefined.ts, 7, 3))
+
+var x8 = undefined + 1;
+>x8 : Symbol(x8, Decl(operatorAddNullUndefined.ts, 8, 3))
+>undefined : Symbol(undefined)
+
+var x9 = "test" + null;
+>x9 : Symbol(x9, Decl(operatorAddNullUndefined.ts, 9, 3))
+
+var x10 = "test" + undefined;
+>x10 : Symbol(x10, Decl(operatorAddNullUndefined.ts, 10, 3))
+>undefined : Symbol(undefined)
+
+var x11 = null + "test";
+>x11 : Symbol(x11, Decl(operatorAddNullUndefined.ts, 11, 3))
+
+var x12 = undefined + "test";
+>x12 : Symbol(x12, Decl(operatorAddNullUndefined.ts, 12, 3))
+>undefined : Symbol(undefined)
+
+var x13 = null + E.x
+>x13 : Symbol(x13, Decl(operatorAddNullUndefined.ts, 13, 3))
+>E.x : Symbol(E.x, Decl(operatorAddNullUndefined.ts, 0, 8))
+>E : Symbol(E, Decl(operatorAddNullUndefined.ts, 0, 0))
+>x : Symbol(E.x, Decl(operatorAddNullUndefined.ts, 0, 8))
+
+var x14 = undefined + E.x
+>x14 : Symbol(x14, Decl(operatorAddNullUndefined.ts, 14, 3))
+>undefined : Symbol(undefined)
+>E.x : Symbol(E.x, Decl(operatorAddNullUndefined.ts, 0, 8))
+>E : Symbol(E, Decl(operatorAddNullUndefined.ts, 0, 0))
+>x : Symbol(E.x, Decl(operatorAddNullUndefined.ts, 0, 8))
+
+var x15 = E.x + null
+>x15 : Symbol(x15, Decl(operatorAddNullUndefined.ts, 15, 3))
+>E.x : Symbol(E.x, Decl(operatorAddNullUndefined.ts, 0, 8))
+>E : Symbol(E, Decl(operatorAddNullUndefined.ts, 0, 0))
+>x : Symbol(E.x, Decl(operatorAddNullUndefined.ts, 0, 8))
+
+var x16 = E.x + undefined
+>x16 : Symbol(x16, Decl(operatorAddNullUndefined.ts, 16, 3))
+>E.x : Symbol(E.x, Decl(operatorAddNullUndefined.ts, 0, 8))
+>E : Symbol(E, Decl(operatorAddNullUndefined.ts, 0, 0))
+>x : Symbol(E.x, Decl(operatorAddNullUndefined.ts, 0, 8))
+>undefined : Symbol(undefined)
+

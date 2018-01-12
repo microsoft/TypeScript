@@ -13,7 +13,7 @@ export interface IFilterProvider {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var FilterManager = (function () {
+    var FilterManager = /** @class */ (function () {
         function FilterManager() {
         }
         return FilterManager;

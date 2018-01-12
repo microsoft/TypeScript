@@ -44,7 +44,7 @@ class class2 {
 }
 
 //// [noCollisionThisExpressionAndLocalVarInAccessors.js]
-var class1 = (function () {
+var class1 = /** @class */ (function () {
     function class1() {
     }
     Object.defineProperty(class1.prototype, "a", {
@@ -70,7 +70,7 @@ var class1 = (function () {
     });
     return class1;
 }());
-var class2 = (function () {
+var class2 = /** @class */ (function () {
     function class2() {
     }
     Object.defineProperty(class2.prototype, "a", {

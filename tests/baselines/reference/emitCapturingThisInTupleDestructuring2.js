@@ -12,7 +12,7 @@ class B {
 
 //// [emitCapturingThisInTupleDestructuring2.js]
 var array1 = [1, 2];
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     B.prototype.method = function () {

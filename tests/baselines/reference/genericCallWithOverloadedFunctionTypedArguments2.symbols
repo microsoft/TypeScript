@@ -1,0 +1,125 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedFunctionTypedArguments2.ts ===
+// Function typed arguments with multiple signatures must be passed an implementation that matches all of them
+// Inferences are made quadratic-pairwise to and from these overload sets
+
+module NonGenericParameter {
+>NonGenericParameter : Symbol(NonGenericParameter, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 0, 0))
+
+    var a: {
+>a : Symbol(a, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 4, 7))
+
+        (x: boolean): boolean;
+>x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 5, 9))
+
+        (x: string): string;
+>x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 6, 9))
+    }
+
+    function foo4(cb: typeof a) {
+>foo4 : Symbol(foo4, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 7, 5))
+>cb : Symbol(cb, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 9, 18))
+>a : Symbol(a, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 4, 7))
+
+        return cb;
+>cb : Symbol(cb, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 9, 18))
+    }
+
+    var r3 = foo4(<T, U>(x: T) => { var r: U; return r }); // ok
+>r3 : Symbol(r3, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 13, 7))
+>foo4 : Symbol(foo4, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 7, 5))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 13, 19))
+>U : Symbol(U, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 13, 21))
+>x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 13, 25))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 13, 19))
+>r : Symbol(r, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 13, 39))
+>U : Symbol(U, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 13, 21))
+>r : Symbol(r, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 13, 39))
+}
+
+module GenericParameter {
+>GenericParameter : Symbol(GenericParameter, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 14, 1))
+
+    function foo5<T>(cb: { (x: T): string; (x: number): T }) {
+>foo5 : Symbol(foo5, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 16, 25))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 17, 18))
+>cb : Symbol(cb, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 17, 21))
+>x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 17, 28))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 17, 18))
+>x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 17, 44))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 17, 18))
+
+        return cb;
+>cb : Symbol(cb, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 17, 21))
+    }
+
+    var r6 = foo5(<T>(x: T) => x); // ok
+>r6 : Symbol(r6, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 21, 7))
+>foo5 : Symbol(foo5, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 16, 25))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 21, 19))
+>x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 21, 22))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 21, 19))
+>x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 21, 22))
+
+    function foo6<T>(cb: { (x: T): string; (x: T, y?: T): string }) {
+>foo6 : Symbol(foo6, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 21, 34))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 23, 18))
+>cb : Symbol(cb, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 23, 21))
+>x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 23, 28))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 23, 18))
+>x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 23, 44))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 23, 18))
+>y : Symbol(y, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 23, 49))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 23, 18))
+
+        return cb;
+>cb : Symbol(cb, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 23, 21))
+    }
+
+    var r10 = foo6(<T>(x: T, y: T) => ''); // error
+>r10 : Symbol(r10, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 27, 7))
+>foo6 : Symbol(foo6, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 21, 34))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 27, 20))
+>x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 27, 23))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 27, 20))
+>y : Symbol(y, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 27, 28))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 27, 20))
+
+    function foo7<T>(x:T, cb: { (x: T): string; (x: T, y?: T): string }) {
+>foo7 : Symbol(foo7, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 27, 42))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 29, 18))
+>x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 29, 21))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 29, 18))
+>cb : Symbol(cb, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 29, 25))
+>x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 29, 33))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 29, 18))
+>x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 29, 49))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 29, 18))
+>y : Symbol(y, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 29, 54))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 29, 18))
+
+        return cb;
+>cb : Symbol(cb, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 29, 25))
+    }
+
+    var r13 = foo7(1, <T>(x: T) => x); // ok
+>r13 : Symbol(r13, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 33, 7))
+>foo7 : Symbol(foo7, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 27, 42))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 33, 23))
+>x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 33, 26))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 33, 23))
+>x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 33, 26))
+
+    var a: { <T>(x: T): number; <T>(x: number): T; }
+>a : Symbol(a, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 34, 7))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 34, 14))
+>x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 34, 17))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 34, 14))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 34, 33))
+>x : Symbol(x, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 34, 36))
+>T : Symbol(T, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 34, 33))
+
+    var r14 = foo7(1, a); // ok
+>r14 : Symbol(r14, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 35, 7))
+>foo7 : Symbol(foo7, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 27, 42))
+>a : Symbol(a, Decl(genericCallWithOverloadedFunctionTypedArguments2.ts, 34, 7))
+}

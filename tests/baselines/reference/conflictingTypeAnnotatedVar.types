@@ -1,0 +1,10 @@
+=== tests/cases/compiler/conflictingTypeAnnotatedVar.ts ===
+var foo: string;
+>foo : string
+
+function foo(): number { }
+>foo : () => number
+
+function foo(): number { }
+>foo : () => number
+
