@@ -6468,7 +6468,7 @@ namespace ts {
         }
 
         function getConstraintOfIndexedAccess(type: IndexedAccessType) {
-            const transformed = getSubstitutedIndexedMappedType(type);
+            const transformed = getSimplifiedIndexedAccessType(type);
             if (transformed) {
                 return transformed;
             }
@@ -8359,6 +8359,10 @@ namespace ts {
             return false;
         }
 
+        function isMappedTypeToNever(type: Type) {
+            return getObjectFlags(type) & ObjectFlags.Mapped && getTemplateTypeFromMappedType(type as MappedType) === neverType;
+        }
+
         // Transform an indexed access to a simpler form, if possible. Return the simpler form, or return
         // undefined if no transformation is possible.
         function getSimplifiedIndexedAccessType(type: IndexedAccessType): Type {
@@ -8383,11 +8387,22 @@ namespace ts {
                     getIntersectionType(stringIndexTypes)
                 ]);
             }
-            return getSubstitutedIndexedMappedType(type);
-        }
+            // Given an indexed access type T[K], if T is an intersection containing one or more generic types and one or
+            // more mapped types with a template type `never`, '(U & V & { [P in T]: never })[K]', return a
+            // transformed type that removes the never-mapped type:  '(U & V)[K]'. This mirrors what would happen
+            // eventually anyway, but it easier to reason about.
+            if (objectType.flags & TypeFlags.Intersection && isGenericObjectType(objectType) && some((<IntersectionType>objectType).types, isMappedTypeToNever)) {
+                let nonNeverTypes: Type[];
+                for (const t of (<IntersectionType>objectType).types) {
+                    if (!isMappedTypeToNever(t)) {
+                        (nonNeverTypes || (nonNeverTypes = [])).push(t);
+                    }
+                }
+                if (nonNeverTypes) {
+                    return getIndexedAccessType(getIntersectionType(nonNeverTypes), type.indexType);
+                }
+            }
 
-        function getSubstitutedIndexedMappedType(type: IndexedAccessType): Type {
-            const objectType = type.objectType;
             // If the object type is a mapped type { [P in K]: E }, where K is generic, instantiate E using a mapper
             // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
             // construct the type Box<T[X]>.
