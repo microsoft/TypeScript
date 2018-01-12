@@ -2149,15 +2149,14 @@ declare namespace ts {
         declaration?: SignatureDeclaration;
     }
     enum InferencePriority {
-        Contravariant = 1,
-        NakedTypeVariable = 2,
-        MappedType = 4,
-        ReturnType = 8,
-        NeverType = 16,
+        NakedTypeVariable = 1,
+        MappedType = 2,
+        ReturnType = 4,
     }
     interface InferenceInfo {
         typeParameter: TypeParameter;
         candidates: Type[];
+        contraCandidates: Type[];
         inferredType: Type;
         priority: InferencePriority;
         topLevel: boolean;
