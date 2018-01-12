@@ -667,7 +667,8 @@ namespace ts {
             dropDiagnosticsProducingTypeChecker,
             getSourceFileFromReference,
             sourceFileToPackageName,
-            redirectTargetsSet
+            redirectTargetsSet,
+            isEmittedFile
         };
 
         verifyCompilerOptions();
@@ -2342,6 +2343,20 @@ namespace ts {
         function blockEmittingOfFile(emitFileName: string, diag: Diagnostic) {
             hasEmitBlockingDiagnostics.set(toPath(emitFileName), true);
             programDiagnostics.add(diag);
+        }
+
+        function isEmittedFile(file: string) {
+            if (options.noEmit) {
+                return false;
+            }
+
+            return forEachEmittedFile(getEmitHost(), ({ jsFilePath, declarationFilePath }) =>
+                isSameFile(jsFilePath, file) ||
+                (declarationFilePath && isSameFile(declarationFilePath, file)));
+        }
+
+        function isSameFile(file1: string, file2: string) {
+            return comparePaths(file1, file2, currentDirectory, !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
         }
     }
 

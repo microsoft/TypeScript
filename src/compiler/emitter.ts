@@ -18,8 +18,8 @@ namespace ts {
      *   If an array, the full list of source files to emit.
      *   Else, calls `getSourceFilesToEmit` with the (optional) target source file to determine the list of source files to emit.
      */
-    export function forEachEmittedFile(
-        host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle, emitOnlyDtsFiles: boolean) => void,
+    export function forEachEmittedFile<T>(
+        host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle, emitOnlyDtsFiles: boolean) => T,
         sourceFilesOrTargetSourceFile?: SourceFile[] | SourceFile,
         emitOnlyDtsFiles?: boolean) {
 
@@ -30,7 +30,10 @@ namespace ts {
                 const jsFilePath = options.outFile || options.out;
                 const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
                 const declarationFilePath = options.declaration ? removeFileExtension(jsFilePath) + Extension.Dts : "";
-                action({ jsFilePath, sourceMapFilePath, declarationFilePath }, createBundle(sourceFiles), emitOnlyDtsFiles);
+                const result = action({ jsFilePath, sourceMapFilePath, declarationFilePath }, createBundle(sourceFiles), emitOnlyDtsFiles);
+                if (result) {
+                    return result;
+                }
             }
         }
         else {
@@ -38,7 +41,10 @@ namespace ts {
                 const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, getOutputExtension(sourceFile, options));
                 const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
                 const declarationFilePath = !isSourceFileJavaScript(sourceFile) && (emitOnlyDtsFiles || options.declaration) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
-                action({ jsFilePath, sourceMapFilePath, declarationFilePath }, sourceFile, emitOnlyDtsFiles);
+                const result = action({ jsFilePath, sourceMapFilePath, declarationFilePath }, sourceFile, emitOnlyDtsFiles);
+                if (result) {
+                    return result;
+                }
             }
         }
     }
