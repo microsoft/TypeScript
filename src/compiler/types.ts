@@ -4120,6 +4120,7 @@ namespace ts {
         isFilePath?: boolean;                                   // True if option value is a path or fileName
         shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;                        // The message describing what the command line switch does
+        descriptionOnTSConfig?: DiagnosticMessage;              // The message describing what the option does in tsconfig.json file
         paramType?: DiagnosticMessage;                          // The name to be used for a non-boolean option's parameter
         isTSConfigOnly?: boolean;                               // True if option can only be specified via tsconfig.json file
         isCommandLineOnly?: boolean;
