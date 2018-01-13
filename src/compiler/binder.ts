@@ -2740,6 +2740,9 @@ namespace ts {
             case SyntaxKind.PropertyAccessExpression:
                 return computePropertyAccess(<PropertyAccessExpression>node, subtreeFlags);
 
+            case SyntaxKind.ElementAccessExpression:
+                return computeElementAccess(<ElementAccessExpression>node, subtreeFlags);
+
             default:
                 return computeOther(node, kind, subtreeFlags);
         }
@@ -2748,17 +2751,21 @@ namespace ts {
     function computeCallExpression(node: CallExpression, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
         const expression = node.expression;
-        const expressionKind = expression.kind;
 
         if (node.typeArguments) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
         if (subtreeFlags & TransformFlags.ContainsSpread
-            || isSuperOrSuperProperty(expression, expressionKind)) {
+            || (expression.transformFlags & (TransformFlags.Super | TransformFlags.ContainsSuper))) {
             // If the this node contains a SpreadExpression, or is a super call, then it is an ES6
             // node.
             transformFlags |= TransformFlags.AssertES2015;
+            // super property or element accesses could be inside lambdas, etc, and need a captured `this`,
+            // while super keyword for super calls (indicated by TransformFlags.Super) does not (since it can only be top-level in a constructor)
+            if (expression.transformFlags & TransformFlags.ContainsSuper) {
+                transformFlags |= TransformFlags.ContainsLexicalThis;
+            }
         }
 
         if (expression.kind === SyntaxKind.ImportKeyword) {
@@ -2773,21 +2780,6 @@ namespace ts {
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
         return transformFlags & ~TransformFlags.ArrayLiteralOrCallOrNewExcludes;
-    }
-
-    function isSuperOrSuperProperty(node: Node, kind: SyntaxKind) {
-        switch (kind) {
-            case SyntaxKind.SuperKeyword:
-                return true;
-
-            case SyntaxKind.PropertyAccessExpression:
-            case SyntaxKind.ElementAccessExpression:
-                const expression = (<PropertyAccessExpression | ElementAccessExpression>node).expression;
-                const expressionKind = expression.kind;
-                return expressionKind === SyntaxKind.SuperKeyword;
-        }
-
-        return false;
     }
 
     function computeNewExpression(node: NewExpression, subtreeFlags: TransformFlags) {
@@ -2884,7 +2876,7 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        return transformFlags & ~TransformFlags.NodeExcludes;
+        return transformFlags & ~TransformFlags.OuterExpressionExcludes;
     }
 
     function computeClassDeclaration(node: ClassDeclaration, subtreeFlags: TransformFlags) {
@@ -3203,17 +3195,32 @@ namespace ts {
 
     function computePropertyAccess(node: PropertyAccessExpression, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const expression = node.expression;
-        const expressionKind = expression.kind;
 
         // If a PropertyAccessExpression starts with a super keyword, then it is
         // ES6 syntax, and requires a lexical `this` binding.
-        if (expressionKind === SyntaxKind.SuperKeyword) {
-            transformFlags |= TransformFlags.ContainsLexicalThis;
+        if (transformFlags & TransformFlags.Super) {
+            transformFlags ^= TransformFlags.Super;
+            transformFlags |= TransformFlags.ContainsSuper;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        return transformFlags & ~TransformFlags.NodeExcludes;
+        return transformFlags & ~TransformFlags.PropertyAccessExcludes;
+    }
+
+    function computeElementAccess(node: ElementAccessExpression, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags;
+        const expression = node.expression;
+        const expressionFlags = expression.transformFlags; // We do not want to aggregate flags from the argument expression for super/this capturing
+
+        // If an ElementAccessExpression starts with a super keyword, then it is
+        // ES6 syntax, and requires a lexical `this` binding.
+        if (expressionFlags & TransformFlags.Super) {
+            transformFlags &= ~TransformFlags.Super;
+            transformFlags |= TransformFlags.ContainsSuper;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.PropertyAccessExcludes;
     }
 
     function computeVariableDeclaration(node: VariableDeclaration, subtreeFlags: TransformFlags) {
@@ -3333,6 +3340,13 @@ namespace ts {
                 transformFlags |= TransformFlags.AssertESNext | TransformFlags.AssertES2017;
                 break;
 
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.AsExpression:
+            case SyntaxKind.PartiallyEmittedExpression:
+                // These nodes are TypeScript syntax.
+                transformFlags |= TransformFlags.AssertTypeScript;
+                excludeFlags = TransformFlags.OuterExpressionExcludes;
+                break;
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.PrivateKeyword:
             case SyntaxKind.ProtectedKeyword:
@@ -3341,8 +3355,6 @@ namespace ts {
             case SyntaxKind.ConstKeyword:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.EnumMember:
-            case SyntaxKind.TypeAssertionExpression:
-            case SyntaxKind.AsExpression:
             case SyntaxKind.NonNullExpression:
             case SyntaxKind.ReadonlyKeyword:
                 // These nodes are TypeScript syntax.
@@ -3470,7 +3482,8 @@ namespace ts {
 
             case SyntaxKind.SuperKeyword:
                 // This node is ES6 syntax.
-                transformFlags |= TransformFlags.AssertES2015;
+                transformFlags |= TransformFlags.AssertES2015 | TransformFlags.Super;
+                excludeFlags = TransformFlags.OuterExpressionExcludes; // must be set to persist `Super`
                 break;
 
             case SyntaxKind.ThisKeyword:
@@ -3627,6 +3640,15 @@ namespace ts {
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
                 return TransformFlags.BindingPatternExcludes;
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.AsExpression:
+            case SyntaxKind.PartiallyEmittedExpression:
+            case SyntaxKind.ParenthesizedExpression:
+            case SyntaxKind.SuperKeyword:
+                return TransformFlags.OuterExpressionExcludes;
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.ElementAccessExpression:
+                return TransformFlags.PropertyAccessExcludes;
             default:
                 return TransformFlags.NodeExcludes;
         }
