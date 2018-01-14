@@ -8428,10 +8428,6 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function isGenericExtendsType(type: Type) {
-            return maybeTypeOfKind(type, TypeFlags.Instantiable | TypeFlags.GenericMappedType);
-        }
-
         function createExtendsType(checkType: Type, extendsType: Type) {
             const type = <ExtendsType>createType(TypeFlags.Extends);
             type.checkType = checkType;
@@ -8447,9 +8443,16 @@ namespace ts {
             if (checkType.flags & TypeFlags.Any) {
                 return booleanType;
             }
-            if (!isGenericExtendsType(checkType) && !isGenericExtendsType(extendsType)) {
-                return isTypeAssignableTo(checkType, extendsType) ? trueType : falseType;
+            // Return trueType if type is definitely assignable
+            if (isTypeAssignableTo(checkType, extendsType)) {
+                return trueType;
             }
+            // Return falseType is type is definitely not assignable
+            if (!isTypeAssignableTo(instantiateType(checkType, anyMapper), instantiateType(extendsType, constraintMapper))) {
+                // Type is definitely not assignable
+                return falseType;
+            }
+            // Type is possibly assignable, defer the check
             const id = checkType.id + "," + extendsType.id;
             let type = extendsTypes.get(id);
             if (!type) {
@@ -8842,6 +8845,14 @@ namespace ts {
 
         function createReplacementMapper(source: Type, target: Type, baseMapper: TypeMapper): TypeMapper {
             return t => t === source ? target : baseMapper(t);
+        }
+
+        function anyMapper(type: Type) {
+            return type.flags & TypeFlags.TypeParameter ? anyType : type;
+        }
+
+        function constraintMapper(type: Type) {
+            return type.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>type) || anyType : type;
         }
 
         function cloneTypeParameter(typeParameter: TypeParameter): TypeParameter {
