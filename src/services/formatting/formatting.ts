@@ -623,10 +623,13 @@ namespace ts.formatting {
 
             // if there are any tokens that logically belong to node and interleave child nodes
             // such tokens will be consumed in processChildNode for for the child that follows them
+            let inheritedIndentation = Constants.Unknown;
+            let lastChildEndLine = Constants.Unknown;
             forEachChild(
                 node,
                 child => {
-                    processChildNode(child, /*inheritedIndentation*/ Constants.Unknown, node, nodeDynamicIndentation, nodeStartLine, undecoratedNodeStartLine, /*isListItem*/ false);
+                    inheritedIndentation = processChildNode(child, inheritedIndentation, node, nodeDynamicIndentation, nodeStartLine, undecoratedNodeStartLine, lastChildEndLine);
+                    lastChildEndLine = sourceFile.getLineAndCharacterOfPosition(child.getEnd()).line;
                 },
                 nodes => {
                     processChildNodes(nodes, node, nodeStartLine, nodeDynamicIndentation);
@@ -648,8 +651,7 @@ namespace ts.formatting {
                 parentDynamicIndentation: DynamicIndentation,
                 parentStartLine: number,
                 undecoratedParentStartLine: number,
-                isListItem: boolean,
-                isFirstListItem?: boolean): number {
+                lastChildEndLine: number): number {
 
                 const childStartPos = child.getStart(sourceFile);
 
@@ -660,10 +662,27 @@ namespace ts.formatting {
                     undecoratedChildStartLine = sourceFile.getLineAndCharacterOfPosition(getNonDecoratorTokenPosOfNode(child, sourceFile)).line;
                 }
 
+                let isListLikeItem = false;
+                switch (parent.kind) {
+                    case SyntaxKind.ArrayLiteralExpression:
+                    case SyntaxKind.BinaryExpression:
+                    case SyntaxKind.CallExpression:
+                    case SyntaxKind.NewExpression:
+                        isListLikeItem = true;
+                        if (childStartLine > lastChildEndLine) {
+                            inheritedIndentation = Constants.Unknown;
+                        }
+                        break;
+                    case SyntaxKind.SourceFile:
+                        // skip 'inheritedIndentation' reset to don't break formattingAfterMultiLineIfCondition.ts
+                        isListLikeItem = true;
+                        break;
+                }
+
                 // if child is a list item - try to get its indentation, only if parent is within the original range.
                 let childIndentationAmount = Constants.Unknown;
 
-                if (isListItem && rangeContainsRange(originalRange, parent)) {
+                if (isListLikeItem && rangeContainsRange(originalRange, parent)) {
                     childIndentationAmount = tryComputeIndentationForListItem(childStartPos, child.end, parentStartLine, originalRange, inheritedIndentation);
                     if (childIndentationAmount !== Constants.Unknown) {
                         inheritedIndentation = childIndentationAmount;
@@ -718,7 +737,7 @@ namespace ts.formatting {
 
                 childContextNode = node;
 
-                if (isFirstListItem && parent.kind === SyntaxKind.ArrayLiteralExpression && inheritedIndentation === Constants.Unknown) {
+                if (isListLikeItem && inheritedIndentation === Constants.Unknown) {
                     inheritedIndentation = childIndentation.indentation;
                 }
 
@@ -762,9 +781,10 @@ namespace ts.formatting {
                 }
 
                 let inheritedIndentation = Constants.Unknown;
-                for (let i = 0; i < nodes.length; i++) {
-                    const child = nodes[i];
-                    inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListItem*/ true, /*isFirstListItem*/ i === 0);
+                let lastChildEndLine = Constants.Unknown;
+                for (const child of nodes) {
+                    inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, lastChildEndLine);
+                    lastChildEndLine = sourceFile.getLineAndCharacterOfPosition(child.getEnd()).line;
                 }
 
                 if (listEndToken !== SyntaxKind.Unknown) {
