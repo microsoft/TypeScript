@@ -1902,7 +1902,7 @@ namespace ts {
                     error(errorNode, diag, moduleReference, resolvedModule.resolvedFileName);
                 }
                 else if (noImplicitAny && moduleNotFoundError) {
-                    let shouldNotSuggestTryNpm = !resolvedModule.isExternalLibraryImport || startsWith(moduleReference, "@types/./");
+                    const shouldNotSuggestTryNpm = !resolvedModule.isExternalLibraryImport || startsWith(moduleReference, "@types/./");
                     let errorInfo = shouldNotSuggestTryNpm ? undefined : chainDiagnosticMessages(/*details*/ undefined,
                         Diagnostics.Try_npm_install_types_Slash_0_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
                         moduleReference);
