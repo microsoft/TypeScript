@@ -252,7 +252,6 @@ namespace ts {
         ParenthesizedType,
         ThisType,
         TypeOperator,
-        BinaryType,
         IndexedAccessType,
         MappedType,
         LiteralType,
@@ -1114,13 +1113,6 @@ namespace ts {
         kind: SyntaxKind.TypeOperator;
         operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword;
         type: TypeNode;
-    }
-
-    export interface BinaryTypeNode extends TypeNode {
-        kind: SyntaxKind.BinaryType;
-        left: TypeNode;
-        operator: SyntaxKind.ExtendsKeyword;
-        right: TypeNode;
     }
 
     /* @internal */
@@ -3409,16 +3401,15 @@ namespace ts {
         Index                   = 1 << 19,  // keyof T
         IndexedAccess           = 1 << 20,  // T[K]
         Conditional             = 1 << 21,  // T extends U ? X : Y
-        Extends                 = 1 << 22,  // T extends U
         /* @internal */
-        FreshLiteral            = 1 << 23,  // Fresh literal or unique type
+        FreshLiteral            = 1 << 22,  // Fresh literal or unique type
         /* @internal */
-        ContainsWideningType    = 1 << 24,  // Type is or contains undefined or null widening type
+        ContainsWideningType    = 1 << 23,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 25,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 1 << 24,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 26,  // Type is or contains the anyFunctionType
-        NonPrimitive            = 1 << 27,  // intrinsic object type
+        ContainsAnyFunctionType = 1 << 25,  // Type is or contains the anyFunctionType
+        NonPrimitive            = 1 << 26,  // intrinsic object type
         /* @internal */
         GenericMappedType       = 1 << 29,  // Flag used by maybeTypeOfKind
 
@@ -3438,14 +3429,14 @@ namespace ts {
         Primitive = String | Number | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol,
         StringLike = String | StringLiteral | Index,
         NumberLike = Number | NumberLiteral | Enum,
-        BooleanLike = Boolean | BooleanLiteral | Extends,
+        BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
         ESSymbolLike = ESSymbol | UniqueESSymbol,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
         TypeVariable = TypeParameter | IndexedAccess,
         InstantiableNonPrimitive = TypeVariable | Conditional,
-        InstantiablePrimitive = Index | Extends,
+        InstantiablePrimitive = Index,
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
 
@@ -3707,11 +3698,6 @@ namespace ts {
         extendsType: Type;
         trueType: Type;
         falseType: Type;
-    }
-
-    export interface ExtendsType extends InstantiableType {
-        checkType: Type;
-        extendsType: Type;
     }
 
     export const enum SignatureKind {

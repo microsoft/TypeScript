@@ -400,12 +400,6 @@ namespace ts {
                 return updateTypeOperatorNode(<TypeOperatorNode>node,
                     visitNode((<TypeOperatorNode>node).type, visitor, isTypeNode));
 
-            case SyntaxKind.BinaryType:
-                return updateBinaryTypeNode(<BinaryTypeNode>node,
-                    visitNode((<BinaryTypeNode>node).left, visitor, isTypeNode),
-                    (<BinaryTypeNode>node).operator,
-                    visitNode((<BinaryTypeNode>node).right, visitor, isTypeNode));
-
             case SyntaxKind.IndexedAccessType:
                 return updateIndexedAccessTypeNode((<IndexedAccessTypeNode>node),
                     visitNode((<IndexedAccessTypeNode>node).objectType, visitor, isTypeNode),

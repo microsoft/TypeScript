@@ -183,9 +183,6 @@ namespace ts {
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.TypeOperator:
                 return visitNode(cbNode, (<ParenthesizedTypeNode | TypeOperatorNode>node).type);
-            case SyntaxKind.BinaryType:
-                return visitNode(cbNode, (<BinaryTypeNode>node).left) ||
-                    visitNode(cbNode, (<BinaryTypeNode>node).right);
             case SyntaxKind.IndexedAccessType:
                 return visitNode(cbNode, (<IndexedAccessTypeNode>node).objectType) ||
                     visitNode(cbNode, (<IndexedAccessTypeNode>node).indexType);

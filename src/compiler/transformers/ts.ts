@@ -389,7 +389,6 @@ namespace ts {
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.ThisType:
                 case SyntaxKind.TypeOperator:
-                case SyntaxKind.BinaryType:
                 case SyntaxKind.IndexedAccessType:
                 case SyntaxKind.MappedType:
                 case SyntaxKind.LiteralType:
@@ -1887,7 +1886,6 @@ namespace ts {
 
                 case SyntaxKind.TypeQuery:
                 case SyntaxKind.TypeOperator:
-                case SyntaxKind.BinaryType:
                 case SyntaxKind.IndexedAccessType:
                 case SyntaxKind.MappedType:
                 case SyntaxKind.TypeLiteral:

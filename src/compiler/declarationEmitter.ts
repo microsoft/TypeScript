@@ -456,8 +456,6 @@ namespace ts {
                     return emitParenType(<ParenthesizedTypeNode>type);
                 case SyntaxKind.TypeOperator:
                     return emitTypeOperator(<TypeOperatorNode>type);
-                case SyntaxKind.BinaryType:
-                    return emitBinaryType(<BinaryTypeNode>type);
                 case SyntaxKind.IndexedAccessType:
                     return emitIndexedAccessType(<IndexedAccessTypeNode>type);
                 case SyntaxKind.MappedType:
@@ -569,12 +567,6 @@ namespace ts {
                 write(tokenToString(type.operator));
                 write(" ");
                 emitType(type.type);
-            }
-
-            function emitBinaryType(node: BinaryTypeNode) {
-                emitType(node.left);
-                write(" extends ");
-                emitType(node.right);
             }
 
             function emitIndexedAccessType(node: IndexedAccessTypeNode) {

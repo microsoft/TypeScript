@@ -4549,10 +4549,6 @@ namespace ts {
         return node.kind === SyntaxKind.TypeOperator;
     }
 
-    export function isBinaryTypeNode(node: Node): node is BinaryTypeNode {
-        return node.kind === SyntaxKind.BinaryType;
-    }
-
     export function isIndexedAccessTypeNode(node: Node): node is IndexedAccessTypeNode {
         return node.kind === SyntaxKind.IndexedAccessType;
     }
