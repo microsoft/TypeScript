@@ -720,19 +720,21 @@ namespace ts {
             : node;
     }
 
-    export function createConditionalTypeNode(conditionType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
+    export function createConditionalTypeNode(checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.ConditionalType) as ConditionalTypeNode;
-        node.conditionType = parenthesizeConditionalTypeMember(conditionType);
+        node.checkType = parenthesizeConditionalTypeMember(checkType);
+        node.extendsType = parenthesizeConditionalTypeMember(extendsType);
         node.trueType = trueType;
         node.falseType = falseType;
         return node;
     }
 
-    export function updateConditionalTypeNode(node: ConditionalTypeNode, conditionType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
-        return node.conditionType !== conditionType
+    export function updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
+        return node.checkType !== checkType
+            || node.extendsType !== extendsType
             || node.trueType !== trueType
             || node.falseType !== falseType
-            ? updateNode(createConditionalTypeNode(conditionType, trueType, falseType), node)
+            ? updateNode(createConditionalTypeNode(checkType, extendsType, trueType, falseType), node)
             : node;
     }
 

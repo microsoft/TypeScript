@@ -176,7 +176,8 @@ namespace ts {
             case SyntaxKind.IntersectionType:
                 return visitNodes(cbNode, cbNodes, (<UnionOrIntersectionTypeNode>node).types);
             case SyntaxKind.ConditionalType:
-                return visitNode(cbNode, (<ConditionalTypeNode>node).conditionType) ||
+                return visitNode(cbNode, (<ConditionalTypeNode>node).checkType) ||
+                    visitNode(cbNode, (<ConditionalTypeNode>node).extendsType) ||
                     visitNode(cbNode, (<ConditionalTypeNode>node).trueType) ||
                     visitNode(cbNode, (<ConditionalTypeNode>node).falseType);
             case SyntaxKind.ParenthesizedType:
@@ -2883,23 +2884,13 @@ namespace ts {
             return parseUnionOrIntersectionType(SyntaxKind.UnionType, parseIntersectionTypeOrHigher, SyntaxKind.BarToken);
         }
 
-        function parseBinaryTypeOrHigher(): TypeNode {
-            let type = parseUnionTypeOrHigher();
-            while (parseOptional(SyntaxKind.ExtendsKeyword)) {
-                const node = <BinaryTypeNode>createNode(SyntaxKind.BinaryType, type.pos);
-                node.left = type;
-                node.operator = SyntaxKind.ExtendsKeyword;
-                node.right = parseUnionTypeOrHigher();
-                type = finishNode(node);
-            }
-            return type;
-        }
-
         function parseConditionalTypeOrHigher(): TypeNode {
-            const type = parseBinaryTypeOrHigher();
-            if (parseOptional(SyntaxKind.QuestionToken)) {
+            const type = parseUnionTypeOrHigher();
+            if (parseOptional(SyntaxKind.ExtendsKeyword)) {
                 const node = <ConditionalTypeNode>createNode(SyntaxKind.ConditionalType, type.pos);
-                node.conditionType = type;
+                node.checkType = type;
+                node.extendsType = parseUnionTypeOrHigher();
+                parseExpected(SyntaxKind.QuestionToken);
                 node.trueType = parseConditionalTypeOrHigher();
                 parseExpected(SyntaxKind.ColonToken);
                 node.falseType = parseConditionalTypeOrHigher();

@@ -1099,7 +1099,8 @@ namespace ts {
 
     export interface ConditionalTypeNode extends TypeNode {
         kind: SyntaxKind.ConditionalType;
-        conditionType: TypeNode;
+        checkType: TypeNode;
+        extendsType: TypeNode;
         trueType: TypeNode;
         falseType: TypeNode;
     }
@@ -3407,7 +3408,7 @@ namespace ts {
         Intersection            = 1 << 18,  // Intersection (T & U)
         Index                   = 1 << 19,  // keyof T
         IndexedAccess           = 1 << 20,  // T[K]
-        Conditional             = 1 << 21,  // C ? T : U
+        Conditional             = 1 << 21,  // T extends U ? X : Y
         Extends                 = 1 << 22,  // T extends U
         /* @internal */
         FreshLiteral            = 1 << 23,  // Fresh literal or unique type
@@ -3702,7 +3703,8 @@ namespace ts {
     }
 
     export interface ConditionalType extends InstantiableType {
-        conditionType: Type;
+        checkType: Type;
+        extendsType: Type;
         trueType: Type;
         falseType: Type;
     }

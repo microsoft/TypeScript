@@ -387,7 +387,8 @@ namespace ts {
 
             case SyntaxKind.ConditionalType:
                 return updateConditionalTypeNode(<ConditionalTypeNode>node,
-                    visitNode((<ConditionalTypeNode>node).conditionType, visitor, isTypeNode),
+                    visitNode((<ConditionalTypeNode>node).checkType, visitor, isTypeNode),
+                    visitNode((<ConditionalTypeNode>node).extendsType, visitor, isTypeNode),
                     visitNode((<ConditionalTypeNode>node).trueType, visitor, isTypeNode),
                     visitNode((<ConditionalTypeNode>node).falseType, visitor, isTypeNode));
 

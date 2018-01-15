@@ -550,7 +550,9 @@ namespace ts {
             }
 
             function emitConditionalType(node: ConditionalTypeNode) {
-                emitType(node.conditionType);
+                emitType(node.checkType);
+                write(" extends ");
+                emitType(node.extendsType);
                 write(" ? ");
                 emitType(node.trueType);
                 write(" : ");

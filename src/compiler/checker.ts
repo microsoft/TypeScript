@@ -2643,10 +2643,11 @@ namespace ts {
                     return createIndexedAccessTypeNode(objectTypeNode, indexTypeNode);
                 }
                 if (type.flags & TypeFlags.Conditional) {
-                    const conditionTypeNode = typeToTypeNodeHelper((<ConditionalType>type).conditionType, context);
+                    const checkTypeNode = typeToTypeNodeHelper((<ConditionalType>type).checkType, context);
+                    const extendsTypeNode = typeToTypeNodeHelper((<ConditionalType>type).extendsType, context);
                     const trueTypeNode = typeToTypeNodeHelper((<ConditionalType>type).trueType, context);
                     const falseTypeNode = typeToTypeNodeHelper((<ConditionalType>type).falseType, context);
-                    return createConditionalTypeNode(conditionTypeNode, trueTypeNode, falseTypeNode);
+                    return createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
                 }
                 if (type.flags & TypeFlags.Extends) {
                     const leftTypeNode = typeToTypeNodeHelper((<ExtendsType>type).checkType, context);
@@ -3422,7 +3423,11 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
                     }
                     else if (type.flags & TypeFlags.Conditional) {
-                        writeType((<ConditionalType>type).conditionType, TypeFormatFlags.InElementType);
+                        writeType((<ConditionalType>type).checkType, TypeFormatFlags.InElementType);
+                        writeSpace(writer);
+                        writer.writeKeyword("extends");
+                        writeSpace(writer);
+                        writeType((<ConditionalType>type).extendsType, TypeFormatFlags.InElementType);
                         writeSpace(writer);
                         writePunctuation(writer, SyntaxKind.QuestionToken);
                         writeSpace(writer);
@@ -6396,14 +6401,11 @@ namespace ts {
             // with its constraint. We do this because if the constraint is a union type it will be distributed
             // over the conditional type and possibly reduced. For example, 'T extends undefined ? never : T'
             // removes 'undefined' from T.
-            const conditionType = type.conditionType;
-            if (conditionType.flags & TypeFlags.Extends) {
-                const checkType = (<ExtendsType>conditionType).checkType;
-                if (checkType.flags & TypeFlags.TypeParameter) {
-                    const constraint = getConstraintOfTypeParameter(<TypeParameter>checkType);
-                    if (constraint) {
-                        return instantiateType(type, createTypeMapper([<TypeParameter>checkType], [constraint]));
-                    }
+            const checkType = type.checkType;
+            if (checkType.flags & TypeFlags.TypeParameter) {
+                const constraint = getConstraintOfTypeParameter(<TypeParameter>checkType);
+                if (constraint) {
+                    return instantiateType(type, createTypeMapper([<TypeParameter>checkType], [constraint]));
                 }
             }
             return undefined;
@@ -8387,33 +8389,38 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function isGenericConditionType(type: Type) {
-            return maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive | TypeFlags.Extends);
-        }
-
-        function createConditionalType(conditionType: Type, whenTrueType: Type, whenFalseType: Type, aliasSymbol: Symbol, aliasTypeArguments: Type[]) {
+        function createConditionalType(checkType: Type, extendsType: Type, trueType: Type, falseType: Type, aliasSymbol: Symbol, aliasTypeArguments: Type[]) {
             const type = <ConditionalType>createType(TypeFlags.Conditional);
-            type.conditionType = conditionType;
-            type.trueType = whenTrueType;
-            type.falseType = whenFalseType;
+            type.checkType = checkType;
+            type.extendsType = extendsType;
+            type.trueType = trueType;
+            type.falseType = falseType;
             type.aliasSymbol = aliasSymbol;
             type.aliasTypeArguments = aliasTypeArguments;
             return type;
         }
 
-        function getConditionalType(condition: Type, whenTrue: Type, whenFalse: Type, aliasSymbol: Symbol, aliasTypeArguments: Type[], mapper: TypeMapper): Type {
-            if (!isGenericConditionType(condition)) {
-                return condition.flags & TypeFlags.Never ? neverType : getUnionType([
-                    typeMaybeAssignableTo(condition, trueType) ? instantiateType(whenTrue, mapper) : neverType,
-                    typeMaybeAssignableTo(condition, falseType) ? instantiateType(whenFalse, mapper) : neverType]);
+        function getConditionalType(checkType: Type, extendsType: Type, mapper: TypeMapper, trueType: Type, falseType: Type, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+            // Distribute union types over conditional types
+            if (checkType.flags & TypeFlags.Union) {
+                return getUnionType(map((<UnionType>checkType).types, t => getConditionalType(t, extendsType, mapper, trueType, falseType)));
             }
-            const resultTrueType = instantiateType(whenTrue, mapper);
-            const resultFalseType = instantiateType(whenFalse, mapper);
-            const resultTypeArguments = instantiateTypes(aliasTypeArguments, mapper);
-            const id = condition.id + "," + resultTrueType.id + "," + resultFalseType.id;
+            // Return trueType for a definitely true extends check
+            if (isTypeAssignableTo(checkType, extendsType)) {
+                return instantiateType(trueType, mapper);
+            }
+            // Return falseType for a definitely false extends check
+            if (!isTypeAssignableTo(instantiateType(checkType, anyMapper), instantiateType(extendsType, constraintMapper))) {
+                return instantiateType(falseType, mapper);
+            }
+            // Otherwise return a deferred conditional type
+            const resTrueType = instantiateType(trueType, mapper);
+            const resFalseType = instantiateType(falseType, mapper);
+            const resTypeArguments = instantiateTypes(aliasTypeArguments, mapper);
+            const id = checkType.id + "," + extendsType.id + "," + resTrueType.id + "," + resFalseType.id;
             let type = conditionalTypes.get(id);
             if (!type) {
-                conditionalTypes.set(id, type = createConditionalType(condition, resultTrueType, resultFalseType, aliasSymbol, resultTypeArguments));
+                conditionalTypes.set(id, type = createConditionalType(checkType, extendsType, resTrueType, resFalseType, aliasSymbol, resTypeArguments));
             }
             return type;
         }
@@ -8421,9 +8428,9 @@ namespace ts {
         function getTypeFromConditionalTypeNode(node: ConditionalTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getConditionalType(getTypeFromTypeNode(node.conditionType),
-                    getTypeFromTypeNode(node.trueType), getTypeFromTypeNode(node.falseType),
-                    getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node), identityMapper);
+                links.resolvedType = getConditionalType(getTypeFromTypeNode(node.checkType), getTypeFromTypeNode(node.extendsType),
+                    identityMapper, getTypeFromTypeNode(node.trueType), getTypeFromTypeNode(node.falseType),
+                    getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node));
             }
             return links.resolvedType;
         }
@@ -9039,23 +9046,19 @@ namespace ts {
             // Check if we have a conditional type of the form T extends U ? X : Y, where T is a type parameter.
             // If so, the conditional type is distributive over a union type and when T is instantiated to a union
             // type A | B, we produce (A extends U ? X : Y) | (B extends U ? X : Y).
-            const conditionType = type.conditionType;
-            if (conditionType.flags & TypeFlags.Extends) {
-                const checkType = (<ExtendsType>conditionType).checkType;
-                if (checkType.flags & TypeFlags.TypeParameter) {
-                    const instantiatedType = mapper(<TypeParameter>checkType);
-                    if (checkType !== instantiatedType && instantiatedType.flags & TypeFlags.Union) {
-                        return mapType(instantiatedType, t => instantiateConditionalType(type, createReplacementMapper(checkType, t, mapper)));
-                    }
+            const checkType = type.checkType;
+            if (checkType.flags & TypeFlags.TypeParameter) {
+                const instantiatedType = mapper(<TypeParameter>checkType);
+                if (checkType !== instantiatedType && instantiatedType.flags & TypeFlags.Union) {
+                    return mapType(instantiatedType, t => instantiateConditionalType(type, createReplacementMapper(checkType, t, mapper)));
                 }
             }
             return instantiateConditionalType(type, mapper);
         }
 
         function instantiateConditionalType(type: ConditionalType, mapper: TypeMapper): Type {
-            return getConditionalType(instantiateType((<ConditionalType>type).conditionType, mapper),
-                (<ConditionalType>type).trueType, (<ConditionalType>type).falseType,
-                type.aliasSymbol, type.aliasTypeArguments, mapper);
+            return getConditionalType(instantiateType(type.checkType, mapper), instantiateType(type.extendsType, mapper),
+                mapper, type.trueType, type.falseType, type.aliasSymbol, type.aliasTypeArguments);
         }
 
         function instantiateType(type: Type, mapper: TypeMapper): Type {
@@ -11644,7 +11647,8 @@ namespace ts {
                     inferFromTypes((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType);
                 }
                 else if (source.flags & TypeFlags.Conditional && target.flags & TypeFlags.Conditional) {
-                    inferFromTypes((<ConditionalType>source).conditionType, (<ConditionalType>target).conditionType);
+                    inferFromTypes((<ConditionalType>source).checkType, (<ConditionalType>target).checkType);
+                    inferFromTypes((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType);
                     inferFromTypes((<ConditionalType>source).trueType, (<ConditionalType>target).trueType);
                     inferFromTypes((<ConditionalType>source).falseType, (<ConditionalType>target).falseType);
                 }
@@ -20358,7 +20362,6 @@ namespace ts {
 
         function checkConditionalType(node: ConditionalTypeNode) {
             forEachChild(node, checkSourceElement);
-            checkTypeAssignableTo(getTypeFromTypeNode(node.conditionType), booleanType, node.conditionType);
         }
 
         function isPrivateWithinAmbient(node: Node): boolean {

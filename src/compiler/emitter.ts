@@ -1134,7 +1134,9 @@ namespace ts {
         }
 
         function emitConditionalType(node: ConditionalTypeNode) {
-            emit(node.conditionType);
+            emit(node.checkType);
+            write(" extends ");
+            emit(node.extendsType);
             write(" ? ");
             emit(node.trueType);
             write(" : ");
