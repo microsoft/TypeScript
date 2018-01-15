@@ -3401,15 +3401,16 @@ namespace ts {
         Index                   = 1 << 19,  // keyof T
         IndexedAccess           = 1 << 20,  // T[K]
         Conditional             = 1 << 21,  // T extends U ? X : Y
+        Substitution            = 1 << 22,  // Type parameter substitution
         /* @internal */
-        FreshLiteral            = 1 << 22,  // Fresh literal or unique type
+        FreshLiteral            = 1 << 23,  // Fresh literal or unique type
         /* @internal */
-        ContainsWideningType    = 1 << 23,  // Type is or contains undefined or null widening type
+        ContainsWideningType    = 1 << 24,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 24,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 1 << 25,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 25,  // Type is or contains the anyFunctionType
-        NonPrimitive            = 1 << 26,  // intrinsic object type
+        ContainsAnyFunctionType = 1 << 26,  // Type is or contains the anyFunctionType
+        NonPrimitive            = 1 << 27,  // intrinsic object type
         /* @internal */
         GenericMappedType       = 1 << 29,  // Flag used by maybeTypeOfKind
 
@@ -3435,7 +3436,7 @@ namespace ts {
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
         TypeVariable = TypeParameter | IndexedAccess,
-        InstantiableNonPrimitive = TypeVariable | Conditional,
+        InstantiableNonPrimitive = TypeVariable | Conditional | Substitution,
         InstantiablePrimitive = Index,
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
@@ -3693,11 +3694,18 @@ namespace ts {
         type: InstantiableType | UnionOrIntersectionType;
     }
 
+    // T extends U ? X : Y (TypeFlags.Conditional)
     export interface ConditionalType extends InstantiableType {
         checkType: Type;
         extendsType: Type;
         trueType: Type;
         falseType: Type;
+    }
+
+    // Type parameter substitution (TypeFlags.Substitution)
+    export interface SubstitutionType extends InstantiableType {
+        typeParameter: TypeParameter;  // Target type parameter
+        substitute: Type;              // Type to substitute for type parameter
     }
 
     export const enum SignatureKind {

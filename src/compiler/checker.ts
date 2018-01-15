@@ -2648,6 +2648,9 @@ namespace ts {
                     const falseTypeNode = typeToTypeNodeHelper((<ConditionalType>type).falseType, context);
                     return createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
                 }
+                if (type.flags & TypeFlags.Substitution) {
+                    return typeToTypeNodeHelper((<SubstitutionType>type).typeParameter, context);
+                }
 
                 Debug.fail("Should be unreachable.");
 
@@ -3430,6 +3433,9 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.ColonToken);
                         writeSpace(writer);
                         writeType((<ConditionalType>type).falseType, TypeFormatFlags.InElementType);
+                    }
+                    else if (type.flags & TypeFlags.Substitution) {
+                        writeType((<SubstitutionType>type).typeParameter, TypeFormatFlags.None);
                     }
                     else {
                         // Should never get here
@@ -6480,6 +6486,9 @@ namespace ts {
                 if (t.flags & TypeFlags.Conditional) {
                     return getBaseConstraint(getConstraintOfConditionalType(<ConditionalType>t));
                 }
+                if (t.flags & TypeFlags.Substitution) {
+                    return getBaseConstraint((<SubstitutionType>t).substitute);
+                }
                 if (isGenericMappedType(t)) {
                     return emptyObjectType;
                 }
@@ -7458,7 +7467,7 @@ namespace ts {
                     error(node, Diagnostics.Type_0_is_not_generic, symbolToString(symbol));
                     return unknownType;
                 }
-                return res;
+                return res.flags & TypeFlags.TypeParameter ? getConstrainedTypeParameter(<TypeParameter>res, node) : res;
             }
 
             if (!(symbol.flags & SymbolFlags.Value && isJSDocTypeReference(node))) {
@@ -7495,6 +7504,26 @@ namespace ts {
                 (symbol.members || getJSDocClassTag(symbol.valueDeclaration))) {
                 return getInferredClassType(symbol);
             }
+        }
+
+        function getConstrainedTypeParameter(typeParameter: TypeParameter, node: Node) {
+            let constraints: Type[];
+            while (isTypeNode(node)) {
+                const parent = node.parent;
+                if (parent.kind === SyntaxKind.ConditionalType && node === (<ConditionalTypeNode>parent).trueType) {
+                    if (getTypeFromTypeNode((<ConditionalTypeNode>parent).checkType) === typeParameter) {
+                        constraints = append(constraints, getTypeFromTypeNode((<ConditionalTypeNode>parent).extendsType));
+                    }
+                }
+                node = parent;
+            }
+            if (constraints) {
+                const result = <SubstitutionType>createType(TypeFlags.Substitution);
+                result.typeParameter = typeParameter;
+                result.substitute = getIntersectionType(append(constraints, typeParameter));
+                return result;
+            }
+            return typeParameter;
         }
 
         function isJSDocTypeReference(node: TypeReferenceType): node is TypeReferenceNode {
@@ -8395,13 +8424,14 @@ namespace ts {
                 return instantiateType(falseType, mapper);
             }
             // Otherwise return a deferred conditional type
+            const resCheckType = checkType.flags & TypeFlags.Substitution ? (<SubstitutionType>checkType).typeParameter : checkType;
             const resTrueType = instantiateType(trueType, mapper);
             const resFalseType = instantiateType(falseType, mapper);
             const resTypeArguments = instantiateTypes(aliasTypeArguments, mapper);
-            const id = checkType.id + "," + extendsType.id + "," + resTrueType.id + "," + resFalseType.id;
+            const id = resCheckType.id + "," + extendsType.id + "," + resTrueType.id + "," + resFalseType.id;
             let type = conditionalTypes.get(id);
             if (!type) {
-                conditionalTypes.set(id, type = createConditionalType(checkType, extendsType, resTrueType, resFalseType, aliasSymbol, resTypeArguments));
+                conditionalTypes.set(id, type = createConditionalType(resCheckType, extendsType, resTrueType, resFalseType, aliasSymbol, resTypeArguments));
             }
             return type;
         }
@@ -9034,6 +9064,9 @@ namespace ts {
                 if (type.flags & TypeFlags.Conditional) {
                     return getConditionalTypeInstantiation(<ConditionalType>type, mapper);
                 }
+                if (type.flags & TypeFlags.Substitution) {
+                    return instantiateType((<SubstitutionType>type).typeParameter, mapper);
+                }
             }
             return type;
         }
@@ -9619,6 +9652,13 @@ namespace ts {
                 if (target.flags & TypeFlags.StringOrNumberLiteral && target.flags & TypeFlags.FreshLiteral) {
                     target = (<LiteralType>target).regularType;
                 }
+                if (source.flags & TypeFlags.Substitution) {
+                    source = (<SubstitutionType>source).substitute;
+                }
+                if (target.flags & TypeFlags.Substitution) {
+                    target = (<SubstitutionType>target).typeParameter;
+                }
+
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                 if (source === target) return Ternary.True;
 
