@@ -2021,7 +2021,8 @@ declare namespace ts {
         Index = 524288,
         IndexedAccess = 1048576,
         Conditional = 2097152,
-        NonPrimitive = 67108864,
+        Substitution = 4194304,
+        NonPrimitive = 134217728,
         Literal = 224,
         Unit = 13536,
         StringOrNumberLiteral = 96,
@@ -2034,12 +2035,12 @@ declare namespace ts {
         UnionOrIntersection = 393216,
         StructuredType = 458752,
         TypeVariable = 1081344,
-        InstantiableNonPrimitive = 3178496,
+        InstantiableNonPrimitive = 7372800,
         InstantiablePrimitive = 524288,
-        Instantiable = 3702784,
-        StructuredOrInstantiable = 4161536,
-        Narrowable = 71272191,
-        NotUnionOrUnit = 67174913,
+        Instantiable = 7897088,
+        StructuredOrInstantiable = 8355840,
+        Narrowable = 142575359,
+        NotUnionOrUnit = 134283777,
     }
     type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
     interface Type {
@@ -2144,6 +2145,10 @@ declare namespace ts {
         extendsType: Type;
         trueType: Type;
         falseType: Type;
+    }
+    interface SubstitutionType extends InstantiableType {
+        typeParameter: TypeParameter;
+        substitute: Type;
     }
     enum SignatureKind {
         Call = 0,
