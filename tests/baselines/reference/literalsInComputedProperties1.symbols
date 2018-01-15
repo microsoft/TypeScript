@@ -31,7 +31,7 @@ x[3].toExponential();
 x[4].toExponential();
 >x[4].toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(literalsInComputedProperties1.ts, 0, 3))
->4 : Symbol(["4"], Decl(literalsInComputedProperties1.ts, 3, 10))
+>4 : Symbol([4], Decl(literalsInComputedProperties1.ts, 3, 10))
 >toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
 
 interface A {

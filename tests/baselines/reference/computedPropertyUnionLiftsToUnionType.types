@@ -1,0 +1,264 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyUnionLiftsToUnionType.ts ===
+declare var ab: 'a' | 'b';
+>ab : "a" | "b"
+
+declare var cd: 'c' | 'd';
+>cd : "c" | "d"
+
+declare var onetwo: 1 | 2;
+>onetwo : 2 | 1
+
+enum Alphabet {
+>Alphabet : Alphabet
+
+    Aleph,
+>Aleph : Alphabet.Aleph
+
+    Bet,
+>Bet : Alphabet.Bet
+}
+declare var alphabet: Alphabet;
+>alphabet : Alphabet
+>Alphabet : Alphabet
+
+const x: { a: string } | { b: string } = { [ab]: 'hi' }
+>x : { a: string; } | { b: string; }
+>a : string
+>b : string
+>{ [ab]: 'hi' } : { ["a"]: string; } | { ["b"]: string; }
+>ab : "a" | "b"
+>'hi' : "hi"
+
+//   multiple unions
+const y: { a: string, m: number, c: string }
+>y : { a: string; m: number; c: string; } | { a: string; m: number; d: string; } | { b: string; m: number; c: string; } | { b: string; m: number; d: string; }
+>a : string
+>m : number
+>c : string
+
+    | { a: string, m: number, d: string }
+>a : string
+>m : number
+>d : string
+
+    | { b: string, m: number, c: string }
+>b : string
+>m : number
+>c : string
+
+    | { b: string, m: number, d: string } = { [ab]: 'hi', m: 1, [cd]: 'there' }
+>b : string
+>m : number
+>d : string
+>{ [ab]: 'hi', m: 1, [cd]: 'there' } : { m: number; ["c"]: string; ["a"]: string; } | { m: number; ["d"]: string; ["a"]: string; } | { m: number; ["c"]: string; ["b"]: string; } | { m: number; ["d"]: string; ["b"]: string; }
+>ab : "a" | "b"
+>'hi' : "hi"
+>m : number
+>1 : 1
+>cd : "c" | "d"
+>'there' : "there"
+
+//   union, spread (with union inside), union
+const s: { a: string, c: string } | { b: string, c: string } = { [ab]: 'hi', ...{ c: 'no' }}
+>s : { a: string; c: string; } | { b: string; c: string; }
+>a : string
+>c : string
+>b : string
+>c : string
+>{ [ab]: 'hi', ...{ c: 'no' }} : { c: string; ["a"]: string; } | { c: string; ["b"]: string; }
+>ab : "a" | "b"
+>'hi' : "hi"
+>{ c: 'no' } : { c: string; }
+>c : string
+>'no' : "no"
+
+const sd: { a: string } | { b: string } = { [ab]: 'hi', ...{ a: 'no' }}
+>sd : { a: string; } | { b: string; }
+>a : string
+>b : string
+>{ [ab]: 'hi', ...{ a: 'no' }} : { a: string; } | { a: string; ["b"]: string; }
+>ab : "a" | "b"
+>'hi' : "hi"
+>{ a: 'no' } : { a: string; }
+>a : string
+>'no' : "no"
+
+const sn: { a: string, c: string }
+>sn : { a: string; c: string; } | { a: string; d: string; } | { b: string; c: string; } | { b: string; d: string; }
+>a : string
+>c : string
+
+    | { a: string, d: string }
+>a : string
+>d : string
+
+    | { b: string, c: string }
+>b : string
+>c : string
+
+    | { b: string, d: string } = { [ab]: 'hi', ...{ [cd]: 'no' }}
+>b : string
+>d : string
+>{ [ab]: 'hi', ...{ [cd]: 'no' }} : { ["c"]: string; ["a"]: string; } | { ["d"]: string; ["a"]: string; } | { ["c"]: string; ["b"]: string; } | { ["d"]: string; ["b"]: string; }
+>ab : "a" | "b"
+>'hi' : "hi"
+>{ [cd]: 'no' } : { ["c"]: string; } | { ["d"]: string; }
+>cd : "c" | "d"
+>'no' : "no"
+
+// methods
+const m: { a: string, m(): number, p: number } | { b: string, m(): number, p: number } =
+>m : { a: string; m(): number; p: number; } | { b: string; m(): number; p: number; }
+>a : string
+>m : () => number
+>p : number
+>b : string
+>m : () => number
+>p : number
+
+    { [ab]: 'hi', m() { return 1 }, get p() { return 2 } }
+>{ [ab]: 'hi', m() { return 1 }, get p() { return 2 } } : { m(): number; p: number; ["a"]: string; } | { m(): number; p: number; ["b"]: string; }
+>ab : "a" | "b"
+>'hi' : "hi"
+>m : () => number
+>1 : 1
+>p : number
+>2 : 2
+
+//   other literal types: number, enum (string and number)
+const n: { "1": string } | { "2": string } = { [onetwo]: 'hi' }
+>n : { "1": string; } | { "2": string; }
+>{ [onetwo]: 'hi' } : { [2]: string; } | { [1]: string; }
+>onetwo : 2 | 1
+>'hi' : "hi"
+
+const e: { "0": string } | { "1": string } = { [alphabet]: 'hi' }
+>e : { "0": string; } | { "1": string; }
+>{ [alphabet]: 'hi' } : { [0]: string; } | { [1]: string; }
+>alphabet : Alphabet
+>'hi' : "hi"
+
+//   destructuring
+declare let u: { a: string } | { b: string }
+>u : { a: string; } | { b: string; }
+>a : string
+>b : string
+
+({ [ab]: du } = u) // implicit any error
+>({ [ab]: du } = u) : { a: string; } | { b: string; }
+>{ [ab]: du } = u : { a: string; } | { b: string; }
+>{ [ab]: du } : { ["a"]: any; } | { ["b"]: any; }
+>ab : "a" | "b"
+>du : any
+>u : { a: string; } | { b: string; }
+
+var du: any
+>du : any
+
+declare let sig: { [s: string]: string }
+>sig : { [s: string]: string; }
+>s : string
+
+({ [ab]: ds } = sig) // fine, comes from index signature
+>({ [ab]: ds } = sig) : { [s: string]: string; }
+>{ [ab]: ds } = sig : { [s: string]: string; }
+>{ [ab]: ds } : { ["a"]: string; } | { ["b"]: string; }
+>ab : "a" | "b"
+>ds : string
+>sig : { [s: string]: string; }
+
+var ds: string
+>ds : string
+
+var duo: any
+>duo : any
+
+var dso: string
+>dso : string
+
+var { [ab]: duo } = u   // implicit any error (or similar to the singleton one)
+>ab : "a" | "b"
+>duo : any
+>u : { a: string; } | { b: string; }
+
+var { [ab]: dso } = sig // fine
+>ab : "a" | "b"
+>dso : string
+>sig : { [s: string]: string; }
+
+// number index signatures
+declare let sin: { [n: number]: number }
+>sin : { [n: number]: number; }
+>n : number
+
+var dn: number
+>dn : number
+
+({ [onetwo]: dn } = sin) // fine, from index signature
+>({ [onetwo]: dn } = sin) : { [n: number]: number; }
+>{ [onetwo]: dn } = sin : { [n: number]: number; }
+>{ [onetwo]: dn } : { [2]: number; } | { [1]: number; }
+>onetwo : 2 | 1
+>dn : number
+>sin : { [n: number]: number; }
+
+var dno: number
+>dno : number
+
+var { [onetwo]: dno } = sin // fine, from index signature
+>onetwo : 2 | 1
+>dno : number
+>sin : { [n: number]: number; }
+
+// # 16789
+declare const textMap: {[key: string]: string}
+>textMap : { [key: string]: string; }
+>key : string
+
+function getText (s: string, n: number) {
+>getText : (s: string, n: number) => void
+>s : string
+>n : number
+
+    var { [s]: rawText = s } = sig;
+>s : string
+>rawText : string
+>s : string
+>sig : { [s: string]: string; }
+
+    var { [n]: rawNumber = n } = sin;
+>n : number
+>rawNumber : number
+>n : number
+>sin : { [n: number]: number; }
+
+    ({ [s]: rawText } = sig);
+>({ [s]: rawText } = sig) : { [s: string]: string; }
+>{ [s]: rawText } = sig : { [s: string]: string; }
+>{ [s]: rawText } : { [x: string]: string; }
+>s : string
+>rawText : string
+>sig : { [s: string]: string; }
+
+    ({ [n]: rawNumber } = sin);
+>({ [n]: rawNumber } = sin) : { [n: number]: number; }
+>{ [n]: rawNumber } = sin : { [n: number]: number; }
+>{ [n]: rawNumber } : { [x: number]: number; }
+>n : number
+>rawNumber : number
+>sin : { [n: number]: number; }
+
+    var { [s]: noSig } = {};
+>s : string
+>noSig : any
+>{} : {}
+
+    ({ [s]: noSig } = {});
+>({ [s]: noSig } = {}) : {}
+>{ [s]: noSig } = {} : {}
+>{ [s]: noSig } : { [x: string]: any; }
+>s : string
+>noSig : any
+>{} : {}
+}
+

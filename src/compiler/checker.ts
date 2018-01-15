@@ -2184,7 +2184,7 @@ namespace ts {
         }
 
         // A reserved member name starts with two underscores, but the third character cannot be an underscore
-        // or the @ symbol. A third underscore indicates an escaped form of an identifer that started
+        // or the @ symbol. A third underscore indicates an escaped form of an identifier that started
         // with at least two underscores. The @ character indicates that the name is denoted by a well known ES
         // Symbol instance.
         function isReservedMemberName(name: __String) {
@@ -3280,6 +3280,15 @@ namespace ts {
                 const declaration = symbol.declarations[0];
                 const name = getNameOfDeclaration(declaration);
                 if (name) {
+                    if (name.kind === SyntaxKind.ComputedPropertyName &&
+                        symbol.flags & SymbolFlags.Transient &&
+                        !((symbol as TransientSymbol).checkFlags & CheckFlags.Late) &&
+                        !isWellKnownSymbolSyntactically((name as ComputedPropertyName).expression) &&
+                        symbol.escapedName !== undefined) {
+                        return isNumericLiteralName(symbol.escapedName) ?
+                            "[" + symbol.escapedName + "]" :
+                            '["' + unescapeLeadingUnderscores(symbol.escapedName) + '"]';
+                    }
                     return declarationNameToString(name);
                 }
                 if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
@@ -4327,7 +4336,7 @@ namespace ts {
             return symbol && getSymbolLinks(symbol).type || getTypeForVariableLikeDeclaration(node, /*includeOptionality*/ false);
         }
 
-        function isComputedNonLiteralName(name: PropertyName): boolean {
+        function isComputedNonLiteralName(name: PropertyName): name is ComputedPropertyName {
             return name.kind === SyntaxKind.ComputedPropertyName && !isStringOrNumericLiteral((<ComputedPropertyName>name).expression);
         }
 
@@ -4396,22 +4405,28 @@ namespace ts {
                     // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
                     const name = declaration.propertyName || <Identifier>declaration.name;
                     if (isComputedNonLiteralName(name)) {
-                        // computed properties with non-literal names are treated as 'any'
-                        return anyType;
+                        type = checkComputedDestructuredProperty(parentType, name, text => {
+                            const declaredType = getTypeOfPropertyOfType(parentType, text);
+                            return declaredType && getFlowTypeOfReference(declaration, declaredType);
+                        });
+                        if (!type) {
+                            return anyType;
+                        }
                     }
+                    else {
+                        // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
+                        // or otherwise the type of the string index signature.
+                        const text = getTextOfPropertyName(name);
 
-                    // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
-                    // or otherwise the type of the string index signature.
-                    const text = getTextOfPropertyName(name);
-
-                    // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
-                    if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
-                        parentType = getNonNullableType(parentType);
+                        // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
+                        if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
+                            parentType = getNonNullableType(parentType);
+                        }
+                        const declaredType = getTypeOfPropertyOfType(parentType, text);
+                        type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
+                            isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
+                            getIndexTypeOfType(parentType, IndexKind.String);
                     }
-                    const declaredType = getTypeOfPropertyOfType(parentType, text);
-                    type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
-                        isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
-                        getIndexTypeOfType(parentType, IndexKind.String);
                     if (!type) {
                         error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
                         return unknownType;
@@ -4640,17 +4655,23 @@ namespace ts {
             let hasComputedProperties = false;
             forEach(pattern.elements, e => {
                 const name = e.propertyName || <Identifier>e.name;
-                if (isComputedNonLiteralName(name)) {
-                    // do not include computed properties in the implied type
-                    hasComputedProperties = true;
-                    return;
-                }
+                let text: __String;
                 if (e.dotDotDotToken) {
                     stringIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
                     return;
                 }
-
-                const text = getTextOfPropertyName(name);
+                if (isComputedNonLiteralName(name)) {
+                    // only include computed properties with literal types in the implied type
+                    const computedType = checkComputedPropertyName(<ComputedPropertyName>name);
+                    if (!computedType || !(computedType.flags & TypeFlags.Literal)) {
+                        hasComputedProperties = true;
+                        return;
+                    }
+                    text = getTextOfPropertyLiteralType(computedType);
+                }
+                else {
+                    text = getTextOfPropertyName(name);
+                }
                 const flags = SymbolFlags.Property | (e.initializer ? SymbolFlags.Optional : 0);
                 const symbol = createSymbol(flags, text);
                 symbol.type = getTypeFromBindingElement(e, includePatternInType, reportErrors);
@@ -6100,9 +6121,13 @@ namespace ts {
                 getIntersectionType([info1.type, info2.type]), info1.isReadonly && info2.isReadonly);
         }
 
-        function unionSpreadIndexInfos(info1: IndexInfo, info2: IndexInfo): IndexInfo {
-            return info1 && info2 && createIndexInfo(
-                getUnionType([info1.type, info2.type]), info1.isReadonly || info2.isReadonly);
+        function unionSpreadIndexInfos(info1: IndexInfo, info2: IndexInfo, allowSingleIndex: boolean): IndexInfo {
+            if (info1 && info2) {
+                return createIndexInfo(getUnionType([info1.type, info2.type]), info1.isReadonly || info2.isReadonly);
+            }
+            if (allowSingleIndex) {
+                return info1 ? info1 : info2 ? info2 : undefined;
+            }
         }
 
         function includeMixinType(type: Type, types: Type[], index: number): Type {
@@ -8514,7 +8539,7 @@ namespace ts {
          * this function should be called in a left folding style, with left = previous result of getSpreadType
          * and right = the new element to be spread.
          */
-        function getSpreadType(left: Type, right: Type, symbol: Symbol, propagatedFlags: TypeFlags): Type {
+        function getSpreadType(left: Type, right: Type, symbol: Symbol, propagatedFlags: TypeFlags, fromComputedProperty: boolean): Type {
             if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
                 return anyType;
             }
@@ -8525,10 +8550,10 @@ namespace ts {
                 return left;
             }
             if (left.flags & TypeFlags.Union) {
-                return mapType(left, t => getSpreadType(t, right, symbol, propagatedFlags));
+                return mapType(left, t => getSpreadType(t, right, symbol, propagatedFlags, fromComputedProperty));
             }
             if (right.flags & TypeFlags.Union) {
-                return mapType(right, t => getSpreadType(left, t, symbol, propagatedFlags));
+                return mapType(right, t => getSpreadType(left, t, symbol, propagatedFlags, fromComputedProperty));
             }
             if (right.flags & (TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive)) {
                 return left;
@@ -8544,8 +8569,8 @@ namespace ts {
                 numberIndexInfo = getIndexInfoOfType(right, IndexKind.Number);
             }
             else {
-                stringIndexInfo = unionSpreadIndexInfos(getIndexInfoOfType(left, IndexKind.String), getIndexInfoOfType(right, IndexKind.String));
-                numberIndexInfo = unionSpreadIndexInfos(getIndexInfoOfType(left, IndexKind.Number), getIndexInfoOfType(right, IndexKind.Number));
+                stringIndexInfo = unionSpreadIndexInfos(getIndexInfoOfType(left, IndexKind.String), getIndexInfoOfType(right, IndexKind.String), fromComputedProperty);
+                numberIndexInfo = unionSpreadIndexInfos(getIndexInfoOfType(left, IndexKind.Number), getIndexInfoOfType(right, IndexKind.Number), fromComputedProperty);
             }
 
             for (const rightProp of getPropertiesOfType(right)) {
@@ -14766,7 +14791,7 @@ namespace ts {
 
             let propertiesTable = createSymbolTable();
             let propertiesArray: Symbol[] = [];
-            let spread: Type = emptyObjectType;
+            let intermediate: Type = emptyObjectType;
             let propagatedFlags: TypeFlags = TypeFlags.FreshLiteral;
 
             const contextualType = getApparentTypeOfContextualType(node);
@@ -14777,27 +14802,26 @@ namespace ts {
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
+            let hasUnionedComputedProperty = false;
             const isInJSFile = isInJavaScriptFile(node);
 
             let offset = 0;
             for (let i = 0; i < node.properties.length; i++) {
                 const memberDecl = node.properties[i];
-                let member = getSymbolOfNode(memberDecl);
-                let literalName: __String | undefined;
+                let member: Symbol;
+                let literalName: __String[] | __String | undefined;
                 if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
                     memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
                     isObjectLiteralMethod(memberDecl)) {
-                    let jsdocType: Type;
-                    if (isInJSFile) {
-                        jsdocType = getTypeForDeclarationFromJSDocComment(memberDecl);
-                    }
 
                     let type: Type;
                     if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
                         if (memberDecl.name.kind === SyntaxKind.ComputedPropertyName) {
-                            const t = checkComputedPropertyName(<ComputedPropertyName>memberDecl.name);
-                            if (t.flags & TypeFlags.Literal) {
-                                literalName = escapeLeadingUnderscores("" + (t as LiteralType).value);
+                            const computedType = checkComputedPropertyName(<ComputedPropertyName>memberDecl.name);
+                            if (isLiteralType(computedType)) {
+                                literalName = computedType.flags & TypeFlags.Union ?
+                                    (computedType as UnionType).types.map(getTextOfPropertyLiteralType) :
+                                    getTextOfPropertyLiteralType(computedType);
                             }
                         }
                         type = checkPropertyAssignment(<PropertyAssignment>memberDecl, checkMode);
@@ -14810,72 +14834,36 @@ namespace ts {
                         type = checkExpressionForMutableLocation((<ShorthandPropertyAssignment>memberDecl).name, checkMode);
                     }
 
-                    if (jsdocType) {
-                        checkTypeAssignableTo(type, jsdocType, memberDecl);
-                        type = jsdocType;
+                    if (isInJSFile) {
+                        const jsdocType = getTypeForDeclarationFromJSDocComment(memberDecl);
+                        if (jsdocType) {
+                            checkTypeAssignableTo(type, jsdocType, memberDecl);
+                            type = jsdocType;
+                        }
                     }
 
                     typeFlags |= type.flags;
-
-                    const nameType = hasLateBindableName(memberDecl) ? checkComputedPropertyName(memberDecl.name) : undefined;
-                    const prop = nameType && isTypeUsableAsLateBoundName(nameType)
-                        ? createSymbol(SymbolFlags.Property | member.flags, getLateBoundNameFromType(nameType), CheckFlags.Late)
-                        : createSymbol(SymbolFlags.Property | member.flags, literalName || member.escapedName);
-
-                    if (inDestructuringPattern) {
-                        // If object literal is an assignment pattern and if the assignment pattern specifies a default value
-                        // for the property, make the property optional.
-                        const isOptional =
-                            (memberDecl.kind === SyntaxKind.PropertyAssignment && hasDefaultValue((<PropertyAssignment>memberDecl).initializer)) ||
-                            (memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment && (<ShorthandPropertyAssignment>memberDecl).objectAssignmentInitializer);
-                        if (isOptional) {
-                            prop.flags |= SymbolFlags.Optional;
-                        }
-                        if (!literalName && hasDynamicName(memberDecl)) {
-                            patternWithComputedProperties = true;
-                        }
-                    }
-                    else if (contextualTypeHasPattern && !(getObjectFlags(contextualType) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
-                        // If object literal is contextually typed by the implied type of a binding pattern, and if the
-                        // binding pattern specifies a default value for the property, make the property optional.
-                        const impliedProp = getPropertyOfType(contextualType, member.escapedName);
-                        if (impliedProp) {
-                            prop.flags |= impliedProp.flags & SymbolFlags.Optional;
-                        }
-
-                        else if (!compilerOptions.suppressExcessPropertyErrors && !getIndexInfoOfType(contextualType, IndexKind.String)) {
-                            error(memberDecl.name, Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
-                                symbolToString(member), typeToString(contextualType));
-                        }
-                    }
-                    prop.declarations = member.declarations;
-                    prop.parent = member.parent;
-                    if (member.valueDeclaration) {
-                        prop.valueDeclaration = member.valueDeclaration;
+                    if (isArray(literalName)) {
+                        hasUnionedComputedProperty = true;
+                        updateIntermediateType(getUnionFromLiteralUnion(memberDecl, literalName, type));
+                        continue;
                     }
 
-                    prop.type = type;
-                    prop.target = member;
-                    member = prop;
+                    member = createProperty(memberDecl, literalName, type);
                 }
                 else if (memberDecl.kind === SyntaxKind.SpreadAssignment) {
                     if (languageVersion < ScriptTarget.ES2015) {
                         checkExternalEmitHelpers(memberDecl, ExternalEmitHelpers.Assign);
                     }
                     if (propertiesArray.length > 0) {
-                        spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags);
-                        propertiesArray = [];
-                        propertiesTable = createSymbolTable();
-                        hasComputedStringProperty = false;
-                        hasComputedNumberProperty = false;
-                        typeFlags = 0;
+                        updateIntermediateType(getSpreadType(intermediate, createObjectLiteralType(), node.symbol, propagatedFlags, /*fromComputedProperty*/ false));
                     }
                     const type = checkExpression((memberDecl as SpreadAssignment).expression);
                     if (!isValidSpreadType(type)) {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
-                    spread = getSpreadType(spread, type, node.symbol, propagatedFlags);
+                    intermediate = getSpreadType(intermediate, type, node.symbol, propagatedFlags, /*fromComputedProperty*/ false);
                     offset = i + 1;
                     continue;
                 }
@@ -14889,6 +14877,7 @@ namespace ts {
                     checkNodeDeferred(memberDecl);
                 }
 
+                member = member || getSymbolOfNode(memberDecl);
                 if (!literalName && hasNonBindableDynamicName(memberDecl)) {
                     if (isNumericName(memberDecl.name)) {
                         hasComputedNumberProperty = true;
@@ -14907,7 +14896,7 @@ namespace ts {
             // type with those properties for which the binding pattern specifies a default value.
             if (contextualTypeHasPattern) {
                 for (const prop of getPropertiesOfType(contextualType)) {
-                    if (!propertiesTable.get(prop.escapedName) && !(spread && getPropertyOfType(spread, prop.escapedName))) {
+                    if (!propertiesTable.get(prop.escapedName) && !(intermediate && getPropertyOfType(intermediate, prop.escapedName))) {
                         if (!(prop.flags & SymbolFlags.Optional)) {
                             error(prop.valueDeclaration || (<TransientSymbol>prop).bindingElement,
                                 Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
@@ -14918,14 +14907,83 @@ namespace ts {
                 }
             }
 
-            if (spread !== emptyObjectType) {
+            if (intermediate !== emptyObjectType) {
                 if (propertiesArray.length > 0) {
-                    spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags);
+                    intermediate = getSpreadType(intermediate, createObjectLiteralType(), node.symbol, propagatedFlags, /*fromComputedProperty*/ hasUnionedComputedProperty);
                 }
-                return spread;
+                return intermediate;
             }
 
             return createObjectLiteralType();
+
+            function updateIntermediateType(type: Type) {
+                intermediate = type;
+                propertiesArray = [];
+                propertiesTable = createSymbolTable();
+            }
+
+            function getUnionFromLiteralUnion(memberDecl: ObjectLiteralElementLike, literalNames: __String[], type: Type) {
+                const types: Type[] = [];
+                for (const literalName of literalNames) {
+                    const prop = createProperty(memberDecl, literalName, type);
+                    propertiesArray.push(prop);
+                    let duplicate: Symbol;
+                    if (propertiesTable.has(prop.escapedName)) {
+                        duplicate = propertiesTable.get(prop.escapedName);
+                    }
+                    propertiesTable.set(prop.escapedName, prop);
+
+                    types.push(createObjectLiteralType());
+
+                    propertiesArray.pop();
+                    if (duplicate) {
+                        propertiesTable.set(prop.escapedName, duplicate);
+                    }
+                    else {
+                        propertiesTable.delete(prop.escapedName);
+                    }
+                }
+                return getSpreadType(intermediate, getUnionType(types), node.symbol, propagatedFlags, /*fromComputedProperty*/ true);
+            }
+
+            function createProperty(memberDecl: ObjectLiteralElementLike, literalName: __String, type: Type) {
+                const member = getSymbolOfNode(memberDecl);
+                const nameType = hasLateBindableName(memberDecl) ? checkComputedPropertyName(memberDecl.name) : undefined;
+                const prop = nameType && isTypeUsableAsLateBoundName(nameType)
+                    ? createSymbol(SymbolFlags.Property | member.flags, getLateBoundNameFromType(nameType), CheckFlags.Late)
+                    : createSymbol(SymbolFlags.Property | member.flags, literalName || member.escapedName);
+                if (inDestructuringPattern) {
+                    // If object literal is an assignment pattern and if the assignment pattern specifies a default value
+                    // for the property, make the property optional.
+                    const isOptional = (memberDecl.kind === SyntaxKind.PropertyAssignment && hasDefaultValue((<PropertyAssignment>memberDecl).initializer)) ||
+                        (memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment && (<ShorthandPropertyAssignment>memberDecl).objectAssignmentInitializer);
+                    if (isOptional) {
+                        prop.flags |= SymbolFlags.Optional;
+                    }
+                    if (!literalName && hasDynamicName(memberDecl)) {
+                        patternWithComputedProperties = true;
+                    }
+                }
+                else if (contextualTypeHasPattern && !(getObjectFlags(contextualType) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
+                    // If object literal is contextually typed by the implied type of a binding pattern, and if the
+                    // binding pattern specifies a default value for the property, make the property optional.
+                    const impliedProp = getPropertyOfType(contextualType, member.escapedName);
+                    if (impliedProp) {
+                        prop.flags |= impliedProp.flags & SymbolFlags.Optional;
+                    }
+                    else if (!compilerOptions.suppressExcessPropertyErrors && !getIndexInfoOfType(contextualType, IndexKind.String)) {
+                        error(memberDecl.name, Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1, symbolToString(member), typeToString(contextualType));
+                    }
+                }
+                prop.declarations = member.declarations;
+                prop.parent = member.parent;
+                if (member.valueDeclaration) {
+                    prop.valueDeclaration = member.valueDeclaration;
+                }
+                prop.type = type;
+                prop.target = member;
+                return prop;
+            }
 
             function createObjectLiteralType() {
                 const stringIndexInfo = isJSObjectLiteral ? jsObjectLiteralIndexInfo : hasComputedStringProperty ? getObjectLiteralIndexInfo(node.properties, offset, propertiesArray, IndexKind.String) : undefined;
@@ -14945,6 +15003,13 @@ namespace ts {
                 }
                 return result;
             }
+        }
+
+        function getTextOfPropertyLiteralType(type: Type): __String {
+            if (type.flags & TypeFlags.Intrinsic) {
+                return (type as IntrinsicType).intrinsicName as __String;
+            }
+            return escapeLeadingUnderscores("" + (type as LiteralType).value);
         }
 
         function isValidSpreadType(type: Type): boolean {
@@ -15053,7 +15118,7 @@ namespace ts {
                 else {
                     Debug.assert(attributeDecl.kind === SyntaxKind.JsxSpreadAttribute);
                     if (attributesTable.size > 0) {
-                        spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, TypeFlags.JsxAttributes);
+                        spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, TypeFlags.JsxAttributes, /*fromComputedProperty*/ false);
                         attributesTable = createSymbolTable();
                     }
                     const exprType = checkExpressionCached(attributeDecl.expression, checkMode);
@@ -15061,7 +15126,7 @@ namespace ts {
                         hasSpreadAnyType = true;
                     }
                     if (isValidSpreadType(exprType)) {
-                        spread = getSpreadType(spread, exprType, openingLikeElement.symbol, TypeFlags.JsxAttributes);
+                        spread = getSpreadType(spread, exprType, openingLikeElement.symbol, TypeFlags.JsxAttributes, /*fromComputedProperty*/ false);
                     }
                     else {
                         typeToIntersect = typeToIntersect ? getIntersectionType([typeToIntersect, exprType]) : exprType;
@@ -15071,7 +15136,7 @@ namespace ts {
 
             if (!hasSpreadAnyType) {
                 if (attributesTable.size > 0) {
-                    spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, TypeFlags.JsxAttributes);
+                    spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, TypeFlags.JsxAttributes, /*fromComputedProperty*/ false);
                 }
             }
 
@@ -15096,7 +15161,7 @@ namespace ts {
                         createArrayType(getUnionType(childrenTypes));
                     const childPropMap = createSymbolTable();
                     childPropMap.set(jsxChildrenPropertyName, childrenPropSymbol);
-                    spread = getSpreadType(spread, createAnonymousType(attributes.symbol, childPropMap, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined), attributes.symbol, TypeFlags.JsxAttributes);
+                    spread = getSpreadType(spread, createAnonymousType(attributes.symbol, childPropMap, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined), attributes.symbol, TypeFlags.JsxAttributes, /*fromComputedProperty*/ false);
 
                 }
             }
@@ -18001,7 +18066,7 @@ namespace ts {
                         const anonymousSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
                         const defaultContainingObject = createAnonymousType(anonymousSymbol, memberTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
                         anonymousSymbol.type = defaultContainingObject;
-                        synthType.syntheticType = (type.flags & TypeFlags.StructuredType && type.symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable)) ? getSpreadType(type, defaultContainingObject, anonymousSymbol, /*propegatedFlags*/ 0) : defaultContainingObject;
+                        synthType.syntheticType = (type.flags & TypeFlags.StructuredType && type.symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable)) ? getSpreadType(type, defaultContainingObject, anonymousSymbol, /*propagatedFlags*/ 0, /*fromComputedProperty*/ false) : defaultContainingObject;
                     }
                     else {
                         synthType.syntheticType = type;
@@ -18825,19 +18890,23 @@ namespace ts {
         function checkObjectLiteralDestructuringPropertyAssignment(objectLiteralType: Type, property: ObjectLiteralElementLike, allProperties?: ReadonlyArray<ObjectLiteralElementLike>) {
             if (property.kind === SyntaxKind.PropertyAssignment || property.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 const name = <PropertyName>(<PropertyAssignment>property).name;
-                if (name.kind === SyntaxKind.ComputedPropertyName) {
-                    checkComputedPropertyName(<ComputedPropertyName>name);
-                }
+                let type: Type;
                 if (isComputedNonLiteralName(name)) {
-                    return undefined;
+                    type = checkComputedDestructuredProperty(objectLiteralType, name, text => {
+                        return isTypeAny(objectLiteralType) ? anyType : getTypeOfPropertyOfType(objectLiteralType, text);
+                    });
+                    if (!type) {
+                        return undefined;
+                    }
                 }
-
-                const text = getTextOfPropertyName(name);
-                const type = isTypeAny(objectLiteralType)
-                    ? objectLiteralType
-                    : getTypeOfPropertyOfType(objectLiteralType, text) ||
-                    isNumericLiteralName(text) && getIndexTypeOfType(objectLiteralType, IndexKind.Number) ||
-                    getIndexTypeOfType(objectLiteralType, IndexKind.String);
+                else {
+                    const text = getTextOfPropertyName(name);
+                    type = isTypeAny(objectLiteralType)
+                        ? objectLiteralType
+                        : getTypeOfPropertyOfType(objectLiteralType, text) ||
+                        isNumericLiteralName(text) && getIndexTypeOfType(objectLiteralType, IndexKind.Number) ||
+                        getIndexTypeOfType(objectLiteralType, IndexKind.String);
+                }
                 if (type) {
                     if (property.kind === SyntaxKind.ShorthandPropertyAssignment) {
                         return checkDestructuringAssignment(<ShorthandPropertyAssignment>property, type);
@@ -18867,6 +18936,39 @@ namespace ts {
             else {
                 error(property, Diagnostics.Property_assignment_expected);
             }
+        }
+
+        function checkComputedDestructuredProperty(source: Type, name: ComputedPropertyName, getSourcePropertyType: (text: __String) => Type | undefined) {
+            const computedType = checkComputedPropertyName(name);
+            const isLiteral = isLiteralType(computedType);
+            const isNumeric = isLiteral && (computedType.flags & TypeFlags.NumberLiteral ||
+                                            computedType.flags & TypeFlags.Union && (computedType as UnionType).types.every(t => !!(t.flags & TypeFlags.NumberLiteral)));
+            let type: Type | undefined;
+            let errorName: __String | undefined;
+            if (computedType.flags & (TypeFlags.String | TypeFlags.Number) || isLiteral) {
+                type = getIndexTypeOfType(source, IndexKind.String);
+            }
+            if (computedType.flags & TypeFlags.Number || isNumeric) {
+                type = getIndexTypeOfType(source, IndexKind.Number) || type;
+            }
+            if (isLiteral) {
+                const text = !(computedType.flags & TypeFlags.Union) && getTextOfPropertyLiteralType(computedType);
+                errorName = computedType.flags & TypeFlags.Union && (computedType as UnionType).types.length ?
+                    getTextOfPropertyLiteralType((computedType as UnionType).types[0]) :
+                    text;
+                type = text && getSourcePropertyType(text) || type;
+            }
+            if (!type) {
+                if (noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors) {
+                    if (errorName) {
+                        error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(source), unescapeLeadingUnderscores(errorName));
+                    }
+                    else {
+                        error(name, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(source));
+                    }
+                }
+            }
+            return type;
         }
 
         function checkArrayLiteralAssignment(node: ArrayLiteralExpression, sourceType: Type, checkMode?: CheckMode): Type {
@@ -24890,8 +24992,11 @@ namespace ts {
             //    [{ property1: p1, property2 }] = elems;
             const typeOfArrayLiteral = getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(<Expression>expr.parent);
             const elementType = checkIteratedTypeOrElementType(typeOfArrayLiteral || unknownType, expr.parent, /*allowStringInput*/ false, /*allowAsyncIterables*/ false) || unknownType;
-            return checkArrayLiteralDestructuringElementAssignment(<ArrayLiteralExpression>expr.parent, typeOfArrayLiteral,
-                (<ArrayLiteralExpression>expr.parent).elements.indexOf(expr), elementType || unknownType);
+            return checkArrayLiteralDestructuringElementAssignment(
+                <ArrayLiteralExpression>expr.parent,
+                typeOfArrayLiteral,
+                (<ArrayLiteralExpression>expr.parent).elements.indexOf(expr),
+                elementType || unknownType);
         }
 
         // Gets the property symbol corresponding to the property in destructuring assignment
