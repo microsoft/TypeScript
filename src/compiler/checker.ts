@@ -8415,6 +8415,10 @@ namespace ts {
             if (checkType.flags & TypeFlags.Union) {
                 return getUnionType(map((<UnionType>checkType).types, t => getConditionalType(t, extendsType, mapper, trueType, falseType)));
             }
+            // Return union of trueType and falseType for any and never since they match anything
+            if (checkType.flags & (TypeFlags.Any | TypeFlags.Never)) {
+                return getUnionType([instantiateType(trueType, mapper), instantiateType(falseType, mapper)]);
+            }
             // Return trueType for a definitely true extends check
             if (isTypeAssignableTo(checkType, extendsType)) {
                 return instantiateType(trueType, mapper);
