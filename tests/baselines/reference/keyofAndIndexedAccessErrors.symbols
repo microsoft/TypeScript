@@ -268,3 +268,34 @@ function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {
 >k2 : Symbol(k2, Decl(keyofAndIndexedAccessErrors.ts, 69, 37))
 >k1 : Symbol(k1, Decl(keyofAndIndexedAccessErrors.ts, 69, 19))
 }
+
+// Repro from #17166
+function f3<T, K extends keyof T>(obj: T, k: K, value: T[K]): void {
+>f3 : Symbol(f3, Decl(keyofAndIndexedAccessErrors.ts, 78, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 81, 12))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 81, 14))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 81, 12))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccessErrors.ts, 81, 34))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 81, 12))
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 81, 41))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 81, 14))
+>value : Symbol(value, Decl(keyofAndIndexedAccessErrors.ts, 81, 47))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 81, 12))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 81, 14))
+
+    for (let key in obj) {
+>key : Symbol(key, Decl(keyofAndIndexedAccessErrors.ts, 82, 12))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccessErrors.ts, 81, 34))
+
+        k = key // error, keyof T =/=> K
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 81, 41))
+>key : Symbol(key, Decl(keyofAndIndexedAccessErrors.ts, 82, 12))
+
+        value = obj[key]; // error, T[keyof T] =/=> T[K]
+>value : Symbol(value, Decl(keyofAndIndexedAccessErrors.ts, 81, 47))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccessErrors.ts, 81, 34))
+>key : Symbol(key, Decl(keyofAndIndexedAccessErrors.ts, 82, 12))
+    }
+}
+
+

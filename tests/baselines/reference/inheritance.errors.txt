@@ -1,7 +1,6 @@
-tests/cases/compiler/inheritance.ts(30,7): error TS2415: Class 'Baad' incorrectly extends base class 'Good'.
-  Types of property 'g' are incompatible.
-    Type '(n: number) => number' is not assignable to type '() => number'.
 tests/cases/compiler/inheritance.ts(31,12): error TS2425: Class 'Good' defines instance member property 'f', but extended class 'Baad' defines it as instance member function.
+tests/cases/compiler/inheritance.ts(32,12): error TS2416: Property 'g' in type 'Baad' is not assignable to the same property in base type 'Good'.
+  Type '(n: number) => number' is not assignable to type '() => number'.
 
 
 ==== tests/cases/compiler/inheritance.ts (2 errors) ====
@@ -35,13 +34,12 @@ tests/cases/compiler/inheritance.ts(31,12): error TS2425: Class 'Good' defines i
     }
     
     class Baad extends Good {
-          ~~~~
-!!! error TS2415: Class 'Baad' incorrectly extends base class 'Good'.
-!!! error TS2415:   Types of property 'g' are incompatible.
-!!! error TS2415:     Type '(n: number) => number' is not assignable to type '() => number'.
         public f(): number { return 0; }
                ~
 !!! error TS2425: Class 'Good' defines instance member property 'f', but extended class 'Baad' defines it as instance member function.
         public g(n: number) { return 0; }
+               ~
+!!! error TS2416: Property 'g' in type 'Baad' is not assignable to the same property in base type 'Good'.
+!!! error TS2416:   Type '(n: number) => number' is not assignable to type '() => number'.
     }
     

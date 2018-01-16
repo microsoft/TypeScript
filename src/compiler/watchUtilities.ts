@@ -323,6 +323,14 @@ namespace ts {
         }
     }
 
+    export function isEmittedFileOfProgram(program: Program | undefined, file: string) {
+        if (!program) {
+            return false;
+        }
+
+        return program.isEmittedFile(file);
+    }
+
     export interface WatchFileHost {
         watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
     }

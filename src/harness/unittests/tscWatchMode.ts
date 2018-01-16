@@ -22,14 +22,16 @@ namespace ts.tscWatch {
         checkFileNames(`Program rootFileNames`, program.getRootFileNames(), expectedFiles);
     }
 
-    function createWatchOfConfigFile(configFileName: string, host: WatchedSystem) {
-        const watch = ts.createWatchOfConfigFile(configFileName, {}, host);
-        return () => watch.getExistingProgram();
+    function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, maxNumberOfFilesToIterateForInvalidation?: number) {
+        const compilerHost = ts.createWatchCompilerHostOfConfigFile(configFileName, {}, host, /*reportDiagnostic*/ undefined, /*reportWatchStatus*/ undefined);
+        compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
+        const watch = ts.createWatchProgram(compilerHost);
+        return () => watch.getCurrentProgram();
     }
 
     function createWatchOfFilesAndCompilerOptions(rootFiles: string[], host: WatchedSystem, options: CompilerOptions = {}) {
         const watch = ts.createWatchOfFilesAndCompilerOptions(rootFiles, options, host);
-        return () => watch.getExistingProgram();
+        return () => watch.getCurrentProgram();
     }
 
     function getEmittedLineForMultiFileOutput(file: FileOrFolder, host: WatchedSystem) {
@@ -264,8 +266,8 @@ namespace ts.tscWatch {
             const host = createWatchedSystem([configFile, libFile, file1, file2, file3]);
             const watch = ts.createWatchOfConfigFile(configFile.path, {}, host, notImplemented);
 
-            checkProgramActualFiles(watch.getExistingProgram(), [file1.path, libFile.path, file2.path]);
-            checkProgramRootFiles(watch.getExistingProgram(), [file1.path, file2.path]);
+            checkProgramActualFiles(watch.getCurrentProgram(), [file1.path, libFile.path, file2.path]);
+            checkProgramRootFiles(watch.getCurrentProgram(), [file1.path, file2.path]);
             checkWatchedFiles(host, [configFile.path, file1.path, file2.path, libFile.path]);
             const configDir = getDirectoryPath(configFile.path);
             checkWatchedDirectories(host, [configDir, combinePaths(configDir, projectSystem.nodeModulesAtTypes)], /*recursive*/ true);
@@ -1053,6 +1055,36 @@ namespace ts.tscWatch {
             checkOutputErrors(host, nowErrors, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
             assert.equal(nowErrors[0].start, intialErrors[0].start - configFileContentComment.length);
             assert.equal(nowErrors[1].start, intialErrors[1].start - configFileContentComment.length);
+        });
+
+        it("should not trigger recompilation because of program emit", () => {
+            const proj = "/user/username/projects/myproject";
+            const file1: FileOrFolder = {
+                path: `${proj}/file1.ts`,
+                content: "export const c = 30;"
+            };
+            const file2: FileOrFolder = {
+                path: `${proj}/src/file2.ts`,
+                content: `import {c} from "file1"; export const d = 30;`
+            };
+            const tsconfig: FileOrFolder = {
+                path: `${proj}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        module: "amd",
+                        outDir: "build"
+                    }
+                })
+            };
+            const host = createWatchedSystem([file1, file2, libFile, tsconfig], { currentDirectory: proj });
+            const watch = createWatchOfConfigFile(tsconfig.path, host, /*maxNumberOfFilesToIterateForInvalidation*/1);
+            checkProgramActualFiles(watch(), [file1.path, file2.path, libFile.path]);
+
+            assert.isTrue(host.fileExists("build/file1.js"));
+            assert.isTrue(host.fileExists("build/src/file2.js"));
+
+            // This should be 0
+            host.checkTimeoutQueueLengthAndRun(0);
         });
     });
 

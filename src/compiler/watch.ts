@@ -290,6 +290,10 @@ namespace ts {
         /** If provided, called with Diagnostic message that informs about change in watch status */
         onWatchStatusChange?(diagnostic: Diagnostic, newLine: string): void;
 
+        // Only for testing
+        /*@internal*/
+        maxNumberOfFilesToIterateForInvalidation?: number;
+
         // Sub set of compiler host methods to read and generate new program
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
@@ -405,7 +409,7 @@ namespace ts {
         getProgram(): T;
         /** Gets the existing program without synchronizing with changes on host */
         /*@internal*/
-        getExistingProgram(): T;
+        getCurrentProgram(): T;
     }
 
     /**
@@ -533,7 +537,9 @@ namespace ts {
                 hasChangedAutomaticTypeDirectiveNames = true;
                 scheduleProgramUpdate();
             },
-            writeLog,
+            maxNumberOfFilesToIterateForInvalidation: host.maxNumberOfFilesToIterateForInvalidation,
+            getCurrentProgram,
+            writeLog
         };
         // Cache for the module resolution
         const resolutionCache = createResolutionCache(compilerHost, configFileName ?
@@ -557,8 +563,12 @@ namespace ts {
         watchConfigFileWildCardDirectories();
 
         return configFileName ?
-            { getExistingProgram: () => program, getProgram: synchronizeProgram } :
-            { getExistingProgram: () => program, getProgram: synchronizeProgram, updateRootFileNames };
+            { getCurrentProgram, getProgram: synchronizeProgram } :
+            { getCurrentProgram, getProgram: synchronizeProgram, updateRootFileNames };
+
+        function getCurrentProgram() {
+            return program;
+        }
 
         function synchronizeProgram(): Program {
             writeLog(`Synchronizing program`);
@@ -933,7 +943,7 @@ namespace ts {
         let builderProgram: T | undefined;
         return {
             getProgram: () => builderProgram = createBuilderProgram(watch.getProgram(), host, builderProgram),
-            getExistingProgram: () => builderProgram = createBuilderProgram(watch.getExistingProgram(), host, builderProgram),
+            getCurrentProgram: () => builderProgram = createBuilderProgram(watch.getCurrentProgram(), host, builderProgram),
             updateRootFileNames: watch.updateRootFileNames && (fileNames => watch.updateRootFileNames(fileNames))
         };
     }

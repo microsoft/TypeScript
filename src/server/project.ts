@@ -825,7 +825,10 @@ namespace ts.server {
             return !hasChanges;
         }
 
-
+        /* @internal */
+        getCurrentProgram() {
+            return this.program;
+        }
 
         protected removeExistingTypings(include: string[]): string[] {
             const existing = ts.getAutomaticTypeDirectiveNames(this.getCompilerOptions(), this.directoryStructureHost);
