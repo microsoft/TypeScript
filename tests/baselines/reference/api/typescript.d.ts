@@ -2185,6 +2185,7 @@ declare namespace ts {
     interface InferenceInfo {
         typeParameter: TypeParameter;
         candidates: Type[];
+        indexes: Type[];
         inferredType: Type;
         priority: InferencePriority;
         topLevel: boolean;

@@ -1337,6 +1337,15 @@ type Record<K extends string, T> = {
 interface ThisType<T> { }
 
 /**
+ * Type instantiated to perform partial inferences from indexed accesses
+ */
+type PartialInference<T, Keys extends string> = ({
+  [K in Keys]: {
+    [K1 in K]: T
+  }
+})[Keys];
+
+/**
   * Represents a raw buffer of binary data, which is used to store data for the
   * different typed arrays. ArrayBuffers cannot be read from or written to directly,
   * but can be passed to a typed array or DataView Object to interpret the raw

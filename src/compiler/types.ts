@@ -3678,6 +3678,9 @@ namespace ts {
         constraintType?: Type;
         templateType?: Type;
         modifiersType?: Type;
+        hasQuestionToken?: boolean;
+        hasReadonlyToken?: boolean;
+        hasPossiblyHomomorphicConstraint?: boolean;
     }
 
     export interface EvolvingArrayType extends ObjectType {
@@ -3834,6 +3837,7 @@ namespace ts {
     export interface InferenceInfo {
         typeParameter: TypeParameter;
         candidates: Type[];
+        indexes: Type[]; // Partial candidates created by indexed accesses
         inferredType: Type;
         priority: InferencePriority;
         topLevel: boolean;
