@@ -182,7 +182,7 @@ interface Math {
      *     If any argument is NaN, the result is NaN.
      *     If all arguments are either +0 or −0, the result is +0.
      */
-    hypot(...values: number[] ): number;
+    hypot(...values: number[]): number;
 
     /**
      * Returns the integral part of the a numeric expression, x, removing any fractional digits.
