@@ -22298,7 +22298,8 @@ namespace ts {
                 indexType: Type,
                 indexKind: IndexKind): void {
 
-                if (!indexType) {
+                // ESSymbol properties apply to neither string nor numeric indexers.
+                if (!indexType || isKnownSymbol(prop)) {
                     return;
                 }
 
