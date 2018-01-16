@@ -818,15 +818,23 @@ namespace ts {
         return loadNodeModuleFromDirectory(extensions, candidate, failedLookupLocations, onlyRecordFailures, state, considerPackageJson);
     }
 
+    const nodeModulesPathPart = "/node_modules/";
+
+    /**
+     * packageDirectory is the directory of the package itself.
+     * subModuleName is the path within the package.
+     *   For `foo/index.d.ts` this is { packageDirectory: "foo", subModuleName: "" }.
+     *   For `foo/bar.d.ts` this is { packageDirectory: "foo", subModuleName": "bar" }.
+     *   For `@types/foo/bar/index.d.ts` this is { packageDirectory: "@types/foo", subModuleName: "bar" }.
+     */
     function parseNodeModuleFromPath(path: string): { packageDirectory: string, subModuleName: string } | undefined {
         path = normalizePath(path);
-        const nodeModules = "/node_modules/";
-        const idx = path.indexOf(nodeModules);
+        const idx = path.indexOf(nodeModulesPathPart);
         if (idx === -1) {
             return undefined;
         }
 
-        const indexAfterNodeModules = idx + nodeModules.length;
+        const indexAfterNodeModules = idx + nodeModulesPathPart.length;
         let indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterNodeModules);
         if (path.charCodeAt(indexAfterNodeModules) === CharacterCodes.at) {
             indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterPackageName);
@@ -836,13 +844,13 @@ namespace ts {
         return { packageDirectory, subModuleName };
     }
 
-    function moveToNextDirectorySeparatorIfAvailable(path: string, pos: number): number {
-        const indexOfSlash = path.indexOf(directorySeparator, pos);
-        return indexOfSlash === -1 ? pos : indexOfSlash;
+    function moveToNextDirectorySeparatorIfAvailable(path: string, prevSeparatorIndex: number): number {
+        const nextSeparatorIndex = path.indexOf(directorySeparator, prevSeparatorIndex);
+        return nextSeparatorIndex === -1 ? prevSeparatorIndex : nextSeparatorIndex;
     }
 
-    function removeExtensionAndIndex(fileName: string): string {
-        const noExtension = removeFileExtension(fileName);
+    function removeExtensionAndIndex(path: string): string {
+        const noExtension = removeFileExtension(path);
         return noExtension === "index" ? "" : removeSuffix(noExtension, "/index");
     }
 
