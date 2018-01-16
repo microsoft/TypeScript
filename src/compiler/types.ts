@@ -676,12 +676,18 @@ namespace ts {
     export type ModifiersArray = NodeArray<Modifier>;
 
     /*@internal*/
-    export const enum GeneratedIdentifierKind {
-        None,   // Not automatically generated.
-        Auto,   // Automatically generated identifier.
-        Loop,   // Automatically generated identifier with a preference for '_i'.
-        Unique, // Unique name based on the 'text' property.
-        Node,   // Unique name based on the node in the 'original' property.
+    export const enum GeneratedIdentifierFlags {
+        // Kinds
+        None = 0,                           // Not automatically generated.
+        Auto = 1,                           // Automatically generated identifier.
+        Loop = 2,                           // Automatically generated identifier with a preference for '_i'.
+        Unique = 3,                         // Unique name based on the 'text' property.
+        Node = 4,                           // Unique name based on the node in the 'original' property.
+        KindMask = 7,                       // Mask to extract the kind of identifier from its flags.
+
+        // Flags
+        SkipNameGenerationScope = 1 << 3,   // Should skip a name generation scope when generating the name for this identifier
+        ReservedInNestedScopes = 1 << 4,    // Reserve the generated name in nested scopes
     }
 
     export interface Identifier extends PrimaryExpression, Declaration {
@@ -692,12 +698,11 @@ namespace ts {
          */
         escapedText: __String;
         originalKeywordKind?: SyntaxKind;                         // Original syntaxKind which get set so that we can report an error later
-        /*@internal*/ autoGenerateKind?: GeneratedIdentifierKind; // Specifies whether to auto-generate the text for an identifier.
+        /*@internal*/ autoGenerateFlags?: GeneratedIdentifierFlags; // Specifies whether to auto-generate the text for an identifier.
         /*@internal*/ autoGenerateId?: number;                    // Ensures unique generated identifiers get unique names, but clones get the same name.
         isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
         /*@internal*/ typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
         /*@internal*/ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
-        /*@internal*/ skipNameGenerationScope?: boolean;          // Should skip a name generation scope when generating the name for this identifier
     }
 
     // Transient identifier node (marked by id === -1)
@@ -707,10 +712,7 @@ namespace ts {
 
     /*@internal*/
     export interface GeneratedIdentifier extends Identifier {
-        autoGenerateKind: GeneratedIdentifierKind.Auto
-                        | GeneratedIdentifierKind.Loop
-                        | GeneratedIdentifierKind.Unique
-                        | GeneratedIdentifierKind.Node;
+        autoGenerateFlags: GeneratedIdentifierFlags;
     }
 
     export interface QualifiedName extends Node {
