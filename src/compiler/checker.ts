@@ -15815,7 +15815,7 @@ namespace ts {
         }
         function isValidMethodAccess(method: Symbol, type: Type) {
             const propType = getTypeOfFuncClassEnumModule(method);
-            const signatures = getSignaturesOfType(propType, SignatureKind.Call);
+            const signatures = getSignaturesOfType(getNonNullableType(propType), SignatureKind.Call);
             Debug.assert(signatures.length !== 0);
             return signatures.some(sig => {
                 const thisType = getThisTypeOfSignature(sig);
