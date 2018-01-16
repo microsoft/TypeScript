@@ -7316,7 +7316,16 @@ namespace ts {
             return result & TypeFlags.PropagatingFlags;
         }
 
+        // This function replaces substitution types in the given array with their underlying type parameter.
+        // We do this when creating type references and type alias instantiations because subsitution types are
+        // no longer necessary once the type arguments have been validated against their corresponding type
+        // parameter constraints.
+        function eraseSubstitutionTypes(types: Type[]) {
+            return sameMap(types, t => t.flags & TypeFlags.Substitution ? (<SubstitutionType>t).typeParameter : t);
+        }
+
         function createTypeReference(target: GenericType, typeArguments: Type[]): TypeReference {
+            typeArguments = eraseSubstitutionTypes(typeArguments);
             const id = getTypeListId(typeArguments);
             let type = target.instantiations.get(id);
             if (!type) {
@@ -7383,6 +7392,7 @@ namespace ts {
         }
 
         function getTypeAliasInstantiation(symbol: Symbol, typeArguments: Type[]): Type {
+            typeArguments = eraseSubstitutionTypes(typeArguments);
             const type = getDeclaredTypeOfSymbol(symbol);
             const links = getSymbolLinks(symbol);
             const typeParameters = links.typeParameters;
