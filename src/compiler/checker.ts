@@ -9658,6 +9658,9 @@ namespace ts {
 
                 if (source.flags & TypeFlags.TypeParameter) {
                     let constraint = getConstraintOfTypeParameter(<TypeParameter>source);
+                    if (constraint) {
+                        constraint = getTypeWithThisArgument(constraint, source);
+                    }
                     // A type parameter with no constraint is not related to the non-primitive object type.
                     if (constraint || !(target.flags & TypeFlags.NonPrimitive)) {
                         if (!constraint || constraint.flags & TypeFlags.Any) {

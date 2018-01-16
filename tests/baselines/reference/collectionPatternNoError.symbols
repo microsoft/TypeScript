@@ -1,0 +1,81 @@
+=== tests/cases/compiler/collectionPatternNoError.ts ===
+interface MsgConstructor<T extends Message> {
+>MsgConstructor : Symbol(MsgConstructor, Decl(collectionPatternNoError.ts, 0, 0))
+>T : Symbol(T, Decl(collectionPatternNoError.ts, 0, 25))
+>Message : Symbol(Message, Decl(collectionPatternNoError.ts, 2, 3))
+
+    new(data: Array<{}>): T;
+>data : Symbol(data, Decl(collectionPatternNoError.ts, 1, 8))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(collectionPatternNoError.ts, 0, 25))
+  }
+  class Message {
+>Message : Symbol(Message, Decl(collectionPatternNoError.ts, 2, 3))
+
+    clone(): this {
+>clone : Symbol(Message.clone, Decl(collectionPatternNoError.ts, 3, 17))
+
+      return this;
+>this : Symbol(Message, Decl(collectionPatternNoError.ts, 2, 3))
+    }
+  }
+  interface MessageList<T extends Message> extends Message {
+>MessageList : Symbol(MessageList, Decl(collectionPatternNoError.ts, 7, 3))
+>T : Symbol(T, Decl(collectionPatternNoError.ts, 8, 24))
+>Message : Symbol(Message, Decl(collectionPatternNoError.ts, 2, 3))
+>Message : Symbol(Message, Decl(collectionPatternNoError.ts, 2, 3))
+
+    methodOnMessageList(): T[];
+>methodOnMessageList : Symbol(MessageList.methodOnMessageList, Decl(collectionPatternNoError.ts, 8, 60))
+>T : Symbol(T, Decl(collectionPatternNoError.ts, 8, 24))
+  }
+  
+  function fetchMsg<V extends Message>(protoCtor: MsgConstructor<V>): V {
+>fetchMsg : Symbol(fetchMsg, Decl(collectionPatternNoError.ts, 10, 3))
+>V : Symbol(V, Decl(collectionPatternNoError.ts, 12, 20))
+>Message : Symbol(Message, Decl(collectionPatternNoError.ts, 2, 3))
+>protoCtor : Symbol(protoCtor, Decl(collectionPatternNoError.ts, 12, 39))
+>MsgConstructor : Symbol(MsgConstructor, Decl(collectionPatternNoError.ts, 0, 0))
+>V : Symbol(V, Decl(collectionPatternNoError.ts, 12, 20))
+>V : Symbol(V, Decl(collectionPatternNoError.ts, 12, 20))
+
+    return null!;
+  }
+  
+  class DataProvider<T extends Message, U extends MessageList<T>> {
+>DataProvider : Symbol(DataProvider, Decl(collectionPatternNoError.ts, 14, 3))
+>T : Symbol(T, Decl(collectionPatternNoError.ts, 16, 21))
+>Message : Symbol(Message, Decl(collectionPatternNoError.ts, 2, 3))
+>U : Symbol(U, Decl(collectionPatternNoError.ts, 16, 39))
+>MessageList : Symbol(MessageList, Decl(collectionPatternNoError.ts, 7, 3))
+>T : Symbol(T, Decl(collectionPatternNoError.ts, 16, 21))
+
+    constructor(
+        private readonly message: MsgConstructor<T>,
+>message : Symbol(DataProvider.message, Decl(collectionPatternNoError.ts, 17, 16))
+>MsgConstructor : Symbol(MsgConstructor, Decl(collectionPatternNoError.ts, 0, 0))
+>T : Symbol(T, Decl(collectionPatternNoError.ts, 16, 21))
+
+        private readonly messageList: MsgConstructor<U>,
+>messageList : Symbol(DataProvider.messageList, Decl(collectionPatternNoError.ts, 18, 52))
+>MsgConstructor : Symbol(MsgConstructor, Decl(collectionPatternNoError.ts, 0, 0))
+>U : Symbol(U, Decl(collectionPatternNoError.ts, 16, 39))
+
+    ) {}
+  
+    fetch() {
+>fetch : Symbol(DataProvider.fetch, Decl(collectionPatternNoError.ts, 20, 8))
+
+      const messageList = fetchMsg(this.messageList);
+>messageList : Symbol(messageList, Decl(collectionPatternNoError.ts, 23, 11))
+>fetchMsg : Symbol(fetchMsg, Decl(collectionPatternNoError.ts, 10, 3))
+>this.messageList : Symbol(DataProvider.messageList, Decl(collectionPatternNoError.ts, 18, 52))
+>this : Symbol(DataProvider, Decl(collectionPatternNoError.ts, 14, 3))
+>messageList : Symbol(DataProvider.messageList, Decl(collectionPatternNoError.ts, 18, 52))
+
+      messageList.methodOnMessageList();
+>messageList.methodOnMessageList : Symbol(MessageList.methodOnMessageList, Decl(collectionPatternNoError.ts, 8, 60))
+>messageList : Symbol(messageList, Decl(collectionPatternNoError.ts, 23, 11))
+>methodOnMessageList : Symbol(MessageList.methodOnMessageList, Decl(collectionPatternNoError.ts, 8, 60))
+    }
+  }
