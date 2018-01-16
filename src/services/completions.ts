@@ -301,7 +301,7 @@ namespace ts.Completions {
                     //      });
                     return getStringLiteralCompletionEntriesFromPropertyAssignment(<PropertyAssignment>node.parent, sourceFile, typeChecker, compilerOptions.target, log);
                 }
-                return fromType();
+                return fromContextualType();
 
             case SyntaxKind.ElementAccessExpression: {
                 const { expression, argumentExpression } = node.parent as ElementAccessExpression;
@@ -325,7 +325,7 @@ namespace ts.Completions {
                     // Get string literal completions from specialized signatures of the target
                     // i.e. declare function f(a: 'A');
                     // f("/*completion position*/")
-                    return argumentInfo ? getStringLiteralCompletionEntriesFromCallExpression(argumentInfo, typeChecker) : fromType();
+                    return argumentInfo ? getStringLiteralCompletionEntriesFromCallExpression(argumentInfo, typeChecker) : fromContextualType();
                 }
                 // falls through
 
@@ -341,10 +341,10 @@ namespace ts.Completions {
                 return pathCompletionsInfo(PathCompletions.getStringLiteralCompletionsFromModuleNames(sourceFile, node as StringLiteral, compilerOptions, host, typeChecker));
 
             default:
-                return fromType();
+                return fromContextualType();
         }
 
-        function fromType(): CompletionInfo {
+        function fromContextualType(): CompletionInfo {
             // Get completion for string literal from string literal type
             // i.e. var x: "hi" | "hello" = "/*completion position*/"
             return getStringLiteralCompletionEntriesFromType(getContextualTypeFromParent(node, typeChecker), typeChecker);
