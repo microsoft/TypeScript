@@ -24,6 +24,7 @@ namespace ts {
 
     export type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind) => void;
     export type DirectoryWatcherCallback = (fileName: string) => void;
+    /*@internal*/
     export interface WatchedFile {
         readonly fileName: string;
         readonly callback: FileWatcherCallback;

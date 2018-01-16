@@ -321,10 +321,6 @@ namespace ts.server {
         typesMapLocation?: string;
     }
 
-    export type WatchFile = (host: ServerHost, file: string, cb: FileWatcherCallback, pollingInterval: number | undefined, watchType: WatchType, project?: Project) => FileWatcher;
-    export type WatchFilePath = (host: ServerHost, file: string, cb: FilePathWatcherCallback, pollingInterval: number | undefined, path: Path, watchType: WatchType, project?: Project) => FileWatcher;
-    export type WatchDirectory = (host: ServerHost, directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags, watchType: WatchType, project?: Project) => FileWatcher;
-
     function getDetailWatchInfo(watchType: WatchType, project: Project | undefined) {
         return `Project: ${project ? project.getProjectName() : ""} WatchType: ${watchType}`;
     }

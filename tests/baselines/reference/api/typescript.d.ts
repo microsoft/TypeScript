@@ -2824,11 +2824,6 @@ declare namespace ts {
     }
     type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind) => void;
     type DirectoryWatcherCallback = (fileName: string) => void;
-    interface WatchedFile {
-        fileName: string;
-        callback: FileWatcherCallback;
-        mtime?: Date;
-    }
     /**
      * Partial interface of the System thats needed to support the caching of directory structure
      */
