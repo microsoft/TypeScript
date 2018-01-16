@@ -35,11 +35,14 @@ namespace ts.Completions {
             return entries && pathCompletionsInfo(entries);
         }
 
-        if (isInString(sourceFile, position)) {
-            return getStringLiteralCompletionEntries(sourceFile, position, typeChecker, compilerOptions, host, log);
+        const contextToken = findPrecedingToken(position, sourceFile);
+
+        if (isInString(sourceFile, position, contextToken)) {
+            return !contextToken || !isStringLiteral(contextToken) && !isNoSubstitutionTemplateLiteral(contextToken)
+                ? undefined
+                : getStringLiteralCompletionEntries(sourceFile, contextToken, position, typeChecker, compilerOptions, host, log);
         }
 
-        const contextToken = findPrecedingToken(position, sourceFile);
         if (contextToken && isBreakOrContinueStatement(contextToken.parent)
             && (contextToken.kind === SyntaxKind.BreakKeyword || contextToken.kind === SyntaxKind.ContinueKeyword || contextToken.kind === SyntaxKind.Identifier)) {
             return getLabelCompletionAtPosition(contextToken.parent);
@@ -261,12 +264,7 @@ namespace ts.Completions {
         }
     }
 
-    function getStringLiteralCompletionEntries(sourceFile: SourceFile, position: number, typeChecker: TypeChecker, compilerOptions: CompilerOptions, host: LanguageServiceHost, log: Log): CompletionInfo | undefined {
-        const node = findPrecedingToken(position, sourceFile);
-        if (!node || !isStringLiteral(node) && !isNoSubstitutionTemplateLiteral(node)) {
-            return undefined;
-        }
-
+    function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringLiteralLike, position: number, typeChecker: TypeChecker, compilerOptions: CompilerOptions, host: LanguageServiceHost, log: Log): CompletionInfo | undefined {
         switch (node.parent.kind) {
             case SyntaxKind.LiteralType:
                 switch (node.parent.parent.kind) {
@@ -283,7 +281,7 @@ namespace ts.Completions {
                         const type = typeChecker.getTypeFromTypeNode((node.parent.parent as IndexedAccessTypeNode).objectType);
                         return getStringLiteralCompletionEntriesFromElementAccessOrIndexedAccess(node, sourceFile, type, typeChecker, compilerOptions.target, log);
                     default:
-                    return undefined;
+                        return undefined;
                 }
 
             case SyntaxKind.PropertyAssignment:
@@ -303,7 +301,7 @@ namespace ts.Completions {
                     //      });
                     return getStringLiteralCompletionEntriesFromPropertyAssignment(<PropertyAssignment>node.parent, sourceFile, typeChecker, compilerOptions.target, log);
                 }
-                break;
+                return fromType();
 
             case SyntaxKind.ElementAccessExpression: {
                 const { expression, argumentExpression } = node.parent as ElementAccessExpression;
@@ -324,13 +322,10 @@ namespace ts.Completions {
             case SyntaxKind.NewExpression:
                 if (!isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false) && !isImportCall(node.parent)) {
                     const argumentInfo = SignatureHelp.getImmediatelyContainingArgumentInfo(node, position, sourceFile);
-                    if (argumentInfo) {
-                        // Get string literal completions from specialized signatures of the target
-                        // i.e. declare function f(a: 'A');
-                        // f("/*completion position*/")
-                        return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo, typeChecker);
-                    }
-                    break;
+                    // Get string literal completions from specialized signatures of the target
+                    // i.e. declare function f(a: 'A');
+                    // f("/*completion position*/")
+                    return argumentInfo ? getStringLiteralCompletionEntriesFromCallExpression(argumentInfo, typeChecker) : fromType();
                 }
                 // falls through
 
@@ -344,11 +339,16 @@ namespace ts.Completions {
                 //      var y = require("/*completion position*/");
                 //      export * from "/*completion position*/";
                 return pathCompletionsInfo(PathCompletions.getStringLiteralCompletionsFromModuleNames(sourceFile, node as StringLiteral, compilerOptions, host, typeChecker));
+
+            default:
+                return fromType();
         }
 
-        // Get completion for string literal from string literal type
-        // i.e. var x: "hi" | "hello" = "/*completion position*/"
-        return getStringLiteralCompletionEntriesFromType(getContextualTypeFromParent(node, typeChecker), typeChecker);
+        function fromType(): CompletionInfo {
+            // Get completion for string literal from string literal type
+            // i.e. var x: "hi" | "hello" = "/*completion position*/"
+            return getStringLiteralCompletionEntriesFromType(getContextualTypeFromParent(node, typeChecker), typeChecker);
+        }
     }
 
     function pathCompletionsInfo(entries: CompletionEntry[]): CompletionInfo {
