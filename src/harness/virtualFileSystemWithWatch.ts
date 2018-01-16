@@ -262,6 +262,7 @@ interface Array<T> {}`
         readonly watchedFiles = createMultiMap<TestFileWatcher>();
         private readonly executingFilePath: string;
         private readonly currentDirectory: string;
+        private readonly dynamicPriorityWatchFile: HostWatchFile;
 
         constructor(public withSafeList: boolean, public useCaseSensitiveFileNames: boolean, executingFilePath: string, currentDirectory: string, fileOrFolderList: ReadonlyArray<FileOrFolder>, public readonly newLine = "\n", public readonly useWindowsStylePath?: boolean, private readonly environmentVariables?: Map<string>) {
             this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
@@ -269,6 +270,9 @@ interface Array<T> {}`
             this.executingFilePath = this.getHostSpecificPath(executingFilePath);
             this.currentDirectory = this.getHostSpecificPath(currentDirectory);
             this.reloadFS(fileOrFolderList);
+            this.dynamicPriorityWatchFile = this.environmentVariables && this.environmentVariables.get("TSC_WATCHOPTION") === "DynamicPriorityPolling" ?
+                createDynamicPriorityPollingWatchFile(this) :
+                undefined;
         }
 
         getNewLine() {
@@ -602,7 +606,11 @@ interface Array<T> {}`
             return Harness.mockHash(s);
         }
 
-        watchFile(fileName: string, cb: FileWatcherCallback) {
+        watchFile(fileName: string, cb: FileWatcherCallback, pollingInterval: number) {
+            if (this.dynamicPriorityWatchFile) {
+                return this.dynamicPriorityWatchFile(fileName, cb, pollingInterval);
+            }
+
             const path = this.toFullPath(fileName);
             const callback: TestFileWatcher = { fileName, cb };
             this.watchedFiles.add(path, callback);

@@ -932,7 +932,7 @@ namespace ts.server {
                         this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
                     }
                 },
-                WatchPriority.Medium,
+                PollingInterval.Medium,
                 WatchType.MissingFilePath,
                 this
             );

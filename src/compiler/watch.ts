@@ -257,11 +257,11 @@ namespace ts {
         const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? s => { system.write(s); system.write(system.newLine); } : noop;
         watchingHost = watchingHost || createWatchingSystemHost(compilerOptions.pretty);
         const { system, parseConfigFile, reportDiagnostic, reportWatchDiagnostic, beforeCompile, afterCompile } = watchingHost;
-        const { watchFile, watchFilePath, watchDirectory: watchDirectoryWorker } = getWatchFactory(system, watchLogLevel, writeLog);
+        const { watchFile, watchFilePath, watchDirectory: watchDirectoryWorker } = getWatchFactory(watchLogLevel, writeLog);
 
         const directoryStructureHost = configFileName ? createCachedDirectoryStructureHost(system) : system;
         if (configFileName) {
-            watchFile(system, configFileName, scheduleProgramReload, WatchPriority.Low);
+            watchFile(system, configFileName, scheduleProgramReload, PollingInterval.High);
         }
 
         const getCurrentDirectory = memoize(() => directoryStructureHost.getCurrentDirectory());
@@ -414,7 +414,7 @@ namespace ts {
                         hostSourceFile.sourceFile = sourceFile;
                         sourceFile.version = hostSourceFile.version.toString();
                         if (!hostSourceFile.fileWatcher) {
-                            hostSourceFile.fileWatcher = watchFilePath(system, fileName, onSourceFileChange, WatchPriority.High, path);
+                            hostSourceFile.fileWatcher = watchFilePath(system, fileName, onSourceFileChange, PollingInterval.Low, path);
                         }
                     }
                     else {
@@ -427,7 +427,7 @@ namespace ts {
                     let fileWatcher: FileWatcher;
                     if (sourceFile) {
                         sourceFile.version = "0";
-                        fileWatcher = watchFilePath(system, fileName, onSourceFileChange, WatchPriority.High, path);
+                        fileWatcher = watchFilePath(system, fileName, onSourceFileChange, PollingInterval.Low, path);
                         sourceFilesCache.set(path, { sourceFile, version: 0, fileWatcher });
                     }
                     else {
@@ -601,7 +601,7 @@ namespace ts {
         }
 
         function watchMissingFilePath(missingFilePath: Path) {
-            return watchFilePath(system, missingFilePath, onMissingFileChange, WatchPriority.Medium, missingFilePath);
+            return watchFilePath(system, missingFilePath, onMissingFileChange, PollingInterval.Medium, missingFilePath);
         }
 
         function onMissingFileChange(fileName: string, eventKind: FileWatcherEventKind, missingFilePath: Path) {

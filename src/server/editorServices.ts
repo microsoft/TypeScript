@@ -449,7 +449,7 @@ namespace ts.server {
             const watchLogLevel = this.logger.hasLevel(LogLevel.verbose) ? WatchLogLevel.Verbose :
                 this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
             const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
-            this.watchFactory = getDefaultWatchFactory(watchLogLevel, log, getDetailWatchInfo);
+            this.watchFactory = getWatchFactory(watchLogLevel, log, getDetailWatchInfo);
         }
 
         toPath(fileName: string) {
@@ -1116,7 +1116,7 @@ namespace ts.server {
                 this.host,
                 configFileName,
                 (_filename, eventKind) => this.onConfigFileChangeForOpenScriptInfo(configFileName, eventKind),
-                WatchPriority.Low,
+                PollingInterval.High,
                 WatchType.ConfigFileForInferredRoot
             );
             this.logConfigFileWatchUpdate(configFileName, canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.UpdatedCallback);
@@ -1500,7 +1500,7 @@ namespace ts.server {
                 this.host,
                 configFileName,
                 (_fileName, eventKind) => this.onConfigChangedForConfiguredProject(project, eventKind),
-                WatchPriority.Low,
+                PollingInterval.High,
                 WatchType.ConfigFilePath,
                 project
             );
@@ -1727,7 +1727,7 @@ namespace ts.server {
                     this.host,
                     fileName,
                     (fileName, eventKind, path) => this.onSourceFileChanged(fileName, eventKind, path),
-                    WatchPriority.Medium,
+                    PollingInterval.Medium,
                     info.path,
                     WatchType.ClosedScriptInfo
                 );

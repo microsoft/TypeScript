@@ -2123,15 +2123,15 @@ declare module "fs" {
             };
             const files = [file1, libFile];
             const environmentVariables = createMap<string>();
-            environmentVariables.set("TSC_WATCHFILE", "DynamicPriorityPolling");
+            environmentVariables.set("TSC_WATCHOPTION", "DynamicPriorityPolling");
             const host = createWatchedSystem(files, { environmentVariables });
             const watch = createWatchModeWithoutConfigFile([file1.path], host);
 
             const initialProgram = watch();
             verifyProgram();
 
-            const mediumPriorityThreshold = unChangedThreshold(WatchPriority.Medium);
-            for (let index = 0; index < mediumPriorityThreshold; index++) {
+            const mediumPollingIntervalThreshold = unChangedThreshold(PollingInterval.Medium);
+            for (let index = 0; index < mediumPollingIntervalThreshold; index++) {
                 // Transition libFile and file1 to low priority queue
                 host.checkTimeoutQueueLengthAndRun(1);
                 assert.deepEqual(watch(), initialProgram);
@@ -2157,14 +2157,14 @@ declare module "fs" {
             assert.isTrue(host.fileExists(outputFile1));
             assert.equal(host.readFile(outputFile1), file1.content + host.newLine);
 
-            const newThreshold = unChangedThreshold(WatchPriority.High) + mediumPriorityThreshold;
+            const newThreshold = unChangedThreshold(PollingInterval.Low) + mediumPollingIntervalThreshold;
             for (; fileUnchangeDetected < newThreshold; fileUnchangeDetected++) {
-                // For low + Medium/high priority
+                // For high + Medium/low polling interval
                 host.checkTimeoutQueueLengthAndRun(2);
                 assert.deepEqual(watch(), newProgram);
             }
 
-            // Everything goes in low priority queue
+            // Everything goes in high polling interval queue
             host.checkTimeoutQueueLengthAndRun(1);
             assert.deepEqual(watch(), newProgram);
 
