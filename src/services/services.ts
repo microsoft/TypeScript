@@ -883,7 +883,8 @@ namespace ts {
         scriptKind: ScriptKind;
     }
 
-    export interface DisplayPartsSymbolWriter extends SymbolWriter {
+    /* @internal */
+    export interface DisplayPartsSymbolWriter extends EmitTextWriter {
         displayParts(): SymbolDisplayPart[];
     }
 

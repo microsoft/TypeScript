@@ -128,6 +128,11 @@ namespace ts {
             typeToTypeNode: nodeBuilder.typeToTypeNode,
             indexInfoToIndexSignatureDeclaration: nodeBuilder.indexInfoToIndexSignatureDeclaration,
             signatureToSignatureDeclaration: nodeBuilder.signatureToSignatureDeclaration,
+            symbolToEntityName: nodeBuilder.symbolToEntityName,
+            symbolToExpression: nodeBuilder.symbolToExpression,
+            symbolToTypeParameterDeclarations: nodeBuilder.symbolToTypeParameterDeclarations,
+            symbolToParameterDeclaration: nodeBuilder.symbolToParameterDeclaration,
+            typeParameterToDeclaration: nodeBuilder.typeParameterToDeclaration,
             getSymbolsInScope: (location, meaning) => {
                 location = getParseTreeNode(location);
                 return location ? getSymbolsInScope(location, meaning) : [];
@@ -155,16 +160,31 @@ namespace ts {
                 location = getParseTreeNode(location, isIdentifier);
                 return location ? getPropertySymbolOfDestructuringAssignment(location) : undefined;
             },
-            signatureToString: (signature, enclosingDeclaration?, flags?, kind?) => {
+            signatureToString: (signature, enclosingDeclaration, flags, kind) => {
                 return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind);
             },
-            typeToString: (type, enclosingDeclaration?, flags?) => {
+            typeToString: (type, enclosingDeclaration, flags) => {
                 return typeToString(type, getParseTreeNode(enclosingDeclaration), flags);
             },
-            getSymbolDisplayBuilder,
-            symbolToString: (symbol, enclosingDeclaration?, meaning?) => {
-                return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning);
+            symbolToString: (symbol, enclosingDeclaration, meaning, flags) => {
+                return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags);
             },
+            typePredicateToString: (predicate, enclosingDeclaration, flags) => {
+                return typePredicateToString(predicate, getParseTreeNode(enclosingDeclaration), flags);
+            },
+            writeSignature: (signature, enclosingDeclaration, flags, kind, writer) => {
+                return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind, writer);
+            },
+            writeType: (type, enclosingDeclaration, flags, writer) => {
+                return typeToString(type, getParseTreeNode(enclosingDeclaration), flags, writer);
+            },
+            writeSymbol: (symbol, enclosingDeclaration, meaning, flags, writer) => {
+                return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags, writer);
+            },
+            writeTypePredicate: (predicate, enclosingDeclaration, flags, writer) => {
+                return typePredicateToString(predicate, getParseTreeNode(enclosingDeclaration), flags, writer);
+            },
+            getSymbolDisplayBuilder, // TODO (weswigham): Remove once deprecation process is complete
             getAugmentedPropertiesOfType,
             getRootSymbols,
             getContextualType: node => {
@@ -273,6 +293,7 @@ namespace ts {
             },
             getJsxNamespace: () => unescapeLeadingUnderscores(getJsxNamespace()),
             getAccessibleSymbolChain,
+            getTypePredicateOfSignature,
             resolveExternalModuleSymbol,
         };
 
@@ -520,9 +541,6 @@ namespace ts {
         const identityRelation = createMap<RelationComparisonResult>();
         const enumRelation = createMap<boolean>();
 
-        // This is for caching the result of getSymbolDisplayBuilder. Do not access directly.
-        let _displayBuilder: SymbolDisplayBuilder;
-
         type TypeSystemEntity = Symbol | Type | Signature;
 
         const enum TypeSystemPropertyName {
@@ -571,6 +589,145 @@ namespace ts {
         initializeTypeChecker();
 
         return checker;
+
+        /**
+         * @deprecated
+         */
+        function getSymbolDisplayBuilder(): SymbolDisplayBuilder {
+            return {
+                buildTypeDisplay(type, writer, enclosingDeclaration?, flags?) {
+                    typeToString(type, enclosingDeclaration, flags, emitTextWriterWrapper(writer));
+                },
+                buildSymbolDisplay(symbol, writer, enclosingDeclaration?, meaning?, flags?) {
+                    symbolToString(symbol, enclosingDeclaration, meaning, flags | SymbolFormatFlags.AllowAnyNodeKind, emitTextWriterWrapper(writer));
+                },
+                buildSignatureDisplay(signature, writer, enclosing?, flags?, kind?) {
+                    signatureToString(signature, enclosing, flags, kind, emitTextWriterWrapper(writer));
+                },
+                buildIndexSignatureDisplay(info, writer, kind, enclosing?, flags?) {
+                    const sig = nodeBuilder.indexInfoToIndexSignatureDeclaration(info, kind, enclosing, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors, writer);
+                    const printer = createPrinter({ removeComments: true });
+                    printer.writeNode(EmitHint.Unspecified, sig, getSourceFileOfNode(getParseTreeNode(enclosing)), emitTextWriterWrapper(writer));
+                },
+                buildParameterDisplay(symbol, writer, enclosing?, flags?) {
+                    const node = nodeBuilder.symbolToParameterDeclaration(symbol, enclosing, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors, writer);
+                    const printer = createPrinter({ removeComments: true });
+                    printer.writeNode(EmitHint.Unspecified, node, getSourceFileOfNode(getParseTreeNode(enclosing)), emitTextWriterWrapper(writer));
+                },
+                buildTypeParameterDisplay(tp, writer, enclosing?, flags?) {
+                    const node = nodeBuilder.typeParameterToDeclaration(tp, enclosing, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.OmitParameterModifiers, writer);
+                    const printer = createPrinter({ removeComments: true });
+                    printer.writeNode(EmitHint.Unspecified, node, getSourceFileOfNode(getParseTreeNode(enclosing)), emitTextWriterWrapper(writer));
+                },
+                buildTypePredicateDisplay(predicate, writer, enclosing?, flags?) {
+                    typePredicateToString(predicate, enclosing, flags, emitTextWriterWrapper(writer));
+                },
+                buildTypeParameterDisplayFromSymbol(symbol, writer, enclosing?, flags?) {
+                    const nodes = nodeBuilder.symbolToTypeParameterDeclarations(symbol, enclosing, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors, writer);
+                    const printer = createPrinter({ removeComments: true });
+                    printer.writeList(ListFormat.TypeParameters, nodes, getSourceFileOfNode(getParseTreeNode(enclosing)), emitTextWriterWrapper(writer));
+                },
+                buildDisplayForParametersAndDelimiters(thisParameter, parameters, writer, enclosing?, originalFlags?) {
+                    const printer = createPrinter({ removeComments: true });
+                    const flags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | toNodeBuilderFlags(originalFlags);
+                    const thisParameterArray = thisParameter ? [nodeBuilder.symbolToParameterDeclaration(thisParameter, enclosing, flags)] : [];
+                    const params = createNodeArray([...thisParameterArray, ...map(parameters, param => nodeBuilder.symbolToParameterDeclaration(param, enclosing, flags))]);
+                    printer.writeList(ListFormat.CallExpressionArguments, params, getSourceFileOfNode(getParseTreeNode(enclosing)), emitTextWriterWrapper(writer));
+                },
+                buildDisplayForTypeParametersAndDelimiters(typeParameters, writer, enclosing?, flags?) {
+                    const printer = createPrinter({ removeComments: true });
+                    const args = createNodeArray(map(typeParameters, p => nodeBuilder.typeParameterToDeclaration(p, enclosing, toNodeBuilderFlags(flags))));
+                    printer.writeList(ListFormat.TypeParameters, args, getSourceFileOfNode(getParseTreeNode(enclosing)), emitTextWriterWrapper(writer));
+                },
+                buildReturnTypeDisplay(signature, writer, enclosing?, flags?) {
+                    writer.writePunctuation(":");
+                    writer.writeSpace(" ");
+                    const predicate = getTypePredicateOfSignature(signature);
+                    if (predicate) {
+                        return typePredicateToString(predicate, enclosing, flags, emitTextWriterWrapper(writer));
+                    }
+                    const node = nodeBuilder.typeToTypeNode(getReturnTypeOfSignature(signature), enclosing, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors, writer);
+                    const printer = createPrinter({ removeComments: true });
+                    printer.writeNode(EmitHint.Unspecified, node, getSourceFileOfNode(getParseTreeNode(enclosing)), emitTextWriterWrapper(writer));
+                }
+            };
+
+            function emitTextWriterWrapper(underlying: SymbolWriter): EmitTextWriter {
+                return {
+                    write: ts.noop,
+                    writeTextOfNode: ts.noop,
+                    writeLine: ts.noop,
+                    increaseIndent() {
+                        return underlying.increaseIndent();
+                    },
+                    decreaseIndent() {
+                        return underlying.decreaseIndent();
+                    },
+                    getText() {
+                        return "";
+                    },
+                    rawWrite: ts.noop,
+                    writeLiteral(s) {
+                        return underlying.writeStringLiteral(s);
+                    },
+                    getTextPos() {
+                        return 0;
+                    },
+                    getLine() {
+                        return 0;
+                    },
+                    getColumn() {
+                        return 0;
+                    },
+                    getIndent() {
+                        return 0;
+                    },
+                    isAtStartOfLine() {
+                        return false;
+                    },
+                    clear() {
+                        return underlying.clear();
+                    },
+
+                    writeKeyword(text) {
+                        return underlying.writeKeyword(text);
+                    },
+                    writeOperator(text) {
+                        return underlying.writeOperator(text);
+                    },
+                    writePunctuation(text) {
+                        return underlying.writePunctuation(text);
+                    },
+                    writeSpace(text) {
+                        return underlying.writeSpace(text);
+                    },
+                    writeStringLiteral(text) {
+                        return underlying.writeStringLiteral(text);
+                    },
+                    writeParameter(text) {
+                        return underlying.writeParameter(text);
+                    },
+                    writeProperty(text) {
+                        return underlying.writeProperty(text);
+                    },
+                    writeSymbol(text, symbol) {
+                        return underlying.writeSymbol(text, symbol);
+                    },
+                    trackSymbol(symbol, enclosing?, meaning?) {
+                        return underlying.trackSymbol && underlying.trackSymbol(symbol, enclosing, meaning);
+                    },
+                    reportInaccessibleThisError() {
+                        return underlying.reportInaccessibleThisError && underlying.reportInaccessibleThisError();
+                    },
+                    reportPrivateInBaseOfClassExpression(name) {
+                        return underlying.reportPrivateInBaseOfClassExpression && underlying.reportPrivateInBaseOfClassExpression(name);
+                    },
+                    reportInaccessibleUniqueSymbolError() {
+                        return underlying.reportInaccessibleUniqueSymbolError && underlying.reportInaccessibleUniqueSymbolError();
+                    }
+                };
+            }
+        }
 
         function getJsxNamespace(): __String {
             if (!_jsxNamespace) {
@@ -2516,100 +2673,130 @@ namespace ts {
             };
         }
 
-        function writeKeyword(writer: SymbolWriter, kind: SyntaxKind) {
-            writer.writeKeyword(tokenToString(kind));
+        function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags: SymbolFormatFlags = SymbolFormatFlags.AllowAnyNodeKind, writer?: EmitTextWriter): string {
+            let nodeFlags = NodeBuilderFlags.IgnoreErrors;
+            if (flags & SymbolFormatFlags.UseOnlyExternalAliasing) {
+                nodeFlags |= NodeBuilderFlags.UseOnlyExternalAliasing;
+            }
+            if (flags & SymbolFormatFlags.WriteTypeParametersOrArguments) {
+                nodeFlags |= NodeBuilderFlags.WriteTypeParametersInQualifiedName;
+            }
+            const builder = flags & SymbolFormatFlags.AllowAnyNodeKind ? nodeBuilder.symbolToExpression : nodeBuilder.symbolToEntityName;
+            return writer ? symbolToStringWorker(writer).getText() : usingSingleLineStringWriter(symbolToStringWorker);
+
+            function symbolToStringWorker(writer: EmitTextWriter) {
+                const entity = builder(symbol, meaning, enclosingDeclaration, nodeFlags);
+                const printer = createPrinter({ removeComments: true });
+                const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
+                printer.writeNode(EmitHint.Unspecified, entity, /*sourceFile*/ sourceFile, writer);
+                return writer;
+            }
         }
 
-        function writePunctuation(writer: SymbolWriter, kind: SyntaxKind) {
-            writer.writePunctuation(tokenToString(kind));
+        function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind, writer?: EmitTextWriter): string {
+            return writer ? signatureToStringWorker(writer).getText() : usingSingleLineStringWriter(signatureToStringWorker);
+
+            function signatureToStringWorker(writer: EmitTextWriter) {
+                let sigOutput: SyntaxKind;
+                if (flags & TypeFormatFlags.WriteArrowStyleSignature) {
+                    sigOutput = kind === SignatureKind.Construct ? SyntaxKind.ConstructorType : SyntaxKind.FunctionType;
+                }
+                else {
+                    sigOutput = kind === SignatureKind.Construct ? SyntaxKind.ConstructSignature : SyntaxKind.CallSignature;
+                }
+                const sig = nodeBuilder.signatureToSignatureDeclaration(signature, sigOutput, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName);
+                const printer = createPrinter({ removeComments: true, omitTrailingSemicolon: true });
+                const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
+                printer.writeNode(EmitHint.Unspecified, sig, /*sourceFile*/ sourceFile, writer);
+                return writer;
+            }
         }
 
-        function writeSpace(writer: SymbolWriter) {
-            writer.writeSpace(" ");
-        }
-
-        function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string {
-            return usingSingleLineStringWriter(writer => {
-                getSymbolDisplayBuilder().buildSymbolDisplay(symbol, writer, enclosingDeclaration, meaning);
-            });
-        }
-
-        function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string {
-            return usingSingleLineStringWriter(writer => {
-                getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags, kind);
-            });
-        }
-
-        function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
-            const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName);
+        function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer: EmitTextWriter = createTextWriter("")): string {
+            const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors, writer);
             Debug.assert(typeNode !== undefined, "should always get typenode");
             const options = { removeComments: true };
-            const writer = createTextWriter("");
             const printer = createPrinter(options);
             const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
             printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ sourceFile, writer);
             const result = writer.getText();
 
             const maxLength = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation ? undefined : 100;
-            if (maxLength && result.length >= maxLength) {
+            if (maxLength && result && result.length >= maxLength) {
                 return result.substr(0, maxLength - "...".length) + "...";
             }
             return result;
+        }
 
-            function toNodeBuilderFlags(flags?: TypeFormatFlags): NodeBuilderFlags {
-                let result = NodeBuilderFlags.None;
-                if (!flags) {
-                    return result;
-                }
-                if (flags & TypeFormatFlags.NoTruncation) {
-                    result |= NodeBuilderFlags.NoTruncation;
-                }
-                if (flags & TypeFormatFlags.UseFullyQualifiedType) {
-                    result |= NodeBuilderFlags.UseFullyQualifiedType;
-                }
-                if (flags & TypeFormatFlags.SuppressAnyReturnType) {
-                    result |= NodeBuilderFlags.SuppressAnyReturnType;
-                }
-                if (flags & TypeFormatFlags.WriteArrayAsGenericType) {
-                    result |= NodeBuilderFlags.WriteArrayAsGenericType;
-                }
-                if (flags & TypeFormatFlags.WriteTypeArgumentsOfSignature) {
-                    result |= NodeBuilderFlags.WriteTypeArgumentsOfSignature;
-                }
-
-                return result;
-            }
+        function toNodeBuilderFlags(flags?: TypeFormatFlags): NodeBuilderFlags {
+            return flags & TypeFormatFlags.NodeBuilderFlagsMask;
         }
 
         function createNodeBuilder() {
             return {
-                typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags) => {
+                typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
                     Debug.assert(enclosingDeclaration === undefined || (enclosingDeclaration.flags & NodeFlags.Synthesized) === 0);
-                    const context = createNodeBuilderContext(enclosingDeclaration, flags);
+                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
                     const resultingNode = typeToTypeNodeHelper(type, context);
                     const result = context.encounteredError ? undefined : resultingNode;
                     return result;
                 },
-                indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags) => {
+                indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
                     Debug.assert(enclosingDeclaration === undefined || (enclosingDeclaration.flags & NodeFlags.Synthesized) === 0);
-                    const context = createNodeBuilderContext(enclosingDeclaration, flags);
+                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
                     const resultingNode = indexInfoToIndexSignatureDeclarationHelper(indexInfo, kind, context);
                     const result = context.encounteredError ? undefined : resultingNode;
                     return result;
                 },
-                signatureToSignatureDeclaration: (signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags) => {
+                signatureToSignatureDeclaration: (signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
                     Debug.assert(enclosingDeclaration === undefined || (enclosingDeclaration.flags & NodeFlags.Synthesized) === 0);
-                    const context = createNodeBuilderContext(enclosingDeclaration, flags);
+                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
                     const resultingNode = signatureToSignatureDeclarationHelper(signature, kind, context);
                     const result = context.encounteredError ? undefined : resultingNode;
                     return result;
-                }
+                },
+                symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
+                    Debug.assert(enclosingDeclaration === undefined || (enclosingDeclaration.flags & NodeFlags.Synthesized) === 0);
+                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
+                    const resultingNode = symbolToName(symbol, context, meaning, /*expectsIdentifier*/ false);
+                    const result = context.encounteredError ? undefined : resultingNode;
+                    return result;
+                },
+                symbolToExpression: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
+                    Debug.assert(enclosingDeclaration === undefined || (enclosingDeclaration.flags & NodeFlags.Synthesized) === 0);
+                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
+                    const resultingNode = symbolToExpression(symbol, context, meaning);
+                    const result = context.encounteredError ? undefined : resultingNode;
+                    return result;
+                },
+                symbolToTypeParameterDeclarations: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
+                    Debug.assert(enclosingDeclaration === undefined || (enclosingDeclaration.flags & NodeFlags.Synthesized) === 0);
+                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
+                    const resultingNode = typeParametersToTypeParameterDeclarations(symbol, context);
+                    const result = context.encounteredError ? undefined : resultingNode;
+                    return result;
+                },
+                symbolToParameterDeclaration: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
+                    Debug.assert(enclosingDeclaration === undefined || (enclosingDeclaration.flags & NodeFlags.Synthesized) === 0);
+                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
+                    const resultingNode = symbolToParameterDeclaration(symbol, context);
+                    const result = context.encounteredError ? undefined : resultingNode;
+                    return result;
+                },
+                typeParameterToDeclaration: (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
+                    Debug.assert(enclosingDeclaration === undefined || (enclosingDeclaration.flags & NodeFlags.Synthesized) === 0);
+                    const context = createNodeBuilderContext(enclosingDeclaration, flags, tracker);
+                    const resultingNode = typeParameterToDeclaration(parameter, context);
+                    const result = context.encounteredError ? undefined : resultingNode;
+                    return result;
+                },
             };
 
-            function createNodeBuilderContext(enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): NodeBuilderContext {
+            function createNodeBuilderContext(enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, tracker: SymbolTracker | undefined): NodeBuilderContext {
                 return {
                     enclosingDeclaration,
                     flags,
+                    tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: noop },
                     encounteredError: false,
                     symbolStack: undefined
                 };
@@ -2656,6 +2843,11 @@ namespace ts {
                     return (<IntrinsicType>type).intrinsicName === "true" ? createTrue() : createFalse();
                 }
                 if (type.flags & TypeFlags.UniqueESSymbol) {
+                    if (!(context.flags & NodeBuilderFlags.AllowUniqueESSymbolType)) {
+                        if (context.tracker.reportInaccessibleUniqueSymbolError) {
+                            context.tracker.reportInaccessibleUniqueSymbolError();
+                        }
+                    }
                     return createTypeOperatorNode(SyntaxKind.UniqueKeyword, createKeywordTypeNode(SyntaxKind.SymbolKeyword));
                 }
                 if (type.flags & TypeFlags.Void) {
@@ -2681,6 +2873,9 @@ namespace ts {
                         if (!context.encounteredError && !(context.flags & NodeBuilderFlags.AllowThisInObjectLiteral)) {
                             context.encounteredError = true;
                         }
+                        if (context.tracker.reportInaccessibleThisError) {
+                            context.tracker.reportInaccessibleThisError();
+                        }
                     }
                     return createThis();
                 }
@@ -2696,7 +2891,7 @@ namespace ts {
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
-                if (!inTypeAlias && type.aliasSymbol && isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration)) {
+                if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
                     const name = symbolToTypeReferenceName(type.aliasSymbol);
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
                     return createTypeReferenceNode(name, typeArgumentNodes);
@@ -2737,7 +2932,7 @@ namespace ts {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
                     const readonlyToken = type.declaration && type.declaration.readonlyToken ? createToken(SyntaxKind.ReadonlyKeyword) : undefined;
                     const questionToken = type.declaration && type.declaration.questionToken ? createToken(SyntaxKind.QuestionToken) : undefined;
-                    const typeParameterNode = typeParameterToDeclaration(getTypeParameterFromMappedType(type), context);
+                    const typeParameterNode = typeParameterToDeclaration(getTypeParameterFromMappedType(type), context, getConstraintTypeFromMappedType(type));
                     const templateTypeNode = typeToTypeNodeHelper(getTemplateTypeFromMappedType(type), context);
 
                     const mappedTypeNode = createMappedTypeNode(readonlyToken, typeParameterNode, questionToken, templateTypeNode);
@@ -2748,7 +2943,7 @@ namespace ts {
                     const symbol = type.symbol;
                     if (symbol) {
                         // Always use 'typeof T' for type of class, enum, and module objects
-                        if (symbol.flags & SymbolFlags.Class && !getBaseTypeVariableOfClass(symbol) ||
+                        if (symbol.flags & SymbolFlags.Class && !getBaseTypeVariableOfClass(symbol) && !(symbol.valueDeclaration.kind === SyntaxKind.ClassExpression && context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral) ||
                             symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule) ||
                             shouldWriteTypeOfFunctionSymbol()) {
                             return createTypeQueryNodeFromSymbol(symbol, SymbolFlags.Value);
@@ -2771,10 +2966,17 @@ namespace ts {
                             if (!context.symbolStack) {
                                 context.symbolStack = [];
                             }
-                            context.symbolStack.push(symbol);
-                            const result = createTypeNodeFromObjectType(type);
-                            context.symbolStack.pop();
-                            return result;
+
+                            const isConstructorObject = getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
+                            if (isConstructorObject) {
+                                return createTypeNodeFromObjectType(type);
+                            }
+                            else {
+                                context.symbolStack.push(symbol);
+                                const result = createTypeNodeFromObjectType(type);
+                                context.symbolStack.pop();
+                                return result;
+                            }
                         }
                     }
                     else {
@@ -2791,7 +2993,7 @@ namespace ts {
                                     declaration.parent.kind === SyntaxKind.SourceFile || declaration.parent.kind === SyntaxKind.ModuleBlock));
                         if (isStaticMethodSymbol || isNonLocalFunctionSymbol) {
                             // typeof is allowed only for static/non local functions
-                            return contains(context.symbolStack, symbol); // it is type of the symbol uses itself recursively
+                            return !!(context.flags & NodeBuilderFlags.UseTypeOfFunction) || contains(context.symbolStack, symbol); // it is type of the symbol uses itself recursively
                         }
                     }
                 }
@@ -2826,7 +3028,7 @@ namespace ts {
                     const members = createTypeNodesFromResolvedType(resolved);
                     context.flags = savedFlags;
                     const typeLiteralNode = createTypeLiteralNode(members);
-                    return setEmitFlags(typeLiteralNode, EmitFlags.SingleLine);
+                    return setEmitFlags(typeLiteralNode, (context.flags & NodeBuilderFlags.MultilineObjectLiterals) ? 0 : EmitFlags.SingleLine);
                 }
 
                 function createTypeQueryNodeFromSymbol(symbol: Symbol, symbolFlags: SymbolFlags) {
@@ -2863,6 +3065,11 @@ namespace ts {
                         }
                         context.encounteredError = true;
                         return undefined;
+                    }
+                    else if (context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral &&
+                        type.symbol.valueDeclaration &&
+                        type.symbol.valueDeclaration.kind === SyntaxKind.ClassExpression) {
+                        return createAnonymousTypeNode(type);
                     }
                     else {
                         const outerTypeParameters = type.target.outerTypeParameters;
@@ -2965,9 +3172,24 @@ namespace ts {
                     }
 
                     for (const propertySymbol of properties) {
+                        if (context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral) {
+                            if (propertySymbol.flags & SymbolFlags.Prototype) {
+                                continue;
+                            }
+                            if (getDeclarationModifierFlagsFromSymbol(propertySymbol) & (ModifierFlags.Private | ModifierFlags.Protected) && context.tracker.reportPrivateInBaseOfClassExpression) {
+                                context.tracker.reportPrivateInBaseOfClassExpression(unescapeLeadingUnderscores(propertySymbol.escapedName));
+                            }
+                        }
                         const propertyType = getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped ? anyType : getTypeOfSymbol(propertySymbol);
                         const saveEnclosingDeclaration = context.enclosingDeclaration;
                         context.enclosingDeclaration = undefined;
+                        if (getCheckFlags(propertySymbol) & CheckFlags.Late) {
+                            const decl = firstOrUndefined(propertySymbol.declarations);
+                            const name = hasLateBindableName(decl) && resolveEntityName(decl.name.expression, SymbolFlags.Value);
+                            if (name && context.tracker.trackSymbol) {
+                                context.tracker.trackSymbol(name, saveEnclosingDeclaration, SymbolFlags.Value);
+                            }
+                        }
                         const propertyName = symbolToName(propertySymbol, context, SymbolFlags.Value, /*expectsIdentifier*/ true);
                         context.enclosingDeclaration = saveEnclosingDeclaration;
                         const optionalToken = propertySymbol.flags & SymbolFlags.Optional ? createToken(SyntaxKind.QuestionToken) : undefined;
@@ -3023,7 +3245,10 @@ namespace ts {
                     /*questionToken*/ undefined,
                     indexerTypeNode,
                     /*initializer*/ undefined);
-                const typeNode = typeToTypeNodeHelper(indexInfo.type, context);
+                const typeNode = indexInfo.type ? typeToTypeNodeHelper(indexInfo.type, context) : typeToTypeNodeHelper(anyType, context);
+                if (!indexInfo.type && !(context.flags & NodeBuilderFlags.AllowEmptyIndexInfoType)) {
+                    context.encounteredError = true;
+                }
                 return createIndexSignature(
                     /*decorators*/ undefined,
                     indexInfo.isReadonly ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined,
@@ -3032,7 +3257,14 @@ namespace ts {
             }
 
             function signatureToSignatureDeclarationHelper(signature: Signature, kind: SyntaxKind, context: NodeBuilderContext): SignatureDeclaration {
-                const typeParameters = signature.typeParameters && signature.typeParameters.map(parameter => typeParameterToDeclaration(parameter, context));
+                let typeParameters: TypeParameterDeclaration[];
+                let typeArguments: TypeNode[];
+                if (context.flags & NodeBuilderFlags.WriteTypeArgumentsOfSignature && signature.target && signature.mapper && signature.target.typeParameters) {
+                    typeArguments = signature.target.typeParameters.map(parameter => typeToTypeNodeHelper(instantiateType(parameter, signature.mapper), context));
+                }
+                else {
+                    typeParameters = signature.typeParameters && signature.typeParameters.map(parameter => typeParameterToDeclaration(parameter, context));
+                }
                 const parameters = signature.parameters.map(parameter => symbolToParameterDeclaration(parameter, context));
                 if (signature.thisParameter) {
                     const thisParameter = symbolToParameterDeclaration(signature.thisParameter, context);
@@ -3059,15 +3291,17 @@ namespace ts {
                 else if (!returnTypeNode) {
                     returnTypeNode = createKeywordTypeNode(SyntaxKind.AnyKeyword);
                 }
-                return createSignatureDeclaration(kind, typeParameters, parameters, returnTypeNode);
+                return createSignatureDeclaration(kind, typeParameters, parameters, returnTypeNode, typeArguments);
             }
 
-            function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext): TypeParameterDeclaration {
+            function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintFromTypeParameter(type)): TypeParameterDeclaration {
+                const savedContextFlags = context.flags;
+                context.flags &= ~NodeBuilderFlags.WriteTypeParametersInQualifiedName; // Avoids potential infinite loop when building for a claimspace with a generic
                 const name = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true);
-                const constraint = getConstraintFromTypeParameter(type);
                 const constraintNode = constraint && typeToTypeNodeHelper(constraint, context);
                 const defaultParameter = getDefaultFromTypeParameter(type);
                 const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, context);
+                context.flags = savedContextFlags;
                 return createTypeParameterDeclaration(name, constraintNode, defaultParameterNode);
             }
 
@@ -3081,7 +3315,7 @@ namespace ts {
                 }
                 const parameterTypeNode = typeToTypeNodeHelper(parameterType, context);
 
-                const modifiers = parameterDeclaration && parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedClone);
+                const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && parameterDeclaration && parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedClone);
                 const dotDotDotToken = !parameterDeclaration || isRestParameter(parameterDeclaration) ? createToken(SyntaxKind.DotDotDotToken) : undefined;
                 const name = parameterDeclaration
                     ? parameterDeclaration.name ?
@@ -3114,10 +3348,8 @@ namespace ts {
                 }
             }
 
-            function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: true): Identifier;
-            function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: false): EntityName;
-            function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: boolean): EntityName {
-
+            function lookupSymbolChain(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags) {
+                context.tracker.trackSymbol(symbol, context.enclosingDeclaration, meaning);
                 // Try to get qualified name if the symbol is not a type parameter and there is an enclosing declaration.
                 let chain: Symbol[];
                 const isTypeParameter = symbol.flags & SymbolFlags.TypeParameter;
@@ -3128,42 +3360,11 @@ namespace ts {
                 else {
                     chain = [symbol];
                 }
-
-                if (expectsIdentifier && chain.length !== 1
-                    && !context.encounteredError
-                    && !(context.flags & NodeBuilderFlags.AllowQualifedNameInPlaceOfIdentifier)) {
-                    context.encounteredError = true;
-                }
-                return createEntityNameFromSymbolChain(chain, chain.length - 1);
-
-                function createEntityNameFromSymbolChain(chain: Symbol[], index: number): EntityName {
-                    Debug.assert(chain && 0 <= index && index < chain.length);
-                    const symbol = chain[index];
-                    let typeParameterNodes: ReadonlyArray<TypeNode> | undefined;
-                    if (context.flags & NodeBuilderFlags.WriteTypeParametersInQualifiedName && index > 0) {
-                        const parentSymbol = chain[index - 1];
-                        let typeParameters: TypeParameter[];
-                        if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
-                            typeParameters = getTypeParametersOfClassOrInterface(parentSymbol);
-                        }
-                        else {
-                            const targetSymbol = getTargetSymbol(parentSymbol);
-                            if (targetSymbol.flags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.TypeAlias)) {
-                                typeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
-                            }
-                        }
-
-                        typeParameterNodes = mapToTypeNodes(typeParameters, context);
-                    }
-
-                    const identifier = setEmitFlags(createIdentifier(getNameOfSymbolAsWritten(symbol, context), typeParameterNodes), EmitFlags.NoAsciiEscaping);
-
-                    return index > 0 ? createQualifiedName(createEntityNameFromSymbolChain(chain, index - 1), identifier) : identifier;
-                }
+                return chain;
 
                 /** @param endOfChain Set to false for recursive calls; non-recursive calls should always output something. */
                 function getSymbolChain(symbol: Symbol, meaning: SymbolFlags, endOfChain: boolean): Symbol[] | undefined {
-                    let accessibleSymbolChain = getAccessibleSymbolChain(symbol, context.enclosingDeclaration, meaning, /*useOnlyExternalAliasing*/ false);
+                    let accessibleSymbolChain = getAccessibleSymbolChain(symbol, context.enclosingDeclaration, meaning, !!(context.flags & NodeBuilderFlags.UseOnlyExternalAliasing));
                     let parentSymbol: Symbol;
 
                     if (!accessibleSymbolChain ||
@@ -3195,12 +3396,113 @@ namespace ts {
                     }
                 }
             }
+
+            function typeParametersToTypeParameterDeclarations(symbol: Symbol, context: NodeBuilderContext) {
+                let typeParameterNodes: NodeArray<TypeParameterDeclaration> | undefined;
+                const targetSymbol = getTargetSymbol(symbol);
+                if (targetSymbol.flags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.TypeAlias)) {
+                    typeParameterNodes = createNodeArray(map(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol), tp => typeParameterToDeclaration(tp, context)));
+                }
+                return typeParameterNodes;
+            }
+
+            function lookupTypeParameterNodes(chain: Symbol[], index: number, context: NodeBuilderContext) {
+                Debug.assert(chain && 0 <= index && index < chain.length);
+                const symbol = chain[index];
+                let typeParameterNodes: ReadonlyArray<TypeNode> | ReadonlyArray<TypeParameterDeclaration> | undefined;
+                if (context.flags & NodeBuilderFlags.WriteTypeParametersInQualifiedName && index < (chain.length - 1)) {
+                    const parentSymbol = symbol;
+                    const nextSymbol = chain[index + 1];
+                    if (getCheckFlags(nextSymbol) & CheckFlags.Instantiated) {
+                        const params = getTypeParametersOfClassOrInterface(
+                            parentSymbol.flags & SymbolFlags.Alias ? resolveAlias(parentSymbol) : parentSymbol
+                        );
+                        typeParameterNodes = mapToTypeNodes(map(params, (nextSymbol as TransientSymbol).mapper), context);
+                    }
+                    else {
+                        typeParameterNodes = typeParametersToTypeParameterDeclarations(symbol, context);
+                    }
+                }
+                return typeParameterNodes;
+            }
+
+            function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: true): Identifier;
+            function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: false): EntityName;
+            function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: boolean): EntityName {
+                const chain = lookupSymbolChain(symbol, context, meaning);
+
+                if (expectsIdentifier && chain.length !== 1
+                    && !context.encounteredError
+                    && !(context.flags & NodeBuilderFlags.AllowQualifedNameInPlaceOfIdentifier)) {
+                    context.encounteredError = true;
+                }
+                return createEntityNameFromSymbolChain(chain, chain.length - 1);
+
+                function createEntityNameFromSymbolChain(chain: Symbol[], index: number): EntityName {
+                    const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
+                    const symbol = chain[index];
+                    const symbolName = getNameOfSymbolAsWritten(symbol, context);
+                    const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                    identifier.symbol = symbol;
+
+                    return index > 0 ? createQualifiedName(createEntityNameFromSymbolChain(chain, index - 1), identifier) : identifier;
+                }
+            }
+
+            function symbolToExpression(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags) {
+                const chain = lookupSymbolChain(symbol, context, meaning);
+
+                return createExpressionFromSymbolChain(chain, chain.length - 1);
+
+                function createExpressionFromSymbolChain(chain: Symbol[], index: number): Expression {
+                    const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
+                    const symbol = chain[index];
+
+                    let symbolName = getNameOfSymbolAsWritten(symbol, context);
+                    let firstChar = symbolName.charCodeAt(0);
+                    const canUsePropertyAccess = isIdentifierStart(firstChar, languageVersion);
+                    if (index === 0 || canUsePropertyAccess) {
+                        const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                        identifier.symbol = symbol;
+
+                        return index > 0 ? createPropertyAccess(createExpressionFromSymbolChain(chain, index - 1), identifier) : identifier;
+                    }
+                    else {
+                        if (firstChar === CharacterCodes.openBracket) {
+                            symbolName = symbolName.substring(1, symbolName.length - 1);
+                            firstChar = symbolName.charCodeAt(0);
+                        }
+                        let expression: Expression;
+                        if (isSingleOrDoubleQuote(firstChar)) {
+                            expression = createLiteral(symbolName.substring(1, symbolName.length - 1).replace(/\\./g, s => s.substring(1)));
+                            (expression as StringLiteral).singleQuote = firstChar === CharacterCodes.singleQuote;
+                        }
+                        else if (("" + +symbolName) === symbolName) {
+                            expression = createLiteral(+symbolName);
+                        }
+                        if (!expression) {
+                            expression = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                            expression.symbol = symbol;
+                        }
+                        return createElementAccess(createExpressionFromSymbolChain(chain, index - 1), expression);
+                    }
+                }
+            }
         }
 
-        function typePredicateToString(typePredicate: TypePredicate, enclosingDeclaration?: Declaration, flags?: TypeFormatFlags): string {
-            return usingSingleLineStringWriter(writer => {
-                getSymbolDisplayBuilder().buildTypePredicateDisplay(typePredicate, writer, enclosingDeclaration, flags);
-            });
+        function typePredicateToString(typePredicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string {
+            return writer ? typePredicateToStringWorker(writer).getText() : usingSingleLineStringWriter(typePredicateToStringWorker);
+
+            function typePredicateToStringWorker(writer: EmitTextWriter) {
+                const predicate = createTypePredicateNode(
+                    typePredicate.kind === TypePredicateKind.Identifier ? createIdentifier(typePredicate.parameterName) : createThisTypeNode(),
+                    nodeBuilder.typeToTypeNode(typePredicate.type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName)
+                );
+                const printer = createPrinter({ removeComments: true });
+                const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
+                printer.writeNode(EmitHint.Unspecified, predicate, /*sourceFile*/ sourceFile, writer);
+                return writer;
+            }
         }
 
         function formatUnionTypes(types: Type[]): Type[] {
@@ -3262,6 +3564,7 @@ namespace ts {
         interface NodeBuilderContext {
             enclosingDeclaration: Node | undefined;
             flags: NodeBuilderFlags | undefined;
+            tracker: SymbolTracker | undefined;
 
             // State
             encounteredError: boolean;
@@ -3276,6 +3579,9 @@ namespace ts {
          * It will also use a representation of a number as written instead of a decimal form, e.g. `0o11` instead of `9`.
          */
         function getNameOfSymbolAsWritten(symbol: Symbol, context?: NodeBuilderContext): string {
+            if (context && context.flags & NodeBuilderFlags.WriteDefaultSymbolWithoutName && symbol.escapedName === InternalSymbolName.Default) {
+                return "default";
+            }
             if (symbol.declarations && symbol.declarations.length) {
                 const declaration = symbol.declarations[0];
                 const name = getNameOfDeclaration(declaration);
@@ -3303,781 +3609,6 @@ namespace ts {
                 }
             }
             return symbolName(symbol);
-        }
-
-        function getSymbolDisplayBuilder(): SymbolDisplayBuilder {
-
-            /**
-             * Writes only the name of the symbol out to the writer. Uses the original source text
-             * for the name of the symbol if it is available to match how the user wrote the name.
-             */
-            function appendSymbolNameOnly(symbol: Symbol, writer: SymbolWriter): void {
-                writer.writeSymbol(getNameOfSymbolAsWritten(symbol), symbol);
-            }
-
-            /**
-             * Writes a property access or element access with the name of the symbol out to the writer.
-             * Uses the original source text for the name of the symbol if it is available to match how the user wrote the name,
-             * ensuring that any names written with literals use element accesses.
-             */
-            function appendPropertyOrElementAccessForSymbol(symbol: Symbol, writer: SymbolWriter): void {
-                const symbolName = symbol.escapedName === InternalSymbolName.Default ? InternalSymbolName.Default : getNameOfSymbolAsWritten(symbol);
-                const firstChar = symbolName.charCodeAt(0);
-                const needsElementAccess = !isIdentifierStart(firstChar, languageVersion);
-
-                if (needsElementAccess) {
-                    if (firstChar !== CharacterCodes.openBracket) {
-                        writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                    }
-                    if (isSingleOrDoubleQuote(firstChar)) {
-                        writer.writeStringLiteral(symbolName);
-                    }
-                    else {
-                        writer.writeSymbol(symbolName, symbol);
-                    }
-                    if (firstChar !== CharacterCodes.openBracket) {
-                        writePunctuation(writer, SyntaxKind.CloseBracketToken);
-                    }
-                }
-                else {
-                    writePunctuation(writer, SyntaxKind.DotToken);
-                    writer.writeSymbol(symbolName, symbol);
-                }
-            }
-
-            /**
-             * Enclosing declaration is optional when we don't want to get qualified name in the enclosing declaration scope
-             * Meaning needs to be specified if the enclosing declaration is given
-             */
-            function buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, typeFlags?: TypeFormatFlags): void {
-                let parentSymbol: Symbol;
-                function appendParentTypeArgumentsAndSymbolName(symbol: Symbol): void {
-                    if (parentSymbol) {
-                        // Write type arguments of instantiated class/interface here
-                        if (flags & SymbolFormatFlags.WriteTypeParametersOrArguments) {
-                            if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
-                                const params = getTypeParametersOfClassOrInterface(parentSymbol.flags & SymbolFlags.Alias ? resolveAlias(parentSymbol) : parentSymbol);
-                                buildDisplayForTypeArgumentsAndDelimiters(params, (<TransientSymbol>symbol).mapper, writer, enclosingDeclaration);
-                            }
-                            else {
-                                buildTypeParameterDisplayFromSymbol(parentSymbol, writer, enclosingDeclaration);
-                            }
-                        }
-                        appendPropertyOrElementAccessForSymbol(symbol, writer);
-                    }
-                    else {
-                        appendSymbolNameOnly(symbol, writer);
-                    }
-                    parentSymbol = symbol;
-                }
-
-                // Let the writer know we just wrote out a symbol.  The declaration emitter writer uses
-                // this to determine if an import it has previously seen (and not written out) needs
-                // to be written to the file once the walk of the tree is complete.
-                //
-                // NOTE(cyrusn): This approach feels somewhat unfortunate.  A simple pass over the tree
-                // up front (for example, during checking) could determine if we need to emit the imports
-                // and we could then access that data during declaration emit.
-                writer.trackSymbol(symbol, enclosingDeclaration, meaning);
-                /** @param endOfChain Set to false for recursive calls; non-recursive calls should always output something. */
-                function walkSymbol(symbol: Symbol, meaning: SymbolFlags, endOfChain: boolean): void {
-                    const accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaning, !!(flags & SymbolFormatFlags.UseOnlyExternalAliasing));
-
-                    if (!accessibleSymbolChain ||
-                        needsQualification(accessibleSymbolChain[0], enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
-
-                        // Go up and add our parent.
-                        const parent = getParentOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol);
-                        if (parent) {
-                            walkSymbol(parent, getQualifiedLeftMeaning(meaning), /*endOfChain*/ false);
-                        }
-                    }
-
-                    if (accessibleSymbolChain) {
-                        for (const accessibleSymbol of accessibleSymbolChain) {
-                            appendParentTypeArgumentsAndSymbolName(accessibleSymbol);
-                        }
-                    }
-                    else if (
-                        // If this is the last part of outputting the symbol, always output. The cases apply only to parent symbols.
-                        endOfChain ||
-                        // If a parent symbol is an external module, don't write it. (We prefer just `x` vs `"foo/bar".x`.)
-                        !(!parentSymbol && ts.forEach(symbol.declarations, hasExternalModuleSymbol)) &&
-                        // If a parent symbol is an anonymous type, don't write it.
-                        !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral))) {
-
-                        appendParentTypeArgumentsAndSymbolName(symbol);
-                    }
-                }
-
-                // Get qualified name if the symbol is not a type parameter
-                // and there is an enclosing declaration or we specifically
-                // asked for it
-                const isTypeParameter = symbol.flags & SymbolFlags.TypeParameter;
-                const typeFormatFlag = TypeFormatFlags.UseFullyQualifiedType & typeFlags;
-                if (!isTypeParameter && (enclosingDeclaration || typeFormatFlag)) {
-                    walkSymbol(symbol, meaning, /*endOfChain*/ true);
-                }
-                else {
-                    appendParentTypeArgumentsAndSymbolName(symbol);
-                }
-            }
-
-            function buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]) {
-                const globalFlagsToPass = globalFlags & (TypeFormatFlags.WriteOwnNameForAnyLike | TypeFormatFlags.WriteClassExpressionAsTypeLiteral);
-                let inObjectTypeLiteral = false;
-                return writeType(type, globalFlags);
-
-                function writeType(type: Type, flags: TypeFormatFlags) {
-                    const nextFlags = flags & ~TypeFormatFlags.InTypeAlias;
-                    // Write undefined/null type as any
-                    if (type.flags & TypeFlags.Intrinsic) {
-                        // Special handling for unknown / resolving types, they should show up as any and not unknown or __resolving
-                        writer.writeKeyword(!(globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike) && isTypeAny(type)
-                            ? "any"
-                            : (<IntrinsicType>type).intrinsicName);
-                    }
-                    else if (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType) {
-                        if (inObjectTypeLiteral) {
-                            writer.reportInaccessibleThisError();
-                        }
-                        writer.writeKeyword("this");
-                    }
-                    else if (getObjectFlags(type) & ObjectFlags.Reference) {
-                        writeTypeReference(<TypeReference>type, nextFlags);
-                    }
-                    else if (type.flags & TypeFlags.EnumLiteral && !(type.flags & TypeFlags.Union)) {
-                        const parent = getParentOfSymbol(type.symbol);
-                        buildSymbolDisplay(parent, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
-                        // In a literal enum type with a single member E { A }, E and E.A denote the
-                        // same type. We always display this type simply as E.
-                        if (getDeclaredTypeOfSymbol(parent) !== type) {
-                            writePunctuation(writer, SyntaxKind.DotToken);
-                            appendSymbolNameOnly(type.symbol, writer);
-                        }
-                    }
-                    else if (getObjectFlags(type) & ObjectFlags.ClassOrInterface || type.flags & (TypeFlags.EnumLike | TypeFlags.TypeParameter)) {
-                        // The specified symbol flags need to be reinterpreted as type flags
-                        buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
-                    }
-                    else if (!(flags & TypeFormatFlags.InTypeAlias) && type.aliasSymbol &&
-                        ((flags & TypeFormatFlags.UseAliasDefinedOutsideCurrentScope) || isTypeSymbolAccessible(type.aliasSymbol, enclosingDeclaration))) {
-                        const typeArguments = type.aliasTypeArguments;
-                        writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, length(typeArguments), nextFlags);
-                    }
-                    else if (type.flags & TypeFlags.UnionOrIntersection) {
-                        writeUnionOrIntersectionType(<UnionOrIntersectionType>type, nextFlags);
-                    }
-                    else if (getObjectFlags(type) & (ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
-                        writeAnonymousType(<ObjectType>type, nextFlags);
-                    }
-                    else if (type.flags & TypeFlags.UniqueESSymbol) {
-                        if (flags & TypeFormatFlags.AllowUniqueESSymbolType) {
-                            writeKeyword(writer, SyntaxKind.UniqueKeyword);
-                            writeSpace(writer);
-                        }
-                        else {
-                            writer.reportInaccessibleUniqueSymbolError();
-                        }
-                        writeKeyword(writer, SyntaxKind.SymbolKeyword);
-                    }
-                    else if (type.flags & TypeFlags.StringOrNumberLiteral) {
-                        writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
-                    }
-                    else if (type.flags & TypeFlags.Index) {
-                        if (flags & TypeFormatFlags.InElementType) {
-                            writePunctuation(writer, SyntaxKind.OpenParenToken);
-                        }
-                        writer.writeKeyword("keyof");
-                        writeSpace(writer);
-                        writeType((<IndexType>type).type, TypeFormatFlags.InElementType);
-                        if (flags & TypeFormatFlags.InElementType) {
-                            writePunctuation(writer, SyntaxKind.CloseParenToken);
-                        }
-                    }
-                    else if (type.flags & TypeFlags.IndexedAccess) {
-                        writeType((<IndexedAccessType>type).objectType, TypeFormatFlags.InElementType);
-                        writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                        writeType((<IndexedAccessType>type).indexType, TypeFormatFlags.None);
-                        writePunctuation(writer, SyntaxKind.CloseBracketToken);
-                    }
-                    else {
-                        // Should never get here
-                        // { ... }
-                        writePunctuation(writer, SyntaxKind.OpenBraceToken);
-                        writeSpace(writer);
-                        writePunctuation(writer, SyntaxKind.DotDotDotToken);
-                        writeSpace(writer);
-                        writePunctuation(writer, SyntaxKind.CloseBraceToken);
-                    }
-                }
-
-
-                function writeTypeList(types: Type[], delimiter: SyntaxKind) {
-                    for (let i = 0; i < types.length; i++) {
-                        if (i > 0) {
-                            if (delimiter !== SyntaxKind.CommaToken) {
-                                writeSpace(writer);
-                            }
-                            writePunctuation(writer, delimiter);
-                            writeSpace(writer);
-                        }
-                        writeType(types[i], delimiter === SyntaxKind.CommaToken ? TypeFormatFlags.None : TypeFormatFlags.InElementType);
-                    }
-                }
-
-                function writeSymbolTypeReference(symbol: Symbol, typeArguments: Type[], pos: number, end: number, flags: TypeFormatFlags) {
-                    // Unnamed function expressions and arrow functions have reserved names that we don't want to display
-                    if (symbol.flags & SymbolFlags.Class || !isReservedMemberName(symbol.escapedName)) {
-                        buildSymbolDisplay(symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, flags);
-                    }
-                    if (pos < end) {
-                        writePunctuation(writer, SyntaxKind.LessThanToken);
-                        writeType(typeArguments[pos], TypeFormatFlags.InFirstTypeArgument);
-                        pos++;
-                        while (pos < end) {
-                            writePunctuation(writer, SyntaxKind.CommaToken);
-                            writeSpace(writer);
-                            writeType(typeArguments[pos], TypeFormatFlags.None);
-                            pos++;
-                        }
-                        writePunctuation(writer, SyntaxKind.GreaterThanToken);
-                    }
-                }
-
-                function writeTypeReference(type: TypeReference, flags: TypeFormatFlags) {
-                    const typeArguments = type.typeArguments || emptyArray;
-                    if (type.target === globalArrayType && !(flags & TypeFormatFlags.WriteArrayAsGenericType)) {
-                        writeType(typeArguments[0], TypeFormatFlags.InElementType | TypeFormatFlags.InArrayType);
-                        writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                        writePunctuation(writer, SyntaxKind.CloseBracketToken);
-                    }
-                    else if (type.target.objectFlags & ObjectFlags.Tuple) {
-                        writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                        writeTypeList(type.typeArguments.slice(0, getTypeReferenceArity(type)), SyntaxKind.CommaToken);
-                        writePunctuation(writer, SyntaxKind.CloseBracketToken);
-                    }
-                    else if (flags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral &&
-                             type.symbol.valueDeclaration &&
-                             type.symbol.valueDeclaration.kind === SyntaxKind.ClassExpression) {
-                        writeAnonymousType(type, flags);
-                    }
-                    else {
-                        // Write the type reference in the format f<A>.g<B>.C<X, Y> where A and B are type arguments
-                        // for outer type parameters, and f and g are the respective declaring containers of those
-                        // type parameters.
-                        const outerTypeParameters = type.target.outerTypeParameters;
-                        let i = 0;
-                        if (outerTypeParameters) {
-                            const length = outerTypeParameters.length;
-                            while (i < length) {
-                                // Find group of type arguments for type parameters with the same declaring container.
-                                const start = i;
-                                const parent = getParentSymbolOfTypeParameter(outerTypeParameters[i]);
-                                do {
-                                    i++;
-                                } while (i < length && getParentSymbolOfTypeParameter(outerTypeParameters[i]) === parent);
-                                // When type parameters are their own type arguments for the whole group (i.e. we have
-                                // the default outer type arguments), we don't show the group.
-                                if (!rangeEquals(outerTypeParameters, typeArguments, start, i)) {
-                                    writeSymbolTypeReference(parent, typeArguments, start, i, flags);
-                                    writePunctuation(writer, SyntaxKind.DotToken);
-                                }
-                            }
-                        }
-                        const typeParameterCount = (type.target.typeParameters || emptyArray).length;
-                        writeSymbolTypeReference(type.symbol, typeArguments, i, typeParameterCount, flags);
-                    }
-                }
-
-                function writeUnionOrIntersectionType(type: UnionOrIntersectionType, flags: TypeFormatFlags) {
-                    if (flags & TypeFormatFlags.InElementType) {
-                        writePunctuation(writer, SyntaxKind.OpenParenToken);
-                    }
-                    if (type.flags & TypeFlags.Union) {
-                        writeTypeList(formatUnionTypes(type.types), SyntaxKind.BarToken);
-                    }
-                    else {
-                        writeTypeList(type.types, SyntaxKind.AmpersandToken);
-                    }
-                    if (flags & TypeFormatFlags.InElementType) {
-                        writePunctuation(writer, SyntaxKind.CloseParenToken);
-                    }
-                }
-
-                function writeAnonymousType(type: ObjectType, flags: TypeFormatFlags) {
-                    const symbol = type.symbol;
-                    if (symbol) {
-                        // Always use 'typeof T' for type of class, enum, and module objects
-                        if (symbol.flags & SymbolFlags.Class &&
-                            !getBaseTypeVariableOfClass(symbol) &&
-                            !(symbol.valueDeclaration.kind === SyntaxKind.ClassExpression && flags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral) ||
-                            symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule)) {
-                            writeTypeOfSymbol(type.symbol, flags);
-                        }
-                        else if (shouldWriteTypeOfFunctionSymbol()) {
-                            writeTypeOfSymbol(type.symbol, flags);
-                        }
-                        else if (contains(symbolStack, symbol)) {
-                            // If type is an anonymous type literal in a type alias declaration, use type alias name
-                            const typeAlias = getTypeAliasForTypeLiteral(type);
-                            if (typeAlias) {
-                                // The specified symbol flags need to be reinterpreted as type flags
-                                buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, flags);
-                            }
-                            else {
-                                // Recursive usage, use any
-                                writeKeyword(writer, SyntaxKind.AnyKeyword);
-                            }
-                        }
-                        else {
-                            // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
-                            // of types allows us to catch circular references to instantiations of the same anonymous type
-                            // However, in case of class expressions, we want to write both the static side and the instance side.
-                            // We skip adding the static side so that the instance side has a chance to be written
-                            // before checking for circular references.
-                            if (!symbolStack) {
-                                symbolStack = [];
-                            }
-                            const isConstructorObject = type.objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
-                            if (isConstructorObject) {
-                                writeLiteralType(type, flags);
-                            }
-                            else {
-                                symbolStack.push(symbol);
-                                writeLiteralType(type, flags);
-                                symbolStack.pop();
-                            }
-                        }
-                    }
-                    else {
-                        // Anonymous types with no symbol are never circular
-                        writeLiteralType(type, flags);
-                    }
-
-                    function shouldWriteTypeOfFunctionSymbol() {
-                        const isStaticMethodSymbol = !!(symbol.flags & SymbolFlags.Method) &&  // typeof static method
-                            some(symbol.declarations, declaration => hasModifier(declaration, ModifierFlags.Static));
-                        const isNonLocalFunctionSymbol = !!(symbol.flags & SymbolFlags.Function) &&
-                            (symbol.parent || // is exported function symbol
-                                some(symbol.declarations, declaration =>
-                                    declaration.parent.kind === SyntaxKind.SourceFile || declaration.parent.kind === SyntaxKind.ModuleBlock));
-                        if (isStaticMethodSymbol || isNonLocalFunctionSymbol) {
-                            // typeof is allowed only for static/non local functions
-                            return !!(flags & TypeFormatFlags.UseTypeOfFunction) || // use typeof if format flags specify it
-                                contains(symbolStack, symbol); // it is type of the symbol uses itself recursively
-                        }
-                    }
-                }
-
-                function writeTypeOfSymbol(symbol: Symbol, typeFormatFlags?: TypeFormatFlags) {
-                    if (typeFormatFlags & TypeFormatFlags.InArrayType) {
-                        writePunctuation(writer, SyntaxKind.OpenParenToken);
-                    }
-                    writeKeyword(writer, SyntaxKind.TypeOfKeyword);
-                    writeSpace(writer);
-                    buildSymbolDisplay(symbol, writer, enclosingDeclaration, SymbolFlags.Value, SymbolFormatFlags.None, typeFormatFlags);
-                    if (typeFormatFlags & TypeFormatFlags.InArrayType) {
-                        writePunctuation(writer, SyntaxKind.CloseParenToken);
-                    }
-                }
-
-                function writePropertyWithModifiers(prop: Symbol) {
-                    if (isReadonlySymbol(prop)) {
-                        writeKeyword(writer, SyntaxKind.ReadonlyKeyword);
-                        writeSpace(writer);
-                    }
-                    if (getCheckFlags(prop) & CheckFlags.Late) {
-                        const decl = firstOrUndefined(prop.declarations);
-                        const name = hasLateBindableName(decl) && resolveEntityName(decl.name.expression, SymbolFlags.Value);
-                        if (name) {
-                            writer.trackSymbol(name, enclosingDeclaration, SymbolFlags.Value);
-                        }
-                    }
-                    buildSymbolDisplay(prop, writer);
-                    if (prop.flags & SymbolFlags.Optional) {
-                        writePunctuation(writer, SyntaxKind.QuestionToken);
-                    }
-                }
-
-                function shouldAddParenthesisAroundFunctionType(callSignature: Signature, flags: TypeFormatFlags) {
-                    if (flags & TypeFormatFlags.InElementType) {
-                        return true;
-                    }
-                    else if (flags & TypeFormatFlags.InFirstTypeArgument) {
-                        // Add parenthesis around function type for the first type argument to avoid ambiguity
-                        const typeParameters = callSignature.target && (flags & TypeFormatFlags.WriteTypeArgumentsOfSignature) ?
-                            callSignature.target.typeParameters : callSignature.typeParameters;
-                        return typeParameters && typeParameters.length !== 0;
-                    }
-                    return false;
-                }
-
-                function writeLiteralType(type: ObjectType, flags: TypeFormatFlags) {
-                    if (isGenericMappedType(type)) {
-                        writeMappedType(<MappedType>type);
-                        return;
-                    }
-
-                    const resolved = resolveStructuredTypeMembers(type);
-                    if (!resolved.properties.length && !resolved.stringIndexInfo && !resolved.numberIndexInfo) {
-                        if (!resolved.callSignatures.length && !resolved.constructSignatures.length) {
-                            writePunctuation(writer, SyntaxKind.OpenBraceToken);
-                            writePunctuation(writer, SyntaxKind.CloseBraceToken);
-                            return;
-                        }
-
-                        if (resolved.callSignatures.length === 1 && !resolved.constructSignatures.length) {
-                            const parenthesizeSignature = shouldAddParenthesisAroundFunctionType(resolved.callSignatures[0], flags);
-                            if (parenthesizeSignature) {
-                                writePunctuation(writer, SyntaxKind.OpenParenToken);
-                            }
-                            buildSignatureDisplay(resolved.callSignatures[0], writer, enclosingDeclaration, globalFlagsToPass | TypeFormatFlags.WriteArrowStyleSignature, /*kind*/ undefined, symbolStack);
-                            if (parenthesizeSignature) {
-                                writePunctuation(writer, SyntaxKind.CloseParenToken);
-                            }
-                            return;
-                        }
-                        if (resolved.constructSignatures.length === 1 && !resolved.callSignatures.length) {
-                            if (flags & TypeFormatFlags.InElementType) {
-                                writePunctuation(writer, SyntaxKind.OpenParenToken);
-                            }
-                            writeKeyword(writer, SyntaxKind.NewKeyword);
-                            writeSpace(writer);
-                            buildSignatureDisplay(resolved.constructSignatures[0], writer, enclosingDeclaration, globalFlagsToPass | TypeFormatFlags.WriteArrowStyleSignature, /*kind*/ undefined, symbolStack);
-                            if (flags & TypeFormatFlags.InElementType) {
-                                writePunctuation(writer, SyntaxKind.CloseParenToken);
-                            }
-                            return;
-                        }
-                    }
-
-                    const saveInObjectTypeLiteral = inObjectTypeLiteral;
-                    inObjectTypeLiteral = true;
-                    writePunctuation(writer, SyntaxKind.OpenBraceToken);
-                    writer.writeLine();
-                    writer.increaseIndent();
-                    writeObjectLiteralType(resolved);
-                    writer.decreaseIndent();
-                    writePunctuation(writer, SyntaxKind.CloseBraceToken);
-                    inObjectTypeLiteral = saveInObjectTypeLiteral;
-                }
-
-                function writeObjectLiteralType(resolved: ResolvedType) {
-                    for (const signature of resolved.callSignatures) {
-                        buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, /*kind*/ undefined, symbolStack);
-                        writePunctuation(writer, SyntaxKind.SemicolonToken);
-                        writer.writeLine();
-                    }
-                    for (const signature of resolved.constructSignatures) {
-                        buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, SignatureKind.Construct, symbolStack);
-                        writePunctuation(writer, SyntaxKind.SemicolonToken);
-                        writer.writeLine();
-                    }
-                    const stringIndexInfo = resolved.objectFlags & ObjectFlags.ReverseMapped && resolved.stringIndexInfo ?
-                        createIndexInfo(anyType, resolved.stringIndexInfo.isReadonly, resolved.stringIndexInfo.declaration) :
-                        resolved.stringIndexInfo;
-                    buildIndexSignatureDisplay(stringIndexInfo, writer, IndexKind.String, enclosingDeclaration, globalFlags, symbolStack);
-                    buildIndexSignatureDisplay(resolved.numberIndexInfo, writer, IndexKind.Number, enclosingDeclaration, globalFlags, symbolStack);
-                    for (const p of resolved.properties) {
-                        if (globalFlags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral) {
-                            if (p.flags & SymbolFlags.Prototype) {
-                                continue;
-                            }
-                            if (getDeclarationModifierFlagsFromSymbol(p) & (ModifierFlags.Private | ModifierFlags.Protected)) {
-                                writer.reportPrivateInBaseOfClassExpression(symbolName(p));
-                            }
-                        }
-                        const t = getCheckFlags(p) & CheckFlags.ReverseMapped ? anyType : getTypeOfSymbol(p);
-                        if (p.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(t).length) {
-                            const signatures = getSignaturesOfType(t, SignatureKind.Call);
-                            for (const signature of signatures) {
-                                writePropertyWithModifiers(p);
-                                buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, /*kind*/ undefined, symbolStack);
-                                writePunctuation(writer, SyntaxKind.SemicolonToken);
-                                writer.writeLine();
-                            }
-                        }
-                        else {
-                            writePropertyWithModifiers(p);
-                            writePunctuation(writer, SyntaxKind.ColonToken);
-                            writeSpace(writer);
-                            writeType(t, globalFlags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral);
-                            writePunctuation(writer, SyntaxKind.SemicolonToken);
-                            writer.writeLine();
-                        }
-                    }
-                }
-
-                function writeMappedType(type: MappedType) {
-                    writePunctuation(writer, SyntaxKind.OpenBraceToken);
-                    writer.writeLine();
-                    writer.increaseIndent();
-                    if (type.declaration.readonlyToken) {
-                        writeKeyword(writer, SyntaxKind.ReadonlyKeyword);
-                        writeSpace(writer);
-                    }
-                    writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                    appendSymbolNameOnly(getTypeParameterFromMappedType(type).symbol, writer);
-                    writeSpace(writer);
-                    writeKeyword(writer, SyntaxKind.InKeyword);
-                    writeSpace(writer);
-                    writeType(getConstraintTypeFromMappedType(type), TypeFormatFlags.None);
-                    writePunctuation(writer, SyntaxKind.CloseBracketToken);
-                    if (type.declaration.questionToken) {
-                        writePunctuation(writer, SyntaxKind.QuestionToken);
-                    }
-                    writePunctuation(writer, SyntaxKind.ColonToken);
-                    writeSpace(writer);
-                    writeType(getTemplateTypeFromMappedType(type), TypeFormatFlags.None);
-                    writePunctuation(writer, SyntaxKind.SemicolonToken);
-                    writer.writeLine();
-                    writer.decreaseIndent();
-                    writePunctuation(writer, SyntaxKind.CloseBraceToken);
-                }
-            }
-
-            function buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags) {
-                const targetSymbol = getTargetSymbol(symbol);
-                if (targetSymbol.flags & SymbolFlags.Class || targetSymbol.flags & SymbolFlags.Interface || targetSymbol.flags & SymbolFlags.TypeAlias) {
-                    buildDisplayForTypeParametersAndDelimiters(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol), writer, enclosingDeclaration, flags);
-                }
-            }
-
-            function buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
-                appendSymbolNameOnly(tp.symbol, writer);
-                const constraint = getConstraintOfTypeParameter(tp);
-                if (constraint) {
-                    writeSpace(writer);
-                    writeKeyword(writer, SyntaxKind.ExtendsKeyword);
-                    writeSpace(writer);
-                    buildTypeDisplay(constraint, writer, enclosingDeclaration, flags, symbolStack);
-                }
-                const defaultType = getDefaultFromTypeParameter(tp);
-                if (defaultType) {
-                    writeSpace(writer);
-                    writePunctuation(writer, SyntaxKind.EqualsToken);
-                    writeSpace(writer);
-                    buildTypeDisplay(defaultType, writer, enclosingDeclaration, flags, symbolStack);
-                }
-            }
-
-            function buildParameterDisplay(p: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
-                const parameterNode = <ParameterDeclaration>p.valueDeclaration;
-
-                if (parameterNode ? isRestParameter(parameterNode) : isTransientSymbol(p) && p.isRestParameter) {
-                    writePunctuation(writer, SyntaxKind.DotDotDotToken);
-                }
-                if (parameterNode && isBindingPattern(parameterNode.name)) {
-                    buildBindingPatternDisplay(<BindingPattern>parameterNode.name, writer, enclosingDeclaration, flags, symbolStack);
-                }
-                else {
-                    appendSymbolNameOnly(p, writer);
-                }
-                if (parameterNode && isOptionalParameter(parameterNode)) {
-                    writePunctuation(writer, SyntaxKind.QuestionToken);
-                }
-                writePunctuation(writer, SyntaxKind.ColonToken);
-                writeSpace(writer);
-
-                let type = getTypeOfSymbol(p);
-                if (parameterNode && isRequiredInitializedParameter(parameterNode)) {
-                    type = getOptionalType(type);
-                }
-                buildTypeDisplay(type, writer, enclosingDeclaration, flags, symbolStack);
-            }
-
-            function buildBindingPatternDisplay(bindingPattern: BindingPattern, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
-                // We have to explicitly emit square bracket and bracket because these tokens are not stored inside the node.
-                if (bindingPattern.kind === SyntaxKind.ObjectBindingPattern) {
-                    writePunctuation(writer, SyntaxKind.OpenBraceToken);
-                    buildDisplayForCommaSeparatedList(bindingPattern.elements, writer, e => buildBindingElementDisplay(e, writer, enclosingDeclaration, flags, symbolStack));
-                    writePunctuation(writer, SyntaxKind.CloseBraceToken);
-                }
-                else if (bindingPattern.kind === SyntaxKind.ArrayBindingPattern) {
-                    writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                    const elements = bindingPattern.elements;
-                    buildDisplayForCommaSeparatedList(elements, writer, e => buildBindingElementDisplay(e, writer, enclosingDeclaration, flags, symbolStack));
-                    if (elements && elements.hasTrailingComma) {
-                        writePunctuation(writer, SyntaxKind.CommaToken);
-                    }
-                    writePunctuation(writer, SyntaxKind.CloseBracketToken);
-                }
-            }
-
-            function buildBindingElementDisplay(bindingElement: ArrayBindingElement, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
-                if (isOmittedExpression(bindingElement)) {
-                    return;
-                }
-                Debug.assert(bindingElement.kind === SyntaxKind.BindingElement);
-                if (bindingElement.propertyName) {
-                    writer.writeProperty(getTextOfNode(bindingElement.propertyName));
-                    writePunctuation(writer, SyntaxKind.ColonToken);
-                    writeSpace(writer);
-                }
-                if (isBindingPattern(bindingElement.name)) {
-                    buildBindingPatternDisplay(<BindingPattern>bindingElement.name, writer, enclosingDeclaration, flags, symbolStack);
-                }
-                else {
-                    if (bindingElement.dotDotDotToken) {
-                        writePunctuation(writer, SyntaxKind.DotDotDotToken);
-                    }
-                    appendSymbolNameOnly(bindingElement.symbol, writer);
-                }
-            }
-
-            function buildDisplayForTypeParametersAndDelimiters(typeParameters: ReadonlyArray<TypeParameter>, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
-                if (typeParameters && typeParameters.length) {
-                    writePunctuation(writer, SyntaxKind.LessThanToken);
-                    buildDisplayForCommaSeparatedList(typeParameters, writer, p => buildTypeParameterDisplay(p, writer, enclosingDeclaration, flags, symbolStack));
-                    writePunctuation(writer, SyntaxKind.GreaterThanToken);
-                }
-            }
-
-            function buildDisplayForCommaSeparatedList<T>(list: ReadonlyArray<T>, writer: SymbolWriter, action: (item: T) => void) {
-                for (let i = 0; i < list.length; i++) {
-                    if (i > 0) {
-                        writePunctuation(writer, SyntaxKind.CommaToken);
-                        writeSpace(writer);
-                    }
-                    action(list[i]);
-                }
-            }
-
-            function buildDisplayForTypeArgumentsAndDelimiters(typeParameters: ReadonlyArray<TypeParameter>, mapper: TypeMapper, writer: SymbolWriter, enclosingDeclaration?: Node) {
-                if (typeParameters && typeParameters.length) {
-                    writePunctuation(writer, SyntaxKind.LessThanToken);
-                    let flags = TypeFormatFlags.InFirstTypeArgument;
-                    for (let i = 0; i < typeParameters.length; i++) {
-                        if (i > 0) {
-                            writePunctuation(writer, SyntaxKind.CommaToken);
-                            writeSpace(writer);
-                            flags = TypeFormatFlags.None;
-                        }
-                        buildTypeDisplay(mapper(typeParameters[i]), writer, enclosingDeclaration, flags);
-                    }
-                    writePunctuation(writer, SyntaxKind.GreaterThanToken);
-                }
-            }
-
-            function buildDisplayForParametersAndDelimiters(thisParameter: Symbol | undefined, parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
-                writePunctuation(writer, SyntaxKind.OpenParenToken);
-                if (thisParameter) {
-                    buildParameterDisplay(thisParameter, writer, enclosingDeclaration, flags, symbolStack);
-                }
-                for (let i = 0; i < parameters.length; i++) {
-                    if (i > 0 || thisParameter) {
-                        writePunctuation(writer, SyntaxKind.CommaToken);
-                        writeSpace(writer);
-                    }
-                    buildParameterDisplay(parameters[i], writer, enclosingDeclaration, flags, symbolStack);
-                }
-                writePunctuation(writer, SyntaxKind.CloseParenToken);
-            }
-
-            function buildTypePredicateDisplay(predicate: TypePredicate, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]): void {
-                if (isIdentifierTypePredicate(predicate)) {
-                    writer.writeParameter(predicate.parameterName);
-                }
-                else {
-                    writeKeyword(writer, SyntaxKind.ThisKeyword);
-                }
-                writeSpace(writer);
-                writeKeyword(writer, SyntaxKind.IsKeyword);
-                writeSpace(writer);
-                buildTypeDisplay(predicate.type, writer, enclosingDeclaration, flags, symbolStack);
-            }
-
-            function buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
-                const returnType = getReturnTypeOfSignature(signature);
-                if (flags & TypeFormatFlags.SuppressAnyReturnType && isTypeAny(returnType)) {
-                    return;
-                }
-
-                if (flags & TypeFormatFlags.WriteArrowStyleSignature) {
-                    writeSpace(writer);
-                    writePunctuation(writer, SyntaxKind.EqualsGreaterThanToken);
-                }
-                else {
-                    writePunctuation(writer, SyntaxKind.ColonToken);
-                }
-                writeSpace(writer);
-
-                const typePredicate = getTypePredicateOfSignature(signature);
-                if (typePredicate) {
-                    buildTypePredicateDisplay(typePredicate, writer, enclosingDeclaration, flags, symbolStack);
-                }
-                else {
-                    buildTypeDisplay(returnType, writer, enclosingDeclaration, flags, symbolStack);
-                }
-            }
-
-            function buildSignatureDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind, symbolStack?: Symbol[]) {
-                if (kind === SignatureKind.Construct) {
-                    writeKeyword(writer, SyntaxKind.NewKeyword);
-                    writeSpace(writer);
-                }
-
-                if (signature.target && (flags & TypeFormatFlags.WriteTypeArgumentsOfSignature)) {
-                    // Instantiated signature, write type arguments instead
-                    // This is achieved by passing in the mapper separately
-                    buildDisplayForTypeArgumentsAndDelimiters(signature.target.typeParameters, signature.mapper, writer, enclosingDeclaration);
-                }
-                else {
-                    buildDisplayForTypeParametersAndDelimiters(signature.typeParameters, writer, enclosingDeclaration, flags, symbolStack);
-                }
-
-                buildDisplayForParametersAndDelimiters(signature.thisParameter, signature.parameters, writer, enclosingDeclaration, flags, symbolStack);
-
-                buildReturnTypeDisplay(signature, writer, enclosingDeclaration, flags, symbolStack);
-            }
-
-            function buildIndexSignatureDisplay(info: IndexInfo, writer: SymbolWriter, kind: IndexKind, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]) {
-                if (info) {
-                    if (info.isReadonly) {
-                        writeKeyword(writer, SyntaxKind.ReadonlyKeyword);
-                        writeSpace(writer);
-                    }
-                    writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                    writer.writeParameter(info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : "x");
-                    writePunctuation(writer, SyntaxKind.ColonToken);
-                    writeSpace(writer);
-                    switch (kind) {
-                        case IndexKind.Number:
-                            writeKeyword(writer, SyntaxKind.NumberKeyword);
-                            break;
-                        case IndexKind.String:
-                            writeKeyword(writer, SyntaxKind.StringKeyword);
-                            break;
-                    }
-
-                    writePunctuation(writer, SyntaxKind.CloseBracketToken);
-                    writePunctuation(writer, SyntaxKind.ColonToken);
-                    writeSpace(writer);
-                    if (info.type) {
-                        buildTypeDisplay(info.type, writer, enclosingDeclaration, globalFlags, symbolStack);
-                    }
-                    else {
-                        writeKeyword(writer, SyntaxKind.AnyKeyword);
-                    }
-                    writePunctuation(writer, SyntaxKind.SemicolonToken);
-                    writer.writeLine();
-                }
-            }
-
-            return _displayBuilder || (_displayBuilder = {
-                buildSymbolDisplay,
-                buildTypeDisplay,
-                buildTypeParameterDisplay,
-                buildTypePredicateDisplay,
-                buildParameterDisplay,
-                buildDisplayForParametersAndDelimiters,
-                buildDisplayForTypeParametersAndDelimiters,
-                buildTypeParameterDisplayFromSymbol,
-                buildSignatureDisplay,
-                buildIndexSignatureDisplay,
-                buildReturnTypeDisplay
-            });
         }
 
         function isDeclarationVisible(node: Declaration): boolean {
@@ -25348,7 +24879,7 @@ namespace ts {
             }
         }
 
-        function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
+        function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: EmitTextWriter) {
             // Get type of the symbol if this is the valid symbol otherwise get type at location
             const symbol = getSymbolOfNode(declaration);
             let type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
@@ -25361,18 +24892,17 @@ namespace ts {
             if (flags & TypeFormatFlags.AddUndefined) {
                 type = getOptionalType(type);
             }
-
-            getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
+            typeToString(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals, writer);
         }
 
-        function writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
+        function writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: EmitTextWriter) {
             const signature = getSignatureFromDeclaration(signatureDeclaration);
-            getSymbolDisplayBuilder().buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags);
+            typeToString(getReturnTypeOfSignature(signature), enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals, writer);
         }
 
-        function writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
+        function writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: EmitTextWriter) {
             const type = getWidenedType(getRegularTypeOfExpression(expr));
-            getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
+            typeToString(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals, writer);
         }
 
         function hasGlobalName(name: string): boolean {
@@ -25420,7 +24950,7 @@ namespace ts {
             return false;
         }
 
-        function writeLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, writer: SymbolWriter) {
+        function writeLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, writer: EmitTextWriter) {
             const type = getTypeOfSymbol(getSymbolOfNode(node));
             writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
         }

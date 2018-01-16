@@ -810,6 +810,38 @@ namespace ts.textChanges {
             this.writer.write(s);
             this.setLastNonTriviaPosition(s, /*force*/ false);
         }
+        writeKeyword(s: string): void {
+            this.writer.writeKeyword(s);
+            this.setLastNonTriviaPosition(s, /*force*/ false);
+        }
+        writeOperator(s: string): void {
+            this.writer.writeOperator(s);
+            this.setLastNonTriviaPosition(s, /*force*/ false);
+        }
+        writePunctuation(s: string): void {
+            this.writer.writePunctuation(s);
+            this.setLastNonTriviaPosition(s, /*force*/ false);
+        }
+        writeParameter(s: string): void {
+            this.writer.writeParameter(s);
+            this.setLastNonTriviaPosition(s, /*force*/ false);
+        }
+        writeProperty(s: string): void {
+            this.writer.writeProperty(s);
+            this.setLastNonTriviaPosition(s, /*force*/ false);
+        }
+        writeSpace(s: string): void {
+            this.writer.writeSpace(s);
+            this.setLastNonTriviaPosition(s, /*force*/ false);
+        }
+        writeStringLiteral(s: string): void {
+            this.writer.writeStringLiteral(s);
+            this.setLastNonTriviaPosition(s, /*force*/ false);
+        }
+        writeSymbol(s: string, sym: Symbol): void {
+            this.writer.writeSymbol(s, sym);
+            this.setLastNonTriviaPosition(s, /*force*/ false);
+        }
         writeTextOfNode(text: string, node: Node): void {
             this.writer.writeTextOfNode(text, node);
         }
@@ -848,8 +880,8 @@ namespace ts.textChanges {
         isAtStartOfLine(): boolean {
             return this.writer.isAtStartOfLine();
         }
-        reset(): void {
-            this.writer.reset();
+        clear(): void {
+            this.writer.clear();
             this.lastNonTriviaPosition = 0;
         }
     }

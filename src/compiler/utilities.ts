@@ -29,26 +29,31 @@ namespace ts {
         return undefined;
     }
 
-    export interface StringSymbolWriter extends SymbolWriter {
-        string(): string;
-    }
-
     const stringWriter = createSingleLineStringWriter();
 
-    function createSingleLineStringWriter(): StringSymbolWriter {
+    function createSingleLineStringWriter(): EmitTextWriter {
         let str = "";
 
         const writeText: (text: string) => void = text => str += text;
         return {
-            string: () => str,
+            getText: () => str,
+            write: writeText,
+            rawWrite: writeText,
+            writeTextOfNode: writeText,
             writeKeyword: writeText,
             writeOperator: writeText,
             writePunctuation: writeText,
             writeSpace: writeText,
             writeStringLiteral: writeText,
+            writeLiteral: writeText,
             writeParameter: writeText,
             writeProperty: writeText,
             writeSymbol: writeText,
+            getTextPos: () => str.length,
+            getLine: () => 0,
+            getColumn: () => 0,
+            getIndent: () => 0,
+            isAtStartOfLine: () => false,
 
             // Completely ignore indentation for string writers.  And map newlines to
             // a single space.
@@ -63,11 +68,11 @@ namespace ts {
         };
     }
 
-    export function usingSingleLineStringWriter(action: (writer: StringSymbolWriter) => void): string {
-        const oldString = stringWriter.string();
+    export function usingSingleLineStringWriter(action: (writer: EmitTextWriter) => void): string {
+        const oldString = stringWriter.getText();
         try {
             action(stringWriter);
-            return stringWriter.string();
+            return stringWriter.getText();
         }
         finally {
             stringWriter.clear();
@@ -2606,7 +2611,19 @@ namespace ts {
             getColumn: () => lineStart ? indent * getIndentSize() + 1 : output.length - linePos + 1,
             getText: () => output,
             isAtStartOfLine: () => lineStart,
-            reset
+            clear: reset,
+            reportInaccessibleThisError: noop,
+            reportPrivateInBaseOfClassExpression: noop,
+            reportInaccessibleUniqueSymbolError: noop,
+            trackSymbol: noop,
+            writeKeyword: write,
+            writeOperator: write,
+            writeParameter: write,
+            writeProperty: write,
+            writePunctuation: write,
+            writeSpace: write,
+            writeStringLiteral: write,
+            writeSymbol: write
         };
     }
 

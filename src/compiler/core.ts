@@ -2771,10 +2771,10 @@ namespace ts {
     function Signature() {} // tslint:disable-line no-empty
 
     function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
-        this.id = 0;
-        this.kind = kind;
         this.pos = pos;
         this.end = end;
+        this.kind = kind;
+        this.id = 0;
         this.flags = NodeFlags.None;
         this.modifierFlagsCache = ModifierFlags.None;
         this.transformFlags = TransformFlags.None;
@@ -3044,6 +3044,10 @@ namespace ts {
 
     export function and<T>(f: (arg: T) => boolean, g: (arg: T) => boolean) {
         return (arg: T) => f(arg) && g(arg);
+    }
+
+    export function or<T>(f: (arg: T) => boolean, g: (arg: T) => boolean) {
+        return (arg: T) => f(arg) || g(arg);
     }
 
     export function assertTypeIsNever(_: never): void { } // tslint:disable-line no-empty
