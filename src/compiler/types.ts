@@ -2934,6 +2934,7 @@ namespace ts {
         NoTruncation                            = 1 << 0,   // Don't truncate result
         WriteArrayAsGenericType                 = 1 << 1,   // Write Array<T> instead T[]
         WriteDefaultSymbolWithoutName           = 1 << 2,   // Write `default`-named symbols as `default` instead of how they were written
+        UseStructuralFallback                   = 1 << 3,   // When an alias cannot be named by its symbol, rather than report an error, fallback to a structural printout if possible 
         // empty space
         WriteTypeArgumentsOfSignature           = 1 << 5,   // Write the type arguments instead of type parameters of the signature
         UseFullyQualifiedType                   = 1 << 6,   // Write out the fully qualified type name (eg. Module.Type, instead of Type)
@@ -2968,6 +2969,7 @@ namespace ts {
         NoTruncation                            = 1 << 0,  // Don't truncate typeToString result
         WriteArrayAsGenericType                 = 1 << 1,  // Write Array<T> instead T[]
         WriteDefaultSymbolWithoutName           = 1 << 2,  // Write all `defaut`-named symbols as `default` instead of their written name
+        UseStructuralFallback                   = 1 << 3,   // When an alias cannot be named by its symbol, rather than report an error, fallback to a structural printout if possible 
         // hole because there's a hole in node builder flags
         WriteTypeArgumentsOfSignature           = 1 << 5,  // Write the type arguments instead of type parameters of the signature
         UseFullyQualifiedType                   = 1 << 6,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
@@ -2997,7 +2999,7 @@ namespace ts {
         /** @deprecated */ WriteOwnNameForAnyLike  = 0,  // Does nothing
 
         NodeBuilderFlagsMask =
-            NoTruncation | WriteArrayAsGenericType | WriteDefaultSymbolWithoutName | WriteTypeArgumentsOfSignature |
+            NoTruncation | WriteArrayAsGenericType | WriteDefaultSymbolWithoutName | UseStructuralFallback | WriteTypeArgumentsOfSignature |
             UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
             UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias,
     }

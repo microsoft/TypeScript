@@ -2945,7 +2945,7 @@ namespace ts {
                         // Always use 'typeof T' for type of class, enum, and module objects
                         if (symbol.flags & SymbolFlags.Class && !getBaseTypeVariableOfClass(symbol) && !(symbol.valueDeclaration.kind === SyntaxKind.ClassExpression && context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral) ||
                             symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule) ||
-                            shouldWriteTypeOfFunctionSymbol()) {
+                            shouldWriteTypeOfFunctionSymbol() && !(context.flags & NodeBuilderFlags.UseStructuralFallback && isSymbolAccessible(symbol, context.enclosingDeclaration, SymbolFlags.Value, /*computeAliases*/ false).accessibility !== SymbolAccessibility.Accessible)) {
                             return createTypeQueryNodeFromSymbol(symbol, SymbolFlags.Value);
                         }
                         else if (contains(context.symbolStack, symbol)) {
