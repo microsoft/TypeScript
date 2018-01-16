@@ -94,3 +94,34 @@ const x4 = f4(fo, fs);  // Func<string>
 >fo : Symbol(fo, Decl(strictFunctionTypes1.ts, 6, 58))
 >fs : Symbol(fs, Decl(strictFunctionTypes1.ts, 8, 37))
 
+declare const never: never;
+>never : Symbol(never, Decl(strictFunctionTypes1.ts, 17, 13))
+
+const x10 = f2(never, fo, fs);  // string
+>x10 : Symbol(x10, Decl(strictFunctionTypes1.ts, 19, 5))
+>f2 : Symbol(f2, Decl(strictFunctionTypes1.ts, 0, 79))
+>never : Symbol(never, Decl(strictFunctionTypes1.ts, 17, 13))
+>fo : Symbol(fo, Decl(strictFunctionTypes1.ts, 6, 58))
+>fs : Symbol(fs, Decl(strictFunctionTypes1.ts, 8, 37))
+
+const x11 = f3(never, fo, fx);  // "def"
+>x11 : Symbol(x11, Decl(strictFunctionTypes1.ts, 20, 5))
+>f3 : Symbol(f3, Decl(strictFunctionTypes1.ts, 1, 74))
+>never : Symbol(never, Decl(strictFunctionTypes1.ts, 17, 13))
+>fo : Symbol(fo, Decl(strictFunctionTypes1.ts, 6, 58))
+>fx : Symbol(fx, Decl(strictFunctionTypes1.ts, 9, 37))
+
+// Repro from #21112
+
+declare function foo<T>(a: ReadonlyArray<T>): T;
+>foo : Symbol(foo, Decl(strictFunctionTypes1.ts, 20, 30))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 24, 21))
+>a : Symbol(a, Decl(strictFunctionTypes1.ts, 24, 24))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 24, 21))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 24, 21))
+
+let x = foo([]);  // never
+>x : Symbol(x, Decl(strictFunctionTypes1.ts, 25, 3))
+>foo : Symbol(foo, Decl(strictFunctionTypes1.ts, 20, 30))
+
