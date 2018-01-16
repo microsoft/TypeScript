@@ -2541,6 +2541,9 @@ namespace ts {
         /* @internal */ ambientModuleNames: ReadonlyArray<string>;
         /* @internal */ checkJsDirective: CheckJsDirective | undefined;
         /* @internal */ version: string;
+        /* @internal */ pragmas: Map<string>;
+        /* @internal */ localJsxNamespace?: __String;
+        /* @internal */ localJsxFactory?: EntityName;
     }
 
     export interface Bundle extends Node {
@@ -2905,7 +2908,7 @@ namespace ts {
         /* @internal */ isArrayLikeType(type: Type): boolean;
         /* @internal */ getAllPossiblePropertiesOfTypes(type: ReadonlyArray<Type>): Symbol[];
         /* @internal */ resolveName(name: string, location: Node, meaning: SymbolFlags, excludeGlobals: boolean): Symbol | undefined;
-        /* @internal */ getJsxNamespace(): string;
+        /* @internal */ getJsxNamespace(location?: Node): string;
 
         /**
          * Note that this will return undefined in the following case:
@@ -3169,7 +3172,7 @@ namespace ts {
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
         writeLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, writer: EmitTextWriter): void;
-        getJsxFactoryEntity(): EntityName;
+        getJsxFactoryEntity(location?: Node): EntityName;
     }
 
     export const enum SymbolFlags {

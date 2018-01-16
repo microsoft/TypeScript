@@ -6037,6 +6037,7 @@ namespace ts {
             const referencedFiles: FileReference[] = [];
             const typeReferenceDirectives: FileReference[] = [];
             const amdDependencies: { path: string; name: string }[] = [];
+            let pragmas: { pragma: string, value: string | undefined }[] = [];
             let amdModuleName: string;
             let checkJsDirective: CheckJsDirective = undefined;
 
@@ -6045,6 +6046,9 @@ namespace ts {
             // reference comment.
             while (true) {
                 const kind = triviaScanner.scan();
+                if (kind === SyntaxKind.MultiLineCommentTrivia) {
+                    pragmas = concatenate(pragmas, extractPragmas(sourceText.substring(triviaScanner.getTokenPos(), triviaScanner.getTextPos())));
+                }
                 if (kind !== SyntaxKind.SingleLineCommentTrivia) {
                     if (isTrivia(kind)) {
                         continue;
@@ -6110,6 +6114,8 @@ namespace ts {
                             pos: range.pos
                         };
                     }
+
+                    pragmas = concatenate(pragmas, extractPragmas(comment));
                 }
             }
 
@@ -6118,6 +6124,25 @@ namespace ts {
             sourceFile.amdDependencies = amdDependencies;
             sourceFile.moduleName = amdModuleName;
             sourceFile.checkJsDirective = checkJsDirective;
+            sourceFile.pragmas = createMap();
+            for (const p of pragmas) {
+                if (sourceFile.pragmas.has(p.pragma)) {
+                    // First one in semantics matches babel's behavior for the jsx pragma
+                    // TODO: Considering issuing an error/warning on ignored pragma comments? It feels philosophically incorrect to error on a comment, but...
+                    continue;
+                }
+                sourceFile.pragmas.set(p.pragma, p.value);
+            }
+        }
+
+        function extractPragmas(text: string) {
+            const pragmas: { pragma: string, value: string | undefined }[] = [];
+            const pragmaRegEx = /@(\w+)(\W+(\w+)(\W+|$))?/gim;
+            let matchResult: RegExpMatchArray;
+            while (matchResult = pragmaRegEx.exec(text)) {
+                pragmas.push({ pragma: matchResult[1], value: matchResult[3] });
+            }
+            return pragmas;
         }
 
         function setExternalModuleIndicator(sourceFile: SourceFile) {

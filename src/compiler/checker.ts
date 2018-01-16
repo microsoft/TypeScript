@@ -291,7 +291,7 @@ namespace ts {
             resolveName(name, location, meaning, excludeGlobals) {
                 return resolveName(location, escapeLeadingUnderscores(name), meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false, excludeGlobals);
             },
-            getJsxNamespace: () => unescapeLeadingUnderscores(getJsxNamespace()),
+            getJsxNamespace: n => unescapeLeadingUnderscores(getJsxNamespace(n)),
             getAccessibleSymbolChain,
             getTypePredicateOfSignature,
             resolveExternalModuleSymbol,
@@ -729,7 +729,22 @@ namespace ts {
             }
         }
 
-        function getJsxNamespace(): __String {
+        function getJsxNamespace(location: Node | undefined): __String {
+            if (location) {
+                const file = getSourceFileOfNode(location);
+                if (file) {
+                    if (file.localJsxNamespace) {
+                        return file.localJsxNamespace;
+                    }
+                    const jsxPragma = file.pragmas.get("jsx");
+                    if (jsxPragma) {
+                        file.localJsxFactory = parseIsolatedEntityName(jsxPragma, languageVersion);
+                        if (file.localJsxFactory) {
+                            return file.localJsxNamespace = getFirstIdentifier(file.localJsxFactory).escapedText;
+                        }
+                    }
+                }
+            }
             if (!_jsxNamespace) {
                 _jsxNamespace = "React" as __String;
                 if (compilerOptions.jsxFactory) {
@@ -15200,7 +15215,7 @@ namespace ts {
             // The reactNamespace/jsxFactory's root symbol should be marked as 'used' so we don't incorrectly elide its import.
             // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
             const reactRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
-            const reactNamespace = getJsxNamespace();
+            const reactNamespace = getJsxNamespace(node);
             const reactLocation = isNodeOpeningLikeElement ? (<JsxOpeningLikeElement>node).tagName : node;
             const reactSym = resolveName(reactLocation, reactNamespace, SymbolFlags.Value, reactRefErr, reactNamespace, /*isUse*/ true);
             if (reactSym) {
@@ -25021,7 +25036,7 @@ namespace ts {
                     return !!(symbol && getCheckFlags(symbol) & CheckFlags.Late);
                 },
                 writeLiteralConstValue,
-                getJsxFactoryEntity: () => _jsxFactoryEntity
+                getJsxFactoryEntity: location => location ? (getJsxNamespace(location), (getSourceFileOfNode(location).localJsxFactory || _jsxFactoryEntity)) : _jsxFactoryEntity
             };
 
             // defined here to avoid outer scope pollution
