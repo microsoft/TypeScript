@@ -295,6 +295,15 @@ namespace ts {
             getAccessibleSymbolChain,
             getTypePredicateOfSignature,
             resolveExternalModuleSymbol,
+            tryGetThisTypeAt: node => {
+                node = getParseTreeNode(node);
+                return node && tryGetThisTypeAt(node);
+            },
+            isMemberSymbol: symbol =>
+                symbol.flags & SymbolFlags.ClassMember
+                    && symbol !== argumentsSymbol
+                    && symbol !== undefinedSymbol
+                    && !(symbol.parent && symbol.parent.flags & SymbolFlags.Module),
         };
 
         const tupleTypes: GenericType[] = [];
@@ -13268,6 +13277,16 @@ namespace ts {
             if (needToCaptureLexicalThis) {
                 captureLexicalThis(node, container);
             }
+
+            const type = tryGetThisTypeAt(node, container);
+            if (!type && noImplicitThis) {
+                // With noImplicitThis, functions may not reference 'this' if it has type 'any'
+                error(node, Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation);
+            }
+            return type || anyType;
+        }
+
+        function tryGetThisTypeAt(node: Node, container = getThisContainer(node, /*includeArrowFunctions*/ false)): Type | undefined {
             if (isFunctionLike(container) &&
                 (!isInParameterInitializerBeforeContainingFunction(node) || getThisParameter(container))) {
                 // Note: a parameter initializer should refer to class-this unless function-this is explicitly annotated.
@@ -13306,12 +13325,6 @@ namespace ts {
                     return type;
                 }
             }
-
-            if (noImplicitThis) {
-                // With noImplicitThis, functions may not reference 'this' if it has type 'any'
-                error(node, Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation);
-            }
-            return anyType;
         }
 
         function getTypeForThisExpressionFromJSDoc(node: Node) {

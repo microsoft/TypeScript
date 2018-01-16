@@ -2919,6 +2919,9 @@ namespace ts {
         /* @internal */ getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined;
         /* @internal */ getTypePredicateOfSignature(signature: Signature): TypePredicate;
         /* @internal */ resolveExternalModuleSymbol(symbol: Symbol): Symbol;
+        /** @param node A location where we might consider accessing `this`. Not necessarily a ThisExpression. */
+        /* @internal */ tryGetThisTypeAt(node: Node): Type | undefined;
+        /* @internal */ isMemberSymbol(symbol: Symbol): boolean;
     }
 
     /* @internal */

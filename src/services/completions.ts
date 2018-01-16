@@ -167,7 +167,6 @@ namespace ts.Completions {
             return undefined;
         }
         const { name, needsConvertPropertyAccess } = info;
-        Debug.assert(!(needsConvertPropertyAccess && !propertyAccessToConvert));
         if (needsConvertPropertyAccess && !includeInsertTextCompletions) {
             return undefined;
         }
@@ -186,14 +185,24 @@ namespace ts.Completions {
             kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
             sortText: "0",
             source: getSourceFromOrigin(origin),
-            // TODO: GH#20619 Use configured quote style
-            insertText: needsConvertPropertyAccess ? `["${name}"]` : undefined,
-            replacementSpan: needsConvertPropertyAccess
-                ? createTextSpanFromBounds(findChildOfKind(propertyAccessToConvert, SyntaxKind.DotToken, sourceFile)!.getStart(sourceFile), propertyAccessToConvert.name.end)
-                : undefined,
-            hasAction: trueOrUndefined(needsConvertPropertyAccess || origin !== undefined),
+            hasAction: trueOrUndefined(origin !== undefined),
             isRecommended: trueOrUndefined(isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker)),
+            ...getInsertTextAndReplacementSpan(),
         };
+
+        function getInsertTextAndReplacementSpan(): { insertText?: string, replacementSpan?: TextSpan } {
+            if (kind === CompletionKind.Global) {
+                if (typeChecker.isMemberSymbol(symbol)) {
+                    return { insertText: needsConvertPropertyAccess ? `this["${name}"]` : `this.${name}` };
+                }
+            }
+            if (needsConvertPropertyAccess) {
+                // TODO: GH#20619 Use configured quote style
+                const replacementSpan = createTextSpanFromBounds(findChildOfKind(propertyAccessToConvert!, SyntaxKind.DotToken, sourceFile)!.getStart(sourceFile), propertyAccessToConvert!.name.end);
+                return { insertText: `["${name}"]`, replacementSpan };
+            }
+            return {};
+        }
     }
 
 
@@ -1097,6 +1106,15 @@ namespace ts.Completions {
             const symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
 
             symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
+
+            // Need to insert 'this.' before properties of `this` type, so only do that if `includeInsertTextCompletions`
+            if (options.includeInsertTextCompletions && scopeNode.kind !== SyntaxKind.SourceFile) {
+                const thisType = typeChecker.tryGetThisTypeAt(scopeNode);
+                if (thisType) {
+                    symbols.push(...getPropertiesForCompletion(thisType, typeChecker, /*isForAccess*/ true));
+                }
+            }
+
             if (options.includeExternalModuleExports) {
                 getSymbolsFromOtherSourceFileExports(symbols, previousToken && isIdentifier(previousToken) ? previousToken.text : "", target);
             }
@@ -2052,13 +2070,13 @@ namespace ts.Completions {
         if (isIdentifierText(name, target)) return validIdentiferResult;
         switch (kind) {
             case CompletionKind.None:
-            case CompletionKind.Global:
             case CompletionKind.MemberLike:
                 return undefined;
             case CompletionKind.ObjectPropertyDeclaration:
                 // TODO: GH#18169
                 return { name: JSON.stringify(name), needsConvertPropertyAccess: false };
             case CompletionKind.PropertyAccess:
+            case CompletionKind.Global:
                 // Don't add a completion for a name starting with a space. See https://github.com/Microsoft/TypeScript/pull/20547
                 return name.charCodeAt(0) === CharacterCodes.space ? undefined : { name, needsConvertPropertyAccess: true };
             case CompletionKind.String:
