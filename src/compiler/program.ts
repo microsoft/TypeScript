@@ -15,7 +15,8 @@ namespace ts {
 
     export function resolveTripleslashReference(moduleName: string, containingFile: string): string {
         const basePath = getDirectoryPath(containingFile);
-        const referencedFileName = isRootedDiskPath(moduleName) ? moduleName : combinePaths(basePath, moduleName);
+        const normalizedModuleName = normalizePath(moduleName);
+        const referencedFileName = isRootedDiskPath(normalizedModuleName) ? normalizedModuleName : combinePaths(basePath, normalizedModuleName);
         return normalizePath(referencedFileName);
     }
 
