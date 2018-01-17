@@ -14,7 +14,7 @@ Please help us by doing the following steps before logging an issue:
 -->
 
 <!-- If you have a SUGGESTION:
-  Most suggestion reports are duplicates, please search extra hard before logging a new suggestions.
+  Most suggestion reports are duplicates, please search extra hard before logging a new suggestion.
   See https://github.com/Microsoft/TypeScript-wiki/blob/master/Writing-Good-Design-Proposals.md
 -->
 
