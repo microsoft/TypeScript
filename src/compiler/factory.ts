@@ -3960,7 +3960,9 @@ namespace ts {
         // per ES grammar both 'whenTrue' and 'whenFalse' parts of conditional expression are assignment expressions
         // so in case when comma expression is introduced as a part of previous transformations
         // if should be wrapped in parens since comma operator has the lowest precedence
-        return e.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>e).operatorToken.kind === SyntaxKind.CommaToken
+        const emittedExpression = skipPartiallyEmittedExpressions(e);
+        return emittedExpression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>emittedExpression).operatorToken.kind === SyntaxKind.CommaToken ||
+            emittedExpression.kind === SyntaxKind.CommaListExpression
             ? createParen(e)
             : e;
     }
