@@ -63,7 +63,7 @@
       ],
       "documentation": [
         {
-          "text": "Doc{T} A template",
+          "text": "DocT} A template",
           "kind": "text"
         }
       ],
@@ -82,7 +82,7 @@
         },
         {
           "name": "typedef",
-          "text": "NumOrStr "
+          "text": "NumOrStr"
         },
         {
           "name": "property",

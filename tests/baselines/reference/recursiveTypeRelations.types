@@ -17,7 +17,7 @@ class Query<A extends Attributes<keyof A>> {
 >A : A
 
     multiply<B extends Attributes<keyof B>>(x: B): Query<A & B>;
->multiply : <B extends { [Key in Keys]: string; }>(x: B) => Query<A & B>
+>multiply : <B extends { [Key in keyof B]: string; }>(x: B) => Query<A & B>
 >B : B
 >Attributes : { [Key in Keys]: string; }
 >B : B

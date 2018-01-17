@@ -1,13 +1,11 @@
-tests/cases/compiler/genericSpecializations1.ts(5,7): error TS2420: Class 'IntFooBad' incorrectly implements interface 'IFoo<number>'.
-  Types of property 'foo' are incompatible.
-    Type '(x: string) => string' is not assignable to type '<T>(x: T) => T'.
-      Types of parameters 'x' and 'x' are incompatible.
-        Type 'T' is not assignable to type 'string'.
-tests/cases/compiler/genericSpecializations1.ts(9,7): error TS2420: Class 'StringFoo2' incorrectly implements interface 'IFoo<string>'.
-  Types of property 'foo' are incompatible.
-    Type '(x: string) => string' is not assignable to type '<T>(x: T) => T'.
-      Types of parameters 'x' and 'x' are incompatible.
-        Type 'T' is not assignable to type 'string'.
+tests/cases/compiler/genericSpecializations1.ts(6,5): error TS2416: Property 'foo' in type 'IntFooBad' is not assignable to the same property in base type 'IFoo<number>'.
+  Type '(x: string) => string' is not assignable to type '<T>(x: T) => T'.
+    Types of parameters 'x' and 'x' are incompatible.
+      Type 'T' is not assignable to type 'string'.
+tests/cases/compiler/genericSpecializations1.ts(10,5): error TS2416: Property 'foo' in type 'StringFoo2' is not assignable to the same property in base type 'IFoo<string>'.
+  Type '(x: string) => string' is not assignable to type '<T>(x: T) => T'.
+    Types of parameters 'x' and 'x' are incompatible.
+      Type 'T' is not assignable to type 'string'.
 
 
 ==== tests/cases/compiler/genericSpecializations1.ts (2 errors) ====
@@ -16,23 +14,21 @@ tests/cases/compiler/genericSpecializations1.ts(9,7): error TS2420: Class 'Strin
     }
     
     class IntFooBad implements IFoo<number> {
-          ~~~~~~~~~
-!!! error TS2420: Class 'IntFooBad' incorrectly implements interface 'IFoo<number>'.
-!!! error TS2420:   Types of property 'foo' are incompatible.
-!!! error TS2420:     Type '(x: string) => string' is not assignable to type '<T>(x: T) => T'.
-!!! error TS2420:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2420:         Type 'T' is not assignable to type 'string'.
         foo(x: string): string { return null; }
+        ~~~
+!!! error TS2416: Property 'foo' in type 'IntFooBad' is not assignable to the same property in base type 'IFoo<number>'.
+!!! error TS2416:   Type '(x: string) => string' is not assignable to type '<T>(x: T) => T'.
+!!! error TS2416:     Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2416:       Type 'T' is not assignable to type 'string'.
     }
     
     class StringFoo2 implements IFoo<string> {
-          ~~~~~~~~~~
-!!! error TS2420: Class 'StringFoo2' incorrectly implements interface 'IFoo<string>'.
-!!! error TS2420:   Types of property 'foo' are incompatible.
-!!! error TS2420:     Type '(x: string) => string' is not assignable to type '<T>(x: T) => T'.
-!!! error TS2420:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2420:         Type 'T' is not assignable to type 'string'.
         foo(x: string): string { return null; }
+        ~~~
+!!! error TS2416: Property 'foo' in type 'StringFoo2' is not assignable to the same property in base type 'IFoo<string>'.
+!!! error TS2416:   Type '(x: string) => string' is not assignable to type '<T>(x: T) => T'.
+!!! error TS2416:     Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2416:       Type 'T' is not assignable to type 'string'.
     }
     
     class StringFoo3 implements IFoo<string> {

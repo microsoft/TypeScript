@@ -25,8 +25,7 @@
                 "escapedText": "foo"
             },
             "isNameFirst": true,
-            "isBracketed": false,
-            "comment": ""
+            "isBracketed": false
         },
         "length": 1,
         "pos": 8,

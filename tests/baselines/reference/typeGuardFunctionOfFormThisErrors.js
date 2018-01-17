@@ -152,6 +152,6 @@ declare let b: GuardInterface;
 declare function invalidGuard(c: any): this is number;
 declare let c: number | number[];
 declare let holder: {
-    invalidGuard: (c: any) => this is number;
+    invalidGuard: typeof invalidGuard;
 };
 declare let detached: () => this is FollowerGuard;

@@ -24,6 +24,7 @@ namespace ts {
         context.onSubstituteNode = onSubstituteNode;
         context.onEmitNode = onEmitNode;
         context.enableSubstitution(SyntaxKind.Identifier); // Substitutes expression identifiers for imported symbols.
+        context.enableSubstitution(SyntaxKind.ShorthandPropertyAssignment); // Substitutes expression identifiers for imported symbols
         context.enableSubstitution(SyntaxKind.BinaryExpression); // Substitutes assignments to exported symbols.
         context.enableSubstitution(SyntaxKind.PrefixUnaryExpression); // Substitutes updates to exported symbols.
         context.enableSubstitution(SyntaxKind.PostfixUnaryExpression); // Substitutes updates to exported symbols.
@@ -1625,7 +1626,61 @@ namespace ts {
             if (hint === EmitHint.Expression) {
                 return substituteExpression(<Expression>node);
             }
+            else if (hint === EmitHint.Unspecified) {
+                return substituteUnspecified(node);
+            }
 
+            return node;
+        }
+
+        /**
+         * Substitute the node, if necessary.
+         *
+         * @param node The node to substitute.
+         */
+        function substituteUnspecified(node: Node) {
+            switch (node.kind) {
+                case SyntaxKind.ShorthandPropertyAssignment:
+                    return substituteShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
+            }
+            return node;
+        }
+        /**
+         * Substitution for a ShorthandPropertyAssignment whose name that may contain an imported or exported symbol.
+         *
+         * @param node The node to substitute.
+         */
+        function substituteShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
+            const name = node.name;
+            if (!isGeneratedIdentifier(name) && !isLocalName(name)) {
+                const importDeclaration = resolver.getReferencedImportDeclaration(name);
+                if (importDeclaration) {
+                    if (isImportClause(importDeclaration)) {
+                        return setTextRange(
+                            createPropertyAssignment(
+                                getSynthesizedClone(name),
+                                createPropertyAccess(
+                                    getGeneratedNameForNode(importDeclaration.parent),
+                                    createIdentifier("default")
+                                )
+                            ),
+                            /*location*/ node
+                        );
+                    }
+                    else if (isImportSpecifier(importDeclaration)) {
+                        return setTextRange(
+                            createPropertyAssignment(
+                                getSynthesizedClone(name),
+                                createPropertyAccess(
+                                    getGeneratedNameForNode(importDeclaration.parent.parent.parent),
+                                    getSynthesizedClone(importDeclaration.propertyName || importDeclaration.name)
+                                ),
+                            ),
+                            /*location*/ node
+                        );
+                    }
+                }
+            }
             return node;
         }
 
