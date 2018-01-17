@@ -299,11 +299,6 @@ namespace ts {
                 node = getParseTreeNode(node);
                 return node && tryGetThisTypeAt(node);
             },
-            isMemberSymbol: symbol =>
-                symbol.flags & SymbolFlags.ClassMember
-                    && symbol !== argumentsSymbol
-                    && symbol !== undefinedSymbol
-                    && !(symbol.parent && symbol.parent.flags & SymbolFlags.Module),
         };
 
         const tupleTypes: GenericType[] = [];

@@ -4,7 +4,9 @@
 namespace ts.Completions {
     export type Log = (message: string) => void;
 
-    interface SymbolOriginInfo {
+    type SymbolOriginInfo = { type: "this-type" } | SymbolOriginInfoExport;
+    interface SymbolOriginInfoExport {
+        type: "export";
         moduleSymbol: Symbol;
         isDefaultExport: boolean;
     }
@@ -171,6 +173,17 @@ namespace ts.Completions {
             return undefined;
         }
 
+        let insertText: string | undefined;
+        let replacementSpan: TextSpan | undefined;
+        if (kind === CompletionKind.Global && origin && origin.type === "this-type") {
+            insertText = needsConvertPropertyAccess ? `this["${name}"]` : `this.${name}`;
+        }
+        else if (needsConvertPropertyAccess) {
+            // TODO: GH#20619 Use configured quote style
+            insertText = `["${name}"]`;
+            replacementSpan = createTextSpanFromBounds(findChildOfKind(propertyAccessToConvert!, SyntaxKind.DotToken, sourceFile)!.getStart(sourceFile), propertyAccessToConvert!.name.end);
+        }
+
         // TODO(drosen): Right now we just permit *all* semantic meanings when calling
         // 'getSymbolKind' which is permissible given that it is backwards compatible; but
         // really we should consider passing the meaning for the node so that we don't report
@@ -185,24 +198,11 @@ namespace ts.Completions {
             kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
             sortText: "0",
             source: getSourceFromOrigin(origin),
-            hasAction: trueOrUndefined(origin !== undefined),
+            hasAction: trueOrUndefined(!!origin && origin.type === "export"),
             isRecommended: trueOrUndefined(isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker)),
-            ...getInsertTextAndReplacementSpan(),
+            insertText,
+            replacementSpan,
         };
-
-        function getInsertTextAndReplacementSpan(): { insertText?: string, replacementSpan?: TextSpan } {
-            if (kind === CompletionKind.Global) {
-                if (typeChecker.isMemberSymbol(symbol)) {
-                    return { insertText: needsConvertPropertyAccess ? `this["${name}"]` : `this.${name}` };
-                }
-            }
-            if (needsConvertPropertyAccess) {
-                // TODO: GH#20619 Use configured quote style
-                const replacementSpan = createTextSpanFromBounds(findChildOfKind(propertyAccessToConvert!, SyntaxKind.DotToken, sourceFile)!.getStart(sourceFile), propertyAccessToConvert!.name.end);
-                return { insertText: `["${name}"]`, replacementSpan };
-            }
-            return {};
-        }
     }
 
 
@@ -216,7 +216,7 @@ namespace ts.Completions {
     }
 
     function getSourceFromOrigin(origin: SymbolOriginInfo | undefined): string | undefined {
-        return origin && stripQuotes(origin.moduleSymbol.name);
+        return origin && origin.type === "export" ? stripQuotes(origin.moduleSymbol.name) : undefined;
     }
 
     function getCompletionEntriesFromSymbols(
@@ -493,7 +493,7 @@ namespace ts.Completions {
     }
 
     function getSymbolName(symbol: Symbol, origin: SymbolOriginInfo | undefined, target: ScriptTarget): string {
-        return origin && origin.isDefaultExport && symbol.escapedName === InternalSymbolName.Default
+        return origin && origin.type === "export" && origin.isDefaultExport && symbol.escapedName === InternalSymbolName.Default
             // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
             ? firstDefined(symbol.declarations, d => isExportAssignment(d) && isIdentifier(d.expression) ? d.expression.text : undefined)
                 || codefix.moduleSymbolToValidIdentifier(origin.moduleSymbol, target)
@@ -579,13 +579,13 @@ namespace ts.Completions {
         allSourceFiles: ReadonlyArray<SourceFile>,
     ): CodeActionsAndSourceDisplay {
         const symbolOriginInfo = symbolToOriginInfoMap[getSymbolId(symbol)];
-        return symbolOriginInfo
+        return symbolOriginInfo && symbolOriginInfo.type === "export"
             ? getCodeActionsAndSourceDisplayForImport(symbolOriginInfo, symbol, program, checker, host, compilerOptions, sourceFile, previousToken, formatContext, getCanonicalFileName, allSourceFiles)
             : { codeActions: undefined, sourceDisplay: undefined };
     }
 
     function getCodeActionsAndSourceDisplayForImport(
-        symbolOriginInfo: SymbolOriginInfo,
+        symbolOriginInfo: SymbolOriginInfoExport,
         symbol: Symbol,
         program: Program,
         checker: TypeChecker,
@@ -1111,7 +1111,10 @@ namespace ts.Completions {
             if (options.includeInsertTextCompletions && scopeNode.kind !== SyntaxKind.SourceFile) {
                 const thisType = typeChecker.tryGetThisTypeAt(scopeNode);
                 if (thisType) {
-                    symbols.push(...getPropertiesForCompletion(thisType, typeChecker, /*isForAccess*/ true));
+                    for (const symbol of getPropertiesForCompletion(thisType, typeChecker, /*isForAccess*/ true)) {
+                        symbolToOriginInfoMap[getSymbolId(symbol)] = { type: "this-type" };
+                        symbols.push(symbol);
+                    }
                 }
             }
 
@@ -1228,10 +1231,10 @@ namespace ts.Completions {
                         symbol = getLocalSymbolForExportDefault(symbol) || symbol;
                     }
 
-                    const origin: SymbolOriginInfo = { moduleSymbol, isDefaultExport };
+                    const origin: SymbolOriginInfo = { type: "export", moduleSymbol, isDefaultExport };
                     if (stringContainsCharactersInOrder(getSymbolName(symbol, origin, target).toLowerCase(), tokenTextLowerCase)) {
                         symbols.push(symbol);
-                        symbolToOriginInfoMap[getSymbolId(symbol)] = { moduleSymbol, isDefaultExport };
+                        symbolToOriginInfoMap[getSymbolId(symbol)] = origin;
                     }
                 }
             });
