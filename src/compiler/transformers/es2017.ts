@@ -12,9 +12,9 @@ namespace ts {
 
     export function transformES2017(context: TransformationContext) {
         const {
-            startLexicalEnvironment,
             resumeLexicalEnvironment,
-            endLexicalEnvironment
+            endLexicalEnvironment,
+            hoistVariableDeclaration
         } = context;
 
         const resolver = context.getEmitResolver();
@@ -32,6 +32,8 @@ namespace ts {
          * just-in-time substitution for `super` expressions inside of async methods.
          */
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
+
+        let enclosingFunctionParameterNames: UnderscoreEscapedMap<true>;
 
         // Save the previous transformation hooks.
         const previousOnEmitNode = context.onEmitNode;
@@ -81,6 +83,108 @@ namespace ts {
                 default:
                     return visitEachChild(node, visitor, context);
             }
+        }
+
+        function asyncBodyVisitor(node: Node): VisitResult<Node> {
+            if (isNodeWithPossibleHoistedDeclaration(node)) {
+                switch (node.kind) {
+                    case SyntaxKind.VariableStatement:
+                        return visitVariableStatementInAsyncBody(node);
+                    case SyntaxKind.ForStatement:
+                        return visitForStatementInAsyncBody(node);
+                    case SyntaxKind.ForInStatement:
+                        return visitForInStatementInAsyncBody(node);
+                    case SyntaxKind.ForOfStatement:
+                        return visitForOfStatementInAsyncBody(node);
+                    case SyntaxKind.CatchClause:
+                        return visitCatchClauseInAsyncBody(node);
+                    case SyntaxKind.Block:
+                    case SyntaxKind.SwitchStatement:
+                    case SyntaxKind.CaseBlock:
+                    case SyntaxKind.CaseClause:
+                    case SyntaxKind.DefaultClause:
+                    case SyntaxKind.TryStatement:
+                    case SyntaxKind.DoStatement:
+                    case SyntaxKind.WhileStatement:
+                    case SyntaxKind.IfStatement:
+                    case SyntaxKind.WithStatement:
+                    case SyntaxKind.LabeledStatement:
+                        return visitEachChild(node, asyncBodyVisitor, context);
+                    default:
+                        return Debug.assertNever(node, "Unhandled node.");
+                }
+            }
+            return visitor(node);
+        }
+
+        function visitCatchClauseInAsyncBody(node: CatchClause) {
+            const catchClauseNames = createUnderscoreEscapedMap<true>();
+            recordDeclarationName(node.variableDeclaration, catchClauseNames);
+
+            // names declared in a catch variable are block scoped
+            let catchClauseUnshadowedNames: UnderscoreEscapedMap<true>;
+            catchClauseNames.forEach((_, escapedName) => {
+                if (enclosingFunctionParameterNames.has(escapedName)) {
+                    if (!catchClauseUnshadowedNames) {
+                        catchClauseUnshadowedNames = cloneMap(enclosingFunctionParameterNames);
+                    }
+                    catchClauseUnshadowedNames.delete(escapedName);
+                }
+            });
+
+            if (catchClauseUnshadowedNames) {
+                const savedEnclosingFunctionParameterNames = enclosingFunctionParameterNames;
+                enclosingFunctionParameterNames = catchClauseUnshadowedNames;
+                const result = visitEachChild(node, asyncBodyVisitor, context);
+                enclosingFunctionParameterNames = savedEnclosingFunctionParameterNames;
+                return result;
+            }
+            else {
+                return visitEachChild(node, asyncBodyVisitor, context);
+            }
+        }
+
+        function visitVariableStatementInAsyncBody(node: VariableStatement) {
+            if (isVariableDeclarationListWithCollidingName(node.declarationList)) {
+                const expression = visitVariableDeclarationListWithCollidingNames(node.declarationList, /*hasReceiver*/ false);
+                return expression ? createStatement(expression) : undefined;
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitForInStatementInAsyncBody(node: ForInStatement) {
+            return updateForIn(
+                node,
+                isVariableDeclarationListWithCollidingName(node.initializer)
+                    ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ true)
+                    : visitNode(node.initializer, visitor, isForInitializer),
+                visitNode(node.expression, visitor, isExpression),
+                visitNode(node.statement, asyncBodyVisitor, isStatement, liftToBlock)
+            );
+        }
+
+        function visitForOfStatementInAsyncBody(node: ForOfStatement) {
+            return updateForOf(
+                node,
+                visitNode(node.awaitModifier, visitor, isToken),
+                isVariableDeclarationListWithCollidingName(node.initializer)
+                    ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ true)
+                    : visitNode(node.initializer, visitor, isForInitializer),
+                visitNode(node.expression, visitor, isExpression),
+                visitNode(node.statement, asyncBodyVisitor, isStatement, liftToBlock)
+            );
+        }
+
+        function visitForStatementInAsyncBody(node: ForStatement) {
+            return updateFor(
+                node,
+                isVariableDeclarationListWithCollidingName(node.initializer)
+                    ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ false)
+                    : visitNode(node.initializer, visitor, isForInitializer),
+                visitNode(node.condition, visitor, isExpression),
+                visitNode(node.incrementor, visitor, isExpression),
+                visitNode((<ForStatement>node).statement, asyncBodyVisitor, isStatement, liftToBlock)
+            );
         }
 
         /**
@@ -197,6 +301,82 @@ namespace ts {
             );
         }
 
+        function recordDeclarationName({ name }: ParameterDeclaration | VariableDeclaration | BindingElement, names: UnderscoreEscapedMap<true>) {
+            if (isIdentifier(name)) {
+                names.set(name.escapedText, true);
+            }
+            else {
+                for (const element of name.elements) {
+                    if (!isOmittedExpression(element)) {
+                        recordDeclarationName(element, names);
+                    }
+                }
+            }
+        }
+
+        function isVariableDeclarationListWithCollidingName(node: ForInitializer): node is VariableDeclarationList {
+            return node
+                && isVariableDeclarationList(node)
+                && !(node.flags & NodeFlags.BlockScoped)
+                && forEach(node.declarations, collidesWithParameterName);
+        }
+
+        function visitVariableDeclarationListWithCollidingNames(node: VariableDeclarationList, hasReceiver: boolean) {
+            hoistVariableDeclarationList(node);
+
+            const variables = getInitializedVariables(node);
+            if (variables.length === 0) {
+                if (hasReceiver) {
+                    return visitNode(convertToAssignmentElementTarget(node.declarations[0].name), visitor, isExpression);
+                }
+                return undefined;
+            }
+
+            return inlineExpressions(map(variables, transformInitializedVariable));
+        }
+
+        function hoistVariableDeclarationList(node: VariableDeclarationList) {
+            forEach(node.declarations, hoistVariable);
+        }
+
+        function hoistVariable({ name }: VariableDeclaration | BindingElement) {
+            if (isIdentifier(name)) {
+                hoistVariableDeclaration(name);
+            }
+            else {
+                for (const element of name.elements) {
+                    if (!isOmittedExpression(element)) {
+                        hoistVariable(element);
+                    }
+                }
+            }
+        }
+
+        function transformInitializedVariable(node: VariableDeclaration) {
+            const converted = setSourceMapRange(
+                createAssignment(
+                    convertToAssignmentElementTarget(node.name),
+                    node.initializer
+                ),
+                node
+            );
+            return visitNode(converted, visitor, isExpression);
+        }
+
+        function collidesWithParameterName({ name }: VariableDeclaration | BindingElement): boolean {
+            if (isIdentifier(name)) {
+                return enclosingFunctionParameterNames.has(name.escapedText);
+            }
+            else {
+                for (const element of name.elements) {
+                    if (!isOmittedExpression(element) && collidesWithParameterName(element)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         function transformAsyncFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody;
         function transformAsyncFunctionBody(node: ArrowFunction): ConciseBody;
         function transformAsyncFunctionBody(node: FunctionLikeDeclaration): ConciseBody {
@@ -214,6 +394,13 @@ namespace ts {
             // passed to `__awaiter` is executed inside of the callback to the
             // promise constructor.
 
+            const savedEnclosingFunctionParameterNames = enclosingFunctionParameterNames;
+            enclosingFunctionParameterNames = createUnderscoreEscapedMap<true>();
+            for (const parameter of node.parameters) {
+                recordDeclarationName(parameter, enclosingFunctionParameterNames);
+            }
+
+            let result: ConciseBody;
             if (!isArrowFunction) {
                 const statements: Statement[] = [];
                 const statementOffset = addPrologue(statements, (<Block>node.body).statements, /*ensureUseStrict*/ false, visitor);
@@ -223,7 +410,7 @@ namespace ts {
                             context,
                             hasLexicalArguments,
                             promiseConstructor,
-                            transformFunctionBodyWorker(<Block>node.body, statementOffset)
+                            transformAsyncFunctionBodyWorker(<Block>node.body, statementOffset)
                         )
                     )
                 );
@@ -246,35 +433,36 @@ namespace ts {
                     }
                 }
 
-                return block;
+                result = block;
             }
             else {
                 const expression = createAwaiterHelper(
                     context,
                     hasLexicalArguments,
                     promiseConstructor,
-                    transformFunctionBodyWorker(node.body)
+                    transformAsyncFunctionBodyWorker(node.body)
                 );
 
                 const declarations = endLexicalEnvironment();
                 if (some(declarations)) {
                     const block = convertToFunctionBody(expression);
-                    return updateBlock(block, setTextRange(createNodeArray(concatenate(block.statements, declarations)), block.statements));
+                    result = updateBlock(block, setTextRange(createNodeArray(concatenate(block.statements, declarations)), block.statements));
                 }
-
-                return expression;
+                else {
+                    result = expression;
+                }
             }
+
+            enclosingFunctionParameterNames = savedEnclosingFunctionParameterNames;
+            return result;
         }
 
-        function transformFunctionBodyWorker(body: ConciseBody, start?: number) {
+        function transformAsyncFunctionBodyWorker(body: ConciseBody, start?: number) {
             if (isBlock(body)) {
-                return updateBlock(body, visitLexicalEnvironment(body.statements, visitor, context, start));
+                return updateBlock(body, visitNodes(body.statements, asyncBodyVisitor, isStatement, start));
             }
             else {
-                startLexicalEnvironment();
-                const visited = convertToFunctionBody(visitNode(body, visitor, isConciseBody));
-                const declarations = endLexicalEnvironment();
-                return updateBlock(visited, setTextRange(createNodeArray(concatenate(visited.statements, declarations)), visited.statements));
+                return convertToFunctionBody(visitNode(body, asyncBodyVisitor, isConciseBody));
             }
         }
 

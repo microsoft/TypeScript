@@ -1766,6 +1766,51 @@ namespace ts {
         return getAssignmentTargetKind(node) !== AssignmentKind.None;
     }
 
+    export type NodeWithPossibleHoistedDeclaration =
+        | Block
+        | VariableStatement
+        | WithStatement
+        | IfStatement
+        | SwitchStatement
+        | CaseBlock
+        | CaseClause
+        | DefaultClause
+        | LabeledStatement
+        | ForStatement
+        | ForInStatement
+        | ForOfStatement
+        | DoStatement
+        | WhileStatement
+        | TryStatement
+        | CatchClause;
+
+    /**
+     * Indicates whether a node could contain a `var` VariableDeclarationList that contributes to
+     * the same `var` declaration scope as the node's parent.
+     */
+    export function isNodeWithPossibleHoistedDeclaration(node: Node): node is NodeWithPossibleHoistedDeclaration {
+        switch (node.kind) {
+            case SyntaxKind.Block:
+            case SyntaxKind.VariableStatement:
+            case SyntaxKind.WithStatement:
+            case SyntaxKind.IfStatement:
+            case SyntaxKind.SwitchStatement:
+            case SyntaxKind.CaseBlock:
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.DefaultClause:
+            case SyntaxKind.LabeledStatement:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.WhileStatement:
+            case SyntaxKind.TryStatement:
+            case SyntaxKind.CatchClause:
+                return true;
+        }
+        return false;
+    }
+
     function walkUp(node: Node, kind: SyntaxKind) {
         while (node && node.kind === kind) {
             node = node.parent;
