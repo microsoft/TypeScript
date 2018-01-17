@@ -56,7 +56,7 @@ export let b: number;
 export let x: number;
 >x : number
 
-=== c:/node_modules/module3.d.ts ===
+=== c:/node_modules/module3/index.d.ts ===
 export let y: number;
 >y : number
 

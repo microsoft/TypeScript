@@ -16,7 +16,7 @@ export const x: number;
 export const y: number;
 >y : number
 
-=== /node_modules/@types/be__bop/e/z.d.ts ===
+=== /node_modules/@types/be__bop/e/z/index.d.ts ===
 export const z: number;
 >z : number
 

@@ -417,7 +417,7 @@ namespace ts.tscWatch {
                 content: `import { T } from "module1";`
             };
             const nodeModuleFile: FileOrFolder = {
-                path: "/a/b/node_modules/module1.ts",
+                path: "/a/b/node_modules/module1/index.d.ts",
                 content: `export interface T {}`
             };
             const classicModuleFile: FileOrFolder = {

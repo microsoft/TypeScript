@@ -1,5 +1,5 @@
 // @declaration: true
-// @filename: node_modules/umd.d.ts
+// @filename: node_modules/umd/index.d.ts
 export as namespace UMD;
 
 export type Thing = {

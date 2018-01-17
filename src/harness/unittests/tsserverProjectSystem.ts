@@ -889,7 +889,7 @@ namespace ts.projectSystem {
                 content: `import { T } from "module1";`
             };
             const nodeModuleFile: FileOrFolder = {
-                path: "/a/b/node_modules/module1.ts",
+                path: "/a/b/node_modules/module1/index.ts",
                 content: `export interface T {}`
             };
             const classicModuleFile: FileOrFolder = {
@@ -3023,7 +3023,7 @@ namespace ts.projectSystem {
             assert.deepEqual(resolutionTrace, [
                 "======== Resolving module 'lib' from '/a/b/app.js'. ========",
                 "Module resolution kind is not specified, using 'NodeJs'.",
-                "Loading module 'lib' from 'node_modules' folder, target file type 'TypeScript'.",
+                "Loading module 'lib' from 'node_modules' folder, target file type 'TypeScript ('.ts' preferred)'.",
                 "Directory '/a/b/node_modules' does not exist, skipping all lookups in it.",
                 "Directory '/a/node_modules' does not exist, skipping all lookups in it.",
                 "Directory '/node_modules' does not exist, skipping all lookups in it.",
@@ -3033,9 +3033,7 @@ namespace ts.projectSystem {
                 "Directory '/node_modules' does not exist, skipping all lookups in it.",
                 "======== Module name 'lib' was not resolved. ========",
                 `Auto discovery for typings is enabled in project '${proj.getProjectName()}'. Running extra resolution pass for module 'lib' using cache location '/a/cache'.`,
-                "File '/a/cache/node_modules/lib.d.ts' does not exist.",
                 "File '/a/cache/node_modules/@types/lib/package.json' does not exist.",
-                "File '/a/cache/node_modules/@types/lib.d.ts' does not exist.",
                 "File '/a/cache/node_modules/@types/lib/index.d.ts' exist - use it as a name resolution result.",
             ]);
             checkProjectActualFiles(proj, [file1.path, lib.path]);
@@ -6278,7 +6276,7 @@ namespace ts.projectSystem {
                         content: 'import a from "file2"'
                     };
                     const file2: FileOrFolder = {
-                        path: rootFolder + "a/b/node_modules/file2.d.ts",
+                        path: rootFolder + "a/b/node_modules/file2/index.d.ts",
                         content: "export class a { }"
                     };
                     const file3: FileOrFolder = {

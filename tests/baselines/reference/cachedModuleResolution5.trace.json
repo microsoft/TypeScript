@@ -1,19 +1,18 @@
 [
     "======== Resolving module 'foo' from '/a/b/c/d/e/app.ts'. ========",
     "Explicitly specified module resolution kind: 'NodeJs'.",
-    "Loading module 'foo' from 'node_modules' folder, target file type 'TypeScript'.",
+    "Loading module 'foo' from 'node_modules' folder, target file type 'TypeScript ('.ts' preferred)'.",
     "Directory '/a/b/c/d/e/node_modules' does not exist, skipping all lookups in it.",
     "Directory '/a/b/c/d/node_modules' does not exist, skipping all lookups in it.",
     "Directory '/a/b/c/node_modules' does not exist, skipping all lookups in it.",
-    "File '/a/b/node_modules/foo.ts' does not exist.",
-    "File '/a/b/node_modules/foo.tsx' does not exist.",
-    "File '/a/b/node_modules/foo.d.ts' exist - use it as a name resolution result.",
-    "Resolving real path for '/a/b/node_modules/foo.d.ts', result '/a/b/node_modules/foo.d.ts'.",
-    "======== Module name 'foo' was successfully resolved to '/a/b/node_modules/foo.d.ts'. ========",
+    "File '/a/b/node_modules/foo/package.json' does not exist.",
+    "File '/a/b/node_modules/foo/index.d.ts' exist - use it as a name resolution result.",
+    "Resolving real path for '/a/b/node_modules/foo/index.d.ts', result '/a/b/node_modules/foo/index.d.ts'.",
+    "======== Module name 'foo' was successfully resolved to '/a/b/node_modules/foo/index.d.ts'. ========",
     "======== Resolving module 'foo' from '/a/b/lib.ts'. ========",
     "Explicitly specified module resolution kind: 'NodeJs'.",
-    "Loading module 'foo' from 'node_modules' folder, target file type 'TypeScript'.",
+    "Loading module 'foo' from 'node_modules' folder, target file type 'TypeScript ('.ts' preferred)'.",
     "Resolution for module 'foo' was found in cache.",
-    "Resolving real path for '/a/b/node_modules/foo.d.ts', result '/a/b/node_modules/foo.d.ts'.",
-    "======== Module name 'foo' was successfully resolved to '/a/b/node_modules/foo.d.ts'. ========"
+    "Resolving real path for '/a/b/node_modules/foo/index.d.ts', result '/a/b/node_modules/foo/index.d.ts'.",
+    "======== Module name 'foo' was successfully resolved to '/a/b/node_modules/foo/index.d.ts'. ========"
 ]

@@ -195,36 +195,26 @@ namespace ts {
 
             function test(hasDirectoryExists: boolean) {
                 const containingFile = { name: "/a/b/c/d/e.ts" };
-                const moduleFile = { name: "/a/b/node_modules/foo.ts" };
+                const moduleFile = { name: "/a/b/node_modules/foo/index.d.ts" };
                 const resolution = nodeModuleNameResolver("foo", containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, moduleFile));
                 checkResolvedModuleWithFailedLookupLocations(resolution, createResolvedModule(moduleFile.name, /*isExternalLibraryImport*/ true), [
                     "/a/b/c/d/node_modules/foo/package.json",
-                    "/a/b/c/d/node_modules/foo.ts",
-                    "/a/b/c/d/node_modules/foo.tsx",
-                    "/a/b/c/d/node_modules/foo.d.ts",
+                    "/a/b/c/d/node_modules/foo/index.d.ts",
 
                     "/a/b/c/d/node_modules/foo/index.ts",
                     "/a/b/c/d/node_modules/foo/index.tsx",
-                    "/a/b/c/d/node_modules/foo/index.d.ts",
 
                     "/a/b/c/d/node_modules/@types/foo/package.json",
-                    "/a/b/c/d/node_modules/@types/foo.d.ts",
-
                     "/a/b/c/d/node_modules/@types/foo/index.d.ts",
 
                     "/a/b/c/node_modules/foo/package.json",
-                    "/a/b/c/node_modules/foo.ts",
-                    "/a/b/c/node_modules/foo.tsx",
-                    "/a/b/c/node_modules/foo.d.ts",
-
+                    "/a/b/c/node_modules/foo/index.d.ts",
                     "/a/b/c/node_modules/foo/index.ts",
                     "/a/b/c/node_modules/foo/index.tsx",
-                    "/a/b/c/node_modules/foo/index.d.ts",
 
                     "/a/b/c/node_modules/@types/foo/package.json",
-                    "/a/b/c/node_modules/@types/foo.d.ts",
-
                     "/a/b/c/node_modules/@types/foo/index.d.ts",
+
                     "/a/b/node_modules/foo/package.json",
                 ]);
             }
@@ -252,54 +242,30 @@ namespace ts {
                 const resolution = nodeModuleNameResolver("foo", containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, moduleFile));
                 checkResolvedModuleWithFailedLookupLocations(resolution, createResolvedModule(moduleFile.name, /*isExternalLibraryImport*/ true), [
                     "/a/node_modules/b/c/node_modules/d/node_modules/foo/package.json",
-                    "/a/node_modules/b/c/node_modules/d/node_modules/foo.ts",
-                    "/a/node_modules/b/c/node_modules/d/node_modules/foo.tsx",
-                    "/a/node_modules/b/c/node_modules/d/node_modules/foo.d.ts",
-
+                    "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.d.ts",
                     "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.ts",
                     "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.tsx",
-                    "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.d.ts",
 
                     "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo/package.json",
-                    "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo.d.ts",
-
                     "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo/index.d.ts",
 
                     "/a/node_modules/b/c/node_modules/foo/package.json",
-                    "/a/node_modules/b/c/node_modules/foo.ts",
-                    "/a/node_modules/b/c/node_modules/foo.tsx",
-                    "/a/node_modules/b/c/node_modules/foo.d.ts",
-
+                    "/a/node_modules/b/c/node_modules/foo/index.d.ts",
                     "/a/node_modules/b/c/node_modules/foo/index.ts",
                     "/a/node_modules/b/c/node_modules/foo/index.tsx",
-                    "/a/node_modules/b/c/node_modules/foo/index.d.ts",
 
                     "/a/node_modules/b/c/node_modules/@types/foo/package.json",
-                    "/a/node_modules/b/c/node_modules/@types/foo.d.ts",
-
                     "/a/node_modules/b/c/node_modules/@types/foo/index.d.ts",
 
                     "/a/node_modules/b/node_modules/foo/package.json",
-                    "/a/node_modules/b/node_modules/foo.ts",
-                    "/a/node_modules/b/node_modules/foo.tsx",
-                    "/a/node_modules/b/node_modules/foo.d.ts",
-
+                    "/a/node_modules/b/node_modules/foo/index.d.ts",
                     "/a/node_modules/b/node_modules/foo/index.ts",
                     "/a/node_modules/b/node_modules/foo/index.tsx",
-                    "/a/node_modules/b/node_modules/foo/index.d.ts",
 
                     "/a/node_modules/b/node_modules/@types/foo/package.json",
-                    "/a/node_modules/b/node_modules/@types/foo.d.ts",
-
                     "/a/node_modules/b/node_modules/@types/foo/index.d.ts",
 
                     "/a/node_modules/foo/package.json",
-                    "/a/node_modules/foo.ts",
-                    "/a/node_modules/foo.tsx",
-                    "/a/node_modules/foo.d.ts",
-
-                    "/a/node_modules/foo/index.ts",
-                    "/a/node_modules/foo/index.tsx"
                 ]);
             }
         });
@@ -604,7 +570,7 @@ import b = require("./moduleB");
                 const file4Typings: File = { name: "/root/generated/folder2/file4/package.json", content: JSON.stringify({ typings: "dist/types.d.ts" }) };
                 const file4: File = { name: "/root/generated/folder2/file4/dist/types.d.ts" }; // load file pointed by typings
                 const file5: File = { name: "/root/someanotherfolder/file5/index.d.ts" }; // load remapped module from folder
-                const file6: File = { name: "/root/node_modules/file6.ts" }; // fallback to node
+                const file6: File = { name: "/root/node_modules/file6/index.ts" }; // fallback to node
                 const host = createModuleResolutionHost(hasDirectoryExists, file1, file2, file3, file4, file4Typings, file5, file6);
 
                 const options: CompilerOptions = {
@@ -711,24 +677,19 @@ import b = require("./moduleB");
                     "/root/generated/file6/index.d.ts",
 
                     // fallback to standard node behavior
-                    "/root/folder1/node_modules/file6/package.json",
-
-                    // load from file
-                    "/root/folder1/node_modules/file6.ts",
-                    "/root/folder1/node_modules/file6.tsx",
-                    "/root/folder1/node_modules/file6.d.ts",
 
                     // load from folder
+                    "/root/folder1/node_modules/file6/package.json",
+                    "/root/folder1/node_modules/file6/index.d.ts",
                     "/root/folder1/node_modules/file6/index.ts",
                     "/root/folder1/node_modules/file6/index.tsx",
-                    "/root/folder1/node_modules/file6/index.d.ts",
 
                     "/root/folder1/node_modules/@types/file6/package.json",
-                    "/root/folder1/node_modules/@types/file6.d.ts",
                     "/root/folder1/node_modules/@types/file6/index.d.ts",
 
                     "/root/node_modules/file6/package.json",
-                    // success on /root/node_modules/file6.ts
+                    "/root/node_modules/file6/index.d.ts",
+                    // success on /root/node_modules/file6/index.ts
                 ], /*isExternalLibraryImport*/ true);
 
                 function check(name: string, expected: File, expectedFailedLookups: string[], isExternalLibraryImport = false) {
@@ -1009,11 +970,6 @@ import b = require("./moduleB");
             }
         });
         it("Can be resolved from secondary location", () => {
-            {
-                const f1 = { name: "/root/src/app.ts" };
-                const f2 = { name: "/root/node_modules/lib.d.ts" };
-                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ false, f1, f2);
-            }
             {
                 const f1 = { name: "/root/src/app.ts" };
                 const f2 = { name: "/root/node_modules/lib/index.d.ts" };

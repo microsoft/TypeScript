@@ -1,6 +1,6 @@
-=== tests/cases/compiler/node_modules/umd.d.ts ===
+=== tests/cases/compiler/node_modules/umd/index.d.ts ===
 export as namespace UMD;
->UMD : typeof "tests/cases/compiler/node_modules/umd"
+>UMD : typeof "tests/cases/compiler/node_modules/umd/index"
 
 export type Thing = {
 >Thing : Thing

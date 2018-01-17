@@ -6,7 +6,7 @@ export const x: number;
 //// [index.d.ts]
 export const y: number;
 
-//// [z.d.ts]
+//// [index.d.ts]
 export const z: number;
 
 //// [a.ts]

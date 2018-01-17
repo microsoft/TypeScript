@@ -1,17 +1,17 @@
-=== tests/cases/compiler/node_modules/umd.d.ts ===
+=== tests/cases/compiler/node_modules/umd/index.d.ts ===
 export as namespace UMD;
->UMD : Symbol(UMD, Decl(umd.d.ts, 0, 0))
+>UMD : Symbol(UMD, Decl(index.d.ts, 0, 0))
 
 export type Thing = {
->Thing : Symbol(Thing, Decl(umd.d.ts, 0, 24))
+>Thing : Symbol(Thing, Decl(index.d.ts, 0, 24))
 
     a: number;
->a : Symbol(a, Decl(umd.d.ts, 2, 21))
+>a : Symbol(a, Decl(index.d.ts, 2, 21))
 }
 
 export declare function makeThing(): Thing;
->makeThing : Symbol(makeThing, Decl(umd.d.ts, 4, 1))
->Thing : Symbol(Thing, Decl(umd.d.ts, 0, 24))
+>makeThing : Symbol(makeThing, Decl(index.d.ts, 4, 1))
+>Thing : Symbol(Thing, Decl(index.d.ts, 0, 24))
 
 === tests/cases/compiler/index.ts ===
 import { makeThing } from "umd";
