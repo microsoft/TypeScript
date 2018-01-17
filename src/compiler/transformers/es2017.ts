@@ -86,31 +86,34 @@ namespace ts {
         }
 
         function asyncBodyVisitor(node: Node): VisitResult<Node> {
-            switch (node.kind) {
-                case SyntaxKind.VariableStatement:
-                    return visitVariableStatementInAsyncBody(<VariableStatement>node);
-                case SyntaxKind.ForStatement:
-                    return visitForStatementInAsyncBody(<ForStatement>node);
-                case SyntaxKind.ForInStatement:
-                    return visitForInStatementInAsyncBody(<ForInStatement>node);
-                case SyntaxKind.ForOfStatement:
-                    return visitForOfStatementInAsyncBody(<ForOfStatement>node);
-                case SyntaxKind.CatchClause:
-                    return visitCatchClauseInAsyncBody(<CatchClause>node);
-                case SyntaxKind.Block:
-                case SyntaxKind.SwitchStatement:
-                case SyntaxKind.CaseBlock:
-                case SyntaxKind.CaseClause:
-                case SyntaxKind.DefaultClause:
-                case SyntaxKind.TryStatement:
-                case SyntaxKind.DoStatement:
-                case SyntaxKind.WhileStatement:
-                case SyntaxKind.IfStatement:
-                case SyntaxKind.WithStatement:
-                case SyntaxKind.LabeledStatement:
-                    return visitEachChild(node, asyncBodyVisitor, context);
+            if (isNodeWithPossibleHoistedDeclaration(node)) {
+                switch (node.kind) {
+                    case SyntaxKind.VariableStatement:
+                        return visitVariableStatementInAsyncBody(node);
+                    case SyntaxKind.ForStatement:
+                        return visitForStatementInAsyncBody(node);
+                    case SyntaxKind.ForInStatement:
+                        return visitForInStatementInAsyncBody(node);
+                    case SyntaxKind.ForOfStatement:
+                        return visitForOfStatementInAsyncBody(node);
+                    case SyntaxKind.CatchClause:
+                        return visitCatchClauseInAsyncBody(node);
+                    case SyntaxKind.Block:
+                    case SyntaxKind.SwitchStatement:
+                    case SyntaxKind.CaseBlock:
+                    case SyntaxKind.CaseClause:
+                    case SyntaxKind.DefaultClause:
+                    case SyntaxKind.TryStatement:
+                    case SyntaxKind.DoStatement:
+                    case SyntaxKind.WhileStatement:
+                    case SyntaxKind.IfStatement:
+                    case SyntaxKind.WithStatement:
+                    case SyntaxKind.LabeledStatement:
+                        return visitEachChild(node, asyncBodyVisitor, context);
+                    default:
+                        return Debug.assertNever(node, "Unhandled node.");
+                }
             }
-            Debug.assert(!isNodeWithPossibleVarDeclaration(node), "Unhandled node.");
             return visitor(node);
         }
 

@@ -1761,14 +1761,32 @@ namespace ts {
         return getAssignmentTargetKind(node) !== AssignmentKind.None;
     }
 
+    export type NodeWithPossibleHoistedDeclaration =
+        | Block
+        | VariableStatement
+        | WithStatement
+        | IfStatement
+        | SwitchStatement
+        | CaseBlock
+        | CaseClause
+        | DefaultClause
+        | LabeledStatement
+        | ForStatement
+        | ForInStatement
+        | ForOfStatement
+        | DoStatement
+        | WhileStatement
+        | TryStatement
+        | CatchClause;
+
     /**
-     * Indicates whether a node could contain embedded statements that share the same `var`
-     * declaration scope as its parent.
+     * Indicates whether a node could contain a `var` VariableDeclarationList that contributes to
+     * the same `var` declaration scope as the node's parent.
      */
-    export function isNodeWithPossibleVarDeclaration(node: Node) {
+    export function isNodeWithPossibleHoistedDeclaration(node: Node): node is NodeWithPossibleHoistedDeclaration {
         switch (node.kind) {
-            case SyntaxKind.SourceFile:
             case SyntaxKind.Block:
+            case SyntaxKind.VariableStatement:
             case SyntaxKind.WithStatement:
             case SyntaxKind.IfStatement:
             case SyntaxKind.SwitchStatement:
