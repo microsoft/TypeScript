@@ -821,11 +821,14 @@ namespace ts {
     const nodeModulesPathPart = "/node_modules/";
 
     /**
+     * This will be called on the successfully resolved path from `loadModuleFromFile`.
+     * (Not neeeded for `loadModuleFromNodeModules` as that looks up the `package.json` as part of resolution.)
+     *
      * packageDirectory is the directory of the package itself.
      * subModuleName is the path within the package.
-     *   For `foo/index.d.ts` this is { packageDirectory: "foo", subModuleName: "" }.
-     *   For `foo/bar.d.ts` this is { packageDirectory: "foo", subModuleName": "bar" }.
-     *   For `@types/foo/bar/index.d.ts` this is { packageDirectory: "@types/foo", subModuleName: "bar" }.
+     *   For `blah/node_modules/foo/index.d.ts` this is { packageDirectory: "foo", subModuleName: "" }. (Part before "/node_modules/" is ignored.)
+     *   For `/node_modules/foo/bar.d.ts` this is { packageDirectory: "foo", subModuleName": "bar" }.
+     *   For `/node_modules/@types/foo/bar/index.d.ts` this is { packageDirectory: "@types/foo", subModuleName: "bar" }.
      */
     function parseNodeModuleFromPath(path: string): { packageDirectory: string, subModuleName: string } | undefined {
         path = normalizePath(path);
