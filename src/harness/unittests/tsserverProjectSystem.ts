@@ -3510,6 +3510,38 @@ namespace ts.projectSystem {
         it("works when project root is used with case-insensitive system", () => {
             verifyOpenFileWorks(/*useCaseSensitiveFileNames*/ false);
         });
+
+        it("uses existing project even if project refresh is pending", () => {
+            const projectFolder = "/user/someuser/projects/myproject";
+            const aFile: FileOrFolder = {
+                path: `${projectFolder}/src/a.ts`,
+                content: "export const x = 0;"
+            };
+            const configFile: FileOrFolder = {
+                path: `${projectFolder}/tsconfig.json`,
+                content: "{}"
+            };
+            const files = [aFile, configFile, libFile];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            service.openClientFile(aFile.path, /*fileContent*/ undefined, ScriptKind.TS, projectFolder);
+            verifyProject();
+
+            const bFile: FileOrFolder = {
+                path: `${projectFolder}/src/b.ts`,
+                content: `export {}; declare module "./a" {  export const y: number; }`
+            };
+            files.push(bFile);
+            host.reloadFS(files);
+            service.openClientFile(bFile.path, /*fileContent*/ undefined, ScriptKind.TS, projectFolder);
+            verifyProject();
+
+            function verifyProject() {
+                assert.isDefined(service.configuredProjects.get(configFile.path));
+                const project = service.configuredProjects.get(configFile.path);
+                checkProjectActualFiles(project, files.map(f => f.path));
+            }
+        });
     });
 
     describe("tsserverProjectSystem Language service", () => {

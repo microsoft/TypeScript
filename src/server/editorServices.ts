@@ -727,15 +727,6 @@ namespace ts.server {
             }
         }
 
-        private findContainingExternalProject(fileName: NormalizedPath): ExternalProject {
-            for (const proj of this.externalProjects) {
-                if (proj.containsFile(fileName)) {
-                    return proj;
-                }
-            }
-            return undefined;
-        }
-
         getFormatCodeOptions(file?: NormalizedPath) {
             let formatCodeSettings: FormatCodeSettings;
             if (file) {
@@ -1994,13 +1985,24 @@ namespace ts.server {
             return this.openClientFileWithNormalizedPath(toNormalizedPath(fileName), fileContent, scriptKind, /*hasMixedContent*/ false, projectRootPath ? toNormalizedPath(projectRootPath) : undefined);
         }
 
+        private findExternalProjetContainingOpenScriptInfo(info: ScriptInfo): ExternalProject {
+            for (const proj of this.externalProjects) {
+                // Ensure project structure is uptodate to check if info is present in external project
+                proj.updateGraph();
+                if (proj.containsScriptInfo(info)) {
+                    return proj;
+                }
+            }
+            return undefined;
+        }
+
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult {
             let configFileName: NormalizedPath;
             let sendConfigFileDiagEvent = false;
             let configFileErrors: ReadonlyArray<Diagnostic>;
 
             const info = this.getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName, projectRootPath ? this.getNormalizedAbsolutePath(projectRootPath) : this.currentDirectory, fileContent, scriptKind, hasMixedContent);
-            let project: ConfiguredProject | ExternalProject = this.findContainingExternalProject(fileName);
+            let project: ConfiguredProject | ExternalProject = this.findExternalProjetContainingOpenScriptInfo(info);
             if (!project) {
                 configFileName = this.getConfigFileNameForFile(info, projectRootPath);
                 if (configFileName) {
@@ -2009,6 +2011,10 @@ namespace ts.server {
                         project = this.createConfiguredProject(configFileName);
                         // Send the event only if the project got created as part of this open request
                         sendConfigFileDiagEvent = true;
+                    }
+                    else {
+                        // Ensure project is ready to check if it contains opened script info
+                        project.updateGraph();
                     }
                 }
             }
