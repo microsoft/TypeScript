@@ -832,7 +832,7 @@ namespace ts {
      */
     function parseNodeModuleFromPath(path: string): { packageDirectory: string, subModuleName: string } | undefined {
         path = normalizePath(path);
-        const idx = path.indexOf(nodeModulesPathPart);
+        const idx = path.lastIndexOf(nodeModulesPathPart);
         if (idx === -1) {
             return undefined;
         }
@@ -843,12 +843,12 @@ namespace ts {
             indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterPackageName);
         }
         const packageDirectory = path.slice(0, indexAfterPackageName);
-        const subModuleName = removeExtensionAndIndex(path.slice(indexAfterPackageName));
+        const subModuleName = removeExtensionAndIndex(path.slice(indexAfterPackageName + 1));
         return { packageDirectory, subModuleName };
     }
 
     function moveToNextDirectorySeparatorIfAvailable(path: string, prevSeparatorIndex: number): number {
-        const nextSeparatorIndex = path.indexOf(directorySeparator, prevSeparatorIndex);
+        const nextSeparatorIndex = path.indexOf(directorySeparator, prevSeparatorIndex + 1);
         return nextSeparatorIndex === -1 ? prevSeparatorIndex : nextSeparatorIndex;
     }
 
