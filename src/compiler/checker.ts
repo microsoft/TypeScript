@@ -9632,7 +9632,7 @@ namespace ts {
                 }
                 else if (target.flags & TypeFlags.IndexedAccess) {
                     // A type S is related to a type T[K] if S is related to A[K], where K is string-like and
-                    // A is the apparent type of T.
+                    // A is the constraint of T.
                     const constraint = getConstraintOfIndexedAccess(<IndexedAccessType>target);
                     if (constraint) {
                         if (result = isRelatedTo(source, constraint, reportErrors)) {
@@ -9668,7 +9668,7 @@ namespace ts {
                 }
                 else if (source.flags & TypeFlags.IndexedAccess) {
                     // A type S[K] is related to a type T if A[K] is related to T, where K is string-like and
-                    // A is the apparent type of S.
+                    // A is the constraint of S.
                     const constraint = getConstraintOfIndexedAccess(<IndexedAccessType>source);
                     if (constraint) {
                         if (result = isRelatedTo(constraint, target, reportErrors)) {
@@ -9676,10 +9676,11 @@ namespace ts {
                             return result;
                         }
                     }
-                    else if (target.flags & TypeFlags.IndexedAccess && (<IndexedAccessType>source).indexType === (<IndexedAccessType>target).indexType) {
-                        // if we have indexed access types with identical index types, see if relationship holds for
-                        // the two object types.
+                    else if (target.flags & TypeFlags.IndexedAccess) {
                         if (result = isRelatedTo((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType, reportErrors)) {
+                            result &= isRelatedTo((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType, reportErrors);
+                        }
+                        if (result) {
                             errorInfo = saveErrorInfo;
                             return result;
                         }
