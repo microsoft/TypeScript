@@ -908,24 +908,25 @@ namespace ts.formatting {
             let trimTrailingWhitespaces: boolean;
             let lineAction = LineAction.None;
             if (rule) {
-                applyRuleEdits(rule, previousItem, previousStartLine, currentItem, currentStartLine);
-
-                if (rule.action & (RuleAction.Space | RuleAction.Delete) && currentStartLine !== previousStartLine) {
-                    lineAction = LineAction.LineRemoved;
-                    // Handle the case where the next line is moved to be the end of this line.
-                    // In this case we don't indent the next line in the next pass.
-                    if (currentParent.getStart(sourceFile) === currentItem.pos) {
-                        dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ false);
-                    }
-                }
-                else if (rule.action & RuleAction.NewLine && currentStartLine === previousStartLine) {
-                    lineAction = LineAction.LineAdded;
-                    // Handle the case where token2 is moved to the new line.
-                    // In this case we indent token2 in the next pass but we set
-                    // sameLineIndent flag to notify the indenter that the indentation is within the line.
-                    if (currentParent.getStart(sourceFile) === currentItem.pos) {
-                        dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ true);
-                    }
+                lineAction = applyRuleEdits(rule, previousItem, previousStartLine, currentItem, currentStartLine);
+                switch (lineAction) {
+                    case LineAction.LineRemoved:
+                        // Handle the case where the next line is moved to be the end of this line.
+                        // In this case we don't indent the next line in the next pass.
+                        if (currentParent.getStart(sourceFile) === currentItem.pos) {
+                            dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ false);
+                        }
+                        break;
+                    case LineAction.LineAdded:
+                        // Handle the case where token2 is moved to the new line.
+                        // In this case we indent token2 in the next pass but we set
+                        // sameLineIndent flag to notify the indenter that the indentation is within the line.
+                        if (currentParent.getStart(sourceFile) === currentItem.pos) {
+                            dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ true);
+                        }
+                        break;
+                    default:
+                        Debug.assert(lineAction === LineAction.None);
                 }
 
                 // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
@@ -1102,16 +1103,18 @@ namespace ts.formatting {
             previousRange: TextRangeWithKind,
             previousStartLine: number,
             currentRange: TextRangeWithKind,
-            currentStartLine: number): void {
-
+            currentStartLine: number,
+        ): LineAction {
+            const onLaterLine = currentStartLine !== previousStartLine;
             switch (rule.action) {
                 case RuleAction.Ignore:
                     // no action required
-                    return;
+                    return LineAction.None;
                 case RuleAction.Delete:
                     if (previousRange.end !== currentRange.pos) {
                         // delete characters starting from t1.end up to t2.pos exclusive
                         recordDelete(previousRange.end, currentRange.pos - previousRange.end);
+                        return onLaterLine ? LineAction.LineRemoved : LineAction.None;
                     }
                     break;
                 case RuleAction.NewLine:
@@ -1119,27 +1122,29 @@ namespace ts.formatting {
                     // if line1 and line2 are on subsequent lines then no edits are required - ok to exit
                     // if line1 and line2 are separated with more than one newline - ok to exit since we cannot delete extra new lines
                     if (rule.flags !== RuleFlags.CanDeleteNewLines && previousStartLine !== currentStartLine) {
-                        return;
+                        return LineAction.None;
                     }
 
                     // edit should not be applied if we have one line feed between elements
                     const lineDelta = currentStartLine - previousStartLine;
                     if (lineDelta !== 1) {
                         recordReplace(previousRange.end, currentRange.pos - previousRange.end, options.newLineCharacter);
+                        return onLaterLine ? LineAction.None : LineAction.LineAdded;
                     }
                     break;
                 case RuleAction.Space:
                     // exit early if we on different lines and rule cannot change number of newlines
                     if (rule.flags !== RuleFlags.CanDeleteNewLines && previousStartLine !== currentStartLine) {
-                        return;
+                        return LineAction.None;
                     }
 
                     const posDelta = currentRange.pos - previousRange.end;
                     if (posDelta !== 1 || sourceFile.text.charCodeAt(previousRange.end) !== CharacterCodes.space) {
                         recordReplace(previousRange.end, currentRange.pos - previousRange.end, " ");
+                        return onLaterLine ? LineAction.LineRemoved : LineAction.None;
                     }
-                    break;
             }
+            return LineAction.None;
         }
     }
 
