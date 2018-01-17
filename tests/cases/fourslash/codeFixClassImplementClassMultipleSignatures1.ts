@@ -8,7 +8,6 @@
 
 verify.codeFix({
     description: "Implement interface 'A'",
-    // TODO: GH#18445
     newFileContent:
 `class A {
     method(a: number, b: string): boolean;

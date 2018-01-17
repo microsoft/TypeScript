@@ -9,7 +9,6 @@
 
 verify.codeFixAll({
     fixId: "constructorForDerivedNeedSuperCall",
-    // TODO: GH#18445
     newFileContent: `class C extends Object {
     constructor() {
         super();

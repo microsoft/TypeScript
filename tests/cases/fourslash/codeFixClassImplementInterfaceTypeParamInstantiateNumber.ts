@@ -5,7 +5,6 @@
 
 verify.codeFix({
     description: "Implement interface 'I<number>'",
-    // TODO: GH#18445
     newFileContent:
 `interface I<T> { x: T; }
 class C implements I<number> {

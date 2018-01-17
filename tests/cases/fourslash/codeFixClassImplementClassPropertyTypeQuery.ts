@@ -7,7 +7,6 @@
 
 verify.codeFix({
     description: "Implement interface 'A'",
-    // TODO: GH#18445
     newFileContent:
 `class A {
     A: typeof A;

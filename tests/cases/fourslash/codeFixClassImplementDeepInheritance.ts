@@ -50,7 +50,6 @@
 
 verify.codeFix({
     description: "Implement interface 'I6'",
-    // TODO: GH#18445
     newFileContent:
 `// Referenced throughout the inheritance chain.
 interface I0 { a: number }

@@ -9,7 +9,6 @@
 
 verify.codeFix({
     description: "Implement interface 'I'",
-    // TODO: GH#18445
     newFileContent:
 `type Either<T> = { val: T } | Error;
 interface I {

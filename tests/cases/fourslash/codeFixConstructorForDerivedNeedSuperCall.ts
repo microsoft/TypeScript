@@ -8,7 +8,6 @@
 
 verify.codeFix({
     description: "Add missing 'super()' call",
-    // TODO: GH#18445
     newFileContent:
 `class Base{
 }

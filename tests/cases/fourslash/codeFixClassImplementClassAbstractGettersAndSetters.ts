@@ -15,7 +15,6 @@
 
 verify.codeFix({
     description: "Implement interface 'A'",
-    // TODO: GH#18445
     newFileContent:
 `abstract class A {
     private _a: string;

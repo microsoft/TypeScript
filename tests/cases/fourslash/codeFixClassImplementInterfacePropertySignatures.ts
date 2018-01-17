@@ -21,7 +21,6 @@
 
 verify.codeFix({
     description: "Implement interface 'I'",
-    // TODO: GH#18445
     newFileContent:
 `interface I {
     a0: {};

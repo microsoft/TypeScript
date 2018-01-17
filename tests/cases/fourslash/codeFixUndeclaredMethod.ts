@@ -13,7 +13,6 @@
 verify.codeFix({
     description: "Declare method 'foo1'",
     index: 0,
-    // TODO: GH#18445
     newRangeContent: `
     foo1(arg0: any, arg1: any, arg2: any): any {
         throw new Error("Method not implemented.");

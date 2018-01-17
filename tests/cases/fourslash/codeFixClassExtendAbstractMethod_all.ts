@@ -8,7 +8,6 @@
 
 verify.codeFixAll({
     fixId: "fixClassDoesntImplementInheritedAbstractMember",
-    // TODO: GH#18445
     newFileContent:
 `abstract class A {
     abstract m(): void;

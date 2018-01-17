@@ -9,7 +9,6 @@
 verify.codeFix({
     description: "Declare property 'foo'",
     index: 0,
-    // TODO: GH#18445
     newFileContent: `class C {
     foo: number;
     method() {

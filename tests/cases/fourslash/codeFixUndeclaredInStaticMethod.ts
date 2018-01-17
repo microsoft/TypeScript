@@ -12,7 +12,6 @@
 verify.codeFix({
     description: "Declare static method 'm1'",
     index: 0,
-    // TODO: GH#18445
     newRangeContent: `
     static m1(arg0: any, arg1: any, arg2: any): any {
         throw new Error("Method not implemented.");
