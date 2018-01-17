@@ -6581,7 +6581,7 @@ namespace ts.projectSystem {
     });
 
     describe("watchDirectories implementation", () => {
-        function verifyCompletionListWithNewFileInSubFolder(usesWatchFile: boolean) {
+        function verifyCompletionListWithNewFileInSubFolder(tscWatchDirectory: TestFSWithWatch.Tsc_WatchDirectory) {
             const projectFolder = "/a/username/project";
             const projectSrcFolder = `${projectFolder}/src`;
             const configFile: FileOrFolder = {
@@ -6602,7 +6602,11 @@ namespace ts.projectSystem {
             // All closed files(files other than index), project folder, project/src folder and project/node_modules/@types folder
             const expectedWatchedFiles = arrayToMap(fileNames.slice(1), s => s, () => 1);
             const expectedWatchedDirectories = createMap<number>();
-            const mapOfDirectories = usesWatchFile ? expectedWatchedFiles : expectedWatchedDirectories;
+            const mapOfDirectories = tscWatchDirectory === TestFSWithWatch.Tsc_WatchDirectory.NonRecursiveWatchDirectory ?
+                expectedWatchedDirectories :
+                tscWatchDirectory === TestFSWithWatch.Tsc_WatchDirectory.WatchFile ?
+                    expectedWatchedFiles :
+                    createMap();
             // For failed resolution lookup and tsconfig files
             mapOfDirectories.set(projectFolder, 2);
             // Through above recursive watches
@@ -6612,7 +6616,7 @@ namespace ts.projectSystem {
             const expectedCompletions = ["file1"];
             const completionPosition = index.content.lastIndexOf('"');
             const environmentVariables = createMap<string>();
-            environmentVariables.set("TSC_WATCHDIRECTORY", usesWatchFile ? "RecursiveDirectoryUsingFsWatchFile" : "RecursiveDirectoryUsingNonRecursiveWatchDirectory");
+            environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
             const host = createServerHost(files, { environmentVariables });
             const projectService = createProjectService(host);
             projectService.openClientFile(index.path);
@@ -6636,23 +6640,27 @@ namespace ts.projectSystem {
             verifyProjectAndCompletions();
 
             function verifyProjectAndCompletions() {
+                const completions = project.getLanguageService().getCompletionsAtPosition(index.path, completionPosition, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
+                checkArray("Completion Entries", completions.entries.map(e => e.name), expectedCompletions);
+
                 checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
 
                 ts.TestFSWithWatch.checkMultiMapKeyCount("watchedFiles", host.watchedFiles, expectedWatchedFiles);
                 ts.TestFSWithWatch.checkMultiMapKeyCount("watchedDirectories", host.watchedDirectories, expectedWatchedDirectories);
                 checkProjectActualFiles(project, fileNames);
-
-                const completions = project.getLanguageService().getCompletionsAtPosition(index.path, completionPosition, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
-                checkArray("Completion Entries", completions.entries.map(e => e.name), expectedCompletions);
             }
         }
 
         it("uses watchFile when file is added to subfolder, completion list has new file", () => {
-            verifyCompletionListWithNewFileInSubFolder(/*usesWatchFile*/ true);
+            verifyCompletionListWithNewFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.WatchFile);
         });
 
         it("uses non recursive watchDirectory when file is added to subfolder, completion list has new file", () => {
-            verifyCompletionListWithNewFileInSubFolder(/*usesWatchFile*/ false);
+            verifyCompletionListWithNewFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.NonRecursiveWatchDirectory);
+        });
+
+        it("uses dynamic polling when file is added to subfolder, completion list has new file", () => {
+            verifyCompletionListWithNewFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.DynamicPolling);
         });
     });
 }

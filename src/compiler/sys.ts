@@ -494,7 +494,7 @@ namespace ts {
             const useNonPollingWatchers = process.env.TSC_NONPOLLING_WATCHER;
             const tscWatchFile = process.env.TSC_WATCHFILE;
             const tscWatchDirectory = process.env.TSC_WATCHDIRECTORY;
-
+            let dynamicPollingWatchFile: HostWatchFile | undefined;
             const nodeSystem: System = {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
@@ -607,7 +607,8 @@ namespace ts {
                         return watchFileUsingFsWatch;
                     case "UseFsEventsWithFallbackDynamicPolling":
                         // Use notifications from FS to watch with falling back to dynamic watch file
-                        return watchFileUsingDynamicWatchFile;
+                        dynamicPollingWatchFile = createDynamicPriorityPollingWatchFile(nodeSystem);
+                        return createWatchFileUsingDynamicWatchFile(dynamicPollingWatchFile);
                 }
                 return useNonPollingWatchers ?
                     createNonPollingWatchFile() :
@@ -623,7 +624,11 @@ namespace ts {
                     return watchDirectoryUsingFsWatch;
                 }
 
-                const watchDirectory = tscWatchDirectory === "RecursiveDirectoryUsingFsWatchFile" ? watchDirectoryUsingFsWatchFile : watchDirectoryUsingFsWatch;
+                const watchDirectory = tscWatchDirectory === "RecursiveDirectoryUsingFsWatchFile" ?
+                    createWatchDirectoryUsing(fsWatchFile) :
+                    tscWatchDirectory === "RecursiveDirectoryUsingDynamicPriorityPolling" ?
+                        createWatchDirectoryUsing(dynamicPollingWatchFile || createDynamicPriorityPollingWatchFile(nodeSystem)) :
+                        watchDirectoryUsingFsWatch;
                 const watchDirectoryRecursively = createRecursiveDirectoryWatcher({
                     filePathComparer: useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
                     directoryExists,
@@ -838,9 +843,8 @@ namespace ts {
                 return fsWatch(fileName, FileSystemEntryKind.File, createFsWatchCallbackForFileWatcherCallback(fileName, callback), /*recursive*/ false, fsWatchFile, pollingInterval);
             }
 
-            function watchFileUsingDynamicWatchFile(fileName: string, callback: FileWatcherCallback, pollingInterval?: number) {
-                const watchFile = createDynamicPriorityPollingWatchFile(nodeSystem);
-                return fsWatch(fileName, FileSystemEntryKind.File, createFsWatchCallbackForFileWatcherCallback(fileName, callback), /*recursive*/ false, watchFile, pollingInterval);
+            function createWatchFileUsingDynamicWatchFile(watchFile: HostWatchFile): HostWatchFile {
+                return (fileName, callback, pollingInterval) => fsWatch(fileName, FileSystemEntryKind.File, createFsWatchCallbackForFileWatcherCallback(fileName, callback), /*recursive*/ false, watchFile, pollingInterval);
             }
 
             function fsWatchDirectory(directoryName: string, callback: FsWatchCallback, recursive?: boolean): FileWatcher {
@@ -851,8 +855,8 @@ namespace ts {
                 return fsWatchDirectory(directoryName, createFsWatchCallbackForDirectoryWatcherCallback(directoryName, callback), recursive);
             }
 
-            function watchDirectoryUsingFsWatchFile(directoryName: string, callback: DirectoryWatcherCallback) {
-                return fsWatchFile(directoryName, () => callback(directoryName), PollingInterval.Medium);
+            function createWatchDirectoryUsing(fsWatchFile: HostWatchFile): HostWatchDirectory {
+                return (directoryName, callback) => fsWatchFile(directoryName, () => callback(directoryName), PollingInterval.Medium);
             }
 
             function readFile(fileName: string, _encoding?: string): string | undefined {

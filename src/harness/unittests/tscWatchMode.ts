@@ -2177,7 +2177,7 @@ declare module "fs" {
         });
 
         describe("tsc-watch when watchDirectories implementation", () => {
-            function verifyRenamingFileInSubFolder(usesWatchFile: boolean) {
+            function verifyRenamingFileInSubFolder(tscWatchDirectory: TestFSWithWatch.Tsc_WatchDirectory) {
                 const projectFolder = "/a/username/project";
                 const projectSrcFolder = `${projectFolder}/src`;
                 const configFile: FileOrFolder = {
@@ -2191,14 +2191,14 @@ declare module "fs" {
                 const programFiles = [file, libFile];
                 const files = [file, configFile, libFile];
                 const environmentVariables = createMap<string>();
-                environmentVariables.set("TSC_WATCHDIRECTORY", usesWatchFile ? "RecursiveDirectoryUsingFsWatchFile" : "RecursiveDirectoryUsingNonRecursiveWatchDirectory");
+                environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
                 const host = createWatchedSystem(files, { environmentVariables });
                 const watch = createWatchModeWithConfigFile(configFile.path, host);
                 const projectFolders = [projectFolder, projectSrcFolder, `${projectFolder}/node_modules/@types`];
                 // Watching files config file, file, lib file
                 const expectedWatchedFiles = files.map(f => f.path);
-                const expectedWatchedDirectories = usesWatchFile ? [] : projectFolders;
-                if (usesWatchFile) {
+                const expectedWatchedDirectories = tscWatchDirectory === TestFSWithWatch.Tsc_WatchDirectory.NonRecursiveWatchDirectory ? projectFolders : emptyArray;
+                if (tscWatchDirectory === TestFSWithWatch.Tsc_WatchDirectory.WatchFile) {
                     expectedWatchedFiles.push(...projectFolders);
                 }
 
@@ -2208,31 +2208,40 @@ declare module "fs" {
                 file.path = file.path.replace("file1.ts", "file2.ts");
                 expectedWatchedFiles[0] = file.path;
                 host.reloadFS(files);
+                if (tscWatchDirectory === TestFSWithWatch.Tsc_WatchDirectory.DynamicPolling) {
+                    // With dynamic polling the fs change would be detected only by running timeouts
+                    host.runQueuedTimeoutCallbacks();
+                }
+                // Delayed update program
                 host.runQueuedTimeoutCallbacks();
                 verifyProgram(checkOutputErrorsIncremental);
 
                 function verifyProgram(checkOutputErrors: (host: WatchedSystem, errors: ReadonlyArray<Diagnostic>) => void) {
-                    checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
-
-                    // Watching config file, file, lib file and directories
-                    ts.TestFSWithWatch.checkMultiMapEachKeyWithCount("watchedFiles", host.watchedFiles, expectedWatchedFiles, 1);
-                    ts.TestFSWithWatch.checkMultiMapEachKeyWithCount("watchedDirectories", host.watchedDirectories, expectedWatchedDirectories, 1);
-
                     checkProgramActualFiles(watch(), programFiles.map(f => f.path));
                     checkOutputErrors(host, emptyArray);
 
                     const outputFile = changeExtension(file.path, ".js");
                     assert(host.fileExists(outputFile));
                     assert.equal(host.readFile(outputFile), file.content);
+
+                    checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+
+                    // Watching config file, file, lib file and directories
+                    ts.TestFSWithWatch.checkMultiMapEachKeyWithCount("watchedFiles", host.watchedFiles, expectedWatchedFiles, 1);
+                    ts.TestFSWithWatch.checkMultiMapEachKeyWithCount("watchedDirectories", host.watchedDirectories, expectedWatchedDirectories, 1);
                 }
             }
 
             it("uses watchFile when renaming file in subfolder", () => {
-                verifyRenamingFileInSubFolder(/*usesWatchFile*/ true);
+                verifyRenamingFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.WatchFile);
             });
 
             it("uses non recursive watchDirectory when renaming file in subfolder", () => {
-                verifyRenamingFileInSubFolder(/*usesWatchFile*/ false);
+                verifyRenamingFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.NonRecursiveWatchDirectory);
+            });
+
+            it("uses non recursive dynamic polling when renaming file in subfolder", () => {
+                verifyRenamingFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.DynamicPolling);
             });
         });
     });

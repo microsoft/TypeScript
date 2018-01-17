@@ -257,6 +257,12 @@ interface Array<T> {}`
         ignoreWatchInvokedWithTriggerAsFileCreate: boolean;
     }
 
+    export enum Tsc_WatchDirectory {
+        WatchFile = "RecursiveDirectoryUsingFsWatchFile",
+        NonRecursiveWatchDirectory = "RecursiveDirectoryUsingNonRecursiveWatchDirectory",
+        DynamicPolling = "RecursiveDirectoryUsingDynamicPriorityPolling"
+    }
+
     export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
         args: string[] = [];
 
@@ -286,8 +292,8 @@ interface Array<T> {}`
             this.dynamicPriorityWatchFile = this.environmentVariables && this.environmentVariables.get("TSC_WATCHFILE") === "DynamicPriorityPolling" ?
                 createDynamicPriorityPollingWatchFile(this) :
                 undefined;
-            const tscWatchDirectory = this.environmentVariables && this.environmentVariables.get("TSC_WATCHDIRECTORY");
-            if (tscWatchDirectory === "RecursiveDirectoryUsingFsWatchFile") {
+            const tscWatchDirectory = this.environmentVariables && this.environmentVariables.get("TSC_WATCHDIRECTORY") as Tsc_WatchDirectory;
+            if (tscWatchDirectory === Tsc_WatchDirectory.WatchFile) {
                 const watchDirectory: HostWatchDirectory = (directory, cb) => this.watchFile(directory, () => cb(directory), PollingInterval.Medium);
                 this.customRecursiveWatchDirectory = createRecursiveDirectoryWatcher({
                     directoryExists: path => this.directoryExists(path),
@@ -296,8 +302,18 @@ interface Array<T> {}`
                     watchDirectory
                 });
             }
-            else if (tscWatchDirectory === "RecursiveDirectoryUsingNonRecursiveWatchDirectory") {
+            else if (tscWatchDirectory === Tsc_WatchDirectory.NonRecursiveWatchDirectory) {
                 const watchDirectory: HostWatchDirectory = (directory, cb) => this.watchDirectory(directory, fileName => cb(fileName), /*recursive*/ false);
+                this.customRecursiveWatchDirectory = createRecursiveDirectoryWatcher({
+                    directoryExists: path => this.directoryExists(path),
+                    getAccessileSortedChildDirectories: path => this.getDirectories(path),
+                    filePathComparer: this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
+                    watchDirectory
+                });
+            }
+            else if (tscWatchDirectory === Tsc_WatchDirectory.DynamicPolling) {
+                const watchFile = createDynamicPriorityPollingWatchFile(this);
+                const watchDirectory: HostWatchDirectory = (directory, cb) => watchFile(directory, () => cb(directory), PollingInterval.Medium);
                 this.customRecursiveWatchDirectory = createRecursiveDirectoryWatcher({
                     directoryExists: path => this.directoryExists(path),
                     getAccessileSortedChildDirectories: path => this.getDirectories(path),
@@ -348,6 +364,7 @@ interface Array<T> {}`
                             if (currentEntry.content !== fileOrDirectory.content) {
                                 currentEntry.content = fileOrDirectory.content;
                                 currentEntry.modifiedTime = new Date();
+                                this.fs.get(getDirectoryPath(currentEntry.path)).modifiedTime = new Date();
                                 if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
                                     this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
                                 }
