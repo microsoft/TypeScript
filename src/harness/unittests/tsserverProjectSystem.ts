@@ -4168,6 +4168,32 @@ namespace ts.projectSystem {
             // Since no file from the configured project is open, it would be closed immediately
             projectService.checkNumberOfProjects({ configuredProjects: 0, inferredProjects: 1 });
         });
+
+        it("should tolerate invalid include files that start in subDirectory", () => {
+            const projectFolder = "/user/username/projects/myproject";
+            const f = {
+                path: `${projectFolder}/src/server/index.ts`,
+                content: "let x = 1"
+            };
+            const config = {
+                path: `${projectFolder}/src/server/tsconfig.json`,
+                content: JSON.stringify({
+                    compiler: {
+                        module: "commonjs",
+                        outDir: "../../build"
+                    },
+                    include: [
+                        "../src/**/*.ts"
+                    ]
+                })
+            };
+            const host = createServerHost([f, config, libFile], { useCaseSensitiveFileNames: true });
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(f.path);
+            // Since no file from the configured project is open, it would be closed immediately
+            projectService.checkNumberOfProjects({ configuredProjects: 0, inferredProjects: 1 });
+        });
     });
 
     describe("tsserverProjectSystem reload", () => {
