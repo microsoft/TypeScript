@@ -960,13 +960,18 @@ namespace ts {
         const directoryExists = !onlyRecordFailures && directoryProbablyExists(nodeModuleDirectory, host);
         const packageJsonPath = pathToPackageJson(nodeModuleDirectory);
         if (directoryExists && host.fileExists(packageJsonPath)) {
-            if (traceEnabled) {
-                trace(host, Diagnostics.Found_package_json_at_0, packageJsonPath);
-            }
             const packageJsonContent = readJson(packageJsonPath, host);
             const packageId: PackageId = typeof packageJsonContent.name === "string" && typeof packageJsonContent.version === "string"
                 ? { name: packageJsonContent.name, subModuleName, version: packageJsonContent.version }
                 : undefined;
+            if (traceEnabled) {
+                if (packageId) {
+                    trace(host, Diagnostics.Found_package_json_at_0_Package_ID_is_1, packageJsonPath, packageIdToString(packageId));
+                }
+                else {
+                    trace(host, Diagnostics.Found_package_json_at_0, packageJsonPath);
+                }
+            }
             return { found: true, packageJsonContent, packageId };
         }
         else {
