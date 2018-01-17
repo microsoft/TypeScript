@@ -2821,6 +2821,31 @@ namespace ts.projectSystem {
             checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
         });
 
+        it("Properly handle Windows-style outDir", () => {
+            const configFile: FileOrFolder = {
+                path: "C:\\a\\tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {
+                        outDir: `C:\\a\\b`
+                    },
+                    include: ["*.ts"]
+                })
+            };
+            const file1: FileOrFolder = {
+                path: "C:\\a\\f1.ts",
+                content: "let x = 1;"
+            };
+
+            const host = createServerHost([file1, configFile], { useWindowsStylePaths: true });
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(file1.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            const project = configuredProjectAt(projectService, 0);
+            checkProjectActualFiles(project, [normalizePath(file1.path), normalizePath(configFile.path)]);
+            const options = project.getCompilerOptions();
+            assert.equal(options.outDir, "C:/a/b", "");
+        });
     });
 
     describe("tsserverProjectSystem Proper errors", () => {
