@@ -1761,6 +1761,35 @@ namespace ts {
         return getAssignmentTargetKind(node) !== AssignmentKind.None;
     }
 
+    /**
+     * Indicates whether a node could contain embedded statements that share the same `var`
+     * declaration scope as its parent.
+     */
+    export function isNodeWithPossibleVarDeclaration(node: Node) {
+        switch (node.kind) {
+            case SyntaxKind.SourceFile:
+            case SyntaxKind.Block:
+            case SyntaxKind.WithStatement:
+            case SyntaxKind.IfStatement:
+            case SyntaxKind.SwitchStatement:
+            case SyntaxKind.CaseBlock:
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.DefaultClause:
+            case SyntaxKind.LabeledStatement:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.WhileStatement:
+            case SyntaxKind.TryStatement:
+            case SyntaxKind.CatchClause:
+            case SyntaxKind.ModuleDeclaration:
+            case SyntaxKind.ModuleBlock:
+                return true;
+        }
+        return false;
+    }
+
     function walkUp(node: Node, kind: SyntaxKind) {
         while (node && node.kind === kind) {
             node = node.parent;

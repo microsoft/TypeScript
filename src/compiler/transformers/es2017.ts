@@ -95,6 +95,8 @@ namespace ts {
                     return visitForInStatementInAsyncBody(<ForInStatement>node);
                 case SyntaxKind.ForOfStatement:
                     return visitForOfStatementInAsyncBody(<ForOfStatement>node);
+                case SyntaxKind.CatchClause:
+                    return visitCatchClauseInAsyncBody(<CatchClause>node);
                 case SyntaxKind.Block:
                 case SyntaxKind.SwitchStatement:
                 case SyntaxKind.CaseBlock:
@@ -105,10 +107,10 @@ namespace ts {
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.IfStatement:
                 case SyntaxKind.WithStatement:
+                case SyntaxKind.LabeledStatement:
                     return visitEachChild(node, asyncBodyVisitor, context);
-                case SyntaxKind.CatchClause:
-                    return visitCatchClauseInAsyncBody(<CatchClause>node);
             }
+            Debug.assert(!isNodeWithPossibleVarDeclaration(node), "Unhandled node.");
             return visitor(node);
         }
 

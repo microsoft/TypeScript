@@ -408,3 +408,18 @@ async function fn38(x) {
 >x : any
     }
 }
+
+async function fn39(x) {
+>fn39 : (x: any) => Promise<void>
+>x : any
+
+    foo: {
+>foo : any
+
+        var x;
+>x : any
+
+        break foo;
+>foo : any
+    }
+}

@@ -205,3 +205,10 @@ async function fn38(x) {
             var x;
     }
 }
+
+async function fn39(x) {
+    foo: {
+        var x;
+        break foo;
+    }
+}

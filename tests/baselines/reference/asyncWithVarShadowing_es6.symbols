@@ -404,3 +404,15 @@ async function fn38(x) {
 >x : Symbol(x, Decl(asyncWithVarShadowing_es6.ts, 199, 20), Decl(asyncWithVarShadowing_es6.ts, 202, 15))
     }
 }
+
+async function fn39(x) {
+>fn39 : Symbol(fn39, Decl(asyncWithVarShadowing_es6.ts, 204, 1))
+>x : Symbol(x, Decl(asyncWithVarShadowing_es6.ts, 206, 20), Decl(asyncWithVarShadowing_es6.ts, 208, 11))
+
+    foo: {
+        var x;
+>x : Symbol(x, Decl(asyncWithVarShadowing_es6.ts, 206, 20), Decl(asyncWithVarShadowing_es6.ts, 208, 11))
+
+        break foo;
+    }
+}

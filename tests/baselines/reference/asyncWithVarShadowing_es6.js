@@ -205,6 +205,13 @@ async function fn38(x) {
     }
 }
 
+async function fn39(x) {
+    foo: {
+        var x;
+        break foo;
+    }
+}
+
 //// [asyncWithVarShadowing_es6.js]
 function fn1(x) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -457,6 +464,14 @@ function fn38(x) {
     return __awaiter(this, void 0, void 0, function* () {
         switch (y) {
             case y:
+        }
+    });
+    var x;
+}
+function fn39(x) {
+    return __awaiter(this, void 0, void 0, function* () {
+        foo: {
+            break foo;
         }
     });
     var x;
