@@ -10,7 +10,7 @@ namespace ts.projectSystem {
     export import TestServerHost = ts.TestFSWithWatch.TestServerHost;
     export type FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
     export import createServerHost = ts.TestFSWithWatch.createServerHost;
-    export import checkFileNames = ts.TestFSWithWatch.checkFileNames;
+    export import checkArray = ts.TestFSWithWatch.checkArray;
     export import libFile = ts.TestFSWithWatch.libFile;
     export import checkWatchedFiles = ts.TestFSWithWatch.checkWatchedFiles;
     import checkWatchedDirectories = ts.TestFSWithWatch.checkWatchedDirectories;
@@ -330,11 +330,11 @@ namespace ts.projectSystem {
     }
 
     export function checkProjectActualFiles(project: server.Project, expectedFiles: string[]) {
-        checkFileNames(`${server.ProjectKind[project.projectKind]} project, actual files`, project.getFileNames(), expectedFiles);
+        checkArray(`${server.ProjectKind[project.projectKind]} project, actual files`, project.getFileNames(), expectedFiles);
     }
 
     function checkProjectRootFiles(project: server.Project, expectedFiles: string[]) {
-        checkFileNames(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
+        checkArray(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
     }
 
     function mapCombinedPathsInAncestor(dir: string, path2: string, mapAncestor: (ancestor: string) => boolean) {
@@ -367,7 +367,7 @@ namespace ts.projectSystem {
     }
 
     function checkOpenFiles(projectService: server.ProjectService, expectedFiles: FileOrFolder[]) {
-        checkFileNames("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path).fileName), expectedFiles.map(file => file.path));
+        checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path).fileName), expectedFiles.map(file => file.path));
     }
 
     /**
@@ -506,7 +506,7 @@ namespace ts.projectSystem {
 
             const project = projectService.inferredProjects[0];
 
-            checkFileNames("inferred project", project.getFileNames(), [appFile.path, libFile.path, moduleFile.path]);
+            checkArray("inferred project", project.getFileNames(), [appFile.path, libFile.path, moduleFile.path]);
             const configFileLocations = ["/a/b/c/", "/a/b/", "/a/", "/"];
             const configFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]);
             checkWatchedFiles(host, configFiles.concat(libFile.path, moduleFile.path));
@@ -6582,6 +6582,65 @@ namespace ts.projectSystem {
 
             // Verify that the pkgcurrentdirectory from the current directory isnt picked up
             checkProjectActualFiles(project, [file.path]);
+        });
+    });
+
+    describe("WatchingDirectories with polling", () => {
+        it("when file is added to subfolder, completion list has new file", () => {
+            const projectFolder = "/a/username/project";
+            const projectSrcFolder = `${projectFolder}/src`;
+            const configFile: FileOrFolder = {
+                path: `${projectFolder}/tsconfig.json`,
+                content: "{}"
+            };
+            const index: FileOrFolder = {
+                path: `${projectSrcFolder}/index.ts`,
+                content: `import {} from "./"`
+            };
+            const file1: FileOrFolder = {
+                path: `${projectSrcFolder}/file1.ts`,
+                content: ""
+            };
+
+            const files = [index, file1, configFile, libFile];
+            const fileNames = files.map(file => file.path);
+            // All closed files(files other than index), project folder, project/src folder and project/node_modules/@types folder
+            const expectedWatchedFiles = fileNames.slice(1).concat(projectFolder, projectSrcFolder, `${projectFolder}/${nodeModulesAtTypes}`);
+            const expectedCompletions = ["file1"];
+            const completionPosition = index.content.lastIndexOf('"');
+            const environmentVariables = createMap<string>();
+            environmentVariables.set("TSC_WATCHDIRECTORY", "RecursiveDirectoryUsingFsWatchFile");
+            const host = createServerHost(files, { environmentVariables });
+            const projectService = createProjectService(host);
+            projectService.openClientFile(index.path);
+
+            const project = projectService.configuredProjects.get(configFile.path);
+            assert.isDefined(project);
+            verifyProjectAndCompletions();
+
+            // Add file2
+            const file2: FileOrFolder = {
+                path: `${projectSrcFolder}/file2.ts`,
+                content: ""
+            };
+            files.push(file2);
+            fileNames.push(file2.path);
+            expectedWatchedFiles.push(file2.path);
+            expectedCompletions.push("file2");
+            host.reloadFS(files);
+            host.runQueuedTimeoutCallbacks();
+            assert.equal(projectService.configuredProjects.get(configFile.path), project);
+            verifyProjectAndCompletions();
+
+            function verifyProjectAndCompletions() {
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+                checkWatchedFiles(host, expectedWatchedFiles);
+                checkProjectActualFiles(project, fileNames);
+
+                const completions = project.getLanguageService().getCompletionsAtPosition(index.path, completionPosition, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
+                checkArray("Completion Entries", completions.entries.map(e => e.name), expectedCompletions);
+            }
         });
     });
 }

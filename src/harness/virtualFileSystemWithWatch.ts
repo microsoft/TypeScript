@@ -147,10 +147,10 @@ interface Array<T> {}`
         }
     }
 
-    export function checkFileNames(caption: string, actualFileNames: ReadonlyArray<string>, expectedFileNames: string[]) {
-        assert.equal(actualFileNames.length, expectedFileNames.length, `${caption}: incorrect actual number of files, expected:\r\n${expectedFileNames.join("\r\n")}\r\ngot: ${actualFileNames.join("\r\n")}`);
-        for (const f of expectedFileNames) {
-            assert.equal(true, contains(actualFileNames, f), `${caption}: expected to find ${f} in ${actualFileNames}`);
+    export function checkArray(caption: string, actual: ReadonlyArray<string>, expected: ReadonlyArray<string>) {
+        assert.equal(actual.length, expected.length, `${caption}: incorrect actual number of files, expected:\r\n${expected.join("\r\n")}\r\ngot: ${actual.join("\r\n")}`);
+        for (const f of expected) {
+            assert.equal(true, contains(actual, f), `${caption}: expected to find ${f} in ${actual}`);
         }
     }
 
@@ -278,6 +278,7 @@ interface Array<T> {}`
             if (tscWatchDirectory === "RecursiveDirectoryUsingFsWatchFile") {
                 const watchDirectory: HostWatchDirectory = (directory, cb) => this.watchFile(directory, () => cb(directory), PollingInterval.Medium);
                 this.customRecursiveWatchDirectory = createRecursiveDirectoryWatcher({
+                    directoryExists: path => this.directoryExists(path),
                     getAccessileSortedChildDirectories: path => this.getDirectories(path),
                     filePathComparer: this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
                     watchDirectory
@@ -286,6 +287,7 @@ interface Array<T> {}`
             else if (tscWatchDirectory === "RecursiveDirectoryUsingNonRecursiveWatchDirectory") {
                 const watchDirectory: HostWatchDirectory = (directory, cb) => this.watchDirectory(directory, fileName => cb(fileName), /*recursive*/ false);
                 this.customRecursiveWatchDirectory = createRecursiveDirectoryWatcher({
+                    directoryExists: path => this.directoryExists(path),
                     getAccessileSortedChildDirectories: path => this.getDirectories(path),
                     filePathComparer: this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
                     watchDirectory
@@ -607,7 +609,7 @@ interface Array<T> {}`
 
         watchDirectory(directoryName: string, cb: DirectoryWatcherCallback, recursive: boolean): FileWatcher {
             if (recursive && this.customRecursiveWatchDirectory) {
-                return this.customRecursiveWatchDirectory(directoryName, cb, true);
+                return this.customRecursiveWatchDirectory(directoryName, cb, /*recursive*/ true);
             }
             const path = this.toFullPath(directoryName);
             const map = recursive ? this.watchedDirectoriesRecursive : this.watchedDirectories;

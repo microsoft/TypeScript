@@ -292,6 +292,7 @@ namespace ts {
     export interface RecursiveDirectoryWatcherHost {
         watchDirectory: HostWatchDirectory;
         getAccessileSortedChildDirectories(path: string): ReadonlyArray<string>;
+        directoryExists(dir: string): boolean;
         filePathComparer: Comparer<string>;
     }
 
@@ -348,7 +349,7 @@ namespace ts {
         function watchChildDirectories(parentDir: string, existingChildWatches: ChildWatches, callback: DirectoryWatcherCallback): ChildWatches {
             let newChildWatches: DirectoryWatcher[] | undefined;
             enumerateInsertsAndDeletes<string, DirectoryWatcher>(
-                host.getAccessileSortedChildDirectories(parentDir),
+                host.directoryExists(parentDir) ? host.getAccessileSortedChildDirectories(parentDir) : emptyArray,
                 existingChildWatches,
                 (child, childWatcher) => host.filePathComparer(getNormalizedAbsolutePath(child, parentDir), childWatcher.dirName),
                 createAndAddChildDirectoryWatcher,
@@ -625,6 +626,7 @@ namespace ts {
                 const watchDirectory = tscWatchDirectory === "RecursiveDirectoryUsingFsWatchFile" ? watchDirectoryUsingFsWatchFile : watchDirectoryUsingFsWatch;
                 const watchDirectoryRecursively = createRecursiveDirectoryWatcher({
                     filePathComparer: useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
+                    directoryExists,
                     getAccessileSortedChildDirectories: path => getAccessibleFileSystemEntries(path).directories,
                     watchDirectory
                 });
