@@ -801,7 +801,9 @@ namespace ts {
             }
             const resolvedFromFile = loadModuleFromFile(extensions, candidate, failedLookupLocations, onlyRecordFailures, state);
             if (resolvedFromFile) {
-                return noPackageId(resolvedFromFile);
+                const nm = considerPackageJson ? parseNodeModuleFromPath(resolvedFromFile.path) : undefined;
+                const packageId = nm && getPackageJsonInfo(nm.packageDirectory, nm.subModuleName, failedLookupLocations, /*onlyRecordFailures*/ false, state).packageId;
+                return withPackageId(packageId, resolvedFromFile);
             }
         }
         if (!onlyRecordFailures) {
@@ -814,6 +816,45 @@ namespace ts {
             }
         }
         return loadNodeModuleFromDirectory(extensions, candidate, failedLookupLocations, onlyRecordFailures, state, considerPackageJson);
+    }
+
+    const nodeModulesPathPart = "/node_modules/";
+
+    /**
+     * This will be called on the successfully resolved path from `loadModuleFromFile`.
+     * (Not neeeded for `loadModuleFromNodeModules` as that looks up the `package.json` as part of resolution.)
+     *
+     * packageDirectory is the directory of the package itself.
+     * subModuleName is the path within the package.
+     *   For `blah/node_modules/foo/index.d.ts` this is { packageDirectory: "foo", subModuleName: "" }. (Part before "/node_modules/" is ignored.)
+     *   For `/node_modules/foo/bar.d.ts` this is { packageDirectory: "foo", subModuleName": "bar" }.
+     *   For `/node_modules/@types/foo/bar/index.d.ts` this is { packageDirectory: "@types/foo", subModuleName: "bar" }.
+     */
+    function parseNodeModuleFromPath(path: string): { packageDirectory: string, subModuleName: string } | undefined {
+        path = normalizePath(path);
+        const idx = path.lastIndexOf(nodeModulesPathPart);
+        if (idx === -1) {
+            return undefined;
+        }
+
+        const indexAfterNodeModules = idx + nodeModulesPathPart.length;
+        let indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterNodeModules);
+        if (path.charCodeAt(indexAfterNodeModules) === CharacterCodes.at) {
+            indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterPackageName);
+        }
+        const packageDirectory = path.slice(0, indexAfterPackageName);
+        const subModuleName = removeExtensionAndIndex(path.slice(indexAfterPackageName + 1));
+        return { packageDirectory, subModuleName };
+    }
+
+    function moveToNextDirectorySeparatorIfAvailable(path: string, prevSeparatorIndex: number): number {
+        const nextSeparatorIndex = path.indexOf(directorySeparator, prevSeparatorIndex + 1);
+        return nextSeparatorIndex === -1 ? prevSeparatorIndex : nextSeparatorIndex;
+    }
+
+    function removeExtensionAndIndex(path: string): string {
+        const noExtension = removeFileExtension(path);
+        return noExtension === "index" ? "" : removeSuffix(noExtension, "/index");
     }
 
     /* @internal */
