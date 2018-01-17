@@ -198,16 +198,6 @@ namespace ts.server {
         }
     }
 
-    /**
-     * This helper function processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
-     */
-    export function combineProjectOutput<T>(projects: ReadonlyArray<Project>, action: (project: Project) => ReadonlyArray<T>, comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean) {
-        const outputs = flatMap(projects, action);
-        return comparer
-            ? sortAndDeduplicate(outputs, comparer, areEqual)
-            : deduplicate(outputs, areEqual);
-    }
-
     export interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
         hostInfo: string;
@@ -336,6 +326,11 @@ namespace ts.server {
          */
         private readonly filenameToScriptInfo = createMap<ScriptInfo>();
         /**
+         * Map to the real path of the infos
+         */
+        /* @internal */
+        readonly realpathToScriptInfos: MultiMap<ScriptInfo> | undefined;
+        /**
          * maps external project file name to list of config files that were the part of this project
          */
         private readonly externalProjectToConfiguredProjectMap: Map<NormalizedPath[]> = createMap<NormalizedPath[]>();
@@ -427,7 +422,9 @@ namespace ts.server {
             this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(this.getExecutingFilePath(), "../typesMap.json") : opts.typesMapLocation;
 
             Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
-
+            if (this.host.realpath) {
+                this.realpathToScriptInfos = createMultiMap();
+            }
             this.currentDirectory = this.host.getCurrentDirectory();
             this.toCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
             this.throttledOperations = new ThrottledOperations(this.host, this.logger);
@@ -759,7 +756,7 @@ namespace ts.server {
                 if (info.containingProjects.length === 0) {
                     // Orphan script info, remove it as we can always reload it on next open file request
                     this.stopWatchingScriptInfo(info);
-                    this.filenameToScriptInfo.delete(info.path);
+                    this.deleteScriptInfo(info);
                 }
                 else {
                     // file has been changed which might affect the set of referenced files in projects that include
@@ -776,7 +773,7 @@ namespace ts.server {
             // TODO: handle isOpen = true case
 
             if (!info.isScriptOpen()) {
-                this.filenameToScriptInfo.delete(info.path);
+                this.deleteScriptInfo(info);
 
                 // capture list of projects since detachAllProjects will wipe out original list
                 const containingProjects = info.containingProjects.slice();
@@ -1010,9 +1007,17 @@ namespace ts.server {
                 if (!info.isScriptOpen() && info.isOrphan()) {
                     // if there are not projects that include this script info - delete it
                     this.stopWatchingScriptInfo(info);
-                    this.filenameToScriptInfo.delete(info.path);
+                    this.deleteScriptInfo(info);
                 }
             });
+        }
+
+        private deleteScriptInfo(info: ScriptInfo) {
+            this.filenameToScriptInfo.delete(info.path);
+            const realpath = info.getRealpathIfDifferent();
+            if (realpath) {
+                this.realpathToScriptInfos.remove(realpath, info);
+            }
         }
 
         private configFileExists(configFileName: NormalizedPath, canonicalConfigFilePath: string, info: ScriptInfo) {
@@ -1725,6 +1730,43 @@ namespace ts.server {
 
         getScriptInfo(uncheckedFileName: string) {
             return this.getScriptInfoForNormalizedPath(toNormalizedPath(uncheckedFileName));
+        }
+
+        /**
+         * Returns the projects that contain script info through SymLink
+         * Note that this does not return projects in info.containingProjects
+         */
+        /*@internal*/
+        getSymlinkedProjects(info: ScriptInfo): MultiMap<Project> | undefined {
+            let projects: MultiMap<Project> | undefined;
+            if (this.realpathToScriptInfos) {
+                const realpath = info.getRealpathIfDifferent();
+                if (realpath) {
+                    forEach(this.realpathToScriptInfos.get(realpath), combineProjects);
+                }
+                forEach(this.realpathToScriptInfos.get(info.path), combineProjects);
+            }
+
+            return projects;
+
+            function combineProjects(toAddInfo: ScriptInfo) {
+                if (toAddInfo !== info) {
+                    for (const project of toAddInfo.containingProjects) {
+                        // Add the projects only if they can use symLink targets and not already in the list
+                        if (project.languageServiceEnabled &&
+                            !project.getCompilerOptions().preserveSymlinks &&
+                            !contains(info.containingProjects, project)) {
+                            if (!projects) {
+                                projects = createMultiMap();
+                                projects.add(toAddInfo.path, project);
+                            }
+                            else if (!forEachEntry(projects, (projs, path) => path === toAddInfo.path ? false : contains(projs, project))) {
+                                projects.add(toAddInfo.path, project);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private watchClosedScriptInfo(info: ScriptInfo) {
