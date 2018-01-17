@@ -4,7 +4,9 @@
 namespace ts.Completions {
     export type Log = (message: string) => void;
 
-    interface SymbolOriginInfo {
+    type SymbolOriginInfo = { type: "this-type" } | SymbolOriginInfoExport;
+    interface SymbolOriginInfoExport {
+        type: "export";
         moduleSymbol: Symbol;
         isDefaultExport: boolean;
     }
@@ -170,9 +172,19 @@ namespace ts.Completions {
             return undefined;
         }
         const { name, needsConvertPropertyAccess } = info;
-        Debug.assert(!(needsConvertPropertyAccess && !propertyAccessToConvert));
         if (needsConvertPropertyAccess && !includeInsertTextCompletions) {
             return undefined;
+        }
+
+        let insertText: string | undefined;
+        let replacementSpan: TextSpan | undefined;
+        if (kind === CompletionKind.Global && origin && origin.type === "this-type") {
+            insertText = needsConvertPropertyAccess ? `this["${name}"]` : `this.${name}`;
+        }
+        else if (needsConvertPropertyAccess) {
+            // TODO: GH#20619 Use configured quote style
+            insertText = `["${name}"]`;
+            replacementSpan = createTextSpanFromBounds(findChildOfKind(propertyAccessToConvert!, SyntaxKind.DotToken, sourceFile)!.getStart(sourceFile), propertyAccessToConvert!.name.end);
         }
 
         // TODO(drosen): Right now we just permit *all* semantic meanings when calling
@@ -189,13 +201,10 @@ namespace ts.Completions {
             kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
             sortText: "0",
             source: getSourceFromOrigin(origin),
-            // TODO: GH#20619 Use configured quote style
-            insertText: needsConvertPropertyAccess ? `["${name}"]` : undefined,
-            replacementSpan: needsConvertPropertyAccess
-                ? createTextSpanFromBounds(findChildOfKind(propertyAccessToConvert, SyntaxKind.DotToken, sourceFile)!.getStart(sourceFile), propertyAccessToConvert.name.end)
-                : undefined,
-            hasAction: trueOrUndefined(needsConvertPropertyAccess || origin !== undefined),
+            hasAction: trueOrUndefined(!!origin && origin.type === "export"),
             isRecommended: trueOrUndefined(isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker)),
+            insertText,
+            replacementSpan,
         };
     }
 
@@ -210,7 +219,7 @@ namespace ts.Completions {
     }
 
     function getSourceFromOrigin(origin: SymbolOriginInfo | undefined): string | undefined {
-        return origin && stripQuotes(origin.moduleSymbol.name);
+        return origin && origin.type === "export" ? stripQuotes(origin.moduleSymbol.name) : undefined;
     }
 
     function getCompletionEntriesFromSymbols(
@@ -504,7 +513,7 @@ namespace ts.Completions {
     }
 
     function getSymbolName(symbol: Symbol, origin: SymbolOriginInfo | undefined, target: ScriptTarget): string {
-        return origin && origin.isDefaultExport && symbol.escapedName === InternalSymbolName.Default
+        return origin && origin.type === "export" && origin.isDefaultExport && symbol.escapedName === InternalSymbolName.Default
             // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
             ? firstDefined(symbol.declarations, d => isExportAssignment(d) && isIdentifier(d.expression) ? d.expression.text : undefined)
                 || codefix.moduleSymbolToValidIdentifier(origin.moduleSymbol, target)
@@ -590,13 +599,13 @@ namespace ts.Completions {
         allSourceFiles: ReadonlyArray<SourceFile>,
     ): CodeActionsAndSourceDisplay {
         const symbolOriginInfo = symbolToOriginInfoMap[getSymbolId(symbol)];
-        return symbolOriginInfo
+        return symbolOriginInfo && symbolOriginInfo.type === "export"
             ? getCodeActionsAndSourceDisplayForImport(symbolOriginInfo, symbol, program, checker, host, compilerOptions, sourceFile, previousToken, formatContext, getCanonicalFileName, allSourceFiles)
             : { codeActions: undefined, sourceDisplay: undefined };
     }
 
     function getCodeActionsAndSourceDisplayForImport(
-        symbolOriginInfo: SymbolOriginInfo,
+        symbolOriginInfo: SymbolOriginInfoExport,
         symbol: Symbol,
         program: Program,
         checker: TypeChecker,
@@ -1117,6 +1126,18 @@ namespace ts.Completions {
             const symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
 
             symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
+
+            // Need to insert 'this.' before properties of `this` type, so only do that if `includeInsertTextCompletions`
+            if (options.includeInsertTextCompletions && scopeNode.kind !== SyntaxKind.SourceFile) {
+                const thisType = typeChecker.tryGetThisTypeAt(scopeNode);
+                if (thisType) {
+                    for (const symbol of getPropertiesForCompletion(thisType, typeChecker, /*isForAccess*/ true)) {
+                        symbolToOriginInfoMap[getSymbolId(symbol)] = { type: "this-type" };
+                        symbols.push(symbol);
+                    }
+                }
+            }
+
             if (options.includeExternalModuleExports) {
                 getSymbolsFromOtherSourceFileExports(symbols, previousToken && isIdentifier(previousToken) ? previousToken.text : "", target);
             }
@@ -1230,10 +1251,10 @@ namespace ts.Completions {
                         symbol = getLocalSymbolForExportDefault(symbol) || symbol;
                     }
 
-                    const origin: SymbolOriginInfo = { moduleSymbol, isDefaultExport };
+                    const origin: SymbolOriginInfo = { type: "export", moduleSymbol, isDefaultExport };
                     if (stringContainsCharactersInOrder(getSymbolName(symbol, origin, target).toLowerCase(), tokenTextLowerCase)) {
                         symbols.push(symbol);
-                        symbolToOriginInfoMap[getSymbolId(symbol)] = { moduleSymbol, isDefaultExport };
+                        symbolToOriginInfoMap[getSymbolId(symbol)] = origin;
                     }
                 }
             });
@@ -2072,13 +2093,13 @@ namespace ts.Completions {
         if (isIdentifierText(name, target)) return validIdentiferResult;
         switch (kind) {
             case CompletionKind.None:
-            case CompletionKind.Global:
             case CompletionKind.MemberLike:
                 return undefined;
             case CompletionKind.ObjectPropertyDeclaration:
                 // TODO: GH#18169
                 return { name: JSON.stringify(name), needsConvertPropertyAccess: false };
             case CompletionKind.PropertyAccess:
+            case CompletionKind.Global:
                 // Don't add a completion for a name starting with a space. See https://github.com/Microsoft/TypeScript/pull/20547
                 return name.charCodeAt(0) === CharacterCodes.space ? undefined : { name, needsConvertPropertyAccess: true };
             case CompletionKind.String:

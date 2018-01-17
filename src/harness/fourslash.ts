@@ -3152,8 +3152,9 @@ Actual: ${stringify(fullActual)}`);
                 assert.isTrue(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + entryId));
             }
 
-            assert.equal(item.hasAction, hasAction);
+            assert.equal(item.hasAction, hasAction, "hasAction");
             assert.equal(item.isRecommended, options && options.isRecommended, "isRecommended");
+            assert.equal(item.insertText, options && options.insertText, "insertText");
         }
 
         private findFile(indexOrName: string | number) {
@@ -4615,6 +4616,7 @@ namespace FourSlashInterface {
     export interface VerifyCompletionListContainsOptions extends ts.GetCompletionsAtPositionOptions {
         sourceDisplay: string;
         isRecommended?: true;
+        insertText?: string;
     }
 
     export interface NewContentOptions {

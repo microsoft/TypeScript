@@ -13,7 +13,7 @@
 ////    interface localInterface {}
 ////    export interface exportedInterface {}
 ////
-////    module localModule { 
+////    module localModule {
 ////        export var x = 0;
 ////    }
 ////    export module exportedModule {
@@ -38,7 +38,7 @@
 ////    interface localInterface2 {}
 ////    export interface exportedInterface2 {}
 ////
-////    module localModule2 { 
+////    module localModule2 {
 ////        export var x = 0;
 ////    }
 ////    export module exportedModule2 {
