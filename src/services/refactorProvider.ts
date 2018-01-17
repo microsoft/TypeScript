@@ -21,7 +21,7 @@ namespace ts {
 
     export function getNewLineFromContext(context: RefactorOrCodeFixContext) {
         const formatSettings = context.formatContext.options;
-        return formatSettings ? formatSettings.newLineCharacter : context.host.getNewLine();
+        return (formatSettings && formatSettings.newLineCharacter) || getNewLineOrDefaultFromHost(context.host);
     }
 
     export function toTextChangesContext(context: RefactorOrCodeFixContext): textChanges.TextChangesContext {
