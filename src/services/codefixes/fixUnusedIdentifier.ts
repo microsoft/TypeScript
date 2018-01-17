@@ -135,6 +135,9 @@ namespace ts.codefix {
                         oldFunction.equalsGreaterThanToken,
                         oldFunction.body);
 
+                    // Drop leading and trailing trivia of the new function because we're only going
+                    // to replace the span (vs the full span) of the old function - the old leading
+                    // and trailing trivia will remain.
                     suppressLeadingAndTrailingTrivia(newFunction);
 
                     changes.replaceRange(sourceFile, { pos: oldFunction.getStart(), end: oldFunction.end }, newFunction);
