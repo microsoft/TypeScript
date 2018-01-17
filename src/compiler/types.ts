@@ -1467,7 +1467,7 @@ namespace ts {
         | SpreadAssignment // AssignmentRestProperty
         ;
 
-    export type BindingOrAssignmentElementTarget = BindingOrAssignmentPattern | Expression;
+    export type BindingOrAssignmentElementTarget = BindingOrAssignmentPattern | Identifier | PropertyAccessExpression | ElementAccessExpression | OmittedExpression;
 
     export type ObjectBindingOrAssignmentPattern
         = ObjectBindingPattern
