@@ -1535,8 +1535,8 @@ Actual: ${stringify(fullActual)}`);
             const addSpanInfoString = () => {
                 if (previousSpanInfo) {
                     resultString += currentLine;
-                    let thisLineMarker = repeatString(startColumn, " ") + repeatString(length, "~");
-                    thisLineMarker += repeatString(this.alignmentForExtraInfo - thisLineMarker.length - prefixString.length + 1, " ");
+                    let thisLineMarker = ts.repeatString(" ", startColumn) + ts.repeatString("~", length);
+                    thisLineMarker += ts.repeatString(" ", this.alignmentForExtraInfo - thisLineMarker.length - prefixString.length + 1);
                     resultString += thisLineMarker;
                     resultString += "=> Pos: (" + (pos - length) + " to " + (pos - 1) + ") ";
                     resultString += " " + previousSpanInfo;
@@ -1551,7 +1551,7 @@ Actual: ${stringify(fullActual)}`);
                     if (resultString.length) {
                         resultString += "\n--------------------------------";
                     }
-                    currentLine = "\n" + nextLine.toString() + repeatString(3 - nextLine.toString().length, " ") + ">" + this.activeFile.content.substring(pos, fileLineMap[nextLine]) + "\n    ";
+                    currentLine = "\n" + nextLine.toString() + ts.repeatString(" ", 3 - nextLine.toString().length) + ">" + this.activeFile.content.substring(pos, fileLineMap[nextLine]) + "\n    ";
                     startColumn = 0;
                     length = 0;
                 }
@@ -2787,7 +2787,7 @@ Actual: ${stringify(fullActual)}`);
             const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
             Harness.IO.log(`Navigation bar (${items.length} items)`);
             for (const item of items) {
-                Harness.IO.log(`${repeatString(item.indent, " ")}name: ${item.text}, kind: ${item.kind}, childItems: ${item.childItems.map(child => child.text)}`);
+                Harness.IO.log(`${ts.repeatString(" ", item.indent)}name: ${item.text}, kind: ${item.kind}, childItems: ${item.childItems.map(child => child.text)}`);
             }
         }
 
@@ -3687,14 +3687,6 @@ ${code}
             version: 0,
             fileName,
         };
-    }
-
-    function repeatString(count: number, char: string) {
-        let result = "";
-        for (let i = 0; i < count; i++) {
-            result += char;
-        }
-        return result;
     }
 
     function stringify(data: any, replacer?: (key: string, value: any) => any): string {
