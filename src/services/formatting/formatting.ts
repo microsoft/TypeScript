@@ -66,11 +66,6 @@ namespace ts.formatting {
         recomputeIndentation(lineAddedByFormatting: boolean): void;
     }
 
-    interface Indentation {
-        indentation: number;
-        delta: number;
-    }
-
     export function formatOnEnter(position: number, sourceFile: SourceFile, formatContext: FormatContext): TextChange[] {
         const line = sourceFile.getLineAndCharacterOfPosition(position).line;
         if (line === 0) {
@@ -469,39 +464,35 @@ namespace ts.formatting {
             inheritedIndentation: number,
             parent: Node,
             parentDynamicIndentation: DynamicIndentation,
-            effectiveParentStartLine: number): Indentation {
-
-            let indentation = inheritedIndentation;
-            let delta = SmartIndenter.shouldIndentChildNode(node) ? options.indentSize : 0;
+            effectiveParentStartLine: number
+        ): { indentation: number, delta: number } {
+            const delta = SmartIndenter.shouldIndentChildNode(node) ? options.indentSize : 0;
 
             if (effectiveParentStartLine === startLine) {
                 // if node is located on the same line with the parent
                 // - inherit indentation from the parent
                 // - push children if either parent of node itself has non-zero delta
-                indentation = startLine === lastIndentedLine
-                    ? indentationOnLastIndentedLine
-                    : parentDynamicIndentation.getIndentation();
-                delta = Math.min(options.indentSize, parentDynamicIndentation.getDelta(node) + delta);
+                return {
+                    indentation: startLine === lastIndentedLine ? indentationOnLastIndentedLine : parentDynamicIndentation.getIndentation(),
+                    delta: Math.min(options.indentSize, parentDynamicIndentation.getDelta(node) + delta)
+                };
             }
-            else if (indentation === Constants.Unknown) {
+            else if (inheritedIndentation === Constants.Unknown) {
                 if (node.kind === SyntaxKind.OpenParenToken && startLine === lastIndentedLine) {
                     // the is used for chaining methods formatting
                     // - we need to get the indentation on last line and the delta of parent
-                    indentation = indentationOnLastIndentedLine;
-                    delta = parentDynamicIndentation.getDelta(node);
+                    return { indentation: indentationOnLastIndentedLine, delta: parentDynamicIndentation.getDelta(node) };
                 }
                 else if (SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile)) {
-                    indentation = parentDynamicIndentation.getIndentation();
+                    return { indentation: parentDynamicIndentation.getIndentation(), delta };
                 }
                 else {
-                    indentation = parentDynamicIndentation.getIndentation() + parentDynamicIndentation.getDelta(node);
+                    return { indentation: parentDynamicIndentation.getIndentation() + parentDynamicIndentation.getDelta(node), delta };
                 }
             }
-
-            return {
-                indentation,
-                delta
-            };
+            else {
+                return { indentation: inheritedIndentation, delta };
+            }
         }
 
         function getFirstNonDecoratorTokenOfNode(node: Node) {
