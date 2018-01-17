@@ -5416,18 +5416,19 @@ namespace ts {
             return symbol;
         }
 
-        function getTypeWithThisArgument(type: Type, thisArgument?: Type): Type {
+        function getTypeWithThisArgument(type: Type, thisArgument?: Type, needApparentType?: boolean): Type {
             if (getObjectFlags(type) & ObjectFlags.Reference) {
                 const target = (<TypeReference>type).target;
                 const typeArguments = (<TypeReference>type).typeArguments;
                 if (length(target.typeParameters) === length(typeArguments)) {
-                    return createTypeReference(target, concatenate(typeArguments, [thisArgument || target.thisType]));
+                    const ref = createTypeReference(target, concatenate(typeArguments, [thisArgument || target.thisType]));
+                    return needApparentType ? getApparentType(ref) : ref;
                 }
             }
             else if (type.flags & TypeFlags.Intersection) {
-                return getIntersectionType(map((<IntersectionType>type).types, t => getTypeWithThisArgument(t, thisArgument)));
+                return getIntersectionType(map((<IntersectionType>type).types, t => getTypeWithThisArgument(t, thisArgument, needApparentType)));
             }
-            return type;
+            return needApparentType ? getApparentType(type) : type;
         }
 
         function resolveObjectTypeMembers(type: ObjectType, source: InterfaceTypeWithDeclaredMembers, typeParameters: TypeParameter[], typeArguments: Type[]) {
@@ -6107,7 +6108,7 @@ namespace ts {
         }
 
         function getApparentTypeOfIntersectionType(type: IntersectionType) {
-            return type.resolvedApparentType || (type.resolvedApparentType = getTypeWithThisArgument(type, type));
+            return type.resolvedApparentType || (type.resolvedApparentType = getTypeWithThisArgument(type, type, /*apparentType*/ true));
         }
 
         function getResolvedTypeParameterDefault(typeParameter: TypeParameter): Type | undefined {
@@ -14068,7 +14069,7 @@ namespace ts {
         // If the given type is an object or union type with a single signature, and if that signature has at
         // least as many parameters as the given function, return the signature. Otherwise return undefined.
         function getContextualCallSignature(type: Type, node: FunctionExpression | ArrowFunction | MethodDeclaration): Signature {
-            const signatures = getSignaturesOfStructuredType(type, SignatureKind.Call);
+            const signatures = getSignaturesOfType(type, SignatureKind.Call);
             if (signatures.length === 1) {
                 const signature = signatures[0];
                 if (!isAritySmaller(signature, node)) {
