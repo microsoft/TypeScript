@@ -322,7 +322,7 @@ namespace ts {
             const variables = getInitializedVariables(node);
             if (variables.length === 0) {
                 if (hasReceiver) {
-                    return convertBindingNameToAssignmentTarget(node.declarations[0].name);
+                    return visitNode(convertToAssignmentElementTarget(node.declarations[0].name), visitor, isExpression);
                 }
                 return undefined;
             }
@@ -348,81 +348,14 @@ namespace ts {
         }
 
         function transformInitializedVariable(node: VariableDeclaration) {
-            return setSourceMapRange(
+            const converted = setSourceMapRange(
                 createAssignment(
-                    convertBindingNameToAssignmentTarget(node.name),
-                    visitNode(node.initializer, visitor, isExpression)
+                    convertToAssignmentElementTarget(node.name),
+                    node.initializer
                 ),
                 node
             );
-        }
-
-        function convertBindingNameToAssignmentTarget(node: BindingName): Identifier | AssignmentPattern {
-            return isObjectBindingPattern(node) ? convertObjectBindingPatternToObjectAssignmentPattern(node) :
-                isArrayBindingPattern(node) ? convertArrayBindingPatternToArrayAssignmentPattern(node) :
-                setSourceMapRange(<Identifier>getSynthesizedClone(node), node);
-        }
-
-        function convertObjectBindingPatternToObjectAssignmentPattern(node: ObjectBindingPattern): ObjectLiteralExpression {
-            return createObjectLiteral(
-                map(node.elements, convertObjectBindingElementToObjectAssignmentElement)
-            );
-        }
-
-        function convertObjectBindingElementToObjectAssignmentElement(node: BindingElement): ObjectLiteralElementLike {
-            if (node.propertyName) {
-                let expression: Expression = convertBindingNameToAssignmentTarget(node.name);
-                if (node.initializer) {
-                    expression = createAssignment(expression, visitNode(node.initializer, visitor, isExpression));
-                }
-                return setSourceMapRange(
-                    createPropertyAssignment(
-                        visitNode(node.propertyName, visitor, isPropertyName),
-                        expression
-                    ),
-                    node
-                );
-            }
-            else if (node.dotDotDotToken) {
-                return setSourceMapRange(
-                    createSpreadAssignment(
-                        visitNode(cast(node.name, isIdentifier), visitor, isIdentifier)
-                    ),
-                    node
-                );
-            }
-            else {
-                return setSourceMapRange(
-                    createShorthandPropertyAssignment(
-                        visitNode(cast(node.name, isIdentifier), visitor, isIdentifier),
-                        visitNode(node.initializer, visitor, isExpression)
-                    ),
-                    node
-                );
-            }
-        }
-
-        function convertArrayBindingPatternToArrayAssignmentPattern(node: ArrayBindingPattern): ArrayLiteralExpression {
-            return setSourceMapRange(
-                createArrayLiteral(
-                    map(node.elements, convertArrayBindingElementToArrayAssignmentElement)
-                ),
-                node
-            );
-        }
-
-        function convertArrayBindingElementToArrayAssignmentElement(node: ArrayBindingElement): Expression {
-            if (isOmittedExpression(node)) return node;
-            let expression: Expression = convertBindingNameToAssignmentTarget(node.name);
-            if (node.initializer) {
-                expression = createAssignment(expression, visitNode(node.initializer, visitor, isExpression));
-                setSourceMapRange(expression, node);
-            }
-            else if (node.dotDotDotToken) {
-                expression = createSpread(expression);
-                setSourceMapRange(expression, node);
-            }
-            return expression;
+            return visitNode(converted, visitor, isExpression);
         }
 
         function collidesWithParameterName({ name }: VariableDeclaration | BindingElement): boolean {
