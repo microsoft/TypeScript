@@ -257,7 +257,7 @@ namespace ts.codefix {
         }
     }
 
-    function getCodeActionForNewImport(context: SymbolContext & RefactorOrCodeFixContext & { kind: ImportKind }, moduleSpecifier: string): ImportCodeAction {
+    function getCodeActionForNewImport(context: SymbolContext & textChanges.TextChangesContext & { kind: ImportKind }, moduleSpecifier: string): ImportCodeAction {
         const { kind, sourceFile, symbolName } = context;
         const lastImportDeclaration = findLast(sourceFile.statements, isAnyImportSyntax);
 
@@ -275,7 +275,7 @@ namespace ts.codefix {
                 createIdentifier(symbolName),
                 createExternalModuleReference(quotedModuleSpecifier));
 
-        const changes = ChangeTracker.with(toTextChangesContext(context), changeTracker => {
+        const changes = ChangeTracker.with(context, changeTracker => {
             if (lastImportDeclaration) {
                 changeTracker.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl);
             }
@@ -669,33 +669,33 @@ namespace ts.codefix {
         return expression && isStringLiteral(expression) ? expression.text : undefined;
     }
 
-    function tryUpdateExistingImport(context: SymbolContext & RefactorOrCodeFixContext & { kind: ImportKind }, importClause: ImportClause | ImportEqualsDeclaration): FileTextChanges[] | undefined {
+    function tryUpdateExistingImport(context: SymbolContext & textChanges.TextChangesContext & { kind: ImportKind }, importClause: ImportClause | ImportEqualsDeclaration): FileTextChanges[] | undefined {
         const { symbolName, sourceFile, kind } = context;
         const { name } = importClause;
         const { namedBindings } = importClause.kind !== SyntaxKind.ImportEqualsDeclaration && importClause;
         switch (kind) {
             case ImportKind.Default:
-                return name ? undefined : ChangeTracker.with(toTextChangesContext(context), t =>
+                return name ? undefined : ChangeTracker.with(context, t =>
                     t.replaceNode(sourceFile, importClause, createImportClause(createIdentifier(symbolName), namedBindings)));
 
             case ImportKind.Named: {
                 const newImportSpecifier = createImportSpecifier(/*propertyName*/ undefined, createIdentifier(symbolName));
                 if (namedBindings && namedBindings.kind === SyntaxKind.NamedImports && namedBindings.elements.length !== 0) {
                     // There are already named imports; add another.
-                    return ChangeTracker.with(toTextChangesContext(context), t => t.insertNodeInListAfter(
+                    return ChangeTracker.with(context, t => t.insertNodeInListAfter(
                         sourceFile,
                         namedBindings.elements[namedBindings.elements.length - 1],
                         newImportSpecifier));
                 }
                 if (!namedBindings || namedBindings.kind === SyntaxKind.NamedImports && namedBindings.elements.length === 0) {
-                    return ChangeTracker.with(toTextChangesContext(context), t =>
+                    return ChangeTracker.with(context, t =>
                         t.replaceNode(sourceFile, importClause, createImportClause(name, createNamedImports([newImportSpecifier]))));
                 }
                 return undefined;
             }
 
             case ImportKind.Namespace:
-                return namedBindings ? undefined : ChangeTracker.with(toTextChangesContext(context), t =>
+                return namedBindings ? undefined : ChangeTracker.with(context, t =>
                     t.replaceNode(sourceFile, importClause, createImportClause(name, createNamespaceImport(createIdentifier(symbolName)))));
 
             case ImportKind.Equals:
@@ -706,7 +706,7 @@ namespace ts.codefix {
         }
     }
 
-    function getCodeActionForUseExistingNamespaceImport(namespacePrefix: string, context: SymbolContext & RefactorOrCodeFixContext, symbolToken: Identifier): ImportCodeAction {
+    function getCodeActionForUseExistingNamespaceImport(namespacePrefix: string, context: SymbolContext & textChanges.TextChangesContext, symbolToken: Identifier): ImportCodeAction {
         const { symbolName, sourceFile } = context;
 
         /**
@@ -720,7 +720,7 @@ namespace ts.codefix {
          * become "ns.foo"
          */
         // Prefix the node instead of it replacing it, because this may be used for import completions and we don't want the text changes to overlap with the identifier being completed.
-        const changes = ChangeTracker.with(toTextChangesContext(context), tracker =>
+        const changes = ChangeTracker.with(context, tracker =>
             tracker.changeIdentifierToPropertyAccess(sourceFile, namespacePrefix, symbolToken));
         return createCodeAction(Diagnostics.Change_0_to_1, [symbolName, `${namespacePrefix}.${symbolName}`], changes, "CodeChange", /*moduleSpecifier*/ undefined);
     }

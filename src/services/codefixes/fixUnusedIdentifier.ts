@@ -13,13 +13,13 @@ namespace ts.codefix {
             const token = getToken(sourceFile, context.span.start);
             const result: CodeFixAction[] = [];
 
-            const deletion = textChanges.ChangeTracker.with(toTextChangesContext(context), t => tryDeleteDeclaration(t, sourceFile, token));
+            const deletion = textChanges.ChangeTracker.with(context, t => tryDeleteDeclaration(t, sourceFile, token));
             if (deletion.length) {
                 const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Remove_declaration_for_Colon_0), [token.getText()]);
                 result.push({ description, changes: deletion, fixId: fixIdDelete });
             }
 
-            const prefix = textChanges.ChangeTracker.with(toTextChangesContext(context), t => tryPrefixDeclaration(t, context.errorCode, sourceFile, token));
+            const prefix = textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, context.errorCode, sourceFile, token));
             if (prefix.length) {
                 const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Prefix_0_with_an_underscore), [token.getText()]);
                 result.push({ description, changes: prefix, fixId: fixIdPrefix });

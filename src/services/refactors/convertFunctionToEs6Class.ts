@@ -59,7 +59,7 @@ namespace ts.refactor.convertFunctionToES6Class {
         }
 
         const ctorDeclaration = ctorSymbol.valueDeclaration;
-        const changeTracker = textChanges.ChangeTracker.fromContext(toTextChangesContext(context));
+        const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
         let precedingNode: Node;
         let newClassDeclaration: ClassDeclaration;

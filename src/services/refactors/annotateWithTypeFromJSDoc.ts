@@ -78,7 +78,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
             return Debug.fail(`!decl || !jsdocType || decl.type: !${decl} || !${jsdocType} || ${decl.type}`);
         }
 
-        const changeTracker = textChanges.ChangeTracker.fromContext(toTextChangesContext(context));
+        const changeTracker = textChanges.ChangeTracker.fromContext(context);
         const declarationWithType = addType(decl, transformJSDocType(jsdocType) as TypeNode);
         suppressLeadingAndTrailingTrivia(declarationWithType);
         changeTracker.replaceRange(sourceFile, { pos: decl.getStart(), end: decl.end }, declarationWithType);
@@ -93,7 +93,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         const sourceFile = context.file;
         const token = getTokenAtPosition(sourceFile, context.startPosition, /*includeJsDocComment*/ false);
         const decl = findAncestor(token, isFunctionLikeDeclaration);
-        const changeTracker = textChanges.ChangeTracker.fromContext(toTextChangesContext(context));
+        const changeTracker = textChanges.ChangeTracker.fromContext(context);
         const functionWithType = addTypesToFunctionLike(decl);
         suppressLeadingAndTrailingTrivia(functionWithType);
         changeTracker.replaceRange(sourceFile, { pos: decl.getStart(), end: decl.end }, functionWithType);

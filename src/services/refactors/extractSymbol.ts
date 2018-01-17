@@ -806,7 +806,7 @@ namespace ts.refactor.extractSymbol {
             );
         }
 
-        const changeTracker = textChanges.ChangeTracker.fromContext(toTextChangesContext(context));
+        const changeTracker = textChanges.ChangeTracker.fromContext(context);
         const minInsertionPos = (isReadonlyArray(range.range) ? last(range.range) : range.range).end;
         const nodeToInsertBefore = getNodeToInsertFunctionBefore(minInsertionPos, scope);
         if (nodeToInsertBefore) {
@@ -1011,7 +1011,7 @@ namespace ts.refactor.extractSymbol {
         const initializer = transformConstantInitializer(node, substitutions);
         suppressLeadingAndTrailingTrivia(initializer);
 
-        const changeTracker = textChanges.ChangeTracker.fromContext(toTextChangesContext(context));
+        const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
         if (isClassLike(scope)) {
             Debug.assert(!isJS); // See CannotExtractToJSClass

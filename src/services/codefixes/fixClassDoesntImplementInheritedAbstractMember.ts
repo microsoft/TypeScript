@@ -9,7 +9,7 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions(context) {
             const { program, sourceFile, span } = context;
-            const changes = textChanges.ChangeTracker.with(toTextChangesContext(context), t =>
+            const changes = textChanges.ChangeTracker.with(context, t =>
                 addMissingMembers(getClass(sourceFile, span.start), sourceFile, program.getTypeChecker(), t));
             return changes.length === 0 ? undefined : [{ description: getLocaleSpecificMessage(Diagnostics.Implement_inherited_abstract_class), changes, fixId }];
         },

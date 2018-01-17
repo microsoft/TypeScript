@@ -32,7 +32,7 @@ namespace ts.codefix {
             createImportClause(namespace.name, /*namedBindings*/ undefined),
             node.moduleSpecifier
         );
-        const changeTracker = textChanges.ChangeTracker.fromContext(toTextChangesContext(context));
+        const changeTracker = textChanges.ChangeTracker.fromContext(context);
         changeTracker.replaceNode(sourceFile, node, replacement, { useNonAdjustedEndPosition: true });
         const changes = changeTracker.getChanges();
         variations.push({
@@ -48,7 +48,7 @@ namespace ts.codefix {
                 namespace.name,
                 createExternalModuleReference(node.moduleSpecifier)
             );
-            const changeTracker = textChanges.ChangeTracker.fromContext(toTextChangesContext(context));
+            const changeTracker = textChanges.ChangeTracker.fromContext(context);
             changeTracker.replaceNode(sourceFile, node, replacement, { useNonAdjustedEndPosition: true });
             const changes = changeTracker.getChanges();
             variations.push({
@@ -86,7 +86,7 @@ namespace ts.codefix {
             addRange(fixes, getCodeFixesForImportDeclaration(context, relatedImport));
         }
         const propertyAccess = createPropertyAccess(expr, "default");
-        const changeTracker = textChanges.ChangeTracker.fromContext(toTextChangesContext(context));
+        const changeTracker = textChanges.ChangeTracker.fromContext(context);
         changeTracker.replaceNode(sourceFile, expr, propertyAccess, {});
         const changes = changeTracker.getChanges();
         fixes.push({

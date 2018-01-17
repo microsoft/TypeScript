@@ -7,7 +7,7 @@ namespace ts.codefix {
         getCodeActions(context) {
             const { sourceFile } = context;
             const token = getNode(sourceFile, context.span.start);
-            const changes = textChanges.ChangeTracker.with(toTextChangesContext(context), t => doChange(t, sourceFile, token));
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, token));
             return [{ description: getLocaleSpecificMessage(Diagnostics.Add_this_to_unresolved_variable), changes, fixId }];
         },
         fixIds: [fixId],

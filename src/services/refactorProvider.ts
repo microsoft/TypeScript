@@ -14,24 +14,7 @@ namespace ts {
         getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined;
     }
 
-    export interface RefactorOrCodeFixContext {
-        host: LanguageServiceHost;
-        formatContext: ts.formatting.FormatContext;
-    }
-
-    export function getNewLineFromContext(context: RefactorOrCodeFixContext) {
-        const formatSettings = context.formatContext.options;
-        return (formatSettings && formatSettings.newLineCharacter) || getNewLineOrDefaultFromHost(context.host);
-    }
-
-    export function toTextChangesContext(context: RefactorOrCodeFixContext): textChanges.TextChangesContext {
-        return {
-            newLineCharacter: getNewLineFromContext(context),
-            formatContext: context.formatContext,
-        };
-    }
-
-    export interface RefactorContext extends RefactorOrCodeFixContext {
+    export interface RefactorContext extends textChanges.TextChangesContext {
         file: SourceFile;
         startPosition: number;
         endPosition?: number;

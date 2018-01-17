@@ -9,7 +9,7 @@ namespace ts.codefix {
             const nodes = getNodes(sourceFile, span.start);
             if (!nodes) return undefined;
             const { constructor, superCall } = nodes;
-            const changes = textChanges.ChangeTracker.with(toTextChangesContext(context), t => doChange(t, sourceFile, constructor, superCall));
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, constructor, superCall));
             return [{ description: getLocaleSpecificMessage(Diagnostics.Make_super_call_the_first_statement_in_the_constructor), changes, fixId }];
         },
         fixIds: [fixId],

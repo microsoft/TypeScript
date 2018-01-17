@@ -10,7 +10,7 @@ namespace ts.codefix {
             const classDeclaration = getClass(sourceFile, span.start);
             const checker = program.getTypeChecker();
             return mapDefined<ExpressionWithTypeArguments, CodeFixAction>(getClassImplementsHeritageClauseElements(classDeclaration), implementedTypeNode => {
-                const changes = textChanges.ChangeTracker.with(toTextChangesContext(context), t => addMissingDeclarations(checker, implementedTypeNode, sourceFile, classDeclaration, t));
+                const changes = textChanges.ChangeTracker.with(context, t => addMissingDeclarations(checker, implementedTypeNode, sourceFile, classDeclaration, t));
                 if (changes.length === 0) return undefined;
                 const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Implement_interface_0), [implementedTypeNode.getText()]);
                 return { description, changes, fixId };
