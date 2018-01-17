@@ -116,6 +116,11 @@ namespace ts {
         return a === b || a && b && a.name === b.name && a.subModuleName === b.subModuleName && a.version === b.version;
     }
 
+    export function packageIdToString({ name, subModuleName, version }: PackageId): string {
+        const fullName = subModuleName ? `${name}/${subModuleName}` : name;
+        return `${fullName}@${version}`;
+    }
+
     export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {
         return oldResolution.resolvedFileName === newResolution.resolvedFileName && oldResolution.primary === newResolution.primary;
     }
