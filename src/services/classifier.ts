@@ -619,37 +619,46 @@ namespace ts {
                     return start;
                 }
 
-                // Don't bother with newlines/whitespace.
-                if (kind === SyntaxKind.NewLineTrivia || kind === SyntaxKind.WhitespaceTrivia) {
-                    continue;
-                }
-
-                // Only bother with the trivia if it at least intersects the span of interest.
-                if (isComment(kind)) {
-                    classifyComment(token, kind, start, width);
-
-                    // Classifying a comment might cause us to reuse the trivia scanner
-                    // (because of jsdoc comments).  So after we classify the comment make
-                    // sure we set the scanner position back to where it needs to be.
-                    triviaScanner.setTextPos(end);
-                    continue;
-                }
-
-                if (kind === SyntaxKind.ConflictMarkerTrivia) {
-                    const text = sourceFile.text;
-                    const ch = text.charCodeAt(start);
-
-                    // for the <<<<<<< and >>>>>>> markers, we just add them in as comments
-                    // in the classification stream.
-                    if (ch === CharacterCodes.lessThan || ch === CharacterCodes.greaterThan) {
-                        pushClassification(start, width, ClassificationType.comment);
+                switch (kind) {
+                    case SyntaxKind.NewLineTrivia:
+                    case SyntaxKind.WhitespaceTrivia:
+                        // Don't bother with newlines/whitespace.
                         continue;
-                    }
 
-                    // for the ||||||| and ======== markers, add a comment for the first line,
-                    // and then lex all subsequent lines up until the end of the conflict marker.
-                    Debug.assert(ch === CharacterCodes.bar || ch === CharacterCodes.equals);
-                    classifyDisabledMergeCode(text, start, end);
+                    case SyntaxKind.SingleLineCommentTrivia:
+                    case SyntaxKind.MultiLineCommentTrivia:
+                        // Only bother with the trivia if it at least intersects the span of interest.
+                        classifyComment(token, kind, start, width);
+
+                        // Classifying a comment might cause us to reuse the trivia scanner
+                        // (because of jsdoc comments).  So after we classify the comment make
+                        // sure we set the scanner position back to where it needs to be.
+                        triviaScanner.setTextPos(end);
+                        continue;
+
+                    case SyntaxKind.ConflictMarkerTrivia:
+                        const text = sourceFile.text;
+                        const ch = text.charCodeAt(start);
+
+                        // for the <<<<<<< and >>>>>>> markers, we just add them in as comments
+                        // in the classification stream.
+                        if (ch === CharacterCodes.lessThan || ch === CharacterCodes.greaterThan) {
+                            pushClassification(start, width, ClassificationType.comment);
+                            continue;
+                        }
+
+                        // for the ||||||| and ======== markers, add a comment for the first line,
+                        // and then lex all subsequent lines up until the end of the conflict marker.
+                        Debug.assert(ch === CharacterCodes.bar || ch === CharacterCodes.equals);
+                        classifyDisabledMergeCode(text, start, end);
+                        break;
+
+                    case SyntaxKind.ShebangTrivia:
+                        // TODO: Maybe we should classify these.
+                        break;
+
+                    default:
+                        Debug.assertNever(kind);
                 }
             }
         }
