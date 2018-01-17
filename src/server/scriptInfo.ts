@@ -196,7 +196,7 @@ namespace ts.server {
 
     /*@internal*/
     export function isDynamicFileName(fileName: NormalizedPath) {
-        return getBaseFileName(fileName)[0] === "^";
+        return fileName[0] === "^" || getBaseFileName(fileName)[0] === "^";
     }
 
     export class ScriptInfo {
