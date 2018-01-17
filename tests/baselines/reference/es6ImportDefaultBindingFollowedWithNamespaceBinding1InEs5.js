@@ -24,3 +24,4 @@ var x = es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0_1.default;
 declare var a: number;
 export default a;
 //// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.d.ts]
+export {};

@@ -25,14 +25,14 @@ namespace ts {
                 if (externalHelpersModuleName) {
                     const statements: Statement[] = [];
                     const statementOffset = addPrologue(statements, node.statements);
-                    append(statements,
-                        createImportDeclaration(
-                            /*decorators*/ undefined,
-                            /*modifiers*/ undefined,
-                            createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
-                            createLiteral(externalHelpersModuleNameText)
-                        )
+                    const tslibImport = createImportDeclaration(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
+                        createLiteral(externalHelpersModuleNameText)
                     );
+                    addEmitFlags(tslibImport, EmitFlags.NeverApplyImportHelper);
+                    append(statements, tslibImport);
 
                     addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
                     return updateSourceFileNode(

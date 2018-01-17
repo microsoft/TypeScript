@@ -275,9 +275,7 @@ declare function f3(): void;
 declare function f4(): void;
 declare function makeRecord<T, K extends string>(obj: {
     [P in K]: T;
-}): {
-    [P in K]: T;
-};
+}): { [P in K]: T; };
 declare function f5(s: string): void;
 declare function makeDictionary<T>(obj: {
     [x: string]: T;
@@ -310,17 +308,11 @@ declare type Spec<T> = {
  */
 declare function applySpec<T>(obj: Spec<T>): (...args: any[]) => T;
 declare var g1: (...args: any[]) => {
-    sum: number;
-    nested: {
-        mul: string;
-    };
+    sum: any;
+    nested: any;
 };
 declare var g2: (...args: any[]) => {
-    foo: {
-        bar: {
-            baz: boolean;
-        };
-    };
+    foo: any;
 };
 declare const foo: <T>(object: T, partial: Partial<T>) => T;
 declare let o: {

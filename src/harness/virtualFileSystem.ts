@@ -162,7 +162,7 @@ namespace Utils {
         /**
          * Reads the directory at the given path and retrieves a list of file names and a list
          * of directory names within it. Suitable for use with ts.matchFiles()
-         * @param path  The path to the directory to be read
+         * @param path The path to the directory to be read
          */
         getAccessibleFileSystemEntries(path: string) {
             const entry = this.traversePath(path);

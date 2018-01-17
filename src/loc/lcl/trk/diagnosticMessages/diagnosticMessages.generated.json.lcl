@@ -467,6 +467,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime_7038" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A namespace-style import cannot be called or constructed, and will cause a failure at runtime.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bir ad alanı stili içeri aktarma işlemi çağrılamadığından veya oluşturulamadığından çalışma zamanında hataya yol açacak.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_parameter_initializer_is_only_allowed_in_a_function_or_constructor_implementation_2371" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A parameter initializer is only allowed in a function or constructor implementation.]]></Val>
@@ -866,6 +875,12 @@
           <Prev Cat="Text">
             <Val><![CDATA[Add '{0}' to existing import declaration from "{1}".]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_async_modifier_to_containing_function_90029" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add async modifier to containing function]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1270,6 +1285,24 @@
           <Val><![CDATA[An index signature parameter must have a type annotation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Dizin imzası parametresi, bir tür ek açıklamasına sahip olmalıdır.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_index_signature_parameter_type_cannot_be_a_type_alias_Consider_writing_0_Colon_1_Colon_2_instead_1336" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An index signature parameter type cannot be a type alias. Consider writing '[{0}: {1}]5D;: {2}' instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Dizin imzası parametre türü bir tür diğer adı olamaz. Bunun yerine '[{0}: {1}]5D;: {2}' yazabilirsiniz.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_index_signature_parameter_type_cannot_be_a_union_type_Consider_using_a_mapped_object_type_instead_1337" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An index signature parameter type cannot be a union type. Consider using a mapped object type instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Dizin imzası parametre türü bir birleşim türü olamaz. Bunun yerine eşlenen nesne türü kullanabilirsiniz.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1823,6 +1856,33 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Cannot_invoke_an_object_which_is_possibly_null_2721" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot invoke an object which is possibly 'null'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Muhtemelen 'null' olan bir nesne çağrılamıyor.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Cannot_invoke_an_object_which_is_possibly_null_or_undefined_2723" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot invoke an object which is possibly 'null' or 'undefined'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Muhtemelen 'null' veya 'undefined' olan bir nesne çağrılamıyor.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Cannot_invoke_an_object_which_is_possibly_undefined_2722" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot invoke an object which is possibly 'undefined'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Muhtemelen 'undefined' olan bir nesne çağrılamıyor.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Cannot_re_export_a_type_when_the_isolatedModules_flag_is_provided_1205" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot re-export a type when the '--isolatedModules' flag is provided.]]></Val>
@@ -2066,6 +2126,9 @@
       <Item ItemId=";Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclas_2720" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Class '{0}' incorrectly implements class '{1}'. Did you mean to extend '{1}' and inherit its members as a subclass?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' sınıfı hatalı olarak '{1}' sınıfını uyguluyor. '{1}' sınıfını genişletip üyelerini bir alt sınıf olarak devralmak mı istiyordunuz?]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2284,6 +2347,15 @@
           <Val><![CDATA[Convert function to an ES2015 class]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[İşlevi bir ES2015 sınıfına dönüştür]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_to_ES6_module_95017" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert to ES6 module]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ES6 modülüne dönüştür]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2885,6 +2957,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Enables_emit_interoperability_between_CommonJS_and_ES_Modules_via_creation_of_namespace_objects_for__7037" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tüm içeri aktarma işlemleri için ad alanı nesnelerinin oluşturulması aracılığıyla CommonJS ile ES Modülleri arasında yayımlama birlikte çalışabilirliğine imkan tanır. Şu anlama gelir: 'allowSyntheticDefaultImports'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Enables_experimental_support_for_ES7_async_functions_6068" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enables experimental support for ES7 async functions.]]></Val>
@@ -2991,7 +3072,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expected {0}-{1} type arguments; provide these with an '@extends' tag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{0}-{1} türünde bağımsız değişkenler bekleniyordu; bunları bir '@extends' etiketiyle sağlayın.]]></Val>
+            <Val><![CDATA[{0}-{1} tür bağımsız değişkeni bekleniyordu; bunları bir '@extends' etiketiyle sağlayın.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3018,7 +3099,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expected {0} type arguments, but got {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{0} türünde bağımsız değişkenler bekleniyordu ancak {1} alındı.]]></Val>
+            <Val><![CDATA[{0} tür bağımsız değişkeni bekleniyordu ancak {1} alındı.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3027,7 +3108,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Expected {0} type arguments; provide these with an '@extends' tag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{0} türünde bağımsız değişkenler bekleniyordu; bunları bir '@extends' etiketiyle sağlayın.]]></Val>
+            <Val><![CDATA[{0} tür bağımsız değişkeni bekleniyordu; bunları bir '@extends' etiketiyle sağlayın.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3174,7 +3255,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Exported variable '{0}' has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan '{0}' değişkeni, {2} dış modülündeki '{1}' özel adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan '{0}' değişkeni, {2} dış modülündeki '{1}' adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3183,7 +3264,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Exported variable '{0}' has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan '{0}' değişkeni, '{2}' özel modüldeki '{1}' özel adına sahip veya bu adı kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan '{0}' değişkeni, '{2}' özel modüldeki '{1}' adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4529,6 +4610,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Mapped_object_type_implicitly_has_an_any_template_type_7039" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Mapped object type implicitly has an 'any' template type.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Member_0_implicitly_has_an_1_type_7008" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Member '{0}' implicitly has an '{1}' type.]]></Val>
@@ -4689,7 +4776,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module Resolution Options]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modül Çözünürlüğü Seçenekleri]]></Val>
+            <Val><![CDATA[Modül Çözümleme Seçenekleri]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5217,7 +5304,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of constructor from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki oluşturucunun '{0}' parametresi, {2} dış modülündeki '{1}' özel adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki oluşturucunun '{0}' parametresi, {2} dış modülündeki '{1}' adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5262,7 +5349,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of exported function has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan işlevin '{0}' parametresi, {2} dış modülündeki '{1}' özel adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan işlevin '{0}' parametresi, {2} dış modülündeki '{1}' adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5325,7 +5412,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public method from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki ortak metodun '{0}' parametresi, {2} dış modülündeki '{1}' özel adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki ortak metodun '{0}' parametresi, {2} dış modülündeki '{1}' adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5352,7 +5439,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' of public static method from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki ortak metodun '{0}' parametresi, {2} dış modülündeki '{1}' özel adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki ortak metodun '{0}' parametresi, {2} dış modülündeki '{1}' adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5397,7 +5484,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel ayarlayıcı '{0}' için parametre türü, '{2}' özel modülündeki '{1}' adını taşıyor veya kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel ayarlayıcı '{0}' için parametre türü, '{2}' özel modülündeki '{1}' adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5406,7 +5493,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public setter '{0}' from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel ayarlayıcı '{0}' için parametre türü, '{1}' özel adını taşıyor veya kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel ayarlayıcı '{0}' için parametre türü, '{1}' özel adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5415,7 +5502,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public static setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik ayarlayıcı '{0}' için parametre türü, '{2}' özel modülündeki '{1}' adını taşıyor veya kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik ayarlayıcı '{0}' için parametre türü, '{2}' özel modülündeki '{1}' adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5424,7 +5511,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter type of public static setter '{0}' from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik ayarlayıcı '{0}' için parametre türü, '{1}' özel adını taşıyor veya kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik ayarlayıcı '{0}' için parametre türü, '{1}' özel adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5560,6 +5647,15 @@
           <Val><![CDATA[Property '{0}' implicitly has type 'any', because its set accessor lacks a parameter type annotation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' özelliği, set erişimcisinin parametre türü ek açıklaması olmadığı için örtük olarak 'any' türü içeriyor.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2_2416" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' in type '{1}' is not assignable to the same property in base type '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{1}' türündeki '{0}' özelliği, '{2}' temel türündeki aynı özelliğe atanamaz.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5805,7 +5901,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public property '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıfın '{0}' ortak özelliği, {2} dış modülündeki '{1}' özel adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıfın '{0}' ortak özelliği, {2} dış modülündeki '{1}' adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5832,7 +5928,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public static method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıfın '{0}' genel statik metodu, {2} dış modülündeki '{1}' özel adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıfın '{0}' genel statik metodu, {2} dış modülündeki '{1}' adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5859,7 +5955,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Public static property '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıfın '{0}' ortak statik özelliği, {2} dış modülündeki '{1}' özel adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıfın '{0}' ortak statik özelliği, {2} dış modülündeki '{1}' adına sahip veya bu adı kullanıyor, ancak adlandırılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5918,6 +6014,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Remove declaration for: '{0}'.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Replace_import_with_0_95015" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Replace import with '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[İçeri aktarma işlemini '{0}' ile değiştirin.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6216,7 +6321,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel alıcı '{0}' için dönüş türü, '{2}' dış modülündeki '{1}' adını taşıyor veya kullanıyor ancak adlandırılamıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel alıcı '{0}' için dönüş türü, '{2}' dış modülündeki '{1}' adına sahip veya bu adı kullanıyor ancak adlandırılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6225,7 +6330,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel alıcı '{0}' için dönüş türü, '{2}' özel modülündeki '{1}' adını taşıyor veya kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel alıcı '{0}' için dönüş türü, '{2}' özel modülündeki '{1}' adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6234,7 +6339,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public getter '{0}' from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel alıcı '{0}' için dönüş türü, '{1}' özel adını taşıyor veya kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel alıcı '{0}' için dönüş türü, '{1}' özel adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6270,7 +6375,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using name '{1}' from external module {2} but cannot be named.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik alıcı '{0}' için dönüş türü, '{2}' dış modülündeki '{1}' adını taşıyor veya kullanıyor ancak adlandırılamıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik alıcı '{0}' için dönüş türü, '{2}' dış modülündeki '{1}' adına sahip veya bu adı kullanıyor ancak adlandırılamıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6279,7 +6384,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik alıcı '{0}' için dönüş türü, '{2}' özel modülündeki '{1}' adını taşıyor veya kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik alıcı '{0}' için dönüş türü, '{2}' özel modülündeki '{1}' adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6288,7 +6393,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type of public static getter '{0}' from exported class has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik alıcı '{0}' için dönüş türü, '{1}' özel adını taşıyor veya kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan sınıftaki genel statik alıcı '{0}' için dönüş türü, '{1}' özel adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6324,7 +6429,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Reusing module resolutions originating in '{0}' since resolutions are unchanged from old program.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Eski programdaki çözmeler değişmediğinden '{0}' kaynaklı modül çözmeleri yeniden kullanılıyor.]]></Val>
+            <Val><![CDATA[Eski programdaki çözümlemeler değişmediğinden '{0}' kaynaklı modül çözümlemeleri yeniden kullanılıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6564,7 +6669,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Spread types may only be created from object types.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Spread türleri yalnızca nesne türlerinden oluşturulabilir.]]></Val>
+            <Val><![CDATA[Yayılma türleri yalnızca nesne türlerinden oluşturulabilir.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7985,6 +8090,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Use_synthetic_default_member_95016" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Use synthetic 'default' member.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Yapay 'default' üyesini kullanın.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Using_a_string_in_a_for_of_statement_is_only_supported_in_ECMAScript_5_and_higher_2494" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Using a string in a 'for...of' statement is only supported in ECMAScript 5 and higher.]]></Val>
@@ -8488,10 +8602,13 @@
       </Item>
       <Item ItemId=";const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_im_2475" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA['const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.]]></Val>
+          <Val><![CDATA['const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['const' sabit listeleri yalnızca bir özellikte, dizin erişim ifadelerinde, içeri aktarma bildiriminin sağ tarafında veya dışarı aktarma atamasında kullanılabilir.]]></Val>
+            <Val><![CDATA['const' sabit listeleri yalnızca bir özellikte, dizin erişim ifadelerinde, içeri aktarma bildiriminin veya dışarı aktarma atamasının sağ tarafında ya da tür sorgusunda kullanılabilir.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA['const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8562,7 +8679,7 @@
         <Str Cat="Text">
           <Val><![CDATA['extends' clause of exported interface '{0}' has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dışarı aktarılan '{0}' arabirimin 'extends' yan tümcesi, '{1}' özel adına sahip veya bu adı kullanıyor.]]></Val>
+            <Val><![CDATA[Dışarı aktarılan '{0}' arabiriminin 'extends' yan tümcesi, '{1}' özel adına sahip veya bu adı kullanıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

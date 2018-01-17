@@ -27,9 +27,11 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(76,5): error 
   Type 'T' is not assignable to type 'T & U'.
     Type 'T' is not assignable to type 'U'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(77,5): error TS2322: Type 'keyof (T & U)' is not assignable to type 'keyof (T | U)'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(84,9): error TS2322: Type 'keyof T' is not assignable to type 'K'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(85,9): error TS2322: Type 'T[keyof T]' is not assignable to type 'T[K]'.
 
 
-==== tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts (25 errors) ====
+==== tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts (27 errors) ====
     class Shape {
         name: string;
         width: number;
@@ -163,3 +165,17 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(77,5): error 
 !!! error TS2322: Type 'keyof (T & U)' is not assignable to type 'keyof (T | U)'.
         k2 = k1;
     }
+    
+    // Repro from #17166
+    function f3<T, K extends keyof T>(obj: T, k: K, value: T[K]): void {
+        for (let key in obj) {
+            k = key // error, keyof T =/=> K
+            ~
+!!! error TS2322: Type 'keyof T' is not assignable to type 'K'.
+            value = obj[key]; // error, T[keyof T] =/=> T[K]
+            ~~~~~
+!!! error TS2322: Type 'T[keyof T]' is not assignable to type 'T[K]'.
+        }
+    }
+    
+    

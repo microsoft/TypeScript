@@ -268,8 +268,7 @@
       "documentation": [],
       "tags": [
         {
-          "name": "mytag",
-          "text": ""
+          "name": "mytag"
         }
       ]
     }
@@ -446,8 +445,7 @@
           "text": "Another value"
         },
         {
-          "name": "mytag",
-          "text": ""
+          "name": "mytag"
         }
       ]
     }
@@ -580,12 +578,10 @@
           "text": "here all the comments are on a new line"
         },
         {
-          "name": "mytag3",
-          "text": ""
+          "name": "mytag3"
         },
         {
-          "name": "mytag",
-          "text": ""
+          "name": "mytag"
         }
       ]
     }
@@ -655,8 +651,7 @@
       "documentation": [],
       "tags": [
         {
-          "name": "mytag",
-          "text": ""
+          "name": "mytag"
         }
       ]
     }

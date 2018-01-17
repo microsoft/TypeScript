@@ -20,6 +20,9 @@ namespace ts {
         // Callbacks to do custom action before creating program and after creating program
         beforeCompile(compilerOptions: CompilerOptions): void;
         afterCompile(host: DirectoryStructureHost, program: Program, builder: Builder): void;
+
+        // Only for testing
+        maxNumberOfFilesToIterateForInvalidation?: number;
     }
 
     const defaultFormatDiagnosticsHost: FormatDiagnosticsHost = sys ? {
@@ -301,6 +304,8 @@ namespace ts {
                 hasChangedAutomaticTypeDirectiveNames = true;
                 scheduleProgramUpdate();
             },
+            maxNumberOfFilesToIterateForInvalidation: watchingHost.maxNumberOfFilesToIterateForInvalidation,
+            getCurrentProgram,
             writeLog
         };
         // Cache for the module resolution
@@ -318,7 +323,11 @@ namespace ts {
         // Update the wild card directory watch
         watchConfigFileWildCardDirectories();
 
-        return () => program;
+        return getCurrentProgram;
+
+        function getCurrentProgram() {
+            return program;
+        }
 
         function synchronizeProgram() {
             writeLog(`Synchronizing program`);

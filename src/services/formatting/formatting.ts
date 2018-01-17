@@ -484,7 +484,13 @@ namespace ts.formatting {
                 delta = Math.min(options.indentSize, parentDynamicIndentation.getDelta(node) + delta);
             }
             else if (indentation === Constants.Unknown) {
-                if (SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile)) {
+                if (node.kind === SyntaxKind.OpenParenToken && startLine === lastIndentedLine) {
+                    // the is used for chaining methods formatting
+                    // - we need to get the indentation on last line and the delta of parent
+                    indentation = indentationOnLastIndentedLine;
+                    delta = parentDynamicIndentation.getDelta(node);
+                }
+                else if (SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile)) {
                     indentation = parentDynamicIndentation.getIndentation();
                 }
                 else {
@@ -622,7 +628,7 @@ namespace ts.formatting {
             let childContextNode = contextNode;
 
             // if there are any tokens that logically belong to node and interleave child nodes
-            // such tokens will be consumed in processChildNode for for the child that follows them
+            // such tokens will be consumed in processChildNode for the child that follows them
             forEachChild(
                 node,
                 child => {

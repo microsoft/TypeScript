@@ -11,3 +11,4 @@ const bar = { foo, baz };
 
 
 //// [test.d.ts]
+export {};
