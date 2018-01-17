@@ -1783,8 +1783,6 @@ namespace ts {
             case SyntaxKind.WhileStatement:
             case SyntaxKind.TryStatement:
             case SyntaxKind.CatchClause:
-            case SyntaxKind.ModuleDeclaration:
-            case SyntaxKind.ModuleBlock:
                 return true;
         }
         return false;
