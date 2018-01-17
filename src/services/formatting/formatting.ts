@@ -1277,13 +1277,13 @@ namespace ts.formatting {
             }
 
             if (internedTabsIndentation[tabs] === undefined) {
-                internedTabsIndentation[tabs] = tabString = repeat("\t", tabs);
+                internedTabsIndentation[tabs] = tabString = repeatString("\t", tabs);
             }
             else {
                 tabString = internedTabsIndentation[tabs];
             }
 
-            return spaces ? tabString + repeat(" ", spaces) : tabString;
+            return spaces ? tabString + repeatString(" ", spaces) : tabString;
         }
         else {
             let spacesString: string;
@@ -1294,23 +1294,14 @@ namespace ts.formatting {
             }
 
             if (internedSpacesIndentation[quotient] === undefined) {
-                spacesString = repeat(" ", options.indentSize * quotient);
+                spacesString = repeatString(" ", options.indentSize * quotient);
                 internedSpacesIndentation[quotient] = spacesString;
             }
             else {
                 spacesString = internedSpacesIndentation[quotient];
             }
 
-            return remainder ? spacesString + repeat(" ", remainder) : spacesString;
-        }
-
-        function repeat(value: string, count: number): string {
-            let s = "";
-            for (let i = 0; i < count; i++) {
-                s += value;
-            }
-
-            return s;
+            return remainder ? spacesString + repeatString(" ", remainder) : spacesString;
         }
     }
 }
