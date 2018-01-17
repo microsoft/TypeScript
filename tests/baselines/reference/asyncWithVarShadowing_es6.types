@@ -423,3 +423,17 @@ async function fn39(x) {
 >foo : any
     }
 }
+
+async function fn40(x) {
+>fn40 : (x: any) => Promise<void>
+>x : any
+
+    try {
+
+    }
+    catch {
+        var x;
+>x : any
+    }
+}
+

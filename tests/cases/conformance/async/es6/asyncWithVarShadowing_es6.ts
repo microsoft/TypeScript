@@ -212,3 +212,12 @@ async function fn39(x) {
         break foo;
     }
 }
+
+async function fn40(x) {
+    try {
+
+    }
+    catch {
+        var x;
+    }
+}
