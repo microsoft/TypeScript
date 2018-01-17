@@ -537,70 +537,56 @@ namespace ts.formatting {
                         case SyntaxKind.CloseBraceToken:
                         case SyntaxKind.CloseBracketToken:
                         case SyntaxKind.CloseParenToken:
-                            return indentation + getEffectiveDelta(delta, container);
+                            return indentation + getDelta(container);
                     }
                     return tokenIndentation !== Constants.Unknown ? tokenIndentation : indentation;
                 },
-                getIndentationForToken: (line, kind, container) => {
-                    if (nodeStartLine !== line && node.decorators) {
-                        if (kind === getFirstNonDecoratorTokenOfNode(node)) {
-                            // if this token is the first token following the list of decorators, we do not need to indent
-                            return indentation;
-                        }
-                    }
-                    switch (kind) {
-                        // open and close brace, 'else' and 'while' (in do statement) tokens has indentation of the parent
-                        case SyntaxKind.OpenBraceToken:
-                        case SyntaxKind.CloseBraceToken:
-                        case SyntaxKind.OpenParenToken:
-                        case SyntaxKind.CloseParenToken:
-                        case SyntaxKind.ElseKeyword:
-                        case SyntaxKind.WhileKeyword:
-                        case SyntaxKind.AtToken:
-                            return indentation;
-                        case SyntaxKind.SlashToken:
-                        case SyntaxKind.GreaterThanToken: {
-                            if (container.kind === SyntaxKind.JsxOpeningElement ||
-                                container.kind === SyntaxKind.JsxClosingElement ||
-                                container.kind === SyntaxKind.JsxSelfClosingElement
-                            ) {
-                                return indentation;
-                            }
-                            break;
-                        }
-                        case SyntaxKind.OpenBracketToken:
-                        case SyntaxKind.CloseBracketToken: {
-                            if (container.kind !== SyntaxKind.MappedType) {
-                                return indentation;
-                            }
-                            break;
-                        }
-                    }
-                    // if token line equals to the line of containing node (this is a first token in the node) - use node indentation
-                    return nodeStartLine !== line ? indentation + getEffectiveDelta(delta, container) : indentation;
-                },
+                getIndentationForToken: (line, kind, container) =>
+                    shouldAddDelta(line, kind, container) ? indentation + getDelta(container) : indentation,
                 getIndentation: () => indentation,
-                getDelta: child => getEffectiveDelta(delta, child),
+                getDelta,
                 recomputeIndentation: lineAdded => {
                     if (node.parent && SmartIndenter.shouldIndentChildNode(node.parent, node)) {
-                        if (lineAdded) {
-                            indentation += options.indentSize;
-                        }
-                        else {
-                            indentation -= options.indentSize;
-                        }
-
-                        if (SmartIndenter.shouldIndentChildNode(node)) {
-                            delta = options.indentSize;
-                        }
-                        else {
-                            delta = 0;
-                        }
+                        indentation += lineAdded ? options.indentSize : -options.indentSize;
+                        delta = SmartIndenter.shouldIndentChildNode(node) ? options.indentSize : 0;
                     }
                 }
             };
 
-            function getEffectiveDelta(delta: number, child: TextRangeWithKind) {
+            function shouldAddDelta(line: number, kind: SyntaxKind, container: Node): boolean {
+                switch (kind) {
+                    // open and close brace, 'else' and 'while' (in do statement) tokens has indentation of the parent
+                    case SyntaxKind.OpenBraceToken:
+                    case SyntaxKind.CloseBraceToken:
+                    case SyntaxKind.OpenParenToken:
+                    case SyntaxKind.CloseParenToken:
+                    case SyntaxKind.ElseKeyword:
+                    case SyntaxKind.WhileKeyword:
+                    case SyntaxKind.AtToken:
+                        return false;
+                    case SyntaxKind.SlashToken:
+                    case SyntaxKind.GreaterThanToken:
+                        switch (container.kind) {
+                            case SyntaxKind.JsxOpeningElement:
+                            case SyntaxKind.JsxClosingElement:
+                            case SyntaxKind.JsxSelfClosingElement:
+                                return false;
+                        }
+                        break;
+                    case SyntaxKind.OpenBracketToken:
+                    case SyntaxKind.CloseBracketToken:
+                        if (container.kind !== SyntaxKind.MappedType) {
+                            return false;
+                        }
+                        break;
+                }
+                // if token line equals to the line of containing node (this is a first token in the node) - use node indentation
+                return nodeStartLine !== line
+                    // if this token is the first token following the list of decorators, we do not need to indent
+                    && !(node.decorators && kind === getFirstNonDecoratorTokenOfNode(node));
+            }
+
+            function getDelta(child: TextRangeWithKind) {
                 // Delta value should be zero when the node explicitly prevents indentation of the child node
                 return SmartIndenter.nodeWillIndentChild(node, child, /*indentByDefault*/ true) ? delta : 0;
             }
