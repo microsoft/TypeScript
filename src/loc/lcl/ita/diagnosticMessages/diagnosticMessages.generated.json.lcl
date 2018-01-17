@@ -6486,11 +6486,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Specify_library_files_to_be_included_in_the_compilation_6079" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Specify_library_files_to_be_included_in_the_compilation_Colon_6079" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify library files to be included in the compilation.]]></Val>
+          <Val><![CDATA[Specify library files to be included in the compilation: ]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Specifica i file di libreria da includere nella compilazione.]]></Val>
+            <Val><![CDATA[Specifica i file di libreria da includere nella compilazione: ]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
