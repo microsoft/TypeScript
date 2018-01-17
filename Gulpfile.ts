@@ -528,7 +528,7 @@ gulp.task(tsserverLibraryFile, /*help*/ false, [servicesFile, typesMapJson], (do
     const serverLibraryProject = tsc.createProject("src/server/tsconfig.library.json", getCompilerSettings({ removeComments: false }, /*useBuiltCompiler*/ true));
     const {js, dts}: { js: NodeJS.ReadableStream, dts: NodeJS.ReadableStream } = serverLibraryProject.src()
         .pipe(sourcemaps.init())
-        .pipe(newer(tsserverLibraryFile))
+        .pipe(newer(<any>{ dest: tsserverLibraryFile, extra: ["src/compiler/**/*.ts", "src/services/**/*.ts"] }))
         .pipe(serverLibraryProject());
 
     return merge2([
