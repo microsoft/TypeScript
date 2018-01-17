@@ -6744,8 +6744,8 @@ namespace ts {
             return signature.resolvedReturnType;
         }
 
-        function isResolvingReturnTypeOfSignature(signature: Signature) {
-            return !signature.resolvedReturnType && findResolutionCycleStartIndex(signature, TypeSystemPropertyName.ResolvedReturnType) >= 0;
+        function isResolvingReturnTypeOfSignature(signature: Signature): boolean {
+            return !signature.resolvedReturnType && findResolutionCycleStartIndex(signature, TypeSystemPropertyName.ResolvedReturnType) >= 0 || (signature.unionSignatures && some(signature.unionSignatures, s => isResolvingReturnTypeOfSignature(s)));
         }
 
         function getRestTypeOfSignature(signature: Signature): Type {
@@ -14067,18 +14067,11 @@ namespace ts {
 
         // If the given type is an object or union type with a single signature, and if that signature has at
         // least as many parameters as the given function, return the signature. Otherwise return undefined.
-        function getContextualCallSignature(type: Type, node: FunctionExpression | ArrowFunction | MethodDeclaration): Signature {
-            const signatures = getSignaturesOfStructuredType(type, SignatureKind.Call);
-            if (signatures.length === 1) {
-                const signature = signatures[0];
-                if (!isAritySmaller(signature, node)) {
-                    return signature;
-                }
-            }
+        function getContextualCallSignatures(type: Type, node: FunctionExpression | ArrowFunction | MethodDeclaration): Signature[] {
+            return filter(getSignaturesOfStructuredType(type, SignatureKind.Call), s => !isAritySmaller(s, node));
         }
 
-        /** If the contextual signature has fewer parameters than the function expression, do not use it */
-        function isAritySmaller(signature: Signature, target: FunctionExpression | ArrowFunction | MethodDeclaration) {
+        function getMinimumArityOf(target: SignatureDeclaration) {
             let targetParameterCount = 0;
             for (; targetParameterCount < target.parameters.length; targetParameterCount++) {
                 const param = target.parameters[targetParameterCount];
@@ -14089,6 +14082,12 @@ namespace ts {
             if (target.parameters.length && parameterIsThisKeyword(target.parameters[0])) {
                 targetParameterCount--;
             }
+            return targetParameterCount;
+        }
+
+        /** If the contextual signature has fewer parameters than the function expression, do not use it */
+        function isAritySmaller(signature: Signature, target: FunctionExpression | ArrowFunction | MethodDeclaration) {
+            const targetParameterCount = getMinimumArityOf(target);
             const sourceLength = signature.hasRestParameter ? Number.MAX_VALUE : signature.parameters.length;
             return sourceLength < targetParameterCount;
         }
@@ -14110,6 +14109,96 @@ namespace ts {
                 getApparentTypeOfContextualType(node);
         }
 
+        function combineSignatures(signatureList: Signature[], declaration: SignatureDeclaration): Signature {
+            // Produce a synthetic signature whose arguments are a union of the parameters of the inferred signatures and whose return type is an intersection
+            const parameters: Symbol[] = [];
+            const restTypes: TypeSet = [];
+            let thisTypes: Type[];
+            let hasLiteralTypes = false;
+            let hasRestParameter = false;
+            const oldTypeParameters = flatMap(signatureList, s => s.typeParameters);
+            const newTypeParameters = map(oldTypeParameters, cloneTypeParameter);
+            const mapper = createTypeMapper(oldTypeParameters, newTypeParameters);
+
+            // First, for every parameter the user has written, lookup a corresponding union of types from the associated signatures
+            if (declaration.parameters && declaration.parameters.length) {
+                for (let i = 0; i < declaration.parameters.length ; i++) {
+                    const param = declaration.parameters[i];
+                    // We do this so the name is reasonable for users; however it is very rare for this symbol name to appear anywhere user-facing, as the result signature is used only for contextual typing
+                    const canUseUserSuppliedName = isIdentifier(param.name);
+                    const paramName = canUseUserSuppliedName ? (param.name as Identifier).escapedText : escapeLeadingUnderscores("arg");
+                    const paramSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, paramName);
+                    const parameterTypes: TypeSet = [];
+                    if (param.dotDotDotToken) {
+                        hasRestParameter = true;
+                        for (const signature of signatureList) {
+                            for (let j = i; j < signature.parameters.length; j++) {
+                                handleAddingTypesForParameter(signature, j, parameterTypes);
+                            }
+                        }
+                        paramSymbol.type = createArrayType(getUnionType(restTypes ? parameterTypes.concat(restTypes) : parameterTypes));
+                        parameters.push(paramSymbol);
+                        break;
+                    }
+                    else {
+                        for (const signature of signatureList) {
+                            handleAddingTypesForParameter(signature, i, parameterTypes);
+                        }
+                        paramSymbol.type = getUnionType(restTypes.length ? parameterTypes.concat(restTypes) : parameterTypes);
+                        parameters.push(paramSymbol);
+                    }
+                }
+            }
+
+            // Then, collect aggrgate statistics about all signatures to determine the characteristics of the resulting signature
+            for (const signature of signatureList) {
+                if (signature.hasLiteralTypes) {
+                    hasLiteralTypes = true;
+                }
+                if (signature.thisParameter) {
+                    (thisTypes || (thisTypes = [])).push(instantiateType(getTypeOfSymbol(signature.thisParameter), mapper));
+                }
+                else if (compilerOptions.noImplicitThis) {
+                    (thisTypes || (thisTypes = [])).push(undefinedType);
+                }
+            }
+
+            let thisParameterSymbol: TransientSymbol;
+            if (thisTypes && thisTypes.length) {
+                thisParameterSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "this" as __String);
+                thisParameterSymbol.type = getUnionType(thisTypes);
+            }
+
+            return createSignature(
+                declaration,
+                newTypeParameters,
+                thisParameterSymbol,
+                parameters,
+                instantiateType(getIntersectionType(map(signatureList, getReturnTypeOfSignature)), mapper),
+                /*typePredicate*/ undefined,
+                getMinimumArityOf(declaration),
+                hasRestParameter,
+                hasLiteralTypes
+            );
+
+            function handleAddingTypesForParameter(signature: Signature, i: number, parameterTypes: TypeSet) {
+                const sigParam = signature.parameters[i];
+                if (sigParam && !(signature.hasRestParameter && i === (signature.parameters.length - 1))) {
+                    addTypeToUnion(parameterTypes, instantiateType(getTypeOfSymbol(sigParam), mapper));
+                    return;
+                }
+                if (signature.hasRestParameter) {
+                    const innerType = getRestTypeOfSignature(signature) || anyType;
+                    const newInnerType = instantiateType(innerType, mapper);
+                    addTypeToUnion(parameterTypes, newInnerType);
+                    addTypeToUnion(restTypes, newInnerType);
+                }
+                if (compilerOptions.strictNullChecks) {
+                    addTypeToUnion(parameterTypes, undefinedType);
+                }
+            }
+        }
+
         // Return the contextual signature for a given expression node. A contextual type provides a
         // contextual signature if it has a single call signature and if that call signature is non-generic.
         // If the contextual type is a union type, get the signature from each type possible and if they are
@@ -14121,35 +14210,45 @@ namespace ts {
             if (!type) {
                 return undefined;
             }
-            if (!(type.flags & TypeFlags.Union)) {
-                return getContextualCallSignature(type, node);
-            }
             let signatureList: Signature[];
-            const types = (<UnionType>type).types;
-            for (const current of types) {
-                const signature = getContextualCallSignature(current, node);
-                if (signature) {
-                    if (!signatureList) {
-                        // This signature will contribute to contextual union signature
-                        signatureList = [signature];
-                    }
-                    else if (!compareSignaturesIdentical(signatureList[0], signature, /*partialMatch*/ false, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true, compareTypesIdentical)) {
-                        // Signatures aren't identical, do not use
-                        return undefined;
-                    }
-                    else {
-                        // Use this signature for contextual union signature
-                        signatureList.push(signature);
+            if (!(type.flags & TypeFlags.Union)) {
+                signatureList = getContextualCallSignatures(type, node);
+            }
+            else {
+                const types = (<UnionType>type).types;
+                for (const current of types) {
+                    const signatures = getContextualCallSignatures(current, node);
+                    if (signatures && signatures.length) {
+                        if (!signatureList) {
+                            signatureList = signatures;
+                        }
+                        else {
+                            signatureList = signatureList.concat(signatures);
+                        }
                     }
                 }
             }
 
-            // Result is union of signatures collected (return type is union of return types of this signature set)
-            let result: Signature;
-            if (signatureList) {
-                result = cloneSignature(signatureList[0]);
-                result.unionSignatures = signatureList;
+            if (!(signatureList && signatureList.length)) {
+                return undefined;
             }
+
+            if (signatureList.length === 1) {
+                return signatureList[0];
+            }
+
+            for (const signature of signatureList) {
+                if (!compareSignaturesIdentical(signatureList[0], signature, /*partialMatch*/ false, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true, compareTypesIdentical)) {
+                    // Signatures not simply identical, combine them
+                    return combineSignatures(signatureList, node);
+                }
+            }
+
+            // Result is union of signatures collected (return type is union of return types of this signature set)
+            const result = cloneSignature(signatureList[0]);
+            // Clear resolved return type we possibly got from cloneSignature
+            result.resolvedReturnType = undefined;
+            result.unionSignatures = signatureList;
             return result;
         }
 
@@ -17828,7 +17927,7 @@ namespace ts {
 
             if (isUnitType(type)) {
                 let contextualType = !contextualSignature ? undefined :
-                    contextualSignature === getSignatureFromDeclaration(func) ? type :
+                    contextualSignature === getSignatureFromDeclaration(func) || contextualSignature.unionSignatures && some(contextualSignature.unionSignatures, s => s === getSignatureFromDeclaration(func)) ? type :
                     getReturnTypeOfSignature(contextualSignature);
                 if (contextualType) {
                     switch (functionFlags & FunctionFlags.AsyncGenerator) {

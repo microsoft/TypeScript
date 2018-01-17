@@ -11,11 +11,11 @@ var f: {
 };
 
 f = (a) => { return a.asdf }
->f = (a) => { return a.asdf } : (a: any) => any
+>f = (a) => { return a.asdf } : (a: string | number) => any
 >f : { (x: string): string; (x: number): string; }
->(a) => { return a.asdf } : (a: any) => any
->a : any
+>(a) => { return a.asdf } : (a: string | number) => any
+>a : string | number
 >a.asdf : any
->a : any
+>a : string | number
 >asdf : any
 

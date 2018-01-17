@@ -74,7 +74,9 @@ var x3: IWithCallSignatures | IWithCallSignatures3 = a => /*here a should be any
 >IWithCallSignatures : Symbol(IWithCallSignatures, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 9, 1))
 >IWithCallSignatures3 : Symbol(IWithCallSignatures3, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 15, 1))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 32, 52))
+>a.toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 32, 52))
+>toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 // With call signature count mismatch
 var x4: IWithCallSignatures | IWithCallSignatures4 = a => /*here a should be any*/ a.toString();
@@ -82,7 +84,7 @@ var x4: IWithCallSignatures | IWithCallSignatures4 = a => /*here a should be any
 >IWithCallSignatures : Symbol(IWithCallSignatures, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 9, 1))
 >IWithCallSignatures4 : Symbol(IWithCallSignatures4, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 18, 1))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 35, 52))
->a.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>a.toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 35, 52))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 

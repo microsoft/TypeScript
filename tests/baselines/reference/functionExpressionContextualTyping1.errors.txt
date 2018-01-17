@@ -1,0 +1,80 @@
+tests/cases/conformance/expressions/contextualTyping/functionExpressionContextualTyping1.ts(43,17): error TS2339: Property 'toLowerCase' does not exist on type 'string | number'.
+  Property 'toLowerCase' does not exist on type 'number'.
+tests/cases/conformance/expressions/contextualTyping/functionExpressionContextualTyping1.ts(45,7): error TS2339: Property 'toExponential' does not exist on type 'string | number'.
+  Property 'toExponential' does not exist on type 'string'.
+tests/cases/conformance/expressions/contextualTyping/functionExpressionContextualTyping1.ts(52,13): error TS2322: Type '(j: number | T, k: U) => (number | T | U)[]' is not assignable to type '((j: T, k: U) => (T | U)[]) | ((j: number, k: U) => number[])'.
+  Type '(j: number | T, k: U) => (number | T | U)[]' is not assignable to type '(j: number, k: U) => number[]'.
+    Type '(number | T | U)[]' is not assignable to type 'number[]'.
+      Type 'number | T | U' is not assignable to type 'number'.
+        Type 'T' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/expressions/contextualTyping/functionExpressionContextualTyping1.ts (3 errors) ====
+    // When a function expression with no type parameters and no parameter type annotations 
+    // is contextually typed (section 4.19) by a type T and a contextual signature S can be extracted from T
+    
+    enum E { red, blue }
+    
+    // A contextual signature S is extracted from a function type T as follows:
+    //      If T is a function type with exactly one call signature, and if that call signature is non- generic, S is that signature.
+    
+    var a0: (n: number, s: string) => number = (num, str) => {
+        num.toExponential();
+        return 0;
+    }
+    
+    class Class<T> {
+        foo() { }
+    }
+    
+    var a1: (c: Class<Number>) => number = (a1) => {
+        a1.foo();
+        return 1;
+    }
+    
+    // A contextual signature S is extracted from a function type T as follows:
+    //      If T is a union type, let U be the set of element types in T that have call signatures.
+    //        If each type in U has exactly one call signature and that call signature is non- generic,
+    //        and if all of the signatures are identical ignoring return types,
+    //        then S is a signature with the same parameters and a union of the return types.
+    var b1: ((s: string, w: boolean) => void) | ((s: string, w: boolean) => string);
+    b1 = (k, h) => { };
+    var b2: typeof a0 | ((n: number, s: string) => string);
+    b2 = (foo, bar) => { return foo + 1; }
+    b2 = (foo, bar) => { return "hello"; }
+    var b3: (name: string, num: number, boo: boolean) => void;
+    b3 = (name, number) => { };
+    
+    var b4: (n: E) => string = (number = 1) => { return "hello"; };
+    var b5: (n: {}) => string = (number = "string") => { return "hello"; };
+    
+    // A contextual signature S is extracted from a function type T as follows:
+    //      Otherwise, no contextual signature can be extracted from T and S is undefined.
+    var b6: ((s: string, w: boolean) => void) | ((n: number) => number);
+    var b7: ((s: string, w: boolean) => void) | ((s: string, w: number) => string);
+    b6 = (k) => { k.toLowerCase() };
+                    ~~~~~~~~~~~
+!!! error TS2339: Property 'toLowerCase' does not exist on type 'string | number'.
+!!! error TS2339:   Property 'toLowerCase' does not exist on type 'number'.
+    b6 = (i) => {
+        i.toExponential();
+          ~~~~~~~~~~~~~
+!!! error TS2339: Property 'toExponential' does not exist on type 'string | number'.
+!!! error TS2339:   Property 'toExponential' does not exist on type 'string'.
+        return i;
+    };                   // Per spec, no contextual signature can be extracted in this case. (Otherwise clause)
+    b7 = (j, m) => { };  // Per spec, no contextual signature can be extracted in this case. (Otherwise clause)
+    
+    class C<T, U> {
+        constructor() {
+            var k: ((j: T, k: U) => (T|U)[]) | ((j: number,k :U) => number[]) = (j, k) => {
+                ~
+!!! error TS2322: Type '(j: number | T, k: U) => (number | T | U)[]' is not assignable to type '((j: T, k: U) => (T | U)[]) | ((j: number, k: U) => number[])'.
+!!! error TS2322:   Type '(j: number | T, k: U) => (number | T | U)[]' is not assignable to type '(j: number, k: U) => number[]'.
+!!! error TS2322:     Type '(number | T | U)[]' is not assignable to type 'number[]'.
+!!! error TS2322:       Type 'number | T | U' is not assignable to type 'number'.
+!!! error TS2322:         Type 'T' is not assignable to type 'number'.
+                return [j, k];
+            }   // Per spec, no contextual signature can be extracted in this case.
+        }
+    }

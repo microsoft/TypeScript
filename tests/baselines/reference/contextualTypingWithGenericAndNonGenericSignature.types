@@ -20,12 +20,12 @@ var f2: {
 };
 
 f2 = (x, y) => { return x }
->f2 = (x, y) => { return x } : (x: any, y: any) => any
+>f2 = (x, y) => { return x } : <T, U>(x: string | T, y: number | U) => string | T
 >f2 : { (x: string, y: number): string; <T, U>(x: T, y: U): T; }
->(x, y) => { return x } : (x: any, y: any) => any
->x : any
->y : any
->x : any
+>(x, y) => { return x } : <T, U>(x: string | T, y: number | U) => string | T
+>x : string | T
+>y : number | U
+>x : string | T
 
 var f3: {
 >f3 : { <T, U>(x: T, y: U): T; (x: string, y: number): string; }
@@ -46,10 +46,10 @@ var f3: {
 };
 
 f3 = (x, y) => { return x }
->f3 = (x, y) => { return x } : (x: any, y: any) => any
+>f3 = (x, y) => { return x } : <T, U>(x: string | T, y: number | U) => string | T
 >f3 : { <T, U>(x: T, y: U): T; (x: string, y: number): string; }
->(x, y) => { return x } : (x: any, y: any) => any
->x : any
->y : any
->x : any
+>(x, y) => { return x } : <T, U>(x: string | T, y: number | U) => string | T
+>x : string | T
+>y : number | U
+>x : string | T
 

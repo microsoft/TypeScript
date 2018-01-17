@@ -1,0 +1,38 @@
+tests/cases/conformance/types/specifyingTypes/typeLiterals/functionLiteralForOverloads.ts(3,5): error TS2322: Type '(x: string | number) => string | number' is not assignable to type '{ (x: string): string; (x: number): number; }'.
+  Type 'string | number' is not assignable to type 'string'.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/specifyingTypes/typeLiterals/functionLiteralForOverloads.ts(8,5): error TS2322: Type '<T, T>(x: string | number) => string | number' is not assignable to type '{ <T>(x: string): string; <T>(x: number): number; }'.
+  Type 'string | number' is not assignable to type 'string'.
+    Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/types/specifyingTypes/typeLiterals/functionLiteralForOverloads.ts (2 errors) ====
+    // basic uses of function literals with overloads
+    
+    var f: {
+        ~
+!!! error TS2322: Type '(x: string | number) => string | number' is not assignable to type '{ (x: string): string; (x: number): number; }'.
+!!! error TS2322:   Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+        (x: string): string;
+        (x: number): number;
+    } = (x) => x;
+    
+    var f2: {
+        ~~
+!!! error TS2322: Type '<T, T>(x: string | number) => string | number' is not assignable to type '{ <T>(x: string): string; <T>(x: number): number; }'.
+!!! error TS2322:   Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+        <T>(x: string): string;
+        <T>(x: number): number;
+    } = (x) => x;
+    
+    var f3: {
+        <T>(x: T): string;
+        <T>(x: T): number;
+    } = (x) => x;
+    
+    var f4: {
+        <T>(x: string): T;
+        <T>(x: number): T;
+    } = (x) => x;

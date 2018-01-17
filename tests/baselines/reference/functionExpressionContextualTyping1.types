@@ -143,37 +143,37 @@ var b7: ((s: string, w: boolean) => void) | ((s: string, w: number) => string);
 >w : number
 
 b6 = (k) => { k.toLowerCase() };
->b6 = (k) => { k.toLowerCase() } : (k: any) => void
+>b6 = (k) => { k.toLowerCase() } : (k: string | number) => void
 >b6 : ((s: string, w: boolean) => void) | ((n: number) => number)
->(k) => { k.toLowerCase() } : (k: any) => void
->k : any
+>(k) => { k.toLowerCase() } : (k: string | number) => void
+>k : string | number
 >k.toLowerCase() : any
 >k.toLowerCase : any
->k : any
+>k : string | number
 >toLowerCase : any
 
 b6 = (i) => {
->b6 = (i) => {    i.toExponential();    return i;} : (i: any) => any
+>b6 = (i) => {    i.toExponential();    return i;} : (i: string | number) => string | number
 >b6 : ((s: string, w: boolean) => void) | ((n: number) => number)
->(i) => {    i.toExponential();    return i;} : (i: any) => any
->i : any
+>(i) => {    i.toExponential();    return i;} : (i: string | number) => string | number
+>i : string | number
 
     i.toExponential();
 >i.toExponential() : any
 >i.toExponential : any
->i : any
+>i : string | number
 >toExponential : any
 
     return i;
->i : any
+>i : string | number
 
 };                   // Per spec, no contextual signature can be extracted in this case. (Otherwise clause)
 b7 = (j, m) => { };  // Per spec, no contextual signature can be extracted in this case. (Otherwise clause)
->b7 = (j, m) => { } : (j: any, m: any) => void
+>b7 = (j, m) => { } : (j: string, m: number | boolean) => void
 >b7 : ((s: string, w: boolean) => void) | ((s: string, w: number) => string)
->(j, m) => { } : (j: any, m: any) => void
->j : any
->m : any
+>(j, m) => { } : (j: string, m: number | boolean) => void
+>j : string
+>m : number | boolean
 
 class C<T, U> {
 >C : C<T, U>
@@ -192,14 +192,14 @@ class C<T, U> {
 >j : number
 >k : U
 >U : U
->(j, k) => {            return [j, k];        } : (j: any, k: any) => any[]
->j : any
->k : any
+>(j, k) => {            return [j, k];        } : (j: number | T, k: U) => (number | T | U)[]
+>j : number | T
+>k : U
 
             return [j, k];
->[j, k] : any[]
->j : any
->k : any
+>[j, k] : (number | T | U)[]
+>j : number | T
+>k : U
 
         }   // Per spec, no contextual signature can be extracted in this case.
     }

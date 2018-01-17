@@ -126,9 +126,9 @@ var c3t7: {
 >s1 : string
 
 } = function(n) { return n; };
->function(n) { return n; } : (n: any) => any
->n : any
->n : any
+>function(n) { return n; } : (n: string | number) => string | number
+>n : string | number
+>n : string | number
 
 var c3t8: (n: number, s: string) => number = function(n) { return n; };
 >c3t8 : (n: number, s: string) => number

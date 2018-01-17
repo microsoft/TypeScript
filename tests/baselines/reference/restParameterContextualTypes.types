@@ -1,0 +1,78 @@
+=== tests/cases/compiler/restParameterContextualTypes.ts ===
+type ComplexCalls = {
+>ComplexCalls : ComplexCalls
+
+    (): string;
+    (a: number): string;
+>a : number
+
+    (a: {x: number}, b: string): string;
+>a : { x: number; }
+>x : number
+>b : string
+
+    (a: symbol, ...rest: {y: string}[]): string;
+>a : symbol
+>rest : { y: string; }[]
+>y : string
+
+    (...rest: {z: string}[]): string;
+>rest : { z: string; }[]
+>z : string
+
+};
+
+const x: ComplexCalls = (...rest) => rest.toString();
+>x : ComplexCalls
+>ComplexCalls : ComplexCalls
+>(...rest) => rest.toString() : (...rest: (string | number | symbol | { x: number; } | { y: string; } | { z: string; } | undefined)[]) => string
+>rest : (string | number | symbol | { x: number; } | { y: string; } | { z: string; } | undefined)[]
+>rest.toString() : string
+>rest.toString : () => string
+>rest : (string | number | symbol | { x: number; } | { y: string; } | { z: string; } | undefined)[]
+>toString : () => string
+
+const y: ComplexCalls = (_a = 1, ...rest) => rest.toString();
+>y : ComplexCalls
+>ComplexCalls : ComplexCalls
+>(_a = 1, ...rest) => rest.toString() : (_a?: number | symbol | { x: number; } | { z: string; } | undefined, ...rest: (string | { y: string; } | { z: string; } | undefined)[]) => string
+>_a : number | symbol | { x: number; } | { z: string; } | undefined
+>1 : 1
+>rest : (string | { y: string; } | { z: string; } | undefined)[]
+>rest.toString() : string
+>rest.toString : () => string
+>rest : (string | { y: string; } | { z: string; } | undefined)[]
+>toString : () => string
+
+const z: ComplexCalls = (_a = 1, _b = "", ...rest) => rest.toString();
+>z : ComplexCalls
+>ComplexCalls : ComplexCalls
+>(_a = 1, _b = "", ...rest) => rest.toString() : (_a?: number | symbol | { x: number; } | { z: string; } | undefined, _b?: string | { y: string; } | { z: string; } | undefined, ...rest: ({ y: string; } | { z: string; })[]) => string
+>_a : number | symbol | { x: number; } | { z: string; } | undefined
+>1 : 1
+>_b : string | { y: string; } | { z: string; } | undefined
+>"" : ""
+>rest : ({ y: string; } | { z: string; })[]
+>rest.toString() : string
+>rest.toString : () => string
+>rest : ({ y: string; } | { z: string; })[]
+>toString : () => string
+
+const more: ComplexCalls = (_a = 1, _b = "", _c = { z: "" }, ...rest) => rest.toString();
+>more : ComplexCalls
+>ComplexCalls : ComplexCalls
+>(_a = 1, _b = "", _c = { z: "" }, ...rest) => rest.toString() : (_a?: number | symbol | { x: number; } | { z: string; } | undefined, _b?: string | { y: string; } | { z: string; } | undefined, _c?: { y: string; } | { z: string; } | undefined, ...rest: ({ y: string; } | { z: string; })[]) => string
+>_a : number | symbol | { x: number; } | { z: string; } | undefined
+>1 : 1
+>_b : string | { y: string; } | { z: string; } | undefined
+>"" : ""
+>_c : { y: string; } | { z: string; } | undefined
+>{ z: "" } : { z: string; }
+>z : string
+>"" : ""
+>rest : ({ y: string; } | { z: string; })[]
+>rest.toString() : string
+>rest.toString : () => string
+>rest : ({ y: string; } | { z: string; })[]
+>toString : () => string
+

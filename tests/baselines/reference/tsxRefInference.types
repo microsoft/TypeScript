@@ -1,0 +1,810 @@
+=== tests/cases/compiler/index.tsx ===
+import React = require("react");
+>React : typeof React
+
+interface MyInputProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>,  HTMLInputElement> {
+>MyInputProps : MyInputProps
+>React.DetailedHTMLProps : any
+>React : typeof React
+>DetailedHTMLProps : React.DetailedHTMLProps<E, T>
+>React : any
+>InputHTMLAttributes : React.InputHTMLAttributes<T>
+>HTMLInputElement : HTMLInputElement
+>HTMLInputElement : HTMLInputElement
+
+    onValid?(): boolean;
+>onValid : () => boolean
+
+    onInvalid?(): boolean;
+>onInvalid : () => boolean
+}
+
+class MyInput implements React.Component<MyInputProps, any>  {
+>MyInput : MyInput
+>React.Component : any
+>React : typeof React
+>Component : React.Component<P, S>
+>MyInputProps : MyInputProps
+
+    props: MyInputProps;
+>props : MyInputProps
+>MyInputProps : MyInputProps
+
+    render() {
+>render : () => JSX.Element
+
+        const { onValid, onInvalid, onChange, ...inputProps } = this.props;
+>onValid : () => boolean
+>onInvalid : () => boolean
+>onChange : React.EventHandler<React.ChangeEvent<HTMLInputElement>>
+>inputProps : { ref?: React.Ref<HTMLInputElement>; key?: string | number; onChangeCapture?: React.EventHandler<React.FormEvent<HTMLInputElement>>; onInput?: React.EventHandler<React.FormEvent<HTMLInputElement>>; onInputCapture?: React.EventHandler<React.FormEvent<HTMLInputElement>>; onReset?: React.EventHandler<React.FormEvent<HTMLInputElement>>; onResetCapture?: React.EventHandler<React.FormEvent<HTMLInputElement>>; onSubmit?: React.EventHandler<React.FormEvent<HTMLInputElement>>; onSubmitCapture?: React.EventHandler<React.FormEvent<HTMLInputElement>>; onInvalidCapture?: React.EventHandler<React.FormEvent<HTMLInputElement>>; }
+>this.props : MyInputProps
+>this : this
+>props : MyInputProps
+
+        return (
+>(            <input                { ...inputProps }                onChange={ this._onChange }            />        ) : JSX.Element
+
+            <input
+><input                { ...inputProps }                onChange={ this._onChange }            /> : JSX.Element
+>input : any
+
+                { ...inputProps }
+>inputProps : { ref?: React.Ref<HTMLInputElement>; key?: string | number; onChangeCapture?: React.EventHandler<React.FormEvent<HTMLInputElement>>; onInput?: React.EventHandler<React.FormEvent<HTMLInputElement>>; onInputCapture?: React.EventHandler<React.FormEvent<HTMLInputElement>>; onReset?: React.EventHandler<React.FormEvent<HTMLInputElement>>; onResetCapture?: React.EventHandler<React.FormEvent<HTMLInputElement>>; onSubmit?: React.EventHandler<React.FormEvent<HTMLInputElement>>; onSubmitCapture?: React.EventHandler<React.FormEvent<HTMLInputElement>>; onInvalidCapture?: React.EventHandler<React.FormEvent<HTMLInputElement>>; }
+
+                onChange={ this._onChange }
+>onChange : (event: React.ChangeEvent<HTMLInputElement>) => void
+>this._onChange : (event: React.ChangeEvent<HTMLInputElement>) => void
+>this : this
+>_onChange : (event: React.ChangeEvent<HTMLInputElement>) => void
+
+            />
+        );
+    }
+
+    componentDidMount() {}
+>componentDidMount : () => void
+
+    private _onChange(event: React.ChangeEvent<HTMLInputElement>) {
+>_onChange : (event: React.ChangeEvent<HTMLInputElement>) => void
+>event : React.ChangeEvent<HTMLInputElement>
+>React : any
+>ChangeEvent : React.ChangeEvent<T>
+>HTMLInputElement : HTMLInputElement
+
+        // do some validation first...
+
+        // ... then trigger onChange callback, if present:
+        if (this.props.onChange) {
+>this.props.onChange : React.EventHandler<React.ChangeEvent<HTMLInputElement>>
+>this.props : MyInputProps
+>this : this
+>props : MyInputProps
+>onChange : React.EventHandler<React.ChangeEvent<HTMLInputElement>>
+
+            this.props.onChange(event);
+>this.props.onChange(event) : void
+>this.props.onChange : React.EventHandler<React.ChangeEvent<HTMLInputElement>>
+>this.props : MyInputProps
+>this : this
+>props : MyInputProps
+>onChange : React.EventHandler<React.ChangeEvent<HTMLInputElement>>
+>event : React.ChangeEvent<HTMLInputElement>
+        }
+    }
+}
+
+function someFunction() {}
+>someFunction : () => void
+
+const x = <MyInput ref={r => 0} onChange={someFunction} />;
+>x : JSX.Element
+><MyInput ref={r => 0} onChange={someFunction} /> : JSX.Element
+>MyInput : typeof MyInput
+>ref : (r: HTMLInputElement | MyInput) => number
+>r => 0 : (r: HTMLInputElement | MyInput) => number
+>r : HTMLInputElement | MyInput
+>0 : 0
+>onChange : () => void
+>someFunction : () => void
+
+=== tests/cases/compiler/node_modules/react/index.d.ts ===
+export as namespace React;
+>React : typeof React
+
+export = React;
+>React : typeof React
+
+declare namespace React {
+>React : typeof React
+
+    interface SyntheticEvent<T> {
+>SyntheticEvent : SyntheticEvent<T>
+>T : T
+
+        bubbles: boolean;
+>bubbles : boolean
+
+        currentTarget: EventTarget & T;
+>currentTarget : EventTarget & T
+>EventTarget : EventTarget
+>T : T
+
+        cancelable: boolean;
+>cancelable : boolean
+
+        defaultPrevented: boolean;
+>defaultPrevented : boolean
+
+        eventPhase: number;
+>eventPhase : number
+
+        isTrusted: boolean;
+>isTrusted : boolean
+
+        nativeEvent: Event;
+>nativeEvent : Event
+>Event : Event
+
+        preventDefault(): void;
+>preventDefault : () => void
+
+        isDefaultPrevented(): boolean;
+>isDefaultPrevented : () => boolean
+
+        stopPropagation(): void;
+>stopPropagation : () => void
+
+        isPropagationStopped(): boolean;
+>isPropagationStopped : () => boolean
+
+        persist(): void;
+>persist : () => void
+
+        // If you thought this should be `EventTarget & T`, see https://github.com/DefinitelyTyped/DefinitelyTyped/pull/12239
+        target: EventTarget;
+>target : EventTarget
+>EventTarget : EventTarget
+
+        timeStamp: number;
+>timeStamp : number
+
+        type: string;
+>type : string
+    }
+
+    interface ChangeEvent<T> extends SyntheticEvent<T> {
+>ChangeEvent : ChangeEvent<T>
+>T : T
+>SyntheticEvent : SyntheticEvent<T>
+>T : T
+
+        target: EventTarget & T;
+>target : EventTarget & T
+>EventTarget : EventTarget
+>T : T
+    }
+
+    interface FormEvent<T> extends SyntheticEvent<T> {
+>FormEvent : FormEvent<T>
+>T : T
+>SyntheticEvent : SyntheticEvent<T>
+>T : T
+    }
+
+    interface DOMAttributes<T> {
+>DOMAttributes : DOMAttributes<T>
+>T : T
+
+        onChange?: FormEventHandler<T>;
+>onChange : (event: FormEvent<T>) => void
+>FormEventHandler : (event: FormEvent<T>) => void
+>T : T
+
+        onChangeCapture?: FormEventHandler<T>;
+>onChangeCapture : (event: FormEvent<T>) => void
+>FormEventHandler : (event: FormEvent<T>) => void
+>T : T
+
+        onInput?: FormEventHandler<T>;
+>onInput : (event: FormEvent<T>) => void
+>FormEventHandler : (event: FormEvent<T>) => void
+>T : T
+
+        onInputCapture?: FormEventHandler<T>;
+>onInputCapture : (event: FormEvent<T>) => void
+>FormEventHandler : (event: FormEvent<T>) => void
+>T : T
+
+        onReset?: FormEventHandler<T>;
+>onReset : (event: FormEvent<T>) => void
+>FormEventHandler : (event: FormEvent<T>) => void
+>T : T
+
+        onResetCapture?: FormEventHandler<T>;
+>onResetCapture : (event: FormEvent<T>) => void
+>FormEventHandler : (event: FormEvent<T>) => void
+>T : T
+
+        onSubmit?: FormEventHandler<T>;
+>onSubmit : (event: FormEvent<T>) => void
+>FormEventHandler : (event: FormEvent<T>) => void
+>T : T
+
+        onSubmitCapture?: FormEventHandler<T>;
+>onSubmitCapture : (event: FormEvent<T>) => void
+>FormEventHandler : (event: FormEvent<T>) => void
+>T : T
+
+        onInvalid?: FormEventHandler<T>;
+>onInvalid : (event: FormEvent<T>) => void
+>FormEventHandler : (event: FormEvent<T>) => void
+>T : T
+
+        onInvalidCapture?: FormEventHandler<T>;
+>onInvalidCapture : (event: FormEvent<T>) => void
+>FormEventHandler : (event: FormEvent<T>) => void
+>T : T
+    }
+
+    interface HTMLAttributes<T> extends DOMAttributes<T> {}
+>HTMLAttributes : HTMLAttributes<T>
+>T : T
+>DOMAttributes : DOMAttributes<T>
+>T : T
+
+    interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
+>InputHTMLAttributes : InputHTMLAttributes<T>
+>T : T
+>HTMLAttributes : HTMLAttributes<T>
+>T : T
+
+        onChange?: ChangeEventHandler<T>;
+>onChange : (event: ChangeEvent<T>) => void
+>ChangeEventHandler : (event: ChangeEvent<T>) => void
+>T : T
+    }
+
+    type FormEventHandler<T> = EventHandler<FormEvent<T>>;
+>FormEventHandler : (event: FormEvent<T>) => void
+>T : T
+>EventHandler : (event: E) => void
+>FormEvent : FormEvent<T>
+>T : T
+
+    type ChangeEventHandler<T> = EventHandler<ChangeEvent<T>>;
+>ChangeEventHandler : (event: ChangeEvent<T>) => void
+>T : T
+>EventHandler : (event: E) => void
+>ChangeEvent : ChangeEvent<T>
+>T : T
+
+    type EventHandler<E extends SyntheticEvent<any>> = (event: E) => void;
+>EventHandler : (event: E) => void
+>E : E
+>SyntheticEvent : SyntheticEvent<T>
+>event : E
+>E : E
+
+    type DetailedHTMLProps<E extends HTMLAttributes<T>, T> = ClassAttributes<T> & E;
+>DetailedHTMLProps : ClassAttributes<T> & E
+>E : E
+>HTMLAttributes : HTMLAttributes<T>
+>T : T
+>T : T
+>ClassAttributes : ClassAttributes<T>
+>T : T
+>E : E
+
+    interface Attributes {
+>Attributes : Attributes
+
+        key?: Key;
+>key : string | number
+>Key : string | number
+    }
+    interface ClassAttributes<T> extends Attributes {
+>ClassAttributes : ClassAttributes<T>
+>T : T
+>Attributes : Attributes
+
+        ref?: Ref<T>;
+>ref : string | ((instance: T) => any)
+>Ref : string | ((instance: T) => any)
+>T : T
+    }
+
+    type Key = string | number;
+>Key : string | number
+
+    type Ref<T> = string | ((instance: T | null) => any);
+>Ref : string | ((instance: T) => any)
+>T : T
+>instance : T
+>T : T
+>null : null
+
+    interface Component<P = {}, S = {}> extends ComponentLifecycle<P, S> {}
+>Component : Component<P, S>
+>P : P
+>S : S
+>ComponentLifecycle : ComponentLifecycle<P, S>
+>P : P
+>S : S
+
+    interface ComponentLifecycle<P, S> {
+>ComponentLifecycle : ComponentLifecycle<P, S>
+>P : P
+>S : S
+
+        componentWillMount?(): void;
+>componentWillMount : () => void
+
+        componentDidMount?(): void;
+>componentDidMount : () => void
+
+        componentWillReceiveProps?(nextProps: Readonly<P>, nextContext: any): void;
+>componentWillReceiveProps : (nextProps: Readonly<P>, nextContext: any) => void
+>nextProps : Readonly<P>
+>Readonly : Readonly<T>
+>P : P
+>nextContext : any
+
+        shouldComponentUpdate?(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean;
+>shouldComponentUpdate : (nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any) => boolean
+>nextProps : Readonly<P>
+>Readonly : Readonly<T>
+>P : P
+>nextState : Readonly<S>
+>Readonly : Readonly<T>
+>S : S
+>nextContext : any
+
+        componentWillUpdate?(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): void;
+>componentWillUpdate : (nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any) => void
+>nextProps : Readonly<P>
+>Readonly : Readonly<T>
+>P : P
+>nextState : Readonly<S>
+>Readonly : Readonly<T>
+>S : S
+>nextContext : any
+
+        componentDidUpdate?(prevProps: Readonly<P>, prevState: Readonly<S>, prevContext: any): void;
+>componentDidUpdate : (prevProps: Readonly<P>, prevState: Readonly<S>, prevContext: any) => void
+>prevProps : Readonly<P>
+>Readonly : Readonly<T>
+>P : P
+>prevState : Readonly<S>
+>Readonly : Readonly<T>
+>S : S
+>prevContext : any
+
+        componentWillUnmount?(): void;
+>componentWillUnmount : () => void
+
+        componentDidCatch?(error: Error, errorInfo: ErrorInfo): void;
+>componentDidCatch : (error: Error, errorInfo: ErrorInfo) => void
+>error : Error
+>Error : Error
+>errorInfo : ErrorInfo
+>ErrorInfo : ErrorInfo
+    }
+
+    interface ErrorInfo {
+>ErrorInfo : ErrorInfo
+
+        componentStack: string;
+>componentStack : string
+    }
+
+    interface ReactElement<P> {
+>ReactElement : ReactElement<P>
+>P : P
+
+        type: string | ComponentClass<P> | SFC<P>;
+>type : string | ComponentClass<P> | StatelessComponent<P>
+>ComponentClass : ComponentClass<P>
+>P : P
+>SFC : StatelessComponent<P>
+>P : P
+
+        props: P;
+>props : P
+>P : P
+
+        key: Key | null;
+>key : string | number
+>Key : string | number
+>null : null
+    }
+
+    interface SFCElement<P> extends ReactElement<P> {
+>SFCElement : SFCElement<P>
+>P : P
+>ReactElement : ReactElement<P>
+>P : P
+
+        type: SFC<P>;
+>type : StatelessComponent<P>
+>SFC : StatelessComponent<P>
+>P : P
+    }
+
+    type ComponentState = {};
+>ComponentState : {}
+
+    type ClassType<P, T extends Component<P, ComponentState>, C extends ComponentClass<P>> =
+>ClassType : C & (new (props?: P, context?: any) => T) & (new (props?: P, context?: any) => { props: P; })
+>P : P
+>T : T
+>Component : Component<P, S>
+>P : P
+>ComponentState : {}
+>C : C
+>ComponentClass : ComponentClass<P>
+>P : P
+
+        & C
+>C : C
+
+        & (new (props?: P, context?: any) => T)
+>props : P
+>P : P
+>context : any
+>T : T
+
+        & (new (props?: P, context?: any) => { props: P });
+>props : P
+>P : P
+>context : any
+>props : P
+>P : P
+
+    type CElement<P, T extends Component<P, ComponentState>> = ComponentElement<P, T>;
+>CElement : ComponentElement<P, T>
+>P : P
+>T : T
+>Component : Component<P, S>
+>P : P
+>ComponentState : {}
+>ComponentElement : ComponentElement<P, T>
+>P : P
+>T : T
+
+    interface ComponentElement<P, T extends Component<P, ComponentState>> extends ReactElement<P> {
+>ComponentElement : ComponentElement<P, T>
+>P : P
+>T : T
+>Component : Component<P, S>
+>P : P
+>ComponentState : {}
+>ReactElement : ReactElement<P>
+>P : P
+
+        type: ComponentClass<P>;
+>type : ComponentClass<P>
+>ComponentClass : ComponentClass<P>
+>P : P
+
+        ref?: Ref<T>;
+>ref : string | ((instance: T) => any)
+>Ref : string | ((instance: T) => any)
+>T : T
+    }
+
+    interface ClassicComponent<P = {}, S = {}> extends Component<P, S> {
+>ClassicComponent : ClassicComponent<P, S>
+>P : P
+>S : S
+>Component : Component<P, S>
+>P : P
+>S : S
+
+        replaceState(nextState: S, callback?: () => any): void;
+>replaceState : (nextState: S, callback?: () => any) => void
+>nextState : S
+>S : S
+>callback : () => any
+
+        isMounted(): boolean;
+>isMounted : () => boolean
+
+        getInitialState?(): S;
+>getInitialState : () => S
+>S : S
+    }
+
+    interface ClassicComponentClass<P = {}> extends ComponentClass<P> {
+>ClassicComponentClass : ClassicComponentClass<P>
+>P : P
+>ComponentClass : ComponentClass<P>
+>P : P
+
+        new (props?: P, context?: any): ClassicComponent<P, ComponentState>;
+>props : P
+>P : P
+>context : any
+>ClassicComponent : ClassicComponent<P, S>
+>P : P
+>ComponentState : {}
+
+        getDefaultProps?(): P;
+>getDefaultProps : () => P
+>P : P
+    }
+
+    type SFC<P = {}> = StatelessComponent<P>;
+>SFC : StatelessComponent<P>
+>P : P
+>StatelessComponent : StatelessComponent<P>
+>P : P
+
+    interface StatelessComponent<P = {}> {
+>StatelessComponent : StatelessComponent<P>
+>P : P
+
+        (props: P & { children?: ReactNode }, context?: any): ReactElement<any> | null;
+>props : P & { children?: string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[]; }
+>P : P
+>children : string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[]
+>ReactNode : string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[]
+>context : any
+>ReactElement : ReactElement<P>
+>null : null
+
+        propTypes?: ValidationMap<P>;
+>propTypes : { [K in keyof T]?: (object: P, key: string, componentName: string, ...rest: any[]) => Error; }
+>ValidationMap : { [K in keyof T]?: (object: T, key: string, componentName: string, ...rest: any[]) => Error; }
+>P : P
+
+        contextTypes?: ValidationMap<any>;
+>contextTypes : { [x: string]: (object: any, key: string, componentName: string, ...rest: any[]) => Error; }
+>ValidationMap : { [K in keyof T]?: (object: T, key: string, componentName: string, ...rest: any[]) => Error; }
+
+        defaultProps?: Partial<P>;
+>defaultProps : Partial<P>
+>Partial : Partial<T>
+>P : P
+
+        displayName?: string;
+>displayName : string
+    }
+
+    type ReactNode = ReactChild | ReactFragment | boolean | null | undefined;
+>ReactNode : string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[]
+>ReactChild : string | number | ReactElement<any>
+>ReactFragment : {} | (string | number | boolean | any[] | ReactElement<any>)[]
+>null : null
+
+    type ReactChild = ReactElement<any> | ReactText;
+>ReactChild : string | number | ReactElement<any>
+>ReactElement : ReactElement<P>
+>ReactText : string | number
+
+    type ReactText = string | number;
+>ReactText : string | number
+
+    // Should be Array<ReactNode> but type aliases cannot be recursive
+    type ReactFragment = {} | Array<ReactChild | any[] | boolean>;
+>ReactFragment : {} | (string | number | boolean | any[] | ReactElement<any>)[]
+>Array : T[]
+>ReactChild : string | number | ReactElement<any>
+
+    interface ComponentClass<P = {}> {
+>ComponentClass : ComponentClass<P>
+>P : P
+
+        new (props?: P, context?: any): Component<P, {}>;
+>props : P
+>P : P
+>context : any
+>Component : Component<P, S>
+>P : P
+
+        propTypes?: ValidationMap<P>;
+>propTypes : { [K in keyof T]?: (object: P, key: string, componentName: string, ...rest: any[]) => Error; }
+>ValidationMap : { [K in keyof T]?: (object: T, key: string, componentName: string, ...rest: any[]) => Error; }
+>P : P
+
+        contextTypes?: ValidationMap<any>;
+>contextTypes : { [x: string]: (object: any, key: string, componentName: string, ...rest: any[]) => Error; }
+>ValidationMap : { [K in keyof T]?: (object: T, key: string, componentName: string, ...rest: any[]) => Error; }
+
+        childContextTypes?: ValidationMap<any>;
+>childContextTypes : { [x: string]: (object: any, key: string, componentName: string, ...rest: any[]) => Error; }
+>ValidationMap : { [K in keyof T]?: (object: T, key: string, componentName: string, ...rest: any[]) => Error; }
+
+        defaultProps?: Partial<P>;
+>defaultProps : Partial<P>
+>Partial : Partial<T>
+>P : P
+
+        displayName?: string;
+>displayName : string
+    }
+
+    type ValidationMap<T> = {[K in keyof T]?: Validator<T> };
+>ValidationMap : { [K in keyof T]?: (object: T, key: string, componentName: string, ...rest: any[]) => Error; }
+>T : T
+>K : K
+>T : T
+>Validator : (object: T, key: string, componentName: string, ...rest: any[]) => Error
+>T : T
+
+    type Validator<T> = (object: T, key: string, componentName: string, ...rest: any[]) => Error | null;
+>Validator : (object: T, key: string, componentName: string, ...rest: any[]) => Error
+>T : T
+>object : T
+>T : T
+>key : string
+>componentName : string
+>rest : any[]
+>Error : Error
+>null : null
+
+    function createElement<P>(
+>createElement : { <P>(type: StatelessComponent<P>, props?: Attributes & P, ...children: (string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[])[]): SFCElement<P>; <P>(type: ClassicComponentClass<P> & (new (props?: P, context?: any) => ClassicComponent<P, {}>) & (new (props?: P, context?: any) => { props: P; }), props?: ClassAttributes<ClassicComponent<P, {}>> & P, ...children: (string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[])[]): ComponentElement<P, ClassicComponent<P, {}>>; <P, T extends Component<P, {}>, C extends ComponentClass<P>>(type: C & (new (props?: P, context?: any) => T) & (new (props?: P, context?: any) => { props: P; }), props?: ClassAttributes<T> & P, ...children: (string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[])[]): ComponentElement<P, T>; <P>(type: ComponentClass<P>, props?: Attributes & P, ...children: (string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[])[]): ReactElement<P>; }
+>P : P
+
+        type: SFC<P>,
+>type : StatelessComponent<P>
+>SFC : StatelessComponent<P>
+>P : P
+
+        props?: Attributes & P,
+>props : Attributes & P
+>Attributes : Attributes
+>P : P
+
+        ...children: ReactNode[]): SFCElement<P>;
+>children : (string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[])[]
+>ReactNode : string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[]
+>SFCElement : SFCElement<P>
+>P : P
+
+    function createElement<P>(
+>createElement : { <P>(type: StatelessComponent<P>, props?: Attributes & P, ...children: (string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[])[]): SFCElement<P>; <P>(type: ClassicComponentClass<P> & (new (props?: P, context?: any) => ClassicComponent<P, {}>) & (new (props?: P, context?: any) => { props: P; }), props?: ClassAttributes<ClassicComponent<P, {}>> & P, ...children: (string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[])[]): ComponentElement<P, ClassicComponent<P, {}>>; <P, T extends Component<P, {}>, C extends ComponentClass<P>>(type: C & (new (props?: P, context?: any) => T) & (new (props?: P, context?: any) => { props: P; }), props?: ClassAttributes<T> & P, ...children: (string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[])[]): ComponentElement<P, T>; <P>(type: ComponentClass<P>, props?: Attributes & P, ...children: (string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[])[]): ReactElement<P>; }
+>P : P
+
+        type: ClassType<P, ClassicComponent<P, ComponentState>, ClassicComponentClass<P>>,
+>type : ClassicComponentClass<P> & (new (props?: P, context?: any) => ClassicComponent<P, {}>) & (new (props?: P, context?: any) => { props: P; })
+>ClassType : C & (new (props?: P, context?: any) => T) & (new (props?: P, context?: any) => { props: P; })
+>P : P
+>ClassicComponent : ClassicComponent<P, S>
+>P : P
+>ComponentState : {}
+>ClassicComponentClass : ClassicComponentClass<P>
+>P : P
+
+        props?: ClassAttributes<ClassicComponent<P, ComponentState>> & P,
+>props : ClassAttributes<ClassicComponent<P, {}>> & P
+>ClassAttributes : ClassAttributes<T>
+>ClassicComponent : ClassicComponent<P, S>
+>P : P
+>ComponentState : {}
+>P : P
+
+        ...children: ReactNode[]): CElement<P, ClassicComponent<P, ComponentState>>;
+>children : (string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[])[]
+>ReactNode : string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[]
+>CElement : ComponentElement<P, T>
+>P : P
+>ClassicComponent : ClassicComponent<P, S>
+>P : P
+>ComponentState : {}
+
+    function createElement<P, T extends Component<P, ComponentState>, C extends ComponentClass<P>>(
+>createElement : { <P>(type: StatelessComponent<P>, props?: Attributes & P, ...children: (string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[])[]): SFCElement<P>; <P>(type: ClassicComponentClass<P> & (new (props?: P, context?: any) => ClassicComponent<P, {}>) & (new (props?: P, context?: any) => { props: P; }), props?: ClassAttributes<ClassicComponent<P, {}>> & P, ...children: (string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[])[]): ComponentElement<P, ClassicComponent<P, {}>>; <P, T extends Component<P, {}>, C extends ComponentClass<P>>(type: C & (new (props?: P, context?: any) => T) & (new (props?: P, context?: any) => { props: P; }), props?: ClassAttributes<T> & P, ...children: (string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[])[]): ComponentElement<P, T>; <P>(type: ComponentClass<P>, props?: Attributes & P, ...children: (string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[])[]): ReactElement<P>; }
+>P : P
+>T : T
+>Component : Component<P, S>
+>P : P
+>ComponentState : {}
+>C : C
+>ComponentClass : ComponentClass<P>
+>P : P
+
+        type: ClassType<P, T, C>,
+>type : C & (new (props?: P, context?: any) => T) & (new (props?: P, context?: any) => { props: P; })
+>ClassType : C & (new (props?: P, context?: any) => T) & (new (props?: P, context?: any) => { props: P; })
+>P : P
+>T : T
+>C : C
+
+        props?: ClassAttributes<T> & P,
+>props : ClassAttributes<T> & P
+>ClassAttributes : ClassAttributes<T>
+>T : T
+>P : P
+
+        ...children: ReactNode[]): CElement<P, T>;
+>children : (string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[])[]
+>ReactNode : string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[]
+>CElement : ComponentElement<P, T>
+>P : P
+>T : T
+
+    function createElement<P>(
+>createElement : { <P>(type: StatelessComponent<P>, props?: Attributes & P, ...children: (string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[])[]): SFCElement<P>; <P>(type: ClassicComponentClass<P> & (new (props?: P, context?: any) => ClassicComponent<P, {}>) & (new (props?: P, context?: any) => { props: P; }), props?: ClassAttributes<ClassicComponent<P, {}>> & P, ...children: (string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[])[]): ComponentElement<P, ClassicComponent<P, {}>>; <P, T extends Component<P, {}>, C extends ComponentClass<P>>(type: C & (new (props?: P, context?: any) => T) & (new (props?: P, context?: any) => { props: P; }), props?: ClassAttributes<T> & P, ...children: (string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[])[]): ComponentElement<P, T>; <P>(type: ComponentClass<P>, props?: Attributes & P, ...children: (string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[])[]): ReactElement<P>; }
+>P : P
+
+        type: ComponentClass<P>,
+>type : ComponentClass<P>
+>ComponentClass : ComponentClass<P>
+>P : P
+
+        props?: Attributes & P,
+>props : Attributes & P
+>Attributes : Attributes
+>P : P
+
+        ...children: ReactNode[]): ReactElement<P>;
+>children : (string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[])[]
+>ReactNode : string | number | boolean | {} | ReactElement<any> | (string | number | boolean | any[] | ReactElement<any>)[]
+>ReactElement : ReactElement<P>
+>P : P
+}
+
+declare global {
+>global : any
+
+    namespace JSX {
+>JSX : any
+
+        interface Element extends React.ReactElement<any> {}
+>Element : Element
+>React.ReactElement : any
+>React : typeof React
+>ReactElement : React.ReactElement<P>
+
+        interface ElementClass extends React.Component<any> {
+>ElementClass : ElementClass
+>React.Component : any
+>React : typeof React
+>Component : React.Component<P, S>
+
+            render(): JSX.Element | null | false;
+>render : () => false | Element
+>JSX : any
+>Element : Element
+>null : null
+>false : false
+        }
+        interface ElementAttributesProperty { props: {}; }
+>ElementAttributesProperty : ElementAttributesProperty
+>props : {}
+
+        interface ElementChildrenAttribute { children: {}; }
+>ElementChildrenAttribute : ElementChildrenAttribute
+>children : {}
+
+        interface IntrinsicAttributes extends React.Attributes {}
+>IntrinsicAttributes : IntrinsicAttributes
+>React.Attributes : any
+>React : typeof React
+>Attributes : React.Attributes
+
+        interface IntrinsicClassAttributes<T> extends React.ClassAttributes<T> {}
+>IntrinsicClassAttributes : IntrinsicClassAttributes<T>
+>T : T
+>React.ClassAttributes : any
+>React : typeof React
+>ClassAttributes : React.ClassAttributes<T>
+>T : T
+
+        interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+            input: React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>,  HTMLInputElement>;
+>input : React.ClassAttributes<HTMLInputElement> & React.InputHTMLAttributes<HTMLInputElement>
+>React : any
+>DetailedHTMLProps : React.ClassAttributes<T> & E
+>React : any
+>InputHTMLAttributes : React.InputHTMLAttributes<T>
+>HTMLInputElement : HTMLInputElement
+>HTMLInputElement : HTMLInputElement
+        }
+    }
+}
+
