@@ -20,6 +20,7 @@ namespace ts {
 
 /* @internal */
 namespace ts {
+    export const emptyArray: never[] = [] as never[];
     /** Create a MapLike with good performance. */
     function createDictionaryObject<T>(): MapLike<T> {
         const map = Object.create(/*prototype*/ null); // tslint:disable-line:no-null-keyword
@@ -3070,6 +3071,10 @@ namespace ts {
         readonly directories: string[];
     }
 
+    export const emptyFileSystemEntries: FileSystemEntries = {
+        files: emptyArray,
+        directories: emptyArray
+    };
     export function createCachedDirectoryStructureHost(host: DirectoryStructureHost): CachedDirectoryStructureHost {
         const cachedReadDirectoryResult = createMap<MutableFileSystemEntries>();
         const getCurrentDirectory = memoize(() => host.getCurrentDirectory());
@@ -3211,7 +3216,7 @@ namespace ts {
                 if (path === rootDirPath) {
                     return result;
                 }
-                return getCachedFileSystemEntries(path) || createCachedFileSystemEntries(dir, path);
+                return tryReadDirectory(dir, path) || emptyFileSystemEntries;
             }
         }
 

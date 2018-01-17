@@ -398,7 +398,7 @@ namespace ts {
                     return { files, directories };
                 }
                 catch (e) {
-                    return { files: [], directories: [] };
+                    return emptyFileSystemEntries;
                 }
             }
 
