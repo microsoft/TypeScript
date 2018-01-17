@@ -11,6 +11,7 @@ Please help us by doing the following steps before logging an issue:
 <!-- If you have a QUESTION:
    THIS IS NOT A FORUM FOR QUESTIONS.
    Ask questions at http://stackoverflow.com/questions/tagged/typescript
+    or https://gitter.im/Microsoft/TypeScript
 -->
 
 <!-- If you have a SUGGESTION:
