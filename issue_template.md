@@ -1,4 +1,4 @@
-<!-- 🚨 𝑺𝑻𝑶𝑷 🚨 𝑺𝑻𝑶𝑷 🚨 𝑺𝑻𝑶𝑷 🚨 -->
+<!-- 🚨 STOP 🚨 𝗦𝗧𝗢𝗣 🚨 𝑺𝑻𝑶𝑷 🚨 -->
 <!--
 Half of all issues filed here are duplicates, answered in the FAQ, or not appropriate for the bug tracker.
 
