@@ -270,7 +270,7 @@ interface Array<T> {}`
             this.executingFilePath = this.getHostSpecificPath(executingFilePath);
             this.currentDirectory = this.getHostSpecificPath(currentDirectory);
             this.reloadFS(fileOrFolderList);
-            this.dynamicPriorityWatchFile = this.environmentVariables && this.environmentVariables.get("TSC_WATCHOPTION") === "DynamicPriorityPolling" ?
+            this.dynamicPriorityWatchFile = this.environmentVariables && this.environmentVariables.get("TSC_WATCHFILE") === "DynamicPriorityPolling" ?
                 createDynamicPriorityPollingWatchFile(this) :
                 undefined;
         }

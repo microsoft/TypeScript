@@ -891,7 +891,7 @@ namespace ts.server {
 
             const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;
             this.externalFiles = this.getExternalFiles();
-            enumerateInsertsAndDeletes(this.externalFiles, oldExternalFiles,
+            enumerateInsertsAndDeletes(this.externalFiles, oldExternalFiles, compareStringsCaseSensitive,
                 // Ensure a ScriptInfo is created for new external files. This is performed indirectly
                 // by the LSHost for files in the program when the program is retrieved above but
                 // the program doesn't contain external files so this must be done explicitly.
@@ -899,8 +899,7 @@ namespace ts.server {
                     const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.currentDirectory, this.directoryStructureHost);
                     scriptInfo.attachToProject(this);
                 },
-                removed => this.detachScriptInfoFromProject(removed),
-                compareStringsCaseSensitive
+                removed => this.detachScriptInfoFromProject(removed)
             );
             const elapsed = timestamp() - start;
             this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} structureChanged: ${hasChanges} Elapsed: ${elapsed}ms`);

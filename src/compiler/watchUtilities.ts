@@ -181,10 +181,6 @@ namespace ts {
         return `WatchInfo: ${file} ${flags} ${getDetailWatchInfo ? getDetailWatchInfo(detailInfo1, detailInfo2) : ""}`;
     }
 
-    export function closeFileWatcher(watcher: FileWatcher) {
-        watcher.close();
-    }
-
     export function closeFileWatcherOf<T extends { watcher: FileWatcher; }>(objWithWatcher: T) {
         objWithWatcher.watcher.close();
     }

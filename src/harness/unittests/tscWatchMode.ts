@@ -2123,7 +2123,7 @@ declare module "fs" {
             };
             const files = [file1, libFile];
             const environmentVariables = createMap<string>();
-            environmentVariables.set("TSC_WATCHOPTION", "DynamicPriorityPolling");
+            environmentVariables.set("TSC_WATCHFILE", "DynamicPriorityPolling");
             const host = createWatchedSystem(files, { environmentVariables });
             const watch = createWatchModeWithoutConfigFile([file1.path], host);
 
