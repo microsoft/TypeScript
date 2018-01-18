@@ -321,6 +321,10 @@ namespace ts.formatting {
             rule("NoSpaceAfterCloseBracket", SyntaxKind.CloseBracketToken, anyToken, [isNonJsxSameLineTokenContext, isNotBeforeBlockInFunctionDeclarationContext], RuleAction.Delete),
             rule("SpaceAfterSemicolon", SyntaxKind.SemicolonToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.Space),
 
+            // Remove extra space between for and await
+            rule("SpaceAfterFor", SyntaxKind.ForKeyword, anyToken, [ isNonJsxSameLineTokenContext ], RuleAction.Space),
+            rule("NoSpaceBeforeAwait", anyToken, SyntaxKind.AwaitKeyword, [ isNonJsxSameLineTokenContext ], RuleAction.Delete),
+
             // Add a space between statements. All keywords except (do,else,case) has open/close parens after them.
             // So, we have a rule to add a space for [),Any], [do,Any], [else,Any], and [case,Any]
             rule(
