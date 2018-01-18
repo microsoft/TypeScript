@@ -26194,12 +26194,16 @@ namespace ts {
         function checkGrammarBindingElement(node: BindingElement) {
             if (node.dotDotDotToken) {
                 const elements = (<BindingPattern>node.parent).elements;
-                if (node !== lastOrUndefined(elements)) {
+                if (node !== last(elements)) {
                     return grammarErrorOnNode(node, Diagnostics.A_rest_element_must_be_last_in_a_destructuring_pattern);
                 }
 
                 if (node.name.kind === SyntaxKind.ArrayBindingPattern || node.name.kind === SyntaxKind.ObjectBindingPattern) {
                     return grammarErrorOnNode(node.name, Diagnostics.A_rest_element_cannot_contain_a_binding_pattern);
+                }
+
+                if (node.propertyName) {
+                    return grammarErrorOnNode(node.name, Diagnostics.A_rest_element_cannot_have_a_property_name);
                 }
 
                 if (node.initializer) {

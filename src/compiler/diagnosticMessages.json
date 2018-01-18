@@ -1976,6 +1976,10 @@
         "category": "Error",
         "code": 2565
     },
+    "A rest element cannot have a property name.": {
+        "category": "Error",
+        "code": 2566
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
