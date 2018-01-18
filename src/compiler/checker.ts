@@ -18375,6 +18375,9 @@ namespace ts {
 
         function checkObjectLiteralAssignment(node: ObjectLiteralExpression, sourceType: Type): Type {
             const properties = node.properties;
+            if (strictNullChecks && properties.length === 0) {
+                return checkNonNullType(sourceType, node);
+            }
             for (const p of properties) {
                 checkObjectLiteralDestructuringPropertyAssignment(sourceType, p, properties);
             }
@@ -21444,7 +21447,13 @@ namespace ts {
             if (isBindingPattern(node.name)) {
                 // Don't validate for-in initializer as it is already an error
                 if (node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
-                    checkTypeAssignableTo(checkExpressionCached(node.initializer), getWidenedTypeForVariableLikeDeclaration(node), node, /*headMessage*/ undefined);
+                    const initializerType = checkExpressionCached(node.initializer);
+                    if (strictNullChecks && node.name.elements.length === 0) {
+                        checkNonNullType(initializerType, node);
+                    }
+                    else {
+                        checkTypeAssignableTo(initializerType, getWidenedTypeForVariableLikeDeclaration(node), node, /*headMessage*/ undefined);
+                    }
                     checkParameterInitializer(node);
                 }
                 return;
