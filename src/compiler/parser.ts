@@ -6830,7 +6830,7 @@ namespace ts {
                 }
 
                 function parseTemplateTag(atToken: AtToken, tagName: Identifier): JSDocTemplateTag | undefined {
-                    if (forEach(tags, t => t.kind === SyntaxKind.JSDocTemplateTag)) {
+                    if (some(tags, isJSDocTemplateTag)) {
                         parseErrorAtPosition(tagName.pos, scanner.getTokenPos() - tagName.pos, Diagnostics._0_tag_already_specified, tagName.escapedText);
                     }
 
@@ -6839,14 +6839,14 @@ namespace ts {
                     const typeParametersPos = getNodePos();
 
                     while (true) {
-                        const name = parseJSDocIdentifierName();
+                        const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
+                        const name = parseJSDocIdentifierNameWithOptionalBraces();
                         skipWhitespace();
                         if (!name) {
                             parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
                             return undefined;
                         }
 
-                        const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter, name.pos);
                         typeParameter.name = name;
                         finishNode(typeParameter);
 
@@ -6867,6 +6867,15 @@ namespace ts {
                     result.typeParameters = createNodeArray(typeParameters, typeParametersPos);
                     finishNode(result);
                     return result;
+                }
+
+                function parseJSDocIdentifierNameWithOptionalBraces(): Identifier | undefined {
+                    const parsedBrace = parseOptional(SyntaxKind.OpenBraceToken);
+                    const res = parseJSDocIdentifierName();
+                    if (parsedBrace) {
+                        parseExpected(SyntaxKind.CloseBraceToken);
+                    }
+                    return res;
                 }
 
                 function nextJSDocToken(): JsDocSyntaxKind {
