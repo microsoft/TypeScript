@@ -9677,8 +9677,9 @@ namespace ts {
                 else if (source.flags & TypeFlags.IndexedAccess) {
                     // A type S[K] is related to a type T if A[K] is related to T, where K is string-like and
                     // A is the constraint of S.
-                    const constraint = getConstraintOfIndexedAccess(<IndexedAccessType>source);
+                    let constraint = getConstraintOfIndexedAccess(<IndexedAccessType>source);
                     if (constraint) {
+                        constraint = getTypeWithThisArgument(constraint, source);
                         if (result = isRelatedTo(constraint, target, reportErrors)) {
                             errorInfo = saveErrorInfo;
                             return result;
