@@ -427,6 +427,20 @@ namespace ts {
     }
 
     /**
+     * Create the watch compiler host for either configFile or fileNames and its options
+     */
+    export function createWatchCompilerHost(rootFiles: string[], options: CompilerOptions, system: System, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHostOfFilesAndCompilerOptions;
+    export function createWatchCompilerHost(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHostOfConfigFile;
+    export function createWatchCompilerHost(rootFilesOrConfigFileName: string | string[], options: CompilerOptions | undefined, system: System, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHostOfFilesAndCompilerOptions | WatchCompilerHostOfConfigFile {
+        if (isArray(rootFilesOrConfigFileName)) {
+            return createWatchCompilerHostOfFilesAndCompilerOptions(rootFilesOrConfigFileName, options, system, reportDiagnostic, reportWatchStatus);
+        }
+        else {
+            return createWatchCompilerHostOfConfigFile(rootFilesOrConfigFileName, options, system, reportDiagnostic, reportWatchStatus);
+        }
+    }
+
+    /**
      * Creates the watch from the host for root files and compiler options
      */
     export function createWatchProgram(host: WatchCompilerHostOfFilesAndCompilerOptions): WatchOfFilesAndCompilerOptions<Program>;

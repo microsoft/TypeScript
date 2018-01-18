@@ -4069,6 +4069,11 @@ declare namespace ts {
         updateRootFileNames(fileNames: string[]): void;
     }
     /**
+     * Create the watch compiler host for either configFile or fileNames and its options
+     */
+    function createWatchCompilerHost(rootFiles: string[], options: CompilerOptions, system: System, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHostOfFilesAndCompilerOptions;
+    function createWatchCompilerHost(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHostOfConfigFile;
+    /**
      * Creates the watch from the host for root files and compiler options
      */
     function createWatchProgram(host: WatchCompilerHostOfFilesAndCompilerOptions): WatchOfFilesAndCompilerOptions<Program>;
