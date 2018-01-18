@@ -40,6 +40,6 @@ class C<T extends Options> {
 >b : T["b"]
 
         a;
->a : number | object | undefined
+>a : T["a"]
     }
 }
