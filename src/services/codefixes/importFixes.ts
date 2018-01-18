@@ -24,15 +24,13 @@ namespace ts.codefix {
         moduleSpecifier?: string;
     }
 
-    interface SymbolContext {
+    interface SymbolContext extends textChanges.TextChangesContext {
         sourceFile: SourceFile;
         symbolName: string;
-        formatContext: ts.formatting.FormatContext;
     }
 
     interface ImportCodeFixContext extends SymbolContext {
         symbolToken: Identifier | undefined;
-        host: LanguageServiceHost;
         program: Program;
         checker: TypeChecker;
         compilerOptions: CompilerOptions;
@@ -257,7 +255,7 @@ namespace ts.codefix {
         }
     }
 
-    function getCodeActionForNewImport(context: SymbolContext & textChanges.TextChangesContext & { kind: ImportKind }, moduleSpecifier: string): ImportCodeAction {
+    function getCodeActionForNewImport(context: SymbolContext & { kind: ImportKind }, moduleSpecifier: string): ImportCodeAction {
         const { kind, sourceFile, symbolName } = context;
         const lastImportDeclaration = findLast(sourceFile.statements, isAnyImportSyntax);
 
@@ -669,7 +667,7 @@ namespace ts.codefix {
         return expression && isStringLiteral(expression) ? expression.text : undefined;
     }
 
-    function tryUpdateExistingImport(context: SymbolContext & textChanges.TextChangesContext & { kind: ImportKind }, importClause: ImportClause | ImportEqualsDeclaration): FileTextChanges[] | undefined {
+    function tryUpdateExistingImport(context: SymbolContext & { kind: ImportKind }, importClause: ImportClause | ImportEqualsDeclaration): FileTextChanges[] | undefined {
         const { symbolName, sourceFile, kind } = context;
         const { name } = importClause;
         const { namedBindings } = importClause.kind !== SyntaxKind.ImportEqualsDeclaration && importClause;
@@ -706,7 +704,7 @@ namespace ts.codefix {
         }
     }
 
-    function getCodeActionForUseExistingNamespaceImport(namespacePrefix: string, context: SymbolContext & textChanges.TextChangesContext, symbolToken: Identifier): ImportCodeAction {
+    function getCodeActionForUseExistingNamespaceImport(namespacePrefix: string, context: SymbolContext, symbolToken: Identifier): ImportCodeAction {
         const { symbolName, sourceFile } = context;
 
         /**
