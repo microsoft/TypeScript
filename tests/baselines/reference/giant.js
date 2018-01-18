@@ -1118,14 +1118,14 @@ export declare class eC {
     pV: any;
     private rV;
     pF(): void;
-    private rF();
+    private rF;
     pgF(): void;
     readonly pgF: any;
     psF(param: any): void;
     psF: any;
-    private rgF();
+    private rgF;
     private readonly rgF;
-    private rsF(param);
+    private rsF;
     private rsF;
     static tV: any;
     static tF(): void;
@@ -1170,14 +1170,14 @@ export declare module eM {
         pV: any;
         private rV;
         pF(): void;
-        private rF();
+        private rF;
         pgF(): void;
         readonly pgF: any;
         psF(param: any): void;
         psF: any;
-        private rgF();
+        private rgF;
         private readonly rgF;
-        private rsF(param);
+        private rsF;
         private rsF;
         static tV: any;
         static tF(): void;
@@ -1221,14 +1221,12 @@ export declare module eM {
         }
         interface eI {
         }
-        module eM {
-        }
+        module eM { }
         var eaV: any;
         function eaF(): void;
         class eaC {
         }
-        module eaM {
-        }
+        module eaM { }
     }
     var eaV: any;
     function eaF(): void;
@@ -1237,14 +1235,14 @@ export declare module eM {
         pV: any;
         private rV;
         pF(): void;
-        private rF();
+        private rF;
         pgF(): void;
         readonly pgF: any;
         psF(param: any): void;
         psF: any;
-        private rgF();
+        private rgF;
         private readonly rgF;
-        private rsF(param);
+        private rsF;
         private rsF;
         static tV: any;
         static tF(): void;
@@ -1260,16 +1258,14 @@ export declare module eM {
         }
         interface I {
         }
-        module M {
-        }
+        module M { }
         var eV: any;
         function eF(): void;
         class eC {
         }
         interface eI {
         }
-        module eM {
-        }
+        module eM { }
     }
 }
 export declare var eaV: any;
@@ -1279,14 +1275,14 @@ export declare class eaC {
     pV: any;
     private rV;
     pF(): void;
-    private rF();
+    private rF;
     pgF(): void;
     readonly pgF: any;
     psF(param: any): void;
     psF: any;
-    private rgF();
+    private rgF;
     private readonly rgF;
-    private rsF(param);
+    private rsF;
     private rsF;
     static tV: any;
     static tF(): void;
@@ -1340,22 +1336,19 @@ export declare module eaM {
         }
         interface I {
         }
-        module M {
-        }
+        module M { }
         var eV: any;
         function eF(): void;
         class eC {
         }
         interface eI {
         }
-        module eM {
-        }
+        module eM { }
         var eaV: any;
         function eaF(): void;
         class eaC {
         }
-        module eaM {
-        }
+        module eaM { }
     }
     var eV: any;
     function eF(): void;
@@ -1400,15 +1393,13 @@ export declare module eaM {
         function F(): void;
         class C {
         }
-        module M {
-        }
+        module M { }
         var eV: any;
         function eF(): void;
         class eC {
         }
         interface eI {
         }
-        module eM {
-        }
+        module eM { }
     }
 }

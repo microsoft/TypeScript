@@ -171,6 +171,15 @@ namespace ts {
         return name;
     }
 
+    /** Create a unique name based on the supplied text. */
+    export function createOptimisticUniqueName(text: string): Identifier {
+        const name = createIdentifier(text);
+        name.autoGenerateFlags = GeneratedIdentifierFlags.OptimisticUnique;
+        name.autoGenerateId = nextAutoGenerateId;
+        nextAutoGenerateId++;
+        return name;
+    }
+
     /** Create a unique name generated for a node. */
     export function getGeneratedNameForNode(node: Node): Identifier;
     /* @internal */ export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier; // tslint:disable-line unified-signatures
@@ -212,6 +221,68 @@ namespace ts {
 
     export function createFalse() {
         return <BooleanLiteral & Token<SyntaxKind.FalseKeyword>>createSynthesizedNode(SyntaxKind.FalseKeyword);
+    }
+
+    // Modifiers
+
+    export function createAbstractModifier() {
+        return createToken(SyntaxKind.AbstractKeyword);
+    }
+
+    export function createAsyncModifier() {
+        return createToken(SyntaxKind.AsyncKeyword);
+    }
+
+    export function createConstModifier() {
+        return createToken(SyntaxKind.ConstKeyword);
+    }
+
+    export function createDeclareModifier() {
+        return createToken(SyntaxKind.DeclareKeyword);
+    }
+
+    export function createDefaultModifier() {
+        return createToken(SyntaxKind.DefaultKeyword);
+    }
+
+    export function createExportModifier() {
+        return createToken(SyntaxKind.ExportKeyword);
+    }
+
+    export function createPublicModifier() {
+        return createToken(SyntaxKind.PublicKeyword);
+    }
+
+    export function createPrivateModifier() {
+        return createToken(SyntaxKind.PrivateKeyword);
+    }
+
+    export function createProtectedModifier() {
+        return createToken(SyntaxKind.ProtectedKeyword);
+    }
+
+    export function createReadonlyModifier() {
+        return createToken(SyntaxKind.ReadonlyKeyword);
+    }
+
+    export function createStaticModifier() {
+        return createToken(SyntaxKind.StaticKeyword);
+    }
+
+    export function createModifiersFromModifierFlags(flags: ModifierFlags) {
+        const result: Modifier[] = [];
+        if (flags & ModifierFlags.Export) { result.push(createExportModifier()); }
+        if (flags & ModifierFlags.Ambient) { result.push(createDeclareModifier()); }
+        if (flags & ModifierFlags.Default) { result.push(createDefaultModifier()); }
+        if (flags & ModifierFlags.Const) { result.push(createConstModifier()); }
+        if (flags & ModifierFlags.Public) { result.push(createPublicModifier()); }
+        if (flags & ModifierFlags.Private) { result.push(createPrivateModifier()); }
+        if (flags & ModifierFlags.Protected) { result.push(createProtectedModifier()); }
+        if (flags & ModifierFlags.Abstract) { result.push(createAbstractModifier()); }
+        if (flags & ModifierFlags.Static) { result.push(createStaticModifier()); }
+        if (flags & ModifierFlags.Readonly) { result.push(createReadonlyModifier()); }
+        if (flags & ModifierFlags.Async) { result.push(createAsyncModifier()); }
+        return result;
     }
 
     // Names
@@ -2342,8 +2413,13 @@ namespace ts {
 
     // Top-level nodes
 
-    export function updateSourceFileNode(node: SourceFile, statements: ReadonlyArray<Statement>) {
-        if (node.statements !== statements) {
+    export function updateSourceFileNode(node: SourceFile, statements: ReadonlyArray<Statement>, isDeclarationFile?: boolean, referencedFiles?: SourceFile["referencedFiles"], typeReferences?: SourceFile["typeReferenceDirectives"]) {
+        if (
+            node.statements !== statements ||
+            (isDeclarationFile !== undefined && node.isDeclarationFile !== isDeclarationFile) ||
+            (referencedFiles !== undefined && node.referencedFiles !== referencedFiles) ||
+            (typeReferences !== undefined && node.typeReferenceDirectives !== typeReferences)
+        ) {
             const updated = <SourceFile>createSynthesizedNode(SyntaxKind.SourceFile);
             updated.flags |= node.flags;
             updated.statements = createNodeArray(statements);
@@ -2351,12 +2427,12 @@ namespace ts {
             updated.fileName = node.fileName;
             updated.path = node.path;
             updated.text = node.text;
+            updated.isDeclarationFile = isDeclarationFile === undefined ? node.isDeclarationFile : isDeclarationFile;
+            updated.referencedFiles = referencedFiles === undefined ? node.referencedFiles : referencedFiles;
+            updated.typeReferenceDirectives = typeReferences === undefined ? node.typeReferenceDirectives : typeReferences;
             if (node.amdDependencies !== undefined) updated.amdDependencies = node.amdDependencies;
             if (node.moduleName !== undefined) updated.moduleName = node.moduleName;
-            if (node.referencedFiles !== undefined) updated.referencedFiles = node.referencedFiles;
-            if (node.typeReferenceDirectives !== undefined) updated.typeReferenceDirectives = node.typeReferenceDirectives;
             if (node.languageVariant !== undefined) updated.languageVariant = node.languageVariant;
-            if (node.isDeclarationFile !== undefined) updated.isDeclarationFile = node.isDeclarationFile;
             if (node.renamedDependencies !== undefined) updated.renamedDependencies = node.renamedDependencies;
             if (node.hasNoDefaultLib !== undefined) updated.hasNoDefaultLib = node.hasNoDefaultLib;
             if (node.languageVersion !== undefined) updated.languageVersion = node.languageVersion;
@@ -2948,7 +3024,8 @@ namespace ts {
         requestEmitHelper: noop,
         resumeLexicalEnvironment: noop,
         startLexicalEnvironment: noop,
-        suspendLexicalEnvironment: noop
+        suspendLexicalEnvironment: noop,
+        addDiagnostic: noop,
     };
 
     // Compound nodes
@@ -3147,8 +3224,7 @@ namespace ts {
                         return { value: o && o[i++], done: !o };
                     }
                 };
-            };
-        `
+            };`
     };
 
     export function createValuesHelper(context: TransformationContext, expression: Expression, location?: TextRange) {
@@ -3182,8 +3258,7 @@ namespace ts {
                     finally { if (e) throw e.error; }
                 }
                 return ar;
-            };
-        `
+            };`
     };
 
     export function createReadHelper(context: TransformationContext, iteratorRecord: Expression, count: number | undefined, location?: TextRange) {

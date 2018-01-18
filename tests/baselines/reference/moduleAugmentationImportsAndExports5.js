@@ -69,14 +69,3 @@ var a;
 var b = a.foo().n;
 var c = a.bar().a;
 var d = a.baz().b;
-
-
-//// [f1.d.ts]
-export declare class A {
-}
-//// [f2.d.ts]
-export declare class B {
-    n: number;
-}
-//// [f4.d.ts]
-import "./f3";

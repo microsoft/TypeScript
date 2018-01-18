@@ -79,6 +79,8 @@ export declare class B {
     n: number;
 }
 //// [f3.d.ts]
+import I = N.Ifc;
+import C = N.Cls;
 import { B } from "./f2";
 export declare namespace N {
     interface Ifc {
@@ -88,8 +90,6 @@ export declare namespace N {
         b: number;
     }
 }
-import I = N.Ifc;
-import C = N.Cls;
 declare module "./f1" {
     interface A {
         foo(): B;

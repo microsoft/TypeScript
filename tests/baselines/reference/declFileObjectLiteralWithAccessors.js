@@ -29,8 +29,8 @@ declare function makePoint(x: number): {
     b: number;
     x: number;
 };
-declare var point: {
+declare var /*4*/ point: {
     b: number;
     x: number;
 };
-declare var x: number;
+declare var /*2*/ x: number;

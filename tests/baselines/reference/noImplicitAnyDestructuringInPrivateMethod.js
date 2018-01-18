@@ -28,8 +28,8 @@ exports.Bar = Bar;
 
 //// [noImplicitAnyDestructuringInPrivateMethod.d.ts]
 export declare class Bar {
-    private bar({a});
+    private bar;
 }
 export declare class Bar2 {
-    private bar({a});
+    private bar;
 }

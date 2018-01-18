@@ -669,8 +669,7 @@ namespace ts {
         name: "typescript:async-super",
         scoped: true,
         text: `
-            const _super = name => super[name];
-        `
+            const _super = name => super[name];`
     };
 
     export const advancedAsyncSuperHelper: EmitHelper = {
@@ -680,7 +679,6 @@ namespace ts {
             const _super = (function (geti, seti) {
                 const cache = Object.create(null);
                 return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
-            })(name => super[name], (name, value) => super[name] = value);
-        `
+            })(name => super[name], (name, value) => super[name] = value);`
     };
 }

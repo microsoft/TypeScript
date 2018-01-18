@@ -48,7 +48,8 @@ export { Account2 as Acc };
 //// [index.d.ts]
 export * from "./account";
 //// [index.d.ts]
-declare global  {
+import * as model from "./model";
+declare global {
     interface Account {
         someProp: number;
     }
@@ -56,5 +57,4 @@ declare global  {
         someProp: number;
     }
 }
-import * as model from "./model";
 export declare const func: (account: model.Account, acc2: model.Acc) => void;

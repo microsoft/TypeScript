@@ -32,10 +32,10 @@ var cReturnVal = exports.cProp.foo(10);
 
 
 //// [internalAliasClassInsideTopLevelModuleWithoutExport.d.ts]
+import xc = x.c;
 export declare module x {
     class c {
         foo(a: number): number;
     }
 }
-import xc = x.c;
 export declare var cProp: xc;

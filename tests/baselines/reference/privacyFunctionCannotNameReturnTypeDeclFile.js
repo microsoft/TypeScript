@@ -350,37 +350,3 @@ function privateFunctionWithPrivateModuleReturnTypes() {
 function privateFunctionWithPrivateModuleReturnTypes1() {
     return exporter.createExportedWidget4();
 }
-
-
-//// [privacyFunctionReturnTypeDeclFile_GlobalWidgets.d.ts]
-declare module "GlobalWidgets" {
-    class Widget3 {
-        name: string;
-    }
-    function createWidget3(): Widget3;
-    module SpecializedGlobalWidget {
-        class Widget4 {
-            name: string;
-        }
-        function createWidget4(): Widget4;
-    }
-}
-//// [privacyFunctionReturnTypeDeclFile_Widgets.d.ts]
-export declare class Widget1 {
-    name: string;
-}
-export declare function createWidget1(): Widget1;
-export declare module SpecializedWidget {
-    class Widget2 {
-        name: string;
-    }
-    function createWidget2(): Widget2;
-}
-//// [privacyFunctionReturnTypeDeclFile_exporter.d.ts]
-/// <reference path="privacyFunctionReturnTypeDeclFile_GlobalWidgets.d.ts" />
-import Widgets = require("./privacyFunctionReturnTypeDeclFile_Widgets");
-import Widgets1 = require("GlobalWidgets");
-export declare function createExportedWidget1(): Widgets.Widget1;
-export declare function createExportedWidget2(): Widgets.SpecializedWidget.Widget2;
-export declare function createExportedWidget3(): Widgets1.Widget3;
-export declare function createExportedWidget4(): Widgets1.SpecializedGlobalWidget.Widget4;

@@ -67,14 +67,3 @@ exports.__esModule = true;
 require("./f3");
 var a;
 var b = a.foo().n;
-
-
-//// [f1.d.ts]
-export declare class A {
-}
-//// [f2.d.ts]
-export declare class B {
-    n: number;
-}
-//// [f4.d.ts]
-import "./f3";

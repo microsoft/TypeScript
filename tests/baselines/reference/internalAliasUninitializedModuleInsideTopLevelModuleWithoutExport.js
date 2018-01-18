@@ -19,6 +19,7 @@ exports.x.foo();
 
 
 //// [internalAliasUninitializedModuleInsideTopLevelModuleWithoutExport.d.ts]
+import b = a.b;
 export declare module a {
     module b {
         interface I {
@@ -26,5 +27,4 @@ export declare module a {
         }
     }
 }
-import b = a.b;
 export declare var x: b.I;

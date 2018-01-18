@@ -189,23 +189,23 @@ export declare class aaaa1 {
 }
 //// [client.d.ts]
 import { a } from "./server";
-export declare var xxxx: a;
 import { a11 as b } from "./server";
-export declare var xxxx1: b;
 import { x, a12 as y } from "./server";
+import { x11 as z } from "./server";
+import { m } from "./server";
+import { a1, x1 } from "./server";
+import { a111 as a11, x111 as x11 } from "./server";
+import { z1 } from "./server";
+import { z2 as z3 } from "./server";
+export declare var xxxx: a;
+export declare var xxxx1: b;
 export declare var xxxx2: x;
 export declare var xxxx3: y;
-import { x11 as z } from "./server";
 export declare var xxxx4: z;
-import { m } from "./server";
 export declare var xxxx5: m;
-import { a1, x1 } from "./server";
 export declare var xxxx6: a1;
 export declare var xxxx7: x1;
-import { a111 as a11, x111 as x11 } from "./server";
 export declare var xxxx8: a11;
 export declare var xxxx9: x11;
-import { z1 } from "./server";
 export declare var z111: z1;
-import { z2 as z3 } from "./server";
 export declare var z2: z3;
