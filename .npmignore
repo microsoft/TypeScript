@@ -19,3 +19,4 @@ Jakefile.js
 .travis.yml
 .vscode/
 test.config
+package-lock.json
