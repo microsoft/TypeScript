@@ -13362,7 +13362,7 @@ interface WebSocket extends EventTarget {
     readonly readyState: number;
     readonly url: string;
     close(code?: number, reason?: string): void;
-    send(data: any): void;
+    send(data: USVString | ArrayBuffer | Blob | ArrayBufferView): void;
     readonly CLOSED: number;
     readonly CLOSING: number;
     readonly CONNECTING: number;
