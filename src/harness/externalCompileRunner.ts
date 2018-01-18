@@ -33,6 +33,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
         });
     }
     private runTest(directoryName: string) {
+        // tslint:disable-next-line:no-this-assignment
         const cls = this;
         const timeout = 600_000; // 10 minutes
         describe(directoryName, function(this: Mocha.ISuiteCallbackContext) {
