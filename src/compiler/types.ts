@@ -3794,6 +3794,8 @@ namespace ts {
         extendsType: Type;
         trueType: Type;
         falseType: Type;
+        target?: ConditionalType;
+        mapper?: TypeMapper;
     }
 
     // Type parameter substitution (TypeFlags.Substitution)
