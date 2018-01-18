@@ -3767,6 +3767,10 @@
         "category": "Error",
         "code": 17016
     },
+    "JSX fragment is not supported when using an inline JSX factory pragma": {
+        "category": "Error",
+        "code": 17017
+    },
 
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",

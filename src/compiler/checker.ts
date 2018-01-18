@@ -14523,8 +14523,10 @@ namespace ts {
         function checkJsxFragment(node: JsxFragment, checkMode: CheckMode): Type {
             checkJsxOpeningLikeElementOrOpeningFragment(node.openingFragment, checkMode);
 
-            if (compilerOptions.jsx === JsxEmit.React && compilerOptions.jsxFactory) {
-                error(node, Diagnostics.JSX_fragment_is_not_supported_when_using_jsxFactory);
+            if (compilerOptions.jsx === JsxEmit.React && (compilerOptions.jsxFactory || getSourceFileOfNode(node).pragmas.has("jsx"))) {
+                error(node, compilerOptions.jsxFactory
+                    ? Diagnostics.JSX_fragment_is_not_supported_when_using_jsxFactory
+                    : Diagnostics.JSX_fragment_is_not_supported_when_using_an_inline_JSX_factory_pragma);
             }
 
             return getJsxGlobalElementType() || anyType;
