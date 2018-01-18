@@ -20,6 +20,7 @@ namespace ts {
 
 /* @internal */
 namespace ts {
+    export const emptyArray: never[] = [] as never[];
     /** Create a MapLike with good performance. */
     function createDictionaryObject<T>(): MapLike<T> {
         const map = Object.create(/*prototype*/ null); // tslint:disable-line:no-null-keyword
@@ -1341,7 +1342,8 @@ namespace ts {
 
     export function cloneMap(map: SymbolTable): SymbolTable;
     export function cloneMap<T>(map: ReadonlyMap<T>): Map<T>;
-    export function cloneMap<T>(map: ReadonlyMap<T> | SymbolTable): Map<T> | SymbolTable {
+    export function cloneMap<T>(map: ReadonlyUnderscoreEscapedMap<T>): UnderscoreEscapedMap<T>;
+    export function cloneMap<T>(map: ReadonlyMap<T> | ReadonlyUnderscoreEscapedMap<T> | SymbolTable): Map<T> | UnderscoreEscapedMap<T> | SymbolTable {
         const clone = createMap<T>();
         copyEntries(map as Map<T>, clone);
         return clone;
@@ -1912,7 +1914,7 @@ namespace ts {
             return p2 + 1;
         }
         if (path.charCodeAt(1) === CharacterCodes.colon) {
-            if (path.charCodeAt(2) === CharacterCodes.slash) return 3;
+            if (path.charCodeAt(2) === CharacterCodes.slash || path.charCodeAt(2) === CharacterCodes.backslash) return 3;
         }
         // Per RFC 1738 'file' URI schema has the shape file://<host>/<path>
         // if <host> is omitted then it is assumed that host value is 'localhost',
@@ -3052,6 +3054,11 @@ namespace ts {
     }
 
     export function assertTypeIsNever(_: never): void { } // tslint:disable-line no-empty
+
+    export const emptyFileSystemEntries: FileSystemEntries = {
+        files: emptyArray,
+        directories: emptyArray
+    };
 
     export function singleElementArray<T>(t: T | undefined): T[] | undefined {
         return t === undefined ? undefined : [t];

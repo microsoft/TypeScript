@@ -833,8 +833,7 @@ namespace ts {
         }
     }
 
-    export function isInString(sourceFile: SourceFile, position: number): boolean {
-        const previousToken = findPrecedingToken(position, sourceFile);
+    export function isInString(sourceFile: SourceFile, position: number, previousToken = findPrecedingToken(position, sourceFile)): boolean {
         if (previousToken && isStringTextContainingNode(previousToken)) {
             const start = previousToken.getStart();
             const end = previousToken.getEnd();
@@ -1110,6 +1109,14 @@ namespace ts {
 
     export function getSnapshotText(snap: IScriptSnapshot): string {
         return snap.getText(0, snap.getLength());
+    }
+
+    export function repeatString(str: string, count: number): string {
+        let result = "";
+        for (let i = 0; i < count; i++) {
+            result += str;
+        }
+        return result;
     }
 }
 

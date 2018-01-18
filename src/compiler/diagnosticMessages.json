@@ -3015,7 +3015,7 @@
         "category": "Message",
         "code": 6078
     },
-    "Specify library files to be included in the compilation: ": {
+    "Specify library files to be included in the compilation.": {
         "category": "Message",
         "code": 6079
     },
@@ -3450,6 +3450,10 @@
     "Multiple consecutive numeric separators are not permitted.": {
         "category": "Error",
         "code": 6189
+    },
+    "Found 'package.json' at '{0}'. Package ID is '{1}'.": {
+        "category": "Message",
+        "code": 6190
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

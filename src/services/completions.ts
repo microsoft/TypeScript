@@ -4,7 +4,9 @@
 namespace ts.Completions {
     export type Log = (message: string) => void;
 
-    interface SymbolOriginInfo {
+    type SymbolOriginInfo = { type: "this-type" } | SymbolOriginInfoExport;
+    interface SymbolOriginInfoExport {
+        type: "export";
         moduleSymbol: Symbol;
         isDefaultExport: boolean;
     }
@@ -35,11 +37,14 @@ namespace ts.Completions {
             return entries && pathCompletionsInfo(entries);
         }
 
-        if (isInString(sourceFile, position)) {
-            return getStringLiteralCompletionEntries(sourceFile, position, typeChecker, compilerOptions, host, log);
+        const contextToken = findPrecedingToken(position, sourceFile);
+
+        if (isInString(sourceFile, position, contextToken)) {
+            return !contextToken || !isStringLiteral(contextToken) && !isNoSubstitutionTemplateLiteral(contextToken)
+                ? undefined
+                : getStringLiteralCompletionEntries(sourceFile, contextToken, position, typeChecker, compilerOptions, host, log);
         }
 
-        const contextToken = findPrecedingToken(position, sourceFile);
         if (contextToken && isBreakOrContinueStatement(contextToken.parent)
             && (contextToken.kind === SyntaxKind.BreakKeyword || contextToken.kind === SyntaxKind.ContinueKeyword || contextToken.kind === SyntaxKind.Identifier)) {
             return getLabelCompletionAtPosition(contextToken.parent);
@@ -167,9 +172,19 @@ namespace ts.Completions {
             return undefined;
         }
         const { name, needsConvertPropertyAccess } = info;
-        Debug.assert(!(needsConvertPropertyAccess && !propertyAccessToConvert));
         if (needsConvertPropertyAccess && !includeInsertTextCompletions) {
             return undefined;
+        }
+
+        let insertText: string | undefined;
+        let replacementSpan: TextSpan | undefined;
+        if (kind === CompletionKind.Global && origin && origin.type === "this-type") {
+            insertText = needsConvertPropertyAccess ? `this["${name}"]` : `this.${name}`;
+        }
+        else if (needsConvertPropertyAccess) {
+            // TODO: GH#20619 Use configured quote style
+            insertText = `["${name}"]`;
+            replacementSpan = createTextSpanFromBounds(findChildOfKind(propertyAccessToConvert!, SyntaxKind.DotToken, sourceFile)!.getStart(sourceFile), propertyAccessToConvert!.name.end);
         }
 
         // TODO(drosen): Right now we just permit *all* semantic meanings when calling
@@ -186,13 +201,10 @@ namespace ts.Completions {
             kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
             sortText: "0",
             source: getSourceFromOrigin(origin),
-            // TODO: GH#20619 Use configured quote style
-            insertText: needsConvertPropertyAccess ? `["${name}"]` : undefined,
-            replacementSpan: needsConvertPropertyAccess
-                ? createTextSpanFromBounds(findChildOfKind(propertyAccessToConvert, SyntaxKind.DotToken, sourceFile)!.getStart(sourceFile), propertyAccessToConvert.name.end)
-                : undefined,
-            hasAction: trueOrUndefined(needsConvertPropertyAccess || origin !== undefined),
+            hasAction: trueOrUndefined(!!origin && origin.type === "export"),
             isRecommended: trueOrUndefined(isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker)),
+            insertText,
+            replacementSpan,
         };
     }
 
@@ -207,7 +219,7 @@ namespace ts.Completions {
     }
 
     function getSourceFromOrigin(origin: SymbolOriginInfo | undefined): string | undefined {
-        return origin && stripQuotes(origin.moduleSymbol.name);
+        return origin && origin.type === "export" ? stripQuotes(origin.moduleSymbol.name) : undefined;
     }
 
     function getCompletionEntriesFromSymbols(
@@ -261,70 +273,87 @@ namespace ts.Completions {
         }
     }
 
-    function getStringLiteralCompletionEntries(sourceFile: SourceFile, position: number, typeChecker: TypeChecker, compilerOptions: CompilerOptions, host: LanguageServiceHost, log: Log): CompletionInfo | undefined {
-        const node = findPrecedingToken(position, sourceFile);
-        if (!node || !isStringLiteral(node) && !isNoSubstitutionTemplateLiteral(node)) {
-            return undefined;
-        }
+    function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringLiteralLike, position: number, typeChecker: TypeChecker, compilerOptions: CompilerOptions, host: LanguageServiceHost, log: Log): CompletionInfo | undefined {
+        switch (node.parent.kind) {
+            case SyntaxKind.LiteralType:
+                switch (node.parent.parent.kind) {
+                    case SyntaxKind.TypeReference:
+                        // TODO: GH#21168
+                        return undefined;
+                    case SyntaxKind.IndexedAccessType:
+                        // Get all apparent property names
+                        // i.e. interface Foo {
+                        //          foo: string;
+                        //          bar: string;
+                        //      }
+                        //      let x: Foo["/*completion position*/"]
+                        const type = typeChecker.getTypeFromTypeNode((node.parent.parent as IndexedAccessTypeNode).objectType);
+                        return getStringLiteralCompletionEntriesFromElementAccessOrIndexedAccess(node, sourceFile, type, typeChecker, compilerOptions.target, log);
+                    default:
+                        return undefined;
+                }
 
-        if (node.parent.kind === SyntaxKind.PropertyAssignment &&
-            node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression &&
-            (<PropertyAssignment>node.parent).name === node) {
-            // Get quoted name of properties of the object literal expression
-            // i.e. interface ConfigFiles {
-            //          'jspm:dev': string
-            //      }
-            //      let files: ConfigFiles = {
-            //          '/*completion position*/'
-            //      }
-            //
-            //      function foo(c: ConfigFiles) {}
-            //      foo({
-            //          '/*completion position*/'
-            //      });
-            return getStringLiteralCompletionEntriesFromPropertyAssignment(<ObjectLiteralElement>node.parent, sourceFile, typeChecker, compilerOptions.target, log);
-        }
-        else if (isElementAccessExpression(node.parent) && node.parent.argumentExpression === node) {
-            // Get all names of properties on the expression
-            // i.e. interface A {
-            //      'prop1': string
-            // }
-            // let a: A;
-            // a['/*completion position*/']
-            const type = typeChecker.getTypeAtLocation(node.parent.expression);
-            return getStringLiteralCompletionEntriesFromElementAccessOrIndexedAccess(node, sourceFile, type, typeChecker, compilerOptions.target, log);
-        }
-        else if (node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration
-            || isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false) || isImportCall(node.parent)
-            || isExpressionOfExternalModuleImportEqualsDeclaration(node)) {
-            // Get all known external module names or complete a path to a module
-            // i.e. import * as ns from "/*completion position*/";
-            //      var y = import("/*completion position*/");
-            //      import x = require("/*completion position*/");
-            //      var y = require("/*completion position*/");
-            //      export * from "/*completion position*/";
-            const entries = PathCompletions.getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker);
-            return pathCompletionsInfo(entries);
-        }
-        else if (isIndexedAccessTypeNode(node.parent.parent)) {
-            // Get all apparent property names
-            // i.e. interface Foo {
-            //          foo: string;
-            //          bar: string;
-            //      }
-            //      let x: Foo["/*completion position*/"]
-            const type = typeChecker.getTypeFromTypeNode(node.parent.parent.objectType);
-            return getStringLiteralCompletionEntriesFromElementAccessOrIndexedAccess(node, sourceFile, type, typeChecker, compilerOptions.target, log);
-        }
-        else {
-            const argumentInfo = SignatureHelp.getImmediatelyContainingArgumentInfo(node, position, sourceFile);
-            if (argumentInfo) {
-                // Get string literal completions from specialized signatures of the target
-                // i.e. declare function f(a: 'A');
-                // f("/*completion position*/")
-                return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo, typeChecker);
+            case SyntaxKind.PropertyAssignment:
+                if (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression &&
+                    (<PropertyAssignment>node.parent).name === node) {
+                    // Get quoted name of properties of the object literal expression
+                    // i.e. interface ConfigFiles {
+                    //          'jspm:dev': string
+                    //      }
+                    //      let files: ConfigFiles = {
+                    //          '/*completion position*/'
+                    //      }
+                    //
+                    //      function foo(c: ConfigFiles) {}
+                    //      foo({
+                    //          '/*completion position*/'
+                    //      });
+                    return getStringLiteralCompletionEntriesFromPropertyAssignment(<PropertyAssignment>node.parent, sourceFile, typeChecker, compilerOptions.target, log);
+                }
+                return fromContextualType();
+
+            case SyntaxKind.ElementAccessExpression: {
+                const { expression, argumentExpression } = node.parent as ElementAccessExpression;
+                if (node === argumentExpression) {
+                    // Get all names of properties on the expression
+                    // i.e. interface A {
+                    //      'prop1': string
+                    // }
+                    // let a: A;
+                    // a['/*completion position*/']
+                    const type = typeChecker.getTypeAtLocation(expression);
+                    return getStringLiteralCompletionEntriesFromElementAccessOrIndexedAccess(node, sourceFile, type, typeChecker, compilerOptions.target, log);
+                }
+                break;
             }
 
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.NewExpression:
+                if (!isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false) && !isImportCall(node.parent)) {
+                    const argumentInfo = SignatureHelp.getImmediatelyContainingArgumentInfo(node, position, sourceFile);
+                    // Get string literal completions from specialized signatures of the target
+                    // i.e. declare function f(a: 'A');
+                    // f("/*completion position*/")
+                    return argumentInfo ? getStringLiteralCompletionEntriesFromCallExpression(argumentInfo, typeChecker) : fromContextualType();
+                }
+                // falls through
+
+            case SyntaxKind.ImportDeclaration:
+            case SyntaxKind.ExportDeclaration:
+            case SyntaxKind.ExternalModuleReference:
+                // Get all known external module names or complete a path to a module
+                // i.e. import * as ns from "/*completion position*/";
+                //      var y = import("/*completion position*/");
+                //      import x = require("/*completion position*/");
+                //      var y = require("/*completion position*/");
+                //      export * from "/*completion position*/";
+                return pathCompletionsInfo(PathCompletions.getStringLiteralCompletionsFromModuleNames(sourceFile, node as StringLiteral, compilerOptions, host, typeChecker));
+
+            default:
+                return fromContextualType();
+        }
+
+        function fromContextualType(): CompletionInfo {
             // Get completion for string literal from string literal type
             // i.e. var x: "hi" | "hello" = "/*completion position*/"
             return getStringLiteralCompletionEntriesFromType(getContextualTypeFromParent(node, typeChecker), typeChecker);
@@ -484,7 +513,7 @@ namespace ts.Completions {
     }
 
     function getSymbolName(symbol: Symbol, origin: SymbolOriginInfo | undefined, target: ScriptTarget): string {
-        return origin && origin.isDefaultExport && symbol.escapedName === InternalSymbolName.Default
+        return origin && origin.type === "export" && origin.isDefaultExport && symbol.escapedName === InternalSymbolName.Default
             // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
             ? firstDefined(symbol.declarations, d => isExportAssignment(d) && isIdentifier(d.expression) ? d.expression.text : undefined)
                 || codefix.moduleSymbolToValidIdentifier(origin.moduleSymbol, target)
@@ -570,13 +599,13 @@ namespace ts.Completions {
         allSourceFiles: ReadonlyArray<SourceFile>,
     ): CodeActionsAndSourceDisplay {
         const symbolOriginInfo = symbolToOriginInfoMap[getSymbolId(symbol)];
-        return symbolOriginInfo
+        return symbolOriginInfo && symbolOriginInfo.type === "export"
             ? getCodeActionsAndSourceDisplayForImport(symbolOriginInfo, symbol, program, checker, host, compilerOptions, sourceFile, previousToken, formatContext, getCanonicalFileName, allSourceFiles)
             : { codeActions: undefined, sourceDisplay: undefined };
     }
 
     function getCodeActionsAndSourceDisplayForImport(
-        symbolOriginInfo: SymbolOriginInfo,
+        symbolOriginInfo: SymbolOriginInfoExport,
         symbol: Symbol,
         program: Program,
         checker: TypeChecker,
@@ -1097,6 +1126,18 @@ namespace ts.Completions {
             const symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
 
             symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
+
+            // Need to insert 'this.' before properties of `this` type, so only do that if `includeInsertTextCompletions`
+            if (options.includeInsertTextCompletions && scopeNode.kind !== SyntaxKind.SourceFile) {
+                const thisType = typeChecker.tryGetThisTypeAt(scopeNode);
+                if (thisType) {
+                    for (const symbol of getPropertiesForCompletion(thisType, typeChecker, /*isForAccess*/ true)) {
+                        symbolToOriginInfoMap[getSymbolId(symbol)] = { type: "this-type" };
+                        symbols.push(symbol);
+                    }
+                }
+            }
+
             if (options.includeExternalModuleExports) {
                 getSymbolsFromOtherSourceFileExports(symbols, previousToken && isIdentifier(previousToken) ? previousToken.text : "", target);
             }
@@ -1210,10 +1251,10 @@ namespace ts.Completions {
                         symbol = getLocalSymbolForExportDefault(symbol) || symbol;
                     }
 
-                    const origin: SymbolOriginInfo = { moduleSymbol, isDefaultExport };
+                    const origin: SymbolOriginInfo = { type: "export", moduleSymbol, isDefaultExport };
                     if (stringContainsCharactersInOrder(getSymbolName(symbol, origin, target).toLowerCase(), tokenTextLowerCase)) {
                         symbols.push(symbol);
-                        symbolToOriginInfoMap[getSymbolId(symbol)] = { moduleSymbol, isDefaultExport };
+                        symbolToOriginInfoMap[getSymbolId(symbol)] = origin;
                     }
                 }
             });
@@ -2052,13 +2093,13 @@ namespace ts.Completions {
         if (isIdentifierText(name, target)) return validIdentiferResult;
         switch (kind) {
             case CompletionKind.None:
-            case CompletionKind.Global:
             case CompletionKind.MemberLike:
                 return undefined;
             case CompletionKind.ObjectPropertyDeclaration:
                 // TODO: GH#18169
                 return { name: JSON.stringify(name), needsConvertPropertyAccess: false };
             case CompletionKind.PropertyAccess:
+            case CompletionKind.Global:
                 // Don't add a completion for a name starting with a space. See https://github.com/Microsoft/TypeScript/pull/20547
                 return name.charCodeAt(0) === CharacterCodes.space ? undefined : { name, needsConvertPropertyAccess: true };
             case CompletionKind.String:

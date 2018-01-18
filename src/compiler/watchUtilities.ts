@@ -179,7 +179,7 @@ namespace ts {
                 if (path === rootDirPath) {
                     return result;
                 }
-                return getCachedFileSystemEntries(path) || createCachedFileSystemEntries(dir, path);
+                return tryReadDirectory(dir, path) || emptyFileSystemEntries;
             }
         }
 

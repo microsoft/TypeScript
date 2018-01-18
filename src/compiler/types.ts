@@ -676,12 +676,18 @@ namespace ts {
     export type ModifiersArray = NodeArray<Modifier>;
 
     /*@internal*/
-    export const enum GeneratedIdentifierKind {
-        None,   // Not automatically generated.
-        Auto,   // Automatically generated identifier.
-        Loop,   // Automatically generated identifier with a preference for '_i'.
-        Unique, // Unique name based on the 'text' property.
-        Node,   // Unique name based on the node in the 'original' property.
+    export const enum GeneratedIdentifierFlags {
+        // Kinds
+        None = 0,                           // Not automatically generated.
+        Auto = 1,                           // Automatically generated identifier.
+        Loop = 2,                           // Automatically generated identifier with a preference for '_i'.
+        Unique = 3,                         // Unique name based on the 'text' property.
+        Node = 4,                           // Unique name based on the node in the 'original' property.
+        KindMask = 7,                       // Mask to extract the kind of identifier from its flags.
+
+        // Flags
+        SkipNameGenerationScope = 1 << 3,   // Should skip a name generation scope when generating the name for this identifier
+        ReservedInNestedScopes = 1 << 4,    // Reserve the generated name in nested scopes
     }
 
     export interface Identifier extends PrimaryExpression, Declaration {
@@ -692,12 +698,11 @@ namespace ts {
          */
         escapedText: __String;
         originalKeywordKind?: SyntaxKind;                         // Original syntaxKind which get set so that we can report an error later
-        /*@internal*/ autoGenerateKind?: GeneratedIdentifierKind; // Specifies whether to auto-generate the text for an identifier.
+        /*@internal*/ autoGenerateFlags?: GeneratedIdentifierFlags; // Specifies whether to auto-generate the text for an identifier.
         /*@internal*/ autoGenerateId?: number;                    // Ensures unique generated identifiers get unique names, but clones get the same name.
         isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
         /*@internal*/ typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
         /*@internal*/ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
-        /*@internal*/ skipNameGenerationScope?: boolean;          // Should skip a name generation scope when generating the name for this identifier
     }
 
     // Transient identifier node (marked by id === -1)
@@ -707,10 +712,7 @@ namespace ts {
 
     /*@internal*/
     export interface GeneratedIdentifier extends Identifier {
-        autoGenerateKind: GeneratedIdentifierKind.Auto
-                        | GeneratedIdentifierKind.Loop
-                        | GeneratedIdentifierKind.Unique
-                        | GeneratedIdentifierKind.Node;
+        autoGenerateFlags: GeneratedIdentifierFlags;
     }
 
     export interface QualifiedName extends Node {
@@ -1465,7 +1467,7 @@ namespace ts {
         | SpreadAssignment // AssignmentRestProperty
         ;
 
-    export type BindingOrAssignmentElementTarget = BindingOrAssignmentPattern | Expression;
+    export type BindingOrAssignmentElementTarget = BindingOrAssignmentPattern | Identifier | PropertyAccessExpression | ElementAccessExpression | OmittedExpression;
 
     export type ObjectBindingOrAssignmentPattern
         = ObjectBindingPattern
@@ -2919,6 +2921,8 @@ namespace ts {
         /* @internal */ getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined;
         /* @internal */ getTypePredicateOfSignature(signature: Signature): TypePredicate;
         /* @internal */ resolveExternalModuleSymbol(symbol: Symbol): Symbol;
+        /** @param node A location where we might consider accessing `this`. Not necessarily a ThisExpression. */
+        /* @internal */ tryGetThisTypeAt(node: Node): Type | undefined;
     }
 
     /* @internal */
@@ -2934,6 +2938,7 @@ namespace ts {
         NoTruncation                            = 1 << 0,   // Don't truncate result
         WriteArrayAsGenericType                 = 1 << 1,   // Write Array<T> instead T[]
         WriteDefaultSymbolWithoutName           = 1 << 2,   // Write `default`-named symbols as `default` instead of how they were written
+        UseStructuralFallback                   = 1 << 3,   // When an alias cannot be named by its symbol, rather than report an error, fallback to a structural printout if possible
         // empty space
         WriteTypeArgumentsOfSignature           = 1 << 5,   // Write the type arguments instead of type parameters of the signature
         UseFullyQualifiedType                   = 1 << 6,   // Write out the fully qualified type name (eg. Module.Type, instead of Type)
@@ -2968,6 +2973,7 @@ namespace ts {
         NoTruncation                            = 1 << 0,  // Don't truncate typeToString result
         WriteArrayAsGenericType                 = 1 << 1,  // Write Array<T> instead T[]
         WriteDefaultSymbolWithoutName           = 1 << 2,  // Write all `defaut`-named symbols as `default` instead of their written name
+        UseStructuralFallback                   = 1 << 3,   // When an alias cannot be named by its symbol, rather than report an error, fallback to a structural printout if possible
         // hole because there's a hole in node builder flags
         WriteTypeArgumentsOfSignature           = 1 << 5,  // Write the type arguments instead of type parameters of the signature
         UseFullyQualifiedType                   = 1 << 6,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
@@ -2997,7 +3003,7 @@ namespace ts {
         /** @deprecated */ WriteOwnNameForAnyLike  = 0,  // Does nothing
 
         NodeBuilderFlagsMask =
-            NoTruncation | WriteArrayAsGenericType | WriteDefaultSymbolWithoutName | WriteTypeArgumentsOfSignature |
+            NoTruncation | WriteArrayAsGenericType | WriteDefaultSymbolWithoutName | UseStructuralFallback | WriteTypeArgumentsOfSignature |
             UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
             UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias,
     }
@@ -3824,20 +3830,19 @@ namespace ts {
     export type TypeMapper = (t: TypeParameter) => Type;
 
     export const enum InferencePriority {
-        Contravariant     = 1 << 0,  // Inference from contravariant position
-        NakedTypeVariable = 1 << 1,  // Naked type variable in union or intersection type
-        MappedType        = 1 << 2,  // Reverse inference for mapped type
-        ReturnType        = 1 << 3,  // Inference made from return type of generic function
-        NeverType         = 1 << 4,  // Inference made from the never type
+        NakedTypeVariable = 1 << 0,  // Naked type variable in union or intersection type
+        MappedType        = 1 << 1,  // Reverse inference for mapped type
+        ReturnType        = 1 << 2,  // Inference made from return type of generic function
     }
 
     export interface InferenceInfo {
-        typeParameter: TypeParameter;
-        candidates: Type[];
-        inferredType: Type;
-        priority: InferencePriority;
-        topLevel: boolean;
-        isFixed: boolean;
+        typeParameter: TypeParameter;  // Type parameter for which inferences are being made
+        candidates: Type[];            // Candidates in covariant positions (or undefined)
+        contraCandidates: Type[];      // Candidates in contravariant positions (or undefined)
+        inferredType: Type;            // Cache for resolved inferred type
+        priority: InferencePriority;   // Priority of current inference set
+        topLevel: boolean;             // True if all inferences are to top level occurrences
+        isFixed: boolean;              // True if inferences are fixed
     }
 
     export const enum InferenceFlags {

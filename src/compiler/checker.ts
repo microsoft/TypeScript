@@ -295,6 +295,10 @@ namespace ts {
             getAccessibleSymbolChain,
             getTypePredicateOfSignature,
             resolveExternalModuleSymbol,
+            tryGetThisTypeAt: node => {
+                node = getParseTreeNode(node);
+                return node && tryGetThisTypeAt(node);
+            },
         };
 
         const tupleTypes: GenericType[] = [];
@@ -2061,9 +2065,9 @@ namespace ts {
                     error(errorNode, diag, moduleReference, resolvedModule.resolvedFileName);
                 }
                 else if (noImplicitAny && moduleNotFoundError) {
-                    let errorInfo = !resolvedModule.isExternalLibraryImport ? undefined : chainDiagnosticMessages(/*details*/ undefined,
+                    let errorInfo = resolvedModule.packageId && chainDiagnosticMessages(/*details*/ undefined,
                         Diagnostics.Try_npm_install_types_Slash_0_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
-                        moduleReference);
+                        resolvedModule.packageId.name);
                     errorInfo = chainDiagnosticMessages(errorInfo,
                         Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
                         moduleReference,
@@ -2533,6 +2537,11 @@ namespace ts {
             return access.accessibility === SymbolAccessibility.Accessible;
         }
 
+        function isValueSymbolAccessible(typeSymbol: Symbol, enclosingDeclaration: Node): boolean {
+            const access = isSymbolAccessible(typeSymbol, enclosingDeclaration, SymbolFlags.Value, /*shouldComputeAliasesToMakeVisible*/ false);
+            return access.accessibility === SymbolAccessibility.Accessible;
+        }
+
         /**
          * Check if the given symbol in given enclosing declaration is accessible and mark all associated alias to be visible if requested
          *
@@ -2995,7 +3004,8 @@ namespace ts {
                                     declaration.parent.kind === SyntaxKind.SourceFile || declaration.parent.kind === SyntaxKind.ModuleBlock));
                         if (isStaticMethodSymbol || isNonLocalFunctionSymbol) {
                             // typeof is allowed only for static/non local functions
-                            return !!(context.flags & NodeBuilderFlags.UseTypeOfFunction) || contains(context.symbolStack, symbol); // it is type of the symbol uses itself recursively
+                            return (!!(context.flags & NodeBuilderFlags.UseTypeOfFunction) || contains(context.symbolStack, symbol)) && // it is type of the symbol uses itself recursively
+                                (!(context.flags & NodeBuilderFlags.UseStructuralFallback) || isValueSymbolAccessible(symbol, context.enclosingDeclaration)); // And the build is going to succeed without visibility error or there is no structural fallback allowed
                         }
                     }
                 }
@@ -5408,18 +5418,19 @@ namespace ts {
             return symbol;
         }
 
-        function getTypeWithThisArgument(type: Type, thisArgument?: Type): Type {
+        function getTypeWithThisArgument(type: Type, thisArgument?: Type, needApparentType?: boolean): Type {
             if (getObjectFlags(type) & ObjectFlags.Reference) {
                 const target = (<TypeReference>type).target;
                 const typeArguments = (<TypeReference>type).typeArguments;
                 if (length(target.typeParameters) === length(typeArguments)) {
-                    return createTypeReference(target, concatenate(typeArguments, [thisArgument || target.thisType]));
+                    const ref = createTypeReference(target, concatenate(typeArguments, [thisArgument || target.thisType]));
+                    return needApparentType ? getApparentType(ref) : ref;
                 }
             }
             else if (type.flags & TypeFlags.Intersection) {
-                return getIntersectionType(map((<IntersectionType>type).types, t => getTypeWithThisArgument(t, thisArgument)));
+                return getIntersectionType(map((<IntersectionType>type).types, t => getTypeWithThisArgument(t, thisArgument, needApparentType)));
             }
-            return type;
+            return needApparentType ? getApparentType(type) : type;
         }
 
         function resolveObjectTypeMembers(type: ObjectType, source: InterfaceTypeWithDeclaredMembers, typeParameters: TypeParameter[], typeArguments: Type[]) {
@@ -6099,7 +6110,7 @@ namespace ts {
         }
 
         function getApparentTypeOfIntersectionType(type: IntersectionType) {
-            return type.resolvedApparentType || (type.resolvedApparentType = getTypeWithThisArgument(type, type));
+            return type.resolvedApparentType || (type.resolvedApparentType = getTypeWithThisArgument(type, type, /*apparentType*/ true));
         }
 
         function getResolvedTypeParameterDefault(typeParameter: TypeParameter): Type | undefined {
@@ -10913,6 +10924,7 @@ namespace ts {
             return {
                 typeParameter,
                 candidates: undefined,
+                contraCandidates: undefined,
                 inferredType: undefined,
                 priority: undefined,
                 topLevel: true,
@@ -10924,6 +10936,7 @@ namespace ts {
             return {
                 typeParameter: inference.typeParameter,
                 candidates: inference.candidates && inference.candidates.slice(),
+                contraCandidates: inference.contraCandidates && inference.contraCandidates.slice(),
                 inferredType: inference.inferredType,
                 priority: inference.priority,
                 topLevel: inference.topLevel,
@@ -11037,6 +11050,7 @@ namespace ts {
         function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0) {
             let symbolStack: Symbol[];
             let visited: Map<boolean>;
+            let contravariant = false;
             inferFromTypes(originalSource, originalTarget);
 
             function inferFromTypes(source: Type, target: Type) {
@@ -11104,18 +11118,20 @@ namespace ts {
                     const inference = getInferenceInfoForType(target);
                     if (inference) {
                         if (!inference.isFixed) {
-                            // We give lowest priority to inferences of implicitNeverType (which is used as the
-                            // element type for empty array literals). Thus, inferences from empty array literals
-                            // only matter when no other inferences are made.
-                            const p = priority | (source === implicitNeverType ? InferencePriority.NeverType : 0);
-                            if (!inference.candidates || p < inference.priority) {
-                                inference.candidates = [source];
-                                inference.priority = p;
+                            if (inference.priority === undefined || priority < inference.priority) {
+                                inference.candidates = undefined;
+                                inference.contraCandidates = undefined;
+                                inference.priority = priority;
                             }
-                            else if (p === inference.priority) {
-                                inference.candidates.push(source);
+                            if (priority === inference.priority) {
+                                if (contravariant) {
+                                    inference.contraCandidates = append(inference.contraCandidates, source);
+                                }
+                                else {
+                                    inference.candidates = append(inference.candidates, source);
+                                }
                             }
-                            if (!(p & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
+                            if (!(priority & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
                                 inference.topLevel = false;
                             }
                         }
@@ -11138,15 +11154,15 @@ namespace ts {
                     }
                 }
                 else if (source.flags & TypeFlags.Index && target.flags & TypeFlags.Index) {
-                    priority ^= InferencePriority.Contravariant;
+                    contravariant = !contravariant;
                     inferFromTypes((<IndexType>source).type, (<IndexType>target).type);
-                    priority ^= InferencePriority.Contravariant;
+                    contravariant = !contravariant;
                 }
                 else if ((isLiteralType(source) || source.flags & TypeFlags.String) && target.flags & TypeFlags.Index) {
                     const empty = createEmptyObjectTypeFromStringLiteral(source);
-                    priority ^= InferencePriority.Contravariant;
+                    contravariant = !contravariant;
                     inferFromTypes(empty, (target as IndexType).type);
-                    priority ^= InferencePriority.Contravariant;
+                    contravariant = !contravariant;
                 }
                 else if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
                     inferFromTypes((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType);
@@ -11215,9 +11231,9 @@ namespace ts {
 
             function inferFromContravariantTypes(source: Type, target: Type) {
                 if (strictFunctionTypes) {
-                    priority ^= InferencePriority.Contravariant;
+                    contravariant = !contravariant;
                     inferFromTypes(source, target);
-                    priority ^= InferencePriority.Contravariant;
+                    contravariant = !contravariant;
                 }
                 else {
                     inferFromTypes(source, target);
@@ -11396,10 +11412,19 @@ namespace ts {
                     // If all inferences were made from contravariant positions, infer a common subtype. Otherwise, if
                     // union types were requested or if all inferences were made from the return type position, infer a
                     // union type. Otherwise, infer a common supertype.
-                    const unwidenedType = inference.priority & InferencePriority.Contravariant ? getCommonSubtype(baseCandidates) :
-                        context.flags & InferenceFlags.InferUnionTypes || inference.priority & InferencePriority.ReturnType ? getUnionType(baseCandidates, UnionReduction.Subtype) :
+                    const unwidenedType = context.flags & InferenceFlags.InferUnionTypes || inference.priority & InferencePriority.ReturnType ?
+                        getUnionType(baseCandidates, UnionReduction.Subtype) :
                         getCommonSupertype(baseCandidates);
                     inferredType = getWidenedType(unwidenedType);
+                    // If we have inferred 'never' but have contravariant candidates. To get a more specific type we
+                    // infer from the contravariant candidates instead.
+                    if (inferredType.flags & TypeFlags.Never && inference.contraCandidates) {
+                        inferredType = getCommonSubtype(inference.contraCandidates);
+                    }
+                }
+                else if (inference.contraCandidates) {
+                    // We only have contravariant inferences, infer the best common subtype of those
+                    inferredType = getCommonSubtype(inference.contraCandidates);
                 }
                 else if (context.flags & InferenceFlags.NoDefault) {
                     // We use silentNeverType as the wildcard that signals no inferences.
@@ -13250,6 +13275,16 @@ namespace ts {
             if (needToCaptureLexicalThis) {
                 captureLexicalThis(node, container);
             }
+
+            const type = tryGetThisTypeAt(node, container);
+            if (!type && noImplicitThis) {
+                // With noImplicitThis, functions may not reference 'this' if it has type 'any'
+                error(node, Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation);
+            }
+            return type || anyType;
+        }
+
+        function tryGetThisTypeAt(node: Node, container = getThisContainer(node, /*includeArrowFunctions*/ false)): Type | undefined {
             if (isFunctionLike(container) &&
                 (!isInParameterInitializerBeforeContainingFunction(node) || getThisParameter(container))) {
                 // Note: a parameter initializer should refer to class-this unless function-this is explicitly annotated.
@@ -13288,12 +13323,6 @@ namespace ts {
                     return type;
                 }
             }
-
-            if (noImplicitThis) {
-                // With noImplicitThis, functions may not reference 'this' if it has type 'any'
-                error(node, Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation);
-            }
-            return anyType;
         }
 
         function getTypeForThisExpressionFromJSDoc(node: Node) {
@@ -14042,7 +14071,7 @@ namespace ts {
         // If the given type is an object or union type with a single signature, and if that signature has at
         // least as many parameters as the given function, return the signature. Otherwise return undefined.
         function getContextualCallSignature(type: Type, node: FunctionExpression | ArrowFunction | MethodDeclaration): Signature {
-            const signatures = getSignaturesOfStructuredType(type, SignatureKind.Call);
+            const signatures = getSignaturesOfType(type, SignatureKind.Call);
             if (signatures.length === 1) {
                 const signature = signatures[0];
                 if (!isAritySmaller(signature, node)) {
@@ -15797,7 +15826,7 @@ namespace ts {
         }
         function isValidMethodAccess(method: Symbol, type: Type) {
             const propType = getTypeOfFuncClassEnumModule(method);
-            const signatures = getSignaturesOfType(propType, SignatureKind.Call);
+            const signatures = getSignaturesOfType(getNonNullableType(propType), SignatureKind.Call);
             Debug.assert(signatures.length !== 0);
             return signatures.some(sig => {
                 const thisType = getThisTypeOfSignature(sig);
@@ -22280,7 +22309,8 @@ namespace ts {
                 indexType: Type,
                 indexKind: IndexKind): void {
 
-                if (!indexType) {
+                // ESSymbol properties apply to neither string nor numeric indexers.
+                if (!indexType || isKnownSymbol(prop)) {
                     return;
                 }
 
