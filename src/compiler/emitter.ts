@@ -1268,12 +1268,12 @@ namespace ts {
         }
 
         function emitBindingElement(node: BindingElement) {
+            emitIfPresent(node.dotDotDotToken);
             if (node.propertyName) {
                 emit(node.propertyName);
                 writePunctuation(":");
                 writeSpace();
             }
-            emitIfPresent(node.dotDotDotToken);
             emit(node.name);
             emitInitializer(node.initializer);
         }
