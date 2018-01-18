@@ -126,8 +126,8 @@ namespace ts {
             case SyntaxKind.BindingElement:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<BindingElement>node).propertyName) ||
                     visitNode(cbNode, (<BindingElement>node).dotDotDotToken) ||
+                    visitNode(cbNode, (<BindingElement>node).propertyName) ||
                     visitNode(cbNode, (<BindingElement>node).name) ||
                     visitNode(cbNode, (<BindingElement>node).initializer);
             case SyntaxKind.FunctionType:
