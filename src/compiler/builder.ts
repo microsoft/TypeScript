@@ -257,14 +257,14 @@ namespace ts {
             getSyntacticDiagnostics: (sourceFile, cancellationToken) => state.program.getSyntacticDiagnostics(sourceFile, cancellationToken),
             getSemanticDiagnostics,
             emit,
-            getAllDependencies: sourceFile => BuilderState.getAllDependencies(state, state.program, sourceFile)
+            getAllDependencies: sourceFile => BuilderState.getAllDependencies(state, state.program, sourceFile),
+            getCurrentDirectory: () => state.program.getCurrentDirectory()
         };
 
         if (kind === BuilderProgramKind.SemanticDiagnosticsBuilderProgram) {
             (result as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile = getSemanticDiagnosticsOfNextAffectedFile;
         }
         else if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
-            (result as EmitAndSemanticDiagnosticsBuilderProgram).getCurrentDirectory = () => state.program.getCurrentDirectory();
             (result as EmitAndSemanticDiagnosticsBuilderProgram).emitNextAffectedFile = emitNextAffectedFile;
         }
         else {
@@ -485,6 +485,10 @@ namespace ts {
          * in that order would be used to write the files
          */
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
+        /**
+         * Get the current directory of the program
+         */
+        getCurrentDirectory(): string;
     }
 
     /**
@@ -503,10 +507,6 @@ namespace ts {
      * The semantic diagnostics are cached per file and managed by clearing for the changed/affected files
      */
     export interface EmitAndSemanticDiagnosticsBuilderProgram extends BuilderProgram {
-        /**
-         * Get the current directory of the program
-         */
-        getCurrentDirectory(): string;
         /**
          * Emits the next affected file's emit result (EmitResult and sourceFiles emitted) or returns undefined if iteration is complete
          * The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host

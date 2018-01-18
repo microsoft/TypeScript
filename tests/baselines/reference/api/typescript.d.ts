@@ -3929,6 +3929,10 @@ declare namespace ts {
          * in that order would be used to write the files
          */
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
+        /**
+         * Get the current directory of the program
+         */
+        getCurrentDirectory(): string;
     }
     /**
      * The builder that caches the semantic diagnostics for the program and handles the changed files and affected files
@@ -3945,10 +3949,6 @@ declare namespace ts {
      * The semantic diagnostics are cached per file and managed by clearing for the changed/affected files
      */
     interface EmitAndSemanticDiagnosticsBuilderProgram extends BuilderProgram {
-        /**
-         * Get the current directory of the program
-         */
-        getCurrentDirectory(): string;
         /**
          * Emits the next affected file's emit result (EmitResult and sourceFiles emitted) or returns undefined if iteration is complete
          * The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
