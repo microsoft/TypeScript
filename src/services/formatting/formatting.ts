@@ -14,10 +14,14 @@ namespace ts.formatting {
         kind: SyntaxKind;
     }
 
+    export interface TextRangeWithTriviaKind extends TextRange {
+        kind: TriviaKind;
+    }
+
     export interface TokenInfo {
-        leadingTrivia: TextRangeWithKind[];
+        leadingTrivia: TextRangeWithTriviaKind[];
         token: TextRangeWithKind;
-        trailingTrivia: TextRangeWithKind[];
+        trailingTrivia: TextRangeWithTriviaKind[];
     }
 
     const enum Constants {
