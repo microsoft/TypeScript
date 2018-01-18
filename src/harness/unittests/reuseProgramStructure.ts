@@ -910,12 +910,12 @@ namespace ts {
         }
 
         function verifyProgramWithoutConfigFile(system: System, rootFiles: string[], options: CompilerOptions) {
-            const program = createWatchOfFilesAndCompilerOptions(rootFiles, options, system).getCurrentProgram();
+            const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, system)).getCurrentProgram();
             verifyProgramIsUptoDate(program, duplicate(rootFiles), duplicate(options));
         }
 
         function verifyProgramWithConfigFile(system: System, configFileName: string) {
-            const program = createWatchOfConfigFile(configFileName, {}, system).getCurrentProgram();
+            const program = createWatchProgram(createWatchCompilerHostOfConfigFile(configFileName, {}, system)).getCurrentProgram();
             const { fileNames, options } = parseConfigFileWithSystem(configFileName, {}, system, notImplemented);
             verifyProgramIsUptoDate(program, fileNames, options);
         }

@@ -4069,14 +4069,6 @@ declare namespace ts {
         updateRootFileNames(fileNames: string[]): void;
     }
     /**
-     * Create the watched program for config file
-     */
-    function createWatchOfConfigFile(configFileName: string, optionsToExtend?: CompilerOptions, system?: System, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchOfConfigFile<Program>;
-    /**
-     * Create the watched program for root files and compiler options
-     */
-    function createWatchOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions, system?: System, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchOfFilesAndCompilerOptions<Program>;
-    /**
      * Creates the watch from the host for root files and compiler options
      */
     function createWatchProgram(host: WatchCompilerHostOfFilesAndCompilerOptions): WatchOfFilesAndCompilerOptions<Program>;

@@ -257,7 +257,7 @@ namespace ts {
     /**
      * Creates the watch compiler host from system for config file in watch mode
      */
-    export function createWatchCompilerHostOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, reportDiagnostic: DiagnosticReporter | undefined, reportWatchStatus: WatchStatusReporter | undefined): WatchCompilerHostOfConfigFile {
+    export function createWatchCompilerHostOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHostOfConfigFile {
         reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system);
         const host = createWatchCompilerHost(system, reportDiagnostic, reportWatchStatus) as WatchCompilerHostOfConfigFile;
         host.onConfigFileDiagnostic = reportDiagnostic;
@@ -270,7 +270,7 @@ namespace ts {
     /**
      * Creates the watch compiler host from system for compiling root files and options in watch mode
      */
-    export function createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions, system: System, reportDiagnostic: DiagnosticReporter | undefined, reportWatchStatus: WatchStatusReporter | undefined): WatchCompilerHostOfFilesAndCompilerOptions {
+    export function createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions, system: System, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHostOfFilesAndCompilerOptions {
         const host = createWatchCompilerHost(system, reportDiagnostic || createDiagnosticReporter(system), reportWatchStatus) as WatchCompilerHostOfFilesAndCompilerOptions;
         host.rootFiles = rootFiles;
         host.options = options;
@@ -424,20 +424,6 @@ namespace ts {
     export interface WatchOfFilesAndCompilerOptions<T> extends Watch<T> {
         /** Updates the root files in the program, only if this is not config file compilation */
         updateRootFileNames(fileNames: string[]): void;
-    }
-
-    /**
-     * Create the watched program for config file
-     */
-    export function createWatchOfConfigFile(configFileName: string, optionsToExtend?: CompilerOptions, system = sys, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchOfConfigFile<Program> {
-        return createWatchProgram(createWatchCompilerHostOfConfigFile(configFileName, optionsToExtend, system, reportDiagnostic, reportWatchStatus));
-    }
-
-    /**
-     * Create the watched program for root files and compiler options
-     */
-    export function createWatchOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions, system = sys, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchOfFilesAndCompilerOptions<Program> {
-        return createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, system, reportDiagnostic, reportWatchStatus));
     }
 
     /**

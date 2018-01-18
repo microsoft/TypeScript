@@ -23,14 +23,14 @@ namespace ts.tscWatch {
     }
 
     function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, maxNumberOfFilesToIterateForInvalidation?: number) {
-        const compilerHost = ts.createWatchCompilerHostOfConfigFile(configFileName, {}, host, /*reportDiagnostic*/ undefined, /*reportWatchStatus*/ undefined);
+        const compilerHost = ts.createWatchCompilerHostOfConfigFile(configFileName, {}, host);
         compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
         const watch = ts.createWatchProgram(compilerHost);
         return () => watch.getCurrentProgram();
     }
 
     function createWatchOfFilesAndCompilerOptions(rootFiles: string[], host: WatchedSystem, options: CompilerOptions = {}) {
-        const watch = ts.createWatchOfFilesAndCompilerOptions(rootFiles, options, host);
+        const watch = ts.createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, host));
         return () => watch.getCurrentProgram();
     }
 
@@ -264,7 +264,7 @@ namespace ts.tscWatch {
             };
 
             const host = createWatchedSystem([configFile, libFile, file1, file2, file3]);
-            const watch = ts.createWatchOfConfigFile(configFile.path, {}, host, notImplemented);
+            const watch = createWatchProgram(createWatchCompilerHostOfConfigFile(configFile.path, {}, host, notImplemented));
 
             checkProgramActualFiles(watch.getCurrentProgram(), [file1.path, libFile.path, file2.path]);
             checkProgramRootFiles(watch.getCurrentProgram(), [file1.path, file2.path]);
