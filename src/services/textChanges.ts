@@ -191,11 +191,6 @@ namespace ts.textChanges {
         formatContext: ts.formatting.FormatContext;
     }
 
-    export function getNewLineFromContext(context: TextChangesContext) {
-        const formatSettings = context.formatContext.options;
-        return (formatSettings && formatSettings.newLineCharacter) || getNewLineOrDefaultFromHost(context.host);
-    }
-
     export class ChangeTracker {
         private readonly changes: Change[] = [];
         private readonly newLineCharacter: string;
@@ -204,7 +199,7 @@ namespace ts.textChanges {
         private readonly nodesInsertedAtClassStarts = createMap<{ sourceFile: SourceFile, cls: ClassLikeDeclaration, members: ClassElement[] }>();
 
         public static fromContext(context: TextChangesContext): ChangeTracker {
-            return new ChangeTracker(getNewLineFromContext(context) === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed, context.formatContext);
+            return new ChangeTracker(getNewLineOrDefaultFromHost(context.host, context.formatContext.options) === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed, context.formatContext);
         }
 
         public static with(context: TextChangesContext, cb: (tracker: ChangeTracker) => void): FileTextChanges[] {

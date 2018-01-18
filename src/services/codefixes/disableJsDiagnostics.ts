@@ -15,7 +15,7 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            const newLineCharacter = textChanges.getNewLineFromContext(context);
+            const newLineCharacter = getNewLineOrDefaultFromHost(context.host, context.formatContext.options);
 
             return [{
                 description: getLocaleSpecificMessage(Diagnostics.Ignore_this_error_message),
@@ -38,7 +38,7 @@ namespace ts.codefix {
         fixIds: [fixId], // No point applying as a group, doing it once will fix all errors
         getAllCodeActions: context => codeFixAllWithTextChanges(context, errorCodes, (changes, err) => {
             if (err.start !== undefined) {
-                changes.push(getIgnoreCommentLocationForLocation(err.file!, err.start, textChanges.getNewLineFromContext(context)));
+                changes.push(getIgnoreCommentLocationForLocation(err.file!, err.start, getNewLineOrDefaultFromHost(context.host, context.formatContext.options)));
             }
         }),
     });
