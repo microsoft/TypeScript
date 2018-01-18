@@ -151,7 +151,7 @@ namespace ts {
             },
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
-            description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation_Colon
+            description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation
         },
         {
             name: "allowJs",

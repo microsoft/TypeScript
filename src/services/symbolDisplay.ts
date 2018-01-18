@@ -120,6 +120,7 @@ namespace ts.SymbolDisplay {
         let hasAddedSymbolInfo: boolean;
         const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isExpression(location);
         let type: Type;
+        let printer: Printer;
         let documentationFromAlias: SymbolDisplayPart[];
 
         // Class at constructor site need to be shown as constructor apart from property,method, vars
@@ -198,7 +199,7 @@ namespace ts.SymbolDisplay {
                             displayParts.push(punctuationPart(SyntaxKind.ColonToken));
                             displayParts.push(spacePart());
                             if (!(type.flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous) && type.symbol) {
-                                addRange(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
+                                addRange(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.AllowAnyNodeKind | SymbolFormatFlags.WriteTypeParametersOrArguments));
                                 displayParts.push(lineBreakPart());
                             }
                             if (useConstructSignatures) {
@@ -450,7 +451,8 @@ namespace ts.SymbolDisplay {
                         // If the type is type parameter, format it specially
                         if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter) {
                             const typeParameterParts = mapToDisplayParts(writer => {
-                                typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplay(<TypeParameter>type, writer, enclosingDeclaration);
+                                const param = typeChecker.typeParameterToDeclaration(type as TypeParameter, enclosingDeclaration);
+                                getPrinter().writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
                             });
                             addRange(displayParts, typeParameterParts);
                         }
@@ -510,6 +512,13 @@ namespace ts.SymbolDisplay {
 
         return { displayParts, documentation, symbolKind, tags };
 
+        function getPrinter() {
+            if (!printer) {
+                printer = createPrinter({ removeComments: true });
+            }
+            return printer;
+        }
+
         function prefixNextMeaning() {
             if (displayParts.length) {
                 displayParts.push(lineBreakPart());
@@ -535,7 +544,7 @@ namespace ts.SymbolDisplay {
                 symbolToDisplay = alias;
             }
             const fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
-                SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing);
+                SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
             addRange(displayParts, fullSymbolDisplayParts);
         }
 
@@ -584,7 +593,8 @@ namespace ts.SymbolDisplay {
 
         function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node) {
             const typeParameterParts = mapToDisplayParts(writer => {
-                typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplayFromSymbol(symbol, writer, enclosingDeclaration);
+                const params = typeChecker.symbolToTypeParameterDeclarations(symbol, enclosingDeclaration);
+                getPrinter().writeList(ListFormat.TypeParameters, params, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
             });
             addRange(displayParts, typeParameterParts);
         }

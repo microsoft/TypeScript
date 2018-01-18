@@ -20,6 +20,7 @@ namespace ts {
 
 /* @internal */
 namespace ts {
+    export const emptyArray: never[] = [] as never[];
     /** Create a MapLike with good performance. */
     function createDictionaryObject<T>(): MapLike<T> {
         const map = Object.create(/*prototype*/ null); // tslint:disable-line:no-null-keyword
@@ -1341,7 +1342,8 @@ namespace ts {
 
     export function cloneMap(map: SymbolTable): SymbolTable;
     export function cloneMap<T>(map: ReadonlyMap<T>): Map<T>;
-    export function cloneMap<T>(map: ReadonlyMap<T> | SymbolTable): Map<T> | SymbolTable {
+    export function cloneMap<T>(map: ReadonlyUnderscoreEscapedMap<T>): UnderscoreEscapedMap<T>;
+    export function cloneMap<T>(map: ReadonlyMap<T> | ReadonlyUnderscoreEscapedMap<T> | SymbolTable): Map<T> | UnderscoreEscapedMap<T> | SymbolTable {
         const clone = createMap<T>();
         copyEntries(map as Map<T>, clone);
         return clone;
@@ -1909,7 +1911,7 @@ namespace ts {
             return p2 + 1;
         }
         if (path.charCodeAt(1) === CharacterCodes.colon) {
-            if (path.charCodeAt(2) === CharacterCodes.slash) return 3;
+            if (path.charCodeAt(2) === CharacterCodes.slash || path.charCodeAt(2) === CharacterCodes.backslash) return 3;
         }
         // Per RFC 1738 'file' URI schema has the shape file://<host>/<path>
         // if <host> is omitted then it is assumed that host value is 'localhost',
@@ -2771,10 +2773,10 @@ namespace ts {
     function Signature() {} // tslint:disable-line no-empty
 
     function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
-        this.id = 0;
-        this.kind = kind;
         this.pos = pos;
         this.end = end;
+        this.kind = kind;
+        this.id = 0;
         this.flags = NodeFlags.None;
         this.modifierFlagsCache = ModifierFlags.None;
         this.transformFlags = TransformFlags.None;
@@ -3046,6 +3048,10 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
+    export function or<T>(f: (arg: T) => boolean, g: (arg: T) => boolean) {
+        return (arg: T) => f(arg) || g(arg);
+    }
+
     export function assertTypeIsNever(_: never): void { } // tslint:disable-line no-empty
 
     export interface FileAndDirectoryExistence {
@@ -3065,6 +3071,10 @@ namespace ts {
         readonly directories: string[];
     }
 
+    export const emptyFileSystemEntries: FileSystemEntries = {
+        files: emptyArray,
+        directories: emptyArray
+    };
     export function createCachedDirectoryStructureHost(host: DirectoryStructureHost): CachedDirectoryStructureHost {
         const cachedReadDirectoryResult = createMap<MutableFileSystemEntries>();
         const getCurrentDirectory = memoize(() => host.getCurrentDirectory());
@@ -3206,7 +3216,7 @@ namespace ts {
                 if (path === rootDirPath) {
                     return result;
                 }
-                return getCachedFileSystemEntries(path) || createCachedFileSystemEntries(dir, path);
+                return tryReadDirectory(dir, path) || emptyFileSystemEntries;
             }
         }
 

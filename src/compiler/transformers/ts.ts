@@ -893,11 +893,14 @@ namespace ts {
 
             if (some(staticProperties) || some(pendingExpressions)) {
                 const expressions: Expression[] = [];
-                const temp = createTempVariable(hoistVariableDeclaration);
-                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
+                const isClassWithConstructorReference = resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference;
+                const temp = createTempVariable(hoistVariableDeclaration, !!isClassWithConstructorReference);
+                if (isClassWithConstructorReference) {
                     // record an alias as the class name is not in scope for statics.
                     enableSubstitutionForClassAliases();
-                    classAliases[getOriginalNodeId(node)] = getSynthesizedClone(temp);
+                    const alias = getSynthesizedClone(temp);
+                    alias.autoGenerateFlags &= ~GeneratedIdentifierFlags.ReservedInNestedScopes;
+                    classAliases[getOriginalNodeId(node)] = alias;
                 }
 
                 // To preserve the behavior of the old emitter, we explicitly indent

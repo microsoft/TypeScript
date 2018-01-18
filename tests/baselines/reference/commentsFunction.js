@@ -61,8 +61,8 @@ function foo() {
 foo();
 /** This is comment for function signature*/
 function fooWithParameters(/** this is comment about a*/ a, 
-    /** this is comment for b*/
-    b) {
+/** this is comment for b*/
+b) {
     var d = a;
 } // trailing comment of function
 fooWithParameters("a", 10);
@@ -78,7 +78,7 @@ var lambddaNoVarComment = function (/**param a*/ a, /**param b*/ b) { return a *
 lambdaFoo(10, 20);
 lambddaNoVarComment(10, 20);
 function blah(a /* multiline trailing comment
-    multiline */) {
+multiline */) {
 }
 function blah2(a /* single line multiple trailing comments */ /* second */) {
 }

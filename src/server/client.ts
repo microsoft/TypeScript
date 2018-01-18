@@ -52,8 +52,7 @@ namespace ts.server {
         private getLineMap(fileName: string): number[] {
             let lineMap = this.lineMaps.get(fileName);
             if (!lineMap) {
-                const scriptSnapshot = this.host.getScriptSnapshot(fileName);
-                lineMap = computeLineStarts(scriptSnapshot.getText(0, scriptSnapshot.getLength()));
+                lineMap = computeLineStarts(getSnapshotText(this.host.getScriptSnapshot(fileName)));
                 this.lineMaps.set(fileName, lineMap);
             }
             return lineMap;
@@ -559,8 +558,7 @@ namespace ts.server {
             const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixes, args);
             const response = this.processResponse<protocol.CodeFixResponse>(request);
 
-            // TODO: GH#20538 shouldn't need cast
-            return (response.body as ReadonlyArray<protocol.CodeFixAction>).map(({ description, changes, fixId }) => ({ description, changes: this.convertChanges(changes, file), fixId }));
+            return response.body.map(({ description, changes, fixId }) => ({ description, changes: this.convertChanges(changes, file), fixId }));
         }
 
         getCombinedCodeFix = notImplemented;

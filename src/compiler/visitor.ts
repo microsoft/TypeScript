@@ -3,6 +3,8 @@
 /// <reference path="utilities.ts" />
 
 namespace ts {
+    const isTypeNodeOrTypeParameterDeclaration = or(isTypeNode, isTypeParameterDeclaration);
+
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
      *
@@ -222,7 +224,7 @@ namespace ts {
             // Names
 
             case SyntaxKind.Identifier:
-                return updateIdentifier(<Identifier>node, nodesVisitor((<Identifier>node).typeArguments, visitor, isTypeNode));
+                return updateIdentifier(<Identifier>node, nodesVisitor((<Identifier>node).typeArguments, visitor, isTypeNodeOrTypeParameterDeclaration));
 
             case SyntaxKind.QualifiedName:
                 return updateQualifiedName(<QualifiedName>node,
