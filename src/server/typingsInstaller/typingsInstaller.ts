@@ -309,7 +309,9 @@ namespace ts.server.typingsInstaller {
                             continue;
                         }
 
-                        const newVersion = Semver.parse(this.typesRegistry.get(packageName)[`ts${ts.versionMajorMinor}`]);
+                        // packageName is guaranteed to exist in typesRegistry by filterTypings
+                        const distTags = this.typesRegistry.get(packageName);
+                        const newVersion = Semver.parse(distTags[`ts${ts.versionMajorMinor}`] || distTags["latest"]);
                         const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, version: newVersion };
                         this.packageNameToTypingLocation.set(packageName, newTyping);
                         installedTypingFiles.push(typingFile);

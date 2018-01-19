@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts {
-    function intOfString(str: string): number {
+    function stringToInt(str: string): number {
         const n = parseInt(str, 10);
         if (isNaN(n)) {
             throw new Error(`Error in parseInt(${JSON.stringify(str)})`);
@@ -28,10 +28,10 @@ namespace ts {
             // "A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative integers, and MUST NOT contain leading zeroes."
             const rgx = isPrerelease ? /^(\d+)\.(\d+)\.0-next.(\d+)$/ : /^(\d+)\.(\d+)\.(\d+)$/;
             const match = rgx.exec(semver);
-            return match ? new Semver(intOfString(match[1]), intOfString(match[2]), intOfString(match[3]), isPrerelease) : undefined;
+            return match ? new Semver(stringToInt(match[1]), stringToInt(match[2]), stringToInt(match[3]), isPrerelease) : undefined;
         }
 
-        constructor(
+        private constructor(
             readonly major: number, readonly minor: number, readonly patch: number,
             /**
              * If true, this is `major.minor.0-next.patch`.
@@ -49,7 +49,9 @@ namespace ts {
 
         greaterThan(sem: Semver): boolean {
             return this.major > sem.major || this.major === sem.major
-                && (this.minor > sem.minor || this.minor === sem.minor && this.patch > sem.patch);
+                && (this.minor > sem.minor || this.minor === sem.minor
+                && (!this.isPrerelease && sem.isPrerelease || this.isPrerelease === sem.isPrerelease
+                && this.patch > sem.patch));
         }
     }
 }
