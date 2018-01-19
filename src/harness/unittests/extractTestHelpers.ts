@@ -128,7 +128,7 @@ namespace ts {
                 host: notImplementedHost,
                 formatContext: formatting.getFormatContext(testFormatOptions),
             };
-            const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
+            const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromStartEnd(selectionRange));
             assert.equal(rangeToExtract.errors, undefined, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);
             const infos = refactor.extractSymbol.getAvailableActions(context);
             const actions = find(infos, info => info.description === description.message).actions;
@@ -191,7 +191,7 @@ namespace ts {
                 host: notImplementedHost,
                 formatContext: formatting.getFormatContext(testFormatOptions),
             };
-            const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
+            const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromStartEnd(selectionRange));
             assert.isUndefined(rangeToExtract.errors, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);
             const infos = refactor.extractSymbol.getAvailableActions(context);
             assert.isUndefined(find(infos, info => info.description === description.message));

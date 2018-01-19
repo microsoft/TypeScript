@@ -632,7 +632,7 @@ namespace ts.textChanges {
         }
 
         private computeSpan(change: Change, _sourceFile: SourceFile): TextSpan {
-            return createTextSpanFromBounds(change.range.pos, change.range.end);
+            return createTextSpanFromRange(change.range);
         }
 
         private computeNewText(change: Change, sourceFile: SourceFile): string {

@@ -870,7 +870,7 @@ namespace FourSlash {
                 if (completion.insertText !== insertText) {
                     this.raiseError(`Expected completion insert text at index ${index} to be ${insertText}, got ${completion.insertText}`);
                 }
-                const convertedReplacementSpan = replacementSpan && textSpanFromRange(replacementSpan);
+                const convertedReplacementSpan = replacementSpan && ts.createTextSpanFromStartEnd(replacementSpan);
                 try {
                     assert.deepEqual(completion.replacementSpan, convertedReplacementSpan);
                 }
@@ -1107,7 +1107,7 @@ namespace FourSlash {
                 references: ts.ReferenceEntry[];
             }
             const fullExpected = ts.map<FourSlashInterface.ReferenceGroup, ReferenceGroupJson>(parts, ({ definition, ranges }) => ({
-                definition: typeof definition === "string" ? definition : { ...definition, range: textSpanFromRange(definition.range) },
+                definition: typeof definition === "string" ? definition : { ...definition, range: ts.createTextSpanFromStartEnd(definition.range) },
                 references: ranges.map(rangeToReferenceEntry),
             }));
 
@@ -1125,7 +1125,7 @@ namespace FourSlash {
 
             function rangeToReferenceEntry(r: Range): ts.ReferenceEntry {
                 const { isWriteAccess, isDefinition, isInString } = (r.marker && r.marker.data) || { isWriteAccess: false, isDefinition: false, isInString: undefined };
-                const result: ts.ReferenceEntry = { fileName: r.fileName, textSpan: textSpanFromRange(r), isWriteAccess: !!isWriteAccess, isDefinition: !!isDefinition };
+                const result: ts.ReferenceEntry = { fileName: r.fileName, textSpan: ts.createTextSpanFromStartEnd(r), isWriteAccess: !!isWriteAccess, isDefinition: !!isDefinition };
                 if (isInString !== undefined) {
                     result.isInString = isInString;
                 }
@@ -3217,7 +3217,7 @@ Actual: ${stringify(fullActual)}`);
         private getTextSpanForRangeAtIndex(index: number): ts.TextSpan {
             const ranges = this.getRanges();
             if (ranges && ranges.length > index) {
-                return textSpanFromRange(ranges[index]);
+                return ts.createTextSpanFromStartEnd(ranges[index]);
             }
             else {
                 this.raiseError("Supplied span index: " + index + " does not exist in range list of size: " + (ranges ? 0 : ranges.length));
@@ -3245,10 +3245,6 @@ Actual: ${stringify(fullActual)}`);
         private static textSpansEqual(a: ts.TextSpan, b: ts.TextSpan) {
             return a && b && a.start === b.start && a.length === b.length;
         }
-    }
-
-    function textSpanFromRange(range: FourSlash.Range): ts.TextSpan {
-        return ts.createTextSpanFromBounds(range.start, range.end);
     }
 
     export function runFourSlashTest(basePath: string, testType: FourSlashTestType, fileName: string) {

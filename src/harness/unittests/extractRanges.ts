@@ -9,7 +9,7 @@ namespace ts {
             if (!selectionRange) {
                 throw new Error(`Test ${s} does not specify selection range`);
             }
-            const result = refactor.extractSymbol.getRangeToExtract(file, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
+            const result = refactor.extractSymbol.getRangeToExtract(file, createTextSpanFromStartEnd(selectionRange));
             assert(result.targetRange === undefined, "failure expected");
             const sortedErrors = result.errors.map(e => <string>e.messageText).sort();
             assert.deepEqual(sortedErrors, expectedErrors.sort(), "unexpected errors");
@@ -23,7 +23,7 @@ namespace ts {
         if (!selectionRange) {
             throw new Error(`Test ${s} does not specify selection range`);
         }
-        const result = refactor.extractSymbol.getRangeToExtract(f, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
+        const result = refactor.extractSymbol.getRangeToExtract(f, createTextSpanFromStartEnd(selectionRange));
         const expectedRange = t.ranges.get("extracted");
         if (expectedRange) {
             let start: number, end: number;
