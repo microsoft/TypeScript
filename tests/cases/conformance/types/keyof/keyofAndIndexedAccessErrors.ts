@@ -79,10 +79,23 @@ function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {
 }
 
 // Repro from #17166
-function f3<T, K extends keyof T>(obj: T, k: K, value: T[K]): void {
-    for (let key in obj) {
+function f3<T, K extends keyof T, U extends T, J extends K>(
+    t: T, k: K, tk: T[K], u: U, j: J, uk: U[K], tj: T[J], uj: U[J]): void {
+    for (let key in t) {
+        key = k // ok, K ==> keyof T
         k = key // error, keyof T =/=> K
-        value = obj[key]; // error, T[keyof T] =/=> T[K]
+        t[key] = tk; // ok, T[K] ==> T[keyof T]
+        tk = t[key]; // error, T[keyof T] =/=> T[K]
     }
-}
+    tk = uk;
+    uk = tk; // error
 
+    tj = uj;
+    uj = tj; // error
+
+    tk = tj;
+    tj = tk; // error
+
+    tk = uj;
+    uj = tk; // error
+}

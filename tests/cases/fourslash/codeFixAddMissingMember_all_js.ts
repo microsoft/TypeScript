@@ -16,13 +16,12 @@
 verify.codeFixAll({
     fixId: "addMissingMember",
     newFileContent:
-    // TODO: GH#18445
 `class C {
-    y() {\r
-        throw new Error("Method not implemented.");\r
-    }\r
-    constructor() {\r
-        this.x = undefined;\r
+    y() {
+        throw new Error("Method not implemented.");
+    }
+    constructor() {
+        this.x = undefined;
     }
     method() {
         this.x;

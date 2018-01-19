@@ -6564,7 +6564,7 @@ namespace ts {
             // b) It references `arguments` somewhere
             const lastParam = lastOrUndefined(declaration.parameters);
             const lastParamTags = lastParam && getJSDocParameterTags(lastParam);
-            const lastParamVariadicType = lastParamTags && firstDefined(lastParamTags, p =>
+            const lastParamVariadicType = firstDefined(lastParamTags, p =>
                 p.typeExpression && isJSDocVariadicType(p.typeExpression.type) ? p.typeExpression.type : undefined);
             if (!lastParamVariadicType && !containsArgumentsReference(declaration)) {
                 return false;
@@ -9639,7 +9639,7 @@ namespace ts {
                 }
                 else if (target.flags & TypeFlags.IndexedAccess) {
                     // A type S is related to a type T[K] if S is related to A[K], where K is string-like and
-                    // A is the apparent type of T.
+                    // A is the constraint of T.
                     const constraint = getConstraintOfIndexedAccess(<IndexedAccessType>target);
                     if (constraint) {
                         if (result = isRelatedTo(source, constraint, reportErrors)) {
@@ -9675,7 +9675,7 @@ namespace ts {
                 }
                 else if (source.flags & TypeFlags.IndexedAccess) {
                     // A type S[K] is related to a type T if A[K] is related to T, where K is string-like and
-                    // A is the apparent type of S.
+                    // A is the constraint of S.
                     const constraint = getConstraintOfIndexedAccess(<IndexedAccessType>source);
                     if (constraint) {
                         if (result = isRelatedTo(constraint, target, reportErrors)) {
@@ -9683,10 +9683,11 @@ namespace ts {
                             return result;
                         }
                     }
-                    else if (target.flags & TypeFlags.IndexedAccess && (<IndexedAccessType>source).indexType === (<IndexedAccessType>target).indexType) {
-                        // if we have indexed access types with identical index types, see if relationship holds for
-                        // the two object types.
+                    else if (target.flags & TypeFlags.IndexedAccess) {
                         if (result = isRelatedTo((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType, reportErrors)) {
+                            result &= isRelatedTo((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType, reportErrors);
+                        }
+                        if (result) {
                             errorInfo = saveErrorInfo;
                             return result;
                         }
@@ -10967,7 +10968,7 @@ namespace ts {
             return type === typeParameter || type.flags & TypeFlags.UnionOrIntersection && forEach((<UnionOrIntersectionType>type).types, t => isTypeParameterAtTopLevel(t, typeParameter));
         }
 
-        /** Create an object with properties named in the string literal type. Every property has type `{}` */
+        /** Create an object with properties named in the string literal type. Every property has type `any` */
         function createEmptyObjectTypeFromStringLiteral(type: Type) {
             const members = createSymbolTable();
             forEachType(type, t => {
@@ -10976,7 +10977,7 @@ namespace ts {
                 }
                 const name = escapeLeadingUnderscores((t as StringLiteralType).value);
                 const literalProp = createSymbol(SymbolFlags.Property, name);
-                literalProp.type = emptyObjectType;
+                literalProp.type = anyType;
                 if (t.symbol) {
                     literalProp.declarations = t.symbol.declarations;
                     literalProp.valueDeclaration = t.symbol.valueDeclaration;
@@ -11031,7 +11032,9 @@ namespace ts {
             const templateType = getTemplateTypeFromMappedType(target);
             const inference = createInferenceInfo(typeParameter);
             inferTypes([inference], sourceType, templateType);
-            return inference.candidates ? getUnionType(inference.candidates, UnionReduction.Subtype) : emptyObjectType;
+            return inference.candidates ? getUnionType(inference.candidates, UnionReduction.Subtype) :
+                inference.contraCandidates ? getCommonSubtype(inference.contraCandidates) :
+                emptyObjectType;
         }
 
         function getUnmatchedProperty(source: Type, target: Type, requireOptionalProperties: boolean) {
@@ -18377,6 +18380,9 @@ namespace ts {
 
         function checkObjectLiteralAssignment(node: ObjectLiteralExpression, sourceType: Type): Type {
             const properties = node.properties;
+            if (strictNullChecks && properties.length === 0) {
+                return checkNonNullType(sourceType, node);
+            }
             for (const p of properties) {
                 checkObjectLiteralDestructuringPropertyAssignment(sourceType, p, properties);
             }
@@ -21446,7 +21452,13 @@ namespace ts {
             if (isBindingPattern(node.name)) {
                 // Don't validate for-in initializer as it is already an error
                 if (node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
-                    checkTypeAssignableTo(checkExpressionCached(node.initializer), getWidenedTypeForVariableLikeDeclaration(node), node, /*headMessage*/ undefined);
+                    const initializerType = checkExpressionCached(node.initializer);
+                    if (strictNullChecks && node.name.elements.length === 0) {
+                        checkNonNullType(initializerType, node);
+                    }
+                    else {
+                        checkTypeAssignableTo(initializerType, getWidenedTypeForVariableLikeDeclaration(node), node, /*headMessage*/ undefined);
+                    }
                     checkParameterInitializer(node);
                 }
                 return;
@@ -26196,12 +26208,16 @@ namespace ts {
         function checkGrammarBindingElement(node: BindingElement) {
             if (node.dotDotDotToken) {
                 const elements = (<BindingPattern>node.parent).elements;
-                if (node !== lastOrUndefined(elements)) {
+                if (node !== last(elements)) {
                     return grammarErrorOnNode(node, Diagnostics.A_rest_element_must_be_last_in_a_destructuring_pattern);
                 }
 
                 if (node.name.kind === SyntaxKind.ArrayBindingPattern || node.name.kind === SyntaxKind.ObjectBindingPattern) {
                     return grammarErrorOnNode(node.name, Diagnostics.A_rest_element_cannot_contain_a_binding_pattern);
+                }
+
+                if (node.propertyName) {
+                    return grammarErrorOnNode(node.name, Diagnostics.A_rest_element_cannot_have_a_property_name);
                 }
 
                 if (node.initializer) {

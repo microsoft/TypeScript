@@ -7,7 +7,7 @@
 /////*6*/}while(a!==b)
 /////*7*/}while(a!==b)
 goTo.marker("1");
-edit.insert("\r\n");
+edit.insert("\n");
 verify.currentLineContentIs("    {");
 goTo.marker("2");
 verify.currentLineContentIs("do{");

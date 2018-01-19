@@ -2294,3 +2294,51 @@ new AnotherSampleClass({});
 >AnotherSampleClass : typeof AnotherSampleClass
 >{} : {}
 
+// Positive repro from #17166
+function f3<T, K extends keyof T>(t: T, k: K, tk: T[K]): void {
+>f3 : <T, K extends keyof T>(t: T, k: K, tk: T[K]) => void
+>T : T
+>K : K
+>T : T
+>t : T
+>T : T
+>k : K
+>K : K
+>tk : T[K]
+>T : T
+>K : K
+
+    for (let key in t) {
+>key : keyof T
+>t : T
+
+        key = k // ok, K ==> keyof T
+>key = k : K
+>key : keyof T
+>k : K
+
+        t[key] = tk; // ok, T[K] ==> T[keyof T]
+>t[key] = tk : T[K]
+>t[key] : T[keyof T]
+>t : T
+>key : keyof T
+>tk : T[K]
+    }
+}
+
+// # 21185
+type Predicates<TaggedRecord> = {
+>Predicates : Predicates<TaggedRecord>
+>TaggedRecord : TaggedRecord
+
+  [T in keyof TaggedRecord]: (variant: TaggedRecord[keyof TaggedRecord]) => variant is TaggedRecord[T]
+>T : T
+>TaggedRecord : TaggedRecord
+>variant : TaggedRecord[keyof TaggedRecord]
+>TaggedRecord : TaggedRecord
+>TaggedRecord : TaggedRecord
+>variant : any
+>TaggedRecord : TaggedRecord
+>T : T
+}
+
