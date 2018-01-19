@@ -1,15 +1,8 @@
 /* @internal */
 namespace ts.refactor.installTypesForPackage {
     const actionName = "Convert to default import";
-
-    const useDefaultImport: Refactor = {
-        name: actionName,
-        description: getLocaleSpecificMessage(Diagnostics.Convert_to_default_import),
-        getEditsForAction,
-        getAvailableActions,
-    };
-
-    registerRefactor(useDefaultImport);
+    const description = getLocaleSpecificMessage(Diagnostics.Convert_to_default_import);
+    registerRefactor(actionName, { getEditsForAction, getAvailableActions });
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
         const { file, startPosition, program } = context;
@@ -31,11 +24,11 @@ namespace ts.refactor.installTypesForPackage {
 
         return [
             {
-                name: useDefaultImport.name,
-                description: useDefaultImport.description,
+                name: actionName,
+                description,
                 actions: [
                     {
-                        description: useDefaultImport.description,
+                        description,
                         name: actionName,
                     },
                 ],

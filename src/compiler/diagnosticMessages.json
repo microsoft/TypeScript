@@ -3897,10 +3897,6 @@
         "category": "Message",
         "code": 95002
     },
-    "Extract symbol": {
-        "category": "Message",
-        "code": 95003
-    },
     "Extract to {0} in {1}": {
         "category": "Message",
         "code": 95004
