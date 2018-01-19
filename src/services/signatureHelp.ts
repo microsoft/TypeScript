@@ -331,7 +331,7 @@ namespace ts.SignatureHelp {
 
             // If the node is not a subspan of its parent, this is a big problem.
             // There have been crashes that might be caused by this violation.
-            if (n.pos < n.parent.pos || n.end > n.parent.end) {
+            if (!rangeContainsRange(n.parent, n)) {
                 Debug.fail("Node of kind " + n.kind + " is not a subspan of its parent of kind " + n.parent.kind);
             }
 

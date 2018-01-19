@@ -2202,18 +2202,8 @@ namespace ts.Completions {
 
     /** Get the corresponding JSDocTag node if the position is in a jsDoc comment */
     function getJsDocTagAtPosition(node: Node, position: number): JSDocTag | undefined {
-        const { jsDoc } = getJsDocHavingNode(node) as JSDocContainer;
-        if (!jsDoc) return undefined;
-
-        for (const { pos, end, tags } of jsDoc) {
-            if (!tags || position < pos || position > end) continue;
-            for (let i = tags.length - 1; i >= 0; i--) {
-                const tag = tags[i];
-                if (position >= tag.pos) {
-                    return tag;
-                }
-            }
-        }
+        return firstDefined((getJsDocHavingNode(node) as JSDocContainer).jsDoc, ({ pos, end, tags }) =>
+            pos <= position && position <= end ? findLast(tags, tag => position >= tag.pos) : undefined);
     }
 
     function getJsDocHavingNode(node: Node): Node {

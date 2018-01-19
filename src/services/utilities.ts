@@ -630,13 +630,7 @@ namespace ts {
         // be parented by the container of the SyntaxList, not the SyntaxList itself.
         // In order to find the list item index, we first need to locate SyntaxList itself and then search
         // for the position of the relevant node (or comma).
-        const syntaxList = forEach(node.parent.getChildren(), c => {
-            // find syntax list that covers the span of the node
-            if (isSyntaxList(c) && c.pos <= node.pos && c.end >= node.end) {
-                return c;
-            }
-        });
-
+        const syntaxList = find<Node, SyntaxList>(node.parent.getChildren(), (c): c is SyntaxList => isSyntaxList(c) && rangeContainsRange(c, node));
         // Either we didn't find an appropriate list, or the list must contain us.
         Debug.assert(!syntaxList || contains(syntaxList.getChildren(), node));
         return syntaxList;
@@ -734,21 +728,14 @@ namespace ts {
                 // this is token that starts at the end of previous token - return it
                 return n;
             }
-
-            const children = n.getChildren();
-            for (const child of children) {
+            return firstDefined(n.getChildren(), child => {
                 const shouldDiveInChildNode =
                     // previous token is enclosed somewhere in the child
                     (child.pos <= previousToken.pos && child.end > previousToken.end) ||
                     // previous token ends exactly at the beginning of child
                     (child.pos === previousToken.end);
-
-                if (shouldDiveInChildNode && nodeHasTokens(child)) {
-                    return find(child);
-                }
-            }
-
-            return undefined;
+                return shouldDiveInChildNode && nodeHasTokens(child) ? find(child) : undefined;
+            });
         }
     }
 

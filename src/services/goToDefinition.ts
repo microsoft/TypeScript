@@ -257,13 +257,9 @@ namespace ts.GoToDefinition {
         return createDefinitionInfo(decl, symbolKind, symbolName, containerName);
     }
 
-    export function findReferenceInPosition(refs: ReadonlyArray<FileReference>, pos: number): FileReference {
-        for (const ref of refs) {
-            if (ref.pos <= pos && pos <= ref.end) {
-                return ref;
-            }
-        }
-        return undefined;
+
+    function findReferenceInPosition(refs: ReadonlyArray<FileReference>, pos: number): FileReference | undefined {
+        return find(refs, ref => ref.pos <= pos && pos <= ref.end);
     }
 
     function getDefinitionInfoForFileReference(name: string, targetFileName: string): DefinitionInfo {
