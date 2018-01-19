@@ -20,7 +20,6 @@
 
 verify.codeFix({
     description: "Implement interface 'N.I'",
-    // TODO: GH#18445
     newFileContent:
 `namespace N {
     /**enum prefix */
@@ -36,11 +35,11 @@ verify.codeFix({
     /**method signature prefix */foo /**open angle prefix */< /**type parameter name prefix */ X /** closing angle prefix */> /**open paren prefix */(/** parameter prefix */ a/** colon prefix */: /** parameter type prefix */ X /** close paren prefix */) /** colon prefix */: /** return type prefix */ string /** semicolon prefix */;
         /**close-brace prefix*/ }
 /**close-brace prefix*/ }
-class C implements N.I {\r
-    /** property prefix */ a /** colon prefix */: N.E.a;\r
-    /** property prefix */ b /** colon prefix */: N.E;\r
-    /**method signature prefix */ foo /**open angle prefix */<X>(a: X): string {\r
-        throw new Error("Method not implemented.");\r
-    }\r
+class C implements N.I {
+    /** property prefix */ a /** colon prefix */: N.E.a;
+    /** property prefix */ b /** colon prefix */: N.E;
+    /**method signature prefix */ foo /**open angle prefix */<X>(a: X): string {
+        throw new Error("Method not implemented.");
+    }
 }`,
 });

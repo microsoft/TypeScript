@@ -7,21 +7,21 @@
 
 verify.codeFixAll({
     fixId: "fixClassIncorrectlyImplementsInterface",
-    // TODO: GH#20073 GH#18445
+    // TODO: GH#20073
     newFileContent:
 `interface I { i(): void; }
 interface J { j(): void; }
-class C implements I, J {\r
-    i(): void {\r
-        throw new Error("Method not implemented.");\r
-    }\r
-    j(): void {\r
-        throw new Error("Method not implemented.");\r
-    }\r
+class C implements I, J {
+    i(): void {
+        throw new Error("Method not implemented.");
+    }
+    j(): void {
+        throw new Error("Method not implemented.");
+    }
 }
-class D implements J {\r
-    j(): void {\r
-        throw new Error("Method not implemented.");\r
-    }\r
+class D implements J {
+    j(): void {
+        throw new Error("Method not implemented.");
+    }
 }`,
 });

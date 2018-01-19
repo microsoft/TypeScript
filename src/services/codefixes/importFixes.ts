@@ -29,12 +29,8 @@ namespace ts.codefix {
         symbolName: string;
     }
 
-    interface SymbolAndTokenContext extends SymbolContext {
+    interface ImportCodeFixContext extends SymbolContext {
         symbolToken: Identifier | undefined;
-    }
-
-    interface ImportCodeFixContext extends SymbolAndTokenContext {
-        host: LanguageServiceHost;
         program: Program;
         checker: TypeChecker;
         compilerOptions: CompilerOptions;
@@ -173,7 +169,6 @@ namespace ts.codefix {
         const symbolToken = cast(getTokenAtPosition(context.sourceFile, context.span.start, /*includeJsDocComment*/ false), isIdentifier);
         return {
             host: context.host,
-            newLineCharacter: context.newLineCharacter,
             formatContext: context.formatContext,
             sourceFile: context.sourceFile,
             program,

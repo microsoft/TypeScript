@@ -13,8 +13,8 @@ verify.codeFixAll({
     fixId: "disableJsDiagnostics",
     newFileContent:
 `let x = "";
-// @ts-ignore\r
+// @ts-ignore
 x = 1;
-// @ts-ignore\r
+// @ts-ignore
 x = true;`,
 });

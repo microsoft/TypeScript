@@ -15,7 +15,6 @@
 
 verify.codeFix({
     description: "Implement interface 'A'",
-    // TODO: GH#18445
     newFileContent:
 `abstract class A {
     private _a: string;
@@ -28,9 +27,9 @@ verify.codeFix({
     abstract set c(arg: number | string);
 }
 
-class C implements A {\r
-    a: string;\r
-    b: number;\r
-    c: string | number;\r
+class C implements A {
+    a: string;
+    b: number;
+    c: string | number;
 }`,
 });

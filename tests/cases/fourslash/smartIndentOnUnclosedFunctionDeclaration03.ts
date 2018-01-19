@@ -5,7 +5,7 @@
 
 function verifyIndentationAfterNewLine(marker: string, indentation: number): void {
     goTo.marker(marker);
-    edit.insert("\r\n");
+    edit.insert("\n");
     verify.indentationIs(indentation);
 }
 

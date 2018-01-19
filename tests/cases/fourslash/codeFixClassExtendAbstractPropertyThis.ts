@@ -8,13 +8,12 @@
 
 verify.codeFix({
     description: "Implement inherited abstract class",
-    // TODO: GH#18445
     newFileContent:
 `abstract class A {
     abstract x: this;
 }
 
-class C extends A {\r
-    x: this;\r
+class C extends A {
+    x: this;
 }`,
 });

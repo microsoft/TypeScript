@@ -2568,9 +2568,7 @@ Actual: ${stringify(fullActual)}`);
             const originalContent = scriptInfo.content;
             for (const codeFix of codeFixes) {
                 this.applyEdits(codeFix.changes[0].fileName, codeFix.changes[0].textChanges, /*isFormattingEdit*/ false);
-                let text = this.rangeText(ranges[0]);
-                // TODO:GH#18445 (remove this line to see errors in many `importNameCodeFix` tests)
-                text = text.replace(/\r\n/g, "\n");
+                const text = this.rangeText(ranges[0]);
                 actualTextArray.push(text);
                 scriptInfo.updateContent(originalContent);
             }
