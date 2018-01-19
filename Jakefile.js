@@ -575,7 +575,7 @@ task("setDebugMode", function () {
 });
 
 task("configure-nightly", [configureNightlyJs], function () {
-    var cmd = host + " " + configureNightlyJs + " " + packageJson + " " + versionFile;
+    var cmd = host + " " + configureNightlyJs + " dev " + packageJson + " " + versionFile;
     console.log(cmd);
     exec(cmd);
 }, { async: true });
@@ -583,6 +583,19 @@ task("configure-nightly", [configureNightlyJs], function () {
 desc("Configure, build, test, and publish the nightly release.");
 task("publish-nightly", ["configure-nightly", "LKG", "clean", "setDebugMode", "runtests-parallel"], function () {
     var cmd = "npm publish --tag next";
+    console.log(cmd);
+    exec(cmd);
+});
+
+task("configure-insiders", [configureNightlyJs], function () {
+    var cmd = host + " " + configureNightlyJs + " insiders " + packageJson + " " + versionFile;
+    console.log(cmd);
+    exec(cmd);
+}, { async: true });
+
+desc("Configure, build, test, and publish the insiders release.");
+task("publish-insiders", ["configure-nightly", "LKG", "clean", "setDebugMode", "runtests-parallel"], function () {
+    var cmd = "npm publish --tag insiders";
     console.log(cmd);
     exec(cmd);
 });
