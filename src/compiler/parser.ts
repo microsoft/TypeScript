@@ -2882,21 +2882,6 @@ namespace ts {
             return parseUnionOrIntersectionType(SyntaxKind.UnionType, parseIntersectionTypeOrHigher, SyntaxKind.BarToken);
         }
 
-        function parseConditionalTypeOrHigher(): TypeNode {
-            const type = parseUnionTypeOrHigher();
-            if (parseOptional(SyntaxKind.ExtendsKeyword)) {
-                const node = <ConditionalTypeNode>createNode(SyntaxKind.ConditionalType, type.pos);
-                node.checkType = type;
-                node.extendsType = parseType();
-                parseExpected(SyntaxKind.QuestionToken);
-                node.trueType = parseType();
-                parseExpected(SyntaxKind.ColonToken);
-                node.falseType = parseType();
-                return finishNode(node);
-            }
-            return type;
-        }
-
         function isStartOfFunctionType(): boolean {
             if (token() === SyntaxKind.LessThanToken) {
                 return true;
@@ -2979,14 +2964,26 @@ namespace ts {
             return doOutsideOfContext(NodeFlags.TypeExcludesFlags, parseTypeWorker);
         }
 
-        function parseTypeWorker(): TypeNode {
+        function parseTypeWorker(noConditionalTypes?: boolean): TypeNode {
             if (isStartOfFunctionType()) {
                 return parseFunctionOrConstructorType(SyntaxKind.FunctionType);
             }
             if (token() === SyntaxKind.NewKeyword) {
                 return parseFunctionOrConstructorType(SyntaxKind.ConstructorType);
             }
-            return parseConditionalTypeOrHigher();
+            const type = parseUnionTypeOrHigher();
+            if (!noConditionalTypes && parseOptional(SyntaxKind.ExtendsKeyword)) {
+                const node = <ConditionalTypeNode>createNode(SyntaxKind.ConditionalType, type.pos);
+                node.checkType = type;
+                // The type following 'extends' is not permitted to be another conditional type
+                node.extendsType = parseTypeWorker(/*noConditionalTypes*/ true);
+                parseExpected(SyntaxKind.QuestionToken);
+                node.trueType = parseTypeWorker();
+                parseExpected(SyntaxKind.ColonToken);
+                node.falseType = parseTypeWorker();
+                return finishNode(node);
+            }
+            return type;
         }
 
         function parseTypeAnnotation(): TypeNode {
