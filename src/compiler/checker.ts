@@ -367,6 +367,7 @@ namespace ts {
         const globals = createSymbolTable();
         const reverseMappedCache = createMap<Type | undefined>();
         let ambientModulesCache: Symbol[] | undefined;
+        let alreadyCreatingReverseMappedType = false;
         /**
          * List of every ambient module with a "*" wildcard.
          * Unlike other ambient modules, these can't be stored in `globals` because symbol tables only deal with exact matches.
@@ -3190,7 +3191,7 @@ namespace ts {
                                 context.tracker.reportPrivateInBaseOfClassExpression(unescapeLeadingUnderscores(propertySymbol.escapedName));
                             }
                         }
-                        const propertyType = getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped ? anyType : getTypeOfSymbol(propertySymbol);
+                        const propertyType = getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped && alreadyCreatingReverseMappedType ? anyType : getTypeOfSymbol(propertySymbol);
                         const saveEnclosingDeclaration = context.enclosingDeclaration;
                         context.enclosingDeclaration = undefined;
                         if (getCheckFlags(propertySymbol) & CheckFlags.Late) {
@@ -3213,7 +3214,10 @@ namespace ts {
                             }
                         }
                         else {
+                            const saveAlreadyCreating = alreadyCreatingReverseMappedType;
+                            alreadyCreatingReverseMappedType = !!(getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped);
                             const propertyTypeNode = propertyType ? typeToTypeNodeHelper(propertyType, context) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                            alreadyCreatingReverseMappedType = saveAlreadyCreating;
 
                             const modifiers = isReadonlySymbol(propertySymbol) ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
                             const propertySignature = createPropertySignature(
