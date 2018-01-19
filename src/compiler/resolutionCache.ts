@@ -473,11 +473,6 @@ namespace ts {
                     resolutionHost.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
                 }
 
-                // Ignore emits from the program
-                if (isEmittedFileOfProgram(resolutionHost.getCurrentProgram(), fileOrDirectory)) {
-                    return;
-                }
-
                 // If the files are added to project root or node_modules directory, always run through the invalidation process
                 // Otherwise run through invalidation only if adding to the immediate directory
                 if (!allFilesHaveInvalidatedResolution &&
@@ -579,6 +574,10 @@ namespace ts {
                 }
                 else {
                     if (!isPathWithDefaultFailedLookupExtension(fileOrDirectoryPath) && !customFailedLookupPaths.has(fileOrDirectoryPath)) {
+                        return false;
+                    }
+                    // Ignore emits from the program
+                    if (isEmittedFileOfProgram(resolutionHost.getCurrentProgram(), fileOrDirectoryPath)) {
                         return false;
                     }
                     // Resolution need to be invalidated if failed lookup location is same as the file or directory getting created
