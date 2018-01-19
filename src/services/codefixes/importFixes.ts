@@ -23,12 +23,8 @@ namespace ts.codefix {
         symbolName: string;
     }
 
-    interface SymbolAndTokenContext extends SymbolContext {
+    interface ImportCodeFixContext extends SymbolContext {
         symbolToken: Identifier | undefined;
-    }
-
-    interface ImportCodeFixContext extends SymbolAndTokenContext {
-        host: LanguageServiceHost;
         program: Program;
         checker: TypeChecker;
         compilerOptions: CompilerOptions;
@@ -50,7 +46,6 @@ namespace ts.codefix {
         const symbolToken = cast(getTokenAtPosition(context.sourceFile, context.span.start, /*includeJsDocComment*/ false), isIdentifier);
         return {
             host: context.host,
-            newLineCharacter: context.newLineCharacter,
             formatContext: context.formatContext,
             sourceFile: context.sourceFile,
             program,
@@ -106,7 +101,7 @@ namespace ts.codefix {
         Debug.assert(exportInfos.some(info => info.moduleSymbol === moduleSymbol));
         // We sort the best codefixes first, so taking `first` is best for completions.
         const moduleSpecifier = first(getNewImportInfos(program, sourceFile, exportInfos, compilerOptions, getCanonicalFileName, host)).moduleSpecifier;
-        const ctx: ImportCodeFixContext = { host, program, checker, newLineCharacter: host.getNewLine(), compilerOptions, sourceFile, formatContext, symbolName, getCanonicalFileName, symbolToken };
+        const ctx: ImportCodeFixContext = { host, program, checker, compilerOptions, sourceFile, formatContext, symbolName, getCanonicalFileName, symbolToken };
         return { moduleSpecifier, codeAction: first(getCodeActionsForImport(exportInfos, ctx)) };
     }
     function getAllReExportingModules(exportedSymbol: Symbol, checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>): ReadonlyArray<SymbolExportInfo> {
@@ -284,6 +279,10 @@ namespace ts.codefix {
                     }
                 }
 
+                if (isPathRelativeToParent(relativeToBaseUrl)) {
+                    return [relativePath];
+                }
+
                 /*
                 Prefer a relative import over a baseUrl import if it doesn't traverse up to baseUrl.
 
@@ -347,9 +346,10 @@ namespace ts.codefix {
         }
     }
 
-    function tryGetModuleNameFromPaths(relativeNameWithIndex: string, relativeName: string, paths: MapLike<ReadonlyArray<string>>): string | undefined {
+    function tryGetModuleNameFromPaths(relativeToBaseUrlWithIndex: string, relativeToBaseUrl: string, paths: MapLike<ReadonlyArray<string>>): string | undefined {
         for (const key in paths) {
-            for (const pattern of paths[key]) {
+            for (const patternText of paths[key]) {
+                const pattern = removeFileExtension(normalizePath(patternText));
                 const indexOfStar = pattern.indexOf("*");
                 if (indexOfStar === 0 && pattern.length === 1) {
                     continue;
@@ -357,14 +357,14 @@ namespace ts.codefix {
                 else if (indexOfStar !== -1) {
                     const prefix = pattern.substr(0, indexOfStar);
                     const suffix = pattern.substr(indexOfStar + 1);
-                    if (relativeName.length >= prefix.length + suffix.length &&
-                        startsWith(relativeName, prefix) &&
-                        endsWith(relativeName, suffix)) {
-                        const matchedStar = relativeName.substr(prefix.length, relativeName.length - suffix.length);
-                        return key.replace("\*", matchedStar);
+                    if (relativeToBaseUrl.length >= prefix.length + suffix.length &&
+                        startsWith(relativeToBaseUrl, prefix) &&
+                        endsWith(relativeToBaseUrl, suffix)) {
+                        const matchedStar = relativeToBaseUrl.substr(prefix.length, relativeToBaseUrl.length - suffix.length);
+                        return key.replace("*", matchedStar);
                     }
                 }
-                else if (pattern === relativeName || pattern === relativeNameWithIndex) {
+                else if (pattern === relativeToBaseUrl || pattern === relativeToBaseUrlWithIndex) {
                     return key;
                 }
             }
@@ -524,7 +524,10 @@ namespace ts.codefix {
     }
 
     function getPathRelativeToRootDirs(path: string, rootDirs: ReadonlyArray<string>, getCanonicalFileName: GetCanonicalFileName): string | undefined {
-        return firstDefined(rootDirs, rootDir => getRelativePathIfInDirectory(path, rootDir, getCanonicalFileName));
+        return firstDefined(rootDirs, rootDir => {
+            const relativePath = getRelativePathIfInDirectory(path, rootDir, getCanonicalFileName);
+            return isPathRelativeToParent(relativePath) ? undefined : relativePath;
+        });
     }
 
     function removeExtensionAndIndexPostFix(fileName: string, options: CompilerOptions, addJsExtension: boolean): string {
@@ -538,7 +541,11 @@ namespace ts.codefix {
 
     function getRelativePathIfInDirectory(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName): string | undefined {
         const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
-        return isRootedDiskPath(relativePath) || startsWith(relativePath, "..") ? undefined : relativePath;
+        return isRootedDiskPath(relativePath) ? undefined : relativePath;
+    }
+
+    function isPathRelativeToParent(path: string): boolean {
+        return startsWith(path, "..");
     }
 
     function getRelativePath(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName) {
@@ -653,7 +660,7 @@ namespace ts.codefix {
         }
         else if (isJsxOpeningLikeElement(symbolToken.parent) && symbolToken.parent.tagName === symbolToken) {
             // The error wasn't for the symbolAtLocation, it was for the JSX tag itself, which needs access to e.g. `React`.
-            symbol = checker.getAliasedSymbol(checker.resolveName(checker.getJsxNamespace(), symbolToken.parent.tagName, SymbolFlags.Value));
+            symbol = checker.getAliasedSymbol(checker.resolveName(checker.getJsxNamespace(), symbolToken.parent.tagName, SymbolFlags.Value, /*excludeGlobals*/ false));
             symbolName = symbol.name;
         }
         else {
@@ -705,8 +712,11 @@ namespace ts.codefix {
             const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
             if (defaultExport) {
                 const localSymbol = getLocalSymbolForExportDefault(defaultExport);
-                if ((localSymbol && localSymbol.escapedName === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, context.compilerOptions.target) === symbolName)
-                    && checkSymbolHasMeaning(localSymbol || defaultExport, currentTokenMeaning)) {
+                if ((
+                        localSymbol && localSymbol.escapedName === symbolName ||
+                        getEscapedNameForExportDefault(defaultExport) === symbolName ||
+                        moduleSymbolToValidIdentifier(moduleSymbol, context.compilerOptions.target) === symbolName
+                    ) && checkSymbolHasMeaning(localSymbol || defaultExport, currentTokenMeaning)) {
                     addSymbol(moduleSymbol, localSymbol || defaultExport, ImportKind.Default);
                 }
             }
@@ -715,6 +725,22 @@ namespace ts.codefix {
             const exportSymbolWithIdenticalName = checker.tryGetMemberInModuleExportsAndProperties(symbolName, moduleSymbol);
             if (exportSymbolWithIdenticalName && checkSymbolHasMeaning(exportSymbolWithIdenticalName, currentTokenMeaning)) {
                 addSymbol(moduleSymbol, exportSymbolWithIdenticalName, ImportKind.Named);
+            }
+
+            function getEscapedNameForExportDefault(symbol: Symbol): __String | undefined {
+                return firstDefined(symbol.declarations, declaration => {
+                    if (isExportAssignment(declaration)) {
+                        if (isIdentifier(declaration.expression)) {
+                            return declaration.expression.escapedText;
+                        }
+                    }
+                    else if (isExportSpecifier(declaration)) {
+                        Debug.assert(declaration.name.escapedText === InternalSymbolName.Default);
+                        if (declaration.propertyName) {
+                            return declaration.propertyName.escapedText;
+                        }
+                    }
+                });
             }
         });
 
@@ -758,7 +784,7 @@ namespace ts.codefix {
         return moduleSpecifierToValidIdentifier(removeFileExtension(getBaseFileName(moduleSymbol.name)), target);
     }
 
-    function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget): string {
+    export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget): string {
         let res = "";
         let lastCharWasValid = true;
         const firstCharCode = moduleSpecifier.charCodeAt(0);

@@ -22,16 +22,16 @@ verify.codeFix({
     abstract foo(): number;
 }
 
-class C extends A {\r
-    f(a: number, b: string): boolean;\r
-    f(a: number, b: string): this;\r
-    f(a: string, b: number): Function;\r
-    f(a: string): Function;\r
-    f(a: any, b?: any) {\r
-        throw new Error("Method not implemented.");\r
-    }\r
-    foo(): number {\r
-        throw new Error("Method not implemented.");\r
-    }\r
+class C extends A {
+    f(a: number, b: string): boolean;
+    f(a: number, b: string): this;
+    f(a: string, b: number): Function;
+    f(a: string): Function;
+    f(a: any, b?: any) {
+        throw new Error("Method not implemented.");
+    }
+    foo(): number {
+        throw new Error("Method not implemented.");
+    }
 }`
 });

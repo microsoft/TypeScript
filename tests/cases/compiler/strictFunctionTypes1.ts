@@ -17,3 +17,13 @@ const x1 = f1(fo, fs);  // (x: string) => void
 const x2 = f2("abc", fo, fs);  // "abc"
 const x3 = f3("abc", fo, fx);  // "abc" | "def"
 const x4 = f4(fo, fs);  // Func<string>
+
+declare const never: never;
+
+const x10 = f2(never, fo, fs);  // string
+const x11 = f3(never, fo, fx);  // "def"
+
+// Repro from #21112
+
+declare function foo<T>(a: ReadonlyArray<T>): T;
+let x = foo([]);  // never

@@ -3190,8 +3190,8 @@ namespace ts {
     // `throw` methods that step through the generator when invoked.
     //
     // parameters:
-    //  thisArg  The value to use as the `this` binding for the transformed generator body.
-    //  body     A function that acts as the transformed generator body.
+    //  @param thisArg  The value to use as the `this` binding for the transformed generator body.
+    //  @param body     A function that acts as the transformed generator body.
     //
     // variables:
     //  _       Persistent state for the generator that is shared between the helper and the

@@ -398,7 +398,7 @@ namespace ts {
                     return { files, directories };
                 }
                 catch (e) {
-                    return { files: [], directories: [] };
+                    return emptyFileSystemEntries;
                 }
             }
 
@@ -524,7 +524,12 @@ namespace ts {
                     process.exit(exitCode);
                 },
                 realpath(path: string): string {
-                    return _fs.realpathSync(path);
+                    try {
+                        return _fs.realpathSync(path);
+                    }
+                    catch {
+                        return path;
+                    }
                 },
                 debugMode: some(<string[]>process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
                 tryEnableSourceMapsForHost() {

@@ -12,6 +12,6 @@
 verify.quickInfoAt("className", "class Sphere");
 
 goTo.marker('interfaceGoesHere');
-edit.insert("\r\ninterface Surface {\r\n    reflect: () => number;\r\n}\r\n");
+edit.insert("\ninterface Surface {\n    reflect: () => number;\n}\n");
 
 verify.quickInfoAt("className", "class Sphere");

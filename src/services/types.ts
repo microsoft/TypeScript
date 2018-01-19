@@ -295,10 +295,7 @@ namespace ts {
 
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
 
-        // TODO: GH#20538 return `ReadonlyArray<CodeFixAction>`
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings): ReadonlyArray<CodeAction>;
-        // TODO: GH#20538
-        /* @internal */
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings): ReadonlyArray<CodeFixAction>;
         getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions;
         applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
@@ -327,12 +324,11 @@ namespace ts {
         dispose(): void;
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface CombinedCodeFixScope { type: "file"; fileName: string; }
 
     export interface GetCompletionsAtPositionOptions {
         includeExternalModuleExports: boolean;
+        includeInsertTextCompletions: boolean;
     }
 
     export interface ApplyCodeActionCommandResult {
@@ -418,8 +414,6 @@ namespace ts {
         commands?: CodeActionCommand[];
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface CodeFixAction extends CodeAction {
         /**
          * If present, one may call 'getCombinedCodeFix' with this fixId.
@@ -428,8 +422,6 @@ namespace ts {
         fixId?: {};
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface CombinedCodeActions {
         changes: ReadonlyArray<FileTextChanges>;
         commands: ReadonlyArray<CodeActionCommand> | undefined;
@@ -597,6 +589,7 @@ namespace ts {
         InsertSpaceBeforeFunctionParenthesis?: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
+        insertSpaceBeforeTypeAnnotation?: boolean;
     }
 
     export interface FormatCodeSettings extends EditorSettings {
@@ -615,6 +608,7 @@ namespace ts {
         insertSpaceBeforeFunctionParenthesis?: boolean;
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
+        insertSpaceBeforeTypeAnnotation?: boolean;
     }
 
     export interface DefinitionInfo {
@@ -746,6 +740,7 @@ namespace ts {
         kind: ScriptElementKind;
         kindModifiers: string; // see ScriptElementKindModifier, comma separated
         sortText: string;
+        insertText?: string;
         /**
          * An optional span that indicates the text to be replaced by this completion item.
          * If present, this span should be used instead of the default one.
@@ -954,6 +949,7 @@ namespace ts {
         ambientModifier = "declare",
         staticModifier = "static",
         abstractModifier = "abstract",
+        optionalModifier = "optional"
     }
 
     export const enum ClassificationTypeNames {

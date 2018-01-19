@@ -10,5 +10,4 @@ import(...["PathModule"]);
 
 var p1 = import(...a);
 const p2 = import();
-const p3 = import(,);
 const p4 = import("pathToModule", "secondModule");

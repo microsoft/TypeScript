@@ -3,31 +3,37 @@
 // @noLib: true
 
 // @Filename: /a.ts
-////export namespace N {
+////export namespace Name {
 ////    export class C {}
 ////}
-////export function f(c: N.C) {}
-////f(new /*a*/);
+////export function f(c: Name.C) {}
+////f(new N/*a0*/);
+////f(new /*a1*/);
 
 // @Filename: /b.ts
 ////import { f } from "./a";
-// Here we will recommend a new import of 'N'
-////f(new /*b*/);
+// Here we will recommend a new import of 'Name'
+////f(new N/*b0*/);
+////f(new /*b1*/);
 
 // @Filename: /c.ts
-////import * as a from "./a";
-// Here we will recommend 'a' because it contains 'N' which contains 'C'.
-////a.f(new /*c*/);
+////import * as alpha from "./a";
+// Here we will recommend 'a' because it contains 'Name' which contains 'C'.
+////alpha.f(new a/*c0*/);
+////alpha.f(new /*c1*/);
 
-goTo.marker("a");
-verify.completionListContains("N", "namespace N", "", "module", undefined, undefined, { isRecommended: true });
-
-goTo.marker("b");
-verify.completionListContains({ name: "N", source: "/a" }, "namespace N", "", "module", undefined, /*hasAction*/ true, {
-    includeExternalModuleExports: true,
-    isRecommended: true,
-    sourceDisplay: "./a",
+goTo.eachMarker(["a0", "a1"], () => {
+    verify.completionListContains("Name", "namespace Name", "", "module", undefined, undefined, { isRecommended: true });
 });
 
-goTo.marker("c");
-verify.completionListContains("a", "import a", "", "alias", undefined, undefined, { isRecommended: true });
+goTo.eachMarker(["b0", "b1"], () => {
+    verify.completionListContains({ name: "Name", source: "/a" }, "namespace Name", "", "module", undefined, /*hasAction*/ true, {
+        includeExternalModuleExports: true,
+        isRecommended: true,
+        sourceDisplay: "./a",
+    });
+});
+
+goTo.eachMarker(["c0", "c1"], () => {
+    verify.completionListContains("alpha", "import alpha", "", "alias", undefined, undefined, { isRecommended: true });
+});

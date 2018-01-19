@@ -46,7 +46,7 @@ namespace ts.NavigateTo {
                 continue;
             }
 
-            // It was a match!  If the pattern has dots in it, then also see if the
+            // It was a match! If the pattern has dots in it, then also see if the
             // declaration container matches as well.
             let containerMatches = matches;
             if (patternMatcher.patternContainsDots) {
