@@ -416,7 +416,7 @@ namespace ts.FindAllReferences.Core {
         }
 
         // If the symbol is declared as part of a declaration like `{ type: "a" } | { type: "b" }`, use the property on the union type to get more references.
-        return symbol.declarations && firstDefined(symbol.declarations, decl =>
+        return firstDefined(symbol.declarations, decl =>
             isTypeLiteralNode(decl.parent) && isUnionTypeNode(decl.parent.parent)
                 ? checker.getPropertyOfType(checker.getTypeFromTypeNode(decl.parent.parent), symbol.name)
                 : undefined) || symbol;

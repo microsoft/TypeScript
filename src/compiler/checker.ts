@@ -6562,7 +6562,7 @@ namespace ts {
             // b) It references `arguments` somewhere
             const lastParam = lastOrUndefined(declaration.parameters);
             const lastParamTags = lastParam && getJSDocParameterTags(lastParam);
-            const lastParamVariadicType = lastParamTags && firstDefined(lastParamTags, p =>
+            const lastParamVariadicType = firstDefined(lastParamTags, p =>
                 p.typeExpression && isJSDocVariadicType(p.typeExpression.type) ? p.typeExpression.type : undefined);
             if (!lastParamVariadicType && !containsArgumentsReference(declaration)) {
                 return false;
