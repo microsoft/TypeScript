@@ -311,7 +311,7 @@ namespace ts.server.typingsInstaller {
 
                         // packageName is guaranteed to exist in typesRegistry by filterTypings
                         const distTags = this.typesRegistry.get(packageName);
-                        const newVersion = Semver.parse(distTags[`ts${ts.versionMajorMinor}`] || distTags["latest"]);
+                        const newVersion = Semver.parse(distTags[`ts${ts.versionMajorMinor}`] || distTags[latestDistTag]);
                         const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, version: newVersion };
                         this.packageNameToTypingLocation.set(packageName, newTyping);
                         installedTypingFiles.push(typingFile);
@@ -407,4 +407,6 @@ namespace ts.server.typingsInstaller {
     export function typingsName(packageName: string): string {
         return `@types/${packageName}@ts${versionMajorMinor}`;
     }
+
+    const latestDistTag = "latest";
 }

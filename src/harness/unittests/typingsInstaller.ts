@@ -1300,7 +1300,7 @@ namespace ts.projectSystem {
                 content: ""
             };
             const host = createServerHost([f, node]);
-            const cache = createMapFromTemplate<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new Semver(1, 3, 0, /*isPrerelease*/ false) } });
+            const cache = createMapFromTemplate<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: Semver.parse("1.3.0") } });
             const registry = createTypesRegistry("node");
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, ["fs", "bar"], registry);
@@ -1358,8 +1358,8 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([app]);
             const cache = createMapFromTemplate<JsTyping.CachedTyping>({
-                node: { typingLocation: node.path, version: new Semver(1, 3, 0, /*isPrerelease*/ false) },
-                commander: { typingLocation: commander.path, version: new Semver(1, 0, 0, /*isPrerelease*/ false) }
+                node: { typingLocation: node.path, version: Semver.parse("1.3.0") },
+                commander: { typingLocation: commander.path, version: Semver.parse("1.0.0") }
             });
             const registry = createTypesRegistry("node", "commander");
             const logger = trackingLogger();
@@ -1370,6 +1370,64 @@ namespace ts.projectSystem {
             ]);
             assert.deepEqual(result.cachedTypingPaths, [node.path]);
             assert.deepEqual(result.newTypingNames, ["commander"]);
+        });
+
+        it("should install expired typings with prerelease version of tsserver", () => {
+            const app = {
+                path: "/a/app.js",
+                content: ""
+            };
+            const cachePath = "/a/cache/";
+            const node = {
+                path: cachePath + "node_modules/@types/node/index.d.ts",
+                content: "export let y: number"
+            };
+            const host = createServerHost([app]);
+            const cache = createMapFromTemplate<JsTyping.CachedTyping>({
+                node: { typingLocation: node.path, version: Semver.parse("1.0.0") }
+            });
+            const registry = createTypesRegistry("node");
+            registry.delete(`ts${ts.versionMajorMinor}`);
+            const logger = trackingLogger();
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), emptySafeList, cache, { enable: true }, ["http"], registry);
+            assert.deepEqual(logger.finish(), [
+                'Inferred typings from unresolved imports: ["node"]',
+                'Result: {"cachedTypingPaths":[],"newTypingNames":["node"],"filesToWatch":["/a/bower_components","/a/node_modules"]}',
+            ]);
+            assert.deepEqual(result.cachedTypingPaths, []);
+            assert.deepEqual(result.newTypingNames, ["node"]);
+        });
+
+
+        it("prerelease typings are properly handled", () => {
+            const app = {
+                path: "/a/app.js",
+                content: ""
+            };
+            const cachePath = "/a/cache/";
+            const commander = {
+                path: cachePath + "node_modules/@types/commander/index.d.ts",
+                content: "export let x: number"
+            };
+            const node = {
+                path: cachePath + "node_modules/@types/node/index.d.ts",
+                content: "export let y: number"
+            };
+            const host = createServerHost([app]);
+            const cache = createMapFromTemplate<JsTyping.CachedTyping>({
+                node: { typingLocation: node.path, version: Semver.parse("1.3.0-next.0") },
+                commander: { typingLocation: commander.path, version: Semver.parse("1.3.0-next.0") }
+            });
+            const registry = createTypesRegistry("node", "commander");
+            registry.get("node")[`ts${ts.versionMajorMinor}`] = "1.3.0-next.1";
+            const logger = trackingLogger();
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), emptySafeList, cache, { enable: true }, ["http", "commander"], registry);
+            assert.deepEqual(logger.finish(), [
+                'Inferred typings from unresolved imports: ["node","commander"]',
+                'Result: {"cachedTypingPaths":[],"newTypingNames":["node","commander"],"filesToWatch":["/a/bower_components","/a/node_modules"]}',
+            ]);
+            assert.deepEqual(result.cachedTypingPaths, []);
+            assert.deepEqual(result.newTypingNames, ["node", "commander"]);
         });
     });
 

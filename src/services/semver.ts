@@ -23,7 +23,7 @@ namespace ts {
         }
 
         // This must parse the output of `versionString`.
-        static tryParse(semver: string, isPrerelease: boolean): Semver | undefined {
+        private static tryParse(semver: string, isPrerelease: boolean): Semver | undefined {
             // Per the semver spec <http://semver.org/#spec-item-2>:
             // "A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative integers, and MUST NOT contain leading zeroes."
             const rgx = isPrerelease ? /^(\d+)\.(\d+)\.0-next.(\d+)$/ : /^(\d+)\.(\d+)\.(\d+)$/;
