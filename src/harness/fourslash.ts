@@ -1102,20 +1102,30 @@ namespace FourSlash {
         }
 
         public verifyReferenceGroups(startRanges: Range | Range[], parts: FourSlashInterface.ReferenceGroup[]): void {
-            const fullExpected = ts.map(parts, ({ definition, ranges }) => ({ definition, ranges: ranges.map(rangeToReferenceEntry) }));
+            interface ReferenceGroupJson {
+                definition: string | { text: string, range: ts.TextSpan };
+                references: ts.ReferenceEntry[];
+            }
+            const fullExpected = ts.map<FourSlashInterface.ReferenceGroup, ReferenceGroupJson>(parts, ({ definition, ranges }) => ({
+                definition: typeof definition === "string" ? definition : { ...definition, range: textSpanFromRange(definition.range) },
+                references: ranges.map(rangeToReferenceEntry),
+            }));
 
             for (const startRange of toArray(startRanges)) {
                 this.goToRangeStart(startRange);
-                const fullActual = ts.map(this.findReferencesAtCaret(), ({ definition, references }) => ({
-                    definition: definition.displayParts.map(d => d.text).join(""),
-                    ranges: references
-                }));
+                const fullActual = ts.map<ts.ReferencedSymbol, ReferenceGroupJson>(this.findReferencesAtCaret(), ({ definition, references }, i) => {
+                    const text = definition.displayParts.map(d => d.text).join("");
+                    return {
+                        definition: typeof fullExpected[i].definition === "string" ? text : { text, range: definition.textSpan },
+                        references,
+                    };
+                });
                 this.assertObjectsEqual(fullActual, fullExpected);
             }
 
             function rangeToReferenceEntry(r: Range): ts.ReferenceEntry {
                 const { isWriteAccess, isDefinition, isInString } = (r.marker && r.marker.data) || { isWriteAccess: false, isDefinition: false, isInString: undefined };
-                const result: ts.ReferenceEntry = { fileName: r.fileName, textSpan: { start: r.start, length: r.end - r.start }, isWriteAccess: !!isWriteAccess, isDefinition: !!isDefinition };
+                const result: ts.ReferenceEntry = { fileName: r.fileName, textSpan: textSpanFromRange(r), isWriteAccess: !!isWriteAccess, isDefinition: !!isDefinition };
                 if (isInString !== undefined) {
                     result.isInString = isInString;
                 }
@@ -1139,7 +1149,7 @@ namespace FourSlash {
             }
         }
 
-        public verifySingleReferenceGroup(definition: string, ranges?: Range[]) {
+        public verifySingleReferenceGroup(definition: FourSlashInterface.ReferenceGroupDefinition, ranges?: Range[]) {
             ranges = ranges || this.getRanges();
             this.verifyReferenceGroups(ranges, [{ definition, ranges }]);
         }
@@ -4080,7 +4090,7 @@ namespace FourSlashInterface {
             this.state.verifyNoReferences(markerNameOrRange);
         }
 
-        public singleReferenceGroup(definition: string, ranges?: FourSlash.Range[]) {
+        public singleReferenceGroup(definition: ReferenceGroupDefinition, ranges?: FourSlash.Range[]) {
             this.state.verifySingleReferenceGroup(definition, ranges);
         }
 
@@ -4592,9 +4602,11 @@ namespace FourSlashInterface {
     }
 
     export interface ReferenceGroup {
-        definition: string;
+        definition: ReferenceGroupDefinition;
         ranges: FourSlash.Range[];
     }
+
+    export type ReferenceGroupDefinition = string | { text: string, range: FourSlash.Range };
 
     export interface ApplyRefactorOptions {
         refactorName: string;
