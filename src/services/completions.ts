@@ -278,7 +278,6 @@ namespace ts.Completions {
             case SyntaxKind.LiteralType:
                 switch (node.parent.parent.kind) {
                     case SyntaxKind.TypeReference:
-                        // TODO: GH#21168
                         const constraint = typeChecker.getTypeArgumentConstraint(node.parent as LiteralTypeNode);
                         return getStringLiteralCompletionEntriesFromType(constraint, typeChecker);
                     case SyntaxKind.IndexedAccessType:
