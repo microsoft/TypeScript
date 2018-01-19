@@ -2887,11 +2887,11 @@ namespace ts {
             if (parseOptional(SyntaxKind.ExtendsKeyword)) {
                 const node = <ConditionalTypeNode>createNode(SyntaxKind.ConditionalType, type.pos);
                 node.checkType = type;
-                node.extendsType = parseUnionTypeOrHigher();
+                node.extendsType = parseType();
                 parseExpected(SyntaxKind.QuestionToken);
-                node.trueType = parseConditionalTypeOrHigher();
+                node.trueType = parseType();
                 parseExpected(SyntaxKind.ColonToken);
-                node.falseType = parseConditionalTypeOrHigher();
+                node.falseType = parseType();
                 return finishNode(node);
             }
             return type;
