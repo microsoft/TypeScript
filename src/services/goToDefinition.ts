@@ -188,7 +188,7 @@ namespace ts.GoToDefinition {
         const { symbolName, symbolKind, containerName } = getSymbolInfo(typeChecker, symbol, node);
         return getConstructSignatureDefinition() || getCallSignatureDefinition() || map(symbol.declarations, declaration => createDefinitionInfo(declaration, symbolKind, symbolName, containerName));
 
-        function getConstructSignatureDefinition(): DefinitionInfo[] | undefined { //neater
+        function getConstructSignatureDefinition(): DefinitionInfo[] | undefined {
             // Applicable only if we are in a new expression, or we are on a constructor declaration
             // and in either case the symbol has a construct signature definition, i.e. class
             if (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword && symbol.flags & SymbolFlags.Class) {
