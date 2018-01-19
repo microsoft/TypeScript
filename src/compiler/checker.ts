@@ -9338,7 +9338,7 @@ namespace ts {
                     }
                     if (discriminant) {
                         // check excess properties against discriminant type only, not the entire union
-                        return hasExcessProperties(source, discriminant, undefined, reportErrors);
+                        return hasExcessProperties(source, discriminant, /*discriminant*/ undefined, reportErrors);
                     }
                     for (const prop of getPropertiesOfObjectType(source)) {
                         if (!isKnownProperty(target, prop.escapedName, isComparingJsxAttributes)) {
