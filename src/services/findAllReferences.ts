@@ -44,7 +44,7 @@ namespace ts.FindAllReferences {
     export function findReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number): ReferencedSymbol[] | undefined {
         const referencedSymbols = findAllReferencedSymbols(program, cancellationToken, sourceFiles, sourceFile, position);
         const checker = program.getTypeChecker();
-        return !referencedSymbols || !referencedSymbols.length ? undefined : mapDefined(referencedSymbols, ({ definition, references }) =>
+        return !referencedSymbols || !referencedSymbols.length ? undefined : mapDefined<SymbolAndEntries, ReferencedSymbol>(referencedSymbols, ({ definition, references }) =>
             // Only include referenced symbols that have a valid definition.
             definition && { definition: definitionToReferencedSymbolDefinitionInfo(definition, checker), references: references.map(toReferenceEntry) });
     }
