@@ -220,9 +220,30 @@ namespace ts {
         EmitAndSemanticDiagnosticsBuilderProgram
     }
 
-    export function createBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram: BuilderProgram | undefined, kind: BuilderProgramKind.SemanticDiagnosticsBuilderProgram): SemanticDiagnosticsBuilderProgram;
-    export function createBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram: BuilderProgram | undefined, kind: BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram): EmitAndSemanticDiagnosticsBuilderProgram;
-    export function createBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram: BuilderProgram | undefined, kind: BuilderProgramKind) {
+    export interface BuilderCreationParameters {
+        newProgram: Program;
+        host: BuilderProgramHost;
+        oldProgram: BuilderProgram | undefined;
+    }
+
+    export function getBuilderCreationParameters(newProgramOrRootNames: Program | ReadonlyArray<string>, hostOrOptions: BuilderProgramHost | CompilerOptions, oldProgramOrHost?: CompilerHost | BuilderProgram, oldProgram?: BuilderProgram): BuilderCreationParameters {
+        let host: BuilderProgramHost;
+        let newProgram: Program;
+        if (isArray(newProgramOrRootNames)) {
+            newProgram = createProgram(newProgramOrRootNames, hostOrOptions as CompilerOptions, oldProgramOrHost as CompilerHost, oldProgram && oldProgram.getProgram());
+            host = oldProgramOrHost as CompilerHost;
+        }
+        else {
+            newProgram = newProgramOrRootNames as Program;
+            host = hostOrOptions as BuilderProgramHost;
+            oldProgram = oldProgramOrHost as BuilderProgram;
+        }
+        return { host, newProgram, oldProgram };
+    }
+
+    export function createBuilderProgram(kind: BuilderProgramKind.SemanticDiagnosticsBuilderProgram, builderCreationParameters: BuilderCreationParameters): SemanticDiagnosticsBuilderProgram;
+    export function createBuilderProgram(kind: BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram, builderCreationParameters: BuilderCreationParameters): EmitAndSemanticDiagnosticsBuilderProgram;
+    export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, host, oldProgram }: BuilderCreationParameters) {
         // Return same program if underlying program doesnt change
         let oldState = oldProgram && oldProgram.getState();
         if (oldState && newProgram === oldState.program) {
@@ -518,15 +539,43 @@ namespace ts {
     /**
      * Create the builder to manage semantic diagnostics and cache them
      */
-    export function createSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: SemanticDiagnosticsBuilderProgram): SemanticDiagnosticsBuilderProgram {
-        return createBuilderProgram(newProgram, host, oldProgram, BuilderProgramKind.SemanticDiagnosticsBuilderProgram);
+    export function createSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: SemanticDiagnosticsBuilderProgram): SemanticDiagnosticsBuilderProgram;
+    export function createSemanticDiagnosticsBuilderProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: SemanticDiagnosticsBuilderProgram): SemanticDiagnosticsBuilderProgram;
+    export function createSemanticDiagnosticsBuilderProgram(newProgramOrRootNames: Program | ReadonlyArray<string>, hostOrOptions: BuilderProgramHost | CompilerOptions, oldProgramOrHost?: CompilerHost | SemanticDiagnosticsBuilderProgram, oldProgram?: SemanticDiagnosticsBuilderProgram) {
+        return createBuilderProgram(BuilderProgramKind.SemanticDiagnosticsBuilderProgram, getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, oldProgram));
     }
 
     /**
      * Create the builder that can handle the changes in program and iterate through changed files
      * to emit the those files and manage semantic diagnostics cache as well
      */
-    export function createEmitAndSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram): EmitAndSemanticDiagnosticsBuilderProgram {
-        return createBuilderProgram(newProgram, host, oldProgram, BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram);
+    export function createEmitAndSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram): EmitAndSemanticDiagnosticsBuilderProgram;
+    export function createEmitAndSemanticDiagnosticsBuilderProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram): EmitAndSemanticDiagnosticsBuilderProgram;
+    export function createEmitAndSemanticDiagnosticsBuilderProgram(newProgramOrRootNames: Program | ReadonlyArray<string>, hostOrOptions: BuilderProgramHost | CompilerOptions, oldProgramOrHost?: CompilerHost | EmitAndSemanticDiagnosticsBuilderProgram, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram) {
+        return createBuilderProgram(BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram, getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, oldProgram));
+    }
+
+    /**
+     * Creates a builder thats just abstraction over program and can be used with watch
+     */
+    export function createAbstractBuilder(newProgram: Program, host: BuilderProgramHost, oldProgram?: BuilderProgram): BuilderProgram;
+    export function createAbstractBuilder(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: BuilderProgram): BuilderProgram;
+    export function createAbstractBuilder(newProgramOrRootNames: Program | ReadonlyArray<string>, hostOrOptions: BuilderProgramHost | CompilerOptions, oldProgramOrHost?: CompilerHost | BuilderProgram, oldProgram?: BuilderProgram): BuilderProgram {
+        const { newProgram: program } = getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, oldProgram);
+        return {
+            // Only return program, all other methods are not implemented
+            getProgram: () => program,
+            getState: notImplemented,
+            getCompilerOptions: notImplemented,
+            getSourceFile: notImplemented,
+            getSourceFiles: notImplemented,
+            getOptionsDiagnostics: notImplemented,
+            getGlobalDiagnostics: notImplemented,
+            getSyntacticDiagnostics: notImplemented,
+            getSemanticDiagnostics: notImplemented,
+            emit: notImplemented,
+            getAllDependencies: notImplemented,
+            getCurrentDirectory: notImplemented
+        };
     }
 }
