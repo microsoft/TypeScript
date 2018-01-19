@@ -10966,7 +10966,7 @@ namespace ts {
             return type === typeParameter || type.flags & TypeFlags.UnionOrIntersection && forEach((<UnionOrIntersectionType>type).types, t => isTypeParameterAtTopLevel(t, typeParameter));
         }
 
-        /** Create an object with properties named in the string literal type. Every property has type `{}` */
+        /** Create an object with properties named in the string literal type. Every property has type `any` */
         function createEmptyObjectTypeFromStringLiteral(type: Type) {
             const members = createSymbolTable();
             forEachType(type, t => {
@@ -10975,7 +10975,7 @@ namespace ts {
                 }
                 const name = escapeLeadingUnderscores((t as StringLiteralType).value);
                 const literalProp = createSymbol(SymbolFlags.Property, name);
-                literalProp.type = emptyObjectType;
+                literalProp.type = anyType;
                 if (t.symbol) {
                     literalProp.declarations = t.symbol.declarations;
                     literalProp.valueDeclaration = t.symbol.valueDeclaration;
