@@ -31,8 +31,9 @@ namespace ts.projectSystem {
         }
 
         it("external project - diagnostics for missing files", () => {
-            const host = new fakes.FakeServerHost({ safeList: true, lib: true });
-            host.vfs.addFile("/a/b/app.ts", ``);
+            const host = new fakes.FakeServerHost({ safeList: true, lib: true }, /*files*/ {
+                "/a/b/app.ts": ``,
+            });
 
             const projectFileName = "/a/b/test.csproj";
 
@@ -49,26 +50,28 @@ namespace ts.projectSystem {
             const diags1 = sendCompilerOptionsDiagnosticsRequest(session, { projectFileName }, /*seq*/ 2);
             checkDiagnosticsWithLinePos(diags1, ["File '/a/b/applib.ts' not found."]);
 
-            host.vfs.removeFile("/a/b/app.ts");
-            host.vfs.addFile("/a/b/applib.ts", ``);
+            host.vfs.unlinkSync("/a/b/app.ts");
+            host.vfs.writeFileSync("/a/b/applib.ts", ``);
 
             // only file2 exists - expect error
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             const diags2 = sendCompilerOptionsDiagnosticsRequest(session, { projectFileName }, /*seq*/ 2);
             checkDiagnosticsWithLinePos(diags2, ["File '/a/b/app.ts' not found."]);
 
-            host.vfs.addFile("/a/b/app.ts", ``);
+            host.vfs.writeFileSync("/a/b/app.ts", ``);
 
             // both files exist - expect no errors
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             const diags3 = sendCompilerOptionsDiagnosticsRequest(session, { projectFileName }, /*seq*/ 2);
+            console.log(diags3);
             checkDiagnosticsWithLinePos(diags3, []);
         });
 
         it("configured projects - diagnostics for missing files", () => {
-            const host = new fakes.FakeServerHost({ safeList: true, lib: true });
-            host.vfs.addFile("/a/b/app.ts", ``);
-            host.vfs.addFile("/a/b/tsconfig.json", `{ "files": ["app.ts", "applib.ts"] }`);
+            const host = new fakes.FakeServerHost({ safeList: true, lib: true }, /*files*/ {
+                "/a/b/app.ts": ``,
+                "/a/b/tsconfig.json": `{ "files": ["app.ts", "applib.ts"] }`,
+            });
 
             const session = createSession(host);
             const projectService = session.getProjectService();
@@ -80,7 +83,7 @@ namespace ts.projectSystem {
             const diags1 = sendCompilerOptionsDiagnosticsRequest(session, { projectFileName: project.getProjectName() }, /*seq*/ 2);
             checkDiagnosticsWithLinePos(diags1, ["File '/a/b/applib.ts' not found."]);
 
-            host.vfs.addFile("/a/b/applib.ts", ``);
+            host.vfs.writeFileSync("/a/b/applib.ts", ``);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const diags2 = sendCompilerOptionsDiagnosticsRequest(session, { projectFileName: project.getProjectName() }, /*seq*/ 2);
@@ -88,10 +91,11 @@ namespace ts.projectSystem {
         });
 
         it("configured projects - diagnostics for corrupted config 1", () => {
-            const host = new fakes.FakeServerHost({ safeList: true });
-            host.vfs.addFile("/a/b/app.ts", ``);
-            host.vfs.addFile("/a/b/lib.ts", ``);
-            host.vfs.addFile("/a/b/tsconfig.json", ` "files": ["app.ts", "lib.ts"] }`);
+            const host = new fakes.FakeServerHost({ safeList: true }, /*files*/ {
+                "/a/b/app.ts": ``,
+                "/a/b/lib.ts": ``,
+                "/a/b/tsconfig.json": ` "files": ["app.ts", "lib.ts"] }`,
+            });
 
             const projectService = createProjectService(host);
 
@@ -109,7 +113,7 @@ namespace ts.projectSystem {
             assert.equal(projectErrors1[0].file.fileName, "/a/b/tsconfig.json");
 
             // fix config and trigger watcher
-            host.vfs.writeFile("/a/b/tsconfig.json", `{ "files": ["app.ts", "lib.ts"] }`);
+            host.vfs.writeFileSync("/a/b/tsconfig.json", `{ "files": ["app.ts", "lib.ts"] }`);
 
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
 
@@ -122,10 +126,11 @@ namespace ts.projectSystem {
         });
 
         it("configured projects - diagnostics for corrupted config 2", () => {
-            const host = new fakes.FakeServerHost({ safeList: true });
-            host.vfs.addFile("/a/b/app.ts", ``);
-            host.vfs.addFile("/a/b/lib.ts", ``);
-            host.vfs.addFile("/a/b/tsconfig.json", `{ "files": ["app.ts", "lib.ts"] }`);
+            const host = new fakes.FakeServerHost({ safeList: true }, /*files*/ {
+                "/a/b/app.ts": ``,
+                "/a/b/lib.ts": ``,
+                "/a/b/tsconfig.json": `{ "files": ["app.ts", "lib.ts"] }`,
+            });
 
             const projectService = createProjectService(host);
 
@@ -140,7 +145,7 @@ namespace ts.projectSystem {
             checkProjectErrorsWorker(projectErrors1, []);
 
             // break config and trigger watcher
-            host.vfs.writeFile("/a/b/tsconfig.json", ` "files": ["app.ts", "lib.ts"] }`);
+            host.vfs.writeFileSync("/a/b/tsconfig.json", ` "files": ["app.ts", "lib.ts"] }`);
 
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
 

@@ -1,0 +1,31 @@
+{
+  "private": true,
+  "name": "@typescript/vfs",
+  "version": "0.0.0",
+  "description": "JavaScript Virtual File System",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "Ron Buckton (ron.buckton@microsoft.com)",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@typescript/vfs-core": "file:../vfs-core",
+    "@typescript/vfs-errors": "file:../vfs-errors",
+    "@typescript/vfs-path": "file:../vfs-path"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.0.10",
+    "@types/mocha": "^2.2.44",
+    "@types/node": "^8.0.20",
+    "@types/source-map-support": "^0.4.0",
+    "typemock": "file:../typemock",
+    "chai": "^4.1.2",
+    "del": "^2.0.2",
+    "gulp": "^3.9.1",
+    "gulp-mocha": "^4.3.1",
+    "gulp-sourcemaps": "^2.6.1",
+    "gulp-tsb": "^2.0.5",
+    "mocha": "^4.0.1",
+    "source-map-support": "^0.5.0",
+    "typescript": "^2.6.1"
+  }
+}

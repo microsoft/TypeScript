@@ -20,7 +20,8 @@
 /// <reference path="..\server\client.ts" />
 /// <reference path="sourceMapRecorder.ts"/>
 /// <reference path="runnerbase.ts"/>
-/// <reference path="vfs.ts" />
+/// <reference path="./vfs.ts" />
+/// <reference path="./vfsutils.ts" />
 /// <reference types="node" />
 /// <reference types="mocha" />
 /// <reference types="chai" />
@@ -509,6 +510,7 @@ namespace Harness {
         getCurrentDirectory(): string;
         useCaseSensitiveFileNames(): boolean;
         resolvePath(path: string): string;
+        getFileSize(path: string): number;
         readFile(path: string): string | undefined;
         writeFile(path: string, contents: string): void;
         directoryName(path: string): string;
@@ -572,13 +574,13 @@ namespace Harness {
             function filesInFolder(folder: string): string[] {
                 let paths: string[] = [];
 
-                    for (const file of fs.readdirSync(folder)) {
-                        const pathToFile = pathModule.join(folder, file);
+                for (const file of fs.readdirSync(folder)) {
+                    const pathToFile = pathModule.join(folder, file);
                     const stat = fs.statSync(pathToFile);
                     if (options.recursive && stat.isDirectory()) {
                         paths = paths.concat(filesInFolder(pathToFile));
                     }
-                        else if (stat.isFile() && (!spec || file.match(spec))) {
+                    else if (stat.isFile() && (!spec || file.match(spec))) {
                         paths.push(pathToFile);
                     }
                 }
@@ -636,6 +638,7 @@ namespace Harness {
             getCurrentDirectory: () => ts.sys.getCurrentDirectory(),
             useCaseSensitiveFileNames: () => ts.sys.useCaseSensitiveFileNames,
             resolvePath: (path: string) => ts.sys.resolvePath(path),
+            getFileSize: (path: string) => ts.sys.getFileSize(path),
             readFile: path => ts.sys.readFile(path),
             writeFile: (path, content) => ts.sys.writeFile(path, content),
             directoryName,
@@ -885,6 +888,11 @@ namespace Harness {
             return HttpResponseMessage.hasSuccessStatusCode(response) && response.content ? response.content.content : undefined;
         }
 
+        function getFileSize(path: string): number {
+            const response = send(HttpRequestMessage.head(new URL(path, serverRoot)));
+            return HttpResponseMessage.hasSuccessStatusCode(response) ? +response.headers.get("Content-Length").toString() : 0;
+        }
+
         function readFile(path: string): string | undefined {
             const response = send(HttpRequestMessage.get(new URL(path, serverRoot)));
             return HttpResponseMessage.hasSuccessStatusCode(response) && response.content ? response.content.content : undefined;
@@ -935,22 +943,21 @@ namespace Harness {
         }
 
         function readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[], depth?: number) {
-            const fs = new vfs.VirtualFileSystem(path, useCaseSensitiveFileNames());
-            fs.addFiles(IO.listFiles(path));
-            return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), /*currentDirectory*/ "", depth, path => getAccessibleVirtualFileSystemEntries(fs, path));
+            const fs = new vfs.FileSystem(!useCaseSensitiveFileNames(), { cwd: path, files: { [path]: { } } });
+            for (const file of IO.listFiles(path)) {
+                fs.mkdirpSync(vpath.dirname(file));
+                fs.writeFileSync(file, "");
+            }
+            return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), /*currentDirectory*/ "", depth, path => vfsutils.getAccessibleFileSystemEntries(fs, path));
         }
 
         function getAccessibleFileSystemEntries(dirname: string): FileSystemEntries {
-            const fs = new vfs.VirtualFileSystem(dirname, useCaseSensitiveFileNames());
-            fs.addFiles(IO.listFiles(dirname));
-            return getAccessibleVirtualFileSystemEntries(fs, dirname);
-        }
-
-        function getAccessibleVirtualFileSystemEntries(fs: vfs.VirtualFileSystem, dirname: string): FileSystemEntries {
-            const directory = fs.getDirectory(dirname);
-            return directory
-                ? { files: directory.getFileNames(), directories: directory.getDirectoryNames() }
-                : { files: [], directories: [] };
+            const fs = new vfs.FileSystem(!useCaseSensitiveFileNames(), { cwd: dirname, files: { [dirname]: {} } });
+            for (const file of IO.listFiles(path)) {
+                fs.mkdirpSync(vpath.dirname(file));
+                fs.writeFileSync(file, "");
+            }
+            return vfsutils.getAccessibleFileSystemEntries(fs, dirname);
         }
 
         return {
@@ -958,6 +965,7 @@ namespace Harness {
             getCurrentDirectory: () => "",
             useCaseSensitiveFileNames,
             resolvePath,
+            getFileSize,
             readFile,
             writeFile,
             directoryName: Utils.memoize(directoryName, path => path),
@@ -1241,7 +1249,7 @@ namespace Harness {
 
             return compiler.compileFiles(
                 new compiler.CompilerHost(
-                    vfs.VirtualFileSystem.createFromDocuments(
+                    vfsutils.createFromDocuments(
                         useCaseSensitiveFileNames,
                         inputFiles.concat(otherFiles).map(documents.TextDocument.fromTestFile),
                         { currentDirectory, overwrite: true }
@@ -1282,10 +1290,10 @@ namespace Harness {
             }
 
             function addDtsFile(file: TestFile, dtsFiles: TestFile[]) {
-                if (vpath.isDeclaration(file.unitName)) {
+                if (vfsutils.isDeclaration(file.unitName)) {
                     dtsFiles.push(file);
                 }
-                else if (vpath.isTypeScript(file.unitName)) {
+                else if (vfsutils.isTypeScript(file.unitName)) {
                     const declFile = findResultCodeFile(file.unitName);
                     if (declFile && !findUnit(declFile.file, declInputFiles) && !findUnit(declFile.file, declOtherFiles)) {
                         dtsFiles.push({ unitName: declFile.file, content: core.removeByteOrderMark(declFile.text) });
@@ -1301,7 +1309,7 @@ namespace Harness {
                 const outFile = options.outFile || options.out;
                 if (!outFile) {
                     if (options.outDir) {
-                        let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, result.vfs.currentDirectory);
+                        let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, result.vfs.cwd());
                         sourceFilePath = sourceFilePath.replace(result.program.getCommonSourceDirectory(), "");
                         sourceFileName = ts.combinePaths(options.outDir, sourceFilePath);
                     }

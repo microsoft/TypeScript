@@ -3,6 +3,7 @@
 /// <reference path="./core.ts" />
 /// <reference path="./vpath.ts" />
 /// <reference path="./vfs.ts" />
+/// <reference path="./vfsutils.ts" />
 /// <reference path="./utils.ts" />
 
 // NOTE: The contents of this file are all exported from the namespace 'compiler'. This is to
@@ -13,7 +14,7 @@ namespace compiler {
      * A `ts.CompilerHost` that leverages a virtual file system.
      */
     export class CompilerHost implements ts.CompilerHost {
-        public readonly vfs: vfs.VirtualFileSystem;
+        public readonly vfs: vfs.FileSystem;
         public readonly defaultLibLocation: string;
         public readonly outputs: documents.TextDocument[] = [];
         public readonly traces: string[] = [];
@@ -24,10 +25,10 @@ namespace compiler {
         private _newLine: string;
         private _parseConfigHost: ParseConfigHost;
 
-        constructor(vfs: vfs.VirtualFileSystem, options: ts.CompilerOptions, setParentNodes = false) {
+        constructor(vfs: vfs.FileSystem, options: ts.CompilerOptions, setParentNodes = false) {
             this.vfs = vfs;
-            this.defaultLibLocation = vfs.metadata.get("defaultLibLocation") || "";
-            this._sourceFiles = new core.KeyedCollection<string, ts.SourceFile>(this.vfs.pathComparer);
+            this.defaultLibLocation = vfs.meta.get("defaultLibLocation") || "";
+            this._sourceFiles = new core.KeyedCollection<string, ts.SourceFile>(this.vfs.stringComparer);
             this._newLine = options.newLine === ts.NewLineKind.LineFeed ? "\n" : "\r\n";
             this._setParentNodes = setParentNodes;
         }
@@ -37,11 +38,11 @@ namespace compiler {
         }
 
         public getCurrentDirectory(): string {
-            return this.vfs.currentDirectory;
+            return this.vfs.cwd();
         }
 
         public useCaseSensitiveFileNames(): boolean {
-            return this.vfs.useCaseSensitiveFileNames;
+            return !this.vfs.ignoreCase;
         }
 
         public getNewLine(): string {
@@ -49,43 +50,38 @@ namespace compiler {
         }
 
         public getCanonicalFileName(fileName: string): string {
-            return this.vfs.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
+            return this.vfs.ignoreCase ? fileName.toLowerCase() : fileName;
         }
 
         public fileExists(fileName: string): boolean {
-            return this.vfs.fileExists(fileName);
+            return vfsutils.fileExists(this.vfs, fileName);
         }
 
         public directoryExists(directoryName: string): boolean {
-            return this.vfs.directoryExists(directoryName);
+            return vfsutils.directoryExists(this.vfs, directoryName);
         }
 
         public getDirectories(path: string): string[] {
-            const entry = this.vfs.getDirectory(path);
-            return entry ? entry.getDirectories().map(dir => dir.name) : [];
+            return vfsutils.getDirectories(this.vfs, path);
         }
 
         public readFile(path: string): string | undefined {
-            const content = this.vfs.readFile(path);
-            return content === undefined ? undefined :
-                vpath.extname(path) === ".json" ? utils.removeComments(core.removeByteOrderMark(content), utils.CommentRemoval.leadingAndTrailing) :
-                core.removeByteOrderMark(content);
+            if (path.endsWith("lib.d.ts")) debugger;
+            return vfsutils.readFile(this.vfs, path);
         }
 
         public writeFile(fileName: string, content: string, writeByteOrderMark: boolean) {
-            if (writeByteOrderMark) content = "\u00EF\u00BB\u00BF" + content;
-            const entry = this.vfs.addFile(fileName, content, { overwrite: true });
-            if (entry) {
-                const document = new documents.TextDocument(fileName, content);
-                document.meta.set("fileName", fileName);
-                entry.metadata.set("document", document);
-                const index = this.outputs.findIndex(output => this.vfs.pathComparer(document.file, output.file) === 0);
-                if (index < 0) {
-                    this.outputs.push(document);
-                }
-                else {
-                    this.outputs[index] = document;
-                }
+            if (writeByteOrderMark) content = core.addUTF8ByteOrderMark(content);
+            vfsutils.writeFile(this.vfs, fileName, content);
+            const document = new documents.TextDocument(fileName, content);
+            document.meta.set("fileName", fileName);
+            this.vfs.filemeta(fileName).set("document", document);
+            const index = this.outputs.findIndex(output => this.vfs.stringComparer(document.file, output.file) === 0);
+            if (index < 0) {
+                this.outputs.push(document);
+            }
+            else {
+                this.outputs[index] = document;
             }
         }
 
@@ -94,11 +90,11 @@ namespace compiler {
         }
 
         public realpath(path: string): string {
-            return this.vfs.realpath(path);
+            return this.vfs.realpathSync(path);
         }
 
         public getDefaultLibLocation(): string {
-            return vpath.resolve(this.vfs.currentDirectory, this.defaultLibLocation);
+            return vpath.resolve(this.vfs.cwd(), this.defaultLibLocation);
         }
 
         public getDefaultLibFileName(options: ts.CompilerOptions): string {
@@ -126,11 +122,12 @@ namespace compiler {
         }
 
         public getSourceFile(fileName: string, languageVersion: number): ts.SourceFile | undefined {
-            const canonicalFileName = this.getCanonicalFileName(vpath.resolve(this.vfs.currentDirectory, fileName));
+            const canonicalFileName = this.getCanonicalFileName(vpath.resolve(this.vfs.cwd(), fileName));
             const existing = this._sourceFiles.get(canonicalFileName);
             if (existing) return existing;
-            const file = this.vfs.getFile(canonicalFileName);
-            if (!file) return undefined;
+
+            const content = this.readFile(canonicalFileName);
+            if (content === undefined) return undefined;
 
             // A virtual file system may shadow another existing virtual file system. This
             // allows us to reuse a common virtual file system structure across multiple
@@ -138,17 +135,16 @@ namespace compiler {
             // reused across multiple tests. In that case, we cache the SourceFile we parse
             // so that it can be reused across multiple tests to avoid the cost of
             // repeatedly parsing the same file over and over (such as lib.d.ts).
-            const cacheKey = file.shadowRoot && `SourceFile[languageVersion=${languageVersion},setParentNodes=${this._setParentNodes}]`;
+            const cacheKey = this.vfs.shadowRoot && `SourceFile[languageVersion=${languageVersion},setParentNodes=${this._setParentNodes}]`;
             if (cacheKey) {
-                const sourceFileFromMetadata = file.metadata.get(cacheKey) as ts.SourceFile | undefined;
+                const meta = this.vfs.filemeta(canonicalFileName);
+                const sourceFileFromMetadata = meta.get(cacheKey) as ts.SourceFile | undefined;
                 if (sourceFileFromMetadata) {
                     this._sourceFiles.set(canonicalFileName, sourceFileFromMetadata);
                     return sourceFileFromMetadata;
                 }
             }
 
-            if (file.content === undefined) return undefined;
-            const content = core.removeByteOrderMark(file.content);
             const parsed = ts.createSourceFile(fileName, content, languageVersion, this._setParentNodes || this.shouldAssertInvariants);
             if (this.shouldAssertInvariants) {
                 Utils.assertInvariants(parsed, /*parent*/ undefined);
@@ -158,12 +154,27 @@ namespace compiler {
 
             if (cacheKey) {
                 // store the cached source file on the unshadowed file with the same version.
-                let rootFile = file;
-                while (rootFile.shadowRoot && rootFile.shadowRoot.version === file.version) {
-                    rootFile = rootFile.shadowRoot;
+                const stats = this.vfs.statSync(canonicalFileName);
+
+                let fs = this.vfs;
+                while (fs.shadowRoot) {
+                    try {
+                        const shadowRootStats = fs.shadowRoot.statSync(canonicalFileName);
+                        if (shadowRootStats.dev !== stats.dev ||
+                            shadowRootStats.ino !== stats.ino ||
+                            shadowRootStats.mtimeMs !== stats.mtimeMs) {
+                            break;
+                        }
+
+                        fs = fs.shadowRoot;
+                    }
+                    catch {
+                        break;
+                    }
                 }
-                if (rootFile !== file) {
-                    rootFile.metadata.set(cacheKey, parsed);
+
+                if (fs !== this.vfs) {
+                    fs.filemeta(canonicalFileName).set(cacheKey, parsed);
                 }
             }
 
@@ -175,14 +186,26 @@ namespace compiler {
      * A `ts.ParseConfigHost` that leverages a virtual file system.
      */
     export class ParseConfigHost implements ts.ParseConfigHost {
-        public readonly vfs: vfs.VirtualFileSystem;
+        public readonly vfs: vfs.FileSystem;
 
-        constructor(vfs: vfs.VirtualFileSystem) {
+        constructor(vfs: vfs.FileSystem) {
             this.vfs = vfs;
         }
 
         public get useCaseSensitiveFileNames() {
-            return this.vfs.useCaseSensitiveFileNames;
+            return !this.vfs.ignoreCase;
+        }
+
+        public fileExists(fileName: string): boolean {
+            return vfsutils.fileExists(this.vfs, fileName);
+        }
+
+        public directoryExists(directoryName: string): boolean {
+            return vfsutils.directoryExists(this.vfs, directoryName);
+        }
+
+        public readFile(path: string): string | undefined {
+            return vfsutils.readFile(this.vfs, path);
         }
 
         public readDirectory(path: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
@@ -191,18 +214,10 @@ namespace compiler {
                 extensions,
                 excludes,
                 includes,
-                this.vfs.useCaseSensitiveFileNames,
-                this.vfs.currentDirectory,
+                !this.vfs.ignoreCase,
+                this.vfs.cwd(),
                 depth,
-                path => this.vfs.getAccessibleFileSystemEntries(path));
-        }
-
-        public fileExists(path: string) {
-            return this.vfs.fileExists(path);
-        }
-
-        public readFile(path: string) {
-            return this.vfs.readFile(path);
+                path => vfsutils.getAccessibleFileSystemEntries(this.vfs, path));
         }
     }
 
@@ -218,9 +233,7 @@ namespace compiler {
                 vpath.combine(project, "tsconfig.json");
         }
         else {
-            const dir = host.vfs.getDirectory(host.vfs.currentDirectory);
-            const projectFile = dir && dir.findFile("tsconfig.json", "ancestors-or-self");
-            project = projectFile && projectFile.path;
+            [project] = host.vfs.scanSync(".", "ancestors-or-self", { accept: (path, stats) => stats.isFile() && host.vfs.stringComparer(vpath.basename(path), "tsconfig.json") === 0 });
         }
 
         if (project) {
@@ -270,32 +283,32 @@ namespace compiler {
             this.options = program ? program.getCompilerOptions() : options;
 
             // collect outputs
-            const js = this.js = new core.KeyedCollection<string, documents.TextDocument>(this.vfs.pathComparer);
-            const dts = this.dts = new core.KeyedCollection<string, documents.TextDocument>(this.vfs.pathComparer);
-            const maps = this.maps = new core.KeyedCollection<string, documents.TextDocument>(this.vfs.pathComparer);
+            const js = this.js = new core.KeyedCollection<string, documents.TextDocument>(this.vfs.stringComparer);
+            const dts = this.dts = new core.KeyedCollection<string, documents.TextDocument>(this.vfs.stringComparer);
+            const maps = this.maps = new core.KeyedCollection<string, documents.TextDocument>(this.vfs.stringComparer);
             for (const document of this.host.outputs) {
-                if (vpath.isJavaScript(document.file)) {
+                if (vfsutils.isJavaScript(document.file)) {
                     js.set(document.file, document);
                 }
-                else if (vpath.isDeclaration(document.file)) {
+                else if (vfsutils.isDeclaration(document.file)) {
                     dts.set(document.file, document);
                 }
-                else if (vpath.isSourceMap(document.file)) {
+                else if (vfsutils.isSourceMap(document.file)) {
                     maps.set(document.file, document);
                 }
             }
 
             // correlate inputs and outputs
-            this._inputsAndOutputs = new core.KeyedCollection<string, CompilationOutput>(this.vfs.pathComparer);
+            this._inputsAndOutputs = new core.KeyedCollection<string, CompilationOutput>(this.vfs.stringComparer);
             if (program) {
                 if (this.options.out || this.options.outFile) {
-                    const outFile = vpath.resolve(this.vfs.currentDirectory, this.options.outFile || this.options.out);
+                    const outFile = vpath.resolve(this.vfs.cwd(), this.options.outFile || this.options.out);
                     const inputs: documents.TextDocument[] = [];
                     for (const sourceFile of program.getSourceFiles()) {
                         if (sourceFile) {
                             const input = new documents.TextDocument(sourceFile.fileName, sourceFile.text);
                             this._inputs.push(input);
-                            if (!vpath.isDeclaration(sourceFile.fileName)) {
+                            if (!vfsutils.isDeclaration(sourceFile.fileName)) {
                                 inputs.push(input);
                             }
                         }
@@ -321,7 +334,7 @@ namespace compiler {
                         if (sourceFile) {
                             const input = new documents.TextDocument(sourceFile.fileName, sourceFile.text);
                             this._inputs.push(input);
-                            if (!vpath.isDeclaration(sourceFile.fileName)) {
+                            if (!vfsutils.isDeclaration(sourceFile.fileName)) {
                                 const extname = ts.getOutputExtension(sourceFile, this.options);
                                 const outputs: CompilationOutput = {
                                     inputs: [input],
@@ -343,7 +356,7 @@ namespace compiler {
             this.diagnostics = diagnostics;
         }
 
-        public get vfs(): vfs.VirtualFileSystem {
+        public get vfs(): vfs.FileSystem {
             return this.host.vfs;
         }
 
@@ -369,11 +382,11 @@ namespace compiler {
 
         public get commonSourceDirectory(): string {
             const common = this.program && this.program.getCommonSourceDirectory() || "";
-            return common && vpath.combine(this.vfs.currentDirectory, common);
+            return common && vpath.combine(this.vfs.cwd(), common);
         }
 
         public getInputsAndOutputs(path: string): CompilationOutput | undefined {
-            return this._inputsAndOutputs.get(vpath.resolve(this.vfs.currentDirectory, path));
+            return this._inputsAndOutputs.get(vpath.resolve(this.vfs.cwd(), path));
         }
 
         public getInputs(path: string): ReadonlyArray<documents.TextDocument> | undefined {
@@ -393,7 +406,7 @@ namespace compiler {
         }
 
         public getSourceMap(path: string): documents.SourceMap | undefined {
-            if (this.options.noEmit || vpath.isDeclaration(path)) return undefined;
+            if (this.options.noEmit || vfsutils.isDeclaration(path)) return undefined;
             if (this.options.inlineSourceMap) {
                 const document = this.getOutput(path, "js");
                 return document && documents.SourceMap.fromSource(document.text);
@@ -406,16 +419,16 @@ namespace compiler {
 
         public getOutputPath(path: string, ext: string): string {
             if (this.options.outFile || this.options.out) {
-                path = vpath.resolve(this.vfs.currentDirectory, this.options.outFile || this.options.out);
+                path = vpath.resolve(this.vfs.cwd(), this.options.outFile || this.options.out);
             }
             else {
-                path = vpath.resolve(this.vfs.currentDirectory, path);
+                path = vpath.resolve(this.vfs.cwd(), path);
                 const outDir = ext === ".d.ts" ? this.options.declarationDir || this.options.outDir : this.options.outDir;
                 if (outDir) {
                     const common = this.commonSourceDirectory;
                     if (common) {
-                        path = vpath.relative(common, path, !this.vfs.useCaseSensitiveFileNames);
-                        path = vpath.combine(vpath.resolve(this.vfs.currentDirectory, this.options.outDir), path);
+                        path = vpath.relative(common, path, this.vfs.ignoreCase);
+                        path = vpath.combine(vpath.resolve(this.vfs.cwd(), this.options.outDir), path);
                     }
                 }
             }

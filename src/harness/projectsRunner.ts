@@ -3,6 +3,7 @@
 /// <reference path="./vpath.ts" />
 /// <reference path="./documents.ts" />
 /// <reference path="./compiler.ts" />
+/// <reference path="./vfsutils.ts" />
 
 namespace project {
     // Test case is json of below type in tests/cases/project/
@@ -75,7 +76,7 @@ namespace project {
         private _testCase: ProjectRunnerTestCase & ts.CompilerOptions;
         private _projectParseConfigHost: ProjectParseConfigHost;
 
-        constructor(vfs: vfs.VirtualFileSystem, compilerOptions: ts.CompilerOptions, _testCaseJustName: string, testCase: ProjectRunnerTestCase & ts.CompilerOptions, _moduleKind: ts.ModuleKind) {
+        constructor(vfs: vfs.FileSystem, compilerOptions: ts.CompilerOptions, _testCaseJustName: string, testCase: ProjectRunnerTestCase & ts.CompilerOptions, _moduleKind: ts.ModuleKind) {
             super(vfs, compilerOptions);
             this._testCase = testCase;
         }
@@ -92,7 +93,7 @@ namespace project {
     class ProjectParseConfigHost extends compiler.ParseConfigHost {
         private _testCase: ProjectRunnerTestCase & ts.CompilerOptions;
 
-        constructor(vfs: vfs.VirtualFileSystem, testCase: ProjectRunnerTestCase & ts.CompilerOptions) {
+        constructor(vfs: vfs.FileSystem, testCase: ProjectRunnerTestCase & ts.CompilerOptions) {
             super(vfs);
             this._testCase = testCase;
         }
@@ -103,7 +104,7 @@ namespace project {
             return result.map(item => vpath.relative(
                 projectRoot,
                 vpath.resolve(projectRoot, item),
-                !this.vfs.useCaseSensitiveFileNames
+                this.vfs.ignoreCase
             ));
         }
     }
@@ -116,13 +117,13 @@ namespace project {
     interface ProjectTestPayload {
         testCase: ProjectRunnerTestCase & ts.CompilerOptions;
         moduleKind: ts.ModuleKind;
-        vfs: vfs.VirtualFileSystem;
+        vfs: vfs.FileSystem;
     }
 
     class ProjectTestCase {
         private testCase: ProjectRunnerTestCase & ts.CompilerOptions;
         private testCaseJustName: string;
-        private vfs: vfs.VirtualFileSystem;
+        private vfs: vfs.FileSystem;
         private compilerOptions: ts.CompilerOptions;
         private compilerResult: BatchCompileProjectTestCaseResult;
 
@@ -140,13 +141,13 @@ namespace project {
                 assert(!inputFiles || inputFiles.length === 0, "cannot specify input files and project option together");
             }
             else if (!inputFiles || inputFiles.length === 0) {
-                configFileName = ts.findConfigFile("", path => this.vfs.fileExists(path));
+                configFileName = ts.findConfigFile("", path => vfsutils.fileExists(this.vfs, path));
             }
 
             let errors: ts.Diagnostic[];
             const configFileSourceFiles: ts.SourceFile[] = [];
             if (configFileName) {
-                const result = ts.readJsonConfigFile(configFileName, path => this.vfs.readFile(path));
+                const result = ts.readJsonConfigFile(configFileName, path => vfsutils.readFile(this.vfs, path));
                 configFileSourceFiles.push(result);
                 const configParseHost = new ProjectParseConfigHost(this.vfs, this.testCase);
                 const configParseResult = ts.parseJsonSourceFileConfigFileContent(result, configParseHost, ts.getDirectoryPath(configFileName), this.compilerOptions);
@@ -187,10 +188,11 @@ namespace project {
                 assert(false, "Testcase: " + testCaseFileName + " does not contain valid json format: " + e.message);
             }
 
-            const fs = vfs.VirtualFileSystem.createFromFileSystem(/*useCaseSensitiveFileNames*/ true);
-            fs.addDirectory("/.src/tests", vfs.createResolver(Harness.IO, { "/.src/tests": vpath.resolve(__dirname, "../../tests") }));
-            fs.changeDirectory(vpath.combine("/.src", testCase.projectRoot));
-            fs.makeReadOnly();
+            const fs = vfsutils.createFromFileSystem(/*useCaseSensitiveFileNames*/ true);
+            fs.mountSync(vpath.resolve(__dirname, "../../tests"), "/.src/tests", vfsutils.createResolver(Harness.IO));
+            fs.mkdirpSync(vpath.combine("/.src", testCase.projectRoot));
+            fs.chdir(vpath.combine("/.src", testCase.projectRoot));
+            fs.makeReadonly();
 
             return [
                 { name: `@module: commonjs`, payload: { testCase, moduleKind: ts.ModuleKind.CommonJS, vfs: fs } },
@@ -199,8 +201,8 @@ namespace project {
         }
 
         public verifyResolution() {
-            const cwd = this.vfs.currentDirectory;
-            const ignoreCase = !this.vfs.useCaseSensitiveFileNames;
+            const cwd = this.vfs.cwd();
+            const ignoreCase = this.vfs.ignoreCase;
             const resolutionInfo: ProjectRunnerTestCaseResolutionInfo & ts.CompilerOptions = JSON.parse(JSON.stringify(this.testCase));
             resolutionInfo.resolvedInputFiles = this.compilerResult.program.getSourceFiles()
                 .map(input => utils.removeTestPathPrefixes(vpath.isAbsolute(input.fileName) ? vpath.relative(cwd, input.fileName, ignoreCase) : input.fileName));
@@ -236,15 +238,15 @@ namespace project {
                         // convert file name to rooted name
                         // if filename is not rooted - concat it with project root and then expand project root relative to current directory
                         const fileName = output.meta.get("fileName") || output.file;
-                        const diskFileName = vpath.isAbsolute(fileName) ? fileName : vpath.resolve(this.vfs.currentDirectory, fileName);
+                        const diskFileName = vpath.isAbsolute(fileName) ? fileName : vpath.resolve(this.vfs.cwd(), fileName);
 
                         // compute file name relative to current directory (expanded project root)
-                        let diskRelativeName = vpath.relative(this.vfs.currentDirectory, diskFileName, !this.vfs.useCaseSensitiveFileNames);
+                        let diskRelativeName = vpath.relative(this.vfs.cwd(), diskFileName, this.vfs.ignoreCase);
                         if (vpath.isAbsolute(diskRelativeName) || diskRelativeName.startsWith("../")) {
                             // If the generated output file resides in the parent folder or is rooted path,
                             // we need to instead create files that can live in the project reference folder
                             // but make sure extension of these files matches with the fileName the compiler asked to write
-                            diskRelativeName = `diskFile${nonSubfolderDiskFiles}${vpath.extname(fileName, [".js.map", ".js", ".d.ts"], !this.vfs.useCaseSensitiveFileNames)}`;
+                            diskRelativeName = `diskFile${nonSubfolderDiskFiles}${vpath.extname(fileName, [".js.map", ".js", ".d.ts"], this.vfs.ignoreCase)}`;
                             nonSubfolderDiskFiles++;
                         }
 
@@ -353,7 +355,7 @@ namespace project {
             const rootFiles: string[] = [];
             ts.forEach(compilerResult.program.getSourceFiles(), sourceFile => {
                 if (sourceFile.isDeclarationFile) {
-                    if (!vpath.isDefaultLibrary(sourceFile.fileName)) {
+                    if (!vfsutils.isDefaultLibrary(sourceFile.fileName)) {
                         allInputFiles.unshift(new documents.TextDocument(sourceFile.fileName, sourceFile.text));
                     }
                     rootFiles.unshift(sourceFile.fileName);
@@ -386,7 +388,7 @@ namespace project {
                 }
             });
 
-            const _vfs = vfs.VirtualFileSystem.createFromDocuments(/*useCaseSensitiveFileNames*/ true, allInputFiles, {
+            const _vfs = vfsutils.createFromDocuments(/*useCaseSensitiveFileNames*/ true, allInputFiles, {
                 currentDirectory: vpath.combine("/.src", this.testCase.projectRoot)
             });
 

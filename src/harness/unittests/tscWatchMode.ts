@@ -182,9 +182,10 @@ namespace ts.tscWatch {
 
         describe("program updates", () => {
             it("create watch without config file", () => {
-                const host = new fakes.FakeServerHost({ lib: true });
-                host.vfs.addFile("/a/b/c/app.ts", `import {f} from "./module"\nconsole.log(f)`);
-                host.vfs.addFile("/a/b/c/module.d.ts", `export let x: number`);
+                const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                    "/a/b/c/app.ts": `import {f} from "./module"\nconsole.log(f)`,
+                    "/a/b/c/module.d.ts": `export let x: number`,
+                });
 
                 const watch = createWatchModeWithoutConfigFile(["/a/b/c/app.ts"], host);
                 checkProgramActualFiles(watch(), ["/a/b/c/app.ts", fakes.FakeServerHost.libPath, "/a/b/c/module.d.ts"]);
@@ -197,20 +198,22 @@ namespace ts.tscWatch {
             });
 
             it("can handle tsconfig file name with difference casing", () => {
-                const host = new fakes.FakeServerHost({ vfs: { useCaseSensitiveFileNames: false } });
-                host.vfs.addFile("/a/b/app.ts", `let x = 1`);
-                host.vfs.addFile("/a/b/tsconfig.json", `{ "include": ["app.ts"] }`);
+                const host = new fakes.FakeServerHost({ vfs: { useCaseSensitiveFileNames: false } }, /*files*/ {
+                    "/a/b/app.ts": `let x = 1`,
+                    "/a/b/tsconfig.json": `{ "include": ["app.ts"] }`,
+                });
 
                 const watch = createWatchModeWithConfigFile("/A/B/tsconfig.json", host);
                 checkProgramActualFiles(watch(), ["/A/B/app.ts"]);
             });
 
             it("create configured project without file list", () => {
-                const host = new fakes.FakeServerHost({ lib: true });
-                host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {}, "exclude": ["e"] }`);
-                host.vfs.addFile("/a/b/c/f1.ts", `let x = 1`);
-                host.vfs.addFile("/a/b/d/f2.ts", `let y = 1`);
-                host.vfs.addFile("/a/b/e/f3.ts", `let z = 1`);
+                const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                    "/a/b/tsconfig.json": `{ "compilerOptions": {}, "exclude": ["e"] }`,
+                    "/a/b/c/f1.ts": `let x = 1`,
+                    "/a/b/d/f2.ts": `let y = 1`,
+                    "/a/b/e/f3.ts": `let z = 1`,
+                });
 
                 const watchingSystemHost = createWatchingSystemHost(host);
                 const configFileResult = parseConfigFile("/a/b/tsconfig.json", watchingSystemHost);
@@ -229,26 +232,28 @@ namespace ts.tscWatch {
             // });
 
             it("add new files to a configured program without file list", () => {
-                const host = new fakes.FakeServerHost({ lib: true });
-                host.vfs.addFile("/a/b/commonFile1.ts", `let x = 1`);
-                host.vfs.addFile("/a/b/tsconfig.json", `{}`);
+                const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                    "/a/b/commonFile1.ts": `let x = 1`,
+                    "/a/b/tsconfig.json": `{}`,
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
                 host.checkWatchedDirectories(["/a/b", "/a/b/node_modules/@types"], /*recursive*/ true);
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts"]);
 
                 // add a new ts file
-                host.vfs.addFile("/a/b/commonFile2.ts", `let y = 1`);
+                host.vfs.writeFileSync("/a/b/commonFile2.ts", `let y = 1`);
 
                 host.checkTimeoutQueueLengthAndRun(1);
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts", "/a/b/commonFile2.ts"]);
             });
 
             it("should ignore non-existing files specified in the config file", () => {
-                const host = new fakes.FakeServerHost();
-                host.vfs.addFile("/a/b/commonFile1.ts", `let x = 1`);
-                host.vfs.addFile("/a/b/commonFile2.ts", `let y = 1`);
-                host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {}, "files": ["commonFile1.ts", "commonFile3.ts"] }`);
+                const host = new fakes.FakeServerHost({}, /*files*/ {
+                    "/a/b/commonFile1.ts": `let x = 1`,
+                    "/a/b/commonFile2.ts": `let y = 1`,
+                    "/a/b/tsconfig.json": `{ "compilerOptions": {}, "files": ["commonFile1.ts", "commonFile3.ts"] }`,
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts", "/a/b/commonFile3.ts"]);
@@ -256,21 +261,22 @@ namespace ts.tscWatch {
             });
 
             it("handle recreated files correctly", () => {
-                const host = new fakes.FakeServerHost();
-                host.vfs.addFile("/a/b/commonFile1.ts", `let x = 1`);
-                host.vfs.addFile("/a/b/commonFile2.ts", `let y = 1`);
-                host.vfs.addFile("/a/b/tsconfig.json", `{}`);
+                const host = new fakes.FakeServerHost({}, /*files*/ {
+                    "/a/b/commonFile1.ts": `let x = 1`,
+                    "/a/b/commonFile2.ts": `let y = 1`,
+                    "/a/b/tsconfig.json": `{}`,
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts", "/a/b/commonFile2.ts"]);
 
                 // delete commonFile2
-                host.vfs.removeFile("/a/b/commonFile2.ts");
+                host.vfs.unlinkSync("/a/b/commonFile2.ts");
                 host.checkTimeoutQueueLengthAndRun(1);
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts"]);
 
                 // re-add commonFile2
-                host.vfs.addFile("/a/b/commonFile2.ts", `let y = 1`);
+                host.vfs.writeFileSync("/a/b/commonFile2.ts", `let y = 1`);
                 host.checkTimeoutQueueLengthAndRun(1);
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts", "/a/b/commonFile2.ts"]);
             });
@@ -278,8 +284,9 @@ namespace ts.tscWatch {
             it("handles the missing files - that were added to program because they were added with ///<ref", () => {
                 const file1Content = `/// <reference path="commonFile2.ts"/>\nlet x = y`;
 
-                const host = new fakes.FakeServerHost({ lib: true, vfs: { useCaseSensitiveFileNames: false } });
-                host.vfs.addFile("/a/b/commonFile1.ts", file1Content);
+                const host = new fakes.FakeServerHost({ lib: true, vfs: { useCaseSensitiveFileNames: false } }, /*files*/ {
+                    "/a/b/commonFile1.ts": file1Content,
+                });
 
                 const watch = createWatchModeWithoutConfigFile(["/a/b/commonFile1.ts"], host);
 
@@ -288,124 +295,132 @@ namespace ts.tscWatch {
                 checkOutputErrors(host, [
                     createFileNotFoundDiagnostic(watch(), "/a/b/commonFile1.ts", file1Content, "commonFile2.ts", "/a/b/commonFile2.ts"),
                     createCannotFindNameDiagnostic(watch(), "/a/b/commonFile1.ts", file1Content, "y"),
-            ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
+                ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
-                host.vfs.addFile("/a/b/commonFile2.ts", `let y = 1`);
+                host.vfs.writeFileSync("/a/b/commonFile2.ts", `let y = 1`);
                 host.checkTimeoutQueueLengthAndRun(1);
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts"]);
                 checkProgramActualFiles(watch(), ["/a/b/commonFile1.ts", fakes.FakeServerHost.libPath, "/a/b/commonFile2.ts"]);
-            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
+                checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
             });
 
             it("should reflect change in config file", () => {
-                const host = new fakes.FakeServerHost();
-                host.vfs.addFile("/a/b/commonFile1.ts", `let x = 1`);
-                host.vfs.addFile("/a/b/commonFile2.ts", `let y = 1`);
-                host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {}, "files": ["/a/b/commonFile1.ts", "/a/b/commonFile2.ts"] }`);
+                const host = new fakes.FakeServerHost({}, /*files*/ {
+                    "/a/b/commonFile1.ts": `let x = 1`,
+                    "/a/b/commonFile2.ts": `let y = 1`,
+                    "/a/b/tsconfig.json": `{ "compilerOptions": {}, "files": ["/a/b/commonFile1.ts", "/a/b/commonFile2.ts"] }`,
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts", "/a/b/commonFile2.ts"]);
 
-                host.vfs.writeFile("/a/b/tsconfig.json", `{ "compilerOptions": {}, "files": ["/a/b/commonFile1.ts"] }`);
+                host.vfs.writeFileSync("/a/b/tsconfig.json", `{ "compilerOptions": {}, "files": ["/a/b/commonFile1.ts"] }`);
                 host.checkTimeoutQueueLengthAndRun(1); // reload the configured project
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts"]);
             });
 
             it("files explicitly excluded in config file", () => {
-                const host = new fakes.FakeServerHost();
-                host.vfs.addFile("/a/b/commonFile1.ts", `let x = 1`);
-                host.vfs.addFile("/a/b/commonFile2.ts", `let y = 1`);
-                host.vfs.addFile("/a/c/excludedFile1.ts", `let t = 1;`);
-                host.vfs.addFile("/a/tsconfig.json", `{ "compilerOptions": {}, "exclude": ["/a/c"] }`);
+                const host = new fakes.FakeServerHost({}, /*files*/ {
+                    "/a/b/commonFile1.ts": `let x = 1`,
+                    "/a/b/commonFile2.ts": `let y = 1`,
+                    "/a/c/excludedFile1.ts": `let t = 1;`,
+                    "/a/tsconfig.json": `{ "compilerOptions": {}, "exclude": ["/a/c"] }`,
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/tsconfig.json", host);
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts", "/a/b/commonFile2.ts"]);
             });
 
             it("should properly handle module resolution changes in config file", () => {
-                const host = new fakes.FakeServerHost();
-                host.vfs.addFile("/a/b/file1.ts", `import { T } from "module1";`);
-                host.vfs.addFile("/a/b/node_modules/module1.ts", `export interface T {}`);
-                host.vfs.addFile("/a/module1.ts", `export interface T {}`);
-                host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": { "moduleResolution": "node" }, "files": ["/a/b/file1.ts"] }`);
+                const host = new fakes.FakeServerHost({}, /*files*/ {
+                    "/a/b/file1.ts": `import { T } from "module1";`,
+                    "/a/b/node_modules/module1.ts": `export interface T {}`,
+                    "/a/module1.ts": `export interface T {}`,
+                    "/a/b/tsconfig.json": `{ "compilerOptions": { "moduleResolution": "node" }, "files": ["/a/b/file1.ts"] }`,
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
                 checkProgramRootFiles(watch(), ["/a/b/file1.ts"]);
                 checkProgramActualFiles(watch(), ["/a/b/file1.ts", "/a/b/node_modules/module1.ts"]);
 
-                host.vfs.writeFile("/a/b/tsconfig.json", `{ "compilerOptions": { "moduleResolution": "classic" }, "files": ["/a/b/file1.ts"] }`);
+                host.vfs.writeFileSync("/a/b/tsconfig.json", `{ "compilerOptions": { "moduleResolution": "classic" }, "files": ["/a/b/file1.ts"] }`);
                 host.checkTimeoutQueueLengthAndRun(1);
                 checkProgramRootFiles(watch(), ["/a/b/file1.ts"]);
                 checkProgramActualFiles(watch(), ["/a/b/file1.ts", "/a/module1.ts"]);
             });
 
             it("should tolerate config file errors and still try to build a project", () => {
-                const host = new fakes.FakeServerHost({ lib: true });
-                host.vfs.addFile("/a/b/commonFile1.ts", `let x = 1`);
-                host.vfs.addFile("/a/b/commonFile2.ts", `let y = 1`);
-                host.vfs.addFile("/a/b/tsconfig.json",
-                    `{\n` +
-                    `   "compilerOptions": {\n` +
-                    `        "target": "es6",\n` +
-                    `        "allowAnything": true\n` +
-                    `    },\n` +
-                    `    "someOtherProperty": {}\n` +
-                    `}`);
+                const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                    "/a/b/commonFile1.ts": `let x = 1`,
+                    "/a/b/commonFile2.ts": `let y = 1`,
+                    "/a/b/tsconfig.json":
+                        `{\n` +
+                        `   "compilerOptions": {\n` +
+                        `        "target": "es6",\n` +
+                        `        "allowAnything": true\n` +
+                        `    },\n` +
+                        `    "someOtherProperty": {}\n` +
+                        `}`
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts", "/a/b/commonFile2.ts"]);
             });
 
             it("changes in files are reflected in project structure", () => {
-                const host = new fakes.FakeServerHost();
-                host.vfs.addFile("/a/b/f1.ts", `export * from "./f2"`);
-                host.vfs.addFile("/a/b/f2.ts", `export let x = 1`);
-                host.vfs.addFile("/a/c/f3.ts", `export let y = 1;`);
+                const host = new fakes.FakeServerHost({}, /*files*/ {
+                    "/a/b/f1.ts": `export * from "./f2"`,
+                    "/a/b/f2.ts": `export let x = 1`,
+                    "/a/c/f3.ts": `export let y = 1;`,
+                });
 
                 const watch = createWatchModeWithoutConfigFile(["/a/b/f1.ts"], host);
                 checkProgramRootFiles(watch(), ["/a/b/f1.ts"]);
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts", "/a/b/f2.ts"]);
 
-                host.vfs.writeFile("/a/b/f2.ts", `export * from "../c/f3"`); // now inferred project should inclule file3
+                host.vfs.writeFileSync("/a/b/f2.ts", `export * from "../c/f3"`); // now inferred project should inclule file3
                 host.checkTimeoutQueueLengthAndRun(1);
                 checkProgramRootFiles(watch(), ["/a/b/f1.ts"]);
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts", "/a/b/f2.ts", "/a/c/f3.ts"]);
             });
 
             it("deleted files affect project structure", () => {
-                const host = new fakes.FakeServerHost();
-                host.vfs.addFile("/a/b/f1.ts", `export * from "./f2"`);
-                host.vfs.addFile("/a/b/f2.ts", `export * from "../c/f3"`);
-                host.vfs.addFile("/a/c/f3.ts", `export let y = 1;`);
+                const host = new fakes.FakeServerHost({}, /*files*/ {
+                    "/a/b/f1.ts": `export * from "./f2"`,
+                    "/a/b/f2.ts": `export * from "../c/f3"`,
+                    "/a/c/f3.ts": `export let y = 1;`,
+                });
 
                 const watch = createWatchModeWithoutConfigFile(["/a/b/f1.ts"], host);
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts", "/a/b/f2.ts", "/a/c/f3.ts"]);
 
-                host.vfs.removeFile("/a/b/f2.ts");
+                host.vfs.unlinkSync("/a/b/f2.ts");
                 host.checkTimeoutQueueLengthAndRun(1);
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts"]);
             });
 
             it("deleted files affect project structure - 2", () => {
-                const host = new fakes.FakeServerHost();
-                host.vfs.addFile("/a/b/f1.ts", `export * from "./f2"`);
-                host.vfs.addFile("/a/b/f2.ts", `export * from "../c/f3"`);
-                host.vfs.addFile("/a/c/f3.ts", `export let y = 1;`);
+                const host = new fakes.FakeServerHost({}, /*files*/ {
+                    "/a/b/f1.ts": `export * from "./f2"`,
+                    "/a/b/f2.ts": `export * from "../c/f3"`,
+                    "/a/c/f3.ts": `export let y = 1;`,
+                });
 
                 const watch = createWatchModeWithoutConfigFile(["/a/b/f1.ts", "/a/c/f3.ts"], host);
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts", "/a/b/f2.ts", "/a/c/f3.ts"]);
 
-                host.vfs.removeFile("/a/b/f2.ts");
+                host.vfs.unlinkSync("/a/b/f2.ts");
                 host.checkTimeoutQueueLengthAndRun(1);
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts", "/a/c/f3.ts"]);
             });
 
             it("config file includes the file", () => {
-                const host = new fakes.FakeServerHost();
-                host.vfs.addFile("/a/b/f1.ts", `export let x = 5`);
-                host.vfs.addFile("/a/c/f2.ts", `import {x} from "../b/f1"`);
-                host.vfs.addFile("/a/c/f3.ts", `export let y = 1`);
-                host.vfs.addFile("/a/c/tsconfig.json", `{ "compilerOptions": {}, "files": ["f2.ts", "f3.ts"] }`);
+                const host = new fakes.FakeServerHost({}, /*files*/ {
+                    "/a/b/f1.ts": `export let x = 5`,
+                    "/a/c/f2.ts": `import {x} from "../b/f1"`,
+                    "/a/c/f3.ts": `export let y = 1`,
+                    "/a/c/tsconfig.json": `{ "compilerOptions": {}, "files": ["f2.ts", "f3.ts"] }`,
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/c/tsconfig.json", host);
                 checkProgramRootFiles(watch(), ["/a/c/f2.ts", "/a/c/f3.ts"]);
@@ -413,12 +428,13 @@ namespace ts.tscWatch {
             });
 
             it("correctly migrate files between projects", () => {
-                const host = new fakes.FakeServerHost();
-                host.vfs.addFile("/a/b/f1.ts",
-                    `export * from "../c/f2";\n` +
-                    `export * from "../d/f3";`);
-                host.vfs.addFile("/a/c/f2.ts", `export let x = 1;`);
-                host.vfs.addFile("/a/d/f3.ts", `export let y = 1;`);
+                const host = new fakes.FakeServerHost({}, /*files*/ {
+                    "/a/b/f1.ts":
+                        `export * from "../c/f2";\n` +
+                        `export * from "../d/f3";`,
+                    "/a/c/f2.ts": `export let x = 1;`,
+                    "/a/d/f3.ts": `export let y = 1;`,
+                });
 
                 const watch1 = createWatchModeWithoutConfigFile(["/a/c/f2.ts", "/a/d/f3.ts"], host);
                 checkProgramActualFiles(watch1(), ["/a/c/f2.ts", "/a/d/f3.ts"]);
@@ -432,97 +448,104 @@ namespace ts.tscWatch {
             });
 
             it("can correctly update configured project when set of root files has changed (new file on disk)", () => {
-                const host = new fakes.FakeServerHost();
-                host.vfs.addFile("/a/b/f1.ts", `let x = 1`);
-                host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {} }`);
+                const host = new fakes.FakeServerHost({}, /*files*/ {
+                    "/a/b/f1.ts": `let x = 1`,
+                    "/a/b/tsconfig.json": `{ "compilerOptions": {} }`,
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts"]);
 
-                host.vfs.addFile("/a/b/f2.ts", `let y = 1`);
+                host.vfs.writeFileSync("/a/b/f2.ts", `let y = 1`);
                 host.checkTimeoutQueueLengthAndRun(1);
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts", "/a/b/f2.ts"]);
                 checkProgramRootFiles(watch(), ["/a/b/f1.ts", "/a/b/f2.ts"]);
             });
 
             it("can correctly update configured project when set of root files has changed (new file in list of files)", () => {
-                const host = new fakes.FakeServerHost();
-                host.vfs.addFile("/a/b/f1.ts", `let x = 1`);
-                host.vfs.addFile("/a/b/f2.ts", `let y = 1`);
-                host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {}, "files": ["f1.ts"] }`);
+                const host = new fakes.FakeServerHost({}, /*files*/ {
+                    "/a/b/f1.ts": `let x = 1`,
+                    "/a/b/f2.ts": `let y = 1`,
+                    "/a/b/tsconfig.json": `{ "compilerOptions": {}, "files": ["f1.ts"] }`,
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts"]);
 
-                host.vfs.writeFile("/a/b/tsconfig.json", `{ "compilerOptions": {}, "files": ["f1.ts", "f2.ts"] }`);
+                host.vfs.writeFileSync("/a/b/tsconfig.json", `{ "compilerOptions": {}, "files": ["f1.ts", "f2.ts"] }`);
                 host.checkTimeoutQueueLengthAndRun(1);
                 checkProgramRootFiles(watch(), ["/a/b/f1.ts", "/a/b/f2.ts"]);
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts", "/a/b/f2.ts"]);
             });
 
             it("can update configured project when set of root files was not changed", () => {
-                const host = new fakes.FakeServerHost();
-                host.vfs.addFile("/a/b/f1.ts", `let x = 1`);
-                host.vfs.addFile("/a/b/f2.ts", `let y = 1`);
-                host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {}, "files": ["f1.ts", "f2.ts"] }`);
+                const host = new fakes.FakeServerHost({}, /*files*/ {
+                    "/a/b/f1.ts": `let x = 1`,
+                    "/a/b/f2.ts": `let y = 1`,
+                    "/a/b/tsconfig.json": `{ "compilerOptions": {}, "files": ["f1.ts", "f2.ts"] }`,
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts", "/a/b/f2.ts"]);
 
-                host.vfs.writeFile("/a/b/tsconfig.json", `{ "compilerOptions": { "outFile": "out.js" }, "files": ["f1.ts", "f2.ts"] }`);
+                host.vfs.writeFileSync("/a/b/tsconfig.json", `{ "compilerOptions": { "outFile": "out.js" }, "files": ["f1.ts", "f2.ts"] }`);
                 host.checkTimeoutQueueLengthAndRun(1);
                 checkProgramRootFiles(watch(), ["/a/b/f1.ts", "/a/b/f2.ts"]);
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts", "/a/b/f2.ts"]);
             });
 
             it("config file is deleted", () => {
-                const host = new fakes.FakeServerHost({ lib: true });
-                host.vfs.addFile("/a/b/f1.ts", `let x = 1`);
-                host.vfs.addFile("/a/b/f2.ts", `let y = 1`);
-                host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {} }`);
+                const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                    "/a/b/f1.ts": `let x = 1`,
+                    "/a/b/f2.ts": `let y = 1`,
+                    "/a/b/tsconfig.json": `{ "compilerOptions": {} }`,
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
 
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts", "/a/b/f2.ts", fakes.FakeServerHost.libPath]);
-            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
+                checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
-                host.vfs.removeFile("/a/b/tsconfig.json");
+                host.vfs.unlinkSync("/a/b/tsconfig.json");
                 host.checkTimeoutQueueLengthAndRun(1);
 
                 assert.equal(host.exitCode, ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 checkOutputErrors(host, [
                     createCompilerDiagnostic(Diagnostics.File_0_not_found, "/a/b/tsconfig.json")
-            ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected, /*skipWaiting*/ true);
+                ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected, /*skipWaiting*/ true);
             });
 
             it("Proper errors: document is not contained in project", () => {
-                const host = new fakes.FakeServerHost();
-                host.vfs.addFile("/a/b/app.ts", ``);
-                host.vfs.addFile("/a/b/tsconfig.json", `{`);
+                const host = new fakes.FakeServerHost({}, /*files*/ {
+                    "/a/b/app.ts": ``,
+                    "/a/b/tsconfig.json": `{`,
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
                 checkProgramActualFiles(watch(), ["/a/b/app.ts"]);
             });
 
             it("correctly handles changes in lib section of config file", () => {
-                const host = new fakes.FakeServerHost();
-                host.vfs.addFile("/.ts/lib.es5.d.ts", `declare const eval: any`);
-                host.vfs.addFile("/.ts/lib.es2015.promise.d.ts", `declare class Promise<T> {}`);
-                host.vfs.addFile("/src/app.ts", `var x: Promise<string>;`);
-                host.vfs.addFile("/src/tsconfig.json", `{ "compilerOptions": { "lib": ["es5"] } }`);
+                const host = new fakes.FakeServerHost({}, /*files*/ {
+                    "/.ts/lib.es5.d.ts": `declare const eval: any`,
+                    "/.ts/lib.es2015.promise.d.ts": `declare class Promise<T> {}`,
+                    "/src/app.ts": `var x: Promise<string>;`,
+                    "/src/tsconfig.json": `{ "compilerOptions": { "lib": ["es5"] } }`,
+                });
 
                 const watch = createWatchModeWithConfigFile("/src/tsconfig.json", host);
                 checkProgramActualFiles(watch(), ["/.ts/lib.es5.d.ts", "/src/app.ts"]);
 
-                host.vfs.writeFile("/src/tsconfig.json", `{ "compilerOptions": { "lib": ["es5", "es2015.promise"] } }`);
+                host.vfs.writeFileSync("/src/tsconfig.json", `{ "compilerOptions": { "lib": ["es5", "es2015.promise"] } }`);
                 host.checkTimeoutQueueLengthAndRun(1);
                 checkProgramActualFiles(watch(), ["/.ts/lib.es5.d.ts", "/.ts/lib.es2015.promise.d.ts", "/src/app.ts"]);
             });
 
             it("should handle non-existing directories in config file", () => {
-                const host = new fakes.FakeServerHost();
-                host.vfs.addFile("/a/src/app.ts", `let x = 1;`);
-                host.vfs.addFile("/a/tsconfig.json", `{ "compilerOptions": {}, "include": ["src/**/*", "notexistingfolder/*"] }`);
+                const host = new fakes.FakeServerHost({}, /*files*/ {
+                    "/a/src/app.ts": `let x = 1;`,
+                    "/a/tsconfig.json": `{ "compilerOptions": {}, "include": ["src/**/*", "notexistingfolder/*"] }`,
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/tsconfig.json", host);
                 checkProgramActualFiles(watch(), ["/a/src/app.ts"]);
@@ -530,59 +553,61 @@ namespace ts.tscWatch {
 
             it("rename a module file and rename back should restore the states for inferred projects", () => {
                 const file1Content = `import * as T from "./moduleFile"; T.bar();`;
-                const host = new fakes.FakeServerHost({ lib: true });
-                host.vfs.addFile("/a/b/file1.ts", file1Content);
-                host.vfs.addFile("/a/b/moduleFile.ts", `export function bar() { };`);
+                const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                    "/a/b/file1.ts": file1Content,
+                    "/a/b/moduleFile.ts": `export function bar() { };`,
+                });
 
                 const watch = createWatchModeWithoutConfigFile(["/a/b/file1.ts"], host);
-            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
+                checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
-                host.vfs.removeFile("/a/b/moduleFile.js");
-                host.vfs.rename("/a/b/moduleFile.ts", "/a/b/moduleFile1.ts");
+                host.vfs.unlinkSync("/a/b/moduleFile.js");
+                host.vfs.renameSync("/a/b/moduleFile.ts", "/a/b/moduleFile1.ts");
 
                 host.runQueuedTimeoutCallbacks();
                 checkOutputErrors(host, [
                     createCannotFindModuleDiagnostic(watch(), "/a/b/file1.ts", file1Content, "./moduleFile")
-            ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
+                ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
 
-                host.vfs.removeFile("/a/b/moduleFile1.js");
-                host.vfs.rename("/a/b/moduleFile1.ts", "/a/b/moduleFile.ts");
+                host.vfs.renameSync("/a/b/moduleFile1.ts", "/a/b/moduleFile.ts");
 
                 host.runQueuedTimeoutCallbacks();
-            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
+                checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
             });
 
             it("rename a module file and rename back should restore the states for configured projects", () => {
                 const file1Content = `import * as T from "./moduleFile"; T.bar();`;
-                const host = new fakes.FakeServerHost({ lib: true });
-                host.vfs.addFile("/a/b/file1.ts", file1Content);
-                host.vfs.addFile("/a/b/moduleFile.ts", `export function bar() { };`);
-                host.vfs.addFile("/a/b/tsconfig.json", `{}`);
+                const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                    "/a/b/file1.ts": file1Content,
+                    "/a/b/moduleFile.ts": `export function bar() { };`,
+                    "/a/b/tsconfig.json": `{}`,
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
-            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
+                checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
-                host.vfs.removeFile("/a/b/moduleFile.js");
-                host.vfs.rename("/a/b/moduleFile.ts", "/a/b/moduleFile1.ts");
+                host.vfs.unlinkSync("/a/b/moduleFile.js");
+                host.vfs.renameSync("/a/b/moduleFile.ts", "/a/b/moduleFile1.ts");
 
                 host.runQueuedTimeoutCallbacks();
                 checkOutputErrors(host, [
                     createCannotFindModuleDiagnostic(watch(), "/a/b/file1.ts", file1Content, "./moduleFile")
-            ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
+                ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
 
-                host.vfs.removeFile("/a/b/moduleFile1.js");
-                host.vfs.rename("/a/b/moduleFile1.ts", "/a/b/moduleFile.ts");
+                host.vfs.unlinkSync("/a/b/moduleFile1.js");
+                host.vfs.renameSync("/a/b/moduleFile1.ts", "/a/b/moduleFile.ts");
 
                 host.runQueuedTimeoutCallbacks();
-            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
+                checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
             });
 
             it("types should load from config file path if config exists", () => {
-                const host = new fakes.FakeServerHost({ vfs: { currentDirectory: "/a/c" } });
-                host.vfs.addDirectory("/a/c");
-                host.vfs.addFile("/a/b/app.ts", `let x = 1`);
-                host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": { "types": ["node"], "typeRoots": [] } }`);
-                host.vfs.addFile("/a/b/node_modules/@types/node/index.d.ts", `declare var process: any`);
+                const host = new fakes.FakeServerHost({ vfs: { currentDirectory: "/a/c" } }, /*files*/ {
+                    "/a/c": {},
+                    "/a/b/app.ts": `let x = 1`,
+                    "/a/b/tsconfig.json": `{ "compilerOptions": { "types": ["node"], "typeRoots": [] } }`,
+                    "/a/b/node_modules/@types/node/index.d.ts": `declare var process: any`,
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
                 checkProgramActualFiles(watch(), ["/a/b/app.ts", "/a/b/node_modules/@types/node/index.d.ts"]);
@@ -590,80 +615,86 @@ namespace ts.tscWatch {
 
             it("add the missing module file for inferred project: should remove the `module not found` error", () => {
                 const file1Content = `import * as T from "./moduleFile"; T.bar();`;
-                const host = new fakes.FakeServerHost({ lib: true });
-                host.vfs.addFile("/a/b/file1.ts", file1Content);
+                const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                    "/a/b/file1.ts": file1Content,
+                });
 
                 const watch = createWatchModeWithoutConfigFile(["/a/b/file1.ts"], host);
 
                 checkOutputErrors(host, [
                     createCannotFindModuleDiagnostic(watch(), "/a/b/file1.ts", file1Content, "./moduleFile")
-            ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
+                ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
-                host.vfs.addFile("/a/b/moduleFile.ts", `export function bar() { };`);
+                host.vfs.writeFileSync("/a/b/moduleFile.ts", `export function bar() { };`);
 
                 host.runQueuedTimeoutCallbacks();
-            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
+                checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
             });
 
             it("Configure file diagnostics events are generated when the config file has errors", () => {
                 const configFileContent = `{ "compilerOptions": { "foo": "bar", "allowJS": true } }`;
-                const host = new fakes.FakeServerHost({ lib: true });
-                host.vfs.addFile("/a/b/app.ts", `let x = 10`);
-                host.vfs.addFile("/a/b/tsconfig.json", configFileContent);
+                const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                    "/a/b/app.ts": `let x = 10`,
+                    "/a/b/tsconfig.json": configFileContent,
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
                 checkOutputErrors(host, [
                     createUnknownCompilerOptionDiagnostic(watch(), configFileContent, "foo"),
                     createUnknownCompilerOptionDiagnostic(watch(), configFileContent, "allowJS")
-            ], /*errorsPosition*/ ExpectedOutputErrorsPosition.BeforeCompilationStarts);
+                ], /*errorsPosition*/ ExpectedOutputErrorsPosition.BeforeCompilationStarts);
             });
 
             it("If config file doesnt have errors, they are not reported", () => {
-                const host = new fakes.FakeServerHost({ lib: true });
-                host.vfs.addFile("/a/b/app.ts", `let x = 10`);
-                host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {} }`);
+                const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                    "/a/b/app.ts": `let x = 10`,
+                    "/a/b/tsconfig.json": `{ "compilerOptions": {} }`,
+                });
 
                 createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
-            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
+                checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
             });
 
             it("Reports errors when the config file changes", () => {
-                const host = new fakes.FakeServerHost({ lib: true });
-                host.vfs.addFile("/a/b/app.ts", `let x = 10`);
-                host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {} }`);
+                const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                    "/a/b/app.ts": `let x = 10`,
+                    "/a/b/tsconfig.json": `{ "compilerOptions": {} }`,
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
-            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
+                checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 const configFileBadContent = `{ "compilerOptions": { "haha": 123 } }`;
-                host.vfs.writeFile("/a/b/tsconfig.json", configFileBadContent);
+                host.vfs.writeFileSync("/a/b/tsconfig.json", configFileBadContent);
 
                 host.runQueuedTimeoutCallbacks();
                 checkOutputErrors(host, [
                     createUnknownCompilerOptionDiagnostic(watch(), configFileBadContent, "haha")
-            ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
+                ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
 
-                host.vfs.writeFile("/a/b/tsconfig.json", `{ "compilerOptions": {} }`);
+                host.vfs.writeFileSync("/a/b/tsconfig.json", `{ "compilerOptions": {} }`);
 
                 host.runQueuedTimeoutCallbacks();
-            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
+                checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
             });
 
             it("non-existing directories listed in config file input array should be tolerated without crashing the server", () => {
-                const host = new fakes.FakeServerHost({ lib: true });
-                host.vfs.addFile("/a/b/file1.ts", `let t = 10;`);
-                host.vfs.addFile("/a/b/tsconfig.json", `{ "compilerOptions": {}, "include": ["app/*", "test/**/*", "something"] }`);
+                const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                    "/a/b/file1.ts": `let t = 10;`,
+                    "/a/b/tsconfig.json": `{ "compilerOptions": {}, "include": ["app/*", "test/**/*", "something"] }`,
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
                 checkProgramActualFiles(watch(), [fakes.FakeServerHost.libPath]);
             });
 
             it("non-existing directories listed in config file input array should be able to handle @types if input file list is empty", () => {
-                const host = new fakes.FakeServerHost({ vfs: { currentDirectory: "/a/" } });
-                host.vfs.addFile("/a/app.ts", `let x = 1`);
-                host.vfs.addFile("/a/tsconfig.json", `{ "compilerOptions": {}, "files": [] }`);
-                host.vfs.addFile("/a/node_modules/@types/typings/index.d.ts", `export * from "./lib"`);
-                host.vfs.addFile("/a/node_modules/@types/typings/lib.d.ts", `export const x: number`);
+                const host = new fakes.FakeServerHost({ vfs: { currentDirectory: "/a/" } }, /*files*/ {
+                    "/a/app.ts": `let x = 1`,
+                    "/a/tsconfig.json": `{ "compilerOptions": {}, "files": [] }`,
+                    "/a/node_modules/@types/typings/index.d.ts": `export * from "./lib"`,
+                    "/a/node_modules/@types/typings/lib.d.ts": `export const x: number`,
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/tsconfig.json", host);
 
@@ -671,8 +702,9 @@ namespace ts.tscWatch {
             });
 
             it("should support files without extensions", () => {
-                const host = new fakes.FakeServerHost({ lib: true });
-                host.vfs.addFile("/a/compile", `let x = 1`);
+                const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                    "/a/compile": `let x = 1`,
+                });
 
                 const watch = createWatchModeWithoutConfigFile(["/a/compile"], host, { allowNonTsExtensions: true });
                 checkProgramActualFiles(watch(), ["/a/compile", fakes.FakeServerHost.libPath]);
@@ -698,9 +730,10 @@ namespace ts.tscWatch {
                     `    }\n` +
                     `}`;
 
-                const host = new fakes.FakeServerHost({ lib: true });
-                host.vfs.addFile("/a/b/app.ts", `let x = 10`);
-                host.vfs.addFile("/a/b/tsconfig.json", configFileContentWithComment);
+                const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                    "/a/b/app.ts": `let x = 10`,
+                    "/a/b/tsconfig.json": configFileContentWithComment,
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
                 const initialErrors = [
@@ -709,7 +742,7 @@ namespace ts.tscWatch {
                 ];
                 checkOutputErrors(host, initialErrors, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
-                host.vfs.writeFile("/a/b/tsconfig.json", configFileContentWithoutComment);
+                host.vfs.writeFileSync("/a/b/tsconfig.json", configFileContentWithoutComment);
                 host.runQueuedTimeoutCallbacks();
                 const nowErrors = [
                     createExclusiveCompilerOptionDiagnostic(watch(), configFileContentWithoutComment, "allowJs", "declaration", /*checkFirst*/ true),
@@ -736,13 +769,13 @@ namespace ts.tscWatch {
                     ]
                 });
 
-                const host = new fakes.FakeServerHost();
-
-                host.vfs.addFile("/a/b/output/AnotherDependency/file1.d.ts", `declare namespace Common.SomeComponent.DynamicMenu { enum Z { Full = 0, Min = 1, Average = 2, } }`);
-                host.vfs.addFile("/a/b/dependencies/file2.d.ts", `declare namespace Dependencies.SomeComponent { export class SomeClass { version: string; } }`);
-                host.vfs.addFile("/a/b/project/src/main.ts", `namespace Main { export function fooBar() { } }`);
-                host.vfs.addFile("/a/b/project/src/main2.ts", `namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) { } }`);
-                host.vfs.addFile("/a/b/project/tsconfig.json", configContent);
+                const host = new fakes.FakeServerHost({}, /*files*/ {
+                    "/a/b/output/AnotherDependency/file1.d.ts": `declare namespace Common.SomeComponent.DynamicMenu { enum Z { Full = 0, Min = 1, Average = 2, } }`,
+                    "/a/b/dependencies/file2.d.ts": `declare namespace Dependencies.SomeComponent { export class SomeClass { version: string; } }`,
+                    "/a/b/project/src/main.ts": `namespace Main { export function fooBar() { } }`,
+                    "/a/b/project/src/main2.ts": `namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) { } }`,
+                    "/a/b/project/tsconfig.json": configContent,
+                });
 
                 const writeFileSpy = spy(host, "writeFile");
 
@@ -774,7 +807,7 @@ namespace ts.tscWatch {
 
         describe("emit", () => {
             function writeFile(host: fakes.FakeServerHost, path: string, content: string) {
-                host.vfs.writeFile(path, content);
+                vfsutils.writeFile(host.vfs, path, content);
             }
 
             function writeConfigFile(host: fakes.FakeServerHost, path: string, config: any = {}) {
@@ -948,7 +981,7 @@ namespace ts.tscWatch {
                         writeFile(host, moduleFile1Path, `export var T: number;export function Foo() { };`);
 
                         // Delete file1Consumer2
-                        host.vfs.removeFile(file1Consumer2Path);
+                        host.vfs.unlinkSync(file1Consumer2Path);
                         waitAndCheckAffectedFiles(host, [moduleFile1OutputPath, file1Consumer1OutputPath], commonOutputPaths);
                     });
 
@@ -1065,7 +1098,7 @@ namespace ts.tscWatch {
                         createWatchModeWithConfigFile(configFilePath, host);
                         checkAffectedFiles(host, ["/a/b/referenceFile1.js", moduleFile1OutputPath]);
 
-                        host.vfs.removeFile(moduleFile1Path);
+                        host.vfs.unlinkSync(moduleFile1Path);
                         waitAndCheckAffectedFiles(host, ["/a/b/referenceFile1.js"], [moduleFile1OutputPath]);
                     });
 
@@ -1175,9 +1208,10 @@ namespace ts.tscWatch {
                 const rootContent1 = `import {x} from "f1"`;
                 const importedContent = `foo()`;
 
-                const host = new fakes.FakeServerHost({ lib: true });
-                host.vfs.addFile("/a/d/f0.ts", rootContent1);
-                host.vfs.addFile("/a/f1.ts", importedContent);
+                const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                    "/a/d/f0.ts": rootContent1,
+                    "/a/f1.ts": importedContent,
+                });
 
                 const watch = createWatchModeWithoutConfigFile(["/a/d/f0.ts"], host, { module: ModuleKind.AMD });
 
@@ -1192,7 +1226,7 @@ namespace ts.tscWatch {
 
                 // write file and trigger synchronization
                 const rootContent2 = `import {x} from "f1"\nvar x: string = 1;`;
-                host.vfs.writeFile("/a/d/f0.ts", rootContent2);
+                host.vfs.writeFileSync("/a/d/f0.ts", rootContent2);
                 host.runQueuedTimeoutCallbacks();
 
                 // verify fileExists was not called.
@@ -1212,7 +1246,7 @@ namespace ts.tscWatch {
 
                 // write file and trigger synchronization
                 const rootContent3 = `import {x} from "f2"`;
-                host.vfs.writeFile("/a/d/f0.ts", rootContent3);
+                host.vfs.writeFileSync("/a/d/f0.ts", rootContent3);
                 host.runQueuedTimeoutCallbacks();
 
                 // verify fileExists was called correctly
@@ -1231,7 +1265,7 @@ namespace ts.tscWatch {
 
                 // write file and trigger synchronization
                 const rootContent4 = `import {x} from "f1"`;
-                host.vfs.writeFile("/a/d/f0.ts", rootContent4);
+                host.vfs.writeFileSync("/a/d/f0.ts", rootContent4);
                 host.runQueuedTimeoutCallbacks();
 
                 // verify fileExists was called correctly
@@ -1249,8 +1283,9 @@ namespace ts.tscWatch {
             it("loads missing files from disk", () => {
                 const rootContent1 = `import {x} from "bar"`;
 
-                const host = new fakes.FakeServerHost({ lib: true });
-                host.vfs.addFile("/a/foo.ts", rootContent1);
+                const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                    "/a/foo.ts": rootContent1,
+                });
 
                 // spy on calls to fileExists when starting watch mode
                 const fileExistsSpy1 = spy(host, "fileExists");
@@ -1269,8 +1304,8 @@ namespace ts.tscWatch {
                 // spy on calls to fileExists after synchronization is triggered
                 const fileExistsSpy2 = spy(host, "fileExists");
 
-                host.vfs.writeFile("/a/foo.ts", `import {y} from "bar"`);
-                host.vfs.writeFile("/a/bar.d.ts", `export const y = 1;`);
+                host.vfs.writeFileSync("/a/foo.ts", `import {y} from "bar"`);
+                host.vfs.writeFileSync("/a/bar.d.ts", `export const y = 1;`);
                 host.runQueuedTimeoutCallbacks();
 
                 // verify fileExists was called correctly
@@ -1285,9 +1320,10 @@ namespace ts.tscWatch {
                 const rootContent = `import {x} from "bar"`;
                 const importedContent = `export const y = 1;export const x = 10;`;
 
-                const host = new fakes.FakeServerHost({ lib: true });
-                host.vfs.addFile("/a/foo.ts", rootContent);
-                host.vfs.addFile("/a/bar.d.ts", importedContent);
+                const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                    "/a/foo.ts": rootContent,
+                    "/a/bar.d.ts": importedContent,
+                });
 
                 // spy on fileExists when starting watch mode
                 const fileExistsSpy1 = spy(host, "fileExists");
@@ -1304,7 +1340,7 @@ namespace ts.tscWatch {
                 // spy on fileExists when triggering synchronization
                 const fileExistsSpy2 = spy(host, "fileExists");
 
-                host.vfs.removeFile("/a/bar.d.ts");
+                host.vfs.unlinkSync("/a/bar.d.ts");
                 host.runQueuedTimeoutCallbacks();
 
                 // verify fileExists was called correctly
@@ -1319,7 +1355,7 @@ namespace ts.tscWatch {
                 // spy on fileExists when triggering synchronization
                 const fileExistsSpy3 = spy(host, "fileExists");
 
-                host.vfs.writeFile("/a/bar.d.ts", importedContent);
+                host.vfs.writeFileSync("/a/bar.d.ts", importedContent);
                 host.checkTimeoutQueueLengthAndRun(1);
 
                 // verify fileExists was called correctly.
@@ -1332,28 +1368,30 @@ namespace ts.tscWatch {
 
             it("works when module resolution changes to ambient module", () => {
                 const rootContent = `import * as fs from "fs";`;
-                const host = new fakes.FakeServerHost({ vfs: { currentDirectory: "/a/b" }, lib: true });
-                host.vfs.addFile("/a/b/foo.ts", rootContent);
+                const host = new fakes.FakeServerHost({ vfs: { currentDirectory: "/a/b" }, lib: true }, /*files*/ {
+                    "/a/b/foo.ts": rootContent,
+                });
 
                 const watch = createWatchModeWithoutConfigFile(["/a/b/foo.ts"], host, { });
 
                 checkOutputErrors(host, [
                     createCannotFindModuleDiagnostic(watch(), "/a/b/foo.ts", rootContent, "fs")
-            ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
+                ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
-                host.vfs.writeFile("/a/b/node_modules/@types/node/package.json", `{\n  "main": ""\n}\n`);
-                host.vfs.writeFile("/a/b/node_modules/@types/node/index.d.ts", `\ndeclare module "fs" {\n    export interface Stats {\n        isFile(): boolean;\n    }\n}`);
+                host.writeFile("/a/b/node_modules/@types/node/package.json", `{\n  "main": ""\n}\n`);
+                host.writeFile("/a/b/node_modules/@types/node/index.d.ts", `\ndeclare module "fs" {\n    export interface Stats {\n        isFile(): boolean;\n    }\n}`);
                 host.runQueuedTimeoutCallbacks();
-            checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
+                checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
             });
 
             it("works when included file with ambient module changes", () => {
                 const rootContent = `import * as fs from "fs";\nimport * as u from "url";`;
                 const fileContent1 = `declare module "url" {\n    export interface Url {\n        href?: string;\n    }\n}`;
 
-                const host = new fakes.FakeServerHost({ vfs: { currentDirectory: "/a/b" }, lib: true });
-                host.vfs.addFile("/a/b/foo.ts", rootContent);
-                host.vfs.addFile("/a/b/bar.d.ts", fileContent1);
+                const host = new fakes.FakeServerHost({ vfs: { currentDirectory: "/a/b" }, lib: true }, /*files*/ {
+                    "/a/b/foo.ts": rootContent,
+                    "/a/b/bar.d.ts": fileContent1,
+                });
 
                 const watch = createWatchModeWithoutConfigFile(["/a/b/foo.ts", "/a/b/bar.d.ts"], host, {});
 
@@ -1362,7 +1400,7 @@ namespace ts.tscWatch {
                 ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 const fileContent2 = fileContent1 + `declare module "fs" {\n    export interface Stats {\n        isFile(): boolean;\n    }\n}`;
-                host.vfs.writeFile("/a/b/bar.d.ts", fileContent2);
+                host.vfs.writeFileSync("/a/b/bar.d.ts", fileContent2);
                 host.runQueuedTimeoutCallbacks();
                 checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
             });
@@ -1373,19 +1411,20 @@ namespace ts.tscWatch {
                 const file2Content = `import module11 = require("module1");\nmodule11("hello");`;
                 const file2Output = `"use strict";\nexports.__esModule = true;\nvar module11 = require("module1");\nmodule11("hello");\n`;
 
-                const host = new fakes.FakeServerHost({ vfs: { currentDirectory: "/a/b/projects/myProject/" }, lib: true });
-                host.vfs.addFile("/a/b/projects/myProject/src/file1.ts", file1Content);
-                host.vfs.addFile("/a/b/projects/myProject/src/file2.ts", file2Content);
-                host.vfs.addFile("/a/b/projects/myProject/node_modules/module1/index.js", `module.exports = options => { return options.toString(); }`);
-                host.vfs.addFile("/a/b/projects/myProject/src/tsconfig.json", JSON.stringify({
-                    compilerOptions: {
-                        allowJs: true,
-                        rootDir: ".",
-                        outDir: "../dist",
-                        moduleResolution: "node",
-                        maxNodeModuleJsDepth: 1
-                    }
-                }));
+                const host = new fakes.FakeServerHost({ vfs: { currentDirectory: "/a/b/projects/myProject/" }, lib: true }, /*files*/ {
+                    "/a/b/projects/myProject/src/file1.ts": file1Content,
+                    "/a/b/projects/myProject/src/file2.ts": file2Content,
+                    "/a/b/projects/myProject/node_modules/module1/index.js": `module.exports = options => { return options.toString(); }`,
+                    "/a/b/projects/myProject/src/tsconfig.json": JSON.stringify({
+                        compilerOptions: {
+                            allowJs: true,
+                            rootDir: ".",
+                            outDir: "../dist",
+                            moduleResolution: "node",
+                            maxNodeModuleJsDepth: 1
+                        }
+                    })
+                });
 
                 // spy on calls to writeFile when starting watch mode
                 const writeFileSpy1 = spy(host, "writeFile");
@@ -1409,7 +1448,7 @@ namespace ts.tscWatch {
                 // spy on calls to writeFile when triggering synchronization
                 const writeFileSpy2 = spy(host, "writeFile");
 
-                host.vfs.writeFile("/a/b/projects/myProject/src/file1.ts", file1Content + "\n;");
+                host.vfs.writeFileSync("/a/b/projects/myProject/src/file1.ts", file1Content + "\n;");
                 host.runQueuedTimeoutCallbacks();
                 checkProgramActualFiles(watch(), [
                     "/a/b/projects/myProject/src/file1.ts",
@@ -1429,19 +1468,20 @@ namespace ts.tscWatch {
 
         describe("with when module emit is specified as node", () => {
             it("when instead of filechanged recursive directory watcher is invoked", () => {
-                const host = new fakes.FakeServerHost({ lib: true });
-                host.vfs.addFile("/a/rootFolder/project/Scripts/TypeScript.ts", `var z = 10;`);
-                host.vfs.addFile("/a/rootFolder/project/Scripts/Javascript.js", `var zz = 10;`);
-                host.vfs.addFile("/a/rootFolder/project/tsconfig.json", JSON.stringify({
-                    compilerOptions: {
-                        module: "none",
-                        allowJs: true,
-                        outDir: "Static/scripts/"
-                    },
-                    include: [
-                        "Scripts/**/*"
-                    ],
-                }));
+                const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                    "/a/rootFolder/project/Scripts/TypeScript.ts": `var z = 10;`,
+                    "/a/rootFolder/project/Scripts/Javascript.js": `var zz = 10;`,
+                    "/a/rootFolder/project/tsconfig.json": JSON.stringify({
+                        compilerOptions: {
+                            module: "none",
+                            allowJs: true,
+                            outDir: "Static/scripts/"
+                        },
+                        include: [
+                            "Scripts/**/*"
+                        ],
+                    })
+                });
 
                 const watch = createWatchModeWithConfigFile("/a/rootFolder/project/tsconfig.json", host);
 
@@ -1452,13 +1492,13 @@ namespace ts.tscWatch {
                 ]);
 
 
-                host.vfs.watchFiles = false;
-                host.vfs.removeFile("/a/rootFolder/project/Scripts/TypeScript.ts");
+                host.watchFiles = false;
+                host.vfs.unlinkSync("/a/rootFolder/project/Scripts/TypeScript.ts");
                 host.runQueuedTimeoutCallbacks();
 
                 const writeFileSpy1 = spy(host, "writeFile");
 
-                host.vfs.writeFile("/a/rootFolder/project/Scripts/TypeScript.ts", `var zz30 = 100;`);
+                host.vfs.writeFileSync("/a/rootFolder/project/Scripts/TypeScript.ts", `var zz30 = 100;`);
                 host.runQueuedTimeoutCallbacks();
 
                 checkProgramActualFiles(watch(), [
@@ -1476,8 +1516,9 @@ namespace ts.tscWatch {
 
     describe("tsc-watch console clearing", () => {
         it("clears the console when it starts", () => {
-            const host = new fakes.FakeServerHost({ lib: true });
-            host.vfs.addFile("/a/f.ts", "");
+            const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                "/a/f.ts": "",
+            });
 
             createWatchModeWithoutConfigFile(["/a/f.ts"], host);
             host.runQueuedTimeoutCallbacks();
@@ -1486,11 +1527,12 @@ namespace ts.tscWatch {
         });
 
         it("clears the console on recompile", () => {
-            const host = new fakes.FakeServerHost({ lib: true });
-            host.vfs.addFile("/a/f.ts", "");
+            const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                "/a/f.ts": "",
+            });
             createWatchModeWithoutConfigFile(["/a/f.ts"], host);
 
-            host.vfs.writeFile("/a/f.ts", "//");
+            host.vfs.writeFileSync("/a/f.ts", "//");
             host.runQueuedTimeoutCallbacks();
 
             host.checkScreenClears(2);
