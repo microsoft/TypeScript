@@ -3794,7 +3794,9 @@ namespace ts {
         extendsType: Type;
         trueType: Type;
         falseType: Type;
+        /* @internal */
         target?: ConditionalType;
+        /* @internal */
         mapper?: TypeMapper;
     }
 

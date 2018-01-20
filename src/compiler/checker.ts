@@ -6968,7 +6968,7 @@ namespace ts {
         // type references and type alias instantiations because subsitution types are no longer necessary once
         // the type arguments have been validated against their corresponding type parameter constraints.
         function eraseSubstitutionType(type: Type) {
-            return type.flags & TypeFlags.Substitution ? (<SubstitutionType>type).typeParameter : type
+            return type.flags & TypeFlags.Substitution ? (<SubstitutionType>type).typeParameter : type;
         }
 
         function createTypeReference(target: GenericType, typeArguments: Type[]): TypeReference {
@@ -9821,13 +9821,21 @@ namespace ts {
                         }
                     }
                 }
-                else if (isGenericMappedType(target) && !isGenericMappedType(source) && getConstraintTypeFromMappedType(<MappedType>target) === getIndexType(source)) {
+                else if (isGenericMappedType(target)) {
+                    // A source type T is related to a target type { [P in X]: T[P] }
+                    const template = getTemplateTypeFromMappedType(<MappedType>target);
+                    if (template.flags & TypeFlags.IndexedAccess && (<IndexedAccessType>template).objectType === source &&
+                        (<IndexedAccessType>template).indexType === getTypeParameterFromMappedType(<MappedType>target)) {
+                        return Ternary.True;
+                    }
                     // A source type T is related to a target type { [P in keyof T]: X } if T[P] is related to X.
-                    const indexedAccessType = getIndexedAccessType(source, getTypeParameterFromMappedType(<MappedType>target));
-                    const templateType = getTemplateTypeFromMappedType(<MappedType>target);
-                    if (result = isRelatedTo(indexedAccessType, templateType, reportErrors)) {
-                        errorInfo = saveErrorInfo;
-                        return result;
+                    if (!isGenericMappedType(source) && getConstraintTypeFromMappedType(<MappedType>target) === getIndexType(source)) {
+                        const indexedAccessType = getIndexedAccessType(source, getTypeParameterFromMappedType(<MappedType>target));
+                        const templateType = getTemplateTypeFromMappedType(<MappedType>target);
+                        if (result = isRelatedTo(indexedAccessType, templateType, reportErrors)) {
+                            errorInfo = saveErrorInfo;
+                            return result;
+                        }
                     }
                 }
 
