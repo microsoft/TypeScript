@@ -25004,7 +25004,6 @@ namespace ts {
                         return;
                     }
                     const file = host.getSourceFile(resolvedDirective.resolvedFileName);
-                    Debug.assert(!!file, `Resolved filename ${resolvedDirective.resolvedFileName} did not map to existing source file. Consider enabling --preserveSymlinks if appropriate`); // tslint:disable-line
                     fileToDirective.set(file.path, key);
                 });
             }
