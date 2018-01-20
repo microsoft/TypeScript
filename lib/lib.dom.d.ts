@@ -9802,6 +9802,7 @@ interface SourceBuffer extends EventTarget {
     timestampOffset: number;
     readonly updating: boolean;
     readonly videoTracks: VideoTrackList;
+    readonly textTracks: TextTrackList;
     abort(): void;
     appendBuffer(data: ArrayBuffer | ArrayBufferView): void;
     appendStream(stream: MSStream, maxSize?: number): void;
