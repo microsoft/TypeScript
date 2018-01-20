@@ -26,7 +26,7 @@ async function* f4() {
 }
 
 //// [file1.js]
-var __asyncValues = (this && this.__asyncIterator) || function (o) {
+var __asyncValues = (this && this.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator];
     return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
@@ -48,7 +48,7 @@ async function f1() {
     var e_1, _a;
 }
 //// [file2.js]
-var __asyncValues = (this && this.__asyncIterator) || function (o) {
+var __asyncValues = (this && this.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator];
     return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
@@ -70,7 +70,7 @@ async function f2() {
     var e_1, _a;
 }
 //// [file3.js]
-var __asyncValues = (this && this.__asyncIterator) || function (o) {
+var __asyncValues = (this && this.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator];
     return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
@@ -106,7 +106,7 @@ function f3() {
     });
 }
 //// [file4.js]
-var __asyncValues = (this && this.__asyncIterator) || function (o) {
+var __asyncValues = (this && this.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator];
     return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();

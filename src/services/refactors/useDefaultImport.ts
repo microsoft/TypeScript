@@ -1,15 +1,8 @@
 /* @internal */
 namespace ts.refactor.installTypesForPackage {
     const actionName = "Convert to default import";
-
-    const useDefaultImport: Refactor = {
-        name: actionName,
-        description: getLocaleSpecificMessage(Diagnostics.Convert_to_default_import),
-        getEditsForAction,
-        getAvailableActions,
-    };
-
-    registerRefactor(useDefaultImport);
+    const description = getLocaleSpecificMessage(Diagnostics.Convert_to_default_import);
+    registerRefactor(actionName, { getEditsForAction, getAvailableActions });
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
         const { file, startPosition, program } = context;
@@ -23,7 +16,7 @@ namespace ts.refactor.installTypesForPackage {
             return undefined;
         }
 
-        const module = ts.getResolvedModule(file, importInfo.moduleSpecifier.text);
+        const module = getResolvedModule(file, importInfo.moduleSpecifier.text);
         const resolvedFile = program.getSourceFile(module.resolvedFileName);
         if (!(resolvedFile.externalModuleIndicator && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals)) {
             return undefined;
@@ -31,11 +24,11 @@ namespace ts.refactor.installTypesForPackage {
 
         return [
             {
-                name: useDefaultImport.name,
-                description: useDefaultImport.description,
+                name: actionName,
+                description,
                 actions: [
                     {
-                        description: useDefaultImport.description,
+                        description,
                         name: actionName,
                     },
                 ],
@@ -52,7 +45,7 @@ namespace ts.refactor.installTypesForPackage {
         }
         const { importStatement, name, moduleSpecifier } = importInfo;
         const newImportClause = createImportClause(name, /*namedBindings*/ undefined);
-        const newImportStatement = ts.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, newImportClause, moduleSpecifier);
+        const newImportStatement = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, newImportClause, moduleSpecifier);
         return {
             edits: textChanges.ChangeTracker.with(context, t => t.replaceNode(file, importStatement, newImportStatement)),
             renameFilename: undefined,

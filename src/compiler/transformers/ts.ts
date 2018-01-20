@@ -81,7 +81,7 @@ namespace ts {
         let classAliases: Identifier[];
 
         /**
-         * Keeps track of whether  we are within any containing namespaces when performing
+         * Keeps track of whether we are within any containing namespaces when performing
          * just-in-time substitution while printing an expression identifier.
          */
         let applicableSubstitutions: TypeScriptSubstitutionFlags;
@@ -893,11 +893,14 @@ namespace ts {
 
             if (some(staticProperties) || some(pendingExpressions)) {
                 const expressions: Expression[] = [];
-                const temp = createTempVariable(hoistVariableDeclaration);
-                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
+                const isClassWithConstructorReference = resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference;
+                const temp = createTempVariable(hoistVariableDeclaration, !!isClassWithConstructorReference);
+                if (isClassWithConstructorReference) {
                     // record an alias as the class name is not in scope for statics.
                     enableSubstitutionForClassAliases();
-                    classAliases[getOriginalNodeId(node)] = getSynthesizedClone(temp);
+                    const alias = getSynthesizedClone(temp);
+                    alias.autoGenerateFlags &= ~GeneratedIdentifierFlags.ReservedInNestedScopes;
+                    classAliases[getOriginalNodeId(node)] = alias;
                 }
 
                 // To preserve the behavior of the old emitter, we explicitly indent
@@ -1261,7 +1264,7 @@ namespace ts {
          *                 the class.
          */
         function getDecoratedClassElements(node: ClassExpression | ClassDeclaration, isStatic: boolean): ReadonlyArray<ClassElement> {
-            return filter(node.members, isStatic ? isStaticDecoratedClassElement : isInstanceDecoratedClassElement);
+            return filter(node.members, isStatic ? m => isStaticDecoratedClassElement(m, node) : m => isInstanceDecoratedClassElement(m, node));
         }
 
         /**
@@ -1270,8 +1273,8 @@ namespace ts {
          *
          * @param member The class member.
          */
-        function isStaticDecoratedClassElement(member: ClassElement) {
-            return isDecoratedClassElement(member, /*isStatic*/ true);
+        function isStaticDecoratedClassElement(member: ClassElement, parent: ClassLikeDeclaration) {
+            return isDecoratedClassElement(member, /*isStatic*/ true, parent);
         }
 
         /**
@@ -1280,8 +1283,8 @@ namespace ts {
          *
          * @param member The class member.
          */
-        function isInstanceDecoratedClassElement(member: ClassElement) {
-            return isDecoratedClassElement(member, /*isStatic*/ false);
+        function isInstanceDecoratedClassElement(member: ClassElement, parent: ClassLikeDeclaration) {
+            return isDecoratedClassElement(member, /*isStatic*/ false, parent);
         }
 
         /**
@@ -1290,8 +1293,8 @@ namespace ts {
          *
          * @param member The class member.
          */
-        function isDecoratedClassElement(member: ClassElement, isStatic: boolean) {
-            return nodeOrChildIsDecorated(member)
+        function isDecoratedClassElement(member: ClassElement, isStatic: boolean, parent: ClassLikeDeclaration) {
+            return nodeOrChildIsDecorated(member, parent)
                 && isStatic === hasModifier(member, ModifierFlags.Static);
         }
 

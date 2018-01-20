@@ -1,16 +1,10 @@
 /* @internal */
 
 namespace ts.refactor.convertFunctionToES6Class {
+    const refactorName = "Convert to ES2015 class";
     const actionName = "convert";
-
-    const convertFunctionToES6Class: Refactor = {
-        name: "Convert to ES2015 class",
-        description: Diagnostics.Convert_function_to_an_ES2015_class.message,
-        getEditsForAction,
-        getAvailableActions
-    };
-
-    registerRefactor(convertFunctionToES6Class);
+    const description = Diagnostics.Convert_function_to_an_ES2015_class.message;
+    registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
         if (!isInJavaScriptFile(context.file)) {
@@ -29,11 +23,11 @@ namespace ts.refactor.convertFunctionToES6Class {
         if ((symbol.flags & SymbolFlags.Function) && symbol.members && (symbol.members.size > 0)) {
             return [
                 {
-                    name: convertFunctionToES6Class.name,
-                    description: convertFunctionToES6Class.description,
+                    name: refactorName,
+                    description,
                     actions: [
                         {
-                            description: convertFunctionToES6Class.description,
+                            description,
                             name: actionName
                         }
                     ]
@@ -50,7 +44,6 @@ namespace ts.refactor.convertFunctionToES6Class {
 
         const { file: sourceFile } = context;
         const ctorSymbol = getConstructorSymbol(context);
-        const newLine = context.formatContext.options.newLineCharacter;
 
         const deletedNodes: Node[] = [];
         const deletes: (() => any)[] = [];
@@ -88,7 +81,7 @@ namespace ts.refactor.convertFunctionToES6Class {
         }
 
         // Because the preceding node could be touched, we need to insert nodes before delete nodes.
-        changeTracker.insertNodeAfter(sourceFile, precedingNode, newClassDeclaration, { suffix: newLine });
+        changeTracker.insertNodeAfter(sourceFile, precedingNode, newClassDeclaration);
         for (const deleteCallback of deletes) {
             deleteCallback();
         }

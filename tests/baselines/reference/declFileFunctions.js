@@ -85,8 +85,8 @@ function foo() {
 exports.foo = foo;
 /** This is comment for function signature*/
 function fooWithParameters(/** this is comment about a*/ a, 
-    /** this is comment for b*/
-    b) {
+/** this is comment for b*/
+b) {
     var d = a;
 }
 exports.fooWithParameters = fooWithParameters;
@@ -127,8 +127,8 @@ function nonExportedFoo() {
 }
 /** This is comment for function signature*/
 function nonExportedFooWithParameters(/** this is comment about a*/ a, 
-    /** this is comment for b*/
-    b) {
+/** this is comment for b*/
+b) {
     var d = a;
 }
 function nonExportedFooWithRestParameters(a) {
@@ -147,8 +147,8 @@ function globalfoo() {
 }
 /** This is comment for function signature*/
 function globalfooWithParameters(/** this is comment about a*/ a, 
-    /** this is comment for b*/
-    b) {
+/** this is comment for b*/
+b) {
     var d = a;
 }
 function globalfooWithRestParameters(a) {

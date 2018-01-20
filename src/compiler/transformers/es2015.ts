@@ -859,7 +859,7 @@ namespace ts {
                 statements.push(
                     setTextRange(
                         createStatement(
-                            createExtendsHelper(context, getLocalName(node))
+                            createExtendsHelper(context, getInternalName(node))
                         ),
                         /*location*/ extendsClauseElement
                     )
@@ -2592,7 +2592,7 @@ namespace ts {
         }
 
         /**
-         * Visits an ObjectLiteralExpression with computed propety names.
+         * Visits an ObjectLiteralExpression with computed property names.
          *
          * @param node An ObjectLiteralExpression node.
          */

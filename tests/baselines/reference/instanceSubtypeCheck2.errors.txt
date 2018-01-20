@@ -1,6 +1,5 @@
-tests/cases/compiler/instanceSubtypeCheck2.ts(5,7): error TS2415: Class 'C2<T>' incorrectly extends base class 'C1<T>'.
-  Types of property 'x' are incompatible.
-    Type 'string' is not assignable to type 'C2<T>'.
+tests/cases/compiler/instanceSubtypeCheck2.ts(6,5): error TS2416: Property 'x' in type 'C2<T>' is not assignable to the same property in base type 'C1<T>'.
+  Type 'string' is not assignable to type 'C2<T>'.
 
 
 ==== tests/cases/compiler/instanceSubtypeCheck2.ts (1 errors) ====
@@ -9,9 +8,8 @@ tests/cases/compiler/instanceSubtypeCheck2.ts(5,7): error TS2415: Class 'C2<T>' 
     }
     
     class C2<T> extends C1<T> {
-          ~~
-!!! error TS2415: Class 'C2<T>' incorrectly extends base class 'C1<T>'.
-!!! error TS2415:   Types of property 'x' are incompatible.
-!!! error TS2415:     Type 'string' is not assignable to type 'C2<T>'.
         x: string
+        ~
+!!! error TS2416: Property 'x' in type 'C2<T>' is not assignable to the same property in base type 'C1<T>'.
+!!! error TS2416:   Type 'string' is not assignable to type 'C2<T>'.
     }

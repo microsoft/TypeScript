@@ -186,7 +186,7 @@ class ProjectRunner extends RunnerBase {
                     getCanonicalFileName: Harness.Compiler.getCanonicalFileName,
                     useCaseSensitiveFileNames: () => Harness.IO.useCaseSensitiveFileNames(),
                     getNewLine: () => Harness.IO.newLine(),
-                    fileExists: fileName => fileName === Harness.Compiler.defaultLibFileName ||  getSourceFileText(fileName) !== undefined,
+                    fileExists: fileName => fileName === Harness.Compiler.defaultLibFileName || getSourceFileText(fileName) !== undefined,
                     readFile: fileName => Harness.IO.readFile(fileName),
                     getDirectories: path => Harness.IO.getDirectories(path)
                 };

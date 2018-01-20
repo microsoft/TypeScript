@@ -7,5 +7,5 @@
 ////};
 
 goTo.marker("1");
-edit.insert("\r\n");
+edit.insert("\n");
 verify.indentationIs(0);

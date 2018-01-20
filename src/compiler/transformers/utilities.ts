@@ -143,6 +143,7 @@ namespace ts {
             createLiteral(externalHelpersModuleNameText));
 
         if (externalHelpersImportDeclaration) {
+            addEmitFlags(externalHelpersImportDeclaration, EmitFlags.NeverApplyImportHelper);
             externalImports.unshift(externalHelpersImportDeclaration);
         }
 
