@@ -7,12 +7,11 @@
 
 verify.codeFix({
     description: "Implement interface 'I<Y>'",
-    // TODO: GH#18445
     newFileContent:
 `interface I<X> {
     x: { readonly [K in keyof X]: X[K] };
 }
-class C<Y> implements I<Y> {\r
-    x: { readonly [K in keyof X]: Y[K]; };\r
+class C<Y> implements I<Y> {
+    x: { readonly [K in keyof Y]: Y[K]; };
 }`,
 });

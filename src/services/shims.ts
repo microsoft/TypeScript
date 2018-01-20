@@ -1083,7 +1083,7 @@ namespace ts {
                 `getPreProcessedFileInfo('${fileName}')`,
                 () => {
                     // for now treat files as JavaScript
-                    const result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
+                    const result = preProcessFile(getSnapshotText(sourceTextSnapshot), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
                     return {
                         referencedFiles: this.convertFileReferences(result.referencedFiles),
                         importedFiles: this.convertFileReferences(result.importedFiles),
@@ -1123,9 +1123,7 @@ namespace ts {
             return this.forwardJSONCall(
                 `getTSConfigFileInfo('${fileName}')`,
                 () => {
-                    const text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
-
-                    const result = parseJsonText(fileName, text);
+                    const result = parseJsonText(fileName, getSnapshotText(sourceTextSnapshot));
                     const normalizedFileName = normalizeSlashes(fileName);
                     const configFile = parseJsonSourceFileConfigFileContent(result, this.host, getDirectoryPath(normalizedFileName), /*existingOptions*/ {}, normalizedFileName);
 

@@ -21,7 +21,6 @@
 
 verify.codeFix({
     description: "Implement interface 'I<number>'",
-    // TODO: GH#18445
     newFileContent:
 `interface I<Species> {
     [Symbol.hasInstance](o: any): boolean;
@@ -38,34 +37,34 @@ verify.codeFix({
     [Symbol.toStringTag]: string;
     [Symbol.unscopables]: any;
 }
-class C implements I<number> {\r
-    [Symbol.hasInstance](o: any): boolean {\r
-        throw new Error("Method not implemented.");\r
-    }\r
-    [Symbol.isConcatSpreadable]: boolean;\r
-    [Symbol.iterator]() {\r
-        throw new Error("Method not implemented.");\r
-    }\r
-    [Symbol.match]: boolean;\r
-    [Symbol.replace](...args: {}) {\r
-        throw new Error("Method not implemented.");\r
-    }\r
-    [Symbol.search](str: string): number {\r
-        throw new Error("Method not implemented.");\r
-    }\r
-    [Symbol.species](): number {\r
-        throw new Error("Method not implemented.");\r
-    }\r
-    [Symbol.split](str: string, limit?: number): {} {\r
-        throw new Error("Method not implemented.");\r
-    }\r
-    [Symbol.toPrimitive](hint: "number"): number;\r
-    [Symbol.toPrimitive](hint: "default"): number;\r
-    [Symbol.toPrimitive](hint: "string"): string;\r
-    [Symbol.toPrimitive](hint: any) {\r
-        throw new Error("Method not implemented.");\r
-    }\r
-    [Symbol.toStringTag]: string\;\r
-    [Symbol.unscopables]: any;\r
+class C implements I<number> {
+    [Symbol.hasInstance](o: any): boolean {
+        throw new Error("Method not implemented.");
+    }
+    [Symbol.isConcatSpreadable]: boolean;
+    [Symbol.iterator]() {
+        throw new Error("Method not implemented.");
+    }
+    [Symbol.match]: boolean;
+    [Symbol.replace](...args: {}) {
+        throw new Error("Method not implemented.");
+    }
+    [Symbol.search](str: string): number {
+        throw new Error("Method not implemented.");
+    }
+    [Symbol.species](): number {
+        throw new Error("Method not implemented.");
+    }
+    [Symbol.split](str: string, limit?: number): {} {
+        throw new Error("Method not implemented.");
+    }
+    [Symbol.toPrimitive](hint: "number"): number;
+    [Symbol.toPrimitive](hint: "default"): number;
+    [Symbol.toPrimitive](hint: "string"): string;
+    [Symbol.toPrimitive](hint: any) {
+        throw new Error("Method not implemented.");
+    }
+    [Symbol.toStringTag]: string\;
+    [Symbol.unscopables]: any;
 }`,
 });

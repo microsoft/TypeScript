@@ -181,7 +181,7 @@
       "tags": [
         {
           "name": "param",
-          "text": "opts "
+          "text": "opts"
         }
       ]
     }

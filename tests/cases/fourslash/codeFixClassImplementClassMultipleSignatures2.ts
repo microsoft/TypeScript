@@ -10,7 +10,6 @@
 
 verify.codeFix({
     description: "Implement interface 'A'",
-    // TODO: GH#18445
     newFileContent:
 `class A {
     method(a: any, b: string): boolean;
@@ -18,12 +17,12 @@ verify.codeFix({
     method(a: string): Function;
     method(a: string | number, b?: string | number): boolean | Function { return true; }
 }
-class C implements A {\r
-    method(a: any, b: string): boolean;\r
-    method(a: string, b: number): Function;\r
-    method(a: string): Function;\r
-    method(a: string | number, b?: string | number): boolean | Function {\r
-        throw new Error("Method not implemented.");\r
-    }\r
+class C implements A {
+    method(a: any, b: string): boolean;
+    method(a: string, b: number): Function;
+    method(a: string): Function;
+    method(a: string | number, b?: string | number): boolean | Function {
+        throw new Error("Method not implemented.");
+    }
 }`,
 });

@@ -3,14 +3,8 @@
 
 /* @internal */
 namespace ts.refactor.extractSymbol {
-    const extractSymbol: Refactor = {
-        name: "Extract Symbol",
-        description: getLocaleSpecificMessage(Diagnostics.Extract_symbol),
-        getAvailableActions,
-        getEditsForAction,
-    };
-
-    registerRefactor(extractSymbol);
+    const refactorName = "Extract Symbol";
+    registerRefactor(refactorName, { getAvailableActions, getEditsForAction });
 
     /**
      * Compute the associated code actions
@@ -77,7 +71,7 @@ namespace ts.refactor.extractSymbol {
 
         if (functionActions.length) {
             infos.push({
-                name: extractSymbol.name,
+                name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_function),
                 actions: functionActions
             });
@@ -85,7 +79,7 @@ namespace ts.refactor.extractSymbol {
 
         if (constantActions.length) {
             infos.push({
-                name: extractSymbol.name,
+                name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
                 actions: constantActions
             });

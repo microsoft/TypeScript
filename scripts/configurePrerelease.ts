@@ -11,34 +11,39 @@ interface PackageJson {
 
 function main(): void {
     const sys = ts.sys;
-    if (sys.args.length < 2) {
+    if (sys.args.length < 3) {
         sys.write("Usage:" + sys.newLine)
-        sys.write("\tnode configureNightly.js <package.json location> <file containing version>" + sys.newLine);
+        sys.write("\tnode configureNightly.js <dev|insiders> <package.json location> <file containing version>" + sys.newLine);
         return;
     }
 
+    const tag = sys.args[0];
+    if (tag !== "dev" && tag !== "insiders") {
+        throw new Error(`Unexpected tag name '${tag}'.`);
+    }
+
     // Acquire the version from the package.json file and modify it appropriately.
-    const packageJsonFilePath = ts.normalizePath(sys.args[0]);
+    const packageJsonFilePath = ts.normalizePath(sys.args[1]);
     const packageJsonValue: PackageJson = JSON.parse(sys.readFile(packageJsonFilePath));
 
     const { majorMinor, patch } = parsePackageJsonVersion(packageJsonValue.version);
-    const nightlyPatch = getNightlyPatch(patch);
+    const prereleasePatch = getPrereleasePatch(tag, patch);
 
     // Acquire and modify the source file that exposes the version string.
-    const tsFilePath = ts.normalizePath(sys.args[1]);
+    const tsFilePath = ts.normalizePath(sys.args[2]);
     const tsFileContents = ts.sys.readFile(tsFilePath);
-    const modifiedTsFileContents = updateTsFile(tsFilePath, tsFileContents, majorMinor, patch, nightlyPatch);
+    const modifiedTsFileContents = updateTsFile(tsFilePath, tsFileContents, majorMinor, patch, prereleasePatch);
 
     // Ensure we are actually changing something - the user probably wants to know that the update failed.
     if (tsFileContents === modifiedTsFileContents) {
-        let err = `\n  '${tsFilePath}' was not updated while configuring for a nightly publish.\n    `;
+        let err = `\n  '${tsFilePath}' was not updated while configuring for a prerelease publish for '${tag}'.\n    `;
         err += `Ensure that you have not already run this script; otherwise, erase your changes using 'git checkout -- "${tsFilePath}"'.`;
-        throw err + "\n";
+        throw new Error(err + "\n");
     }
 
     // Finally write the changes to disk.
     // Modify the package.json structure
-    packageJsonValue.version = `${majorMinor}.${nightlyPatch}`;
+    packageJsonValue.version = `${majorMinor}.${prereleasePatch}`;
     sys.writeFile(packageJsonFilePath, JSON.stringify(packageJsonValue, /*replacer:*/ undefined, /*space:*/ 4))
     sys.writeFile(tsFilePath, modifiedTsFileContents);
 }
@@ -69,7 +74,7 @@ function parsePackageJsonVersion(versionString: string): { majorMinor: string, p
 }
 
 /** e.g. 0-dev.20170707 */
-function getNightlyPatch(plainPatch: string): string {
+function getPrereleasePatch(tag: string, plainPatch: string): string {
     // We're going to append a representation of the current time at the end of the current version.
     // String.prototype.toISOString() returns a 24-character string formatted as 'YYYY-MM-DDTHH:mm:ss.sssZ',
     // but we'd prefer to just remove separators and limit ourselves to YYYYMMDD.
@@ -77,7 +82,7 @@ function getNightlyPatch(plainPatch: string): string {
     const now = new Date();
     const timeStr = now.toISOString().replace(/:|T|\.|-/g, "").slice(0, 8);
 
-    return `${plainPatch}-dev.${timeStr}`;
+    return `${plainPatch}-${tag}.${timeStr}`;
 }
 
 main();

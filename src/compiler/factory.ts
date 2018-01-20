@@ -112,21 +112,23 @@ namespace ts {
 
     export function createIdentifier(text: string): Identifier;
     /* @internal */
-    // tslint:disable-next-line unified-signatures
-    export function createIdentifier(text: string, typeArguments: ReadonlyArray<TypeNode>): Identifier;
-    export function createIdentifier(text: string, typeArguments?: ReadonlyArray<TypeNode>): Identifier {
+    export function createIdentifier(text: string, typeArguments: ReadonlyArray<TypeNode | TypeParameterDeclaration>): Identifier; // tslint:disable-line unified-signatures
+    export function createIdentifier(text: string, typeArguments?: ReadonlyArray<TypeNode | TypeParameterDeclaration>): Identifier {
         const node = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
         node.escapedText = escapeLeadingUnderscores(text);
         node.originalKeywordKind = text ? stringToToken(text) : SyntaxKind.Unknown;
-        node.autoGenerateKind = GeneratedIdentifierKind.None;
+        node.autoGenerateFlags = GeneratedIdentifierFlags.None;
         node.autoGenerateId = 0;
         if (typeArguments) {
-            node.typeArguments = createNodeArray(typeArguments);
+            node.typeArguments = createNodeArray(typeArguments as ReadonlyArray<TypeNode>);
         }
         return node;
     }
 
-    export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode> | undefined): Identifier {
+    export function updateIdentifier(node: Identifier): Identifier;
+    /* @internal */
+    export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier; // tslint:disable-line unified-signatures
+    export function updateIdentifier(node: Identifier, typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier {
         return node.typeArguments !== typeArguments
         ? updateNode(createIdentifier(idText(node), typeArguments), node)
         : node;
@@ -135,13 +137,18 @@ namespace ts {
     let nextAutoGenerateId = 0;
 
     /** Create a unique temporary variable. */
-    export function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined): Identifier {
+    export function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined): Identifier;
+    /* @internal */ export function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes: boolean): Identifier; // tslint:disable-line unified-signatures
+    export function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes?: boolean): Identifier {
         const name = createIdentifier("");
-        name.autoGenerateKind = GeneratedIdentifierKind.Auto;
+        name.autoGenerateFlags = GeneratedIdentifierFlags.Auto;
         name.autoGenerateId = nextAutoGenerateId;
         nextAutoGenerateId++;
         if (recordTempVariable) {
             recordTempVariable(name);
+        }
+        if (reservedInNestedScopes) {
+            name.autoGenerateFlags |= GeneratedIdentifierFlags.ReservedInNestedScopes;
         }
         return name;
     }
@@ -149,7 +156,7 @@ namespace ts {
     /** Create a unique temporary variable for use in a loop. */
     export function createLoopVariable(): Identifier {
         const name = createIdentifier("");
-        name.autoGenerateKind = GeneratedIdentifierKind.Loop;
+        name.autoGenerateFlags = GeneratedIdentifierFlags.Loop;
         name.autoGenerateId = nextAutoGenerateId;
         nextAutoGenerateId++;
         return name;
@@ -158,7 +165,7 @@ namespace ts {
     /** Create a unique name based on the supplied text. */
     export function createUniqueName(text: string): Identifier {
         const name = createIdentifier(text);
-        name.autoGenerateKind = GeneratedIdentifierKind.Unique;
+        name.autoGenerateFlags = GeneratedIdentifierFlags.Unique;
         name.autoGenerateId = nextAutoGenerateId;
         nextAutoGenerateId++;
         return name;
@@ -166,14 +173,15 @@ namespace ts {
 
     /** Create a unique name generated for a node. */
     export function getGeneratedNameForNode(node: Node): Identifier;
-    // tslint:disable-next-line unified-signatures
-    /*@internal*/ export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier;
+    /* @internal */ export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier; // tslint:disable-line unified-signatures
     export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier {
         const name = createIdentifier("");
-        name.autoGenerateKind = GeneratedIdentifierKind.Node;
+        name.autoGenerateFlags = GeneratedIdentifierFlags.Node;
         name.autoGenerateId = nextAutoGenerateId;
         name.original = node;
-        name.skipNameGenerationScope = !!shouldSkipNameGenerationScope;
+        if (shouldSkipNameGenerationScope) {
+            name.autoGenerateFlags |= GeneratedIdentifierFlags.SkipNameGenerationScope;
+        }
         nextAutoGenerateId++;
         return name;
     }
@@ -578,11 +586,12 @@ namespace ts {
     }
 
     /* @internal */
-    export function createSignatureDeclaration(kind: SyntaxKind, typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined, parameters: ReadonlyArray<ParameterDeclaration>, type: TypeNode | undefined) {
+    export function createSignatureDeclaration(kind: SyntaxKind, typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined, parameters: ReadonlyArray<ParameterDeclaration>, type: TypeNode | undefined, typeArguments?: TypeNode[] | undefined) {
         const node = createSynthesizedNode(kind) as SignatureDeclaration;
         node.typeParameters = asNodeArray(typeParameters);
         node.parameters = asNodeArray(parameters);
         node.type = type;
+        node.typeArguments = asNodeArray(typeArguments);
         return node;
     }
 
@@ -3951,7 +3960,9 @@ namespace ts {
         // per ES grammar both 'whenTrue' and 'whenFalse' parts of conditional expression are assignment expressions
         // so in case when comma expression is introduced as a part of previous transformations
         // if should be wrapped in parens since comma operator has the lowest precedence
-        return e.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>e).operatorToken.kind === SyntaxKind.CommaToken
+        const emittedExpression = skipPartiallyEmittedExpressions(e);
+        return emittedExpression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>emittedExpression).operatorToken.kind === SyntaxKind.CommaToken ||
+            emittedExpression.kind === SyntaxKind.CommaListExpression
             ? createParen(e)
             : e;
     }

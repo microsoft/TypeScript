@@ -4,27 +4,10 @@ namespace ts {
         function testLSWithFiles(settings: CompilerOptions, files: Harness.Compiler.TestFile[]) {
             function snapFor(path: string): IScriptSnapshot {
                 if (path === "lib.d.ts") {
-                    return {
-                        dispose: noop,
-                        getChangeRange() { return undefined; },
-                        getLength() { return 0; },
-                        getText() {
-                            return "";
-                        }
-                    };
+                    return ScriptSnapshot.fromString("");
                 }
-                const result = forEach(files, f => f.unitName === path ? f : undefined);
-                if (result) {
-                    return {
-                        dispose: noop,
-                        getChangeRange() { return undefined; },
-                        getLength() { return result.content.length; },
-                        getText(start, end) {
-                            return result.content.substring(start, end);
-                        }
-                    };
-                }
-                return undefined;
+                const result = find(files, f => f.unitName === path);
+                return result && ScriptSnapshot.fromString(result.content);
             }
             const lshost: LanguageServiceHost = {
                 getCompilationSettings: () => settings,

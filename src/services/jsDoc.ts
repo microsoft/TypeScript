@@ -52,18 +52,28 @@ namespace ts.JsDoc {
         // Eg. const a: Array<string> | Array<number>; a.length
         // The property length will have two declarations of property length coming
         // from Array<T> - Array<string> and Array<number>
-        const documentationComment = <SymbolDisplayPart[]>[];
+        const documentationComment: SymbolDisplayPart[] = [];
         forEachUnique(declarations, declaration => {
-            forEach(getAllJSDocs(declaration), doc => {
-                if (doc.comment) {
-                    if (documentationComment.length) {
-                        documentationComment.push(lineBreakPart());
-                    }
-                    documentationComment.push(textPart(doc.comment));
+            for (const { comment } of getCommentHavingNodes(declaration)) {
+                if (comment === undefined) continue;
+                if (documentationComment.length) {
+                    documentationComment.push(lineBreakPart());
                 }
-            });
+                documentationComment.push(textPart(comment));
+            }
         });
         return documentationComment;
+    }
+
+    function getCommentHavingNodes(declaration: Declaration): ReadonlyArray<JSDoc | JSDocTag> {
+        switch (declaration.kind) {
+            case SyntaxKind.JSDocPropertyTag:
+                return [declaration as JSDocPropertyTag];
+            case SyntaxKind.JSDocTypedefTag:
+                return [(declaration as JSDocTypedefTag).parent];
+            default:
+                return getJSDocCommentsAndTags(declaration);
+        }
     }
 
     export function getJsDocTagsFromDeclarations(declarations?: Declaration[]): JSDocTagInfo[] {
@@ -77,7 +87,7 @@ namespace ts.JsDoc {
         return tags;
     }
 
-    function getCommentText(tag: JSDocTag): string {
+    function getCommentText(tag: JSDocTag): string | undefined {
         const { comment } = tag;
         switch (tag.kind) {
             case SyntaxKind.JSDocAugmentsTag:
@@ -96,11 +106,15 @@ namespace ts.JsDoc {
         }
 
         function withNode(node: Node) {
-            return `${node.getText()} ${comment}`;
+            return addComment(node.getText());
         }
 
         function withList(list: NodeArray<Node>): string {
-            return `${list.map(x => x.getText())} ${comment}`;
+            return addComment(list.map(x => x.getText()).join(", "));
+        }
+
+        function addComment(s: string) {
+            return comment === undefined ? s : `${s} ${comment}`;
         }
     }
 

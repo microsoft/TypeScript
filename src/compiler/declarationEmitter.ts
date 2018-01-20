@@ -20,14 +20,14 @@ namespace ts {
 
     type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic;
 
-    interface EmitTextWriterWithSymbolWriter extends EmitTextWriter, SymbolWriter {
+    interface EmitTextWriterWithSymbolWriter extends EmitTextWriter {
         getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic;
     }
 
     interface SymbolAccessibilityDiagnostic {
         errorNode: Node;
         diagnosticMessage: DiagnosticMessage;
-        typeName?: DeclarationName;
+        typeName?: DeclarationName | QualifiedName;
     }
 
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
@@ -358,7 +358,7 @@ namespace ts {
             }
             else {
                 errorNameNode = declaration.name;
-                const format = TypeFormatFlags.UseTypeOfFunction |
+                const format = TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseStructuralFallback | TypeFormatFlags.WriteDefaultSymbolWithoutName |
                     TypeFormatFlags.WriteClassExpressionAsTypeLiteral |
                     (shouldUseResolverType ? TypeFormatFlags.AddUndefined : 0);
                 resolver.writeTypeOfDeclaration(declaration, enclosingDeclaration, format, writer);
@@ -378,7 +378,7 @@ namespace ts {
                 resolver.writeReturnTypeOfSignatureDeclaration(
                     signature,
                     enclosingDeclaration,
-                    TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.WriteClassExpressionAsTypeLiteral,
+                    TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseStructuralFallback | TypeFormatFlags.WriteClassExpressionAsTypeLiteral | TypeFormatFlags.WriteDefaultSymbolWithoutName,
                     writer);
                 errorNameNode = undefined;
             }
@@ -643,7 +643,7 @@ namespace ts {
             resolver.writeTypeOfExpression(
                 expr,
                 enclosingDeclaration,
-                TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.WriteClassExpressionAsTypeLiteral,
+                TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseStructuralFallback | TypeFormatFlags.WriteClassExpressionAsTypeLiteral | TypeFormatFlags.WriteDefaultSymbolWithoutName,
                 writer);
             write(";");
             writeLine();
@@ -2000,7 +2000,7 @@ namespace ts {
     export function writeDeclarationFile(declarationFilePath: string, sourceFileOrBundle: SourceFile | Bundle, host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection, emitOnlyDtsFiles: boolean) {
         const emitDeclarationResult = emitDeclarations(host, resolver, emitterDiagnostics, declarationFilePath, sourceFileOrBundle, emitOnlyDtsFiles);
         const emitSkipped = emitDeclarationResult.reportedDeclarationError || host.isEmitBlocked(declarationFilePath) || host.getCompilerOptions().noEmit;
-        if (!emitSkipped) {
+        if (!emitSkipped || emitOnlyDtsFiles) {
             const sourceFiles = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle.sourceFiles : [sourceFileOrBundle];
             const declarationOutput = emitDeclarationResult.referencesOutput
                 + getDeclarationOutput(emitDeclarationResult.synchronousDeclarationOutput, emitDeclarationResult.moduleElementDeclarationEmitInfo);

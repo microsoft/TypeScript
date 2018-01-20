@@ -3,7 +3,7 @@ tests/cases/conformance/jsx/file.tsx(9,33): error TS2322: Type '{ a: number; }' 
     Property 'b' is missing in type '{ a: number; }'.
 tests/cases/conformance/jsx/file.tsx(10,33): error TS2322: Type 'T & { ignore-prop: true; }' is not assignable to type 'IntrinsicAttributes & { b: {}; a: {}; }'.
   Type 'T & { ignore-prop: true; }' is not assignable to type '{ b: {}; a: {}; }'.
-    Property 'a' is missing in type 'T & { ignore-prop: true; }'.
+    Property 'a' is missing in type '{ b: number; } & { ignore-prop: true; }'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
@@ -24,5 +24,5 @@ tests/cases/conformance/jsx/file.tsx(10,33): error TS2322: Type 'T & { ignore-pr
                                     ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'T & { ignore-prop: true; }' is not assignable to type 'IntrinsicAttributes & { b: {}; a: {}; }'.
 !!! error TS2322:   Type 'T & { ignore-prop: true; }' is not assignable to type '{ b: {}; a: {}; }'.
-!!! error TS2322:     Property 'a' is missing in type 'T & { ignore-prop: true; }'.
+!!! error TS2322:     Property 'a' is missing in type '{ b: number; } & { ignore-prop: true; }'.
     }

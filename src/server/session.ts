@@ -255,6 +255,32 @@ namespace ts.server {
         };
     }
 
+    type Projects = ReadonlyArray<Project> | {
+        projects: ReadonlyArray<Project>;
+        symLinkedProjects: MultiMap<Project>;
+    };
+
+    function isProjectsArray(projects: Projects): projects is ReadonlyArray<Project> {
+        return !!(<ReadonlyArray<Project>>projects).length;
+    }
+
+    /**
+     * This helper function processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
+     */
+    function combineProjectOutput<T, U>(defaultValue: T, getValue: (path: Path) => T, projects: Projects, action: (project: Project, value: T) => ReadonlyArray<U> | U | undefined, comparer?: (a: U, b: U) => number, areEqual?: (a: U, b: U) => boolean) {
+        const outputs = flatMap(isProjectsArray(projects) ? projects : projects.projects, project => action(project, defaultValue));
+        if (!isProjectsArray(projects) && projects.symLinkedProjects) {
+            projects.symLinkedProjects.forEach((projects, path) => {
+                const value = getValue(path as Path);
+                outputs.push(...flatMap(projects, project => action(project, value)));
+            });
+        }
+
+        return comparer
+            ? sortAndDeduplicate(outputs, comparer, areEqual)
+            : deduplicate(outputs, areEqual);
+    }
+
     export interface SessionOptions {
         host: ServerHost;
         cancellationToken: ServerCancellationToken;
@@ -789,8 +815,9 @@ namespace ts.server {
             return project.getLanguageService().getRenameInfo(file, position);
         }
 
-        private getProjects(args: protocol.FileRequestArgs) {
-            let projects: Project[];
+        private getProjects(args: protocol.FileRequestArgs): Projects {
+            let projects: ReadonlyArray<Project>;
+            let symLinkedProjects: MultiMap<Project> | undefined;
             if (args.projectFileName) {
                 const project = this.getProject(args.projectFileName);
                 if (project) {
@@ -800,13 +827,14 @@ namespace ts.server {
             else {
                 const scriptInfo = this.projectService.getScriptInfo(args.file);
                 projects = scriptInfo.containingProjects;
+                symLinkedProjects = this.projectService.getSymlinkedProjects(scriptInfo);
             }
             // filter handles case when 'projects' is undefined
             projects = filter(projects, p => p.languageServiceEnabled);
-            if (!projects || !projects.length) {
+            if ((!projects || !projects.length) && !symLinkedProjects) {
                 return Errors.ThrowNoProject();
             }
-            return projects;
+            return symLinkedProjects ? { projects, symLinkedProjects } : projects;
         }
 
         private getDefaultProject(args: protocol.FileRequestArgs) {
@@ -841,8 +869,10 @@ namespace ts.server {
                 }
 
                 const fileSpans = combineProjectOutput(
+                    file,
+                    path => this.projectService.getScriptInfoForPath(path).fileName,
                     projects,
-                    (project: Project) => {
+                    (project, file) => {
                         const renameLocations = project.getLanguageService().findRenameLocations(file, position, args.findInStrings, args.findInComments);
                         if (!renameLocations) {
                             return emptyArray;
@@ -881,8 +911,10 @@ namespace ts.server {
             }
             else {
                 return combineProjectOutput(
+                    file,
+                    path => this.projectService.getScriptInfoForPath(path).fileName,
                     projects,
-                    p => p.getLanguageService().findRenameLocations(file, position, args.findInStrings, args.findInComments),
+                    (p, file) => p.getLanguageService().findRenameLocations(file, position, args.findInStrings, args.findInComments),
                     /*comparer*/ undefined,
                     renameLocationIsEqualTo
                 );
@@ -938,9 +970,11 @@ namespace ts.server {
                 const nameSpan = nameInfo.textSpan;
                 const nameColStart = scriptInfo.positionToLineOffset(nameSpan.start).offset;
                 const nameText = scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan));
-                const refs = combineProjectOutput<protocol.ReferencesResponseItem>(
+                const refs = combineProjectOutput<NormalizedPath, protocol.ReferencesResponseItem>(
+                    file,
+                    path => this.projectService.getScriptInfoForPath(path).fileName,
                     projects,
-                    (project: Project) => {
+                    (project, file) => {
                         const references = project.getLanguageService().getReferencesAtPosition(file, position);
                         if (!references) {
                             return emptyArray;
@@ -974,8 +1008,10 @@ namespace ts.server {
             }
             else {
                 return combineProjectOutput(
+                    file,
+                    path => this.projectService.getScriptInfoForPath(path).fileName,
                     projects,
-                    project => project.getLanguageService().findReferences(file, position),
+                    (project, file) => project.getLanguageService().findReferences(file, position),
                     /*comparer*/ undefined,
                     equateValues
                 );
@@ -1240,20 +1276,25 @@ namespace ts.server {
                 return emptyArray;
             }
 
-            const result: protocol.CompileOnSaveAffectedFileListSingleProject[] = [];
-
             // if specified a project, we only return affected file list in this project
-            const projectsToSearch = args.projectFileName ? [this.projectService.findProject(args.projectFileName)] : info.containingProjects;
-            for (const project of projectsToSearch) {
-                if (project.compileOnSaveEnabled && project.languageServiceEnabled && !project.getCompilationSettings().noEmit) {
-                    result.push({
-                        projectFileName: project.getProjectName(),
-                        fileNames: project.getCompileOnSaveAffectedFileList(info),
-                        projectUsesOutFile: !!project.getCompilationSettings().outFile || !!project.getCompilationSettings().out
-                    });
+            const projects = args.projectFileName ? [this.projectService.findProject(args.projectFileName)] : info.containingProjects;
+            const symLinkedProjects = !args.projectFileName && this.projectService.getSymlinkedProjects(info);
+            return combineProjectOutput(
+                info,
+                path => this.projectService.getScriptInfoForPath(path),
+                symLinkedProjects ? { projects, symLinkedProjects } : projects,
+                (project, info) => {
+                    let result: protocol.CompileOnSaveAffectedFileListSingleProject;
+                    if (project.compileOnSaveEnabled && project.languageServiceEnabled && !project.getCompilationSettings().noEmit) {
+                        result = {
+                            projectFileName: project.getProjectName(),
+                            fileNames: project.getCompileOnSaveAffectedFileList(info),
+                            projectUsesOutFile: !!project.getCompilationSettings().outFile || !!project.getCompilationSettings().out
+                        };
+                    }
+                    return result;
                 }
-            }
-            return result;
+            );
         }
 
         private emitFile(args: protocol.CompileOnSaveEmitFileRequestArgs) {
@@ -1406,8 +1447,14 @@ namespace ts.server {
             const fileName = args.currentFileOnly ? args.file && normalizeSlashes(args.file) : undefined;
             if (simplifiedResult) {
                 return combineProjectOutput(
+                    fileName,
+                    () => undefined,
                     projects,
-                    project => {
+                    (project, file) => {
+                        if (fileName && !file) {
+                            return undefined;
+                        }
+
                         const navItems = project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, fileName, /*excludeDts*/ project.isNonTsProject());
                         if (!navItems) {
                             return emptyArray;
@@ -1443,8 +1490,15 @@ namespace ts.server {
             }
             else {
                 return combineProjectOutput(
+                    fileName,
+                    () => undefined,
                     projects,
-                    project => project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, fileName, /*excludeDts*/ project.isNonTsProject()),
+                    (project, file) => {
+                        if (fileName && !file) {
+                            return undefined;
+                        }
+                        return project.getLanguageService().getNavigateToItems(args.searchValue, args.maxResultCount, fileName, /*excludeDts*/ project.isNonTsProject());
+                    },
                     /*comparer*/ undefined,
                     navigateToItemIsEqualTo);
             }
@@ -1534,9 +1588,7 @@ namespace ts.server {
                 let mappedRenameLocation: protocol.Location | undefined;
                 if (renameFilename !== undefined && renameLocation !== undefined) {
                     const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(renameFilename));
-                    const snapshot = renameScriptInfo.getSnapshot();
-                    const oldText = snapshot.getText(0, snapshot.getLength());
-                    mappedRenameLocation = getLocationInNewDocument(oldText, renameFilename, renameLocation, edits);
+                    mappedRenameLocation = getLocationInNewDocument(getSnapshotText(renameScriptInfo.getSnapshot()), renameFilename, renameLocation, edits);
                 }
                 return { renameLocation: mappedRenameLocation, renameFilename, edits: this.mapTextChangesToCodeEdits(project, edits) };
             }
@@ -1613,9 +1665,9 @@ namespace ts.server {
             return { startPosition, endPosition };
         }
 
-        private mapCodeAction(project: Project, { description, changes: unmappedChanges, commands }: CodeAction): protocol.CodeAction {
+        private mapCodeAction(project: Project, { description, changes: unmappedChanges, commands, fixId }: CodeFixAction): protocol.CodeFixAction {
             const changes = unmappedChanges.map(change => this.mapTextChangesToCodeEditsUsingScriptinfo(change, project.getScriptInfoForNormalizedPath(toNormalizedPath(change.fileName))));
-            return { description, changes, commands };
+            return { description, changes, commands, fixId };
         }
 
         private mapTextChangesToCodeEdits(project: Project, textChanges: ReadonlyArray<FileTextChanges>): protocol.FileCodeEdits[] {

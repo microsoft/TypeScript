@@ -371,7 +371,7 @@ namespace ts.server {
         }
 
         getLength() {
-            return this.index.root.charCount();
+            return this.index.getLength();
         }
 
         getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {

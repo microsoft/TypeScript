@@ -63,7 +63,7 @@
       ],
       "documentation": [
         {
-          "text": "Doc{T} A template",
+          "text": "Doc",
           "kind": "text"
         }
       ],
@@ -77,12 +77,16 @@
           "text": "C<T> Augments it"
         },
         {
+          "name": "template",
+          "text": "{T} A template"
+        },
+        {
           "name": "type",
           "text": "{number | string} A type"
         },
         {
           "name": "typedef",
-          "text": "NumOrStr "
+          "text": "NumOrStr"
         },
         {
           "name": "property",
