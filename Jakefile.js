@@ -1199,23 +1199,12 @@ task("update-sublime", ["local", serverFile], function () {
 });
 
 var tslintRuleDir = "scripts/tslint/rules";
-var tslintRules = [
-    "booleanTriviaRule",
-    "debugAssertRule",
-    "nextLineRule",
-    "noBomRule",
-    "noDoubleSpaceRule",
-    "noIncrementDecrementRule",
-    "noInOperatorRule",
-    "noTypeAssertionWhitespaceRule",
-    "objectLiteralSurroundingSpaceRule",
-    "typeOperatorSpacingRule",
-];
+var tslintRules = fs.readdirSync(tslintRuleDir);
 var tslintRulesFiles = tslintRules.map(function (p) {
-    return path.join(tslintRuleDir, p + ".ts");
+    return path.join(tslintRuleDir, p);
 });
 var tslintRulesOutFiles = tslintRules.map(function (p) {
-    return path.join(builtLocalDirectory, "tslint/rules", p + ".js");
+    return path.join(builtLocalDirectory, "tslint/rules", p.replace(".ts", ".js"));
 });
 var tslintFormattersDir = "scripts/tslint/formatters";
 var tslintFormatters = [

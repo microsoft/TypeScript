@@ -3380,14 +3380,14 @@ namespace ts {
 
     const carriageReturnLineFeed = "\r\n";
     const lineFeed = "\n";
-    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, system?: { newLine: string }): string {
+    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, getNewLine?: () => string): string {
         switch (options.newLine) {
             case NewLineKind.CarriageReturnLineFeed:
                 return carriageReturnLineFeed;
             case NewLineKind.LineFeed:
                 return lineFeed;
         }
-        return system ? system.newLine : sys ? sys.newLine : carriageReturnLineFeed;
+        return getNewLine ? getNewLine() : sys ? sys.newLine : carriageReturnLineFeed;
     }
 
     /**

@@ -749,10 +749,12 @@ namespace ts {
             return _jsxNamespace;
         }
 
-        function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationToken) {
+        function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationToken, ignoreDiagnostics?: boolean) {
             // Ensure we have all the type information in place for this file so that all the
             // emitter questions of this resolver will return the right information.
-            getDiagnostics(sourceFile, cancellationToken);
+            if (!ignoreDiagnostics) {
+                getDiagnostics(sourceFile, cancellationToken);
+            }
             return emitResolver;
         }
 
