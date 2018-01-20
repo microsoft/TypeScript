@@ -8,9 +8,13 @@ namespace ts {
         return n;
     }
 
+    const isPrereleaseRegex = /^(.*)-next.\d+/;
+    const prereleaseSemverRegex = /^(\d+)\.(\d+)\.0-next.(\d+)$/;
+    const semverRegex = /^(\d+)\.(\d+)\.(\d+)$/;
+
     export class Semver {
         static parse(semver: string): Semver {
-            const isPrerelease = /^(.*)-next.\d+/.test(semver);
+            const isPrerelease = isPrereleaseRegex.test(semver);
             const result = Semver.tryParse(semver, isPrerelease);
             if (!result) {
                 throw new Error(`Unexpected semver: ${semver} (isPrerelease: ${isPrerelease})`);
@@ -26,7 +30,7 @@ namespace ts {
         private static tryParse(semver: string, isPrerelease: boolean): Semver | undefined {
             // Per the semver spec <http://semver.org/#spec-item-2>:
             // "A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative integers, and MUST NOT contain leading zeroes."
-            const rgx = isPrerelease ? /^(\d+)\.(\d+)\.0-next.(\d+)$/ : /^(\d+)\.(\d+)\.(\d+)$/;
+            const rgx = isPrerelease ? prereleaseSemverRegex : semverRegex;
             const match = rgx.exec(semver);
             return match ? new Semver(stringToInt(match[1]), stringToInt(match[2]), stringToInt(match[3]), isPrerelease) : undefined;
         }
