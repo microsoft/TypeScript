@@ -3804,7 +3804,8 @@ namespace ts {
     // Substitution types are created for type parameter references that occur in the true branch
     // of a conditional type. For example, in 'T extends string ? Foo<T> : Bar<T>', the reference to
     // T in Foo<T> is resolved as a substitution type that substitutes 'string & T' for T. Thus, if
-    // Foo<T> has a 'string' constraint on its type parameter, T will satisfy it.
+    // Foo has a 'string' constraint on its type parameter, T will satisfy it. Substitution types
+    // disappear upon instantiation (just like type parameters).
     export interface SubstitutionType extends InstantiableType {
         typeParameter: TypeParameter;  // Target type parameter
         substitute: Type;              // Type to substitute for type parameter

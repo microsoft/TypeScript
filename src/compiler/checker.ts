@@ -6965,7 +6965,7 @@ namespace ts {
         }
 
         // This function replaces substitution types with their underlying type parameters. We erase when creating
-        // type references and type alias instantiations because subsitution types are no longer necessary once
+        // type references and type alias instantiations because substitution types are no longer necessary once
         // the type arguments have been validated against their corresponding type parameter constraints.
         function eraseSubstitutionType(type: Type) {
             return type.flags & TypeFlags.Substitution ? (<SubstitutionType>type).typeParameter : type;
@@ -14621,7 +14621,7 @@ namespace ts {
                         checkExternalEmitHelpers(memberDecl, ExternalEmitHelpers.Assign);
                     }
                     if (propertiesArray.length > 0) {
-                        spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, 0);
+                        spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, /*objectFlags*/ 0);
                         propertiesArray = [];
                         propertiesTable = createSymbolTable();
                         hasComputedStringProperty = false;
@@ -14633,7 +14633,7 @@ namespace ts {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
-                    spread = getSpreadType(spread, type, node.symbol, propagatedFlags, 0);
+                    spread = getSpreadType(spread, type, node.symbol, propagatedFlags, /*objectFlags*/ 0);
                     offset = i + 1;
                     continue;
                 }
@@ -14678,7 +14678,7 @@ namespace ts {
 
             if (spread !== emptyObjectType) {
                 if (propertiesArray.length > 0) {
-                    spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, 0);
+                    spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, /*objectFlags*/ 0);
                 }
                 return spread;
             }
@@ -14811,7 +14811,7 @@ namespace ts {
                 else {
                     Debug.assert(attributeDecl.kind === SyntaxKind.JsxSpreadAttribute);
                     if (attributesTable.size > 0) {
-                        spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, 0, ObjectFlags.JsxAttributes);
+                        spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, /*typeFlags*/ 0, ObjectFlags.JsxAttributes);
                         attributesTable = createSymbolTable();
                     }
                     const exprType = checkExpressionCached(attributeDecl.expression, checkMode);
@@ -14819,7 +14819,7 @@ namespace ts {
                         hasSpreadAnyType = true;
                     }
                     if (isValidSpreadType(exprType)) {
-                        spread = getSpreadType(spread, exprType, openingLikeElement.symbol, 0, ObjectFlags.JsxAttributes);
+                        spread = getSpreadType(spread, exprType, openingLikeElement.symbol, /*typeFlags*/ 0, ObjectFlags.JsxAttributes);
                     }
                     else {
                         typeToIntersect = typeToIntersect ? getIntersectionType([typeToIntersect, exprType]) : exprType;
@@ -14829,7 +14829,7 @@ namespace ts {
 
             if (!hasSpreadAnyType) {
                 if (attributesTable.size > 0) {
-                    spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, 0, ObjectFlags.JsxAttributes);
+                    spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, /*typeFlags*/ 0, ObjectFlags.JsxAttributes);
                 }
             }
 
@@ -14855,7 +14855,7 @@ namespace ts {
                     const childPropMap = createSymbolTable();
                     childPropMap.set(jsxChildrenPropertyName, childrenPropSymbol);
                     spread = getSpreadType(spread, createAnonymousType(attributes.symbol, childPropMap, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined),
-                        attributes.symbol, 0, ObjectFlags.JsxAttributes);
+                        attributes.symbol, /*typeFlags*/ 0, ObjectFlags.JsxAttributes);
 
                 }
             }
