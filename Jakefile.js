@@ -556,16 +556,16 @@ desc("Generates a diagnostic file in TypeScript based on an input JSON file");
 task("generate-diagnostics", [diagnosticInfoMapTs]);
 
 // Publish nightly
-var configureNightlyJs = path.join(scriptsDirectory, "configureNightly.js");
-var configureNightlyTs = path.join(scriptsDirectory, "configureNightly.ts");
+var configurePrereleaseJs = path.join(scriptsDirectory, "configurePrerelease.js");
+var configurePrereleaseTs = path.join(scriptsDirectory, "configurePrerelease.ts");
 var packageJson = "package.json";
 var versionFile = path.join(compilerDirectory, "core.ts");
 
-file(configureNightlyTs);
+file(configurePrereleaseTs);
 
-compileFile(/*outfile*/configureNightlyJs,
-            /*sources*/[configureNightlyTs],
-            /*prereqs*/[configureNightlyTs],
+compileFile(/*outfile*/configurePrereleaseJs,
+            /*sources*/[configurePrereleaseTs],
+            /*prereqs*/[configurePrereleaseTs],
             /*prefixes*/[],
             /*useBuiltCompiler*/ false,
     { noOutFile: false, generateDeclarations: false, keepComments: false, noResolve: false, stripInternal: false });
@@ -574,8 +574,8 @@ task("setDebugMode", function () {
     useDebugMode = true;
 });
 
-task("configure-nightly", [configureNightlyJs], function () {
-    var cmd = host + " " + configureNightlyJs + " dev " + packageJson + " " + versionFile;
+task("configure-nightly", [configurePrereleaseJs], function () {
+    var cmd = host + " " + configurePrereleaseJs + " dev " + packageJson + " " + versionFile;
     console.log(cmd);
     exec(cmd);
 }, { async: true });
@@ -587,8 +587,8 @@ task("publish-nightly", ["configure-nightly", "LKG", "clean", "setDebugMode", "r
     exec(cmd);
 });
 
-task("configure-insiders", [configureNightlyJs], function () {
-    var cmd = host + " " + configureNightlyJs + " insiders " + packageJson + " " + versionFile;
+task("configure-insiders", [configurePrereleaseJs], function () {
+    var cmd = host + " " + configurePrereleaseJs + " insiders " + packageJson + " " + versionFile;
     console.log(cmd);
     exec(cmd);
 }, { async: true });
