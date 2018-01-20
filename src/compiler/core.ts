@@ -6,7 +6,7 @@ namespace ts {
     // If changing the text in this section, be sure to test `configureNightly` too.
     export const versionMajorMinor = "2.7";
     /** The version of the TypeScript compiler release */
-    export const version = `${versionMajorMinor}.0`;
+    export const version = `${versionMajorMinor}.1`;
 }
 
 namespace ts {
