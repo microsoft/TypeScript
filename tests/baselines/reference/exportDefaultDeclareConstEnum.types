@@ -1,0 +1,16 @@
+=== tests/cases/compiler/a.ts ===
+// https://github.com/Microsoft/TypeScript/issues/3792
+export default declare const enum A { FOO }
+>A : A
+>FOO : A
+
+=== tests/cases/compiler/b.ts ===
+import A from "./a";
+>A : typeof A
+
+const x = A.FOO;
+>x : A
+>A.FOO : A
+>A : typeof A
+>FOO : A
+

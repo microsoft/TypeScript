@@ -1,0 +1,17 @@
+{
+    "scenario": "declarations_ExportDefault",
+    "projectRoot": "tests/cases/projects/declarations_ExportDefault",
+    "declaration": true,
+    "baselineCheck": true,
+    "inputFiles": [
+        "constEnum.ts",
+        "declareClass.ts",
+        "declareConstEnum.ts",
+        "declareEnum.ts",
+        "declareFunction.ts",
+        "declareNamespace.ts",
+        "enum.ts",
+        "namespace.ts",
+        "type.ts"
+    ]
+}

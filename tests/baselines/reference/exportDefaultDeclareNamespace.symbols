@@ -1,0 +1,24 @@
+=== tests/cases/compiler/a.ts ===
+// https://github.com/Microsoft/TypeScript/issues/3792
+export default declare namespace A {
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+    export const A1: number;
+>A1 : Symbol(A1, Decl(a.ts, 2, 16))
+
+    export class A2 {
+>A2 : Symbol(A2, Decl(a.ts, 2, 28))
+
+    }
+}
+
+=== tests/cases/compiler/b.ts ===
+import A from "./a";
+>A : Symbol(A, Decl(b.ts, 0, 6))
+
+const namespaceAUsage = A.A1
+>namespaceAUsage : Symbol(namespaceAUsage, Decl(b.ts, 2, 5))
+>A.A1 : Symbol(A.A1, Decl(a.ts, 2, 16))
+>A : Symbol(A, Decl(b.ts, 0, 6))
+>A1 : Symbol(A.A1, Decl(a.ts, 2, 16))
+

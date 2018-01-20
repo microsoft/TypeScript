@@ -1,0 +1,131 @@
+=== tests/cases/compiler/a.ts ===
+// https://github.com/Microsoft/TypeScript/issues/3792
+
+/**
+ * export default enum A 1 comment
+ */
+export default enum A { FOO } // export default enum A 1 trailing comment
+>A : A
+>FOO : A.FOO
+
+/**
+ * export default enum A 2 comment
+ */
+export default enum A {
+>A : A
+
+    BAR = 2
+>BAR : A.BAR
+>2 : 2
+
+} // export default enum A 2 trailing comment
+
+const enumAUsage = A.FOO;
+>enumAUsage : A.FOO
+>A.FOO : A.FOO
+>A : typeof A
+>FOO : A.FOO
+
+/**
+ * export enum B 1 comment
+ */
+export enum B {
+>B : B
+
+    X = 0,
+>X : B.X
+>0 : 0
+
+} // export enum B 1 trailing comment
+
+// export enum B 2 comment
+export enum B {
+>B : B
+
+    Y = 1
+>Y : B.Y
+>1 : 1
+
+} // export enum B 2 trailing comment
+
+const enumBUsage = B.Y
+>enumBUsage : B.Y
+>B.Y : B.Y
+>B : typeof B
+>Y : B.Y
+
+namespace ns {
+>ns : typeof ns
+
+    // enum ns.C 1 comment
+    export enum C {
+>C : C
+
+        X = 0
+>X : C.X
+>0 : 0
+
+    } // enum ns.C 1 trailing comment
+    // enum ns.C 2 comment
+    export enum C {
+>C : C
+
+        Y = 1
+>Y : C.Y
+>1 : 1
+
+    } // enum ns.C 2 trailing comment
+}
+namespace ns {
+>ns : typeof ns
+
+    // enum ns.C 3 comment
+    export enum C {
+>C : C
+
+        Z = 2
+>Z : C.Z
+>2 : 2
+
+    } // enum ns.C 3 trailing comment
+
+    const enumCUSage1 = C.X;
+>enumCUSage1 : C.X
+>C.X : C.X
+>C : typeof C
+>X : C.X
+}
+
+namespace ns {
+>ns : typeof ns
+
+    const enumCUsage2 = C.X
+>enumCUsage2 : C.X
+>C.X : C.X
+>C : typeof C
+>X : C.X
+}
+
+=== tests/cases/compiler/b.ts ===
+import A, { B } from "./a";
+>A : typeof A
+>B : typeof B
+
+const enumAExternalUsage1 = A.FOO;
+>enumAExternalUsage1 : A.FOO
+>A.FOO : A.FOO
+>A : typeof A
+>FOO : A.FOO
+
+const enumAExternalUsage2 = A[enumAExternalUsage1];
+>enumAExternalUsage2 : string
+>A[enumAExternalUsage1] : string
+>A : typeof A
+>enumAExternalUsage1 : A.FOO
+
+const enumBExternalUsage1 = B.X;
+>enumBExternalUsage1 : B.X
+>B.X : B.X
+>B : typeof B
+>X : B.X
+

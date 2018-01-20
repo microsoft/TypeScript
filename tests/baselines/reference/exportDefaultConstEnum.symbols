@@ -1,0 +1,22 @@
+=== tests/cases/compiler/a.ts ===
+// https://github.com/Microsoft/TypeScript/issues/3792
+export
+default
+const
+enum
+A
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+{ FOO }
+>FOO : Symbol(A.FOO, Decl(a.ts, 6, 1))
+
+=== tests/cases/compiler/b.ts ===
+import A from './a';
+>A : Symbol(A, Decl(b.ts, 0, 6))
+
+const x = A.FOO;
+>x : Symbol(x, Decl(b.ts, 2, 5))
+>A.FOO : Symbol(A.FOO, Decl(a.ts, 6, 1))
+>A : Symbol(A, Decl(b.ts, 0, 6))
+>FOO : Symbol(A.FOO, Decl(a.ts, 6, 1))
+

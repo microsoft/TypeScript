@@ -1,0 +1,124 @@
+=== tests/cases/compiler/a.ts ===
+// https://github.com/Microsoft/TypeScript/issues/3792
+
+/**
+ * export default enum A 1 comment
+ */
+export default enum A { FOO } // export default enum A 1 trailing comment
+>A : Symbol(A, Decl(a.ts, 0, 0), Decl(a.ts, 5, 29))
+>FOO : Symbol(A.FOO, Decl(a.ts, 5, 23))
+
+/**
+ * export default enum A 2 comment
+ */
+export default enum A {
+>A : Symbol(A, Decl(a.ts, 0, 0), Decl(a.ts, 5, 29))
+
+    BAR = 2
+>BAR : Symbol(A.BAR, Decl(a.ts, 10, 23))
+
+} // export default enum A 2 trailing comment
+
+const enumAUsage = A.FOO;
+>enumAUsage : Symbol(enumAUsage, Decl(a.ts, 14, 5))
+>A.FOO : Symbol(A.FOO, Decl(a.ts, 5, 23))
+>A : Symbol(A, Decl(a.ts, 0, 0), Decl(a.ts, 5, 29))
+>FOO : Symbol(A.FOO, Decl(a.ts, 5, 23))
+
+/**
+ * export enum B 1 comment
+ */
+export enum B {
+>B : Symbol(B, Decl(a.ts, 14, 25), Decl(a.ts, 21, 1))
+
+    X = 0,
+>X : Symbol(B.X, Decl(a.ts, 19, 15))
+
+} // export enum B 1 trailing comment
+
+// export enum B 2 comment
+export enum B {
+>B : Symbol(B, Decl(a.ts, 14, 25), Decl(a.ts, 21, 1))
+
+    Y = 1
+>Y : Symbol(B.Y, Decl(a.ts, 24, 15))
+
+} // export enum B 2 trailing comment
+
+const enumBUsage = B.Y
+>enumBUsage : Symbol(enumBUsage, Decl(a.ts, 28, 5))
+>B.Y : Symbol(B.Y, Decl(a.ts, 24, 15))
+>B : Symbol(B, Decl(a.ts, 14, 25), Decl(a.ts, 21, 1))
+>Y : Symbol(B.Y, Decl(a.ts, 24, 15))
+
+namespace ns {
+>ns : Symbol(ns, Decl(a.ts, 28, 22), Decl(a.ts, 39, 1), Decl(a.ts, 47, 1))
+
+    // enum ns.C 1 comment
+    export enum C {
+>C : Symbol(C, Decl(a.ts, 30, 14), Decl(a.ts, 34, 5), Decl(a.ts, 40, 14))
+
+        X = 0
+>X : Symbol(C.X, Decl(a.ts, 32, 19))
+
+    } // enum ns.C 1 trailing comment
+    // enum ns.C 2 comment
+    export enum C {
+>C : Symbol(C, Decl(a.ts, 30, 14), Decl(a.ts, 34, 5), Decl(a.ts, 40, 14))
+
+        Y = 1
+>Y : Symbol(C.Y, Decl(a.ts, 36, 19))
+
+    } // enum ns.C 2 trailing comment
+}
+namespace ns {
+>ns : Symbol(ns, Decl(a.ts, 28, 22), Decl(a.ts, 39, 1), Decl(a.ts, 47, 1))
+
+    // enum ns.C 3 comment
+    export enum C {
+>C : Symbol(C, Decl(a.ts, 30, 14), Decl(a.ts, 34, 5), Decl(a.ts, 40, 14))
+
+        Z = 2
+>Z : Symbol(C.Z, Decl(a.ts, 42, 19))
+
+    } // enum ns.C 3 trailing comment
+
+    const enumCUSage1 = C.X;
+>enumCUSage1 : Symbol(enumCUSage1, Decl(a.ts, 46, 9))
+>C.X : Symbol(C.X, Decl(a.ts, 32, 19))
+>C : Symbol(C, Decl(a.ts, 30, 14), Decl(a.ts, 34, 5), Decl(a.ts, 40, 14))
+>X : Symbol(C.X, Decl(a.ts, 32, 19))
+}
+
+namespace ns {
+>ns : Symbol(ns, Decl(a.ts, 28, 22), Decl(a.ts, 39, 1), Decl(a.ts, 47, 1))
+
+    const enumCUsage2 = C.X
+>enumCUsage2 : Symbol(enumCUsage2, Decl(a.ts, 50, 9))
+>C.X : Symbol(C.X, Decl(a.ts, 32, 19))
+>C : Symbol(C, Decl(a.ts, 30, 14), Decl(a.ts, 34, 5), Decl(a.ts, 40, 14))
+>X : Symbol(C.X, Decl(a.ts, 32, 19))
+}
+
+=== tests/cases/compiler/b.ts ===
+import A, { B } from "./a";
+>A : Symbol(A, Decl(b.ts, 0, 6))
+>B : Symbol(B, Decl(b.ts, 0, 11))
+
+const enumAExternalUsage1 = A.FOO;
+>enumAExternalUsage1 : Symbol(enumAExternalUsage1, Decl(b.ts, 2, 5))
+>A.FOO : Symbol(A.FOO, Decl(a.ts, 5, 23))
+>A : Symbol(A, Decl(b.ts, 0, 6))
+>FOO : Symbol(A.FOO, Decl(a.ts, 5, 23))
+
+const enumAExternalUsage2 = A[enumAExternalUsage1];
+>enumAExternalUsage2 : Symbol(enumAExternalUsage2, Decl(b.ts, 3, 5))
+>A : Symbol(A, Decl(b.ts, 0, 6))
+>enumAExternalUsage1 : Symbol(enumAExternalUsage1, Decl(b.ts, 2, 5))
+
+const enumBExternalUsage1 = B.X;
+>enumBExternalUsage1 : Symbol(enumBExternalUsage1, Decl(b.ts, 4, 5))
+>B.X : Symbol(B.X, Decl(a.ts, 19, 15))
+>B : Symbol(B, Decl(b.ts, 0, 11))
+>X : Symbol(B.X, Decl(a.ts, 19, 15))
+

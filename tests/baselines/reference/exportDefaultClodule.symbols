@@ -1,0 +1,29 @@
+=== tests/cases/compiler/a.ts ===
+// https://github.com/Microsoft/TypeScript/issues/3792
+export default class A {
+>A : Symbol(A, Decl(a.ts, 0, 0), Decl(a.ts, 3, 1))
+
+    A1: string
+>A1 : Symbol(A.A1, Decl(a.ts, 1, 24))
+}
+export default namespace A {
+>A : Symbol(A, Decl(a.ts, 0, 0), Decl(a.ts, 3, 1))
+
+    export const A2 = 32;
+>A2 : Symbol(A2, Decl(a.ts, 5, 16))
+}
+
+=== tests/cases/compiler/b.ts ===
+import A from "./a";
+>A : Symbol(A, Decl(b.ts, 0, 6))
+
+const a = new A();
+>a : Symbol(a, Decl(b.ts, 2, 5))
+>A : Symbol(A, Decl(b.ts, 0, 6))
+
+const a2 = A.A2;
+>a2 : Symbol(a2, Decl(b.ts, 3, 5))
+>A.A2 : Symbol(A.A2, Decl(a.ts, 5, 16))
+>A : Symbol(A, Decl(b.ts, 0, 6))
+>A2 : Symbol(A.A2, Decl(a.ts, 5, 16))
+

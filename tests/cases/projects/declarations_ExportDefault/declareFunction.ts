@@ -1,0 +1,1 @@
+export default declare function A(): string

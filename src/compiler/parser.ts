@@ -1414,11 +1414,11 @@ namespace ts {
                 case SyntaxKind.ExportKeyword:
                     nextToken();
                     if (token() === SyntaxKind.DefaultKeyword) {
-                        return lookAhead(nextTokenCanFollowDefaultKeyword);
+                        return lookAhead(nextTokenCanFollowDefaultModifier);
                     }
                     return token() !== SyntaxKind.AsteriskToken && token() !== SyntaxKind.AsKeyword && token() !== SyntaxKind.OpenBraceToken && canFollowModifier();
                 case SyntaxKind.DefaultKeyword:
-                    return nextTokenCanFollowDefaultKeyword();
+                    return nextTokenCanFollowDefaultModifier();
                 case SyntaxKind.StaticKeyword:
                 case SyntaxKind.GetKeyword:
                 case SyntaxKind.SetKeyword:
@@ -1441,12 +1441,37 @@ namespace ts {
                 || isLiteralPropertyName();
         }
 
-        function nextTokenCanFollowDefaultKeyword(): boolean {
+        /**
+         * For export default assignments like
+         *  "export default foo"
+         *  "export default async"
+         * no modifiers should be parsed.
+         */
+        function nextTokenCanFollowDefaultModifier(): boolean {
             nextToken();
-            return token() === SyntaxKind.ClassKeyword || token() === SyntaxKind.FunctionKeyword ||
-                token() === SyntaxKind.InterfaceKeyword ||
-                (token() === SyntaxKind.AbstractKeyword && lookAhead(nextTokenIsClassKeywordOnSameLine)) ||
-                (token() === SyntaxKind.AsyncKeyword && lookAhead(nextTokenIsFunctionKeywordOnSameLine));
+            switch (token()) {
+                case SyntaxKind.ClassKeyword:
+                case SyntaxKind.FunctionKeyword:
+                case SyntaxKind.EnumKeyword:
+                case SyntaxKind.NamespaceKeyword:
+                case SyntaxKind.ModuleKeyword:
+                case SyntaxKind.ConstKeyword:
+                    return true;
+
+                // The following keywords aren't reserved keywords and could be identifiers.
+                // We need to look at the next token to make sure these should be parsed as a modifier keyword,
+                // and not as an identifier. If they are followed by an identifier or a keyword on the same line,
+                // the current statement is not an export default assignment.
+                // See https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#221-reserved-words
+                case SyntaxKind.InterfaceKeyword:
+                case SyntaxKind.AbstractKeyword:
+                case SyntaxKind.DeclareKeyword:
+                case SyntaxKind.AsyncKeyword:
+                case SyntaxKind.TypeKeyword:
+                    return lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine);
+                default:
+                    return false;
+            }
         }
 
         // True if positioned at the start of a list element
@@ -4081,14 +4106,14 @@ namespace ts {
             let expression: MemberExpression;
             if (token() === SyntaxKind.ImportKeyword) {
                 if (lookAhead(nextTokenIsOpenParenOrLessThan)) {
-                    // We don't want to eagerly consume all import keyword as import call expression so we look ahead to find "("
-                    // For example:
-                    //      var foo3 = require("subfolder
-                    //      import * as foo1 from "module-from-node
-                    // We want this import to be a statement rather than import call expression
-                    sourceFile.flags |= NodeFlags.PossiblyContainsDynamicImport;
-                    expression = parseTokenNode<PrimaryExpression>();
-                }
+                // We don't want to eagerly consume all import keyword as import call expression so we look a head to find "("
+                // For example:
+                //      var foo3 = require("subfolder
+                //      import * as foo1 from "module-from-node
+                // We want this import to be a statement rather than import call expression
+                sourceFile.flags |= NodeFlags.PossiblyContainsDynamicImport;
+                expression = parseTokenNode<PrimaryExpression>();
+            }
                 else if (lookAhead(nextTokenIsDot)) {
                     // This is an 'import.*' metaproperty (i.e. 'import.meta')
                     const fullStart = scanner.getStartPos();
@@ -4101,7 +4126,7 @@ namespace ts {
 
                     sourceFile.flags |= NodeFlags.PossiblyContainsImportMeta;
                 }
-                else {
+            else {
                     expression = parseMemberExpressionOrHigher();
                 }
             }
@@ -5116,11 +5141,6 @@ namespace ts {
         function nextTokenIsIdentifierOrKeywordOnSameLine() {
             nextToken();
             return tokenIsIdentifierOrKeyword(token()) && !scanner.hasPrecedingLineBreak();
-        }
-
-        function nextTokenIsClassKeywordOnSameLine() {
-            nextToken();
-            return token() === SyntaxKind.ClassKeyword && !scanner.hasPrecedingLineBreak();
         }
 
         function nextTokenIsFunctionKeywordOnSameLine() {
@@ -6233,7 +6253,7 @@ namespace ts {
             sourceFile.externalModuleIndicator =
                     forEach(sourceFile.statements, isAnExternalModuleIndicatorNode) ||
                     getImportMetaIfNecessary(sourceFile);
-        }
+                    }
 
         function isAnExternalModuleIndicatorNode(node: Node) {
             return hasModifier(node, ModifierFlags.Export)
@@ -6243,17 +6263,17 @@ namespace ts {
                 || node.kind === SyntaxKind.ExportDeclaration
                     ? node
                     : undefined;
-        }
+                        }
 
         function getImportMetaIfNecessary(sourceFile: SourceFile) {
             return sourceFile.flags & NodeFlags.PossiblyContainsImportMeta ?
                 walkTreeForExternalModuleIndicators(sourceFile) :
                 undefined;
-        }
+                        }
 
         function walkTreeForExternalModuleIndicators(node: Node): Node | undefined {
             return isImportMeta(node) ? node : forEachChild(node, walkTreeForExternalModuleIndicators);
-        }
+                    }
 
         function isImportMeta(node: Node): boolean {
             return isMetaProperty(node) && node.keywordToken === SyntaxKind.ImportKeyword && node.name.escapedText === "meta";
@@ -6468,7 +6488,7 @@ namespace ts {
                                 break;
                         }
                         nextJSDocToken();
-                    }
+                        }
                     removeLeadingNewlines(comments);
                     removeTrailingWhitespace(comments);
                     return createJSDocComment();

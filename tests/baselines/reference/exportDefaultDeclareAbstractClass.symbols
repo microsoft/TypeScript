@@ -1,0 +1,23 @@
+=== tests/cases/compiler/a.ts ===
+// https://github.com/Microsoft/TypeScript/issues/3792
+export default declare abstract class A {
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+    foo(): number
+>foo : Symbol(A.foo, Decl(a.ts, 1, 41))
+ }
+
+=== tests/cases/compiler/b.ts ===
+import A from "./a";
+>A : Symbol(A, Decl(b.ts, 0, 6))
+
+class B extends A {
+>B : Symbol(B, Decl(b.ts, 0, 20))
+>A : Symbol(A, Decl(b.ts, 0, 6))
+
+    foo() {
+>foo : Symbol(B.foo, Decl(b.ts, 2, 19))
+
+        return 0;
+    }
+}

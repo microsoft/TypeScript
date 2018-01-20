@@ -1,0 +1,15 @@
+=== tests/cases/compiler/a.ts ===
+// https://github.com/Microsoft/TypeScript/issues/3792
+export default class A {
+>A : Symbol(A, Decl(a.ts, 0, 0), Decl(a.ts, 3, 1))
+
+    A1: string = "init"
+>A1 : Symbol(A.A1, Decl(a.ts, 1, 24))
+}
+export default namespace B {
+>B : Symbol(A, Decl(a.ts, 0, 0), Decl(a.ts, 3, 1))
+
+    export const A2 = 32;
+>A2 : Symbol(A2, Decl(a.ts, 5, 16))
+}
+

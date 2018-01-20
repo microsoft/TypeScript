@@ -1,0 +1,13 @@
+=== tests/cases/compiler/int.ts ===
+// https://github.com/Microsoft/TypeScript/issues/3792
+export default type int = number
+>int : number
+
+=== tests/cases/compiler/b.ts ===
+import int from "./int";
+>int : any
+
+const intUsage: int = 23;
+>intUsage : number
+>23 : 23
+

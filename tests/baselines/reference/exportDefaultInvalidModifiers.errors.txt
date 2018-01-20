@@ -1,0 +1,42 @@
+tests/cases/compiler/exportDefaultAbstractConstEnum.ts(1,16): error TS1242: 'abstract' modifier can only appear on a class, method, or property declaration.
+tests/cases/compiler/exportDefaultDeclareAbstractFunction.ts(1,24): error TS1242: 'abstract' modifier can only appear on a class, method, or property declaration.
+tests/cases/compiler/exportDefaultDeclareStaticFunction.ts(1,24): error TS1044: 'static' modifier cannot appear on a module or namespace element.
+tests/cases/compiler/exportDefaultDeclaresyncFunction.ts(1,24): error TS1040: 'async' modifier cannot be used in an ambient context.
+tests/cases/compiler/exportDefaultDeclaresyncFunction.ts(1,51): error TS1055: Type 'void' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
+tests/cases/compiler/exportDefaultStaticFunction.ts(1,16): error TS2304: Cannot find name 'static'.
+tests/cases/compiler/exportDefaultStaticFunction.ts(1,23): error TS1005: ';' expected.
+tests/cases/compiler/exportDefaultStaticFunction.ts(1,31): error TS1003: Identifier expected.
+
+
+==== tests/cases/compiler/exportDefaultDeclareAbstractFunction.ts (1 errors) ====
+    export default declare abstract function(a: number): void
+                           ~~~~~~~~
+!!! error TS1242: 'abstract' modifier can only appear on a class, method, or property declaration.
+    
+==== tests/cases/compiler/exportDefaultDeclaresyncFunction.ts (2 errors) ====
+    export default declare async function(a: number): void
+                           ~~~~~
+!!! error TS1040: 'async' modifier cannot be used in an ambient context.
+                                                      ~~~~
+!!! error TS1055: Type 'void' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
+    
+==== tests/cases/compiler/exportDefaultDeclareStaticFunction.ts (1 errors) ====
+    export default declare static function(a: number): void
+                           ~~~~~~
+!!! error TS1044: 'static' modifier cannot appear on a module or namespace element.
+    
+==== tests/cases/compiler/exportDefaultStaticFunction.ts (3 errors) ====
+    export default static function(a: number): void
+                   ~~~~~~
+!!! error TS2304: Cannot find name 'static'.
+                          ~~~~~~~~
+!!! error TS1005: ';' expected.
+                                  ~
+!!! error TS1003: Identifier expected.
+    
+==== tests/cases/compiler/exportDefaultAbstractConstEnum.ts (1 errors) ====
+    export default abstract const enum A {}
+                   ~~~~~~~~
+!!! error TS1242: 'abstract' modifier can only appear on a class, method, or property declaration.
+    
+    

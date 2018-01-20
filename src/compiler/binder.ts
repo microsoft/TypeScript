@@ -426,6 +426,15 @@ namespace ts {
                         symbol = createSymbol(SymbolFlags.None, name);
                     }
                 }
+                else if (isDefaultExport && parent && symbol.declarations && symbol.declarations.length) {
+                    // && parent because we only want to check the export default symbol.
+                    // if there is already an export default declaration, make sure that their local names are the same.
+                    if (symbol.declarations[0].localSymbol !== node.localSymbol) {
+                        const message = Diagnostics.Merged_default_exports_must_have_the_same_name;
+                        file.bindDiagnostics.push(createDiagnosticForNode(getNameOfDeclaration(symbol.declarations[0]) || symbol.declarations[0], message));
+                        file.bindDiagnostics.push(createDiagnosticForNode(getNameOfDeclaration(node) || node, message));
+                    }
+                }
             }
 
             addDeclarationToSymbol(symbol, node, includes);
@@ -472,8 +481,8 @@ namespace ts {
                     }
                     const exportKind = symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0;
                     const local = declareSymbol(container.locals!, /*parent*/ undefined, node, exportKind, symbolExcludes);
-                    local.exportSymbol = declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes);
                     node.localSymbol = local;
+                    local.exportSymbol = declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes);
                     return local;
                 }
                 else {
@@ -1381,7 +1390,7 @@ namespace ts {
         function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag) {
             if (node.fullName) {
                 setParentPointers(node, node.fullName);
-            }
+                }
         }
 
         function bindCallExpressionFlow(node: CallExpression) {

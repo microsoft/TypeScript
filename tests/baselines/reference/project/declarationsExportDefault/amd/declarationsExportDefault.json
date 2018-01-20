@@ -1,0 +1,49 @@
+{
+    "scenario": "declarations_ExportDefault",
+    "projectRoot": "tests/cases/projects/declarations_ExportDefault",
+    "declaration": true,
+    "baselineCheck": true,
+    "inputFiles": [
+        "constEnum.ts",
+        "declareClass.ts",
+        "declareConstEnum.ts",
+        "declareEnum.ts",
+        "declareFunction.ts",
+        "declareNamespace.ts",
+        "enum.ts",
+        "namespace.ts",
+        "type.ts"
+    ],
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "constEnum.ts",
+        "declareClass.ts",
+        "declareConstEnum.ts",
+        "declareEnum.ts",
+        "declareFunction.ts",
+        "declareNamespace.ts",
+        "enum.ts",
+        "namespace.ts",
+        "type.ts"
+    ],
+    "emittedFiles": [
+        "constEnum.js",
+        "constEnum.d.ts",
+        "declareClass.js",
+        "declareClass.d.ts",
+        "declareConstEnum.js",
+        "declareConstEnum.d.ts",
+        "declareEnum.js",
+        "declareEnum.d.ts",
+        "declareFunction.js",
+        "declareFunction.d.ts",
+        "declareNamespace.js",
+        "declareNamespace.d.ts",
+        "enum.js",
+        "enum.d.ts",
+        "namespace.js",
+        "namespace.d.ts",
+        "type.js",
+        "type.d.ts"
+    ]
+}

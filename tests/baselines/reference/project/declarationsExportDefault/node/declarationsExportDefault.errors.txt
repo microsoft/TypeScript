@@ -1,0 +1,39 @@
+namespace.ts(2,15): error TS1155: 'const' declarations must be initialized.
+
+
+==== constEnum.ts (0 errors) ====
+    export default const enum A {
+    	FOO = 2
+    }
+==== declareClass.ts (0 errors) ====
+    export default declare class A {
+    	FOO: 2
+    }
+==== declareConstEnum.ts (0 errors) ====
+    export default declare const enum A {
+    	FOO,
+    	BAR
+    }
+==== declareEnum.ts (0 errors) ====
+    export default declare enum A {
+    	FOO,
+    	BAR
+    }
+==== declareFunction.ts (0 errors) ====
+    export default declare function A(): string
+==== declareNamespace.ts (0 errors) ====
+    export default declare namespace A {
+    	export const FOO: string
+    }
+==== enum.ts (0 errors) ====
+    export default enum A {
+    	FOO = 2
+    }
+==== namespace.ts (1 errors) ====
+    export default namespace A {
+    	export const FOO: 2
+    	             ~~~
+!!! error TS1155: 'const' declarations must be initialized.
+    }
+==== type.ts (0 errors) ====
+    export default type int = number;

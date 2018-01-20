@@ -1,0 +1,31 @@
+=== tests/cases/compiler/a.ts ===
+// https://github.com/Microsoft/TypeScript/issues/3792
+export default class A {
+>A : A
+
+    A1: string
+>A1 : string
+}
+export default namespace A {
+>A : typeof A
+
+    export const A2 = 32;
+>A2 : 32
+>32 : 32
+}
+
+=== tests/cases/compiler/b.ts ===
+import A from "./a";
+>A : typeof A
+
+const a = new A();
+>a : A
+>new A() : A
+>A : typeof A
+
+const a2 = A.A2;
+>a2 : 32
+>A.A2 : 32
+>A : typeof A
+>A2 : 32
+

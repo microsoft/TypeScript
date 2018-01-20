@@ -1,0 +1,22 @@
+=== tests/cases/compiler/exportDefaultDeclareAbstractFunction.ts ===
+export default declare abstract function(a: number): void
+>a : Symbol(a, Decl(exportDefaultDeclareAbstractFunction.ts, 0, 41))
+
+=== tests/cases/compiler/exportDefaultDeclaresyncFunction.ts ===
+export default declare async function(a: number): void
+>a : Symbol(a, Decl(exportDefaultDeclaresyncFunction.ts, 0, 38))
+
+=== tests/cases/compiler/exportDefaultDeclareStaticFunction.ts ===
+export default declare static function(a: number): void
+>a : Symbol(a, Decl(exportDefaultDeclareStaticFunction.ts, 0, 39))
+
+=== tests/cases/compiler/exportDefaultStaticFunction.ts ===
+export default static function(a: number): void
+> : Symbol((Missing), Decl(exportDefaultStaticFunction.ts, 0, 21))
+>a : Symbol(a, Decl(exportDefaultStaticFunction.ts, 0, 31))
+
+=== tests/cases/compiler/exportDefaultAbstractConstEnum.ts ===
+export default abstract const enum A {}
+>A : Symbol(A, Decl(exportDefaultAbstractConstEnum.ts, 0, 0))
+
+

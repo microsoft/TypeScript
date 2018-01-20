@@ -1,0 +1,24 @@
+=== tests/cases/compiler/a.ts ===
+// https://github.com/Microsoft/TypeScript/issues/3792
+export default declare module A {
+>A : typeof A
+
+    export const A1: number;
+>A1 : number
+
+    export class A2 {
+>A2 : A2
+
+    }
+}
+
+=== tests/cases/compiler/b.ts ===
+import A from "./a";
+>A : typeof A
+
+const namespaceAUsage = A.A1
+>namespaceAUsage : number
+>A.A1 : number
+>A : typeof A
+>A1 : number
+
