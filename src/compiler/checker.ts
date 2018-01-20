@@ -303,6 +303,7 @@ namespace ts {
         const literalTypes = createMap<LiteralType>();
         const indexedAccessTypes = createMap<IndexedAccessType>();
         const conditionalTypes = createMap<ConditionalType>();
+        const substitutionTypes = createMap<SubstitutionType>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties = createMap<Symbol>() as UnderscoreEscapedMap<Symbol>;
 
@@ -6964,15 +6965,7 @@ namespace ts {
             return result & TypeFlags.PropagatingFlags;
         }
 
-        // This function replaces substitution types with their underlying type parameters. We erase when creating
-        // type references and type alias instantiations because substitution types are no longer necessary once
-        // the type arguments have been validated against their corresponding type parameter constraints.
-        function eraseSubstitutionType(type: Type) {
-            return type.flags & TypeFlags.Substitution ? (<SubstitutionType>type).typeParameter : type;
-        }
-
         function createTypeReference(target: GenericType, typeArguments: Type[]): TypeReference {
-            typeArguments = sameMap(typeArguments, eraseSubstitutionType);
             const id = getTypeListId(typeArguments);
             let type = target.instantiations.get(id);
             if (!type) {
@@ -7039,7 +7032,6 @@ namespace ts {
         }
 
         function getTypeAliasInstantiation(symbol: Symbol, typeArguments: Type[]): Type {
-            typeArguments = sameMap(typeArguments, eraseSubstitutionType);
             const type = getDeclaredTypeOfSymbol(symbol);
             const links = getSymbolLinks(symbol);
             const typeParameters = links.typeParameters;
@@ -7163,6 +7155,19 @@ namespace ts {
             }
         }
 
+        function getSubstitutionType(typeParameter: TypeParameter, substitute: Type) {
+            const id = typeParameter.id + "," + substitute.id;
+            const cached = substitutionTypes.get(id);
+            if (cached) {
+                return cached;
+            }
+            const result = <SubstitutionType>createType(TypeFlags.Substitution);
+            result.typeParameter = typeParameter;
+            result.substitute = substitute;
+            substitutionTypes.set(id, result);
+            return result;
+        }
+
         function getConstrainedTypeParameter(typeParameter: TypeParameter, node: Node) {
             let constraints: Type[];
             while (isTypeNode(node)) {
@@ -7174,13 +7179,7 @@ namespace ts {
                 }
                 node = parent;
             }
-            if (constraints) {
-                const result = <SubstitutionType>createType(TypeFlags.Substitution);
-                result.typeParameter = typeParameter;
-                result.substitute = getIntersectionType(append(constraints, typeParameter));
-                return result;
-            }
-            return typeParameter;
+            return constraints ? getSubstitutionType(typeParameter, getIntersectionType(append(constraints, typeParameter))) : typeParameter;
         }
 
         function isJSDocTypeReference(node: TypeReferenceType): node is TypeReferenceNode {
@@ -8082,6 +8081,10 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getActualTypeParameter(type: Type) {
+            return type.flags & TypeFlags.Substitution ? (<SubstitutionType>type).typeParameter : type;
+        }
+
         function createConditionalType(checkType: Type, extendsType: Type, trueType: Type, falseType: Type, target: ConditionalType, mapper: TypeMapper, aliasSymbol: Symbol, aliasTypeArguments: Type[]) {
             const type = <ConditionalType>createType(TypeFlags.Conditional);
             type.checkType = checkType;
@@ -8113,7 +8116,7 @@ namespace ts {
                 return falseType;
             }
             // Return a deferred type for a check that is neither definitely true nor definitely false
-            return createConditionalType(eraseSubstitutionType(checkType), extendsType, trueType, falseType,
+            return createConditionalType(getActualTypeParameter(checkType), extendsType, trueType, falseType,
                 /*target*/ undefined, /*mapper*/ undefined, aliasSymbol, aliasTypeArguments);
         }
 
@@ -8724,7 +8727,7 @@ namespace ts {
                 return instantiateType(type.falseType, mapper);
             }
             // Return a deferred type for a check that is neither definitely true nor definitely false
-            const erasedCheckType = eraseSubstitutionType(checkType);
+            const erasedCheckType = getActualTypeParameter(checkType);
             const trueType = instantiateType(type.trueType, mapper);
             const falseType = instantiateType(type.falseType, mapper);
             const id = type.id + ","  + erasedCheckType.id + "," + extendsType.id + "," + trueType.id + "," + falseType.id;
@@ -8773,7 +8776,7 @@ namespace ts {
                     return getConditionalTypeInstantiation(<ConditionalType>type, mapper);
                 }
                 if (type.flags & TypeFlags.Substitution) {
-                    return instantiateType((<SubstitutionType>type).typeParameter, mapper);
+                    return mapper((<SubstitutionType>type).typeParameter);
                 }
             }
             return type;
