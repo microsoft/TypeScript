@@ -6,10 +6,10 @@ function foo1(x: number, ...rest: number[]) {
 
     return [x].concat(rest);
 >[x].concat(rest) : number[]
->[x].concat : { (...items: ReadonlyArray<number>[]): number[]; (...items: (number | ReadonlyArray<number>)[]): number[]; }
+>[x].concat : { (...items: (number[] | ReadonlyArray<number>)[]): number[]; (...items: (number | number[] | ReadonlyArray<number>)[]): number[]; }
 >[x] : number[]
 >x : number
->concat : { (...items: ReadonlyArray<number>[]): number[]; (...items: (number | ReadonlyArray<number>)[]): number[]; }
+>concat : { (...items: (number[] | ReadonlyArray<number>)[]): number[]; (...items: (number | number[] | ReadonlyArray<number>)[]): number[]; }
 >rest : number[]
 }
 
