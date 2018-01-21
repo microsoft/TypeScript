@@ -189,7 +189,7 @@ namespace ts {
         {
             name: "emitDeclarationsOnly",
             type: "boolean",
-            category: Diagnostics.Experimental_Options,
+            category: Diagnostics.Advanced_Options,
             description: Diagnostics.Only_emit_d_ts_declaration_files,
         },
         {
