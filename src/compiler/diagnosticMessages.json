@@ -2807,7 +2807,7 @@
         "category": "Message",
         "code": 6013
     },
-    "Only emit declaration files.": {
+    "Only emit '.d.ts' declaration files.": {
         "category": "Message",
         "code": 6014
     },
