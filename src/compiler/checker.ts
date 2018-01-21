@@ -8091,26 +8091,38 @@ namespace ts {
             return type;
         }
 
-        function getConditionalType(checkType: Type, extendsType: Type, trueType: Type, falseType: Type, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+        function getConditionalType(checkType: Type, extendsType: Type, baseTrueType: Type, baseFalseType: Type, target: ConditionalType, mapper: TypeMapper, aliasSymbol?: Symbol, baseAliasTypeArguments?: Type[]): Type {
             // Distribute union types over conditional types
             if (checkType.flags & TypeFlags.Union) {
-                return getUnionType(map((<UnionType>checkType).types, t => getConditionalType(t, extendsType, trueType, falseType)));
+                return getUnionType(map((<UnionType>checkType).types, t => getConditionalType(t, extendsType, baseTrueType, baseFalseType, target, mapper)));
             }
             // Return union of trueType and falseType for any and never since they match anything
             if (checkType.flags & (TypeFlags.Any | TypeFlags.Never)) {
-                return getUnionType([trueType, falseType]);
+                return getUnionType([instantiateType(baseTrueType, mapper), instantiateType(baseFalseType, mapper)]);
             }
             // Return trueType for a definitely true extends check
             if (isTypeAssignableTo(checkType, extendsType)) {
-                return trueType;
+                return instantiateType(baseTrueType, mapper);
             }
             // Return falseType for a definitely false extends check
             if (!typeMaybeAssignableTo(instantiateType(checkType, anyMapper), instantiateType(extendsType, constraintMapper))) {
-                return falseType;
+                return instantiateType(baseFalseType, mapper);
             }
             // Return a deferred type for a check that is neither definitely true nor definitely false
-            return createConditionalType(getActualTypeParameter(checkType), extendsType, trueType, falseType,
-                /*target*/ undefined, /*mapper*/ undefined, aliasSymbol, aliasTypeArguments);
+            const erasedCheckType = getActualTypeParameter(checkType);
+            const trueType = instantiateType(baseTrueType, mapper);
+            const falseType = instantiateType(baseFalseType, mapper);
+            const id = target && (target.id + ","  + erasedCheckType.id + "," + extendsType.id + "," + trueType.id + "," + falseType.id);
+            const cached = id && conditionalTypes.get(id);
+            if (cached) {
+                return cached;
+            }
+            const result = createConditionalType(erasedCheckType, extendsType, trueType, falseType,
+                target, mapper, aliasSymbol, instantiateTypes(baseAliasTypeArguments, mapper));
+            if (id) {
+                conditionalTypes.set(id, result);
+            }
+            return result;
         }
 
         function getTypeFromConditionalTypeNode(node: ConditionalTypeNode): Type {
@@ -8119,6 +8131,7 @@ namespace ts {
                 links.resolvedType = getConditionalType(
                     getTypeFromTypeNode(node.checkType), getTypeFromTypeNode(node.extendsType),
                     getTypeFromTypeNode(node.trueType), getTypeFromTypeNode(node.falseType),
+                    /*target*/ undefined, /*mapper*/ undefined,
                     getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node));
             }
             return links.resolvedType;
@@ -8705,36 +8718,12 @@ namespace ts {
         }
 
         function instantiateConditionalType(type: ConditionalType, mapper: TypeMapper): Type {
-            const checkType = instantiateType(type.checkType, mapper);
-            // Return union of trueType and falseType for any and never since they match anything
-            if (checkType.flags & (TypeFlags.Any | TypeFlags.Never)) {
-                return getUnionType([instantiateType(type.trueType, mapper), instantiateType(type.falseType, mapper)]);
-            }
-            const extendsType = instantiateType(type.extendsType, mapper);
-            // Return trueType for a definitely true extends check
-            if (isTypeAssignableTo(checkType, extendsType)) {
-                return instantiateType(type.trueType, mapper);
-            }
-            // Return falseType for a definitely false extends check
-            if (!typeMaybeAssignableTo(instantiateType(checkType, anyMapper), instantiateType(extendsType, constraintMapper))) {
-                return instantiateType(type.falseType, mapper);
-            }
-            // Return a deferred type for a check that is neither definitely true nor definitely false
-            const erasedCheckType = getActualTypeParameter(checkType);
-            const trueType = instantiateType(type.trueType, mapper);
-            const falseType = instantiateType(type.falseType, mapper);
-            const id = type.id + ","  + erasedCheckType.id + "," + extendsType.id + "," + trueType.id + "," + falseType.id;
-            let result = conditionalTypes.get(id);
-            if (!result) {
-                result = createConditionalType(erasedCheckType, extendsType, trueType, falseType,
-                    type, mapper, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
-                conditionalTypes.set(id, result);
-            }
-            return result;
+            return getConditionalType(instantiateType(type.checkType, mapper), instantiateType(type.extendsType, mapper),
+                type.trueType, type.falseType, type, mapper, type.aliasSymbol, type.aliasTypeArguments);
         }
 
         function instantiateType(type: Type, mapper: TypeMapper): Type {
-            if (type && mapper !== identityMapper) {
+            if (type && mapper && mapper !== identityMapper) {
                 if (type.flags & TypeFlags.TypeParameter) {
                     return mapper(<TypeParameter>type);
                 }
