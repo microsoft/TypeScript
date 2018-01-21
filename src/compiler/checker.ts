@@ -303,7 +303,6 @@ namespace ts {
         const literalTypes = createMap<LiteralType>();
         const indexedAccessTypes = createMap<IndexedAccessType>();
         const conditionalTypes = createMap<ConditionalType>();
-        const substitutionTypes = createMap<SubstitutionType>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties = createMap<Symbol>() as UnderscoreEscapedMap<Symbol>;
 
@@ -7156,15 +7155,9 @@ namespace ts {
         }
 
         function getSubstitutionType(typeParameter: TypeParameter, substitute: Type) {
-            const id = typeParameter.id + "," + substitute.id;
-            const cached = substitutionTypes.get(id);
-            if (cached) {
-                return cached;
-            }
             const result = <SubstitutionType>createType(TypeFlags.Substitution);
             result.typeParameter = typeParameter;
             result.substitute = substitute;
-            substitutionTypes.set(id, result);
             return result;
         }
 
