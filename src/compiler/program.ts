@@ -2201,8 +2201,14 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "checkJs", "allowJs"));
             }
 
-            if (options.noEmit && options.emitDeclarationsOnly) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmit", "emitDeclarationsOnly");
+            if (options.emitDeclarationsOnly) {
+                if (!options.declaration) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDeclarationsOnly", "declarations");
+                }
+
+                if (options.noEmit) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "emitDeclarationsOnly", "noEmit");
+                }
             }
 
             if (options.emitDecoratorMetadata &&
