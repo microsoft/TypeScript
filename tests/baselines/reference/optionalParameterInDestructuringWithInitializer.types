@@ -196,3 +196,69 @@ function func7( {a: {b, c = 6} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, 
   // no error
 }
 
+interface Foo {
+>Foo : Foo
+
+  readonly bar?: number;
+>bar : number | undefined
+}
+
+function performFoo({ bar }: Foo = {}) {
+>performFoo : ({ bar }?: Foo) => void
+>bar : number | undefined
+>Foo : Foo
+>{} : {}
+
+  useBar(bar);
+>useBar(bar) : void
+>useBar : (bar: number) => void
+>bar : number | undefined
+}
+
+function useBar(bar: number) {
+>useBar : (bar: number) => void
+>bar : number
+
+  f(bar, 1)
+>f(bar, 1) : void
+>f : (a: number, b: number) => void
+>bar : number
+>1 : 1
+}
+
+performFoo();
+>performFoo() : void
+>performFoo : ({ bar }?: Foo) => void
+
+function performFoo2({ bar = null }: Foo = {}) {
+>performFoo2 : ({ bar }?: Foo) => void
+>bar : number | null
+>null : null
+>Foo : Foo
+>{} : {}
+
+  useBar2(bar);
+>useBar2(bar) : void
+>useBar2 : (bar: number | undefined) => void
+>bar : number | null
+}
+
+function useBar2(bar: number | undefined) {
+>useBar2 : (bar: number | undefined) => void
+>bar : number | undefined
+
+  if (bar) {
+>bar : number | undefined
+
+    f(bar, 1)
+>f(bar, 1) : void
+>f : (a: number, b: number) => void
+>bar : number
+>1 : 1
+  }
+}
+
+performFoo2();
+>performFoo2() : void
+>performFoo2 : ({ bar }?: Foo) => void
+

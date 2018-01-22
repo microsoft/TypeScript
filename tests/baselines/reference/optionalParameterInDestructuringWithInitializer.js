@@ -38,6 +38,32 @@ function func7( {a: {b, c = 6} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, 
   // no error
 }
 
+interface Foo {
+  readonly bar?: number;
+}
+
+function performFoo({ bar }: Foo = {}) {
+  useBar(bar);
+}
+
+function useBar(bar: number) {
+  f(bar, 1)
+}
+
+performFoo();
+
+function performFoo2({ bar = null }: Foo = {}) {
+  useBar2(bar);
+}
+
+function useBar2(bar: number | undefined) {
+  if (bar) {
+    f(bar, 1)
+  }
+}
+
+performFoo2();
+
 
 //// [optionalParameterInDestructuringWithInitializer.js]
 // https://github.com/Microsoft/TypeScript/issues/17080
@@ -78,3 +104,21 @@ function func7(_a) {
     f(b, c);
     // no error
 }
+function performFoo(_a) {
+    var bar = (_a === void 0 ? {} : _a).bar;
+    useBar(bar);
+}
+function useBar(bar) {
+    f(bar, 1);
+}
+performFoo();
+function performFoo2(_a) {
+    var _b = (_a === void 0 ? {} : _a).bar, bar = _b === void 0 ? null : _b;
+    useBar2(bar);
+}
+function useBar2(bar) {
+    if (bar) {
+        f(bar, 1);
+    }
+}
+performFoo2();

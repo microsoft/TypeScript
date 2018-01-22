@@ -152,3 +152,58 @@ function func7( {a: {b, c = 6} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, 
   // no error
 }
 
+interface Foo {
+>Foo : Symbol(Foo, Decl(optionalParameterInDestructuringWithInitializer.ts, 37, 1))
+
+  readonly bar?: number;
+>bar : Symbol(Foo.bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 39, 15))
+}
+
+function performFoo({ bar }: Foo = {}) {
+>performFoo : Symbol(performFoo, Decl(optionalParameterInDestructuringWithInitializer.ts, 41, 1))
+>bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 43, 21))
+>Foo : Symbol(Foo, Decl(optionalParameterInDestructuringWithInitializer.ts, 37, 1))
+
+  useBar(bar);
+>useBar : Symbol(useBar, Decl(optionalParameterInDestructuringWithInitializer.ts, 45, 1))
+>bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 43, 21))
+}
+
+function useBar(bar: number) {
+>useBar : Symbol(useBar, Decl(optionalParameterInDestructuringWithInitializer.ts, 45, 1))
+>bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 47, 16))
+
+  f(bar, 1)
+>f : Symbol(f, Decl(optionalParameterInDestructuringWithInitializer.ts, 0, 0))
+>bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 47, 16))
+}
+
+performFoo();
+>performFoo : Symbol(performFoo, Decl(optionalParameterInDestructuringWithInitializer.ts, 41, 1))
+
+function performFoo2({ bar = null }: Foo = {}) {
+>performFoo2 : Symbol(performFoo2, Decl(optionalParameterInDestructuringWithInitializer.ts, 51, 13))
+>bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 53, 22))
+>Foo : Symbol(Foo, Decl(optionalParameterInDestructuringWithInitializer.ts, 37, 1))
+
+  useBar2(bar);
+>useBar2 : Symbol(useBar2, Decl(optionalParameterInDestructuringWithInitializer.ts, 55, 1))
+>bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 53, 22))
+}
+
+function useBar2(bar: number | undefined) {
+>useBar2 : Symbol(useBar2, Decl(optionalParameterInDestructuringWithInitializer.ts, 55, 1))
+>bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 57, 17))
+
+  if (bar) {
+>bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 57, 17))
+
+    f(bar, 1)
+>f : Symbol(f, Decl(optionalParameterInDestructuringWithInitializer.ts, 0, 0))
+>bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 57, 17))
+  }
+}
+
+performFoo2();
+>performFoo2 : Symbol(performFoo2, Decl(optionalParameterInDestructuringWithInitializer.ts, 51, 13))
+

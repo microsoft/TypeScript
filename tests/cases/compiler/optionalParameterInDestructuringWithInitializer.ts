@@ -37,3 +37,29 @@ function func7( {a: {b, c = 6} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, 
   f(b, c)
   // no error
 }
+
+interface Foo {
+  readonly bar?: number;
+}
+
+function performFoo({ bar }: Foo = {}) {
+  useBar(bar);
+}
+
+function useBar(bar: number) {
+  f(bar, 1)
+}
+
+performFoo();
+
+function performFoo2({ bar = null }: Foo = {}) {
+  useBar2(bar);
+}
+
+function useBar2(bar: number | undefined) {
+  if (bar) {
+    f(bar, 1)
+  }
+}
+
+performFoo2();
