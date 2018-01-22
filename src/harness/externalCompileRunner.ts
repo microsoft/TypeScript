@@ -131,13 +131,13 @@ function removeExpectedErrors(errors: string, cwd: string): string {
 function isUnexpectedError(cwd: string) {
     return (error: string[]) => {
         ts.Debug.assertGreaterThanOrEqual(error.length, 1);
-        const match = error[0].match(/(.+\.ts)\((\d+),\d+\): error TS/);
+        const match = error[0].match(/(.+\.tsx?)\((\d+),\d+\): error TS/);
         if (!match) {
             return true;
         }
         const [, errorFile, lineNumberString] = match;
         const lines = fs.readFileSync(path.join(cwd, errorFile), { encoding: "utf8" }).split("\n");
-        const lineNumber = parseInt(lineNumberString);
+        const lineNumber = parseInt(lineNumberString) - 1;
         ts.Debug.assertGreaterThanOrEqual(lineNumber, 0);
         ts.Debug.assertLessThan(lineNumber, lines.length);
         const previousLine = lineNumber - 1 > 0 ? lines[lineNumber - 1] : "";
