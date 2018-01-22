@@ -1,10 +1,10 @@
 === tests/cases/compiler/optionalParameterInDestructuringWithInitializer.ts ===
 // https://github.com/Microsoft/TypeScript/issues/17080
-function f(a:number,b:number) {
+
+declare function f(a:number,b:number): void;
 >f : (a: number, b: number) => void
 >a : number
 >b : number
-}
 
 function func1( {a, b}: {a: number, b?: number} = {a: 1, b: 2} ) {
 >func1 : ({ a, b }?: { a: number; b?: number | undefined; }) => void
@@ -215,16 +215,9 @@ function performFoo({ bar }: Foo = {}) {
 >bar : number | undefined
 }
 
-function useBar(bar: number) {
+declare function useBar(bar: number): void;
 >useBar : (bar: number) => void
 >bar : number
-
-  f(bar, 1)
->f(bar, 1) : void
->f : (a: number, b: number) => void
->bar : number
->1 : 1
-}
 
 performFoo();
 >performFoo() : void
@@ -243,20 +236,9 @@ function performFoo2({ bar = null }: Foo = {}) {
 >bar : number | null
 }
 
-function useBar2(bar: number | undefined) {
+declare function useBar2(bar: number | undefined): void;
 >useBar2 : (bar: number | undefined) => void
 >bar : number | undefined
-
-  if (bar) {
->bar : number | undefined
-
-    f(bar, 1)
->f(bar, 1) : void
->f : (a: number, b: number) => void
->bar : number
->1 : 1
-  }
-}
 
 performFoo2();
 >performFoo2() : void

@@ -1,7 +1,7 @@
 // @strictNullChecks: true
 // https://github.com/Microsoft/TypeScript/issues/17080
-function f(a:number,b:number) {
-}
+
+declare function f(a:number,b:number): void;
 
 function func1( {a, b}: {a: number, b?: number} = {a: 1, b: 2} ) {
   f(a, b)
@@ -46,9 +46,7 @@ function performFoo({ bar }: Foo = {}) {
   useBar(bar);
 }
 
-function useBar(bar: number) {
-  f(bar, 1)
-}
+declare function useBar(bar: number): void;
 
 performFoo();
 
@@ -56,10 +54,6 @@ function performFoo2({ bar = null }: Foo = {}) {
   useBar2(bar);
 }
 
-function useBar2(bar: number | undefined) {
-  if (bar) {
-    f(bar, 1)
-  }
-}
+declare function useBar2(bar: number | undefined): void;
 
 performFoo2();

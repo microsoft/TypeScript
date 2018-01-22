@@ -1,13 +1,13 @@
 === tests/cases/compiler/optionalParameterInDestructuringWithInitializer.ts ===
 // https://github.com/Microsoft/TypeScript/issues/17080
-function f(a:number,b:number) {
+
+declare function f(a:number,b:number): void;
 >f : Symbol(f, Decl(optionalParameterInDestructuringWithInitializer.ts, 0, 0))
->a : Symbol(a, Decl(optionalParameterInDestructuringWithInitializer.ts, 1, 11))
->b : Symbol(b, Decl(optionalParameterInDestructuringWithInitializer.ts, 1, 20))
-}
+>a : Symbol(a, Decl(optionalParameterInDestructuringWithInitializer.ts, 2, 19))
+>b : Symbol(b, Decl(optionalParameterInDestructuringWithInitializer.ts, 2, 28))
 
 function func1( {a, b}: {a: number, b?: number} = {a: 1, b: 2} ) {
->func1 : Symbol(func1, Decl(optionalParameterInDestructuringWithInitializer.ts, 2, 1))
+>func1 : Symbol(func1, Decl(optionalParameterInDestructuringWithInitializer.ts, 2, 44))
 >a : Symbol(a, Decl(optionalParameterInDestructuringWithInitializer.ts, 4, 17))
 >b : Symbol(b, Decl(optionalParameterInDestructuringWithInitializer.ts, 4, 19))
 >a : Symbol(a, Decl(optionalParameterInDestructuringWithInitializer.ts, 4, 25))
@@ -169,41 +169,27 @@ function performFoo({ bar }: Foo = {}) {
 >bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 43, 21))
 }
 
-function useBar(bar: number) {
+declare function useBar(bar: number): void;
 >useBar : Symbol(useBar, Decl(optionalParameterInDestructuringWithInitializer.ts, 45, 1))
->bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 47, 16))
-
-  f(bar, 1)
->f : Symbol(f, Decl(optionalParameterInDestructuringWithInitializer.ts, 0, 0))
->bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 47, 16))
-}
+>bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 47, 24))
 
 performFoo();
 >performFoo : Symbol(performFoo, Decl(optionalParameterInDestructuringWithInitializer.ts, 41, 1))
 
 function performFoo2({ bar = null }: Foo = {}) {
->performFoo2 : Symbol(performFoo2, Decl(optionalParameterInDestructuringWithInitializer.ts, 51, 13))
->bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 53, 22))
+>performFoo2 : Symbol(performFoo2, Decl(optionalParameterInDestructuringWithInitializer.ts, 49, 13))
+>bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 51, 22))
 >Foo : Symbol(Foo, Decl(optionalParameterInDestructuringWithInitializer.ts, 37, 1))
 
   useBar2(bar);
->useBar2 : Symbol(useBar2, Decl(optionalParameterInDestructuringWithInitializer.ts, 55, 1))
->bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 53, 22))
+>useBar2 : Symbol(useBar2, Decl(optionalParameterInDestructuringWithInitializer.ts, 53, 1))
+>bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 51, 22))
 }
 
-function useBar2(bar: number | undefined) {
->useBar2 : Symbol(useBar2, Decl(optionalParameterInDestructuringWithInitializer.ts, 55, 1))
->bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 57, 17))
-
-  if (bar) {
->bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 57, 17))
-
-    f(bar, 1)
->f : Symbol(f, Decl(optionalParameterInDestructuringWithInitializer.ts, 0, 0))
->bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 57, 17))
-  }
-}
+declare function useBar2(bar: number | undefined): void;
+>useBar2 : Symbol(useBar2, Decl(optionalParameterInDestructuringWithInitializer.ts, 53, 1))
+>bar : Symbol(bar, Decl(optionalParameterInDestructuringWithInitializer.ts, 55, 25))
 
 performFoo2();
->performFoo2 : Symbol(performFoo2, Decl(optionalParameterInDestructuringWithInitializer.ts, 51, 13))
+>performFoo2 : Symbol(performFoo2, Decl(optionalParameterInDestructuringWithInitializer.ts, 49, 13))
 

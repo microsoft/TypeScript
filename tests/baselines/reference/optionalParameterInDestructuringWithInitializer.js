@@ -1,7 +1,7 @@
 //// [optionalParameterInDestructuringWithInitializer.ts]
 // https://github.com/Microsoft/TypeScript/issues/17080
-function f(a:number,b:number) {
-}
+
+declare function f(a:number,b:number): void;
 
 function func1( {a, b}: {a: number, b?: number} = {a: 1, b: 2} ) {
   f(a, b)
@@ -46,9 +46,7 @@ function performFoo({ bar }: Foo = {}) {
   useBar(bar);
 }
 
-function useBar(bar: number) {
-  f(bar, 1)
-}
+declare function useBar(bar: number): void;
 
 performFoo();
 
@@ -56,19 +54,13 @@ function performFoo2({ bar = null }: Foo = {}) {
   useBar2(bar);
 }
 
-function useBar2(bar: number | undefined) {
-  if (bar) {
-    f(bar, 1)
-  }
-}
+declare function useBar2(bar: number | undefined): void;
 
 performFoo2();
 
 
 //// [optionalParameterInDestructuringWithInitializer.js]
 // https://github.com/Microsoft/TypeScript/issues/17080
-function f(a, b) {
-}
 function func1(_a) {
     var _b = _a === void 0 ? { a: 1, b: 2 } : _a, a = _b.a, b = _b.b;
     f(a, b);
@@ -108,17 +100,9 @@ function performFoo(_a) {
     var bar = (_a === void 0 ? {} : _a).bar;
     useBar(bar);
 }
-function useBar(bar) {
-    f(bar, 1);
-}
 performFoo();
 function performFoo2(_a) {
     var _b = (_a === void 0 ? {} : _a).bar, bar = _b === void 0 ? null : _b;
     useBar2(bar);
-}
-function useBar2(bar) {
-    if (bar) {
-        f(bar, 1);
-    }
 }
 performFoo2();
