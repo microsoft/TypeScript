@@ -829,7 +829,7 @@ namespace ts {
             getToken: () => token,
             getTokenPos: () => tokenPos,
             getTokenText: () => text.substring(tokenPos, pos),
-            getTokenValue: () => tokenValue,
+            getTokenValue: () => Debug.assertDefined(tokenValue),
             hasExtendedUnicodeEscape: () => (tokenFlags & TokenFlags.ExtendedUnicodeEscape) !== 0,
             hasPrecedingLineBreak: () => (tokenFlags & TokenFlags.PrecedingLineBreak) !== 0,
             isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
