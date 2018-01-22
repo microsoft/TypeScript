@@ -627,7 +627,6 @@ namespace ts.Completions {
             host,
             program,
             checker,
-            newLineCharacter: host.getNewLine(),
             compilerOptions,
             sourceFile,
             formatContext,

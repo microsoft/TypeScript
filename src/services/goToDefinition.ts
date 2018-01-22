@@ -127,30 +127,16 @@ namespace ts.GoToDefinition {
         }
 
         const symbol = typeChecker.getSymbolAtLocation(node);
-        if (!symbol) {
-            return undefined;
-        }
-
-        const type = typeChecker.getTypeOfSymbolAtLocation(symbol, node);
+        const type = symbol && typeChecker.getTypeOfSymbolAtLocation(symbol, node);
         if (!type) {
             return undefined;
         }
 
         if (type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Enum)) {
-            const result: DefinitionInfo[] = [];
-            forEach((<UnionType>type).types, t => {
-                if (t.symbol) {
-                    addRange(/*to*/ result, /*from*/ getDefinitionFromSymbol(typeChecker, t.symbol, node));
-                }
-            });
-            return result;
+            return flatMap((<UnionType>type).types, t => t.symbol && getDefinitionFromSymbol(typeChecker, t.symbol, node));
         }
 
-        if (!type.symbol) {
-            return undefined;
-        }
-
-        return getDefinitionFromSymbol(typeChecker, type.symbol, node);
+        return type.symbol && getDefinitionFromSymbol(typeChecker, type.symbol, node);
     }
 
     export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFile, position: number): DefinitionInfoAndBoundSpan {
@@ -199,66 +185,32 @@ namespace ts.GoToDefinition {
     }
 
     function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node: Node): DefinitionInfo[] {
-        const result: DefinitionInfo[] = [];
-        const declarations = symbol.getDeclarations();
         const { symbolName, symbolKind, containerName } = getSymbolInfo(typeChecker, symbol, node);
+        return getConstructSignatureDefinition() || getCallSignatureDefinition() || map(symbol.declarations, declaration => createDefinitionInfo(declaration, symbolKind, symbolName, containerName));
 
-        if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
-            !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
-            // Just add all the declarations.
-            forEach(declarations, declaration => {
-                result.push(createDefinitionInfo(declaration, symbolKind, symbolName, containerName));
-            });
-        }
-
-        return result;
-
-        function tryAddConstructSignature(symbol: Symbol, location: Node, symbolKind: ScriptElementKind, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+        function getConstructSignatureDefinition(): DefinitionInfo[] | undefined {
             // Applicable only if we are in a new expression, or we are on a constructor declaration
             // and in either case the symbol has a construct signature definition, i.e. class
-            if (isNewExpressionTarget(location) || location.kind === SyntaxKind.ConstructorKeyword) {
-                if (symbol.flags & SymbolFlags.Class) {
-                    // Find the first class-like declaration and try to get the construct signature.
-                    for (const declaration of symbol.getDeclarations()) {
-                        if (isClassLike(declaration)) {
-                            return tryAddSignature(
-                                declaration.members, /*selectConstructors*/ true, symbolKind, symbolName, containerName, result);
-                        }
-                    }
-
-                    Debug.fail("Expected declaration to have at least one class-like declaration");
-                }
+            if (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword && symbol.flags & SymbolFlags.Class) {
+                const cls = find(symbol.declarations, isClassLike) || Debug.fail("Expected declaration to have at least one class-like declaration");
+                return getSignatureDefinition(cls.members, /*selectConstructors*/ true);
             }
-            return false;
         }
 
-        function tryAddCallSignature(symbol: Symbol, location: Node, symbolKind: ScriptElementKind, symbolName: string, containerName: string, result: DefinitionInfo[]) {
-            if (isCallExpressionTarget(location) || isNewExpressionTarget(location) || isNameOfFunctionDeclaration(location)) {
-                return tryAddSignature(symbol.declarations, /*selectConstructors*/ false, symbolKind, symbolName, containerName, result);
-            }
-            return false;
+        function getCallSignatureDefinition(): DefinitionInfo[] | undefined {
+            return isCallExpressionTarget(node) || isNewExpressionTarget(node) || isNameOfFunctionDeclaration(node)
+                ? getSignatureDefinition(symbol.declarations, /*selectConstructors*/ false)
+                : undefined;
         }
 
-        function tryAddSignature(signatureDeclarations: ReadonlyArray<Declaration> | undefined, selectConstructors: boolean, symbolKind: ScriptElementKind, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+        function getSignatureDefinition(signatureDeclarations: ReadonlyArray<Declaration> | undefined, selectConstructors: boolean): DefinitionInfo[] | undefined {
             if (!signatureDeclarations) {
-                return false;
+                return undefined;
             }
-
-            const declarations: Declaration[] = [];
-            let definition: Declaration | undefined;
-
-            for (const d of signatureDeclarations) {
-                if (selectConstructors ? d.kind === SyntaxKind.Constructor : isSignatureDeclaration(d)) {
-                    declarations.push(d);
-                    if ((<FunctionLikeDeclaration>d).body) definition = d;
-                }
-            }
-
-            if (declarations.length) {
-                result.push(createDefinitionInfo(definition || lastOrUndefined(declarations), symbolKind, symbolName, containerName));
-                return true;
-            }
-            return false;
+            const declarations = signatureDeclarations.filter(selectConstructors ? isConstructorDeclaration : isSignatureDeclaration);
+            return declarations.length
+                ? [createDefinitionInfo(find(declarations, d => !!(<FunctionLikeDeclaration>d).body) || last(declarations), symbolKind, symbolName, containerName)]
+                : undefined;
         }
     }
 

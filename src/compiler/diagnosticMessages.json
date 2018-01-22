@@ -1976,6 +1976,10 @@
         "category": "Error",
         "code": 2565
     },
+    "A rest element cannot have a property name.": {
+        "category": "Error",
+        "code": 2566
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -3892,10 +3896,6 @@
     "Convert function '{0}' to class": {
         "category": "Message",
         "code": 95002
-    },
-    "Extract symbol": {
-        "category": "Message",
-        "code": 95003
     },
     "Extract to {0} in {1}": {
         "category": "Message",

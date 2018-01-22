@@ -73,6 +73,7 @@ interface Array<T> {}`
         path: string;
         content?: string;
         fileSize?: number;
+        symLink?: string;
     }
 
     interface FSEntry {
@@ -90,12 +91,20 @@ interface Array<T> {}`
         entries: FSEntry[];
     }
 
+    interface SymLink extends FSEntry {
+        symLink: string;
+    }
+
     function isFolder(s: FSEntry): s is Folder {
         return s && isArray((<Folder>s).entries);
     }
 
     function isFile(s: FSEntry): s is File {
         return s && isString((<File>s).content);
+    }
+
+    function isSymLink(s: FSEntry): s is SymLink {
+        return s && isString((<SymLink>s).symLink);
     }
 
     function invokeWatcherCallbacks<T>(callbacks: T[], invokeCallback: (cb: T) => void): void {
@@ -374,8 +383,11 @@ interface Array<T> {}`
                             }
                         }
                         else {
-                            // TODO: Changing from file => folder
+                            // TODO: Changing from file => folder/Symlink
                         }
+                    }
+                    else if (isSymLink(currentEntry)) {
+                        // TODO: update symlinks
                     }
                     else {
                         // Folder
@@ -398,7 +410,7 @@ interface Array<T> {}`
                     // If this entry is not from the new file or folder
                     if (!mapNewLeaves.get(path)) {
                         // Leaf entries that arent in new list => remove these
-                        if (isFile(fileOrDirectory) || isFolder(fileOrDirectory) && fileOrDirectory.entries.length === 0) {
+                        if (isFile(fileOrDirectory) || isSymLink(fileOrDirectory) || isFolder(fileOrDirectory) && fileOrDirectory.entries.length === 0) {
                             this.removeFileOrFolder(fileOrDirectory, folder => !mapNewLeaves.get(folder.path));
                         }
                     }
@@ -446,6 +458,12 @@ interface Array<T> {}`
                 const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath));
                 this.addFileOrFolderInFolder(baseFolder, file, ignoreWatchInvokedWithTriggerAsFileCreate);
             }
+            else if (isString(fileOrDirectory.symLink)) {
+                const symLink = this.toSymLink(fileOrDirectory);
+                Debug.assert(!this.fs.get(symLink.path));
+                const baseFolder = this.ensureFolder(getDirectoryPath(symLink.fullPath));
+                this.addFileOrFolderInFolder(baseFolder, symLink, ignoreWatchInvokedWithTriggerAsFileCreate);
+            }
             else {
                 const fullPath = getNormalizedAbsolutePath(fileOrDirectory.path, this.currentDirectory);
                 this.ensureFolder(fullPath);
@@ -473,7 +491,7 @@ interface Array<T> {}`
             return folder;
         }
 
-        private addFileOrFolderInFolder(folder: Folder, fileOrDirectory: File | Folder, ignoreWatch?: boolean) {
+        private addFileOrFolderInFolder(folder: Folder, fileOrDirectory: File | Folder | SymLink, ignoreWatch?: boolean) {
             folder.entries.push(fileOrDirectory);
             folder.modifiedTime = new Date();
             this.fs.set(fileOrDirectory.path, fileOrDirectory);
@@ -485,7 +503,7 @@ interface Array<T> {}`
             this.invokeDirectoryWatcher(folder.fullPath, fileOrDirectory.fullPath);
         }
 
-        private removeFileOrFolder(fileOrDirectory: File | Folder, isRemovableLeafFolder: (folder: Folder) => boolean, isRenaming?: boolean) {
+        private removeFileOrFolder(fileOrDirectory: File | Folder | SymLink, isRemovableLeafFolder: (folder: Folder) => boolean, isRenaming?: boolean) {
             const basePath = getDirectoryPath(fileOrDirectory.path);
             const baseFolder = this.fs.get(basePath) as Folder;
             if (basePath !== fileOrDirectory.path) {
@@ -496,7 +514,7 @@ interface Array<T> {}`
             this.fs.delete(fileOrDirectory.path);
 
             this.invokeFileWatcher(fileOrDirectory.fullPath, FileWatcherEventKind.Deleted);
-            if (!isFile(fileOrDirectory)) {
+            if (isFolder(fileOrDirectory)) {
                 Debug.assert(fileOrDirectory.entries.length === 0 || isRenaming);
                 const relativePath = this.getRelativePathToDirectory(fileOrDirectory.fullPath, fileOrDirectory.fullPath);
                 // Invoke directory and recursive directory watcher for the folder
@@ -518,7 +536,7 @@ interface Array<T> {}`
 
         private invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind) {
             const callbacks = this.watchedFiles.get(this.toPath(fileFullPath));
-            invokeWatcherCallbacks(callbacks, ({ cb, fileName }) => cb(fileName, eventKind));
+            invokeWatcherCallbacks(callbacks, ({ cb }) => cb(fileFullPath, eventKind));
         }
 
         private getRelativePathToDirectory(directoryFullPath: string, fileFullPath: string) {
@@ -568,15 +586,59 @@ interface Array<T> {}`
             return file;
         }
 
+        private toSymLink(fileOrDirectory: FileOrFolder): SymLink {
+            const symLink = this.toFsEntry(fileOrDirectory.path) as SymLink;
+            symLink.symLink = getNormalizedAbsolutePath(fileOrDirectory.symLink, getDirectoryPath(symLink.fullPath));
+            return symLink;
+        }
+
         private toFolder(path: string): Folder {
             const folder = this.toFsEntry(path) as Folder;
             folder.entries = [];
             return folder;
         }
 
+        private getRealFsEntry<T extends FSEntry>(isFsEntry: (fsEntry: FSEntry) => fsEntry is T, path: Path, fsEntry = this.fs.get(path)): T | undefined {
+            if (isFsEntry(fsEntry)) {
+                return fsEntry;
+            }
+
+            if (isSymLink(fsEntry)) {
+                return this.getRealFsEntry(isFsEntry, this.toPath(fsEntry.symLink));
+            }
+
+            if (fsEntry) {
+                // This fs entry is something else
+                return undefined;
+            }
+
+            const realpath = this.realpath(path);
+            if (path !== realpath) {
+                return this.getRealFsEntry(isFsEntry, realpath as Path);
+            }
+
+            return undefined;
+        }
+
+        private isFile(fsEntry: FSEntry) {
+            return !!this.getRealFile(fsEntry.path, fsEntry);
+        }
+
+        private getRealFile(path: Path, fsEntry?: FSEntry): File | undefined {
+            return this.getRealFsEntry(isFile, path, fsEntry);
+        }
+
+        private isFolder(fsEntry: FSEntry) {
+            return !!this.getRealFolder(fsEntry.path, fsEntry);
+        }
+
+        private getRealFolder(path: Path, fsEntry = this.fs.get(path)): Folder | undefined {
+            return this.getRealFsEntry(isFolder, path, fsEntry);
+        }
+
         fileExists(s: string) {
             const path = this.toFullPath(s);
-            return isFile(this.fs.get(path));
+            return !!this.getRealFile(path);
         }
 
         getModifiedTime(s: string) {
@@ -585,9 +647,9 @@ interface Array<T> {}`
             return fsEntry && fsEntry.modifiedTime;
         }
 
-        readFile(s: string) {
-            const fsEntry = this.fs.get(this.toFullPath(s));
-            return isFile(fsEntry) ? fsEntry.content : undefined;
+        readFile(s: string): string {
+            const fsEntry = this.getRealFile(this.toFullPath(s));
+            return fsEntry ? fsEntry.content : undefined;
         }
 
         getFileSize(s: string) {
@@ -601,14 +663,14 @@ interface Array<T> {}`
 
         directoryExists(s: string) {
             const path = this.toFullPath(s);
-            return isFolder(this.fs.get(path));
+            return !!this.getRealFolder(path);
         }
 
-        getDirectories(s: string) {
+        getDirectories(s: string): string[] {
             const path = this.toFullPath(s);
-            const folder = this.fs.get(path);
-            if (isFolder(folder)) {
-                return mapDefined(folder.entries, entry => isFolder(entry) ? getBaseFileName(entry.fullPath) : undefined);
+            const folder = this.getRealFolder(path);
+            if (folder) {
+                return mapDefined(folder.entries, entry => this.isFolder(entry) ? getBaseFileName(entry.fullPath) : undefined);
             }
             Debug.fail(folder ? "getDirectories called on file" : "getDirectories called on missing folder");
             return [];
@@ -618,13 +680,13 @@ interface Array<T> {}`
             return ts.matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, (dir) => {
                 const directories: string[] = [];
                 const files: string[] = [];
-                const dirEntry = this.fs.get(this.toPath(dir));
-                if (isFolder(dirEntry)) {
-                    dirEntry.entries.forEach((entry) => {
-                        if (isFolder(entry)) {
+                const folder = this.getRealFolder(this.toPath(dir));
+                if (folder) {
+                    folder.entries.forEach((entry) => {
+                        if (this.isFolder(entry)) {
                             directories.push(getBaseFileName(entry.fullPath));
                         }
-                        else if (isFile(entry)) {
+                        else if (this.isFile(entry)) {
                             files.push(getBaseFileName(entry.fullPath));
                         }
                         else {
@@ -755,6 +817,23 @@ interface Array<T> {}`
 
         clearOutput() {
             clear(this.output);
+        }
+
+        realpath(s: string): string {
+            const fullPath = this.toNormalizedAbsolutePath(s);
+            const path = this.toPath(fullPath);
+            if (getDirectoryPath(path) === path) {
+                // Root
+                return s;
+            }
+            const dirFullPath = this.realpath(getDirectoryPath(fullPath));
+            const realFullPath = combinePaths(dirFullPath, getBaseFileName(fullPath));
+            const fsEntry = this.fs.get(this.toPath(realFullPath));
+            if (isSymLink(fsEntry)) {
+                return this.realpath(fsEntry.symLink);
+            }
+
+            return realFullPath;
         }
 
         readonly exitMessage = "System Exit";

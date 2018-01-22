@@ -1,4 +1,4 @@
-﻿{
+{
     "extends": "../tsconfig-base",
     "compilerOptions": {
         "removeComments": false,
@@ -37,6 +37,11 @@
         "../compiler/declarationEmitter.ts",
         "../compiler/emitter.ts",
         "../compiler/program.ts",
+        "../compiler/builderState.ts",
+        "../compiler/builder.ts",
+        "../compiler/resolutionCache.ts",
+        "../compiler/watch.ts",
+        "../compiler/watchUtilities.ts",
         "../compiler/commandLineParser.ts",
         "../compiler/diagnosticInformationMap.generated.ts",
         "types.ts",
