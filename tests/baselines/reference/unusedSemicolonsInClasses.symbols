@@ -1,0 +1,7 @@
+=== tests/cases/compiler/unusedSemicolonsInClasses.ts ===
+class Unused {
+>Unused : Symbol(Unused, Decl(unusedSemicolonsInClasses.ts, 0, 0))
+
+    ;
+}
+

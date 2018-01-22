@@ -21030,6 +21030,7 @@ namespace ts {
                             }
                             break;
                         case SyntaxKind.IndexSignature:
+                        case SyntaxKind.SemicolonClassElement:
                             // Can't be private
                             break;
                         default:
