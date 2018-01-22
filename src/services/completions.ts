@@ -20,6 +20,7 @@ namespace ts.Completions {
         None,
         ClassElementKeywords,           // Keywords at class keyword
         ConstructorParameterKeywords,   // Keywords at constructor parameter
+        FunctionLikeBodyKeywords        // Keywords at function like body
     }
 
     export function getCompletionsAtPosition(
@@ -1060,6 +1061,10 @@ namespace ts.Completions {
                 return true;
             }
 
+            if (tryGetFunctionLikeBodyCompletionContainer(contextToken)) {
+                keywordFilters = KeywordCompletionFilters.FunctionLikeBodyKeywords;
+            }
+
             if (classLikeContainer = tryGetClassLikeCompletionContainer(contextToken)) {
                 // cursor inside class declaration
                 getGetClassLikeCompletionSymbols(classLikeContainer);
@@ -1688,6 +1693,22 @@ namespace ts.Completions {
             return undefined;
         }
 
+        function tryGetFunctionLikeBodyCompletionContainer(contextToken: Node): FunctionLikeDeclaration {
+            if (contextToken) {
+                let prev: Node;
+                const container = findAncestor(contextToken.parent, (node: Node) => {
+                    if (isClassLike(node)) {
+                        return "quit";
+                    }
+                    if (isFunctionLikeDeclaration(node) && prev === node.body) {
+                        return true;
+                    }
+                    prev = node;
+                });
+                return container && container as FunctionLikeDeclaration;
+            }
+        }
+
         function tryGetContainingJsxElement(contextToken: Node): JsxOpeningLikeElement {
             if (contextToken) {
                 const parent = contextToken.parent;
@@ -2126,6 +2147,8 @@ namespace ts.Completions {
                     return getFilteredKeywordCompletions(isClassMemberCompletionKeywordText);
                 case KeywordCompletionFilters.ConstructorParameterKeywords:
                     return getFilteredKeywordCompletions(isConstructorParameterCompletionKeywordText);
+                case KeywordCompletionFilters.FunctionLikeBodyKeywords:
+                    return getFilteredKeywordCompletions(isFunctionLikeBodyCompletionKeywordText);
                 default:
                     Debug.assertNever(keywordFilter);
             }
@@ -2186,6 +2209,26 @@ namespace ts.Completions {
 
     function isConstructorParameterCompletionKeywordText(text: string) {
         return isConstructorParameterCompletionKeyword(stringToToken(text));
+    }
+
+    function isFunctionLikeBodyCompletionKeyword(kind: SyntaxKind) {
+        switch (kind) {
+            case SyntaxKind.PublicKeyword:
+            case SyntaxKind.PrivateKeyword:
+            case SyntaxKind.ProtectedKeyword:
+            case SyntaxKind.ReadonlyKeyword:
+            case SyntaxKind.ConstructorKeyword:
+            case SyntaxKind.StaticKeyword:
+            case SyntaxKind.AbstractKeyword:
+            case SyntaxKind.GetKeyword:
+            case SyntaxKind.SetKeyword:
+                return false;
+        }
+        return true;
+    }
+
+    function isFunctionLikeBodyCompletionKeywordText(text: string) {
+        return isFunctionLikeBodyCompletionKeyword(stringToToken(text));
     }
 
     function isEqualityOperatorKind(kind: ts.SyntaxKind): kind is EqualityOperator {
