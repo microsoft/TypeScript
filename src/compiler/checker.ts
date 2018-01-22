@@ -5995,7 +5995,9 @@ namespace ts {
             for (const memberType of types) {
                 for (const { escapedName } of getAugmentedPropertiesOfType(memberType)) {
                     if (!props.has(escapedName)) {
-                        props.set(escapedName, createUnionOrIntersectionProperty(unionType as UnionType, escapedName));
+                        const prop = createUnionOrIntersectionProperty(unionType as UnionType, escapedName);
+                        // May be undefined if the property is private
+                        if (prop) props.set(escapedName, prop);
                     }
                 }
             }
@@ -6177,7 +6179,7 @@ namespace ts {
                 t;
         }
 
-        function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: __String): Symbol {
+        function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: __String): Symbol | undefined {
             let props: Symbol[];
             const isUnion = containingType.flags & TypeFlags.Union;
             const excludeModifiers = isUnion ? ModifierFlags.NonPublicAccessibilityModifier : 0;
