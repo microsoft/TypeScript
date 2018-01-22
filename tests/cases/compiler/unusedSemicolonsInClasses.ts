@@ -1,0 +1,4 @@
+// @noUnusedLocals: true
+class Unused {
+    ;
+}
