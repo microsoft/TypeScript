@@ -84,7 +84,7 @@ namespace Harness.LanguageService {
     }
 
     class ScriptSnapshotProxy implements ts.ScriptSnapshotShim {
-        constructor(public scriptSnapshot: ts.IScriptSnapshot) {
+        constructor(private readonly scriptSnapshot: ts.IScriptSnapshot) {
         }
 
         public getText(start: number, end: number): string {
@@ -96,14 +96,8 @@ namespace Harness.LanguageService {
         }
 
         public getChangeRange(oldScript: ts.ScriptSnapshotShim): string {
-            const oldShim = <ScriptSnapshotProxy>oldScript;
-
-            const range = this.scriptSnapshot.getChangeRange(oldShim.scriptSnapshot);
-            if (range === undefined) {
-                return undefined;
-            }
-
-            return JSON.stringify({ span: { start: range.span.start, length: range.span.length }, newLength: range.newLength });
+            const range = this.scriptSnapshot.getChangeRange((oldScript as ScriptSnapshotProxy).scriptSnapshot);
+            return range && JSON.stringify(range);
         }
     }
 
@@ -354,7 +348,7 @@ namespace Harness.LanguageService {
         fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }
         readFile(fileName: string) {
             const snapshot = this.nativeHost.getScriptSnapshot(fileName);
-            return snapshot && snapshot.getText(0, snapshot.getLength());
+            return snapshot && ts.getSnapshotText(snapshot);
         }
         log(s: string): void { this.nativeHost.log(s); }
         trace(s: string): void { this.nativeHost.trace(s); }
@@ -658,7 +652,7 @@ namespace Harness.LanguageService {
             }
 
             const snapshot = this.host.getScriptSnapshot(fileName);
-            return snapshot && snapshot.getText(0, snapshot.getLength());
+            return snapshot && ts.getSnapshotText(snapshot);
         }
 
         writeFile = ts.noop;

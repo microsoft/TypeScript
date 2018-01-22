@@ -1,12 +1,6 @@
 /* @internal */
 namespace ts {
     export interface Refactor {
-        /** An unique code associated with each refactor */
-        name: string;
-
-        /** Description of the refactor to display in the UI of the editor */
-        description: string;
-
         /** Compute the associated code actions */
         getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined;
 
@@ -19,7 +13,6 @@ namespace ts {
         startPosition: number;
         endPosition?: number;
         program: Program;
-        host: LanguageServiceHost;
         cancellationToken?: CancellationToken;
     }
 
@@ -28,8 +21,9 @@ namespace ts {
         // e.g.  nonSuggestableRefactors[refactorCode] -> the refactor you want
         const refactors: Map<Refactor> = createMap<Refactor>();
 
-        export function registerRefactor(refactor: Refactor) {
-            refactors.set(refactor.name, refactor);
+        /** @param name An unique code associated with each refactor. Does not have to be human-readable. */
+        export function registerRefactor(name: string, refactor: Refactor) {
+            refactors.set(name, refactor);
         }
 
         export function getApplicableRefactors(context: RefactorContext): ApplicableRefactorInfo[] {

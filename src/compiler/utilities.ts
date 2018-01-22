@@ -2,8 +2,9 @@
 
 /* @internal */
 namespace ts {
-    export const emptyArray: never[] = [] as never[];
+    export const resolvingEmptyArray: never[] = [] as never[];
     export const emptyMap: ReadonlyMap<never> = createMap<never>();
+    export const emptyUnderscoreEscapedMap: ReadonlyUnderscoreEscapedMap<never> = emptyMap as ReadonlyUnderscoreEscapedMap<never>;
 
     export const externalHelpersModuleNameText = "tslib";
 
@@ -27,26 +28,31 @@ namespace ts {
         return undefined;
     }
 
-    export interface StringSymbolWriter extends SymbolWriter {
-        string(): string;
-    }
-
     const stringWriter = createSingleLineStringWriter();
 
-    function createSingleLineStringWriter(): StringSymbolWriter {
+    function createSingleLineStringWriter(): EmitTextWriter {
         let str = "";
 
         const writeText: (text: string) => void = text => str += text;
         return {
-            string: () => str,
+            getText: () => str,
+            write: writeText,
+            rawWrite: writeText,
+            writeTextOfNode: writeText,
             writeKeyword: writeText,
             writeOperator: writeText,
             writePunctuation: writeText,
             writeSpace: writeText,
             writeStringLiteral: writeText,
+            writeLiteral: writeText,
             writeParameter: writeText,
             writeProperty: writeText,
             writeSymbol: writeText,
+            getTextPos: () => str.length,
+            getLine: () => 0,
+            getColumn: () => 0,
+            getIndent: () => 0,
+            isAtStartOfLine: () => false,
 
             // Completely ignore indentation for string writers.  And map newlines to
             // a single space.
@@ -61,11 +67,11 @@ namespace ts {
         };
     }
 
-    export function usingSingleLineStringWriter(action: (writer: StringSymbolWriter) => void): string {
-        const oldString = stringWriter.string();
+    export function usingSingleLineStringWriter(action: (writer: EmitTextWriter) => void): string {
+        const oldString = stringWriter.getText();
         try {
             action(stringWriter);
-            return stringWriter.string();
+            return stringWriter.getText();
         }
         finally {
             stringWriter.clear();
@@ -107,6 +113,11 @@ namespace ts {
 
     function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
         return a === b || a && b && a.name === b.name && a.subModuleName === b.subModuleName && a.version === b.version;
+    }
+
+    export function packageIdToString({ name, subModuleName, version }: PackageId): string {
+        const fullName = subModuleName ? `${name}/${subModuleName}` : name;
+        return `${fullName}@${version}`;
     }
 
     export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {
@@ -802,7 +813,7 @@ namespace ts {
                         return node === (<TypeAssertion>parent).type;
                     case SyntaxKind.CallExpression:
                     case SyntaxKind.NewExpression:
-                        return (<CallExpression>parent).typeArguments && indexOf((<CallExpression>parent).typeArguments, node) >= 0;
+                        return contains((<CallExpression>parent).typeArguments, node);
                     case SyntaxKind.TaggedTemplateExpression:
                         // TODO (drosen): TaggedTemplateExpressions may eventually support type arguments.
                         return false;
@@ -1418,6 +1429,8 @@ namespace ts {
      * exactly one argument (of the form 'require("name")').
      * This function does not test if the node is in a JavaScript file or not.
      */
+    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteral: true): callExpression is CallExpression & { expression: Identifier, arguments: [StringLiteralLike] };
+    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteral: boolean): callExpression is CallExpression;
     export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteral: boolean): callExpression is CallExpression {
         if (callExpression.kind !== SyntaxKind.CallExpression) {
             return false;
@@ -1455,7 +1468,7 @@ namespace ts {
         return false;
     }
 
-    export function getRightMostAssignedExpression(node: Node) {
+    export function getRightMostAssignedExpression(node: Expression): Expression {
         while (isAssignmentExpression(node, /*excludeCompoundAssignements*/ true)) {
             node = node.right;
         }
@@ -1582,42 +1595,35 @@ namespace ts {
             ((node as JSDocFunctionType).parameters[0].name as Identifier).escapedText === "new";
     }
 
-    export function getAllJSDocs(node: Node): (JSDoc | JSDocTag)[] {
-        if (isJSDocTypedefTag(node)) {
-            return [node.parent];
-        }
-        return getJSDocCommentsAndTags(node);
-    }
-
-    export function getSourceOfAssignment(node: Node): Node {
+    function getSourceOfAssignment(node: Node): Node {
         return isExpressionStatement(node) &&
             node.expression && isBinaryExpression(node.expression) &&
             node.expression.operatorToken.kind === SyntaxKind.EqualsToken &&
             node.expression.right;
     }
 
-    export function getSingleInitializerOfVariableStatement(node: Node, child?: Node): Node {
+    function getSingleInitializerOfVariableStatement(node: Node, child?: Node): Node {
         return isVariableStatement(node) &&
             node.declarationList.declarations.length > 0 &&
             (!child || node.declarationList.declarations[0].initializer === child) &&
             node.declarationList.declarations[0].initializer;
     }
 
-    export function getSingleVariableOfVariableStatement(node: Node, child?: Node): Node {
+    function getSingleVariableOfVariableStatement(node: Node, child?: Node): Node {
         return isVariableStatement(node) &&
             node.declarationList.declarations.length > 0 &&
             (!child || node.declarationList.declarations[0] === child) &&
             node.declarationList.declarations[0];
     }
 
-    export function getNestedModuleDeclaration(node: Node): Node {
+    function getNestedModuleDeclaration(node: Node): Node {
         return node.kind === SyntaxKind.ModuleDeclaration &&
             (node as ModuleDeclaration).body &&
             (node as ModuleDeclaration).body.kind === SyntaxKind.ModuleDeclaration &&
             (node as ModuleDeclaration).body;
     }
 
-    export function getJSDocCommentsAndTags(node: Node): (JSDoc | JSDocTag)[] {
+    export function getJSDocCommentsAndTags(node: Node): ReadonlyArray<JSDoc | JSDocTag> {
         let result: (JSDoc | JSDocTag)[] | undefined;
         getJSDocCommentsAndTagsWorker(node);
         return result || emptyArray;
@@ -1757,6 +1763,51 @@ namespace ts {
     // (Note that `p` is not a target in the above examples, only `a`.)
     export function isAssignmentTarget(node: Node): boolean {
         return getAssignmentTargetKind(node) !== AssignmentKind.None;
+    }
+
+    export type NodeWithPossibleHoistedDeclaration =
+        | Block
+        | VariableStatement
+        | WithStatement
+        | IfStatement
+        | SwitchStatement
+        | CaseBlock
+        | CaseClause
+        | DefaultClause
+        | LabeledStatement
+        | ForStatement
+        | ForInStatement
+        | ForOfStatement
+        | DoStatement
+        | WhileStatement
+        | TryStatement
+        | CatchClause;
+
+    /**
+     * Indicates whether a node could contain a `var` VariableDeclarationList that contributes to
+     * the same `var` declaration scope as the node's parent.
+     */
+    export function isNodeWithPossibleHoistedDeclaration(node: Node): node is NodeWithPossibleHoistedDeclaration {
+        switch (node.kind) {
+            case SyntaxKind.Block:
+            case SyntaxKind.VariableStatement:
+            case SyntaxKind.WithStatement:
+            case SyntaxKind.IfStatement:
+            case SyntaxKind.SwitchStatement:
+            case SyntaxKind.CaseBlock:
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.DefaultClause:
+            case SyntaxKind.LabeledStatement:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.WhileStatement:
+            case SyntaxKind.TryStatement:
+            case SyntaxKind.CatchClause:
+                return true;
+        }
+        return false;
     }
 
     function walkUp(node: Node, kind: SyntaxKind) {
@@ -1978,7 +2029,13 @@ namespace ts {
         return token !== undefined && isNonContextualKeyword(token);
     }
 
-    export function isTrivia(token: SyntaxKind) {
+    export type TriviaKind = SyntaxKind.SingleLineCommentTrivia
+        | SyntaxKind.MultiLineCommentTrivia
+        | SyntaxKind.NewLineTrivia
+        | SyntaxKind.WhitespaceTrivia
+        | SyntaxKind.ShebangTrivia
+        | SyntaxKind.ConflictMarkerTrivia;
+    export function isTrivia(token: SyntaxKind): token is TriviaKind {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
 
@@ -2116,6 +2173,10 @@ namespace ts {
 
     export function getPropertyNameForKnownSymbolName(symbolName: string): __String {
         return "__@" + symbolName as __String;
+    }
+
+    export function isKnownSymbol(symbol: Symbol): boolean {
+        return startsWith(symbol.escapedName as string, "__@");
     }
 
     /**
@@ -2605,7 +2666,19 @@ namespace ts {
             getColumn: () => lineStart ? indent * getIndentSize() + 1 : output.length - linePos + 1,
             getText: () => output,
             isAtStartOfLine: () => lineStart,
-            reset
+            clear: reset,
+            reportInaccessibleThisError: noop,
+            reportPrivateInBaseOfClassExpression: noop,
+            reportInaccessibleUniqueSymbolError: noop,
+            trackSymbol: noop,
+            writeKeyword: write,
+            writeOperator: write,
+            writeParameter: write,
+            writeProperty: write,
+            writePunctuation: write,
+            writeSpace: write,
+            writeStringLiteral: write,
+            writeSymbol: write
         };
     }
 
@@ -3307,14 +3380,14 @@ namespace ts {
 
     const carriageReturnLineFeed = "\r\n";
     const lineFeed = "\n";
-    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, system?: { newLine: string }): string {
+    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, getNewLine?: () => string): string {
         switch (options.newLine) {
             case NewLineKind.CarriageReturnLineFeed:
                 return carriageReturnLineFeed;
             case NewLineKind.LineFeed:
                 return lineFeed;
         }
-        return system ? system.newLine : sys ? sys.newLine : carriageReturnLineFeed;
+        return getNewLine ? getNewLine() : sys ? sys.newLine : carriageReturnLineFeed;
     }
 
     /**
@@ -3916,8 +3989,8 @@ namespace ts {
             //
             // {
             //      oldStart3: Min(oldStart1, oldStart2),
-            //      oldEnd3  : Max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1)),
-            //      newEnd3  : Max(newEnd2, newEnd2 + (newEnd1 - oldEnd2))
+            //      oldEnd3: Max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1)),
+            //      newEnd3: Max(newEnd2, newEnd2 + (newEnd1 - oldEnd2))
             // }
 
             const oldStart1 = oldStartN;
@@ -4402,7 +4475,7 @@ namespace ts {
         return node.kind === SyntaxKind.RegularExpressionLiteral;
     }
 
-    export function isNoSubstitutionTemplateLiteral(node: Node): node is LiteralExpression {
+    export function isNoSubstitutionTemplateLiteral(node: Node): node is NoSubstitutionTemplateLiteral {
         return node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
@@ -4631,7 +4704,7 @@ namespace ts {
     }
 
     export function isTypeOfExpression(node: Node): node is TypeOfExpression {
-        return node.kind === SyntaxKind.AwaitExpression;
+        return node.kind === SyntaxKind.TypeOfExpression;
     }
 
     export function isVoidExpression(node: Node): node is VoidExpression {
@@ -5116,7 +5189,7 @@ namespace ts {
     /* @internal */
     export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {
         // Using `>` here catches both `GeneratedIdentifierKind.None` and `undefined`.
-        return isIdentifier(node) && node.autoGenerateKind > GeneratedIdentifierKind.None;
+        return isIdentifier(node) && (node.autoGenerateFlags & GeneratedIdentifierFlags.KindMask) > GeneratedIdentifierFlags.None;
     }
 
     // Keywords
@@ -5841,5 +5914,20 @@ namespace ts {
     /* @internal */
     export function hasOnlyExpressionInitializer(node: Node): node is HasExpressionInitializer {
         return hasInitializer(node) && !isForStatement(node) && !isForInStatement(node) && !isForOfStatement(node) && !isJsxAttribute(node);
+    }
+
+    export function isObjectLiteralElement(node: Node): node is ObjectLiteralElement {
+        switch (node.kind) {
+            case SyntaxKind.JsxAttribute:
+            case SyntaxKind.JsxSpreadAttribute:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return true;
+            default:
+                return false;
+        }
     }
 }

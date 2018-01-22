@@ -291,7 +291,12 @@ namespace fakes {
         }
 
         public realpath(path: string) {
-            return this.vfs.realpathSync(path);
+            try {
+                return this.vfs.realpathSync(path);
+            }
+            catch {
+                return path;
+            }
         }
 
         public getEnvironmentVariable(_name: string): string | undefined {

@@ -20,23 +20,16 @@ namespace ts.tscWatch {
         checkFileNames(`Program rootFileNames`, program.getRootFileNames(), expectedFiles);
     }
 
-    function createWatchingSystemHost(system: ts.System) {
-        return ts.createWatchingSystemHost(/*pretty*/ undefined, system);
+    function createWatchOfConfigFile(configFileName: string, host: ts.System, maxNumberOfFilesToIterateForInvalidation?: number) {
+        const compilerHost = ts.createWatchCompilerHostOfConfigFile(configFileName, {}, host);
+        compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
+        const watch = createWatchProgram(compilerHost);
+        return () => watch.getCurrentProgram().getProgram();
     }
 
-    function parseConfigFile(configFileName: string, watchingSystemHost: WatchingSystemHost) {
-        return ts.parseConfigFile(configFileName, {}, watchingSystemHost.system, watchingSystemHost.reportDiagnostic, watchingSystemHost.reportWatchDiagnostic);
-    }
-
-    function createWatchModeWithConfigFile(configFilePath: string, host: ts.System) {
-        const watchingSystemHost = createWatchingSystemHost(host);
-        const configFileResult = parseConfigFile(configFilePath, watchingSystemHost);
-        return ts.createWatchModeWithConfigFile(configFileResult, {}, watchingSystemHost);
-    }
-
-    function createWatchModeWithoutConfigFile(fileNames: string[], host: ts.System, options: CompilerOptions = {}) {
-        const watchingSystemHost = createWatchingSystemHost(host);
-        return ts.createWatchModeWithoutConfigFile(fileNames, options, watchingSystemHost);
+    function createWatchOfFilesAndCompilerOptions(rootFiles: string[], host: ts.System, options: CompilerOptions = {}) {
+        const watch = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, host));
+        return () => watch.getCurrentProgram().getProgram();
     }
 
     function formatOutputFile(path: string, host: ts.System) {
@@ -187,7 +180,7 @@ namespace ts.tscWatch {
                     "/a/b/c/module.d.ts": `export let x: number`,
                 });
 
-                const watch = createWatchModeWithoutConfigFile(["/a/b/c/app.ts"], host);
+                const watch = createWatchOfFilesAndCompilerOptions(["/a/b/c/app.ts"], host);
                 checkProgramActualFiles(watch(), ["/a/b/c/app.ts", fakes.FakeServerHost.libPath, "/a/b/c/module.d.ts"]);
 
                 // TODO: Should we watch creation of config files in the root file's file hierarchy?
@@ -203,7 +196,7 @@ namespace ts.tscWatch {
                     "/a/b/tsconfig.json": `{ "include": ["app.ts"] }`,
                 });
 
-                const watch = createWatchModeWithConfigFile("/A/B/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/A/B/tsconfig.json", host);
                 checkProgramActualFiles(watch(), ["/A/B/app.ts"]);
             });
 
@@ -215,14 +208,10 @@ namespace ts.tscWatch {
                     "/a/b/e/f3.ts": `let z = 1`,
                 });
 
-                const watchingSystemHost = createWatchingSystemHost(host);
-                const configFileResult = parseConfigFile("/a/b/tsconfig.json", watchingSystemHost);
-                assert.equal(configFileResult.errors.length, 0, `expect no errors in config file, got ${JSON.stringify(configFileResult.errors)}`);
+                const watch = createWatchProgram(createWatchCompilerHostOfConfigFile("/a/b/tsconfig.json", {}, host, /*createProgram*/ undefined, notImplemented));
 
-                const watch = ts.createWatchModeWithConfigFile(configFileResult, {}, watchingSystemHost);
-
-                checkProgramActualFiles(watch(), ["/a/b/c/f1.ts", fakes.FakeServerHost.libPath, "/a/b/d/f2.ts"]);
-                checkProgramRootFiles(watch(), ["/a/b/c/f1.ts", "/a/b/d/f2.ts"]);
+                checkProgramActualFiles(watch.getCurrentProgram().getProgram(), ["/a/b/c/f1.ts", fakes.FakeServerHost.libPath, "/a/b/d/f2.ts"]);
+                checkProgramRootFiles(watch.getCurrentProgram().getProgram(), ["/a/b/c/f1.ts", "/a/b/d/f2.ts"]);
                 host.checkWatchedFiles(["/a/b/tsconfig.json", "/a/b/c/f1.ts", "/a/b/d/f2.ts", fakes.FakeServerHost.libPath]);
                 host.checkWatchedDirectories(["/a/b", "/a/b/node_modules/@types"], /*recursive*/ true);
             });
@@ -237,7 +226,7 @@ namespace ts.tscWatch {
                     "/a/b/tsconfig.json": `{}`,
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/b/tsconfig.json", host);
                 host.checkWatchedDirectories(["/a/b", "/a/b/node_modules/@types"], /*recursive*/ true);
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts"]);
 
@@ -255,7 +244,7 @@ namespace ts.tscWatch {
                     "/a/b/tsconfig.json": `{ "compilerOptions": {}, "files": ["commonFile1.ts", "commonFile3.ts"] }`,
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/b/tsconfig.json", host);
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts", "/a/b/commonFile3.ts"]);
                 checkProgramActualFiles(watch(), ["/a/b/commonFile1.ts"]);
             });
@@ -267,7 +256,7 @@ namespace ts.tscWatch {
                     "/a/b/tsconfig.json": `{}`,
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/b/tsconfig.json", host);
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts", "/a/b/commonFile2.ts"]);
 
                 // delete commonFile2
@@ -288,7 +277,7 @@ namespace ts.tscWatch {
                     "/a/b/commonFile1.ts": file1Content,
                 });
 
-                const watch = createWatchModeWithoutConfigFile(["/a/b/commonFile1.ts"], host);
+                const watch = createWatchOfFilesAndCompilerOptions(["/a/b/commonFile1.ts"], host);
 
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts"]);
                 checkProgramActualFiles(watch(), ["/a/b/commonFile1.ts", fakes.FakeServerHost.libPath]);
@@ -311,7 +300,7 @@ namespace ts.tscWatch {
                     "/a/b/tsconfig.json": `{ "compilerOptions": {}, "files": ["/a/b/commonFile1.ts", "/a/b/commonFile2.ts"] }`,
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/b/tsconfig.json", host);
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts", "/a/b/commonFile2.ts"]);
 
                 host.vfs.writeFileSync("/a/b/tsconfig.json", `{ "compilerOptions": {}, "files": ["/a/b/commonFile1.ts"] }`);
@@ -327,7 +316,7 @@ namespace ts.tscWatch {
                     "/a/tsconfig.json": `{ "compilerOptions": {}, "exclude": ["/a/c"] }`,
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/tsconfig.json", host);
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts", "/a/b/commonFile2.ts"]);
             });
 
@@ -339,7 +328,7 @@ namespace ts.tscWatch {
                     "/a/b/tsconfig.json": `{ "compilerOptions": { "moduleResolution": "node" }, "files": ["/a/b/file1.ts"] }`,
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/b/tsconfig.json", host);
                 checkProgramRootFiles(watch(), ["/a/b/file1.ts"]);
                 checkProgramActualFiles(watch(), ["/a/b/file1.ts", "/a/b/node_modules/module1.ts"]);
 
@@ -363,7 +352,7 @@ namespace ts.tscWatch {
                         `}`
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/b/tsconfig.json", host);
                 checkProgramRootFiles(watch(), ["/a/b/commonFile1.ts", "/a/b/commonFile2.ts"]);
             });
 
@@ -374,7 +363,7 @@ namespace ts.tscWatch {
                     "/a/c/f3.ts": `export let y = 1;`,
                 });
 
-                const watch = createWatchModeWithoutConfigFile(["/a/b/f1.ts"], host);
+                const watch = createWatchOfFilesAndCompilerOptions(["/a/b/f1.ts"], host);
                 checkProgramRootFiles(watch(), ["/a/b/f1.ts"]);
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts", "/a/b/f2.ts"]);
 
@@ -391,7 +380,7 @@ namespace ts.tscWatch {
                     "/a/c/f3.ts": `export let y = 1;`,
                 });
 
-                const watch = createWatchModeWithoutConfigFile(["/a/b/f1.ts"], host);
+                const watch = createWatchOfFilesAndCompilerOptions(["/a/b/f1.ts"], host);
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts", "/a/b/f2.ts", "/a/c/f3.ts"]);
 
                 host.vfs.unlinkSync("/a/b/f2.ts");
@@ -406,7 +395,7 @@ namespace ts.tscWatch {
                     "/a/c/f3.ts": `export let y = 1;`,
                 });
 
-                const watch = createWatchModeWithoutConfigFile(["/a/b/f1.ts", "/a/c/f3.ts"], host);
+                const watch = createWatchOfFilesAndCompilerOptions(["/a/b/f1.ts", "/a/c/f3.ts"], host);
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts", "/a/b/f2.ts", "/a/c/f3.ts"]);
 
                 host.vfs.unlinkSync("/a/b/f2.ts");
@@ -422,7 +411,7 @@ namespace ts.tscWatch {
                     "/a/c/tsconfig.json": `{ "compilerOptions": {}, "files": ["f2.ts", "f3.ts"] }`,
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/c/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/c/tsconfig.json", host);
                 checkProgramRootFiles(watch(), ["/a/c/f2.ts", "/a/c/f3.ts"]);
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts", "/a/c/f2.ts", "/a/c/f3.ts"]);
             });
@@ -436,10 +425,10 @@ namespace ts.tscWatch {
                     "/a/d/f3.ts": `export let y = 1;`,
                 });
 
-                const watch1 = createWatchModeWithoutConfigFile(["/a/c/f2.ts", "/a/d/f3.ts"], host);
+                const watch1 = createWatchOfFilesAndCompilerOptions(["/a/c/f2.ts", "/a/d/f3.ts"], host);
                 checkProgramActualFiles(watch1(), ["/a/c/f2.ts", "/a/d/f3.ts"]);
 
-                const watch2 = createWatchModeWithoutConfigFile(["/a/b/f1.ts"], host);
+                const watch2 = createWatchOfFilesAndCompilerOptions(["/a/b/f1.ts"], host);
                 checkProgramActualFiles(watch2(), ["/a/b/f1.ts", "/a/c/f2.ts", "/a/d/f3.ts"]);
 
                 // Previous program shouldnt be updated
@@ -453,7 +442,7 @@ namespace ts.tscWatch {
                     "/a/b/tsconfig.json": `{ "compilerOptions": {} }`,
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/b/tsconfig.json", host);
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts"]);
 
                 host.vfs.writeFileSync("/a/b/f2.ts", `let y = 1`);
@@ -469,7 +458,7 @@ namespace ts.tscWatch {
                     "/a/b/tsconfig.json": `{ "compilerOptions": {}, "files": ["f1.ts"] }`,
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/b/tsconfig.json", host);
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts"]);
 
                 host.vfs.writeFileSync("/a/b/tsconfig.json", `{ "compilerOptions": {}, "files": ["f1.ts", "f2.ts"] }`);
@@ -485,7 +474,7 @@ namespace ts.tscWatch {
                     "/a/b/tsconfig.json": `{ "compilerOptions": {}, "files": ["f1.ts", "f2.ts"] }`,
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/b/tsconfig.json", host);
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts", "/a/b/f2.ts"]);
 
                 host.vfs.writeFileSync("/a/b/tsconfig.json", `{ "compilerOptions": { "outFile": "out.js" }, "files": ["f1.ts", "f2.ts"] }`);
@@ -501,7 +490,7 @@ namespace ts.tscWatch {
                     "/a/b/tsconfig.json": `{ "compilerOptions": {} }`,
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/b/tsconfig.json", host);
 
                 checkProgramActualFiles(watch(), ["/a/b/f1.ts", "/a/b/f2.ts", fakes.FakeServerHost.libPath]);
                 checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
@@ -521,7 +510,7 @@ namespace ts.tscWatch {
                     "/a/b/tsconfig.json": `{`,
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/b/tsconfig.json", host);
                 checkProgramActualFiles(watch(), ["/a/b/app.ts"]);
             });
 
@@ -533,7 +522,7 @@ namespace ts.tscWatch {
                     "/src/tsconfig.json": `{ "compilerOptions": { "lib": ["es5"] } }`,
                 });
 
-                const watch = createWatchModeWithConfigFile("/src/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/src/tsconfig.json", host);
                 checkProgramActualFiles(watch(), ["/.ts/lib.es5.d.ts", "/src/app.ts"]);
 
                 host.vfs.writeFileSync("/src/tsconfig.json", `{ "compilerOptions": { "lib": ["es5", "es2015.promise"] } }`);
@@ -547,7 +536,7 @@ namespace ts.tscWatch {
                     "/a/tsconfig.json": `{ "compilerOptions": {}, "include": ["src/**/*", "notexistingfolder/*"] }`,
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/tsconfig.json", host);
                 checkProgramActualFiles(watch(), ["/a/src/app.ts"]);
             });
 
@@ -558,7 +547,7 @@ namespace ts.tscWatch {
                     "/a/b/moduleFile.ts": `export function bar() { };`,
                 });
 
-                const watch = createWatchModeWithoutConfigFile(["/a/b/file1.ts"], host);
+                const watch = createWatchOfFilesAndCompilerOptions(["/a/b/file1.ts"], host);
                 checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 host.vfs.unlinkSync("/a/b/moduleFile.js");
@@ -583,7 +572,7 @@ namespace ts.tscWatch {
                     "/a/b/tsconfig.json": `{}`,
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/b/tsconfig.json", host);
                 checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 host.vfs.unlinkSync("/a/b/moduleFile.js");
@@ -609,7 +598,7 @@ namespace ts.tscWatch {
                     "/a/b/node_modules/@types/node/index.d.ts": `declare var process: any`,
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/b/tsconfig.json", host);
                 checkProgramActualFiles(watch(), ["/a/b/app.ts", "/a/b/node_modules/@types/node/index.d.ts"]);
             });
 
@@ -619,7 +608,7 @@ namespace ts.tscWatch {
                     "/a/b/file1.ts": file1Content,
                 });
 
-                const watch = createWatchModeWithoutConfigFile(["/a/b/file1.ts"], host);
+                const watch = createWatchOfFilesAndCompilerOptions(["/a/b/file1.ts"], host);
 
                 checkOutputErrors(host, [
                     createCannotFindModuleDiagnostic(watch(), "/a/b/file1.ts", file1Content, "./moduleFile")
@@ -638,7 +627,7 @@ namespace ts.tscWatch {
                     "/a/b/tsconfig.json": configFileContent,
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/b/tsconfig.json", host);
                 checkOutputErrors(host, [
                     createUnknownCompilerOptionDiagnostic(watch(), configFileContent, "foo"),
                     createUnknownCompilerOptionDiagnostic(watch(), configFileContent, "allowJS")
@@ -651,7 +640,7 @@ namespace ts.tscWatch {
                     "/a/b/tsconfig.json": `{ "compilerOptions": {} }`,
                 });
 
-                createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
+                createWatchOfConfigFile("/a/b/tsconfig.json", host);
                 checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
             });
 
@@ -661,7 +650,7 @@ namespace ts.tscWatch {
                     "/a/b/tsconfig.json": `{ "compilerOptions": {} }`,
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/b/tsconfig.json", host);
                 checkOutputErrors(host, emptyArray, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
                 const configFileBadContent = `{ "compilerOptions": { "haha": 123 } }`;
@@ -684,7 +673,7 @@ namespace ts.tscWatch {
                     "/a/b/tsconfig.json": `{ "compilerOptions": {}, "include": ["app/*", "test/**/*", "something"] }`,
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/b/tsconfig.json", host);
                 checkProgramActualFiles(watch(), [fakes.FakeServerHost.libPath]);
             });
 
@@ -696,7 +685,7 @@ namespace ts.tscWatch {
                     "/a/node_modules/@types/typings/lib.d.ts": `export const x: number`,
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/tsconfig.json", host);
 
                 checkProgramActualFiles(watch(), ["/a/node_modules/@types/typings/index.d.ts", "/a/node_modules/@types/typings/lib.d.ts"]);
             });
@@ -706,7 +695,7 @@ namespace ts.tscWatch {
                     "/a/compile": `let x = 1`,
                 });
 
-                const watch = createWatchModeWithoutConfigFile(["/a/compile"], host, { allowNonTsExtensions: true });
+                const watch = createWatchOfFilesAndCompilerOptions(["/a/compile"], host, { allowNonTsExtensions: true });
                 checkProgramActualFiles(watch(), ["/a/compile", fakes.FakeServerHost.libPath]);
             });
 
@@ -735,7 +724,7 @@ namespace ts.tscWatch {
                     "/a/b/tsconfig.json": configFileContentWithComment,
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/b/tsconfig.json", host);
                 const initialErrors = [
                     createExclusiveCompilerOptionDiagnostic(watch(), configFileContentWithComment, "allowJs", "declaration", /*checkFirst*/ true),
                     createExclusiveCompilerOptionDiagnostic(watch(), configFileContentWithComment, "allowJs", "declaration", /*checkFirst*/ false)
@@ -752,6 +741,28 @@ namespace ts.tscWatch {
 
                 assert.equal(nowErrors[0].start, initialErrors[0].start - configFileContentComment.length);
                 assert.equal(nowErrors[1].start, initialErrors[1].start - configFileContentComment.length);
+            });
+
+            it("should not trigger recompilation because of program emit", () => {
+                const proj = "/user/username/projects/myproject";
+                const host = new fakes.FakeServerHost({ lib: true, vfs: { currentDirectory: proj } }, /*files*/ { [proj]: {
+                    "file1.ts": `export const c = 30;`,
+                    "src/file2.ts": `import {c} from "file1"; export const d = 30;`,
+                    "tsconfig.json": JSON.stringify({
+                        compilerOptions: {
+                            module: "amd",
+                            outDir: "build"
+                        }
+                    })
+                }});
+                const watch = createWatchOfConfigFile(`${proj}/tsconfig.json`, host, /*maxNumberOfFilesToIterateForInvalidation*/1);
+                checkProgramActualFiles(watch(), [`${proj}/file1.ts`, `${proj}/src/file2.ts`, fakes.FakeServerHost.libPath]);
+
+                assert.isTrue(host.fileExists("build/file1.js"));
+                assert.isTrue(host.fileExists("build/src/file2.js"));
+
+                // This should be 0
+                host.checkTimeoutQueueLengthAndRun(0);
             });
         });
 
@@ -779,7 +790,7 @@ namespace ts.tscWatch {
 
                 const writeFileSpy = spy(host, "writeFile");
 
-                createWatchModeWithConfigFile("/a/b/project/tsconfig.json", host);
+                createWatchOfConfigFile("/a/b/project/tsconfig.json", host);
 
                 if (useOutFile) {
                     writeFileSpy
@@ -851,7 +862,7 @@ namespace ts.tscWatch {
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath);
 
-                        createWatchModeWithConfigFile(configFilePath, host);
+                        createWatchOfConfigFile(configFilePath, host);
                         checkAffectedFiles(host, commonOutputPaths);
 
                         writeFile(host, file1Path, `let x = 11`);
@@ -863,7 +874,7 @@ namespace ts.tscWatch {
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath, { compilerOptions: { out: "/a/out.js" } });
 
-                        createWatchModeWithConfigFile(configFilePath, host);
+                        createWatchOfConfigFile(configFilePath, host);
                         checkAffectedFiles(host, ["/a/out.js"], commonOutputPaths);
 
                         writeFile(host, file1Path, `let x = 11`);
@@ -875,7 +886,7 @@ namespace ts.tscWatch {
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath, { compilerOptions: { outFile: "/a/out.js" } });
 
-                        createWatchModeWithConfigFile(configFilePath, host);
+                        createWatchOfConfigFile(configFilePath, host);
                         checkAffectedFiles(host, ["/a/out.js"], commonOutputPaths);
 
                         writeFile(host, file1Path, `let x = 11`);
@@ -927,7 +938,7 @@ namespace ts.tscWatch {
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath);
 
-                        createWatchModeWithConfigFile(configFilePath, host);
+                        createWatchOfConfigFile(configFilePath, host);
                         checkAffectedFiles(host, commonOutputPaths);
 
                         // Make a change to moduleFile1 that changes its external shape
@@ -944,7 +955,7 @@ namespace ts.tscWatch {
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath);
 
-                        createWatchModeWithConfigFile(configFilePath, host);
+                        createWatchOfConfigFile(configFilePath, host);
                         checkAffectedFiles(host, commonOutputPaths);
 
                         // Remove import of moduleFile1 from file1Consumer1. Should only affect itself.
@@ -974,7 +985,7 @@ namespace ts.tscWatch {
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath);
 
-                        createWatchModeWithConfigFile(configFilePath, host);
+                        createWatchOfConfigFile(configFilePath, host);
                         checkAffectedFiles(host, commonOutputPaths);
 
                         // Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
@@ -990,7 +1001,7 @@ namespace ts.tscWatch {
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath);
 
-                        createWatchModeWithConfigFile(configFilePath, host);
+                        createWatchOfConfigFile(configFilePath, host);
                         checkAffectedFiles(host, commonOutputPaths);
 
                         writeFile(host, "/a/b/file1Consumer3.ts", `import {Foo} from "./moduleFile1"; let y = Foo();`);
@@ -1003,7 +1014,7 @@ namespace ts.tscWatch {
                         writeCommonFiles(host, [file1Consumer1Path, moduleFile1Path]);
                         writeConfigFile(host, configFilePath, { files: [file1Consumer1Path] });
 
-                        createWatchModeWithConfigFile(configFilePath, host);
+                        createWatchOfConfigFile(configFilePath, host);
                         checkAffectedFiles(host, [file1Consumer1OutputPath, moduleFile1OutputPath]);
 
                         // Add export to moduleFile1. Should affect moduleFile1 and file1Consumer1.
@@ -1020,7 +1031,7 @@ namespace ts.tscWatch {
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath);
 
-                        createWatchModeWithConfigFile(configFilePath, host);
+                        createWatchOfConfigFile(configFilePath, host);
                         checkAffectedFiles(host, commonOutputPaths);
 
                         // Add declaration to global. Should affect all files.
@@ -1033,7 +1044,7 @@ namespace ts.tscWatch {
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath, { compilerOptions: { isolatedModules: true } });
 
-                        createWatchModeWithConfigFile(configFilePath, host);
+                        createWatchOfConfigFile(configFilePath, host);
                         checkAffectedFiles(host, commonOutputPaths);
 
                         // Add export to moduleFile1. Should only affect moduleFile1.
@@ -1046,7 +1057,7 @@ namespace ts.tscWatch {
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath, { compilerOptions: { module: "system", outFile: "/a/b/out.js" } });
 
-                        createWatchModeWithConfigFile(configFilePath, host);
+                        createWatchOfConfigFile(configFilePath, host);
                         checkAffectedFiles(host, ["/a/b/out.js"]);
 
                         writeFile(host, moduleFile1Path, `export var T: number;export function Foo() { };`);
@@ -1058,7 +1069,7 @@ namespace ts.tscWatch {
                         writeCommonFiles(host);
                         writeConfigFile(host, configFilePath);
 
-                        createWatchModeWithConfigFile(configFilePath, host);
+                        createWatchOfConfigFile(configFilePath, host);
                         checkAffectedFiles(host, commonOutputPaths);
 
                         writeFile(host, "/a/b/file1Consumer1Consumer1.ts", `import {y} from "./file1Consumer1";`);
@@ -1082,7 +1093,7 @@ namespace ts.tscWatch {
                         writeFile(host, "/a/b/file2.ts", `/// <reference path="./file1.ts" />\nexport var t2 = 10;`);
                         writeConfigFile(host, configFilePath);
 
-                        createWatchModeWithConfigFile(configFilePath, host);
+                        createWatchOfConfigFile(configFilePath, host);
                         checkAffectedFiles(host, ["/a/b/file1.js", "/a/b/file2.js"]);
 
                         writeFile(host, "/a/b/file1.ts", `/// <reference path="./file2.ts" />\nexport var t1 = 10;\nexport var t3 = 10;`);
@@ -1095,7 +1106,7 @@ namespace ts.tscWatch {
                         writeCommonFiles(host, [moduleFile1Path]);
                         writeConfigFile(host, configFilePath);
 
-                        createWatchModeWithConfigFile(configFilePath, host);
+                        createWatchOfConfigFile(configFilePath, host);
                         checkAffectedFiles(host, ["/a/b/referenceFile1.js", moduleFile1OutputPath]);
 
                         host.vfs.unlinkSync(moduleFile1Path);
@@ -1107,7 +1118,7 @@ namespace ts.tscWatch {
                         writeFile(host, "/a/b/referenceFile1.ts", `/// <reference path="./moduleFile2.ts" />\nexport var x = Foo();`);
                         writeConfigFile(host, configFilePath);
 
-                        createWatchModeWithConfigFile(configFilePath, host);
+                        createWatchOfConfigFile(configFilePath, host);
                         checkAffectedFiles(host, ["/a/b/referenceFile1.js"]);
 
                         writeFile(host, "/a/b/referenceFile1.ts", `/// <reference path="./moduleFile2.ts" />\nexport var x = Foo();\nexport var yy = Foo();`);
@@ -1127,7 +1138,7 @@ namespace ts.tscWatch {
                     const host = new fakes.FakeServerHost({ newLine });
                     writeFile(host, "/a/app.ts", `var x = 1;${newLine}var y = 2;`);
 
-                    createWatchModeWithoutConfigFile(["/a/app.ts"], host, { listEmittedFiles: true });
+                    createWatchOfFilesAndCompilerOptions(["/a/app.ts"], host, { listEmittedFiles: true });
                     checkAffectedFiles(host, ["/a/app.js"]);
 
                     assert.isTrue(host.fileExists("/a/app.js"));
@@ -1150,7 +1161,7 @@ namespace ts.tscWatch {
 
                     const writeFileSpy1 = spy(host, "writeFile");
 
-                    createWatchModeWithConfigFile("/a/b/tsconfig.json", host);
+                    createWatchOfConfigFile("/a/b/tsconfig.json", host);
                     checkAffectedFiles(host, ["/a/b/f1.js", "/a/b/f2.js", "/a/b/f3.js"]);
 
                     writeFileSpy1
@@ -1180,7 +1191,7 @@ namespace ts.tscWatch {
 
                     const writeFileSpy1 = spy(host, "writeFile");
 
-                    createWatchModeWithoutConfigFile(["/user/someone/projects/myproject/file1.ts", "/user/someone/projects/myproject/file2.ts", "/user/someone/projects/myproject/file3.ts"], host, { listEmittedFiles: true });
+                    createWatchOfFilesAndCompilerOptions(["/user/someone/projects/myproject/file1.ts", "/user/someone/projects/myproject/file2.ts", "/user/someone/projects/myproject/file3.ts"], host, { listEmittedFiles: true });
                     checkAffectedFiles(host, ["/user/someone/projects/myproject/file1.js", "/user/someone/projects/myproject/file2.js", "/user/someone/projects/myproject/file3.js"]);
 
                     writeFileSpy1
@@ -1213,7 +1224,7 @@ namespace ts.tscWatch {
                     "/a/f1.ts": importedContent,
                 });
 
-                const watch = createWatchModeWithoutConfigFile(["/a/d/f0.ts"], host, { module: ModuleKind.AMD });
+                const watch = createWatchOfFilesAndCompilerOptions(["/a/d/f0.ts"], host, { module: ModuleKind.AMD });
 
                 // ensure that imported file was found
                 checkOutputErrors(host, [
@@ -1290,7 +1301,7 @@ namespace ts.tscWatch {
                 // spy on calls to fileExists when starting watch mode
                 const fileExistsSpy1 = spy(host, "fileExists");
 
-                const watch = createWatchModeWithoutConfigFile(["/a/foo.ts"], host, { module: ModuleKind.AMD });
+                const watch = createWatchOfFilesAndCompilerOptions(["/a/foo.ts"], host, { module: ModuleKind.AMD });
 
                 // verify fileExists was called correctly
                 fileExistsSpy1
@@ -1328,7 +1339,7 @@ namespace ts.tscWatch {
                 // spy on fileExists when starting watch mode
                 const fileExistsSpy1 = spy(host, "fileExists");
 
-                const watch = createWatchModeWithoutConfigFile(["/a/foo.ts"], host, { module: ModuleKind.AMD });
+                const watch = createWatchOfFilesAndCompilerOptions(["/a/foo.ts"], host, { module: ModuleKind.AMD });
 
                 // verify fileExists was called correctly
                 fileExistsSpy1
@@ -1372,7 +1383,7 @@ namespace ts.tscWatch {
                     "/a/b/foo.ts": rootContent,
                 });
 
-                const watch = createWatchModeWithoutConfigFile(["/a/b/foo.ts"], host, { });
+                const watch = createWatchOfFilesAndCompilerOptions(["/a/b/foo.ts"], host, { });
 
                 checkOutputErrors(host, [
                     createCannotFindModuleDiagnostic(watch(), "/a/b/foo.ts", rootContent, "fs")
@@ -1393,7 +1404,7 @@ namespace ts.tscWatch {
                     "/a/b/bar.d.ts": fileContent1,
                 });
 
-                const watch = createWatchModeWithoutConfigFile(["/a/b/foo.ts", "/a/b/bar.d.ts"], host, {});
+                const watch = createWatchOfFilesAndCompilerOptions(["/a/b/foo.ts", "/a/b/bar.d.ts"], host, {});
 
                 checkOutputErrors(host, [
                     createCannotFindModuleDiagnostic(watch(), "/a/b/foo.ts", rootContent, "fs")
@@ -1429,7 +1440,7 @@ namespace ts.tscWatch {
                 // spy on calls to writeFile when starting watch mode
                 const writeFileSpy1 = spy(host, "writeFile");
 
-                const watch = createWatchModeWithConfigFile("/a/b/projects/myProject/src/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/b/projects/myProject/src/tsconfig.json", host);
                 checkProgramActualFiles(watch(), [
                     "/a/b/projects/myProject/src/file1.ts",
                     "/a/b/projects/myProject/src/file2.ts",
@@ -1483,7 +1494,7 @@ namespace ts.tscWatch {
                     })
                 });
 
-                const watch = createWatchModeWithConfigFile("/a/rootFolder/project/tsconfig.json", host);
+                const watch = createWatchOfConfigFile("/a/rootFolder/project/tsconfig.json", host);
 
                 checkProgramActualFiles(watch(), [
                     "/a/rootFolder/project/Scripts/TypeScript.ts",
@@ -1520,7 +1531,7 @@ namespace ts.tscWatch {
                 "/a/f.ts": "",
             });
 
-            createWatchModeWithoutConfigFile(["/a/f.ts"], host);
+            createWatchOfFilesAndCompilerOptions(["/a/f.ts"], host);
             host.runQueuedTimeoutCallbacks();
 
             host.checkScreenClears(1);
@@ -1530,7 +1541,7 @@ namespace ts.tscWatch {
             const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
                 "/a/f.ts": "",
             });
-            createWatchModeWithoutConfigFile(["/a/f.ts"], host);
+            createWatchOfFilesAndCompilerOptions(["/a/f.ts"], host);
 
             host.vfs.writeFileSync("/a/f.ts", "//");
             host.runQueuedTimeoutCallbacks();

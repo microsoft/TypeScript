@@ -24,7 +24,7 @@ function f0() {
 >x : number
 >y : string
 >z : any
->[1, "hello"] : [number, string, any]
+>[1, "hello"] : [number, string, undefined]
 >1 : 1
 >"hello" : "hello"
 
@@ -258,13 +258,13 @@ function f8() {
 >a : any
 >b : any
 >c : any
->[] : [any, any, any]
+>[] : [undefined, undefined, undefined]
 
     var [d, e, f] = [1];  // Error, [1] is a tuple
 >d : number
 >e : any
 >f : any
->[1] : [number, any, any]
+>[1] : [number, undefined, undefined]
 >1 : 1
 }
 

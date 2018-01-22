@@ -15,6 +15,6 @@
 verify.singleReferenceGroup("(property) A.foo: string");
 
 goTo.marker("");
-edit.insert("\r\n");
+edit.insert("\n");
 
 verify.singleReferenceGroup("(property) A.foo: string");

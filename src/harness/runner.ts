@@ -96,6 +96,7 @@ interface TestConfig {
     runners?: string[];
     runUnitTests?: boolean;
     noColors?: boolean;
+    timeout?: number;
 }
 
 interface TaskSet {
@@ -104,11 +105,15 @@ interface TaskSet {
 }
 
 let configOption: string;
+let globalTimeout: number;
 function handleTestConfig() {
     if (testConfigContent !== "") {
         const testConfig = <TestConfig>JSON.parse(testConfigContent);
         if (testConfig.light) {
             Harness.lightMode = true;
+        }
+        if (testConfig.timeout) {
+            globalTimeout = testConfig.timeout;
         }
         runUnitTests = testConfig.runUnitTests;
         if (testConfig.workerCount) {

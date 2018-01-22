@@ -1,511 +1,581 @@
-/// <reference path="program.ts" />
+/// <reference path="builderState.ts" />
 
+/*@internal*/
 namespace ts {
-    export interface EmitOutput {
-        outputFiles: OutputFile[];
-        emitSkipped: boolean;
+    /**
+     * State to store the changed files, affected files and cache semantic diagnostics
+     */
+    export interface BuilderProgramState extends BuilderState {
+        /**
+         * Cache of semantic diagnostics for files with their Path being the key
+         */
+        semanticDiagnosticsPerFile: Map<ReadonlyArray<Diagnostic>> | undefined;
+        /**
+         * The map has key by source file's path that has been changed
+         */
+        changedFilesSet: Map<true>;
+        /**
+         * Set of affected files being iterated
+         */
+        affectedFiles: ReadonlyArray<SourceFile> | undefined;
+        /**
+         * Current index to retrieve affected file from
+         */
+        affectedFilesIndex: number | undefined;
+        /**
+         * Current changed file for iterating over affected files
+         */
+        currentChangedFilePath: Path | undefined;
+        /**
+         * Map of file signatures, with key being file path, calculated while getting current changed file's affected files
+         * These will be commited whenever the iteration through affected files of current changed file is complete
+         */
+        currentAffectedFilesSignatures: Map<string> | undefined;
+        /**
+         * Already seen affected files
+         */
+        seenAffectedFiles: Map<true> | undefined;
+        /**
+         * program corresponding to this state
+         */
+        program: Program;
     }
 
-    export interface OutputFile {
-        name: string;
-        writeByteOrderMark: boolean;
-        text: string;
+    function hasSameKeys<T, U>(map1: ReadonlyMap<T> | undefined, map2: ReadonlyMap<U> | undefined) {
+        if (map1 === undefined) {
+            return map2 === undefined;
+        }
+        if (map2 === undefined) {
+            return map1 === undefined;
+        }
+        // Has same size and every key is present in both maps
+        return map1.size === map2.size && !forEachKey(map1, key => !map2.has(key));
     }
-}
 
-/* @internal */
-namespace ts {
-    export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean,
-        cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitOutput {
-        const outputFiles: OutputFile[] = [];
-        const emitResult = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
-            return { outputFiles, emitSkipped: emitResult.emitSkipped };
+    /**
+     * Create the state so that we can iterate on changedFiles/affected files
+     */
+    function createBuilderProgramState(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<BuilderProgramState>): BuilderProgramState {
+        const state = BuilderState.create(newProgram, getCanonicalFileName, oldState) as BuilderProgramState;
+        state.program = newProgram;
+        const compilerOptions = newProgram.getCompilerOptions();
+        if (!compilerOptions.outFile && !compilerOptions.out) {
+            state.semanticDiagnosticsPerFile = createMap<ReadonlyArray<Diagnostic>>();
+        }
+        state.changedFilesSet = createMap<true>();
+        const useOldState = BuilderState.canReuseOldState(state.referencedMap, oldState);
+        const canCopySemanticDiagnostics = useOldState && oldState.semanticDiagnosticsPerFile && !!state.semanticDiagnosticsPerFile;
+        if (useOldState) {
+            // Verify the sanity of old state
+            if (!oldState.currentChangedFilePath) {
+                Debug.assert(!oldState.affectedFiles && (!oldState.currentAffectedFilesSignatures || !oldState.currentAffectedFilesSignatures.size), "Cannot reuse if only few affected files of currentChangedFile were iterated");
+            }
+            if (canCopySemanticDiagnostics) {
+                Debug.assert(!forEachKey(oldState.changedFilesSet, path => oldState.semanticDiagnosticsPerFile.has(path)), "Semantic diagnostics shouldnt be available for changed files");
+            }
 
-        function writeFile(fileName: string, text: string, writeByteOrderMark: boolean) {
-            outputFiles.push({ name: fileName, writeByteOrderMark, text });
+            // Copy old state's changed files set
+            copyEntries(oldState.changedFilesSet, state.changedFilesSet);
+        }
+
+        // Update changed files and copy semantic diagnostics if we can
+        const referencedMap = state.referencedMap;
+        const oldReferencedMap = useOldState && oldState.referencedMap;
+        state.fileInfos.forEach((info, sourceFilePath) => {
+            let oldInfo: Readonly<BuilderState.FileInfo>;
+            let newReferences: BuilderState.ReferencedSet;
+
+            // if not using old state, every file is changed
+            if (!useOldState ||
+                // File wasnt present in old state
+                !(oldInfo = oldState.fileInfos.get(sourceFilePath)) ||
+                // versions dont match
+                oldInfo.version !== info.version ||
+                // Referenced files changed
+                !hasSameKeys(newReferences = referencedMap && referencedMap.get(sourceFilePath), oldReferencedMap && oldReferencedMap.get(sourceFilePath)) ||
+                // Referenced file was deleted in the new program
+                newReferences && forEachKey(newReferences, path => !state.fileInfos.has(path) && oldState.fileInfos.has(path))) {
+                // Register file as changed file and do not copy semantic diagnostics, since all changed files need to be re-evaluated
+                state.changedFilesSet.set(sourceFilePath, true);
+            }
+            else if (canCopySemanticDiagnostics) {
+                // Unchanged file copy diagnostics
+                const diagnostics = oldState.semanticDiagnosticsPerFile.get(sourceFilePath);
+                if (diagnostics) {
+                    state.semanticDiagnosticsPerFile.set(sourceFilePath, diagnostics);
+                }
+            }
+        });
+
+        return state;
+    }
+
+    /**
+     * Verifies that source file is ok to be used in calls that arent handled by next
+     */
+    function assertSourceFileOkWithoutNextAffectedCall(state: BuilderProgramState, sourceFile: SourceFile | undefined) {
+        Debug.assert(!sourceFile || !state.affectedFiles || state.affectedFiles[state.affectedFilesIndex - 1] !== sourceFile || !state.semanticDiagnosticsPerFile.has(sourceFile.path));
+    }
+
+    /**
+     * This function returns the next affected file to be processed.
+     * Note that until doneAffected is called it would keep reporting same result
+     * This is to allow the callers to be able to actually remove affected file only when the operation is complete
+     * eg. if during diagnostics check cancellation token ends up cancelling the request, the affected file should be retained
+     */
+    function getNextAffectedFile(state: BuilderProgramState, cancellationToken: CancellationToken | undefined, computeHash: BuilderState.ComputeHash): SourceFile | Program | undefined {
+        while (true) {
+            const { affectedFiles } = state;
+            if (affectedFiles) {
+                const { seenAffectedFiles, semanticDiagnosticsPerFile } = state;
+                let { affectedFilesIndex } = state;
+                while (affectedFilesIndex < affectedFiles.length) {
+                    const affectedFile = affectedFiles[affectedFilesIndex];
+                    if (!seenAffectedFiles.has(affectedFile.path)) {
+                        // Set the next affected file as seen and remove the cached semantic diagnostics
+                        state.affectedFilesIndex = affectedFilesIndex;
+                        semanticDiagnosticsPerFile.delete(affectedFile.path);
+                        return affectedFile;
+                    }
+                    seenAffectedFiles.set(affectedFile.path, true);
+                    affectedFilesIndex++;
+                }
+
+                // Remove the changed file from the change set
+                state.changedFilesSet.delete(state.currentChangedFilePath);
+                state.currentChangedFilePath = undefined;
+                // Commit the changes in file signature
+                BuilderState.updateSignaturesFromCache(state, state.currentAffectedFilesSignatures);
+                state.currentAffectedFilesSignatures.clear();
+                state.affectedFiles = undefined;
+            }
+
+            // Get next changed file
+            const nextKey = state.changedFilesSet.keys().next();
+            if (nextKey.done) {
+                // Done
+                return undefined;
+            }
+
+            // With --out or --outFile all outputs go into single file
+            // so operations are performed directly on program, return program
+            const compilerOptions = state.program.getCompilerOptions();
+            if (compilerOptions.outFile || compilerOptions.out) {
+                Debug.assert(!state.semanticDiagnosticsPerFile);
+                return state.program;
+            }
+
+            // Get next batch of affected files
+            state.currentAffectedFilesSignatures = state.currentAffectedFilesSignatures || createMap();
+            state.affectedFiles = BuilderState.getFilesAffectedBy(state, state.program, nextKey.value as Path, cancellationToken, computeHash, state.currentAffectedFilesSignatures);
+            state.currentChangedFilePath = nextKey.value as Path;
+            state.semanticDiagnosticsPerFile.delete(nextKey.value as Path);
+            state.affectedFilesIndex = 0;
+            state.seenAffectedFiles = state.seenAffectedFiles || createMap<true>();
         }
     }
 
-    export interface Builder {
-        /** Called to inform builder about new program */
-        updateProgram(newProgram: Program): void;
-
-        /** Gets the files affected by the file path */
-        getFilesAffectedBy(program: Program, path: Path): ReadonlyArray<SourceFile>;
-
-        /** Emit the changed files and clear the cache of the changed files */
-        emitChangedFiles(program: Program, writeFileCallback: WriteFileCallback): ReadonlyArray<EmitResult>;
-
-        /** When called gets the semantic diagnostics for the program. It also caches the diagnostics and manage them */
-        getSemanticDiagnostics(program: Program, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-
-        /** Called to reset the status of the builder */
-        clear(): void;
+    /**
+     * This is called after completing operation on the next affected file.
+     * The operations here are postponed to ensure that cancellation during the iteration is handled correctly
+     */
+    function doneWithAffectedFile(state: BuilderProgramState, affected: SourceFile | Program) {
+        if (affected === state.program) {
+            state.changedFilesSet.clear();
+        }
+        else {
+            state.seenAffectedFiles.set((affected as SourceFile).path, true);
+            state.affectedFilesIndex++;
+        }
     }
 
-    interface EmitHandler {
-        /**
-         * Called when sourceFile is added to the program
-         */
-        onAddSourceFile(program: Program, sourceFile: SourceFile): void;
-        /**
-         * Called when sourceFile is removed from the program
-         */
-        onRemoveSourceFile(path: Path): void;
-        /**
-         * For all source files, either "onUpdateSourceFile" or "onUpdateSourceFileWithSameVersion" will be called.
-         * If the builder is sure that the source file needs an update, "onUpdateSourceFile" will be called;
-         * otherwise "onUpdateSourceFileWithSameVersion" will be called.
-         */
-        onUpdateSourceFile(program: Program, sourceFile: SourceFile): void;
-        /**
-         * For all source files, either "onUpdateSourceFile" or "onUpdateSourceFileWithSameVersion" will be called.
-         * If the builder is sure that the source file needs an update, "onUpdateSourceFile" will be called;
-         * otherwise "onUpdateSourceFileWithSameVersion" will be called.
-         * This function should return whether the source file should be marked as changed (meaning that something associated with file has changed, e.g. module resolution)
-         */
-        onUpdateSourceFileWithSameVersion(program: Program, sourceFile: SourceFile): boolean;
-        /**
-         * Gets the files affected by the script info which has updated shape from the known one
-         */
-        getFilesAffectedByUpdatedShape(program: Program, sourceFile: SourceFile): ReadonlyArray<SourceFile>;
+    /**
+     * Returns the result with affected file
+     */
+    function toAffectedFileResult<T>(state: BuilderProgramState, result: T, affected: SourceFile | Program): AffectedFileResult<T> {
+        doneWithAffectedFile(state, affected);
+        return { result, affected };
     }
 
-    interface FileInfo {
-        version: string;
-        signature: string;
+    /**
+     * Gets the semantic diagnostics either from cache if present, or otherwise from program and caches it
+     * Note that it is assumed that the when asked about semantic diagnostics, the file has been taken out of affected files/changed file set
+     */
+    function getSemanticDiagnosticsOfFile(state: BuilderProgramState, sourceFile: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
+        const path = sourceFile.path;
+        const cachedDiagnostics = state.semanticDiagnosticsPerFile.get(path);
+        // Report the semantic diagnostics from the cache if we already have those diagnostics present
+        if (cachedDiagnostics) {
+            return cachedDiagnostics;
+        }
+
+        // Diagnostics werent cached, get them from program, and cache the result
+        const diagnostics = state.program.getSemanticDiagnostics(sourceFile, cancellationToken);
+        state.semanticDiagnosticsPerFile.set(path, diagnostics);
+        return diagnostics;
     }
 
-    export interface BuilderOptions {
-        getCanonicalFileName: GetCanonicalFileName;
-        computeHash: (data: string) => string;
+    export enum BuilderProgramKind {
+        SemanticDiagnosticsBuilderProgram,
+        EmitAndSemanticDiagnosticsBuilderProgram
     }
 
-    export function createBuilder(options: BuilderOptions): Builder {
-        let isModuleEmit: boolean | undefined;
-        const fileInfos = createMap<FileInfo>();
-        const semanticDiagnosticsPerFile = createMap<ReadonlyArray<Diagnostic>>();
-        /** The map has key by source file's path that has been changed */
-        const changedFilesSet = createMap<true>();
-        const hasShapeChanged = createMap<true>();
-        let allFilesExcludingDefaultLibraryFile: ReadonlyArray<SourceFile> | undefined;
-        let emitHandler: EmitHandler;
-        return {
-            updateProgram,
-            getFilesAffectedBy,
-            emitChangedFiles,
+    export interface BuilderCreationParameters {
+        newProgram: Program;
+        host: BuilderProgramHost;
+        oldProgram: BuilderProgram | undefined;
+    }
+
+    export function getBuilderCreationParameters(newProgramOrRootNames: Program | ReadonlyArray<string>, hostOrOptions: BuilderProgramHost | CompilerOptions, oldProgramOrHost?: CompilerHost | BuilderProgram, oldProgram?: BuilderProgram): BuilderCreationParameters {
+        let host: BuilderProgramHost;
+        let newProgram: Program;
+        if (isArray(newProgramOrRootNames)) {
+            newProgram = createProgram(newProgramOrRootNames, hostOrOptions as CompilerOptions, oldProgramOrHost as CompilerHost, oldProgram && oldProgram.getProgram());
+            host = oldProgramOrHost as CompilerHost;
+        }
+        else {
+            newProgram = newProgramOrRootNames as Program;
+            host = hostOrOptions as BuilderProgramHost;
+            oldProgram = oldProgramOrHost as BuilderProgram;
+        }
+        return { host, newProgram, oldProgram };
+    }
+
+    export function createBuilderProgram(kind: BuilderProgramKind.SemanticDiagnosticsBuilderProgram, builderCreationParameters: BuilderCreationParameters): SemanticDiagnosticsBuilderProgram;
+    export function createBuilderProgram(kind: BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram, builderCreationParameters: BuilderCreationParameters): EmitAndSemanticDiagnosticsBuilderProgram;
+    export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, host, oldProgram }: BuilderCreationParameters) {
+        // Return same program if underlying program doesnt change
+        let oldState = oldProgram && oldProgram.getState();
+        if (oldState && newProgram === oldState.program) {
+            newProgram = undefined;
+            oldState = undefined;
+            return oldProgram;
+        }
+
+        /**
+         * Create the canonical file name for identity
+         */
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
+        /**
+         * Computing hash to for signature verification
+         */
+        const computeHash = host.createHash || identity;
+        const state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState);
+
+        // To ensure that we arent storing any references to old program or new program without state
+        newProgram = undefined;
+        oldProgram = undefined;
+        oldState = undefined;
+
+        const result: BuilderProgram = {
+            getState: () => state,
+            getProgram: () => state.program,
+            getCompilerOptions: () => state.program.getCompilerOptions(),
+            getSourceFile: fileName => state.program.getSourceFile(fileName),
+            getSourceFiles: () => state.program.getSourceFiles(),
+            getOptionsDiagnostics: cancellationToken => state.program.getOptionsDiagnostics(cancellationToken),
+            getGlobalDiagnostics: cancellationToken => state.program.getGlobalDiagnostics(cancellationToken),
+            getSyntacticDiagnostics: (sourceFile, cancellationToken) => state.program.getSyntacticDiagnostics(sourceFile, cancellationToken),
             getSemanticDiagnostics,
-            clear
+            emit,
+            getAllDependencies: sourceFile => BuilderState.getAllDependencies(state, state.program, sourceFile),
+            getCurrentDirectory: () => state.program.getCurrentDirectory()
         };
 
-        function createProgramGraph(program: Program) {
-            const currentIsModuleEmit = program.getCompilerOptions().module !== ModuleKind.None;
-            if (isModuleEmit !== currentIsModuleEmit) {
-                isModuleEmit = currentIsModuleEmit;
-                emitHandler = isModuleEmit ? getModuleEmitHandler() : getNonModuleEmitHandler();
-                fileInfos.clear();
-                semanticDiagnosticsPerFile.clear();
+        if (kind === BuilderProgramKind.SemanticDiagnosticsBuilderProgram) {
+            (result as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile = getSemanticDiagnosticsOfNextAffectedFile;
+        }
+        else if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
+            (result as EmitAndSemanticDiagnosticsBuilderProgram).emitNextAffectedFile = emitNextAffectedFile;
+        }
+        else {
+            notImplemented();
+        }
+
+        return result;
+
+        /**
+         * Emits the next affected file's emit result (EmitResult and sourceFiles emitted) or returns undefined if iteration is complete
+         * The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
+         * in that order would be used to write the files
+         */
+        function emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult> {
+            const affected = getNextAffectedFile(state, cancellationToken, computeHash);
+            if (!affected) {
+                // Done
+                return undefined;
             }
-            hasShapeChanged.clear();
-            allFilesExcludingDefaultLibraryFile = undefined;
-            mutateMap(
-                fileInfos,
-                arrayToMap(program.getSourceFiles(), sourceFile => sourceFile.path),
-                {
-                    // Add new file info
-                    createNewValue: (_path, sourceFile) => addNewFileInfo(program, sourceFile),
-                    // Remove existing file info
-                    onDeleteValue: removeExistingFileInfo,
-                    // We will update in place instead of deleting existing value and adding new one
-                    onExistingValue: (existingInfo, sourceFile) => updateExistingFileInfo(program, existingInfo, sourceFile)
-                }
+
+            return toAffectedFileResult(
+                state,
+                // When whole program is affected, do emit only once (eg when --out or --outFile is specified)
+                // Otherwise just affected file
+                state.program.emit(affected === state.program ? undefined : affected as SourceFile, writeFile || host.writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers),
+                affected
             );
         }
 
-        function registerChangedFile(path: Path) {
-            changedFilesSet.set(path, true);
-            // All changed files need to re-evaluate its semantic diagnostics
-            semanticDiagnosticsPerFile.delete(path);
-        }
+        /**
+         * Emits the JavaScript and declaration files.
+         * When targetSource file is specified, emits the files corresponding to that source file,
+         * otherwise for the whole program.
+         * In case of EmitAndSemanticDiagnosticsBuilderProgram, when targetSourceFile is specified,
+         * it is assumed that that file is handled from affected file list. If targetSourceFile is not specified,
+         * it will only emit all the affected files instead of whole program
+         *
+         * The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
+         * in that order would be used to write the files
+         */
+        function emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
+            if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
+                assertSourceFileOkWithoutNextAffectedCall(state, targetSourceFile);
+                if (!targetSourceFile) {
+                    // Emit and report any errors we ran into.
+                    let sourceMaps: SourceMapData[] = [];
+                    let emitSkipped: boolean;
+                    let diagnostics: Diagnostic[];
+                    let emittedFiles: string[] = [];
 
-        function addNewFileInfo(program: Program, sourceFile: SourceFile): FileInfo {
-            registerChangedFile(sourceFile.path);
-            emitHandler.onAddSourceFile(program, sourceFile);
-            return { version: sourceFile.version, signature: undefined };
-        }
-
-        function removeExistingFileInfo(_existingFileInfo: FileInfo, path: Path) {
-            // Since we dont need to track removed file as changed file
-            // We can just remove its diagnostics
-            changedFilesSet.delete(path);
-            semanticDiagnosticsPerFile.delete(path);
-            emitHandler.onRemoveSourceFile(path);
-        }
-
-        function updateExistingFileInfo(program: Program, existingInfo: FileInfo, sourceFile: SourceFile) {
-            if (existingInfo.version !== sourceFile.version) {
-                registerChangedFile(sourceFile.path);
-                existingInfo.version = sourceFile.version;
-                emitHandler.onUpdateSourceFile(program, sourceFile);
-            }
-            else if (emitHandler.onUpdateSourceFileWithSameVersion(program, sourceFile)) {
-                registerChangedFile(sourceFile.path);
-            }
-        }
-
-        function ensureProgramGraph(program: Program) {
-            if (!emitHandler) {
-                createProgramGraph(program);
-            }
-        }
-
-        function updateProgram(newProgram: Program) {
-            if (emitHandler) {
-                createProgramGraph(newProgram);
-            }
-        }
-
-        function getFilesAffectedBy(program: Program, path: Path): ReadonlyArray<SourceFile> {
-            ensureProgramGraph(program);
-
-            const sourceFile = program.getSourceFileByPath(path);
-            if (!sourceFile) {
-                return emptyArray;
-            }
-
-            if (!updateShapeSignature(program, sourceFile)) {
-                return [sourceFile];
-            }
-            return emitHandler.getFilesAffectedByUpdatedShape(program, sourceFile);
-        }
-
-        function emitChangedFiles(program: Program, writeFileCallback: WriteFileCallback): ReadonlyArray<EmitResult> {
-            ensureProgramGraph(program);
-            const compilerOptions = program.getCompilerOptions();
-
-            if (!changedFilesSet.size) {
-                return emptyArray;
-            }
-
-            // With --out or --outFile all outputs go into single file, do it only once
-            if (compilerOptions.outFile || compilerOptions.out) {
-                Debug.assert(semanticDiagnosticsPerFile.size === 0);
-                changedFilesSet.clear();
-                return [program.emit(/*targetSourceFile*/ undefined, writeFileCallback)];
-            }
-
-            const seenFiles = createMap<true>();
-            let result: EmitResult[] | undefined;
-            changedFilesSet.forEach((_true, path) => {
-                // Get the affected Files by this program
-                const affectedFiles = getFilesAffectedBy(program, path as Path);
-                affectedFiles.forEach(affectedFile => {
-                    // Affected files shouldnt have cached diagnostics
-                    semanticDiagnosticsPerFile.delete(affectedFile.path);
-
-                    if (!seenFiles.has(affectedFile.path)) {
-                        seenFiles.set(affectedFile.path, true);
-
-                        // Emit the affected file
-                        (result || (result = [])).push(program.emit(affectedFile, writeFileCallback));
+                    let affectedEmitResult: AffectedFileResult<EmitResult>;
+                    while (affectedEmitResult = emitNextAffectedFile(writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers)) {
+                        emitSkipped = emitSkipped || affectedEmitResult.result.emitSkipped;
+                        diagnostics = addRange(diagnostics, affectedEmitResult.result.diagnostics);
+                        emittedFiles = addRange(emittedFiles, affectedEmitResult.result.emittedFiles);
+                        sourceMaps = addRange(sourceMaps, affectedEmitResult.result.sourceMaps);
                     }
-                });
-            });
-            changedFilesSet.clear();
-            return result || emptyArray;
+                    return {
+                        emitSkipped,
+                        diagnostics: diagnostics || emptyArray,
+                        emittedFiles,
+                        sourceMaps
+                    };
+                }
+            }
+            return state.program.emit(targetSourceFile, writeFile || host.writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
         }
 
-        function getSemanticDiagnostics(program: Program, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
-            ensureProgramGraph(program);
-            Debug.assert(changedFilesSet.size === 0);
+        /**
+         * Return the semantic diagnostics for the next affected file or undefined if iteration is complete
+         * If provided ignoreSourceFile would be called before getting the diagnostics and would ignore the sourceFile if the returned value was true
+         */
+        function getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<ReadonlyArray<Diagnostic>> {
+            while (true) {
+                const affected = getNextAffectedFile(state, cancellationToken, computeHash);
+                if (!affected) {
+                    // Done
+                    return undefined;
+                }
+                else if (affected === state.program) {
+                    // When whole program is affected, get all semantic diagnostics (eg when --out or --outFile is specified)
+                    return toAffectedFileResult(
+                        state,
+                        state.program.getSemanticDiagnostics(/*targetSourceFile*/ undefined, cancellationToken),
+                        affected
+                    );
+                }
 
-            const compilerOptions = program.getCompilerOptions();
+                // Get diagnostics for the affected file if its not ignored
+                if (ignoreSourceFile && ignoreSourceFile(affected as SourceFile)) {
+                    // Get next affected file
+                    doneWithAffectedFile(state, affected);
+                    continue;
+                }
+
+                return toAffectedFileResult(
+                    state,
+                    getSemanticDiagnosticsOfFile(state, affected as SourceFile, cancellationToken),
+                    affected
+                );
+            }
+        }
+
+        /**
+         * Gets the semantic diagnostics from the program corresponding to this state of file (if provided) or whole program
+         * The semantic diagnostics are cached and managed here
+         * Note that it is assumed that when asked about semantic diagnostics through this API,
+         * the file has been taken out of affected files so it is safe to use cache or get from program and cache the diagnostics
+         * In case of SemanticDiagnosticsBuilderProgram if the source file is not provided,
+         * it will iterate through all the affected files, to ensure that cache stays valid and yet provide a way to get all semantic diagnostics
+         */
+        function getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
+            assertSourceFileOkWithoutNextAffectedCall(state, sourceFile);
+            const compilerOptions = state.program.getCompilerOptions();
             if (compilerOptions.outFile || compilerOptions.out) {
-                Debug.assert(semanticDiagnosticsPerFile.size === 0);
+                Debug.assert(!state.semanticDiagnosticsPerFile);
                 // We dont need to cache the diagnostics just return them from program
-                return program.getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken);
+                return state.program.getSemanticDiagnostics(sourceFile, cancellationToken);
+            }
+
+            if (sourceFile) {
+                return getSemanticDiagnosticsOfFile(state, sourceFile, cancellationToken);
+            }
+
+            if (kind === BuilderProgramKind.SemanticDiagnosticsBuilderProgram) {
+                // When semantic builder asks for diagnostics of the whole program,
+                // ensure that all the affected files are handled
+                let affected: SourceFile | Program | undefined;
+                while (affected = getNextAffectedFile(state, cancellationToken, computeHash)) {
+                    doneWithAffectedFile(state, affected);
+                }
             }
 
             let diagnostics: Diagnostic[];
-            for (const sourceFile of program.getSourceFiles()) {
-                diagnostics = addRange(diagnostics, getSemanticDiagnosticsOfFile(program, sourceFile, cancellationToken));
+            for (const sourceFile of state.program.getSourceFiles()) {
+                diagnostics = addRange(diagnostics, getSemanticDiagnosticsOfFile(state, sourceFile, cancellationToken));
             }
             return diagnostics || emptyArray;
         }
+    }
+}
 
-        function getSemanticDiagnosticsOfFile(program: Program, sourceFile: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
-            const path = sourceFile.path;
-            const cachedDiagnostics = semanticDiagnosticsPerFile.get(path);
-            // Report the semantic diagnostics from the cache if we already have those diagnostics present
-            if (cachedDiagnostics) {
-                return cachedDiagnostics;
-            }
+namespace ts {
+    export type AffectedFileResult<T> = { result: T; affected: SourceFile | Program; } | undefined;
 
-            // Diagnostics werent cached, get them from program, and cache the result
-            const diagnostics = program.getSemanticDiagnostics(sourceFile, cancellationToken);
-            semanticDiagnosticsPerFile.set(path, diagnostics);
-            return diagnostics;
-        }
-
-        function clear() {
-            isModuleEmit = undefined;
-            emitHandler = undefined;
-            fileInfos.clear();
-            semanticDiagnosticsPerFile.clear();
-            changedFilesSet.clear();
-            hasShapeChanged.clear();
-        }
-
+    export interface BuilderProgramHost {
         /**
-         * For script files that contains only ambient external modules, although they are not actually external module files,
-         * they can only be consumed via importing elements from them. Regular script files cannot consume them. Therefore,
-         * there are no point to rebuild all script files if these special files have changed. However, if any statement
-         * in the file is not ambient external module, we treat it as a regular script file.
+         * return true if file names are treated with case sensitivity
          */
-        function containsOnlyAmbientModules(sourceFile: SourceFile) {
-            for (const statement of sourceFile.statements) {
-                if (!isModuleWithStringLiteralName(statement)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
+        useCaseSensitiveFileNames(): boolean;
         /**
-         * @return {boolean} indicates if the shape signature has changed since last update.
+         * If provided this would be used this hash instead of actual file shape text for detecting changes
          */
-        function updateShapeSignature(program: Program, sourceFile: SourceFile) {
-            Debug.assert(!!sourceFile);
-
-            // If we have cached the result for this file, that means hence forth we should assume file shape is uptodate
-            if (hasShapeChanged.has(sourceFile.path)) {
-                return false;
-            }
-
-            hasShapeChanged.set(sourceFile.path, true);
-            const info = fileInfos.get(sourceFile.path);
-            Debug.assert(!!info);
-
-            const prevSignature = info.signature;
-            let latestSignature: string;
-            if (sourceFile.isDeclarationFile) {
-                latestSignature = sourceFile.version;
-                info.signature = latestSignature;
-            }
-            else {
-                const emitOutput = getFileEmitOutput(program, sourceFile, /*emitOnlyDtsFiles*/ true);
-                if (emitOutput.outputFiles && emitOutput.outputFiles.length > 0) {
-                    latestSignature = options.computeHash(emitOutput.outputFiles[0].text);
-                    info.signature = latestSignature;
-                }
-                else {
-                    latestSignature = prevSignature;
-                }
-            }
-
-            return !prevSignature || latestSignature !== prevSignature;
-        }
-
+        createHash?: (data: string) => string;
         /**
-         * Gets the referenced files for a file from the program with values for the keys as referenced file's path to be true
+         * When emit or emitNextAffectedFile are called without writeFile,
+         * this callback if present would be used to write files
          */
-        function getReferencedFiles(program: Program, sourceFile: SourceFile): Map<true> | undefined {
-            let referencedFiles: Map<true> | undefined;
+        writeFile?: WriteFileCallback;
+    }
 
-            // We need to use a set here since the code can contain the same import twice,
-            // but that will only be one dependency.
-            // To avoid invernal conversion, the key of the referencedFiles map must be of type Path
-            if (sourceFile.imports && sourceFile.imports.length > 0) {
-                const checker: TypeChecker = program.getTypeChecker();
-                for (const importName of sourceFile.imports) {
-                    const symbol = checker.getSymbolAtLocation(importName);
-                    if (symbol && symbol.declarations && symbol.declarations[0]) {
-                        const declarationSourceFile = getSourceFileOfNode(symbol.declarations[0]);
-                        if (declarationSourceFile) {
-                            addReferencedFile(declarationSourceFile.path);
-                        }
-                    }
-                }
-            }
-
-            const sourceFileDirectory = getDirectoryPath(sourceFile.path);
-            // Handle triple slash references
-            if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
-                for (const referencedFile of sourceFile.referencedFiles) {
-                    const referencedPath = toPath(referencedFile.fileName, sourceFileDirectory, options.getCanonicalFileName);
-                    addReferencedFile(referencedPath);
-                }
-            }
-
-            // Handle type reference directives
-            if (sourceFile.resolvedTypeReferenceDirectiveNames) {
-                sourceFile.resolvedTypeReferenceDirectiveNames.forEach((resolvedTypeReferenceDirective) => {
-                    if (!resolvedTypeReferenceDirective) {
-                        return;
-                    }
-
-                    const fileName = resolvedTypeReferenceDirective.resolvedFileName;
-                    const typeFilePath = toPath(fileName, sourceFileDirectory, options.getCanonicalFileName);
-                    addReferencedFile(typeFilePath);
-                });
-            }
-
-            return referencedFiles;
-
-            function addReferencedFile(referencedPath: Path) {
-                if (!referencedFiles) {
-                    referencedFiles = createMap<true>();
-                }
-                referencedFiles.set(referencedPath, true);
-            }
-        }
-
+    /**
+     * Builder to manage the program state changes
+     */
+    export interface BuilderProgram {
+        /*@internal*/
+        getState(): BuilderProgramState;
         /**
-         * Gets all files of the program excluding the default library file
+         * Returns current program
          */
-        function getAllFilesExcludingDefaultLibraryFile(program: Program, firstSourceFile: SourceFile): ReadonlyArray<SourceFile> {
-            // Use cached result
-            if (allFilesExcludingDefaultLibraryFile) {
-                return allFilesExcludingDefaultLibraryFile;
-            }
+        getProgram(): Program;
+        /**
+         * Get compiler options of the program
+         */
+        getCompilerOptions(): CompilerOptions;
+        /**
+         * Get the source file in the program with file name
+         */
+        getSourceFile(fileName: string): SourceFile | undefined;
+        /**
+         * Get a list of files in the program
+         */
+        getSourceFiles(): ReadonlyArray<SourceFile>;
+        /**
+         * Get the diagnostics for compiler options
+         */
+        getOptionsDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        /**
+         * Get the diagnostics that dont belong to any file
+         */
+        getGlobalDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        /**
+         * Get the syntax diagnostics, for all source files if source file is not supplied
+         */
+        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        /**
+         * Get all the dependencies of the file
+         */
+        getAllDependencies(sourceFile: SourceFile): ReadonlyArray<string>;
+        /**
+         * Gets the semantic diagnostics from the program corresponding to this state of file (if provided) or whole program
+         * The semantic diagnostics are cached and managed here
+         * Note that it is assumed that when asked about semantic diagnostics through this API,
+         * the file has been taken out of affected files so it is safe to use cache or get from program and cache the diagnostics
+         * In case of SemanticDiagnosticsBuilderProgram if the source file is not provided,
+         * it will iterate through all the affected files, to ensure that cache stays valid and yet provide a way to get all semantic diagnostics
+         */
+        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        /**
+         * Emits the JavaScript and declaration files.
+         * When targetSource file is specified, emits the files corresponding to that source file,
+         * otherwise for the whole program.
+         * In case of EmitAndSemanticDiagnosticsBuilderProgram, when targetSourceFile is specified,
+         * it is assumed that that file is handled from affected file list. If targetSourceFile is not specified,
+         * it will only emit all the affected files instead of whole program
+         *
+         * The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
+         * in that order would be used to write the files
+         */
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
+        /**
+         * Get the current directory of the program
+         */
+        getCurrentDirectory(): string;
+    }
 
-            let result: SourceFile[];
-            addSourceFile(firstSourceFile);
-            for (const sourceFile of program.getSourceFiles()) {
-                if (sourceFile !== firstSourceFile) {
-                    addSourceFile(sourceFile);
-                }
-            }
-            allFilesExcludingDefaultLibraryFile = result || emptyArray;
-            return allFilesExcludingDefaultLibraryFile;
+    /**
+     * The builder that caches the semantic diagnostics for the program and handles the changed files and affected files
+     */
+    export interface SemanticDiagnosticsBuilderProgram extends BuilderProgram {
+        /**
+         * Gets the semantic diagnostics from the program for the next affected file and caches it
+         * Returns undefined if the iteration is complete
+         */
+        getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<ReadonlyArray<Diagnostic>>;
+    }
 
-            function addSourceFile(sourceFile: SourceFile) {
-                if (!program.isSourceFileDefaultLibrary(sourceFile)) {
-                    (result || (result = [])).push(sourceFile);
-                }
-            }
-        }
+    /**
+     * The builder that can handle the changes in program and iterate through changed file to emit the files
+     * The semantic diagnostics are cached per file and managed by clearing for the changed/affected files
+     */
+    export interface EmitAndSemanticDiagnosticsBuilderProgram extends BuilderProgram {
+        /**
+         * Emits the next affected file's emit result (EmitResult and sourceFiles emitted) or returns undefined if iteration is complete
+         * The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
+         * in that order would be used to write the files
+         */
+        emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult>;
+    }
 
-        function getNonModuleEmitHandler(): EmitHandler {
-            return {
-                onAddSourceFile: noop,
-                onRemoveSourceFile: noop,
-                onUpdateSourceFile: noop,
-                onUpdateSourceFileWithSameVersion: returnFalse,
-                getFilesAffectedByUpdatedShape
-            };
+    /**
+     * Create the builder to manage semantic diagnostics and cache them
+     */
+    export function createSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: SemanticDiagnosticsBuilderProgram): SemanticDiagnosticsBuilderProgram;
+    export function createSemanticDiagnosticsBuilderProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: SemanticDiagnosticsBuilderProgram): SemanticDiagnosticsBuilderProgram;
+    export function createSemanticDiagnosticsBuilderProgram(newProgramOrRootNames: Program | ReadonlyArray<string>, hostOrOptions: BuilderProgramHost | CompilerOptions, oldProgramOrHost?: CompilerHost | SemanticDiagnosticsBuilderProgram, oldProgram?: SemanticDiagnosticsBuilderProgram) {
+        return createBuilderProgram(BuilderProgramKind.SemanticDiagnosticsBuilderProgram, getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, oldProgram));
+    }
 
-            function getFilesAffectedByUpdatedShape(program: Program, sourceFile: SourceFile): ReadonlyArray<SourceFile> {
-                const options = program.getCompilerOptions();
-                // If `--out` or `--outFile` is specified, any new emit will result in re-emitting the entire project,
-                // so returning the file itself is good enough.
-                if (options && (options.out || options.outFile)) {
-                    return [sourceFile];
-                }
-                return getAllFilesExcludingDefaultLibraryFile(program, sourceFile);
-            }
-        }
+    /**
+     * Create the builder that can handle the changes in program and iterate through changed files
+     * to emit the those files and manage semantic diagnostics cache as well
+     */
+    export function createEmitAndSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram): EmitAndSemanticDiagnosticsBuilderProgram;
+    export function createEmitAndSemanticDiagnosticsBuilderProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram): EmitAndSemanticDiagnosticsBuilderProgram;
+    export function createEmitAndSemanticDiagnosticsBuilderProgram(newProgramOrRootNames: Program | ReadonlyArray<string>, hostOrOptions: BuilderProgramHost | CompilerOptions, oldProgramOrHost?: CompilerHost | EmitAndSemanticDiagnosticsBuilderProgram, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram) {
+        return createBuilderProgram(BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram, getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, oldProgram));
+    }
 
-        function getModuleEmitHandler(): EmitHandler {
-            const references = createMap<Map<true>>();
-            return {
-                onAddSourceFile: setReferences,
-                onRemoveSourceFile,
-                onUpdateSourceFile: updateReferences,
-                onUpdateSourceFileWithSameVersion: updateReferencesTrackingChangedReferences,
-                getFilesAffectedByUpdatedShape
-            };
-
-            function setReferences(program: Program, sourceFile: SourceFile) {
-                const newReferences = getReferencedFiles(program, sourceFile);
-                if (newReferences) {
-                    references.set(sourceFile.path, newReferences);
-                }
-            }
-
-            function updateReferences(program: Program, sourceFile: SourceFile) {
-                const newReferences = getReferencedFiles(program, sourceFile);
-                if (newReferences) {
-                    references.set(sourceFile.path, newReferences);
-                }
-                else {
-                    references.delete(sourceFile.path);
-                }
-            }
-
-            function updateReferencesTrackingChangedReferences(program: Program, sourceFile: SourceFile) {
-                const newReferences = getReferencedFiles(program, sourceFile);
-                if (!newReferences) {
-                    // Changed if we had references
-                    return references.delete(sourceFile.path);
-                }
-
-                const oldReferences = references.get(sourceFile.path);
-                references.set(sourceFile.path, newReferences);
-                if (!oldReferences || oldReferences.size !== newReferences.size) {
-                    return true;
-                }
-
-                // If there are any new references that werent present previously there is change
-                return forEachEntry(newReferences, (_true, referencedPath) => !oldReferences.delete(referencedPath)) ||
-                    // Otherwise its changed if there are more references previously than now
-                    !!oldReferences.size;
-            }
-
-            function onRemoveSourceFile(removedFilePath: Path) {
-                // Remove existing references
-                references.forEach((referencesInFile, filePath) => {
-                    if (referencesInFile.has(removedFilePath)) {
-                        // add files referencing the removedFilePath, as changed files too
-                        const referencedByInfo = fileInfos.get(filePath);
-                        if (referencedByInfo) {
-                            registerChangedFile(filePath as Path);
-                        }
-                    }
-                });
-                // Delete the entry for the removed file path
-                references.delete(removedFilePath);
-            }
-
-            function getReferencedByPaths(referencedFilePath: Path) {
-                return arrayFrom(mapDefinedIterator(references.entries(), ([filePath, referencesInFile]) =>
-                    referencesInFile.has(referencedFilePath) ? filePath as Path : undefined
-                ));
-            }
-
-            function getFilesAffectedByUpdatedShape(program: Program, sourceFile: SourceFile): ReadonlyArray<SourceFile> {
-                if (!isExternalModule(sourceFile) && !containsOnlyAmbientModules(sourceFile)) {
-                    return getAllFilesExcludingDefaultLibraryFile(program, sourceFile);
-                }
-
-                const compilerOptions = program.getCompilerOptions();
-                if (compilerOptions && (compilerOptions.isolatedModules || compilerOptions.out || compilerOptions.outFile)) {
-                    return [sourceFile];
-                }
-
-                // Now we need to if each file in the referencedBy list has a shape change as well.
-                // Because if so, its own referencedBy files need to be saved as well to make the
-                // emitting result consistent with files on disk.
-                const seenFileNamesMap = createMap<SourceFile>();
-
-                // Start with the paths this file was referenced by
-                const path = sourceFile.path;
-                seenFileNamesMap.set(path, sourceFile);
-                const queue = getReferencedByPaths(path);
-                while (queue.length > 0) {
-                    const currentPath = queue.pop();
-                    if (!seenFileNamesMap.has(currentPath)) {
-                        const currentSourceFile = program.getSourceFileByPath(currentPath);
-                        seenFileNamesMap.set(currentPath, currentSourceFile);
-                        if (currentSourceFile && updateShapeSignature(program, currentSourceFile)) {
-                            queue.push(...getReferencedByPaths(currentPath));
-                        }
-                    }
-                }
-
-                // Return array of values that needs emit
-                return arrayFrom(mapDefinedIterator(seenFileNamesMap.values(), value => value));
-            }
-        }
+    /**
+     * Creates a builder thats just abstraction over program and can be used with watch
+     */
+    export function createAbstractBuilder(newProgram: Program, host: BuilderProgramHost, oldProgram?: BuilderProgram): BuilderProgram;
+    export function createAbstractBuilder(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: BuilderProgram): BuilderProgram;
+    export function createAbstractBuilder(newProgramOrRootNames: Program | ReadonlyArray<string>, hostOrOptions: BuilderProgramHost | CompilerOptions, oldProgramOrHost?: CompilerHost | BuilderProgram, oldProgram?: BuilderProgram): BuilderProgram {
+        const { newProgram: program } = getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, oldProgram);
+        return {
+            // Only return program, all other methods are not implemented
+            getProgram: () => program,
+            getState: notImplemented,
+            getCompilerOptions: notImplemented,
+            getSourceFile: notImplemented,
+            getSourceFiles: notImplemented,
+            getOptionsDiagnostics: notImplemented,
+            getGlobalDiagnostics: notImplemented,
+            getSyntacticDiagnostics: notImplemented,
+            getSemanticDiagnostics: notImplemented,
+            emit: notImplemented,
+            getAllDependencies: notImplemented,
+            getCurrentDirectory: notImplemented
+        };
     }
 }

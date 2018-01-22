@@ -801,7 +801,9 @@ namespace ts {
             }
             const resolvedFromFile = loadModuleFromFile(extensions, candidate, failedLookupLocations, onlyRecordFailures, state);
             if (resolvedFromFile) {
-                return noPackageId(resolvedFromFile);
+                const nm = considerPackageJson ? parseNodeModuleFromPath(resolvedFromFile.path) : undefined;
+                const packageId = nm && getPackageJsonInfo(nm.packageDirectory, nm.subModuleName, failedLookupLocations, /*onlyRecordFailures*/ false, state).packageId;
+                return withPackageId(packageId, resolvedFromFile);
             }
         }
         if (!onlyRecordFailures) {
@@ -814,6 +816,45 @@ namespace ts {
             }
         }
         return loadNodeModuleFromDirectory(extensions, candidate, failedLookupLocations, onlyRecordFailures, state, considerPackageJson);
+    }
+
+    const nodeModulesPathPart = "/node_modules/";
+
+    /**
+     * This will be called on the successfully resolved path from `loadModuleFromFile`.
+     * (Not neeeded for `loadModuleFromNodeModules` as that looks up the `package.json` as part of resolution.)
+     *
+     * packageDirectory is the directory of the package itself.
+     * subModuleName is the path within the package.
+     *   For `blah/node_modules/foo/index.d.ts` this is { packageDirectory: "foo", subModuleName: "" }. (Part before "/node_modules/" is ignored.)
+     *   For `/node_modules/foo/bar.d.ts` this is { packageDirectory: "foo", subModuleName": "bar" }.
+     *   For `/node_modules/@types/foo/bar/index.d.ts` this is { packageDirectory: "@types/foo", subModuleName: "bar" }.
+     */
+    function parseNodeModuleFromPath(path: string): { packageDirectory: string, subModuleName: string } | undefined {
+        path = normalizePath(path);
+        const idx = path.lastIndexOf(nodeModulesPathPart);
+        if (idx === -1) {
+            return undefined;
+        }
+
+        const indexAfterNodeModules = idx + nodeModulesPathPart.length;
+        let indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterNodeModules);
+        if (path.charCodeAt(indexAfterNodeModules) === CharacterCodes.at) {
+            indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterPackageName);
+        }
+        const packageDirectory = path.slice(0, indexAfterPackageName);
+        const subModuleName = removeExtensionAndIndex(path.slice(indexAfterPackageName + 1));
+        return { packageDirectory, subModuleName };
+    }
+
+    function moveToNextDirectorySeparatorIfAvailable(path: string, prevSeparatorIndex: number): number {
+        const nextSeparatorIndex = path.indexOf(directorySeparator, prevSeparatorIndex + 1);
+        return nextSeparatorIndex === -1 ? prevSeparatorIndex : nextSeparatorIndex;
+    }
+
+    function removeExtensionAndIndex(path: string): string {
+        const noExtension = removeFileExtension(path);
+        return noExtension === "index" ? "" : removeSuffix(noExtension, "/index");
     }
 
     /* @internal */
@@ -919,13 +960,18 @@ namespace ts {
         const directoryExists = !onlyRecordFailures && directoryProbablyExists(nodeModuleDirectory, host);
         const packageJsonPath = pathToPackageJson(nodeModuleDirectory);
         if (directoryExists && host.fileExists(packageJsonPath)) {
-            if (traceEnabled) {
-                trace(host, Diagnostics.Found_package_json_at_0, packageJsonPath);
-            }
             const packageJsonContent = readJson(packageJsonPath, host);
             const packageId: PackageId = typeof packageJsonContent.name === "string" && typeof packageJsonContent.version === "string"
                 ? { name: packageJsonContent.name, subModuleName, version: packageJsonContent.version }
                 : undefined;
+            if (traceEnabled) {
+                if (packageId) {
+                    trace(host, Diagnostics.Found_package_json_at_0_Package_ID_is_1, packageJsonPath, packageIdToString(packageId));
+                }
+                else {
+                    trace(host, Diagnostics.Found_package_json_at_0, packageJsonPath);
+                }
+            }
             return { found: true, packageJsonContent, packageId };
         }
         else {
@@ -1097,11 +1143,16 @@ namespace ts {
     export function getPackageNameFromAtTypesDirectory(mangledName: string): string {
         const withoutAtTypePrefix = removePrefix(mangledName, "@types/");
         if (withoutAtTypePrefix !== mangledName) {
-            return stringContains(withoutAtTypePrefix, mangledScopedPackageSeparator) ?
-                "@" + withoutAtTypePrefix.replace(mangledScopedPackageSeparator, ts.directorySeparator) :
-                withoutAtTypePrefix;
+            return getUnmangledNameForScopedPackage(withoutAtTypePrefix);
         }
         return mangledName;
+    }
+
+    /* @internal */
+    export function getUnmangledNameForScopedPackage(typesPackageName: string): string {
+        return stringContains(typesPackageName, mangledScopedPackageSeparator) ?
+            "@" + typesPackageName.replace(mangledScopedPackageSeparator, ts.directorySeparator) :
+            typesPackageName;
     }
 
     function tryFindNonRelativeModuleNameInCache(cache: PerModuleNameCache | undefined, moduleName: string, containingDirectory: string, traceEnabled: boolean, host: ModuleResolutionHost): SearchResult<Resolved> {

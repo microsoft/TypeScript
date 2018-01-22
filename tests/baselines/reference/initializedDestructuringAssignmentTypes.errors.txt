@@ -1,0 +1,9 @@
+tests/cases/compiler/initializedDestructuringAssignmentTypes.ts(3,3): error TS2339: Property 'toFixed' does not exist on type 'string'.
+
+
+==== tests/cases/compiler/initializedDestructuringAssignmentTypes.ts (1 errors) ====
+    const [, a = ''] = ''.match('') || [];
+    
+    a.toFixed()
+      ~~~~~~~
+!!! error TS2339: Property 'toFixed' does not exist on type 'string'.

@@ -1,12 +1,11 @@
 /// <reference path="sys.ts" />
 /// <reference path="emitter.ts" />
 /// <reference path="core.ts" />
-/// <reference path="builder.ts" />
 
 namespace ts {
     const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?)/;
 
-    export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string {
+    export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string | undefined {
         return forEachAncestorDirectory(searchPath, ancestor => {
             const fileName = combinePaths(ancestor, configName);
             return fileExists(fileName) ? fileName : undefined;
@@ -331,11 +330,11 @@ namespace ts {
                 }
 
                 output += formatColorAndReset(relativeFileName, ForegroundColorEscapeSequences.Cyan);
-                output += "(";
+                output += ":";
                 output += formatColorAndReset(`${ firstLine + 1 }`, ForegroundColorEscapeSequences.Yellow);
-                output += ",";
+                output += ":";
                 output += formatColorAndReset(`${ firstLineChar + 1 }`, ForegroundColorEscapeSequences.Yellow);
-                output += "): ";
+                output += " - ";
             }
 
             const categoryColor = getCategoryFormat(diagnostic.category);
@@ -667,7 +666,8 @@ namespace ts {
             dropDiagnosticsProducingTypeChecker,
             getSourceFileFromReference,
             sourceFileToPackageName,
-            redirectTargetsSet
+            redirectTargetsSet,
+            isEmittedFile
         };
 
         verifyCompilerOptions();
@@ -1140,32 +1140,34 @@ namespace ts {
         function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
             let declarationDiagnostics: ReadonlyArray<Diagnostic> = [];
 
-            if (options.noEmit) {
-                return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
-            }
-
-            // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
-            // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
-            // get any preEmit diagnostics, not just the ones
-            if (options.noEmitOnError) {
-                const diagnostics = [
-                    ...program.getOptionsDiagnostics(cancellationToken),
-                    ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
-                    ...program.getGlobalDiagnostics(cancellationToken),
-                    ...program.getSemanticDiagnostics(sourceFile, cancellationToken)
-                ];
-
-                if (diagnostics.length === 0 && program.getCompilerOptions().declaration) {
-                    declarationDiagnostics = program.getDeclarationDiagnostics(/*sourceFile*/ undefined, cancellationToken);
+            if (!emitOnlyDtsFiles) {
+                if (options.noEmit) {
+                    return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
                 }
 
-                if (diagnostics.length > 0 || declarationDiagnostics.length > 0) {
-                    return {
-                        diagnostics: concatenate(diagnostics, declarationDiagnostics),
-                        sourceMaps: undefined,
-                        emittedFiles: undefined,
-                        emitSkipped: true
-                    };
+                // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
+                // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
+                // get any preEmit diagnostics, not just the ones
+                if (options.noEmitOnError) {
+                    const diagnostics = [
+                        ...program.getOptionsDiagnostics(cancellationToken),
+                        ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
+                        ...program.getGlobalDiagnostics(cancellationToken),
+                        ...program.getSemanticDiagnostics(sourceFile, cancellationToken)
+                    ];
+
+                    if (diagnostics.length === 0 && program.getCompilerOptions().declaration) {
+                        declarationDiagnostics = program.getDeclarationDiagnostics(/*sourceFile*/ undefined, cancellationToken);
+                    }
+
+                    if (diagnostics.length > 0 || declarationDiagnostics.length > 0) {
+                        return {
+                            diagnostics: concatenate(diagnostics, declarationDiagnostics),
+                            sourceMaps: undefined,
+                            emittedFiles: undefined,
+                            emitSkipped: true
+                        };
+                    }
                 }
             }
 
@@ -1177,7 +1179,7 @@ namespace ts {
             // This is because in the -out scenario all files need to be emitted, and therefore all
             // files need to be type checked. And the way to specify that all files need to be type
             // checked is to not pass the file to getEmitResolver.
-            const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile);
+            const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile, cancellationToken, emitOnlyDtsFiles);
 
             performance.mark("beforeEmit");
 
@@ -1601,6 +1603,7 @@ namespace ts {
                 // synthesize 'import "tslib"' declaration
                 const externalHelpersModuleReference = createLiteral(externalHelpersModuleNameText);
                 const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined);
+                addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
                 externalHelpersModuleReference.parent = importDecl;
                 importDecl.parent = file;
                 imports = [externalHelpersModuleReference];
@@ -1815,7 +1818,7 @@ namespace ts {
             }, shouldCreateNewSourceFile);
 
             if (packageId) {
-                const packageIdKey = `${packageId.name}/${packageId.subModuleName}@${packageId.version}`;
+                const packageIdKey = packageIdToString(packageId);
                 const fileFromPackageId = packageIdToSourceFile.get(packageIdKey);
                 if (fileFromPackageId) {
                     // Some other SourceFile already exists with this package name and version.
@@ -2341,6 +2344,20 @@ namespace ts {
         function blockEmittingOfFile(emitFileName: string, diag: Diagnostic) {
             hasEmitBlockingDiagnostics.set(toPath(emitFileName), true);
             programDiagnostics.add(diag);
+        }
+
+        function isEmittedFile(file: string) {
+            if (options.noEmit) {
+                return false;
+            }
+
+            return forEachEmittedFile(getEmitHost(), ({ jsFilePath, declarationFilePath }) =>
+                isSameFile(jsFilePath, file) ||
+                (declarationFilePath && isSameFile(declarationFilePath, file)));
+        }
+
+        function isSameFile(file1: string, file2: string) {
+            return comparePaths(file1, file2, currentDirectory, !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
         }
     }
 

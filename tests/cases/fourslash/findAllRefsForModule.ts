@@ -12,12 +12,12 @@
 ////const a = require("[|../a|]");
 
 // @Filename: /d.ts
-//// /// <reference path="[|./a|]" />
+//// /// <reference path="[|./a.ts|]" />
 
 verify.noErrors();
 
 const ranges = test.ranges();
 const [r0, r1, r2] = ranges;
-verify.referenceGroups([r0, r1], [{ definition: 'module "/a"', ranges: [r0, r1, r2] }]);
-// TODO:GH#15736
-verify.referenceGroups(r2, undefined);
+verify.referenceGroups(ranges, [{ definition: 'module "/a"', ranges: [r0, r1, r2] }]);
+// Testing that it works with documentHighlights too
+verify.rangesAreDocumentHighlights();

@@ -8,14 +8,13 @@
 
 verify.codeFix({
     description: "Implement interface 'IPerson'",
-    // TODO: GH#18445
     newFileContent:
 `interface IPerson {
     name: string;
     birthday?: string;
 }
-class Person implements IPerson {\r
-    name: string;\r
-    birthday?: string;\r
+class Person implements IPerson {
+    name: string;
+    birthday?: string;
 }`,
 });

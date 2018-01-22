@@ -102,8 +102,6 @@ namespace ts.server.protocol {
         GetCodeFixes = "getCodeFixes",
         /* @internal */
         GetCodeFixesFull = "getCodeFixes-full",
-        // TODO: GH#20538
-        /* @internal */
         GetCombinedCodeFix = "getCombinedCodeFix",
         /* @internal */
         GetCombinedCodeFixFull = "getCombinedCodeFix-full",
@@ -557,16 +555,12 @@ namespace ts.server.protocol {
         arguments: CodeFixRequestArgs;
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface GetCombinedCodeFixRequest extends Request {
         command: CommandTypes.GetCombinedCodeFix;
         arguments: GetCombinedCodeFixRequestArgs;
     }
 
-    // TODO: GH#20538
-    /* @internal */
-    export interface GetCombinedCodeFixResponse  extends Response {
+    export interface GetCombinedCodeFixResponse extends Response {
         body: CombinedCodeActions;
     }
 
@@ -622,15 +616,11 @@ namespace ts.server.protocol {
         errorCodes?: ReadonlyArray<number>;
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface GetCombinedCodeFixRequestArgs {
         scope: GetCombinedCodeFixScope;
         fixId: {};
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface GetCombinedCodeFixScope {
         type: "file";
         args: FileRequestArgs;
@@ -1619,7 +1609,7 @@ namespace ts.server.protocol {
 
     export interface CodeFixResponse extends Response {
         /** The code actions that are available */
-        body?: CodeAction[]; // TODO: GH#20538 CodeFixAction[]
+        body?: CodeFixAction[];
     }
 
     export interface CodeAction {
@@ -1631,15 +1621,11 @@ namespace ts.server.protocol {
         commands?: {}[];
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface CombinedCodeActions {
         changes: ReadonlyArray<FileCodeEdits>;
         commands?: ReadonlyArray<{}>;
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface CodeFixAction extends CodeAction {
         /**
          * If present, one may call 'getCombinedCodeFix' with this fixId.
@@ -1693,6 +1679,11 @@ namespace ts.server.protocol {
          * This affects lone identifier completions but not completions on the right hand side of `obj.`.
          */
         includeExternalModuleExports: boolean;
+        /**
+         * If enabled, the completion list will include completions with invalid identifier names.
+         * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
+         */
+        includeInsertTextCompletions: boolean;
     }
 
     /**
@@ -1768,6 +1759,12 @@ namespace ts.server.protocol {
          * is often the same as the name but may be different in certain circumstances.
          */
         sortText: string;
+        /**
+         * Text to insert instead of `name`.
+         * This is used to support bracketed completions; If `name` might be "a-b" but `insertText` would be `["a-b"]`,
+         * coupled with `replacementSpan` to replace a dotted access with a bracket access.
+         */
+        insertText?: string;
         /**
          * An optional span that indicates the text to be replaced by this completion item.
          * If present, this span should be used instead of the default one.
@@ -2556,6 +2553,7 @@ namespace ts.server.protocol {
         insertSpaceBeforeFunctionParenthesis?: boolean;
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
+        insertSpaceBeforeTypeAnnotation?: boolean;
     }
 
     export interface CompilerOptions {

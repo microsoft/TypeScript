@@ -63,7 +63,7 @@ declare var window: {};
 declare var XMLHttpRequest: {
     new(): XMLHttpRequest;
 };
-interface XMLHttpRequest  {
+interface XMLHttpRequest {
     readonly readyState: number;
     readonly responseText: string;
     readonly status: number;
@@ -1901,7 +1901,7 @@ namespace Harness {
             let tsConfigFileUnitData: TestUnitData;
             for (let i = 0; i < testUnitData.length; i++) {
                 const data = testUnitData[i];
-                if (ts.getBaseFileName(data.name).toLowerCase() === "tsconfig.json") {
+                if (getConfigNameFromFileName(data.name)) {
                     const configJson = ts.parseJsonText(data.name, data.content);
                     assert.isTrue(configJson.endOfFileToken !== undefined);
                     let baseDir = ts.normalizePath(ts.getDirectoryPath(data.name));
@@ -2111,6 +2111,11 @@ namespace Harness {
     export function getDefaultLibraryFile(filePath: string, io: Harness.IO): Harness.Compiler.TestFile {
         const libFile = Harness.userSpecifiedRoot + Harness.libFolder + ts.getBaseFileName(ts.normalizeSlashes(filePath));
         return { unitName: libFile, content: io.readFile(libFile) };
+    }
+
+    export function getConfigNameFromFileName(filename: string): "tsconfig.json" | "jsconfig.json" | undefined {
+        const flc = ts.getBaseFileName(filename).toLowerCase();
+        return ts.find(["tsconfig.json" as "tsconfig.json", "jsconfig.json" as "jsconfig.json"], x => x === flc);
     }
 
     if (Error) (<any>Error).stackTraceLimit = 100;

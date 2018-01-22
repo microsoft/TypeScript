@@ -122,7 +122,6 @@ namespace ts {
             const sourceFile = program.getSourceFile(path);
             const context: RefactorContext = {
                 cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
-                newLineCharacter,
                 program,
                 file: sourceFile,
                 startPosition: selectionRange.start,
@@ -183,7 +182,6 @@ namespace ts {
             const sourceFile = program.getSourceFile("/a.ts");
             const context: RefactorContext = {
                 cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
-                newLineCharacter,
                 program,
                 file: sourceFile,
                 startPosition: selectionRange.start,
