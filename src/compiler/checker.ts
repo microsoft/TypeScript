@@ -13898,56 +13898,35 @@ namespace ts {
             return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional) : undefined;
         }
 
+        function getContextualTypeForChildJsxExpression(node: JsxElement) {
+            const attributesType = getApparentTypeOfContextualType(node.openingElement.tagName);
+            // JSX expression is in children of JSX Element, we will look for an "children" atttribute (we get the name from JSX.ElementAttributesProperty)
+            const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
+            return attributesType && !isTypeAny(attributesType) && jsxChildrenPropertyName && jsxChildrenPropertyName !== "" ? getTypeOfPropertyOfContextualType(attributesType, jsxChildrenPropertyName) : undefined;
+        }
+
         function getContextualTypeForJsxExpression(node: JsxExpression): Type {
-            // JSX expression can appear in two position : JSX Element's children or JSX attribute
-            const jsxAttributes = isJsxAttributeLike(node.parent) ?
-                node.parent.parent :
-                    isJsxElement(node.parent) ?
-                        node.parent.openingElement.attributes :
-                        undefined; // node.parent is JsxFragment with no attributes
-
-            if (!jsxAttributes) {
-                return undefined; // don't check children of a fragment
-            }
-
-            // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give its attributes a contextual type
-            // which is a type of the parameter of the signature we are trying out.
-            // If there is no contextual type (e.g. we are trying to resolve stateful component), get attributes type from resolving element's tagName
-            const attributesType = getContextualType(jsxAttributes);
-
-            if (!attributesType || isTypeAny(attributesType)) {
-                return undefined;
-            }
-
-            if (isJsxAttribute(node.parent)) {
-                // JSX expression is in JSX attribute
-                return getTypeOfPropertyOfContextualType(attributesType, node.parent.name.escapedText);
-            }
-            else if (node.parent.kind === SyntaxKind.JsxElement) {
-                // JSX expression is in children of JSX Element, we will look for an "children" atttribute (we get the name from JSX.ElementAttributesProperty)
-                const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
-                return jsxChildrenPropertyName && jsxChildrenPropertyName !== "" ? getTypeOfPropertyOfContextualType(attributesType, jsxChildrenPropertyName) : anyType;
-            }
-            else {
-                // JSX expression is in JSX spread attribute
-                return attributesType;
-            }
+            const exprParent = node.parent;
+            return isJsxAttributeLike(exprParent)
+                ? getContextualType(node)
+                : isJsxElement(exprParent)
+                    ? getContextualTypeForChildJsxExpression(exprParent)
+                    : undefined;
         }
 
         function getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute) {
             // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give its attributes a contextual type
             // which is a type of the parameter of the signature we are trying out.
             // If there is no contextual type (e.g. we are trying to resolve stateful component), get attributes type from resolving element's tagName
-            const attributesType = getContextualType(<Expression>attribute.parent);
-
             if (isJsxAttribute(attribute)) {
+                const attributesType = getApparentTypeOfContextualType(attribute.parent);
                 if (!attributesType || isTypeAny(attributesType)) {
                     return undefined;
                 }
                 return getTypeOfPropertyOfContextualType(attributesType, attribute.name.escapedText);
             }
             else {
-                return attributesType;
+                return getContextualType(attribute.parent);
             }
         }
 
@@ -14055,7 +14034,7 @@ namespace ts {
                     return getContextualTypeForJsxAttribute(<JsxAttribute | JsxSpreadAttribute>parent);
                 case SyntaxKind.JsxOpeningElement:
                 case SyntaxKind.JsxSelfClosingElement:
-                    return getAttributesTypeFromJsxOpeningLikeElement(<JsxOpeningLikeElement>parent);
+                    return getContextualJsxElementAttributesType(<JsxOpeningLikeElement>parent);
             }
             return undefined;
         }
@@ -14063,6 +14042,119 @@ namespace ts {
         function getContextualMapper(node: Node) {
             node = findAncestor(node, n => !!n.contextualMapper);
             return node ? node.contextualMapper : identityMapper;
+        }
+
+        function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement) {
+            if (isJsxIntrinsicIdentifier(node.tagName)) {
+                return getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node);
+            }
+            const valueType = checkExpression(node.tagName);
+            if (isTypeAny(valueType)) {
+                // Short-circuit if the class tag is using an element type 'any'
+                return anyType;
+            }
+
+            return mapType(valueType, signturesToParameterTypes);
+
+            function signturesToParameterTypes(valueType: Type) {
+                // If the elemType is a string type, we have to return anyType to prevent an error downstream as we will try to find construct or call signature of the type
+                if (valueType.flags & TypeFlags.String) {
+                    return anyType;
+                }
+                else if (valueType.flags & TypeFlags.StringLiteral) {
+                    // If the elemType is a stringLiteral type, we can then provide a check to make sure that the string literal type is one of the Jsx intrinsic element type
+                    // For example:
+                    //      var CustomTag: "h1" = "h1";
+                    //      <CustomTag> Hello World </CustomTag>
+                    const intrinsicElementsType = getJsxType(JsxNames.IntrinsicElements);
+                    if (intrinsicElementsType !== unknownType) {
+                        const stringLiteralTypeName = (<StringLiteralType>valueType).value;
+                        const intrinsicProp = getPropertyOfType(intrinsicElementsType, escapeLeadingUnderscores(stringLiteralTypeName));
+                        if (intrinsicProp) {
+                            return getTypeOfSymbol(intrinsicProp);
+                        }
+                        const indexSignatureType = getIndexTypeOfType(intrinsicElementsType, IndexKind.String);
+                        if (indexSignatureType) {
+                            return indexSignatureType;
+                        }
+                    }
+                    return anyType;
+                }
+
+                // Resolve the signatures, preferring constructor
+                let signatures = getSignaturesOfType(valueType, SignatureKind.Construct);
+                let ctor = true;
+                if (signatures.length === 0) {
+                    // No construct signatures, try call signatures
+                    signatures = getSignaturesOfType(valueType, SignatureKind.Call);
+                    ctor = false;
+                    if (signatures.length === 0) {
+                        // We found no signatures at all, which is an error
+                        return unknownType;
+                    }
+                }
+
+                return getUnionType(map(signatures, ctor ? getJsxPropsTypeFromConstructSignature : getJsxPropsTypeFromCallSignature), UnionReduction.None);
+            }
+        }
+
+        function getJsxPropsTypeFromCallSignature(sig: Signature) {
+            let propsType = getTypeOfFirstParameterOfSignature(sig);
+            const intrinsicAttribs = getJsxType(JsxNames.IntrinsicAttributes);
+            if (intrinsicAttribs !== unknownType) {
+                propsType = intersectTypes(intrinsicAttribs, propsType);
+            }
+            return propsType;
+        }
+
+        function getJsxPropsTypeFromConstructSignature(sig: Signature) {
+            let propsType: Type;
+            const hostClassType = getReturnTypeOfSignature(sig);
+            if (hostClassType) {
+                const propsName = getJsxElementPropertiesName();
+                if (propsName === undefined) {
+                    // There is no type ElementAttributesProperty, return 'any'
+                    return anyType;
+                }
+                else if (propsName === "") {
+                    // If there is no e.g. 'props' member in ElementAttributesProperty, use the element class type instead
+                    return hostClassType;
+                }
+                else {
+                    const attributesType = getTypeOfPropertyOfType(hostClassType, propsName);
+                    if (!attributesType) {
+                        // There is no property named 'props' on this instance type
+                        return emptyObjectType;
+                    }
+                    else if (isTypeAny(attributesType) || (attributesType === unknownType)) {
+                        // Props is of type 'any' or unknown
+                        return attributesType;
+                    }
+                    else {
+                        propsType = attributesType;
+                        const intrinsicClassAttribs = getJsxType(JsxNames.IntrinsicClassAttributes);
+                        if (intrinsicClassAttribs !== unknownType) {
+                            const typeParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(intrinsicClassAttribs.symbol);
+                            if (typeParams) {
+                                if (typeParams.length === 1) {
+                                    propsType = intersectTypes(createTypeReference(<GenericType>intrinsicClassAttribs, [hostClassType]), propsType);
+                                }
+                            }
+                            else {
+                                propsType = intersectTypes(propsType, intrinsicClassAttribs);
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                propsType = getTypeOfFirstParameterOfSignature(sig);
+            }
+            const intrinsicAttribs = getJsxType(JsxNames.IntrinsicAttributes);
+            if (intrinsicAttribs !== unknownType) {
+                propsType = intersectTypes(intrinsicAttribs, propsType);
+            }
+            return propsType;
         }
 
         // If the given type is an object or union type with a single signature, and if that signature has at
@@ -14757,7 +14849,7 @@ namespace ts {
          * element is not a class element, or the class element type cannot be determined, returns 'undefined'.
          * For example, in the element <MyClass>, the element instance type is `MyClass` (not `typeof MyClass`).
          */
-        function getJsxElementInstanceType(node: JsxOpeningLikeElement, valueType: Type, sourceAttributesType: Type | undefined) {
+        function getJsxElementInstanceType(node: JsxOpeningLikeElement, valueType: Type) {
             Debug.assert(!(valueType.flags & TypeFlags.Union));
             if (isTypeAny(valueType)) {
                 // Short-circuit if the class tag is using an element type 'any'
@@ -14776,27 +14868,21 @@ namespace ts {
                 }
             }
 
-            if (sourceAttributesType) {
-                // Instantiate in context of source type
-                const instantiatedSignatures = [];
-                for (const signature of signatures) {
-                    if (signature.typeParameters) {
-                        const isJavascript = isInJavaScriptFile(node);
-                        const inferenceContext = createInferenceContext(signature, /*flags*/ isJavascript ? InferenceFlags.AnyDefault : 0);
-                        const typeArguments = inferJsxTypeArguments(signature, sourceAttributesType, inferenceContext);
-                        instantiatedSignatures.push(getSignatureInstantiation(signature, typeArguments, isJavascript));
-                    }
-                    else {
-                        instantiatedSignatures.push(signature);
-                    }
+            // Instantiate in context of source type
+            const instantiatedSignatures = [];
+            for (const signature of signatures) {
+                if (signature.typeParameters) {
+                    const isJavascript = isInJavaScriptFile(node);
+                    const inferenceContext = createInferenceContext(signature, /*flags*/ isJavascript ? InferenceFlags.AnyDefault : 0);
+                    const typeArguments = inferJsxTypeArguments(signature, node, inferenceContext);
+                    instantiatedSignatures.push(getSignatureInstantiation(signature, typeArguments, isJavascript));
                 }
+                else {
+                    instantiatedSignatures.push(signature);
+                }
+            }
 
-                return getUnionType(map(instantiatedSignatures, getReturnTypeOfSignature), UnionReduction.Subtype);
-            }
-            else {
-                // Do not instantiate if no source type is provided - type parameters and their constraints will be used by contextual typing
-                return getUnionType(map(signatures, getReturnTypeOfSignature), UnionReduction.Subtype);
-            }
+            return getUnionType(map(instantiatedSignatures, getReturnTypeOfSignature), UnionReduction.Subtype);
         }
 
         /**
@@ -14982,14 +15068,13 @@ namespace ts {
          */
         function resolveCustomJsxElementAttributesType(openingLikeElement: JsxOpeningLikeElement,
             shouldIncludeAllStatelessAttributesType: boolean,
-            sourceAttributesType: Type | undefined,
             elementType: Type,
             elementClassType?: Type): Type {
 
             if (elementType.flags & TypeFlags.Union) {
                 const types = (elementType as UnionType).types;
                 return getUnionType(types.map(type => {
-                    return resolveCustomJsxElementAttributesType(openingLikeElement, shouldIncludeAllStatelessAttributesType, sourceAttributesType, type, elementClassType);
+                    return resolveCustomJsxElementAttributesType(openingLikeElement, shouldIncludeAllStatelessAttributesType, type, elementClassType);
                 }), UnionReduction.Subtype);
             }
 
@@ -15020,7 +15105,7 @@ namespace ts {
             }
 
             // Get the element instance type (the result of newing or invoking this tag)
-            const elemInstanceType = getJsxElementInstanceType(openingLikeElement, elementType, sourceAttributesType);
+            const elemInstanceType = getJsxElementInstanceType(openingLikeElement, elementType);
 
             // If we should include all stateless attributes type, then get all attributes type from all stateless function signature.
             // Otherwise get only attributes type from the signature picked by choose-overload logic.
@@ -15033,7 +15118,7 @@ namespace ts {
             }
 
             // Issue an error if this return type isn't assignable to JSX.ElementClass
-            if (elementClassType && sourceAttributesType) {
+            if (elementClassType) {
                 checkTypeRelatedTo(elemInstanceType, elementClassType, assignableRelation, openingLikeElement, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
             }
 
@@ -15116,20 +15201,8 @@ namespace ts {
          * @param node a custom JSX opening-like element
          * @param shouldIncludeAllStatelessAttributesType a boolean value used by language service to get all possible attributes type from an overload stateless function component
          */
-        function getCustomJsxElementAttributesType(node: JsxOpeningLikeElement, sourceAttributesType: Type, shouldIncludeAllStatelessAttributesType: boolean): Type {
-            if (!sourceAttributesType) {
-                // This ensures we cache non-inference uses of this calculation (ie, contextual types or services)
-                const links = getNodeLinks(node);
-                const linkLocation = shouldIncludeAllStatelessAttributesType ? "resolvedJsxElementAllAttributesType" : "resolvedJsxElementAttributesType";
-                if (!links[linkLocation]) {
-                    const elemClassType = getJsxGlobalElementClassType();
-                    return links[linkLocation] = resolveCustomJsxElementAttributesType(node, shouldIncludeAllStatelessAttributesType, sourceAttributesType, checkExpression(node.tagName), elemClassType);
-                }
-                return links[linkLocation];
-            }
-            else {
-                return resolveCustomJsxElementAttributesType(node, shouldIncludeAllStatelessAttributesType, sourceAttributesType, checkExpression(node.tagName), getJsxGlobalElementClassType());
-            }
+        function getCustomJsxElementAttributesType(node: JsxOpeningLikeElement, shouldIncludeAllStatelessAttributesType: boolean): Type {
+            return resolveCustomJsxElementAttributesType(node, shouldIncludeAllStatelessAttributesType, checkExpression(node.tagName), getJsxGlobalElementClassType());
         }
 
         /**
@@ -15144,7 +15217,7 @@ namespace ts {
             else {
                 // Because in language service, the given JSX opening-like element may be incomplete and therefore,
                 // we can't resolve to exact signature if the element is a stateless function component so the best thing to do is return all attributes type from all overloads.
-                return getCustomJsxElementAttributesType(node, /*sourceAttributesType*/ undefined, /*shouldIncludeAllStatelessAttributesType*/ true);
+                return getCustomJsxElementAttributesType(node, /*shouldIncludeAllStatelessAttributesType*/ true);
             }
         }
 
@@ -15158,7 +15231,7 @@ namespace ts {
                 return getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node);
             }
             else {
-                return getCustomJsxElementAttributesType(node, /*sourceAttributesType*/ undefined, /*shouldIncludeAllStatelessAttributesType*/ false);
+                return getCustomJsxElementAttributesType(node, /*shouldIncludeAllStatelessAttributesType*/ false);
             }
         }
 
@@ -15298,15 +15371,15 @@ namespace ts {
             //      3. Check if the two are assignable to each other
 
 
+            // targetAttributesType is a type of an attributes from resolving tagName of an opening-like JSX element.
+            const targetAttributesType = isJsxIntrinsicIdentifier(openingLikeElement.tagName) ?
+                getIntrinsicAttributesTypeFromJsxOpeningLikeElement(openingLikeElement) :
+                getCustomJsxElementAttributesType(openingLikeElement, /*shouldIncludeAllStatelessAttributesType*/ false);
+
             // sourceAttributesType is a type of an attributes properties.
             // i.e <div attr1={10} attr2="string" />
             //     attr1 and attr2 are treated as JSXAttributes attached in the JsxOpeningLikeElement as "attributes".
             const sourceAttributesType = createJsxAttributesTypeFromAttributesProperty(openingLikeElement, checkMode);
-
-            // targetAttributesType is a type of an attributes from resolving tagName of an opening-like JSX element.
-            const targetAttributesType = isJsxIntrinsicIdentifier(openingLikeElement.tagName) ?
-                getIntrinsicAttributesTypeFromJsxOpeningLikeElement(openingLikeElement) :
-                getCustomJsxElementAttributesType(openingLikeElement, sourceAttributesType, /*shouldIncludeAllStatelessAttributesType*/ false);
 
             // If the targetAttributesType is an emptyObjectType, indicating that there is no property named 'props' on this instance type.
             // but there exists a sourceAttributesType, we need to explicitly give an error as normal assignability check allow excess properties and will pass.
@@ -16183,9 +16256,19 @@ namespace ts {
             return getSignatureInstantiation(signature, getInferredTypes(context), isInJavaScriptFile(contextualSignature.declaration));
         }
 
-        function inferJsxTypeArguments(signature: Signature, sourceAttributesType: Type, context: InferenceContext): Type[] {
-            const paramType = getTypeAtPosition(signature, 0);
-            inferTypes(context.inferences, sourceAttributesType, paramType);
+        function inferJsxTypeArguments(signature: Signature, node: JsxOpeningLikeElement, context: InferenceContext): Type[] {
+            {
+                // Skip context sensitive pass
+                const paramType = getTypeAtPosition(signature, 0);
+                const checkAttrTypeSkipContextSensitive = checkExpressionWithContextualType(node.attributes, paramType, identityMapper);
+                inferTypes(context.inferences, checkAttrTypeSkipContextSensitive, paramType);
+            }
+            {
+                // Standard pass
+                const paramType = getTypeAtPosition(signature, 0);
+                const checkAttrType = checkExpressionWithContextualType(node.attributes, paramType, context);
+                inferTypes(context.inferences, checkAttrType, paramType);
+            }
 
             return getInferredTypes(context);
         }
