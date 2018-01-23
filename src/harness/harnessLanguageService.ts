@@ -131,7 +131,7 @@ namespace Harness.LanguageService {
         public getFilenames(): string[] {
             const fileNames: string[] = [];
             this.vfs.scanSync("/", "descendants-or-self", {
-                accept: (path, stats) => {
+                accept: (path: string, stats: vfs.FileSystem) => {
                     if (stats.isFile()) {
                         const scriptInfo = this.vfs.filemeta(path).get("scriptInfo") as ScriptInfo;
                         if (scriptInfo && scriptInfo.isRootFile) {
