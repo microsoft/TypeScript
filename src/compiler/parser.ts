@@ -4067,7 +4067,7 @@ namespace ts {
                 case SyntaxKind.JsxTextAllWhiteSpaces:
                     return parseJsxText();
                 case SyntaxKind.OpenBraceToken:
-                    return parseJsxExpression(/*inExpressionContext*/ false);
+                    return parseJsxExpression(/*inExpressionContext*/ false)!;
                 case SyntaxKind.LessThanToken:
                     return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ false);
             }
@@ -4177,10 +4177,13 @@ namespace ts {
             return expression;
         }
 
-        function parseJsxExpression(inExpressionContext: boolean): JsxExpression {
+        function parseJsxExpression(inExpressionContext: boolean): JsxExpression | undefined {
             const node = <JsxExpression>createNode(SyntaxKind.JsxExpression);
 
-            parseExpected(SyntaxKind.OpenBraceToken);
+            if (!parseExpected(SyntaxKind.OpenBraceToken)) {
+                return undefined;
+            }
+
             if (token() !== SyntaxKind.CloseBraceToken) {
                 node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
                 node.expression = parseAssignmentExpressionOrHigher();

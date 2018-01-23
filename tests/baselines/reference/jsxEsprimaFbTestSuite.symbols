@@ -89,7 +89,6 @@ baz
 >LeftRight : Symbol(LeftRight, Decl(jsxEsprimaFbTestSuite.tsx, 3, 11))
 >left : Symbol(left, Decl(jsxEsprimaFbTestSuite.tsx, 38, 10))
 >a : Symbol(unknown)
->right : Symbol(right, Decl(jsxEsprimaFbTestSuite.tsx, 38, 21))
 >b : Symbol(unknown)
 >b : Symbol(unknown)
 
