@@ -1254,11 +1254,15 @@ namespace Harness {
             currentDirectory: string): DeclarationCompilationContext | undefined {
 
             if (result.errors.length === 0) {
-                if (options.declaration && result.declFilesCode.length !== result.files.length) {
-                    throw new Error("There were no errors and declFiles generated did not match number of js files generated");
-                }
-                if (options.emitDeclarationsOnly && result.files.length > 0) {
-                    throw new Error("Only declaration files should be generated when emitDeclarationsOnly:true");
+                if (options.declaration) {
+                    if (options.emitDeclarationsOnly) {
+                        if (result.files.length > 0 || result.declFilesCode.length === 0) {
+                            throw new Error("Only declaration files should be generated when emitDeclarationsOnly:true");
+                        }
+                    }
+                    else if (result.declFilesCode.length !== result.files.length) {
+                        throw new Error("There were no errors and declFiles generated did not match number of js files generated");
+                    }
                 }
             }
 
