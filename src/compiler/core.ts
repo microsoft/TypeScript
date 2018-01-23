@@ -340,6 +340,10 @@ namespace ts {
         return false;
     }
 
+    export function arraysEqual<T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>, equalityComparer: EqualityComparer<T> = equateValues): boolean {
+        return a.length === b.length && a.every((x, i) => equalityComparer(x, b[i]));
+    }
+
     export function indexOfAnyCharCode(text: string, charCodes: ReadonlyArray<number>, start?: number): number {
         for (let i = start || 0; i < text.length; i++) {
             if (contains(charCodes, text.charCodeAt(i))) {
