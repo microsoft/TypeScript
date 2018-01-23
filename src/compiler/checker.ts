@@ -26580,7 +26580,7 @@ namespace ts {
         switch (name.parent.kind) {
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
-                return true;
+                return isIdentifier(name);
             default:
                 return isDeclarationName(name);
         }
