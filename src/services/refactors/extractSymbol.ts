@@ -1321,6 +1321,13 @@ namespace ts.refactor.extractSymbol {
                     }
                     prevStatement = statement;
                 }
+
+                if (!prevStatement && isCaseClause(curr)) {
+                    // We must have been in the expression of the case clause.
+                    Debug.assert(isSwitchStatement(curr.parent.parent));
+                    return curr.parent.parent;
+                }
+
                 // There must be at least one statement since we started in one.
                 Debug.assert(prevStatement !== undefined);
                 return prevStatement;
