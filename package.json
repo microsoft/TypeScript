@@ -93,7 +93,7 @@
         "build": "npm run build:compiler && npm run build:tests",
         "build:compiler": "jake local",
         "build:tests": "jake tests",
-        "build:private-packages": "jake private-packages",
+        "build:private-packages": "jake private-packages INSTALL_PRIVATE_DEPS=1",
         "start": "node lib/tsc",
         "clean": "jake clean",
         "gulp": "gulp",

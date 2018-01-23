@@ -228,17 +228,7 @@ var compilerFilename = "tsc.js";
 var LKGCompiler = path.join(LKGDirectory, compilerFilename);
 var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
 
-/**
- * Executes the compiler
- * @param {boolean} useBuiltCompiler 
- * @param {string[]} args 
- * @param {function([Error]): void} [callback] A callback to execute after the compilation process ends.
- */
-function execCompiler(useBuiltCompiler, args, callback) {
-    var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
-    var cmd = host + " " + compilerPath + " " + args.join(" ");
-    console.log(cmd + "\n");
-
+function execAsync(cmd, callback) {
     var ex = jake.createExec([cmd]);
     // Add listeners for output and error
     ex.addListener("stdout", function (output) {
@@ -254,10 +244,29 @@ function execCompiler(useBuiltCompiler, args, callback) {
     });
     ex.addListener("error", function (error) {
         if (callback) {
-            callback(error || new Error("Compilation unsuccessful"));
+            callback(error || new Error());
         }
     });
     ex.run();
+}
+
+function execNpmInstall(packages, callback) {
+    var cmd = "npm install --no-save " + packages.join(" ");
+    console.log(cmd);
+    execAsync(cmd, callback);
+}
+
+/**
+ * Executes the compiler
+ * @param {boolean} useBuiltCompiler
+ * @param {string[]} args
+ * @param {function([Error]): void} [callback] A callback to execute after the compilation process ends.
+ */
+function execCompiler(useBuiltCompiler, args, callback) {
+    var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
+    var cmd = host + " " + compilerPath + " " + args.join(" ");
+    console.log(cmd + "\n");
+    execAsync(cmd, callback);
 }
 
 /** Compiles a file from a list of sources
@@ -287,10 +296,10 @@ function compile(outFile, sources, prefixes, useBuiltCompiler, opts, callback) {
     var startCompileTime = mark();
     opts = opts || {};
     var options = [
-        "--noImplicitAny", 
-        "--noImplicitThis", 
-        "--alwaysStrict", 
-        "--noEmitOnError", 
+        "--noImplicitAny",
+        "--noImplicitThis",
+        "--alwaysStrict",
+        "--noEmitOnError",
         "--pretty",
         "--newLine LF"
     ];
@@ -378,18 +387,18 @@ function compile(outFile, sources, prefixes, useBuiltCompiler, opts, callback) {
                     prependFile(prefixes[i], outFile);
                 }
             }
-    
+
             if (callback) {
                 callback();
             }
-    
+
             complete();
         }
         measure(startCompileTime);
     });
 }
 
-/** 
+/**
  * Compiles a file from a list of sources
  * @param {string} outFile the target file name
  * @param {string[]} sources an array of the names of the source files
@@ -834,29 +843,53 @@ task("vfs-errors", function () {
 }, { async: true });
 
 task("vfs-path", ["vfs-core", "vfs-errors"], function () {
-    var startCompileTime = mark();
-    execCompiler(/*useBuiltCompiler*/ false, ["-p", "scripts/vfs-path/tsconfig.json"], function (error) {
-        if (error) {
-            fail("Compilation unsuccessful.");
-        }
-        else {
-            complete();
-        }
-        measure(startCompileTime);
-    });
+    if (process.env.INSTALL_PRIVATE_DEPS) {
+        execNpmInstall(["file:scripts/vfs-core", "file:scripts/vfs-errors"], function (error) {
+            if (error) return fail(error);
+            compile();
+        });
+    }
+    else {
+        compile();
+    }
+
+    function compile() {
+        var startCompileTime = mark();
+        execCompiler(/*useBuiltCompiler*/ false, ["-p", "scripts/vfs-path/tsconfig.json"], function (error) {
+            if (error) {
+                fail("Compilation unsuccessful.");
+            }
+            else {
+                complete();
+            }
+            measure(startCompileTime);
+        });
+    }
 }, { async: true });
 
-task("vfs", ["vfs-path", "vfs-core", "vfs-errors"], function () {
-    var startCompileTime = mark();
-    execCompiler(/*useBuiltCompiler*/ false, ["-p", "scripts/vfs/tsconfig.json"], function (error) {
-        if (error) {
-            fail("Compilation unsuccessful.");
-        }
-        else {
-            complete();
-        }
-        measure(startCompileTime);
-    });
+task("vfs", ["vfs-core", "vfs-errors", "vfs-path", "typemock"], function () {
+    if (process.env.INSTALL_PRIVATE_DEPS) {
+        execNpmInstall(["file:scripts/vfs-path", "file:scripts/typemock"], function (error) {
+            if (error) return fail(error);
+            compile();
+        });
+    }
+    else {
+        compile();
+    }
+
+    function compile() {
+        var startCompileTime = mark();
+        execCompiler(/*useBuiltCompiler*/ false, ["-p", "scripts/vfs/tsconfig.json"], function (error) {
+            if (error) {
+                fail("Compilation unsuccessful.");
+            }
+            else {
+                complete();
+            }
+            measure(startCompileTime);
+        });
+    }
 }, { async: true });
 
 task("private-packages", ["typemock", "vfs"]);
@@ -866,7 +899,7 @@ var run = path.join(builtLocalDirectory, "run.js");
 compileFile(
     /*outFile*/ run,
     /*source*/ harnessSources,
-    /*prereqs*/[builtLocalDirectory, tscFile, tsserverLibraryFile, "typemock"].concat(libraryTargets).concat(servicesSources).concat(harnessSources),
+    /*prereqs*/[builtLocalDirectory, tscFile, tsserverLibraryFile, "private-packages"].concat(libraryTargets).concat(servicesSources).concat(harnessSources),
     /*prefixes*/[],
     /*useBuiltCompiler:*/ true,
     /*opts*/ { types: ["node", "mocha", "chai"], lib: "es6" });

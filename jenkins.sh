@@ -14,7 +14,7 @@ npm install
 if [ "$1" = "6" ]; then
     npm uninstall typemock @typescript/vfs @typescript/vfs-path @typescript/vfs-core @typescript/vfs-errors --no-save;
     npm run build:private-packages;
-    npm install file:scripts/typemock file:scripts/vfs file:scripts/vfs-path --no-save;
+    npm install file:scripts/typemock file:scripts/vfs-errors file:scripts/vfs-core file:scripts/vfs-path file:scripts/vfs --no-save;
 fi
 
 npm update

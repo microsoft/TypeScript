@@ -234,7 +234,7 @@ namespace compiler {
         }
         else {
             [project] = host.vfs.scanSync(".", "ancestors-or-self", {
-                accept: (path: string, stats: vfs.FileSystem) => stats.isFile() && host.vfs.stringComparer(vpath.basename(path), "tsconfig.json") === 0
+                accept: (path, stats) => stats.isFile() && host.vfs.stringComparer(vpath.basename(path), "tsconfig.json") === 0
             });
         }
 
