@@ -529,8 +529,9 @@ namespace ts.FindAllReferences {
             const out = [];
             for (let pow = 0; pow <= 30; pow++) {
                 const n = 1 << pow;
-                if (f & n)
+                if (f & n) {
                     out.push(flags[n]);
+                }
             }
             return out.join("|");
         }
