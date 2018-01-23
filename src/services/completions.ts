@@ -20,7 +20,8 @@ namespace ts.Completions {
         None,
         ClassElementKeywords,           // Keywords at class keyword
         ConstructorParameterKeywords,   // Keywords at constructor parameter
-        FunctionLikeBodyKeywords        // Keywords at function like body
+        FunctionLikeBodyKeywords,       // Keywords at function like body
+        TypeKeywords,
     }
 
     export function getCompletionsAtPosition(
@@ -565,7 +566,7 @@ namespace ts.Completions {
             }
             case "none": {
                 // Didn't find a symbol with this name.  See if we can find a keyword instead.
-                if (some(getKeywordCompletions(KeywordCompletionFilters.None), c => c.name === name)) {
+                if (allKeywordsCompletions().some(c => c.name === name)) {
                     return {
                         name,
                         kind: ScriptElementKind.keyword,
@@ -1163,6 +1164,9 @@ namespace ts.Completions {
         }
 
         function filterGlobalCompletion(symbols: Symbol[]): void {
+            const isTypeCompletion = insideJsDocTagTypeExpression || !isContextTokenValueLocation(contextToken) && (isPartOfTypeNode(location) || isContextTokenTypeLocation(contextToken));
+            if (isTypeCompletion) keywordFilters = KeywordCompletionFilters.TypeKeywords;
+
             filterMutate(symbols, symbol => {
                 if (!isSourceFile(location)) {
                     // export = /**/ here we want to get all meanings, so any symbol is ok
@@ -1170,19 +1174,14 @@ namespace ts.Completions {
                         return true;
                     }
 
-                    // This is an alias, follow what it aliases
-                    if (symbol && symbol.flags & SymbolFlags.Alias) {
-                        symbol = typeChecker.getAliasedSymbol(symbol);
-                    }
+                    symbol = skipAlias(symbol, typeChecker);
 
                     // import m = /**/ <-- It can only access namespace (if typing import = x. this would get member symbols and not namespace)
                     if (isInRightSideOfInternalImportEqualsDeclaration(location)) {
                         return !!(symbol.flags & SymbolFlags.Namespace);
                     }
 
-                    if (insideJsDocTagTypeExpression ||
-                        (!isContextTokenValueLocation(contextToken) &&
-                            (isPartOfTypeNode(location) || isContextTokenTypeLocation(contextToken)))) {
+                    if (isTypeCompletion) {
                         // Its a type, but you can reach it by namespace.type as well
                         return symbolCanBeReferencedAtTypeLocation(symbol);
                     }
@@ -1199,7 +1198,7 @@ namespace ts.Completions {
                 contextToken.parent.kind === SyntaxKind.TypeQuery;
         }
 
-        function isContextTokenTypeLocation(contextToken: Node) {
+        function isContextTokenTypeLocation(contextToken: Node): boolean {
             if (contextToken) {
                 const parentKind = contextToken.parent.kind;
                 switch (contextToken.kind) {
@@ -1217,6 +1216,7 @@ namespace ts.Completions {
                         return parentKind === SyntaxKind.AsExpression;
                 }
             }
+            return false;
         }
 
         function symbolCanBeReferencedAtTypeLocation(symbol: Symbol): boolean {
@@ -2130,51 +2130,38 @@ namespace ts.Completions {
     }
 
     // A cache of completion entries for keywords, these do not change between sessions
-    const _keywordCompletions: CompletionEntry[][] = [];
-    function getKeywordCompletions(keywordFilter: KeywordCompletionFilters): CompletionEntry[] {
-        const completions = _keywordCompletions[keywordFilter];
-        if (completions) {
-            return completions;
+    const _keywordCompletions: ReadonlyArray<CompletionEntry>[] = [];
+    const allKeywordsCompletions: () => ReadonlyArray<CompletionEntry> = ts.memoize(() => {
+        const res: CompletionEntry[] = [];
+        for (let i = SyntaxKind.FirstKeyword; i <= SyntaxKind.LastKeyword; i++) {
+            res.push({
+                name: tokenToString(i),
+                kind: ScriptElementKind.keyword,
+                kindModifiers: ScriptElementKindModifier.none,
+                sortText: "0"
+            });
         }
-        return _keywordCompletions[keywordFilter] = generateKeywordCompletions(keywordFilter);
-
-        type FilterKeywordCompletions = (entryName: string) => boolean;
-        function generateKeywordCompletions(keywordFilter: KeywordCompletionFilters): CompletionEntry[] {
+        return res;
+    });
+    function getKeywordCompletions(keywordFilter: KeywordCompletionFilters): ReadonlyArray<CompletionEntry> {
+        return _keywordCompletions[keywordFilter] || (_keywordCompletions[keywordFilter] = allKeywordsCompletions().filter(entry => {
+            const kind = stringToToken(entry.name);
             switch (keywordFilter) {
                 case KeywordCompletionFilters.None:
-                    return getAllKeywordCompletions();
+                    // "undefined" is a global variable, so don't need a keyword completion for it.
+                    return kind !== SyntaxKind.UndefinedKeyword;
                 case KeywordCompletionFilters.ClassElementKeywords:
-                    return getFilteredKeywordCompletions(isClassMemberCompletionKeywordText);
+                    return isClassMemberCompletionKeyword(kind);
                 case KeywordCompletionFilters.ConstructorParameterKeywords:
-                    return getFilteredKeywordCompletions(isConstructorParameterCompletionKeywordText);
+                    return isConstructorParameterCompletionKeyword(kind);
                 case KeywordCompletionFilters.FunctionLikeBodyKeywords:
-                    return getFilteredKeywordCompletions(isFunctionLikeBodyCompletionKeywordText);
+                    return isFunctionLikeBodyCompletionKeyword(kind);
+                case KeywordCompletionFilters.TypeKeywords:
+                    return isTypeKeyword(kind);
                 default:
-                    Debug.assertNever(keywordFilter);
+                    return Debug.assertNever(keywordFilter);
             }
-        }
-
-        function getAllKeywordCompletions() {
-            const allKeywordsCompletions: CompletionEntry[] = [];
-            for (let i = SyntaxKind.FirstKeyword; i <= SyntaxKind.LastKeyword; i++) {
-                // "undefined" is a global variable, so don't need a keyword completion for it.
-                if (i === SyntaxKind.UndefinedKeyword) continue;
-                allKeywordsCompletions.push({
-                    name: tokenToString(i),
-                    kind: ScriptElementKind.keyword,
-                    kindModifiers: ScriptElementKindModifier.none,
-                    sortText: "0"
-                });
-            }
-            return allKeywordsCompletions;
-        }
-
-        function getFilteredKeywordCompletions(filterFn: FilterKeywordCompletions) {
-            return filter(
-                getKeywordCompletions(KeywordCompletionFilters.None),
-                entry => filterFn(entry.name)
-            );
-        }
+        }));
     }
 
     function isClassMemberCompletionKeyword(kind: SyntaxKind) {
@@ -2222,13 +2209,10 @@ namespace ts.Completions {
             case SyntaxKind.AbstractKeyword:
             case SyntaxKind.GetKeyword:
             case SyntaxKind.SetKeyword:
+            case SyntaxKind.UndefinedKeyword:
                 return false;
         }
         return true;
-    }
-
-    function isFunctionLikeBodyCompletionKeywordText(text: string) {
-        return isFunctionLikeBodyCompletionKeyword(stringToToken(text));
     }
 
     function isEqualityOperatorKind(kind: ts.SyntaxKind): kind is EqualityOperator {
