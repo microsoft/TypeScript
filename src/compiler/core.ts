@@ -16,6 +16,10 @@ namespace ts {
         // Update: We also consider a path like `C:\foo.ts` "relative" because we do not search for it in `node_modules` or treat it as an ambient module.
         return pathIsRelative(moduleName) || isRootedDiskPath(moduleName);
     }
+
+    export function sortAndDeduplicateDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): Diagnostic[] {
+        return sortAndDeduplicate(diagnostics, compareDiagnostics);
+    }
 }
 
 /* @internal */
@@ -1895,10 +1899,6 @@ namespace ts {
 
         // We still have one chain remaining.  The shorter chain should come first.
         return text1 ? Comparison.GreaterThan : Comparison.LessThan;
-    }
-
-    export function sortAndDeduplicateDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): Diagnostic[] {
-        return sortAndDeduplicate(diagnostics, compareDiagnostics);
     }
 
     export function normalizeSlashes(path: string): string {
