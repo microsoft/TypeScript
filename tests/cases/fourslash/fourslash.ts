@@ -102,7 +102,7 @@ declare namespace FourSlashInterface {
     }
     interface Range {
         fileName: string;
-        start: number;
+        pos: number;
         end: number;
         marker?: Marker;
     }
@@ -288,7 +288,7 @@ declare namespace FourSlashInterface {
         baselineGetEmitOutput(): void;
         baselineQuickInfo(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
-        outliningSpansInCurrentFile(spans: TextSpan[]): void;
+        outliningSpansInCurrentFile(spans: Range[]): void;
         todoCommentsInCurrentFile(descriptors: string[]): void;
         matchingBracePositionInCurrentFile(bracePosition: number, expectedMatchPosition: number): void;
         noMatchingBracePositionInCurrentFile(bracePosition: number): void;

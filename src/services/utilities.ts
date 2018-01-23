@@ -1067,10 +1067,6 @@ namespace ts {
         return createTextSpanFromBounds(range.pos, range.end);
     }
 
-    export function createTextSpanFromStartEnd({ start, end }: { start: number, end: number }): TextSpan {
-        return createTextSpanFromBounds(start, end);
-    }
-
     export const typeKeywords: ReadonlyArray<SyntaxKind> = [
         SyntaxKind.AnyKeyword,
         SyntaxKind.BooleanKeyword,
