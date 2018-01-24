@@ -5788,7 +5788,7 @@ namespace ts {
             // and T as the template type.
             const typeParameter = getTypeParameterFromMappedType(type);
             const constraintType = getConstraintTypeFromMappedType(type);
-            const templateType = getTemplateTypeFromMappedType(type);
+            const templateType = getTemplateTypeFromMappedType(<MappedType>type.target || type);
             const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
             const templateReadonly = !!type.declaration.readonlyToken;
             const templateOptional = !!type.declaration.questionToken;
