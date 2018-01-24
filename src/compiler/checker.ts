@@ -6047,6 +6047,14 @@ namespace ts {
             return constraint;
         }
 
+        /**
+         * This is similar to `getBaseConstraintOfType` except it returns the input type if there's no base constraint, instead of `undefined`
+         * It also doesn't map indexes to `string`, as where this is used this would be unneeded (and likely undesirable)
+         */
+        function getBaseConstraintOrType(type: Type) {
+            return getBaseConstraintOfTypeVariableUnionOrIntersection(type) || type;
+        }
+
         function hasNonCircularBaseConstraint(type: TypeVariable): boolean {
             return getResolvedBaseConstraint(type) !== circularConstraintType;
         }
@@ -12909,10 +12917,6 @@ namespace ts {
                 return mapType(getWidenedType(type), getBaseConstraintOrType);
             }
             return type;
-        }
-
-        function getBaseConstraintOrType(type: Type) {
-            return getBaseConstraintOfTypeVariableUnionOrIntersection(type) || type;
         }
 
         function markAliasReferenced(symbol: Symbol, location: Node) {
