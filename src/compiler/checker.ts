@@ -3952,7 +3952,7 @@ namespace ts {
                         parentType = getNonNullableType(parentType);
                     }
                     const propType = getTypeOfPropertyOfType(parentType, text);
-                    const declaredType = propType && getConstrainedTypeForLocation(propType, declaration.name);
+                    const declaredType = propType && getConstraintForLocation(propType, declaration.name);
                     type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
                         isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
                         getIndexTypeOfType(parentType, IndexKind.String);
@@ -5419,19 +5419,19 @@ namespace ts {
             return symbol;
         }
 
-        function getTypeWithThisArgument(type: Type, thisArgument?: Type, transformer?: (t: Type) => Type): Type {
+        function getTypeWithThisArgument(type: Type, thisArgument?: Type, needApparentType?: boolean): Type {
             if (getObjectFlags(type) & ObjectFlags.Reference) {
                 const target = (<TypeReference>type).target;
                 const typeArguments = (<TypeReference>type).typeArguments;
                 if (length(target.typeParameters) === length(typeArguments)) {
                     const ref = createTypeReference(target, concatenate(typeArguments, [thisArgument || target.thisType]));
-                    return transformer ? transformer(ref) : ref;
+                    return needApparentType ? getApparentType(ref) : ref;
                 }
             }
             else if (type.flags & TypeFlags.Intersection) {
-                return getIntersectionType(map((<IntersectionType>type).types, t => getTypeWithThisArgument(t, thisArgument, transformer)));
+                return getIntersectionType(map((<IntersectionType>type).types, t => getTypeWithThisArgument(t, thisArgument, needApparentType)));
             }
-            return transformer ? transformer(type) : type;
+            return needApparentType ? getApparentType(type) : type;
         }
 
         function resolveObjectTypeMembers(type: ObjectType, source: InterfaceTypeWithDeclaredMembers, typeParameters: TypeParameter[], typeArguments: Type[]) {
@@ -6029,17 +6029,22 @@ namespace ts {
             return baseObjectType || baseIndexType ? getIndexedAccessType(baseObjectType || type.objectType, baseIndexType || type.indexType) : undefined;
         }
 
-        function getBaseConstraintOfType(type: Type): Type {
+        function getBaseConstraintOfTypeVariableUnionOrIntersection(type: Type) {
             if (type.flags & (TypeFlags.TypeVariable | TypeFlags.UnionOrIntersection)) {
                 const constraint = getResolvedBaseConstraint(<TypeVariable | UnionOrIntersectionType>type);
                 if (constraint !== noConstraintType && constraint !== circularConstraintType) {
                     return constraint;
                 }
             }
-            else if (type.flags & TypeFlags.Index) {
+            return undefined;
+        }
+
+        function getBaseConstraintOfType(type: Type): Type {
+            const constraint = getBaseConstraintOfTypeVariableUnionOrIntersection(type);
+            if (!constraint && type.flags & TypeFlags.Index) {
                 return stringType;
             }
-            return undefined;
+            return constraint;
         }
 
         function hasNonCircularBaseConstraint(type: TypeVariable): boolean {
@@ -6113,11 +6118,7 @@ namespace ts {
         }
 
         function getApparentTypeOfIntersectionType(type: IntersectionType) {
-            return type.resolvedApparentType || (type.resolvedApparentType = getTypeWithThisArgument(type, type, getApparentType));
-        }
-
-        function getConstraintTypeOfIntersectionType(type: IntersectionType) {
-            return type.resolvedConstraintType || (type.resolvedConstraintType = getTypeWithThisArgument(type, type, getConstraintType));
+            return type.resolvedApparentType || (type.resolvedApparentType = getTypeWithThisArgument(type, type, /*apparentType*/ true));
         }
 
         function getResolvedTypeParameterDefault(typeParameter: TypeParameter): Type | undefined {
@@ -6165,12 +6166,6 @@ namespace ts {
          */
         function hasTypeParameterDefault(typeParameter: TypeParameter): boolean {
             return !!(typeParameter.symbol && forEach(typeParameter.symbol.declarations, decl => isTypeParameterDeclaration(decl) && decl.default));
-        }
-
-        function getConstraintType(type: Type): Type {
-            const t = type.flags & TypeFlags.TypeVariable ? getBaseConstraintOfType(type) || emptyObjectType : type;
-            return t.flags & TypeFlags.Intersection ? getConstraintTypeOfIntersectionType(<IntersectionType>t) :
-                t;
         }
 
         /**
@@ -11530,7 +11525,7 @@ namespace ts {
         function getFlowCacheKey(node: Node): string | undefined {
             if (node.kind === SyntaxKind.Identifier) {
                 const symbol = getResolvedSymbol(<Identifier>node);
-                return symbol !== unknownSymbol ? (isConstrainedTypePosition(node) ? "@" : "") + getSymbolId(symbol) : undefined;
+                return symbol !== unknownSymbol ? (isConstraintPosition(node) ? "@" : "") + getSymbolId(symbol) : undefined;
             }
             if (node.kind === SyntaxKind.ThisKeyword) {
                 return "0";
@@ -12892,7 +12887,7 @@ namespace ts {
             return annotationIncludesUndefined ? getTypeWithFacts(declaredType, TypeFacts.NEUndefined) : declaredType;
         }
 
-        function isConstrainedTypePosition(node: Node) {
+        function isConstraintPosition(node: Node) {
             const parent = node.parent;
             return parent.kind === SyntaxKind.PropertyAccessExpression ||
                 parent.kind === SyntaxKind.CallExpression && (<CallExpression>parent).expression === node ||
@@ -12905,15 +12900,19 @@ namespace ts {
             return type.flags & TypeFlags.TypeVariable && maybeTypeOfKind(getBaseConstraintOfType(type) || emptyObjectType, TypeFlags.Nullable);
         }
 
-        function getConstrainedTypeForLocation(type: Type, node: Node) {
+        function getConstraintForLocation(type: Type, node: Node) {
             // When a node is the left hand expression of a property access, element access, or call expression,
             // and the type of the node includes type variables with constraints that are nullable, we fetch the
             // apparent type of the node *before* performing control flow analysis such that narrowings apply to
             // the constraint type.
-            if (isConstrainedTypePosition(node) && forEachType(type, typeHasNullableConstraint)) {
-                return mapType(getWidenedType(type), getConstraintType);
+            if (isConstraintPosition(node) && forEachType(type, typeHasNullableConstraint)) {
+                return mapType(getWidenedType(type), getBaseConstraintOrType);
             }
             return type;
+        }
+
+        function getBaseConstraintOrType(type: Type) {
+            return getBaseConstraintOfTypeVariableUnionOrIntersection(type) || type;
         }
 
         function markAliasReferenced(symbol: Symbol, location: Node) {
@@ -12999,7 +12998,7 @@ namespace ts {
             checkCollisionWithCapturedNewTargetVariable(node, node);
             checkNestedBlockScopedBinding(node, symbol);
 
-            const type = getConstrainedTypeForLocation(getTypeOfSymbol(localOrExportSymbol), node);
+            const type = getConstraintForLocation(getTypeOfSymbol(localOrExportSymbol), node);
             const assignmentKind = getAssignmentTargetKind(node);
 
             if (assignmentKind) {
@@ -15565,7 +15564,7 @@ namespace ts {
                         return unknownType;
                     }
                 }
-                propType = getConstrainedTypeForLocation(getTypeOfSymbol(prop), node);
+                propType = getConstraintForLocation(getTypeOfSymbol(prop), node);
             }
             // Only compute control flow type if this is a property access expression that isn't an
             // assignment target, and the referenced property was declared as a variable, property,

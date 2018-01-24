@@ -3666,8 +3666,6 @@ namespace ts {
     export interface IntersectionType extends UnionOrIntersectionType {
         /* @internal */
         resolvedApparentType: Type;
-        /* @internal */
-        resolvedConstraintType: Type;
     }
 
     export type StructuredType = ObjectType | UnionType | IntersectionType;
