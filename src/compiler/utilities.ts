@@ -2430,11 +2430,10 @@ namespace ts {
     }
 
     export function createDiagnosticCollection(): DiagnosticCollection {
-        let nonFileDiagnostics: Diagnostic[] = [];
-        const fileDiagnostics = createMap<Diagnostic[]>();
+        let nonFileDiagnostics = [] as SortedArray<Diagnostic>;
+        const fileDiagnostics = createMap<SortedArray<Diagnostic>>();
 
         let hasReadNonFileDiagnostics = false;
-        let diagnosticsModified = false;
         let modificationCount = 0;
 
         return {
@@ -2454,11 +2453,11 @@ namespace ts {
         }
 
         function add(diagnostic: Diagnostic): void {
-            let diagnostics: Diagnostic[];
+            let diagnostics: SortedArray<Diagnostic>;
             if (diagnostic.file) {
                 diagnostics = fileDiagnostics.get(diagnostic.file.fileName);
                 if (!diagnostics) {
-                    diagnostics = [];
+                    diagnostics = [] as SortedArray<Diagnostic>;
                     fileDiagnostics.set(diagnostic.file.fileName, diagnostics);
                 }
             }
@@ -2466,25 +2465,22 @@ namespace ts {
                 // If we've already read the non-file diagnostics, do not modify the existing array.
                 if (hasReadNonFileDiagnostics) {
                     hasReadNonFileDiagnostics = false;
-                    nonFileDiagnostics = nonFileDiagnostics.slice();
+                    nonFileDiagnostics = nonFileDiagnostics.slice() as SortedArray<Diagnostic>;
                 }
 
                 diagnostics = nonFileDiagnostics;
             }
 
-            diagnostics.push(diagnostic);
-            diagnosticsModified = true;
+            insertSorted(diagnostics, diagnostic, compareDiagnostics);
             modificationCount++;
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
-            sortAndDeduplicate();
             hasReadNonFileDiagnostics = true;
             return nonFileDiagnostics;
         }
 
         function getDiagnostics(fileName?: string): Diagnostic[] {
-            sortAndDeduplicate();
             if (fileName) {
                 return fileDiagnostics.get(fileName) || [];
             }
@@ -2501,19 +2497,6 @@ namespace ts {
             });
 
             return sortAndDeduplicateDiagnostics(allDiagnostics);
-        }
-
-        function sortAndDeduplicate() {
-            if (!diagnosticsModified) {
-                return;
-            }
-
-            diagnosticsModified = false;
-            nonFileDiagnostics = sortAndDeduplicateDiagnostics(nonFileDiagnostics);
-
-            fileDiagnostics.forEach((diagnostics, key) => {
-                fileDiagnostics.set(key, sortAndDeduplicateDiagnostics(diagnostics));
-            });
         }
     }
 

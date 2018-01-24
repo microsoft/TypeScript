@@ -4948,6 +4948,10 @@ namespace ts {
         newLength: number;
     }
 
+    export interface SortedArray<T> extends Array<T> {
+        " __sortedArrayBrand": any;
+    }
+
     /* @internal */
     export interface DiagnosticCollection {
         // Adds a diagnostic to this diagnostic collection.
