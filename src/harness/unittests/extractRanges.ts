@@ -411,6 +411,12 @@ switch (x) {
             refactor.extractSymbol.Messages.cannotExtractRange.message
         ]);
 
+        testExtractRangeFailed("extractRangeFailed18",
+        `[#|{ 1;|] }`,
+        [
+            refactor.extractSymbol.Messages.cannotExtractRange.message
+        ]);
+
         testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, [refactor.extractSymbol.Messages.cannotExtractIdentifier.message]);
     });
 }
