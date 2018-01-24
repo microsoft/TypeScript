@@ -14,7 +14,7 @@
     <Cmt Name="LcxAdmin" />
     <Cmt Name="Loc" />
     <Cmt Name="Note" />
-    <Cmt Name="Rccx" />
+    <Cmt  Name="RCCX" />
   </OwnedComments>
   <Settings Name="@vsLocTools@\current\default.lss" Type="LSS" />
   <Item ItemId=";String Table" ItemType="0" PsrId="306" Leaf="false">
