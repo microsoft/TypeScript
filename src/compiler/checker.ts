@@ -14054,9 +14054,9 @@ namespace ts {
                 return anyType;
             }
 
-            return mapType(valueType, signturesToParameterTypes);
+            return mapType(valueType, signaturesToParameterTypes);
 
-            function signturesToParameterTypes(valueType: Type) {
+            function signaturesToParameterTypes(valueType: Type) {
                 // If the elemType is a string type, we have to return anyType to prevent an error downstream as we will try to find construct or call signature of the type
                 if (valueType.flags & TypeFlags.String) {
                     return anyType;
@@ -14107,54 +14107,61 @@ namespace ts {
             return propsType;
         }
 
-        function getJsxPropsTypeFromConstructSignature(sig: Signature) {
-            let propsType: Type;
-            const hostClassType = getReturnTypeOfSignature(sig);
-            if (hostClassType) {
-                const propsName = getJsxElementPropertiesName();
-                if (propsName === undefined) {
-                    // There is no type ElementAttributesProperty, return 'any'
-                    return anyType;
-                }
-                else if (propsName === "") {
-                    // If there is no e.g. 'props' member in ElementAttributesProperty, use the element class type instead
-                    return hostClassType;
-                }
-                else {
-                    const attributesType = getTypeOfPropertyOfType(hostClassType, propsName);
-                    if (!attributesType) {
-                        // There is no property named 'props' on this instance type
-                        return emptyObjectType;
-                    }
-                    else if (isTypeAny(attributesType) || (attributesType === unknownType)) {
-                        // Props is of type 'any' or unknown
-                        return attributesType;
-                    }
-                    else {
-                        propsType = attributesType;
-                        const intrinsicClassAttribs = getJsxType(JsxNames.IntrinsicClassAttributes);
-                        if (intrinsicClassAttribs !== unknownType) {
-                            const typeParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(intrinsicClassAttribs.symbol);
-                            if (typeParams) {
-                                if (typeParams.length === 1) {
-                                    propsType = intersectTypes(createTypeReference(<GenericType>intrinsicClassAttribs, [hostClassType]), propsType);
-                                }
-                            }
-                            else {
-                                propsType = intersectTypes(propsType, intrinsicClassAttribs);
-                            }
-                        }
-                    }
-                }
+        function getJsxPropsTypeFromClassType(hostClassType: Type) {
+            if (isTypeAny(hostClassType)) {
+                return hostClassType;
+            }
+
+            const propsName = getJsxElementPropertiesName();
+            if (propsName === undefined) {
+                // There is no type ElementAttributesProperty, return 'any'
+                return anyType;
+            }
+            else if (propsName === "") {
+                // If there is no e.g. 'props' member in ElementAttributesProperty, use the element class type instead
+                return hostClassType;
             }
             else {
-                propsType = getTypeOfFirstParameterOfSignature(sig);
+                const attributesType = getTypeOfPropertyOfType(hostClassType, propsName);
+
+                if (!attributesType) {
+                    // There is no property named 'props' on this instance type
+                    return emptyObjectType;
+                }
+                else if (isTypeAny(attributesType)) {
+                    // Props is of type 'any' or unknown
+                    return attributesType;
+                }
+                else {
+                    // Normal case -- add in IntrinsicClassElements<T> and IntrinsicElements
+                    let apparentAttributesType = attributesType;
+                    const intrinsicClassAttribs = getJsxType(JsxNames.IntrinsicClassAttributes);
+                    if (intrinsicClassAttribs !== unknownType) {
+                        const typeParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(intrinsicClassAttribs.symbol);
+                        apparentAttributesType = intersectTypes(
+                            length(typeParams)
+                                ? createTypeReference(<GenericType>intrinsicClassAttribs, [hostClassType])
+                                : intrinsicClassAttribs,
+                            apparentAttributesType
+                        );
+                    }
+
+                    const intrinsicAttribs = getJsxType(JsxNames.IntrinsicAttributes);
+                    if (intrinsicAttribs !== unknownType) {
+                        apparentAttributesType = intersectTypes(intrinsicAttribs, apparentAttributesType);
+                    }
+
+                    return apparentAttributesType;
+                }
             }
-            const intrinsicAttribs = getJsxType(JsxNames.IntrinsicAttributes);
-            if (intrinsicAttribs !== unknownType) {
-                propsType = intersectTypes(intrinsicAttribs, propsType);
+        }
+
+        function getJsxPropsTypeFromConstructSignature(sig: Signature) {
+            const hostClassType = getReturnTypeOfSignature(sig);
+            if (hostClassType) {
+                return getJsxPropsTypeFromClassType(hostClassType);
             }
-            return propsType;
+            return getJsxPropsTypeFromCallSignature(sig);
         }
 
         // If the given type is an object or union type with a single signature, and if that signature has at
@@ -14873,7 +14880,7 @@ namespace ts {
             for (const signature of signatures) {
                 if (signature.typeParameters) {
                     const isJavascript = isInJavaScriptFile(node);
-                    const inferenceContext = createInferenceContext(signature, /*flags*/ isJavascript ? InferenceFlags.AnyDefault : 0);
+                    const inferenceContext = createInferenceContext(signature, /*flags*/ isJavascript ? InferenceFlags.AnyDefault : InferenceFlags.None);
                     const typeArguments = inferJsxTypeArguments(signature, node, inferenceContext);
                     instantiatedSignatures.push(getSignatureInstantiation(signature, typeArguments, isJavascript));
                 }
@@ -15122,54 +15129,7 @@ namespace ts {
                 checkTypeRelatedTo(elemInstanceType, elementClassType, assignableRelation, openingLikeElement, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
             }
 
-            if (isTypeAny(elemInstanceType)) {
-                return elemInstanceType;
-            }
-
-            const propsName = getJsxElementPropertiesName();
-            if (propsName === undefined) {
-                // There is no type ElementAttributesProperty, return 'any'
-                return anyType;
-            }
-            else if (propsName === "") {
-                // If there is no e.g. 'props' member in ElementAttributesProperty, use the element class type instead
-                return elemInstanceType;
-            }
-            else {
-                const attributesType = getTypeOfPropertyOfType(elemInstanceType, propsName);
-
-                if (!attributesType) {
-                    // There is no property named 'props' on this instance type
-                    return emptyObjectType;
-                }
-                else if (isTypeAny(attributesType) || (attributesType === unknownType)) {
-                    // Props is of type 'any' or unknown
-                    return attributesType;
-                }
-                else {
-                    // Normal case -- add in IntrinsicClassElements<T> and IntrinsicElements
-                    let apparentAttributesType = attributesType;
-                    const intrinsicClassAttribs = getJsxType(JsxNames.IntrinsicClassAttributes);
-                    if (intrinsicClassAttribs !== unknownType) {
-                        const typeParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(intrinsicClassAttribs.symbol);
-                        if (typeParams) {
-                            if (typeParams.length === 1) {
-                                apparentAttributesType = intersectTypes(createTypeReference(<GenericType>intrinsicClassAttribs, [elemInstanceType]), apparentAttributesType);
-                            }
-                        }
-                        else {
-                            apparentAttributesType = intersectTypes(attributesType, intrinsicClassAttribs);
-                        }
-                    }
-
-                    const intrinsicAttribs = getJsxType(JsxNames.IntrinsicAttributes);
-                    if (intrinsicAttribs !== unknownType) {
-                        apparentAttributesType = intersectTypes(intrinsicAttribs, apparentAttributesType);
-                    }
-
-                    return apparentAttributesType;
-                }
-            }
+            return getJsxPropsTypeFromClassType(elemInstanceType);
         }
 
         /**
@@ -16257,18 +16217,15 @@ namespace ts {
         }
 
         function inferJsxTypeArguments(signature: Signature, node: JsxOpeningLikeElement, context: InferenceContext): Type[] {
-            {
-                // Skip context sensitive pass
-                const paramType = getTypeAtPosition(signature, 0);
-                const checkAttrTypeSkipContextSensitive = checkExpressionWithContextualType(node.attributes, paramType, identityMapper);
-                inferTypes(context.inferences, checkAttrTypeSkipContextSensitive, paramType);
-            }
-            {
-                // Standard pass
-                const paramType = getTypeAtPosition(signature, 0);
-                const checkAttrType = checkExpressionWithContextualType(node.attributes, paramType, context);
-                inferTypes(context.inferences, checkAttrType, paramType);
-            }
+            // Skip context sensitive pass
+            const skipContextParamType = getTypeAtPosition(signature, 0);
+            const checkAttrTypeSkipContextSensitive = checkExpressionWithContextualType(node.attributes, skipContextParamType, identityMapper);
+            inferTypes(context.inferences, checkAttrTypeSkipContextSensitive, skipContextParamType);
+
+            // Standard pass
+            const paramType = getTypeAtPosition(signature, 0);
+            const checkAttrType = checkExpressionWithContextualType(node.attributes, paramType, context);
+            inferTypes(context.inferences, checkAttrType, paramType);
 
             return getInferredTypes(context);
         }
@@ -17014,7 +16971,7 @@ namespace ts {
 
                     let candidate: Signature;
                     const inferenceContext = originalCandidate.typeParameters ?
-                        createInferenceContext(originalCandidate, /*flags*/ isInJavaScriptFile(node) ? InferenceFlags.AnyDefault : 0) :
+                        createInferenceContext(originalCandidate, /*flags*/ isInJavaScriptFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None) :
                         undefined;
 
                     while (true) {
