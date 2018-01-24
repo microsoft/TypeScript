@@ -242,7 +242,6 @@ namespace ts.refactor.extractSymbol {
                 // they will never find `start` in `start.parent.statements`.
                 // Consider: We could support ranges like [|case 1:|] by refining them to just
                 // the expression.
-                Debug.assert(isCaseClause(start.parent) && span.start < start.parent.expression.end);
                 return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
             }
 
