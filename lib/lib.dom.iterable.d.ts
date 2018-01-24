@@ -133,3 +133,10 @@ interface URLSearchParams {
      */
     [Symbol.iterator](): IterableIterator<[string, string]>;
 }
+
+declare var URLSearchParams: {
+  /**
+   * Constructor returning a URLSearchParams object.
+   */
+  new (init?: string | URLSearchParams | Iterable<[string, string]>): URLSearchParams;
+};
