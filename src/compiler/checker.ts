@@ -3952,7 +3952,7 @@ namespace ts {
                         parentType = getNonNullableType(parentType);
                     }
                     const propType = getTypeOfPropertyOfType(parentType, text);
-                    const declaredType = propType && getApparentTypeForLocation(propType, declaration.name);
+                    const declaredType = propType && getConstrainedTypeForLocation(propType, declaration.name);
                     type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
                         isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
                         getIndexTypeOfType(parentType, IndexKind.String);
@@ -5419,19 +5419,19 @@ namespace ts {
             return symbol;
         }
 
-        function getTypeWithThisArgument(type: Type, thisArgument?: Type, needApparentType?: boolean): Type {
+        function getTypeWithThisArgument(type: Type, thisArgument?: Type, transformer?: (t: Type) => Type): Type {
             if (getObjectFlags(type) & ObjectFlags.Reference) {
                 const target = (<TypeReference>type).target;
                 const typeArguments = (<TypeReference>type).typeArguments;
                 if (length(target.typeParameters) === length(typeArguments)) {
                     const ref = createTypeReference(target, concatenate(typeArguments, [thisArgument || target.thisType]));
-                    return needApparentType ? getApparentType(ref) : ref;
+                    return transformer ? transformer(ref) : ref;
                 }
             }
             else if (type.flags & TypeFlags.Intersection) {
-                return getIntersectionType(map((<IntersectionType>type).types, t => getTypeWithThisArgument(t, thisArgument, needApparentType)));
+                return getIntersectionType(map((<IntersectionType>type).types, t => getTypeWithThisArgument(t, thisArgument, transformer)));
             }
-            return needApparentType ? getApparentType(type) : type;
+            return transformer ? transformer(type) : type;
         }
 
         function resolveObjectTypeMembers(type: ObjectType, source: InterfaceTypeWithDeclaredMembers, typeParameters: TypeParameter[], typeArguments: Type[]) {
@@ -6113,7 +6113,11 @@ namespace ts {
         }
 
         function getApparentTypeOfIntersectionType(type: IntersectionType) {
-            return type.resolvedApparentType || (type.resolvedApparentType = getTypeWithThisArgument(type, type, /*apparentType*/ true));
+            return type.resolvedApparentType || (type.resolvedApparentType = getTypeWithThisArgument(type, type, getApparentType));
+        }
+
+        function getConstraintTypeOfIntersectionType(type: IntersectionType) {
+            return type.resolvedConstraintType || (type.resolvedConstraintType = getTypeWithThisArgument(type, type, getConstraintType));
         }
 
         function getResolvedTypeParameterDefault(typeParameter: TypeParameter): Type | undefined {
@@ -6161,6 +6165,12 @@ namespace ts {
          */
         function hasTypeParameterDefault(typeParameter: TypeParameter): boolean {
             return !!(typeParameter.symbol && forEach(typeParameter.symbol.declarations, decl => isTypeParameterDeclaration(decl) && decl.default));
+        }
+
+        function getConstraintType(type: Type): Type {
+            const t = type.flags & TypeFlags.TypeVariable ? getBaseConstraintOfType(type) || emptyObjectType : type;
+            return t.flags & TypeFlags.Intersection ? getConstraintTypeOfIntersectionType(<IntersectionType>t) :
+                t;
         }
 
         /**
@@ -11520,7 +11530,7 @@ namespace ts {
         function getFlowCacheKey(node: Node): string | undefined {
             if (node.kind === SyntaxKind.Identifier) {
                 const symbol = getResolvedSymbol(<Identifier>node);
-                return symbol !== unknownSymbol ? (isApparentTypePosition(node) ? "@" : "") + getSymbolId(symbol) : undefined;
+                return symbol !== unknownSymbol ? (isConstrainedTypePosition(node) ? "@" : "") + getSymbolId(symbol) : undefined;
             }
             if (node.kind === SyntaxKind.ThisKeyword) {
                 return "0";
@@ -12882,7 +12892,7 @@ namespace ts {
             return annotationIncludesUndefined ? getTypeWithFacts(declaredType, TypeFacts.NEUndefined) : declaredType;
         }
 
-        function isApparentTypePosition(node: Node) {
+        function isConstrainedTypePosition(node: Node) {
             const parent = node.parent;
             return parent.kind === SyntaxKind.PropertyAccessExpression ||
                 parent.kind === SyntaxKind.CallExpression && (<CallExpression>parent).expression === node ||
@@ -12895,13 +12905,13 @@ namespace ts {
             return type.flags & TypeFlags.TypeVariable && maybeTypeOfKind(getBaseConstraintOfType(type) || emptyObjectType, TypeFlags.Nullable);
         }
 
-        function getApparentTypeForLocation(type: Type, node: Node) {
+        function getConstrainedTypeForLocation(type: Type, node: Node) {
             // When a node is the left hand expression of a property access, element access, or call expression,
             // and the type of the node includes type variables with constraints that are nullable, we fetch the
             // apparent type of the node *before* performing control flow analysis such that narrowings apply to
             // the constraint type.
-            if (isApparentTypePosition(node) && forEachType(type, typeHasNullableConstraint)) {
-                return mapType(getWidenedType(type), getApparentType);
+            if (isConstrainedTypePosition(node) && forEachType(type, typeHasNullableConstraint)) {
+                return mapType(getWidenedType(type), getConstraintType);
             }
             return type;
         }
@@ -12989,7 +12999,7 @@ namespace ts {
             checkCollisionWithCapturedNewTargetVariable(node, node);
             checkNestedBlockScopedBinding(node, symbol);
 
-            const type = getApparentTypeForLocation(getTypeOfSymbol(localOrExportSymbol), node);
+            const type = getConstrainedTypeForLocation(getTypeOfSymbol(localOrExportSymbol), node);
             const assignmentKind = getAssignmentTargetKind(node);
 
             if (assignmentKind) {
@@ -15555,7 +15565,7 @@ namespace ts {
                         return unknownType;
                     }
                 }
-                propType = getApparentTypeForLocation(getTypeOfSymbol(prop), node);
+                propType = getConstrainedTypeForLocation(getTypeOfSymbol(prop), node);
             }
             // Only compute control flow type if this is a property access expression that isn't an
             // assignment target, and the referenced property was declared as a variable, property,
