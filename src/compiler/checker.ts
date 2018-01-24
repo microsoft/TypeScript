@@ -8092,10 +8092,6 @@ namespace ts {
         }
 
         function getConditionalType(checkType: Type, extendsType: Type, baseTrueType: Type, baseFalseType: Type, target: ConditionalType, mapper: TypeMapper, aliasSymbol?: Symbol, baseAliasTypeArguments?: Type[]): Type {
-            // Distribute union types over conditional types
-            if (checkType.flags & TypeFlags.Union) {
-                return getUnionType(map((<UnionType>checkType).types, t => getConditionalType(t, extendsType, baseTrueType, baseFalseType, target, mapper)));
-            }
             // Return union of trueType and falseType for any and never since they match anything
             if (checkType.flags & (TypeFlags.Any | TypeFlags.Never)) {
                 return getUnionType([instantiateType(baseTrueType, mapper), instantiateType(baseFalseType, mapper)]);
@@ -8105,7 +8101,7 @@ namespace ts {
                 return instantiateType(baseTrueType, mapper);
             }
             // Return falseType for a definitely false extends check
-            if (!typeMaybeAssignableTo(instantiateType(checkType, anyMapper), instantiateType(extendsType, constraintMapper))) {
+            if (!isTypeAssignableTo(instantiateType(checkType, anyMapper), instantiateType(extendsType, constraintMapper))) {
                 return instantiateType(baseFalseType, mapper);
             }
             // Return a deferred type for a check that is neither definitely true nor definitely false
@@ -8704,8 +8700,8 @@ namespace ts {
         function getConditionalTypeInstantiation(type: ConditionalType, mapper: TypeMapper): Type {
             const target = type.target || type;
             const combinedMapper = type.mapper ? combineTypeMappers(type.mapper, mapper) : mapper;
-            // Check if we have a conditional type of the form T extends U ? X : Y, where T is a type parameter.
-            // If so, the conditional type is distributive over a union type and when T is instantiated to a union
+            // Check if we have a conditional type where the check type is a naked type parameter. If so,
+            // the conditional type is distributive over union types and when T is instantiated to a union
             // type A | B, we produce (A extends U ? X : Y) | (B extends U ? X : Y).
             const checkType = target.checkType;
             if (checkType.flags & TypeFlags.TypeParameter) {
