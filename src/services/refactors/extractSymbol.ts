@@ -235,6 +235,16 @@ namespace ts.refactor.extractSymbol {
                     break;
                 }
             }
+
+            if (!statements.length) {
+                // https://github.com/Microsoft/TypeScript/issues/20559
+                // Ranges like [|case 1: break;|] will fail to populate `statements` because
+                // they will never find `start` in `start.parent.statements`.
+                // Consider: We could support ranges like [|case 1:|] by refining them to just
+                // the expression.
+                return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
+            }
+
             return { targetRange: { range: statements, facts: rangeFacts, declarations } };
         }
 
