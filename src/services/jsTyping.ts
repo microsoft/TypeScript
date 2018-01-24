@@ -34,7 +34,7 @@ namespace ts.JsTyping {
 
     /* @internal */
     export function isTypingUpToDate(cachedTyping: JsTyping.CachedTyping, availableTypingVersions: MapLike<string>) {
-        const availableVersion = Semver.parse(getProperty(availableTypingVersions, `ts${ts.versionMajorMinor}`));
+        const availableVersion = Semver.parse(getProperty(availableTypingVersions, `ts${ts.versionMajorMinor}`) || getProperty(availableTypingVersions, "latest"));
         return !availableVersion.greaterThan(cachedTyping.version);
     }
 
