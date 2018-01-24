@@ -681,9 +681,21 @@ namespace ts {
             return getSpanOfTokenAtPosition(sourceFile, node.pos);
         }
 
-        const pos = nodeIsMissing(errorNode)
+        const isMissing = nodeIsMissing(errorNode);
+        const pos = isMissing
             ? errorNode.pos
             : skipTrivia(sourceFile.text, errorNode.pos);
+
+        // These asserts should all be satisfied for a properly constructed `errorNode`.
+        // Upstream from https://github.com/Microsoft/TypeScript/issues/20809.
+        if (isMissing) {
+            Debug.assert(pos === errorNode.pos);
+            Debug.assert(pos === errorNode.end);
+        }
+        else {
+            Debug.assert(pos >= errorNode.pos);
+            Debug.assert(pos <= errorNode.end);
+        }
 
         return createTextSpanFromBounds(pos, errorNode.end);
     }
