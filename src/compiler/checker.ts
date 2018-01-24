@@ -16717,7 +16717,7 @@ namespace ts {
             const isDecorator = node.kind === SyntaxKind.Decorator;
             const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
 
-            let typeArguments: ReadonlyArray<TypeNode>;
+            let typeArguments: NodeArray<TypeNode>;
 
             if (!isTaggedTemplate && !isDecorator && !isJsxOpeningOrSelfClosingElement) {
                 typeArguments = (<CallExpression>node).typeArguments;
@@ -16846,7 +16846,7 @@ namespace ts {
                     max = Math.max(max, length(sig.typeParameters));
                 }
                 const paramCount = min < max ? min + "-" + max : min;
-                diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_type_arguments_but_got_1, paramCount, typeArguments.length));
+                diagnostics.add(createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, paramCount, typeArguments.length));
             }
             else if (args) {
                 let min = Number.POSITIVE_INFINITY;
