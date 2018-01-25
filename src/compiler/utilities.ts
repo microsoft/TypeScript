@@ -2432,6 +2432,7 @@ namespace ts {
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics = [] as SortedArray<Diagnostic>;
         const fileDiagnostics = createMap<SortedArray<Diagnostic>>();
+        const allDiagnostics = [] as SortedArray<Diagnostic>;
 
         let hasReadNonFileDiagnostics = false;
         let modificationCount = 0;
@@ -2472,6 +2473,7 @@ namespace ts {
             }
 
             insertSorted(diagnostics, diagnostic, compareDiagnostics);
+            insertSorted(allDiagnostics, diagnostic, compareDiagnostics);
             modificationCount++;
         }
 
@@ -2485,18 +2487,7 @@ namespace ts {
                 return fileDiagnostics.get(fileName) || [];
             }
 
-            const allDiagnostics: Diagnostic[] = [];
-            function pushDiagnostic(d: Diagnostic) {
-                allDiagnostics.push(d);
-            }
-
-            forEach(nonFileDiagnostics, pushDiagnostic);
-
-            fileDiagnostics.forEach(diagnostics => {
-                forEach(diagnostics, pushDiagnostic);
-            });
-
-            return sortAndDeduplicateDiagnostics(allDiagnostics);
+            return allDiagnostics;
         }
     }
 
