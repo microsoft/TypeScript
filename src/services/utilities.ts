@@ -1067,6 +1067,12 @@ namespace ts {
         return createTextSpanFromBounds(range.pos, range.end);
     }
 
+    export function createTextChange(span: TextSpan, newText: string): TextChange;
+    export function createTextChange(start: number, length: number, newText: string): TextChange;
+    export function createTextChange(arg0: number | TextSpan, arg1: string | number, newText?: string): TextChange {
+        return typeof arg0 === "number" ? createTextChange(createTextSpan(arg0, arg1 as number), newText!) : { span: arg0, newText: arg1 as string };
+    }
+
     export const typeKeywords: ReadonlyArray<SyntaxKind> = [
         SyntaxKind.AnyKeyword,
         SyntaxKind.BooleanKeyword,

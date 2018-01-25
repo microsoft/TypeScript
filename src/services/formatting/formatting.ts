@@ -1078,19 +1078,15 @@ namespace ts.formatting {
             trimTrailingWhitespacesForLines(startLine, endLine + 1, previousRange);
         }
 
-        function newTextChange(start: number, len: number, newText: string): TextChange {
-            return { span: createTextSpan(start, len), newText };
-        }
-
         function recordDelete(start: number, len: number) {
             if (len) {
-                edits.push(newTextChange(start, len, ""));
+                edits.push(createTextChange(start, len, ""));
             }
         }
 
         function recordReplace(start: number, len: number, newText: string) {
             if (len || newText) {
-                edits.push(newTextChange(start, len, newText));
+                edits.push(createTextChange(start, len, newText));
             }
         }
 
