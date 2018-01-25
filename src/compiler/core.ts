@@ -16,6 +16,70 @@ namespace ts {
         // Update: We also consider a path like `C:\foo.ts` "relative" because we do not search for it in `node_modules` or treat it as an ambient module.
         return pathIsRelative(moduleName) || isRootedDiskPath(moduleName);
     }
+
+    export interface FileSystemEntries {
+        readonly files: ReadonlyArray<string>;
+        readonly directories: ReadonlyArray<string>;
+    }
+
+    export function matchFiles(path: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string>, includes: ReadonlyArray<string>, useCaseSensitiveFileNames: boolean, currentDirectory: string, depth: number | undefined, getFileSystemEntries: (path: string) => FileSystemEntries): string[] {
+        path = normalizePath(path);
+        currentDirectory = normalizePath(currentDirectory);
+
+        const comparer = useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
+        const patterns = getFileMatcherPatterns(path, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
+
+        const regexFlag = useCaseSensitiveFileNames ? "" : "i";
+        const includeFileRegexes = patterns.includeFilePatterns && patterns.includeFilePatterns.map(pattern => new RegExp(pattern, regexFlag));
+        const includeDirectoryRegex = patterns.includeDirectoryPattern && new RegExp(patterns.includeDirectoryPattern, regexFlag);
+        const excludeRegex = patterns.excludePattern && new RegExp(patterns.excludePattern, regexFlag);
+
+        // Associate an array of results with each include regex. This keeps results in order of the "include" order.
+        // If there are no "includes", then just put everything in results[0].
+        const results: string[][] = includeFileRegexes ? includeFileRegexes.map(() => []) : [[]];
+
+        for (const basePath of patterns.basePaths) {
+            visitDirectory(basePath, combinePaths(currentDirectory, basePath), depth);
+        }
+
+        return flatten<string>(results);
+
+        function visitDirectory(path: string, absolutePath: string, depth: number | undefined) {
+            const { files, directories } = getFileSystemEntries(path);
+
+            for (const current of sort(files, comparer)) {
+                const name = combinePaths(path, current);
+                const absoluteName = combinePaths(absolutePath, current);
+                if (extensions && !fileExtensionIsOneOf(name, extensions)) continue;
+                if (excludeRegex && excludeRegex.test(absoluteName)) continue;
+                if (!includeFileRegexes) {
+                    results[0].push(name);
+                }
+                else {
+                    const includeIndex = findIndex(includeFileRegexes, re => re.test(absoluteName));
+                    if (includeIndex !== -1) {
+                        results[includeIndex].push(name);
+                    }
+                }
+            }
+
+            if (depth !== undefined) {
+                depth--;
+                if (depth === 0) {
+                    return;
+                }
+            }
+
+            for (const current of sort(directories, comparer)) {
+                const name = combinePaths(path, current);
+                const absoluteName = combinePaths(absolutePath, current);
+                if ((!includeDirectoryRegex || includeDirectoryRegex.test(absoluteName)) &&
+                    (!excludeRegex || !excludeRegex.test(absoluteName))) {
+                    visitDirectory(name, absoluteName, depth);
+                }
+            }
+        }
+    }
 }
 
 /* @internal */
@@ -2467,11 +2531,6 @@ namespace ts {
         return match === "*" ? singleAsteriskRegexFragment : match === "?" ? "[^/]" : "\\" + match;
     }
 
-    export interface FileSystemEntries {
-        readonly files: ReadonlyArray<string>;
-        readonly directories: ReadonlyArray<string>;
-    }
-
     export interface FileMatcherPatterns {
         /** One pattern for each "include" spec. */
         includeFilePatterns: ReadonlyArray<string>;
@@ -2494,65 +2553,6 @@ namespace ts {
             excludePattern: getRegularExpressionForWildcard(excludes, absolutePath, "exclude"),
             basePaths: getBasePaths(path, includes, useCaseSensitiveFileNames)
         };
-    }
-
-    export function matchFiles(path: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string>, includes: ReadonlyArray<string>, useCaseSensitiveFileNames: boolean, currentDirectory: string, depth: number | undefined, getFileSystemEntries: (path: string) => FileSystemEntries): string[] {
-        path = normalizePath(path);
-        currentDirectory = normalizePath(currentDirectory);
-
-        const comparer = useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
-        const patterns = getFileMatcherPatterns(path, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
-
-        const regexFlag = useCaseSensitiveFileNames ? "" : "i";
-        const includeFileRegexes = patterns.includeFilePatterns && patterns.includeFilePatterns.map(pattern => new RegExp(pattern, regexFlag));
-        const includeDirectoryRegex = patterns.includeDirectoryPattern && new RegExp(patterns.includeDirectoryPattern, regexFlag);
-        const excludeRegex = patterns.excludePattern && new RegExp(patterns.excludePattern, regexFlag);
-
-        // Associate an array of results with each include regex. This keeps results in order of the "include" order.
-        // If there are no "includes", then just put everything in results[0].
-        const results: string[][] = includeFileRegexes ? includeFileRegexes.map(() => []) : [[]];
-
-        for (const basePath of patterns.basePaths) {
-            visitDirectory(basePath, combinePaths(currentDirectory, basePath), depth);
-        }
-
-        return flatten<string>(results);
-
-        function visitDirectory(path: string, absolutePath: string, depth: number | undefined) {
-            const { files, directories } = getFileSystemEntries(path);
-
-            for (const current of sort(files, comparer)) {
-                const name = combinePaths(path, current);
-                const absoluteName = combinePaths(absolutePath, current);
-                if (extensions && !fileExtensionIsOneOf(name, extensions)) continue;
-                if (excludeRegex && excludeRegex.test(absoluteName)) continue;
-                if (!includeFileRegexes) {
-                    results[0].push(name);
-                }
-                else {
-                    const includeIndex = findIndex(includeFileRegexes, re => re.test(absoluteName));
-                    if (includeIndex !== -1) {
-                        results[includeIndex].push(name);
-                    }
-                }
-            }
-
-            if (depth !== undefined) {
-                depth--;
-                if (depth === 0) {
-                    return;
-                }
-            }
-
-            for (const current of sort(directories, comparer)) {
-                const name = combinePaths(path, current);
-                const absoluteName = combinePaths(absolutePath, current);
-                if ((!includeDirectoryRegex || includeDirectoryRegex.test(absoluteName)) &&
-                    (!excludeRegex || !excludeRegex.test(absoluteName))) {
-                    visitDirectory(name, absoluteName, depth);
-                }
-            }
-        }
     }
 
     /**
