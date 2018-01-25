@@ -4559,6 +4559,10 @@ namespace ts {
         return node.kind === SyntaxKind.ConditionalType;
     }
 
+    export function isInferTypeNode(node: Node): node is InferTypeNode {
+        return node.kind === SyntaxKind.InferType;
+    }
+
     export function isParenthesizedTypeNode(node: Node): node is ParenthesizedTypeNode {
         return node.kind === SyntaxKind.ParenthesizedType;
     }

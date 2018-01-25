@@ -180,6 +180,8 @@ namespace ts {
                     visitNode(cbNode, (<ConditionalTypeNode>node).extendsType) ||
                     visitNode(cbNode, (<ConditionalTypeNode>node).trueType) ||
                     visitNode(cbNode, (<ConditionalTypeNode>node).falseType);
+            case SyntaxKind.InferType:
+                return visitNode(cbNode, (<InferTypeNode>node).typeParameter);
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.TypeOperator:
                 return visitNode(cbNode, (<ParenthesizedTypeNode | TypeOperatorNode>node).type);
@@ -2647,6 +2649,15 @@ namespace ts {
             return finishNode(node);
         }
 
+        function parseInferType(): InferTypeNode {
+            const node = <InferTypeNode>createNode(SyntaxKind.InferType);
+            parseExpected(SyntaxKind.InferKeyword);
+            const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
+            typeParameter.name = parseIdentifier();
+            node.typeParameter = finishNode(typeParameter);
+            return finishNode(node);
+        }
+
         function parseFunctionOrConstructorType(kind: SyntaxKind): FunctionOrConstructorTypeNode {
             const node = <FunctionOrConstructorTypeNode>createNodeWithJSDoc(kind);
             if (kind === SyntaxKind.ConstructorType) {
@@ -2733,6 +2744,8 @@ namespace ts {
                     return parseTupleType();
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedType();
+                case SyntaxKind.InferKeyword:
+                    return parseInferType();
                 default:
                     return parseTypeReference();
             }
@@ -2767,6 +2780,7 @@ namespace ts {
                 case SyntaxKind.QuestionToken:
                 case SyntaxKind.ExclamationToken:
                 case SyntaxKind.DotDotDotToken:
+                case SyntaxKind.InferKeyword:
                     return true;
                 case SyntaxKind.MinusToken:
                     return !inStartOfParameter && lookAhead(nextTokenIsNumericLiteral);

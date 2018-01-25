@@ -602,6 +602,8 @@ namespace ts {
                     return emitIntersectionType(<IntersectionTypeNode>node);
                 case SyntaxKind.ConditionalType:
                     return emitConditionalType(<ConditionalTypeNode>node);
+                case SyntaxKind.InferType:
+                    return emitInferType(<InferTypeNode>node);
                 case SyntaxKind.ParenthesizedType:
                     return emitParenthesizedType(<ParenthesizedTypeNode>node);
                 case SyntaxKind.ExpressionWithTypeArguments:
@@ -1200,6 +1202,11 @@ namespace ts {
             emit(node.trueType);
             write(" : ");
             emit(node.falseType);
+        }
+
+        function emitInferType(node: InferTypeNode) {
+            write("infer ");
+            emit(node.typeParameter);
         }
 
         function emitParenthesizedType(node: ParenthesizedTypeNode) {

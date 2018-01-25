@@ -394,6 +394,10 @@ namespace ts {
                     visitNode((<ConditionalTypeNode>node).trueType, visitor, isTypeNode),
                     visitNode((<ConditionalTypeNode>node).falseType, visitor, isTypeNode));
 
+            case SyntaxKind.InferType:
+                return updateInferTypeNode(<InferTypeNode>node,
+                    visitNode((<InferTypeNode>node).typeParameter, visitor, isTypeParameterDeclaration));
+
             case SyntaxKind.ParenthesizedType:
                 return updateParenthesizedType(<ParenthesizedTypeNode>node,
                     visitNode((<ParenthesizedTypeNode>node).type, visitor, isTypeNode));

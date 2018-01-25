@@ -1169,6 +1169,11 @@ namespace ts {
                                     );
                             }
                         }
+                        else if (location.kind === SyntaxKind.ConditionalType) {
+                            // A type parameter declared using 'infer T' in a conditional type is visible only in
+                            // the true branch of the conditional type.
+                            useResult = lastLocation === (<ConditionalTypeNode>location).trueType;
+                        }
 
                         if (useResult) {
                             break loop;
@@ -4628,9 +4633,13 @@ namespace ts {
                     case SyntaxKind.TypeAliasDeclaration:
                     case SyntaxKind.JSDocTemplateTag:
                     case SyntaxKind.MappedType:
+                    case SyntaxKind.ConditionalType:
                         const outerTypeParameters = getOuterTypeParameters(node, includeThisTypes);
                         if (node.kind === SyntaxKind.MappedType) {
                             return append(outerTypeParameters, getDeclaredTypeOfTypeParameter(getSymbolOfNode((<MappedTypeNode>node).typeParameter)));
+                        }
+                        else if (node.kind === SyntaxKind.ConditionalType) {
+                            return concatenate(outerTypeParameters, getInferTypeParameters(<ConditionalTypeNode>node));
                         }
                         const outerAndOwnTypeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>node) || emptyArray);
                         const thisType = includeThisTypes &&
@@ -8078,12 +8087,13 @@ namespace ts {
             return type.flags & TypeFlags.Substitution ? (<SubstitutionType>type).typeParameter : type;
         }
 
-        function createConditionalType(checkType: Type, extendsType: Type, trueType: Type, falseType: Type, target: ConditionalType, mapper: TypeMapper, aliasSymbol: Symbol, aliasTypeArguments: Type[]) {
+        function createConditionalType(checkType: Type, extendsType: Type, trueType: Type, falseType: Type, inferTypeParameters: TypeParameter[], target: ConditionalType, mapper: TypeMapper, aliasSymbol: Symbol, aliasTypeArguments: Type[]) {
             const type = <ConditionalType>createType(TypeFlags.Conditional);
             type.checkType = checkType;
             type.extendsType = extendsType;
             type.trueType = trueType;
             type.falseType = falseType;
+            type.inferTypeParameters = inferTypeParameters;
             type.target = target;
             type.mapper = mapper;
             type.aliasSymbol = aliasSymbol;
@@ -8091,14 +8101,29 @@ namespace ts {
             return type;
         }
 
-        function getConditionalType(checkType: Type, extendsType: Type, baseTrueType: Type, baseFalseType: Type, target: ConditionalType, mapper: TypeMapper, aliasSymbol?: Symbol, baseAliasTypeArguments?: Type[]): Type {
+        function getConditionalType(checkType: Type, baseExtendsType: Type, baseTrueType: Type, baseFalseType: Type, inferTypeParameters: TypeParameter[], target: ConditionalType, mapper: TypeMapper, aliasSymbol?: Symbol, baseAliasTypeArguments?: Type[]): Type {
+            // Instantiate extends type without instantiating any 'infer T' type parameters
+            const extendsType = instantiateType(baseExtendsType, mapper);
+            let combinedMapper: TypeMapper;
+            if (inferTypeParameters) {
+                const inferences = map(inferTypeParameters, createInferenceInfo);
+                // We don't want inferences from constraints as they may cause us to eagerly resolve the
+                // conditional type instead of deferring resolution.
+                inferTypes(inferences, checkType, extendsType, InferencePriority.NoConstraints);
+                // We infer 'never' when there are no candidates for a type parameter
+                const inferredTypes = map(inferences, inference => getTypeFromInference(inference) || neverType);
+                const inferenceMapper = createTypeMapper(inferTypeParameters, inferredTypes);
+                combinedMapper = mapper ? combineTypeMappers(mapper, inferenceMapper) : inferenceMapper;
+            }
             // Return union of trueType and falseType for any and never since they match anything
             if (checkType.flags & (TypeFlags.Any | TypeFlags.Never)) {
-                return getUnionType([instantiateType(baseTrueType, mapper), instantiateType(baseFalseType, mapper)]);
+                return getUnionType([instantiateType(baseTrueType, combinedMapper || mapper), instantiateType(baseFalseType, mapper)]);
             }
+            // Instantiate the extends type including inferences for 'infer T' type parameters
+            const inferredExtendsType = combinedMapper ? instantiateType(baseExtendsType, combinedMapper) : extendsType;
             // Return trueType for a definitely true extends check
-            if (isTypeAssignableTo(checkType, extendsType)) {
-                return instantiateType(baseTrueType, mapper);
+            if (isTypeAssignableTo(checkType, inferredExtendsType)) {
+                return instantiateType(baseTrueType, combinedMapper || mapper);
             }
             // Return falseType for a definitely false extends check
             if (!isTypeAssignableTo(instantiateType(checkType, anyMapper), instantiateType(extendsType, constraintMapper))) {
@@ -8114,9 +8139,21 @@ namespace ts {
                 return cached;
             }
             const result = createConditionalType(erasedCheckType, extendsType, trueType, falseType,
-                target, mapper, aliasSymbol, instantiateTypes(baseAliasTypeArguments, mapper));
+                inferTypeParameters, target, mapper, aliasSymbol, instantiateTypes(baseAliasTypeArguments, mapper));
             if (id) {
                 conditionalTypes.set(id, result);
+            }
+            return result;
+        }
+
+        function getInferTypeParameters(node: ConditionalTypeNode): TypeParameter[] {
+            let result: TypeParameter[];
+            if (node.locals) {
+                node.locals.forEach(symbol => {
+                    if (symbol.flags & SymbolFlags.TypeParameter) {
+                        result = append(result, getDeclaredTypeOfSymbol(symbol));
+                    }
+                });
             }
             return result;
         }
@@ -8127,8 +8164,16 @@ namespace ts {
                 links.resolvedType = getConditionalType(
                     getTypeFromTypeNode(node.checkType), getTypeFromTypeNode(node.extendsType),
                     getTypeFromTypeNode(node.trueType), getTypeFromTypeNode(node.falseType),
-                    /*target*/ undefined, /*mapper*/ undefined,
+                    getInferTypeParameters(node), /*target*/ undefined, /*mapper*/ undefined,
                     getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node));
+            }
+            return links.resolvedType;
+        }
+
+        function getTypeFromInferTypeNode(node: InferTypeNode): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node.typeParameter));
             }
             return links.resolvedType;
         }
@@ -8423,6 +8468,8 @@ namespace ts {
                     return getTypeFromMappedTypeNode(<MappedTypeNode>node);
                 case SyntaxKind.ConditionalType:
                     return getTypeFromConditionalTypeNode(<ConditionalTypeNode>node);
+                case SyntaxKind.InferType:
+                    return getTypeFromInferTypeNode(<InferTypeNode>node);
                 // This function assumes that an identifier or qualified name is a type expression
                 // Callers should first ensure this by calling isTypeNode
                 case SyntaxKind.Identifier:
@@ -8714,8 +8761,8 @@ namespace ts {
         }
 
         function instantiateConditionalType(type: ConditionalType, mapper: TypeMapper): Type {
-            return getConditionalType(instantiateType(type.checkType, mapper), instantiateType(type.extendsType, mapper),
-                type.trueType, type.falseType, type, mapper, type.aliasSymbol, type.aliasTypeArguments);
+            return getConditionalType(instantiateType(type.checkType, mapper), type.extendsType, type.trueType, type.falseType,
+                type.inferTypeParameters, type, mapper, type.aliasSymbol, type.aliasTypeArguments);
         }
 
         function instantiateType(type: Type, mapper: TypeMapper): Type {
@@ -11206,7 +11253,7 @@ namespace ts {
             const templateType = getTemplateTypeFromMappedType(target);
             const inference = createInferenceInfo(typeParameter);
             inferTypes([inference], sourceType, templateType);
-            return inference.candidates ? getUnionType(inference.candidates, UnionReduction.Subtype) : emptyObjectType;
+            return getTypeFromInference(inference) || emptyObjectType;
         }
 
         function getUnmatchedProperty(source: Type, target: Type, requireOptionalProperties: boolean) {
@@ -11220,6 +11267,12 @@ namespace ts {
                 }
             }
             return undefined;
+        }
+
+        function getTypeFromInference(inference: InferenceInfo) {
+            return inference.candidates ? getUnionType(inference.candidates, UnionReduction.Subtype) :
+                inference.contraCandidates ? getCommonSubtype(inference.contraCandidates) :
+                undefined;
         }
 
         function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0) {
@@ -11381,7 +11434,9 @@ namespace ts {
                     }
                 }
                 else {
-                    source = getApparentType(source);
+                    if (!(priority && InferencePriority.NoConstraints && source.flags & (TypeFlags.Intersection | TypeFlags.Instantiable))) {
+                        source = getApparentType(source);
+                    }
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
                         const key = source.id + "," + target.id;
                         if (visited && visited.get(key)) {

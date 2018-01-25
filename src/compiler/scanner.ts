@@ -92,6 +92,7 @@ namespace ts {
         "implements": SyntaxKind.ImplementsKeyword,
         "import": SyntaxKind.ImportKeyword,
         "in": SyntaxKind.InKeyword,
+        "infer": SyntaxKind.InferKeyword,
         "instanceof": SyntaxKind.InstanceOfKeyword,
         "interface": SyntaxKind.InterfaceKeyword,
         "is": SyntaxKind.IsKeyword,
