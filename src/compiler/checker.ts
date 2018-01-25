@@ -20172,6 +20172,13 @@ namespace ts {
             forEachChild(node, checkSourceElement);
         }
 
+        function checkInferType(node: InferTypeNode) {
+            if (!findAncestor(node, n => n.parent && n.parent.kind === SyntaxKind.ConditionalType && (<ConditionalTypeNode>n.parent).extendsType === n)) {
+                grammarErrorOnNode(node, Diagnostics.infer_declarations_are_only_permitted_in_the_extends_clause_of_a_conditional_type);
+            }
+            checkSourceElement(node.typeParameter);
+        }
+
         function isPrivateWithinAmbient(node: Node): boolean {
             return hasModifier(node, ModifierFlags.Private) && !!(node.flags & NodeFlags.Ambient);
         }
@@ -23874,6 +23881,8 @@ namespace ts {
                     return checkTypeOperator(<TypeOperatorNode>node);
                 case SyntaxKind.ConditionalType:
                     return checkConditionalType(<ConditionalTypeNode>node);
+                case SyntaxKind.InferType:
+                    return checkInferType(<InferTypeNode>node);
                 case SyntaxKind.JSDocAugmentsTag:
                     return checkJSDocAugmentsTag(node as JSDocAugmentsTag);
                 case SyntaxKind.JSDocTypedefTag:
