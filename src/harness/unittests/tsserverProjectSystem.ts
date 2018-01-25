@@ -6793,6 +6793,9 @@ namespace ts.projectSystem {
                     });
                 }
             }
+        });
+    });
+
     describe("tsserverProjectSystem forceConsistentCasingInFileNames", () => {
         it("works when extends is specified with a case insensitive file system", () => {
             const rootPath = "/Users/username/dev/project";

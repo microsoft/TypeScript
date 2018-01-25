@@ -1419,9 +1419,9 @@ namespace ts {
     }
 
     function directoryOfCombinedPath(fileName: string, basePath: string) {
-        // Use the `identity` function to avoid canonicalizing the path, as it must remain noncanonical
+        // Use the `getNormalizedAbsolutePath` function to avoid canonicalizing the path, as it must remain noncanonical
         // until consistient casing errors are reported
-        return getDirectoryPath(toPath(fileName, basePath, identity));
+        return getDirectoryPath(getNormalizedAbsolutePath(fileName, basePath));
     }
 
     /**
@@ -1540,7 +1540,10 @@ namespace ts {
         raw: any;
         options?: CompilerOptions;
         typeAcquisition?: TypeAcquisition;
-        extendedConfigPath?: Path;
+        /**
+         * Note that the case of the config path has not yet been normalized, as no files have been imported into the project yet
+         */
+        extendedConfigPath?: string;
     }
 
     function isSuccessfulParsedTsconfig(value: ParsedTsconfig) {
@@ -1557,11 +1560,11 @@ namespace ts {
             host: ParseConfigHost,
             basePath: string,
             configFileName: string,
-            resolutionStack: Path[],
+            resolutionStack: string[],
             errors: Push<Diagnostic>,
     ): ParsedTsconfig {
         basePath = normalizeSlashes(basePath);
-        const resolvedPath = toPath(configFileName || "", basePath, identity);
+        const resolvedPath = getNormalizedAbsolutePath(configFileName || "", basePath);
 
         if (resolutionStack.indexOf(resolvedPath) >= 0) {
             errors.push(createCompilerDiagnostic(Diagnostics.Circularity_detected_while_resolving_configuration_Colon_0, [...resolutionStack, resolvedPath].join(" -> ")));
@@ -1615,7 +1618,7 @@ namespace ts {
         // It should be removed in future releases - use typeAcquisition instead.
         const typeAcquisition = convertTypeAcquisitionFromJsonWorker(json.typeAcquisition || json.typingOptions, basePath, errors, configFileName);
         json.compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors);
-        let extendedConfigPath: Path;
+        let extendedConfigPath: string;
 
         if (json.extends) {
             if (!isString(json.extends)) {
@@ -1638,7 +1641,7 @@ namespace ts {
     ): ParsedTsconfig {
         const options = getDefaultCompilerOptions(configFileName);
         let typeAcquisition: TypeAcquisition, typingOptionstypeAcquisition: TypeAcquisition;
-        let extendedConfigPath: Path;
+        let extendedConfigPath: string;
 
         const optionsIterator: JsonConversionNotifier = {
             onSetValidOptionKeyValueInParent(parentOption: string, option: CommandLineOption, value: CompilerOptionsValue) {
@@ -1708,9 +1711,9 @@ namespace ts {
             errors.push(createDiagnostic(Diagnostics.A_path_in_an_extends_option_must_be_relative_or_rooted_but_0_is_not, extendedConfig));
             return undefined;
         }
-        let extendedConfigPath = toPath(extendedConfig, basePath, identity);
+        let extendedConfigPath = getNormalizedAbsolutePath(extendedConfig, basePath);
         if (!host.fileExists(extendedConfigPath) && !endsWith(extendedConfigPath, Extension.Json)) {
-            extendedConfigPath = `${extendedConfigPath}.json` as Path;
+            extendedConfigPath = `${extendedConfigPath}.json`;
             if (!host.fileExists(extendedConfigPath)) {
                 errors.push(createDiagnostic(Diagnostics.File_0_does_not_exist, extendedConfig));
                 return undefined;
@@ -1721,10 +1724,10 @@ namespace ts {
 
     function getExtendedConfig(
         sourceFile: JsonSourceFile,
-        extendedConfigPath: Path,
+        extendedConfigPath: string,
         host: ts.ParseConfigHost,
         basePath: string,
-        resolutionStack: Path[],
+        resolutionStack: string[],
         errors: Push<Diagnostic>,
     ): ParsedTsconfig | undefined {
         const extendedResult = readJsonConfigFile(extendedConfigPath, path => host.readFile(path));
