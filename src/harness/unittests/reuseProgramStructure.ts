@@ -785,6 +785,25 @@ namespace ts {
             }
         });
 
+        it("successful when same program is passed twice to create new program", () => {
+            const program1 = newProgram(files, ["a.ts"], { target });
+            const program2 = updateProgram(program1, ["a.ts"], { target }, files => {
+                files[0].text = files[0].text.updateProgram("var x = 100");
+            });
+            assert.equal(program1.structureIsReused, StructureIsReused.Completely);
+            const program1Diagnostics = program1.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
+            const program2Diagnostics = program2.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
+            assert.equal(program1Diagnostics.length, program2Diagnostics.length);
+
+            // Pass program1 again to create new program
+            const program3 = updateProgram(program1, ["a.ts"], { target }, files => {
+                files[0].text = files[0].text.updateProgram("var x = 100");
+            });
+            assert.equal(program1.structureIsReused, StructureIsReused.Completely);
+            const program3Diagnostics = program3.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
+            assert.equal(program1Diagnostics.length, program3Diagnostics.length);
+        });
+
         describe("redirects", () => {
             const axIndex = "/node_modules/a/node_modules/x/index.d.ts";
             const axPackage = "/node_modules/a/node_modules/x/package.json";
