@@ -7,7 +7,7 @@
 
 function verifyIndentation(marker: string): void {
 	goTo.marker(marker);
-	edit.insert("\r\n");
+	edit.insert("\n");
 	verify.indentationIs(0);
 }
 verifyIndentation("1");

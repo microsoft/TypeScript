@@ -1070,12 +1070,16 @@ namespace ts {
     export const typeKeywords: ReadonlyArray<SyntaxKind> = [
         SyntaxKind.AnyKeyword,
         SyntaxKind.BooleanKeyword,
+        SyntaxKind.KeyOfKeyword,
         SyntaxKind.NeverKeyword,
+        SyntaxKind.NullKeyword,
         SyntaxKind.NumberKeyword,
         SyntaxKind.ObjectKeyword,
         SyntaxKind.StringKeyword,
         SyntaxKind.SymbolKeyword,
         SyntaxKind.VoidKeyword,
+        SyntaxKind.UndefinedKeyword,
+        SyntaxKind.UniqueKeyword,
     ];
 
     export function isTypeKeyword(kind: SyntaxKind): boolean {
@@ -1259,8 +1263,10 @@ namespace ts {
     /**
      * The default is CRLF.
      */
-    export function getNewLineOrDefaultFromHost(host: LanguageServiceHost | LanguageServiceShimHost) {
-        return host.getNewLine ? host.getNewLine() : carriageReturnLineFeed;
+    export function getNewLineOrDefaultFromHost(host: LanguageServiceHost | LanguageServiceShimHost, formatSettings?: FormatCodeSettings) {
+        return (formatSettings && formatSettings.newLineCharacter) ||
+            (host.getNewLine && host.getNewLine()) ||
+            carriageReturnLineFeed;
     }
 
     export function lineBreakPart() {

@@ -599,6 +599,11 @@ namespace ts {
         return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2, arg3);
     }
 
+    export function createDiagnosticForNodeArray(sourceFile: SourceFile, nodes: NodeArray<Node>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
+        const start = skipTrivia(sourceFile.text, nodes.pos);
+        return createFileDiagnostic(sourceFile, start, nodes.end - start, message, arg0, arg1, arg2, arg3);
+    }
+
     export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
         const span = getErrorSpanForNode(sourceFile, node);
         return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2, arg3);
@@ -3380,14 +3385,14 @@ namespace ts {
 
     const carriageReturnLineFeed = "\r\n";
     const lineFeed = "\n";
-    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, system?: { newLine: string }): string {
+    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, getNewLine?: () => string): string {
         switch (options.newLine) {
             case NewLineKind.CarriageReturnLineFeed:
                 return carriageReturnLineFeed;
             case NewLineKind.LineFeed:
                 return lineFeed;
         }
-        return system ? system.newLine : sys ? sys.newLine : carriageReturnLineFeed;
+        return getNewLine ? getNewLine() : sys ? sys.newLine : carriageReturnLineFeed;
     }
 
     /**
@@ -4704,7 +4709,7 @@ namespace ts {
     }
 
     export function isTypeOfExpression(node: Node): node is TypeOfExpression {
-        return node.kind === SyntaxKind.AwaitExpression;
+        return node.kind === SyntaxKind.TypeOfExpression;
     }
 
     export function isVoidExpression(node: Node): node is VoidExpression {

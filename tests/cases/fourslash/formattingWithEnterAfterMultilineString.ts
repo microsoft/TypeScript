@@ -8,7 +8,7 @@
 ////}
 
 goTo.marker("1");
-edit.insert("\r\n");
+edit.insert("\n");
 // We actually need to verify smart (virtual) identation here rather than actual identation. Fourslash support is required.
 verify.indentationIs(8);
 goTo.marker("2");

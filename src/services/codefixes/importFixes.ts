@@ -29,12 +29,8 @@ namespace ts.codefix {
         symbolName: string;
     }
 
-    interface SymbolAndTokenContext extends SymbolContext {
+    interface ImportCodeFixContext extends SymbolContext {
         symbolToken: Identifier | undefined;
-    }
-
-    interface ImportCodeFixContext extends SymbolAndTokenContext {
-        host: LanguageServiceHost;
         program: Program;
         checker: TypeChecker;
         compilerOptions: CompilerOptions;
@@ -173,7 +169,6 @@ namespace ts.codefix {
         const symbolToken = cast(getTokenAtPosition(context.sourceFile, context.span.start, /*includeJsDocComment*/ false), isIdentifier);
         return {
             host: context.host,
-            newLineCharacter: context.newLineCharacter,
             formatContext: context.formatContext,
             sourceFile: context.sourceFile,
             program,
@@ -395,7 +390,7 @@ namespace ts.codefix {
                 In this case we should prefer using the relative path "../a" instead of the baseUrl path "foo/a".
                 */
                 const pathFromSourceToBaseUrl = getRelativePath(baseUrl, sourceDirectory, getCanonicalFileName);
-                const relativeFirst = getRelativePathNParents(pathFromSourceToBaseUrl) < getRelativePathNParents(relativePath);
+                const relativeFirst = getRelativePathNParents(relativePath) < getRelativePathNParents(pathFromSourceToBaseUrl);
                 return relativeFirst ? [relativePath, importRelativeToBaseUrl] : [importRelativeToBaseUrl, relativePath];
             }));
         // Only return results for the re-export with the shortest possible path (and also give the other path even if that's long.)
@@ -472,7 +467,7 @@ namespace ts.codefix {
         addJsExtension: boolean,
     ): string | undefined {
         const roots = getEffectiveTypeRoots(options, host);
-        return roots && firstDefined(roots, unNormalizedTypeRoot => {
+        return firstDefined(roots, unNormalizedTypeRoot => {
             const typeRoot = toPath(unNormalizedTypeRoot, /*basePath*/ undefined, getCanonicalFileName);
             if (startsWith(moduleFileName, typeRoot)) {
                 return removeExtensionAndIndexPostFix(moduleFileName.substring(typeRoot.length + 1), options, addJsExtension);

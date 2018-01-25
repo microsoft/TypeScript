@@ -479,7 +479,7 @@ interface Array<T> {}`
 
         private invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind) {
             const callbacks = this.watchedFiles.get(this.toPath(fileFullPath));
-            invokeWatcherCallbacks(callbacks, ({ cb, fileName }) => cb(fileName, eventKind));
+            invokeWatcherCallbacks(callbacks, ({ cb }) => cb(fileFullPath, eventKind));
         }
 
         private getRelativePathToDirectory(directoryFullPath: string, fileFullPath: string) {

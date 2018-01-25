@@ -749,10 +749,12 @@ namespace ts {
             return _jsxNamespace;
         }
 
-        function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationToken) {
+        function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationToken, ignoreDiagnostics?: boolean) {
             // Ensure we have all the type information in place for this file so that all the
             // emitter questions of this resolver will return the right information.
-            getDiagnostics(sourceFile, cancellationToken);
+            if (!ignoreDiagnostics) {
+                getDiagnostics(sourceFile, cancellationToken);
+            }
             return emitResolver;
         }
 
@@ -2422,12 +2424,15 @@ namespace ts {
             const visitedSymbolTables: SymbolTable[] = [];
             return forEachSymbolTableInScope(enclosingDeclaration, getAccessibleSymbolChainFromSymbolTable);
 
-            function getAccessibleSymbolChainFromSymbolTable(symbols: SymbolTable): Symbol[] | undefined {
+            /**
+             * @param {ignoreQualification} boolean Set when a symbol is being looked for through the exports of another symbol (meaning we have a route to qualify it already)
+             */
+            function getAccessibleSymbolChainFromSymbolTable(symbols: SymbolTable, ignoreQualification?: boolean): Symbol[] | undefined {
                 if (!pushIfUnique(visitedSymbolTables, symbols)) {
                     return undefined;
                 }
 
-                const result = trySymbolTable(symbols);
+                const result = trySymbolTable(symbols, ignoreQualification);
                 visitedSymbolTables.pop();
                 return result;
             }
@@ -2439,22 +2444,22 @@ namespace ts {
                     !!getAccessibleSymbolChain(symbolFromSymbolTable.parent, enclosingDeclaration, getQualifiedLeftMeaning(meaning), useOnlyExternalAliasing);
             }
 
-            function isAccessible(symbolFromSymbolTable: Symbol, resolvedAliasSymbol?: Symbol) {
+            function isAccessible(symbolFromSymbolTable: Symbol, resolvedAliasSymbol?: Symbol, ignoreQualification?: boolean) {
                 return symbol === (resolvedAliasSymbol || symbolFromSymbolTable) &&
                     // if the symbolFromSymbolTable is not external module (it could be if it was determined as ambient external module and would be in globals table)
                     // and if symbolFromSymbolTable or alias resolution matches the symbol,
                     // check the symbol can be qualified, it is only then this symbol is accessible
                     !some(symbolFromSymbolTable.declarations, hasExternalModuleSymbol) &&
-                    canQualifySymbol(symbolFromSymbolTable, meaning);
+                    (ignoreQualification || canQualifySymbol(symbolFromSymbolTable, meaning));
             }
 
             function isUMDExportSymbol(symbol: Symbol) {
                 return symbol && symbol.declarations && symbol.declarations[0] && isNamespaceExportDeclaration(symbol.declarations[0]);
             }
 
-            function trySymbolTable(symbols: SymbolTable) {
+            function trySymbolTable(symbols: SymbolTable, ignoreQualification: boolean | undefined) {
                 // If symbol is directly available by its name in the symbol table
-                if (isAccessible(symbols.get(symbol.escapedName))) {
+                if (isAccessible(symbols.get(symbol.escapedName), /*resolvedAliasSymbol*/ undefined, ignoreQualification)) {
                     return [symbol];
                 }
 
@@ -2467,14 +2472,14 @@ namespace ts {
                         && (!useOnlyExternalAliasing || some(symbolFromSymbolTable.declarations, isExternalModuleImportEqualsDeclaration))) {
 
                         const resolvedImportedSymbol = resolveAlias(symbolFromSymbolTable);
-                        if (isAccessible(symbolFromSymbolTable, resolvedImportedSymbol)) {
+                        if (isAccessible(symbolFromSymbolTable, resolvedImportedSymbol, ignoreQualification)) {
                             return [symbolFromSymbolTable];
                         }
 
                         // Look in the exported members, if we can find accessibleSymbolChain, symbol is accessible using this chain
                         // but only if the symbolFromSymbolTable can be qualified
                         const candidateTable = getExportsOfSymbol(resolvedImportedSymbol);
-                        const accessibleSymbolsFromExports = candidateTable && getAccessibleSymbolChainFromSymbolTable(candidateTable);
+                        const accessibleSymbolsFromExports = candidateTable && getAccessibleSymbolChainFromSymbolTable(candidateTable, /*ignoreQualification*/ true);
                         if (accessibleSymbolsFromExports && canQualifySymbol(symbolFromSymbolTable, getQualifiedLeftMeaning(meaning))) {
                             return [symbolFromSymbolTable].concat(accessibleSymbolsFromExports);
                         }
@@ -3949,7 +3954,8 @@ namespace ts {
                     if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
                         parentType = getNonNullableType(parentType);
                     }
-                    const declaredType = getTypeOfPropertyOfType(parentType, text);
+                    const propType = getTypeOfPropertyOfType(parentType, text);
+                    const declaredType = propType && getApparentTypeForLocation(propType, declaration.name);
                     type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
                         isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
                         getIndexTypeOfType(parentType, IndexKind.String);
@@ -5992,7 +5998,9 @@ namespace ts {
             for (const memberType of types) {
                 for (const { escapedName } of getAugmentedPropertiesOfType(memberType)) {
                     if (!props.has(escapedName)) {
-                        props.set(escapedName, createUnionOrIntersectionProperty(unionType as UnionType, escapedName));
+                        const prop = createUnionOrIntersectionProperty(unionType as UnionType, escapedName);
+                        // May be undefined if the property is private
+                        if (prop) props.set(escapedName, prop);
                     }
                 }
             }
@@ -6174,7 +6182,7 @@ namespace ts {
                 t;
         }
 
-        function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: __String): Symbol {
+        function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: __String): Symbol | undefined {
             let props: Symbol[];
             const isUnion = containingType.flags & TypeFlags.Union;
             const excludeModifiers = isUnion ? ModifierFlags.NonPublicAccessibilityModifier : 0;
@@ -6562,7 +6570,7 @@ namespace ts {
             // b) It references `arguments` somewhere
             const lastParam = lastOrUndefined(declaration.parameters);
             const lastParamTags = lastParam && getJSDocParameterTags(lastParam);
-            const lastParamVariadicType = lastParamTags && firstDefined(lastParamTags, p =>
+            const lastParamVariadicType = firstDefined(lastParamTags, p =>
                 p.typeExpression && isJSDocVariadicType(p.typeExpression.type) ? p.typeExpression.type : undefined);
             if (!lastParamVariadicType && !containsArgumentsReference(declaration)) {
                 return false;
@@ -9635,7 +9643,7 @@ namespace ts {
                 }
                 else if (target.flags & TypeFlags.IndexedAccess) {
                     // A type S is related to a type T[K] if S is related to A[K], where K is string-like and
-                    // A is the apparent type of T.
+                    // A is the constraint of T.
                     const constraint = getConstraintOfIndexedAccess(<IndexedAccessType>target);
                     if (constraint) {
                         if (result = isRelatedTo(source, constraint, reportErrors)) {
@@ -9671,7 +9679,7 @@ namespace ts {
                 }
                 else if (source.flags & TypeFlags.IndexedAccess) {
                     // A type S[K] is related to a type T if A[K] is related to T, where K is string-like and
-                    // A is the apparent type of S.
+                    // A is the constraint of S.
                     const constraint = getConstraintOfIndexedAccess(<IndexedAccessType>source);
                     if (constraint) {
                         if (result = isRelatedTo(constraint, target, reportErrors)) {
@@ -9679,10 +9687,11 @@ namespace ts {
                             return result;
                         }
                     }
-                    else if (target.flags & TypeFlags.IndexedAccess && (<IndexedAccessType>source).indexType === (<IndexedAccessType>target).indexType) {
-                        // if we have indexed access types with identical index types, see if relationship holds for
-                        // the two object types.
+                    else if (target.flags & TypeFlags.IndexedAccess) {
                         if (result = isRelatedTo((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType, reportErrors)) {
+                            result &= isRelatedTo((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType, reportErrors);
+                        }
+                        if (result) {
                             errorInfo = saveErrorInfo;
                             return result;
                         }
@@ -10963,7 +10972,7 @@ namespace ts {
             return type === typeParameter || type.flags & TypeFlags.UnionOrIntersection && forEach((<UnionOrIntersectionType>type).types, t => isTypeParameterAtTopLevel(t, typeParameter));
         }
 
-        /** Create an object with properties named in the string literal type. Every property has type `{}` */
+        /** Create an object with properties named in the string literal type. Every property has type `any` */
         function createEmptyObjectTypeFromStringLiteral(type: Type) {
             const members = createSymbolTable();
             forEachType(type, t => {
@@ -10972,7 +10981,7 @@ namespace ts {
                 }
                 const name = escapeLeadingUnderscores((t as StringLiteralType).value);
                 const literalProp = createSymbol(SymbolFlags.Property, name);
-                literalProp.type = emptyObjectType;
+                literalProp.type = anyType;
                 if (t.symbol) {
                     literalProp.declarations = t.symbol.declarations;
                     literalProp.valueDeclaration = t.symbol.valueDeclaration;
@@ -11027,7 +11036,9 @@ namespace ts {
             const templateType = getTemplateTypeFromMappedType(target);
             const inference = createInferenceInfo(typeParameter);
             inferTypes([inference], sourceType, templateType);
-            return inference.candidates ? getUnionType(inference.candidates, UnionReduction.Subtype) : emptyObjectType;
+            return inference.candidates ? getUnionType(inference.candidates, UnionReduction.Subtype) :
+                inference.contraCandidates ? getCommonSubtype(inference.contraCandidates) :
+                emptyObjectType;
         }
 
         function getUnmatchedProperty(source: Type, target: Type, requireOptionalProperties: boolean) {
@@ -11763,16 +11774,6 @@ namespace ts {
         }
 
         function getTypeWithFacts(type: Type, include: TypeFacts) {
-            if (type.flags & TypeFlags.IndexedAccess) {
-                // TODO (weswig): This is a substitute for a lazy negated type to remove the types indicated by the TypeFacts from the (potential) union the IndexedAccess refers to
-                //  - See discussion in https://github.com/Microsoft/TypeScript/pull/19275 for details, and test `strictNullNotNullIndexTypeShouldWork` for current behavior
-                const baseConstraint = getBaseConstraintOfType(type) || emptyObjectType;
-                const result = filterType(baseConstraint, t => (getTypeFacts(t) & include) !== 0);
-                if (result !== baseConstraint) {
-                    return result;
-                }
-                return type;
-            }
             return filterType(type, t => (getTypeFacts(t) & include) !== 0);
         }
 
@@ -12886,19 +12887,20 @@ namespace ts {
             const parent = node.parent;
             return parent.kind === SyntaxKind.PropertyAccessExpression ||
                 parent.kind === SyntaxKind.CallExpression && (<CallExpression>parent).expression === node ||
-                parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>parent).expression === node;
+                parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>parent).expression === node ||
+                parent.kind === SyntaxKind.NonNullExpression ||
+                parent.kind === SyntaxKind.BindingElement && (<BindingElement>parent).name === node && !!(<BindingElement>parent).initializer;
         }
 
         function typeHasNullableConstraint(type: Type) {
             return type.flags & TypeFlags.TypeVariable && maybeTypeOfKind(getBaseConstraintOfType(type) || emptyObjectType, TypeFlags.Nullable);
         }
 
-        function getDeclaredOrApparentType(symbol: Symbol, node: Node) {
+        function getApparentTypeForLocation(type: Type, node: Node) {
             // When a node is the left hand expression of a property access, element access, or call expression,
             // and the type of the node includes type variables with constraints that are nullable, we fetch the
             // apparent type of the node *before* performing control flow analysis such that narrowings apply to
             // the constraint type.
-            const type = getTypeOfSymbol(symbol);
             if (isApparentTypePosition(node) && forEachType(type, typeHasNullableConstraint)) {
                 return mapType(getWidenedType(type), getApparentType);
             }
@@ -12988,7 +12990,7 @@ namespace ts {
             checkCollisionWithCapturedNewTargetVariable(node, node);
             checkNestedBlockScopedBinding(node, symbol);
 
-            const type = getDeclaredOrApparentType(localOrExportSymbol, node);
+            const type = getApparentTypeForLocation(getTypeOfSymbol(localOrExportSymbol), node);
             const assignmentKind = getAssignmentTargetKind(node);
 
             if (assignmentKind) {
@@ -13047,7 +13049,7 @@ namespace ts {
                 node.parent.kind === SyntaxKind.NonNullExpression ||
                 declaration.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>declaration).exclamationToken ||
                 declaration.flags & NodeFlags.Ambient;
-            const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, getRootDeclaration(declaration) as VariableLikeDeclaration) : type) :
+            const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, declaration as VariableLikeDeclaration) : type) :
                 type === autoType || type === autoArrayType ? undefinedType :
                     getOptionalType(type);
             const flowType = getFlowTypeOfReference(node, type, initialType, flowContainer, !assumeInitialized);
@@ -15309,7 +15311,7 @@ namespace ts {
 
             // If the targetAttributesType is an emptyObjectType, indicating that there is no property named 'props' on this instance type.
             // but there exists a sourceAttributesType, we need to explicitly give an error as normal assignability check allow excess properties and will pass.
-            if (targetAttributesType === emptyObjectType && (isTypeAny(sourceAttributesType) || (<ResolvedType>sourceAttributesType).properties.length > 0)) {
+            if (targetAttributesType === emptyObjectType && (isTypeAny(sourceAttributesType) || getPropertiesOfType(<ResolvedType>sourceAttributesType).length > 0)) {
                 error(openingLikeElement, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, unescapeLeadingUnderscores(getJsxElementPropertiesName()));
             }
             else {
@@ -15554,7 +15556,7 @@ namespace ts {
                         return unknownType;
                     }
                 }
-                propType = getDeclaredOrApparentType(prop, node);
+                propType = getApparentTypeForLocation(getTypeOfSymbol(prop), node);
             }
             // Only compute control flow type if this is a property access expression that isn't an
             // assignment target, and the referenced property was declared as a variable, property,
@@ -16716,7 +16718,7 @@ namespace ts {
             const isDecorator = node.kind === SyntaxKind.Decorator;
             const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
 
-            let typeArguments: ReadonlyArray<TypeNode>;
+            let typeArguments: NodeArray<TypeNode>;
 
             if (!isTaggedTemplate && !isDecorator && !isJsxOpeningOrSelfClosingElement) {
                 typeArguments = (<CallExpression>node).typeArguments;
@@ -16845,7 +16847,7 @@ namespace ts {
                     max = Math.max(max, length(sig.typeParameters));
                 }
                 const paramCount = min < max ? min + "-" + max : min;
-                diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_type_arguments_but_got_1, paramCount, typeArguments.length));
+                diagnostics.add(createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, paramCount, typeArguments.length));
             }
             else if (args) {
                 let min = Number.POSITIVE_INFINITY;
@@ -21029,6 +21031,7 @@ namespace ts {
                             }
                             break;
                         case SyntaxKind.IndexSignature:
+                        case SyntaxKind.SemicolonClassElement:
                             // Can't be private
                             break;
                         default:

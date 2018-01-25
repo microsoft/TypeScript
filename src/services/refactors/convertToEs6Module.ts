@@ -1,15 +1,8 @@
 /* @internal */
 namespace ts.refactor {
     const actionName = "Convert to ES6 module";
-
-    const convertToEs6Module: Refactor = {
-        name: actionName,
-        description: getLocaleSpecificMessage(Diagnostics.Convert_to_ES6_module),
-        getEditsForAction,
-        getAvailableActions,
-    };
-
-    registerRefactor(convertToEs6Module);
+    const description = getLocaleSpecificMessage(Diagnostics.Convert_to_ES6_module);
+    registerRefactor(actionName, { getEditsForAction, getAvailableActions });
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
         const { file, startPosition } = context;
@@ -20,11 +13,11 @@ namespace ts.refactor {
         const node = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
         return !isAtTriggerLocation(file, node) ? undefined : [
             {
-                name: convertToEs6Module.name,
-                description: convertToEs6Module.description,
+                name: actionName,
+                description,
                 actions: [
                     {
-                        description: convertToEs6Module.description,
+                        description,
                         name: actionName,
                     },
                 ],
