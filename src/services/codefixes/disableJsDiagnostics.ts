@@ -1,8 +1,8 @@
 /* @internal */
 namespace ts.codefix {
     const fixId = "disableJsDiagnostics";
-    const errorCodes = mapDefined(Object.keys(Diagnostics), key => {
-        const diag = (Diagnostics as MapLike<DiagnosticMessage>)[key];
+    const errorCodes = mapDefined(Object.keys(Diagnostics) as ReadonlyArray<keyof typeof Diagnostics>, key => {
+        const diag = Diagnostics[key];
         return diag.category === DiagnosticCategory.Error ? diag.code : undefined;
     });
 
@@ -19,7 +19,7 @@ namespace ts.codefix {
 
             return [{
                 description: getLocaleSpecificMessage(Diagnostics.Ignore_this_error_message),
-                changes: [createFileTextChanges(sourceFile.fileName, [getIgnoreCommentLocationForLocation(sourceFile, span.start, newLineCharacter)])],
+                changes: [createFileTextChanges(sourceFile.fileName, [getIgnoreCommentLocationForLocation(sourceFile, span.start, newLineCharacter).change])],
                 fixId,
             },
             {
@@ -35,17 +35,23 @@ namespace ts.codefix {
                 fixId: undefined,
             }];
         },
-        fixIds: [fixId], // No point applying as a group, doing it once will fix all errors
-        getAllCodeActions: context => codeFixAllWithTextChanges(context, errorCodes, (changes, err) => {
-            if (err.start !== undefined) {
-                changes.push(getIgnoreCommentLocationForLocation(err.file!, err.start, getNewLineOrDefaultFromHost(context.host, context.formatContext.options)));
-            }
-        }),
+        fixIds: [fixId],
+        getAllCodeActions: context => {
+            const seenLines = createMap<true>(); // Only need to add `// @ts-ignore` for a line once.
+            return codeFixAllWithTextChanges(context, errorCodes, (changes, err) => {
+                if (err.start !== undefined) {
+                    const { lineNumber, change } = getIgnoreCommentLocationForLocation(err.file!, err.start, getNewLineOrDefaultFromHost(context.host, context.formatContext.options));
+                    if (addToSeen(seenLines, lineNumber)) {
+                        changes.push(change);
+                    }
+                }
+            });
+        },
     });
 
-    function getIgnoreCommentLocationForLocation(sourceFile: SourceFile, position: number, newLineCharacter: string): TextChange {
-        const { line } = getLineAndCharacterOfPosition(sourceFile, position);
-        const lineStartPosition = getStartPositionOfLine(line, sourceFile);
+    function getIgnoreCommentLocationForLocation(sourceFile: SourceFile, position: number, newLineCharacter: string): { lineNumber: number, change: TextChange } {
+        const { line: lineNumber } = getLineAndCharacterOfPosition(sourceFile, position);
+        const lineStartPosition = getStartPositionOfLine(lineNumber, sourceFile);
         const startPosition = getFirstNonSpaceCharacterPosition(sourceFile.text, lineStartPosition);
 
         // First try to see if we can put the '// @ts-ignore' on the previous line.
@@ -54,19 +60,17 @@ namespace ts.codefix {
         // if so, we do not want to separate the node from its comment if we can.
         if (!isInComment(sourceFile, startPosition) && !isInString(sourceFile, startPosition) && !isInTemplateString(sourceFile, startPosition)) {
             const token = getTouchingToken(sourceFile, startPosition, /*includeJsDocComment*/ false);
-            const tokenLeadingCommnets = getLeadingCommentRangesOfNode(token, sourceFile);
-            if (!tokenLeadingCommnets || !tokenLeadingCommnets.length || tokenLeadingCommnets[0].pos >= startPosition) {
-                return {
-                    span: { start: startPosition, length: 0 },
-                    newText: `// @ts-ignore${newLineCharacter}`
-                };
+            const tokenLeadingComments = getLeadingCommentRangesOfNode(token, sourceFile);
+            if (!tokenLeadingComments || !tokenLeadingComments.length || tokenLeadingComments[0].pos >= startPosition) {
+                return { lineNumber, change: createTextChange(startPosition, 0, `// @ts-ignore${newLineCharacter}`) };
             }
         }
 
         // If all fails, add an extra new line immediately before the error span.
-        return {
-            span: { start: position, length: 0 },
-            newText: `${position === startPosition ? "" : newLineCharacter}// @ts-ignore${newLineCharacter}`
-        };
+        return { lineNumber, change: createTextChange(position, 0, `${position === startPosition ? "" : newLineCharacter}// @ts-ignore${newLineCharacter}`) };
+    }
+
+    function createTextChange(start: number, length: number, newText: string): TextChange {
+        return { span: { start, length }, newText };
     }
 }
