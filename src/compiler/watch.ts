@@ -68,7 +68,7 @@ namespace ts {
         const host: ParseConfigFileHost = <any>system;
         host.onConfigFileDiagnostic = reportDiagnostic;
         host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(sys, reportDiagnostic, diagnostic);
-        const result = parseConfigFile(configFileName, optionsToExtend, host);
+        const result = getParsedCommandLineOfConfigFile(configFileName, optionsToExtend, host);
         host.onConfigFileDiagnostic = undefined;
         host.onUnRecoverableConfigFileDiagnostic = undefined;
         return result;
@@ -77,7 +77,7 @@ namespace ts {
     /**
      * Reads the config file, reports errors if any and exits if the config file cannot be found
      */
-    export function parseConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost): ParsedCommandLine | undefined {
+    export function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost): ParsedCommandLine | undefined {
         let configFileText: string;
         try {
             configFileText = host.readFile(configFileName);
@@ -791,7 +791,7 @@ namespace ts {
         }
 
         function parseConfigFile() {
-            const configParseResult = ts.parseConfigFile(configFileName, optionsToExtendForConfigFile, parseConfigFileHost);
+            const configParseResult = ts.getParsedCommandLineOfConfigFile(configFileName, optionsToExtendForConfigFile, parseConfigFileHost);
             rootFileNames = configParseResult.fileNames;
             compilerOptions = configParseResult.options;
             configFileSpecs = configParseResult.configFileSpecs;
