@@ -9225,7 +9225,8 @@ namespace ts {
                     isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
 
                 if (isObjectLiteralType(source) && source.flags & TypeFlags.FreshLiteral) {
-                    if (hasExcessProperties(<FreshObjectLiteralType>source, target, reportErrors)) {
+                    const discriminantType = target.flags & TypeFlags.Union ? findMatchingDiscriminantType(source, target as UnionType) : undefined;
+                    if (hasExcessProperties(<FreshObjectLiteralType>source, target, discriminantType, reportErrors)) {
                         if (reportErrors) {
                             reportRelationError(headMessage, source, target);
                         }
@@ -9235,7 +9236,7 @@ namespace ts {
                     // and intersection types are further deconstructed on the target side, we don't want to
                     // make the check again (as it might fail for a partial target type). Therefore we obtain
                     // the regular source type and proceed with that.
-                    if (isUnionOrIntersectionTypeWithoutNullableConstituents(target)) {
+                    if (isUnionOrIntersectionTypeWithoutNullableConstituents(target) && !discriminantType) {
                         source = getRegularTypeOfObjectLiteral(source);
                     }
                 }
@@ -9336,19 +9337,16 @@ namespace ts {
                 return Ternary.False;
             }
 
-            function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
+            function hasExcessProperties(source: FreshObjectLiteralType, target: Type, discriminant: Type | undefined, reportErrors: boolean): boolean {
                 if (maybeTypeOfKind(target, TypeFlags.Object) && !(getObjectFlags(target) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
                     const isComparingJsxAttributes = !!(source.flags & TypeFlags.JsxAttributes);
                     if ((relation === assignableRelation || relation === comparableRelation) &&
                         (isTypeSubsetOf(globalObjectType, target) || (!isComparingJsxAttributes && isEmptyObjectType(target)))) {
                         return false;
                     }
-                    if (target.flags & TypeFlags.Union) {
-                        const discriminantType = findMatchingDiscriminantType(source, target as UnionType);
-                        if (discriminantType) {
-                            // check excess properties against discriminant type only, not the entire union
-                            return hasExcessProperties(source, discriminantType, reportErrors);
-                        }
+                    if (discriminant) {
+                        // check excess properties against discriminant type only, not the entire union
+                        return hasExcessProperties(source, discriminant, /*discriminant*/ undefined, reportErrors);
                     }
                     for (const prop of getPropertiesOfObjectType(source)) {
                         if (!isKnownProperty(target, prop.escapedName, isComparingJsxAttributes)) {
