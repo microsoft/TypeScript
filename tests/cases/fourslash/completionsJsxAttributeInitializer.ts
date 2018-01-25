@@ -4,7 +4,6 @@
 ////function f(this: { p: number; "a b": number }, x: number): void {
 ////    <div foo=/**/ />;
 ////}
-////
 
 goTo.marker();
 

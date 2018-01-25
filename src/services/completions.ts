@@ -179,7 +179,7 @@ namespace ts.Completions {
         let insertText: string | undefined;
         let replacementSpan: TextSpan | undefined;
         if (includeInsertTextCompletions) {
-            if (kind === CompletionKind.Global || kind === CompletionKind.None && origin && origin.type === "this-type") {
+            if (origin && origin.type === "this-type") {
                 insertText = needsConvertPropertyAccess ? `this["${name}"]` : `this.${name}`;
             }
             else if (needsConvertPropertyAccess) {
@@ -695,6 +695,7 @@ namespace ts.Completions {
 
     const enum CompletionKind {
         ObjectPropertyDeclaration,
+        /** Note that sometimes we access completions from global scope, but use "None" instead of this. See isGlobalCompletionScope. */
         Global,
         PropertyAccess,
         MemberLike,
@@ -2135,8 +2136,8 @@ namespace ts.Completions {
                 // TODO: GH#18169
                 return { name: JSON.stringify(name), needsConvertPropertyAccess: false };
             case CompletionKind.PropertyAccess:
-            case CompletionKind.Global:
             case CompletionKind.None:
+            case CompletionKind.Global:
                 // Don't add a completion for a name starting with a space. See https://github.com/Microsoft/TypeScript/pull/20547
                 return name.charCodeAt(0) === CharacterCodes.space ? undefined : { name, needsConvertPropertyAccess: true };
             case CompletionKind.String:

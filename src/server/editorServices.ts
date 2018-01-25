@@ -898,7 +898,7 @@ namespace ts.server {
 
             const project = this.getOrCreateInferredProjectForProjectRootPathIfEnabled(info, projectRootPath) ||
                 this.getOrCreateSingleInferredProjectIfEnabled() ||
-                this.createInferredProject(getDirectoryPath(info.path));
+                this.createInferredProject(info.isDynamic ? this.currentDirectory : getDirectoryPath(info.path));
 
             project.addRoot(info);
             project.updateGraph();
@@ -1655,7 +1655,7 @@ namespace ts.server {
         }
 
         private getOrCreateInferredProjectForProjectRootPathIfEnabled(info: ScriptInfo, projectRootPath: NormalizedPath | undefined): InferredProject | undefined {
-            if (!this.useInferredProjectPerProjectRoot) {
+            if (info.isDynamic || !this.useInferredProjectPerProjectRoot) {
                 return undefined;
             }
 
