@@ -191,7 +191,7 @@ namespace ts.codefix {
 
     function makeChange(declaration: Declaration, start: number, type: Type | undefined, program: Program): TextChange | undefined {
         const typeString = type && typeToString(type, declaration, program.getTypeChecker());
-        return typeString === undefined ? undefined : createTextChange(start, 0, `: ${typeString}`);
+        return typeString === undefined ? undefined : createTextChangeFromStartLength(start, 0, `: ${typeString}`);
     }
 
     function getReferences(token: PropertyName | Token<SyntaxKind.ConstructorKeyword>, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): Identifier[] {

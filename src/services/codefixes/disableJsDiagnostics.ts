@@ -58,11 +58,11 @@ namespace ts.codefix {
             const token = getTouchingToken(sourceFile, startPosition, /*includeJsDocComment*/ false);
             const tokenLeadingComments = getLeadingCommentRangesOfNode(token, sourceFile);
             if (!tokenLeadingComments || !tokenLeadingComments.length || tokenLeadingComments[0].pos >= startPosition) {
-                return { lineNumber, change: createTextChange(startPosition, 0, `// @ts-ignore${newLineCharacter}`) };
+                return { lineNumber, change: createTextChangeFromStartLength(startPosition, 0, `// @ts-ignore${newLineCharacter}`) };
             }
         }
 
         // If all fails, add an extra new line immediately before the error span.
-        return { lineNumber, change: createTextChange(position, 0, `${position === startPosition ? "" : newLineCharacter}// @ts-ignore${newLineCharacter}`) };
+        return { lineNumber, change: createTextChangeFromStartLength(position, 0, `${position === startPosition ? "" : newLineCharacter}// @ts-ignore${newLineCharacter}`) };
     }
 }

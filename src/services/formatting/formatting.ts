@@ -1080,13 +1080,13 @@ namespace ts.formatting {
 
         function recordDelete(start: number, len: number) {
             if (len) {
-                edits.push(createTextChange(start, len, ""));
+                edits.push(createTextChangeFromStartLength(start, len, ""));
             }
         }
 
         function recordReplace(start: number, len: number, newText: string) {
             if (len || newText) {
-                edits.push(createTextChange(start, len, newText));
+                edits.push(createTextChangeFromStartLength(start, len, newText));
             }
         }
 
