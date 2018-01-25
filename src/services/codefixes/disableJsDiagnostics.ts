@@ -40,8 +40,8 @@ namespace ts.codefix {
             const seenLines = createMap<true>(); // Only need to add `// @ts-ignore` for a line once.
             return codeFixAllWithTextChanges(context, errorCodes, (changes, err) => {
                 if (err.start !== undefined) {
-                    const { line, change } = getIgnoreCommentLocationForLocation(err.file!, err.start, getNewLineOrDefaultFromHost(context.host, context.formatContext.options));
-                    if (addToSeen(seenLines, line)) {
+                    const { lineNumber, change } = getIgnoreCommentLocationForLocation(err.file!, err.start, getNewLineOrDefaultFromHost(context.host, context.formatContext.options));
+                    if (addToSeen(seenLines, lineNumber)) {
                         changes.push(change);
                     }
                 }
@@ -49,9 +49,9 @@ namespace ts.codefix {
         },
     });
 
-    function getIgnoreCommentLocationForLocation(sourceFile: SourceFile, position: number, newLineCharacter: string): { line: number, change: TextChange } {
-        const { line } = getLineAndCharacterOfPosition(sourceFile, position);
-        const lineStartPosition = getStartPositionOfLine(line, sourceFile);
+    function getIgnoreCommentLocationForLocation(sourceFile: SourceFile, position: number, newLineCharacter: string): { lineNumber: number, change: TextChange } {
+        const { line: lineNumber } = getLineAndCharacterOfPosition(sourceFile, position);
+        const lineStartPosition = getStartPositionOfLine(lineNumber, sourceFile);
         const startPosition = getFirstNonSpaceCharacterPosition(sourceFile.text, lineStartPosition);
 
         // First try to see if we can put the '// @ts-ignore' on the previous line.
@@ -62,12 +62,12 @@ namespace ts.codefix {
             const token = getTouchingToken(sourceFile, startPosition, /*includeJsDocComment*/ false);
             const tokenLeadingComments = getLeadingCommentRangesOfNode(token, sourceFile);
             if (!tokenLeadingComments || !tokenLeadingComments.length || tokenLeadingComments[0].pos >= startPosition) {
-                return { line, change: createTextChange(startPosition, 0, `// @ts-ignore${newLineCharacter}`) };
+                return { lineNumber, change: createTextChange(startPosition, 0, `// @ts-ignore${newLineCharacter}`) };
             }
         }
 
         // If all fails, add an extra new line immediately before the error span.
-        return { line, change: createTextChange(position, 0, `${position === startPosition ? "" : newLineCharacter}// @ts-ignore${newLineCharacter}`) };
+        return { lineNumber, change: createTextChange(position, 0, `${position === startPosition ? "" : newLineCharacter}// @ts-ignore${newLineCharacter}`) };
     }
 
     function createTextChange(start: number, length: number, newText: string): TextChange {
