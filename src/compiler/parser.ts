@@ -2649,15 +2649,6 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseInferType(): InferTypeNode {
-            const node = <InferTypeNode>createNode(SyntaxKind.InferType);
-            parseExpected(SyntaxKind.InferKeyword);
-            const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
-            typeParameter.name = parseIdentifier();
-            node.typeParameter = finishNode(typeParameter);
-            return finishNode(node);
-        }
-
         function parseFunctionOrConstructorType(kind: SyntaxKind): FunctionOrConstructorTypeNode {
             const node = <FunctionOrConstructorTypeNode>createNodeWithJSDoc(kind);
             if (kind === SyntaxKind.ConstructorType) {
@@ -2744,8 +2735,6 @@ namespace ts {
                     return parseTupleType();
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedType();
-                case SyntaxKind.InferKeyword:
-                    return parseInferType();
                 default:
                     return parseTypeReference();
             }
@@ -2857,12 +2846,23 @@ namespace ts {
             return finishNode(node);
         }
 
+        function parseInferType(): InferTypeNode {
+            const node = <InferTypeNode>createNode(SyntaxKind.InferType);
+            parseExpected(SyntaxKind.InferKeyword);
+            const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
+            typeParameter.name = parseIdentifier();
+            node.typeParameter = finishNode(typeParameter);
+            return finishNode(node);
+        }
+
         function parseTypeOperatorOrHigher(): TypeNode {
             const operator = token();
             switch (operator) {
                 case SyntaxKind.KeyOfKeyword:
                 case SyntaxKind.UniqueKeyword:
                     return parseTypeOperator(operator);
+                case SyntaxKind.InferKeyword:
+                    return parseInferType();
                 case SyntaxKind.DotDotDotToken: {
                     const result = createNode(SyntaxKind.JSDocVariadicType) as JSDocVariadicType;
                     nextToken();
