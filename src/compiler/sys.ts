@@ -608,6 +608,9 @@ namespace ts {
                         // Use notifications from FS to watch with falling back to dynamic watch file
                         dynamicPollingWatchFile = createDynamicPriorityPollingWatchFile(nodeSystem);
                         return createWatchFileUsingDynamicWatchFile(dynamicPollingWatchFile);
+                    case "UseFsEventsOnParentDirectory":
+                        // Use notifications from FS to watch with falling back to fs.watchFile
+                        return createNonPollingWatchFile();
                 }
                 return useNonPollingWatchers ?
                     createNonPollingWatchFile() :
