@@ -511,8 +511,9 @@ namespace FourSlash {
         }
 
         private getAllDiagnostics(): ts.Diagnostic[] {
+            const options = this.languageService.getProgram().getCompilerOptions();
             return ts.flatMap(this.languageServiceAdapterHost.getFilenames(), fileName =>
-                ts.isAnySupportedFileExtension(fileName) ? this.getDiagnostics(fileName) : []);
+                ts.fileExtensionIsOneOf(fileName, ts.getSupportedExtensions(options)) ? this.getDiagnostics(fileName) : []);
         }
 
         public verifyErrorExistsAfterMarker(markerName: string, shouldExist: boolean, after: boolean) {
