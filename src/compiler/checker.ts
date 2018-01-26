@@ -4,6 +4,8 @@
 
 /* @internal */
 namespace ts {
+    // declare const process: any;
+
     const ambientModuleSymbolRegex = /^".+"$/;
 
     let nextSymbolId = 1;
@@ -3951,7 +3953,8 @@ namespace ts {
                     if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
                         parentType = getNonNullableType(parentType);
                     }
-                    const propType = getTypeOfPropertyOfType(parentType, text);
+                    const parentTypeNEUndefined = getTypeWithFacts(parentType, TypeFacts.NEUndefined);
+                    const propType = getTypeOfPropertyOfType(parentTypeNEUndefined, text);
                     const declaredType = propType && getApparentTypeForLocation(propType, declaration.name);
                     type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
                         isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
@@ -8777,6 +8780,11 @@ namespace ts {
 
         type ErrorReporter = (message: DiagnosticMessage, arg0?: string, arg1?: string) => void;
 
+
+        // function dummyFunction(target: Type) {
+          // process.stdout.write(String(target.id));
+        // }
+
         /**
          * See signatureRelatedTo, compareSignaturesIdentical
          */
@@ -8829,7 +8837,8 @@ namespace ts {
             const targetParams = target.parameters;
             for (let i = 0; i < checkCount; i++) {
                 const sourceType = i < sourceMax ? getTypeOfParameter(sourceParams[i]) : getRestTypeOfSignature(source);
-                const targetType = i < targetMax ? getTypeOfParameter(targetParams[i]) : getRestTypeOfSignature(target);
+                const targetType: Type = i < targetMax ? getTypeOfParameter(targetParams[i]) : getRestTypeOfSignature(target);
+                // dummyFunction(targetType);
                 // In order to ensure that any generic type Foo<T> is at least co-variant with respect to T no matter
                 // how Foo uses T, we need to relate parameters bi-variantly (given that parameters are input positions,
                 // they naturally relate only contra-variantly). However, if the source and target parameters both have
@@ -17648,12 +17657,29 @@ namespace ts {
             }
         }
 
+        function getOptionalTypeRecursive(type: Type) {
+          if(!(type.flags & TypeFlags.Object)) {
+            return type;
+          }
+          let type2 = type as ResolvedType;
+
+          let x = type2.properties.length
+          for(let i=0;i<x;i++) {
+            let prop = type2.properties[i] as SymbolLinks;
+            if(prop.bindingElement && prop.bindingElement.initializer) {
+              prop.type = getOptionalType(prop.type)
+              type2.properties[i] = prop as Symbol;
+            }
+          }
+          return type as Type;
+        }
+
         function getTypeOfParameter(symbol: Symbol) {
             const type = getTypeOfSymbol(symbol);
             if (strictNullChecks) {
                 const declaration = symbol.valueDeclaration;
                 if (declaration && hasInitializer(declaration)) {
-                    return getOptionalType(type);
+                    return getOptionalType(getOptionalTypeRecursive(type));
                 }
             }
             return type;
