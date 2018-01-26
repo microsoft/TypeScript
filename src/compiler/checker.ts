@@ -8104,6 +8104,11 @@ namespace ts {
         function getConditionalType(checkType: Type, baseExtendsType: Type, baseTrueType: Type, baseFalseType: Type, inferTypeParameters: TypeParameter[], target: ConditionalType, mapper: TypeMapper, aliasSymbol?: Symbol, baseAliasTypeArguments?: Type[]): Type {
             // Instantiate extends type without instantiating any 'infer T' type parameters
             const extendsType = instantiateType(baseExtendsType, mapper);
+            // Return falseType for a definitely false extends check
+            if (!isTypeAssignableTo(instantiateType(checkType, anyMapper), instantiateType(extendsType, constraintMapper))) {
+                return instantiateType(baseFalseType, mapper);
+            }
+            // The check could be true for some instantiation
             let combinedMapper: TypeMapper;
             if (inferTypeParameters) {
                 const inferences = map(inferTypeParameters, createInferenceInfo);
@@ -8124,10 +8129,6 @@ namespace ts {
             // Return trueType for a definitely true extends check
             if (isTypeAssignableTo(checkType, inferredExtendsType)) {
                 return instantiateType(baseTrueType, combinedMapper || mapper);
-            }
-            // Return falseType for a definitely false extends check
-            if (!isTypeAssignableTo(instantiateType(checkType, anyMapper), instantiateType(extendsType, constraintMapper))) {
-                return instantiateType(baseFalseType, mapper);
             }
             // Return a deferred type for a check that is neither definitely true nor definitely false
             const erasedCheckType = getActualTypeParameter(checkType);
