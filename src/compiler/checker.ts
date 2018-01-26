@@ -4,8 +4,6 @@
 
 /* @internal */
 namespace ts {
-    // declare const process: any;
-
     const ambientModuleSymbolRegex = /^".+"$/;
 
     let nextSymbolId = 1;
