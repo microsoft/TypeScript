@@ -554,7 +554,10 @@ namespace ts {
                 write(" extends ");
                 emitType(node.extendsType);
                 write(" ? ");
+                const prevEnclosingDeclaration = enclosingDeclaration;
+                enclosingDeclaration = node.trueType;
                 emitType(node.trueType);
+                enclosingDeclaration = prevEnclosingDeclaration;
                 write(" : ");
                 emitType(node.falseType);
             }
