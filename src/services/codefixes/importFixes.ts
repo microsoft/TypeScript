@@ -390,7 +390,7 @@ namespace ts.codefix {
                 In this case we should prefer using the relative path "../a" instead of the baseUrl path "foo/a".
                 */
                 const pathFromSourceToBaseUrl = getRelativePath(baseUrl, sourceDirectory, getCanonicalFileName);
-                const relativeFirst = getRelativePathNParents(pathFromSourceToBaseUrl) < getRelativePathNParents(relativePath);
+                const relativeFirst = getRelativePathNParents(relativePath) < getRelativePathNParents(pathFromSourceToBaseUrl);
                 return relativeFirst ? [relativePath, importRelativeToBaseUrl] : [importRelativeToBaseUrl, relativePath];
             }));
         // Only return results for the re-export with the shortest possible path (and also give the other path even if that's long.)

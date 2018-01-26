@@ -13,7 +13,7 @@
     <Cmt Name="Dev" />
     <Cmt Name="LcxAdmin" />
     <Cmt Name="Note" />
-    <Cmt Name="Rccx" />
+    <Cmt Name="RCCX" />
   </OwnedComments>
   <Settings Name="@vsLocTools@\current\default.lss" Type="LSS" />
   <Item ItemId=";String Table" ItemType="0" PsrId="306" Leaf="false">
@@ -568,6 +568,15 @@
           <Val><![CDATA[A rest element cannot contain a binding pattern.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Элемент rest не может содержать шаблон привязки.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";A_rest_element_cannot_have_a_property_name_2566" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A rest element cannot have a property name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Элемент rest не может иметь имя свойства.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3368,15 +3377,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Extract_symbol_95003" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Extract symbol]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Извлечь символ]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Extract_to_0_in_1_95004" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Extract to {0} in {1}]]></Val>
@@ -3559,6 +3559,15 @@
           <Val><![CDATA[Found 'package.json' at '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Обнаружен package.json в "{0}".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Found_package_json_at_0_Package_ID_is_1_6190" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Found 'package.json' at '{0}'. Package ID is '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Найден "package.json" в "{0}". Идентификатор пакета: "{1}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6593,11 +6602,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Specify_library_files_to_be_included_in_the_compilation_Colon_6079" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Specify_library_files_to_be_included_in_the_compilation_6079" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify library files to be included in the compilation: ]]></Val>
+          <Val><![CDATA[Specify library files to be included in the compilation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Укажите файлы библиотеки для включения в компиляцию: ]]></Val>
+            <Val><![CDATA[Укажите файлы библиотек для включения в компиляцию.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
