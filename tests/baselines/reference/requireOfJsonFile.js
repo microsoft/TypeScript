@@ -16,6 +16,10 @@ if (x) {
 }
 
 //// [b.js]
+{
+    "a": true,
+    "b": "hello"
+};
 //// [file1.js]
 "use strict";
 exports.__esModule = true;

@@ -1056,11 +1056,11 @@ namespace ts {
         errors: Push<Diagnostic>,
         knownRootOptions: Map<CommandLineOption> | undefined,
         jsonConversionNotifier: JsonConversionNotifier | undefined): any {
-        if (!sourceFile.jsonObject) {
+        if (!sourceFile.statements.length) {
             return {};
         }
 
-        return convertObjectLiteralExpressionToJson(sourceFile.jsonObject, knownRootOptions,
+        return convertObjectLiteralExpressionToJson(sourceFile.statements[0].expression, knownRootOptions,
             /*extraKeyDiagnosticMessage*/ undefined, /*parentOption*/ undefined);
 
         function convertObjectLiteralExpressionToJson(
@@ -2092,8 +2092,8 @@ namespace ts {
         });
 
         function createDiagnostic(message: DiagnosticMessage, spec: string): Diagnostic {
-            if (jsonSourceFile && jsonSourceFile.jsonObject) {
-                for (const property of getPropertyAssignment(jsonSourceFile.jsonObject, specKey)) {
+            if (jsonSourceFile && jsonSourceFile.statements.length) {
+                for (const property of getPropertyAssignment(jsonSourceFile.statements[0].expression, specKey)) {
                     if (isArrayLiteralExpression(property.initializer)) {
                         for (const element of property.initializer.elements) {
                             if (isStringLiteral(element) && element.text === spec) {

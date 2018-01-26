@@ -260,7 +260,6 @@ namespace ts {
                 return visitNodes(cbNode, cbNodes, (<Block>node).statements);
             case SyntaxKind.SourceFile:
                 return visitNodes(cbNode, cbNodes, (<SourceFile>node).statements) ||
-                    visitNode(cbNode, (<JsonSourceFile>node).jsonObject) ||
                     visitNode(cbNode, (<SourceFile>node).endOfFileToken);
             case SyntaxKind.VariableStatement:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
@@ -663,7 +662,6 @@ namespace ts {
             scriptKind = ensureScriptKind(fileName, scriptKind);
             if (scriptKind === ScriptKind.JSON) {
                 const result = parseJsonText(fileName, sourceText, languageVersion, syntaxCursor, setParentNodes);
-                result.statements = <any>emptyArray;
                 result.typeReferenceDirectives = emptyArray;
                 result.amdDependencies = emptyArray;
                 return result;
@@ -693,20 +691,28 @@ namespace ts {
             initializeState(sourceText, languageVersion, syntaxCursor, ScriptKind.JSON);
             // Set source file so that errors will be reported with this file name
             sourceFile = createSourceFile(fileName, ScriptTarget.ES2015, ScriptKind.JSON, /*isDeclaration*/ false);
-            const result = <JsonSourceFile>sourceFile;
+            const result = sourceFile as JsonSourceFile;
 
             // Prime the scanner.
             nextToken();
+            const pos = getNodePos();
             if (token() === SyntaxKind.EndOfFileToken) {
                 sourceFile.endOfFileToken = parseTokenNode<EndOfFileToken>();
             }
             else if (token() === SyntaxKind.OpenBraceToken ||
                 lookAhead(() => token() === SyntaxKind.StringLiteral)) {
-                result.jsonObject = parseObjectLiteralExpression();
+                const statement = createNode(SyntaxKind.ExpressionStatement) as JsonObjectLiteralExpressionStatement;
+                statement.expression = parseObjectLiteralExpression();
+                finishNode(statement);
+                sourceFile.statements = createNodeArray([statement], pos);
                 sourceFile.endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token);
             }
             else {
                 parseExpected(SyntaxKind.OpenBraceToken);
+            }
+
+            if (!sourceFile.statements) {
+                sourceFile.statements = createNodeArray([], pos, pos);
             }
 
             if (setParentNodes) {

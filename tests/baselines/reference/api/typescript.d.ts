@@ -1631,8 +1631,11 @@ declare namespace ts {
         sourceFiles: ReadonlyArray<SourceFile>;
     }
     interface JsonSourceFile extends SourceFile {
-        jsonObject?: ObjectLiteralExpression;
+        statements: NodeArray<JsonObjectLiteralExpressionStatement>;
         extendedSourceFiles?: string[];
+    }
+    interface JsonObjectLiteralExpressionStatement extends ExpressionStatement {
+        expression: ObjectLiteralExpression;
     }
     interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
