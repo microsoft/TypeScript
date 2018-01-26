@@ -1,0 +1,108 @@
+=== tests/cases/compiler/compareTypeSignaturesWithOptionalParameters.ts ===
+let x1: (a?: {b?:number, c?:number}) => void;
+>x1 : Symbol(x1, Decl(compareTypeSignaturesWithOptionalParameters.ts, 0, 3))
+>a : Symbol(a, Decl(compareTypeSignaturesWithOptionalParameters.ts, 0, 9))
+>b : Symbol(b, Decl(compareTypeSignaturesWithOptionalParameters.ts, 0, 14))
+>c : Symbol(c, Decl(compareTypeSignaturesWithOptionalParameters.ts, 0, 24))
+
+x1 = ({b = 1, c = 2} = {}) => {};
+>x1 : Symbol(x1, Decl(compareTypeSignaturesWithOptionalParameters.ts, 0, 3))
+>b : Symbol(b, Decl(compareTypeSignaturesWithOptionalParameters.ts, 1, 7))
+>c : Symbol(c, Decl(compareTypeSignaturesWithOptionalParameters.ts, 1, 13))
+
+const x2 = ({b = 1, c = 2} = {}) => {};
+>x2 : Symbol(x2, Decl(compareTypeSignaturesWithOptionalParameters.ts, 2, 5))
+>b : Symbol(b, Decl(compareTypeSignaturesWithOptionalParameters.ts, 2, 13))
+>c : Symbol(c, Decl(compareTypeSignaturesWithOptionalParameters.ts, 2, 19))
+
+x1 = x2;
+>x1 : Symbol(x1, Decl(compareTypeSignaturesWithOptionalParameters.ts, 0, 3))
+>x2 : Symbol(x2, Decl(compareTypeSignaturesWithOptionalParameters.ts, 2, 5))
+
+let x3: (a?: {b?:number, c?:{d?:number, e?:number}}) => void;
+>x3 : Symbol(x3, Decl(compareTypeSignaturesWithOptionalParameters.ts, 5, 3))
+>a : Symbol(a, Decl(compareTypeSignaturesWithOptionalParameters.ts, 5, 9))
+>b : Symbol(b, Decl(compareTypeSignaturesWithOptionalParameters.ts, 5, 14))
+>c : Symbol(c, Decl(compareTypeSignaturesWithOptionalParameters.ts, 5, 24))
+>d : Symbol(d, Decl(compareTypeSignaturesWithOptionalParameters.ts, 5, 29))
+>e : Symbol(e, Decl(compareTypeSignaturesWithOptionalParameters.ts, 5, 39))
+
+x3 = ({b = 1, c:{d = 2, e = 3} = {}} = {}) => {};
+>x3 : Symbol(x3, Decl(compareTypeSignaturesWithOptionalParameters.ts, 5, 3))
+>b : Symbol(b, Decl(compareTypeSignaturesWithOptionalParameters.ts, 6, 7))
+>d : Symbol(d, Decl(compareTypeSignaturesWithOptionalParameters.ts, 6, 17))
+>e : Symbol(e, Decl(compareTypeSignaturesWithOptionalParameters.ts, 6, 23))
+
+const x4 = ({b = 1, c:{d = 2, e = 3} = {}} = {}) => {};
+>x4 : Symbol(x4, Decl(compareTypeSignaturesWithOptionalParameters.ts, 7, 5))
+>b : Symbol(b, Decl(compareTypeSignaturesWithOptionalParameters.ts, 7, 13))
+>c : Symbol(c)
+>d : Symbol(d, Decl(compareTypeSignaturesWithOptionalParameters.ts, 7, 23))
+>e : Symbol(e, Decl(compareTypeSignaturesWithOptionalParameters.ts, 7, 29))
+
+x3 = x4;
+>x3 : Symbol(x3, Decl(compareTypeSignaturesWithOptionalParameters.ts, 5, 3))
+>x4 : Symbol(x4, Decl(compareTypeSignaturesWithOptionalParameters.ts, 7, 5))
+
+let x5: (a?: {b?:number, c?:{d?:{f?:number, g?:number}, e?:number}}) => void;
+>x5 : Symbol(x5, Decl(compareTypeSignaturesWithOptionalParameters.ts, 10, 3))
+>a : Symbol(a, Decl(compareTypeSignaturesWithOptionalParameters.ts, 10, 9))
+>b : Symbol(b, Decl(compareTypeSignaturesWithOptionalParameters.ts, 10, 14))
+>c : Symbol(c, Decl(compareTypeSignaturesWithOptionalParameters.ts, 10, 24))
+>d : Symbol(d, Decl(compareTypeSignaturesWithOptionalParameters.ts, 10, 29))
+>f : Symbol(f, Decl(compareTypeSignaturesWithOptionalParameters.ts, 10, 33))
+>g : Symbol(g, Decl(compareTypeSignaturesWithOptionalParameters.ts, 10, 43))
+>e : Symbol(e, Decl(compareTypeSignaturesWithOptionalParameters.ts, 10, 55))
+
+x5 = ({b = 1, c:{d:{f = 4, g = 5} = {}, e = 3} = {}} = {}) => {};
+>x5 : Symbol(x5, Decl(compareTypeSignaturesWithOptionalParameters.ts, 10, 3))
+>b : Symbol(b, Decl(compareTypeSignaturesWithOptionalParameters.ts, 11, 7))
+>d : Symbol(d, Decl(compareTypeSignaturesWithOptionalParameters.ts, 10, 29))
+>f : Symbol(f, Decl(compareTypeSignaturesWithOptionalParameters.ts, 11, 20))
+>g : Symbol(g, Decl(compareTypeSignaturesWithOptionalParameters.ts, 11, 26))
+>e : Symbol(e, Decl(compareTypeSignaturesWithOptionalParameters.ts, 11, 39))
+
+const x6 = ({b = 1, c:{d:{f = 4, g = 5} = {}, e = 3} = {}} = {}) => {};
+>x6 : Symbol(x6, Decl(compareTypeSignaturesWithOptionalParameters.ts, 12, 5))
+>b : Symbol(b, Decl(compareTypeSignaturesWithOptionalParameters.ts, 12, 13))
+>c : Symbol(c)
+>f : Symbol(f, Decl(compareTypeSignaturesWithOptionalParameters.ts, 12, 26))
+>g : Symbol(g, Decl(compareTypeSignaturesWithOptionalParameters.ts, 12, 32))
+>e : Symbol(e, Decl(compareTypeSignaturesWithOptionalParameters.ts, 12, 45))
+
+x5 = x6;
+>x5 : Symbol(x5, Decl(compareTypeSignaturesWithOptionalParameters.ts, 10, 3))
+>x6 : Symbol(x6, Decl(compareTypeSignaturesWithOptionalParameters.ts, 12, 5))
+
+let useImplementation1 = true;
+>useImplementation1 : Symbol(useImplementation1, Decl(compareTypeSignaturesWithOptionalParameters.ts, 15, 3))
+
+let someOtherFunctionOfThisType = ({a = 3, b = 4} = {}) => a + b;
+>someOtherFunctionOfThisType : Symbol(someOtherFunctionOfThisType, Decl(compareTypeSignaturesWithOptionalParameters.ts, 16, 3))
+>a : Symbol(a, Decl(compareTypeSignaturesWithOptionalParameters.ts, 16, 36))
+>b : Symbol(b, Decl(compareTypeSignaturesWithOptionalParameters.ts, 16, 42))
+>a : Symbol(a, Decl(compareTypeSignaturesWithOptionalParameters.ts, 16, 36))
+>b : Symbol(b, Decl(compareTypeSignaturesWithOptionalParameters.ts, 16, 42))
+
+let adder: (nums?: {a?:number, b?:number}) => number;
+>adder : Symbol(adder, Decl(compareTypeSignaturesWithOptionalParameters.ts, 17, 3))
+>nums : Symbol(nums, Decl(compareTypeSignaturesWithOptionalParameters.ts, 17, 12))
+>a : Symbol(a, Decl(compareTypeSignaturesWithOptionalParameters.ts, 17, 20))
+>b : Symbol(b, Decl(compareTypeSignaturesWithOptionalParameters.ts, 17, 30))
+
+if (useImplementation1) {
+>useImplementation1 : Symbol(useImplementation1, Decl(compareTypeSignaturesWithOptionalParameters.ts, 15, 3))
+
+  adder = ({a = 1, b = 2} = {}) => a + b;
+>adder : Symbol(adder, Decl(compareTypeSignaturesWithOptionalParameters.ts, 17, 3))
+>a : Symbol(a, Decl(compareTypeSignaturesWithOptionalParameters.ts, 19, 12))
+>b : Symbol(b, Decl(compareTypeSignaturesWithOptionalParameters.ts, 19, 18))
+>a : Symbol(a, Decl(compareTypeSignaturesWithOptionalParameters.ts, 19, 12))
+>b : Symbol(b, Decl(compareTypeSignaturesWithOptionalParameters.ts, 19, 18))
+
+} else {
+  adder = someOtherFunctionOfThisType;
+>adder : Symbol(adder, Decl(compareTypeSignaturesWithOptionalParameters.ts, 17, 3))
+>someOtherFunctionOfThisType : Symbol(someOtherFunctionOfThisType, Decl(compareTypeSignaturesWithOptionalParameters.ts, 16, 3))
+}
+

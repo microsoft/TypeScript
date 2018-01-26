@@ -17658,20 +17658,42 @@ namespace ts {
         }
 
         function getOptionalTypeRecursive(type: Type) {
-          if(!(type.flags & TypeFlags.Object)) {
-            return type;
-          }
-          let type2 = type as ResolvedType;
+            if ((type as ResolvedType).properties) {
+                const rType = type as ResolvedType;
+                const propCount = rType.properties.length;
 
-          let x = type2.properties.length
-          for(let i=0;i<x;i++) {
-            let prop = type2.properties[i] as SymbolLinks;
-            if(prop.bindingElement && prop.bindingElement.initializer) {
-              prop.type = getOptionalType(prop.type)
-              type2.properties[i] = prop as Symbol;
+                if (rType.flags & TypeFlags.Object) {
+                  for (let i = 0; i < propCount; i++) {
+                    const prop = rType.properties[i] as SymbolLinks;
+                    let innerType;
+                    if (prop.bindingElement && prop.bindingElement.initializer) {
+                        innerType = getOptionalTypeRecursive(prop.type);
+                        innerType = getOptionalType(innerType);
+                    }
+                    else if (prop.type.symbol) {
+                        innerType = getTypeOfParameter(prop.type.symbol);
+                    }
+                    else {
+                        innerType = prop.type;
+                    }
+                    prop.type = innerType;
+                    rType.properties[i] = prop as Symbol;
+                  }
+                }
+
+                if (type.flags & TypeFlags.Union || type.flags & TypeFlags.Intersection) {
+                  for (let i = 0; i < propCount; i++) {
+                    const prop = rType.properties[i] as SymbolLinks;
+                    const innerType = getOptionalTypeRecursive(prop.type);
+                    prop.type = innerType;
+                    rType.properties[i] = prop as Symbol;
+                  }
+                }
+                return rType as Type;
             }
-          }
-          return type as Type;
+            else {
+              return type;
+            }
         }
 
         function getTypeOfParameter(symbol: Symbol) {
