@@ -11271,7 +11271,7 @@ namespace ts {
 
         function getTypeFromInference(inference: InferenceInfo) {
             return inference.candidates ? getUnionType(inference.candidates, UnionReduction.Subtype) :
-                inference.contraCandidates ? getCommonSubtype(inference.contraCandidates) :
+                inference.contraCandidates ? getIntersectionType(inference.contraCandidates) :
                 undefined;
         }
 
