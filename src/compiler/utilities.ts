@@ -687,14 +687,13 @@ namespace ts {
             : skipTrivia(sourceFile.text, errorNode.pos);
 
         // These asserts should all be satisfied for a properly constructed `errorNode`.
-        // Upstream from https://github.com/Microsoft/TypeScript/issues/20809.
         if (isMissing) {
-            Debug.assert(pos === errorNode.pos);
-            Debug.assert(pos === errorNode.end);
+            Debug.assert(pos === errorNode.pos, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
+            Debug.assert(pos === errorNode.end, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
         }
         else {
-            Debug.assert(pos >= errorNode.pos);
-            Debug.assert(pos <= errorNode.end);
+            Debug.assert(pos >= errorNode.pos, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
+            Debug.assert(pos <= errorNode.end, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
         }
 
         return createTextSpanFromBounds(pos, errorNode.end);

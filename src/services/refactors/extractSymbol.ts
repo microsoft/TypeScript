@@ -336,13 +336,11 @@ namespace ts.refactor.extractSymbol {
                 Return = 1 << 2
             }
 
-            // This assert is upstream from https://github.com/Microsoft/TypeScript/issues/20809.
             // We believe it's true because the node is from the (unmodified) tree.
-            Debug.assert(nodeToCheck.pos <= nodeToCheck.end);
+            Debug.assert(nodeToCheck.pos <= nodeToCheck.end, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
 
-            // This assert is upstream from https://github.com/Microsoft/TypeScript/issues/20809.
             // For understanding how skipTrivia functioned:
-            Debug.assert(!positionIsSynthesized(nodeToCheck.pos));
+            Debug.assert(!positionIsSynthesized(nodeToCheck.pos), "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
 
             if (!isStatement(nodeToCheck) && !(isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck))) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.statementOrExpressionExpected)];
