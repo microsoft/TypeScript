@@ -8104,8 +8104,10 @@ namespace ts {
         function getConditionalType(checkType: Type, baseExtendsType: Type, baseTrueType: Type, baseFalseType: Type, inferTypeParameters: TypeParameter[], target: ConditionalType, mapper: TypeMapper, aliasSymbol?: Symbol, baseAliasTypeArguments?: Type[]): Type {
             // Instantiate extends type without instantiating any 'infer T' type parameters
             const extendsType = instantiateType(baseExtendsType, mapper);
-            // Return falseType for a definitely false extends check
-            if (!isTypeAssignableTo(instantiateType(checkType, anyMapper), instantiateType(extendsType, constraintMapper))) {
+            // Return falseType for a definitely false extends check. We check an instantations of the two
+            // types with type parameters mapped to any, the most permissive instantiations possible. If those
+            // are not related, then no instatiations will be and we can just return the false branch type.
+            if (!isTypeAssignableTo(getAnyInstantiation(checkType), getAnyInstantiation(extendsType))) {
                 return instantiateType(baseFalseType, mapper);
             }
             // The check could be true for some instantiation
@@ -8561,10 +8563,6 @@ namespace ts {
             return type.flags & TypeFlags.TypeParameter ? anyType : type;
         }
 
-        function constraintMapper(type: Type) {
-            return type.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>type) || anyType : type;
-        }
-
         function cloneTypeParameter(typeParameter: TypeParameter): TypeParameter {
             const result = <TypeParameter>createType(TypeFlags.TypeParameter);
             result.symbol = typeParameter.symbol;
@@ -8806,6 +8804,11 @@ namespace ts {
                 }
             }
             return type;
+        }
+
+        function getAnyInstantiation(type: Type) {
+            return type.flags & (TypeFlags.Primitive | TypeFlags.Any | TypeFlags.Never) ? type :
+                type.resolvedAnyInstantiation || (type.resolvedAnyInstantiation = instantiateType(type, anyMapper));
         }
 
         function instantiateIndexInfo(info: IndexInfo, mapper: TypeMapper): IndexInfo {
