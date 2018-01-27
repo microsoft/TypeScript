@@ -594,7 +594,7 @@ task("configure-insiders", [configurePrereleaseJs], function () {
 }, { async: true });
 
 desc("Configure, build, test, and publish the insiders release.");
-task("publish-insiders", ["configure-nightly", "LKG", "clean", "setDebugMode", "runtests-parallel"], function () {
+task("publish-insiders", ["configure-insiders", "LKG", "clean", "setDebugMode", "runtests-parallel"], function () {
     var cmd = "npm publish --tag insiders";
     console.log(cmd);
     exec(cmd);
