@@ -8781,11 +8781,6 @@ namespace ts {
 
         type ErrorReporter = (message: DiagnosticMessage, arg0?: string, arg1?: string) => void;
 
-
-        // function dummyFunction(target: Type) {
-          // process.stdout.write(String(target.id));
-        // }
-
         /**
          * See signatureRelatedTo, compareSignaturesIdentical
          */
@@ -8839,7 +8834,6 @@ namespace ts {
             for (let i = 0; i < checkCount; i++) {
                 const sourceType = i < sourceMax ? getTypeOfParameter(sourceParams[i]) : getRestTypeOfSignature(source);
                 const targetType: Type = i < targetMax ? getTypeOfParameter(targetParams[i]) : getRestTypeOfSignature(target);
-                // dummyFunction(targetType);
                 // In order to ensure that any generic type Foo<T> is at least co-variant with respect to T no matter
                 // how Foo uses T, we need to relate parameters bi-variantly (given that parameters are input positions,
                 // they naturally relate only contra-variantly). However, if the source and target parameters both have
