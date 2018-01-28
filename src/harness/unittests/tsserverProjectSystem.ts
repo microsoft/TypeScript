@@ -5289,69 +5289,69 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("tsserverProjectSystem Options Diagnostic locations reported correctly with changes in configFile contents", () => {
-        it("when options change", () => {
-            const file = {
-                path: "/a/b/app.ts",
-                content: "let x = 10"
-            };
-            const configFileContentBeforeComment = `{`;
-            const configFileContentComment = `
-                // comment`;
-            const configFileContentAfterComment = `
-                "compilerOptions": {
-                    "allowJs": true,
-                    "declaration": true
-                }
-            }`;
-            const configFileContentWithComment = configFileContentBeforeComment + configFileContentComment + configFileContentAfterComment;
-            const configFileContentWithoutCommentLine = configFileContentBeforeComment + configFileContentAfterComment;
+    // describe("tsserverProjectSystem Options Diagnostic locations reported correctly with changes in configFile contents", () => {
+    //     it("when options change", () => {
+    //         const file = {
+    //             path: "/a/b/app.ts",
+    //             content: "let x = 10"
+    //         };
+    //         const configFileContentBeforeComment = `{`;
+    //         const configFileContentComment = `
+    //             // comment`;
+    //         const configFileContentAfterComment = `
+    //             "compilerOptions": {
+    //                 "allowJs": true,
+    //                 "declaration": true
+    //             }
+    //         }`;
+    //         const configFileContentWithComment = configFileContentBeforeComment + configFileContentComment + configFileContentAfterComment;
+    //         const configFileContentWithoutCommentLine = configFileContentBeforeComment + configFileContentAfterComment;
 
-            const configFile = {
-                path: "/a/b/tsconfig.json",
-                content: configFileContentWithComment
-            };
-            const host = createServerHost([file, libFile, configFile]);
-            const session = createSession(host);
-            openFilesForSession([file], session);
+    //         const configFile = {
+    //             path: "/a/b/tsconfig.json",
+    //             content: configFileContentWithComment
+    //         };
+    //         const host = createServerHost([file, libFile, configFile]);
+    //         const session = createSession(host);
+    //         openFilesForSession([file], session);
 
-            const projectService = session.getProjectService();
-            checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const projectName = configuredProjectAt(projectService, 0).getProjectName();
+    //         const projectService = session.getProjectService();
+    //         checkNumberOfProjects(projectService, { configuredProjects: 1 });
+    //         const projectName = configuredProjectAt(projectService, 0).getProjectName();
 
-            const diags = session.executeCommand(<server.protocol.SemanticDiagnosticsSyncRequest>{
-                type: "request",
-                command: server.CommandNames.SemanticDiagnosticsSync,
-                seq: 2,
-                arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
-            }).response as ReadonlyArray<server.protocol.DiagnosticWithLinePosition>;
-            assert.isTrue(diags.length === 2);
+    //         const diags = session.executeCommand(<server.protocol.SemanticDiagnosticsSyncRequest>{
+    //             type: "request",
+    //             command: server.CommandNames.SemanticDiagnosticsSync,
+    //             seq: 2,
+    //             arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
+    //         }).response as ReadonlyArray<server.protocol.DiagnosticWithLinePosition>;
+    //         assert.isTrue(diags.length === 2);
 
-            configFile.content = configFileContentWithoutCommentLine;
-            host.reloadFS([file, configFile]);
+    //         configFile.content = configFileContentWithoutCommentLine;
+    //         host.reloadFS([file, configFile]);
 
-            const diagsAfterEdit = session.executeCommand(<server.protocol.SemanticDiagnosticsSyncRequest>{
-                type: "request",
-                command: server.CommandNames.SemanticDiagnosticsSync,
-                seq: 2,
-                arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
-            }).response as ReadonlyArray<server.protocol.DiagnosticWithLinePosition>;
-            assert.isTrue(diagsAfterEdit.length === 2);
+    //         const diagsAfterEdit = session.executeCommand(<server.protocol.SemanticDiagnosticsSyncRequest>{
+    //             type: "request",
+    //             command: server.CommandNames.SemanticDiagnosticsSync,
+    //             seq: 2,
+    //             arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
+    //         }).response as ReadonlyArray<server.protocol.DiagnosticWithLinePosition>;
+    //         assert.isTrue(diagsAfterEdit.length === 2);
 
-            verifyDiagnostic(diags[0], diagsAfterEdit[0]);
-            verifyDiagnostic(diags[1], diagsAfterEdit[1]);
+    //         verifyDiagnostic(diags[0], diagsAfterEdit[0]);
+    //         verifyDiagnostic(diags[1], diagsAfterEdit[1]);
 
-            function verifyDiagnostic(beforeEditDiag: server.protocol.DiagnosticWithLinePosition, afterEditDiag: server.protocol.DiagnosticWithLinePosition) {
-                assert.equal(beforeEditDiag.message, afterEditDiag.message);
-                assert.equal(beforeEditDiag.code, afterEditDiag.code);
-                assert.equal(beforeEditDiag.category, afterEditDiag.category);
-                assert.equal(beforeEditDiag.startLocation.line, afterEditDiag.startLocation.line + 1);
-                assert.equal(beforeEditDiag.startLocation.offset, afterEditDiag.startLocation.offset);
-                assert.equal(beforeEditDiag.endLocation.line, afterEditDiag.endLocation.line + 1);
-                assert.equal(beforeEditDiag.endLocation.offset, afterEditDiag.endLocation.offset);
-            }
-        });
-    });
+    //         function verifyDiagnostic(beforeEditDiag: server.protocol.DiagnosticWithLinePosition, afterEditDiag: server.protocol.DiagnosticWithLinePosition) {
+    //             assert.equal(beforeEditDiag.message, afterEditDiag.message);
+    //             assert.equal(beforeEditDiag.code, afterEditDiag.code);
+    //             assert.equal(beforeEditDiag.category, afterEditDiag.category);
+    //             assert.equal(beforeEditDiag.startLocation.line, afterEditDiag.startLocation.line + 1);
+    //             assert.equal(beforeEditDiag.startLocation.offset, afterEditDiag.startLocation.offset);
+    //             assert.equal(beforeEditDiag.endLocation.line, afterEditDiag.endLocation.line + 1);
+    //             assert.equal(beforeEditDiag.endLocation.offset, afterEditDiag.endLocation.offset);
+    //         }
+    //     });
+    // });
 
     describe("tsserverProjectSystem refactors", () => {
         it("use formatting options", () => {
