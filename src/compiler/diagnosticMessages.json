@@ -1983,7 +1983,7 @@
         "category": "Error",
         "code": 2566
     },
-    "Types of construct signature are incompatible.": {
+    "Types of constructor signature are incompatible.": {
         "category": "Error",
         "code": 2567
     },

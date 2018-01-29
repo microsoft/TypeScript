@@ -10377,11 +10377,12 @@ namespace ts {
                     result = signatureRelatedTo(sourceSignatures[0], targetSignatures[0], eraseGenerics, reportErrors);
 
                     if (result === Ternary.False && reportErrors && kind === SignatureKind.Construct) {
-                        let sourceSignature = signatureToString(sourceSignatures[0]);
-                        let targetSignature = signatureToString(targetSignatures[0]);
+                        const flags = TypeFormatFlags.WriteArrowStyleSignature;
+                        const sourceSignature = signatureToString(sourceSignatures[0], undefined, flags, kind);
+                        const targetSignature = signatureToString(targetSignatures[0], undefined, flags, kind);
                         reportError(Diagnostics.Type_0_is_not_assignable_to_type_1, sourceSignature, targetSignature);
 
-                        reportError(Diagnostics.Types_of_construct_signature_are_incompatible);
+                        reportError(Diagnostics.Types_of_constructor_signature_are_incompatible);
                     }
                 }
                 else {
