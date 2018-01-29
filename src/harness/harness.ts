@@ -1220,7 +1220,7 @@ namespace Harness {
             options.skipDefaultLibCheck = typeof options.skipDefaultLibCheck === "undefined" ? true : options.skipDefaultLibCheck;
 
             if (typeof currentDirectory === "undefined") {
-                currentDirectory = "/.src";
+                currentDirectory = vfsutils.srcFolder;
             }
 
             // Parse settings
@@ -1237,13 +1237,13 @@ namespace Harness {
             // Files from built\local that are requested by test "@includeBuiltFiles" to be in the context.
             // Treat them as library files, so include them in build, but not in baselines.
             if (options.includeBuiltFile) {
-                programFileNames.push(vpath.combine("/.ts/", options.includeBuiltFile));
+                programFileNames.push(vpath.combine(vfsutils.builtFolder, options.includeBuiltFile));
             }
 
             // Files from tests\lib that are requested by "@libFiles"
             if (options.libFiles) {
                 for (const fileName of options.libFiles.split(",")) {
-                    programFileNames.push(vpath.combine("/.lib/", fileName));
+                    programFileNames.push(vpath.combine(vfsutils.testLibFolder, fileName));
                 }
             }
 
@@ -2113,7 +2113,7 @@ namespace Harness {
 
     export function isBuiltFile(filePath: string): boolean {
         return filePath.indexOf(Harness.libFolder) === 0 ||
-            filePath.indexOf("/.ts/") === 0;
+            filePath.indexOf(vpath.addTrailingSeparator(vfsutils.builtFolder)) === 0;
     }
 
     export function getDefaultLibraryFile(filePath: string, io: Harness.IO): Harness.Compiler.TestFile {

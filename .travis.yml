@@ -2,7 +2,7 @@ language: node_js
 
 node_js:
   - 'stable'
-  - 'lts/*'
+  - '8'
 
 sudo: false
 

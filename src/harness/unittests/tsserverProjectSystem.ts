@@ -5762,7 +5762,7 @@ namespace ts.projectSystem {
                             content: "export class Cookie { }"
                         };
                         const es2016LibFile: FileOrFolder = {
-                            path: "/.ts/lib.es2016.full.d.ts",
+                            path: vpath.combine(vfsutils.builtFolder, "lib.es2016.full.d.ts"),
                             content: libFile.content
                         };
                         const typeRoots = ["types", "node_modules/@types"];

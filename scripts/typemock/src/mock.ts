@@ -5,9 +5,6 @@ import { Inject } from "./inject";
 const weakHandler = new WeakMap<object, MockHandler<object>>();
 const weakMock = new WeakMap<object, Mock<object>>();
 
-function noop() {}
-const empty = {};
-
 export type Callable = (...args: any[]) => any;
 
 export type Constructable = new (...args: any[]) => any;
@@ -111,7 +108,7 @@ export class Mock<T extends object> {
     public static spy<T extends { [P in K]: (...args: any[]) => any }, K extends keyof T>(object?: T, propertyKey?: K) {
         return object !== undefined && propertyKey !== undefined
             ? new Spy(object, propertyKey)
-            : new Mock(object || noop);
+            : new Mock(object || function () {});
     }
 
     /**
@@ -221,7 +218,7 @@ export class Spy<T extends { [P in K]: (...args: any[]) => any }, K extends keyo
 
 class Recording {
     public static readonly noThisArg = {};
-    public readonly trap: string;
+    public readonly trap: "apply" | "construct" | "invoke" | "get" | "set";
     public readonly name: PropertyKey | undefined;
     public readonly thisArg: any;
     public readonly argArray: ReadonlyArray<any>;
@@ -233,7 +230,7 @@ class Recording {
     private _newTargetCondition: Arg | undefined;
     private _conditions: ReadonlyArray<Arg> | undefined;
 
-    constructor(trap: string, name: PropertyKey | undefined, thisArg: any, argArray: ReadonlyArray<any>, newTarget: any, result: Partial<Returns<any> & Throws & Fallback> | undefined, callback: Callable | undefined) {
+    constructor(trap: "apply" | "construct" | "invoke" | "get" | "set", name: PropertyKey | undefined, thisArg: any, argArray: ReadonlyArray<any>, newTarget: any, result: Partial<Returns<any> & Throws & Fallback> | undefined, callback: Callable | undefined) {
         this.trap = trap;
         this.name = name;
         this.thisArg = thisArg;
@@ -450,7 +447,7 @@ class MockHandler<T extends object> implements ProxyHandler<T> {
     }
 
     protected capture<U>(callback: (value: T) => U, result: Setup<any> | undefined) {
-        return this.captureCore(<T>empty, new CapturingHandler<T, U>(result), callback);
+        return this.captureCore(<T>{}, new CapturingHandler<T, U>(result), callback);
     }
 
     protected captureCore<T extends object, U>(target: T, handler: CapturingHandler<T, U>, callback: (value: T) => U): Recording {
@@ -471,7 +468,7 @@ class MockHandler<T extends object> implements ProxyHandler<T> {
         const setups = this.setups;
         this.setupMembers({
             [name](...argArray: any[]) {
-                return Recording.evaluate(setups, "invoke", name, this, argArray, /*newTarget*/ undefined, noop);
+                return Recording.evaluate(setups, "invoke", name, this, argArray, /*newTarget*/ undefined, () => {});
             }
         });
     }
@@ -480,10 +477,10 @@ class MockHandler<T extends object> implements ProxyHandler<T> {
         const setups = this.setups;
         this.setupMembers({
             get [name]() {
-                return Recording.evaluate(setups, "get", name, this, [], /*newTarget*/ undefined, noop);
+                return Recording.evaluate(setups, "get", name, this, [], /*newTarget*/ undefined, () => {});
             },
             set [name](value: any) {
-                Recording.evaluate(setups, "set", name, this, [value], /*newTarget*/ undefined, noop);
+                Recording.evaluate(setups, "set", name, this, [value], /*newTarget*/ undefined, () => {});
             }
         });
     }
@@ -519,7 +516,7 @@ class MockFunctionHandler<T extends Callable | Constructable> extends MockHandle
     }
 
     protected capture<U>(callback: (value: T) => U, result: Returns<any> & ThisArg | Returns<any> | Throws & ThisArg | Throws | ThisArg | undefined) {
-        return this.captureCore(<T>noop, new CapturingFunctionHandler<T, U>(result), callback);
+        return this.captureCore(<T>function() {}, new CapturingFunctionHandler<T, U>(result), callback);
     }
 }
 

@@ -13,6 +13,36 @@ namespace vfsutils {
     let builtLocalCI: vfs.FileSystem | undefined;
     let builtLocalCS: vfs.FileSystem | undefined;
 
+    /**
+     * Posix-style path to the TypeScript compiler build outputs (including tsc.js, lib.d.ts, etc.)
+     */
+    export const builtFolder = "/.ts";
+
+    /**
+     * Posix-style path to additional test libraries
+     */
+    export const testLibFolder = "/.lib";
+
+    /**
+     * Posix-style path to sources under test
+     */
+    export const srcFolder = "/.src";
+
+    /**
+     * DOS-style path to the TypeScript compiler build outputs (including tsc.js, lib.d.ts, etc.)
+     */
+    export const dosBuiltFolder = "c:" + builtFolder;
+
+    /**
+     * DOS-style path to additional test libraries
+     */
+    export const dosTestLibFolder = "c:" + testLibFolder;
+
+    /**
+     * DOS-style path to sources under test
+     */
+    export const dosSrcFolder = "c:" + srcFolder;
+
     export function createResolver(io: Harness.IO): vfs.FileSystemResolver {
         return {
             readdirSync(path: string): string[] {
@@ -60,12 +90,12 @@ namespace vfsutils {
             const resolver = createResolver(Harness.IO);
             builtLocalCI = new vfs.FileSystem(/*ignoreCase*/ true, {
                 files: {
-                    "/.ts": new vfs.Mount(__dirname, patchResolver(Harness.IO, resolver)),
-                    "/.lib": new vfs.Mount(vpath.resolve(__dirname, "../../tests/lib"), resolver),
-                    "/.src": {}
+                    [builtFolder]: new vfs.Mount(__dirname, patchResolver(Harness.IO, resolver)),
+                    [testLibFolder]: new vfs.Mount(vpath.resolve(__dirname, "../../tests/lib"), resolver),
+                    [srcFolder]: {}
                 },
-                cwd: "/.src",
-                meta: { defaultLibLocation: "/.ts" }
+                cwd: srcFolder,
+                meta: { defaultLibLocation: builtFolder }
             });
             builtLocalCI.makeReadonly();
         }

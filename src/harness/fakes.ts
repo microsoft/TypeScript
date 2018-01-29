@@ -37,8 +37,8 @@ namespace fakes {
     }
 
     export class FakeServerHost implements ts.server.ServerHost, ts.FormatDiagnosticsHost, ts.ModuleResolutionHost {
-        public static readonly dosExecutingFilePath = "c:/.ts/tsc.js";
-        public static readonly defaultExecutingFilePath = "/.ts/tsc.js";
+        public static readonly dosExecutingFilePath = vpath.combine(vfsutils.dosBuiltFolder, "tsc.js");
+        public static readonly defaultExecutingFilePath = vpath.combine(vfsutils.builtFolder, "tsc.js");
         public static readonly dosDefaultCurrentDirectory = "c:/";
         public static readonly defaultCurrentDirectory = "/";
         public static readonly dosSafeListPath = "c:/safelist.json";
@@ -53,8 +53,8 @@ namespace fakes {
             `    "chroma": "chroma-js"\n` +
             `}`;
 
-        public static readonly dosLibPath = "c:/.ts/lib.d.ts";
-        public static readonly libPath = "/.ts/lib.d.ts";
+        public static readonly dosLibPath = vpath.combine(vfsutils.dosBuiltFolder, "lib.d.ts");
+        public static readonly libPath = vpath.combine(vfsutils.builtFolder, "lib.d.ts");
         public static readonly libContent =
             `/// <reference no-default-lib="true"/>\n` +
             `interface Boolean {}\n` +

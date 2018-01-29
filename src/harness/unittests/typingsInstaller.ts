@@ -732,7 +732,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [app, jsconfig]);
-            host.checkWatchedFiles([jsconfig, "/bower_components", "/node_modules", "/.ts/lib.d.ts"]);
+            host.checkWatchedFiles([jsconfig, "/bower_components", "/node_modules", vpath.combine(vfsutils.builtFolder, "lib.d.ts")]);
 
             installer.installAll(/*expectedCount*/ 1);
 

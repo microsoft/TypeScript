@@ -515,19 +515,21 @@ namespace ts.tscWatch {
             });
 
             it("correctly handles changes in lib section of config file", () => {
+                const es5LibPath = vpath.combine(vfsutils.builtFolder, "lib.es5.d.ts");
+                const es2015PromiseLibPath = vpath.combine(vfsutils.builtFolder, "lib.es2015.promise.d.ts");
                 const host = new fakes.FakeServerHost({}, /*files*/ {
-                    "/.ts/lib.es5.d.ts": `declare const eval: any`,
-                    "/.ts/lib.es2015.promise.d.ts": `declare class Promise<T> {}`,
+                    [es5LibPath]: `declare const eval: any`,
+                    [es2015PromiseLibPath]: `declare class Promise<T> {}`,
                     "/src/app.ts": `var x: Promise<string>;`,
                     "/src/tsconfig.json": `{ "compilerOptions": { "lib": ["es5"] } }`,
                 });
 
                 const watch = createWatchOfConfigFile("/src/tsconfig.json", host);
-                checkProgramActualFiles(watch(), ["/.ts/lib.es5.d.ts", "/src/app.ts"]);
+                checkProgramActualFiles(watch(), [es5LibPath, "/src/app.ts"]);
 
                 host.vfs.writeFileSync("/src/tsconfig.json", `{ "compilerOptions": { "lib": ["es5", "es2015.promise"] } }`);
                 host.checkTimeoutQueueLengthAndRun(1);
-                checkProgramActualFiles(watch(), ["/.ts/lib.es5.d.ts", "/.ts/lib.es2015.promise.d.ts", "/src/app.ts"]);
+                checkProgramActualFiles(watch(), [es5LibPath, es2015PromiseLibPath, "/src/app.ts"]);
             });
 
             it("should handle non-existing directories in config file", () => {

@@ -100,7 +100,7 @@ namespace project {
 
         public readDirectory(path: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
             const result = super.readDirectory(path, extensions, excludes, includes, depth);
-            const projectRoot = vpath.resolve("/.src", this._testCase.projectRoot);
+            const projectRoot = vpath.resolve(vfsutils.srcFolder, this._testCase.projectRoot);
             return result.map(item => vpath.relative(
                 projectRoot,
                 vpath.resolve(projectRoot, item),
@@ -189,9 +189,9 @@ namespace project {
             }
 
             const fs = vfsutils.createFromFileSystem(/*useCaseSensitiveFileNames*/ true);
-            fs.mountSync(vpath.resolve(__dirname, "../../tests"), "/.src/tests", vfsutils.createResolver(Harness.IO));
-            fs.mkdirpSync(vpath.combine("/.src", testCase.projectRoot));
-            fs.chdir(vpath.combine("/.src", testCase.projectRoot));
+            fs.mountSync(vpath.resolve(__dirname, "../../tests"), vpath.combine(vfsutils.srcFolder, "tests"), vfsutils.createResolver(Harness.IO));
+            fs.mkdirpSync(vpath.combine(vfsutils.srcFolder, testCase.projectRoot));
+            fs.chdir(vpath.combine(vfsutils.srcFolder, testCase.projectRoot));
             fs.makeReadonly();
 
             return [
@@ -389,7 +389,7 @@ namespace project {
             });
 
             const _vfs = vfsutils.createFromDocuments(/*useCaseSensitiveFileNames*/ true, allInputFiles, {
-                currentDirectory: vpath.combine("/.src", this.testCase.projectRoot)
+                currentDirectory: vpath.combine(vfsutils.srcFolder, this.testCase.projectRoot)
             });
 
             // Dont allow config files since we are compiling existing source options
@@ -438,11 +438,11 @@ namespace project {
             moduleResolution: ts.ModuleResolutionKind.Classic,
             module: moduleKind,
             mapRoot: testCase.resolveMapRoot && testCase.mapRoot
-                ? vpath.resolve("/.src", testCase.mapRoot)
+                ? vpath.resolve(vfsutils.srcFolder, testCase.mapRoot)
                 : testCase.mapRoot,
 
             sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot
-                ? vpath.resolve("/.src", testCase.sourceRoot)
+                ? vpath.resolve(vfsutils.srcFolder, testCase.sourceRoot)
                 : testCase.sourceRoot
         };
 
