@@ -843,53 +843,29 @@ task("vfs-errors", function () {
 }, { async: true });
 
 task("vfs-path", ["vfs-core", "vfs-errors"], function () {
-    if (process.env.INSTALL_PRIVATE_DEPS) {
-        execNpmInstall(["file:scripts/vfs-core", "file:scripts/vfs-errors"], function (error) {
-            if (error) return fail(error);
-            compile();
-        });
-    }
-    else {
-        compile();
-    }
-
-    function compile() {
-        var startCompileTime = mark();
-        execCompiler(/*useBuiltCompiler*/ false, ["-p", "scripts/vfs-path/tsconfig.json"], function (error) {
-            if (error) {
-                fail("Compilation unsuccessful.");
-            }
-            else {
-                complete();
-            }
-            measure(startCompileTime);
-        });
-    }
+    var startCompileTime = mark();
+    execCompiler(/*useBuiltCompiler*/ false, ["-p", "scripts/vfs-path/tsconfig.json"], function (error) {
+        if (error) {
+            fail("Compilation unsuccessful.");
+        }
+        else {
+            complete();
+        }
+        measure(startCompileTime);
+    });
 }, { async: true });
 
 task("vfs", ["vfs-core", "vfs-errors", "vfs-path", "typemock"], function () {
-    if (process.env.INSTALL_PRIVATE_DEPS) {
-        execNpmInstall(["file:scripts/vfs-path", "file:scripts/typemock"], function (error) {
-            if (error) return fail(error);
-            compile();
-        });
-    }
-    else {
-        compile();
-    }
-
-    function compile() {
-        var startCompileTime = mark();
-        execCompiler(/*useBuiltCompiler*/ false, ["-p", "scripts/vfs/tsconfig.json"], function (error) {
-            if (error) {
-                fail("Compilation unsuccessful.");
-            }
-            else {
-                complete();
-            }
-            measure(startCompileTime);
-        });
-    }
+    var startCompileTime = mark();
+    execCompiler(/*useBuiltCompiler*/ false, ["-p", "scripts/vfs/tsconfig.json"], function (error) {
+        if (error) {
+            fail("Compilation unsuccessful.");
+        }
+        else {
+            complete();
+        }
+        measure(startCompileTime);
+    });
 }, { async: true });
 
 task("private-packages", ["typemock", "vfs"]);
