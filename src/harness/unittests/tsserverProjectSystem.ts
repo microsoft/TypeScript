@@ -1388,11 +1388,11 @@ namespace ts.projectSystem {
                     service.checkNumberOfProjects({ externalProjects: 1 });
                     checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, fakes.FakeServerHost.libPath]);
 
-            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
+                    const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
                     assert.isTrue(completions1.entries.some(e => e.name === "somelongname"), "should contain 'somelongname'");
 
                     service.closeClientFile(f2.path);
-            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
+                    const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
                     assert.isFalse(completions2.entries.some(e => e.name === "somelongname"), "should not contain 'somelongname'");
                     const sf2 = service.externalProjects[0].getLanguageService().getProgram().getSourceFile(f2.path);
                     assert.equal(sf2.text, "");
@@ -2875,6 +2875,7 @@ namespace ts.projectSystem {
                     watchedRecursiveDirectories.push(`${root}/a/b/src`, `${root}/a/b/node_modules`);
                     host.checkWatchedDirectories(watchedRecursiveDirectories, /*recursive*/ true);
                 });
+
                 it("Properly handle Windows-style outDir", () => {
                     const configFile: FileOrFolder = {
                         path: "C:\\a\\tsconfig.json",
@@ -2899,6 +2900,45 @@ namespace ts.projectSystem {
                     checkProjectActualFiles(project, [normalizePath(file1.path), normalizePath(configFile.path)]);
                     const options = project.getCompilerOptions();
                     assert.equal(options.outDir, "C:/a/b", "");
+                });
+
+                it("dynamic file without external project", () => {
+                    const file: FileOrFolder = {
+                        path: "^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js",
+                        content: "var x = 10;"
+                    };
+                    const host = createServerHost([], { dos: true, lib: true });
+                    const projectService = createProjectService(host);
+                    projectService.setCompilerOptionsForInferredProjects({
+                        module: ModuleKind.CommonJS,
+                        allowJs: true,
+                        allowSyntheticDefaultImports: true,
+                        allowNonTsExtensions: true
+                    });
+                    projectService.openClientFile(file.path, file.content);
+
+                    projectService.checkNumberOfProjects({ inferredProjects: 1 });
+                    const project = projectService.inferredProjects[0];
+                    checkProjectRootFiles(project, [file.path]);
+                    checkProjectActualFiles(project, [file.path, fakes.FakeServerHost.dosLibPath]);
+
+                    assert.strictEqual(projectService.getDefaultProjectForFile(server.toNormalizedPath(file.path), /*ensureProject*/ true), project);
+                    const indexOfX = file.content.indexOf("x");
+                    assert.deepEqual(project.getLanguageService(/*ensureSynchronized*/ true).getQuickInfoAtPosition(file.path, indexOfX), {
+                        kind: ScriptElementKind.variableElement,
+                        kindModifiers: "",
+                        textSpan: { start: indexOfX, length: 1 },
+                        displayParts: [
+                            { text: "var", kind: "keyword" },
+                            { text: " ", kind: "space" },
+                            { text: "x", kind: "localName" },
+                            { text: ":", kind: "punctuation" },
+                            { text: " ", kind: "space" },
+                            { text: "number", kind: "keyword" }
+                        ],
+                        documentation: [],
+                        tags: []
+                    });
                 });
             });
 

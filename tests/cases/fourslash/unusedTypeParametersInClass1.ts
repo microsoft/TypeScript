@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// @noUnusedLocals: true
+// @noUnusedParameters: true
 ////[|class greeter<T> |] {
 ////}
 

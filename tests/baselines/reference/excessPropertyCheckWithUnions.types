@@ -221,3 +221,67 @@ t0 = t2
 >t0 : { a: any; b: any; } | { d: any; e: any; }
 >t2 : { a: any; b: any; c: any; } | { c: any; d: any; e: any; }
 
+// Nested excess property checks work with discriminated unions
+type AN = { a: string } | { c: string }
+>AN : AN
+>a : string
+>c : string
+
+type BN = { b: string }
+>BN : BN
+>b : string
+
+type AB = { kind: "A", n: AN } | { kind: "B", n: BN }
+>AB : AB
+>kind : "A"
+>n : AN
+>AN : AN
+>kind : "B"
+>n : BN
+>BN : BN
+
+const abab: AB = {
+>abab : AB
+>AB : AB
+>{    kind: "A",    n: {        a: "a",        b: "b", // excess -- kind: "A"    }} : { kind: "A"; n: { a: string; b: string; }; }
+
+    kind: "A",
+>kind : "A"
+>"A" : "A"
+
+    n: {
+>n : { a: string; b: string; }
+>{        a: "a",        b: "b", // excess -- kind: "A"    } : { a: string; b: string; }
+
+        a: "a",
+>a : string
+>"a" : "a"
+
+        b: "b", // excess -- kind: "A"
+>b : string
+>"b" : "b"
+    }
+}
+const abac: AB = {
+>abac : AB
+>AB : AB
+>{    kind: "A",    n: {        a: "a",        c: "c", // ok -- kind: "A", an: { a: string } | { c: string }    }} : { kind: "A"; n: { a: string; c: string; }; }
+
+    kind: "A",
+>kind : "A"
+>"A" : "A"
+
+    n: {
+>n : { a: string; c: string; }
+>{        a: "a",        c: "c", // ok -- kind: "A", an: { a: string } | { c: string }    } : { a: string; c: string; }
+
+        a: "a",
+>a : string
+>"a" : "a"
+
+        c: "c", // ok -- kind: "A", an: { a: string } | { c: string }
+>c : string
+>"c" : "c"
+    }
+}
+

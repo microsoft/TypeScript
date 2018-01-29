@@ -4,7 +4,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "2.7";
+    export const versionMajorMinor = "2.8";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0`;
 }
@@ -15,6 +15,10 @@ namespace ts {
         // An external module name is "relative" if the first term is "." or "..".
         // Update: We also consider a path like `C:\foo.ts` "relative" because we do not search for it in `node_modules` or treat it as an ambient module.
         return pathIsRelative(moduleName) || isRootedDiskPath(moduleName);
+    }
+
+    export function sortAndDeduplicateDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): Diagnostic[] {
+        return sortAndDeduplicate(diagnostics, compareDiagnostics);
     }
 }
 
@@ -338,6 +342,10 @@ namespace ts {
             }
         }
         return false;
+    }
+
+    export function arraysEqual<T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>, equalityComparer: EqualityComparer<T> = equateValues): boolean {
+        return a.length === b.length && a.every((x, i) => equalityComparer(x, b[i]));
     }
 
     export function indexOfAnyCharCode(text: string, charCodes: ReadonlyArray<number>, start?: number): number {
@@ -1895,10 +1903,6 @@ namespace ts {
 
         // We still have one chain remaining.  The shorter chain should come first.
         return text1 ? Comparison.GreaterThan : Comparison.LessThan;
-    }
-
-    export function sortAndDeduplicateDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): Diagnostic[] {
-        return sortAndDeduplicate(diagnostics, compareDiagnostics);
     }
 
     export function normalizeSlashes(path: string): string {

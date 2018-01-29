@@ -1275,8 +1275,16 @@ namespace Harness {
             options: ts.CompilerOptions,
             // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
             currentDirectory: string): DeclarationCompilationContext | undefined {
-            if (options.declaration && result.diagnostics.length === 0 && result.dts.size !== result.js.size) {
-                throw new Error("There were no errors and declFiles generated did not match number of js files generated");
+
+            if (options.declaration && result.diagnostics.length === 0) {
+                if (options.emitDeclarationsOnly) {
+                    if (result.js.size > 0 || result.dts.size === 0) {
+                        throw new Error("Only declaration files should be generated when emitDeclarationsOnly:true");
+                    }
+                }
+                else if (result.dts.size !== result.js.size) {
+                    throw new Error("There were no errors and declFiles generated did not match number of js files generated");
+                }
             }
 
             const declInputFiles: TestFile[] = [];
@@ -1664,7 +1672,7 @@ namespace Harness {
         }
 
         export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: compiler.CompilationResult, tsConfigFiles: ReadonlyArray<Harness.Compiler.TestFile>, toBeCompiled: ReadonlyArray<Harness.Compiler.TestFile>, otherFiles: ReadonlyArray<Harness.Compiler.TestFile>, harnessSettings: Harness.TestCaseParser.CompilerSettings) {
-            if (!options.noEmit && result.js.size === 0 && result.diagnostics.length === 0) {
+            if (!options.noEmit && !options.emitDeclarationsOnly && result.js.size === 0 && result.diagnostics.length === 0) {
                 throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
             }
 
