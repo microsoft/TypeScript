@@ -161,7 +161,7 @@ namespace ts.server {
         },
         "Datatables.net": {
             // e.g. /wwwroot/lib/datatables.all.min.js
-            match: /(jquery\.)*dataTables(\.all)*(\.min)*\.js$/i,
+            match: /(jquery\.)?dataTables(\.all)?(\.min)?\.js$/i,
             types: ["datatables.net"]
         }
     };
