@@ -1873,7 +1873,7 @@ interface ErrorEventHandler {
     (message: string, filename?: string, lineno?: number, colno?: number, error?: Error): void;
 }
 interface ForEachCallback {
-    (keyId: BufferSource, status: MediaKeyStatus): void;
+    (keyId: any, status: MediaKeyStatus): void;
 }
 interface FunctionStringCallback {
     (data: string): void;
