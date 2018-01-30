@@ -33,12 +33,15 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
         });
     }
     private runTest(directoryName: string) {
-        describe(directoryName, () => {
+        // tslint:disable-next-line:no-this-assignment
+        const cls = this;
+        const timeout = 600_000; // 10 minutes
+        describe(directoryName, function(this: Mocha.ISuiteCallbackContext) {
+            this.timeout(timeout);
             const cp = require("child_process");
 
             it("should build successfully", () => {
-                let cwd = path.join(__dirname, "../../", this.testDir, directoryName);
-                const timeout = 600000; // 600s = 10 minutes
+                let cwd = path.join(__dirname, "../../", cls.testDir, directoryName);
                 const stdio = isWorker ? "pipe" : "inherit";
                 let types: string[];
                 if (fs.existsSync(path.join(cwd, "test.json"))) {
@@ -61,9 +64,9 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                         fs.unlinkSync(path.join(cwd, "package-lock.json"));
                     }
                     if (fs.existsSync(path.join(cwd, "node_modules"))) {
-                        require("del").sync(path.join(cwd, "node_modules"));
+                        require("del").sync(path.join(cwd, "node_modules"), { force: true });
                     }
-                    const install = cp.spawnSync(`npm`, ["i"], { cwd, timeout, shell: true, stdio });
+                    const install = cp.spawnSync(`npm`, ["i"], { cwd, timeout: timeout / 2, shell: true, stdio }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
                     if (install.status !== 0) throw new Error(`NPM Install for ${directoryName} failed: ${install.stderr.toString()}`);
                 }
                 const args = [path.join(__dirname, "tsc.js")];
@@ -71,8 +74,8 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                     args.push("--types", types.join(","));
                 }
                 args.push("--noEmit");
-                Harness.Baseline.runBaseline(`${this.kind()}/${directoryName}.log`, () => {
-                    return this.report(cp.spawnSync(`node`, args, { cwd, timeout, shell: true }), cwd);
+                Harness.Baseline.runBaseline(`${cls.kind()}/${directoryName}.log`, () => {
+                    return cls.report(cp.spawnSync(`node`, args, { cwd, timeout, shell: true }), cwd);
                 });
             });
         });
@@ -128,13 +131,13 @@ function removeExpectedErrors(errors: string, cwd: string): string {
 function isUnexpectedError(cwd: string) {
     return (error: string[]) => {
         ts.Debug.assertGreaterThanOrEqual(error.length, 1);
-        const match = error[0].match(/(.+\.ts)\((\d+),\d+\): error TS/);
+        const match = error[0].match(/(.+\.tsx?)\((\d+),\d+\): error TS/);
         if (!match) {
             return true;
         }
         const [, errorFile, lineNumberString] = match;
         const lines = fs.readFileSync(path.join(cwd, errorFile), { encoding: "utf8" }).split("\n");
-        const lineNumber = parseInt(lineNumberString);
+        const lineNumber = parseInt(lineNumberString) - 1;
         ts.Debug.assertGreaterThanOrEqual(lineNumber, 0);
         ts.Debug.assertLessThan(lineNumber, lines.length);
         const previousLine = lineNumber - 1 > 0 ? lines[lineNumber - 1] : "";

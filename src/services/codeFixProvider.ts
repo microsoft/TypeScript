@@ -10,7 +10,6 @@ namespace ts {
     export interface CodeFixContextBase extends textChanges.TextChangesContext {
         sourceFile: SourceFile;
         program: Program;
-        host: LanguageServiceHost;
         cancellationToken: CancellationToken;
     }
 

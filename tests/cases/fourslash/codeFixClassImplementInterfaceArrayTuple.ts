@@ -10,7 +10,6 @@
 
 verify.codeFix({
     description: "Implement interface 'I'",
-    // TODO: GH#18445
     newFileContent:
 `interface I {
     x: number[];
@@ -18,9 +17,9 @@ verify.codeFix({
     z: [number, string, I];
 }
 
-class C implements I {\r
-    x: number[];\r
-    y: number[];\r
-    z: [number, string, I];\r
+class C implements I {
+    x: number[];
+    y: number[];
+    z: [number, string, I];
 }`,
 });

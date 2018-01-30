@@ -18,14 +18,14 @@ verify.codeFixAll({
     fixId: "classSuperMustPrecedeThisAccess",
     newFileContent: `class C extends Object {
     constructor() {
-        super();\r
+        super();
         this;
         this;
     }
 }
 class D extends Object {
     constructor() {
-        super();\r
+        super();
         this;
     }
 }`,

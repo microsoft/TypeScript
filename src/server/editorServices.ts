@@ -198,16 +198,6 @@ namespace ts.server {
         }
     }
 
-    /**
-     * This helper function processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
-     */
-    export function combineProjectOutput<T>(projects: ReadonlyArray<Project>, action: (project: Project) => ReadonlyArray<T>, comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean) {
-        const outputs = flatMap(projects, action);
-        return comparer
-            ? sortAndDeduplicate(outputs, comparer, areEqual)
-            : deduplicate(outputs, areEqual);
-    }
-
     export interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
         hostInfo: string;
@@ -336,6 +326,11 @@ namespace ts.server {
          */
         private readonly filenameToScriptInfo = createMap<ScriptInfo>();
         /**
+         * Map to the real path of the infos
+         */
+        /* @internal */
+        readonly realpathToScriptInfos: MultiMap<ScriptInfo> | undefined;
+        /**
          * maps external project file name to list of config files that were the part of this project
          */
         private readonly externalProjectToConfiguredProjectMap: Map<NormalizedPath[]> = createMap<NormalizedPath[]>();
@@ -427,7 +422,9 @@ namespace ts.server {
             this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(this.getExecutingFilePath(), "../typesMap.json") : opts.typesMapLocation;
 
             Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
-
+            if (this.host.realpath) {
+                this.realpathToScriptInfos = createMultiMap();
+            }
             this.currentDirectory = this.host.getCurrentDirectory();
             this.toCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
             this.throttledOperations = new ThrottledOperations(this.host, this.logger);
@@ -727,15 +724,6 @@ namespace ts.server {
             }
         }
 
-        private findContainingExternalProject(fileName: NormalizedPath): ExternalProject {
-            for (const proj of this.externalProjects) {
-                if (proj.containsFile(fileName)) {
-                    return proj;
-                }
-            }
-            return undefined;
-        }
-
         getFormatCodeOptions(file?: NormalizedPath) {
             let formatCodeSettings: FormatCodeSettings;
             if (file) {
@@ -768,7 +756,7 @@ namespace ts.server {
                 if (info.containingProjects.length === 0) {
                     // Orphan script info, remove it as we can always reload it on next open file request
                     this.stopWatchingScriptInfo(info);
-                    this.filenameToScriptInfo.delete(info.path);
+                    this.deleteScriptInfo(info);
                 }
                 else {
                     // file has been changed which might affect the set of referenced files in projects that include
@@ -785,7 +773,7 @@ namespace ts.server {
             // TODO: handle isOpen = true case
 
             if (!info.isScriptOpen()) {
-                this.filenameToScriptInfo.delete(info.path);
+                this.deleteScriptInfo(info);
 
                 // capture list of projects since detachAllProjects will wipe out original list
                 const containingProjects = info.containingProjects.slice();
@@ -910,7 +898,7 @@ namespace ts.server {
 
             const project = this.getOrCreateInferredProjectForProjectRootPathIfEnabled(info, projectRootPath) ||
                 this.getOrCreateSingleInferredProjectIfEnabled() ||
-                this.createInferredProject(getDirectoryPath(info.path));
+                this.createInferredProject(info.isDynamic ? this.currentDirectory : getDirectoryPath(info.path));
 
             project.addRoot(info);
             project.updateGraph();
@@ -1019,9 +1007,17 @@ namespace ts.server {
                 if (!info.isScriptOpen() && info.isOrphan()) {
                     // if there are not projects that include this script info - delete it
                     this.stopWatchingScriptInfo(info);
-                    this.filenameToScriptInfo.delete(info.path);
+                    this.deleteScriptInfo(info);
                 }
             });
+        }
+
+        private deleteScriptInfo(info: ScriptInfo) {
+            this.filenameToScriptInfo.delete(info.path);
+            const realpath = info.getRealpathIfDifferent();
+            if (realpath) {
+                this.realpathToScriptInfos.remove(realpath, info);
+            }
         }
 
         private configFileExists(configFileName: NormalizedPath, canonicalConfigFilePath: string, info: ScriptInfo) {
@@ -1499,7 +1495,7 @@ namespace ts.server {
         }
 
         private createConfiguredProject(configFileName: NormalizedPath) {
-            const cachedDirectoryStructureHost = createCachedDirectoryStructureHost(this.host);
+            const cachedDirectoryStructureHost = createCachedDirectoryStructureHost(this.host, this.host.getCurrentDirectory(), this.host.useCaseSensitiveFileNames);
             const { projectOptions, configFileErrors, configFileSpecs } = this.convertConfigFileContentToProjectOptions(configFileName, cachedDirectoryStructureHost);
             this.logger.info(`Opened configuration file ${configFileName}`);
             const languageServiceEnabled = !this.exceededTotalSizeLimitForNonTsFiles(configFileName, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader);
@@ -1659,7 +1655,7 @@ namespace ts.server {
         }
 
         private getOrCreateInferredProjectForProjectRootPathIfEnabled(info: ScriptInfo, projectRootPath: NormalizedPath | undefined): InferredProject | undefined {
-            if (!this.useInferredProjectPerProjectRoot) {
+            if (info.isDynamic || !this.useInferredProjectPerProjectRoot) {
                 return undefined;
             }
 
@@ -1736,6 +1732,43 @@ namespace ts.server {
             return this.getScriptInfoForNormalizedPath(toNormalizedPath(uncheckedFileName));
         }
 
+        /**
+         * Returns the projects that contain script info through SymLink
+         * Note that this does not return projects in info.containingProjects
+         */
+        /*@internal*/
+        getSymlinkedProjects(info: ScriptInfo): MultiMap<Project> | undefined {
+            let projects: MultiMap<Project> | undefined;
+            if (this.realpathToScriptInfos) {
+                const realpath = info.getRealpathIfDifferent();
+                if (realpath) {
+                    forEach(this.realpathToScriptInfos.get(realpath), combineProjects);
+                }
+                forEach(this.realpathToScriptInfos.get(info.path), combineProjects);
+            }
+
+            return projects;
+
+            function combineProjects(toAddInfo: ScriptInfo) {
+                if (toAddInfo !== info) {
+                    for (const project of toAddInfo.containingProjects) {
+                        // Add the projects only if they can use symLink targets and not already in the list
+                        if (project.languageServiceEnabled &&
+                            !project.getCompilerOptions().preserveSymlinks &&
+                            !contains(info.containingProjects, project)) {
+                            if (!projects) {
+                                projects = createMultiMap();
+                                projects.add(toAddInfo.path, project);
+                            }
+                            else if (!forEachEntry(projects, (projs, path) => path === toAddInfo.path ? false : contains(projs, project))) {
+                                projects.add(toAddInfo.path, project);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         private watchClosedScriptInfo(info: ScriptInfo) {
             Debug.assert(!info.fileWatcher);
             // do not watch files with mixed content - server doesn't know how to interpret it
@@ -1767,19 +1800,19 @@ namespace ts.server {
             return this.getOrCreateScriptInfoWorker(fileName, currentDirectory, /*openedByClient*/ true, fileContent, scriptKind, hasMixedContent);
         }
 
-        getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: DirectoryStructureHost) {
+        getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: { fileExists(path: string): boolean; }) {
             return this.getOrCreateScriptInfoWorker(fileName, this.currentDirectory, openedByClient, fileContent, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
         }
 
-        private getOrCreateScriptInfoWorker(fileName: NormalizedPath, currentDirectory: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: DirectoryStructureHost) {
+        private getOrCreateScriptInfoWorker(fileName: NormalizedPath, currentDirectory: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: { fileExists(path: string): boolean; }) {
             Debug.assert(fileContent === undefined || openedByClient, "ScriptInfo needs to be opened by client to be able to set its user defined content");
             const path = normalizedPathToPath(fileName, currentDirectory, this.toCanonicalFileName);
             let info = this.getScriptInfoForPath(path);
             if (!info) {
                 const isDynamic = isDynamicFileName(fileName);
-                Debug.assert(isRootedDiskPath(fileName) || isDynamic || openedByClient, "Script info with non-dynamic relative file name can only be open script info");
-                Debug.assert(!isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)), "Open script files with non rooted disk path opened with current directory context cannot have same canonical names");
-                Debug.assert(!isDynamic || this.currentDirectory === currentDirectory, "Dynamic files must always have current directory context since containing external project name will always match the script info name.");
+                Debug.assert(isRootedDiskPath(fileName) || isDynamic || openedByClient, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nScript info with non-dynamic relative file name can only be open script info`);
+                Debug.assert(!isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)), "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nOpen script files with non rooted disk path opened with current directory context cannot have same canonical names`);
+                Debug.assert(!isDynamic || this.currentDirectory === currentDirectory, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nDynamic files must always have current directory context since containing external project name will always match the script info name.`);
                 // If the file is not opened by client and the file doesnot exist on the disk, return
                 if (!openedByClient && !isDynamic && !(hostToQueryFileExistsOn || this.host).fileExists(fileName)) {
                     return;
@@ -1994,13 +2027,24 @@ namespace ts.server {
             return this.openClientFileWithNormalizedPath(toNormalizedPath(fileName), fileContent, scriptKind, /*hasMixedContent*/ false, projectRootPath ? toNormalizedPath(projectRootPath) : undefined);
         }
 
+        private findExternalProjetContainingOpenScriptInfo(info: ScriptInfo): ExternalProject {
+            for (const proj of this.externalProjects) {
+                // Ensure project structure is uptodate to check if info is present in external project
+                proj.updateGraph();
+                if (proj.containsScriptInfo(info)) {
+                    return proj;
+                }
+            }
+            return undefined;
+        }
+
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult {
             let configFileName: NormalizedPath;
             let sendConfigFileDiagEvent = false;
             let configFileErrors: ReadonlyArray<Diagnostic>;
 
             const info = this.getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName, projectRootPath ? this.getNormalizedAbsolutePath(projectRootPath) : this.currentDirectory, fileContent, scriptKind, hasMixedContent);
-            let project: ConfiguredProject | ExternalProject = this.findContainingExternalProject(fileName);
+            let project: ConfiguredProject | ExternalProject = this.findExternalProjetContainingOpenScriptInfo(info);
             if (!project) {
                 configFileName = this.getConfigFileNameForFile(info, projectRootPath);
                 if (configFileName) {
@@ -2009,6 +2053,10 @@ namespace ts.server {
                         project = this.createConfiguredProject(configFileName);
                         // Send the event only if the project got created as part of this open request
                         sendConfigFileDiagEvent = true;
+                    }
+                    else {
+                        // Ensure project is ready to check if it contains opened script info
+                        project.updateGraph();
                     }
                 }
             }

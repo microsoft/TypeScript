@@ -510,9 +510,30 @@ namespace ts.FindAllReferences {
                         return undefined;
                 }
 
-                const sym = useLhsSymbol ? checker.getSymbolAtLocation((node.left as ts.PropertyAccessExpression).name) : symbol;
+                const sym = useLhsSymbol ? checker.getSymbolAtLocation(cast(node.left, isPropertyAccessExpression).name) : symbol;
+                // Better detection for GH#20803
+                if (sym && !(checker.getMergedSymbol(sym.parent).flags & SymbolFlags.Module)) {
+                    Debug.fail(`Special property assignment kind does not have a module as its parent. Assignment is ${showSymbol(sym)}, parent is ${showSymbol(sym.parent)}`);
+                }
                 return sym && exportInfo(sym, kind);
             }
+        }
+
+        function showSymbol(s: Symbol): string {
+            const decls = s.declarations.map(d => (ts as any).SyntaxKind[d.kind]).join(",");
+            const flags = showFlags(s.flags, (ts as any).SymbolFlags);
+            return `{ declarations: ${decls}, flags: ${flags} }`;
+        }
+
+        function showFlags(f: number, flags: any) {
+            const out = [];
+            for (let pow = 0; pow <= 30; pow++) {
+                const n = 1 << pow;
+                if (f & n) {
+                    out.push(flags[n]);
+                }
+            }
+            return out.join("|");
         }
 
         function getImport(): ImportedSymbol | undefined {

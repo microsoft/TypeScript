@@ -1962,3 +1962,48 @@ class AnotherSampleClass<T> extends SampleClass<T & Foo> {
 new AnotherSampleClass({});
 >AnotherSampleClass : Symbol(AnotherSampleClass, Decl(keyofAndIndexedAccess.ts, 540, 54))
 
+// Positive repro from #17166
+function f3<T, K extends keyof T>(t: T, k: K, tk: T[K]): void {
+>f3 : Symbol(f3, Decl(keyofAndIndexedAccess.ts, 552, 27))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 555, 12))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 555, 14))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 555, 12))
+>t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 555, 34))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 555, 12))
+>k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 555, 39))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 555, 14))
+>tk : Symbol(tk, Decl(keyofAndIndexedAccess.ts, 555, 45))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 555, 12))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 555, 14))
+
+    for (let key in t) {
+>key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 556, 12))
+>t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 555, 34))
+
+        key = k // ok, K ==> keyof T
+>key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 556, 12))
+>k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 555, 39))
+
+        t[key] = tk; // ok, T[K] ==> T[keyof T]
+>t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 555, 34))
+>key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 556, 12))
+>tk : Symbol(tk, Decl(keyofAndIndexedAccess.ts, 555, 45))
+    }
+}
+
+// # 21185
+type Predicates<TaggedRecord> = {
+>Predicates : Symbol(Predicates, Decl(keyofAndIndexedAccess.ts, 560, 1))
+>TaggedRecord : Symbol(TaggedRecord, Decl(keyofAndIndexedAccess.ts, 563, 16))
+
+  [T in keyof TaggedRecord]: (variant: TaggedRecord[keyof TaggedRecord]) => variant is TaggedRecord[T]
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 564, 3))
+>TaggedRecord : Symbol(TaggedRecord, Decl(keyofAndIndexedAccess.ts, 563, 16))
+>variant : Symbol(variant, Decl(keyofAndIndexedAccess.ts, 564, 30))
+>TaggedRecord : Symbol(TaggedRecord, Decl(keyofAndIndexedAccess.ts, 563, 16))
+>TaggedRecord : Symbol(TaggedRecord, Decl(keyofAndIndexedAccess.ts, 563, 16))
+>variant : Symbol(variant, Decl(keyofAndIndexedAccess.ts, 564, 30))
+>TaggedRecord : Symbol(TaggedRecord, Decl(keyofAndIndexedAccess.ts, 563, 16))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 564, 3))
+}
+

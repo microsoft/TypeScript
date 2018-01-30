@@ -151,7 +151,13 @@ declare namespace FourSlashInterface {
             kind?: string | { kind?: string, kindModifiers?: string },
             spanIndex?: number,
             hasAction?: boolean,
-            options?: { includeExternalModuleExports?: boolean, sourceDisplay?: string, isRecommended?: true },
+            options?: {
+                includeExternalModuleExports?: boolean,
+                includeInsertTextCompletions?: boolean,
+                sourceDisplay?: string,
+                isRecommended?: true,
+                insertText?: string,
+            },
         ): void;
         completionListItemsCountIsGreaterThan(count: number): void;
         completionListIsEmpty(): void;
@@ -252,8 +258,8 @@ declare namespace FourSlashInterface {
          * For each of startRanges, asserts the ranges that are referenced from there.
          * This uses the 'findReferences' command instead of 'getReferencesAtPosition', so references are grouped by their definition.
          */
-        referenceGroups(startRanges: Range | Range[], parts: Array<{ definition: string, ranges: Range[] }>): void;
-        singleReferenceGroup(definition: string, ranges?: Range[]): void;
+        referenceGroups(startRanges: Range | Range[], parts: Array<{ definition: ReferencesDefinition, ranges: Range[] }>): void;
+        singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[]): void;
         rangesAreOccurrences(isWriteAccess?: boolean): void;
         rangesWithSameTextAreRenameLocations(): void;
         rangesAreRenameLocations(options?: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: Range[] });
@@ -505,6 +511,11 @@ declare namespace FourSlashInterface {
             text: string;
             textSpan?: TextSpan;
         };
+    }
+
+    interface ReferencesDefinition {
+        text: string;
+        range: Range;
     }
 }
 declare function verifyOperationIsCancelled(f: any): void;
