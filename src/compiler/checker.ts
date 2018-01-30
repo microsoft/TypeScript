@@ -20273,6 +20273,8 @@ namespace ts {
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.EnumDeclaration:
                         return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue;
+                    case SyntaxKind.SourceFile:
+                        return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue | DeclarationSpaces.ExportNamespace;
                     // The below options all declare an Alias, which is allowed to merge with other values within the importing module
                     case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.NamespaceImport:
