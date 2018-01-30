@@ -8591,7 +8591,7 @@ namespace ts {
 
         function instantiateSymbol(symbol: Symbol, mapper: TypeMapper): Symbol {
             const links = getSymbolLinks(symbol);
-            if (links.type && !maybeTypeOfKind(links.type, TypeFlags.Object | TypeFlags.TypeVariable | TypeFlags.Index)) {
+            if (links.type && !maybeTypeOfKind(links.type, TypeFlags.Object | TypeFlags.Instantiable)) {
                 // If the type of the symbol is already resolved, and if that type could not possibly
                 // be affected by instantiation, simply return the symbol itself.
                 return symbol;
