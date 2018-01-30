@@ -47,3 +47,22 @@ combined(function (comb) {
     comb.a;
 });
 var n = f(2).a;
+
+
+//// [indirectTypeParameterReferences.d.ts]
+declare type B = {
+    b: string;
+};
+declare const flowtypes: <A>(b: B) => {
+    combined: (fn: (combined: A & B) => void) => any;
+    literal: (fn: (aPlusB: A & B) => void) => any;
+};
+declare const combined: (fn: (combined: {
+    a: string;
+} & B) => void) => any, literal: (fn: (aPlusB: {
+    a: string;
+} & B) => void) => any;
+declare function f<T>(a: T): {
+    a: typeof a;
+};
+declare let n: number;

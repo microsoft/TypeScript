@@ -2905,10 +2905,28 @@ namespace ts {
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
-                if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
-                    const name = symbolToTypeReferenceName(type.aliasSymbol);
-                    const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
-                    return createTypeReferenceNode(name, typeArgumentNodes);
+                if (type.flags & TypeFlags.Alias) {
+                    if (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration)) {
+                        const name = symbolToTypeReferenceName(type.symbol);
+                        const typeArgumentNodes = mapToTypeNodes((type as AliasType).typeArguments, context);
+                        return createTypeReferenceNode(name, typeArgumentNodes);
+                    }
+                    else {
+                        context.flags |= NodeBuilderFlags.InTypeAlias;
+                        context.encounteredError = true; // Alias not visible
+                        return typeToTypeNodeHelper((type as AliasType).typeArguments ? getTypeAliasInstantiation(type.symbol, (type as AliasType).typeArguments) : getDeclaredTypeOfSymbol(type.symbol), context);
+                    }
+                }
+                if (!inTypeAlias && type.alternativeRepresentation) {
+                    const originalHadError = context.encounteredError;
+                    context.encounteredError = false;
+                    const alt = typeToTypeNodeHelper(type.alternativeRepresentation, context);
+                    const representationError = context.encounteredError;
+                    context.encounteredError = originalHadError;
+                    if (!representationError) {
+                        // Only use the alternative representation if it can be made without error
+                        return alt;
+                    }
                 }
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
                     const types = type.flags & TypeFlags.Union ? formatUnionTypes((<UnionType>type).types) : (<IntersectionType>type).types;
@@ -5035,7 +5053,7 @@ namespace ts {
                     }
                 }
                 if (memberTypeList.length) {
-                    const enumType = getUnionType(memberTypeList, UnionReduction.Literal, symbol, /*aliasTypeArguments*/ undefined);
+                    const enumType = getUnionType(memberTypeList, UnionReduction.Literal, createAliasType(symbol, /*typeArguments*/ undefined));
                     if (enumType.flags & TypeFlags.Union) {
                         enumType.flags |= TypeFlags.EnumLiteral;
                         enumType.symbol = symbol;
@@ -7572,7 +7590,7 @@ namespace ts {
         // expression constructs such as array literals and the || and ?: operators). Named types can
         // circularly reference themselves and therefore cannot be subtype reduced during their declaration.
         // For example, "type Item = string | (() => Item" is a named type that circularly references itself.
-        function getUnionType(types: Type[], unionReduction: UnionReduction = UnionReduction.Literal, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+        function getUnionType(types: Type[], unionReduction: UnionReduction = UnionReduction.Literal, alternative?: Type): Type {
             if (types.length === 0) {
                 return neverType;
             }
@@ -7599,7 +7617,7 @@ namespace ts {
                     typeSet.containsUndefined ? typeSet.containsNonWideningType ? undefinedType : undefinedWideningType :
                         neverType;
             }
-            return getUnionTypeFromSortedList(typeSet, aliasSymbol, aliasTypeArguments);
+            return getUnionTypeFromSortedList(typeSet, alternative);
         }
 
         function getUnionTypePredicate(signatures: ReadonlyArray<Signature>): TypePredicate {
@@ -7639,7 +7657,7 @@ namespace ts {
         }
 
         // This function assumes the constituent type list is sorted and deduplicated.
-        function getUnionTypeFromSortedList(types: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+        function getUnionTypeFromSortedList(types: Type[], alternative?: Type): Type {
             if (types.length === 0) {
                 return neverType;
             }
@@ -7654,14 +7672,21 @@ namespace ts {
                 unionTypes.set(id, type);
                 type.types = types;
                 /*
-                Note: This is the alias symbol (or lack thereof) that we see when we first encounter this union type.
-                For aliases of identical unions, eg `type T = A | B; type U = A | B`, the symbol of the first alias encountered is the aliasSymbol.
+                Note: This is the alternative representation (or lack thereof) that we see when we first encounter this union type.
+                For aliases of identical unions, eg `type T = A | B; type U = A | B`, the symbol of the first alias encountered is the alternative.
                 (In the language service, the order may depend on the order in which a user takes actions, such as hovering over symbols.)
                 It's important that we create equivalent union types only once, so that's an unfortunate side effect.
                 */
-                type.aliasSymbol = aliasSymbol;
-                type.aliasTypeArguments = aliasTypeArguments;
+                type.alternativeRepresentation = alternative;
             }
+            return type;
+        }
+
+        function createAliasType(symbol: Symbol, typeArguments?: Type[]) {
+            if (!symbol) return;
+            const type = createType(TypeFlags.Alias) as AliasType;
+            type.symbol = symbol;
+            type.typeArguments = typeArguments;
             return type;
         }
 
@@ -7669,7 +7694,7 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNode), UnionReduction.Literal,
-                    getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node));
+                    createAliasType(getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node)));
             }
             return links.resolvedType;
         }
@@ -7719,7 +7744,7 @@ namespace ts {
         // a type alias of the form "type List<T> = T & { next: List<T> }" cannot be reduced during its declaration.
         // Also, unlike union types, the order of the constituent types is preserved in order that overload resolution
         // for intersections of types with signatures can be deterministic.
-        function getIntersectionType(types: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+        function getIntersectionType(types: Type[], alternative?: Type): Type {
             if (types.length === 0) {
                 return emptyObjectType;
             }
@@ -7743,7 +7768,7 @@ namespace ts {
                 // the form X & A & Y | X & B & Y and recursively reduce until no union type constituents remain.
                 const unionType = <UnionType>typeSet[unionIndex];
                 return getUnionType(map(unionType.types, t => getIntersectionType(replaceElement(typeSet, unionIndex, t))),
-                UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
+                UnionReduction.Literal, alternative);
             }
             const id = getTypeListId(typeSet);
             let type = intersectionTypes.get(id);
@@ -7752,8 +7777,7 @@ namespace ts {
                 type = <IntersectionType>createType(TypeFlags.Intersection | propagatedFlags);
                 intersectionTypes.set(id, type);
                 type.types = typeSet;
-                type.aliasSymbol = aliasSymbol; // See comment in `getUnionTypeFromSortedList`.
-                type.aliasTypeArguments = aliasTypeArguments;
+                type.alternativeRepresentation = alternative; // See comment in `getUnionTypeFromSortedList`.
             }
             return type;
         }
@@ -7762,7 +7786,7 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 links.resolvedType = getIntersectionType(map(node.types, getTypeFromTypeNode),
-                    getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node));
+                    createAliasType(getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node)));
             }
             return links.resolvedType;
         }
@@ -7782,7 +7806,25 @@ namespace ts {
         }
 
         function getLiteralTypeFromPropertyNames(type: Type) {
-            return getUnionType(map(getPropertiesOfType(type), getLiteralTypeFromPropertyName));
+            let alternative: Type;
+            if (type.flags & TypeFlags.Index || type.alternativeRepresentation && type.alternativeRepresentation.flags & TypeFlags.Index) {
+                const index = <IndexType>createType(TypeFlags.Index);
+                index.type = globalStringType;
+                alternative = index;
+            }
+            else if (type.alternativeRepresentation && type.alternativeRepresentation.flags & TypeFlags.Alias) {
+                const index = <IndexType>createType(TypeFlags.Index);
+                index.type = type.alternativeRepresentation;
+                alternative = index;
+            }
+            else if (type.symbol && type.symbol.flags & (SymbolFlags.Interface | SymbolFlags.Class)) {
+                // This is restricted to interface and class symbols just because `keyof {a: number, b: number}`,
+                //  while correct, is much more confusing and ugly than just having no alternative and printing `"a" | "b"`
+                const index = <IndexType>createType(TypeFlags.Index);
+                index.type = type;
+                alternative = index;
+            }
+            return getUnionType(map(getPropertiesOfType(type), getLiteralTypeFromPropertyName), UnionReduction.Literal, alternative);
         }
 
         function getIndexType(type: Type): Type {
@@ -8019,8 +8061,7 @@ namespace ts {
             if (!links.resolvedType) {
                 const type = <MappedType>createObjectType(ObjectFlags.Mapped, node.symbol);
                 type.declaration = node;
-                type.aliasSymbol = getAliasSymbolForTypeNode(node);
-                type.aliasTypeArguments = getAliasTypeArgumentsForTypeNode(node);
+                type.alternativeRepresentation = createAliasType(getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node));
                 links.resolvedType = type;
                 // Eagerly resolve the constraint type which forces an error if the constraint type circularly
                 // references itself through one or more type aliases.
@@ -8039,8 +8080,7 @@ namespace ts {
                 }
                 else {
                     let type = createObjectType(ObjectFlags.Anonymous, node.symbol);
-                    type.aliasSymbol = aliasSymbol;
-                    type.aliasTypeArguments = getAliasTypeArgumentsForTypeNode(node);
+                    type.alternativeRepresentation = createAliasType(aliasSymbol, getAliasTypeArgumentsForTypeNode(node));
                     if (isJSDocTypeLiteral(node) && node.isArrayType) {
                         type = createArrayType(type);
                     }
@@ -8480,6 +8520,11 @@ namespace ts {
             return result;
         }
 
+        function alternativeRepresentationIsAliasWithTypeArguments(type: Type): boolean {
+            const representation = type.alternativeRepresentation;
+            return !!representation && !!(representation.flags & TypeFlags.Alias) && !!(representation as AliasType).typeArguments;
+        }
+
         function getAnonymousTypeInstantiation(type: AnonymousType, mapper: TypeMapper) {
             const target = type.objectFlags & ObjectFlags.Instantiated ? type.target : type;
             const symbol = target.symbol;
@@ -8492,7 +8537,7 @@ namespace ts {
                 // set of type parameters to those that are possibly referenced in the literal.
                 const declaration = symbol.declarations[0];
                 const outerTypeParameters = getOuterTypeParameters(declaration, /*includeThisTypes*/ true) || emptyArray;
-                typeParameters = symbol.flags & SymbolFlags.TypeLiteral && !target.aliasTypeArguments ?
+                typeParameters = symbol.flags & SymbolFlags.TypeLiteral && !alternativeRepresentationIsAliasWithTypeArguments(target) ?
                     filter(outerTypeParameters, tp => isTypeParameterPossiblyReferenced(tp, declaration)) :
                     outerTypeParameters;
                 links.typeParameters = typeParameters;
@@ -8578,8 +8623,7 @@ namespace ts {
             }
             result.target = type;
             result.mapper = mapper;
-            result.aliasSymbol = type.aliasSymbol;
-            result.aliasTypeArguments = instantiateTypes(type.aliasTypeArguments, mapper);
+            result.alternativeRepresentation = instantiateType(type.alternativeRepresentation, mapper);
             return result;
         }
 
@@ -8604,16 +8648,19 @@ namespace ts {
                     }
                 }
                 if (type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Primitive)) {
-                    return getUnionType(instantiateTypes((<UnionType>type).types, mapper), UnionReduction.Literal, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
+                    return getUnionType(instantiateTypes((<UnionType>type).types, mapper), UnionReduction.Literal, instantiateType(type.alternativeRepresentation, mapper));
                 }
                 if (type.flags & TypeFlags.Intersection) {
-                    return getIntersectionType(instantiateTypes((<IntersectionType>type).types, mapper), type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
+                    return getIntersectionType(instantiateTypes((<IntersectionType>type).types, mapper), instantiateType(type.alternativeRepresentation, mapper));
                 }
                 if (type.flags & TypeFlags.Index) {
                     return getIndexType(instantiateType((<IndexType>type).type, mapper));
                 }
                 if (type.flags & TypeFlags.IndexedAccess) {
                     return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper));
+                }
+                if (type.flags & TypeFlags.Alias) {
+                    return createAliasType(type.symbol, instantiateTypes((type as AliasType).typeArguments, mapper));
                 }
             }
             return type;
@@ -11064,11 +11111,14 @@ namespace ts {
                 if (!couldContainTypeVariables(target)) {
                     return;
                 }
-                if (source.aliasSymbol && source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol) {
+                if (source.alternativeRepresentation && target.alternativeRepresentation &&
+                    source.alternativeRepresentation.flags & TypeFlags.Alias & target.alternativeRepresentation.flags & TypeFlags.Alias &&
+                    (source.alternativeRepresentation as AliasType).typeArguments &&
+                    source.alternativeRepresentation.symbol === target.alternativeRepresentation.symbol) {
                     // Source and target are types originating in the same generic type alias declaration.
                     // Simply infer from source type arguments to target type arguments.
-                    const sourceTypes = source.aliasTypeArguments;
-                    const targetTypes = target.aliasTypeArguments;
+                    const sourceTypes = (source.alternativeRepresentation as AliasType).typeArguments;
+                    const targetTypes = (target.alternativeRepresentation as AliasType).typeArguments;
                     for (let i = 0; i < sourceTypes.length; i++) {
                         inferFromTypes(sourceTypes[i], targetTypes[i]);
                     }

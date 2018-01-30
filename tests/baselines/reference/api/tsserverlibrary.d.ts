@@ -2046,6 +2046,7 @@ declare namespace ts {
         IndexedAccess = 1048576,
         NonPrimitive = 33554432,
         MarkerType = 134217728,
+        Alias = 268435456,
         Literal = 224,
         Unit = 13536,
         StringOrNumberLiteral = 96,
@@ -2067,8 +2068,11 @@ declare namespace ts {
         flags: TypeFlags;
         symbol?: Symbol;
         pattern?: DestructuringPattern;
-        aliasSymbol?: Symbol;
-        aliasTypeArguments?: Type[];
+        alternativeRepresentation?: Type;
+    }
+    interface AliasType extends Type {
+        symbol: Symbol;
+        typeArguments?: Type[];
     }
     interface LiteralType extends Type {
         value: string | number;

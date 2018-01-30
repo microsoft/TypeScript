@@ -3492,6 +3492,7 @@ namespace ts {
         /* @internal */
         JsxAttributes           = 1 << 26,  // Jsx attributes type
         MarkerType              = 1 << 27,  // Marker type used for variance probing
+        Alias                   = 1 << 28,  // Placeholder type used to point at another type
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -3536,8 +3537,12 @@ namespace ts {
         /* @internal */ checker: TypeChecker;
         symbol?: Symbol;                 // Symbol associated with type (if any)
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
-        aliasSymbol?: Symbol;            // Alias associated with type
-        aliasTypeArguments?: Type[];     // Alias type arguments (if any)
+        alternativeRepresentation?: Type; // Alternative representation of the type, prefered when printing; not to be used for comparisons or equality
+    }
+
+    export interface AliasType extends Type {
+        symbol: Symbol;
+        typeArguments?: Type[];
     }
 
     /* @internal */
