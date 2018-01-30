@@ -8656,7 +8656,7 @@
         <Str Cat="Text">
           <Val><![CDATA['enum declarations' can only be used in a .ts file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['enum declarations' 只可用於 .ts 檔案中。]]></Val>
+            <Val><![CDATA[「列舉宣告」只可用於 .ts 檔案中。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
