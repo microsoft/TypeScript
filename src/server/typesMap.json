@@ -24,7 +24,7 @@
             "exclude": [["^", 1, "$"]]
         },
         "Datatables.net": {
-            "match": "(jquery\\.)*dataTables(\\.all)*(\\.min)*\\.js$",
+            "match": "(jquery\\.)?dataTables(\\.all)?(\\.min)?\\.js$",
             "types": ["datatables.net"]
         }
     },
