@@ -2363,9 +2363,30 @@ namespace ts {
                 return false;
             }
 
-            return forEachEmittedFile(getEmitHost(), ({ jsFilePath, declarationFilePath }) =>
-                isSameFile(jsFilePath, file) ||
-                (declarationFilePath && isSameFile(declarationFilePath, file)));
+            // If this is source file, its not emitted file
+            const filePath = toPath(file);
+            if (getSourceFileByPath(filePath)) {
+                return false;
+            }
+
+            // If options have --outFile or --out just check that
+            const out = options.outFile || options.out;
+            if (out) {
+                return isSameFile(filePath, out) || isSameFile(filePath, removeFileExtension(out) + Extension.Dts);
+            }
+
+            // If --outDir, check if file is in that directory
+            if (options.outDir) {
+                return containsPath(options.outDir, filePath, currentDirectory, !host.useCaseSensitiveFileNames());
+            }
+
+            if (fileExtensionIsOneOf(filePath, supportedJavascriptExtensions) || fileExtensionIs(filePath, Extension.Dts)) {
+                // Otherwise just check if sourceFile with the name exists
+                const filePathWithoutExtension = removeFileExtension(filePath);
+                return !!getSourceFileByPath(combinePaths(filePathWithoutExtension, Extension.Ts) as Path) ||
+                    !!getSourceFileByPath(combinePaths(filePathWithoutExtension, Extension.Tsx) as Path);
+            }
+            return false;
         }
 
         function isSameFile(file1: string, file2: string) {

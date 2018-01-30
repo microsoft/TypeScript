@@ -8449,11 +8449,18 @@ namespace ts {
 
         function instantiateList<T>(items: T[], mapper: TypeMapper, instantiator: (item: T, mapper: TypeMapper) => T): T[] {
             if (items && items.length) {
-                const result: T[] = [];
-                for (const v of items) {
-                    result.push(instantiator(v, mapper));
+                for (let i = 0; i < items.length; i++) {
+                    const item = items[i];
+                    const mapped = instantiator(item, mapper);
+                    if (item !== mapped) {
+                        const result = i === 0 ? [] : items.slice(0, i);
+                        result.push(mapped);
+                        for (i++; i < items.length; i++) {
+                            result.push(instantiator(items[i], mapper));
+                        }
+                        return result;
+                    }
                 }
-                return result;
             }
             return items;
         }
@@ -8583,8 +8590,13 @@ namespace ts {
         }
 
         function instantiateSymbol(symbol: Symbol, mapper: TypeMapper): Symbol {
+            const links = getSymbolLinks(symbol);
+            if (links.type && !maybeTypeOfKind(links.type, TypeFlags.Object | TypeFlags.TypeVariable | TypeFlags.Index)) {
+                // If the type of the symbol is already resolved, and if that type could not possibly
+                // be affected by instantiation, simply return the symbol itself.
+                return symbol;
+            }
             if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
-                const links = getSymbolLinks(symbol);
                 // If symbol being instantiated is itself a instantiation, fetch the original target and combine the
                 // type mappers. This ensures that original type identities are properly preserved and that aliases
                 // always reference a non-aliases.
@@ -8748,14 +8760,20 @@ namespace ts {
                         return getAnonymousTypeInstantiation(<MappedType>type, mapper);
                     }
                     if ((<ObjectType>type).objectFlags & ObjectFlags.Reference) {
-                        return createTypeReference((<TypeReference>type).target, instantiateTypes((<TypeReference>type).typeArguments, mapper));
+                        const typeArguments = (<TypeReference>type).typeArguments;
+                        const newTypeArguments = instantiateTypes(typeArguments, mapper);
+                        return newTypeArguments !== typeArguments ? createTypeReference((<TypeReference>type).target, newTypeArguments) : type;
                     }
                 }
                 if (type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Primitive)) {
-                    return getUnionType(instantiateTypes((<UnionType>type).types, mapper), UnionReduction.Literal, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
+                    const types = (<UnionType>type).types;
+                    const newTypes = instantiateTypes(types, mapper);
+                    return newTypes !== types ? getUnionType(newTypes, UnionReduction.Literal, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper)) : type;
                 }
                 if (type.flags & TypeFlags.Intersection) {
-                    return getIntersectionType(instantiateTypes((<IntersectionType>type).types, mapper), type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
+                    const types = (<IntersectionType>type).types;
+                    const newTypes = instantiateTypes(types, mapper);
+                    return newTypes !== types ? getIntersectionType(newTypes, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper)) : type;
                 }
                 if (type.flags & TypeFlags.Index) {
                     return getIndexType(instantiateType((<IndexType>type).type, mapper));
