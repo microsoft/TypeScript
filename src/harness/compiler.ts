@@ -21,14 +21,14 @@ namespace compiler {
         public readonly shouldAssertInvariants = !Harness.lightMode;
 
         private _setParentNodes: boolean;
-        private _sourceFiles: core.KeyedCollection<string, ts.SourceFile>;
+        private _sourceFiles: core.SortedMap<string, ts.SourceFile>;
         private _newLine: string;
         private _parseConfigHost: ParseConfigHost;
 
         constructor(vfs: vfs.FileSystem, options: ts.CompilerOptions, setParentNodes = false) {
             this.vfs = vfs;
             this.defaultLibLocation = vfs.meta.get("defaultLibLocation") || "";
-            this._sourceFiles = new core.KeyedCollection<string, ts.SourceFile>(this.vfs.stringComparer);
+            this._sourceFiles = new core.SortedMap<string, ts.SourceFile>({ comparer: this.vfs.stringComparer, sort: "insertion" });
             this._newLine = options.newLine === ts.NewLineKind.LineFeed ? "\n" : "\r\n";
             this._setParentNodes = setParentNodes;
         }
@@ -270,12 +270,12 @@ namespace compiler {
         public readonly result: ts.EmitResult | undefined;
         public readonly options: ts.CompilerOptions;
         public readonly diagnostics: ReadonlyArray<ts.Diagnostic>;
-        public readonly js: core.ReadonlyKeyedCollection<string, documents.TextDocument>;
-        public readonly dts: core.ReadonlyKeyedCollection<string, documents.TextDocument>;
-        public readonly maps: core.ReadonlyKeyedCollection<string, documents.TextDocument>;
+        public readonly js: ReadonlyMap<string, documents.TextDocument>;
+        public readonly dts: ReadonlyMap<string, documents.TextDocument>;
+        public readonly maps: ReadonlyMap<string, documents.TextDocument>;
 
         private _inputs: documents.TextDocument[] = [];
-        private _inputsAndOutputs: core.KeyedCollection<string, CompilationOutput>;
+        private _inputsAndOutputs: core.SortedMap<string, CompilationOutput>;
 
         constructor(host: CompilerHost, options: ts.CompilerOptions, program: ts.Program | undefined, result: ts.EmitResult | undefined, diagnostics: ts.Diagnostic[]) {
             this.host = host;
@@ -285,9 +285,9 @@ namespace compiler {
             this.options = program ? program.getCompilerOptions() : options;
 
             // collect outputs
-            const js = this.js = new core.KeyedCollection<string, documents.TextDocument>(this.vfs.stringComparer);
-            const dts = this.dts = new core.KeyedCollection<string, documents.TextDocument>(this.vfs.stringComparer);
-            const maps = this.maps = new core.KeyedCollection<string, documents.TextDocument>(this.vfs.stringComparer);
+            const js = this.js = new core.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
+            const dts = this.dts = new core.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
+            const maps = this.maps = new core.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
             for (const document of this.host.outputs) {
                 if (vfsutils.isJavaScript(document.file)) {
                     js.set(document.file, document);
@@ -301,7 +301,7 @@ namespace compiler {
             }
 
             // correlate inputs and outputs
-            this._inputsAndOutputs = new core.KeyedCollection<string, CompilationOutput>(this.vfs.stringComparer);
+            this._inputsAndOutputs = new core.SortedMap<string, CompilationOutput>({ comparer: this.vfs.stringComparer, sort: "insertion" });
             if (program) {
                 if (this.options.out || this.options.outFile) {
                     const outFile = vpath.resolve(this.vfs.cwd(), this.options.outFile || this.options.out);

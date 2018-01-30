@@ -611,57 +611,23 @@ gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUse
     return runSequence("LKGInternal", "VerifyLKG");
 });
 
-gulp.task("typemock", () => {
-    const project = tsc.createProject("scripts/typemock/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ false));
+function compilePrivatePackage(packageName) {
+    const project = tsc.createProject(`scripts/${packageName}/tsconfig.json`, getCompilerSettings({}, /*useBuiltCompiler*/ false));
     return project.src()
         .pipe(sourcemaps.init())
-        .pipe(newer("scripts/typemock/dist/index.js"))
+        .pipe(newer(`scripts/${packageName}/dist/index.js`))
         .pipe(project())
-        .pipe(sourcemaps.write(".", <any>{ sourceRoot: "../src", includeContent: false, destPath: "scripts/typemock/dist" }))
-        .pipe(gulp.dest("scripts/typemock/dist"));
-});
+        .pipe(sourcemaps.write(".", <any>{ sourceRoot: "../src", includeContent: false, destPath: `scripts/${packageName}/dist` }))
+        .pipe(gulp.dest(`scripts/${packageName}/dist`));
+}
 
-gulp.task("vfs-core", () => {
-    const project = tsc.createProject("scripts/vfs-core/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ false));
-    return project.src()
-        .pipe(sourcemaps.init())
-        .pipe(newer("scripts/vfs-core/dist/index.js"))
-        .pipe(project())
-        .pipe(sourcemaps.write(".", <any>{ sourceRoot: "../src", includeContent: false, destPath: "scripts/vfs-core/dist" }))
-        .pipe(gulp.dest("scripts/vfs-core/dist"));
-});
-
-gulp.task("vfs-errors", () => {
-    const project = tsc.createProject("scripts/vfs-errors/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ false));
-    return project.src()
-        .pipe(sourcemaps.init())
-        .pipe(newer("scripts/vfs-errors/dist/index.js"))
-        .pipe(project())
-        .pipe(sourcemaps.write(".", <any>{ sourceRoot: "../src", includeContent: false, destPath: "scripts/vfs-errors/dist" }))
-        .pipe(gulp.dest("scripts/vfs-errors/dist"));
-});
-
-gulp.task("vfs-path", ["vfs-core", "vfs-errors"], () => {
-    const project = tsc.createProject("scripts/vfs-path/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ false));
-    return project.src()
-        .pipe(sourcemaps.init())
-        .pipe(newer("scripts/vfs-path/dist/index.js"))
-        .pipe(project())
-        .pipe(sourcemaps.write(".", <any>{ sourceRoot: "../src", includeContent: false, destPath: "scripts/vfs-path/dist" }))
-        .pipe(gulp.dest("scripts/vfs-path/dist"));
-});
-
-gulp.task("vfs", ["vfs-core", "vfs-errors", "vfs-path"], () => {
-    const project = tsc.createProject("scripts/vfs/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ false));
-    return project.src()
-        .pipe(sourcemaps.init())
-        .pipe(newer("scripts/vfs/dist/index.js"))
-        .pipe(project())
-        .pipe(sourcemaps.write(".", <any>{ sourceRoot: "../src", includeContent: false, destPath: "scripts/vfs/dist" }))
-        .pipe(gulp.dest("scripts/vfs/dist"));
-});
-
-gulp.task("private-packages", ["typemock", "vfs"]);
+gulp.task("typemock", () => compilePrivatePackage("typemock"));
+gulp.task("vfs-core", () => compilePrivatePackage("vfs-core"));
+gulp.task("vfs-errors", () => compilePrivatePackage("vfs-errors"));
+gulp.task("vfs-path", ["vfs-core", "vfs-errors"], () => compilePrivatePackage("vfs-path"));
+gulp.task("vfs", ["vfs-core", "vfs-errors", "vfs-path", "typemock"], () => compilePrivatePackage("vfs"));
+gulp.task("harness-core", ["vfs-core"], () => compilePrivatePackage("harness-core"));
+gulp.task("private-packages", ["typemock", "vfs", "harness-core"]);
 
 // Task to build the tests infrastructure using the built compiler
 const run = path.join(builtLocalDirectory, "run.js");

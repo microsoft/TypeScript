@@ -1,66 +1,61 @@
-// NOTE: The contents of this file are all exported from the namespace 'vpath'. This is to
-//       support the eventual conversion of harness into a modular system.
-
-// NOTE: Some of the functions here duplicate functionality from compiler/core.ts. They have been
-//       added to reduce the number of direct dependencies on compiler and services to eventually
-//       break away from depending directly on the compiler to speed up compilation time.
+// NOTE: This namespace re-exports all of the exports from the @typescript/vfs-path private package.
 
 namespace vpath {
-    const module = require("@typescript/vfs-path");
-    vpath.sep = module.sep;
-    vpath.normalizeSeparators = module.normalizeSeparators;
-    (<any>vpath).ValidationFlags = module.ValidationFlags;
-    vpath.valid = module.valid;
-    vpath.validate = module.validate;
-    vpath.isAbsolute = module.isAbsolute;
-    vpath.hasTrailingSeparator = module.hasTrailingSeparator;
-    vpath.addTrailingSeparator = module.addTrailingSeparator;
-    vpath.removeTrailingSeparator = module.removeTrailingSeparator;
-    vpath.normalize = module.normalize;
-    vpath.combine = module.combine;
-    vpath.resolve = module.resolve;
-    vpath.relative = module.relative;
-    vpath.compareCaseSensitive = module.compareCaseSensitive;
-    vpath.compareCaseInsensitive = module.compareCaseInsensitive;
-    vpath.compare = module.compare;
-    vpath.equals = module.equals;
-    vpath.beneath = module.beneath;
-    vpath.parse = module.parse;
-    vpath.format = module.format;
-    vpath.dirname = module.dirname;
-    vpath.basename = module.basename;
-    vpath.extname = module.extname;
-    vpath.changeExtension = module.changeExtension;
+    const _vpath = require("@typescript/vfs-path") as typeof vpath;
+    vpath.sep = _vpath.sep;
+    vpath.normalizeSeparators = _vpath.normalizeSeparators;
+    (<any>vpath).ValidationFlags = (<any>_vpath).ValidationFlags;
+    vpath.valid = _vpath.valid;
+    vpath.validate = _vpath.validate;
+    vpath.isAbsolute = _vpath.isAbsolute;
+    vpath.hasTrailingSeparator = _vpath.hasTrailingSeparator;
+    vpath.addTrailingSeparator = _vpath.addTrailingSeparator;
+    vpath.removeTrailingSeparator = _vpath.removeTrailingSeparator;
+    vpath.normalize = _vpath.normalize;
+    vpath.combine = _vpath.combine;
+    vpath.resolve = _vpath.resolve;
+    vpath.relative = _vpath.relative;
+    vpath.compareCaseSensitive = _vpath.compareCaseSensitive;
+    vpath.compareCaseInsensitive = _vpath.compareCaseInsensitive;
+    vpath.compare = _vpath.compare;
+    vpath.equals = _vpath.equals;
+    vpath.beneath = _vpath.beneath;
+    vpath.parse = _vpath.parse;
+    vpath.format = _vpath.format;
+    vpath.dirname = _vpath.dirname;
+    vpath.basename = _vpath.basename;
+    vpath.extname = _vpath.extname;
+    vpath.changeExtension = _vpath.changeExtension;
 }
 
-declare module "vpath_" {
-    import * as vpath_ from "@typescript/vfs-path";
+declare module "_vpath" {
+    import * as _vpath from "@typescript/vfs-path";
     global {
         namespace vpath {
-            export import sep = vpath_.sep;
-            export import normalizeSeparators = vpath_.normalizeSeparators;
-            export import ValidationFlags = vpath_.ValidationFlags;
-            export import valid = vpath_.valid;
-            export import validate = vpath_.validate;
-            export import isAbsolute = vpath_.isAbsolute;
-            export import hasTrailingSeparator = vpath_.hasTrailingSeparator;
-            export import addTrailingSeparator = vpath_.addTrailingSeparator;
-            export import removeTrailingSeparator = vpath_.removeTrailingSeparator;
-            export import normalize = vpath_.normalize;
-            export import combine = vpath_.combine;
-            export import resolve = vpath_.resolve;
-            export import relative = vpath_.relative;
-            export import compareCaseSensitive = vpath_.compareCaseSensitive;
-            export import compareCaseInsensitive = vpath_.compareCaseInsensitive;
-            export import compare = vpath_.compare;
-            export import equals = vpath_.equals;
-            export import beneath = vpath_.beneath;
-            export import parse = vpath_.parse;
-            export import format = vpath_.format;
-            export import dirname = vpath_.dirname;
-            export import basename = vpath_.basename;
-            export import extname = vpath_.extname;
-            export import changeExtension = vpath_.changeExtension;
+            export import sep = _vpath.sep;
+            export import normalizeSeparators = _vpath.normalizeSeparators;
+            export import ValidationFlags = _vpath.ValidationFlags;
+            export import valid = _vpath.valid;
+            export import validate = _vpath.validate;
+            export import isAbsolute = _vpath.isAbsolute;
+            export import hasTrailingSeparator = _vpath.hasTrailingSeparator;
+            export import addTrailingSeparator = _vpath.addTrailingSeparator;
+            export import removeTrailingSeparator = _vpath.removeTrailingSeparator;
+            export import normalize = _vpath.normalize;
+            export import combine = _vpath.combine;
+            export import resolve = _vpath.resolve;
+            export import relative = _vpath.relative;
+            export import compareCaseSensitive = _vpath.compareCaseSensitive;
+            export import compareCaseInsensitive = _vpath.compareCaseInsensitive;
+            export import compare = _vpath.compare;
+            export import equals = _vpath.equals;
+            export import beneath = _vpath.beneath;
+            export import parse = _vpath.parse;
+            export import format = _vpath.format;
+            export import dirname = _vpath.dirname;
+            export import basename = _vpath.basename;
+            export import extname = _vpath.extname;
+            export import changeExtension = _vpath.changeExtension;
         }
     }
 }

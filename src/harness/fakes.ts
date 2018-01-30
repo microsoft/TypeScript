@@ -78,11 +78,11 @@ namespace fakes {
         private readonly _executingFilePath: string;
         private readonly _getCanonicalFileName: (file: string) => string;
         private _screenClears = 0;
-        private _watchedFiles: core.KeyedCollection<string, number> | undefined;
+        private _watchedFiles: core.SortedMap<string, number> | undefined;
         private _watchedFilesSet: core.SortedSet<string> | undefined;
-        private _watchedRecursiveDirectories: core.KeyedCollection<string, number> | undefined;
+        private _watchedRecursiveDirectories: core.SortedMap<string, number> | undefined;
         private _watchedRecursiveDirectoriesSet: core.SortedSet<string> | undefined;
-        private _watchedNonRecursiveDirectories: core.KeyedCollection<string, number> | undefined;
+        private _watchedNonRecursiveDirectories: core.SortedMap<string, number> | undefined;
         private _watchedNonRecursiveDirectoriesSet: core.SortedSet<string> | undefined;
 
         constructor(options: FakeServerHostOptions = {}, files?: vfs.FileSet) {
@@ -201,7 +201,7 @@ namespace fakes {
         }
 
         public watchFile(path: string, cb: ts.FileWatcherCallback) {
-            if (!this._watchedFiles) this._watchedFiles = new core.KeyedCollection<string, number>(this.vfs.stringComparer);
+            if (!this._watchedFiles) this._watchedFiles = new core.SortedMap<string, number>({ comparer: this.vfs.stringComparer, sort: "insertion" });
             if (!this._watchedFilesSet) this._watchedFilesSet = new core.SortedSet<string>(this.vfs.stringComparer);
 
             const previousCount = this._watchedFiles.get(path) || 0;
@@ -235,8 +235,8 @@ namespace fakes {
 
         public watchDirectory(path: string, cb: ts.DirectoryWatcherCallback, recursive?: boolean): ts.FileWatcher {
             const watchedDirectories = recursive
-                ? this._watchedRecursiveDirectories || (this._watchedRecursiveDirectories = new core.KeyedCollection(this.vfs.stringComparer))
-                : this._watchedNonRecursiveDirectories || (this._watchedNonRecursiveDirectories = new core.KeyedCollection(this.vfs.stringComparer));
+                ? this._watchedRecursiveDirectories || (this._watchedRecursiveDirectories = new core.SortedMap({ comparer: this.vfs.stringComparer, sort: "insertion" }))
+                : this._watchedNonRecursiveDirectories || (this._watchedNonRecursiveDirectories = new core.SortedMap({ comparer: this.vfs.stringComparer, sort: "insertion" }));
 
             const watchedDirectoriesSet = recursive
                 ? this._watchedRecursiveDirectoriesSet || (this._watchedRecursiveDirectoriesSet = new core.SortedSet(this.vfs.stringComparer))

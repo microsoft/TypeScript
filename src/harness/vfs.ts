@@ -1,43 +1,35 @@
-/// <reference path="../compiler/commandLineParser.ts"/>
-/// <reference path="./harness.ts" />
-/// <reference path="./core.ts" />
-/// <reference path="./events.ts" />
-/// <reference path="./vpath.ts" />
-/// <reference path="./documents.ts" />
-
-// NOTE: The contents of this file are all exported from the namespace 'vfs'. This is to
-//       support the eventual conversion of harness into a modular system.
+// NOTE: This namespace re-exports all of the exports from the @typescript/vfs private package.
 
 namespace vfs {
-    const module = require("@typescript/vfs");
-    vfs.Directory = module.Directory;
-    vfs.File = module.File;
-    vfs.Link = module.Link;
-    vfs.Symlink = module.Symlink;
-    vfs.Mount = module.Mount;
-    vfs.FileSystem = module.FileSystem;
-    vfs.Stats = module.Stats;
-    vfs.FSWatcher = module.FSWatcher;
+    const _vfs = require("@typescript/vfs");
+    vfs.Directory = _vfs.Directory;
+    vfs.File = _vfs.File;
+    vfs.Link = _vfs.Link;
+    vfs.Symlink = _vfs.Symlink;
+    vfs.Mount = _vfs.Mount;
+    vfs.FileSystem = _vfs.FileSystem;
+    vfs.Stats = _vfs.Stats;
+    vfs.FSWatcher = _vfs.FSWatcher;
 }
 
-declare module "vfs_" {
-    import * as vfs_ from "@typescript/vfs";
+declare module "_vfs" {
+    import * as _vfs from "@typescript/vfs";
     global {
         namespace vfs {
-            export import FileSystemResolver = vfs_.FileSystemResolver;
-            export import FileSystemTimers = vfs_.FileSystemTimers;
-            export import FileSet = vfs_.FileSet;
-            export import Directory = vfs_.Directory;
-            export import DirectoryLike = vfs_.DirectoryLike;
-            export import File = vfs_.File;
-            export import FileLike = vfs_.FileLike;
-            export import Link = vfs_.Link;
-            export import Symlink = vfs_.Symlink;
-            export import Mount = vfs_.Mount;
-            export import FileSystemOptions = vfs_.FileSystemOptions;
-            export import FileSystem = vfs_.FileSystem;
-            export import Stats = vfs_.Stats;
-            export import FSWatcher = vfs_.FSWatcher;
+            export import FileSystemResolver = _vfs.FileSystemResolver;
+            export import FileSystemTimers = _vfs.FileSystemTimers;
+            export import FileSet = _vfs.FileSet;
+            export import Directory = _vfs.Directory;
+            export import DirectoryLike = _vfs.DirectoryLike;
+            export import File = _vfs.File;
+            export import FileLike = _vfs.FileLike;
+            export import Link = _vfs.Link;
+            export import Symlink = _vfs.Symlink;
+            export import Mount = _vfs.Mount;
+            export import FileSystemOptions = _vfs.FileSystemOptions;
+            export import FileSystem = _vfs.FileSystem;
+            export import Stats = _vfs.Stats;
+            export import FSWatcher = _vfs.FSWatcher;
         }
     }
 }

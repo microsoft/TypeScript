@@ -803,72 +803,28 @@ task("LKG", ["clean", "release", "local"].concat(libraryTargets), function () {
 // Test directory
 directory(builtLocalDirectory);
 
-task("typemock", function () {
-    var startCompileTime = mark();
-    execCompiler(/*useBuiltCompiler*/ false, ["-p", "scripts/typemock/tsconfig.json"], function (error) {
-        if (error) {
-            fail("Compilation unsuccessful.");
-        }
-        else {
-            complete();
-        }
-        measure(startCompileTime);
-    });
-}, { async: true });
+function privatePackage(packageName, prereqs) {
+    task(packageName, prereqs, function () {
+        var startCompileTime = mark();
+        execCompiler(/*useBuiltCompiler*/ false, ["-p", `scripts/${packageName}/tsconfig.json`], function (error) {
+            if (error) {
+                fail("Compilation unsuccessful.");
+            }
+            else {
+                complete();
+            }
+            measure(startCompileTime);
+        });    
+    }, { async: true });
+}
 
-task("vfs-core", function () {
-    var startCompileTime = mark();
-    execCompiler(/*useBuiltCompiler*/ false, ["-p", "scripts/vfs-core/tsconfig.json"], function (error) {
-        if (error) {
-            fail("Compilation unsuccessful.");
-        }
-        else {
-            complete();
-        }
-        measure(startCompileTime);
-    });
-}, { async: true });
-
-task("vfs-errors", function () {
-    var startCompileTime = mark();
-    execCompiler(/*useBuiltCompiler*/ false, ["-p", "scripts/vfs-errors/tsconfig.json"], function (error) {
-        if (error) {
-            fail("Compilation unsuccessful.");
-        }
-        else {
-            complete();
-        }
-        measure(startCompileTime);
-    });
-}, { async: true });
-
-task("vfs-path", ["vfs-core", "vfs-errors"], function () {
-    var startCompileTime = mark();
-    execCompiler(/*useBuiltCompiler*/ false, ["-p", "scripts/vfs-path/tsconfig.json"], function (error) {
-        if (error) {
-            fail("Compilation unsuccessful.");
-        }
-        else {
-            complete();
-        }
-        measure(startCompileTime);
-    });
-}, { async: true });
-
-task("vfs", ["vfs-core", "vfs-errors", "vfs-path", "typemock"], function () {
-    var startCompileTime = mark();
-    execCompiler(/*useBuiltCompiler*/ false, ["-p", "scripts/vfs/tsconfig.json"], function (error) {
-        if (error) {
-            fail("Compilation unsuccessful.");
-        }
-        else {
-            complete();
-        }
-        measure(startCompileTime);
-    });
-}, { async: true });
-
-task("private-packages", ["typemock", "vfs"]);
+privatePackage("typemock");
+privatePackage("vfs-core");
+privatePackage("vfs-errors");
+privatePackage("vfs-path", ["vfs-core", "vfs-errors"]);
+privatePackage("vfs", ["vfs-path", "typemock"]);
+privatePackage("harness-core", ["vfs-core"]);
+task("private-packages", ["typemock", "vfs", "harness-core"]);
 
 // Task to build the tests infrastructure using the built compiler
 var run = path.join(builtLocalDirectory, "run.js");

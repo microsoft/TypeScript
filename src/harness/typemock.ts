@@ -1,9 +1,4 @@
-/// <reference path="./core.ts" />
-/// <reference path="./utils.ts" />
-/// <reference path="./vfs.ts" />
-
-// NOTE: The contents of this file are all exported from the namespace 'typemock'. This is to
-//       support the eventual conversion of harness into a modular system.
+// NOTE: This namespace re-exports all of the exports from the typemock private package.
 
 // typemock library
 namespace typemock {
