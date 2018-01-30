@@ -22,6 +22,10 @@
         "References": {
             "match": "^(.*\\/_references\\.js)$",
             "exclude": [["^", 1, "$"]]
+        },
+        "Datatables.net": {
+            "match": "(jquery\\.)*dataTables(\\.all)*(\\.min)*\\.js$",
+            "types": ["datatables.net"]
         }
     },
     "simpleMap": {

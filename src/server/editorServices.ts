@@ -158,6 +158,11 @@ namespace ts.server {
         "References": {
             match: /^(.*\/_references\.js)$/i,
             exclude: [["^", 1, "$"]]
+        },
+        "Datatables.net": {
+            // e.g. /wwwroot/lib/datatables.all.min.js
+            match: /(jquery\.)*dataTables(\.all)*(\.min)*\.js$/i,
+            types: ["datatables.net"]
         }
     };
 
