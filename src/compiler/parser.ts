@@ -697,22 +697,42 @@ namespace ts {
             nextToken();
             const pos = getNodePos();
             if (token() === SyntaxKind.EndOfFileToken) {
+                sourceFile.statements = createNodeArray([], pos, pos);
                 sourceFile.endOfFileToken = parseTokenNode<EndOfFileToken>();
             }
-            else if (token() === SyntaxKind.OpenBraceToken ||
-                lookAhead(() => token() === SyntaxKind.StringLiteral)) {
-                const statement = createNode(SyntaxKind.ExpressionStatement) as JsonObjectLiteralExpressionStatement;
-                statement.expression = parseObjectLiteralExpression();
+            else {
+                const statement = createNode(SyntaxKind.ExpressionStatement) as JsonObjectExpressionStatement;
+                switch (token()) {
+                    case SyntaxKind.OpenBracketToken:
+                        statement.expression = parseArrayLiteralExpression();
+                        break;
+                    case SyntaxKind.TrueKeyword:
+                    case SyntaxKind.FalseKeyword:
+                    case SyntaxKind.NullKeyword:
+                        statement.expression = parseTokenNode<BooleanLiteral | NullLiteral>();
+                        break;
+                    case SyntaxKind.MinusToken:
+                        if (lookAhead(() => nextToken() === SyntaxKind.NumericLiteral && nextToken() !== SyntaxKind.ColonToken)) {
+                            statement.expression = parsePrefixUnaryExpression() as JsonMinusNumericLiteral;
+                        }
+                        else {
+                            statement.expression = parseObjectLiteralExpression();
+                        }
+                        break;
+                    case SyntaxKind.NumericLiteral:
+                    case SyntaxKind.StringLiteral:
+                        if (lookAhead(() => nextToken() !== SyntaxKind.ColonToken)) {
+                            statement.expression = parseLiteralNode() as StringLiteral | NumericLiteral;
+                            break;
+                        }
+                        // falls through
+                    default:
+                        statement.expression = parseObjectLiteralExpression();
+                        break;
+                }
                 finishNode(statement);
                 sourceFile.statements = createNodeArray([statement], pos);
                 sourceFile.endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token);
-            }
-            else {
-                parseExpected(SyntaxKind.OpenBraceToken);
-            }
-
-            if (!sourceFile.statements) {
-                sourceFile.statements = createNodeArray([], pos, pos);
             }
 
             if (setParentNodes) {
