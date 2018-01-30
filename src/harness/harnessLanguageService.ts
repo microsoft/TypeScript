@@ -119,9 +119,11 @@ namespace Harness.LanguageService {
     export abstract class LanguageServiceAdapterHost {
         public typesRegistry: ts.Map<void> | undefined;
         public readonly vfs = new vfs.FileSystem(/*ignoreCase*/ true, { cwd: virtualFileSystemRoot });
+        private scriptInfos: core.SortedMap<string, ScriptInfo>;
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.instance,
             protected settings = ts.getDefaultCompilerOptions()) {
+            this.scriptInfos = new core.SortedMap({ comparer: this.vfs.stringComparer, sort: "insertion" });
         }
 
         public getNewLine(): string {
@@ -130,36 +132,35 @@ namespace Harness.LanguageService {
 
         public getFilenames(): string[] {
             const fileNames: string[] = [];
-            this.vfs.scanSync("/", "descendants-or-self", {
-                accept: (path, stats) => {
-                    if (stats.isFile()) {
-                        const scriptInfo = this.vfs.filemeta(path).get("scriptInfo") as ScriptInfo;
-                        if (scriptInfo && scriptInfo.isRootFile) {
-                            // only include root files here
-                            // usually it means that we won't include lib.d.ts in the list of root files so it won't mess the computation of compilation root dir.
-                            fileNames.push(scriptInfo.fileName);
-                        }
-                    }
-                    return false;
+            this.scriptInfos.forEach(scriptInfo => {
+                if (scriptInfo.isRootFile) {
+                    // only include root files here
+                    // usually it means that we won't include lib.d.ts in the list of root files so it won't mess the computation of compilation root dir.
+                    fileNames.push(scriptInfo.fileName);
                 }
             });
+            // this.vfs.scanSync("/", "descendants-or-self", {
+            //     accept: (path, stats) => {
+            //         if (stats.isFile()) {
+            //             const scriptInfo = this.vfs.filemeta(path).get("scriptInfo") as ScriptInfo;
+            //             if (scriptInfo && scriptInfo.isRootFile) {
+            //                 fileNames.push(scriptInfo.fileName);
+            //             }
+            //         }
+            //         return false;
+            //     }
+            // });
             return fileNames;
         }
 
         public getScriptInfo(fileName: string): ScriptInfo {
-            try {
-                const meta = this.vfs.filemeta(fileName);
-                return meta ? meta.get("scriptInfo") : undefined;
-            }
-            catch {
-                return undefined;
-            }
+            return this.scriptInfos.get(vpath.resolve(this.vfs.cwd(), fileName));
         }
 
         public addScript(fileName: string, content: string, isRootFile: boolean): void {
             this.vfs.mkdirpSync(vpath.dirname(fileName));
             this.vfs.writeFileSync(fileName, content);
-            this.vfs.filemeta(fileName).set("scriptInfo", new ScriptInfo(fileName, content, isRootFile));
+            this.scriptInfos.set(vpath.resolve(this.vfs.cwd(), fileName), new ScriptInfo(fileName, content, isRootFile));
         }
 
         public editScript(fileName: string, start: number, end: number, newText: string) {

@@ -3,11 +3,11 @@
 // @declaration: true
 // @out: out.js
 // @allowJs: true
-// @Filename: a.js
+// @Filename: b.js
 // @emitThisFile: true
 ////function foo() { return 10; }/*1*/
 
-// @Filename: b.ts
+// @Filename: a.ts
 // @emitThisFile: true
 ////function foo() { return 30; }/*2*/
 
