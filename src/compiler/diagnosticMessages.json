@@ -1976,6 +1976,10 @@
         "category": "Error",
         "code": 2565
     },
+    "A rest element cannot have a property name.": {
+        "category": "Error",
+        "code": 2566
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2802,6 +2806,10 @@
     "Do not resolve the real path of symlinks.": {
         "category": "Message",
         "code": 6013
+    },
+    "Only emit '.d.ts' declaration files.": {
+        "category": "Message",
+        "code": 6014
     },
     "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'.": {
         "category": "Message",
@@ -3892,10 +3900,6 @@
     "Convert function '{0}' to class": {
         "category": "Message",
         "code": 95002
-    },
-    "Extract symbol": {
-        "category": "Message",
-        "code": 95003
     },
     "Extract to {0} in {1}": {
         "category": "Message",

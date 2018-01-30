@@ -3,14 +3,8 @@
 
 /* @internal */
 namespace ts.refactor.extractSymbol {
-    const extractSymbol: Refactor = {
-        name: "Extract Symbol",
-        description: getLocaleSpecificMessage(Diagnostics.Extract_symbol),
-        getAvailableActions,
-        getEditsForAction,
-    };
-
-    registerRefactor(extractSymbol);
+    const refactorName = "Extract Symbol";
+    registerRefactor(refactorName, { getAvailableActions, getEditsForAction });
 
     /**
      * Compute the associated code actions
@@ -77,7 +71,7 @@ namespace ts.refactor.extractSymbol {
 
         if (functionActions.length) {
             infos.push({
-                name: extractSymbol.name,
+                name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_function),
                 actions: functionActions
             });
@@ -85,7 +79,7 @@ namespace ts.refactor.extractSymbol {
 
         if (constantActions.length) {
             infos.push({
-                name: extractSymbol.name,
+                name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
                 actions: constantActions
             });
@@ -241,6 +235,16 @@ namespace ts.refactor.extractSymbol {
                     break;
                 }
             }
+
+            if (!statements.length) {
+                // https://github.com/Microsoft/TypeScript/issues/20559
+                // Ranges like [|case 1: break;|] will fail to populate `statements` because
+                // they will never find `start` in `start.parent.statements`.
+                // Consider: We could support ranges like [|case 1:|] by refining them to just
+                // the expression.
+                return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
+            }
+
             return { targetRange: { range: statements, facts: rangeFacts, declarations } };
         }
 
@@ -1327,6 +1331,13 @@ namespace ts.refactor.extractSymbol {
                     }
                     prevStatement = statement;
                 }
+
+                if (!prevStatement && isCaseClause(curr)) {
+                    // We must have been in the expression of the case clause.
+                    Debug.assert(isSwitchStatement(curr.parent.parent));
+                    return curr.parent.parent;
+                }
+
                 // There must be at least one statement since we started in one.
                 Debug.assert(prevStatement !== undefined);
                 return prevStatement;

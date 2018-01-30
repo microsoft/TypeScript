@@ -121,9 +121,26 @@ namespace ts.codefix {
                 break;
 
             case SyntaxKind.Parameter:
-                const functionDeclaration = <FunctionDeclaration>parent.parent;
-                if (functionDeclaration.parameters.length === 1) {
-                    changes.deleteNode(sourceFile, parent);
+                const oldFunction = parent.parent;
+                if (isArrowFunction(oldFunction) && oldFunction.parameters.length === 1) {
+                    // Lambdas with exactly one parameter are special because, after removal, there
+                    // must be an empty parameter list (i.e. `()`) and this won't necessarily be the
+                    // case if the parameter is simply removed (e.g. in `x => 1`).
+                    const newFunction = updateArrowFunction(
+                        oldFunction,
+                        oldFunction.modifiers,
+                        oldFunction.typeParameters,
+                        /*parameters*/ undefined,
+                        oldFunction.type,
+                        oldFunction.equalsGreaterThanToken,
+                        oldFunction.body);
+
+                    // Drop leading and trailing trivia of the new function because we're only going
+                    // to replace the span (vs the full span) of the old function - the old leading
+                    // and trailing trivia will remain.
+                    suppressLeadingAndTrailingTrivia(newFunction);
+
+                    changes.replaceRange(sourceFile, { pos: oldFunction.getStart(), end: oldFunction.end }, newFunction);
                 }
                 else {
                     changes.deleteNodeInList(sourceFile, parent);

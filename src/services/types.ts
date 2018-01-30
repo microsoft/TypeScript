@@ -295,10 +295,7 @@ namespace ts {
 
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
 
-        // TODO: GH#20538 return `ReadonlyArray<CodeFixAction>`
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings): ReadonlyArray<CodeAction>;
-        // TODO: GH#20538
-        /* @internal */
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings): ReadonlyArray<CodeFixAction>;
         getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions;
         applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
@@ -327,8 +324,6 @@ namespace ts {
         dispose(): void;
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface CombinedCodeFixScope { type: "file"; fileName: string; }
 
     export interface GetCompletionsAtPositionOptions {
@@ -419,8 +414,6 @@ namespace ts {
         commands?: CodeActionCommand[];
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface CodeFixAction extends CodeAction {
         /**
          * If present, one may call 'getCombinedCodeFix' with this fixId.
@@ -429,8 +422,6 @@ namespace ts {
         fixId?: {};
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface CombinedCodeActions {
         changes: ReadonlyArray<FileTextChanges>;
         commands: ReadonlyArray<CodeActionCommand> | undefined;

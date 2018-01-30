@@ -135,7 +135,7 @@ namespace ts {
 
         function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
             // Make sure not to write js file and source map file if any of them cannot be written
-            if (!host.isEmitBlocked(jsFilePath) && !compilerOptions.noEmit) {
+            if (!host.isEmitBlocked(jsFilePath) && !compilerOptions.noEmit && !compilerOptions.emitDeclarationsOnly) {
                 if (!emitOnlyDtsFiles) {
                     printSourceFileOrBundle(jsFilePath, sourceMapFilePath, sourceFileOrBundle);
                 }
@@ -1280,12 +1280,12 @@ namespace ts {
         }
 
         function emitBindingElement(node: BindingElement) {
+            emitIfPresent(node.dotDotDotToken);
             if (node.propertyName) {
                 emit(node.propertyName);
                 writePunctuation(":");
                 writeSpace();
             }
-            emitIfPresent(node.dotDotDotToken);
             emit(node.name);
             emitInitializer(node.initializer);
         }

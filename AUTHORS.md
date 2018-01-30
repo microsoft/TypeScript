@@ -205,6 +205,7 @@ TypeScript is authored by:
 * Nathan Shively-Sanders
 * Nathan Yee
 * Nicolas Henry
+* @nieltg
 * Nima Zahedi
 * Noah Chen 
 * Noel Varanda 

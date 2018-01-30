@@ -20,7 +20,7 @@ verify.codeFix({
     return C;
 }
 
-class B extends foo("s")<number> {\r
-    a: string | number;\r
+class B extends foo("s")<number> {
+    a: string | number;
 }`
 });

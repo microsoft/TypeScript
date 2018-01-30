@@ -30,27 +30,14 @@ namespace ts {
         mtime?: Date;
     }
 
-    /**
-     * Partial interface of the System thats needed to support the caching of directory structure
-     */
-    export interface DirectoryStructureHost {
+    export interface System {
+        args: string[];
         newLine: string;
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
         readFile(path: string, encoding?: string): string | undefined;
-        writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
-        fileExists(path: string): boolean;
-        directoryExists(path: string): boolean;
-        createDirectory(path: string): void;
-        getCurrentDirectory(): string;
-        getDirectories(path: string): string[];
-        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
-        exit(exitCode?: number): void;
-    }
-
-    export interface System extends DirectoryStructureHost {
-        args: string[];
         getFileSize?(path: string): number;
+        writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         /**
          * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
          * use native OS file watching
@@ -58,7 +45,13 @@ namespace ts {
         watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         resolvePath(path: string): string;
+        fileExists(path: string): boolean;
+        directoryExists(path: string): boolean;
+        createDirectory(path: string): void;
         getExecutingFilePath(): string;
+        getCurrentDirectory(): string;
+        getDirectories(path: string): string[];
+        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
         getModifiedTime?(path: string): Date;
         /**
          * This should be cryptographically secure.
@@ -66,6 +59,7 @@ namespace ts {
          */
         createHash?(data: string): string;
         getMemoryUsage?(): number;
+        exit(exitCode?: number): void;
         realpath?(path: string): string;
         /*@internal*/ getEnvironmentVariable(name: string): string;
         /*@internal*/ tryEnableSourceMapsForHost?(): void;
@@ -132,9 +126,31 @@ namespace ts {
             const _fs = require("fs");
             const _path = require("path");
             const _os = require("os");
-            const _crypto = require("crypto");
+            // crypto can be absent on reduced node installations
+            let _crypto: any;
+            try {
+              _crypto = require("crypto");
+            }
+            catch {
+              _crypto = undefined;
+            }
 
             const useNonPollingWatchers = process.env.TSC_NONPOLLING_WATCHER;
+
+            /**
+             * djb2 hashing algorithm
+             * http://www.cse.yorku.ca/~oz/hash.html
+             */
+            function generateDjb2Hash(data: string): string {
+              const chars = data.split("").map(str => str.charCodeAt(0));
+              return `${chars.reduce((prev, curr) => ((prev << 5) + prev) + curr, 5381)}`;
+            }
+
+            function createMD5HashUsingNativeCrypto(data: string) {
+              const hash = _crypto.createHash("md5");
+              hash.update(data);
+              return hash.digest("hex");
+            }
 
             function createWatchedFileSet() {
                 const dirWatchers = createMap<DirectoryWatcher>();
@@ -398,7 +414,7 @@ namespace ts {
                     return { files, directories };
                 }
                 catch (e) {
-                    return { files: [], directories: [] };
+                    return emptyFileSystemEntries;
                 }
             }
 
@@ -499,11 +515,7 @@ namespace ts {
                         return undefined;
                     }
                 },
-                createHash(data) {
-                    const hash = _crypto.createHash("md5");
-                    hash.update(data);
-                    return hash.digest("hex");
-                },
+                createHash: _crypto ? createMD5HashUsingNativeCrypto : generateDjb2Hash,
                 getMemoryUsage() {
                     if (global.gc) {
                         global.gc();
@@ -524,7 +536,12 @@ namespace ts {
                     process.exit(exitCode);
                 },
                 realpath(path: string): string {
-                    return _fs.realpathSync(path);
+                    try {
+                        return _fs.realpathSync(path);
+                    }
+                    catch {
+                        return path;
+                    }
                 },
                 debugMode: some(<string[]>process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
                 tryEnableSourceMapsForHost() {

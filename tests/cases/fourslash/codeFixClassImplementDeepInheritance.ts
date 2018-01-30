@@ -50,7 +50,6 @@
 
 verify.codeFix({
     description: "Implement interface 'I6'",
-    // TODO: GH#18445
     newFileContent:
 `// Referenced throughout the inheritance chain.
 interface I0 { a: number }
@@ -75,12 +74,12 @@ class C4 extends C3 implements I0, I4, I5 {
 }
 
 interface I6 extends C4 {}
-class C5 implements I6 {\r
-    e: number;\r
-    f: number;\r
-    a: number;\r
-    b: number;\r
-    d: number;\r
-    c: number;\r
+class C5 implements I6 {
+    e: number;
+    f: number;
+    a: number;
+    b: number;
+    d: number;
+    c: number;
 }`,
 });

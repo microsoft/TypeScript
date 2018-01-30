@@ -41,19 +41,94 @@ namespace ts {
             program = updateProgramFile(program, "/b.ts", "namespace B { export const x = 1; }");
             assertChanges(["/b.js", "/a.js"]);
         });
+
+        it("keeps the file in affected files if cancellation token throws during the operation", () => {
+            const files: NamedSourceText[] = [
+                { name: "/a.ts", text: SourceText.New("", 'import { b } from "./b";', "") },
+                { name: "/b.ts", text: SourceText.New("", ' import { c } from "./c";', "export const b = c;") },
+                { name: "/c.ts", text: SourceText.New("", "", "export const c = 0;") },
+                { name: "/d.ts", text: SourceText.New("", "", "export const dd = 0;") },
+                { name: "/e.ts", text: SourceText.New("", "", "export const ee = 0;") },
+            ];
+
+            let program = newProgram(files, ["/d.ts", "/e.ts", "/a.ts"], {});
+            const assertChanges = makeAssertChangesWithCancellationToken(() => program);
+            // No cancellation
+            assertChanges(["/d.js", "/e.js", "/c.js", "/b.js", "/a.js"]);
+
+            // cancel when emitting a.ts
+            program = updateProgramFile(program, "/a.ts", "export function foo() { }");
+            assertChanges(["/a.js"], 0);
+            // Change d.ts and verify previously pending a.ts is emitted as well
+            program = updateProgramFile(program, "/d.ts", "export function bar() { }");
+            assertChanges(["/a.js", "/d.js"]);
+
+            // Cancel when emitting b.js
+            program = updateProgramFile(program, "/b.ts", "export class b { foo() { c + 1; } }");
+            program = updateProgramFile(program, "/d.ts", "export function bar2() { }");
+            assertChanges(["/d.js", "/b.js", "/a.js"], 1);
+            // Change e.ts and verify previously b.js as well as a.js get emitted again since previous change was consumed completely but not d.ts
+            program = updateProgramFile(program, "/e.ts", "export function bar3() { }");
+            assertChanges(["/b.js", "/a.js", "/e.js"]);
+
+            // Cancel in the middle of affected files list after b.js emit
+            program = updateProgramFile(program, "/b.ts", "export class b { foo2() { c + 1; } }");
+            assertChanges(["/b.js", "/a.js"], 1);
+            // Change e.ts and verify previously b.js as well as a.js get emitted again since previous change was consumed completely but not d.ts
+            program = updateProgramFile(program, "/e.ts", "export function bar5() { }");
+            assertChanges(["/b.js", "/a.js", "/e.js"]);
+        });
     });
 
     function makeAssertChanges(getProgram: () => Program): (fileNames: ReadonlyArray<string>) => void {
-        const builder = createBuilder({
-            getCanonicalFileName: identity,
-            computeHash: identity
-        });
+        const host: BuilderProgramHost = { useCaseSensitiveFileNames: returnTrue };
+        let builderProgram: EmitAndSemanticDiagnosticsBuilderProgram | undefined;
         return fileNames => {
             const program = getProgram();
-            builder.updateProgram(program);
+            builderProgram = createEmitAndSemanticDiagnosticsBuilderProgram(program, host, builderProgram);
             const outputFileNames: string[] = [];
-            builder.emitChangedFiles(program, fileName => outputFileNames.push(fileName));
+            // tslint:disable-next-line no-empty
+            while (builderProgram.emitNextAffectedFile(fileName => outputFileNames.push(fileName))) {
+            }
             assert.deepEqual(outputFileNames, fileNames);
+        };
+    }
+
+    function makeAssertChangesWithCancellationToken(getProgram: () => Program): (fileNames: ReadonlyArray<string>, cancelAfterEmitLength?: number) => void {
+        const host: BuilderProgramHost = { useCaseSensitiveFileNames: returnTrue };
+        let builderProgram: EmitAndSemanticDiagnosticsBuilderProgram | undefined;
+        let cancel = false;
+        const cancellationToken: CancellationToken = {
+            isCancellationRequested: () => cancel,
+            throwIfCancellationRequested: () => {
+                if (cancel) {
+                    throw new OperationCanceledException();
+                }
+            },
+        };
+        return (fileNames, cancelAfterEmitLength?: number) => {
+            cancel = false;
+            let operationWasCancelled = false;
+            const program = getProgram();
+            builderProgram = createEmitAndSemanticDiagnosticsBuilderProgram(program, host, builderProgram);
+            const outputFileNames: string[] = [];
+            try {
+                // tslint:disable-next-line no-empty
+                do {
+                    assert.isFalse(cancel);
+                    if (outputFileNames.length === cancelAfterEmitLength) {
+                        cancel = true;
+                    }
+                } while (builderProgram.emitNextAffectedFile(fileName => outputFileNames.push(fileName), cancellationToken));
+            }
+            catch (e) {
+                assert.isFalse(operationWasCancelled);
+                assert(e instanceof OperationCanceledException, e.toString());
+                operationWasCancelled = true;
+            }
+            assert.equal(cancel, operationWasCancelled);
+            assert.equal(operationWasCancelled, fileNames.length > cancelAfterEmitLength);
+            assert.deepEqual(outputFileNames, fileNames.slice(0, cancelAfterEmitLength));
         };
     }
 

@@ -63,7 +63,7 @@
       ],
       "documentation": [
         {
-          "text": "DocT} A template",
+          "text": "Doc",
           "kind": "text"
         }
       ],
@@ -75,6 +75,10 @@
         {
           "name": "augments",
           "text": "C<T> Augments it"
+        },
+        {
+          "name": "template",
+          "text": "{T} A template"
         },
         {
           "name": "type",
