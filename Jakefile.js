@@ -738,7 +738,7 @@ task("default", ["local"]);
 
 // Cleans the built directory
 desc("Cleans the compiler output, declare files, and tests");
-task("clean", function () {
+task("clean", ["clean-private-packages"], function () {
     jake.rmRf(builtDirectory);
 });
 
@@ -804,7 +804,7 @@ task("LKG", ["clean", "release", "local"].concat(libraryTargets), function () {
 directory(builtLocalDirectory);
 
 function privatePackage(packageName, prereqs) {
-    task(packageName, prereqs, function () {
+    task(packageName, prereqs || [], function () {
         var startCompileTime = mark();
         execCompiler(/*useBuiltCompiler*/ false, ["-p", `scripts/${packageName}/tsconfig.json`], function (error) {
             if (error) {
@@ -818,6 +818,10 @@ function privatePackage(packageName, prereqs) {
     }, { async: true });
 }
 
+function cleanPrivatePackage(packageName) {
+    jake.rmRf(`scripts/${packageName}/dist`);
+}
+
 privatePackage("typemock");
 privatePackage("vfs-core");
 privatePackage("vfs-errors");
@@ -825,6 +829,14 @@ privatePackage("vfs-path", ["vfs-core", "vfs-errors"]);
 privatePackage("vfs", ["vfs-path", "typemock"]);
 privatePackage("harness-core", ["vfs-core"]);
 task("private-packages", ["typemock", "vfs", "harness-core"]);
+
+task("clean-typemock", () => cleanPrivatePackage("typemock"));
+task("clean-vfs-core", () => cleanPrivatePackage("vfs-core"));
+task("clean-vfs-errors", () => cleanPrivatePackage("vfs-errors"));
+task("clean-vfs-path", ["clean-vfs-core", "clean-vfs-errors"], () => cleanPrivatePackage("vfs-path"));
+task("clean-vfs", ["clean-vfs-path", "clean-typemock"], () => cleanPrivatePackage("vfs"));
+task("clean-harness-core", ["clean-vfs-core"], () => cleanPrivatePackage("harness-core"));
+task("clean-private-packages", ["clean-typemock", "clean-vfs", "clean-harness-core"]);
 
 // Task to build the tests infrastructure using the built compiler
 var run = path.join(builtLocalDirectory, "run.js");

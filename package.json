@@ -51,6 +51,8 @@
         "@types/source-map-support": "latest",
         "@types/through2": "latest",
         "@types/xml2js": "^0.4.0",
+        "@typescript/vfs-core": "file:scripts/vfs-core",
+        "@typescript/vfs-errors": "file:scripts/vfs-errors",
         "@typescript/vfs-path": "file:scripts/vfs-path",
         "@typescript/vfs": "file:scripts/vfs",
         "@typescript/harness-core": "file:scripts/harness-core",

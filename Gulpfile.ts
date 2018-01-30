@@ -585,7 +585,7 @@ gulp.task(specMd, /*help*/ false, [word2mdJs], (done) => {
 
 gulp.task("generate-spec", "Generates a Markdown version of the Language Specification", [specMd]);
 
-gulp.task("clean", "Cleans the compiler output, declare files, and tests", [], () => {
+gulp.task("clean", "Cleans the compiler output, declare files, and tests", ["clean:private-packages"], () => {
     return del([builtDirectory]);
 });
 
@@ -611,7 +611,7 @@ gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUse
     return runSequence("LKGInternal", "VerifyLKG");
 });
 
-function compilePrivatePackage(packageName) {
+function compilePrivatePackage(packageName: string) {
     const project = tsc.createProject(`scripts/${packageName}/tsconfig.json`, getCompilerSettings({}, /*useBuiltCompiler*/ false));
     return project.src()
         .pipe(sourcemaps.init())
@@ -621,6 +621,10 @@ function compilePrivatePackage(packageName) {
         .pipe(gulp.dest(`scripts/${packageName}/dist`));
 }
 
+function cleanPrivatePackage(packageName: string) {
+    return del([`scripts/${packageName}/dist`]);
+}
+
 gulp.task("typemock", () => compilePrivatePackage("typemock"));
 gulp.task("vfs-core", () => compilePrivatePackage("vfs-core"));
 gulp.task("vfs-errors", () => compilePrivatePackage("vfs-errors"));
@@ -628,6 +632,14 @@ gulp.task("vfs-path", ["vfs-core", "vfs-errors"], () => compilePrivatePackage("v
 gulp.task("vfs", ["vfs-core", "vfs-errors", "vfs-path", "typemock"], () => compilePrivatePackage("vfs"));
 gulp.task("harness-core", ["vfs-core"], () => compilePrivatePackage("harness-core"));
 gulp.task("private-packages", ["typemock", "vfs", "harness-core"]);
+
+gulp.task("clean:typemock", () => cleanPrivatePackage("typemock"));
+gulp.task("clean:vfs-core", () => cleanPrivatePackage("vfs-core"));
+gulp.task("clean:vfs-errors", () => cleanPrivatePackage("vfs-errors"));
+gulp.task("clean:vfs-path", ["clean:vfs-core", "clean:vfs-errors"], () => cleanPrivatePackage("vfs-path"));
+gulp.task("clean:vfs", ["clean:vfs-core", "clean:vfs-errors", "clean:vfs-path", "clean:typemock"], () => cleanPrivatePackage("vfs"));
+gulp.task("clean:harness-core", ["clean:vfs-core"], () => cleanPrivatePackage("harness-core"));
+gulp.task("clean:private-packages", ["clean:typemock", "clean:vfs", "clean:harness-core"]);
 
 // Task to build the tests infrastructure using the built compiler
 const run = path.join(builtLocalDirectory, "run.js");
