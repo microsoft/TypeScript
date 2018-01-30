@@ -14,7 +14,7 @@
     <Cmt Name="LcxAdmin" />
     <Cmt Name="Loc" />
     <Cmt Name="Note" />
-    <Cmt Name="RCCX" />
+    <Cmt Name="Rccx" />
   </OwnedComments>
   <Settings Name="@vsLocTools@\current\default.lss" Type="LSS" />
   <Item ItemId=";String Table" ItemType="0" PsrId="306" Leaf="false">
@@ -5099,6 +5099,15 @@
           <Val><![CDATA[Only 'amd' and 'system' modules are supported alongside --{0}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[只有 'amd' 與 'system' 模組連同受支援 --{0}。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Only_emit_d_ts_declaration_files_6014" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Only emit '.d.ts' declaration files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[只發出 '.d.ts' 宣告檔案。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
