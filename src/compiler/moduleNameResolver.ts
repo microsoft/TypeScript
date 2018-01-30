@@ -801,7 +801,7 @@ namespace ts {
             }
             const resolvedFromFile = loadModuleFromFile(extensions, candidate, failedLookupLocations, onlyRecordFailures, state);
             if (resolvedFromFile) {
-                const nm = considerPackageJson ? parseNodeModuleFromPath(resolvedFromFile.path) : undefined;
+                const nm = considerPackageJson ? parseNodeModuleFromPath(resolvedFromFile) : undefined;
                 const packageId = nm && getPackageJsonInfo(nm.packageDirectory, nm.subModuleName, failedLookupLocations, /*onlyRecordFailures*/ false, state).packageId;
                 return withPackageId(packageId, resolvedFromFile);
             }
@@ -831,8 +831,8 @@ namespace ts {
      *   For `/node_modules/@types/foo/bar/index.d.ts` this is { packageDirectory: "@types/foo", subModuleName: "bar/index.d.ts" }.
      *   For `/node_modules/foo/bar/index.d.ts` this is { packageDirectory: "foo", subModuleName": "bar/index.d.ts" }.
      */
-    function parseNodeModuleFromPath(path: string): { packageDirectory: string, subModuleName: string } | undefined {
-        path = normalizePath(path);
+    function parseNodeModuleFromPath(resolved: PathAndExtension): { packageDirectory: string, subModuleName: string } | undefined {
+        const path = normalizePath(resolved.path);
         const idx = path.lastIndexOf(nodeModulesPathPart);
         if (idx === -1) {
             return undefined;
@@ -844,7 +844,7 @@ namespace ts {
             indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterPackageName);
         }
         const packageDirectory = path.slice(0, indexAfterPackageName);
-        const subModuleName = addExtensionAndIndex(path.slice(indexAfterPackageName + 1));
+        const subModuleName = removeExtension(path.slice(indexAfterPackageName + 1), resolved.ext) + Extension.Dts;
         return { packageDirectory, subModuleName };
     }
 
@@ -979,14 +979,14 @@ namespace ts {
                 else {
                     const jsPath = tryReadPackageJsonFields(/*readTypes*/ false, packageJsonContent, nodeModuleDirectory, state);
                     if (typeof jsPath === "string") {
-                        subModuleName = removeExtension(jsPath.substring(nodeModuleDirectory.length + 1), ".js") + ".d.ts";
+                        subModuleName = removeExtension(removeExtension(jsPath.substring(nodeModuleDirectory.length + 1), Extension.Js), Extension.Jsx) + Extension.Dts;
                     }
                     else {
                         subModuleName = "index.d.ts";
                     }
                 }
             }
-            if (!endsWith(subModuleName, ".d.ts")) {
+            if (!endsWith(subModuleName, Extension.Dts)) {
                 subModuleName = addExtensionAndIndex(subModuleName);
             }
             const packageId: PackageId = typeof packageJsonContent.name === "string" && typeof packageJsonContent.version === "string"
