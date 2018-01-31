@@ -68,6 +68,10 @@ type T52 = X3<{ a: (x: string) => void, b: (x: string) => void }>;  // string
 type T53 = X3<{ a: (x: number) => void, b: (x: string) => void }>;  // string & number
 type T54 = X3<{ a: (x: number) => void, b: () => void }>;  // number
 
+type T60 = infer U;  // Error
+type T61<T> = infer A extends infer B ? infer C : infer D;  // Error
+type T62<T> = U extends (infer U)[] ? U : U;  // Error
+
 
 //// [inferTypes1.js]
 "use strict";
@@ -81,103 +85,3 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
-
-
-//// [inferTypes1.d.ts]
-declare type Unpacked<T> = T extends (infer U)[] ? U : T extends (...args: any[]) => infer U ? U : T extends Promise<infer U> ? U : T;
-declare type T00 = Unpacked<string>;
-declare type T01 = Unpacked<string[]>;
-declare type T02 = Unpacked<() => string>;
-declare type T03 = Unpacked<Promise<string>>;
-declare type T04 = Unpacked<Unpacked<Promise<string>[]>>;
-declare type T05 = Unpacked<any>;
-declare type T06 = Unpacked<never>;
-declare type ReturnType<T extends Function> = T extends ((...args: any[]) => infer R) | (new (...args: any[]) => infer R) ? R : any;
-declare function f1(s: string): {
-    a: number;
-    b: string;
-};
-declare class C {
-    x: number;
-    y: number;
-}
-declare type T10 = ReturnType<() => string>;
-declare type T11 = ReturnType<(s: string) => void>;
-declare type T12 = ReturnType<(<T>() => T)>;
-declare type T13 = ReturnType<(<T extends U, U extends number[]>() => T)>;
-declare type T14 = ReturnType<typeof f1>;
-declare type T15 = ReturnType<typeof C>;
-declare type T16 = ReturnType<any>;
-declare type T17 = ReturnType<never>;
-declare type T18 = ReturnType<string>;
-declare type T19 = ReturnType<Function>;
-declare type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A : any;
-declare type T20 = ArgumentType<() => void>;
-declare type T21 = ArgumentType<(x: string) => number>;
-declare type T22 = ArgumentType<(x?: string) => number>;
-declare type T23 = ArgumentType<(...args: string[]) => number>;
-declare type T24 = ArgumentType<(x: string, y: string) => number>;
-declare type T25 = ArgumentType<Function>;
-declare type T26 = ArgumentType<any>;
-declare type T27 = ArgumentType<never>;
-declare type X1<T extends {
-    x: any;
-    y: any;
-}> = T extends {
-    x: infer X;
-    y: infer Y;
-} ? [X, Y] : any;
-declare type T30 = X1<{
-    x: any;
-    y: any;
-}>;
-declare type T31 = X1<{
-    x: number;
-    y: string;
-}>;
-declare type T32 = X1<{
-    x: number;
-    y: string;
-    z: boolean;
-}>;
-declare type X2<T> = T extends {
-    a: infer U;
-    b: infer U;
-} ? U : never;
-declare type T40 = X2<{}>;
-declare type T41 = X2<{
-    a: string;
-}>;
-declare type T42 = X2<{
-    a: string;
-    b: string;
-}>;
-declare type T43 = X2<{
-    a: number;
-    b: string;
-}>;
-declare type T44 = X2<{
-    a: number;
-    b: string;
-    c: boolean;
-}>;
-declare type X3<T> = T extends {
-    a: (x: infer U) => void;
-    b: (x: infer U) => void;
-} ? U : never;
-declare type T50 = X3<{}>;
-declare type T51 = X3<{
-    a: (x: string) => void;
-}>;
-declare type T52 = X3<{
-    a: (x: string) => void;
-    b: (x: string) => void;
-}>;
-declare type T53 = X3<{
-    a: (x: number) => void;
-    b: (x: string) => void;
-}>;
-declare type T54 = X3<{
-    a: (x: number) => void;
-    b: () => void;
-}>;

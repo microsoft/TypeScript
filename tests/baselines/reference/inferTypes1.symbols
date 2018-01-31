@@ -297,3 +297,21 @@ type T54 = X3<{ a: (x: number) => void, b: () => void }>;  // number
 >x : Symbol(x, Decl(inferTypes1.ts, 67, 20))
 >b : Symbol(b, Decl(inferTypes1.ts, 67, 39))
 
+type T60 = infer U;  // Error
+>T60 : Symbol(T60, Decl(inferTypes1.ts, 67, 57))
+>U : Symbol(U, Decl(inferTypes1.ts, 69, 16))
+
+type T61<T> = infer A extends infer B ? infer C : infer D;  // Error
+>T61 : Symbol(T61, Decl(inferTypes1.ts, 69, 19))
+>T : Symbol(T, Decl(inferTypes1.ts, 70, 9))
+>A : Symbol(A, Decl(inferTypes1.ts, 70, 19))
+>B : Symbol(B, Decl(inferTypes1.ts, 70, 35))
+>C : Symbol(C, Decl(inferTypes1.ts, 70, 45))
+>D : Symbol(D, Decl(inferTypes1.ts, 70, 55))
+
+type T62<T> = U extends (infer U)[] ? U : U;  // Error
+>T62 : Symbol(T62, Decl(inferTypes1.ts, 70, 58))
+>T : Symbol(T, Decl(inferTypes1.ts, 71, 9))
+>U : Symbol(U, Decl(inferTypes1.ts, 71, 30))
+>U : Symbol(U, Decl(inferTypes1.ts, 71, 30))
+
