@@ -1541,7 +1541,6 @@ namespace ts.projectSystem {
                 path: "/scripts/Office/1/powerpoint.js",
                 content: "unspecified"
             };
-
             const files = [file1, minFile, kendoFile1, kendoFile2, kendoFile3, officeFile1, officeFile2];
             const host = createServerHost(files);
             const projectService = createProjectService(host);
