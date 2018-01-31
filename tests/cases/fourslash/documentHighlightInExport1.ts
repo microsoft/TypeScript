@@ -1,6 +1,5 @@
 ﻿/// <reference path='fourslash.ts'/>
 
-// @Filename: file1.ts
 //// class [|C|] {}
 //// [|export|] { [|C|] [|as|] [|D|] };
 
