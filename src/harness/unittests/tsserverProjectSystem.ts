@@ -1541,27 +1541,15 @@ namespace ts.projectSystem {
                 path: "/scripts/Office/1/powerpoint.js",
                 content: "unspecified"
             };
-            const datatablesFile1 = {
-                path: "/js/jquery.datatables.js",
-                content: "unspecified"
-            };
-            const datatablesFile2 = {
-                path: "/js/datatables.js",
-                content: "unspecified"
-            };
-            const datatablesFile3 = {
-                path: "/js/datatables.all.min.js",
-                content: "unspecified"
-            };
 
-            const files = [file1, minFile, kendoFile1, kendoFile2, kendoFile3, officeFile1, officeFile2, datatablesFile1, datatablesFile2, datatablesFile3];
+            const files = [file1, minFile, kendoFile1, kendoFile2, kendoFile3, officeFile1, officeFile2];
             const host = createServerHost(files);
             const projectService = createProjectService(host);
             try {
                 projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles(files.map(f => f.path)) });
                 const proj = projectService.externalProjects[0];
                 assert.deepEqual(proj.getFileNames(/*excludeFilesFromExternalLibraries*/ true), [file1.path]);
-                assert.deepEqual(proj.getTypeAcquisition().include, ["kendo-ui", "office", "datatables.net"]);
+                assert.deepEqual(proj.getTypeAcquisition().include, ["kendo-ui", "office"]);
             } finally {
                 projectService.resetSafeList();
             }
