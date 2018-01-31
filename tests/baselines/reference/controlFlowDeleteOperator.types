@@ -16,9 +16,9 @@ function f() {
 >a : string | number | undefined
 
     x.b;
->x.b : string | number
+>x.b : number
 >x : { a?: string | number | undefined; b: string | number; }
->b : string | number
+>b : number
 
     x.a = 1;
 >x.a = 1 : 1

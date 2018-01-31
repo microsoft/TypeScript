@@ -1,0 +1,25 @@
+=== tests/cases/conformance/controlFlow/controlFlowObjectLiteralDeclaration.ts ===
+type Foo = {
+>Foo : Foo
+
+  bar?: number[];
+>bar : number[] | undefined
+}
+
+let f2: Foo = { bar: [] };
+>f2 : Foo
+>Foo : Foo
+>{ bar: [] } : { bar: never[]; }
+>bar : never[]
+>[] : never[]
+
+f2.bar.push(0)
+>f2.bar.push(0) : number
+>f2.bar.push : (...items: number[]) => number
+>f2.bar : number[]
+>f2 : Foo
+>bar : number[]
+>push : (...items: number[]) => number
+>0 : 0
+
+

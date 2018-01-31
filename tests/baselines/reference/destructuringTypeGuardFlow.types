@@ -38,9 +38,9 @@ const aFoo: foo = { bar: 3, baz: "b", nested: { a: 1, b: "y" } };
 
 if (aFoo.bar && aFoo.nested.b) {
 >aFoo.bar && aFoo.nested.b : string | 0 | null
->aFoo.bar : number | null
+>aFoo.bar : number
 >aFoo : foo
->bar : number | null
+>bar : number
 >aFoo.nested.b : string | null
 >aFoo.nested : { a: number; b: string | null; }
 >aFoo : foo

@@ -1,0 +1,21 @@
+=== tests/cases/conformance/controlFlow/controlFlowObjectLiteralDeclaration.ts ===
+type Foo = {
+>Foo : Symbol(Foo, Decl(controlFlowObjectLiteralDeclaration.ts, 0, 0))
+
+  bar?: number[];
+>bar : Symbol(bar, Decl(controlFlowObjectLiteralDeclaration.ts, 0, 12))
+}
+
+let f2: Foo = { bar: [] };
+>f2 : Symbol(f2, Decl(controlFlowObjectLiteralDeclaration.ts, 4, 3))
+>Foo : Symbol(Foo, Decl(controlFlowObjectLiteralDeclaration.ts, 0, 0))
+>bar : Symbol(bar, Decl(controlFlowObjectLiteralDeclaration.ts, 4, 15))
+
+f2.bar.push(0)
+>f2.bar.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>f2.bar : Symbol(bar, Decl(controlFlowObjectLiteralDeclaration.ts, 0, 12))
+>f2 : Symbol(f2, Decl(controlFlowObjectLiteralDeclaration.ts, 4, 3))
+>bar : Symbol(bar, Decl(controlFlowObjectLiteralDeclaration.ts, 0, 12))
+>push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+
+
