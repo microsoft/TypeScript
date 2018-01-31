@@ -2212,6 +2212,7 @@ declare namespace ts {
         MappedType = 2,
         ReturnType = 4,
         NoConstraints = 8,
+        AlwaysStrict = 16,
     }
     interface InferenceInfo {
         typeParameter: TypeParameter;
