@@ -1,6 +1,5 @@
 // This file contains the build logic for the public repo
 // @ts-check
-/*jshint esversion: 6 */ 
 
 var fs = require("fs");
 var os = require("os");
