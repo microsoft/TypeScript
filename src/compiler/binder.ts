@@ -845,6 +845,11 @@ namespace ts {
             return { flags: FlowFlags.Assignment, antecedent, node };
         }
 
+        function createFlowInitializer(antecedent: FlowNode, node: Expression | VariableDeclaration | BindingElement): FlowNode {
+            setFlowNodeReferenced(antecedent);
+            return { flags: FlowFlags.Initializer, antecedent, node };
+        }
+
         function createFlowArrayMutation(antecedent: FlowNode, node: CallExpression | BinaryExpression): FlowNode {
             setFlowNodeReferenced(antecedent);
             const res: FlowArrayMutation = { flags: FlowFlags.ArrayMutation, antecedent, node };
@@ -1094,8 +1099,9 @@ namespace ts {
                 //
                 // extra edges that we inject allows to control this behavior
                 // if when walking the flow we step on post-finally edge - we can mark matching pre-finally edge as locked so it will be skipped.
-                const preFinallyFlow: PreFinallyFlow = { flags: FlowFlags.PreFinally, antecedent: preTryFlow, lock: {} };
-                addAntecedent(preFinallyLabel, preFinallyFlow);
+                let preFinallyFlow: PreFinallyFlow = { flags: FlowFlags.PreFinally, antecedent: preTryFlow, lock: {} };
+                preFinallyFlow = localInit(preTryFlow, preFinallyLabel, true);
+                // addAntecedent(preFinallyLabel, preFinallyFlow);
 
                 currentFlow = finishFlowLabel(preFinallyLabel);
                 bind(node.finallyBlock);
@@ -1121,6 +1127,19 @@ namespace ts {
             else {
                 currentFlow = finishFlowLabel(preFinallyLabel);
             }
+        }
+
+        function localInit(preTryFlow: FlowNode, preFinallyLabel: FlowLabel, finallyBlock: boolean): PreFinallyFlow {
+            if (finallyBlock) {
+                return preFinallyFlow;
+            }
+            const preFinallyFlow: PreFinallyFlow = { flags: FlowFlags.PreFinally, antecedent: preTryFlow, lock: {} };
+            addAntecedent(preFinallyLabel, preFinallyFlow);
+            if (!finallyBlock) {
+                const afterFinallyFlow: AfterFinallyFlow = { flags: FlowFlags.AfterFinally, antecedent: currentFlow };
+                preFinallyFlow.lock = afterFinallyFlow;
+            }
+            return preFinallyFlow;
         }
 
         function bindSwitchStatement(node: SwitchStatement): void {
@@ -1211,39 +1230,49 @@ namespace ts {
             }
         }
 
-        function bindDestructuringTargetFlow(node: Expression) {
+        function bindDestructuringTargetFlow(node: Expression, SPECIAL?: boolean) {
             if (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken) {
-                bindAssignmentTargetFlow((<BinaryExpression>node).left);
+                bindAssignmentTargetFlow((<BinaryExpression>node).left, SPECIAL);
             }
             else {
-                bindAssignmentTargetFlow(node);
+                bindAssignmentTargetFlow(node, SPECIAL);
             }
         }
 
-        function bindAssignmentTargetFlow(node: Expression) {
+        function bindAssignmentTargetFlow(node: Expression, SPECIAL?: boolean) {
             if (isNarrowableReference(node)) {
-                currentFlow = createFlowAssignment(currentFlow, node);
+                if (SPECIAL) {
+                    currentFlow = createFlowInitializer(currentFlow, node);
+                }
+                else {
+                    currentFlow = createFlowAssignment(currentFlow, node);
+                }
             }
             else if (node.kind === SyntaxKind.ArrayLiteralExpression) {
                 for (const e of (<ArrayLiteralExpression>node).elements) {
                     if (e.kind === SyntaxKind.SpreadElement) {
-                        bindAssignmentTargetFlow((<SpreadElement>e).expression);
+                        bindAssignmentTargetFlow((<SpreadElement>e).expression, SPECIAL);
                     }
                     else {
-                        bindDestructuringTargetFlow(e);
+                        bindDestructuringTargetFlow(e, SPECIAL);
                     }
                 }
             }
             else if (node.kind === SyntaxKind.ObjectLiteralExpression) {
                 for (const p of (<ObjectLiteralExpression>node).properties) {
                     if (p.kind === SyntaxKind.PropertyAssignment) {
-                        bindDestructuringTargetFlow((<PropertyAssignment>p).initializer);
+                        if (SPECIAL && p.name.kind === SyntaxKind.Identifier) {
+                            bindAssignmentTargetFlow(p.name, SPECIAL);
+                        }
+                        else {
+                            bindDestructuringTargetFlow(p.initializer, SPECIAL);
+                        }
                     }
                     else if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                        bindAssignmentTargetFlow((<ShorthandPropertyAssignment>p).name);
+                        bindAssignmentTargetFlow(p.name, SPECIAL);
                     }
                     else if (p.kind === SyntaxKind.SpreadAssignment) {
-                        bindAssignmentTargetFlow((<SpreadAssignment>p).expression);
+                        bindAssignmentTargetFlow(p.expression, SPECIAL);
                     }
                 }
             }
@@ -1344,6 +1373,14 @@ namespace ts {
             }
             else {
                 currentFlow = createFlowAssignment(currentFlow, node);
+                if (isVariableDeclaration(node) &&
+                    node.type &&
+                    node.initializer &&
+                    isIdentifier(node.name) &&
+                    node.initializer.kind === SyntaxKind.ObjectLiteralExpression) {
+                    // should be fine!
+                    bindAssignmentTargetFlow(node.initializer as ObjectLiteralExpression, /*SPECIAL*/ true);
+                }
             }
         }
 

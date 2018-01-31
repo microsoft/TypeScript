@@ -12239,6 +12239,13 @@ namespace ts {
                             continue;
                         }
                     }
+                    else if (flags & FlowFlags.Initializer) {
+                        type = getTypeAtFlowInitializer(flow as FlowInitializer);
+                        if (!type) {
+                            flow = (<FlowInitializer>flow).antecedent;
+                            continue;
+                        }
+                    }
                     else if (flags & FlowFlags.Condition) {
                         type = getTypeAtFlowCondition(<FlowCondition>flow);
                     }
@@ -12287,6 +12294,30 @@ namespace ts {
                 }
             }
 
+            function getTypeAtFlowInitializer(flow: FlowInitializer): Type {
+                const node = flow.node;
+                // TODO: More conditions here to do with object literals and variable declarations
+                // (and actually recursive ones)
+                // node identifier=bar
+                // .parent propertyassignment=bar: []
+                //  .parent objectliteral= { bar: [] }
+                //   .parent variabledeclaration = f2: Foo = { bar: [] }
+                //    .name identifier f2
+                if (isPropertyAccessExpression(reference) &&
+                    isPropertyAssignment(node.parent) &&
+                    isIdentifier(node) &&
+                    isIdentifier((node.parent.parent.parent as VariableDeclaration).name) &&
+                    // isMatchingReference(reference, createPropertyAccess(reference.expression, node))) {
+                    isMatchingReference(reference, createPropertyAccess((node.parent.parent.parent as VariableDeclaration).name as Identifier, node))) {
+                    if (declaredType.flags & TypeFlags.Union) {
+                        return getAssignmentReducedType(declaredType as UnionType, getTypeOfNode((node.parent as PropertyAssignment).initializer));
+                    }
+                    return declaredType;
+                }
+                // initializer doesn't affect reference
+                return undefined;
+            }
+
             function getTypeAtFlowAssignment(flow: FlowAssignment) {
                 const node = flow.node;
                 // Assignments only narrow the computed type if the declared type is a union type. Thus, we
@@ -12315,7 +12346,6 @@ namespace ts {
                 if (containsMatchingReference(reference, node)) {
                     return declaredType;
                 }
-                // Assignment doesn't affect reference
                 return undefined;
             }
 
