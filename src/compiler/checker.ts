@@ -8129,8 +8129,9 @@ namespace ts {
             if (inferTypeParameters) {
                 const inferences = map(inferTypeParameters, createInferenceInfo);
                 // We don't want inferences from constraints as they may cause us to eagerly resolve the
-                // conditional type instead of deferring resolution.
-                inferTypes(inferences, checkType, extendsType, InferencePriority.NoConstraints);
+                // conditional type instead of deferring resolution. Also, we always want strict function
+                // types rules (i.e. proper contravariance) for inferences.
+                inferTypes(inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
                 // We infer 'never' when there are no candidates for a type parameter
                 const inferredTypes = map(inferences, inference => getTypeFromInference(inference) || neverType);
                 const inferenceMapper = createTypeMapper(inferTypeParameters, inferredTypes);
@@ -11510,7 +11511,7 @@ namespace ts {
             }
 
             function inferFromContravariantTypes(source: Type, target: Type) {
-                if (strictFunctionTypes) {
+                if (strictFunctionTypes || priority & InferencePriority.AlwaysStrict) {
                     contravariant = !contravariant;
                     inferFromTypes(source, target);
                     contravariant = !contravariant;

@@ -3884,6 +3884,7 @@ namespace ts {
         MappedType        = 1 << 1,  // Reverse inference for mapped type
         ReturnType        = 1 << 2,  // Inference made from return type of generic function
         NoConstraints     = 1 << 3,  // Don't infer from constraints of instantiable types
+        AlwaysStrict      = 1 << 4,  // Always use strict rules for contravariant inferences
     }
 
     export interface InferenceInfo {
