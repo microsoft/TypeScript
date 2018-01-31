@@ -69,3 +69,7 @@ type T51 = X3<{ a: (x: string) => void }>;  // never
 type T52 = X3<{ a: (x: string) => void, b: (x: string) => void }>;  // string
 type T53 = X3<{ a: (x: number) => void, b: (x: string) => void }>;  // string & number
 type T54 = X3<{ a: (x: number) => void, b: () => void }>;  // number
+
+type T60 = infer U;  // Error
+type T61<T> = infer A extends infer B ? infer C : infer D;  // Error
+type T62<T> = U extends (infer U)[] ? U : U;  // Error
