@@ -363,14 +363,14 @@ function f12() {
 >10 : 10
 >y : boolean
 >false : false
->[1, ["hello", { x: 5, y: true }]] : [number, [string, { x: number; y: boolean; }]]
+>[1, ["hello", { x: 5, y: true }]] : [number, [string, { x: number; y: true; }]]
 >1 : 1
->["hello", { x: 5, y: true }] : [string, { x: number; y: boolean; }]
+>["hello", { x: 5, y: true }] : [string, { x: number; y: true; }]
 >"hello" : "hello"
->{ x: 5, y: true } : { x: number; y: boolean; }
+>{ x: 5, y: true } : { x: number; y: true; }
 >x : number
 >5 : 5
->y : boolean
+>y : true
 >true : true
 
     var a: number;
@@ -433,14 +433,14 @@ function f14([a = 1, [b = "hello", { x, y: c = false }]]) {
 f14([2, ["abc", { x: 0, y: true }]]);
 >f14([2, ["abc", { x: 0, y: true }]]) : void
 >f14 : ([a, [b, { x, y: c }]]: [number, [string, { x: any; y?: boolean; }]]) => void
->[2, ["abc", { x: 0, y: true }]] : [number, [string, { x: number; y: boolean; }]]
+>[2, ["abc", { x: 0, y: true }]] : [number, [string, { x: number; y: true; }]]
 >2 : 2
->["abc", { x: 0, y: true }] : [string, { x: number; y: boolean; }]
+>["abc", { x: 0, y: true }] : [string, { x: number; y: true; }]
 >"abc" : "abc"
->{ x: 0, y: true } : { x: number; y: boolean; }
+>{ x: 0, y: true } : { x: number; y: true; }
 >x : number
 >0 : 0
->y : boolean
+>y : true
 >true : true
 
 f14([2, ["abc", { x: 0 }]]);
@@ -534,8 +534,8 @@ f17({ a: "hello" });
 f17({ c: true });
 >f17({ c: true }) : void
 >f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
->{ c: true } : { c: boolean; }
->c : boolean
+>{ c: true } : { c: true; }
+>c : true
 >true : true
 
 f17(f15());
@@ -818,47 +818,47 @@ function f21() {
 >true : true
 
     [...a] = [1, "hello", true];
->[...a] = [1, "hello", true] : (string | number | boolean)[]
+>[...a] = [1, "hello", true] : (string | number | true)[]
 >[...a] : (string | number | boolean)[]
 >...a : string | number | boolean
 >a : (string | number | boolean)[]
->[1, "hello", true] : (string | number | boolean)[]
+>[1, "hello", true] : (string | number | true)[]
 >1 : 1
 >"hello" : "hello"
 >true : true
 
     [x, ...a] = [1, "hello", true];
->[x, ...a] = [1, "hello", true] : (string | number | boolean)[]
+>[x, ...a] = [1, "hello", true] : (string | number | true)[]
 >[x, ...a] : (string | number | boolean)[]
 >x : string | number | boolean
 >...a : string | number | boolean
 >a : (string | number | boolean)[]
->[1, "hello", true] : (string | number | boolean)[]
+>[1, "hello", true] : (string | number | true)[]
 >1 : 1
 >"hello" : "hello"
 >true : true
 
     [x, y, ...a] = [1, "hello", true];
->[x, y, ...a] = [1, "hello", true] : (string | number | boolean)[]
+>[x, y, ...a] = [1, "hello", true] : (string | number | true)[]
 >[x, y, ...a] : (string | number | boolean)[]
 >x : string | number | boolean
 >y : string | number | boolean
 >...a : string | number | boolean
 >a : (string | number | boolean)[]
->[1, "hello", true] : (string | number | boolean)[]
+>[1, "hello", true] : (string | number | true)[]
 >1 : 1
 >"hello" : "hello"
 >true : true
 
     [x, y, z, ...a] = [1, "hello", true];
->[x, y, z, ...a] = [1, "hello", true] : (string | number | boolean)[]
+>[x, y, z, ...a] = [1, "hello", true] : (string | number | true)[]
 >[x, y, z, ...a] : (string | number | boolean)[]
 >x : string | number | boolean
 >y : string | number | boolean
 >z : string | number | boolean
 >...a : string | number | boolean
 >a : (string | number | boolean)[]
->[1, "hello", true] : (string | number | boolean)[]
+>[1, "hello", true] : (string | number | true)[]
 >1 : 1
 >"hello" : "hello"
 >true : true
