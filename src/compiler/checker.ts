@@ -2695,6 +2695,9 @@ namespace ts {
             if (flags & SymbolFormatFlags.WriteTypeParametersOrArguments) {
                 nodeFlags |= NodeBuilderFlags.WriteTypeParametersInQualifiedName;
             }
+            if (flags & SymbolFormatFlags.UseAliasDefinedOutsideCurrentScope) {
+                nodeFlags |= NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+            }
             const builder = flags & SymbolFormatFlags.AllowAnyNodeKind ? nodeBuilder.symbolToExpression : nodeBuilder.symbolToEntityName;
             return writer ? symbolToStringWorker(writer).getText() : usingSingleLineStringWriter(symbolToStringWorker);
 
@@ -3456,7 +3459,14 @@ namespace ts {
                 function createEntityNameFromSymbolChain(chain: Symbol[], index: number): EntityName {
                     const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
                     const symbol = chain[index];
+
+                    if (index === 0) {
+                        context.flags |= NodeBuilderFlags.InInitialEntityName;
+                    }
                     const symbolName = getNameOfSymbolAsWritten(symbol, context);
+                    if (index === 0) {
+                        context.flags ^= NodeBuilderFlags.InInitialEntityName;
+                    }
                     const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                     identifier.symbol = symbol;
 
@@ -3473,7 +3483,13 @@ namespace ts {
                     const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
                     const symbol = chain[index];
 
+                    if (index === 0) {
+                        context.flags |= NodeBuilderFlags.InInitialEntityName;
+                    }
                     let symbolName = getNameOfSymbolAsWritten(symbol, context);
+                    if (index === 0) {
+                        context.flags ^= NodeBuilderFlags.InInitialEntityName;
+                    }
                     let firstChar = symbolName.charCodeAt(0);
                     const canUsePropertyAccess = isIdentifierStart(firstChar, languageVersion);
                     if (index === 0 || canUsePropertyAccess) {
@@ -3586,6 +3602,10 @@ namespace ts {
             symbolStack: Symbol[] | undefined;
         }
 
+        function isDefaultBindingContext(location: Node) {
+            return location.kind === SyntaxKind.SourceFile || isAmbientModule(location);
+        }
+
         /**
          * Gets a human-readable name for a symbol.
          * Should *not* be used for the right-hand side of a `.` -- use `symbolName(symbol)` for that instead.
@@ -3594,7 +3614,13 @@ namespace ts {
          * It will also use a representation of a number as written instead of a decimal form, e.g. `0o11` instead of `9`.
          */
         function getNameOfSymbolAsWritten(symbol: Symbol, context?: NodeBuilderContext): string {
-            if (context && context.flags & NodeBuilderFlags.WriteDefaultSymbolWithoutName && symbol.escapedName === InternalSymbolName.Default) {
+            if (context && symbol.escapedName === InternalSymbolName.Default && !(context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope) &&
+                // If it's not the first part of an entity name, it must print as `default`
+                (!(context.flags & NodeBuilderFlags.InInitialEntityName) ||
+                // if the symbol is synthesized, it will only be referenced externally it must print as `default`
+                !symbol.declarations ||
+                // if not in the same binding context (source file, module declaration), it must print as `default`
+                (context.enclosingDeclaration && findAncestor(symbol.declarations[0], isDefaultBindingContext) !== findAncestor(context.enclosingDeclaration, isDefaultBindingContext)))) {
                 return "default";
             }
             if (symbol.declarations && symbol.declarations.length) {
