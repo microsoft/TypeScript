@@ -1454,7 +1454,13 @@ namespace ts {
 
     export function cast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut {
         if (value !== undefined && test(value)) return value;
-        Debug.fail(`Invalid cast. The supplied value did not pass the test '${Debug.getFunctionName(test)}'.`);
+
+        if (value && typeof (value as any).kind === "number") {
+            Debug.fail(`Invalid cast. The supplied ${(ts as any).SyntaxKind[(value as any).kind]} did not pass the test '${Debug.getFunctionName(test)}'.`);
+        }
+        else {
+            Debug.fail(`Invalid cast. The supplied value did not pass the test '${Debug.getFunctionName(test)}'.`);
+        }
     }
 
     /** Does nothing. */
