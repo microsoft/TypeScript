@@ -3978,7 +3978,7 @@ declare namespace ts {
 }
 declare namespace ts {
     type DiagnosticReporter = (diagnostic: Diagnostic) => void;
-    type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string) => void;
+    type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions) => void;
     type CreateProgram<T extends BuilderProgram> = (rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: T) => T;
     interface WatchCompilerHost<T extends BuilderProgram> {
         /**
@@ -3988,7 +3988,7 @@ declare namespace ts {
         /** If provided, callback to invoke after every new program creation */
         afterProgramCreate?(program: T): void;
         /** If provided, called with Diagnostic message that informs about change in watch status */
-        onWatchStatusChange?(diagnostic: Diagnostic, newLine: string): void;
+        onWatchStatusChange?(diagnostic: Diagnostic, newLine: string, options: CompilerOptions): void;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
         getCurrentDirectory(): string;
