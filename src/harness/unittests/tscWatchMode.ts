@@ -2102,35 +2102,45 @@ declare module "fs" {
     });
 
     describe("tsc-watch console clearing", () => {
-        it("clears the console when it starts", () => {
+        function checkConsoleClearing(diagnostics: boolean, extendedDiagnostics: boolean) {
             const file = {
                 path: "f.ts",
                 content: ""
             };
-            const host = createWatchedSystem([file]);
+            const files = [file];
+            const host = createWatchedSystem(files);
+            let clearCount: number | undefined;
+            checkConsoleClears();
 
-            createWatchOfFilesAndCompilerOptions([file.path], host);
+            createWatchOfFilesAndCompilerOptions([file.path], host, { diagnostics, extendedDiagnostics });
+            checkConsoleClears();
+
+            file.content = "//";
+            host.reloadFS(files);
             host.runQueuedTimeoutCallbacks();
 
-            host.checkScreenClears(1);
+            checkConsoleClears();
+
+            function checkConsoleClears() {
+                if (clearCount === undefined) {
+                    clearCount = 0;
+                }
+                else if (!diagnostics && !extendedDiagnostics) {
+                    clearCount++;
+                }
+                host.checkScreenClears(clearCount);
+                return clearCount;
+            }
+        }
+
+        it("without --diagnostics or --extendedDiagnostics", () => {
+            checkConsoleClearing(/*diagnostics*/ false, /*extendedDiagnostics*/ false);
         });
-
-        it("clears the console on recompile", () => {
-            const file = {
-                path: "f.ts",
-                content: ""
-            };
-            const host = createWatchedSystem([file]);
-            createWatchOfFilesAndCompilerOptions([file.path], host);
-
-            const modifiedFile = {
-                ...file,
-                content: "//"
-            };
-            host.reloadFS([modifiedFile]);
-            host.runQueuedTimeoutCallbacks();
-
-            host.checkScreenClears(2);
+        it("with --diagnostics", () => {
+            checkConsoleClearing(/*diagnostics*/ true, /*extendedDiagnostics*/ false);
+        });
+        it("with --extendedDiagnostics", () => {
+            checkConsoleClearing(/*diagnostics*/ false, /*extendedDiagnostics*/ true);
         });
     });
 }
