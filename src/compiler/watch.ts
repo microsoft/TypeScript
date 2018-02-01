@@ -31,8 +31,11 @@ namespace ts {
         };
     }
 
-    function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic) {
-        if (system.clearScreen && diagnostic.code !== Diagnostics.Compilation_complete_Watching_for_file_changes.code) {
+    function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions) {
+        if (system.clearScreen &&
+            diagnostic.code !== Diagnostics.Compilation_complete_Watching_for_file_changes.code &&
+            !options.extendedDiagnostics &&
+            !options.diagnostics) {
             system.clearScreen();
         }
     }
@@ -42,18 +45,18 @@ namespace ts {
      */
     export function createWatchStatusReporter(system: System, pretty?: boolean): WatchStatusReporter {
         return pretty ?
-        (diagnostic: Diagnostic, newLine: string) => {
-            clearScreenIfNotWatchingForFileChanges(system, diagnostic);
-            let output = `[${ formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey) }] `;
-            output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine + newLine}`;
-            system.write(output);
-        } :
-        (diagnostic: Diagnostic, newLine: string) => {
-            clearScreenIfNotWatchingForFileChanges(system, diagnostic);
-            let output = new Date().toLocaleTimeString() + " - ";
-            output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine + newLine}`;
-            system.write(output);
-        };
+            (diagnostic, newLine, options) => {
+                clearScreenIfNotWatchingForFileChanges(system, diagnostic, options);
+                let output = `[${formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey)}] `;
+                output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine + newLine}`;
+                system.write(output);
+            } :
+            (diagnostic, newLine, options) => {
+                clearScreenIfNotWatchingForFileChanges(system, diagnostic, options);
+                let output = new Date().toLocaleTimeString() + " - ";
+                output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine + newLine}`;
+                system.write(output);
+            };
     }
 
     /**
@@ -254,7 +257,7 @@ namespace ts {
 
 namespace ts {
     export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
-    export type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string) => void;
+    export type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions) => void;
     export type CreateProgram<T extends BuilderProgram> = (rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: T) => T;
     export interface WatchCompilerHost<T extends BuilderProgram> {
         /**
@@ -264,7 +267,7 @@ namespace ts {
         /** If provided, callback to invoke after every new program creation */
         afterProgramCreate?(program: T): void;
         /** If provided, called with Diagnostic message that informs about change in watch status */
-        onWatchStatusChange?(diagnostic: Diagnostic, newLine: string): void;
+        onWatchStatusChange?(diagnostic: Diagnostic, newLine: string, options: CompilerOptions): void;
 
         // Only for testing
         /*@internal*/
@@ -725,7 +728,7 @@ namespace ts {
 
         function reportWatchDiagnostic(message: DiagnosticMessage) {
             if (host.onWatchStatusChange) {
-                host.onWatchStatusChange(createCompilerDiagnostic(message), newLine);
+                host.onWatchStatusChange(createCompilerDiagnostic(message), newLine, compilerOptions);
             }
         }
 
