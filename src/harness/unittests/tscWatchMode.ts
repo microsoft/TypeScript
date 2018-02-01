@@ -766,6 +766,29 @@ namespace ts.tscWatch {
                 // This should be 0
                 host.checkTimeoutQueueLengthAndRun(0);
             });
+
+            it("shouldnt report error about unused function incorrectly when file changes from global to module", () => {
+                const getFileContent = (asModule: boolean) => `
+                        function one() {}
+                        ${asModule ? "export " : ""}function two() {
+                          return function three() {
+                            one();
+                          }
+                        }`;
+                const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                    "/a/b/file.ts": getFileContent(/*asModule*/ false)
+                });
+                const watch = createWatchOfFilesAndCompilerOptions(["/a/b/file.ts"], host, {
+                    noUnusedLocals: true
+                });
+                checkProgramActualFiles(watch(), ["/a/b/file.ts", fakes.FakeServerHost.libPath]);
+                checkOutputErrors(host, [], ExpectedOutputErrorsPosition.AfterCompilationStarting);
+
+                host.writeFile("/a/b/file.ts", getFileContent(/*asModule*/ true));
+                host.runQueuedTimeoutCallbacks();
+                checkProgramActualFiles(watch(), ["/a/b/file.ts", fakes.FakeServerHost.libPath]);
+                checkOutputErrors(host, [], ExpectedOutputErrorsPosition.AfterFileChangeDetected);
+            });
         });
 
         describe("emit once", () => {
@@ -1525,30 +1548,44 @@ namespace ts.tscWatch {
                     .revoke();
             });
         });
-    });
 
-    describe("tsc-watch console clearing", () => {
-        it("clears the console when it starts", () => {
-            const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
-                "/a/f.ts": "",
+        describe("console clearing", () => {
+            function checkConsoleClearing(diagnostics: boolean, extendedDiagnostics: boolean) {
+                const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
+                    "/a/f.ts": ""
+                });
+                let clearCount: number | undefined;
+                checkConsoleClears();
+
+                createWatchOfFilesAndCompilerOptions(["/a/f.ts"], host, { diagnostics, extendedDiagnostics });
+                checkConsoleClears();
+
+                host.writeFile("/a/f.ts", "//");
+                host.runQueuedTimeoutCallbacks();
+
+                checkConsoleClears();
+
+                function checkConsoleClears() {
+                    if (clearCount === undefined) {
+                        clearCount = 0;
+                    }
+                    else if (!diagnostics && !extendedDiagnostics) {
+                        clearCount++;
+                    }
+                    host.checkScreenClears(clearCount);
+                    return clearCount;
+                }
+            }
+
+            it("without --diagnostics or --extendedDiagnostics", () => {
+                checkConsoleClearing(/*diagnostics*/ false, /*extendedDiagnostics*/ false);
             });
-
-            createWatchOfFilesAndCompilerOptions(["/a/f.ts"], host);
-            host.runQueuedTimeoutCallbacks();
-
-            host.checkScreenClears(1);
-        });
-
-        it("clears the console on recompile", () => {
-            const host = new fakes.FakeServerHost({ lib: true }, /*files*/ {
-                "/a/f.ts": "",
+            it("with --diagnostics", () => {
+                checkConsoleClearing(/*diagnostics*/ true, /*extendedDiagnostics*/ false);
             });
-            createWatchOfFilesAndCompilerOptions(["/a/f.ts"], host);
-
-            host.vfs.writeFileSync("/a/f.ts", "//");
-            host.runQueuedTimeoutCallbacks();
-
-            host.checkScreenClears(2);
+            it("with --extendedDiagnostics", () => {
+                checkConsoleClearing(/*diagnostics*/ false, /*extendedDiagnostics*/ true);
+            });
         });
     });
 }

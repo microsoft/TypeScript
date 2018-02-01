@@ -63,7 +63,6 @@ namespace ts.projectSystem {
             // both files exist - expect no errors
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             const diags3 = sendCompilerOptionsDiagnosticsRequest(session, { projectFileName }, /*seq*/ 2);
-            console.log(diags3);
             checkDiagnosticsWithLinePos(diags3, []);
         });
 

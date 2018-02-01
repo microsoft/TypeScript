@@ -2863,6 +2863,15 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
+        public verifyNoDocumentHighlights(startRange: Range) {
+            this.goToRangeStart(startRange);
+            const documentHighlights = this.getDocumentHighlightsAtCurrentPosition([this.activeFile.fileName]);
+            const numHighlights = ts.length(documentHighlights);
+            if (numHighlights > 0) {
+                this.raiseError(`verifyNoDocumentHighlights failed - unexpectedly got ${numHighlights} highlights`);
+            }
+        }
+
         private verifyDocumentHighlights(expectedRanges: Range[], fileNames: string[] = [this.activeFile.fileName]) {
             const documentHighlights = this.getDocumentHighlightsAtCurrentPosition(fileNames) || [];
 
@@ -4269,6 +4278,10 @@ namespace FourSlashInterface {
 
         public documentHighlightsOf(startRange: FourSlash.Range, ranges: FourSlash.Range[]) {
             this.state.verifyDocumentHighlightsOf(startRange, ranges);
+        }
+
+        public noDocumentHighlights(startRange: FourSlash.Range) {
+            this.state.verifyNoDocumentHighlights(startRange);
         }
 
         public completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]) {
