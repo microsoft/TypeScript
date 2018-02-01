@@ -34,30 +34,30 @@ class Bug {
 >{} : {}
 
         this.values['comments'] = { italic: true };
->this.values['comments'] = { italic: true } : { italic: boolean; }
+>this.values['comments'] = { italic: true } : { italic: true; }
 >this.values['comments'] : IOptions
 >this.values : IMap
 >this : this
 >values : IMap
 >'comments' : "comments"
->{ italic: true } : { italic: boolean; }
->italic : boolean
+>{ italic: true } : { italic: true; }
+>italic : true
 >true : true
     }
     shouldBeOK() {
 >shouldBeOK : () => void
 
         this.values = {
->this.values = {            comments: { italic: true }        } : { comments: { italic: boolean; }; }
+>this.values = {            comments: { italic: true }        } : { comments: { italic: true; }; }
 >this.values : IMap
 >this : this
 >values : IMap
->{            comments: { italic: true }        } : { comments: { italic: boolean; }; }
+>{            comments: { italic: true }        } : { comments: { italic: true; }; }
 
             comments: { italic: true }
->comments : { italic: boolean; }
->{ italic: true } : { italic: boolean; }
->italic : boolean
+>comments : { italic: true; }
+>{ italic: true } : { italic: true; }
+>italic : true
 >true : true
 
         };

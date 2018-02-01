@@ -139,12 +139,12 @@ amb = { tag: "A" }
 >"A" : "A"
 
 amb = { tag: "A", z: true }
->amb = { tag: "A", z: true } : { tag: "A"; z: boolean; }
+>amb = { tag: "A", z: true } : { tag: "A"; z: true; }
 >amb : Ambiguous
->{ tag: "A", z: true } : { tag: "A"; z: boolean; }
+>{ tag: "A", z: true } : { tag: "A"; z: true; }
 >tag : "A"
 >"A" : "A"
->z : boolean
+>z : true
 >true : true
 
 type Overlapping =

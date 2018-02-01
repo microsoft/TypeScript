@@ -18960,13 +18960,9 @@ namespace ts {
 
         function isLiteralOfContextualType(candidateType: Type, contextualType: Type): boolean {
             if (contextualType) {
-                if (contextualType.flags & TypeFlags.UnionOrIntersection && !(contextualType.flags & TypeFlags.Boolean)) {
-                    // If the contextual type is a union containing both of the 'true' and 'false' types we
-                    // don't consider it a literal context for boolean literals.
+                if (contextualType.flags & TypeFlags.UnionOrIntersection) {
                     const types = (<UnionType>contextualType).types;
-                    return some(types, t =>
-                        !(t.flags & TypeFlags.BooleanLiteral && containsType(types, trueType) && containsType(types, falseType)) &&
-                        isLiteralOfContextualType(candidateType, t));
+                    return some(types, t => isLiteralOfContextualType(candidateType, t));
                 }
                 if (contextualType.flags & TypeFlags.TypeVariable) {
                     // If the contextual type is a type variable constrained to a primitive type, consider
