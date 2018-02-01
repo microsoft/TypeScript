@@ -1086,6 +1086,33 @@ namespace ts.tscWatch {
             // This should be 0
             host.checkTimeoutQueueLengthAndRun(0);
         });
+
+        it("shouldnt report error about unused function incorrectly when file changes from global to module", () => {
+            const getFileContent = (asModule: boolean) => `
+                    function one() {}
+                    ${asModule ? "export " : ""}function two() {
+                      return function three() {
+                        one();
+                      }
+                    }`;
+            const file: FileOrFolder = {
+                path: "/a/b/file.ts",
+                content: getFileContent(/*asModule*/ false)
+            };
+            const files = [file, libFile];
+            const host = createWatchedSystem(files);
+            const watch = createWatchOfFilesAndCompilerOptions([file.path], host, {
+                noUnusedLocals: true
+            });
+            checkProgramActualFiles(watch(), files.map(file => file.path));
+            checkOutputErrors(host, [], ExpectedOutputErrorsPosition.AfterCompilationStarting);
+
+            file.content = getFileContent(/*asModule*/ true);
+            host.reloadFS(files);
+            host.runQueuedTimeoutCallbacks();
+            checkProgramActualFiles(watch(), files.map(file => file.path));
+            checkOutputErrors(host, [], ExpectedOutputErrorsPosition.AfterFileChangeDetected);
+        });
     });
 
     describe("tsc-watch emit with outFile or out setting", () => {
