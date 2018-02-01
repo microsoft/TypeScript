@@ -1799,7 +1799,6 @@ declare namespace ts {
         None = 0,
         NoTruncation = 1,
         WriteArrayAsGenericType = 2,
-        WriteDefaultSymbolWithoutName = 4,
         UseStructuralFallback = 8,
         WriteTypeArgumentsOfSignature = 32,
         UseFullyQualifiedType = 64,
@@ -1821,12 +1820,12 @@ declare namespace ts {
         IgnoreErrors = 3112960,
         InObjectTypeLiteral = 4194304,
         InTypeAlias = 8388608,
+        InInitialEntityName = 16777216,
     }
     enum TypeFormatFlags {
         None = 0,
         NoTruncation = 1,
         WriteArrayAsGenericType = 2,
-        WriteDefaultSymbolWithoutName = 4,
         UseStructuralFallback = 8,
         WriteTypeArgumentsOfSignature = 32,
         UseFullyQualifiedType = 64,
@@ -1844,13 +1843,14 @@ declare namespace ts {
         InFirstTypeArgument = 4194304,
         InTypeAlias = 8388608,
         /** @deprecated */ WriteOwnNameForAnyLike = 0,
-        NodeBuilderFlagsMask = 9469295,
+        NodeBuilderFlagsMask = 9469291,
     }
     enum SymbolFormatFlags {
         None = 0,
         WriteTypeParametersOrArguments = 1,
         UseOnlyExternalAliasing = 2,
         AllowAnyNodeKind = 4,
+        UseAliasDefinedOutsideCurrentScope = 8,
     }
     /**
      * @deprecated
