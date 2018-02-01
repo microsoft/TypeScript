@@ -416,7 +416,7 @@ namespace ts {
         hasInvalidatedResolution: HasInvalidatedResolution,
         hasChangedAutomaticTypeDirectiveNames: boolean,
     ): boolean {
-        // If we haven't create a program yet or has changed automatic type directives, then it is not up-to-date
+        // If we haven't created a program yet or have changed automatic type directives, then it is not up-to-date
         if (!program || hasChangedAutomaticTypeDirectiveNames) {
             return false;
         }
@@ -457,10 +457,10 @@ namespace ts {
     }
 
     /**
-     * Determined if source file needs to be re-created even if its text hasnt changed
+     * Determined if source file needs to be re-created even if its text hasn't changed
      */
     function shouldProgramCreateNewSourceFiles(program: Program, newOptions: CompilerOptions) {
-        // If any of these options change, we cant reuse old source file even if version match
+        // If any of these options change, we can't reuse old source file even if version match
         // The change in options like these could result in change in syntax tree change
         const oldOptions = program && program.getCompilerOptions();
         return oldOptions && (
