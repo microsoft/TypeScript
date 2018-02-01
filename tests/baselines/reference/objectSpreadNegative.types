@@ -278,10 +278,10 @@ let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
 >1 : 1
 >b : string
 >'yes' : "yes"
->{ c: 'no', d: false } : { c: string; d: boolean; }
+>{ c: 'no', d: false } : { c: string; d: false; }
 >c : string
 >'no' : "no"
->d : boolean
+>d : false
 >false : false
 
 let overlap: { id: string, a: number, b: string } =
@@ -327,10 +327,10 @@ let overwriteId: { id: string, a: number, c: number, d: string } =
     f({ a: 1, id: true }, { c: 1, d: 'no' })
 >f({ a: 1, id: true }, { c: 1, d: 'no' }) : any
 >f : <T, U>(t: T, u: U) => any
->{ a: 1, id: true } : { a: number; id: boolean; }
+>{ a: 1, id: true } : { a: number; id: true; }
 >a : number
 >1 : 1
->id : boolean
+>id : true
 >true : true
 >{ c: 1, d: 'no' } : { c: number; d: string; }
 >c : number
