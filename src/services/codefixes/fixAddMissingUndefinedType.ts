@@ -22,7 +22,7 @@ namespace ts.codefix {
                     return;
                 }
 
-                addUndefinedType(changes, diag.file, propertyDeclaration, propertyDeclaration.type);
+                addUndefinedType(changes, diag.file, propertyDeclaration);
             });
         },
     });
@@ -43,15 +43,14 @@ namespace ts.codefix {
     }
 
     function getActionsForAddMissingUndefinedType (context: CodeFixContext, token: Identifier, propertyDeclaration: PropertyDeclaration): CodeFixAction[] | undefined {
-        const typeNode = propertyDeclaration.type;
         const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Declare_property_0), [token.text]);
-        const changes = textChanges.ChangeTracker.with(context, t => addUndefinedType(t, context.sourceFile, propertyDeclaration, typeNode));
+        const changes = textChanges.ChangeTracker.with(context, t => addUndefinedType(t, context.sourceFile, propertyDeclaration));
         const action = { description, changes, fixId };
         return [ action ];
     }
 
-    function addUndefinedType(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration, typeNode: TypeNode): void {
-        const newTypeNode = createUnionTypeNode([typeNode, createKeywordTypeNode(SyntaxKind.UndefinedKeyword)]);
+    function addUndefinedType(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration): void {
+        const newTypeNode = createUnionTypeNode([propertyDeclaration.type, createKeywordTypeNode(SyntaxKind.UndefinedKeyword)]);
         changeTracker.replaceNode(propertyDeclarationSourceFile, propertyDeclaration.type, newTypeNode);
     }
 }
