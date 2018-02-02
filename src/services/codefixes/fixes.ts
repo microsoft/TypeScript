@@ -18,4 +18,5 @@
 /// <reference path='inferFromUsage.ts' />
 /// <reference path="fixInvalidImportSyntax.ts" />
 /// <reference path="fixAddMissingUndefinedType.ts" />
+/// <reference path="fixAddMissingDefiniteAssignmentAssertions.ts" />
 

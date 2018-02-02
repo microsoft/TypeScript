@@ -350,6 +350,11 @@ namespace ts.textChanges {
             this.replaceWithSingle(sourceFile, pos, pos, createToken(modifier), { suffix: " " });
         }
 
+        public insertTokenAfter(sourceFile: SourceFile, token: SyntaxKind, after: Node) {
+            const pos = after.getEnd();
+            this.replaceWithSingle(sourceFile, pos, pos, createToken(token), {});
+        }
+
         public changeIdentifierToPropertyAccess(sourceFile: SourceFile, prefix: string, node: Identifier): void {
             const startPosition = getAdjustedStartPosition(sourceFile, node, {}, Position.Start);
             this.replaceWithSingle(sourceFile, startPosition, startPosition, createPropertyAccess(createIdentifier(prefix), ""), {});
