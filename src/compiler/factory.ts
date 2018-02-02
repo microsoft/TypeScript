@@ -4295,7 +4295,7 @@ namespace ts {
         return emitNode && emitNode.externalHelpersModuleName;
     }
 
-    export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean) {
+    export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStarOrImportDefault?: boolean) {
         if (compilerOptions.importHelpers && isEffectiveExternalModule(node, compilerOptions)) {
             const externalHelpersModuleName = getExternalHelpersModuleName(node);
             if (externalHelpersModuleName) {
@@ -4303,7 +4303,7 @@ namespace ts {
             }
 
             const moduleKind = getEmitModuleKind(compilerOptions);
-            let create = hasExportStarsToExportValues
+            let create = (hasExportStarsToExportValues || (compilerOptions.esModuleInterop && hasImportStarOrImportDefault))
                 && moduleKind !== ModuleKind.System
                 && moduleKind !== ModuleKind.ES2015
                 && moduleKind !== ModuleKind.ESNext;
