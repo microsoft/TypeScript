@@ -2882,6 +2882,11 @@ namespace ts {
             throw e;
         }
 
+        export function assertDefined<T>(value: T | null | undefined, message?: string): T {
+            assert(value !== undefined && value !== null, message);
+            return value;
+        }
+
         export function assertNever(member: never, message?: string, stackCrawlMark?: AnyFunction): never {
             return fail(message || `Illegal value: ${member}`, stackCrawlMark || assertNever);
         }
