@@ -13341,13 +13341,13 @@ namespace ts {
                         .expression;                             // x
                     const classSymbol = checkExpression(className).symbol;
                     if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
-                        return getInferredClassType(classSymbol);
+                        return getFlowTypeOfReference(node, getInferredClassType(classSymbol));
                     }
                 }
 
                 const thisType = getThisTypeOfDeclaration(container) || getContextualThisParameterType(container);
                 if (thisType) {
-                    return thisType;
+                    return getFlowTypeOfReference(node, thisType);
                 }
             }
 
@@ -13360,7 +13360,7 @@ namespace ts {
             if (isInJavaScriptFile(node)) {
                 const type = getTypeForThisExpressionFromJSDoc(container);
                 if (type && type !== unknownType) {
-                    return type;
+                    return getFlowTypeOfReference(node, type);
                 }
             }
         }
