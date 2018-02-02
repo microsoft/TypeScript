@@ -8249,7 +8249,7 @@ namespace ts {
             if (isValidESSymbolDeclaration(node)) {
                 const symbol = getSymbolOfNode(node);
                 const links = getSymbolLinks(symbol);
-                return links.type || (links.type = createUniqueESSymbolType(symbol));
+                return links.uniqueESSymbolType || (links.uniqueESSymbolType = createUniqueESSymbolType(symbol));
             }
             return esSymbolType;
         }
