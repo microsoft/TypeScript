@@ -2872,8 +2872,8 @@ namespace ts {
             throw e;
         }
 
-        export function assertDefined<T>(value: T | null | undefined): T {
-            assert(value !== undefined && value !== null);
+        export function assertDefined<T>(value: T | null | undefined, message?: string): T {
+            assert(value !== undefined && value !== null, message);
             return value;
         }
 

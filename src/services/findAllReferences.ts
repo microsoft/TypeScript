@@ -366,7 +366,7 @@ namespace ts.FindAllReferences.Core {
 
         if (node.kind === SyntaxKind.DefaultKeyword) {
             addReference(node, symbol, node, state);
-            searchForImportsOfExport(node, symbol, { exportingModuleSymbol: Debug.assertDefined(symbol.parent), exportKind: ExportKind.Default }, state);
+            searchForImportsOfExport(node, symbol, { exportingModuleSymbol: Debug.assertDefined(symbol.parent, "Expected export symbol to have a parent"), exportKind: ExportKind.Default }, state);
         }
         else {
             const search = state.createSearch(node, symbol, /*comingFrom*/ undefined, { allSearchSymbols: populateSearchSymbolSet(symbol, node, checker, options.implementations) });
