@@ -30,7 +30,7 @@ namespace ts.codefix {
     }
 
     interface ImportCodeFixContext extends SymbolContext {
-        symbolToken: Identifier | undefined;
+        symbolToken: Node;
         program: Program;
         checker: TypeChecker;
         compilerOptions: CompilerOptions;
@@ -161,12 +161,13 @@ namespace ts.codefix {
         };
     }
 
-    function convertToImportCodeFixContext(context: CodeFixContext): ImportCodeFixContext {
+    function convertToImportCodeFixContext(context: CodeFixContext): ImportCodeFixContext & { isJsxNamespace: boolean } {
         const useCaseSensitiveFileNames = context.host.useCaseSensitiveFileNames ? context.host.useCaseSensitiveFileNames() : false;
         const { program } = context;
         const checker = program.getTypeChecker();
-        // This will always be an Identifier, since the diagnostics we fix only fail on identifiers.
-        const symbolToken = cast(getTokenAtPosition(context.sourceFile, context.span.start, /*includeJsDocComment*/ false), isIdentifier);
+
+        const symbolToken = getTokenAtPosition(context.sourceFile, context.span.start, /*includeJsDocComment*/ false);
+        const isJsxNamespace = isJsxOpeningLikeElement(symbolToken.parent) && symbolToken.parent.tagName === symbolToken;
         return {
             host: context.host,
             formatContext: context.formatContext,
@@ -176,8 +177,9 @@ namespace ts.codefix {
             compilerOptions: program.getCompilerOptions(),
             cachedImportDeclarations: [],
             getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames),
-            symbolName: symbolToken.getText(),
+            symbolName: isJsxNamespace ? checker.getJsxNamespace() : cast(symbolToken, isIdentifier).text,
             symbolToken,
+            isJsxNamespace,
         };
     }
 
@@ -193,7 +195,7 @@ namespace ts.codefix {
         const declarations = flatMap(moduleSymbols, moduleSymbol =>
             getImportDeclarations(moduleSymbol, context.checker, context.sourceFile, context.cachedImportDeclarations));
         const actions: ImportCodeAction[] = [];
-        if (context.symbolToken) {
+        if (context.symbolToken && isIdentifier(context.symbolToken)) {
             // It is possible that multiple import statements with the same specifier exist in the file.
             // e.g.
             //
@@ -726,29 +728,16 @@ namespace ts.codefix {
     function getImportCodeActions(context: CodeFixContext): ImportCodeAction[] {
         const importFixContext = convertToImportCodeFixContext(context);
         return context.errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code
-            ? getActionsForUMDImport(importFixContext)
+            ? getActionsForUMDImport(importFixContext, importFixContext.isJsxNamespace)
             : getActionsForNonUMDImport(importFixContext, context.program.getSourceFiles(), context.cancellationToken);
     }
 
-    function getActionsForUMDImport(context: ImportCodeFixContext): ImportCodeAction[] {
-        const { checker, symbolToken, compilerOptions } = context;
-        const umdSymbol = checker.getSymbolAtLocation(symbolToken);
-        let symbol: ts.Symbol;
-        let symbolName: string;
-        if (umdSymbol.flags & ts.SymbolFlags.Alias) {
-            symbol = checker.getAliasedSymbol(umdSymbol);
-            symbolName = context.symbolName;
-        }
-        else if (isJsxOpeningLikeElement(symbolToken.parent) && symbolToken.parent.tagName === symbolToken) {
-            // The error wasn't for the symbolAtLocation, it was for the JSX tag itself, which needs access to e.g. `React`.
-            symbol = checker.getAliasedSymbol(checker.resolveName(checker.getJsxNamespace(), symbolToken.parent.tagName, SymbolFlags.Value, /*excludeGlobals*/ false));
-            symbolName = symbol.name;
-        }
-        else {
-            throw Debug.fail("Either the symbol or the JSX namespace should be a UMD global if we got here");
-        }
-
-        return getCodeActionForImport(symbol, { ...context, symbolName, kind: getUmdImportKind(compilerOptions) });
+    function getActionsForUMDImport(context: ImportCodeFixContext, isJsxNamespace: boolean): ImportCodeAction[] {
+        const { checker, symbolName, symbolToken, compilerOptions } = context;
+        const symbol = skipAlias(
+            isJsxNamespace ? checker.resolveName(symbolName, /*location*/ undefined, SymbolFlags.Value, /*excludeGlobals*/ false) : checker.getSymbolAtLocation(symbolToken),
+            checker);
+        return getCodeActionForImport(symbol, { ...context, kind: getUmdImportKind(compilerOptions) });
     }
     function getUmdImportKind(compilerOptions: CompilerOptions) {
         // Import a synthetic `default` if enabled.

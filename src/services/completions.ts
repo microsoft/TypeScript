@@ -648,7 +648,7 @@ namespace ts.Completions {
             formatContext,
             symbolName: getSymbolName(symbol, symbolOriginInfo, compilerOptions.target),
             getCanonicalFileName,
-            symbolToken: tryCast(previousToken, isIdentifier),
+            symbolToken: previousToken,
             kind: isDefaultExport ? codefix.ImportKind.Default : codefix.ImportKind.Named,
         }).slice(0, 1); // Only take the first code action
         return { sourceDisplay, codeActions };
