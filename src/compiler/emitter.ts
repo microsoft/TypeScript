@@ -1024,6 +1024,7 @@ namespace ts {
             emitModifiers(node, node.modifiers);
             emit(node.name);
             emitIfPresent(node.questionToken);
+            emitIfPresent(node.exclamationToken);
             emitTypeAnnotation(node.type);
             emitInitializer(node.initializer);
             writeSemicolon();

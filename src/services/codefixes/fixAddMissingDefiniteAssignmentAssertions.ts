@@ -13,6 +13,8 @@ namespace ts.codefix {
         fixIds: [fixId],
         getAllCodeActions: context => {
             const seenNames = createMap<true>();
+            const newLineCharacter = getNewLineOrDefaultFromHost(context.host, context.formatContext.options);
+
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const info = getInfo(diag.file!, diag.start!);
                 if (!info) return undefined;
@@ -22,7 +24,7 @@ namespace ts.codefix {
                     return;
                 }
 
-                addDefiniteAssignmentAssertion(changes, diag.file, propertyDeclaration);
+                addDefiniteAssignmentAssertion(changes, diag.file, propertyDeclaration, newLineCharacter);
             });
         },
     });
@@ -43,13 +45,16 @@ namespace ts.codefix {
     }
 
     function getActionsForAddMissingDefiniteAssignmentAssertion (context: CodeFixContext, token: Identifier, propertyDeclaration: PropertyDeclaration): CodeFixAction[] | undefined {
+        const newLineCharacter = getNewLineOrDefaultFromHost(context.host, context.formatContext.options);
         const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Declare_property_0), [token.text]);
-        const changes = textChanges.ChangeTracker.with(context, t => addDefiniteAssignmentAssertion(t, context.sourceFile, propertyDeclaration));
+        const changes = textChanges.ChangeTracker.with(context, t => addDefiniteAssignmentAssertion(t, context.sourceFile, propertyDeclaration, newLineCharacter));
         const action = { description, changes, fixId };
         return [ action ];
     }
 
-    function addDefiniteAssignmentAssertion(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration): void {
-        changeTracker.insertTokenAfter(propertyDeclarationSourceFile, SyntaxKind.ExclamationToken, propertyDeclaration.name);
+    function addDefiniteAssignmentAssertion(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration, newLineCharacter: string): void {
+        const property = clone(propertyDeclaration);
+        property.exclamationToken = createToken(SyntaxKind.ExclamationToken);
+        changeTracker.replaceNode(propertyDeclarationSourceFile, propertyDeclaration, property, { suffix: newLineCharacter });
     }
 }
