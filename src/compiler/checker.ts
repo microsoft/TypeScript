@@ -25222,10 +25222,11 @@ namespace ts {
             }
 
             if (augmentations) {
-                // merge module augmentations.
+                // merge _global_ module augmentations.
                 // this needs to be done after global symbol table is initialized to make sure that all ambient modules are indexed
                 for (const list of augmentations) {
                     for (const augmentation of list) {
+                        if (!isGlobalScopeAugmentation(augmentation.parent as ModuleDeclaration)) continue;
                         mergeModuleAugmentation(augmentation);
                     }
                 }
@@ -25257,6 +25258,17 @@ namespace ts {
             globalReadonlyArrayType = <GenericType>getGlobalTypeOrUndefined("ReadonlyArray" as __String, /*arity*/ 1);
             anyReadonlyArrayType = globalReadonlyArrayType ? createTypeFromGenericGlobalType(globalReadonlyArrayType, [anyType]) : anyArrayType;
             globalThisType = <GenericType>getGlobalTypeOrUndefined("ThisType" as __String, /*arity*/ 1);
+
+            if (augmentations) {
+                // merge _nonglobal_ module augmentations.
+                // this needs to be done after global symbol table is initialized to make sure that all ambient modules are indexed
+                for (const list of augmentations) {
+                    for (const augmentation of list) {
+                        if (isGlobalScopeAugmentation(augmentation.parent as ModuleDeclaration)) continue;
+                        mergeModuleAugmentation(augmentation);
+                    }
+                }
+            }
         }
 
         function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {
