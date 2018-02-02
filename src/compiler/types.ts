@@ -3294,6 +3294,7 @@ namespace ts {
         immediateTarget?: Symbol;           // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
         target?: Symbol;                    // Resolved (non-alias) target of an alias
         type?: Type;                        // Type of value symbol
+        uniqueESSymbolType?: Type;          // UniqueESSymbol type for a symbol
         declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
         typeParameters?: TypeParameter[];   // Type parameters of type alias (undefined if non-generic)
         inferredClassType?: Type;           // Type of an inferred ES5 class
