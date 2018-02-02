@@ -385,7 +385,7 @@ namespace ts.Completions {
     }
 
     function getStringLiteralCompletionEntriesFromPropertyAssignment(element: ObjectLiteralElement, sourceFile: SourceFile, typeChecker: TypeChecker, target: ScriptTarget, log: Log): CompletionInfo | undefined {
-        const type = typeChecker.getContextualType((<ObjectLiteralExpression>element.parent));
+        const type = getContextualTypeForCompletions((<ObjectLiteralExpression>element.parent), typeChecker);
         const entries: CompletionEntry[] = [];
         if (type) {
             getCompletionEntriesFromSymbols(type.getApparentProperties(), entries, element, sourceFile, typeChecker, target, log, CompletionKind.String);
@@ -704,7 +704,7 @@ namespace ts.Completions {
     }
 
     function getRecommendedCompletion(currentToken: Node, checker: TypeChecker): Symbol | undefined {
-        const ty = getContextualType(currentToken, checker);
+        const ty = getContextualTypeForCompletions(currentToken, checker);
         const symbol = ty && ty.symbol;
         // Don't include make a recommended completion for an abstract class
         return symbol && (symbol.flags & SymbolFlags.Enum || symbol.flags & SymbolFlags.Class && !isAbstractConstructorSymbol(symbol))
@@ -712,23 +712,23 @@ namespace ts.Completions {
             : undefined;
     }
 
-    function getContextualType(currentToken: Node, checker: ts.TypeChecker): Type | undefined {
+    function getContextualTypeForCompletions(currentToken: Node, checker: ts.TypeChecker): Type | undefined {
         const { parent } = currentToken;
         switch (currentToken.kind) {
             case ts.SyntaxKind.Identifier:
                 return getContextualTypeFromParent(currentToken as ts.Identifier, checker);
             case ts.SyntaxKind.EqualsToken:
-                return ts.isVariableDeclaration(parent) ? checker.getContextualType(parent.initializer) :
+                return ts.isVariableDeclaration(parent) ? getContextualType(parent.initializer, checker) :
                     ts.isBinaryExpression(parent) ? checker.getTypeAtLocation(parent.left) : undefined;
             case ts.SyntaxKind.NewKeyword:
-                return checker.getContextualType(parent as ts.Expression);
+                return getContextualType(parent as ts.Expression, checker);
             case ts.SyntaxKind.CaseKeyword:
                 return getSwitchedType(cast(currentToken.parent, isCaseClause), checker);
             default:
                 return isEqualityOperatorKind(currentToken.kind) && ts.isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind)
                     // completion at `x ===/**/` should be for the right side
                     ? checker.getTypeAtLocation(parent.left)
-                    : checker.getContextualType(currentToken as ts.Expression);
+                    : getContextualType(currentToken as ts.Expression, checker);
         }
     }
 
@@ -736,17 +736,17 @@ namespace ts.Completions {
         const { parent } = node;
         switch (parent.kind) {
             case ts.SyntaxKind.NewExpression:
-                return checker.getContextualType(parent as ts.NewExpression);
+                return getContextualType(parent as ts.NewExpression, checker);
             case ts.SyntaxKind.BinaryExpression: {
                 const { left, operatorToken, right } = parent as ts.BinaryExpression;
                 return isEqualityOperatorKind(operatorToken.kind)
                     ? checker.getTypeAtLocation(node === right ? left : right)
-                    : checker.getContextualType(node);
+                    : getContextualType(node, checker);
             }
             case ts.SyntaxKind.CaseClause:
                 return (parent as ts.CaseClause).expression === node ? getSwitchedType(parent as ts.CaseClause, checker) : undefined;
             default:
-                return checker.getContextualType(node);
+                return getContextualType(node, checker);
         }
     }
 
@@ -1448,7 +1448,7 @@ namespace ts.Completions {
                 // We are completing on contextual types, but may also include properties
                 // other than those within the declared type.
                 isNewIdentifierLocation = true;
-                const typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
+                const typeForObject = getContextualType(<ObjectLiteralExpression>objectLikeContainer, typeChecker);
                 if (!typeForObject) return false;
                 typeMembers = getPropertiesForCompletion(typeForObject, typeChecker, /*isForAccess*/ false);
                 existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;
@@ -1469,10 +1469,10 @@ namespace ts.Completions {
                 let canGetType = hasInitializer(rootDeclaration) || hasType(rootDeclaration) || rootDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement;
                 if (!canGetType && rootDeclaration.kind === SyntaxKind.Parameter) {
                     if (isExpression(rootDeclaration.parent)) {
-                        canGetType = !!typeChecker.getContextualType(<Expression>rootDeclaration.parent);
+                        canGetType = !!getContextualType(<Expression>rootDeclaration.parent, typeChecker);
                     }
                     else if (rootDeclaration.parent.kind === SyntaxKind.MethodDeclaration || rootDeclaration.parent.kind === SyntaxKind.SetAccessor) {
-                        canGetType = isExpression(rootDeclaration.parent.parent) && !!typeChecker.getContextualType(<Expression>rootDeclaration.parent.parent);
+                        canGetType = isExpression(rootDeclaration.parent.parent) && !!getContextualType(<Expression>rootDeclaration.parent.parent, typeChecker);
                     }
                 }
                 if (canGetType) {
