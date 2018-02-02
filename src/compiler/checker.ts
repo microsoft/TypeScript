@@ -1975,8 +1975,7 @@ namespace ts {
                 if (name.kind === SyntaxKind.QualifiedName) {
                     left = (<QualifiedName>name).left;
                 }
-                else if (name.kind === SyntaxKind.PropertyAccessExpression &&
-                    (name.expression.kind === SyntaxKind.ParenthesizedExpression || isEntityNameExpression(name.expression))) {
+                else if (name.kind === SyntaxKind.PropertyAccessExpression) {
                     left = name.expression;
                 }
                 else {
@@ -2004,15 +2003,6 @@ namespace ts {
                     }
                     return undefined;
                 }
-            }
-            else if (name.kind === SyntaxKind.ParenthesizedExpression) {
-                // If the expression in parenthesizedExpression is not an entity-name (e.g. it is a call expression), it won't be able to successfully resolve the name.
-                // This is the case when we are trying to do any language service operation in heritage clauses.
-                // By return undefined, the getSymbolOfEntityNameOrPropertyAccessExpression will attempt to checkPropertyAccessExpression to resolve symbol.
-                // i.e class C extends foo()./*do language service operation here*/B {}
-                return isEntityNameExpression(name.expression) ?
-                    resolveEntityName(name.expression as EntityNameOrEntityNameExpression, meaning, ignoreErrors, dontResolveAlias, location) :
-                    undefined;
             }
             else {
                 Debug.assertNever(name, "Unknown entity name kind.");
@@ -24203,8 +24193,8 @@ namespace ts {
                 }
             }
 
-            if (entityName.parent.kind === SyntaxKind.ExportAssignment && isEntityNameExpression(<Identifier | PropertyAccessExpression>entityName)) {
-                return resolveEntityName(<EntityNameExpression>entityName,
+            if (entityName.parent.kind === SyntaxKind.ExportAssignment && isEntityNameExpression(entityName)) {
+                return resolveEntityName(entityName,
                     /*all meanings*/ SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
             }
 
@@ -24219,7 +24209,7 @@ namespace ts {
                 entityName = <QualifiedName | PropertyAccessEntityNameExpression>entityName.parent;
             }
 
-            if (isHeritageClauseElementIdentifier(<EntityName>entityName)) {
+            if (isHeritageClauseElementIdentifier(entityName)) {
                 let meaning = SymbolFlags.None;
                 // In an interface or class, we're definitely interested in a type.
                 if (entityName.parent.kind === SyntaxKind.ExpressionWithTypeArguments) {
@@ -24235,7 +24225,7 @@ namespace ts {
                 }
 
                 meaning |= SymbolFlags.Alias;
-                const entityNameSymbol = resolveEntityName(<EntityName>entityName, meaning);
+                const entityNameSymbol = isEntityNameExpression(entityName) ? resolveEntityName(entityName, meaning) : undefined;
                 if (entityNameSymbol) {
                     return entityNameSymbol;
                 }
