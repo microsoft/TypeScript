@@ -927,6 +927,22 @@ namespace ts {
         return to;
     }
 
+    export function minAndMax<T>(arr: ReadonlyArray<T>, getValue: (value: T) => number): { min: number, max: number } {
+        Debug.assert(arr.length !== 0);
+        let min = getValue(arr[0]);
+        let max = min;
+        for (let i = 1; i < arr.length; i++) {
+            const b = getValue(arr[i]);
+            if (b < min) {
+                min = b;
+            }
+            else if (b > max) {
+                max = b;
+            }
+        }
+        return { min, max };
+    }
+
     /**
      * Gets the actual offset into an array for a relative offset. Negative offsets indicate a
      * position offset from the end of the array.
