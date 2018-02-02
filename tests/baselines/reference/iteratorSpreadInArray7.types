@@ -35,9 +35,9 @@ var array: symbol[];
 
 array.concat([...new SymbolIterator]);
 >array.concat([...new SymbolIterator]) : symbol[]
->array.concat : { (...items: InputArray<symbol>[]): symbol[]; (...items: (symbol | InputArray<symbol>[])[]): symbol[]; }
+>array.concat : { (...items: InputArray<symbol>[]): symbol[]; (...items: (symbol | InputArray<symbol>)[]): symbol[]; }
 >array : symbol[]
->concat : { (...items: InputArray<symbol>[]): symbol[]; (...items: (symbol | InputArray<symbol>[])[]): symbol[]; }
+>concat : { (...items: InputArray<symbol>[]): symbol[]; (...items: (symbol | InputArray<symbol>)[]): symbol[]; }
 >[...new SymbolIterator] : symbol[]
 >...new SymbolIterator : symbol
 >new SymbolIterator : SymbolIterator

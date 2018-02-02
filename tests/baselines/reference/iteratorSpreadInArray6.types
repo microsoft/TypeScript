@@ -38,9 +38,9 @@ var array: number[] = [0, 1];
 
 array.concat([...new SymbolIterator]);
 >array.concat([...new SymbolIterator]) : any
->array.concat : { (...items: InputArray<number>[]): number[]; (...items: (number | InputArray<number>[])[]): number[]; }
+>array.concat : { (...items: InputArray<number>[]): number[]; (...items: (number | InputArray<number>)[]): number[]; }
 >array : number[]
->concat : { (...items: InputArray<number>[]): number[]; (...items: (number | InputArray<number>[])[]): number[]; }
+>concat : { (...items: InputArray<number>[]): number[]; (...items: (number | InputArray<number>)[]): number[]; }
 >[...new SymbolIterator] : symbol[]
 >...new SymbolIterator : symbol
 >new SymbolIterator : SymbolIterator
