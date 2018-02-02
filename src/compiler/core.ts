@@ -2772,6 +2772,10 @@ namespace ts {
         this.flags = flags;
         this.escapedName = name;
         this.declarations = undefined;
+        this.valueDeclaration = undefined;
+        this.id = undefined;
+        this.mergeId = undefined;
+        this.parent = undefined;
     }
 
     function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
