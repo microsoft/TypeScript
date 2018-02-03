@@ -8169,7 +8169,7 @@ namespace ts {
                 combinedMapper = mapper ? combineTypeMappers(mapper, inferenceMapper) : inferenceMapper;
             }
             // Return union of trueType and falseType for any and never since they match anything
-            if (checkType.flags & (TypeFlags.Any | TypeFlags.Never)) {
+            if (checkType.flags & TypeFlags.Any || (checkType.flags & TypeFlags.Never && !(extendsType.flags & TypeFlags.Never))) {
                 return getUnionType([instantiateType(baseTrueType, combinedMapper || mapper), instantiateType(baseFalseType, mapper)]);
             }
             // Instantiate the extends type including inferences for 'infer T' type parameters
