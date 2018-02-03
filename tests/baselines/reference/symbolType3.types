@@ -12,15 +12,15 @@ delete Symbol.iterator;
 
 void Symbol.toPrimitive;
 >void Symbol.toPrimitive : undefined
->Symbol.toPrimitive : symbol
+>Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
->toPrimitive : symbol
+>toPrimitive : unique symbol
 
 typeof Symbol.toStringTag;
 >typeof Symbol.toStringTag : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
 ++s;
 >++s : number

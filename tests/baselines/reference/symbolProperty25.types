@@ -3,9 +3,9 @@ interface I {
 >I : I
 
     [Symbol.toPrimitive]: () => boolean;
->Symbol.toPrimitive : symbol
+>Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
->toPrimitive : symbol
+>toPrimitive : unique symbol
 }
 
 class C implements I {
@@ -13,9 +13,9 @@ class C implements I {
 >I : I
 
     [Symbol.toStringTag]() {
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
         return "";
 >"" : ""

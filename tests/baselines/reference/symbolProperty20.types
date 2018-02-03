@@ -9,9 +9,9 @@ interface I {
 >s : string
 
     [Symbol.toStringTag](s: number): number;
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 >s : number
 }
 
@@ -29,9 +29,9 @@ var i: I = {
 >s : string
 
     [Symbol.toStringTag](n) { return n; }
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 >n : number
 >n : number
 }

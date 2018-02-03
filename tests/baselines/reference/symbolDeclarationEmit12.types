@@ -15,31 +15,31 @@ module M {
 >I : I
 
         [Symbol.toPrimitive](x: I) { }
->Symbol.toPrimitive : symbol
+>Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
->toPrimitive : symbol
+>toPrimitive : unique symbol
 >x : I
 >I : I
 
         [Symbol.isConcatSpreadable](): I {
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 >I : I
 
             return undefined
 >undefined : undefined
         }
         get [Symbol.toPrimitive]() { return undefined; }
->Symbol.toPrimitive : symbol
+>Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
->toPrimitive : symbol
+>toPrimitive : unique symbol
 >undefined : undefined
 
         set [Symbol.toPrimitive](x: I) { }
->Symbol.toPrimitive : symbol
+>Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
->toPrimitive : symbol
+>toPrimitive : unique symbol
 >x : I
 >I : I
     }
