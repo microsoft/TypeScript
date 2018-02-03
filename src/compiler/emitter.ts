@@ -1196,16 +1196,23 @@ namespace ts {
 
         function emitConditionalType(node: ConditionalTypeNode) {
             emit(node.checkType);
-            write(" extends ");
+            writeSpace();
+            writeKeyword("extends");
+            writeSpace();
             emit(node.extendsType);
-            write(" ? ");
+            writeSpace();
+            writePunctuation("?");
+            writeSpace();
             emit(node.trueType);
-            write(" : ");
+            writeSpace();
+            writePunctuation(":");
+            writeSpace();
             emit(node.falseType);
         }
 
         function emitInferType(node: InferTypeNode) {
-            write("infer ");
+            writeKeyword("infer");
+            writeSpace();
             emit(node.typeParameter);
         }
 
