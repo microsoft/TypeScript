@@ -14054,10 +14054,19 @@ namespace ts {
                 return anyType;
             }
 
-            return mapType(valueType, getJsxSignaturesParameterTypes);
+            const isJs = isInJavaScriptFile(node);
+            return mapType(valueType, isJs ? getJsxSignaturesParameterTypesJs : getJsxSignaturesParameterTypes);
         }
 
         function getJsxSignaturesParameterTypes(valueType: Type) {
+            return getJsxSignaturesParameterTypesInternal(valueType, /*isJs*/ false);
+        }
+
+        function getJsxSignaturesParameterTypesJs(valueType: Type) {
+            return getJsxSignaturesParameterTypesInternal(valueType, /*isJs*/ true);
+        }
+
+        function getJsxSignaturesParameterTypesInternal(valueType: Type, isJs: boolean) {
             // If the elemType is a string type, we have to return anyType to prevent an error downstream as we will try to find construct or call signature of the type
             if (valueType.flags & TypeFlags.String) {
                 return anyType;
@@ -14095,7 +14104,7 @@ namespace ts {
                 }
             }
 
-            return getUnionType(map(signatures, ctor ? getJsxPropsTypeFromConstructSignature : getJsxPropsTypeFromCallSignature), UnionReduction.None);
+            return getUnionType(map(signatures, ctor ? isJs ? getJsxPropsTypeFromConstructSignatureJs : getJsxPropsTypeFromConstructSignature : getJsxPropsTypeFromCallSignature), UnionReduction.None);
         }
 
         function getJsxPropsTypeFromCallSignature(sig: Signature) {
@@ -14107,7 +14116,7 @@ namespace ts {
             return propsType;
         }
 
-        function getJsxPropsTypeFromClassType(hostClassType: Type) {
+        function getJsxPropsTypeFromClassType(hostClassType: Type, isJs: boolean) {
             if (isTypeAny(hostClassType)) {
                 return hostClassType;
             }
@@ -14139,8 +14148,8 @@ namespace ts {
                     if (intrinsicClassAttribs !== unknownType) {
                         const typeParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(intrinsicClassAttribs.symbol);
                         apparentAttributesType = intersectTypes(
-                            length(typeParams)
-                                ? createTypeReference(<GenericType>intrinsicClassAttribs, [hostClassType])
+                            typeParams
+                                ? createTypeReference(<GenericType>intrinsicClassAttribs, fillMissingTypeArguments([hostClassType], typeParams, typeParams.length, isJs))
                                 : intrinsicClassAttribs,
                             apparentAttributesType
                         );
@@ -14156,13 +14165,23 @@ namespace ts {
             }
         }
 
+        function getJsxPropsTypeFromConstructSignatureJs(sig: Signature) {
+            return getJsxPropsTypeFromConstructSignatureInternal(sig, /*isJs*/ true);
+        }
+
         function getJsxPropsTypeFromConstructSignature(sig: Signature) {
+            return getJsxPropsTypeFromConstructSignatureInternal(sig, /*isJs*/ false);
+        }
+
+        function getJsxPropsTypeFromConstructSignatureInternal(sig: Signature, isJs: boolean) {
             const hostClassType = getReturnTypeOfSignature(sig);
             if (hostClassType) {
-                return getJsxPropsTypeFromClassType(hostClassType);
+                return getJsxPropsTypeFromClassType(hostClassType, isJs);
             }
             return getJsxPropsTypeFromCallSignature(sig);
         }
+
+
 
         // If the given type is an object or union type with a single signature, and if that signature has at
         // least as many parameters as the given function, return the signature. Otherwise return undefined.
@@ -15129,7 +15148,7 @@ namespace ts {
                 checkTypeRelatedTo(elemInstanceType, elementClassType, assignableRelation, openingLikeElement, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
             }
 
-            return getJsxPropsTypeFromClassType(elemInstanceType);
+            return getJsxPropsTypeFromClassType(elemInstanceType, isInJavaScriptFile(openingLikeElement));
         }
 
         /**
