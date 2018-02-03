@@ -196,3 +196,7 @@ type O6 = Or<false, boolean>;  // boolean
 type O7 = Or<boolean, true>;  // true
 type O8 = Or<true, boolean>;  // true
 type O9 = Or<boolean, boolean>;  // boolean
+
+type T40 = never extends never ? true : false;  // true
+type T41 = number extends never ? true : false;  // false
+type T42 = never extends number ? true : false;  // boolean
