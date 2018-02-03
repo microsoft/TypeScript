@@ -215,6 +215,7 @@ namespace ts {
         ConstructorKeyword,
         DeclareKeyword,
         GetKeyword,
+        InferKeyword,
         IsKeyword,
         KeyOfKeyword,
         ModuleKeyword,
@@ -266,6 +267,7 @@ namespace ts {
         UnionType,
         IntersectionType,
         ConditionalType,
+        InferType,
         ParenthesizedType,
         ThisType,
         TypeOperator,
@@ -771,7 +773,7 @@ namespace ts {
 
     export interface TypeParameterDeclaration extends NamedDeclaration {
         kind: SyntaxKind.TypeParameter;
-        parent?: DeclarationWithTypeParameters;
+        parent?: DeclarationWithTypeParameters | InferTypeNode;
         name: Identifier;
         constraint?: TypeNode;
         default?: TypeNode;
@@ -1123,6 +1125,11 @@ namespace ts {
         extendsType: TypeNode;
         trueType: TypeNode;
         falseType: TypeNode;
+    }
+
+    export interface InferTypeNode extends TypeNode {
+        kind: SyntaxKind.InferType;
+        typeParameter: TypeParameterDeclaration;
     }
 
     export interface ParenthesizedTypeNode extends TypeNode {
@@ -3556,6 +3563,8 @@ namespace ts {
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
         aliasSymbol?: Symbol;            // Alias associated with type
         aliasTypeArguments?: Type[];     // Alias type arguments (if any)
+        /* @internal */
+        resolvedAnyInstantiation?: Type;  // Instantiation with type parameters mapped to any
     }
 
     /* @internal */
@@ -3801,6 +3810,8 @@ namespace ts {
         trueType: Type;
         falseType: Type;
         /* @internal */
+        inferTypeParameters: TypeParameter[];
+        /* @internal */
         target?: ConditionalType;
         /* @internal */
         mapper?: TypeMapper;
@@ -3876,6 +3887,8 @@ namespace ts {
         NakedTypeVariable = 1 << 0,  // Naked type variable in union or intersection type
         MappedType        = 1 << 1,  // Reverse inference for mapped type
         ReturnType        = 1 << 2,  // Inference made from return type of generic function
+        NoConstraints     = 1 << 3,  // Don't infer from constraints of instantiable types
+        AlwaysStrict      = 1 << 4,  // Always use strict rules for contravariant inferences
     }
 
     export interface InferenceInfo {

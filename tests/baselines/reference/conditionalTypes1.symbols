@@ -751,3 +751,12 @@ type O9 = Or<boolean, boolean>;  // boolean
 >O9 : Symbol(O9, Decl(conditionalTypes1.ts, 193, 28))
 >Or : Symbol(Or, Decl(conditionalTypes1.ts, 162, 65))
 
+type T40 = never extends never ? true : false;  // true
+>T40 : Symbol(T40, Decl(conditionalTypes1.ts, 194, 31))
+
+type T41 = number extends never ? true : false;  // false
+>T41 : Symbol(T41, Decl(conditionalTypes1.ts, 196, 46))
+
+type T42 = never extends number ? true : false;  // boolean
+>T42 : Symbol(T42, Decl(conditionalTypes1.ts, 197, 47))
+

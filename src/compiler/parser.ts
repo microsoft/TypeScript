@@ -180,6 +180,8 @@ namespace ts {
                     visitNode(cbNode, (<ConditionalTypeNode>node).extendsType) ||
                     visitNode(cbNode, (<ConditionalTypeNode>node).trueType) ||
                     visitNode(cbNode, (<ConditionalTypeNode>node).falseType);
+            case SyntaxKind.InferType:
+                return visitNode(cbNode, (<InferTypeNode>node).typeParameter);
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.TypeOperator:
                 return visitNode(cbNode, (<ParenthesizedTypeNode | TypeOperatorNode>node).type);
@@ -2767,6 +2769,7 @@ namespace ts {
                 case SyntaxKind.QuestionToken:
                 case SyntaxKind.ExclamationToken:
                 case SyntaxKind.DotDotDotToken:
+                case SyntaxKind.InferKeyword:
                     return true;
                 case SyntaxKind.MinusToken:
                     return !inStartOfParameter && lookAhead(nextTokenIsNumericLiteral);
@@ -2843,12 +2846,23 @@ namespace ts {
             return finishNode(node);
         }
 
+        function parseInferType(): InferTypeNode {
+            const node = <InferTypeNode>createNode(SyntaxKind.InferType);
+            parseExpected(SyntaxKind.InferKeyword);
+            const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
+            typeParameter.name = parseIdentifier();
+            node.typeParameter = finishNode(typeParameter);
+            return finishNode(node);
+        }
+
         function parseTypeOperatorOrHigher(): TypeNode {
             const operator = token();
             switch (operator) {
                 case SyntaxKind.KeyOfKeyword:
                 case SyntaxKind.UniqueKeyword:
                     return parseTypeOperator(operator);
+                case SyntaxKind.InferKeyword:
+                    return parseInferType();
                 case SyntaxKind.DotDotDotToken: {
                     const result = createNode(SyntaxKind.JSDocVariadicType) as JSDocVariadicType;
                     nextToken();
