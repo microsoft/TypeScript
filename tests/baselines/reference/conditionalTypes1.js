@@ -195,6 +195,10 @@ type O7 = Or<boolean, true>;  // true
 type O8 = Or<true, boolean>;  // true
 type O9 = Or<boolean, boolean>;  // boolean
 
+type T40 = never extends never ? true : false;  // true
+type T41 = number extends never ? true : false;  // false
+type T42 = never extends number ? true : false;  // boolean
+
 
 //// [conditionalTypes1.js]
 "use strict";
@@ -398,3 +402,6 @@ declare type O6 = Or<false, boolean>;
 declare type O7 = Or<boolean, true>;
 declare type O8 = Or<true, boolean>;
 declare type O9 = Or<boolean, boolean>;
+declare type T40 = never extends never ? true : false;
+declare type T41 = number extends never ? true : false;
+declare type T42 = never extends number ? true : false;

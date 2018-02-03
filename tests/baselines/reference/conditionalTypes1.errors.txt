@@ -335,3 +335,7 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(157,5): error TS2
     type O8 = Or<true, boolean>;  // true
     type O9 = Or<boolean, boolean>;  // boolean
     
+    type T40 = never extends never ? true : false;  // true
+    type T41 = number extends never ? true : false;  // false
+    type T42 = never extends number ? true : false;  // boolean
+    

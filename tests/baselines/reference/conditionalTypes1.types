@@ -849,3 +849,18 @@ type O9 = Or<boolean, boolean>;  // boolean
 >O9 : boolean
 >Or : If<A, true, B>
 
+type T40 = never extends never ? true : false;  // true
+>T40 : true
+>true : true
+>false : false
+
+type T41 = number extends never ? true : false;  // false
+>T41 : false
+>true : true
+>false : false
+
+type T42 = never extends number ? true : false;  // boolean
+>T42 : boolean
+>true : true
+>false : false
+
