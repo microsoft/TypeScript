@@ -14788,7 +14788,7 @@ namespace ts {
                     }
                 }
                 else {
-                    childrenTypes.push(checkExpression(child, checkMode));
+                    childrenTypes.push(checkExpressionForMutableLocation(child, checkMode));
                 }
             }
             return childrenTypes;
@@ -18957,16 +18957,24 @@ namespace ts {
             return stringType;
         }
 
+        function getContextNode(node: Expression): Node {
+            if (node.kind === SyntaxKind.JsxAttributes) {
+                return node.parent.parent; // Needs to be the root JsxElement, so it encompasses the attributes _and_ the children (which are essentially part of the attributes)
+            }
+            return node;
+        }
+
         function checkExpressionWithContextualType(node: Expression, contextualType: Type, contextualMapper: TypeMapper | undefined): Type {
-            const saveContextualType = node.contextualType;
-            const saveContextualMapper = node.contextualMapper;
-            node.contextualType = contextualType;
-            node.contextualMapper = contextualMapper;
+            const context = getContextNode(node);
+            const saveContextualType = context.contextualType;
+            const saveContextualMapper = context.contextualMapper;
+            context.contextualType = contextualType;
+            context.contextualMapper = contextualMapper;
             const checkMode = contextualMapper === identityMapper ? CheckMode.SkipContextSensitive :
                 contextualMapper ? CheckMode.Inferential : CheckMode.Contextual;
             const result = checkExpression(node, checkMode);
-            node.contextualType = saveContextualType;
-            node.contextualMapper = saveContextualMapper;
+            context.contextualType = saveContextualType;
+            context.contextualMapper = saveContextualMapper;
             return result;
         }
 
