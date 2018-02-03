@@ -358,7 +358,7 @@ namespace ts {
             }
             else {
                 errorNameNode = declaration.name;
-                const format = TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseStructuralFallback | TypeFormatFlags.WriteDefaultSymbolWithoutName |
+                const format = TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseStructuralFallback |
                     TypeFormatFlags.WriteClassExpressionAsTypeLiteral |
                     (shouldUseResolverType ? TypeFormatFlags.AddUndefined : 0);
                 resolver.writeTypeOfDeclaration(declaration, enclosingDeclaration, format, writer);
@@ -378,7 +378,7 @@ namespace ts {
                 resolver.writeReturnTypeOfSignatureDeclaration(
                     signature,
                     enclosingDeclaration,
-                    TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseStructuralFallback | TypeFormatFlags.WriteClassExpressionAsTypeLiteral | TypeFormatFlags.WriteDefaultSymbolWithoutName,
+                    TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseStructuralFallback | TypeFormatFlags.WriteClassExpressionAsTypeLiteral,
                     writer);
                 errorNameNode = undefined;
             }
@@ -655,7 +655,7 @@ namespace ts {
             resolver.writeTypeOfExpression(
                 expr,
                 enclosingDeclaration,
-                TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseStructuralFallback | TypeFormatFlags.WriteClassExpressionAsTypeLiteral | TypeFormatFlags.WriteDefaultSymbolWithoutName,
+                TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseStructuralFallback | TypeFormatFlags.WriteClassExpressionAsTypeLiteral,
                 writer);
             write(";");
             writeLine();
