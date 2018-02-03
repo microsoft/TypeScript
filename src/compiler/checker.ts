@@ -25228,11 +25228,18 @@ namespace ts {
                 }
             }
 
+            // We do global augmentations seperately from module augmentations (and before creating global types) because they
+            //  1. Affect global types. We won't have the correct global types until global augmentations are merged. Also,
+            //  2. Module augmentation instantiation requires creating the type of a module, which, in turn, can require
+            //       checking for an export or property on the module (if export=) which, in turn, can fall back to the
+            //       apparent type of the module - either globalObjectType or globalFunctionType - which wouldn't exist if we
+            //       did module augmentations prior to finalizing the global types.
             if (augmentations) {
-                // merge module augmentations.
+                // merge _global_ module augmentations.
                 // this needs to be done after global symbol table is initialized to make sure that all ambient modules are indexed
                 for (const list of augmentations) {
                     for (const augmentation of list) {
+                        if (!isGlobalScopeAugmentation(augmentation.parent as ModuleDeclaration)) continue;
                         mergeModuleAugmentation(augmentation);
                     }
                 }
@@ -25264,6 +25271,17 @@ namespace ts {
             globalReadonlyArrayType = <GenericType>getGlobalTypeOrUndefined("ReadonlyArray" as __String, /*arity*/ 1);
             anyReadonlyArrayType = globalReadonlyArrayType ? createTypeFromGenericGlobalType(globalReadonlyArrayType, [anyType]) : anyArrayType;
             globalThisType = <GenericType>getGlobalTypeOrUndefined("ThisType" as __String, /*arity*/ 1);
+
+            if (augmentations) {
+                // merge _nonglobal_ module augmentations.
+                // this needs to be done after global symbol table is initialized to make sure that all ambient modules are indexed
+                for (const list of augmentations) {
+                    for (const augmentation of list) {
+                        if (isGlobalScopeAugmentation(augmentation.parent as ModuleDeclaration)) continue;
+                        mergeModuleAugmentation(augmentation);
+                    }
+                }
+            }
         }
 
         function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {
