@@ -13901,7 +13901,7 @@ namespace ts {
         function getContextualTypeForChildJsxExpression(node: JsxElement) {
             const attributesType = getApparentTypeOfContextualType(node.openingElement.tagName);
             // JSX expression is in children of JSX Element, we will look for an "children" atttribute (we get the name from JSX.ElementAttributesProperty)
-            const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
+            const jsxChildrenPropertyName = getJsxElementChildrenPropertyName();
             return attributesType && !isTypeAny(attributesType) && jsxChildrenPropertyName && jsxChildrenPropertyName !== "" ? getTypeOfPropertyOfContextualType(attributesType, jsxChildrenPropertyName) : undefined;
         }
 
@@ -14054,48 +14054,48 @@ namespace ts {
                 return anyType;
             }
 
-            return mapType(valueType, signaturesToParameterTypes);
+            return mapType(valueType, getJsxSignaturesParameterTypes);
+        }
 
-            function signaturesToParameterTypes(valueType: Type) {
-                // If the elemType is a string type, we have to return anyType to prevent an error downstream as we will try to find construct or call signature of the type
-                if (valueType.flags & TypeFlags.String) {
-                    return anyType;
-                }
-                else if (valueType.flags & TypeFlags.StringLiteral) {
-                    // If the elemType is a stringLiteral type, we can then provide a check to make sure that the string literal type is one of the Jsx intrinsic element type
-                    // For example:
-                    //      var CustomTag: "h1" = "h1";
-                    //      <CustomTag> Hello World </CustomTag>
-                    const intrinsicElementsType = getJsxType(JsxNames.IntrinsicElements);
-                    if (intrinsicElementsType !== unknownType) {
-                        const stringLiteralTypeName = (<StringLiteralType>valueType).value;
-                        const intrinsicProp = getPropertyOfType(intrinsicElementsType, escapeLeadingUnderscores(stringLiteralTypeName));
-                        if (intrinsicProp) {
-                            return getTypeOfSymbol(intrinsicProp);
-                        }
-                        const indexSignatureType = getIndexTypeOfType(intrinsicElementsType, IndexKind.String);
-                        if (indexSignatureType) {
-                            return indexSignatureType;
-                        }
-                    }
-                    return anyType;
-                }
-
-                // Resolve the signatures, preferring constructor
-                let signatures = getSignaturesOfType(valueType, SignatureKind.Construct);
-                let ctor = true;
-                if (signatures.length === 0) {
-                    // No construct signatures, try call signatures
-                    signatures = getSignaturesOfType(valueType, SignatureKind.Call);
-                    ctor = false;
-                    if (signatures.length === 0) {
-                        // We found no signatures at all, which is an error
-                        return unknownType;
-                    }
-                }
-
-                return getUnionType(map(signatures, ctor ? getJsxPropsTypeFromConstructSignature : getJsxPropsTypeFromCallSignature), UnionReduction.None);
+        function getJsxSignaturesParameterTypes(valueType: Type) {
+            // If the elemType is a string type, we have to return anyType to prevent an error downstream as we will try to find construct or call signature of the type
+            if (valueType.flags & TypeFlags.String) {
+                return anyType;
             }
+            else if (valueType.flags & TypeFlags.StringLiteral) {
+                // If the elemType is a stringLiteral type, we can then provide a check to make sure that the string literal type is one of the Jsx intrinsic element type
+                // For example:
+                //      var CustomTag: "h1" = "h1";
+                //      <CustomTag> Hello World </CustomTag>
+                const intrinsicElementsType = getJsxType(JsxNames.IntrinsicElements);
+                if (intrinsicElementsType !== unknownType) {
+                    const stringLiteralTypeName = (<StringLiteralType>valueType).value;
+                    const intrinsicProp = getPropertyOfType(intrinsicElementsType, escapeLeadingUnderscores(stringLiteralTypeName));
+                    if (intrinsicProp) {
+                        return getTypeOfSymbol(intrinsicProp);
+                    }
+                    const indexSignatureType = getIndexTypeOfType(intrinsicElementsType, IndexKind.String);
+                    if (indexSignatureType) {
+                        return indexSignatureType;
+                    }
+                }
+                return anyType;
+            }
+
+            // Resolve the signatures, preferring constructor
+            let signatures = getSignaturesOfType(valueType, SignatureKind.Construct);
+            let ctor = true;
+            if (signatures.length === 0) {
+                // No construct signatures, try call signatures
+                signatures = getSignaturesOfType(valueType, SignatureKind.Call);
+                ctor = false;
+                if (signatures.length === 0) {
+                    // We found no signatures at all, which is an error
+                    return unknownType;
+                }
+            }
+
+            return getUnionType(map(signatures, ctor ? getJsxPropsTypeFromConstructSignature : getJsxPropsTypeFromCallSignature), UnionReduction.None);
         }
 
         function getJsxPropsTypeFromCallSignature(sig: Signature) {
@@ -14688,7 +14688,7 @@ namespace ts {
             let hasSpreadAnyType = false;
             let typeToIntersect: Type;
             let explicitlySpecifyChildrenAttribute = false;
-            const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
+            const jsxChildrenPropertyName = getJsxElementChildrenPropertyName();
 
             for (const attributeDecl of attributes.properties) {
                 const member = attributeDecl.symbol;
@@ -14940,7 +14940,7 @@ namespace ts {
             return _jsxElementPropertiesName;
         }
 
-        function getJsxElementChildrenPropertyname(): __String {
+        function getJsxElementChildrenPropertyName(): __String {
             if (!_hasComputedJsxElementChildrenPropertyName) {
                 _hasComputedJsxElementChildrenPropertyName = true;
                 _jsxElementChildrenPropertyName = getNameFromJsxElementAttributesContainer(JsxNames.ElementChildrenAttributeNameContainer);
@@ -15331,7 +15331,7 @@ namespace ts {
             //      3. Check if the two are assignable to each other
 
 
-            // targetAttributesType is a type of an attributes from resolving tagName of an opening-like JSX element.
+            // targetAttributesType is a type of an attribute from resolving tagName of an opening-like JSX element.
             const targetAttributesType = isJsxIntrinsicIdentifier(openingLikeElement.tagName) ?
                 getIntrinsicAttributesTypeFromJsxOpeningLikeElement(openingLikeElement) :
                 getCustomJsxElementAttributesType(openingLikeElement, /*shouldIncludeAllStatelessAttributesType*/ false);
