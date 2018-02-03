@@ -1110,7 +1110,7 @@ namespace ts {
             // otherwise, using options specified in '--lib' instead of '--target' default library file
             const equalityComparer = host.useCaseSensitiveFileNames() ? equateStringsCaseSensitive : equateStringsCaseInsensitive;
             if (!options.lib) {
-               return equalityComparer(file.fileName, getDefaultLibraryFileName());
+                return equalityComparer(file.fileName, getDefaultLibraryFileName());
             }
             else {
                 return forEach(options.lib, libFileName => equalityComparer(file.fileName, combinePaths(defaultLibraryPath, libFileName)));
@@ -1325,10 +1325,9 @@ namespace ts {
                         // @ts-ignore
                         const ignoreOptions = result[4];
                         if (ignoreOptions) {
-                            return ignoreOptions.indexOf('TS'+diagnostic.code) === -1;
-                        } else {
-                            return false;
+                            return ignoreOptions.indexOf("TS" + diagnostic.code) === -1;
                         }
+                        return false;
                     }
                     line--;
                 }
