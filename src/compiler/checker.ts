@@ -582,6 +582,21 @@ namespace ts {
             Both = Source | Target,
         }
 
+        const enum TypeIncludes {
+            Any = 1 << 0,
+            Undefined = 1 << 1,
+            Null = 1 << 2,
+            Never = 1 << 3,
+            NonWideningType = 1 << 4,
+            String = 1 << 5,
+            Number = 1 << 6,
+            ESSymbol = 1 << 7,
+            LiteralOrUniqueESSymbol = 1 << 8,
+            ObjectType = 1 << 9,
+            EmptyObject = 1 << 10,
+            Union = 1 << 11,
+        }
+
         const enum MembersOrExportsResolutionKind {
             resolvedExports = "resolvedExports",
             resolvedMembers = "resolvedMembers"
@@ -751,12 +766,10 @@ namespace ts {
             return _jsxNamespace;
         }
 
-        function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationToken, ignoreDiagnostics?: boolean) {
+        function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationToken) {
             // Ensure we have all the type information in place for this file so that all the
             // emitter questions of this resolver will return the right information.
-            if (!ignoreDiagnostics) {
-                getDiagnostics(sourceFile, cancellationToken);
-            }
+            getDiagnostics(sourceFile, cancellationToken);
             return emitResolver;
         }
 
@@ -2702,6 +2715,9 @@ namespace ts {
             if (flags & SymbolFormatFlags.WriteTypeParametersOrArguments) {
                 nodeFlags |= NodeBuilderFlags.WriteTypeParametersInQualifiedName;
             }
+            if (flags & SymbolFormatFlags.UseAliasDefinedOutsideCurrentScope) {
+                nodeFlags |= NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+            }
             const builder = flags & SymbolFormatFlags.AllowAnyNodeKind ? nodeBuilder.symbolToExpression : nodeBuilder.symbolToEntityName;
             return writer ? symbolToStringWorker(writer).getText() : usingSingleLineStringWriter(symbolToStringWorker);
 
@@ -3473,7 +3489,14 @@ namespace ts {
                 function createEntityNameFromSymbolChain(chain: Symbol[], index: number): EntityName {
                     const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
                     const symbol = chain[index];
+
+                    if (index === 0) {
+                        context.flags |= NodeBuilderFlags.InInitialEntityName;
+                    }
                     const symbolName = getNameOfSymbolAsWritten(symbol, context);
+                    if (index === 0) {
+                        context.flags ^= NodeBuilderFlags.InInitialEntityName;
+                    }
                     const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                     identifier.symbol = symbol;
 
@@ -3490,7 +3513,13 @@ namespace ts {
                     const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
                     const symbol = chain[index];
 
+                    if (index === 0) {
+                        context.flags |= NodeBuilderFlags.InInitialEntityName;
+                    }
                     let symbolName = getNameOfSymbolAsWritten(symbol, context);
+                    if (index === 0) {
+                        context.flags ^= NodeBuilderFlags.InInitialEntityName;
+                    }
                     let firstChar = symbolName.charCodeAt(0);
                     const canUsePropertyAccess = isIdentifierStart(firstChar, languageVersion);
                     if (index === 0 || canUsePropertyAccess) {
@@ -3603,6 +3632,10 @@ namespace ts {
             symbolStack: Symbol[] | undefined;
         }
 
+        function isDefaultBindingContext(location: Node) {
+            return location.kind === SyntaxKind.SourceFile || isAmbientModule(location);
+        }
+
         /**
          * Gets a human-readable name for a symbol.
          * Should *not* be used for the right-hand side of a `.` -- use `symbolName(symbol)` for that instead.
@@ -3611,7 +3644,13 @@ namespace ts {
          * It will also use a representation of a number as written instead of a decimal form, e.g. `0o11` instead of `9`.
          */
         function getNameOfSymbolAsWritten(symbol: Symbol, context?: NodeBuilderContext): string {
-            if (context && context.flags & NodeBuilderFlags.WriteDefaultSymbolWithoutName && symbol.escapedName === InternalSymbolName.Default) {
+            if (context && symbol.escapedName === InternalSymbolName.Default && !(context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope) &&
+                // If it's not the first part of an entity name, it must print as `default`
+                (!(context.flags & NodeBuilderFlags.InInitialEntityName) ||
+                // if the symbol is synthesized, it will only be referenced externally it must print as `default`
+                !symbol.declarations ||
+                // if not in the same binding context (source file, module declaration), it must print as `default`
+                (context.enclosingDeclaration && findAncestor(symbol.declarations[0], isDefaultBindingContext) !== findAncestor(context.enclosingDeclaration, isDefaultBindingContext)))) {
                 return "default";
             }
             if (symbol.declarations && symbol.declarations.length) {
@@ -5537,6 +5576,8 @@ namespace ts {
             sig.minArgumentCount = minArgumentCount;
             sig.hasRestParameter = hasRestParameter;
             sig.hasLiteralTypes = hasLiteralTypes;
+            sig.target = undefined;
+            sig.mapper = undefined;
             return sig;
         }
 
@@ -7492,21 +7533,6 @@ namespace ts {
             return links.resolvedType;
         }
 
-        interface TypeSet extends Array<Type> {
-            containsAny?: boolean;
-            containsUndefined?: boolean;
-            containsNull?: boolean;
-            containsNever?: boolean;
-            containsNonWideningType?: boolean;
-            containsString?: boolean;
-            containsNumber?: boolean;
-            containsESSymbol?: boolean;
-            containsLiteralOrUniqueESSymbol?: boolean;
-            containsObjectType?: boolean;
-            containsEmptyObject?: boolean;
-            unionIndex?: number;
-        }
-
         function getTypeId(type: Type) {
             return type.id;
         }
@@ -7531,28 +7557,28 @@ namespace ts {
             return false;
         }
 
-        function addTypeToUnion(typeSet: TypeSet, type: Type) {
+        function addTypeToUnion(typeSet: Type[], includes: TypeIncludes, type: Type) {
             const flags = type.flags;
             if (flags & TypeFlags.Union) {
-                addTypesToUnion(typeSet, (<UnionType>type).types);
+                includes = addTypesToUnion(typeSet, includes, (<UnionType>type).types);
             }
             else if (flags & TypeFlags.Any) {
-                typeSet.containsAny = true;
+                includes |= TypeIncludes.Any;
             }
             else if (!strictNullChecks && flags & TypeFlags.Nullable) {
-                if (flags & TypeFlags.Undefined) typeSet.containsUndefined = true;
-                if (flags & TypeFlags.Null) typeSet.containsNull = true;
-                if (!(flags & TypeFlags.ContainsWideningType)) typeSet.containsNonWideningType = true;
+                if (flags & TypeFlags.Undefined) includes |= TypeIncludes.Undefined;
+                if (flags & TypeFlags.Null) includes |= TypeIncludes.Null;
+                if (!(flags & TypeFlags.ContainsWideningType)) includes |= TypeIncludes.NonWideningType;
             }
             else if (!(flags & TypeFlags.Never || flags & TypeFlags.Intersection && isEmptyIntersectionType(<IntersectionType>type))) {
                 // We ignore 'never' types in unions. Likewise, we ignore intersections of unit types as they are
                 // another form of 'never' (in that they have an empty value domain). We could in theory turn
                 // intersections of unit types into 'never' upon construction, but deferring the reduction makes it
                 // easier to reason about their origin.
-                if (flags & TypeFlags.String) typeSet.containsString = true;
-                if (flags & TypeFlags.Number) typeSet.containsNumber = true;
-                if (flags & TypeFlags.ESSymbol) typeSet.containsESSymbol = true;
-                if (flags & TypeFlags.StringOrNumberLiteralOrUnique) typeSet.containsLiteralOrUniqueESSymbol = true;
+                if (flags & TypeFlags.String) includes |= TypeIncludes.String;
+                if (flags & TypeFlags.Number) includes |= TypeIncludes.Number;
+                if (flags & TypeFlags.ESSymbol) includes |= TypeIncludes.ESSymbol;
+                if (flags & TypeFlags.StringOrNumberLiteralOrUnique) includes |= TypeIncludes.LiteralOrUniqueESSymbol;
                 const len = typeSet.length;
                 const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues);
                 if (index < 0) {
@@ -7562,14 +7588,16 @@ namespace ts {
                     }
                 }
             }
+            return includes;
         }
 
         // Add the given types to the given type set. Order is preserved, duplicates are removed,
         // and nested types of the given kind are flattened into the set.
-        function addTypesToUnion(typeSet: TypeSet, types: Type[]) {
+        function addTypesToUnion(typeSet: Type[], includes: TypeIncludes, types: Type[]): TypeIncludes {
             for (const type of types) {
-                addTypeToUnion(typeSet, type);
+                includes = addTypeToUnion(typeSet, includes, type);
             }
+            return includes;
         }
 
         function containsIdenticalType(types: Type[], type: Type) {
@@ -7593,7 +7621,7 @@ namespace ts {
             return false;
         }
 
-        function isSetOfLiteralsFromSameEnum(types: TypeSet): boolean {
+        function isSetOfLiteralsFromSameEnum(types: Type[]): boolean {
             const first = types[0];
             if (first.flags & TypeFlags.EnumLiteral) {
                 const firstEnum = getParentOfSymbol(first.symbol);
@@ -7609,7 +7637,7 @@ namespace ts {
             return false;
         }
 
-        function removeSubtypes(types: TypeSet) {
+        function removeSubtypes(types: Type[]) {
             if (types.length === 0 || isSetOfLiteralsFromSameEnum(types)) {
                 return;
             }
@@ -7622,15 +7650,15 @@ namespace ts {
             }
         }
 
-        function removeRedundantLiteralTypes(types: TypeSet) {
+        function removeRedundantLiteralTypes(types: Type[], includes: TypeIncludes) {
             let i = types.length;
             while (i > 0) {
                 i--;
                 const t = types[i];
                 const remove =
-                    t.flags & TypeFlags.StringLiteral && types.containsString ||
-                    t.flags & TypeFlags.NumberLiteral && types.containsNumber ||
-                    t.flags & TypeFlags.UniqueESSymbol && types.containsESSymbol ||
+                    t.flags & TypeFlags.StringLiteral && includes & TypeIncludes.String ||
+                    t.flags & TypeFlags.NumberLiteral && includes & TypeIncludes.Number ||
+                    t.flags & TypeFlags.UniqueESSymbol && includes & TypeIncludes.ESSymbol ||
                     t.flags & TypeFlags.StringOrNumberLiteral && t.flags & TypeFlags.FreshLiteral && containsType(types, (<LiteralType>t).regularType);
                 if (remove) {
                     orderedRemoveItemAt(types, i);
@@ -7652,15 +7680,15 @@ namespace ts {
             if (types.length === 1) {
                 return types[0];
             }
-            const typeSet = [] as TypeSet;
-            addTypesToUnion(typeSet, types);
-            if (typeSet.containsAny) {
+            const typeSet: Type[] = [];
+            const includes = addTypesToUnion(typeSet, 0, types);
+            if (includes & TypeIncludes.Any) {
                 return anyType;
             }
             switch (unionReduction) {
                 case UnionReduction.Literal:
-                    if (typeSet.containsLiteralOrUniqueESSymbol) {
-                        removeRedundantLiteralTypes(typeSet);
+                    if (includes & TypeIncludes.LiteralOrUniqueESSymbol) {
+                        removeRedundantLiteralTypes(typeSet, includes);
                     }
                     break;
                 case UnionReduction.Subtype:
@@ -7668,8 +7696,8 @@ namespace ts {
                     break;
             }
             if (typeSet.length === 0) {
-                return typeSet.containsNull ? typeSet.containsNonWideningType ? nullType : nullWideningType :
-                    typeSet.containsUndefined ? typeSet.containsNonWideningType ? undefinedType : undefinedWideningType :
+                return includes & TypeIncludes.Null ? includes & TypeIncludes.NonWideningType ? nullType : nullWideningType :
+                    includes & TypeIncludes.Undefined ? includes & TypeIncludes.NonWideningType ? undefinedType : undefinedWideningType :
                         neverType;
             }
             return getUnionTypeFromSortedList(typeSet, aliasSymbol, aliasTypeArguments);
@@ -7747,39 +7775,42 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function addTypeToIntersection(typeSet: TypeSet, type: Type) {
-            if (type.flags & TypeFlags.Intersection) {
-                addTypesToIntersection(typeSet, (<IntersectionType>type).types);
+        function addTypeToIntersection(typeSet: Type[], includes: TypeIncludes, type: Type) {
+            const flags = type.flags;
+            if (flags & TypeFlags.Intersection) {
+                includes = addTypesToIntersection(typeSet, includes, (<IntersectionType>type).types);
             }
-            else if (type.flags & TypeFlags.Any) {
-                typeSet.containsAny = true;
+            else if (flags & TypeFlags.Any) {
+                includes |= TypeIncludes.Any;
             }
-            else if (type.flags & TypeFlags.Never) {
-                typeSet.containsNever = true;
+            else if (flags & TypeFlags.Never) {
+                includes |= TypeIncludes.Never;
             }
             else if (getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(type)) {
-                typeSet.containsEmptyObject = true;
+                includes |= TypeIncludes.EmptyObject;
             }
-            else if ((strictNullChecks || !(type.flags & TypeFlags.Nullable)) && !contains(typeSet, type)) {
-                if (type.flags & TypeFlags.Object) {
-                    typeSet.containsObjectType = true;
+            else if ((strictNullChecks || !(flags & TypeFlags.Nullable)) && !contains(typeSet, type)) {
+                if (flags & TypeFlags.Object) {
+                    includes |= TypeIncludes.ObjectType;
                 }
-                if (type.flags & TypeFlags.Union && typeSet.unionIndex === undefined) {
-                    typeSet.unionIndex = typeSet.length;
+                if (flags & TypeFlags.Union) {
+                    includes |= TypeIncludes.Union;
                 }
-                if (!(type.flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous &&
+                if (!(flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous &&
                     type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && containsIdenticalType(typeSet, type))) {
                     typeSet.push(type);
                 }
             }
+            return includes;
         }
 
         // Add the given types to the given type set. Order is preserved, freshness is removed from literal
         // types, duplicates are removed, and nested types of the given kind are flattened into the set.
-        function addTypesToIntersection(typeSet: TypeSet, types: Type[]) {
+        function addTypesToIntersection(typeSet: Type[], includes: TypeIncludes, types: Type[]) {
             for (const type of types) {
-                addTypeToIntersection(typeSet, getRegularTypeOfLiteralType(type));
+                includes = addTypeToIntersection(typeSet, includes, getRegularTypeOfLiteralType(type));
             }
+            return includes;
         }
 
         // We normalize combinations of intersection and union types based on the distributive property of the '&'
@@ -7796,27 +7827,27 @@ namespace ts {
             if (types.length === 0) {
                 return emptyObjectType;
             }
-            const typeSet = [] as TypeSet;
-            addTypesToIntersection(typeSet, types);
-            if (typeSet.containsNever) {
+            const typeSet: Type[] = [];
+            const includes = addTypesToIntersection(typeSet, 0, types);
+            if (includes & TypeIncludes.Never) {
                 return neverType;
             }
-            if (typeSet.containsAny) {
+            if (includes & TypeIncludes.Any) {
                 return anyType;
             }
-            if (typeSet.containsEmptyObject && !typeSet.containsObjectType) {
+            if (includes & TypeIncludes.EmptyObject && !(includes & TypeIncludes.ObjectType)) {
                 typeSet.push(emptyObjectType);
             }
             if (typeSet.length === 1) {
                 return typeSet[0];
             }
-            const unionIndex = typeSet.unionIndex;
-            if (unionIndex !== undefined) {
+            if (includes & TypeIncludes.Union) {
                 // We are attempting to construct a type of the form X & (A | B) & Y. Transform this into a type of
                 // the form X & A & Y | X & B & Y and recursively reduce until no union type constituents remain.
+                const unionIndex = findIndex(typeSet, t => (t.flags & TypeFlags.Union) !== 0);
                 const unionType = <UnionType>typeSet[unionIndex];
                 return getUnionType(map(unionType.types, t => getIntersectionType(replaceElement(typeSet, unionIndex, t))),
-                UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
+                    UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
             }
             const id = getTypeListId(typeSet);
             let type = intersectionTypes.get(id);
@@ -13573,13 +13604,13 @@ namespace ts {
                         .expression;                             // x
                     const classSymbol = checkExpression(className).symbol;
                     if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
-                        return getInferredClassType(classSymbol);
+                        return getFlowTypeOfReference(node, getInferredClassType(classSymbol));
                     }
                 }
 
                 const thisType = getThisTypeOfDeclaration(container) || getContextualThisParameterType(container);
                 if (thisType) {
-                    return thisType;
+                    return getFlowTypeOfReference(node, thisType);
                 }
             }
 
@@ -13592,7 +13623,7 @@ namespace ts {
             if (isInJavaScriptFile(node)) {
                 const type = getTypeForThisExpressionFromJSDoc(container);
                 if (type && type !== unknownType) {
-                    return type;
+                    return getFlowTypeOfReference(node, type);
                 }
             }
         }
@@ -17836,7 +17867,7 @@ namespace ts {
                         const anonymousSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
                         const defaultContainingObject = createAnonymousType(anonymousSymbol, memberTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
                         anonymousSymbol.type = defaultContainingObject;
-                        synthType.syntheticType = (type.flags & TypeFlags.StructuredType && type.symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable)) ? getSpreadType(type, defaultContainingObject, anonymousSymbol, /*typeFLags*/ 0, /*objectFlags*/ 0) : defaultContainingObject;
+                        synthType.syntheticType = isValidSpreadType(type) ? getSpreadType(type, defaultContainingObject, anonymousSymbol, /*typeFLags*/ 0, /*objectFlags*/ 0) : defaultContainingObject;
                     }
                     else {
                         synthType.syntheticType = type;
@@ -19237,13 +19268,9 @@ namespace ts {
 
         function isLiteralOfContextualType(candidateType: Type, contextualType: Type): boolean {
             if (contextualType) {
-                if (contextualType.flags & TypeFlags.UnionOrIntersection && !(contextualType.flags & TypeFlags.Boolean)) {
-                    // If the contextual type is a union containing both of the 'true' and 'false' types we
-                    // don't consider it a literal context for boolean literals.
+                if (contextualType.flags & TypeFlags.UnionOrIntersection) {
                     const types = (<UnionType>contextualType).types;
-                    return some(types, t =>
-                        !(t.flags & TypeFlags.BooleanLiteral && containsType(types, trueType) && containsType(types, falseType)) &&
-                        isLiteralOfContextualType(candidateType, t));
+                    return some(types, t => isLiteralOfContextualType(candidateType, t));
                 }
                 if (contextualType.flags & TypeFlags.InstantiableNonPrimitive) {
                     // If the contextual type is a type variable constrained to a primitive type, consider
@@ -20541,6 +20568,8 @@ namespace ts {
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.EnumDeclaration:
                         return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue;
+                    case SyntaxKind.SourceFile:
+                        return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue | DeclarationSpaces.ExportNamespace;
                     // The below options all declare an Alias, which is allowed to merge with other values within the importing module
                     case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.NamespaceImport:
@@ -25471,11 +25500,18 @@ namespace ts {
                 }
             }
 
+            // We do global augmentations seperately from module augmentations (and before creating global types) because they
+            //  1. Affect global types. We won't have the correct global types until global augmentations are merged. Also,
+            //  2. Module augmentation instantiation requires creating the type of a module, which, in turn, can require
+            //       checking for an export or property on the module (if export=) which, in turn, can fall back to the
+            //       apparent type of the module - either globalObjectType or globalFunctionType - which wouldn't exist if we
+            //       did module augmentations prior to finalizing the global types.
             if (augmentations) {
-                // merge module augmentations.
+                // merge _global_ module augmentations.
                 // this needs to be done after global symbol table is initialized to make sure that all ambient modules are indexed
                 for (const list of augmentations) {
                     for (const augmentation of list) {
+                        if (!isGlobalScopeAugmentation(augmentation.parent as ModuleDeclaration)) continue;
                         mergeModuleAugmentation(augmentation);
                     }
                 }
@@ -25507,6 +25543,17 @@ namespace ts {
             globalReadonlyArrayType = <GenericType>getGlobalTypeOrUndefined("ReadonlyArray" as __String, /*arity*/ 1);
             anyReadonlyArrayType = globalReadonlyArrayType ? createTypeFromGenericGlobalType(globalReadonlyArrayType, [anyType]) : anyArrayType;
             globalThisType = <GenericType>getGlobalTypeOrUndefined("ThisType" as __String, /*arity*/ 1);
+
+            if (augmentations) {
+                // merge _nonglobal_ module augmentations.
+                // this needs to be done after global symbol table is initialized to make sure that all ambient modules are indexed
+                for (const list of augmentations) {
+                    for (const augmentation of list) {
+                        if (isGlobalScopeAugmentation(augmentation.parent as ModuleDeclaration)) continue;
+                        mergeModuleAugmentation(augmentation);
+                    }
+                }
+            }
         }
 
         function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {
@@ -26871,7 +26918,7 @@ namespace ts {
         switch (name.parent.kind) {
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
-                return true;
+                return isIdentifier(name);
             default:
                 return isDeclarationName(name);
         }

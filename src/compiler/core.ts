@@ -1452,7 +1452,13 @@ namespace ts {
 
     export function cast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut {
         if (value !== undefined && test(value)) return value;
-        Debug.fail(`Invalid cast. The supplied value did not pass the test '${Debug.getFunctionName(test)}'.`);
+
+        if (value && typeof (value as any).kind === "number") {
+            Debug.fail(`Invalid cast. The supplied ${(ts as any).SyntaxKind[(value as any).kind]} did not pass the test '${Debug.getFunctionName(test)}'.`);
+        }
+        else {
+            Debug.fail(`Invalid cast. The supplied value did not pass the test '${Debug.getFunctionName(test)}'.`);
+        }
     }
 
     /** Does nothing. */
@@ -2770,6 +2776,10 @@ namespace ts {
         this.flags = flags;
         this.escapedName = name;
         this.declarations = undefined;
+        this.valueDeclaration = undefined;
+        this.id = undefined;
+        this.mergeId = undefined;
+        this.parent = undefined;
     }
 
     function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
@@ -2872,6 +2882,11 @@ namespace ts {
                 (<any>Error).captureStackTrace(e, stackCrawlMark || fail);
             }
             throw e;
+        }
+
+        export function assertDefined<T>(value: T | null | undefined, message?: string): T {
+            assert(value !== undefined && value !== null, message);
+            return value;
         }
 
         export function assertNever(member: never, message?: string, stackCrawlMark?: AnyFunction): never {

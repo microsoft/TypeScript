@@ -2908,7 +2908,7 @@ namespace ts {
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
         /* @internal */ getGlobalDiagnostics(): Diagnostic[];
-        /* @internal */ getEmitResolver(sourceFile?: SourceFile, cancellationToken?: CancellationToken, ignoreDiagnostics?: boolean): EmitResolver;
+        /* @internal */ getEmitResolver(sourceFile?: SourceFile, cancellationToken?: CancellationToken): EmitResolver;
 
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;
@@ -2953,7 +2953,7 @@ namespace ts {
         // Options
         NoTruncation                            = 1 << 0,   // Don't truncate result
         WriteArrayAsGenericType                 = 1 << 1,   // Write Array<T> instead T[]
-        WriteDefaultSymbolWithoutName           = 1 << 2,   // Write `default`-named symbols as `default` instead of how they were written
+        // empty space
         UseStructuralFallback                   = 1 << 3,   // When an alias cannot be named by its symbol, rather than report an error, fallback to a structural printout if possible
         // empty space
         WriteTypeArgumentsOfSignature           = 1 << 5,   // Write the type arguments instead of type parameters of the signature
@@ -2981,6 +2981,7 @@ namespace ts {
         // State
         InObjectTypeLiteral                     = 1 << 22,
         InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
+        InInitialEntityName                     = 1 << 24,    // Set when writing the LHS of an entity name or entity name expression
     }
 
     // Ensure the shared flags between this and `NodeBuilderFlags` stay in alignment
@@ -2988,7 +2989,7 @@ namespace ts {
         None                                    = 0,
         NoTruncation                            = 1 << 0,  // Don't truncate typeToString result
         WriteArrayAsGenericType                 = 1 << 1,  // Write Array<T> instead T[]
-        WriteDefaultSymbolWithoutName           = 1 << 2,  // Write all `defaut`-named symbols as `default` instead of their written name
+        // hole because there's a hole in node builder flags
         UseStructuralFallback                   = 1 << 3,   // When an alias cannot be named by its symbol, rather than report an error, fallback to a structural printout if possible
         // hole because there's a hole in node builder flags
         WriteTypeArgumentsOfSignature           = 1 << 5,  // Write the type arguments instead of type parameters of the signature
@@ -3019,7 +3020,7 @@ namespace ts {
         /** @deprecated */ WriteOwnNameForAnyLike  = 0,  // Does nothing
 
         NodeBuilderFlagsMask =
-            NoTruncation | WriteArrayAsGenericType | WriteDefaultSymbolWithoutName | UseStructuralFallback | WriteTypeArgumentsOfSignature |
+            NoTruncation | WriteArrayAsGenericType | UseStructuralFallback | WriteTypeArgumentsOfSignature |
             UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
             UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias,
     }
@@ -3040,6 +3041,9 @@ namespace ts {
 
         // Build symbol name using any nodes needed, instead of just components of an entity name
         AllowAnyNodeKind = 0x00000004,
+
+        // Prefer aliases which are not directly visible
+        UseAliasDefinedOutsideCurrentScope = 0x00000008,
     }
 
     /* @internal */
