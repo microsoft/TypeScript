@@ -1,0 +1,20 @@
+tests/cases/conformance/es6/Symbols/symbolProperty20.ts(6,5): error TS2322: Type '{ [Symbol.iterator]: (s: string) => string; [Symbol.toStringTag](n: number): number; }' is not assignable to type 'I'.
+  Property '[Symbol.toStringTag]' is missing in type '{ [Symbol.iterator]: (s: string) => string; [Symbol.toStringTag](n: number): number; }'.
+tests/cases/conformance/es6/Symbols/symbolProperty20.ts(8,6): error TS2702: 'Symbol' only refers to a type, but is being used as a namespace here.
+
+
+==== tests/cases/conformance/es6/Symbols/symbolProperty20.ts (2 errors) ====
+    interface I {
+        [Symbol.iterator]: (s: string) => string;
+        [Symbol.toStringTag](s: number): number;
+    }
+    
+    var i: I = {
+        ~
+!!! error TS2322: Type '{ [Symbol.iterator]: (s: string) => string; [Symbol.toStringTag](n: number): number; }' is not assignable to type 'I'.
+!!! error TS2322:   Property '[Symbol.toStringTag]' is missing in type '{ [Symbol.iterator]: (s: string) => string; [Symbol.toStringTag](n: number): number; }'.
+        [Symbol.iterator]: s => s,
+        [Symbol.toStringTag](n) { return n; }
+         ~~~~~~
+!!! error TS2702: 'Symbol' only refers to a type, but is being used as a namespace here.
+    }

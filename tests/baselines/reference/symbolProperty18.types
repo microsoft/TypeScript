@@ -41,7 +41,7 @@ var str = i[Symbol.toStringTag]();
 
 i[Symbol.toPrimitive] = false;
 >i[Symbol.toPrimitive] = false : false
->i[Symbol.toPrimitive] : boolean
+>i[Symbol.toPrimitive] : any
 >i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
 >Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor

@@ -26,7 +26,7 @@ declare function foo<T, U>(p1: T, p2: I<T, U>): U;
 >U : U
 
 foo("", { [Symbol.unscopables]: s => s.length });
->foo("", { [Symbol.unscopables]: s => s.length }) : number
+>foo("", { [Symbol.unscopables]: s => s.length }) : any
 >foo : <T, U>(p1: T, p2: I<T, U>) => U
 >"" : ""
 >{ [Symbol.unscopables]: s => s.length } : { [Symbol.unscopables]: (s: string) => number; }

@@ -1,0 +1,9 @@
+tests/cases/conformance/es6/Symbols/symbolDeclarationEmit9.ts(2,6): error TS2702: 'Symbol' only refers to a type, but is being used as a namespace here.
+
+
+==== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit9.ts (1 errors) ====
+    var obj = {
+        [Symbol.isConcatSpreadable]() { }
+         ~~~~~~
+!!! error TS2702: 'Symbol' only refers to a type, but is being used as a namespace here.
+    }

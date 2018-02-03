@@ -1,0 +1,18 @@
+tests/cases/conformance/es6/Symbols/symbolProperty22.ts(7,9): error TS2345: Argument of type '{ [Symbol.unscopables]: (s: string) => number; }' is not assignable to parameter of type 'I<string, {}>'.
+  Property '[Symbol.unscopables]' is missing in type '{ [Symbol.unscopables]: (s: string) => number; }'.
+tests/cases/conformance/es6/Symbols/symbolProperty22.ts(7,12): error TS2702: 'Symbol' only refers to a type, but is being used as a namespace here.
+
+
+==== tests/cases/conformance/es6/Symbols/symbolProperty22.ts (2 errors) ====
+    interface I<T, U> {
+        [Symbol.unscopables](x: T): U;
+    }
+    
+    declare function foo<T, U>(p1: T, p2: I<T, U>): U;
+    
+    foo("", { [Symbol.unscopables]: s => s.length });
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ [Symbol.unscopables]: (s: string) => number; }' is not assignable to parameter of type 'I<string, {}>'.
+!!! error TS2345:   Property '[Symbol.unscopables]' is missing in type '{ [Symbol.unscopables]: (s: string) => number; }'.
+               ~~~~~~
+!!! error TS2702: 'Symbol' only refers to a type, but is being used as a namespace here.

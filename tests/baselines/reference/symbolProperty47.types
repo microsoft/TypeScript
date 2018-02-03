@@ -21,7 +21,7 @@ class C {
 
 (new C)[Symbol.hasInstance] = 0;
 >(new C)[Symbol.hasInstance] = 0 : 0
->(new C)[Symbol.hasInstance] : number
+>(new C)[Symbol.hasInstance] : string
 >(new C) : C
 >new C : C
 >C : typeof C
@@ -32,7 +32,7 @@ class C {
 
 (new C)[Symbol.hasInstance] = "";
 >(new C)[Symbol.hasInstance] = "" : ""
->(new C)[Symbol.hasInstance] : number
+>(new C)[Symbol.hasInstance] : string
 >(new C) : C
 >new C : C
 >C : typeof C

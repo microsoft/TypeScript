@@ -1,8 +1,11 @@
-tests/cases/conformance/es6/Symbols/symbolProperty21.ts(10,5): error TS2345: Argument of type '{ [Symbol.isConcatSpreadable]: string; [Symbol.toPrimitive]: number; [Symbol.unscopables]: true; }' is not assignable to parameter of type 'I<boolean, string>'.
-  Object literal may only specify known properties, and '[Symbol.toPrimitive]' does not exist in type 'I<boolean, string>'.
+tests/cases/conformance/es6/Symbols/symbolProperty21.ts(9,6): error TS2702: 'Symbol' only refers to a type, but is being used as a namespace here.
+tests/cases/conformance/es6/Symbols/symbolProperty21.ts(10,5): error TS2345: Argument of type '{ [Symbol.isConcatSpreadable]: string; [Symbol.toPrimitive]: number; [Symbol.unscopables]: boolean; }' is not assignable to parameter of type 'I<{}, {}>'.
+  Object literal may only specify known properties, and '[Symbol.toPrimitive]' does not exist in type 'I<{}, {}>'.
+tests/cases/conformance/es6/Symbols/symbolProperty21.ts(10,6): error TS2702: 'Symbol' only refers to a type, but is being used as a namespace here.
+tests/cases/conformance/es6/Symbols/symbolProperty21.ts(11,6): error TS2702: 'Symbol' only refers to a type, but is being used as a namespace here.
 
 
-==== tests/cases/conformance/es6/Symbols/symbolProperty21.ts (1 errors) ====
+==== tests/cases/conformance/es6/Symbols/symbolProperty21.ts (4 errors) ====
     interface I<T, U> {
         [Symbol.unscopables]: T;
         [Symbol.isConcatSpreadable]: U;
@@ -12,9 +15,15 @@ tests/cases/conformance/es6/Symbols/symbolProperty21.ts(10,5): error TS2345: Arg
     
     foo({
         [Symbol.isConcatSpreadable]: "",
+         ~~~~~~
+!!! error TS2702: 'Symbol' only refers to a type, but is being used as a namespace here.
         [Symbol.toPrimitive]: 0,
         ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ [Symbol.isConcatSpreadable]: string; [Symbol.toPrimitive]: number; [Symbol.unscopables]: true; }' is not assignable to parameter of type 'I<boolean, string>'.
-!!! error TS2345:   Object literal may only specify known properties, and '[Symbol.toPrimitive]' does not exist in type 'I<boolean, string>'.
+!!! error TS2345: Argument of type '{ [Symbol.isConcatSpreadable]: string; [Symbol.toPrimitive]: number; [Symbol.unscopables]: boolean; }' is not assignable to parameter of type 'I<{}, {}>'.
+!!! error TS2345:   Object literal may only specify known properties, and '[Symbol.toPrimitive]' does not exist in type 'I<{}, {}>'.
+         ~~~~~~
+!!! error TS2702: 'Symbol' only refers to a type, but is being used as a namespace here.
         [Symbol.unscopables]: true
+         ~~~~~~
+!!! error TS2702: 'Symbol' only refers to a type, but is being used as a namespace here.
     });
