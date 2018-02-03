@@ -690,36 +690,15 @@ namespace ts {
             return createCall(createPropertyAccess(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
         }
 
-        function getNamedImportCount(node: ImportDeclaration) {
-            if (!(node.importClause && node.importClause.namedBindings)) return 0;
-            const names = node.importClause.namedBindings;
-            if (!names) return 0;
-            if (!isNamedImports(names)) return 0;
-            return names.elements.length;
-        }
-
-        function containsDefaultReference(node: NamedImportBindings) {
-            if (!node) return false;
-            if (!isNamedImports(node)) return false;
-            return some(node.elements, isNamedDefaultReference);
-        }
-
-        function isNamedDefaultReference(e: ImportSpecifier) {
-            return e.propertyName && e.propertyName.escapedText === InternalSymbolName.Default;
-        }
-
         function getHelperExpressionForImport(node: ImportDeclaration, innerExpr: Expression) {
             if (!compilerOptions.esModuleInterop || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
                 return innerExpr;
             }
-            const nameCount = getNamedImportCount(node);
-            const hasDefault = nameCount > 0 ? containsDefaultReference(node.importClause.namedBindings) : undefined;
-
-            if (getNamespaceDeclarationNode(node) || (nameCount > 1 && hasDefault)) {
+            if (getImportNeedsImportStarHelper(node)) {
                 context.requestEmitHelper(importStarHelper);
                 return createCall(getHelperName("__importStar"), /*typeArguments*/ undefined, [innerExpr]);
             }
-            if (isDefaultImport(node) || (nameCount === 1 && hasDefault)) {
+            if (getImportNeedsImportDefaultHelper(node)) {
                 context.requestEmitHelper(importDefaultHelper);
                 return createCall(getHelperName("__importDefault"), /*typeArguments*/ undefined, [innerExpr]);
             }
