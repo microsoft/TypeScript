@@ -35,3 +35,15 @@ x();
 x();
 >x : Symbol(x, Decl(a.js, 0, 3))
 
+// @ts-ignore TS2349
+x();
+>x : Symbol(x, Decl(a.js, 0, 3))
+
+// @ts-ignore TS2349, TS2350
+x();
+>x : Symbol(x, Decl(a.js, 0, 3))
+
+// @ts-ignore TS2350 here should be error
+x();
+>x : Symbol(x, Decl(a.js, 0, 3))
+
