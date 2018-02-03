@@ -3,7 +3,7 @@
 /// <reference path="core.ts" />
 
 namespace ts {
-    const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?)/;
+    const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?(?:\s+((?:(?:TS\d+),\s*)*(?:TS\d+)?))?)/;
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string | undefined {
         return forEachAncestorDirectory(searchPath, ancestor => {
@@ -1323,7 +1323,12 @@ namespace ts {
                     }
                     if (result[3]) {
                         // @ts-ignore
-                        return false;
+                        const ignoreOptions = result[4];
+                        if (ignoreOptions) {
+                            return ignoreOptions.indexOf('TS'+diagnostic.code) === -1;
+                        } else {
+                            return false;
+                        }
                     }
                     line--;
                 }
