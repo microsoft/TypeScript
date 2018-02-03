@@ -731,6 +731,24 @@ namespace ts {
             : node;
     }
 
+    export function createConditionalTypeNode(checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.ConditionalType) as ConditionalTypeNode;
+        node.checkType = parenthesizeConditionalTypeMember(checkType);
+        node.extendsType = parenthesizeConditionalTypeMember(extendsType);
+        node.trueType = trueType;
+        node.falseType = falseType;
+        return node;
+    }
+
+    export function updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
+        return node.checkType !== checkType
+            || node.extendsType !== extendsType
+            || node.trueType !== trueType
+            || node.falseType !== falseType
+            ? updateNode(createConditionalTypeNode(checkType, extendsType, trueType, falseType), node)
+            : node;
+    }
+
     export function createParenthesizedType(type: TypeNode) {
         const node = <ParenthesizedTypeNode>createSynthesizedNode(SyntaxKind.ParenthesizedType);
         node.type = type;
@@ -4094,6 +4112,10 @@ namespace ts {
         return expression;
     }
 
+    export function parenthesizeConditionalTypeMember(member: TypeNode) {
+        return member.kind === SyntaxKind.ConditionalType ? createParenthesizedType(member) : member;
+    }
+
     export function parenthesizeElementTypeMember(member: TypeNode) {
         switch (member.kind) {
             case SyntaxKind.UnionType:
@@ -4102,7 +4124,7 @@ namespace ts {
             case SyntaxKind.ConstructorType:
                 return createParenthesizedType(member);
         }
-        return member;
+        return parenthesizeConditionalTypeMember(member);
     }
 
     export function parenthesizeArrayTypeMember(member: TypeNode) {

@@ -4621,6 +4621,10 @@ namespace ts {
         return node.kind === SyntaxKind.IntersectionType;
     }
 
+    export function isConditionalTypeNode(node: Node): node is ConditionalTypeNode {
+        return node.kind === SyntaxKind.ConditionalType;
+    }
+
     export function isParenthesizedTypeNode(node: Node): node is ParenthesizedTypeNode {
         return node.kind === SyntaxKind.ParenthesizedType;
     }

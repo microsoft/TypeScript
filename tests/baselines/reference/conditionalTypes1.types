@@ -1,0 +1,851 @@
+=== tests/cases/conformance/types/conditional/conditionalTypes1.ts ===
+type Diff<T, U> = T extends U ? never : T;
+>Diff : Diff<T, U>
+>T : T
+>U : U
+>T : T
+>U : U
+>T : T
+
+type Filter<T, U> = T extends U ? T : never;
+>Filter : Filter<T, U>
+>T : T
+>U : U
+>T : T
+>U : U
+>T : T
+
+type NonNullable<T> = Diff<T, null | undefined>;
+>NonNullable : Diff<T, null | undefined>
+>T : T
+>Diff : Diff<T, U>
+>T : T
+>null : null
+
+type T00 = Diff<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "b" | "d"
+>T00 : "b" | "d"
+>Diff : Diff<T, U>
+
+type T01 = Filter<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "a" | "c"
+>T01 : "a" | "c"
+>Filter : Filter<T, U>
+
+type T02 = Diff<string | number | (() => void), Function>;  // string | number
+>T02 : string | number
+>Diff : Diff<T, U>
+>Function : Function
+
+type T03 = Filter<string | number | (() => void), Function>;  // () => void
+>T03 : () => void
+>Filter : Filter<T, U>
+>Function : Function
+
+type T04 = NonNullable<string | number | undefined>;  // string | number
+>T04 : string | number
+>NonNullable : Diff<T, null | undefined>
+
+type T05 = NonNullable<(() => string) | string[] | null | undefined>;  // (() => string) | string[]
+>T05 : (() => string) | string[]
+>NonNullable : Diff<T, null | undefined>
+>null : null
+
+function f1<T>(x: T, y: NonNullable<T>) {
+>f1 : <T>(x: T, y: Diff<T, null | undefined>) => void
+>T : T
+>x : T
+>T : T
+>y : Diff<T, null | undefined>
+>NonNullable : Diff<T, null | undefined>
+>T : T
+
+    x = y;
+>x = y : Diff<T, null | undefined>
+>x : T
+>y : Diff<T, null | undefined>
+
+    y = x;  // Error
+>y = x : T
+>y : Diff<T, null | undefined>
+>x : T
+}
+
+function f2<T extends string | undefined>(x: T, y: NonNullable<T>) {
+>f2 : <T extends string | undefined>(x: T, y: Diff<T, null | undefined>) => void
+>T : T
+>x : T
+>T : T
+>y : Diff<T, null | undefined>
+>NonNullable : Diff<T, null | undefined>
+>T : T
+
+    x = y;
+>x = y : Diff<T, null | undefined>
+>x : T
+>y : Diff<T, null | undefined>
+
+    y = x;  // Error
+>y = x : T
+>y : Diff<T, null | undefined>
+>x : T
+
+    let s1: string = x;  // Error
+>s1 : string
+>x : T
+
+    let s2: string = y;
+>s2 : string
+>y : Diff<T, null | undefined>
+}
+
+function f3<T>(x: Partial<T>[keyof T], y: NonNullable<Partial<T>[keyof T]>) {
+>f3 : <T>(x: Partial<T>[keyof T], y: Diff<Partial<T>[keyof T], null | undefined>) => void
+>T : T
+>x : Partial<T>[keyof T]
+>Partial : Partial<T>
+>T : T
+>T : T
+>y : Diff<Partial<T>[keyof T], null | undefined>
+>NonNullable : Diff<T, null | undefined>
+>Partial : Partial<T>
+>T : T
+>T : T
+
+    x = y;
+>x = y : Diff<Partial<T>[keyof T], null | undefined>
+>x : Partial<T>[keyof T]
+>y : Diff<Partial<T>[keyof T], null | undefined>
+
+    y = x;  // Error
+>y = x : Partial<T>[keyof T]
+>y : Diff<Partial<T>[keyof T], null | undefined>
+>x : Partial<T>[keyof T]
+}
+
+type Options = { k: "a", a: number } | { k: "b", b: string } | { k: "c", c: boolean };
+>Options : Options
+>k : "a"
+>a : number
+>k : "b"
+>b : string
+>k : "c"
+>c : boolean
+
+type T10 = Diff<Options, { k: "a" | "b" }>;  // { k: "c", c: boolean }
+>T10 : { k: "c"; c: boolean; }
+>Diff : Diff<T, U>
+>Options : Options
+>k : "a" | "b"
+
+type T11 = Filter<Options, { k: "a" | "b" }>;  // { k: "a", a: number } | { k: "b", b: string }
+>T11 : { k: "a"; a: number; } | { k: "b"; b: string; }
+>Filter : Filter<T, U>
+>Options : Options
+>k : "a" | "b"
+
+type T12 = Diff<Options, { k: "a" } | { k: "b" }>;  // { k: "c", c: boolean }
+>T12 : { k: "c"; c: boolean; }
+>Diff : Diff<T, U>
+>Options : Options
+>k : "a"
+>k : "b"
+
+type T13 = Filter<Options, { k: "a" } | { k: "b" }>;  // { k: "a", a: number } | { k: "b", b: string }
+>T13 : { k: "a"; a: number; } | { k: "b"; b: string; }
+>Filter : Filter<T, U>
+>Options : Options
+>k : "a"
+>k : "b"
+
+type T14 = Diff<Options, { q: "a" }>;  // Options
+>T14 : Options
+>Diff : Diff<T, U>
+>Options : Options
+>q : "a"
+
+type T15 = Filter<Options, { q: "a" }>;  // never
+>T15 : never
+>Filter : Filter<T, U>
+>Options : Options
+>q : "a"
+
+declare function f4<T extends Options, K extends string>(p: K): Filter<T, { k: K }>;
+>f4 : <T extends Options, K extends string>(p: K) => Filter<T, { k: K; }>
+>T : T
+>Options : Options
+>K : K
+>p : K
+>K : K
+>Filter : Filter<T, U>
+>T : T
+>k : K
+>K : K
+
+let x0 = f4("a");  // { k: "a", a: number }
+>x0 : { k: "a"; a: number; }
+>f4("a") : { k: "a"; a: number; }
+>f4 : <T extends Options, K extends string>(p: K) => Filter<T, { k: K; }>
+>"a" : "a"
+
+type OptionsOfKind<K extends Options["k"]> = Filter<Options, { k: K }>;
+>OptionsOfKind : Filter<{ k: "a"; a: number; }, { k: K; }> | Filter<{ k: "b"; b: string; }, { k: K; }> | Filter<{ k: "c"; c: boolean; }, { k: K; }>
+>K : K
+>Options : Options
+>Filter : Filter<T, U>
+>Options : Options
+>k : K
+>K : K
+
+type T16 = OptionsOfKind<"a" | "b">;  // { k: "a", a: number } | { k: "b", b: string }
+>T16 : { k: "a"; a: number; } | { k: "b"; b: string; }
+>OptionsOfKind : Filter<{ k: "a"; a: number; }, { k: K; }> | Filter<{ k: "b"; b: string; }, { k: K; }> | Filter<{ k: "c"; c: boolean; }, { k: K; }>
+
+type Select<T, K extends keyof T, V extends T[K]> = Filter<T, { [P in K]: V }>;
+>Select : Filter<T, { [P in K]: V; }>
+>T : T
+>K : K
+>T : T
+>V : V
+>T : T
+>K : K
+>Filter : Filter<T, U>
+>T : T
+>P : P
+>K : K
+>V : V
+
+type T17 = Select<Options, "k", "a" | "b">;  // // { k: "a", a: number } | { k: "b", b: string }
+>T17 : { k: "a"; a: number; } | { k: "b"; b: string; }
+>Select : Filter<T, { [P in K]: V; }>
+>Options : Options
+
+type TypeName<T> =
+>TypeName : TypeName<T>
+>T : T
+
+    T extends string ? "string" :
+>T : T
+
+    T extends number ? "number" :
+>T : T
+
+    T extends boolean ? "boolean" :
+>T : T
+
+    T extends undefined ? "undefined" :
+>T : T
+
+    T extends Function ? "function" :
+>T : T
+>Function : Function
+
+    "object";
+
+type T20 = TypeName<string | (() => void)>;  // "string" | "function"
+>T20 : "string" | "function"
+>TypeName : TypeName<T>
+
+type T21 = TypeName<any>;  // "string" | "number" | "boolean" | "undefined" | "function" | "object"
+>T21 : "string" | "number" | "boolean" | "undefined" | "object" | "function"
+>TypeName : TypeName<T>
+
+type T22 = TypeName<never>;  // "string" | "number" | "boolean" | "undefined" | "function" | "object"
+>T22 : "string" | "number" | "boolean" | "undefined" | "object" | "function"
+>TypeName : TypeName<T>
+
+type T23 = TypeName<{}>;  // "object"
+>T23 : "object"
+>TypeName : TypeName<T>
+
+type KnockoutObservable<T> = { object: T };
+>KnockoutObservable : KnockoutObservable<T>
+>T : T
+>object : T
+>T : T
+
+type KnockoutObservableArray<T> = { array: T };
+>KnockoutObservableArray : KnockoutObservableArray<T>
+>T : T
+>array : T
+>T : T
+
+type KnockedOut<T> = T extends any[] ? KnockoutObservableArray<T[number]> : KnockoutObservable<T>;
+>KnockedOut : KnockedOut<T>
+>T : T
+>T : T
+>KnockoutObservableArray : KnockoutObservableArray<T>
+>T : T
+>KnockoutObservable : KnockoutObservable<T>
+>T : T
+
+type KnockedOutObj<T> = {
+>KnockedOutObj : KnockedOutObj<T>
+>T : T
+
+    [P in keyof T]: KnockedOut<T[P]>;
+>P : P
+>T : T
+>KnockedOut : KnockedOut<T>
+>T : T
+>P : P
+}
+
+interface Item {
+>Item : Item
+
+    id: number;
+>id : number
+
+    name: string;
+>name : string
+
+    subitems: string[];
+>subitems : string[]
+}
+
+type KOItem = KnockedOutObj<Item>;
+>KOItem : KnockedOutObj<Item>
+>KnockedOutObj : KnockedOutObj<T>
+>Item : Item
+
+interface Part {
+>Part : Part
+
+    id: number;
+>id : number
+
+    name: string;
+>name : string
+
+    subparts: Part[];
+>subparts : Part[]
+>Part : Part
+
+    updatePart(newName: string): void;
+>updatePart : (newName: string) => void
+>newName : string
+}
+
+type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
+>FunctionPropertyNames : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
+>T : T
+>K : K
+>T : T
+>T : T
+>K : K
+>Function : Function
+>K : K
+>T : T
+
+type FunctionProperties<T> = Pick<T, FunctionPropertyNames<T>>;
+>FunctionProperties : Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>
+>T : T
+>Pick : Pick<T, K>
+>T : T
+>FunctionPropertyNames : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
+>T : T
+
+type NonFunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? never : K }[keyof T];
+>NonFunctionPropertyNames : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
+>T : T
+>K : K
+>T : T
+>T : T
+>K : K
+>Function : Function
+>K : K
+>T : T
+
+type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>;
+>NonFunctionProperties : Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>
+>T : T
+>Pick : Pick<T, K>
+>T : T
+>NonFunctionPropertyNames : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
+>T : T
+
+type T30 = FunctionProperties<Part>;
+>T30 : Pick<Part, "updatePart">
+>FunctionProperties : Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>
+>Part : Part
+
+type T31 = NonFunctionProperties<Part>;
+>T31 : Pick<Part, "id" | "name" | "subparts">
+>NonFunctionProperties : Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>
+>Part : Part
+
+function f7<T>(x: T, y: FunctionProperties<T>, z: NonFunctionProperties<T>) {
+>f7 : <T>(x: T, y: Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>, z: Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>) => void
+>T : T
+>x : T
+>T : T
+>y : Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>
+>FunctionProperties : Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>
+>T : T
+>z : Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>
+>NonFunctionProperties : Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>
+>T : T
+
+    x = y;  // Error
+>x = y : Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>
+>x : T
+>y : Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>
+
+    x = z;  // Error
+>x = z : Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>
+>x : T
+>z : Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>
+
+    y = x;
+>y = x : T
+>y : Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>
+>x : T
+
+    y = z;  // Error
+>y = z : Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>
+>y : Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>
+>z : Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>
+
+    z = x;
+>z = x : T
+>z : Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>
+>x : T
+
+    z = y;  // Error
+>z = y : Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>
+>z : Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>
+>y : Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>
+}
+
+function f8<T>(x: keyof T, y: FunctionPropertyNames<T>, z: NonFunctionPropertyNames<T>) {
+>f8 : <T>(x: keyof T, y: { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T], z: { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]) => void
+>T : T
+>x : keyof T
+>T : T
+>y : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
+>FunctionPropertyNames : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
+>T : T
+>z : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
+>NonFunctionPropertyNames : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
+>T : T
+
+    x = y;
+>x = y : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
+>x : keyof T
+>y : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
+
+    x = z;
+>x = z : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
+>x : keyof T
+>z : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
+
+    y = x;  // Error
+>y = x : keyof T
+>y : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
+>x : keyof T
+
+    y = z;  // Error
+>y = z : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
+>y : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
+>z : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
+
+    z = x;  // Error
+>z = x : keyof T
+>z : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
+>x : keyof T
+
+    z = y;  // Error
+>z = y : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
+>z : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
+>y : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
+}
+
+type DeepReadonly<T> =
+>DeepReadonly : DeepReadonly<T>
+>T : T
+
+    T extends any[] ? DeepReadonlyArray<T[number]> :
+>T : T
+>DeepReadonlyArray : DeepReadonlyArray<T>
+>T : T
+
+    T extends object ? DeepReadonlyObject<T> :
+>T : T
+>DeepReadonlyObject : DeepReadonlyObject<T>
+>T : T
+
+    T;
+>T : T
+
+interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> {}
+>DeepReadonlyArray : DeepReadonlyArray<T>
+>T : T
+>ReadonlyArray : ReadonlyArray<T>
+>DeepReadonly : DeepReadonly<T>
+>T : T
+
+type DeepReadonlyObject<T> = {
+>DeepReadonlyObject : DeepReadonlyObject<T>
+>T : T
+
+    readonly [P in NonFunctionPropertyNames<T>]: DeepReadonly<T[P]>;
+>P : P
+>NonFunctionPropertyNames : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
+>T : T
+>DeepReadonly : DeepReadonly<T>
+>T : T
+>P : P
+
+};
+
+function f10(part: DeepReadonly<Part>) {
+>f10 : (part: DeepReadonlyObject<Part>) => void
+>part : DeepReadonlyObject<Part>
+>DeepReadonly : DeepReadonly<T>
+>Part : Part
+
+    let name: string = part.name;
+>name : string
+>part.name : string
+>part : DeepReadonlyObject<Part>
+>name : string
+
+    let id: number = part.subparts[0].id;
+>id : number
+>part.subparts[0].id : number
+>part.subparts[0] : DeepReadonlyObject<Part>
+>part.subparts : DeepReadonlyArray<Part>
+>part : DeepReadonlyObject<Part>
+>subparts : DeepReadonlyArray<Part>
+>0 : 0
+>id : number
+
+    part.id = part.id;  // Error
+>part.id = part.id : number
+>part.id : any
+>part : DeepReadonlyObject<Part>
+>id : any
+>part.id : number
+>part : DeepReadonlyObject<Part>
+>id : number
+
+    part.subparts[0] = part.subparts[0];  // Error
+>part.subparts[0] = part.subparts[0] : DeepReadonlyObject<Part>
+>part.subparts[0] : DeepReadonlyObject<Part>
+>part.subparts : DeepReadonlyArray<Part>
+>part : DeepReadonlyObject<Part>
+>subparts : DeepReadonlyArray<Part>
+>0 : 0
+>part.subparts[0] : DeepReadonlyObject<Part>
+>part.subparts : DeepReadonlyArray<Part>
+>part : DeepReadonlyObject<Part>
+>subparts : DeepReadonlyArray<Part>
+>0 : 0
+
+    part.subparts[0].id = part.subparts[0].id;  // Error
+>part.subparts[0].id = part.subparts[0].id : number
+>part.subparts[0].id : any
+>part.subparts[0] : DeepReadonlyObject<Part>
+>part.subparts : DeepReadonlyArray<Part>
+>part : DeepReadonlyObject<Part>
+>subparts : DeepReadonlyArray<Part>
+>0 : 0
+>id : any
+>part.subparts[0].id : number
+>part.subparts[0] : DeepReadonlyObject<Part>
+>part.subparts : DeepReadonlyArray<Part>
+>part : DeepReadonlyObject<Part>
+>subparts : DeepReadonlyArray<Part>
+>0 : 0
+>id : number
+
+    part.updatePart("hello");  // Error
+>part.updatePart("hello") : any
+>part.updatePart : any
+>part : DeepReadonlyObject<Part>
+>updatePart : any
+>"hello" : "hello"
+}
+
+type ZeroOf<T extends number | string | boolean> = T extends number ? 0 : T extends string ? "" : false;
+>ZeroOf : ZeroOf<T>
+>T : T
+>T : T
+>T : T
+>false : false
+
+function zeroOf<T extends number | string | boolean>(value: T) {
+>zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
+>T : T
+>value : T
+>T : T
+
+    return <ZeroOf<T>>(typeof value === "number" ? 0 : typeof value === "string" ? "" : false);
+><ZeroOf<T>>(typeof value === "number" ? 0 : typeof value === "string" ? "" : false) : ZeroOf<T>
+>ZeroOf : ZeroOf<T>
+>T : T
+>(typeof value === "number" ? 0 : typeof value === "string" ? "" : false) : false | 0 | ""
+>typeof value === "number" ? 0 : typeof value === "string" ? "" : false : false | 0 | ""
+>typeof value === "number" : boolean
+>typeof value : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>value : T
+>"number" : "number"
+>0 : 0
+>typeof value === "string" ? "" : false : false | ""
+>typeof value === "string" : boolean
+>typeof value : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>value : T
+>"string" : "string"
+>"" : ""
+>false : false
+}
+
+function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T) {
+>f20 : <T extends string>(n: number, b: boolean, x: number | boolean, y: T) => void
+>T : T
+>n : number
+>b : boolean
+>x : number | boolean
+>y : T
+>T : T
+
+    zeroOf(5);  // 0
+>zeroOf(5) : 0
+>zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
+>5 : 5
+
+    zeroOf("hello");  // ""
+>zeroOf("hello") : ""
+>zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
+>"hello" : "hello"
+
+    zeroOf(true);  // false
+>zeroOf(true) : false
+>zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
+>true : true
+
+    zeroOf(n);  // 0
+>zeroOf(n) : 0
+>zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
+>n : number
+
+    zeroOf(b);  // False
+>zeroOf(b) : false
+>zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
+>b : boolean
+
+    zeroOf(x);  // 0 | false
+>zeroOf(x) : false | 0
+>zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
+>x : number | boolean
+
+    zeroOf(y);  // ZeroOf<T>
+>zeroOf(y) : ZeroOf<T>
+>zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
+>y : T
+}
+
+function f21<T extends number | string>(x: T, y: ZeroOf<T>) {
+>f21 : <T extends string | number>(x: T, y: ZeroOf<T>) => void
+>T : T
+>x : T
+>T : T
+>y : ZeroOf<T>
+>ZeroOf : ZeroOf<T>
+>T : T
+
+    let z1: number | string = y;
+>z1 : string | number
+>y : ZeroOf<T>
+
+    let z2: 0 | "" = y;
+>z2 : "" | 0
+>y : ZeroOf<T>
+
+    x = y;  // Error
+>x = y : ZeroOf<T>
+>x : T
+>y : ZeroOf<T>
+
+    y = x;  // Error
+>y = x : T
+>y : ZeroOf<T>
+>x : T
+}
+
+type Extends<T, U> = T extends U ? true : false;
+>Extends : Extends<T, U>
+>T : T
+>U : U
+>T : T
+>U : U
+>true : true
+>false : false
+
+type If<C extends boolean, T, F> = C extends true ? T : F;
+>If : If<C, T, F>
+>C : C
+>T : T
+>F : F
+>C : C
+>true : true
+>T : T
+>F : F
+
+type Not<C extends boolean> = If<C, false, true>;
+>Not : If<C, false, true>
+>C : C
+>If : If<C, T, F>
+>C : C
+>false : false
+>true : true
+
+type And<A extends boolean, B extends boolean> = If<A, B, false>;
+>And : If<A, B, false>
+>A : A
+>B : B
+>If : If<C, T, F>
+>A : A
+>B : B
+>false : false
+
+type Or<A extends boolean, B extends boolean> = If<A, true, B>;
+>Or : If<A, true, B>
+>A : A
+>B : B
+>If : If<C, T, F>
+>A : A
+>true : true
+>B : B
+
+type isString<T> = Extends<T, string>;
+>isString : Extends<T, string>
+>T : T
+>Extends : Extends<T, U>
+>T : T
+
+type Q1 = isString<number>;  // false
+>Q1 : false
+>isString : Extends<T, string>
+
+type Q2 = isString<"abc">;  // true
+>Q2 : true
+>isString : Extends<T, string>
+
+type Q3 = isString<any>;  // boolean
+>Q3 : boolean
+>isString : Extends<T, string>
+
+type Q4 = isString<never>;  // boolean
+>Q4 : boolean
+>isString : Extends<T, string>
+
+type N1 = Not<false>;  // true
+>N1 : true
+>Not : If<C, false, true>
+>false : false
+
+type N2 = Not<true>;  // false
+>N2 : false
+>Not : If<C, false, true>
+>true : true
+
+type N3 = Not<boolean>;  // boolean
+>N3 : boolean
+>Not : If<C, false, true>
+
+type A1 = And<false, false>;  // false
+>A1 : false
+>And : If<A, B, false>
+>false : false
+>false : false
+
+type A2 = And<false, true>;  // false
+>A2 : false
+>And : If<A, B, false>
+>false : false
+>true : true
+
+type A3 = And<true, false>;  // false
+>A3 : false
+>And : If<A, B, false>
+>true : true
+>false : false
+
+type A4 = And<true, true>;  // true
+>A4 : true
+>And : If<A, B, false>
+>true : true
+>true : true
+
+type A5 = And<boolean, false>;  // false
+>A5 : false
+>And : If<A, B, false>
+>false : false
+
+type A6 = And<false, boolean>;  // false
+>A6 : false
+>And : If<A, B, false>
+>false : false
+
+type A7 = And<boolean, true>;  // boolean
+>A7 : boolean
+>And : If<A, B, false>
+>true : true
+
+type A8 = And<true, boolean>;  // boolean
+>A8 : boolean
+>And : If<A, B, false>
+>true : true
+
+type A9 = And<boolean, boolean>;  // boolean
+>A9 : boolean
+>And : If<A, B, false>
+
+type O1 = Or<false, false>;  // false
+>O1 : false
+>Or : If<A, true, B>
+>false : false
+>false : false
+
+type O2 = Or<false, true>;  // true
+>O2 : true
+>Or : If<A, true, B>
+>false : false
+>true : true
+
+type O3 = Or<true, false>;  // true
+>O3 : true
+>Or : If<A, true, B>
+>true : true
+>false : false
+
+type O4 = Or<true, true>;  // true
+>O4 : true
+>Or : If<A, true, B>
+>true : true
+>true : true
+
+type O5 = Or<boolean, false>;  // boolean
+>O5 : boolean
+>Or : If<A, true, B>
+>false : false
+
+type O6 = Or<false, boolean>;  // boolean
+>O6 : boolean
+>Or : If<A, true, B>
+>false : false
+
+type O7 = Or<boolean, true>;  // true
+>O7 : true
+>Or : If<A, true, B>
+>true : true
+
+type O8 = Or<true, boolean>;  // true
+>O8 : true
+>Or : If<A, true, B>
+>true : true
+
+type O9 = Or<boolean, boolean>;  // boolean
+>O9 : boolean
+>Or : If<A, true, B>
+

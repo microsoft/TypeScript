@@ -439,23 +439,21 @@ namespace ts {
     export function sameMap<T>(array: T[], f: (x: T, i: number) => T): T[];
     export function sameMap<T>(array: ReadonlyArray<T>, f: (x: T, i: number) => T): ReadonlyArray<T>;
     export function sameMap<T>(array: T[], f: (x: T, i: number) => T): T[] {
-        let result: T[];
         if (array) {
             for (let i = 0; i < array.length; i++) {
-                if (result) {
-                    result.push(f(array[i], i));
-                }
-                else {
-                    const item = array[i];
-                    const mapped = f(item, i);
-                    if (item !== mapped) {
-                        result = array.slice(0, i);
-                        result.push(mapped);
+                const item = array[i];
+                const mapped = f(item, i);
+                if (item !== mapped) {
+                    const result = array.slice(0, i);
+                    result.push(mapped);
+                    for (i++; i < array.length; i++) {
+                        result.push(f(array[i], i));
                     }
+                    return result;
                 }
             }
         }
-        return result || array;
+        return array;
     }
 
     /**

@@ -265,6 +265,7 @@ namespace ts {
         TupleType,
         UnionType,
         IntersectionType,
+        ConditionalType,
         ParenthesizedType,
         ThisType,
         TypeOperator,
@@ -1114,6 +1115,14 @@ namespace ts {
     export interface IntersectionTypeNode extends TypeNode {
         kind: SyntaxKind.IntersectionType;
         types: NodeArray<TypeNode>;
+    }
+
+    export interface ConditionalTypeNode extends TypeNode {
+        kind: SyntaxKind.ConditionalType;
+        checkType: TypeNode;
+        extendsType: TypeNode;
+        trueType: TypeNode;
+        falseType: TypeNode;
     }
 
     export interface ParenthesizedTypeNode extends TypeNode {
@@ -3484,18 +3493,19 @@ namespace ts {
         Intersection            = 1 << 18,  // Intersection (T & U)
         Index                   = 1 << 19,  // keyof T
         IndexedAccess           = 1 << 20,  // T[K]
+        Conditional             = 1 << 21,  // T extends U ? X : Y
+        Substitution            = 1 << 22,  // Type parameter substitution
         /* @internal */
-        FreshLiteral            = 1 << 21,  // Fresh literal or unique type
+        FreshLiteral            = 1 << 23,  // Fresh literal or unique type
         /* @internal */
-        ContainsWideningType    = 1 << 22,  // Type is or contains undefined or null widening type
+        ContainsWideningType    = 1 << 24,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 23,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 1 << 25,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 24,  // Type is or contains the anyFunctionType
-        NonPrimitive            = 1 << 25,  // intrinsic object type
+        ContainsAnyFunctionType = 1 << 26,  // Type is or contains the anyFunctionType
+        NonPrimitive            = 1 << 27,  // intrinsic object type
         /* @internal */
-        JsxAttributes           = 1 << 26,  // Jsx attributes type
-        MarkerType              = 1 << 27,  // Marker type used for variance probing
+        GenericMappedType       = 1 << 29,  // Flag used by maybeTypeOfKind
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -3518,17 +3528,21 @@ namespace ts {
         ESSymbolLike = ESSymbol | UniqueESSymbol,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
-        StructuredOrTypeVariable = StructuredType | TypeParameter | Index | IndexedAccess,
         TypeVariable = TypeParameter | IndexedAccess,
+        InstantiableNonPrimitive = TypeVariable | Conditional | Substitution,
+        InstantiablePrimitive = Index,
+        Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
+        StructuredOrInstantiable = StructuredType | Instantiable,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
+        Narrowable = Any | StructuredOrInstantiable | StringLike | NumberLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
         NotUnionOrUnit = Any | ESSymbol | Object | NonPrimitive,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */
         PropagatingFlags = ContainsWideningType | ContainsObjectLiteral | ContainsAnyFunctionType,
+        /* @internal */
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -3587,7 +3601,9 @@ namespace ts {
         EvolvingArray    = 1 << 8,  // Evolving array type
         ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
         ContainsSpread   = 1 << 10, // Object literal contains spread operation
-        ReverseMapped = 1 << 11,    // Object contains a property from a reverse-mapped type
+        ReverseMapped    = 1 << 11, // Object contains a property from a reverse-mapped type
+        JsxAttributes    = 1 << 12, // Jsx attributes type
+        MarkerType       = 1 << 13, // Marker type used for variance probing
         ClassOrInterface = Class | Interface
     }
 
@@ -3741,7 +3757,7 @@ namespace ts {
         syntheticType?: Type;
     }
 
-    export interface TypeVariable extends Type {
+    export interface InstantiableType extends Type {
         /* @internal */
         resolvedBaseConstraint?: Type;
         /* @internal */
@@ -3749,7 +3765,7 @@ namespace ts {
     }
 
     // Type parameters (TypeFlags.TypeParameter)
-    export interface TypeParameter extends TypeVariable {
+    export interface TypeParameter extends InstantiableType {
         /** Retrieve using getConstraintFromTypeParameter */
         /* @internal */
         constraint?: Type;        // Constraint
@@ -3767,15 +3783,38 @@ namespace ts {
 
     // Indexed access types (TypeFlags.IndexedAccess)
     // Possible forms are T[xxx], xxx[T], or xxx[keyof T], where T is a type variable
-    export interface IndexedAccessType extends TypeVariable {
+    export interface IndexedAccessType extends InstantiableType {
         objectType: Type;
         indexType: Type;
         constraint?: Type;
     }
 
     // keyof T types (TypeFlags.Index)
-    export interface IndexType extends Type {
-        type: TypeVariable | UnionOrIntersectionType;
+    export interface IndexType extends InstantiableType {
+        type: InstantiableType | UnionOrIntersectionType;
+    }
+
+    // T extends U ? X : Y (TypeFlags.Conditional)
+    export interface ConditionalType extends InstantiableType {
+        checkType: Type;
+        extendsType: Type;
+        trueType: Type;
+        falseType: Type;
+        /* @internal */
+        target?: ConditionalType;
+        /* @internal */
+        mapper?: TypeMapper;
+    }
+
+    // Type parameter substitution (TypeFlags.Substitution)
+    // Substitution types are created for type parameter references that occur in the true branch
+    // of a conditional type. For example, in 'T extends string ? Foo<T> : Bar<T>', the reference to
+    // T in Foo<T> is resolved as a substitution type that substitutes 'string & T' for T. Thus, if
+    // Foo has a 'string' constraint on its type parameter, T will satisfy it. Substitution types
+    // disappear upon instantiation (just like type parameters).
+    export interface SubstitutionType extends InstantiableType {
+        typeParameter: TypeParameter;  // Target type parameter
+        substitute: Type;              // Type to substitute for type parameter
     }
 
     export const enum SignatureKind {

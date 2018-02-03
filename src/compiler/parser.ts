@@ -175,6 +175,11 @@ namespace ts {
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
                 return visitNodes(cbNode, cbNodes, (<UnionOrIntersectionTypeNode>node).types);
+            case SyntaxKind.ConditionalType:
+                return visitNode(cbNode, (<ConditionalTypeNode>node).checkType) ||
+                    visitNode(cbNode, (<ConditionalTypeNode>node).extendsType) ||
+                    visitNode(cbNode, (<ConditionalTypeNode>node).trueType) ||
+                    visitNode(cbNode, (<ConditionalTypeNode>node).falseType);
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.TypeOperator:
                 return visitNode(cbNode, (<ParenthesizedTypeNode | TypeOperatorNode>node).type);
@@ -1494,6 +1499,11 @@ namespace ts {
             return isStartOfExpression();
         }
 
+        function nextTokenIsStartOfType() {
+            nextToken();
+            return isStartOfType();
+        }
+
         // True if positioned at a list terminator
         function isListTerminator(kind: ParsingContext): boolean {
             if (token() === SyntaxKind.EndOfFileToken) {
@@ -2789,6 +2799,10 @@ namespace ts {
                         type = createJSDocPostfixType(SyntaxKind.JSDocNonNullableType, type);
                         break;
                     case SyntaxKind.QuestionToken:
+                        // If not in JSDoc and next token is start of a type we have a conditional type
+                        if (!(contextFlags & NodeFlags.JSDoc) && lookAhead(nextTokenIsStartOfType)) {
+                            return type;
+                        }
                         type = createJSDocPostfixType(SyntaxKind.JSDocNullableType, type);
                         break;
                     case SyntaxKind.OpenBracketToken:
@@ -2950,14 +2964,26 @@ namespace ts {
             return doOutsideOfContext(NodeFlags.TypeExcludesFlags, parseTypeWorker);
         }
 
-        function parseTypeWorker(): TypeNode {
+        function parseTypeWorker(noConditionalTypes?: boolean): TypeNode {
             if (isStartOfFunctionType()) {
                 return parseFunctionOrConstructorType(SyntaxKind.FunctionType);
             }
             if (token() === SyntaxKind.NewKeyword) {
                 return parseFunctionOrConstructorType(SyntaxKind.ConstructorType);
             }
-            return parseUnionTypeOrHigher();
+            const type = parseUnionTypeOrHigher();
+            if (!noConditionalTypes && parseOptional(SyntaxKind.ExtendsKeyword)) {
+                const node = <ConditionalTypeNode>createNode(SyntaxKind.ConditionalType, type.pos);
+                node.checkType = type;
+                // The type following 'extends' is not permitted to be another conditional type
+                node.extendsType = parseTypeWorker(/*noConditionalTypes*/ true);
+                parseExpected(SyntaxKind.QuestionToken);
+                node.trueType = parseTypeWorker();
+                parseExpected(SyntaxKind.ColonToken);
+                node.falseType = parseTypeWorker();
+                return finishNode(node);
+            }
+            return type;
         }
 
         function parseTypeAnnotation(): TypeNode {
