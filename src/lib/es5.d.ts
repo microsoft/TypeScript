@@ -1273,7 +1273,20 @@ declare type PropertyDecorator = (target: Object, propertyKey: string | symbol) 
 declare type MethodDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
 declare type ParameterDecorator = (target: Object, propertyKey: string | symbol, parameterIndex: number) => void;
 
-declare type PromiseConstructorLike = new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>;
+/** An object type that can be definitely be awaited. Do not inherit from this type. */
+declare type Awaitable<T> = { then(onfulfilled: (value: T) => any): any; };
+
+/** An object type that may not be awaitable. Do not inherit from this type. */
+declare type NonAwaitable = { then(...args: any[]): any; };
+
+/** Gets the type resulting from awaiting `T`. This does **not** recursively unwrap nested promises. */
+declare type Awaited<T> =
+    T extends Awaitable<Awaitable<infer U>> ? U :
+    T extends Awaitable<infer U> ? U :
+    T extends NonAwaitable ? never :
+    T;
+
+declare type PromiseConstructorLike = new <T>(executor: (resolve: (value?: T | Awaitable<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>;
 
 interface PromiseLike<T> {
     /**
@@ -1282,7 +1295,7 @@ interface PromiseLike<T> {
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): PromiseLike<TResult1 | TResult2>;
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: Awaited<T>) => TResult1) | null, onrejected?: ((reason: any) => TResult2) | null): PromiseLike<Awaited<TResult1 | TResult2>>;
 }
 
 /**
@@ -1295,14 +1308,14 @@ interface Promise<T> {
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: Awaited<T>) => TResult1) | null, onrejected?: ((reason: any) => TResult2) | null): Promise<Awaited<TResult1 | TResult2>>;
 
     /**
      * Attaches a callback for only the rejection of the Promise.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of the callback.
      */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult) | null): Promise<Awaited<T | TResult>>;
 }
 
 interface ArrayLike<T> {
