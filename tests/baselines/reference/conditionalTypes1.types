@@ -717,27 +717,27 @@ type Or<A extends boolean, B extends boolean> = If<A, true, B>;
 >true : true
 >B : B
 
-type isString<T> = Extends<T, string>;
->isString : Extends<T, string>
+type IsString<T> = Extends<T, string>;
+>IsString : Extends<T, string>
 >T : T
 >Extends : Extends<T, U>
 >T : T
 
-type Q1 = isString<number>;  // false
+type Q1 = IsString<number>;  // false
 >Q1 : false
->isString : Extends<T, string>
+>IsString : Extends<T, string>
 
-type Q2 = isString<"abc">;  // true
+type Q2 = IsString<"abc">;  // true
 >Q2 : true
->isString : Extends<T, string>
+>IsString : Extends<T, string>
 
-type Q3 = isString<any>;  // boolean
+type Q3 = IsString<any>;  // boolean
 >Q3 : boolean
->isString : Extends<T, string>
+>IsString : Extends<T, string>
 
-type Q4 = isString<never>;  // boolean
+type Q4 = IsString<never>;  // boolean
 >Q4 : boolean
->isString : Extends<T, string>
+>IsString : Extends<T, string>
 
 type N1 = Not<false>;  // true
 >N1 : true
@@ -863,4 +863,23 @@ type T42 = never extends number ? true : false;  // boolean
 >T42 : boolean
 >true : true
 >false : false
+
+type IsNever<T> = T extends never ? true : false;
+>IsNever : IsNever<T>
+>T : T
+>T : T
+>true : true
+>false : false
+
+type T50 = IsNever<never>;  // true
+>T50 : true
+>IsNever : IsNever<T>
+
+type T51 = IsNever<number>;  // false
+>T51 : false
+>IsNever : IsNever<T>
+
+type T52 = IsNever<any>;  // false
+>T52 : false
+>IsNever : IsNever<T>
 
