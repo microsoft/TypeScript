@@ -31,8 +31,11 @@ namespace ts {
         };
     }
 
-    function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic) {
-        if (system.clearScreen && diagnostic.code !== Diagnostics.Compilation_complete_Watching_for_file_changes.code) {
+    function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions) {
+        if (system.clearScreen &&
+            diagnostic.code !== Diagnostics.Compilation_complete_Watching_for_file_changes.code &&
+            !options.extendedDiagnostics &&
+            !options.diagnostics) {
             system.clearScreen();
         }
     }
@@ -42,18 +45,18 @@ namespace ts {
      */
     export function createWatchStatusReporter(system: System, pretty?: boolean): WatchStatusReporter {
         return pretty ?
-        (diagnostic: Diagnostic, newLine: string) => {
-            clearScreenIfNotWatchingForFileChanges(system, diagnostic);
-            let output = `[${ formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey) }] `;
-            output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine + newLine}`;
-            system.write(output);
-        } :
-        (diagnostic: Diagnostic, newLine: string) => {
-            clearScreenIfNotWatchingForFileChanges(system, diagnostic);
-            let output = new Date().toLocaleTimeString() + " - ";
-            output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine + newLine}`;
-            system.write(output);
-        };
+            (diagnostic, newLine, options) => {
+                clearScreenIfNotWatchingForFileChanges(system, diagnostic, options);
+                let output = `[${formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey)}] `;
+                output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine + newLine}`;
+                system.write(output);
+            } :
+            (diagnostic, newLine, options) => {
+                clearScreenIfNotWatchingForFileChanges(system, diagnostic, options);
+                let output = new Date().toLocaleTimeString() + " - ";
+                output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine + newLine}`;
+                system.write(output);
+            };
     }
 
     /**
@@ -68,7 +71,7 @@ namespace ts {
         const host: ParseConfigFileHost = <any>system;
         host.onConfigFileDiagnostic = reportDiagnostic;
         host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(sys, reportDiagnostic, diagnostic);
-        const result = parseConfigFile(configFileName, optionsToExtend, host);
+        const result = getParsedCommandLineOfConfigFile(configFileName, optionsToExtend, host);
         host.onConfigFileDiagnostic = undefined;
         host.onUnRecoverableConfigFileDiagnostic = undefined;
         return result;
@@ -77,7 +80,7 @@ namespace ts {
     /**
      * Reads the config file, reports errors if any and exits if the config file cannot be found
      */
-    export function parseConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost): ParsedCommandLine | undefined {
+    export function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost): ParsedCommandLine | undefined {
         let configFileText: string;
         try {
             configFileText = host.readFile(configFileName);
@@ -254,7 +257,7 @@ namespace ts {
 
 namespace ts {
     export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
-    export type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string) => void;
+    export type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions) => void;
     export type CreateProgram<T extends BuilderProgram> = (rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: T) => T;
     export interface WatchCompilerHost<T extends BuilderProgram> {
         /**
@@ -264,7 +267,7 @@ namespace ts {
         /** If provided, callback to invoke after every new program creation */
         afterProgramCreate?(program: T): void;
         /** If provided, called with Diagnostic message that informs about change in watch status */
-        onWatchStatusChange?(diagnostic: Diagnostic, newLine: string): void;
+        onWatchStatusChange?(diagnostic: Diagnostic, newLine: string, options: CompilerOptions): void;
 
         // Only for testing
         /*@internal*/
@@ -477,12 +480,13 @@ namespace ts {
         const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? trace : noop;
         const { watchFile, watchFilePath, watchDirectory: watchDirectoryWorker } = getWatchFactory(watchLogLevel, writeLog);
 
+        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
+        let newLine = updateNewLine();
+
+        writeLog(`Current directory: ${currentDirectory} CaseSensitiveFileNames: ${useCaseSensitiveFileNames}`);
         if (configFileName) {
             watchFile(host, configFileName, scheduleProgramReload, PollingInterval.High);
         }
-
-        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
-        let newLine = updateNewLine();
 
         const compilerHost: CompilerHost & ResolutionCacheHost = {
             // Members for CompilerHost
@@ -570,6 +574,12 @@ namespace ts {
             }
 
             // Compile the program
+            if (watchLogLevel !== WatchLogLevel.None) {
+                writeLog("CreatingProgramWith::");
+                writeLog(`  roots: ${JSON.stringify(rootFileNames)}`);
+                writeLog(`  options: ${JSON.stringify(compilerOptions)}`);
+            }
+
             const needsUpdateInTypeRootWatch = hasChangedCompilerOptions || !program;
             hasChangedCompilerOptions = false;
             resolutionCache.startCachingPerDirectoryResolution();
@@ -725,7 +735,7 @@ namespace ts {
 
         function reportWatchDiagnostic(message: DiagnosticMessage) {
             if (host.onWatchStatusChange) {
-                host.onWatchStatusChange(createCompilerDiagnostic(message), newLine);
+                host.onWatchStatusChange(createCompilerDiagnostic(message), newLine, compilerOptions);
             }
         }
 
@@ -791,7 +801,7 @@ namespace ts {
         }
 
         function parseConfigFile() {
-            const configParseResult = ts.parseConfigFile(configFileName, optionsToExtendForConfigFile, parseConfigFileHost);
+            const configParseResult = ts.getParsedCommandLineOfConfigFile(configFileName, optionsToExtendForConfigFile, parseConfigFileHost);
             rootFileNames = configParseResult.fileNames;
             compilerOptions = configParseResult.options;
             configFileSpecs = configParseResult.configFileSpecs;

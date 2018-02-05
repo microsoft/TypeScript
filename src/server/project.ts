@@ -428,6 +428,14 @@ namespace ts.server {
             this.projectService.logger.info(s);
         }
 
+        log(s: string) {
+            this.writeLog(s);
+        }
+
+        error(s: string) {
+            this.projectService.logger.msg(s, Msg.Err);
+        }
+
         private setInternalCompilerOptionsForEmittingJsFiles() {
             if (this.projectKind === ProjectKind.Inferred || this.projectKind === ProjectKind.External) {
                 this.compilerOptions.noEmitForJsFiles = true;
