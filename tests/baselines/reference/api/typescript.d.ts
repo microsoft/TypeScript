@@ -1266,6 +1266,7 @@ declare namespace ts {
     }
     interface ClassDeclaration extends ClassLikeDeclarationBase, DeclarationStatement {
         kind: SyntaxKind.ClassDeclaration;
+        /** May be undefined in `export default class { ... }`. */
         name?: Identifier;
     }
     interface ClassExpression extends ClassLikeDeclarationBase, PrimaryExpression {
