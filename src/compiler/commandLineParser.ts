@@ -187,7 +187,7 @@ namespace ts {
             description: Diagnostics.Generates_corresponding_d_ts_file,
         },
         {
-            name: "emitDeclarationsOnly",
+            name: "emitDeclarationOnly",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Only_emit_d_ts_declaration_files,
