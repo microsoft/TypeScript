@@ -2502,12 +2502,12 @@ namespace ts {
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
-                /*parameters*/ param ? [param] : [],
+                /*parameters*/ optionToArray(param),
                 /*type*/ undefined,
                 createBlock(statements, /*multiLine*/ true)
             ),
             /*typeArguments*/ undefined,
-            /*argumentsArray*/ paramValue ? [paramValue] : []
+            /*argumentsArray*/ optionToArray(paramValue)
         );
     }
 
@@ -2518,13 +2518,13 @@ namespace ts {
             createArrowFunction(
                 /*modifiers*/ undefined,
                 /*typeParameters*/ undefined,
-                /*parameters*/ param ? [param] : [],
+                /*parameters*/ optionToArray(param),
                 /*type*/ undefined,
                 /*equalsGreaterThanToken*/ undefined,
                 createBlock(statements, /*multiLine*/ true)
             ),
             /*typeArguments*/ undefined,
-            /*argumentsArray*/ paramValue ? [paramValue] : []
+            /*argumentsArray*/ optionToArray(paramValue)
         );
     }
 

@@ -1439,6 +1439,10 @@ namespace ts {
         return isArray(value) ? value : [value];
     }
 
+    export function optionToArray<T>(value: T | undefined): T[] {
+        return value === undefined ? [] : [value];
+    }
+
     /**
      * Tests whether a value is string
      */
