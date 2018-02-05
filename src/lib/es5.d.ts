@@ -1273,17 +1273,13 @@ declare type PropertyDecorator = (target: Object, propertyKey: string | symbol) 
 declare type MethodDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
 declare type ParameterDecorator = (target: Object, propertyKey: string | symbol, parameterIndex: number) => void;
 
-/** An object type that can be definitely be awaited. Do not inherit from this type. */
+/** An object type that can definitely be awaited. Do not inherit from this type. */
 declare type Awaitable<T> = { then(onfulfilled: (value: T) => any): any; };
 
-/** An object type that may not be awaitable. Do not inherit from this type. */
-declare type NonAwaitable = { then(...args: any[]): any; };
-
-/** Gets the type resulting from awaiting `T`. This does **not** recursively unwrap nested promises. */
+/** Gets the resulting type from awaiting `T`. This does **not** recursively unwrap nested promises. */
 declare type Awaited<T> =
-    T extends Awaitable<Awaitable<infer U>> ? U :
     T extends Awaitable<infer U> ? U :
-    T extends NonAwaitable ? never :
+    T extends { then(...args: any[]): any; } ? never :
     T;
 
 declare type PromiseConstructorLike = new <T>(executor: (resolve: (value?: T | Awaitable<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>;
