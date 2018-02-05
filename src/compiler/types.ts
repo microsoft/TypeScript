@@ -3564,7 +3564,7 @@ namespace ts {
         aliasSymbol?: Symbol;            // Alias associated with type
         aliasTypeArguments?: Type[];     // Alias type arguments (if any)
         /* @internal */
-        resolvedAnyInstantiation?: Type;  // Instantiation with type parameters mapped to any
+        wildcardInstantiation?: Type;    // Instantiation with type parameters mapped to wildcard type
     }
 
     /* @internal */

@@ -315,6 +315,7 @@ namespace ts {
 
         const anyType = createIntrinsicType(TypeFlags.Any, "any");
         const autoType = createIntrinsicType(TypeFlags.Any, "any");
+        const wildcardType = createIntrinsicType(TypeFlags.Any, "any");
         const unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
         const undefinedType = createIntrinsicType(TypeFlags.Undefined, "undefined");
         const undefinedWideningType = strictNullChecks ? undefinedType : createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsWideningType, "undefined");
@@ -8150,9 +8151,10 @@ namespace ts {
             // Instantiate extends type without instantiating any 'infer T' type parameters
             const extendsType = instantiateType(baseExtendsType, mapper);
             // Return falseType for a definitely false extends check. We check an instantations of the two
-            // types with type parameters mapped to any, the most permissive instantiations possible. If those
-            // are not related, then no instatiations will be and we can just return the false branch type.
-            if (!isTypeAssignableTo(getAnyInstantiation(checkType), getAnyInstantiation(extendsType))) {
+            // types with type parameters mapped to the wildcard type, the most permissive instantiations
+            // possible (the wildcard type is assignable to and from all types). If those are not related,
+            // then no instatiations will be and we can just return the false branch type.
+            if (!isTypeAssignableTo(getWildcardInstantiation(checkType), getWildcardInstantiation(extendsType))) {
                 return instantiateType(baseFalseType, mapper);
             }
             // The check could be true for some instantiation
@@ -8615,8 +8617,8 @@ namespace ts {
             return t => t === source ? target : baseMapper(t);
         }
 
-        function anyMapper(type: Type) {
-            return type.flags & TypeFlags.TypeParameter ? anyType : type;
+        function wildcardMapper(type: Type) {
+            return type.flags & TypeFlags.TypeParameter ? wildcardType : type;
         }
 
         function cloneTypeParameter(typeParameter: TypeParameter): TypeParameter {
@@ -8873,9 +8875,9 @@ namespace ts {
             return type;
         }
 
-        function getAnyInstantiation(type: Type) {
+        function getWildcardInstantiation(type: Type) {
             return type.flags & (TypeFlags.Primitive | TypeFlags.Any | TypeFlags.Never) ? type :
-                type.resolvedAnyInstantiation || (type.resolvedAnyInstantiation = instantiateType(type, anyMapper));
+                type.wildcardInstantiation || (type.wildcardInstantiation = instantiateType(type, wildcardMapper));
         }
 
         function instantiateIndexInfo(info: IndexInfo, mapper: TypeMapper): IndexInfo {
@@ -9282,7 +9284,7 @@ namespace ts {
         function isSimpleTypeRelatedTo(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorReporter?: ErrorReporter) {
             const s = source.flags;
             const t = target.flags;
-            if (t & TypeFlags.Any || s & TypeFlags.Never) return true;
+            if (t & TypeFlags.Any || s & TypeFlags.Never || source === wildcardType) return true;
             if (t & TypeFlags.Never) return false;
             if (s & TypeFlags.StringLike && t & TypeFlags.String) return true;
             if (s & TypeFlags.StringLiteral && s & TypeFlags.EnumLiteral &&
