@@ -2878,7 +2878,7 @@ Actual: ${stringify(fullActual)}`);
 
             for (const fileName of fileNames) {
                 const expectedRangesInFile = expectedRanges.filter(r => r.fileName === fileName);
-                const highlights = ts.find(documentHighlights, dh => dh.fileName === fileName)
+                const highlights = ts.find(documentHighlights, dh => dh.fileName === fileName);
                 const spansInFile = highlights ? highlights.highlightSpans.sort((s1, s2) => s1.textSpan.start - s2.textSpan.start) : [];
 
                 if (expectedRangesInFile.length !== spansInFile.length) {
