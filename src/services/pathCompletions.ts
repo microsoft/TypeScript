@@ -6,7 +6,7 @@ namespace ts.Completions.PathCompletions {
         const scriptPath = node.getSourceFile().path;
         const scriptDirectory = getDirectoryPath(scriptPath);
 
-        const span = getDirectoryFragmentTextSpan((<StringLiteral>node).text, node.getStart(sourceFile) + 1);
+        const span = getDirectoryFragmentTextSpan(node.text, node.getStart(sourceFile) + 1);
         if (isPathRelativeToScript(literalValue) || isRootedDiskPath(literalValue)) {
             const extensions = getSupportedExtensions(compilerOptions);
             if (compilerOptions.rootDirs) {
@@ -226,7 +226,8 @@ namespace ts.Completions.PathCompletions {
         const includeGlob = normalizedSuffix ? "**/*" : "./*";
 
         const matches = tryReadDirectory(host, baseDirectory, fileExtensions, /*exclude*/ undefined, [includeGlob]);
-        const directories = tryGetDirectories(host, baseDirectory);
+        const directories = tryGetDirectories(host, baseDirectory).map(d => combinePaths(baseDirectory, d));
+
         // Trim away prefix and suffix
         return mapDefined(concatenate(matches, directories), match => {
             const normalizedMatch = normalizePath(match);
@@ -476,14 +477,14 @@ namespace ts.Completions.PathCompletions {
     const nodeModulesDependencyKeys = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"];
 
     function tryGetDirectories(host: LanguageServiceHost, directoryName: string): string[] {
-        return tryIOAndConsumeErrors(host, host.getDirectories, directoryName);
+        return tryIOAndConsumeErrors(host, host.getDirectories, directoryName) || [];
     }
 
-    function tryReadDirectory(host: LanguageServiceHost, path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>): string[] | undefined {
+    function tryReadDirectory(host: LanguageServiceHost, path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>): string[] | undefined | undefined {
         return tryIOAndConsumeErrors(host, host.readDirectory, path, extensions, exclude, include);
     }
 
-    function tryReadFile(host: LanguageServiceHost, path: string): string {
+    function tryReadFile(host: LanguageServiceHost, path: string): string | undefined {
         return tryIOAndConsumeErrors(host, host.readFile, path);
     }
 
