@@ -137,8 +137,8 @@ async function out() {
     return new Promise(function (resolve, reject) {});
 >new Promise(function (resolve, reject) {}) : Promise<{}>
 >Promise : PromiseConstructor
->function (resolve, reject) {} : (resolve: (value?: {} | Awaitable<{}>) => void, reject: (reason?: any) => void) => void
->resolve : (value?: {} | Awaitable<{}>) => void
+>function (resolve, reject) {} : (resolve: (value?: {} | PromiseLike<{}>) => void, reject: (reason?: any) => void) => void
+>resolve : (value?: {} | PromiseLike<{}>) => void
 >reject : (reason?: any) => void
 }
 
