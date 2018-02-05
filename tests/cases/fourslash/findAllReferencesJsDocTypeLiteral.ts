@@ -14,9 +14,3 @@
 //// function f(o) { return o.nested.[|great|]; }
 
 verify.rangesReferenceEachOther();
-
-///**
-// * @param {object} [|o|] - very important!
-// * @param {string} o.x - a thing, its ok
-// */
-// function f([|o|]) { return [|o|].x; }
