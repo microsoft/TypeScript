@@ -7500,6 +7500,8 @@ declare namespace ts.server {
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         directoryExists(path: string): boolean;
         getDirectories(path: string): string[];
+        log(s: string): void;
+        error(s: string): void;
         private setInternalCompilerOptionsForEmittingJsFiles();
         /**
          * Get the errors that dont have any file name associated
