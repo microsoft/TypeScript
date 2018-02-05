@@ -2155,7 +2155,7 @@ declare module "fs" {
             const initialProgram = watch();
             verifyProgram();
 
-            const mediumPollingIntervalThreshold = unChangedThreshold(PollingInterval.Medium);
+            const mediumPollingIntervalThreshold = unchangedPollThresholds[PollingInterval.Medium];
             for (let index = 0; index < mediumPollingIntervalThreshold; index++) {
                 // Transition libFile and file1 to low priority queue
                 host.checkTimeoutQueueLengthAndRun(1);
@@ -2182,7 +2182,7 @@ declare module "fs" {
             assert.isTrue(host.fileExists(outputFile1));
             assert.equal(host.readFile(outputFile1), file1.content + host.newLine);
 
-            const newThreshold = unChangedThreshold(PollingInterval.Low) + mediumPollingIntervalThreshold;
+            const newThreshold = unchangedPollThresholds[PollingInterval.Low] + mediumPollingIntervalThreshold;
             for (; fileUnchangeDetected < newThreshold; fileUnchangeDetected++) {
                 // For high + Medium/low polling interval
                 host.checkTimeoutQueueLengthAndRun(2);

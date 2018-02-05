@@ -63,26 +63,73 @@ namespace ts {
     /* @internal */
     export const missingFileModifiedTime = new Date(0); // Any subsequent modification will occur after this time
 
-    enum ChunkSize {
-        Low = 32,
-        Medium = 64,
-        High = 256
+    interface Levels {
+        Low: number;
+        Medium: number;
+        High: number;
     }
 
-    function chunkSize(pollingInterval: PollingInterval) {
-        switch (pollingInterval) {
-            case PollingInterval.Low:
-                return ChunkSize.Low;
-            case PollingInterval.Medium:
-                return ChunkSize.Medium;
-            case PollingInterval.High:
-                return ChunkSize.High;
+    function createPollingIntervalBasedLevels(levels: Levels) {
+        return {
+            [PollingInterval.Low]: levels.Low,
+            [PollingInterval.Medium]: levels.Medium,
+            [PollingInterval.High]: levels.High
+        };
+    }
+
+    const defaultChunkLevels: Levels = { Low: 32, Medium: 64, High: 256 };
+    let pollingChunkSize = createPollingIntervalBasedLevels(defaultChunkLevels);
+    /* @internal */
+    export let unchangedPollThresholds = createPollingIntervalBasedLevels(defaultChunkLevels);
+
+    /* @internal */
+    export function setCustomPollingValues(system: System) {
+        if (!system.getEnvironmentVariable) {
+            return;
         }
-    }
+        const pollingIntervalChanged = setCustomLevels("TSC_WATCH_POLLINGINTERVAL", PollingInterval);
+        pollingChunkSize = getCustomPollingBasedLevels("TSC_WATCH_POLLINGCHUNKSIZE", defaultChunkLevels) || pollingChunkSize;
+        unchangedPollThresholds = getCustomPollingBasedLevels("TSC_WATCH_UNCHANGEDPOLLTHRESHOLDS", defaultChunkLevels) || unchangedPollThresholds;
 
-    /*@internal*/
-    export function unChangedThreshold(pollingInterval: PollingInterval) {
-        return chunkSize(pollingInterval);
+        function getLevel(envVar: string, level: keyof Levels) {
+            return system.getEnvironmentVariable(`${envVar}_${level.toUpperCase()}`);
+        }
+
+        function getCustomLevels(baseVariable: string) {
+            let customLevels: Partial<Levels> | undefined;
+            setCustomLevel("Low");
+            setCustomLevel("Medium");
+            setCustomLevel("High");
+            return customLevels;
+
+            function setCustomLevel(level: keyof Levels) {
+                const customLevel = getLevel(baseVariable, level);
+                if (customLevel) {
+                    (customLevels || (customLevels || {}))[level] = Number(customLevel);
+                }
+            }
+        }
+
+        function setCustomLevels(baseVariable: string, levels: Levels) {
+            const customLevels = getCustomLevels(baseVariable);
+            if (customLevels) {
+                setLevel("Low");
+                setLevel("Medium");
+                setLevel("High");
+                return true;
+            }
+            return false;
+
+            function setLevel(level: keyof Levels) {
+                levels[level] = customLevels[level] || levels[level];
+            }
+        }
+
+        function getCustomPollingBasedLevels(baseVariable: string, defaultLevels: Levels) {
+            let customLevels = getCustomLevels(baseVariable);
+            return (pollingIntervalChanged || customLevels) &&
+                createPollingIntervalBasedLevels(customLevels ? { ...defaultLevels, ...customLevels } : defaultLevels);
+        }
     }
 
     /* @internal */
@@ -138,7 +185,7 @@ namespace ts {
         }
 
         function pollPollingIntervalQueue(queue: PollingIntervalQueue) {
-            queue.pollIndex = pollQueue(queue, queue.pollingInterval, queue.pollIndex, chunkSize(queue.pollingInterval));
+            queue.pollIndex = pollQueue(queue, queue.pollingInterval, queue.pollIndex, pollingChunkSize[queue.pollingInterval]);
             // Set the next polling index and timeout
             if (queue.length) {
                 scheduleNextPoll(queue.pollingInterval);
@@ -190,7 +237,7 @@ namespace ts {
                         addChangedFileToLowPollingIntervalQueue(watchedFile);
                     }
                 }
-                else if (watchedFile.unchangedPolls !== unChangedThreshold(pollingInterval)) {
+                else if (watchedFile.unchangedPolls !== unchangedPollThresholds[pollingInterval]) {
                     watchedFile.unchangedPolls++;
                 }
                 else if (queue === changedFilesInLastPoll) {
@@ -575,6 +622,7 @@ namespace ts {
                     process.stdout.write("\x1Bc");
                 }
             };
+
             nodeSystem.watchFile = getWatchFile();
             nodeSystem.watchDirectory = getWatchDirectory();
             return nodeSystem;
@@ -1063,6 +1111,7 @@ namespace ts {
     })();
 
     if (sys && sys.getEnvironmentVariable) {
+        setCustomPollingValues(sys);
         Debug.currentAssertionLevel = /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))
             ? AssertionLevel.Normal
             : AssertionLevel.None;
