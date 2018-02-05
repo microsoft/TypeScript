@@ -1582,7 +1582,7 @@ namespace ts {
 
         function getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] {
             synchronizeHostData();
-            const sourceFilesToSearch = map(filesToSearch, f => program.getSourceFile(f));
+            const sourceFilesToSearch = map(filesToSearch, f => Debug.assertDefined(program.getSourceFile(f)));
             const sourceFile = getValidSourceFile(fileName);
             return DocumentHighlights.getDocumentHighlights(program, cancellationToken, sourceFile, position, sourceFilesToSearch);
         }

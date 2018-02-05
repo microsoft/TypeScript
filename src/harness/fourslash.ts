@@ -2819,7 +2819,7 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        private getDocumentHighlightsAtCurrentPosition(fileNamesToSearch: string[]) {
+        private getDocumentHighlightsAtCurrentPosition(fileNamesToSearch: ReadonlyArray<string>) {
             const filesToSearch = fileNamesToSearch.map(name => ts.combinePaths(this.basePath, name));
             return this.languageService.getDocumentHighlights(this.activeFile.fileName, this.currentCaretPosition, filesToSearch);
         }
@@ -2843,9 +2843,8 @@ Actual: ${stringify(fullActual)}`);
             this.rangesByText().forEach(ranges => this.verifyRangesAreDocumentHighlights(ranges));
         }
 
-        public verifyDocumentHighlightsOf(startRange: Range, ranges: Range[]) {
-            ts.Debug.assert(ts.contains(ranges, startRange));
-            const fileNames = unique(ranges, range => range.fileName);
+        public verifyDocumentHighlightsOf(startRange: Range, ranges: Range[], options: FourSlashInterface.VerifyDocumentHighlightsOptions | undefined) {
+            const fileNames = options && options.filesToSearch || unique(ranges, range => range.fileName);
             this.goToRangeStart(startRange);
             this.verifyDocumentHighlights(ranges, fileNames);
         }
@@ -2868,7 +2867,7 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        private verifyDocumentHighlights(expectedRanges: Range[], fileNames: string[] = [this.activeFile.fileName]) {
+        private verifyDocumentHighlights(expectedRanges: Range[], fileNames: ReadonlyArray<string> = [this.activeFile.fileName]) {
             const documentHighlights = this.getDocumentHighlightsAtCurrentPosition(fileNames) || [];
 
             for (const dh of documentHighlights) {
@@ -2879,11 +2878,8 @@ Actual: ${stringify(fullActual)}`);
 
             for (const fileName of fileNames) {
                 const expectedRangesInFile = expectedRanges.filter(r => r.fileName === fileName);
-                const highlights = ts.find(documentHighlights, dh => dh.fileName === fileName);
-                if (!highlights) {
-                    this.raiseError(`verifyDocumentHighlights failed - found no highlights in ${fileName}`);
-                }
-                const spansInFile = highlights.highlightSpans.sort((s1, s2) => s1.textSpan.start - s2.textSpan.start);
+                const highlights = ts.find(documentHighlights, dh => dh.fileName === fileName)
+                const spansInFile = highlights ? highlights.highlightSpans.sort((s1, s2) => s1.textSpan.start - s2.textSpan.start) : [];
 
                 if (expectedRangesInFile.length !== spansInFile.length) {
                     this.raiseError(`verifyDocumentHighlights failed - In ${fileName}, expected ${expectedRangesInFile.length} highlights, got ${spansInFile.length}`);
@@ -4272,8 +4268,8 @@ namespace FourSlashInterface {
             this.state.verifyRangesWithSameTextAreDocumentHighlights();
         }
 
-        public documentHighlightsOf(startRange: FourSlash.Range, ranges: FourSlash.Range[]) {
-            this.state.verifyDocumentHighlightsOf(startRange, ranges);
+        public documentHighlightsOf(startRange: FourSlash.Range, ranges: FourSlash.Range[], options?: VerifyDocumentHighlightsOptions) {
+            this.state.verifyDocumentHighlightsOf(startRange, ranges, options);
         }
 
         public noDocumentHighlights(startRange: FourSlash.Range) {
@@ -4620,6 +4616,10 @@ namespace FourSlashInterface {
         sourceDisplay: string;
         isRecommended?: true;
         insertText?: string;
+    }
+
+    export interface VerifyDocumentHighlightsOptions {
+        filesToSearch?: ReadonlyArray<string>;
     }
 
     export interface NewContentOptions {
