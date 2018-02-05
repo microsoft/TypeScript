@@ -148,7 +148,7 @@ someGenerics3<Date>(() => undefined);
 >someGenerics3<Date>(() => undefined) : void
 >someGenerics3 : <T>(producer: () => T) => void
 >Date : Date
->() => undefined : () => any
+>() => undefined : () => undefined
 >undefined : undefined
 
 someGenerics3<number>(() => 3);
@@ -172,7 +172,7 @@ someGenerics4(4, () => null);
 >someGenerics4(4, () => null) : void
 >someGenerics4 : <T, U>(n: T, f: (x: U) => void) => void
 >4 : 4
->() => null : () => any
+>() => null : () => null
 >null : null
 
 someGenerics4<string, number>('', () => 3);
@@ -203,7 +203,7 @@ someGenerics5(4, () => null);
 >someGenerics5(4, () => null) : void
 >someGenerics5 : <U, T>(n: T, f: (x: U) => void) => void
 >4 : 4
->() => null : () => any
+>() => null : () => null
 >null : null
 
 someGenerics5<number, string>('', () => 3);

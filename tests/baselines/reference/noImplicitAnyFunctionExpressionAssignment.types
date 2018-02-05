@@ -2,7 +2,7 @@
 var x: (a: any) => void = function <T>(x: T) {
 >x : (a: any) => void
 >a : any
->function <T>(x: T) {    return null;} : <T>(x: T) => any
+>function <T>(x: T) {    return null;} : <T>(x: T) => null
 >T : T
 >x : T
 >T : T

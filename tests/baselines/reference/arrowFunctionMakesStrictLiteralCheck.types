@@ -1,0 +1,21 @@
+=== tests/cases/compiler/arrowFunctionMakesStrictLiteralCheck.ts ===
+interface X { x: number; }
+>X : X
+>x : number
+
+type XGetter = () => X;
+>XGetter : XGetter
+>X : X
+
+const getX2: XGetter = () => {
+>getX2 : XGetter
+>XGetter : XGetter
+>() => {	return { x: 1, y: 2 }; // Expect excess property error on `y`} : () => { x: number; y: number; }
+
+	return { x: 1, y: 2 }; // Expect excess property error on `y`
+>{ x: 1, y: 2 } : { x: number; y: number; }
+>x : number
+>1 : 1
+>y : number
+>2 : 2
+}

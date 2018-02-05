@@ -8,8 +8,8 @@ tests/cases/compiler/assignmentCompatBug2.ts(15,1): error TS2322: Type '{ f: (n:
   Property 'm' is missing in type '{ f: (n: number) => number; g: (s: string) => number; }'.
 tests/cases/compiler/assignmentCompatBug2.ts(20,1): error TS2322: Type '{ f: (n: number) => number; m: number; }' is not assignable to type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }'.
   Property 'g' is missing in type '{ f: (n: number) => number; m: number; }'.
-tests/cases/compiler/assignmentCompatBug2.ts(33,1): error TS2322: Type '{ f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => any; }' is not assignable to type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }'.
-  Property 'm' is missing in type '{ f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => any; }'.
+tests/cases/compiler/assignmentCompatBug2.ts(33,1): error TS2322: Type '{ f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => null; }' is not assignable to type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }'.
+  Property 'm' is missing in type '{ f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => null; }'.
 
 
 ==== tests/cases/compiler/assignmentCompatBug2.ts (6 errors) ====
@@ -62,8 +62,8 @@ tests/cases/compiler/assignmentCompatBug2.ts(33,1): error TS2322: Type '{ f: (n:
     
     b3 = {
     ~~
-!!! error TS2322: Type '{ f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => any; }' is not assignable to type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }'.
-!!! error TS2322:   Property 'm' is missing in type '{ f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => any; }'.
+!!! error TS2322: Type '{ f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => null; }' is not assignable to type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }'.
+!!! error TS2322:   Property 'm' is missing in type '{ f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => null; }'.
         f: (n) => { return 0; },
         g: (s) => { return 0; },
         n: 0,

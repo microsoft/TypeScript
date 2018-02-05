@@ -18,7 +18,7 @@ f("", x => null, x => x.toLowerCase());
 >f("", x => null, x => x.toLowerCase()) : string
 >f : <T>(x: T, y: (p: T) => T, z: (p: T) => T) => T
 >"" : ""
->x => null : (x: string) => any
+>x => null : (x: string) => null
 >x : string
 >null : null
 >x => x.toLowerCase() : (x: string) => string
@@ -48,16 +48,16 @@ declare function g();
 >g : { <T>(x: T, y: (p: T) => T, z: (p: T) => T): T; (): any; }
 
 g("", x => null, x => x.toLowerCase());
->g("", x => null, x => x.toLowerCase()) : any
+>g("", x => null, x => x.toLowerCase()) : string
 >g : { <T>(x: T, y: (p: T) => T, z: (p: T) => T): T; (): any; }
 >"" : ""
->x => null : (x: string) => any
+>x => null : (x: string) => null
 >x : string
 >null : null
->x => x.toLowerCase() : (x: any) => any
->x : any
->x.toLowerCase() : any
->x.toLowerCase : any
->x : any
->toLowerCase : any
+>x => x.toLowerCase() : (x: string) => string
+>x : string
+>x.toLowerCase() : string
+>x.toLowerCase : () => string
+>x : string
+>toLowerCase : () => string
 

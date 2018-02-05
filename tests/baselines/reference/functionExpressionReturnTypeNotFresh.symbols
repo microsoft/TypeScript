@@ -1,0 +1,21 @@
+=== tests/cases/compiler/functionExpressionReturnTypeNotFresh.ts ===
+const a = () => ({
+>a : Symbol(a, Decl(functionExpressionReturnTypeNotFresh.ts, 0, 5))
+
+    a: 12,
+>a : Symbol(a, Decl(functionExpressionReturnTypeNotFresh.ts, 0, 18))
+
+    b: 11
+>b : Symbol(b, Decl(functionExpressionReturnTypeNotFresh.ts, 1, 10))
+
+});
+
+declare function f(arg: {a: number}): void;
+>f : Symbol(f, Decl(functionExpressionReturnTypeNotFresh.ts, 3, 3))
+>arg : Symbol(arg, Decl(functionExpressionReturnTypeNotFresh.ts, 5, 19))
+>a : Symbol(a, Decl(functionExpressionReturnTypeNotFresh.ts, 5, 25))
+
+f(a());
+>f : Symbol(f, Decl(functionExpressionReturnTypeNotFresh.ts, 3, 3))
+>a : Symbol(a, Decl(functionExpressionReturnTypeNotFresh.ts, 0, 5))
+

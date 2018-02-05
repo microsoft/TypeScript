@@ -1,0 +1,29 @@
+=== tests/cases/compiler/destructuringNoFreshLiteralLeak.ts ===
+const { x = () => ({a: 12}) } = { x: () => ({a: 24, b: 12}) };
+>x : () => { a: number; }
+>() => ({a: 12}) : () => { a: number; }
+>({a: 12}) : { a: number; }
+>{a: 12} : { a: number; }
+>a : number
+>12 : 12
+>{ x: () => ({a: 24, b: 12}) } : { x?: () => { a: number; b: number; }; }
+>x : () => { a: number; b: number; }
+>() => ({a: 24, b: 12}) : () => { a: number; b: number; }
+>({a: 24, b: 12}) : { a: number; b: number; }
+>{a: 24, b: 12} : { a: number; b: number; }
+>a : number
+>24 : 24
+>b : number
+>12 : 12
+
+declare function f(x: {a: number}): void;
+>f : (x: { a: number; }) => void
+>x : { a: number; }
+>a : number
+
+f(x());
+>f(x()) : void
+>f : (x: { a: number; }) => void
+>x() : { a: number; }
+>x : () => { a: number; }
+
