@@ -17,6 +17,4 @@
 /// <reference path='helpers.ts' />
 /// <reference path='inferFromUsage.ts' />
 /// <reference path="fixInvalidImportSyntax.ts" />
-/// <reference path="fixAddMissingUndefinedType.ts" />
-/// <reference path="fixAddMissingDefiniteAssignmentAssertions.ts" />
-/// <reference path="fixAddMissingPropertyInitializer.ts" />
+/// <reference path="fixStrictClassInitialization.ts" />
