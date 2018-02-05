@@ -166,12 +166,12 @@ type Not<C extends boolean> = If<C, false, true>;
 type And<A extends boolean, B extends boolean> = If<A, B, false>;
 type Or<A extends boolean, B extends boolean> = If<A, true, B>;
 
-type isString<T> = Extends<T, string>;
+type IsString<T> = Extends<T, string>;
 
-type Q1 = isString<number>;  // false
-type Q2 = isString<"abc">;  // true
-type Q3 = isString<any>;  // boolean
-type Q4 = isString<never>;  // boolean
+type Q1 = IsString<number>;  // false
+type Q2 = IsString<"abc">;  // true
+type Q3 = IsString<any>;  // boolean
+type Q4 = IsString<never>;  // boolean
 
 type N1 = Not<false>;  // true
 type N2 = Not<true>;  // false
@@ -200,3 +200,9 @@ type O9 = Or<boolean, boolean>;  // boolean
 type T40 = never extends never ? true : false;  // true
 type T41 = number extends never ? true : false;  // false
 type T42 = never extends number ? true : false;  // boolean
+
+type IsNever<T> = T extends never ? true : false;
+
+type T50 = IsNever<never>;  // true
+type T51 = IsNever<number>;  // false
+type T52 = IsNever<any>;  // false
