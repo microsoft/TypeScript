@@ -480,6 +480,7 @@ namespace ts {
         const watchFilePath = compilerOptions.extendedDiagnostics ? ts.addFilePathWatcherWithLogging : ts.addFilePathWatcher;
         const watchDirectoryWorker = compilerOptions.extendedDiagnostics ? ts.addDirectoryWatcherWithLogging : ts.addDirectoryWatcher;
 
+        writeLog(`Current directory: ${currentDirectory} CaseSensitiveFileNames: ${useCaseSensitiveFileNames}`);
         if (configFileName) {
             watchFile(host, configFileName, scheduleProgramReload, writeLog);
         }
@@ -573,6 +574,10 @@ namespace ts {
             }
 
             // Compile the program
+            if (loggingEnabled) {
+                writeLog(`CreatingProgramWith::\n  roots: ${JSON.stringify(rootFileNames)}\n  options: ${JSON.stringify(compilerOptions)}`);
+            }
+
             const needsUpdateInTypeRootWatch = hasChangedCompilerOptions || !program;
             hasChangedCompilerOptions = false;
             resolutionCache.startCachingPerDirectoryResolution();

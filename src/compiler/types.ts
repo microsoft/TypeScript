@@ -215,6 +215,7 @@ namespace ts {
         ConstructorKeyword,
         DeclareKeyword,
         GetKeyword,
+        InferKeyword,
         IsKeyword,
         KeyOfKeyword,
         ModuleKeyword,
@@ -265,6 +266,8 @@ namespace ts {
         TupleType,
         UnionType,
         IntersectionType,
+        ConditionalType,
+        InferType,
         ParenthesizedType,
         ThisType,
         TypeOperator,
@@ -770,7 +773,7 @@ namespace ts {
 
     export interface TypeParameterDeclaration extends NamedDeclaration {
         kind: SyntaxKind.TypeParameter;
-        parent?: DeclarationWithTypeParameters;
+        parent?: DeclarationWithTypeParameters | InferTypeNode;
         name: Identifier;
         constraint?: TypeNode;
         default?: TypeNode;
@@ -1114,6 +1117,19 @@ namespace ts {
     export interface IntersectionTypeNode extends TypeNode {
         kind: SyntaxKind.IntersectionType;
         types: NodeArray<TypeNode>;
+    }
+
+    export interface ConditionalTypeNode extends TypeNode {
+        kind: SyntaxKind.ConditionalType;
+        checkType: TypeNode;
+        extendsType: TypeNode;
+        trueType: TypeNode;
+        falseType: TypeNode;
+    }
+
+    export interface InferTypeNode extends TypeNode {
+        kind: SyntaxKind.InferType;
+        typeParameter: TypeParameterDeclaration;
     }
 
     export interface ParenthesizedTypeNode extends TypeNode {
@@ -2937,7 +2953,7 @@ namespace ts {
         // Options
         NoTruncation                            = 1 << 0,   // Don't truncate result
         WriteArrayAsGenericType                 = 1 << 1,   // Write Array<T> instead T[]
-        WriteDefaultSymbolWithoutName           = 1 << 2,   // Write `default`-named symbols as `default` instead of how they were written
+        // empty space
         UseStructuralFallback                   = 1 << 3,   // When an alias cannot be named by its symbol, rather than report an error, fallback to a structural printout if possible
         // empty space
         WriteTypeArgumentsOfSignature           = 1 << 5,   // Write the type arguments instead of type parameters of the signature
@@ -2965,6 +2981,7 @@ namespace ts {
         // State
         InObjectTypeLiteral                     = 1 << 22,
         InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
+        InInitialEntityName                     = 1 << 24,    // Set when writing the LHS of an entity name or entity name expression
     }
 
     // Ensure the shared flags between this and `NodeBuilderFlags` stay in alignment
@@ -2972,7 +2989,7 @@ namespace ts {
         None                                    = 0,
         NoTruncation                            = 1 << 0,  // Don't truncate typeToString result
         WriteArrayAsGenericType                 = 1 << 1,  // Write Array<T> instead T[]
-        WriteDefaultSymbolWithoutName           = 1 << 2,  // Write all `defaut`-named symbols as `default` instead of their written name
+        // hole because there's a hole in node builder flags
         UseStructuralFallback                   = 1 << 3,   // When an alias cannot be named by its symbol, rather than report an error, fallback to a structural printout if possible
         // hole because there's a hole in node builder flags
         WriteTypeArgumentsOfSignature           = 1 << 5,  // Write the type arguments instead of type parameters of the signature
@@ -3003,7 +3020,7 @@ namespace ts {
         /** @deprecated */ WriteOwnNameForAnyLike  = 0,  // Does nothing
 
         NodeBuilderFlagsMask =
-            NoTruncation | WriteArrayAsGenericType | WriteDefaultSymbolWithoutName | UseStructuralFallback | WriteTypeArgumentsOfSignature |
+            NoTruncation | WriteArrayAsGenericType | UseStructuralFallback | WriteTypeArgumentsOfSignature |
             UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
             UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias,
     }
@@ -3024,6 +3041,9 @@ namespace ts {
 
         // Build symbol name using any nodes needed, instead of just components of an entity name
         AllowAnyNodeKind = 0x00000004,
+
+        // Prefer aliases which are not directly visible
+        UseAliasDefinedOutsideCurrentScope = 0x00000008,
     }
 
     /* @internal */
@@ -3480,18 +3500,19 @@ namespace ts {
         Intersection            = 1 << 18,  // Intersection (T & U)
         Index                   = 1 << 19,  // keyof T
         IndexedAccess           = 1 << 20,  // T[K]
+        Conditional             = 1 << 21,  // T extends U ? X : Y
+        Substitution            = 1 << 22,  // Type parameter substitution
         /* @internal */
-        FreshLiteral            = 1 << 21,  // Fresh literal or unique type
+        FreshLiteral            = 1 << 23,  // Fresh literal or unique type
         /* @internal */
-        ContainsWideningType    = 1 << 22,  // Type is or contains undefined or null widening type
+        ContainsWideningType    = 1 << 24,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 23,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 1 << 25,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 24,  // Type is or contains the anyFunctionType
-        NonPrimitive            = 1 << 25,  // intrinsic object type
+        ContainsAnyFunctionType = 1 << 26,  // Type is or contains the anyFunctionType
+        NonPrimitive            = 1 << 27,  // intrinsic object type
         /* @internal */
-        JsxAttributes           = 1 << 26,  // Jsx attributes type
-        MarkerType              = 1 << 27,  // Marker type used for variance probing
+        GenericMappedType       = 1 << 29,  // Flag used by maybeTypeOfKind
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -3514,17 +3535,21 @@ namespace ts {
         ESSymbolLike = ESSymbol | UniqueESSymbol,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
-        StructuredOrTypeVariable = StructuredType | TypeParameter | Index | IndexedAccess,
         TypeVariable = TypeParameter | IndexedAccess,
+        InstantiableNonPrimitive = TypeVariable | Conditional | Substitution,
+        InstantiablePrimitive = Index,
+        Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
+        StructuredOrInstantiable = StructuredType | Instantiable,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
+        Narrowable = Any | StructuredOrInstantiable | StringLike | NumberLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
         NotUnionOrUnit = Any | ESSymbol | Object | NonPrimitive,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */
         PropagatingFlags = ContainsWideningType | ContainsObjectLiteral | ContainsAnyFunctionType,
+        /* @internal */
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -3538,6 +3563,8 @@ namespace ts {
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
         aliasSymbol?: Symbol;            // Alias associated with type
         aliasTypeArguments?: Type[];     // Alias type arguments (if any)
+        /* @internal */
+        resolvedAnyInstantiation?: Type;  // Instantiation with type parameters mapped to any
     }
 
     /* @internal */
@@ -3583,7 +3610,9 @@ namespace ts {
         EvolvingArray    = 1 << 8,  // Evolving array type
         ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
         ContainsSpread   = 1 << 10, // Object literal contains spread operation
-        ReverseMapped = 1 << 11,    // Object contains a property from a reverse-mapped type
+        ReverseMapped    = 1 << 11, // Object contains a property from a reverse-mapped type
+        JsxAttributes    = 1 << 12, // Jsx attributes type
+        MarkerType       = 1 << 13, // Marker type used for variance probing
         ClassOrInterface = Class | Interface
     }
 
@@ -3737,7 +3766,7 @@ namespace ts {
         syntheticType?: Type;
     }
 
-    export interface TypeVariable extends Type {
+    export interface InstantiableType extends Type {
         /* @internal */
         resolvedBaseConstraint?: Type;
         /* @internal */
@@ -3745,7 +3774,7 @@ namespace ts {
     }
 
     // Type parameters (TypeFlags.TypeParameter)
-    export interface TypeParameter extends TypeVariable {
+    export interface TypeParameter extends InstantiableType {
         /** Retrieve using getConstraintFromTypeParameter */
         /* @internal */
         constraint?: Type;        // Constraint
@@ -3763,15 +3792,40 @@ namespace ts {
 
     // Indexed access types (TypeFlags.IndexedAccess)
     // Possible forms are T[xxx], xxx[T], or xxx[keyof T], where T is a type variable
-    export interface IndexedAccessType extends TypeVariable {
+    export interface IndexedAccessType extends InstantiableType {
         objectType: Type;
         indexType: Type;
         constraint?: Type;
     }
 
     // keyof T types (TypeFlags.Index)
-    export interface IndexType extends Type {
-        type: TypeVariable | UnionOrIntersectionType;
+    export interface IndexType extends InstantiableType {
+        type: InstantiableType | UnionOrIntersectionType;
+    }
+
+    // T extends U ? X : Y (TypeFlags.Conditional)
+    export interface ConditionalType extends InstantiableType {
+        checkType: Type;
+        extendsType: Type;
+        trueType: Type;
+        falseType: Type;
+        /* @internal */
+        inferTypeParameters: TypeParameter[];
+        /* @internal */
+        target?: ConditionalType;
+        /* @internal */
+        mapper?: TypeMapper;
+    }
+
+    // Type parameter substitution (TypeFlags.Substitution)
+    // Substitution types are created for type parameter references that occur in the true branch
+    // of a conditional type. For example, in 'T extends string ? Foo<T> : Bar<T>', the reference to
+    // T in Foo<T> is resolved as a substitution type that substitutes 'string & T' for T. Thus, if
+    // Foo has a 'string' constraint on its type parameter, T will satisfy it. Substitution types
+    // disappear upon instantiation (just like type parameters).
+    export interface SubstitutionType extends InstantiableType {
+        typeParameter: TypeParameter;  // Target type parameter
+        substitute: Type;              // Type to substitute for type parameter
     }
 
     export const enum SignatureKind {
@@ -3833,6 +3887,8 @@ namespace ts {
         NakedTypeVariable = 1 << 0,  // Naked type variable in union or intersection type
         MappedType        = 1 << 1,  // Reverse inference for mapped type
         ReturnType        = 1 << 2,  // Inference made from return type of generic function
+        NoConstraints     = 1 << 3,  // Don't infer from constraints of instantiable types
+        AlwaysStrict      = 1 << 4,  // Always use strict rules for contravariant inferences
     }
 
     export interface InferenceInfo {

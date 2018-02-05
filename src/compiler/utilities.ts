@@ -4621,6 +4621,14 @@ namespace ts {
         return node.kind === SyntaxKind.IntersectionType;
     }
 
+    export function isConditionalTypeNode(node: Node): node is ConditionalTypeNode {
+        return node.kind === SyntaxKind.ConditionalType;
+    }
+
+    export function isInferTypeNode(node: Node): node is InferTypeNode {
+        return node.kind === SyntaxKind.InferType;
+    }
+
     export function isParenthesizedTypeNode(node: Node): node is ParenthesizedTypeNode {
         return node.kind === SyntaxKind.ParenthesizedType;
     }
@@ -5891,7 +5899,7 @@ namespace ts {
 
     /** True if node is of a kind that may contain comment text. */
     export function isJSDocCommentContainingNode(node: Node): boolean {
-        return node.kind === SyntaxKind.JSDocComment || isJSDocTag(node);
+        return node.kind === SyntaxKind.JSDocComment || isJSDocTag(node) || isJSDocTypeLiteral(node);
     }
 
     // TODO: determine what this does before making it public.

@@ -17,12 +17,12 @@ function foo(...rest: any[]) {
 foo({ x: "", y: 0, z: false });
 >foo({ x: "", y: 0, z: false }) : any
 >foo : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => any
->{ x: "", y: 0, z: false } : { x: string; y: number; z: boolean; }
+>{ x: "", y: 0, z: false } : { x: string; y: number; z: false; }
 >x : string
 >"" : ""
 >y : number
 >0 : 0
->z : boolean
+>z : false
 >false : false
 
 foo({ x: false, y: 0, z: "" });

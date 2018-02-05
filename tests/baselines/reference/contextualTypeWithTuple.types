@@ -15,7 +15,7 @@ var numStrTuple2: [number, string] = [5, "foo", true];
 
 var numStrBoolTuple: [number, string, boolean] = [5, "foo", true];
 >numStrBoolTuple : [number, string, boolean]
->[5, "foo", true] : [number, string, boolean]
+>[5, "foo", true] : [number, string, true]
 >5 : 5
 >"foo" : "foo"
 >true : true

@@ -149,20 +149,20 @@ function foo5(opts5) {
 foo5([{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unnest: 1 }]);
 >foo5([{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unnest: 1 }]) : void
 >foo5 : (opts5: { help: string; what: { a: string; bad: { idea: string; oh: boolean; }[]; }; unnest: number; }[]) => void
->[{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unnest: 1 }] : { help: string; what: { a: string; bad: { idea: string; oh: boolean; }[]; }; unnest: number; }[]
->{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unnest: 1 } : { help: string; what: { a: string; bad: { idea: string; oh: boolean; }[]; }; unnest: number; }
+>[{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unnest: 1 }] : { help: string; what: { a: string; bad: { idea: string; oh: false; }[]; }; unnest: number; }[]
+>{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unnest: 1 } : { help: string; what: { a: string; bad: { idea: string; oh: false; }[]; }; unnest: number; }
 >help : string
 >"help" : "help"
->what : { a: string; bad: { idea: string; oh: boolean; }[]; }
->{ a: 'a', bad: [{ idea: 'idea', oh: false }] } : { a: string; bad: { idea: string; oh: boolean; }[]; }
+>what : { a: string; bad: { idea: string; oh: false; }[]; }
+>{ a: 'a', bad: [{ idea: 'idea', oh: false }] } : { a: string; bad: { idea: string; oh: false; }[]; }
 >a : string
 >'a' : "a"
->bad : { idea: string; oh: boolean; }[]
->[{ idea: 'idea', oh: false }] : { idea: string; oh: boolean; }[]
->{ idea: 'idea', oh: false } : { idea: string; oh: boolean; }
+>bad : { idea: string; oh: false; }[]
+>[{ idea: 'idea', oh: false }] : { idea: string; oh: false; }[]
+>{ idea: 'idea', oh: false } : { idea: string; oh: false; }
 >idea : string
 >'idea' : "idea"
->oh : boolean
+>oh : false
 >false : false
 >unnest : number
 >1 : 1

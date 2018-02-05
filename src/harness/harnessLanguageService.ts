@@ -202,7 +202,7 @@ namespace Harness.LanguageService {
         getCancellationToken() { return this.cancellationToken; }
 
         getDirectories(path: string): string[] {
-            return vfsutils.getDirectories(this.vfs, path).map(name => vpath.combine(path, name));
+            return vfsutils.getDirectories(this.vfs, path);
         }
 
         getCurrentDirectory(): string { return virtualFileSystemRoot; }
