@@ -1065,7 +1065,10 @@ declare namespace ts {
     }
     type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
     type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
-    type JsxTagNameExpression = Identifier | ThisExpression | PropertyAccessExpression;
+    type JsxTagNameExpression = Identifier | ThisExpression | JsxTagNamePropertyAccess;
+    interface JsxTagNamePropertyAccess extends PropertyAccessExpression {
+        expression: JsxTagNameExpression;
+    }
     interface JsxAttributes extends ObjectLiteralExpressionBase<JsxAttributeLike> {
         parent?: JsxOpeningLikeElement;
     }
