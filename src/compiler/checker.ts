@@ -14457,7 +14457,7 @@ namespace ts {
                         const typeParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(intrinsicClassAttribs.symbol);
                         apparentAttributesType = intersectTypes(
                             typeParams
-                                ? createTypeReference(<GenericType>intrinsicClassAttribs, fillMissingTypeArguments([hostClassType], typeParams, typeParams.length, isJs))
+                                ? createTypeReference(<GenericType>intrinsicClassAttribs, fillMissingTypeArguments([hostClassType], typeParams, getMinTypeArgumentCount(typeParams), isJs))
                                 : intrinsicClassAttribs,
                             apparentAttributesType
                         );
