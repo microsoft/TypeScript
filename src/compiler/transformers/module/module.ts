@@ -157,7 +157,7 @@ namespace ts {
                                 /*typeArguments*/ undefined,
                                 [
                                     // Add the module name (if provided).
-                                    ...(moduleName ? [moduleName] : []),
+                                    ...optionToArray(moduleName),
 
                                     // Add the dependency array argument:
                                     //
@@ -266,7 +266,7 @@ namespace ts {
                                                 /*typeArguments*/ undefined,
                                                 [
                                                     // Add the module name (if provided).
-                                                    ...(moduleName ? [moduleName] : []),
+                                                    ...optionToArray(moduleName),
                                                     createArrayLiteral([
                                                         createLiteral("require"),
                                                         createLiteral("exports"),
@@ -653,7 +653,7 @@ namespace ts {
             // We have to wrap require in then callback so that require is done in asynchronously
             // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
             const promiseResolveCall = createCall(createPropertyAccess(createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []);
-            let requireCall = createCall(createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : []);
+            let requireCall = createCall(createIdentifier("require"), /*typeArguments*/ undefined, optionToArray(arg));
             if (compilerOptions.esModuleInterop) {
                 context.requestEmitHelper(importStarHelper);
                 requireCall = createCall(getHelperName("__importStar"), /*typeArguments*/ undefined, [requireCall]);
