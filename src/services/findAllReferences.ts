@@ -990,7 +990,7 @@ namespace ts.FindAllReferences.Core {
         const pusher = () => state.referenceAdder(search.symbol, search.location);
 
         if (isClassLike(referenceLocation.parent)) {
-            Debug.assert(referenceLocation.parent.name === referenceLocation);
+            Debug.assert(referenceLocation.kind === SyntaxKind.DefaultKeyword || referenceLocation.parent.name === referenceLocation);
             // This is the class declaration containing the constructor.
             findOwnConstructorReferences(search.symbol, sourceFile, pusher());
         }
