@@ -4024,7 +4024,7 @@ namespace ts {
         /** configFile is set as non enumerable property so as to avoid checking of json source files */
         /* @internal */ readonly configFile?: JsonSourceFile;
         declaration?: boolean;
-        emitDeclarationsOnly?: boolean;
+        emitDeclarationOnly?: boolean;
         declarationDir?: string;
         /* @internal */ diagnostics?: boolean;
         /* @internal */ extendedDiagnostics?: boolean;

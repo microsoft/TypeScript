@@ -2300,7 +2300,7 @@ declare namespace ts {
         charset?: string;
         checkJs?: boolean;
         declaration?: boolean;
-        emitDeclarationsOnly?: boolean;
+        emitDeclarationOnly?: boolean;
         declarationDir?: string;
         disableSizeLimit?: boolean;
         downlevelIteration?: boolean;

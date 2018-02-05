@@ -1,5 +1,5 @@
 // @declaration: true
-// @emitDeclarationsOnly: true
+// @emitDeclarationOnly: true
 
 // @filename: helloworld.ts
 const Log = {
