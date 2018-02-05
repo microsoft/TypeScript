@@ -3,7 +3,7 @@
 /// <reference path="core.ts" />
 
 namespace ts {
-    const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?(?:\s+((?:(?:TS\d+),\s*)*(?:TS\d+)?))?)/;
+    const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?(?:\s+((?:(?:TS\d+),\s*)*TS\d+))?)/;
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string | undefined {
         return forEachAncestorDirectory(searchPath, ancestor => {
