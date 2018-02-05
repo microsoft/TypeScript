@@ -124,9 +124,9 @@ var flat = _.reduceRight(list, (a, b) => a.concat(b), []);
 >a : number[]
 >b : number[]
 >a.concat(b) : number[]
->a.concat : { (...items: (number[] | ReadonlyArray<number>)[]): number[]; (...items: (number | number[] | ReadonlyArray<number>)[]): number[]; }
+>a.concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
 >a : number[]
->concat : { (...items: (number[] | ReadonlyArray<number>)[]): number[]; (...items: (number | number[] | ReadonlyArray<number>)[]): number[]; }
+>concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
 >b : number[]
 >[] : undefined[]
 
@@ -249,7 +249,7 @@ _.any([null, 0, 'yes', false]);
 >_.any : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
 >_ : Underscore.Static
 >any : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
->[null, 0, 'yes', false] : (string | number | boolean)[]
+>[null, 0, 'yes', false] : (string | number | false)[]
 >null : null
 >0 : 0
 >'yes' : "yes"
@@ -512,7 +512,7 @@ _.compact([0, 1, false, 2, '', 3]);
 >_.compact : <T>(list: T[]) => T[]
 >_ : Underscore.Static
 >compact : <T>(list: T[]) => T[]
->[0, 1, false, 2, '', 3] : (string | number | boolean)[]
+>[0, 1, false, 2, '', 3] : (string | number | false)[]
 >0 : 0
 >1 : 1
 >false : false

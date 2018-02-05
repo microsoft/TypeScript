@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// @noUnusedLocals: true
+// @noUnusedParameters: true
 //// class A {
 ////     [|public f1<X, Y, Z>(a: X)|] { a; var b: Z; b }
 //// }

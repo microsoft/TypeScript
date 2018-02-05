@@ -78,7 +78,7 @@ namespace ts.Completions {
     }
 
     function completionInfoFromData(sourceFile: SourceFile, typeChecker: TypeChecker, compilerOptions: CompilerOptions, log: Log, completionData: CompletionData, includeInsertTextCompletions: boolean): CompletionInfo {
-        const { symbols, completionKind, isNewIdentifierLocation, location, propertyAccessToConvert, keywordFilters, symbolToOriginInfoMap, recommendedCompletion } = completionData;
+        const { symbols, completionKind, isNewIdentifierLocation, location, propertyAccessToConvert, keywordFilters, symbolToOriginInfoMap, recommendedCompletion, isJsxInitializer } = completionData;
 
         if (sourceFile.languageVariant === LanguageVariant.JSX && location && location.parent && isJsxClosingElement(location.parent)) {
             // In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,
@@ -99,7 +99,7 @@ namespace ts.Completions {
         const entries: CompletionEntry[] = [];
 
         if (isSourceFileJavaScript(sourceFile)) {
-            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, sourceFile, typeChecker, compilerOptions.target, log, completionKind, includeInsertTextCompletions, propertyAccessToConvert, recommendedCompletion, symbolToOriginInfoMap);
+            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, sourceFile, typeChecker, compilerOptions.target, log, completionKind, includeInsertTextCompletions, propertyAccessToConvert, isJsxInitializer, recommendedCompletion, symbolToOriginInfoMap);
             getJavaScriptCompletionEntries(sourceFile, location.pos, uniqueNames, compilerOptions.target, entries);
         }
         else {
@@ -107,7 +107,7 @@ namespace ts.Completions {
                 return undefined;
             }
 
-            getCompletionEntriesFromSymbols(symbols, entries, location, sourceFile, typeChecker, compilerOptions.target, log, completionKind, includeInsertTextCompletions, propertyAccessToConvert, recommendedCompletion, symbolToOriginInfoMap);
+            getCompletionEntriesFromSymbols(symbols, entries, location, sourceFile, typeChecker, compilerOptions.target, log, completionKind, includeInsertTextCompletions, propertyAccessToConvert, isJsxInitializer, recommendedCompletion, symbolToOriginInfoMap);
         }
 
         // TODO add filter for keyword based on type/value/namespace and also location
@@ -167,6 +167,7 @@ namespace ts.Completions {
         origin: SymbolOriginInfo | undefined,
         recommendedCompletion: Symbol | undefined,
         propertyAccessToConvert: PropertyAccessExpression | undefined,
+        isJsxInitializer: boolean,
         includeInsertTextCompletions: boolean,
     ): CompletionEntry | undefined {
         const info = getCompletionEntryDisplayNameForSymbol(symbol, target, origin, kind);
@@ -174,19 +175,30 @@ namespace ts.Completions {
             return undefined;
         }
         const { name, needsConvertPropertyAccess } = info;
-        if (needsConvertPropertyAccess && !includeInsertTextCompletions) {
-            return undefined;
-        }
 
         let insertText: string | undefined;
         let replacementSpan: TextSpan | undefined;
-        if (kind === CompletionKind.Global && origin && origin.type === "this-type") {
-            insertText = needsConvertPropertyAccess ? `this["${name}"]` : `this.${name}`;
+        if (includeInsertTextCompletions) {
+            if (origin && origin.type === "this-type") {
+                insertText = needsConvertPropertyAccess ? `this["${name}"]` : `this.${name}`;
+            }
+            else if (needsConvertPropertyAccess) {
+                // TODO: GH#20619 Use configured quote style
+                insertText = `["${name}"]`;
+                const dot = findChildOfKind(propertyAccessToConvert!, SyntaxKind.DotToken, sourceFile)!;
+                // If the text after the '.' starts with this name, write over it. Else, add new text.
+                const end = startsWith(name, propertyAccessToConvert!.name.text) ? propertyAccessToConvert!.name.end : dot.end;
+                replacementSpan = createTextSpanFromBounds(dot.getStart(sourceFile), end);
+            }
+
+            if (isJsxInitializer) {
+                if (insertText === undefined) insertText = name;
+                insertText = `{${insertText}}`;
+            }
         }
-        else if (needsConvertPropertyAccess) {
-            // TODO: GH#20619 Use configured quote style
-            insertText = `["${name}"]`;
-            replacementSpan = createTextSpanFromBounds(findChildOfKind(propertyAccessToConvert!, SyntaxKind.DotToken, sourceFile)!.getStart(sourceFile), propertyAccessToConvert!.name.end);
+
+        if (insertText !== undefined && !includeInsertTextCompletions) {
+            return undefined;
         }
 
         // TODO(drosen): Right now we just permit *all* semantic meanings when calling
@@ -235,6 +247,7 @@ namespace ts.Completions {
         kind: CompletionKind,
         includeInsertTextCompletions?: boolean,
         propertyAccessToConvert?: PropertyAccessExpression | undefined,
+        isJsxInitializer?: boolean,
         recommendedCompletion?: Symbol,
         symbolToOriginInfoMap?: SymbolOriginInfoMap,
     ): Map<true> {
@@ -246,7 +259,7 @@ namespace ts.Completions {
         const uniques = createMap<true>();
         for (const symbol of symbols) {
             const origin = symbolToOriginInfoMap ? symbolToOriginInfoMap[getSymbolId(symbol)] : undefined;
-            const entry = createCompletionEntry(symbol, location, sourceFile, typeChecker, target, kind, origin, recommendedCompletion, propertyAccessToConvert, includeInsertTextCompletions);
+            const entry = createCompletionEntry(symbol, location, sourceFile, typeChecker, target, kind, origin, recommendedCompletion, propertyAccessToConvert, isJsxInitializer, includeInsertTextCompletions);
             if (!entry) {
                 continue;
             }
@@ -349,7 +362,7 @@ namespace ts.Completions {
                 //      import x = require("/*completion position*/");
                 //      var y = require("/*completion position*/");
                 //      export * from "/*completion position*/";
-                return pathCompletionsInfo(PathCompletions.getStringLiteralCompletionsFromModuleNames(sourceFile, node as StringLiteral, compilerOptions, host, typeChecker));
+                return pathCompletionsInfo(PathCompletions.getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker));
 
             default:
                 return fromContextualType();
@@ -483,6 +496,7 @@ namespace ts.Completions {
         location: Node;
         symbolToOriginInfoMap: SymbolOriginInfoMap;
         previousToken: Node;
+        readonly isJsxInitializer: boolean;
     }
     function getSymbolCompletionFromEntryId(
         typeChecker: TypeChecker,
@@ -501,7 +515,7 @@ namespace ts.Completions {
             return { type: "request", request: completionData };
         }
 
-        const { symbols, location, completionKind, symbolToOriginInfoMap, previousToken } = completionData;
+        const { symbols, location, completionKind, symbolToOriginInfoMap, previousToken, isJsxInitializer } = completionData;
 
         // Find the symbol with the matching entry name.
         // We don't need to perform character checks here because we're only comparing the
@@ -510,7 +524,7 @@ namespace ts.Completions {
         return firstDefined<Symbol, SymbolCompletion>(symbols, (symbol): SymbolCompletion => { // TODO: Shouldn't need return type annotation (GH#12632)
             const origin = symbolToOriginInfoMap[getSymbolId(symbol)];
             const info = getCompletionEntryDisplayNameForSymbol(symbol, compilerOptions.target, origin, completionKind);
-            return info && info.name === name && getSourceFromOrigin(origin) === source ? { type: "symbol" as "symbol", symbol, location, symbolToOriginInfoMap, previousToken } : undefined;
+            return info && info.name === name && getSourceFromOrigin(origin) === source ? { type: "symbol" as "symbol", symbol, location, symbolToOriginInfoMap, previousToken, isJsxInitializer } : undefined;
         }) || { type: "none" };
     }
 
@@ -678,11 +692,13 @@ namespace ts.Completions {
         readonly symbolToOriginInfoMap: SymbolOriginInfoMap;
         readonly recommendedCompletion: Symbol | undefined;
         readonly previousToken: Node | undefined;
+        readonly isJsxInitializer: boolean;
     }
     type Request = { readonly kind: CompletionDataKind.JsDocTagName | CompletionDataKind.JsDocTag } | { readonly kind: CompletionDataKind.JsDocParameterName, tag: JSDocParameterTag };
 
     const enum CompletionKind {
         ObjectPropertyDeclaration,
+        /** Note that sometimes we access completions from global scope, but use "None" instead of this. See isGlobalCompletionScope. */
         Global,
         PropertyAccess,
         MemberLike,
@@ -858,6 +874,7 @@ namespace ts.Completions {
         let isRightOfDot = false;
         let isRightOfOpenTag = false;
         let isStartingCloseTag = false;
+        let isJsxInitializer = false;
 
         let location = getTouchingPropertyName(sourceFile, position, insideJsDocTagTypeExpression); // TODO: GH#15853
         if (contextToken) {
@@ -916,6 +933,10 @@ namespace ts.Completions {
                             location = contextToken;
                         }
                         break;
+
+                    case SyntaxKind.JsxAttribute:
+                        isJsxInitializer = previousToken.kind === SyntaxKind.EqualsToken;
+                        break;
                 }
             }
         }
@@ -961,7 +982,7 @@ namespace ts.Completions {
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
         const recommendedCompletion = previousToken && getRecommendedCompletion(previousToken, typeChecker);
-        return { kind: CompletionDataKind.Data, symbols, completionKind, propertyAccessToConvert, isNewIdentifierLocation, location, keywordFilters, symbolToOriginInfoMap, recommendedCompletion, previousToken };
+        return { kind: CompletionDataKind.Data, symbols, completionKind, propertyAccessToConvert, isNewIdentifierLocation, location, keywordFilters, symbolToOriginInfoMap, recommendedCompletion, previousToken, isJsxInitializer };
 
         type JSDocTagWithTypeExpression = JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag;
 
@@ -1903,7 +1924,8 @@ namespace ts.Completions {
             return isDeclarationName(contextToken)
                 && !isJsxAttribute(contextToken.parent)
                 // Don't block completions if we're in `class C /**/`, because we're *past* the end of the identifier and might want to complete `extends`.
-                && !(isClassLike(contextToken.parent) && position > previousToken.end);
+                // If `contextToken !== previousToken`, this is `class C ex/**/`.
+                && !(isClassLike(contextToken.parent) && (contextToken !== previousToken || position > previousToken.end));
         }
 
         function isFunctionLikeButNotConstructor(kind: SyntaxKind) {
@@ -2112,13 +2134,13 @@ namespace ts.Completions {
         const validIdentiferResult: CompletionEntryDisplayNameForSymbol = { name, needsConvertPropertyAccess: false };
         if (isIdentifierText(name, target)) return validIdentiferResult;
         switch (kind) {
-            case CompletionKind.None:
             case CompletionKind.MemberLike:
                 return undefined;
             case CompletionKind.ObjectPropertyDeclaration:
                 // TODO: GH#18169
                 return { name: JSON.stringify(name), needsConvertPropertyAccess: false };
             case CompletionKind.PropertyAccess:
+            case CompletionKind.None:
             case CompletionKind.Global:
                 // Don't add a completion for a name starting with a space. See https://github.com/Microsoft/TypeScript/pull/20547
                 return name.charCodeAt(0) === CharacterCodes.space ? undefined : { name, needsConvertPropertyAccess: true };

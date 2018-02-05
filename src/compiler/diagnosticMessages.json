@@ -947,6 +947,10 @@
         "category": "Error",
         "code": 1337
     },
+    "'infer' declarations are only permitted in the 'extends' clause of a conditional type.": {
+        "category": "Error",
+        "code": 1338
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -2806,6 +2810,10 @@
     "Do not resolve the real path of symlinks.": {
         "category": "Message",
         "code": 6013
+    },
+    "Only emit '.d.ts' declaration files.": {
+        "category": "Message",
+        "code": 6014
     },
     "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'.": {
         "category": "Message",

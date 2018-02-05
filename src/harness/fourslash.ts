@@ -23,7 +23,7 @@ namespace FourSlash {
     ts.disableIncrementalParsing = false;
 
     // Represents a parsed source file with metadata
-    export interface FourSlashFile {
+    interface FourSlashFile {
         // The contents of the file (with markers, etc stripped out)
         content: string;
         fileName: string;
@@ -34,7 +34,7 @@ namespace FourSlash {
     }
 
     // Represents a set of parsed source files and options
-    export interface FourSlashData {
+    interface FourSlashData {
         // Global options (name/value pairs)
         globalOptions: Harness.TestCaseParser.CompilerSettings;
 
@@ -59,7 +59,7 @@ namespace FourSlash {
     export interface Marker {
         fileName: string;
         position: number;
-        data?: any;
+        data?: {};
     }
 
     export interface Range {
@@ -87,21 +87,6 @@ namespace FourSlash {
     export interface TextSpan {
         start: number;
         end: number;
-    }
-
-    export import IndentStyle = ts.IndentStyle;
-
-    const entityMap = ts.createMapFromTemplate({
-        "&": "&amp;",
-        "\"": "&quot;",
-        "'": "&#39;",
-        "/": "&#47;",
-        "<": "&lt;",
-        ">": "&gt;"
-    });
-
-    export function escapeXmlAttributeValue(s: string) {
-        return s.replace(/[&<>"'\/]/g, ch => entityMap.get(ch));
     }
 
     // Name of testcase metadata including ts.CompilerOptions properties that will be used by globalOptions
@@ -1079,7 +1064,7 @@ namespace FourSlash {
             for (const reference of expectedReferences) {
                 const { fileName, start, end } = reference;
                 if (reference.marker && reference.marker.data) {
-                    const { isWriteAccess, isDefinition } = reference.marker.data;
+                    const { isWriteAccess, isDefinition } = reference.marker.data as { isWriteAccess?: boolean, isDefinition?: boolean };
                     this.verifyReferencesWorker(actualReferences, fileName, start, end, isWriteAccess, isDefinition);
                 }
                 else {
@@ -1108,7 +1093,16 @@ namespace FourSlash {
             }
             const fullExpected = ts.map<FourSlashInterface.ReferenceGroup, ReferenceGroupJson>(parts, ({ definition, ranges }) => ({
                 definition: typeof definition === "string" ? definition : { ...definition, range: textSpanFromRange(definition.range) },
-                references: ranges.map(rangeToReferenceEntry),
+                references: ranges.map<ts.ReferenceEntry>(r => {
+                    const { isWriteAccess = false, isDefinition = false, isInString } = (r.marker && r.marker.data || {}) as { isWriteAccess?: boolean, isDefinition?: boolean, isInString?: true };
+                    return {
+                        isWriteAccess,
+                        isDefinition,
+                        fileName: r.fileName,
+                        textSpan: textSpanFromRange(r),
+                        ...(isInString ? { isInString: true } : undefined),
+                    };
+                }),
             }));
 
             for (const startRange of toArray(startRanges)) {
@@ -1121,15 +1115,6 @@ namespace FourSlash {
                     };
                 });
                 this.assertObjectsEqual(fullActual, fullExpected);
-            }
-
-            function rangeToReferenceEntry(r: Range): ts.ReferenceEntry {
-                const { isWriteAccess, isDefinition, isInString } = (r.marker && r.marker.data) || { isWriteAccess: false, isDefinition: false, isInString: undefined };
-                const result: ts.ReferenceEntry = { fileName: r.fileName, textSpan: textSpanFromRange(r), isWriteAccess: !!isWriteAccess, isDefinition: !!isDefinition };
-                if (isInString !== undefined) {
-                    result.isInString = isInString;
-                }
-                return result;
             }
         }
 
@@ -2587,12 +2572,10 @@ Actual: ${stringify(fullActual)}`);
                 actualTextArray.push(text);
                 scriptInfo.updateContent(originalContent);
             }
-            const sortedExpectedArray = expectedTextArray.sort();
-            const sortedActualArray = actualTextArray.sort();
-            if (sortedExpectedArray.length !== sortedActualArray.length) {
-                this.raiseError(`Expected ${sortedExpectedArray.length} import fixes, got ${sortedActualArray.length}`);
+            if (expectedTextArray.length !== actualTextArray.length) {
+                this.raiseError(`Expected ${expectedTextArray.length} import fixes, got ${actualTextArray.length}`);
             }
-            ts.zipWith(sortedExpectedArray, sortedActualArray, (expected, actual, index) => {
+            ts.zipWith(expectedTextArray, actualTextArray, (expected, actual, index) => {
                 if (expected !== actual) {
                     this.raiseError(`Import fix at index ${index} doesn't match.\n${showTextDiff(expected, actual)}`);
                 }
@@ -2873,6 +2856,15 @@ Actual: ${stringify(fullActual)}`);
             for (const range of ranges) {
                 this.goToRangeStart(range);
                 this.verifyDocumentHighlights(ranges, fileNames);
+            }
+        }
+
+        public verifyNoDocumentHighlights(startRange: Range) {
+            this.goToRangeStart(startRange);
+            const documentHighlights = this.getDocumentHighlightsAtCurrentPosition([this.activeFile.fileName]);
+            const numHighlights = ts.length(documentHighlights);
+            if (numHighlights > 0) {
+                this.raiseError(`verifyNoDocumentHighlights failed - unexpectedly got ${numHighlights} highlights`);
             }
         }
 
@@ -4282,6 +4274,10 @@ namespace FourSlashInterface {
 
         public documentHighlightsOf(startRange: FourSlash.Range, ranges: FourSlash.Range[]) {
             this.state.verifyDocumentHighlightsOf(startRange, ranges);
+        }
+
+        public noDocumentHighlights(startRange: FourSlash.Range) {
+            this.state.verifyNoDocumentHighlights(startRange);
         }
 
         public completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]) {
