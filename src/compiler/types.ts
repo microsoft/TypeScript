@@ -3312,6 +3312,7 @@ namespace ts {
         type?: Type;                        // Type of value symbol
         declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
         typeParameters?: TypeParameter[];   // Type parameters of type alias (undefined if non-generic)
+        outerTypeParameters?: TypeParameter[];  // Outer type parameters of anonymous object type
         inferredClassType?: Type;           // Type of an inferred ES5 class
         instantiations?: Map<Type>;         // Instantiations of generic type alias (undefined if non-generic)
         mapper?: TypeMapper;                // Type mapper for instantiation alias
