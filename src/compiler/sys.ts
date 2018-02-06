@@ -126,7 +126,7 @@ namespace ts {
         }
 
         function getCustomPollingBasedLevels(baseVariable: string, defaultLevels: Levels) {
-            let customLevels = getCustomLevels(baseVariable);
+            const customLevels = getCustomLevels(baseVariable);
             return (pollingIntervalChanged || customLevels) &&
                 createPollingIntervalBasedLevels(customLevels ? { ...defaultLevels, ...customLevels } : defaultLevels);
         }
