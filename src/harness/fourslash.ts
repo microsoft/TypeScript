@@ -3166,6 +3166,9 @@ Actual: ${stringify(fullActual)}`);
             assert.equal(item.hasAction, hasAction, "hasAction");
             assert.equal(item.isRecommended, options && options.isRecommended, "isRecommended");
             assert.equal(item.insertText, options && options.insertText, "insertText");
+            if (options && options.replacementSpan) { // TODO: GH#21679
+                assert.deepEqual(item.replacementSpan, options && options.replacementSpan && textSpanFromRange(options.replacementSpan), "replacementSpan");
+            }
         }
 
         private findFile(indexOrName: string | number) {
@@ -4622,6 +4625,7 @@ namespace FourSlashInterface {
         sourceDisplay: string;
         isRecommended?: true;
         insertText?: string;
+        replacementSpan?: FourSlash.Range;
     }
 
     export interface NewContentOptions {

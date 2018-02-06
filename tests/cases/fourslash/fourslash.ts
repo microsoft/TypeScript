@@ -157,6 +157,7 @@ declare namespace FourSlashInterface {
                 sourceDisplay?: string,
                 isRecommended?: true,
                 insertText?: string,
+                replacementSpan?: Range,
             },
         ): void;
         completionListItemsCountIsGreaterThan(count: number): void;
