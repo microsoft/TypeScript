@@ -179,7 +179,7 @@ namespace ts.Completions.PathCompletions {
 
     function getCompletionsForPathMapping(
         path: string, patterns: ReadonlyArray<string>, fragment: string, baseUrl: string, fileExtensions: ReadonlyArray<string>, host: LanguageServiceHost,
-    ): string[] {
+    ): ReadonlyArray<string> {
         if (!endsWith(path, "*")) {
             // For a path mapping "foo": ["/x/y/z.ts"], add "foo" itself as a completion.
             return !stringContains(path, "*") && startsWith(path, fragment) ? [path] : emptyArray;
@@ -231,14 +231,17 @@ namespace ts.Completions.PathCompletions {
         // Trim away prefix and suffix
         return mapDefined(concatenate(matches, directories), match => {
             const normalizedMatch = normalizePath(match);
-            if (!endsWith(normalizedMatch, normalizedSuffix) || !startsWith(normalizedMatch, completePrefix)) {
-                return;
-            }
-
-            const start = completePrefix.length;
-            const length = normalizedMatch.length - start - normalizedSuffix.length;
-            return removeFileExtension(normalizedMatch.substr(start, length));
+            const inner = withoutStartAndEnd(normalizedMatch, completePrefix, normalizedSuffix);
+            return inner !== undefined ? removeLeadingDirectorySeparator(removeFileExtension(inner)) : undefined;
         });
+    }
+
+    function withoutStartAndEnd(s: string, start: string, end: string): string | undefined {
+        return startsWith(s, start) && endsWith(s, end) ? s.slice(start.length, s.length - end.length) : undefined;
+    }
+
+    function removeLeadingDirectorySeparator(path: string): string {
+        return path[0] === directorySeparator ? path.slice(1) : path;
     }
 
     function enumeratePotentialNonRelativeModules(fragment: string, scriptPath: string, options: CompilerOptions, typeChecker: TypeChecker, host: LanguageServiceHost): string[] {
