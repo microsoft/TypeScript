@@ -17,6 +17,9 @@ namespace vfsutils {
      * Posix-style path to the TypeScript compiler build outputs (including tsc.js, lib.d.ts, etc.)
      */
     export const builtFolder = "/.ts";
+    export const tscPath = builtFolder + "/tsc.js";
+    export const libPath = builtFolder + "/lib.d.ts";
+    export const safelistPath = "/safelist.json";
 
     /**
      * Posix-style path to additional test libraries
@@ -32,6 +35,9 @@ namespace vfsutils {
      * DOS-style path to the TypeScript compiler build outputs (including tsc.js, lib.d.ts, etc.)
      */
     export const dosBuiltFolder = "c:" + builtFolder;
+    export const dosTscPath = dosBuiltFolder + "/tsc.js";
+    export const dosLibPath = dosBuiltFolder + "/lib.d.ts";
+    export const dosSafelistPath = dosBuiltFolder + "/safelist.json";
 
     /**
      * DOS-style path to additional test libraries
@@ -42,6 +48,29 @@ namespace vfsutils {
      * DOS-style path to sources under test
      */
     export const dosSrcFolder = "c:" + srcFolder;
+
+    /** Default safelist.json content used by a number of tests. */
+    export const safelistContent = utils.dedent`
+        {
+            "commander": "commander",
+            "express": "express",
+            "jquery": "jquery",
+            "lodash": "lodash",
+            "moment": "moment",
+            "chroma": "chroma-js"
+        }`;
+
+    /** A minimal lib.d.ts used by a number of tests. */
+    export const emptyLibContent = utils.dedent`
+        /// <reference no-default-lib="true"/>
+        interface Boolean {}
+        interface Function {}
+        interface IArguments {}
+        interface Number { toExponential: any; }
+        interface Object {}
+        interface RegExp {}
+        interface String { charAt: any; }
+        interface Array<T> {}`;
 
     export function createResolver(io: Harness.IO): vfs.FileSystemResolver {
         return {

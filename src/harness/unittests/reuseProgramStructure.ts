@@ -1,6 +1,5 @@
 /// <reference path="..\harness.ts" />
 /// <reference path="..\..\harness\harnessLanguageService.ts" />
-/// <reference path="../fakes.ts" />
 
 namespace ts {
 
@@ -885,6 +884,10 @@ namespace ts {
         });
     });
 
+    type FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
+    import createTestSystem = ts.TestFSWithWatch.createWatchedSystem;
+    import libFile = ts.TestFSWithWatch.libFile;
+
     describe("isProgramUptoDate should return true when there is no change in compiler options and", () => {
         function verifyProgramIsUptoDate(
             program: Program,
@@ -917,37 +920,48 @@ namespace ts {
             verifyProgramIsUptoDate(program, fileNames, options);
         }
 
-        function verifyProgram(vfs: vfs.FileSystem, rootFiles: string[], options: CompilerOptions, configFile: string) {
-            const system = new fakes.FakeServerHost({ vfs });
+        function verifyProgram(files: FileOrFolder[], rootFiles: string[], options: CompilerOptions, configFile: string) {
+            const system = createTestSystem(files);
             verifyProgramWithoutConfigFile(system, rootFiles, options);
             verifyProgramWithConfigFile(system, configFile);
         }
 
         it("has empty options", () => {
-            const file1 = "/a/b/file1.ts";
-            const file2 = "/a/b/file2.ts";
-            const configFile = "/a/b/tsconfig.json";
-            const fs = new vfs.FileSystem(/*ignoreCase*/ false, { cwd: "/", files: {
-                [file1]: "let x = 1",
-                [file2]: "let y = 1",
-                [configFile]: "{}",
-                [fakes.FakeServerHost.libPath]: fakes.FakeServerHost.libContent,
-            }});
-
-            verifyProgram(fs, [file1, file2], {}, configFile);
+            const file1: FileOrFolder = {
+                path: "/a/b/file1.ts",
+                content: "let x = 1"
+            };
+            const file2: FileOrFolder = {
+                path: "/a/b/file2.ts",
+                content: "let y = 1"
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: "{}"
+            };
+            verifyProgram([file1, file2, libFile, configFile], [file1.path, file2.path], {}, configFile.path);
         });
 
         it("has lib specified in the options", () => {
-            const app = "/src/app.ts";
-            const configFile = "/src/tsconfig.json";
             const compilerOptions: CompilerOptions = { lib: ["es5", "es2015.promise"] };
-            const fs = new vfs.FileSystem(/*ignoreCase*/ false, { cwd: "/", files: {
-                [app]: "var x: Promise<string>;",
-                [configFile]: JSON.stringify({ compilerOptions }),
-                "/compiler/lib.es5.d.ts": "declare const eval: any;",
-                "/compiler/lib.es2015.promise.d.ts": "declare class Promise<T> {}",
-            }});
-            verifyProgram(fs, [app], compilerOptions, configFile);
+            const app: FileOrFolder = {
+                path: "/src/app.ts",
+                content: "var x: Promise<string>;"
+            };
+            const configFile: FileOrFolder = {
+                path: "/src/tsconfig.json",
+                content: JSON.stringify({ compilerOptions })
+            };
+            const es5Lib: FileOrFolder = {
+                path: "/compiler/lib.es5.d.ts",
+                content: "declare const eval: any"
+            };
+            const es2015Promise: FileOrFolder = {
+                path: "/compiler/lib.es2015.promise.d.ts",
+                content: "declare class Promise<T> {}"
+            };
+
+            verifyProgram([app, configFile, es5Lib, es2015Promise], [app.path], compilerOptions, configFile.path);
         });
 
         it("has paths specified in the options", () => {
@@ -961,26 +975,31 @@ namespace ts {
                     ]
                 }
             };
-            const app = "/src/packages/framework/app.ts";
-            const configFile = "/src/tsconfig.json";
-            const fs = new vfs.FileSystem(/*ignoreCase*/ false, { cwd: "/", files: {
-                [app]:
-                    `import classC from "module1/lib/file1";\n` +
-                    `import classD from "module3/file3";\n` +
-                    `let x = new classC();\n` +
-                    `let y = new classD();`,
-                "/src/packages/mail/data/module1/lib/file1.ts":
-                    `import classC from "module2/file2";\n` +
-                    `export default classC;`,
-                "/src/packages/mail/data/module1/lib/module2/file2.ts":
-                    `class classC { method2() { return "hello"; } }\n` +
-                    `export default classC;`,
-                "/src/packages/styles/module3/file3.ts":
-                    `class classD { method() { return 10; } }\n` +
-                    `export default classD;`,
-                [configFile]: JSON.stringify({ compilerOptions }),
-            }});
-            verifyProgram(fs, [app], compilerOptions, configFile);
+            const app: FileOrFolder = {
+                path: "/src/packages/framework/app.ts",
+                content: 'import classc from "module1/lib/file1";\
+                          import classD from "module3/file3";\
+                          let x = new classc();\
+                          let y = new classD();'
+            };
+            const module1: FileOrFolder = {
+                path: "/src/packages/mail/data/module1/lib/file1.ts",
+                content: 'import classc from "module2/file2";export default classc;',
+            };
+            const module2: FileOrFolder = {
+                path: "/src/packages/mail/data/module1/lib/module2/file2.ts",
+                content: 'class classc { method2() { return "hello"; } }\nexport default classc',
+            };
+            const module3: FileOrFolder = {
+                path: "/src/packages/styles/module3/file3.ts",
+                content: "class classD { method() { return 10; } }\nexport default classD;"
+            };
+            const configFile: FileOrFolder = {
+                path: "/src/tsconfig.json",
+                content: JSON.stringify({ compilerOptions })
+            };
+
+            verifyProgram([app, module1, module2, module3, libFile, configFile], [app.path], compilerOptions, configFile.path);
         });
 
         it("has include paths specified in tsconfig file", () => {
@@ -994,27 +1013,30 @@ namespace ts {
                     ]
                 }
             };
-            const configFile = "/src/tsconfig.json";
-            const fs = new vfs.FileSystem(/*ignoreCase*/ false, { cwd: "/", files: {
-                "/src/packages/framework/app.ts":
-                    `import classC from "module1/lib/file1";\n` +
-                    `import classD from "module3/file3";\n` +
-                    `let x = new classC();\n` +
-                    `let y = new classD();`,
-                "/src/packages/mail/data/module1/lib/file1.ts":
-                    `import classC from "module2/file2";\n` +
-                    `export default classC;`,
-                "/src/packages/mail/data/module1/lib/module2/file2.ts":
-                    `class classC { method2() { return "hello"; } }\n` +
-                    `export default classC;`,
-                "/src/packages/styles/module3/file3.ts":
-                    `class classD { method() { return 10; } }\n` +
-                    `export default classD;`,
-                [configFile]:
-                    JSON.stringify({ compilerOptions, include: ["packages/**/*.ts"] }),
-            }});
-            const watchingSystemHost = new fakes.FakeServerHost({ vfs: fs });
-            verifyProgramWithConfigFile(watchingSystemHost, configFile);
+            const app: FileOrFolder = {
+                path: "/src/packages/framework/app.ts",
+                content: 'import classc from "module1/lib/file1";\
+                          import classD from "module3/file3";\
+                          let x = new classc();\
+                          let y = new classD();'
+            };
+            const module1: FileOrFolder = {
+                path: "/src/packages/mail/data/module1/lib/file1.ts",
+                content: 'import classc from "module2/file2";export default classc;',
+            };
+            const module2: FileOrFolder = {
+                path: "/src/packages/mail/data/module1/lib/module2/file2.ts",
+                content: 'class classc { method2() { return "hello"; } }\nexport default classc',
+            };
+            const module3: FileOrFolder = {
+                path: "/src/packages/styles/module3/file3.ts",
+                content: "class classD { method() { return 10; } }\nexport default classD;"
+            };
+            const configFile: FileOrFolder = {
+                path: "/src/tsconfig.json",
+                content: JSON.stringify({ compilerOptions, include: ["packages/**/*.ts"] })
+            };
+            verifyProgramWithConfigFile(createTestSystem([app, module1, module2, module3, libFile, configFile]), configFile.path);
         });
     });
 }

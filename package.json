@@ -85,7 +85,6 @@
         "travis-fold": "latest",
         "ts-node": "latest",
         "tslint": "latest",
-        "typemock": "file:scripts/typemock",
         "typescript": "next",
         "vinyl": "latest",
         "xml2js": "^0.4.19"

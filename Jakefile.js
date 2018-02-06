@@ -813,7 +813,7 @@ function privatePackage(packageName, prereqs) {
                 complete();
             }
             measure(startCompileTime);
-        });    
+        });
     }, { async: true });
 }
 
@@ -821,21 +821,19 @@ function cleanPrivatePackage(packageName) {
     jake.rmRf(`scripts/${packageName}/dist`);
 }
 
-privatePackage("typemock");
 privatePackage("vfs-core");
 privatePackage("vfs-errors");
 privatePackage("vfs-path", ["vfs-core", "vfs-errors"]);
-privatePackage("vfs", ["vfs-path", "typemock"]);
+privatePackage("vfs", ["vfs-path"]);
 privatePackage("harness-core", ["vfs-core"]);
-task("private-packages", ["typemock", "vfs", "harness-core"]);
+task("private-packages", ["vfs", "harness-core"]);
 
-task("clean-typemock", () => cleanPrivatePackage("typemock"));
 task("clean-vfs-core", () => cleanPrivatePackage("vfs-core"));
 task("clean-vfs-errors", () => cleanPrivatePackage("vfs-errors"));
 task("clean-vfs-path", ["clean-vfs-core", "clean-vfs-errors"], () => cleanPrivatePackage("vfs-path"));
-task("clean-vfs", ["clean-vfs-path", "clean-typemock"], () => cleanPrivatePackage("vfs"));
+task("clean-vfs", ["clean-vfs-path"], () => cleanPrivatePackage("vfs"));
 task("clean-harness-core", ["clean-vfs-core"], () => cleanPrivatePackage("harness-core"));
-task("clean-private-packages", ["clean-typemock", "clean-vfs", "clean-harness-core"]);
+task("clean-private-packages", ["clean-vfs", "clean-harness-core"]);
 
 // Task to build the tests infrastructure using the built compiler
 var run = path.join(builtLocalDirectory, "run.js");
@@ -1337,7 +1335,7 @@ desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex
 task("lint", ["build-rules"], () => {
     if (fold.isTravis()) console.log(fold.start("lint"));
     const fileMatcher = process.env.f || process.env.file || process.env.files;
-    
+
     const files = fileMatcher
         ? `src/**/${fileMatcher}`
         : `Gulpfile.ts scripts/generateLocalizedDiagnosticMessages.ts "scripts/tslint/**/*.ts" "src/**/*.ts" --exclude "src/lib/*.d.ts"`;

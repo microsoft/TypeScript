@@ -111,7 +111,7 @@ namespace ts {
 
         function runBaseline(extension: Extension) {
             const path = "/a" + extension;
-            const program = makeProgram({ path, content: t.source }, includeLib);
+            const program = makeProgram(path, t.source, includeLib);
 
             if (hasSyntacticDiagnostics(program)) {
                 // Don't bother generating JS baselines for inputs that aren't valid JS.
@@ -146,18 +146,19 @@ namespace ts {
                     const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
                     data.push(newTextWithRename);
 
-                    const diagProgram = makeProgram({ path, content: newText }, includeLib);
+                    const diagProgram = makeProgram(path, newText, includeLib);
                     assert.isFalse(hasSyntacticDiagnostics(diagProgram));
                 }
                 return data.join(newLineCharacter);
             });
         }
 
-        function makeProgram(f: {path: string, content: string }, includeLib?: boolean) {
+        function makeProgram(path: string, content: string, includeLib?: boolean) {
             // libFile is expensive to parse repeatedly - only test when required
-            const host = new fakes.FakeServerHost({ lib: includeLib }, /*files*/ { [f.path]: f.content });
+            const fs = new vfs.FileSystem(/*ignoreCase*/ true, { files: { [path]: content } });
+            const host = new fakes.ServerHost(fs, { lib: includeLib });
             const projectService = projectSystem.createProjectService(host);
-            projectService.openClientFile(f.path);
+            projectService.openClientFile(path);
             const program = projectService.inferredProjects[0].getLanguageService().getProgram();
             return program;
         }
@@ -175,7 +176,8 @@ namespace ts {
             if (!selectionRange) {
                 throw new Error(`Test ${caption} does not specify selection range`);
             }
-            const host = new fakes.FakeServerHost({ lib: true }, /*files*/ { "/a.ts": t.source });
+            const fs = new vfs.FileSystem(/*ignoreCase*/ true, { files: { "/a.ts": t.source } });
+            const host = new fakes.ServerHost(fs, { lib: true });
             const projectService = projectSystem.createProjectService(host);
             projectService.openClientFile("/a.ts");
             const program = projectService.inferredProjects[0].getLanguageService().getProgram();

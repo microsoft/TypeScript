@@ -625,21 +625,19 @@ function cleanPrivatePackage(packageName: string) {
     return del([`scripts/${packageName}/dist`]);
 }
 
-gulp.task("typemock", () => compilePrivatePackage("typemock"));
 gulp.task("vfs-core", () => compilePrivatePackage("vfs-core"));
 gulp.task("vfs-errors", () => compilePrivatePackage("vfs-errors"));
 gulp.task("vfs-path", ["vfs-core", "vfs-errors"], () => compilePrivatePackage("vfs-path"));
-gulp.task("vfs", ["vfs-core", "vfs-errors", "vfs-path", "typemock"], () => compilePrivatePackage("vfs"));
+gulp.task("vfs", ["vfs-core", "vfs-errors", "vfs-path"], () => compilePrivatePackage("vfs"));
 gulp.task("harness-core", ["vfs-core"], () => compilePrivatePackage("harness-core"));
-gulp.task("private-packages", ["typemock", "vfs", "harness-core"]);
+gulp.task("private-packages", ["vfs", "harness-core"]);
 
-gulp.task("clean:typemock", () => cleanPrivatePackage("typemock"));
 gulp.task("clean:vfs-core", () => cleanPrivatePackage("vfs-core"));
 gulp.task("clean:vfs-errors", () => cleanPrivatePackage("vfs-errors"));
 gulp.task("clean:vfs-path", ["clean:vfs-core", "clean:vfs-errors"], () => cleanPrivatePackage("vfs-path"));
-gulp.task("clean:vfs", ["clean:vfs-core", "clean:vfs-errors", "clean:vfs-path", "clean:typemock"], () => cleanPrivatePackage("vfs"));
+gulp.task("clean:vfs", ["clean:vfs-core", "clean:vfs-errors", "clean:vfs-path"], () => cleanPrivatePackage("vfs"));
 gulp.task("clean:harness-core", ["clean:vfs-core"], () => cleanPrivatePackage("harness-core"));
-gulp.task("clean:private-packages", ["clean:typemock", "clean:vfs", "clean:harness-core"]);
+gulp.task("clean:private-packages", ["clean:vfs", "clean:harness-core"]);
 
 // Task to build the tests infrastructure using the built compiler
 const run = path.join(builtLocalDirectory, "run.js");
@@ -1161,5 +1159,5 @@ gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: 
 gulp.task("default", "Runs 'local'", ["local"]);
 
 gulp.task("watch", "Watches the src/ directory for changes and executes runtests-parallel.", [], () => {
-    gulp.watch(["src/**/*.*", "scripts/typemock/src/**/*.*"], ["runtests-parallel"]);
+    gulp.watch(["src/**/*.*"], ["runtests-parallel"]);
 });

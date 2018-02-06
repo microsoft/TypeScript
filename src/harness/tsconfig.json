@@ -73,10 +73,10 @@
         "../services/codefixes/disableJsDiagnostics.ts",
 
         "harness.ts",
-        
+
+        "assert.ts",
         "core.ts",
         "utils.ts",
-        "typemock.ts",
         "events.ts",
         "documents.ts",
         "vpath.ts",
@@ -101,6 +101,7 @@
         "./parallel/host.ts",
         "./parallel/worker.ts",
         "runner.ts",
+        "virtualFileSystemWithWatch.ts",
         "../server/protocol.ts",
         "../server/session.ts",
         "../server/client.ts",

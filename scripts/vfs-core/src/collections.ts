@@ -27,6 +27,10 @@ export class SortedMap<K, V> {
         return this._keys.length;
     }
 
+    public get comparer() {
+        return this._comparer;
+    }
+
     public get [Symbol.toStringTag]() {
         return "SortedMap";
     }
@@ -224,6 +228,10 @@ export class SortedSet<T> {
 
     public get size() {
         return this._values.length;
+    }
+
+    public get comparer() {
+        return this._comparer;
     }
 
     public get [Symbol.toStringTag]() {

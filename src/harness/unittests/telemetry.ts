@@ -1,59 +1,46 @@
 /// <reference path="../harness.ts" />
 /// <reference path="./tsserverProjectSystem.ts" />
-/// <reference path="../fakes.ts" />
 
 namespace ts.projectSystem {
     describe("project telemetry", () => {
         it("does nothing for inferred project", () => {
-            const host = new fakes.FakeServerHost({}, /*files*/ {
-                "/a.js": "",
-            });
-            const et = new TestServerEventManager(host);
-            et.service.openClientFile("/a.js");
+            const file = makeFile("/a.js");
+            const et = new TestServerEventManager([file]);
+            et.service.openClientFile(file.path);
             et.hasZeroEvent(ts.server.ProjectInfoTelemetryEvent);
         });
 
         it("only sends an event once", () => {
-            const host = new fakes.FakeServerHost({}, /*files*/ {
-                "/a/a.ts": ``,
-                "/b.ts": ``,
-                "/a/tsconfig.json": `{}`,
-            });
+            const file = makeFile("/a/a.ts");
+            const file2 = makeFile("/b.ts");
+            const tsconfig = makeFile("/a/tsconfig.json", {});
 
-            const et = new TestServerEventManager(host);
-            et.service.openClientFile("/a/a.ts");
-            et.assertProjectInfoTelemetryEvent({}, "/a/tsconfig.json");
+            const et = new TestServerEventManager([file, file2, tsconfig]);
+            et.service.openClientFile(file.path);
+            et.assertProjectInfoTelemetryEvent({}, tsconfig.path);
 
-            et.service.closeClientFile("/a/a.ts");
+            et.service.closeClientFile(file.path);
             checkNumberOfProjects(et.service, { configuredProjects: 1 });
 
-            et.service.openClientFile("/b.ts");
+            et.service.openClientFile(file2.path);
             checkNumberOfProjects(et.service, { inferredProjects: 1 });
 
             et.hasZeroEvent(ts.server.ProjectInfoTelemetryEvent);
 
-            et.service.openClientFile("/a/a.ts");
+            et.service.openClientFile(file.path);
             checkNumberOfProjects(et.service, { configuredProjects: 1, inferredProjects: 1 });
 
             et.hasZeroEvent(ts.server.ProjectInfoTelemetryEvent);
         });
 
         it("counts files by extension", () => {
+            const files = ["ts.ts", "tsx.tsx", "moo.ts", "dts.d.ts", "jsx.jsx", "js.js", "badExtension.badExtension"].map(f => makeFile(`/src/${f}`));
+            const notIncludedFile = makeFile("/bin/ts.js");
             const compilerOptions: ts.CompilerOptions = { allowJs: true };
-            const host = new fakes.FakeServerHost({}, /*files*/ {
-                "/src/ts.ts": ``,
-                "/src/tsx.tsx": ``,
-                "/src/moo.ts": ``,
-                "/src/dts.d.ts": ``,
-                "/src/jsx.jsx": ``,
-                "/src/js.js": ``,
-                "/src/badExtension.badExtension": ``,
-                "/bin/ts.js": ``,
-                "/tsconfig.json": JSON.stringify({ compilerOptions, include: ["src"] }),
-            });
+            const tsconfig = makeFile("/tsconfig.json", { compilerOptions, include: ["src"] });
 
-            const et = new TestServerEventManager(host);
-            et.service.openClientFile("/src/ts.ts");
+            const et = new TestServerEventManager([...files, notIncludedFile, tsconfig]);
+            et.service.openClientFile(files[0].path);
             et.assertProjectInfoTelemetryEvent({
                 fileStats: { ts: 2, tsx: 1, js: 1, jsx: 1, dts: 1 },
                 compilerOptions,
@@ -62,11 +49,8 @@ namespace ts.projectSystem {
         });
 
         it("works with external project", () => {
-            const host = new fakes.FakeServerHost({}, /*files*/ {
-                "/a.ts": ``,
-            });
-
-            const et = new TestServerEventManager(host);
+            const file1 = makeFile("/a.ts");
+            const et = new TestServerEventManager([file1]);
             const compilerOptions: ts.server.protocol.CompilerOptions = { strict: true };
 
             const projectFileName = "/hunter2/foo.csproj";
@@ -75,7 +59,7 @@ namespace ts.projectSystem {
 
             // TODO: Apparently compilerOptions is mutated, so have to repeat it here!
             et.assertProjectInfoTelemetryEvent({
-                projectId: core.sha1("/hunter2/foo.csproj"),
+                projectId: Harness.mockHash("/hunter2/foo.csproj"),
                 compilerOptions: { strict: true },
                 compileOnSave: true,
                 // These properties can't be present for an external project, so they are undefined instead of false.
@@ -97,7 +81,7 @@ namespace ts.projectSystem {
 
             function open(): void {
                 et.service.openExternalProject({
-                    rootFiles: toExternalFiles(["/a.ts"]),
+                    rootFiles: toExternalFiles([file1.path]),
                     options: compilerOptions,
                     projectFileName,
                 });
@@ -106,6 +90,8 @@ namespace ts.projectSystem {
         });
 
         it("does not expose paths", () => {
+            const file = makeFile("/a.ts");
+
             const compilerOptions: ts.CompilerOptions = {
                 project: "",
                 outFile: "hunter2.js",
@@ -160,14 +146,10 @@ namespace ts.projectSystem {
                 lib: ["es6", "dom"],
             };
             (compilerOptions as any).unknownCompilerOption = "hunter2"; // These are always ignored.
+            const tsconfig = makeFile("/tsconfig.json", { compilerOptions, files: ["/a.ts"] });
 
-            const host = new fakes.FakeServerHost({}, /*files*/ {
-                "/a.ts": ``,
-                "/tsconfig.json": JSON.stringify({ compilerOptions, files: ["/a.ts"] }),
-            });
-
-            const et = new TestServerEventManager(host);
-            et.service.openClientFile("/a.ts");
+            const et = new TestServerEventManager([file, tsconfig]);
+            et.service.openClientFile(file.path);
 
             et.assertProjectInfoTelemetryEvent({
                 compilerOptions: safeCompilerOptions,
@@ -176,20 +158,18 @@ namespace ts.projectSystem {
         });
 
         it("sends telemetry for extends, files, include, exclude, and compileOnSave", () => {
-            const host = new fakes.FakeServerHost({}, /*files*/ {
-                "/hunter2/a.ts": ``,
-                "/tsconfig.json": JSON.stringify({
-                    compilerOptions: {},
-                    extends: "hunter2.json",
-                    files: ["hunter2/a.ts"],
-                    include: ["hunter2"],
-                    exclude: ["hunter2"],
-                    compileOnSave: true,
-                })
+            const file = makeFile("/hunter2/a.ts");
+            const tsconfig = makeFile("/tsconfig.json", {
+                compilerOptions: {},
+                extends: "hunter2.json",
+                files: ["hunter2/a.ts"],
+                include: ["hunter2"],
+                exclude: ["hunter2"],
+                compileOnSave: true,
             });
 
-            const et = new TestServerEventManager(host);
-            et.service.openClientFile("/hunter2/a.ts");
+            const et = new TestServerEventManager([tsconfig, file]);
+            et.service.openClientFile(file.path);
             et.assertProjectInfoTelemetryEvent({
                 extends: true,
                 files: true,
@@ -209,22 +189,20 @@ namespace ts.projectSystem {
         };
 
         it("sends telemetry for typeAcquisition settings", () => {
-            const host = new fakes.FakeServerHost({}, /*files*/ {
-                "/a.js": ``,
-                "/jsconfig.json": JSON.stringify({
-                    compilerOptions: {},
-                    typeAcquisition: {
-                        enable: true,
-                        enableAutoDiscovery: false,
-                        include: ["hunter2", "hunter3"],
-                        exclude: [],
-                    },
-                })
+            const file = makeFile("/a.js");
+            const jsconfig = makeFile("/jsconfig.json", {
+                compilerOptions: {},
+                typeAcquisition: {
+                    enable: true,
+                    enableAutoDiscovery: false,
+                    include: ["hunter2", "hunter3"],
+                    exclude: [],
+                },
             });
-            const et = new TestServerEventManager(host);
-            et.service.openClientFile("/a.js");
+            const et = new TestServerEventManager([jsconfig, file]);
+            et.service.openClientFile(file.path);
             et.assertProjectInfoTelemetryEvent({
-                projectId: core.sha1("/jsconfig.json"),
+                projectId: Harness.mockHash("/jsconfig.json"),
                 fileStats: fileStats({ js: 1 }),
                 compilerOptions: autoJsCompilerOptions,
                 typeAcquisition: {
@@ -237,17 +215,14 @@ namespace ts.projectSystem {
         });
 
         it("detects whether language service was disabled", () => {
-            const host = new fakes.FakeServerHost({}, /*files*/ {
-                "/a.js": ``,
-                "/jsconfig.json": `{}`,
-            });
-
-            const et = new TestServerEventManager(host);
+            const file = makeFile("/a.js");
+            const tsconfig = makeFile("/jsconfig.json", {});
+            const et = new TestServerEventManager([tsconfig, file]);
             et.host.getFileSize = () => server.maxProgramSizeForNonTsFiles + 1;
-            et.service.openClientFile("/a.js");
+            et.service.openClientFile(file.path);
             et.getEvent<server.ProjectLanguageServiceStateEvent>(server.ProjectLanguageServiceStateEvent);
             et.assertProjectInfoTelemetryEvent({
-                projectId: core.sha1("/jsconfig.json"),
+                projectId: Harness.mockHash("/jsconfig.json"),
                 fileStats: fileStats({ js: 1 }),
                 compilerOptions: autoJsCompilerOptions,
                 configFileName: "jsconfig.json",
@@ -260,4 +235,8 @@ namespace ts.projectSystem {
             });
         });
     });
+
+    function makeFile(path: string, content: {} = ""): projectSystem.FileOrFolder {
+        return { path, content: isString(content) ? "" : JSON.stringify(content) };
+    }
 }

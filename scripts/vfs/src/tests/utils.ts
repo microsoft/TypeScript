@@ -12,3 +12,9 @@ export function theory(name: string, data: (Theory | any[])[], callback: (...arg
         }
     });
 }
+
+export function createSpy() {
+    const calls: any[][] = [];
+    const proxy = function(...args: any[]): any { calls.push(args); }
+    return { proxy, calls };
+}

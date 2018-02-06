@@ -1,6 +1,6 @@
 import * as vpath from "@typescript/vfs-path";
 import * as constants from "../constants";
-import { spy, Times, Arg } from "typemock";
+import { createSpy } from "./utils";
 import { FileSystem } from "../fileSystem";
 import { Link, Symlink } from "../fileSet";
 import { assert } from "chai";
@@ -832,528 +832,579 @@ describe("fileSystem", () => {
                 describe("directory (non-recursive)", () => {
                     it("open() new file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": {} } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), callbackSpy.proxy);
                         fs.openSync("dir/file", "w+");
 
-                        callbackSpy.verify(_ => _("rename", "file"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file"]
+                        ]);
                     });
                     it("open() + write() new file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": {} } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), callbackSpy.proxy);
                         const fd = fs.openSync("dir/file", "w+");
                         fs.writeSync(fd, Buffer.from("test"), 0, 4);
 
-                        callbackSpy.verify(_ => _("rename", "file"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file"]
+                        ]);
                     });
                     it("open() + write() + close() new file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": {} } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), callbackSpy.proxy);
                         const fd = fs.openSync("dir/file", "w+");
                         fs.writeSync(fd, Buffer.from("test"), 0, 4);
                         fs.closeSync(fd);
 
-                        callbackSpy.verify(_ => _("rename", "file"), Times.once());
-                        callbackSpy.verify(_ => _("change", "file"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.exactly(2));
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file"],
+                            ["change", "file"]
+                        ]);
                     });
                     it("open() + close() new file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": {} } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), callbackSpy.proxy);
                         const fd = fs.openSync("dir/file", "w+");
                         fs.closeSync(fd);
 
-                        callbackSpy.verify(_ => _("rename", "file"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file"],
+                            ["change", "file"]
+                        ]);
                     });
                     it("writeFile() new file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": {} } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), callbackSpy.proxy);
                         fs.writeFileSync("dir/file", "test");
 
-                        callbackSpy.verify(_ => _("rename", "file"), Times.once());
-                        callbackSpy.verify(_ => _("change", "file"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.exactly(2));
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file"],
+                            ["change", "file"]
+                        ]);
                     });
                     it("writeFile() replace file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "file": "" } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), callbackSpy.proxy);
                         fs.writeFileSync("dir/file", "test");
 
-                        callbackSpy.verify(_ => _("change", "file"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["change", "file"]
+                        ]);
                     });
                     it("truncate() file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "file": "test" } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), callbackSpy.proxy);
                         fs.truncateSync(vpath.combine(root, "dir/file"));
 
-                        callbackSpy.verify(_ => _("change", "file"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["change", "file"]
+                        ]);
                     });
                     it("rename() file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "file": "test" } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), callbackSpy.proxy);
                         fs.renameSync(vpath.combine(root, "dir/file"), vpath.combine(root, "dir/file1"));
 
-                        callbackSpy.verify(_ => _("rename", "file"), Times.once());
-                        callbackSpy.verify(_ => _("rename", "file1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.exactly(2));
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file"],
+                            ["rename", "file1"]
+                        ]);
                     });
                     it("link() new file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "file": "test" } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), callbackSpy.proxy);
                         fs.linkSync(vpath.combine(root, "dir/file"), vpath.combine(root, "dir/file1"));
 
-                        callbackSpy.verify(_ => _("rename", "file1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file1"]
+                        ]);
                     });
                     it("symlink() file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "file": "test" } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), callbackSpy.proxy);
                         fs.symlinkSync(vpath.combine(root, "dir/file"), vpath.combine(root, "dir/file1"));
 
-                        callbackSpy.verify(_ => _("rename", "file1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file1"]
+                        ]);
                     });
                     it("unlink() file (single link)", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "file": "" } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), callbackSpy.proxy);
                         fs.unlinkSync(vpath.combine(root, "dir/file"));
 
-                        callbackSpy.verify(_ => _("rename", "file"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file"]
+                        ]);
                     });
                     it("unlink() file (multiple links)", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "file": "", "file1": new Link("file") } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), callbackSpy.proxy);
                         fs.unlinkSync(vpath.combine(root, "dir/file"));
 
-                        callbackSpy.verify(_ => _("rename", "file"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file"]
+                        ]);
                     });
                     it("mkdir() new subdirectory", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), callbackSpy.proxy);
                         fs.mkdirSync(vpath.combine(root, "dir/subdir"));
 
-                        callbackSpy.verify(_ => _("rename", "subdir"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "subdir"]
+                        ]);
                     });
                     it("rmdir() subdirectory", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "subdir": {} } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), callbackSpy.proxy);
                         fs.rmdirSync(vpath.combine(root, "dir/subdir"));
 
-                        callbackSpy.verify(_ => _("rename", "subdir"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "subdir"]
+                        ]);
                     });
                 });
                 describe("directory (recursive)", () => {
                     it("open() new file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "sub1": {} } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), { recursive: true }, callbackSpy.proxy);
                         fs.openSync("dir/sub1/file1", "w+");
 
-                        callbackSpy.verify(_ => _("rename", "sub1/file1"), Times.once());
-                        callbackSpy.verify(_ => _("change", "sub1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.exactly(2));
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "sub1/file1"],
+                            ["change", "sub1"]
+                        ]);
                     });
                     it("open() + write() new file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "sub1": {} } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), { recursive: true }, callbackSpy.proxy);
                         const fd = fs.openSync("dir/sub1/file1", "w+");
                         fs.writeSync(fd, Buffer.from("test"), 0, 4);
 
-                        callbackSpy.verify(_ => _("rename", "sub1/file1"), Times.once());
-                        callbackSpy.verify(_ => _("change", "sub1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.exactly(2));
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "sub1/file1"],
+                            ["change", "sub1"]
+                        ]);
                     });
                     it("open() + write() + close() new file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "sub1": {} } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), { recursive: true }, callbackSpy.proxy);
                         const fd = fs.openSync("dir/sub1/file1", "w+");
                         fs.writeSync(fd, Buffer.from("test"), 0, 4);
                         fs.closeSync(fd);
 
-                        callbackSpy.verify(_ => _("rename", "sub1/file1"), Times.once());
-                        callbackSpy.verify(_ => _("change", "sub1/file1"), Times.once());
-                        callbackSpy.verify(_ => _("change", "sub1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.exactly(3));
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "sub1/file1"],
+                            ["change", "sub1/file1"],
+                            ["change", "sub1"]
+                        ]);
                     });
                     it("open() + close() new file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "sub1": {} } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), { recursive: true }, callbackSpy.proxy);
                         const fd = fs.openSync("dir/sub1/file1", "w+");
                         fs.closeSync(fd);
 
-                        callbackSpy.verify(_ => _("rename", "sub1/file1"), Times.once());
-                        callbackSpy.verify(_ => _("change", "sub1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.exactly(2));
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "sub1/file1"],
+                            ["change", "sub1"],
+                            ["change", "sub1/file1"]
+                        ]);
                     });
                     it("writeFile() new file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "sub1": {} } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), { recursive: true }, callbackSpy.proxy);
                         fs.writeFileSync("dir/sub1/file1", "test");
 
-                        callbackSpy.verify(_ => _("rename", "sub1/file1"), Times.once());
-                        callbackSpy.verify(_ => _("change", "sub1/file1"), Times.once());
-                        callbackSpy.verify(_ => _("change", "sub1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.exactly(3));
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "sub1/file1"],
+                            ["change", "sub1/file1"],
+                            ["change", "sub1"]
+                        ]);
                     });
                     it("writeFile() replace file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "sub1": { "file1": "" } } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), { recursive: true }, callbackSpy.proxy);
                         fs.writeFileSync("dir/sub1/file1", "test");
 
-                        callbackSpy.verify(_ => _("change", "sub1/file1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["change", "sub1/file1"]
+                        ]);
                     });
                     it("truncate() file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "sub1": { "file1": "test" } } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), { recursive: true }, callbackSpy.proxy);
                         fs.truncateSync(vpath.combine(root, "dir/sub1/file1"));
 
-                        callbackSpy.verify(_ => _("change", "sub1/file1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["change", "sub1/file1"]
+                        ]);
                     });
                     it("rename() file (same directory)", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "sub1": { "file1": "test" } } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), { recursive: true }, callbackSpy.proxy);
                         fs.renameSync(vpath.combine(root, "dir/sub1/file1"), vpath.combine(root, "dir/sub1/file2"));
 
-                        callbackSpy.verify(_ => _("rename", "sub1/file1"), Times.once());
-                        callbackSpy.verify(_ => _("rename", "sub1/file2"), Times.once());
-                        callbackSpy.verify(_ => _("change", "sub1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.exactly(3));
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "sub1/file1"],
+                            ["rename", "sub1/file2"],
+                            ["change", "sub1"]
+                        ]);
                     });
                     it("rename() file (different directory)", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "sub1": { "file1": "test" }, "sub2": {} } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), { recursive: true }, callbackSpy.proxy);
                         fs.renameSync(vpath.combine(root, "dir/sub1/file1"), vpath.combine(root, "dir/sub2/file1"));
 
-                        callbackSpy.verify(_ => _("rename", "sub1/file1"), Times.once());
-                        callbackSpy.verify(_ => _("rename", "sub2/file1"), Times.once());
-                        callbackSpy.verify(_ => _("change", "sub1"), Times.once());
-                        callbackSpy.verify(_ => _("change", "sub2"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.exactly(4));
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "sub1/file1"],
+                            ["rename", "sub2/file1"],
+                            ["change", "sub1"],
+                            ["change", "sub2"]
+                        ]);
                     });
                     it("link() file (same directory)", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "sub1": { "file1": "test" } } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), { recursive: true }, callbackSpy.proxy);
                         fs.linkSync(vpath.combine(root, "dir/sub1/file1"), vpath.combine(root, "dir/sub1/file2"));
 
-                        callbackSpy.verify(_ => _("rename", "sub1/file2"), Times.once());
-                        callbackSpy.verify(_ => _("change", "sub1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.exactly(2));
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "sub1/file2"],
+                            ["change", "sub1"]
+                        ]);
                     });
                     it("link() file (different directory)", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "sub1": { "file1": "test" }, "sub2": {} } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), { recursive: true }, callbackSpy.proxy);
                         fs.linkSync(vpath.combine(root, "dir/sub1/file1"), vpath.combine(root, "dir/sub2/file1"));
 
-                        callbackSpy.verify(_ => _("rename", "sub2/file1"), Times.once());
-                        callbackSpy.verify(_ => _("change", "sub2"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.exactly(2));
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "sub2/file1"],
+                            ["change", "sub2"]
+                        ]);
                     });
                     it("symlink() file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "sub1": { "file": "test" } } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), { recursive: true }, callbackSpy.proxy);
                         fs.symlinkSync(vpath.combine(root, "dir/sub1/file"), vpath.combine(root, "dir/sub1/file1"));
 
-                        callbackSpy.verify(_ => _("rename", "sub1/file1"), Times.once());
-                        callbackSpy.verify(_ => _("change", "sub1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.exactly(2));
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "sub1/file1"],
+                            ["change", "sub1"]
+                        ]);
                     });
                     it("unlink() file (single link)", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "sub1": { "file1": "" } } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), { recursive: true }, callbackSpy.proxy);
                         fs.unlinkSync(vpath.combine(root, "dir/sub1/file1"));
 
-                        callbackSpy.verify(_ => _("rename", "sub1/file1"), Times.once());
-                        callbackSpy.verify(_ => _("change", "sub1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.exactly(2));
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "sub1/file1"],
+                            ["change", "sub1"]
+                        ]);
                     });
                     it("unlink() file (multiple links)", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "sub1": { "file1": "", "file2": new Link("file1") } } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), { recursive: true }, callbackSpy.proxy);
                         fs.unlinkSync(vpath.combine(root, "dir/sub1/file1"));
 
-                        callbackSpy.verify(_ => _("rename", "sub1/file1"), Times.once());
-                        callbackSpy.verify(_ => _("change", "sub1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.exactly(2));
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "sub1/file1"],
+                            ["change", "sub1"]
+                        ]);
                     });
                     it("mkdir() new subdirectory", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "sub1": {} } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), { recursive: true }, callbackSpy.proxy);
                         fs.mkdirSync(vpath.combine(root, "dir/sub1/sub2"));
 
-                        callbackSpy.verify(_ => _("rename", "sub1/sub2"), Times.once());
-                        callbackSpy.verify(_ => _("change", "sub1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.exactly(2));
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "sub1/sub2"],
+                            ["change", "sub1"]
+                        ]);
                     });
                     it("rmdir() subdirectory", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "sub1": { "sub2": {} } } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir"), { recursive: true }, callbackSpy.proxy);
                         fs.rmdirSync(vpath.combine(root, "dir/sub1/sub2"));
 
-                        callbackSpy.verify(_ => _("rename", "sub1/sub2"), Times.once());
-                        callbackSpy.verify(_ => _("change", "sub1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.exactly(2));
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "sub1/sub2"],
+                            ["change", "sub1"]
+                        ]);
                     });
                 });
                 describe("file", () => {
                     it("writeFile() replace", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "file1": "" } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir/file1"), callbackSpy.proxy);
                         fs.writeFileSync("dir/file1", "test");
 
-                        callbackSpy.verify(_ => _("change", "file1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["change", "file1"]
+                        ]);
                     });
                     it("unlink() (single link)", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "file1": "" } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir/file1"), callbackSpy.proxy);
                         fs.unlinkSync(vpath.combine(root, "dir/file1"));
 
-                        callbackSpy.verify(_ => _("rename", "file1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file1"]
+                        ]);
                     });
                 });
                 describe("symlink (directory, non-recursive)", () => {
                     it("open() new file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": {}, "dir2": new Symlink("dir") } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir2"), callbackSpy.proxy);
                         fs.openSync("dir/file", "w+");
 
-                        callbackSpy.verify(_ => _("rename", "file"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file"]
+                        ]);
                     });
                     it("open() + write() new file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": {}, "dir2": new Symlink("dir") } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir2"), callbackSpy.proxy);
                         const fd = fs.openSync("dir/file", "w+");
                         fs.writeSync(fd, Buffer.from("test"), 0, 4);
 
-                        callbackSpy.verify(_ => _("rename", "file"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file"]
+                        ]);
                     });
                     it("open() + write() + close() new file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": {}, "dir2": new Symlink("dir") } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir2"), callbackSpy.proxy);
                         const fd = fs.openSync("dir/file", "w+");
                         fs.writeSync(fd, Buffer.from("test"), 0, 4);
                         fs.closeSync(fd);
 
-                        callbackSpy.verify(_ => _("rename", "file"), Times.once());
-                        callbackSpy.verify(_ => _("change", "file"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.exactly(2));
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file"],
+                            ["change", "file"]
+                        ]);
                     });
                     it("open() + close() new file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": {}, "dir2": new Symlink("dir") } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir2"), callbackSpy.proxy);
                         const fd = fs.openSync("dir/file", "w+");
                         fs.closeSync(fd);
 
-                        callbackSpy.verify(_ => _("rename", "file"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file"],
+                            ["change", "file"]
+                        ]);
                     });
                     it("writeFile() new file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": {}, "dir2": new Symlink("dir") } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir2"), callbackSpy.proxy);
                         fs.writeFileSync("dir/file", "test");
 
-                        callbackSpy.verify(_ => _("rename", "file"), Times.once());
-                        callbackSpy.verify(_ => _("change", "file"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.exactly(2));
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file"],
+                            ["change", "file"]
+                        ]);
                     });
                     it("writeFile() replace file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "file": "" }, "dir2": new Symlink("dir") } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir2"), callbackSpy.proxy);
                         fs.writeFileSync("dir/file", "test");
 
-                        callbackSpy.verify(_ => _("change", "file"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["change", "file"]
+                        ]);
                     });
                     it("truncate() file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "file": "test" }, "dir2": new Symlink("dir") } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir2"), callbackSpy.proxy);
                         fs.truncateSync(vpath.combine(root, "dir/file"));
 
-                        callbackSpy.verify(_ => _("change", "file"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["change", "file"]
+                        ]);
                     });
                     it("rename() file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "file": "test" }, "dir2": new Symlink("dir") } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir2"), callbackSpy.proxy);
                         fs.renameSync(vpath.combine(root, "dir/file"), vpath.combine(root, "dir/file1"));
 
-                        callbackSpy.verify(_ => _("rename", "file"), Times.once());
-                        callbackSpy.verify(_ => _("rename", "file1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.exactly(2));
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file"],
+                            ["rename", "file1"]
+                        ]);
                     });
                     it("link() new file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "file": "test" }, "dir2": new Symlink("dir") } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir2"), callbackSpy.proxy);
                         fs.linkSync(vpath.combine(root, "dir/file"), vpath.combine(root, "dir/file1"));
 
-                        callbackSpy.verify(_ => _("rename", "file1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file1"]
+                        ]);
                     });
                     it("symlink() file", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "file": "test" }, "dir2": new Symlink("dir") } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir2"), callbackSpy.proxy);
                         fs.symlinkSync(vpath.combine(root, "dir/file"), vpath.combine(root, "dir/file1"));
 
-                        callbackSpy.verify(_ => _("rename", "file1"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file1"]
+                        ]);
                     });
                     it("unlink() file (single link)", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "file": "" }, "dir2": new Symlink("dir") } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir2"), callbackSpy.proxy);
                         fs.unlinkSync(vpath.combine(root, "dir/file"));
 
-                        callbackSpy.verify(_ => _("rename", "file"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file"]
+                        ]);
                     });
                     it("unlink() file (multiple links)", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "file": "", "file1": new Link("file") }, "dir2": new Symlink("dir") } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir2"), callbackSpy.proxy);
                         fs.unlinkSync(vpath.combine(root, "dir/file"));
 
-                        callbackSpy.verify(_ => _("rename", "file"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file"]
+                        ]);
                     });
                     it("mkdir() new subdirectory", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { }, "dir2": new Symlink("dir") } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir2"), callbackSpy.proxy);
                         fs.mkdirSync(vpath.combine(root, "dir/subdir"));
 
-                        callbackSpy.verify(_ => _("rename", "subdir"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "subdir"]
+                        ]);
                     });
                     it("rmdir() subdirectory", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "subdir": {} }, "dir2": new Symlink("dir") } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir2"), callbackSpy.proxy);
                         fs.rmdirSync(vpath.combine(root, "dir/subdir"));
 
-                        callbackSpy.verify(_ => _("rename", "subdir"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "subdir"]
+                        ]);
                     });
                 });
                 describe("symlink (file)", () => {
                     it("writeFile() replace", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "file1": "", "file2": new Symlink("file1") } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir/file2"), callbackSpy.proxy);
                         fs.writeFileSync("dir/file1", "test");
 
-                        callbackSpy.verify(_ => _("change", "file2"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["change", "file2"]
+                        ]);
                     });
                     it("unlink() (single link)", () => {
                         const fs = new FileSystem(ignoreCase, { files: { [root]: { "dir": { "file1": "", "file2": new Symlink("file1") } } } });
-                        const callbackSpy = spy<(eventType: string, filename: string) => void>();
+                        const callbackSpy = createSpy();
 
                         fs.watch(vpath.combine(root, "dir/file2"), callbackSpy.proxy);
                         fs.unlinkSync(vpath.combine(root, "dir/file1"));
 
-                        callbackSpy.verify(_ => _("rename", "file2"), Times.once());
-                        callbackSpy.verify(_ => _(Arg.any(), Arg.any()), Times.once());
+                        assert.sameDeepMembers(callbackSpy.calls, [
+                            ["rename", "file2"]
+                        ]);
                     });
                 });
                 it("fail: invalid path (ENOENT)", () => {

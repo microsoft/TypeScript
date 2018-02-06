@@ -72,9 +72,15 @@ namespace utils {
         let match: RegExpExecArray | null;
         let lineStart = 0;
         while (match = lineTerminatorRegExp.exec(text)) {
-            lines.push(text.slice(lineStart, match.index));
-            lineTerminators.push(match[0]);
+            if (lineStart !== match.index || lines.length > 0) {
+                lines.push(text.slice(lineStart, match.index));
+                lineTerminators.push(match[0]);
+            }
             lineStart = match.index + match[0].length;
+        }
+
+        if (lineStart < text.length) {
+            lines.push(text.slice(lineStart));
         }
 
         const indentation = guessIndentation(lines);
@@ -84,7 +90,9 @@ namespace utils {
             const lineText = lines[i];
             const line = indentation ? lineText.slice(indentation) : lineText;
             result += line;
-            result += lineTerminators[i];
+            if (i < lineTerminators.length) {
+                result += lineTerminators[i];
+            }
         }
         return result;
     }
