@@ -180,11 +180,10 @@ namespace ts.Completions {
         let replacementSpan: TextSpan | undefined;
         if (includeInsertTextCompletions) {
             if (origin && origin.type === "this-type") {
-                insertText = needsConvertPropertyAccess ? `this["${name}"]` : `this.${name}`;
+                insertText = needsConvertPropertyAccess ? `this[${quote(name)}]` : `this.${name}`;
             }
             else if (needsConvertPropertyAccess) {
-                // TODO: GH#20619 Use configured quote style
-                insertText = `["${name}"]`;
+                insertText = `[${quote(name)}]`;
                 const dot = findChildOfKind(propertyAccessToConvert!, SyntaxKind.DotToken, sourceFile)!;
                 // If the text after the '.' starts with this name, write over it. Else, add new text.
                 const end = startsWith(name, propertyAccessToConvert!.name.text) ? propertyAccessToConvert!.name.end : dot.end;
@@ -222,6 +221,10 @@ namespace ts.Completions {
         };
     }
 
+    function quote(text: string): string {
+        // TODO: GH#20619 Use configured quote style
+        return JSON.stringify(text);
+    }
 
     function isRecommendedCompletionMatch(localSymbol: Symbol, recommendedCompletion: Symbol, checker: TypeChecker): boolean {
         return localSymbol === recommendedCompletion ||
