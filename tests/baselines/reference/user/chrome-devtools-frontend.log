@@ -12,8 +12,8 @@ Standard output:
 ../../../../built/local/lib.dom.d.ts(9264,13): error TS2300: Duplicate identifier 'Request'.
 ../../../../built/local/lib.dom.d.ts(13522,11): error TS2300: Duplicate identifier 'Window'.
 ../../../../built/local/lib.dom.d.ts(13711,13): error TS2300: Duplicate identifier 'Window'.
-../../../../built/local/lib.es5.d.ts(1321,11): error TS2300: Duplicate identifier 'ArrayLike'.
-../../../../built/local/lib.es5.d.ts(1350,6): error TS2300: Duplicate identifier 'Record'.
+../../../../built/local/lib.es5.d.ts(1328,11): error TS2300: Duplicate identifier 'ArrayLike'.
+../../../../built/local/lib.es5.d.ts(1357,6): error TS2300: Duplicate identifier 'Record'.
 ../../../../node_modules/@types/node/index.d.ts(150,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{ [x: string]: any; }', but here has type 'NodeModule'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(43,8): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(95,28): error TS2339: Property 'response' does not exist on type 'EventTarget'.
