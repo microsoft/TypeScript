@@ -167,7 +167,7 @@ namespace ts.Completions {
         origin: SymbolOriginInfo | undefined,
         recommendedCompletion: Symbol | undefined,
         propertyAccessToConvert: PropertyAccessExpression | undefined,
-        isJsxInitializer: boolean,
+        isJsxInitializer: IsJsxInitializer,
         includeInsertTextCompletions: boolean,
     ): CompletionEntry | undefined {
         const info = getCompletionEntryDisplayNameForSymbol(symbol, target, origin, kind);
@@ -193,6 +193,9 @@ namespace ts.Completions {
             if (isJsxInitializer) {
                 if (insertText === undefined) insertText = name;
                 insertText = `{${insertText}}`;
+                if (typeof isJsxInitializer !== "boolean") {
+                    replacementSpan = createTextSpanFromNode(isJsxInitializer, sourceFile);
+                }
             }
         }
 
@@ -250,7 +253,7 @@ namespace ts.Completions {
         kind: CompletionKind,
         includeInsertTextCompletions?: boolean,
         propertyAccessToConvert?: PropertyAccessExpression | undefined,
-        isJsxInitializer?: boolean,
+        isJsxInitializer?: IsJsxInitializer,
         recommendedCompletion?: Symbol,
         symbolToOriginInfoMap?: SymbolOriginInfoMap,
     ): Map<true> {
@@ -499,7 +502,7 @@ namespace ts.Completions {
         location: Node;
         symbolToOriginInfoMap: SymbolOriginInfoMap;
         previousToken: Node;
-        readonly isJsxInitializer: boolean;
+        readonly isJsxInitializer: IsJsxInitializer;
     }
     function getSymbolCompletionFromEntryId(
         typeChecker: TypeChecker,
@@ -668,6 +671,8 @@ namespace ts.Completions {
     }
 
     const enum CompletionDataKind { Data, JsDocTagName, JsDocTag, JsDocParameterName }
+    /** true: after the `=` sign but no identifier has been typed yet. Else is the Identifier after the initializer. */
+    type IsJsxInitializer = boolean | Identifier;
     interface CompletionData {
         readonly kind: CompletionDataKind.Data;
         readonly symbols: ReadonlyArray<Symbol>;
@@ -680,7 +685,7 @@ namespace ts.Completions {
         readonly symbolToOriginInfoMap: SymbolOriginInfoMap;
         readonly recommendedCompletion: Symbol | undefined;
         readonly previousToken: Node | undefined;
-        readonly isJsxInitializer: boolean;
+        readonly isJsxInitializer: IsJsxInitializer;
     }
     type Request = { readonly kind: CompletionDataKind.JsDocTagName | CompletionDataKind.JsDocTag } | { readonly kind: CompletionDataKind.JsDocParameterName, tag: JSDocParameterTag };
 
@@ -862,7 +867,7 @@ namespace ts.Completions {
         let isRightOfDot = false;
         let isRightOfOpenTag = false;
         let isStartingCloseTag = false;
-        let isJsxInitializer = false;
+        let isJsxInitializer: IsJsxInitializer = false;
 
         let location = getTouchingPropertyName(sourceFile, position, insideJsDocTagTypeExpression); // TODO: GH#15853
         if (contextToken) {
@@ -923,7 +928,15 @@ namespace ts.Completions {
                         break;
 
                     case SyntaxKind.JsxAttribute:
-                        isJsxInitializer = previousToken.kind === SyntaxKind.EqualsToken;
+                        switch (previousToken.kind) {
+                            case SyntaxKind.EqualsToken:
+                                isJsxInitializer = true;
+                                break;
+                            case SyntaxKind.Identifier:
+                                if (previousToken !== (parent as JsxAttribute).name) {
+                                    isJsxInitializer = previousToken as Identifier;
+                                }
+                        }
                         break;
                 }
             }
