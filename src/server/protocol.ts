@@ -1106,9 +1106,9 @@ namespace ts.server.protocol {
         options: ts.CompilerOptions;
 
         /**
-         * true if project language service is disabled
+         * Filename of the last file analyzed before disabling the language service. undefined, if the language service is enabled.
          */
-        languageServiceDisabled: boolean;
+        exceededFilename: string | undefined;
     }
 
     /**

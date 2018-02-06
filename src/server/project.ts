@@ -130,6 +130,7 @@ namespace ts.server {
         protected languageService: LanguageService;
 
         public languageServiceEnabled = true;
+        public exceededFilename: string | undefined;
 
         readonly trace?: (s: string) => void;
         readonly realpath?: (path: string) => string;
@@ -212,7 +213,7 @@ namespace ts.server {
             readonly projectService: ProjectService,
             private documentRegistry: DocumentRegistry,
             hasExplicitListOfFiles: boolean,
-            languageServiceEnabled: boolean,
+            exceededFilename: string | undefined,
             private compilerOptions: CompilerOptions,
             public compileOnSaveEnabled: boolean,
             directoryStructureHost: DirectoryStructureHost,
@@ -244,8 +245,8 @@ namespace ts.server {
             // Use the current directory as resolution root only if the project created using current directory string
             this.resolutionCache = createResolutionCache(this, currentDirectory && this.currentDirectory, /*logChangesWhenResolvingModule*/ true);
             this.languageService = createLanguageService(this, this.documentRegistry);
-            if (!languageServiceEnabled) {
-                this.disableLanguageService();
+            if (exceededFilename) {
+                this.disableLanguageService(exceededFilename);
             }
             this.markAsDirty();
         }
@@ -500,12 +501,13 @@ namespace ts.server {
             this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ true);
         }
 
-        disableLanguageService() {
+        disableLanguageService(exceededFilename: string) {
             if (!this.languageServiceEnabled) {
                 return;
             }
             this.languageService.cleanupSemanticCache();
             this.languageServiceEnabled = false;
+            this.exceededFilename = exceededFilename;
             this.builderState = undefined;
             this.resolutionCache.closeTypeRootsWatch();
             this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ false);
@@ -993,12 +995,12 @@ namespace ts.server {
         getChangesSinceVersion(lastKnownVersion?: number): ProjectFilesWithTSDiagnostics {
             this.updateGraph();
 
-            const info = {
+            const info: protocol.ProjectVersionInfo = {
                 projectName: this.getProjectName(),
                 version: this.projectStructureVersion,
                 isInferred: this.projectKind === ProjectKind.Inferred,
                 options: this.getCompilationSettings(),
-                languageServiceDisabled: !this.languageServiceEnabled
+                exceededFilename: this.exceededFilename
             };
             const updatedFileNames = this.updatedFileNames;
             this.updatedFileNames = undefined;
@@ -1182,7 +1184,7 @@ namespace ts.server {
                 projectService,
                 documentRegistry,
                 /*files*/ undefined,
-                /*languageServiceEnabled*/ true,
+                /*exceededFileName*/ undefined,
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false,
                 projectService.host,
@@ -1261,7 +1263,7 @@ namespace ts.server {
             documentRegistry: DocumentRegistry,
             hasExplicitListOfFiles: boolean,
             compilerOptions: CompilerOptions,
-            languageServiceEnabled: boolean,
+            exceededFilename: string | undefined,
             public compileOnSaveEnabled: boolean,
             cachedDirectoryStructureHost: CachedDirectoryStructureHost) {
             super(configFileName,
@@ -1269,7 +1271,7 @@ namespace ts.server {
                 projectService,
                 documentRegistry,
                 hasExplicitListOfFiles,
-                languageServiceEnabled,
+                exceededFilename,
                 compilerOptions,
                 compileOnSaveEnabled,
                 cachedDirectoryStructureHost,
@@ -1456,7 +1458,7 @@ namespace ts.server {
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
             compilerOptions: CompilerOptions,
-            languageServiceEnabled: boolean,
+            exceededFilename: string | undefined,
             public compileOnSaveEnabled: boolean,
             projectFilePath?: string) {
             super(externalProjectName,
@@ -1464,7 +1466,7 @@ namespace ts.server {
                 projectService,
                 documentRegistry,
                 /*hasExplicitListOfFiles*/ true,
-                languageServiceEnabled,
+                exceededFilename,
                 compilerOptions,
                 compileOnSaveEnabled,
                 projectService.host,
