@@ -310,7 +310,9 @@ declare namespace FourSlashInterface {
         occurrencesAtPositionCount(expectedCount: number): void;
         rangesAreDocumentHighlights(ranges?: Range[]): void;
         rangesWithSameTextAreDocumentHighlights(): void;
-        documentHighlightsOf(startRange: Range, ranges: Range[]): void;
+        documentHighlightsOf(startRange: Range, ranges: Range[], options?: {
+            filesToSearch?: ReadonlyArray<string>;
+        }): void;
         completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]): void;
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.

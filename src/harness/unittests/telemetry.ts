@@ -185,6 +185,7 @@ namespace ts.projectSystem {
             allowSyntheticDefaultImports: true,
             maxNodeModuleJsDepth: 2,
             skipLibCheck: true,
+            noEmit: true
         };
 
         it("sends telemetry for typeAcquisition settings", () => {

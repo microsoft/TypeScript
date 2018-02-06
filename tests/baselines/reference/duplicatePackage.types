@@ -1,22 +1,22 @@
 === /src/a.ts ===
 import { a } from "a";
->a : (x: X) => void
+>a : (x: default) => void
 
 import { b } from "b";
->b : X
+>b : default
 
 import { c } from "c";
->c : X
+>c : default
 
 a(b); // Works
 >a(b) : void
->a : (x: X) => void
->b : X
+>a : (x: default) => void
+>b : default
 
 a(c); // Error, these are from different versions of the library.
 >a(c) : void
->a : (x: X) => void
->c : X
+>a : (x: default) => void
+>c : default
 
 === /node_modules/a/index.d.ts ===
 import X from "x";

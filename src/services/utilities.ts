@@ -1067,6 +1067,14 @@ namespace ts {
         return createTextSpanFromBounds(range.pos, range.end);
     }
 
+    export function createTextChangeFromStartLength(start: number, length: number, newText: string): TextChange {
+        return createTextChange(createTextSpan(start, length), newText);
+    }
+
+    export function createTextChange(span: TextSpan, newText: string): TextChange {
+        return { span, newText };
+    }
+
     export const typeKeywords: ReadonlyArray<SyntaxKind> = [
         SyntaxKind.AnyKeyword,
         SyntaxKind.BooleanKeyword,
@@ -1292,7 +1300,7 @@ namespace ts {
 
     export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typeChecker.writeSymbol(symbol, enclosingDeclaration, meaning, flags, writer);
+            typeChecker.writeSymbol(symbol, enclosingDeclaration, meaning, flags | SymbolFormatFlags.UseAliasDefinedOutsideCurrentScope, writer);
         });
     }
 

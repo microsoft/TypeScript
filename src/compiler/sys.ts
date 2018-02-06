@@ -126,9 +126,31 @@ namespace ts {
             const _fs = require("fs");
             const _path = require("path");
             const _os = require("os");
-            const _crypto = require("crypto");
+            // crypto can be absent on reduced node installations
+            let _crypto: any;
+            try {
+              _crypto = require("crypto");
+            }
+            catch {
+              _crypto = undefined;
+            }
 
             const useNonPollingWatchers = process.env.TSC_NONPOLLING_WATCHER;
+
+            /**
+             * djb2 hashing algorithm
+             * http://www.cse.yorku.ca/~oz/hash.html
+             */
+            function generateDjb2Hash(data: string): string {
+              const chars = data.split("").map(str => str.charCodeAt(0));
+              return `${chars.reduce((prev, curr) => ((prev << 5) + prev) + curr, 5381)}`;
+            }
+
+            function createMD5HashUsingNativeCrypto(data: string) {
+              const hash = _crypto.createHash("md5");
+              hash.update(data);
+              return hash.digest("hex");
+            }
 
             function createWatchedFileSet() {
                 const dirWatchers = createMap<DirectoryWatcher>();
@@ -493,11 +515,7 @@ namespace ts {
                         return undefined;
                     }
                 },
-                createHash(data) {
-                    const hash = _crypto.createHash("md5");
-                    hash.update(data);
-                    return hash.digest("hex");
-                },
+                createHash: _crypto ? createMD5HashUsingNativeCrypto : generateDjb2Hash,
                 getMemoryUsage() {
                     if (global.gc) {
                         global.gc();

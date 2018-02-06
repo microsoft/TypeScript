@@ -208,12 +208,14 @@ namespace ts.Completions {
         let replacementSpan: TextSpan | undefined;
         if (includeInsertTextCompletions) {
             if (origin && origin.type === "this-type") {
-                insertText = needsConvertPropertyAccess ? `this["${name}"]` : `this.${name}`;
+                insertText = needsConvertPropertyAccess ? `this[${quote(name)}]` : `this.${name}`;
             }
             else if (needsConvertPropertyAccess) {
-                // TODO: GH#20619 Use configured quote style
-                insertText = `["${name}"]`;
-                replacementSpan = createTextSpanFromBounds(findChildOfKind(propertyAccessToConvert!, SyntaxKind.DotToken, sourceFile)!.getStart(sourceFile), propertyAccessToConvert!.name.end);
+                insertText = `[${quote(name)}]`;
+                const dot = findChildOfKind(propertyAccessToConvert!, SyntaxKind.DotToken, sourceFile)!;
+                // If the text after the '.' starts with this name, write over it. Else, add new text.
+                const end = startsWith(name, propertyAccessToConvert!.name.text) ? propertyAccessToConvert!.name.end : dot.end;
+                replacementSpan = createTextSpanFromBounds(dot.getStart(sourceFile), end);
             }
 
             if (isJsxInitializer) {
@@ -247,6 +249,10 @@ namespace ts.Completions {
         };
     }
 
+    function quote(text: string): string {
+        // TODO: GH#20619 Use configured quote style
+        return JSON.stringify(text);
+    }
 
     function isRecommendedCompletionMatch(localSymbol: Symbol, recommendedCompletion: Symbol, checker: TypeChecker): boolean {
         return localSymbol === recommendedCompletion ||
@@ -589,37 +595,22 @@ namespace ts.Completions {
         getCanonicalFileName: GetCanonicalFileName,
         allSourceFiles: ReadonlyArray<SourceFile>
     ): CodeActionsAndSourceDisplay {
-        const { moduleSymbol, isDefaultExport } = symbolOriginInfo;
+        const { moduleSymbol } = symbolOriginInfo;
         const exportedSymbol = skipAlias(symbol.exportSymbol || symbol, checker);
-        const moduleSymbols = getAllReExportingModules(exportedSymbol, checker, allSourceFiles);
-        Debug.assert(contains(moduleSymbols, moduleSymbol));
-
-        const sourceDisplay = [textPart(first(codefix.getModuleSpecifiersForNewImport(program, sourceFile, moduleSymbols, compilerOptions, getCanonicalFileName, host)))];
-        const codeActions = codefix.getCodeActionForImport(moduleSymbols, {
+        const { moduleSpecifier, codeAction } = codefix.getImportCompletionAction(
+            exportedSymbol,
+            moduleSymbol,
+            sourceFile,
+            getSymbolName(symbol, symbolOriginInfo, compilerOptions.target),
             host,
             program,
             checker,
             compilerOptions,
-            sourceFile,
+            allSourceFiles,
             formatContext,
-            symbolName: getSymbolName(symbol, symbolOriginInfo, compilerOptions.target),
             getCanonicalFileName,
-            symbolToken: tryCast(previousToken, isIdentifier),
-            kind: isDefaultExport ? codefix.ImportKind.Default : codefix.ImportKind.Named,
-        }).slice(0, 1); // Only take the first code action
-        return { sourceDisplay, codeActions };
-    }
-
-    function getAllReExportingModules(exportedSymbol: Symbol, checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>): ReadonlyArray<Symbol> {
-        const result: Symbol[] = [];
-        codefix.forEachExternalModule(checker, allSourceFiles, module => {
-            for (const exported of checker.getExportsOfModule(module)) {
-                if (skipAlias(exported, checker) === exportedSymbol) {
-                    result.push(module);
-                }
-            }
-        });
-        return result;
+            tryCast(previousToken, isIdentifier));
+        return { sourceDisplay: [textPart(moduleSpecifier)], codeActions: [codeAction] };
     }
 
     export function getCompletionEntrySymbol(
@@ -1220,6 +1211,9 @@ namespace ts.Completions {
             codefix.forEachExternalModuleToImportFrom(typeChecker, sourceFile, allSourceFiles, moduleSymbol => {
                 for (let symbol of typeChecker.getExportsOfModule(moduleSymbol)) {
                     // Don't add a completion for a re-export, only for the original.
+                    // The actual import fix might end up coming from a re-export -- we don't compute that until getting completion details.
+                    // This is just to avoid adding duplicate completion entries.
+                    //
                     // If `symbol.parent !== ...`, this comes from an `export * from "foo"` re-export. Those don't create new symbols.
                     // If `some(...)`, this comes from an `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
                     if (typeChecker.getMergedSymbol(symbol.parent) !== typeChecker.resolveExternalModuleSymbol(moduleSymbol)
@@ -1880,7 +1874,8 @@ namespace ts.Completions {
             return isDeclarationName(contextToken)
                 && !isJsxAttribute(contextToken.parent)
                 // Don't block completions if we're in `class C /**/`, because we're *past* the end of the identifier and might want to complete `extends`.
-                && !(isClassLike(contextToken.parent) && position > previousToken.end);
+                // If `contextToken !== previousToken`, this is `class C ex/**/`.
+                && !(isClassLike(contextToken.parent) && (contextToken !== previousToken || position > previousToken.end));
         }
 
         function isFunctionLikeButNotConstructor(kind: SyntaxKind) {

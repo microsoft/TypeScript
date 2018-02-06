@@ -189,10 +189,7 @@ namespace Harness.LanguageService {
         getCancellationToken() { return this.cancellationToken; }
         getDirectories(path: string): string[] {
             const dir = this.virtualFileSystem.traversePath(path);
-            if (dir && dir.isDirectory()) {
-                return ts.map((<Utils.VirtualDirectory>dir).getDirectories(), (d) => ts.combinePaths(path, d.name));
-            }
-            return [];
+            return dir && dir.isDirectory() ? dir.getDirectories().map(d => d.name) : [];
         }
         getCurrentDirectory(): string { return virtualFileSystemRoot; }
         getDefaultLibFileName(): string { return Harness.Compiler.defaultLibFileName; }
