@@ -1,0 +1,37 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : typeof React
+
+const Foo = (props: any) => [<span />, <span />];
+>Foo : (props: any) => JSX.Element[]
+>(props: any) => [<span />, <span />] : (props: any) => JSX.Element[]
+>props : any
+>[<span />, <span />] : JSX.Element[]
+><span /> : JSX.Element
+>span : any
+><span /> : JSX.Element
+>span : any
+
+function Greet(x: { name?: string }) {
+>Greet : (x: { name?: string; }) => JSX.Element[]
+>x : { name?: string; }
+>name : string
+
+	return [<span />, <span />];
+>[<span />, <span />] : JSX.Element[]
+><span /> : JSX.Element
+>span : any
+><span /> : JSX.Element
+>span : any
+}
+
+const foo = <Foo />;
+>foo : JSX.Element
+><Foo /> : JSX.Element
+>Foo : (props: any) => JSX.Element[]
+
+const G = <Greet />;
+>G : JSX.Element
+><Greet /> : JSX.Element
+>Greet : (x: { name?: string; }) => JSX.Element[]
+
