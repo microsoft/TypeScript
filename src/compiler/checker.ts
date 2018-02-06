@@ -12303,12 +12303,11 @@ namespace ts {
                 //  .parent objectliteral= { bar: [] }
                 //   .parent variabledeclaration = f2: Foo = { bar: [] }
                 //    .name identifier f2
-                if (isPropertyAccessExpression(reference) &&
-                    isPropertyAssignment(node.parent) &&
-                    isIdentifier(node) &&
-                    isIdentifier((node.parent.parent.parent as VariableDeclaration).name) &&
-                    // isMatchingReference(reference, createPropertyAccess(reference.expression, node))) {
-                    isMatchingReference(reference, createPropertyAccess((node.parent.parent.parent as VariableDeclaration).name as Identifier, node))) {
+                const referenceMatchesPropertyAssignment = isPropertyAccessExpression(reference) && isIdentifier(node) &&
+                    isPropertyAssignment(node.parent) && reference.name.escapedText === node.escapedText;
+                if (referenceMatchesPropertyAssignment &&
+                    isVariableDeclaration(node.parent.parent.parent) &&
+                    isMatchingReference((reference as PropertyAccessExpression).expression, node.parent.parent.parent)) {
                     if (declaredType.flags & TypeFlags.Union) {
                         return getAssignmentReducedType(declaredType as UnionType, getTypeOfNode((node.parent as PropertyAssignment).initializer));
                     }

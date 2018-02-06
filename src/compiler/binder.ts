@@ -1099,9 +1099,8 @@ namespace ts {
                 //
                 // extra edges that we inject allows to control this behavior
                 // if when walking the flow we step on post-finally edge - we can mark matching pre-finally edge as locked so it will be skipped.
-                let preFinallyFlow: PreFinallyFlow = { flags: FlowFlags.PreFinally, antecedent: preTryFlow, lock: {} };
-                preFinallyFlow = localInit(preTryFlow, preFinallyLabel, true);
-                // addAntecedent(preFinallyLabel, preFinallyFlow);
+                const preFinallyFlow: PreFinallyFlow = { flags: FlowFlags.PreFinally, antecedent: preTryFlow, lock: {} };
+                addAntecedent(preFinallyLabel, preFinallyFlow);
 
                 currentFlow = finishFlowLabel(preFinallyLabel);
                 bind(node.finallyBlock);
@@ -1127,19 +1126,6 @@ namespace ts {
             else {
                 currentFlow = finishFlowLabel(preFinallyLabel);
             }
-        }
-
-        function localInit(preTryFlow: FlowNode, preFinallyLabel: FlowLabel, finallyBlock: boolean): PreFinallyFlow {
-            if (finallyBlock) {
-                return preFinallyFlow;
-            }
-            const preFinallyFlow: PreFinallyFlow = { flags: FlowFlags.PreFinally, antecedent: preTryFlow, lock: {} };
-            addAntecedent(preFinallyLabel, preFinallyFlow);
-            if (!finallyBlock) {
-                const afterFinallyFlow: AfterFinallyFlow = { flags: FlowFlags.AfterFinally, antecedent: currentFlow };
-                preFinallyFlow.lock = afterFinallyFlow;
-            }
-            return preFinallyFlow;
         }
 
         function bindSwitchStatement(node: SwitchStatement): void {
@@ -1230,7 +1216,7 @@ namespace ts {
             }
         }
 
-        function bindDestructuringTargetFlow(node: Expression, SPECIAL?: boolean) {
+        function bindDestructuringTargetFlow(node: Expression, SPECIAL: boolean) {
             if (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken) {
                 bindAssignmentTargetFlow((<BinaryExpression>node).left, SPECIAL);
             }
