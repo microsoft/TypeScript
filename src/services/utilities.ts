@@ -1433,4 +1433,13 @@ namespace ts {
             }
         }
     }
+
+    export function getContextualType(node: Expression, checker: TypeChecker) {
+        const type = checker.getContextualType(node);
+        // It's possible that we'll get a contextual type that comes from the current object itself.
+        // For example: `function id<T>(a: T): void; a({ x: 0 })`.
+        // The contextual type of `{ x: 0 }` would come from the inferred type argument, which comes from the type of the object.
+        const declarations = type && type.symbol && type.symbol.declarations;
+        return length(declarations) === 1 && first(declarations!) === <Declaration | Expression>node ? undefined : type;
+    }
 }
