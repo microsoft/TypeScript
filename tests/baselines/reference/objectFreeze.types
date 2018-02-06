@@ -1,20 +1,20 @@
 === tests/cases/compiler/objectFreeze.ts ===
 const f = Object.freeze(function foo(a: number, b: string) { return false; });
->f : (a: number, b: string) => false
->Object.freeze(function foo(a: number, b: string) { return false; }) : (a: number, b: string) => false
+>f : (a: number, b: string) => boolean
+>Object.freeze(function foo(a: number, b: string) { return false; }) : (a: number, b: string) => boolean
 >Object.freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
 >freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
->function foo(a: number, b: string) { return false; } : (a: number, b: string) => false
->foo : (a: number, b: string) => false
+>function foo(a: number, b: string) { return false; } : (a: number, b: string) => boolean
+>foo : (a: number, b: string) => boolean
 >a : number
 >b : string
 >false : false
 
 f(1, "") === false;
 >f(1, "") === false : boolean
->f(1, "") : false
->f : (a: number, b: string) => false
+>f(1, "") : boolean
+>f : (a: number, b: string) => boolean
 >1 : 1
 >"" : ""
 >false : false
