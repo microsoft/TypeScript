@@ -135,7 +135,7 @@ namespace ts {
 
         function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
             // Make sure not to write js file and source map file if any of them cannot be written
-            if (!host.isEmitBlocked(jsFilePath) && !compilerOptions.noEmit) {
+            if (!host.isEmitBlocked(jsFilePath) && !compilerOptions.noEmit && !compilerOptions.emitDeclarationOnly) {
                 if (!emitOnlyDtsFiles) {
                     printSourceFileOrBundle(jsFilePath, sourceMapFilePath, sourceFileOrBundle);
                 }
