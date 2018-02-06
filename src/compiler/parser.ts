@@ -2986,7 +2986,7 @@ namespace ts {
                 return parseFunctionOrConstructorType(SyntaxKind.ConstructorType);
             }
             const type = parseUnionTypeOrHigher();
-            if (!noConditionalTypes && parseOptional(SyntaxKind.ExtendsKeyword)) {
+            if (!noConditionalTypes && !scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.ExtendsKeyword)) {
                 const node = <ConditionalTypeNode>createNode(SyntaxKind.ConditionalType, type.pos);
                 node.checkType = type;
                 // The type following 'extends' is not permitted to be another conditional type
