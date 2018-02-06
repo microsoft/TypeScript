@@ -2985,7 +2985,8 @@ namespace ts {
      */
     export function matchedText(pattern: Pattern, candidate: string): string {
         Debug.assert(isPatternMatch(pattern, candidate));
-        return candidate.substr(pattern.prefix.length, candidate.length - pattern.suffix.length);
+        const matchLength = candidate.length - pattern.suffix.length - pattern.prefix.length;
+        return candidate.substr(pattern.prefix.length, matchLength);
     }
 
     /** Return the object corresponding to the best pattern to match `candidate`. */

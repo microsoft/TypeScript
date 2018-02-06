@@ -1,0 +1,23 @@
+=== c:/root/index.ts ===
+import {x} from "@speedy/folder1/testing"
+>x : number
+
+declare function use(a: any): void;
+>use : (a: any) => void
+>a : any
+
+use(x.toExponential());
+>use(x.toExponential()) : void
+>use : (a: any) => void
+>x.toExponential() : string
+>x.toExponential : (fractionDigits?: number) => string
+>x : number
+>toExponential : (fractionDigits?: number) => string
+
+=== c:/root/folder1/dist/index.ts ===
+export const x = 1 + 2;
+>x : number
+>1 + 2 : number
+>1 : 1
+>2 : 2
+
