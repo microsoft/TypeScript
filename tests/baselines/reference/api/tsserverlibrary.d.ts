@@ -2227,6 +2227,7 @@ declare namespace ts {
         isFixed: boolean;
     }
     enum InferenceFlags {
+        None = 0,
         InferUnionTypes = 1,
         NoDefault = 2,
         AnyDefault = 4,
