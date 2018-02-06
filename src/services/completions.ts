@@ -365,7 +365,7 @@ namespace ts.Completions {
                 //      import x = require("/*completion position*/");
                 //      var y = require("/*completion position*/");
                 //      export * from "/*completion position*/";
-                return pathCompletionsInfo(PathCompletions.getStringLiteralCompletionsFromModuleNames(sourceFile, node as StringLiteral, compilerOptions, host, typeChecker));
+                return pathCompletionsInfo(PathCompletions.getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker));
 
             default:
                 return fromContextualType();

@@ -20,8 +20,4 @@
 ////}
 
 const [replacementSpan] = test.ranges();
-verify.completionsAt("", [
-    { name: "a", replacementSpan },
-    { name: "b", replacementSpan },
-    { name: "dir", replacementSpan },
-]);
+verify.completionsAt("", ["a", "b", "dir"].map(name => ({ name, replacementSpan })));
