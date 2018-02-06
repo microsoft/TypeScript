@@ -149,10 +149,10 @@ namespace ts.Completions.PathCompletions {
             for (const path in paths) {
                 const patterns = paths[path];
                 if (paths.hasOwnProperty(path) && patterns) {
-                    for (const pathCompletion of getCompletionsForPathMapping(path, patterns, fragment, baseUrl, fileExtensions, host)) {
+                    for (const { name, kind } of getCompletionsForPathMapping(path, patterns, fragment, baseUrl, fileExtensions, host)) {
                         // Path mappings may provide a duplicate way to get to something we've already added, so don't add again.
-                        if (!result.some(entry => entry.name === pathCompletion)) {
-                            result.push(createCompletionEntryForModule(pathCompletion, ScriptElementKind.externalModuleName, span));
+                        if (!result.some(entry => entry.name === name)) {
+                            result.push(createCompletionEntryForModule(name, kind, span));
                         }
                     }
                 }
@@ -177,24 +177,29 @@ namespace ts.Completions.PathCompletions {
         return result;
     }
 
+    interface NameAndKind {
+        readonly name: string;
+        readonly kind: ScriptElementKind.scriptElement | ScriptElementKind.directory;
+    }
+
     function getCompletionsForPathMapping(
         path: string, patterns: ReadonlyArray<string>, fragment: string, baseUrl: string, fileExtensions: ReadonlyArray<string>, host: LanguageServiceHost,
-    ): ReadonlyArray<string> {
+    ): ReadonlyArray<NameAndKind> {
         if (!endsWith(path, "*")) {
             // For a path mapping "foo": ["/x/y/z.ts"], add "foo" itself as a completion.
-            return !stringContains(path, "*") && startsWith(path, fragment) ? [path] : emptyArray;
+            return !stringContains(path, "*") && startsWith(path, fragment) ? [{ name: path, kind: ScriptElementKind.directory }] : emptyArray;
         }
 
         const pathPrefix = path.slice(0, path.length - 1);
         if (!startsWith(fragment, pathPrefix)) {
-            return [pathPrefix];
+            return [{ name: pathPrefix, kind: ScriptElementKind.directory }];
         }
 
         const remainingFragment = fragment.slice(pathPrefix.length);
         return flatMap(patterns, pattern => getModulesForPathsPattern(remainingFragment, baseUrl, pattern, fileExtensions, host));
     }
 
-    function getModulesForPathsPattern(fragment: string, baseUrl: string, pattern: string, fileExtensions: ReadonlyArray<string>, host: LanguageServiceHost): string[] | undefined {
+    function getModulesForPathsPattern(fragment: string, baseUrl: string, pattern: string, fileExtensions: ReadonlyArray<string>, host: LanguageServiceHost): ReadonlyArray<NameAndKind> | undefined {
         if (!host.readDirectory) {
             return undefined;
         }
@@ -225,14 +230,14 @@ namespace ts.Completions.PathCompletions {
         // doesn't support. For now, this is safer but slower
         const includeGlob = normalizedSuffix ? "**/*" : "./*";
 
-        const matches = tryReadDirectory(host, baseDirectory, fileExtensions, /*exclude*/ undefined, [includeGlob]);
-        const directories = tryGetDirectories(host, baseDirectory).map(d => combinePaths(baseDirectory, d));
+        const matches = tryReadDirectory(host, baseDirectory, fileExtensions, /*exclude*/ undefined, [includeGlob]).map<NameAndKind>(name => ({ name, kind: ScriptElementKind.scriptElement }));;
+        const directories = tryGetDirectories(host, baseDirectory).map(d => combinePaths(baseDirectory, d)).map<NameAndKind>(name => ({ name, kind: ScriptElementKind.directory }));;
 
         // Trim away prefix and suffix
-        return mapDefined(concatenate(matches, directories), match => {
-            const normalizedMatch = normalizePath(match);
+        return mapDefined<NameAndKind, NameAndKind>(concatenate(matches, directories), ({ name, kind }) => {
+            const normalizedMatch = normalizePath(name);
             const inner = withoutStartAndEnd(normalizedMatch, completePrefix, normalizedSuffix);
-            return inner !== undefined ? removeLeadingDirectorySeparator(removeFileExtension(inner)) : undefined;
+            return inner !== undefined ? { name: removeLeadingDirectorySeparator(removeFileExtension(inner)), kind } : undefined;
         });
     }
 
@@ -483,8 +488,8 @@ namespace ts.Completions.PathCompletions {
         return tryIOAndConsumeErrors(host, host.getDirectories, directoryName) || [];
     }
 
-    function tryReadDirectory(host: LanguageServiceHost, path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>): string[] | undefined | undefined {
-        return tryIOAndConsumeErrors(host, host.readDirectory, path, extensions, exclude, include);
+    function tryReadDirectory(host: LanguageServiceHost, path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>): ReadonlyArray<string> {
+        return tryIOAndConsumeErrors(host, host.readDirectory, path, extensions, exclude, include) || emptyArray;
     }
 
     function tryReadFile(host: LanguageServiceHost, path: string): string | undefined {
