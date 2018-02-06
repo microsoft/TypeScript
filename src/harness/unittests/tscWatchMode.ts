@@ -1719,6 +1719,38 @@ namespace ts.tscWatch {
                 return [files[0]];
             }
         });
+
+        it("file is deleted and created as part of change", () => {
+            const projectLocation = "/home/username/project";
+            const file: FileOrFolder = {
+                path: `${projectLocation}/app/file.ts`,
+                content: "var a = 10;"
+            };
+            const fileJs = `${projectLocation}/app/file.js`;
+            const configFile: FileOrFolder = {
+                path: `${projectLocation}/tsconfig.json`,
+                content: JSON.stringify({
+                    "include": [
+                        "app/**/*.ts"
+                    ]
+                })
+            };
+            const files = [file, configFile, libFile];
+            const host = createWatchedSystem(files, { currentDirectory: projectLocation, useCaseSensitiveFileNames: true });
+            createWatchOfConfigFile("tsconfig.json", host);
+            verifyProgram();
+
+            file.content += "var b = 10;";
+
+            host.reloadFS(files, { invokeFileDeleteCreateAsPartInsteadOfChange: true });
+            host.runQueuedTimeoutCallbacks();
+            verifyProgram();
+
+            function verifyProgram() {
+                assert.isTrue(host.fileExists(fileJs));
+                assert.equal(host.readFile(fileJs), file.content + "\n");
+            }
+        });
     });
 
     describe("tsc-watch module resolution caching", () => {
