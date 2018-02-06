@@ -462,7 +462,13 @@ namespace ts.Completions.PathCompletions {
     }
 
     function normalizeAndPreserveTrailingSlash(path: string) {
-        return hasTrailingDirectorySeparator(path) ? ensureTrailingDirectorySeparator(normalizePath(path)) : normalizePath(path);
+        if (path === "./") {
+            // normalizePath turns "./" into "". "" + "/" would then be a rooted path instead of a relative one, so avoid this particular case.
+            // There is no problem for adding "/" to a non-empty string -- it's only a problem at the beginning.
+            return "";
+        }
+        const norm = normalizePath(path);
+        return hasTrailingDirectorySeparator(path) ? ensureTrailingDirectorySeparator(norm) : norm;
     }
 
     /**
