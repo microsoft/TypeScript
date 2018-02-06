@@ -1730,7 +1730,7 @@ namespace ts.tscWatch {
             const configFile: FileOrFolder = {
                 path: `${projectLocation}/tsconfig.json`,
                 content: JSON.stringify({
-                    "include": [
+                    include: [
                         "app/**/*.ts"
                     ]
                 })
@@ -1740,7 +1740,7 @@ namespace ts.tscWatch {
             createWatchOfConfigFile("tsconfig.json", host);
             verifyProgram();
 
-            file.content += "var b = 10;";
+            file.content += "\nvar b = 10;";
 
             host.reloadFS(files, { invokeFileDeleteCreateAsPartInsteadOfChange: true });
             host.runQueuedTimeoutCallbacks();
