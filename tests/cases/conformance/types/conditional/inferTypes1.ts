@@ -73,3 +73,35 @@ type T54 = X3<{ a: (x: number) => void, b: () => void }>;  // number
 type T60 = infer U;  // Error
 type T61<T> = infer A extends infer B ? infer C : infer D;  // Error
 type T62<T> = U extends (infer U)[] ? U : U;  // Error
+
+// Example from #21496
+
+type JsonifiedObject<T extends object> = { [K in keyof T]: Jsonified<T[K]> };
+
+type Jsonified<T> =
+    T extends string | number | boolean | null ? T
+    : T extends undefined | Function ? never // undefined and functions are removed
+    : T extends { toJSON(): infer R } ? R // toJSON is called if it exists (e.g. Date)
+    : T extends object ? JsonifiedObject<T>
+    : "what is this";
+
+type Example = {
+    str: "literalstring",
+    fn: () => void,
+    date: Date,
+    customClass: MyClass,
+    obj: {
+        prop: "property",
+        clz: MyClass,
+        nested: { attr: Date }
+    },
+}
+
+declare class MyClass {
+    toJSON(): "correct";
+}
+
+type JsonifiedExample = Jsonified<Example>;
+declare let ex: JsonifiedExample;
+const z1: "correct" = ex.customClass;
+const z2: string = ex.obj.nested.attr;
