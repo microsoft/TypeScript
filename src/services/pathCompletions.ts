@@ -187,7 +187,7 @@ namespace ts.Completions.PathCompletions {
 
         const pathPrefix = path.slice(0, path.length - 1);
         if (!startsWith(fragment, pathPrefix)) {
-            return emptyArray;
+            return [pathPrefix];
         }
 
         const remainingFragment = fragment.slice(pathPrefix.length);
