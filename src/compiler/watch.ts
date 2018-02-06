@@ -420,8 +420,7 @@ namespace ts {
         }
     }
 
-    const intialVersion = 1;
-    const intialVersionString = "1";
+    const initialVersion = 1;
 
     /**
      * Creates the watch from the host for root files and compiler options
@@ -437,7 +436,7 @@ namespace ts {
             sourceFile: SourceFile;
             fileWatcher: FileWatcher;
         }
-        type FileMissingOnHost = string;
+        type FileMissingOnHost = number;
         interface FilePresenceUnknownOnHost {
             version: number;
         }
@@ -632,7 +631,7 @@ namespace ts {
         }
 
         function isFileMissingOnHost(hostSourceFile: HostFileInfo): hostSourceFile is FileMissingOnHost {
-            return isString(hostSourceFile);
+            return typeof hostSourceFile === "number";
         }
 
         function isFilePresentOnHost(hostSourceFile: FileMayBePresentOnHost): hostSourceFile is FilePresentOnHost {
@@ -678,17 +677,17 @@ namespace ts {
                         if (isFilePresentOnHost(hostSourceFile)) {
                             hostSourceFile.fileWatcher.close();
                         }
-                        sourceFilesCache.set(path, hostSourceFile.version.toString());
+                        sourceFilesCache.set(path, hostSourceFile.version);
                     }
                 }
                 else {
                     if (sourceFile) {
-                        sourceFile.version = intialVersionString;
+                        sourceFile.version = initialVersion.toString();
                         const fileWatcher = watchFilePath(host, fileName, onSourceFileChange, path, writeLog);
-                        sourceFilesCache.set(path, { sourceFile, version: intialVersion, fileWatcher });
+                        sourceFilesCache.set(path, { sourceFile, version: initialVersion, fileWatcher });
                     }
                     else {
-                        sourceFilesCache.set(path, intialVersionString);
+                        sourceFilesCache.set(path, initialVersion);
                     }
                 }
                 return sourceFile;
