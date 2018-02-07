@@ -24838,8 +24838,10 @@ namespace ts {
 
             if (isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
                 const symbol = getSymbolAtLocation(node);
-                const declaredType = symbol && getDeclaredTypeOfSymbol(symbol);
-                return declaredType !== unknownType ? declaredType : getTypeOfSymbol(symbol);
+                if (symbol) {
+                    const declaredType = getDeclaredTypeOfSymbol(symbol);
+                    return declaredType !== unknownType ? declaredType : getTypeOfSymbol(symbol);
+                }
             }
 
             return unknownType;
