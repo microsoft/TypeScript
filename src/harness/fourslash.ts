@@ -865,7 +865,7 @@ namespace FourSlash {
             ts.zipWith(actual, expected, (completion, expectedCompletion, index) => {
                 const { name, insertText, replacementSpan } = typeof expectedCompletion === "string" ? { name: expectedCompletion, insertText: undefined, replacementSpan: undefined } : expectedCompletion;
                 if (completion.name !== name) {
-                    this.raiseError(`Expected completion at index ${index} to be ${expectedCompletion}, got ${completion.name}`);
+                    this.raiseError(`Expected completion at index ${index} to be ${name}, got ${completion.name}`);
                 }
                 if (completion.insertText !== insertText) {
                     this.raiseError(`Expected completion insert text at index ${index} to be ${insertText}, got ${completion.insertText}`);
