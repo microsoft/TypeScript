@@ -161,7 +161,7 @@ namespace ts.codefix {
         };
     }
 
-    function convertToImportCodeFixContext(context: CodeFixContext): ImportCodeFixContext & { isJsxNamespace: boolean } {
+    function convertToImportCodeFixContext(context: CodeFixContext): { context: ImportCodeFixContext, isJsxNamespace: boolean } {
         const useCaseSensitiveFileNames = context.host.useCaseSensitiveFileNames ? context.host.useCaseSensitiveFileNames() : false;
         const { program } = context;
         const checker = program.getTypeChecker();
@@ -169,16 +169,18 @@ namespace ts.codefix {
         const symbolToken = getTokenAtPosition(context.sourceFile, context.span.start, /*includeJsDocComment*/ false);
         const isJsxNamespace = isJsxOpeningLikeElement(symbolToken.parent) && symbolToken.parent.tagName === symbolToken;
         return {
-            host: context.host,
-            formatContext: context.formatContext,
-            sourceFile: context.sourceFile,
-            program,
-            checker,
-            compilerOptions: program.getCompilerOptions(),
-            cachedImportDeclarations: [],
-            getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames),
-            symbolName: isJsxNamespace ? checker.getJsxNamespace() : cast(symbolToken, isIdentifier).text,
-            symbolToken,
+            context: {
+                host: context.host,
+                formatContext: context.formatContext,
+                sourceFile: context.sourceFile,
+                program,
+                checker,
+                compilerOptions: program.getCompilerOptions(),
+                cachedImportDeclarations: [],
+                getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames),
+                symbolName: isJsxNamespace ? checker.getJsxNamespace() : cast(symbolToken, isIdentifier).text,
+                symbolToken,
+            },
             isJsxNamespace,
         };
     }
@@ -726,9 +728,9 @@ namespace ts.codefix {
     }
 
     function getImportCodeActions(context: CodeFixContext): ImportCodeAction[] {
-        const importFixContext = convertToImportCodeFixContext(context);
+        const { context: importFixContext, isJsxNamespace } = convertToImportCodeFixContext(context);
         return context.errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code
-            ? getActionsForUMDImport(importFixContext, importFixContext.isJsxNamespace)
+            ? getActionsForUMDImport(importFixContext, isJsxNamespace)
             : getActionsForNonUMDImport(importFixContext, context.program.getSourceFiles(), context.cancellationToken);
     }
 
