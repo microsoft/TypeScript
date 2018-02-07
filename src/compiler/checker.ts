@@ -18056,9 +18056,9 @@ namespace ts {
             }
         }
 
-        function assignContextualParameterTypes(signature: Signature, context: Signature) {
+        function assignContextualParameterTypes(node: ArrowFunction | FunctionExpression | MethodDeclaration, signature: Signature, context: Signature) {
             signature.typeParameters = context.typeParameters;
-            if (context.thisParameter) {
+            if (context.thisParameter && node.kind !== SyntaxKind.ArrowFunction) {
                 const parameter = signature.thisParameter;
                 if (!parameter || parameter.valueDeclaration && !(<ParameterDeclaration>parameter.valueDeclaration).type) {
                     if (!parameter) {
@@ -18422,7 +18422,7 @@ namespace ts {
                             }
                             const instantiatedContextualSignature = contextualMapper === identityMapper ?
                                 contextualSignature : instantiateSignature(contextualSignature, contextualMapper);
-                            assignContextualParameterTypes(signature, instantiatedContextualSignature);
+                            assignContextualParameterTypes(node, signature, instantiatedContextualSignature);
                         }
                         if (!getEffectiveReturnTypeNode(node) && !signature.resolvedReturnType) {
                             const returnType = getReturnTypeFromBody(node, checkMode);
