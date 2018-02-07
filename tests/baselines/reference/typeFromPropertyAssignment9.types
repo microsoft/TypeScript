@@ -2,47 +2,65 @@
 // TODO: JSDoc would provide a contextual type, so ... I should test that
 // TODO: Try initializer of function or class I guess (though classes aren't context sensitive)
 var my = my || {};
->my : { [x: string]: any; m: () => number; p: { [x: string]: any; }; n: number; }
->my || {} : { [x: string]: any; m: () => number; p: { [x: string]: any; }; n: number; }
->my : { [x: string]: any; m: () => number; p: { [x: string]: any; }; n: number; }
->{} : { [x: string]: any; m: () => number; p: { [x: string]: any; }; n: number; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
+>my || {} : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
+>{} : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
 
 my.m = function() {
 >my.m = function() {    return 1;} : () => number
 >my.m : () => number
->my : { [x: string]: any; m: () => number; p: { [x: string]: any; }; n: number; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
 >m : () => number
 >function() {    return 1;} : () => number
 
     return 1;
 >1 : 1
 }
-my.p = {};
->my.p = {} : { [x: string]: any; }
->my.p : { [x: string]: any; }
->my : { [x: string]: any; m: () => number; p: { [x: string]: any; }; n: number; }
->p : { [x: string]: any; }
->{} : { [x: string]: any; }
-
 my.n = 1;
 >my.n = 1 : 1
 >my.n : number
->my : { [x: string]: any; m: () => number; p: { [x: string]: any; }; n: number; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
 >n : number
 >1 : 1
 
-my.m
+my.o = {};
+>my.o = {} : { [x: string]: any; }
+>my.o : { [x: string]: any; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
+>o : { [x: string]: any; }
+>{} : { [x: string]: any; }
+
+my.possible = my.possible || {};
+>my.possible = my.possible || {} : { [x: string]: any; }
+>my.possible : { [x: string]: any; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
+>possible : { [x: string]: any; }
+>my.possible || {} : { [x: string]: any; }
+>my.possible : { [x: string]: any; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
+>possible : { [x: string]: any; }
+>{} : { [x: string]: any; }
+
+my.m;
 >my.m : () => number
->my : { [x: string]: any; m: () => number; p: { [x: string]: any; }; n: number; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
 >m : () => number
 
-my.p
->my.p : { [x: string]: any; }
->my : { [x: string]: any; m: () => number; p: { [x: string]: any; }; n: number; }
->p : { [x: string]: any; }
+my.o;
+>my.o : { [x: string]: any; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
+>o : { [x: string]: any; }
 
-my.n
+my.n;
 >my.n : number
->my : { [x: string]: any; m: () => number; p: { [x: string]: any; }; n: number; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
 >n : number
+
+my.possible;
+>my.possible : { [x: string]: any; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
+>possible : { [x: string]: any; }
+
+
 

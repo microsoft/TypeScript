@@ -4363,6 +4363,10 @@ namespace ts {
                     // !!! (probably out of place, probably not the right function to call)
                     return links.type = checkExpression(((declaration as VariableDeclaration).initializer as BinaryExpression).right);
                 }
+                if (isInJavaScriptFile(declaration) && isAssignmentOfDefaultedJavascriptContainerExpression(symbol)) {
+                    // !!! (probably out of place, probably not the right function to call)
+                    return links.type = checkExpression(((declaration.parent as BinaryExpression).right as BinaryExpression).right);
+                }
                 // Handle variable, parameter or property
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                     return unknownType;

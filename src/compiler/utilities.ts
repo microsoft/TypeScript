@@ -1504,16 +1504,32 @@ namespace ts {
     }
 
     export function isDeclarationOfDefaultedJavascriptContainerExpression(s: Symbol) {
-        if (s.valueDeclaration && isVariableDeclaration(s.valueDeclaration)) {
-            return s.valueDeclaration.initializer &&
-                isBinaryExpression(s.valueDeclaration.initializer) &&
-                isIdentifier(s.valueDeclaration.initializer.left) &&
-                isIdentifier(s.valueDeclaration.name) &&
-                s.valueDeclaration.initializer.left.escapedText === s.valueDeclaration.name.escapedText &&
-                isObjectLiteralExpression(s.valueDeclaration.initializer.right) &&
-                s.valueDeclaration.initializer.right.properties.length === 0;
-        }
-        return false;
+        return s.valueDeclaration &&
+            isVariableDeclaration(s.valueDeclaration) &&
+            s.valueDeclaration.initializer &&
+            isBinaryExpression(s.valueDeclaration.initializer) &&
+            isIdentifier(s.valueDeclaration.initializer.left) &&
+            isIdentifier(s.valueDeclaration.name) &&
+            s.valueDeclaration.initializer.left.escapedText === s.valueDeclaration.name.escapedText &&
+            // TODO: Should still probably be isJavascriptContainerExpression
+            isObjectLiteralExpression(s.valueDeclaration.initializer.right) &&
+            s.valueDeclaration.initializer.right.properties.length === 0;
+    }
+
+    export function isAssignmentOfDefaultedJavascriptContainerExpression(s: Symbol) {
+        return s.valueDeclaration &&
+            isPropertyAccessExpression(s.valueDeclaration) &&
+            isBinaryExpression(s.valueDeclaration.parent) &&
+            s.valueDeclaration.parent.right &&
+            isBinaryExpression(s.valueDeclaration.parent.right) &&
+            isPropertyAccessExpression(s.valueDeclaration.parent.right.left) &&
+            isIdentifier(s.valueDeclaration.parent.right.left.expression) &&
+            isPropertyAccessExpression(s.valueDeclaration.parent.left) &&
+            isIdentifier(s.valueDeclaration.parent.left.expression) &&
+            s.valueDeclaration.parent.right.left.expression.escapedText === s.valueDeclaration.parent.left.expression.escapedText &&
+            s.valueDeclaration.parent.right.left.name.escapedText === s.valueDeclaration.parent.left.name.escapedText &&
+            isObjectLiteralExpression(s.valueDeclaration.parent.right.right) &&
+            s.valueDeclaration.parent.right.right.properties.length === 0;
     }
 
     export function getRightMostAssignedExpression(node: Expression): Expression {

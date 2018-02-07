@@ -12,28 +12,43 @@ my.m = function() {
 
     return 1;
 }
-my.p = {};
->my.p : Symbol(p, Decl(a.js, 5, 1))
->my : Symbol(my, Decl(a.js, 2, 3), Decl(a.js, 2, 18))
->p : Symbol(p, Decl(a.js, 5, 1))
-
 my.n = 1;
->my.n : Symbol(n, Decl(a.js, 6, 10))
+>my.n : Symbol(n, Decl(a.js, 5, 1))
 >my : Symbol(my, Decl(a.js, 2, 3), Decl(a.js, 2, 18))
->n : Symbol(n, Decl(a.js, 6, 10))
+>n : Symbol(n, Decl(a.js, 5, 1))
 
-my.m
+my.o = {};
+>my.o : Symbol(o, Decl(a.js, 6, 9))
+>my : Symbol(my, Decl(a.js, 2, 3), Decl(a.js, 2, 18))
+>o : Symbol(o, Decl(a.js, 6, 9))
+
+my.possible = my.possible || {};
+>my.possible : Symbol(possible, Decl(a.js, 7, 10))
+>my : Symbol(my, Decl(a.js, 2, 3), Decl(a.js, 2, 18))
+>possible : Symbol(possible, Decl(a.js, 7, 10))
+>my.possible : Symbol(possible, Decl(a.js, 7, 10))
+>my : Symbol(my, Decl(a.js, 2, 3), Decl(a.js, 2, 18))
+>possible : Symbol(possible, Decl(a.js, 7, 10))
+
+my.m;
 >my.m : Symbol(m, Decl(a.js, 2, 18))
 >my : Symbol(my, Decl(a.js, 2, 3), Decl(a.js, 2, 18))
 >m : Symbol(m, Decl(a.js, 2, 18))
 
-my.p
->my.p : Symbol(p, Decl(a.js, 5, 1))
+my.o;
+>my.o : Symbol(o, Decl(a.js, 6, 9))
 >my : Symbol(my, Decl(a.js, 2, 3), Decl(a.js, 2, 18))
->p : Symbol(p, Decl(a.js, 5, 1))
+>o : Symbol(o, Decl(a.js, 6, 9))
 
-my.n
->my.n : Symbol(n, Decl(a.js, 6, 10))
+my.n;
+>my.n : Symbol(n, Decl(a.js, 5, 1))
 >my : Symbol(my, Decl(a.js, 2, 3), Decl(a.js, 2, 18))
->n : Symbol(n, Decl(a.js, 6, 10))
+>n : Symbol(n, Decl(a.js, 5, 1))
+
+my.possible;
+>my.possible : Symbol(possible, Decl(a.js, 7, 10))
+>my : Symbol(my, Decl(a.js, 2, 3), Decl(a.js, 2, 18))
+>possible : Symbol(possible, Decl(a.js, 7, 10))
+
+
 
