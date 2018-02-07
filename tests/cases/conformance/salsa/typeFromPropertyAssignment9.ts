@@ -10,8 +10,13 @@ var my = my || {};
 my.m = function() {
     return 1;
 }
-my.p = {};
 my.n = 1;
-my.m
-my.p
-my.n
+my.o = {};
+my.possible = my.possible || {};
+
+my.m;
+my.o;
+my.n;
+my.possible;
+
+
