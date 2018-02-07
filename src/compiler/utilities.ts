@@ -2431,9 +2431,8 @@ namespace ts {
 
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics = [] as SortedArray<Diagnostic>;
+        const filesWithDiagnostics = [] as SortedArray<string>;
         const fileDiagnostics = createMap<SortedArray<Diagnostic>>();
-        const allDiagnostics = [] as SortedArray<Diagnostic>;
-
         let hasReadNonFileDiagnostics = false;
         let modificationCount = 0;
 
@@ -2460,6 +2459,7 @@ namespace ts {
                 if (!diagnostics) {
                     diagnostics = [] as SortedArray<Diagnostic>;
                     fileDiagnostics.set(diagnostic.file.fileName, diagnostics);
+                    insertSorted(filesWithDiagnostics, diagnostic.file.fileName, compareStringsCaseSensitive);
                 }
             }
             else {
@@ -2473,7 +2473,6 @@ namespace ts {
             }
 
             insertSorted(diagnostics, diagnostic, compareDiagnostics);
-            insertSorted(allDiagnostics, diagnostic, compareDiagnostics);
             modificationCount++;
         }
 
@@ -2487,7 +2486,7 @@ namespace ts {
                 return fileDiagnostics.get(fileName) || [];
             }
 
-            return allDiagnostics;
+            return [...nonFileDiagnostics, ...flatMap(filesWithDiagnostics, f => fileDiagnostics.get(f))];
         }
     }
 
