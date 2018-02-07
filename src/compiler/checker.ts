@@ -4359,6 +4359,10 @@ namespace ts {
                 if (isInJavaScriptFile(declaration) && isJSDocPropertyLikeTag(declaration) && declaration.typeExpression) {
                     return links.type = getTypeFromTypeNode(declaration.typeExpression.type);
                 }
+                if (isInJavaScriptFile(declaration) && isDeclarationOfDefaultedJavascriptContainerExpression(symbol)) {
+                    // !!! (probably out of place, probably not the right function to call)
+                    return links.type = checkExpression(((declaration as VariableDeclaration).initializer as BinaryExpression).right);
+                }
                 // Handle variable, parameter or property
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                     return unknownType;
@@ -4379,7 +4383,7 @@ namespace ts {
                     || isIdentifier(declaration)
                     || (isMethodDeclaration(declaration) && !isObjectLiteralMethod(declaration))
                     || isMethodSignature(declaration)) {
-
+                    // TODO: Might need to add a case here?
                     // Symbol is property of some kind that is merged with something - should use `getTypeOfFuncClassEnumModule` and not `getTypeOfVariableOrParameterOrProperty`
                     if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
                         return getTypeOfFuncClassEnumModule(symbol);
@@ -14744,15 +14748,18 @@ namespace ts {
             let spread: Type = emptyObjectType;
             let propagatedFlags: TypeFlags = TypeFlags.FreshLiteral;
 
-            const contextualType = getApparentTypeOfContextualType(node);
+            const isInJSFile = isInJavaScriptFile(node);
+            // TODO: Might need to skip if isDeclarationOfDefaultedJavascriptContainerExpression(node.parent.parent) instead of just checking node.properties.length > 0
+            // (actually, it would be better not to skip contextual typing at all, but to do that I need to avoid the checking loop another way)
+            const contextualType = node.properties.length > 0 && getApparentTypeOfContextualType(node);
             const contextualTypeHasPattern = contextualType && contextualType.pattern &&
                 (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
-            const isJSObjectLiteral = !contextualType && isInJavaScriptFile(node);
+            const isJSObjectLiteral = !contextualType && isInJSFile;
             let typeFlags: TypeFlags = 0;
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
-            const isInJSFile = isInJavaScriptFile(node);
+            // TODO: This seems like the wrong way to put the assignment-properties into the type (especially the manual call to mergeSymbolTable)
             if (isInJSFile && node.symbol && node.symbol.exports) {
                 mergeSymbolTable(propertiesTable, node.symbol.exports);
                 node.symbol.exports.forEach(symbol => propertiesArray.push(symbol));

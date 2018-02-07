@@ -2407,8 +2407,8 @@ namespace ts {
 
         function bindPropertyAssignment(functionName: __String, propertyAccess: PropertyAccessExpression, isPrototypeProperty: boolean) {
             const symbol = lookupSymbolForName(functionName);
-            let targetSymbol = symbol && isDeclarationOfJavascriptExpression(symbol) ?
-                (symbol.valueDeclaration as VariableDeclaration).initializer.symbol :
+            let targetSymbol = symbol && isDeclarationOfJavascriptContainerExpression(symbol) ? (symbol.valueDeclaration as VariableDeclaration).initializer.symbol :
+                symbol && isDeclarationOfDefaultedJavascriptContainerExpression(symbol) ? ((symbol.valueDeclaration as VariableDeclaration).initializer as BinaryExpression).right.symbol :
                 symbol;
             Debug.assert(propertyAccess.parent.kind === SyntaxKind.BinaryExpression || propertyAccess.parent.kind === SyntaxKind.ExpressionStatement);
             let isLegalPosition: boolean;

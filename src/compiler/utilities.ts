@@ -1489,14 +1489,29 @@ namespace ts {
      * Returns true if the node is a variable declaration whose initializer is a function or class expression, or an empty object literal.
      * This function does not test if the node is in a JavaScript file or not.
      */
-    export function isDeclarationOfJavascriptExpression(s: Symbol) {
-        if (s.valueDeclaration && s.valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
-            const declaration = s.valueDeclaration as VariableDeclaration;
-            return declaration.initializer &&
-                (declaration.initializer.kind === SyntaxKind.FunctionExpression ||
-                 declaration.initializer.kind === SyntaxKind.ClassExpression ||
-                 (declaration.initializer.kind === SyntaxKind.ObjectLiteralExpression &&
-                  (declaration.initializer as ObjectLiteralExpression).properties.length === 0));
+    export function isDeclarationOfJavascriptContainerExpression(s: Symbol) {
+        if (s.valueDeclaration && isVariableDeclaration(s.valueDeclaration)) {
+            return isVariableDeclaration(s.valueDeclaration) && isJavascriptContainerExpression(s.valueDeclaration.initializer);
+        }
+        return false;
+    }
+
+    export function isJavascriptContainerExpression(expression: Expression | undefined) {
+        return expression &&
+            (expression.kind === SyntaxKind.FunctionExpression ||
+             expression.kind === SyntaxKind.ClassExpression ||
+             isObjectLiteralExpression(expression) && expression.properties.length === 0)
+    }
+
+    export function isDeclarationOfDefaultedJavascriptContainerExpression(s: Symbol) {
+        if (s.valueDeclaration && isVariableDeclaration(s.valueDeclaration)) {
+            return s.valueDeclaration.initializer &&
+                isBinaryExpression(s.valueDeclaration.initializer) &&
+                isIdentifier(s.valueDeclaration.initializer.left) &&
+                isIdentifier(s.valueDeclaration.name) &&
+                s.valueDeclaration.initializer.left.escapedText === s.valueDeclaration.name.escapedText &&
+                isObjectLiteralExpression(s.valueDeclaration.initializer.right) &&
+                s.valueDeclaration.initializer.right.properties.length === 0;
         }
         return false;
     }
