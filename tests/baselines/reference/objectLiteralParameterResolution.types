@@ -63,7 +63,7 @@ var s = $.extend({
 >"" : ""
 
     traditional: true ,
->traditional : boolean
+>traditional : true
 >true : true
 
     timeout: 12,

@@ -7,7 +7,7 @@ tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperator
 tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(8,24): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(9,17): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(9,29): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(12,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'NUMBER' has type 'any' at tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts 3:18, but here has type 'number'.
+tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(12,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'NUMBER' must be of type 'any', but here has type 'number'.
 tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(12,14): error TS1109: Expression expected.
 
 
@@ -43,6 +43,6 @@ tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperator
     // miss operand
     var NUMBER =-;
         ~~~~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'NUMBER' has type 'any' at tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts 3:18, but here has type 'number'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'NUMBER' must be of type 'any', but here has type 'number'.
                  ~
 !!! error TS1109: Expression expected.

@@ -148,7 +148,7 @@ namespace ts {
         }
 
         function visitLabeledStatement(node: LabeledStatement) {
-            if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
+            if (enclosingFunctionFlags & FunctionFlags.Async) {
                 const statement = unwrapInnermostStatementOfLabel(node);
                 if (statement.kind === SyntaxKind.ForOfStatement && (<ForOfStatement>statement).awaitModifier) {
                     return visitForOfStatement(<ForOfStatement>statement, node);
@@ -968,7 +968,7 @@ namespace ts {
         name: "typescript:asyncValues",
         scoped: false,
         text: `
-            var __asyncValues = (this && this.__asyncIterator) || function (o) {
+            var __asyncValues = (this && this.__asyncValues) || function (o) {
                 if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
                 var m = o[Symbol.asyncIterator];
                 return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();

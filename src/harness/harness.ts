@@ -32,9 +32,30 @@
 // this will work in the browser via browserify
 var _chai: typeof chai = require("chai");
 var assert: typeof _chai.assert = _chai.assert;
-// chai's builtin `assert.isFalse` is featureful but slow - we don't use those features,
-// so we'll just overwrite it as an alterative to migrating a bunch of code off of chai
-assert.isFalse = (expr, msg) => { if (expr as any as boolean !== false) throw new Error(msg); };
+{
+    // chai's builtin `assert.isFalse` is featureful but slow - we don't use those features,
+    // so we'll just overwrite it as an alterative to migrating a bunch of code off of chai
+    assert.isFalse = (expr, msg) => { if (expr as any as boolean !== false) throw new Error(msg); };
+
+    const assertDeepImpl = assert.deepEqual;
+    assert.deepEqual = (a, b, msg) => {
+        if (ts.isArray(a) && ts.isArray(b)) {
+            assertDeepImpl(arrayExtraKeysObject(a), arrayExtraKeysObject(b), "Array extra keys differ");
+        }
+        assertDeepImpl(a, b, msg);
+
+        function arrayExtraKeysObject(a: ReadonlyArray<{} | null | undefined>): object {
+            const obj: { [key: string]: {} | null | undefined } = {};
+            for (const key in a) {
+                if (Number.isNaN(Number(key))) {
+                    obj[key] = a[key];
+                }
+            }
+            return obj;
+        }
+    };
+}
+
 declare var __dirname: string; // Node-specific
 var global: NodeJS.Global = <any>Function("return this").call(undefined);
 
@@ -42,7 +63,7 @@ declare var window: {};
 declare var XMLHttpRequest: {
     new(): XMLHttpRequest;
 };
-interface XMLHttpRequest  {
+interface XMLHttpRequest {
     readonly readyState: number;
     readonly responseText: string;
     readonly status: number;
@@ -135,7 +156,7 @@ namespace Utils {
         return content;
     }
 
-    export function memoize<T extends Function>(f: T, memoKey: (...anything: any[]) => string): T {
+    export function memoize<T extends ts.AnyFunction>(f: T, memoKey: (...anything: any[]) => string): T {
         const cache = ts.createMap<any>();
 
         return <any>(function(this: any, ...args: any[]) {
@@ -853,7 +874,7 @@ namespace Harness {
         // Cache of lib files from "built/local"
         let libFileNameSourceFileMap: ts.Map<ts.SourceFile> | undefined;
 
-        // Cache of lib files from  "tests/lib/"
+        // Cache of lib files from "tests/lib/"
         const testLibFileNameSourceFileMap = ts.createMap<ts.SourceFile>();
         const es6TestLibFileNameSourceFileMap = ts.createMap<ts.SourceFile>();
 
@@ -1231,8 +1252,18 @@ namespace Harness {
             options: ts.CompilerOptions,
             // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
             currentDirectory: string): DeclarationCompilationContext | undefined {
-            if (options.declaration && result.errors.length === 0 && result.declFilesCode.length !== result.files.length) {
-                throw new Error("There were no errors and declFiles generated did not match number of js files generated");
+
+            if (result.errors.length === 0) {
+                if (options.declaration) {
+                    if (options.emitDeclarationOnly) {
+                        if (result.files.length > 0 || result.declFilesCode.length === 0) {
+                            throw new Error("Only declaration files should be generated when emitDeclarationOnly:true");
+                        }
+                    }
+                    else if (result.declFilesCode.length !== result.files.length) {
+                        throw new Error("There were no errors and declFiles generated did not match number of js files generated");
+                    }
+                }
             }
 
             const declInputFiles: TestFile[] = [];
@@ -1633,7 +1664,7 @@ namespace Harness {
         }
 
         export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: CompilerResult, tsConfigFiles: Harness.Compiler.TestFile[], toBeCompiled: Harness.Compiler.TestFile[], otherFiles: Harness.Compiler.TestFile[], harnessSettings: Harness.TestCaseParser.CompilerSettings) {
-            if (!options.noEmit && result.files.length === 0 && result.errors.length === 0) {
+            if (!options.noEmit && !options.emitDeclarationOnly && result.files.length === 0 && result.errors.length === 0) {
                 throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
             }
 
@@ -1940,7 +1971,7 @@ namespace Harness {
             let tsConfigFileUnitData: TestUnitData;
             for (let i = 0; i < testUnitData.length; i++) {
                 const data = testUnitData[i];
-                if (ts.getBaseFileName(data.name).toLowerCase() === "tsconfig.json") {
+                if (getConfigNameFromFileName(data.name)) {
                     const configJson = ts.parseJsonText(data.name, data.content);
                     assert.isTrue(configJson.endOfFileToken !== undefined);
                     let baseDir = ts.normalizePath(ts.getDirectoryPath(data.name));
@@ -2149,6 +2180,11 @@ namespace Harness {
     export function getDefaultLibraryFile(filePath: string, io: Harness.Io): Harness.Compiler.TestFile {
         const libFile = Harness.userSpecifiedRoot + Harness.libFolder + ts.getBaseFileName(ts.normalizeSlashes(filePath));
         return { unitName: libFile, content: io.readFile(libFile) };
+    }
+
+    export function getConfigNameFromFileName(filename: string): "tsconfig.json" | "jsconfig.json" | undefined {
+        const flc = ts.getBaseFileName(filename).toLowerCase();
+        return ts.find(["tsconfig.json" as "tsconfig.json", "jsconfig.json" as "jsconfig.json"], x => x === flc);
     }
 
     if (Error) (<any>Error).stackTraceLimit = 100;

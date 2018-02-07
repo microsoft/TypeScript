@@ -97,6 +97,7 @@ declare namespace FourSlashInterface {
         InsertSpaceAfterTypeAssertion: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
+        insertSpaceBeforeTypeAnnotation: boolean;
         [s: string]: boolean | number | string | undefined;
     }
     interface Range {
@@ -122,7 +123,8 @@ declare namespace FourSlashInterface {
     }
     class goTo {
         marker(name?: string | Marker): void;
-        eachMarker(action: () => void): void;
+        eachMarker(markers: ReadonlyArray<string>, action: (marker: Marker, index: number) => void): void;
+        eachMarker(action: (marker: Marker, index: number) => void): void;
         rangeStart(range: Range): void;
         eachRange(action: () => void): void;
         bof(): void;
@@ -133,6 +135,7 @@ declare namespace FourSlashInterface {
         file(index: number, content?: string, scriptKindName?: string): any;
         file(name: string, content?: string, scriptKindName?: string): any;
         select(startMarker: string, endMarker: string): void;
+        selectRange(range: Range): void;
     }
     class verifyNegatable {
         private negative;
@@ -145,10 +148,17 @@ declare namespace FourSlashInterface {
             entryId: string | { name: string, source?: string },
             text?: string,
             documentation?: string,
-            kind?: string,
+            kind?: string | { kind?: string, kindModifiers?: string },
             spanIndex?: number,
             hasAction?: boolean,
-            options?: { includeExternalModuleExports?: boolean, sourceDisplay?: string, allowDuplicate?: boolean },
+            options?: {
+                includeExternalModuleExports?: boolean,
+                includeInsertTextCompletions?: boolean,
+                sourceDisplay?: string,
+                isRecommended?: true,
+                insertText?: string,
+                replacementSpan?: Range,
+            },
         ): void;
         completionListItemsCountIsGreaterThan(count: number): void;
         completionListIsEmpty(): void;
@@ -171,7 +181,7 @@ declare namespace FourSlashInterface {
             errorCode?: number,
             index?: number,
         });
-        codeFixAvailable(options: Array<{ description: string, actions: Array<{ type: string, data: {} }> }>): void;
+        codeFixAvailable(options: Array<{ description: string, actions?: Array<{ type: string, data: {} }>, commands?: {}[] }>): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
@@ -186,7 +196,10 @@ declare namespace FourSlashInterface {
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
-        completionsAt(markerName: string, completions: string[], options?: { isNewIdentifierLocation?: boolean }): void;
+        completionsAt(markerName: string, completions: ReadonlyArray<string | { name: string, insertText?: string, replacementSpan?: Range }>, options?: {
+            isNewIdentifierLocation?: boolean;
+            includeInsertTextCompletions?: boolean;
+        }): void;
         completionsAndDetailsAt(
             markerName: string,
             completions: {
@@ -246,8 +259,8 @@ declare namespace FourSlashInterface {
          * For each of startRanges, asserts the ranges that are referenced from there.
          * This uses the 'findReferences' command instead of 'getReferencesAtPosition', so references are grouped by their definition.
          */
-        referenceGroups(startRanges: Range | Range[], parts: Array<{ definition: string, ranges: Range[] }>): void;
-        singleReferenceGroup(definition: string, ranges?: Range[]): void;
+        referenceGroups(startRanges: Range | Range[], parts: Array<{ definition: ReferencesDefinition, ranges: Range[] }>): void;
+        singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[]): void;
         rangesAreOccurrences(isWriteAccess?: boolean): void;
         rangesWithSameTextAreRenameLocations(): void;
         rangesAreRenameLocations(options?: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: Range[] });
@@ -283,6 +296,7 @@ declare namespace FourSlashInterface {
         docCommentTemplateAt(markerName: string | FourSlashInterface.Marker, expectedOffset: number, expectedText: string): void;
         noDocCommentTemplateAt(markerName: string | FourSlashInterface.Marker): void;
         rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void;
+        codeFixAll(options: { fixId: string, newFileContent: string, commands?: {}[] }): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, actionName: string, formattingOptions?: FormatCodeOptions): void;
         rangeIs(expectedText: string, includeWhiteSpace?: boolean): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: FormatCodeOptions): void;
@@ -297,7 +311,9 @@ declare namespace FourSlashInterface {
         occurrencesAtPositionCount(expectedCount: number): void;
         rangesAreDocumentHighlights(ranges?: Range[]): void;
         rangesWithSameTextAreDocumentHighlights(): void;
-        documentHighlightsOf(startRange: Range, ranges: Range[]): void;
+        documentHighlightsOf(startRange: Range, ranges: Range[], options?: {
+            filesToSearch?: ReadonlyArray<string>;
+        }): void;
         completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]): void;
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
@@ -498,6 +514,11 @@ declare namespace FourSlashInterface {
             text: string;
             textSpan?: TextSpan;
         };
+    }
+
+    interface ReferencesDefinition {
+        text: string;
+        range: Range;
     }
 }
 declare function verifyOperationIsCancelled(f: any): void;

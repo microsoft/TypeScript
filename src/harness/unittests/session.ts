@@ -4,6 +4,7 @@ const expect: typeof _chai.expect = _chai.expect;
 
 namespace ts.server {
     let lastWrittenToHost: string;
+    const noopFileWatcher: FileWatcher = { close: noop };
     const mockHost: ServerHost = {
         args: [],
         newLine: "\n",
@@ -26,6 +27,8 @@ namespace ts.server {
         setImmediate: () => 0,
         clearImmediate: noop,
         createHash: Harness.mockHash,
+        watchFile: () => noopFileWatcher,
+        watchDirectory: () => noopFileWatcher
     };
 
     class TestSession extends Session {
@@ -54,7 +57,7 @@ namespace ts.server {
         }
 
         // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
-        let oldPrepare: Function;
+        let oldPrepare: AnyFunction;
         before(() => {
             oldPrepare = (Error as any).prepareStackTrace;
             delete (Error as any).prepareStackTrace;
@@ -170,6 +173,19 @@ namespace ts.server {
                         allowNonTsExtensions: true // injected by tsserver
                     });
             });
+
+            it("Status request gives ts.version", () => {
+                const req: protocol.StatusRequest = {
+                    command: CommandNames.Status,
+                    seq: 0,
+                    type: "request"
+                };
+
+                const expected: protocol.StatusResponseBody = {
+                     version: ts.version
+                };
+                assert.deepEqual(session.executeCommand(req).response, expected);
+            });
         });
 
         describe("onMessage", () => {
@@ -221,6 +237,7 @@ namespace ts.server {
                 CommandNames.Saveto,
                 CommandNames.SignatureHelp,
                 CommandNames.SignatureHelpFull,
+                CommandNames.Status,
                 CommandNames.TypeDefinition,
                 CommandNames.ProjectInfo,
                 CommandNames.ReloadProjects,
@@ -402,7 +419,7 @@ namespace ts.server {
     describe("exceptions", () => {
 
         // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
-        let oldPrepare: Function;
+        let oldPrepare: AnyFunction;
         before(() => {
             oldPrepare = (Error as any).prepareStackTrace;
             delete (Error as any).prepareStackTrace;

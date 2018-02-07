@@ -290,7 +290,7 @@ namespace ts.FindAllReferences {
 
         function isNameMatch(name: __String): boolean {
             // Use name of "default" even in `export =` case because we may have allowSyntheticDefaultImports
-            return name === exportSymbol.escapedName || exportKind !== ExportKind.Named && name === "default";
+            return name === exportSymbol.escapedName || exportKind !== ExportKind.Named && name === InternalSymbolName.Default;
         }
     }
 
@@ -491,8 +491,7 @@ namespace ts.FindAllReferences {
 
             function getExportAssignmentExport(ex: ExportAssignment): ExportedSymbol {
                 // Get the symbol for the `export =` node; its parent is the module it's the export of.
-                const exportingModuleSymbol = ex.symbol.parent;
-                Debug.assert(!!exportingModuleSymbol);
+                const exportingModuleSymbol = Debug.assertDefined(ex.symbol.parent, "Expected export symbol to have a parent");
                 const exportKind = ex.isExportEquals ? ExportKind.ExportEquals : ExportKind.Default;
                 return { kind: ImportExport.Export, symbol, exportInfo: { exportingModuleSymbol, exportKind } };
             }
@@ -510,9 +509,30 @@ namespace ts.FindAllReferences {
                         return undefined;
                 }
 
-                const sym = useLhsSymbol ? checker.getSymbolAtLocation((node.left as ts.PropertyAccessExpression).name) : symbol;
+                const sym = useLhsSymbol ? checker.getSymbolAtLocation(cast(node.left, isPropertyAccessExpression).name) : symbol;
+                // Better detection for GH#20803
+                if (sym && !(checker.getMergedSymbol(sym.parent).flags & SymbolFlags.Module)) {
+                    Debug.fail(`Special property assignment kind does not have a module as its parent. Assignment is ${showSymbol(sym)}, parent is ${showSymbol(sym.parent)}`);
+                }
                 return sym && exportInfo(sym, kind);
             }
+        }
+
+        function showSymbol(s: Symbol): string {
+            const decls = s.declarations.map(d => (ts as any).SyntaxKind[d.kind]).join(",");
+            const flags = showFlags(s.flags, (ts as any).SymbolFlags);
+            return `{ declarations: ${decls}, flags: ${flags} }`;
+        }
+
+        function showFlags(f: number, flags: any) {
+            const out = [];
+            for (let pow = 0; pow <= 30; pow++) {
+                const n = 1 << pow;
+                if (f & n) {
+                    out.push(flags[n]);
+                }
+            }
+            return out.join("|");
         }
 
         function getImport(): ImportedSymbol | undefined {
@@ -534,7 +554,7 @@ namespace ts.FindAllReferences {
             // If `importedName` is undefined, do continue searching as the export is anonymous.
             // (All imports returned from this function will be ignored anyway if we are in rename and this is a not a named export.)
             const importedName = symbolName(importedSymbol);
-            if (importedName === undefined || importedName === "default" || importedName === symbol.escapedName) {
+            if (importedName === undefined || importedName === InternalSymbolName.Default || importedName === symbol.escapedName) {
                 return { kind: ImportExport.Import, symbol: importedSymbol, ...isImport };
             }
         }
@@ -604,7 +624,7 @@ namespace ts.FindAllReferences {
     }
 
     function symbolName(symbol: Symbol): __String | undefined {
-        if (symbol.escapedName !== "default") {
+        if (symbol.escapedName !== InternalSymbolName.Default) {
             return symbol.escapedName;
         }
 
@@ -616,7 +636,7 @@ namespace ts.FindAllReferences {
 
     /** If at an export specifier, go to the symbol it refers to. */
     function skipExportSpecifierSymbol(symbol: Symbol, checker: TypeChecker): Symbol {
-        // For `export { foo } from './bar", there's nothing to skip, because it does  not create a new alias. But `export { foo } does.
+        // For `export { foo } from './bar", there's nothing to skip, because it does not create a new alias. But `export { foo } does.
         if (symbol.declarations) {
             for (const declaration of symbol.declarations) {
                 if (isExportSpecifier(declaration) && !(declaration as ExportSpecifier).propertyName && !(declaration as ExportSpecifier).parent.parent.moduleSpecifier) {

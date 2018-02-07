@@ -71,11 +71,11 @@ namespace ts {
     // Literals
 
     /** If a node is passed, creates a string literal whose source text is read from a source node during emit. */
-    export function createLiteral(value: string | StringLiteral | NumericLiteral | Identifier): StringLiteral;
+    export function createLiteral(value: string | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier): StringLiteral;
     export function createLiteral(value: number): NumericLiteral;
     export function createLiteral(value: boolean): BooleanLiteral;
     export function createLiteral(value: string | number | boolean): PrimaryExpression;
-    export function createLiteral(value: string | number | boolean | StringLiteral | NumericLiteral | Identifier): PrimaryExpression {
+    export function createLiteral(value: string | number | boolean | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier): PrimaryExpression {
         if (typeof value === "number") {
             return createNumericLiteral(value + "");
         }
@@ -101,7 +101,7 @@ namespace ts {
         return node;
     }
 
-    function createLiteralFromNode(sourceNode: StringLiteral | NumericLiteral | Identifier): StringLiteral {
+    function createLiteralFromNode(sourceNode: StringLiteralLike | NumericLiteral | Identifier): StringLiteral {
         const node = createStringLiteral(getTextOfIdentifierOrLiteral(sourceNode));
         node.textSourceNode = sourceNode;
         return node;
@@ -112,21 +112,23 @@ namespace ts {
 
     export function createIdentifier(text: string): Identifier;
     /* @internal */
-    // tslint:disable-next-line unified-signatures
-    export function createIdentifier(text: string, typeArguments: ReadonlyArray<TypeNode>): Identifier;
-    export function createIdentifier(text: string, typeArguments?: ReadonlyArray<TypeNode>): Identifier {
+    export function createIdentifier(text: string, typeArguments: ReadonlyArray<TypeNode | TypeParameterDeclaration>): Identifier; // tslint:disable-line unified-signatures
+    export function createIdentifier(text: string, typeArguments?: ReadonlyArray<TypeNode | TypeParameterDeclaration>): Identifier {
         const node = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
         node.escapedText = escapeLeadingUnderscores(text);
         node.originalKeywordKind = text ? stringToToken(text) : SyntaxKind.Unknown;
-        node.autoGenerateKind = GeneratedIdentifierKind.None;
+        node.autoGenerateFlags = GeneratedIdentifierFlags.None;
         node.autoGenerateId = 0;
         if (typeArguments) {
-            node.typeArguments = createNodeArray(typeArguments);
+            node.typeArguments = createNodeArray(typeArguments as ReadonlyArray<TypeNode>);
         }
         return node;
     }
 
-    export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode> | undefined): Identifier {
+    export function updateIdentifier(node: Identifier): Identifier;
+    /* @internal */
+    export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier; // tslint:disable-line unified-signatures
+    export function updateIdentifier(node: Identifier, typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier {
         return node.typeArguments !== typeArguments
         ? updateNode(createIdentifier(idText(node), typeArguments), node)
         : node;
@@ -135,13 +137,18 @@ namespace ts {
     let nextAutoGenerateId = 0;
 
     /** Create a unique temporary variable. */
-    export function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined): Identifier {
+    export function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined): Identifier;
+    /* @internal */ export function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes: boolean): Identifier; // tslint:disable-line unified-signatures
+    export function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes?: boolean): Identifier {
         const name = createIdentifier("");
-        name.autoGenerateKind = GeneratedIdentifierKind.Auto;
+        name.autoGenerateFlags = GeneratedIdentifierFlags.Auto;
         name.autoGenerateId = nextAutoGenerateId;
         nextAutoGenerateId++;
         if (recordTempVariable) {
             recordTempVariable(name);
+        }
+        if (reservedInNestedScopes) {
+            name.autoGenerateFlags |= GeneratedIdentifierFlags.ReservedInNestedScopes;
         }
         return name;
     }
@@ -149,7 +156,7 @@ namespace ts {
     /** Create a unique temporary variable for use in a loop. */
     export function createLoopVariable(): Identifier {
         const name = createIdentifier("");
-        name.autoGenerateKind = GeneratedIdentifierKind.Loop;
+        name.autoGenerateFlags = GeneratedIdentifierFlags.Loop;
         name.autoGenerateId = nextAutoGenerateId;
         nextAutoGenerateId++;
         return name;
@@ -158,7 +165,7 @@ namespace ts {
     /** Create a unique name based on the supplied text. */
     export function createUniqueName(text: string): Identifier {
         const name = createIdentifier(text);
-        name.autoGenerateKind = GeneratedIdentifierKind.Unique;
+        name.autoGenerateFlags = GeneratedIdentifierFlags.Unique;
         name.autoGenerateId = nextAutoGenerateId;
         nextAutoGenerateId++;
         return name;
@@ -166,14 +173,15 @@ namespace ts {
 
     /** Create a unique name generated for a node. */
     export function getGeneratedNameForNode(node: Node): Identifier;
-    // tslint:disable-next-line unified-signatures
-    /*@internal*/ export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier;
+    /* @internal */ export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier; // tslint:disable-line unified-signatures
     export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier {
         const name = createIdentifier("");
-        name.autoGenerateKind = GeneratedIdentifierKind.Node;
+        name.autoGenerateFlags = GeneratedIdentifierFlags.Node;
         name.autoGenerateId = nextAutoGenerateId;
         name.original = node;
-        name.skipNameGenerationScope = !!shouldSkipNameGenerationScope;
+        if (shouldSkipNameGenerationScope) {
+            name.autoGenerateFlags |= GeneratedIdentifierFlags.SkipNameGenerationScope;
+        }
         nextAutoGenerateId++;
         return name;
     }
@@ -341,14 +349,15 @@ namespace ts {
         decorators: ReadonlyArray<Decorator> | undefined,
         modifiers: ReadonlyArray<Modifier> | undefined,
         name: string | PropertyName,
-        questionToken: QuestionToken | undefined,
+        questionOrExclamationToken: QuestionToken | ExclamationToken | undefined,
         type: TypeNode | undefined,
         initializer: Expression | undefined) {
         const node = <PropertyDeclaration>createSynthesizedNode(SyntaxKind.PropertyDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
         node.name = asName(name);
-        node.questionToken = questionToken;
+        node.questionToken = questionOrExclamationToken !== undefined && questionOrExclamationToken.kind === SyntaxKind.QuestionToken ? questionOrExclamationToken : undefined;
+        node.exclamationToken = questionOrExclamationToken !== undefined && questionOrExclamationToken.kind === SyntaxKind.ExclamationToken ? questionOrExclamationToken : undefined;
         node.type = type;
         node.initializer = initializer;
         return node;
@@ -359,16 +368,17 @@ namespace ts {
         decorators: ReadonlyArray<Decorator> | undefined,
         modifiers: ReadonlyArray<Modifier> | undefined,
         name: string | PropertyName,
-        questionToken: QuestionToken | undefined,
+        questionOrExclamationToken: QuestionToken | ExclamationToken | undefined,
         type: TypeNode | undefined,
         initializer: Expression | undefined) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.name !== name
-            || node.questionToken !== questionToken
+            || node.questionToken !== (questionOrExclamationToken !== undefined && questionOrExclamationToken.kind === SyntaxKind.QuestionToken ? questionOrExclamationToken : undefined)
+            || node.exclamationToken !== (questionOrExclamationToken !== undefined && questionOrExclamationToken.kind === SyntaxKind.ExclamationToken ? questionOrExclamationToken : undefined)
             || node.type !== type
             || node.initializer !== initializer
-            ? updateNode(createProperty(decorators, modifiers, name, questionToken, type, initializer), node)
+            ? updateNode(createProperty(decorators, modifiers, name, questionOrExclamationToken, type, initializer), node)
             : node;
     }
 
@@ -578,11 +588,12 @@ namespace ts {
     }
 
     /* @internal */
-    export function createSignatureDeclaration(kind: SyntaxKind, typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined, parameters: ReadonlyArray<ParameterDeclaration>, type: TypeNode | undefined) {
+    export function createSignatureDeclaration(kind: SyntaxKind, typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined, parameters: ReadonlyArray<ParameterDeclaration>, type: TypeNode | undefined, typeArguments?: TypeNode[] | undefined) {
         const node = createSynthesizedNode(kind) as SignatureDeclaration;
         node.typeParameters = asNodeArray(typeParameters);
         node.parameters = asNodeArray(parameters);
         node.type = type;
+        node.typeArguments = asNodeArray(typeArguments);
         return node;
     }
 
@@ -717,6 +728,36 @@ namespace ts {
     function updateUnionOrIntersectionTypeNode<T extends UnionOrIntersectionTypeNode>(node: T, types: NodeArray<TypeNode>): T {
         return node.types !== types
             ? updateNode(<T>createUnionOrIntersectionTypeNode(node.kind, types), node)
+            : node;
+    }
+
+    export function createConditionalTypeNode(checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.ConditionalType) as ConditionalTypeNode;
+        node.checkType = parenthesizeConditionalTypeMember(checkType);
+        node.extendsType = parenthesizeConditionalTypeMember(extendsType);
+        node.trueType = trueType;
+        node.falseType = falseType;
+        return node;
+    }
+
+    export function updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
+        return node.checkType !== checkType
+            || node.extendsType !== extendsType
+            || node.trueType !== trueType
+            || node.falseType !== falseType
+            ? updateNode(createConditionalTypeNode(checkType, extendsType, trueType, falseType), node)
+            : node;
+    }
+
+    export function createInferTypeNode(typeParameter: TypeParameterDeclaration) {
+        const node = <InferTypeNode>createSynthesizedNode(SyntaxKind.InferType);
+        node.typeParameter = typeParameter;
+        return node;
+    }
+
+    export function updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration) {
+        return node.typeParameter !== typeParameter
+            ? updateNode(createInferTypeNode(typeParameter), node)
             : node;
     }
 
@@ -3626,7 +3667,7 @@ namespace ts {
         return qualifiedName;
     }
 
-    export function convertToFunctionBody(node: ConciseBody, multiLine?: boolean) {
+    export function convertToFunctionBody(node: ConciseBody, multiLine?: boolean): Block {
         return isBlock(node) ? node : setTextRange(createBlock([setTextRange(createReturn(node), node)], multiLine), node);
     }
 
@@ -3831,13 +3872,13 @@ namespace ts {
                 if (isLeftSideOfBinary) {
                     // No need to parenthesize the left operand when the binary operator is
                     // left associative:
-                    //  (a*b)/x    ->  a*b/x
-                    //  (a**b)/x   ->  a**b/x
+                    //  (a*b)/x    -> a*b/x
+                    //  (a**b)/x   -> a**b/x
                     //
                     // Parentheses are needed for the left operand when the binary operator is
                     // right associative:
-                    //  (a/b)**x   ->  (a/b)**x
-                    //  (a**b)**x  ->  (a**b)**x
+                    //  (a/b)**x   -> (a/b)**x
+                    //  (a**b)**x  -> (a**b)**x
                     return binaryOperatorAssociativity === Associativity.Right;
                 }
                 else {
@@ -3951,7 +3992,9 @@ namespace ts {
         // per ES grammar both 'whenTrue' and 'whenFalse' parts of conditional expression are assignment expressions
         // so in case when comma expression is introduced as a part of previous transformations
         // if should be wrapped in parens since comma operator has the lowest precedence
-        return e.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>e).operatorToken.kind === SyntaxKind.CommaToken
+        const emittedExpression = skipPartiallyEmittedExpressions(e);
+        return emittedExpression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>emittedExpression).operatorToken.kind === SyntaxKind.CommaToken ||
+            emittedExpression.kind === SyntaxKind.CommaListExpression
             ? createParen(e)
             : e;
     }
@@ -4081,6 +4124,10 @@ namespace ts {
         return expression;
     }
 
+    export function parenthesizeConditionalTypeMember(member: TypeNode) {
+        return member.kind === SyntaxKind.ConditionalType ? createParenthesizedType(member) : member;
+    }
+
     export function parenthesizeElementTypeMember(member: TypeNode) {
         switch (member.kind) {
             case SyntaxKind.UnionType:
@@ -4089,7 +4136,7 @@ namespace ts {
             case SyntaxKind.ConstructorType:
                 return createParenthesizedType(member);
         }
-        return member;
+        return parenthesizeConditionalTypeMember(member);
     }
 
     export function parenthesizeArrayTypeMember(member: TypeNode) {
@@ -4282,7 +4329,7 @@ namespace ts {
         return emitNode && emitNode.externalHelpersModuleName;
     }
 
-    export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean) {
+    export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStarOrImportDefault?: boolean) {
         if (compilerOptions.importHelpers && isEffectiveExternalModule(node, compilerOptions)) {
             const externalHelpersModuleName = getExternalHelpersModuleName(node);
             if (externalHelpersModuleName) {
@@ -4290,7 +4337,7 @@ namespace ts {
             }
 
             const moduleKind = getEmitModuleKind(compilerOptions);
-            let create = hasExportStarsToExportValues
+            let create = (hasExportStarsToExportValues || (compilerOptions.esModuleInterop && hasImportStarOrImportDefault))
                 && moduleKind !== ModuleKind.System
                 && moduleKind !== ModuleKind.ES2015
                 && moduleKind !== ModuleKind.ESNext;

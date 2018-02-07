@@ -3,6 +3,8 @@
 /// <reference path="utilities.ts" />
 
 namespace ts {
+    const isTypeNodeOrTypeParameterDeclaration = or(isTypeNode, isTypeParameterDeclaration);
+
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
      *
@@ -222,7 +224,7 @@ namespace ts {
             // Names
 
             case SyntaxKind.Identifier:
-                return updateIdentifier(<Identifier>node, nodesVisitor((<Identifier>node).typeArguments, visitor, isTypeNode));
+                return updateIdentifier(<Identifier>node, nodesVisitor((<Identifier>node).typeArguments, visitor, isTypeNodeOrTypeParameterDeclaration));
 
             case SyntaxKind.QualifiedName:
                 return updateQualifiedName(<QualifiedName>node,
@@ -384,6 +386,17 @@ namespace ts {
             case SyntaxKind.IntersectionType:
                 return updateIntersectionTypeNode(<IntersectionTypeNode>node,
                     nodesVisitor((<IntersectionTypeNode>node).types, visitor, isTypeNode));
+
+            case SyntaxKind.ConditionalType:
+                return updateConditionalTypeNode(<ConditionalTypeNode>node,
+                    visitNode((<ConditionalTypeNode>node).checkType, visitor, isTypeNode),
+                    visitNode((<ConditionalTypeNode>node).extendsType, visitor, isTypeNode),
+                    visitNode((<ConditionalTypeNode>node).trueType, visitor, isTypeNode),
+                    visitNode((<ConditionalTypeNode>node).falseType, visitor, isTypeNode));
+
+            case SyntaxKind.InferType:
+                return updateInferTypeNode(<InferTypeNode>node,
+                    visitNode((<InferTypeNode>node).typeParameter, visitor, isTypeParameterDeclaration));
 
             case SyntaxKind.ParenthesizedType:
                 return updateParenthesizedType(<ParenthesizedTypeNode>node,
@@ -622,7 +635,7 @@ namespace ts {
 
             case SyntaxKind.ForOfStatement:
                 return updateForOf(<ForOfStatement>node,
-                    (<ForOfStatement>node).awaitModifier,
+                    visitNode((<ForOfStatement>node).awaitModifier, visitor, isToken),
                     visitNode((<ForOfStatement>node).initializer, visitor, isForInitializer),
                     visitNode((<ForOfStatement>node).expression, visitor, isExpression),
                     visitNode((<ForOfStatement>node).statement, visitor, isStatement, liftToBlock));

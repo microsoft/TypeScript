@@ -4,7 +4,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "2.7";
+    export const versionMajorMinor = "2.8";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0`;
 }
@@ -16,10 +16,15 @@ namespace ts {
         // Update: We also consider a path like `C:\foo.ts` "relative" because we do not search for it in `node_modules` or treat it as an ambient module.
         return pathIsRelative(moduleName) || isRootedDiskPath(moduleName);
     }
+
+    export function sortAndDeduplicateDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): Diagnostic[] {
+        return sortAndDeduplicate(diagnostics, compareDiagnostics);
+    }
 }
 
 /* @internal */
 namespace ts {
+    export const emptyArray: never[] = [] as never[];
     /** Create a MapLike with good performance. */
     function createDictionaryObject<T>(): MapLike<T> {
         const map = Object.create(/*prototype*/ null); // tslint:disable-line:no-null-keyword
@@ -182,6 +187,10 @@ namespace ts {
 
     /** Like `forEach`, but suitable for use with numbers and strings (which may be falsy). */
     export function firstDefined<T, U>(array: ReadonlyArray<T> | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
+        if (array === undefined) {
+            return undefined;
+        }
+
         for (let i = 0; i < array.length; i++) {
             const result = callback(array[i], i);
             if (result !== undefined) {
@@ -189,6 +198,19 @@ namespace ts {
             }
         }
         return undefined;
+    }
+
+    export function firstDefinedIterator<T, U>(iter: Iterator<T>, callback: (element: T) => U | undefined): U | undefined {
+        while (true) {
+            const { value, done } = iter.next();
+            if (done) {
+                return undefined;
+            }
+            const result = callback(value);
+            if (result !== undefined) {
+                return result;
+            }
+        }
     }
 
     /**
@@ -215,11 +237,25 @@ namespace ts {
 
     export function zipWith<T, U, V>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<U>, callback: (a: T, b: U, index: number) => V): V[] {
         const result: V[] = [];
-        Debug.assert(arrayA.length === arrayB.length);
+        Debug.assertEqual(arrayA.length, arrayB.length);
         for (let i = 0; i < arrayA.length; i++) {
             result.push(callback(arrayA[i], arrayB[i], i));
         }
         return result;
+    }
+
+    export function zipToIterator<T, U>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<U>): Iterator<[T, U]> {
+        Debug.assertEqual(arrayA.length, arrayB.length);
+        let i = 0;
+        return {
+            next() {
+                if (i === arrayA.length) {
+                    return { value: undefined as never, done: true };
+                }
+                i++;
+                return { value: [arrayA[i - 1], arrayB[i - 1]], done: false };
+            }
+        };
     }
 
     export function zipToMap<T>(keys: ReadonlyArray<string>, values: ReadonlyArray<T>): Map<T> {
@@ -261,6 +297,8 @@ namespace ts {
         return undefined;
     }
 
+    export function findLast<T, U extends T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => element is U): U | undefined;
+    export function findLast<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined;
     export function findLast<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined {
         for (let i = array.length - 1; i >= 0; i--) {
             const value = array[i];
@@ -306,15 +344,8 @@ namespace ts {
         return false;
     }
 
-    export function indexOf<T>(array: ReadonlyArray<T>, value: T): number {
-        if (array) {
-            for (let i = 0; i < array.length; i++) {
-                if (array[i] === value) {
-                    return i;
-                }
-            }
-        }
-        return -1;
+    export function arraysEqual<T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>, equalityComparer: EqualityComparer<T> = equateValues): boolean {
+        return a.length === b.length && a.every((x, i) => equalityComparer(x, b[i]));
     }
 
     export function indexOfAnyCharCode(text: string, charCodes: ReadonlyArray<number>, start?: number): number {
@@ -394,35 +425,35 @@ namespace ts {
         return result;
     }
 
+
     export function mapIterator<T, U>(iter: Iterator<T>, mapFn: (x: T) => U): Iterator<U> {
-        return { next };
-        function next(): { value: U, done: false } | { value: never, done: true } {
-            const iterRes = iter.next();
-            return iterRes.done ? iterRes : { value: mapFn(iterRes.value), done: false };
-        }
+        return {
+            next() {
+                const iterRes = iter.next();
+                return iterRes.done ? iterRes : { value: mapFn(iterRes.value), done: false };
+            }
+        };
     }
 
     // Maps from T to T and avoids allocation if all elements map to themselves
     export function sameMap<T>(array: T[], f: (x: T, i: number) => T): T[];
     export function sameMap<T>(array: ReadonlyArray<T>, f: (x: T, i: number) => T): ReadonlyArray<T>;
     export function sameMap<T>(array: T[], f: (x: T, i: number) => T): T[] {
-        let result: T[];
         if (array) {
             for (let i = 0; i < array.length; i++) {
-                if (result) {
-                    result.push(f(array[i], i));
-                }
-                else {
-                    const item = array[i];
-                    const mapped = f(item, i);
-                    if (item !== mapped) {
-                        result = array.slice(0, i);
-                        result.push(mapped);
+                const item = array[i];
+                const mapped = f(item, i);
+                if (item !== mapped) {
+                    const result = array.slice(0, i);
+                    result.push(mapped);
+                    for (i++; i < array.length; i++) {
+                        result.push(f(array[i], i));
                     }
+                    return result;
                 }
             }
         }
-        return result || array;
+        return array;
     }
 
     /**
@@ -474,22 +505,32 @@ namespace ts {
         return result;
     }
 
-    export function flatMapIter<T, U>(iter: Iterator<T>, mapfn: (x: T) => U | U[] | undefined): U[] {
-        const result: U[] = [];
-        while (true) {
-            const { value, done } = iter.next();
-            if (done) break;
-            const res = mapfn(value);
-            if (res) {
-                if (isArray(res)) {
-                    result.push(...res);
-                }
-                else {
-                    result.push(res);
-                }
-            }
+    export function flatMapIterator<T, U>(iter: Iterator<T>, mapfn: (x: T) => U[] | Iterator<U> | undefined): Iterator<U> {
+        const first = iter.next();
+        if (first.done) {
+            return emptyIterator;
         }
-        return result;
+        let currentIter = getIterator(first.value);
+        return {
+            next() {
+                while (true) {
+                    const currentRes = currentIter.next();
+                    if (!currentRes.done) {
+                        return currentRes;
+                    }
+                    const iterRes = iter.next();
+                    if (iterRes.done) {
+                        return iterRes;
+                    }
+                    currentIter = getIterator(iterRes.value);
+                }
+            },
+        };
+
+        function getIterator(x: T): Iterator<U> {
+            const res = mapfn(x);
+            return res === undefined ? emptyIterator : isArray(res) ? arrayIterator(res) : res;
+        }
     }
 
     /**
@@ -523,12 +564,23 @@ namespace ts {
         return result || array;
     }
 
+    export function mapAllOrFail<T, U>(array: ReadonlyArray<T>, mapFn: (x: T, i: number) => U | undefined): U[] | undefined {
+        const result: U[] = [];
+        for (let i = 0; i < array.length; i++) {
+            const mapped = mapFn(array[i], i);
+            if (mapped === undefined) {
+                return undefined;
+            }
+            result.push(mapped);
+        }
+        return result;
+    }
+
     export function mapDefined<T, U>(array: ReadonlyArray<T> | undefined, mapFn: (x: T, i: number) => U | undefined): U[] {
         const result: U[] = [];
         if (array) {
             for (let i = 0; i < array.length; i++) {
-                const item = array[i];
-                const mapped = mapFn(item, i);
+                const mapped = mapFn(array[i], i);
                 if (mapped !== undefined) {
                     result.push(mapped);
                 }
@@ -537,17 +589,34 @@ namespace ts {
         return result;
     }
 
-    export function mapDefinedIter<T, U>(iter: Iterator<T>, mapFn: (x: T) => U | undefined): U[] {
-        const result: U[] = [];
-        while (true) {
-            const { value, done } = iter.next();
-            if (done) break;
-            const res = mapFn(value);
-            if (res !== undefined) {
-                result.push(res);
+    export function mapDefinedIterator<T, U>(iter: Iterator<T>, mapFn: (x: T) => U | undefined): Iterator<U> {
+        return {
+            next() {
+                while (true) {
+                    const res = iter.next();
+                    if (res.done) {
+                        return res;
+                    }
+                    const value = mapFn(res.value);
+                    if (value !== undefined) {
+                        return { value, done: false };
+                    }
+                }
             }
-        }
-        return result;
+        };
+    }
+
+    export const emptyIterator: Iterator<never> = { next: () => ({ value: undefined as never, done: true }) };
+
+    export function singleIterator<T>(value: T): Iterator<T> {
+        let done = false;
+        return {
+            next() {
+                const wasDone = done;
+                done = true;
+                return wasDone ? { value: undefined as never, done: true } : { value, done: false };
+            }
+        };
     }
 
     /**
@@ -835,7 +904,7 @@ namespace ts {
     export function sum<T extends Record<K, number>, K extends string>(array: ReadonlyArray<T>, prop: K): number {
         let result = 0;
         for (const v of array) {
-            // Note: we need the following type assertion because of GH #17069
+            // TODO: Remove the following type assertion once the fix for #17069 is merged
             result += v[prop] as number;
         }
         return result;
@@ -1283,7 +1352,8 @@ namespace ts {
 
     export function cloneMap(map: SymbolTable): SymbolTable;
     export function cloneMap<T>(map: ReadonlyMap<T>): Map<T>;
-    export function cloneMap<T>(map: ReadonlyMap<T> | SymbolTable): Map<T> | SymbolTable {
+    export function cloneMap<T>(map: ReadonlyUnderscoreEscapedMap<T>): UnderscoreEscapedMap<T>;
+    export function cloneMap<T>(map: ReadonlyMap<T> | ReadonlyUnderscoreEscapedMap<T> | SymbolTable): Map<T> | UnderscoreEscapedMap<T> | SymbolTable {
         const clone = createMap<T>();
         copyEntries(map as Map<T>, clone);
         return clone;
@@ -1345,7 +1415,6 @@ namespace ts {
             this.set(key, values = [value]);
         }
         return values;
-
     }
     function multiMapRemove<T>(this: MultiMap<T>, key: string, value: T) {
         const values = this.get(key);
@@ -1360,12 +1429,12 @@ namespace ts {
     /**
      * Tests whether a value is an array.
      */
-    export function isArray(value: any): value is ReadonlyArray<any> {
+    export function isArray(value: any): value is ReadonlyArray<{}> {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
     }
 
-    export function toArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T>;
     export function toArray<T>(value: T | T[]): T[];
+    export function toArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T>;
     export function toArray<T>(value: T | T[]): T[] {
         return isArray(value) ? value : [value];
     }
@@ -1383,7 +1452,13 @@ namespace ts {
 
     export function cast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut {
         if (value !== undefined && test(value)) return value;
-        Debug.fail(`Invalid cast. The supplied value did not pass the test '${Debug.getFunctionName(test)}'.`);
+
+        if (value && typeof (value as any).kind === "number") {
+            Debug.fail(`Invalid cast. The supplied ${(ts as any).SyntaxKind[(value as any).kind]} did not pass the test '${Debug.getFunctionName(test)}'.`);
+        }
+        else {
+            Debug.fail(`Invalid cast. The supplied value did not pass the test '${Debug.getFunctionName(test)}'.`);
+        }
     }
 
     /** Does nothing. */
@@ -1397,6 +1472,9 @@ namespace ts {
 
     /** Returns its argument. */
     export function identity<T>(x: T) { return x; }
+
+    /** Returns lower case string */
+    export function toLowerCase(x: string) { return x.toLowerCase(); }
 
     /** Throws an error because a function is not implemented. */
     export function notImplemented(): never {
@@ -1831,10 +1909,6 @@ namespace ts {
         return text1 ? Comparison.GreaterThan : Comparison.LessThan;
     }
 
-    export function sortAndDeduplicateDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): Diagnostic[] {
-        return sortAndDeduplicate(diagnostics, compareDiagnostics);
-    }
-
     export function normalizeSlashes(path: string): string {
         return path.replace(/\\/g, "/");
     }
@@ -1852,7 +1926,7 @@ namespace ts {
             return p2 + 1;
         }
         if (path.charCodeAt(1) === CharacterCodes.colon) {
-            if (path.charCodeAt(2) === CharacterCodes.slash) return 3;
+            if (path.charCodeAt(2) === CharacterCodes.slash || path.charCodeAt(2) === CharacterCodes.backslash) return 3;
         }
         // Per RFC 1738 'file' URI schema has the shape file://<host>/<path>
         // if <host> is omitted then it is assumed that host value is 'localhost',
@@ -1939,11 +2013,6 @@ namespace ts {
         return /^\.\.?($|[\\/])/.test(path);
     }
 
-    /** @deprecated Use `!isExternalModuleNameRelative(moduleName)` instead. */
-    export function moduleHasNonRelativeName(moduleName: string): boolean {
-        return !isExternalModuleNameRelative(moduleName);
-    }
-
     export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
         return compilerOptions.target || ScriptTarget.ES3;
     }
@@ -1966,7 +2035,9 @@ namespace ts {
         const moduleKind = getEmitModuleKind(compilerOptions);
         return compilerOptions.allowSyntheticDefaultImports !== undefined
             ? compilerOptions.allowSyntheticDefaultImports
-            : moduleKind === ModuleKind.System;
+            : compilerOptions.esModuleInterop
+                ? moduleKind !== ModuleKind.None && moduleKind < ModuleKind.ES2015
+                : moduleKind === ModuleKind.System;
     }
 
     export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictPropertyInitialization" | "alwaysStrict";
@@ -2030,7 +2101,7 @@ namespace ts {
 
     function getNormalizedPathComponentsOfUrl(url: string) {
         // Get root length of http://www.website.com/folder1/folder2/
-        // In this example the root is:  http://www.website.com/
+        // In this example the root is: http://www.website.com/
         // normalized path components should be ["http://www.website.com/", "folder1", "folder2"]
 
         const urlLength = url.length;
@@ -2063,7 +2134,7 @@ namespace ts {
         }
         else {
             // Can't find the host assume the rest of the string as component
-            // but make sure we append "/"  to it as root is not joined using "/"
+            // but make sure we append "/" to it as root is not joined using "/"
             // eg. if url passed in was http://website.com we want to use root as [http://website.com/]
             // so that other path manipulations will be correct and it can be merged with relative paths correctly
             return [url + directorySeparator];
@@ -2084,7 +2155,7 @@ namespace ts {
         const directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, currentDirectory);
         if (directoryComponents.length > 1 && lastOrUndefined(directoryComponents) === "") {
             // If the directory path given was of type test/cases/ then we really need components of directory to be only till its name
-            // that is  ["test", "cases", ""] needs to be actually ["test", "cases"]
+            // that is ["test", "cases", ""] needs to be actually ["test", "cases"]
             directoryComponents.pop();
         }
 
@@ -2326,7 +2397,6 @@ namespace ts {
 
     function getSubPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude", { singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter }: WildcardMatcher): string | undefined {
         let subpattern = "";
-        let hasRecursiveDirectoryWildcard = false;
         let hasWrittenComponent = false;
         const components = getNormalizedPathComponents(spec, basePath);
         const lastComponent = lastOrUndefined(components);
@@ -2345,12 +2415,7 @@ namespace ts {
         let optionalCount = 0;
         for (let component of components) {
             if (component === "**") {
-                if (hasRecursiveDirectoryWildcard) {
-                    return undefined;
-                }
-
                 subpattern += doubleAsteriskRegexFragment;
-                hasRecursiveDirectoryWildcard = true;
             }
             else {
                 if (usage === "directories") {
@@ -2711,6 +2776,10 @@ namespace ts {
         this.flags = flags;
         this.escapedName = name;
         this.declarations = undefined;
+        this.valueDeclaration = undefined;
+        this.id = undefined;
+        this.mergeId = undefined;
+        this.parent = undefined;
     }
 
     function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
@@ -2723,10 +2792,10 @@ namespace ts {
     function Signature() {} // tslint:disable-line no-empty
 
     function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
-        this.id = 0;
-        this.kind = kind;
         this.pos = pos;
         this.end = end;
+        this.kind = kind;
+        this.id = 0;
         this.flags = NodeFlags.None;
         this.modifierFlagsCache = ModifierFlags.None;
         this.transformFlags = TransformFlags.None;
@@ -2758,6 +2827,12 @@ namespace ts {
         VeryAggressive = 3,
     }
 
+    /**
+     * Safer version of `Function` which should not be called.
+     * Every function should be assignable to this, but this should not be assignable to every function.
+     */
+    export type AnyFunction = (...args: never[]) => void;
+
     export namespace Debug {
         export let currentAssertionLevel = AssertionLevel.None;
         export let isDebugging = false;
@@ -2766,7 +2841,7 @@ namespace ts {
             return currentAssertionLevel >= level;
         }
 
-        export function assert(expression: boolean, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: Function): void {
+        export function assert(expression: boolean, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: AnyFunction): void {
             if (!expression) {
                 if (verboseDebugInfo) {
                     message += "\r\nVerbose Debug Information: " + (typeof verboseDebugInfo === "string" ? verboseDebugInfo : verboseDebugInfo());
@@ -2800,7 +2875,7 @@ namespace ts {
             }
         }
 
-        export function fail(message?: string, stackCrawlMark?: Function): never {
+        export function fail(message?: string, stackCrawlMark?: AnyFunction): never {
             debugger;
             const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
             if ((<any>Error).captureStackTrace) {
@@ -2809,11 +2884,16 @@ namespace ts {
             throw e;
         }
 
-        export function assertNever(member: never, message?: string, stackCrawlMark?: Function): never {
+        export function assertDefined<T>(value: T | null | undefined, message?: string): T {
+            assert(value !== undefined && value !== null, message);
+            return value;
+        }
+
+        export function assertNever(member: never, message?: string, stackCrawlMark?: AnyFunction): never {
             return fail(message || `Illegal value: ${member}`, stackCrawlMark || assertNever);
         }
 
-        export function getFunctionName(func: Function) {
+        export function getFunctionName(func: AnyFunction) {
             if (typeof func !== "function") {
                 return "";
             }
@@ -2871,9 +2951,7 @@ namespace ts {
 
     export type GetCanonicalFileName = (fileName: string) => string;
     export function createGetCanonicalFileName(useCaseSensitiveFileNames: boolean): GetCanonicalFileName {
-        return useCaseSensitiveFileNames
-            ? ((fileName) => fileName)
-            : ((fileName) => fileName.toLowerCase());
+        return useCaseSensitiveFileNames ? identity : toLowerCase;
     }
 
     /**
@@ -2992,219 +3070,18 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
+    export function or<T>(f: (arg: T) => boolean, g: (arg: T) => boolean) {
+        return (arg: T) => f(arg) || g(arg);
+    }
+
     export function assertTypeIsNever(_: never): void { } // tslint:disable-line no-empty
 
-    export interface FileAndDirectoryExistence {
-        fileExists: boolean;
-        directoryExists: boolean;
-    }
+    export const emptyFileSystemEntries: FileSystemEntries = {
+        files: emptyArray,
+        directories: emptyArray
+    };
 
-    export interface CachedDirectoryStructureHost extends DirectoryStructureHost {
-        /** Returns the queried result for the file exists and directory exists if at all it was done */
-        addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path): FileAndDirectoryExistence | undefined;
-        addOrDeleteFile(fileName: string, filePath: Path, eventKind: FileWatcherEventKind): void;
-        clearCache(): void;
-    }
-
-    interface MutableFileSystemEntries {
-        readonly files: string[];
-        readonly directories: string[];
-    }
-
-    export function createCachedDirectoryStructureHost(host: DirectoryStructureHost): CachedDirectoryStructureHost {
-        const cachedReadDirectoryResult = createMap<MutableFileSystemEntries>();
-        const getCurrentDirectory = memoize(() => host.getCurrentDirectory());
-        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
-        return {
-            useCaseSensitiveFileNames: host.useCaseSensitiveFileNames,
-            newLine: host.newLine,
-            readFile: (path, encoding) => host.readFile(path, encoding),
-            write: s => host.write(s),
-            writeFile,
-            fileExists,
-            directoryExists,
-            createDirectory,
-            getCurrentDirectory,
-            getDirectories,
-            readDirectory,
-            addOrDeleteFileOrDirectory,
-            addOrDeleteFile,
-            clearCache,
-            exit: code => host.exit(code)
-        };
-
-        function toPath(fileName: string) {
-            return ts.toPath(fileName, getCurrentDirectory(), getCanonicalFileName);
-        }
-
-        function getCachedFileSystemEntries(rootDirPath: Path): MutableFileSystemEntries | undefined {
-            return cachedReadDirectoryResult.get(rootDirPath);
-        }
-
-        function getCachedFileSystemEntriesForBaseDir(path: Path): MutableFileSystemEntries | undefined {
-            return getCachedFileSystemEntries(getDirectoryPath(path));
-        }
-
-        function getBaseNameOfFileName(fileName: string) {
-            return getBaseFileName(normalizePath(fileName));
-        }
-
-        function createCachedFileSystemEntries(rootDir: string, rootDirPath: Path) {
-            const resultFromHost: MutableFileSystemEntries = {
-                files: map(host.readDirectory(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || [],
-                directories: host.getDirectories(rootDir) || []
-            };
-
-            cachedReadDirectoryResult.set(rootDirPath, resultFromHost);
-            return resultFromHost;
-        }
-
-        /**
-         * If the readDirectory result was already cached, it returns that
-         * Otherwise gets result from host and caches it.
-         * The host request is done under try catch block to avoid caching incorrect result
-         */
-        function tryReadDirectory(rootDir: string, rootDirPath: Path): MutableFileSystemEntries | undefined {
-            const cachedResult = getCachedFileSystemEntries(rootDirPath);
-            if (cachedResult) {
-                return cachedResult;
-            }
-
-            try {
-                return createCachedFileSystemEntries(rootDir, rootDirPath);
-            }
-            catch (_e) {
-                // If there is exception to read directories, dont cache the result and direct the calls to host
-                Debug.assert(!cachedReadDirectoryResult.has(rootDirPath));
-                return undefined;
-            }
-        }
-
-        function fileNameEqual(name1: string, name2: string) {
-            return getCanonicalFileName(name1) === getCanonicalFileName(name2);
-        }
-
-        function hasEntry(entries: ReadonlyArray<string>, name: string) {
-            return some(entries, file => fileNameEqual(file, name));
-        }
-
-        function updateFileSystemEntry(entries: string[], baseName: string, isValid: boolean) {
-            if (hasEntry(entries, baseName)) {
-                if (!isValid) {
-                    return filterMutate(entries, entry => !fileNameEqual(entry, baseName));
-                }
-            }
-            else if (isValid) {
-                return entries.push(baseName);
-            }
-        }
-
-        function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
-            const path = toPath(fileName);
-            const result = getCachedFileSystemEntriesForBaseDir(path);
-            if (result) {
-                updateFilesOfFileSystemEntry(result, getBaseNameOfFileName(fileName), /*fileExists*/ true);
-            }
-            return host.writeFile(fileName, data, writeByteOrderMark);
-        }
-
-        function fileExists(fileName: string): boolean {
-            const path = toPath(fileName);
-            const result = getCachedFileSystemEntriesForBaseDir(path);
-            return result && hasEntry(result.files, getBaseNameOfFileName(fileName)) ||
-                host.fileExists(fileName);
-        }
-
-        function directoryExists(dirPath: string): boolean {
-            const path = toPath(dirPath);
-            return cachedReadDirectoryResult.has(path) || host.directoryExists(dirPath);
-        }
-
-        function createDirectory(dirPath: string) {
-            const path = toPath(dirPath);
-            const result = getCachedFileSystemEntriesForBaseDir(path);
-            const baseFileName = getBaseNameOfFileName(dirPath);
-            if (result) {
-                updateFileSystemEntry(result.directories, baseFileName, /*isValid*/ true);
-            }
-            host.createDirectory(dirPath);
-        }
-
-        function getDirectories(rootDir: string): string[] {
-            const rootDirPath = toPath(rootDir);
-            const result = tryReadDirectory(rootDir, rootDirPath);
-            if (result) {
-                return result.directories.slice();
-            }
-            return host.getDirectories(rootDir);
-        }
-
-        function readDirectory(rootDir: string, extensions?: ReadonlyArray<string>, excludes?: ReadonlyArray<string>, includes?: ReadonlyArray<string>, depth?: number): string[] {
-            const rootDirPath = toPath(rootDir);
-            const result = tryReadDirectory(rootDir, rootDirPath);
-            if (result) {
-                return matchFiles(rootDir, extensions, excludes, includes, host.useCaseSensitiveFileNames, getCurrentDirectory(), depth, getFileSystemEntries);
-            }
-            return host.readDirectory(rootDir, extensions, excludes, includes, depth);
-
-            function getFileSystemEntries(dir: string) {
-                const path = toPath(dir);
-                if (path === rootDirPath) {
-                    return result;
-                }
-                return getCachedFileSystemEntries(path) || createCachedFileSystemEntries(dir, path);
-            }
-        }
-
-        function addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path) {
-            const existingResult = getCachedFileSystemEntries(fileOrDirectoryPath);
-            if (existingResult) {
-                // Just clear the cache for now
-                // For now just clear the cache, since this could mean that multiple level entries might need to be re-evaluated
-                clearCache();
-            }
-            else {
-                // This was earlier a file (hence not in cached directory contents)
-                // or we never cached the directory containing it
-                const parentResult = getCachedFileSystemEntriesForBaseDir(fileOrDirectoryPath);
-                if (parentResult) {
-                    const baseName = getBaseNameOfFileName(fileOrDirectory);
-                    if (parentResult) {
-                        const fsQueryResult: FileAndDirectoryExistence = {
-                            fileExists: host.fileExists(fileOrDirectoryPath),
-                            directoryExists: host.directoryExists(fileOrDirectoryPath)
-                        };
-                        if (fsQueryResult.directoryExists || hasEntry(parentResult.directories, baseName)) {
-                            // Folder added or removed, clear the cache instead of updating the folder and its structure
-                            clearCache();
-                        }
-                        else {
-                            // No need to update the directory structure, just files
-                            updateFilesOfFileSystemEntry(parentResult, baseName, fsQueryResult.fileExists);
-                        }
-                        return fsQueryResult;
-                    }
-                }
-            }
-        }
-
-        function addOrDeleteFile(fileName: string, filePath: Path, eventKind: FileWatcherEventKind) {
-            if (eventKind === FileWatcherEventKind.Changed) {
-                return;
-            }
-
-            const parentResult = getCachedFileSystemEntriesForBaseDir(filePath);
-            if (parentResult) {
-                updateFilesOfFileSystemEntry(parentResult, getBaseNameOfFileName(fileName), eventKind === FileWatcherEventKind.Created);
-            }
-        }
-
-        function updateFilesOfFileSystemEntry(parentResult: MutableFileSystemEntries, baseName: string, fileExists: boolean) {
-            updateFileSystemEntry(parentResult.files, baseName, fileExists);
-        }
-
-        function clearCache() {
-            cachedReadDirectoryResult.clear();
-        }
+    export function singleElementArray<T>(t: T | undefined): T[] | undefined {
+        return t === undefined ? undefined : [t];
     }
 }

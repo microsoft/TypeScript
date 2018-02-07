@@ -20,14 +20,14 @@ namespace ts {
 
     type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic;
 
-    interface EmitTextWriterWithSymbolWriter extends EmitTextWriter, SymbolWriter {
+    interface EmitTextWriterWithSymbolWriter extends EmitTextWriter {
         getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic;
     }
 
     interface SymbolAccessibilityDiagnostic {
         errorNode: Node;
         diagnosticMessage: DiagnosticMessage;
-        typeName?: DeclarationName;
+        typeName?: DeclarationName | QualifiedName;
     }
 
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
@@ -64,7 +64,7 @@ namespace ts {
         let currentIdentifiers: Map<string>;
         let isCurrentFileExternalModule: boolean;
         let reportedDeclarationError = false;
-        let errorNameNode: DeclarationName;
+        let errorNameNode: DeclarationName | QualifiedName;
         const emitJsDocComments = compilerOptions.removeComments ? noop : writeJsDocComments;
         const emit = compilerOptions.stripInternal ? stripInternal : emitNode;
         let needsDeclare = true;
@@ -148,8 +148,8 @@ namespace ts {
                 moduleElementDeclarationEmitInfo = [];
             }
 
-            if (!isBundledEmit && isExternalModule(sourceFile) && sourceFile.moduleAugmentations.length && !resultHasExternalModuleIndicator) {
-                // if file was external module with augmentations - this fact should be preserved in .d.ts as well.
+            if (!isBundledEmit && isExternalModule(sourceFile) && !resultHasExternalModuleIndicator) {
+                // if file was external module this fact should be preserved in .d.ts as well.
                 // in case if we didn't write any external module specifiers in .d.ts we need to emit something
                 // that will force compiler to think that this file is an external module - 'export {}' is a reasonable choice here.
                 write("export {};");
@@ -358,7 +358,7 @@ namespace ts {
             }
             else {
                 errorNameNode = declaration.name;
-                const format = TypeFormatFlags.UseTypeOfFunction |
+                const format = TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseStructuralFallback |
                     TypeFormatFlags.WriteClassExpressionAsTypeLiteral |
                     (shouldUseResolverType ? TypeFormatFlags.AddUndefined : 0);
                 resolver.writeTypeOfDeclaration(declaration, enclosingDeclaration, format, writer);
@@ -378,7 +378,7 @@ namespace ts {
                 resolver.writeReturnTypeOfSignatureDeclaration(
                     signature,
                     enclosingDeclaration,
-                    TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.WriteClassExpressionAsTypeLiteral,
+                    TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseStructuralFallback | TypeFormatFlags.WriteClassExpressionAsTypeLiteral,
                     writer);
                 errorNameNode = undefined;
             }
@@ -450,6 +450,10 @@ namespace ts {
                     return emitUnionType(<UnionTypeNode>type);
                 case SyntaxKind.IntersectionType:
                     return emitIntersectionType(<IntersectionTypeNode>type);
+                case SyntaxKind.ConditionalType:
+                    return emitConditionalType(<ConditionalTypeNode>type);
+                case SyntaxKind.InferType:
+                    return emitInferType(<InferTypeNode>type);
                 case SyntaxKind.ParenthesizedType:
                     return emitParenType(<ParenthesizedTypeNode>type);
                 case SyntaxKind.TypeOperator:
@@ -543,6 +547,24 @@ namespace ts {
 
             function emitIntersectionType(type: IntersectionTypeNode) {
                 emitSeparatedList(type.types, " & ", emitType);
+            }
+
+            function emitConditionalType(node: ConditionalTypeNode) {
+                emitType(node.checkType);
+                write(" extends ");
+                emitType(node.extendsType);
+                write(" ? ");
+                const prevEnclosingDeclaration = enclosingDeclaration;
+                enclosingDeclaration = node.trueType;
+                emitType(node.trueType);
+                enclosingDeclaration = prevEnclosingDeclaration;
+                write(" : ");
+                emitType(node.falseType);
+            }
+
+            function emitInferType(node: InferTypeNode) {
+                write("infer ");
+                writeTextOfNode(currentText, node.typeParameter.name);
             }
 
             function emitParenType(type: ParenthesizedTypeNode) {
@@ -643,7 +665,7 @@ namespace ts {
             resolver.writeTypeOfExpression(
                 expr,
                 enclosingDeclaration,
-                TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.WriteClassExpressionAsTypeLiteral,
+                TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseStructuralFallback | TypeFormatFlags.WriteClassExpressionAsTypeLiteral,
                 writer);
             write(";");
             writeLine();
@@ -651,6 +673,9 @@ namespace ts {
         }
 
         function emitExportAssignment(node: ExportAssignment) {
+            if (isSourceFile(node.parent)) {
+                resultHasExternalModuleIndicator = true; // Top-level exports are external module indicators
+            }
             if (node.expression.kind === SyntaxKind.Identifier) {
                 write(node.isExportEquals ? "export = " : "export default ");
                 writeTextOfNode(currentText, node.expression);
@@ -745,6 +770,7 @@ namespace ts {
                 const modifiers = getModifierFlags(node);
                 // If the node is exported
                 if (modifiers & ModifierFlags.Export) {
+                    resultHasExternalModuleIndicator = true; // Top-level exports are external module indicators
                     write("export ");
                 }
 
@@ -901,6 +927,7 @@ namespace ts {
         }
 
         function emitExportDeclaration(node: ExportDeclaration) {
+            resultHasExternalModuleIndicator = true; // Top-level exports are external module indicators
             emitJsDocComments(node);
             write("export ");
             if (node.exportClause) {
@@ -1199,7 +1226,7 @@ namespace ts {
                         write(">");
                     }
                 }
-                else  {
+                else {
                     emitHeritageClause([baseTypeNode], /*isImplementsList*/ false);
                 }
             }
@@ -1372,7 +1399,7 @@ namespace ts {
             // if this is property of type literal,
             // or is parameter of method/call/construct/index signature of type literal
             // emit only if type is specified
-            if (node.type) {
+            if (hasType(node)) {
                 write(": ");
                 emitType(node.type);
             }
@@ -1866,6 +1893,7 @@ namespace ts {
                     // it allows emitSeparatedList to write separator appropriately)
                     // Example:
                     //      original: function foo([, x, ,]) {}
+                    //      tslint:disable-next-line no-double-space
                     //      emit    : function foo([ , x,  , ]) {}
                     write(" ");
                 }
@@ -1994,7 +2022,7 @@ namespace ts {
     export function writeDeclarationFile(declarationFilePath: string, sourceFileOrBundle: SourceFile | Bundle, host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection, emitOnlyDtsFiles: boolean) {
         const emitDeclarationResult = emitDeclarations(host, resolver, emitterDiagnostics, declarationFilePath, sourceFileOrBundle, emitOnlyDtsFiles);
         const emitSkipped = emitDeclarationResult.reportedDeclarationError || host.isEmitBlocked(declarationFilePath) || host.getCompilerOptions().noEmit;
-        if (!emitSkipped) {
+        if (!emitSkipped || emitOnlyDtsFiles) {
             const sourceFiles = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle.sourceFiles : [sourceFileOrBundle];
             const declarationOutput = emitDeclarationResult.referencesOutput
                 + getDeclarationOutput(emitDeclarationResult.synchronousDeclarationOutput, emitDeclarationResult.moduleElementDeclarationEmitInfo);

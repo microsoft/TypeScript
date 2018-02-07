@@ -114,12 +114,15 @@ namespace ts {
             return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
         }
 
-        private addSyntheticNodes(nodes: Node[], pos: number, end: number): number {
+        private addSyntheticNodes(nodes: Push<Node>, pos: number, end: number): number {
             scanner.setTextPos(pos);
             while (pos < end) {
                 const token = scanner.scan();
                 const textPos = scanner.getTextPos();
                 if (textPos <= end) {
+                    if (token === SyntaxKind.Identifier) {
+                        Debug.fail(`Did not expect ${(ts as any).SyntaxKind[this.kind]} to have an Identifier in its trivia`);
+                    }
                     nodes.push(createNode(token, pos, textPos, this));
                 }
                 pos = textPos;
@@ -488,6 +491,7 @@ namespace ts {
         parameters: Symbol[];
         thisParameter: Symbol;
         resolvedReturnType: Type;
+        resolvedTypePredicate: TypePredicate | undefined;
         minTypeArgumentCount: number;
         minArgumentCount: number;
         hasRestParameter: boolean;
@@ -882,7 +886,8 @@ namespace ts {
         scriptKind: ScriptKind;
     }
 
-    export interface DisplayPartsSymbolWriter extends SymbolWriter {
+    /* @internal */
+    export interface DisplayPartsSymbolWriter extends EmitTextWriter {
         displayParts(): SymbolDisplayPart[];
     }
 
@@ -1064,8 +1069,7 @@ namespace ts {
     }
 
     export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean, scriptKind?: ScriptKind): SourceFile {
-        const text = scriptSnapshot.getText(0, scriptSnapshot.getLength());
-        const sourceFile = createSourceFile(fileName, text, scriptTarget, setNodeParents, scriptKind);
+        const sourceFile = createSourceFile(fileName, getSnapshotText(scriptSnapshot), scriptTarget, setNodeParents, scriptKind);
         setSourceFileFields(sourceFile, scriptSnapshot, version);
         return sourceFile;
     }
@@ -1254,7 +1258,7 @@ namespace ts {
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitivefileNames,
-                getNewLine: () => getNewLineCharacter(newSettings, { newLine: getNewLineOrDefaultFromHost(host) }),
+                getNewLine: () => getNewLineCharacter(newSettings, () => getNewLineOrDefaultFromHost(host)),
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: noop,
                 getCurrentDirectory: () => currentDirectory,
@@ -1264,10 +1268,11 @@ namespace ts {
                     const path = toPath(fileName, currentDirectory, getCanonicalFileName);
                     const entry = hostCache.getEntryByPath(path);
                     if (entry) {
-                        return isString(entry) ? undefined : entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
+                        return isString(entry) ? undefined : getSnapshotText(entry.scriptSnapshot);
                     }
                     return host.readFile && host.readFile(fileName);
                 },
+                realpath: host.realpath && (path => host.realpath(path)),
                 directoryExists: directoryName => {
                     return directoryProbablyExists(directoryName, host);
                 },
@@ -1430,7 +1435,7 @@ namespace ts {
             return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
         }
 
-        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = { includeExternalModuleExports: false }): CompletionInfo {
+        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = { includeExternalModuleExports: false, includeInsertTextCompletions: false }): CompletionInfo {
             synchronizeHostData();
             return Completions.getCompletionsAtPosition(
                 host,
@@ -1446,7 +1451,7 @@ namespace ts {
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions?: FormatCodeSettings, source?: string): CompletionEntryDetails {
             synchronizeHostData();
             return Completions.getCompletionEntryDetails(
-                program.getTypeChecker(),
+                program,
                 log,
                 program.getCompilerOptions(),
                 getValidSourceFile(fileName),
@@ -1577,7 +1582,7 @@ namespace ts {
 
         function getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] {
             synchronizeHostData();
-            const sourceFilesToSearch = map(filesToSearch, f => program.getSourceFile(f));
+            const sourceFilesToSearch = map(filesToSearch, f => Debug.assertDefined(program.getSourceFile(f)));
             const sourceFile = getValidSourceFile(fileName);
             return DocumentHighlights.getDocumentHighlights(program, cancellationToken, sourceFile, position, sourceFilesToSearch);
         }
@@ -1881,17 +1886,25 @@ namespace ts {
             return [];
         }
 
-        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[] {
+        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings): ReadonlyArray<CodeFixAction> {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const span = createTextSpanFromBounds(start, end);
-            const newLineCharacter = getNewLineOrDefaultFromHost(host);
             const formatContext = formatting.getFormatContext(formatOptions);
 
             return flatMap(deduplicate(errorCodes, equateValues, compareValues), errorCode => {
                 cancellationToken.throwIfCancellationRequested();
-                return codefix.getFixes({ errorCode, sourceFile, span, program, newLineCharacter, host, cancellationToken, formatContext });
+                return codefix.getFixes({ errorCode, sourceFile, span, program, host, cancellationToken, formatContext });
             });
+        }
+
+        function getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions {
+            synchronizeHostData();
+            Debug.assert(scope.type === "file");
+            const sourceFile = getValidSourceFile(scope.fileName);
+            const formatContext = formatting.getFormatContext(formatOptions);
+
+            return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext });
         }
 
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
@@ -2041,7 +2054,7 @@ namespace ts {
             }
 
             function getTodoCommentsRegExp(): RegExp {
-                // NOTE: ?:  means 'non-capture group'.  It allows us to have groups without having to
+                // NOTE: `?:` means 'non-capture group'.  It allows us to have groups without having to
                 // filter them out later in the final result array.
 
                 // TODO comments can appear in one of the following forms:
@@ -2122,7 +2135,6 @@ namespace ts {
                 startPosition,
                 endPosition,
                 program: getProgram(),
-                newLineCharacter: formatOptions ? formatOptions.newLineCharacter : host.getNewLine(),
                 host,
                 formatContext: formatting.getFormatContext(formatOptions),
                 cancellationToken,
@@ -2188,6 +2200,7 @@ namespace ts {
             isValidBraceCompletionAtPosition,
             getSpanOfEnclosingComment,
             getCodeFixesAtPosition,
+            getCombinedCodeFix,
             applyCodeActionCommand,
             getEmitOutput,
             getNonBoundSourceFile,
@@ -2236,20 +2249,6 @@ namespace ts {
             node.parent.kind === SyntaxKind.ExternalModuleReference ||
             isArgumentOfElementAccessExpression(node) ||
             isLiteralComputedPropertyDeclarationName(node);
-    }
-
-    function isObjectLiteralElement(node: Node): node is ObjectLiteralElement {
-        switch (node.kind) {
-            case SyntaxKind.JsxAttribute:
-            case SyntaxKind.JsxSpreadAttribute:
-            case SyntaxKind.PropertyAssignment:
-            case SyntaxKind.ShorthandPropertyAssignment:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-                return true;
-        }
-        return false;
     }
 
     /**

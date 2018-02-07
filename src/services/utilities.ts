@@ -445,7 +445,7 @@ namespace ts {
         return position < candidate.end || !isCompletedNode(candidate, sourceFile);
     }
 
-    export function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
+    function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
         if (nodeIsMissing(n)) {
             return false;
         }
@@ -512,7 +512,7 @@ namespace ts {
 
             case SyntaxKind.ExpressionStatement:
                 return isCompletedNode((<ExpressionStatement>n).expression, sourceFile) ||
-                    hasChildOfKind(n, SyntaxKind.SemicolonToken);
+                    hasChildOfKind(n, SyntaxKind.SemicolonToken, sourceFile);
 
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.ArrayBindingPattern:
@@ -540,11 +540,9 @@ namespace ts {
                 return isCompletedNode((<IterationStatement>n).statement, sourceFile);
             case SyntaxKind.DoStatement:
                 // rough approximation: if DoStatement has While keyword - then if node is completed is checking the presence of ')';
-                const hasWhileKeyword = findChildOfKind(n, SyntaxKind.WhileKeyword, sourceFile);
-                if (hasWhileKeyword) {
-                    return nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile);
-                }
-                return isCompletedNode((<DoStatement>n).statement, sourceFile);
+                return hasChildOfKind(n, SyntaxKind.WhileKeyword, sourceFile)
+                    ? nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile)
+                    : isCompletedNode((<DoStatement>n).statement, sourceFile);
 
             case SyntaxKind.TypeQuery:
                 return isCompletedNode((<TypeQueryNode>n).exprName, sourceFile);
@@ -619,12 +617,12 @@ namespace ts {
         };
     }
 
-    export function hasChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): boolean {
+    export function hasChildOfKind(n: Node, kind: SyntaxKind, sourceFile: SourceFile): boolean {
         return !!findChildOfKind(n, kind, sourceFile);
     }
 
-    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFileLike): Node | undefined {
-        return forEach(n.getChildren(sourceFile), c => c.kind === kind && c);
+    export function findChildOfKind<T extends Node>(n: Node, kind: T["kind"], sourceFile: SourceFileLike): T | undefined {
+        return find(n.getChildren(sourceFile), (c): c is T => c.kind === kind);
     }
 
     export function findContainingList(node: Node): SyntaxList | undefined {
@@ -835,8 +833,7 @@ namespace ts {
         }
     }
 
-    export function isInString(sourceFile: SourceFile, position: number): boolean {
-        const previousToken = findPrecedingToken(position, sourceFile);
+    export function isInString(sourceFile: SourceFile, position: number, previousToken = findPrecedingToken(position, sourceFile)): boolean {
         if (previousToken && isStringTextContainingNode(previousToken)) {
             const start = previousToken.getStart();
             const end = previousToken.getEnd();
@@ -1070,15 +1067,27 @@ namespace ts {
         return createTextSpanFromBounds(range.pos, range.end);
     }
 
+    export function createTextChangeFromStartLength(start: number, length: number, newText: string): TextChange {
+        return createTextChange(createTextSpan(start, length), newText);
+    }
+
+    export function createTextChange(span: TextSpan, newText: string): TextChange {
+        return { span, newText };
+    }
+
     export const typeKeywords: ReadonlyArray<SyntaxKind> = [
         SyntaxKind.AnyKeyword,
         SyntaxKind.BooleanKeyword,
+        SyntaxKind.KeyOfKeyword,
         SyntaxKind.NeverKeyword,
+        SyntaxKind.NullKeyword,
         SyntaxKind.NumberKeyword,
         SyntaxKind.ObjectKeyword,
         SyntaxKind.StringKeyword,
         SyntaxKind.SymbolKeyword,
         SyntaxKind.VoidKeyword,
+        SyntaxKind.UndefinedKeyword,
+        SyntaxKind.UniqueKeyword,
     ];
 
     export function isTypeKeyword(kind: SyntaxKind): boolean {
@@ -1099,6 +1108,28 @@ namespace ts {
             return !seen[id] && (seen[id] = true);
         };
     }
+
+    /** Add a value to a set, and return true if it wasn't already present. */
+    export function addToSeen(seen: Map<true>, key: string | number): boolean {
+        key = String(key);
+        if (seen.has(key)) {
+            return false;
+        }
+        seen.set(key, true);
+        return true;
+    }
+
+    export function getSnapshotText(snap: IScriptSnapshot): string {
+        return snap.getText(0, snap.getLength());
+    }
+
+    export function repeatString(str: string, count: number): string {
+        let result = "";
+        for (let i = 0; i < count; i++) {
+            result += str;
+        }
+        return result;
+    }
 }
 
 // Display-part writer helpers
@@ -1115,6 +1146,7 @@ namespace ts {
         let indent: number;
 
         resetWriter();
+        const unknownWrite = (text: string) => writeKind(text, SymbolDisplayPartKind.text);
         return {
             displayParts: () => displayParts,
             writeKeyword: text => writeKind(text, SymbolDisplayPartKind.keyword),
@@ -1124,8 +1156,18 @@ namespace ts {
             writeStringLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
             writeParameter: text => writeKind(text, SymbolDisplayPartKind.parameterName),
             writeProperty: text => writeKind(text, SymbolDisplayPartKind.propertyName),
+            writeLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
             writeSymbol,
             writeLine,
+            write: unknownWrite,
+            writeTextOfNode: unknownWrite,
+            getText: () => "",
+            getTextPos: () => 0,
+            getColumn: () => 0,
+            getLine: () => 0,
+            isAtStartOfLine: () => false,
+            rawWrite: notImplemented,
+            getIndent: () => indent,
             increaseIndent: () => { indent++; },
             decreaseIndent: () => { indent--; },
             clear: resetWriter,
@@ -1229,14 +1271,17 @@ namespace ts {
     /**
      * The default is CRLF.
      */
-    export function getNewLineOrDefaultFromHost(host: LanguageServiceHost | LanguageServiceShimHost) {
-        return host.getNewLine ? host.getNewLine() : carriageReturnLineFeed;
+    export function getNewLineOrDefaultFromHost(host: LanguageServiceHost | LanguageServiceShimHost, formatSettings?: FormatCodeSettings) {
+        return (formatSettings && formatSettings.newLineCharacter) ||
+            (host.getNewLine && host.getNewLine()) ||
+            carriageReturnLineFeed;
     }
 
     export function lineBreakPart() {
         return displayPart("\n", SymbolDisplayPartKind.lineBreak);
     }
 
+    /* @internal */
     export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
         try {
             writeDisplayParts(displayPartWriter);
@@ -1249,34 +1294,21 @@ namespace ts {
 
     export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typechecker.getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
+            typechecker.writeType(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals, writer);
         });
     }
 
     export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typeChecker.getSymbolDisplayBuilder().buildSymbolDisplay(symbol, writer, enclosingDeclaration, meaning, flags);
+            typeChecker.writeSymbol(symbol, enclosingDeclaration, meaning, flags | SymbolFormatFlags.UseAliasDefinedOutsideCurrentScope, writer);
         });
     }
 
     export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
-        flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
+        flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
         return mapToDisplayParts(writer => {
-            typechecker.getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags);
+            typechecker.writeSignature(signature, enclosingDeclaration, flags, /*signatureKind*/ undefined, writer);
         });
-    }
-
-    export function getDeclaredName(typeChecker: TypeChecker, symbol: Symbol, location: Node): string {
-        // If this is an export or import specifier it could have been renamed using the 'as' syntax.
-        // If so we want to search for whatever is under the cursor.
-        if (isImportOrExportSpecifierName(location) || isStringOrNumericLiteral(location) && location.parent.kind === SyntaxKind.ComputedPropertyName) {
-            return getTextOfIdentifierOrLiteral(location);
-        }
-
-        // Try to get the local symbol if we're dealing with an 'export default'
-        // since that symbol has the "true" name.
-        const localExportDefaultSymbol = getLocalSymbolForExportDefault(symbol);
-        return typeChecker.symbolToString(localExportDefaultSymbol || symbol);
     }
 
     export function isImportOrExportSpecifierName(location: Node): location is Identifier {
@@ -1292,10 +1324,14 @@ namespace ts {
      */
     export function stripQuotes(name: string) {
         const length = name.length;
-        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && isSingleOrDoubleQuote(name.charCodeAt(0))) {
+        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && startsWithQuote(name)) {
             return name.substring(1, length - 1);
         }
         return name;
+    }
+
+    export function startsWithQuote(name: string): boolean {
+        return isSingleOrDoubleQuote(name.charCodeAt(0));
     }
 
     export function scriptKindIs(fileName: string, host: LanguageServiceHost, ...scriptKinds: ScriptKind[]): boolean {
@@ -1318,57 +1354,6 @@ namespace ts {
             position += 1;
         }
         return position;
-    }
-
-    export function getOpenBrace(constructor: ConstructorDeclaration, sourceFile: SourceFile) {
-        // First token is the open curly, this is where we want to put the 'super' call.
-        return constructor.body.getFirstToken(sourceFile);
-    }
-
-    export function getOpenBraceOfClassLike(declaration: ClassLikeDeclaration, sourceFile: SourceFile) {
-        return getTokenAtPosition(sourceFile, declaration.members.pos - 1, /*includeJsDocComment*/ false);
-    }
-
-    export function getSourceFileImportLocation({ text }: SourceFile) {
-        const shebang = getShebang(text);
-        let position = 0;
-        if (shebang !== undefined) {
-            position = shebang.length;
-            advancePastLineBreak();
-        }
-
-        // For a source file, it is possible there are detached comments we should not skip
-        let ranges = getLeadingCommentRanges(text, position);
-        if (!ranges) return position;
-        // However we should still skip a pinned comment at the top
-        if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0])) {
-            position = ranges[0].end;
-            advancePastLineBreak();
-            ranges = ranges.slice(1);
-        }
-        // As well as any triple slash references
-        for (const range of ranges) {
-            if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment(text, range.pos, range.end)) {
-                position = range.end;
-                advancePastLineBreak();
-                continue;
-            }
-            break;
-        }
-        return position;
-
-        function advancePastLineBreak() {
-            if (position < text.length) {
-                const charCode = text.charCodeAt(position);
-                if (isLineBreak(charCode)) {
-                    position++;
-
-                    if (position < text.length && charCode === CharacterCodes.carriageReturn && text.charCodeAt(position) === CharacterCodes.lineFeed) {
-                        position++;
-                    }
-                }
-            }
-        }
     }
 
     /**
@@ -1404,6 +1389,10 @@ namespace ts {
         visited.parent = undefined;
 
         return visited;
+    }
+
+    export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
+        return nodes && createNodeArray(nodes.map(getSynthesizedDeepClone), nodes.hasTrailingComma);
     }
 
     /**

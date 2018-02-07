@@ -79,6 +79,29 @@ function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {
     k2 = k1;
 }
 
+// Repro from #17166
+function f3<T, K extends keyof T, U extends T, J extends K>(
+    t: T, k: K, tk: T[K], u: U, j: J, uk: U[K], tj: T[J], uj: U[J]): void {
+    for (let key in t) {
+        key = k // ok, K ==> keyof T
+        k = key // error, keyof T =/=> K
+        t[key] = tk; // ok, T[K] ==> T[keyof T]
+        tk = t[key]; // error, T[keyof T] =/=> T[K]
+    }
+    tk = uk;
+    uk = tk; // error
+
+    tj = uj;
+    uj = tj; // error
+
+    tk = tj;
+    tj = tk; // error
+
+    tk = uj;
+    uj = tk; // error
+}
+
+
 //// [keyofAndIndexedAccessErrors.js]
 var Shape = /** @class */ (function () {
     function Shape() {
@@ -108,4 +131,21 @@ function f20(k1, k2, o1, o2) {
     o2 = o1; // Error
     k1 = k2; // Error
     k2 = k1;
+}
+// Repro from #17166
+function f3(t, k, tk, u, j, uk, tj, uj) {
+    for (var key in t) {
+        key = k; // ok, K ==> keyof T
+        k = key; // error, keyof T =/=> K
+        t[key] = tk; // ok, T[K] ==> T[keyof T]
+        tk = t[key]; // error, T[keyof T] =/=> T[K]
+    }
+    tk = uk;
+    uk = tk; // error
+    tj = uj;
+    uj = tj; // error
+    tk = tj;
+    tj = tk; // error
+    tk = uj;
+    uj = tk; // error
 }

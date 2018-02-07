@@ -224,6 +224,32 @@ namespace ts {
                 }
             }
         });
+
+        // https://github.com/Microsoft/TypeScript/issues/17384
+        testBaseline("transformAddDecoratedNode", () => {
+            return ts.transpileModule("", {
+                transformers: {
+                    before: [transformAddDecoratedNode],
+                },
+                compilerOptions: {
+                    target: ts.ScriptTarget.ES5,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
+
+            function transformAddDecoratedNode(_context: ts.TransformationContext) {
+                return (sourceFile: ts.SourceFile): ts.SourceFile => {
+                    return visitNode(sourceFile);
+                };
+                function visitNode(sf: ts.SourceFile) {
+                    // produce `class Foo { @Bar baz() {} }`;
+                    const classDecl = ts.createClassDeclaration([], [], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
+                        ts.createMethod([ts.createDecorator(ts.createIdentifier("Bar"))], [], /**/ undefined, "baz", /**/ undefined, /**/ undefined, [], /**/ undefined, ts.createBlock([]))
+                    ]);
+                    return ts.updateSourceFileNode(sf, [classDecl]);
+                }
+            }
+        });
     });
 }
 

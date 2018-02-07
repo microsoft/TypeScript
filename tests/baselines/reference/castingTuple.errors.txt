@@ -11,7 +11,7 @@ tests/cases/conformance/types/tuple/castingTuple.ts(30,10): error TS2352: Type '
 tests/cases/conformance/types/tuple/castingTuple.ts(31,10): error TS2352: Type '[C, D]' cannot be converted to type '[A, I]'.
   Type 'C' is not comparable to type 'A'.
     Property 'a' is missing in type 'C'.
-tests/cases/conformance/types/tuple/castingTuple.ts(32,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' has type '{}[]' at tests/cases/conformance/types/tuple/castingTuple.ts 22:4, but here has type 'number[]'.
+tests/cases/conformance/types/tuple/castingTuple.ts(32,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.
 tests/cases/conformance/types/tuple/castingTuple.ts(33,1): error TS2304: Cannot find name 't4'.
 
 
@@ -68,7 +68,7 @@ tests/cases/conformance/types/tuple/castingTuple.ts(33,1): error TS2304: Cannot 
 !!! error TS2352:     Property 'a' is missing in type 'C'.
     var array1 = <number[]>numStrTuple;
         ~~~~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' has type '{}[]' at tests/cases/conformance/types/tuple/castingTuple.ts 22:4, but here has type 'number[]'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.
     t4[2] = 10;
     ~~
 !!! error TS2304: Cannot find name 't4'.

@@ -9,12 +9,12 @@ namespace ts {
         startRecordingFilesWithChangedResolutions(): void;
         finishRecordingFilesWithChangedResolutions(): Path[];
 
-        resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, logChanges: boolean): ResolvedModuleFull[];
+        resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined): ResolvedModuleFull[];
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
 
         invalidateResolutionOfFile(filePath: Path): void;
         removeResolutionsOfFile(filePath: Path): void;
-        createHasInvalidatedResolution(): HasInvalidatedResolution;
+        createHasInvalidatedResolution(forceAllFilesAsInvalidated?: boolean): HasInvalidatedResolution;
 
         startCachingPerDirectoryResolution(): void;
         finishCachingPerDirectoryResolution(): void;
@@ -47,11 +47,12 @@ namespace ts {
         onInvalidatedResolution(): void;
         watchTypeRootsDirectory(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): FileWatcher;
         onChangedAutomaticTypeDirectiveNames(): void;
-        getCachedDirectoryStructureHost?(): CachedDirectoryStructureHost;
+        getCachedDirectoryStructureHost(): CachedDirectoryStructureHost | undefined;
         projectName?: string;
         getGlobalCache?(): string | undefined;
         writeLog(s: string): void;
         maxNumberOfFilesToIterateForInvalidation?: number;
+        getCurrentProgram(): Program;
     }
 
     interface DirectoryWatchesOfFailedLookup {
@@ -72,7 +73,7 @@ namespace ts {
     type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> =
         (resolution: T) => R;
 
-    export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string): ResolutionCache {
+    export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string, logChangesWhenResolvingModule: boolean): ResolutionCache {
         let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
         let filesWithInvalidatedResolutions: Map<true> | undefined;
         let allFilesHaveInvalidatedResolution = false;
@@ -87,6 +88,7 @@ namespace ts {
         const perDirectoryResolvedTypeReferenceDirectives = createMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
 
         const getCurrentDirectory = memoize(() => resolutionHost.getCurrentDirectory());
+        const cachedDirectoryStructureHost = resolutionHost.getCachedDirectoryStructureHost();
 
         /**
          * These are the extensions that failed lookup files will have by default,
@@ -158,8 +160,8 @@ namespace ts {
             return collected;
         }
 
-        function createHasInvalidatedResolution(): HasInvalidatedResolution {
-            if (allFilesHaveInvalidatedResolution) {
+        function createHasInvalidatedResolution(forceAllFilesAsInvalidated?: boolean): HasInvalidatedResolution {
+            if (allFilesHaveInvalidatedResolution || forceAllFilesAsInvalidated) {
                 // Any file asked would have invalidated resolution
                 filesWithInvalidatedResolutions = undefined;
                 return returnTrue;
@@ -306,12 +308,12 @@ namespace ts {
             );
         }
 
-        function resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, logChanges: boolean): ResolvedModuleFull[] {
+        function resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined): ResolvedModuleFull[] {
             return resolveNamesWithLocalCache(
                 moduleNames, containingFile,
                 resolvedModuleNames, perDirectoryResolvedModuleNames,
                 resolveModuleName, getResolvedModule,
-                reusedNames, logChanges
+                reusedNames, logChangesWhenResolvingModule
             );
         }
 
@@ -467,9 +469,9 @@ namespace ts {
         function createDirectoryWatcher(directory: string, dirPath: Path) {
             return resolutionHost.watchDirectoryOfFailedLookupLocation(directory, fileOrDirectory => {
                 const fileOrDirectoryPath = resolutionHost.toPath(fileOrDirectory);
-                if (resolutionHost.getCachedDirectoryStructureHost) {
+                if (cachedDirectoryStructureHost) {
                     // Since the file existance changed, update the sourceFiles cache
-                    resolutionHost.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
+                    cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
                 }
 
                 // If the files are added to project root or node_modules directory, always run through the invalidation process
@@ -575,6 +577,10 @@ namespace ts {
                     if (!isPathWithDefaultFailedLookupExtension(fileOrDirectoryPath) && !customFailedLookupPaths.has(fileOrDirectoryPath)) {
                         return false;
                     }
+                    // Ignore emits from the program
+                    if (isEmittedFileOfProgram(resolutionHost.getCurrentProgram(), fileOrDirectoryPath)) {
+                        return false;
+                    }
                     // Resolution need to be invalidated if failed lookup location is same as the file or directory getting created
                     isChangedFailedLookupLocation = location => resolutionHost.toPath(location) === fileOrDirectoryPath;
                 }
@@ -596,9 +602,9 @@ namespace ts {
             // Create new watch and recursive info
             return resolutionHost.watchTypeRootsDirectory(typeRoot, fileOrDirectory => {
                 const fileOrDirectoryPath = resolutionHost.toPath(fileOrDirectory);
-                if (resolutionHost.getCachedDirectoryStructureHost) {
+                if (cachedDirectoryStructureHost) {
                     // Since the file existance changed, update the sourceFiles cache
-                    resolutionHost.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
+                    cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
                 }
 
                 // For now just recompile

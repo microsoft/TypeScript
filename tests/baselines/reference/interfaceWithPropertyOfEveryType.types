@@ -91,7 +91,7 @@ var a: Foo = {
 >'' : ""
 
     c: true,
->c : boolean
+>c : true
 >true : true
 
     d: {},

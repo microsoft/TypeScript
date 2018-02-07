@@ -21,10 +21,9 @@ verify.completionListContains({ name: "fooBar", source: "/src/foo-bar" }, "(prop
 verify.applyCodeActionFromCompletion("1", {
     name: "fooBar",
     source: "/src/foo-bar",
-    description: `Import 'fooBar' from module "./foo-bar".`,
-    // TODO: GH#18445
-    newFileContent: `import fooBar from "./foo-bar";\r
-\r
+    description: `Import 'fooBar' from module "./foo-bar"`,
+    newFileContent: `import fooBar from "./foo-bar";
+
 def
 fooB`,
 });

@@ -1,12 +1,13 @@
-tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(7,7): error TS2415: Class 'b' incorrectly extends base class 'a'.
-  Types of property 'x' are incompatible.
-    Type 'string' is not assignable to type '() => string'.
 tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(8,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(8,9): error TS2416: Property 'x' in type 'b' is not assignable to the same property in base type 'a'.
+  Type 'string' is not assignable to type '() => string'.
 tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(8,9): error TS2423: Class 'a' defines instance member function 'x', but extended class 'b' defines it as instance member accessor.
 tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(11,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(11,9): error TS2416: Property 'x' in type 'b' is not assignable to the same property in base type 'a'.
+  Type 'string' is not assignable to type '() => string'.
 
 
-==== tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts (4 errors) ====
+==== tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts (5 errors) ====
     class a {
         x() {
             return "20";
@@ -14,13 +15,12 @@ tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(11,9): error T
     }
     
     class b extends a {
-          ~
-!!! error TS2415: Class 'b' incorrectly extends base class 'a'.
-!!! error TS2415:   Types of property 'x' are incompatible.
-!!! error TS2415:     Type 'string' is not assignable to type '() => string'.
         get x() {
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            ~
+!!! error TS2416: Property 'x' in type 'b' is not assignable to the same property in base type 'a'.
+!!! error TS2416:   Type 'string' is not assignable to type '() => string'.
             ~
 !!! error TS2423: Class 'a' defines instance member function 'x', but extended class 'b' defines it as instance member accessor.
             return "20";
@@ -28,6 +28,9 @@ tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(11,9): error T
         set x(aValue: string) {
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            ~
+!!! error TS2416: Property 'x' in type 'b' is not assignable to the same property in base type 'a'.
+!!! error TS2416:   Type 'string' is not assignable to type '() => string'.
     
         }
     }

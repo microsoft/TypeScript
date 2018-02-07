@@ -9,10 +9,10 @@ tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(1
 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(20,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(22,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(29,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
-tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(31,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' has type 'string' at tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts 28:17, but here has type 'keyof this'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(31,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'keyof this'.
 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(38,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(46,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
-tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(48,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' has type 'string' at tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts 45:17, but here has type 'keyof this'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(48,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'keyof this'.
 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(51,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(62,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 
@@ -72,7 +72,7 @@ tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(6
             for (var x in this.biz) { }
             for (var x in this) { }
                      ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' has type 'string' at tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts 28:17, but here has type 'keyof this'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'keyof this'.
             return null;
         }
     
@@ -95,7 +95,7 @@ tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(6
             for (var x in this.biz) { }
             for (var x in this) { }
                      ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' has type 'string' at tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts 45:17, but here has type 'keyof this'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'keyof this'.
     
             for (var x in super.biz) { }
             for (var x in super.biz()) { }

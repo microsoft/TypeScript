@@ -196,7 +196,7 @@ namespace ts.server {
 
     /*@internal*/
     export function isDynamicFileName(fileName: NormalizedPath) {
-        return getBaseFileName(fileName)[0] === "^";
+        return fileName[0] === "^" || getBaseFileName(fileName)[0] === "^";
     }
 
     export class ScriptInfo {
@@ -213,6 +213,10 @@ namespace ts.server {
         /*@internal*/
         readonly isDynamic: boolean;
 
+        /*@internal*/
+        /** Set to real path if path is different from info.path */
+        private realpath: Path | undefined;
+
         constructor(
             private readonly host: ServerHost,
             readonly fileName: NormalizedPath,
@@ -224,6 +228,7 @@ namespace ts.server {
             this.textStorage = new TextStorage(host, fileName);
             if (hasMixedContent || this.isDynamic) {
                 this.textStorage.reload("");
+                this.realpath = this.path;
             }
             this.scriptKind = scriptKind
                 ? scriptKind
@@ -264,6 +269,30 @@ namespace ts.server {
             return this.textStorage.getSnapshot();
         }
 
+        private ensureRealPath() {
+            if (this.realpath === undefined) {
+                // Default is just the path
+                this.realpath = this.path;
+                if (this.host.realpath) {
+                    Debug.assert(!!this.containingProjects.length);
+                    const project = this.containingProjects[0];
+                    const realpath = this.host.realpath(this.path);
+                    if (realpath) {
+                        this.realpath = project.toPath(realpath);
+                        // If it is different from this.path, add to the map
+                        if (this.realpath !== this.path) {
+                            project.projectService.realpathToScriptInfos.add(this.realpath, this);
+                        }
+                    }
+                }
+            }
+        }
+
+        /*@internal*/
+        getRealpathIfDifferent(): Path | undefined {
+            return this.realpath && this.realpath !== this.path ? this.realpath : undefined;
+        }
+
         getFormatCodeSettings() {
             return this.formatCodeSettings;
         }
@@ -272,6 +301,9 @@ namespace ts.server {
             const isNew = !this.isAttached(project);
             if (isNew) {
                 this.containingProjects.push(project);
+                if (!project.getCompilerOptions().preserveSymlinks) {
+                    this.ensureRealPath();
+                }
             }
             return isNew;
         }
@@ -313,7 +345,7 @@ namespace ts.server {
         detachAllProjects() {
             for (const p of this.containingProjects) {
                 if (p.projectKind === ProjectKind.Configured) {
-                    (p.directoryStructureHost as CachedDirectoryStructureHost).addOrDeleteFile(this.fileName, this.path, FileWatcherEventKind.Deleted);
+                    p.getCachedDirectoryStructureHost().addOrDeleteFile(this.fileName, this.path, FileWatcherEventKind.Deleted);
                 }
                 const isInfoRoot = p.isRoot(this);
                 // detach is unnecessary since we'll clean the list of containing projects anyways
@@ -370,8 +402,7 @@ namespace ts.server {
         }
 
         saveTo(fileName: string) {
-            const snap = this.textStorage.getSnapshot();
-            this.host.writeFile(fileName, snap.getText(0, snap.getLength()));
+            this.host.writeFile(fileName, getSnapshotText(this.textStorage.getSnapshot()));
         }
 
         /*@internal*/

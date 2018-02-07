@@ -304,6 +304,24 @@ namespace ts.projectSystem {
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, []);
             });
 
+            it("should return empty array if noEmit is set", () => {
+                configFile = {
+                    path: "/a/b/tsconfig.json",
+                    content: `{
+                        "compileOnSave": true,
+                        "compilerOptions": {
+                            "noEmit": true
+                        }
+                    }`
+                };
+
+                const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
+                const typingsInstaller = createTestTypingsInstaller(host);
+                const session = createSession(host, typingsInstaller);
+                openFilesForSession([moduleFile1], session);
+                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, []);
+            });
+
             it("should save when compileOnSave is enabled in base tsconfig.json", () => {
                 configFile = {
                     path: "/a/b/tsconfig.json",
