@@ -5,6 +5,12 @@
 ////let I: {
 ////    /*constructSignature*/new(): C2;
 ////};
-////let C = new [|/*invokeExpression*/I|]();
+////new [|/*invokeExpression1*/I|]();
+////let /*symbolDeclaration*/I2: {
+////};
+////new [|/*invokeExpression2*/I2|]();
 
-verify.goToDefinition("invokeExpression", "constructSignature");
+verify.goToDefinition({
+    invokeExpression1: "constructSignature",
+    invokeExpression2: "symbolDeclaration"
+});
