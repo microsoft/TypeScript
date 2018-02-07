@@ -8769,6 +8769,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";infer_declarations_are_only_permitted_in_the_extends_clause_of_a_conditional_type_1338" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['infer' declarations are only permitted in the 'extends' clause of a conditional type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['infer' 宣言は、条件付き型の 'extends' 句でのみ許可されます。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";interface_declarations_can_only_be_used_in_a_ts_file_8006" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['interface declarations' can only be used in a .ts file.]]></Val>
