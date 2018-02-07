@@ -19413,12 +19413,18 @@ namespace ts {
         function getTypeOfExpression(node: Expression, cache?: boolean) {
             // Optimize for the common case of a call to a function with a single non-generic call
             // signature where we can just fetch the return type without checking the arguments.
-            if (node.kind === SyntaxKind.CallExpression && (<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(node, /*checkArgumentIsStringLiteral*/ true) && !isSymbolOrSymbolForCall(node)) {
-                const funcType = checkNonNullExpression((<CallExpression>node).expression);
-                const signature = getSingleCallSignature(funcType);
-                if (signature && !signature.typeParameters) {
-                    return getReturnTypeOfSignature(signature);
-                }
+            switch (node.kind) {
+                case SyntaxKind.CallExpression:
+                    if ((<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(node, /*checkArgumentIsStringLiteral*/ true) && !isSymbolOrSymbolForCall(node)) {
+                        const funcType = checkNonNullExpression((<CallExpression>node).expression);
+                        const signature = getSingleCallSignature(funcType);
+                        if (signature && !signature.typeParameters) {
+                            return getReturnTypeOfSignature(signature);
+                        }
+                    }
+                    break;
+                case SyntaxKind.YieldExpression:
+                    return anyType;
             }
             // Otherwise simply call checkExpression. Ideally, the entire family of checkXXX functions
             // should have a parameter that indicates whether full error checking is required such that
