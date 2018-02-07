@@ -10,9 +10,11 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(72,15): error TS2304: C
 tests/cases/conformance/types/conditional/inferTypes1.ts(72,15): error TS4081: Exported type alias 'T62' has or is using private name 'U'.
 tests/cases/conformance/types/conditional/inferTypes1.ts(72,43): error TS2304: Cannot find name 'U'.
 tests/cases/conformance/types/conditional/inferTypes1.ts(72,43): error TS4081: Exported type alias 'T62' has or is using private name 'U'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(78,44): error TS2344: Type 'U' does not satisfy the constraint 'string'.
+  Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/types/conditional/inferTypes1.ts (11 errors) ====
+==== tests/cases/conformance/types/conditional/inferTypes1.ts (12 errors) ====
     type Unpacked<T> =
         T extends (infer U)[] ? U :
         T extends (...args: any[]) => infer U ? U :
@@ -109,6 +111,22 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(72,43): error TS4081: E
                                               ~
 !!! error TS4081: Exported type alias 'T62' has or is using private name 'U'.
     
+    type T70<T extends string> = { x: T };
+    type T71<T> = T extends T70<infer U> ? T70<U> : never;
+    
+    type T72<T extends number> = { y: T };
+    type T73<T> = T extends T72<infer U> ? T70<U> : never;  // Error
+                                               ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'string'.
+!!! error TS2344:   Type 'number' is not assignable to type 'string'.
+    
+    type T74<T extends number, U extends string> = { x: T, y: U };
+    type T75<T> = T extends T74<infer U, infer U> ? T70<U> | T72<U> | T74<U, U> : never;
+    
+    type T76<T extends T[], U extends T> = { x: T };
+    type T77<T> = T extends T76<infer X, infer Y> ? T76<X, Y> : never;
+    type T78<T> = T extends T76<infer X, infer X> ? T76<X, X> : never;
+    
     // Example from #21496
     
     type JsonifiedObject<T extends object> = { [K in keyof T]: Jsonified<T[K]> };
@@ -140,4 +158,13 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(72,43): error TS4081: E
     declare let ex: JsonifiedExample;
     const z1: "correct" = ex.customClass;
     const z2: string = ex.obj.nested.attr;
+    
+    // Repros from #21631
+    
+    type A1<T, U extends A1<any, any>> = [T, U];
+    type B1<S> = S extends A1<infer T, infer U> ? [T, U] : never;
+    
+    type A2<T, U extends void> = [T, U];
+    type B2<S> = S extends A2<infer T, infer U> ? [T, U] : never;
+    type C2<S, U extends void> = S extends A2<infer T, U> ? [T, U] : never;
     
