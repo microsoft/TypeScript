@@ -551,3 +551,21 @@ type C2<S, U extends void> = S extends A2<infer T, U> ? [T, U] : never;
 >T : Symbol(T, Decl(inferTypes1.ts, 125, 47))
 >U : Symbol(U, Decl(inferTypes1.ts, 125, 10))
 
+// Repro from #21735
+
+type A<T> = T extends string ? { [P in T]: void; } : T;
+>A : Symbol(A, Decl(inferTypes1.ts, 125, 71))
+>T : Symbol(T, Decl(inferTypes1.ts, 129, 7))
+>T : Symbol(T, Decl(inferTypes1.ts, 129, 7))
+>P : Symbol(P, Decl(inferTypes1.ts, 129, 34))
+>T : Symbol(T, Decl(inferTypes1.ts, 129, 7))
+>T : Symbol(T, Decl(inferTypes1.ts, 129, 7))
+
+type B<T> = string extends T ? { [P in T]: void; } : T;  // Error
+>B : Symbol(B, Decl(inferTypes1.ts, 129, 55))
+>T : Symbol(T, Decl(inferTypes1.ts, 130, 7))
+>T : Symbol(T, Decl(inferTypes1.ts, 130, 7))
+>P : Symbol(P, Decl(inferTypes1.ts, 130, 34))
+>T : Symbol(T, Decl(inferTypes1.ts, 130, 7))
+>T : Symbol(T, Decl(inferTypes1.ts, 130, 7))
+
