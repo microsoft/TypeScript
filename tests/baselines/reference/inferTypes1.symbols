@@ -315,3 +315,106 @@ type T62<T> = U extends (infer U)[] ? U : U;  // Error
 >U : Symbol(U, Decl(inferTypes1.ts, 71, 30))
 >U : Symbol(U, Decl(inferTypes1.ts, 71, 30))
 
+// Example from #21496
+
+type JsonifiedObject<T extends object> = { [K in keyof T]: Jsonified<T[K]> };
+>JsonifiedObject : Symbol(JsonifiedObject, Decl(inferTypes1.ts, 71, 44))
+>T : Symbol(T, Decl(inferTypes1.ts, 75, 21))
+>K : Symbol(K, Decl(inferTypes1.ts, 75, 44))
+>T : Symbol(T, Decl(inferTypes1.ts, 75, 21))
+>Jsonified : Symbol(Jsonified, Decl(inferTypes1.ts, 75, 77))
+>T : Symbol(T, Decl(inferTypes1.ts, 75, 21))
+>K : Symbol(K, Decl(inferTypes1.ts, 75, 44))
+
+type Jsonified<T> =
+>Jsonified : Symbol(Jsonified, Decl(inferTypes1.ts, 75, 77))
+>T : Symbol(T, Decl(inferTypes1.ts, 77, 15))
+
+    T extends string | number | boolean | null ? T
+>T : Symbol(T, Decl(inferTypes1.ts, 77, 15))
+>T : Symbol(T, Decl(inferTypes1.ts, 77, 15))
+
+    : T extends undefined | Function ? never // undefined and functions are removed
+>T : Symbol(T, Decl(inferTypes1.ts, 77, 15))
+>Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+    : T extends { toJSON(): infer R } ? R // toJSON is called if it exists (e.g. Date)
+>T : Symbol(T, Decl(inferTypes1.ts, 77, 15))
+>toJSON : Symbol(toJSON, Decl(inferTypes1.ts, 80, 17))
+>R : Symbol(R, Decl(inferTypes1.ts, 80, 33))
+>R : Symbol(R, Decl(inferTypes1.ts, 80, 33))
+
+    : T extends object ? JsonifiedObject<T>
+>T : Symbol(T, Decl(inferTypes1.ts, 77, 15))
+>JsonifiedObject : Symbol(JsonifiedObject, Decl(inferTypes1.ts, 71, 44))
+>T : Symbol(T, Decl(inferTypes1.ts, 77, 15))
+
+    : "what is this";
+
+type Example = {
+>Example : Symbol(Example, Decl(inferTypes1.ts, 82, 21))
+
+    str: "literalstring",
+>str : Symbol(str, Decl(inferTypes1.ts, 84, 16))
+
+    fn: () => void,
+>fn : Symbol(fn, Decl(inferTypes1.ts, 85, 25))
+
+    date: Date,
+>date : Symbol(date, Decl(inferTypes1.ts, 86, 19))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+    customClass: MyClass,
+>customClass : Symbol(customClass, Decl(inferTypes1.ts, 87, 15))
+>MyClass : Symbol(MyClass, Decl(inferTypes1.ts, 94, 1))
+
+    obj: {
+>obj : Symbol(obj, Decl(inferTypes1.ts, 88, 25))
+
+        prop: "property",
+>prop : Symbol(prop, Decl(inferTypes1.ts, 89, 10))
+
+        clz: MyClass,
+>clz : Symbol(clz, Decl(inferTypes1.ts, 90, 25))
+>MyClass : Symbol(MyClass, Decl(inferTypes1.ts, 94, 1))
+
+        nested: { attr: Date }
+>nested : Symbol(nested, Decl(inferTypes1.ts, 91, 21))
+>attr : Symbol(attr, Decl(inferTypes1.ts, 92, 17))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+    },
+}
+
+declare class MyClass {
+>MyClass : Symbol(MyClass, Decl(inferTypes1.ts, 94, 1))
+
+    toJSON(): "correct";
+>toJSON : Symbol(MyClass.toJSON, Decl(inferTypes1.ts, 96, 23))
+}
+
+type JsonifiedExample = Jsonified<Example>;
+>JsonifiedExample : Symbol(JsonifiedExample, Decl(inferTypes1.ts, 98, 1))
+>Jsonified : Symbol(Jsonified, Decl(inferTypes1.ts, 75, 77))
+>Example : Symbol(Example, Decl(inferTypes1.ts, 82, 21))
+
+declare let ex: JsonifiedExample;
+>ex : Symbol(ex, Decl(inferTypes1.ts, 101, 11))
+>JsonifiedExample : Symbol(JsonifiedExample, Decl(inferTypes1.ts, 98, 1))
+
+const z1: "correct" = ex.customClass;
+>z1 : Symbol(z1, Decl(inferTypes1.ts, 102, 5))
+>ex.customClass : Symbol(customClass, Decl(inferTypes1.ts, 87, 15))
+>ex : Symbol(ex, Decl(inferTypes1.ts, 101, 11))
+>customClass : Symbol(customClass, Decl(inferTypes1.ts, 87, 15))
+
+const z2: string = ex.obj.nested.attr;
+>z2 : Symbol(z2, Decl(inferTypes1.ts, 103, 5))
+>ex.obj.nested.attr : Symbol(attr, Decl(inferTypes1.ts, 92, 17))
+>ex.obj.nested : Symbol(nested, Decl(inferTypes1.ts, 91, 21))
+>ex.obj : Symbol(obj, Decl(inferTypes1.ts, 88, 25))
+>ex : Symbol(ex, Decl(inferTypes1.ts, 101, 11))
+>obj : Symbol(obj, Decl(inferTypes1.ts, 88, 25))
+>nested : Symbol(nested, Decl(inferTypes1.ts, 91, 21))
+>attr : Symbol(attr, Decl(inferTypes1.ts, 92, 17))
+

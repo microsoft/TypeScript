@@ -469,7 +469,9 @@ namespace ts.formatting {
     }
 
     function isBraceWrappedContext(context: FormattingContext): boolean {
-        return context.contextNode.kind === SyntaxKind.ObjectBindingPattern || isSingleLineBlockContext(context);
+        return context.contextNode.kind === SyntaxKind.ObjectBindingPattern ||
+            context.contextNode.kind === SyntaxKind.MappedType ||
+            isSingleLineBlockContext(context);
     }
 
     // This check is done before an open brace in a control construct, a function, or a typescript block declaration

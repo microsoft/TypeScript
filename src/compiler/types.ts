@@ -1638,7 +1638,7 @@ namespace ts {
         multiLine?: boolean;
     }
 
-    export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression | ParenthesizedExpression;
+    export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression;
     export type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
 
     export interface PropertyAccessExpression extends MemberExpression, NamedDeclaration {
@@ -3311,6 +3311,7 @@ namespace ts {
         immediateTarget?: Symbol;           // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
         target?: Symbol;                    // Resolved (non-alias) target of an alias
         type?: Type;                        // Type of value symbol
+        uniqueESSymbolType?: Type;          // UniqueESSymbol type for a symbol
         declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
         typeParameters?: TypeParameter[];   // Type parameters of type alias (undefined if non-generic)
         outerTypeParameters?: TypeParameter[];  // Outer type parameters of anonymous object type
@@ -3904,6 +3905,7 @@ namespace ts {
     }
 
     export const enum InferenceFlags {
+        None            =      0,  // No special inference behaviors
         InferUnionTypes = 1 << 0,  // Infer union types for disjoint candidates (otherwise unknownType)
         NoDefault       = 1 << 1,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
         AnyDefault      = 1 << 2,  // Infer anyType for no inferences (otherwise emptyObjectType)
@@ -4025,7 +4027,7 @@ namespace ts {
         /** configFile is set as non enumerable property so as to avoid checking of json source files */
         /* @internal */ readonly configFile?: JsonSourceFile;
         declaration?: boolean;
-        emitDeclarationsOnly?: boolean;
+        emitDeclarationOnly?: boolean;
         declarationDir?: string;
         /* @internal */ diagnostics?: boolean;
         /* @internal */ extendedDiagnostics?: boolean;

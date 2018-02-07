@@ -3286,7 +3286,7 @@ namespace ts {
             && isClassLike(node.parent.parent);
     }
 
-    export function isEntityNameExpression(node: Expression): node is EntityNameExpression {
+    export function isEntityNameExpression(node: Node): node is EntityNameExpression {
         return node.kind === SyntaxKind.Identifier ||
             node.kind === SyntaxKind.PropertyAccessExpression && isEntityNameExpression((<PropertyAccessExpression>node).expression);
     }

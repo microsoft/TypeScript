@@ -29,7 +29,7 @@ const Basic = () => (
       }}
       validate={values => {
         // same as above, but feel free to move this into a class method now.
-        let errors: FormikErrors<MyData> = {};
+        let errors: FormikErrors<MyData> = {} as FormikErrors<MyData>; // FormikErrors<MyData> isn't optionalized, so in strict null checks this needs a cast
         if (!values.email) {
           errors.email = 'Required';
         } else if (

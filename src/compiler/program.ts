@@ -2201,13 +2201,13 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "checkJs", "allowJs"));
             }
 
-            if (options.emitDeclarationsOnly) {
+            if (options.emitDeclarationOnly) {
                 if (!options.declaration) {
-                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDeclarationsOnly", "declarations");
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDeclarationOnly", "declarations");
                 }
 
                 if (options.noEmit) {
-                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "emitDeclarationsOnly", "noEmit");
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "emitDeclarationOnly", "noEmit");
                 }
             }
 
@@ -2233,7 +2233,7 @@ namespace ts {
                 const emitHost = getEmitHost();
                 const emitFilesSeen = createMap<true>();
                 forEachEmittedFile(emitHost, (emitFileNames) => {
-                    if (!options.emitDeclarationsOnly) {
+                    if (!options.emitDeclarationOnly) {
                         verifyEmitFilePath(emitFileNames.jsFilePath, emitFilesSeen);
                     }
                     verifyEmitFilePath(emitFileNames.declarationFilePath, emitFilesSeen);

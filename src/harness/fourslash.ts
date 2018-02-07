@@ -850,7 +850,7 @@ namespace FourSlash {
             ts.zipWith(actual, expected, (completion, expectedCompletion, index) => {
                 const { name, insertText, replacementSpan } = typeof expectedCompletion === "string" ? { name: expectedCompletion, insertText: undefined, replacementSpan: undefined } : expectedCompletion;
                 if (completion.name !== name) {
-                    this.raiseError(`Expected completion at index ${index} to be ${expectedCompletion}, got ${completion.name}`);
+                    this.raiseError(`Expected completion at index ${index} to be ${name}, got ${completion.name}`);
                 }
                 if (completion.insertText !== insertText) {
                     this.raiseError(`Expected completion insert text at index ${index} to be ${insertText}, got ${completion.insertText}`);
@@ -3156,6 +3156,9 @@ Actual: ${stringify(fullActual)}`);
             assert.equal(item.hasAction, hasAction, "hasAction");
             assert.equal(item.isRecommended, options && options.isRecommended, "isRecommended");
             assert.equal(item.insertText, options && options.insertText, "insertText");
+            if (options && options.replacementSpan) { // TODO: GH#21679
+                assert.deepEqual(item.replacementSpan, options && options.replacementSpan && textSpanFromRange(options.replacementSpan), "replacementSpan");
+            }
         }
 
         private findFile(indexOrName: string | number) {
@@ -4616,6 +4619,7 @@ namespace FourSlashInterface {
         sourceDisplay: string;
         isRecommended?: true;
         insertText?: string;
+        replacementSpan?: FourSlash.Range;
     }
 
     export interface VerifyDocumentHighlightsOptions {
