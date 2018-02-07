@@ -8144,7 +8144,7 @@ namespace ts {
             // types with type parameters mapped to the wildcard type, the most permissive instantiations
             // possible (the wildcard type is assignable to and from all types). If those are not related,
             // then no instatiations will be and we can just return the false branch type.
-            if (!isTypeAssignableTo(getWildcardInstantiation(checkType), getWildcardInstantiation(extendsType))) {
+            if (!typeMaybeAssignableTo(getWildcardInstantiation(checkType), getWildcardInstantiation(extendsType))) {
                 return instantiateType(baseFalseType, mapper);
             }
             // The check could be true for some instantiation
