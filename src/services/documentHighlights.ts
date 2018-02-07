@@ -189,11 +189,6 @@ namespace ts.DocumentHighlights {
     }
 
     function getModifierOccurrences(modifier: SyntaxKind, declaration: Node): Node[] {
-        // Make sure we only highlight the keyword when it makes sense to do so.
-        if (!isLegalModifier(modifier, declaration)) {
-            return undefined;
-        }
-
         const modifierFlag = modifierToFlag(modifier);
         return mapDefined(getNodesToSearchForModifier(declaration, modifierFlag), node => {
             if (getModifierFlags(node) & modifierFlag) {
@@ -213,8 +208,8 @@ namespace ts.DocumentHighlights {
             case SyntaxKind.CaseClause:
             case SyntaxKind.DefaultClause:
                 // Container is either a class declaration or the declaration is a classDeclaration
-                if (modifierFlag & ModifierFlags.Abstract) {
-                    return [...(<ClassDeclaration>declaration).members, declaration];
+                if (modifierFlag & ModifierFlags.Abstract && isClassDeclaration(declaration)) {
+                    return [...declaration.members, declaration];
                 }
                 else {
                     return (<ModuleBlock | SourceFile | Block | CaseClause | DefaultClause>container).statements;
@@ -239,33 +234,6 @@ namespace ts.DocumentHighlights {
                 return nodes;
             default:
                 Debug.fail("Invalid container kind.");
-        }
-    }
-
-    function isLegalModifier(modifier: SyntaxKind, declaration: Node): boolean {
-        const container = declaration.parent;
-        switch (modifier) {
-            case SyntaxKind.PrivateKeyword:
-            case SyntaxKind.ProtectedKeyword:
-            case SyntaxKind.PublicKeyword:
-                switch (container.kind) {
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.ClassExpression:
-                        return true;
-                    case SyntaxKind.Constructor:
-                        return declaration.kind === SyntaxKind.Parameter;
-                    default:
-                        return false;
-                }
-            case SyntaxKind.StaticKeyword:
-                return container.kind === SyntaxKind.ClassDeclaration || container.kind === SyntaxKind.ClassExpression;
-            case SyntaxKind.ExportKeyword:
-            case SyntaxKind.DeclareKeyword:
-                return container.kind === SyntaxKind.ModuleBlock || container.kind === SyntaxKind.SourceFile;
-            case SyntaxKind.AbstractKeyword:
-                return container.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.ClassDeclaration;
-            default:
-                return false;
         }
     }
 
