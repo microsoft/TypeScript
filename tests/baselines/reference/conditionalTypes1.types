@@ -883,3 +883,111 @@ type T52 = IsNever<any>;  // false
 >T52 : false
 >IsNever : IsNever<T>
 
+// Repros from #21664
+
+type Eq<T, U> = T extends U ? U extends T ? true : false : false;
+>Eq : Eq<T, U>
+>T : T
+>U : U
+>T : T
+>U : U
+>U : U
+>T : T
+>true : true
+>false : false
+>false : false
+
+type T60 = Eq<true, true>;  // true
+>T60 : true
+>Eq : Eq<T, U>
+>true : true
+>true : true
+
+type T61 = Eq<true, false>;  // false
+>T61 : false
+>Eq : Eq<T, U>
+>true : true
+>false : false
+
+type T62 = Eq<false, true>;  // false
+>T62 : false
+>Eq : Eq<T, U>
+>false : false
+>true : true
+
+type T63 = Eq<false, false>;  // true
+>T63 : true
+>Eq : Eq<T, U>
+>false : false
+>false : false
+
+type Eq1<T, U> = Eq<T, U> extends false ? false : true;
+>Eq1 : Eq1<T, U>
+>T : T
+>U : U
+>Eq : Eq<T, U>
+>T : T
+>U : U
+>false : false
+>false : false
+>true : true
+
+type T70 = Eq1<true, true>;  // true
+>T70 : true
+>Eq1 : Eq1<T, U>
+>true : true
+>true : true
+
+type T71 = Eq1<true, false>;  // false
+>T71 : false
+>Eq1 : Eq1<T, U>
+>true : true
+>false : false
+
+type T72 = Eq1<false, true>;  // false
+>T72 : false
+>Eq1 : Eq1<T, U>
+>false : false
+>true : true
+
+type T73 = Eq1<false, false>;  // true
+>T73 : true
+>Eq1 : Eq1<T, U>
+>false : false
+>false : false
+
+type Eq2<T, U> = Eq<T, U> extends true ? true : false;
+>Eq2 : Eq2<T, U>
+>T : T
+>U : U
+>Eq : Eq<T, U>
+>T : T
+>U : U
+>true : true
+>true : true
+>false : false
+
+type T80 = Eq2<true, true>;  // true
+>T80 : true
+>Eq2 : Eq2<T, U>
+>true : true
+>true : true
+
+type T81 = Eq2<true, false>;  // false
+>T81 : false
+>Eq2 : Eq2<T, U>
+>true : true
+>false : false
+
+type T82 = Eq2<false, true>;  // false
+>T82 : false
+>Eq2 : Eq2<T, U>
+>false : false
+>true : true
+
+type T83 = Eq2<false, false>;  // true
+>T83 : true
+>Eq2 : Eq2<T, U>
+>false : false
+>false : false
+
