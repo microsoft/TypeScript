@@ -620,10 +620,7 @@ namespace ts.textChanges {
                 const sourceFile = changesInFile[0].sourceFile;
                 const fileTextChanges: FileTextChanges = { fileName: sourceFile.fileName, textChanges: [] };
                 for (const c of ChangeTracker.normalize(changesInFile)) {
-                    fileTextChanges.textChanges.push({
-                        span: this.computeSpan(c, sourceFile),
-                        newText: this.computeNewText(c, sourceFile)
-                    });
+                    fileTextChanges.textChanges.push(createTextChange(this.computeSpan(c, sourceFile), this.computeNewText(c, sourceFile)));
                 }
                 fileChangesList.push(fileTextChanges);
             });

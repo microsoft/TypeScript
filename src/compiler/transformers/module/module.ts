@@ -690,16 +690,15 @@ namespace ts {
             return createCall(createPropertyAccess(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
         }
 
-
         function getHelperExpressionForImport(node: ImportDeclaration, innerExpr: Expression) {
             if (!compilerOptions.esModuleInterop || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
                 return innerExpr;
             }
-            if (getNamespaceDeclarationNode(node)) {
+            if (getImportNeedsImportStarHelper(node)) {
                 context.requestEmitHelper(importStarHelper);
                 return createCall(getHelperName("__importStar"), /*typeArguments*/ undefined, [innerExpr]);
             }
-            if (isDefaultImport(node)) {
+            if (getImportNeedsImportDefaultHelper(node)) {
                 context.requestEmitHelper(importDefaultHelper);
                 return createCall(getHelperName("__importDefault"), /*typeArguments*/ undefined, [innerExpr]);
             }

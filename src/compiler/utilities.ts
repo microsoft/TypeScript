@@ -599,6 +599,11 @@ namespace ts {
         return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2, arg3);
     }
 
+    export function createDiagnosticForNodeArray(sourceFile: SourceFile, nodes: NodeArray<Node>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
+        const start = skipTrivia(sourceFile.text, nodes.pos);
+        return createFileDiagnostic(sourceFile, start, nodes.end - start, message, arg0, arg1, arg2, arg3);
+    }
+
     export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
         const span = getErrorSpanForNode(sourceFile, node);
         return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2, arg3);
@@ -676,9 +681,20 @@ namespace ts {
             return getSpanOfTokenAtPosition(sourceFile, node.pos);
         }
 
-        const pos = nodeIsMissing(errorNode)
+        const isMissing = nodeIsMissing(errorNode);
+        const pos = isMissing
             ? errorNode.pos
             : skipTrivia(sourceFile.text, errorNode.pos);
+
+        // These asserts should all be satisfied for a properly constructed `errorNode`.
+        if (isMissing) {
+            Debug.assert(pos === errorNode.pos, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
+            Debug.assert(pos === errorNode.end, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
+        }
+        else {
+            Debug.assert(pos >= errorNode.pos, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
+            Debug.assert(pos <= errorNode.end, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
+        }
 
         return createTextSpanFromBounds(pos, errorNode.end);
     }
@@ -3270,7 +3286,7 @@ namespace ts {
             && isClassLike(node.parent.parent);
     }
 
-    export function isEntityNameExpression(node: Expression): node is EntityNameExpression {
+    export function isEntityNameExpression(node: Node): node is EntityNameExpression {
         return node.kind === SyntaxKind.Identifier ||
             node.kind === SyntaxKind.PropertyAccessExpression && isEntityNameExpression((<PropertyAccessExpression>node).expression);
     }
@@ -4605,6 +4621,14 @@ namespace ts {
         return node.kind === SyntaxKind.IntersectionType;
     }
 
+    export function isConditionalTypeNode(node: Node): node is ConditionalTypeNode {
+        return node.kind === SyntaxKind.ConditionalType;
+    }
+
+    export function isInferTypeNode(node: Node): node is InferTypeNode {
+        return node.kind === SyntaxKind.InferType;
+    }
+
     export function isParenthesizedTypeNode(node: Node): node is ParenthesizedTypeNode {
         return node.kind === SyntaxKind.ParenthesizedType;
     }
@@ -5875,7 +5899,7 @@ namespace ts {
 
     /** True if node is of a kind that may contain comment text. */
     export function isJSDocCommentContainingNode(node: Node): boolean {
-        return node.kind === SyntaxKind.JSDocComment || isJSDocTag(node);
+        return node.kind === SyntaxKind.JSDocComment || isJSDocTag(node) || isJSDocTypeLiteral(node);
     }
 
     // TODO: determine what this does before making it public.

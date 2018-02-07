@@ -8,12 +8,12 @@ tests/cases/conformance/jsx/file.tsx(31,11): error TS2322: Type '{ children: (El
       Type '(Element | ((name: string) => Element))[]' is not assignable to type 'string | Element'.
         Type '(Element | ((name: string) => Element))[]' is not assignable to type 'Element'.
           Property 'type' is missing in type '(Element | ((name: string) => Element))[]'.
-tests/cases/conformance/jsx/file.tsx(37,11): error TS2322: Type '{ children: (Element | 1000000)[]; a: number; b: string; }' is not assignable to type 'IntrinsicAttributes & Prop'.
-  Type '{ children: (Element | 1000000)[]; a: number; b: string; }' is not assignable to type 'Prop'.
+tests/cases/conformance/jsx/file.tsx(37,11): error TS2322: Type '{ children: (number | Element)[]; a: number; b: string; }' is not assignable to type 'IntrinsicAttributes & Prop'.
+  Type '{ children: (number | Element)[]; a: number; b: string; }' is not assignable to type 'Prop'.
     Types of property 'children' are incompatible.
-      Type '(Element | 1000000)[]' is not assignable to type 'string | Element'.
-        Type '(Element | 1000000)[]' is not assignable to type 'Element'.
-          Property 'type' is missing in type '(Element | 1000000)[]'.
+      Type '(number | Element)[]' is not assignable to type 'string | Element'.
+        Type '(number | Element)[]' is not assignable to type 'Element'.
+          Property 'type' is missing in type '(number | Element)[]'.
 tests/cases/conformance/jsx/file.tsx(43,11): error TS2322: Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'IntrinsicAttributes & Prop'.
   Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'Prop'.
     Types of property 'children' are incompatible.
@@ -80,12 +80,12 @@ tests/cases/conformance/jsx/file.tsx(49,11): error TS2322: Type '{ children: Ele
     let k3 =
         <Comp a={10} b="hi">
               ~~~~~~~~~~~~~
-!!! error TS2322: Type '{ children: (Element | 1000000)[]; a: number; b: string; }' is not assignable to type 'IntrinsicAttributes & Prop'.
-!!! error TS2322:   Type '{ children: (Element | 1000000)[]; a: number; b: string; }' is not assignable to type 'Prop'.
+!!! error TS2322: Type '{ children: (number | Element)[]; a: number; b: string; }' is not assignable to type 'IntrinsicAttributes & Prop'.
+!!! error TS2322:   Type '{ children: (number | Element)[]; a: number; b: string; }' is not assignable to type 'Prop'.
 !!! error TS2322:     Types of property 'children' are incompatible.
-!!! error TS2322:       Type '(Element | 1000000)[]' is not assignable to type 'string | Element'.
-!!! error TS2322:         Type '(Element | 1000000)[]' is not assignable to type 'Element'.
-!!! error TS2322:           Property 'type' is missing in type '(Element | 1000000)[]'.
+!!! error TS2322:       Type '(number | Element)[]' is not assignable to type 'string | Element'.
+!!! error TS2322:         Type '(number | Element)[]' is not assignable to type 'Element'.
+!!! error TS2322:           Property 'type' is missing in type '(number | Element)[]'.
             <div> My Div </div>
             {1000000}
         </Comp>;
