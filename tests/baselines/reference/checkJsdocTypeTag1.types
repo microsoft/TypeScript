@@ -91,12 +91,12 @@ x2(0);
  */
 var props = {};
 >props : any
->{} : {}
+>{} : { [x: string]: any; }
 
 /**
  * @type {Object}
  */
 var props = {};
 >props : any
->{} : {}
+>{} : { [x: string]: any; }
 

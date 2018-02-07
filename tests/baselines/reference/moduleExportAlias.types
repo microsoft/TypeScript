@@ -206,19 +206,19 @@ multipleDeclarationAlias4.func8 = function () { };
 >function () { } : () => void
 
 var multipleDeclarationAlias5 = module.exports = exports = {};
->multipleDeclarationAlias5 : {}
->module.exports = exports = {} : {}
+>multipleDeclarationAlias5 : { [x: string]: any; }
+>module.exports = exports = {} : { [x: string]: any; }
 >module.exports : any
 >module : any
 >exports : any
->exports = {} : {}
+>exports = {} : { [x: string]: any; }
 >exports : any
->{} : {}
+>{} : { [x: string]: any; }
 
 multipleDeclarationAlias5.func9 = function () { };
 >multipleDeclarationAlias5.func9 = function () { } : () => void
 >multipleDeclarationAlias5.func9 : any
->multipleDeclarationAlias5 : {}
+>multipleDeclarationAlias5 : { [x: string]: any; }
 >func9 : any
 >function () { } : () => void
 
@@ -240,15 +240,15 @@ multipleDeclarationAlias6.func10 = function () { };
 >function () { } : () => void
 
 exports = module.exports = someOtherVariable = {};
->exports = module.exports = someOtherVariable = {} : {}
+>exports = module.exports = someOtherVariable = {} : { [x: string]: any; }
 >exports : any
->module.exports = someOtherVariable = {} : {}
+>module.exports = someOtherVariable = {} : { [x: string]: any; }
 >module.exports : any
 >module : any
 >exports : any
->someOtherVariable = {} : {}
+>someOtherVariable = {} : { [x: string]: any; }
 >someOtherVariable : any
->{} : {}
+>{} : { [x: string]: any; }
 
 exports.func11 = function () { };
 >exports.func11 = function () { } : () => void
@@ -267,15 +267,15 @@ module.exports.func12 = function () { };
 >function () { } : () => void
 
 exports = module.exports = someOtherVariable = {};
->exports = module.exports = someOtherVariable = {} : {}
+>exports = module.exports = someOtherVariable = {} : { [x: string]: any; }
 >exports : any
->module.exports = someOtherVariable = {} : {}
+>module.exports = someOtherVariable = {} : { [x: string]: any; }
 >module.exports : any
 >module : any
 >exports : any
->someOtherVariable = {} : {}
+>someOtherVariable = {} : { [x: string]: any; }
 >someOtherVariable : any
->{} : {}
+>{} : { [x: string]: any; }
 
 exports.func11 = function () { };
 >exports.func11 = function () { } : () => void
@@ -344,13 +344,13 @@ module.exports.func16 = function () { };
 >function () { } : () => void
 
 module.exports = exports = {};
->module.exports = exports = {} : {}
+>module.exports = exports = {} : { [x: string]: any; }
 >module.exports : any
 >module : any
 >exports : any
->exports = {} : {}
+>exports = {} : { [x: string]: any; }
 >exports : any
->{} : {}
+>{} : { [x: string]: any; }
 
 exports.func17 = function () { };
 >exports.func17 = function () { } : () => void
