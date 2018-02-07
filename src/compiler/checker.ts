@@ -14755,7 +14755,7 @@ namespace ts {
             const isInJSFile = isInJavaScriptFile(node);
             // TODO: Might need to skip if isDeclarationOfDefaultedJavascriptContainerExpression(node.parent.parent) instead of just checking node.properties.length > 0
             // (actually, it would be better not to skip contextual typing at all, but to do that I need to avoid the checking loop another way)
-            const contextualType = node.properties.length > 0 && getApparentTypeOfContextualType(node);
+            const contextualType = (!isInJSFile || node.properties.length > 0) && getApparentTypeOfContextualType(node);
             const contextualTypeHasPattern = contextualType && contextualType.pattern &&
                 (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
             const isJSObjectLiteral = !contextualType && isInJSFile;
