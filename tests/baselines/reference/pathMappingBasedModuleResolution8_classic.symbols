@@ -2,16 +2,6 @@
 import {x} from "@speedy/folder1/testing"
 >x : Symbol(x, Decl(index.ts, 0, 8))
 
-declare function use(a: any): void;
->use : Symbol(use, Decl(index.ts, 0, 41))
->a : Symbol(a, Decl(index.ts, 1, 21))
-
-use(x.toExponential());
->use : Symbol(use, Decl(index.ts, 0, 41))
->x.toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
->x : Symbol(x, Decl(index.ts, 0, 8))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
-
 === c:/root/folder1/dist/index.ts ===
 export const x = 1 + 2;
 >x : Symbol(x, Decl(index.ts, 0, 12))
