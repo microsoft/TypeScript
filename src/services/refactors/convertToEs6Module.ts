@@ -381,8 +381,8 @@ namespace ts.refactor {
                     // `exports.f = function g() {}` -> `export const f = function g() {}`
                     return exportConst();
                 }
-                // falls through
             }
+                // falls through
             case SyntaxKind.ArrowFunction:
                 // `exports.f = function() {}` --> `export function f() {}`
                 return functionExpressionToDeclaration(name, modifiers, exported as FunctionExpression | ArrowFunction);
