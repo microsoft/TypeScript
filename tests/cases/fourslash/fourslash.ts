@@ -516,7 +516,7 @@ declare namespace FourSlashInterface {
         };
     }
 
-    interface ReferencesDefinition {
+    type ReferencesDefinition = string | {
         text: string;
         range: Range;
     }
