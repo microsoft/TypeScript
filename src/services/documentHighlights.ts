@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.DocumentHighlights {
-    export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] | undefined {
+    export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: ReadonlyArray<SourceFile>): DocumentHighlights[] | undefined {
         const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ true);
 
         if (node.parent && (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent))) {
@@ -21,12 +21,12 @@ namespace ts.DocumentHighlights {
         };
     }
 
-    function getSemanticDocumentHighlights(position: number, node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] {
+    function getSemanticDocumentHighlights(position: number, node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: ReadonlyArray<SourceFile>): DocumentHighlights[] {
         const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken);
         return referenceEntries && convertReferencedSymbols(referenceEntries);
     }
 
-    function convertReferencedSymbols(referenceEntries: FindAllReferences.Entry[]): DocumentHighlights[] {
+    function convertReferencedSymbols(referenceEntries: ReadonlyArray<FindAllReferences.Entry>): DocumentHighlights[] {
         const fileNameToDocumentHighlights = createMap<HighlightSpan[]>();
         for (const entry of referenceEntries) {
             const { fileName, span } = FindAllReferences.toHighlightSpan(entry);
