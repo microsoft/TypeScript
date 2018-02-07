@@ -16188,24 +16188,13 @@ namespace ts {
             propertyName: __String,
             type: Type): boolean {
 
-            if (type !== unknownType && !isTypeAny(type)) {
-                const prop = getPropertyOfType(type, propertyName);
-                if (prop) {
-                    return checkPropertyAccessibility(node, left, type, prop);
-                }
-
-                // In js files properties of unions are allowed in completion
-                if (isInJavaScriptFile(left) && (type.flags & TypeFlags.Union)) {
-                    for (const elementType of (<UnionType>type).types) {
-                        if (isValidPropertyAccessWithType(node, left, propertyName, elementType)) {
-                            return true;
-                        }
-                    }
-                }
-
-                return false;
+            if (type === unknownType || isTypeAny(type)) {
+                return true;
             }
-            return true;
+            const prop = getPropertyOfType(type, propertyName);
+            return prop ? checkPropertyAccessibility(node, left, type, prop)
+                // In js files properties of unions are allowed in completion
+                : isInJavaScriptFile(node) && (type.flags & TypeFlags.Union) && (<UnionType>type).types.some(elementType => isValidPropertyAccessWithType(node, left, propertyName, elementType));
         }
 
         /**
