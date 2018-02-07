@@ -6964,7 +6964,7 @@ namespace ts {
         }
 
         function getInferredTypeParameterConstraint(typeParameter: TypeParameter) {
-            let constraints: Type[];
+            let inferences: Type[];
             if (typeParameter.symbol) {
                 for (const declaration of typeParameter.symbol.declarations) {
                     // When an 'infer T' declaration is immediately contained in a type reference node
@@ -6977,17 +6977,26 @@ namespace ts {
                         if (typeParameters) {
                             const index = typeReference.typeArguments.indexOf(<TypeNode>declaration.parent);
                             if (index < typeParameters.length) {
-                                const constraint = getConstraintOfTypeParameter(typeParameters[index]);
-                                if (constraint) {
+                                const declaredConstraint = getConstraintOfTypeParameter(typeParameters[index]);
+                                if (declaredConstraint) {
+                                    // Type parameter constraints can reference other type parameters so
+                                    // constraints need to be instantiated. If instantiation produces the
+                                    // type parameter itself, we discard that inference. For example, in
+                                    //   type Foo<T extends string, U extends T> = [T, U];
+                                    //   type Bar<T> = T extends Foo<infer X, infer X> ? Foo<X, X> : T;
+                                    // the instantiated constraint for U is X, so we discard that inference.
                                     const mapper = createTypeMapper(typeParameters, getEffectiveTypeArguments(typeReference, typeParameters));
-                                    constraints = append(constraints, instantiateType(constraint, mapper));
+                                    const constraint = instantiateType(declaredConstraint, mapper);
+                                    if (constraint !== typeParameter) {
+                                        inferences = append(inferences, constraint);
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-            return constraints && getIntersectionType(constraints);
+            return inferences && getIntersectionType(inferences);
         }
 
         function getConstraintFromTypeParameter(typeParameter: TypeParameter): Type {
@@ -20197,8 +20206,8 @@ namespace ts {
         }
 
         function getEffectiveTypeArguments(node: TypeReferenceNode | ExpressionWithTypeArguments, typeParameters: TypeParameter[]) {
-            const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
-            return fillMissingTypeArguments(map(node.typeArguments, getTypeFromTypeNode), typeParameters, minTypeArgumentCount, isInJavaScriptFile(node));
+            return fillMissingTypeArguments(map(node.typeArguments, getTypeFromTypeNode), typeParameters,
+                getMinTypeArgumentCount(typeParameters), isInJavaScriptFile(node));
         }
 
         function checkTypeArgumentConstraints(node: TypeReferenceNode | ExpressionWithTypeArguments, typeParameters: TypeParameter[]): boolean {
