@@ -130,7 +130,7 @@ interface I {
 let impl: I = {
 >impl : I
 >I : I
->{    a: 12,    explicitVoid1() {        return this.a; // error, no 'a' in 'void'    },    explicitVoid2: () => this.a, // ok, `this:any` because it refers to an outer object    explicitStructural: () => 12,    explicitInterface: () => 12,    explicitThis() {        return this.a;    },} : { a: number; explicitVoid1(this: void): any; explicitVoid2: () => any; explicitStructural: () => number; explicitInterface: () => number; explicitThis(this: I): number; }
+>{    a: 12,    explicitVoid1() {        return this.a; // error, no 'a' in 'void'    },    explicitVoid2: () => this.a, // ok, `this:any` because it refers to an outer object    explicitStructural: () => 12,    explicitInterface: () => 12,    explicitThis() {        return this.a;    },} : { a: number; explicitVoid1(this: void): any; explicitVoid2: () => any; explicitStructural: (this: { a: number; }) => number; explicitInterface: (this: I) => number; explicitThis(this: I): number; }
 
     a: 12,
 >a : number
@@ -153,13 +153,13 @@ let impl: I = {
 >a : any
 
     explicitStructural: () => 12,
->explicitStructural : () => number
->() => 12 : () => number
+>explicitStructural : (this: { a: number; }) => number
+>() => 12 : (this: { a: number; }) => number
 >12 : 12
 
     explicitInterface: () => 12,
->explicitInterface : () => number
->() => 12 : () => number
+>explicitInterface : (this: I) => number
+>() => 12 : (this: I) => number
 >12 : 12
 
     explicitThis() {

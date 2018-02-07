@@ -8876,7 +8876,7 @@ namespace ts {
 
         // Returns true if the given expression contains (at any level of nesting) a function or arrow expression
         // that is subject to contextual typing.
-        function isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElementLike | JsxAttributeLike): boolean {
+        function isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElementLike | JsxAttributeLike | JsxChild): boolean {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
             switch (node.kind) {
                 case SyntaxKind.FunctionExpression:
@@ -8898,13 +8898,24 @@ namespace ts {
                 case SyntaxKind.ParenthesizedExpression:
                     return isContextSensitive((<ParenthesizedExpression>node).expression);
                 case SyntaxKind.JsxAttributes:
-                    return forEach((<JsxAttributes>node).properties, isContextSensitive);
+                    const attrs = <JsxAttributes>node;
+                    return forEach(attrs.properties, isContextSensitive) || // This is structured like so because the attributes type depends on the children
+                        (isJsxOpeningElement(node.parent) && forEach(node.parent.parent.children, isContextSensitive));
                 case SyntaxKind.JsxAttribute:
                     // If there is no initializer, JSX attribute has a boolean value of true which is not context sensitive.
                     return (<JsxAttribute>node).initializer && isContextSensitive((<JsxAttribute>node).initializer);
                 case SyntaxKind.JsxExpression:
                     // It is possible to that node.expression is undefined (e.g <div x={} />)
                     return (<JsxExpression>node).expression && isContextSensitive((<JsxExpression>node).expression);
+                case SyntaxKind.JsxElement:
+                    return isContextSensitive((<JsxElement>node).openingElement.attributes);
+                case SyntaxKind.JsxFragment:
+                    return forEach((<JsxFragment>node).children, isContextSensitive);
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                    return true;
             }
 
             return false;
@@ -8928,8 +8939,11 @@ namespace ts {
                 }
             }
 
-            // TODO(anhans): A block should be context-sensitive if it has a context-sensitive return value.
-            return node.body.kind === SyntaxKind.Block ? false : isContextSensitive(node.body);
+            return node.body.kind === SyntaxKind.Block ? isContextSensitiveBlock(node.body as Block) : isContextSensitive(node.body);
+        }
+
+        function isContextSensitiveBlock(node: Block) {
+            return forEachReturnStatement(node, s => s.expression && isContextSensitive(s.expression));
         }
 
         function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {
@@ -16535,10 +16549,12 @@ namespace ts {
         }
 
         function inferJsxTypeArguments(signature: Signature, node: JsxOpeningLikeElement, context: InferenceContext): Type[] {
-            // Skip context sensitive pass
-            const skipContextParamType = getTypeAtPosition(signature, 0);
-            const checkAttrTypeSkipContextSensitive = checkExpressionWithContextualType(node.attributes, skipContextParamType, identityMapper);
-            inferTypes(context.inferences, checkAttrTypeSkipContextSensitive, skipContextParamType);
+            if (isContextSensitive(node.attributes)) {
+                // Skip context sensitive pass
+                const skipContextParamType = getTypeAtPosition(signature, 0);
+                const checkAttrTypeSkipContextSensitive = checkExpressionWithContextualType(node.attributes, skipContextParamType, identityMapper);
+                inferTypes(context.inferences, checkAttrTypeSkipContextSensitive, skipContextParamType);
+            }
 
             // Standard pass
             const paramType = getTypeAtPosition(signature, 0);

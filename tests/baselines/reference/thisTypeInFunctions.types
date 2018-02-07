@@ -186,11 +186,11 @@ impl.explicitVoid1 = function () { return 12; };
 >12 : 12
 
 impl.explicitVoid2 = () => 12;
->impl.explicitVoid2 = () => 12 : () => number
+>impl.explicitVoid2 = () => 12 : (this: void) => number
 >impl.explicitVoid2 : (this: void) => number
 >impl : I
 >explicitVoid2 : (this: void) => number
->() => 12 : () => number
+>() => 12 : (this: void) => number
 >12 : 12
 
 impl.explicitStructural = function() { return this.a; };
@@ -214,19 +214,19 @@ impl.explicitInterface = function() { return this.a; };
 >a : number
 
 impl.explicitStructural = () => 12;
->impl.explicitStructural = () => 12 : () => number
+>impl.explicitStructural = () => 12 : (this: { a: number; }) => number
 >impl.explicitStructural : (this: { a: number; }) => number
 >impl : I
 >explicitStructural : (this: { a: number; }) => number
->() => 12 : () => number
+>() => 12 : (this: { a: number; }) => number
 >12 : 12
 
 impl.explicitInterface = () => 12;
->impl.explicitInterface = () => 12 : () => number
+>impl.explicitInterface = () => 12 : (this: I) => number
 >impl.explicitInterface : (this: I) => number
 >impl : I
 >explicitInterface : (this: I) => number
->() => 12 : () => number
+>() => 12 : (this: I) => number
 >12 : 12
 
 impl.explicitThis = function () { return this.a; };
