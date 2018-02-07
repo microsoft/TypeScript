@@ -126,7 +126,6 @@ namespace ts.server {
         private cachedUnresolvedImportsPerFile = new UnresolvedImportsMap();
         private lastCachedUnresolvedImportsList: SortedReadonlyArray<string>;
 
-        /*@internal*/
         private lastFileExceededProgramSize: string | undefined;
 
         // wrapper over the real language service that will suppress all semantic operations
