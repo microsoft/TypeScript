@@ -488,13 +488,13 @@ namespace ts {
         const watchFilePath = compilerOptions.extendedDiagnostics ? ts.addFilePathWatcherWithLogging : ts.addFilePathWatcher;
         const watchDirectoryWorker = compilerOptions.extendedDiagnostics ? ts.addDirectoryWatcherWithLogging : ts.addDirectoryWatcher;
 
+        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
+        let newLine = updateNewLine();
+
         writeLog(`Current directory: ${currentDirectory} CaseSensitiveFileNames: ${useCaseSensitiveFileNames}`);
         if (configFileName) {
             watchFile(host, configFileName, scheduleProgramReload, writeLog);
         }
-
-        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
-        let newLine = updateNewLine();
 
         const compilerHost: CompilerHost & ResolutionCacheHost = {
             // Members for CompilerHost
@@ -583,7 +583,9 @@ namespace ts {
 
             // Compile the program
             if (loggingEnabled) {
-                writeLog(`CreatingProgramWith::\n  roots: ${JSON.stringify(rootFileNames)}\n  options: ${JSON.stringify(compilerOptions)}`);
+                writeLog(`CreatingProgramWith::`);
+                writeLog(`  roots: ${JSON.stringify(rootFileNames)}`);
+                writeLog(`  options: ${JSON.stringify(compilerOptions)}`);
             }
 
             const needsUpdateInTypeRootWatch = hasChangedCompilerOptions || !program;
