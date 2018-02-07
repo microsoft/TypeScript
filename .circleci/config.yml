@@ -1,0 +1,58 @@
+workflows:
+  version: 2
+  main:
+    jobs:
+      - node9:
+          filters:
+            branches:
+              only:
+                - master
+                - release-2.5
+                - release-2.6
+                - release-2.7
+                - circleci
+      - node8:
+          filters:
+            branches:
+              only:
+                - master
+                - release-2.5
+                - release-2.6
+                - release-2.7
+                - circleci
+      - node6:
+          filters:
+            branches:
+              only:
+                - master
+                - release-2.5
+                - release-2.6
+                - release-2.7
+                - circleci
+
+base: &base
+  environment:
+    - workerCount: 3
+  steps:
+    - checkout
+    - run: |
+        npm uninstall typescript --no-save
+        npm uninstall tslint --no-save
+        npm install
+        #npm update Appeared in Jenkins only
+        npm test
+
+version: 2
+jobs:
+  node9:
+    docker:
+      - image: circleci/node:9
+    <<: *base
+  node8:
+    docker:
+      - image: circleci/node:8
+    <<: *base
+  node6:
+    docker:
+      - image: circleci/node:6
+    <<: *base
