@@ -8,7 +8,6 @@ var child_process = require("child_process");
 var fold = require("travis-fold");
 var ts = require("./lib/typescript");
 
-
 // Variables
 var compilerDirectory = "src/compiler/";
 var serverDirectory = "src/server/";
@@ -86,7 +85,7 @@ var servicesSources = filesFromConfig("./src/services/tsconfig.json");
 var cancellationTokenSources = filesFromConfig(path.join(serverDirectory, "cancellationToken/tsconfig.json"));
 var typingsInstallerSources = filesFromConfig(path.join(serverDirectory, "typingsInstaller/tsconfig.json"));
 var watchGuardSources = filesFromConfig(path.join(serverDirectory, "watchGuard/tsconfig.json"));
-var serverSources = filesFromConfig(path.join(serverDirectory, "tsconfig.json"))
+var serverSources = filesFromConfig(path.join(serverDirectory, "tsconfig.json"));
 var languageServiceLibrarySources = filesFromConfig(path.join(serverDirectory, "tsconfig.library.json"));
 
 var typesMapOutputPath = path.join(builtLocalDirectory, 'typesMap.json');
@@ -332,7 +331,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         var startCompileTime = mark();
         opts = opts || {};
         var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
-        var options = "--noImplicitAny --noImplicitThis --alwaysStrict --noEmitOnError --types "
+        var options = "--noImplicitAny --noImplicitThis --alwaysStrict --noEmitOnError --types ";
         if (opts.types) {
             options += opts.types.join(",");
         }
@@ -381,10 +380,10 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         }
         options += " --target es5";
         if (opts.lib) {
-            options += " --lib " + opts.lib
+            options += " --lib " + opts.lib;
         }
         else {
-            options += " --lib es5"
+            options += " --lib es5";
         }
         options += " --noUnusedLocals --noUnusedParameters";
 
@@ -526,7 +525,7 @@ file(buildProtocolDts, [buildProtocolTs, buildProtocolJs, typescriptServicesDts]
         complete();
     });
     ex.run();
-}, { async: true })
+}, { async: true });
 
 // The generated diagnostics map; built for the compiler and for the 'generate-diagnostics' task
 file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson], function () {
@@ -646,7 +645,7 @@ compileFile(servicesFile, servicesSources, [builtLocalDirectory, copyright].conc
         // Stanalone/web definition file using global 'ts' namespace
         jake.cpR(standaloneDefinitionsFile, nodeDefinitionsFile, { silent: true });
         var definitionFileContents = fs.readFileSync(nodeDefinitionsFile).toString();
-        definitionFileContents = removeConstModifierFromEnumDeclarations(definitionFileContents)
+        definitionFileContents = removeConstModifierFromEnumDeclarations(definitionFileContents);
         fs.writeFileSync(standaloneDefinitionsFile, definitionFileContents);
 
         // Official node package definition file, pointed to by 'typings' in package.json
@@ -1253,7 +1252,7 @@ task("build-rules-end", [], function () {
 var lintTargets = compilerSources
     .concat(harnessSources)
     // Other harness sources
-    .concat(["instrumenter.ts"].map(function (f) { return path.join(harnessDirectory, f) }))
+    .concat(["instrumenter.ts"].map(function (f) { return path.join(harnessDirectory, f); }))
     .concat(serverSources)
     .concat(tslintRulesFiles)
     .concat(servicesSources)
@@ -1261,7 +1260,7 @@ var lintTargets = compilerSources
     .concat(cancellationTokenSources)
     .concat(["Gulpfile.ts"])
     .concat([nodeServerInFile, perftscPath, "tests/perfsys.ts", webhostPath])
-    .map(function (p) { return path.resolve(p) });
+    .map(function (p) { return path.resolve(p); });
 // keep only unique items
 lintTargets = Array.from(new Set(lintTargets));
 
@@ -1303,9 +1302,10 @@ desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex
 task("lint", ["build-rules"], () => {
     if (fold.isTravis()) console.log(fold.start("lint"));
     const fileMatcher = process.env.f || process.env.file || process.env.files;
+    
     const files = fileMatcher
         ? `src/**/${fileMatcher}`
-        : "Gulpfile.ts 'scripts/generateLocalizedDiagnosticMessages.ts' 'scripts/tslint/**/*.ts' 'src/**/*.ts' --exclude 'src/lib/*.d.ts'";
+        : `Gulpfile.ts scripts/generateLocalizedDiagnosticMessages.ts "scripts/tslint/**/*.ts" "src/**/*.ts" --exclude "src/lib/*.d.ts"`;
     const cmd = `node node_modules/tslint/bin/tslint ${files} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
     console.log("Linting: " + cmd);
     jake.exec([cmd], { interactive: true }, () => {

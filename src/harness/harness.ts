@@ -1255,9 +1255,9 @@ namespace Harness {
 
             if (result.errors.length === 0) {
                 if (options.declaration) {
-                    if (options.emitDeclarationsOnly) {
+                    if (options.emitDeclarationOnly) {
                         if (result.files.length > 0 || result.declFilesCode.length === 0) {
-                            throw new Error("Only declaration files should be generated when emitDeclarationsOnly:true");
+                            throw new Error("Only declaration files should be generated when emitDeclarationOnly:true");
                         }
                     }
                     else if (result.declFilesCode.length !== result.files.length) {
@@ -1664,7 +1664,7 @@ namespace Harness {
         }
 
         export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: CompilerResult, tsConfigFiles: Harness.Compiler.TestFile[], toBeCompiled: Harness.Compiler.TestFile[], otherFiles: Harness.Compiler.TestFile[], harnessSettings: Harness.TestCaseParser.CompilerSettings) {
-            if (!options.noEmit && !options.emitDeclarationsOnly && result.files.length === 0 && result.errors.length === 0) {
+            if (!options.noEmit && !options.emitDeclarationOnly && result.files.length === 0 && result.errors.length === 0) {
                 throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
             }
 
