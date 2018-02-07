@@ -315,106 +315,228 @@ type T62<T> = U extends (infer U)[] ? U : U;  // Error
 >U : Symbol(U, Decl(inferTypes1.ts, 71, 30))
 >U : Symbol(U, Decl(inferTypes1.ts, 71, 30))
 
+type T70<T extends string> = { x: T };
+>T70 : Symbol(T70, Decl(inferTypes1.ts, 71, 44))
+>T : Symbol(T, Decl(inferTypes1.ts, 73, 9))
+>x : Symbol(x, Decl(inferTypes1.ts, 73, 30))
+>T : Symbol(T, Decl(inferTypes1.ts, 73, 9))
+
+type T71<T> = T extends T70<infer U> ? T70<U> : never;
+>T71 : Symbol(T71, Decl(inferTypes1.ts, 73, 38))
+>T : Symbol(T, Decl(inferTypes1.ts, 74, 9))
+>T : Symbol(T, Decl(inferTypes1.ts, 74, 9))
+>T70 : Symbol(T70, Decl(inferTypes1.ts, 71, 44))
+>U : Symbol(U, Decl(inferTypes1.ts, 74, 33))
+>T70 : Symbol(T70, Decl(inferTypes1.ts, 71, 44))
+>U : Symbol(U, Decl(inferTypes1.ts, 74, 33))
+
+type T72<T extends number> = { y: T };
+>T72 : Symbol(T72, Decl(inferTypes1.ts, 74, 54))
+>T : Symbol(T, Decl(inferTypes1.ts, 76, 9))
+>y : Symbol(y, Decl(inferTypes1.ts, 76, 30))
+>T : Symbol(T, Decl(inferTypes1.ts, 76, 9))
+
+type T73<T> = T extends T72<infer U> ? T70<U> : never;  // Error
+>T73 : Symbol(T73, Decl(inferTypes1.ts, 76, 38))
+>T : Symbol(T, Decl(inferTypes1.ts, 77, 9))
+>T : Symbol(T, Decl(inferTypes1.ts, 77, 9))
+>T72 : Symbol(T72, Decl(inferTypes1.ts, 74, 54))
+>U : Symbol(U, Decl(inferTypes1.ts, 77, 33))
+>T70 : Symbol(T70, Decl(inferTypes1.ts, 71, 44))
+>U : Symbol(U, Decl(inferTypes1.ts, 77, 33))
+
+type T74<T extends number, U extends string> = { x: T, y: U };
+>T74 : Symbol(T74, Decl(inferTypes1.ts, 77, 54))
+>T : Symbol(T, Decl(inferTypes1.ts, 79, 9))
+>U : Symbol(U, Decl(inferTypes1.ts, 79, 26))
+>x : Symbol(x, Decl(inferTypes1.ts, 79, 48))
+>T : Symbol(T, Decl(inferTypes1.ts, 79, 9))
+>y : Symbol(y, Decl(inferTypes1.ts, 79, 54))
+>U : Symbol(U, Decl(inferTypes1.ts, 79, 26))
+
+type T75<T> = T extends T74<infer U, infer U> ? T70<U> | T72<U> | T74<U, U> : never;
+>T75 : Symbol(T75, Decl(inferTypes1.ts, 79, 62))
+>T : Symbol(T, Decl(inferTypes1.ts, 80, 9))
+>T : Symbol(T, Decl(inferTypes1.ts, 80, 9))
+>T74 : Symbol(T74, Decl(inferTypes1.ts, 77, 54))
+>U : Symbol(U, Decl(inferTypes1.ts, 80, 33), Decl(inferTypes1.ts, 80, 42))
+>U : Symbol(U, Decl(inferTypes1.ts, 80, 33), Decl(inferTypes1.ts, 80, 42))
+>T70 : Symbol(T70, Decl(inferTypes1.ts, 71, 44))
+>U : Symbol(U, Decl(inferTypes1.ts, 80, 33), Decl(inferTypes1.ts, 80, 42))
+>T72 : Symbol(T72, Decl(inferTypes1.ts, 74, 54))
+>U : Symbol(U, Decl(inferTypes1.ts, 80, 33), Decl(inferTypes1.ts, 80, 42))
+>T74 : Symbol(T74, Decl(inferTypes1.ts, 77, 54))
+>U : Symbol(U, Decl(inferTypes1.ts, 80, 33), Decl(inferTypes1.ts, 80, 42))
+>U : Symbol(U, Decl(inferTypes1.ts, 80, 33), Decl(inferTypes1.ts, 80, 42))
+
+type T76<T extends T[], U extends T> = { x: T };
+>T76 : Symbol(T76, Decl(inferTypes1.ts, 80, 84))
+>T : Symbol(T, Decl(inferTypes1.ts, 82, 9))
+>T : Symbol(T, Decl(inferTypes1.ts, 82, 9))
+>U : Symbol(U, Decl(inferTypes1.ts, 82, 23))
+>T : Symbol(T, Decl(inferTypes1.ts, 82, 9))
+>x : Symbol(x, Decl(inferTypes1.ts, 82, 40))
+>T : Symbol(T, Decl(inferTypes1.ts, 82, 9))
+
+type T77<T> = T extends T76<infer X, infer Y> ? T76<X, Y>: never;
+>T77 : Symbol(T77, Decl(inferTypes1.ts, 82, 48))
+>T : Symbol(T, Decl(inferTypes1.ts, 83, 9))
+>T : Symbol(T, Decl(inferTypes1.ts, 83, 9))
+>T76 : Symbol(T76, Decl(inferTypes1.ts, 80, 84))
+>X : Symbol(X, Decl(inferTypes1.ts, 83, 33))
+>Y : Symbol(Y, Decl(inferTypes1.ts, 83, 42))
+>T76 : Symbol(T76, Decl(inferTypes1.ts, 80, 84))
+>X : Symbol(X, Decl(inferTypes1.ts, 83, 33))
+>Y : Symbol(Y, Decl(inferTypes1.ts, 83, 42))
+
 // Example from #21496
 
 type JsonifiedObject<T extends object> = { [K in keyof T]: Jsonified<T[K]> };
->JsonifiedObject : Symbol(JsonifiedObject, Decl(inferTypes1.ts, 71, 44))
->T : Symbol(T, Decl(inferTypes1.ts, 75, 21))
->K : Symbol(K, Decl(inferTypes1.ts, 75, 44))
->T : Symbol(T, Decl(inferTypes1.ts, 75, 21))
->Jsonified : Symbol(Jsonified, Decl(inferTypes1.ts, 75, 77))
->T : Symbol(T, Decl(inferTypes1.ts, 75, 21))
->K : Symbol(K, Decl(inferTypes1.ts, 75, 44))
+>JsonifiedObject : Symbol(JsonifiedObject, Decl(inferTypes1.ts, 83, 65))
+>T : Symbol(T, Decl(inferTypes1.ts, 87, 21))
+>K : Symbol(K, Decl(inferTypes1.ts, 87, 44))
+>T : Symbol(T, Decl(inferTypes1.ts, 87, 21))
+>Jsonified : Symbol(Jsonified, Decl(inferTypes1.ts, 87, 77))
+>T : Symbol(T, Decl(inferTypes1.ts, 87, 21))
+>K : Symbol(K, Decl(inferTypes1.ts, 87, 44))
 
 type Jsonified<T> =
->Jsonified : Symbol(Jsonified, Decl(inferTypes1.ts, 75, 77))
->T : Symbol(T, Decl(inferTypes1.ts, 77, 15))
+>Jsonified : Symbol(Jsonified, Decl(inferTypes1.ts, 87, 77))
+>T : Symbol(T, Decl(inferTypes1.ts, 89, 15))
 
     T extends string | number | boolean | null ? T
->T : Symbol(T, Decl(inferTypes1.ts, 77, 15))
->T : Symbol(T, Decl(inferTypes1.ts, 77, 15))
+>T : Symbol(T, Decl(inferTypes1.ts, 89, 15))
+>T : Symbol(T, Decl(inferTypes1.ts, 89, 15))
 
     : T extends undefined | Function ? never // undefined and functions are removed
->T : Symbol(T, Decl(inferTypes1.ts, 77, 15))
+>T : Symbol(T, Decl(inferTypes1.ts, 89, 15))
 >Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     : T extends { toJSON(): infer R } ? R // toJSON is called if it exists (e.g. Date)
->T : Symbol(T, Decl(inferTypes1.ts, 77, 15))
->toJSON : Symbol(toJSON, Decl(inferTypes1.ts, 80, 17))
->R : Symbol(R, Decl(inferTypes1.ts, 80, 33))
->R : Symbol(R, Decl(inferTypes1.ts, 80, 33))
+>T : Symbol(T, Decl(inferTypes1.ts, 89, 15))
+>toJSON : Symbol(toJSON, Decl(inferTypes1.ts, 92, 17))
+>R : Symbol(R, Decl(inferTypes1.ts, 92, 33))
+>R : Symbol(R, Decl(inferTypes1.ts, 92, 33))
 
     : T extends object ? JsonifiedObject<T>
->T : Symbol(T, Decl(inferTypes1.ts, 77, 15))
->JsonifiedObject : Symbol(JsonifiedObject, Decl(inferTypes1.ts, 71, 44))
->T : Symbol(T, Decl(inferTypes1.ts, 77, 15))
+>T : Symbol(T, Decl(inferTypes1.ts, 89, 15))
+>JsonifiedObject : Symbol(JsonifiedObject, Decl(inferTypes1.ts, 83, 65))
+>T : Symbol(T, Decl(inferTypes1.ts, 89, 15))
 
     : "what is this";
 
 type Example = {
->Example : Symbol(Example, Decl(inferTypes1.ts, 82, 21))
+>Example : Symbol(Example, Decl(inferTypes1.ts, 94, 21))
 
     str: "literalstring",
->str : Symbol(str, Decl(inferTypes1.ts, 84, 16))
+>str : Symbol(str, Decl(inferTypes1.ts, 96, 16))
 
     fn: () => void,
->fn : Symbol(fn, Decl(inferTypes1.ts, 85, 25))
+>fn : Symbol(fn, Decl(inferTypes1.ts, 97, 25))
 
     date: Date,
->date : Symbol(date, Decl(inferTypes1.ts, 86, 19))
+>date : Symbol(date, Decl(inferTypes1.ts, 98, 19))
 >Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     customClass: MyClass,
->customClass : Symbol(customClass, Decl(inferTypes1.ts, 87, 15))
->MyClass : Symbol(MyClass, Decl(inferTypes1.ts, 94, 1))
+>customClass : Symbol(customClass, Decl(inferTypes1.ts, 99, 15))
+>MyClass : Symbol(MyClass, Decl(inferTypes1.ts, 106, 1))
 
     obj: {
->obj : Symbol(obj, Decl(inferTypes1.ts, 88, 25))
+>obj : Symbol(obj, Decl(inferTypes1.ts, 100, 25))
 
         prop: "property",
->prop : Symbol(prop, Decl(inferTypes1.ts, 89, 10))
+>prop : Symbol(prop, Decl(inferTypes1.ts, 101, 10))
 
         clz: MyClass,
->clz : Symbol(clz, Decl(inferTypes1.ts, 90, 25))
->MyClass : Symbol(MyClass, Decl(inferTypes1.ts, 94, 1))
+>clz : Symbol(clz, Decl(inferTypes1.ts, 102, 25))
+>MyClass : Symbol(MyClass, Decl(inferTypes1.ts, 106, 1))
 
         nested: { attr: Date }
->nested : Symbol(nested, Decl(inferTypes1.ts, 91, 21))
->attr : Symbol(attr, Decl(inferTypes1.ts, 92, 17))
+>nested : Symbol(nested, Decl(inferTypes1.ts, 103, 21))
+>attr : Symbol(attr, Decl(inferTypes1.ts, 104, 17))
 >Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     },
 }
 
 declare class MyClass {
->MyClass : Symbol(MyClass, Decl(inferTypes1.ts, 94, 1))
+>MyClass : Symbol(MyClass, Decl(inferTypes1.ts, 106, 1))
 
     toJSON(): "correct";
->toJSON : Symbol(MyClass.toJSON, Decl(inferTypes1.ts, 96, 23))
+>toJSON : Symbol(MyClass.toJSON, Decl(inferTypes1.ts, 108, 23))
 }
 
 type JsonifiedExample = Jsonified<Example>;
->JsonifiedExample : Symbol(JsonifiedExample, Decl(inferTypes1.ts, 98, 1))
->Jsonified : Symbol(Jsonified, Decl(inferTypes1.ts, 75, 77))
->Example : Symbol(Example, Decl(inferTypes1.ts, 82, 21))
+>JsonifiedExample : Symbol(JsonifiedExample, Decl(inferTypes1.ts, 110, 1))
+>Jsonified : Symbol(Jsonified, Decl(inferTypes1.ts, 87, 77))
+>Example : Symbol(Example, Decl(inferTypes1.ts, 94, 21))
 
 declare let ex: JsonifiedExample;
->ex : Symbol(ex, Decl(inferTypes1.ts, 101, 11))
->JsonifiedExample : Symbol(JsonifiedExample, Decl(inferTypes1.ts, 98, 1))
+>ex : Symbol(ex, Decl(inferTypes1.ts, 113, 11))
+>JsonifiedExample : Symbol(JsonifiedExample, Decl(inferTypes1.ts, 110, 1))
 
 const z1: "correct" = ex.customClass;
->z1 : Symbol(z1, Decl(inferTypes1.ts, 102, 5))
->ex.customClass : Symbol(customClass, Decl(inferTypes1.ts, 87, 15))
->ex : Symbol(ex, Decl(inferTypes1.ts, 101, 11))
->customClass : Symbol(customClass, Decl(inferTypes1.ts, 87, 15))
+>z1 : Symbol(z1, Decl(inferTypes1.ts, 114, 5))
+>ex.customClass : Symbol(customClass, Decl(inferTypes1.ts, 99, 15))
+>ex : Symbol(ex, Decl(inferTypes1.ts, 113, 11))
+>customClass : Symbol(customClass, Decl(inferTypes1.ts, 99, 15))
 
 const z2: string = ex.obj.nested.attr;
->z2 : Symbol(z2, Decl(inferTypes1.ts, 103, 5))
->ex.obj.nested.attr : Symbol(attr, Decl(inferTypes1.ts, 92, 17))
->ex.obj.nested : Symbol(nested, Decl(inferTypes1.ts, 91, 21))
->ex.obj : Symbol(obj, Decl(inferTypes1.ts, 88, 25))
->ex : Symbol(ex, Decl(inferTypes1.ts, 101, 11))
->obj : Symbol(obj, Decl(inferTypes1.ts, 88, 25))
->nested : Symbol(nested, Decl(inferTypes1.ts, 91, 21))
->attr : Symbol(attr, Decl(inferTypes1.ts, 92, 17))
+>z2 : Symbol(z2, Decl(inferTypes1.ts, 115, 5))
+>ex.obj.nested.attr : Symbol(attr, Decl(inferTypes1.ts, 104, 17))
+>ex.obj.nested : Symbol(nested, Decl(inferTypes1.ts, 103, 21))
+>ex.obj : Symbol(obj, Decl(inferTypes1.ts, 100, 25))
+>ex : Symbol(ex, Decl(inferTypes1.ts, 113, 11))
+>obj : Symbol(obj, Decl(inferTypes1.ts, 100, 25))
+>nested : Symbol(nested, Decl(inferTypes1.ts, 103, 21))
+>attr : Symbol(attr, Decl(inferTypes1.ts, 104, 17))
+
+// Repros from #21631
+
+type A1<T, U extends A1<any, any>> = [T, U];
+>A1 : Symbol(A1, Decl(inferTypes1.ts, 115, 38))
+>T : Symbol(T, Decl(inferTypes1.ts, 119, 8))
+>U : Symbol(U, Decl(inferTypes1.ts, 119, 10))
+>A1 : Symbol(A1, Decl(inferTypes1.ts, 115, 38))
+>T : Symbol(T, Decl(inferTypes1.ts, 119, 8))
+>U : Symbol(U, Decl(inferTypes1.ts, 119, 10))
+
+type B1<S> = S extends A1<infer T, infer U> ? [T, U] : never;
+>B1 : Symbol(B1, Decl(inferTypes1.ts, 119, 44))
+>S : Symbol(S, Decl(inferTypes1.ts, 120, 8))
+>S : Symbol(S, Decl(inferTypes1.ts, 120, 8))
+>A1 : Symbol(A1, Decl(inferTypes1.ts, 115, 38))
+>T : Symbol(T, Decl(inferTypes1.ts, 120, 31))
+>U : Symbol(U, Decl(inferTypes1.ts, 120, 40))
+>T : Symbol(T, Decl(inferTypes1.ts, 120, 31))
+>U : Symbol(U, Decl(inferTypes1.ts, 120, 40))
+
+type A2<T, U extends void> = [T, U];
+>A2 : Symbol(A2, Decl(inferTypes1.ts, 120, 61))
+>T : Symbol(T, Decl(inferTypes1.ts, 122, 8))
+>U : Symbol(U, Decl(inferTypes1.ts, 122, 10))
+>T : Symbol(T, Decl(inferTypes1.ts, 122, 8))
+>U : Symbol(U, Decl(inferTypes1.ts, 122, 10))
+
+type B2<S> = S extends A2<infer T, infer U> ? [T, U] : never;
+>B2 : Symbol(B2, Decl(inferTypes1.ts, 122, 36))
+>S : Symbol(S, Decl(inferTypes1.ts, 123, 8))
+>S : Symbol(S, Decl(inferTypes1.ts, 123, 8))
+>A2 : Symbol(A2, Decl(inferTypes1.ts, 120, 61))
+>T : Symbol(T, Decl(inferTypes1.ts, 123, 31))
+>U : Symbol(U, Decl(inferTypes1.ts, 123, 40))
+>T : Symbol(T, Decl(inferTypes1.ts, 123, 31))
+>U : Symbol(U, Decl(inferTypes1.ts, 123, 40))
+
+type C2<S, U extends void> = S extends A2<infer T, U> ? [T, U] : never;
+>C2 : Symbol(C2, Decl(inferTypes1.ts, 123, 61))
+>S : Symbol(S, Decl(inferTypes1.ts, 124, 8))
+>U : Symbol(U, Decl(inferTypes1.ts, 124, 10))
+>S : Symbol(S, Decl(inferTypes1.ts, 124, 8))
+>A2 : Symbol(A2, Decl(inferTypes1.ts, 120, 61))
+>T : Symbol(T, Decl(inferTypes1.ts, 124, 47))
+>U : Symbol(U, Decl(inferTypes1.ts, 124, 10))
+>T : Symbol(T, Decl(inferTypes1.ts, 124, 47))
+>U : Symbol(U, Decl(inferTypes1.ts, 124, 10))
 
