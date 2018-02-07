@@ -6977,7 +6977,11 @@ namespace ts {
                         if (typeParameters) {
                             const index = typeReference.typeArguments.indexOf(<TypeNode>declaration.parent);
                             if (index < typeParameters.length) {
-                                constraints = append(constraints, getBaseConstraintOfType(typeParameters[index]));
+                                const constraint = getConstraintOfTypeParameter(typeParameters[index]);
+                                if (constraint) {
+                                    const mapper = createTypeMapper(typeParameters, getEffectiveTypeArguments(typeReference, typeParameters));
+                                    constraints = append(constraints, instantiateType(constraint, mapper));
+                                }
                             }
                         }
                     }
@@ -20192,8 +20196,12 @@ namespace ts {
             checkDecorators(node);
         }
 
-        function checkTypeArgumentConstraints(typeParameters: TypeParameter[], typeArgumentNodes: ReadonlyArray<TypeNode>): boolean {
+        function getEffectiveTypeArguments(node: TypeReferenceNode | ExpressionWithTypeArguments, typeParameters: TypeParameter[]) {
             const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
+            return fillMissingTypeArguments(map(node.typeArguments, getTypeFromTypeNode), typeParameters, minTypeArgumentCount, isInJavaScriptFile(node));
+        }
+
+        function checkTypeArgumentConstraints(node: TypeReferenceNode | ExpressionWithTypeArguments, typeParameters: TypeParameter[]): boolean {
             let typeArguments: Type[];
             let mapper: TypeMapper;
             let result = true;
@@ -20201,14 +20209,14 @@ namespace ts {
                 const constraint = getConstraintOfTypeParameter(typeParameters[i]);
                 if (constraint) {
                     if (!typeArguments) {
-                        typeArguments = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, minTypeArgumentCount, isInJavaScriptFile(typeArgumentNodes[i]));
+                        typeArguments = getEffectiveTypeArguments(node, typeParameters);
                         mapper = createTypeMapper(typeParameters, typeArguments);
                     }
                     const typeArgument = typeArguments[i];
                     result = result && checkTypeAssignableTo(
                         typeArgument,
                         instantiateType(constraint, mapper),
-                        typeArgumentNodes[i],
+                        node.typeArguments[i],
                         Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                 }
             }
@@ -20220,13 +20228,8 @@ namespace ts {
             if (type !== unknownType) {
                 const symbol = getNodeLinks(node).resolvedSymbol;
                 if (symbol) {
-                    const typeAliasParameters = symbol.flags & SymbolFlags.TypeAlias && getSymbolLinks(symbol).typeParameters;
-                    if (typeAliasParameters) {
-                        return typeAliasParameters;
-                    }
-                    if (getObjectFlags(type) & ObjectFlags.Reference) {
-                        return (<TypeReference>type).target.localTypeParameters;
-                    }
+                    return symbol.flags & SymbolFlags.TypeAlias && getSymbolLinks(symbol).typeParameters ||
+                        (getObjectFlags(type) & ObjectFlags.Reference ? (<TypeReference>type).target.localTypeParameters : undefined);
                 }
             }
             return undefined;
@@ -20236,7 +20239,6 @@ namespace ts {
             checkGrammarTypeArguments(node, node.typeArguments);
             if (node.kind === SyntaxKind.TypeReference && node.typeName.jsdocDotPos !== undefined && !isInJavaScriptFile(node) && !isInJSDoc(node)) {
                 grammarErrorAtPos(node, node.typeName.jsdocDotPos, 1, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
-
             }
             const type = getTypeFromTypeReference(node);
             if (type !== unknownType) {
@@ -20246,7 +20248,7 @@ namespace ts {
                     if (produceDiagnostics) {
                         const typeParameters = getTypeParametersForTypeReference(node);
                         if (typeParameters) {
-                            checkTypeArgumentConstraints(typeParameters, node.typeArguments);
+                            checkTypeArgumentConstraints(node, typeParameters);
                         }
                     }
                 }
@@ -22944,7 +22946,7 @@ namespace ts {
                     if (some(baseTypeNode.typeArguments)) {
                         forEach(baseTypeNode.typeArguments, checkSourceElement);
                         for (const constructor of getConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments, baseTypeNode)) {
-                            if (!checkTypeArgumentConstraints(constructor.typeParameters, baseTypeNode.typeArguments)) {
+                            if (!checkTypeArgumentConstraints(baseTypeNode, constructor.typeParameters)) {
                                 break;
                             }
                         }
