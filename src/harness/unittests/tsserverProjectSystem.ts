@@ -2888,6 +2888,29 @@ namespace ts.projectSystem {
     });
 
     describe("tsserverProjectSystem Proper errors", () => {
+        function createErrorLogger() {
+            let hasError = false;
+            const errorLogger: server.Logger = {
+                close: noop,
+                hasLevel: () => true,
+                loggingEnabled: () => true,
+                perftrc: noop,
+                info: noop,
+                msg: (_s, type) => {
+                    if (type === server.Msg.Err) {
+                        hasError = true;
+                    }
+                },
+                startGroup: noop,
+                endGroup: noop,
+                getLogFileName: (): string => undefined
+            };
+            return {
+                errorLogger,
+                hasError: () => hasError
+            };
+        }
+
         it("document is not contained in project", () => {
             const file1 = {
                 path: "/a/b/app.ts",
@@ -2910,23 +2933,8 @@ namespace ts.projectSystem {
         describe("when opening new file that doesnt exist on disk yet", () => {
             function verifyNonExistentFile(useProjectRoot: boolean) {
                 const host = createServerHost([libFile]);
-                let hasError = false;
-                const errLogger: server.Logger = {
-                    close: noop,
-                    hasLevel: () => true,
-                    loggingEnabled: () => true,
-                    perftrc: noop,
-                    info: noop,
-                    msg: (_s, type) => {
-                        if (type === server.Msg.Err) {
-                            hasError = true;
-                        }
-                    },
-                    startGroup: noop,
-                    endGroup: noop,
-                    getLogFileName: (): string => undefined
-                };
-                const session = createSession(host, { canUseEvents: true, logger: errLogger, useInferredProjectPerProjectRoot: true });
+                const { hasError, errorLogger } = createErrorLogger();
+                const session = createSession(host, { canUseEvents: true, logger: errorLogger, useInferredProjectPerProjectRoot: true });
 
                 const folderPath = "/user/someuser/projects/someFolder";
                 const projectService = session.getProjectService();
@@ -2967,13 +2975,13 @@ namespace ts.projectSystem {
                 // Run the last one = get error request
                 host.runQueuedTimeoutCallbacks(newTimeoutId);
 
-                assert.isFalse(hasError);
+                assert.isFalse(hasError());
                 host.checkTimeoutQueueLength(2);
                 checkErrorMessage(session, "syntaxDiag", { file: untitledFile, diagnostics: [] });
                 session.clearMessages();
 
                 host.runQueuedImmediateCallbacks();
-                assert.isFalse(hasError);
+                assert.isFalse(hasError());
                 checkErrorMessage(session, "semanticDiag", { file: untitledFile, diagnostics: [] });
 
                 checkCompleteEvent(session, 2, expectedSequenceId);
@@ -3038,6 +3046,31 @@ namespace ts.projectSystem {
                 checkCompleteEvent(session, 2, expectedSequenceId);
                 session.clearMessages();
             }
+        });
+
+        it("Getting errors before opening file", () => {
+            const file: FileOrFolder = {
+                path: "/a/b/project/file.ts",
+                content: "let x: number = false;"
+            };
+            const host = createServerHost([file, libFile]);
+            const { hasError, errorLogger } = createErrorLogger();
+            const session = createSession(host, { canUseEvents: true, logger: errorLogger });
+
+            session.clearMessages();
+            const expectedSequenceId = session.getNextSeq();
+            session.executeCommandSeq<protocol.GeterrRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    files: [file.path]
+                }
+            });
+
+            host.runQueuedImmediateCallbacks();
+            assert.isFalse(hasError());
+            checkCompleteEvent(session, 1, expectedSequenceId);
+            session.clearMessages();
         });
     });
 
