@@ -947,6 +947,10 @@
         "category": "Error",
         "code": 1337
     },
+    "'infer' declarations are only permitted in the 'extends' clause of a conditional type.": {
+        "category": "Error",
+        "code": 1338
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

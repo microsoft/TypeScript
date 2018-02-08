@@ -22,10 +22,6 @@ declare namespace ts.server {
         require?(initialPath: string, moduleName: string): RequireResult;
     }
 
-    export interface SortedArray<T> extends Array<T> {
-        " __sortedArrayBrand": any;
-    }
-
     export interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
         " __sortedArrayBrand": any;
     }

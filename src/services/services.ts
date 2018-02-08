@@ -114,12 +114,15 @@ namespace ts {
             return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
         }
 
-        private addSyntheticNodes(nodes: Node[], pos: number, end: number): number {
+        private addSyntheticNodes(nodes: Push<Node>, pos: number, end: number): number {
             scanner.setTextPos(pos);
             while (pos < end) {
                 const token = scanner.scan();
                 const textPos = scanner.getTextPos();
                 if (textPos <= end) {
+                    if (token === SyntaxKind.Identifier) {
+                        Debug.fail(`Did not expect ${(ts as any).SyntaxKind[this.kind]} to have an Identifier in its trivia`);
+                    }
                     nodes.push(createNode(token, pos, textPos, this));
                 }
                 pos = textPos;
@@ -1577,9 +1580,9 @@ namespace ts {
             return results;
         }
 
-        function getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] {
+        function getDocumentHighlights(fileName: string, position: number, filesToSearch: ReadonlyArray<string>): DocumentHighlights[] {
             synchronizeHostData();
-            const sourceFilesToSearch = map(filesToSearch, f => program.getSourceFile(f));
+            const sourceFilesToSearch = map(filesToSearch, f => Debug.assertDefined(program.getSourceFile(f)));
             const sourceFile = getValidSourceFile(fileName);
             return DocumentHighlights.getDocumentHighlights(program, cancellationToken, sourceFile, position, sourceFilesToSearch);
         }
