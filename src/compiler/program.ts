@@ -637,6 +637,10 @@ namespace ts {
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
         oldProgram = undefined;
 
+        if (options.noImportCycles) {
+            checkForImportCycles();
+        }
+
         program = {
             getRootFileNames: () => rootNames,
             getSourceFile,
@@ -2391,6 +2395,105 @@ namespace ts {
 
         function isSameFile(file1: string, file2: string) {
             return comparePaths(file1, file2, currentDirectory, !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
+        }
+
+        // Determines whether two cycles are the same. Because they are cyclical,
+        // they can start on any source file within the cycle.
+        function areImportCyclesEqual(cycle1: ImportCycle, cycle2: ImportCycle): boolean {
+            if (cycle1.length !== cycle2.length) {
+                return false;
+            }
+
+            let i: number;
+            for (i = 0; i < cycle2.length; i++) {
+                if (cycle1[0] === cycle2[i]) {
+                    break;
+                }
+            }
+
+            if (i >= cycle2.length) {
+                return false;
+            }
+
+            for (let j = 1; j < cycle2.length; j++) {
+                if (cycle1[j] !== cycle2[(i + j) % cycle2.length]) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        function printImportCycle(cycle: ImportCycle): string {
+            return cycle.map(file => {
+                return getBaseFileName(file.fileName);
+            }).join(' -> ');
+        }
+
+        function checkForImportCycles() {
+            // Build a map of source files by path name but without file extension.
+            let sourceFileMap: { [path: string]: ts.SourceFile } = {};
+            let filesChecked: { [path: string]: boolean } = {};
+            files.forEach(file => {
+                if (!file.isDeclarationFile) {
+                    sourceFileMap[removeFileExtension(file.fileName)] = file;
+                }
+            });
+
+            let cyclesFound: ImportCycle[] = [];
+
+            let findCycles = (sourceFile: ts.SourceFile, stack: ts.SourceFile[]): void => {
+                stack.push(sourceFile);
+                let fileDir = getDirectoryPath(sourceFile.fileName);
+                let paths: string[] = sourceFile.imports.map(path => {
+                    return getNormalizedAbsolutePath(path.text, fileDir);
+                });
+                if (paths) {
+                    paths.forEach(path => {
+                        // If this file has already been checked, we can short-cut
+                        // the check because we know it either doesn't participate in
+                        // cycles or any newly-detected cycles will not be unique.
+                        if (filesChecked[path]) {
+                            return;
+                        }
+                        
+                        let importedFile = sourceFileMap[path];
+
+                        // Global interface files won't be in the source file map, so 
+                        // ignore if we don't find it.
+                        if (importedFile) {
+                            let indexOfImportedFile = stack.indexOf(importedFile);
+                            if (indexOfImportedFile >= 0) {
+                                let newCycle: ImportCycle = stack.slice(indexOfImportedFile);
+                                let isUnique = true;
+                                cyclesFound.forEach(existingCycle => {
+                                    if (areImportCyclesEqual(existingCycle, newCycle)) {
+                                        isUnique = false;
+                                    }
+                                });
+                                if (isUnique) {
+                                    cyclesFound.push(newCycle);
+                                }
+                            } else {
+                                findCycles(importedFile, stack);
+                            }
+                        }
+
+                        filesChecked[path] = true;
+                    });
+                }
+                stack.pop();
+            };
+
+            files.forEach(file => {
+                if (!file.isDeclarationFile) {
+                    findCycles(file, []);
+                }
+            });
+
+            cyclesFound.forEach(cycle => {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Import_cycle_detected_Colon_0, printImportCycle(cycle)));
+            });
         }
     }
 
