@@ -4942,7 +4942,8 @@ namespace ts {
          * ```
          */
         substituteNode?(hint: EmitHint, node: Node): Node;
-        /*@internal*/ onEmitSourceMapOfNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
+        /*@internal*/ onEmitLeadingSourceMapOfNode?: (node: Node) => void;
+        /*@internal*/ onEmitTrailingSourceMapOfNode?: (node: Node) => void;
         /*@internal*/ onEmitSourceMapOfToken?: (node: Node, token: SyntaxKind, writer: (s: string) => void, pos: number, emitCallback: (token: SyntaxKind, writer: (s: string) => void, pos: number) => number) => number;
         /*@internal*/ onEmitSourceMapOfPosition?: (pos: number) => void;
         /*@internal*/ onEmitHelpers?: (node: Node, writeLines: (text: string) => void) => void;
