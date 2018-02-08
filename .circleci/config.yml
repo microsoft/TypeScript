@@ -29,10 +29,48 @@ workflows:
                 - release-2.6
                 - release-2.7
                 - circleci
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 8 * * *"
+          filters:
+            branches:
+              only: master
+    jobs:
+      - node9:
+          filters:
+            branches:
+              only:
+                - master
+                - release-2.5
+                - release-2.6
+                - release-2.7
+                - circleci
+          context: nightlies
+      - node8:
+          filters:
+            branches:
+              only:
+                - master
+                - release-2.5
+                - release-2.6
+                - release-2.7
+                - circleci
+          context: nightlies
+      - node6:
+          filters:
+            branches:
+              only:
+                - master
+                - release-2.5
+                - release-2.6
+                - release-2.7
+                - circleci
+          context: nightlies
 
 base: &base
   environment:
-    - workerCount: 3
+    - workerCount: 4
   steps:
     - checkout
     - run: |
