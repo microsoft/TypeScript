@@ -705,7 +705,10 @@ namespace ts.codefix {
     function getActionsForNonUMDImport(context: CodeFixContext): CodeAction[] {
         // This will always be an Identifier, since the diagnostics we fix only fail on identifiers.
         const { sourceFile, span, program, cancellationToken } = context;
-        const symbolToken = cast(getTokenAtPosition(sourceFile, span.start, /*includeJsDocComment*/ false), isIdentifier);
+        const symbolToken = getTokenAtPosition(sourceFile, span.start, /*includeJsDocComment*/ false);
+        if (!isIdentifier(symbolToken)) {
+            return undefined;
+        }
         const symbolName = symbolToken.getText();
         const allSourceFiles = program.getSourceFiles();
         const checker = program.getTypeChecker();
