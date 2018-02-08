@@ -28,9 +28,11 @@ namespace ts.textChanges {
     }
 
     export interface ConfigurableStart {
+        /** True to use getStart() (NB, not getFullStart()) without adjustment. */
         useNonAdjustedStartPosition?: boolean;
     }
     export interface ConfigurableEnd {
+        /** True to use getEnd() without adjustment. */
         useNonAdjustedEndPosition?: boolean;
     }
 
@@ -132,7 +134,7 @@ namespace ts.textChanges {
 
     export function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStart, position: Position) {
         if (options.useNonAdjustedStartPosition) {
-            return node.getFullStart();
+            return node.getStart();
         }
         const fullStart = node.getFullStart();
         const start = node.getStart(sourceFile);
