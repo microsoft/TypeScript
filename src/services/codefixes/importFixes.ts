@@ -672,7 +672,7 @@ namespace ts.codefix {
             const symbol = checker.getAliasedSymbol(umdSymbol);
             if (symbol) {
                 return getCodeActionsForImport([{ moduleSymbol: symbol, importKind: getUmdImportKind(context.program.getCompilerOptions()) }],
-                    convertToImportCodeFixContext(context, isIdentifier(token) ? token : undefined, umdSymbol.name));
+                    convertToImportCodeFixContext(context, token, umdSymbol.name));
             }
         }
 
