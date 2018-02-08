@@ -15,7 +15,7 @@ declare function conforms<T>(source: { [K in keyof T]: (val: T[K]) => boolean })
 
 conforms({ foo: (v: string) => false })({ foo: "hello" });
 >conforms({ foo: (v: string) => false })({ foo: "hello" }) : boolean
->conforms({ foo: (v: string) => false }) : (value: { foo: any; }) => boolean
+>conforms({ foo: (v: string) => false }) : (value: { foo: string; }) => boolean
 >conforms : <T>(source: { [K in keyof T]: (val: T[K]) => boolean; }) => (value: T) => boolean
 >{ foo: (v: string) => false } : { foo: (v: string) => boolean; }
 >foo : (v: string) => boolean

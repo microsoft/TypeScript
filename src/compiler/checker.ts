@@ -3215,7 +3215,8 @@ namespace ts {
                                 context.tracker.reportPrivateInBaseOfClassExpression(unescapeLeadingUnderscores(propertySymbol.escapedName));
                             }
                         }
-                        const propertyType = getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped ? anyType : getTypeOfSymbol(propertySymbol);
+                        const propertyType = getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped && context.flags & NodeBuilderFlags.InReverseMappedType ?
+                            anyType : getTypeOfSymbol(propertySymbol);
                         const saveEnclosingDeclaration = context.enclosingDeclaration;
                         context.enclosingDeclaration = undefined;
                         if (getCheckFlags(propertySymbol) & CheckFlags.Late) {
@@ -3238,7 +3239,10 @@ namespace ts {
                             }
                         }
                         else {
+                            const savedFlags = context.flags;
+                            context.flags |= !!(getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped) ? NodeBuilderFlags.InReverseMappedType : 0;
                             const propertyTypeNode = propertyType ? typeToTypeNodeHelper(propertyType, context) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                            context.flags = savedFlags;
 
                             const modifiers = isReadonlySymbol(propertySymbol) ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
                             const propertySignature = createPropertySignature(

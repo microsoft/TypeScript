@@ -1838,6 +1838,7 @@ declare namespace ts {
         InObjectTypeLiteral = 4194304,
         InTypeAlias = 8388608,
         InInitialEntityName = 16777216,
+        InReverseMappedType = 33554432,
     }
     enum TypeFormatFlags {
         None = 0,
