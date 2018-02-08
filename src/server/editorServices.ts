@@ -668,7 +668,7 @@ namespace ts.server {
 
         getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean) {
             let scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
-            if (ensureProject && !scriptInfo || scriptInfo.isOrphan()) {
+            if (ensureProject && (!scriptInfo || scriptInfo.isOrphan())) {
                 this.ensureProjectStructuresUptoDate();
                 scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
                 if (!scriptInfo) {
