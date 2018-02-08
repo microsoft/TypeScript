@@ -1,0 +1,13 @@
+tests/cases/conformance/es6/Symbols/symbolDeclarationEmit4.ts(2,9): error TS2718: Duplicate declaration '[Symbol.toPrimitive]'.
+tests/cases/conformance/es6/Symbols/symbolDeclarationEmit4.ts(3,9): error TS2718: Duplicate declaration '[Symbol.toPrimitive]'.
+
+
+==== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit4.ts (2 errors) ====
+    class C {
+        get [Symbol.toPrimitive]() { return ""; }
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2718: Duplicate declaration '[Symbol.toPrimitive]'.
+        set [Symbol.toPrimitive](x) { }
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2718: Duplicate declaration '[Symbol.toPrimitive]'.
+    }

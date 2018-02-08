@@ -1,9 +1,9 @@
 === tests/cases/conformance/es6/Symbols/symbolDeclarationEmit7.ts ===
 var obj: {
->obj : { [Symbol.isConcatSpreadable]: string; }
+>obj : { [Symbol.isConcatSpreadable]: string; [Symbol.isConcatSpreadable]: string; }
 
     [Symbol.isConcatSpreadable]: string;
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 }

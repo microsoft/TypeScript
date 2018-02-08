@@ -12,9 +12,9 @@ var i = {
 >null : null
 
     [Symbol.toStringTag]() { return { p: undefined }; }
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 >{ p: undefined } : { p: undefined; }
 >p : undefined
 >undefined : undefined
@@ -33,7 +33,7 @@ var str = i[Symbol.toStringTag]();
 >i[Symbol.toStringTag]() : { p: any; }
 >i[Symbol.toStringTag] : () => { p: any; }
 >i : { [Symbol.iterator]: { p: any; }; [Symbol.toStringTag](): { p: any; }; }
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
