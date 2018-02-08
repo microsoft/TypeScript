@@ -2775,6 +2775,9 @@ declare namespace ts {
         span: TextSpan;
         newLength: number;
     }
+    interface SortedArray<T> extends Array<T> {
+        " __sortedArrayBrand": any;
+    }
     interface SyntaxList extends Node {
         _children: Node[];
     }
@@ -4853,9 +4856,6 @@ declare namespace ts.server {
         gc?(): void;
         trace?(s: string): void;
         require?(initialPath: string, moduleName: string): RequireResult;
-    }
-    interface SortedArray<T> extends Array<T> {
-        " __sortedArrayBrand": any;
     }
     interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
         " __sortedArrayBrand": any;
