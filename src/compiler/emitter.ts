@@ -2201,10 +2201,7 @@ namespace ts {
             writePunctuation("<");
             emitJsxTagName(node.tagName);
             writeSpace();
-            // We are checking here so we won't re-enter the emiting pipeline and emit extra sourcemap
-            if (node.attributes.properties && node.attributes.properties.length > 0) {
-                emit(node.attributes);
-            }
+            emit(node.attributes);
             writePunctuation("/>");
         }
 
@@ -2219,11 +2216,10 @@ namespace ts {
 
             if (isJsxOpeningElement(node)) {
                 emitJsxTagName(node.tagName);
-                // We are checking here so we won't re-enter the emitting pipeline and emit extra sourcemap
                 if (node.attributes.properties && node.attributes.properties.length > 0) {
                     writeSpace();
-                    emit(node.attributes);
                 }
+                emit(node.attributes);
             }
 
             writePunctuation(">");
