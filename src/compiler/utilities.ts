@@ -3770,6 +3770,10 @@ namespace ts {
     export function forSomeAncestorDirectory(directory: string, callback: (directory: string) => boolean): boolean {
         return !!forEachAncestorDirectory(directory, d => callback(d) ? true : undefined);
     }
+
+    export function isUMDExportSymbol(symbol: Symbol) {
+        return symbol && symbol.declarations && symbol.declarations[0] && isNamespaceExportDeclaration(symbol.declarations[0]);
+    }
 }
 
 namespace ts {

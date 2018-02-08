@@ -2464,10 +2464,6 @@ namespace ts {
                     (ignoreQualification || canQualifySymbol(symbolFromSymbolTable, meaning));
             }
 
-            function isUMDExportSymbol(symbol: Symbol) {
-                return symbol && symbol.declarations && symbol.declarations[0] && isNamespaceExportDeclaration(symbol.declarations[0]);
-            }
-
             function trySymbolTable(symbols: SymbolTable, ignoreQualification: boolean | undefined) {
                 // If symbol is directly available by its name in the symbol table
                 if (isAccessible(symbols.get(symbol.escapedName), /*resolvedAliasSymbol*/ undefined, ignoreQualification)) {
