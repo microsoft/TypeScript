@@ -242,7 +242,6 @@ namespace ts.refactor.extractSymbol {
                 // they will never find `start` in `start.parent.statements`.
                 // Consider: We could support ranges like [|case 1:|] by refining them to just
                 // the expression.
-                Debug.assert(isCaseClause(start.parent) && span.start < start.parent.expression.end);
                 return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
             }
 
@@ -336,6 +335,13 @@ namespace ts.refactor.extractSymbol {
                 Continue = 1 << 1,
                 Return = 1 << 2
             }
+
+            // We believe it's true because the node is from the (unmodified) tree.
+            Debug.assert(nodeToCheck.pos <= nodeToCheck.end, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
+
+            // For understanding how skipTrivia functioned:
+            Debug.assert(!positionIsSynthesized(nodeToCheck.pos), "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
+
             if (!isStatement(nodeToCheck) && !(isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck))) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.statementOrExpressionExpected)];
             }

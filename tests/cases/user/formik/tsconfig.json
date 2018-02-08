@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "jsx": "react",
+        "strict": true,
+        "esModuleInterop": true,
+        "noEmit": true,
+        "types": []
+    },
+    "files": [
+        "index.tsx"
+    ]
+}

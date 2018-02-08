@@ -18,10 +18,10 @@ function rebase(fn: (base: any, ...args: any[]) => any): (...args: any[]) => any
 >apply : (this: Function, thisArg: any, argArray?: any) => any
 >this : any
 >[ this ].concat(args) : any[]
->[ this ].concat : { (...items: (any[] | ReadonlyArray<any>)[]): any[]; (...items: any[]): any[]; }
+>[ this ].concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
 >[ this ] : any[]
 >this : any
->concat : { (...items: (any[] | ReadonlyArray<any>)[]): any[]; (...items: any[]): any[]; }
+>concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
 >args : any[]
 
     };

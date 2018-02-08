@@ -3,6 +3,7 @@ TypeScript is authored by:
 * Abubaker Bashir
 * Adam Freidin
 * Adi Dahiya
+* Adnan Chowdhury 
 * Adrian Leonhard 
 * Ahmad Farid
 * Akshar Patel
@@ -36,6 +37,7 @@ TypeScript is authored by:
 * Asad Saeeduddin
 * Avery Morin
 * Basarat Ali Syed
+* @begincalendar
 * Ben Duffield
 * Ben Mosher 
 * Benjamin Bock 
@@ -59,7 +61,6 @@ TypeScript is authored by:
 * Colby Russell
 * Colin Snover
 * Cotton Hou 
-* csigs 
 * Cyrus Najmabadi
 * Dafrok Zhang
 * Dahan Gong
@@ -87,6 +88,7 @@ TypeScript is authored by:
 * Eric Tsang
 * Erik Edrosa
 * Erik McClenney 
+* Esakki Raj 
 * Ethan Resnick 
 * Ethan Rubio
 * Eugene Timokhov 
@@ -124,6 +126,7 @@ TypeScript is authored by:
 * Ivan Enderlin 
 * Ivo Gabe de Wolff
 * Iwata Hidetaka 
+* Jack Williams 
 * Jakub Korzeniowski
 * Jakub Młokosiewicz 
 * James Henry 
@@ -182,7 +185,6 @@ TypeScript is authored by:
 * Martin Hiller 
 * Martin Vseticka
 * Masahiro Wakame
-* Matt 
 * Matt Bierner 
 * Matt McCutchen
 * Matt Mitchell 
@@ -224,6 +226,7 @@ TypeScript is authored by:
 * Perry Jiang
 * Peter Burns
 * Philip Bulley
+* Philippe Voinov 
 * Piero Cangianiello
 * @piloopin
 * Prayag Verma
@@ -261,6 +264,7 @@ TypeScript is authored by:
 * Stanislav Iliev 
 * Stanislav Sysoev
 * Stas Vilchik 
+* Stephan Ginthör 
 * Steve Lucco
 * Sudheesh Singanamalla 
 * Sébastien Arod

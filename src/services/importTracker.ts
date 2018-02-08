@@ -107,6 +107,11 @@ namespace ts.FindAllReferences {
                             if (namedBindings && namedBindings.kind === SyntaxKind.NamespaceImport) {
                                 handleNamespaceImport(direct, namedBindings.name);
                             }
+                            else if (isDefaultImport(direct)) {
+                                const sourceFileLike = getSourceFileLikeForImportDeclaration(direct);
+                                addIndirectUser(sourceFileLike); // Add a check for indirect uses to handle synthetic default imports
+                                directImports.push(direct);
+                            }
                             else {
                                 directImports.push(direct);
                             }
@@ -491,8 +496,7 @@ namespace ts.FindAllReferences {
 
             function getExportAssignmentExport(ex: ExportAssignment): ExportedSymbol {
                 // Get the symbol for the `export =` node; its parent is the module it's the export of.
-                const exportingModuleSymbol = ex.symbol.parent;
-                Debug.assert(!!exportingModuleSymbol);
+                const exportingModuleSymbol = Debug.assertDefined(ex.symbol.parent, "Expected export symbol to have a parent");
                 const exportKind = ex.isExportEquals ? ExportKind.ExportEquals : ExportKind.Default;
                 return { kind: ImportExport.Export, symbol, exportInfo: { exportingModuleSymbol, exportKind } };
             }

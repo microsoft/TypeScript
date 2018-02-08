@@ -898,7 +898,7 @@ namespace ts.server {
 
             const project = this.getOrCreateInferredProjectForProjectRootPathIfEnabled(info, projectRootPath) ||
                 this.getOrCreateSingleInferredProjectIfEnabled() ||
-                this.createInferredProject(getDirectoryPath(info.path));
+                this.createInferredProject(info.isDynamic ? this.currentDirectory : getDirectoryPath(info.path));
 
             project.addRoot(info);
             project.updateGraph();
@@ -1377,9 +1377,10 @@ namespace ts.server {
             return { projectOptions, configFileErrors: errors, configFileSpecs: parsedCommandLine.configFileSpecs };
         }
 
-        private exceededTotalSizeLimitForNonTsFiles<T>(name: string, options: CompilerOptions, fileNames: T[], propertyReader: FilePropertyReader<T>) {
+        /** Get a filename if the language service exceeds the maximum allowed program size; otherwise returns undefined. */
+        private getFilenameForExceededTotalSizeLimitForNonTsFiles<T>(name: string, options: CompilerOptions, fileNames: T[], propertyReader: FilePropertyReader<T>): string | undefined {
             if (options && options.disableSizeLimit || !this.host.getFileSize) {
-                return false;
+                return;
             }
 
             let availableSpace = maxProgramSizeForNonTsFiles;
@@ -1396,20 +1397,16 @@ namespace ts.server {
 
                 totalNonTsFileSize += this.host.getFileSize(fileName);
 
-                if (totalNonTsFileSize > maxProgramSizeForNonTsFiles) {
+                if (totalNonTsFileSize > maxProgramSizeForNonTsFiles || totalNonTsFileSize > availableSpace) {
                     this.logger.info(getExceedLimitMessage({ propertyReader, hasTypeScriptFileExtension, host: this.host }, totalNonTsFileSize));
                     // Keep the size as zero since it's disabled
-                    return true;
+                    return fileName;
                 }
             }
 
-            if (totalNonTsFileSize > availableSpace) {
-                this.logger.info(getExceedLimitMessage({ propertyReader, hasTypeScriptFileExtension, host: this.host }, totalNonTsFileSize));
-                return true;
-            }
-
             this.projectToSizeMap.set(name, totalNonTsFileSize);
-            return false;
+
+            return;
 
             function getExceedLimitMessage(context: { propertyReader: FilePropertyReader<any>, hasTypeScriptFileExtension: (filename: string) => boolean, host: ServerHost }, totalNonTsFileSize: number) {
                 const files = getTop5LargestFiles(context);
@@ -1432,7 +1429,7 @@ namespace ts.server {
                 this,
                 this.documentRegistry,
                 compilerOptions,
-                /*languageServiceEnabled*/ !this.exceededTotalSizeLimitForNonTsFiles(projectFileName, compilerOptions, files, externalFilePropertyReader),
+                /*lastFileExceededProgramSize*/ this.getFilenameForExceededTotalSizeLimitForNonTsFiles(projectFileName, compilerOptions, files, externalFilePropertyReader),
                 options.compileOnSave === undefined ? true : options.compileOnSave);
             project.excludedFiles = excludedFiles;
 
@@ -1498,14 +1495,14 @@ namespace ts.server {
             const cachedDirectoryStructureHost = createCachedDirectoryStructureHost(this.host, this.host.getCurrentDirectory(), this.host.useCaseSensitiveFileNames);
             const { projectOptions, configFileErrors, configFileSpecs } = this.convertConfigFileContentToProjectOptions(configFileName, cachedDirectoryStructureHost);
             this.logger.info(`Opened configuration file ${configFileName}`);
-            const languageServiceEnabled = !this.exceededTotalSizeLimitForNonTsFiles(configFileName, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader);
+            const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(configFileName, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader);
             const project = new ConfiguredProject(
                 configFileName,
                 this,
                 this.documentRegistry,
                 projectOptions.configHasFilesProperty,
                 projectOptions.compilerOptions,
-                languageServiceEnabled,
+                lastFileExceededProgramSize,
                 projectOptions.compileOnSave === undefined ? false : projectOptions.compileOnSave,
                 cachedDirectoryStructureHost);
 
@@ -1518,7 +1515,7 @@ namespace ts.server {
                 WatchType.ConfigFilePath,
                 project
             );
-            if (languageServiceEnabled) {
+            if (!lastFileExceededProgramSize) {
                 project.watchWildcards(projectOptions.wildcardDirectories);
             }
 
@@ -1631,8 +1628,9 @@ namespace ts.server {
             // Update the project
             project.configFileSpecs = configFileSpecs;
             project.setProjectErrors(configFileErrors);
-            if (this.exceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader)) {
-                project.disableLanguageService();
+            const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader);
+            if (lastFileExceededProgramSize) {
+                project.disableLanguageService(lastFileExceededProgramSize);
                 project.stopWatchingWildCards();
             }
             else {
@@ -1655,7 +1653,7 @@ namespace ts.server {
         }
 
         private getOrCreateInferredProjectForProjectRootPathIfEnabled(info: ScriptInfo, projectRootPath: NormalizedPath | undefined): InferredProject | undefined {
-            if (!this.useInferredProjectPerProjectRoot) {
+            if (info.isDynamic || !this.useInferredProjectPerProjectRoot) {
                 return undefined;
             }
 
@@ -2396,8 +2394,9 @@ namespace ts.server {
                 externalProject.excludedFiles = excludedFiles;
                 if (!tsConfigFiles) {
                     const compilerOptions = convertCompilerOptions(proj.options);
-                    if (this.exceededTotalSizeLimitForNonTsFiles(proj.projectFileName, compilerOptions, proj.rootFiles, externalFilePropertyReader)) {
-                        externalProject.disableLanguageService();
+                    const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(proj.projectFileName, compilerOptions, proj.rootFiles, externalFilePropertyReader);
+                    if (lastFileExceededProgramSize) {
+                        externalProject.disableLanguageService(lastFileExceededProgramSize);
                     }
                     else {
                         externalProject.enableLanguageService();
