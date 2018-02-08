@@ -777,3 +777,78 @@ type T52 = IsNever<any>;  // false
 >T52 : Symbol(T52, Decl(conditionalTypes1.ts, 203, 27))
 >IsNever : Symbol(IsNever, Decl(conditionalTypes1.ts, 198, 47))
 
+// Repros from #21664
+
+type Eq<T, U> = T extends U ? U extends T ? true : false : false;
+>Eq : Symbol(Eq, Decl(conditionalTypes1.ts, 204, 24))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 208, 8))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 208, 10))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 208, 8))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 208, 10))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 208, 10))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 208, 8))
+
+type T60 = Eq<true, true>;  // true
+>T60 : Symbol(T60, Decl(conditionalTypes1.ts, 208, 65))
+>Eq : Symbol(Eq, Decl(conditionalTypes1.ts, 204, 24))
+
+type T61 = Eq<true, false>;  // false
+>T61 : Symbol(T61, Decl(conditionalTypes1.ts, 209, 26))
+>Eq : Symbol(Eq, Decl(conditionalTypes1.ts, 204, 24))
+
+type T62 = Eq<false, true>;  // false
+>T62 : Symbol(T62, Decl(conditionalTypes1.ts, 210, 27))
+>Eq : Symbol(Eq, Decl(conditionalTypes1.ts, 204, 24))
+
+type T63 = Eq<false, false>;  // true
+>T63 : Symbol(T63, Decl(conditionalTypes1.ts, 211, 27))
+>Eq : Symbol(Eq, Decl(conditionalTypes1.ts, 204, 24))
+
+type Eq1<T, U> = Eq<T, U> extends false ? false : true;
+>Eq1 : Symbol(Eq1, Decl(conditionalTypes1.ts, 212, 28))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 214, 9))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 214, 11))
+>Eq : Symbol(Eq, Decl(conditionalTypes1.ts, 204, 24))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 214, 9))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 214, 11))
+
+type T70 = Eq1<true, true>;  // true
+>T70 : Symbol(T70, Decl(conditionalTypes1.ts, 214, 55))
+>Eq1 : Symbol(Eq1, Decl(conditionalTypes1.ts, 212, 28))
+
+type T71 = Eq1<true, false>;  // false
+>T71 : Symbol(T71, Decl(conditionalTypes1.ts, 215, 27))
+>Eq1 : Symbol(Eq1, Decl(conditionalTypes1.ts, 212, 28))
+
+type T72 = Eq1<false, true>;  // false
+>T72 : Symbol(T72, Decl(conditionalTypes1.ts, 216, 28))
+>Eq1 : Symbol(Eq1, Decl(conditionalTypes1.ts, 212, 28))
+
+type T73 = Eq1<false, false>;  // true
+>T73 : Symbol(T73, Decl(conditionalTypes1.ts, 217, 28))
+>Eq1 : Symbol(Eq1, Decl(conditionalTypes1.ts, 212, 28))
+
+type Eq2<T, U> = Eq<T, U> extends true ? true : false;
+>Eq2 : Symbol(Eq2, Decl(conditionalTypes1.ts, 218, 29))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 220, 9))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 220, 11))
+>Eq : Symbol(Eq, Decl(conditionalTypes1.ts, 204, 24))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 220, 9))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 220, 11))
+
+type T80 = Eq2<true, true>;  // true
+>T80 : Symbol(T80, Decl(conditionalTypes1.ts, 220, 54))
+>Eq2 : Symbol(Eq2, Decl(conditionalTypes1.ts, 218, 29))
+
+type T81 = Eq2<true, false>;  // false
+>T81 : Symbol(T81, Decl(conditionalTypes1.ts, 221, 27))
+>Eq2 : Symbol(Eq2, Decl(conditionalTypes1.ts, 218, 29))
+
+type T82 = Eq2<false, true>;  // false
+>T82 : Symbol(T82, Decl(conditionalTypes1.ts, 222, 28))
+>Eq2 : Symbol(Eq2, Decl(conditionalTypes1.ts, 218, 29))
+
+type T83 = Eq2<false, false>;  // true
+>T83 : Symbol(T83, Decl(conditionalTypes1.ts, 223, 28))
+>Eq2 : Symbol(Eq2, Decl(conditionalTypes1.ts, 218, 29))
+

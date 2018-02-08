@@ -321,6 +321,91 @@ type T62<T> = U extends (infer U)[] ? U : U;  // Error
 >U : U
 >U : No type information available!
 
+type T70<T extends string> = { x: T };
+>T70 : T70<T>
+>T : T
+>x : T
+>T : T
+
+type T71<T> = T extends T70<infer U> ? T70<U> : never;
+>T71 : T71<T>
+>T : T
+>T : T
+>T70 : T70<T>
+>U : U
+>T70 : T70<T>
+>U : U
+
+type T72<T extends number> = { y: T };
+>T72 : T72<T>
+>T : T
+>y : T
+>T : T
+
+type T73<T> = T extends T72<infer U> ? T70<U> : never;  // Error
+>T73 : T73<T>
+>T : T
+>T : T
+>T72 : T72<T>
+>U : U
+>T70 : T70<T>
+>U : U
+
+type T74<T extends number, U extends string> = { x: T, y: U };
+>T74 : T74<T, U>
+>T : T
+>U : U
+>x : T
+>T : T
+>y : U
+>U : U
+
+type T75<T> = T extends T74<infer U, infer U> ? T70<U> | T72<U> | T74<U, U> : never;
+>T75 : T75<T>
+>T : T
+>T : T
+>T74 : T74<T, U>
+>U : U
+>U : U
+>T70 : T70<T>
+>U : U
+>T72 : T72<T>
+>U : U
+>T74 : T74<T, U>
+>U : U
+>U : U
+
+type T76<T extends T[], U extends T> = { x: T };
+>T76 : T76<T, U>
+>T : T
+>T : T
+>U : U
+>T : T
+>x : T
+>T : T
+
+type T77<T> = T extends T76<infer X, infer Y> ? T76<X, Y> : never;
+>T77 : T77<T>
+>T : T
+>T : T
+>T76 : T76<T, U>
+>X : X
+>Y : Y
+>T76 : T76<T, U>
+>X : X
+>Y : Y
+
+type T78<T> = T extends T76<infer X, infer X> ? T76<X, X> : never;
+>T78 : T78<T>
+>T : T
+>T : T
+>T76 : T76<T, U>
+>X : X
+>X : X
+>T76 : T76<T, U>
+>X : X
+>X : X
+
 // Example from #21496
 
 type JsonifiedObject<T extends object> = { [K in keyof T]: Jsonified<T[K]> };
@@ -424,4 +509,70 @@ const z2: string = ex.obj.nested.attr;
 >obj : JsonifiedObject<{ prop: "property"; clz: MyClass; nested: { attr: Date; }; }>
 >nested : JsonifiedObject<{ attr: Date; }>
 >attr : string
+
+// Repros from #21631
+
+type A1<T, U extends A1<any, any>> = [T, U];
+>A1 : [T, U]
+>T : T
+>U : U
+>A1 : [T, U]
+>T : T
+>U : U
+
+type B1<S> = S extends A1<infer T, infer U> ? [T, U] : never;
+>B1 : B1<S>
+>S : S
+>S : S
+>A1 : [T, U]
+>T : T
+>U : U
+>T : T
+>U : U
+
+type A2<T, U extends void> = [T, U];
+>A2 : [T, U]
+>T : T
+>U : U
+>T : T
+>U : U
+
+type B2<S> = S extends A2<infer T, infer U> ? [T, U] : never;
+>B2 : B2<S>
+>S : S
+>S : S
+>A2 : [T, U]
+>T : T
+>U : U
+>T : T
+>U : U
+
+type C2<S, U extends void> = S extends A2<infer T, U> ? [T, U] : never;
+>C2 : C2<S, U>
+>S : S
+>U : U
+>S : S
+>A2 : [T, U]
+>T : T
+>U : U
+>T : T
+>U : U
+
+// Repro from #21735
+
+type A<T> = T extends string ? { [P in T]: void; } : T;
+>A : A<T>
+>T : T
+>T : T
+>P : P
+>T : T
+>T : T
+
+type B<T> = string extends T ? { [P in T]: void; } : T;  // Error
+>B : B<T>
+>T : T
+>T : T
+>P : P
+>T : T
+>T : T
 

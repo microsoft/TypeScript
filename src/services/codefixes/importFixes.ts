@@ -24,7 +24,7 @@ namespace ts.codefix {
     }
 
     interface ImportCodeFixContext extends SymbolContext {
-        symbolToken: Identifier | undefined;
+        symbolToken: Node;
         program: Program;
         checker: TypeChecker;
         compilerOptions: CompilerOptions;
@@ -42,6 +42,7 @@ namespace ts.codefix {
         const useCaseSensitiveFileNames = context.host.useCaseSensitiveFileNames ? context.host.useCaseSensitiveFileNames() : false;
         const { program } = context;
         const checker = program.getTypeChecker();
+
         return {
             host: context.host,
             formatContext: context.formatContext,
@@ -52,7 +53,7 @@ namespace ts.codefix {
             cachedImportDeclarations: [],
             getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames),
             symbolName,
-            symbolToken,
+            symbolToken
         };
     }
 
@@ -93,7 +94,7 @@ namespace ts.codefix {
         allSourceFiles: ReadonlyArray<ts.SourceFile>,
         formatContext: ts.formatting.FormatContext,
         getCanonicalFileName: GetCanonicalFileName,
-        symbolToken: Identifier | undefined,
+        symbolToken: Node | undefined,
     ): { readonly moduleSpecifier: string, readonly codeAction: CodeAction } {
         const exportInfos = getAllReExportingModules(exportedSymbol, checker, allSourceFiles);
         Debug.assert(exportInfos.some(info => info.moduleSymbol === moduleSymbol));
@@ -130,12 +131,12 @@ namespace ts.codefix {
         //     1. change "member3" to "ns.member3"
         //     2. add "member3" to the second import statement's import list
         // and it is up to the user to decide which one fits best.
-        const useExistingImportActions = !context.symbolToken ? emptyArray : mapDefined(existingImports, ({ declaration }) => {
+        const useExistingImportActions = !context.symbolToken || !isIdentifier(context.symbolToken) ? emptyArray : mapDefined(existingImports, ({ declaration }) => {
             const namespace = getNamespaceImportName(declaration);
             if (namespace) {
                 const moduleSymbol = context.checker.getAliasedSymbol(context.checker.getSymbolAtLocation(namespace));
                 if (moduleSymbol && moduleSymbol.exports.has(escapeLeadingUnderscores(context.symbolName))) {
-                    return getCodeActionForUseExistingNamespaceImport(namespace.text, context, context.symbolToken);
+                    return getCodeActionForUseExistingNamespaceImport(namespace.text, context, context.symbolToken as Identifier);
                 }
             }
         });

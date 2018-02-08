@@ -205,6 +205,26 @@ type T50 = IsNever<never>;  // true
 type T51 = IsNever<number>;  // false
 type T52 = IsNever<any>;  // false
 
+// Repros from #21664
+
+type Eq<T, U> = T extends U ? U extends T ? true : false : false;
+type T60 = Eq<true, true>;  // true
+type T61 = Eq<true, false>;  // false
+type T62 = Eq<false, true>;  // false
+type T63 = Eq<false, false>;  // true
+
+type Eq1<T, U> = Eq<T, U> extends false ? false : true;
+type T70 = Eq1<true, true>;  // true
+type T71 = Eq1<true, false>;  // false
+type T72 = Eq1<false, true>;  // false
+type T73 = Eq1<false, false>;  // true
+
+type Eq2<T, U> = Eq<T, U> extends true ? true : false;
+type T80 = Eq2<true, true>;  // true
+type T81 = Eq2<true, false>;  // false
+type T82 = Eq2<false, true>;  // false
+type T83 = Eq2<false, false>;  // true
+
 
 //// [conditionalTypes1.js]
 "use strict";
@@ -415,3 +435,18 @@ declare type IsNever<T> = T extends never ? true : false;
 declare type T50 = IsNever<never>;
 declare type T51 = IsNever<number>;
 declare type T52 = IsNever<any>;
+declare type Eq<T, U> = T extends U ? U extends T ? true : false : false;
+declare type T60 = Eq<true, true>;
+declare type T61 = Eq<true, false>;
+declare type T62 = Eq<false, true>;
+declare type T63 = Eq<false, false>;
+declare type Eq1<T, U> = Eq<T, U> extends false ? false : true;
+declare type T70 = Eq1<true, true>;
+declare type T71 = Eq1<true, false>;
+declare type T72 = Eq1<false, true>;
+declare type T73 = Eq1<false, false>;
+declare type Eq2<T, U> = Eq<T, U> extends true ? true : false;
+declare type T80 = Eq2<true, true>;
+declare type T81 = Eq2<true, false>;
+declare type T82 = Eq2<false, true>;
+declare type T83 = Eq2<false, false>;

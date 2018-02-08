@@ -1104,11 +1104,14 @@ namespace ts.server.protocol {
          * Current set of compiler options for project
          */
         options: ts.CompilerOptions;
-
         /**
          * true if project language service is disabled
          */
         languageServiceDisabled: boolean;
+        /**
+         * Filename of the last file analyzed before disabling the language service. undefined, if the language service is enabled.
+         */
+        lastFileExceededProgramSize: string | undefined;
     }
 
     /**
