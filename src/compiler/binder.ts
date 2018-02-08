@@ -2045,7 +2045,7 @@ namespace ts {
                             bindThisPropertyAssignment(<BinaryExpression>node);
                             break;
                         case SpecialPropertyAssignmentKind.Property:
-                            bindStaticPropertyAssignment(<BinaryExpression>node);
+                            bindStaticBinaryExpressionAssignment(node as BinaryExpression);
                             break;
                         case SpecialPropertyAssignmentKind.None:
                             // Nothing to do
@@ -2373,31 +2373,32 @@ namespace ts {
             bindPropertyAssignment(constructorFunction.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ true);
         }
 
-        /**
-         * For nodes like `x.y = z`, declare a member 'y' on 'x' if x is a function or class, or not declared.
-         * Also works for expression statements preceded by JSDoc, like / ** @type number * / x.y;
-         */
-        function bindStaticPropertyAssignment(node: BinaryExpression | PropertyAccessExpression) {
-            // Look up the function in the local scope, since static assignments should
-            // follow the function declaration
-            const leftSideOfAssignment = node.kind === SyntaxKind.PropertyAccessExpression ? node : node.left as PropertyAccessExpression;
-            const target = leftSideOfAssignment.expression;
 
-            if (isIdentifier(target)) {
-                // Fix up parent pointers since we're going to use these nodes before we bind into them
-                target.parent = leftSideOfAssignment;
-                if (node.kind === SyntaxKind.BinaryExpression) {
-                    leftSideOfAssignment.parent = node;
-                }
-                if (container === file && isNameOfExportsOrModuleExportsAliasDeclaration(file, target)) {
+        function bindStaticBinaryExpressionAssignment(node: BinaryExpression) {
+            const lhs = node.left as PropertyAccessExpression;
+            if (isIdentifier(lhs.expression)) {
+                lhs.parent = node;
+                if (container === file && isNameOfExportsOrModuleExportsAliasDeclaration(file, lhs.expression)) {
                     // This can be an alias for the 'exports' or 'module.exports' names, e.g.
                     //    var util = module.exports;
                     //    util.property = function ...
-                    bindExportsPropertyAssignment(node as BinaryExpression);
+                    bindExportsPropertyAssignment(node);
                 }
                 else {
-                    bindPropertyAssignment(target.escapedText, leftSideOfAssignment, /*isPrototypeProperty*/ false);
+                    bindStaticPropertyAssignment(lhs);
                 }
+            }
+        }
+        /**
+         * For nodes like `x.y = z`, declare a member 'y' on 'x' if x is a function or class or {}, or not declared.
+         * Also works for expression statements preceded by JSDoc, like / ** @type number * / x.y;
+         */
+        function bindStaticPropertyAssignment(node: PropertyAccessExpression) {
+            // Look up the property in the local scope, since static assignments should follow the declaration
+            if (isIdentifier(node.expression)) {
+                // Fix up parent pointers since we're going to use these nodes before we bind into them
+                node.expression.parent = node;
+                bindPropertyAssignment(node.expression.escapedText, node, /*isPrototypeProperty*/ false);
             }
         }
 
@@ -2405,8 +2406,8 @@ namespace ts {
             return lookupSymbolForNameWorker(container, name);
         }
 
-        function bindPropertyAssignment(functionName: __String, propertyAccess: PropertyAccessExpression, isPrototypeProperty: boolean) {
-            const symbol = lookupSymbolForName(functionName);
+        function bindPropertyAssignment(name: __String, propertyAccess: PropertyAccessExpression, isPrototypeProperty: boolean) {
+            const symbol = lookupSymbolForName(name);
             let targetSymbol = symbol && isDeclarationOfJavascriptContainerExpression(symbol) ? (symbol.valueDeclaration as VariableDeclaration).initializer.symbol :
                 symbol && isDeclarationOfDefaultedJavascriptContainerExpression(symbol) ? ((symbol.valueDeclaration as VariableDeclaration).initializer as BinaryExpression).right.symbol :
                 symbol;
