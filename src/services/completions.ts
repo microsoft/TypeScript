@@ -923,9 +923,8 @@ namespace ts.Completions {
         }
         else if (isStartingCloseTag) {
             const tagName = (<JsxElement>contextToken.parent.parent).openingElement.tagName;
-            const tagSymbol = Debug.assertDefined(typeChecker.getSymbolAtLocation(tagName));
-
-            if (!typeChecker.isUnknownSymbol(tagSymbol)) {
+            const tagSymbol = typeChecker.getSymbolAtLocation(tagName);
+            if (tagSymbol) {
                 symbols = [tagSymbol];
             }
             completionKind = CompletionKind.MemberLike;
