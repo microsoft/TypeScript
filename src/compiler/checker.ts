@@ -24624,7 +24624,8 @@ namespace ts {
 
                 if (entityName.kind === SyntaxKind.Identifier) {
                     if (isJSXTagName(entityName) && isJsxIntrinsicIdentifier(entityName)) {
-                        return getIntrinsicTagSymbol(<JsxOpeningLikeElement>entityName.parent);
+                        const symbol = getIntrinsicTagSymbol(<JsxOpeningLikeElement>entityName.parent);
+                        return symbol === unknownSymbol ? undefined : symbol;
                     }
 
                     return resolveEntityName(entityName, SymbolFlags.Value, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
