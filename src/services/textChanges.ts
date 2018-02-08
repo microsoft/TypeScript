@@ -282,7 +282,7 @@ namespace ts.textChanges {
             return this;
         }
 
-        public replaceRange(sourceFile: SourceFile, range: TextRange, newNode: Node, options: InsertNodeOptions = {}) {
+        public replaceRange(sourceFile: SourceFile, range: TextRange, newNode: Node, options: ChangeNodeOptions = {}) {
             this.changes.push({ kind: ChangeKind.ReplaceWithSingleNode, sourceFile, range, options, node: newNode });
             return this;
         }
@@ -299,23 +299,29 @@ namespace ts.textChanges {
             return this.replaceRange(sourceFile, { pos, end }, newNode, options);
         }
 
-        private replaceWithMultiple(sourceFile: SourceFile, startPosition: number, endPosition: number, newNodes: ReadonlyArray<Node>, options: ChangeMultipleNodesOptions): this {
-            this.changes.push({
-                kind: ChangeKind.ReplaceWithMultipleNodes,
-                sourceFile,
-                options,
-                nodes: newNodes,
-                range: { pos: startPosition, end: endPosition }
-            });
+        private getDefaultChangeMultipleNodesOptions(): ChangeMultipleNodesOptions {
+            return {
+                nodeSeparator: this.newLineCharacter,
+                useNonAdjustedStartPosition: true,
+                useNonAdjustedEndPosition: true,
+            };
+        }
+
+        public replaceRangeWithNodes(sourceFile: SourceFile, range: TextRange, newNodes: ReadonlyArray<Node>, options: ChangeMultipleNodesOptions = this.getDefaultChangeMultipleNodesOptions()) {
+            this.changes.push({ kind: ChangeKind.ReplaceWithMultipleNodes, sourceFile, range, options, nodes: newNodes });
             return this;
         }
 
-        public replaceNodeWithNodes(sourceFile: SourceFile, oldNode: Node, newNodes: ReadonlyArray<Node>): void {
-            this.replaceWithMultiple(sourceFile, oldNode.getStart(sourceFile), oldNode.getEnd(), newNodes, { nodeSeparator: this.newLineCharacter });
+        public replaceNodeWithNodes(sourceFile: SourceFile, oldNode: Node, newNodes: ReadonlyArray<Node>, options: ChangeMultipleNodesOptions = this.getDefaultChangeMultipleNodesOptions()) {
+            const pos = getAdjustedStartPosition(sourceFile, oldNode, options, Position.Start);
+            const end = getAdjustedEndPosition(sourceFile, oldNode, options);
+            return this.replaceRangeWithNodes(sourceFile, { pos, end }, newNodes, options);
         }
 
-        public replaceNodesWithNodes(sourceFile: SourceFile, oldNodes: ReadonlyArray<Node>, newNodes: ReadonlyArray<Node>): void {
-            this.replaceWithMultiple(sourceFile, first(oldNodes).getStart(sourceFile), last(oldNodes).getEnd(), newNodes, { nodeSeparator: this.newLineCharacter });
+        public replaceNodeRangeWithNodes(sourceFile: SourceFile, startNode: Node, endNode: Node, newNodes: ReadonlyArray<Node>, options: ChangeMultipleNodesOptions = this.getDefaultChangeMultipleNodesOptions()) {
+            const pos = getAdjustedStartPosition(sourceFile, startNode, options, Position.Start);
+            const end = getAdjustedEndPosition(sourceFile, endNode, options);
+            return this.replaceRangeWithNodes(sourceFile, { pos, end }, newNodes, options);
         }
 
         private insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options: InsertNodeOptions = {}) {

@@ -968,7 +968,7 @@ namespace ts.refactor.extractSymbol {
         }
 
         if (isReadonlyArray(range.range)) {
-            changeTracker.replaceNodesWithNodes(context.file, range.range, newNodes);
+            changeTracker.replaceNodeRangeWithNodes(context.file, first(range.range), last(range.range), newNodes);
         }
         else {
             changeTracker.replaceNodeWithNodes(context.file, range.range, newNodes);
