@@ -38,7 +38,7 @@ namespace ts.codefix {
         return { description, changes, fixId: undefined };
     }
 
-    function convertToImportCodeFixContext(context: CodeFixContext, symbolToken: Identifier | undefined, symbolName: string): ImportCodeFixContext {
+    function convertToImportCodeFixContext(context: CodeFixContext, symbolToken: Node, symbolName: string): ImportCodeFixContext {
         const useCaseSensitiveFileNames = context.host.useCaseSensitiveFileNames ? context.host.useCaseSensitiveFileNames() : false;
         const { program } = context;
         const checker = program.getTypeChecker();
@@ -706,13 +706,14 @@ namespace ts.codefix {
     function getActionsForNonUMDImport(context: CodeFixContext): CodeAction[] {
         // This will always be an Identifier, since the diagnostics we fix only fail on identifiers.
         const { sourceFile, span, program, cancellationToken } = context;
+        const checker = program.getTypeChecker();
         const symbolToken = getTokenAtPosition(sourceFile, span.start, /*includeJsDocComment*/ false);
-        if (!isIdentifier(symbolToken)) {
+        const isJsxNamespace = isJsxOpeningLikeElement(symbolToken.parent) && symbolToken.parent.tagName === symbolToken;
+        if (!isJsxNamespace && !isIdentifier(symbolToken)) {
             return undefined;
         }
-        const symbolName = symbolToken.getText();
+        const symbolName = isJsxNamespace ? checker.getJsxNamespace() : (<Identifier>symbolToken).text;
         const allSourceFiles = program.getSourceFiles();
-        const checker = program.getTypeChecker();
         const compilerOptions = program.getCompilerOptions();
 
         // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
