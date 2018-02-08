@@ -38,15 +38,6 @@ namespace ts {
         emitTrailingSourceMapOfNode(node: Node): void;
 
         /**
-         * Emits a node with possible leading and trailing source maps.
-         *
-         * @param hint The current emit context
-         * @param node The node to emit.
-         * @param emitCallback The callback used to emit the node.
-         */
-        emitNodeWithSourceMap(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
-
-        /**
          * Emits a token of a node node with possible leading and trailing source maps.
          *
          * @param node The node containing the token.
@@ -108,7 +99,6 @@ namespace ts {
             emitPos,
             emitLeadingSourceMapOfNode,
             emitTrailingSourceMapOfNode,
-            emitNodeWithSourceMap,
             emitTokenWithSourceMap,
             getText,
             getSourceMappingURL,
@@ -315,20 +305,6 @@ namespace ts {
                 performance.mark("afterSourcemap");
                 performance.measure("Source Map", "beforeSourcemap", "afterSourcemap");
             }
-        }
-
-        /**
-         * Emits a node with possible leading and trailing source maps.
-         *
-         * @param hint A hint as to the intended usage of the node.
-         * @param node The node to emit.
-         * @param emitCallback The callback used to emit the node.
-         */
-        function emitNodeWithSourceMap(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
-            if (!node) return;
-            emitLeadingSourceMapOfNode(node);
-            emitCallback(hint, node);
-            emitTrailingSourceMapOfNode(node);
         }
 
         function emitLeadingSourceMapOfNode(node: Node) {

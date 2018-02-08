@@ -105,7 +105,9 @@ namespace ts {
             hasGlobalName: resolver.hasGlobalName,
 
             // transform hooks
-            onEmitNode: transform.emitNodeWithNotification,
+            onEmitNode: transform.useEmitNodeWithNotification ? transform.emitNodeWithNotification : undefined,
+            onBeforeEmitNode: transform.useEmitNodeWithNotification ? undefined : transform.beforeEmitNode,
+            onAfterEmitNode: transform.useEmitNodeWithNotification ? undefined : transform.afterEmitNode,
             substituteNode: transform.substituteNode,
 
             // sourcemap hooks
@@ -260,11 +262,15 @@ namespace ts {
     }
 
     const enum PipelinePhase {
+        BeforeEmit,
         LeadingComments,
         LeadingSourceMap,
         Emit,
         TrailingSourceMap,
-        TrailingComments
+        TrailingComments,
+        AfterEmit,
+
+        Start = BeforeEmit
     }
 
     export function createPrinter(printerOptions: PrinterOptions = {}, handlers: PrintHandlers = {}): Printer {
@@ -275,6 +281,8 @@ namespace ts {
             onEmitSourceMapOfToken,
             onEmitSourceMapOfPosition,
             onEmitNode,
+            onBeforeEmitNode,
+            onAfterEmitNode,
             onEmitHelpers,
             onSetSourceFile,
             substituteNode,
@@ -283,6 +291,8 @@ namespace ts {
             onBeforeEmitToken,
             onAfterEmitToken
         } = handlers;
+
+        Debug.assert(!(onEmitNode && (onBeforeEmitNode || onAfterEmitNode)), "Do not provide 'onEmitNode' of either of 'onBeforeEmitNode' or 'onAfterEmitNode' are provided.");
 
         const newLine = getNewLineCharacter(printerOptions);
         const comments = createCommentWriter(printerOptions, onEmitSourceMapOfPosition);
@@ -428,7 +438,13 @@ namespace ts {
                 setSourceFile(sourceFile);
             }
 
-            pipelineEmitWithNotification(hint, node);
+            // NOTE: this has been manually inlined to reduce overall stack depth
+            if (onEmitNode) {
+                onEmitNode(hint, node, pipelineEmit);
+            }
+            else {
+                pipelineEmitWorker(hint, node, PipelinePhase.Start);
+            }
         }
 
         function setSourceFile(sourceFile: SourceFile) {
@@ -456,33 +472,49 @@ namespace ts {
         }
 
         function emit(node: Node | undefined) {
-            pipelineEmitWithNotification(EmitHint.Unspecified, node);
+            // NOTE: this has been manually inlined to reduce overall stack depth
+            if (onEmitNode) {
+                onEmitNode(EmitHint.Unspecified, node, pipelineEmit);
+            }
+            else {
+                pipelineEmitWorker(EmitHint.Unspecified, node, PipelinePhase.Start);
+            }
         }
 
         function emitIdentifierName(node: Identifier | undefined) {
-            pipelineEmitWithNotification(EmitHint.IdentifierName, node);
+            // NOTE: this has been manually inlined to reduce overall stack depth
+            if (onEmitNode) {
+                onEmitNode(EmitHint.IdentifierName, node, pipelineEmit);
+            }
+            else {
+                pipelineEmitWorker(EmitHint.IdentifierName, node, PipelinePhase.Start);
+            }
         }
 
         function emitExpression(node: Expression | undefined) {
-            pipelineEmitWithNotification(EmitHint.Expression, node);
-        }
-
-        function pipelineEmitWithNotification(hint: EmitHint, node: Node) {
+            // NOTE: this has been manually inlined to reduce overall stack depth
             if (onEmitNode) {
-                onEmitNode(hint, node, pipelineEmitWithComments);
+                onEmitNode(EmitHint.Expression, node, pipelineEmit);
             }
             else {
-                pipelineEmitWithComments(hint, node);
+                pipelineEmitWorker(EmitHint.Expression, node, PipelinePhase.Start);
             }
         }
 
-        function pipelineEmitWithComments(hint: EmitHint, node: Node) {
-            pipelineEmit(hint, node, PipelinePhase.LeadingComments);
+        function pipelineEmit(hint: EmitHint, node: Node) {
+            pipelineEmitWorker(hint, node, PipelinePhase.Start);
         }
 
-        function pipelineEmit(hint: EmitHint, node: Node | undefined, start: PipelinePhase) {
+        function pipelineEmitWorker(hint: EmitHint, node: Node | undefined, phase: PipelinePhase) {
             if (!node) return;
-            switch (start) {
+            switch (phase) {
+                case PipelinePhase.BeforeEmit:
+                    if (onBeforeEmitNode) {
+                        onBeforeEmitNode(hint, node);
+                    }
+
+                    // falls through
+
                 case PipelinePhase.LeadingComments:
                     node = trySubstituteNode(hint, node);
                     if (hint !== EmitHint.SourceFile) {
@@ -514,7 +546,12 @@ namespace ts {
                         emitTrailingCommentsOfNode(node);
                     }
 
-                    break;
+                    // falls through
+
+                case PipelinePhase.AfterEmit:
+                    if (onAfterEmitNode) {
+                        onAfterEmitNode(hint, node);
+                    }
             }
         }
 
@@ -1260,7 +1297,15 @@ namespace ts {
             }
 
             writePunctuation("[");
-            pipelineEmitWithNotification(EmitHint.MappedTypeParameter, node.typeParameter);
+
+            // NOTE: this has been manually inlined to reduce overall stack depth
+            if (onEmitNode) {
+                onEmitNode(EmitHint.MappedTypeParameter, node.typeParameter, pipelineEmit);
+            }
+            else {
+                pipelineEmitWorker(EmitHint.MappedTypeParameter, node.typeParameter, PipelinePhase.Start);
+            }
+
             writePunctuation("]");
 
             emit(node.questionToken);

@@ -82,6 +82,13 @@ namespace ts {
         return transformers;
     }
 
+    const defaultOnSubstituteNode: TransformationContext["onSubstituteNode"] = (_, node) => node;
+    const defaultOnEmitNode: TransformationContext["onEmitNode"] = (hint, node, callback) => callback(hint, node);
+    // NOTE: not using `noop` here to avoid deoptimizations due to inlining and argument/parameter
+    // count mismatches. Deoptimization for this would be severely negative as these functions are
+    // used in a hot path.
+    const defaultOnBeforeOrAfterEmitNode: TransformationContext["onBeforeEmitNode"] = (_hint, _node) => { /*empty*/ };
+
     /**
      * Transforms an array of SourceFiles by passing them through each transformer.
      *
@@ -101,8 +108,10 @@ namespace ts {
         let lexicalEnvironmentStackOffset = 0;
         let lexicalEnvironmentSuspended = false;
         let emitHelpers: EmitHelper[];
-        let onSubstituteNode: TransformationContext["onSubstituteNode"] = (_, node) => node;
-        let onEmitNode: TransformationContext["onEmitNode"] = (hint, node, callback) => callback(hint, node);
+        let onSubstituteNode: TransformationContext["onSubstituteNode"] = defaultOnSubstituteNode;
+        let onEmitNode: TransformationContext["onEmitNode"];
+        let onBeforeEmitNode: TransformationContext["onBeforeEmitNode"];
+        let onAfterEmitNode: TransformationContext["onBeforeEmitNode"];
         let state = TransformationState.Uninitialized;
 
         // The transformation context is provided to each transformer as part of transformer
@@ -129,12 +138,32 @@ namespace ts {
                 Debug.assert(value !== undefined, "Value must not be 'undefined'");
                 onSubstituteNode = value;
             },
-            get onEmitNode() { return onEmitNode; },
+            get onEmitNode() {
+                // for backwards compatibility, we push any current before/after events into the current callback.
+                if (onBeforeEmitNode || onAfterEmitNode) {
+                    onEmitNode = wrapNotification(onEmitNode || defaultOnEmitNode, onBeforeEmitNode, onAfterEmitNode);
+                    onBeforeEmitNode = undefined;
+                    onAfterEmitNode = undefined;
+                }
+                return onEmitNode || defaultOnEmitNode;
+            },
             set onEmitNode(value) {
                 Debug.assert(state < TransformationState.Initialized, "Cannot modify transformation hooks after initialization has completed.");
                 Debug.assert(value !== undefined, "Value must not be 'undefined'");
                 onEmitNode = value;
-            }
+            },
+            get onBeforeEmitNode() { return onBeforeEmitNode || defaultOnBeforeOrAfterEmitNode; },
+            set onBeforeEmitNode(value) {
+                Debug.assert(state < TransformationState.Initialized, "Cannot modify transformation hooks after initialization has completed.");
+                Debug.assert(value !== undefined, "Value must not be 'undefined'");
+                onBeforeEmitNode = value;
+            },
+            get onAfterEmitNode() { return onAfterEmitNode || defaultOnBeforeOrAfterEmitNode; },
+            set onAfterEmitNode(value) {
+                Debug.assert(state < TransformationState.Initialized, "Cannot modify transformation hooks after initialization has completed.");
+                Debug.assert(value !== undefined, "Value must not be 'undefined'");
+                onAfterEmitNode = value;
+            },
         };
 
         // Ensure the parse tree is clean before applying transformations
@@ -159,11 +188,21 @@ namespace ts {
         performance.mark("afterTransform");
         performance.measure("transformTime", "beforeTransform", "afterTransform");
 
+        // for backwards compatibility, we push any current before/after events into the current callback.
+        if (onEmitNode && (onBeforeEmitNode || onAfterEmitNode)) {
+            onEmitNode = wrapNotification(onEmitNode, onBeforeEmitNode, onAfterEmitNode);
+            onBeforeEmitNode = undefined;
+            onAfterEmitNode = undefined;
+        }
+
         return {
             transformed,
             substituteNode,
+            useEmitNodeWithNotification: onEmitNode !== undefined,
             emitNodeWithNotification,
-            dispose
+            beforeEmitNode: onBeforeEmitNode ? beforeEmitNode : undefined,
+            afterEmitNode: onAfterEmitNode ? afterEmitNode : undefined,
+            dispose,
         };
 
         function transformRoot(node: T) {
@@ -215,6 +254,14 @@ namespace ts {
                 || (getEmitFlags(node) & EmitFlags.AdviseOnEmitNode) !== 0;
         }
 
+        function wrapNotification(onEmitNode: TransformationContext["onEmitNode"], onBeforeEmitNode: TransformationContext["onBeforeEmitNode"], onAfterEmitNode: TransformationContext["onAfterEmitNode"]): TransformationContext["onEmitNode"] {
+            return (hint, node, emitCallback) => {
+                if (onBeforeEmitNode) onBeforeEmitNode(hint, node);
+                onEmitNode(hint, node, emitCallback);
+                if (onAfterEmitNode) onAfterEmitNode(hint, node);
+            };
+        }
+
         /**
          * Emits a node with possible emit notification.
          *
@@ -226,11 +273,25 @@ namespace ts {
             Debug.assert(state < TransformationState.Disposed, "Cannot invoke TransformationResult callbacks after the result is disposed.");
             if (node) {
                 if (isEmitNotificationEnabled(node)) {
-                    onEmitNode(hint, node, emitCallback);
+                    if (onEmitNode) onEmitNode(hint, node, emitCallback);
                 }
                 else {
                     emitCallback(hint, node);
                 }
+            }
+        }
+
+        function beforeEmitNode(hint: EmitHint, node: Node) {
+            Debug.assert(state < TransformationState.Disposed, "Cannot invoke TransformationResult callbacks after the result is disposed.");
+            if (node && onBeforeEmitNode && isEmitNotificationEnabled(node)) {
+                onBeforeEmitNode(hint, node);
+            }
+        }
+
+        function afterEmitNode(hint: EmitHint, node: Node) {
+            Debug.assert(state < TransformationState.Disposed, "Cannot invoke TransformationResult callbacks after the result is disposed.");
+            if (node && onAfterEmitNode && isEmitNotificationEnabled(node)) {
+                onAfterEmitNode(hint, node);
             }
         }
 

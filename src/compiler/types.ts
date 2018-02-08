@@ -4817,6 +4817,8 @@ namespace ts {
          * before returning the `NodeTransformer` callback.
          */
         onEmitNode: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
+        /*@internal*/ onBeforeEmitNode?: (hint: EmitHint, node: Node) => void;
+        /*@internal*/ onAfterEmitNode?: (hint: EmitHint, node: Node) => void;
     }
 
     export interface TransformationResult<T extends Node> {
@@ -4847,6 +4849,10 @@ namespace ts {
          * Clean up EmitNode entries on any parse-tree nodes.
          */
         dispose(): void;
+
+        /*@internal*/ useEmitNodeWithNotification: boolean;
+        /*@internal*/ beforeEmitNode?(hint: EmitHint, node: Node): void;
+        /*@internal*/ afterEmitNode?(hint: EmitHint, node: Node): void;
     }
 
     /**
@@ -4942,6 +4948,8 @@ namespace ts {
          * ```
          */
         substituteNode?(hint: EmitHint, node: Node): Node;
+        /*@internal*/ onBeforeEmitNode?: (hint: EmitHint, node: Node) => void;
+        /*@internal*/ onAfterEmitNode?: (hint: EmitHint, node: Node) => void;
         /*@internal*/ onEmitLeadingSourceMapOfNode?: (node: Node) => void;
         /*@internal*/ onEmitTrailingSourceMapOfNode?: (node: Node) => void;
         /*@internal*/ onEmitSourceMapOfToken?: (node: Node, token: SyntaxKind, writer: (s: string) => void, pos: number, emitCallback: (token: SyntaxKind, writer: (s: string) => void, pos: number) => number) => number;

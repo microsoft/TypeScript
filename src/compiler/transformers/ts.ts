@@ -50,11 +50,13 @@ namespace ts {
         const moduleKind = getEmitModuleKind(compilerOptions);
 
         // Save the previous transformation hooks.
-        const previousOnEmitNode = context.onEmitNode;
+        const previousOnBeforeEmitNode = context.onBeforeEmitNode;
+        const previousOnAfterEmitNode = context.onAfterEmitNode;
         const previousOnSubstituteNode = context.onSubstituteNode;
 
         // Set new transformation hooks.
-        context.onEmitNode = onEmitNode;
+        context.onBeforeEmitNode = onBeforeEmitNode;
+        context.onAfterEmitNode = onAfterEmitNode;
         context.onSubstituteNode = onSubstituteNode;
 
         // Enable substitution for property/element access to emit const enum values.
@@ -85,6 +87,7 @@ namespace ts {
          * just-in-time substitution while printing an expression identifier.
          */
         let applicableSubstitutions: TypeScriptSubstitutionFlags;
+        const applicableSubstitutionsStack: TypeScriptSubstitutionFlags[] = [];
 
         /**
          * Tracks what computed name expressions originating from elided names must be inlined
@@ -3389,28 +3392,39 @@ namespace ts {
          *
          * @param hint A hint as to the intended usage of the node.
          * @param node The node to emit.
-         * @param emit A callback used to emit the node in the printer.
          */
-        function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
-            const savedApplicableSubstitutions = applicableSubstitutions;
-            const savedCurrentSourceFile = currentSourceFile;
-
+        function onBeforeEmitNode(hint: EmitHint, node: Node) {
             if (isSourceFile(node)) {
                 currentSourceFile = node;
             }
 
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && isTransformedModuleDeclaration(node)) {
-                applicableSubstitutions |= TypeScriptSubstitutionFlags.NamespaceExports;
+            const requiresNamespaceExports = enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && isTransformedModuleDeclaration(node);
+            const requiresNonQualifiedEnumMembers = enabledSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && isTransformedEnumDeclaration(node);
+            if (requiresNamespaceExports || requiresNonQualifiedEnumMembers) {
+                applicableSubstitutionsStack.push(applicableSubstitutions);
+                if (requiresNamespaceExports) {
+                    applicableSubstitutions |= TypeScriptSubstitutionFlags.NamespaceExports;
+                }
+
+                if (requiresNonQualifiedEnumMembers) {
+                    applicableSubstitutions |= TypeScriptSubstitutionFlags.NonQualifiedEnumMembers;
+                }
             }
 
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && isTransformedEnumDeclaration(node)) {
-                applicableSubstitutions |= TypeScriptSubstitutionFlags.NonQualifiedEnumMembers;
+            previousOnBeforeEmitNode(hint, node);
+        }
+
+        function onAfterEmitNode(hint: EmitHint, node: Node) {
+            previousOnAfterEmitNode(hint, node);
+
+            if (isSourceFile(node)) {
+                currentSourceFile = undefined;
             }
 
-            previousOnEmitNode(hint, node, emitCallback);
-
-            applicableSubstitutions = savedApplicableSubstitutions;
-            currentSourceFile = savedCurrentSourceFile;
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && isTransformedModuleDeclaration(node) ||
+                enabledSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && isTransformedEnumDeclaration(node)) {
+                applicableSubstitutions = applicableSubstitutionsStack.pop();
+            }
         }
 
         /**

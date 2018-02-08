@@ -32,15 +32,18 @@ namespace ts {
          * just-in-time substitution for `super` expressions inside of async methods.
          */
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
+        const enclosingSuperContainerFlagsStack: NodeCheckFlags[] = [];
 
         let enclosingFunctionParameterNames: UnderscoreEscapedMap<true>;
 
         // Save the previous transformation hooks.
-        const previousOnEmitNode = context.onEmitNode;
+        const previousOnBeforeEmitNode = context.onBeforeEmitNode;
+        const previousOnAfterEmitNode = context.onAfterEmitNode;
         const previousOnSubstituteNode = context.onSubstituteNode;
 
         // Set new transformation hooks.
-        context.onEmitNode = onEmitNode;
+        context.onBeforeEmitNode = onBeforeEmitNode;
+        context.onAfterEmitNode = onAfterEmitNode;
         context.onSubstituteNode = onSubstituteNode;
 
         return transformSourceFile;
@@ -503,22 +506,23 @@ namespace ts {
          *
          * @param hint A hint as to the intended usage of the node.
          * @param node The node to emit.
-         * @param emit A callback used to emit the node in the printer.
          */
-        function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
-            // If we need to support substitutions for `super` in an async method,
-            // we should track it here.
+
+        function onBeforeEmitNode(hint: EmitHint, node: Node) {
             if (enabledSubstitutions & ES2017SubstitutionFlags.AsyncMethodsWithSuper && isSuperContainer(node)) {
-                const superContainerFlags = resolver.getNodeCheckFlags(node) & (NodeCheckFlags.AsyncMethodWithSuper | NodeCheckFlags.AsyncMethodWithSuperBinding);
-                if (superContainerFlags !== enclosingSuperContainerFlags) {
-                    const savedEnclosingSuperContainerFlags = enclosingSuperContainerFlags;
-                    enclosingSuperContainerFlags = superContainerFlags;
-                    previousOnEmitNode(hint, node, emitCallback);
-                    enclosingSuperContainerFlags = savedEnclosingSuperContainerFlags;
-                    return;
-                }
+                enclosingSuperContainerFlagsStack.push(enclosingSuperContainerFlags);
+                enclosingSuperContainerFlags = resolver.getNodeCheckFlags(node) & (NodeCheckFlags.AsyncMethodWithSuper | NodeCheckFlags.AsyncMethodWithSuperBinding);
             }
-            previousOnEmitNode(hint, node, emitCallback);
+
+            previousOnBeforeEmitNode(hint, node);
+        }
+
+        function onAfterEmitNode(hint: EmitHint, node: Node) {
+            previousOnAfterEmitNode(hint, node);
+
+            if (enabledSubstitutions & ES2017SubstitutionFlags.AsyncMethodsWithSuper && isSuperContainer(node)) {
+                enclosingSuperContainerFlags = enclosingSuperContainerFlagsStack.pop();
+            }
         }
 
         /**

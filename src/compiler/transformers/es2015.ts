@@ -272,12 +272,15 @@ namespace ts {
         const compilerOptions = context.getCompilerOptions();
         const resolver = context.getEmitResolver();
         const previousOnSubstituteNode = context.onSubstituteNode;
-        const previousOnEmitNode = context.onEmitNode;
-        context.onEmitNode = onEmitNode;
+        const previousOnBeforeEmitNode = context.onBeforeEmitNode;
+        const previousOnAfterEmitNode = context.onAfterEmitNode;
         context.onSubstituteNode = onSubstituteNode;
+        context.onBeforeEmitNode = onBeforeEmitNode;
+        context.onAfterEmitNode = onAfterEmitNode;
 
         let currentSourceFile: SourceFile;
         let currentText: string;
+        const hierarchyFactsStack: HierarchyFacts[] = [];
         let hierarchyFacts: HierarchyFacts;
         let taggedTemplateStringDeclarations: VariableDeclaration[];
 
@@ -3840,9 +3843,8 @@ namespace ts {
          *
          * @param hint A hint as to the intended usage of the node.
          * @param node The node to be printed.
-         * @param emitCallback The callback used to emit the node.
          */
-        function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
+        function onBeforeEmitNode(hint: EmitHint, node: Node) {
             if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis && isFunctionLike(node)) {
                 // If we are tracking a captured `this`, keep track of the enclosing function.
                 const ancestorFacts = enterSubtree(
@@ -3850,11 +3852,19 @@ namespace ts {
                     getEmitFlags(node) & EmitFlags.CapturesThis
                         ? HierarchyFacts.FunctionIncludes | HierarchyFacts.CapturesThis
                         : HierarchyFacts.FunctionIncludes);
-                previousOnEmitNode(hint, node, emitCallback);
-                exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
-                return;
+                hierarchyFactsStack.push(ancestorFacts);
             }
-            previousOnEmitNode(hint, node, emitCallback);
+
+            previousOnBeforeEmitNode(hint, node);
+        }
+
+        function onAfterEmitNode(hint: EmitHint, node: Node) {
+            previousOnAfterEmitNode(hint, node);
+
+            if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis && isFunctionLike(node)) {
+                const ancestorFacts = hierarchyFactsStack.pop();
+                exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
+            }
         }
 
         /**

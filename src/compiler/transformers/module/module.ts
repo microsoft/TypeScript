@@ -30,10 +30,12 @@ namespace ts {
         const host = context.getEmitHost();
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
+        const previousOnBeforeEmitNode = context.onBeforeEmitNode;
+        const previousOnAfterEmitNode = context.onAfterEmitNode;
         const previousOnSubstituteNode = context.onSubstituteNode;
-        const previousOnEmitNode = context.onEmitNode;
+        context.onBeforeEmitNode = onBeforeEmitNode;
+        context.onAfterEmitNode = onAfterEmitNode;
         context.onSubstituteNode = onSubstituteNode;
-        context.onEmitNode = onEmitNode;
         context.enableSubstitution(SyntaxKind.Identifier); // Substitutes expression identifiers with imported/exported symbols.
         context.enableSubstitution(SyntaxKind.BinaryExpression); // Substitutes assignments to exported symbols.
         context.enableSubstitution(SyntaxKind.PrefixUnaryExpression); // Substitutes updates to exported symbols.
@@ -1455,22 +1457,24 @@ namespace ts {
          *
          * @param hint A hint as to the intended usage of the node.
          * @param node The node to emit.
-         * @param emit A callback used to emit the node in the printer.
          */
-        function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
-            if (node.kind === SyntaxKind.SourceFile) {
-                currentSourceFile = <SourceFile>node;
+        function onBeforeEmitNode(hint: EmitHint, node: Node): void {
+            if (isSourceFile(node)) {
+                currentSourceFile = node;
                 currentModuleInfo = moduleInfoMap[getOriginalNodeId(currentSourceFile)];
                 noSubstitution = [];
+            }
 
-                previousOnEmitNode(hint, node, emitCallback);
+            previousOnBeforeEmitNode(hint, node);
+        }
 
+        function onAfterEmitNode(hint: EmitHint, node: Node): void {
+            previousOnAfterEmitNode(hint, node);
+
+            if (isSourceFile(node)) {
                 currentSourceFile = undefined;
                 currentModuleInfo = undefined;
                 noSubstitution = undefined;
-            }
-            else {
-                previousOnEmitNode(hint, node, emitCallback);
             }
         }
 

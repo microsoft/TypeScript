@@ -19,10 +19,12 @@ namespace ts {
         const compilerOptions = context.getCompilerOptions();
         const resolver = context.getEmitResolver();
         const host = context.getEmitHost();
+        const previousOnBeforeEmitNode = context.onBeforeEmitNode;
+        const previousOnAfterEmitNode = context.onAfterEmitNode;
         const previousOnSubstituteNode = context.onSubstituteNode;
-        const previousOnEmitNode = context.onEmitNode;
+        context.onBeforeEmitNode = onBeforeEmitNode;
+        context.onAfterEmitNode = onAfterEmitNode;
         context.onSubstituteNode = onSubstituteNode;
-        context.onEmitNode = onEmitNode;
         context.enableSubstitution(SyntaxKind.Identifier); // Substitutes expression identifiers for imported symbols.
         context.enableSubstitution(SyntaxKind.ShorthandPropertyAssignment); // Substitutes expression identifiers for imported symbols
         context.enableSubstitution(SyntaxKind.BinaryExpression); // Substitutes assignments to exported symbols.
@@ -1581,29 +1583,28 @@ namespace ts {
          *
          * @param hint A hint as to the intended usage of the node.
          * @param node The node to emit.
-         * @param emitCallback A callback used to emit the node in the printer.
          */
-        function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
-            if (node.kind === SyntaxKind.SourceFile) {
+        function onBeforeEmitNode(hint: EmitHint, node: Node): void {
+            if (isSourceFile(node)) {
                 const id = getOriginalNodeId(node);
-                currentSourceFile = <SourceFile>node;
+                currentSourceFile = node;
                 moduleInfo = moduleInfoMap[id];
                 exportFunction = exportFunctionsMap[id];
                 noSubstitution = noSubstitutionMap[id];
-
                 if (noSubstitution) {
                     delete noSubstitutionMap[id];
                 }
+            }
+            previousOnBeforeEmitNode(hint, node);
+        }
 
-                previousOnEmitNode(hint, node, emitCallback);
-
+        function onAfterEmitNode(hint: EmitHint, node: Node) {
+            previousOnAfterEmitNode(hint, node);
+            if (isSourceFile(node)) {
                 currentSourceFile = undefined;
                 moduleInfo = undefined;
                 exportFunction = undefined;
                 noSubstitution = undefined;
-            }
-            else {
-                previousOnEmitNode(hint, node, emitCallback);
             }
         }
 
