@@ -2901,6 +2901,13 @@ namespace ts {
             return value;
         }
 
+        export function assertEachDefined<T, A extends ReadonlyArray<T>>(value: A, message: string): A {
+            for (const v of value) {
+                assertDefined(v, message);
+            }
+            return value;
+        }
+
         export function assertNever(member: never, message?: string, stackCrawlMark?: AnyFunction): never {
             return fail(message || `Illegal value: ${member}`, stackCrawlMark || assertNever);
         }
