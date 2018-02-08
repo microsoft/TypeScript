@@ -382,9 +382,11 @@ declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
 
 type Foo = { 'a': string; }
 >Foo : Symbol(Foo, Decl(typeGuardFunctionErrors.ts, 151, 74))
+>'a' : Symbol('a', Decl(typeGuardFunctionErrors.ts, 153, 12))
 
 type Bar = { 'a': number; }
 >Bar : Symbol(Bar, Decl(typeGuardFunctionErrors.ts, 153, 27))
+>'a' : Symbol('a', Decl(typeGuardFunctionErrors.ts, 154, 12))
 
 interface NeedsFoo<T extends Foo> {
 >NeedsFoo : Symbol(NeedsFoo, Decl(typeGuardFunctionErrors.ts, 154, 27))

@@ -246,8 +246,12 @@ interface Array<T> {}`
     }
 
     export interface ReloadWatchInvokeOptions {
+        /** Invokes the directory watcher for the parent instead of the file changed */
         invokeDirectoryWatcherInsteadOfFileChanged: boolean;
+        /** When new file is created, do not invoke watches for it */
         ignoreWatchInvokedWithTriggerAsFileCreate: boolean;
+        /** Invoke the file delete, followed by create instead of file changed */
+        invokeFileDeleteCreateAsPartInsteadOfChange: boolean;
     }
 
     export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
@@ -315,12 +319,18 @@ interface Array<T> {}`
                         if (isString(fileOrDirectory.content)) {
                             // Update file
                             if (currentEntry.content !== fileOrDirectory.content) {
-                                currentEntry.content = fileOrDirectory.content;
-                                if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
-                                    this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
+                                if (options && options.invokeFileDeleteCreateAsPartInsteadOfChange) {
+                                    this.removeFileOrFolder(currentEntry, returnFalse);
+                                    this.ensureFileOrFolder(fileOrDirectory);
                                 }
                                 else {
-                                    this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
+                                    currentEntry.content = fileOrDirectory.content;
+                                    if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
+                                        this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
+                                    }
+                                    else {
+                                        this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
+                                    }
                                 }
                             }
                         }
@@ -479,7 +489,7 @@ interface Array<T> {}`
 
         private invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind) {
             const callbacks = this.watchedFiles.get(this.toPath(fileFullPath));
-            invokeWatcherCallbacks(callbacks, ({ cb, fileName }) => cb(fileName, eventKind));
+            invokeWatcherCallbacks(callbacks, ({ cb }) => cb(fileFullPath, eventKind));
         }
 
         private getRelativePathToDirectory(directoryFullPath: string, fileFullPath: string) {

@@ -1,5 +1,7 @@
 === tests/cases/compiler/incompatibleExports1.ts ===
 declare module "foo" { 
+>"foo" : typeof "foo"
+
     export interface x { a: string } 
 >x : x
 >a : string
@@ -14,6 +16,8 @@ declare module "foo" {
 }
  
 declare module "baz" {
+>"baz" : typeof "baz"
+
     export module a {
 >a : typeof a
 

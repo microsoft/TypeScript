@@ -3,6 +3,7 @@
 
 interface Y { 'i am a very certain type': Y }
 >Y : Symbol(Y, Decl(unionAndIntersectionInference1.ts, 0, 0))
+>'i am a very certain type' : Symbol(Y['i am a very certain type'], Decl(unionAndIntersectionInference1.ts, 2, 13))
 >Y : Symbol(Y, Decl(unionAndIntersectionInference1.ts, 0, 0))
 
 var y: Y = <Y>undefined;

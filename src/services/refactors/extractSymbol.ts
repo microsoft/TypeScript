@@ -235,6 +235,16 @@ namespace ts.refactor.extractSymbol {
                     break;
                 }
             }
+
+            if (!statements.length) {
+                // https://github.com/Microsoft/TypeScript/issues/20559
+                // Ranges like [|case 1: break;|] will fail to populate `statements` because
+                // they will never find `start` in `start.parent.statements`.
+                // Consider: We could support ranges like [|case 1:|] by refining them to just
+                // the expression.
+                return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
+            }
+
             return { targetRange: { range: statements, facts: rangeFacts, declarations } };
         }
 
@@ -325,6 +335,13 @@ namespace ts.refactor.extractSymbol {
                 Continue = 1 << 1,
                 Return = 1 << 2
             }
+
+            // We believe it's true because the node is from the (unmodified) tree.
+            Debug.assert(nodeToCheck.pos <= nodeToCheck.end, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
+
+            // For understanding how skipTrivia functioned:
+            Debug.assert(!positionIsSynthesized(nodeToCheck.pos), "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
+
             if (!isStatement(nodeToCheck) && !(isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck))) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.statementOrExpressionExpected)];
             }
@@ -1321,6 +1338,13 @@ namespace ts.refactor.extractSymbol {
                     }
                     prevStatement = statement;
                 }
+
+                if (!prevStatement && isCaseClause(curr)) {
+                    // We must have been in the expression of the case clause.
+                    Debug.assert(isSwitchStatement(curr.parent.parent));
+                    return curr.parent.parent;
+                }
+
                 // There must be at least one statement since we started in one.
                 Debug.assert(prevStatement !== undefined);
                 return prevStatement;

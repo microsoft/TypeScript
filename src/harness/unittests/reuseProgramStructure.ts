@@ -884,7 +884,6 @@ namespace ts {
         });
     });
 
-    import TestSystem = ts.TestFSWithWatch.TestServerHost;
     type FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
     import createTestSystem = ts.TestFSWithWatch.createWatchedSystem;
     import libFile = ts.TestFSWithWatch.libFile;
@@ -910,30 +909,21 @@ namespace ts {
             return JSON.parse(JSON.stringify(filesOrOptions));
         }
 
-        function createWatchingSystemHost(host: TestSystem) {
-            return ts.createWatchingSystemHost(/*pretty*/ undefined, host);
-        }
-
-        function verifyProgramWithoutConfigFile(watchingSystemHost: WatchingSystemHost, rootFiles: string[], options: CompilerOptions) {
-            const program = createWatchModeWithoutConfigFile(rootFiles, options, watchingSystemHost)();
+        function verifyProgramWithoutConfigFile(system: System, rootFiles: string[], options: CompilerOptions) {
+            const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, system)).getCurrentProgram().getProgram();
             verifyProgramIsUptoDate(program, duplicate(rootFiles), duplicate(options));
         }
 
-        function getConfigParseResult(watchingSystemHost: WatchingSystemHost, configFileName: string) {
-            return parseConfigFile(configFileName, {}, watchingSystemHost.system, watchingSystemHost.reportDiagnostic, watchingSystemHost.reportWatchDiagnostic);
-        }
-
-        function verifyProgramWithConfigFile(watchingSystemHost: WatchingSystemHost, configFile: string) {
-            const result = getConfigParseResult(watchingSystemHost, configFile);
-            const program = createWatchModeWithConfigFile(result, {}, watchingSystemHost)();
-            const { fileNames, options } = getConfigParseResult(watchingSystemHost, configFile);
+        function verifyProgramWithConfigFile(system: System, configFileName: string) {
+            const program = createWatchProgram(createWatchCompilerHostOfConfigFile(configFileName, {}, system)).getCurrentProgram().getProgram();
+            const { fileNames, options } = parseConfigFileWithSystem(configFileName, {}, system, notImplemented);
             verifyProgramIsUptoDate(program, fileNames, options);
         }
 
         function verifyProgram(files: FileOrFolder[], rootFiles: string[], options: CompilerOptions, configFile: string) {
-            const watchingSystemHost = createWatchingSystemHost(createTestSystem(files));
-            verifyProgramWithoutConfigFile(watchingSystemHost, rootFiles, options);
-            verifyProgramWithConfigFile(watchingSystemHost, configFile);
+            const system = createTestSystem(files);
+            verifyProgramWithoutConfigFile(system, rootFiles, options);
+            verifyProgramWithConfigFile(system, configFile);
         }
 
         it("has empty options", () => {
@@ -1044,11 +1034,9 @@ namespace ts {
             };
             const configFile: FileOrFolder = {
                 path: "/src/tsconfig.json",
-                content: JSON.stringify({ compilerOptions, include: ["packages/**/ *.ts"] })
+                content: JSON.stringify({ compilerOptions, include: ["packages/**/*.ts"] })
             };
-
-            const watchingSystemHost = createWatchingSystemHost(createTestSystem([app, module1, module2, module3, libFile, configFile]));
-            verifyProgramWithConfigFile(watchingSystemHost, configFile.path);
+            verifyProgramWithConfigFile(createTestSystem([app, module1, module2, module3, libFile, configFile]), configFile.path);
         });
     });
 }

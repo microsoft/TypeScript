@@ -9,7 +9,7 @@ module x {
 declare export import a = x.c;
 >a : any
 >x : any
->c : No type information available!
+>c : any
 
 var b: a;
 >b : any

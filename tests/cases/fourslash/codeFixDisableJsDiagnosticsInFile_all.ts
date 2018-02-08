@@ -6,15 +6,15 @@
 
 // @Filename: a.js
 ////let x = "";
-////x = 1;
-////x = true;
+////x = 1; x = true;
+////x = [];
 
 verify.codeFixAll({
     fixId: "disableJsDiagnostics",
     newFileContent:
 `let x = "";
 // @ts-ignore
-x = 1;
+x = 1; x = true;
 // @ts-ignore
-x = true;`,
+x = [];`,
 });

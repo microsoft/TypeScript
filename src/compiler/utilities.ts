@@ -599,6 +599,11 @@ namespace ts {
         return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2, arg3);
     }
 
+    export function createDiagnosticForNodeArray(sourceFile: SourceFile, nodes: NodeArray<Node>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
+        const start = skipTrivia(sourceFile.text, nodes.pos);
+        return createFileDiagnostic(sourceFile, start, nodes.end - start, message, arg0, arg1, arg2, arg3);
+    }
+
     export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
         const span = getErrorSpanForNode(sourceFile, node);
         return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2, arg3);
@@ -676,9 +681,20 @@ namespace ts {
             return getSpanOfTokenAtPosition(sourceFile, node.pos);
         }
 
-        const pos = nodeIsMissing(errorNode)
+        const isMissing = nodeIsMissing(errorNode);
+        const pos = isMissing
             ? errorNode.pos
             : skipTrivia(sourceFile.text, errorNode.pos);
+
+        // These asserts should all be satisfied for a properly constructed `errorNode`.
+        if (isMissing) {
+            Debug.assert(pos === errorNode.pos, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
+            Debug.assert(pos === errorNode.end, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
+        }
+        else {
+            Debug.assert(pos >= errorNode.pos, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
+            Debug.assert(pos <= errorNode.end, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
+        }
 
         return createTextSpanFromBounds(pos, errorNode.end);
     }
@@ -755,6 +771,8 @@ namespace ts {
                 return node.parent.kind !== SyntaxKind.VoidExpression;
             case SyntaxKind.ExpressionWithTypeArguments:
                 return !isExpressionWithTypeArgumentsInClassExtendsClause(node);
+            case SyntaxKind.TypeParameter:
+                return node.parent.kind === SyntaxKind.MappedType || node.parent.kind === SyntaxKind.InferType;
 
             // Identifiers and qualified names may be type nodes, depending on their context. Climb
             // above them to find the lowest container
@@ -2425,11 +2443,10 @@ namespace ts {
     }
 
     export function createDiagnosticCollection(): DiagnosticCollection {
-        let nonFileDiagnostics: Diagnostic[] = [];
-        const fileDiagnostics = createMap<Diagnostic[]>();
-
+        let nonFileDiagnostics = [] as SortedArray<Diagnostic>;
+        const filesWithDiagnostics = [] as SortedArray<string>;
+        const fileDiagnostics = createMap<SortedArray<Diagnostic>>();
         let hasReadNonFileDiagnostics = false;
-        let diagnosticsModified = false;
         let modificationCount = 0;
 
         return {
@@ -2449,66 +2466,45 @@ namespace ts {
         }
 
         function add(diagnostic: Diagnostic): void {
-            let diagnostics: Diagnostic[];
+            let diagnostics: SortedArray<Diagnostic>;
             if (diagnostic.file) {
                 diagnostics = fileDiagnostics.get(diagnostic.file.fileName);
                 if (!diagnostics) {
-                    diagnostics = [];
+                    diagnostics = [] as SortedArray<Diagnostic>;
                     fileDiagnostics.set(diagnostic.file.fileName, diagnostics);
+                    insertSorted(filesWithDiagnostics, diagnostic.file.fileName, compareStringsCaseSensitive);
                 }
             }
             else {
                 // If we've already read the non-file diagnostics, do not modify the existing array.
                 if (hasReadNonFileDiagnostics) {
                     hasReadNonFileDiagnostics = false;
-                    nonFileDiagnostics = nonFileDiagnostics.slice();
+                    nonFileDiagnostics = nonFileDiagnostics.slice() as SortedArray<Diagnostic>;
                 }
 
                 diagnostics = nonFileDiagnostics;
             }
 
-            diagnostics.push(diagnostic);
-            diagnosticsModified = true;
+            insertSorted(diagnostics, diagnostic, compareDiagnostics);
             modificationCount++;
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
-            sortAndDeduplicate();
             hasReadNonFileDiagnostics = true;
             return nonFileDiagnostics;
         }
 
         function getDiagnostics(fileName?: string): Diagnostic[] {
-            sortAndDeduplicate();
             if (fileName) {
                 return fileDiagnostics.get(fileName) || [];
             }
 
-            const allDiagnostics: Diagnostic[] = [];
-            function pushDiagnostic(d: Diagnostic) {
-                allDiagnostics.push(d);
+            const fileDiags = flatMap(filesWithDiagnostics, f => fileDiagnostics.get(f));
+            if (!nonFileDiagnostics.length) {
+                return fileDiags;
             }
-
-            forEach(nonFileDiagnostics, pushDiagnostic);
-
-            fileDiagnostics.forEach(diagnostics => {
-                forEach(diagnostics, pushDiagnostic);
-            });
-
-            return sortAndDeduplicateDiagnostics(allDiagnostics);
-        }
-
-        function sortAndDeduplicate() {
-            if (!diagnosticsModified) {
-                return;
-            }
-
-            diagnosticsModified = false;
-            nonFileDiagnostics = sortAndDeduplicateDiagnostics(nonFileDiagnostics);
-
-            fileDiagnostics.forEach((diagnostics, key) => {
-                fileDiagnostics.set(key, sortAndDeduplicateDiagnostics(diagnostics));
-            });
+            fileDiags.unshift(...nonFileDiagnostics);
+            return fileDiags;
         }
     }
 
@@ -3270,7 +3266,7 @@ namespace ts {
             && isClassLike(node.parent.parent);
     }
 
-    export function isEntityNameExpression(node: Expression): node is EntityNameExpression {
+    export function isEntityNameExpression(node: Node): node is EntityNameExpression {
         return node.kind === SyntaxKind.Identifier ||
             node.kind === SyntaxKind.PropertyAccessExpression && isEntityNameExpression((<PropertyAccessExpression>node).expression);
     }
@@ -3380,14 +3376,14 @@ namespace ts {
 
     const carriageReturnLineFeed = "\r\n";
     const lineFeed = "\n";
-    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, system?: { newLine: string }): string {
+    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, getNewLine?: () => string): string {
         switch (options.newLine) {
             case NewLineKind.CarriageReturnLineFeed:
                 return carriageReturnLineFeed;
             case NewLineKind.LineFeed:
                 return lineFeed;
         }
-        return system ? system.newLine : sys ? sys.newLine : carriageReturnLineFeed;
+        return getNewLine ? getNewLine() : sys ? sys.newLine : carriageReturnLineFeed;
     }
 
     /**
@@ -3773,6 +3769,10 @@ namespace ts {
 
     export function forSomeAncestorDirectory(directory: string, callback: (directory: string) => boolean): boolean {
         return !!forEachAncestorDirectory(directory, d => callback(d) ? true : undefined);
+    }
+
+    export function isUMDExportSymbol(symbol: Symbol) {
+        return symbol && symbol.declarations && symbol.declarations[0] && isNamespaceExportDeclaration(symbol.declarations[0]);
     }
 }
 
@@ -4605,6 +4605,14 @@ namespace ts {
         return node.kind === SyntaxKind.IntersectionType;
     }
 
+    export function isConditionalTypeNode(node: Node): node is ConditionalTypeNode {
+        return node.kind === SyntaxKind.ConditionalType;
+    }
+
+    export function isInferTypeNode(node: Node): node is InferTypeNode {
+        return node.kind === SyntaxKind.InferType;
+    }
+
     export function isParenthesizedTypeNode(node: Node): node is ParenthesizedTypeNode {
         return node.kind === SyntaxKind.ParenthesizedType;
     }
@@ -4704,7 +4712,7 @@ namespace ts {
     }
 
     export function isTypeOfExpression(node: Node): node is TypeOfExpression {
-        return node.kind === SyntaxKind.AwaitExpression;
+        return node.kind === SyntaxKind.TypeOfExpression;
     }
 
     export function isVoidExpression(node: Node): node is VoidExpression {
@@ -5875,7 +5883,7 @@ namespace ts {
 
     /** True if node is of a kind that may contain comment text. */
     export function isJSDocCommentContainingNode(node: Node): boolean {
-        return node.kind === SyntaxKind.JSDocComment || isJSDocTag(node);
+        return node.kind === SyntaxKind.JSDocComment || isJSDocTag(node) || isJSDocTypeLiteral(node);
     }
 
     // TODO: determine what this does before making it public.

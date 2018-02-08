@@ -41,6 +41,8 @@ var b: {
 >x : Symbol(x, Decl(multipleNumericIndexers.ts, 19, 5))
 
 } = { 1: '', "2": '' }
+>1 : Symbol(1, Decl(multipleNumericIndexers.ts, 20, 5))
+>"2" : Symbol("2", Decl(multipleNumericIndexers.ts, 20, 12))
 
 class C2<T> {
 >C2 : Symbol(C2, Decl(multipleNumericIndexers.ts, 20, 22))

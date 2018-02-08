@@ -23,7 +23,7 @@ namespace FourSlash {
     ts.disableIncrementalParsing = false;
 
     // Represents a parsed source file with metadata
-    export interface FourSlashFile {
+    interface FourSlashFile {
         // The contents of the file (with markers, etc stripped out)
         content: string;
         fileName: string;
@@ -34,7 +34,7 @@ namespace FourSlash {
     }
 
     // Represents a set of parsed source files and options
-    export interface FourSlashData {
+    interface FourSlashData {
         // Global options (name/value pairs)
         globalOptions: Harness.TestCaseParser.CompilerSettings;
 
@@ -59,7 +59,7 @@ namespace FourSlash {
     export interface Marker {
         fileName: string;
         position: number;
-        data?: any;
+        data?: {};
     }
 
     export interface Range {
@@ -87,21 +87,6 @@ namespace FourSlash {
     export interface TextSpan {
         start: number;
         end: number;
-    }
-
-    export import IndentStyle = ts.IndentStyle;
-
-    const entityMap = ts.createMapFromTemplate({
-        "&": "&amp;",
-        "\"": "&quot;",
-        "'": "&#39;",
-        "/": "&#47;",
-        "<": "&lt;",
-        ">": "&gt;"
-    });
-
-    export function escapeXmlAttributeValue(s: string) {
-        return s.replace(/[&<>"'\/]/g, ch => entityMap.get(ch));
     }
 
     // Name of testcase metadata including ts.CompilerOptions properties that will be used by globalOptions
@@ -865,7 +850,7 @@ namespace FourSlash {
             ts.zipWith(actual, expected, (completion, expectedCompletion, index) => {
                 const { name, insertText, replacementSpan } = typeof expectedCompletion === "string" ? { name: expectedCompletion, insertText: undefined, replacementSpan: undefined } : expectedCompletion;
                 if (completion.name !== name) {
-                    this.raiseError(`Expected completion at index ${index} to be ${expectedCompletion}, got ${completion.name}`);
+                    this.raiseError(`Expected completion at index ${index} to be ${name}, got ${completion.name}`);
                 }
                 if (completion.insertText !== insertText) {
                     this.raiseError(`Expected completion insert text at index ${index} to be ${insertText}, got ${completion.insertText}`);
@@ -1079,7 +1064,7 @@ namespace FourSlash {
             for (const reference of expectedReferences) {
                 const { fileName, pos, end } = reference;
                 if (reference.marker && reference.marker.data) {
-                    const { isWriteAccess, isDefinition } = reference.marker.data;
+                    const { isWriteAccess, isDefinition } = reference.marker.data as { isWriteAccess?: boolean, isDefinition?: boolean };
                     this.verifyReferencesWorker(actualReferences, fileName, pos, end, isWriteAccess, isDefinition);
                 }
                 else {
@@ -1108,7 +1093,16 @@ namespace FourSlash {
             }
             const fullExpected = ts.map<FourSlashInterface.ReferenceGroup, ReferenceGroupJson>(parts, ({ definition, ranges }) => ({
                 definition: typeof definition === "string" ? definition : { ...definition, range: ts.createTextSpanFromRange(definition.range) },
-                references: ranges.map(rangeToReferenceEntry),
+                references: ranges.map<ts.ReferenceEntry>(r => {
+                    const { isWriteAccess = false, isDefinition = false, isInString } = (r.marker && r.marker.data || {}) as { isWriteAccess?: boolean, isDefinition?: boolean, isInString?: true };
+                    return {
+                        isWriteAccess,
+                        isDefinition,
+                        fileName: r.fileName,
+                        textSpan: ts.createTextSpanFromRange(r),
+                        ...(isInString ? { isInString: true } : undefined),
+                    };
+                }),
             }));
 
             for (const startRange of toArray(startRanges)) {
@@ -1121,15 +1115,6 @@ namespace FourSlash {
                     };
                 });
                 this.assertObjectsEqual(fullActual, fullExpected);
-            }
-
-            function rangeToReferenceEntry(r: Range): ts.ReferenceEntry {
-                const { isWriteAccess, isDefinition, isInString } = (r.marker && r.marker.data) || { isWriteAccess: false, isDefinition: false, isInString: undefined };
-                const result: ts.ReferenceEntry = { fileName: r.fileName, textSpan: ts.createTextSpanFromRange(r), isWriteAccess: !!isWriteAccess, isDefinition: !!isDefinition };
-                if (isInString !== undefined) {
-                    result.isInString = isInString;
-                }
-                return result;
             }
         }
 
@@ -2587,12 +2572,10 @@ Actual: ${stringify(fullActual)}`);
                 actualTextArray.push(text);
                 scriptInfo.updateContent(originalContent);
             }
-            const sortedExpectedArray = expectedTextArray.sort();
-            const sortedActualArray = actualTextArray.sort();
-            if (sortedExpectedArray.length !== sortedActualArray.length) {
-                this.raiseError(`Expected ${sortedExpectedArray.length} import fixes, got ${sortedActualArray.length}`);
+            if (expectedTextArray.length !== actualTextArray.length) {
+                this.raiseError(`Expected ${expectedTextArray.length} import fixes, got ${actualTextArray.length}`);
             }
-            ts.zipWith(sortedExpectedArray, sortedActualArray, (expected, actual, index) => {
+            ts.zipWith(expectedTextArray, actualTextArray, (expected, actual, index) => {
                 if (expected !== actual) {
                     this.raiseError(`Import fix at index ${index} doesn't match.\n${showTextDiff(expected, actual)}`);
                 }
@@ -2836,7 +2819,7 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        private getDocumentHighlightsAtCurrentPosition(fileNamesToSearch: string[]) {
+        private getDocumentHighlightsAtCurrentPosition(fileNamesToSearch: ReadonlyArray<string>) {
             const filesToSearch = fileNamesToSearch.map(name => ts.combinePaths(this.basePath, name));
             return this.languageService.getDocumentHighlights(this.activeFile.fileName, this.currentCaretPosition, filesToSearch);
         }
@@ -2860,9 +2843,8 @@ Actual: ${stringify(fullActual)}`);
             this.rangesByText().forEach(ranges => this.verifyRangesAreDocumentHighlights(ranges));
         }
 
-        public verifyDocumentHighlightsOf(startRange: Range, ranges: Range[]) {
-            ts.Debug.assert(ts.contains(ranges, startRange));
-            const fileNames = unique(ranges, range => range.fileName);
+        public verifyDocumentHighlightsOf(startRange: Range, ranges: Range[], options: FourSlashInterface.VerifyDocumentHighlightsOptions | undefined) {
+            const fileNames = options && options.filesToSearch || unique(ranges, range => range.fileName);
             this.goToRangeStart(startRange);
             this.verifyDocumentHighlights(ranges, fileNames);
         }
@@ -2876,7 +2858,16 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        private verifyDocumentHighlights(expectedRanges: Range[], fileNames: string[] = [this.activeFile.fileName]) {
+        public verifyNoDocumentHighlights(startRange: Range) {
+            this.goToRangeStart(startRange);
+            const documentHighlights = this.getDocumentHighlightsAtCurrentPosition([this.activeFile.fileName]);
+            const numHighlights = ts.length(documentHighlights);
+            if (numHighlights > 0) {
+                this.raiseError(`verifyNoDocumentHighlights failed - unexpectedly got ${numHighlights} highlights`);
+            }
+        }
+
+        private verifyDocumentHighlights(expectedRanges: Range[], fileNames: ReadonlyArray<string> = [this.activeFile.fileName]) {
             const documentHighlights = this.getDocumentHighlightsAtCurrentPosition(fileNames) || [];
 
             for (const dh of documentHighlights) {
@@ -2888,10 +2879,7 @@ Actual: ${stringify(fullActual)}`);
             for (const fileName of fileNames) {
                 const expectedRangesInFile = expectedRanges.filter(r => r.fileName === fileName);
                 const highlights = ts.find(documentHighlights, dh => dh.fileName === fileName);
-                if (!highlights) {
-                    this.raiseError(`verifyDocumentHighlights failed - found no highlights in ${fileName}`);
-                }
-                const spansInFile = highlights.highlightSpans.sort((s1, s2) => s1.textSpan.start - s2.textSpan.start);
+                const spansInFile = highlights ? highlights.highlightSpans.sort((s1, s2) => s1.textSpan.start - s2.textSpan.start) : [];
 
                 if (expectedRangesInFile.length !== spansInFile.length) {
                     this.raiseError(`verifyDocumentHighlights failed - In ${fileName}, expected ${expectedRangesInFile.length} highlights, got ${spansInFile.length}`);
@@ -3168,6 +3156,9 @@ Actual: ${stringify(fullActual)}`);
             assert.equal(item.hasAction, hasAction, "hasAction");
             assert.equal(item.isRecommended, options && options.isRecommended, "isRecommended");
             assert.equal(item.insertText, options && options.insertText, "insertText");
+            if (options && options.replacementSpan) { // TODO: GH#21679
+                assert.deepEqual(item.replacementSpan, options && options.replacementSpan && ts.createTextSpanFromRange(options.replacementSpan), "replacementSpan");
+            }
         }
 
         private findFile(indexOrName: string | number) {
@@ -4276,8 +4267,12 @@ namespace FourSlashInterface {
             this.state.verifyRangesWithSameTextAreDocumentHighlights();
         }
 
-        public documentHighlightsOf(startRange: FourSlash.Range, ranges: FourSlash.Range[]) {
-            this.state.verifyDocumentHighlightsOf(startRange, ranges);
+        public documentHighlightsOf(startRange: FourSlash.Range, ranges: FourSlash.Range[], options?: VerifyDocumentHighlightsOptions) {
+            this.state.verifyDocumentHighlightsOf(startRange, ranges, options);
+        }
+
+        public noDocumentHighlights(startRange: FourSlash.Range) {
+            this.state.verifyNoDocumentHighlights(startRange);
         }
 
         public completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]) {
@@ -4620,6 +4615,11 @@ namespace FourSlashInterface {
         sourceDisplay: string;
         isRecommended?: true;
         insertText?: string;
+        replacementSpan?: FourSlash.Range;
+    }
+
+    export interface VerifyDocumentHighlightsOptions {
+        filesToSearch?: ReadonlyArray<string>;
     }
 
     export interface NewContentOptions {

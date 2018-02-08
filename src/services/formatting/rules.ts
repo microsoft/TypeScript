@@ -321,6 +321,9 @@ namespace ts.formatting {
             rule("NoSpaceAfterCloseBracket", SyntaxKind.CloseBracketToken, anyToken, [isNonJsxSameLineTokenContext, isNotBeforeBlockInFunctionDeclarationContext], RuleAction.Delete),
             rule("SpaceAfterSemicolon", SyntaxKind.SemicolonToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.Space),
 
+            // Remove extra space between for and await
+            rule("SpaceBetweenForAndAwaitKeyword", SyntaxKind.ForKeyword, SyntaxKind.AwaitKeyword, [isNonJsxSameLineTokenContext], RuleAction.Space),
+
             // Add a space between statements. All keywords except (do,else,case) has open/close parens after them.
             // So, we have a rule to add a space for [),Any], [do,Any], [else,Any], and [case,Any]
             rule(
@@ -406,6 +409,7 @@ namespace ts.formatting {
         switch (context.contextNode.kind) {
             case SyntaxKind.BinaryExpression:
             case SyntaxKind.ConditionalExpression:
+            case SyntaxKind.ConditionalType:
             case SyntaxKind.AsExpression:
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.ImportSpecifier:
@@ -458,7 +462,8 @@ namespace ts.formatting {
     }
 
     function isConditionalOperatorContext(context: FormattingContext): boolean {
-        return context.contextNode.kind === SyntaxKind.ConditionalExpression;
+        return context.contextNode.kind === SyntaxKind.ConditionalExpression ||
+                context.contextNode.kind === SyntaxKind.ConditionalType;
     }
 
     function isSameLineTokenOrBeforeBlockContext(context: FormattingContext): boolean {
@@ -466,7 +471,9 @@ namespace ts.formatting {
     }
 
     function isBraceWrappedContext(context: FormattingContext): boolean {
-        return context.contextNode.kind === SyntaxKind.ObjectBindingPattern || isSingleLineBlockContext(context);
+        return context.contextNode.kind === SyntaxKind.ObjectBindingPattern ||
+            context.contextNode.kind === SyntaxKind.MappedType ||
+            isSingleLineBlockContext(context);
     }
 
     // This check is done before an open brace in a control construct, a function, or a typescript block declaration

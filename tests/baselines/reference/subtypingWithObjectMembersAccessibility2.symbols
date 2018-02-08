@@ -40,6 +40,7 @@ module ExplicitPublic {
 >A2 : Symbol(A2, Decl(subtypingWithObjectMembersAccessibility2.ts, 17, 5))
 
         private 1: Base;
+>1 : Symbol(A2[1], Decl(subtypingWithObjectMembersAccessibility2.ts, 19, 14))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembersAccessibility2.ts, 0, 0))
     }
 
@@ -48,6 +49,7 @@ module ExplicitPublic {
 >A2 : Symbol(A2, Decl(subtypingWithObjectMembersAccessibility2.ts, 17, 5))
 
         public 1: Derived; // error
+>1 : Symbol(B2[1], Decl(subtypingWithObjectMembersAccessibility2.ts, 23, 25))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersAccessibility2.ts, 4, 1))
     }
 
@@ -55,6 +57,7 @@ module ExplicitPublic {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembersAccessibility2.ts, 25, 5))
 
         private '1': Base;
+>'1' : Symbol(A3['1'], Decl(subtypingWithObjectMembersAccessibility2.ts, 27, 14))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembersAccessibility2.ts, 0, 0))
     }
 
@@ -63,6 +66,7 @@ module ExplicitPublic {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembersAccessibility2.ts, 25, 5))
 
         public '1': Derived; // error
+>'1' : Symbol(B3['1'], Decl(subtypingWithObjectMembersAccessibility2.ts, 31, 25))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersAccessibility2.ts, 4, 1))
     }
 }
@@ -91,6 +95,7 @@ module ImplicitPublic {
 >A2 : Symbol(A2, Decl(subtypingWithObjectMembersAccessibility2.ts, 43, 5))
 
         private 1: Base;
+>1 : Symbol(A2[1], Decl(subtypingWithObjectMembersAccessibility2.ts, 45, 14))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembersAccessibility2.ts, 0, 0))
     }
 
@@ -99,6 +104,7 @@ module ImplicitPublic {
 >A2 : Symbol(A2, Decl(subtypingWithObjectMembersAccessibility2.ts, 43, 5))
 
         1: Derived; // error
+>1 : Symbol(B2[1], Decl(subtypingWithObjectMembersAccessibility2.ts, 49, 25))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersAccessibility2.ts, 4, 1))
     }
 
@@ -106,6 +112,7 @@ module ImplicitPublic {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembersAccessibility2.ts, 51, 5))
 
         private '1': Base;
+>'1' : Symbol(A3['1'], Decl(subtypingWithObjectMembersAccessibility2.ts, 53, 14))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembersAccessibility2.ts, 0, 0))
     }
 
@@ -114,6 +121,7 @@ module ImplicitPublic {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembersAccessibility2.ts, 51, 5))
 
         '1': Derived; // error
+>'1' : Symbol(B3['1'], Decl(subtypingWithObjectMembersAccessibility2.ts, 57, 25))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersAccessibility2.ts, 4, 1))
     }
 }
