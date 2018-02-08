@@ -2486,7 +2486,12 @@ namespace ts {
                 return fileDiagnostics.get(fileName) || [];
             }
 
-            return [...nonFileDiagnostics, ...flatMap(filesWithDiagnostics, f => fileDiagnostics.get(f))];
+            const fileDiags = flatMap(filesWithDiagnostics, f => fileDiagnostics.get(f));
+            if (!nonFileDiagnostics.length) {
+                return fileDiags;
+            }
+            fileDiags.unshift(...nonFileDiagnostics);
+            return fileDiags;
         }
     }
 
