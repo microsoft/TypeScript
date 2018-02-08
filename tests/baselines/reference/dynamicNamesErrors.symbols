@@ -12,6 +12,7 @@ interface T0 {
 >c0 : Symbol(c0, Decl(dynamicNamesErrors.ts, 0, 5))
 
     1: number;
+>1 : Symbol(T0[1], Decl(dynamicNamesErrors.ts, 4, 17))
 }
 
 interface T1 {

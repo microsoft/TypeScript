@@ -42,6 +42,7 @@ interface E {
 >E : Symbol(E, Decl(inheritedMembersAndIndexSignaturesFromDifferentBases.ts, 16, 31))
 
     0: {};
+>0 : Symbol(E[0], Decl(inheritedMembersAndIndexSignaturesFromDifferentBases.ts, 18, 13))
 }
 
 interface F extends A, B, E { } // error because 0 is not a subtype of {a; b;}

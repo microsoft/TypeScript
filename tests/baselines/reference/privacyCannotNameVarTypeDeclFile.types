@@ -242,6 +242,8 @@ var privateVarWithPrivateModulePropertyTypes1 = exporter.createExportedWidget4()
 
 === tests/cases/compiler/privacyCannotNameVarTypeDeclFile_GlobalWidgets.ts ===
 declare module "GlobalWidgets" {
+>"GlobalWidgets" : typeof "GlobalWidgets"
+
     export class Widget3 {
 >Widget3 : Widget3
 

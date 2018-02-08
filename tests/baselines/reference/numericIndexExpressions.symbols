@@ -3,11 +3,13 @@ interface Numbers1 {
 >Numbers1 : Symbol(Numbers1, Decl(numericIndexExpressions.ts, 0, 0))
 
     1: string;
+>1 : Symbol(Numbers1[1], Decl(numericIndexExpressions.ts, 0, 20))
 }
 interface Strings1 {
 >Strings1 : Symbol(Strings1, Decl(numericIndexExpressions.ts, 2, 1))
 
     '1': string;
+>'1' : Symbol(Strings1['1'], Decl(numericIndexExpressions.ts, 3, 20))
 }
  
  

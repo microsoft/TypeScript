@@ -33,6 +33,8 @@ async function a(): Bluebird<void> {
 
 === tests/cases/compiler/bluebird.d.ts ===
 declare module "bluebird" {
+>"bluebird" : Symbol("bluebird", Decl(bluebird.d.ts, 0, 0))
+
     type Bluebird<T> = Promise<T>;
 >Bluebird : Symbol(Bluebird, Decl(bluebird.d.ts, 0, 27), Decl(bluebird.d.ts, 2, 9))
 >T : Symbol(T, Decl(bluebird.d.ts, 1, 18))

@@ -8,6 +8,7 @@ enum ENUM1 { A, B, "" };
 >ENUM1 : Symbol(ENUM1, Decl(deleteOperatorWithEnumType.ts, 2, 14))
 >A : Symbol(ENUM1.A, Decl(deleteOperatorWithEnumType.ts, 3, 12))
 >B : Symbol(ENUM1.B, Decl(deleteOperatorWithEnumType.ts, 3, 15))
+>"" : Symbol(ENUM1[""], Decl(deleteOperatorWithEnumType.ts, 3, 18))
 
 // enum type var
 var ResultIsBoolean1 = delete ENUM;

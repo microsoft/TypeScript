@@ -1,6 +1,8 @@
 === tests/cases/compiler/refs.d.ts ===
 declare module "path";
-No type information for this code.=== tests/cases/compiler/file.ts ===
+>"path" : Symbol("path", Decl(refs.d.ts, 0, 0))
+
+=== tests/cases/compiler/file.ts ===
 import path from "path";
 >path : Symbol(path, Decl(file.ts, 0, 6))
 
