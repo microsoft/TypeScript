@@ -1550,20 +1550,18 @@ namespace ts {
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
     export function getSpecialPropertyAssignmentKind(expr: BinaryExpression): SpecialPropertyAssignmentKind {
-        if (!isInJavaScriptFile(expr)) {
+        if (!isInJavaScriptFile(expr) ||
+            expr.operatorToken.kind !== SyntaxKind.EqualsToken ||
+            !isPropertyAccessExpression(expr.left)) {
             return SpecialPropertyAssignmentKind.None;
         }
-        if (expr.operatorToken.kind !== SyntaxKind.EqualsToken || expr.left.kind !== SyntaxKind.PropertyAccessExpression) {
-            return SpecialPropertyAssignmentKind.None;
-        }
-        const lhs = <PropertyAccessExpression>expr.left;
-        if (lhs.expression.kind === SyntaxKind.Identifier) {
-            const lhsId = <Identifier>lhs.expression;
-            if (lhsId.escapedText === "exports") {
+        const lhs = expr.left;
+        if (isIdentifier(lhs.expression)) {
+            if (lhs.expression.escapedText === "exports") {
                 // exports.name = expr
                 return SpecialPropertyAssignmentKind.ExportsProperty;
             }
-            else if (lhsId.escapedText === "module" && lhs.name.escapedText === "exports") {
+            else if (lhs.expression.escapedText === "module" && lhs.name.escapedText === "exports") {
                 // module.exports = expr
                 return SpecialPropertyAssignmentKind.ModuleExports;
             }
@@ -1575,16 +1573,14 @@ namespace ts {
         else if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
             return SpecialPropertyAssignmentKind.ThisProperty;
         }
-        else if (lhs.expression.kind === SyntaxKind.PropertyAccessExpression) {
+        else if (isPropertyAccessExpression(lhs.expression)) {
             // chained dot, e.g. x.y.z = expr; this var is the 'x.y' part
-            const innerPropertyAccess = <PropertyAccessExpression>lhs.expression;
-            if (innerPropertyAccess.expression.kind === SyntaxKind.Identifier) {
+            if (isIdentifier(lhs.expression.expression)) {
                 // module.exports.name = expr
-                const innerPropertyAccessIdentifier = <Identifier>innerPropertyAccess.expression;
-                if (innerPropertyAccessIdentifier.escapedText === "module" && innerPropertyAccess.name.escapedText === "exports") {
+                if (lhs.expression.expression.escapedText === "module" && lhs.expression.name.escapedText === "exports") {
                     return SpecialPropertyAssignmentKind.ExportsProperty;
                 }
-                if (innerPropertyAccess.name.escapedText === "prototype") {
+                if (lhs.expression.name.escapedText === "prototype") {
                     return SpecialPropertyAssignmentKind.PrototypeProperty;
                 }
             }
