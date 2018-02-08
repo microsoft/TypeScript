@@ -45,8 +45,6 @@ export class Button extends React.Component<any, any> {
 >render : Symbol(Button.render, Decl(button.tsx, 2, 55))
 
         return <button>Some button</button>;
->button : Symbol(unknown)
->button : Symbol(unknown)
     }
 
 }

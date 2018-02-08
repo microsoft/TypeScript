@@ -36,7 +36,5 @@ class Foo extends createComponentClass(() => class extends React.Component<{}, {
 >render : Symbol((Anonymous class).render, Decl(jsxInExtendsClause.tsx, 6, 84))
 
     return <span>Hello, world!</span>;
->span : Symbol(unknown)
->span : Symbol(unknown)
   }
 }) {}
