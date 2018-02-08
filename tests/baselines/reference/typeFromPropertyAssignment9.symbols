@@ -1,54 +1,62 @@
 === tests/cases/conformance/salsa/a.js ===
 // TODO: JSDoc would provide a contextual type, so ... I should test that
+//  (a number of existing tests fail because of that, I think)
 // TODO: Try initializer of function or class I guess (though classes aren't context sensitive)
+// TODO: Duplicated declarations should be OK (if they have the same type (??))
 var my = my || {};
->my : Symbol(my, Decl(a.js, 2, 3), Decl(a.js, 2, 18))
->my : Symbol(my, Decl(a.js, 2, 3), Decl(a.js, 2, 18))
+>my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
+>my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
 
 my.m = function() {
->my.m : Symbol(m, Decl(a.js, 2, 18))
->my : Symbol(my, Decl(a.js, 2, 3), Decl(a.js, 2, 18))
->m : Symbol(m, Decl(a.js, 2, 18))
+>my.m : Symbol(m, Decl(a.js, 4, 18))
+>my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
+>m : Symbol(m, Decl(a.js, 4, 18))
 
     return 1;
 }
 my.n = 1;
->my.n : Symbol(n, Decl(a.js, 5, 1))
->my : Symbol(my, Decl(a.js, 2, 3), Decl(a.js, 2, 18))
->n : Symbol(n, Decl(a.js, 5, 1))
+>my.n : Symbol(n, Decl(a.js, 7, 1))
+>my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
+>n : Symbol(n, Decl(a.js, 7, 1))
 
 my.o = {};
->my.o : Symbol(o, Decl(a.js, 6, 9))
->my : Symbol(my, Decl(a.js, 2, 3), Decl(a.js, 2, 18))
->o : Symbol(o, Decl(a.js, 6, 9))
+>my.o : Symbol(o, Decl(a.js, 8, 9))
+>my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
+>o : Symbol(o, Decl(a.js, 8, 9))
 
-my.possible = my.possible || {};
->my.possible : Symbol(possible, Decl(a.js, 7, 10))
->my : Symbol(my, Decl(a.js, 2, 3), Decl(a.js, 2, 18))
->possible : Symbol(possible, Decl(a.js, 7, 10))
->my.possible : Symbol(possible, Decl(a.js, 7, 10))
->my : Symbol(my, Decl(a.js, 2, 3), Decl(a.js, 2, 18))
->possible : Symbol(possible, Decl(a.js, 7, 10))
+my.predicate = my.predicate || {};
+>my.predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
+>my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
+>predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
+>my.predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
+>my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
+>predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
 
-my.m;
->my.m : Symbol(m, Decl(a.js, 2, 18))
->my : Symbol(my, Decl(a.js, 2, 3), Decl(a.js, 2, 18))
->m : Symbol(m, Decl(a.js, 2, 18))
+my.predicate.query = function () {
+>my.predicate.query : Symbol(query, Decl(a.js, 10, 34))
+>my.predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
+>my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
+>predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
+>query : Symbol(query, Decl(a.js, 10, 34))
 
-my.o;
->my.o : Symbol(o, Decl(a.js, 6, 9))
->my : Symbol(my, Decl(a.js, 2, 3), Decl(a.js, 2, 18))
->o : Symbol(o, Decl(a.js, 6, 9))
+    var me = this;
+>me : Symbol(me, Decl(a.js, 12, 7))
+>this : Symbol(__object, Decl(a.js, 10, 30))
 
-my.n;
->my.n : Symbol(n, Decl(a.js, 5, 1))
->my : Symbol(my, Decl(a.js, 2, 3), Decl(a.js, 2, 18))
->n : Symbol(n, Decl(a.js, 5, 1))
+    me.property = false;
+>me : Symbol(me, Decl(a.js, 12, 7))
 
-my.possible;
->my.possible : Symbol(possible, Decl(a.js, 7, 10))
->my : Symbol(my, Decl(a.js, 2, 3), Decl(a.js, 2, 18))
->possible : Symbol(possible, Decl(a.js, 7, 10))
+};
+var q = new my.predicate.query();
+>q : Symbol(q, Decl(a.js, 15, 3))
+>my.predicate.query : Symbol(query, Decl(a.js, 10, 34))
+>my.predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
+>my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
+>predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
+>query : Symbol(query, Decl(a.js, 10, 34))
 
+// my.predicate.result = {};
+// my.predicate.sorted = my.predicate.sorted || {};
 
+// TODO: EVEN MORE NESTING
 

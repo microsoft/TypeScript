@@ -1490,17 +1490,12 @@ namespace ts {
      * This function does not test if the node is in a JavaScript file or not.
      */
     export function isDeclarationOfJavascriptContainerExpression(s: Symbol) {
-        if (s.valueDeclaration && isVariableDeclaration(s.valueDeclaration)) {
-            return isVariableDeclaration(s.valueDeclaration) && isJavascriptContainerExpression(s.valueDeclaration.initializer);
-        }
-        return false;
-    }
-
-    export function isJavascriptContainerExpression(expression: Expression | undefined) {
-        return expression &&
-            (expression.kind === SyntaxKind.FunctionExpression ||
-             expression.kind === SyntaxKind.ClassExpression ||
-             isObjectLiteralExpression(expression) && expression.properties.length === 0)
+        return s.valueDeclaration &&
+            isVariableDeclaration(s.valueDeclaration) &&
+            s.valueDeclaration.initializer &&
+            (s.valueDeclaration.initializer.kind === SyntaxKind.FunctionExpression ||
+             s.valueDeclaration.initializer.kind === SyntaxKind.ClassExpression ||
+             isObjectLiteralExpression(s.valueDeclaration.initializer) && s.valueDeclaration.initializer.properties.length === 0);
     }
 
     export function isDeclarationOfDefaultedJavascriptContainerExpression(s: Symbol) {
@@ -1584,8 +1579,10 @@ namespace ts {
                     return SpecialPropertyAssignmentKind.PrototypeProperty;
                 }
             }
+            if(isEntityNameExpression(lhs.expression)) {
+                return SpecialPropertyAssignmentKind.Property;
+            }
         }
-
 
         return SpecialPropertyAssignmentKind.None;
     }

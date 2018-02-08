@@ -1,16 +1,18 @@
 === tests/cases/conformance/salsa/a.js ===
 // TODO: JSDoc would provide a contextual type, so ... I should test that
+//  (a number of existing tests fail because of that, I think)
 // TODO: Try initializer of function or class I guess (though classes aren't context sensitive)
+// TODO: Duplicated declarations should be OK (if they have the same type (??))
 var my = my || {};
->my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
->my || {} : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
->my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
->{} : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
+>my || {} : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
+>{} : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
 
 my.m = function() {
 >my.m = function() {    return 1;} : () => number
 >my.m : () => number
->my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
 >m : () => number
 >function() {    return 1;} : () => number
 
@@ -20,47 +22,60 @@ my.m = function() {
 my.n = 1;
 >my.n = 1 : 1
 >my.n : number
->my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
 >n : number
 >1 : 1
 
 my.o = {};
 >my.o = {} : { [x: string]: any; }
 >my.o : { [x: string]: any; }
->my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
 >o : { [x: string]: any; }
 >{} : { [x: string]: any; }
 
-my.possible = my.possible || {};
->my.possible = my.possible || {} : { [x: string]: any; }
->my.possible : { [x: string]: any; }
->my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
->possible : { [x: string]: any; }
->my.possible || {} : { [x: string]: any; }
->my.possible : { [x: string]: any; }
->my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
->possible : { [x: string]: any; }
->{} : { [x: string]: any; }
+my.predicate = my.predicate || {};
+>my.predicate = my.predicate || {} : { [x: string]: any; query: () => void; }
+>my.predicate : { [x: string]: any; query: () => void; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
+>predicate : { [x: string]: any; query: () => void; }
+>my.predicate || {} : { [x: string]: any; query: () => void; }
+>my.predicate : { [x: string]: any; query: () => void; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
+>predicate : { [x: string]: any; query: () => void; }
+>{} : { [x: string]: any; query: () => void; }
 
-my.m;
->my.m : () => number
->my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
->m : () => number
+my.predicate.query = function () {
+>my.predicate.query = function () {    var me = this;    me.property = false;} : () => void
+>my.predicate.query : () => void
+>my.predicate : { [x: string]: any; query: () => void; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
+>predicate : { [x: string]: any; query: () => void; }
+>query : () => void
+>function () {    var me = this;    me.property = false;} : () => void
 
-my.o;
->my.o : { [x: string]: any; }
->my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
->o : { [x: string]: any; }
+    var me = this;
+>me : { [x: string]: any; query: () => void; }
+>this : { [x: string]: any; query: () => void; }
 
-my.n;
->my.n : number
->my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
->n : number
+    me.property = false;
+>me.property = false : false
+>me.property : any
+>me : { [x: string]: any; query: () => void; }
+>property : any
+>false : false
 
-my.possible;
->my.possible : { [x: string]: any; }
->my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; possible: { [x: string]: any; }; }
->possible : { [x: string]: any; }
+};
+var q = new my.predicate.query();
+>q : any
+>new my.predicate.query() : any
+>my.predicate.query : () => void
+>my.predicate : { [x: string]: any; query: () => void; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
+>predicate : { [x: string]: any; query: () => void; }
+>query : () => void
 
+// my.predicate.result = {};
+// my.predicate.sorted = my.predicate.sorted || {};
 
+// TODO: EVEN MORE NESTING
 
