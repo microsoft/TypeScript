@@ -2965,6 +2965,7 @@ namespace ts {
         // State
         InObjectTypeLiteral                     = 1 << 22,
         InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
+        InReverseMappedType                     = 1 << 24,
     }
 
     // Ensure the shared flags between this and `NodeBuilderFlags` stay in alignment

@@ -1821,6 +1821,7 @@ declare namespace ts {
         IgnoreErrors = 3112960,
         InObjectTypeLiteral = 4194304,
         InTypeAlias = 8388608,
+        InReverseMappedType = 16777216,
     }
     enum TypeFormatFlags {
         None = 0,
