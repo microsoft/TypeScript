@@ -7245,7 +7245,7 @@ namespace ts {
 
         function getConstrainedTypeParameter(typeParameter: TypeParameter, node: Node) {
             let constraints: Type[];
-            while (isTypeNode(node)) {
+            while (isPartOfTypeNode(node)) {
                 const parent = node.parent;
                 if (parent.kind === SyntaxKind.ConditionalType && node === (<ConditionalTypeNode>parent).trueType) {
                     if (getTypeFromTypeNode((<ConditionalTypeNode>parent).checkType) === typeParameter) {

@@ -127,3 +127,8 @@ type B1<S> = S extends A1<infer T, infer U> ? [T, U] : never;
 type A2<T, U extends void> = [T, U];
 type B2<S> = S extends A2<infer T, infer U> ? [T, U] : never;
 type C2<S, U extends void> = S extends A2<infer T, U> ? [T, U] : never;
+
+// Repro from #21735
+
+type A<T> = T extends string ? { [P in T]: void; } : T;
+type B<T> = string extends T ? { [P in T]: void; } : T;  // Error

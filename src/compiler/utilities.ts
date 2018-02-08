@@ -771,6 +771,8 @@ namespace ts {
                 return node.parent.kind !== SyntaxKind.VoidExpression;
             case SyntaxKind.ExpressionWithTypeArguments:
                 return !isExpressionWithTypeArgumentsInClassExtendsClause(node);
+            case SyntaxKind.TypeParameter:
+                return node.parent.kind === SyntaxKind.MappedType || node.parent.kind === SyntaxKind.InferType;
 
             // Identifiers and qualified names may be type nodes, depending on their context. Climb
             // above them to find the lowest container

@@ -558,3 +558,21 @@ type C2<S, U extends void> = S extends A2<infer T, U> ? [T, U] : never;
 >T : T
 >U : U
 
+// Repro from #21735
+
+type A<T> = T extends string ? { [P in T]: void; } : T;
+>A : A<T>
+>T : T
+>T : T
+>P : P
+>T : T
+>T : T
+
+type B<T> = string extends T ? { [P in T]: void; } : T;  // Error
+>B : B<T>
+>T : T
+>T : T
+>P : P
+>T : T
+>T : T
+
