@@ -1,0 +1,48 @@
+=== tests/cases/compiler/package.d.ts ===
+declare namespace thing {
+>thing : Symbol(thing, Decl(package.d.ts, 0, 0), Decl(package.d.ts, 3, 11))
+
+    export interface MyInterface {}
+>MyInterface : Symbol(MyInterface, Decl(package.d.ts, 0, 25))
+}
+declare var thing: {
+>thing : Symbol(thing, Decl(package.d.ts, 0, 0), Decl(package.d.ts, 3, 11))
+
+    x: thing.MyInterface;
+>x : Symbol(x, Decl(package.d.ts, 3, 20))
+>thing : Symbol(thing, Decl(package.d.ts, 0, 0), Decl(package.d.ts, 3, 11))
+>MyInterface : Symbol(thing.MyInterface, Decl(package.d.ts, 0, 25))
+
+};
+export = thing;
+>thing : Symbol(thing, Decl(package.d.ts, 0, 0), Decl(package.d.ts, 3, 11))
+
+export as namespace thing;
+>thing : Symbol(thing, Decl(package.d.ts, 6, 15), Decl(globalize.d.ts, 1, 16), Decl(globalize.d.ts, 5, 9))
+
+=== tests/cases/compiler/globalize.d.ts ===
+import * as thingAlias from "./package";
+>thingAlias : Symbol(thingAlias, Decl(globalize.d.ts, 0, 6))
+
+declare global {
+>global : Symbol(global, Decl(globalize.d.ts, 0, 40))
+
+    namespace thing {
+>thing : Symbol(thing, Decl(package.d.ts, 6, 15), Decl(globalize.d.ts, 1, 16), Decl(globalize.d.ts, 5, 9))
+
+        export type MyInterface = thingAlias.MyInterface;
+>MyInterface : Symbol(MyInterface, Decl(globalize.d.ts, 2, 21))
+>thingAlias : Symbol(thingAlias, Decl(globalize.d.ts, 0, 6))
+>MyInterface : Symbol(thingAlias.MyInterface, Decl(package.d.ts, 0, 25))
+    }
+    const thing: typeof thingAlias;
+>thing : Symbol(thing, Decl(package.d.ts, 6, 15), Decl(globalize.d.ts, 1, 16), Decl(globalize.d.ts, 5, 9))
+>thingAlias : Symbol(thingAlias, Decl(globalize.d.ts, 0, 6))
+}
+=== tests/cases/compiler/usage.ts ===
+export const num = thing.x;
+>num : Symbol(num, Decl(usage.ts, 0, 12))
+>thing.x : Symbol(x, Decl(package.d.ts, 3, 20))
+>thing : Symbol(thing, Decl(package.d.ts, 6, 15), Decl(globalize.d.ts, 1, 16), Decl(globalize.d.ts, 5, 9))
+>x : Symbol(x, Decl(package.d.ts, 3, 20))
+
