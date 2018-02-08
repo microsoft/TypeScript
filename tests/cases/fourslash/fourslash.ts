@@ -256,10 +256,10 @@ declare namespace FourSlashInterface {
          */
         referencesOf(start: Range, references: Range[]): void;
         /**
-         * For each of startRanges, asserts the ranges that are referenced from there.
+         * For each of starts, asserts the ranges that are referenced from there.
          * This uses the 'findReferences' command instead of 'getReferencesAtPosition', so references are grouped by their definition.
          */
-        referenceGroups(startRanges: Range | Range[], parts: Array<{ definition: ReferencesDefinition, ranges: Range[] }>): void;
+        referenceGroups(starts: string | string[] | Range | Range[], parts: Array<{ definition: ReferencesDefinition, ranges: Range[] }>): void;
         singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[]): void;
         rangesAreOccurrences(isWriteAccess?: boolean): void;
         rangesWithSameTextAreRenameLocations(): void;
