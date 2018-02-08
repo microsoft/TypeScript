@@ -2846,9 +2846,71 @@ namespace ts.projectSystem {
             const options = project.getCompilerOptions();
             assert.equal(options.outDir, "C:/a/b", "");
         });
+
+        it("dynamic file without external project", () => {
+            const file: FileOrFolder = {
+                path: "^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js",
+                content: "var x = 10;"
+            };
+            const host = createServerHost([libFile], { useCaseSensitiveFileNames: true });
+            const projectService = createProjectService(host);
+            projectService.setCompilerOptionsForInferredProjects({
+                module: ModuleKind.CommonJS,
+                allowJs: true,
+                allowSyntheticDefaultImports: true,
+                allowNonTsExtensions: true
+            });
+            projectService.openClientFile(file.path, "var x = 10;");
+
+            projectService.checkNumberOfProjects({ inferredProjects: 1 });
+            const project = projectService.inferredProjects[0];
+            checkProjectRootFiles(project, [file.path]);
+            checkProjectActualFiles(project, [file.path, libFile.path]);
+
+            assert.strictEqual(projectService.getDefaultProjectForFile(server.toNormalizedPath(file.path), /*ensureProject*/ true), project);
+            const indexOfX = file.content.indexOf("x");
+            assert.deepEqual(project.getLanguageService(/*ensureSynchronized*/ true).getQuickInfoAtPosition(file.path, indexOfX), {
+                kind: ScriptElementKind.variableElement,
+                kindModifiers: "",
+                textSpan: { start: indexOfX, length: 1 },
+                displayParts: [
+                    { text: "var", kind: "keyword" },
+                    { text: " ", kind: "space" },
+                    { text: "x", kind: "localName" },
+                    { text: ":", kind: "punctuation" },
+                    { text: " ", kind: "space" },
+                    { text: "number", kind: "keyword" }
+                ],
+                documentation: [],
+                tags: []
+            });
+        });
     });
 
     describe("tsserverProjectSystem Proper errors", () => {
+        function createErrorLogger() {
+            let hasError = false;
+            const errorLogger: server.Logger = {
+                close: noop,
+                hasLevel: () => true,
+                loggingEnabled: () => true,
+                perftrc: noop,
+                info: noop,
+                msg: (_s, type) => {
+                    if (type === server.Msg.Err) {
+                        hasError = true;
+                    }
+                },
+                startGroup: noop,
+                endGroup: noop,
+                getLogFileName: (): string => undefined
+            };
+            return {
+                errorLogger,
+                hasError: () => hasError
+            };
+        }
+
         it("document is not contained in project", () => {
             const file1 = {
                 path: "/a/b/app.ts",
@@ -2871,23 +2933,8 @@ namespace ts.projectSystem {
         describe("when opening new file that doesnt exist on disk yet", () => {
             function verifyNonExistentFile(useProjectRoot: boolean) {
                 const host = createServerHost([libFile]);
-                let hasError = false;
-                const errLogger: server.Logger = {
-                    close: noop,
-                    hasLevel: () => true,
-                    loggingEnabled: () => true,
-                    perftrc: noop,
-                    info: noop,
-                    msg: (_s, type) => {
-                        if (type === server.Msg.Err) {
-                            hasError = true;
-                        }
-                    },
-                    startGroup: noop,
-                    endGroup: noop,
-                    getLogFileName: (): string => undefined
-                };
-                const session = createSession(host, { canUseEvents: true, logger: errLogger, useInferredProjectPerProjectRoot: true });
+                const { hasError, errorLogger } = createErrorLogger();
+                const session = createSession(host, { canUseEvents: true, logger: errorLogger, useInferredProjectPerProjectRoot: true });
 
                 const folderPath = "/user/someuser/projects/someFolder";
                 const projectService = session.getProjectService();
@@ -2928,13 +2975,13 @@ namespace ts.projectSystem {
                 // Run the last one = get error request
                 host.runQueuedTimeoutCallbacks(newTimeoutId);
 
-                assert.isFalse(hasError);
+                assert.isFalse(hasError());
                 host.checkTimeoutQueueLength(2);
                 checkErrorMessage(session, "syntaxDiag", { file: untitledFile, diagnostics: [] });
                 session.clearMessages();
 
                 host.runQueuedImmediateCallbacks();
-                assert.isFalse(hasError);
+                assert.isFalse(hasError());
                 checkErrorMessage(session, "semanticDiag", { file: untitledFile, diagnostics: [] });
 
                 checkCompleteEvent(session, 2, expectedSequenceId);
@@ -2999,6 +3046,31 @@ namespace ts.projectSystem {
                 checkCompleteEvent(session, 2, expectedSequenceId);
                 session.clearMessages();
             }
+        });
+
+        it("Getting errors before opening file", () => {
+            const file: FileOrFolder = {
+                path: "/a/b/project/file.ts",
+                content: "let x: number = false;"
+            };
+            const host = createServerHost([file, libFile]);
+            const { hasError, errorLogger } = createErrorLogger();
+            const session = createSession(host, { canUseEvents: true, logger: errorLogger });
+
+            session.clearMessages();
+            const expectedSequenceId = session.getNextSeq();
+            session.executeCommandSeq<protocol.GeterrRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    files: [file.path]
+                }
+            });
+
+            host.runQueuedImmediateCallbacks();
+            assert.isFalse(hasError());
+            checkCompleteEvent(session, 1, expectedSequenceId);
+            session.clearMessages();
         });
     });
 
@@ -6754,6 +6826,50 @@ namespace ts.projectSystem {
                     });
                 }
             }
+        });
+    });
+
+    describe("tsserverProjectSystem forceConsistentCasingInFileNames", () => {
+        it("works when extends is specified with a case insensitive file system", () => {
+            const rootPath = "/Users/username/dev/project";
+            const file1: FileOrFolder = {
+                path: `${rootPath}/index.ts`,
+                content: 'import {x} from "file2";',
+            };
+            const file2: FileOrFolder = {
+                path: `${rootPath}/file2.js`,
+                content: "",
+            };
+            const file2Dts: FileOrFolder = {
+                path: `${rootPath}/types/file2/index.d.ts`,
+                content: "export declare const x: string;",
+            };
+            const tsconfigAll: FileOrFolder = {
+                path: `${rootPath}/tsconfig.all.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        baseUrl: ".",
+                        paths: { file2: ["./file2.js"] },
+                        typeRoots: ["./types"],
+                        forceConsistentCasingInFileNames: true,
+                    },
+                }),
+            };
+            const tsconfig: FileOrFolder = {
+                path: `${rootPath}/tsconfig.json`,
+                content: JSON.stringify({ extends: "./tsconfig.all.json" }),
+            };
+
+            const host = createServerHost([file1, file2, file2Dts, libFile, tsconfig, tsconfigAll], { useCaseSensitiveFileNames: false });
+            const session = createSession(host);
+
+            openFilesForSession([file1], session);
+            const projectService = session.getProjectService();
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+
+            const diagnostics = configuredProjectAt(projectService, 0).getLanguageService().getCompilerOptionsDiagnostics();
+            assert.deepEqual(diagnostics, []);
         });
     });
 }

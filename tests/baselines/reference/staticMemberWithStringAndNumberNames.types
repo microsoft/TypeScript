@@ -3,9 +3,11 @@ class C {
 >C : C
 
     static "foo" = 0;
+>"foo" : number
 >0 : 0
 
     static 0 = 1;
+>0 : number
 >1 : 1
 
     x = C['foo'];

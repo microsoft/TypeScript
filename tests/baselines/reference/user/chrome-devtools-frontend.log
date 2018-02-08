@@ -12,8 +12,8 @@ Standard output:
 ../../../../built/local/lib.dom.d.ts(9264,13): error TS2300: Duplicate identifier 'Request'.
 ../../../../built/local/lib.dom.d.ts(13522,11): error TS2300: Duplicate identifier 'Window'.
 ../../../../built/local/lib.dom.d.ts(13711,13): error TS2300: Duplicate identifier 'Window'.
-../../../../built/local/lib.es5.d.ts(1321,11): error TS2300: Duplicate identifier 'ArrayLike'.
-../../../../built/local/lib.es5.d.ts(1350,6): error TS2300: Duplicate identifier 'Record'.
+../../../../built/local/lib.es5.d.ts(1328,11): error TS2300: Duplicate identifier 'ArrayLike'.
+../../../../built/local/lib.es5.d.ts(1357,6): error TS2300: Duplicate identifier 'Record'.
 ../../../../node_modules/@types/node/index.d.ts(150,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{ [x: string]: any; }', but here has type 'NodeModule'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(43,8): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(95,28): error TS2339: Property 'response' does not exist on type 'EventTarget'.
@@ -9168,7 +9168,7 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker
     Type 'number' is not assignable to type 'boolean'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(208,5): error TS2554: Expected 2-3 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(223,3): error TS2554: Expected 2-3 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(230,35): error TS2345: Argument of type '{ ranges: boolean; ecmaVersion: number; }' is not assignable to parameter of type '{ [x: string]: boolean; }'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(230,35): error TS2345: Argument of type '{ ranges: false; ecmaVersion: number; }' is not assignable to parameter of type '{ [x: string]: boolean; }'.
   Property 'ecmaVersion' is incompatible with index signature.
     Type 'number' is not assignable to type 'boolean'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(258,14): error TS2339: Property 'parent' does not exist on type '{ start: number; end: number; type: string; body: any; declarations: any[]; properties: any[]; in...'.
@@ -9235,7 +9235,7 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/HTMLFormatter.j
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/HTMLFormatter.js(401,27): error TS2339: Property 'Token' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/HTMLFormatter.js(419,27): error TS2339: Property 'Tag' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/HTMLFormatter.js(441,27): error TS2339: Property 'Element' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/JavaScriptFormatter.js(54,42): error TS2345: Argument of type '{ ranges: boolean; ecmaVersion: number; preserveParens: boolean; }' is not assignable to parameter of type '{ [x: string]: boolean; }'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/JavaScriptFormatter.js(54,42): error TS2345: Argument of type '{ ranges: false; ecmaVersion: number; preserveParens: true; }' is not assignable to parameter of type '{ [x: string]: boolean; }'.
   Property 'ecmaVersion' is incompatible with index signature.
     Type 'number' is not assignable to type 'boolean'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/JavaScriptFormatter.js(60,21): error TS2694: Namespace 'Acorn' has no exported member 'TokenOrComment'.
@@ -9286,10 +9286,10 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/JavaScriptForma
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/JavaScriptFormatter.js(304,62): error TS2339: Property 'alternate' does not exist on type '{ start: number; end: number; type: string; body: any; declarations: any[]; properties: any[]; in...'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/JavaScriptFormatter.js(306,23): error TS2339: Property 'consequent' does not exist on type '{ start: number; end: number; type: string; body: any; declarations: any[]; properties: any[]; in...'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/JavaScriptFormatter.js(307,18): error TS2339: Property 'consequent' does not exist on type '{ start: number; end: number; type: string; body: any; declarations: any[]; properties: any[]; in...'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/JavaScriptOutline.js(14,32): error TS2345: Argument of type '{ ranges: boolean; ecmaVersion: number; }' is not assignable to parameter of type '{ [x: string]: boolean; }'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/JavaScriptOutline.js(14,32): error TS2345: Argument of type '{ ranges: false; ecmaVersion: number; }' is not assignable to parameter of type '{ [x: string]: boolean; }'.
   Property 'ecmaVersion' is incompatible with index signature.
     Type 'number' is not assignable to type 'boolean'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/JavaScriptOutline.js(16,39): error TS2345: Argument of type '{ ranges: boolean; ecmaVersion: number; }' is not assignable to parameter of type '{ [x: string]: boolean; }'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/JavaScriptOutline.js(16,39): error TS2345: Argument of type '{ ranges: false; ecmaVersion: number; }' is not assignable to parameter of type '{ [x: string]: boolean; }'.
   Property 'ecmaVersion' is incompatible with index signature.
     Type 'number' is not assignable to type 'boolean'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/JavaScriptOutline.js(19,53): error TS2339: Property 'computeLineEndings' does not exist on type 'string'.
@@ -23432,7 +23432,7 @@ node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(32,18): error TS23
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(39,16): error TS2339: Property '_observer' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(48,25): error TS2339: Property 'parentNodeOrShadowHost' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(56,19): error TS2339: Property 'parentNodeOrShadowHost' does not exist on type 'Node'.
-node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(100,79): error TS2345: Argument of type '{ passive: boolean; capture: boolean; }' is not assignable to parameter of type 'boolean | EventListenerOptions'.
+node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(100,79): error TS2345: Argument of type '{ passive: boolean; capture: false; }' is not assignable to parameter of type 'boolean | EventListenerOptions'.
   Object literal may only specify known properties, and 'passive' does not exist in type 'boolean | EventListenerOptions'.
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(108,19): error TS2551: Property '_scrollTop' does not exist on type 'Element'. Did you mean 'scrollTop'?
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(109,37): error TS2551: Property '_scrollTop' does not exist on type 'Element'. Did you mean 'scrollTop'?

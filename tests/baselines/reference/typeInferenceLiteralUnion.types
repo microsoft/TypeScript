@@ -79,7 +79,7 @@ extentMixed = extent([new NumCoercible(10), 13, '12', true]);
 >extentMixed : [undefined, undefined] | [string | number | boolean | Date | NumCoercible, string | number | boolean | Date | NumCoercible]
 >extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [string | number | boolean | Date | NumCoercible, string | number | boolean | Date | NumCoercible]
 >extent : <T extends Numeric>(array: (string | number | boolean | Date | T)[]) => [string | number | boolean | Date | T, string | number | boolean | Date | T] | [undefined, undefined]
->[new NumCoercible(10), 13, '12', true] : (string | number | boolean | NumCoercible)[]
+>[new NumCoercible(10), 13, '12', true] : (string | number | true | NumCoercible)[]
 >new NumCoercible(10) : NumCoercible
 >NumCoercible : typeof NumCoercible
 >10 : 10

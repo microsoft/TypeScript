@@ -255,15 +255,15 @@ module EmptyTypes {
 >x : boolean
 >y : base
 >base : base
->[{ x: true, y: new derived() }, { x: false, y: new base() }] : { x: boolean; y: derived; }[]
->{ x: true, y: new derived() } : { x: boolean; y: derived; }
->x : boolean
+>[{ x: true, y: new derived() }, { x: false, y: new base() }] : ({ x: true; y: derived; } | { x: false; y: base; })[]
+>{ x: true, y: new derived() } : { x: true; y: derived; }
+>x : true
 >true : true
 >y : derived
 >new derived() : derived
 >derived : typeof derived
->{ x: false, y: new base() } : { x: boolean; y: base; }
->x : boolean
+>{ x: false, y: new base() } : { x: false; y: base; }
+>x : false
 >false : false
 >y : base
 >new base() : base
@@ -658,15 +658,15 @@ module NonEmptyTypes {
 >x : boolean
 >y : base
 >base : base
->[{ x: true, y: new derived() }, { x: false, y: new base() }] : { x: boolean; y: base; }[]
->{ x: true, y: new derived() } : { x: boolean; y: derived; }
->x : boolean
+>[{ x: true, y: new derived() }, { x: false, y: new base() }] : ({ x: true; y: derived; } | { x: false; y: base; })[]
+>{ x: true, y: new derived() } : { x: true; y: derived; }
+>x : true
 >true : true
 >y : derived
 >new derived() : derived
 >derived : typeof derived
->{ x: false, y: new base() } : { x: boolean; y: base; }
->x : boolean
+>{ x: false, y: new base() } : { x: false; y: base; }
+>x : false
 >false : false
 >y : base
 >new base() : base

@@ -92,6 +92,7 @@ namespace ts {
         "implements": SyntaxKind.ImplementsKeyword,
         "import": SyntaxKind.ImportKeyword,
         "in": SyntaxKind.InKeyword,
+        "infer": SyntaxKind.InferKeyword,
         "instanceof": SyntaxKind.InstanceOfKeyword,
         "interface": SyntaxKind.InterfaceKeyword,
         "is": SyntaxKind.IsKeyword,
@@ -335,7 +336,10 @@ namespace ts {
 
     /* @internal */
     export function computePositionOfLineAndCharacter(lineStarts: ReadonlyArray<number>, line: number, character: number, debugText?: string): number {
-        Debug.assert(line >= 0 && line < lineStarts.length);
+        if (line < 0 || line >= lineStarts.length) {
+            Debug.fail(`Bad line number. Line: ${line}, lineStarts.length: ${lineStarts.length} , line map is correct? ${debugText !== undefined ? arraysEqual(lineStarts, computeLineStarts(debugText)) : "unknown"}`);
+        }
+
         const res = lineStarts[line] + character;
         if (line < lineStarts.length - 1) {
             Debug.assert(res < lineStarts[line + 1]);

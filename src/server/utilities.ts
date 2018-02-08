@@ -232,18 +232,6 @@ namespace ts.server {
         return base === "tsconfig.json" || base === "jsconfig.json" ? base : undefined;
     }
 
-    export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void {
-        if (array.length === 0) {
-            array.push(insert);
-            return;
-        }
-
-        const insertIndex = binarySearch(array, insert, identity, compare);
-        if (insertIndex < 0) {
-            array.splice(~insertIndex, 0, insert);
-        }
-    }
-
     export function removeSorted<T>(array: SortedArray<T>, remove: T, compare: Comparer<T>): void {
         if (!array || array.length === 0) {
             return;

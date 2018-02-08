@@ -349,14 +349,15 @@ namespace ts {
         decorators: ReadonlyArray<Decorator> | undefined,
         modifiers: ReadonlyArray<Modifier> | undefined,
         name: string | PropertyName,
-        questionToken: QuestionToken | undefined,
+        questionOrExclamationToken: QuestionToken | ExclamationToken | undefined,
         type: TypeNode | undefined,
         initializer: Expression | undefined) {
         const node = <PropertyDeclaration>createSynthesizedNode(SyntaxKind.PropertyDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
         node.name = asName(name);
-        node.questionToken = questionToken;
+        node.questionToken = questionOrExclamationToken !== undefined && questionOrExclamationToken.kind === SyntaxKind.QuestionToken ? questionOrExclamationToken : undefined;
+        node.exclamationToken = questionOrExclamationToken !== undefined && questionOrExclamationToken.kind === SyntaxKind.ExclamationToken ? questionOrExclamationToken : undefined;
         node.type = type;
         node.initializer = initializer;
         return node;
@@ -367,16 +368,17 @@ namespace ts {
         decorators: ReadonlyArray<Decorator> | undefined,
         modifiers: ReadonlyArray<Modifier> | undefined,
         name: string | PropertyName,
-        questionToken: QuestionToken | undefined,
+        questionOrExclamationToken: QuestionToken | ExclamationToken | undefined,
         type: TypeNode | undefined,
         initializer: Expression | undefined) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.name !== name
-            || node.questionToken !== questionToken
+            || node.questionToken !== (questionOrExclamationToken !== undefined && questionOrExclamationToken.kind === SyntaxKind.QuestionToken ? questionOrExclamationToken : undefined)
+            || node.exclamationToken !== (questionOrExclamationToken !== undefined && questionOrExclamationToken.kind === SyntaxKind.ExclamationToken ? questionOrExclamationToken : undefined)
             || node.type !== type
             || node.initializer !== initializer
-            ? updateNode(createProperty(decorators, modifiers, name, questionToken, type, initializer), node)
+            ? updateNode(createProperty(decorators, modifiers, name, questionOrExclamationToken, type, initializer), node)
             : node;
     }
 
@@ -726,6 +728,36 @@ namespace ts {
     function updateUnionOrIntersectionTypeNode<T extends UnionOrIntersectionTypeNode>(node: T, types: NodeArray<TypeNode>): T {
         return node.types !== types
             ? updateNode(<T>createUnionOrIntersectionTypeNode(node.kind, types), node)
+            : node;
+    }
+
+    export function createConditionalTypeNode(checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.ConditionalType) as ConditionalTypeNode;
+        node.checkType = parenthesizeConditionalTypeMember(checkType);
+        node.extendsType = parenthesizeConditionalTypeMember(extendsType);
+        node.trueType = trueType;
+        node.falseType = falseType;
+        return node;
+    }
+
+    export function updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
+        return node.checkType !== checkType
+            || node.extendsType !== extendsType
+            || node.trueType !== trueType
+            || node.falseType !== falseType
+            ? updateNode(createConditionalTypeNode(checkType, extendsType, trueType, falseType), node)
+            : node;
+    }
+
+    export function createInferTypeNode(typeParameter: TypeParameterDeclaration) {
+        const node = <InferTypeNode>createSynthesizedNode(SyntaxKind.InferType);
+        node.typeParameter = typeParameter;
+        return node;
+    }
+
+    export function updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration) {
+        return node.typeParameter !== typeParameter
+            ? updateNode(createInferTypeNode(typeParameter), node)
             : node;
     }
 
@@ -4092,6 +4124,10 @@ namespace ts {
         return expression;
     }
 
+    export function parenthesizeConditionalTypeMember(member: TypeNode) {
+        return member.kind === SyntaxKind.ConditionalType ? createParenthesizedType(member) : member;
+    }
+
     export function parenthesizeElementTypeMember(member: TypeNode) {
         switch (member.kind) {
             case SyntaxKind.UnionType:
@@ -4100,7 +4136,7 @@ namespace ts {
             case SyntaxKind.ConstructorType:
                 return createParenthesizedType(member);
         }
-        return member;
+        return parenthesizeConditionalTypeMember(member);
     }
 
     export function parenthesizeArrayTypeMember(member: TypeNode) {
@@ -4293,7 +4329,7 @@ namespace ts {
         return emitNode && emitNode.externalHelpersModuleName;
     }
 
-    export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean) {
+    export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStarOrImportDefault?: boolean) {
         if (compilerOptions.importHelpers && isEffectiveExternalModule(node, compilerOptions)) {
             const externalHelpersModuleName = getExternalHelpersModuleName(node);
             if (externalHelpersModuleName) {
@@ -4301,7 +4337,7 @@ namespace ts {
             }
 
             const moduleKind = getEmitModuleKind(compilerOptions);
-            let create = hasExportStarsToExportValues
+            let create = (hasExportStarsToExportValues || (compilerOptions.esModuleInterop && hasImportStarOrImportDefault))
                 && moduleKind !== ModuleKind.System
                 && moduleKind !== ModuleKind.ES2015
                 && moduleKind !== ModuleKind.ESNext;

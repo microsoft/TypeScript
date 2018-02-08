@@ -4,12 +4,16 @@ class List<T> { }
 >T : T
 
 declare module 'mod1' {
+>'mod1' : typeof 'mod1'
+
     class Foo {
 >Foo : Foo
     }
 }
 
 declare module 'moo' {
+>'moo' : typeof 'moo'
+
     import x = require('mod1');
 >x : typeof x
 

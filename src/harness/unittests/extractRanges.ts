@@ -365,6 +365,58 @@ switch (x) {
             refactor.extractSymbol.Messages.cannotExtractRange.message
         ]);
 
+        testExtractRangeFailed("extractRangeFailed14",
+        `
+            switch(1) {
+                case [#|1:
+                    break;|]
+            }
+        `,
+        [
+            refactor.extractSymbol.Messages.cannotExtractRange.message
+        ]);
+
+        testExtractRangeFailed("extractRangeFailed15",
+        `
+            switch(1) {
+                case [#|1:
+                    break|];
+            }
+        `,
+        [
+            refactor.extractSymbol.Messages.cannotExtractRange.message
+        ]);
+
+        // Documentation only - it would be nice if the result were [$|1|]
+        testExtractRangeFailed("extractRangeFailed16",
+        `
+            switch(1) {
+                [#|case 1|]:
+                    break;
+            }
+        `,
+        [
+            refactor.extractSymbol.Messages.cannotExtractRange.message
+        ]);
+
+        // Documentation only - it would be nice if the result were [$|1|]
+        testExtractRangeFailed("extractRangeFailed17",
+        `
+            switch(1) {
+                [#|case 1:|]
+                    break;
+            }
+        `,
+        [
+            refactor.extractSymbol.Messages.cannotExtractRange.message
+        ]);
+
+        testExtractRangeFailed("extractRangeFailed18",
+        `[#|{ 1;|] }`,
+        [
+            refactor.extractSymbol.Messages.cannotExtractRange.message
+        ]);
+
         testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, [refactor.extractSymbol.Messages.cannotExtractIdentifier.message]);
     });
 }

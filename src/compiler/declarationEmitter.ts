@@ -358,7 +358,7 @@ namespace ts {
             }
             else {
                 errorNameNode = declaration.name;
-                const format = TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseStructuralFallback | TypeFormatFlags.WriteDefaultSymbolWithoutName |
+                const format = TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseStructuralFallback |
                     TypeFormatFlags.WriteClassExpressionAsTypeLiteral |
                     (shouldUseResolverType ? TypeFormatFlags.AddUndefined : 0);
                 resolver.writeTypeOfDeclaration(declaration, enclosingDeclaration, format, writer);
@@ -378,7 +378,7 @@ namespace ts {
                 resolver.writeReturnTypeOfSignatureDeclaration(
                     signature,
                     enclosingDeclaration,
-                    TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseStructuralFallback | TypeFormatFlags.WriteClassExpressionAsTypeLiteral | TypeFormatFlags.WriteDefaultSymbolWithoutName,
+                    TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseStructuralFallback | TypeFormatFlags.WriteClassExpressionAsTypeLiteral,
                     writer);
                 errorNameNode = undefined;
             }
@@ -450,6 +450,10 @@ namespace ts {
                     return emitUnionType(<UnionTypeNode>type);
                 case SyntaxKind.IntersectionType:
                     return emitIntersectionType(<IntersectionTypeNode>type);
+                case SyntaxKind.ConditionalType:
+                    return emitConditionalType(<ConditionalTypeNode>type);
+                case SyntaxKind.InferType:
+                    return emitInferType(<InferTypeNode>type);
                 case SyntaxKind.ParenthesizedType:
                     return emitParenType(<ParenthesizedTypeNode>type);
                 case SyntaxKind.TypeOperator:
@@ -543,6 +547,24 @@ namespace ts {
 
             function emitIntersectionType(type: IntersectionTypeNode) {
                 emitSeparatedList(type.types, " & ", emitType);
+            }
+
+            function emitConditionalType(node: ConditionalTypeNode) {
+                emitType(node.checkType);
+                write(" extends ");
+                emitType(node.extendsType);
+                write(" ? ");
+                const prevEnclosingDeclaration = enclosingDeclaration;
+                enclosingDeclaration = node.trueType;
+                emitType(node.trueType);
+                enclosingDeclaration = prevEnclosingDeclaration;
+                write(" : ");
+                emitType(node.falseType);
+            }
+
+            function emitInferType(node: InferTypeNode) {
+                write("infer ");
+                writeTextOfNode(currentText, node.typeParameter.name);
             }
 
             function emitParenType(type: ParenthesizedTypeNode) {
@@ -643,7 +665,7 @@ namespace ts {
             resolver.writeTypeOfExpression(
                 expr,
                 enclosingDeclaration,
-                TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseStructuralFallback | TypeFormatFlags.WriteClassExpressionAsTypeLiteral | TypeFormatFlags.WriteDefaultSymbolWithoutName,
+                TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseStructuralFallback | TypeFormatFlags.WriteClassExpressionAsTypeLiteral,
                 writer);
             write(";");
             writeLine();
@@ -2000,7 +2022,7 @@ namespace ts {
     export function writeDeclarationFile(declarationFilePath: string, sourceFileOrBundle: SourceFile | Bundle, host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection, emitOnlyDtsFiles: boolean) {
         const emitDeclarationResult = emitDeclarations(host, resolver, emitterDiagnostics, declarationFilePath, sourceFileOrBundle, emitOnlyDtsFiles);
         const emitSkipped = emitDeclarationResult.reportedDeclarationError || host.isEmitBlocked(declarationFilePath) || host.getCompilerOptions().noEmit;
-        if (!emitSkipped) {
+        if (!emitSkipped || emitOnlyDtsFiles) {
             const sourceFiles = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle.sourceFiles : [sourceFileOrBundle];
             const declarationOutput = emitDeclarationResult.referencesOutput
                 + getDeclarationOutput(emitDeclarationResult.synchronousDeclarationOutput, emitDeclarationResult.moduleElementDeclarationEmitInfo);

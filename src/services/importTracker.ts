@@ -107,6 +107,11 @@ namespace ts.FindAllReferences {
                             if (namedBindings && namedBindings.kind === SyntaxKind.NamespaceImport) {
                                 handleNamespaceImport(direct, namedBindings.name);
                             }
+                            else if (isDefaultImport(direct)) {
+                                const sourceFileLike = getSourceFileLikeForImportDeclaration(direct);
+                                addIndirectUser(sourceFileLike); // Add a check for indirect uses to handle synthetic default imports
+                                directImports.push(direct);
+                            }
                             else {
                                 directImports.push(direct);
                             }
@@ -491,8 +496,7 @@ namespace ts.FindAllReferences {
 
             function getExportAssignmentExport(ex: ExportAssignment): ExportedSymbol {
                 // Get the symbol for the `export =` node; its parent is the module it's the export of.
-                const exportingModuleSymbol = ex.symbol.parent;
-                Debug.assert(!!exportingModuleSymbol);
+                const exportingModuleSymbol = Debug.assertDefined(ex.symbol.parent, "Expected export symbol to have a parent");
                 const exportKind = ex.isExportEquals ? ExportKind.ExportEquals : ExportKind.Default;
                 return { kind: ImportExport.Export, symbol, exportInfo: { exportingModuleSymbol, exportKind } };
             }
@@ -510,9 +514,30 @@ namespace ts.FindAllReferences {
                         return undefined;
                 }
 
-                const sym = useLhsSymbol ? checker.getSymbolAtLocation((node.left as ts.PropertyAccessExpression).name) : symbol;
+                const sym = useLhsSymbol ? checker.getSymbolAtLocation(cast(node.left, isPropertyAccessExpression).name) : symbol;
+                // Better detection for GH#20803
+                if (sym && !(checker.getMergedSymbol(sym.parent).flags & SymbolFlags.Module)) {
+                    Debug.fail(`Special property assignment kind does not have a module as its parent. Assignment is ${showSymbol(sym)}, parent is ${showSymbol(sym.parent)}`);
+                }
                 return sym && exportInfo(sym, kind);
             }
+        }
+
+        function showSymbol(s: Symbol): string {
+            const decls = s.declarations.map(d => (ts as any).SyntaxKind[d.kind]).join(",");
+            const flags = showFlags(s.flags, (ts as any).SymbolFlags);
+            return `{ declarations: ${decls}, flags: ${flags} }`;
+        }
+
+        function showFlags(f: number, flags: any) {
+            const out = [];
+            for (let pow = 0; pow <= 30; pow++) {
+                const n = 1 << pow;
+                if (f & n) {
+                    out.push(flags[n]);
+                }
+            }
+            return out.join("|");
         }
 
         function getImport(): ImportedSymbol | undefined {

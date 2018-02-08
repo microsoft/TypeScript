@@ -1,5 +1,7 @@
 === /a.ts ===
 declare module "foo" {
+>"foo" : Symbol("foo", Decl(a.ts, 0, 0))
+
     export const x: number;
 >x : Symbol(x, Decl(a.ts, 1, 16))
 }

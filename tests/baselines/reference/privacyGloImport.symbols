@@ -219,6 +219,8 @@ module glo_M1_public {
 }
 
 declare module "glo_M2_public" {
+>"glo_M2_public" : Symbol("glo_M2_public", Decl(privacyGloImport.ts, 92, 1))
+
     export function f1();
 >f1 : Symbol(f1, Decl(privacyGloImport.ts, 94, 32))
 
@@ -235,6 +237,8 @@ declare module "glo_M2_public" {
 }
 
 declare module "use_glo_M1_public" {
+>"use_glo_M1_public" : Symbol("use_glo_M1_public", Decl(privacyGloImport.ts, 100, 1))
+
     import use_glo_M1_public = glo_M1_public;
 >use_glo_M1_public : Symbol(use_glo_M1_public, Decl(privacyGloImport.ts, 102, 36))
 >glo_M1_public : Symbol(use_glo_M1_public, Decl(privacyGloImport.ts, 82, 1))
@@ -318,6 +322,8 @@ declare module "use_glo_M1_public" {
 }
 
 declare module "anotherParseError" {
+>"anotherParseError" : Symbol("anotherParseError", Decl(privacyGloImport.ts, 128, 1))
+
     module m2 {
 >m2 : Symbol(m2, Decl(privacyGloImport.ts, 130, 36), Decl(privacyGloImport.ts, 134, 5))
 

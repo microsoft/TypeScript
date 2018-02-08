@@ -50,7 +50,7 @@ namespace ts.codefix {
     }
 
     function createChange(declaration: TypeNode, sourceFile: SourceFile, newText: string): TextChange {
-        return { span: createTextSpanFromBounds(declaration.getStart(sourceFile), declaration.getEnd()), newText };
+        return createTextChange(createTextSpanFromNode(declaration, sourceFile), newText);
     }
 
     function typeString(type: Type, checker: TypeChecker): string {
