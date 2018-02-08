@@ -3467,6 +3467,14 @@
         "category": "Message",
         "code": 6190
     },
+    "Raise error when import cycle is detected.": {
+        "category": "Message",
+        "code": 6191
+    },
+    "Import cycle detected: {0}.": {
+        "category": "Error",
+        "code": 6192
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

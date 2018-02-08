@@ -1,0 +1,13 @@
+error TS6192: Import cycle detected: noImportCyclesError2.ts -> noImportCyclesError1.ts.
+
+
+!!! error TS6192: Import cycle detected: noImportCyclesError2.ts -> noImportCyclesError1.ts.
+==== tests/cases/compiler/noImportCyclesError1.ts (0 errors) ====
+    import Dummy2 = require("./noImportCyclesError2");
+    export default class Dummy1 {}
+    
+    
+==== tests/cases/compiler/noImportCyclesError2.ts (0 errors) ====
+    import Dummy1 = require("./noImportCyclesError1");
+    export default class Dummy2 {}
+    

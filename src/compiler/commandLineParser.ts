@@ -664,6 +664,12 @@ namespace ts {
             description: Diagnostics.Disable_strict_checking_of_generic_signatures_in_function_types,
         },
         {
+            name: "noImportCycles",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Raise_error_when_import_cycle_is_detected
+        },
+        {
             // A list of plugins to load in the language service
             name: "plugins",
             type: "list",

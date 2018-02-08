@@ -4067,6 +4067,7 @@ namespace ts {
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
         noImplicitUseStrict?: boolean;
+        noImportCycles?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
         out?: string;
@@ -5122,4 +5123,6 @@ namespace ts {
         Parameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis,
         IndexSignatureParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | SquareBrackets,
     }
+
+    export type ImportCycle = SourceFile[];
 }

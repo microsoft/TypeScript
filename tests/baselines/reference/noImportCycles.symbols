@@ -1,0 +1,15 @@
+=== tests/cases/compiler/noImportCyclesError1.ts ===
+import Dummy2 = require("./noImportCyclesError2");
+>Dummy2 : Symbol(Dummy2, Decl(noImportCyclesError1.ts, 0, 0))
+
+export default class Dummy1 {}
+>Dummy1 : Symbol(Dummy1, Decl(noImportCyclesError1.ts, 0, 50))
+
+
+=== tests/cases/compiler/noImportCyclesError2.ts ===
+import Dummy1 = require("./noImportCyclesError1");
+>Dummy1 : Symbol(Dummy1, Decl(noImportCyclesError2.ts, 0, 0))
+
+export default class Dummy2 {}
+>Dummy2 : Symbol(Dummy2, Decl(noImportCyclesError2.ts, 0, 50))
+

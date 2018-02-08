@@ -1,0 +1,15 @@
+=== tests/cases/compiler/noImportCyclesError1.ts ===
+import Dummy2 = require("./noImportCyclesError2");
+>Dummy2 : typeof Dummy2
+
+export default class Dummy1 {}
+>Dummy1 : Dummy1
+
+
+=== tests/cases/compiler/noImportCyclesError2.ts ===
+import Dummy1 = require("./noImportCyclesError1");
+>Dummy1 : typeof Dummy1
+
+export default class Dummy2 {}
+>Dummy2 : Dummy2
+
