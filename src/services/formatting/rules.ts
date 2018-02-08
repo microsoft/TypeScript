@@ -409,6 +409,7 @@ namespace ts.formatting {
         switch (context.contextNode.kind) {
             case SyntaxKind.BinaryExpression:
             case SyntaxKind.ConditionalExpression:
+            case SyntaxKind.ConditionalType:
             case SyntaxKind.AsExpression:
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.ImportSpecifier:
@@ -461,7 +462,8 @@ namespace ts.formatting {
     }
 
     function isConditionalOperatorContext(context: FormattingContext): boolean {
-        return context.contextNode.kind === SyntaxKind.ConditionalExpression;
+        return context.contextNode.kind === SyntaxKind.ConditionalExpression ||
+                context.contextNode.kind === SyntaxKind.ConditionalType;
     }
 
     function isSameLineTokenOrBeforeBlockContext(context: FormattingContext): boolean {
