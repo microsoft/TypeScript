@@ -149,10 +149,7 @@ namespace ts.GoToDefinition {
         // Check if position is on triple slash reference.
         const comment = findReferenceInPosition(sourceFile.referencedFiles, position) || findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
         if (comment) {
-            return {
-                definitions,
-                textSpan: createTextSpanFromBounds(comment.pos, comment.end)
-            };
+            return { definitions, textSpan: createTextSpanFromRange(comment) };
         }
 
         const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
@@ -258,7 +255,7 @@ namespace ts.GoToDefinition {
         return createDefinitionInfo(decl, symbolKind, symbolName, containerName);
     }
 
-    export function findReferenceInPosition(refs: ReadonlyArray<FileReference>, pos: number): FileReference {
+    export function findReferenceInPosition(refs: ReadonlyArray<FileReference>, pos: number): FileReference | undefined {
         for (const ref of refs) {
             if (ref.pos <= pos && pos <= ref.end) {
                 return ref;
