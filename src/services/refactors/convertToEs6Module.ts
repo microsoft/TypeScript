@@ -375,7 +375,14 @@ namespace ts.refactor {
     function convertExportsDotXEquals(name: string | undefined, exported: Expression): Statement {
         const modifiers = [createToken(SyntaxKind.ExportKeyword)];
         switch (exported.kind) {
-            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.FunctionExpression: {
+                const { name: expressionName } = exported as FunctionExpression;
+                if (expressionName && expressionName.text !== name) {
+                    // `exports.f = function g() {}` -> `export const f = function g() {}`
+                    return exportConst();
+                }
+            }
+                // falls through
             case SyntaxKind.ArrowFunction:
                 // `exports.f = function() {}` --> `export function f() {}`
                 return functionExpressionToDeclaration(name, modifiers, exported as FunctionExpression | ArrowFunction);
@@ -383,8 +390,12 @@ namespace ts.refactor {
                 // `exports.C = class {}` --> `export class C {}`
                 return classExpressionToDeclaration(name, modifiers, exported as ClassExpression);
             default:
-                // `exports.x = 0;` --> `export const x = 0;`
-                return makeConst(modifiers, createIdentifier(name), exported);
+                return exportConst();
+        }
+
+        function exportConst() {
+            // `exports.x = 0;` --> `export const x = 0;`
+            return makeConst(modifiers, createIdentifier(name), exported);
         }
     }
 
