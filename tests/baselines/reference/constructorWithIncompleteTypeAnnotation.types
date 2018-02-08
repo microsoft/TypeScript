@@ -19,7 +19,7 @@ declare module "fs" {
 
 import fs = module("fs");
 >fs : any
->module : No type information available!
+>module : any
 >("fs") : "fs"
 >"fs" : "fs"
 
