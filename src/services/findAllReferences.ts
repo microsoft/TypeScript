@@ -424,7 +424,7 @@ namespace ts.FindAllReferences.Core {
             }
             return isTypeLiteralNode(decl.parent) && isUnionTypeNode(decl.parent.parent)
                 ? checker.getPropertyOfType(checker.getTypeFromTypeNode(decl.parent.parent), symbol.name)
-                : undefined
+                : undefined;
         }) || symbol;
     }
 

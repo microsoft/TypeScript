@@ -2934,8 +2934,9 @@ namespace ts {
             const out = [];
             for (let pow = 0; pow <= 30; pow++) {
                 const n = 1 << pow;
-                if (flags & n)
+                if (flags & n) {
                     out.push(flagsEnum[n]);
+                }
             }
             return out.join("|");
         }
