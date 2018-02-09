@@ -117,7 +117,8 @@ namespace ts.server.typingsInstaller {
                 this.safeList,
                 this.packageNameToTypingLocation,
                 req.typeAcquisition,
-                req.unresolvedImports);
+                req.unresolvedImports,
+                req.containsCommonJsRequire);
 
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Finished typings discovery: ${JSON.stringify(discoverTypingsResult)}`);

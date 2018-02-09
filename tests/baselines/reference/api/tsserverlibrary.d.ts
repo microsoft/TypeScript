@@ -2382,6 +2382,7 @@ declare namespace ts {
         typeAcquisition: TypeAcquisition;
         compilerOptions: CompilerOptions;
         unresolvedImports: ReadonlyArray<string>;
+        containsCommonJsRequire: boolean;
     }
     enum ModuleKind {
         None = 0,
@@ -4870,6 +4871,7 @@ declare namespace ts.server {
         readonly compilerOptions: CompilerOptions;
         readonly typeAcquisition: TypeAcquisition;
         readonly unresolvedImports: SortedReadonlyArray<string>;
+        readonly containsCommonJsRequire: boolean;
         readonly cachePath?: string;
         readonly kind: "discover";
     }

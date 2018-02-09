@@ -175,6 +175,10 @@ namespace ts.server {
 
         private readonly cancellationToken: ThrottledCancellationToken;
 
+        /* @internal */ public containsCommonJsRequire(): boolean {
+            return this.program.getSourceFiles().some(file => file.commonJsModuleIndicator !== undefined);
+        }
+
         public isNonTsProject() {
             this.updateGraph();
             return allFilesAreJsOrDts(this);

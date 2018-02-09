@@ -67,13 +67,14 @@ namespace ts.JsTyping {
     export function discoverTypings(
         host: TypingResolutionHost,
         log: ((message: string) => void) | undefined,
-        fileNames: string[],
+        fileNames: ReadonlyArray<string>,
         projectRootPath: Path,
         safeList: SafeList,
         packageNameToTypingLocation: ReadonlyMap<string>,
         typeAcquisition: TypeAcquisition,
-        unresolvedImports: ReadonlyArray<string>):
-        { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
+        unresolvedImports: ReadonlyArray<string>,
+        containsCommonJsRequire: boolean,
+    ): { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         if (!typeAcquisition || !typeAcquisition.enable) {
             return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] };
@@ -81,6 +82,10 @@ namespace ts.JsTyping {
 
         // A typing name to typing file path mapping
         const inferredTypings = createMap<string>();
+
+        if (containsCommonJsRequire) {
+            addInferredTyping("node");
+        }
 
         // Only infer typings for .js and .jsx files
         fileNames = mapDefined(fileNames, fileName => {
@@ -115,11 +120,11 @@ namespace ts.JsTyping {
 
         // add typings for unresolved imports
         if (unresolvedImports) {
-            const module = deduplicate(
+            const modules = deduplicate(
                 unresolvedImports.map(moduleId => nodeCoreModules.has(moduleId) ? "node" : moduleId),
                 equateStringsCaseSensitive,
                 compareStringsCaseSensitive);
-            addInferredTypings(module, "Inferred typings from unresolved imports");
+            addInferredTypings(modules, "Inferred typings from unresolved imports");
         }
         // Add the cached typing locations for inferred typings that are already installed
         packageNameToTypingLocation.forEach((typingLocation, name) => {
@@ -178,7 +183,7 @@ namespace ts.JsTyping {
          * to the 'angular-route' typing name.
          * @param fileNames are the names for source files in the project
          */
-        function getTypingNamesFromSourceFileNames(fileNames: string[]) {
+        function getTypingNamesFromSourceFileNames(fileNames: ReadonlyArray<string>): void {
             const fromFileNames = mapDefined(fileNames, j => {
                 if (!hasJavaScriptFileExtension(j)) return undefined;
 
