@@ -416,10 +416,16 @@ namespace ts.FindAllReferences.Core {
         }
 
         // If the symbol is declared as part of a declaration like `{ type: "a" } | { type: "b" }`, use the property on the union type to get more references.
-        return firstDefined(symbol.declarations, decl =>
-            isTypeLiteralNode(decl.parent) && isUnionTypeNode(decl.parent.parent)
+        return firstDefined(symbol.declarations, decl => {
+            if (!decl.parent) {
+                // Assertions for GH#21814. We should be handling SourceFile symbols in `getReferencedSymbolsForModule` instead of getting here.
+                Debug.assert(decl.kind === SyntaxKind.SourceFile);
+                Debug.fail(`Unexpected symbol at ${Debug.showSyntaxKind(node)}: ${Debug.showSymbol(symbol)}`);
+            }
+            return isTypeLiteralNode(decl.parent) && isUnionTypeNode(decl.parent.parent)
                 ? checker.getPropertyOfType(checker.getTypeFromTypeNode(decl.parent.parent), symbol.name)
-                : undefined) || symbol;
+                : undefined
+        }) || symbol;
     }
 
     /**
