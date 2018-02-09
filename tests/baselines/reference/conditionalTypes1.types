@@ -991,3 +991,115 @@ type T83 = Eq2<false, false>;  // true
 >false : false
 >false : false
 
+// Repro from #21756
+
+type Foo<T> = T extends string ? boolean : number;
+>Foo : Foo<T>
+>T : T
+>T : T
+
+type Bar<T> = T extends string ? boolean : number;
+>Bar : Bar<T>
+>T : T
+>T : T
+
+const convert = <U>(value: Foo<U>): Bar<U> => value;
+>convert : <U>(value: Foo<U>) => Foo<U>
+><U>(value: Foo<U>): Bar<U> => value : <U>(value: Foo<U>) => Foo<U>
+>U : U
+>value : Foo<U>
+>Foo : Foo<T>
+>U : U
+>Bar : Bar<T>
+>U : U
+>value : Foo<U>
+
+type Baz<T> = Foo<T>;
+>Baz : Foo<T>
+>T : T
+>Foo : Foo<T>
+>T : T
+
+const convert2 = <T>(value: Foo<T>): Baz<T> => value;
+>convert2 : <T>(value: Foo<T>) => Foo<T>
+><T>(value: Foo<T>): Baz<T> => value : <T>(value: Foo<T>) => Foo<T>
+>T : T
+>value : Foo<T>
+>Foo : Foo<T>
+>T : T
+>Baz : Foo<T>
+>T : T
+>value : Foo<T>
+
+function f31<T>() {
+>f31 : <T>() => void
+>T : T
+
+    type T1 = T extends string ? boolean : number;
+>T1 : T extends string ? boolean : number
+>T : T
+
+    type T2 = T extends string ? boolean : number;
+>T2 : T extends string ? boolean : number
+>T : T
+
+    var x: T1;
+>x : T extends string ? boolean : number
+>T1 : T extends string ? boolean : number
+
+    var x: T2;
+>x : T extends string ? boolean : number
+>T2 : T extends string ? boolean : number
+}
+
+function f32<T, U>() {
+>f32 : <T, U>() => void
+>T : T
+>U : U
+
+    type T1 = T & U extends string ? boolean : number;
+>T1 : T & U extends string ? boolean : number
+>T : T
+>U : U
+
+    type T2 = Foo<T & U>;
+>T2 : Foo<T & U>
+>Foo : Foo<T>
+>T : T
+>U : U
+
+    var z: T1;
+>z : T & U extends string ? boolean : number
+>T1 : T & U extends string ? boolean : number
+
+    var z: T2;  // Error, T2 is distributive, T1 isn't
+>z : T & U extends string ? boolean : number
+>T2 : Foo<T & U>
+}
+
+function f33<T, U>() {
+>f33 : <T, U>() => void
+>T : T
+>U : U
+
+    type T1 = Foo<T & U>;
+>T1 : Foo<T & U>
+>Foo : Foo<T>
+>T : T
+>U : U
+
+    type T2 = Bar<T & U>;
+>T2 : Foo<T & U>
+>Bar : Bar<T>
+>T : T
+>U : U
+
+    var z: T1;
+>z : Foo<T & U>
+>T1 : Foo<T & U>
+
+    var z: T2;
+>z : Foo<T & U>
+>T2 : Foo<T & U>
+}
+
