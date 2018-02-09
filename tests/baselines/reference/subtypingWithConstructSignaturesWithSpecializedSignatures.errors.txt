@@ -4,8 +4,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
       Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignaturesWithSpecializedSignatures.ts(76,15): error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
   Types of property 'a2' are incompatible.
-    Type 'new <T>(x: T) => string' is not assignable to type 'new <T>(x: T) => T'.
-      Type 'string' is not assignable to type 'T'.
+    Types of constructor signature are incompatible.
+      Type 'new <T>(x: T) => string' is not assignable to type 'new <T>(x: T) => T'.
+        Type 'string' is not assignable to type 'T'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignaturesWithSpecializedSignatures.ts (2 errors) ====
@@ -93,8 +94,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
                   ~~
 !!! error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
 !!! error TS2430:   Types of property 'a2' are incompatible.
-!!! error TS2430:     Type 'new <T>(x: T) => string' is not assignable to type 'new <T>(x: T) => T'.
-!!! error TS2430:       Type 'string' is not assignable to type 'T'.
+!!! error TS2430:     Types of constructor signature are incompatible.
+!!! error TS2430:       Type 'new <T>(x: T) => string' is not assignable to type 'new <T>(x: T) => T'.
+!!! error TS2430:         Type 'string' is not assignable to type 'T'.
             // N's
             a2: new <T>(x: T) => string; // error because base returns non-void;
         }

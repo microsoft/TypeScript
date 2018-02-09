@@ -9511,7 +9511,7 @@ namespace ts {
              * * Ternary.Maybe if they are related with assumptions of other relationships, or
              * * Ternary.False if they are not related.
              */
-            function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
+            function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage, dontReportMatchedConstructor = false): Ternary {
                 if (source.flags & TypeFlags.StringOrNumberLiteral && source.flags & TypeFlags.FreshLiteral) {
                     source = (<LiteralType>source).regularType;
                 }
@@ -9627,7 +9627,12 @@ namespace ts {
                     else if (source.symbol && source.flags & TypeFlags.Object && globalObjectType === source) {
                         reportError(Diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead);
                     }
-                    reportRelationError(headMessage, source, target);
+                    const isMatchedSourceConstructor = isConstructorType(source) && getSignaturesOfType(source, SignatureKind.Construct).length === 1;
+                    const isMatchedTargetConstructor = isConstructorType(target) && getSignaturesOfType(target, SignatureKind.Construct).length === 1;
+                    const dontReportRelationError = dontReportMatchedConstructor && isMatchedSourceConstructor && isMatchedTargetConstructor;
+                    if (!dontReportRelationError) {
+                        reportRelationError(headMessage, source, target);
+                    }
                 }
                 return result;
             }
@@ -10244,7 +10249,7 @@ namespace ts {
                                 }
                                 return Ternary.False;
                             }
-                            const related = isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors);
+                            const related = isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors, /*headMessage*/ undefined, /*dontReportMatchedConstructor*/ true);
                             if (!related) {
                                 if (reportErrors) {
                                     reportError(Diagnostics.Types_of_property_0_are_incompatible, symbolToString(targetProp));
