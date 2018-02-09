@@ -8219,16 +8219,17 @@ namespace ts {
             const erasedCheckType = getActualTypeParameter(checkType);
             const trueType = instantiateType(baseTrueType, mapper);
             const falseType = instantiateType(baseFalseType, mapper);
-            const id = target && (target.id + ","  + erasedCheckType.id + "," + extendsType.id + "," + trueType.id + "," + falseType.id);
-            const cached = id && conditionalTypes.get(id);
+            // We compute the cache key from the ids of the four constituent types, plus an indicator of whether the
+            // type is distributive (i.e. whether the original declaration has a type parameter as the check type).
+            const isDistributive = (target ? target.checkType : erasedCheckType).flags & TypeFlags.TypeParameter ? 1 : 0;
+            const id = erasedCheckType.id + "," + extendsType.id + "," + trueType.id + "," + falseType.id + "," + isDistributive;
+            const cached = conditionalTypes.get(id);
             if (cached) {
                 return cached;
             }
             const result = createConditionalType(erasedCheckType, extendsType, trueType, falseType,
                 inferTypeParameters, target, mapper, aliasSymbol, instantiateTypes(baseAliasTypeArguments, mapper));
-            if (id) {
-                conditionalTypes.set(id, result);
-            }
+            conditionalTypes.set(id, result);
             return result;
         }
 
