@@ -225,6 +225,36 @@ type T81 = Eq2<true, false>;  // false
 type T82 = Eq2<false, true>;  // false
 type T83 = Eq2<false, false>;  // true
 
+// Repro from #21756
+
+type Foo<T> = T extends string ? boolean : number;
+type Bar<T> = T extends string ? boolean : number;
+const convert = <U>(value: Foo<U>): Bar<U> => value;
+
+type Baz<T> = Foo<T>;
+const convert2 = <T>(value: Foo<T>): Baz<T> => value;
+
+function f31<T>() {
+    type T1 = T extends string ? boolean : number;
+    type T2 = T extends string ? boolean : number;
+    var x: T1;
+    var x: T2;
+}
+
+function f32<T, U>() {
+    type T1 = T & U extends string ? boolean : number;
+    type T2 = Foo<T & U>;
+    var z: T1;
+    var z: T2;  // Error, T2 is distributive, T1 isn't
+}
+
+function f33<T, U>() {
+    type T1 = Foo<T & U>;
+    type T2 = Bar<T & U>;
+    var z: T1;
+    var z: T2;
+}
+
 
 //// [conditionalTypes1.js]
 "use strict";
@@ -284,6 +314,20 @@ function f21(x, y) {
     var z2 = y;
     x = y; // Error
     y = x; // Error
+}
+var convert = function (value) { return value; };
+var convert2 = function (value) { return value; };
+function f31() {
+    var x;
+    var x;
+}
+function f32() {
+    var z;
+    var z; // Error, T2 is distributive, T1 isn't
+}
+function f33() {
+    var z;
+    var z;
 }
 
 
@@ -450,3 +494,11 @@ declare type T80 = Eq2<true, true>;
 declare type T81 = Eq2<true, false>;
 declare type T82 = Eq2<false, true>;
 declare type T83 = Eq2<false, false>;
+declare type Foo<T> = T extends string ? boolean : number;
+declare type Bar<T> = T extends string ? boolean : number;
+declare const convert: <U>(value: Foo<U>) => Foo<U>;
+declare type Baz<T> = Foo<T>;
+declare const convert2: <T>(value: Foo<T>) => Foo<T>;
+declare function f31<T>(): void;
+declare function f32<T, U>(): void;
+declare function f33<T, U>(): void;
