@@ -23,6 +23,6 @@ namespace ts.codefix {
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Identifier): void {
         // TODO (https://github.com/Microsoft/TypeScript/issues/21246): use shared helper
         suppressLeadingAndTrailingTrivia(token);
-        changes.replaceRange(sourceFile, { pos: token.getStart(), end: token.end }, createPropertyAccess(createThis(), token));
+        changes.replaceNode(sourceFile, token, createPropertyAccess(createThis(), token), textChanges.useNonAdjustedPositions);
     }
 }
