@@ -1106,7 +1106,12 @@ namespace FourSlash {
             }));
 
             for (const start of toArray<string | Range>(starts)) {
-                if (typeof start === "string") this.goToMarker(start); else this.goToRangeStart(start);
+                if (typeof start === "string") {
+                    this.goToMarker(start);
+                }
+                else {
+                    this.goToRangeStart(start);
+                }
                 const fullActual = ts.map<ts.ReferencedSymbol, ReferenceGroupJson>(this.findReferencesAtCaret(), ({ definition, references }, i) => {
                     const text = definition.displayParts.map(d => d.text).join("");
                     return {
