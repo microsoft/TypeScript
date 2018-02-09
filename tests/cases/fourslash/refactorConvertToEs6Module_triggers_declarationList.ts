@@ -6,4 +6,4 @@
 ////c[|o|]nst;
 ////require("x");
 
-goTo.eachRange(() => verify.refactorAvailable("Convert to ES6 module"));
+goTo.eachRange(() => verify.not.refactorAvailable("Convert to ES6 module"));
