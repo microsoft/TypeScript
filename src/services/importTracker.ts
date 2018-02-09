@@ -577,17 +577,17 @@ namespace ts.FindAllReferences {
 
     function getExportEqualsLocalSymbol(importedSymbol: Symbol, checker: TypeChecker): Symbol {
         if (importedSymbol.flags & SymbolFlags.Alias) {
-            return checker.getImmediateAliasedSymbol(importedSymbol);
+            return Debug.assertDefined(checker.getImmediateAliasedSymbol(importedSymbol));
         }
 
         const decl = importedSymbol.valueDeclaration;
         if (isExportAssignment(decl)) { // `export = class {}`
-            return decl.expression.symbol;
+            return Debug.assertDefined(decl.expression.symbol);
         }
         else if (isBinaryExpression(decl)) { // `module.exports = class {}`
-            return decl.right.symbol;
+            return Debug.assertDefined(decl.right.symbol);
         }
-        Debug.fail();
+        return Debug.fail();
     }
 
     // If a reference is a class expression, the exported node would be its parent.
