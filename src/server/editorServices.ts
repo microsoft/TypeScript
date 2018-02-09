@@ -2038,7 +2038,6 @@ namespace ts.server {
 
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult {
             let configFileName: NormalizedPath;
-            let sendConfigFileDiagEvent = false;
             let configFileErrors: ReadonlyArray<Diagnostic>;
 
             const info = this.getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName, projectRootPath ? this.getNormalizedAbsolutePath(projectRootPath) : this.currentDirectory, fileContent, scriptKind, hasMixedContent);
@@ -2049,8 +2048,15 @@ namespace ts.server {
                     project = this.findConfiguredProjectByProjectName(configFileName);
                     if (!project) {
                         project = this.createConfiguredProject(configFileName);
-                        // Send the event only if the project got created as part of this open request
-                        sendConfigFileDiagEvent = true;
+                        // Send the event only if the project got created as part of this open request and info is part of the project
+                        if (info.isOrphan()) {
+                            // Since the file isnt part of configured project, do not send config file info
+                            configFileName = undefined;
+                        }
+                        else {
+                            configFileErrors = project.getAllProjectErrors();
+                            this.sendConfigFileDiagEvent(project as ConfiguredProject, fileName);
+                        }
                     }
                     else {
                         // Ensure project is ready to check if it contains opened script info
@@ -2058,29 +2064,19 @@ namespace ts.server {
                     }
                 }
             }
-            if (project && !project.languageServiceEnabled) {
-                // if project language service is disabled then we create a program only for open files.
-                // this means that project should be marked as dirty to force rebuilding of the program
-                // on the next request
-                project.markAsDirty();
-            }
+
+            // Project we have at this point is going to be updated since its either found through
+            // - external project search, which updates the project before checking if info is present in it
+            // - configured project - either created or updated to ensure we know correct status of info
 
             // At this point if file is part of any any configured or external project, then it would be present in the containing projects
             // So if it still doesnt have any containing projects, it needs to be part of inferred project
             if (info.isOrphan()) {
-                // Since the file isnt part of configured project, do not send config file event
-                configFileName = undefined;
-                sendConfigFileDiagEvent = false;
-
                 this.assignOrphanScriptInfoToInferredProject(info, projectRootPath);
             }
+
             Debug.assert(!info.isOrphan());
             this.openFiles.set(info.path, projectRootPath);
-
-            if (sendConfigFileDiagEvent) {
-                configFileErrors = project.getAllProjectErrors();
-                this.sendConfigFileDiagEvent(project as ConfiguredProject, fileName);
-            }
 
             // Remove the configured projects that have zero references from open files.
             // This was postponed from closeOpenFile to after opening next file,
