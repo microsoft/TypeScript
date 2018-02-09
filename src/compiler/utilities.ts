@@ -1508,10 +1508,8 @@ namespace ts {
             isVariableDeclaration(node) &&
             node.initializer &&
             isBinaryExpression(node.initializer) &&
-            // TODO: This will have to change for `var my = window.my || {}`;
-            isIdentifier(node.initializer.left) &&
             isIdentifier(node.name) &&
-            node.initializer.left.escapedText === node.name.escapedText &&
+            isSameName(node.name, node.initializer.left as EntityNameExpression) &&
             isJavascriptContainerExpression(node.initializer.right);
     }
 
@@ -1534,12 +1532,20 @@ namespace ts {
             isJavascriptContainerExpression(node.right.right);
     }
 
-    function isSameName(left: EntityNameExpression, right: EntityNameExpression): boolean {
-        if (isIdentifier(left) && isIdentifier(right)) {
-            return left.escapedText === right.escapedText;
+    function isSameName(name: EntityNameExpression, initializer: EntityNameExpression): boolean {
+        if (isIdentifier(name) && isIdentifier(initializer)) {
+            return name.escapedText === initializer.escapedText;
         }
-        if (isPropertyAccessExpression(left) && isPropertyAccessExpression(right)) {
-            return left.name.escapedText === right.name.escapedText && isSameName(left.expression, right.expression);
+        if (isIdentifier(name) && isPropertyAccessExpression(initializer)) {
+            return (initializer.expression.kind as SyntaxKind.ThisKeyword === SyntaxKind.ThisKeyword ||
+                    isIdentifier(initializer.expression) &&
+                    (initializer.expression.escapedText === "window" as __String ||
+                     initializer.expression.escapedText === "self" as __String ||
+                     initializer.expression.escapedText === "global" as __String)) &&
+                isSameName(name, initializer.name);
+        }
+        if (isPropertyAccessExpression(name) && isPropertyAccessExpression(initializer)) {
+            return name.name.escapedText === initializer.name.escapedText && isSameName(name.expression, initializer.expression);
         }
         return false;
     }
@@ -1596,7 +1602,7 @@ namespace ts {
                     return SpecialPropertyAssignmentKind.PrototypeProperty;
                 }
             }
-            if(isEntityNameExpression(lhs.expression)) {
+            if (isEntityNameExpression(lhs.expression)) {
                 return SpecialPropertyAssignmentKind.Property;
             }
         }

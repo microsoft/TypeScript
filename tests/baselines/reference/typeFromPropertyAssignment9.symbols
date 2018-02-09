@@ -1,84 +1,113 @@
 === tests/cases/conformance/salsa/a.js ===
 // TODO: JSDoc would provide a contextual type, so ... I should test that
-//  (a number of existing tests fail because of that, I think)
-// TODO: Try initializer of function or class I guess (though classes aren't context sensitive)
-// TODO: Duplicated declarations should be OK (if they have the same type (??))
 var my = my || {};
->my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
->my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
+>my : Symbol(my, Decl(a.js, 1, 3), Decl(a.js, 1, 18))
+>my : Symbol(my, Decl(a.js, 1, 3), Decl(a.js, 1, 18))
 
-my.m = function() {
->my.m : Symbol(m, Decl(a.js, 4, 18))
->my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
->m : Symbol(m, Decl(a.js, 4, 18))
+my.method = function() {
+>my.method : Symbol(method, Decl(a.js, 1, 18))
+>my : Symbol(my, Decl(a.js, 1, 3), Decl(a.js, 1, 18))
+>method : Symbol(method, Decl(a.js, 1, 18))
 
     return 1;
 }
-my.n = 1;
->my.n : Symbol(n, Decl(a.js, 7, 1))
->my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
->n : Symbol(n, Decl(a.js, 7, 1))
+my.number = 1;
+>my.number : Symbol(number, Decl(a.js, 4, 1))
+>my : Symbol(my, Decl(a.js, 1, 3), Decl(a.js, 1, 18))
+>number : Symbol(number, Decl(a.js, 4, 1))
 
-my.o = {};
->my.o : Symbol(o, Decl(a.js, 8, 9))
->my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
->o : Symbol(o, Decl(a.js, 8, 9))
+my.object = {};
+>my.object : Symbol(object, Decl(a.js, 5, 14))
+>my : Symbol(my, Decl(a.js, 1, 3), Decl(a.js, 1, 18))
+>object : Symbol(object, Decl(a.js, 5, 14))
 
 my.predicate = my.predicate || {};
->my.predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
->my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
->predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
->my.predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
->my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
->predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
+>my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 7, 34), Decl(a.js, 16, 1))
+>my : Symbol(my, Decl(a.js, 1, 3), Decl(a.js, 1, 18))
+>predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 7, 34), Decl(a.js, 16, 1))
+>my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 7, 34), Decl(a.js, 16, 1))
+>my : Symbol(my, Decl(a.js, 1, 3), Decl(a.js, 1, 18))
+>predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 7, 34), Decl(a.js, 16, 1))
 
 my.predicate.query = function () {
->my.predicate.query : Symbol(query, Decl(a.js, 10, 34))
->my.predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
->my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
->predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
->query : Symbol(query, Decl(a.js, 10, 34))
+>my.predicate.query : Symbol(query, Decl(a.js, 7, 34))
+>my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 7, 34), Decl(a.js, 16, 1))
+>my : Symbol(my, Decl(a.js, 1, 3), Decl(a.js, 1, 18))
+>predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 7, 34), Decl(a.js, 16, 1))
+>query : Symbol(query, Decl(a.js, 7, 34))
 
     var me = this;
->me : Symbol(me, Decl(a.js, 12, 7))
->this : Symbol(__object, Decl(a.js, 10, 30))
+>me : Symbol(me, Decl(a.js, 9, 7))
+>this : Symbol(__object, Decl(a.js, 7, 30))
 
     me.property = false;
->me : Symbol(me, Decl(a.js, 12, 7))
+>me : Symbol(me, Decl(a.js, 9, 7))
 
 };
 var q = new my.predicate.query();
->q : Symbol(q, Decl(a.js, 15, 3))
->my.predicate.query : Symbol(query, Decl(a.js, 10, 34))
->my.predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
->my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
->predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
->query : Symbol(query, Decl(a.js, 10, 34))
+>q : Symbol(q, Decl(a.js, 12, 3))
+>my.predicate.query : Symbol(query, Decl(a.js, 7, 34))
+>my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 7, 34), Decl(a.js, 16, 1))
+>my : Symbol(my, Decl(a.js, 1, 3), Decl(a.js, 1, 18))
+>predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 7, 34), Decl(a.js, 16, 1))
+>query : Symbol(query, Decl(a.js, 7, 34))
 
 my.predicate.query.result = 'none'
->my.predicate.query.result : Symbol((Anonymous function).result, Decl(a.js, 15, 33))
->my.predicate.query : Symbol(query, Decl(a.js, 10, 34))
->my.predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
->my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
->predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
->query : Symbol(query, Decl(a.js, 10, 34))
->result : Symbol((Anonymous function).result, Decl(a.js, 15, 33))
+>my.predicate.query.result : Symbol((Anonymous function).result, Decl(a.js, 12, 33))
+>my.predicate.query : Symbol(query, Decl(a.js, 7, 34))
+>my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 7, 34), Decl(a.js, 16, 1))
+>my : Symbol(my, Decl(a.js, 1, 3), Decl(a.js, 1, 18))
+>predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 7, 34), Decl(a.js, 16, 1))
+>query : Symbol(query, Decl(a.js, 7, 34))
+>result : Symbol((Anonymous function).result, Decl(a.js, 12, 33))
 
 my.predicate.sort = my.predicate.sort || function (first, second) {
->my.predicate.sort : Symbol(sort, Decl(a.js, 16, 34))
->my.predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
->my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
->predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
->sort : Symbol(sort, Decl(a.js, 16, 34))
->my.predicate.sort : Symbol(sort, Decl(a.js, 16, 34))
->my.predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
->my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
->predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
->sort : Symbol(sort, Decl(a.js, 16, 34))
->first : Symbol(first, Decl(a.js, 17, 51))
->second : Symbol(second, Decl(a.js, 17, 57))
+>my.predicate.sort : Symbol(sort, Decl(a.js, 13, 34))
+>my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 7, 34), Decl(a.js, 16, 1))
+>my : Symbol(my, Decl(a.js, 1, 3), Decl(a.js, 1, 18))
+>predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 7, 34), Decl(a.js, 16, 1))
+>sort : Symbol(sort, Decl(a.js, 13, 34))
+>my.predicate.sort : Symbol(sort, Decl(a.js, 13, 34))
+>my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 7, 34), Decl(a.js, 16, 1))
+>my : Symbol(my, Decl(a.js, 1, 3), Decl(a.js, 1, 18))
+>predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 7, 34), Decl(a.js, 16, 1))
+>sort : Symbol(sort, Decl(a.js, 13, 34))
+>first : Symbol(first, Decl(a.js, 14, 51))
+>second : Symbol(second, Decl(a.js, 14, 57))
 
     return first;
->first : Symbol(first, Decl(a.js, 17, 51))
+>first : Symbol(first, Decl(a.js, 14, 51))
 }
+my.predicate.type = class {
+>my.predicate.type : Symbol(type, Decl(a.js, 16, 1))
+>my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 7, 34), Decl(a.js, 16, 1))
+>my : Symbol(my, Decl(a.js, 1, 3), Decl(a.js, 1, 18))
+>predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 7, 34), Decl(a.js, 16, 1))
+>type : Symbol(type, Decl(a.js, 16, 1))
+
+    m() { return 101; }
+>m : Symbol((Anonymous class).m, Decl(a.js, 17, 27))
+}
+
+
+// global-ish prefixes
+var min = window.min || {};
+>min : Symbol(min, Decl(a.js, 23, 3))
+
+min.nest = this.min.nest || function () { };
+>min.nest : Symbol(nest, Decl(a.js, 23, 27))
+>min : Symbol(min, Decl(a.js, 23, 3))
+>nest : Symbol(nest, Decl(a.js, 23, 27))
+
+min.nest.other = self.min.nest.other || class { };
+>min.nest.other : Symbol((Anonymous function).other, Decl(a.js, 24, 44))
+>min.nest : Symbol(nest, Decl(a.js, 23, 27))
+>min : Symbol(min, Decl(a.js, 23, 3))
+>nest : Symbol(nest, Decl(a.js, 23, 27))
+>other : Symbol((Anonymous function).other, Decl(a.js, 24, 44))
+
+min.property = global.min.property || {};
+>min.property : Symbol(property, Decl(a.js, 25, 50))
+>min : Symbol(min, Decl(a.js, 23, 3))
+>property : Symbol(property, Decl(a.js, 25, 50))
 
