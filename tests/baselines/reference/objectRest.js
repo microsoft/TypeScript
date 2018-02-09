@@ -85,10 +85,10 @@ var i = removable;
 var { removed } = i, removableRest2 = __rest(i, ["removed"]);
 let computed = 'b';
 let computed2 = 'a';
-var _g = computed, stillNotGreat = o[_g], _h = computed2, soSo = o[_h], o = __rest(o, [typeof _g === "symbol" ? _g : _g + "", typeof _h === "symbol" ? _h : _h + ""]);
-(_j = computed, stillNotGreat = o[_j], _k = computed2, soSo = o[_k], o = __rest(o, [typeof _j === "symbol" ? _j : _j + "", typeof _k === "symbol" ? _k : _k + ""]));
+var _g = o, _h = computed, stillNotGreat = _g[_h], _j = computed2, soSo = _g[_j], o = __rest(_g, [typeof _h === "symbol" ? _h : _h + "", typeof _j === "symbol" ? _j : _j + ""]);
+(_k = o, _l = computed, stillNotGreat = _k[_l], _m = computed2, soSo = _k[_m], o = __rest(_k, [typeof _l === "symbol" ? _l : _l + "", typeof _m === "symbol" ? _m : _m + ""]));
 var noContextualType = (_a) => {
     var { aNumber = 12 } = _a, notEmptyObject = __rest(_a, ["aNumber"]);
     return aNumber + notEmptyObject.anythingGoes;
 };
-var _d, _f, _j, _k;
+var _d, _f, _k, _l, _m;

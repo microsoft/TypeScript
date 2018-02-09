@@ -91,7 +91,7 @@ namespace ts.server {
 
         private processResponse<T extends protocol.Response>(request: protocol.Request): T {
             let foundResponseMessage = false;
-            let response: T;
+            let response!: T;
             while (!foundResponseMessage) {
                 const lastMessage = this.messages.shift()!;
                 Debug.assert(!!lastMessage, "Did not receive any responses.");
@@ -110,14 +110,14 @@ namespace ts.server {
             }
 
             // verify the sequence numbers
-            Debug.assert(response!.request_seq === request.seq, "Malformed response: response sequence number did not match request sequence number.");
+            Debug.assert(response.request_seq === request.seq, "Malformed response: response sequence number did not match request sequence number.");
 
             // unmarshal errors
-            if (!response!.success) {
-                throw new Error("Error " + response!.message);
+            if (!response.success) {
+                throw new Error("Error " + response.message);
             }
 
-            Debug.assert(!!response!.body, "Malformed response: Unexpected empty response body.");
+            Debug.assert(!!response.body, "Malformed response: Unexpected empty response body.");
 
             return response;
         }
@@ -558,8 +558,7 @@ namespace ts.server {
             const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixes, args);
             const response = this.processResponse<protocol.CodeFixResponse>(request);
 
-            // TODO: GH#20538 shouldn't need cast
-            return (response.body as ReadonlyArray<protocol.CodeFixAction>).map(({ description, changes, fixId }) => ({ description, changes: this.convertChanges(changes, file), fixId }));
+            return response.body!.map(({ description, changes, fixId }) => ({ description, changes: this.convertChanges(changes, file), fixId }));
         }
 
         getCombinedCodeFix = notImplemented;

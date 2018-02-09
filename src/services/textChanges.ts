@@ -187,7 +187,7 @@ namespace ts.textChanges {
     }
 
     export interface TextChangesContext {
-        newLineCharacter: string;
+        host: LanguageServiceHost;
         formatContext: ts.formatting.FormatContext;
     }
 
@@ -199,7 +199,7 @@ namespace ts.textChanges {
         private readonly nodesInsertedAtClassStarts = createMap<{ sourceFile: SourceFile, cls: ClassLikeDeclaration, members: ClassElement[] }>();
 
         public static fromContext(context: TextChangesContext): ChangeTracker {
-            return new ChangeTracker(context.newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed, context.formatContext);
+            return new ChangeTracker(getNewLineOrDefaultFromHost(context.host, context.formatContext.options) === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed, context.formatContext);
         }
 
         public static with(context: TextChangesContext, cb: (tracker: ChangeTracker) => void): FileTextChanges[] {
@@ -810,6 +810,38 @@ namespace ts.textChanges {
             this.writer.write(s);
             this.setLastNonTriviaPosition(s, /*force*/ false);
         }
+        writeKeyword(s: string): void {
+            this.writer.writeKeyword(s);
+            this.setLastNonTriviaPosition(s, /*force*/ false);
+        }
+        writeOperator(s: string): void {
+            this.writer.writeOperator(s);
+            this.setLastNonTriviaPosition(s, /*force*/ false);
+        }
+        writePunctuation(s: string): void {
+            this.writer.writePunctuation(s);
+            this.setLastNonTriviaPosition(s, /*force*/ false);
+        }
+        writeParameter(s: string): void {
+            this.writer.writeParameter(s);
+            this.setLastNonTriviaPosition(s, /*force*/ false);
+        }
+        writeProperty(s: string): void {
+            this.writer.writeProperty(s);
+            this.setLastNonTriviaPosition(s, /*force*/ false);
+        }
+        writeSpace(s: string): void {
+            this.writer.writeSpace(s);
+            this.setLastNonTriviaPosition(s, /*force*/ false);
+        }
+        writeStringLiteral(s: string): void {
+            this.writer.writeStringLiteral(s);
+            this.setLastNonTriviaPosition(s, /*force*/ false);
+        }
+        writeSymbol(s: string, sym: Symbol): void {
+            this.writer.writeSymbol(s, sym);
+            this.setLastNonTriviaPosition(s, /*force*/ false);
+        }
         writeTextOfNode(text: string, node: Node): void {
             this.writer.writeTextOfNode(text, node);
         }
@@ -848,8 +880,8 @@ namespace ts.textChanges {
         isAtStartOfLine(): boolean {
             return this.writer.isAtStartOfLine();
         }
-        reset(): void {
-            this.writer.reset();
+        clear(): void {
+            this.writer.clear();
             this.lastNonTriviaPosition = 0;
         }
     }

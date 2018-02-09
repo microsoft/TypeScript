@@ -12,9 +12,9 @@ verify.codeFix({
 `class A {
     f() {}
 }
-let B = class implements A {\r
-    f(): void {\r
-        throw new Error("Method not implemented.");\r
-    }\r
+let B = class implements A {
+    f(): void {
+        throw new Error("Method not implemented.");
+    }
 }`
 });

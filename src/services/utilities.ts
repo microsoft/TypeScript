@@ -835,8 +835,7 @@ namespace ts {
         }
     }
 
-    export function isInString(sourceFile: SourceFile, position: number): boolean {
-        const previousToken = findPrecedingToken(position, sourceFile);
+    export function isInString(sourceFile: SourceFile, position: number, previousToken = findPrecedingToken(position, sourceFile)): boolean {
         if (previousToken && isStringTextContainingNode(previousToken)) {
             const start = previousToken.getStart();
             const end = previousToken.getEnd();
@@ -1073,12 +1072,16 @@ namespace ts {
     export const typeKeywords: ReadonlyArray<SyntaxKind> = [
         SyntaxKind.AnyKeyword,
         SyntaxKind.BooleanKeyword,
+        SyntaxKind.KeyOfKeyword,
         SyntaxKind.NeverKeyword,
+        SyntaxKind.NullKeyword,
         SyntaxKind.NumberKeyword,
         SyntaxKind.ObjectKeyword,
         SyntaxKind.StringKeyword,
         SyntaxKind.SymbolKeyword,
         SyntaxKind.VoidKeyword,
+        SyntaxKind.UndefinedKeyword,
+        SyntaxKind.UniqueKeyword,
     ];
 
     export function isTypeKeyword(kind: SyntaxKind): boolean {
@@ -1113,6 +1116,14 @@ namespace ts {
     export function getSnapshotText(snap: IScriptSnapshot): string {
         return snap.getText(0, snap.getLength());
     }
+
+    export function repeatString(str: string, count: number): string {
+        let result = "";
+        for (let i = 0; i < count; i++) {
+            result += str;
+        }
+        return result;
+    }
 }
 
 // Display-part writer helpers
@@ -1129,6 +1140,7 @@ namespace ts {
         let indent: number;
 
         resetWriter();
+        const unknownWrite = (text: string) => writeKind(text, SymbolDisplayPartKind.text);
         return {
             displayParts: () => displayParts,
             writeKeyword: text => writeKind(text, SymbolDisplayPartKind.keyword),
@@ -1138,8 +1150,18 @@ namespace ts {
             writeStringLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
             writeParameter: text => writeKind(text, SymbolDisplayPartKind.parameterName),
             writeProperty: text => writeKind(text, SymbolDisplayPartKind.propertyName),
+            writeLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
             writeSymbol,
             writeLine,
+            write: unknownWrite,
+            writeTextOfNode: unknownWrite,
+            getText: () => "",
+            getTextPos: () => 0,
+            getColumn: () => 0,
+            getLine: () => 0,
+            isAtStartOfLine: () => false,
+            rawWrite: notImplemented,
+            getIndent: () => indent,
             increaseIndent: () => { indent++; },
             decreaseIndent: () => { indent--; },
             clear: resetWriter,
@@ -1243,14 +1265,17 @@ namespace ts {
     /**
      * The default is CRLF.
      */
-    export function getNewLineOrDefaultFromHost(host: LanguageServiceHost | LanguageServiceShimHost) {
-        return host.getNewLine ? host.getNewLine() : carriageReturnLineFeed;
+    export function getNewLineOrDefaultFromHost(host: LanguageServiceHost | LanguageServiceShimHost, formatSettings?: FormatCodeSettings) {
+        return (formatSettings && formatSettings.newLineCharacter) ||
+            (host.getNewLine && host.getNewLine()) ||
+            carriageReturnLineFeed;
     }
 
     export function lineBreakPart() {
         return displayPart("\n", SymbolDisplayPartKind.lineBreak);
     }
 
+    /* @internal */
     export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
         try {
             writeDisplayParts(displayPartWriter);
@@ -1263,20 +1288,20 @@ namespace ts {
 
     export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typechecker.getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
+            typechecker.writeType(type, enclosingDeclaration, flags! | TypeFormatFlags.MultilineObjectLiterals, writer);
         });
     }
 
     export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typeChecker.getSymbolDisplayBuilder().buildSymbolDisplay(symbol, writer, enclosingDeclaration, meaning, flags);
+            typeChecker.writeSymbol(symbol, enclosingDeclaration, meaning, flags, writer);
         });
     }
 
     export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
-        flags! |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
+        flags! |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
         return mapToDisplayParts(writer => {
-            typechecker.getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags);
+            typechecker.writeSignature(signature, enclosingDeclaration, flags, /*signatureKind*/ undefined, writer);
         });
     }
 

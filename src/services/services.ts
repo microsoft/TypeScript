@@ -883,7 +883,8 @@ namespace ts {
         scriptKind: ScriptKind;
     }
 
-    export interface DisplayPartsSymbolWriter extends SymbolWriter {
+    /* @internal */
+    export interface DisplayPartsSymbolWriter extends EmitTextWriter {
         displayParts(): SymbolDisplayPart[];
     }
 
@@ -1254,7 +1255,7 @@ namespace ts {
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitivefileNames,
-                getNewLine: () => getNewLineCharacter(newSettings, { newLine: getNewLineOrDefaultFromHost(host) }),
+                getNewLine: () => getNewLineCharacter(newSettings, () => getNewLineOrDefaultFromHost(host)),
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: noop,
                 getCurrentDirectory: () => currentDirectory,
@@ -1886,12 +1887,11 @@ namespace ts {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const span = createTextSpanFromBounds(start, end);
-            const newLineCharacter = getNewLineOrDefaultFromHost(host);
             const formatContext = formatting.getFormatContext(formatOptions);
 
             return flatMap(deduplicate(errorCodes, equateValues, compareValues), errorCode => {
                 cancellationToken.throwIfCancellationRequested();
-                return codefix.getFixes({ errorCode, sourceFile, span, program, newLineCharacter, host, cancellationToken, formatContext });
+                return codefix.getFixes({ errorCode, sourceFile, span, program, host, cancellationToken, formatContext });
             });
         }
 
@@ -1899,10 +1899,9 @@ namespace ts {
             synchronizeHostData();
             Debug.assert(scope.type === "file");
             const sourceFile = getValidSourceFile(scope.fileName);
-            const newLineCharacter = getNewLineOrDefaultFromHost(host);
             const formatContext = formatting.getFormatContext(formatOptions);
 
-            return codefix.getAllFixes({ fixId, sourceFile, program, newLineCharacter, host, cancellationToken, formatContext });
+            return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext });
         }
 
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
@@ -2133,7 +2132,6 @@ namespace ts {
                 startPosition,
                 endPosition,
                 program: getProgram(),
-                newLineCharacter: formatOptions ? formatOptions.newLineCharacter! : host.getNewLine!(), // TODO: GH#18217
                 host,
                 formatContext: formatting.getFormatContext(formatOptions!), // TODO: GH#18217
                 cancellationToken,

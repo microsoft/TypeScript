@@ -13,7 +13,7 @@
     <Cmt Name="Dev" />
     <Cmt Name="LcxAdmin" />
     <Cmt Name="Note" />
-    <Cmt Name="Rccx" />
+    <Cmt Name="RCCX" />
   </OwnedComments>
   <Settings Name="@vsLocTools@\current\default.lss" Type="LSS" />
   <Item ItemId=";String Table" ItemType="0" PsrId="306" Leaf="false">
@@ -473,6 +473,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime_7038" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A namespace-style import cannot be called or constructed, and will cause a failure at runtime.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Импорт стиля пространства имен не может быть вызван или создан и приведет к сбою во время выполнения.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_parameter_initializer_is_only_allowed_in_a_function_or_constructor_implementation_2371" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A parameter initializer is only allowed in a function or constructor implementation.]]></Val>
@@ -559,6 +568,15 @@
           <Val><![CDATA[A rest element cannot contain a binding pattern.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Элемент rest не может содержать шаблон привязки.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";A_rest_element_cannot_have_a_property_name_2566" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A rest element cannot have a property name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Элемент rest не может иметь имя свойства.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -872,6 +890,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Add '{0}' to existing import declaration from "{1}".]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_async_modifier_to_containing_function_90029" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add async modifier to containing function]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Добавьте модификатор async в содержащую функцию]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1276,6 +1303,24 @@
           <Val><![CDATA[An index signature parameter must have a type annotation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[У параметра сигнатуры индекса должна быть аннотация типа.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_index_signature_parameter_type_cannot_be_a_type_alias_Consider_writing_0_Colon_1_Colon_2_instead_1336" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An index signature parameter type cannot be a type alias. Consider writing '[{0}: {1}]5D;: {2}' instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Тип параметра сигнатуры индекса не может быть псевдонимом типа. Вместо этого рекомендуется написать "[{0}: {1}]5D;: {2}".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_index_signature_parameter_type_cannot_be_a_union_type_Consider_using_a_mapped_object_type_instead_1337" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An index signature parameter type cannot be a union type. Consider using a mapped object type instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Тип параметра сигнатуры индекса не может быть типом объединения. Рекомендуется использовать тип сопоставляемого объекта.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1829,6 +1874,33 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Cannot_invoke_an_object_which_is_possibly_null_2721" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot invoke an object which is possibly 'null'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Не удается вызвать объект, который может иметь значение "NULL".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Cannot_invoke_an_object_which_is_possibly_null_or_undefined_2723" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot invoke an object which is possibly 'null' or 'undefined'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Не удается вызвать объект, который может иметь значение "NULL" или "undefined".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Cannot_invoke_an_object_which_is_possibly_undefined_2722" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot invoke an object which is possibly 'undefined'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Не удается вызвать объект, который может иметь значение "undefined".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Cannot_re_export_a_type_when_the_isolatedModules_flag_is_provided_1205" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot re-export a type when the '--isolatedModules' flag is provided.]]></Val>
@@ -2293,6 +2365,15 @@
           <Val><![CDATA[Convert function to an ES2015 class]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Преобразование функции в класс ES2015]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_to_ES6_module_95017" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert to ES6 module]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Преобразовать в модуль ES6]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2894,6 +2975,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Enables_emit_interoperability_between_CommonJS_and_ES_Modules_via_creation_of_namespace_objects_for__7037" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Позволяет обеспечивать взаимодействие между модулями CommonJS и ES посредством создания объектов пространства имен для всех импортов. Подразумевает "allowSyntheticDefaultImports".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Enables_experimental_support_for_ES7_async_functions_6068" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enables experimental support for ES7 async functions.]]></Val>
@@ -3287,15 +3377,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Extract_symbol_95003" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Extract symbol]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Извлечь символ]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Extract_to_0_in_1_95004" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Extract to {0} in {1}]]></Val>
@@ -3478,6 +3559,15 @@
           <Val><![CDATA[Found 'package.json' at '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Обнаружен package.json в "{0}".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Found_package_json_at_0_Package_ID_is_1_6190" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Found 'package.json' at '{0}'. Package ID is '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Найден "package.json" в "{0}". Идентификатор пакета: "{1}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4538,6 +4628,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Mapped_object_type_implicitly_has_an_any_template_type_7039" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Mapped object type implicitly has an 'any' template type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Сопоставленный объект неявно имеет тип шаблона "любой".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Member_0_implicitly_has_an_1_type_7008" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Member '{0}' implicitly has an '{1}' type.]]></Val>
@@ -5573,6 +5672,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2_2416" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' in type '{1}' is not assignable to the same property in base type '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Свойство "{0}" в типе "{1}" невозможно присвоить тому же свойству в базовом типе "{2}".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Property_0_in_type_1_is_not_assignable_to_type_2_2603" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' in type '{1}' is not assignable to type '{2}'.]]></Val>
@@ -5927,6 +6035,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Remove declaration for: '{0}'.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Replace_import_with_0_95015" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Replace import with '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Замена импорта на "{0}".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6485,11 +6602,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Specify_library_files_to_be_included_in_the_compilation_Colon_6079" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Specify_library_files_to_be_included_in_the_compilation_6079" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify library files to be included in the compilation: ]]></Val>
+          <Val><![CDATA[Specify library files to be included in the compilation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Укажите файлы библиотеки для включения в компиляцию: ]]></Val>
+            <Val><![CDATA[Укажите файлы библиотек для включения в компиляцию.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7994,6 +8111,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Use_synthetic_default_member_95016" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Use synthetic 'default' member.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Используйте искусственный элемент "default".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Using_a_string_in_a_for_of_statement_is_only_supported_in_ECMAScript_5_and_higher_2494" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Using a string in a 'for...of' statement is only supported in ECMAScript 5 and higher.]]></Val>
@@ -8497,10 +8623,13 @@
       </Item>
       <Item ItemId=";const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_im_2475" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA['const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.]]></Val>
+          <Val><![CDATA['const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Перечисления const можно использовать только в выражениях доступа к свойствам или по индексу, а также в правой части объявления присваивания импорта или экспорта.]]></Val>
+            <Val><![CDATA[Перечисления const можно использовать только в выражениях доступа к свойству или индексу, а также в правой части объявления импорта, присваивания экспорта или запроса типа.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA['const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>

@@ -44,10 +44,10 @@ namespace ts.FindAllReferences {
     export function findReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number): ReferencedSymbol[] | undefined {
         const referencedSymbols = findAllReferencedSymbols(program, cancellationToken, sourceFiles, sourceFile, position);
         const checker = program.getTypeChecker();
-        return !referencedSymbols || !referencedSymbols.length ? undefined : mapDefined(referencedSymbols, ({ definition, references }): ReferencedSymbol | undefined => {
+        return !referencedSymbols || !referencedSymbols.length ? undefined : mapDefined<SymbolAndEntries, ReferencedSymbol>(referencedSymbols, ({ definition, references }) => {
             // Only include referenced symbols that have a valid definition.
             const info = definition && definitionToReferencedSymbolDefinitionInfo(definition, checker);
-            return info && { definition: info, references: references.map(toReferenceEntry) }
+            return info && { definition: info, references: references.map(toReferenceEntry) };
         });
     }
 
@@ -358,7 +358,7 @@ namespace ts.FindAllReferences.Core {
 
     /** Core find-all-references algorithm for a normal symbol. */
     function getReferencedSymbolsForSymbol(symbol: Symbol, node: Node, sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cancellationToken: CancellationToken, options: Options): SymbolAndEntries[] {
-        symbol = skipPastExportOrImportSpecifier(symbol, node, checker);
+        symbol = skipPastExportOrImportSpecifierOrUnion(symbol, node, checker);
 
         // Compute the meaning from the location and the symbol it references
         const searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), symbol.declarations!);
@@ -407,7 +407,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     /** Handle a few special cases relating to export/import specifiers. */
-    function skipPastExportOrImportSpecifier(symbol: Symbol, node: Node, checker: TypeChecker): Symbol {
+    function skipPastExportOrImportSpecifierOrUnion(symbol: Symbol, node: Node, checker: TypeChecker): Symbol {
         const { parent } = node;
         if (isExportSpecifier(parent)) {
             return getLocalSymbolForExportSpecifier(node as Identifier, symbol, parent, checker);
@@ -417,7 +417,11 @@ namespace ts.FindAllReferences.Core {
             return checker.getImmediateAliasedSymbol(symbol)!;
         }
 
-        return symbol;
+        // If the symbol is declared as part of a declaration like `{ type: "a" } | { type: "b" }`, use the property on the union type to get more references.
+        return firstDefined(symbol.declarations!, decl =>
+            isTypeLiteralNode(decl.parent) && isUnionTypeNode(decl.parent.parent)
+                ? checker.getPropertyOfType(checker.getTypeFromTypeNode(decl.parent.parent), symbol.name)
+                : undefined) || symbol;
     }
 
     /**

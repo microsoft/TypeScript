@@ -1,21 +1,16 @@
 /* @internal */
 namespace ts.refactor.annotateWithTypeFromJSDoc {
+    const refactorName = "Annotate with type from JSDoc";
     const actionName = "annotate";
+    const description = Diagnostics.Annotate_with_type_from_JSDoc.message;
+    registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
-    const annotateTypeFromJSDoc: Refactor = {
-        name: "Annotate with type from JSDoc",
-        description: Diagnostics.Annotate_with_type_from_JSDoc.message,
-        getEditsForAction,
-        getAvailableActions
-    };
     type DeclarationWithType =
         | FunctionLikeDeclaration
         | VariableDeclaration
         | ParameterDeclaration
         | PropertySignature
         | PropertyDeclaration;
-
-    registerRefactor(annotateTypeFromJSDoc);
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
         if (isInJavaScriptFile(context.file)) {
@@ -25,11 +20,11 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         const node = getTokenAtPosition(context.file, context.startPosition, /*includeJsDocComment*/ false);
         if (hasUsableJSDoc(findAncestor(node, isDeclarationWithType))) {
             return [{
-                name: annotateTypeFromJSDoc.name,
-                description: annotateTypeFromJSDoc.description,
+                name: refactorName,
+                description,
                 actions: [
                     {
-                        description: annotateTypeFromJSDoc.description,
+                        description,
                         name: actionName
                     }
                 ]

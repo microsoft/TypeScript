@@ -31,8 +31,8 @@ namespace ts.formatting {
         scanner.setTextPos(startPos);
 
         let wasNewLine = true;
-        let leadingTrivia: TextRangeWithKind[] | undefined;
-        let trailingTrivia: TextRangeWithKind[] | undefined;
+        let leadingTrivia: TextRangeWithTriviaKind[] | undefined;
+        let trailingTrivia: TextRangeWithTriviaKind[] | undefined;
 
         let savedPos: number;
         let lastScanAction: ScanAction | undefined;
@@ -77,7 +77,7 @@ namespace ts.formatting {
 
                 // consume leading trivia
                 scanner.scan();
-                const item = {
+                const item: TextRangeWithTriviaKind = {
                     pos,
                     end: scanner.getStartPos(),
                     kind: t
@@ -188,7 +188,7 @@ namespace ts.formatting {
                 if (!isTrivia(currentToken)) {
                     break;
                 }
-                const trivia = {
+                const trivia: TextRangeWithTriviaKind = {
                     pos: scanner.getStartPos(),
                     end: scanner.getTextPos(),
                     kind: currentToken

@@ -662,7 +662,7 @@ namespace ts {
                                 expr = createBinary(expr!, SyntaxKind.CommaToken, copyExpr);
                             }
                         }
-                        returnExpression = createBinary(expr, SyntaxKind.CommaToken, returnExpression);
+                        returnExpression = createBinary(expr!, SyntaxKind.CommaToken, returnExpression);
                     }
                     return createReturn(returnExpression);
                 }

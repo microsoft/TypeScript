@@ -102,8 +102,6 @@ namespace ts.server.protocol {
         GetCodeFixes = "getCodeFixes",
         /* @internal */
         GetCodeFixesFull = "getCodeFixes-full",
-        // TODO: GH#20538
-        /* @internal */
         GetCombinedCodeFix = "getCombinedCodeFix",
         /* @internal */
         GetCombinedCodeFixFull = "getCombinedCodeFix-full",
@@ -557,15 +555,11 @@ namespace ts.server.protocol {
         arguments: CodeFixRequestArgs;
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface GetCombinedCodeFixRequest extends Request {
         command: CommandTypes.GetCombinedCodeFix;
         arguments: GetCombinedCodeFixRequestArgs;
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface GetCombinedCodeFixResponse extends Response {
         body: CombinedCodeActions;
     }
@@ -622,15 +616,11 @@ namespace ts.server.protocol {
         errorCodes?: ReadonlyArray<number>;
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface GetCombinedCodeFixRequestArgs {
         scope: GetCombinedCodeFixScope;
         fixId: {};
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface GetCombinedCodeFixScope {
         type: "file";
         args: FileRequestArgs;
@@ -1619,7 +1609,7 @@ namespace ts.server.protocol {
 
     export interface CodeFixResponse extends Response {
         /** The code actions that are available */
-        body?: CodeAction[]; // TODO: GH#20538 CodeFixAction[]
+        body?: CodeFixAction[];
     }
 
     export interface CodeAction {
@@ -1631,15 +1621,11 @@ namespace ts.server.protocol {
         commands?: {}[];
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface CombinedCodeActions {
         changes: ReadonlyArray<FileCodeEdits>;
         commands?: ReadonlyArray<{}>;
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface CodeFixAction extends CodeAction {
         /**
          * If present, one may call 'getCombinedCodeFix' with this fixId.

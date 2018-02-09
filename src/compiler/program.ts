@@ -1,7 +1,6 @@
 /// <reference path="sys.ts" />
 /// <reference path="emitter.ts" />
 /// <reference path="core.ts" />
-/// <reference path="builder.ts" />
 
 namespace ts {
     const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?)/;
@@ -1142,32 +1141,34 @@ namespace ts {
         function emitWorker(program: Program, sourceFile: SourceFile | undefined, writeFileCallback: WriteFileCallback | undefined, cancellationToken: CancellationToken | undefined, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
             let declarationDiagnostics: ReadonlyArray<Diagnostic> = [];
 
-            if (options.noEmit) {
-                return { diagnostics: declarationDiagnostics, sourceMaps: undefined!, emittedFiles: undefined!, emitSkipped: true }; // TODO: GH#18217
-            }
-
-            // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
-            // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
-            // get any preEmit diagnostics, not just the ones
-            if (options.noEmitOnError) {
-                const diagnostics = [
-                    ...program.getOptionsDiagnostics(cancellationToken),
-                    ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
-                    ...program.getGlobalDiagnostics(cancellationToken),
-                    ...program.getSemanticDiagnostics(sourceFile, cancellationToken)
-                ];
-
-                if (diagnostics.length === 0 && program.getCompilerOptions().declaration) {
-                    declarationDiagnostics = program.getDeclarationDiagnostics(/*sourceFile*/ undefined, cancellationToken);
+            if (!emitOnlyDtsFiles) {
+                if (options.noEmit) {
+                    return { diagnostics: declarationDiagnostics, sourceMaps: undefined!, emittedFiles: undefined!, emitSkipped: true }; // TODO: GH#18217
                 }
 
-                if (diagnostics.length > 0 || declarationDiagnostics.length > 0) {
-                    return {
-                        diagnostics: concatenate(diagnostics, declarationDiagnostics),
-                        sourceMaps: undefined!,
-                        emittedFiles: undefined!, // TODO: GH#18217
-                        emitSkipped: true
-                    };
+                // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
+                // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
+                // get any preEmit diagnostics, not just the ones
+                if (options.noEmitOnError) {
+                    const diagnostics = [
+                        ...program.getOptionsDiagnostics(cancellationToken),
+                        ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
+                        ...program.getGlobalDiagnostics(cancellationToken),
+                        ...program.getSemanticDiagnostics(sourceFile, cancellationToken)
+                    ];
+
+                    if (diagnostics.length === 0 && program.getCompilerOptions().declaration) {
+                        declarationDiagnostics = program.getDeclarationDiagnostics(/*sourceFile*/ undefined, cancellationToken);
+                    }
+
+                    if (diagnostics.length > 0 || declarationDiagnostics.length > 0) {
+                        return {
+                            diagnostics: concatenate(diagnostics, declarationDiagnostics),
+                            sourceMaps: undefined!,
+                            emittedFiles: undefined!,
+                            emitSkipped: true
+                        };
+                    }
                 }
             }
 
@@ -1179,7 +1180,7 @@ namespace ts {
             // This is because in the -out scenario all files need to be emitted, and therefore all
             // files need to be type checked. And the way to specify that all files need to be type
             // checked is to not pass the file to getEmitResolver.
-            const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile);
+            const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile, cancellationToken, emitOnlyDtsFiles);
 
             performance.mark("beforeEmit");
 
@@ -1818,7 +1819,7 @@ namespace ts {
             }, shouldCreateNewSourceFile);
 
             if (packageId) {
-                const packageIdKey = `${packageId.name}/${packageId.subModuleName}@${packageId.version}`;
+                const packageIdKey = packageIdToString(packageId);
                 const fileFromPackageId = packageIdToSourceFile.get(packageIdKey);
                 if (fileFromPackageId) {
                     // Some other SourceFile already exists with this package name and version.

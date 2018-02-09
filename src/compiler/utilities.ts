@@ -2,7 +2,6 @@
 
 /* @internal */
 namespace ts {
-    export const emptyArray: never[] = [] as never[];
     export const resolvingEmptyArray: never[] = [] as never[];
     export const emptyMap: ReadonlyMap<never> = createMap<never>();
     export const emptyUnderscoreEscapedMap: ReadonlyUnderscoreEscapedMap<never> = emptyMap as ReadonlyUnderscoreEscapedMap<never>;
@@ -29,26 +28,31 @@ namespace ts {
         return undefined;
     }
 
-    export interface StringSymbolWriter extends SymbolWriter {
-        string(): string;
-    }
-
     const stringWriter = createSingleLineStringWriter();
 
-    function createSingleLineStringWriter(): StringSymbolWriter {
+    function createSingleLineStringWriter(): EmitTextWriter {
         let str = "";
 
         const writeText: (text: string) => void = text => str += text;
         return {
-            string: () => str,
+            getText: () => str,
+            write: writeText,
+            rawWrite: writeText,
+            writeTextOfNode: writeText,
             writeKeyword: writeText,
             writeOperator: writeText,
             writePunctuation: writeText,
             writeSpace: writeText,
             writeStringLiteral: writeText,
+            writeLiteral: writeText,
             writeParameter: writeText,
             writeProperty: writeText,
             writeSymbol: writeText,
+            getTextPos: () => str.length,
+            getLine: () => 0,
+            getColumn: () => 0,
+            getIndent: () => 0,
+            isAtStartOfLine: () => false,
 
             // Completely ignore indentation for string writers.  And map newlines to
             // a single space.
@@ -63,11 +67,11 @@ namespace ts {
         };
     }
 
-    export function usingSingleLineStringWriter(action: (writer: StringSymbolWriter) => void): string {
-        const oldString = stringWriter.string();
+    export function usingSingleLineStringWriter(action: (writer: EmitTextWriter) => void): string {
+        const oldString = stringWriter.getText();
         try {
             action(stringWriter);
-            return stringWriter.string();
+            return stringWriter.getText();
         }
         finally {
             stringWriter.clear();
@@ -109,6 +113,11 @@ namespace ts {
 
     function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
         return a === b || !!a && !!b && a.name === b.name && a.subModuleName === b.subModuleName && a.version === b.version;
+    }
+
+    export function packageIdToString({ name, subModuleName, version }: PackageId): string {
+        const fullName = subModuleName ? `${name}/${subModuleName}` : name;
+        return `${fullName}@${version}`;
     }
 
     export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {
@@ -162,6 +171,8 @@ namespace ts {
         }
     }
 
+    export function getSourceFileOfNode(node: Node): SourceFile;
+    export function getSourceFileOfNode(node: Node | undefined): SourceFile | undefined;
     export function getSourceFileOfNode(node: Node): SourceFile {
         while (node && node.kind !== SyntaxKind.SourceFile) {
             node = node.parent;
@@ -591,6 +602,11 @@ namespace ts {
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
         const sourceFile = getSourceFileOfNode(node);
         return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2, arg3);
+    }
+
+    export function createDiagnosticForNodeArray(sourceFile: SourceFile, nodes: NodeArray<Node>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
+        const start = skipTrivia(sourceFile.text, nodes.pos);
+        return createFileDiagnostic(sourceFile, start, nodes.end - start, message, arg0, arg1, arg2, arg3);
     }
 
     export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
@@ -1770,6 +1786,51 @@ namespace ts {
         return getAssignmentTargetKind(node) !== AssignmentKind.None;
     }
 
+    export type NodeWithPossibleHoistedDeclaration =
+        | Block
+        | VariableStatement
+        | WithStatement
+        | IfStatement
+        | SwitchStatement
+        | CaseBlock
+        | CaseClause
+        | DefaultClause
+        | LabeledStatement
+        | ForStatement
+        | ForInStatement
+        | ForOfStatement
+        | DoStatement
+        | WhileStatement
+        | TryStatement
+        | CatchClause;
+
+    /**
+     * Indicates whether a node could contain a `var` VariableDeclarationList that contributes to
+     * the same `var` declaration scope as the node's parent.
+     */
+    export function isNodeWithPossibleHoistedDeclaration(node: Node): node is NodeWithPossibleHoistedDeclaration {
+        switch (node.kind) {
+            case SyntaxKind.Block:
+            case SyntaxKind.VariableStatement:
+            case SyntaxKind.WithStatement:
+            case SyntaxKind.IfStatement:
+            case SyntaxKind.SwitchStatement:
+            case SyntaxKind.CaseBlock:
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.DefaultClause:
+            case SyntaxKind.LabeledStatement:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.WhileStatement:
+            case SyntaxKind.TryStatement:
+            case SyntaxKind.CatchClause:
+                return true;
+        }
+        return false;
+    }
+
     function walkUp(node: Node, kind: SyntaxKind) {
         while (node && node.kind === kind) {
             node = node.parent;
@@ -1993,7 +2054,13 @@ namespace ts {
         return token !== undefined && isNonContextualKeyword(token);
     }
 
-    export function isTrivia(token: SyntaxKind) {
+    export type TriviaKind = SyntaxKind.SingleLineCommentTrivia
+        | SyntaxKind.MultiLineCommentTrivia
+        | SyntaxKind.NewLineTrivia
+        | SyntaxKind.WhitespaceTrivia
+        | SyntaxKind.ShebangTrivia
+        | SyntaxKind.ConflictMarkerTrivia;
+    export function isTrivia(token: SyntaxKind): token is TriviaKind {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
 
@@ -2628,7 +2695,19 @@ namespace ts {
             getColumn: () => lineStart ? indent * getIndentSize() + 1 : output.length - linePos + 1,
             getText: () => output,
             isAtStartOfLine: () => lineStart,
-            reset
+            clear: reset,
+            reportInaccessibleThisError: noop,
+            reportPrivateInBaseOfClassExpression: noop,
+            reportInaccessibleUniqueSymbolError: noop,
+            trackSymbol: noop,
+            writeKeyword: write,
+            writeOperator: write,
+            writeParameter: write,
+            writeProperty: write,
+            writePunctuation: write,
+            writeSpace: write,
+            writeStringLiteral: write,
+            writeSymbol: write
         };
     }
 
@@ -3330,14 +3409,14 @@ namespace ts {
 
     const carriageReturnLineFeed = "\r\n";
     const lineFeed = "\n";
-    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, system?: { newLine: string }): string {
+    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, getNewLine?: () => string): string {
         switch (options.newLine) {
             case NewLineKind.CarriageReturnLineFeed:
                 return carriageReturnLineFeed;
             case NewLineKind.LineFeed:
                 return lineFeed;
         }
-        return system ? system.newLine : sys ? sys.newLine : carriageReturnLineFeed;
+        return getNewLine ? getNewLine() : sys ? sys.newLine : carriageReturnLineFeed;
     }
 
     /**
@@ -4661,7 +4740,7 @@ namespace ts {
     }
 
     export function isTypeOfExpression(node: Node): node is TypeOfExpression {
-        return node.kind === SyntaxKind.AwaitExpression;
+        return node.kind === SyntaxKind.TypeOfExpression;
     }
 
     export function isVoidExpression(node: Node): node is VoidExpression {
@@ -5145,7 +5224,7 @@ namespace ts {
 
     /* @internal */
     export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {
-        return isIdentifier(node) && node.autoGenerateKind !== undefined && node.autoGenerateKind > GeneratedIdentifierKind.None;
+        return isIdentifier(node) && (node.autoGenerateFlags! & GeneratedIdentifierFlags.KindMask) > GeneratedIdentifierFlags.None;
     }
 
     // Keywords

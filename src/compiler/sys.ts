@@ -30,27 +30,14 @@ namespace ts {
         mtime?: Date;
     }
 
-    /**
-     * Partial interface of the System thats needed to support the caching of directory structure
-     */
-    export interface DirectoryStructureHost {
+    export interface System {
+        args: string[];
         newLine: string;
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
         readFile(path: string, encoding?: string): string | undefined;
-        writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
-        fileExists(path: string): boolean;
-        directoryExists(path: string): boolean;
-        createDirectory(path: string): void;
-        getCurrentDirectory(): string;
-        getDirectories(path: string): string[];
-        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
-        exit(exitCode?: number): void;
-    }
-
-    export interface System extends DirectoryStructureHost {
-        args: string[];
         getFileSize?(path: string): number;
+        writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         /**
          * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
          * use native OS file watching
@@ -58,7 +45,13 @@ namespace ts {
         watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         resolvePath(path: string): string;
+        fileExists(path: string): boolean;
+        directoryExists(path: string): boolean;
+        createDirectory(path: string): void;
         getExecutingFilePath(): string;
+        getCurrentDirectory(): string;
+        getDirectories(path: string): string[];
+        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
         getModifiedTime?(path: string): Date;
         /**
          * This should be cryptographically secure.
@@ -66,6 +59,7 @@ namespace ts {
          */
         createHash?(data: string): string;
         getMemoryUsage?(): number;
+        exit(exitCode?: number): void;
         realpath?(path: string): string;
         /*@internal*/ getEnvironmentVariable(name: string): string;
         /*@internal*/ tryEnableSourceMapsForHost?(): void;
@@ -398,7 +392,7 @@ namespace ts {
                     return { files, directories };
                 }
                 catch (e) {
-                    return { files: [], directories: [] };
+                    return emptyFileSystemEntries;
                 }
             }
 
@@ -525,7 +519,12 @@ namespace ts {
                     process.exit(exitCode);
                 },
                 realpath(path: string): string {
-                    return _fs.realpathSync(path);
+                    try {
+                        return _fs.realpathSync(path);
+                    }
+                    catch {
+                        return path;
+                    }
                 },
                 debugMode: some(<string[]>process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
                 tryEnableSourceMapsForHost() {
