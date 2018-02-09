@@ -55,8 +55,16 @@ var q = new my.predicate.query();
 >predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
 >query : Symbol(query, Decl(a.js, 10, 34))
 
-// my.predicate.result = {};
-// my.predicate.sorted = my.predicate.sorted || {};
+my.predicate.query.result = 'none'
+>my.predicate.query.result : Symbol((Anonymous function).result, Decl(a.js, 15, 33))
+>my.predicate.query : Symbol(query, Decl(a.js, 10, 34))
+>my.predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
+>my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
+>predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
+>query : Symbol(query, Decl(a.js, 10, 34))
+>result : Symbol((Anonymous function).result, Decl(a.js, 15, 33))
 
-// TODO: EVEN MORE NESTING
+// my.predicate.sort = my.predicate.sort || function (first, second) {
+    // return first;
+// }
 

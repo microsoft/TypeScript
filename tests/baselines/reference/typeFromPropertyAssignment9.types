@@ -4,15 +4,15 @@
 // TODO: Try initializer of function or class I guess (though classes aren't context sensitive)
 // TODO: Duplicated declarations should be OK (if they have the same type (??))
 var my = my || {};
->my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
->my || {} : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
->my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
->{} : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; result: string; }; }; }
+>my || {} : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; result: string; }; }; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; result: string; }; }; }
+>{} : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; result: string; }; }; }
 
 my.m = function() {
 >my.m = function() {    return 1;} : () => number
 >my.m : () => number
->my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; result: string; }; }; }
 >m : () => number
 >function() {    return 1;} : () => number
 
@@ -22,45 +22,45 @@ my.m = function() {
 my.n = 1;
 >my.n = 1 : 1
 >my.n : number
->my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; result: string; }; }; }
 >n : number
 >1 : 1
 
 my.o = {};
 >my.o = {} : { [x: string]: any; }
 >my.o : { [x: string]: any; }
->my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; result: string; }; }; }
 >o : { [x: string]: any; }
 >{} : { [x: string]: any; }
 
 my.predicate = my.predicate || {};
->my.predicate = my.predicate || {} : { [x: string]: any; query: () => void; }
->my.predicate : { [x: string]: any; query: () => void; }
->my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
->predicate : { [x: string]: any; query: () => void; }
->my.predicate || {} : { [x: string]: any; query: () => void; }
->my.predicate : { [x: string]: any; query: () => void; }
->my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
->predicate : { [x: string]: any; query: () => void; }
->{} : { [x: string]: any; query: () => void; }
+>my.predicate = my.predicate || {} : { [x: string]: any; query: { (): void; result: string; }; }
+>my.predicate : { [x: string]: any; query: { (): void; result: string; }; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; result: string; }; }; }
+>predicate : { [x: string]: any; query: { (): void; result: string; }; }
+>my.predicate || {} : { [x: string]: any; query: { (): void; result: string; }; }
+>my.predicate : { [x: string]: any; query: { (): void; result: string; }; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; result: string; }; }; }
+>predicate : { [x: string]: any; query: { (): void; result: string; }; }
+>{} : { [x: string]: any; query: { (): void; result: string; }; }
 
 my.predicate.query = function () {
->my.predicate.query = function () {    var me = this;    me.property = false;} : () => void
->my.predicate.query : () => void
->my.predicate : { [x: string]: any; query: () => void; }
->my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
->predicate : { [x: string]: any; query: () => void; }
->query : () => void
->function () {    var me = this;    me.property = false;} : () => void
+>my.predicate.query = function () {    var me = this;    me.property = false;} : { (): void; result: string; }
+>my.predicate.query : { (): void; result: string; }
+>my.predicate : { [x: string]: any; query: { (): void; result: string; }; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; result: string; }; }; }
+>predicate : { [x: string]: any; query: { (): void; result: string; }; }
+>query : { (): void; result: string; }
+>function () {    var me = this;    me.property = false;} : { (): void; result: string; }
 
     var me = this;
->me : { [x: string]: any; query: () => void; }
->this : { [x: string]: any; query: () => void; }
+>me : { [x: string]: any; query: { (): void; result: string; }; }
+>this : { [x: string]: any; query: { (): void; result: string; }; }
 
     me.property = false;
 >me.property = false : false
 >me.property : any
->me : { [x: string]: any; query: () => void; }
+>me : { [x: string]: any; query: { (): void; result: string; }; }
 >property : any
 >false : false
 
@@ -68,14 +68,24 @@ my.predicate.query = function () {
 var q = new my.predicate.query();
 >q : any
 >new my.predicate.query() : any
->my.predicate.query : () => void
->my.predicate : { [x: string]: any; query: () => void; }
->my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: () => void; }; }
->predicate : { [x: string]: any; query: () => void; }
->query : () => void
+>my.predicate.query : { (): void; result: string; }
+>my.predicate : { [x: string]: any; query: { (): void; result: string; }; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; result: string; }; }; }
+>predicate : { [x: string]: any; query: { (): void; result: string; }; }
+>query : { (): void; result: string; }
 
-// my.predicate.result = {};
-// my.predicate.sorted = my.predicate.sorted || {};
+my.predicate.query.result = 'none'
+>my.predicate.query.result = 'none' : "none"
+>my.predicate.query.result : string
+>my.predicate.query : { (): void; result: string; }
+>my.predicate : { [x: string]: any; query: { (): void; result: string; }; }
+>my : { [x: string]: any; m: () => number; n: number; o: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; result: string; }; }; }
+>predicate : { [x: string]: any; query: { (): void; result: string; }; }
+>query : { (): void; result: string; }
+>result : string
+>'none' : "none"
 
-// TODO: EVEN MORE NESTING
+// my.predicate.sort = my.predicate.sort || function (first, second) {
+    // return first;
+// }
 

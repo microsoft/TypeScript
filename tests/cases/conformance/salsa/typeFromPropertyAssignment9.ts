@@ -20,7 +20,7 @@ my.predicate.query = function () {
     me.property = false;
 };
 var q = new my.predicate.query();
-// my.predicate.result = {};
-// my.predicate.sorted = my.predicate.sorted || {};
-
-// TODO: EVEN MORE NESTING
+my.predicate.query.result = 'none'
+// my.predicate.sort = my.predicate.sort || function (first, second) {
+    // return first;
+// }

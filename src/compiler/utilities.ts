@@ -1472,6 +1472,7 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(sourceFile, str).charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
+    // TODO: All 5 (!) of these need to be de-duped
     /**
      * Returns true if the node is a variable declaration whose initializer is a function or class expression.
      * This function does not test if the node is in a JavaScript file or not.
@@ -1509,6 +1510,16 @@ namespace ts {
             // TODO: Should still probably be isJavascriptContainerExpression
             isObjectLiteralExpression(s.valueDeclaration.initializer.right) &&
             s.valueDeclaration.initializer.right.properties.length === 0;
+    }
+
+    export function isAssignmentOfJavascriptContainerExpression(s: Symbol) {
+        return s.valueDeclaration &&
+            isPropertyAccessExpression(s.valueDeclaration) &&
+            isBinaryExpression(s.valueDeclaration.parent) &&
+            s.valueDeclaration.parent.right &&
+            (s.valueDeclaration.parent.right.kind === SyntaxKind.FunctionExpression ||
+             s.valueDeclaration.parent.right.kind === SyntaxKind.ClassExpression ||
+             isObjectLiteralExpression(s.valueDeclaration.parent.right) && s.valueDeclaration.parent.right.properties.length === 0);
     }
 
     export function isAssignmentOfDefaultedJavascriptContainerExpression(s: Symbol) {

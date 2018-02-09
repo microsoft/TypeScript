@@ -2406,8 +2406,8 @@ namespace ts {
                 let symbol = lookupSymbolForPropertyAccess(node.expression as Identifier | PropertyAccessExpression);
                 symbol = symbol && isDeclarationOfJavascriptContainerExpression(symbol) ? (symbol.valueDeclaration as VariableDeclaration).initializer.symbol :
                     symbol && isDeclarationOfDefaultedJavascriptContainerExpression(symbol) ? ((symbol.valueDeclaration as VariableDeclaration).initializer as BinaryExpression).right.symbol :
-                    // TODO: Might want the next line below for even further nestings?
-                // symbol && isAssignmentOfDefaultedJavascriptContainerExpression(symbol) ? ((symbol.valueDeclaration.parent as BinaryExpression).right as BinaryExpression).symbol :
+                    symbol && isAssignmentOfDefaultedJavascriptContainerExpression(symbol) ? (((symbol.valueDeclaration.parent as BinaryExpression).right as BinaryExpression).right as BinaryExpression).symbol :
+                    symbol && isAssignmentOfJavascriptContainerExpression(symbol) ? ((symbol.valueDeclaration.parent as BinaryExpression).right as BinaryExpression).symbol :
                     symbol;
                 return symbol && symbol.exports && symbol.exports.get(node.name.escapedText);
             }
@@ -2420,6 +2420,7 @@ namespace ts {
             let targetSymbol = symbol && isDeclarationOfJavascriptContainerExpression(symbol) ? (symbol.valueDeclaration as VariableDeclaration).initializer.symbol :
                 symbol && isDeclarationOfDefaultedJavascriptContainerExpression(symbol) ? ((symbol.valueDeclaration as VariableDeclaration).initializer as BinaryExpression).right.symbol :
                 symbol && isAssignmentOfDefaultedJavascriptContainerExpression(symbol) ? (((symbol.valueDeclaration.parent as BinaryExpression).right as BinaryExpression).right as BinaryExpression).symbol :
+                symbol && isAssignmentOfJavascriptContainerExpression(symbol) ? ((symbol.valueDeclaration.parent as BinaryExpression).right as BinaryExpression).symbol :
                 symbol;
             Debug.assert(propertyAccess.parent.kind === SyntaxKind.BinaryExpression ||
                          propertyAccess.parent.kind === SyntaxKind.ExpressionStatement ||
