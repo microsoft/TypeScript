@@ -606,7 +606,9 @@ namespace ts.FindAllReferences {
     }
 
     export function getExportInfo(exportSymbol: Symbol, exportKind: ExportKind, checker: TypeChecker): ExportInfo | undefined {
-        const exportingModuleSymbol = checker.getMergedSymbol(exportSymbol.parent); // Need to get merged symbol in case there's an augmentation.
+        const moduleSymbol = exportSymbol.parent;
+        if (!moduleSymbol) return undefined; // This can happen if an `export` is not at the top-level (which is a compile error).
+        const exportingModuleSymbol = checker.getMergedSymbol(moduleSymbol); // Need to get merged symbol in case there's an augmentation.
         // `export` may appear in a namespace. In that case, just rely on global search.
         return isExternalModuleSymbol(exportingModuleSymbol) ? { exportingModuleSymbol, exportKind } : undefined;
     }
