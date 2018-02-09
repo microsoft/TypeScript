@@ -8,9 +8,15 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(22,9): error TS23
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(28,5): error TS2322: Type 'Partial<T>[keyof T]' is not assignable to type 'Diff<Partial<T>[keyof T], null | undefined>'.
   Type 'T[keyof T] | undefined' is not assignable to type 'Diff<Partial<T>[keyof T], null | undefined>'.
     Type 'undefined' is not assignable to type 'Diff<Partial<T>[keyof T], null | undefined>'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(100,5): error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>' is not assignable to type 'T'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(101,5): error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>' is not assignable to type 'T'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(103,5): error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>' is not assignable to type 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(33,5): error TS2322: Type 'T["x"]' is not assignable to type 'Diff<T["x"], null | undefined>'.
+  Type 'string | undefined' is not assignable to type 'Diff<T["x"], null | undefined>'.
+    Type 'undefined' is not assignable to type 'Diff<T["x"], null | undefined>'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(34,9): error TS2322: Type 'T["x"]' is not assignable to type 'string'.
+  Type 'string | undefined' is not assignable to type 'string'.
+    Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(107,5): error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>' is not assignable to type 'T'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(108,5): error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>' is not assignable to type 'T'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(110,5): error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>' is not assignable to type 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>'.
   Type '{ [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]' is not assignable to type '{ [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]'.
     Type 'T[keyof T] extends Function ? keyof T : never' is not assignable to type '{ [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]'.
       Type 'keyof T' is not assignable to type '{ [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]'.
@@ -18,8 +24,8 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(103,5): error TS2
           Type 'T[keyof T] extends Function ? keyof T : never' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
             Type '{ [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
               Type 'T[keyof T] extends Function ? keyof T : never' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-                Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(105,5): error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>' is not assignable to type 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>'.
+                Type 'keyof T' is not assignable to type 'never'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(112,5): error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>' is not assignable to type 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>'.
   Type '{ [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]' is not assignable to type '{ [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]'.
     Type 'T[keyof T] extends Function ? never : keyof T' is not assignable to type '{ [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]'.
       Type 'keyof T' is not assignable to type '{ [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]'.
@@ -27,41 +33,43 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(105,5): error TS2
           Type 'T[keyof T] extends Function ? never : keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
             Type '{ [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
               Type 'T[keyof T] extends Function ? never : keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-                Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(111,5): error TS2322: Type 'keyof T' is not assignable to type '{ [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]'.
+                Type 'keyof T' is not assignable to type 'never'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(118,5): error TS2322: Type 'keyof T' is not assignable to type '{ [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]'.
   Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(112,5): error TS2322: Type '{ [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]' is not assignable to type '{ [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(119,5): error TS2322: Type '{ [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]' is not assignable to type '{ [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]'.
   Type 'T[keyof T] extends Function ? never : keyof T' is not assignable to type '{ [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]'.
     Type 'keyof T' is not assignable to type '{ [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]'.
       Type 'T[keyof T] extends Function ? never : keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
         Type '{ [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
           Type 'T[keyof T] extends Function ? never : keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-            Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(113,5): error TS2322: Type 'keyof T' is not assignable to type '{ [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]'.
+            Type 'keyof T' is not assignable to type 'never'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(120,5): error TS2322: Type 'keyof T' is not assignable to type '{ [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]'.
   Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(114,5): error TS2322: Type '{ [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]' is not assignable to type '{ [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(121,5): error TS2322: Type '{ [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]' is not assignable to type '{ [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]'.
   Type 'T[keyof T] extends Function ? keyof T : never' is not assignable to type '{ [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]'.
     Type 'keyof T' is not assignable to type '{ [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]'.
       Type 'T[keyof T] extends Function ? keyof T : never' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
         Type '{ [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
           Type 'T[keyof T] extends Function ? keyof T : never' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-            Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(131,10): error TS2540: Cannot assign to 'id' because it is a constant or a read-only property.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(132,5): error TS2542: Index signature in type 'DeepReadonlyArray<Part>' only permits reading.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(133,22): error TS2540: Cannot assign to 'id' because it is a constant or a read-only property.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(134,10): error TS2339: Property 'updatePart' does not exist on type 'DeepReadonlyObject<Part>'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(156,5): error TS2322: Type 'ZeroOf<T>' is not assignable to type 'T'.
+            Type 'keyof T' is not assignable to type 'never'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(138,10): error TS2540: Cannot assign to 'id' because it is a constant or a read-only property.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(139,5): error TS2542: Index signature in type 'DeepReadonlyArray<Part>' only permits reading.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(140,22): error TS2540: Cannot assign to 'id' because it is a constant or a read-only property.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(141,10): error TS2339: Property 'updatePart' does not exist on type 'DeepReadonlyObject<Part>'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(163,5): error TS2322: Type 'ZeroOf<T>' is not assignable to type 'T'.
   Type '0 | (T extends string ? "" : false)' is not assignable to type 'T'.
     Type '0' is not assignable to type 'T'.
       Type '"" | 0' is not assignable to type 'T'.
         Type '""' is not assignable to type 'T'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(157,5): error TS2322: Type 'T' is not assignable to type 'ZeroOf<T>'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(164,5): error TS2322: Type 'T' is not assignable to type 'ZeroOf<T>'.
   Type 'string | number' is not assignable to type 'ZeroOf<T>'.
     Type 'string' is not assignable to type 'ZeroOf<T>'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(247,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'Foo<T & U>'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(254,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'Foo<T & U>'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(279,43): error TS2322: Type 'T95<U>' is not assignable to type 'T94<U>'.
+  Type 'boolean' is not assignable to type 'true'.
 
 
-==== tests/cases/conformance/types/conditional/conditionalTypes1.ts (19 errors) ====
+==== tests/cases/conformance/types/conditional/conditionalTypes1.ts (22 errors) ====
     type Diff<T, U> = T extends U ? never : T;
     type Filter<T, U> = T extends U ? T : never;
     type NonNullable<T> = Diff<T, null | undefined>;
@@ -106,6 +114,21 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(247,9): error TS2
 !!! error TS2322:     Type 'undefined' is not assignable to type 'Diff<Partial<T>[keyof T], null | undefined>'.
     }
     
+    function f4<T extends { x: string | undefined }>(x: T["x"], y: NonNullable<T["x"]>) {
+        x = y;
+        y = x;  // Error
+        ~
+!!! error TS2322: Type 'T["x"]' is not assignable to type 'Diff<T["x"], null | undefined>'.
+!!! error TS2322:   Type 'string | undefined' is not assignable to type 'Diff<T["x"], null | undefined>'.
+!!! error TS2322:     Type 'undefined' is not assignable to type 'Diff<T["x"], null | undefined>'.
+        let s1: string = x;  // Error
+            ~~
+!!! error TS2322: Type 'T["x"]' is not assignable to type 'string'.
+!!! error TS2322:   Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:     Type 'undefined' is not assignable to type 'string'.
+        let s2: string = y;
+    }
+    
     type Options = { k: "a", a: number } | { k: "b", b: string } | { k: "c", c: boolean };
     
     type T10 = Diff<Options, { k: "a" | "b" }>;  // { k: "c", c: boolean }
@@ -117,8 +140,8 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(247,9): error TS2
     type T14 = Diff<Options, { q: "a" }>;  // Options
     type T15 = Filter<Options, { q: "a" }>;  // never
     
-    declare function f4<T extends Options, K extends string>(p: K): Filter<T, { k: K }>;
-    let x0 = f4("a");  // { k: "a", a: number }
+    declare function f5<T extends Options, K extends string>(p: K): Filter<T, { k: K }>;
+    let x0 = f5("a");  // { k: "a", a: number }
     
     type OptionsOfKind<K extends Options["k"]> = Filter<Options, { k: K }>;
     
@@ -192,7 +215,7 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(247,9): error TS2
 !!! error TS2322:           Type 'T[keyof T] extends Function ? keyof T : never' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
 !!! error TS2322:             Type '{ [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
 !!! error TS2322:               Type 'T[keyof T] extends Function ? keyof T : never' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-!!! error TS2322:                 Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
+!!! error TS2322:                 Type 'keyof T' is not assignable to type 'never'.
         z = x;
         z = y;  // Error
         ~
@@ -204,7 +227,7 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(247,9): error TS2
 !!! error TS2322:           Type 'T[keyof T] extends Function ? never : keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
 !!! error TS2322:             Type '{ [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
 !!! error TS2322:               Type 'T[keyof T] extends Function ? never : keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-!!! error TS2322:                 Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
+!!! error TS2322:                 Type 'keyof T' is not assignable to type 'never'.
     }
     
     function f8<T>(x: keyof T, y: FunctionPropertyNames<T>, z: NonFunctionPropertyNames<T>) {
@@ -222,7 +245,7 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(247,9): error TS2
 !!! error TS2322:       Type 'T[keyof T] extends Function ? never : keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
 !!! error TS2322:         Type '{ [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
 !!! error TS2322:           Type 'T[keyof T] extends Function ? never : keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-!!! error TS2322:             Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
+!!! error TS2322:             Type 'keyof T' is not assignable to type 'never'.
         z = x;  // Error
         ~
 !!! error TS2322: Type 'keyof T' is not assignable to type '{ [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]'.
@@ -235,7 +258,7 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(247,9): error TS2
 !!! error TS2322:       Type 'T[keyof T] extends Function ? keyof T : never' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
 !!! error TS2322:         Type '{ [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
 !!! error TS2322:           Type 'T[keyof T] extends Function ? keyof T : never' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-!!! error TS2322:             Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
+!!! error TS2322:             Type 'keyof T' is not assignable to type 'never'.
     }
     
     type DeepReadonly<T> =
@@ -397,4 +420,24 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(247,9): error TS2
         var z: T1;
         var z: T2;
     }
+    
+    // Repro from #21823
+    
+    type T90<T> = T extends 0 ? 0 : () => 0;
+    type T91<T> = T extends 0 ? 0 : () => 0;
+    const f40 = <U>(a: T90<U>): T91<U> => a;
+    const f41 = <U>(a: T91<U>): T90<U> => a;
+    
+    type T92<T> = T extends () => 0 ? () => 1 : () => 2;
+    type T93<T> = T extends () => 0 ? () => 1 : () => 2;
+    const f42 = <U>(a: T92<U>): T93<U> => a;
+    const f43 = <U>(a: T93<U>): T92<U> => a;
+    
+    type T94<T> = T extends string ? true : 42;
+    type T95<T> = T extends string ? boolean : number;
+    const f44 = <U>(value: T94<U>): T95<U> => value;
+    const f45 = <U>(value: T95<U>): T94<U> => value;  // Error
+                                              ~~~~~
+!!! error TS2322: Type 'T95<U>' is not assignable to type 'T94<U>'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'true'.
     
