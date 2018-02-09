@@ -182,6 +182,10 @@ namespace ts.server.typingsInstaller {
                 }
                 if (npmConfig.devDependencies && npmLock.dependencies) {
                     for (const key in npmConfig.devDependencies) {
+                        if (!hasProperty(npmLock.dependencies, key)) {
+                            // if package in package.json but not package-lock.json, skip adding to cache so it is reinstalled on next use
+                            continue;
+                        }
                         // key is @types/<package name>
                         const packageName = getBaseFileName(key);
                         if (!packageName) {
