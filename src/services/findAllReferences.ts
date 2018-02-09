@@ -914,7 +914,8 @@ namespace ts.FindAllReferences.Core {
 
         // At `export { x } from "foo"`, also search for the imported symbol `"foo".x`.
         if (search.comingFrom !== ImportExport.Export && exportDeclaration.moduleSpecifier && !propertyName) {
-            searchForImportedSymbol(state.checker.getExportSpecifierLocalTargetSymbol(exportSpecifier), state);
+            const imported = state.checker.getExportSpecifierLocalTargetSymbol(exportSpecifier);
+            if (imported) searchForImportedSymbol(imported, state);
         }
 
         function addRef() {
@@ -923,7 +924,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function getLocalSymbolForExportSpecifier(referenceLocation: Identifier, referenceSymbol: Symbol, exportSpecifier: ExportSpecifier, checker: TypeChecker): Symbol {
-        return isExportSpecifierAlias(referenceLocation, exportSpecifier) ? checker.getExportSpecifierLocalTargetSymbol(exportSpecifier) : referenceSymbol;
+        return isExportSpecifierAlias(referenceLocation, exportSpecifier) && checker.getExportSpecifierLocalTargetSymbol(exportSpecifier) || referenceSymbol;
     }
 
     function isExportSpecifierAlias(referenceLocation: Identifier, exportSpecifier: ExportSpecifier): boolean {
