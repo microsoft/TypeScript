@@ -222,6 +222,22 @@ namespace ts.server.typingsInstaller {
         });
     }
 
+    // Duplicate of the same function in utilities.ts, but we don't want dependencies to keep typingsInstaller.js small
+    function forEachAncestorDirectory<T>(directory: string, callback: (directory: string) => T | undefined): T | undefined {
+        while (true) {
+            const result = callback(directory);
+            if (result !== undefined) {
+                return result;
+            }
+
+            const parentPath = getDirectoryPath(directory);
+            if (parentPath === directory) {
+                return undefined;
+            }
+            directory = parentPath;
+        }
+    }
+
     const logFilePath = findArgument(server.Arguments.LogFile);
     const globalTypingsCacheLocation = findArgument(server.Arguments.GlobalCacheLocation);
     const typingSafeListLocation = findArgument(server.Arguments.TypingSafeListLocation);
