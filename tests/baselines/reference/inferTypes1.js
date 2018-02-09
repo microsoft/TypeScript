@@ -13,8 +13,6 @@ type T04 = Unpacked<Unpacked<Promise<string>[]>>;  // string
 type T05 = Unpacked<any>;  // any
 type T06 = Unpacked<never>;  // never
 
-type ReturnType<T extends Function> = T extends ((...args: any[]) => infer R) | (new (...args: any[]) => infer R) ? R : any;
-
 function f1(s: string) {
     return { a: 1, b: s };
 }
@@ -29,11 +27,16 @@ type T11 = ReturnType<(s: string) => void>;  // void
 type T12 = ReturnType<(<T>() => T)>;  // {}
 type T13 = ReturnType<(<T extends U, U extends number[]>() => T)>;  // number[]
 type T14 = ReturnType<typeof f1>;  // { a: number, b: string }
-type T15 = ReturnType<typeof C>;  // C
-type T16 = ReturnType<any>;  // any
-type T17 = ReturnType<never>;  // any
-type T18 = ReturnType<string>;  // Error
-type T19 = ReturnType<Function>;  // any
+type T15 = ReturnType<any>;  // any
+type T16 = ReturnType<never>;  // any
+type T17 = ReturnType<string>;  // Error
+type T18 = ReturnType<Function>;  // Error
+
+type U10 = InstanceType<typeof C>;  // C
+type U11 = InstanceType<any>;  // any
+type U12 = InstanceType<never>;  // any
+type U13 = InstanceType<string>;  // Error
+type U14 = InstanceType<Function>;  // Error
 
 type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A : any;
 
