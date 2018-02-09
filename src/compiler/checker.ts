@@ -4359,13 +4359,17 @@ namespace ts {
                 if (isInJavaScriptFile(declaration) && isJSDocPropertyLikeTag(declaration) && declaration.typeExpression) {
                     return links.type = getTypeFromTypeNode(declaration.typeExpression.type);
                 }
-                if (isInJavaScriptFile(declaration) && isDeclarationOfDefaultedJavascriptContainerExpression(symbol)) {
+                if (isInJavaScriptFile(declaration) && isDeclarationOfDefaultedJavascriptContainerExpression(declaration)) {
                     // !!! (probably out of place, probably not the right function to call)
                     return links.type = checkExpression(((declaration as VariableDeclaration).initializer as BinaryExpression).right);
                 }
-                if (isInJavaScriptFile(declaration) && isAssignmentOfDefaultedJavascriptContainerExpression(symbol)) {
+                if (isInJavaScriptFile(declaration) && isAssignmentOfDefaultedJavascriptContainerExpression(declaration.parent)) {
                     // !!! (probably out of place, probably not the right function to call)
                     return links.type = checkExpression(((declaration.parent as BinaryExpression).right as BinaryExpression).right);
+                }
+                // TODO: Not sure this is needed (probably, but I need to write a test case for it)
+                if (isInJavaScriptFile(declaration) && isAssignmentOfJavascriptContainerExpression(declaration)) {
+                    return links.type = checkExpression((declaration.parent as BinaryExpression).right);
                 }
                 // Handle variable, parameter or property
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
@@ -14105,9 +14109,10 @@ namespace ts {
                     return node === right && isContextSensitiveAssignment(binaryExpression) ? getTypeOfExpression(left) : undefined;
                 case SyntaxKind.BarBarToken:
                     // When an || expression has a contextual type, the operands are contextually typed by that type. When an ||
-                    // expression has no contextual type, the right operand is contextually typed by the type of the left operand.
+                    // expression has no contextual type, the right operand is contextually typed by the type of the left operand,
+                    // except for the special case of Javascript declarations of the form `namespace.prop = namespace.prop || {}`
                     const type = getContextualType(binaryExpression);
-                    return !type && node === right ? getTypeOfExpression(left, /*cache*/ true) : type;
+                    return !type && node === right && !isDeclarationOfDefaultedJavascriptContainerExpression(binaryExpression.parent) && !isAssignmentOfDefaultedJavascriptContainerExpression(binaryExpression.parent) ? getTypeOfExpression(left, /*cache*/ true) : type;
                 case SyntaxKind.AmpersandAmpersandToken:
                 case SyntaxKind.CommaToken:
                     return node === right ? getContextualType(binaryExpression) : undefined;
@@ -14755,7 +14760,7 @@ namespace ts {
             const isInJSFile = isInJavaScriptFile(node);
             // TODO: Might need to skip if isDeclarationOfDefaultedJavascriptContainerExpression(node.parent.parent) instead of just checking node.properties.length > 0
             // (actually, it would be better not to skip contextual typing at all, but to do that I need to avoid the checking loop another way)
-            const contextualType = (!isInJSFile || node.properties.length > 0) && getApparentTypeOfContextualType(node);
+            const contextualType = getApparentTypeOfContextualType(node);
             const contextualTypeHasPattern = contextualType && contextualType.pattern &&
                 (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
             const isJSObjectLiteral = !contextualType && isInJSFile;

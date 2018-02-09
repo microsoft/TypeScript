@@ -64,7 +64,21 @@ my.predicate.query.result = 'none'
 >query : Symbol(query, Decl(a.js, 10, 34))
 >result : Symbol((Anonymous function).result, Decl(a.js, 15, 33))
 
-// my.predicate.sort = my.predicate.sort || function (first, second) {
-    // return first;
-// }
+my.predicate.sort = my.predicate.sort || function (first, second) {
+>my.predicate.sort : Symbol(sort, Decl(a.js, 16, 34))
+>my.predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
+>my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
+>predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
+>sort : Symbol(sort, Decl(a.js, 16, 34))
+>my.predicate.sort : Symbol(sort, Decl(a.js, 16, 34))
+>my.predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
+>my : Symbol(my, Decl(a.js, 4, 3), Decl(a.js, 4, 18))
+>predicate : Symbol(predicate, Decl(a.js, 9, 10), Decl(a.js, 10, 34))
+>sort : Symbol(sort, Decl(a.js, 16, 34))
+>first : Symbol(first, Decl(a.js, 17, 51))
+>second : Symbol(second, Decl(a.js, 17, 57))
+
+    return first;
+>first : Symbol(first, Decl(a.js, 17, 51))
+}
 

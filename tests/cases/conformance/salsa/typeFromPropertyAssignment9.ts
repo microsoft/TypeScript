@@ -21,6 +21,6 @@ my.predicate.query = function () {
 };
 var q = new my.predicate.query();
 my.predicate.query.result = 'none'
-// my.predicate.sort = my.predicate.sort || function (first, second) {
-    // return first;
-// }
+my.predicate.sort = my.predicate.sort || function (first, second) {
+    return first;
+}

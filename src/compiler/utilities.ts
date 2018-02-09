@@ -1490,52 +1490,58 @@ namespace ts {
      * Returns true if the node is a variable declaration whose initializer is a function or class expression, or an empty object literal.
      * This function does not test if the node is in a JavaScript file or not.
      */
-    export function isDeclarationOfJavascriptContainerExpression(s: Symbol) {
-        return s.valueDeclaration &&
-            isVariableDeclaration(s.valueDeclaration) &&
-            s.valueDeclaration.initializer &&
-            (s.valueDeclaration.initializer.kind === SyntaxKind.FunctionExpression ||
-             s.valueDeclaration.initializer.kind === SyntaxKind.ClassExpression ||
-             isObjectLiteralExpression(s.valueDeclaration.initializer) && s.valueDeclaration.initializer.properties.length === 0);
+    export function isDeclarationOfJavascriptContainerExpression(node: Node): node is VariableDeclaration {
+        return node &&
+            isVariableDeclaration(node) &&
+            node.initializer &&
+            isJavascriptContainerExpression(node.initializer);
     }
 
-    export function isDeclarationOfDefaultedJavascriptContainerExpression(s: Symbol) {
-        return s.valueDeclaration &&
-            isVariableDeclaration(s.valueDeclaration) &&
-            s.valueDeclaration.initializer &&
-            isBinaryExpression(s.valueDeclaration.initializer) &&
-            isIdentifier(s.valueDeclaration.initializer.left) &&
-            isIdentifier(s.valueDeclaration.name) &&
-            s.valueDeclaration.initializer.left.escapedText === s.valueDeclaration.name.escapedText &&
-            // TODO: Should still probably be isJavascriptContainerExpression
-            isObjectLiteralExpression(s.valueDeclaration.initializer.right) &&
-            s.valueDeclaration.initializer.right.properties.length === 0;
+    function isJavascriptContainerExpression(e: Expression) {
+        return e.kind === SyntaxKind.FunctionExpression ||
+            e.kind === SyntaxKind.ClassExpression ||
+            isObjectLiteralExpression(e) && e.properties.length === 0;
     }
 
-    export function isAssignmentOfJavascriptContainerExpression(s: Symbol) {
-        return s.valueDeclaration &&
-            isPropertyAccessExpression(s.valueDeclaration) &&
-            isBinaryExpression(s.valueDeclaration.parent) &&
-            s.valueDeclaration.parent.right &&
-            (s.valueDeclaration.parent.right.kind === SyntaxKind.FunctionExpression ||
-             s.valueDeclaration.parent.right.kind === SyntaxKind.ClassExpression ||
-             isObjectLiteralExpression(s.valueDeclaration.parent.right) && s.valueDeclaration.parent.right.properties.length === 0);
+    export function isDeclarationOfDefaultedJavascriptContainerExpression(node: Node): node is VariableDeclaration {
+        return node &&
+            isVariableDeclaration(node) &&
+            node.initializer &&
+            isBinaryExpression(node.initializer) &&
+            // TODO: This will have to change for `var my = window.my || {}`;
+            isIdentifier(node.initializer.left) &&
+            isIdentifier(node.name) &&
+            node.initializer.left.escapedText === node.name.escapedText &&
+            isJavascriptContainerExpression(node.initializer.right);
     }
 
-    export function isAssignmentOfDefaultedJavascriptContainerExpression(s: Symbol) {
-        return s.valueDeclaration &&
-            isPropertyAccessExpression(s.valueDeclaration) &&
-            isBinaryExpression(s.valueDeclaration.parent) &&
-            s.valueDeclaration.parent.right &&
-            isBinaryExpression(s.valueDeclaration.parent.right) &&
-            isPropertyAccessExpression(s.valueDeclaration.parent.right.left) &&
-            isIdentifier(s.valueDeclaration.parent.right.left.expression) &&
-            isPropertyAccessExpression(s.valueDeclaration.parent.left) &&
-            isIdentifier(s.valueDeclaration.parent.left.expression) &&
-            s.valueDeclaration.parent.right.left.expression.escapedText === s.valueDeclaration.parent.left.expression.escapedText &&
-            s.valueDeclaration.parent.right.left.name.escapedText === s.valueDeclaration.parent.left.name.escapedText &&
-            isObjectLiteralExpression(s.valueDeclaration.parent.right.right) &&
-            s.valueDeclaration.parent.right.right.properties.length === 0;
+    export function isAssignmentOfJavascriptContainerExpression(node: Node) {
+        return node &&
+            isPropertyAccessExpression(node) &&
+            isBinaryExpression(node.parent) &&
+            node.parent.right &&
+            isJavascriptContainerExpression(node.parent.right);
+    }
+
+    export function isAssignmentOfDefaultedJavascriptContainerExpression(node: Node) {
+        // or ... uh ... maybe not? usage is pretty inconvenient
+        // (changing what is the declaration might instead be the right answer)
+        return node &&
+            isBinaryExpression(node) &&
+            node.right &&
+            isBinaryExpression(node.right) &&
+            isSameName(node.left as EntityNameExpression, node.right.left as EntityNameExpression) &&
+            isJavascriptContainerExpression(node.right.right);
+    }
+
+    function isSameName(left: EntityNameExpression, right: EntityNameExpression): boolean {
+        if (isIdentifier(left) && isIdentifier(right)) {
+            return left.escapedText === right.escapedText;
+        }
+        if (isPropertyAccessExpression(left) && isPropertyAccessExpression(right)) {
+            return left.name.escapedText === right.name.escapedText && isSameName(left.expression, right.expression);
+        }
+        return false;
     }
 
     export function getRightMostAssignedExpression(node: Expression): Expression {

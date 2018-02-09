@@ -2353,7 +2353,7 @@ namespace ts {
             }
             else if ((node.expression.kind === SyntaxKind.Identifier || node.expression.kind === SyntaxKind.PropertyAccessExpression) &&
                 node.parent.parent.kind === SyntaxKind.SourceFile) {
-                bindStaticPropertyAssignment(node);
+                bindStaticPropertyAssignment(node as PropertyAccessEntityNameExpression);
             }
         }
 
@@ -2362,8 +2362,8 @@ namespace ts {
 
             // Look up the function in the local scope, since prototype assignments should
             // follow the function declaration
-            const leftSideOfAssignment = node.left as PropertyAccessExpression;
-            const classPrototype = leftSideOfAssignment.expression as PropertyAccessExpression;
+            const leftSideOfAssignment = node.left as PropertyAccessEntityNameExpression;
+            const classPrototype = leftSideOfAssignment.expression as PropertyAccessEntityNameExpression;
             const constructorFunction = classPrototype.expression as Identifier;
 
             // Fix up parent pointers since we're going to use these nodes before we bind into them
@@ -2376,7 +2376,7 @@ namespace ts {
 
 
         function bindStaticBinaryExpressionAssignment(node: BinaryExpression) {
-            const lhs = node.left as PropertyAccessExpression;
+            const lhs = node.left as PropertyAccessEntityNameExpression;
             lhs.parent = node;
             if (isIdentifier(lhs.expression) && container === file && isNameOfExportsOrModuleExportsAliasDeclaration(file, lhs.expression)) {
                 // This can be an alias for the 'exports' or 'module.exports' names, e.g.
@@ -2392,35 +2392,35 @@ namespace ts {
          * For nodes like `x.y = z`, declare a member 'y' on 'x' if x is a function or class or {}, or not declared.
          * Also works for expression statements preceded by JSDoc, like / ** @type number * / x.y;
          */
-        function bindStaticPropertyAssignment(node: PropertyAccessExpression) {
+        function bindStaticPropertyAssignment(node: PropertyAccessEntityNameExpression) {
             // Fix up parent pointers since we're going to use these nodes before we bind into them
             node.expression.parent = node;
-            bindPropertyAssignment(node.expression as Identifier | PropertyAccessExpression, node, /*isPrototypeProperty*/ false);
+            bindPropertyAssignment(node.expression, node, /*isPrototypeProperty*/ false);
         }
 
-        function lookupSymbolForPropertyAccess(node: Identifier | PropertyAccessExpression): Symbol | undefined {
+        function lookupSymbolForPropertyAccess(node: EntityNameExpression): Symbol | undefined {
             if (isIdentifier(node)) {
                 return lookupSymbolForNameWorker(container, node.escapedText);
             }
             else {
-                let symbol = lookupSymbolForPropertyAccess(node.expression as Identifier | PropertyAccessExpression);
-                symbol = symbol && isDeclarationOfJavascriptContainerExpression(symbol) ? (symbol.valueDeclaration as VariableDeclaration).initializer.symbol :
-                    symbol && isDeclarationOfDefaultedJavascriptContainerExpression(symbol) ? ((symbol.valueDeclaration as VariableDeclaration).initializer as BinaryExpression).right.symbol :
-                    symbol && isAssignmentOfDefaultedJavascriptContainerExpression(symbol) ? (((symbol.valueDeclaration.parent as BinaryExpression).right as BinaryExpression).right as BinaryExpression).symbol :
-                    symbol && isAssignmentOfJavascriptContainerExpression(symbol) ? ((symbol.valueDeclaration.parent as BinaryExpression).right as BinaryExpression).symbol :
+                let symbol = lookupSymbolForPropertyAccess(node.expression);
+                symbol = symbol && isDeclarationOfJavascriptContainerExpression(symbol.valueDeclaration) ? (symbol.valueDeclaration as VariableDeclaration).initializer.symbol :
+                    symbol && isDeclarationOfDefaultedJavascriptContainerExpression(symbol.valueDeclaration) ? ((symbol.valueDeclaration as VariableDeclaration).initializer as BinaryExpression).right.symbol :
+                    symbol && isAssignmentOfDefaultedJavascriptContainerExpression(symbol.valueDeclaration.parent) ? (((symbol.valueDeclaration.parent as BinaryExpression).right as BinaryExpression).right as BinaryExpression).symbol :
+                    symbol && isAssignmentOfJavascriptContainerExpression(symbol.valueDeclaration) ? ((symbol.valueDeclaration.parent as BinaryExpression).right as BinaryExpression).symbol :
                     symbol;
                 return symbol && symbol.exports && symbol.exports.get(node.name.escapedText);
             }
         }
 
-        function bindPropertyAssignment(name: Identifier | PropertyAccessExpression, propertyAccess: PropertyAccessExpression, isPrototypeProperty: boolean) {
+        function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
             // Look up the property in the local scope, since property assignments should follow the declaration
             const symbol = lookupSymbolForPropertyAccess(name);
             // TODO: Should be able to structure this with less duplication
-            let targetSymbol = symbol && isDeclarationOfJavascriptContainerExpression(symbol) ? (symbol.valueDeclaration as VariableDeclaration).initializer.symbol :
-                symbol && isDeclarationOfDefaultedJavascriptContainerExpression(symbol) ? ((symbol.valueDeclaration as VariableDeclaration).initializer as BinaryExpression).right.symbol :
-                symbol && isAssignmentOfDefaultedJavascriptContainerExpression(symbol) ? (((symbol.valueDeclaration.parent as BinaryExpression).right as BinaryExpression).right as BinaryExpression).symbol :
-                symbol && isAssignmentOfJavascriptContainerExpression(symbol) ? ((symbol.valueDeclaration.parent as BinaryExpression).right as BinaryExpression).symbol :
+            let targetSymbol = symbol && isDeclarationOfJavascriptContainerExpression(symbol.valueDeclaration) ? (symbol.valueDeclaration as VariableDeclaration).initializer.symbol :
+                symbol && isDeclarationOfDefaultedJavascriptContainerExpression(symbol.valueDeclaration) ? ((symbol.valueDeclaration as VariableDeclaration).initializer as BinaryExpression).right.symbol :
+                symbol && isAssignmentOfDefaultedJavascriptContainerExpression(symbol.valueDeclaration.parent) ? (((symbol.valueDeclaration.parent as BinaryExpression).right as BinaryExpression).right as BinaryExpression).symbol :
+                symbol && isAssignmentOfJavascriptContainerExpression(symbol.valueDeclaration) ? ((symbol.valueDeclaration.parent as BinaryExpression).right as BinaryExpression).symbol :
                 symbol;
             Debug.assert(propertyAccess.parent.kind === SyntaxKind.BinaryExpression ||
                          propertyAccess.parent.kind === SyntaxKind.ExpressionStatement ||
@@ -2435,7 +2435,8 @@ namespace ts {
                 isLegalPosition = propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
             }
             if (!isPrototypeProperty && (!targetSymbol || !(targetSymbol.flags & SymbolFlags.Namespace)) && isLegalPosition) {
-                const identifier = isIdentifier(propertyAccess.expression) ? propertyAccess.expression : (propertyAccess.expression as PropertyAccessExpression).expression as Identifier;
+                const identifier = isIdentifier(propertyAccess.expression) ? propertyAccess.expression : isIdentifier(propertyAccess.expression.expression) && propertyAccess.expression.expression;
+                Debug.assert(identifier !== undefined);
                 const flags = SymbolFlags.Module | SymbolFlags.JSContainer;
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.JSContainer;
                 if (targetSymbol) {
