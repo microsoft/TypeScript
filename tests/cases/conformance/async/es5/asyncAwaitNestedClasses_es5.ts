@@ -5,7 +5,7 @@
 class A {
     static B = class B {
         static func2(): Promise<void> {
-            return new Promise((resolve) => { resolve(null); });
+            return new Promise((resolve) => { resolve(); });
         }
         static C = class C {
             static async func() {
