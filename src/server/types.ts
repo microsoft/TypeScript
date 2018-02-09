@@ -75,7 +75,7 @@ declare namespace ts.server {
     /* @internal */
     export interface TypesRegistryResponse extends TypingInstallerResponse {
         readonly kind: EventTypesRegistry;
-        readonly typesRegistry: MapLike<void>;
+        readonly typesRegistry: MapLike<MapLike<string>>;
     }
 
     export interface PackageInstalledResponse extends ProjectResponse {
