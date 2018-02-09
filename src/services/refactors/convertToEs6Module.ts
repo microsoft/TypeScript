@@ -33,8 +33,8 @@ namespace ts.refactor {
                 return isExportsOrModuleExportsOrAlias(sourceFile, node as PropertyAccessExpression)
                     || isExportsOrModuleExportsOrAlias(sourceFile, (node as PropertyAccessExpression).expression);
             case SyntaxKind.VariableDeclarationList:
-                const decl = (node as VariableDeclarationList).declarations[0];
-                return isExportsOrModuleExportsOrAlias(sourceFile, decl.initializer);
+                const decl = firstOrUndefined((node as VariableDeclarationList).declarations);
+                return !!decl && isExportsOrModuleExportsOrAlias(sourceFile, decl.initializer);
             case SyntaxKind.VariableDeclaration:
                 return isExportsOrModuleExportsOrAlias(sourceFile, (node as VariableDeclaration).initializer);
             default:
