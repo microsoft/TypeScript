@@ -443,6 +443,128 @@ namespace ts.textChanges {
             throw Debug.failBadSyntaxKind(node); // We haven't handled this kind of node yet -- add it
         }
 
+        private insertNodeInListAfterNotLast(sourceFile: SourceFile, containingList: NodeArray<Node>, nextToken: Node, index: number, newNode: Node): void {
+            // for list
+            // a, b, c
+            // create change for adding 'e' after 'a' as
+            // - find start of next element after a (it is b)
+            // - use this start as start and end position in final change
+            // - build text of change by formatting the text of node + separator + whitespace trivia of b
+
+            // in multiline case it will work as
+            //   a,
+            //   b,
+            //   c,
+            // result - '*' denotes leading trivia that will be inserted after new text (displayed as '#')
+            //   a,*
+            // ***insertedtext<separator>#
+            // ###b,
+            //   c,
+            // find line and character of the next element
+            const lineAndCharOfNextElement = getLineAndCharacterOfPosition(sourceFile, skipWhitespacesAndLineBreaks(sourceFile.text, containingList[index + 1].getFullStart()));
+            // find line and character of the token that precedes next element (usually it is separator)
+            const lineAndCharOfNextToken = getLineAndCharacterOfPosition(sourceFile, nextToken.end);
+            let prefix: string;
+            let startPos: number;
+            if (lineAndCharOfNextToken.line === lineAndCharOfNextElement.line) {
+                // next element is located on the same line with separator:
+                // a,$$$$b
+                //  ^    ^
+                //  |    |-next element
+                //  |-separator
+                // where $$$ is some leading trivia
+                // for a newly inserted node we'll maintain the same relative position comparing to separator and replace leading trivia with spaces
+                // a,    x,$$$$b
+                //  ^    ^     ^
+                //  |    |     |-next element
+                //  |    |-new inserted node padded with spaces
+                //  |-separator
+                startPos = nextToken.end;
+                prefix = spaces(lineAndCharOfNextElement.character - lineAndCharOfNextToken.character);
+            }
+            else {
+                // next element is located on different line that separator
+                // let insert position be the beginning of the line that contains next element
+                startPos = getStartPositionOfLine(lineAndCharOfNextElement.line, sourceFile);
+            }
+
+            this.changes.push({
+                kind: ChangeKind.ReplaceWithSingleNode,
+                sourceFile,
+                range: { pos: startPos, end: containingList[index + 1].getStart(sourceFile) },
+                node: newNode,
+                options: {
+                    prefix,
+                    // write separator and leading trivia of the next element as suffix
+                    suffix: `${tokenToString(nextToken.kind)}${sourceFile.text.substring(nextToken.end, containingList[index + 1].getStart(sourceFile))}`
+                }
+            });
+        }
+
+        private insertNodeInListAfterLast(sourceFile: SourceFile, containingList: NodeArray<Node>, after: Node, end: number, index: number, newNode: Node): void {
+            const afterStart = after.getStart(sourceFile);
+            const afterStartLinePosition = getLineStartPositionForPosition(afterStart, sourceFile);
+
+            let separator: SyntaxKind.CommaToken | SyntaxKind.SemicolonToken;
+            let multilineList = false;
+
+            // insert element after the last element in the list that has more than one item
+            // pick the element preceding the after element to:
+            // - pick the separator
+            // - determine if list is a multiline
+            if (containingList.length === 1) {
+                // if list has only one element then we'll format is as multiline if node has comment in trailing trivia, or as singleline otherwise
+                // i.e. var x = 1 // this is x
+                //     | new element will be inserted at this position
+                separator = SyntaxKind.CommaToken;
+            }
+            else {
+                // element has more than one element, pick separator from the list
+                const tokenBeforeInsertPosition = findPrecedingToken(after.pos, sourceFile);
+                separator = isSeparator(after, tokenBeforeInsertPosition) ? tokenBeforeInsertPosition.kind : SyntaxKind.CommaToken;
+                // determine if list is multiline by checking lines of after element and element that precedes it.
+                const afterMinusOneStartLinePosition = getLineStartPositionForPosition(containingList[index - 1].getStart(sourceFile), sourceFile);
+                multilineList = afterMinusOneStartLinePosition !== afterStartLinePosition;
+            }
+            if (hasCommentsBeforeLineBreak(sourceFile.text, after.end)) {
+                // in this case we'll always treat containing list as multiline
+                multilineList = true;
+            }
+            if (multilineList) {
+                // insert separator immediately following the 'after' node to preserve comments in trailing trivia
+                this.changes.push({
+                    kind: ChangeKind.ReplaceWithSingleNode,
+                    sourceFile,
+                    range: { pos: end, end },
+                    node: createToken(separator),
+                    options: {}
+                });
+                // use the same indentation as 'after' item
+                const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(afterStartLinePosition, afterStart, sourceFile, this.formatContext.options);
+                // insert element before the line break on the line that contains 'after' element
+                let insertPos = skipTrivia(sourceFile.text, end, /*stopAfterLineBreak*/ true, /*stopAtComments*/ false);
+                if (insertPos !== end && isLineBreak(sourceFile.text.charCodeAt(insertPos - 1))) {
+                    insertPos--;
+                }
+                this.changes.push({
+                    kind: ChangeKind.ReplaceWithSingleNode,
+                    sourceFile,
+                    range: { pos: insertPos, end: insertPos },
+                    node: newNode,
+                    options: { indentation, prefix: this.newLineCharacter }
+                });
+            }
+            else {
+                this.changes.push({
+                    kind: ChangeKind.ReplaceWithSingleNode,
+                    sourceFile,
+                    range: { pos: end, end },
+                    node: newNode,
+                    options: { prefix: `${tokenToString(separator)} ` }
+                });
+            }
+        }
+
         /**
          * This function should be used to insert nodes in lists when nodes don't carry separators as the part of the node range,
          * i.e. arguments in arguments lists, parameters in parameter lists etc.
@@ -464,125 +586,11 @@ namespace ts.textChanges {
                 // use next sibling as an anchor
                 const nextToken = getTokenAtPosition(sourceFile, after.end, /*includeJsDocComment*/ false);
                 if (nextToken && isSeparator(after, nextToken)) {
-                    // for list
-                    // a, b, c
-                    // create change for adding 'e' after 'a' as
-                    // - find start of next element after a (it is b)
-                    // - use this start as start and end position in final change
-                    // - build text of change by formatting the text of node + separator + whitespace trivia of b
-
-                    // in multiline case it will work as
-                    //   a,
-                    //   b,
-                    //   c,
-                    // result - '*' denotes leading trivia that will be inserted after new text (displayed as '#')
-                    //   a,*
-                    // ***insertedtext<separator>#
-                    // ###b,
-                    //   c,
-                    // find line and character of the next element
-                    const lineAndCharOfNextElement = getLineAndCharacterOfPosition(sourceFile, skipWhitespacesAndLineBreaks(sourceFile.text, containingList[index + 1].getFullStart()));
-                    // find line and character of the token that precedes next element (usually it is separator)
-                    const lineAndCharOfNextToken = getLineAndCharacterOfPosition(sourceFile, nextToken.end);
-                    let prefix: string;
-                    let startPos: number;
-                    if (lineAndCharOfNextToken.line === lineAndCharOfNextElement.line) {
-                        // next element is located on the same line with separator:
-                        // a,$$$$b
-                        //  ^    ^
-                        //  |    |-next element
-                        //  |-separator
-                        // where $$$ is some leading trivia
-                        // for a newly inserted node we'll maintain the same relative position comparing to separator and replace leading trivia with spaces
-                        // a,    x,$$$$b
-                        //  ^    ^     ^
-                        //  |    |     |-next element
-                        //  |    |-new inserted node padded with spaces
-                        //  |-separator
-                        startPos = nextToken.end;
-                        prefix = spaces(lineAndCharOfNextElement.character - lineAndCharOfNextToken.character);
-                    }
-                    else {
-                        // next element is located on different line that separator
-                        // let insert position be the beginning of the line that contains next element
-                        startPos = getStartPositionOfLine(lineAndCharOfNextElement.line, sourceFile);
-                    }
-
-                    this.changes.push({
-                        kind: ChangeKind.ReplaceWithSingleNode,
-                        sourceFile,
-                        range: { pos: startPos, end: containingList[index + 1].getStart(sourceFile) },
-                        node: newNode,
-                        options: {
-                            prefix,
-                            // write separator and leading trivia of the next element as suffix
-                            suffix: `${tokenToString(nextToken.kind)}${sourceFile.text.substring(nextToken.end, containingList[index + 1].getStart(sourceFile))}`
-                        }
-                    });
+                    this.insertNodeInListAfterNotLast(sourceFile, containingList, nextToken, index, newNode);
                 }
             }
             else {
-                const afterStart = after.getStart(sourceFile);
-                const afterStartLinePosition = getLineStartPositionForPosition(afterStart, sourceFile);
-
-                let separator: SyntaxKind.CommaToken | SyntaxKind.SemicolonToken;
-                let multilineList = false;
-
-                // insert element after the last element in the list that has more than one item
-                // pick the element preceding the after element to:
-                // - pick the separator
-                // - determine if list is a multiline
-                if (containingList.length === 1) {
-                    // if list has only one element then we'll format is as multiline if node has comment in trailing trivia, or as singleline otherwise
-                    // i.e. var x = 1 // this is x
-                    //     | new element will be inserted at this position
-                    separator = SyntaxKind.CommaToken;
-                }
-                else {
-                    // element has more than one element, pick separator from the list
-                    const tokenBeforeInsertPosition = findPrecedingToken(after.pos, sourceFile);
-                    separator = isSeparator(after, tokenBeforeInsertPosition) ? tokenBeforeInsertPosition.kind : SyntaxKind.CommaToken;
-                    // determine if list is multiline by checking lines of after element and element that precedes it.
-                    const afterMinusOneStartLinePosition = getLineStartPositionForPosition(containingList[index - 1].getStart(sourceFile), sourceFile);
-                    multilineList = afterMinusOneStartLinePosition !== afterStartLinePosition;
-                }
-                if (hasCommentsBeforeLineBreak(sourceFile.text, after.end)) {
-                    // in this case we'll always treat containing list as multiline
-                    multilineList = true;
-                }
-                if (multilineList) {
-                    // insert separator immediately following the 'after' node to preserve comments in trailing trivia
-                    this.changes.push({
-                        kind: ChangeKind.ReplaceWithSingleNode,
-                        sourceFile,
-                        range: { pos: end, end },
-                        node: createToken(separator),
-                        options: {}
-                    });
-                    // use the same indentation as 'after' item
-                    const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(afterStartLinePosition, afterStart, sourceFile, this.formatContext.options);
-                    // insert element before the line break on the line that contains 'after' element
-                    let insertPos = skipTrivia(sourceFile.text, end, /*stopAfterLineBreak*/ true, /*stopAtComments*/ false);
-                    if (insertPos !== end && isLineBreak(sourceFile.text.charCodeAt(insertPos - 1))) {
-                        insertPos--;
-                    }
-                    this.changes.push({
-                        kind: ChangeKind.ReplaceWithSingleNode,
-                        sourceFile,
-                        range: { pos: insertPos, end: insertPos },
-                        node: newNode,
-                        options: { indentation, prefix: this.newLineCharacter }
-                    });
-                }
-                else {
-                    this.changes.push({
-                        kind: ChangeKind.ReplaceWithSingleNode,
-                        sourceFile,
-                        range: { pos: end, end },
-                        node: newNode,
-                        options: { prefix: `${tokenToString(separator)} ` }
-                    });
-                }
+                this.insertNodeInListAfterLast(sourceFile, containingList, after, end, index, newNode);
             }
             return this;
         }
