@@ -416,10 +416,16 @@ namespace ts.FindAllReferences.Core {
         }
 
         // If the symbol is declared as part of a declaration like `{ type: "a" } | { type: "b" }`, use the property on the union type to get more references.
-        return firstDefined(symbol.declarations, decl =>
-            isTypeLiteralNode(decl.parent) && isUnionTypeNode(decl.parent.parent)
+        return firstDefined(symbol.declarations, decl => {
+            if (!decl.parent) {
+                // Assertions for GH#21814. We should be handling SourceFile symbols in `getReferencedSymbolsForModule` instead of getting here.
+                Debug.assert(decl.kind === SyntaxKind.SourceFile);
+                Debug.fail(`Unexpected symbol at ${Debug.showSyntaxKind(node)}: ${Debug.showSymbol(symbol)}`);
+            }
+            return isTypeLiteralNode(decl.parent) && isUnionTypeNode(decl.parent.parent)
                 ? checker.getPropertyOfType(checker.getTypeFromTypeNode(decl.parent.parent), symbol.name)
-                : undefined) || symbol;
+                : undefined;
+        }) || symbol;
     }
 
     /**
@@ -914,7 +920,8 @@ namespace ts.FindAllReferences.Core {
 
         // At `export { x } from "foo"`, also search for the imported symbol `"foo".x`.
         if (search.comingFrom !== ImportExport.Export && exportDeclaration.moduleSpecifier && !propertyName) {
-            searchForImportedSymbol(state.checker.getExportSpecifierLocalTargetSymbol(exportSpecifier), state);
+            const imported = state.checker.getExportSpecifierLocalTargetSymbol(exportSpecifier);
+            if (imported) searchForImportedSymbol(imported, state);
         }
 
         function addRef() {
@@ -923,7 +930,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function getLocalSymbolForExportSpecifier(referenceLocation: Identifier, referenceSymbol: Symbol, exportSpecifier: ExportSpecifier, checker: TypeChecker): Symbol {
-        return isExportSpecifierAlias(referenceLocation, exportSpecifier) ? checker.getExportSpecifierLocalTargetSymbol(exportSpecifier) : referenceSymbol;
+        return isExportSpecifierAlias(referenceLocation, exportSpecifier) && checker.getExportSpecifierLocalTargetSymbol(exportSpecifier) || referenceSymbol;
     }
 
     function isExportSpecifierAlias(referenceLocation: Identifier, exportSpecifier: ExportSpecifier): boolean {

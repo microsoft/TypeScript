@@ -63,7 +63,7 @@ namespace ts.projectSystem {
             readonly globalTypingsCacheLocation: string,
             throttleLimit: number,
             installTypingHost: server.ServerHost,
-            readonly typesRegistry = createMap<void>(),
+            readonly typesRegistry = createMap<MapLike<string>>(),
             log?: TI.Log) {
             super(installTypingHost, globalTypingsCacheLocation, safeList.path, customTypesMap.path, throttleLimit, log);
         }
@@ -124,6 +124,25 @@ namespace ts.projectSystem {
             dependencies[typing] = "1.0.0";
         }
         return JSON.stringify({ dependencies });
+    }
+
+    export function createTypesRegistry(...list: string[]): Map<MapLike<string>> {
+        const versionMap = {
+            "latest": "1.3.0",
+            "ts2.0": "1.0.0",
+            "ts2.1": "1.0.0",
+            "ts2.2": "1.2.0",
+            "ts2.3": "1.3.0",
+            "ts2.4": "1.3.0",
+            "ts2.5": "1.3.0",
+            "ts2.6": "1.3.0",
+            "ts2.7": "1.3.0"
+        };
+        const map = createMap<MapLike<string>>();
+        for (const l of list) {
+            map.set(l, versionMap);
+        }
+        return map;
     }
 
     export function toExternalFile(fileName: string): protocol.ExternalFile {
@@ -6682,12 +6701,18 @@ namespace ts.projectSystem {
                     },
                 })
             };
+            const typingsCachePackageLockJson: FileOrFolder = {
+                path: `${typingsCache}/package-lock.json`,
+                content: JSON.stringify({
+                    dependencies: {
+                    },
+                })
+            };
 
-            const files = [file, packageJsonInCurrentDirectory, packageJsonOfPkgcurrentdirectory, indexOfPkgcurrentdirectory, typingsCachePackageJson];
+            const files = [file, packageJsonInCurrentDirectory, packageJsonOfPkgcurrentdirectory, indexOfPkgcurrentdirectory, typingsCachePackageJson, typingsCachePackageLockJson];
             const host = createServerHost(files, { currentDirectory });
 
-            const typesRegistry = createMap<void>();
-            typesRegistry.set("pkgcurrentdirectory", void 0);
+            const typesRegistry = createTypesRegistry("pkgcurrentdirectory");
             const typingsInstaller = new TestTypingsInstaller(typingsCache, /*throttleLimit*/ 5, host, typesRegistry);
 
             const projectService = createProjectService(host, { typingsInstaller });

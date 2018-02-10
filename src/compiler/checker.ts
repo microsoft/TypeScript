@@ -4406,7 +4406,7 @@ namespace ts {
                     type = getWidenedTypeForVariableLikeDeclaration(declaration, /*reportErrors*/ true);
                 }
                 else {
-                    Debug.fail("Unhandled declaration kind! " + (ts as any).SyntaxKind[declaration.kind]);
+                    Debug.fail("Unhandled declaration kind! " + Debug.showSyntaxKind(declaration));
                 }
 
                 if (!popTypeResolution()) {
@@ -20726,7 +20726,7 @@ namespace ts {
                     case SyntaxKind.ImportSpecifier: // https://github.com/Microsoft/TypeScript/pull/7591
                         return DeclarationSpaces.ExportValue;
                     default:
-                        Debug.fail((ts as any).SyntaxKind[d.kind]);
+                        Debug.fail(Debug.showSyntaxKind(d));
                 }
             }
         }

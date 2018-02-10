@@ -1,13 +1,9 @@
 //// [conditionalTypes1.ts]
-type Diff<T, U> = T extends U ? never : T;
-type Filter<T, U> = T extends U ? T : never;
-type NonNullable<T> = Diff<T, null | undefined>;
+type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "b" | "d"
+type T01 = Extract<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "a" | "c"
 
-type T00 = Diff<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "b" | "d"
-type T01 = Filter<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "a" | "c"
-
-type T02 = Diff<string | number | (() => void), Function>;  // string | number
-type T03 = Filter<string | number | (() => void), Function>;  // () => void
+type T02 = Exclude<string | number | (() => void), Function>;  // string | number
+type T03 = Extract<string | number | (() => void), Function>;  // () => void
 
 type T04 = NonNullable<string | number | undefined>;  // string | number
 type T05 = NonNullable<(() => string) | string[] | null | undefined>;  // (() => string) | string[]
@@ -38,23 +34,23 @@ function f4<T extends { x: string | undefined }>(x: T["x"], y: NonNullable<T["x"
 
 type Options = { k: "a", a: number } | { k: "b", b: string } | { k: "c", c: boolean };
 
-type T10 = Diff<Options, { k: "a" | "b" }>;  // { k: "c", c: boolean }
-type T11 = Filter<Options, { k: "a" | "b" }>;  // { k: "a", a: number } | { k: "b", b: string }
+type T10 = Exclude<Options, { k: "a" | "b" }>;  // { k: "c", c: boolean }
+type T11 = Extract<Options, { k: "a" | "b" }>;  // { k: "a", a: number } | { k: "b", b: string }
 
-type T12 = Diff<Options, { k: "a" } | { k: "b" }>;  // { k: "c", c: boolean }
-type T13 = Filter<Options, { k: "a" } | { k: "b" }>;  // { k: "a", a: number } | { k: "b", b: string }
+type T12 = Exclude<Options, { k: "a" } | { k: "b" }>;  // { k: "c", c: boolean }
+type T13 = Extract<Options, { k: "a" } | { k: "b" }>;  // { k: "a", a: number } | { k: "b", b: string }
 
-type T14 = Diff<Options, { q: "a" }>;  // Options
-type T15 = Filter<Options, { q: "a" }>;  // never
+type T14 = Exclude<Options, { q: "a" }>;  // Options
+type T15 = Extract<Options, { q: "a" }>;  // never
 
-declare function f5<T extends Options, K extends string>(p: K): Filter<T, { k: K }>;
+declare function f5<T extends Options, K extends string>(p: K): Extract<T, { k: K }>;
 let x0 = f5("a");  // { k: "a", a: number }
 
-type OptionsOfKind<K extends Options["k"]> = Filter<Options, { k: K }>;
+type OptionsOfKind<K extends Options["k"]> = Extract<Options, { k: K }>;
 
 type T16 = OptionsOfKind<"a" | "b">;  // { k: "a", a: number } | { k: "b", b: string }
 
-type Select<T, K extends keyof T, V extends T[K]> = Filter<T, { [P in K]: V }>;
+type Select<T, K extends keyof T, V extends T[K]> = Extract<T, { [P in K]: V }>;
 
 type T17 = Select<Options, "k", "a" | "b">;  // // { k: "a", a: number } | { k: "b", b: string }
 
@@ -368,13 +364,10 @@ var f45 = function (value) { return value; }; // Error
 
 
 //// [conditionalTypes1.d.ts]
-declare type Diff<T, U> = T extends U ? never : T;
-declare type Filter<T, U> = T extends U ? T : never;
-declare type NonNullable<T> = Diff<T, null | undefined>;
-declare type T00 = Diff<"a" | "b" | "c" | "d", "a" | "c" | "f">;
-declare type T01 = Filter<"a" | "b" | "c" | "d", "a" | "c" | "f">;
-declare type T02 = Diff<string | number | (() => void), Function>;
-declare type T03 = Filter<string | number | (() => void), Function>;
+declare type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;
+declare type T01 = Extract<"a" | "b" | "c" | "d", "a" | "c" | "f">;
+declare type T02 = Exclude<string | number | (() => void), Function>;
+declare type T03 = Extract<string | number | (() => void), Function>;
 declare type T04 = NonNullable<string | number | undefined>;
 declare type T05 = NonNullable<(() => string) | string[] | null | undefined>;
 declare function f1<T>(x: T, y: NonNullable<T>): void;
@@ -393,40 +386,40 @@ declare type Options = {
     k: "c";
     c: boolean;
 };
-declare type T10 = Diff<Options, {
+declare type T10 = Exclude<Options, {
     k: "a" | "b";
 }>;
-declare type T11 = Filter<Options, {
+declare type T11 = Extract<Options, {
     k: "a" | "b";
 }>;
-declare type T12 = Diff<Options, {
+declare type T12 = Exclude<Options, {
     k: "a";
 } | {
     k: "b";
 }>;
-declare type T13 = Filter<Options, {
+declare type T13 = Extract<Options, {
     k: "a";
 } | {
     k: "b";
 }>;
-declare type T14 = Diff<Options, {
+declare type T14 = Exclude<Options, {
     q: "a";
 }>;
-declare type T15 = Filter<Options, {
+declare type T15 = Extract<Options, {
     q: "a";
 }>;
-declare function f5<T extends Options, K extends string>(p: K): Filter<T, {
+declare function f5<T extends Options, K extends string>(p: K): Extract<T, {
     k: K;
 }>;
 declare let x0: {
     k: "a";
     a: number;
 };
-declare type OptionsOfKind<K extends Options["k"]> = Filter<Options, {
+declare type OptionsOfKind<K extends Options["k"]> = Extract<Options, {
     k: K;
 }>;
 declare type T16 = OptionsOfKind<"a" | "b">;
-declare type Select<T, K extends keyof T, V extends T[K]> = Filter<T, {
+declare type Select<T, K extends keyof T, V extends T[K]> = Extract<T, {
     [P in K]: V;
 }>;
 declare type T17 = Select<Options, "k", "a" | "b">;

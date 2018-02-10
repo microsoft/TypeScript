@@ -1466,7 +1466,7 @@ namespace ts {
         if (value !== undefined && test(value)) return value;
 
         if (value && typeof (value as any).kind === "number") {
-            Debug.fail(`Invalid cast. The supplied ${(ts as any).SyntaxKind[(value as any).kind]} did not pass the test '${Debug.getFunctionName(test)}'.`);
+            Debug.fail(`Invalid cast. The supplied ${Debug.showSyntaxKind(value as any as Node)} did not pass the test '${Debug.getFunctionName(test)}'.`);
         }
         else {
             Debug.fail(`Invalid cast. The supplied value did not pass the test '${Debug.getFunctionName(test)}'.`);
@@ -2924,6 +2924,25 @@ namespace ts {
                 const match = /^function\s+([\w\$]+)\s*\(/.exec(text);
                 return match ? match[1] : "";
             }
+        }
+
+        export function showSymbol(symbol: Symbol): string {
+            return `{ flags: ${showFlags(symbol.flags, (ts as any).SymbolFlags)}; declarations: ${map(symbol.declarations, showSyntaxKind)} }`;
+        }
+
+        function showFlags(flags: number, flagsEnum: { [flag: number]: string }): string {
+            const out = [];
+            for (let pow = 0; pow <= 30; pow++) {
+                const n = 1 << pow;
+                if (flags & n) {
+                    out.push(flagsEnum[n]);
+                }
+            }
+            return out.join("|");
+        }
+
+        export function showSyntaxKind(node: Node): string {
+            return (ts as any).SyntaxKind[node.kind];
         }
     }
 
