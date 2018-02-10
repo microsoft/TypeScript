@@ -1,6 +1,6 @@
 // @allowJs: true
 // @declaration: true
-// @emitDeclarationsOnly: true
+// @emitDeclarationOnly: true
 // @target: es6
 // @filename: a.js
 

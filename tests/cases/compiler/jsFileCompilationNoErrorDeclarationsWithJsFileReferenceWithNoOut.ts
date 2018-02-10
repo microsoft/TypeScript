@@ -1,6 +1,6 @@
 // @allowJs: true
 // @declaration: true
-// @emitDeclarationsOnly: true
+// @emitDeclarationOnly: true
 // @filename: a.ts
 class c {
 }
