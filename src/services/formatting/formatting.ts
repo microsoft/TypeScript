@@ -693,7 +693,20 @@ namespace ts.formatting {
                     return inheritedIndentation;
                 }
 
-                const effectiveParentStartLine = child.kind === SyntaxKind.Decorator ? childStartLine : undecoratedParentStartLine;
+                let effectiveParentStartLine = child.kind === SyntaxKind.Decorator ? childStartLine : undecoratedParentStartLine;
+
+                // variable declarations with multiline initializers
+                if (node.kind === SyntaxKind.VariableDeclaration) {
+                    const variableDeclaration = node as VariableDeclaration;
+                    if (variableDeclaration.initializer === child) {
+                        if (variableDeclaration.name.kind & (SyntaxKind.ObjectBindingPattern | SyntaxKind.ArrayBindingPattern)) {
+                            const pos = sourceFile.getLineAndCharacterOfPosition(variableDeclaration.name.pos);
+                            const end = sourceFile.getLineAndCharacterOfPosition(variableDeclaration.name.end);
+                            effectiveParentStartLine += end.line - pos.line;
+                        }
+                    }
+                }
+
                 const childIndentation = computeIndentation(child, childStartLine, childIndentationAmount, node, parentDynamicIndentation, effectiveParentStartLine);
 
                 processNode(child, childContextNode, childStartLine, undecoratedChildStartLine, childIndentation.indentation, childIndentation.delta);
