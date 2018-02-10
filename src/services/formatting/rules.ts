@@ -162,6 +162,7 @@ namespace ts.formatting {
                     SyntaxKind.TypeKeyword,
                     SyntaxKind.FromKeyword,
                     SyntaxKind.KeyOfKeyword,
+                    SyntaxKind.InferKeyword,
                 ],
                 anyToken,
                 [isNonJsxSameLineTokenContext],
