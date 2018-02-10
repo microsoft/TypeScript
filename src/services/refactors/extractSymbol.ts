@@ -1053,7 +1053,7 @@ namespace ts.refactor.extractSymbol {
             changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariable, /*blankLineBetween*/ true);
 
             // Consume
-            changeTracker.replaceRange(context.file, { pos: node.getStart(), end: node.end }, localReference);
+            changeTracker.replaceNode(context.file, node, localReference, textChanges.useNonAdjustedPositions);
         }
         else {
             const newVariableDeclaration = createVariableDeclaration(localNameText, variableType, initializer);
@@ -1070,7 +1070,7 @@ namespace ts.refactor.extractSymbol {
 
                 // Consume
                 const localReference = createIdentifier(localNameText);
-                changeTracker.replaceRange(context.file, { pos: node.getStart(), end: node.end }, localReference);
+                changeTracker.replaceNode(context.file, node, localReference, textChanges.useNonAdjustedPositions);
             }
             else if (node.parent.kind === SyntaxKind.ExpressionStatement && scope === findAncestor(node, isScope)) {
                 // If the parent is an expression statement and the target scope is the immediately enclosing one,
@@ -1078,7 +1078,7 @@ namespace ts.refactor.extractSymbol {
                 const newVariableStatement = createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const));
-                changeTracker.replaceRange(context.file, { pos: node.parent.getStart(), end: node.parent.end }, newVariableStatement);
+                changeTracker.replaceNode(context.file, node.parent, newVariableStatement, textChanges.useNonAdjustedPositions);
             }
             else {
                 const newVariableStatement = createVariableStatement(
@@ -1097,11 +1097,11 @@ namespace ts.refactor.extractSymbol {
                 // Consume
                 if (node.parent.kind === SyntaxKind.ExpressionStatement) {
                     // If the parent is an expression statement, delete it.
-                    changeTracker.deleteRange(context.file, { pos: node.parent.getStart(), end: node.parent.end });
+                    changeTracker.deleteNode(context.file, node.parent, textChanges.useNonAdjustedPositions);
                 }
                 else {
                     const localReference = createIdentifier(localNameText);
-                    changeTracker.replaceRange(context.file, { pos: node.getStart(), end: node.end }, localReference);
+                    changeTracker.replaceNode(context.file, node, localReference, textChanges.useNonAdjustedPositions);
                 }
             }
         }
