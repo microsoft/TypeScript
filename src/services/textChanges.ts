@@ -501,7 +501,8 @@ namespace ts.textChanges {
             });
         }
 
-        private insertNodeInListAfterLast(sourceFile: SourceFile, containingList: NodeArray<Node>, after: Node, end: number, index: number, newNode: Node): void {
+        private insertNodeInListAfterLast(sourceFile: SourceFile, containingList: NodeArray<Node>, after: Node, index: number, newNode: Node): void {
+            const end = after.getEnd();
             const afterStart = after.getStart(sourceFile);
             const afterStartLinePosition = getLineStartPositionForPosition(afterStart, sourceFile);
 
@@ -580,7 +581,6 @@ namespace ts.textChanges {
             if (index < 0) {
                 return this;
             }
-            const end = after.getEnd();
             if (index !== containingList.length - 1) {
                 // any element except the last one
                 // use next sibling as an anchor
@@ -590,7 +590,7 @@ namespace ts.textChanges {
                 }
             }
             else {
-                this.insertNodeInListAfterLast(sourceFile, containingList, after, end, index, newNode);
+                this.insertNodeInListAfterLast(sourceFile, containingList, after, index, newNode);
             }
             return this;
         }
