@@ -26,6 +26,3 @@ var Application = function () {
 return Application;
 })();
 min.app.Application()
-
-// TODO: Make sure to include github.com/chadbr/vscodeTestJS
-// (though extracted to 4 js files instead of 2 js files and an html)

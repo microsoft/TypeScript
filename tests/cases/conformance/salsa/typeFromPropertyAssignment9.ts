@@ -4,10 +4,10 @@
 // @target: es6
 // @Filename: a.js
 
-// TODO: JSDoc would provide a contextual type, so ... I should test that
 var my = my || {};
-my.method = function() {
-    return 1;
+/** @param {number} n */
+my.method = function(n) {
+    return n + 1;
 }
 my.number = 1;
 my.object = {};
@@ -18,8 +18,11 @@ my.predicate.query = function () {
 };
 var q = new my.predicate.query();
 my.predicate.query.result = 'none'
+/** @param {number} first
+ *  @param {number} second
+ */
 my.predicate.sort = my.predicate.sort || function (first, second) {
-    return first;
+    return first > second ? first : second;
 }
 my.predicate.type = class {
     m() { return 101; }

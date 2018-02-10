@@ -70,6 +70,3 @@ min.app.Application()
 >app : Symbol(app, Decl(b.js, 0, 27))
 >Application : Symbol(Application, Decl(b.js, 1, 24))
 
-// TODO: Make sure to include github.com/chadbr/vscodeTestJS
-// (though extracted to 4 js files instead of 2 js files and an html)
-

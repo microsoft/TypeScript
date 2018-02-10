@@ -94,6 +94,3 @@ min.app.Application()
 >app : { [x: string]: any; Application: () => void; }
 >Application : () => void
 
-// TODO: Make sure to include github.com/chadbr/vscodeTestJS
-// (though extracted to 4 js files instead of 2 js files and an html)
-
