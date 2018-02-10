@@ -1682,6 +1682,15 @@ namespace ts {
             node.expression.right;
     }
 
+    function getSourceOfDefaultedAssignment(node: Node): Node {
+        return isExpressionStatement(node) &&
+            isBinaryExpression(node.expression) &&
+            getSpecialPropertyAssignmentKind(node.expression) !== SpecialPropertyAssignmentKind.None &&
+            isBinaryExpression(node.expression.right) &&
+            node.expression.right.operatorToken.kind === SyntaxKind.BarBarToken &&
+            node.expression.right.right;
+    }
+
     function getSingleInitializerOfVariableStatement(node: Node, child?: Node): Node {
         return isVariableStatement(node) &&
             node.declarationList.declarations.length > 0 &&
@@ -1723,7 +1732,8 @@ namespace ts {
                 (getSingleVariableOfVariableStatement(parent.parent, node) || getSourceOfAssignment(parent.parent))) {
                 getJSDocCommentsAndTagsWorker(parent.parent);
             }
-            if (parent && parent.parent && parent.parent.parent && getSingleInitializerOfVariableStatement(parent.parent.parent, node)) {
+            if (parent && parent.parent && parent.parent.parent &&
+                (getSingleInitializerOfVariableStatement(parent.parent.parent, node) || getSourceOfDefaultedAssignment(parent.parent.parent))) {
                 getJSDocCommentsAndTagsWorker(parent.parent.parent);
             }
             if (isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) !== SpecialPropertyAssignmentKind.None ||
@@ -1765,7 +1775,8 @@ namespace ts {
 
     export function getHostSignatureFromJSDoc(node: JSDocParameterTag): FunctionLike | undefined {
         const host = getJSDocHost(node);
-        const decl = getSourceOfAssignment(host) ||
+        const decl = getSourceOfDefaultedAssignment(host) ||
+            getSourceOfAssignment(host) ||
             getSingleInitializerOfVariableStatement(host) ||
             getSingleVariableOfVariableStatement(host) ||
             getNestedModuleDeclaration(host) ||
