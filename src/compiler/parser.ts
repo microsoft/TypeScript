@@ -4572,13 +4572,25 @@ namespace ts {
             //     IdentifierReference[?Yield] Initializer[In, ?Yield]
             // this is necessary because ObjectLiteral productions are also used to cover grammar for ObjectAssignmentPattern
             const isShorthandPropertyAssignment =
-                tokenIsIdentifier && (token() === SyntaxKind.CommaToken || token() === SyntaxKind.CloseBraceToken || token() === SyntaxKind.EqualsToken);
+                tokenIsIdentifier && (
+                    token() === SyntaxKind.CommaToken
+                    || token() === SyntaxKind.CloseBraceToken
+                    || token() === SyntaxKind.EqualsToken
+                    || token() === SyntaxKind.AsKeyword);
             if (isShorthandPropertyAssignment) {
                 node.kind = SyntaxKind.ShorthandPropertyAssignment;
                 const equalsToken = parseOptionalToken(SyntaxKind.EqualsToken);
                 if (equalsToken) {
                     (<ShorthandPropertyAssignment>node).equalsToken = equalsToken;
                     (<ShorthandPropertyAssignment>node).objectAssignmentInitializer = allowInAnd(parseAssignmentExpressionOrHigher);
+                }
+                else {
+                    const asKeyword = parseOptionalToken(118);
+                    if (asKeyword) {
+                        const asType = parseType();
+                        (<ShorthandPropertyAssignment>node).type = asType;
+                        asType.parent = node;
+                    }
                 }
             }
             else {

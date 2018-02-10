@@ -605,6 +605,7 @@ declare namespace ts {
         questionToken?: QuestionToken;
         equalsToken?: Token<SyntaxKind.EqualsToken>;
         objectAssignmentInitializer?: Expression;
+        type?: TypeNode;
     }
     interface SpreadAssignment extends ObjectLiteralElement, JSDocContainer {
         parent: ObjectLiteralExpression;

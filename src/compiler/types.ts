@@ -900,6 +900,8 @@ namespace ts {
         // it is grammar error to appear in actual object initializer
         equalsToken?: Token<SyntaxKind.EqualsToken>;
         objectAssignmentInitializer?: Expression;
+        // Type assertion, as `<type>name` if before the name or `name as type` if after
+        type?: TypeNode;
     }
 
     export interface SpreadAssignment extends ObjectLiteralElement, JSDocContainer {

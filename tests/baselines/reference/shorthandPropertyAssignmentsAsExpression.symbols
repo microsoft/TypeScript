@@ -1,0 +1,107 @@
+=== tests/cases/compiler/shorthandPropertyAssignmentsAsExpression.ts ===
+interface Valid {
+>Valid : Symbol(Valid, Decl(shorthandPropertyAssignmentsAsExpression.ts, 0, 0))
+
+	general: number;
+>general : Symbol(Valid.general, Decl(shorthandPropertyAssignmentsAsExpression.ts, 0, 17))
+
+	specific: 0;
+>specific : Symbol(Valid.specific, Decl(shorthandPropertyAssignmentsAsExpression.ts, 1, 17))
+
+	optional?: 1;
+>optional : Symbol(Valid.optional, Decl(shorthandPropertyAssignmentsAsExpression.ts, 2, 13))
+}
+
+const general = 2;
+>general : Symbol(general, Decl(shorthandPropertyAssignmentsAsExpression.ts, 6, 5))
+
+let specific = 0;
+>specific : Symbol(specific, Decl(shorthandPropertyAssignmentsAsExpression.ts, 7, 3))
+
+const valid = { general, specific };
+>valid : Symbol(valid, Decl(shorthandPropertyAssignmentsAsExpression.ts, 9, 5))
+>general : Symbol(general, Decl(shorthandPropertyAssignmentsAsExpression.ts, 9, 15))
+>specific : Symbol(specific, Decl(shorthandPropertyAssignmentsAsExpression.ts, 9, 24))
+
+specific = 2;
+>specific : Symbol(specific, Decl(shorthandPropertyAssignmentsAsExpression.ts, 7, 3))
+
+const expressionValid = {
+>expressionValid : Symbol(expressionValid, Decl(shorthandPropertyAssignmentsAsExpression.ts, 13, 5))
+
+	general,
+>general : Symbol(general, Decl(shorthandPropertyAssignmentsAsExpression.ts, 13, 25))
+
+	specific as 0,
+>specific : Symbol(specific, Decl(shorthandPropertyAssignmentsAsExpression.ts, 14, 9))
+
+};
+
+const invalid = { general, specific };
+>invalid : Symbol(invalid, Decl(shorthandPropertyAssignmentsAsExpression.ts, 18, 5))
+>general : Symbol(general, Decl(shorthandPropertyAssignmentsAsExpression.ts, 18, 17))
+>specific : Symbol(specific, Decl(shorthandPropertyAssignmentsAsExpression.ts, 18, 26))
+
+const optional = 3;
+>optional : Symbol(optional, Decl(shorthandPropertyAssignmentsAsExpression.ts, 20, 5))
+
+const veryInvalid = {
+>veryInvalid : Symbol(veryInvalid, Decl(shorthandPropertyAssignmentsAsExpression.ts, 22, 5))
+
+	general,
+>general : Symbol(general, Decl(shorthandPropertyAssignmentsAsExpression.ts, 22, 21))
+
+	specific,
+>specific : Symbol(specific, Decl(shorthandPropertyAssignmentsAsExpression.ts, 23, 9))
+
+	optional as number | undefined,
+>optional : Symbol(optional, Decl(shorthandPropertyAssignmentsAsExpression.ts, 24, 10))
+
+};
+
+interface ContainsValid {
+>ContainsValid : Symbol(ContainsValid, Decl(shorthandPropertyAssignmentsAsExpression.ts, 26, 2))
+
+	required: Valid;
+>required : Symbol(ContainsValid.required, Decl(shorthandPropertyAssignmentsAsExpression.ts, 28, 25))
+>Valid : Symbol(Valid, Decl(shorthandPropertyAssignmentsAsExpression.ts, 0, 0))
+
+	optional?: Valid;
+>optional : Symbol(ContainsValid.optional, Decl(shorthandPropertyAssignmentsAsExpression.ts, 29, 17))
+>Valid : Symbol(Valid, Decl(shorthandPropertyAssignmentsAsExpression.ts, 0, 0))
+}
+
+const fullContains: ContainsValid = {
+>fullContains : Symbol(fullContains, Decl(shorthandPropertyAssignmentsAsExpression.ts, 33, 5))
+>ContainsValid : Symbol(ContainsValid, Decl(shorthandPropertyAssignmentsAsExpression.ts, 26, 2))
+
+	required: {} as Valid,
+>required : Symbol(required, Decl(shorthandPropertyAssignmentsAsExpression.ts, 33, 37))
+>Valid : Symbol(Valid, Decl(shorthandPropertyAssignmentsAsExpression.ts, 0, 0))
+
+	optional: {} as Valid,
+>optional : Symbol(optional, Decl(shorthandPropertyAssignmentsAsExpression.ts, 34, 23))
+>Valid : Symbol(Valid, Decl(shorthandPropertyAssignmentsAsExpression.ts, 0, 0))
+
+};
+
+const invalidContains: ContainsValid = {
+>invalidContains : Symbol(invalidContains, Decl(shorthandPropertyAssignmentsAsExpression.ts, 38, 5))
+>ContainsValid : Symbol(ContainsValid, Decl(shorthandPropertyAssignmentsAsExpression.ts, 26, 2))
+
+	required: 7 as Valid,
+>required : Symbol(required, Decl(shorthandPropertyAssignmentsAsExpression.ts, 38, 40))
+>Valid : Symbol(Valid, Decl(shorthandPropertyAssignmentsAsExpression.ts, 0, 0))
+
+};
+
+const extraContains: ContainsValid = {
+>extraContains : Symbol(extraContains, Decl(shorthandPropertyAssignmentsAsExpression.ts, 42, 5))
+>ContainsValid : Symbol(ContainsValid, Decl(shorthandPropertyAssignmentsAsExpression.ts, 26, 2))
+
+	extra: number as Valid,
+>extra : Symbol(extra, Decl(shorthandPropertyAssignmentsAsExpression.ts, 42, 38))
+>Valid : Symbol(Valid, Decl(shorthandPropertyAssignmentsAsExpression.ts, 0, 0))
+
+};
+

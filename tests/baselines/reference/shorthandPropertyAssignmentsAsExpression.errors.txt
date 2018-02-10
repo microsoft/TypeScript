@@ -1,0 +1,60 @@
+tests/cases/compiler/shorthandPropertyAssignmentsAsExpression.ts(40,12): error TS2352: Type 'number' cannot be converted to type 'Valid'.
+tests/cases/compiler/shorthandPropertyAssignmentsAsExpression.ts(44,2): error TS2322: Type '{ extra: Valid; }' is not assignable to type 'ContainsValid'.
+  Object literal may only specify known properties, and 'extra' does not exist in type 'ContainsValid'.
+tests/cases/compiler/shorthandPropertyAssignmentsAsExpression.ts(44,9): error TS2693: 'number' only refers to a type, but is being used as a value here.
+
+
+==== tests/cases/compiler/shorthandPropertyAssignmentsAsExpression.ts (3 errors) ====
+    interface Valid {
+    	general: number;
+    	specific: 0;
+    	optional?: 1;
+    }
+    
+    const general = 2;
+    let specific = 0;
+    
+    const valid = { general, specific };
+    
+    specific = 2;
+    
+    const expressionValid = {
+    	general,
+    	specific as 0,
+    };
+    
+    const invalid = { general, specific };
+    
+    const optional = 3;
+    
+    const veryInvalid = {
+    	general,
+    	specific,
+    	optional as number | undefined,
+    };
+    
+    interface ContainsValid {
+    	required: Valid;
+    	optional?: Valid;
+    }
+    
+    const fullContains: ContainsValid = {
+    	required: {} as Valid,
+    	optional: {} as Valid,
+    };
+    
+    const invalidContains: ContainsValid = {
+    	required: 7 as Valid,
+    	          ~~~~~~~~~~
+!!! error TS2352: Type 'number' cannot be converted to type 'Valid'.
+    };
+    
+    const extraContains: ContainsValid = {
+    	extra: number as Valid,
+    	~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ extra: Valid; }' is not assignable to type 'ContainsValid'.
+!!! error TS2322:   Object literal may only specify known properties, and 'extra' does not exist in type 'ContainsValid'.
+    	       ~~~~~~
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+    };
+    
