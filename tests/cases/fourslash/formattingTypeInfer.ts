@@ -1,9 +1,9 @@
 /// <reference path='fourslash.ts'/>
 
 ////
-/////*L1*/type C<T> = T extends Array<infer U>;
+/////*L1*/type C<T> = T extends Array<infer U> ? U : never;
 ////
-/////*L2*/  type   C  <  T  >   =   T   extends   Array   <   infer     U  >;  
+/////*L2*/  type   C  <  T  >   =   T   extends   Array   <   infer     U  >  ?   U   :   never  ; 
 ////
 /////*L3*/type C<T> = T extends Array<infer U> ? U : T;
 ////
@@ -21,10 +21,10 @@
 format.document();
 
 goTo.marker("L1");
-verify.currentLineContentIs("type C<T> = T extends Array<infer U>;");
+verify.currentLineContentIs("type C<T> = T extends Array<infer U> ? U : never;");
 
 goTo.marker("L2");
-verify.currentLineContentIs("type C<T> = T extends Array<infer U>;");
+verify.currentLineContentIs("type C<T> = T extends Array<infer U> ? U : never;");
 
 goTo.marker("L3");
 verify.currentLineContentIs("type C<T> = T extends Array<infer U> ? U : T;");
