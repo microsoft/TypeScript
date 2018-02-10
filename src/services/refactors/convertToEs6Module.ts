@@ -33,13 +33,16 @@ namespace ts.refactor {
                 return isExportsOrModuleExportsOrAlias(sourceFile, node as PropertyAccessExpression)
                     || isExportsOrModuleExportsOrAlias(sourceFile, (node as PropertyAccessExpression).expression);
             case SyntaxKind.VariableDeclarationList:
-                const decl = firstOrUndefined((node as VariableDeclarationList).declarations);
-                return !!decl && isExportsOrModuleExportsOrAlias(sourceFile, decl.initializer);
+                return isVariableDeclarationTriggerLocation(firstOrUndefined((node as VariableDeclarationList).declarations));
             case SyntaxKind.VariableDeclaration:
-                return isExportsOrModuleExportsOrAlias(sourceFile, (node as VariableDeclaration).initializer);
+                return isVariableDeclarationTriggerLocation(node as VariableDeclaration);
             default:
                 return isExpression(node) && isExportsOrModuleExportsOrAlias(sourceFile, node)
                     || !onSecondTry && isAtTriggerLocation(sourceFile, node.parent, /*onSecondTry*/ true);
+        }
+
+        function isVariableDeclarationTriggerLocation(decl: VariableDeclaration | undefined) {
+            return !!decl && !!decl.initializer && isExportsOrModuleExportsOrAlias(sourceFile, decl.initializer);
         }
     }
 
