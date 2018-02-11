@@ -7,7 +7,7 @@ namespace ts.refactor.installTypesForPackage {
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
         const { file, startPosition, program } = context;
 
-        if (!program.getCompilerOptions().allowSyntheticDefaultImports) {
+        if (!getAllowSyntheticDefaultImports(program.getCompilerOptions())) {
             return undefined;
         }
 
