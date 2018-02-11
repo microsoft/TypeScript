@@ -506,31 +506,8 @@ namespace ts.textChanges {
             const afterStart = after.getStart(sourceFile);
             const afterStartLinePosition = getLineStartPositionForPosition(afterStart, sourceFile);
 
-            let separator: SyntaxKind.CommaToken | SyntaxKind.SemicolonToken;
-            let multilineList = false;
+            const { multilineList, separator } = this.getMultilineAndSeparatorOfList(sourceFile, containingList, afterStartLinePosition, index, after);
 
-            // insert element after the last element in the list that has more than one item
-            // pick the element preceding the after element to:
-            // - pick the separator
-            // - determine if list is a multiline
-            if (containingList.length === 1) {
-                // if list has only one element then we'll format is as multiline if node has comment in trailing trivia, or as singleline otherwise
-                // i.e. var x = 1 // this is x
-                //     | new element will be inserted at this position
-                separator = SyntaxKind.CommaToken;
-            }
-            else {
-                // element has more than one element, pick separator from the list
-                const tokenBeforeInsertPosition = findPrecedingToken(after.pos, sourceFile);
-                separator = isSeparator(after, tokenBeforeInsertPosition) ? tokenBeforeInsertPosition.kind : SyntaxKind.CommaToken;
-                // determine if list is multiline by checking lines of after element and element that precedes it.
-                const afterMinusOneStartLinePosition = getLineStartPositionForPosition(containingList[index - 1].getStart(sourceFile), sourceFile);
-                multilineList = afterMinusOneStartLinePosition !== afterStartLinePosition;
-            }
-            if (hasCommentsBeforeLineBreak(sourceFile.text, after.end)) {
-                // in this case we'll always treat containing list as multiline
-                multilineList = true;
-            }
             if (multilineList) {
                 // insert separator immediately following the 'after' node to preserve comments in trailing trivia
                 this.changes.push({
@@ -564,6 +541,36 @@ namespace ts.textChanges {
                     options: { prefix: `${tokenToString(separator)} ` }
                 });
             }
+        }
+
+        private getMultilineAndSeparatorOfList(sourceFile: SourceFile, containingList: NodeArray<Node>, afterStartLinePosition: number, sampleIndex: number, sampleNode: Node) {
+            let separator: SyntaxKind.CommaToken | SyntaxKind.SemicolonToken;
+            let multilineList = false;
+
+            // insert element after the last element in the list that has more than one item
+            // pick the element preceding the after element to:
+            // - pick the separator
+            // - determine if list is a multiline
+            if (containingList.length === 1) {
+                // if list has only one element then we'll format is as multiline if node has comment in trailing trivia, or as singleline otherwise
+                // i.e. var x = 1 // this is x
+                //     | new element will be inserted at this position
+                separator = SyntaxKind.CommaToken;
+            }
+            else {
+                // element has more than one element, pick separator from the list
+                const tokenBeforeInsertPosition = findPrecedingToken(sampleNode.pos, sourceFile);
+                separator = isSeparator(sampleNode, tokenBeforeInsertPosition) ? tokenBeforeInsertPosition.kind : SyntaxKind.CommaToken;
+                // determine if list is multiline by checking lines of after element and element that precedes it.
+                const afterMinusOneStartLinePosition = getLineStartPositionForPosition(containingList[sampleIndex - 1].getStart(sourceFile), sourceFile);
+                multilineList = afterMinusOneStartLinePosition !== afterStartLinePosition;
+            }
+            if (hasCommentsBeforeLineBreak(sourceFile.text, sampleNode.end)) {
+                // in this case we'll always treat containing list as multiline
+                multilineList = true;
+            }
+
+            return { multilineList, separator };
         }
 
         /**
