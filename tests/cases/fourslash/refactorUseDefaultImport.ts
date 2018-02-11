@@ -12,6 +12,9 @@
 // @Filename: /c.ts
 /////*c0*/import a = require("./a");/*c1*/
 
+// @Filename: /d.ts
+/////*d0*/import "./a";/*d1*/
+
 goTo.select("b0", "b1");
 edit.applyRefactor({
     refactorName: "Convert to default import",
@@ -27,3 +30,6 @@ edit.applyRefactor({
     actionDescription: "Convert to default import",
     newContent: 'import a from "./a";',
 });
+
+goTo.select("d0", "d1");
+verify.not.applicableRefactorAvailableAtMarker("d0");
