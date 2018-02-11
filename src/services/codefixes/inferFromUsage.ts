@@ -86,8 +86,8 @@ namespace ts.codefix {
         if (containingFunction === undefined) {
             return undefined;
         }
-        switch (errorCode) {
 
+        switch (errorCode) {
             // Parameter declarations
             case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
                 if (isSetAccessor(containingFunction)) {
@@ -96,7 +96,7 @@ namespace ts.codefix {
                 // falls through
             case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
                 return !seenFunctions || addToSeen(seenFunctions, getNodeId(containingFunction))
-                    ? getCodeActionForParameters(<ParameterDeclaration>token.parent, containingFunction, sourceFile, program, cancellationToken)
+                    ? getCodeActionForParameters(cast(token.parent, isParameter), containingFunction, sourceFile, program, cancellationToken)
                     : undefined;
 
             // Get Accessor declarations
