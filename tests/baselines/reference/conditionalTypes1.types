@@ -98,6 +98,35 @@ function f3<T>(x: Partial<T>[keyof T], y: NonNullable<Partial<T>[keyof T]>) {
 >x : Partial<T>[keyof T]
 }
 
+function f4<T extends { x: string | undefined }>(x: T["x"], y: NonNullable<T["x"]>) {
+>f4 : <T extends { x: string | undefined; }>(x: T["x"], y: NonNullable<T["x"]>) => void
+>T : T
+>x : string | undefined
+>x : T["x"]
+>T : T
+>y : NonNullable<T["x"]>
+>NonNullable : NonNullable<T>
+>T : T
+
+    x = y;
+>x = y : NonNullable<T["x"]>
+>x : T["x"]
+>y : NonNullable<T["x"]>
+
+    y = x;  // Error
+>y = x : T["x"]
+>y : NonNullable<T["x"]>
+>x : T["x"]
+
+    let s1: string = x;  // Error
+>s1 : string
+>x : T["x"]
+
+    let s2: string = y;
+>s2 : string
+>y : NonNullable<T["x"]>
+}
+
 type Options = { k: "a", a: number } | { k: "b", b: string } | { k: "c", c: boolean };
 >Options : Options
 >k : "a"
@@ -145,8 +174,8 @@ type T15 = Extract<Options, { q: "a" }>;  // never
 >Options : Options
 >q : "a"
 
-declare function f4<T extends Options, K extends string>(p: K): Extract<T, { k: K }>;
->f4 : <T extends Options, K extends string>(p: K) => Extract<T, { k: K; }>
+declare function f5<T extends Options, K extends string>(p: K): Extract<T, { k: K }>;
+>f5 : <T extends Options, K extends string>(p: K) => Extract<T, { k: K; }>
 >T : T
 >Options : Options
 >K : K
@@ -157,10 +186,10 @@ declare function f4<T extends Options, K extends string>(p: K): Extract<T, { k: 
 >k : K
 >K : K
 
-let x0 = f4("a");  // { k: "a", a: number }
+let x0 = f5("a");  // { k: "a", a: number }
 >x0 : { k: "a"; a: number; }
->f4("a") : { k: "a"; a: number; }
->f4 : <T extends Options, K extends string>(p: K) => Extract<T, { k: K; }>
+>f5("a") : { k: "a"; a: number; }
+>f5 : <T extends Options, K extends string>(p: K) => Extract<T, { k: K; }>
 >"a" : "a"
 
 type OptionsOfKind<K extends Options["k"]> = Extract<Options, { k: K }>;
@@ -1079,4 +1108,103 @@ function f33<T, U>() {
 >z : Foo<T & U>
 >T2 : Foo<T & U>
 }
+
+// Repro from #21823
+
+type T90<T> = T extends 0 ? 0 : () => 0;
+>T90 : T90<T>
+>T : T
+>T : T
+
+type T91<T> = T extends 0 ? 0 : () => 0;
+>T91 : T91<T>
+>T : T
+>T : T
+
+const f40 = <U>(a: T90<U>): T91<U> => a;
+>f40 : <U>(a: T90<U>) => T91<U>
+><U>(a: T90<U>): T91<U> => a : <U>(a: T90<U>) => T91<U>
+>U : U
+>a : T90<U>
+>T90 : T90<T>
+>U : U
+>T91 : T91<T>
+>U : U
+>a : T90<U>
+
+const f41 = <U>(a: T91<U>): T90<U> => a;
+>f41 : <U>(a: T91<U>) => T90<U>
+><U>(a: T91<U>): T90<U> => a : <U>(a: T91<U>) => T90<U>
+>U : U
+>a : T91<U>
+>T91 : T91<T>
+>U : U
+>T90 : T90<T>
+>U : U
+>a : T91<U>
+
+type T92<T> = T extends () => 0 ? () => 1 : () => 2;
+>T92 : T92<T>
+>T : T
+>T : T
+
+type T93<T> = T extends () => 0 ? () => 1 : () => 2;
+>T93 : T93<T>
+>T : T
+>T : T
+
+const f42 = <U>(a: T92<U>): T93<U> => a;
+>f42 : <U>(a: T92<U>) => T93<U>
+><U>(a: T92<U>): T93<U> => a : <U>(a: T92<U>) => T93<U>
+>U : U
+>a : T92<U>
+>T92 : T92<T>
+>U : U
+>T93 : T93<T>
+>U : U
+>a : T92<U>
+
+const f43 = <U>(a: T93<U>): T92<U> => a;
+>f43 : <U>(a: T93<U>) => T92<U>
+><U>(a: T93<U>): T92<U> => a : <U>(a: T93<U>) => T92<U>
+>U : U
+>a : T93<U>
+>T93 : T93<T>
+>U : U
+>T92 : T92<T>
+>U : U
+>a : T93<U>
+
+type T94<T> = T extends string ? true : 42;
+>T94 : T94<T>
+>T : T
+>T : T
+>true : true
+
+type T95<T> = T extends string ? boolean : number;
+>T95 : T95<T>
+>T : T
+>T : T
+
+const f44 = <U>(value: T94<U>): T95<U> => value;
+>f44 : <U>(value: T94<U>) => T95<U>
+><U>(value: T94<U>): T95<U> => value : <U>(value: T94<U>) => T95<U>
+>U : U
+>value : T94<U>
+>T94 : T94<T>
+>U : U
+>T95 : T95<T>
+>U : U
+>value : T94<U>
+
+const f45 = <U>(value: T95<U>): T94<U> => value;  // Error
+>f45 : <U>(value: T95<U>) => T94<U>
+><U>(value: T95<U>): T94<U> => value : <U>(value: T95<U>) => T94<U>
+>U : U
+>value : T95<U>
+>T95 : T95<T>
+>U : U
+>T94 : T94<T>
+>U : U
+>value : T95<U>
 
