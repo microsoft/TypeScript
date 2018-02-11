@@ -15,6 +15,9 @@
 // @Filename: /d.ts
 /////*d0*/import "./a";/*d1*/
 
+// @Filename: /e.ts
+/////*e0*/import * as n from "./non-existant";/*e1*/
+
 goTo.select("b0", "b1");
 edit.applyRefactor({
     refactorName: "Convert to default import",
@@ -33,3 +36,6 @@ edit.applyRefactor({
 
 goTo.select("d0", "d1");
 verify.not.applicableRefactorAvailableAtMarker("d0");
+
+goTo.select("e0", "e1");
+verify.not.applicableRefactorAvailableAtMarker("e0");

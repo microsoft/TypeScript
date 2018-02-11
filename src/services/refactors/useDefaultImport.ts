@@ -17,8 +17,8 @@ namespace ts.refactor.installTypesForPackage {
         }
 
         const module = getResolvedModule(file, importInfo.moduleSpecifier.text);
-        const resolvedFile = program.getSourceFile(module.resolvedFileName);
-        if (!(resolvedFile.externalModuleIndicator && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals)) {
+        const resolvedFile = module && program.getSourceFile(module.resolvedFileName);
+        if (!(resolvedFile && resolvedFile.externalModuleIndicator && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals)) {
             return undefined;
         }
 
