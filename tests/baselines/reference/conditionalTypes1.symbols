@@ -940,3 +940,65 @@ function f33<T, U>() {
 >T2 : Symbol(T2, Decl(conditionalTypes1.ts, 246, 25))
 }
 
+// Repro from #21863
+
+function f40() {
+>f40 : Symbol(f40, Decl(conditionalTypes1.ts, 250, 1))
+
+    type Eq<T, U> = T extends U ? U extends T ? true : false : false;
+>Eq : Symbol(Eq, Decl(conditionalTypes1.ts, 254, 16))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 255, 12))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 255, 14))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 255, 12))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 255, 14))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 255, 14))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 255, 12))
+
+    type If<S, T, U> = S extends false ? U : T;
+>If : Symbol(If, Decl(conditionalTypes1.ts, 255, 69))
+>S : Symbol(S, Decl(conditionalTypes1.ts, 256, 12))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 256, 14))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 256, 17))
+>S : Symbol(S, Decl(conditionalTypes1.ts, 256, 12))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 256, 17))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 256, 14))
+
+    type Omit<T extends object> = { [P in keyof T]: If<Eq<T[P], never>, never, P>; }[keyof T];
+>Omit : Symbol(Omit, Decl(conditionalTypes1.ts, 256, 47))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 257, 14))
+>P : Symbol(P, Decl(conditionalTypes1.ts, 257, 37))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 257, 14))
+>If : Symbol(If, Decl(conditionalTypes1.ts, 255, 69))
+>Eq : Symbol(Eq, Decl(conditionalTypes1.ts, 254, 16))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 257, 14))
+>P : Symbol(P, Decl(conditionalTypes1.ts, 257, 37))
+>P : Symbol(P, Decl(conditionalTypes1.ts, 257, 37))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 257, 14))
+
+    type Omit2<T extends object, U = never> = { [P in keyof T]: If<Eq<T[P], U>, never, P>; }[keyof T];
+>Omit2 : Symbol(Omit2, Decl(conditionalTypes1.ts, 257, 94))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 258, 15))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 258, 32))
+>P : Symbol(P, Decl(conditionalTypes1.ts, 258, 49))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 258, 15))
+>If : Symbol(If, Decl(conditionalTypes1.ts, 255, 69))
+>Eq : Symbol(Eq, Decl(conditionalTypes1.ts, 254, 16))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 258, 15))
+>P : Symbol(P, Decl(conditionalTypes1.ts, 258, 49))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 258, 32))
+>P : Symbol(P, Decl(conditionalTypes1.ts, 258, 49))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 258, 15))
+
+    type A = Omit<{ a: void; b: never; }>;  // 'a'
+>A : Symbol(A, Decl(conditionalTypes1.ts, 258, 102))
+>Omit : Symbol(Omit, Decl(conditionalTypes1.ts, 256, 47))
+>a : Symbol(a, Decl(conditionalTypes1.ts, 259, 19))
+>b : Symbol(b, Decl(conditionalTypes1.ts, 259, 28))
+
+    type B = Omit2<{ a: void; b: never; }>;  // 'a'
+>B : Symbol(B, Decl(conditionalTypes1.ts, 259, 42))
+>Omit2 : Symbol(Omit2, Decl(conditionalTypes1.ts, 257, 94))
+>a : Symbol(a, Decl(conditionalTypes1.ts, 260, 20))
+>b : Symbol(b, Decl(conditionalTypes1.ts, 260, 29))
+}
+
