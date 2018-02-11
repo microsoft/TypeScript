@@ -5,21 +5,20 @@ class A {
 
     static B = class B {
 >B : typeof B
->class B {        static func2(): Promise<void> {            return new Promise((resolve) => { resolve(null); });        }        static C = class C {            static async func() {                await B.func2();            }        }    } : typeof B
+>class B {        static func2(): Promise<void> {            return new Promise((resolve) => { resolve(); });        }        static C = class C {            static async func() {                await B.func2();            }        }    } : typeof B
 >B : typeof B
 
         static func2(): Promise<void> {
 >func2 : () => Promise<void>
 >Promise : Promise<T>
 
-            return new Promise((resolve) => { resolve(null); });
->new Promise((resolve) => { resolve(null); }) : Promise<void>
+            return new Promise((resolve) => { resolve(); });
+>new Promise((resolve) => { resolve(); }) : Promise<void>
 >Promise : PromiseConstructor
->(resolve) => { resolve(null); } : (resolve: (value?: void | PromiseLike<void>) => void) => void
->resolve : (value?: void | PromiseLike<void>) => void
->resolve(null) : void
->resolve : (value?: void | PromiseLike<void>) => void
->null : null
+>(resolve) => { resolve(); } : (resolve: (value?: PromiseLike<void>) => void) => void
+>resolve : (value?: PromiseLike<void>) => void
+>resolve() : void
+>resolve : (value?: PromiseLike<void>) => void
         }
         static C = class C {
 >C : typeof C
