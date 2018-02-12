@@ -2111,9 +2111,6 @@ namespace ts.projectSystem {
                 /*closedFiles*/ undefined);
 
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
-            const changedFiles = projectService.getChangedFiles_TestOnly();
-            assert(changedFiles && changedFiles.length === 1, `expected 1 changed file, got ${JSON.stringify(changedFiles && changedFiles.length || 0)}`);
-
             projectService.ensureInferredProjectsUpToDate_TestOnly();
             checkNumberOfProjects(projectService, { inferredProjects: 2 });
         });
