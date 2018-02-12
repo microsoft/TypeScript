@@ -847,13 +847,11 @@ namespace ts {
                 error(getNameOfDeclaration(source.declarations[0]), Diagnostics.Cannot_augment_module_0_with_value_exports_because_it_resolves_to_a_non_module_entity, symbolToString(target));
             }
             else {
-                let message = Diagnostics.Duplicate_identifier_0;
-                if (target.flags & SymbolFlags.Enum || source.flags & SymbolFlags.Enum) {
-                    message = Diagnostics.Enum_declarations_can_only_merge_with_namespace_or_other_enum_declarations;
-                }
-                if (target.flags & SymbolFlags.BlockScopedVariable || source.flags & SymbolFlags.BlockScopedVariable) {
-                    message = Diagnostics.Cannot_redeclare_block_scoped_variable_0;
-                }
+                const message = target.flags & SymbolFlags.Enum || source.flags & SymbolFlags.Enum
+                    ? Diagnostics.Enum_declarations_can_only_merge_with_namespace_or_other_enum_declarations
+                    : target.flags & SymbolFlags.BlockScopedVariable || source.flags & SymbolFlags.BlockScopedVariable
+                        ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
+                        : Diagnostics.Duplicate_identifier_0;
                 forEach(source.declarations, node => {
                     error(getNameOfDeclaration(node) || node, message, symbolToString(source));
                 });
