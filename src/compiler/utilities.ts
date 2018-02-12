@@ -1754,6 +1754,7 @@ namespace ts {
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.SpreadElement:
+                case SyntaxKind.NonNullExpression:
                     node = parent;
                     break;
                 case SyntaxKind.ShorthandPropertyAssignment:
