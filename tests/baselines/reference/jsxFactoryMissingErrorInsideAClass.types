@@ -1,0 +1,14 @@
+=== tests/cases/compiler/test.tsx ===
+export class C {
+>C : C
+
+    factory() {
+>factory : () => any
+
+        return <div></div>;
+><div></div> : any
+>div : any
+>div : any
+    }
+}
+

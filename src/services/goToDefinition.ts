@@ -149,10 +149,7 @@ namespace ts.GoToDefinition {
         // Check if position is on triple slash reference.
         const comment = findReferenceInPosition(sourceFile.referencedFiles, position) || findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
         if (comment) {
-            return {
-                definitions,
-                textSpan: createTextSpanFromBounds(comment.pos, comment.end)
-            };
+            return { definitions, textSpan: createTextSpanFromRange(comment) };
         }
 
         const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
@@ -191,7 +188,7 @@ namespace ts.GoToDefinition {
         function getConstructSignatureDefinition(): DefinitionInfo[] | undefined {
             // Applicable only if we are in a new expression, or we are on a constructor declaration
             // and in either case the symbol has a construct signature definition, i.e. class
-            if (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword && symbol.flags & SymbolFlags.Class) {
+            if (symbol.flags & SymbolFlags.Class && (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword)) {
                 const cls = find(symbol.declarations, isClassLike) || Debug.fail("Expected declaration to have at least one class-like declaration");
                 return getSignatureDefinition(cls.members, /*selectConstructors*/ true);
             }
@@ -217,6 +214,7 @@ namespace ts.GoToDefinition {
     function isSignatureDeclaration(node: Node): boolean {
         switch (node.kind) {
             case ts.SyntaxKind.Constructor:
+            case ts.SyntaxKind.ConstructSignature:
             case ts.SyntaxKind.FunctionDeclaration:
             case ts.SyntaxKind.MethodDeclaration:
             case ts.SyntaxKind.MethodSignature:
@@ -257,9 +255,8 @@ namespace ts.GoToDefinition {
         return createDefinitionInfo(decl, symbolKind, symbolName, containerName);
     }
 
-
     function findReferenceInPosition(refs: ReadonlyArray<FileReference>, pos: number): FileReference | undefined {
-        return find(refs, ref => ref.pos <= pos && pos <= ref.end);
+        return find(refs, ref => textRangeContainsPositionInclusive(ref, pos));
     }
 
     function getDefinitionInfoForFileReference(name: string, targetFileName: string): DefinitionInfo {

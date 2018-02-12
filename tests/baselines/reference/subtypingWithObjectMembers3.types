@@ -48,9 +48,11 @@ module NotOptional {
 >A2 : A2
 
         1: Base;
+>1 : Base
 >Base : Base
 
         2.0: Derived;
+>2.0 : Derived
 >Derived : Derived
     }
 
@@ -59,9 +61,11 @@ module NotOptional {
 >A2 : A2
 
         1: Derived; // ok
+>1 : Derived
 >Derived : Derived
 
         2: Base; // error
+>2 : Base
 >Base : Base
     }
 
@@ -69,9 +73,11 @@ module NotOptional {
 >A3 : A3
 
         '1': Base;
+>'1' : Base
 >Base : Base
 
         '2.0': Derived;
+>'2.0' : Derived
 >Derived : Derived
     }
 
@@ -80,9 +86,11 @@ module NotOptional {
 >A3 : A3
 
         '1': Derived; // ok
+>'1' : Derived
 >Derived : Derived
 
         '2.0': Base; // error
+>'2.0' : Base
 >Base : Base
     }
 }
@@ -119,9 +127,11 @@ module Optional {
 >A2 : A2
 
         1?: Base;
+>1 : Base
 >Base : Base
 
         2.0?: Derived;
+>2.0 : Derived
 >Derived : Derived
     }
 
@@ -130,9 +140,11 @@ module Optional {
 >A2 : A2
 
         1?: Derived; // ok
+>1 : Derived
 >Derived : Derived
 
         2?: Base; // error
+>2 : Base
 >Base : Base
     }
 
@@ -140,9 +152,11 @@ module Optional {
 >A3 : A3
 
         '1'?: Base;
+>'1' : Base
 >Base : Base
 
         '2.0'?: Derived;
+>'2.0' : Derived
 >Derived : Derived
     }
 
@@ -151,9 +165,11 @@ module Optional {
 >A3 : A3
 
         '1'?: Derived; // ok
+>'1' : Derived
 >Derived : Derived
 
         '2.0'?: Base; // error
+>'2.0' : Base
 >Base : Base
     }
 }

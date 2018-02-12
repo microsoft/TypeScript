@@ -116,3 +116,12 @@ module M {
 	export async function f1() { }
 >f1 : Symbol(f1, Decl(asyncAwait_es5.ts, 36, 10))
 }
+
+async function f14() {
+>f14 : Symbol(f14, Decl(asyncAwait_es5.ts, 38, 1))
+
+    block: {
+        await 1;
+        break block;
+    }
+}

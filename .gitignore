@@ -39,7 +39,7 @@ scripts/word2md.js
 scripts/buildProtocol.js
 scripts/ior.js
 scripts/authors.js
-scripts/configureNightly.js
+scripts/configurePrerelease.js
 scripts/processDiagnosticMessages.d.ts
 scripts/processDiagnosticMessages.js
 scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js

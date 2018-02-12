@@ -53,6 +53,8 @@ declare namespace foo.bar {
 }
 
 declare module "foobar" {
+>"foobar" : Symbol("foobar", Decl(declarations.d.ts, 5, 1))
+
     export default foo.bar;
 >foo.bar : Symbol(default, Decl(declarations.d.ts, 2, 22))
 >foo : Symbol(foo, Decl(declarations.d.ts, 0, 0))
@@ -60,6 +62,8 @@ declare module "foobar" {
 }
 
 declare module "foobarx" {
+>"foobarx" : Symbol("foobarx", Decl(declarations.d.ts, 9, 1))
+
     export default foo.bar.X;
 >foo.bar.X : Symbol(default, Decl(declarations.d.ts, 2, 27), Decl(declarations.d.ts, 4, 16))
 >foo.bar : Symbol(foo.bar, Decl(declarations.d.ts, 2, 22))

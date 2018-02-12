@@ -202,6 +202,8 @@ interface T12 {
 >a : Symbol(T12.a, Decl(main.ts, 49, 15))
 
     1: string;
+>1 : Symbol(T12[1], Decl(main.ts, 50, 14))
+
     [s2]: boolean;
 >s2 : Symbol(s2, Decl(main.ts, 29, 12))
 }
@@ -213,6 +215,8 @@ declare class T13 implements T2 {
 >a : Symbol(T13.a, Decl(main.ts, 54, 33))
 
     1: string;
+>1 : Symbol(T13[1], Decl(main.ts, 55, 14))
+
     [s2]: boolean;
 >s2 : Symbol(s2, Decl(main.ts, 29, 12))
 }
@@ -227,6 +231,8 @@ declare type T15 = {
 >a : Symbol(a, Decl(main.ts, 61, 20))
 
     1: string;
+>1 : Symbol(1, Decl(main.ts, 62, 14))
+
     [s2]: boolean;
 >s2 : Symbol(s2, Decl(main.ts, 29, 12))
 
@@ -239,6 +245,8 @@ declare class C {
 >a : Symbol(C.a, Decl(main.ts, 67, 17))
 
     static 1: string;
+>1 : Symbol(C[1], Decl(main.ts, 68, 21))
+
     static [s2]: boolean;
 >s2 : Symbol(s2, Decl(main.ts, 29, 12))
 }

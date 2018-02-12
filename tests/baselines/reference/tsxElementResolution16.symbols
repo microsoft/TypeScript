@@ -14,6 +14,5 @@ var obj1: Obj1;
 >Obj1 : Symbol(Obj1, Decl(file.tsx, 1, 1))
 
 <obj1 x={10} />; // Error (JSX.Element is implicit any)
->obj1 : Symbol(unknown)
 >x : Symbol(x, Decl(file.tsx, 7, 5))
 

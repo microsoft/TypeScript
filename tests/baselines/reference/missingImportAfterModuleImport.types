@@ -19,6 +19,8 @@ export = MainModule;
 
 === tests/cases/compiler/missingImportAfterModuleImport_0.ts ===
 declare module "SubModule" {
+>"SubModule" : typeof "SubModule"
+
     class SubModule {
 >SubModule : SubModule
 

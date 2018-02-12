@@ -15,6 +15,7 @@
 >K : any
 
     declare module "ambient" {
+>"ambient" : typeof Foo
 
     }
 

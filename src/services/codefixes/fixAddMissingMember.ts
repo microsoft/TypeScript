@@ -86,7 +86,7 @@ namespace ts.codefix {
         else {
             const leftExpressionType = checker.getTypeAtLocation(parent.expression);
             const { symbol } = leftExpressionType;
-            if (!(leftExpressionType.flags & TypeFlags.Object && symbol.flags & SymbolFlags.Class)) {
+            if (!(symbol && leftExpressionType.flags & TypeFlags.Object && symbol.flags & SymbolFlags.Class)) {
                 return undefined;
             }
             const classDeclaration = cast(first(symbol.declarations), isClassLike);

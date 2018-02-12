@@ -10,6 +10,6 @@ default abstract class C {}
 
 import abstract class D {}
 >abstract : any
-> : No type information available!
+> : any
 >D : D
 

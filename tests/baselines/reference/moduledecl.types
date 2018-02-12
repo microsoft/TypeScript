@@ -303,6 +303,8 @@ declare module m55 {
 }
 
 declare module "m3" {
+>"m3" : typeof "m3"
+
     export var b: number;
 >b : number
 }
