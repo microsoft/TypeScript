@@ -39,3 +39,10 @@ class C {
 module M {
 	export async function f1() { }
 }
+
+async function f14() {
+    block: {
+        await 1;
+        break block;
+    }
+}
