@@ -25054,7 +25054,7 @@ namespace ts {
                         // we prefix depends on the kind of entity. SymbolFlags.ExportHasLocal encompasses all the
                         // kinds that we do NOT prefix.
                         const exportSymbol = getMergedSymbol(symbol.exportSymbol);
-                        if (!prefixLocals && exportSymbol.flags & SymbolFlags.ExportHasLocal) {
+                        if (!prefixLocals && exportSymbol.flags & SymbolFlags.ExportHasLocal && !(exportSymbol.flags & SymbolFlags.Variable)) {
                             return undefined;
                         }
                         symbol = exportSymbol;
