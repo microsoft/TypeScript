@@ -26097,7 +26097,7 @@ namespace ts {
             // Prevent cascading error by short-circuit
             const file = getSourceFileOfNode(node);
             return checkGrammarDecoratorsAndModifiers(node) || checkGrammarTypeParameterList(node.typeParameters, file) ||
-                checkGrammarParameterList(node.parameters) || node.kind === SyntaxKind.ArrowFunction && checkGrammarArrowFunction(node, file);
+                checkGrammarParameterList(node.parameters) || checkGrammarArrowFunction(node, file);
         }
 
         function checkGrammarClassLikeDeclaration(node: ClassLikeDeclaration): boolean {
@@ -26105,7 +26105,12 @@ namespace ts {
             return checkGrammarClassDeclarationHeritageClauses(node) || checkGrammarTypeParameterList(node.typeParameters, file);
         }
 
-        function checkGrammarArrowFunction({ equalsGreaterThanToken }: ArrowFunction, file: SourceFile): boolean {
+        function checkGrammarArrowFunction(node: Node, file: SourceFile): boolean {
+            if (!isArrowFunction(node)) {
+                return false;
+            }
+
+            const { equalsGreaterThanToken } = node;
             const startLine = getLineAndCharacterOfPosition(file, equalsGreaterThanToken.pos).line;
             const endLine = getLineAndCharacterOfPosition(file, equalsGreaterThanToken.end).line;
             return startLine !== endLine && grammarErrorOnNode(equalsGreaterThanToken, Diagnostics.Line_terminator_not_permitted_before_arrow);
