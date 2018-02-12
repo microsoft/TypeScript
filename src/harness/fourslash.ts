@@ -2549,12 +2549,14 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyImportFixAtPosition(expectedTextArray: string[], errorCode?: number) {
-            const ranges = this.getRanges().filter(r => r.fileName === this.activeFile.fileName);
+            const { fileName } = this.activeFile;
+            const ranges = this.getRanges().filter(r => r.fileName === fileName);
             if (ranges.length !== 1) {
                 this.raiseError("Exactly one range should be specified in the testfile.");
             }
+            const range = ts.first(ranges);
 
-            const codeFixes = this.getCodeFixes(this.activeFile.fileName, errorCode);
+            const codeFixes = this.getCodeFixes(fileName, errorCode);
 
             if (codeFixes.length === 0) {
                 if (expectedTextArray.length !== 0) {
@@ -2564,11 +2566,14 @@ Actual: ${stringify(fullActual)}`);
             }
 
             const actualTextArray: string[] = [];
-            const scriptInfo = this.languageServiceAdapterHost.getScriptInfo(codeFixes[0].changes[0].fileName);
+            const scriptInfo = this.languageServiceAdapterHost.getScriptInfo(fileName);
             const originalContent = scriptInfo.content;
             for (const codeFix of codeFixes) {
-                this.applyEdits(codeFix.changes[0].fileName, codeFix.changes[0].textChanges, /*isFormattingEdit*/ false);
-                const text = this.rangeText(ranges[0]);
+                ts.Debug.assert(codeFix.changes.length === 1);
+                const change = ts.first(codeFix.changes);
+                ts.Debug.assert(change.fileName === fileName);
+                this.applyEdits(change.fileName, change.textChanges, /*isFormattingEdit*/ false);
+                const text = this.rangeText(range);
                 actualTextArray.push(text);
                 scriptInfo.updateContent(originalContent);
             }
