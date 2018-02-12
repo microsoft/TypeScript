@@ -18404,7 +18404,7 @@ namespace ts {
          *
          * @param returnType - return type of the function, can be undefined if return type is not explicitly specified
          */
-        function checkAllCodePathsInNonVoidFunctionReturnOrThrow(func: FunctionLikeDeclaration, returnType: Type): void {
+        function checkAllCodePathsInNonVoidFunctionReturnOrThrow(func: FunctionLikeDeclaration | MethodSignature, returnType: Type): void {
             if (!produceDiagnostics) {
                 return;
             }
@@ -18416,7 +18416,7 @@ namespace ts {
 
             // If all we have is a function signature, or an arrow function with an expression body, then there is nothing to check.
             // also if HasImplicitReturn flag is not set this means that all codepaths in function body end with return or throw
-            if (nodeIsMissing(func.body) || func.body.kind !== SyntaxKind.Block || !functionHasImplicitReturn(func)) {
+            if (func.kind === SyntaxKind.MethodSignature || nodeIsMissing(func.body) || func.body.kind !== SyntaxKind.Block || !functionHasImplicitReturn(func)) {
                 return;
             }
 
@@ -20083,7 +20083,7 @@ namespace ts {
             checkVariableLikeDeclaration(node);
         }
 
-        function checkMethodDeclaration(node: MethodDeclaration) {
+        function checkMethodDeclaration(node: MethodDeclaration | MethodSignature) {
             // Grammar checking
             if (!checkGrammarMethod(node)) checkGrammarComputedPropertyName(node.name);
 
@@ -20092,7 +20092,7 @@ namespace ts {
 
             // Abstract methods cannot have an implementation.
             // Extra checks are to avoid reporting multiple errors relating to the "abstractness" of the node.
-            if (hasModifier(node, ModifierFlags.Abstract) && node.body) {
+            if (hasModifier(node, ModifierFlags.Abstract) && node.kind === SyntaxKind.MethodDeclaration && node.body) {
                 error(node, Diagnostics.Method_0_cannot_have_an_implementation_because_it_is_marked_abstract, declarationNameToString(node.name));
             }
         }
@@ -20922,7 +20922,7 @@ namespace ts {
          *
          * @param node The signature to check
          */
-        function checkAsyncFunctionReturnType(node: FunctionLikeDeclaration): Type {
+        function checkAsyncFunctionReturnType(node: FunctionLikeDeclaration | MethodSignature): Type {
             // As part of our emit for an async function, we will need to emit the entity name of
             // the return type annotation as an expression. To meet the necessary runtime semantics
             // for __awaiter, we must also check that the type of the declaration (e.g. the static
@@ -21284,7 +21284,7 @@ namespace ts {
             }
         }
 
-        function checkFunctionOrMethodDeclaration(node: FunctionDeclaration | MethodDeclaration): void {
+        function checkFunctionOrMethodDeclaration(node: FunctionDeclaration | MethodDeclaration | MethodSignature): void {
             checkDecorators(node);
             checkSignatureDeclaration(node);
             const functionFlags = getFunctionFlags(node);
@@ -21326,7 +21326,8 @@ namespace ts {
                 }
             }
 
-            checkSourceElement(node.body);
+            const body = node.kind === SyntaxKind.MethodSignature ? undefined : node.body;
+            checkSourceElement(body);
 
             const returnTypeNode = getEffectiveReturnTypeNode(node);
             if ((functionFlags & FunctionFlags.Generator) === 0) { // Async function or normal function
@@ -21339,11 +21340,11 @@ namespace ts {
             if (produceDiagnostics && !returnTypeNode) {
                 // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
                 // in an ambient context
-                if (noImplicitAny && nodeIsMissing(node.body) && !isPrivateWithinAmbient(node)) {
+                if (noImplicitAny && nodeIsMissing(body) && !isPrivateWithinAmbient(node)) {
                     reportImplicitAnyError(node, anyType);
                 }
 
-                if (functionFlags & FunctionFlags.Generator && nodeIsPresent(node.body)) {
+                if (functionFlags & FunctionFlags.Generator && nodeIsPresent(body)) {
                     // A generator with a body and no type annotation can still cause errors. It can error if the
                     // yielded values have no common supertype, or it can give an implicit any error if it has no
                     // yielded values. The only way to trigger these errors is to try checking its return type.
@@ -22006,20 +22007,6 @@ namespace ts {
             // Grammar checking
             if (!checkGrammarDecoratorsAndModifiers(node) && !checkGrammarVariableDeclarationList(node.declarationList)) checkGrammarForDisallowedLetOrConstStatement(node);
             forEach(node.declarationList.declarations, checkSourceElement);
-        }
-
-        function checkGrammarDisallowedModifiersOnObjectLiteralExpressionMethod(node: MethodDeclaration) {
-            // We only disallow modifier on a method declaration if it is a property of object-literal-expression
-            if (node.modifiers && node.parent.kind === SyntaxKind.ObjectLiteralExpression) {
-                if (getFunctionFlags(node) & FunctionFlags.Async) {
-                    if (node.modifiers.length > 1) {
-                        return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
-                    }
-                }
-                else {
-                    return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
-                }
-            }
         }
 
         function checkExpressionStatement(node: ExpressionStatement) {
@@ -24075,7 +24062,7 @@ namespace ts {
                     return checkSignatureDeclaration(<SignatureDeclaration>node);
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
-                    return checkMethodDeclaration(<MethodDeclaration>node);
+                    return checkMethodDeclaration(<MethodDeclaration | MethodSignature>node);
                 case SyntaxKind.Constructor:
                     return checkConstructorDeclaration(<ConstructorDeclaration>node);
                 case SyntaxKind.GetAccessor:
@@ -26106,7 +26093,7 @@ namespace ts {
             }
         }
 
-        function checkGrammarFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
+        function checkGrammarFunctionLikeDeclaration(node: FunctionLikeDeclaration | MethodSignature): boolean {
             // Prevent cascading error by short-circuit
             const file = getSourceFileOfNode(node);
             return checkGrammarDecoratorsAndModifiers(node) || checkGrammarTypeParameterList(node.typeParameters, file) ||
@@ -26118,16 +26105,15 @@ namespace ts {
             return checkGrammarClassDeclarationHeritageClauses(node) || checkGrammarTypeParameterList(node.typeParameters, file);
         }
 
-        function checkGrammarArrowFunction(node: FunctionLikeDeclaration, file: SourceFile): boolean {
-            if (node.kind === SyntaxKind.ArrowFunction) {
-                const arrowFunction = <ArrowFunction>node;
-                const startLine = getLineAndCharacterOfPosition(file, arrowFunction.equalsGreaterThanToken.pos).line;
-                const endLine = getLineAndCharacterOfPosition(file, arrowFunction.equalsGreaterThanToken.end).line;
-                if (startLine !== endLine) {
-                    return grammarErrorOnNode(arrowFunction.equalsGreaterThanToken, Diagnostics.Line_terminator_not_permitted_before_arrow);
-                }
+        function checkGrammarArrowFunction(node: Node, file: SourceFile): boolean {
+            if (!isArrowFunction(node)) {
+                return false;
             }
-            return false;
+
+            const { equalsGreaterThanToken } = node;
+            const startLine = getLineAndCharacterOfPosition(file, equalsGreaterThanToken.pos).line;
+            const endLine = getLineAndCharacterOfPosition(file, equalsGreaterThanToken.end).line;
+            return startLine !== endLine && grammarErrorOnNode(equalsGreaterThanToken, Diagnostics.Line_terminator_not_permitted_before_arrow);
         }
 
         function checkGrammarIndexSignatureParameters(node: SignatureDeclaration): boolean {
@@ -26592,19 +26578,26 @@ namespace ts {
             }
         }
 
-        function checkGrammarMethod(node: MethodDeclaration) {
-            if (checkGrammarDisallowedModifiersOnObjectLiteralExpressionMethod(node) ||
-                checkGrammarFunctionLikeDeclaration(node) ||
-                checkGrammarForGenerator(node)) {
+        function checkGrammarMethod(node: MethodDeclaration | MethodSignature) {
+            if (checkGrammarFunctionLikeDeclaration(node)) {
                 return true;
             }
 
-            if (node.parent.kind === SyntaxKind.ObjectLiteralExpression) {
-                if (checkGrammarForInvalidQuestionMark(node.questionToken, Diagnostics.An_object_member_cannot_be_declared_optional)) {
-                    return true;
+            if (node.kind === SyntaxKind.MethodDeclaration) {
+                if (node.parent.kind === SyntaxKind.ObjectLiteralExpression) {
+                    // We only disallow modifier on a method declaration if it is a property of object-literal-expression
+                    if (node.modifiers && !(node.modifiers.length === 1 && first(node.modifiers).kind === SyntaxKind.AsyncKeyword)) {
+                        return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
+                    }
+                    else if (checkGrammarForInvalidQuestionMark(node.questionToken, Diagnostics.An_object_member_cannot_be_declared_optional)) {
+                        return true;
+                    }
+                    else if (node.body === undefined) {
+                        return grammarErrorAtPos(node, node.end - 1, ";".length, Diagnostics._0_expected, "{");
+                    }
                 }
-                else if (node.body === undefined) {
-                    return grammarErrorAtPos(node, node.end - 1, ";".length, Diagnostics._0_expected, "{");
+                if (checkGrammarForGenerator(node)) {
+                    return true;
                 }
             }
 
@@ -26617,7 +26610,7 @@ namespace ts {
                 if (node.flags & NodeFlags.Ambient) {
                     return checkGrammarForInvalidDynamicName(node.name, Diagnostics.A_computed_property_name_in_an_ambient_context_must_refer_to_an_expression_whose_type_is_a_literal_type_or_a_unique_symbol_type);
                 }
-                else if (!node.body) {
+                else if (node.kind === SyntaxKind.MethodDeclaration && !node.body) {
                     return checkGrammarForInvalidDynamicName(node.name, Diagnostics.A_computed_property_name_in_a_method_overload_must_refer_to_an_expression_whose_type_is_a_literal_type_or_a_unique_symbol_type);
                 }
             }
