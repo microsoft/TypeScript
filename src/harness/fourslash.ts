@@ -3109,6 +3109,9 @@ Actual: ${stringify(fullActual)}`);
             hasAction: boolean | undefined,
             options: FourSlashInterface.VerifyCompletionListContainsOptions | undefined,
         ) {
+            const eq = <T>(a: T, b: T, msg: string) => {
+                assert.deepEqual(a, b,  this.assertionMessageAtLastKnownMarker(msg + " for " + stringify(entryId)));
+            };
             const matchingItems = items.filter(item => item.name === entryId.name && item.source === entryId.source);
             if (matchingItems.length === 0) {
                 const itemsString = items.map(item => stringify({ name: item.name, source: item.source, kind: item.kind })).join(",\n");
@@ -3123,30 +3126,30 @@ Actual: ${stringify(fullActual)}`);
                 const details = this.getCompletionEntryDetails(item.name, item.source);
 
                 if (documentation !== undefined) {
-                    assert.equal(ts.displayPartsToString(details.documentation), documentation, this.assertionMessageAtLastKnownMarker("completion item documentation for " + entryId));
+                    eq(ts.displayPartsToString(details.documentation), documentation, "completion item documentation");
                 }
                 if (text !== undefined) {
-                    assert.equal(ts.displayPartsToString(details.displayParts), text, this.assertionMessageAtLastKnownMarker("completion item detail text for " + entryId));
+                    eq(ts.displayPartsToString(details.displayParts), text, "completion item detail text");
                 }
 
                 if (entryId.source === undefined) {
-                    assert.equal(options && options.sourceDisplay, undefined);
+                    eq(options && options.sourceDisplay, undefined, "source display");
                 }
                 else {
-                    assert.deepEqual(details.source, [ts.textPart(options!.sourceDisplay)]);
+                    eq(details.source, [ts.textPart(options!.sourceDisplay)], "source display");
                 }
             }
 
             if (kind !== undefined) {
                 if (typeof kind === "string") {
-                    assert.equal(item.kind, kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + entryId));
+                    eq(item.kind, kind, "completion item kind");
                 }
                 else {
                     if (kind.kind) {
-                        assert.equal(item.kind, kind.kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + entryId));
+                        eq(item.kind, kind.kind, "completion item kind");
                     }
                     if (kind.kindModifiers !== undefined) {
-                        assert.equal(item.kindModifiers, kind.kindModifiers, this.assertionMessageAtLastKnownMarker("completion item kindModifiers for " + entryId));
+                        eq(item.kindModifiers, kind.kindModifiers, "completion item kindModifiers");
                     }
                 }
             }
@@ -3155,14 +3158,14 @@ Actual: ${stringify(fullActual)}`);
 
             if (spanIndex !== undefined) {
                 const span = this.getTextSpanForRangeAtIndex(spanIndex);
-                assert.isTrue(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + entryId));
+                assert.isTrue(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + stringify(entryId)));
             }
 
-            assert.equal(item.hasAction, hasAction, "hasAction");
-            assert.equal(item.isRecommended, options && options.isRecommended, "isRecommended");
-            assert.equal(item.insertText, options && options.insertText, "insertText");
+            eq(item.hasAction, hasAction, "hasAction");
+            eq(item.isRecommended, options && options.isRecommended, "isRecommended");
+            eq(item.insertText, options && options.insertText, "insertText");
             if (options && options.replacementSpan) { // TODO: GH#21679
-                assert.deepEqual(item.replacementSpan, options && options.replacementSpan && ts.createTextSpanFromRange(options.replacementSpan), "replacementSpan");
+                eq(item.replacementSpan, options && options.replacementSpan && ts.createTextSpanFromRange(options.replacementSpan), "replacementSpan");
             }
         }
 
