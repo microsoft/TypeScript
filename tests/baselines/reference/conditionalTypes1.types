@@ -1208,3 +1208,69 @@ const f45 = <U>(value: T95<U>): T94<U> => value;  // Error
 >U : U
 >value : T95<U>
 
+// Repro from #21863
+
+function f50() {
+>f50 : () => void
+
+    type Eq<T, U> = T extends U ? U extends T ? true : false : false;
+>Eq : T extends U ? U extends T ? true : false : false
+>T : T
+>U : U
+>T : T
+>U : U
+>U : U
+>T : T
+>true : true
+>false : false
+>false : false
+
+    type If<S, T, U> = S extends false ? U : T;
+>If : S extends false ? U : T
+>S : S
+>T : T
+>U : U
+>S : S
+>false : false
+>U : U
+>T : T
+
+    type Omit<T extends object> = { [P in keyof T]: If<Eq<T[P], never>, never, P>; }[keyof T];
+>Omit : { [P in keyof T]: (T[P] extends never ? boolean : false) extends false ? P : never; }[keyof T]
+>T : T
+>P : P
+>T : T
+>If : S extends false ? U : T
+>Eq : T extends U ? U extends T ? true : false : false
+>T : T
+>P : P
+>P : P
+>T : T
+
+    type Omit2<T extends object, U = never> = { [P in keyof T]: If<Eq<T[P], U>, never, P>; }[keyof T];
+>Omit2 : { [P in keyof T]: (T[P] extends U ? U extends T[P] ? true : false : false) extends false ? P : never; }[keyof T]
+>T : T
+>U : U
+>P : P
+>T : T
+>If : S extends false ? U : T
+>Eq : T extends U ? U extends T ? true : false : false
+>T : T
+>P : P
+>U : U
+>P : P
+>T : T
+
+    type A = Omit<{ a: void; b: never; }>;  // 'a'
+>A : "a"
+>Omit : { [P in keyof T]: (T[P] extends never ? boolean : false) extends false ? P : never; }[keyof T]
+>a : void
+>b : never
+
+    type B = Omit2<{ a: void; b: never; }>;  // 'a'
+>B : "a"
+>Omit2 : { [P in keyof T]: (T[P] extends U ? U extends T[P] ? true : false : false) extends false ? P : never; }[keyof T]
+>a : void
+>b : never
+}
+
