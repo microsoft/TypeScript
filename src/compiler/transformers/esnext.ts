@@ -153,7 +153,7 @@ namespace ts {
                 if (statement.kind === SyntaxKind.ForOfStatement && (<ForOfStatement>statement).awaitModifier) {
                     return visitForOfStatement(<ForOfStatement>statement, node);
                 }
-                return restoreEnclosingLabel(visitEachChild(node, visitor, context), node);
+                return restoreEnclosingLabel(visitEachChild(statement, visitor, context), node);
             }
             return visitEachChild(node, visitor, context);
         }
