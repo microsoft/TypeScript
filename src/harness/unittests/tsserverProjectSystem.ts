@@ -2904,6 +2904,83 @@ namespace ts.projectSystem {
                 tags: []
             });
         });
+
+        it("files opened, closed affecting multiple projects", () => {
+            const file: FileOrFolder = {
+                path: "/a/b/projects/config/file.ts",
+                content: `import {a} from "../files/file1"; export let b = a;`
+            };
+            const config: FileOrFolder = {
+                path: "/a/b/projects/config/tsconfig.json",
+                content: ""
+            };
+            const filesFile1: FileOrFolder = {
+                path: "/a/b/projects/files/file1.ts",
+                content: "export let a = 10;"
+            };
+            const filesFile2: FileOrFolder = {
+                path: "/a/b/projects/files/file2.ts",
+                content: "export let aa = 10;"
+            };
+
+            const files = [config, file, filesFile1, filesFile2, libFile];
+            const host = createServerHost(files);
+            const session = createSession(host);
+            // Create configured project
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: protocol.CommandTypes.Open,
+                arguments: {
+                    file: file.path
+                }
+            });
+
+            const projectService = session.getProjectService();
+            const configuredProject = projectService.configuredProjects.get(config.path);
+            verifyConfiguredProject();
+
+            // open files/file1 = should not create another project
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: protocol.CommandTypes.Open,
+                arguments: {
+                    file: filesFile1.path
+                }
+            });
+            verifyConfiguredProject();
+
+            // Close the file = should still have project
+            session.executeCommandSeq<protocol.CloseRequest>({
+                command: protocol.CommandTypes.Close,
+                arguments: {
+                    file: file.path
+                }
+            });
+            verifyConfiguredProject();
+
+            // Open files/file2 - should create inferred project and close configured project
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: protocol.CommandTypes.Open,
+                arguments: {
+                    file: filesFile2.path
+                }
+            });
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [libFile.path, filesFile2.path]);
+
+            // Actions on file1 would result in assert
+            session.executeCommandSeq<protocol.OccurrencesRequest>({
+                command: protocol.CommandTypes.Occurrences,
+                arguments: {
+                    file: filesFile1.path,
+                    line: 1,
+                    offset: filesFile1.content.indexOf("a")
+                }
+            });
+
+            function verifyConfiguredProject() {
+                checkNumberOfProjects(projectService, { configuredProjects: 1 });
+                checkProjectActualFiles(configuredProject, [file.path, filesFile1.path, libFile.path, config.path]);
+            }
+        });
     });
 
     describe("tsserverProjectSystem Proper errors", () => {
