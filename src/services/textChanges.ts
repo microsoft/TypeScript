@@ -442,6 +442,85 @@ namespace ts.textChanges {
             }
             throw Debug.failBadSyntaxKind(node); // We haven't handled this kind of node yet -- add it
         }
+        /**
+         * This function should be used to insert nodes alphabetically in lists when nodes don't carry separators as the part of the node range,
+         * e.g. export lists, import lists, etc.
+         * Linear search is used instead of binary as the (generally few) nodes are not guaranteed to be in order.
+         */
+        public insertNodeInListAlphabetically(sourceFile: SourceFile, containingList: NodeArray<ImportSpecifier>, newNode: ImportSpecifier): this {
+            if (newNode.name.text < containingList[0].name.text) {
+                this.insertNodeInListBeforeFirst(sourceFile, containingList, containingList[0], newNode);
+                return this;
+            }
+
+            for (let i = 1; i < containingList.length; i += 1) {
+                if (newNode.name.text < containingList[i].name.text) {
+                    this.insertNodeInListAfter(sourceFile, containingList[i - 1], newNode);
+                    return this;
+                }
+            }
+
+            this.insertNodeInListAfter(sourceFile, containingList[containingList.length - 1], newNode);
+            return this;
+        }
+
+        /**
+         * This function should be used to insert nodes in lists when nodes don't carry separators as the part of the node range,
+         * i.e. arguments in arguments lists, parameters in parameter lists etc.
+         * Note that separators are part of the node in statements and class elements.
+         */
+        public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node) {
+            const containingList = formatting.SmartIndenter.getContainingList(after, sourceFile);
+            if (!containingList) {
+                Debug.fail("node is not a list element");
+                return this;
+            }
+            const index = indexOfNode(containingList, after);
+            if (index < 0) {
+                return this;
+            }
+            if (index !== containingList.length - 1) {
+                // any element except the last one
+                // use next sibling as an anchor
+                const nextToken = getTokenAtPosition(sourceFile, after.end, /*includeJsDocComment*/ false);
+                if (nextToken && isSeparator(after, nextToken)) {
+                    this.insertNodeInListAfterNotLast(sourceFile, containingList, nextToken, index, newNode);
+                }
+            }
+            else {
+                this.insertNodeInListAfterLast(sourceFile, containingList, after, index, newNode);
+            }
+            return this;
+        }
+
+        private insertNodeInListBeforeFirst(sourceFile: SourceFile, containingList: NodeArray<Node>, first: Node, newNode: Node): void {
+            const startPosition = first.getStart(sourceFile);
+            const afterStartLinePosition = getLineStartPositionForPosition(startPosition, sourceFile);
+            const { multilineList, separator } = this.getMultilineAndSeparatorOfList(sourceFile, containingList, afterStartLinePosition, 1, first);
+
+            if (!multilineList) {
+                this.changes.push({
+                    kind: ChangeKind.ReplaceWithSingleNode,
+                    sourceFile,
+                    range: { pos: startPosition, end: startPosition },
+                    node: newNode,
+                    options: { suffix: `${tokenToString(separator)} ` }
+                });
+                return;
+            }
+
+            const last = containingList[containingList.length - 1];
+            const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(afterStartLinePosition, last.end, sourceFile, this.formatContext.options);
+            const insertPos = skipTrivia(sourceFile.text, startPosition, /*stopAfterLineBreak*/ true, /*stopAtComments*/ false) - indentation;
+
+            this.changes.push({
+                kind: ChangeKind.ReplaceWithSingleNode,
+                sourceFile,
+                range: { pos: insertPos, end: insertPos },
+                node: newNode,
+                options: { indentation, suffix: `${tokenToString(separator)}${this.newLineCharacter}` }
+            });
+        }
 
         private insertNodeInListAfterNotLast(sourceFile: SourceFile, containingList: NodeArray<Node>, nextToken: Node, index: number, newNode: Node): void {
             // for list
@@ -498,57 +577,6 @@ namespace ts.textChanges {
                     // write separator and leading trivia of the next element as suffix
                     suffix: `${tokenToString(nextToken.kind)}${sourceFile.text.substring(nextToken.end, containingList[index + 1].getStart(sourceFile))}`
                 }
-            });
-        }
-
-        /**
-         * This function should be used to insert nodes alphabetically in lists when nodes don't carry separators as the part of the node range,
-         * e.g. export lists, import lists, etc.
-         * Linear search is used instead of binary as the (generally few) nodes are not guaranteed to be in order.
-         */
-        public insertNodeInListAlphabetically(sourceFile: SourceFile, containingList: NodeArray<ImportSpecifier>, newNode: ImportSpecifier): this {
-            if (newNode.name.text < containingList[0].name.text) {
-                this.insertNodeInListBeforeFirst(sourceFile, containingList, containingList[0], newNode);
-                return this;
-            }
-
-            for (let i = 1; i < containingList.length; i += 1) {
-                if (newNode.name.text < containingList[i].name.text) {
-                    this.insertNodeInListAfter(sourceFile, containingList[i - 1], newNode);
-                    return this;
-                }
-            }
-
-            this.insertNodeInListAfter(sourceFile, containingList[containingList.length - 1], newNode);
-            return this;
-        }
-
-        private insertNodeInListBeforeFirst(sourceFile: SourceFile, containingList: NodeArray<Node>, first: Node, newNode: Node): void {
-            const startPosition = first.getStart(sourceFile);
-            const afterStartLinePosition = getLineStartPositionForPosition(startPosition, sourceFile);
-            const { multilineList, separator } = this.getMultilineAndSeparatorOfList(sourceFile, containingList, afterStartLinePosition, 1, first);
-
-            if (!multilineList) {
-                this.changes.push({
-                    kind: ChangeKind.ReplaceWithSingleNode,
-                    sourceFile,
-                    range: { pos: startPosition, end: startPosition },
-                    node: newNode,
-                    options: { suffix: `${tokenToString(separator)} ` }
-                });
-                return;
-            }
-
-            const last = containingList[containingList.length - 1];
-            const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(afterStartLinePosition, last.end, sourceFile, this.formatContext.options);
-            const insertPos = skipTrivia(sourceFile.text, startPosition, /*stopAfterLineBreak*/ true, /*stopAtComments*/ false) - indentation;
-
-            this.changes.push({
-                kind: ChangeKind.ReplaceWithSingleNode,
-                sourceFile,
-                range: { pos: insertPos, end: insertPos },
-                node: newNode,
-                options: { indentation, suffix: `${tokenToString(separator)}${this.newLineCharacter}` }
             });
         }
 
@@ -622,35 +650,6 @@ namespace ts.textChanges {
             }
 
             return { multilineList, separator };
-        }
-
-        /**
-         * This function should be used to insert nodes in lists when nodes don't carry separators as the part of the node range,
-         * i.e. arguments in arguments lists, parameters in parameter lists etc.
-         * Note that separators are part of the node in statements and class elements.
-         */
-        public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node) {
-            const containingList = formatting.SmartIndenter.getContainingList(after, sourceFile);
-            if (!containingList) {
-                Debug.fail("node is not a list element");
-                return this;
-            }
-            const index = indexOfNode(containingList, after);
-            if (index < 0) {
-                return this;
-            }
-            if (index !== containingList.length - 1) {
-                // any element except the last one
-                // use next sibling as an anchor
-                const nextToken = getTokenAtPosition(sourceFile, after.end, /*includeJsDocComment*/ false);
-                if (nextToken && isSeparator(after, nextToken)) {
-                    this.insertNodeInListAfterNotLast(sourceFile, containingList, nextToken, index, newNode);
-                }
-            }
-            else {
-                this.insertNodeInListAfterLast(sourceFile, containingList, after, index, newNode);
-            }
-            return this;
         }
 
         private finishInsertNodeAtClassStart(): void {
