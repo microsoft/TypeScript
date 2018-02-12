@@ -11203,7 +11203,7 @@ namespace ts {
                         const t = getTypeOfSymbol(p);
                         if (t.flags & TypeFlags.ContainsWideningType) {
                             if (!reportWideningErrorsInType(t)) {
-                                error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, symbolName(p), typeToString(getWidenedType(t)));
+                                error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, symbolToString(p), typeToString(getWidenedType(t)));
                             }
                             errorReported = true;
                         }
