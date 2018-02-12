@@ -14,8 +14,7 @@
 
 verify.importFixAtPosition([
 `{
-    f1,
-    v1, v2,
+    f1, v1, v2,
     v3
 }`
 ]);

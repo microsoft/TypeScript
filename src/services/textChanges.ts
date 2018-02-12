@@ -520,12 +520,13 @@ namespace ts.textChanges {
             }
 
             this.insertNodeInListAfter(sourceFile, containingList[containingList.length - 1], newNode);
+            return this;
         }
 
         private insertNodeInListBeforeFirst(sourceFile: SourceFile, containingList: NodeArray<Node>, first: Node, newNode: Node): void {
             const startPosition = first.getStart(sourceFile);
             const afterStartLinePosition = getLineStartPositionForPosition(startPosition, sourceFile);
-            const { multilineList, separator } = this.getMultilineAndSeparatorOfList(sourceFile, containingList, afterStartLinePosition, 0, first);
+            const { multilineList, separator } = this.getMultilineAndSeparatorOfList(sourceFile, containingList, afterStartLinePosition, 1, first);
 
             if (!multilineList) {
                 this.changes.push({
@@ -538,18 +539,16 @@ namespace ts.textChanges {
                 return;
             }
 
-            const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(startPosition, afterStartLinePosition, sourceFile, this.formatContext.options);
-            let insertPos = skipTrivia(sourceFile.text, startPosition, /*stopAfterLineBreak*/ true, /*stopAtComments*/ false);
-            if (insertPos !== startPosition && isLineBreak(sourceFile.text.charCodeAt(insertPos - 1))) {
-                insertPos--;
-            }
+            const last = containingList[containingList.length - 1];
+            const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(afterStartLinePosition, last.end, sourceFile, this.formatContext.options);
+            const insertPos = skipTrivia(sourceFile.text, startPosition, /*stopAfterLineBreak*/ true, /*stopAtComments*/ false) - indentation;
 
             this.changes.push({
                 kind: ChangeKind.ReplaceWithSingleNode,
                 sourceFile,
                 range: { pos: insertPos, end: insertPos },
                 node: newNode,
-                options: { indentation, prefix: this.newLineCharacter }
+                options: { indentation, suffix: `${tokenToString(separator)}${this.newLineCharacter}` }
             });
         }
 
@@ -558,7 +557,7 @@ namespace ts.textChanges {
             const afterStart = after.getStart(sourceFile);
             const afterStartLinePosition = getLineStartPositionForPosition(afterStart, sourceFile);
 
-            const { multilineList, separator } = this.getMultilineAndSeparatorOfList(sourceFile, containingList, afterStartLinePosition, index, after);
+            const { multilineList, separator } = this.getMultilineAndSeparatorOfList(sourceFile, containingList, afterStartLinePosition, index - 1, after);
 
             if (multilineList) {
                 // insert separator immediately following the 'after' node to preserve comments in trailing trivia
@@ -614,7 +613,7 @@ namespace ts.textChanges {
                 const tokenBeforeInsertPosition = findPrecedingToken(sampleNode.pos, sourceFile);
                 separator = isSeparator(sampleNode, tokenBeforeInsertPosition) ? tokenBeforeInsertPosition.kind : SyntaxKind.CommaToken;
                 // determine if list is multiline by checking lines of after element and element that precedes it.
-                const afterMinusOneStartLinePosition = getLineStartPositionForPosition(containingList[sampleIndex - 1].getStart(sourceFile), sourceFile);
+                const afterMinusOneStartLinePosition = getLineStartPositionForPosition(containingList[sampleIndex].getStart(sourceFile), sourceFile);
                 multilineList = afterMinusOneStartLinePosition !== afterStartLinePosition;
             }
             if (hasCommentsBeforeLineBreak(sourceFile.text, sampleNode.end)) {

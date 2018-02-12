@@ -9,4 +9,4 @@
 //// export var v2 = 5;
 //// export var v3 = 5;
 
-verify.importFixAtPosition([`{f1, v1, v2, v3}`]);
+verify.importFixAtPosition([`{f1, v1, v2, v3,}`]);
