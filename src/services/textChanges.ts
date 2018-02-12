@@ -501,6 +501,58 @@ namespace ts.textChanges {
             });
         }
 
+        /**
+         * This function should be used to insert nodes alphabetically in lists when nodes don't carry separators as the part of the node range,
+         * e.g. export lists, import lists, etc.
+         * Linear search is used instead of binary as the (generally few) nodes are not guaranteed to be in order.
+         */
+        public insertNodeInListAlphabetically(sourceFile: SourceFile, containingList: NodeArray<ImportSpecifier>, newNode: ImportSpecifier): this {
+            if (newNode.name.text < containingList[0].name.text) {
+                this.insertNodeInListBeforeFirst(sourceFile, containingList, containingList[0], newNode);
+                return this;
+            }
+
+            for (let i = 1; i < containingList.length; i += 1) {
+                if (newNode.name.text < containingList[i].name.text) {
+                    this.insertNodeInListAfter(sourceFile, containingList[i - 1], newNode);
+                    return this;
+                }
+            }
+
+            this.insertNodeInListAfter(sourceFile, containingList[containingList.length - 1], newNode);
+        }
+
+        private insertNodeInListBeforeFirst(sourceFile: SourceFile, containingList: NodeArray<Node>, first: Node, newNode: Node): void {
+            const startPosition = first.getStart(sourceFile);
+            const afterStartLinePosition = getLineStartPositionForPosition(startPosition, sourceFile);
+            const { multilineList, separator } = this.getMultilineAndSeparatorOfList(sourceFile, containingList, afterStartLinePosition, 0, first);
+
+            if (!multilineList) {
+                this.changes.push({
+                    kind: ChangeKind.ReplaceWithSingleNode,
+                    sourceFile,
+                    range: { pos: startPosition, end: startPosition },
+                    node: newNode,
+                    options: { suffix: `${tokenToString(separator)} ` }
+                });
+                return;
+            }
+
+            const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(startPosition, afterStartLinePosition, sourceFile, this.formatContext.options);
+            let insertPos = skipTrivia(sourceFile.text, startPosition, /*stopAfterLineBreak*/ true, /*stopAtComments*/ false);
+            if (insertPos !== startPosition && isLineBreak(sourceFile.text.charCodeAt(insertPos - 1))) {
+                insertPos--;
+            }
+
+            this.changes.push({
+                kind: ChangeKind.ReplaceWithSingleNode,
+                sourceFile,
+                range: { pos: insertPos, end: insertPos },
+                node: newNode,
+                options: { indentation, prefix: this.newLineCharacter }
+            });
+        }
+
         private insertNodeInListAfterLast(sourceFile: SourceFile, containingList: NodeArray<Node>, after: Node, index: number, newNode: Node): void {
             const end = after.getEnd();
             const afterStart = after.getStart(sourceFile);

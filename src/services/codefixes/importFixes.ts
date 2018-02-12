@@ -599,9 +599,9 @@ namespace ts.codefix {
                 const newImportSpecifier = createImportSpecifier(/*propertyName*/ undefined, createIdentifier(symbolName));
                 if (namedBindings && namedBindings.kind === SyntaxKind.NamedImports && namedBindings.elements.length !== 0) {
                     // There are already named imports; add another.
-                    return ChangeTracker.with(context, t => t.insertNodeInListAfter(
+                    return ChangeTracker.with(context, t => t.insertNodeInListAlphabetically(
                         sourceFile,
-                        namedBindings.elements[namedBindings.elements.length - 1],
+                        namedBindings.elements,
                         newImportSpecifier));
                 }
                 if (!namedBindings || namedBindings.kind === SyntaxKind.NamedImports && namedBindings.elements.length === 0) {
