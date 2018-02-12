@@ -862,6 +862,23 @@ namespace ts.Completions {
                     parent = parent.parent;
                 }
 
+                // Fix location
+                if (currentToken.parent === location) {
+                    switch (currentToken.kind) {
+                        case SyntaxKind.GreaterThanToken:
+                            if (currentToken.parent.kind === SyntaxKind.JsxElement || currentToken.parent.kind === SyntaxKind.JsxOpeningElement) {
+                                location = currentToken;
+                            }
+                            break;
+
+                        case SyntaxKind.SlashToken:
+                            if (currentToken.parent.kind === SyntaxKind.JsxSelfClosingElement) {
+                                location = currentToken;
+                            }
+                            break;
+                    }
+                }
+
                 switch (parent.kind) {
                     case SyntaxKind.JsxClosingElement:
                         if (contextToken.kind === SyntaxKind.SlashToken) {
@@ -1042,10 +1059,6 @@ namespace ts.Completions {
                 return true;
             }
 
-            if (tryGetFunctionLikeBodyCompletionContainer(contextToken)) {
-                keywordFilters = KeywordCompletionFilters.FunctionLikeBodyKeywords;
-            }
-
             if (classLikeContainer = tryGetClassLikeCompletionContainer(contextToken)) {
                 // cursor inside class declaration
                 getGetClassLikeCompletionSymbols(classLikeContainer);
@@ -1065,6 +1078,10 @@ namespace ts.Completions {
                         return true;
                     }
                 }
+            }
+
+            if (tryGetFunctionLikeBodyCompletionContainer(contextToken)) {
+                keywordFilters = KeywordCompletionFilters.FunctionLikeBodyKeywords;
             }
 
             // Get all entities in the current scope.
