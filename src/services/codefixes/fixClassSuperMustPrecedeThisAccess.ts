@@ -34,7 +34,7 @@ namespace ts.codefix {
 
     function getNodes(sourceFile: SourceFile, pos: number): { readonly constructor: ConstructorDeclaration, readonly superCall: ExpressionStatement } {
         const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
-        Debug.assert(token.kind === SyntaxKind.ThisKeyword);
+        if (token.kind !== SyntaxKind.ThisKeyword) return undefined;
         const constructor = getContainingFunction(token) as ConstructorDeclaration;
         const superCall = findSuperCall(constructor.body);
         // figure out if the `this` access is actually inside the supercall
