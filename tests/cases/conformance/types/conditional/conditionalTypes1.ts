@@ -27,6 +27,13 @@ function f3<T>(x: Partial<T>[keyof T], y: NonNullable<Partial<T>[keyof T]>) {
     y = x;  // Error
 }
 
+function f4<T extends { x: string | undefined }>(x: T["x"], y: NonNullable<T["x"]>) {
+    x = y;
+    y = x;  // Error
+    let s1: string = x;  // Error
+    let s2: string = y;
+}
+
 type Options = { k: "a", a: number } | { k: "b", b: string } | { k: "c", c: boolean };
 
 type T10 = Exclude<Options, { k: "a" | "b" }>;  // { k: "c", c: boolean }
@@ -38,8 +45,8 @@ type T13 = Extract<Options, { k: "a" } | { k: "b" }>;  // { k: "a", a: number } 
 type T14 = Exclude<Options, { q: "a" }>;  // Options
 type T15 = Extract<Options, { q: "a" }>;  // never
 
-declare function f4<T extends Options, K extends string>(p: K): Extract<T, { k: K }>;
-let x0 = f4("a");  // { k: "a", a: number }
+declare function f5<T extends Options, K extends string>(p: K): Extract<T, { k: K }>;
+let x0 = f5("a");  // { k: "a", a: number }
 
 type OptionsOfKind<K extends Options["k"]> = Extract<Options, { k: K }>;
 
@@ -252,3 +259,20 @@ function f33<T, U>() {
     var z: T1;
     var z: T2;
 }
+
+// Repro from #21823
+
+type T90<T> = T extends 0 ? 0 : () => 0;
+type T91<T> = T extends 0 ? 0 : () => 0;
+const f40 = <U>(a: T90<U>): T91<U> => a;
+const f41 = <U>(a: T91<U>): T90<U> => a;
+
+type T92<T> = T extends () => 0 ? () => 1 : () => 2;
+type T93<T> = T extends () => 0 ? () => 1 : () => 2;
+const f42 = <U>(a: T92<U>): T93<U> => a;
+const f43 = <U>(a: T93<U>): T92<U> => a;
+
+type T94<T> = T extends string ? true : 42;
+type T95<T> = T extends string ? boolean : number;
+const f44 = <U>(value: T94<U>): T95<U> => value;
+const f45 = <U>(value: T95<U>): T94<U> => value;  // Error

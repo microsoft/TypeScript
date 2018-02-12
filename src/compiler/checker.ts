@@ -6096,11 +6096,13 @@ namespace ts {
             // with its constraint. We do this because if the constraint is a union type it will be distributed
             // over the conditional type and possibly reduced. For example, 'T extends undefined ? never : T'
             // removes 'undefined' from T.
-            const checkType = type.checkType;
-            if (checkType.flags & TypeFlags.TypeParameter) {
-                const constraint = getConstraintOfTypeParameter(<TypeParameter>checkType);
+            if (isDistributiveConditionalType(type)) {
+                const constraint = getConstraintOfType(type.checkType);
                 if (constraint) {
-                    return instantiateType(type, createTypeMapper([<TypeParameter>checkType], [constraint]));
+                    const target = type.target || type;
+                    const mapper = createTypeMapper([<TypeParameter>target.checkType], [constraint]);
+                    const combinedMapper = type.mapper ? combineTypeMappers(mapper, type.mapper) : mapper;
+                    return instantiateType(target, combinedMapper);
                 }
             }
             return undefined;
@@ -8237,6 +8239,10 @@ namespace ts {
             return result;
         }
 
+        function isDistributiveConditionalType(type: ConditionalType) {
+            return !!((type.target || type).checkType.flags & TypeFlags.TypeParameter);
+        }
+
         function getInferTypeParameters(node: ConditionalTypeNode): TypeParameter[] {
             let result: TypeParameter[];
             if (node.locals) {
@@ -8849,9 +8855,9 @@ namespace ts {
             // Check if we have a conditional type where the check type is a naked type parameter. If so,
             // the conditional type is distributive over union types and when T is instantiated to a union
             // type A | B, we produce (A extends U ? X : Y) | (B extends U ? X : Y).
-            const checkType = target.checkType;
-            if (checkType.flags & TypeFlags.TypeParameter) {
-                const instantiatedType = combinedMapper(<TypeParameter>checkType);
+            if (isDistributiveConditionalType(target)) {
+                const checkType = <TypeParameter>target.checkType;
+                const instantiatedType = combinedMapper(checkType);
                 if (checkType !== instantiatedType && instantiatedType.flags & TypeFlags.Union) {
                     return mapType(instantiatedType, t => instantiateConditionalType(target, createReplacementMapper(checkType, t, combinedMapper)));
                 }
@@ -9628,16 +9634,42 @@ namespace ts {
 
             function isIdenticalTo(source: Type, target: Type): Ternary {
                 let result: Ternary;
-                if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
+                const flags = source.flags & target.flags;
+                if (flags & TypeFlags.Object) {
                     return recursiveTypeRelatedTo(source, target, /*reportErrors*/ false);
                 }
-                if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union ||
-                    source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Intersection) {
+                if (flags & (TypeFlags.Union | TypeFlags.Intersection)) {
                     if (result = eachTypeRelatedToSomeType(<UnionOrIntersectionType>source, <UnionOrIntersectionType>target)) {
                         if (result &= eachTypeRelatedToSomeType(<UnionOrIntersectionType>target, <UnionOrIntersectionType>source)) {
                             return result;
                         }
                     }
+                }
+                if (flags & TypeFlags.Index) {
+                    return isRelatedTo((<IndexType>source).type, (<IndexType>target).type, /*reportErrors*/ false);
+                }
+                if (flags & TypeFlags.IndexedAccess) {
+                    if (result = isRelatedTo((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType, /*reportErrors*/ false)) {
+                        if (result &= isRelatedTo((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType, /*reportErrors*/ false)) {
+                            return result;
+                        }
+                    }
+                }
+                if (flags & TypeFlags.Conditional) {
+                    if (result = isRelatedTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType, /*reportErrors*/ false)) {
+                        if (result &= isRelatedTo((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType, /*reportErrors*/ false)) {
+                            if (result &= isRelatedTo((<ConditionalType>source).trueType, (<ConditionalType>target).trueType, /*reportErrors*/ false)) {
+                                if (result &= isRelatedTo((<ConditionalType>source).falseType, (<ConditionalType>target).falseType, /*reportErrors*/ false)) {
+                                    if (isDistributiveConditionalType(<ConditionalType>source) === isDistributiveConditionalType(<ConditionalType>target)) {
+                                        return result;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (flags & TypeFlags.Substitution) {
+                    return isRelatedTo((<SubstitutionType>source).substitute, (<SubstitutionType>target).substitute, /*reportErrors*/ false);
                 }
                 return Ternary.False;
             }
@@ -10024,7 +10056,19 @@ namespace ts {
                             }
                         }
                     }
-                    if (result = isRelatedTo(getDefaultConstraintOfConditionalType(<ConditionalType>source), target, reportErrors)) {
+                    if (target.flags & TypeFlags.Conditional) {
+                        if (isTypeIdenticalTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType) &&
+                            isTypeIdenticalTo((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType)) {
+                            if (result = isRelatedTo((<ConditionalType>source).trueType, (<ConditionalType>target).trueType, reportErrors)) {
+                                result &= isRelatedTo((<ConditionalType>source).falseType, (<ConditionalType>target).falseType, reportErrors);
+                            }
+                            if (result) {
+                                errorInfo = saveErrorInfo;
+                                return result;
+                            }
+                        }
+                    }
+                    else if (result = isRelatedTo(getDefaultConstraintOfConditionalType(<ConditionalType>source), target, reportErrors)) {
                         errorInfo = saveErrorInfo;
                         return result;
                     }
