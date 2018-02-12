@@ -271,7 +271,7 @@ verify.completionListContains("i1_nc_f1", "(method) c1.i1_nc_f1(): void", "");
 verify.completionListContains("i1_nc_l1", "(property) c1.i1_nc_l1: () => void", "");
 verify.completionListContains("p1", "(property) c1.p1: number", "c1_p1");
 verify.completionListContains("f1", "(method) c1.f1(): void", "c1_f1");
-verify.completionListContains("l1", "(property) c1.l1: () => void", "");
+verify.completionListContains("l1", "(property) c1.l1: () => void", "cl_l1");
 verify.completionListContains("nc_p1", "(property) c1.nc_p1: number", "c1_nc_p1");
 verify.completionListContains("nc_f1", "(method) c1.nc_f1(): void", "c1_nc_f1");
 verify.completionListContains("nc_l1", "(property) c1.nc_l1: () => void", "");
