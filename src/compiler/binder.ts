@@ -2409,7 +2409,8 @@ namespace ts {
         }
 
         function isValidInitializer(initializer: Node) {
-            return initializer.kind === SyntaxKind.ClassExpression ||
+            return initializer === undefined ||
+                initializer.kind === SyntaxKind.ClassExpression ||
                 initializer.kind === SyntaxKind.FunctionExpression ||
                 initializer.kind === SyntaxKind.ObjectLiteralExpression && (initializer as ObjectLiteralExpression).properties.length === 0 ||
                 initializer.kind === SyntaxKind.CallExpression && (skipParentheses((initializer as CallExpression).expression).kind === SyntaxKind.FunctionExpression ||
@@ -2425,7 +2426,7 @@ namespace ts {
                          propertyAccess.parent.kind === SyntaxKind.PropertyAccessExpression);
             const isLegalPosition = propertyAccess.parent.kind === SyntaxKind.BinaryExpression ?
                 propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile && isValidInitializer((propertyAccess.parent as BinaryExpression).right) :
-                propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
+                propertyAccess.parent.parent.kind === SyntaxKind.SourceFile && isValidInitializer((propertyAccess.parent as VariableDeclaration).initializer);
             if (!isPrototypeProperty && (!symbol || !(symbol.flags & SymbolFlags.Namespace)) && isLegalPosition) {
                 const flags = SymbolFlags.Module | SymbolFlags.JSContainer;
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.JSContainer;
