@@ -1318,6 +1318,13 @@ type Partial<T> = {
 };
 
 /**
+ * Make all properties in T required
+ */
+type Required<T> = {
+    [P in keyof T]-?: T[P];
+};
+
+/**
  * Make all properties in T readonly
  */
 type Readonly<T> = {
