@@ -2408,65 +2408,62 @@ namespace ts {
             }
         }
 
+        function isValidInitializer(initializer: Node) {
+            return initializer.kind === SyntaxKind.ClassExpression ||
+                initializer.kind === SyntaxKind.FunctionExpression ||
+                initializer.kind === SyntaxKind.ObjectLiteralExpression && (initializer as ObjectLiteralExpression).properties.length === 0 ||
+                initializer.kind === SyntaxKind.CallExpression && (skipParentheses((initializer as CallExpression).expression).kind === SyntaxKind.FunctionExpression ||
+                                                                   skipParentheses((initializer as CallExpression).expression).kind === SyntaxKind.ArrowFunction);
+        }
+
         function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
             // Look up the property in the local scope, since property assignments should follow the declaration
-            const symbol = lookupSymbolForPropertyAccess(name);
+            let symbol = follow(lookupSymbolForPropertyAccess(name));
             // TODO: Should be able to structure this with less duplication
-            let targetSymbol = follow(symbol);
             Debug.assert(propertyAccess.parent.kind === SyntaxKind.BinaryExpression ||
                          propertyAccess.parent.kind === SyntaxKind.ExpressionStatement ||
                          propertyAccess.parent.kind === SyntaxKind.PropertyAccessExpression);
-            let isLegalPosition: boolean;
-            if (propertyAccess.parent.kind === SyntaxKind.BinaryExpression) {
-                const initializerKind = (propertyAccess.parent as BinaryExpression).right.kind;
-                isLegalPosition = (initializerKind === SyntaxKind.ClassExpression || initializerKind === SyntaxKind.FunctionExpression) &&
-                    propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile;
-                if (propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile && initializerKind === SyntaxKind.BinaryExpression && (((propertyAccess.parent as BinaryExpression).right as BinaryExpression).right.kind === SyntaxKind.ClassExpression || ((propertyAccess.parent as BinaryExpression).right as BinaryExpression).right.kind === SyntaxKind.FunctionExpression)) {
-                    isLegalPosition = true;
-                }
-            }
-            else {
-                isLegalPosition = propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
-            }
-            if (!isPrototypeProperty && (!targetSymbol || !(targetSymbol.flags & SymbolFlags.Namespace)) && isLegalPosition) {
+            const isLegalPosition = propertyAccess.parent.kind === SyntaxKind.BinaryExpression ?
+                propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile && isValidInitializer((propertyAccess.parent as BinaryExpression).right) :
+                propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
+            if (!isPrototypeProperty && (!symbol || !(symbol.flags & SymbolFlags.Namespace)) && isLegalPosition) {
                 const flags = SymbolFlags.Module | SymbolFlags.JSContainer;
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.JSContainer;
-                // const startTargetSymbol = !!targetSymbol;
                 // hm. This is only needed to make namespaced access of types workable. Namespaced access of *values* doesn't work now either, so something is wrong.
                 // (Note: for the non-nested case, at least, addDeclarationToSymbol is only needed for things that could be further namespaces, because it
                 // makes the intermediate namespace. However, I think something like it is needed for *all* nested assignments, in case their intermediate namespaces don't exist)
                 iterateEntityNameExpression(propertyAccess.expression, (id, originalSymbol, available) => {
-                    if (targetSymbol) {
+                    if (symbol) {
                         if (available) {
                             // Note: add declaration to original symbol, not the special-syntax's symbol, so that namespaces work for type lookup
                             addDeclarationToSymbol(originalSymbol, id, flags);
-                            // TODO: Why can't I overwrite targetSymbol here? I'm having trouble tracking targetSymbol's state.
+                            // TODO: Why can't I overwrite symbol here? I'm having trouble tracking symbol's state.
                             return originalSymbol;
                         }
                         else {
                             originalSymbol.exports = originalSymbol.exports || createSymbolTable();
-                            targetSymbol = declareSymbol(originalSymbol.exports, originalSymbol, id, flags, excludeFlags);
-                            return targetSymbol;
+                            symbol = declareSymbol(originalSymbol.exports, originalSymbol, id, flags, excludeFlags);
+                            return symbol;
                         }
                     }
                     else {
                         Debug.assert(!available);
-                        targetSymbol = declareSymbol(container.locals, /*parent*/ undefined, id, flags, excludeFlags);
-                        return targetSymbol;
+                        symbol = declareSymbol(container.locals, /*parent*/ undefined, id, flags, excludeFlags);
+                        return symbol;
                     }
                 });
             }
-            if (!targetSymbol || !(targetSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule | SymbolFlags.ObjectLiteral))) {
+            if (!symbol || !(symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule | SymbolFlags.ObjectLiteral))) {
                 return;
             }
 
             // Set up the members collection if it doesn't exist already
             const symbolTable = isPrototypeProperty ?
-                (targetSymbol.members || (targetSymbol.members = createSymbolTable())) :
-                (targetSymbol.exports || (targetSymbol.exports = createSymbolTable()));
+                (symbol.members || (symbol.members = createSymbolTable())) :
+                (symbol.exports || (symbol.exports = createSymbolTable()));
 
             // Declare the method/property
-            declareSymbol(symbolTable, targetSymbol, propertyAccess, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+            declareSymbol(symbolTable, symbol, propertyAccess, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
         }
 
         function iterateEntityNameExpression(e: EntityNameExpression, action: (e: Identifier, originalSymbol: Symbol, available: boolean) => Symbol): Symbol {

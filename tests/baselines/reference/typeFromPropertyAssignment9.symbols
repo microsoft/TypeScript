@@ -1,12 +1,12 @@
 === tests/cases/conformance/salsa/a.js ===
 var my = my || {};
->my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 7, 34), Decl(a.js, 13, 34), Decl(a.js, 19, 1))
->my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 7, 34), Decl(a.js, 13, 34), Decl(a.js, 19, 1))
+>my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 5, 14), Decl(a.js, 7, 34), Decl(a.js, 19, 1))
+>my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 5, 14), Decl(a.js, 7, 34), Decl(a.js, 19, 1))
 
 /** @param {number} n */
 my.method = function(n) {
 >my.method : Symbol(method, Decl(a.js, 0, 18))
->my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 7, 34), Decl(a.js, 13, 34), Decl(a.js, 19, 1))
+>my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 5, 14), Decl(a.js, 7, 34), Decl(a.js, 19, 1))
 >method : Symbol(method, Decl(a.js, 0, 18))
 >n : Symbol(n, Decl(a.js, 2, 21))
 
@@ -15,27 +15,27 @@ my.method = function(n) {
 }
 my.number = 1;
 >my.number : Symbol(number, Decl(a.js, 4, 1))
->my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 7, 34), Decl(a.js, 13, 34), Decl(a.js, 19, 1))
+>my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 5, 14), Decl(a.js, 7, 34), Decl(a.js, 19, 1))
 >number : Symbol(number, Decl(a.js, 4, 1))
 
 my.object = {};
 >my.object : Symbol(object, Decl(a.js, 5, 14))
->my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 7, 34), Decl(a.js, 13, 34), Decl(a.js, 19, 1))
+>my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 5, 14), Decl(a.js, 7, 34), Decl(a.js, 19, 1))
 >object : Symbol(object, Decl(a.js, 5, 14))
 
 my.predicate = my.predicate || {};
->my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 17, 3), Decl(a.js, 20, 3))
->my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 7, 34), Decl(a.js, 13, 34), Decl(a.js, 19, 1))
->predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 17, 3), Decl(a.js, 20, 3))
->my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 17, 3), Decl(a.js, 20, 3))
->my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 7, 34), Decl(a.js, 13, 34), Decl(a.js, 19, 1))
->predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 17, 3), Decl(a.js, 20, 3))
+>my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 20, 3))
+>my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 5, 14), Decl(a.js, 7, 34), Decl(a.js, 19, 1))
+>predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 20, 3))
+>my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 20, 3))
+>my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 5, 14), Decl(a.js, 7, 34), Decl(a.js, 19, 1))
+>predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 20, 3))
 
 my.predicate.query = function () {
 >my.predicate.query : Symbol(query, Decl(a.js, 7, 34))
->my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 17, 3), Decl(a.js, 20, 3))
->my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 7, 34), Decl(a.js, 13, 34), Decl(a.js, 19, 1))
->predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 17, 3), Decl(a.js, 20, 3))
+>my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 20, 3))
+>my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 5, 14), Decl(a.js, 7, 34), Decl(a.js, 19, 1))
+>predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 20, 3))
 >query : Symbol(query, Decl(a.js, 7, 34))
 
     var me = this;
@@ -49,17 +49,17 @@ my.predicate.query = function () {
 var q = new my.predicate.query();
 >q : Symbol(q, Decl(a.js, 12, 3))
 >my.predicate.query : Symbol(query, Decl(a.js, 7, 34))
->my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 17, 3), Decl(a.js, 20, 3))
->my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 7, 34), Decl(a.js, 13, 34), Decl(a.js, 19, 1))
->predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 17, 3), Decl(a.js, 20, 3))
+>my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 20, 3))
+>my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 5, 14), Decl(a.js, 7, 34), Decl(a.js, 19, 1))
+>predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 20, 3))
 >query : Symbol(query, Decl(a.js, 7, 34))
 
 my.predicate.query.result = 'none'
 >my.predicate.query.result : Symbol((Anonymous function).result, Decl(a.js, 12, 33))
 >my.predicate.query : Symbol(query, Decl(a.js, 7, 34))
->my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 17, 3), Decl(a.js, 20, 3))
->my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 7, 34), Decl(a.js, 13, 34), Decl(a.js, 19, 1))
->predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 17, 3), Decl(a.js, 20, 3))
+>my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 20, 3))
+>my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 5, 14), Decl(a.js, 7, 34), Decl(a.js, 19, 1))
+>predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 20, 3))
 >query : Symbol(query, Decl(a.js, 7, 34))
 >result : Symbol((Anonymous function).result, Decl(a.js, 12, 33))
 
@@ -68,14 +68,14 @@ my.predicate.query.result = 'none'
  */
 my.predicate.sort = my.predicate.sort || function (first, second) {
 >my.predicate.sort : Symbol(sort, Decl(a.js, 13, 34))
->my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 17, 3), Decl(a.js, 20, 3))
->my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 7, 34), Decl(a.js, 13, 34), Decl(a.js, 19, 1))
->predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 17, 3), Decl(a.js, 20, 3))
+>my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 20, 3))
+>my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 5, 14), Decl(a.js, 7, 34), Decl(a.js, 19, 1))
+>predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 20, 3))
 >sort : Symbol(sort, Decl(a.js, 13, 34))
 >my.predicate.sort : Symbol(sort, Decl(a.js, 13, 34))
->my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 17, 3), Decl(a.js, 20, 3))
->my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 7, 34), Decl(a.js, 13, 34), Decl(a.js, 19, 1))
->predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 17, 3), Decl(a.js, 20, 3))
+>my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 20, 3))
+>my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 5, 14), Decl(a.js, 7, 34), Decl(a.js, 19, 1))
+>predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 20, 3))
 >sort : Symbol(sort, Decl(a.js, 13, 34))
 >first : Symbol(first, Decl(a.js, 17, 51))
 >second : Symbol(second, Decl(a.js, 17, 57))
@@ -88,9 +88,9 @@ my.predicate.sort = my.predicate.sort || function (first, second) {
 }
 my.predicate.type = class {
 >my.predicate.type : Symbol(type, Decl(a.js, 19, 1))
->my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 17, 3), Decl(a.js, 20, 3))
->my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 7, 34), Decl(a.js, 13, 34), Decl(a.js, 19, 1))
->predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 17, 3), Decl(a.js, 20, 3))
+>my.predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 20, 3))
+>my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 5, 14), Decl(a.js, 7, 34), Decl(a.js, 19, 1))
+>predicate : Symbol(predicate, Decl(a.js, 6, 15), Decl(a.js, 8, 3), Decl(a.js, 20, 3))
 >type : Symbol(type, Decl(a.js, 19, 1))
 
     m() { return 101; }
@@ -100,22 +100,22 @@ my.predicate.type = class {
 
 // global-ish prefixes
 var min = window.min || {};
->min : Symbol(min, Decl(a.js, 26, 3), Decl(a.js, 26, 27), Decl(a.js, 27, 44))
+>min : Symbol(min, Decl(a.js, 26, 3))
 
 min.nest = this.min.nest || function () { };
->min.nest : Symbol(nest, Decl(a.js, 26, 27), Decl(a.js, 28, 4))
->min : Symbol(min, Decl(a.js, 26, 3), Decl(a.js, 26, 27), Decl(a.js, 27, 44))
->nest : Symbol(nest, Decl(a.js, 26, 27), Decl(a.js, 28, 4))
+>min.nest : Symbol(nest, Decl(a.js, 26, 27))
+>min : Symbol(min, Decl(a.js, 26, 3))
+>nest : Symbol(nest, Decl(a.js, 26, 27))
 
 min.nest.other = self.min.nest.other || class { };
 >min.nest.other : Symbol((Anonymous function).other, Decl(a.js, 27, 44))
->min.nest : Symbol(nest, Decl(a.js, 26, 27), Decl(a.js, 28, 4))
->min : Symbol(min, Decl(a.js, 26, 3), Decl(a.js, 26, 27), Decl(a.js, 27, 44))
->nest : Symbol(nest, Decl(a.js, 26, 27), Decl(a.js, 28, 4))
+>min.nest : Symbol(nest, Decl(a.js, 26, 27))
+>min : Symbol(min, Decl(a.js, 26, 3))
+>nest : Symbol(nest, Decl(a.js, 26, 27))
 >other : Symbol((Anonymous function).other, Decl(a.js, 27, 44))
 
 min.property = global.min.property || {};
 >min.property : Symbol(property, Decl(a.js, 28, 50))
->min : Symbol(min, Decl(a.js, 26, 3), Decl(a.js, 26, 27), Decl(a.js, 27, 44))
+>min : Symbol(min, Decl(a.js, 26, 3))
 >property : Symbol(property, Decl(a.js, 28, 50))
 
