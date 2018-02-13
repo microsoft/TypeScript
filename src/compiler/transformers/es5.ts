@@ -12,11 +12,11 @@ namespace ts {
         const compilerOptions = context.getCompilerOptions();
 
         // enable emit notification only if using --jsx preserve or react-native
-        let previousOnEmitNode: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
+        let previousOnBeforeEmitNode: TransformationContext["onBeforeEmitNode"];
         let noSubstitution: boolean[];
         if (compilerOptions.jsx === JsxEmit.Preserve || compilerOptions.jsx === JsxEmit.ReactNative) {
-            previousOnEmitNode = context.onEmitNode;
-            context.onEmitNode = onEmitNode;
+            previousOnBeforeEmitNode = context.onBeforeEmitNode;
+            context.onBeforeEmitNode = onBeforeEmitNode;
             context.enableEmitNotification(SyntaxKind.JsxOpeningElement);
             context.enableEmitNotification(SyntaxKind.JsxClosingElement);
             context.enableEmitNotification(SyntaxKind.JsxSelfClosingElement);
@@ -43,9 +43,8 @@ namespace ts {
          *
          * @param hint A hint as to the intended usage of the node.
          * @param node The node to emit.
-         * @param emitCallback A callback used to emit the node.
          */
-        function onEmitNode(hint: EmitHint, node: Node, emitCallback: (emitContext: EmitHint, node: Node) => void) {
+        function onBeforeEmitNode(hint: EmitHint, node: Node) {
             switch (node.kind) {
                 case SyntaxKind.JsxOpeningElement:
                 case SyntaxKind.JsxClosingElement:
@@ -55,7 +54,7 @@ namespace ts {
                     break;
             }
 
-            previousOnEmitNode(hint, node, emitCallback);
+            previousOnBeforeEmitNode(hint, node);
         }
 
         /**

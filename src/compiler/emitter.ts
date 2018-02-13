@@ -105,11 +105,14 @@ namespace ts {
             hasGlobalName: resolver.hasGlobalName,
 
             // transform hooks
-            onEmitNode: transform.emitNodeWithNotification,
+            onEmitNode: transform.useEmitNodeWithNotification ? transform.emitNodeWithNotification : undefined,
+            onBeforeEmitNode: transform.useEmitNodeWithNotification ? undefined : transform.beforeEmitNode,
+            onAfterEmitNode: transform.useEmitNodeWithNotification ? undefined : transform.afterEmitNode,
             substituteNode: transform.substituteNode,
 
             // sourcemap hooks
-            onEmitSourceMapOfNode: sourceMap.emitNodeWithSourceMap,
+            onEmitLeadingSourceMapOfNode: sourceMap.emitLeadingSourceMapOfNode,
+            onEmitTrailingSourceMapOfNode: sourceMap.emitTrailingSourceMapOfNode,
             onEmitSourceMapOfToken: sourceMap.emitTokenWithSourceMap,
             onEmitSourceMapOfPosition: sourceMap.emitPos,
 
@@ -258,13 +261,28 @@ namespace ts {
         }
     }
 
+    const enum PipelinePhase {
+        BeforeEmit,
+        LeadingComments,
+        LeadingSourceMap,
+        Emit,
+        TrailingSourceMap,
+        TrailingComments,
+        AfterEmit,
+
+        Start = BeforeEmit
+    }
+
     export function createPrinter(printerOptions: PrinterOptions = {}, handlers: PrintHandlers = {}): Printer {
         const {
             hasGlobalName,
-            onEmitSourceMapOfNode,
+            onEmitLeadingSourceMapOfNode,
+            onEmitTrailingSourceMapOfNode,
             onEmitSourceMapOfToken,
             onEmitSourceMapOfPosition,
             onEmitNode,
+            onBeforeEmitNode,
+            onAfterEmitNode,
             onEmitHelpers,
             onSetSourceFile,
             substituteNode,
@@ -274,11 +292,15 @@ namespace ts {
             onAfterEmitToken
         } = handlers;
 
+        Debug.assert(!(onEmitNode && (onBeforeEmitNode || onAfterEmitNode)), "Do not provide 'onEmitNode' of either of 'onBeforeEmitNode' or 'onAfterEmitNode' are provided.");
+
         const newLine = getNewLineCharacter(printerOptions);
         const comments = createCommentWriter(printerOptions, onEmitSourceMapOfPosition);
         const {
-            emitNodeWithComments,
-            emitBodyWithDetachedComments,
+            emitLeadingCommentsOfNode,
+            emitTrailingCommentsOfNode,
+            emitLeadingDetachedCommentsOfBody,
+            emitTrailingDetachedCommentsOfBody,
             emitTrailingCommentsOfPosition,
             emitLeadingCommentsOfPosition,
         } = comments;
@@ -415,7 +437,14 @@ namespace ts {
             if (sourceFile) {
                 setSourceFile(sourceFile);
             }
-            pipelineEmitWithNotification(hint, node);
+
+            // NOTE: this has been manually inlined to reduce overall stack depth
+            if (onEmitNode) {
+                onEmitNode(hint, node, pipelineEmit);
+            }
+            else {
+                pipelineEmitWorker(hint, node, PipelinePhase.Start);
+            }
         }
 
         function setSourceFile(sourceFile: SourceFile) {
@@ -442,453 +471,466 @@ namespace ts {
             setWriter(/*output*/ undefined);
         }
 
-        // TODO: Should this just be `emit`?
-        // See https://github.com/Microsoft/TypeScript/pull/18284#discussion_r137611034
-        function emitIfPresent(node: Node | undefined) {
-            if (node) {
-                emit(node);
-            }
-        }
-
-        function emit(node: Node) {
-            pipelineEmitWithNotification(EmitHint.Unspecified, node);
-        }
-
-        function emitIdentifierName(node: Identifier) {
-            pipelineEmitWithNotification(EmitHint.IdentifierName, node);
-        }
-
-        function emitExpression(node: Expression) {
-            pipelineEmitWithNotification(EmitHint.Expression, node);
-        }
-
-        function pipelineEmitWithNotification(hint: EmitHint, node: Node) {
+        function emit(node: Node | undefined) {
+            // NOTE: this has been manually inlined to reduce overall stack depth
             if (onEmitNode) {
-                onEmitNode(hint, node, pipelineEmitWithComments);
+                onEmitNode(EmitHint.Unspecified, node, pipelineEmit);
             }
             else {
-                pipelineEmitWithComments(hint, node);
+                pipelineEmitWorker(EmitHint.Unspecified, node, PipelinePhase.Start);
             }
         }
 
-        function pipelineEmitWithComments(hint: EmitHint, node: Node) {
-            node = trySubstituteNode(hint, node);
-            if (emitNodeWithComments && hint !== EmitHint.SourceFile) {
-                emitNodeWithComments(hint, node, pipelineEmitWithSourceMap);
+        function emitIdentifierName(node: Identifier | undefined) {
+            // NOTE: this has been manually inlined to reduce overall stack depth
+            if (onEmitNode) {
+                onEmitNode(EmitHint.IdentifierName, node, pipelineEmit);
             }
             else {
-                pipelineEmitWithSourceMap(hint, node);
+                pipelineEmitWorker(EmitHint.IdentifierName, node, PipelinePhase.Start);
             }
         }
 
-        function pipelineEmitWithSourceMap(hint: EmitHint, node: Node) {
-            if (onEmitSourceMapOfNode && hint !== EmitHint.SourceFile && hint !== EmitHint.IdentifierName) {
-                onEmitSourceMapOfNode(hint, node, pipelineEmitWithHint);
+        function emitExpression(node: Expression | undefined) {
+            // NOTE: this has been manually inlined to reduce overall stack depth
+            if (onEmitNode) {
+                onEmitNode(EmitHint.Expression, node, pipelineEmit);
             }
             else {
-                pipelineEmitWithHint(hint, node);
+                pipelineEmitWorker(EmitHint.Expression, node, PipelinePhase.Start);
+            }
+        }
+
+        function pipelineEmit(hint: EmitHint, node: Node) {
+            pipelineEmitWorker(hint, node, PipelinePhase.Start);
+        }
+
+        function pipelineEmitWorker(hint: EmitHint, node: Node | undefined, phase: PipelinePhase) {
+            if (!node) return;
+            switch (phase) {
+                case PipelinePhase.BeforeEmit:
+                    if (onBeforeEmitNode) {
+                        onBeforeEmitNode(hint, node);
+                    }
+
+                    // falls through
+
+                case PipelinePhase.LeadingComments:
+                    node = trySubstituteNode(hint, node);
+                    if (hint !== EmitHint.SourceFile) {
+                        emitLeadingCommentsOfNode(node);
+                    }
+
+                    // falls through
+
+                case PipelinePhase.LeadingSourceMap:
+                    if (onEmitLeadingSourceMapOfNode && hint !== EmitHint.SourceFile && hint !== EmitHint.IdentifierName) {
+                        onEmitLeadingSourceMapOfNode(node);
+                    }
+
+                    // falls through
+
+                case PipelinePhase.Emit:
+                    pipelineEmitWithHint(hint, node);
+                    // falls through
+
+                case PipelinePhase.TrailingSourceMap:
+                    if (onEmitTrailingSourceMapOfNode && hint !== EmitHint.SourceFile && hint !== EmitHint.IdentifierName) {
+                        onEmitTrailingSourceMapOfNode(node);
+                    }
+
+                    // falls through
+
+                case PipelinePhase.TrailingComments:
+                    if (hint !== EmitHint.SourceFile) {
+                        emitTrailingCommentsOfNode(node);
+                    }
+
+                    // falls through
+
+                case PipelinePhase.AfterEmit:
+                    if (onAfterEmitNode) {
+                        onAfterEmitNode(hint, node);
+                    }
             }
         }
 
         function pipelineEmitWithHint(hint: EmitHint, node: Node): void {
-            switch (hint) {
-                case EmitHint.SourceFile: return pipelineEmitSourceFile(node);
-                case EmitHint.IdentifierName: return pipelineEmitIdentifierName(node);
-                case EmitHint.Expression: return pipelineEmitExpression(node);
-                case EmitHint.MappedTypeParameter: return emitMappedTypeParameter(cast(node, isTypeParameterDeclaration));
-                case EmitHint.Unspecified: return pipelineEmitUnspecified(node);
-            }
-        }
-
-        function pipelineEmitSourceFile(node: Node): void {
-            Debug.assertNode(node, isSourceFile);
-            emitSourceFile(<SourceFile>node);
-        }
-
-        function pipelineEmitIdentifierName(node: Node): void {
-            Debug.assertNode(node, isIdentifier);
-            emitIdentifier(<Identifier>node);
-        }
-
-        function emitMappedTypeParameter(node: TypeParameterDeclaration): void {
-            emit(node.name);
-            writeSpace();
-            writeKeyword("in");
-            writeSpace();
-            emit(node.constraint);
-        }
-
-        function pipelineEmitUnspecified(node: Node): void {
-            const kind = node.kind;
-
-            // Reserved words
-            // Strict mode reserved words
-            // Contextual keywords
-            if (isKeyword(kind)) {
-                writeTokenNode(node, writeKeyword);
-                return;
+            if (hint === EmitHint.SourceFile) {
+                return emitSourceFile(cast(node, isSourceFile));
             }
 
-            switch (kind) {
-                // Pseudo-literals
-                case SyntaxKind.TemplateHead:
-                case SyntaxKind.TemplateMiddle:
-                case SyntaxKind.TemplateTail:
-                    return emitLiteral(<LiteralExpression>node);
-
-                // Identifiers
-                case SyntaxKind.Identifier:
-                    return emitIdentifier(<Identifier>node);
-
-                // Parse tree nodes
-
-                // Names
-                case SyntaxKind.QualifiedName:
-                    return emitQualifiedName(<QualifiedName>node);
-                case SyntaxKind.ComputedPropertyName:
-                    return emitComputedPropertyName(<ComputedPropertyName>node);
-
-                // Signature elements
-                case SyntaxKind.TypeParameter:
-                    return emitTypeParameter(<TypeParameterDeclaration>node);
-                case SyntaxKind.Parameter:
-                    return emitParameter(<ParameterDeclaration>node);
-                case SyntaxKind.Decorator:
-                    return emitDecorator(<Decorator>node);
-
-                // Type members
-                case SyntaxKind.PropertySignature:
-                    return emitPropertySignature(<PropertySignature>node);
-                case SyntaxKind.PropertyDeclaration:
-                    return emitPropertyDeclaration(<PropertyDeclaration>node);
-                case SyntaxKind.MethodSignature:
-                    return emitMethodSignature(<MethodSignature>node);
-                case SyntaxKind.MethodDeclaration:
-                    return emitMethodDeclaration(<MethodDeclaration>node);
-                case SyntaxKind.Constructor:
-                    return emitConstructor(<ConstructorDeclaration>node);
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    return emitAccessorDeclaration(<AccessorDeclaration>node);
-                case SyntaxKind.CallSignature:
-                    return emitCallSignature(<CallSignatureDeclaration>node);
-                case SyntaxKind.ConstructSignature:
-                    return emitConstructSignature(<ConstructSignatureDeclaration>node);
-                case SyntaxKind.IndexSignature:
-                    return emitIndexSignature(<IndexSignatureDeclaration>node);
-
-                // Types
-                case SyntaxKind.TypePredicate:
-                    return emitTypePredicate(<TypePredicateNode>node);
-                case SyntaxKind.TypeReference:
-                    return emitTypeReference(<TypeReferenceNode>node);
-                case SyntaxKind.FunctionType:
-                    return emitFunctionType(<FunctionTypeNode>node);
-                case SyntaxKind.JSDocFunctionType:
-                    return emitJSDocFunctionType(node as JSDocFunctionType);
-                case SyntaxKind.ConstructorType:
-                    return emitConstructorType(<ConstructorTypeNode>node);
-                case SyntaxKind.TypeQuery:
-                    return emitTypeQuery(<TypeQueryNode>node);
-                case SyntaxKind.TypeLiteral:
-                    return emitTypeLiteral(<TypeLiteralNode>node);
-                case SyntaxKind.ArrayType:
-                    return emitArrayType(<ArrayTypeNode>node);
-                case SyntaxKind.TupleType:
-                    return emitTupleType(<TupleTypeNode>node);
-                case SyntaxKind.UnionType:
-                    return emitUnionType(<UnionTypeNode>node);
-                case SyntaxKind.IntersectionType:
-                    return emitIntersectionType(<IntersectionTypeNode>node);
-                case SyntaxKind.ConditionalType:
-                    return emitConditionalType(<ConditionalTypeNode>node);
-                case SyntaxKind.InferType:
-                    return emitInferType(<InferTypeNode>node);
-                case SyntaxKind.ParenthesizedType:
-                    return emitParenthesizedType(<ParenthesizedTypeNode>node);
-                case SyntaxKind.ExpressionWithTypeArguments:
-                    return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>node);
-                case SyntaxKind.ThisType:
-                    return emitThisType();
-                case SyntaxKind.TypeOperator:
-                    return emitTypeOperator(<TypeOperatorNode>node);
-                case SyntaxKind.IndexedAccessType:
-                    return emitIndexedAccessType(<IndexedAccessTypeNode>node);
-                case SyntaxKind.MappedType:
-                    return emitMappedType(<MappedTypeNode>node);
-                case SyntaxKind.LiteralType:
-                    return emitLiteralType(<LiteralTypeNode>node);
-                case SyntaxKind.JSDocAllType:
-                    write("*");
-                    return;
-                case SyntaxKind.JSDocUnknownType:
-                    write("?");
-                    return;
-                case SyntaxKind.JSDocNullableType:
-                    return emitJSDocNullableType(node as JSDocNullableType);
-                case SyntaxKind.JSDocNonNullableType:
-                    return emitJSDocNonNullableType(node as JSDocNonNullableType);
-                case SyntaxKind.JSDocOptionalType:
-                    return emitJSDocOptionalType(node as JSDocOptionalType);
-                case SyntaxKind.JSDocVariadicType:
-                    return emitJSDocVariadicType(node as JSDocVariadicType);
-
-                // Binding patterns
-                case SyntaxKind.ObjectBindingPattern:
-                    return emitObjectBindingPattern(<ObjectBindingPattern>node);
-                case SyntaxKind.ArrayBindingPattern:
-                    return emitArrayBindingPattern(<ArrayBindingPattern>node);
-                case SyntaxKind.BindingElement:
-                    return emitBindingElement(<BindingElement>node);
-
-                // Misc
-                case SyntaxKind.TemplateSpan:
-                    return emitTemplateSpan(<TemplateSpan>node);
-                case SyntaxKind.SemicolonClassElement:
-                    return emitSemicolonClassElement();
-
-                // Statements
-                case SyntaxKind.Block:
-                    return emitBlock(<Block>node);
-                case SyntaxKind.VariableStatement:
-                    return emitVariableStatement(<VariableStatement>node);
-                case SyntaxKind.EmptyStatement:
-                    return emitEmptyStatement();
-                case SyntaxKind.ExpressionStatement:
-                    return emitExpressionStatement(<ExpressionStatement>node);
-                case SyntaxKind.IfStatement:
-                    return emitIfStatement(<IfStatement>node);
-                case SyntaxKind.DoStatement:
-                    return emitDoStatement(<DoStatement>node);
-                case SyntaxKind.WhileStatement:
-                    return emitWhileStatement(<WhileStatement>node);
-                case SyntaxKind.ForStatement:
-                    return emitForStatement(<ForStatement>node);
-                case SyntaxKind.ForInStatement:
-                    return emitForInStatement(<ForInStatement>node);
-                case SyntaxKind.ForOfStatement:
-                    return emitForOfStatement(<ForOfStatement>node);
-                case SyntaxKind.ContinueStatement:
-                    return emitContinueStatement(<ContinueStatement>node);
-                case SyntaxKind.BreakStatement:
-                    return emitBreakStatement(<BreakStatement>node);
-                case SyntaxKind.ReturnStatement:
-                    return emitReturnStatement(<ReturnStatement>node);
-                case SyntaxKind.WithStatement:
-                    return emitWithStatement(<WithStatement>node);
-                case SyntaxKind.SwitchStatement:
-                    return emitSwitchStatement(<SwitchStatement>node);
-                case SyntaxKind.LabeledStatement:
-                    return emitLabeledStatement(<LabeledStatement>node);
-                case SyntaxKind.ThrowStatement:
-                    return emitThrowStatement(<ThrowStatement>node);
-                case SyntaxKind.TryStatement:
-                    return emitTryStatement(<TryStatement>node);
-                case SyntaxKind.DebuggerStatement:
-                    return emitDebuggerStatement(<DebuggerStatement>node);
-
-                // Declarations
-                case SyntaxKind.VariableDeclaration:
-                    return emitVariableDeclaration(<VariableDeclaration>node);
-                case SyntaxKind.VariableDeclarationList:
-                    return emitVariableDeclarationList(<VariableDeclarationList>node);
-                case SyntaxKind.FunctionDeclaration:
-                    return emitFunctionDeclaration(<FunctionDeclaration>node);
-                case SyntaxKind.ClassDeclaration:
-                    return emitClassDeclaration(<ClassDeclaration>node);
-                case SyntaxKind.InterfaceDeclaration:
-                    return emitInterfaceDeclaration(<InterfaceDeclaration>node);
-                case SyntaxKind.TypeAliasDeclaration:
-                    return emitTypeAliasDeclaration(<TypeAliasDeclaration>node);
-                case SyntaxKind.EnumDeclaration:
-                    return emitEnumDeclaration(<EnumDeclaration>node);
-                case SyntaxKind.ModuleDeclaration:
-                    return emitModuleDeclaration(<ModuleDeclaration>node);
-                case SyntaxKind.ModuleBlock:
-                    return emitModuleBlock(<ModuleBlock>node);
-                case SyntaxKind.CaseBlock:
-                    return emitCaseBlock(<CaseBlock>node);
-                case SyntaxKind.NamespaceExportDeclaration:
-                    return emitNamespaceExportDeclaration(<NamespaceExportDeclaration>node);
-                case SyntaxKind.ImportEqualsDeclaration:
-                    return emitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
-                case SyntaxKind.ImportDeclaration:
-                    return emitImportDeclaration(<ImportDeclaration>node);
-                case SyntaxKind.ImportClause:
-                    return emitImportClause(<ImportClause>node);
-                case SyntaxKind.NamespaceImport:
-                    return emitNamespaceImport(<NamespaceImport>node);
-                case SyntaxKind.NamedImports:
-                    return emitNamedImports(<NamedImports>node);
-                case SyntaxKind.ImportSpecifier:
-                    return emitImportSpecifier(<ImportSpecifier>node);
-                case SyntaxKind.ExportAssignment:
-                    return emitExportAssignment(<ExportAssignment>node);
-                case SyntaxKind.ExportDeclaration:
-                    return emitExportDeclaration(<ExportDeclaration>node);
-                case SyntaxKind.NamedExports:
-                    return emitNamedExports(<NamedExports>node);
-                case SyntaxKind.ExportSpecifier:
-                    return emitExportSpecifier(<ExportSpecifier>node);
-                case SyntaxKind.MissingDeclaration:
-                    return;
-
-                // Module references
-                case SyntaxKind.ExternalModuleReference:
-                    return emitExternalModuleReference(<ExternalModuleReference>node);
-
-                // JSX (non-expression)
-                case SyntaxKind.JsxText:
-                    return emitJsxText(<JsxText>node);
-                case SyntaxKind.JsxOpeningElement:
-                case SyntaxKind.JsxOpeningFragment:
-                    return emitJsxOpeningElementOrFragment(<JsxOpeningElement>node);
-                case SyntaxKind.JsxClosingElement:
-                case SyntaxKind.JsxClosingFragment:
-                    return emitJsxClosingElementOrFragment(<JsxClosingElement>node);
-                case SyntaxKind.JsxAttribute:
-                    return emitJsxAttribute(<JsxAttribute>node);
-                case SyntaxKind.JsxAttributes:
-                    return emitJsxAttributes(<JsxAttributes>node);
-                case SyntaxKind.JsxSpreadAttribute:
-                    return emitJsxSpreadAttribute(<JsxSpreadAttribute>node);
-                case SyntaxKind.JsxExpression:
-                    return emitJsxExpression(<JsxExpression>node);
-
-                // Clauses
-                case SyntaxKind.CaseClause:
-                    return emitCaseClause(<CaseClause>node);
-                case SyntaxKind.DefaultClause:
-                    return emitDefaultClause(<DefaultClause>node);
-                case SyntaxKind.HeritageClause:
-                    return emitHeritageClause(<HeritageClause>node);
-                case SyntaxKind.CatchClause:
-                    return emitCatchClause(<CatchClause>node);
-
-                // Property assignments
-                case SyntaxKind.PropertyAssignment:
-                    return emitPropertyAssignment(<PropertyAssignment>node);
-                case SyntaxKind.ShorthandPropertyAssignment:
-                    return emitShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
-                case SyntaxKind.SpreadAssignment:
-                    return emitSpreadAssignment(node as SpreadAssignment);
-
-                // Enum
-                case SyntaxKind.EnumMember:
-                    return emitEnumMember(<EnumMember>node);
-
-                // JSDoc nodes (ignored)
-                // Transformation nodes (ignored)
+            if (hint === EmitHint.IdentifierName) {
+                return emitIdentifier(cast(node, isIdentifier));
             }
 
-            // If the node is an expression, try to emit it as an expression with
-            // substitution.
-            if (isExpression(node)) {
-                return pipelineEmitExpression(trySubstituteNode(EmitHint.Expression, node));
+            if (hint === EmitHint.MappedTypeParameter) {
+                return emitMappedTypeParameter(cast(node, isTypeParameterDeclaration));
             }
 
-            if (isToken(node)) {
-                writeTokenNode(node, writePunctuation);
-                return;
-            }
-        }
-
-        function pipelineEmitExpression(node: Node): void {
-            const kind = node.kind;
-            switch (kind) {
-                // Literals
-                case SyntaxKind.NumericLiteral:
-                    return emitNumericLiteral(<NumericLiteral>node);
-
-                case SyntaxKind.StringLiteral:
-                case SyntaxKind.RegularExpressionLiteral:
-                case SyntaxKind.NoSubstitutionTemplateLiteral:
-                    return emitLiteral(<LiteralExpression>node);
-
-                // Identifiers
-                case SyntaxKind.Identifier:
-                    return emitIdentifier(<Identifier>node);
-
+            if (hint === EmitHint.Unspecified) {
                 // Reserved words
-                case SyntaxKind.FalseKeyword:
-                case SyntaxKind.NullKeyword:
-                case SyntaxKind.SuperKeyword:
-                case SyntaxKind.TrueKeyword:
-                case SyntaxKind.ThisKeyword:
-                case SyntaxKind.ImportKeyword:
+                // Strict mode reserved words
+                // Contextual keywords
+                if (isKeyword(node.kind)) {
                     writeTokenNode(node, writeKeyword);
                     return;
+                }
 
-                // Expressions
-                case SyntaxKind.ArrayLiteralExpression:
-                    return emitArrayLiteralExpression(<ArrayLiteralExpression>node);
-                case SyntaxKind.ObjectLiteralExpression:
-                    return emitObjectLiteralExpression(<ObjectLiteralExpression>node);
-                case SyntaxKind.PropertyAccessExpression:
-                    return emitPropertyAccessExpression(<PropertyAccessExpression>node);
-                case SyntaxKind.ElementAccessExpression:
-                    return emitElementAccessExpression(<ElementAccessExpression>node);
-                case SyntaxKind.CallExpression:
-                    return emitCallExpression(<CallExpression>node);
-                case SyntaxKind.NewExpression:
-                    return emitNewExpression(<NewExpression>node);
-                case SyntaxKind.TaggedTemplateExpression:
-                    return emitTaggedTemplateExpression(<TaggedTemplateExpression>node);
-                case SyntaxKind.TypeAssertionExpression:
-                    return emitTypeAssertionExpression(<TypeAssertion>node);
-                case SyntaxKind.ParenthesizedExpression:
-                    return emitParenthesizedExpression(<ParenthesizedExpression>node);
-                case SyntaxKind.FunctionExpression:
-                    return emitFunctionExpression(<FunctionExpression>node);
-                case SyntaxKind.ArrowFunction:
-                    return emitArrowFunction(<ArrowFunction>node);
-                case SyntaxKind.DeleteExpression:
-                    return emitDeleteExpression(<DeleteExpression>node);
-                case SyntaxKind.TypeOfExpression:
-                    return emitTypeOfExpression(<TypeOfExpression>node);
-                case SyntaxKind.VoidExpression:
-                    return emitVoidExpression(<VoidExpression>node);
-                case SyntaxKind.AwaitExpression:
-                    return emitAwaitExpression(<AwaitExpression>node);
-                case SyntaxKind.PrefixUnaryExpression:
-                    return emitPrefixUnaryExpression(<PrefixUnaryExpression>node);
-                case SyntaxKind.PostfixUnaryExpression:
-                    return emitPostfixUnaryExpression(<PostfixUnaryExpression>node);
-                case SyntaxKind.BinaryExpression:
-                    return emitBinaryExpression(<BinaryExpression>node);
-                case SyntaxKind.ConditionalExpression:
-                    return emitConditionalExpression(<ConditionalExpression>node);
-                case SyntaxKind.TemplateExpression:
-                    return emitTemplateExpression(<TemplateExpression>node);
-                case SyntaxKind.YieldExpression:
-                    return emitYieldExpression(<YieldExpression>node);
-                case SyntaxKind.SpreadElement:
-                    return emitSpreadExpression(<SpreadElement>node);
-                case SyntaxKind.ClassExpression:
-                    return emitClassExpression(<ClassExpression>node);
-                case SyntaxKind.OmittedExpression:
-                    return;
-                case SyntaxKind.AsExpression:
-                    return emitAsExpression(<AsExpression>node);
-                case SyntaxKind.NonNullExpression:
-                    return emitNonNullExpression(<NonNullExpression>node);
-                case SyntaxKind.MetaProperty:
-                    return emitMetaProperty(<MetaProperty>node);
+                switch (node.kind) {
+                    // Pseudo-literals
+                    case SyntaxKind.TemplateHead:
+                    case SyntaxKind.TemplateMiddle:
+                    case SyntaxKind.TemplateTail:
+                        return emitLiteral(<LiteralExpression>node);
 
-                // JSX
-                case SyntaxKind.JsxElement:
-                    return emitJsxElement(<JsxElement>node);
-                case SyntaxKind.JsxSelfClosingElement:
-                    return emitJsxSelfClosingElement(<JsxSelfClosingElement>node);
-                case SyntaxKind.JsxFragment:
-                    return emitJsxFragment(<JsxFragment>node);
+                    // Identifiers
+                    case SyntaxKind.Identifier:
+                        return emitIdentifier(<Identifier>node);
 
-                // Transformation nodes
-                case SyntaxKind.PartiallyEmittedExpression:
-                    return emitPartiallyEmittedExpression(<PartiallyEmittedExpression>node);
+                    // Parse tree nodes
 
-                case SyntaxKind.CommaListExpression:
-                    return emitCommaList(<CommaListExpression>node);
+                    // Names
+                    case SyntaxKind.QualifiedName:
+                        return emitQualifiedName(<QualifiedName>node);
+                    case SyntaxKind.ComputedPropertyName:
+                        return emitComputedPropertyName(<ComputedPropertyName>node);
+
+                    // Signature elements
+                    case SyntaxKind.TypeParameter:
+                        return emitTypeParameter(<TypeParameterDeclaration>node);
+                    case SyntaxKind.Parameter:
+                        return emitParameter(<ParameterDeclaration>node);
+                    case SyntaxKind.Decorator:
+                        return emitDecorator(<Decorator>node);
+
+                    // Type members
+                    case SyntaxKind.PropertySignature:
+                        return emitPropertySignature(<PropertySignature>node);
+                    case SyntaxKind.PropertyDeclaration:
+                        return emitPropertyDeclaration(<PropertyDeclaration>node);
+                    case SyntaxKind.MethodSignature:
+                        return emitMethodSignature(<MethodSignature>node);
+                    case SyntaxKind.MethodDeclaration:
+                        return emitMethodDeclaration(<MethodDeclaration>node);
+                    case SyntaxKind.Constructor:
+                        return emitConstructor(<ConstructorDeclaration>node);
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        return emitAccessorDeclaration(<AccessorDeclaration>node);
+                    case SyntaxKind.CallSignature:
+                        return emitCallSignature(<CallSignatureDeclaration>node);
+                    case SyntaxKind.ConstructSignature:
+                        return emitConstructSignature(<ConstructSignatureDeclaration>node);
+                    case SyntaxKind.IndexSignature:
+                        return emitIndexSignature(<IndexSignatureDeclaration>node);
+
+                    // Types
+                    case SyntaxKind.TypePredicate:
+                        return emitTypePredicate(<TypePredicateNode>node);
+                    case SyntaxKind.TypeReference:
+                        return emitTypeReference(<TypeReferenceNode>node);
+                    case SyntaxKind.FunctionType:
+                        return emitFunctionType(<FunctionTypeNode>node);
+                    case SyntaxKind.JSDocFunctionType:
+                        return emitJSDocFunctionType(node as JSDocFunctionType);
+                    case SyntaxKind.ConstructorType:
+                        return emitConstructorType(<ConstructorTypeNode>node);
+                    case SyntaxKind.TypeQuery:
+                        return emitTypeQuery(<TypeQueryNode>node);
+                    case SyntaxKind.TypeLiteral:
+                        return emitTypeLiteral(<TypeLiteralNode>node);
+                    case SyntaxKind.ArrayType:
+                        return emitArrayType(<ArrayTypeNode>node);
+                    case SyntaxKind.TupleType:
+                        return emitTupleType(<TupleTypeNode>node);
+                    case SyntaxKind.UnionType:
+                        return emitUnionType(<UnionTypeNode>node);
+                    case SyntaxKind.IntersectionType:
+                        return emitIntersectionType(<IntersectionTypeNode>node);
+                    case SyntaxKind.ConditionalType:
+                        return emitConditionalType(<ConditionalTypeNode>node);
+                    case SyntaxKind.InferType:
+                        return emitInferType(<InferTypeNode>node);
+                    case SyntaxKind.ParenthesizedType:
+                        return emitParenthesizedType(<ParenthesizedTypeNode>node);
+                    case SyntaxKind.ExpressionWithTypeArguments:
+                        return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>node);
+                    case SyntaxKind.ThisType:
+                        return emitThisType();
+                    case SyntaxKind.TypeOperator:
+                        return emitTypeOperator(<TypeOperatorNode>node);
+                    case SyntaxKind.IndexedAccessType:
+                        return emitIndexedAccessType(<IndexedAccessTypeNode>node);
+                    case SyntaxKind.MappedType:
+                        return emitMappedType(<MappedTypeNode>node);
+                    case SyntaxKind.LiteralType:
+                        return emitLiteralType(<LiteralTypeNode>node);
+                    case SyntaxKind.JSDocAllType:
+                        return write("*");
+                    case SyntaxKind.JSDocUnknownType:
+                        return write("?");
+                    case SyntaxKind.JSDocNullableType:
+                        return emitJSDocNullableType(node as JSDocNullableType);
+                    case SyntaxKind.JSDocNonNullableType:
+                        return emitJSDocNonNullableType(node as JSDocNonNullableType);
+                    case SyntaxKind.JSDocOptionalType:
+                        return emitJSDocOptionalType(node as JSDocOptionalType);
+                    case SyntaxKind.JSDocVariadicType:
+                        return emitJSDocVariadicType(node as JSDocVariadicType);
+
+                    // Binding patterns
+                    case SyntaxKind.ObjectBindingPattern:
+                        return emitObjectBindingPattern(<ObjectBindingPattern>node);
+                    case SyntaxKind.ArrayBindingPattern:
+                        return emitArrayBindingPattern(<ArrayBindingPattern>node);
+                    case SyntaxKind.BindingElement:
+                        return emitBindingElement(<BindingElement>node);
+
+                    // Misc
+                    case SyntaxKind.TemplateSpan:
+                        return emitTemplateSpan(<TemplateSpan>node);
+                    case SyntaxKind.SemicolonClassElement:
+                        return emitSemicolonClassElement();
+
+                    // Statements
+                    case SyntaxKind.Block:
+                        return emitBlock(<Block>node);
+                    case SyntaxKind.VariableStatement:
+                        return emitVariableStatement(<VariableStatement>node);
+                    case SyntaxKind.EmptyStatement:
+                        return emitEmptyStatement();
+                    case SyntaxKind.ExpressionStatement:
+                        return emitExpressionStatement(<ExpressionStatement>node);
+                    case SyntaxKind.IfStatement:
+                        return emitIfStatement(<IfStatement>node);
+                    case SyntaxKind.DoStatement:
+                        return emitDoStatement(<DoStatement>node);
+                    case SyntaxKind.WhileStatement:
+                        return emitWhileStatement(<WhileStatement>node);
+                    case SyntaxKind.ForStatement:
+                        return emitForStatement(<ForStatement>node);
+                    case SyntaxKind.ForInStatement:
+                        return emitForInStatement(<ForInStatement>node);
+                    case SyntaxKind.ForOfStatement:
+                        return emitForOfStatement(<ForOfStatement>node);
+                    case SyntaxKind.ContinueStatement:
+                        return emitContinueStatement(<ContinueStatement>node);
+                    case SyntaxKind.BreakStatement:
+                        return emitBreakStatement(<BreakStatement>node);
+                    case SyntaxKind.ReturnStatement:
+                        return emitReturnStatement(<ReturnStatement>node);
+                    case SyntaxKind.WithStatement:
+                        return emitWithStatement(<WithStatement>node);
+                    case SyntaxKind.SwitchStatement:
+                        return emitSwitchStatement(<SwitchStatement>node);
+                    case SyntaxKind.LabeledStatement:
+                        return emitLabeledStatement(<LabeledStatement>node);
+                    case SyntaxKind.ThrowStatement:
+                        return emitThrowStatement(<ThrowStatement>node);
+                    case SyntaxKind.TryStatement:
+                        return emitTryStatement(<TryStatement>node);
+                    case SyntaxKind.DebuggerStatement:
+                        return emitDebuggerStatement(<DebuggerStatement>node);
+
+                    // Declarations
+                    case SyntaxKind.VariableDeclaration:
+                        return emitVariableDeclaration(<VariableDeclaration>node);
+                    case SyntaxKind.VariableDeclarationList:
+                        return emitVariableDeclarationList(<VariableDeclarationList>node);
+                    case SyntaxKind.FunctionDeclaration:
+                        return emitFunctionDeclaration(<FunctionDeclaration>node);
+                    case SyntaxKind.ClassDeclaration:
+                        return emitClassDeclaration(<ClassDeclaration>node);
+                    case SyntaxKind.InterfaceDeclaration:
+                        return emitInterfaceDeclaration(<InterfaceDeclaration>node);
+                    case SyntaxKind.TypeAliasDeclaration:
+                        return emitTypeAliasDeclaration(<TypeAliasDeclaration>node);
+                    case SyntaxKind.EnumDeclaration:
+                        return emitEnumDeclaration(<EnumDeclaration>node);
+                    case SyntaxKind.ModuleDeclaration:
+                        return emitModuleDeclaration(<ModuleDeclaration>node);
+                    case SyntaxKind.ModuleBlock:
+                        return emitModuleBlock(<ModuleBlock>node);
+                    case SyntaxKind.CaseBlock:
+                        return emitCaseBlock(<CaseBlock>node);
+                    case SyntaxKind.NamespaceExportDeclaration:
+                        return emitNamespaceExportDeclaration(<NamespaceExportDeclaration>node);
+                    case SyntaxKind.ImportEqualsDeclaration:
+                        return emitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
+                    case SyntaxKind.ImportDeclaration:
+                        return emitImportDeclaration(<ImportDeclaration>node);
+                    case SyntaxKind.ImportClause:
+                        return emitImportClause(<ImportClause>node);
+                    case SyntaxKind.NamespaceImport:
+                        return emitNamespaceImport(<NamespaceImport>node);
+                    case SyntaxKind.NamedImports:
+                        return emitNamedImports(<NamedImports>node);
+                    case SyntaxKind.ImportSpecifier:
+                        return emitImportSpecifier(<ImportSpecifier>node);
+                    case SyntaxKind.ExportAssignment:
+                        return emitExportAssignment(<ExportAssignment>node);
+                    case SyntaxKind.ExportDeclaration:
+                        return emitExportDeclaration(<ExportDeclaration>node);
+                    case SyntaxKind.NamedExports:
+                        return emitNamedExports(<NamedExports>node);
+                    case SyntaxKind.ExportSpecifier:
+                        return emitExportSpecifier(<ExportSpecifier>node);
+                    case SyntaxKind.MissingDeclaration:
+                        return;
+
+                    // Module references
+                    case SyntaxKind.ExternalModuleReference:
+                        return emitExternalModuleReference(<ExternalModuleReference>node);
+
+                    // JSX (non-expression)
+                    case SyntaxKind.JsxText:
+                        return emitJsxText(<JsxText>node);
+                    case SyntaxKind.JsxOpeningElement:
+                    case SyntaxKind.JsxOpeningFragment:
+                        return emitJsxOpeningElementOrFragment(<JsxOpeningElement>node);
+                    case SyntaxKind.JsxClosingElement:
+                    case SyntaxKind.JsxClosingFragment:
+                        return emitJsxClosingElementOrFragment(<JsxClosingElement>node);
+                    case SyntaxKind.JsxAttribute:
+                        return emitJsxAttribute(<JsxAttribute>node);
+                    case SyntaxKind.JsxAttributes:
+                        return emitJsxAttributes(<JsxAttributes>node);
+                    case SyntaxKind.JsxSpreadAttribute:
+                        return emitJsxSpreadAttribute(<JsxSpreadAttribute>node);
+                    case SyntaxKind.JsxExpression:
+                        return emitJsxExpression(<JsxExpression>node);
+
+                    // Clauses
+                    case SyntaxKind.CaseClause:
+                        return emitCaseClause(<CaseClause>node);
+                    case SyntaxKind.DefaultClause:
+                        return emitDefaultClause(<DefaultClause>node);
+                    case SyntaxKind.HeritageClause:
+                        return emitHeritageClause(<HeritageClause>node);
+                    case SyntaxKind.CatchClause:
+                        return emitCatchClause(<CatchClause>node);
+
+                    // Property assignments
+                    case SyntaxKind.PropertyAssignment:
+                        return emitPropertyAssignment(<PropertyAssignment>node);
+                    case SyntaxKind.ShorthandPropertyAssignment:
+                        return emitShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
+                    case SyntaxKind.SpreadAssignment:
+                        return emitSpreadAssignment(node as SpreadAssignment);
+
+                    // Enum
+                    case SyntaxKind.EnumMember:
+                        return emitEnumMember(<EnumMember>node);
+
+                    // JSDoc nodes (ignored)
+                    // Transformation nodes (ignored)
+                }
+
+                if (isExpression(node)) {
+                    hint = EmitHint.Expression;
+                    node = trySubstituteNode(EmitHint.Expression, node);
+                }
+                else if (isToken(node)) {
+                    return writeTokenNode(node, writePunctuation);
+                }
+            }
+
+            if (hint === EmitHint.Expression) {
+                switch (node.kind) {
+                    // Literals
+                    case SyntaxKind.NumericLiteral:
+                        return emitNumericLiteral(<NumericLiteral>node);
+
+                    case SyntaxKind.StringLiteral:
+                    case SyntaxKind.RegularExpressionLiteral:
+                    case SyntaxKind.NoSubstitutionTemplateLiteral:
+                        return emitLiteral(<LiteralExpression>node);
+
+                    // Identifiers
+                    case SyntaxKind.Identifier:
+                        return emitIdentifier(<Identifier>node);
+
+                    // Reserved words
+                    case SyntaxKind.FalseKeyword:
+                    case SyntaxKind.NullKeyword:
+                    case SyntaxKind.SuperKeyword:
+                    case SyntaxKind.TrueKeyword:
+                    case SyntaxKind.ThisKeyword:
+                    case SyntaxKind.ImportKeyword:
+                        return writeTokenNode(node, writeKeyword);
+
+                    // Expressions
+                    case SyntaxKind.ArrayLiteralExpression:
+                        return emitArrayLiteralExpression(<ArrayLiteralExpression>node);
+                    case SyntaxKind.ObjectLiteralExpression:
+                        return emitObjectLiteralExpression(<ObjectLiteralExpression>node);
+                    case SyntaxKind.PropertyAccessExpression:
+                        return emitPropertyAccessExpression(<PropertyAccessExpression>node);
+                    case SyntaxKind.ElementAccessExpression:
+                        return emitElementAccessExpression(<ElementAccessExpression>node);
+                    case SyntaxKind.CallExpression:
+                        return emitCallExpression(<CallExpression>node);
+                    case SyntaxKind.NewExpression:
+                        return emitNewExpression(<NewExpression>node);
+                    case SyntaxKind.TaggedTemplateExpression:
+                        return emitTaggedTemplateExpression(<TaggedTemplateExpression>node);
+                    case SyntaxKind.TypeAssertionExpression:
+                        return emitTypeAssertionExpression(<TypeAssertion>node);
+                    case SyntaxKind.ParenthesizedExpression:
+                        return emitParenthesizedExpression(<ParenthesizedExpression>node);
+                    case SyntaxKind.FunctionExpression:
+                        return emitFunctionExpression(<FunctionExpression>node);
+                    case SyntaxKind.ArrowFunction:
+                        return emitArrowFunction(<ArrowFunction>node);
+                    case SyntaxKind.DeleteExpression:
+                        return emitDeleteExpression(<DeleteExpression>node);
+                    case SyntaxKind.TypeOfExpression:
+                        return emitTypeOfExpression(<TypeOfExpression>node);
+                    case SyntaxKind.VoidExpression:
+                        return emitVoidExpression(<VoidExpression>node);
+                    case SyntaxKind.AwaitExpression:
+                        return emitAwaitExpression(<AwaitExpression>node);
+                    case SyntaxKind.PrefixUnaryExpression:
+                        return emitPrefixUnaryExpression(<PrefixUnaryExpression>node);
+                    case SyntaxKind.PostfixUnaryExpression:
+                        return emitPostfixUnaryExpression(<PostfixUnaryExpression>node);
+                    case SyntaxKind.BinaryExpression:
+                        return emitBinaryExpression(<BinaryExpression>node);
+                    case SyntaxKind.ConditionalExpression:
+                        return emitConditionalExpression(<ConditionalExpression>node);
+                    case SyntaxKind.TemplateExpression:
+                        return emitTemplateExpression(<TemplateExpression>node);
+                    case SyntaxKind.YieldExpression:
+                        return emitYieldExpression(<YieldExpression>node);
+                    case SyntaxKind.SpreadElement:
+                        return emitSpreadExpression(<SpreadElement>node);
+                    case SyntaxKind.ClassExpression:
+                        return emitClassExpression(<ClassExpression>node);
+                    case SyntaxKind.OmittedExpression:
+                        return;
+                    case SyntaxKind.AsExpression:
+                        return emitAsExpression(<AsExpression>node);
+                    case SyntaxKind.NonNullExpression:
+                        return emitNonNullExpression(<NonNullExpression>node);
+                    case SyntaxKind.MetaProperty:
+                        return emitMetaProperty(<MetaProperty>node);
+
+                    // JSX
+                    case SyntaxKind.JsxElement:
+                        return emitJsxElement(<JsxElement>node);
+                    case SyntaxKind.JsxSelfClosingElement:
+                        return emitJsxSelfClosingElement(<JsxSelfClosingElement>node);
+                    case SyntaxKind.JsxFragment:
+                        return emitJsxFragment(<JsxFragment>node);
+
+                    // Transformation nodes
+                    case SyntaxKind.PartiallyEmittedExpression:
+                        return emitPartiallyEmittedExpression(<PartiallyEmittedExpression>node);
+
+                    case SyntaxKind.CommaListExpression:
+                        return emitCommaList(<CommaListExpression>node);
+                }
             }
         }
 
@@ -987,11 +1029,11 @@ namespace ts {
         function emitParameter(node: ParameterDeclaration) {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
-            emitIfPresent(node.dotDotDotToken);
+            emit(node.dotDotDotToken);
             if (node.name) {
                 emitNodeWithWriter(node.name, writeParameter);
             }
-            emitIfPresent(node.questionToken);
+            emit(node.questionToken);
             if (node.parent && node.parent.kind === SyntaxKind.JSDocFunctionType && !node.name) {
                 emit(node.type);
             }
@@ -1014,7 +1056,7 @@ namespace ts {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             emitNodeWithWriter(node.name, writeProperty);
-            emitIfPresent(node.questionToken);
+            emit(node.questionToken);
             emitTypeAnnotation(node.type);
             writeSemicolon();
         }
@@ -1023,7 +1065,7 @@ namespace ts {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             emit(node.name);
-            emitIfPresent(node.questionToken);
+            emit(node.questionToken);
             emitTypeAnnotation(node.type);
             emitInitializer(node.initializer);
             writeSemicolon();
@@ -1033,7 +1075,7 @@ namespace ts {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             emit(node.name);
-            emitIfPresent(node.questionToken);
+            emit(node.questionToken);
             emitTypeParameters(node, node.typeParameters);
             emitParameters(node, node.parameters);
             emitTypeAnnotation(node.type);
@@ -1043,9 +1085,9 @@ namespace ts {
         function emitMethodDeclaration(node: MethodDeclaration) {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
-            emitIfPresent(node.asteriskToken);
+            emit(node.asteriskToken);
             emit(node.name);
-            emitIfPresent(node.questionToken);
+            emit(node.questionToken);
             emitSignatureAndBody(node, emitSignatureHead);
         }
 
@@ -1255,10 +1297,18 @@ namespace ts {
             }
 
             writePunctuation("[");
-            pipelineEmitWithNotification(EmitHint.MappedTypeParameter, node.typeParameter);
+
+            // NOTE: this has been manually inlined to reduce overall stack depth
+            if (onEmitNode) {
+                onEmitNode(EmitHint.MappedTypeParameter, node.typeParameter, pipelineEmit);
+            }
+            else {
+                pipelineEmitWorker(EmitHint.MappedTypeParameter, node.typeParameter, PipelinePhase.Start);
+            }
+
             writePunctuation("]");
 
-            emitIfPresent(node.questionToken);
+            emit(node.questionToken);
             writePunctuation(":");
             writeSpace();
             emit(node.type);
@@ -1271,6 +1321,14 @@ namespace ts {
                 decreaseIndent();
             }
             writePunctuation("}");
+        }
+
+        function emitMappedTypeParameter(node: TypeParameterDeclaration): void {
+            emit(node.name);
+            writeSpace();
+            writeKeyword("in");
+            writeSpace();
+            emit(node.constraint);
         }
 
         function emitLiteralType(node: LiteralTypeNode) {
@@ -1294,7 +1352,7 @@ namespace ts {
         }
 
         function emitBindingElement(node: BindingElement) {
-            emitIfPresent(node.dotDotDotToken);
+            emit(node.dotDotDotToken);
             if (node.propertyName) {
                 emit(node.propertyName);
                 writePunctuation(":");
@@ -1815,7 +1873,7 @@ namespace ts {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             writeKeyword("function");
-            emitIfPresent(node.asteriskToken);
+            emit(node.asteriskToken);
             writeSpace();
             emitIdentifierName(node.name);
             emitSignatureAndBody(node, emitSignatureHead);
@@ -1914,12 +1972,9 @@ namespace ts {
                 ? emitBlockFunctionBodyOnSingleLine
                 : emitBlockFunctionBodyWorker;
 
-            if (emitBodyWithDetachedComments) {
-                emitBodyWithDetachedComments(body, body.statements, emitBlockFunctionBody);
-            }
-            else {
-                emitBlockFunctionBody(body);
-            }
+            emitLeadingDetachedCommentsOfBody(body, body.statements);
+            emitBlockFunctionBody(body);
+            emitTrailingDetachedCommentsOfBody(body, body.statements);
 
             decreaseIndent();
             writeToken(SyntaxKind.CloseBraceToken, body.statements.end, writePunctuation, body);
@@ -2260,7 +2315,7 @@ namespace ts {
         function emitJsxExpression(node: JsxExpression) {
             if (node.expression) {
                 writePunctuation("{");
-                emitIfPresent(node.dotDotDotToken);
+                emit(node.dotDotDotToken);
                 emitExpression(node.expression);
                 writePunctuation("}");
             }
@@ -2402,19 +2457,18 @@ namespace ts {
 
         function emitSourceFile(node: SourceFile) {
             writeLine();
-            const statements = node.statements;
-            if (emitBodyWithDetachedComments) {
-                // Emit detached comment if there are no prologue directives or if the first node is synthesized.
-                // The synthesized node will have no leading comment so some comments may be missed.
-                const shouldEmitDetachedComment = statements.length === 0 ||
-                    !isPrologueDirective(statements[0]) ||
-                    nodeIsSynthesized(statements[0]);
-                if (shouldEmitDetachedComment) {
-                    emitBodyWithDetachedComments(node, statements, emitSourceFileWorker);
-                    return;
-                }
+
+            // Emit detached comment if there are no prologue directives or if the first node is synthesized.
+            // The synthesized node will have no leading comment so some comments may be missed.
+            const firstStatement = firstOrUndefined(node.statements);
+            if (!firstStatement || !isPrologueDirective(firstStatement) || nodeIsSynthesized(firstStatement)) {
+                emitLeadingDetachedCommentsOfBody(node, node.statements);
+                emitSourceFileWorker(node);
+                emitTrailingDetachedCommentsOfBody(node, node.statements);
             }
-            emitSourceFileWorker(node);
+            else {
+                emitSourceFileWorker(node);
+            }
         }
 
         function emitSourceFileWorker(node: SourceFile) {

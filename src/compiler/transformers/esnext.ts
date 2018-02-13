@@ -20,8 +20,10 @@ namespace ts {
         const compilerOptions = context.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
 
-        const previousOnEmitNode = context.onEmitNode;
-        context.onEmitNode = onEmitNode;
+        const previousOnBeforeEmitNode = context.onBeforeEmitNode;
+        const previousOnAfterEmitNode = context.onAfterEmitNode;
+        context.onBeforeEmitNode = onBeforeEmitNode;
+        context.onAfterEmitNode = onAfterEmitNode;
 
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onSubstituteNode = onSubstituteNode;
@@ -29,6 +31,7 @@ namespace ts {
         let enabledSubstitutions: ESNextSubstitutionFlags;
         let enclosingFunctionFlags: FunctionFlags;
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
+        const enclosingSuperContainerFlagsStack: NodeCheckFlags[] = [];
 
         return transformSourceFile;
 
@@ -744,21 +747,23 @@ namespace ts {
          * @param node The node to be printed.
          * @param emitCallback The callback used to emit the node.
          */
-        function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
+        function onBeforeEmitNode(hint: EmitHint, node: Node) {
             // If we need to support substitutions for `super` in an async method,
             // we should track it here.
             if (enabledSubstitutions & ESNextSubstitutionFlags.AsyncMethodsWithSuper && isSuperContainer(node)) {
-                const superContainerFlags = resolver.getNodeCheckFlags(node) & (NodeCheckFlags.AsyncMethodWithSuper | NodeCheckFlags.AsyncMethodWithSuperBinding);
-                if (superContainerFlags !== enclosingSuperContainerFlags) {
-                    const savedEnclosingSuperContainerFlags = enclosingSuperContainerFlags;
-                    enclosingSuperContainerFlags = superContainerFlags;
-                    previousOnEmitNode(hint, node, emitCallback);
-                    enclosingSuperContainerFlags = savedEnclosingSuperContainerFlags;
-                    return;
-                }
+                enclosingSuperContainerFlagsStack.push(enclosingSuperContainerFlags);
+                enclosingSuperContainerFlags = resolver.getNodeCheckFlags(node) & (NodeCheckFlags.AsyncMethodWithSuper | NodeCheckFlags.AsyncMethodWithSuperBinding);
             }
 
-            previousOnEmitNode(hint, node, emitCallback);
+            previousOnBeforeEmitNode(hint, node);
+        }
+
+        function onAfterEmitNode(hint: EmitHint, node: Node) {
+            previousOnAfterEmitNode(hint, node);
+
+            if (enabledSubstitutions & ESNextSubstitutionFlags.AsyncMethodsWithSuper && isSuperContainer(node)) {
+                enclosingSuperContainerFlags = enclosingSuperContainerFlagsStack.pop();
+            }
         }
 
         /**

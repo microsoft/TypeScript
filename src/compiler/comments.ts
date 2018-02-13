@@ -6,8 +6,10 @@ namespace ts {
         reset(): void;
         setSourceFile(sourceFile: SourceFile): void;
         setWriter(writer: EmitTextWriter): void;
-        emitNodeWithComments(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
-        emitBodyWithDetachedComments(node: Node, detachedRange: TextRange, emitCallback: (node: Node) => void): void;
+        emitLeadingCommentsOfNode(node: Node | undefined): void;
+        emitTrailingCommentsOfNode(node: Node | undefined): void;
+        emitLeadingDetachedCommentsOfBody(node: Node, detachedRange: TextRange): void;
+        emitTrailingDetachedCommentsOfBody(node: Node, detachedRange: TextRange): void;
         emitTrailingCommentsOfPosition(pos: number, prefixSpace?: boolean): void;
         emitLeadingCommentsOfPosition(pos: number): void;
     }
@@ -15,6 +17,9 @@ namespace ts {
     export function createCommentWriter(printerOptions: PrinterOptions, emitPos: ((pos: number) => void) | undefined): CommentWriter {
         const extendedDiagnostics = printerOptions.extendedDiagnostics;
         const newLine = getNewLineCharacter(printerOptions);
+        const containerPosStack: number[] = [];
+        const containerEndStack: number[] = [];
+        const declarationListContainerEndStack: number[] = [];
         let writer: EmitTextWriter;
         let containerPos = -1;
         let containerEnd = -1;
@@ -24,124 +29,135 @@ namespace ts {
         let currentLineMap: ReadonlyArray<number>;
         let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number}[];
         let hasWrittenComment = false;
-        let disabled: boolean = printerOptions.removeComments;
+        let disabled: number = printerOptions.removeComments ? -1 : 0;
 
         return {
             reset,
             setWriter,
             setSourceFile,
-            emitNodeWithComments,
-            emitBodyWithDetachedComments,
+            emitLeadingCommentsOfNode,
+            emitTrailingCommentsOfNode,
+            emitLeadingDetachedCommentsOfBody,
+            emitTrailingDetachedCommentsOfBody,
             emitTrailingCommentsOfPosition,
             emitLeadingCommentsOfPosition,
         };
 
-        function emitNodeWithComments(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
-            if (disabled) {
-                emitCallback(hint, node);
-                return;
-            }
+        function emitLeadingCommentsOfNode(node: Node | undefined) {
+            if (!node) return;
 
-            if (node) {
+            const emitFlags = getEmitFlags(node);
+            if (!disabled) {
+                if (extendedDiagnostics) performance.mark("emitLeadingCommentsOfNode");
+
                 hasWrittenComment = false;
-
-                const emitNode = node.emitNode;
-                const emitFlags = emitNode && emitNode.flags;
-                const { pos, end } = emitNode && emitNode.commentRange || node;
-                if ((pos < 0 && end < 0) || (pos === end)) {
-                    // Both pos and end are synthesized, so just emit the node without comments.
-                    emitNodeWithSynthesizedComments(hint, node, emitNode, emitFlags, emitCallback);
-                }
-                else {
-                    if (extendedDiagnostics) {
-                        performance.mark("preEmitNodeWithComment");
-                    }
-
-                    const isEmittedNode = node.kind !== SyntaxKind.NotEmittedStatement;
-                    // We have to explicitly check that the node is JsxText because if the compilerOptions.jsx is "preserve" we will not do any transformation.
-                    // It is expensive to walk entire tree just to set one kind of node to have no comments.
-                    const skipLeadingComments = pos < 0 || (emitFlags & EmitFlags.NoLeadingComments) !== 0 || node.kind === SyntaxKind.JsxText;
-                    const skipTrailingComments = end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0 || node.kind === SyntaxKind.JsxText;
+                const commentRange = getCommentRange(node);
+                if (!isSynthesized(commentRange)) {
+                    const skipLeadingComments = shouldSkipLeadingComments(node.kind, commentRange, emitFlags);
+                    const skipTrailingComments = shouldSkipTrailingComments(node.kind, commentRange, emitFlags);
 
                     // Emit leading comments if the position is not synthesized and the node
                     // has not opted out from emitting leading comments.
                     if (!skipLeadingComments) {
-                        emitLeadingComments(pos, isEmittedNode);
+                        emitLeadingComments(commentRange.pos, node.kind !== SyntaxKind.NotEmittedStatement);
                     }
 
-                    // Save current container state on the stack.
-                    const savedContainerPos = containerPos;
-                    const savedContainerEnd = containerEnd;
-                    const savedDeclarationListContainerEnd = declarationListContainerEnd;
+                    pushContainer(node.kind, commentRange, skipLeadingComments, skipTrailingComments);
+                }
 
-                    if (!skipLeadingComments) {
-                        containerPos = pos;
-                    }
+                forEach(getSyntheticLeadingComments(node), emitLeadingSynthesizedComment);
 
-                    if (!skipTrailingComments) {
-                        containerEnd = end;
+                if (extendedDiagnostics) performance.measure("commentTime", "emitLeadingCommentsOfNode");
+            }
 
-                        // To avoid invalid comment emit in a down-level binding pattern, we
-                        // keep track of the last declaration list container's end
-                        if (node.kind === SyntaxKind.VariableDeclarationList) {
-                            declarationListContainerEnd = end;
-                        }
-                    }
+            pushDisabledState(emitFlags);
+        }
 
-                    if (extendedDiagnostics) {
-                        performance.measure("commentTime", "preEmitNodeWithComment");
-                    }
+        function emitTrailingCommentsOfNode(node: Node | undefined) {
+            if (!node) return;
 
-                    emitNodeWithSynthesizedComments(hint, node, emitNode, emitFlags, emitCallback);
+            const emitFlags = getEmitFlags(node);
+            popDisabledState(emitFlags);
 
-                    if (extendedDiagnostics) {
-                        performance.mark("postEmitNodeWithComment");
-                    }
+            if (!disabled) {
+                if (extendedDiagnostics) performance.mark("emitTrailingCommentsOfNode");
 
-                    // Restore previous container state.
-                    containerPos = savedContainerPos;
-                    containerEnd = savedContainerEnd;
-                    declarationListContainerEnd = savedDeclarationListContainerEnd;
+                forEach(getSyntheticTrailingComments(node), emitTrailingSynthesizedComment);
+
+                const commentRange = getCommentRange(node);
+                if (!isSynthesized(commentRange)) {
+                    const skipLeadingComments = shouldSkipLeadingComments(node.kind, commentRange, emitFlags);
+                    const skipTrailingComments = shouldSkipTrailingComments(node.kind, commentRange, emitFlags);
+                    popContainer(node.kind, skipLeadingComments, skipTrailingComments);
 
                     // Emit trailing comments if the position is not synthesized and the node
                     // has not opted out from emitting leading comments and is an emitted node.
-                    if (!skipTrailingComments && isEmittedNode) {
-                        emitTrailingComments(end);
+                    if (!skipTrailingComments && node.kind !== SyntaxKind.NotEmittedStatement) {
+                        emitTrailingComments(commentRange.end);
                     }
+                }
 
-                    if (extendedDiagnostics) {
-                        performance.measure("commentTime", "postEmitNodeWithComment");
-                    }
+                if (extendedDiagnostics) performance.measure("commentTime", "emitTrailingCommentsOfNode");
+            }
+        }
+
+        function shouldSkipLeadingComments(kind: SyntaxKind, commentRange: TextRange, emitFlags: EmitFlags) {
+            // We have to explicitly check that the node is JsxText because if the compilerOptions.jsx is "preserve" we will not do any transformation.
+            // It is expensive to walk entire tree just to set one kind of node to have no comments.
+            return kind === SyntaxKind.JsxText || commentRange.pos < 0 || (emitFlags & EmitFlags.NoLeadingComments) !== 0;
+        }
+
+        function shouldSkipTrailingComments(kind: SyntaxKind, commentRange: TextRange, emitFlags: EmitFlags) {
+            // We have to explicitly check that the node is JsxText because if the compilerOptions.jsx is "preserve" we will not do any transformation.
+            // It is expensive to walk entire tree just to set one kind of node to have no comments.
+            return kind === SyntaxKind.JsxText || commentRange.end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0;
+        }
+
+        function isSynthesized(range: TextRange) {
+            return range.pos < 0 && range.end < 0 || range.pos === range.end;
+        }
+
+        function pushDisabledState(emitFlags: EmitFlags) {
+            if (disabled >= 0 && emitFlags & EmitFlags.NoNestedComments) {
+                disabled++;
+            }
+        }
+
+        function popDisabledState(emitFlags: EmitFlags) {
+            if (disabled > 0 && emitFlags & EmitFlags.NoNestedComments) {
+                disabled--;
+            }
+        }
+
+        function pushContainer(kind: SyntaxKind, commentRange: TextRange, skipLeadingComments: boolean, skipTrailingComments: boolean) {
+            // Save current container state on the stack.
+            if (!skipLeadingComments) {
+                containerPosStack.push(containerPos);
+                containerPos = commentRange.pos;
+            }
+
+            if (!skipTrailingComments) {
+                containerEndStack.push(containerEnd);
+                containerEnd = commentRange.end;
+
+                // To avoid invalid comment emit in a down-level binding pattern, we
+                // keep track of the last declaration list container's end
+                if (kind === SyntaxKind.VariableDeclarationList) {
+                    declarationListContainerEndStack.push(declarationListContainerEnd);
+                    declarationListContainerEnd = commentRange.end;
                 }
             }
         }
 
-        function emitNodeWithSynthesizedComments(hint: EmitHint, node: Node, emitNode: EmitNode, emitFlags: EmitFlags, emitCallback: (hint: EmitHint, node: Node) => void) {
-            const leadingComments = emitNode && emitNode.leadingComments;
-            if (some(leadingComments)) {
-                if (extendedDiagnostics) {
-                    performance.mark("preEmitNodeWithSynthesizedComments");
-                }
-
-                forEach(leadingComments, emitLeadingSynthesizedComment);
-
-                if (extendedDiagnostics) {
-                    performance.measure("commentTime", "preEmitNodeWithSynthesizedComments");
-                }
+        function popContainer(kind: SyntaxKind, skipLeadingComments: boolean, skipTrailingComments: boolean) {
+            if (!skipLeadingComments) {
+                containerPos = containerPosStack.pop();
             }
 
-            emitNodeWithNestedComments(hint, node, emitFlags, emitCallback);
-
-            const trailingComments = emitNode && emitNode.trailingComments;
-            if (some(trailingComments)) {
-                if (extendedDiagnostics) {
-                    performance.mark("postEmitNodeWithSynthesizedComments");
-                }
-
-                forEach(trailingComments, emitTrailingSynthesizedComment);
-
-                if (extendedDiagnostics) {
-                    performance.measure("commentTime", "postEmitNodeWithSynthesizedComments");
+            if (!skipTrailingComments) {
+                containerEnd = containerEndStack.pop();
+                if (kind === SyntaxKind.VariableDeclarationList) {
+                    declarationListContainerEnd = declarationListContainerEndStack.pop();
                 }
             }
         }
@@ -181,47 +197,27 @@ namespace ts {
                 : `//${comment.text}`;
         }
 
-        function emitNodeWithNestedComments(hint: EmitHint, node: Node, emitFlags: EmitFlags, emitCallback: (hint: EmitHint, node: Node) => void) {
-            if (emitFlags & EmitFlags.NoNestedComments) {
-                disabled = true;
-                emitCallback(hint, node);
-                disabled = false;
-            }
-            else {
-                emitCallback(hint, node);
-            }
-        }
+        function emitLeadingDetachedCommentsOfBody(node: Node, detachedRange: TextRange) {
+            if (extendedDiagnostics) performance.mark("emitLeadingDetachedCommentsOfBody");
 
-        function emitBodyWithDetachedComments(node: Node, detachedRange: TextRange, emitCallback: (node: Node) => void) {
-            if (extendedDiagnostics) {
-                performance.mark("preEmitBodyWithDetachedComments");
-            }
-
-            const { pos, end } = detachedRange;
             const emitFlags = getEmitFlags(node);
-            const skipLeadingComments = pos < 0 || (emitFlags & EmitFlags.NoLeadingComments) !== 0;
-            const skipTrailingComments = disabled || end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0;
+            const skipLeadingComments = detachedRange.pos < 0 || (emitFlags & EmitFlags.NoLeadingComments) !== 0;
 
             if (!skipLeadingComments) {
                 emitDetachedCommentsAndUpdateCommentsInfo(detachedRange);
             }
 
-            if (extendedDiagnostics) {
-                performance.measure("commentTime", "preEmitBodyWithDetachedComments");
-            }
+            if (extendedDiagnostics) performance.measure("commentTime", "emitLeadingDetachedCommentsOfBody");
+            pushDisabledState(emitFlags);
+        }
 
-            if (emitFlags & EmitFlags.NoNestedComments && !disabled) {
-                disabled = true;
-                emitCallback(node);
-                disabled = false;
-            }
-            else {
-                emitCallback(node);
-            }
+        function emitTrailingDetachedCommentsOfBody(node: Node, detachedRange: TextRange) {
+            if (extendedDiagnostics) performance.mark("emitTrailingDetachedCommentsOfBody");
 
-            if (extendedDiagnostics) {
-                performance.mark("beginEmitBodyWithDetachedCommetns");
-            }
+            const emitFlags = getEmitFlags(node);
+            popDisabledState(emitFlags);
+
+            const skipTrailingComments = disabled || detachedRange.end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0;
 
             if (!skipTrailingComments) {
                 emitLeadingComments(detachedRange.end, /*isEmittedNode*/ true);
@@ -230,9 +226,7 @@ namespace ts {
                 }
             }
 
-            if (extendedDiagnostics) {
-                performance.measure("commentTime", "beginEmitBodyWithDetachedCommetns");
-            }
+            if (extendedDiagnostics) performance.measure("commentTime", "emitTrailingDetachedCommentsOfBody");
         }
 
         function emitLeadingComments(pos: number, isEmittedNode: boolean) {
@@ -392,7 +386,7 @@ namespace ts {
         }
 
         function emitDetachedCommentsAndUpdateCommentsInfo(range: TextRange) {
-            const currentDetachedCommentInfo = emitDetachedComments(currentText, currentLineMap, writer, writeComment, range, newLine, disabled);
+            const currentDetachedCommentInfo = emitDetachedComments(currentText, currentLineMap, writer, writeComment, range, newLine, !!disabled);
             if (currentDetachedCommentInfo) {
                 if (detachedCommentsInfo) {
                     detachedCommentsInfo.push(currentDetachedCommentInfo);

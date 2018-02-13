@@ -34,14 +34,8 @@ namespace ts {
          */
         emitPos(pos: number): void;
 
-        /**
-         * Emits a node with possible leading and trailing source maps.
-         *
-         * @param hint The current emit context
-         * @param node The node to emit.
-         * @param emitCallback The callback used to emit the node.
-         */
-        emitNodeWithSourceMap(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
+        emitLeadingSourceMapOfNode(node: Node): void;
+        emitTrailingSourceMapOfNode(node: Node): void;
 
         /**
          * Emits a token of a node node with possible leading and trailing source maps.
@@ -95,7 +89,7 @@ namespace ts {
 
         // Source map data
         let sourceMapData: SourceMapData;
-        let disabled: boolean = !(compilerOptions.sourceMap || compilerOptions.inlineSourceMap);
+        let disabled = !(compilerOptions.sourceMap || compilerOptions.inlineSourceMap) ? -1 : 0;
 
         return {
             initialize,
@@ -103,7 +97,8 @@ namespace ts {
             getSourceMapData: () => sourceMapData,
             setSourceFile,
             emitPos,
-            emitNodeWithSourceMap,
+            emitLeadingSourceMapOfNode,
+            emitTrailingSourceMapOfNode,
             emitTokenWithSourceMap,
             getText,
             getSourceMappingURL,
@@ -312,55 +307,71 @@ namespace ts {
             }
         }
 
-        /**
-         * Emits a node with possible leading and trailing source maps.
-         *
-         * @param hint A hint as to the intended usage of the node.
-         * @param node The node to emit.
-         * @param emitCallback The callback used to emit the node.
-         */
-        function emitNodeWithSourceMap(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
-            if (disabled) {
-                return emitCallback(hint, node);
+        function emitLeadingSourceMapOfNode(node: Node) {
+            if (!node) return;
+
+            const emitFlags = getEmitFlags(node);
+            if (!disabled) {
+                const sourceMapRange = getSourceMapRange(node);
+                if (shouldEmitLeadingSourceMap(node.kind, emitFlags, sourceMapRange)) {
+                    if (sourceMapRange.source && sourceMapRange.source !== currentSource) {
+                        const savedCurrentSource = currentSource;
+                        setSourceFile(sourceMapRange.source);
+                        emitPos(skipSourceTrivia(sourceMapRange.pos));
+                        setSourceFile(savedCurrentSource);
+                    }
+                    else {
+                        emitPos(skipSourceTrivia(sourceMapRange.pos));
+                    }
+                }
             }
 
-            if (node) {
-                const emitNode = node.emitNode;
-                const emitFlags = emitNode && emitNode.flags;
-                const range = emitNode && emitNode.sourceMapRange;
-                const { pos, end } = range || node;
-                let source = range && range.source;
-                const oldSource = currentSource;
-                if (source === oldSource) source = undefined;
+            pushDisabledState(emitFlags);
+        }
 
-                if (source) setSourceFile(source);
+        function emitTrailingSourceMapOfNode(node: Node) {
+            if (!node) return;
 
-                if (node.kind !== SyntaxKind.NotEmittedStatement
-                    && (emitFlags & EmitFlags.NoLeadingSourceMap) === 0
-                    && pos >= 0) {
-                    emitPos(skipSourceTrivia(pos));
+            const emitFlags = getEmitFlags(node);
+            popDisabledState(emitFlags);
+
+            if (!disabled) {
+                const sourceMapRange = getSourceMapRange(node);
+                if (shouldEmitTrailingSourceMap(node.kind, emitFlags, sourceMapRange)) {
+                    if (sourceMapRange.source && sourceMapRange.source !== currentSource) {
+                        const savedCurrentSource = currentSource;
+                        setSourceFile(sourceMapRange.source);
+                        emitPos(sourceMapRange.end);
+                        setSourceFile(savedCurrentSource);
+                    }
+                    else {
+                        emitPos(sourceMapRange.end);
+                    }
                 }
+            }
+        }
 
-                if (source) setSourceFile(oldSource);
+        function shouldEmitLeadingSourceMap(kind: SyntaxKind, emitFlags: EmitFlags, sourceMapRange: SourceMapRange) {
+            return kind !== SyntaxKind.NotEmittedStatement &&
+                (emitFlags & EmitFlags.NoLeadingSourceMap) === 0 &&
+                sourceMapRange.pos >= 0;
+        }
 
-                if (emitFlags & EmitFlags.NoNestedSourceMaps) {
-                    disabled = true;
-                    emitCallback(hint, node);
-                    disabled = false;
-                }
-                else {
-                    emitCallback(hint, node);
-                }
+        function shouldEmitTrailingSourceMap(kind: SyntaxKind, emitFlags: EmitFlags, sourceMapRange: SourceMapRange) {
+            return kind !== SyntaxKind.NotEmittedStatement &&
+                (emitFlags & EmitFlags.NoTrailingSourceMap) === 0 &&
+                sourceMapRange.end >= 0;
+        }
 
-                if (source) setSourceFile(source);
+        function pushDisabledState(emitFlags: EmitFlags) {
+            if (disabled >= 0 && emitFlags & EmitFlags.NoNestedSourceMaps) {
+                disabled++;
+            }
+        }
 
-                if (node.kind !== SyntaxKind.NotEmittedStatement
-                    && (emitFlags & EmitFlags.NoTrailingSourceMap) === 0
-                    && end >= 0) {
-                    emitPos(end);
-                }
-
-                if (source) setSourceFile(oldSource);
+        function popDisabledState(emitFlags: EmitFlags) {
+            if (disabled > 0 && emitFlags & EmitFlags.NoNestedSourceMaps) {
+                disabled--;
             }
         }
 
@@ -401,7 +412,7 @@ namespace ts {
          *
          * @param sourceFile The source file.
          */
-        function setSourceFile(sourceFile: SourceMapSource) {
+        function setSourceFile(sourceFile: SourceMapSource | undefined) {
             if (disabled) {
                 return;
             }

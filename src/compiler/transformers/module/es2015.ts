@@ -5,9 +5,11 @@
 namespace ts {
     export function transformES2015Module(context: TransformationContext) {
         const compilerOptions = context.getCompilerOptions();
-        const previousOnEmitNode = context.onEmitNode;
+        const previousOnBeforeEmitNode = context.onBeforeEmitNode;
+        const previousOnAfterEmitNode = context.onAfterEmitNode;
         const previousOnSubstituteNode = context.onSubstituteNode;
-        context.onEmitNode = onEmitNode;
+        context.onBeforeEmitNode = onBeforeEmitNode;
+        context.onAfterEmitNode = onAfterEmitNode;
         context.onSubstituteNode = onSubstituteNode;
         context.enableEmitNotification(SyntaxKind.SourceFile);
         context.enableSubstitution(SyntaxKind.Identifier);
@@ -73,16 +75,18 @@ namespace ts {
          *
          * @param hint A hint as to the intended usage of the node.
          * @param node The node to emit.
-         * @param emit A callback used to emit the node in the printer.
          */
-        function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
+        function onBeforeEmitNode(hint: EmitHint, node: Node): void {
             if (isSourceFile(node)) {
                 currentSourceFile = node;
-                previousOnEmitNode(hint, node, emitCallback);
-                currentSourceFile = undefined;
             }
-            else {
-                previousOnEmitNode(hint, node, emitCallback);
+            previousOnBeforeEmitNode(hint, node);
+        }
+
+        function onAfterEmitNode(hint: EmitHint, node: Node): void {
+            previousOnAfterEmitNode(hint, node);
+            if (isSourceFile(node)) {
+                currentSourceFile = undefined;
             }
         }
 
