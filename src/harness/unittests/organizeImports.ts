@@ -56,7 +56,9 @@ namespace ts {
 
             it("Sort - invalid vs invalid", () => {
                 assertSortsBefore(
+                    // tslint:disable-next-line no-invalid-template-strings
                     "import y from `${'lib1'}`;",
+                    // tslint:disable-next-line no-invalid-template-strings
                     "import x from `${'lib2'}`;");
             });
 
@@ -69,12 +71,14 @@ namespace ts {
             it("Sort - non-relative vs invalid", () => {
                 assertSortsBefore(
                     `import y from "lib";`,
+                    // tslint:disable-next-line no-invalid-template-strings
                     "import x from `${'lib'}`;");
             });
 
             it("Sort - relative vs invalid", () => {
                 assertSortsBefore(
                     `import y from "./lib";`,
+                    // tslint:disable-next-line no-invalid-template-strings
                     "import x from `${'lib'}`;");
             });
 
@@ -357,7 +361,7 @@ F2();
 
             assert.equal(node1.kind, node2.kind);
 
-            switch(node1.kind) {
+            switch (node1.kind) {
                 case SyntaxKind.ImportDeclaration:
                     const decl1 = node1 as ImportDeclaration;
                     const decl2 = node2 as ImportDeclaration;
@@ -369,6 +373,7 @@ F2();
                     const clause2 = node2 as ImportClause;
                     assertEqual(clause1.name, clause2.name);
                     assertEqual(clause1.namedBindings, clause2.namedBindings);
+                    break;
                 case SyntaxKind.NamespaceImport:
                     const nsi1 = node1 as NamespaceImport;
                     const nsi2 = node2 as NamespaceImport;

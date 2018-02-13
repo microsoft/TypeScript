@@ -2368,7 +2368,7 @@ namespace ts {
             const name = getExternalModuleName(specifier);
             if (name) {
                 const isRelative = isExternalModuleNameRelative(name);
-                return { importDeclaration, name, kind: isRelative ? ModuleNameKind.Relative : ModuleNameKind.NonRelative }
+                return { importDeclaration, name, kind: isRelative ? ModuleNameKind.Relative : ModuleNameKind.NonRelative };
             }
 
             return { importDeclaration, name: specifier.getText(), kind: ModuleNameKind.Invalid };
@@ -2505,7 +2505,7 @@ namespace ts {
 
             const sortedImportSpecifiers = stableSort(newImportSpecifiers, (s1, s2) => {
                 const nameComparison = compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name);
-                return nameComparison != Comparison.EqualTo
+                return nameComparison !== Comparison.EqualTo
                     ? nameComparison
                     : compareIdentifiers(s1.name, s2.name);
             });
