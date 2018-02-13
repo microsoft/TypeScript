@@ -661,6 +661,8 @@ namespace ts {
     export type AtToken = Token<SyntaxKind.AtToken>;
     export type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
     export type AwaitKeywordToken = Token<SyntaxKind.AwaitKeyword>;
+    export type PlusToken = Token<SyntaxKind.PlusToken>;
+    export type MinusToken = Token<SyntaxKind.MinusToken>;
 
     export type Modifier
         = Token<SyntaxKind.AbstractKeyword>
@@ -1158,9 +1160,9 @@ namespace ts {
 
     export interface MappedTypeNode extends TypeNode, Declaration {
         kind: SyntaxKind.MappedType;
-        readonlyToken?: ReadonlyToken;
+        readonlyToken?: ReadonlyToken | PlusToken | MinusToken;
         typeParameter: TypeParameterDeclaration;
-        questionToken?: QuestionToken;
+        questionToken?: QuestionToken | PlusToken | MinusToken;
         type?: TypeNode;
     }
 
