@@ -6,12 +6,12 @@ namespace ts {
     describe("Organize imports", () => {
         describe("Sort imports", () => {
             it("No imports", () => {
-                assert.isEmpty(sortImports([]));
+                assert.isEmpty(OrganizeImports.sortImports([]));
             });
 
             it("One import", () => {
                 const unsortedImports = parseImports(`import "lib";`);
-                const actualSortedImports = sortImports(unsortedImports);
+                const actualSortedImports = OrganizeImports.sortImports(unsortedImports);
                 const expectedSortedImports = unsortedImports;
                 assertListEqual(expectedSortedImports, actualSortedImports);
             });
@@ -84,27 +84,27 @@ namespace ts {
 
             function assertUnaffectedBySort(...importStrings: string[]) {
                 const unsortedImports1 = parseImports(...importStrings);
-                assertListEqual(unsortedImports1, sortImports(unsortedImports1));
+                assertListEqual(unsortedImports1, OrganizeImports.sortImports(unsortedImports1));
 
                 const unsortedImports2 = reverse(unsortedImports1);
-                assertListEqual(unsortedImports2, sortImports(unsortedImports2));
+                assertListEqual(unsortedImports2, OrganizeImports.sortImports(unsortedImports2));
             }
 
             function assertSortsBefore(importString1: string, importString2: string) {
                 const imports = parseImports(importString1, importString2);
-                assertListEqual(imports, sortImports(imports));
-                assertListEqual(imports, sortImports(reverse(imports)));
+                assertListEqual(imports, OrganizeImports.sortImports(imports));
+                assertListEqual(imports, OrganizeImports.sortImports(reverse(imports)));
             }
         });
 
         describe("Coalesce imports", () => {
             it("No imports", () => {
-                assert.isEmpty(coalesceImports([]));
+                assert.isEmpty(OrganizeImports.coalesceImports([]));
             });
 
             it("Sort specifiers", () => {
                 const sortedImports = parseImports(`import { default as m, a as n, b, y, z as o } from "lib";`);
-                const actualCoalescedImports = coalesceImports(sortedImports);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = parseImports(`import { a as n, b, default as m, y, z as o } from "lib";`);
                 assertListEqual(expectedCoalescedImports, actualCoalescedImports);
             });
@@ -113,7 +113,7 @@ namespace ts {
                 const sortedImports = parseImports(
                     `import "lib";`,
                     `import "lib";`);
-                const actualCoalescedImports = coalesceImports(sortedImports);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = parseImports(`import "lib";`);
                 assertListEqual(expectedCoalescedImports, actualCoalescedImports);
             });
@@ -122,7 +122,7 @@ namespace ts {
                 const sortedImports = parseImports(
                     `import * as x from "lib";`,
                     `import * as y from "lib";`);
-                const actualCoalescedImports = coalesceImports(sortedImports);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = sortedImports;
                 assertListEqual(expectedCoalescedImports, actualCoalescedImports);
             });
@@ -131,7 +131,7 @@ namespace ts {
                 const sortedImports = parseImports(
                     `import x from "lib";`,
                     `import y from "lib";`);
-                const actualCoalescedImports = coalesceImports(sortedImports);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = parseImports(`import { default as x, default as y } from "lib";`);
                 assertListEqual(expectedCoalescedImports, actualCoalescedImports);
             });
@@ -140,7 +140,7 @@ namespace ts {
                 const sortedImports = parseImports(
                     `import { x } from "lib";`,
                     `import { y as z } from "lib";`);
-                const actualCoalescedImports = coalesceImports(sortedImports);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = parseImports(`import { x, y as z } from "lib";`);
                 assertListEqual(expectedCoalescedImports, actualCoalescedImports);
             });
@@ -149,7 +149,7 @@ namespace ts {
                 const sortedImports = parseImports(
                     `import "lib";`,
                     `import * as x from "lib";`);
-                const actualCoalescedImports = coalesceImports(sortedImports);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = sortedImports;
                 assertListEqual(expectedCoalescedImports, actualCoalescedImports);
             });
@@ -158,7 +158,7 @@ namespace ts {
                 const sortedImports = parseImports(
                     `import "lib";`,
                     `import x from "lib";`);
-                const actualCoalescedImports = coalesceImports(sortedImports);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = sortedImports;
                 assertListEqual(expectedCoalescedImports, actualCoalescedImports);
             });
@@ -167,7 +167,7 @@ namespace ts {
                 const sortedImports = parseImports(
                     `import "lib";`,
                     `import { x } from "lib";`);
-                const actualCoalescedImports = coalesceImports(sortedImports);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = sortedImports;
                 assertListEqual(expectedCoalescedImports, actualCoalescedImports);
             });
@@ -176,7 +176,7 @@ namespace ts {
                 const sortedImports = parseImports(
                     `import * as x from "lib";`,
                     `import y from "lib";`);
-                const actualCoalescedImports = coalesceImports(sortedImports);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = parseImports(
                     `import y, * as x from "lib";`);
                 assertListEqual(expectedCoalescedImports, actualCoalescedImports);
@@ -186,7 +186,7 @@ namespace ts {
                 const sortedImports = parseImports(
                     `import * as x from "lib";`,
                     `import { y } from "lib";`);
-                const actualCoalescedImports = coalesceImports(sortedImports);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = sortedImports;
                 assertListEqual(expectedCoalescedImports, actualCoalescedImports);
             });
@@ -195,7 +195,7 @@ namespace ts {
                 const sortedImports = parseImports(
                     `import x from "lib";`,
                     `import { y } from "lib";`);
-                const actualCoalescedImports = coalesceImports(sortedImports);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = parseImports(
                     `import x, { y } from "lib";`);
                 assertListEqual(expectedCoalescedImports, actualCoalescedImports);
@@ -211,7 +211,7 @@ namespace ts {
                     `import * as x from "lib";`,
                     `import z from "lib";`,
                     `import { a } from "lib";`);
-                const actualCoalescedImports = coalesceImports(sortedImports);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = parseImports(
                     `import "lib";`,
                     `import * as x from "lib";`,
@@ -226,7 +226,7 @@ namespace ts {
                     `import { b } from "lib1";`,
                     `import { c } from "lib2";`,
                     `import { a } from "lib2";`);
-                const actualCoalescedImports = coalesceImports(sortedImports);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = parseImports(
                     `import { b, d } from "lib1";`,
                     `import { a, c } from "lib2";`);
@@ -239,7 +239,7 @@ namespace ts {
                     `import * as x from "lib";`,
                     `import * as y from "lib";`,
                     `import z from "lib";`);
-                const actualCoalescedImports = coalesceImports(sortedImports);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = sortedImports;
                 assertListEqual(expectedCoalescedImports, actualCoalescedImports);
             });
