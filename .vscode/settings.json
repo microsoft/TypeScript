@@ -1,0 +1,10 @@
+{
+	"editor.insertSpaces": false,
+	"editor.renderWhitespace": "all",
+	"editor.tabSize": 4,
+	"files.associations": {
+		"tsconfig*.json": "jsonc",
+		"tslint*.json": "jsonc"
+	},
+	"tslint.autoFixOnSave": true
+}
