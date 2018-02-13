@@ -2,13 +2,13 @@
 /// <reference path="tsserverProjectSystem.ts" />
 
 namespace ts {
-    export interface Range {
-        start: number;
+    interface Range {
+        pos: number;
         end: number;
         name: string;
     }
 
-    export interface Test {
+    interface Test {
         source: string;
         ranges: Map<Range>;
     }
@@ -34,7 +34,7 @@ namespace ts {
                     const name = s === e
                         ? source.charCodeAt(saved + 1) === CharacterCodes.hash ? "selection" : "extracted"
                         : source.substring(s, e);
-                    activeRanges.push({ name, start: text.length, end: undefined });
+                    activeRanges.push({ name, pos: text.length, end: undefined });
                     lastPos = pos;
                     continue;
                 }
@@ -121,15 +121,14 @@ namespace ts {
             const sourceFile = program.getSourceFile(path);
             const context: RefactorContext = {
                 cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
-                newLineCharacter,
                 program,
                 file: sourceFile,
-                startPosition: selectionRange.start,
+                startPosition: selectionRange.pos,
                 endPosition: selectionRange.end,
                 host: notImplementedHost,
                 formatContext: formatting.getFormatContext(testFormatOptions),
             };
-            const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
+            const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromRange(selectionRange));
             assert.equal(rangeToExtract.errors, undefined, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);
             const infos = refactor.extractSymbol.getAvailableActions(context);
             const actions = find(infos, info => info.description === description.message).actions;
@@ -185,15 +184,14 @@ namespace ts {
             const sourceFile = program.getSourceFile(f.path);
             const context: RefactorContext = {
                 cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
-                newLineCharacter,
                 program,
                 file: sourceFile,
-                startPosition: selectionRange.start,
+                startPosition: selectionRange.pos,
                 endPosition: selectionRange.end,
                 host: notImplementedHost,
                 formatContext: formatting.getFormatContext(testFormatOptions),
             };
-            const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
+            const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromRange(selectionRange));
             assert.isUndefined(rangeToExtract.errors, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);
             const infos = refactor.extractSymbol.getAvailableActions(context);
             assert.isUndefined(find(infos, info => info.description === description.message));

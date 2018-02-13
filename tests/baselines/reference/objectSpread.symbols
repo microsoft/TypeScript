@@ -403,6 +403,7 @@ function container(
 >computedFirst : Symbol(computedFirst, Decl(objectSpread.ts, 108, 7))
 >a : Symbol(a, Decl(objectSpread.ts, 108, 24))
 >b : Symbol(b, Decl(objectSpread.ts, 108, 35))
+>"before everything" : Symbol("before everything", Decl(objectSpread.ts, 108, 46))
 
         { ['before everything']: 12, ...o, b: 'yes' }
 >'before everything' : Symbol(['before everything'], Decl(objectSpread.ts, 109, 9))
@@ -414,6 +415,7 @@ function container(
 >a : Symbol(a, Decl(objectSpread.ts, 110, 25))
 >b : Symbol(b, Decl(objectSpread.ts, 110, 36))
 >c : Symbol(c, Decl(objectSpread.ts, 110, 47))
+>"in the middle" : Symbol("in the middle", Decl(objectSpread.ts, 110, 59))
 
         { ...o, ['in the middle']: 13, b: 'maybe?', ...o2 }
 >o : Symbol(o, Decl(objectSpread.ts, 0, 3))
@@ -425,6 +427,7 @@ function container(
 >computedAfter : Symbol(computedAfter, Decl(objectSpread.ts, 112, 7))
 >a : Symbol(a, Decl(objectSpread.ts, 112, 24))
 >b : Symbol(b, Decl(objectSpread.ts, 112, 35))
+>"at the end" : Symbol("at the end", Decl(objectSpread.ts, 112, 46))
 
         { ...o, b: 'yeah', ['at the end']: 14 }
 >o : Symbol(o, Decl(objectSpread.ts, 0, 3))

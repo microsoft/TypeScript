@@ -13,6 +13,8 @@ import * as lib from "lib";
 >lib : Symbol(lib, Decl(index.d.ts, 0, 6))
 
 declare module "lib" {
+>"lib" : Symbol("lib", Decl(index.d.ts, 0, 27))
+
     export function fn(): void;
 >fn : Symbol(fn, Decl(index.d.ts, 1, 22))
 }

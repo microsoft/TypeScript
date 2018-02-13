@@ -3,7 +3,7 @@
 /// <reference path="scriptInfo.ts"/>
 /// <reference path="..\compiler\resolutionCache.ts"/>
 /// <reference path="typingsCache.ts"/>
-/// <reference path="..\compiler\builder.ts"/>
+/// <reference path="..\compiler\builderState.ts"/>
 
 namespace ts.server {
 
@@ -126,6 +126,8 @@ namespace ts.server {
         private cachedUnresolvedImportsPerFile = new UnresolvedImportsMap();
         private lastCachedUnresolvedImportsList: SortedReadonlyArray<string>;
 
+        private lastFileExceededProgramSize: string | undefined;
+
         // wrapper over the real language service that will suppress all semantic operations
         protected languageService: LanguageService;
 
@@ -140,7 +142,7 @@ namespace ts.server {
         /*@internal*/
         resolutionCache: ResolutionCache;
 
-        private builder: Builder;
+        private builderState: BuilderState | undefined;
         /**
          * Set of files names that were updated since the last call to getChangesSinceVersion.
          */
@@ -203,17 +205,21 @@ namespace ts.server {
         readonly currentDirectory: string;
 
         /*@internal*/
+        public directoryStructureHost: DirectoryStructureHost;
+
+        /*@internal*/
         constructor(
             /*@internal*/readonly projectName: string,
             readonly projectKind: ProjectKind,
             readonly projectService: ProjectService,
             private documentRegistry: DocumentRegistry,
             hasExplicitListOfFiles: boolean,
-            languageServiceEnabled: boolean,
+            lastFileExceededProgramSize: string | undefined,
             private compilerOptions: CompilerOptions,
             public compileOnSaveEnabled: boolean,
-            /*@internal*/public directoryStructureHost: DirectoryStructureHost,
+            directoryStructureHost: DirectoryStructureHost,
             currentDirectory: string | undefined) {
+            this.directoryStructureHost = directoryStructureHost;
             this.currentDirectory = this.projectService.getNormalizedAbsolutePath(currentDirectory || "");
 
             this.cancellationToken = new ThrottledCancellationToken(this.projectService.cancellationToken, this.projectService.throttleWaitMilliseconds);
@@ -238,10 +244,10 @@ namespace ts.server {
             }
 
             // Use the current directory as resolution root only if the project created using current directory string
-            this.resolutionCache = createResolutionCache(this, currentDirectory && this.currentDirectory);
+            this.resolutionCache = createResolutionCache(this, currentDirectory && this.currentDirectory, /*logChangesWhenResolvingModule*/ true);
             this.languageService = createLanguageService(this, this.documentRegistry);
-            if (!languageServiceEnabled) {
-                this.disableLanguageService();
+            if (lastFileExceededProgramSize) {
+                this.disableLanguageService(lastFileExceededProgramSize);
             }
             this.markAsDirty();
         }
@@ -267,7 +273,7 @@ namespace ts.server {
         }
 
         getNewLine() {
-            return this.directoryStructureHost.newLine;
+            return this.projectService.host.newLine;
         }
 
         getProjectVersion() {
@@ -335,7 +341,7 @@ namespace ts.server {
         }
 
         useCaseSensitiveFileNames() {
-            return this.directoryStructureHost.useCaseSensitiveFileNames;
+            return this.projectService.host.useCaseSensitiveFileNames;
         }
 
         readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
@@ -343,7 +349,7 @@ namespace ts.server {
         }
 
         readFile(fileName: string): string | undefined {
-            return this.directoryStructureHost.readFile(fileName);
+            return this.projectService.host.readFile(fileName);
         }
 
         fileExists(file: string): boolean {
@@ -354,7 +360,7 @@ namespace ts.server {
         }
 
         resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModuleFull[] {
-            return this.resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, /*logChanges*/ true);
+            return this.resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames);
         }
 
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[] {
@@ -367,6 +373,11 @@ namespace ts.server {
 
         getDirectories(path: string): string[] {
             return this.directoryStructureHost.getDirectories(path);
+        }
+
+        /*@internal*/
+        getCachedDirectoryStructureHost(): CachedDirectoryStructureHost {
+            return undefined;
         }
 
         /*@internal*/
@@ -419,6 +430,14 @@ namespace ts.server {
             this.projectService.logger.info(s);
         }
 
+        log(s: string) {
+            this.writeLog(s);
+        }
+
+        error(s: string) {
+            this.projectService.logger.msg(s, Msg.Err);
+        }
+
         private setInternalCompilerOptionsForEmittingJsFiles() {
             if (this.projectKind === ProjectKind.Inferred || this.projectKind === ProjectKind.External) {
                 this.compilerOptions.noEmitForJsFiles = true;
@@ -443,15 +462,6 @@ namespace ts.server {
             return this.languageService;
         }
 
-        private ensureBuilder() {
-            if (!this.builder) {
-                this.builder = createBuilder({
-                    getCanonicalFileName: this.projectService.toCanonicalFileName,
-                    computeHash: data => this.projectService.host.createHash(data)
-                });
-            }
-        }
-
         private shouldEmitFile(scriptInfo: ScriptInfo) {
             return scriptInfo && !scriptInfo.isDynamicOrHasMixedContent();
         }
@@ -461,8 +471,8 @@ namespace ts.server {
                 return [];
             }
             this.updateGraph();
-            this.ensureBuilder();
-            return mapDefined(this.builder.getFilesAffectedBy(this.program, scriptInfo.path),
+            this.builderState = BuilderState.create(this.program, this.projectService.toCanonicalFileName, this.builderState);
+            return mapDefined(BuilderState.getFilesAffectedBy(this.builderState, this.program, scriptInfo.path, this.cancellationToken, data => this.projectService.host.createHash(data)),
                 sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined);
         }
 
@@ -489,15 +499,18 @@ namespace ts.server {
                 return;
             }
             this.languageServiceEnabled = true;
+            this.lastFileExceededProgramSize = undefined;
             this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ true);
         }
 
-        disableLanguageService() {
+        disableLanguageService(lastFileExceededProgramSize?: string) {
             if (!this.languageServiceEnabled) {
                 return;
             }
             this.languageService.cleanupSemanticCache();
             this.languageServiceEnabled = false;
+            this.lastFileExceededProgramSize = lastFileExceededProgramSize;
+            this.builderState = undefined;
             this.resolutionCache.closeTypeRootsWatch();
             this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ false);
         }
@@ -557,7 +570,7 @@ namespace ts.server {
             this.rootFilesMap = undefined;
             this.externalFiles = undefined;
             this.program = undefined;
-            this.builder = undefined;
+            this.builderState = undefined;
             this.resolutionCache.clear();
             this.resolutionCache = undefined;
             this.cachedUnresolvedImportsPerFile = undefined;
@@ -813,15 +826,9 @@ namespace ts.server {
                 if (this.setTypings(cachedTypings)) {
                     hasChanges = this.updateGraphWorker() || hasChanges;
                 }
-                if (this.builder) {
-                    this.builder.updateProgram(this.program);
-                }
             }
             else {
                 this.lastCachedUnresolvedImportsList = undefined;
-                if (this.builder) {
-                    this.builder.clear();
-                }
             }
 
             if (hasChanges) {
@@ -921,7 +928,7 @@ namespace ts.server {
                 missingFilePath,
                 (fileName, eventKind) => {
                     if (this.projectKind === ProjectKind.Configured) {
-                        (this.directoryStructureHost as CachedDirectoryStructureHost).addOrDeleteFile(fileName, missingFilePath, eventKind);
+                        this.getCachedDirectoryStructureHost().addOrDeleteFile(fileName, missingFilePath, eventKind);
                     }
 
                     if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap.has(missingFilePath)) {
@@ -990,12 +997,13 @@ namespace ts.server {
         getChangesSinceVersion(lastKnownVersion?: number): ProjectFilesWithTSDiagnostics {
             this.updateGraph();
 
-            const info = {
+            const info: protocol.ProjectVersionInfo = {
                 projectName: this.getProjectName(),
                 version: this.projectStructureVersion,
                 isInferred: this.projectKind === ProjectKind.Inferred,
                 options: this.getCompilationSettings(),
-                languageServiceDisabled: !this.languageServiceEnabled
+                languageServiceDisabled: !this.languageServiceEnabled,
+                lastFileExceededProgramSize: this.lastFileExceededProgramSize
             };
             const updatedFileNames = this.updatedFileNames;
             this.updatedFileNames = undefined;
@@ -1179,7 +1187,7 @@ namespace ts.server {
                 projectService,
                 documentRegistry,
                 /*files*/ undefined,
-                /*languageServiceEnabled*/ true,
+                /*lastFileExceededProgramSize*/ undefined,
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false,
                 projectService.host,
@@ -1258,7 +1266,7 @@ namespace ts.server {
             documentRegistry: DocumentRegistry,
             hasExplicitListOfFiles: boolean,
             compilerOptions: CompilerOptions,
-            languageServiceEnabled: boolean,
+            lastFileExceededProgramSize: string | undefined,
             public compileOnSaveEnabled: boolean,
             cachedDirectoryStructureHost: CachedDirectoryStructureHost) {
             super(configFileName,
@@ -1266,7 +1274,7 @@ namespace ts.server {
                 projectService,
                 documentRegistry,
                 hasExplicitListOfFiles,
-                languageServiceEnabled,
+                lastFileExceededProgramSize,
                 compilerOptions,
                 compileOnSaveEnabled,
                 cachedDirectoryStructureHost,
@@ -1453,7 +1461,7 @@ namespace ts.server {
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
             compilerOptions: CompilerOptions,
-            languageServiceEnabled: boolean,
+            lastFileExceededProgramSize: string | undefined,
             public compileOnSaveEnabled: boolean,
             projectFilePath?: string) {
             super(externalProjectName,
@@ -1461,7 +1469,7 @@ namespace ts.server {
                 projectService,
                 documentRegistry,
                 /*hasExplicitListOfFiles*/ true,
-                languageServiceEnabled,
+                lastFileExceededProgramSize,
                 compilerOptions,
                 compileOnSaveEnabled,
                 projectService.host,

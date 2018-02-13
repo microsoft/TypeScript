@@ -114,12 +114,15 @@ namespace ts {
             return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
         }
 
-        private addSyntheticNodes(nodes: Node[], pos: number, end: number): number {
+        private addSyntheticNodes(nodes: Push<Node>, pos: number, end: number): number {
             scanner.setTextPos(pos);
             while (pos < end) {
                 const token = scanner.scan();
                 const textPos = scanner.getTextPos();
                 if (textPos <= end) {
+                    if (token === SyntaxKind.Identifier) {
+                        Debug.fail(`Did not expect ${(ts as any).SyntaxKind[this.kind]} to have an Identifier in its trivia`);
+                    }
                     nodes.push(createNode(token, pos, textPos, this));
                 }
                 pos = textPos;
@@ -1255,7 +1258,7 @@ namespace ts {
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitivefileNames,
-                getNewLine: () => getNewLineCharacter(newSettings, { newLine: getNewLineOrDefaultFromHost(host) }),
+                getNewLine: () => getNewLineCharacter(newSettings, () => getNewLineOrDefaultFromHost(host)),
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: noop,
                 getCurrentDirectory: () => currentDirectory,
@@ -1577,9 +1580,9 @@ namespace ts {
             return results;
         }
 
-        function getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] {
+        function getDocumentHighlights(fileName: string, position: number, filesToSearch: ReadonlyArray<string>): DocumentHighlights[] {
             synchronizeHostData();
-            const sourceFilesToSearch = map(filesToSearch, f => program.getSourceFile(f));
+            const sourceFilesToSearch = map(filesToSearch, f => Debug.assertDefined(program.getSourceFile(f)));
             const sourceFile = getValidSourceFile(fileName);
             return DocumentHighlights.getDocumentHighlights(program, cancellationToken, sourceFile, position, sourceFilesToSearch);
         }
@@ -1887,12 +1890,11 @@ namespace ts {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const span = createTextSpanFromBounds(start, end);
-            const newLineCharacter = getNewLineOrDefaultFromHost(host);
             const formatContext = formatting.getFormatContext(formatOptions);
 
             return flatMap(deduplicate(errorCodes, equateValues, compareValues), errorCode => {
                 cancellationToken.throwIfCancellationRequested();
-                return codefix.getFixes({ errorCode, sourceFile, span, program, newLineCharacter, host, cancellationToken, formatContext });
+                return codefix.getFixes({ errorCode, sourceFile, span, program, host, cancellationToken, formatContext });
             });
         }
 
@@ -1900,10 +1902,9 @@ namespace ts {
             synchronizeHostData();
             Debug.assert(scope.type === "file");
             const sourceFile = getValidSourceFile(scope.fileName);
-            const newLineCharacter = getNewLineOrDefaultFromHost(host);
             const formatContext = formatting.getFormatContext(formatOptions);
 
-            return codefix.getAllFixes({ fixId, sourceFile, program, newLineCharacter, host, cancellationToken, formatContext });
+            return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext });
         }
 
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
@@ -2134,7 +2135,6 @@ namespace ts {
                 startPosition,
                 endPosition,
                 program: getProgram(),
-                newLineCharacter: formatOptions ? formatOptions.newLineCharacter : host.getNewLine(),
                 host,
                 formatContext: formatting.getFormatContext(formatOptions),
                 cancellationToken,

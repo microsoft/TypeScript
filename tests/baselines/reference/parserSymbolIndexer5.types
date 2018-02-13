@@ -6,6 +6,7 @@ var x = {
     [s: symbol]: ""
 >s : any
 >symbol : any
+>"" : any
 }
 > : any
 

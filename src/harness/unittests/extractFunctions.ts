@@ -546,6 +546,18 @@ var q = /*b*/ //c
     /*g*/ + /*h*/ //i
     /*j*/ 2|] /*k*/ //l
     /*m*/; /*n*/ //o`);
+
+    testExtractFunction("extractFunction_NamelessClass", `
+export default class {
+    M() {
+        [#|1 + 1|];
+    }
+}`);
+
+    testExtractFunction("extractFunction_NoDeclarations", `
+function F() {
+[#|arguments.length|]; // arguments has no declaration
+}`);
     });
 
     function testExtractFunction(caption: string, text: string, includeLib?: boolean) {

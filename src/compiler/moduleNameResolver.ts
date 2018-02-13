@@ -801,7 +801,7 @@ namespace ts {
             }
             const resolvedFromFile = loadModuleFromFile(extensions, candidate, failedLookupLocations, onlyRecordFailures, state);
             if (resolvedFromFile) {
-                const nm = considerPackageJson ? parseNodeModuleFromPath(resolvedFromFile.path) : undefined;
+                const nm = considerPackageJson ? parseNodeModuleFromPath(resolvedFromFile) : undefined;
                 const packageId = nm && getPackageJsonInfo(nm.packageDirectory, nm.subModuleName, failedLookupLocations, /*onlyRecordFailures*/ false, state).packageId;
                 return withPackageId(packageId, resolvedFromFile);
             }
@@ -826,12 +826,13 @@ namespace ts {
      *
      * packageDirectory is the directory of the package itself.
      * subModuleName is the path within the package.
-     *   For `blah/node_modules/foo/index.d.ts` this is { packageDirectory: "foo", subModuleName: "" }. (Part before "/node_modules/" is ignored.)
-     *   For `/node_modules/foo/bar.d.ts` this is { packageDirectory: "foo", subModuleName": "bar" }.
-     *   For `/node_modules/@types/foo/bar/index.d.ts` this is { packageDirectory: "@types/foo", subModuleName: "bar" }.
+     *   For `blah/node_modules/foo/index.d.ts` this is { packageDirectory: "foo", subModuleName: "index.d.ts" }. (Part before "/node_modules/" is ignored.)
+     *   For `/node_modules/foo/bar.d.ts` this is { packageDirectory: "foo", subModuleName": "bar/index.d.ts" }.
+     *   For `/node_modules/@types/foo/bar/index.d.ts` this is { packageDirectory: "@types/foo", subModuleName: "bar/index.d.ts" }.
+     *   For `/node_modules/foo/bar/index.d.ts` this is { packageDirectory: "foo", subModuleName": "bar/index.d.ts" }.
      */
-    function parseNodeModuleFromPath(path: string): { packageDirectory: string, subModuleName: string } | undefined {
-        path = normalizePath(path);
+    function parseNodeModuleFromPath(resolved: PathAndExtension): { packageDirectory: string, subModuleName: string } | undefined {
+        const path = normalizePath(resolved.path);
         const idx = path.lastIndexOf(nodeModulesPathPart);
         if (idx === -1) {
             return undefined;
@@ -843,7 +844,7 @@ namespace ts {
             indexAfterPackageName = moveToNextDirectorySeparatorIfAvailable(path, indexAfterPackageName);
         }
         const packageDirectory = path.slice(0, indexAfterPackageName);
-        const subModuleName = removeExtensionAndIndex(path.slice(indexAfterPackageName + 1));
+        const subModuleName = removeExtension(path.slice(indexAfterPackageName + 1), resolved.ext) + Extension.Dts;
         return { packageDirectory, subModuleName };
     }
 
@@ -852,9 +853,17 @@ namespace ts {
         return nextSeparatorIndex === -1 ? prevSeparatorIndex : nextSeparatorIndex;
     }
 
-    function removeExtensionAndIndex(path: string): string {
-        const noExtension = removeFileExtension(path);
-        return noExtension === "index" ? "" : removeSuffix(noExtension, "/index");
+    function addExtensionAndIndex(path: string): string {
+        if (path === "") {
+            return "index.d.ts";
+        }
+        if (endsWith(path, ".d.ts")) {
+            return path;
+        }
+        if (endsWith(path, "/index")) {
+            return path + ".d.ts";
+        }
+        return path + "/index.d.ts";
     }
 
     /* @internal */
@@ -955,12 +964,31 @@ namespace ts {
         subModuleName: string,
         failedLookupLocations: Push<string>,
         onlyRecordFailures: boolean,
-        { host, traceEnabled }: ModuleResolutionState,
+        state: ModuleResolutionState,
     ): { found: boolean, packageJsonContent: PackageJsonPathFields | undefined, packageId: PackageId | undefined } {
+        const { host, traceEnabled } = state;
         const directoryExists = !onlyRecordFailures && directoryProbablyExists(nodeModuleDirectory, host);
         const packageJsonPath = pathToPackageJson(nodeModuleDirectory);
         if (directoryExists && host.fileExists(packageJsonPath)) {
             const packageJsonContent = readJson(packageJsonPath, host);
+            if (subModuleName === "") { // looking up the root - need to handle types/typings/main redirects for subModuleName
+                const path = tryReadPackageJsonFields(/*readTypes*/ true, packageJsonContent, nodeModuleDirectory, state);
+                if (typeof path === "string") {
+                    subModuleName = addExtensionAndIndex(path.substring(nodeModuleDirectory.length + 1));
+                }
+                else {
+                    const jsPath = tryReadPackageJsonFields(/*readTypes*/ false, packageJsonContent, nodeModuleDirectory, state);
+                    if (typeof jsPath === "string") {
+                        subModuleName = removeExtension(removeExtension(jsPath.substring(nodeModuleDirectory.length + 1), Extension.Js), Extension.Jsx) + Extension.Dts;
+                    }
+                    else {
+                        subModuleName = "index.d.ts";
+                    }
+                }
+            }
+            if (!endsWith(subModuleName, Extension.Dts)) {
+                subModuleName = addExtensionAndIndex(subModuleName);
+            }
             const packageId: PackageId = typeof packageJsonContent.name === "string" && typeof packageJsonContent.version === "string"
                 ? { name: packageJsonContent.name, subModuleName, version: packageJsonContent.version }
                 : undefined;

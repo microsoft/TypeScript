@@ -148,12 +148,12 @@ namespace ts {
         }
 
         function visitLabeledStatement(node: LabeledStatement) {
-            if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
+            if (enclosingFunctionFlags & FunctionFlags.Async) {
                 const statement = unwrapInnermostStatementOfLabel(node);
                 if (statement.kind === SyntaxKind.ForOfStatement && (<ForOfStatement>statement).awaitModifier) {
                     return visitForOfStatement(<ForOfStatement>statement, node);
                 }
-                return restoreEnclosingLabel(visitEachChild(node, visitor, context), node);
+                return restoreEnclosingLabel(visitEachChild(statement, visitor, context), node);
             }
             return visitEachChild(node, visitor, context);
         }

@@ -8,13 +8,12 @@
 
 verify.codeFix({
     description: "Implement interface 'I<number>'",
-    // TODO: GH#18445
     newFileContent:
 `interface I<X> {
     [Ƚ: string]: X;
 }
 
-class C implements I<number> {\r
-    [Ƚ: string]: number;\r
+class C implements I<number> {
+    [Ƚ: string]: number;
 }`,
 });

@@ -1,15 +1,9 @@
 /* @internal */
 namespace ts.refactor.installTypesForPackage {
+    const refactorName = "Install missing types package";
     const actionName = "install";
-
-    const installTypesForPackage: Refactor = {
-        name: "Install missing types package",
-        description: "Install missing types package",
-        getEditsForAction,
-        getAvailableActions,
-    };
-
-    registerRefactor(installTypesForPackage);
+    const description = "Install missing types package";
+    registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
         if (getStrictOptionValue(context.program.getCompilerOptions(), "noImplicitAny")) {
@@ -20,8 +14,8 @@ namespace ts.refactor.installTypesForPackage {
         const action = getAction(context);
         return action && [
             {
-                name: installTypesForPackage.name,
-                description: installTypesForPackage.description,
+                name: refactorName,
+                description,
                 actions: [
                     {
                         description: action.description,

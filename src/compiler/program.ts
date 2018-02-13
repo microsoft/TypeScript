@@ -1,7 +1,6 @@
 /// <reference path="sys.ts" />
 /// <reference path="emitter.ts" />
 /// <reference path="core.ts" />
-/// <reference path="builder.ts" />
 
 namespace ts {
     const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?)/;
@@ -417,7 +416,7 @@ namespace ts {
         hasInvalidatedResolution: HasInvalidatedResolution,
         hasChangedAutomaticTypeDirectiveNames: boolean,
     ): boolean {
-        // If we haven't create a program yet or has changed automatic type directives, then it is not up-to-date
+        // If we haven't created a program yet or have changed automatic type directives, then it is not up-to-date
         if (!program || hasChangedAutomaticTypeDirectiveNames) {
             return false;
         }
@@ -458,10 +457,10 @@ namespace ts {
     }
 
     /**
-     * Determined if source file needs to be re-created even if its text hasnt changed
+     * Determined if source file needs to be re-created even if its text hasn't changed
      */
     function shouldProgramCreateNewSourceFiles(program: Program, newOptions: CompilerOptions) {
-        // If any of these options change, we cant reuse old source file even if version match
+        // If any of these options change, we can't reuse old source file even if version match
         // The change in options like these could result in change in syntax tree change
         const oldOptions = program && program.getCompilerOptions();
         return oldOptions && (
@@ -1141,32 +1140,34 @@ namespace ts {
         function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
             let declarationDiagnostics: ReadonlyArray<Diagnostic> = [];
 
-            if (options.noEmit) {
-                return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
-            }
-
-            // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
-            // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
-            // get any preEmit diagnostics, not just the ones
-            if (options.noEmitOnError) {
-                const diagnostics = [
-                    ...program.getOptionsDiagnostics(cancellationToken),
-                    ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
-                    ...program.getGlobalDiagnostics(cancellationToken),
-                    ...program.getSemanticDiagnostics(sourceFile, cancellationToken)
-                ];
-
-                if (diagnostics.length === 0 && program.getCompilerOptions().declaration) {
-                    declarationDiagnostics = program.getDeclarationDiagnostics(/*sourceFile*/ undefined, cancellationToken);
+            if (!emitOnlyDtsFiles) {
+                if (options.noEmit) {
+                    return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
                 }
 
-                if (diagnostics.length > 0 || declarationDiagnostics.length > 0) {
-                    return {
-                        diagnostics: concatenate(diagnostics, declarationDiagnostics),
-                        sourceMaps: undefined,
-                        emittedFiles: undefined,
-                        emitSkipped: true
-                    };
+                // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
+                // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
+                // get any preEmit diagnostics, not just the ones
+                if (options.noEmitOnError) {
+                    const diagnostics = [
+                        ...program.getOptionsDiagnostics(cancellationToken),
+                        ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
+                        ...program.getGlobalDiagnostics(cancellationToken),
+                        ...program.getSemanticDiagnostics(sourceFile, cancellationToken)
+                    ];
+
+                    if (diagnostics.length === 0 && program.getCompilerOptions().declaration) {
+                        declarationDiagnostics = program.getDeclarationDiagnostics(/*sourceFile*/ undefined, cancellationToken);
+                    }
+
+                    if (diagnostics.length > 0 || declarationDiagnostics.length > 0) {
+                        return {
+                            diagnostics: concatenate(diagnostics, declarationDiagnostics),
+                            sourceMaps: undefined,
+                            emittedFiles: undefined,
+                            emitSkipped: true
+                        };
+                    }
                 }
             }
 
@@ -1178,7 +1179,7 @@ namespace ts {
             // This is because in the -out scenario all files need to be emitted, and therefore all
             // files need to be type checked. And the way to specify that all files need to be type
             // checked is to not pass the file to getEmitResolver.
-            const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile);
+            const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile, cancellationToken);
 
             performance.mark("beforeEmit");
 
@@ -2200,6 +2201,16 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "checkJs", "allowJs"));
             }
 
+            if (options.emitDeclarationOnly) {
+                if (!options.declaration) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDeclarationOnly", "declarations");
+                }
+
+                if (options.noEmit) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "emitDeclarationOnly", "noEmit");
+                }
+            }
+
             if (options.emitDecoratorMetadata &&
                 !options.experimentalDecorators) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators");
@@ -2222,7 +2233,9 @@ namespace ts {
                 const emitHost = getEmitHost();
                 const emitFilesSeen = createMap<true>();
                 forEachEmittedFile(emitHost, (emitFileNames) => {
-                    verifyEmitFilePath(emitFileNames.jsFilePath, emitFilesSeen);
+                    if (!options.emitDeclarationOnly) {
+                        verifyEmitFilePath(emitFileNames.jsFilePath, emitFilesSeen);
+                    }
                     verifyEmitFilePath(emitFileNames.declarationFilePath, emitFilesSeen);
                 });
             }
@@ -2350,9 +2363,30 @@ namespace ts {
                 return false;
             }
 
-            return forEachEmittedFile(getEmitHost(), ({ jsFilePath, declarationFilePath }) =>
-                isSameFile(jsFilePath, file) ||
-                (declarationFilePath && isSameFile(declarationFilePath, file)));
+            // If this is source file, its not emitted file
+            const filePath = toPath(file);
+            if (getSourceFileByPath(filePath)) {
+                return false;
+            }
+
+            // If options have --outFile or --out just check that
+            const out = options.outFile || options.out;
+            if (out) {
+                return isSameFile(filePath, out) || isSameFile(filePath, removeFileExtension(out) + Extension.Dts);
+            }
+
+            // If --outDir, check if file is in that directory
+            if (options.outDir) {
+                return containsPath(options.outDir, filePath, currentDirectory, !host.useCaseSensitiveFileNames());
+            }
+
+            if (fileExtensionIsOneOf(filePath, supportedJavascriptExtensions) || fileExtensionIs(filePath, Extension.Dts)) {
+                // Otherwise just check if sourceFile with the name exists
+                const filePathWithoutExtension = removeFileExtension(filePath);
+                return !!getSourceFileByPath(combinePaths(filePathWithoutExtension, Extension.Ts) as Path) ||
+                    !!getSourceFileByPath(combinePaths(filePathWithoutExtension, Extension.Tsx) as Path);
+            }
+            return false;
         }
 
         function isSameFile(file1: string, file2: string) {

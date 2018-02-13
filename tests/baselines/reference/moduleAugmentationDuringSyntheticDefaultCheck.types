@@ -1,0 +1,69 @@
+=== tests/cases/compiler/idx.test.ts ===
+/// <reference path="./idx" />
+
+import moment = require("moment-timezone");
+>moment : { default: () => moment.Moment; }
+
+=== tests/cases/compiler/node_modules/moment/index.d.ts ===
+declare function moment(): moment.Moment;
+>moment : () => Moment
+>moment : any
+>Moment : Moment
+
+declare namespace moment {
+>moment : () => Moment
+
+  interface Moment extends Object {
+>Moment : Moment
+>Object : Object
+
+    valueOf(): number;
+>valueOf : () => number
+  }
+}
+export = moment;
+>moment : () => Moment
+
+=== tests/cases/compiler/node_modules/moment-timezone/index.d.ts ===
+import * as moment from 'moment';
+>moment : { default: () => moment.Moment; }
+
+export = moment;
+>moment : { default: () => moment.Moment; }
+
+declare module "moment" {
+>"moment" : () => Moment
+
+    interface Moment {
+>Moment : Moment
+
+        tz(): string;
+>tz : () => string
+    }
+}
+=== tests/cases/compiler/idx.ts ===
+import * as _moment from "moment";
+>_moment : { default: () => _moment.Moment; }
+
+declare module "moment" {
+>"moment" : () => Moment
+
+    interface Moment {
+>Moment : Moment
+
+        strftime(pattern: string): string;
+>strftime : { (pattern: string): string; (pattern: string): string; }
+>pattern : string
+    }
+}
+declare module "moment-timezone" {
+>"moment-timezone" : { default: () => Moment; }
+
+    interface Moment {
+>Moment : Moment
+
+        strftime(pattern: string): string;
+>strftime : { (pattern: string): string; (pattern: string): string; }
+>pattern : string
+    }
+}

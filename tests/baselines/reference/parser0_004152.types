@@ -7,7 +7,21 @@ export class Game {
 >new DisplayPosition([) : any
 >DisplayPosition : any
 >[ : undefined[]
+>3 : any
+>3 : any
+>3 : any
+>3 : any
+>3 : any
+>0 : any
+>3 : any
+>3 : any
+>3 : any
+>3 : any
+>3 : any
+>3 : any
+>0 : any
 >NoMove : any
+>0 : any
 
     private prevConfig: SeedCoords[][];
 >prevConfig : any[][]

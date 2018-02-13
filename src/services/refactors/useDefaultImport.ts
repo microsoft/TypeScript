@@ -1,20 +1,13 @@
 /* @internal */
 namespace ts.refactor.installTypesForPackage {
     const actionName = "Convert to default import";
-
-    const useDefaultImport: Refactor = {
-        name: actionName,
-        description: getLocaleSpecificMessage(Diagnostics.Convert_to_default_import),
-        getEditsForAction,
-        getAvailableActions,
-    };
-
-    registerRefactor(useDefaultImport);
+    const description = getLocaleSpecificMessage(Diagnostics.Convert_to_default_import);
+    registerRefactor(actionName, { getEditsForAction, getAvailableActions });
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
         const { file, startPosition, program } = context;
 
-        if (!program.getCompilerOptions().allowSyntheticDefaultImports) {
+        if (!getAllowSyntheticDefaultImports(program.getCompilerOptions())) {
             return undefined;
         }
 
@@ -24,18 +17,18 @@ namespace ts.refactor.installTypesForPackage {
         }
 
         const module = getResolvedModule(file, importInfo.moduleSpecifier.text);
-        const resolvedFile = program.getSourceFile(module.resolvedFileName);
-        if (!(resolvedFile.externalModuleIndicator && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals)) {
+        const resolvedFile = module && program.getSourceFile(module.resolvedFileName);
+        if (!(resolvedFile && resolvedFile.externalModuleIndicator && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals)) {
             return undefined;
         }
 
         return [
             {
-                name: useDefaultImport.name,
-                description: useDefaultImport.description,
+                name: actionName,
+                description,
                 actions: [
                     {
-                        description: useDefaultImport.description,
+                        description,
                         name: actionName,
                     },
                 ],
@@ -76,7 +69,7 @@ namespace ts.refactor.installTypesForPackage {
                 case SyntaxKind.ImportDeclaration:
                     const d = node as ImportDeclaration;
                     const { importClause } = d;
-                    return !importClause.name && importClause.namedBindings.kind === SyntaxKind.NamespaceImport && isStringLiteral(d.moduleSpecifier)
+                    return importClause && !importClause.name && importClause.namedBindings.kind === SyntaxKind.NamespaceImport && isStringLiteral(d.moduleSpecifier)
                         ? { importStatement: d, name: importClause.namedBindings.name, moduleSpecifier: d.moduleSpecifier }
                         : undefined;
                 // For known child node kinds of convertible imports, try again with parent node.

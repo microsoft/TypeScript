@@ -22,6 +22,15 @@
         "References": {
             "match": "^(.*\\/_references\\.js)$",
             "exclude": [["^", 1, "$"]]
+        },
+        "Datatables.net": {
+            "match": "^.*\\/(jquery\\.)?dataTables(\\.all)?(\\.min)?\\.js$",
+            "types": ["datatables.net"]
+        },
+        "Ace": {
+            "match": "^(.*)\\/ace.js",
+            "exclude": [["^", 1, "/.*"]],
+            "types": ["ace"]
         }
     },
     "simpleMap": {
@@ -352,6 +361,7 @@
         "passport": "passport",
         "passport-local": "passport-local",
         "path": "pathjs",
+        "pdfkit":"pdfkit",
         "peer": "peerjs",
         "peg": "pegjs",
         "photoswipe": "photoswipe",

@@ -37,6 +37,7 @@ class A2 {
 >A2 : Symbol(A2, Decl(subtypingWithObjectMembers4.ts, 16, 1))
 
     1: Base; 
+>1 : Symbol(A2[1], Decl(subtypingWithObjectMembers4.ts, 18, 10))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers4.ts, 0, 0))
 }
 
@@ -45,6 +46,7 @@ class B2 extends A2 {
 >A2 : Symbol(A2, Decl(subtypingWithObjectMembers4.ts, 16, 1))
 
     1.1: Derived; // ok, inherits 1
+>1.1 : Symbol(B2[1.1], Decl(subtypingWithObjectMembers4.ts, 22, 21))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers4.ts, 4, 1))
 }
 
@@ -52,6 +54,7 @@ class A3 {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembers4.ts, 24, 1))
 
     '1': Base;
+>'1' : Symbol(A3['1'], Decl(subtypingWithObjectMembers4.ts, 26, 10))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers4.ts, 0, 0))
 }
 
@@ -60,5 +63,6 @@ class B3 extends A3 {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembers4.ts, 24, 1))
 
     '1.1': Derived; // ok, inherits '1'
+>'1.1' : Symbol(B3['1.1'], Decl(subtypingWithObjectMembers4.ts, 30, 21))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers4.ts, 4, 1))
 }

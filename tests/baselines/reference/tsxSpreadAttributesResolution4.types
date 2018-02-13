@@ -108,5 +108,6 @@ let e5 = <EmptyProp {...{ "data-prop": true}} />
 ><EmptyProp {...{ "data-prop": true}} /> : JSX.Element
 >EmptyProp : typeof EmptyProp
 >{ "data-prop": true} : { "data-prop": boolean; }
+>"data-prop" : boolean
 >true : true
 

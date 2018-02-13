@@ -17,5 +17,8 @@
 ////[|<div/>|]
 
 goTo.file("/a.tsx");
-verify.not
-verify.importFixAtPosition([]);
+verify.importFixAtPosition([
+`import { factory } from "./factory";
+
+<div/>`
+]);

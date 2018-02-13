@@ -231,7 +231,7 @@ f16(x);
 var y: StringAndBoolean = ["1", false];
 >y : [string, boolean]
 >StringAndBoolean : [string, boolean]
->["1", false] : [string, boolean]
+>["1", false] : [string, false]
 >"1" : "1"
 >false : false
 

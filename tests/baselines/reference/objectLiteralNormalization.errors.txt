@@ -4,9 +4,9 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts
 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(8,1): error TS2322: Type '{ b: string; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
   Type '{ b: string; }' is not assignable to type '{ a: number; b: string; c: boolean; }'.
     Property 'a' is missing in type '{ b: string; }'.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(9,1): error TS2322: Type '{ c: boolean; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
-  Type '{ c: boolean; }' is not assignable to type '{ a: number; b: string; c: boolean; }'.
-    Property 'a' is missing in type '{ c: boolean; }'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(9,1): error TS2322: Type '{ c: true; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
+  Type '{ c: true; }' is not assignable to type '{ a: number; b: string; c: boolean; }'.
+    Property 'a' is missing in type '{ c: true; }'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(17,1): error TS2322: Type '{ a: string; b: number; }' is not assignable to type '{ a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }'.
   Type '{ a: string; b: number; }' is not assignable to type '{ a?: undefined; b?: undefined; }'.
     Types of property 'a' are incompatible.
@@ -36,9 +36,9 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts
 !!! error TS2322:     Property 'a' is missing in type '{ b: string; }'.
     a1 = { c: true };  // Error
     ~~
-!!! error TS2322: Type '{ c: boolean; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
-!!! error TS2322:   Type '{ c: boolean; }' is not assignable to type '{ a: number; b: string; c: boolean; }'.
-!!! error TS2322:     Property 'a' is missing in type '{ c: boolean; }'.
+!!! error TS2322: Type '{ c: true; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
+!!! error TS2322:   Type '{ c: true; }' is not assignable to type '{ a: number; b: string; c: boolean; }'.
+!!! error TS2322:     Property 'a' is missing in type '{ c: true; }'.
     
     let a2 = [{ a: 1, b: 2 }, { a: "abc" }, {}][0];
     a2.a;  // string | number | undefined

@@ -5,4 +5,5 @@ var x = {}["hello"];
 var y: string = { '': 'foo' }[''];
 >y : Symbol(y, Decl(noImplicitAnyStringIndexerOnObject.ts, 1, 3))
 >'' : Symbol('', Decl(noImplicitAnyStringIndexerOnObject.ts, 1, 17))
+>'' : Symbol('', Decl(noImplicitAnyStringIndexerOnObject.ts, 1, 17))
 

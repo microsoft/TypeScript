@@ -424,14 +424,14 @@ module TypeScript {
 
             return this.primaryTable.getAllKeys().concat(this.secondaryTable.getAllKeys());
 >this.primaryTable.getAllKeys().concat(this.secondaryTable.getAllKeys()) : string[]
->this.primaryTable.getAllKeys().concat : { (...items: (string[] | ReadonlyArray<string>)[]): string[]; (...items: (string | string[] | ReadonlyArray<string>)[]): string[]; }
+>this.primaryTable.getAllKeys().concat : { (...items: ConcatArray<string>[]): string[]; (...items: (string | ConcatArray<string>)[]): string[]; }
 >this.primaryTable.getAllKeys() : string[]
 >this.primaryTable.getAllKeys : () => string[]
 >this.primaryTable : IHashTable
 >this : this
 >primaryTable : IHashTable
 >getAllKeys : () => string[]
->concat : { (...items: (string[] | ReadonlyArray<string>)[]): string[]; (...items: (string | string[] | ReadonlyArray<string>)[]): string[]; }
+>concat : { (...items: ConcatArray<string>[]): string[]; (...items: (string | ConcatArray<string>)[]): string[]; }
 >this.secondaryTable.getAllKeys() : string[]
 >this.secondaryTable.getAllKeys : () => string[]
 >this.secondaryTable : IHashTable

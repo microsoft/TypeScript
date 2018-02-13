@@ -1,0 +1,42 @@
+=== tests/cases/compiler/definiteAssignmentOfDestructuredVariable.ts ===
+// https://github.com/Microsoft/TypeScript/issues/20994
+interface Options {
+>Options : Symbol(Options, Decl(definiteAssignmentOfDestructuredVariable.ts, 0, 0))
+
+    a?: number | object;
+>a : Symbol(Options.a, Decl(definiteAssignmentOfDestructuredVariable.ts, 1, 19))
+
+    b: () => void;
+>b : Symbol(Options.b, Decl(definiteAssignmentOfDestructuredVariable.ts, 2, 24))
+}
+
+class C<T extends Options> {
+>C : Symbol(C, Decl(definiteAssignmentOfDestructuredVariable.ts, 4, 1))
+>T : Symbol(T, Decl(definiteAssignmentOfDestructuredVariable.ts, 6, 8))
+>Options : Symbol(Options, Decl(definiteAssignmentOfDestructuredVariable.ts, 0, 0))
+
+    foo!: { [P in keyof T]: T[P] }
+>foo : Symbol(C.foo, Decl(definiteAssignmentOfDestructuredVariable.ts, 6, 28))
+>P : Symbol(P, Decl(definiteAssignmentOfDestructuredVariable.ts, 7, 13))
+>T : Symbol(T, Decl(definiteAssignmentOfDestructuredVariable.ts, 6, 8))
+>T : Symbol(T, Decl(definiteAssignmentOfDestructuredVariable.ts, 6, 8))
+>P : Symbol(P, Decl(definiteAssignmentOfDestructuredVariable.ts, 7, 13))
+
+    method() {
+>method : Symbol(C.method, Decl(definiteAssignmentOfDestructuredVariable.ts, 7, 34))
+
+        let { a, b } = this.foo;
+>a : Symbol(a, Decl(definiteAssignmentOfDestructuredVariable.ts, 10, 13))
+>b : Symbol(b, Decl(definiteAssignmentOfDestructuredVariable.ts, 10, 16))
+>this.foo : Symbol(C.foo, Decl(definiteAssignmentOfDestructuredVariable.ts, 6, 28))
+>this : Symbol(C, Decl(definiteAssignmentOfDestructuredVariable.ts, 4, 1))
+>foo : Symbol(C.foo, Decl(definiteAssignmentOfDestructuredVariable.ts, 6, 28))
+
+        !(a && b);
+>a : Symbol(a, Decl(definiteAssignmentOfDestructuredVariable.ts, 10, 13))
+>b : Symbol(b, Decl(definiteAssignmentOfDestructuredVariable.ts, 10, 16))
+
+        a;
+>a : Symbol(a, Decl(definiteAssignmentOfDestructuredVariable.ts, 10, 13))
+    }
+}

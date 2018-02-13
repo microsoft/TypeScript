@@ -668,7 +668,7 @@ namespace ts.server {
 
         getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean) {
             let scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
-            if (ensureProject && !scriptInfo || scriptInfo.isOrphan()) {
+            if (ensureProject && (!scriptInfo || scriptInfo.isOrphan())) {
                 this.ensureProjectStructuresUptoDate();
                 scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
                 if (!scriptInfo) {
@@ -898,7 +898,7 @@ namespace ts.server {
 
             const project = this.getOrCreateInferredProjectForProjectRootPathIfEnabled(info, projectRootPath) ||
                 this.getOrCreateSingleInferredProjectIfEnabled() ||
-                this.createInferredProject(getDirectoryPath(info.path));
+                this.createInferredProject(info.isDynamic ? this.currentDirectory : getDirectoryPath(info.path));
 
             project.addRoot(info);
             project.updateGraph();
@@ -1377,9 +1377,10 @@ namespace ts.server {
             return { projectOptions, configFileErrors: errors, configFileSpecs: parsedCommandLine.configFileSpecs };
         }
 
-        private exceededTotalSizeLimitForNonTsFiles<T>(name: string, options: CompilerOptions, fileNames: T[], propertyReader: FilePropertyReader<T>) {
+        /** Get a filename if the language service exceeds the maximum allowed program size; otherwise returns undefined. */
+        private getFilenameForExceededTotalSizeLimitForNonTsFiles<T>(name: string, options: CompilerOptions, fileNames: T[], propertyReader: FilePropertyReader<T>): string | undefined {
             if (options && options.disableSizeLimit || !this.host.getFileSize) {
-                return false;
+                return;
             }
 
             let availableSpace = maxProgramSizeForNonTsFiles;
@@ -1396,20 +1397,16 @@ namespace ts.server {
 
                 totalNonTsFileSize += this.host.getFileSize(fileName);
 
-                if (totalNonTsFileSize > maxProgramSizeForNonTsFiles) {
+                if (totalNonTsFileSize > maxProgramSizeForNonTsFiles || totalNonTsFileSize > availableSpace) {
                     this.logger.info(getExceedLimitMessage({ propertyReader, hasTypeScriptFileExtension, host: this.host }, totalNonTsFileSize));
                     // Keep the size as zero since it's disabled
-                    return true;
+                    return fileName;
                 }
             }
 
-            if (totalNonTsFileSize > availableSpace) {
-                this.logger.info(getExceedLimitMessage({ propertyReader, hasTypeScriptFileExtension, host: this.host }, totalNonTsFileSize));
-                return true;
-            }
-
             this.projectToSizeMap.set(name, totalNonTsFileSize);
-            return false;
+
+            return;
 
             function getExceedLimitMessage(context: { propertyReader: FilePropertyReader<any>, hasTypeScriptFileExtension: (filename: string) => boolean, host: ServerHost }, totalNonTsFileSize: number) {
                 const files = getTop5LargestFiles(context);
@@ -1432,7 +1429,7 @@ namespace ts.server {
                 this,
                 this.documentRegistry,
                 compilerOptions,
-                /*languageServiceEnabled*/ !this.exceededTotalSizeLimitForNonTsFiles(projectFileName, compilerOptions, files, externalFilePropertyReader),
+                /*lastFileExceededProgramSize*/ this.getFilenameForExceededTotalSizeLimitForNonTsFiles(projectFileName, compilerOptions, files, externalFilePropertyReader),
                 options.compileOnSave === undefined ? true : options.compileOnSave);
             project.excludedFiles = excludedFiles;
 
@@ -1495,17 +1492,17 @@ namespace ts.server {
         }
 
         private createConfiguredProject(configFileName: NormalizedPath) {
-            const cachedDirectoryStructureHost = createCachedDirectoryStructureHost(this.host);
+            const cachedDirectoryStructureHost = createCachedDirectoryStructureHost(this.host, this.host.getCurrentDirectory(), this.host.useCaseSensitiveFileNames);
             const { projectOptions, configFileErrors, configFileSpecs } = this.convertConfigFileContentToProjectOptions(configFileName, cachedDirectoryStructureHost);
             this.logger.info(`Opened configuration file ${configFileName}`);
-            const languageServiceEnabled = !this.exceededTotalSizeLimitForNonTsFiles(configFileName, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader);
+            const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(configFileName, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader);
             const project = new ConfiguredProject(
                 configFileName,
                 this,
                 this.documentRegistry,
                 projectOptions.configHasFilesProperty,
                 projectOptions.compilerOptions,
-                languageServiceEnabled,
+                lastFileExceededProgramSize,
                 projectOptions.compileOnSave === undefined ? false : projectOptions.compileOnSave,
                 cachedDirectoryStructureHost);
 
@@ -1518,7 +1515,7 @@ namespace ts.server {
                 WatchType.ConfigFilePath,
                 project
             );
-            if (languageServiceEnabled) {
+            if (!lastFileExceededProgramSize) {
                 project.watchWildcards(projectOptions.wildcardDirectories);
             }
 
@@ -1631,8 +1628,9 @@ namespace ts.server {
             // Update the project
             project.configFileSpecs = configFileSpecs;
             project.setProjectErrors(configFileErrors);
-            if (this.exceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader)) {
-                project.disableLanguageService();
+            const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader);
+            if (lastFileExceededProgramSize) {
+                project.disableLanguageService(lastFileExceededProgramSize);
                 project.stopWatchingWildCards();
             }
             else {
@@ -1655,7 +1653,7 @@ namespace ts.server {
         }
 
         private getOrCreateInferredProjectForProjectRootPathIfEnabled(info: ScriptInfo, projectRootPath: NormalizedPath | undefined): InferredProject | undefined {
-            if (!this.useInferredProjectPerProjectRoot) {
+            if (info.isDynamic || !this.useInferredProjectPerProjectRoot) {
                 return undefined;
             }
 
@@ -1800,19 +1798,19 @@ namespace ts.server {
             return this.getOrCreateScriptInfoWorker(fileName, currentDirectory, /*openedByClient*/ true, fileContent, scriptKind, hasMixedContent);
         }
 
-        getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: DirectoryStructureHost) {
+        getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: { fileExists(path: string): boolean; }) {
             return this.getOrCreateScriptInfoWorker(fileName, this.currentDirectory, openedByClient, fileContent, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
         }
 
-        private getOrCreateScriptInfoWorker(fileName: NormalizedPath, currentDirectory: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: DirectoryStructureHost) {
+        private getOrCreateScriptInfoWorker(fileName: NormalizedPath, currentDirectory: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: { fileExists(path: string): boolean; }) {
             Debug.assert(fileContent === undefined || openedByClient, "ScriptInfo needs to be opened by client to be able to set its user defined content");
             const path = normalizedPathToPath(fileName, currentDirectory, this.toCanonicalFileName);
             let info = this.getScriptInfoForPath(path);
             if (!info) {
                 const isDynamic = isDynamicFileName(fileName);
-                Debug.assert(isRootedDiskPath(fileName) || isDynamic || openedByClient, "Script info with non-dynamic relative file name can only be open script info");
-                Debug.assert(!isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)), "Open script files with non rooted disk path opened with current directory context cannot have same canonical names");
-                Debug.assert(!isDynamic || this.currentDirectory === currentDirectory, "Dynamic files must always have current directory context since containing external project name will always match the script info name.");
+                Debug.assert(isRootedDiskPath(fileName) || isDynamic || openedByClient, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nScript info with non-dynamic relative file name can only be open script info`);
+                Debug.assert(!isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)), "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nOpen script files with non rooted disk path opened with current directory context cannot have same canonical names`);
+                Debug.assert(!isDynamic || this.currentDirectory === currentDirectory, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nDynamic files must always have current directory context since containing external project name will always match the script info name.`);
                 // If the file is not opened by client and the file doesnot exist on the disk, return
                 if (!openedByClient && !isDynamic && !(hostToQueryFileExistsOn || this.host).fileExists(fileName)) {
                     return;
@@ -2396,8 +2394,9 @@ namespace ts.server {
                 externalProject.excludedFiles = excludedFiles;
                 if (!tsConfigFiles) {
                     const compilerOptions = convertCompilerOptions(proj.options);
-                    if (this.exceededTotalSizeLimitForNonTsFiles(proj.projectFileName, compilerOptions, proj.rootFiles, externalFilePropertyReader)) {
-                        externalProject.disableLanguageService();
+                    const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(proj.projectFileName, compilerOptions, proj.rootFiles, externalFilePropertyReader);
+                    if (lastFileExceededProgramSize) {
+                        externalProject.disableLanguageService(lastFileExceededProgramSize);
                     }
                     else {
                         externalProject.enableLanguageService();

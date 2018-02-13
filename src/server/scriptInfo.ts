@@ -196,7 +196,7 @@ namespace ts.server {
 
     /*@internal*/
     export function isDynamicFileName(fileName: NormalizedPath) {
-        return getBaseFileName(fileName)[0] === "^";
+        return fileName[0] === "^" || getBaseFileName(fileName)[0] === "^";
     }
 
     export class ScriptInfo {
@@ -345,7 +345,7 @@ namespace ts.server {
         detachAllProjects() {
             for (const p of this.containingProjects) {
                 if (p.projectKind === ProjectKind.Configured) {
-                    (p.directoryStructureHost as CachedDirectoryStructureHost).addOrDeleteFile(this.fileName, this.path, FileWatcherEventKind.Deleted);
+                    p.getCachedDirectoryStructureHost().addOrDeleteFile(this.fileName, this.path, FileWatcherEventKind.Deleted);
                 }
                 const isInfoRoot = p.isRoot(this);
                 // detach is unnecessary since we'll clean the list of containing projects anyways

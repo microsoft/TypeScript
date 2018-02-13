@@ -301,35 +301,104 @@ function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {
 }
 
 // Repro from #17166
-function f3<T, K extends keyof T>(obj: T, k: K, value: T[K]): void {
->f3 : <T, K extends keyof T>(obj: T, k: K, value: T[K]) => void
+function f3<T, K extends keyof T, U extends T, J extends K>(
+>f3 : <T, K extends keyof T, U extends T, J extends K>(t: T, k: K, tk: T[K], u: U, j: J, uk: U[K], tj: T[J], uj: U[J]) => void
 >T : T
 >K : K
 >T : T
->obj : T
+>U : U
+>T : T
+>J : J
+>K : K
+
+    t: T, k: K, tk: T[K], u: U, j: J, uk: U[K], tj: T[J], uj: U[J]): void {
+>t : T
 >T : T
 >k : K
 >K : K
->value : T[K]
+>tk : T[K]
 >T : T
 >K : K
+>u : U
+>U : U
+>j : J
+>J : J
+>uk : U[K]
+>U : U
+>K : K
+>tj : T[J]
+>T : T
+>J : J
+>uj : U[J]
+>U : U
+>J : J
 
-    for (let key in obj) {
+    for (let key in t) {
 >key : keyof T
->obj : T
+>t : T
+
+        key = k // ok, K ==> keyof T
+>key = k : K
+>key : keyof T
+>k : K
 
         k = key // error, keyof T =/=> K
 >k = key : keyof T
 >k : K
 >key : keyof T
 
-        value = obj[key]; // error, T[keyof T] =/=> T[K]
->value = obj[key] : T[keyof T]
->value : T[K]
->obj[key] : T[keyof T]
->obj : T
+        t[key] = tk; // ok, T[K] ==> T[keyof T]
+>t[key] = tk : T[K]
+>t[key] : T[keyof T]
+>t : T
+>key : keyof T
+>tk : T[K]
+
+        tk = t[key]; // error, T[keyof T] =/=> T[K]
+>tk = t[key] : T[keyof T]
+>tk : T[K]
+>t[key] : T[keyof T]
+>t : T
 >key : keyof T
     }
-}
+    tk = uk;
+>tk = uk : U[K]
+>tk : T[K]
+>uk : U[K]
 
+    uk = tk; // error
+>uk = tk : T[K]
+>uk : U[K]
+>tk : T[K]
+
+    tj = uj;
+>tj = uj : U[J]
+>tj : T[J]
+>uj : U[J]
+
+    uj = tj; // error
+>uj = tj : T[J]
+>uj : U[J]
+>tj : T[J]
+
+    tk = tj;
+>tk = tj : T[J]
+>tk : T[K]
+>tj : T[J]
+
+    tj = tk; // error
+>tj = tk : T[K]
+>tj : T[J]
+>tk : T[K]
+
+    tk = uj;
+>tk = uj : U[J]
+>tk : T[K]
+>uj : U[J]
+
+    uj = tk; // error
+>uj = tk : T[K]
+>uj : U[J]
+>tk : T[K]
+}
 

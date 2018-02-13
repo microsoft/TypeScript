@@ -8,12 +8,15 @@ export default R = {
 >{    "___": 30,    "___hello": 21,    "_hi": 40,} : { "___": number; "___hello": number; "_hi": number; }
 
     "___": 30,
+>"___" : number
 >30 : 30
 
     "___hello": 21,
+>"___hello" : number
 >21 : 21
 
     "_hi": 40,
+>"_hi" : number
 >40 : 40
 }
 

@@ -33,6 +33,7 @@ namespace ts.server {
     const os: {
         homedir?(): string;
         tmpdir(): string;
+        platform(): string;
     } = require("os");
 
     interface NodeSocket {
@@ -252,7 +253,7 @@ namespace ts.server {
         private requestMap = createMap<QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
         /** We will lazily request the types registry on the first call to `isKnownTypesPackageName` and store it in `typesRegistryCache`. */
         private requestedRegistry: boolean;
-        private typesRegistryCache: Map<void> | undefined;
+        private typesRegistryCache: Map<MapLike<string>> | undefined;
 
         // This number is essentially arbitrary.  Processing more than one typings request
         // at a time makes sense, but having too many in the pipe results in a hang
@@ -824,8 +825,9 @@ namespace ts.server {
     const logger = createLogger();
 
     const sys = <ServerHost>ts.sys;
+    const nodeVersion = getNodeMajorVersion();
     // use watchGuard process on Windows when node version is 4 or later
-    const useWatchGuard = process.platform === "win32" && getNodeMajorVersion() >= 4;
+    const useWatchGuard = process.platform === "win32" && nodeVersion >= 4;
     const originalWatchDirectory: ServerHost["watchDirectory"] = sys.watchDirectory.bind(sys);
     const noopWatcher: FileWatcher = { close: noop };
     // This is the function that catches the exceptions when watching directory, and yet lets project service continue to function
@@ -980,8 +982,9 @@ namespace ts.server {
     };
 
     logger.info(`Starting TS Server`);
-    logger.info(`Version: ${versionMajorMinor}`);
+    logger.info(`Version: ${version}`);
     logger.info(`Arguments: ${process.argv.join(" ")}`);
+    logger.info(`Platform: ${os.platform()} NodeVersion: ${nodeVersion} CaseSensitive: ${sys.useCaseSensitiveFileNames}`);
 
     const ioSession = new IOSession(options);
     process.on("uncaughtException", err => {
