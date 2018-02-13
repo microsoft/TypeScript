@@ -1486,6 +1486,14 @@ namespace ts {
         return false;
     }
 
+    export function follow(symbol: Symbol) {
+        return symbol && isDeclarationOfJavascriptContainerExpression(symbol.valueDeclaration) ? (symbol.valueDeclaration as VariableDeclaration).initializer.symbol :
+            symbol && isDeclarationOfDefaultedJavascriptContainerExpression(symbol.valueDeclaration) ? ((symbol.valueDeclaration as VariableDeclaration).initializer as BinaryExpression).right.symbol :
+            symbol && symbol.valueDeclaration && isAssignmentOfDefaultedJavascriptContainerExpression(symbol.valueDeclaration.parent) ? (((symbol.valueDeclaration.parent as BinaryExpression).right as BinaryExpression).right as BinaryExpression).symbol :
+            symbol && isAssignmentOfJavascriptContainerExpression(symbol.valueDeclaration) ? ((symbol.valueDeclaration.parent as BinaryExpression).right as BinaryExpression).symbol :
+            symbol;
+    }
+
     /**
      * Returns true if the node is a variable declaration whose initializer is a function or class expression, or an empty object literal.
      * This function does not test if the node is in a JavaScript file or not.

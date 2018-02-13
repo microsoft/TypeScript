@@ -835,7 +835,7 @@ namespace ts {
 
         function mergeSymbol(target: Symbol, source: Symbol) {
             if (!(target.flags & getExcludedSymbolFlags(source.flags)) ||
-                source.flags & SymbolFlags.JSContainer || target.flags & SymbolFlags.JSContainer) {
+                (source.flags | target.flags) & SymbolFlags.JSContainer) {
                 // Javascript static-property-assignment declarations always merge, even though they are also values
                 if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
                     // reset flag when merging instantiated module into value module that has only const enums
@@ -856,6 +856,14 @@ namespace ts {
                 if (source.exports) {
                     if (!target.exports) target.exports = createSymbolTable();
                     mergeSymbolTable(target.exports, source.exports);
+                }
+                if ((source.flags | target.flags) & SymbolFlags.JSContainer) {
+                    const fs = follow(source);
+                    const ft = follow(target);
+                    if (fs !== source || ft !== target) {
+                    // also follow the source's valueDeclaration and merge its symbol
+                        mergeSymbol(follow(target), follow(source));
+                    }
                 }
                 recordMergedSymbol(target, source);
             }
@@ -14752,14 +14760,12 @@ namespace ts {
             // Grammar checking
             checkGrammarObjectLiteralExpression(node, inDestructuringPattern);
 
-            let propertiesTable = createSymbolTable();
+            let propertiesTable: SymbolTable;
             let propertiesArray: Symbol[] = [];
             let spread: Type = emptyObjectType;
             let propagatedFlags: TypeFlags = TypeFlags.FreshLiteral;
 
             const isInJSFile = isInJavaScriptFile(node);
-            // TODO: Might need to skip if isDeclarationOfDefaultedJavascriptContainerExpression(node.parent.parent) instead of just checking node.properties.length > 0
-            // (actually, it would be better not to skip contextual typing at all, but to do that I need to avoid the checking loop another way)
             const contextualType = getApparentTypeOfContextualType(node);
             const contextualTypeHasPattern = contextualType && contextualType.pattern &&
                 (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
@@ -14768,11 +14774,15 @@ namespace ts {
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
-            // TODO: This seems like the wrong way to put the assignment-properties into the type (especially the manual call to mergeSymbolTable)
-            if (isInJSFile && node.symbol && node.symbol.exports) {
-                mergeSymbolTable(propertiesTable, node.symbol.exports);
-                node.symbol.exports.forEach(symbol => propertiesArray.push(symbol));
+            // TODO: This seems like it might be wrong, or at least should come earlier
+            // (maybe check SymbolFlags.JSContainer? This currently misses normal declarations like `var my = {}`, but shouldn't)
+            if (isInJSFile && node.symbol && node.symbol.exports && node.properties.length === 0) {
+                let symbol = node.symbol;
+                propertiesTable = symbol.exports;
+                symbol.exports.forEach(symbol => propertiesArray.push(getMergedSymbol(symbol)));
+                return createObjectLiteralType();
             }
+            propertiesTable = createSymbolTable();
 
             let offset = 0;
             for (let i = 0; i < node.properties.length; i++) {
