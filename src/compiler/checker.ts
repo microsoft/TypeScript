@@ -572,8 +572,10 @@ namespace ts {
         }
 
         const enum MappedTypeModifiers {
-            Readonly = 1 << 0,
-            Optional = 1 << 1,
+            IncludeReadonly = 1 << 0,
+            ExcludeReadonly = 1 << 1,
+            IncludeOptional = 1 << 2,
+            ExcludeOptional = 1 << 3,
         }
 
         const enum ExpandingFlags {
@@ -2967,11 +2969,10 @@ namespace ts {
 
                 function createMappedTypeNodeFromType(type: MappedType) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
-                    const readonlyToken = type.declaration && type.declaration.readonlyToken ? createToken(SyntaxKind.ReadonlyKeyword) : undefined;
-                    const questionToken = type.declaration && type.declaration.questionToken ? createToken(SyntaxKind.QuestionToken) : undefined;
+                    const readonlyToken = type.declaration.readonlyToken ? <ReadonlyToken | PlusToken | MinusToken>createToken(type.declaration.readonlyToken.kind) : undefined;
+                    const questionToken = type.declaration.questionToken ? <QuestionToken | PlusToken | MinusToken>createToken(type.declaration.questionToken.kind) : undefined;
                     const typeParameterNode = typeParameterToDeclaration(getTypeParameterFromMappedType(type), context, getConstraintTypeFromMappedType(type));
                     const templateTypeNode = typeToTypeNodeHelper(getTemplateTypeFromMappedType(type), context);
-
                     const mappedTypeNode = createMappedTypeNode(readonlyToken, typeParameterNode, questionToken, templateTypeNode);
                     return setEmitFlags(mappedTypeNode, EmitFlags.SingleLine);
                 }
@@ -5819,8 +5820,9 @@ namespace ts {
 
         function resolveReverseMappedTypeMembers(type: ReverseMappedType) {
             const indexInfo = getIndexInfoOfType(type.source, IndexKind.String);
-            const readonlyMask = type.mappedType.declaration.readonlyToken ? false : true;
-            const optionalMask = type.mappedType.declaration.questionToken ? 0 : SymbolFlags.Optional;
+            const modifiers = getMappedTypeModifiers(type.mappedType);
+            const readonlyMask = modifiers & MappedTypeModifiers.IncludeReadonly ? false : true;
+            const optionalMask = modifiers & MappedTypeModifiers.IncludeOptional ? 0 : SymbolFlags.Optional;
             const stringIndexInfo = indexInfo && createIndexInfo(inferReverseMappedType(indexInfo.type, type.mappedType), readonlyMask && indexInfo.isReadonly);
             const members = createSymbolTable();
             for (const prop of getPropertiesOfType(type.source)) {
@@ -5846,8 +5848,7 @@ namespace ts {
             const constraintType = getConstraintTypeFromMappedType(type);
             const templateType = getTemplateTypeFromMappedType(<MappedType>type.target || type);
             const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
-            const templateReadonly = !!type.declaration.readonlyToken;
-            const templateOptional = !!type.declaration.questionToken;
+            const templateModifiers = getMappedTypeModifiers(type);
             const constraintDeclaration = type.declaration.typeParameter.constraint;
             if (constraintDeclaration.kind === SyntaxKind.TypeOperator &&
                 (<TypeOperatorNode>constraintDeclaration).operator === SyntaxKind.KeyOfKeyword) {
@@ -5888,10 +5889,17 @@ namespace ts {
                 if (t.flags & TypeFlags.StringLiteral) {
                     const propName = escapeLeadingUnderscores((<StringLiteralType>t).value);
                     const modifiersProp = getPropertyOfType(modifiersType, propName);
-                    const isOptional = templateOptional || !!(modifiersProp && modifiersProp.flags & SymbolFlags.Optional);
-                    const checkFlags = templateReadonly || modifiersProp && isReadonlySymbol(modifiersProp) ? CheckFlags.Readonly : 0;
-                    const prop = createSymbol(SymbolFlags.Property | (isOptional ? SymbolFlags.Optional : 0), propName, checkFlags);
-                    prop.type = propType;
+                    const isOptional = !!(templateModifiers & MappedTypeModifiers.IncludeOptional ||
+                        !(templateModifiers & MappedTypeModifiers.ExcludeOptional) && modifiersProp && modifiersProp.flags & SymbolFlags.Optional);
+                    const isReadonly = !!(templateModifiers & MappedTypeModifiers.IncludeReadonly ||
+                        !(templateModifiers & MappedTypeModifiers.ExcludeReadonly) && modifiersProp && isReadonlySymbol(modifiersProp));
+                    const prop = createSymbol(SymbolFlags.Property | (isOptional ? SymbolFlags.Optional : 0), propName, isReadonly ? CheckFlags.Readonly : 0);
+                    // When creating an optional property in strictNullChecks mode, if 'undefined' isn't assignable to the
+                    // type, we include 'undefined' in the type. Similarly, when creating a non-optional property in strictNullChecks
+                    // mode, if the underlying property is optional we remove 'undefined' from the type.
+                    prop.type = strictNullChecks && isOptional && !isTypeAssignableTo(undefinedType, propType) ? getOptionalType(propType) :
+                        strictNullChecks && !isOptional && modifiersProp && modifiersProp.flags & SymbolFlags.Optional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) :
+                        propType;
                     if (propertySymbol) {
                         prop.syntheticOrigin = propertySymbol;
                         prop.declarations = propertySymbol.declarations;
@@ -5900,7 +5908,7 @@ namespace ts {
                     members.set(propName, prop);
                 }
                 else if (t.flags & (TypeFlags.Any | TypeFlags.String)) {
-                    stringIndexInfo = createIndexInfo(propType, templateReadonly);
+                    stringIndexInfo = createIndexInfo(propType, !!(templateModifiers & MappedTypeModifiers.IncludeReadonly));
                 }
             }
         }
@@ -5918,7 +5926,7 @@ namespace ts {
         function getTemplateTypeFromMappedType(type: MappedType) {
             return type.templateType ||
                 (type.templateType = type.declaration.type ?
-                    instantiateType(addOptionality(getTypeFromTypeNode(type.declaration.type), !!type.declaration.questionToken), type.mapper || identityMapper) :
+                    instantiateType(addOptionality(getTypeFromTypeNode(type.declaration.type), !!(getMappedTypeModifiers(type) & MappedTypeModifiers.IncludeOptional)), type.mapper || identityMapper) :
                     unknownType);
         }
 
@@ -5946,18 +5954,24 @@ namespace ts {
         }
 
         function getMappedTypeModifiers(type: MappedType): MappedTypeModifiers {
-            return (type.declaration.readonlyToken ? MappedTypeModifiers.Readonly : 0) |
-                (type.declaration.questionToken ? MappedTypeModifiers.Optional : 0);
+            const declaration = type.declaration;
+            return (declaration.readonlyToken ? declaration.readonlyToken.kind === SyntaxKind.MinusToken ? MappedTypeModifiers.ExcludeReadonly : MappedTypeModifiers.IncludeReadonly : 0) |
+                (declaration.questionToken ? declaration.questionToken.kind === SyntaxKind.MinusToken ? MappedTypeModifiers.ExcludeOptional : MappedTypeModifiers.IncludeOptional : 0);
         }
 
-        function getCombinedMappedTypeModifiers(type: MappedType): MappedTypeModifiers {
+        function getMappedTypeOptionality(type: MappedType): number {
+            const modifiers = getMappedTypeModifiers(type);
+            return modifiers & MappedTypeModifiers.ExcludeOptional ? -1 : modifiers & MappedTypeModifiers.IncludeOptional ? 1 : 0;
+        }
+
+        function getCombinedMappedTypeOptionality(type: MappedType): number {
+            const optionality = getMappedTypeOptionality(type);
             const modifiersType = getModifiersTypeFromMappedType(type);
-            return getMappedTypeModifiers(type) |
-                (isGenericMappedType(modifiersType) ? getMappedTypeModifiers(<MappedType>modifiersType) : 0);
+            return optionality || (isGenericMappedType(modifiersType) ? getMappedTypeOptionality(<MappedType>modifiersType) : 0);
         }
 
         function isPartialMappedType(type: Type) {
-            return getObjectFlags(type) & ObjectFlags.Mapped && !!(<MappedType>type).declaration.questionToken;
+            return !!(getObjectFlags(type) & ObjectFlags.Mapped && getMappedTypeModifiers(<MappedType>type) & MappedTypeModifiers.IncludeOptional);
         }
 
         function isGenericMappedType(type: Type): type is MappedType {
@@ -9960,7 +9974,7 @@ namespace ts {
                 if (target.flags & TypeFlags.TypeParameter) {
                     // A source type { [P in keyof T]: X } is related to a target type T if X is related to T[P].
                     if (getObjectFlags(source) & ObjectFlags.Mapped && getConstraintTypeFromMappedType(<MappedType>source) === getIndexType(target)) {
-                        if (!(<MappedType>source).declaration.questionToken) {
+                        if (!(getMappedTypeModifiers(<MappedType>source) & MappedTypeModifiers.IncludeOptional)) {
                             const templateType = getTemplateTypeFromMappedType(<MappedType>source);
                             const indexedAccessType = getIndexedAccessType(target, getTypeParameterFromMappedType(<MappedType>source));
                             if (result = isRelatedTo(templateType, indexedAccessType, reportErrors)) {
@@ -9999,6 +10013,8 @@ namespace ts {
                 else if (isGenericMappedType(target)) {
                     // A source type T is related to a target type { [P in X]: T[P] }
                     const template = getTemplateTypeFromMappedType(<MappedType>target);
+                    const modifiers = getMappedTypeModifiers(<MappedType>target);
+                    if (!(modifiers & MappedTypeModifiers.ExcludeOptional)) {
                     if (template.flags & TypeFlags.IndexedAccess && (<IndexedAccessType>template).objectType === source &&
                         (<IndexedAccessType>template).indexType === getTypeParameterFromMappedType(<MappedType>target)) {
                         return Ternary.True;
@@ -10012,6 +10028,7 @@ namespace ts {
                             return result;
                         }
                     }
+                }
                 }
 
                 if (source.flags & TypeFlags.TypeParameter) {
@@ -10162,8 +10179,7 @@ namespace ts {
             function mappedTypeRelatedTo(source: MappedType, target: MappedType, reportErrors: boolean): Ternary {
                 const modifiersRelated = relation === comparableRelation || (
                     relation === identityRelation ? getMappedTypeModifiers(source) === getMappedTypeModifiers(target) :
-                        !(getCombinedMappedTypeModifiers(source) & MappedTypeModifiers.Optional) ||
-                        getCombinedMappedTypeModifiers(target) & MappedTypeModifiers.Optional);
+                        getCombinedMappedTypeOptionality(source) <= getCombinedMappedTypeOptionality(target));
                 if (modifiersRelated) {
                     let result: Ternary;
                     if (result = isRelatedTo(getConstraintTypeFromMappedType(<MappedType>target), getConstraintTypeFromMappedType(<MappedType>source), reportErrors)) {
@@ -20345,7 +20361,7 @@ namespace ts {
             const indexType = (<IndexedAccessType>type).indexType;
             if (isTypeAssignableTo(indexType, getIndexType(objectType))) {
                 if (accessNode.kind === SyntaxKind.ElementAccessExpression && isAssignmentTarget(accessNode) &&
-                    getObjectFlags(objectType) & ObjectFlags.Mapped && (<MappedType>objectType).declaration.readonlyToken) {
+                    getObjectFlags(objectType) & ObjectFlags.Mapped && getMappedTypeModifiers(<MappedType>objectType) & MappedTypeModifiers.IncludeReadonly) {
                     error(accessNode, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(objectType));
                 }
                 return type;

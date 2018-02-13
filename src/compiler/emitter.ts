@@ -1251,14 +1251,20 @@ namespace ts {
             }
             if (node.readonlyToken) {
                 emit(node.readonlyToken);
+                if (node.readonlyToken.kind !== SyntaxKind.ReadonlyKeyword) {
+                    writeKeyword("readonly");
+                }
                 writeSpace();
             }
-
             writePunctuation("[");
             pipelineEmitWithNotification(EmitHint.MappedTypeParameter, node.typeParameter);
             writePunctuation("]");
-
-            emitIfPresent(node.questionToken);
+            if (node.questionToken) {
+                emit(node.questionToken);
+                if (node.questionToken.kind !== SyntaxKind.QuestionToken) {
+                    writePunctuation("?");
+                }
+            }
             writePunctuation(":");
             writeSpace();
             emit(node.type);
