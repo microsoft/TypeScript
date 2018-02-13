@@ -299,6 +299,10 @@ namespace ts {
                 node = getParseTreeNode(node);
                 return node && tryGetThisTypeAt(node);
             },
+            getTypeArgumentConstraint: node => {
+                node = getParseTreeNode(node, isTypeNode);
+                return node && getTypeArgumentConstraint(node);
+            },
         };
 
         const tupleTypes: GenericType[] = [];
@@ -7356,7 +7360,7 @@ namespace ts {
                     type = getTypeReferenceType(node, symbol);
                 }
                 // Cache both the resolved symbol and the resolved type. The resolved symbol is needed in when we check the
-                // type reference in checkTypeReferenceOrExpressionWithTypeArguments.
+                // type reference in checkTypeReferenceNode.
                 links.resolvedSymbol = symbol;
                 links.resolvedType = type;
             }
@@ -20274,9 +20278,8 @@ namespace ts {
                         typeArguments = getEffectiveTypeArguments(node, typeParameters);
                         mapper = createTypeMapper(typeParameters, typeArguments);
                     }
-                    const typeArgument = typeArguments[i];
                     result = result && checkTypeAssignableTo(
-                        typeArgument,
+                        typeArguments[i],
                         instantiateType(constraint, mapper),
                         node.typeArguments[i],
                         Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
@@ -20318,6 +20321,14 @@ namespace ts {
                     error(node, Diagnostics.Enum_type_0_has_members_with_initializers_that_are_not_literals, typeToString(type));
                 }
             }
+        }
+
+        function getTypeArgumentConstraint(node: TypeNode): Type | undefined {
+            const typeReferenceNode = tryCast(node.parent, isTypeReferenceType);
+            if (!typeReferenceNode) return undefined;
+            const typeParameters = getTypeParametersForTypeReference(typeReferenceNode);
+            const constraint = getConstraintOfTypeParameter(typeParameters[typeReferenceNode.typeArguments.indexOf(node)!]);
+            return constraint && instantiateType(constraint, createTypeMapper(typeParameters, getEffectiveTypeArguments(typeReferenceNode, typeParameters)));
         }
 
         function checkTypeQuery(node: TypeQueryNode) {

@@ -5940,4 +5940,9 @@ namespace ts {
                 return false;
         }
     }
+
+    /* @internal */
+    export function isTypeReferenceType(node: Node): node is TypeReferenceType {
+        return node.kind === SyntaxKind.TypeReference || node.kind === SyntaxKind.ExpressionWithTypeArguments;
+    }
 }
