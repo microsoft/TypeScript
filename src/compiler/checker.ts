@@ -12840,6 +12840,21 @@ namespace ts {
             return links.switchTypes;
         }
 
+        function getSwitchClauseTypeOfWitnesses(switchStatement: SwitchStatement): (string | undefined)[] {
+            const witnesses: (string | undefined)[] = [];
+            for (const clause of switchStatement.caseBlock.clauses) {
+                if (clause.kind === SyntaxKind.CaseClause) {
+                    if (clause.expression.kind === SyntaxKind.StringLiteral) {
+                        witnesses.push((clause.expression as StringLiteral).text);
+                        continue;
+                    }
+                    return emptyArray;
+                }
+                witnesses.push(/*explicitDefaultStatement*/ undefined);
+            }
+            return witnesses;
+        }
+
         function eachTypeContainedIn(source: Type, types: Type[]) {
             return source.flags & TypeFlags.Union ? !forEach((<UnionType>source).types, t => !contains(types, t)) : contains(types, source);
         }
@@ -13253,6 +13268,9 @@ namespace ts {
                 else if (isMatchingReferenceDiscriminant(expr, type)) {
                     type = narrowTypeByDiscriminant(type, <PropertyAccessExpression>expr, t => narrowTypeBySwitchOnDiscriminant(t, flow.switchStatement, flow.clauseStart, flow.clauseEnd));
                 }
+                else if (expr.kind === SyntaxKind.TypeOfExpression && isMatchingReference(reference, (expr as TypeOfExpression).expression)) {
+                    type = narrowBySwitchOnTypeOf(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
+                }
                 return createFlowType(type, isIncomplete(flowType));
             }
 
@@ -13547,6 +13565,57 @@ namespace ts {
                 }
                 const defaultType = filterType(type, t => !(isUnitType(t) && contains(switchTypes, getRegularTypeOfLiteralType(t))));
                 return caseType.flags & TypeFlags.Never ? defaultType : getUnionType([caseType, defaultType]);
+            }
+
+            function narrowBySwitchOnTypeOf(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): Type {
+                const switchWitnesses = getSwitchClauseTypeOfWitnesses(switchStatement);
+                if (!switchWitnesses.length) {
+                    return type;
+                }
+                const clauseWitnesses = switchWitnesses.slice(clauseStart, clauseEnd);
+                //  Equal start and end denotes implicit fallthrough; undefined marks explicit default clause
+                const hasDefaultClause = clauseStart === clauseEnd || contains(clauseWitnesses, /*explicitDefaultStatement*/ undefined);
+                const switchFacts = getFactsFromTypeofSwitch(clauseStart, clauseEnd, switchWitnesses, hasDefaultClause);
+                // The implied type is the raw type suggested by a
+                // value being caught in this clause.
+                // - If there is a default the implied type is not used.
+                // - Otherwise, take the union of the types in the
+                // clause. We narrow the union using facts to remove
+                // types that appear multiple types and are
+                // unreachable.
+                // Example:
+                //
+                // switch (typeof x) {
+                //     case 'number':
+                //     case 'string': break;
+                //     default: break;
+                //     case 'number':
+                //     case 'boolean': break
+                // }
+                //
+                // The implied type of the first clause number | string.
+                // The implied type of the second clause is string (but this doesn't get used).
+                // The implied type of the third clause is boolean (number has already be caught).
+                if (!(hasDefaultClause || (type.flags & TypeFlags.Union))) {
+                    let impliedType = getTypeWithFacts(getUnionType(clauseWitnesses.map(text => typeofTypesByName.get(text) || neverType)), switchFacts);
+                    if (impliedType.flags & TypeFlags.Union) {
+                        impliedType = getAssignmentReducedType(impliedType as UnionType, getBaseConstraintOfType(type) || type);
+                    }
+                    if (!(impliedType.flags & TypeFlags.Never)) {
+                        if (isTypeSubtypeOf(impliedType, type)) {
+                            return impliedType;
+                        }
+                        if (type.flags & TypeFlags.Instantiable) {
+                            const constraint = getBaseConstraintOfType(type) || anyType;
+                            if (isTypeSubtypeOf(impliedType, constraint)) {
+                                return getIntersectionType([type, impliedType]);
+                            }
+                        }
+                    }
+                }
+                return hasDefaultClause ?
+                    filterType(type, t => (getTypeFacts(t) & switchFacts) === switchFacts) :
+                    getTypeWithFacts(type, switchFacts);
             }
 
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
@@ -18944,9 +19013,59 @@ namespace ts {
                 : Diagnostics.Type_of_yield_operand_in_an_async_generator_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
         }
 
+        /**
+         * Collect the TypeFacts learned from a typeof switch with
+         * total clauses `witnesses`, and the active clause ranging
+         * from `start` to `end`. Parameter `hasDefault` denotes
+         * whether the active clause contains a default clause.
+         */
+        function getFactsFromTypeofSwitch(start: number, end: number, witnesses: (string | undefined)[], hasDefault: boolean): TypeFacts {
+            let facts: TypeFacts = TypeFacts.None;
+            // When in the default we only collect inequality facts
+            // because default is 'in theory' a set of infinite
+            // equalities.
+            if (hasDefault) {
+                // Value is not equal to any types after the active clause.
+                for (let i = end; i < witnesses.length; i++) {
+                    facts |= typeofNEFacts.get(witnesses[i]) || TypeFacts.TypeofNEHostObject;
+                }
+                // Remove inequalities for types that appear in the
+                // active clause because they appear before other
+                // types collected so far.
+                for (let i = start; i < end; i++) {
+                    facts &= ~(typeofNEFacts.get(witnesses[i]) || 0);
+                }
+                // Add inequalities for types before the active clause unconditionally.
+                for (let i = 0; i < start; i++) {
+                    facts |= typeofNEFacts.get(witnesses[i]) || TypeFacts.TypeofNEHostObject;
+                }
+            }
+            // When in an active clause without default the set of
+            // equalities is finite.
+            else {
+                // Add equalities for all types in the active clause.
+                for (let i = start; i < end; i++) {
+                    facts |= typeofEQFacts.get(witnesses[i]) || TypeFacts.TypeofEQHostObject;
+                }
+                // Remove equalities for types that appear before the
+                // active clause.
+                for (let i = 0; i < start; i++) {
+                    facts &= ~(typeofEQFacts.get(witnesses[i]) || 0);
+                }
+            }
+            return facts;
+        }
+
         function isExhaustiveSwitchStatement(node: SwitchStatement): boolean {
             if (!node.possiblyExhaustive) {
                 return false;
+            }
+            if (node.expression.kind === SyntaxKind.TypeOfExpression) {
+                const operandType = getTypeOfExpression((node.expression as TypeOfExpression).expression);
+                // Type is not equal to every type in the switch.
+                const notEqualFacts = getFactsFromTypeofSwitch(0, 0, getSwitchClauseTypeOfWitnesses(node), /*hasDefault*/ true);
+                const type = getBaseConstraintOfType(operandType) || operandType;
+                return !!(filterType(type, t => (getTypeFacts(t) & notEqualFacts) === notEqualFacts).flags & TypeFlags.Never);
             }
             const type = getTypeOfExpression(node.expression);
             if (!isLiteralType(type)) {
