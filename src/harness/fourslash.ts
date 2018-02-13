@@ -3110,7 +3110,7 @@ Actual: ${stringify(fullActual)}`);
             options: FourSlashInterface.VerifyCompletionListContainsOptions | undefined,
         ) {
             const eq = <T>(a: T, b: T, msg: string) => {
-                assert.deepEqual(a, b,  this.assertionMessageAtLastKnownMarker(msg + " for " + stringify(entryId)));
+                assert.deepEqual(a, b, this.assertionMessageAtLastKnownMarker(msg + " for " + stringify(entryId)));
             };
             const matchingItems = items.filter(item => item.name === entryId.name && item.source === entryId.source);
             if (matchingItems.length === 0) {
@@ -3133,7 +3133,7 @@ Actual: ${stringify(fullActual)}`);
                 }
 
                 if (entryId.source === undefined) {
-                    eq(options && options.sourceDisplay, undefined, "source display");
+                    eq(options && options.sourceDisplay, /*b*/ undefined, "source display");
                 }
                 else {
                     eq(details.source, [ts.textPart(options!.sourceDisplay)], "source display");
