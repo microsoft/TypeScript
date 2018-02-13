@@ -7544,7 +7544,6 @@ declare namespace ts.server {
          */
         updateGraph(): boolean;
         protected removeExistingTypings(include: string[]): string[];
-        private setTypings(typings);
         private updateGraphWorker();
         private detachScriptInfoFromProject(uncheckedFileName);
         private addMissingFileWatcher(missingFilePath);
@@ -7780,9 +7779,7 @@ declare namespace ts.server {
         private readonly hostConfiguration;
         private safelist;
         private legacySafelist;
-        private changedFiles;
         private pendingProjectUpdates;
-        private pendingInferredProjectUpdate;
         readonly currentDirectory: string;
         readonly toCanonicalFileName: (f: string) => string;
         readonly host: ServerHost;
@@ -7804,7 +7801,7 @@ declare namespace ts.server {
         toPath(fileName: string): Path;
         private loadTypesMap();
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void;
-        private delayInferredProjectsRefresh();
+        private delayEnsureProjectForOpenFiles();
         private delayUpdateProjectGraph(project);
         private sendProjectsUpdatedInBackgroundEvent();
         private delayUpdateProjectGraphs(projects);
@@ -7815,17 +7812,13 @@ declare namespace ts.server {
         /**
          * Ensures the project structures are upto date
          * This means,
-         * - if there are changedFiles (the files were updated but their containing project graph was not upto date),
-         *   their project graph is updated
-         * - If there are pendingProjectUpdates (scheduled to be updated with delay so they can batch update the graph if there are several changes in short time span)
-         *   their project graph is updated
-         * - If there were project graph updates and/or there was pending inferred project update and/or called forced the inferred project structure refresh
-         *   Inferred projects are created/updated/deleted based on open files states
-         * @param forceInferredProjectsRefresh when true updates the inferred projects even if there is no pending work to update the files/project structures
+         * - we go through all the projects and update them if they are dirty
+         * - if updates reflect some change in structure or there was pending request to ensure projects for open files
+         *   ensure that each open script info has project
          */
-        private ensureProjectStructuresUptoDate(forceInferredProjectsRefresh?);
+        private ensureProjectStructuresUptoDate();
+        private updateProjectIfDirty(project);
         getFormatCodeOptions(file?: NormalizedPath): FormatCodeSettings;
-        private updateProjectGraphs(projects);
         private onSourceFileChanged(fileName, eventKind);
         private handleDeletedFile(info);
         private onConfigChangedForConfiguredProject(project, eventKind);
@@ -7938,7 +7931,7 @@ declare namespace ts.server {
          * This will go through open files and assign them to inferred project if open file is not part of any other project
          * After that all the inferred project graphs are updated
          */
-        private refreshInferredProjects();
+        private ensureProjectForOpenFiles();
         /**
          * Open file whose contents is managed by the client
          * @param filename is absolute pathname
@@ -7954,14 +7947,14 @@ declare namespace ts.server {
         closeClientFile(uncheckedFileName: string): void;
         private collectChanges(lastKnownProjectVersions, currentProjects, result);
         private closeConfiguredProjectReferencedFromExternalProject(configFile);
-        closeExternalProject(uncheckedFileName: string, suppressRefresh?: boolean): void;
+        closeExternalProject(uncheckedFileName: string): void;
         openExternalProjects(projects: protocol.ExternalProject[]): void;
         /** Makes a filename safe to insert in a RegExp */
         private static readonly filenameEscapeRegexp;
         private static escapeFilenameForRegex(filename);
         resetSafeList(): void;
         applySafeList(proj: protocol.ExternalProject): NormalizedPath[];
-        openExternalProject(proj: protocol.ExternalProject, suppressRefreshOfInferredProjects?: boolean): void;
+        openExternalProject(proj: protocol.ExternalProject): void;
     }
 }
 

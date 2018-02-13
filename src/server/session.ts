@@ -1769,7 +1769,7 @@ namespace ts.server {
                 return this.requiredResponse(response);
             },
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
-                this.projectService.openExternalProject(request.arguments, /*suppressRefreshOfInferredProjects*/ false);
+                this.projectService.openExternalProject(request.arguments);
                 // TODO: GH#20447 report errors
                 return this.requiredResponse(/*response*/ true);
             },
