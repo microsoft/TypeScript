@@ -52,7 +52,7 @@ class TypeWriterWalker {
     }
 
     private *visitNode(node: ts.Node, isSymbolWalk: boolean): IterableIterator<TypeWriterResult> {
-        if (ts.isExpressionNode(node) || node.kind === ts.SyntaxKind.Identifier) {
+        if (ts.isExpressionNode(node) || node.kind === ts.SyntaxKind.Identifier || ts.isDeclarationName(node)) {
             const result = this.writeTypeOrSymbol(node, isSymbolWalk);
             if (result) {
                 yield result;

@@ -1088,6 +1088,33 @@ namespace ts.tscWatch {
             // This should be 0
             host.checkTimeoutQueueLengthAndRun(0);
         });
+
+        it("shouldnt report error about unused function incorrectly when file changes from global to module", () => {
+            const getFileContent = (asModule: boolean) => `
+                    function one() {}
+                    ${asModule ? "export " : ""}function two() {
+                      return function three() {
+                        one();
+                      }
+                    }`;
+            const file: FileOrFolder = {
+                path: "/a/b/file.ts",
+                content: getFileContent(/*asModule*/ false)
+            };
+            const files = [file, libFile];
+            const host = createWatchedSystem(files);
+            const watch = createWatchOfFilesAndCompilerOptions([file.path], host, {
+                noUnusedLocals: true
+            });
+            checkProgramActualFiles(watch(), files.map(file => file.path));
+            checkOutputErrors(host, [], ExpectedOutputErrorsPosition.AfterCompilationStarting);
+
+            file.content = getFileContent(/*asModule*/ true);
+            host.reloadFS(files);
+            host.runQueuedTimeoutCallbacks();
+            checkProgramActualFiles(watch(), files.map(file => file.path));
+            checkOutputErrors(host, [], ExpectedOutputErrorsPosition.AfterFileChangeDetected);
+        });
     });
 
     describe("tsc-watch emit with outFile or out setting", () => {
@@ -1694,6 +1721,38 @@ namespace ts.tscWatch {
                 return [files[0]];
             }
         });
+
+        it("file is deleted and created as part of change", () => {
+            const projectLocation = "/home/username/project";
+            const file: FileOrFolder = {
+                path: `${projectLocation}/app/file.ts`,
+                content: "var a = 10;"
+            };
+            const fileJs = `${projectLocation}/app/file.js`;
+            const configFile: FileOrFolder = {
+                path: `${projectLocation}/tsconfig.json`,
+                content: JSON.stringify({
+                    include: [
+                        "app/**/*.ts"
+                    ]
+                })
+            };
+            const files = [file, configFile, libFile];
+            const host = createWatchedSystem(files, { currentDirectory: projectLocation, useCaseSensitiveFileNames: true });
+            createWatchOfConfigFile("tsconfig.json", host);
+            verifyProgram();
+
+            file.content += "\nvar b = 10;";
+
+            host.reloadFS(files, { invokeFileDeleteCreateAsPartInsteadOfChange: true });
+            host.runQueuedTimeoutCallbacks();
+            verifyProgram();
+
+            function verifyProgram() {
+                assert.isTrue(host.fileExists(fileJs));
+                assert.equal(host.readFile(fileJs), file.content + "\n");
+            }
+        });
     });
 
     describe("tsc-watch module resolution caching", () => {
@@ -2077,35 +2136,45 @@ declare module "fs" {
     });
 
     describe("tsc-watch console clearing", () => {
-        it("clears the console when it starts", () => {
+        function checkConsoleClearing(diagnostics: boolean, extendedDiagnostics: boolean) {
             const file = {
                 path: "f.ts",
                 content: ""
             };
-            const host = createWatchedSystem([file]);
+            const files = [file];
+            const host = createWatchedSystem(files);
+            let clearCount: number | undefined;
+            checkConsoleClears();
 
-            createWatchOfFilesAndCompilerOptions([file.path], host);
+            createWatchOfFilesAndCompilerOptions([file.path], host, { diagnostics, extendedDiagnostics });
+            checkConsoleClears();
+
+            file.content = "//";
+            host.reloadFS(files);
             host.runQueuedTimeoutCallbacks();
 
-            host.checkScreenClears(1);
+            checkConsoleClears();
+
+            function checkConsoleClears() {
+                if (clearCount === undefined) {
+                    clearCount = 0;
+                }
+                else if (!diagnostics && !extendedDiagnostics) {
+                    clearCount++;
+                }
+                host.checkScreenClears(clearCount);
+                return clearCount;
+            }
+        }
+
+        it("without --diagnostics or --extendedDiagnostics", () => {
+            checkConsoleClearing(/*diagnostics*/ false, /*extendedDiagnostics*/ false);
         });
-
-        it("clears the console on recompile", () => {
-            const file = {
-                path: "f.ts",
-                content: ""
-            };
-            const host = createWatchedSystem([file]);
-            createWatchOfFilesAndCompilerOptions([file.path], host);
-
-            const modifiedFile = {
-                ...file,
-                content: "//"
-            };
-            host.reloadFS([modifiedFile]);
-            host.runQueuedTimeoutCallbacks();
-
-            host.checkScreenClears(2);
+        it("with --diagnostics", () => {
+            checkConsoleClearing(/*diagnostics*/ true, /*extendedDiagnostics*/ false);
+        });
+        it("with --extendedDiagnostics", () => {
+            checkConsoleClearing(/*diagnostics*/ false, /*extendedDiagnostics*/ true);
         });
     });
 }

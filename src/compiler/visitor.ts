@@ -387,6 +387,17 @@ namespace ts {
                 return updateIntersectionTypeNode(<IntersectionTypeNode>node,
                     nodesVisitor((<IntersectionTypeNode>node).types, visitor, isTypeNode));
 
+            case SyntaxKind.ConditionalType:
+                return updateConditionalTypeNode(<ConditionalTypeNode>node,
+                    visitNode((<ConditionalTypeNode>node).checkType, visitor, isTypeNode),
+                    visitNode((<ConditionalTypeNode>node).extendsType, visitor, isTypeNode),
+                    visitNode((<ConditionalTypeNode>node).trueType, visitor, isTypeNode),
+                    visitNode((<ConditionalTypeNode>node).falseType, visitor, isTypeNode));
+
+            case SyntaxKind.InferType:
+                return updateInferTypeNode(<InferTypeNode>node,
+                    visitNode((<InferTypeNode>node).typeParameter, visitor, isTypeParameterDeclaration));
+
             case SyntaxKind.ParenthesizedType:
                 return updateParenthesizedType(<ParenthesizedTypeNode>node,
                     visitNode((<ParenthesizedTypeNode>node).type, visitor, isTypeNode));

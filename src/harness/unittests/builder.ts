@@ -70,13 +70,6 @@ namespace ts {
             // Change e.ts and verify previously b.js as well as a.js get emitted again since previous change was consumed completely but not d.ts
             program = updateProgramFile(program, "/e.ts", "export function bar3() { }");
             assertChanges(["/b.js", "/a.js", "/e.js"]);
-
-            // Cancel in the middle of affected files list after b.js emit
-            program = updateProgramFile(program, "/b.ts", "export class b { foo2() { c + 1; } }");
-            assertChanges(["/b.js", "/a.js"], 1);
-            // Change e.ts and verify previously b.js as well as a.js get emitted again since previous change was consumed completely but not d.ts
-            program = updateProgramFile(program, "/e.ts", "export function bar5() { }");
-            assertChanges(["/b.js", "/a.js", "/e.js"]);
         });
     });
 

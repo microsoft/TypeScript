@@ -9,7 +9,7 @@ namespace ts {
             if (!selectionRange) {
                 throw new Error(`Test ${s} does not specify selection range`);
             }
-            const result = refactor.extractSymbol.getRangeToExtract(file, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
+            const result = refactor.extractSymbol.getRangeToExtract(file, createTextSpanFromRange(selectionRange));
             assert(result.targetRange === undefined, "failure expected");
             const sortedErrors = result.errors!.map(e => <string>e.messageText).sort();
             assert.deepEqual(sortedErrors, expectedErrors.sort(), "unexpected errors");
@@ -23,20 +23,20 @@ namespace ts {
         if (!selectionRange) {
             throw new Error(`Test ${s} does not specify selection range`);
         }
-        const result = refactor.extractSymbol.getRangeToExtract(f, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
+        const result = refactor.extractSymbol.getRangeToExtract(f, createTextSpanFromRange(selectionRange));
         const expectedRange = t.ranges.get("extracted");
         if (expectedRange) {
-            let start: number, end: number;
+            let pos: number, end: number;
             const targetRange = result.targetRange!;
             if (isArray(targetRange.range)) {
-                start = targetRange.range[0].getStart(f);
+                pos = targetRange.range[0].getStart(f);
                 end = last(targetRange.range).getEnd();
             }
             else {
-                start = targetRange.range.getStart(f);
+                pos = targetRange.range.getStart(f);
                 end = targetRange.range.getEnd();
             }
-            assert.equal(start, expectedRange.start, "incorrect start of range");
+            assert.equal(pos, expectedRange.pos, "incorrect pos of range");
             assert.equal(end, expectedRange.end, "incorrect end of range");
         }
         else {

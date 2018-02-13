@@ -11,6 +11,7 @@ interface I {
 >s : symbol
 
     "__@iterator": string;
+>"__@iterator" : string
 }
 
 var i: I;

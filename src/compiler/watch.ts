@@ -31,8 +31,11 @@ namespace ts {
         };
     }
 
-    function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic) {
-        if (system.clearScreen && diagnostic.code !== Diagnostics.Compilation_complete_Watching_for_file_changes.code) {
+    function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions) {
+        if (system.clearScreen &&
+            diagnostic.code !== Diagnostics.Compilation_complete_Watching_for_file_changes.code &&
+            !options.extendedDiagnostics &&
+            !options.diagnostics) {
             system.clearScreen();
         }
     }
@@ -42,18 +45,18 @@ namespace ts {
      */
     export function createWatchStatusReporter(system: System, pretty?: boolean): WatchStatusReporter {
         return pretty ?
-        (diagnostic: Diagnostic, newLine: string) => {
-            clearScreenIfNotWatchingForFileChanges(system, diagnostic);
-            let output = `[${ formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey) }] `;
-            output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine + newLine}`;
-            system.write(output);
-        } :
-        (diagnostic: Diagnostic, newLine: string) => {
-            clearScreenIfNotWatchingForFileChanges(system, diagnostic);
-            let output = new Date().toLocaleTimeString() + " - ";
-            output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine + newLine}`;
-            system.write(output);
-        };
+            (diagnostic, newLine, options) => {
+                clearScreenIfNotWatchingForFileChanges(system, diagnostic, options);
+                let output = `[${formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey)}] `;
+                output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine + newLine}`;
+                system.write(output);
+            } :
+            (diagnostic, newLine, options) => {
+                clearScreenIfNotWatchingForFileChanges(system, diagnostic, options);
+                let output = new Date().toLocaleTimeString() + " - ";
+                output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine + newLine}`;
+                system.write(output);
+            };
     }
 
     /**
@@ -254,7 +257,7 @@ namespace ts {
 
 namespace ts {
     export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
-    export type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string) => void;
+    export type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions) => void;
     export type CreateProgram<T extends BuilderProgram> = (rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: T) => T;
     export interface WatchCompilerHost<T extends BuilderProgram> {
         // TODO: GH#18217 Optional methods are frequently asserted
@@ -266,7 +269,7 @@ namespace ts {
         /** If provided, callback to invoke after every new program creation */
         afterProgramCreate?(program: T): void;
         /** If provided, called with Diagnostic message that informs about change in watch status */
-        onWatchStatusChange?(diagnostic: Diagnostic, newLine: string): void;
+        onWatchStatusChange?(diagnostic: Diagnostic, newLine: string, options: CompilerOptions): void;
 
         // Only for testing
         /*@internal*/
@@ -420,6 +423,8 @@ namespace ts {
         }
     }
 
+    const initialVersion = 1;
+
     /**
      * Creates the watch from the host for root files and compiler options
      */
@@ -429,11 +434,17 @@ namespace ts {
      */
     export function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfConfigFile<T>): WatchOfConfigFile<T>;
     export function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptions<T> & WatchCompilerHostOfConfigFile<T>): WatchOfFilesAndCompilerOptions<T> | WatchOfConfigFile<T> {
-        interface HostFileInfo {
+        interface FilePresentOnHost {
             version: number;
             sourceFile: SourceFile;
             fileWatcher: FileWatcher;
         }
+        type FileMissingOnHost = number;
+        interface FilePresenceUnknownOnHost {
+            version: number;
+        }
+        type FileMayBePresentOnHost = FilePresentOnHost | FilePresenceUnknownOnHost;
+        type HostFileInfo = FilePresentOnHost | FileMissingOnHost | FilePresenceUnknownOnHost;
 
         let builderProgram: T;
         let reloadLevel: ConfigFileProgramReloadLevel;                      // level to indicate if the program needs to be reloaded from config file/just filenames etc
@@ -441,8 +452,8 @@ namespace ts {
         let watchedWildcardDirectories: Map<WildcardDirectoryWatcher>;      // map of watchers for the wild card directories in the config file
         let timerToUpdateProgram: any;                                      // timer callback to recompile the program
 
-        const sourceFilesCache = createMap<HostFileInfo | string>();        // Cache that stores the source file and version info
-        let missingFilePathsRequestedForRelease: Path[] | undefined;        // These paths are held temparirly so that we can remove the entry from source file cache if the file is not tracked by missing files
+        const sourceFilesCache = createMap<HostFileInfo>();                 // Cache that stores the source file and version info
+        let missingFilePathsRequestedForRelease: Path[] | undefined;                    // These paths are held temparirly so that we can remove the entry from source file cache if the file is not tracked by missing files
         let hasChangedCompilerOptions = false;                              // True if the compiler options have changed between compilations
         let hasChangedAutomaticTypeDirectiveNames = false;                  // True if the automatic type directives have changed
 
@@ -480,12 +491,13 @@ namespace ts {
         const watchFilePath = compilerOptions.extendedDiagnostics ? ts.addFilePathWatcherWithLogging : ts.addFilePathWatcher;
         const watchDirectoryWorker = compilerOptions.extendedDiagnostics ? ts.addDirectoryWatcherWithLogging : ts.addDirectoryWatcher;
 
+        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
+        let newLine = updateNewLine();
+
+        writeLog(`Current directory: ${currentDirectory} CaseSensitiveFileNames: ${useCaseSensitiveFileNames}`);
         if (configFileName) {
             watchFile(host, configFileName, scheduleProgramReload, writeLog);
         }
-
-        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
-        let newLine = updateNewLine();
 
         const compilerHost: CompilerHost & ResolutionCacheHost = {
             // Members for CompilerHost
@@ -573,6 +585,12 @@ namespace ts {
             }
 
             // Compile the program
+            if (loggingEnabled) {
+                writeLog(`CreatingProgramWith::`);
+                writeLog(`  roots: ${JSON.stringify(rootFileNames)}`);
+                writeLog(`  options: ${JSON.stringify(compilerOptions)}`);
+            }
+
             const needsUpdateInTypeRootWatch = hasChangedCompilerOptions || !program;
             hasChangedCompilerOptions = false;
             resolutionCache.startCachingPerDirectoryResolution();
@@ -622,52 +640,64 @@ namespace ts {
             return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
         }
 
+        function isFileMissingOnHost(hostSourceFile: HostFileInfo): hostSourceFile is FileMissingOnHost {
+            return typeof hostSourceFile === "number";
+        }
+
+        function isFilePresentOnHost(hostSourceFile: FileMayBePresentOnHost): hostSourceFile is FilePresentOnHost {
+            return !!(hostSourceFile as FilePresentOnHost).sourceFile;
+        }
+
         function fileExists(fileName: string) {
             const path = toPath(fileName);
-            const hostSourceFileInfo = sourceFilesCache.get(path);
-            if (hostSourceFileInfo !== undefined) {
-                return !isString(hostSourceFileInfo);
+            // If file is missing on host from cache, we can definitely say file doesnt exist
+            // otherwise we need to ensure from the disk
+            if (isFileMissingOnHost(sourceFilesCache.get(path)!)) {
+                return true;
             }
 
             return directoryStructureHost.fileExists(fileName);
         }
 
         function getVersionedSourceFileByPath(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
-            const hostSourceFile = sourceFilesCache.get(path);
+            const hostSourceFile = sourceFilesCache.get(path)!;
             // No source file on the host
-            if (isString(hostSourceFile)) {
+            if (isFileMissingOnHost(hostSourceFile)) {
                 return undefined;
             }
 
             // Create new source file if requested or the versions dont match
-            if (!hostSourceFile || shouldCreateNewSourceFile || hostSourceFile.version.toString() !== hostSourceFile.sourceFile.version) {
+            if (!hostSourceFile || shouldCreateNewSourceFile || !isFilePresentOnHost(hostSourceFile) || hostSourceFile.version.toString() !== hostSourceFile.sourceFile.version) {
                 const sourceFile = getNewSourceFile();
                 if (hostSourceFile) {
                     if (shouldCreateNewSourceFile) {
                         hostSourceFile.version++;
                     }
+
                     if (sourceFile) {
-                        hostSourceFile.sourceFile = sourceFile;
+                        // Set the source file and create file watcher now that file was present on the disk
+                        (hostSourceFile as FilePresentOnHost).sourceFile = sourceFile;
                         sourceFile.version = hostSourceFile.version.toString();
-                        if (!hostSourceFile.fileWatcher) {
-                            hostSourceFile.fileWatcher = watchFilePath(host, fileName, onSourceFileChange, path, writeLog);
+                        if (!(hostSourceFile as FilePresentOnHost).fileWatcher) {
+                            (hostSourceFile as FilePresentOnHost).fileWatcher = watchFilePath(host, fileName, onSourceFileChange, path, writeLog);
                         }
                     }
                     else {
                         // There is no source file on host any more, close the watch, missing file paths will track it
-                        hostSourceFile.fileWatcher.close();
-                        sourceFilesCache.set(path, hostSourceFile.version.toString());
+                        if (isFilePresentOnHost(hostSourceFile)) {
+                            hostSourceFile.fileWatcher.close();
+                        }
+                        sourceFilesCache.set(path, hostSourceFile.version);
                     }
                 }
                 else {
-                    let fileWatcher: FileWatcher;
                     if (sourceFile) {
-                        sourceFile.version = "1";
-                        fileWatcher = watchFilePath(host, fileName, onSourceFileChange, path, writeLog);
-                        sourceFilesCache.set(path, { sourceFile, version: 1, fileWatcher });
+                        sourceFile.version = initialVersion.toString();
+                        const fileWatcher = watchFilePath(host, fileName, onSourceFileChange, path, writeLog);
+                        sourceFilesCache.set(path, { sourceFile, version: initialVersion, fileWatcher });
                     }
                     else {
-                        sourceFilesCache.set(path, "0");
+                        sourceFilesCache.set(path, initialVersion);
                     }
                 }
                 return sourceFile;
@@ -692,20 +722,22 @@ namespace ts {
             }
         }
 
-        function removeSourceFile(path: Path) {
+        function nextSourceFileVersion(path: Path) {
             const hostSourceFile = sourceFilesCache.get(path);
             if (hostSourceFile !== undefined) {
-                if (!isString(hostSourceFile)) {
-                    hostSourceFile.fileWatcher.close();
-                    resolutionCache.invalidateResolutionOfFile(path);
+                if (isFileMissingOnHost(hostSourceFile)) {
+                    // The next version, lets set it as presence unknown file
+                    sourceFilesCache.set(path, { version: Number(hostSourceFile) + 1 });
                 }
-                sourceFilesCache.delete(path);
+                else {
+                    hostSourceFile.version++;
+                }
             }
         }
 
         function getSourceVersion(path: Path): string | undefined {
             const hostSourceFile = sourceFilesCache.get(path);
-            return !hostSourceFile || isString(hostSourceFile) ? undefined : hostSourceFile.version.toString();
+            return !hostSourceFile || isFileMissingOnHost(hostSourceFile) ? undefined : hostSourceFile.version.toString();
         }
 
         function onReleaseOldSourceFile(oldSourceFile: SourceFile, _oldOptions: CompilerOptions) {
@@ -716,10 +748,10 @@ namespace ts {
             // there was version update and new source file was created.
             if (hostSourceFileInfo) {
                 // record the missing file paths so they can be removed later if watchers arent tracking them
-                if (isString(hostSourceFileInfo)) {
+                if (isFileMissingOnHost(hostSourceFileInfo)) {
                     (missingFilePathsRequestedForRelease || (missingFilePathsRequestedForRelease = [])).push(oldSourceFile.path);
                 }
-                else if (hostSourceFileInfo.sourceFile === oldSourceFile) {
+                else if ((hostSourceFileInfo as FilePresentOnHost).sourceFile === oldSourceFile) {
                     sourceFilesCache.delete(oldSourceFile.path);
                     resolutionCache.removeResolutionsOfFile(oldSourceFile.path);
                 }
@@ -728,7 +760,7 @@ namespace ts {
 
         function reportWatchDiagnostic(message: DiagnosticMessage) {
             if (host.onWatchStatusChange) {
-                host.onWatchStatusChange(createCompilerDiagnostic(message), newLine);
+                host.onWatchStatusChange(createCompilerDiagnostic(message), newLine, compilerOptions);
             }
         }
 
@@ -803,27 +835,12 @@ namespace ts {
 
         function onSourceFileChange(fileName: string, eventKind: FileWatcherEventKind, path: Path) {
             updateCachedSystemWithFile(fileName, path, eventKind);
-            const hostSourceFile = sourceFilesCache.get(path);
-            if (hostSourceFile) {
-                // Update the cache
-                if (eventKind === FileWatcherEventKind.Deleted) {
-                    resolutionCache.invalidateResolutionOfFile(path);
-                    if (!isString(hostSourceFile)) {
-                        hostSourceFile.fileWatcher.close();
-                        sourceFilesCache.set(path, (++hostSourceFile.version).toString());
-                    }
-                }
-                else {
-                    // Deleted file created
-                    if (isString(hostSourceFile)) {
-                        sourceFilesCache.delete(path);
-                    }
-                    else {
-                        // file changed - just update the version
-                        hostSourceFile.version++;
-                    }
-                }
+
+            // Update the source file cache
+            if (eventKind === FileWatcherEventKind.Deleted && sourceFilesCache.get(path)) {
+                resolutionCache.invalidateResolutionOfFile(path);
             }
+            nextSourceFileVersion(path);
 
             // Update the program
             scheduleProgramUpdate();
@@ -851,7 +868,7 @@ namespace ts {
                 missingFilesMap.delete(missingFilePath);
 
                 // Delete the entry in the source files cache so that new source file is created
-                removeSourceFile(missingFilePath);
+                nextSourceFileVersion(missingFilePath);
 
                 // When a missing file is created, we should update the graph.
                 scheduleProgramUpdate();
@@ -880,17 +897,10 @@ namespace ts {
                     const fileOrDirectoryPath = toPath(fileOrDirectory);
 
                     // Since the file existance changed, update the sourceFiles cache
-                    const result = cachedDirectoryStructureHost && cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
-
-                    // Instead of deleting the file, mark it as changed instead
-                    // Many times node calls add/remove/file when watching directories recursively
-                    const hostSourceFile = sourceFilesCache.get(fileOrDirectoryPath);
-                    if (hostSourceFile && !isString(hostSourceFile) && (result ? result.fileExists : directoryStructureHost.fileExists(fileOrDirectory))) {
-                        hostSourceFile.version++;
+                    if (cachedDirectoryStructureHost) {
+                        cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
                     }
-                    else {
-                        removeSourceFile(fileOrDirectoryPath);
-                    }
+                    nextSourceFileVersion(fileOrDirectoryPath);
 
                     // If the the added or created file or directory is not supported file name, ignore the file
                     // But when watched directory is added/removed, we need to reload the file list

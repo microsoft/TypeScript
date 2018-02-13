@@ -140,7 +140,7 @@ namespace ts.codefix {
                     // and trailing trivia will remain.
                     suppressLeadingAndTrailingTrivia(newFunction);
 
-                    changes.replaceRange(sourceFile, { pos: oldFunction.getStart(), end: oldFunction.end }, newFunction);
+                    changes.replaceNode(sourceFile, oldFunction, newFunction, textChanges.useNonAdjustedPositions);
                 }
                 else {
                     changes.deleteNodeInList(sourceFile, parent);

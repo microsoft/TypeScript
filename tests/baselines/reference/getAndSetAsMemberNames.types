@@ -40,7 +40,7 @@ class C5 {
 
     public set: () => boolean = function () { return true; };
 >set : () => boolean
->function () { return true; } : () => boolean
+>function () { return true; } : () => true
 >true : true
 
     get (): boolean { return true; }

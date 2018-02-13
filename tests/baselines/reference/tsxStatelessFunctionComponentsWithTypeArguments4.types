@@ -15,6 +15,7 @@ declare function OverloadComponent<U>(attr: {b: U, a: string, "ignore-prop": boo
 >b : U
 >U : U
 >a : string
+>"ignore-prop" : boolean
 >JSX : any
 >Element : JSX.Element
 

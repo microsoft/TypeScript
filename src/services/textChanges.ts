@@ -28,9 +28,11 @@ namespace ts.textChanges {
     }
 
     export interface ConfigurableStart {
+        /** True to use getStart() (NB, not getFullStart()) without adjustment. */
         useNonAdjustedStartPosition?: boolean;
     }
     export interface ConfigurableEnd {
+        /** True to use getEnd() without adjustment. */
         useNonAdjustedEndPosition?: boolean;
     }
 
@@ -69,6 +71,11 @@ namespace ts.textChanges {
      * If pos\end should be interpreted literally 'useNonAdjustedStartPosition' or 'useNonAdjustedEndPosition' should be set to true
      */
     export type ConfigurableStartEnd = ConfigurableStart & ConfigurableEnd;
+
+    export const useNonAdjustedPositions: ConfigurableStartEnd = {
+        useNonAdjustedStartPosition: true,
+        useNonAdjustedEndPosition: true,
+    };
 
     export interface InsertNodeOptions {
         /**
@@ -117,13 +124,10 @@ namespace ts.textChanges {
         readonly options?: never;
     }
 
-    interface ChangeMultipleNodesOptions extends ChangeNodeOptions {
-        nodeSeparator: string;
-    }
     interface ReplaceWithMultipleNodes extends BaseChange {
         readonly kind: ChangeKind.ReplaceWithMultipleNodes;
         readonly nodes: ReadonlyArray<Node>;
-        readonly options?: ChangeMultipleNodesOptions;
+        readonly options?: ChangeNodeOptions;
     }
 
     export function getSeparatorCharacter(separator: Token<SyntaxKind.CommaToken | SyntaxKind.SemicolonToken>) {
@@ -132,7 +136,7 @@ namespace ts.textChanges {
 
     export function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStart, position: Position) {
         if (options.useNonAdjustedStartPosition) {
-            return node.getFullStart();
+            return node.getStart();
         }
         const fullStart = node.getFullStart();
         const start = node.getStart(sourceFile);
@@ -280,51 +284,41 @@ namespace ts.textChanges {
             return this;
         }
 
-        public replaceRange(sourceFile: SourceFile, range: TextRange, newNode: Node, options: InsertNodeOptions = {}) {
+        // TODO (https://github.com/Microsoft/TypeScript/issues/21246): default should probably be useNonAdjustedPositions
+        public replaceRange(sourceFile: SourceFile, range: TextRange, newNode: Node, options: ChangeNodeOptions = {}) {
             this.changes.push({ kind: ChangeKind.ReplaceWithSingleNode, sourceFile, range, options, node: newNode });
             return this;
         }
 
+        // TODO (https://github.com/Microsoft/TypeScript/issues/21246): default should probably be useNonAdjustedPositions
         public replaceNode(sourceFile: SourceFile, oldNode: Node, newNode: Node, options: ChangeNodeOptions = {}) {
-            const startPosition = getAdjustedStartPosition(sourceFile, oldNode, options, Position.Start);
-            const endPosition = getAdjustedEndPosition(sourceFile, oldNode, options);
-            return this.replaceWithSingle(sourceFile, startPosition, endPosition, newNode, options);
+            const pos = getAdjustedStartPosition(sourceFile, oldNode, options, Position.Start);
+            const end = getAdjustedEndPosition(sourceFile, oldNode, options);
+            return this.replaceRange(sourceFile, { pos, end }, newNode, options);
         }
 
+        // TODO (https://github.com/Microsoft/TypeScript/issues/21246): default should probably be useNonAdjustedPositions
         public replaceNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, newNode: Node, options: ChangeNodeOptions = {}) {
-            const startPosition = getAdjustedStartPosition(sourceFile, startNode, options, Position.Start);
-            const endPosition = getAdjustedEndPosition(sourceFile, endNode, options);
-            return this.replaceWithSingle(sourceFile, startPosition, endPosition, newNode, options);
+            const pos = getAdjustedStartPosition(sourceFile, startNode, options, Position.Start);
+            const end = getAdjustedEndPosition(sourceFile, endNode, options);
+            return this.replaceRange(sourceFile, { pos, end }, newNode, options);
         }
 
-        private replaceWithSingle(sourceFile: SourceFile, startPosition: number, endPosition: number, newNode: Node, options: ChangeNodeOptions): this {
-            this.changes.push({
-                kind: ChangeKind.ReplaceWithSingleNode,
-                sourceFile,
-                options,
-                node: newNode,
-                range: { pos: startPosition, end: endPosition }
-            });
+        public replaceRangeWithNodes(sourceFile: SourceFile, range: TextRange, newNodes: ReadonlyArray<Node>, options: ChangeNodeOptions = useNonAdjustedPositions) {
+            this.changes.push({ kind: ChangeKind.ReplaceWithMultipleNodes, sourceFile, range, options, nodes: newNodes });
             return this;
         }
 
-        private replaceWithMultiple(sourceFile: SourceFile, startPosition: number, endPosition: number, newNodes: ReadonlyArray<Node>, options: ChangeMultipleNodesOptions): this {
-            this.changes.push({
-                kind: ChangeKind.ReplaceWithMultipleNodes,
-                sourceFile,
-                options,
-                nodes: newNodes,
-                range: { pos: startPosition, end: endPosition }
-            });
-            return this;
+        public replaceNodeWithNodes(sourceFile: SourceFile, oldNode: Node, newNodes: ReadonlyArray<Node>, options: ChangeNodeOptions = useNonAdjustedPositions) {
+            const pos = getAdjustedStartPosition(sourceFile, oldNode, options, Position.Start);
+            const end = getAdjustedEndPosition(sourceFile, oldNode, options);
+            return this.replaceRangeWithNodes(sourceFile, { pos, end }, newNodes, options);
         }
 
-        public replaceNodeWithNodes(sourceFile: SourceFile, oldNode: Node, newNodes: ReadonlyArray<Node>): void {
-            this.replaceWithMultiple(sourceFile, oldNode.getStart(sourceFile), oldNode.getEnd(), newNodes, { nodeSeparator: this.newLineCharacter });
-        }
-
-        public replaceNodesWithNodes(sourceFile: SourceFile, oldNodes: ReadonlyArray<Node>, newNodes: ReadonlyArray<Node>): void {
-            this.replaceWithMultiple(sourceFile, first(oldNodes).getStart(sourceFile), last(oldNodes).getEnd(), newNodes, { nodeSeparator: this.newLineCharacter });
+        public replaceNodeRangeWithNodes(sourceFile: SourceFile, startNode: Node, endNode: Node, newNodes: ReadonlyArray<Node>, options: ChangeNodeOptions = useNonAdjustedPositions) {
+            const pos = getAdjustedStartPosition(sourceFile, startNode, options, Position.Start);
+            const end = getAdjustedEndPosition(sourceFile, endNode, options);
+            return this.replaceRangeWithNodes(sourceFile, { pos, end }, newNodes, options);
         }
 
         private insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options: InsertNodeOptions = {}) {
@@ -341,18 +335,18 @@ namespace ts.textChanges {
         }
 
         public insertNodeBefore(sourceFile: SourceFile, before: Node, newNode: Node, blankLineBetween = false) {
-            const startPosition = getAdjustedStartPosition(sourceFile, before, {}, Position.Start);
-            return this.replaceWithSingle(sourceFile, startPosition, startPosition, newNode, this.getOptionsForInsertNodeBefore(before, blankLineBetween));
+            const pos = getAdjustedStartPosition(sourceFile, before, {}, Position.Start);
+            return this.replaceRange(sourceFile, { pos, end: pos }, newNode, this.getOptionsForInsertNodeBefore(before, blankLineBetween));
         }
 
         public insertModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
             const pos = before.getStart(sourceFile);
-            this.replaceWithSingle(sourceFile, pos, pos, createToken(modifier), { suffix: " " });
+            this.replaceRange(sourceFile, { pos, end: pos }, createToken(modifier), { suffix: " " });
         }
 
         public changeIdentifierToPropertyAccess(sourceFile: SourceFile, prefix: string, node: Identifier): void {
-            const startPosition = getAdjustedStartPosition(sourceFile, node, {}, Position.Start);
-            this.replaceWithSingle(sourceFile, startPosition, startPosition, createPropertyAccess(createIdentifier(prefix), ""), {});
+            const pos = getAdjustedStartPosition(sourceFile, node, {}, Position.Start);
+            this.replaceRange(sourceFile, { pos, end: pos }, createPropertyAccess(createIdentifier(prefix), ""), {});
         }
 
         private getOptionsForInsertNodeBefore(before: Node, doubleNewlines: boolean): ChangeNodeOptions {
@@ -390,8 +384,8 @@ namespace ts.textChanges {
         }
 
         public insertNodeAtEndOfScope(sourceFile: SourceFile, scope: Node, newNode: Node): void {
-            const startPosition = getAdjustedStartPosition(sourceFile, scope.getLastToken()!, {}, Position.Start);
-            this.replaceWithSingle(sourceFile, startPosition, startPosition, newNode, {
+            const pos = getAdjustedStartPosition(sourceFile, scope.getLastToken()!, {}, Position.Start);
+            this.replaceRange(sourceFile, { pos, end: pos }, newNode, {
                 prefix: isLineBreak(sourceFile.text.charCodeAt(scope.getLastToken()!.pos)) ? this.newLineCharacter : this.newLineCharacter + this.newLineCharacter,
                 suffix: this.newLineCharacter
             });
@@ -433,7 +427,7 @@ namespace ts.textChanges {
                 }
             }
             const endPosition = getAdjustedEndPosition(sourceFile, after, {});
-            return this.replaceWithSingle(sourceFile, endPosition, endPosition, newNode, this.getInsertNodeAfterOptions(after));
+            return this.replaceRange(sourceFile, { pos: endPosition, end: endPosition }, newNode, this.getInsertNodeAfterOptions(after));
         }
 
         private getInsertNodeAfterOptions(node: Node): InsertNodeOptions {
@@ -620,10 +614,7 @@ namespace ts.textChanges {
                 const sourceFile = changesInFile[0].sourceFile;
                 const fileTextChanges: FileTextChanges = { fileName: sourceFile.fileName, textChanges: [] };
                 for (const c of ChangeTracker.normalize(changesInFile)) {
-                    fileTextChanges.textChanges.push({
-                        span: this.computeSpan(c, sourceFile),
-                        newText: this.computeNewText(c, sourceFile)
-                    });
+                    fileTextChanges.textChanges.push(createTextChange(this.computeSpan(c, sourceFile), this.computeNewText(c, sourceFile)));
                 }
                 fileChangesList.push(fileTextChanges);
             });
@@ -632,7 +623,7 @@ namespace ts.textChanges {
         }
 
         private computeSpan(change: Change, _sourceFile: SourceFile): TextSpan {
-            return createTextSpanFromBounds(change.range.pos, change.range.end);
+            return createTextSpanFromRange(change.range);
         }
 
         private computeNewText(change: Change, sourceFile: SourceFile): string {
@@ -646,8 +637,14 @@ namespace ts.textChanges {
             const pos = change.range.pos;
             const posStartsLine = getLineStartPositionForPosition(pos, sourceFile) === pos;
             if (change.kind === ChangeKind.ReplaceWithMultipleNodes) {
-                const parts = change.nodes.map(n => this.getFormattedTextOfNode(n, sourceFile, pos, options));
-                text = parts.join(change.options!.nodeSeparator); // TODO: GH#18217
+                const lastIndex = change.nodes.length - 1;
+                const parts = change.nodes.map((n, index) => {
+                    const formatted = this.getFormattedTextOfNode(n, sourceFile, pos, options);
+                    return index === lastIndex || endsWith(formatted, this.newLineCharacter)
+                        ? formatted
+                        : (formatted + this.newLineCharacter);
+                });
+                text = parts.join("");
             }
             else {
                 Debug.assert(change.kind === ChangeKind.ReplaceWithSingleNode, "change.kind === ReplaceWithSingleNode");

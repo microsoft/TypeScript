@@ -62,7 +62,7 @@ var r2 = _.all([true], _.identity);
 >_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
 >_ : Underscore.Static
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
->[true] : boolean[]
+>[true] : true[]
 >true : true
 >_.identity : <T>(value: T) => T
 >_ : Underscore.Static

@@ -24,13 +24,9 @@ namespace ts.codefix {
             },
             {
                 description: getLocaleSpecificMessage(Diagnostics.Disable_checking_for_this_file),
-                changes: [createFileTextChanges(sourceFile.fileName, [{
-                    span: {
-                        start: sourceFile.checkJsDirective ? sourceFile.checkJsDirective.pos : 0,
-                        length: sourceFile.checkJsDirective ? sourceFile.checkJsDirective.end - sourceFile.checkJsDirective.pos : 0
-                    },
-                    newText: `// @ts-nocheck${newLineCharacter}`
-                }])],
+                changes: [createFileTextChanges(sourceFile.fileName, [
+                    createTextChange(sourceFile.checkJsDirective ? createTextSpanFromBounds(sourceFile.checkJsDirective.pos, sourceFile.checkJsDirective.end) : createTextSpan(0, 0), `// @ts-nocheck${newLineCharacter}`),
+                ])],
                 // fixId unnecessary because adding `// @ts-nocheck` even once will ignore every error in the file.
                 fixId: undefined,
             }];
@@ -62,15 +58,11 @@ namespace ts.codefix {
             const token = getTouchingToken(sourceFile, startPosition, /*includeJsDocComment*/ false);
             const tokenLeadingComments = getLeadingCommentRangesOfNode(token, sourceFile);
             if (!tokenLeadingComments || !tokenLeadingComments.length || tokenLeadingComments[0].pos >= startPosition) {
-                return { lineNumber, change: createTextChange(startPosition, 0, `// @ts-ignore${newLineCharacter}`) };
+                return { lineNumber, change: createTextChangeFromStartLength(startPosition, 0, `// @ts-ignore${newLineCharacter}`) };
             }
         }
 
         // If all fails, add an extra new line immediately before the error span.
-        return { lineNumber, change: createTextChange(position, 0, `${position === startPosition ? "" : newLineCharacter}// @ts-ignore${newLineCharacter}`) };
-    }
-
-    function createTextChange(start: number, length: number, newText: string): TextChange {
-        return { span: { start, length }, newText };
+        return { lineNumber, change: createTextChangeFromStartLength(position, 0, `${position === startPosition ? "" : newLineCharacter}// @ts-ignore${newLineCharacter}`) };
     }
 }

@@ -41,15 +41,15 @@ namespace ts.server.typingsInstaller {
     }
 
     interface TypesRegistryFile {
-        entries: MapLike<void>;
+        entries: MapLike<MapLike<string>>;
     }
 
-    function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypingHost, log: Log): Map<void> {
+    function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypingHost, log: Log): Map<MapLike<string>> {
         if (!host.fileExists(typesRegistryFilePath)) {
             if (log.isEnabled()) {
                 log.writeLine(`Types registry file '${typesRegistryFilePath}' does not exist`);
             }
-            return createMap<void>();
+            return createMap<MapLike<string>>();
         }
         try {
             const content = <TypesRegistryFile>JSON.parse(host.readFile(typesRegistryFilePath)!);
@@ -59,7 +59,7 @@ namespace ts.server.typingsInstaller {
             if (log.isEnabled()) {
                 log.writeLine(`Error when loading types registry file '${typesRegistryFilePath}': ${(<Error>e).message}, ${(<Error>e).stack}`);
             }
-            return createMap<void>();
+            return createMap<MapLike<string>>();
         }
     }
 
@@ -77,7 +77,7 @@ namespace ts.server.typingsInstaller {
     export class NodeTypingsInstaller extends TypingsInstaller {
         private readonly nodeExecSync: ExecSync;
         private readonly npmPath: string;
-        readonly typesRegistry: Map<void>;
+        readonly typesRegistry: Map<MapLike<string>>;
 
         private delayedInitializationError: InitializationFailedResponse | undefined;
 
@@ -141,7 +141,7 @@ namespace ts.server.typingsInstaller {
                         this.closeProject(req);
                         break;
                     case "typesRegistry": {
-                        const typesRegistry: { [key: string]: void } = {};
+                        const typesRegistry: { [key: string]: MapLike<string> } = {};
                         this.typesRegistry.forEach((value, key) => {
                             typesRegistry[key] = value;
                         });

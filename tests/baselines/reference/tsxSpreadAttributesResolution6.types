@@ -35,7 +35,7 @@ let x = <TextComponent editable={true} />
 >x : JSX.Element
 ><TextComponent editable={true} /> : JSX.Element
 >TextComponent : typeof TextComponent
->editable : boolean
+>editable : true
 >true : true
 
 const textProps: TextProps = {

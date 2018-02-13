@@ -92,6 +92,9 @@ namespace ts.formatting {
             rule("SpaceBetweenCloseBraceAndWhile", SyntaxKind.CloseBraceToken, SyntaxKind.WhileKeyword, [isNonJsxSameLineTokenContext], RuleAction.Space),
             rule("NoSpaceBetweenEmptyBraceBrackets", SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, [isNonJsxSameLineTokenContext, isObjectContext], RuleAction.Delete),
 
+            // Add a space after control dec context if the next character is an open bracket ex: 'if (false)[a, b] = [1, 2];' -> 'if (false) [a, b] = [1, 2];'
+            rule("SpaceAfterConditionalClosingParen", SyntaxKind.CloseParenToken, SyntaxKind.OpenBracketToken, [isControlDeclContext], RuleAction.Space),
+
             rule("NoSpaceBetweenFunctionKeywordAndStar", SyntaxKind.FunctionKeyword, SyntaxKind.AsteriskToken, [isFunctionDeclarationOrFunctionExpressionContext], RuleAction.Delete),
             rule("SpaceAfterStarInGeneratorDeclaration", SyntaxKind.AsteriskToken, [SyntaxKind.Identifier, SyntaxKind.OpenParenToken], [isFunctionDeclarationOrFunctionExpressionContext], RuleAction.Space),
 
@@ -162,6 +165,7 @@ namespace ts.formatting {
                     SyntaxKind.TypeKeyword,
                     SyntaxKind.FromKeyword,
                     SyntaxKind.KeyOfKeyword,
+                    SyntaxKind.InferKeyword,
                 ],
                 anyToken,
                 [isNonJsxSameLineTokenContext],
@@ -409,6 +413,7 @@ namespace ts.formatting {
         switch (context.contextNode.kind) {
             case SyntaxKind.BinaryExpression:
             case SyntaxKind.ConditionalExpression:
+            case SyntaxKind.ConditionalType:
             case SyntaxKind.AsExpression:
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.ImportSpecifier:
@@ -461,7 +466,8 @@ namespace ts.formatting {
     }
 
     function isConditionalOperatorContext(context: FormattingContext): boolean {
-        return context.contextNode.kind === SyntaxKind.ConditionalExpression;
+        return context.contextNode.kind === SyntaxKind.ConditionalExpression ||
+                context.contextNode.kind === SyntaxKind.ConditionalType;
     }
 
     function isSameLineTokenOrBeforeBlockContext(context: FormattingContext): boolean {
@@ -469,7 +475,9 @@ namespace ts.formatting {
     }
 
     function isBraceWrappedContext(context: FormattingContext): boolean {
-        return context.contextNode.kind === SyntaxKind.ObjectBindingPattern || isSingleLineBlockContext(context);
+        return context.contextNode.kind === SyntaxKind.ObjectBindingPattern ||
+            context.contextNode.kind === SyntaxKind.MappedType ||
+            isSingleLineBlockContext(context);
     }
 
     // This check is done before an open brace in a control construct, a function, or a typescript block declaration

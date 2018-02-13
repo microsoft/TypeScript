@@ -17,6 +17,7 @@ function blah () {
 >K : Symbol(K, Decl(moduleElementsInWrongContext2.ts, 6, 16))
 
     declare module "ambient" {
+>"ambient" : Symbol("ambient", Decl(moduleElementsInWrongContext2.ts, 6, 21))
 
     }
 

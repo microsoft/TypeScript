@@ -13,6 +13,8 @@ namespace N1 {
 }
 
 declare module "./observable" {
+>"./observable" : typeof "tests/cases/compiler/observable"
+
     var x: number;
 >x : number
 
@@ -70,6 +72,8 @@ declare module "./observable" {
 }
 
 declare module "./test" {
+>"./test" : typeof "tests/cases/compiler/test"
+
     export = N1;
 >N1 : typeof N1
 }

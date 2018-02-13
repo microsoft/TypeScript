@@ -101,6 +101,7 @@ namespace ts {
         HasLocals = 1 << 5,
         IsInterface = 1 << 6,
         IsObjectLiteralOrClassExpressionMethod = 1 << 7,
+        IsInferenceContainer = 1 << 8,
     }
 
     const binder = createBinder();
@@ -119,6 +120,7 @@ namespace ts {
         let parent: Node;
         let container: Node;
         let blockScopeContainer: Node;
+        let inferenceContainer: Node;
         let lastContainer: Node;
         let seenThisKeyword: boolean;
 
@@ -186,6 +188,7 @@ namespace ts {
             parent = undefined!;
             container = undefined!;
             blockScopeContainer = undefined!;
+            inferenceContainer = undefined!;
             lastContainer = undefined!;
             seenThisKeyword = false;
             currentFlow = undefined!;
@@ -564,6 +567,13 @@ namespace ts {
                 seenThisKeyword = false;
                 bindChildren(node);
                 node.flags = seenThisKeyword ? node.flags | NodeFlags.ContainsThis : node.flags & ~NodeFlags.ContainsThis;
+            }
+            else if (containerFlags & ContainerFlags.IsInferenceContainer) {
+                const saveInferenceContainer = inferenceContainer;
+                inferenceContainer = node;
+                node.locals = undefined;
+                bindChildren(node);
+                inferenceContainer = saveInferenceContainer;
             }
             else {
                 bindChildren(node);
@@ -1421,6 +1431,9 @@ namespace ts {
                 case SyntaxKind.MappedType:
                     return ContainerFlags.IsContainer | ContainerFlags.HasLocals;
 
+                case SyntaxKind.ConditionalType:
+                    return ContainerFlags.IsInferenceContainer;
+
                 case SyntaxKind.SourceFile:
                     return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals;
 
@@ -2064,7 +2077,7 @@ namespace ts {
                 case SyntaxKind.TypePredicate:
                     return checkTypePredicate(node as TypePredicateNode);
                 case SyntaxKind.TypeParameter:
-                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
+                    return bindTypeParameter(node as TypeParameterDeclaration);
                 case SyntaxKind.Parameter:
                     return bindParameter(<ParameterDeclaration>node);
                 case SyntaxKind.VariableDeclaration:
@@ -2579,6 +2592,23 @@ namespace ts {
             return hasDynamicName(node)
                 ? bindAnonymousDeclaration(node, symbolFlags, InternalSymbolName.Computed)
                 : declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes);
+        }
+
+        function bindTypeParameter(node: TypeParameterDeclaration) {
+            if (node.parent.kind === SyntaxKind.InferType) {
+                if (inferenceContainer) {
+                    if (!inferenceContainer.locals) {
+                        inferenceContainer.locals = createSymbolTable();
+                    }
+                    declareSymbol(inferenceContainer.locals, /*parent*/ undefined, node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
+                }
+                else {
+                    bindAnonymousDeclaration(node, SymbolFlags.TypeParameter, getDeclarationName(node)!); // TODO: GH#18217
+                }
+            }
+            else {
+                declareSymbolAndAddToSymbolTable(node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
+            }
         }
 
         // reachability checks
@@ -3445,6 +3475,8 @@ namespace ts {
             case SyntaxKind.TupleType:
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
+            case SyntaxKind.ConditionalType:
+            case SyntaxKind.InferType:
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.TypeAliasDeclaration:

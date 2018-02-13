@@ -42,15 +42,9 @@ namespace ts {
         program: Program;
     }
 
-    function hasSameKeys<T, U>(map1: ReadonlyMap<T> | undefined, map2: ReadonlyMap<U> | undefined) {
-        if (map1 === undefined) {
-            return map2 === undefined;
-        }
-        if (map2 === undefined) {
-            return map1 === undefined;
-        }
+    function hasSameKeys<T, U>(map1: ReadonlyMap<T> | undefined, map2: ReadonlyMap<U> | undefined): boolean {
         // Has same size and every key is present in both maps
-        return map1.size === map2.size && !forEachKey(map1, key => !map2.has(key));
+        return map1 as ReadonlyMap<T | U> === map2 || map1 !== undefined && map2 !== undefined && map1.size === map2.size && !forEachKey(map1, key => !map2.has(key));
     }
 
     /**

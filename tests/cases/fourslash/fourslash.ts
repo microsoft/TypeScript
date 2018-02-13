@@ -102,7 +102,7 @@ declare namespace FourSlashInterface {
     }
     interface Range {
         fileName: string;
-        start: number;
+        pos: number;
         end: number;
         marker?: Marker;
     }
@@ -157,6 +157,7 @@ declare namespace FourSlashInterface {
                 sourceDisplay?: string,
                 isRecommended?: true,
                 insertText?: string,
+                replacementSpan?: Range,
             },
         ): void;
         completionListItemsCountIsGreaterThan(count: number): void;
@@ -288,7 +289,7 @@ declare namespace FourSlashInterface {
         baselineGetEmitOutput(): void;
         baselineQuickInfo(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
-        outliningSpansInCurrentFile(spans: TextSpan[]): void;
+        outliningSpansInCurrentFile(spans: Range[]): void;
         todoCommentsInCurrentFile(descriptors: string[]): void;
         matchingBracePositionInCurrentFile(bracePosition: number, expectedMatchPosition: number): void;
         noMatchingBracePositionInCurrentFile(bracePosition: number): void;
@@ -310,7 +311,9 @@ declare namespace FourSlashInterface {
         occurrencesAtPositionCount(expectedCount: number): void;
         rangesAreDocumentHighlights(ranges?: Range[]): void;
         rangesWithSameTextAreDocumentHighlights(): void;
-        documentHighlightsOf(startRange: Range, ranges: Range[]): void;
+        documentHighlightsOf(startRange: Range, ranges: Range[], options?: {
+            filesToSearch?: ReadonlyArray<string>;
+        }): void;
         completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]): void;
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
