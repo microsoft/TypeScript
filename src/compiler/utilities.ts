@@ -5947,4 +5947,8 @@ namespace ts {
     export function isTypeReferenceType(node: Node): node is TypeReferenceType {
         return node.kind === SyntaxKind.TypeReference || node.kind === SyntaxKind.ExpressionWithTypeArguments;
     }
+
+    export function isStringLiteralLike(node: Node): node is StringLiteralLike {
+        return node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
+    }
 }
