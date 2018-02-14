@@ -4174,6 +4174,11 @@ namespace ts {
         }
 
         function getWidenedTypeFromJSSpecialPropertyDeclarations(symbol: Symbol) {
+            // function/class/{} assignments are fresh declarations, not property assignments:
+            const specialDeclaration = getAssignedJavascriptInitializer(symbol.valueDeclaration);
+            if (specialDeclaration) {
+                return getWidenedLiteralType(checkExpressionCached(specialDeclaration));
+            }
             const types: Type[] = [];
             let definedInConstructor = false;
             let definedInMethod = false;
@@ -4367,18 +4372,6 @@ namespace ts {
                 if (isInJavaScriptFile(declaration) && isJSDocPropertyLikeTag(declaration) && declaration.typeExpression) {
                     return links.type = getTypeFromTypeNode(declaration.typeExpression.type);
                 }
-                if (isInJavaScriptFile(declaration) && isDeclarationOfDefaultedJavascriptContainerExpression(declaration)) {
-                    // !!! (probably out of place, probably not the right function to call)
-                    return links.type = checkExpression(((declaration as VariableDeclaration).initializer as BinaryExpression).right);
-                }
-                if (isInJavaScriptFile(declaration) && isAssignmentOfDefaultedJavascriptContainerExpression(declaration.parent)) {
-                    // !!! (probably out of place, probably not the right function to call)
-                    return links.type = checkExpression(((declaration.parent as BinaryExpression).right as BinaryExpression).right);
-                }
-                // TODO: Not sure this is needed (probably, but I need to write a test case for it)
-                if (isInJavaScriptFile(declaration) && isAssignmentOfJavascriptContainerExpression(declaration)) {
-                    return links.type = checkExpression((declaration.parent as BinaryExpression).right);
-                }
                 // Handle variable, parameter or property
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                     return unknownType;
@@ -4399,7 +4392,6 @@ namespace ts {
                     || isIdentifier(declaration)
                     || (isMethodDeclaration(declaration) && !isObjectLiteralMethod(declaration))
                     || isMethodSignature(declaration)) {
-                    // TODO: Might need to add a case here?
                     // Symbol is property of some kind that is merged with something - should use `getTypeOfFuncClassEnumModule` and not `getTypeOfVariableOrParameterOrProperty`
                     if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
                         return getTypeOfFuncClassEnumModule(symbol);
@@ -14120,7 +14112,8 @@ namespace ts {
                     // expression has no contextual type, the right operand is contextually typed by the type of the left operand,
                     // except for the special case of Javascript declarations of the form `namespace.prop = namespace.prop || {}`
                     const type = getContextualType(binaryExpression);
-                    return !type && node === right && !isDeclarationOfDefaultedJavascriptContainerExpression(binaryExpression.parent) && !isAssignmentOfDefaultedJavascriptContainerExpression(binaryExpression.parent) ? getTypeOfExpression(left, /*cache*/ true) : type;
+                    return !type && node === right && !getDeclaredJavascriptInitializer(binaryExpression.parent) && !getAssignedJavascriptInitializer(binaryExpression) ?
+                        getTypeOfExpression(left, /*cache*/ true) : type;
                 case SyntaxKind.AmpersandAmpersandToken:
                 case SyntaxKind.CommaToken:
                     return node === right ? getContextualType(binaryExpression) : undefined;
@@ -18994,7 +18987,7 @@ namespace ts {
         }
 
         function checkBinaryExpression(node: BinaryExpression, checkMode?: CheckMode) {
-            if (node.operatorToken.kind === SyntaxKind.BarBarToken && isInJavaScriptFile(node) && isAssignmentOfDefaultedJavascriptContainerExpression(node.parent)) {
+            if (node.operatorToken.kind === SyntaxKind.BarBarToken && isInJavaScriptFile(node) && getAssignedJavascriptInitializer(node)) {
                 return checkExpression(node.right, checkMode);
             }
             return checkBinaryLikeExpression(node.left, node.operatorToken, node.right, checkMode, node);
@@ -19352,10 +19345,11 @@ namespace ts {
         }
 
         function checkDeclarationInitializer(declaration: HasExpressionInitializer) {
-            const type = getTypeOfExpression(declaration.initializer, /*cache*/ true);
+            const initializer = isInJavaScriptFile(declaration) && getDeclaredJavascriptInitializer(declaration) || declaration.initializer;
+            const type = getTypeOfExpression(initializer, /*cache*/ true);
             return getCombinedNodeFlags(declaration) & NodeFlags.Const ||
                 (getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration)) ||
-                isTypeAssertion(declaration.initializer) ? type : getWidenedLiteralType(type);
+                isTypeAssertion(initializer) ? type : getWidenedLiteralType(type);
         }
 
         function isLiteralOfContextualType(candidateType: Type, contextualType: Type): boolean {
@@ -21872,7 +21866,7 @@ namespace ts {
                 // Node is the primary declaration of the symbol, just validate the initializer
                 // Don't validate for-in initializer as it is already an error
                 if (node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
-                    const initializer = isInJavaScriptFile(node) && isDeclarationOfDefaultedJavascriptContainerExpression(node) ? (node.initializer as BinaryExpression).right : node.initializer;
+                    const initializer = isInJavaScriptFile(node) && getDeclaredJavascriptInitializer(node) || node.initializer;
                     checkTypeAssignableTo(checkExpressionCached(initializer), type, node, /*headMessage*/ undefined);
                     checkParameterInitializer(node);
                 }

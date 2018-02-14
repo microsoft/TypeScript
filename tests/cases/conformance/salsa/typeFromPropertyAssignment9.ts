@@ -17,6 +17,9 @@ my.predicate.query = function () {
     me.property = false;
 };
 var q = new my.predicate.query();
+my.predicate.query.another = function () {
+    return 1;
+}
 my.predicate.query.result = 'none'
 /** @param {number} first
  *  @param {number} second

@@ -1487,60 +1487,57 @@ namespace ts {
     }
 
     export function follow(symbol: Symbol) {
-        return symbol && isDeclarationOfJavascriptContainerExpression(symbol.valueDeclaration) ? (symbol.valueDeclaration as VariableDeclaration).initializer.symbol :
-            symbol && isDeclarationOfDefaultedJavascriptContainerExpression(symbol.valueDeclaration) ? ((symbol.valueDeclaration as VariableDeclaration).initializer as BinaryExpression).right.symbol :
-            symbol && symbol.valueDeclaration && isAssignmentOfDefaultedJavascriptContainerExpression(symbol.valueDeclaration.parent) ? (((symbol.valueDeclaration.parent as BinaryExpression).right as BinaryExpression).right as BinaryExpression).symbol :
-            symbol && isAssignmentOfJavascriptContainerExpression(symbol.valueDeclaration) ? ((symbol.valueDeclaration.parent as BinaryExpression).right as BinaryExpression).symbol :
-            symbol;
+        if (!symbol || !symbol.valueDeclaration) {
+            return symbol;
+        }
+        const declaration = symbol.valueDeclaration;
+        const e = getDeclaredJavascriptInitializer(declaration) || getAssignedJavascriptInitializer(declaration);
+        return e ? e.symbol : symbol;
     }
 
     /**
      * Returns true if the node is a variable declaration whose initializer is a function or class expression, or an empty object literal.
      * This function does not test if the node is in a JavaScript file or not.
      */
-    export function isDeclarationOfJavascriptContainerExpression(node: Node): node is VariableDeclaration {
-        return node &&
-            isVariableDeclaration(node) &&
-            node.initializer &&
-            isJavascriptContainerExpression(node.initializer);
+    export function getDeclaredJavascriptInitializer(node: Node) {
+        if (node && isVariableDeclaration(node) && node.initializer) {
+            return getJavascriptInitializer(node.initializer) ||
+                isIdentifier(node.name) && getDefaultedJavascriptInitializer(node.name, node.initializer);
+        }
     }
 
-    function isJavascriptContainerExpression(e: Expression) {
-        return e.kind === SyntaxKind.FunctionExpression ||
-            e.kind === SyntaxKind.ClassExpression ||
-            isObjectLiteralExpression(e) && e.properties.length === 0;
+    export function getAssignedJavascriptInitializer(node: Node) {
+        return (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.BarBarToken || isPropertyAccessExpression(node)) &&
+            node.parent && isBinaryExpression(node.parent) &&
+            node.parent.operatorToken.kind === SyntaxKind.EqualsToken &&
+            (getJavascriptInitializer(node.parent.right) || getDefaultedJavascriptInitializer(node.parent.left as EntityNameExpression, node.parent.right));
     }
 
-    export function isDeclarationOfDefaultedJavascriptContainerExpression(node: Node): node is VariableDeclaration {
-        return node &&
-            isVariableDeclaration(node) &&
-            node.initializer &&
-            isBinaryExpression(node.initializer) &&
-            isIdentifier(node.name) &&
-            isSameName(node.name, node.initializer.left as EntityNameExpression) &&
-            isJavascriptContainerExpression(node.initializer.right);
+    function getJavascriptInitializer(e: Expression) {
+        if(e.kind === SyntaxKind.FunctionExpression ||
+           e.kind === SyntaxKind.ClassExpression ||
+           isObjectLiteralExpression(e) && e.properties.length === 0) {
+            return e;
+        }
     }
 
-    export function isAssignmentOfJavascriptContainerExpression(node: Node) {
-        return node &&
-            isPropertyAccessExpression(node) &&
-            isBinaryExpression(node.parent) &&
-            node.parent.right &&
-            isJavascriptContainerExpression(node.parent.right);
+    function getDefaultedJavascriptInitializer(name: EntityNameExpression, initializer: Expression) {
+        const e = isBinaryExpression(initializer) && getJavascriptInitializer(initializer.right)
+        if (e && isSameEntityName(name, (initializer as BinaryExpression).left as EntityNameExpression)) {
+            return e;
+        }
     }
 
-    export function isAssignmentOfDefaultedJavascriptContainerExpression(node: Node) {
-        // or ... uh ... maybe not? usage is pretty inconvenient
-        // (changing what is the declaration might instead be the right answer)
-        return node &&
-            isBinaryExpression(node) &&
-            node.right &&
-            isBinaryExpression(node.right) &&
-            isSameName(node.left as EntityNameExpression, node.right.left as EntityNameExpression) &&
-            isJavascriptContainerExpression(node.right.right);
-    }
-
-    function isSameName(name: EntityNameExpression, initializer: EntityNameExpression): boolean {
+    /**
+     * Is the 'declared' name the same as the one in the initializer?
+     * @return true for identical entity names, as well as ones where the initializer is prefixed with
+     * 'window', 'self' or 'global'. For example:
+     *
+     * var my = my || {}
+     * var min = window.min || {}
+     * my.app = self.my.app || class { }
+     */
+    function isSameEntityName(name: EntityNameExpression, initializer: EntityNameExpression): boolean {
         if (isIdentifier(name) && isIdentifier(initializer)) {
             return name.escapedText === initializer.escapedText;
         }
@@ -1550,10 +1547,10 @@ namespace ts {
                     (initializer.expression.escapedText === "window" as __String ||
                      initializer.expression.escapedText === "self" as __String ||
                      initializer.expression.escapedText === "global" as __String)) &&
-                isSameName(name, initializer.name);
+                isSameEntityName(name, initializer.name);
         }
         if (isPropertyAccessExpression(name) && isPropertyAccessExpression(initializer)) {
-            return name.name.escapedText === initializer.name.escapedText && isSameName(name.expression, initializer.expression);
+            return name.name.escapedText === initializer.name.escapedText && isSameEntityName(name.expression, initializer.expression);
         }
         return false;
     }
