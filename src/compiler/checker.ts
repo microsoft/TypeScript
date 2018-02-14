@@ -191,6 +191,14 @@ namespace ts {
                 node = getParseTreeNode(node, isExpression);
                 return node ? getContextualType(node) : undefined;
             },
+            getContextualTypeForArgumentAtIndex: (node, argIndex) => {
+                node = getParseTreeNode(node, isCallLikeExpression);
+                return node && getContextualTypeForArgumentAtIndex(node, argIndex);
+            },
+            getContextualTypeForJsxAttribute: (node) => {
+                node = getParseTreeNode(node, isJsxAttributeLike);
+                return node && getContextualTypeForJsxAttribute(node);
+            },
             isContextSensitive,
             getFullyQualifiedName,
             getResolvedSignature: (node, candidatesOutArray, theArgumentCount) => {
@@ -14185,14 +14193,15 @@ namespace ts {
         // In a typed function call, an argument or substitution expression is contextually typed by the type of the corresponding parameter.
         function getContextualTypeForArgument(callTarget: CallLikeExpression, arg: Expression): Type {
             const args = getEffectiveCallArguments(callTarget);
-            const argIndex = args.indexOf(arg);
-            if (argIndex >= 0) {
-                // If we're already in the process of resolving the given signature, don't resolve again as
-                // that could cause infinite recursion. Instead, return anySignature.
-                const signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget);
-                return getTypeAtPosition(signature, argIndex);
-            }
-            return undefined;
+            const argIndex = args.indexOf(arg); // -1 for e.g. the expression of a CallExpression, or the tag of a TaggedTemplateExpression
+            return argIndex === -1 ? undefined : getContextualTypeForArgumentAtIndex(callTarget, argIndex);
+        }
+
+        function getContextualTypeForArgumentAtIndex(callTarget: CallLikeExpression, argIndex: number): Type {
+            // If we're already in the process of resolving the given signature, don't resolve again as
+            // that could cause infinite recursion. Instead, return anySignature.
+            const signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget);
+            return getTypeAtPosition(signature, argIndex);
         }
 
         function getContextualTypeForSubstitutionExpression(template: TemplateExpression, substitutionExpression: Expression) {
@@ -14326,7 +14335,7 @@ namespace ts {
                     : undefined;
         }
 
-        function getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute) {
+        function getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute): Type | undefined {
             // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give its attributes a contextual type
             // which is a type of the parameter of the signature we are trying out.
             // If there is no contextual type (e.g. we are trying to resolve stateful component), get attributes type from resolving element's tagName
