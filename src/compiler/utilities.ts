@@ -1620,17 +1620,19 @@ namespace ts {
             node.expression.right;
     }
 
-    function getSingleInitializerOfVariableStatement(node: Node, child?: Node): Node {
-        return isVariableStatement(node) &&
-            node.declarationList.declarations.length > 0 &&
-            (!child || node.declarationList.declarations[0].initializer === child) &&
-            node.declarationList.declarations[0].initializer;
+    function getSingleInitializerOfVariableStatementOrPropertyDeclaration(node: Node): Expression | undefined {
+        switch (node.kind) {
+            case ts.SyntaxKind.VariableStatement:
+                const v = getSingleVariableOfVariableStatement(node);
+                return v && v.initializer;
+            case ts.SyntaxKind.PropertyDeclaration:
+                return (node as PropertyDeclaration).initializer;
+        }
     }
 
-    function getSingleVariableOfVariableStatement(node: Node, child?: Node): Node {
+    function getSingleVariableOfVariableStatement(node: Node): VariableDeclaration | undefined {
         return isVariableStatement(node) &&
             node.declarationList.declarations.length > 0 &&
-            (!child || node.declarationList.declarations[0] === child) &&
             node.declarationList.declarations[0];
     }
 
@@ -1648,7 +1650,7 @@ namespace ts {
 
         function getJSDocCommentsAndTagsWorker(node: Node): void {
             const parent = node.parent;
-            if (parent && (parent.kind === SyntaxKind.PropertyAssignment || getNestedModuleDeclaration(parent))) {
+            if (parent && (parent.kind === SyntaxKind.PropertyAssignment || parent.kind === SyntaxKind.PropertyDeclaration || getNestedModuleDeclaration(parent))) {
                 getJSDocCommentsAndTagsWorker(parent);
             }
             // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement.
@@ -1658,10 +1660,10 @@ namespace ts {
             //   */
             // var x = function(name) { return name.length; }
             if (parent && parent.parent &&
-                (getSingleVariableOfVariableStatement(parent.parent, node) || getSourceOfAssignment(parent.parent))) {
+                (getSingleVariableOfVariableStatement(parent.parent) === node || getSourceOfAssignment(parent.parent))) {
                 getJSDocCommentsAndTagsWorker(parent.parent);
             }
-            if (parent && parent.parent && parent.parent.parent && getSingleInitializerOfVariableStatement(parent.parent.parent, node)) {
+            if (parent && parent.parent && parent.parent.parent && getSingleInitializerOfVariableStatementOrPropertyDeclaration(parent.parent.parent) === node) {
                 getJSDocCommentsAndTagsWorker(parent.parent.parent);
             }
             if (isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) !== SpecialPropertyAssignmentKind.None ||
@@ -1704,7 +1706,7 @@ namespace ts {
     export function getHostSignatureFromJSDoc(node: JSDocParameterTag): FunctionLike | undefined {
         const host = getJSDocHost(node);
         const decl = getSourceOfAssignment(host) ||
-            getSingleInitializerOfVariableStatement(host) ||
+            getSingleInitializerOfVariableStatementOrPropertyDeclaration(host) ||
             getSingleVariableOfVariableStatement(host) ||
             getNestedModuleDeclaration(host) ||
             host;
