@@ -2408,9 +2408,8 @@ namespace ts {
             }
         }
 
-        function isValidInitializer(initializer: Node) {
-            return initializer === undefined ||
-                initializer.kind === SyntaxKind.ClassExpression ||
+        function isNamespaceableInitializer(initializer: Node) {
+            return initializer.kind === SyntaxKind.ClassExpression ||
                 initializer.kind === SyntaxKind.FunctionExpression ||
                 initializer.kind === SyntaxKind.ObjectLiteralExpression && (initializer as ObjectLiteralExpression).properties.length === 0 ||
                 initializer.kind === SyntaxKind.CallExpression && (skipParentheses((initializer as CallExpression).expression).kind === SyntaxKind.FunctionExpression ||
@@ -2424,34 +2423,28 @@ namespace ts {
             Debug.assert(propertyAccess.parent.kind === SyntaxKind.BinaryExpression ||
                          propertyAccess.parent.kind === SyntaxKind.ExpressionStatement ||
                          propertyAccess.parent.kind === SyntaxKind.PropertyAccessExpression);
-            const isLegalPosition = propertyAccess.parent.kind === SyntaxKind.BinaryExpression ?
-                propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile && isValidInitializer((propertyAccess.parent as BinaryExpression).right) :
-                propertyAccess.parent.parent.kind === SyntaxKind.SourceFile && isValidInitializer((propertyAccess.parent as VariableDeclaration).initializer);
-            if (!isPrototypeProperty && (!symbol || !(symbol.flags & SymbolFlags.Namespace)) && isLegalPosition) {
+            const isToplevelNamespaceableInitializer = propertyAccess.parent.kind === SyntaxKind.BinaryExpression ?
+                propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile && isNamespaceableInitializer((propertyAccess.parent as BinaryExpression).right) :
+                propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
+            if (!isPrototypeProperty && (!symbol || !(symbol.flags & SymbolFlags.Namespace)) && isToplevelNamespaceableInitializer) {
                 const flags = SymbolFlags.Module | SymbolFlags.JSContainer;
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.JSContainer;
-                // hm. This is only needed to make namespaced access of types workable. Namespaced access of *values* doesn't work now either, so something is wrong.
-                // (Note: for the non-nested case, at least, addDeclarationToSymbol is only needed for things that could be further namespaces, because it
-                // makes the intermediate namespace. However, I think something like it is needed for *all* nested assignments, in case their intermediate namespaces don't exist)
-                iterateEntityNameExpression(propertyAccess.expression, (id, originalSymbol, available) => {
-                    if (symbol) {
-                        if (available) {
-                            // Note: add declaration to original symbol, not the special-syntax's symbol, so that namespaces work for type lookup
-                            addDeclarationToSymbol(originalSymbol, id, flags);
-                            // TODO: Why can't I overwrite symbol here? I'm having trouble tracking symbol's state.
-                            return originalSymbol;
-                        }
-                        else {
-                            originalSymbol.exports = originalSymbol.exports || createSymbolTable();
-                            symbol = declareSymbol(originalSymbol.exports, originalSymbol, id, flags, excludeFlags);
-                            return symbol;
-                        }
+                // addDeclarationToSymbol is only needed for things that could be further containers, because it makes the intermediate namespace symbol.
+                iterateEntityNameExpression(propertyAccess.expression, (id, original) => {
+                    if (original) {
+                        // Note: add declaration to original symbol, not the special-syntax's symbol, so that namespaces work for type lookup
+                        addDeclarationToSymbol(original, id, flags);
+                        return original;
+                    }
+                    else if (symbol) {
+                        symbol.exports = symbol.exports || createSymbolTable();
+                        symbol = declareSymbol(symbol.exports, symbol, id, flags, excludeFlags);
                     }
                     else {
-                        Debug.assert(!available);
+                        Debug.assert(!original);
                         symbol = declareSymbol(container.locals, /*parent*/ undefined, id, flags, excludeFlags);
-                        return symbol;
                     }
+                    return symbol;
                 });
             }
             if (!symbol || !(symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule | SymbolFlags.ObjectLiteral))) {
@@ -2467,17 +2460,15 @@ namespace ts {
             declareSymbol(symbolTable, symbol, propertyAccess, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
         }
 
-        function iterateEntityNameExpression(e: EntityNameExpression, action: (e: Identifier, originalSymbol: Symbol, available: boolean) => Symbol): Symbol {
+        function iterateEntityNameExpression(e: EntityNameExpression, action: (e: Identifier, symbol: Symbol) => Symbol): Symbol {
             if (isIdentifier(e)) {
-                const s = lookupSymbolForPropertyAccess(e);
-                return action(e, s, !!s);
+                return action(e, lookupSymbolForPropertyAccess(e));
             }
             else {
                 const s = follow(iterateEntityNameExpression(e.expression, action));
                 Debug.assert(!!s, "lost the chant");
-                Debug.assert(!!s.exports, `${s.escapedName} has no exports???`);
-                const t = s.exports.get(e.name.escapedText);
-                return action(e.name, t || s, s.exports.has(e.name.escapedText));
+                Debug.assert(!!s.exports, "has no exports");
+                return action(e.name, s.exports.get(e.name.escapedText));
             }
         }
 
