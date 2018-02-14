@@ -54,32 +54,10 @@ namespace ts {
                     `import x from "./lib2";`);
             });
 
-            it("Sort - invalid vs invalid", () => {
-                assertSortsBefore(
-                    // tslint:disable-next-line no-invalid-template-strings
-                    "import y from `${'lib1'}`;",
-                    // tslint:disable-next-line no-invalid-template-strings
-                    "import x from `${'lib2'}`;");
-            });
-
             it("Sort - relative vs non-relative", () => {
                 assertSortsBefore(
                     `import y from "lib";`,
                     `import x from "./lib";`);
-            });
-
-            it("Sort - non-relative vs invalid", () => {
-                assertSortsBefore(
-                    `import y from "lib";`,
-                    // tslint:disable-next-line no-invalid-template-strings
-                    "import x from `${'lib'}`;");
-            });
-
-            it("Sort - relative vs invalid", () => {
-                assertSortsBefore(
-                    `import y from "./lib";`,
-                    // tslint:disable-next-line no-invalid-template-strings
-                    "import x from `${'lib'}`;");
             });
 
             function assertUnaffectedBySort(...importStrings: string[]) {
@@ -286,6 +264,25 @@ D();
                 },
                 libFile);
 
+                // tslint:disable no-invalid-template-strings
+            testOrganizeImports("MoveToTop_Invalid",
+                {
+                    path: "/test.ts",
+                    content: `
+import { F1, F2 } from "lib";
+F1();
+F2();
+import * as NS from "lib";
+NS.F1();
+import b from ${"`${'lib'}`"};
+import a from ${"`${'lib'}`"};
+import D from "lib";
+D();
+`,
+                },
+                libFile);
+                // tslint:enable no-invalid-template-strings
+
             testOrganizeImports("CoalesceTrivia",
                 {
                     path: "/test.ts",
@@ -322,15 +319,13 @@ F2();
                 assert.equal(testPath, changes[0].fileName);
 
                 Harness.Baseline.runBaseline(baselinePath, () => {
-                    const data: string[] = [];
-                    data.push(`// ==ORIGINAL==`);
-                    data.push(testContent);
-
-                    data.push(`// ==ORGANIZED==`);
                     const newText = textChanges.applyChanges(testContent, changes[0].textChanges);
-                    data.push(newText);
-
-                    return data.join(newLineCharacter);
+                    return [
+                        "// ==ORIGINAL==",
+                        testContent,
+                        "// ==ORGANIZED==",
+                        newText,
+                    ].join(newLineCharacter);
                 });
             }
 

@@ -1855,7 +1855,7 @@ namespace ts {
             const sourceFile = getValidSourceFile(scope.fileName);
             const formatContext = formatting.getFormatContext(formatOptions);
 
-            return OrganizeImports.organizeImports(sourceFile, formatContext, host, cancellationToken);
+            return OrganizeImports.organizeImports(sourceFile, formatContext, host);
         }
 
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
