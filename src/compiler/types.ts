@@ -1178,7 +1178,7 @@ namespace ts {
         /* @internal */ singleQuote?: boolean;
     }
 
-    /* @internal */ export type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
+    export type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
     // Consider 'Expression'.  Without the brand, 'Expression' is actually no different
