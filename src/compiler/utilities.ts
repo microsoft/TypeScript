@@ -1628,20 +1628,18 @@ namespace ts {
             : undefined;
     }
 
-    function getSingleInitializerOfVariableStatement(node: Node, child?: Node): Node | undefined {
-        return isVariableStatement(node) &&
-            node.declarationList.declarations.length > 0 &&
-            (!child || node.declarationList.declarations[0].initializer === child)
-            ? node.declarationList.declarations[0].initializer
-            : undefined;
+    function getSingleInitializerOfVariableStatementOrPropertyDeclaration(node: Node): Expression | undefined {
+        switch (node.kind) {
+            case ts.SyntaxKind.VariableStatement:
+                const v = getSingleVariableOfVariableStatement(node);
+                return v && v.initializer;
+            case ts.SyntaxKind.PropertyDeclaration:
+                return (node as PropertyDeclaration).initializer;
+        }
     }
 
-    function getSingleVariableOfVariableStatement(node: Node, child?: Node): Node | undefined {
-        return isVariableStatement(node) &&
-            node.declarationList.declarations.length > 0 &&
-            (!child || node.declarationList.declarations[0] === child)
-            ? node.declarationList.declarations[0]
-            : undefined;
+    function getSingleVariableOfVariableStatement(node: Node): VariableDeclaration | undefined {
+        return isVariableStatement(node) ? firstOrUndefined(node.declarationList.declarations) : undefined;
     }
 
     function getNestedModuleDeclaration(node: Node): Node | undefined {
@@ -1658,8 +1656,8 @@ namespace ts {
         return result || emptyArray;
 
         function getJSDocCommentsAndTagsWorker(node: Node): void {
-            const { parent } = node;
-            if (parent && (parent.kind === SyntaxKind.PropertyAssignment || getNestedModuleDeclaration(parent))) {
+            const parent = node.parent;
+            if (parent && (parent.kind === SyntaxKind.PropertyAssignment || parent.kind === SyntaxKind.PropertyDeclaration || getNestedModuleDeclaration(parent))) {
                 getJSDocCommentsAndTagsWorker(parent);
             }
             // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement.
@@ -1669,10 +1667,10 @@ namespace ts {
             //   */
             // var x = function(name) { return name.length; }
             if (parent && parent.parent &&
-                (getSingleVariableOfVariableStatement(parent.parent, node) || getSourceOfAssignment(parent.parent))) {
+                (getSingleVariableOfVariableStatement(parent.parent) === node || getSourceOfAssignment(parent.parent))) {
                 getJSDocCommentsAndTagsWorker(parent.parent);
             }
-            if (parent && parent.parent && parent.parent.parent && getSingleInitializerOfVariableStatement(parent.parent.parent, node)) {
+            if (parent && parent.parent && parent.parent.parent && getSingleInitializerOfVariableStatementOrPropertyDeclaration(parent.parent.parent) === node) {
                 getJSDocCommentsAndTagsWorker(parent.parent.parent);
             }
             if (isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) !== SpecialPropertyAssignmentKind.None ||
@@ -1718,7 +1716,7 @@ namespace ts {
     export function getHostSignatureFromJSDoc(node: JSDocParameterTag): FunctionLike | undefined {
         const host = getJSDocHost(node);
         const decl = getSourceOfAssignment(host) ||
-            getSingleInitializerOfVariableStatement(host) ||
+            getSingleInitializerOfVariableStatementOrPropertyDeclaration(host) ||
             getSingleVariableOfVariableStatement(host) ||
             getNestedModuleDeclaration(host) ||
             host;
@@ -1768,6 +1766,7 @@ namespace ts {
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.SpreadElement:
+                case SyntaxKind.NonNullExpression:
                     node = parent;
                     break;
                 case SyntaxKind.ShorthandPropertyAssignment:
@@ -5181,6 +5180,7 @@ namespace ts {
     /**
      * True if node is of some token syntax kind.
      * For example, this is true for an IfKeyword but not for an IfStatement.
+     * Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
      */
     export function isToken(n: Node): boolean {
         return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
@@ -5967,5 +5967,14 @@ namespace ts {
             default:
                 return false;
         }
+    }
+
+    /* @internal */
+    export function isTypeReferenceType(node: Node): node is TypeReferenceType {
+        return node.kind === SyntaxKind.TypeReference || node.kind === SyntaxKind.ExpressionWithTypeArguments;
+    }
+
+    export function isStringLiteralLike(node: Node): node is StringLiteralLike {
+        return node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 }

@@ -214,9 +214,8 @@ namespace ts {
      *  - this is mostly subjective beyond the requirement that the expression not be sideeffecting
      */
     export function isSimpleCopiableExpression(expression: Expression) {
-        return expression.kind === SyntaxKind.StringLiteral ||
+        return isStringLiteralLike(expression) ||
             expression.kind === SyntaxKind.NumericLiteral ||
-            expression.kind === SyntaxKind.NoSubstitutionTemplateLiteral ||
             isKeyword(expression.kind) ||
             isIdentifier(expression);
     }

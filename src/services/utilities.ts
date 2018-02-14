@@ -763,23 +763,12 @@ namespace ts {
         Debug.assert(!(result && isWhiteSpaceOnlyJsxText(result)));
         return result;
 
-        function findRightmostToken(n: Node): Node | undefined {
-            if (isToken(n)) {
-                return n;
-            }
-
-            const children = n.getChildren();
-            const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
-            return candidate && findRightmostToken(candidate);
-
-        }
-
         function find(n: Node): Node | undefined {
-            if (isToken(n)) {
+            if (isNonWhitespaceToken(n)) {
                 return n;
             }
 
-            const children = n.getChildren();
+            const children = n.getChildren(sourceFile);
             for (let i = 0; i < children.length; i++) {
                 const child = children[i];
                 // Note that the span of a node's tokens is [node.getStart(...), node.end).
@@ -797,7 +786,7 @@ namespace ts {
                     if (lookInPreviousChild) {
                         // actual start of the node is past the position - previous token should be at the end of previous child
                         const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
-                        return candidate && findRightmostToken(candidate);
+                        return candidate && findRightmostToken(candidate, sourceFile);
                     }
                     else {
                         // candidate should be in this node
@@ -814,23 +803,37 @@ namespace ts {
             // Namely we are skipping the check: 'position < node.end'
             if (children.length) {
                 const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
-                return candidate && findRightmostToken(candidate);
+                return candidate && findRightmostToken(candidate, sourceFile);
             }
         }
+    }
 
-        /**
-         * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
-         */
-        function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number): Node | undefined {
-            for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
-                const child = children[i];
+    function isNonWhitespaceToken(n: Node): boolean {
+        return isToken(n) && !isWhiteSpaceOnlyJsxText(n);
+    }
 
-                if (isWhiteSpaceOnlyJsxText(child)) {
-                    Debug.assert(i > 0, "`JsxText` tokens should not be the first child of `JsxElement | JsxSelfClosingElement`");
-                }
-                else if (nodeHasTokens(children[i])) {
-                    return children[i];
-                }
+    function findRightmostToken(n: Node, sourceFile: SourceFile): Node | undefined {
+        if (isNonWhitespaceToken(n)) {
+            return n;
+        }
+
+        const children = n.getChildren(sourceFile);
+        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
+        return candidate && findRightmostToken(candidate, sourceFile);
+    }
+
+    /**
+     * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
+     */
+    function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number): Node | undefined {
+        for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
+            const child = children[i];
+
+            if (isWhiteSpaceOnlyJsxText(child)) {
+                Debug.assert(i > 0, "`JsxText` tokens should not be the first child of `JsxElement | JsxSelfClosingElement`");
+            }
+            else if (nodeHasTokens(children[i])) {
+                return children[i];
             }
         }
     }
@@ -895,7 +898,7 @@ namespace ts {
         return false;
     }
 
-    export function isWhiteSpaceOnlyJsxText(node: Node): node is JsxText {
+    function isWhiteSpaceOnlyJsxText(node: Node): boolean {
         return isJsxText(node) && node.containsOnlyWhiteSpaces;
     }
 

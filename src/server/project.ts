@@ -169,6 +169,9 @@ namespace ts.server {
         private projectStateVersion = 0;
 
         /*@internal*/
+        dirty = false;
+
+        /*@internal*/
         hasChangedAutomaticTypeDirectiveNames = false;
 
         private typingFiles: SortedReadonlyArray<string>;
@@ -250,6 +253,7 @@ namespace ts.server {
                 this.disableLanguageService(lastFileExceededProgramSize);
             }
             this.markAsDirty();
+            this.projectService.pendingEnsureProjectForOpenFiles = true;
         }
 
         isKnownTypesPackageName(name: string): boolean {
@@ -399,7 +403,7 @@ namespace ts.server {
 
         /*@internal*/
         onInvalidatedResolution() {
-            this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
+            this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
         }
 
         /*@internal*/
@@ -417,7 +421,7 @@ namespace ts.server {
         /*@internal*/
         onChangedAutomaticTypeDirectiveNames() {
             this.hasChangedAutomaticTypeDirectiveNames = true;
-            this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
+            this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
         }
 
         /*@internal*/
@@ -565,6 +569,7 @@ namespace ts.server {
             for (const root of this.rootFiles) {
                 root.detachFromProject(this);
             }
+            this.projectService.pendingEnsureProjectForOpenFiles = true;
 
             this.rootFiles = undefined!;
             this.rootFilesMap = undefined!;
@@ -747,7 +752,10 @@ namespace ts.server {
         }
 
         markAsDirty() {
-            this.projectStateVersion++;
+            if (!this.dirty) {
+                this.projectStateVersion++;
+                this.dirty = true;
+            }
         }
 
         /* @internal */
@@ -822,7 +830,9 @@ namespace ts.server {
                 }
 
                 const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasChanges);
-                if (this.setTypings(cachedTypings)) {
+                if (!arrayIsEqualTo(this.typingFiles, cachedTypings)) {
+                    this.typingFiles = cachedTypings;
+                    this.markAsDirty();
                     hasChanges = this.updateGraphWorker() || hasChanges;
                 }
             }
@@ -846,15 +856,6 @@ namespace ts.server {
             return include.filter(i => existing.indexOf(i) < 0);
         }
 
-        private setTypings(typings: SortedReadonlyArray<string>): boolean {
-            if (arrayIsEqualTo(this.typingFiles, typings)) {
-                return false;
-            }
-            this.typingFiles = typings;
-            this.markAsDirty();
-            return true;
-        }
-
         private updateGraphWorker() {
             const oldProgram = this.program;
             Debug.assert(!this.isClosed(), "Called update graph worker of closed project");
@@ -863,6 +864,7 @@ namespace ts.server {
             this.hasInvalidatedResolution = this.resolutionCache.createHasInvalidatedResolution();
             this.resolutionCache.startCachingPerDirectoryResolution();
             this.program = this.languageService.getProgram();
+            this.dirty = false;
             this.resolutionCache.finishCachingPerDirectoryResolution();
 
             // bump up the version if
@@ -909,7 +911,7 @@ namespace ts.server {
                 compareStringsCaseSensitive
             );
             const elapsed = timestamp() - start;
-            this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} structureChanged: ${hasChanges} Elapsed: ${elapsed}ms`);
+            this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Version: ${this.getProjectVersion()} structureChanged: ${hasChanges} Elapsed: ${elapsed}ms`);
             return hasChanges;
         }
 
@@ -935,7 +937,7 @@ namespace ts.server {
                         fileWatcher.close();
 
                         // When a missing file is created, we should update the graph.
-                        this.projectService.delayUpdateProjectGraphAndInferredProjectsRefresh(this);
+                        this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
                     }
                 },
                 WatchType.MissingFilePath,

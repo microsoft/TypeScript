@@ -1686,7 +1686,8 @@ namespace ts.refactor.extractSymbol {
                 return symbolId;
             }
             // find first declaration in this file
-            const declInFile = find(symbol.getDeclarations()!, d => d.getSourceFile() === sourceFile); // TODO: GH#18217
+            const decls = symbol.getDeclarations();
+            const declInFile = decls && find(decls, d => d.getSourceFile() === sourceFile);
             if (!declInFile) {
                 return undefined;
             }
@@ -1779,7 +1780,8 @@ namespace ts.refactor.extractSymbol {
             if (!symbol) {
                 return undefined;
             }
-            if (symbol.getDeclarations()!.some(d => d.parent === scopeDecl)) { // TODO: GH#18217
+            const decls = symbol.getDeclarations();
+            if (decls && decls.some(d => d.parent === scopeDecl)) {
                 return createIdentifier(symbol.name);
             }
             const prefix = tryReplaceWithQualifiedNameOrPropertyAccess(symbol.parent, scopeDecl, isTypeNode);

@@ -42,7 +42,7 @@ namespace ts.Completions {
         const contextToken = findPrecedingToken(position, sourceFile);
 
         if (isInString(sourceFile, position, contextToken)) {
-            return !contextToken || !isStringLiteral(contextToken) && !isNoSubstitutionTemplateLiteral(contextToken)
+            return !contextToken || !isStringLiteralLike(contextToken)
                 ? undefined
                 : convertStringLiteralCompletions(getStringLiteralCompletionEntries(sourceFile, contextToken, position, typeChecker, compilerOptions, host), sourceFile, typeChecker, log);
         }
@@ -358,8 +358,7 @@ namespace ts.Completions {
             case SyntaxKind.LiteralType:
                 switch (node.parent.parent.kind) {
                     case SyntaxKind.TypeReference:
-                        // TODO: GH#21168
-                        return undefined;
+                        return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(node.parent as LiteralTypeNode), typeChecker) };
                     case SyntaxKind.IndexedAccessType:
                         // Get all apparent property names
                         // i.e. interface Foo {
@@ -862,6 +861,23 @@ namespace ts.Completions {
                     parent = parent.parent;
                 }
 
+                // Fix location
+                if (currentToken.parent === location) {
+                    switch (currentToken.kind) {
+                        case SyntaxKind.GreaterThanToken:
+                            if (currentToken.parent.kind === SyntaxKind.JsxElement || currentToken.parent.kind === SyntaxKind.JsxOpeningElement) {
+                                location = currentToken;
+                            }
+                            break;
+
+                        case SyntaxKind.SlashToken:
+                            if (currentToken.parent.kind === SyntaxKind.JsxSelfClosingElement) {
+                                location = currentToken;
+                            }
+                            break;
+                    }
+                }
+
                 switch (parent.kind) {
                     case SyntaxKind.JsxClosingElement:
                         if (contextToken.kind === SyntaxKind.SlashToken) {
@@ -1044,10 +1060,6 @@ namespace ts.Completions {
                 return true;
             }
 
-            if (tryGetFunctionLikeBodyCompletionContainer(contextToken)) {
-                keywordFilters = KeywordCompletionFilters.FunctionLikeBodyKeywords;
-            }
-
             if (classLikeContainer = tryGetClassLikeCompletionContainer(contextToken)) {
                 // cursor inside class declaration
                 getGetClassLikeCompletionSymbols(classLikeContainer);
@@ -1065,6 +1077,10 @@ namespace ts.Completions {
                         return true;
                     }
                 }
+            }
+
+            if (tryGetFunctionLikeBodyCompletionContainer(contextToken)) {
+                keywordFilters = KeywordCompletionFilters.FunctionLikeBodyKeywords;
             }
 
             // Get all entities in the current scope.

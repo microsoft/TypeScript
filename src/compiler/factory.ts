@@ -804,7 +804,7 @@ namespace ts {
             : node;
     }
 
-    export function createMappedTypeNode(readonlyToken: ReadonlyToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | undefined, type: TypeNode | undefined): MappedTypeNode {
+    export function createMappedTypeNode(readonlyToken: ReadonlyToken | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode {
         const node = createSynthesizedNode(SyntaxKind.MappedType) as MappedTypeNode;
         node.readonlyToken = readonlyToken;
         node.typeParameter = typeParameter;
@@ -813,7 +813,7 @@ namespace ts {
         return node;
     }
 
-    export function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | undefined, type: TypeNode | undefined): MappedTypeNode {
+    export function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyToken | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode {
         return node.readonlyToken !== readonlyToken
             || node.typeParameter !== typeParameter
             || node.questionToken !== questionToken

@@ -637,7 +637,7 @@ namespace ts.codefix {
          * become "ns.foo"
          */
         const changes = ChangeTracker.with(context, tracker =>
-            tracker.changeIdentifierToPropertyAccess(sourceFile, namespacePrefix, symbolToken));
+            tracker.replaceNode(sourceFile, symbolToken, createPropertyAccess(createIdentifier(namespacePrefix), symbolToken)));
         return createCodeAction(Diagnostics.Change_0_to_1, [symbolName, `${namespacePrefix}.${symbolName}`], changes);
     }
 

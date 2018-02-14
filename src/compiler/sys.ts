@@ -121,7 +121,11 @@ namespace ts {
 
     // TODO: this is used as if it's certainly defined in many places.
     export let sys: System = (() => {
-        const utf8ByteOrderMark = "\u00EF\u00BB\u00BF";
+        // NodeJS detects "\uFEFF" at the start of the string and *replaces* it with the actual
+        // byte order mark from the specified encoding. Using any other byte order mark does
+        // not actually work.
+        const byteOrderMarkIndicator = "\uFEFF";
+
         function getNodeSystem(): System {
             const _fs = require("fs");
             const _path = require("path");
@@ -367,7 +371,7 @@ namespace ts {
             function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
                 // If a BOM is required, emit one
                 if (writeByteOrderMark) {
-                    data = utf8ByteOrderMark + data;
+                    data = byteOrderMarkIndicator + data;
                 }
 
                 let fd: number | undefined;
@@ -573,7 +577,7 @@ namespace ts {
                 writeFile(path: string, data: string, writeByteOrderMark?: boolean) {
                     // If a BOM is required, emit one
                     if (writeByteOrderMark) {
-                        data = utf8ByteOrderMark + data;
+                        data = byteOrderMarkIndicator + data;
                     }
 
                     ChakraHost.writeFile(path, data);

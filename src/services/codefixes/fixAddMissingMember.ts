@@ -85,8 +85,8 @@ namespace ts.codefix {
         }
         else {
             const leftExpressionType = checker.getTypeAtLocation(parent.expression)!; // TODO: GH#18217
-            const symbol = leftExpressionType.symbol!; // TODO: GH#18217
-            if (!(leftExpressionType.flags & TypeFlags.Object && symbol.flags & SymbolFlags.Class)) {
+            const { symbol } = leftExpressionType;
+            if (!(symbol && leftExpressionType.flags & TypeFlags.Object && symbol.flags & SymbolFlags.Class)) {
                 return undefined;
             }
             const classDeclaration = cast(first(symbol.declarations!), isClassLike);

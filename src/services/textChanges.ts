@@ -344,11 +344,6 @@ namespace ts.textChanges {
             this.replaceRange(sourceFile, { pos, end: pos }, createToken(modifier), { suffix: " " });
         }
 
-        public changeIdentifierToPropertyAccess(sourceFile: SourceFile, prefix: string, node: Identifier): void {
-            const pos = getAdjustedStartPosition(sourceFile, node, {}, Position.Start);
-            this.replaceRange(sourceFile, { pos, end: pos }, createPropertyAccess(createIdentifier(prefix), ""), {});
-        }
-
         private getOptionsForInsertNodeBefore(before: Node, doubleNewlines: boolean): ChangeNodeOptions {
             if (isStatement(before) || isClassElement(before)) {
                 return { suffix: doubleNewlines ? this.newLineCharacter + this.newLineCharacter : this.newLineCharacter };

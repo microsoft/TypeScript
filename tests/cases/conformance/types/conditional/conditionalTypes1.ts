@@ -276,3 +276,14 @@ type T94<T> = T extends string ? true : 42;
 type T95<T> = T extends string ? boolean : number;
 const f44 = <U>(value: T94<U>): T95<U> => value;
 const f45 = <U>(value: T95<U>): T94<U> => value;  // Error
+
+// Repro from #21863
+
+function f50() {
+    type Eq<T, U> = T extends U ? U extends T ? true : false : false;
+    type If<S, T, U> = S extends false ? U : T;
+    type Omit<T extends object> = { [P in keyof T]: If<Eq<T[P], never>, never, P>; }[keyof T];
+    type Omit2<T extends object, U = never> = { [P in keyof T]: If<Eq<T[P], U>, never, P>; }[keyof T];
+    type A = Omit<{ a: void; b: never; }>;  // 'a'
+    type B = Omit2<{ a: void; b: never; }>;  // 'a'
+}

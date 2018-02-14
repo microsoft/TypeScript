@@ -199,7 +199,8 @@ namespace ts.DocumentHighlights {
     }
 
     function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): ReadonlyArray<Node> | undefined {
-        const container = declaration.parent;
+        // Types of node whose children might have modifiers.
+        const container = declaration.parent as ModuleBlock | SourceFile | Block | CaseClause | DefaultClause | ConstructorDeclaration | MethodDeclaration | FunctionDeclaration | ClassLikeDeclaration;
         switch (container.kind) {
             case SyntaxKind.ModuleBlock:
             case SyntaxKind.SourceFile:
@@ -211,18 +212,20 @@ namespace ts.DocumentHighlights {
                     return [...declaration.members, declaration];
                 }
                 else {
-                    return (<ModuleBlock | SourceFile | Block | CaseClause | DefaultClause>container).statements;
+                    return container.statements;
                 }
             case SyntaxKind.Constructor:
-                return [...(<ConstructorDeclaration>container).parameters, ...(<ClassDeclaration>container.parent).members];
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.FunctionDeclaration:
+                return [...container.parameters, ...(isClassLike(container.parent) ? container.parent.members : [])];
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
-                const nodes = (<ClassLikeDeclaration>container).members;
+                const nodes = container.members;
 
                 // If we're an accessibility modifier, we're in an instance member and should search
                 // the constructor's parameter list for instance members as well.
                 if (modifierFlag & ModifierFlags.AccessibilityModifier) {
-                    const constructor = find((<ClassLikeDeclaration>container).members, isConstructorDeclaration);
+                    const constructor = find(container.members, isConstructorDeclaration);
                     if (constructor) {
                         return [...nodes, ...constructor.parameters];
                     }
@@ -232,7 +235,7 @@ namespace ts.DocumentHighlights {
                 }
                 return nodes;
             default:
-                Debug.fail("Invalid container kind.");
+                Debug.assertNever(container, "Invalid container kind.");
         }
     }
 
