@@ -42,7 +42,7 @@ namespace ts.Completions {
         const contextToken = findPrecedingToken(position, sourceFile);
 
         if (isInString(sourceFile, position, contextToken)) {
-            return !contextToken || !isStringLiteral(contextToken) && !isNoSubstitutionTemplateLiteral(contextToken)
+            return !contextToken || !isStringLiteralLike(contextToken)
                 ? undefined
                 : convertStringLiteralCompletions(getStringLiteralCompletionEntries(sourceFile, contextToken, position, typeChecker, compilerOptions, host), sourceFile, typeChecker, log);
         }
