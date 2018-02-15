@@ -1438,7 +1438,7 @@ namespace ts {
         }
     }
 
-    export function group<T>(values: ReadonlyArray<T>, getGroupId: (value: T) => string): T[][] {
+    export function group<T>(values: ReadonlyArray<T>, getGroupId: (value: T) => string): ReadonlyArray<ReadonlyArray<T>> {
         const groupIdToGroup = createMultiMap<T>();
         for (const value of values) {
             groupIdToGroup.add(getGroupId(value), value);
