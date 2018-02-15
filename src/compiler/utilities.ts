@@ -1924,6 +1924,16 @@ namespace ts {
         return walkUp(node, SyntaxKind.ParenthesizedExpression);
     }
 
+    export function skipParentheses(node: Expression): Expression;
+    export function skipParentheses(node: Node): Node;
+    export function skipParentheses(node: Node): Node {
+        while (node.kind === SyntaxKind.ParenthesizedExpression) {
+            node = (<ParenthesizedExpression>node).expression;
+        }
+
+        return node;
+    }
+
     // a node is delete target iff. it is PropertyAccessExpression/ElementAccessExpression with parentheses skipped
     export function isDeleteTarget(node: Node): boolean {
         if (node.kind !== SyntaxKind.PropertyAccessExpression && node.kind !== SyntaxKind.ElementAccessExpression) {
