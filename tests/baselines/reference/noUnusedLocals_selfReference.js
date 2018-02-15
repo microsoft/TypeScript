@@ -11,6 +11,14 @@ class C {
     m() { C; }
 }
 enum E { A = 0, B = E.A }
+interface I { x: I };
+type T = { x: T };
+namespace N { N; }
+
+// Avoid a false positive.
+// Previously `T` was considered unused due to merging with the property,
+// back when all non-blocks were checked for recursion.
+export interface A<T> { T: T }
 
 class P { private m() { this.m; } }
 P;
@@ -40,6 +48,11 @@ var E;
     E[E["A"] = 0] = "A";
     E[E["B"] = 0] = "B";
 })(E || (E = {}));
+;
+var N;
+(function (N) {
+    N;
+})(N || (N = {}));
 var P = /** @class */ (function () {
     function P() {
     }

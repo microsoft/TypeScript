@@ -2960,7 +2960,8 @@ namespace ts {
         }
 
         export function showSymbol(symbol: Symbol): string {
-            return `{ flags: ${showFlags(symbol.flags, (ts as any).SymbolFlags)}; declarations: ${map(symbol.declarations, showSyntaxKind)} }`;
+            const symbolFlags = (ts as any).SymbolFlags;
+            return `{ flags: ${symbolFlags ? showFlags(symbol.flags, symbolFlags) : symbol.flags}; declarations: ${map(symbol.declarations, showSyntaxKind)} }`;
         }
 
         function showFlags(flags: number, flagsEnum: { [flag: number]: string }): string {
@@ -2975,7 +2976,8 @@ namespace ts {
         }
 
         export function showSyntaxKind(node: Node): string {
-            return (ts as any).SyntaxKind[node.kind];
+            const syntaxKind = (ts as any).SyntaxKind;
+            return syntaxKind ? syntaxKind[node.kind] : node.kind.toString();
         }
     }
 
