@@ -4488,6 +4488,7 @@ declare namespace ts {
         argumentCount: number;
     }
     interface CompletionInfo {
+        /** Not true for all glboal completions. This will be true if the enclosing scope matches a few syntax kinds. See `isGlobalCompletionScope`. */
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
         /**
