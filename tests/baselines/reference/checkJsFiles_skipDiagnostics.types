@@ -54,6 +54,16 @@ x();
 >x() : any
 >x : number
 
+// @ts-ignore TS2349 , TS2350 // space before comma and additioanl comment
+x();
+>x() : any
+>x : number
+
+// @ts-ignore TS2349 , TS2350, // trailing comma
+x();
+>x() : any
+>x : number
+
 // @ts-ignore TS2350 here should be error
 x();
 >x() : any
