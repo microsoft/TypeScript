@@ -1121,3 +1121,99 @@ function f50() {
 >b : Symbol(b, Decl(conditionalTypes1.ts, 284, 29))
 }
 
+// Repro from #21862
+
+type OldDiff<T extends string, U extends string> = (
+>OldDiff : Symbol(OldDiff, Decl(conditionalTypes1.ts, 285, 1))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 289, 13))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 289, 30))
+
+    & { [P in T]: P; }
+>P : Symbol(P, Decl(conditionalTypes1.ts, 290, 9))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 289, 13))
+>P : Symbol(P, Decl(conditionalTypes1.ts, 290, 9))
+
+    & { [P in U]: never; }
+>P : Symbol(P, Decl(conditionalTypes1.ts, 291, 9))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 289, 30))
+
+    & { [x: string]: never; }
+>x : Symbol(x, Decl(conditionalTypes1.ts, 292, 9))
+
+)[T];
+>T : Symbol(T, Decl(conditionalTypes1.ts, 289, 13))
+
+type NewDiff<T, U> = T extends U ? never : T;
+>NewDiff : Symbol(NewDiff, Decl(conditionalTypes1.ts, 293, 5))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 294, 13))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 294, 15))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 294, 13))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 294, 15))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 294, 13))
+
+interface A {
+>A : Symbol(A, Decl(conditionalTypes1.ts, 294, 45))
+
+    a: 'a';
+>a : Symbol(A.a, Decl(conditionalTypes1.ts, 295, 13))
+}
+interface B1 extends A {
+>B1 : Symbol(B1, Decl(conditionalTypes1.ts, 297, 1))
+>A : Symbol(A, Decl(conditionalTypes1.ts, 294, 45))
+
+    b: 'b';
+>b : Symbol(B1.b, Decl(conditionalTypes1.ts, 298, 24))
+
+    c: OldDiff<keyof this, keyof A>;
+>c : Symbol(B1.c, Decl(conditionalTypes1.ts, 299, 11))
+>OldDiff : Symbol(OldDiff, Decl(conditionalTypes1.ts, 285, 1))
+>A : Symbol(A, Decl(conditionalTypes1.ts, 294, 45))
+}
+interface B2 extends A {
+>B2 : Symbol(B2, Decl(conditionalTypes1.ts, 301, 1))
+>A : Symbol(A, Decl(conditionalTypes1.ts, 294, 45))
+
+    b: 'b';
+>b : Symbol(B2.b, Decl(conditionalTypes1.ts, 302, 24))
+
+    c: NewDiff<keyof this, keyof A>;
+>c : Symbol(B2.c, Decl(conditionalTypes1.ts, 303, 11))
+>NewDiff : Symbol(NewDiff, Decl(conditionalTypes1.ts, 293, 5))
+>A : Symbol(A, Decl(conditionalTypes1.ts, 294, 45))
+}
+type c1 = B1['c']; // 'c' | 'b'
+>c1 : Symbol(c1, Decl(conditionalTypes1.ts, 305, 1))
+>B1 : Symbol(B1, Decl(conditionalTypes1.ts, 297, 1))
+
+type c2 = B2['c']; // 'c' | 'b'
+>c2 : Symbol(c2, Decl(conditionalTypes1.ts, 306, 18))
+>B2 : Symbol(B2, Decl(conditionalTypes1.ts, 301, 1))
+
+// Repro from #21929
+
+type NonFooKeys1<T extends object> = OldDiff<keyof T, 'foo'>;
+>NonFooKeys1 : Symbol(NonFooKeys1, Decl(conditionalTypes1.ts, 307, 18))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 311, 17))
+>OldDiff : Symbol(OldDiff, Decl(conditionalTypes1.ts, 285, 1))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 311, 17))
+
+type NonFooKeys2<T extends object> = Exclude<keyof T, 'foo'>;
+>NonFooKeys2 : Symbol(NonFooKeys2, Decl(conditionalTypes1.ts, 311, 61))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 312, 17))
+>Exclude : Symbol(Exclude, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 312, 17))
+
+type Test1 = NonFooKeys1<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
+>Test1 : Symbol(Test1, Decl(conditionalTypes1.ts, 312, 61))
+>NonFooKeys1 : Symbol(NonFooKeys1, Decl(conditionalTypes1.ts, 307, 18))
+>foo : Symbol(foo, Decl(conditionalTypes1.ts, 314, 26))
+>bar : Symbol(bar, Decl(conditionalTypes1.ts, 314, 33))
+>baz : Symbol(baz, Decl(conditionalTypes1.ts, 314, 41))
+
+type Test2 = NonFooKeys2<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
+>Test2 : Symbol(Test2, Decl(conditionalTypes1.ts, 314, 51))
+>NonFooKeys2 : Symbol(NonFooKeys2, Decl(conditionalTypes1.ts, 311, 61))
+>foo : Symbol(foo, Decl(conditionalTypes1.ts, 315, 26))
+>bar : Symbol(bar, Decl(conditionalTypes1.ts, 315, 33))
+>baz : Symbol(baz, Decl(conditionalTypes1.ts, 315, 41))
+
