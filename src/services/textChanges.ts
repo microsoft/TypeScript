@@ -197,13 +197,12 @@ namespace ts.textChanges {
 
     export class ChangeTracker {
         private readonly changes: Change[] = [];
-        private readonly newLineCharacter: string;
         private readonly deletedNodesInLists: true[] = []; // Stores ids of nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
         // Map from class id to nodes to insert at the start
         private readonly nodesInsertedAtClassStarts = createMap<{ sourceFile: SourceFile, cls: ClassLikeDeclaration, members: ClassElement[] }>();
 
         public static fromContext(context: TextChangesContext): ChangeTracker {
-            return new ChangeTracker(getNewLineOrDefaultFromHost(context.host, context.formatContext.options) === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed, context.formatContext);
+            return new ChangeTracker(getNewLineOrDefaultFromHost(context.host, context.formatContext.options), context.formatContext);
         }
 
         public static with(context: TextChangesContext, cb: (tracker: ChangeTracker) => void): FileTextChanges[] {
@@ -212,11 +211,11 @@ namespace ts.textChanges {
             return tracker.getChanges();
         }
 
+        /** Public for tests only. Other callers should use `ChangeTracker.with`. */
         constructor(
-            private readonly newLine: NewLineKind,
+            private readonly newLineCharacter: string,
             private readonly formatContext: ts.formatting.FormatContext,
             private readonly validator?: (text: NonFormattedText) => void) {
-            this.newLineCharacter = getNewLineCharacter({ newLine });
         }
 
         public deleteRange(sourceFile: SourceFile, range: TextRange) {
@@ -631,7 +630,7 @@ namespace ts.textChanges {
         }
 
         private getFormattedTextOfNode(node: Node, sourceFile: SourceFile, pos: number, options: ChangeNodeOptions): string {
-            const nonformattedText = getNonformattedText(node, sourceFile, this.newLine);
+            const nonformattedText = getNonformattedText(node, sourceFile, this.newLineCharacter);
             if (this.validator) {
                 this.validator(nonformattedText);
             }
@@ -671,10 +670,9 @@ namespace ts.textChanges {
         readonly node: Node;
     }
 
-    function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLine: NewLineKind): NonFormattedText {
-        const options = { newLine, target: sourceFile && sourceFile.languageVersion };
-        const writer = new Writer(getNewLineCharacter(options));
-        const printer = createPrinter(options, writer);
+    function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLine: string): NonFormattedText {
+        const writer = new Writer(newLine);
+        const printer = createPrinter({ newLine: newLine === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed }, writer);
         printer.writeNode(EmitHint.Unspecified, node, sourceFile, writer);
         return { text: writer.getText(), node: assignPositionsToNode(node) };
     }
