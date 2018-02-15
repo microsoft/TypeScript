@@ -14767,13 +14767,14 @@ namespace ts {
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
-            // TODO: This seems like it might be wrong, or at least should come earlier
-            // (maybe check SymbolFlags.JSContainer? This currently misses normal declarations like `var my = {}`, but shouldn't)
-            if (isInJSFile && node.symbol && node.symbol.exports && node.properties.length === 0) {
-                const symbol = getMergedSymbol(node.symbol);
-                propertiesTable = symbol.exports;
-                symbol.exports.forEach(symbol => propertiesArray.push(getMergedSymbol(symbol)));
-                return createObjectLiteralType();
+            if (isInJSFile && node.properties.length === 0) {
+                // an empty JS object literal that nonetheless has members is a JS namespace
+                const symbol = getSymbolOfNode(node);
+                if (symbol.exports) {
+                    propertiesTable = symbol.exports;
+                    symbol.exports.forEach(symbol => propertiesArray.push(getMergedSymbol(symbol)));
+                    return createObjectLiteralType();
+                }
             }
             propertiesTable = createSymbolTable();
 

@@ -2045,7 +2045,7 @@ namespace ts {
                             bindThisPropertyAssignment(node as BinaryExpression);
                             break;
                         case SpecialPropertyAssignmentKind.Property:
-                            bindStaticBinaryExpressionAssignment(node as BinaryExpression);
+                            bindSpecialPropertyAssignment(node as BinaryExpression);
                             break;
                         case SpecialPropertyAssignmentKind.None:
                             // Nothing to do
@@ -2296,7 +2296,6 @@ namespace ts {
         }
 
         function bindExportsPropertyAssignment(node: BinaryExpression) {
-            // TODO: Maybe this should support nested exports too
             // When we create a property via 'exports.foo = bar', the 'exports.foo' property access
             // expression is the declaration
             setCommonJsModuleIndicator(node);
@@ -2375,8 +2374,9 @@ namespace ts {
         }
 
 
-        function bindStaticBinaryExpressionAssignment(node: BinaryExpression) {
+        function bindSpecialPropertyAssignment(node: BinaryExpression) {
             const lhs = node.left as PropertyAccessEntityNameExpression;
+            // Fix up parent pointers since we're going to use these nodes before we bind into them
             lhs.parent = node;
             if (isIdentifier(lhs.expression) && container === file && isNameOfExportsOrModuleExportsAliasDeclaration(file, lhs.expression)) {
                 // This can be an alias for the 'exports' or 'module.exports' names, e.g.
@@ -2388,24 +2388,14 @@ namespace ts {
                 bindStaticPropertyAssignment(lhs);
             }
         }
+
         /**
-         * For nodes like `x.y = z`, declare a member 'y' on 'x' if x is a function or class or {}, or not declared.
+         * For nodes like `x.y = z`, declare a member 'y' on 'x' if x is a function (or IIFE) or class or {}, or not declared.
          * Also works for expression statements preceded by JSDoc, like / ** @type number * / x.y;
          */
         function bindStaticPropertyAssignment(node: PropertyAccessEntityNameExpression) {
-            // Fix up parent pointers since we're going to use these nodes before we bind into them
             node.expression.parent = node;
             bindPropertyAssignment(node.expression, node, /*isPrototypeProperty*/ false);
-        }
-
-        function lookupSymbolForPropertyAccess(node: EntityNameExpression): Symbol | undefined {
-            if (isIdentifier(node)) {
-                return lookupSymbolForNameWorker(container, node.escapedText);
-            }
-            else {
-                const symbol = getJSInitializerSymbol(lookupSymbolForPropertyAccess(node.expression));
-                return symbol && symbol.exports && symbol.exports.get(node.name.escapedText);
-            }
         }
 
         function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
@@ -2449,6 +2439,16 @@ namespace ts {
 
             // Declare the method/property
             declareSymbol(symbolTable, symbol, propertyAccess, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+        }
+
+        function lookupSymbolForPropertyAccess(node: EntityNameExpression): Symbol | undefined {
+            if (isIdentifier(node)) {
+                return lookupSymbolForNameWorker(container, node.escapedText);
+            }
+            else {
+                const symbol = getJSInitializerSymbol(lookupSymbolForPropertyAccess(node.expression));
+                return symbol && symbol.exports && symbol.exports.get(node.name.escapedText);
+            }
         }
 
         function forEachIdentifierInEntityName(e: EntityNameExpression, action: (e: Identifier, symbol: Symbol) => Symbol): Symbol {
