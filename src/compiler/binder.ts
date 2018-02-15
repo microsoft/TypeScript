@@ -2403,34 +2403,25 @@ namespace ts {
                 return lookupSymbolForNameWorker(container, node.escapedText);
             }
             else {
-                const symbol = follow(lookupSymbolForPropertyAccess(node.expression));
+                const symbol = getJSInitializerSymbol(lookupSymbolForPropertyAccess(node.expression));
                 return symbol && symbol.exports && symbol.exports.get(node.name.escapedText);
             }
         }
 
-        function isNamespaceableInitializer(initializer: Node) {
-            return initializer.kind === SyntaxKind.ClassExpression ||
-                initializer.kind === SyntaxKind.FunctionExpression ||
-                initializer.kind === SyntaxKind.ObjectLiteralExpression && (initializer as ObjectLiteralExpression).properties.length === 0 ||
-                initializer.kind === SyntaxKind.CallExpression && (skipParentheses((initializer as CallExpression).expression).kind === SyntaxKind.FunctionExpression ||
-                                                                   skipParentheses((initializer as CallExpression).expression).kind === SyntaxKind.ArrowFunction);
-        }
-
         function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
             // Look up the property in the local scope, since property assignments should follow the declaration
-            let symbol = follow(lookupSymbolForPropertyAccess(name));
-            // TODO: Should be able to structure this with less duplication
+            let symbol = getJSInitializerSymbol(lookupSymbolForPropertyAccess(name));
             Debug.assert(propertyAccess.parent.kind === SyntaxKind.BinaryExpression ||
                          propertyAccess.parent.kind === SyntaxKind.ExpressionStatement ||
                          propertyAccess.parent.kind === SyntaxKind.PropertyAccessExpression);
-            const isToplevelNamespaceableInitializer = propertyAccess.parent.kind === SyntaxKind.BinaryExpression ?
-                propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile && isNamespaceableInitializer((propertyAccess.parent as BinaryExpression).right) :
+            const isToplevelNamespaceableInitializer = isBinaryExpression(propertyAccess.parent) ?
+                propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile && getJavascriptInitializer(propertyAccess.parent.right) :
                 propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
             if (!isPrototypeProperty && (!symbol || !(symbol.flags & SymbolFlags.Namespace)) && isToplevelNamespaceableInitializer) {
                 const flags = SymbolFlags.Module | SymbolFlags.JSContainer;
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.JSContainer;
-                // addDeclarationToSymbol is only needed for things that could be further containers, because it makes the intermediate namespace symbol.
-                iterateEntityNameExpression(propertyAccess.expression, (id, original) => {
+                // make symbols are add declarations for intermediate containers
+                forEachIdentifierInEntityName(propertyAccess.expression, (id, original) => {
                     if (original) {
                         // Note: add declaration to original symbol, not the special-syntax's symbol, so that namespaces work for type lookup
                         addDeclarationToSymbol(original, id, flags);
@@ -2460,12 +2451,12 @@ namespace ts {
             declareSymbol(symbolTable, symbol, propertyAccess, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
         }
 
-        function iterateEntityNameExpression(e: EntityNameExpression, action: (e: Identifier, symbol: Symbol) => Symbol): Symbol {
+        function forEachIdentifierInEntityName(e: EntityNameExpression, action: (e: Identifier, symbol: Symbol) => Symbol): Symbol {
             if (isIdentifier(e)) {
                 return action(e, lookupSymbolForPropertyAccess(e));
             }
             else {
-                const s = follow(iterateEntityNameExpression(e.expression, action));
+                const s = getJSInitializerSymbol(forEachIdentifierInEntityName(e.expression, action));
                 Debug.assert(!!s, "lost the chant");
                 Debug.assert(!!s.exports, "has no exports");
                 return action(e.name, s.exports.get(e.name.escapedText));

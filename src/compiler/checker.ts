@@ -858,11 +858,11 @@ namespace ts {
                     mergeSymbolTable(target.exports, source.exports);
                 }
                 if ((source.flags | target.flags) & SymbolFlags.JSContainer) {
-                    const fs = follow(source);
-                    const ft = follow(target);
+                    const fs = getJSInitializerSymbol(source);
+                    const ft = getJSInitializerSymbol(target);
                     if (fs !== source || ft !== target) {
                     // also follow the source's valueDeclaration and merge its symbol
-                        mergeSymbol(follow(target), follow(source));
+                        mergeSymbol(getJSInitializerSymbol(target), getJSInitializerSymbol(source));
                     }
                 }
                 recordMergedSymbol(target, source);
@@ -18987,7 +18987,7 @@ namespace ts {
         }
 
         function checkBinaryExpression(node: BinaryExpression, checkMode?: CheckMode) {
-            if (node.operatorToken.kind === SyntaxKind.BarBarToken && isInJavaScriptFile(node) && getAssignedJavascriptInitializer(node)) {
+            if (isInJavaScriptFile(node) && getAssignedJavascriptInitializer(node)) {
                 return checkExpression(node.right, checkMode);
             }
             return checkBinaryLikeExpression(node.left, node.operatorToken, node.right, checkMode, node);

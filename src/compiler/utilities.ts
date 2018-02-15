@@ -1472,21 +1472,19 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(sourceFile, str).charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
-    // TODO: All 5 (!) of these need to be de-duped
     /**
      * Returns true if the node is a variable declaration whose initializer is a function or class expression.
      * This function does not test if the node is in a JavaScript file or not.
      */
     export function isDeclarationOfFunctionOrClassExpression(s: Symbol) {
-        if (s.valueDeclaration && s.valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
-            const declaration = s.valueDeclaration as VariableDeclaration;
-            return declaration.initializer &&
-                (declaration.initializer.kind === SyntaxKind.FunctionExpression || declaration.initializer.kind === SyntaxKind.ClassExpression);
+        if (s.valueDeclaration && isVariableDeclaration(s.valueDeclaration)) {
+            return s.valueDeclaration.initializer &&
+                (s.valueDeclaration.initializer.kind === SyntaxKind.FunctionExpression || s.valueDeclaration.initializer.kind === SyntaxKind.ClassExpression);
         }
         return false;
     }
 
-    export function follow(symbol: Symbol) {
+    export function getJSInitializerSymbol(symbol: Symbol) {
         if (!symbol || !symbol.valueDeclaration) {
             return symbol;
         }
@@ -1495,10 +1493,6 @@ namespace ts {
         return e ? e.symbol : symbol;
     }
 
-    /**
-     * Returns true if the node is a variable declaration whose initializer is a function or class expression, or an empty object literal.
-     * This function does not test if the node is in a JavaScript file or not.
-     */
     export function getDeclaredJavascriptInitializer(node: Node) {
         if (node && isVariableDeclaration(node) && node.initializer) {
             return getJavascriptInitializer(node.initializer) ||
@@ -1513,11 +1507,15 @@ namespace ts {
             (getJavascriptInitializer(node.parent.right) || getDefaultedJavascriptInitializer(node.parent.left as EntityNameExpression, node.parent.right));
     }
 
-    function getJavascriptInitializer(e: Expression) {
-        if(e.kind === SyntaxKind.FunctionExpression ||
-           e.kind === SyntaxKind.ClassExpression ||
-           isObjectLiteralExpression(e) && e.properties.length === 0) {
-            return e;
+    export function getJavascriptInitializer(initializer: Expression) {
+        if (isCallExpression(initializer)) {
+            const e = skipParentheses(initializer.expression);
+            return e.kind === SyntaxKind.FunctionExpression || e.kind === SyntaxKind.ArrowFunction ? initializer : undefined;
+        }
+        if(initializer.kind === SyntaxKind.FunctionExpression ||
+           initializer.kind === SyntaxKind.ClassExpression ||
+           isObjectLiteralExpression(initializer) && initializer.properties.length === 0) {
+            return initializer;
         }
     }
 
