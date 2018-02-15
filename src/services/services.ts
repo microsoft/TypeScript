@@ -1567,17 +1567,17 @@ namespace ts {
 
         /// References and Occurrences
         function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
-            let results = getOccurrencesAtPositionCore(fileName, position);
-
-            if (results) {
-                const sourceFile = getCanonicalFileName(normalizeSlashes(fileName));
-
-                // Get occurrences only supports reporting occurrences for the file queried.  So
-                // filter down to that list.
-                results = filter(results, r => getCanonicalFileName(ts.normalizeSlashes(r.fileName)) === sourceFile);
-            }
-
-            return results;
+            const canonicalFileName = getCanonicalFileName(normalizeSlashes(fileName));
+            return flatMap(getDocumentHighlights(fileName, position, [fileName]), entry => entry.highlightSpans.map<ReferenceEntry>(highlightSpan => {
+                Debug.assert(getCanonicalFileName(normalizeSlashes(entry.fileName)) === canonicalFileName); // Get occurrences only supports reporting occurrences for the file queried.
+                return {
+                    fileName: entry.fileName,
+                    textSpan: highlightSpan.textSpan,
+                    isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
+                    isDefinition: false,
+                    isInString: highlightSpan.isInString,
+                };
+            }));
         }
 
         function getDocumentHighlights(fileName: string, position: number, filesToSearch: ReadonlyArray<string>): DocumentHighlights[] {
@@ -1585,31 +1585,6 @@ namespace ts {
             const sourceFilesToSearch = map(filesToSearch, f => Debug.assertDefined(program.getSourceFile(f)));
             const sourceFile = getValidSourceFile(fileName);
             return DocumentHighlights.getDocumentHighlights(program, cancellationToken, sourceFile, position, sourceFilesToSearch);
-        }
-
-        function getOccurrencesAtPositionCore(fileName: string, position: number): ReferenceEntry[] {
-            return convertDocumentHighlights(getDocumentHighlights(fileName, position, [fileName]));
-
-            function convertDocumentHighlights(documentHighlights: DocumentHighlights[]): ReferenceEntry[] {
-                if (!documentHighlights) {
-                    return undefined;
-                }
-
-                const result: ReferenceEntry[] = [];
-                for (const entry of documentHighlights) {
-                    for (const highlightSpan of entry.highlightSpans) {
-                        result.push({
-                            fileName: entry.fileName,
-                            textSpan: highlightSpan.textSpan,
-                            isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
-                            isDefinition: false,
-                            isInString: highlightSpan.isInString,
-                        });
-                    }
-                }
-
-                return result;
-            }
         }
 
         function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
