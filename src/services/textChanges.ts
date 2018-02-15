@@ -593,32 +593,12 @@ namespace ts.textChanges {
 
         public getChanges(): FileTextChanges[] {
             this.finishInsertNodeAtClassStart();
-
-            const changesPerFile = createMap<Change[]>();
-            // group changes per file
-            for (const c of this.changes) {
-                let changesInFile = changesPerFile.get(c.sourceFile.path);
-                if (!changesInFile) {
-                    changesPerFile.set(c.sourceFile.path, changesInFile = []);
-                }
-                changesInFile.push(c);
-            }
-            // convert changes
-            const fileChangesList: FileTextChanges[] = [];
-            changesPerFile.forEach(changesInFile => {
+            return group(this.changes, c => c.sourceFile.path).map(changesInFile => {
                 const sourceFile = changesInFile[0].sourceFile;
-                const fileTextChanges: FileTextChanges = { fileName: sourceFile.fileName, textChanges: [] };
-                for (const c of ChangeTracker.normalize(changesInFile)) {
-                    fileTextChanges.textChanges.push(createTextChange(this.computeSpan(c, sourceFile), this.computeNewText(c, sourceFile)));
-                }
-                fileChangesList.push(fileTextChanges);
+                const textChanges = ChangeTracker.normalize(changesInFile).map(c =>
+                    createTextChange(createTextSpanFromRange(c.range), this.computeNewText(c, sourceFile)));
+                return { fileName: sourceFile.fileName, textChanges };
             });
-
-            return fileChangesList;
-        }
-
-        private computeSpan(change: Change, _sourceFile: SourceFile): TextSpan {
-            return createTextSpanFromRange(change.range);
         }
 
         private computeNewText(change: Change, sourceFile: SourceFile): string {

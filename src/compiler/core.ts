@@ -1438,6 +1438,14 @@ namespace ts {
         }
     }
 
+    export function group<T>(values: ReadonlyArray<T>, getGroupId: (value: T) => string): T[][] {
+        const groupIdToGroup = createMultiMap<T>();
+        for (const value of values) {
+            groupIdToGroup.add(getGroupId(value), value);
+        }
+        return arrayFrom(groupIdToGroup.values());
+    }
+
     /**
      * Tests whether a value is an array.
      */
