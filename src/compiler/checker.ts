@@ -1159,7 +1159,7 @@ namespace ts {
             const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
             let result: Symbol;
             let lastLocation: Node;
-            let lastNonBlockLocation: Node;
+            let lastSelfReferenceLocation: Node;
             let propertyWithInvalidInitializer: Node;
             const errorLocation = location;
             let grandparent: Node;
@@ -1383,17 +1383,17 @@ namespace ts {
                         }
                         break;
                 }
-                if (isNonBlockLocation(location)) {
-                    lastNonBlockLocation = location;
+                if (isSelfReferenceLocation(location)) {
+                    lastSelfReferenceLocation = location;
                 }
                 lastLocation = location;
                 location = location.parent;
             }
 
             // We just climbed up parents looking for the name, meaning that we started in a descendant node of `lastLocation`.
-            // If `result === lastNonBlockLocation.symbol`, that means that we are somewhere inside `lastNonBlockLocation` looking up a name, and resolving to `lastLocation` itself.
+            // If `result === lastSelfReferenceLocation.symbol`, that means that we are somewhere inside `lastSelfReferenceLocation` looking up a name, and resolving to `lastLocation` itself.
             // That means that this is a self-reference of `lastLocation`, and shouldn't count this when considering whether `lastLocation` is used.
-            if (isUse && result && nameNotFoundMessage && noUnusedIdentifiers && result !== lastNonBlockLocation.symbol) {
+            if (isUse && result && nameNotFoundMessage && noUnusedIdentifiers && (!lastSelfReferenceLocation || result !== lastSelfReferenceLocation.symbol)) {
                 result.isReferenced = true;
             }
 
@@ -1476,17 +1476,17 @@ namespace ts {
             return result;
         }
 
-        function isNonBlockLocation({ kind }: Node): boolean {
-            switch (kind) {
-                case SyntaxKind.Block:
-                case SyntaxKind.ModuleBlock:
-                case SyntaxKind.SwitchStatement:
-                case SyntaxKind.CaseBlock:
-                case SyntaxKind.CaseClause:
-                case SyntaxKind.DefaultClause:
-                    return false;
-                default:
+        function isSelfReferenceLocation(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.ModuleDeclaration: // For `namespace N { N; }`
                     return true;
+                default:
+                    return false;
             }
         }
 
