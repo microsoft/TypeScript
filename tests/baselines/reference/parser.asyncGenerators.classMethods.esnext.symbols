@@ -253,4 +253,5 @@ class C25 {
 
     async * x = 1;
 >x : Symbol(C25.x, Decl(asyncGeneratorPropertyIsError.ts, 0, 11))
+>1 : Symbol(C25[1], Decl(asyncGeneratorPropertyIsError.ts, 1, 15))
 }

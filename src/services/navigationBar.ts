@@ -632,9 +632,7 @@ namespace ts.NavigationBar {
     }
 
     function getNodeSpan(node: Node): TextSpan {
-        return node.kind === SyntaxKind.SourceFile
-            ? createTextSpanFromBounds(node.getFullStart(), node.getEnd())
-            : createTextSpanFromNode(node, curSourceFile);
+        return node.kind === SyntaxKind.SourceFile ? createTextSpanFromRange(node) : createTextSpanFromNode(node, curSourceFile);
     }
 
     function getModifiers(node: ts.Node): string {

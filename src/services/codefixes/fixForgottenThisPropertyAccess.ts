@@ -7,6 +7,9 @@ namespace ts.codefix {
         getCodeActions(context) {
             const { sourceFile } = context;
             const token = getNode(sourceFile, context.span.start);
+            if (!token) {
+                return undefined;
+            }
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, token));
             return [{ description: getLocaleSpecificMessage(Diagnostics.Add_this_to_unresolved_variable), changes, fixId }];
         },
@@ -16,13 +19,17 @@ namespace ts.codefix {
         }),
     });
 
-    function getNode(sourceFile: SourceFile, pos: number): Identifier {
-        return cast(getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false), isIdentifier);
+    function getNode(sourceFile: SourceFile, pos: number): Identifier | undefined {
+        const node = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        return isIdentifier(node) ? node : undefined;
     }
 
-    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Identifier): void {
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Identifier | undefined): void {
+        if (!token) {
+            return;
+        }
         // TODO (https://github.com/Microsoft/TypeScript/issues/21246): use shared helper
         suppressLeadingAndTrailingTrivia(token);
-        changes.replaceRange(sourceFile, { pos: token.getStart(), end: token.end }, createPropertyAccess(createThis(), token));
+        changes.replaceNode(sourceFile, token, createPropertyAccess(createThis(), token), textChanges.useNonAdjustedPositions);
     }
 }

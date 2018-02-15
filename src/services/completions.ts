@@ -42,7 +42,7 @@ namespace ts.Completions {
         const contextToken = findPrecedingToken(position, sourceFile);
 
         if (isInString(sourceFile, position, contextToken)) {
-            return !contextToken || !isStringLiteral(contextToken) && !isNoSubstitutionTemplateLiteral(contextToken)
+            return !contextToken || !isStringLiteralLike(contextToken)
                 ? undefined
                 : convertStringLiteralCompletions(getStringLiteralCompletionEntries(sourceFile, contextToken, position, typeChecker, compilerOptions, host), sourceFile, typeChecker, log);
         }
@@ -358,8 +358,7 @@ namespace ts.Completions {
             case SyntaxKind.LiteralType:
                 switch (node.parent.parent.kind) {
                     case SyntaxKind.TypeReference:
-                        // TODO: GH#21168
-                        return undefined;
+                        return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(node.parent as LiteralTypeNode), typeChecker) };
                     case SyntaxKind.IndexedAccessType:
                         // Get all apparent property names
                         // i.e. interface Foo {
@@ -612,7 +611,7 @@ namespace ts.Completions {
             allSourceFiles,
             formatContext,
             getCanonicalFileName,
-            tryCast(previousToken, isIdentifier));
+            previousToken);
         return { sourceDisplay: [textPart(moduleSpecifier)], codeActions: [codeAction] };
     }
 
@@ -712,7 +711,7 @@ namespace ts.Completions {
     function getFirstSymbolInChain(symbol: Symbol, enclosingDeclaration: Node, checker: TypeChecker): Symbol | undefined {
         const chain = checker.getAccessibleSymbolChain(symbol, enclosingDeclaration, /*meaning*/ SymbolFlags.All, /*useOnlyExternalAliasing*/ false);
         if (chain) return first(chain);
-        return isModuleSymbol(symbol.parent) ? symbol : symbol.parent && getFirstSymbolInChain(symbol.parent, enclosingDeclaration, checker);
+        return symbol.parent && (isModuleSymbol(symbol.parent) ? symbol : getFirstSymbolInChain(symbol.parent, enclosingDeclaration, checker));
     }
 
     function isModuleSymbol(symbol: Symbol): boolean {
@@ -862,6 +861,23 @@ namespace ts.Completions {
                     parent = parent.parent;
                 }
 
+                // Fix location
+                if (currentToken.parent === location) {
+                    switch (currentToken.kind) {
+                        case SyntaxKind.GreaterThanToken:
+                            if (currentToken.parent.kind === SyntaxKind.JsxElement || currentToken.parent.kind === SyntaxKind.JsxOpeningElement) {
+                                location = currentToken;
+                            }
+                            break;
+
+                        case SyntaxKind.SlashToken:
+                            if (currentToken.parent.kind === SyntaxKind.JsxSelfClosingElement) {
+                                location = currentToken;
+                            }
+                            break;
+                    }
+                }
+
                 switch (parent.kind) {
                     case SyntaxKind.JsxClosingElement:
                         if (contextToken.kind === SyntaxKind.SlashToken) {
@@ -912,7 +928,7 @@ namespace ts.Completions {
             getTypeScriptMemberSymbols();
         }
         else if (isRightOfOpenTag) {
-            const tagSymbols = typeChecker.getJsxIntrinsicTagNames();
+            const tagSymbols = Debug.assertEachDefined(typeChecker.getJsxIntrinsicTagNames(), "getJsxIntrinsicTagNames() should all be defined");
             if (tryGetGlobalSymbols()) {
                 symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & (SymbolFlags.Value | SymbolFlags.Alias))));
             }
@@ -924,8 +940,7 @@ namespace ts.Completions {
         else if (isStartingCloseTag) {
             const tagName = (<JsxElement>contextToken.parent.parent).openingElement.tagName;
             const tagSymbol = typeChecker.getSymbolAtLocation(tagName);
-
-            if (!typeChecker.isUnknownSymbol(tagSymbol)) {
+            if (tagSymbol) {
                 symbols = [tagSymbol];
             }
             completionKind = CompletionKind.MemberLike;
@@ -971,7 +986,7 @@ namespace ts.Completions {
 
                     if (symbol.flags & (SymbolFlags.Module | SymbolFlags.Enum)) {
                         // Extract module or enum members
-                        const exportedSymbols = typeChecker.getExportsOfModule(symbol);
+                        const exportedSymbols = Debug.assertEachDefined(typeChecker.getExportsOfModule(symbol), "getExportsOfModule() should all be defined");
                         const isValidValueAccess = (symbol: Symbol) => typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name);
                         const isValidTypeAccess = (symbol: Symbol) => symbolCanBeReferencedAtTypeLocation(symbol);
                         const isValidAccess = isRhsOfImportDeclaration ?
@@ -1043,10 +1058,6 @@ namespace ts.Completions {
                 return true;
             }
 
-            if (tryGetFunctionLikeBodyCompletionContainer(contextToken)) {
-                keywordFilters = KeywordCompletionFilters.FunctionLikeBodyKeywords;
-            }
-
             if (classLikeContainer = tryGetClassLikeCompletionContainer(contextToken)) {
                 // cursor inside class declaration
                 getGetClassLikeCompletionSymbols(classLikeContainer);
@@ -1066,6 +1077,10 @@ namespace ts.Completions {
                         return true;
                     }
                 }
+            }
+
+            if (tryGetFunctionLikeBodyCompletionContainer(contextToken)) {
+                keywordFilters = KeywordCompletionFilters.FunctionLikeBodyKeywords;
             }
 
             // Get all entities in the current scope.
@@ -1111,7 +1126,7 @@ namespace ts.Completions {
 
             const symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
 
-            symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
+            symbols = Debug.assertEachDefined(typeChecker.getSymbolsInScope(scopeNode, symbolMeanings), "getSymbolsInScope() should all be defined");
 
             // Need to insert 'this.' before properties of `this` type, so only do that if `includeInsertTextCompletions`
             if (options.includeInsertTextCompletions && scopeNode.kind !== SyntaxKind.SourceFile) {
@@ -1452,7 +1467,7 @@ namespace ts.Completions {
 
             if (typeMembers && typeMembers.length > 0) {
                 // Add filtered items to the completion list
-                symbols = filterObjectMembersList(typeMembers, existingMembers);
+                symbols = filterObjectMembersList(typeMembers, Debug.assertDefined(existingMembers));
             }
             return true;
         }
@@ -1926,11 +1941,7 @@ namespace ts.Completions {
                 existingImportsOrExports.set(name.escapedText, true);
             }
 
-            if (existingImportsOrExports.size === 0) {
-                return filter(exportsOfModule, e => e.escapedName !== InternalSymbolName.Default);
-            }
-
-            return filter(exportsOfModule, e => e.escapedName !== InternalSymbolName.Default && !existingImportsOrExports.get(e.escapedName));
+            return exportsOfModule.filter(e => e.escapedName !== InternalSymbolName.Default && !existingImportsOrExports.get(e.escapedName));
         }
 
         /**
@@ -1940,7 +1951,7 @@ namespace ts.Completions {
          *          do not occur at the current position and have not otherwise been typed.
          */
         function filterObjectMembersList(contextualMemberSymbols: Symbol[], existingMembers: ReadonlyArray<Declaration>): Symbol[] {
-            if (!existingMembers || existingMembers.length === 0) {
+            if (existingMembers.length === 0) {
                 return contextualMemberSymbols;
             }
 
@@ -1980,7 +1991,7 @@ namespace ts.Completions {
                 existingMemberNames.set(existingName, true);
             }
 
-            return filter(contextualMemberSymbols, m => !existingMemberNames.get(m.escapedName));
+            return contextualMemberSymbols.filter(m => !existingMemberNames.get(m.escapedName));
         }
 
         /**
@@ -2066,7 +2077,7 @@ namespace ts.Completions {
                 }
             }
 
-            return filter(symbols, a => !seenNames.get(a.escapedName));
+            return symbols.filter(a => !seenNames.get(a.escapedName));
         }
 
         function isCurrentlyEditingNode(node: Node): boolean {
@@ -2248,13 +2259,13 @@ namespace ts.Completions {
      */
     function getPropertiesForCompletion(type: Type, checker: TypeChecker, isForAccess: boolean): Symbol[] {
         if (!(type.flags & TypeFlags.Union)) {
-            return type.getApparentProperties();
+            return Debug.assertEachDefined(type.getApparentProperties(), "getApparentProperties() should all be defined");
         }
 
         const { types } = type as UnionType;
         // If we're providing completions for an object literal, skip primitive, array-like, or callable types since those shouldn't be implemented by object literals.
         const filteredTypes = isForAccess ? types : types.filter(memberType =>
             !(memberType.flags & TypeFlags.Primitive || checker.isArrayLikeType(memberType) || typeHasCallOrConstructSignatures(memberType, checker)));
-        return checker.getAllPossiblePropertiesOfTypes(filteredTypes);
+        return Debug.assertEachDefined(checker.getAllPossiblePropertiesOfTypes(filteredTypes), "getAllPossiblePropertiesOfTypes() should all be defined");
     }
 }

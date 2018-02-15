@@ -66,6 +66,7 @@
         "services.ts",
         "transform.ts",
         "transpile.ts",
+        "semver.ts",
         "shims.ts",
         "signatureHelp.ts",
         "symbolDisplay.ts",

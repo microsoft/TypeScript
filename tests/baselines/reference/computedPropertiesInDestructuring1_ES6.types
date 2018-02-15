@@ -22,6 +22,7 @@ let {[11]: bar2_1} = {11: "bar"};
 >11 : 11
 >bar2_1 : string
 >{11: "bar"} : { 11: string; }
+>11 : string
 >"bar" : "bar"
 
 let foo2 = () => "bar";

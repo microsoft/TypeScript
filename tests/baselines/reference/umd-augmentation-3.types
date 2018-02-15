@@ -100,6 +100,8 @@ import * as Math2d from 'math2d';
 
 // Augment the module
 declare module 'math2d' {
+>'math2d' : typeof Math2d
+
 	// Add a method to the class
 	interface Vector {
 >Vector : Vector

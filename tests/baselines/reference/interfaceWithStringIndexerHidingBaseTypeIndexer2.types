@@ -36,6 +36,8 @@ interface Derived extends Base {
     }
     // error
     1: {
+>1 : { a: number; }
+
         a: number;
 >a : number
     }

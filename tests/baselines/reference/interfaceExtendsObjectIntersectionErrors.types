@@ -36,6 +36,7 @@ interface I3 extends T3 { length: string }
 interface I4 extends T4 { 0: number }
 >I4 : I4
 >T4 : [string, number]
+>0 : number
 
 interface I5 extends T5 { c: number }
 >I5 : I5
@@ -79,6 +80,7 @@ class C4 extends Constructor<T4>() { 0: number }
 >Constructor<T4>() : [string, number]
 >Constructor : <T>() => Constructor<T>
 >T4 : [string, number]
+>0 : number
 
 class C5 extends Constructor<T5>() { c: number }
 >C5 : C5

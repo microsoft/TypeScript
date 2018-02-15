@@ -1308,7 +1308,7 @@ task("lint", ["build-rules"], () => {
         : `Gulpfile.ts scripts/generateLocalizedDiagnosticMessages.ts "scripts/tslint/**/*.ts" "src/**/*.ts" --exclude "src/lib/*.d.ts"`;
     const cmd = `node node_modules/tslint/bin/tslint ${files} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
     console.log("Linting: " + cmd);
-    jake.exec([cmd], { interactive: true }, () => {
+    jake.exec([cmd], { interactive: true, windowsVerbatimArguments: true }, () => {
         if (fold.isTravis()) console.log(fold.end("lint"));
         complete();
     });

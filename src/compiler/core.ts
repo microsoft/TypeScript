@@ -6,7 +6,7 @@ namespace ts {
     // If changing the text in this section, be sure to test `configureNightly` too.
     export const versionMajorMinor = "2.8";
     /** The version of the TypeScript compiler release */
-    export const version = `${versionMajorMinor}.0`;
+    export const version = `${versionMajorMinor}.0-dev`;
 }
 
 namespace ts {
@@ -794,6 +794,18 @@ namespace ts {
         return deduplicated;
     }
 
+    export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void {
+        if (array.length === 0) {
+            array.push(insert);
+            return;
+        }
+
+        const insertIndex = binarySearch(array, insert, identity, compare);
+        if (insertIndex < 0) {
+            array.splice(~insertIndex, 0, insert);
+        }
+    }
+
     export function sortAndDeduplicate<T>(array: ReadonlyArray<T>, comparer: Comparer<T>, equalityComparer?: EqualityComparer<T>) {
         return deduplicateSorted(sort(array, comparer), equalityComparer || comparer);
     }
@@ -1426,6 +1438,14 @@ namespace ts {
         }
     }
 
+    export function group<T>(values: ReadonlyArray<T>, getGroupId: (value: T) => string): ReadonlyArray<ReadonlyArray<T>> {
+        const groupIdToGroup = createMultiMap<T>();
+        for (const value of values) {
+            groupIdToGroup.add(getGroupId(value), value);
+        }
+        return arrayFrom(groupIdToGroup.values());
+    }
+
     /**
      * Tests whether a value is an array.
      */
@@ -1454,7 +1474,7 @@ namespace ts {
         if (value !== undefined && test(value)) return value;
 
         if (value && typeof (value as any).kind === "number") {
-            Debug.fail(`Invalid cast. The supplied ${(ts as any).SyntaxKind[(value as any).kind]} did not pass the test '${Debug.getFunctionName(test)}'.`);
+            Debug.fail(`Invalid cast. The supplied ${Debug.showSyntaxKind(value as any as Node)} did not pass the test '${Debug.getFunctionName(test)}'.`);
         }
         else {
             Debug.fail(`Invalid cast. The supplied value did not pass the test '${Debug.getFunctionName(test)}'.`);
@@ -2889,6 +2909,13 @@ namespace ts {
             return value;
         }
 
+        export function assertEachDefined<T, A extends ReadonlyArray<T>>(value: A, message: string): A {
+            for (const v of value) {
+                assertDefined(v, message);
+            }
+            return value;
+        }
+
         export function assertNever(member: never, message?: string, stackCrawlMark?: AnyFunction): never {
             return fail(message || `Illegal value: ${member}`, stackCrawlMark || assertNever);
         }
@@ -2905,6 +2932,27 @@ namespace ts {
                 const match = /^function\s+([\w\$]+)\s*\(/.exec(text);
                 return match ? match[1] : "";
             }
+        }
+
+        export function showSymbol(symbol: Symbol): string {
+            const symbolFlags = (ts as any).SymbolFlags;
+            return `{ flags: ${symbolFlags ? showFlags(symbol.flags, symbolFlags) : symbol.flags}; declarations: ${map(symbol.declarations, showSyntaxKind)} }`;
+        }
+
+        function showFlags(flags: number, flagsEnum: { [flag: number]: string }): string {
+            const out = [];
+            for (let pow = 0; pow <= 30; pow++) {
+                const n = 1 << pow;
+                if (flags & n) {
+                    out.push(flagsEnum[n]);
+                }
+            }
+            return out.join("|");
+        }
+
+        export function showSyntaxKind(node: Node): string {
+            const syntaxKind = (ts as any).SyntaxKind;
+            return syntaxKind ? syntaxKind[node.kind] : node.kind.toString();
         }
     }
 
@@ -2985,7 +3033,7 @@ namespace ts {
      */
     export function matchedText(pattern: Pattern, candidate: string): string {
         Debug.assert(isPatternMatch(pattern, candidate));
-        return candidate.substr(pattern.prefix.length, candidate.length - pattern.suffix.length);
+        return candidate.substring(pattern.prefix.length, candidate.length - pattern.suffix.length);
     }
 
     /** Return the object corresponding to the best pattern to match `candidate`. */

@@ -122,6 +122,6 @@ namespace Test5 {
 import lol = Test5.Foo.
 >lol : any
 >Test5 : typeof Test5
->Foo : No type information available!
-> : No type information available!
+>Foo : any
+> : any
 

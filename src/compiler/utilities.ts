@@ -771,6 +771,8 @@ namespace ts {
                 return node.parent.kind !== SyntaxKind.VoidExpression;
             case SyntaxKind.ExpressionWithTypeArguments:
                 return !isExpressionWithTypeArgumentsInClassExtendsClause(node);
+            case SyntaxKind.TypeParameter:
+                return node.parent.kind === SyntaxKind.MappedType || node.parent.kind === SyntaxKind.InferType;
 
             // Identifiers and qualified names may be type nodes, depending on their context. Climb
             // above them to find the lowest container
@@ -1618,17 +1620,19 @@ namespace ts {
             node.expression.right;
     }
 
-    function getSingleInitializerOfVariableStatement(node: Node, child?: Node): Node {
-        return isVariableStatement(node) &&
-            node.declarationList.declarations.length > 0 &&
-            (!child || node.declarationList.declarations[0].initializer === child) &&
-            node.declarationList.declarations[0].initializer;
+    function getSingleInitializerOfVariableStatementOrPropertyDeclaration(node: Node): Expression | undefined {
+        switch (node.kind) {
+            case ts.SyntaxKind.VariableStatement:
+                const v = getSingleVariableOfVariableStatement(node);
+                return v && v.initializer;
+            case ts.SyntaxKind.PropertyDeclaration:
+                return (node as PropertyDeclaration).initializer;
+        }
     }
 
-    function getSingleVariableOfVariableStatement(node: Node, child?: Node): Node {
+    function getSingleVariableOfVariableStatement(node: Node): VariableDeclaration | undefined {
         return isVariableStatement(node) &&
             node.declarationList.declarations.length > 0 &&
-            (!child || node.declarationList.declarations[0] === child) &&
             node.declarationList.declarations[0];
     }
 
@@ -1646,7 +1650,7 @@ namespace ts {
 
         function getJSDocCommentsAndTagsWorker(node: Node): void {
             const parent = node.parent;
-            if (parent && (parent.kind === SyntaxKind.PropertyAssignment || getNestedModuleDeclaration(parent))) {
+            if (parent && (parent.kind === SyntaxKind.PropertyAssignment || parent.kind === SyntaxKind.PropertyDeclaration || getNestedModuleDeclaration(parent))) {
                 getJSDocCommentsAndTagsWorker(parent);
             }
             // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement.
@@ -1656,10 +1660,10 @@ namespace ts {
             //   */
             // var x = function(name) { return name.length; }
             if (parent && parent.parent &&
-                (getSingleVariableOfVariableStatement(parent.parent, node) || getSourceOfAssignment(parent.parent))) {
+                (getSingleVariableOfVariableStatement(parent.parent) === node || getSourceOfAssignment(parent.parent))) {
                 getJSDocCommentsAndTagsWorker(parent.parent);
             }
-            if (parent && parent.parent && parent.parent.parent && getSingleInitializerOfVariableStatement(parent.parent.parent, node)) {
+            if (parent && parent.parent && parent.parent.parent && getSingleInitializerOfVariableStatementOrPropertyDeclaration(parent.parent.parent) === node) {
                 getJSDocCommentsAndTagsWorker(parent.parent.parent);
             }
             if (isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) !== SpecialPropertyAssignmentKind.None ||
@@ -1702,7 +1706,7 @@ namespace ts {
     export function getHostSignatureFromJSDoc(node: JSDocParameterTag): FunctionLike | undefined {
         const host = getJSDocHost(node);
         const decl = getSourceOfAssignment(host) ||
-            getSingleInitializerOfVariableStatement(host) ||
+            getSingleInitializerOfVariableStatementOrPropertyDeclaration(host) ||
             getSingleVariableOfVariableStatement(host) ||
             getNestedModuleDeclaration(host) ||
             host;
@@ -1752,6 +1756,7 @@ namespace ts {
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.SpreadElement:
+                case SyntaxKind.NonNullExpression:
                     node = parent;
                     break;
                 case SyntaxKind.ShorthandPropertyAssignment:
@@ -2441,11 +2446,10 @@ namespace ts {
     }
 
     export function createDiagnosticCollection(): DiagnosticCollection {
-        let nonFileDiagnostics: Diagnostic[] = [];
-        const fileDiagnostics = createMap<Diagnostic[]>();
-
+        let nonFileDiagnostics = [] as SortedArray<Diagnostic>;
+        const filesWithDiagnostics = [] as SortedArray<string>;
+        const fileDiagnostics = createMap<SortedArray<Diagnostic>>();
         let hasReadNonFileDiagnostics = false;
-        let diagnosticsModified = false;
         let modificationCount = 0;
 
         return {
@@ -2465,66 +2469,45 @@ namespace ts {
         }
 
         function add(diagnostic: Diagnostic): void {
-            let diagnostics: Diagnostic[];
+            let diagnostics: SortedArray<Diagnostic>;
             if (diagnostic.file) {
                 diagnostics = fileDiagnostics.get(diagnostic.file.fileName);
                 if (!diagnostics) {
-                    diagnostics = [];
+                    diagnostics = [] as SortedArray<Diagnostic>;
                     fileDiagnostics.set(diagnostic.file.fileName, diagnostics);
+                    insertSorted(filesWithDiagnostics, diagnostic.file.fileName, compareStringsCaseSensitive);
                 }
             }
             else {
                 // If we've already read the non-file diagnostics, do not modify the existing array.
                 if (hasReadNonFileDiagnostics) {
                     hasReadNonFileDiagnostics = false;
-                    nonFileDiagnostics = nonFileDiagnostics.slice();
+                    nonFileDiagnostics = nonFileDiagnostics.slice() as SortedArray<Diagnostic>;
                 }
 
                 diagnostics = nonFileDiagnostics;
             }
 
-            diagnostics.push(diagnostic);
-            diagnosticsModified = true;
+            insertSorted(diagnostics, diagnostic, compareDiagnostics);
             modificationCount++;
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
-            sortAndDeduplicate();
             hasReadNonFileDiagnostics = true;
             return nonFileDiagnostics;
         }
 
         function getDiagnostics(fileName?: string): Diagnostic[] {
-            sortAndDeduplicate();
             if (fileName) {
                 return fileDiagnostics.get(fileName) || [];
             }
 
-            const allDiagnostics: Diagnostic[] = [];
-            function pushDiagnostic(d: Diagnostic) {
-                allDiagnostics.push(d);
+            const fileDiags = flatMap(filesWithDiagnostics, f => fileDiagnostics.get(f));
+            if (!nonFileDiagnostics.length) {
+                return fileDiags;
             }
-
-            forEach(nonFileDiagnostics, pushDiagnostic);
-
-            fileDiagnostics.forEach(diagnostics => {
-                forEach(diagnostics, pushDiagnostic);
-            });
-
-            return sortAndDeduplicateDiagnostics(allDiagnostics);
-        }
-
-        function sortAndDeduplicate() {
-            if (!diagnosticsModified) {
-                return;
-            }
-
-            diagnosticsModified = false;
-            nonFileDiagnostics = sortAndDeduplicateDiagnostics(nonFileDiagnostics);
-
-            fileDiagnostics.forEach((diagnostics, key) => {
-                fileDiagnostics.set(key, sortAndDeduplicateDiagnostics(diagnostics));
-            });
+            fileDiags.unshift(...nonFileDiagnostics);
+            return fileDiags;
         }
     }
 
@@ -3789,6 +3772,10 @@ namespace ts {
 
     export function forSomeAncestorDirectory(directory: string, callback: (directory: string) => boolean): boolean {
         return !!forEachAncestorDirectory(directory, d => callback(d) ? true : undefined);
+    }
+
+    export function isUMDExportSymbol(symbol: Symbol) {
+        return symbol && symbol.declarations && symbol.declarations[0] && isNamespaceExportDeclaration(symbol.declarations[0]);
     }
 }
 
@@ -5168,6 +5155,7 @@ namespace ts {
     /**
      * True if node is of some token syntax kind.
      * For example, this is true for an IfKeyword but not for an IfStatement.
+     * Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
      */
     export function isToken(n: Node): boolean {
         return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
@@ -5953,5 +5941,14 @@ namespace ts {
             default:
                 return false;
         }
+    }
+
+    /* @internal */
+    export function isTypeReferenceType(node: Node): node is TypeReferenceType {
+        return node.kind === SyntaxKind.TypeReference || node.kind === SyntaxKind.ExpressionWithTypeArguments;
+    }
+
+    export function isStringLiteralLike(node: Node): node is StringLiteralLike {
+        return node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 }

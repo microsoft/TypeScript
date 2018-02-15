@@ -15,8 +15,6 @@ type T04 = Unpacked<Unpacked<Promise<string>[]>>;  // string
 type T05 = Unpacked<any>;  // any
 type T06 = Unpacked<never>;  // never
 
-type ReturnType<T extends Function> = T extends ((...args: any[]) => infer R) | (new (...args: any[]) => infer R) ? R : any;
-
 function f1(s: string) {
     return { a: 1, b: s };
 }
@@ -31,11 +29,16 @@ type T11 = ReturnType<(s: string) => void>;  // void
 type T12 = ReturnType<(<T>() => T)>;  // {}
 type T13 = ReturnType<(<T extends U, U extends number[]>() => T)>;  // number[]
 type T14 = ReturnType<typeof f1>;  // { a: number, b: string }
-type T15 = ReturnType<typeof C>;  // C
-type T16 = ReturnType<any>;  // any
-type T17 = ReturnType<never>;  // any
-type T18 = ReturnType<string>;  // Error
-type T19 = ReturnType<Function>;  // any
+type T15 = ReturnType<any>;  // any
+type T16 = ReturnType<never>;  // any
+type T17 = ReturnType<string>;  // Error
+type T18 = ReturnType<Function>;  // Error
+
+type U10 = InstanceType<typeof C>;  // C
+type U11 = InstanceType<any>;  // any
+type U12 = InstanceType<never>;  // any
+type U13 = InstanceType<string>;  // Error
+type U14 = InstanceType<Function>;  // Error
 
 type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A : any;
 
@@ -74,6 +77,19 @@ type T60 = infer U;  // Error
 type T61<T> = infer A extends infer B ? infer C : infer D;  // Error
 type T62<T> = U extends (infer U)[] ? U : U;  // Error
 
+type T70<T extends string> = { x: T };
+type T71<T> = T extends T70<infer U> ? T70<U> : never;
+
+type T72<T extends number> = { y: T };
+type T73<T> = T extends T72<infer U> ? T70<U> : never;  // Error
+
+type T74<T extends number, U extends string> = { x: T, y: U };
+type T75<T> = T extends T74<infer U, infer U> ? T70<U> | T72<U> | T74<U, U> : never;
+
+type T76<T extends T[], U extends T> = { x: T };
+type T77<T> = T extends T76<infer X, infer Y> ? T76<X, Y> : never;
+type T78<T> = T extends T76<infer X, infer X> ? T76<X, X> : never;
+
 // Example from #21496
 
 type JsonifiedObject<T extends object> = { [K in keyof T]: Jsonified<T[K]> };
@@ -105,3 +121,17 @@ type JsonifiedExample = Jsonified<Example>;
 declare let ex: JsonifiedExample;
 const z1: "correct" = ex.customClass;
 const z2: string = ex.obj.nested.attr;
+
+// Repros from #21631
+
+type A1<T, U extends A1<any, any>> = [T, U];
+type B1<S> = S extends A1<infer T, infer U> ? [T, U] : never;
+
+type A2<T, U extends void> = [T, U];
+type B2<S> = S extends A2<infer T, infer U> ? [T, U] : never;
+type C2<S, U extends void> = S extends A2<infer T, U> ? [T, U] : never;
+
+// Repro from #21735
+
+type A<T> = T extends string ? { [P in T]: void; } : T;
+type B<T> = string extends T ? { [P in T]: void; } : T;  // Error

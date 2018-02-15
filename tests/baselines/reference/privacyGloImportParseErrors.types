@@ -47,6 +47,8 @@ module m1 {
     }
 
     export declare module "m1_M3_public" {
+>"m1_M3_public" : typeof "m1_M3_public"
+
         export function f1();
 >f1 : () => any
 
@@ -63,6 +65,8 @@ module m1 {
     }
 
     declare module "m1_M4_private" {
+>"m1_M4_private" : typeof "m1_M4_private"
+
         export function f1();
 >f1 : () => any
 
@@ -339,6 +343,8 @@ module glo_M1_public {
 }
 
 declare module "glo_M2_public" {
+>"glo_M2_public" : typeof "glo_M2_public"
+
     export function f1();
 >f1 : () => any
 
@@ -355,6 +361,8 @@ declare module "glo_M2_public" {
 }
 
 declare module "use_glo_M1_public" {
+>"use_glo_M1_public" : typeof "use_glo_M1_public"
+
     import use_glo_M1_public = glo_M1_public;
 >use_glo_M1_public : typeof use_glo_M1_public
 >glo_M1_public : typeof use_glo_M1_public
@@ -442,10 +450,13 @@ declare module "use_glo_M1_public" {
 }
 
 declare module "anotherParseError" {
+>"anotherParseError" : typeof "anotherParseError"
+
     module m2 {
 >m2 : any
 
         declare module "abc" {
+>"abc" : typeof "abc"
         }
     }
 
@@ -453,9 +464,11 @@ declare module "anotherParseError" {
 >m2 : any
 
         module "abc2" {
+>"abc2" : typeof "abc2"
         }
     }
     module "abc3" {
+>"abc3" : any
     }
 }
 

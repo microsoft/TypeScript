@@ -6,4 +6,5 @@ interface I {
 >s : string
 
     "": string;
+>"" : string
 }

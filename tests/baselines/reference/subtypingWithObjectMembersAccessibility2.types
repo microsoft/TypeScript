@@ -40,6 +40,7 @@ module ExplicitPublic {
 >A2 : A2
 
         private 1: Base;
+>1 : Base
 >Base : Base
     }
 
@@ -48,6 +49,7 @@ module ExplicitPublic {
 >A2 : A2
 
         public 1: Derived; // error
+>1 : Derived
 >Derived : Derived
     }
 
@@ -55,6 +57,7 @@ module ExplicitPublic {
 >A3 : A3
 
         private '1': Base;
+>'1' : Base
 >Base : Base
     }
 
@@ -63,6 +66,7 @@ module ExplicitPublic {
 >A3 : A3
 
         public '1': Derived; // error
+>'1' : Derived
 >Derived : Derived
     }
 }
@@ -91,6 +95,7 @@ module ImplicitPublic {
 >A2 : A2
 
         private 1: Base;
+>1 : Base
 >Base : Base
     }
 
@@ -99,6 +104,7 @@ module ImplicitPublic {
 >A2 : A2
 
         1: Derived; // error
+>1 : Derived
 >Derived : Derived
     }
 
@@ -106,6 +112,7 @@ module ImplicitPublic {
 >A3 : A3
 
         private '1': Base;
+>'1' : Base
 >Base : Base
     }
 
@@ -114,6 +121,7 @@ module ImplicitPublic {
 >A3 : A3
 
         '1': Derived; // error
+>'1' : Derived
 >Derived : Derived
     }
 }

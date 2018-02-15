@@ -170,7 +170,8 @@ namespace RWC {
             });
 
 
-            it("has the expected emitted code", () => {
+            it("has the expected emitted code", function(this: Mocha.ITestCallbackContext) {
+                this.timeout(10000); // Allow long timeouts for RWC js verification
                 Harness.Baseline.runMultifileBaseline(baseName, "", () => {
                     return Harness.Compiler.iterateOutputs(compilerResult.files);
                 }, baselineOpts, [".js", ".jsx"]);

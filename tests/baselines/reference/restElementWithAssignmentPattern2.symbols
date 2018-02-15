@@ -4,6 +4,7 @@ var a: string, b: number;
 >b : Symbol(b, Decl(restElementWithAssignmentPattern2.ts, 0, 14))
 
 [...{ 0: a = "", b }] = ["", 1];
+>0 : Symbol(0, Decl(restElementWithAssignmentPattern2.ts, 1, 5))
 >a : Symbol(a, Decl(restElementWithAssignmentPattern2.ts, 0, 3))
 >b : Symbol(b, Decl(restElementWithAssignmentPattern2.ts, 1, 16))
 

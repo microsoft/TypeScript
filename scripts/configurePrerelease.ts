@@ -55,7 +55,7 @@ function updateTsFile(tsFilePath: string, tsFileContents: string, majorMinor: st
     const parsedMajorMinor = majorMinorMatch[1];
     ts.Debug.assert(parsedMajorMinor === majorMinor, "versionMajorMinor does not match.", () => `${tsFilePath}: '${parsedMajorMinor}'; package.json: '${majorMinor}'`);
 
-    const versionRgx = /export const version = `\$\{versionMajorMinor\}\.(\d)`;/;
+    const versionRgx = /export const version = `\$\{versionMajorMinor\}\.(\d)(-dev)?`;/;
     const patchMatch = versionRgx.exec(tsFileContents);
     ts.Debug.assert(patchMatch !== null, "The file seems to no longer have a string matching", () => versionRgx.toString());
     const parsedPatch = patchMatch[1];
