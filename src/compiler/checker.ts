@@ -858,11 +858,10 @@ namespace ts {
                     mergeSymbolTable(target.exports, source.exports);
                 }
                 if ((source.flags | target.flags) & SymbolFlags.JSContainer) {
-                    const fs = getJSInitializerSymbol(source);
-                    const ft = getJSInitializerSymbol(target);
-                    if (fs !== source || ft !== target) {
-                    // also follow the source's valueDeclaration and merge its symbol
-                        mergeSymbol(getJSInitializerSymbol(target), getJSInitializerSymbol(source));
+                    const sourceInitializer = getJSInitializerSymbol(source);
+                    const targetInitializer = getJSInitializerSymbol(target);
+                    if (sourceInitializer !== source || targetInitializer !== target) {
+                        mergeSymbol(targetInitializer, sourceInitializer);
                     }
                 }
                 recordMergedSymbol(target, source);
@@ -4174,7 +4173,7 @@ namespace ts {
         }
 
         function getWidenedTypeFromJSSpecialPropertyDeclarations(symbol: Symbol) {
-            // function/class/{} assignments are fresh declarations, not property assignments:
+            // function/class/{} assignments are fresh declarations, not property assignments, so return immediately
             const specialDeclaration = getAssignedJavascriptInitializer(symbol.valueDeclaration);
             if (specialDeclaration) {
                 return getWidenedLiteralType(checkExpressionCached(specialDeclaration));
@@ -4392,6 +4391,7 @@ namespace ts {
                     || isIdentifier(declaration)
                     || (isMethodDeclaration(declaration) && !isObjectLiteralMethod(declaration))
                     || isMethodSignature(declaration)) {
+
                     // Symbol is property of some kind that is merged with something - should use `getTypeOfFuncClassEnumModule` and not `getTypeOfVariableOrParameterOrProperty`
                     if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
                         return getTypeOfFuncClassEnumModule(symbol);
@@ -14758,10 +14758,10 @@ namespace ts {
             let spread: Type = emptyObjectType;
             let propagatedFlags: TypeFlags = TypeFlags.FreshLiteral;
 
-            const isInJSFile = isInJavaScriptFile(node);
             const contextualType = getApparentTypeOfContextualType(node);
             const contextualTypeHasPattern = contextualType && contextualType.pattern &&
                 (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
+            const isInJSFile = isInJavaScriptFile(node);
             const isJSObjectLiteral = !contextualType && isInJSFile;
             let typeFlags: TypeFlags = 0;
             let patternWithComputedProperties = false;

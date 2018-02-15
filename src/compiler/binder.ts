@@ -2399,18 +2399,14 @@ namespace ts {
         }
 
         function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
-            // Look up the property in the local scope, since property assignments should follow the declaration
             let symbol = getJSInitializerSymbol(lookupSymbolForPropertyAccess(name));
-            Debug.assert(propertyAccess.parent.kind === SyntaxKind.BinaryExpression ||
-                         propertyAccess.parent.kind === SyntaxKind.ExpressionStatement ||
-                         propertyAccess.parent.kind === SyntaxKind.PropertyAccessExpression);
             const isToplevelNamespaceableInitializer = isBinaryExpression(propertyAccess.parent) ?
                 propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile && getJavascriptInitializer(propertyAccess.parent.right) :
                 propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
             if (!isPrototypeProperty && (!symbol || !(symbol.flags & SymbolFlags.Namespace)) && isToplevelNamespaceableInitializer) {
+                // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.JSContainer;
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.JSContainer;
-                // make symbols are add declarations for intermediate containers
                 forEachIdentifierInEntityName(propertyAccess.expression, (id, original) => {
                     if (original) {
                         // Note: add declaration to original symbol, not the special-syntax's symbol, so that namespaces work for type lookup
@@ -2457,8 +2453,7 @@ namespace ts {
             }
             else {
                 const s = getJSInitializerSymbol(forEachIdentifierInEntityName(e.expression, action));
-                Debug.assert(!!s, "lost the chant");
-                Debug.assert(!!s.exports, "has no exports");
+                Debug.assert(!!s && !!s.exports);
                 return action(e.name, s.exports.get(e.name.escapedText));
             }
         }

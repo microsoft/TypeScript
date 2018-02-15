@@ -1512,15 +1512,15 @@ namespace ts {
             const e = skipParentheses(initializer.expression);
             return e.kind === SyntaxKind.FunctionExpression || e.kind === SyntaxKind.ArrowFunction ? initializer : undefined;
         }
-        if(initializer.kind === SyntaxKind.FunctionExpression ||
-           initializer.kind === SyntaxKind.ClassExpression ||
-           isObjectLiteralExpression(initializer) && initializer.properties.length === 0) {
+        if (initializer.kind === SyntaxKind.FunctionExpression ||
+            initializer.kind === SyntaxKind.ClassExpression ||
+            isObjectLiteralExpression(initializer) && initializer.properties.length === 0) {
             return initializer;
         }
     }
 
     function getDefaultedJavascriptInitializer(name: EntityNameExpression, initializer: Expression) {
-        const e = isBinaryExpression(initializer) && getJavascriptInitializer(initializer.right)
+        const e = isBinaryExpression(initializer) && getJavascriptInitializer(initializer.right);
         if (e && isSameEntityName(name, (initializer as BinaryExpression).left as EntityNameExpression)) {
             return e;
         }
