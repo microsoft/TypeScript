@@ -1010,8 +1010,8 @@ type Bar<T> = T extends string ? boolean : number;
 >T : T
 
 const convert = <U>(value: Foo<U>): Bar<U> => value;
->convert : <U>(value: Foo<U>) => Foo<U>
-><U>(value: Foo<U>): Bar<U> => value : <U>(value: Foo<U>) => Foo<U>
+>convert : <U>(value: Foo<U>) => Bar<U>
+><U>(value: Foo<U>): Bar<U> => value : <U>(value: Foo<U>) => Bar<U>
 >U : U
 >value : Foo<U>
 >Foo : Foo<T>
@@ -1095,7 +1095,7 @@ function f33<T, U>() {
 >U : U
 
     type T2 = Bar<T & U>;
->T2 : Foo<T & U>
+>T2 : Bar<T & U>
 >Bar : Bar<T>
 >T : T
 >U : U
@@ -1106,7 +1106,7 @@ function f33<T, U>() {
 
     var z: T2;
 >z : Foo<T & U>
->T2 : Foo<T & U>
+>T2 : Bar<T & U>
 }
 
 // Repro from #21823
