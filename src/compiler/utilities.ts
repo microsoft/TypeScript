@@ -570,17 +570,15 @@ namespace ts {
     export function getTextOfPropertyName(name: PropertyName): __String {
         switch (name.kind) {
             case SyntaxKind.Identifier:
-                return (<Identifier>name).escapedText;
+                return name.escapedText;
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
-                return escapeLeadingUnderscores((<LiteralExpression>name).text);
+                return escapeLeadingUnderscores(name.text);
             case SyntaxKind.ComputedPropertyName:
-                if (isStringOrNumericLiteral((<ComputedPropertyName>name).expression)) {
-                    return escapeLeadingUnderscores((<LiteralExpression>(<ComputedPropertyName>name).expression).text);
-                }
+                return isStringOrNumericLiteral(name.expression) ? escapeLeadingUnderscores(name.expression.text) : undefined;
+            default:
+                Debug.assertNever(name);
         }
-
-        return undefined;
     }
 
     export function entityNameToString(name: EntityNameOrEntityNameExpression): string {
