@@ -912,7 +912,7 @@ namespace ts.FindAllReferences.Core {
 
         // For `export { foo as bar }`, rename `foo`, but not `bar`.
         if (!(referenceLocation === propertyName && state.options.isForRename)) {
-            const exportKind = (referenceLocation as Identifier).originalKeywordKind === ts.SyntaxKind.DefaultKeyword ? ExportKind.Default : ExportKind.Named;
+            const exportKind = referenceLocation.originalKeywordKind === ts.SyntaxKind.DefaultKeyword ? ExportKind.Default : ExportKind.Named;
             const exportInfo = getExportInfo(referenceSymbol, exportKind, state.checker);
             Debug.assert(!!exportInfo);
             searchForImportsOfExport(referenceLocation, referenceSymbol, exportInfo, state);
@@ -1125,7 +1125,7 @@ namespace ts.FindAllReferences.Core {
                         }
                     });
                 }
-                else if (isImplementationExpression(<Expression>body)) {
+                else if (isImplementationExpression(body)) {
                     addReference(body);
                 }
             }
@@ -1647,10 +1647,10 @@ namespace ts.FindAllReferences.Core {
 
     function getNameFromObjectLiteralElement(node: ObjectLiteralElement): string {
         if (node.name.kind === SyntaxKind.ComputedPropertyName) {
-            const nameExpression = (<ComputedPropertyName>node.name).expression;
+            const nameExpression = node.name.expression;
             // treat computed property names where expression is string/numeric literal as just string/numeric literal
             if (isStringOrNumericLiteral(nameExpression)) {
-                return (<LiteralExpression>nameExpression).text;
+                return nameExpression.text;
             }
             return undefined;
         }
@@ -1728,7 +1728,7 @@ namespace ts.FindAllReferences.Core {
     function getParentStatementOfVariableDeclaration(node: VariableDeclaration): VariableStatement {
         if (node.parent && node.parent.parent && node.parent.parent.kind === SyntaxKind.VariableStatement) {
             Debug.assert(node.parent.kind === SyntaxKind.VariableDeclarationList);
-            return <VariableStatement>node.parent.parent;
+            return node.parent.parent;
         }
     }
 

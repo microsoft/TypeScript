@@ -180,8 +180,7 @@ namespace ts.refactor.convertFunctionToES6Class {
                         }
                         // case 2: () => [1,2,3]
                         else {
-                            const expression = arrowFunctionBody as Expression;
-                            bodyBlock = createBlock([createReturn(expression)]);
+                            bodyBlock = createBlock([createReturn(arrowFunctionBody)]);
                         }
                         const fullModifiers = concatenate(modifiers, getModifierKindFromSource(arrowFunction, SyntaxKind.AsyncKeyword));
                         const method = createMethod(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, memberDeclaration.name, /*questionToken*/ undefined,

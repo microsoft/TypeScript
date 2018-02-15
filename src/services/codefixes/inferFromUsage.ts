@@ -140,7 +140,7 @@ namespace ts.codefix {
             case SyntaxKind.Constructor:
                 return true;
             case SyntaxKind.FunctionExpression:
-                return !!(declaration as FunctionExpression).name;
+                return !!declaration.name;
         }
         return false;
     }
@@ -497,7 +497,7 @@ namespace ts.codefix {
         }
 
         function inferTypeFromSwitchStatementLabelContext(parent: CaseOrDefaultClause, checker: TypeChecker, usageContext: UsageContext): void {
-            addCandidateType(usageContext, checker.getTypeAtLocation((<SwitchStatement>parent.parent.parent).expression));
+            addCandidateType(usageContext, checker.getTypeAtLocation(parent.parent.parent.expression));
         }
 
         function inferTypeFromCallExpressionContext(parent: CallExpression | NewExpression, checker: TypeChecker, usageContext: UsageContext): void {

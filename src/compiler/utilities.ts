@@ -904,11 +904,10 @@ namespace ts {
                     return;
                 default:
                     if (isFunctionLike(node)) {
-                        const name = (<FunctionLikeDeclaration>node).name;
-                        if (name && name.kind === SyntaxKind.ComputedPropertyName) {
+                        if (node.name && node.name.kind === SyntaxKind.ComputedPropertyName) {
                             // Note that we will not include methods/accessors of a class because they would require
                             // first descending into the class. This is by design.
-                            traverse((<ComputedPropertyName>name).expression);
+                            traverse(node.name.expression);
                             return;
                         }
                     }
@@ -1219,15 +1218,15 @@ namespace ts {
     }
 
     export function getInvokedExpression(node: CallLikeExpression): Expression {
-        if (node.kind === SyntaxKind.TaggedTemplateExpression) {
-            return (<TaggedTemplateExpression>node).tag;
+        switch (node.kind) {
+            case SyntaxKind.TaggedTemplateExpression:
+                return node.tag;
+            case SyntaxKind.JsxOpeningElement:
+            case SyntaxKind.JsxSelfClosingElement:
+                return node.tagName;
+            default:
+                return node.expression;
         }
-        else if (isJsxOpeningLikeElement(node)) {
-            return node.tagName;
-        }
-
-        // Will either be a CallExpression, NewExpression, or Decorator.
-        return (<CallExpression | Decorator>node).expression;
     }
 
     export function nodeCanBeDecorated(node: ClassDeclaration): true;
@@ -1559,7 +1558,7 @@ namespace ts {
         if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
             const reference = (<ImportEqualsDeclaration>node).moduleReference;
             if (reference.kind === SyntaxKind.ExternalModuleReference) {
-                return (<ExternalModuleReference>reference).expression;
+                return reference.expression;
             }
         }
         if (node.kind === SyntaxKind.ExportDeclaration) {
@@ -1571,20 +1570,20 @@ namespace ts {
     }
 
     export function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): ImportEqualsDeclaration | NamespaceImport {
-        if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
-            return <ImportEqualsDeclaration>node;
-        }
-
-        const importClause = (<ImportDeclaration>node).importClause;
-        if (importClause && importClause.namedBindings && importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-            return <NamespaceImport>importClause.namedBindings;
+        switch (node.kind) {
+            case SyntaxKind.ImportDeclaration:
+                return node.importClause && tryCast(node.importClause.namedBindings, isNamespaceImport);
+            case SyntaxKind.ImportEqualsDeclaration:
+                return node;
+            case SyntaxKind.ExportDeclaration:
+                return undefined;
+            default:
+                return Debug.assertNever(node);
         }
     }
 
     export function isDefaultImport(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
-        return node.kind === SyntaxKind.ImportDeclaration
-            && (<ImportDeclaration>node).importClause
-            && !!(<ImportDeclaration>node).importClause.name;
+        return node.kind === SyntaxKind.ImportDeclaration && node.importClause && !!node.importClause.name;
     }
 
     export function hasQuestionToken(node: Node) {
@@ -2127,8 +2126,8 @@ namespace ts {
 
     export function isDynamicName(name: DeclarationName): boolean {
         return name.kind === SyntaxKind.ComputedPropertyName &&
-            !isStringOrNumericLiteral((<ComputedPropertyName>name).expression) &&
-            !isWellKnownSymbolSyntactically((<ComputedPropertyName>name).expression);
+            !isStringOrNumericLiteral(name.expression) &&
+            !isWellKnownSymbolSyntactically(name.expression);
     }
 
     /**
@@ -2168,7 +2167,7 @@ namespace ts {
             if (node.kind === SyntaxKind.StringLiteral ||
                 node.kind === SyntaxKind.NumericLiteral) {
 
-                return (node as LiteralLikeNode).text;
+                return node.text;
             }
         }
 
@@ -2183,7 +2182,7 @@ namespace ts {
             if (node.kind === SyntaxKind.StringLiteral ||
                 node.kind === SyntaxKind.NumericLiteral) {
 
-                return escapeLeadingUnderscores((node as LiteralLikeNode).text);
+                return escapeLeadingUnderscores(node.text);
             }
         }
 
@@ -4258,13 +4257,12 @@ namespace ts {
         // Covers remaining cases
         switch (hostNode.kind) {
             case SyntaxKind.VariableStatement:
-                if ((hostNode as VariableStatement).declarationList &&
-                (hostNode as VariableStatement).declarationList.declarations[0]) {
-                    return getDeclarationIdentifier((hostNode as VariableStatement).declarationList.declarations[0]);
+                if (hostNode.declarationList && hostNode.declarationList.declarations[0]) {
+                    return getDeclarationIdentifier(hostNode.declarationList.declarations[0]);
                 }
                 return undefined;
             case SyntaxKind.ExpressionStatement:
-                const expr = (hostNode as ExpressionStatement).expression;
+                const expr = hostNode.expression;
                 switch (expr.kind) {
                     case SyntaxKind.PropertyAccessExpression:
                         return (expr as PropertyAccessExpression).name;
@@ -4297,7 +4295,7 @@ namespace ts {
     }
 
     export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {
-        return declaration.name || nameForNamelessJSDocTypedef(declaration as JSDocTypedefTag);
+        return declaration.name || nameForNamelessJSDocTypedef(declaration);
     }
 
     export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
@@ -4353,7 +4351,7 @@ namespace ts {
     export function getJSDocParameterTags(param: ParameterDeclaration): ReadonlyArray<JSDocParameterTag> | undefined {
         if (param.name && isIdentifier(param.name)) {
             const name = param.name.escapedText;
-            return getJSDocTags(param.parent).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name) as JSDocParameterTag[];
+            return getJSDocTags(param.parent).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name);
         }
         // a binding pattern doesn't have a name, so it's not possible to match it a JSDoc parameter, which is identified by name
         return undefined;
