@@ -1767,55 +1767,21 @@ namespace ts {
             return OutliningElementsCollector.collectElements(sourceFile, cancellationToken);
         }
 
-        function getBraceMatchingAtPosition(fileName: string, position: number) {
+        const braceMatching = createMapFromTemplate({
+            [SyntaxKind.OpenBraceToken]: SyntaxKind.CloseBraceToken,
+            [SyntaxKind.OpenParenToken]: SyntaxKind.CloseParenToken,
+            [SyntaxKind.OpenBracketToken]: SyntaxKind.CloseBracketToken,
+            [SyntaxKind.GreaterThanToken]: SyntaxKind.LessThanToken,
+        });
+        braceMatching.forEach((value, key) => braceMatching.set(value.toString(), Number(key) as SyntaxKind));
+
+        function getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            const result: TextSpan[] = [];
-
             const token = getTouchingToken(sourceFile, position, /*includeJsDocComment*/ false);
-
-            if (token.getStart(sourceFile) === position) {
-                const matchKind = getMatchingTokenKind(token);
-
-                // Ensure that there is a corresponding token to match ours.
-                if (matchKind) {
-                    const parentElement = token.parent;
-
-                    const childNodes = parentElement.getChildren(sourceFile);
-                    for (const current of childNodes) {
-                        if (current.kind === matchKind) {
-                            const range1 = createTextSpan(token.getStart(sourceFile), token.getWidth(sourceFile));
-                            const range2 = createTextSpan(current.getStart(sourceFile), current.getWidth(sourceFile));
-
-                            // We want to order the braces when we return the result.
-                            if (range1.start < range2.start) {
-                                result.push(range1, range2);
-                            }
-                            else {
-                                result.push(range2, range1);
-                            }
-
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return result;
-
-            function getMatchingTokenKind(token: Node): ts.SyntaxKind {
-                switch (token.kind) {
-                    case ts.SyntaxKind.OpenBraceToken: return ts.SyntaxKind.CloseBraceToken;
-                    case ts.SyntaxKind.OpenParenToken: return ts.SyntaxKind.CloseParenToken;
-                    case ts.SyntaxKind.OpenBracketToken: return ts.SyntaxKind.CloseBracketToken;
-                    case ts.SyntaxKind.LessThanToken: return ts.SyntaxKind.GreaterThanToken;
-                    case ts.SyntaxKind.CloseBraceToken: return ts.SyntaxKind.OpenBraceToken;
-                    case ts.SyntaxKind.CloseParenToken: return ts.SyntaxKind.OpenParenToken;
-                    case ts.SyntaxKind.CloseBracketToken: return ts.SyntaxKind.OpenBracketToken;
-                    case ts.SyntaxKind.GreaterThanToken: return ts.SyntaxKind.LessThanToken;
-                }
-
-                return undefined;
-            }
+            const matchKind = token.getStart(sourceFile) === position ? braceMatching.get(token.kind.toString()) : undefined;
+            const match = matchKind && findChildOfKind(token.parent, matchKind, sourceFile);
+            // We want to order the braces when we return the result.
+            return match ? [createTextSpanFromNode(token, sourceFile), createTextSpanFromNode(match, sourceFile)].sort((a, b) => a.start - b.start) : emptyArray;
         }
 
         function getIndentationAtPosition(fileName: string, position: number, editorOptions: EditorOptions | EditorSettings) {
