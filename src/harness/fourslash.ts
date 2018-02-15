@@ -623,11 +623,11 @@ namespace FourSlash {
         }
 
         private getGoToDefinition(): ts.DefinitionInfo[] {
-            return this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            return this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
         }
 
         private getGoToDefinitionAndBoundSpan(): ts.DefinitionInfoAndBoundSpan {
-            return this.languageService.getDefinitionAndBoundSpan(this.activeFile.fileName, this.currentCaretPosition);
+            return this.languageService.getDefinitionAndBoundSpan(this.activeFile.fileName, this.currentCaretPosition)!;
         }
 
         public verifyGoToType(arg0: any, endMarkerNames?: string | string[]) {
@@ -1185,7 +1185,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyDisplayPartsOfReferencedSymbol(expected: ts.SymbolDisplayPart[]) {
-            const referencedSymbols = this.findReferencesAtCaret();
+            const referencedSymbols = this.findReferencesAtCaret()!;
 
             if (referencedSymbols.length === 0) {
                 this.raiseError("No referenced symbols found at current caret position");
@@ -1216,11 +1216,11 @@ Actual: ${stringify(fullActual)}`);
         }
 
         private getCompletionListAtCaret(options?: FourSlashInterface.CompletionsAtOptions): ts.CompletionInfo {
-            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, options);
+            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, options)!;
         }
 
         private getCompletionEntryDetails(entryName: string, source?: string): ts.CompletionEntryDetails {
-            return this.languageService.getCompletionEntryDetails(this.activeFile.fileName, this.currentCaretPosition, entryName, this.formatCodeSettings, source);
+            return this.languageService.getCompletionEntryDetails(this.activeFile.fileName, this.currentCaretPosition, entryName, this.formatCodeSettings, source)!;
         }
 
         private getReferencesAtCaret() {
@@ -1286,7 +1286,7 @@ Actual: ${stringify(fullActual)}`);
             tags: ts.JSDocTagInfo[]
         ) {
 
-            const actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            const actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
             assert.equal(actualQuickInfo.kind, kind, this.messageAtLastKnownMarker("QuickInfo kind"));
             assert.equal(actualQuickInfo.kindModifiers, kindModifiers, this.messageAtLastKnownMarker("QuickInfo kindModifiers"));
             assert.equal(JSON.stringify(actualQuickInfo.textSpan), JSON.stringify(textSpan), this.messageAtLastKnownMarker("QuickInfo textSpan"));
@@ -1432,7 +1432,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifySignatureHelpArgumentCount(expected: number) {
-            const signatureHelpItems = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
+            const signatureHelpItems = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition)!;
             const actual = signatureHelpItems.argumentCount;
             assert.equal(actual, expected);
         }
@@ -1490,13 +1490,13 @@ Actual: ${stringify(fullActual)}`);
         }
 
         private getActiveSignatureHelpItem() {
-            const help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
+            const help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition)!;
             const index = help.selectedItemIndex;
             return help.items[index];
         }
 
         private getActiveParameter(): ts.SignatureHelpParameter {
-            const help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
+            const help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition)!;
             const item = help.items[help.selectedItemIndex];
             const currentParam = help.argumentIndex;
             return item.parameters[currentParam];
@@ -1585,7 +1585,7 @@ Actual: ${stringify(fullActual)}`);
             Harness.Baseline.runBaseline(
                 baselineFile,
                 () => {
-                    return this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos));
+                    return this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos)!);
                 });
         }
 
@@ -1663,7 +1663,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public printBreakpointLocation(pos: number) {
-            Harness.IO.log("\n**Pos: " + pos + " " + this.spanInfoToString(this.getBreakpointStatementLocation(pos), "  "));
+            Harness.IO.log("\n**Pos: " + pos + " " + this.spanInfoToString(this.getBreakpointStatementLocation(pos)!, "  "));
         }
 
         public printBreakpointAtCurrentLocation() {
@@ -1676,7 +1676,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public printCurrentQuickInfo() {
-            const quickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            const quickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
             Harness.IO.log("Quick Info: " + quickInfo.displayParts!.map(part => part.text).join(""));
         }
 
@@ -2005,7 +2005,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public goToTypeDefinition(definitionIndex: number) {
-            const definitions = this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            const definitions = this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
             if (!definitions || !definitions.length) {
                 this.raiseError("goToTypeDefinition failed - expected to find at least one definition location but got 0");
             }
@@ -2048,7 +2048,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public goToImplementation() {
-            const implementations = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            const implementations = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
             if (!implementations || !implementations.length) {
                 this.raiseError("goToImplementation failed - expected to find at least one implementation location but got 0");
             }
@@ -2063,7 +2063,7 @@ Actual: ${stringify(fullActual)}`);
 
         public verifyRangesInImplementationList(markerName: string) {
             this.goToMarker(markerName);
-            const implementations: ImplementationLocationInformation[] = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            const implementations: ImplementationLocationInformation[] = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
             if (!implementations || !implementations.length) {
                 this.raiseError("verifyRangesInImplementationList failed - expected to find at least one implementation location but got 0");
             }
@@ -2238,7 +2238,7 @@ Actual: ${stringify(fullActual)}`);
         public verifyCurrentNameOrDottedNameSpanText(text: string) {
             const span = this.languageService.getNameOrDottedNameSpan(this.activeFile.fileName, this.currentCaretPosition, this.currentCaretPosition);
             if (!span) {
-                this.raiseError("verifyCurrentNameOrDottedNameSpanText\n" +
+                return this.raiseError("verifyCurrentNameOrDottedNameSpanText\n" +
                     "\tExpected: \"" + text + "\"\n" +
                     "\t  Actual: undefined");
             }
@@ -2260,12 +2260,12 @@ Actual: ${stringify(fullActual)}`);
                 this.testData.globalOptions[MetadataOptionNames.baselineFile],
                 () => {
                     return this.baselineCurrentFileLocations(pos =>
-                        this.getNameOrDottedNameSpan(pos));
+                        this.getNameOrDottedNameSpan(pos)!);
                 });
         }
 
         public printNameOrDottedNameSpans(pos: number) {
-            Harness.IO.log(this.spanInfoToString(this.getNameOrDottedNameSpan(pos), "**"));
+            Harness.IO.log(this.spanInfoToString(this.getNameOrDottedNameSpan(pos)!, "**"));
         }
 
         private verifyClassifications(expected: { classificationType: string; text: string; textSpan?: TextSpan }[], actual: ts.ClassifiedSpan[], sourceFileText: string) {
@@ -2590,7 +2590,7 @@ Actual: ${stringify(fullActual)}`);
 
         public verifyDocCommentTemplate(expected: ts.TextInsertion | undefined) {
             const name = "verifyDocCommentTemplate";
-            const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
 
             if (expected === undefined) {
                 if (actual) {
@@ -2801,7 +2801,7 @@ Actual: ${stringify(fullActual)}`);
             const occurrences = this.getOccurrencesAtCurrentPosition();
 
             if (!occurrences || occurrences.length === 0) {
-                this.raiseError("verifyOccurrencesAtPositionListContains failed - found 0 references, expected at least one.");
+                return this.raiseError("verifyOccurrencesAtPositionListContains failed - found 0 references, expected at least one.");
             }
 
             for (const occurrence of occurrences) {

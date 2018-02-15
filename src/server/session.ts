@@ -1240,8 +1240,8 @@ namespace ts.server {
             const position = this.getPosition(args, scriptInfo);
 
             const completions = project.getLanguageService().getCompletionsAtPosition(file, position, args);
-            if (simplifiedResult) {
-                return mapDefined<CompletionEntry, protocol.CompletionEntry>(completions && completions.entries, entry => {
+            if (completions && simplifiedResult) {
+                return mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
                     if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
                         const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, isRecommended } = entry;
                         const convertedSpan = replacementSpan ? this.toLocationTextSpan(replacementSpan, scriptInfo) : undefined;
@@ -1759,7 +1759,7 @@ namespace ts.server {
             return { responseRequired: false };
         }
 
-        private requiredResponse(response: {}): HandlerResponse {
+        private requiredResponse(response: {} | undefined): HandlerResponse {
             return { response, responseRequired: true };
         }
 

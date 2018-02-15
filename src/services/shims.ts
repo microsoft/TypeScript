@@ -552,7 +552,7 @@ namespace ts {
         return result;
     }
 
-    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => {} | null, logPerformance: boolean): string {
+    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => {} | null | undefined, logPerformance: boolean): string {
         return <string>forwardCall(logger, actionDescription, /*returnJson*/ true, action, logPerformance);
     }
 
@@ -614,7 +614,7 @@ namespace ts {
             this.logger = this.host;
         }
 
-        public forwardJSONCall(actionDescription: string, action: () => {} | null): string {
+        public forwardJSONCall(actionDescription: string, action: () => {} | null | undefined): string {
             return forwardJSONCall(this.logger, actionDescription, action, this.logPerformance);
         }
 

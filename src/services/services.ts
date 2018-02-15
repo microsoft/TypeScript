@@ -1435,7 +1435,7 @@ namespace ts {
             return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
         }
 
-        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = { includeExternalModuleExports: false, includeInsertTextCompletions: false }): CompletionInfo {
+        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = { includeExternalModuleExports: false, includeInsertTextCompletions: false }): CompletionInfo | undefined {
             synchronizeHostData();
             return Completions.getCompletionsAtPosition(
                 host,
@@ -1445,10 +1445,10 @@ namespace ts {
                 getValidSourceFile(fileName),
                 position,
                 program.getSourceFiles(),
-                options)!; // TODO: GH#18217
+                options);
         }
 
-        function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions?: FormatCodeSettings, source?: string): CompletionEntryDetails {
+        function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions?: FormatCodeSettings, source?: string): CompletionEntryDetails | undefined {
             synchronizeHostData();
             return Completions.getCompletionEntryDetails(
                 program,
@@ -1460,10 +1460,10 @@ namespace ts {
                 program.getSourceFiles(),
                 host,
                 (formattingOptions && formatting.getFormatContext(formattingOptions))!, // TODO: GH#18217
-                getCanonicalFileName)!; // TODO: GH#18217
+                getCanonicalFileName);
         }
 
-        function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol {
+        function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol | undefined {
             synchronizeHostData();
             return Completions.getCompletionEntrySymbol(
                 program.getTypeChecker(),
@@ -1472,20 +1472,20 @@ namespace ts {
                 getValidSourceFile(fileName),
                 position,
                 { name, source },
-                program.getSourceFiles())!; // TODO: GH#18217
+                program.getSourceFiles());
         }
 
-        function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
+        function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined {
             synchronizeHostData();
 
             const sourceFile = getValidSourceFile(fileName);
             const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
             if (node === sourceFile) {
-                return undefined!; // TODO: GH#18217
+                return undefined;
             }
 
             if (isLabelName(node)) {
-                return undefined!;
+                return undefined;
             }
 
             const typeChecker = program.getTypeChecker();
@@ -1514,7 +1514,7 @@ namespace ts {
                         }
                 }
 
-                return undefined!;
+                return undefined;
             }
 
             const displayPartsDocumentationsAndKind = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(node), node);
@@ -1544,29 +1544,29 @@ namespace ts {
         }
 
         /// Goto definition
-        function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
+        function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] | undefined {
             synchronizeHostData();
-            return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position)!; // TODO: GH#18217
+            return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position);
         }
 
-        function getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan {
+        function getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined {
             synchronizeHostData();
-            return GoToDefinition.getDefinitionAndBoundSpan(program, getValidSourceFile(fileName), position)!; // TODO: GH#18217
+            return GoToDefinition.getDefinitionAndBoundSpan(program, getValidSourceFile(fileName), position);
         }
 
-        function getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
+        function getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] | undefined {
             synchronizeHostData();
-            return GoToDefinition.getTypeDefinitionAtPosition(program.getTypeChecker(), getValidSourceFile(fileName), position)!; // TODO: GH#18217
+            return GoToDefinition.getTypeDefinitionAtPosition(program.getTypeChecker(), getValidSourceFile(fileName), position);
         }
 
         /// Goto implementation
-        function getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] {
+        function getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] | undefined {
             synchronizeHostData();
-            return FindAllReferences.getImplementationsAtPosition(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position)!; // TODO: GH#18217
+            return FindAllReferences.getImplementationsAtPosition(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
         }
 
         /// References and Occurrences
-        function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
+        function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined {
             let results = getOccurrencesAtPositionCore(fileName, position);
 
             if (results) {
@@ -1580,19 +1580,19 @@ namespace ts {
             return results;
         }
 
-        function getDocumentHighlights(fileName: string, position: number, filesToSearch: ReadonlyArray<string>): DocumentHighlights[] {
+        function getDocumentHighlights(fileName: string, position: number, filesToSearch: ReadonlyArray<string>): DocumentHighlights[] | undefined {
             synchronizeHostData();
             const sourceFilesToSearch = map(filesToSearch, f => Debug.assertDefined(program.getSourceFile(f)));
             const sourceFile = getValidSourceFile(fileName);
-            return DocumentHighlights.getDocumentHighlights(program, cancellationToken, sourceFile, position, sourceFilesToSearch)!; // TODO: GH#18217
+            return DocumentHighlights.getDocumentHighlights(program, cancellationToken, sourceFile, position, sourceFilesToSearch);
         }
 
-        function getOccurrencesAtPositionCore(fileName: string, position: number): ReferenceEntry[] {
+        function getOccurrencesAtPositionCore(fileName: string, position: number): ReferenceEntry[] | undefined {
             return convertDocumentHighlights(getDocumentHighlights(fileName, position, [fileName]));
 
-            function convertDocumentHighlights(documentHighlights: DocumentHighlights[]): ReferenceEntry[] {
+            function convertDocumentHighlights(documentHighlights: DocumentHighlights[] | undefined): ReferenceEntry[] | undefined {
                 if (!documentHighlights) {
-                    return undefined!; // TODO: GH#18217
+                    return undefined;
                 }
 
                 const result: ReferenceEntry[] = [];
@@ -1612,15 +1612,15 @@ namespace ts {
             }
         }
 
-        function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
-            return getReferences(fileName, position, { findInStrings, findInComments, isForRename: true })!; // TODO: GH#18217
+        function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] | undefined {
+            return getReferences(fileName, position, { findInStrings, findInComments, isForRename: true });
         }
 
-        function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
-            return getReferences(fileName, position)!; // TODO: GH#18217
+        function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined {
+            return getReferences(fileName, position)!;
         }
 
-        function getReferences(fileName: string, position: number, options?: FindAllReferences.Options) {
+        function getReferences(fileName: string, position: number, options?: FindAllReferences.Options): ReferenceEntry[] | undefined {
             synchronizeHostData();
 
             // Exclude default library when renaming as commonly user don't want to change that file.
@@ -1639,9 +1639,9 @@ namespace ts {
             return FindAllReferences.findReferencedEntries(program, cancellationToken, sourceFiles, getValidSourceFile(fileName), position, options);
         }
 
-        function findReferences(fileName: string, position: number): ReferencedSymbol[] {
+        function findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined {
             synchronizeHostData();
-            return FindAllReferences.findReferencedSymbols(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position)!; // TODO: GH#18217
+            return FindAllReferences.findReferencedSymbols(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
         }
 
         /// NavigateTo
@@ -1664,12 +1664,12 @@ namespace ts {
         /**
          * This is a semantic operation.
          */
-        function getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
+        function getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems | undefined {
             synchronizeHostData();
 
             const sourceFile = getValidSourceFile(fileName);
 
-            return SignatureHelp.getSignatureHelpItems(program, sourceFile, position, cancellationToken)!; // TODO: GH#18217
+            return SignatureHelp.getSignatureHelpItems(program, sourceFile, position, cancellationToken);
         }
 
         /// Syntactic features
@@ -1681,14 +1681,14 @@ namespace ts {
             return getNonBoundSourceFile(fileName);
         }
 
-        function getNameOrDottedNameSpan(fileName: string, startPos: number, _endPos: number): TextSpan {
+        function getNameOrDottedNameSpan(fileName: string, startPos: number, _endPos: number): TextSpan | undefined {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             // Get node at the location
             const node = getTouchingPropertyName(sourceFile, startPos, /*includeJsDocComment*/ false);
 
             if (node === sourceFile) {
-                return undefined!; // TODO: GH#18217
+                return undefined;
             }
 
             switch (node.kind) {
@@ -1706,7 +1706,7 @@ namespace ts {
 
                 // Cant create the text span
                 default:
-                    return undefined!;
+                    return undefined;
             }
 
             let nodeForStartPos = node;
@@ -1738,11 +1738,11 @@ namespace ts {
             return createTextSpanFromBounds(nodeForStartPos.getStart(), node.getEnd());
         }
 
-        function getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan {
+        function getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan | undefined {
             // doesn't use compiler - no need to synchronize with host
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
-            return BreakpointResolver.spanInSourceFileAtLocation(sourceFile, position)!; // TODO: GH#18217
+            return BreakpointResolver.spanInSourceFileAtLocation(sourceFile, position);
         }
 
         function getNavigationBarItems(fileName: string): NavigationBarItem[] {
@@ -1929,8 +1929,8 @@ namespace ts {
             }
         }
 
-        function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
-            return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position)!; // TODO: GH#18217
+        function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion | undefined {
+            return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position);
         }
 
         function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
@@ -1969,10 +1969,10 @@ namespace ts {
             return true;
         }
 
-        function getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan {
+        function getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             const range = ts.formatting.getRangeOfEnclosingComment(sourceFile, position, onlyMultiLine);
-            return (range && createTextSpanFromRange(range))!; // TODO: GH#18217
+            return range && createTextSpanFromRange(range);
         }
 
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
