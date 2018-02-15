@@ -2768,6 +2768,10 @@
         "code": 5068
     },
 
+    "Generates a sourcemap for each corresponding '.d.ts' file.": {
+        "category": "Message",
+        "code": 6000
+    },
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001

@@ -2122,7 +2122,7 @@ namespace ts {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "outFile");
             }
 
-            if (options.mapRoot && !options.sourceMap) {
+            if (options.mapRoot && !(options.sourceMap || options.declarationMaps)) {
                 // Error to specify --mapRoot without --sourcemap
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "mapRoot", "sourceMap");
             }
@@ -2133,6 +2133,12 @@ namespace ts {
                 }
                 if (options.out || options.outFile) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "declarationDir", options.out ? "out" : "outFile");
+                }
+            }
+
+            if (options.declarationMaps) {
+                if (!options.declaration) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "declarationMaps", "declaration");
                 }
             }
 

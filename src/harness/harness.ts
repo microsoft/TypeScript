@@ -1633,13 +1633,13 @@ namespace Harness {
 
         export function doSourcemapBaseline(baselinePath: string, options: ts.CompilerOptions, result: CompilerResult, harnessSettings: TestCaseParser.CompilerSettings) {
             if (options.inlineSourceMap) {
-                if (result.sourceMaps.length > 0) {
+                if (result.sourceMaps.length > 0 && !options.declarationMaps) {
                     throw new Error("No sourcemap files should be generated if inlineSourceMaps was set.");
                 }
                 return;
             }
-            else if (options.sourceMap) {
-                if (result.sourceMaps.length !== result.files.length) {
+            else if (options.sourceMap || options.declarationMaps) {
+                if (result.sourceMaps.length !== (result.files.length * (options.declarationMaps && options.sourceMap ? 2 : 1))) {
                     throw new Error("Number of sourcemap files should be same as js files.");
                 }
 
@@ -1806,6 +1806,10 @@ namespace Harness {
             return ts.endsWith(fileName, ".js.map") || ts.endsWith(fileName, ".jsx.map");
         }
 
+        export function isDTSMap(fileName: string) {
+            return ts.endsWith(fileName, ".d.ts.map");
+        }
+
         /** Contains the code and errors of a compilation and some helper methods to check its status. */
         export class CompilerResult {
             public files: GeneratedFile[] = [];
@@ -1826,7 +1830,7 @@ namespace Harness {
                         // .js file, add to files
                         this.files.push(emittedFile);
                     }
-                    else if (isJSMap(emittedFile.fileName)) {
+                    else if (isJSMap(emittedFile.fileName) || isDTSMap(emittedFile.fileName)) {
                         this.sourceMaps.push(emittedFile);
                     }
                     else {

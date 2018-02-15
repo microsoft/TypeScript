@@ -49,7 +49,8 @@ namespace ts {
             const jsFilePath = options.outFile || options.out;
             const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
             const declarationFilePath = (forceDtsPaths || options.declaration) ? removeFileExtension(jsFilePath) + Extension.Dts : undefined;
-            return { jsFilePath, sourceMapFilePath, declarationFilePath };
+            const declarationMapPath = (declarationFilePath && options.declarationMaps) ? declarationFilePath + ".map" : undefined;
+            return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath };
         }
         else {
             const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, getOutputExtension(sourceFile, options));
@@ -57,7 +58,8 @@ namespace ts {
             // For legacy reasons (ie, we have baselines capturing the behavior), js files don't report a .d.ts output path - this would only matter if `declaration` and `allowJs` were both on, which is currently an error
             const isJs = isSourceFileJavaScript(sourceFile);
             const declarationFilePath = ((forceDtsPaths || options.declaration) && !isJs) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
-            return { jsFilePath, sourceMapFilePath, declarationFilePath };
+            const declarationMapPath = (declarationFilePath && options.declarationMaps) ? declarationFilePath + ".map" : undefined;
+            return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath };
         }
     }
 
@@ -83,12 +85,19 @@ namespace ts {
         return Extension.Js;
     }
 
+    const enum SourceMapEmitKind {
+        None,
+        File,
+        Inline,
+        DeclarationFile
+    }
+
     /*@internal*/
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean, transformers?: TransformerFactory<SourceFile>[]): EmitResult {
         const compilerOptions = host.getCompilerOptions();
         const moduleKind = getEmitModuleKind(compilerOptions);
-        const sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
+        const sourceMapDataList: SourceMapData[] = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || compilerOptions.declarationMaps) ? [] : undefined;
         const emittedFilesList: string[] = compilerOptions.listEmittedFiles ? [] : undefined;
         const emitterDiagnostics = createDiagnosticCollection();
         const newLine = host.getNewLine();
@@ -162,7 +171,8 @@ namespace ts {
                 onSetSourceFile: setSourceFile,
             });
 
-            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, isSourceFile(sourceFileOrBundle) ? transform.transformed[0] : createBundle(transform.transformed), printer);
+            const sourcemapKind = compilerOptions.inlineSourceMap ? SourceMapEmitKind.Inline : compilerOptions.sourceMap ? SourceMapEmitKind.File : SourceMapEmitKind.None;
+            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, isSourceFile(sourceFileOrBundle) ? transform.transformed[0] : createBundle(transform.transformed), printer, sourcemapKind);
 
             // Clean up emit nodes on parse tree
             transform.dispose();
@@ -186,6 +196,11 @@ namespace ts {
                 // resolver hooks
                 hasGlobalName: resolver.hasGlobalName,
 
+                // sourcemap hooks
+                onEmitSourceMapOfNode: sourceMap.emitNodeWithSourceMap,
+                onEmitSourceMapOfToken: sourceMap.emitTokenWithSourceMap,
+                onEmitSourceMapOfPosition: sourceMap.emitPos,
+
                 // transform hooks
                 onEmitNode: declarationTransform.emitNodeWithNotification,
                 substituteNode: declarationTransform.substituteNode,
@@ -194,13 +209,13 @@ namespace ts {
             emitSkipped = emitSkipped || declBlocked;
             if (!declBlocked || emitOnlyDtsFiles) {
                 const previousState = sourceMap.setState(/*disabled*/ true);
-                printSourceFileOrBundle(declarationFilePath, /*sourceMapFilePath*/ undefined, declarationTransform.transformed[0], declarationPrinter, /*shouldSkipSourcemap*/ true);
+                printSourceFileOrBundle(declarationFilePath, /*sourceMapFilePath*/ undefined, declarationTransform.transformed[0], declarationPrinter, declarationFilePath ? SourceMapEmitKind.DeclarationFile : SourceMapEmitKind.None);
                 sourceMap.setState(previousState);
             }
             declarationTransform.dispose();
         }
 
-        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string, sourceFileOrBundle: SourceFile | Bundle, printer: Printer, shouldSkipSourcemap = false) {
+        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string, sourceFileOrBundle: SourceFile | Bundle, printer: Printer, sourcemapKind: SourceMapEmitKind) {
             const bundle = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle : undefined;
             const sourceFile = sourceFileOrBundle.kind === SyntaxKind.SourceFile ? sourceFileOrBundle : undefined;
             const sourceFiles = bundle ? bundle.sourceFiles : [sourceFile];
@@ -219,17 +234,17 @@ namespace ts {
             writer.writeLine();
 
             const sourceMappingURL = sourceMap.getSourceMappingURL();
-            if (!shouldSkipSourcemap && sourceMappingURL) {
+            if (sourceMappingURL) {
                 writer.write(`//# ${"sourceMappingURL"}=${sourceMappingURL}`); // Sometimes tools can sometimes see this line as a source mapping url comment
             }
 
             // Write the source map
-            if (!shouldSkipSourcemap && compilerOptions.sourceMap && !compilerOptions.inlineSourceMap) {
+            if (sourceMapFilePath && (sourcemapKind === SourceMapEmitKind.File || sourcemapKind === SourceMapEmitKind.DeclarationFile)) {
                 writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap.getText(), /*writeByteOrderMark*/ false, sourceFiles);
             }
 
             // Record source map data for the test harness.
-            if (!shouldSkipSourcemap && sourceMapDataList) {
+            if (sourcemapKind !== SourceMapEmitKind.None) {
                 sourceMapDataList.push(sourceMap.getSourceMapData());
             }
 
