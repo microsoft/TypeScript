@@ -7,19 +7,31 @@ class C {
 >C : C
 
     "0.1": void;
+>"0.1" : void
+
     ".1": Object;
+>".1" : Object
 >Object : Object
 
     "1": number;
+>"1" : number
+
     "1.": string;
+>"1." : string
+
     "1..": boolean;
+>"1.." : boolean
+
     "1.0": Date;
+>"1.0" : Date
 >Date : Date
 
     "-1.0": RegExp;
+>"-1.0" : RegExp
 >RegExp : RegExp
 
     "-1": Date;
+>"-1" : Date
 >Date : Date
 }
 
@@ -138,19 +150,31 @@ interface I {
 >I : I
 
     "0.1": void;
+>"0.1" : void
+
     ".1": Object;
+>".1" : Object
 >Object : Object
 
     "1": number;
+>"1" : number
+
     "1.": string;
+>"1." : string
+
     "1..": boolean;
+>"1.." : boolean
+
     "1.0": Date;
+>"1.0" : Date
 >Date : Date
 
     "-1.0": RegExp;
+>"-1.0" : RegExp
 >RegExp : RegExp
 
     "-1": Date;
+>"-1" : Date
 >Date : Date
 }
 
@@ -269,19 +293,31 @@ var a: {
 >a : { "0.1": void; ".1": Object; "1": number; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }
 
     "0.1": void;
+>"0.1" : void
+
     ".1": Object;
+>".1" : Object
 >Object : Object
 
     "1": number;
+>"1" : number
+
     "1.": string;
+>"1." : string
+
     "1..": boolean;
+>"1.." : boolean
+
     "1.0": Date;
+>"1.0" : Date
 >Date : Date
 
     "-1.0": RegExp;
+>"-1.0" : RegExp
 >RegExp : RegExp
 
     "-1": Date;
+>"-1" : Date
 >Date : Date
 }
 
@@ -397,30 +433,38 @@ var b = {
 >{    "0.1": <void>null,    ".1": new Object(),    "1": 1,    "1.": "",    "1..": true,    "1.0": new Date(),    "-1.0": /123/,    "-1": Date} : { "0.1": void; ".1": Object; "1": number; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }
 
     "0.1": <void>null,
+>"0.1" : void
 ><void>null : void
 >null : null
 
     ".1": new Object(),
+>".1" : Object
 >new Object() : Object
 >Object : ObjectConstructor
 
     "1": 1,
+>"1" : number
 >1 : 1
 
     "1.": "",
+>"1." : string
 >"" : ""
 
     "1..": true,
+>"1.." : boolean
 >true : true
 
     "1.0": new Date(),
+>"1.0" : Date
 >new Date() : Date
 >Date : DateConstructor
 
     "-1.0": /123/,
+>"-1.0" : RegExp
 >/123/ : RegExp
 
     "-1": Date
+>"-1" : DateConstructor
 >Date : DateConstructor
 
 };

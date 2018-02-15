@@ -74,9 +74,16 @@ enum e5 {
 >e5 : e5
 
     "Friday",
+>"Friday" : e5.Friday
+
     "Saturday",
+>"Saturday" : e5.Saturday
+
     "Sunday",
+>"Sunday" : e5.Sunday
+
     "Weekend days"
+>"Weekend days" : e5.Weekend days
 }
 
 

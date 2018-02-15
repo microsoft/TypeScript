@@ -18,7 +18,6 @@ export class AppComponent {
 >createElement : Symbol(createElement, Decl(test.tsx, 7, 11))
 
         return <div />;
->div : Symbol(unknown)
     }
 }
 

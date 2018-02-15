@@ -286,4 +286,5 @@ class C25 {
 
     async * x = 1;
 >x : () => any
+>1 : any
 }

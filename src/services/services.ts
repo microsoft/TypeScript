@@ -121,7 +121,7 @@ namespace ts {
                 const textPos = scanner.getTextPos();
                 if (textPos <= end) {
                     if (token === SyntaxKind.Identifier) {
-                        Debug.fail(`Did not expect ${(ts as any).SyntaxKind[this.kind]} to have an Identifier in its trivia`);
+                        Debug.fail(`Did not expect ${Debug.showSyntaxKind(this)} to have an Identifier in its trivia`);
                     }
                     nodes.push(createNode(token, pos, textPos, this));
                 }
@@ -1580,7 +1580,7 @@ namespace ts {
             return results;
         }
 
-        function getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] {
+        function getDocumentHighlights(fileName: string, position: number, filesToSearch: ReadonlyArray<string>): DocumentHighlights[] {
             synchronizeHostData();
             const sourceFilesToSearch = map(filesToSearch, f => Debug.assertDefined(program.getSourceFile(f)));
             const sourceFile = getValidSourceFile(fileName);

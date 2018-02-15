@@ -6,9 +6,11 @@ class C {
 >x : number
 
     1 = '';
+>1 : string
 >'' : ""
 
     "2" = ''
+>"2" : string
 >'' : ""
 }
 
@@ -59,7 +61,10 @@ interface I {
 >x : number
 
     1: string;
+>1 : string
+
     "2": string;
+>"2" : string
 }
 
 var i: I
@@ -109,7 +114,10 @@ var a: {
 >x : number
 
     1: string;
+>1 : string
+
     "2": string;
+>"2" : string
 }
 
 var r1 = a['1'];
@@ -152,7 +160,9 @@ var b: { [x: number]: string } = { 1: '', "2": '' }
 >b : { [x: number]: string; }
 >x : number
 >{ 1: '', "2": '' } : { 1: string; "2": string; }
+>1 : string
 >'' : ""
+>"2" : string
 >'' : ""
 
 var r1a = b['1'];
@@ -194,8 +204,12 @@ var r6 = b[3];
 var b2: { [x: number]: string; 1: string; "2": string; } = { 1: '', "2": '' }
 >b2 : { [x: number]: string; 1: string; "2": string; }
 >x : number
+>1 : string
+>"2" : string
 >{ 1: '', "2": '' } : { 1: string; "2": string; }
+>1 : string
 >'' : ""
+>"2" : string
 >'' : ""
 
 var r1b = b2['1'];

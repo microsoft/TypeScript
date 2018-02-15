@@ -434,9 +434,11 @@ declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
 
 type Foo = { 'a': string; }
 >Foo : Foo
+>'a' : string
 
 type Bar = { 'a': number; }
 >Bar : Bar
+>'a' : number
 
 interface NeedsFoo<T extends Foo> {
 >NeedsFoo : NeedsFoo<T>

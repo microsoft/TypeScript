@@ -2,6 +2,7 @@
 var A = { '': 3 };
 >A : { '': number; }
 >{ '': 3 } : { '': number; }
+>'' : number
 >3 : 3
 
 function fill<B extends typeof A>(f: B) {

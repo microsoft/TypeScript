@@ -1,5 +1,6 @@
 === tests/cases/compiler/declareExternalModuleWithExportAssignedFundule.ts ===
 declare module "express" {
+>"express" : typeof "express"
 
     export = express;
 >express : typeof express

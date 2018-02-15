@@ -107,6 +107,8 @@ enum Nums {
 }
 type TestNums = { 0: number, 1: number }
 >TestNums : TestNums
+>0 : number
+>1 : number
 
 const n: TestNums = {
 >n : TestNums

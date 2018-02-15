@@ -687,7 +687,7 @@ namespace ts.refactor.extractSymbol {
     }
     function getDescriptionForClassLikeDeclaration(scope: ClassLikeDeclaration): string {
         return scope.kind === SyntaxKind.ClassDeclaration
-            ? `class '${scope.name.text}'`
+            ? scope.name ? `class '${scope.name.text}'` : "anonymous class declaration"
             : scope.name ? `class expression '${scope.name.text}'` : "anonymous class expression";
     }
     function getDescriptionForModuleLikeDeclaration(scope: SourceFile | ModuleBlock): string | SpecialScope {
@@ -968,7 +968,7 @@ namespace ts.refactor.extractSymbol {
         }
 
         if (isReadonlyArray(range.range)) {
-            changeTracker.replaceNodesWithNodes(context.file, range.range, newNodes);
+            changeTracker.replaceNodeRangeWithNodes(context.file, first(range.range), last(range.range), newNodes);
         }
         else {
             changeTracker.replaceNodeWithNodes(context.file, range.range, newNodes);
@@ -1053,7 +1053,7 @@ namespace ts.refactor.extractSymbol {
             changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariable, /*blankLineBetween*/ true);
 
             // Consume
-            changeTracker.replaceRange(context.file, { pos: node.getStart(), end: node.end }, localReference);
+            changeTracker.replaceNode(context.file, node, localReference, textChanges.useNonAdjustedPositions);
         }
         else {
             const newVariableDeclaration = createVariableDeclaration(localNameText, variableType, initializer);
@@ -1070,7 +1070,7 @@ namespace ts.refactor.extractSymbol {
 
                 // Consume
                 const localReference = createIdentifier(localNameText);
-                changeTracker.replaceRange(context.file, { pos: node.getStart(), end: node.end }, localReference);
+                changeTracker.replaceNode(context.file, node, localReference, textChanges.useNonAdjustedPositions);
             }
             else if (node.parent.kind === SyntaxKind.ExpressionStatement && scope === findAncestor(node, isScope)) {
                 // If the parent is an expression statement and the target scope is the immediately enclosing one,
@@ -1078,7 +1078,7 @@ namespace ts.refactor.extractSymbol {
                 const newVariableStatement = createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const));
-                changeTracker.replaceRange(context.file, { pos: node.parent.getStart(), end: node.parent.end }, newVariableStatement);
+                changeTracker.replaceNode(context.file, node.parent, newVariableStatement, textChanges.useNonAdjustedPositions);
             }
             else {
                 const newVariableStatement = createVariableStatement(
@@ -1097,11 +1097,11 @@ namespace ts.refactor.extractSymbol {
                 // Consume
                 if (node.parent.kind === SyntaxKind.ExpressionStatement) {
                     // If the parent is an expression statement, delete it.
-                    changeTracker.deleteRange(context.file, { pos: node.parent.getStart(), end: node.parent.end });
+                    changeTracker.deleteNode(context.file, node.parent, textChanges.useNonAdjustedPositions);
                 }
                 else {
                     const localReference = createIdentifier(localNameText);
-                    changeTracker.replaceRange(context.file, { pos: node.getStart(), end: node.end }, localReference);
+                    changeTracker.replaceNode(context.file, node, localReference, textChanges.useNonAdjustedPositions);
                 }
             }
         }
@@ -1689,7 +1689,8 @@ namespace ts.refactor.extractSymbol {
                 return symbolId;
             }
             // find first declaration in this file
-            const declInFile = find(symbol.getDeclarations(), d => d.getSourceFile() === sourceFile);
+            const decls = symbol.getDeclarations();
+            const declInFile = decls && find(decls, d => d.getSourceFile() === sourceFile);
             if (!declInFile) {
                 return undefined;
             }
@@ -1782,7 +1783,8 @@ namespace ts.refactor.extractSymbol {
             if (!symbol) {
                 return undefined;
             }
-            if (symbol.getDeclarations().some(d => d.parent === scopeDecl)) {
+            const decls = symbol.getDeclarations();
+            if (decls && decls.some(d => d.parent === scopeDecl)) {
                 return createIdentifier(symbol.name);
             }
             const prefix = tryReplaceWithQualifiedNameOrPropertyAccess(symbol.parent, scopeDecl, isTypeNode);

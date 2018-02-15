@@ -661,6 +661,8 @@ namespace ts {
     export type AtToken = Token<SyntaxKind.AtToken>;
     export type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
     export type AwaitKeywordToken = Token<SyntaxKind.AwaitKeyword>;
+    export type PlusToken = Token<SyntaxKind.PlusToken>;
+    export type MinusToken = Token<SyntaxKind.MinusToken>;
 
     export type Modifier
         = Token<SyntaxKind.AbstractKeyword>
@@ -983,6 +985,7 @@ namespace ts {
 
     export interface MethodSignature extends SignatureDeclarationBase, TypeElement {
         kind: SyntaxKind.MethodSignature;
+        parent?: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
         name: PropertyName;
     }
 
@@ -997,6 +1000,7 @@ namespace ts {
     // of the method, or use helpers like isObjectLiteralMethodDeclaration
     export interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer {
         kind: SyntaxKind.MethodDeclaration;
+        parent?: ClassLikeDeclaration | ObjectLiteralExpression;
         name: PropertyName;
         body?: FunctionBody;
     }
@@ -1156,9 +1160,9 @@ namespace ts {
 
     export interface MappedTypeNode extends TypeNode, Declaration {
         kind: SyntaxKind.MappedType;
-        readonlyToken?: ReadonlyToken;
+        readonlyToken?: ReadonlyToken | PlusToken | MinusToken;
         typeParameter: TypeParameterDeclaration;
-        questionToken?: QuestionToken;
+        questionToken?: QuestionToken | PlusToken | MinusToken;
         type?: TypeNode;
     }
 
@@ -1174,7 +1178,7 @@ namespace ts {
         /* @internal */ singleQuote?: boolean;
     }
 
-    /* @internal */ export type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
+    export type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
     // Consider 'Expression'.  Without the brand, 'Expression' is actually no different
@@ -2940,6 +2944,7 @@ namespace ts {
         /* @internal */ resolveExternalModuleSymbol(symbol: Symbol): Symbol;
         /** @param node A location where we might consider accessing `this`. Not necessarily a ThisExpression. */
         /* @internal */ tryGetThisTypeAt(node: Node): Type | undefined;
+        /* @internal */ getTypeArgumentConstraint(node: TypeNode): Type | undefined;
     }
 
     /* @internal */
@@ -2983,6 +2988,7 @@ namespace ts {
         InObjectTypeLiteral                     = 1 << 22,
         InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
         InInitialEntityName                     = 1 << 24,    // Set when writing the LHS of an entity name or entity name expression
+        InReverseMappedType                     = 1 << 25,
     }
 
     // Ensure the shared flags between this and `NodeBuilderFlags` stay in alignment
@@ -4117,16 +4123,6 @@ namespace ts {
         [option: string]: string[] | boolean | undefined;
     }
 
-    export interface DiscoverTypingsInfo {
-        fileNames: string[];                            // The file names that belong to the same project.
-        projectRootPath: string;                        // The path to the project root directory
-        safeListPath: string;                           // The path used to retrieve the safe list
-        packageNameToTypingLocation: Map<string>;       // The map of package names to their cached typing locations
-        typeAcquisition: TypeAcquisition;               // Used to customize the type acquisition process
-        compilerOptions: CompilerOptions;               // Used as a source for typing inference
-        unresolvedImports: ReadonlyArray<string>;       // List of unresolved module ids from imports
-    }
-
     export enum ModuleKind {
         None = 0,
         CommonJS = 1,
@@ -5007,6 +5003,10 @@ namespace ts {
     export interface TextChangeRange {
         span: TextSpan;
         newLength: number;
+    }
+
+    export interface SortedArray<T> extends Array<T> {
+        " __sortedArrayBrand": any;
     }
 
     /* @internal */

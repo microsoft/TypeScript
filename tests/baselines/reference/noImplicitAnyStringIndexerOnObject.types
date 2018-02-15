@@ -9,6 +9,7 @@ var y: string = { '': 'foo' }[''];
 >y : string
 >{ '': 'foo' }[''] : string
 >{ '': 'foo' } : { '': string; }
+>'' : string
 >'foo' : "foo"
 >'' : ""
 

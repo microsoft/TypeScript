@@ -393,6 +393,10 @@ namespace ts {
                             ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
                             : Diagnostics.Duplicate_identifier_0;
 
+                        if (symbol.flags & SymbolFlags.Enum || includes & SymbolFlags.Enum) {
+                            message = Diagnostics.Enum_declarations_can_only_merge_with_namespace_or_other_enum_declarations;
+                        }
+
                         if (symbol.declarations && symbol.declarations.length) {
                             // If the current node is a default export of some sort, then check if
                             // there are any other default exports that we need to error on.
@@ -756,11 +760,11 @@ namespace ts {
         }
 
         function isNarrowingTypeofOperands(expr1: Expression, expr2: Expression) {
-            return expr1.kind === SyntaxKind.TypeOfExpression && isNarrowableOperand((<TypeOfExpression>expr1).expression) && (expr2.kind === SyntaxKind.StringLiteral || expr2.kind === SyntaxKind.NoSubstitutionTemplateLiteral);
+            return isTypeOfExpression(expr1) && isNarrowableOperand(expr1.expression) && isStringLiteralLike(expr2);
         }
 
         function isNarrowableInOperands(left: Expression, right: Expression) {
-            return (left.kind === SyntaxKind.StringLiteral || left.kind === SyntaxKind.NoSubstitutionTemplateLiteral) && isNarrowingExpression(right);
+            return isStringLiteralLike(left) && isNarrowingExpression(right);
         }
 
         function isNarrowingBinaryExpression(expr: BinaryExpression) {

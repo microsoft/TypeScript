@@ -79,6 +79,8 @@ namespace ts.SymbolDisplay {
             switch (location.parent && location.parent.kind) {
                 // If we've typed a character of the attribute name, will be 'JsxAttribute', else will be 'JsxOpeningElement'.
                 case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxSelfClosingElement:
                     return location.kind === SyntaxKind.Identifier ? ScriptElementKind.memberVariableElement : ScriptElementKind.jsxAttribute;
                 case SyntaxKind.JsxAttribute:
                     return ScriptElementKind.jsxAttribute;

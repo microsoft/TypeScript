@@ -593,7 +593,9 @@ namespace ts {
                 writeLine();
                 increaseIndent();
                 if (node.readonlyToken) {
-                    write("readonly ");
+                    write(node.readonlyToken.kind === SyntaxKind.PlusToken ? "+readonly " :
+                        node.readonlyToken.kind === SyntaxKind.MinusToken ? "-readonly " :
+                        "readonly ");
                 }
                 write("[");
                 writeEntityName(node.typeParameter.name);
@@ -601,7 +603,9 @@ namespace ts {
                 emitType(node.typeParameter.constraint);
                 write("]");
                 if (node.questionToken) {
-                    write("?");
+                    write(node.questionToken.kind === SyntaxKind.PlusToken ? "+?" :
+                        node.questionToken.kind === SyntaxKind.MinusToken ? "-?" :
+                        "?");
                 }
                 write(": ");
                 emitType(node.type);

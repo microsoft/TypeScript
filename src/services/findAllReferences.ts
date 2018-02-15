@@ -272,7 +272,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function isModuleReferenceLocation(node: ts.Node): boolean {
-        if (node.kind !== SyntaxKind.StringLiteral && node.kind !== SyntaxKind.NoSubstitutionTemplateLiteral) {
+        if (!isStringLiteralLike(node)) {
             return false;
         }
         switch (node.parent.kind) {
@@ -416,10 +416,16 @@ namespace ts.FindAllReferences.Core {
         }
 
         // If the symbol is declared as part of a declaration like `{ type: "a" } | { type: "b" }`, use the property on the union type to get more references.
-        return firstDefined(symbol.declarations, decl =>
-            isTypeLiteralNode(decl.parent) && isUnionTypeNode(decl.parent.parent)
+        return firstDefined(symbol.declarations, decl => {
+            if (!decl.parent) {
+                // Assertions for GH#21814. We should be handling SourceFile symbols in `getReferencedSymbolsForModule` instead of getting here.
+                Debug.assert(decl.kind === SyntaxKind.SourceFile);
+                Debug.fail(`Unexpected symbol at ${Debug.showSyntaxKind(node)}: ${Debug.showSymbol(symbol)}`);
+            }
+            return isTypeLiteralNode(decl.parent) && isUnionTypeNode(decl.parent.parent)
                 ? checker.getPropertyOfType(checker.getTypeFromTypeNode(decl.parent.parent), symbol.name)
-                : undefined) || symbol;
+                : undefined;
+        }) || symbol;
     }
 
     /**
@@ -703,7 +709,7 @@ namespace ts.FindAllReferences.Core {
         return exposedByParent ? scope.getSourceFile() : scope;
     }
 
-    function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): number[] {
+    function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): ReadonlyArray<number> {
         const positions: number[] = [];
 
         /// TODO: Cache symbol existence for files to save text search
@@ -914,7 +920,8 @@ namespace ts.FindAllReferences.Core {
 
         // At `export { x } from "foo"`, also search for the imported symbol `"foo".x`.
         if (search.comingFrom !== ImportExport.Export && exportDeclaration.moduleSpecifier && !propertyName) {
-            searchForImportedSymbol(state.checker.getExportSpecifierLocalTargetSymbol(exportSpecifier), state);
+            const imported = state.checker.getExportSpecifierLocalTargetSymbol(exportSpecifier);
+            if (imported) searchForImportedSymbol(imported, state);
         }
 
         function addRef() {
@@ -923,7 +930,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function getLocalSymbolForExportSpecifier(referenceLocation: Identifier, referenceSymbol: Symbol, exportSpecifier: ExportSpecifier, checker: TypeChecker): Symbol {
-        return isExportSpecifierAlias(referenceLocation, exportSpecifier) ? checker.getExportSpecifierLocalTargetSymbol(exportSpecifier) : referenceSymbol;
+        return isExportSpecifierAlias(referenceLocation, exportSpecifier) && checker.getExportSpecifierLocalTargetSymbol(exportSpecifier) || referenceSymbol;
     }
 
     function isExportSpecifierAlias(referenceLocation: Identifier, exportSpecifier: ExportSpecifier): boolean {
@@ -1344,63 +1351,63 @@ namespace ts.FindAllReferences.Core {
 
         const references: Entry[] = [];
 
-        let possiblePositions: number[];
+        let possiblePositions: ReadonlyArray<number>;
         if (searchSpaceNode.kind === SyntaxKind.SourceFile) {
             forEach(sourceFiles, sourceFile => {
                 cancellationToken.throwIfCancellationRequested();
                 possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this");
-                getThisReferencesInFile(sourceFile, sourceFile, possiblePositions, references);
+                getThisReferencesInFile(sourceFile, sourceFile, possiblePositions, staticFlag, references);
             });
         }
         else {
             const sourceFile = searchSpaceNode.getSourceFile();
             possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this", searchSpaceNode);
-            getThisReferencesInFile(sourceFile, searchSpaceNode, possiblePositions, references);
+            getThisReferencesInFile(sourceFile, searchSpaceNode, possiblePositions, staticFlag, references);
         }
 
         return [{
             definition: { type: "this", node: thisOrSuperKeyword },
             references
         }];
+    }
 
-        function getThisReferencesInFile(sourceFile: SourceFile, searchSpaceNode: Node, possiblePositions: number[], result: Entry[]): void {
-            forEach(possiblePositions, position => {
-                const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ false);
-                if (!node || !isThis(node)) {
-                    return;
-                }
+    function getThisReferencesInFile(sourceFile: SourceFile, searchSpaceNode: Node, possiblePositions: ReadonlyArray<number>, staticFlag: ModifierFlags, result: Push<Entry>): void {
+        forEach(possiblePositions, position => {
+            const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ false);
+            if (!node || !isThis(node)) {
+                return;
+            }
 
-                const container = getThisContainer(node, /* includeArrowFunctions */ false);
+            const container = getThisContainer(node, /* includeArrowFunctions */ false);
 
-                switch (searchSpaceNode.kind) {
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.FunctionDeclaration:
-                        if (searchSpaceNode.symbol === container.symbol) {
-                            result.push(nodeEntry(node));
-                        }
-                        break;
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.MethodSignature:
-                        if (isObjectLiteralMethod(searchSpaceNode) && searchSpaceNode.symbol === container.symbol) {
-                            result.push(nodeEntry(node));
-                        }
-                        break;
-                    case SyntaxKind.ClassExpression:
-                    case SyntaxKind.ClassDeclaration:
-                        // Make sure the container belongs to the same class
-                        // and has the appropriate static modifier from the original container.
-                        if (container.parent && searchSpaceNode.symbol === container.parent.symbol && (getModifierFlags(container) & ModifierFlags.Static) === staticFlag) {
-                            result.push(nodeEntry(node));
-                        }
-                        break;
-                    case SyntaxKind.SourceFile:
-                        if (container.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>container)) {
-                            result.push(nodeEntry(node));
-                        }
-                        break;
-                }
-            });
-        }
+            switch (searchSpaceNode.kind) {
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.FunctionDeclaration:
+                    if (searchSpaceNode.symbol === container.symbol) {
+                        result.push(nodeEntry(node));
+                    }
+                    break;
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                    if (isObjectLiteralMethod(searchSpaceNode) && searchSpaceNode.symbol === container.symbol) {
+                        result.push(nodeEntry(node));
+                    }
+                    break;
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.ClassDeclaration:
+                    // Make sure the container belongs to the same class
+                    // and has the appropriate static modifier from the original container.
+                    if (container.parent && searchSpaceNode.symbol === container.parent.symbol && (getModifierFlags(container) & ModifierFlags.Static) === staticFlag) {
+                        result.push(nodeEntry(node));
+                    }
+                    break;
+                case SyntaxKind.SourceFile:
+                    if (container.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>container)) {
+                        result.push(nodeEntry(node));
+                    }
+                    break;
+            }
+        });
     }
 
     function getReferencesForStringLiteral(node: StringLiteral, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken): SymbolAndEntries[] {
@@ -1417,7 +1424,7 @@ namespace ts.FindAllReferences.Core {
             references
         }];
 
-        function getReferencesForStringLiteralInFile(sourceFile: SourceFile, searchText: string, possiblePositions: number[], references: Push<NodeEntry>): void {
+        function getReferencesForStringLiteralInFile(sourceFile: SourceFile, searchText: string, possiblePositions: ReadonlyArray<number>, references: Push<NodeEntry>): void {
             for (const position of possiblePositions) {
                 const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ false);
                 if (node && node.kind === SyntaxKind.StringLiteral && (node as StringLiteral).text === searchText) {

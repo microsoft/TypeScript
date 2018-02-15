@@ -462,7 +462,7 @@ namespace ts.Completions.PathCompletions {
     }
 
     function normalizeAndPreserveTrailingSlash(path: string) {
-        if (path === "./") {
+        if (normalizeSlashes(path) === "./") {
             // normalizePath turns "./" into "". "" + "/" would then be a rooted path instead of a relative one, so avoid this particular case.
             // There is no problem for adding "/" to a non-empty string -- it's only a problem at the beginning.
             return "";

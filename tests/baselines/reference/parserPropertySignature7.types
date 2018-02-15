@@ -3,4 +3,5 @@ interface I {
 >I : I
 
   "G":any;
+>"G" : any
 }

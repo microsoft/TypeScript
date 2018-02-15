@@ -24,7 +24,7 @@ namespace ts.codefix {
     }
 
     interface ImportCodeFixContext extends SymbolContext {
-        symbolToken: Identifier | undefined;
+        symbolToken: Node;
         program: Program;
         checker: TypeChecker;
         compilerOptions: CompilerOptions;
@@ -38,12 +38,11 @@ namespace ts.codefix {
         return { description, changes, fixId: undefined };
     }
 
-    function convertToImportCodeFixContext(context: CodeFixContext): ImportCodeFixContext {
+    function convertToImportCodeFixContext(context: CodeFixContext, symbolToken: Node, symbolName: string): ImportCodeFixContext {
         const useCaseSensitiveFileNames = context.host.useCaseSensitiveFileNames ? context.host.useCaseSensitiveFileNames() : false;
         const { program } = context;
         const checker = program.getTypeChecker();
-        // This will always be an Identifier, since the diagnostics we fix only fail on identifiers.
-        const symbolToken = cast(getTokenAtPosition(context.sourceFile, context.span.start, /*includeJsDocComment*/ false), isIdentifier);
+
         return {
             host: context.host,
             formatContext: context.formatContext,
@@ -53,8 +52,8 @@ namespace ts.codefix {
             compilerOptions: program.getCompilerOptions(),
             cachedImportDeclarations: [],
             getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames),
-            symbolName: symbolToken.getText(),
-            symbolToken,
+            symbolName,
+            symbolToken
         };
     }
 
@@ -95,7 +94,7 @@ namespace ts.codefix {
         allSourceFiles: ReadonlyArray<ts.SourceFile>,
         formatContext: ts.formatting.FormatContext,
         getCanonicalFileName: GetCanonicalFileName,
-        symbolToken: Identifier | undefined,
+        symbolToken: Node | undefined,
     ): { readonly moduleSpecifier: string, readonly codeAction: CodeAction } {
         const exportInfos = getAllReExportingModules(exportedSymbol, checker, allSourceFiles);
         Debug.assert(exportInfos.some(info => info.moduleSymbol === moduleSymbol));
@@ -132,12 +131,12 @@ namespace ts.codefix {
         //     1. change "member3" to "ns.member3"
         //     2. add "member3" to the second import statement's import list
         // and it is up to the user to decide which one fits best.
-        const useExistingImportActions = !context.symbolToken ? emptyArray : mapDefined(existingImports, ({ declaration }) => {
+        const useExistingImportActions = !context.symbolToken || !isIdentifier(context.symbolToken) ? emptyArray : mapDefined(existingImports, ({ declaration }) => {
             const namespace = getNamespaceImportName(declaration);
             if (namespace) {
                 const moduleSymbol = context.checker.getAliasedSymbol(context.checker.getSymbolAtLocation(namespace));
                 if (moduleSymbol && moduleSymbol.exports.has(escapeLeadingUnderscores(context.symbolName))) {
-                    return getCodeActionForUseExistingNamespaceImport(namespace.text, context, context.symbolToken);
+                    return getCodeActionForUseExistingNamespaceImport(namespace.text, context, context.symbolToken as Identifier);
                 }
             }
         });
@@ -638,37 +637,48 @@ namespace ts.codefix {
          * become "ns.foo"
          */
         const changes = ChangeTracker.with(context, tracker =>
-            tracker.changeIdentifierToPropertyAccess(sourceFile, namespacePrefix, symbolToken));
+            tracker.replaceNode(sourceFile, symbolToken, createPropertyAccess(createIdentifier(namespacePrefix), symbolToken)));
         return createCodeAction(Diagnostics.Change_0_to_1, [symbolName, `${namespacePrefix}.${symbolName}`], changes);
     }
 
     function getImportCodeActions(context: CodeFixContext): CodeAction[] {
-        const importFixContext = convertToImportCodeFixContext(context);
         return context.errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code
-            ? getActionsForUMDImport(importFixContext)
-            : getActionsForNonUMDImport(importFixContext, context.program.getSourceFiles(), context.cancellationToken);
+            ? getActionsForUMDImport(context)
+            : getActionsForNonUMDImport(context);
     }
 
-    function getActionsForUMDImport(context: ImportCodeFixContext): CodeAction[] {
-        const { checker, symbolToken, compilerOptions } = context;
-        const umdSymbol = checker.getSymbolAtLocation(symbolToken);
-        let symbol: ts.Symbol;
-        let symbolName: string;
-        if (umdSymbol.flags & ts.SymbolFlags.Alias) {
-            symbol = checker.getAliasedSymbol(umdSymbol);
-            symbolName = context.symbolName;
+    function getActionsForUMDImport(context: CodeFixContext): CodeAction[] {
+        const token = getTokenAtPosition(context.sourceFile, context.span.start, /*includeJsDocComment*/ false);
+        const checker = context.program.getTypeChecker();
+
+        let umdSymbol: Symbol | undefined;
+
+        if (isIdentifier(token)) {
+            // try the identifier to see if it is the umd symbol
+            umdSymbol = checker.getSymbolAtLocation(token);
         }
-        else if (isJsxOpeningLikeElement(symbolToken.parent) && symbolToken.parent.tagName === symbolToken) {
+
+        if (!isUMDExportSymbol(umdSymbol)) {
             // The error wasn't for the symbolAtLocation, it was for the JSX tag itself, which needs access to e.g. `React`.
-            symbol = checker.getAliasedSymbol(checker.resolveName(checker.getJsxNamespace(), symbolToken.parent.tagName, SymbolFlags.Value, /*excludeGlobals*/ false));
-            symbolName = symbol.name;
-        }
-        else {
-            throw Debug.fail("Either the symbol or the JSX namespace should be a UMD global if we got here");
+            const parent = token.parent;
+            const isNodeOpeningLikeElement = isJsxOpeningLikeElement(parent);
+            if ((isJsxOpeningLikeElement && (<JsxOpeningLikeElement>parent).tagName === token) || parent.kind === SyntaxKind.JsxOpeningFragment) {
+                umdSymbol = checker.resolveName(checker.getJsxNamespace(),
+                    isNodeOpeningLikeElement ? (<JsxOpeningLikeElement>parent).tagName : parent, SymbolFlags.Value, /*excludeGlobals*/ false);
+            }
         }
 
-        return getCodeActionsForImport([{ moduleSymbol: symbol, importKind: getUmdImportKind(compilerOptions) }], { ...context, symbolName });
+        if (isUMDExportSymbol(umdSymbol)) {
+            const symbol = checker.getAliasedSymbol(umdSymbol);
+            if (symbol) {
+                return getCodeActionsForImport([{ moduleSymbol: symbol, importKind: getUmdImportKind(context.program.getCompilerOptions()) }],
+                    convertToImportCodeFixContext(context, token, umdSymbol.name));
+            }
+        }
+
+        return undefined;
     }
+
     function getUmdImportKind(compilerOptions: CompilerOptions) {
         // Import a synthetic `default` if enabled.
         if (getAllowSyntheticDefaultImports(compilerOptions)) {
@@ -693,8 +703,19 @@ namespace ts.codefix {
         }
     }
 
-    function getActionsForNonUMDImport(context: ImportCodeFixContext, allSourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken): CodeAction[] {
-        const { sourceFile, checker, symbolName, symbolToken } = context;
+    function getActionsForNonUMDImport(context: CodeFixContext): CodeAction[] {
+        // This will always be an Identifier, since the diagnostics we fix only fail on identifiers.
+        const { sourceFile, span, program, cancellationToken } = context;
+        const checker = program.getTypeChecker();
+        const symbolToken = getTokenAtPosition(sourceFile, span.start, /*includeJsDocComment*/ false);
+        const isJsxNamespace = isJsxOpeningLikeElement(symbolToken.parent) && symbolToken.parent.tagName === symbolToken;
+        if (!isJsxNamespace && !isIdentifier(symbolToken)) {
+            return undefined;
+        }
+        const symbolName = isJsxNamespace ? checker.getJsxNamespace() : (<Identifier>symbolToken).text;
+        const allSourceFiles = program.getSourceFiles();
+        const compilerOptions = program.getCompilerOptions();
+
         // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
         Debug.assert(symbolName !== "default");
         const currentTokenMeaning = getMeaningFromLocation(symbolToken);
@@ -715,7 +736,7 @@ namespace ts.codefix {
                 if ((
                         localSymbol && localSymbol.escapedName === symbolName ||
                         getEscapedNameForExportDefault(defaultExport) === symbolName ||
-                        moduleSymbolToValidIdentifier(moduleSymbol, context.compilerOptions.target) === symbolName
+                        moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions.target) === symbolName
                     ) && checkSymbolHasMeaning(localSymbol || defaultExport, currentTokenMeaning)) {
                     addSymbol(moduleSymbol, localSymbol || defaultExport, ImportKind.Default);
                 }
@@ -744,7 +765,7 @@ namespace ts.codefix {
             }
         });
 
-        return arrayFrom(flatMapIterator(originalSymbolToExportInfos.values(), exportInfos => getCodeActionsForImport(exportInfos, context)));
+        return arrayFrom(flatMapIterator(originalSymbolToExportInfos.values(), exportInfos => getCodeActionsForImport(exportInfos, convertToImportCodeFixContext(context, symbolToken, symbolName))));
     }
 
     function checkSymbolHasMeaning({ declarations }: Symbol, meaning: SemanticMeaning): boolean {
