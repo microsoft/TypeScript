@@ -2417,15 +2417,9 @@ namespace ts {
                         addDeclarationToSymbol(original, id, flags);
                         return original;
                     }
-                    else if (symbol) {
-                        symbol.exports = symbol.exports || createSymbolTable();
-                        symbol = declareSymbol(symbol.exports, symbol, id, flags, excludeFlags);
-                    }
                     else {
-                        Debug.assert(!original);
-                        symbol = declareSymbol(container.locals, /*parent*/ undefined, id, flags, excludeFlags);
+                        return symbol = declareSymbol(symbol ? symbol.exports : container.locals, symbol, id, flags, excludeFlags);
                     }
-                    return symbol;
                 });
             }
             if (!symbol || !(symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule | SymbolFlags.ObjectLiteral))) {
