@@ -3,5 +3,6 @@
         "tsconfig*.json": "jsonc",
         "tslint*.json": "jsonc"
     },
+    "tslint.alwaysShowRuleFailuresAsWarnings": true,
     "tslint.autoFixOnSave": true
 }
