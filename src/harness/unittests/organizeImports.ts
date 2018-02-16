@@ -5,43 +5,6 @@
 namespace ts {
     describe("Organize imports", () => {
         describe("Sort imports", () => {
-            it("No imports", () => {
-                assert.isEmpty(OrganizeImports.sortImports([]));
-            });
-
-            it("One import", () => {
-                const unsortedImports = parseImports(`import "lib";`);
-                const actualSortedImports = OrganizeImports.sortImports(unsortedImports);
-                const expectedSortedImports = unsortedImports;
-                assertListEqual(expectedSortedImports, actualSortedImports);
-            });
-
-            it("Stable - import kind", () => {
-                assertUnaffectedBySort(
-                    `import "lib";`,
-                    `import * as x from "lib";`,
-                    `import x from "lib";`,
-                    `import {x} from "lib";`);
-            });
-
-            it("Stable - default property alias", () => {
-                assertUnaffectedBySort(
-                    `import x from "lib";`,
-                    `import y from "lib";`);
-            });
-
-            it("Stable - module alias", () => {
-                assertUnaffectedBySort(
-                    `import * as x from "lib";`,
-                    `import * as y from "lib";`);
-            });
-
-            it("Stable - symbol", () => {
-                assertUnaffectedBySort(
-                    `import {x} from "lib";`,
-                    `import {y} from "lib";`);
-            });
-
             it("Sort - non-relative vs non-relative", () => {
                 assertSortsBefore(
                     `import y from "lib1";`,
@@ -60,18 +23,10 @@ namespace ts {
                     `import x from "./lib";`);
             });
 
-            function assertUnaffectedBySort(...importStrings: string[]) {
-                const unsortedImports1 = parseImports(...importStrings);
-                assertListEqual(unsortedImports1, OrganizeImports.sortImports(unsortedImports1));
-
-                const unsortedImports2 = reverse(unsortedImports1);
-                assertListEqual(unsortedImports2, OrganizeImports.sortImports(unsortedImports2));
-            }
-
             function assertSortsBefore(importString1: string, importString2: string) {
-                const imports = parseImports(importString1, importString2);
-                assertListEqual(imports, OrganizeImports.sortImports(imports));
-                assertListEqual(imports, OrganizeImports.sortImports(reverse(imports)));
+                const [{moduleSpecifier: moduleSpecifier1}, {moduleSpecifier: moduleSpecifier2}] = parseImports(importString1, importString2);
+                assert.equal(OrganizeImports.compareModuleSpecifiers(moduleSpecifier1, moduleSpecifier2), Comparison.LessThan);
+                assert.equal(OrganizeImports.compareModuleSpecifiers(moduleSpecifier2, moduleSpecifier1), Comparison.GreaterThan);
             }
         });
 
@@ -84,7 +39,7 @@ namespace ts {
                 const sortedImports = parseImports(`import { default as m, a as n, b, y, z as o } from "lib";`);
                 const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = parseImports(`import { a as n, b, default as m, y, z as o } from "lib";`);
-                assertListEqual(expectedCoalescedImports, actualCoalescedImports);
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
             });
 
             it("Combine side-effect-only imports", () => {
@@ -93,7 +48,7 @@ namespace ts {
                     `import "lib";`);
                 const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = parseImports(`import "lib";`);
-                assertListEqual(expectedCoalescedImports, actualCoalescedImports);
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
             });
 
             it("Combine namespace imports", () => {
@@ -102,7 +57,7 @@ namespace ts {
                     `import * as y from "lib";`);
                 const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = sortedImports;
-                assertListEqual(expectedCoalescedImports, actualCoalescedImports);
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
             });
 
             it("Combine default imports", () => {
@@ -111,7 +66,7 @@ namespace ts {
                     `import y from "lib";`);
                 const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = parseImports(`import { default as x, default as y } from "lib";`);
-                assertListEqual(expectedCoalescedImports, actualCoalescedImports);
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
             });
 
             it("Combine property imports", () => {
@@ -120,7 +75,7 @@ namespace ts {
                     `import { y as z } from "lib";`);
                 const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = parseImports(`import { x, y as z } from "lib";`);
-                assertListEqual(expectedCoalescedImports, actualCoalescedImports);
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
             });
 
             it("Combine side-effect-only import with namespace import", () => {
@@ -129,7 +84,7 @@ namespace ts {
                     `import * as x from "lib";`);
                 const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = sortedImports;
-                assertListEqual(expectedCoalescedImports, actualCoalescedImports);
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
             });
 
             it("Combine side-effect-only import with default import", () => {
@@ -138,7 +93,7 @@ namespace ts {
                     `import x from "lib";`);
                 const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = sortedImports;
-                assertListEqual(expectedCoalescedImports, actualCoalescedImports);
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
             });
 
             it("Combine side-effect-only import with property import", () => {
@@ -147,7 +102,7 @@ namespace ts {
                     `import { x } from "lib";`);
                 const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = sortedImports;
-                assertListEqual(expectedCoalescedImports, actualCoalescedImports);
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
             });
 
             it("Combine namespace import with default import", () => {
@@ -157,7 +112,7 @@ namespace ts {
                 const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = parseImports(
                     `import y, * as x from "lib";`);
-                assertListEqual(expectedCoalescedImports, actualCoalescedImports);
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
             });
 
             it("Combine namespace import with property import", () => {
@@ -166,7 +121,7 @@ namespace ts {
                     `import { y } from "lib";`);
                 const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = sortedImports;
-                assertListEqual(expectedCoalescedImports, actualCoalescedImports);
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
             });
 
             it("Combine default import with property import", () => {
@@ -176,7 +131,7 @@ namespace ts {
                 const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = parseImports(
                     `import x, { y } from "lib";`);
-                assertListEqual(expectedCoalescedImports, actualCoalescedImports);
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
             });
 
             it("Combine many imports", () => {
@@ -195,20 +150,7 @@ namespace ts {
                     `import * as x from "lib";`,
                     `import * as y from "lib";`,
                     `import { a, b, default as w, default as z } from "lib";`);
-                assertListEqual(expectedCoalescedImports, actualCoalescedImports);
-            });
-
-            it("Combine imports from different modules", () => {
-                const sortedImports = parseImports(
-                    `import { d } from "lib1";`,
-                    `import { b } from "lib1";`,
-                    `import { c } from "lib2";`,
-                    `import { a } from "lib2";`);
-                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
-                const expectedCoalescedImports = parseImports(
-                    `import { b, d } from "lib1";`,
-                    `import { a, c } from "lib2";`);
-                assertListEqual(expectedCoalescedImports, actualCoalescedImports);
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
             });
 
             // This is descriptive, rather than normative
@@ -219,7 +161,7 @@ namespace ts {
                     `import z from "lib";`);
                 const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = sortedImports;
-                assertListEqual(expectedCoalescedImports, actualCoalescedImports);
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
             });
         });
 
@@ -232,6 +174,17 @@ export function F1();
 export default function F2();
 `,
             };
+
+            // Don't bother to actually emit a baseline for this.
+            it("NoImports", () => {
+                const testFile = {
+                    path: "/a.ts",
+                    content: "function F() { }",
+                };
+                const languageService = makeLanguageService(testFile);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatOptions);
+                assert.isEmpty(changes);
+            });
 
             testOrganizeImports("Simple",
                 {
@@ -283,6 +236,19 @@ D();
                 libFile);
                 // tslint:enable no-invalid-template-strings
 
+            testOrganizeImports("CoalesceMultipleModules",
+                {
+                    path: "/test.ts",
+                    content: `
+import { d } from "lib1";
+import { b } from "lib1";
+import { c } from "lib2";
+import { a } from "lib2";
+`,
+                },
+                { path: "/lib1.ts", content: "" },
+                { path: "/lib2.ts", content: "" });
+
             testOrganizeImports("CoalesceTrivia",
                 {
                     path: "/test.ts",
@@ -315,8 +281,8 @@ F2();
                 const { path: testPath, content: testContent } = testFile;
                 const languageService = makeLanguageService(testFile, ...otherFiles);
                 const changes = languageService.organizeImports({ type: "file", fileName: testPath }, testFormatOptions);
-                assert.equal(1, changes.length);
-                assert.equal(testPath, changes[0].fileName);
+                assert.equal(changes.length, 1);
+                assert.equal(changes[0].fileName, testPath);
 
                 Harness.Baseline.runBaseline(baselinePath, () => {
                     const newText = textChanges.applyChanges(testContent, changes[0].textChanges);
@@ -340,7 +306,7 @@ F2();
         function parseImports(...importStrings: string[]): ReadonlyArray<ImportDeclaration> {
             const sourceFile = createSourceFile("a.ts", importStrings.join("\n"), ScriptTarget.ES2015, /*setParentNodes*/ true, ScriptKind.TS);
             const imports = filter(sourceFile.statements, isImportDeclaration);
-            assert.equal(importStrings.length, imports.length);
+            assert.equal(imports.length, importStrings.length);
             return imports;
         }
 
@@ -413,14 +379,6 @@ F2();
             for (let i = 0; i < list1.length; i++) {
                 assertEqual(list1[i], list2[i]);
             }
-        }
-
-        function reverse<T>(list: ReadonlyArray<T>) {
-            const result = [];
-            for (let i = list.length - 1; i >= 0; i--) {
-                result.push(list[i]);
-            }
-            return result;
         }
     });
 }
