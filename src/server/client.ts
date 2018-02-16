@@ -629,6 +629,10 @@ namespace ts.server {
             };
         }
 
+        organizeImports(_scope: OrganizeImportsScope, _formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {
+            return notImplemented();
+        }
+
         private convertCodeEditsToTextChanges(edits: protocol.FileCodeEdits[]): FileTextChanges[] {
             return edits.map(edit => {
                 const fileName = edit.fileName;

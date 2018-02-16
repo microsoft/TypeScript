@@ -262,6 +262,8 @@ namespace ts.server {
                 CommandNames.GetApplicableRefactors,
                 CommandNames.GetEditsForRefactor,
                 CommandNames.GetEditsForRefactorFull,
+                CommandNames.OrganizeImports,
+                CommandNames.OrganizeImportsFull,
             ];
 
             it("should not throw when commands are executed with invalid arguments", () => {

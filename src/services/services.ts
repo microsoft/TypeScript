@@ -14,6 +14,7 @@
 /// <reference path='jsTyping.ts' />
 /// <reference path='navigateTo.ts' />
 /// <reference path='navigationBar.ts' />
+/// <reference path='organizeImports.ts' />
 /// <reference path='outliningElementsCollector.ts' />
 /// <reference path='patternMatcher.ts' />
 /// <reference path='preProcess.ts' />
@@ -1848,6 +1849,15 @@ namespace ts {
             return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext });
         }
 
+        function organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {
+            synchronizeHostData();
+            Debug.assert(scope.type === "file");
+            const sourceFile = getValidSourceFile(scope.fileName);
+            const formatContext = formatting.getFormatContext(formatOptions);
+
+            return OrganizeImports.organizeImports(sourceFile, formatContext, host);
+        }
+
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         function applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         function applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
@@ -2143,6 +2153,7 @@ namespace ts {
             getCodeFixesAtPosition,
             getCombinedCodeFix,
             applyCodeActionCommand,
+            organizeImports,
             getEmitOutput,
             getNonBoundSourceFile,
             getSourceFile,

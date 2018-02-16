@@ -141,6 +141,7 @@ var harnessSources = harnessCoreSources.concat([
     "typingsInstaller.ts",
     "projectErrors.ts",
     "matchFiles.ts",
+    "organizeImports.ts",
     "initializeTSConfig.ts",
     "extractConstants.ts",
     "extractFunctions.ts",
