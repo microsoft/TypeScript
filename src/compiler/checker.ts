@@ -12687,27 +12687,26 @@ namespace ts {
 
             function getTypeAtFlowInitializer(flow: FlowInitializer): Type {
                 const node = flow.node;
-                // TODO: Recursive conditions here to do with object literals and variable declarations
-                // node identifier=bar
-                // .parent propertyassignment=bar: []
-                //  .parent objectliteral= { bar: [] }
-                //   .parent variabledeclaration = f2: Foo = { bar: [] }
-                //    .name identifier f2
-                const referenceMatchesPropertyAssignment = isPropertyAccessExpression(reference) &&
-                    isIdentifier(node) &&
-                    (isShorthandPropertyAssignment(node.parent) || isPropertyAssignment(node.parent)) &&
-                    reference.name.escapedText === node.escapedText;
-                if (referenceMatchesPropertyAssignment &&
-                    isVariableDeclaration(node.parent.parent.parent) &&
-                    isMatchingReference((reference as PropertyAccessExpression).expression, node.parent.parent.parent)) {
+                if (isMatchingInitializerReference(reference, node.parent)) {
                     if (declaredType.flags & TypeFlags.Union) {
                         const sourceNode = isPropertyAssignment(node.parent) ? node.parent.initializer : (node.parent as ShorthandPropertyAssignment).name;
                         return getAssignmentReducedType(declaredType as UnionType, getTypeOfNode(sourceNode));
                     }
                     return declaredType;
                 }
-                // initializer doesn't affect reference
                 return undefined;
+            }
+
+            function isMatchingInitializerReference(reference: Node, initializer: Node): boolean {
+                if (isIdentifier(reference)) {
+                    return isVariableDeclaration(initializer) && getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(reference)) === getSymbolOfNode(initializer);
+                }
+                else if (isPropertyAccessExpression(reference)) {
+                    return (isShorthandPropertyAssignment(initializer) || isPropertyAssignment(initializer)) &&
+                        isIdentifier(initializer.name) && reference.name.escapedText === initializer.name.escapedText &&
+                        isMatchingInitializerReference(reference.expression, initializer.parent.parent);
+                }
+                return false;
             }
 
             function getTypeAtFlowAssignment(flow: FlowAssignment) {

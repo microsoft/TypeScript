@@ -1249,6 +1249,9 @@ namespace ts {
                         // TODO: support string, number, computed
                         bindInitializerFlow(p.name);
                     }
+                    if (p.kind === SyntaxKind.PropertyAssignment) {
+                        bindInitializerFlow(p.initializer);
+                    }
                 }
             }
         }
@@ -1257,8 +1260,8 @@ namespace ts {
             if (isNarrowableReference(node)) {
                 currentFlow = createFlowAssignment(currentFlow, node);
             }
-            else if (node.kind === SyntaxKind.ArrayLiteralExpression) {
-                for (const e of (<ArrayLiteralExpression>node).elements) {
+            else if (isArrayLiteralExpression(node)) {
+                for (const e of node.elements) {
                     if (e.kind === SyntaxKind.SpreadElement) {
                         bindAssignmentTargetFlow((<SpreadElement>e).expression);
                     }
@@ -1267,8 +1270,8 @@ namespace ts {
                     }
                 }
             }
-            else if (node.kind === SyntaxKind.ObjectLiteralExpression) {
-                for (const p of (<ObjectLiteralExpression>node).properties) {
+            else if (isObjectLiteralExpression(node)) {
+                for (const p of node.properties) {
                     if (p.kind === SyntaxKind.PropertyAssignment) {
                         bindDestructuringTargetFlow(p.initializer);
                     }

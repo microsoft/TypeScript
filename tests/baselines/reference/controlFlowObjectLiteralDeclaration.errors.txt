@@ -1,7 +1,9 @@
+tests/cases/conformance/controlFlow/controlFlowObjectLiteralDeclaration.ts(24,1): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
 tests/cases/conformance/controlFlow/controlFlowObjectLiteralDeclaration.ts(25,1): error TS2532: Object is possibly 'undefined'.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowObjectLiteralDeclaration.ts (1 errors) ====
+==== tests/cases/conformance/controlFlow/controlFlowObjectLiteralDeclaration.ts (2 errors) ====
     type A = {
         x?: string[]
         y?: number[]
@@ -26,6 +28,9 @@ tests/cases/conformance/controlFlow/controlFlowObjectLiteralDeclaration.ts(25,1)
     a.y.push(4)
     let b = a.z.ka
     b = a.z.ki // error, object is possibly undefined
+    ~
+!!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     a.extra.length // error, reference doesn't match 'wat', so object is possibly undefined
     ~~~~~~~
 !!! error TS2532: Object is possibly 'undefined'.
