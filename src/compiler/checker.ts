@@ -6203,7 +6203,8 @@ namespace ts {
                     return baseIndexedAccess && baseIndexedAccess !== unknownType ? getBaseConstraint(baseIndexedAccess) : undefined;
                 }
                 if (t.flags & TypeFlags.Conditional) {
-                    return getBaseConstraint(getConstraintOfConditionalType(<ConditionalType>t));
+                    const constraint = getConstraintOfConditionalType(<ConditionalType>t);
+                    return constraint && getBaseConstraint(constraint);
                 }
                 if (t.flags & TypeFlags.Substitution) {
                     return getBaseConstraint((<SubstitutionType>t).substitute);
@@ -8237,14 +8238,13 @@ namespace ts {
             result.checkType = erasedCheckType;
             result.extendsType = extendsType;
             result.mapper = mapper;
-            result.trueTypeMapper = combinedMapper || mapper;
             result.aliasSymbol = root.aliasSymbol;
             result.aliasTypeArguments = instantiateTypes(root.aliasTypeArguments, mapper);
             return result;
         }
 
         function getTrueTypeFromConditionalType(type: ConditionalType) {
-            return type.resolvedTrueType || (type.resolvedTrueType = instantiateType(getRootTrueType(type.root), type.trueTypeMapper));
+            return type.resolvedTrueType || (type.resolvedTrueType = instantiateType(getRootTrueType(type.root), type.mapper));
         }
 
         function getFalseTypeFromConditionalType(type: ConditionalType) {
@@ -8885,10 +8885,6 @@ namespace ts {
                 let result = root.instantiations.get(id);
                 if (!result) {
                     const newMapper = createTypeMapper(root.outerTypeParameters, typeArguments);
-                    // sys.write(`${map(root.outerTypeParameters, t => typeToString(t)).join(",")} ===> ${map(typeArguments, t => typeToString(t)).join(",")}\n`);
-                    // if (every(typeArguments, t => t === wildcardType)) {
-                    //     root.instantiations.set(id, wildcardType);
-                    // }
                     result = instantiateConditionalType(root, newMapper);
                     root.instantiations.set(id, result);
                 }
@@ -10110,15 +10106,6 @@ namespace ts {
                     }
                 }
                 else if (source.flags & TypeFlags.Conditional) {
-                    if (relation !== definitelyAssignableRelation) {
-                        const constraint = getConstraintOfDistributiveConditionalType(<ConditionalType>source);
-                        if (constraint) {
-                            if (result = isRelatedTo(constraint, target, reportErrors)) {
-                                errorInfo = saveErrorInfo;
-                                return result;
-                            }
-                        }
-                    }
                     if (target.flags & TypeFlags.Conditional) {
                         if (isTypeIdenticalTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType) &&
                             isTypeIdenticalTo((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType)) {
@@ -10131,9 +10118,21 @@ namespace ts {
                             }
                         }
                     }
-                    else if (result = isRelatedTo(getDefaultConstraintOfConditionalType(<ConditionalType>source), target, reportErrors)) {
-                        errorInfo = saveErrorInfo;
-                        return result;
+                    else if (relation !== definitelyAssignableRelation) {
+                        const distributiveConstraint = getConstraintOfDistributiveConditionalType(<ConditionalType>source);
+                        if (distributiveConstraint) {
+                            if (result = isRelatedTo(distributiveConstraint, target, reportErrors)) {
+                                errorInfo = saveErrorInfo;
+                                return result;
+                            }
+                        }
+                        const defaultConstraint = getDefaultConstraintOfConditionalType(<ConditionalType>source);
+                        if (defaultConstraint) {
+                            if (result = isRelatedTo(defaultConstraint, target, reportErrors)) {
+                                errorInfo = saveErrorInfo;
+                                return result;
+                            }
+                        }
                     }
                 }
                 else {

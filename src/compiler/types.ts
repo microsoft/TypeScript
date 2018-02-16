@@ -3834,8 +3834,6 @@ namespace ts {
         resolvedFalseType?: Type;
         /* @internal */
         mapper?: TypeMapper;
-        /* @internal */
-        trueTypeMapper?: TypeMapper;
     }
 
     // Type parameter substitution (TypeFlags.Substitution)
