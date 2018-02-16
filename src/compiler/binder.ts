@@ -1246,7 +1246,6 @@ namespace ts {
             else if (isObjectLiteralExpression(node)) {
                 for (const p of node.properties) {
                     if (p.name && p.name.kind === SyntaxKind.Identifier) {
-                        // TODO: support string, number, computed
                         bindInitializerFlow(p.name);
                     }
                     if (p.kind === SyntaxKind.PropertyAssignment) {

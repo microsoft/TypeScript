@@ -19,8 +19,16 @@ type A = {
     }
     extra?: string
 >extra : string | undefined
+
+    0?: string
+>0 : string | undefined
+
+    'two words'?: string
+>'two words' : string | undefined
 }
-// TODO: String literals and numeric literals and computed properties
+// Note: spread assignments, as well as strings, numbers and computed properties,
+// are not supported because they are all accessed with element access, which doesn't
+// participate in control flow right now because of performance reasons.
 const y = [1, 2, 3]
 >y : number[]
 >[1, 2, 3] : number[]
@@ -37,7 +45,7 @@ const wat = { extra: "life" }
 let a: A = {
 >a : A
 >A : A
->{    x: [],    y,    z: {        ka: false    },    ...wat} : { extra: string; x: never[]; y: number[]; z: { ka: false; }; }
+>{    x: [],    y,    z: {        ka: false    },    ...wat,    0: 'hi',    'two words': 'ho'} : { 0: string; 'two words': string; extra: string; x: never[]; y: number[]; z: { ka: false; }; }
 
     x: [],
 >x : never[]
@@ -55,8 +63,16 @@ let a: A = {
 >false : false
 
     },
-    ...wat
+    ...wat,
 >wat : { extra: string; }
+
+    0: 'hi',
+>0 : string
+>'hi' : "hi"
+
+    'two words': 'ho'
+>'two words' : string
+>'ho' : "ho"
 }
 a.x.push('hi')
 >a.x.push('hi') : number
@@ -93,11 +109,25 @@ b = a.z.ki // error, object is possibly undefined
 >z : { ka?: boolean | undefined; ki?: boolean | undefined; }
 >ki : boolean | undefined
 
-a.extra.length // error, reference doesn't match 'wat', so object is possibly undefined
+a.extra.length // error, reference doesn't match the spread
 >a.extra.length : number
 >a.extra : string | undefined
 >a : A
 >extra : string | undefined
+>length : number
+
+a[0].length // error, element access doesn't narrow
+>a[0].length : number
+>a[0] : string | undefined
+>a : A
+>0 : 0
+>length : number
+
+a['two words'].length
+>a['two words'].length : number
+>a['two words'] : string | undefined
+>a : A
+>'two words' : "two words"
 >length : number
 
 
