@@ -1,10 +1,3 @@
-/// <reference path="../../compiler/core.ts" />
-/// <reference path="../../compiler/moduleNameResolver.ts" />
-/// <reference path="../../services/jsTyping.ts"/>
-/// <reference path="../../services/semver.ts"/>
-/// <reference path="../types.ts"/>
-/// <reference path="../shared.ts"/>
-
 namespace ts.server.typingsInstaller {
     interface NpmConfig {
         devDependencies: MapLike<any>;
