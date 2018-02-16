@@ -14864,7 +14864,7 @@ interface EventSourceInit {
 interface AnimationKeyFrame {
     offset?: number | null | (number | null)[];
     easing?: string | string[];
-    [index: string]: string | number | number[] | string[] | null | (number | null)[];
+    [index: string]: string | number | number[] | string[] | null | (number | null)[] | undefined;
 }
 
 interface AnimationOptions {
