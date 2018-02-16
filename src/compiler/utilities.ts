@@ -2160,34 +2160,24 @@ namespace ts {
         return undefined;
     }
 
-    export function getTextOfIdentifierOrLiteral(node: Identifier | LiteralLikeNode) {
-        if (node) {
-            if (node.kind === SyntaxKind.Identifier) {
-                return idText(node as Identifier);
-            }
-            if (node.kind === SyntaxKind.StringLiteral ||
-                node.kind === SyntaxKind.NumericLiteral) {
-
-                return (node as LiteralLikeNode).text;
-            }
+    export type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral;
+    export function isPropertyNameLiteral(node: Node): node is PropertyNameLiteral {
+        switch (node.kind) {
+            case SyntaxKind.Identifier:
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.NumericLiteral:
+                return true;
+            default:
+                return false;
         }
-
-        return undefined;
+    }
+    export function getTextOfIdentifierOrLiteral(node: PropertyNameLiteral): string {
+        return node.kind === SyntaxKind.Identifier ? idText(node) : node.text;
     }
 
-    export function getEscapedTextOfIdentifierOrLiteral(node: Identifier | LiteralLikeNode) {
-        if (node) {
-            if (node.kind === SyntaxKind.Identifier) {
-                return (node as Identifier).escapedText;
-            }
-            if (node.kind === SyntaxKind.StringLiteral ||
-                node.kind === SyntaxKind.NumericLiteral) {
-
-                return escapeLeadingUnderscores((node as LiteralLikeNode).text);
-            }
-        }
-
-        return undefined;
+    export function getEscapedTextOfIdentifierOrLiteral(node: PropertyNameLiteral): __String {
+        return node.kind === SyntaxKind.Identifier ? node.escapedText : escapeLeadingUnderscores(node.text);
     }
 
     export function getPropertyNameForKnownSymbolName(symbolName: string): __String {

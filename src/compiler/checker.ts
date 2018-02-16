@@ -23755,7 +23755,11 @@ namespace ts {
 
         function checkExternalImportOrExportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): boolean {
             const moduleName = getExternalModuleName(node);
-            if (!nodeIsMissing(moduleName) && moduleName.kind !== SyntaxKind.StringLiteral) {
+            if (nodeIsMissing(moduleName)) {
+                // Should be a parse error.
+                return false;
+            }
+            if (!isStringLiteral(moduleName)) {
                 error(moduleName, Diagnostics.String_literal_expected);
                 return false;
             }
@@ -23766,7 +23770,7 @@ namespace ts {
                     Diagnostics.Import_declarations_in_a_namespace_cannot_reference_a_module);
                 return false;
             }
-            if (inAmbientExternalModule && isExternalModuleNameRelative(getTextOfIdentifierOrLiteral(<LiteralExpression | Identifier>moduleName))) {
+            if (inAmbientExternalModule && isExternalModuleNameRelative(moduleName.text)) {
                 // we have already reported errors on top level imports\exports in external module augmentations in checkModuleDeclaration
                 // no need to do this again.
                 if (!isTopLevelInExternalModuleAugmentation(node)) {

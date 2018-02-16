@@ -720,23 +720,8 @@ namespace ts {
 
             function getDeclarationName(declaration: Declaration) {
                 const name = getNameOfDeclaration(declaration);
-                if (name) {
-                    const result = getTextOfIdentifierOrLiteral(name as (Identifier | LiteralExpression));
-                    if (result !== undefined) {
-                        return result;
-                    }
-
-                    if (name.kind === SyntaxKind.ComputedPropertyName) {
-                        const expr = (<ComputedPropertyName>name).expression;
-                        if (expr.kind === SyntaxKind.PropertyAccessExpression) {
-                            return (<PropertyAccessExpression>expr).name.text;
-                        }
-
-                        return getTextOfIdentifierOrLiteral(expr as (Identifier | LiteralExpression));
-                    }
-                }
-
-                return undefined;
+                return name && (isPropertyNameLiteral(name) ? getTextOfIdentifierOrLiteral(name) :
+                    name.kind === SyntaxKind.ComputedPropertyName && isPropertyAccessExpression(name.expression) ? name.expression.name.text : undefined);
             }
 
             function visit(node: Node): void {
