@@ -1394,7 +1394,7 @@ namespace ts {
             // If `result === lastSelfReferenceLocation.symbol`, that means that we are somewhere inside `lastSelfReferenceLocation` looking up a name, and resolving to `lastLocation` itself.
             // That means that this is a self-reference of `lastLocation`, and shouldn't count this when considering whether `lastLocation` is used.
             if (isUse && result && nameNotFoundMessage && noUnusedIdentifiers && (!lastSelfReferenceLocation || result !== lastSelfReferenceLocation.symbol)) {
-                result.isReferenced = true;
+                result.isReferenced |= meaning;
             }
 
             if (!result) {
@@ -15697,7 +15697,7 @@ namespace ts {
             if (reactSym) {
                 // Mark local symbol as referenced here because it might not have been marked
                 // if jsx emit was not react as there wont be error being emitted
-                reactSym.isReferenced = true;
+                reactSym.isReferenced = SymbolFlags.All;
 
                 // If react symbol is alias, mark it as refereced
                 if (reactSym.flags & SymbolFlags.Alias && !isConstEnumOrConstEnumOnlyModule(resolveAlias(reactSym))) {
@@ -16267,12 +16267,7 @@ namespace ts {
                 }
             }
 
-            if (getCheckFlags(prop) & CheckFlags.Instantiated) {
-                getSymbolLinks(prop).target.isReferenced = true;
-            }
-            else {
-                prop.isReferenced = true;
-            }
+            (getCheckFlags(prop) & CheckFlags.Instantiated ? getSymbolLinks(prop).target : prop).isReferenced = SymbolFlags.All;
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: __String): boolean {
@@ -21442,7 +21437,9 @@ namespace ts {
         function checkUnusedLocalsAndParameters(node: Node): void {
             if (noUnusedIdentifiers && !(node.flags & NodeFlags.Ambient)) {
                 node.locals.forEach(local => {
-                    if (!local.isReferenced) {
+                    // If it's purely a type parameter, ignore, will be checked in `checkUnusedTypeParameters`.
+                    // If it's a type parameter merged with a parameter, check if the parameter-side is used.
+                    if (local.flags & SymbolFlags.TypeParameter ? (local.flags & SymbolFlags.Variable && !(local.isReferenced & SymbolFlags.Variable)) : !local.isReferenced) {
                         if (local.valueDeclaration && getRootDeclaration(local.valueDeclaration).kind === SyntaxKind.Parameter) {
                             const parameter = <ParameterDeclaration>getRootDeclaration(local.valueDeclaration);
                             const name = getNameOfDeclaration(local.valueDeclaration);
@@ -21453,7 +21450,7 @@ namespace ts {
                                 error(name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(local));
                             }
                         }
-                        else if (local.flags & SymbolFlags.TypeParameter ? compilerOptions.noUnusedParameters : compilerOptions.noUnusedLocals) {
+                        else if (compilerOptions.noUnusedLocals) {
                             forEach(local.declarations, d => errorUnusedLocal(d, symbolName(local)));
                         }
                     }
@@ -21538,7 +21535,7 @@ namespace ts {
                         return;
                     }
                     for (const typeParameter of node.typeParameters) {
-                        if (!getMergedSymbol(typeParameter.symbol).isReferenced && !isIdentifierThatStartsWithUnderScore(typeParameter.name)) {
+                        if (!(getMergedSymbol(typeParameter.symbol).isReferenced & SymbolFlags.TypeParameter) && !isIdentifierThatStartsWithUnderScore(typeParameter.name)) {
                             error(typeParameter.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(typeParameter.symbol));
                         }
                     }
