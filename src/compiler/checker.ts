@@ -12687,8 +12687,7 @@ namespace ts {
 
             function getTypeAtFlowInitializer(flow: FlowInitializer): Type {
                 const node = flow.node;
-                // TODO: More conditions here to do with object literals and variable declarations
-                // (and actually recursive ones)
+                // TODO: Recursive conditions here to do with object literals and variable declarations
                 // node identifier=bar
                 // .parent propertyassignment=bar: []
                 //  .parent objectliteral= { bar: [] }

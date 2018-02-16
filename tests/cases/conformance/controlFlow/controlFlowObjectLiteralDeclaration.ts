@@ -8,6 +8,7 @@ type A = {
     }
     extra?: string
 }
+// TODO: String literals and numeric literals and computed properties
 const y = [1, 2, 3]
 const wat = { extra: "life" }
 let a: A = {

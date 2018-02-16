@@ -20,6 +20,7 @@ type A = {
     extra?: string
 >extra : string | undefined
 }
+// TODO: String literals and numeric literals and computed properties
 const y = [1, 2, 3]
 >y : number[]
 >[1, 2, 3] : number[]

@@ -8,6 +8,7 @@ type A = {
     }
     extra?: string
 }
+// TODO: String literals and numeric literals and computed properties
 const y = [1, 2, 3]
 const wat = { extra: "life" }
 let a: A = {
@@ -37,6 +38,7 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     }
     return t;
 };
+// TODO: String literals and numeric literals and computed properties
 var y = [1, 2, 3];
 var wat = { extra: "life" };
 var a = __assign({ x: [], y: y, z: {

@@ -1,4 +1,4 @@
-tests/cases/conformance/controlFlow/controlFlowObjectLiteralDeclaration.ts(24,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowObjectLiteralDeclaration.ts(25,1): error TS2532: Object is possibly 'undefined'.
 
 
 ==== tests/cases/conformance/controlFlow/controlFlowObjectLiteralDeclaration.ts (1 errors) ====
@@ -11,6 +11,7 @@ tests/cases/conformance/controlFlow/controlFlowObjectLiteralDeclaration.ts(24,1)
         }
         extra?: string
     }
+    // TODO: String literals and numeric literals and computed properties
     const y = [1, 2, 3]
     const wat = { extra: "life" }
     let a: A = {

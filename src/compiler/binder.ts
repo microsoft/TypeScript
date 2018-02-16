@@ -1230,49 +1230,53 @@ namespace ts {
             }
         }
 
-        function bindDestructuringTargetFlow(node: Expression, SPECIAL: boolean) {
+        function bindDestructuringTargetFlow(node: Expression) {
             if (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken) {
-                bindAssignmentTargetFlow((<BinaryExpression>node).left, SPECIAL);
+                bindAssignmentTargetFlow((<BinaryExpression>node).left);
             }
             else {
-                bindAssignmentTargetFlow(node, SPECIAL);
+                bindAssignmentTargetFlow(node);
             }
         }
 
-        function bindAssignmentTargetFlow(node: Expression, SPECIAL?: boolean) {
+        function bindInitializerFlow(node: Expression): void {
             if (isNarrowableReference(node)) {
-                if (SPECIAL) {
-                    currentFlow = createFlowInitializer(currentFlow, node);
+                currentFlow = createFlowInitializer(currentFlow, node);
+            }
+            else if (isObjectLiteralExpression(node)) {
+                for (const p of node.properties) {
+                    if (p.name && p.name.kind === SyntaxKind.Identifier) {
+                        // TODO: support string, number, computed
+                        bindInitializerFlow(p.name);
+                    }
                 }
-                else {
-                    currentFlow = createFlowAssignment(currentFlow, node);
-                }
+            }
+        }
+
+        function bindAssignmentTargetFlow(node: Expression) {
+            if (isNarrowableReference(node)) {
+                currentFlow = createFlowAssignment(currentFlow, node);
             }
             else if (node.kind === SyntaxKind.ArrayLiteralExpression) {
                 for (const e of (<ArrayLiteralExpression>node).elements) {
                     if (e.kind === SyntaxKind.SpreadElement) {
-                        bindAssignmentTargetFlow((<SpreadElement>e).expression, SPECIAL);
+                        bindAssignmentTargetFlow((<SpreadElement>e).expression);
                     }
                     else {
-                        bindDestructuringTargetFlow(e, SPECIAL);
+                        bindDestructuringTargetFlow(e);
                     }
                 }
             }
             else if (node.kind === SyntaxKind.ObjectLiteralExpression) {
                 for (const p of (<ObjectLiteralExpression>node).properties) {
                     if (p.kind === SyntaxKind.PropertyAssignment) {
-                        if (SPECIAL && p.name.kind === SyntaxKind.Identifier) {
-                            bindAssignmentTargetFlow(p.name, SPECIAL);
-                        }
-                        else {
-                            bindDestructuringTargetFlow(p.initializer, SPECIAL);
-                        }
+                        bindDestructuringTargetFlow(p.initializer);
                     }
                     else if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                        bindAssignmentTargetFlow(p.name, SPECIAL);
+                        bindAssignmentTargetFlow(p.name);
                     }
                     else if (p.kind === SyntaxKind.SpreadAssignment) {
-                        bindAssignmentTargetFlow(p.expression, SPECIAL);
+                        bindAssignmentTargetFlow(p.expression);
                     }
                 }
             }
@@ -1377,9 +1381,8 @@ namespace ts {
                     node.type &&
                     node.initializer &&
                     isIdentifier(node.name) &&
-                    node.initializer.kind === SyntaxKind.ObjectLiteralExpression) {
-                    // should be fine!
-                    bindAssignmentTargetFlow(node.initializer as ObjectLiteralExpression, /*SPECIAL*/ true);
+                    isObjectLiteralExpression(node.initializer)) {
+                    bindInitializerFlow(node.initializer);
                 }
             }
         }
