@@ -21909,11 +21909,13 @@ namespace ts {
                 // check private/protected variable access
                 const parent = node.parent.parent;
                 const parentType = getTypeForBindingElementParent(parent);
-                const name = node.propertyName || <Identifier>node.name;
-                const property = getPropertyOfType(parentType, getTextOfPropertyName(name));
-                markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isThisAccess*/ false); // A destructuring is never a write-only reference.
-                if (parent.initializer && property) {
-                    checkPropertyAccessibility(parent, parent.initializer, parentType, property);
+                const name = node.propertyName || node.name;
+                if (!isBindingPattern(name)) {
+                    const property = getPropertyOfType(parentType, getTextOfPropertyName(name));
+                    markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isThisAccess*/ false); // A destructuring is never a write-only reference.
+                    if (parent.initializer && property) {
+                        checkPropertyAccessibility(parent, parent.initializer, parentType, property);
+                    }
                 }
             }
 
