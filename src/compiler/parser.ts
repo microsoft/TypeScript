@@ -4590,7 +4590,6 @@ namespace ts {
                     if (asKeyword) {
                         const asType = parseType();
                         (<ShorthandPropertyAssignment>node).type = asType;
-                        asType.parent = node;
                     }
                 }
             }
