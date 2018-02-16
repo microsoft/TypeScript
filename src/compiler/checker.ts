@@ -12694,13 +12694,16 @@ namespace ts {
                 //  .parent objectliteral= { bar: [] }
                 //   .parent variabledeclaration = f2: Foo = { bar: [] }
                 //    .name identifier f2
-                const referenceMatchesPropertyAssignment = isPropertyAccessExpression(reference) && isIdentifier(node) &&
-                    isPropertyAssignment(node.parent) && reference.name.escapedText === node.escapedText;
+                const referenceMatchesPropertyAssignment = isPropertyAccessExpression(reference) &&
+                    isIdentifier(node) &&
+                    (isShorthandPropertyAssignment(node.parent) || isPropertyAssignment(node.parent)) &&
+                    reference.name.escapedText === node.escapedText;
                 if (referenceMatchesPropertyAssignment &&
                     isVariableDeclaration(node.parent.parent.parent) &&
                     isMatchingReference((reference as PropertyAccessExpression).expression, node.parent.parent.parent)) {
                     if (declaredType.flags & TypeFlags.Union) {
-                        return getAssignmentReducedType(declaredType as UnionType, getTypeOfNode((node.parent as PropertyAssignment).initializer));
+                        const sourceNode = isPropertyAssignment(node.parent) ? node.parent.initializer : (node.parent as ShorthandPropertyAssignment).name;
+                        return getAssignmentReducedType(declaredType as UnionType, getTypeOfNode(sourceNode));
                     }
                     return declaredType;
                 }

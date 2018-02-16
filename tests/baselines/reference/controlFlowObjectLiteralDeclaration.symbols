@@ -1,21 +1,88 @@
 === tests/cases/conformance/controlFlow/controlFlowObjectLiteralDeclaration.ts ===
-type Foo = {
->Foo : Symbol(Foo, Decl(controlFlowObjectLiteralDeclaration.ts, 0, 0))
+type A = {
+>A : Symbol(A, Decl(controlFlowObjectLiteralDeclaration.ts, 0, 0))
 
-  bar?: number[];
->bar : Symbol(bar, Decl(controlFlowObjectLiteralDeclaration.ts, 0, 12))
+    x?: string[]
+>x : Symbol(x, Decl(controlFlowObjectLiteralDeclaration.ts, 0, 10))
+
+    y?: number[]
+>y : Symbol(y, Decl(controlFlowObjectLiteralDeclaration.ts, 1, 16))
+
+    z?: {
+>z : Symbol(z, Decl(controlFlowObjectLiteralDeclaration.ts, 2, 16))
+
+        ka?: boolean
+>ka : Symbol(ka, Decl(controlFlowObjectLiteralDeclaration.ts, 3, 9))
+
+        ki?: boolean
+>ki : Symbol(ki, Decl(controlFlowObjectLiteralDeclaration.ts, 4, 20))
+    }
+    extra?: string
+>extra : Symbol(extra, Decl(controlFlowObjectLiteralDeclaration.ts, 6, 5))
 }
+const y = [1, 2, 3]
+>y : Symbol(y, Decl(controlFlowObjectLiteralDeclaration.ts, 9, 5))
 
-let f2: Foo = { bar: [] };
->f2 : Symbol(f2, Decl(controlFlowObjectLiteralDeclaration.ts, 4, 3))
->Foo : Symbol(Foo, Decl(controlFlowObjectLiteralDeclaration.ts, 0, 0))
->bar : Symbol(bar, Decl(controlFlowObjectLiteralDeclaration.ts, 4, 15))
+const wat = { extra: "life" }
+>wat : Symbol(wat, Decl(controlFlowObjectLiteralDeclaration.ts, 10, 5))
+>extra : Symbol(extra, Decl(controlFlowObjectLiteralDeclaration.ts, 10, 13))
 
-f2.bar.push(0)
->f2.bar.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
->f2.bar : Symbol(bar, Decl(controlFlowObjectLiteralDeclaration.ts, 0, 12))
->f2 : Symbol(f2, Decl(controlFlowObjectLiteralDeclaration.ts, 4, 3))
->bar : Symbol(bar, Decl(controlFlowObjectLiteralDeclaration.ts, 0, 12))
+let a: A = {
+>a : Symbol(a, Decl(controlFlowObjectLiteralDeclaration.ts, 11, 3))
+>A : Symbol(A, Decl(controlFlowObjectLiteralDeclaration.ts, 0, 0))
+
+    x: [],
+>x : Symbol(x, Decl(controlFlowObjectLiteralDeclaration.ts, 11, 12))
+
+    y,
+>y : Symbol(y, Decl(controlFlowObjectLiteralDeclaration.ts, 12, 10))
+
+    z: {
+>z : Symbol(z, Decl(controlFlowObjectLiteralDeclaration.ts, 13, 6))
+
+        ka: false
+>ka : Symbol(ka, Decl(controlFlowObjectLiteralDeclaration.ts, 14, 8))
+
+    },
+    ...wat
+>wat : Symbol(wat, Decl(controlFlowObjectLiteralDeclaration.ts, 10, 5))
+}
+a.x.push('hi')
+>a.x.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>a.x : Symbol(x, Decl(controlFlowObjectLiteralDeclaration.ts, 0, 10))
+>a : Symbol(a, Decl(controlFlowObjectLiteralDeclaration.ts, 11, 3))
+>x : Symbol(x, Decl(controlFlowObjectLiteralDeclaration.ts, 0, 10))
 >push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+
+a.y.push(4)
+>a.y.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>a.y : Symbol(y, Decl(controlFlowObjectLiteralDeclaration.ts, 1, 16))
+>a : Symbol(a, Decl(controlFlowObjectLiteralDeclaration.ts, 11, 3))
+>y : Symbol(y, Decl(controlFlowObjectLiteralDeclaration.ts, 1, 16))
+>push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+
+let b = a.z.ka
+>b : Symbol(b, Decl(controlFlowObjectLiteralDeclaration.ts, 21, 3))
+>a.z.ka : Symbol(ka, Decl(controlFlowObjectLiteralDeclaration.ts, 3, 9))
+>a.z : Symbol(z, Decl(controlFlowObjectLiteralDeclaration.ts, 2, 16))
+>a : Symbol(a, Decl(controlFlowObjectLiteralDeclaration.ts, 11, 3))
+>z : Symbol(z, Decl(controlFlowObjectLiteralDeclaration.ts, 2, 16))
+>ka : Symbol(ka, Decl(controlFlowObjectLiteralDeclaration.ts, 3, 9))
+
+b = a.z.ki // error, object is possibly undefined
+>b : Symbol(b, Decl(controlFlowObjectLiteralDeclaration.ts, 21, 3))
+>a.z.ki : Symbol(ki, Decl(controlFlowObjectLiteralDeclaration.ts, 4, 20))
+>a.z : Symbol(z, Decl(controlFlowObjectLiteralDeclaration.ts, 2, 16))
+>a : Symbol(a, Decl(controlFlowObjectLiteralDeclaration.ts, 11, 3))
+>z : Symbol(z, Decl(controlFlowObjectLiteralDeclaration.ts, 2, 16))
+>ki : Symbol(ki, Decl(controlFlowObjectLiteralDeclaration.ts, 4, 20))
+
+a.extra.length // error, reference doesn't match 'wat', so object is possibly undefined
+>a.extra.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>a.extra : Symbol(extra, Decl(controlFlowObjectLiteralDeclaration.ts, 6, 5))
+>a : Symbol(a, Decl(controlFlowObjectLiteralDeclaration.ts, 11, 3))
+>extra : Symbol(extra, Decl(controlFlowObjectLiteralDeclaration.ts, 6, 5))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
+
 
 

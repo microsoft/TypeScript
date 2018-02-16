@@ -1,25 +1,103 @@
 === tests/cases/conformance/controlFlow/controlFlowObjectLiteralDeclaration.ts ===
-type Foo = {
->Foo : Foo
+type A = {
+>A : A
 
-  bar?: number[];
->bar : number[] | undefined
+    x?: string[]
+>x : string[] | undefined
+
+    y?: number[]
+>y : number[] | undefined
+
+    z?: {
+>z : { ka?: boolean | undefined; ki?: boolean | undefined; } | undefined
+
+        ka?: boolean
+>ka : boolean | undefined
+
+        ki?: boolean
+>ki : boolean | undefined
+    }
+    extra?: string
+>extra : string | undefined
 }
+const y = [1, 2, 3]
+>y : number[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
 
-let f2: Foo = { bar: [] };
->f2 : Foo
->Foo : Foo
->{ bar: [] } : { bar: never[]; }
->bar : never[]
+const wat = { extra: "life" }
+>wat : { extra: string; }
+>{ extra: "life" } : { extra: string; }
+>extra : string
+>"life" : "life"
+
+let a: A = {
+>a : A
+>A : A
+>{    x: [],    y,    z: {        ka: false    },    ...wat} : { extra: string; x: never[]; y: number[]; z: { ka: false; }; }
+
+    x: [],
+>x : never[]
 >[] : never[]
 
-f2.bar.push(0)
->f2.bar.push(0) : number
->f2.bar.push : (...items: number[]) => number
->f2.bar : number[]
->f2 : Foo
->bar : number[]
+    y,
+>y : number[]
+
+    z: {
+>z : { ka: false; }
+>{        ka: false    } : { ka: false; }
+
+        ka: false
+>ka : false
+>false : false
+
+    },
+    ...wat
+>wat : { extra: string; }
+}
+a.x.push('hi')
+>a.x.push('hi') : number
+>a.x.push : (...items: string[]) => number
+>a.x : string[]
+>a : A
+>x : string[]
+>push : (...items: string[]) => number
+>'hi' : "hi"
+
+a.y.push(4)
+>a.y.push(4) : number
+>a.y.push : (...items: number[]) => number
+>a.y : number[]
+>a : A
+>y : number[]
 >push : (...items: number[]) => number
->0 : 0
+>4 : 4
+
+let b = a.z.ka
+>b : boolean | undefined
+>a.z.ka : boolean | undefined
+>a.z : { ka?: boolean | undefined; ki?: boolean | undefined; }
+>a : A
+>z : { ka?: boolean | undefined; ki?: boolean | undefined; }
+>ka : boolean | undefined
+
+b = a.z.ki // error, object is possibly undefined
+>b = a.z.ki : boolean | undefined
+>b : boolean | undefined
+>a.z.ki : boolean | undefined
+>a.z : { ka?: boolean | undefined; ki?: boolean | undefined; }
+>a : A
+>z : { ka?: boolean | undefined; ki?: boolean | undefined; }
+>ki : boolean | undefined
+
+a.extra.length // error, reference doesn't match 'wat', so object is possibly undefined
+>a.extra.length : number
+>a.extra : string | undefined
+>a : A
+>extra : string | undefined
+>length : number
+
 
 
