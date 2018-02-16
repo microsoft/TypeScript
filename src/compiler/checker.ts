@@ -20349,8 +20349,7 @@ namespace ts {
 
         function checkTupleType(node: TupleTypeNode) {
             // Grammar checking
-            const hasErrorFromDisallowedTrailingComma = checkGrammarForDisallowedTrailingComma(node.elementTypes);
-            if (!hasErrorFromDisallowedTrailingComma && node.elementTypes.length === 0) {
+            if (node.elementTypes.length === 0) {
                 grammarErrorOnNode(node, Diagnostics.A_tuple_type_element_list_cannot_be_empty);
             }
 
@@ -26207,8 +26206,7 @@ namespace ts {
         }
 
         function checkGrammarTypeArguments(node: Node, typeArguments: NodeArray<TypeNode>): boolean {
-            return checkGrammarForDisallowedTrailingComma(typeArguments) ||
-                checkGrammarForAtLeastOneTypeArgument(node, typeArguments);
+            return checkGrammarForAtLeastOneTypeArgument(node, typeArguments);
         }
 
         function checkGrammarForOmittedArgument(args: NodeArray<Expression>): boolean {
