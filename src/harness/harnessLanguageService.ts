@@ -143,7 +143,7 @@ namespace Harness.LanguageService {
 
         public getScriptInfo(fileName: string): ScriptInfo {
             const fileEntry = this.virtualFileSystem.traversePath(fileName);
-            return fileEntry && fileEntry.isFile() ? (<Utils.VirtualFile>fileEntry).content : undefined;
+            return fileEntry && fileEntry.isFile() ? fileEntry.content : undefined;
         }
 
         public addScript(fileName: string, content: string, isRootFile: boolean): void {

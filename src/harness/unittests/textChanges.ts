@@ -91,7 +91,7 @@ namespace M
     }
 }`;
             runSingleFileTest("extractMethodLike", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-                const statements = (<Block>(<FunctionDeclaration>findChild("foo", sourceFile)).body).statements.slice(1);
+                const statements = (<FunctionDeclaration>findChild("foo", sourceFile)).body.statements.slice(1);
                 const newFunction = createFunctionDeclaration(
                         /*decorators*/ undefined,
                         /*modifiers*/ undefined,
