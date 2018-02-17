@@ -113,6 +113,10 @@ namespace ts.server.protocol {
         /* @internal */
         GetEditsForRefactorFull = "getEditsForRefactor-full",
 
+        OrganizeImports = "organizeImports",
+        /* @internal */
+        OrganizeImportsFull = "organizeImports-full",
+
         // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
     }
 
@@ -545,6 +549,27 @@ namespace ts.server.protocol {
          */
         renameLocation?: Location;
         renameFilename?: string;
+    }
+
+    /**
+     * Organize imports by:
+     *   1) Removing unused imports
+     *   2) Coalescing imports from the same module
+     *   3) Sorting imports
+     */
+    export interface OrganizeImportsRequest extends Request {
+        command: CommandTypes.OrganizeImports;
+        arguments: OrganizeImportsRequestArgs;
+    }
+
+    export type OrganizeImportsScope = GetCombinedCodeFixScope;
+
+    export interface OrganizeImportsRequestArgs {
+        scope: OrganizeImportsScope;
+    }
+
+    export interface OrganizeImportsResponse extends Response {
+        edits: ReadonlyArray<FileCodeEdits>;
     }
 
     /**

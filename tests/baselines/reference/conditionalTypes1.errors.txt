@@ -437,3 +437,44 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(275,43): error TS
 !!! error TS2322: Type 'T95<U>' is not assignable to type 'T94<U>'.
 !!! error TS2322:   Type 'boolean' is not assignable to type 'true'.
     
+    // Repro from #21863
+    
+    function f50() {
+        type Eq<T, U> = T extends U ? U extends T ? true : false : false;
+        type If<S, T, U> = S extends false ? U : T;
+        type Omit<T extends object> = { [P in keyof T]: If<Eq<T[P], never>, never, P>; }[keyof T];
+        type Omit2<T extends object, U = never> = { [P in keyof T]: If<Eq<T[P], U>, never, P>; }[keyof T];
+        type A = Omit<{ a: void; b: never; }>;  // 'a'
+        type B = Omit2<{ a: void; b: never; }>;  // 'a'
+    }
+    
+    // Repro from #21862
+    
+    type OldDiff<T extends string, U extends string> = (
+        & { [P in T]: P; }
+        & { [P in U]: never; }
+        & { [x: string]: never; }
+    )[T];
+    type NewDiff<T, U> = T extends U ? never : T;
+    interface A {
+        a: 'a';
+    }
+    interface B1 extends A {
+        b: 'b';
+        c: OldDiff<keyof this, keyof A>;
+    }
+    interface B2 extends A {
+        b: 'b';
+        c: NewDiff<keyof this, keyof A>;
+    }
+    type c1 = B1['c']; // 'c' | 'b'
+    type c2 = B2['c']; // 'c' | 'b'
+    
+    // Repro from #21929
+    
+    type NonFooKeys1<T extends object> = OldDiff<keyof T, 'foo'>;
+    type NonFooKeys2<T extends object> = Exclude<keyof T, 'foo'>;
+    
+    type Test1 = NonFooKeys1<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
+    type Test2 = NonFooKeys2<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
+    

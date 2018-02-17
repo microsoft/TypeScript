@@ -1438,6 +1438,14 @@ namespace ts {
         }
     }
 
+    export function group<T>(values: ReadonlyArray<T>, getGroupId: (value: T) => string): ReadonlyArray<ReadonlyArray<T>> {
+        const groupIdToGroup = createMultiMap<T>();
+        for (const value of values) {
+            groupIdToGroup.add(getGroupId(value), value);
+        }
+        return arrayFrom(groupIdToGroup.values());
+    }
+
     /**
      * Tests whether a value is an array.
      */
@@ -1895,6 +1903,11 @@ namespace ts {
             compareValues(d1.code, d2.code) ||
             compareMessageText(d1.messageText, d2.messageText) ||
             Comparison.EqualTo;
+    }
+
+    /** True is greater than false. */
+    export function compareBooleans(a: boolean, b: boolean): Comparison {
+        return compareValues(a ? 1 : 0, b ? 1 : 0);
     }
 
     function compareMessageText(text1: string | DiagnosticMessageChain, text2: string | DiagnosticMessageChain): Comparison {
@@ -2927,7 +2940,8 @@ namespace ts {
         }
 
         export function showSymbol(symbol: Symbol): string {
-            return `{ flags: ${showFlags(symbol.flags, (ts as any).SymbolFlags)}; declarations: ${map(symbol.declarations, showSyntaxKind)} }`;
+            const symbolFlags = (ts as any).SymbolFlags;
+            return `{ flags: ${symbolFlags ? showFlags(symbol.flags, symbolFlags) : symbol.flags}; declarations: ${map(symbol.declarations, showSyntaxKind)} }`;
         }
 
         function showFlags(flags: number, flagsEnum: { [flag: number]: string }): string {
@@ -2942,7 +2956,8 @@ namespace ts {
         }
 
         export function showSyntaxKind(node: Node): string {
-            return (ts as any).SyntaxKind[node.kind];
+            const syntaxKind = (ts as any).SyntaxKind;
+            return syntaxKind ? syntaxKind[node.kind] : node.kind.toString();
         }
     }
 

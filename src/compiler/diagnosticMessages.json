@@ -1983,10 +1983,16 @@
         "category": "Error",
         "code": 2566
     },
-    "Types of constructor signature are incompatible.": {
+    "Enum declarations can only merge with namespace or other enum declarations.": {
         "category": "Error",
         "code": 2567
     },
+    "Types of constructor signature are incompatible.": {
+        "category": "Error",
+        "code": 2568
+    },
+
+
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
