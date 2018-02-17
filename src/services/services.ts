@@ -30,6 +30,7 @@
 /// <reference path='refactorProvider.ts' />
 /// <reference path='codefixes\fixes.ts' />
 /// <reference path='refactors\refactors.ts' />
+/// <reference path="sourcemaps.ts" />
 
 namespace ts {
     /** The version of the language service API */
@@ -1536,20 +1537,79 @@ namespace ts {
             return checker.getSymbolAtLocation(node);
         }
 
+        function getSourceMapper(file: SourceFile) {
+            if (!host.readFile || !host.fileExists) {
+                return file.sourceMapper = sourcemaps.identitySourceMapper;
+            }
+            if (file.sourceMapper) {
+                return file.sourceMapper;
+            }
+            // TODO (wewigham): Read sourcemappingurl from last line of .d.ts if present
+            const mapFileName = file.fileName + ".map";
+            if (!host.fileExists(mapFileName)) {
+                return file.sourceMapper = sourcemaps.identitySourceMapper;
+            }
+            const doc = host.readFile(mapFileName);
+            let maps: sourcemaps.SourceMapData;
+            try {
+                maps = JSON.parse(doc);
+            }
+            catch {}
+            if (!maps || !maps.sources || !maps.file || !maps.mappings) {
+                // obviously invalid map
+                return file.sourceMapper = sourcemaps.identitySourceMapper;
+            }
+            return file.sourceMapper = sourcemaps.decode({readFile: s => host.readFile(s), fileExists: s => host.fileExists(s), getCanonicalFileName}, mapFileName, maps, program);
+        }
+
+        function getTargetOfMappedDeclarationFile(info: DefinitionInfo): DefinitionInfo {
+            if (endsWith(info.fileName, Extension.Dts)) {
+                const file = program.getSourceFile(info.fileName);
+                const mapper = getSourceMapper(file);
+                const mapLoc: sourcemaps.SourceMappableLocation = {fileName: info.fileName, position: info.textSpan.start};
+                const newLoc = mapper.forwardMap(mapLoc);
+                if (newLoc === mapLoc) return info;
+                return {
+                    containerKind: info.containerKind,
+                    containerName: info.containerName,
+                    fileName: newLoc.fileName,
+                    kind: info.kind,
+                    name: info.name,
+                    textSpan: {
+                        start: newLoc.position,
+                        length: info.textSpan.length // TODO: How to determine correct length? mapping the end pos could result in a completely different location...
+                    }
+                }; // TODO: recur if the target file is also a declaration file
+            }
+            return info;
+        }
+
+        function getTargetOfMappedDeclarationFiles(infos: ReadonlyArray<DefinitionInfo>): DefinitionInfo[] {
+            return map(infos, getTargetOfMappedDeclarationFile);
+        }
+
         /// Goto definition
         function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
-            return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position);
+            return getTargetOfMappedDeclarationFiles(GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position));
         }
 
         function getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan {
             synchronizeHostData();
-            return GoToDefinition.getDefinitionAndBoundSpan(program, getValidSourceFile(fileName), position);
+            const result = GoToDefinition.getDefinitionAndBoundSpan(program, getValidSourceFile(fileName), position);
+            const mappedDefs = getTargetOfMappedDeclarationFiles(result.definitions);
+            if (mappedDefs === result.definitions) {
+                return result;
+            }
+            return {
+                definitions: mappedDefs,
+                textSpan: result.textSpan // TODO: Does this need to be mapped in some way? I don't _think_ so?
+            }
         }
 
         function getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
-            return GoToDefinition.getTypeDefinitionAtPosition(program.getTypeChecker(), getValidSourceFile(fileName), position);
+            return getTargetOfMappedDeclarationFiles(GoToDefinition.getTypeDefinitionAtPosition(program.getTypeChecker(), getValidSourceFile(fileName), position));
         }
 
         /// Goto implementation

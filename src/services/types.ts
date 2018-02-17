@@ -75,6 +75,8 @@ namespace ts {
         getLineStarts(): ReadonlyArray<number>;
         getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
+
+        /* @internal */ sourceMapper?: sourcemaps.SourceMapper;
     }
 
     export interface SourceFileLike {

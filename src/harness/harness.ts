@@ -1632,14 +1632,15 @@ namespace Harness {
         }
 
         export function doSourcemapBaseline(baselinePath: string, options: ts.CompilerOptions, result: CompilerResult, harnessSettings: TestCaseParser.CompilerSettings) {
+            const declMaps = ts.getAreDeclarationMapsEnabled(options);
             if (options.inlineSourceMap) {
-                if (result.sourceMaps.length > 0 && !options.declarationMaps) {
+                if (result.sourceMaps.length > 0 && !declMaps) {
                     throw new Error("No sourcemap files should be generated if inlineSourceMaps was set.");
                 }
                 return;
             }
-            else if (options.sourceMap || options.declarationMaps) {
-                if (result.sourceMaps.length !== (result.files.length * (options.declarationMaps && options.sourceMap ? 2 : 1))) {
+            else if (options.sourceMap || declMaps) {
+                if (result.sourceMaps.length !== (result.files.length * (declMaps && options.sourceMap ? 2 : 1))) {
                     throw new Error("Number of sourcemap files should be same as js files.");
                 }
 

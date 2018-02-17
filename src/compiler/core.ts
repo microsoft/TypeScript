@@ -2066,6 +2066,10 @@ namespace ts {
         return moduleResolution;
     }
 
+    export function getAreDeclarationMapsEnabled(options: CompilerOptions) {
+        return !!(options.declaration && options.declarationMaps);
+    }
+
     export function getAllowSyntheticDefaultImports(compilerOptions: CompilerOptions) {
         const moduleKind = getEmitModuleKind(compilerOptions);
         return compilerOptions.allowSyntheticDefaultImports !== undefined
