@@ -617,7 +617,7 @@ namespace ts.server {
             const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body.edits);
 
             const renameFilename: string | undefined = response.body.renameFilename;
-            let renameLocation: number | undefined = undefined;
+            let renameLocation: number | undefined;
             if (renameFilename !== undefined) {
                 renameLocation = this.lineOffsetToPosition(renameFilename, response.body.renameLocation);
             }

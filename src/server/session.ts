@@ -1541,7 +1541,7 @@ namespace ts.server {
         }
 
         private extractPositionAndRange(args: protocol.FileLocationOrRangeRequestArgs, scriptInfo: ScriptInfo): { position: number, textRange: TextRange } {
-            let position: number = undefined;
+            let position: number;
             let textRange: TextRange;
             if (this.isLocation(args)) {
                 position = getPosition(args);
@@ -1657,7 +1657,7 @@ namespace ts.server {
         }
 
         private getStartAndEndPosition(args: protocol.FileRangeRequestArgs, scriptInfo: ScriptInfo) {
-            let startPosition: number = undefined, endPosition: number = undefined;
+            let startPosition: number, endPosition: number;
             if (args.startPosition !== undefined) {
                 startPosition = args.startPosition;
             }

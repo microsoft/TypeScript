@@ -103,7 +103,6 @@
         "no-object-literal-type-assertion": false,
         "no-shadowed-variable": false,
         "no-submodule-imports": false,
-        "no-unnecessary-initializer": false,
         "no-var-requires": false,
         "ordered-imports": false,
         "prefer-conditional-expression": false,

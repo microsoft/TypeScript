@@ -1584,7 +1584,7 @@ namespace ts {
         return text.replace(/{(\d+)}/g, (_match, index?) => args[+index + baseIndex]);
     }
 
-    export let localizedDiagnosticMessages: MapLike<string> = undefined;
+    export let localizedDiagnosticMessages: MapLike<string>;
 
     export function getLocaleSpecificMessage(message: DiagnosticMessage) {
         return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key] || message.message;
@@ -3043,7 +3043,7 @@ namespace ts {
 
     /** Return the object corresponding to the best pattern to match `candidate`. */
     export function findBestPatternMatch<T>(values: ReadonlyArray<T>, getPattern: (value: T) => Pattern, candidate: string): T | undefined {
-        let matchedValue: T | undefined = undefined;
+        let matchedValue: T | undefined;
         // use length of prefix as betterness criteria
         let longestMatchPrefixLength = -1;
 

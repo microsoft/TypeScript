@@ -55,7 +55,7 @@ namespace Harness.Parallel.Worker {
             retries() { return this; },
             slow() { return this; },
             timeout(n) {
-                timeout = n as number;
+                timeout = n;
                 return this;
             },
         };
@@ -127,7 +127,7 @@ namespace Harness.Parallel.Worker {
         const fakeContext: Mocha.ITestCallbackContext = {
             skip() { return this; },
             timeout(n) {
-                timeout = n as number;
+                timeout = n;
                 const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: timeout } };
                 process.send(timeoutMsg);
                 return this;
