@@ -1303,7 +1303,7 @@ desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex
 task("lint", ["build-rules"], () => {
     if (fold.isTravis()) console.log(fold.start("lint"));
    function lint(project, cb) {
-        const cmd = `node node_modules/tslint/bin/tslint --project ${project} --formatters-dir ./built/local/tslint/formatters`;
+        const cmd = `node node_modules/tslint/bin/tslint --project ${project} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
         console.log("Linting: " + cmd);
         jake.exec([cmd], { interactive: true, windowsVerbatimArguments: true }, cb);
    }

@@ -1111,7 +1111,7 @@ function spawnLintWorker(files: {path: string}[], callback: (failures: number) =
 gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: --f[iles]=regex", ["build-rules"], () => {
     if (fold.isTravis()) console.log(fold.start("lint"));
     for (const project of ["scripts/tslint/tsconfig.json", "src/tsconfig-base.json"]) {
-        const cmd = `node node_modules/tslint/bin/tslint --project ${project} --formatters-dir ./built/local/tslint/formatters`;
+        const cmd = `node node_modules/tslint/bin/tslint --project ${project} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
         console.log("Linting: " + cmd);
         child_process.execSync(cmd, { stdio: [0, 1, 2] });
     }
