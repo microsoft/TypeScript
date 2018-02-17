@@ -2428,9 +2428,11 @@ namespace ts {
         antecedent: FlowNode;
     }
 
-    // a huge clone of FlowAssignment. Probably not needed!
+    // FlowInitializer represents the name of a property assignment in an object literal
+    // that initializes a variable that has a declared type. The property assignment
+    // narrows the respective member of the declared type.
     export interface FlowInitializer extends FlowNodeBase {
-        node: Expression | VariableDeclaration | BindingElement;
+        node: Identifier;
         antecedent: FlowNode;
     }
 

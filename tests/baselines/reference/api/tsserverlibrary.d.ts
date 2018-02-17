@@ -1578,7 +1578,7 @@ declare namespace ts {
         antecedent: FlowNode;
     }
     interface FlowInitializer extends FlowNodeBase {
-        node: Expression | VariableDeclaration | BindingElement;
+        node: Identifier;
         antecedent: FlowNode;
     }
     interface FlowCondition extends FlowNodeBase {
