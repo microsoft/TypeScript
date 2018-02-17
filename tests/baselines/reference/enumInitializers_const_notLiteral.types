@@ -1,0 +1,16 @@
+=== tests/cases/compiler/enumInitializers_const_notLiteral.ts ===
+const notALiteralType = 1 ? 2 : 3;
+>notALiteralType : 2 | 3
+>1 ? 2 : 3 : 2 | 3
+>1 : 1
+>2 : 2
+>3 : 3
+
+const enum E {
+>E : E
+
+    x = notALiteralType,
+>x : E
+>notALiteralType : 2 | 3
+}
+

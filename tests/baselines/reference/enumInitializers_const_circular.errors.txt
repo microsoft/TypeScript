@@ -1,0 +1,21 @@
+tests/cases/compiler/enumInitializers_const_circular.ts(3,9): error TS2474: In 'const' enum declarations, a member initializer must have a string or number literal type.
+tests/cases/compiler/enumInitializers_const_circular.ts(10,9): error TS2474: In 'const' enum declarations, a member initializer must have a string or number literal type.
+
+
+==== tests/cases/compiler/enumInitializers_const_circular.ts (2 errors) ====
+    const x = E.y;
+    const enum E {
+        y = x,
+            ~
+!!! error TS2474: In 'const' enum declarations, a member initializer must have a string or number literal type.
+    }
+    
+    namespace N {
+        export const a = F.a;
+    }
+    const enum F {
+        a = N.a,
+            ~~~
+!!! error TS2474: In 'const' enum declarations, a member initializer must have a string or number literal type.
+    }
+    

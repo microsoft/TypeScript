@@ -1,0 +1,44 @@
+=== tests/cases/compiler/enumInitializers_const.ts ===
+const stride = 5;
+>stride : 5
+>5 : 5
+
+namespace N {
+>N : typeof N
+
+    export const two = 2;
+>two : 2
+>2 : 2
+}
+const enum E {
+>E : E
+
+    x = stride * N.two,
+>x : E
+>stride * N.two : number
+>stride : 5
+>N.two : 2
+>N : typeof N
+>two : 2
+}
+E.x;
+>E.x : E
+>E : typeof E
+>x : E
+
+const s = "abc";
+>s : "abc"
+>"abc" : "abc"
+
+const enum S {
+>S : S
+
+    abc = s,
+>abc : S
+>s : "abc"
+}
+S.abc;
+>S.abc : S
+>S : typeof S
+>abc : S
+

@@ -1,0 +1,34 @@
+=== tests/cases/compiler/enumInitializers_const_circular.ts ===
+const x = E.y;
+>x : E
+>E.y : E
+>E : typeof E
+>y : E
+
+const enum E {
+>E : E
+
+    y = x,
+>y : E
+>x : E
+}
+
+namespace N {
+>N : typeof N
+
+    export const a = F.a;
+>a : F
+>F.a : F
+>F : typeof F
+>a : F
+}
+const enum F {
+>F : F
+
+    a = N.a,
+>a : F
+>N.a : F
+>N : typeof N
+>a : F
+}
+

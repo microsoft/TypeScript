@@ -1,0 +1,40 @@
+=== tests/cases/compiler/enumInitializers_const.ts ===
+const stride = 5;
+>stride : Symbol(stride, Decl(enumInitializers_const.ts, 0, 5))
+
+namespace N {
+>N : Symbol(N, Decl(enumInitializers_const.ts, 0, 17))
+
+    export const two = 2;
+>two : Symbol(two, Decl(enumInitializers_const.ts, 2, 16))
+}
+const enum E {
+>E : Symbol(E, Decl(enumInitializers_const.ts, 3, 1))
+
+    x = stride * N.two,
+>x : Symbol(E.x, Decl(enumInitializers_const.ts, 4, 14))
+>stride : Symbol(stride, Decl(enumInitializers_const.ts, 0, 5))
+>N.two : Symbol(N.two, Decl(enumInitializers_const.ts, 2, 16))
+>N : Symbol(N, Decl(enumInitializers_const.ts, 0, 17))
+>two : Symbol(N.two, Decl(enumInitializers_const.ts, 2, 16))
+}
+E.x;
+>E.x : Symbol(E.x, Decl(enumInitializers_const.ts, 4, 14))
+>E : Symbol(E, Decl(enumInitializers_const.ts, 3, 1))
+>x : Symbol(E.x, Decl(enumInitializers_const.ts, 4, 14))
+
+const s = "abc";
+>s : Symbol(s, Decl(enumInitializers_const.ts, 9, 5))
+
+const enum S {
+>S : Symbol(S, Decl(enumInitializers_const.ts, 9, 16))
+
+    abc = s,
+>abc : Symbol(S.abc, Decl(enumInitializers_const.ts, 10, 14))
+>s : Symbol(s, Decl(enumInitializers_const.ts, 9, 5))
+}
+S.abc;
+>S.abc : Symbol(S.abc, Decl(enumInitializers_const.ts, 10, 14))
+>S : Symbol(S, Decl(enumInitializers_const.ts, 9, 16))
+>abc : Symbol(S.abc, Decl(enumInitializers_const.ts, 10, 14))
+

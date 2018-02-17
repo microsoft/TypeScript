@@ -1,0 +1,34 @@
+=== tests/cases/compiler/enumInitializers_const_circular.ts ===
+const x = E.y;
+>x : Symbol(x, Decl(enumInitializers_const_circular.ts, 0, 5))
+>E.y : Symbol(E.y, Decl(enumInitializers_const_circular.ts, 1, 14))
+>E : Symbol(E, Decl(enumInitializers_const_circular.ts, 0, 14))
+>y : Symbol(E.y, Decl(enumInitializers_const_circular.ts, 1, 14))
+
+const enum E {
+>E : Symbol(E, Decl(enumInitializers_const_circular.ts, 0, 14))
+
+    y = x,
+>y : Symbol(E.y, Decl(enumInitializers_const_circular.ts, 1, 14))
+>x : Symbol(x, Decl(enumInitializers_const_circular.ts, 0, 5))
+}
+
+namespace N {
+>N : Symbol(N, Decl(enumInitializers_const_circular.ts, 3, 1))
+
+    export const a = F.a;
+>a : Symbol(a, Decl(enumInitializers_const_circular.ts, 6, 16))
+>F.a : Symbol(F.a, Decl(enumInitializers_const_circular.ts, 8, 14))
+>F : Symbol(F, Decl(enumInitializers_const_circular.ts, 7, 1))
+>a : Symbol(F.a, Decl(enumInitializers_const_circular.ts, 8, 14))
+}
+const enum F {
+>F : Symbol(F, Decl(enumInitializers_const_circular.ts, 7, 1))
+
+    a = N.a,
+>a : Symbol(F.a, Decl(enumInitializers_const_circular.ts, 8, 14))
+>N.a : Symbol(N.a, Decl(enumInitializers_const_circular.ts, 6, 16))
+>N : Symbol(N, Decl(enumInitializers_const_circular.ts, 3, 1))
+>a : Symbol(N.a, Decl(enumInitializers_const_circular.ts, 6, 16))
+}
+

@@ -203,7 +203,7 @@
         "category": "Error",
         "code": 1064
     },
-    "In ambient enum declarations member initializer must be constant expression.": {
+    "In ambient enum declarations, a member initializer must have a string or number literal type.": {
         "category": "Error",
         "code": 1066
     },
@@ -1624,7 +1624,7 @@
         "category": "Error",
         "code": 2473
     },
-    "In 'const' enum declarations member initializer must be constant expression.": {
+    "In 'const' enum declarations, a member initializer must have a string or number literal type.": {
         "category": "Error",
         "code": 2474
     },
