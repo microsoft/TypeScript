@@ -12737,6 +12737,7 @@ namespace ts {
                 if (containsMatchingReference(reference, node)) {
                     return declaredType;
                 }
+                // Assignment doesn't affect reference
                 return undefined;
             }
 
