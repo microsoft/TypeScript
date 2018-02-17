@@ -37,6 +37,7 @@ namespace ts.JsDoc {
         "see",
         "since",
         "static",
+        "template",
         "throws",
         "type",
         "typedef",

@@ -657,8 +657,8 @@ namespace ts.Completions {
         None,
     }
 
-    function getRecommendedCompletion(currentToken: Node, checker: TypeChecker): Symbol | undefined {
-        const ty = getContextualType(currentToken, checker);
+    function getRecommendedCompletion(currentToken: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): Symbol | undefined {
+        const ty = getContextualType(currentToken, position, sourceFile, checker);
         const symbol = ty && ty.symbol;
         // Don't include make a recommended completion for an abstract class
         return symbol && (symbol.flags & SymbolFlags.Enum || symbol.flags & SymbolFlags.Class && !isAbstractConstructorSymbol(symbol))
@@ -666,23 +666,37 @@ namespace ts.Completions {
             : undefined;
     }
 
-    function getContextualType(currentToken: Node, checker: ts.TypeChecker): Type | undefined {
+    function getContextualType(currentToken: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): Type | undefined {
         const { parent } = currentToken;
         switch (currentToken.kind) {
-            case ts.SyntaxKind.Identifier:
-                return getContextualTypeFromParent(currentToken as ts.Identifier, checker);
-            case ts.SyntaxKind.EqualsToken:
-                return ts.isVariableDeclaration(parent) ? checker.getContextualType(parent.initializer) :
-                    ts.isBinaryExpression(parent) ? checker.getTypeAtLocation(parent.left) : undefined;
-            case ts.SyntaxKind.NewKeyword:
-                return checker.getContextualType(parent as ts.Expression);
-            case ts.SyntaxKind.CaseKeyword:
-                return getSwitchedType(cast(currentToken.parent, isCaseClause), checker);
+            case SyntaxKind.Identifier:
+                return getContextualTypeFromParent(currentToken as Identifier, checker);
+            case SyntaxKind.EqualsToken:
+                switch (parent.kind) {
+                    case ts.SyntaxKind.VariableDeclaration:
+                        return checker.getContextualType((parent as VariableDeclaration).initializer);
+                    case ts.SyntaxKind.BinaryExpression:
+                        return checker.getTypeAtLocation((parent as BinaryExpression).left);
+                    case ts.SyntaxKind.JsxAttribute:
+                        return checker.getContextualTypeForJsxAttribute(parent as JsxAttribute);
+                    default:
+                        return undefined;
+                }
+            case SyntaxKind.NewKeyword:
+                return checker.getContextualType(parent as Expression);
+            case SyntaxKind.CaseKeyword:
+                return getSwitchedType(cast(parent, isCaseClause), checker);
+            case SyntaxKind.OpenBraceToken:
+                return isJsxExpression(parent) && parent.parent.kind !== SyntaxKind.JsxElement ? checker.getContextualTypeForJsxAttribute(parent.parent) : undefined;
             default:
-                return isEqualityOperatorKind(currentToken.kind) && ts.isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind)
+                const argInfo = SignatureHelp.getImmediatelyContainingArgumentInfo(currentToken, position, sourceFile);
+                return argInfo
+                    // At `,`, treat this as the next argument after the comma.
+                    ? checker.getContextualTypeForArgumentAtIndex(argInfo.invocation, argInfo.argumentIndex + (currentToken.kind === SyntaxKind.CommaToken ? 1 : 0))
+                    : isEqualityOperatorKind(currentToken.kind) && isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind)
                     // completion at `x ===/**/` should be for the right side
                     ? checker.getTypeAtLocation(parent.left)
-                    : checker.getContextualType(currentToken as ts.Expression);
+                    : checker.getContextualType(currentToken as Expression);
         }
     }
 
@@ -956,7 +970,7 @@ namespace ts.Completions {
 
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
-        const recommendedCompletion = previousToken && getRecommendedCompletion(previousToken, typeChecker);
+        const recommendedCompletion = previousToken && getRecommendedCompletion(previousToken, position, sourceFile, typeChecker);
         return { kind: CompletionDataKind.Data, symbols, completionKind, propertyAccessToConvert, isNewIdentifierLocation, location, keywordFilters, symbolToOriginInfoMap, recommendedCompletion, previousToken, isJsxInitializer };
 
         type JSDocTagWithTypeExpression = JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag;
