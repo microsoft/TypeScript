@@ -1,0 +1,16 @@
+/a.ts(1,8): error TS2307: Cannot find module 'normalize.css'.
+
+
+==== /a.ts (1 errors) ====
+    import "normalize.css";
+           ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'normalize.css'.
+    
+==== /node_modules/normalize.css/normalize.css (0 errors) ====
+    // This tests that a package.json "main" with an unexpected extension is ignored.
+    
+    This file is not read.
+    
+==== /node_modules/normalize.css/package.json (0 errors) ====
+    { "main": "normalize.css" }
+    

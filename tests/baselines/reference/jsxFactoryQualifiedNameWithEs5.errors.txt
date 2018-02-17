@@ -1,0 +1,16 @@
+tests/cases/compiler/index.tsx(1,8): error TS2307: Cannot find module './jsx'.
+
+
+==== tests/cases/compiler/index.tsx (1 errors) ====
+    import "./jsx";
+           ~~~~~~~
+!!! error TS2307: Cannot find module './jsx'.
+    
+    var skate: any;
+    const React = { createElement: skate.h };
+    
+    class Component {
+        renderCallback() {
+            return <div>test</div>;
+        }
+    };

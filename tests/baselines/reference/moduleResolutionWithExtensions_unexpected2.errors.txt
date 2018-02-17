@@ -1,0 +1,16 @@
+/a.ts(1,8): error TS2307: Cannot find module 'foo'.
+
+
+==== /a.ts (1 errors) ====
+    import "foo";
+           ~~~~~
+!!! error TS2307: Cannot find module 'foo'.
+    
+==== /node_modules/foo/foo.js (0 errors) ====
+    // This tests that a package.json "types" with an unexpected extension is ignored.
+    
+    This file is not read.
+    
+==== /node_modules/foo/package.json (0 errors) ====
+    { "types": "foo.js" }
+    
