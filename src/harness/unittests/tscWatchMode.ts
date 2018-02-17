@@ -4,15 +4,15 @@
 
 namespace ts.tscWatch {
 
-    import WatchedSystem = ts.TestFSWithWatch.TestServerHost;
-    type FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
-    import createWatchedSystem = ts.TestFSWithWatch.createWatchedSystem;
-    import checkFileNames = ts.TestFSWithWatch.checkFileNames;
-    import libFile = ts.TestFSWithWatch.libFile;
-    import checkWatchedFiles = ts.TestFSWithWatch.checkWatchedFiles;
-    import checkWatchedDirectories = ts.TestFSWithWatch.checkWatchedDirectories;
-    import checkOutputContains = ts.TestFSWithWatch.checkOutputContains;
-    import checkOutputDoesNotContain = ts.TestFSWithWatch.checkOutputDoesNotContain;
+    import WatchedSystem = TestFSWithWatch.TestServerHost;
+    type FileOrFolder = TestFSWithWatch.FileOrFolder;
+    import createWatchedSystem = TestFSWithWatch.createWatchedSystem;
+    import checkFileNames = TestFSWithWatch.checkFileNames;
+    import libFile = TestFSWithWatch.libFile;
+    import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
+    import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
+    import checkOutputContains = TestFSWithWatch.checkOutputContains;
+    import checkOutputDoesNotContain = TestFSWithWatch.checkOutputDoesNotContain;
 
     export function checkProgramActualFiles(program: Program, expectedFiles: string[]) {
         checkFileNames(`Program actual files`, program.getSourceFiles().map(file => file.fileName), expectedFiles);
@@ -23,7 +23,7 @@ namespace ts.tscWatch {
     }
 
     function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, maxNumberOfFilesToIterateForInvalidation?: number) {
-        const compilerHost = ts.createWatchCompilerHostOfConfigFile(configFileName, {}, host);
+        const compilerHost = createWatchCompilerHostOfConfigFile(configFileName, {}, host);
         compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
         const watch = createWatchProgram(compilerHost);
         return () => watch.getCurrentProgram().getProgram();
@@ -111,7 +111,7 @@ namespace ts.tscWatch {
         });
         if (!skipWaiting) {
             if (errorsPosition === ExpectedOutputErrorsPosition.BeforeCompilationStarts) {
-                assertWatchDiagnosticAt(host, index, ts.Diagnostics.Starting_compilation_in_watch_mode);
+                assertWatchDiagnosticAt(host, index, Diagnostics.Starting_compilation_in_watch_mode);
                 index += 1;
             }
             assertWatchDiagnosticAt(host, index, Diagnostics.Compilation_complete_Watching_for_file_changes);

@@ -418,7 +418,7 @@ namespace FourSlash {
             this.goToPosition(marker.position);
         }
 
-        public goToEachMarker(markers: ReadonlyArray<Marker>, action: (marker: FourSlash.Marker, index: number) => void) {
+        public goToEachMarker(markers: ReadonlyArray<Marker>, action: (marker: Marker, index: number) => void) {
             assert(markers.length);
             for (let i = 0; i < markers.length; i++) {
                 this.goToMarker(markers[i]);
@@ -2345,7 +2345,7 @@ Actual: ${stringify(fullActual)}`);
             this.verifyClassifications(expected, actual, this.activeFile.content);
         }
 
-        public verifyOutliningSpans(spans: FourSlash.Range[]) {
+        public verifyOutliningSpans(spans: Range[]) {
             const actual = this.languageService.getOutliningSpans(this.activeFile.fileName);
 
             if (actual.length !== spans.length) {
@@ -3279,7 +3279,7 @@ ${code}
             const format = new FourSlashInterface.Format(state);
             const cancellation = new FourSlashInterface.Cancellation(state);
             const f = eval(wrappedCode);
-            f(test, goTo, verify, edit, debug, format, cancellation, FourSlashInterface.Classification, FourSlash.verifyOperationIsCancelled);
+            f(test, goTo, verify, edit, debug, format, cancellation, FourSlashInterface.Classification, verifyOperationIsCancelled);
         }
         catch (err) {
             throw err;
@@ -3952,7 +3952,7 @@ namespace FourSlashInterface {
             this.state.verifySpanOfEnclosingComment(this.negative, onlyMultiLineDiverges);
         }
 
-        public codeFix(options: FourSlashInterface.VerifyCodeFixOptions) {
+        public codeFix(options: VerifyCodeFixOptions) {
             this.state.verifyCodeFix(options);
         }
 

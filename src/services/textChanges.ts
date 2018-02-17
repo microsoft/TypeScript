@@ -192,7 +192,7 @@ namespace ts.textChanges {
 
     export interface TextChangesContext {
         host: LanguageServiceHost;
-        formatContext: ts.formatting.FormatContext;
+        formatContext: formatting.FormatContext;
     }
 
     export class ChangeTracker {
@@ -214,7 +214,7 @@ namespace ts.textChanges {
         /** Public for tests only. Other callers should use `ChangeTracker.with`. */
         constructor(
             private readonly newLineCharacter: string,
-            private readonly formatContext: ts.formatting.FormatContext,
+            private readonly formatContext: formatting.FormatContext,
             private readonly validator?: (text: NonFormattedText) => void) {
         }
 
@@ -677,7 +677,7 @@ namespace ts.textChanges {
         return { text: writer.getText(), node: assignPositionsToNode(node) };
     }
 
-    function applyFormatting(nonFormattedText: NonFormattedText, sourceFile: SourceFile, initialIndentation: number, delta: number, formatContext: ts.formatting.FormatContext) {
+    function applyFormatting(nonFormattedText: NonFormattedText, sourceFile: SourceFile, initialIndentation: number, delta: number, formatContext: formatting.FormatContext) {
         const lineMap = computeLineStarts(nonFormattedText.text);
         const file: SourceFileLike = {
             text: nonFormattedText.text,

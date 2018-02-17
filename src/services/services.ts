@@ -224,7 +224,7 @@ namespace ts {
                 return undefined;
             }
 
-            const child = ts.find(children, kid => kid.kind < SyntaxKind.FirstJSDocNode || kid.kind > SyntaxKind.LastJSDocNode);
+            const child = find(children, kid => kid.kind < SyntaxKind.FirstJSDocNode || kid.kind > SyntaxKind.LastJSDocNode);
             return child.kind < SyntaxKind.FirstNode ?
                 child :
                 child.getFirstToken(sourceFile);
@@ -376,7 +376,7 @@ namespace ts {
                                 const inheritedDocs = findInheritedJSDocComments(declaration, this.getName(), checker);
                                 if (inheritedDocs.length > 0) {
                                     if (this.documentationComment.length > 0) {
-                                        inheritedDocs.push(ts.lineBreakPart());
+                                        inheritedDocs.push(lineBreakPart());
                                     }
                                     this.documentationComment = concatenate(inheritedDocs, this.documentationComment);
                                     break;
@@ -530,7 +530,7 @@ namespace ts {
                     if (this.documentationComment.length === 0 || hasJSDocInheritDocTag(this.declaration)) {
                         const inheritedDocs = findInheritedJSDocComments(this.declaration, this.declaration.symbol.getName(), this.checker);
                         if (this.documentationComment.length > 0) {
-                            inheritedDocs.push(ts.lineBreakPart());
+                            inheritedDocs.push(lineBreakPart());
                         }
                         this.documentationComment = concatenate(
                             inheritedDocs,
@@ -561,7 +561,7 @@ namespace ts {
      * @returns `true` if `node` has a JSDoc "inheritDoc" tag on it, otherwise `false`.
      */
     function hasJSDocInheritDocTag(node: Node) {
-        return ts.getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc");
+        return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc");
     }
 
     /**
@@ -661,7 +661,7 @@ namespace ts {
         }
 
         public getLineAndCharacterOfPosition(position: number): LineAndCharacter {
-            return ts.getLineAndCharacterOfPosition(this, position);
+            return getLineAndCharacterOfPosition(this, position);
         }
 
         public getLineStarts(): ReadonlyArray<number> {
@@ -669,7 +669,7 @@ namespace ts {
         }
 
         public getPositionOfLineAndCharacter(line: number, character: number): number {
-            return ts.getPositionOfLineAndCharacter(this, line, character);
+            return getPositionOfLineAndCharacter(this, line, character);
         }
 
         public getLineEndOfPosition(pos: number): number {
@@ -859,7 +859,7 @@ namespace ts {
         constructor(public fileName: string, public text: string, public skipTrivia?: (pos: number) => number) { }
 
         public getLineAndCharacterOfPosition(pos: number): LineAndCharacter {
-            return ts.getLineAndCharacterOfPosition(this, pos);
+            return getLineAndCharacterOfPosition(this, pos);
         }
     }
 
@@ -1625,7 +1625,7 @@ namespace ts {
             synchronizeHostData();
 
             const sourceFiles = fileName ? [getValidSourceFile(fileName)] : program.getSourceFiles();
-            return ts.NavigateTo.getNavigateToItems(sourceFiles, program.getTypeChecker(), cancellationToken, searchValue, maxResultCount, excludeDtsFiles);
+            return NavigateTo.getNavigateToItems(sourceFiles, program.getTypeChecker(), cancellationToken, searchValue, maxResultCount, excludeDtsFiles);
         }
 
         function getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean) {
@@ -1922,7 +1922,7 @@ namespace ts {
 
         function getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean) {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            const range = ts.formatting.getRangeOfEnclosingComment(sourceFile, position, onlyMultiLine);
+            const range = formatting.getRangeOfEnclosingComment(sourceFile, position, onlyMultiLine);
             return range && createTextSpanFromRange(range);
         }
 
@@ -2196,7 +2196,7 @@ namespace ts {
      * then we want 'something' to be in the name table.  Similarly, if we have
      * "a['propname']" then we want to store "propname" in the name table.
      */
-    function literalIsName(node: ts.StringLiteral | ts.NumericLiteral): boolean {
+    function literalIsName(node: StringLiteral | NumericLiteral): boolean {
         return isDeclarationName(node) ||
             node.parent.kind === SyntaxKind.ExternalModuleReference ||
             isArgumentOfElementAccessExpression(node) ||

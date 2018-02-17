@@ -1731,7 +1731,7 @@ namespace ts {
     function getExtendedConfig(
         sourceFile: JsonSourceFile,
         extendedConfigPath: string,
-        host: ts.ParseConfigHost,
+        host: ParseConfigHost,
         basePath: string,
         resolutionStack: string[],
         errors: Push<Diagnostic>,
@@ -2107,7 +2107,7 @@ namespace ts {
         }
     }
 
-    function specToDiagnostic(spec: string, allowTrailingRecursion: boolean): ts.DiagnosticMessage | undefined {
+    function specToDiagnostic(spec: string, allowTrailingRecursion: boolean): DiagnosticMessage | undefined {
         if (!allowTrailingRecursion && invalidTrailingRecursionPattern.test(spec)) {
             return Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0;
         }
@@ -2134,7 +2134,7 @@ namespace ts {
         //  /a/b/a?z    - Watch /a/b directly to catch any new file matching a?z
         const rawExcludeRegex = getRegularExpressionForWildcard(exclude, path, "exclude");
         const excludeRegex = rawExcludeRegex && new RegExp(rawExcludeRegex, useCaseSensitiveFileNames ? "" : "i");
-        const wildcardDirectories: ts.MapLike<WatchDirectoryFlags> = {};
+        const wildcardDirectories: MapLike<WatchDirectoryFlags> = {};
         if (include !== undefined) {
             const recursiveKeys: string[] = [];
             for (const file of include) {
@@ -2248,8 +2248,8 @@ namespace ts {
      * Also converts enum values back to strings.
      */
     /* @internal */
-    export function convertCompilerOptionsForTelemetry(opts: ts.CompilerOptions): ts.CompilerOptions {
-        const out: ts.CompilerOptions = {};
+    export function convertCompilerOptionsForTelemetry(opts: CompilerOptions): CompilerOptions {
+        const out: CompilerOptions = {};
         for (const key in opts) {
             if (opts.hasOwnProperty(key)) {
                 const type = getOptionFromName(key);
@@ -2273,9 +2273,9 @@ namespace ts {
                 return typeof value === "boolean" ? value : "";
             case "list":
                 const elementType = (option as CommandLineOptionOfListType).element;
-                return ts.isArray(value) ? value.map(v => getOptionValueWithEmptyStrings(v, elementType)) : "";
+                return isArray(value) ? value.map(v => getOptionValueWithEmptyStrings(v, elementType)) : "";
             default:
-                return ts.forEachEntry(option.type, (optionEnumValue, optionStringValue) => {
+                return forEachEntry(option.type, (optionEnumValue, optionStringValue) => {
                     if (optionEnumValue === value) {
                         return optionStringValue;
                     }

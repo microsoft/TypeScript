@@ -7,14 +7,14 @@ namespace ts.projectSystem {
     import protocol = server.protocol;
     import CommandNames = server.CommandNames;
 
-    export import TestServerHost = ts.TestFSWithWatch.TestServerHost;
-    export type FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
-    export import createServerHost = ts.TestFSWithWatch.createServerHost;
-    export import checkFileNames = ts.TestFSWithWatch.checkFileNames;
-    export import libFile = ts.TestFSWithWatch.libFile;
-    export import checkWatchedFiles = ts.TestFSWithWatch.checkWatchedFiles;
-    import checkWatchedDirectories = ts.TestFSWithWatch.checkWatchedDirectories;
-    import safeList = ts.TestFSWithWatch.safeList;
+    export import TestServerHost = TestFSWithWatch.TestServerHost;
+    export type FileOrFolder = TestFSWithWatch.FileOrFolder;
+    export import createServerHost = TestFSWithWatch.createServerHost;
+    export import checkFileNames = TestFSWithWatch.checkFileNames;
+    export import libFile = TestFSWithWatch.libFile;
+    export import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
+    import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
+    import safeList = TestFSWithWatch.safeList;
 
     export const customTypesMap = {
         path: <Path>"/typesMap.json",
@@ -161,8 +161,8 @@ namespace ts.projectSystem {
         private events: server.ProjectServiceEvent[] = [];
         readonly session: TestSession;
         readonly service: server.ProjectService;
-        readonly host: projectSystem.TestServerHost;
-        constructor(files: projectSystem.FileOrFolder[]) {
+        readonly host: TestServerHost;
+        constructor(files: FileOrFolder[]) {
             this.host = createServerHost(files);
             this.session = createSession(this.host, {
                 canUseEvents: true,
@@ -204,7 +204,7 @@ namespace ts.projectSystem {
         }
 
         assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>, configFile?: string): void {
-            assert.deepEqual(this.getEvent<server.ProjectInfoTelemetryEvent>(ts.server.ProjectInfoTelemetryEvent), {
+            assert.deepEqual(this.getEvent<server.ProjectInfoTelemetryEvent>(server.ProjectInfoTelemetryEvent), {
                 projectId: Harness.mockHash(configFile || "/tsconfig.json"),
                 fileStats: fileStats({ ts: 1 }),
                 compilerOptions: {},
@@ -221,7 +221,7 @@ namespace ts.projectSystem {
                 configFileName: "tsconfig.json",
                 projectType: "configured",
                 languageServiceEnabled: true,
-                version: ts.version,
+                version,
                 ...partial,
             });
         }
@@ -468,15 +468,15 @@ namespace ts.projectSystem {
     }
 
     function checkErrorMessage(session: TestSession, eventName: "syntaxDiag" | "semanticDiag", diagnostics: protocol.DiagnosticEventBody) {
-        checkNthEvent(session, ts.server.toEvent(eventName, diagnostics), 0, /*isMostRecent*/ false);
+        checkNthEvent(session, server.toEvent(eventName, diagnostics), 0, /*isMostRecent*/ false);
     }
 
     function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number) {
-        checkNthEvent(session, ts.server.toEvent("requestCompleted", { request_seq: expectedSequenceId }), numberOfCurrentEvents - 1, /*isMostRecent*/ true);
+        checkNthEvent(session, server.toEvent("requestCompleted", { request_seq: expectedSequenceId }), numberOfCurrentEvents - 1, /*isMostRecent*/ true);
     }
 
     function checkProjectUpdatedInBackgroundEvent(session: TestSession, openFiles: string[]) {
-        checkNthEvent(session, ts.server.toEvent("projectsUpdatedInBackground", { openFiles }), 0, /*isMostRecent*/ true);
+        checkNthEvent(session, server.toEvent("projectsUpdatedInBackground", { openFiles }), 0, /*isMostRecent*/ true);
     }
 
     function checkNthEvent(session: TestSession, expectedEvent: protocol.Event, index: number, isMostRecent: boolean) {
@@ -4820,7 +4820,7 @@ namespace ts.projectSystem {
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 2,
                 arguments: { projectFileName }
-            }).response as ReadonlyArray<ts.server.protocol.DiagnosticWithLinePosition>;
+            }).response as ReadonlyArray<server.protocol.DiagnosticWithLinePosition>;
             assert.isTrue(diags.length === 0);
 
             session.executeCommand(<server.protocol.OpenExternalProjectRequest>{
@@ -4838,7 +4838,7 @@ namespace ts.projectSystem {
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 4,
                 arguments: { projectFileName }
-            }).response as ReadonlyArray<ts.server.protocol.DiagnosticWithLinePosition>;
+            }).response as ReadonlyArray<server.protocol.DiagnosticWithLinePosition>;
             assert.isTrue(diagsAfterUpdate.length === 0);
         });
     });
@@ -5002,7 +5002,7 @@ namespace ts.projectSystem {
 
     describe("tsserverProjectSystem cancellationToken", () => {
         // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
-        let oldPrepare: ts.AnyFunction;
+        let oldPrepare: AnyFunction;
         before(() => {
             oldPrepare = (Error as any).prepareStackTrace;
             delete (Error as any).prepareStackTrace;
@@ -5546,7 +5546,7 @@ namespace ts.projectSystem {
 
             function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: Map<number>) {
                 const calledMap = calledMaps[callback];
-                ts.TestFSWithWatch.verifyMapSize(callback, calledMap, arrayFrom(expectedKeys.keys()));
+                TestFSWithWatch.verifyMapSize(callback, calledMap, arrayFrom(expectedKeys.keys()));
                 expectedKeys.forEach((called, name) => {
                     assert.isTrue(calledMap.has(name), `${callback} is expected to contain ${name}, actual keys: ${arrayFrom(calledMap.keys())}`);
                     assert.equal(calledMap.get(name).length, called, `${callback} is expected to be called ${called} times with ${name}. Actual entry: ${calledMap.get(name)}`);
@@ -5597,7 +5597,7 @@ namespace ts.projectSystem {
 
             const host = createServerHost([root, imported]);
             const projectService = createProjectService(host);
-            projectService.setCompilerOptionsForInferredProjects({ module: ts.ModuleKind.AMD, noLib: true });
+            projectService.setCompilerOptionsForInferredProjects({ module: ModuleKind.AMD, noLib: true });
             projectService.openClientFile(root.path);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             const project = projectService.inferredProjects[0];
@@ -5643,7 +5643,7 @@ namespace ts.projectSystem {
 
             // setting compiler options discards module resolution cache
             callsTrackingHost.clear();
-            projectService.setCompilerOptionsForInferredProjects({ module: ts.ModuleKind.AMD, noLib: true, target: ts.ScriptTarget.ES5 });
+            projectService.setCompilerOptionsForInferredProjects({ module: ModuleKind.AMD, noLib: true, target: ScriptTarget.ES5 });
             verifyImportedDiagnostics();
             vertifyF1Lookups();
 
@@ -5713,7 +5713,7 @@ namespace ts.projectSystem {
 
             const host = createServerHost([root]);
             const projectService = createProjectService(host);
-            projectService.setCompilerOptionsForInferredProjects({ module: ts.ModuleKind.AMD, noLib: true });
+            projectService.setCompilerOptionsForInferredProjects({ module: ModuleKind.AMD, noLib: true });
             const callsTrackingHost = createCallsTrackingHost(host);
             projectService.openClientFile(root.path);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
@@ -6677,7 +6677,7 @@ namespace ts.projectSystem {
                     const events: protocol.ProjectsUpdatedInBackgroundEvent[] = filter(
                         map(
                             host.getOutput(), s => convertToObject(
-                                ts.parseJsonText("json.json", s.replace(outputEventRegex, "")),
+                                parseJsonText("json.json", s.replace(outputEventRegex, "")),
                                 []
                             )
                         ),

@@ -105,7 +105,7 @@ namespace ts.server {
         project: Project;
     }
 
-    function allEditsBeforePos(edits: ts.TextChange[], pos: number) {
+    function allEditsBeforePos(edits: TextChange[], pos: number) {
         for (const edit of edits) {
             if (textSpanEnd(edit.span) >= pos) {
                 return false;
@@ -122,7 +122,7 @@ namespace ts.server {
     export type CommandNames = protocol.CommandTypes;
     export const CommandNames = (<any>protocol).CommandTypes; // tslint:disable-line variable-name
 
-    export function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
+    export function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
         const verboseLogging = logger.hasLevel(LogLevel.verbose);
 
         const json = JSON.stringify(msg);
@@ -1694,7 +1694,7 @@ namespace ts.server {
             };
         }
 
-        private convertTextChangeToCodeEdit(change: ts.TextChange, scriptInfo: ScriptInfo): protocol.CodeEdit {
+        private convertTextChangeToCodeEdit(change: TextChange, scriptInfo: ScriptInfo): protocol.CodeEdit {
             return {
                 start: scriptInfo.positionToLineOffset(change.span.start),
                 end: scriptInfo.positionToLineOffset(change.span.start + change.span.length),

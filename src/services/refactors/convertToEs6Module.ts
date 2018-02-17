@@ -81,7 +81,7 @@ namespace ts.refactor {
         return { edits, renameFilename: undefined, renameLocation: undefined };
     }
 
-    function fixImportOfModuleExports(importingFile: ts.SourceFile, exportingFile: ts.SourceFile, changes: textChanges.ChangeTracker) {
+    function fixImportOfModuleExports(importingFile: SourceFile, exportingFile: SourceFile, changes: textChanges.ChangeTracker) {
         for (const moduleSpecifier of importingFile.imports) {
             const imported = getResolvedModule(importingFile, moduleSpecifier.text);
             if (!imported || imported.resolvedFileName !== exportingFile.fileName) {

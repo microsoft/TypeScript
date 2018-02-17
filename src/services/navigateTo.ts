@@ -62,7 +62,7 @@ namespace ts.NavigateTo {
         }
     }
 
-    function shouldKeepItem(declaration: Declaration, checker: ts.TypeChecker): boolean {
+    function shouldKeepItem(declaration: Declaration, checker: TypeChecker): boolean {
         switch (declaration.kind) {
             case SyntaxKind.ImportClause:
             case SyntaxKind.ImportSpecifier:
