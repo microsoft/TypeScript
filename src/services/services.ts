@@ -14,6 +14,7 @@
 /// <reference path='jsTyping.ts' />
 /// <reference path='navigateTo.ts' />
 /// <reference path='navigationBar.ts' />
+/// <reference path='organizeImports.ts' />
 /// <reference path='outliningElementsCollector.ts' />
 /// <reference path='patternMatcher.ts' />
 /// <reference path='preProcess.ts' />
@@ -816,10 +817,10 @@ namespace ts {
                             //    import {a, b as B} from "mod";
                             if (importClause.namedBindings) {
                                 if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-                                    addDeclaration(<NamespaceImport>importClause.namedBindings);
+                                    addDeclaration(importClause.namedBindings);
                                 }
                                 else {
-                                    forEach((<NamedImports>importClause.namedBindings).elements, visit);
+                                    forEach(importClause.namedBindings.elements, visit);
                                 }
                             }
                         }
@@ -1833,6 +1834,15 @@ namespace ts {
             return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext });
         }
 
+        function organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {
+            synchronizeHostData();
+            Debug.assert(scope.type === "file");
+            const sourceFile = getValidSourceFile(scope.fileName);
+            const formatContext = formatting.getFormatContext(formatOptions);
+
+            return OrganizeImports.organizeImports(sourceFile, formatContext, host);
+        }
+
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         function applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         function applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
@@ -2128,6 +2138,7 @@ namespace ts {
             getCodeFixesAtPosition,
             getCombinedCodeFix,
             applyCodeActionCommand,
+            organizeImports,
             getEmitOutput,
             getNonBoundSourceFile,
             getSourceFile,
@@ -2192,7 +2203,7 @@ namespace ts {
             case SyntaxKind.Identifier:
                 return isObjectLiteralElement(node.parent) &&
                     (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
-                    (<ObjectLiteralElement>node.parent).name === node ? node.parent as ObjectLiteralElement : undefined;
+                    node.parent.name === node ? node.parent : undefined;
         }
         return undefined;
     }

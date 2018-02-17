@@ -2835,6 +2835,8 @@ namespace ts {
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
         getContextualType(node: Expression): Type | undefined;
+        /* @internal */ getContextualTypeForArgumentAtIndex(call: CallLikeExpression, argIndex: number): Type;
+        /* @internal */ getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute): Type | undefined;
         /* @internal */ isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElementLike | JsxAttributeLike): boolean;
 
         /**
@@ -3307,7 +3309,7 @@ namespace ts {
         /* @internal */ parent?: Symbol;        // Parent symbol
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
-        /* @internal */ isReferenced?: boolean; // True if the symbol is referenced elsewhere
+        /* @internal */ isReferenced?: SymbolFlags; // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
         /* @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
         /* @internal */ isAssigned?: boolean;   // True if the symbol is a parameter with assignments
     }

@@ -356,7 +356,7 @@ namespace ts.FindAllReferences.Core {
 
     /** Core find-all-references algorithm for a normal symbol. */
     function getReferencedSymbolsForSymbol(symbol: Symbol, node: Node, sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cancellationToken: CancellationToken, options: Options): SymbolAndEntries[] {
-        symbol = skipPastExportOrImportSpecifierOrUnion(symbol, node, checker);
+        symbol = skipPastExportOrImportSpecifierOrUnion(symbol, node, checker) || symbol;
 
         // Compute the meaning from the location and the symbol it references
         const searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), symbol.declarations);
@@ -405,7 +405,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     /** Handle a few special cases relating to export/import specifiers. */
-    function skipPastExportOrImportSpecifierOrUnion(symbol: Symbol, node: Node, checker: TypeChecker): Symbol {
+    function skipPastExportOrImportSpecifierOrUnion(symbol: Symbol, node: Node, checker: TypeChecker): Symbol | undefined {
         const { parent } = node;
         if (isExportSpecifier(parent)) {
             return getLocalSymbolForExportSpecifier(node as Identifier, symbol, parent, checker);
@@ -425,7 +425,7 @@ namespace ts.FindAllReferences.Core {
             return isTypeLiteralNode(decl.parent) && isUnionTypeNode(decl.parent.parent)
                 ? checker.getPropertyOfType(checker.getTypeFromTypeNode(decl.parent.parent), symbol.name)
                 : undefined;
-        }) || symbol;
+        });
     }
 
     /**
@@ -912,7 +912,7 @@ namespace ts.FindAllReferences.Core {
 
         // For `export { foo as bar }`, rename `foo`, but not `bar`.
         if (!(referenceLocation === propertyName && state.options.isForRename)) {
-            const exportKind = (referenceLocation as Identifier).originalKeywordKind === ts.SyntaxKind.DefaultKeyword ? ExportKind.Default : ExportKind.Named;
+            const exportKind = referenceLocation.originalKeywordKind === ts.SyntaxKind.DefaultKeyword ? ExportKind.Default : ExportKind.Named;
             const exportInfo = getExportInfo(referenceSymbol, exportKind, state.checker);
             Debug.assert(!!exportInfo);
             searchForImportsOfExport(referenceLocation, referenceSymbol, exportInfo, state);
@@ -1125,7 +1125,7 @@ namespace ts.FindAllReferences.Core {
                         }
                     });
                 }
-                else if (isImplementationExpression(<Expression>body)) {
+                else if (isImplementationExpression(body)) {
                     addReference(body);
                 }
             }
@@ -1647,10 +1647,10 @@ namespace ts.FindAllReferences.Core {
 
     function getNameFromObjectLiteralElement(node: ObjectLiteralElement): string {
         if (node.name.kind === SyntaxKind.ComputedPropertyName) {
-            const nameExpression = (<ComputedPropertyName>node.name).expression;
+            const nameExpression = node.name.expression;
             // treat computed property names where expression is string/numeric literal as just string/numeric literal
             if (isStringOrNumericLiteral(nameExpression)) {
-                return (<LiteralExpression>nameExpression).text;
+                return nameExpression.text;
             }
             return undefined;
         }
@@ -1728,7 +1728,7 @@ namespace ts.FindAllReferences.Core {
     function getParentStatementOfVariableDeclaration(node: VariableDeclaration): VariableStatement {
         if (node.parent && node.parent.parent && node.parent.parent.kind === SyntaxKind.VariableStatement) {
             Debug.assert(node.parent.kind === SyntaxKind.VariableDeclarationList);
-            return <VariableStatement>node.parent.parent;
+            return node.parent.parent;
         }
     }
 

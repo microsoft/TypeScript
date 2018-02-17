@@ -533,7 +533,7 @@ namespace ts {
             }
 
             if (isImportCall(node)) {
-                return visitImportCallExpression(<ImportCall>node);
+                return visitImportCallExpression(node);
             }
             else {
                 return visitEachChild(node, importCallExpressionVisitor, context);

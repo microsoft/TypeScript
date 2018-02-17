@@ -1905,6 +1905,11 @@ namespace ts {
             Comparison.EqualTo;
     }
 
+    /** True is greater than false. */
+    export function compareBooleans(a: boolean, b: boolean): Comparison {
+        return compareValues(a ? 1 : 0, b ? 1 : 0);
+    }
+
     function compareMessageText(text1: string | DiagnosticMessageChain, text2: string | DiagnosticMessageChain): Comparison {
         while (text1 && text2) {
             // We still have both chains.

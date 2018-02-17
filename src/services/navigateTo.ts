@@ -132,7 +132,7 @@ namespace ts.NavigateTo {
         // portion into the container array.
         const name = getNameOfDeclaration(declaration);
         if (name.kind === SyntaxKind.ComputedPropertyName) {
-            if (!tryAddComputedPropertyName((<ComputedPropertyName>name).expression, containers, /*includeLastPortion*/ false)) {
+            if (!tryAddComputedPropertyName(name.expression, containers, /*includeLastPortion*/ false)) {
                 return undefined;
             }
         }
@@ -173,7 +173,7 @@ namespace ts.NavigateTo {
 
     function createNavigateToItem(rawItem: RawNavigateToItem): NavigateToItem {
         const declaration = rawItem.declaration;
-        const container = <Declaration>getContainerNode(declaration);
+        const container = getContainerNode(declaration);
         const containerName = container && getNameOfDeclaration(container);
         return {
             name: rawItem.name,
