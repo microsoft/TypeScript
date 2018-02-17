@@ -356,7 +356,7 @@ namespace ts.FindAllReferences.Core {
 
     /** Core find-all-references algorithm for a normal symbol. */
     function getReferencedSymbolsForSymbol(symbol: Symbol, node: Node, sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cancellationToken: CancellationToken, options: Options): SymbolAndEntries[] {
-        symbol = skipPastExportOrImportSpecifierOrUnion(symbol, node, checker);
+        symbol = skipPastExportOrImportSpecifierOrUnion(symbol, node, checker) || symbol;
 
         // Compute the meaning from the location and the symbol it references
         const searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), symbol.declarations);
@@ -405,7 +405,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     /** Handle a few special cases relating to export/import specifiers. */
-    function skipPastExportOrImportSpecifierOrUnion(symbol: Symbol, node: Node, checker: TypeChecker): Symbol {
+    function skipPastExportOrImportSpecifierOrUnion(symbol: Symbol, node: Node, checker: TypeChecker): Symbol | undefined {
         const { parent } = node;
         if (isExportSpecifier(parent)) {
             return getLocalSymbolForExportSpecifier(node as Identifier, symbol, parent, checker);
@@ -425,7 +425,7 @@ namespace ts.FindAllReferences.Core {
             return isTypeLiteralNode(decl.parent) && isUnionTypeNode(decl.parent.parent)
                 ? checker.getPropertyOfType(checker.getTypeFromTypeNode(decl.parent.parent), symbol.name)
                 : undefined;
-        }) || symbol;
+        });
     }
 
     /**
