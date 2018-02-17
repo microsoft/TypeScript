@@ -1098,7 +1098,7 @@ namespace ts.Completions {
             }
 
             // Get all entities in the current scope.
-            completionKind = CompletionKind.None;
+            completionKind = CompletionKind.Global;
             isNewIdentifierLocation = isNewIdentifierDefinitionLocation(contextToken);
 
             if (previousToken !== contextToken) {
@@ -1134,9 +1134,6 @@ namespace ts.Completions {
                 position;
 
             const scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile) || sourceFile;
-            if (isGlobalCompletionScope(scopeNode)) {
-                completionKind = CompletionKind.Global;
-            }
 
             const symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
 
@@ -1159,18 +1156,6 @@ namespace ts.Completions {
             filterGlobalCompletion(symbols);
 
             return true;
-        }
-
-        function isGlobalCompletionScope(scopeNode: Node): boolean {
-            switch (scopeNode.kind) {
-                case SyntaxKind.SourceFile:
-                case SyntaxKind.TemplateExpression:
-                case SyntaxKind.JsxExpression:
-                case SyntaxKind.Block:
-                    return true;
-                default:
-                    return isStatement(scopeNode);
-            }
         }
 
         function filterGlobalCompletion(symbols: Symbol[]): void {
