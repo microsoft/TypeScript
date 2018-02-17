@@ -680,7 +680,7 @@ namespace ts.server {
 
             // Skipped all children
             const { leaf } = this.lineNumberToInfo(this.lineCount(), 0);
-            return { oneBasedLine: this.lineCount(), zeroBasedColumn: leaf.charCount(), lineText: undefined };
+            return { oneBasedLine: this.lineCount(), zeroBasedColumn: leaf ? leaf.charCount() : 0, lineText: undefined };
         }
 
         /**
