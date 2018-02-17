@@ -12,7 +12,7 @@ edit.applyRefactor({
 `export {}; // Make this a module
 (x => x)(/*RENAME*/newFunction())(1);
 
-function newFunction(): (x: any) => any {
+function newFunction() {
     return x => x;
 }
 `

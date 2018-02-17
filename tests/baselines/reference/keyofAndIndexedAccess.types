@@ -952,8 +952,8 @@ function f71(func: <T, U>(x: T, y: U) => Partial<T & U>) {
 >1 : 1
 >b : string
 >"hello" : "hello"
->{ c: true } : { c: true; }
->c : true
+>{ c: true } : { c: boolean; }
+>c : boolean
 >true : true
 
     x.a;  // number | undefined
@@ -999,8 +999,8 @@ function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T &
 >1 : 1
 >b : string
 >"hello" : "hello"
->{ c: true } : { c: true; }
->c : true
+>{ c: true } : { c: boolean; }
+>c : boolean
 >true : true
 >'a' : "a"
 
@@ -1013,8 +1013,8 @@ function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T &
 >1 : 1
 >b : string
 >"hello" : "hello"
->{ c: true } : { c: true; }
->c : true
+>{ c: true } : { c: boolean; }
+>c : boolean
 >true : true
 >'b' : "b"
 
@@ -1027,8 +1027,8 @@ function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T &
 >1 : 1
 >b : string
 >"hello" : "hello"
->{ c: true } : { c: true; }
->c : true
+>{ c: true } : { c: boolean; }
+>c : boolean
 >true : true
 >'c' : "c"
 }
@@ -1060,8 +1060,8 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 >1 : 1
 >b : string
 >"hello" : "hello"
->{ c: true } : { c: true; }
->c : true
+>{ c: true } : { c: boolean; }
+>c : boolean
 >true : true
 >'a' : "a"
 
@@ -1074,8 +1074,8 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 >1 : 1
 >b : string
 >"hello" : "hello"
->{ c: true } : { c: true; }
->c : true
+>{ c: true } : { c: boolean; }
+>c : boolean
 >true : true
 >'b' : "b"
 
@@ -1088,8 +1088,8 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 >1 : 1
 >b : string
 >"hello" : "hello"
->{ c: true } : { c: true; }
->c : true
+>{ c: true } : { c: boolean; }
+>c : boolean
 >true : true
 >'c' : "c"
 }
@@ -1121,10 +1121,10 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
 >1 : 1
 >b : string
 >"hello" : "hello"
->{ a: 2, b: true } : { a: number; b: true; }
+>{ a: 2, b: true } : { a: number; b: boolean; }
 >a : number
 >2 : 2
->b : true
+>b : boolean
 >true : true
 >'a' : "a"
 
@@ -1137,10 +1137,10 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
 >1 : 1
 >b : string
 >"hello" : "hello"
->{ a: 2, b: true } : { a: number; b: true; }
+>{ a: 2, b: true } : { a: number; b: boolean; }
 >a : number
 >2 : 2
->b : true
+>b : boolean
 >true : true
 >'b' : "b"
 }

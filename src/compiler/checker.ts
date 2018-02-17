@@ -14188,7 +14188,10 @@ namespace ts {
                 // If we're already in the process of resolving the given signature, don't resolve again as
                 // that could cause infinite recursion. Instead, return anySignature.
                 const signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget);
-                return getTypeAtPosition(signature, argIndex);
+                const type = getTypeAtPosition(signature, argIndex);
+                // Don't return a contextual type that is a type inferred from this argument itself.
+                const declarations = type.symbol && type.symbol.declarations;
+                return length(declarations) === 1 && first(declarations!) === <Declaration | Expression>arg ? undefined : type;
             }
             return undefined;
         }

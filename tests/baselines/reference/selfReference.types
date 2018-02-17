@@ -7,8 +7,8 @@ declare function asFunction<T>(value: T): () => T;
 >T : T
 
 asFunction(() => { return 1; });
->asFunction(() => { return 1; }) : () => () => 1
+>asFunction(() => { return 1; }) : () => () => number
 >asFunction : <T>(value: T) => () => T
->() => { return 1; } : () => 1
+>() => { return 1; } : () => number
 >1 : 1
 
