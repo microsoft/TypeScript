@@ -1,0 +1,32 @@
+=== tests/cases/compiler/decoratorWithOrWithoutComma.ts ===
+function decorated(): Function {
+>decorated : Symbol(decorated, Decl(decoratorWithOrWithoutComma.ts, 0, 0))
+>Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+    return (target: any): any => target;
+>target : Symbol(target, Decl(decoratorWithOrWithoutComma.ts, 1, 12))
+>target : Symbol(target, Decl(decoratorWithOrWithoutComma.ts, 1, 12))
+}
+
+class Member { }
+>Member : Symbol(Member, Decl(decoratorWithOrWithoutComma.ts, 2, 1))
+
+class Example {
+>Example : Symbol(Example, Decl(decoratorWithOrWithoutComma.ts, 4, 16))
+
+    @decorated()
+>decorated : Symbol(decorated, Decl(decoratorWithOrWithoutComma.ts, 0, 0))
+
+    public readonly member: Member;
+>member : Symbol(Example.member, Decl(decoratorWithOrWithoutComma.ts, 6, 15))
+>Member : Symbol(Member, Decl(decoratorWithOrWithoutComma.ts, 2, 1))
+
+    @decorated(),
+>decorated : Symbol(decorated, Decl(decoratorWithOrWithoutComma.ts, 0, 0))
+> : Symbol(Example[(Missing)], Decl(decoratorWithOrWithoutComma.ts, 8, 35))
+
+    public readonly memberComma: Member;
+>memberComma : Symbol(Example.memberComma, Decl(decoratorWithOrWithoutComma.ts, 10, 17))
+>Member : Symbol(Member, Decl(decoratorWithOrWithoutComma.ts, 2, 1))
+}
+

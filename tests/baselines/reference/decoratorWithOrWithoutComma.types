@@ -1,0 +1,35 @@
+=== tests/cases/compiler/decoratorWithOrWithoutComma.ts ===
+function decorated(): Function {
+>decorated : () => Function
+>Function : Function
+
+    return (target: any): any => target;
+>(target: any): any => target : (target: any) => any
+>target : any
+>target : any
+}
+
+class Member { }
+>Member : Member
+
+class Example {
+>Example : Example
+
+    @decorated()
+>decorated() : Function
+>decorated : () => Function
+
+    public readonly member: Member;
+>member : Member
+>Member : Member
+
+    @decorated(),
+>decorated() : Function
+>decorated : () => Function
+> : any
+
+    public readonly memberComma: Member;
+>memberComma : Member
+>Member : Member
+}
+

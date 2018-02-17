@@ -1,0 +1,32 @@
+=== tests/cases/compiler/decoratorWithOrWithoutSemicolon.ts ===
+function decorated(): Function {
+>decorated : Symbol(decorated, Decl(decoratorWithOrWithoutSemicolon.ts, 0, 0))
+>Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+    return (target: any): any => target;
+>target : Symbol(target, Decl(decoratorWithOrWithoutSemicolon.ts, 1, 12))
+>target : Symbol(target, Decl(decoratorWithOrWithoutSemicolon.ts, 1, 12))
+}
+
+class Member { }
+>Member : Symbol(Member, Decl(decoratorWithOrWithoutSemicolon.ts, 2, 1))
+
+class Example {
+>Example : Symbol(Example, Decl(decoratorWithOrWithoutSemicolon.ts, 4, 16))
+
+    @decorated()
+>decorated : Symbol(decorated, Decl(decoratorWithOrWithoutSemicolon.ts, 0, 0))
+
+    public readonly member: Member;
+>member : Symbol(Example.member, Decl(decoratorWithOrWithoutSemicolon.ts, 6, 15))
+>Member : Symbol(Member, Decl(decoratorWithOrWithoutSemicolon.ts, 2, 1))
+
+    @decorated();
+>decorated : Symbol(decorated, Decl(decoratorWithOrWithoutSemicolon.ts, 0, 0))
+> : Symbol(Example[(Missing)], Decl(decoratorWithOrWithoutSemicolon.ts, 8, 35))
+
+    public readonly memberSemicolon: Member;
+>memberSemicolon : Symbol(Example.memberSemicolon, Decl(decoratorWithOrWithoutSemicolon.ts, 10, 17))
+>Member : Symbol(Member, Decl(decoratorWithOrWithoutSemicolon.ts, 2, 1))
+}
+
