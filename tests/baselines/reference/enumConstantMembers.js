@@ -19,6 +19,27 @@ declare enum E4 {
     c = 0.1 // Not a constant
 }
 
+enum E5 {
+    a = 1 / 0,
+    b = 2 / 0.0,
+    c = 1.0 / 0.0,
+    d = 0.0 / 0.0,
+    e = NaN,
+    f = Infinity,
+    g = -Infinity
+}
+
+const enum E6 {
+    a = 1 / 0,
+    b = 2 / 0.0,
+    c = 1.0 / 0.0,
+    d = 0.0 / 0.0,
+    e = NaN,
+    f = Infinity,
+    g = -Infinity
+}
+
+
 //// [enumConstantMembers.js]
 // Constant members allow negatives, but not decimals. Also hex literals are allowed
 var E1;
@@ -36,3 +57,13 @@ var E3;
     E3[E3["a"] = 0.1] = "a";
     E3[E3["b"] = 1.1] = "b"; // Error because 0.1 is not a constant
 })(E3 || (E3 = {}));
+var E5;
+(function (E5) {
+    E5[E5["a"] = Infinity] = "a";
+    E5[E5["b"] = Infinity] = "b";
+    E5[E5["c"] = Infinity] = "c";
+    E5[E5["d"] = NaN] = "d";
+    E5[E5["e"] = NaN] = "e";
+    E5[E5["f"] = Infinity] = "f";
+    E5[E5["g"] = -Infinity] = "g";
+})(E5 || (E5 = {}));

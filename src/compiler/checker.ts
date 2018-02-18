@@ -24311,7 +24311,7 @@ namespace ts {
             const initializer = member.initializer;
             const value = enumKind === EnumKind.Literal && !isLiteralEnumMember(member) ? undefined : evaluate(initializer);
             if (value !== undefined) {
-                if (isConstEnum && typeof value === "number" && !isFinite(value)) {
+                if (typeof value === "number" && !isFinite(value)) {
                     error(initializer, isNaN(value) ?
                         Diagnostics.const_enum_member_initializer_was_evaluated_to_disallowed_value_NaN :
                         Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_value);
@@ -24376,7 +24376,11 @@ namespace ts {
                     case SyntaxKind.ParenthesizedExpression:
                         return evaluate((<ParenthesizedExpression>expr).expression);
                     case SyntaxKind.Identifier:
-                        return nodeIsMissing(expr) ? 0 : evaluateEnumMember(expr, getSymbolOfNode(member.parent), (<Identifier>expr).escapedText);
+                        const identifier = <Identifier>expr;
+                        if (isInfinityOrNaNString(identifier.escapedText)) {
+                            return +(identifier.escapedText);
+                        }
+                        return nodeIsMissing(expr) ? 0 : evaluateEnumMember(expr, getSymbolOfNode(member.parent), identifier.escapedText);
                     case SyntaxKind.ElementAccessExpression:
                     case SyntaxKind.PropertyAccessExpression:
                         const ex = <PropertyAccessExpression | ElementAccessExpression>expr;
