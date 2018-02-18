@@ -598,6 +598,7 @@ namespace ts {
             ObjectType = 1 << 9,
             EmptyObject = 1 << 10,
             Union = 1 << 11,
+            Wildcard = 1 << 12,
         }
 
         const enum MembersOrExportsResolutionKind {
@@ -7618,6 +7619,7 @@ namespace ts {
             }
             else if (flags & TypeFlags.Any) {
                 includes |= TypeIncludes.Any;
+                if (type === wildcardType) includes |= TypeIncludes.Wildcard;
             }
             else if (!strictNullChecks && flags & TypeFlags.Nullable) {
                 if (flags & TypeFlags.Undefined) includes |= TypeIncludes.Undefined;
@@ -7737,7 +7739,7 @@ namespace ts {
             const typeSet: Type[] = [];
             const includes = addTypesToUnion(typeSet, 0, types);
             if (includes & TypeIncludes.Any) {
-                return anyType;
+                return includes & TypeIncludes.Wildcard ? wildcardType : anyType;
             }
             switch (unionReduction) {
                 case UnionReduction.Literal:
