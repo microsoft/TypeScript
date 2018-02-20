@@ -24,7 +24,7 @@ namespace ts.codefix {
             return undefined;
         }
 
-        const declaration = declarations[0] as Declaration;
+        const declaration = declarations[0];
         // Clone name to remove leading trivia.
         const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration)) as PropertyName;
         const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));

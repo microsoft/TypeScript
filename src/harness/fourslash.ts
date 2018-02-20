@@ -1621,7 +1621,7 @@ Actual: ${stringify(fullActual)}`);
                             const diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram());
                             for (const diagnostic of diagnostics) {
                                 if (!ts.isString(diagnostic.messageText)) {
-                                    let chainedMessage = <ts.DiagnosticMessageChain>diagnostic.messageText;
+                                    let chainedMessage = diagnostic.messageText;
                                     let indentation = " ";
                                     while (chainedMessage) {
                                         resultString += indentation + chainedMessage.messageText + Harness.IO.newLine();
@@ -3170,24 +3170,23 @@ Actual: ${stringify(fullActual)}`);
         }
 
         private findFile(indexOrName: string | number) {
-            let result: FourSlashFile;
             if (typeof indexOrName === "number") {
-                const index = <number>indexOrName;
+                const index = indexOrName;
                 if (index >= this.testData.files.length) {
                     throw new Error(`File index (${index}) in openFile was out of range. There are only ${this.testData.files.length} files in this test.`);
                 }
                 else {
-                    result = this.testData.files[index];
+                    return this.testData.files[index];
                 }
             }
             else if (ts.isString(indexOrName)) {
-                let name = <string>indexOrName;
+                let name = indexOrName;
 
                 // names are stored in the compiler with this relative path, this allows people to use goTo.file on just the fileName
                 name = name.indexOf("/") === -1 ? (this.basePath + "/" + name) : name;
 
                 const availableNames: string[] = [];
-                result = ts.forEach(this.testData.files, file => {
+                const result = ts.forEach(this.testData.files, file => {
                     const fn = file.fileName;
                     if (fn) {
                         if (fn === name) {
@@ -3200,12 +3199,11 @@ Actual: ${stringify(fullActual)}`);
                 if (!result) {
                     throw new Error(`No test file named "${name}" exists. Available file names are: ${availableNames.join(", ")}`);
                 }
+                return result;
             }
             else {
-                throw new Error("Unknown argument type");
+                return ts.Debug.assertNever(indexOrName);
             }
-
-            return result;
         }
 
         private getLineColStringAtPosition(position: number) {

@@ -644,7 +644,7 @@ namespace ts {
     }
 
     export function updateFunctionTypeNode(node: FunctionTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined) {
-        return <FunctionTypeNode>updateSignatureDeclaration(node, typeParameters, parameters, type);
+        return updateSignatureDeclaration(node, typeParameters, parameters, type);
     }
 
     export function createConstructorTypeNode(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined) {
@@ -652,7 +652,7 @@ namespace ts {
     }
 
     export function updateConstructorTypeNode(node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined) {
-        return <ConstructorTypeNode>updateSignatureDeclaration(node, typeParameters, parameters, type);
+        return updateSignatureDeclaration(node, typeParameters, parameters, type);
     }
 
     export function createTypeQueryNode(exprName: EntityName) {
@@ -1285,7 +1285,7 @@ namespace ts {
     export function createYield(asteriskTokenOrExpression?: AsteriskToken | Expression, expression?: Expression) {
         const node = <YieldExpression>createSynthesizedNode(SyntaxKind.YieldExpression);
         node.asteriskToken = asteriskTokenOrExpression && asteriskTokenOrExpression.kind === SyntaxKind.AsteriskToken ? <AsteriskToken>asteriskTokenOrExpression : undefined;
-        node.expression = asteriskTokenOrExpression && asteriskTokenOrExpression.kind !== SyntaxKind.AsteriskToken ? <Expression>asteriskTokenOrExpression : expression;
+        node.expression = asteriskTokenOrExpression && asteriskTokenOrExpression.kind !== SyntaxKind.AsteriskToken ? asteriskTokenOrExpression : expression;
         return node;
     }
 
@@ -3415,13 +3415,13 @@ namespace ts {
         switch (property.kind) {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
-                return createExpressionForAccessorDeclaration(node.properties, <AccessorDeclaration>property, receiver, node.multiLine);
+                return createExpressionForAccessorDeclaration(node.properties, property, receiver, node.multiLine);
             case SyntaxKind.PropertyAssignment:
-                return createExpressionForPropertyAssignment(<PropertyAssignment>property, receiver);
+                return createExpressionForPropertyAssignment(property, receiver);
             case SyntaxKind.ShorthandPropertyAssignment:
-                return createExpressionForShorthandPropertyAssignment(<ShorthandPropertyAssignment>property, receiver);
+                return createExpressionForShorthandPropertyAssignment(property, receiver);
             case SyntaxKind.MethodDeclaration:
-                return createExpressionForMethodDeclaration(<MethodDeclaration>property, receiver);
+                return createExpressionForMethodDeclaration(property, receiver);
         }
     }
 
@@ -4065,13 +4065,13 @@ namespace ts {
 
     export function parenthesizePostfixOperand(operand: Expression) {
         return isLeftHandSideExpression(operand)
-            ? <LeftHandSideExpression>operand
+            ? operand
             : setTextRange(createParen(operand), operand);
     }
 
     export function parenthesizePrefixOperand(operand: Expression) {
         return isUnaryExpression(operand)
-            ? <UnaryExpression>operand
+            ? operand
             : setTextRange(createParen(operand), operand);
     }
 
@@ -4203,7 +4203,7 @@ namespace ts {
 
     export function parenthesizeConciseBody(body: ConciseBody): ConciseBody {
         if (!isBlock(body) && getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression) {
-            return setTextRange(createParen(<Expression>body), body);
+            return setTextRange(createParen(body), body);
         }
 
         return body;
@@ -4360,10 +4360,10 @@ namespace ts {
             const name = namespaceDeclaration.name;
             return isGeneratedIdentifier(name) ? name : createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, name) || idText(name));
         }
-        if (node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).importClause) {
+        if (node.kind === SyntaxKind.ImportDeclaration && node.importClause) {
             return getGeneratedNameForNode(node);
         }
-        if (node.kind === SyntaxKind.ExportDeclaration && (<ExportDeclaration>node).moduleSpecifier) {
+        if (node.kind === SyntaxKind.ExportDeclaration && node.moduleSpecifier) {
             return getGeneratedNameForNode(node);
         }
         return undefined;
@@ -4484,7 +4484,7 @@ namespace ts {
             // `{a}` in `let [{a} = 1] = ...`
             // `[a]` in `let [[a]] = ...`
             // `[a]` in `let [[a] = 1] = ...`
-            return <ObjectBindingPattern | ArrayBindingPattern | Identifier>bindingElement.name;
+            return bindingElement.name;
         }
 
         if (isObjectLiteralElementLike(bindingElement)) {
@@ -4546,12 +4546,12 @@ namespace ts {
             case SyntaxKind.Parameter:
             case SyntaxKind.BindingElement:
                 // `...` in `let [...a] = ...`
-                return (<ParameterDeclaration | BindingElement>bindingElement).dotDotDotToken;
+                return bindingElement.dotDotDotToken;
 
             case SyntaxKind.SpreadElement:
             case SyntaxKind.SpreadAssignment:
                 // `...` in `[...a] = ...`
-                return <SpreadElement | SpreadAssignment>bindingElement;
+                return bindingElement;
         }
 
         return undefined;
@@ -4567,8 +4567,8 @@ namespace ts {
                 // `[a]` in `let { [a]: b } = ...`
                 // `"a"` in `let { "a": b } = ...`
                 // `1` in `let { 1: b } = ...`
-                if ((<BindingElement>bindingElement).propertyName) {
-                    const propertyName = (<BindingElement>bindingElement).propertyName;
+                if (bindingElement.propertyName) {
+                    const propertyName = bindingElement.propertyName;
                     return isComputedPropertyName(propertyName) && isStringOrNumericLiteral(propertyName.expression)
                         ? propertyName.expression
                         : propertyName;
@@ -4581,8 +4581,8 @@ namespace ts {
                 // `[a]` in `({ [a]: b } = ...)`
                 // `"a"` in `({ "a": b } = ...)`
                 // `1` in `({ 1: b } = ...)`
-                if ((<PropertyAssignment>bindingElement).name) {
-                    const propertyName = (<PropertyAssignment>bindingElement).name;
+                if (bindingElement.name) {
+                    const propertyName = bindingElement.name;
                     return isComputedPropertyName(propertyName) && isStringOrNumericLiteral(propertyName.expression)
                         ? propertyName.expression
                         : propertyName;
@@ -4592,7 +4592,7 @@ namespace ts {
 
             case SyntaxKind.SpreadAssignment:
                 // `a` in `({ ...a } = ...)`
-                return (<SpreadAssignment>bindingElement).name;
+                return bindingElement.name;
         }
 
         const target = getTargetOfBindingOrAssignmentElement(bindingElement);
@@ -4629,7 +4629,7 @@ namespace ts {
                 Debug.assertNode(element.name, isIdentifier);
                 return setOriginalNode(setTextRange(createSpread(<Identifier>element.name), element), element);
             }
-            const expression = convertToAssignmentElementTarget(<ObjectBindingPattern | ArrayBindingPattern | Identifier>element.name);
+            const expression = convertToAssignmentElementTarget(element.name);
             return element.initializer
                 ? setOriginalNode(
                     setTextRange(
@@ -4651,7 +4651,7 @@ namespace ts {
                 return setOriginalNode(setTextRange(createSpreadAssignment(<Identifier>element.name), element), element);
             }
             if (element.propertyName) {
-                const expression = convertToAssignmentElementTarget(<ObjectBindingPattern | ArrayBindingPattern | Identifier>element.name);
+                const expression = convertToAssignmentElementTarget(element.name);
                 return setOriginalNode(setTextRange(createPropertyAssignment(element.propertyName, element.initializer ? createAssignment(expression, element.initializer) : expression), element), element);
             }
             Debug.assertNode(element.name, isIdentifier);
@@ -4684,7 +4684,7 @@ namespace ts {
             );
         }
         Debug.assertNode(node, isObjectLiteralExpression);
-        return <ObjectLiteralExpression>node;
+        return node;
     }
 
     export function convertToArrayAssignmentPattern(node: ArrayBindingOrAssignmentPattern) {
@@ -4698,7 +4698,7 @@ namespace ts {
             );
         }
         Debug.assertNode(node, isArrayLiteralExpression);
-        return <ArrayLiteralExpression>node;
+        return node;
     }
 
     export function convertToAssignmentElementTarget(node: BindingOrAssignmentElementTarget): Expression {
@@ -4707,6 +4707,6 @@ namespace ts {
         }
 
         Debug.assertNode(node, isExpression);
-        return <Expression>node;
+        return node;
     }
 }

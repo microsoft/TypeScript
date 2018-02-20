@@ -228,7 +228,7 @@ namespace ts {
             host = oldProgramOrHost as CompilerHost;
         }
         else {
-            newProgram = newProgramOrRootNames as Program;
+            newProgram = newProgramOrRootNames;
             host = hostOrOptions as BuilderProgramHost;
             oldProgram = oldProgramOrHost as BuilderProgram;
         }

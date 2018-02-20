@@ -1597,6 +1597,19 @@ namespace ts.server {
             }
         }
 
+        private organizeImports({ scope }: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileCodeEdits> | ReadonlyArray<FileTextChanges> {
+            Debug.assert(scope.type === "file");
+            const { file, project } = this.getFileAndProject(scope.args);
+            const formatOptions = this.projectService.getFormatCodeOptions(file);
+            const changes = project.getLanguageService().organizeImports({ type: "file", fileName: file }, formatOptions);
+            if (simplifiedResult) {
+                return this.mapTextChangesToCodeEdits(project, changes);
+            }
+            else {
+                return changes;
+            }
+        }
+
         private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.CodeAction> | ReadonlyArray<CodeAction> {
             if (args.errorCodes.length === 0) {
                 return undefined;
@@ -2041,6 +2054,12 @@ namespace ts.server {
             },
             [CommandNames.GetEditsForRefactorFull]: (request: protocol.GetEditsForRefactorRequest) => {
                 return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ false));
+            },
+            [CommandNames.OrganizeImports]: (request: protocol.OrganizeImportsRequest) => {
+                return this.requiredResponse(this.organizeImports(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.OrganizeImportsFull]: (request: protocol.OrganizeImportsRequest) => {
+                return this.requiredResponse(this.organizeImports(request.arguments, /*simplifiedResult*/ false));
             }
         });
 
