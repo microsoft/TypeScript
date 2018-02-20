@@ -1086,7 +1086,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyReferenceGroups(startRanges: Range | Range[], parts: FourSlashInterface.ReferenceGroup[]): void {
+        public verifyReferenceGroups(starts: string | string[] | Range | Range[], parts: FourSlashInterface.ReferenceGroup[]): void {
             interface ReferenceGroupJson {
                 definition: string | { text: string, range: ts.TextSpan };
                 references: ts.ReferenceEntry[];
@@ -1105,8 +1105,13 @@ namespace FourSlash {
                 }),
             }));
 
-            for (const startRange of toArray(startRanges)) {
-                this.goToRangeStart(startRange);
+            for (const start of toArray<string | Range>(starts)) {
+                if (typeof start === "string") {
+                    this.goToMarker(start);
+                }
+                else {
+                    this.goToRangeStart(start);
+                }
                 const fullActual = ts.map<ts.ReferencedSymbol, ReferenceGroupJson>(this.findReferencesAtCaret(), ({ definition, references }, i) => {
                     const text = definition.displayParts.map(d => d.text).join("");
                     return {
@@ -4075,8 +4080,8 @@ namespace FourSlashInterface {
             this.state.verifyReferencesOf(start, references);
         }
 
-        public referenceGroups(startRanges: FourSlash.Range[], parts: ReferenceGroup[]) {
-            this.state.verifyReferenceGroups(startRanges, parts);
+        public referenceGroups(starts: string | string[] | FourSlash.Range | FourSlash.Range[], parts: ReferenceGroup[]) {
+            this.state.verifyReferenceGroups(starts, parts);
         }
 
         public noReferences(markerNameOrRange?: string | FourSlash.Range) {
