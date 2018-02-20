@@ -57,8 +57,9 @@ namespace ts {
         let typeCount = 0;
         let symbolCount = 0;
         let enumCount = 0;
-        let typeInstantiationDepth = 0;
         let symbolInstantiationDepth = 0;
+        let aliasInstantiationDepth = 0;
+        const aliasInstantiations: Symbol[] = [];
 
         const emptySymbols = createSymbolTable();
         const identityMapper: (type: Type) => Type = identity;
@@ -8909,23 +8910,43 @@ namespace ts {
             return getConditionalType(root, mapper);
         }
 
-        function getErrorNodeForType(type: Type): Node {
-            return type.aliasSymbol && type.aliasTypeArguments && getDeclarationOfKind(type.aliasSymbol, SyntaxKind.TypeAliasDeclaration);
+        function getInstantiationErrorTypeAlias() {
+            const counted: Symbol[] = [];
+            let topCount = 0;
+            let topSymbol: Symbol;
+            for (let i = 0; i < aliasInstantiationDepth - topCount; i++) {
+                const symbol = aliasInstantiations[i];
+                if (counted.indexOf(symbol) < 0) {
+                    counted.push(symbol);
+                    let count = 0;
+                    for (let j = i; j < aliasInstantiationDepth; j++) {
+                        if (symbol === aliasInstantiations[j]) count++;
+                    }
+                    if (count > topCount) {
+                        topCount = count;
+                        topSymbol = symbol;
+                    }
+                }
+            }
+            return topSymbol && <TypeAliasDeclaration>getDeclarationOfKind(topSymbol, SyntaxKind.TypeAliasDeclaration);
         }
 
         function instantiateType(type: Type, mapper: TypeMapper): Type {
             if (type && mapper && mapper !== identityMapper) {
-                if (typeInstantiationDepth >= 100) {
-                    const node = getErrorNodeForType(type);
-                    if (node) {
-                        error(node, Diagnostics.Generic_type_instantiation_is_excessively_deep_and_possibly_infinite);
-                        return unknownType;
-                    }
+                if (aliasInstantiationDepth >= 100) {
+                    const declaration = getInstantiationErrorTypeAlias();
+                    error(declaration, Diagnostics.Recursive_instantiations_of_type_0_are_excessively_deep_and_possibly_infinite,
+                        declarationNameToString(declaration.name));
+                    return unknownType;
                 }
-                typeInstantiationDepth++;
-                const result = instantiateTypeWorker(type, mapper);
-                typeInstantiationDepth--;
-                return result;
+                if (type.aliasSymbol) {
+                    aliasInstantiations[aliasInstantiationDepth] = type.aliasSymbol;
+                    aliasInstantiationDepth++;
+                    const result = instantiateTypeWorker(type, mapper);
+                    aliasInstantiationDepth--;
+                    return result;
+                }
+                return instantiateTypeWorker(type, mapper);
             }
             return type;
         }
