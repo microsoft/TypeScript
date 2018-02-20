@@ -2253,14 +2253,12 @@ namespace ts {
                 return;
             }
             else {
-                const parent = node.parent as SourceFile;
-
-                if (!isExternalModule(parent)) {
+                if (!isExternalModule(node.parent)) {
                     file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Global_module_exports_may_only_appear_in_module_files));
                     return;
                 }
 
-                if (!parent.isDeclarationFile) {
+                if (!node.parent.isDeclarationFile) {
                     file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Global_module_exports_may_only_appear_in_declaration_files));
                     return;
                 }

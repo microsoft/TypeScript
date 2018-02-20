@@ -1545,8 +1545,8 @@ namespace ts {
         let isDebugInfoEnabled = false;
 
         export const failBadSyntaxKind = shouldAssert(AssertionLevel.Normal)
-            ? (node: Node, message?: string): void => fail(
-                `${message || "Unexpected node."}\r\nNode ${formatSyntaxKind(node.kind)} was unexpected.`,
+            ? (node: Node | ts.SyntaxKind, message?: string): void => fail(
+                `${message || "Unexpected node."}\r\nNode ${formatSyntaxKind(typeof node === "number" ? node : node.kind)} was unexpected.`,
                 failBadSyntaxKind)
             : noop;
 

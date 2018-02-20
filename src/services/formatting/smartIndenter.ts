@@ -565,8 +565,9 @@ namespace ts.formatting {
         function isControlFlowEndingStatement(kind: SyntaxKind, parent: TextRangeWithKind): boolean {
             switch (kind) {
                 case SyntaxKind.ReturnStatement:
-                case SyntaxKind.ThrowStatement:
-                    switch (parent.kind) {
+                case SyntaxKind.ThrowStatement: {
+                    const parentKind = parent.kind as StatementOnly["parent"]["kind"];
+                    switch (parentKind) {
                         case SyntaxKind.Block:
                             const grandParent = (parent as Node).parent;
                             switch (grandParent && grandParent.kind) {
@@ -581,10 +582,12 @@ namespace ts.formatting {
                         case SyntaxKind.DefaultClause:
                         case SyntaxKind.SourceFile:
                         case SyntaxKind.ModuleBlock:
+                        case SyntaxKind.LabeledStatement:
                             return true;
                         default:
-                            throw Debug.fail();
+                            return Debug.assertNever(parentKind);
                     }
+                }
                 case SyntaxKind.ContinueStatement:
                 case SyntaxKind.BreakStatement:
                     return true;
