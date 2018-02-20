@@ -23,13 +23,14 @@ namespace ts.DocumentHighlights {
 
     function getSemanticDocumentHighlights(position: number, node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: ReadonlyArray<SourceFile>): DocumentHighlights[] {
         const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken);
-        return referenceEntries && convertReferencedSymbols(referenceEntries);
+        return referenceEntries && convertReferencedSymbols(referenceEntries, sourceFilesToSearch);
     }
 
-    function convertReferencedSymbols(referenceEntries: ReadonlyArray<FindAllReferences.Entry>): DocumentHighlights[] {
+    function convertReferencedSymbols(referenceEntries: ReadonlyArray<FindAllReferences.Entry>, sourceFilesToSearch: ReadonlyArray<SourceFile>): DocumentHighlights[] {
         const fileNameToDocumentHighlights = createMap<HighlightSpan[]>();
         for (const entry of referenceEntries) {
             const { fileName, span } = FindAllReferences.toHighlightSpan(entry);
+            Debug.assert(sourceFilesToSearch.some(s => s.fileName === fileName));
             let highlightSpans = fileNameToDocumentHighlights.get(fileName);
             if (!highlightSpans) {
                 fileNameToDocumentHighlights.set(fileName, highlightSpans = []);
