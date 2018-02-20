@@ -119,7 +119,7 @@ namespace ts.OrganizeImports {
             const entries = FindAllReferences.getReferenceEntriesForNode(identifier.pos, identifier, program, [sourceFile], {
                 isCancellationRequested: () => false,
                 throwIfCancellationRequested: () => { /*noop*/ },
-            });
+            }).filter(e => e.type === "node" && e.node.getSourceFile() === sourceFile);
             return entries.length > 1;
         }
     }
