@@ -2350,14 +2350,13 @@ namespace ts {
             if (node.expression.kind === SyntaxKind.ThisKeyword) {
                 bindThisPropertyAssignment(node);
             }
-            else if (isEntityNameExpression(node) &&
-                     isPropertyAccessExpression(node.expression) &&
-                     node.expression.name.escapedText === "prototype" &&
-                     node.parent.parent.kind === SyntaxKind.SourceFile) {
-                bindPrototypePropertyAssignment(node as PropertyAccessEntityNameExpression, node.parent);
-            }
             else if (isEntityNameExpression(node) && node.parent.parent.kind === SyntaxKind.SourceFile) {
-                bindStaticPropertyAssignment(node as PropertyAccessEntityNameExpression);
+                if (isPropertyAccessExpression(node.expression) && node.expression.name.escapedText === "prototype") {
+                    bindPrototypePropertyAssignment(node as PropertyAccessEntityNameExpression, node.parent);
+                }
+                else {
+                    bindStaticPropertyAssignment(node as PropertyAccessEntityNameExpression);
+                }
             }
         }
 
@@ -2368,7 +2367,6 @@ namespace ts {
         function bindPrototypePropertyAssignment(lhs: PropertyAccessEntityNameExpression, parent: Node) {
             // Look up the function in the local scope, since prototype assignments should
             // follow the function declaration
-            // TODO: This cast is now insufficient for original case+nested case
             const classPrototype = lhs.expression as PropertyAccessEntityNameExpression;
             const constructorFunction = classPrototype.expression as Identifier;
 
