@@ -2451,7 +2451,10 @@ namespace ts {
             }
             else {
                 const s = getJSInitializerSymbol(forEachIdentifierInEntityName(e.expression, action));
-                Debug.assert(!!s && !!s.exports);
+                if (!s || !s.exports) {
+                    // Not a valid nested special assignment
+                    return undefined;
+                }
                 return action(e.name, s.exports.get(e.name.escapedText));
             }
         }
