@@ -1156,7 +1156,7 @@ namespace ts.server {
          * This is called by inferred project whenever script info is added as a root
          */
         /* @internal */
-        startWatchingConfigFilesForInferredProjectRoot(info: ScriptInfo, projectRootPath: NormalizedPath | undefined) {
+        startWatchingConfigFilesForInferredProjectRoot(info: ScriptInfo) {
             Debug.assert(info.isScriptOpen());
             this.forEachConfigFileLocation(info, (configFileName, canonicalConfigFilePath) => {
                 let configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
@@ -1178,7 +1178,7 @@ namespace ts.server {
                     !this.getConfiguredProjectByCanonicalConfigFilePath(canonicalConfigFilePath)) {
                     this.createConfigFileWatcherOfConfigFileExistence(configFileName, canonicalConfigFilePath, configFileExistenceInfo);
                 }
-            }, projectRootPath);
+            });
         }
 
         /**
@@ -1209,12 +1209,14 @@ namespace ts.server {
          * The server must start searching from the directory containing
          * the newly opened file.
          */
-        private forEachConfigFileLocation(info: ScriptInfo,
-            action: (configFileName: NormalizedPath, canonicalConfigFilePath: string) => boolean | void,
-            projectRootPath?: NormalizedPath) {
-            let searchPath = asNormalizedPath(getDirectoryPath(info.fileName));
+        private forEachConfigFileLocation(info: ScriptInfo, action: (configFileName: NormalizedPath, canonicalConfigFilePath: string) => boolean | void) {
+            const projectRootPath = this.openFiles.get(info.path);
+            let searchPath = asNormalizedPath(this.getNormalizedAbsolutePath(getDirectoryPath(info.fileName)));
+            const isSearchPathInProjectRoot = () => containsPath(projectRootPath, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames);
 
-            while (!projectRootPath || containsPath(projectRootPath, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames)) {
+            // If projectRootPath doesnt contain info.path, then do normal search for config file
+            const anySearchPathOk = !projectRootPath || !isSearchPathInProjectRoot();
+            do {
                 const canonicalSearchPath = normalizedPathToPath(searchPath, this.currentDirectory, this.toCanonicalFileName);
                 const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, "tsconfig.json"));
                 let result = action(tsconfigFileName, combinePaths(canonicalSearchPath, "tsconfig.json"));
@@ -1233,7 +1235,7 @@ namespace ts.server {
                     break;
                 }
                 searchPath = parentPath;
-            }
+            } while (anySearchPathOk || isSearchPathInProjectRoot());
 
             return undefined;
         }
@@ -1246,13 +1248,12 @@ namespace ts.server {
          * The server must start searching from the directory containing
          * the newly opened file.
          */
-        private getConfigFileNameForFile(info: ScriptInfo, projectRootPath: NormalizedPath | undefined) {
+        private getConfigFileNameForFile(info: ScriptInfo) {
             Debug.assert(info.isScriptOpen());
             this.logger.info(`Search path: ${getDirectoryPath(info.fileName)}`);
             const configFileName = this.forEachConfigFileLocation(info,
                 (configFileName, canonicalConfigFilePath) =>
-                    this.configFileExists(configFileName, canonicalConfigFilePath, info),
-                projectRootPath
+                    this.configFileExists(configFileName, canonicalConfigFilePath, info)
             );
             if (configFileName) {
                 this.logger.info(`For info: ${info.fileName} :: Config file name: ${configFileName}`);
@@ -1906,7 +1907,7 @@ namespace ts.server {
                 // we first detect if there is already a configured project created for it: if so,
                 // we re- read the tsconfig file content and update the project only if we havent already done so
                 // otherwise we create a new one.
-                const configFileName = this.getConfigFileNameForFile(info, this.openFiles.get(path));
+                const configFileName = this.getConfigFileNameForFile(info);
                 if (configFileName) {
                     const project = this.findConfiguredProjectByProjectName(configFileName);
                     if (!project) {
@@ -2012,9 +2013,10 @@ namespace ts.server {
             let configFileErrors: ReadonlyArray<Diagnostic>;
 
             const info = this.getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName, projectRootPath ? this.getNormalizedAbsolutePath(projectRootPath) : this.currentDirectory, fileContent, scriptKind, hasMixedContent);
+            this.openFiles.set(info.path, projectRootPath);
             let project: ConfiguredProject | ExternalProject = this.findExternalProjetContainingOpenScriptInfo(info);
             if (!project) {
-                configFileName = this.getConfigFileNameForFile(info, projectRootPath);
+                configFileName = this.getConfigFileNameForFile(info);
                 if (configFileName) {
                     project = this.findConfiguredProjectByProjectName(configFileName);
                     if (!project) {
@@ -2047,7 +2049,6 @@ namespace ts.server {
             }
 
             Debug.assert(!info.isOrphan());
-            this.openFiles.set(info.path, projectRootPath);
 
             // Remove the configured projects that have zero references from open files.
             // This was postponed from closeOpenFile to after opening next file,

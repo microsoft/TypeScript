@@ -7891,7 +7891,7 @@ declare namespace ts.server {
          * The server must start searching from the directory containing
          * the newly opened file.
          */
-        private forEachConfigFileLocation(info, action, projectRootPath?);
+        private forEachConfigFileLocation(info, action);
         /**
          * This function tries to search for a tsconfig.json for the given file.
          * This is different from the method the compiler uses because
@@ -7900,7 +7900,7 @@ declare namespace ts.server {
          * The server must start searching from the directory containing
          * the newly opened file.
          */
-        private getConfigFileNameForFile(info, projectRootPath);
+        private getConfigFileNameForFile(info);
         private printProjects();
         private findConfiguredProjectByProjectName(configFileName);
         private getConfiguredProjectByCanonicalConfigFilePath(canonicalConfigFilePath);
