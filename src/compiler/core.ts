@@ -1438,12 +1438,18 @@ namespace ts {
         }
     }
 
-    export function group<T>(values: ReadonlyArray<T>, getGroupId: (value: T) => string): ReadonlyArray<ReadonlyArray<T>> {
-        const groupIdToGroup = createMultiMap<T>();
+    export function toMultiMap<T>(values: ReadonlyArray<T>, getKey: (value: T) => string): MultiMap<T>;
+    export function toMultiMap<T, U>(values: ReadonlyArray<T>, getKey: (value: T) => string, getValue: (value: T) => U): MultiMap<U>;
+    export function toMultiMap<T, U>(values: ReadonlyArray<T>, getKey: (value: T) => string, getValue: (value: T) => T | U = identity): MultiMap<T | U> {
+        const map = createMultiMap<T | U>();
         for (const value of values) {
-            groupIdToGroup.add(getGroupId(value), value);
+            map.add(getKey(value), getValue(value));
         }
-        return arrayFrom(groupIdToGroup.values());
+        return map;
+    }
+
+    export function group<T>(values: ReadonlyArray<T>, getGroupId: (value: T) => string): ReadonlyArray<ReadonlyArray<T>> {
+        return arrayFrom(toMultiMap(values, getGroupId).values());
     }
 
     /**
