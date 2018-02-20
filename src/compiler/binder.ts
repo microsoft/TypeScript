@@ -2040,7 +2040,7 @@ namespace ts {
                             bindModuleExportsAssignment(node as BinaryExpression);
                             break;
                         case SpecialPropertyAssignmentKind.PrototypeProperty:
-                            bindPrototypePropertyAssignment(node as BinaryExpression);
+                            bindPrototypePropertyAssignment((node as BinaryExpression).left as PropertyAccessEntityNameExpression, node);
                             break;
                         case SpecialPropertyAssignmentKind.ThisProperty:
                             bindThisPropertyAssignment(node as BinaryExpression);
@@ -2347,31 +2347,37 @@ namespace ts {
         }
 
         function bindSpecialPropertyDeclaration(node: PropertyAccessExpression) {
-            Debug.assert(isInJavaScriptFile(node));
             if (node.expression.kind === SyntaxKind.ThisKeyword) {
                 bindThisPropertyAssignment(node);
             }
-            else if ((node.expression.kind === SyntaxKind.Identifier || node.expression.kind === SyntaxKind.PropertyAccessExpression) &&
-                node.parent.parent.kind === SyntaxKind.SourceFile) {
+            else if (isEntityNameExpression(node) &&
+                     isPropertyAccessExpression(node.expression) &&
+                     node.expression.name.escapedText === "prototype" &&
+                     node.parent.parent.kind === SyntaxKind.SourceFile) {
+                bindPrototypePropertyAssignment(node as PropertyAccessEntityNameExpression, node.parent);
+            }
+            else if (isEntityNameExpression(node) && node.parent.parent.kind === SyntaxKind.SourceFile) {
                 bindStaticPropertyAssignment(node as PropertyAccessEntityNameExpression);
             }
         }
 
-        function bindPrototypePropertyAssignment(node: BinaryExpression) {
-            // We saw a node of the form 'x.prototype.y = z'. Declare a 'member' y on x if x is a function or class, or not declared.
-
+        /**
+         * For 'x.prototype.y = z', declare a 'member' y on x if x is a function or class, or not declared.
+         * Note that jsdoc preceding an ExpressionStatement like `x.prototype.y;` is also treated as a declaration.
+         */
+        function bindPrototypePropertyAssignment(lhs: PropertyAccessEntityNameExpression, parent: Node) {
             // Look up the function in the local scope, since prototype assignments should
             // follow the function declaration
-            const leftSideOfAssignment = node.left as PropertyAccessEntityNameExpression;
-            const classPrototype = leftSideOfAssignment.expression as PropertyAccessEntityNameExpression;
+            // TODO: This cast is now insufficient for original case+nested case
+            const classPrototype = lhs.expression as PropertyAccessEntityNameExpression;
             const constructorFunction = classPrototype.expression as Identifier;
 
             // Fix up parent pointers since we're going to use these nodes before we bind into them
-            leftSideOfAssignment.parent = node;
+            lhs.parent = parent;
             constructorFunction.parent = classPrototype;
-            classPrototype.parent = leftSideOfAssignment;
+            classPrototype.parent = lhs;
 
-            bindPropertyAssignment(constructorFunction, leftSideOfAssignment, /*isPrototypeProperty*/ true);
+            bindPropertyAssignment(constructorFunction, lhs, /*isPrototypeProperty*/ true);
         }
 
 
@@ -2448,10 +2454,7 @@ namespace ts {
             }
             else {
                 const s = getJSInitializerSymbol(forEachIdentifierInEntityName(e.expression, action));
-                if (!s || !s.exports) {
-                    // Not a valid nested special assignment
-                    return undefined;
-                }
+                Debug.assert(!!s && !!s.exports);
                 return action(e.name, s.exports.get(e.name.escapedText));
             }
         }
