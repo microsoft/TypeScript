@@ -1839,7 +1839,7 @@ namespace ts {
 
     /** Type for statements that appear only in statement position. */
     export interface StatementOnly extends Statement {
-        parent?: Block | CaseClause | DefaultClause | SourceFile | ModuleBlock | LabeledStatement;
+        parent?: BlockLike | IterationStatementLike | IfStatement | WithStatement | LabeledStatement;
     }
 
     // Represents a statement that is elided as part of a transformation to emit comments on a
@@ -1914,6 +1914,8 @@ namespace ts {
         thenStatement: Statement;
         elseStatement?: Statement;
     }
+
+    export type IterationStatementLike = DoStatement | WhileStatement | ForStatement | ForInOrOfStatement;
 
     export interface IterationStatement extends StatementOnly {
         statement: Statement;
