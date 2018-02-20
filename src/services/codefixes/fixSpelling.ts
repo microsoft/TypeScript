@@ -8,18 +8,18 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
-            const { sourceFile } = context;
+            const { sourceFile, host } = context;
             const info = getInfo(sourceFile, context.span.start, context.program.getTypeChecker());
             if (!info) return undefined;
             const { node, suggestion } = info;
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestion));
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestion, host.getCompilationSettings().target));
             const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Change_spelling_to_0), [suggestion]);
             return [{ description, changes, fixId }];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
             const info = getInfo(diag.file!, diag.start!, context.program.getTypeChecker());
-            if (info) doChange(changes, context.sourceFile, info.node, info.suggestion);
+            if (info) doChange(changes, context.sourceFile, info.node, info.suggestion, context.host.getCompilationSettings().target);
         }),
     });
 
@@ -45,8 +45,13 @@ namespace ts.codefix {
         return suggestion === undefined ? undefined : { node, suggestion };
     }
 
-    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: Node, suggestion: string) {
-        changes.replaceNode(sourceFile, node, createIdentifier(suggestion));
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: Node, suggestion: string, target: ScriptTarget) {
+        if (!isIdentifierText(suggestion, target) && isPropertyAccessExpression(node.parent)) {
+            changes.replaceNode(sourceFile, node.parent, createElementAccess(node.parent.expression, createLiteral(suggestion)));
+        }
+        else {
+            changes.replaceNode(sourceFile, node, createIdentifier(suggestion));
+        }
     }
 
     function convertSemanticMeaningToSymbolFlags(meaning: SemanticMeaning): SymbolFlags {
