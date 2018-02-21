@@ -66,18 +66,18 @@ class CompilerBaselineRunner extends RunnerBase {
 
             before(() => {
                 justName = fileName.replace(/^.*[\\\/]/, ""); // strips the fileName from the path.
-                const content = Harness.IO.readFile(fileName);
+                const content = Harness.IO.readFile(fileName)!;
                 const rootDir = fileName.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(fileName) + "/";
                 const testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, fileName, rootDir);
                 const units = testCaseContent.testUnitData;
                 harnessSettings = testCaseContent.settings;
-                let tsConfigOptions: ts.CompilerOptions;
+                let tsConfigOptions: ts.CompilerOptions | undefined;
                 tsConfigFiles = [];
                 if (testCaseContent.tsConfig) {
                     assert.equal(testCaseContent.tsConfig.fileNames.length, 0, `list of files in tsconfig is not currently supported`);
 
                     tsConfigOptions = ts.cloneCompilerOptions(testCaseContent.tsConfig.options);
-                    tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData, rootDir, ts.combinePaths(rootDir, tsConfigOptions.configFilePath)));
+                    tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData!, rootDir, ts.combinePaths(rootDir, tsConfigOptions.configFilePath!))); // TODO: GH#18217
                 }
                 else {
                     const baseUrl = harnessSettings.baseUrl;
@@ -87,7 +87,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
 
                 lastUnit = units[units.length - 1];
-                hasNonDtsFiles = ts.forEach(units, unit => !ts.fileExtensionIs(unit.name, ts.Extension.Dts));
+                hasNonDtsFiles = ts.some(units, unit => !ts.fileExtensionIs(unit.name, ts.Extension.Dts));
                 // We need to assemble the list of input files for the compiler and other related files on the 'filesystem' (ie in a multi-file test)
                 // If the last file in a test uses require or a triple slash reference we'll assume all other files will be brought in via references,
                 // otherwise, assume all files are just meant to be in the same compilation session without explicit references to one another.
@@ -110,7 +110,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
                 if (tsConfigOptions && tsConfigOptions.configFilePath !== undefined) {
                     tsConfigOptions.configFilePath = ts.combinePaths(rootDir, tsConfigOptions.configFilePath);
-                    tsConfigOptions.configFile.fileName = tsConfigOptions.configFilePath;
+                    tsConfigOptions.configFile!.fileName = tsConfigOptions.configFilePath;
                 }
 
                 const output = Harness.Compiler.compileFiles(
@@ -123,14 +123,14 @@ class CompilerBaselineRunner extends RunnerBase {
             after(() => {
                 // Mocha holds onto the closure environment of the describe callback even after the test is done.
                 // Therefore we have to clean out large objects after the test is done.
-                justName = undefined;
-                lastUnit = undefined;
-                hasNonDtsFiles = undefined;
-                result = undefined;
-                options = undefined;
-                toBeCompiled = undefined;
-                otherFiles = undefined;
-                tsConfigFiles = undefined;
+                justName = undefined!;
+                lastUnit = undefined!;
+                hasNonDtsFiles = undefined!;
+                result = undefined!;
+                options = undefined!;
+                toBeCompiled = undefined!;
+                otherFiles = undefined!;
+                tsConfigFiles = undefined!;
             });
 
             // check errors

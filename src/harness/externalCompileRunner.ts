@@ -15,7 +15,7 @@ interface UserConfig {
 
 abstract class ExternalCompileRunnerBase extends RunnerBase {
     abstract testDir: string;
-    abstract report(result: ExecResult, cwd: string): string;
+    abstract report(result: ExecResult, cwd: string): string | null;
     enumerateTestFiles() {
         return Harness.IO.getDirectories(this.testDir);
     }
@@ -43,7 +43,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
             it("should build successfully", () => {
                 let cwd = path.join(__dirname, "../../", cls.testDir, directoryName);
                 const stdio = isWorker ? "pipe" : "inherit";
-                let types: string[];
+                let types: string[] | undefined;
                 if (fs.existsSync(path.join(cwd, "test.json"))) {
                     const submoduleDir = path.join(cwd, directoryName);
                     const reset = cp.spawnSync("git", ["reset", "HEAD", "--hard"], { cwd: submoduleDir, timeout, shell: true, stdio });

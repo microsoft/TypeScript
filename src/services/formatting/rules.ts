@@ -667,7 +667,7 @@ namespace ts.formatting {
 
     function isEndOfDecoratorContextOnSameLine(context: FormattingContext): boolean {
         return context.TokensAreOnSameLine() &&
-            context.contextNode.decorators &&
+            !!context.contextNode.decorators &&
             nodeIsInDecoratorContext(context.currentTokenParent) &&
             !nodeIsInDecoratorContext(context.nextTokenParent);
     }

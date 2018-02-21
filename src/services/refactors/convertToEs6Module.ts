@@ -71,7 +71,7 @@ namespace ts.refactor {
         const { file, program } = context;
         Debug.assert(isSourceFileJavaScript(file));
         const edits = textChanges.ChangeTracker.with(context, changes => {
-            const moduleExportsChangedToDefault = convertFileToEs6Module(file, program.getTypeChecker(), changes, program.getCompilerOptions().target);
+            const moduleExportsChangedToDefault = convertFileToEs6Module(file, program.getTypeChecker(), changes, program.getCompilerOptions().target!);
             if (moduleExportsChangedToDefault) {
                 for (const importingFile of program.getSourceFiles()) {
                     fixImportOfModuleExports(importingFile, file, changes);
@@ -197,7 +197,8 @@ namespace ts.refactor {
         const { declarationList } = statement;
         let foundImport = false;
         const newNodes = flatMap(declarationList.declarations, decl => {
-            const { name, initializer } = decl;
+            const { name } = decl;
+            const initializer = decl.initializer!; // TODO: GH#18217
             if (isExportsOrModuleExportsOrAlias(sourceFile, initializer)) {
                 // `const alias = module.exports;` can be removed.
                 foundImport = true;
@@ -238,7 +239,7 @@ namespace ts.refactor {
                 // `const a = require("b").c` --> `import { c as a } from "./b";
                 return [makeSingleImport(name.text, propertyName, moduleSpecifier)];
             default:
-                Debug.assertNever(name);
+                return Debug.assertNever(name);
         }
     }
 
@@ -291,7 +292,7 @@ namespace ts.refactor {
                 case SyntaxKind.SpreadAssignment:
                     return undefined;
                 case SyntaxKind.PropertyAssignment:
-                    return !isIdentifier(prop.name) ? undefined : convertExportsDotXEquals(prop.name.text, prop.initializer);
+                    return !isIdentifier(prop.name) ? undefined : convertExportsDotXEquals(prop.name.text, prop.initializer!); // TODO: GH#18217
                 case SyntaxKind.MethodDeclaration:
                     return !isIdentifier(prop.name) ? undefined : functionExpressionToDeclaration(prop.name.text, [createToken(SyntaxKind.ExportKeyword)], prop);
                 default:
@@ -356,7 +357,7 @@ namespace ts.refactor {
         // `module.exports = require("x");` ==> `export * from "x"; export { default } from "x";`
         const moduleSpecifier = reExported.text;
         const moduleSymbol = checker.getSymbolAtLocation(reExported);
-        const exports = moduleSymbol ? moduleSymbol.exports : emptyUnderscoreEscapedMap;
+        const exports = moduleSymbol ? moduleSymbol.exports! : emptyUnderscoreEscapedMap;
         return exports.has("export=" as __String)
             ? [[reExportDefault(moduleSpecifier)], true]
             : !exports.has("default" as __String)
@@ -394,7 +395,7 @@ namespace ts.refactor {
 
         function exportConst() {
             // `exports.x = 0;` --> `export const x = 0;`
-            return makeConst(modifiers, createIdentifier(name), exported);
+            return makeConst(modifiers, createIdentifier(name!), exported); // TODO: GH#18217
         }
     }
 
@@ -417,7 +418,7 @@ namespace ts.refactor {
                 const importSpecifiers = mapAllOrFail(name.elements, e =>
                     e.dotDotDotToken || e.initializer || e.propertyName && !isIdentifier(e.propertyName) || !isIdentifier(e.name)
                         ? undefined
-                        : makeImportSpecifier(e.propertyName && (e.propertyName as Identifier).text, e.name.text));
+                        : makeImportSpecifier(e.propertyName && (e.propertyName as Identifier).text, e.name.text)); // tslint:disable-line no-unnecessary-type-assertion (TODO: GH#18217)
                 if (importSpecifiers) {
                     return [makeImport(/*name*/ undefined, importSpecifiers, moduleSpecifier)];
                 }
@@ -437,7 +438,7 @@ namespace ts.refactor {
             case SyntaxKind.Identifier:
                 return convertSingleIdentifierImport(file, name, moduleSpecifier, changes, checker, identifiers);
             default:
-                Debug.assertNever(name);
+                return Debug.assertNever(name);
         }
     }
 
@@ -452,7 +453,7 @@ namespace ts.refactor {
         // True if there is some non-property use like `x()` or `f(x)`.
         let needDefaultImport = false;
 
-        for (const use of identifiers.original.get(name.text)) {
+        for (const use of identifiers.original.get(name.text)!) {
             if (checker.getSymbolAtLocation(use) !== nameSymbol || use === name) {
                 // This was a use of a different symbol with the same name, due to shadowing. Ignore.
                 continue;
@@ -539,7 +540,7 @@ namespace ts.refactor {
             getSynthesizedDeepClones(fn.typeParameters),
             getSynthesizedDeepClones(fn.parameters),
             getSynthesizedDeepClone(fn.type),
-            convertToFunctionBody(getSynthesizedDeepClone(fn.body)));
+            convertToFunctionBody(getSynthesizedDeepClone(fn.body!)));
     }
 
     function classExpressionToDeclaration(name: string | undefined, additionalModifiers: ReadonlyArray<Modifier>, cls: ClassExpression): ClassDeclaration {
@@ -558,7 +559,7 @@ namespace ts.refactor {
             : makeImport(/*name*/ undefined, [makeImportSpecifier(propertyName, localName)], moduleSpecifier);
     }
 
-    function makeImport(name: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier>, moduleSpecifier: string): ImportDeclaration {
+    function makeImport(name: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string): ImportDeclaration {
         const importClause = (name || namedImports) && createImportClause(name, namedImports && createNamedImports(namedImports));
         return createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, importClause, createLiteral(moduleSpecifier));
     }

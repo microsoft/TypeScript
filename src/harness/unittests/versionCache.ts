@@ -46,7 +46,7 @@ var q:Point=<Point>p;`;
         });
 
         after(() => {
-            validateEditAtLineCharIndex = undefined;
+            validateEditAtLineCharIndex = undefined!;
         });
 
         it("handles empty lines array", () => {
@@ -105,10 +105,10 @@ and grew 1cm per day`;
         });
 
         after(() => {
-            validateEditAtPosition = undefined;
-            testContent = undefined;
-            lines = undefined;
-            lineMap = undefined;
+            validateEditAtPosition = undefined!;
+            testContent = undefined!;
+            lines = undefined!;
+            lineMap = undefined!;
         });
 
         it(`Insert at end of file`, () => {
@@ -201,7 +201,7 @@ and grew 1cm per day`;
         before(() => {
             // Use scanner.ts, decent size, does not change frequently
             const testFileName = "src/compiler/scanner.ts";
-            testContent = Harness.IO.readFile(testFileName);
+            testContent = Harness.IO.readFile(testFileName)!;
             const totalChars = testContent.length;
             assert.isTrue(totalChars > 0, "Failed to read test file.");
 
@@ -237,16 +237,16 @@ and grew 1cm per day`;
         });
 
         after(() => {
-            rsa = undefined;
-            la = undefined;
-            las = undefined;
-            elas = undefined;
-            ersa = undefined;
-            ela = undefined;
-            lines = undefined;
-            lineMap = undefined;
-            lineIndex = undefined;
-            testContent = undefined;
+            rsa = undefined!;
+            la = undefined!;
+            las = undefined!;
+            elas = undefined!;
+            ersa = undefined!;
+            ela = undefined!;
+            lines = undefined!;
+            lineMap = undefined!;
+            lineIndex = undefined!;
+            testContent = undefined!;
         });
 
         it("Range (average length 1/4 file size)", () => {

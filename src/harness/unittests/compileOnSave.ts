@@ -601,7 +601,7 @@ namespace ts.projectSystem {
 
             const expectedOutFileName = "/a/b/dist.js";
             assert.isTrue(host.fileExists(expectedOutFileName));
-            const outFileContent = host.readFile(expectedOutFileName);
+            const outFileContent = host.readFile(expectedOutFileName)!;
             assert.isTrue(outFileContent.indexOf(file1.content) !== -1);
             assert.isTrue(outFileContent.indexOf(file2.content) === -1);
             assert.isTrue(outFileContent.indexOf(file3.content) === -1);
@@ -635,14 +635,14 @@ namespace ts.projectSystem {
             // Verify js file
             const expectedOutFileName = "/root/TypeScriptProject3/TypeScriptProject3/" + outFileName;
             assert.isTrue(host.fileExists(expectedOutFileName));
-            const outFileContent = host.readFile(expectedOutFileName);
+            const outFileContent = host.readFile(expectedOutFileName)!;
             verifyContentHasString(outFileContent, file1.content);
             verifyContentHasString(outFileContent, `//# ${"sourceMappingURL"}=${outFileName}.map`); // Sometimes tools can sometimes see this line as a source mapping url comment, so we obfuscate it a little
 
             // Verify map file
             const expectedMapFileName = expectedOutFileName + ".map";
             assert.isTrue(host.fileExists(expectedMapFileName));
-            const mapFileContent = host.readFile(expectedMapFileName);
+            const mapFileContent = host.readFile(expectedMapFileName)!;
             verifyContentHasString(mapFileContent, `"sources":["${inputFileName}"]`);
 
             function verifyContentHasString(content: string, str: string) {

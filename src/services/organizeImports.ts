@@ -14,7 +14,7 @@ namespace ts.OrganizeImports {
             return [];
         }
 
-        const oldImportGroups = group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier));
+        const oldImportGroups = group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier)!); // TODO: GH#18217
 
         const sortedImportGroups = stableSort(oldImportGroups, (group1, group2) =>
             compareModuleSpecifiers(group1[0].moduleSpecifier, group2[0].moduleSpecifier));
@@ -192,7 +192,7 @@ namespace ts.OrganizeImports {
         const name1 = getExternalModuleName(m1);
         const name2 = getExternalModuleName(m2);
         return compareBooleans(name1 === undefined, name2 === undefined) ||
-            compareBooleans(isExternalModuleNameRelative(name1), isExternalModuleNameRelative(name2)) ||
+            compareBooleans(isExternalModuleNameRelative(name1!), isExternalModuleNameRelative(name2!)) ||
             compareStringsCaseSensitive(name1, name2);
     }
 }

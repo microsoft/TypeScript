@@ -1737,7 +1737,7 @@ namespace ts.server.protocol {
 
     export interface CompletionEntryIdentifier {
         name: string;
-        source: string;
+        source: string | undefined;
     }
 
     /**
@@ -1781,7 +1781,7 @@ namespace ts.server.protocol {
         /**
          * Optional modifiers for the kind (such as 'public').
          */
-        kindModifiers: string;
+        kindModifiers?: string;
         /**
          * A string that is used for comparing completion items so that they can be ordered.  This
          * is often the same as the name but may be different in certain circumstances.
@@ -1840,12 +1840,12 @@ namespace ts.server.protocol {
         /**
          * Documentation strings for the symbol.
          */
-        documentation: SymbolDisplayPart[];
+        documentation: SymbolDisplayPart[] | undefined;
 
         /**
          * JSDoc tags for the symbol.
          */
-        tags: JSDocTagInfo[];
+        tags: JSDocTagInfo[] | undefined;
 
         /**
          * The associated code actions for this entry

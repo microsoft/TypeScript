@@ -34,7 +34,7 @@ namespace ts.Rename {
                 // Cannot rename `default` as in `import { default as foo } from "./someModule";
                 if (node.kind === SyntaxKind.Identifier &&
                         (node as Identifier).originalKeywordKind === SyntaxKind.DefaultKeyword &&
-                        symbol.parent.flags & ts.SymbolFlags.Module) {
+                        symbol.parent!.flags & ts.SymbolFlags.Module) { // TODO: GH#18217
                     return undefined;
                 }
 
@@ -74,14 +74,15 @@ namespace ts.Rename {
     }
 
     function getRenameInfoError(diagnostic: DiagnosticMessage): RenameInfo {
+        // TODO: GH#18217
         return {
             canRename: false,
             localizedErrorMessage: getLocaleSpecificMessage(diagnostic),
-            displayName: undefined,
-            fullDisplayName: undefined,
-            kind: undefined,
-            kindModifiers: undefined,
-            triggerSpan: undefined
+            displayName: undefined!,
+            fullDisplayName: undefined!,
+            kind: undefined!,
+            kindModifiers: undefined!,
+            triggerSpan: undefined!
         };
     }
 

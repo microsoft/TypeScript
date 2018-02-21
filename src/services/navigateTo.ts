@@ -8,7 +8,7 @@ namespace ts.NavigateTo {
         declaration: Declaration;
     }
 
-    export function getNavigateToItems(sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number, excludeDtsFiles: boolean): NavigateToItem[] {
+    export function getNavigateToItems(sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number | undefined, excludeDtsFiles: boolean): NavigateToItem[] {
         const patternMatcher = createPatternMatcher(searchValue);
         let rawItems: RawNavigateToItem[] = [];
 
@@ -48,7 +48,7 @@ namespace ts.NavigateTo {
 
             // It was a match! If the pattern has dots in it, then also see if the
             // declaration container matches as well.
-            let containerMatches = matches;
+            let containerMatches: ReadonlyArray<PatternMatch> | undefined = matches;
             if (patternMatcher.patternContainsDots) {
                 containerMatches = patternMatcher.getMatches(getContainers(declaration), name);
                 if (!containerMatches) {
@@ -67,7 +67,7 @@ namespace ts.NavigateTo {
             case SyntaxKind.ImportClause:
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ImportEqualsDeclaration:
-                const importer = checker.getSymbolAtLocation((declaration as ImportClause | ImportSpecifier | ImportEqualsDeclaration).name);
+                const importer = checker.getSymbolAtLocation((declaration as ImportClause | ImportSpecifier | ImportEqualsDeclaration).name!)!;
                 const imported = checker.getAliasedSymbol(importer);
                 return importer.escapedName !== imported.escapedName;
             default:
@@ -125,12 +125,12 @@ namespace ts.NavigateTo {
         return false;
     }
 
-    function getContainers(declaration: Declaration): string[] {
+    function getContainers(declaration: Declaration): string[] | undefined {
         const containers: string[] = [];
 
         // First, if we started with a computed property name, then add all but the last
         // portion into the container array.
-        const name = getNameOfDeclaration(declaration);
+        const name = getNameOfDeclaration(declaration)!; // TODO: GH#18217
         if (name.kind === SyntaxKind.ComputedPropertyName) {
             if (!tryAddComputedPropertyName(name.expression, containers, /*includeLastPortion*/ false)) {
                 return undefined;
@@ -138,14 +138,14 @@ namespace ts.NavigateTo {
         }
 
         // Now, walk up our containers, adding all their names to the container array.
-        declaration = getContainerNode(declaration);
+        let container = getContainerNode(declaration);
 
-        while (declaration) {
-            if (!tryAddSingleDeclarationName(declaration, containers)) {
+        while (container) {
+            if (!tryAddSingleDeclarationName(container, containers)) {
                 return undefined;
             }
 
-            declaration = getContainerNode(declaration);
+            container = getContainerNode(container);
         }
 
         return containers;
@@ -185,7 +185,7 @@ namespace ts.NavigateTo {
             textSpan: createTextSpanFromNode(declaration),
             // TODO(jfreeman): What should be the containerName when the container has a computed name?
             containerName: containerName ? (<Identifier>containerName).text : "",
-            containerKind: containerName ? getNodeKind(container) : ScriptElementKind.unknown
+            containerKind: containerName ? getNodeKind(container!) : ScriptElementKind.unknown // TODO: GH#18217 Just use `container ? ...`
         };
     }
 }

@@ -106,7 +106,7 @@ namespace ts.codefix {
                 break;
 
             case SyntaxKind.TypeParameter:
-                const typeParameters = (<DeclarationWithTypeParameters>parent.parent).typeParameters;
+                const typeParameters = (<DeclarationWithTypeParameters>parent.parent).typeParameters!;
                 if (typeParameters.length === 1) {
                     const previousToken = getTokenAtPosition(sourceFile, typeParameters.pos - 1, /*includeJsDocComment*/ false);
                     const nextToken = getTokenAtPosition(sourceFile, typeParameters.end, /*includeJsDocComment*/ false);
@@ -130,7 +130,7 @@ namespace ts.codefix {
                         oldFunction,
                         oldFunction.modifiers,
                         oldFunction.typeParameters,
-                        /*parameters*/ undefined,
+                        /*parameters*/ undefined!, // TODO: GH#18217
                         oldFunction.type,
                         oldFunction.equalsGreaterThanToken,
                         oldFunction.body);
@@ -149,7 +149,7 @@ namespace ts.codefix {
 
             // handle case where 'import a = A;'
             case SyntaxKind.ImportEqualsDeclaration:
-                const importEquals = getAncestor(identifier, SyntaxKind.ImportEqualsDeclaration);
+                const importEquals = getAncestor(identifier, SyntaxKind.ImportEqualsDeclaration)!;
                 changes.deleteNode(sourceFile, importEquals);
                 break;
 
@@ -171,15 +171,15 @@ namespace ts.codefix {
                 }
                 else {
                     // import |d,| * as ns from './file'
-                    const start = importClause.name.getStart(sourceFile);
-                    const nextToken = getTokenAtPosition(sourceFile, importClause.name.end, /*includeJsDocComment*/ false);
+                    const start = importClause.name!.getStart(sourceFile);
+                    const nextToken = getTokenAtPosition(sourceFile, importClause.name!.end, /*includeJsDocComment*/ false);
                     if (nextToken && nextToken.kind === SyntaxKind.CommaToken) {
                         // shift first non-whitespace position after comma to the start position of the node
                         const end = skipTrivia(sourceFile.text, nextToken.end, /*stopAfterLineBreaks*/ false, /*stopAtComments*/ true);
                         changes.deleteRange(sourceFile, { pos: start, end });
                     }
                     else {
-                        changes.deleteNode(sourceFile, importClause.name);
+                        changes.deleteNode(sourceFile, importClause.name!);
                     }
                 }
                 break;
@@ -208,7 +208,7 @@ namespace ts.codefix {
             // Delete the entire import declaration
             // |import * as ns from './file'|
             // |import { a } from './file'|
-            const importDecl = getAncestor(namedBindings, SyntaxKind.ImportDeclaration);
+            const importDecl = getAncestor(namedBindings, SyntaxKind.ImportDeclaration)!;
             changes.deleteNode(sourceFile, importDecl);
         }
     }

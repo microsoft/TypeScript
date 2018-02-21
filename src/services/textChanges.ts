@@ -178,8 +178,8 @@ namespace ts.textChanges {
     /**
      * Checks if 'candidate' argument is a legal separator in the list that contains 'node' as an element
      */
-    function isSeparator(node: Node, candidate: Node): candidate is Token<SyntaxKind.CommaToken | SyntaxKind.SemicolonToken> {
-        return candidate && node.parent && (candidate.kind === SyntaxKind.CommaToken || (candidate.kind === SyntaxKind.SemicolonToken && node.parent.kind === SyntaxKind.ObjectLiteralExpression));
+    function isSeparator(node: Node, candidate: Node | undefined): candidate is Token<SyntaxKind.CommaToken | SyntaxKind.SemicolonToken> {
+        return !!candidate && !!node.parent && (candidate.kind === SyntaxKind.CommaToken || (candidate.kind === SyntaxKind.SemicolonToken && node.parent.kind === SyntaxKind.ObjectLiteralExpression));
     }
 
     function spaces(count: number) {
@@ -350,13 +350,13 @@ namespace ts.textChanges {
             else if (isVariableDeclaration(before)) { // insert `x = 1, ` into `const x = 1, y = 2;
                 return { suffix: ", " };
             }
-            throw Debug.failBadSyntaxKind(before); // We haven't handled this kind of node yet -- add it
+            return Debug.failBadSyntaxKind(before); // We haven't handled this kind of node yet -- add it
         }
 
         public insertNodeAtConstructorStart(sourceFile: SourceFile, ctr: ConstructorDeclaration, newStatement: Statement): void {
-            const firstStatement = firstOrUndefined(ctr.body.statements);
-            if (!firstStatement || !ctr.body.multiLine) {
-                this.replaceConstructorBody(sourceFile, ctr, [newStatement, ...ctr.body.statements]);
+            const firstStatement = firstOrUndefined(ctr.body!.statements);
+            if (!firstStatement || !ctr.body!.multiLine) {
+                this.replaceConstructorBody(sourceFile, ctr, [newStatement, ...ctr.body!.statements]);
             }
             else {
                 this.insertNodeBefore(sourceFile, firstStatement, newStatement);
@@ -364,9 +364,9 @@ namespace ts.textChanges {
         }
 
         public insertNodeAtConstructorEnd(sourceFile: SourceFile, ctr: ConstructorDeclaration, newStatement: Statement): void {
-            const lastStatement = lastOrUndefined(ctr.body.statements);
-            if (!lastStatement || !ctr.body.multiLine) {
-                this.replaceConstructorBody(sourceFile, ctr, [...ctr.body.statements, newStatement]);
+            const lastStatement = lastOrUndefined(ctr.body!.statements);
+            if (!lastStatement || !ctr.body!.multiLine) {
+                this.replaceConstructorBody(sourceFile, ctr, [...ctr.body!.statements, newStatement]);
             }
             else {
                 this.insertNodeAfter(sourceFile, lastStatement, newStatement);
@@ -374,13 +374,13 @@ namespace ts.textChanges {
         }
 
         private replaceConstructorBody(sourceFile: SourceFile, ctr: ConstructorDeclaration, statements: ReadonlyArray<Statement>): void {
-            this.replaceNode(sourceFile, ctr.body, createBlock(statements, /*multiLine*/ true), { useNonAdjustedEndPosition: true });
+            this.replaceNode(sourceFile, ctr.body!, createBlock(statements, /*multiLine*/ true), { useNonAdjustedEndPosition: true });
         }
 
         public insertNodeAtEndOfScope(sourceFile: SourceFile, scope: Node, newNode: Node): void {
-            const pos = getAdjustedStartPosition(sourceFile, scope.getLastToken(), {}, Position.Start);
+            const pos = getAdjustedStartPosition(sourceFile, scope.getLastToken()!, {}, Position.Start);
             this.replaceRange(sourceFile, { pos, end: pos }, newNode, {
-                prefix: isLineBreak(sourceFile.text.charCodeAt(scope.getLastToken().pos)) ? this.newLineCharacter : this.newLineCharacter + this.newLineCharacter,
+                prefix: isLineBreak(sourceFile.text.charCodeAt(scope.getLastToken()!.pos)) ? this.newLineCharacter : this.newLineCharacter + this.newLineCharacter,
                 suffix: this.newLineCharacter
             });
         }
@@ -434,7 +434,7 @@ namespace ts.textChanges {
             else if (isVariableDeclaration(node)) {
                 return { prefix: ", " };
             }
-            throw Debug.failBadSyntaxKind(node); // We haven't handled this kind of node yet -- add it
+            return Debug.failBadSyntaxKind(node); // We haven't handled this kind of node yet -- add it
         }
 
         /**
@@ -478,7 +478,7 @@ namespace ts.textChanges {
                     const lineAndCharOfNextElement = getLineAndCharacterOfPosition(sourceFile, skipWhitespacesAndLineBreaks(sourceFile.text, containingList[index + 1].getFullStart()));
                     // find line and character of the token that precedes next element (usually it is separator)
                     const lineAndCharOfNextToken = getLineAndCharacterOfPosition(sourceFile, nextToken.end);
-                    let prefix: string;
+                    let prefix: string | undefined;
                     let startPos: number;
                     if (lineAndCharOfNextToken.line === lineAndCharOfNextElement.line) {
                         // next element is located on the same line with separator:
@@ -519,7 +519,7 @@ namespace ts.textChanges {
                 const afterStart = after.getStart(sourceFile);
                 const afterStartLinePosition = getLineStartPositionForPosition(afterStart, sourceFile);
 
-                let separator: SyntaxKind.CommaToken | SyntaxKind.SemicolonToken;
+                let separator: SyntaxKind.CommaToken | SyntaxKind.SemicolonToken | undefined;
                 let multilineList = false;
 
                 // insert element after the last element in the list that has more than one item
@@ -701,7 +701,7 @@ namespace ts.textChanges {
     }
 
     function assignPositionsToNode(node: Node): Node {
-        const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);
+        const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode)!; // TODO: GH#18217
         // create proxy node for non synthesized nodes
         const newNode = nodeIsSynthesized(visited) ? visited : Object.create(visited) as Node;
         newNode.pos = getPos(node);

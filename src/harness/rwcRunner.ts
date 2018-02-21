@@ -45,22 +45,22 @@ namespace RWC {
                 inputFiles = [];
                 otherFiles = [];
                 tsconfigFiles = [];
-                compilerResult = undefined;
-                compilerOptions = undefined;
-                currentDirectory = undefined;
+                compilerResult = undefined!;
+                compilerOptions = undefined!;
+                currentDirectory = undefined!;
                 // useCustomLibraryFile is a flag specified in the json object to indicate whether to use built/local/lib.d.ts
                 // or to use lib.d.ts inside the json object. If the flag is true, use the lib.d.ts inside json file
                 // otherwise use the lib.d.ts from built/local
-                useCustomLibraryFile = undefined;
+                useCustomLibraryFile = undefined!;
             });
 
             it("can compile", function(this: Mocha.ITestCallbackContext) {
                 this.timeout(800000); // Allow long timeouts for RWC compilations
                 let opts: ts.ParsedCommandLine;
 
-                const ioLog: IoLog = Playback.newStyleLogIntoOldStyleLog(JSON.parse(Harness.IO.readFile(`internal/cases/rwc/${jsonPath}/test.json`)), Harness.IO, `internal/cases/rwc/${baseName}`);
+                const ioLog: IoLog = Playback.newStyleLogIntoOldStyleLog(JSON.parse(Harness.IO.readFile(`internal/cases/rwc/${jsonPath}/test.json`)!), Harness.IO, `internal/cases/rwc/${baseName}`);
                 currentDirectory = ioLog.currentDirectory;
-                useCustomLibraryFile = ioLog.useCustomLibraryFile;
+                useCustomLibraryFile = !!ioLog.useCustomLibraryFile;
                 runWithIOLog(ioLog, () => {
                     opts = ts.parseCommandLine(ioLog.arguments, fileName => Harness.IO.readFile(fileName));
                     assert.equal(opts.errors.length, 0);
@@ -106,7 +106,7 @@ namespace RWC {
                     const isInInputList = (resolvedPath: string) => (inputFile: { unitName: string; content: string; }) => inputFile.unitName === resolvedPath;
                     for (const fileRead of ioLog.filesRead) {
                         // Check if the file is already added into the set of input files.
-                        const resolvedPath = ts.normalizeSlashes(Harness.IO.resolvePath(fileRead.path));
+                        const resolvedPath = ts.normalizeSlashes(Harness.IO.resolvePath(fileRead.path)!);
                         const inInputList = ts.forEach(inputFiles, isInInputList(resolvedPath));
 
                         if (isTsConfigFile(fileRead)) {
@@ -142,7 +142,7 @@ namespace RWC {
                     opts.options.noLib = true;
 
                     // Emit the results
-                    compilerOptions = undefined;
+                    compilerOptions = undefined!;
                     const output = Harness.Compiler.compileFiles(
                         inputFiles,
                         otherFiles,
@@ -157,13 +157,13 @@ namespace RWC {
                 });
 
                 function getHarnessCompilerInputUnit(fileName: string): Harness.Compiler.TestFile {
-                    const unitName = ts.normalizeSlashes(Harness.IO.resolvePath(fileName));
+                    const unitName = ts.normalizeSlashes(Harness.IO.resolvePath(fileName)!);
                     let content: string;
                     try {
-                        content = Harness.IO.readFile(unitName);
+                        content = Harness.IO.readFile(unitName)!;
                     }
                     catch (e) {
-                        content = Harness.IO.readFile(fileName);
+                        content = Harness.IO.readFile(fileName)!;
                     }
                     return { unitName, content };
                 }
@@ -219,11 +219,11 @@ namespace RWC {
                         }
 
                         const declContext = Harness.Compiler.prepareDeclarationCompilationContext(
-                            inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined, compilerOptions, currentDirectory
+                            inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined!, compilerOptions, currentDirectory // TODO: GH#18217
                         );
                         // Reset compilerResult before calling into `compileDeclarationFiles` so the memory from the original compilation can be freed
-                        compilerResult = undefined;
-                        const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(declContext);
+                        compilerResult = undefined!;
+                        const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(declContext)!;
 
                         return Harness.Compiler.iterateErrorBaseline(tsconfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
                     }, baselineOpts);

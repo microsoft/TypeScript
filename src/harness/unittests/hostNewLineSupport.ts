@@ -2,7 +2,7 @@
 namespace ts {
     describe("hostNewLineSupport", () => {
         function testLSWithFiles(settings: CompilerOptions, files: Harness.Compiler.TestFile[]) {
-            function snapFor(path: string): IScriptSnapshot {
+            function snapFor(path: string): IScriptSnapshot | undefined {
                 if (path === "lib.d.ts") {
                     return ScriptSnapshot.fromString("");
                 }

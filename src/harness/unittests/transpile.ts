@@ -53,20 +53,20 @@ namespace ts {
                 });
 
                 after(() => {
-                    transpileResult = undefined;
-                    oldTranspileResult = undefined;
-                    oldTranspileDiagnostics = undefined;
+                    transpileResult = undefined!;
+                    oldTranspileResult = undefined!;
+                    oldTranspileDiagnostics = undefined!;
                 });
 
                 it("Correct errors for " + justName, () => {
                     Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".errors.txt"), () => {
-                        if (transpileResult.diagnostics.length === 0) {
+                        if (transpileResult.diagnostics!.length === 0) {
                             /* tslint:disable:no-null-keyword */
                             return null;
                             /* tslint:enable:no-null-keyword */
                         }
 
-                        return Harness.Compiler.getErrorBaseline(toBeCompiled, transpileResult.diagnostics);
+                        return Harness.Compiler.getErrorBaseline(toBeCompiled, transpileResult.diagnostics!);
                     });
                 });
 

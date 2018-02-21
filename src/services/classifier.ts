@@ -224,7 +224,7 @@ namespace ts {
                         case SyntaxKind.NoSubstitutionTemplateLiteral:
                             return EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate;
                         default:
-                            throw Debug.fail("Only 'NoSubstitutionTemplateLiteral's and 'TemplateTail's can be unterminated; got SyntaxKind #" + token);
+                            return Debug.fail("Only 'NoSubstitutionTemplateLiteral's and 'TemplateTail's can be unterminated; got SyntaxKind #" + token);
                     }
                 }
                 return lastOnTemplateStack === SyntaxKind.TemplateHead ? EndOfLineState.InTemplateSubstitutionPosition : undefined;
@@ -300,6 +300,8 @@ namespace ts {
             case ClassificationType.text:
             case ClassificationType.parameterName:
                 return TokenClass.Identifier;
+            default:
+                return undefined!; // TODO: GH#18217 Debug.assertNever(type);
         }
     }
 
@@ -559,6 +561,7 @@ namespace ts {
             case ClassificationType.jsxAttribute: return ClassificationTypeNames.jsxAttribute;
             case ClassificationType.jsxText: return ClassificationTypeNames.jsxText;
             case ClassificationType.jsxAttributeStringLiteralValue: return ClassificationTypeNames.jsxAttributeStringLiteralValue;
+            default: return undefined!; // TODO: GH#18217 throw Debug.assertNever(type);
         }
     }
 
@@ -708,10 +711,10 @@ namespace ts {
                             processJSDocTemplateTag(<JSDocTemplateTag>tag);
                             break;
                         case SyntaxKind.JSDocTypeTag:
-                            processElement((<JSDocTypeTag>tag).typeExpression);
+                            processElement((<JSDocTypeTag>tag).typeExpression!);
                             break;
                         case SyntaxKind.JSDocReturnTag:
-                            processElement((<JSDocReturnTag>tag).typeExpression);
+                            processElement((<JSDocReturnTag>tag).typeExpression!);
                             break;
                     }
 
@@ -812,7 +815,7 @@ namespace ts {
             return true;
         }
 
-        function tryClassifyJsxElementName(token: Node): ClassificationType {
+        function tryClassifyJsxElementName(token: Node): ClassificationType | undefined {
             switch (token.parent && token.parent.kind) {
                 case SyntaxKind.JsxOpeningElement:
                     if ((<JsxOpeningElement>token.parent).tagName === token) {
@@ -841,7 +844,7 @@ namespace ts {
         // for accurate classification, the actual token should be passed in.  however, for
         // cases like 'disabled merge code' classification, we just get the token kind and
         // classify based on that instead.
-        function classifyTokenType(tokenKind: SyntaxKind, token?: Node): ClassificationType {
+        function classifyTokenType(tokenKind: SyntaxKind, token?: Node): ClassificationType | undefined {
             if (isKeyword(tokenKind)) {
                 return ClassificationType.keyword;
             }
@@ -858,20 +861,21 @@ namespace ts {
 
             if (isPunctuation(tokenKind)) {
                 if (token) {
+                    const parent = token.parent;
                     if (tokenKind === SyntaxKind.EqualsToken) {
                         // the '=' in a variable declaration is special cased here.
-                        if (token.parent.kind === SyntaxKind.VariableDeclaration ||
-                            token.parent.kind === SyntaxKind.PropertyDeclaration ||
-                            token.parent.kind === SyntaxKind.Parameter ||
-                            token.parent.kind === SyntaxKind.JsxAttribute) {
+                        if (parent.kind === SyntaxKind.VariableDeclaration ||
+                            parent.kind === SyntaxKind.PropertyDeclaration ||
+                            parent.kind === SyntaxKind.Parameter ||
+                            parent.kind === SyntaxKind.JsxAttribute) {
                             return ClassificationType.operator;
                         }
                     }
 
-                    if (token.parent.kind === SyntaxKind.BinaryExpression ||
-                        token.parent.kind === SyntaxKind.PrefixUnaryExpression ||
-                        token.parent.kind === SyntaxKind.PostfixUnaryExpression ||
-                        token.parent.kind === SyntaxKind.ConditionalExpression) {
+                    if (parent.kind === SyntaxKind.BinaryExpression ||
+                        parent.kind === SyntaxKind.PrefixUnaryExpression ||
+                        parent.kind === SyntaxKind.PostfixUnaryExpression ||
+                        parent.kind === SyntaxKind.ConditionalExpression) {
                         return ClassificationType.operator;
                     }
                 }
@@ -882,7 +886,8 @@ namespace ts {
                 return ClassificationType.numericLiteral;
             }
             else if (tokenKind === SyntaxKind.StringLiteral) {
-                return token.parent.kind === SyntaxKind.JsxAttribute ? ClassificationType.jsxAttributeStringLiteralValue : ClassificationType.stringLiteral;
+                // TODO: GH#18217
+                return token!.parent.kind === SyntaxKind.JsxAttribute ? ClassificationType.jsxAttributeStringLiteralValue : ClassificationType.stringLiteral;
             }
             else if (tokenKind === SyntaxKind.RegularExpressionLiteral) {
                 // TODO: we should get another classification type for these literals.

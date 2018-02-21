@@ -29,10 +29,10 @@ namespace ts.codefix {
         //      ^^^^^^^
         const node = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false); // TODO: GH#15852
 
-        let suggestion: string;
+        let suggestion: string | undefined;
         if (isPropertyAccessExpression(node.parent) && node.parent.name === node) {
             Debug.assert(node.kind === SyntaxKind.Identifier);
-            const containingType = checker.getTypeAtLocation(node.parent.expression);
+            const containingType = checker.getTypeAtLocation(node.parent.expression)!;
             suggestion = checker.getSuggestionForNonexistentProperty(node as Identifier, containingType);
         }
         else {

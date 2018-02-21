@@ -7,7 +7,7 @@ namespace ts.codefix {
      * @returns Empty string iff there are no member insertions.
      */
     export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: ReadonlyArray<Symbol>, checker: TypeChecker, out: (node: ClassElement) => void): void {
-        const classMembers = classDeclaration.symbol.members;
+        const classMembers = classDeclaration.symbol!.members!;
         for (const symbol of possiblyMissingSymbols) {
             if (!classMembers.has(symbol.escapedName)) {
                 addNewNodeForMemberSymbol(symbol, classDeclaration, checker, out);
@@ -74,7 +74,7 @@ namespace ts.codefix {
 
                 if (declarations.length > signatures.length) {
                     const signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
-                    outputMethod(signature, modifiers, name, createStubbedMethodBody());
+                    outputMethod(signature!, modifiers, name, createStubbedMethodBody()); // TODO: GH#18217
                 }
                 else {
                     Debug.assert(declarations.length === signatures.length);
@@ -83,13 +83,21 @@ namespace ts.codefix {
                 break;
         }
 
-        function outputMethod(signature: Signature, modifiers: NodeArray<Modifier>, name: PropertyName, body?: Block): void {
+        function outputMethod(signature: Signature, modifiers: NodeArray<Modifier> | undefined, name: PropertyName, body?: Block): void {
             const method = signatureToMethodDeclaration(checker, signature, enclosingDeclaration, modifiers, name, optional, body);
             if (method) out(method);
         }
     }
 
-    function signatureToMethodDeclaration(checker: TypeChecker, signature: Signature, enclosingDeclaration: ClassLikeDeclaration, modifiers: NodeArray<Modifier>, name: PropertyName, optional: boolean, body: Block | undefined) {
+    function signatureToMethodDeclaration(
+        checker: TypeChecker,
+        signature: Signature,
+        enclosingDeclaration: ClassLikeDeclaration,
+        modifiers: NodeArray<Modifier> | undefined,
+        name: PropertyName,
+        optional: boolean,
+        body: Block | undefined,
+    ): MethodDeclaration | undefined {
         const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, NodeBuilderFlags.SuppressAnyReturnType);
         if (!signatureDeclaration) {
             return undefined;
@@ -104,7 +112,7 @@ namespace ts.codefix {
     }
 
     function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
-        return nodes && createNodeArray(nodes.map(getSynthesizedDeepClone));
+        return nodes && createNodeArray(nodes.map<T>(getSynthesizedDeepClone));
     }
 
     export function createMethodFromCallExpression({ typeArguments, arguments: args }: CallExpression, methodName: string, inJs: boolean, makeStatic: boolean): MethodDeclaration {
@@ -115,7 +123,7 @@ namespace ts.codefix {
             methodName,
             /*questionToken*/ undefined,
             /*typeParameters*/ inJs ? undefined : map(typeArguments, (_, i) =>
-                createTypeParameterDeclaration(CharacterCodes.T + typeArguments.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`)),
+                createTypeParameterDeclaration(CharacterCodes.T + typeArguments!.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`)),
             /*parameters*/ createDummyParameters(args.length, /*names*/ undefined, /*minArgumentCount*/ undefined, inJs),
             /*type*/ inJs ? undefined : createKeywordTypeNode(SyntaxKind.AnyKeyword),
             createStubbedMethodBody());
@@ -182,7 +190,7 @@ namespace ts.codefix {
     }
 
     function createStubbedMethod(
-        modifiers: ReadonlyArray<Modifier>,
+        modifiers: ReadonlyArray<Modifier> | undefined,
         name: PropertyName,
         optional: boolean,
         typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,

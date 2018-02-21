@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.GoToDefinition {
-    export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): DefinitionInfo[] {
+    export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): DefinitionInfo[] | undefined {
         const reference = getReferenceAtPosition(sourceFile, position, program);
         if (reference) {
             return [getDefinitionInfoForFileReference(reference.fileName, reference.file.fileName)];
@@ -10,12 +10,13 @@ namespace ts.GoToDefinition {
         if (node === sourceFile) {
             return undefined;
         }
+        const { parent } = node;
 
         // Labels
         if (isJumpStatementTarget(node)) {
             const labelName = (<Identifier>node).text;
-            const label = getTargetLabel((<BreakOrContinueStatement>node.parent), labelName);
-            return label ? [createDefinitionInfoFromName(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
+            const label = getTargetLabel((<BreakOrContinueStatement>parent), labelName);
+            return label ? [createDefinitionInfoFromName(label, ScriptElementKind.label, labelName, /*containerName*/ undefined!)] : undefined; // TODO: GH#18217
         }
 
         const typeChecker = program.getTypeChecker();
@@ -37,7 +38,7 @@ namespace ts.GoToDefinition {
         // get the aliased symbol instead. This allows for goto def on an import e.g.
         //   import {A, B} from "mod";
         // to jump to the implementation directly.
-        if (symbol.flags & SymbolFlags.Alias && shouldSkipAlias(node, symbol.declarations[0])) {
+        if (symbol.flags & SymbolFlags.Alias && shouldSkipAlias(node, symbol.declarations![0])) {
             const aliased = typeChecker.getAliasedSymbol(symbol);
             if (aliased.declarations) {
                 symbol = aliased;
@@ -49,8 +50,8 @@ namespace ts.GoToDefinition {
         // go to the declaration of the property name (in this case stay at the same position). However, if go-to-definition
         // is performed at the location of property access, we would like to go to definition of the property in the short-hand
         // assignment. This case and others are handled by the following code.
-        if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
-            const shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
+        if (parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
+            const shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(symbol.valueDeclaration!);
             if (!shorthandSymbol) {
                 return [];
             }
@@ -58,7 +59,7 @@ namespace ts.GoToDefinition {
             const shorthandDeclarations = shorthandSymbol.getDeclarations();
             const shorthandSymbolKind = SymbolDisplay.getSymbolKind(typeChecker, shorthandSymbol, node);
             const shorthandSymbolName = typeChecker.symbolToString(shorthandSymbol);
-            const shorthandContainerName = typeChecker.symbolToString(symbol.parent, node);
+            const shorthandContainerName = typeChecker.symbolToString(symbol.parent!, node);
             return map(shorthandDeclarations,
                 declaration => createDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
         }
@@ -74,9 +75,9 @@ namespace ts.GoToDefinition {
         //          pr/*destination*/op1: number
         //      }
         //      bar<Test>(({pr/*goto*/op1})=>{});
-        if (isPropertyName(node) && isBindingElement(node.parent) && isObjectBindingPattern(node.parent.parent) &&
-            (node === (node.parent.propertyName || node.parent.name))) {
-            const type = typeChecker.getTypeAtLocation(node.parent.parent);
+        if (isPropertyName(node) && isBindingElement(parent) && isObjectBindingPattern(parent.parent) &&
+            (node === (parent.propertyName || parent.name))) {
+            const type = typeChecker.getTypeAtLocation(parent.parent);
             if (type) {
                 const propSymbols = getPropertySymbolsFromType(type, node);
                 if (propSymbols) {
@@ -112,7 +113,7 @@ namespace ts.GoToDefinition {
         const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
         if (typeReferenceDirective) {
             const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName);
-            const file = reference && program.getSourceFile(reference.resolvedFileName);
+            const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
             return file && { fileName: typeReferenceDirective.fileName, file };
         }
 
@@ -120,7 +121,7 @@ namespace ts.GoToDefinition {
     }
 
     /// Goto type
-    export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile: SourceFile, position: number): DefinitionInfo[] {
+    export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile: SourceFile, position: number): DefinitionInfo[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
         if (node === sourceFile) {
             return undefined;
@@ -139,7 +140,7 @@ namespace ts.GoToDefinition {
         return type.symbol && getDefinitionFromSymbol(typeChecker, type.symbol, node);
     }
 
-    export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFile, position: number): DefinitionInfoAndBoundSpan {
+    export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFile, position: number): DefinitionInfoAndBoundSpan | undefined {
         const definitions = getDefinitionAtPosition(program, sourceFile, position);
 
         if (!definitions || definitions.length === 0) {
@@ -181,7 +182,7 @@ namespace ts.GoToDefinition {
         }
     }
 
-    function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node: Node): DefinitionInfo[] {
+    function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node: Node): DefinitionInfo[] | undefined {
         const { symbolName, symbolKind, containerName } = getSymbolInfo(typeChecker, symbol, node);
         return getConstructSignatureDefinition() || getCallSignatureDefinition() || map(symbol.declarations, declaration => createDefinitionInfo(declaration, symbolKind, symbolName, containerName));
 
@@ -189,7 +190,7 @@ namespace ts.GoToDefinition {
             // Applicable only if we are in a new expression, or we are on a constructor declaration
             // and in either case the symbol has a construct signature definition, i.e. class
             if (symbol.flags & SymbolFlags.Class && (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword)) {
-                const cls = find(symbol.declarations, isClassLike) || Debug.fail("Expected declaration to have at least one class-like declaration");
+                const cls = find(symbol.declarations!, isClassLike) || Debug.fail("Expected declaration to have at least one class-like declaration");
                 return getSignatureDefinition(cls.members, /*selectConstructors*/ true);
             }
         }
@@ -237,7 +238,7 @@ namespace ts.GoToDefinition {
             textSpan: createTextSpanFromNode(name, sourceFile),
             kind: symbolKind,
             name: symbolName,
-            containerKind: undefined,
+            containerKind: undefined!, // TODO: GH#18217
             containerName
         };
     }
@@ -251,7 +252,7 @@ namespace ts.GoToDefinition {
     }
 
     function createDefinitionFromSignatureDeclaration(typeChecker: TypeChecker, decl: SignatureDeclaration): DefinitionInfo {
-        const { symbolName, symbolKind, containerName } = getSymbolInfo(typeChecker, decl.symbol, decl);
+        const { symbolName, symbolKind, containerName } = getSymbolInfo(typeChecker, decl.symbol!, decl);
         return createDefinitionInfo(decl, symbolKind, symbolName, containerName);
     }
 
@@ -270,8 +271,8 @@ namespace ts.GoToDefinition {
             textSpan: createTextSpanFromBounds(0, 0),
             kind: ScriptElementKind.scriptElement,
             name,
-            containerName: undefined,
-            containerKind: undefined
+            containerName: undefined!,
+            containerKind: undefined!, // TODO: GH#18217
         };
     }
 
@@ -279,7 +280,7 @@ namespace ts.GoToDefinition {
     function getAncestorCallLikeExpression(node: Node): CallLikeExpression | undefined {
         const target = climbPastManyPropertyAccesses(node);
         const callLike = target.parent;
-        return callLike && isCallLikeExpression(callLike) && getInvokedExpression(callLike) === target && callLike;
+        return callLike && isCallLikeExpression(callLike) && getInvokedExpression(callLike) === target ? callLike : undefined;
     }
 
     function climbPastManyPropertyAccesses(node: Node): Node {

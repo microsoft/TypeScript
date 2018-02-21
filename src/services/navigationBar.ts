@@ -67,10 +67,10 @@ namespace ts.NavigationBar {
     }
 
     function reset() {
-        curSourceFile = undefined;
-        curCancellationToken = undefined;
+        curSourceFile = undefined!;
+        curCancellationToken = undefined!;
         parentsStack = [];
-        parent = undefined;
+        parent = undefined!;
         emptyChildItemArray = [];
     }
 
@@ -136,17 +136,17 @@ namespace ts.NavigationBar {
             mergeChildren(parent.children);
             sortChildren(parent.children);
         }
-        parent = parentsStack.pop();
+        parent = parentsStack.pop()!;
     }
 
-    function addNodeWithRecursiveChild(node: Node, child: Node): void {
+    function addNodeWithRecursiveChild(node: Node, child: Node | undefined): void {
         startNode(node);
         addChildrenRecursively(child);
         endNode();
     }
 
     /** Look for navigation bar items in node's subtree, adding them to the current `parent`. */
-    function addChildrenRecursively(node: Node): void {
+    function addChildrenRecursively(node: Node | undefined): void {
         curCancellationToken.throwIfCancellationRequested();
 
         if (!node || isToken(node)) {
@@ -368,7 +368,8 @@ namespace ts.NavigationBar {
     // We use 1 NavNode to represent 'A.B.C', but there are multiple source nodes.
     // Only merge module nodes that have the same chain. Don't merge 'A.B.C' with 'A'!
     function areSameModule(a: ModuleDeclaration, b: ModuleDeclaration): boolean {
-        return a.body.kind === b.body.kind && (a.body.kind !== SyntaxKind.ModuleDeclaration || areSameModule(<ModuleDeclaration>a.body, <ModuleDeclaration>b.body));
+        // TODO: GH#18217
+        return a.body!.kind === b.body!.kind && (a.body!.kind !== SyntaxKind.ModuleDeclaration || areSameModule(<ModuleDeclaration>a.body, <ModuleDeclaration>b.body));
     }
 
     /** Merge source into target. Source should be thrown away after this is called. */
@@ -392,7 +393,7 @@ namespace ts.NavigationBar {
     }
 
     function compareChildren(child1: NavigationBarNode, child2: NavigationBarNode) {
-        return compareStringsCaseSensitiveUI(tryGetName(child1.node), tryGetName(child2.node))
+        return compareStringsCaseSensitiveUI(tryGetName(child1.node)!, tryGetName(child2.node)!) // TODO: GH#18217
             || compareValues(navigationBarNodeKind(child1), navigationBarNodeKind(child2));
     }
 
@@ -408,7 +409,7 @@ namespace ts.NavigationBar {
 
         const declName = getNameOfDeclaration(<Declaration>node);
         if (declName) {
-            return unescapeLeadingUnderscores(getPropertyNameForPropertyNameNode(declName));
+            return unescapeLeadingUnderscores(getPropertyNameForPropertyNameNode(declName)!); // TODO: GH#18217
         }
         switch (node.kind) {
             case SyntaxKind.FunctionExpression:
@@ -534,7 +535,7 @@ namespace ts.NavigationBar {
                     return false;
                 }
 
-                switch (navigationBarNodeKind(item.parent)) {
+                switch (navigationBarNodeKind(item.parent!)) {
                     case SyntaxKind.ModuleBlock:
                     case SyntaxKind.SourceFile:
                     case SyntaxKind.MethodDeclaration:
@@ -544,8 +545,8 @@ namespace ts.NavigationBar {
                         return hasSomeImportantChild(item);
                 }
             }
-            function hasSomeImportantChild(item: NavigationBarNode) {
-                return forEach(item.children, child => {
+            function hasSomeImportantChild(item: NavigationBarNode): boolean {
+                return some(item.children, child => {
                     const childKind = navigationBarNodeKind(child);
                     return childKind !== SyntaxKind.VariableDeclaration && childKind !== SyntaxKind.BindingElement;
                 });
@@ -624,7 +625,7 @@ namespace ts.NavigationBar {
      * We store 'A' as associated with a NavNode, and use getModuleName to traverse down again.
      */
     function getInteriorModule(decl: ModuleDeclaration): ModuleDeclaration {
-        return decl.body.kind === SyntaxKind.ModuleDeclaration ? getInteriorModule(<ModuleDeclaration>decl.body) : decl;
+        return decl.body!.kind === SyntaxKind.ModuleDeclaration ? getInteriorModule(<ModuleDeclaration>decl.body) : decl; // TODO: GH#18217
     }
 
     function isComputedProperty(member: EnumMember): boolean {

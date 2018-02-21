@@ -103,6 +103,8 @@ namespace ts.tscWatch {
                 assertWatchDiagnosticAt(host, errors.length, Diagnostics.Starting_compilation_in_watch_mode);
                 index = 0;
                 break;
+            default:
+                throw Debug.assertNever(errorsPosition);
         }
 
         forEach(errors, error => {
@@ -133,7 +135,7 @@ namespace ts.tscWatch {
         return ` - ${flattenDiagnosticMessageText(getLocaleSpecificMessage(diagnosticMessage), host.newLine)}${host.newLine + host.newLine + host.newLine}`;
     }
 
-    function getDiagnosticOfFileFrom(file: SourceFile, text: string, start: number, length: number, message: DiagnosticMessage): Diagnostic {
+    function getDiagnosticOfFileFrom(file: SourceFile | undefined, text: string, start: number | undefined, length: number | undefined, message: DiagnosticMessage): Diagnostic {
         return {
             file,
             start,
@@ -167,7 +169,7 @@ namespace ts.tscWatch {
 
     function getUnknownCompilerOption(program: Program, configFile: FileOrFolder, option: string) {
         const quotedOption = `"${option}"`;
-        return getDiagnosticOfFile(program.getCompilerOptions().configFile, configFile.content.indexOf(quotedOption), quotedOption.length, Diagnostics.Unknown_compiler_option_0, option);
+        return getDiagnosticOfFile(program.getCompilerOptions().configFile!, configFile.content!.indexOf(quotedOption), quotedOption.length, Diagnostics.Unknown_compiler_option_0, option);
     }
 
     function getDiagnosticOfFileFromProgram(program: Program, filePath: string, start: number, length: number, message: DiagnosticMessage, ..._args: (string | number)[]): Diagnostic {
@@ -177,13 +179,13 @@ namespace ts.tscWatch {
             text = formatStringFromArgs(text, arguments, 5);
         }
 
-        return getDiagnosticOfFileFrom(program.getSourceFileByPath(toPath(filePath, program.getCurrentDirectory(), s => s.toLowerCase())),
+        return getDiagnosticOfFileFrom(program.getSourceFileByPath(toPath(filePath, program.getCurrentDirectory(), s => s.toLowerCase()))!,
             text, start, length, message);
     }
 
     function getDiagnosticModuleNotFoundOfFile(program: Program, file: FileOrFolder, moduleName: string) {
         const quotedModuleName = `"${moduleName}"`;
-        return getDiagnosticOfFileFromProgram(program, file.path, file.content.indexOf(quotedModuleName), quotedModuleName.length, Diagnostics.Cannot_find_module_0, moduleName);
+        return getDiagnosticOfFileFromProgram(program, file.path, file.content!.indexOf(quotedModuleName), quotedModuleName.length, Diagnostics.Cannot_find_module_0, moduleName);
     }
 
     describe("tsc-watch program updates", () => {
@@ -347,8 +349,8 @@ namespace ts.tscWatch {
             checkProgramRootFiles(watch(), [file1.path]);
             checkProgramActualFiles(watch(), [file1.path, libFile.path]);
             checkOutputErrors(host, [
-                getDiagnosticOfFileFromProgram(watch(), file1.path, file1.content.indexOf(commonFile2Name), commonFile2Name.length, Diagnostics.File_0_not_found, commonFile2.path),
-                getDiagnosticOfFileFromProgram(watch(), file1.path, file1.content.indexOf("y"), 1, Diagnostics.Cannot_find_name_0, "y")
+                getDiagnosticOfFileFromProgram(watch(), file1.path, file1.content!.indexOf(commonFile2Name), commonFile2Name.length, Diagnostics.File_0_not_found, commonFile2.path),
+                getDiagnosticOfFileFromProgram(watch(), file1.path, file1.content!.indexOf("y"), 1, Diagnostics.Cannot_find_name_0, "y")
             ], /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
             host.reloadFS([file1, commonFile2, libFile]);
@@ -1042,8 +1044,8 @@ namespace ts.tscWatch {
             const host = createWatchedSystem(files);
             const watch = createWatchOfConfigFile(configFile.path, host);
             const errors = () => [
-                getDiagnosticOfFile(watch().getCompilerOptions().configFile, configFile.content.indexOf('"allowJs"'), '"allowJs"'.length, Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration"),
-                getDiagnosticOfFile(watch().getCompilerOptions().configFile, configFile.content.indexOf('"declaration"'), '"declaration"'.length, Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration")
+                getDiagnosticOfFile(watch().getCompilerOptions().configFile!, configFile.content.indexOf('"allowJs"'), '"allowJs"'.length, Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration"),
+                getDiagnosticOfFile(watch().getCompilerOptions().configFile!, configFile.content.indexOf('"declaration"'), '"declaration"'.length, Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration")
             ];
             const intialErrors = errors();
             checkOutputErrors(host, intialErrors, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
@@ -1053,8 +1055,8 @@ namespace ts.tscWatch {
             host.runQueuedTimeoutCallbacks();
             const nowErrors = errors();
             checkOutputErrors(host, nowErrors, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
-            assert.equal(nowErrors[0].start, intialErrors[0].start - configFileContentComment.length);
-            assert.equal(nowErrors[1].start, intialErrors[1].start - configFileContentComment.length);
+            assert.equal(nowErrors[0].start, intialErrors[0].start! - configFileContentComment.length);
+            assert.equal(nowErrors[1].start, intialErrors[1].start! - configFileContentComment.length);
         });
 
         it("should not trigger recompilation because of program emit", () => {
@@ -1322,7 +1324,7 @@ namespace ts.tscWatch {
             }
 
             function getFile(fileName: string) {
-                return find(files, file => file.path === fileName);
+                return find(files, file => file.path === fileName)!;
             }
 
             function verifyAffectedAllFiles() {
@@ -2087,7 +2089,7 @@ declare module "fs" {
                 return {
                     path: removeFileExtension(file.path.replace(configDir, outDirFolder)) + Extension.Js,
                     isExpectedToEmit: true,
-                    content: '"use strict";\nexports.__esModule = true;\n' + file.content.replace("import", "var") + "\n"
+                    content: '"use strict";\nexports.__esModule = true;\n' + file.content!.replace("import", "var") + "\n"
                 };
             }
         });

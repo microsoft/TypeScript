@@ -46,7 +46,7 @@ namespace ts.codefix {
         },
     });
 
-    interface Info { token: Identifier; classDeclaration: ClassLikeDeclaration; makeStatic: boolean; classDeclarationSourceFile: SourceFile; inJs: boolean; call: CallExpression; }
+    interface Info { token: Identifier; classDeclaration: ClassLikeDeclaration; makeStatic: boolean; classDeclarationSourceFile: SourceFile; inJs: boolean; call: CallExpression | undefined; }
     function getInfo(tokenSourceFile: SourceFile, tokenPos: number, checker: TypeChecker): Info | undefined {
         // The identifier of the missing property. eg:
         // this.missing = 1;
@@ -84,12 +84,12 @@ namespace ts.codefix {
             return isClassLike(classDeclaration) ? { classDeclaration, makeStatic: hasModifier(containingClassMemberDeclaration, ModifierFlags.Static) } : undefined;
         }
         else {
-            const leftExpressionType = checker.getTypeAtLocation(parent.expression);
+            const leftExpressionType = checker.getTypeAtLocation(parent.expression)!; // TODO: GH#18217
             const { symbol } = leftExpressionType;
             if (!(symbol && leftExpressionType.flags & TypeFlags.Object && symbol.flags & SymbolFlags.Class)) {
                 return undefined;
             }
-            const classDeclaration = cast(first(symbol.declarations), isClassLike);
+            const classDeclaration = cast(first(symbol.declarations!), isClassLike);
             // The expression is a class symbol but the type is not the instance-side.
             return { classDeclaration, makeStatic: leftExpressionType !== checker.getDeclaredTypeOfSymbol(symbol) };
         }
@@ -107,7 +107,7 @@ namespace ts.codefix {
             if (classDeclaration.kind === SyntaxKind.ClassExpression) {
                 return;
             }
-            const className = classDeclaration.name.getText();
+            const className = classDeclaration.name!.getText();
             const staticInitialization = initializePropertyToUndefined(createIdentifier(className), tokenName);
             changeTracker.insertNodeAfter(classDeclarationSourceFile, classDeclaration, staticInitialization);
         }
@@ -132,11 +132,11 @@ namespace ts.codefix {
     }
 
     function getTypeNode(checker: TypeChecker, classDeclaration: ClassLikeDeclaration, token: Node) {
-        let typeNode: TypeNode;
+        let typeNode: TypeNode | undefined;
         if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
             const binaryExpression = token.parent.parent as BinaryExpression;
             const otherExpression = token.parent === binaryExpression.left ? binaryExpression.right : binaryExpression.left;
-            const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)));
+            const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)!)); // TODO: GH#18217
             typeNode = checker.typeToTypeNode(widenedType, classDeclaration);
         }
         return typeNode || createKeywordTypeNode(SyntaxKind.AnyKeyword);

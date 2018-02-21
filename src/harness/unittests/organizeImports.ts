@@ -285,7 +285,7 @@ F2();
                 assert.equal(changes[0].fileName, testPath);
 
                 Harness.Baseline.runBaseline(baselinePath, () => {
-                    const newText = textChanges.applyChanges(testContent, changes[0].textChanges);
+                    const newText = textChanges.applyChanges(testContent!, changes[0].textChanges); // TODO: GH#18217
                     return [
                         "// ==ORIGINAL==",
                         testContent,

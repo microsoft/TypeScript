@@ -195,16 +195,16 @@ namespace ts {
         return isCallOrNewExpressionTarget(node, SyntaxKind.NewExpression);
     }
 
-    function isCallOrNewExpressionTarget(node: Node, kind: SyntaxKind) {
+    function isCallOrNewExpressionTarget(node: Node, kind: SyntaxKind): boolean {
         const target = climbPastPropertyAccess(node);
-        return target && target.parent && target.parent.kind === kind && (<CallExpression>target.parent).expression === target;
+        return !!target && !!target.parent && target.parent.kind === kind && (<CallExpression>target.parent).expression === target;
     }
 
     export function climbPastPropertyAccess(node: Node) {
         return isRightSideOfPropertyAccess(node) ? node.parent : node;
     }
 
-    export function getTargetLabel(referenceNode: Node, labelName: string): Identifier {
+    export function getTargetLabel(referenceNode: Node, labelName: string): Identifier | undefined {
         while (referenceNode) {
             if (referenceNode.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>referenceNode).label.escapedText === labelName) {
                 return (<LabeledStatement>referenceNode).label;
@@ -265,6 +265,8 @@ namespace ts {
                 return true;
             case SyntaxKind.LiteralType:
                 return node.parent.parent.kind === SyntaxKind.IndexedAccessType;
+            default:
+                return false;
         }
     }
 
@@ -273,7 +275,7 @@ namespace ts {
             getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node;
     }
 
-    export function getContainerNode(node: Node): Declaration {
+    export function getContainerNode(node: Node): Declaration | undefined {
         if (node.kind === SyntaxKind.JSDocTypedefTag) {
             // This doesn't just apply to the node immediately under the comment, but to everything in its parent's scope.
             // node.parent = the JSDoc comment, node.parent.parent = the node having the comment.
@@ -438,8 +440,8 @@ namespace ts {
         return position < candidate.end || !isCompletedNode(candidate, sourceFile);
     }
 
-    function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
-        if (nodeIsMissing(n)) {
+    function isCompletedNode(n: Node | undefined, sourceFile: SourceFile): boolean {
+        if (n === undefined || nodeIsMissing(n)) {
             return false;
         }
 
@@ -495,7 +497,7 @@ namespace ts {
                 return hasChildOfKind(n, SyntaxKind.CloseParenToken, sourceFile);
 
             case SyntaxKind.ModuleDeclaration:
-                return (<ModuleDeclaration>n).body && isCompletedNode((<ModuleDeclaration>n).body, sourceFile);
+                return !!(<ModuleDeclaration>n).body && isCompletedNode((<ModuleDeclaration>n).body, sourceFile);
 
             case SyntaxKind.IfStatement:
                 if ((<IfStatement>n).elseStatement) {
@@ -579,18 +581,18 @@ namespace ts {
     function nodeEndsWith(n: Node, expectedLastToken: SyntaxKind, sourceFile: SourceFile): boolean {
         const children = n.getChildren(sourceFile);
         if (children.length) {
-            const last = lastOrUndefined(children);
-            if (last.kind === expectedLastToken) {
+            const lastChild = last(children);
+            if (lastChild.kind === expectedLastToken) {
                 return true;
             }
-            else if (last.kind === SyntaxKind.SemicolonToken && children.length !== 1) {
+            else if (lastChild.kind === SyntaxKind.SemicolonToken && children.length !== 1) {
                 return children[children.length - 2].kind === expectedLastToken;
             }
         }
         return false;
     }
 
-    export function findListItemInfo(node: Node): ListItemInfo {
+    export function findListItemInfo(node: Node): ListItemInfo | undefined {
         const list = findContainingList(node);
 
         // It is possible at this point for syntaxList to be undefined, either if
@@ -658,12 +660,12 @@ namespace ts {
     }
 
     /** Returns a token if position is in [start-of-leading-trivia, end) */
-    export function getTokenAtPosition(sourceFile: SourceFile, position: number, includeJsDocComment: boolean, includeEndPosition?: boolean): Node {
+    export function getTokenAtPosition(sourceFile: SourceFile, position: number, includeJsDocComment: boolean, includeEndPosition = false): Node {
         return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includePrecedingTokenAtEndPosition*/ undefined, includeEndPosition, includeJsDocComment);
     }
 
     /** Get the token whose text contains the position */
-    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includePrecedingTokenAtEndPosition: (n: Node) => boolean, includeEndPosition: boolean, includeJsDocComment: boolean): Node {
+    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includePrecedingTokenAtEndPosition: ((n: Node) => boolean) | undefined, includeEndPosition: boolean, includeJsDocComment: boolean): Node {
         let current: Node = sourceFile;
         outer: while (true) {
             if (isToken(current)) {
@@ -708,7 +710,7 @@ namespace ts {
      *   foo <comment> |bar -> will return foo
      *
      */
-    export function findTokenOnLeftOfPosition(file: SourceFile, position: number): Node {
+    export function findTokenOnLeftOfPosition(file: SourceFile, position: number): Node | undefined {
         // Ideally, getTokenAtPosition should return a token. However, it is currently
         // broken, so we do a check to make sure the result was indeed a token.
         const tokenAtPosition = getTokenAtPosition(file, position, /*includeJsDocComment*/ false);
@@ -719,10 +721,10 @@ namespace ts {
         return findPrecedingToken(position, file);
     }
 
-    export function findNextToken(previousToken: Node, parent: Node): Node {
+    export function findNextToken(previousToken: Node, parent: Node): Node | undefined {
         return find(parent);
 
-        function find(n: Node): Node {
+        function find(n: Node): Node | undefined {
             if (isToken(n) && n.pos === previousToken.end) {
                 // this is token that starts at the end of previous token - return it
                 return n;
@@ -947,7 +949,7 @@ namespace ts {
         return result.length > 0 ? result.join(",") : ScriptElementKindModifier.none;
     }
 
-    export function getTypeArgumentOrTypeParameterList(node: Node): NodeArray<Node> {
+    export function getTypeArgumentOrTypeParameterList(node: Node): NodeArray<Node> | undefined {
         if (node.kind === SyntaxKind.TypeReference || node.kind === SyntaxKind.CallExpression) {
             return (<CallExpression>node).typeArguments;
         }
@@ -1241,15 +1243,15 @@ namespace ts {
     }
 
     export function keywordPart(kind: SyntaxKind) {
-        return displayPart(tokenToString(kind), SymbolDisplayPartKind.keyword);
+        return displayPart(tokenToString(kind)!, SymbolDisplayPartKind.keyword);
     }
 
     export function punctuationPart(kind: SyntaxKind) {
-        return displayPart(tokenToString(kind), SymbolDisplayPartKind.punctuation);
+        return displayPart(tokenToString(kind)!, SymbolDisplayPartKind.punctuation);
     }
 
     export function operatorPart(kind: SyntaxKind) {
-        return displayPart(tokenToString(kind), SymbolDisplayPartKind.operator);
+        return displayPart(tokenToString(kind)!, SymbolDisplayPartKind.operator);
     }
 
     export function textOrKeywordPart(text: string) {
@@ -1290,25 +1292,25 @@ namespace ts {
 
     export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typechecker.writeType(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals, writer);
+            typechecker.writeType(type, enclosingDeclaration, flags! | TypeFormatFlags.MultilineObjectLiterals, writer);
         });
     }
 
     export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typeChecker.writeSymbol(symbol, enclosingDeclaration, meaning, flags | SymbolFormatFlags.UseAliasDefinedOutsideCurrentScope, writer);
+            typeChecker.writeSymbol(symbol, enclosingDeclaration, meaning, flags! | SymbolFormatFlags.UseAliasDefinedOutsideCurrentScope, writer);
         });
     }
 
     export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
-        flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
+        flags! |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
         return mapToDisplayParts(writer => {
             typechecker.writeSignature(signature, enclosingDeclaration, flags, /*signatureKind*/ undefined, writer);
         });
     }
 
     export function isImportOrExportSpecifierName(location: Node): location is Identifier {
-        return location.parent &&
+        return !!location.parent &&
             (location.parent.kind === SyntaxKind.ImportSpecifier || location.parent.kind === SyntaxKind.ExportSpecifier) &&
             (<ImportOrExportSpecifier>location.parent).propertyName === location;
     }
@@ -1332,7 +1334,7 @@ namespace ts {
 
     export function scriptKindIs(fileName: string, host: LanguageServiceHost, ...scriptKinds: ScriptKind[]): boolean {
         const scriptKind = getScriptKind(fileName, host);
-        return forEach(scriptKinds, k => k === scriptKind);
+        return some(scriptKinds, k => k === scriptKind);
     }
 
     export function getScriptKind(fileName: string, host?: LanguageServiceHost): ScriptKind {
@@ -1358,6 +1360,8 @@ namespace ts {
      * WARNING: This is an expensive operation and is only intended to be used in refactorings
      * and code fixes (because those are triggered by explicit user actions).
      */
+    export function getSynthesizedDeepClone<T extends Node>(node: T): T;
+    export function getSynthesizedDeepClone<T extends Node>(node: T | undefined): T | undefined;
     export function getSynthesizedDeepClone<T extends Node>(node: T | undefined): T | undefined {
         if (node === undefined) {
             return undefined;
@@ -1382,13 +1386,15 @@ namespace ts {
         // the new node created by visitEachChild with the extra changes getSynthesizedClone
         // would have made.
 
-        visited.parent = undefined;
+        visited.parent = undefined!;
 
         return visited;
     }
 
+    export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>): NodeArray<T>;
+    export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined;
     export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
-        return nodes && createNodeArray(nodes.map(getSynthesizedDeepClone), nodes.hasTrailingComma);
+        return nodes && createNodeArray(nodes.map<T>(getSynthesizedDeepClone), nodes.hasTrailingComma);
     }
 
     /**
@@ -1413,7 +1419,7 @@ namespace ts {
         function suppressTrailing(node: Node) {
             addEmitFlags(node, EmitFlags.NoTrailingComments);
 
-            let lastChild: Node = undefined;
+            let lastChild: Node | undefined;
             forEachChild(
                 node,
                 child => (lastChild = child, undefined),

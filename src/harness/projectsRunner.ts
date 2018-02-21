@@ -63,17 +63,17 @@ class ProjectRunner extends RunnerBase {
 
         let testFileText: string;
         try {
-            testFileText = Harness.IO.readFile(testCaseFileName);
+            testFileText = Harness.IO.readFile(testCaseFileName)!;
         }
         catch (e) {
-            assert(false, "Unable to open testcase file: " + testCaseFileName + ": " + e.message);
+            return ts.Debug.fail("Unable to open testcase file: " + testCaseFileName + ": " + e.message);
         }
 
         try {
             testCase = <ProjectRunnerTestCase & ts.CompilerOptions>JSON.parse(testFileText);
         }
         catch (e) {
-            assert(false, "Testcase: " + testCaseFileName + " does not contain valid json format: " + e.message);
+            return ts.Debug.fail("Testcase: " + testCaseFileName + " does not contain valid json format: " + e.message);
         }
         let testCaseJustName = testCaseFileName.replace(/^.*[\\\/]/, "").replace(/\.json/, "");
 
@@ -98,8 +98,10 @@ class ProjectRunner extends RunnerBase {
             return Harness.Baseline.localPath("projectOutput/" + testCaseJustName + "/" + moduleNameToString(moduleKind) + "/" + fileName);
         }
 
-        function cleanProjectUrl(url: string) {
-            let diskProjectPath = ts.normalizeSlashes(Harness.IO.resolvePath(testCase.projectRoot));
+        function cleanProjectUrl(url: string): string;
+        function cleanProjectUrl(url: string | undefined): string | undefined;
+        function cleanProjectUrl(url: string | undefined) {
+            let diskProjectPath = ts.normalizeSlashes(Harness.IO.resolvePath(testCase.projectRoot)!);
             let projectRootUrl = "file:///" + diskProjectPath;
             const normalizedProjectRoot = ts.normalizeSlashes(testCase.projectRoot);
             diskProjectPath = diskProjectPath.substr(0, diskProjectPath.lastIndexOf(normalizedProjectRoot));
@@ -122,12 +124,12 @@ class ProjectRunner extends RunnerBase {
         }
 
         function getCurrentDirectory() {
-            return Harness.IO.resolvePath(testCase.projectRoot);
+            return Harness.IO.resolvePath(testCase.projectRoot)!;
         }
 
         function compileProjectFiles(moduleKind: ts.ModuleKind, configFileSourceFiles: ReadonlyArray<ts.SourceFile>,
             getInputFiles: () => ReadonlyArray<string>,
-            getSourceFileTextImpl: (fileName: string) => string,
+            getSourceFileTextImpl: (fileName: string) => string | undefined,
             writeFile: (fileName: string, data: string, writeByteOrderMark: boolean) => void,
             compilerOptions: ts.CompilerOptions): CompileProjectFilesResult {
 
@@ -157,13 +159,13 @@ class ProjectRunner extends RunnerBase {
                 sourceMapData
             };
 
-            function getSourceFileText(fileName: string): string {
+            function getSourceFileText(fileName: string): string | undefined {
                 const text = getSourceFileTextImpl(fileName);
                 return text !== undefined ? text : getSourceFileTextImpl(ts.getNormalizedAbsolutePath(fileName, getCurrentDirectory()));
             }
 
-            function getSourceFile(fileName: string, languageVersion: ts.ScriptTarget): ts.SourceFile {
-                let sourceFile: ts.SourceFile = undefined;
+            function getSourceFile(fileName: string, languageVersion: ts.ScriptTarget): ts.SourceFile | undefined {
+                let sourceFile: ts.SourceFile | undefined;
                 if (fileName === Harness.Compiler.defaultLibFileName) {
                     sourceFile = Harness.Compiler.getDefaultLibrarySourceFile(Harness.Compiler.getDefaultLibFileName(compilerOptions));
                 }
@@ -201,7 +203,7 @@ class ProjectRunner extends RunnerBase {
             let compilerOptions = createCompilerOptions();
             const configFileSourceFiles: ts.SourceFile[] = [];
 
-            let configFileName: string;
+            let configFileName: string | undefined;
             if (compilerOptions.project) {
                 // Parse project
                 configFileName = ts.normalizePath(ts.combinePaths(compilerOptions.project, "tsconfig.json"));
@@ -211,7 +213,7 @@ class ProjectRunner extends RunnerBase {
                 configFileName = ts.findConfigFile("", fileExists);
             }
 
-            let errors: ts.Diagnostic[];
+            let errors: ts.Diagnostic[] | undefined;
             if (configFileName) {
                 const result = ts.readJsonConfigFile(configFileName, getSourceFileText);
                 configFileSourceFiles.push(result);
@@ -293,8 +295,8 @@ class ProjectRunner extends RunnerBase {
                 return Harness.IO.readFile(getFileNameInTheProjectTest(fileName));
             }
 
-            function getSourceFileText(fileName: string): string {
-                let text: string = undefined;
+            function getSourceFileText(fileName: string): string | undefined {
+                let text: string | undefined;
                 try {
                     text = Harness.IO.readFile(getFileNameInTheProjectTest(fileName));
                 }
@@ -309,7 +311,7 @@ class ProjectRunner extends RunnerBase {
                 // if filename is not rooted - concat it with project root and then expand project root relative to current directory
                 const diskFileName = ts.isRootedDiskPath(fileName)
                     ? fileName
-                    : Harness.IO.resolvePath(ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(fileName));
+                    : Harness.IO.resolvePath(ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(fileName))!;
 
                 const currentDirectory = getCurrentDirectory();
                 // compute file name relative to current directory (expanded project root)
@@ -370,10 +372,10 @@ class ProjectRunner extends RunnerBase {
                     allInputFiles.unshift({ emittedFileName: sourceFile.fileName, code: sourceFile.text });
                 }
                 else if (!(compilerOptions.outFile || compilerOptions.out)) {
-                    let emitOutputFilePathWithoutExtension: string = undefined;
+                    let emitOutputFilePathWithoutExtension: string | undefined;
                     if (compilerOptions.outDir) {
-                        let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, compilerResult.program.getCurrentDirectory());
-                        sourceFilePath = sourceFilePath.replace(compilerResult.program.getCommonSourceDirectory(), "");
+                        let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, compilerResult.program!.getCurrentDirectory());
+                        sourceFilePath = sourceFilePath.replace(compilerResult.program!.getCommonSourceDirectory(), "");
                         emitOutputFilePathWithoutExtension = ts.removeFileExtension(ts.combinePaths(compilerOptions.outDir, sourceFilePath));
                     }
                     else {
@@ -387,8 +389,8 @@ class ProjectRunner extends RunnerBase {
                     }
                 }
                 else {
-                    const outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out) + ts.Extension.Dts;
-                    const outputDtsFile = findOutputDtsFile(outputDtsFileName);
+                    const outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out!) + ts.Extension.Dts;
+                    const outputDtsFile = findOutputDtsFile(outputDtsFileName)!;
                     if (!ts.contains(allInputFiles, outputDtsFile)) {
                         allInputFiles.unshift(outputDtsFile);
                     }
@@ -396,15 +398,15 @@ class ProjectRunner extends RunnerBase {
             });
 
             // Dont allow config files since we are compiling existing source options
-            return compileProjectFiles(compilerResult.moduleKind, compilerResult.configFileSourceFiles, getInputFiles, getSourceFileText, /*writeFile*/ ts.noop, compilerResult.compilerOptions);
+            return compileProjectFiles(compilerResult.moduleKind, compilerResult.configFileSourceFiles, getInputFiles, getSourceFileText, /*writeFile*/ ts.noop, compilerResult.compilerOptions!);
 
             function findOutputDtsFile(fileName: string) {
-                return ts.forEach(compilerResult.outputFiles, outputFile => outputFile.emittedFileName === fileName ? outputFile : undefined);
+                return compilerResult.outputFiles && ts.find(compilerResult.outputFiles, outputFile => outputFile.emittedFileName === fileName);
             }
             function getInputFiles() {
                 return ts.map(allInputFiles, outputFile => outputFile.emittedFileName);
             }
-            function getSourceFileText(fileName: string): string {
+            function getSourceFileText(fileName: string): string | undefined {
                 for (const inputFile of allInputFiles) {
                     const isMatchingFile = ts.isRootedDiskPath(fileName)
                         ? ts.getNormalizedAbsolutePath(inputFile.emittedFileName, getCurrentDirectory()) === fileName
@@ -447,10 +449,10 @@ class ProjectRunner extends RunnerBase {
 
                     function getCompilerResolutionInfo() {
                         const resolutionInfo: ProjectRunnerTestCaseResolutionInfo & ts.CompilerOptions = JSON.parse(JSON.stringify(testCase));
-                        resolutionInfo.resolvedInputFiles = ts.map(compilerResult.program.getSourceFiles(), inputFile => {
+                        resolutionInfo.resolvedInputFiles = ts.map(compilerResult.program!.getSourceFiles(), inputFile => {
                             return ts.convertToRelativePath(inputFile.fileName, getCurrentDirectory(), path => Harness.Compiler.getCanonicalFileName(path));
                         });
-                        resolutionInfo.emittedFiles = ts.map(compilerResult.outputFiles, outputFile => {
+                        resolutionInfo.emittedFiles = ts.map(compilerResult.outputFiles!, outputFile => {
                             return ts.convertToRelativePath(outputFile.emittedFileName, getCurrentDirectory(), path => Harness.Compiler.getCanonicalFileName(path));
                         });
                         return resolutionInfo;
@@ -485,10 +487,10 @@ class ProjectRunner extends RunnerBase {
                                 try {
                                     Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + outputFile.fileName, () => {
                                         try {
-                                            return Harness.IO.readFile(getProjectOutputFolder(outputFile.fileName, compilerResult.moduleKind));
+                                            return Harness.IO.readFile(getProjectOutputFolder(outputFile.fileName, compilerResult.moduleKind))!;
                                         }
                                         catch (e) {
-                                            return undefined;
+                                            return undefined!; // TODO: GH#18217
                                         }
                                     });
                                 }
@@ -523,7 +525,7 @@ class ProjectRunner extends RunnerBase {
                         }
                     });
                     after(() => {
-                        compilerResult = undefined;
+                        compilerResult = undefined!;
                     });
                 }
 
@@ -533,9 +535,9 @@ class ProjectRunner extends RunnerBase {
                 after(() => {
                     // Mocha holds onto the closure environment of the describe callback even after the test is done.
                     // Therefore we have to clean out large objects after the test is done.
-                    testCase = undefined;
-                    testFileText = undefined;
-                    testCaseJustName = undefined;
+                    testCase = undefined!;
+                    testFileText = undefined!;
+                    testCaseJustName = undefined!;
                 });
             });
         });

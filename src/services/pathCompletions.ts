@@ -45,10 +45,10 @@ namespace ts.Completions.PathCompletions {
 
         // Determine the path to the directory containing the script relative to the root directory it is contained within
         const relativeDirectory = firstDefined(rootDirs, rootDirectory =>
-            containsPath(rootDirectory, scriptPath, basePath, ignoreCase) ? scriptPath.substr(rootDirectory.length) : undefined);
+            containsPath(rootDirectory, scriptPath, basePath, ignoreCase) ? scriptPath.substr(rootDirectory.length) : undefined)!; // TODO: GH#18217
 
         // Now find a path for each potential directory that is to be merged with the one containing the script
-        return deduplicate(
+        return deduplicate<string>(
             rootDirs.map(rootDirectory => combinePaths(rootDirectory, relativeDirectory)),
             equateStringsCaseSensitive,
             compareStringsCaseSensitive);
@@ -157,9 +157,9 @@ namespace ts.Completions.PathCompletions {
             const absolute = isRootedDiskPath(baseUrl) ? baseUrl : combinePaths(projectDir, baseUrl);
             getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/ false, span, host, /*exclude*/ undefined, result);
 
-            for (const path in paths) {
-                const patterns = paths[path];
-                if (paths.hasOwnProperty(path) && patterns) {
+            for (const path in paths!) {
+                const patterns = paths![path];
+                if (paths!.hasOwnProperty(path) && patterns) {
                     for (const { name, kind } of getCompletionsForPathMapping(path, patterns, fragment, baseUrl, fileExtensions, host)) {
                         // Path mappings may provide a duplicate way to get to something we've already added, so don't add again.
                         if (!result.some(entry => entry.name === name)) {
@@ -173,7 +173,7 @@ namespace ts.Completions.PathCompletions {
         if (compilerOptions.moduleResolution === ts.ModuleResolutionKind.NodeJs) {
             forEachAncestorDirectory(scriptPath, ancestor => {
                 const nodeModules = combinePaths(ancestor, "node_modules");
-                if (host.directoryExists(nodeModules)) {
+                if (host.directoryExists!(nodeModules)) { // TODO: GH#18217
                     getCompletionEntriesForDirectoryFragment(fragment, nodeModules, fileExtensions, /*includeExtensions*/ false, span, host, /*exclude*/ undefined, result);
                 }
             });
@@ -268,7 +268,7 @@ namespace ts.Completions.PathCompletions {
         // after the last '/' that appears in the fragment because that's where the replacement span
         // starts
         if (isNestedModule) {
-            const moduleNameWithSeperator = ensureTrailingDirectorySeparator(moduleNameFragment);
+            const moduleNameWithSeperator = ensureTrailingDirectorySeparator(moduleNameFragment!);
             nonRelativeModuleNames = map(nonRelativeModuleNames, nonRelativeModuleName => {
                 return removePrefix(nonRelativeModuleName, moduleNameWithSeperator);
             });
@@ -276,11 +276,11 @@ namespace ts.Completions.PathCompletions {
 
 
         if (!options.moduleResolution || options.moduleResolution === ModuleResolutionKind.NodeJs) {
-            for (const visibleModule of enumerateNodeModulesVisibleToScript(host, scriptPath)) {
+            for (const visibleModule of enumerateNodeModulesVisibleToScript(host, scriptPath)!) { // TODO: GH#18217
                 if (!isNestedModule) {
                     nonRelativeModuleNames.push(visibleModule.moduleName);
                 }
-                else if (startsWith(visibleModule.moduleName, moduleNameFragment)) {
+                else if (startsWith(visibleModule.moduleName, moduleNameFragment!)) { // TODO: GH#18217
                     const nestedFiles = tryReadDirectory(host, visibleModule.moduleDir, supportedTypeScriptExtensions, /*exclude*/ undefined, /*include*/ ["./*"]);
                     if (nestedFiles) {
                         for (let f of nestedFiles) {
@@ -293,7 +293,7 @@ namespace ts.Completions.PathCompletions {
             }
         }
 
-        return deduplicate(nonRelativeModuleNames, equateStringsCaseSensitive, compareStringsCaseSensitive);
+        return deduplicate<string>(nonRelativeModuleNames, equateStringsCaseSensitive, compareStringsCaseSensitive);
     }
 
     export function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: number, compilerOptions: CompilerOptions, host: LanguageServiceHost): PathCompletion[] | undefined {
@@ -337,7 +337,7 @@ namespace ts.Completions.PathCompletions {
             }
         }
         else if (host.getDirectories) {
-            let typeRoots: ReadonlyArray<string>;
+            let typeRoots: ReadonlyArray<string> | undefined;
             try {
                 typeRoots = getEffectiveTypeRoots(options, host);
             }
@@ -393,7 +393,7 @@ namespace ts.Completions.PathCompletions {
         return paths;
     }
 
-    function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string) {
+    function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string): VisibleModuleInfo[] | undefined {
         const result: VisibleModuleInfo[] = [];
 
         if (host.readFile && host.fileExists) {
@@ -513,10 +513,10 @@ namespace ts.Completions.PathCompletions {
             return directoryProbablyExists(path, host);
         }
         catch { /*ignore*/ }
-        return undefined;
+        return false;
     }
 
-    function tryIOAndConsumeErrors<T>(host: LanguageServiceHost, toApply: (...a: any[]) => T, ...args: any[]) {
+    function tryIOAndConsumeErrors<T>(host: LanguageServiceHost, toApply: ((...a: any[]) => T) | undefined, ...args: any[]) {
         try {
             return toApply && toApply.apply(host, args);
         }

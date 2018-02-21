@@ -10,9 +10,9 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (_, diag, commands) => {
-            const pkg = getTypesPackageNameToInstall(context.host, getModuleName(diag.file, diag.start));
+            const pkg = getTypesPackageNameToInstall(context.host, getModuleName(diag.file!, diag.start!));
             if (pkg) {
-                commands.push(getCommand(diag.file.fileName, pkg));
+                commands.push(getCommand(diag.file!.fileName, pkg));
             }
         }),
     });
@@ -28,7 +28,7 @@ namespace ts.codefix {
     function getTypesPackageNameToInstall(host: LanguageServiceHost, moduleName: string): string | undefined {
         const { packageName } = getPackageName(moduleName);
         // If !registry, registry not available yet, can't do anything.
-        return host.isKnownTypesPackageName(packageName) ? getTypesPackageName(packageName) : undefined;
+        return host.isKnownTypesPackageName!(packageName) ? getTypesPackageName(packageName) : undefined; // TODO: GH#18217
     }
 
     export function tryGetCodeActionForInstallPackageTypes(host: LanguageServiceHost, fileName: string, moduleName: string): CodeAction | undefined {

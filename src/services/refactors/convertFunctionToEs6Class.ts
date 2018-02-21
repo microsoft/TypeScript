@@ -17,7 +17,7 @@ namespace ts.refactor.convertFunctionToES6Class {
         }
 
         if (isDeclarationOfFunctionOrClassExpression(symbol)) {
-            symbol = (symbol.valueDeclaration as VariableDeclaration).initializer.symbol;
+            symbol = (symbol.valueDeclaration as VariableDeclaration).initializer!.symbol!;
         }
 
         if ((symbol.flags & SymbolFlags.Function) && symbol.members && (symbol.members.size > 0)) {
@@ -43,7 +43,7 @@ namespace ts.refactor.convertFunctionToES6Class {
         }
 
         const { file: sourceFile } = context;
-        const ctorSymbol = getConstructorSymbol(context);
+        const ctorSymbol = getConstructorSymbol(context)!;
 
         const deletedNodes: Node[] = [];
         const deletes: (() => any)[] = [];
@@ -52,11 +52,11 @@ namespace ts.refactor.convertFunctionToES6Class {
             return undefined;
         }
 
-        const ctorDeclaration = ctorSymbol.valueDeclaration;
+        const ctorDeclaration = ctorSymbol.valueDeclaration!;
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
         let precedingNode: Node;
-        let newClassDeclaration: ClassDeclaration;
+        let newClassDeclaration: ClassDeclaration | undefined;
         switch (ctorDeclaration.kind) {
             case SyntaxKind.FunctionDeclaration:
                 precedingNode = ctorDeclaration;
@@ -74,6 +74,9 @@ namespace ts.refactor.convertFunctionToES6Class {
                 }
                 newClassDeclaration = createClassFromVariableDeclaration(ctorDeclaration as VariableDeclaration);
                 break;
+
+            default:
+                return Debug.fail();
         }
 
         if (!newClassDeclaration) {
@@ -136,7 +139,7 @@ namespace ts.refactor.convertFunctionToES6Class {
                 return isFunctionLike(source);
             }
 
-            function createClassElement(symbol: Symbol, modifiers: Modifier[]): ClassElement {
+            function createClassElement(symbol: Symbol, modifiers: Modifier[] | undefined): ClassElement | undefined {
                 // both properties and methods are bound as property symbols
                 if (!(symbol.flags & SymbolFlags.Property)) {
                     return;
@@ -219,7 +222,7 @@ namespace ts.refactor.convertFunctionToES6Class {
             });
         }
 
-        function createClassFromVariableDeclaration(node: VariableDeclaration): ClassDeclaration {
+        function createClassFromVariableDeclaration(node: VariableDeclaration): ClassDeclaration | undefined {
             const initializer = node.initializer as FunctionExpression;
             if (!initializer || initializer.kind !== SyntaxKind.FunctionExpression) {
                 return undefined;
@@ -229,7 +232,7 @@ namespace ts.refactor.convertFunctionToES6Class {
                 return undefined;
             }
 
-            const memberElements = createClassElementsFromSymbol(initializer.symbol);
+            const memberElements = createClassElementsFromSymbol(initializer.symbol!);
             if (initializer.body) {
                 memberElements.unshift(createConstructor(/*decorators*/ undefined, /*modifiers*/ undefined, initializer.parameters, initializer.body));
             }
@@ -259,7 +262,7 @@ namespace ts.refactor.convertFunctionToES6Class {
         }
     }
 
-    function getConstructorSymbol({ startPosition, file, program }: RefactorContext): Symbol {
+    function getConstructorSymbol({ startPosition, file, program }: RefactorContext): Symbol | undefined {
         const checker = program.getTypeChecker();
         const token = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
         return checker.getSymbolAtLocation(token);

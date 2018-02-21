@@ -109,7 +109,7 @@ namespace ts.BuilderState {
                     return;
                 }
 
-                const fileName = resolvedTypeReferenceDirective.resolvedFileName;
+                const fileName = resolvedTypeReferenceDirective.resolvedFileName!; // TODO: GH#18217
                 const typeFilePath = toPath(fileName, sourceFileDirectory, getCanonicalFileName);
                 addReferencedFile(typeFilePath);
             });
@@ -128,7 +128,7 @@ namespace ts.BuilderState {
     /**
      * Returns true if oldState is reusable, that is the emitKind = module/non module has not changed
      */
-    export function canReuseOldState(newReferencedMap: ReadonlyMap<ReferencedSet>, oldState: Readonly<BuilderState> | undefined) {
+    export function canReuseOldState(newReferencedMap: ReadonlyMap<ReferencedSet> | undefined, oldState: Readonly<BuilderState> | undefined) {
         return oldState && !oldState.referencedMap === !newReferencedMap;
     }
 
@@ -144,7 +144,7 @@ namespace ts.BuilderState {
         // Create the reference map, and set the file infos
         for (const sourceFile of newProgram.getSourceFiles()) {
             const version = sourceFile.version;
-            const oldInfo = useOldState && oldState.fileInfos.get(sourceFile.path);
+            const oldInfo = useOldState ? oldState!.fileInfos.get(sourceFile.path) : undefined;
             if (referencedMap) {
                 const newReferences = getReferencedFiles(newProgram, sourceFile, getCanonicalFileName);
                 if (newReferences) {
@@ -195,7 +195,7 @@ namespace ts.BuilderState {
      */
     export function updateSignaturesFromCache(state: BuilderState, signatureCache: Map<string>) {
         signatureCache.forEach((signature, path) => {
-            state.fileInfos.get(path).signature = signature;
+            state.fileInfos.get(path)!.signature = signature;
             state.hasCalledUpdateShapeSignature.set(path, true);
         });
     }
@@ -211,7 +211,7 @@ namespace ts.BuilderState {
             return false;
         }
 
-        const info = state.fileInfos.get(sourceFile.path);
+        const info = state.fileInfos.get(sourceFile.path)!;
         Debug.assert(!!info);
 
         const prevSignature = info.signature;
@@ -225,7 +225,7 @@ namespace ts.BuilderState {
                 latestSignature = computeHash(emitOutput.outputFiles[0].text);
             }
             else {
-                latestSignature = prevSignature;
+                latestSignature = prevSignature!; // TODO: GH#18217
             }
         }
         cacheToUpdateSignature.set(sourceFile.path, latestSignature);
@@ -252,7 +252,7 @@ namespace ts.BuilderState {
         const seenMap = createMap<true>();
         const queue = [sourceFile.path];
         while (queue.length) {
-            const path = queue.pop();
+            const path = queue.pop()!;
             if (!seenMap.has(path)) {
                 seenMap.set(path, true);
                 const references = state.referencedMap.get(path);
@@ -286,7 +286,7 @@ namespace ts.BuilderState {
      * Gets the files referenced by the the file path
      */
     function getReferencedByPaths(state: Readonly<BuilderState>, referencedFilePath: Path) {
-        return arrayFrom(mapDefinedIterator(state.referencedMap.entries(), ([filePath, referencesInFile]) =>
+        return arrayFrom(mapDefinedIterator(state.referencedMap!.entries(), ([filePath, referencesInFile]) =>
             referencesInFile.has(referencedFilePath) ? filePath as Path : undefined
         ));
     }
@@ -315,7 +315,7 @@ namespace ts.BuilderState {
             return state.allFilesExcludingDefaultLibraryFile;
         }
 
-        let result: SourceFile[];
+        let result: SourceFile[] | undefined;
         addSourceFile(firstSourceFile);
         for (const sourceFile of programOfThisState.getSourceFiles()) {
             if (sourceFile !== firstSourceFile) {
@@ -367,11 +367,11 @@ namespace ts.BuilderState {
         seenFileNamesMap.set(sourceFileWithUpdatedShape.path, sourceFileWithUpdatedShape);
         const queue = getReferencedByPaths(state, sourceFileWithUpdatedShape.path);
         while (queue.length > 0) {
-            const currentPath = queue.pop();
+            const currentPath = queue.pop()!;
             if (!seenFileNamesMap.has(currentPath)) {
-                const currentSourceFile = programOfThisState.getSourceFileByPath(currentPath);
+                const currentSourceFile = programOfThisState.getSourceFileByPath(currentPath)!;
                 seenFileNamesMap.set(currentPath, currentSourceFile);
-                if (currentSourceFile && updateShapeSignature(state, programOfThisState, currentSourceFile, cacheToUpdateSignature, cancellationToken, computeHash)) {
+                if (currentSourceFile && updateShapeSignature(state, programOfThisState, currentSourceFile, cacheToUpdateSignature, cancellationToken, computeHash!)) { // TODO: GH#18217
                     queue.push(...getReferencedByPaths(state, currentPath));
                 }
             }

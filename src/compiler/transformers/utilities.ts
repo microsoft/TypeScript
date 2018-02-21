@@ -10,7 +10,7 @@ namespace ts {
         externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
         exportSpecifiers: Map<ExportSpecifier[]>; // export specifiers by name
         exportedBindings: Identifier[][]; // exported names of local declarations
-        exportedNames: Identifier[]; // all exported names local to module
+        exportedNames: Identifier[] | undefined; // all exported names local to module
         exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
         hasExportStarsToExportValues: boolean; // whether this module contains export*
     }
@@ -23,22 +23,22 @@ namespace ts {
         return names.elements.length;
     }
 
-    function containsDefaultReference(node: NamedImportBindings) {
+    function containsDefaultReference(node: NamedImportBindings | undefined) {
         if (!node) return false;
         if (!isNamedImports(node)) return false;
         return some(node.elements, isNamedDefaultReference);
     }
 
-    function isNamedDefaultReference(e: ImportSpecifier) {
-        return e.propertyName && e.propertyName.escapedText === InternalSymbolName.Default;
+    function isNamedDefaultReference(e: ImportSpecifier): boolean {
+        return e.propertyName !== undefined && e.propertyName.escapedText === InternalSymbolName.Default;
     }
 
     export function getImportNeedsImportStarHelper(node: ImportDeclaration) {
-        return !!getNamespaceDeclarationNode(node) || (getNamedImportCount(node) > 1 && containsDefaultReference(node.importClause.namedBindings));
+        return !!getNamespaceDeclarationNode(node) || (getNamedImportCount(node) > 1 && containsDefaultReference(node.importClause!.namedBindings));
     }
 
     export function getImportNeedsImportDefaultHelper(node: ImportDeclaration) {
-        return isDefaultImport(node) || (getNamedImportCount(node) === 1 && containsDefaultReference(node.importClause.namedBindings));
+        return isDefaultImport(node) || (getNamedImportCount(node) === 1 && containsDefaultReference(node.importClause!.namedBindings));
     }
 
     export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
@@ -46,9 +46,9 @@ namespace ts {
         const exportSpecifiers = createMultiMap<ExportSpecifier>();
         const exportedBindings: Identifier[][] = [];
         const uniqueExports = createMap<boolean>();
-        let exportedNames: Identifier[];
+        let exportedNames: Identifier[] | undefined;
         let hasExportDefault = false;
-        let exportEquals: ExportAssignment = undefined;
+        let exportEquals: ExportAssignment | undefined;
         let hasExportStarsToExportValues = false;
         let hasImportStarOrImportDefault = false;
 
@@ -85,7 +85,7 @@ namespace ts {
                     }
                     else {
                         // export { x, y }
-                        for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
+                        for (const specifier of (<ExportDeclaration>node).exportClause!.elements) {
                             if (!uniqueExports.get(idText(specifier.name))) {
                                 const name = specifier.propertyName || specifier.name;
                                 exportSpecifiers.add(idText(name), specifier);
@@ -130,7 +130,7 @@ namespace ts {
                         }
                         else {
                             // export function x() { }
-                            const name = (<FunctionDeclaration>node).name;
+                            const name = (<FunctionDeclaration>node).name!;
                             if (!uniqueExports.get(idText(name))) {
                                 multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
                                 uniqueExports.set(idText(name), true);
@@ -178,7 +178,7 @@ namespace ts {
         return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames, externalHelpersImportDeclaration };
     }
 
-    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<boolean>, exportedNames: Identifier[]) {
+    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<boolean>, exportedNames: Identifier[] | undefined) {
         if (isBindingPattern(decl.name)) {
             for (const element of decl.name.elements) {
                 if (!isOmittedExpression(element)) {

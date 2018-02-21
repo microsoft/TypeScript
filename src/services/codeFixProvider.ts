@@ -56,7 +56,7 @@ namespace ts {
                 if (actions && actions.length > 0) {
                     for (const action of actions) {
                         if (action === undefined) {
-                            context.host.log(`Action for error code ${context.errorCode} added an invalid action entry; please log a bug`);
+                            context.host.log!(`Action for error code ${context.errorCode} added an invalid action entry; please log a bug`); // TODO: GH#18217
                         }
                         else {
                             allActions.push(action);

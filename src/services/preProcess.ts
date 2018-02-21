@@ -3,7 +3,7 @@ namespace ts {
         const referencedFiles: FileReference[] = [];
         const typeReferenceDirectives: FileReference[] = [];
         const importedFiles: FileReference[] = [];
-        let ambientExternalModules: { ref: FileReference, depth: number }[];
+        let ambientExternalModules: { ref: FileReference, depth: number }[] | undefined;
         let isNoDefaultLib = false;
         let braceNesting = 0;
         // assume that text represent an external module if it contains at least one top level import/export
@@ -27,7 +27,7 @@ namespace ts {
                 const comment = sourceText.substring(commentRange.pos, commentRange.end);
                 const referencePathMatchResult = getFileReferenceFromReferencePath(comment, commentRange);
                 if (referencePathMatchResult) {
-                    isNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
+                    isNoDefaultLib = !!referencePathMatchResult.isNoDefaultLib;
                     const fileReference = referencePathMatchResult.fileReference;
                     if (fileReference) {
                         const collection = referencePathMatchResult.isTypeReferenceDirective
@@ -341,7 +341,7 @@ namespace ts {
         }
         else {
             // for global scripts ambient modules still can have augmentations - look for ambient modules with depth > 0
-            let ambientModuleNames: string[];
+            let ambientModuleNames: string[] | undefined;
             if (ambientExternalModules) {
                 for (const decl of ambientExternalModules) {
                     if (decl.depth === 0) {

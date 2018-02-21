@@ -34,7 +34,7 @@ namespace ts.codefix {
             const { fixId, program, sourceFile } = context;
             const checker = program.getTypeChecker();
             return codeFixAllWithTextChanges(context, errorCodes, (changes, err) => {
-                const info = getInfo(err.file, err.start!, checker);
+                const info = getInfo(err.file!, err.start!, checker);
                 if (!info) return;
                 const { typeNode, type } = info;
                 const fixedType = typeNode.kind === SyntaxKind.JSDocNullableType && fixId === fixIdNullable ? checker.getNullableType(type, TypeFlags.Undefined) : type;
@@ -43,7 +43,7 @@ namespace ts.codefix {
         }
     });
 
-    function getInfo(sourceFile: SourceFile, pos: number, checker: TypeChecker): { readonly typeNode: TypeNode, type: Type } {
+    function getInfo(sourceFile: SourceFile, pos: number, checker: TypeChecker): { readonly typeNode: TypeNode, readonly type: Type } | undefined {
         const decl = findAncestor(getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false), isTypeContainer);
         const typeNode = decl && decl.type;
         return typeNode && { typeNode, type: checker.getTypeFromTypeNode(typeNode) };

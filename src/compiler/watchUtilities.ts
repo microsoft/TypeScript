@@ -9,6 +9,7 @@ namespace ts {
         fileExists(path: string): boolean;
         readFile(path: string, encoding?: string): string | undefined;
 
+        // TODO: GH#18217 Optional methods are frequently used as non-optional
         directoryExists?(path: string): boolean;
         getDirectories?(path: string): string[];
         readDirectory?(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
@@ -78,8 +79,8 @@ namespace ts {
 
         function createCachedFileSystemEntries(rootDir: string, rootDirPath: Path) {
             const resultFromHost: MutableFileSystemEntries = {
-                files: map(host.readDirectory(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || [],
-                directories: host.getDirectories(rootDir) || []
+                files: map(host.readDirectory!(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || [],
+                directories: host.getDirectories!(rootDir) || []
             };
 
             cachedReadDirectoryResult.set(rootDirPath, resultFromHost);
@@ -132,7 +133,7 @@ namespace ts {
             if (result) {
                 updateFilesOfFileSystemEntry(result, getBaseNameOfFileName(fileName), /*fileExists*/ true);
             }
-            return host.writeFile(fileName, data, writeByteOrderMark);
+            return host.writeFile!(fileName, data, writeByteOrderMark);
         }
 
         function fileExists(fileName: string): boolean {
@@ -144,7 +145,7 @@ namespace ts {
 
         function directoryExists(dirPath: string): boolean {
             const path = toPath(dirPath);
-            return cachedReadDirectoryResult.has(path) || host.directoryExists(dirPath);
+            return cachedReadDirectoryResult.has(path) || host.directoryExists!(dirPath);
         }
 
         function createDirectory(dirPath: string) {
@@ -154,7 +155,7 @@ namespace ts {
             if (result) {
                 updateFileSystemEntry(result.directories, baseFileName, /*isValid*/ true);
             }
-            host.createDirectory(dirPath);
+            host.createDirectory!(dirPath);
         }
 
         function getDirectories(rootDir: string): string[] {
@@ -163,7 +164,7 @@ namespace ts {
             if (result) {
                 return result.directories.slice();
             }
-            return host.getDirectories(rootDir);
+            return host.getDirectories!(rootDir);
         }
 
         function readDirectory(rootDir: string, extensions?: ReadonlyArray<string>, excludes?: ReadonlyArray<string>, includes?: ReadonlyArray<string>, depth?: number): string[] {
@@ -172,12 +173,12 @@ namespace ts {
             if (result) {
                 return matchFiles(rootDir, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory, depth, getFileSystemEntries);
             }
-            return host.readDirectory(rootDir, extensions, excludes, includes, depth);
+            return host.readDirectory!(rootDir, extensions, excludes, includes, depth);
 
-            function getFileSystemEntries(dir: string) {
+            function getFileSystemEntries(dir: string): FileSystemEntries {
                 const path = toPath(dir);
                 if (path === rootDirPath) {
-                    return result;
+                    return result!;
                 }
                 return tryReadDirectory(dir, path) || emptyFileSystemEntries;
             }

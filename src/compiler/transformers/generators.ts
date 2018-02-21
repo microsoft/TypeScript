@@ -138,7 +138,7 @@ namespace ts {
         Endfinally              // Marks the end of a `finally` block
     }
 
-    type OperationArguments = [Label] | [Label, Expression] | [Statement] | [Expression] | [Expression, Expression];
+    type OperationArguments = [Label] | [Label, Expression] | [Statement] | [Expression | undefined] | [Expression, Expression];
 
     // whether a generated code block is opening or closing at the current operation for a FunctionBuilder
     const enum BlockAction {
@@ -227,6 +227,7 @@ namespace ts {
             case Instruction.Yield: return "yield";
             case Instruction.YieldStar: return "yield*";
             case Instruction.Endfinally: return "endfinally";
+            default: return undefined!; // TODO: GH#18217
         }
     }
 
@@ -254,18 +255,18 @@ namespace ts {
         // All three arrays are correlated by their index. This approach is used over allocating
         // objects to store the same information to avoid GC overhead.
         //
-        let blocks: CodeBlock[]; // Information about the code block
-        let blockOffsets: number[]; // The operation offset at which a code block begins or ends
-        let blockActions: BlockAction[]; // Whether the code block is opened or closed
-        let blockStack: CodeBlock[]; // A stack of currently open code blocks
+        let blocks: CodeBlock[] | undefined; // Information about the code block
+        let blockOffsets: number[] | undefined; // The operation offset at which a code block begins or ends
+        let blockActions: BlockAction[] | undefined; // Whether the code block is opened or closed
+        let blockStack: CodeBlock[] | undefined; // A stack of currently open code blocks
 
         // Labels are used to mark locations in the code that can be the target of a Break (jump)
         // operation. These are translated into case clauses in a switch statement.
         // The following two arrays are correlated by their index. This approach is used over
         // allocating objects to store the same information to avoid GC overhead.
         //
-        let labelOffsets: number[]; // The operation offset at which the label is defined.
-        let labelExpressions: LiteralExpression[][]; // The NumericLiteral nodes bound to each label.
+        let labelOffsets: number[] | undefined; // The operation offset at which the label is defined.
+        let labelExpressions: LiteralExpression[][] | undefined; // The NumericLiteral nodes bound to each label.
         let nextLabelId = 1; // The next label id to use.
 
         // Operations store information about generated code for the function body. This
@@ -273,9 +274,9 @@ namespace ts {
         // The following three arrays are correlated by their index. This approach is used over
         // allocating objects to store the same information to avoid GC overhead.
         //
-        let operations: OpCode[]; // The operation to perform.
-        let operationArguments: OperationArguments[]; // The arguments to the operation.
-        let operationLocations: TextRange[]; // The source map location for the operation.
+        let operations: OpCode[] | undefined; // The operation to perform.
+        let operationArguments: (OperationArguments | undefined)[] | undefined; // The arguments to the operation.
+        let operationLocations: (TextRange | undefined)[] | undefined; // The source map location for the operation.
 
         let state: Identifier; // The name of the state object used by the generator at runtime.
 
@@ -283,19 +284,19 @@ namespace ts {
         //
         let blockIndex = 0; // The index of the current block.
         let labelNumber = 0; // The current label number.
-        let labelNumbers: number[][];
+        let labelNumbers: number[][] | undefined;
         let lastOperationWasAbrupt: boolean; // Indicates whether the last operation was abrupt (break/continue).
         let lastOperationWasCompletion: boolean; // Indicates whether the last operation was a completion (return/throw).
-        let clauses: CaseClause[]; // The case clauses generated for labels.
-        let statements: Statement[]; // The statements for the current label.
-        let exceptionBlockStack: ExceptionBlock[]; // A stack of containing exception blocks.
-        let currentExceptionBlock: ExceptionBlock; // The current exception block.
-        let withBlockStack: WithBlock[]; // A stack containing `with` blocks.
+        let clauses: CaseClause[] | undefined; // The case clauses generated for labels.
+        let statements: Statement[] | undefined; // The statements for the current label.
+        let exceptionBlockStack: ExceptionBlock[] | undefined; // A stack of containing exception blocks.
+        let currentExceptionBlock: ExceptionBlock | undefined; // The current exception block.
+        let withBlockStack: WithBlock[] | undefined; // A stack containing `with` blocks.
 
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
-            if (node.isDeclarationFile || (node.transformFlags & TransformFlags.ContainsGenerator) === 0) {
+            if (node.isDeclarationFile || (node.transformFlags! & TransformFlags.ContainsGenerator) === 0) {
                 return node;
             }
 
@@ -318,10 +319,10 @@ namespace ts {
             else if (inGeneratorFunctionBody) {
                 return visitJavaScriptInGeneratorFunctionBody(node);
             }
-            else if (transformFlags & TransformFlags.Generator) {
+            else if (transformFlags! & TransformFlags.Generator) {
                 return visitGenerator(node);
             }
-            else if (transformFlags & TransformFlags.ContainsGenerator) {
+            else if (transformFlags! & TransformFlags.ContainsGenerator) {
                 return visitEachChild(node, visitor, context);
             }
             else {
@@ -376,10 +377,10 @@ namespace ts {
                 case SyntaxKind.ReturnStatement:
                     return visitReturnStatement(<ReturnStatement>node);
                 default:
-                    if (node.transformFlags & TransformFlags.ContainsYield) {
+                    if (node.transformFlags! & TransformFlags.ContainsYield) {
                         return visitJavaScriptContainingYield(node);
                     }
-                    else if (node.transformFlags & (TransformFlags.ContainsGenerator | TransformFlags.ContainsHoistedDeclarationOrCompletion)) {
+                    else if (node.transformFlags! & (TransformFlags.ContainsGenerator | TransformFlags.ContainsHoistedDeclarationOrCompletion)) {
                         return visitEachChild(node, visitor, context);
                     }
                     else {
@@ -444,7 +445,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitFunctionDeclaration(node: FunctionDeclaration): Statement {
+        function visitFunctionDeclaration(node: FunctionDeclaration): Statement | undefined {
             // Currently, we only support generators that were originally async functions.
             if (node.asteriskToken) {
                 node = setOriginalNode(
@@ -457,7 +458,7 @@ namespace ts {
                             /*typeParameters*/ undefined,
                             visitParameterList(node.parameters, visitor, context),
                             /*type*/ undefined,
-                            transformGeneratorFunctionBody(node.body)
+                            transformGeneratorFunctionBody(node.body!)
                         ),
                         /*location*/ node
                     ),
@@ -619,8 +620,8 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitVariableStatement(node: VariableStatement): Statement {
-            if (node.transformFlags & TransformFlags.ContainsYield) {
+        function visitVariableStatement(node: VariableStatement): Statement | undefined {
+            if (node.transformFlags! & TransformFlags.ContainsYield) {
                 transformAndEmitVariableDeclarationList(node.declarationList);
                 return undefined;
             }
@@ -659,13 +660,14 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitBinaryExpression(node: BinaryExpression): Expression {
-            switch (getExpressionAssociativity(node)) {
+            const assoc = getExpressionAssociativity(node);
+            switch (assoc) {
                 case Associativity.Left:
                     return visitLeftAssociativeBinaryExpression(node);
                 case Associativity.Right:
                     return visitRightAssociativeBinaryExpression(node);
                 default:
-                    Debug.fail("Unknown associativity.");
+                    return Debug.assertNever(assoc);
             }
         }
 
@@ -733,7 +735,7 @@ namespace ts {
 
                         target = updateElementAccess(<ElementAccessExpression>left,
                             cacheExpression(visitNode((<ElementAccessExpression>left).expression, visitor, isLeftHandSideExpression)),
-                            cacheExpression(visitNode((<ElementAccessExpression>left).argumentExpression, visitor, isExpression))
+                            cacheExpression(visitNode((<ElementAccessExpression>left).argumentExpression!, visitor, isExpression))
                         );
                         break;
 
@@ -938,9 +940,9 @@ namespace ts {
             //      x = %sent%;
 
             const resumeLabel = defineLabel();
-            const expression = visitNode(node.expression, visitor, isExpression);
+            const expression = visitNode(node.expression!, visitor, isExpression);
             if (node.asteriskToken) {
-                const iterator = (getEmitFlags(node.expression) & EmitFlags.Iterator) === 0
+                const iterator = (getEmitFlags(node.expression!) & EmitFlags.Iterator) === 0
                     ? createValuesHelper(context, expression, /*location*/ node)
                     : expression;
                 emitYieldStar(iterator, /*location*/ node);
@@ -982,7 +984,7 @@ namespace ts {
 
             const numInitialElements = countInitialNodesWithoutYield(elements);
 
-            let temp: Identifier;
+            let temp: Identifier | undefined;
             if (numInitialElements > 0) {
                 temp = declareLocal();
                 const initialElements = visitNodes(elements, visitor, isExpression, 0, numInitialElements);
@@ -1091,7 +1093,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitElementAccessExpression(node: ElementAccessExpression) {
-            if (containsYield(node.argumentExpression)) {
+            if (containsYield(node.argumentExpression!)) {
                 // [source]
                 //      a = x[yield];
                 //
@@ -1159,7 +1161,7 @@ namespace ts {
                                 cacheExpression(visitNode(target, visitor, isExpression)),
                                 thisArg,
                                 visitElements(
-                                    node.arguments,
+                                    node.arguments!,
                                     /*leadingElement*/ createVoidZero()
                                 )
                             ),
@@ -1250,7 +1252,7 @@ namespace ts {
             emitStatement(visitNode(node, visitor, isStatement));
         }
 
-        function transformAndEmitVariableDeclarationList(node: VariableDeclarationList): VariableDeclarationList {
+        function transformAndEmitVariableDeclarationList(node: VariableDeclarationList): VariableDeclarationList | undefined {
             for (const variable of node.declarations) {
                 const name = getSynthesizedClone(<Identifier>variable.name);
                 setCommentRange(name, variable.name);
@@ -1264,7 +1266,7 @@ namespace ts {
             while (variablesWritten < numVariables) {
                 for (let i = variablesWritten; i < numVariables; i++) {
                     const variable = variables[i];
-                    if (containsYield(variable.initializer) && pendingExpressions.length > 0) {
+                    if (containsYield(variable.initializer!) && pendingExpressions.length > 0) {
                         break;
                     }
 
@@ -1285,7 +1287,7 @@ namespace ts {
             return setSourceMapRange(
                 createAssignment(
                     setSourceMapRange(<Identifier>getSynthesizedClone(node.name), node.name),
-                    visitNode(node.initializer, visitor, isExpression)
+                    visitNode(node.initializer!, visitor, isExpression)
                 ),
                 node
             );
@@ -1310,11 +1312,11 @@ namespace ts {
                 if (containsYield(node.thenStatement) || containsYield(node.elseStatement)) {
                     const endLabel = defineLabel();
                     const elseLabel = node.elseStatement ? defineLabel() : undefined;
-                    emitBreakWhenFalse(node.elseStatement ? elseLabel : endLabel, visitNode(node.expression, visitor, isExpression), /*location*/ node.expression);
+                    emitBreakWhenFalse(node.elseStatement ? elseLabel! : endLabel, visitNode(node.expression, visitor, isExpression), /*location*/ node.expression);
                     transformAndEmitEmbeddedStatement(node.thenStatement);
                     if (node.elseStatement) {
                         emitBreak(endLabel);
-                        markLabel(elseLabel);
+                        markLabel(elseLabel!);
                         transformAndEmitEmbeddedStatement(node.elseStatement);
                     }
                     markLabel(endLabel);
@@ -1870,7 +1872,7 @@ namespace ts {
 
         function transformAndEmitThrowStatement(node: ThrowStatement): void {
             emitThrow(
-                visitNode(node.expression, visitor, isExpression),
+                visitNode(node.expression!, visitor, isExpression),
                 /*location*/ node
             );
         }
@@ -1910,7 +1912,7 @@ namespace ts {
                 beginExceptionBlock();
                 transformAndEmitEmbeddedStatement(node.tryBlock);
                 if (node.catchClause) {
-                    beginCatchBlock(node.catchClause.variableDeclaration);
+                    beginCatchBlock(node.catchClause.variableDeclaration!); // TODO: GH#18217
                     transformAndEmitEmbeddedStatement(node.catchClause.block);
                 }
 
@@ -1926,8 +1928,8 @@ namespace ts {
             }
         }
 
-        function containsYield(node: Node) {
-            return node && (node.transformFlags & TransformFlags.ContainsYield) !== 0;
+        function containsYield(node: Node | undefined): boolean {
+            return !!node && (node.transformFlags! & TransformFlags.ContainsYield) !== 0;
         }
 
         function countInitialNodesWithoutYield(nodes: NodeArray<Node>) {
@@ -2014,7 +2016,7 @@ namespace ts {
          */
         function markLabel(label: Label): void {
             Debug.assert(labelOffsets !== undefined, "No labels were defined.");
-            labelOffsets[label] = operations ? operations.length : 0;
+            labelOffsets![label] = operations ? operations.length : 0;
         }
 
         /**
@@ -2030,11 +2032,11 @@ namespace ts {
                 blockStack = [];
             }
 
-            const index = blockActions.length;
-            blockActions[index] = BlockAction.Open;
-            blockOffsets[index] = operations ? operations.length : 0;
+            const index = blockActions!.length;
+            blockActions![index] = BlockAction.Open;
+            blockOffsets![index] = operations ? operations.length : 0;
             blocks[index] = block;
-            blockStack.push(block);
+            blockStack!.push(block);
             return index;
         }
 
@@ -2045,25 +2047,25 @@ namespace ts {
             const block = peekBlock();
             Debug.assert(block !== undefined, "beginBlock was never called.");
 
-            const index = blockActions.length;
-            blockActions[index] = BlockAction.Close;
-            blockOffsets[index] = operations ? operations.length : 0;
-            blocks[index] = block;
-            blockStack.pop();
-            return block;
+            const index = blockActions!.length;
+            blockActions![index] = BlockAction.Close;
+            blockOffsets![index] = operations ? operations.length : 0;
+            blocks![index] = block!;
+            blockStack!.pop();
+            return block!;
         }
 
         /**
          * Gets the current open block.
          */
         function peekBlock() {
-            return lastOrUndefined(blockStack);
+            return lastOrUndefined(blockStack!);
         }
 
         /**
          * Gets the kind of the current open block.
          */
-        function peekBlockKind(): CodeBlockKind {
+        function peekBlockKind(): CodeBlockKind | undefined {
             const block = peekBlock();
             return block && block.kind;
         }
@@ -2335,7 +2337,7 @@ namespace ts {
 
         function hasImmediateContainingLabeledBlock(labelText: string, start: number) {
             for (let j = start; j >= 0; j--) {
-                const containingBlock = blockStack[j];
+                const containingBlock = blockStack![j];
                 if (supportsLabeledBreakOrContinue(containingBlock)) {
                     if (containingBlock.labelText === labelText) {
                         return true;
@@ -2411,8 +2413,8 @@ namespace ts {
          *
          * @param label A label.
          */
-        function createLabel(label: Label): Expression {
-            if (label > 0) {
+        function createLabel(label: Label | undefined): Expression {
+            if (label !== undefined && label > 0) {
                 if (labelExpressions === undefined) {
                     labelExpressions = [];
                 }
@@ -2624,8 +2626,8 @@ namespace ts {
 
             const operationIndex = operations.length;
             operations[operationIndex] = code;
-            operationArguments[operationIndex] = args;
-            operationLocations[operationIndex] = location;
+            operationArguments![operationIndex] = args;
+            operationLocations![operationIndex] = location;
         }
 
         /**
@@ -2873,9 +2875,9 @@ namespace ts {
          */
         function tryEnterOrLeaveBlock(operationIndex: number): void {
             if (blocks) {
-                for (; blockIndex < blockActions.length && blockOffsets[blockIndex] <= operationIndex; blockIndex++) {
+                for (; blockIndex < blockActions!.length && blockOffsets![blockIndex] <= operationIndex; blockIndex++) {
                     const block = blocks[blockIndex];
-                    const blockAction = blockActions[blockIndex];
+                    const blockAction = blockActions![blockIndex];
                     switch (block.kind) {
                         case CodeBlockKind.Exception:
                             if (blockAction === BlockAction.Open) {
@@ -2887,11 +2889,11 @@ namespace ts {
                                     statements = [];
                                 }
 
-                                exceptionBlockStack.push(currentExceptionBlock);
+                                exceptionBlockStack.push(currentExceptionBlock!);
                                 currentExceptionBlock = block;
                             }
                             else if (blockAction === BlockAction.Close) {
-                                currentExceptionBlock = exceptionBlockStack.pop();
+                                currentExceptionBlock = exceptionBlockStack!.pop();
                             }
                             break;
                         case CodeBlockKind.With:
@@ -2903,7 +2905,7 @@ namespace ts {
                                 withBlockStack.push(block);
                             }
                             else if (blockAction === BlockAction.Close) {
-                                withBlockStack.pop();
+                                withBlockStack!.pop();
                             }
                             break;
                         // default: do nothing
@@ -2929,7 +2931,7 @@ namespace ts {
             lastOperationWasAbrupt = false;
             lastOperationWasCompletion = false;
 
-            const opcode = operations[operationIndex];
+            const opcode = operations![operationIndex];
             if (opcode === OpCode.Nop) {
                 return;
             }
@@ -2937,12 +2939,12 @@ namespace ts {
                 return writeEndfinally();
             }
 
-            const args = operationArguments[operationIndex];
+            const args = operationArguments![operationIndex]!;
             if (opcode === OpCode.Statement) {
                 return writeStatement(<Statement>args[0]);
             }
 
-            const location = operationLocations[operationIndex];
+            const location = operationLocations![operationIndex];
             switch (opcode) {
                 case OpCode.Assign:
                     return writeAssign(<Expression>args[0], <Expression>args[1], location);
@@ -2986,7 +2988,7 @@ namespace ts {
          * @param right The right-hand side of the assignment.
          * @param operationLocation The source map location for the operation.
          */
-        function writeAssign(left: Expression, right: Expression, operationLocation: TextRange): void {
+        function writeAssign(left: Expression, right: Expression, operationLocation: TextRange | undefined): void {
             writeStatement(setTextRange(createStatement(createAssignment(left, right)), operationLocation));
         }
 
@@ -2996,7 +2998,7 @@ namespace ts {
          * @param expression The value to throw.
          * @param operationLocation The source map location for the operation.
          */
-        function writeThrow(expression: Expression, operationLocation: TextRange): void {
+        function writeThrow(expression: Expression, operationLocation: TextRange | undefined): void {
             lastOperationWasAbrupt = true;
             lastOperationWasCompletion = true;
             writeStatement(setTextRange(createThrow(expression), operationLocation));
@@ -3008,7 +3010,7 @@ namespace ts {
          * @param expression The value to return.
          * @param operationLocation The source map location for the operation.
          */
-        function writeReturn(expression: Expression, operationLocation: TextRange): void {
+        function writeReturn(expression: Expression | undefined, operationLocation: TextRange | undefined): void {
             lastOperationWasAbrupt = true;
             lastOperationWasCompletion = true;
             writeStatement(
@@ -3033,7 +3035,7 @@ namespace ts {
          * @param label The label for the Break.
          * @param operationLocation The source map location for the operation.
          */
-        function writeBreak(label: Label, operationLocation: TextRange): void {
+        function writeBreak(label: Label, operationLocation: TextRange | undefined): void {
             lastOperationWasAbrupt = true;
             writeStatement(
                 setEmitFlags(
@@ -3058,7 +3060,7 @@ namespace ts {
          * @param condition The condition for the Break.
          * @param operationLocation The source map location for the operation.
          */
-        function writeBreakWhenTrue(label: Label, condition: Expression, operationLocation: TextRange): void {
+        function writeBreakWhenTrue(label: Label, condition: Expression, operationLocation: TextRange | undefined): void {
             writeStatement(
                 setEmitFlags(
                     createIf(
@@ -3088,7 +3090,7 @@ namespace ts {
          * @param condition The condition for the Break.
          * @param operationLocation The source map location for the operation.
          */
-        function writeBreakWhenFalse(label: Label, condition: Expression, operationLocation: TextRange): void {
+        function writeBreakWhenFalse(label: Label, condition: Expression, operationLocation: TextRange | undefined): void {
             writeStatement(
                 setEmitFlags(
                     createIf(
@@ -3117,7 +3119,7 @@ namespace ts {
          * @param expression The expression to yield.
          * @param operationLocation The source map location for the operation.
          */
-        function writeYield(expression: Expression, operationLocation: TextRange): void {
+        function writeYield(expression: Expression, operationLocation: TextRange | undefined): void {
             lastOperationWasAbrupt = true;
             writeStatement(
                 setEmitFlags(
@@ -3142,7 +3144,7 @@ namespace ts {
          * @param expression The expression to yield.
          * @param operationLocation The source map location for the operation.
          */
-        function writeYieldStar(expression: Expression, operationLocation: TextRange): void {
+        function writeYieldStar(expression: Expression, operationLocation: TextRange | undefined): void {
             lastOperationWasAbrupt = true;
             writeStatement(
                 setEmitFlags(

@@ -65,10 +65,10 @@ function createRunner(kind: TestRunnerKind): RunnerBase {
         case "dt":
             return new DefinitelyTypedRunner();
     }
-    ts.Debug.fail(`Unknown runner kind ${kind}`);
+    return ts.Debug.fail(`Unknown runner kind ${kind}`);
 }
 
-if (Harness.IO.tryEnableSourceMapsForHost && /^development$/i.test(Harness.IO.getEnvironmentVariable("NODE_ENV"))) {
+if (Harness.IO.tryEnableSourceMapsForHost && /^development$/i.test(Harness.IO.getEnvironmentVariable!("NODE_ENV"))) {
     Harness.IO.tryEnableSourceMapsForHost();
 }
 
@@ -80,10 +80,10 @@ const testconfigFileName = "test.config";
 const customConfig = tryGetConfig(Harness.IO.args());
 let testConfigContent =
     customConfig && Harness.IO.fileExists(customConfig)
-        ? Harness.IO.readFile(customConfig)
+        ? Harness.IO.readFile(customConfig)!
         : Harness.IO.fileExists(mytestconfigFileName)
-            ? Harness.IO.readFile(mytestconfigFileName)
-            : Harness.IO.fileExists(testconfigFileName) ? Harness.IO.readFile(testconfigFileName) : "";
+            ? Harness.IO.readFile(mytestconfigFileName)!
+            : Harness.IO.fileExists(testconfigFileName) ? Harness.IO.readFile(testconfigFileName)! : "";
 
 let taskConfigsFolder: string;
 let workerCount: number;
@@ -133,7 +133,7 @@ function handleTestConfig() {
         if (testConfig.stackTraceLimit === "full") {
             (<any>Error).stackTraceLimit = Infinity;
         }
-        else if ((+testConfig.stackTraceLimit | 0) > 0) {
+        else if ((+testConfig.stackTraceLimit! | 0) > 0) {
             (<any>Error).stackTraceLimit = testConfig.stackTraceLimit;
         }
         if (testConfig.listenForWork) {
@@ -223,6 +223,7 @@ function handleTestConfig() {
     if (runUnitTests === undefined) {
         runUnitTests = runners.length !== 1; // Don't run unit tests when running only one runner if unit tests were not explicitly asked for
     }
+    return false;
 }
 
 function beginTests() {

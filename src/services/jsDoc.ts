@@ -96,7 +96,7 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocTemplateTag:
                 return withList((tag as JSDocTemplateTag).typeParameters);
             case SyntaxKind.JSDocTypeTag:
-                return withNode((tag as JSDocTypeTag).typeExpression);
+                return withNode((tag as JSDocTypeTag).typeExpression!);
             case SyntaxKind.JSDocTypedefTag:
             case SyntaxKind.JSDocPropertyTag:
             case SyntaxKind.JSDocParameterTag:
@@ -124,7 +124,7 @@ namespace ts.JsDoc {
      * returns a truthy value, then returns that value.
      * If no such value is found, the callback is applied to each element of array and undefined is returned.
      */
-    function forEachUnique<T, U>(array: T[], callback: (element: T, index: number) => U): U {
+    function forEachUnique<T, U>(array: T[] | undefined, callback: (element: T, index: number) => U): U | undefined {
         if (array) {
             for (let i = 0; i < array.length; i++) {
                 if (array.indexOf(array[i]) === i) {
@@ -181,13 +181,13 @@ namespace ts.JsDoc {
         const nameThusFar = tag.name.text;
         const jsdoc = tag.parent;
         const fn = jsdoc.parent;
-        if (!ts.isFunctionLike(fn)) return [];
+        if (!isFunctionLike(fn)) return [];
 
         return mapDefined(fn.parameters, param => {
             if (!isIdentifier(param.name)) return undefined;
 
             const name = param.name.text;
-            if (jsdoc.tags.some(t => t !== tag && isJSDocParameterTag(t) && isIdentifier(t.name) && t.name.escapedText === name)
+            if (jsdoc.tags!.some(t => t !== tag && isJSDocParameterTag(t) && isIdentifier(t.name) && t.name.escapedText === name) // TODO: GH#18217
                 || nameThusFar !== undefined && !startsWith(name, nameThusFar)) {
                 return undefined;
             }
@@ -322,7 +322,7 @@ namespace ts.JsDoc {
                     const varStatement = <VariableStatement>commentOwner;
                     const varDeclarations = varStatement.declarationList.declarations;
                     const parameters = varDeclarations.length === 1 && varDeclarations[0].initializer
-                        ? getParametersFromRightHandSideOfAssignment(varDeclarations[0].initializer)
+                        ? getParametersFromRightHandSideOfAssignment(varDeclarations[0].initializer!)
                         : undefined;
                     return { commentOwner, parameters };
                 }
