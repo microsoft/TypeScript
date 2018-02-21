@@ -972,7 +972,7 @@ namespace ts {
                 write(" {");
                 writeLine();
                 increaseIndent();
-                emitLines(node.body.statements);
+                emitLines((node.body as ts.ModuleBlock).statements); // tslint:disable-line no-unnecessary-type-assertion (TODO: GH#18217)
                 decreaseIndent();
                 write("}");
                 writeLine();
