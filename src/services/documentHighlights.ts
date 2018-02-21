@@ -24,7 +24,7 @@ namespace ts.DocumentHighlights {
     function getSemanticDocumentHighlights(position: number, node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: ReadonlyArray<SourceFile>): DocumentHighlights[] | undefined {
         const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken);
         if (!referenceEntries) return undefined;
-        const map = toMultiMap(referenceEntries.map(FindAllReferences.toHighlightSpan), e => e.fileName, e => e.span);
+        const map = arrayToMultiMap(referenceEntries.map(FindAllReferences.toHighlightSpan), e => e.fileName, e => e.span);
         return arrayFrom(map.entries(), ([fileName, highlightSpans]) => ({ fileName, highlightSpans }));
     }
 
