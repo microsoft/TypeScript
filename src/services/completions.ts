@@ -1999,7 +1999,7 @@ namespace ts.Completions {
                     // NOTE: if one only performs this step when m.name is an identifier,
                     // things like '__proto__' are not filtered out.
                     const name = getNameOfDeclaration(m);
-                    existingName = getEscapedTextOfIdentifierOrLiteral(name as (Identifier | LiteralExpression));
+                    existingName = isPropertyNameLiteral(name) ? getEscapedTextOfIdentifierOrLiteral(name) : undefined;
                 }
 
                 existingMemberNames.set(existingName, true);
