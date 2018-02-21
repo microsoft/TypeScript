@@ -6383,8 +6383,9 @@ namespace ts {
          *
          * @param type a type to look up property from
          * @param name a name of property to look up in a given type
+         * @param allowPartialUnions return partial unions instead of undefined
          */
-        function getPropertyOfType(type: Type, name: __String): Symbol | undefined {
+        function getPropertyOfType(type: Type, name: __String, allowPartialUnions = false): Symbol | undefined {
             type = getApparentType(type);
             if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
@@ -6401,7 +6402,12 @@ namespace ts {
                 return getPropertyOfObjectType(globalObjectType, name);
             }
             if (type.flags & TypeFlags.UnionOrIntersection) {
-                return getPropertyOfUnionOrIntersectionType(<UnionOrIntersectionType>type, name);
+                if (allowPartialUnions) {
+                    return getUnionOrIntersectionProperty(<UnionOrIntersectionType>type, name);
+                }
+                else {
+                    return getPropertyOfUnionOrIntersectionType(<UnionOrIntersectionType>type, name);
+                }
             }
             return undefined;
         }
@@ -7997,7 +8003,7 @@ namespace ts {
                     getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>accessExpression.argumentExpression).name)) :
                     undefined;
             if (propName !== undefined) {
-                const prop = getPropertyOfType(objectType, propName);
+                const prop = getPropertyOfType(objectType, propName, /*allowPartialUnions*/ true);
                 if (prop) {
                     if (accessExpression) {
                         markPropertyAsReferenced(prop, accessExpression, /*isThisAccess*/ accessExpression.expression.kind === SyntaxKind.ThisKeyword);

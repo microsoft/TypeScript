@@ -1,0 +1,37 @@
+=== tests/cases/compiler/indexedAccessPartialUnions.ts ===
+// Repro from #21975
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(indexedAccessPartialUnions.ts, 0, 0))
+
+    bar: {
+>bar : Symbol(Foo.bar, Decl(indexedAccessPartialUnions.ts, 2, 15))
+
+        baz: string;
+>baz : Symbol(baz, Decl(indexedAccessPartialUnions.ts, 3, 10))
+
+    } | {
+        qux: number;
+>qux : Symbol(qux, Decl(indexedAccessPartialUnions.ts, 5, 9))
+    }
+}
+
+type ShouldBeString = Foo['bar']['baz'];
+>ShouldBeString : Symbol(ShouldBeString, Decl(indexedAccessPartialUnions.ts, 8, 1))
+>Foo : Symbol(Foo, Decl(indexedAccessPartialUnions.ts, 0, 0))
+
+interface HasOptionalMember {
+>HasOptionalMember : Symbol(HasOptionalMember, Decl(indexedAccessPartialUnions.ts, 10, 40))
+
+    bar?: {
+>bar : Symbol(HasOptionalMember.bar, Decl(indexedAccessPartialUnions.ts, 12, 29))
+
+        baz: string;
+>baz : Symbol(baz, Decl(indexedAccessPartialUnions.ts, 13, 11))
+    }
+}
+
+type ShouldBeString2 = HasOptionalMember['bar']['baz'];
+>ShouldBeString2 : Symbol(ShouldBeString2, Decl(indexedAccessPartialUnions.ts, 16, 1))
+>HasOptionalMember : Symbol(HasOptionalMember, Decl(indexedAccessPartialUnions.ts, 10, 40))
+
