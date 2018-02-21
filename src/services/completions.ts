@@ -650,7 +650,6 @@ namespace ts.Completions {
 
     const enum CompletionKind {
         ObjectPropertyDeclaration,
-        /** Note that sometimes we access completions from global scope, but use "None" instead of this. See isGlobalCompletionScope. */
         Global,
         PropertyAccess,
         MemberLike,
