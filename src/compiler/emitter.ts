@@ -43,7 +43,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export function getOutputPathsFor(sourceFile: SourceFile | Bundle, host: EmitHost, forceDtsPaths?: boolean) {
+    export function getOutputPathsFor(sourceFile: SourceFile | Bundle, host: EmitHost, forceDtsPaths: boolean) {
         const options = host.getCompilerOptions();
         if (sourceFile.kind === SyntaxKind.Bundle) {
             const jsFilePath = options.outFile || options.out;
@@ -129,7 +129,8 @@ namespace ts {
         let declarationPrinter: Printer;
         if (emitOnlyDtsFiles || compilerOptions.declaration) {
             const nonJsFiles = filter(sourceFiles, isSourceFileNotJavaScript);
-            declarationTransform = transformNodes(resolver, host, compilerOptions, (compilerOptions.outFile || compilerOptions.out) ? [createBundle(nonJsFiles)] : nonJsFiles, [transformDeclarations], /*allowDtsFiles*/ false);
+            const inputListOrBundle = (compilerOptions.outFile || compilerOptions.out) ? [createBundle(nonJsFiles)] : nonJsFiles;
+            declarationTransform = transformNodes(resolver, host, compilerOptions, inputListOrBundle, [transformDeclarations], /*allowDtsFiles*/ false);
             declarationPrinter = createPrinter({ ...compilerOptions, onlyPrintJsDocStyle: true } as PrinterOptions, {
                 // resolver hooks
                 hasGlobalName: resolver.hasGlobalName,
@@ -182,9 +183,9 @@ namespace ts {
                         return getOriginalNode(n) === getOriginalNode(sourceFileOrBundle);
                     });
                     if (associatedDeclarationTree) {
-                        const previousState = sourceMap.setDisabled(true);
+                        const previousState = sourceMap.setState(/*disabled*/ true);
                         printSourceFileOrBundle(declarationFilePath, /*sourceMapFilePath*/ undefined, associatedDeclarationTree, declarationPrinter, /*shouldSkipSourcemap*/ true);
-                        sourceMap.setDisabled(previousState);
+                        sourceMap.setState(previousState);
                     }
                     else {
                         Debug.fail(`No declaration output found for path "${declarationFilePath}" for js output file: "${jsFilePath}".`);

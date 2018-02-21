@@ -71,7 +71,7 @@ namespace ts {
         /**
          * @returns the previous disabled state
          */
-        setDisabled(state: boolean): boolean;
+        setState(disabled: boolean): boolean;
     }
 
     // Used for initialize lastEncodedSourceMapSpan and reset lastEncodedSourceMapSpan when updateLastEncodedAndRecordedSpans
@@ -112,10 +112,10 @@ namespace ts {
             emitTokenWithSourceMap,
             getText,
             getSourceMappingURL,
-            setDisabled,
+            setState,
         };
 
-        function setDisabled(state: boolean) {
+        function setState(state: boolean) {
             const last = disabled;
             disabled = state;
             return last;

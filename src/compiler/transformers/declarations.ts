@@ -184,7 +184,7 @@ namespace ts {
             possibleImports = undefined;
             importDeclarationMap = createMap();
             necessaryTypeRefernces = undefined;
-            const refs = collectReferences(currentSourceFile);
+            const refs = collectReferences(currentSourceFile, createMap());
             const references: FileReference[] = [];
             const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath));
             const referenceVisitor = mapReferencesIntoArray(references, outputFilePath);
@@ -234,7 +234,7 @@ namespace ts {
             }
         }
 
-        function collectReferences(sourceFile: SourceFile, ret = createMap<SourceFile>()) {
+        function collectReferences(sourceFile: SourceFile, ret: Map<SourceFile>) {
             if (noResolve || isSourceFileJavaScript(sourceFile)) return ret;
             forEach(sourceFile.referencedFiles, f => {
                 const elem = tryResolveScriptReference(host, sourceFile, f);
@@ -497,7 +497,7 @@ namespace ts {
             }
             if (decl.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
                 // Namespace import (optionally with visible default)
-                const namedBindings = resolver.isDeclarationVisible(decl.importClause.namedBindings as NamespaceImport) ? decl.importClause.namedBindings : /*namedBindings*/ undefined;
+                const namedBindings = resolver.isDeclarationVisible(decl.importClause.namedBindings) ? decl.importClause.namedBindings : /*namedBindings*/ undefined;
                 return visibleDefaultBinding || namedBindings ? updateImportDeclaration(decl, /*decorators*/ undefined, decl.modifiers, updateImportClause(
                         decl.importClause,
                         visibleDefaultBinding,
@@ -797,7 +797,7 @@ namespace ts {
 
             switch (input.kind) {
                 case SyntaxKind.ExportDeclaration: {
-                    if (!resultHasExternalModuleIndicator && isSourceFile(input.parent)) {
+                    if (isSourceFile(input.parent)) {
                         resultHasExternalModuleIndicator = true;
                     }
                     // Always visible if the parent node isn't dropped for being not visible
@@ -806,7 +806,7 @@ namespace ts {
                 }
                 case SyntaxKind.ExportAssignment: {
                     // Always visible if the parent node isn't dropped for being not visible
-                    if (!resultHasExternalModuleIndicator && isSourceFile(input.parent)) {
+                    if (isSourceFile(input.parent)) {
                         resultHasExternalModuleIndicator = true;
                     }
                     if (input.expression.kind === SyntaxKind.Identifier) {
