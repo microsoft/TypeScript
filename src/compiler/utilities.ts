@@ -4298,6 +4298,11 @@ namespace ts {
         return declaration.name || nameForNamelessJSDocTypedef(declaration);
     }
 
+    /** @internal */
+    export function isNamedDeclaration(node: Node): node is NamedDeclaration & { name: DeclarationName } {
+        return !!(node as NamedDeclaration).name;
+    }
+
     export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
         if (!declaration) {
             return undefined;
