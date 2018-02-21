@@ -92,7 +92,7 @@ namespace ts {
             return SemanticMeaning.All;
         }
         else if (isInRightSideOfInternalImportEqualsDeclaration(node)) {
-            return getMeaningFromRightHandSideOfImportEquals(node);
+            return getMeaningFromRightHandSideOfImportEquals(node as Identifier);
         }
         else if (isDeclarationName(node)) {
             return getMeaningFromDeclaration(node.parent);
@@ -112,26 +112,19 @@ namespace ts {
         }
     }
 
-    function getMeaningFromRightHandSideOfImportEquals(node: Node) {
-        Debug.assert(node.kind === SyntaxKind.Identifier);
-
+    function getMeaningFromRightHandSideOfImportEquals(node: Node): SemanticMeaning {
         //     import a = |b|; // Namespace
         //     import a = |b.c|; // Value, type, namespace
         //     import a = |b.c|.d; // Namespace
-
-        if (node.parent.kind === SyntaxKind.QualifiedName &&
-            (<QualifiedName>node.parent).right === node &&
-            node.parent.parent.kind === SyntaxKind.ImportEqualsDeclaration) {
-            return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
-        }
-        return SemanticMeaning.Namespace;
+        const name = node.kind === SyntaxKind.QualifiedName ? node : isQualifiedName(node.parent) && node.parent.right === node ? node.parent : undefined;
+        return name && name.parent.kind === SyntaxKind.ImportEqualsDeclaration ? SemanticMeaning.All : SemanticMeaning.Namespace;
     }
 
     export function isInRightSideOfInternalImportEqualsDeclaration(node: Node) {
         while (node.parent.kind === SyntaxKind.QualifiedName) {
             node = node.parent;
         }
-        return isInternalModuleImportEqualsDeclaration(node.parent) && (<ImportEqualsDeclaration>node.parent).moduleReference === node;
+        return isInternalModuleImportEqualsDeclaration(node.parent) && node.parent.moduleReference === node;
     }
 
     function isNamespaceReference(node: Node): boolean {

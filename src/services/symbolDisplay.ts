@@ -146,13 +146,13 @@ namespace ts.SymbolDisplay {
             // try get the call/construct signature from the type if it matches
             let callExpressionLike: CallExpression | NewExpression | JsxOpeningLikeElement;
             if (isCallOrNewExpression(location)) {
-                callExpressionLike = <CallExpression | NewExpression>location;
+                callExpressionLike = location;
             }
             else if (isCallExpressionTarget(location) || isNewExpressionTarget(location)) {
                 callExpressionLike = <CallExpression | NewExpression>location.parent;
             }
             else if (location.parent && isJsxOpeningLikeElement(location.parent) && isFunctionLike(symbol.valueDeclaration)) {
-                callExpressionLike = <JsxOpeningLikeElement>location.parent;
+                callExpressionLike = location.parent;
             }
 
             if (callExpressionLike) {

@@ -1413,6 +1413,10 @@ declare namespace ts {
         name: Identifier;
     }
     type ImportOrExportSpecifier = ImportSpecifier | ExportSpecifier;
+    /**
+     * This is either an `export =` or an `export default` declaration.
+     * Unless `isExportEquals` is set, this node was parsed as an `export default`.
+     */
     interface ExportAssignment extends DeclarationStatement {
         kind: SyntaxKind.ExportAssignment;
         parent?: SourceFile;
@@ -4150,6 +4154,7 @@ declare namespace ts {
         applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;
+        organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges>;
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
         getProgram(): Program;
         dispose(): void;
@@ -4158,6 +4163,7 @@ declare namespace ts {
         type: "file";
         fileName: string;
     }
+    type OrganizeImportsScope = CombinedCodeFixScope;
     interface GetCompletionsAtPositionOptions {
         includeExternalModuleExports: boolean;
         includeInsertTextCompletions: boolean;
@@ -4503,6 +4509,7 @@ declare namespace ts {
         argumentCount: number;
     }
     interface CompletionInfo {
+        /** Not true for all glboal completions. This will be true if the enclosing scope matches a few syntax kinds. See `isGlobalCompletionScope`. */
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
         /**
@@ -5092,7 +5099,8 @@ declare namespace ts.server.protocol {
         ApplyCodeActionCommand = "applyCodeActionCommand",
         GetSupportedCodeFixes = "getSupportedCodeFixes",
         GetApplicableRefactors = "getApplicableRefactors",
-        GetEditsForRefactor = "getEditsForRefactor"
+        GetEditsForRefactor = "getEditsForRefactor",
+        OrganizeImports = "organizeImports"
     }
     /**
      * A TypeScript Server message
@@ -5443,6 +5451,23 @@ declare namespace ts.server.protocol {
          */
         renameLocation?: Location;
         renameFilename?: string;
+    }
+    /**
+     * Organize imports by:
+     *   1) Removing unused imports
+     *   2) Coalescing imports from the same module
+     *   3) Sorting imports
+     */
+    interface OrganizeImportsRequest extends Request {
+        command: CommandTypes.OrganizeImports;
+        arguments: OrganizeImportsRequestArgs;
+    }
+    type OrganizeImportsScope = GetCombinedCodeFixScope;
+    interface OrganizeImportsRequestArgs {
+        scope: OrganizeImportsScope;
+    }
+    interface OrganizeImportsResponse extends Response {
+        edits: ReadonlyArray<FileCodeEdits>;
     }
     /**
      * Request for the available codefixes at a specific position.
@@ -7297,6 +7322,7 @@ declare namespace ts.server {
         private extractPositionAndRange;
         private getApplicableRefactors;
         private getEditsForRefactor;
+        private organizeImports;
         private getCodeFixes;
         private getCombinedCodeFix;
         private applyCodeActionCommand;

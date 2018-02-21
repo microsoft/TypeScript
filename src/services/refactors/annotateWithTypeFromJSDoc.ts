@@ -118,7 +118,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
             case SyntaxKind.Constructor:
                 return createConstructor(decl.decorators, decl.modifiers, parameters, decl.body);
             case SyntaxKind.FunctionExpression:
-                return createFunctionExpression(decl.modifiers, decl.asteriskToken, (decl as FunctionExpression).name, typeParameters, parameters, returnType, decl.body);
+                return createFunctionExpression(decl.modifiers, decl.asteriskToken, decl.name, typeParameters, parameters, returnType, decl.body);
             case SyntaxKind.ArrowFunction:
                 return createArrowFunction(decl.modifiers, typeParameters, parameters, returnType, decl.equalsGreaterThanToken, decl.body);
             case SyntaxKind.MethodDeclaration:

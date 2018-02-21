@@ -183,7 +183,7 @@ namespace ts {
                     : visitNode(node.initializer, visitor, isForInitializer),
                 visitNode(node.condition, visitor, isExpression),
                 visitNode(node.incrementor, visitor, isExpression),
-                visitNode((<ForStatement>node).statement, asyncBodyVisitor, isStatement, liftToBlock)
+                visitNode(node.statement, asyncBodyVisitor, isStatement, liftToBlock)
             );
         }
 
