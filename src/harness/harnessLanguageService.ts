@@ -143,7 +143,7 @@ namespace Harness.LanguageService {
 
         public getScriptInfo(fileName: string): ScriptInfo | undefined {
             const fileEntry = this.virtualFileSystem.traversePath(fileName);
-            return fileEntry && fileEntry.isFile() ? (<Utils.VirtualFile>fileEntry).content : undefined;
+            return fileEntry && fileEntry.isFile() ? fileEntry.content : undefined;
         }
 
         public addScript(fileName: string, content: string, isRootFile: boolean): void {
@@ -519,6 +519,9 @@ namespace Harness.LanguageService {
             throw new Error("Not supported on the shim.");
         }
         getApplicableRefactors(): ts.ApplicableRefactorInfo[] {
+            throw new Error("Not supported on the shim.");
+        }
+        organizeImports(_scope: ts.OrganizeImportsScope, _formatOptions: ts.FormatCodeSettings): ReadonlyArray<ts.FileTextChanges> {
             throw new Error("Not supported on the shim.");
         }
         getEmitOutput(fileName: string): ts.EmitOutput {

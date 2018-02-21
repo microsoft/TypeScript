@@ -264,7 +264,7 @@ namespace ts {
                     return (isGlobalScopeAugmentation(<ModuleDeclaration>node) ? "__global" : `"${moduleName}"`) as __String;
                 }
                 if (name.kind === SyntaxKind.ComputedPropertyName) {
-                    const nameExpression = (<ComputedPropertyName>name).expression;
+                    const nameExpression = name.expression;
                     // treat computed property names where expression is string/numeric literal as just string/numeric literal
                     if (isStringOrNumericLiteral(nameExpression)) {
                         return escapeLeadingUnderscores(nameExpression.text);
@@ -462,10 +462,7 @@ namespace ts {
                 //       and this case is specially handled. Module augmentations should only be merged with original module definition
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
                 if (node.kind === SyntaxKind.JSDocTypedefTag) Debug.assert(isInJavaScriptFile(node)); // We shouldn't add symbols for JSDoc nodes if not in a JS file.
-                const isJSDocTypedefInJSDocNamespace = node.kind === SyntaxKind.JSDocTypedefTag &&
-                    (node as JSDocTypedefTag).name &&
-                    (node as JSDocTypedefTag).name!.kind === SyntaxKind.Identifier &&
-                    ((node as JSDocTypedefTag).name as Identifier).isInJSDocNamespace;
+                const isJSDocTypedefInJSDocNamespace = isJSDocTypedefTag(node) && node.name && node.name.kind === SyntaxKind.Identifier && node.name.isInJSDocNamespace;
                 if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypedefInJSDocNamespace) {
                     const exportKind = symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0;
                     const local = declareSymbol(container.locals!, /*parent*/ undefined, node, exportKind, symbolExcludes);
@@ -530,7 +527,7 @@ namespace ts {
                 if (!isIIFE) {
                     currentFlow = { flags: FlowFlags.Start };
                     if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethod)) {
-                        (<FlowStart>currentFlow).container = <FunctionExpression | ArrowFunction | MethodDeclaration>node;
+                        currentFlow.container = <FunctionExpression | ArrowFunction | MethodDeclaration>node;
                     }
                 }
                 // We create a return control flow graph for IIFEs and constructors. For constructors
@@ -1001,7 +998,7 @@ namespace ts {
             addAntecedent(postLoopLabel, currentFlow);
             bind(node.initializer);
             if (node.initializer.kind !== SyntaxKind.VariableDeclarationList) {
-                bindAssignmentTargetFlow(<Expression>node.initializer);
+                bindAssignmentTargetFlow(node.initializer);
             }
             bindIterativeStatement(node.statement, postLoopLabel, preLoopLabel);
             addAntecedent(preLoopLabel, currentFlow);
@@ -1175,6 +1172,7 @@ namespace ts {
                 }
                 const preCaseLabel = createBranchLabel();
                 addAntecedent(preCaseLabel, createFlowSwitchClause(preSwitchCaseFlow!, <SwitchStatement>node.parent, clauseStart, i + 1));
+                addAntecedent(preCaseLabel, createFlowSwitchClause(preSwitchCaseFlow!, node.parent, clauseStart, i + 1));
                 addAntecedent(preCaseLabel, fallthroughFlow);
                 currentFlow = finishFlowLabel(preCaseLabel);
                 const clause = clauses[i];
@@ -1255,13 +1253,13 @@ namespace ts {
             else if (node.kind === SyntaxKind.ObjectLiteralExpression) {
                 for (const p of (<ObjectLiteralExpression>node).properties) {
                     if (p.kind === SyntaxKind.PropertyAssignment) {
-                        bindDestructuringTargetFlow((<PropertyAssignment>p).initializer!);
+                        bindDestructuringTargetFlow(p.initializer!);
                     }
                     else if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                        bindAssignmentTargetFlow((<ShorthandPropertyAssignment>p).name);
+                        bindAssignmentTargetFlow(p.name);
                     }
                     else if (p.kind === SyntaxKind.SpreadAssignment) {
-                        bindAssignmentTargetFlow((<SpreadAssignment>p).expression);
+                        bindAssignmentTargetFlow(p.expression);
                     }
                 }
             }
@@ -1576,7 +1574,7 @@ namespace ts {
         }
 
         function hasExportDeclarations(node: ModuleDeclaration | SourceFile): boolean {
-            const body = node.kind === SyntaxKind.SourceFile ? node : (<ModuleDeclaration>node).body;
+            const body = node.kind === SyntaxKind.SourceFile ? node : node.body;
             if (body && (body.kind === SyntaxKind.SourceFile || body.kind === SyntaxKind.ModuleBlock)) {
                 for (const stat of (<BlockLike>body).statements) {
                     if (stat.kind === SyntaxKind.ExportDeclaration || stat.kind === SyntaxKind.ExportAssignment) {
@@ -2215,7 +2213,7 @@ namespace ts {
         function checkTypePredicate(node: TypePredicateNode) {
             const { parameterName, type } = node;
             if (parameterName && parameterName.kind === SyntaxKind.Identifier) {
-                checkStrictModeIdentifier(parameterName as Identifier);
+                checkStrictModeIdentifier(parameterName);
             }
             if (parameterName && parameterName.kind === SyntaxKind.ThisType) {
                 seenThisKeyword = true;
@@ -2560,13 +2558,13 @@ namespace ts {
                 }
             }
 
-            checkStrictModeFunctionName(<FunctionDeclaration>node);
+            checkStrictModeFunctionName(node);
             if (inStrictMode) {
                 checkStrictModeFunctionDeclaration(node);
                 bindBlockScopedDeclaration(node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
             }
             else {
-                declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
+                declareSymbolAndAddToSymbolTable(node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
             }
         }
 

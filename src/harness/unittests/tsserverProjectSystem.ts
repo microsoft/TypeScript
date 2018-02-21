@@ -2560,7 +2560,7 @@ namespace ts.projectSystem {
                     }
                     assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
                     assert.equal(e.data.project.getProjectName(), config.path, "project name");
-                    lastEvent = <server.ProjectLanguageServiceStateEvent>e;
+                    lastEvent = e;
                 }
             });
             session.executeCommand(<protocol.OpenRequest>{

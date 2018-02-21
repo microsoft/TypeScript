@@ -690,7 +690,7 @@ namespace ts {
             // Prime the scanner.
             nextToken();
             if (token() === SyntaxKind.EndOfFileToken) {
-                sourceFile.endOfFileToken = <EndOfFileToken>parseTokenNode();
+                sourceFile.endOfFileToken = parseTokenNode<EndOfFileToken>();
             }
             else if (token() === SyntaxKind.OpenBraceToken ||
                 lookAhead(() => token() === SyntaxKind.StringLiteral)) {
@@ -773,7 +773,7 @@ namespace ts {
 
             sourceFile.statements = parseList(ParsingContext.SourceElements, parseStatement);
             Debug.assert(token() === SyntaxKind.EndOfFileToken);
-            sourceFile.endOfFileToken = addJSDocComment(parseTokenNode() as EndOfFileToken);
+            sourceFile.endOfFileToken = addJSDocComment(parseTokenNode());
 
             setExternalModuleIndicator(sourceFile);
 
@@ -1796,7 +1796,7 @@ namespace ts {
                         // into an actual .ConstructorDeclaration.
                         const methodDeclaration = <MethodDeclaration>node;
                         const nameIsConstructor = methodDeclaration.name.kind === SyntaxKind.Identifier &&
-                            (<Identifier>methodDeclaration.name).originalKeywordKind === SyntaxKind.ConstructorKeyword;
+                            methodDeclaration.name.originalKeywordKind === SyntaxKind.ConstructorKeyword;
 
                         return !nameIsConstructor;
                 }
@@ -3178,7 +3178,7 @@ namespace ts {
             // Note: we call reScanGreaterToken so that we get an appropriately merged token
             // for cases like `> > =` becoming `>>=`
             if (isLeftHandSideExpression(expr) && isAssignmentOperator(reScanGreaterToken())) {
-                return makeBinaryExpression(expr, <BinaryOperatorToken>parseTokenNode(), parseAssignmentExpressionOrHigher());
+                return makeBinaryExpression(expr, parseTokenNode(), parseAssignmentExpressionOrHigher());
             }
 
             // It wasn't an assignment or a lambda.  This is a conditional expression:
@@ -3627,7 +3627,7 @@ namespace ts {
                     }
                 }
                 else {
-                    leftOperand = makeBinaryExpression(leftOperand, <BinaryOperatorToken>parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence));
+                    leftOperand = makeBinaryExpression(leftOperand, parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence));
                 }
             }
 
@@ -4082,7 +4082,7 @@ namespace ts {
             else {
                 Debug.assert(opening.kind === SyntaxKind.JsxSelfClosingElement);
                 // Nothing else to do for self-closing elements
-                result = <JsxSelfClosingElement>opening;
+                result = opening;
             }
 
             // If the user writes the invalid code '<div></div><div></div>' in an expression context (i.e. not wrapped in
@@ -4100,7 +4100,7 @@ namespace ts {
                     badNode.end = invalidElement.end;
                     badNode.left = result;
                     badNode.right = invalidElement;
-                    badNode.operatorToken = <BinaryOperatorToken>createMissingNode(SyntaxKind.CommaToken, /*reportAtCurrentPosition*/ false, /*diagnosticMessage*/ undefined!); // TODO: GH#18217
+                    badNode.operatorToken = createMissingNode(SyntaxKind.CommaToken, /*reportAtCurrentPosition*/ false, /*diagnosticMessage*/ undefined!); // TODO: GH#18217
                     badNode.operatorToken.pos = badNode.operatorToken.end = badNode.right.pos;
                     return <JsxElement><Node>badNode;
                 }
@@ -5256,7 +5256,7 @@ namespace ts {
                     if (node.decorators || node.modifiers) {
                         // We reached this point because we encountered decorators and/or modifiers and assumed a declaration
                         // would follow. For recovery and error reporting purposes, return an incomplete declaration.
-                        const missing = <Statement>createMissingNode(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
+                        const missing = createMissingNode<Statement>(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
                         missing.pos = node.pos;
                         missing.decorators = node.decorators;
                         missing.modifiers = node.modifiers;

@@ -37,6 +37,7 @@ namespace ts.JsDoc {
         "see",
         "since",
         "static",
+        "template",
         "throws",
         "type",
         "typedef",
@@ -268,9 +269,7 @@ namespace ts.JsDoc {
         let docParams = "";
         for (let i = 0; i < parameters.length; i++) {
             const currentName = parameters[i].name;
-            const paramName = currentName.kind === SyntaxKind.Identifier ?
-                (<Identifier>currentName).escapedText :
-                "param" + i;
+            const paramName = currentName.kind === SyntaxKind.Identifier ? currentName.escapedText : "param" + i;
             if (isJavaScriptFile) {
                 docParams += `${indentationStr} * @param {any} ${paramName}${newLine}`;
             }

@@ -1471,6 +1471,14 @@ namespace ts {
         }
     }
 
+    export function group<T>(values: ReadonlyArray<T>, getGroupId: (value: T) => string): ReadonlyArray<ReadonlyArray<T>> {
+        const groupIdToGroup = createMultiMap<T>();
+        for (const value of values) {
+            groupIdToGroup.add(getGroupId(value), value);
+        }
+        return arrayFrom(groupIdToGroup.values());
+    }
+
     /**
      * Tests whether a value is an array.
      */
@@ -1928,7 +1936,14 @@ namespace ts {
             Comparison.EqualTo;
     }
 
-    function compareMessageText(text1: string | DiagnosticMessageChain | undefined, text2: string | DiagnosticMessageChain | undefined): Comparison {
+    /** True is greater than false. */
+    export function compareBooleans(a: boolean, b: boolean): Comparison {
+        return compareValues(a ? 1 : 0, b ? 1 : 0);
+    }
+
+    function compareMessageText(t1: string | DiagnosticMessageChain, t2: string | DiagnosticMessageChain): Comparison {
+        let text1: string | DiagnosticMessageChain | undefined = t1;
+        let text2: string | DiagnosticMessageChain | undefined = t2;
         while (text1 && text2) {
             // We still have both chains.
             const string1 = isString(text1) ? text1 : text1.messageText;

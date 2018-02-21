@@ -58,6 +58,7 @@
         "jsTyping.ts",
         "navigateTo.ts",
         "navigationBar.ts",
+        "organizeImports.ts",
         "outliningElementsCollector.ts",
         "pathCompletions.ts",
         "patternMatcher.ts",

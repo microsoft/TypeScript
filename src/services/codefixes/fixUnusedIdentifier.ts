@@ -195,7 +195,7 @@ namespace ts.codefix {
     }
 
     function tryDeleteNamedImportBinding(changes: textChanges.ChangeTracker, sourceFile: SourceFile, namedBindings: NamedImportBindings): void {
-        if ((<ImportClause>namedBindings.parent).name) {
+        if (namedBindings.parent.name) {
             // Delete named imports while preserving the default import
             // import d|, * as ns| from './file'
             // import d|, { a }| from './file'
@@ -229,7 +229,7 @@ namespace ts.codefix {
             }
 
             case SyntaxKind.ForOfStatement:
-                const forOfStatement = <ForOfStatement>varDecl.parent.parent;
+                const forOfStatement = varDecl.parent.parent;
                 Debug.assert(forOfStatement.initializer.kind === SyntaxKind.VariableDeclarationList);
                 const forOfInitializer = <VariableDeclarationList>forOfStatement.initializer;
                 changes.replaceNode(sourceFile, forOfInitializer.declarations[0], createObjectLiteral());
@@ -240,7 +240,7 @@ namespace ts.codefix {
                 break;
 
             default:
-                const variableStatement = <VariableStatement>varDecl.parent.parent;
+                const variableStatement = varDecl.parent.parent;
                 if (variableStatement.declarationList.declarations.length === 1) {
                     changes.deleteNode(sourceFile, variableStatement);
                 }

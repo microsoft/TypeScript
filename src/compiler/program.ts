@@ -813,7 +813,7 @@ namespace ts {
             if (!result) {
                 // There were no unresolved/ambient resolutions.
                 Debug.assert(resolutions.length === moduleNames.length);
-                return <ResolvedModuleFull[]>resolutions;
+                return resolutions;
             }
 
             let j = 0;

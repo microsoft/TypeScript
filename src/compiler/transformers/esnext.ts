@@ -167,20 +167,13 @@ namespace ts {
                         objects.push(createObjectLiteral(chunkObject));
                         chunkObject = undefined;
                     }
-                    const target = (e as SpreadAssignment).expression;
+                    const target = e.expression;
                     objects.push(visitNode(target, visitor, isExpression));
                 }
                 else {
-                    if (!chunkObject) {
-                        chunkObject = [];
-                    }
-                    if (e.kind === SyntaxKind.PropertyAssignment) {
-                        const p = e as PropertyAssignment;
-                        chunkObject.push(createPropertyAssignment(p.name, visitNode(p.initializer, visitor, isExpression)));
-                    }
-                    else {
-                        chunkObject.push(visitNode(e, visitor, isObjectLiteralElementLike));
-                    }
+                    chunkObject = append(chunkObject, e.kind === SyntaxKind.PropertyAssignment
+                        ? createPropertyAssignment(e.name, visitNode(e.initializer, visitor, isExpression))
+                        : visitNode(e, visitor, isObjectLiteralElementLike));
                 }
             }
             if (chunkObject) {

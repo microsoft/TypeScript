@@ -14,6 +14,7 @@
 /// <reference path='jsTyping.ts' />
 /// <reference path='navigateTo.ts' />
 /// <reference path='navigationBar.ts' />
+/// <reference path='organizeImports.ts' />
 /// <reference path='outliningElementsCollector.ts' />
 /// <reference path='patternMatcher.ts' />
 /// <reference path='preProcess.ts' />
@@ -727,7 +728,7 @@ namespace ts {
                     }
 
                     if (name.kind === SyntaxKind.ComputedPropertyName) {
-                        const expr = (<ComputedPropertyName>name).expression;
+                        const expr = name.expression;
                         if (expr.kind === SyntaxKind.PropertyAccessExpression) {
                             return (<PropertyAccessExpression>expr).name.text;
                         }
@@ -831,10 +832,10 @@ namespace ts {
                             //    import {a, b as B} from "mod";
                             if (importClause.namedBindings) {
                                 if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-                                    addDeclaration(<NamespaceImport>importClause.namedBindings);
+                                    addDeclaration(importClause.namedBindings);
                                 }
                                 else {
-                                    forEach((<NamedImports>importClause.namedBindings).elements, visit);
+                                    forEach(importClause.namedBindings.elements, visit);
                                 }
                             }
                         }
@@ -1567,17 +1568,17 @@ namespace ts {
 
         /// References and Occurrences
         function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined {
-            let results = getOccurrencesAtPositionCore(fileName, position);
-
-            if (results) {
-                const sourceFile = getCanonicalFileName(normalizeSlashes(fileName));
-
-                // Get occurrences only supports reporting occurrences for the file queried.  So
-                // filter down to that list.
-                results = filter(results, r => getCanonicalFileName(ts.normalizeSlashes(r.fileName)) === sourceFile);
-            }
-
-            return results;
+            const canonicalFileName = getCanonicalFileName(normalizeSlashes(fileName));
+            return flatMap(getDocumentHighlights(fileName, position, [fileName]), entry => entry.highlightSpans.map<ReferenceEntry>(highlightSpan => {
+                Debug.assert(getCanonicalFileName(normalizeSlashes(entry.fileName)) === canonicalFileName); // Get occurrences only supports reporting occurrences for the file queried.
+                return {
+                    fileName: entry.fileName,
+                    textSpan: highlightSpan.textSpan,
+                    isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
+                    isDefinition: false,
+                    isInString: highlightSpan.isInString,
+                };
+            }));
         }
 
         function getDocumentHighlights(fileName: string, position: number, filesToSearch: ReadonlyArray<string>): DocumentHighlights[] | undefined {
@@ -1585,31 +1586,6 @@ namespace ts {
             const sourceFilesToSearch = map(filesToSearch, f => Debug.assertDefined(program.getSourceFile(f)));
             const sourceFile = getValidSourceFile(fileName);
             return DocumentHighlights.getDocumentHighlights(program, cancellationToken, sourceFile, position, sourceFilesToSearch);
-        }
-
-        function getOccurrencesAtPositionCore(fileName: string, position: number): ReferenceEntry[] | undefined {
-            return convertDocumentHighlights(getDocumentHighlights(fileName, position, [fileName]));
-
-            function convertDocumentHighlights(documentHighlights: DocumentHighlights[] | undefined): ReferenceEntry[] | undefined {
-                if (!documentHighlights) {
-                    return undefined;
-                }
-
-                const result: ReferenceEntry[] = [];
-                for (const entry of documentHighlights) {
-                    for (const highlightSpan of entry.highlightSpans) {
-                        result.push({
-                            fileName: entry.fileName,
-                            textSpan: highlightSpan.textSpan,
-                            isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
-                            isDefinition: false,
-                            isInString: highlightSpan.isInString,
-                        });
-                    }
-                }
-
-                return result;
-            }
         }
 
         function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] | undefined {
@@ -1792,55 +1768,21 @@ namespace ts {
             return OutliningElementsCollector.collectElements(sourceFile, cancellationToken);
         }
 
-        function getBraceMatchingAtPosition(fileName: string, position: number) {
+        const braceMatching = createMapFromTemplate({
+            [SyntaxKind.OpenBraceToken]: SyntaxKind.CloseBraceToken,
+            [SyntaxKind.OpenParenToken]: SyntaxKind.CloseParenToken,
+            [SyntaxKind.OpenBracketToken]: SyntaxKind.CloseBracketToken,
+            [SyntaxKind.GreaterThanToken]: SyntaxKind.LessThanToken,
+        });
+        braceMatching.forEach((value, key) => braceMatching.set(value.toString(), Number(key) as SyntaxKind));
+
+        function getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            const result: TextSpan[] = [];
-
             const token = getTouchingToken(sourceFile, position, /*includeJsDocComment*/ false);
-
-            if (token.getStart(sourceFile) === position) {
-                const matchKind = getMatchingTokenKind(token);
-
-                // Ensure that there is a corresponding token to match ours.
-                if (matchKind) {
-                    const parentElement = token.parent;
-
-                    const childNodes = parentElement.getChildren(sourceFile);
-                    for (const current of childNodes) {
-                        if (current.kind === matchKind) {
-                            const range1 = createTextSpan(token.getStart(sourceFile), token.getWidth(sourceFile));
-                            const range2 = createTextSpan(current.getStart(sourceFile), current.getWidth(sourceFile));
-
-                            // We want to order the braces when we return the result.
-                            if (range1.start < range2.start) {
-                                result.push(range1, range2);
-                            }
-                            else {
-                                result.push(range2, range1);
-                            }
-
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return result;
-
-            function getMatchingTokenKind(token: Node): ts.SyntaxKind | undefined {
-                switch (token.kind) {
-                    case ts.SyntaxKind.OpenBraceToken: return ts.SyntaxKind.CloseBraceToken;
-                    case ts.SyntaxKind.OpenParenToken: return ts.SyntaxKind.CloseParenToken;
-                    case ts.SyntaxKind.OpenBracketToken: return ts.SyntaxKind.CloseBracketToken;
-                    case ts.SyntaxKind.LessThanToken: return ts.SyntaxKind.GreaterThanToken;
-                    case ts.SyntaxKind.CloseBraceToken: return ts.SyntaxKind.OpenBraceToken;
-                    case ts.SyntaxKind.CloseParenToken: return ts.SyntaxKind.OpenParenToken;
-                    case ts.SyntaxKind.CloseBracketToken: return ts.SyntaxKind.OpenBracketToken;
-                    case ts.SyntaxKind.GreaterThanToken: return ts.SyntaxKind.LessThanToken;
-                }
-
-                return undefined;
-            }
+            const matchKind = token.getStart(sourceFile) === position ? braceMatching.get(token.kind.toString()) : undefined;
+            const match = matchKind && findChildOfKind(token.parent, matchKind, sourceFile);
+            // We want to order the braces when we return the result.
+            return match ? [createTextSpanFromNode(token, sourceFile), createTextSpanFromNode(match, sourceFile)].sort((a, b) => a.start - b.start) : emptyArray;
         }
 
         function getIndentationAtPosition(fileName: string, position: number, editorOptions: EditorOptions | EditorSettings) {
@@ -1905,6 +1847,15 @@ namespace ts {
             const formatContext = formatting.getFormatContext(formatOptions);
 
             return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext });
+        }
+
+        function organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {
+            synchronizeHostData();
+            Debug.assert(scope.type === "file");
+            const sourceFile = getValidSourceFile(scope.fileName);
+            const formatContext = formatting.getFormatContext(formatOptions);
+
+            return OrganizeImports.organizeImports(sourceFile, formatContext, host);
         }
 
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
@@ -2202,6 +2153,7 @@ namespace ts {
             getCodeFixesAtPosition,
             getCombinedCodeFix,
             applyCodeActionCommand,
+            organizeImports,
             getEmitOutput,
             getNonBoundSourceFile,
             getSourceFile,
@@ -2266,7 +2218,7 @@ namespace ts {
             case SyntaxKind.Identifier:
                 return isObjectLiteralElement(node.parent) &&
                     (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
-                    (<ObjectLiteralElement>node.parent).name === node ? node.parent as ObjectLiteralElement : undefined;
+                    node.parent.name === node ? node.parent : undefined;
         }
         return undefined;
     }

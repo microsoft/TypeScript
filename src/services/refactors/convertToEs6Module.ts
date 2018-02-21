@@ -194,7 +194,7 @@ namespace ts.refactor {
     }
 
     function convertVariableStatement(sourceFile: SourceFile, statement: VariableStatement, changes: textChanges.ChangeTracker, checker: TypeChecker, identifiers: Identifiers, target: ScriptTarget): void {
-        const { declarationList } = statement as VariableStatement;
+        const { declarationList } = statement;
         let foundImport = false;
         const newNodes = flatMap(declarationList.declarations, decl => {
             const { name } = decl;
@@ -291,14 +291,10 @@ namespace ts.refactor {
                 case SyntaxKind.ShorthandPropertyAssignment:
                 case SyntaxKind.SpreadAssignment:
                     return undefined;
-                case SyntaxKind.PropertyAssignment: {
-                    const { name, initializer } = prop as PropertyAssignment;
-                    return !isIdentifier(name) ? undefined : convertExportsDotXEquals(name.text, initializer!); // TODO: GH#18217
-                }
-                case SyntaxKind.MethodDeclaration: {
-                    const m = prop as MethodDeclaration;
-                    return !isIdentifier(m.name) ? undefined : functionExpressionToDeclaration(m.name.text, [createToken(SyntaxKind.ExportKeyword)], m);
-                }
+                case SyntaxKind.PropertyAssignment:
+                    return !isIdentifier(prop.name) ? undefined : convertExportsDotXEquals(prop.name.text, prop.initializer!); // TODO: GH#18217
+                case SyntaxKind.MethodDeclaration:
+                    return !isIdentifier(prop.name) ? undefined : functionExpressionToDeclaration(prop.name.text, [createToken(SyntaxKind.ExportKeyword)], prop);
                 default:
                     Debug.assertNever(prop);
             }

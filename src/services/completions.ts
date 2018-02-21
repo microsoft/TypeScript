@@ -657,8 +657,8 @@ namespace ts.Completions {
         None,
     }
 
-    function getRecommendedCompletion(currentToken: Node, checker: TypeChecker): Symbol | undefined {
-        const ty = getContextualType(currentToken, checker);
+    function getRecommendedCompletion(currentToken: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): Symbol | undefined {
+        const ty = getContextualType(currentToken, position, sourceFile, checker);
         const symbol = ty && ty.symbol;
         // Don't include make a recommended completion for an abstract class
         return symbol && (symbol.flags & SymbolFlags.Enum || symbol.flags & SymbolFlags.Class && !isAbstractConstructorSymbol(symbol))
@@ -666,23 +666,37 @@ namespace ts.Completions {
             : undefined;
     }
 
-    function getContextualType(currentToken: Node, checker: ts.TypeChecker): Type | undefined {
+    function getContextualType(currentToken: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): Type | undefined {
         const { parent } = currentToken;
         switch (currentToken.kind) {
-            case ts.SyntaxKind.Identifier:
-                return getContextualTypeFromParent(currentToken as ts.Identifier, checker);
-            case ts.SyntaxKind.EqualsToken:
-                return ts.isVariableDeclaration(parent) ? checker.getContextualType(parent.initializer!) : // TODO: GH#18217
-                    ts.isBinaryExpression(parent) ? checker.getTypeAtLocation(parent.left) : undefined;
-            case ts.SyntaxKind.NewKeyword:
-                return checker.getContextualType(parent as ts.Expression);
-            case ts.SyntaxKind.CaseKeyword:
-                return getSwitchedType(cast(currentToken.parent, isCaseClause), checker);
+            case SyntaxKind.Identifier:
+                return getContextualTypeFromParent(currentToken as Identifier, checker);
+            case SyntaxKind.EqualsToken:
+                switch (parent.kind) {
+                    case ts.SyntaxKind.VariableDeclaration:
+                        return checker.getContextualType((parent as VariableDeclaration).initializer!); // TODO: GH#18217
+                    case ts.SyntaxKind.BinaryExpression:
+                        return checker.getTypeAtLocation((parent as BinaryExpression).left);
+                    case ts.SyntaxKind.JsxAttribute:
+                        return checker.getContextualTypeForJsxAttribute(parent as JsxAttribute);
+                    default:
+                        return undefined;
+                }
+            case SyntaxKind.NewKeyword:
+                return checker.getContextualType(parent as Expression);
+            case SyntaxKind.CaseKeyword:
+                return getSwitchedType(cast(parent, isCaseClause), checker);
+            case SyntaxKind.OpenBraceToken:
+                return isJsxExpression(parent) && parent.parent.kind !== SyntaxKind.JsxElement ? checker.getContextualTypeForJsxAttribute(parent.parent) : undefined;
             default:
-                return isEqualityOperatorKind(currentToken.kind) && ts.isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind)
+                const argInfo = SignatureHelp.getImmediatelyContainingArgumentInfo(currentToken, position, sourceFile);
+                return argInfo
+                    // At `,`, treat this as the next argument after the comma.
+                    ? checker.getContextualTypeForArgumentAtIndex(argInfo.invocation, argInfo.argumentIndex! + (currentToken.kind === SyntaxKind.CommaToken ? 1 : 0)) // TODO: GH#18217
+                    : isEqualityOperatorKind(currentToken.kind) && isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind)
                     // completion at `x ===/**/` should be for the right side
                     ? checker.getTypeAtLocation(parent.left)
-                    : checker.getContextualType(currentToken as ts.Expression);
+                    : checker.getContextualType(currentToken as Expression);
         }
     }
 
@@ -956,7 +970,7 @@ namespace ts.Completions {
 
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
-        const recommendedCompletion = previousToken && getRecommendedCompletion(previousToken, typeChecker);
+        const recommendedCompletion = previousToken && getRecommendedCompletion(previousToken, position, sourceFile, typeChecker);
         return { kind: CompletionDataKind.Data, symbols, completionKind, propertyAccessToConvert, isNewIdentifierLocation, location, keywordFilters, symbolToOriginInfoMap, recommendedCompletion, previousToken, isJsxInitializer };
 
         type JSDocTagWithTypeExpression = JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag;
@@ -1069,9 +1083,9 @@ namespace ts.Completions {
             if (jsxContainer = tryGetContainingJsxElement(contextToken)) {
                 if ((jsxContainer.kind === SyntaxKind.JsxSelfClosingElement) || (jsxContainer.kind === SyntaxKind.JsxOpeningElement)) {
                     // Cursor is inside a JSX self-closing element or opening element
-                    const attrsType = typeChecker.getAllAttributesTypeFromJsxOpeningLikeElement(<JsxOpeningLikeElement>jsxContainer);
+                    const attrsType = typeChecker.getAllAttributesTypeFromJsxOpeningLikeElement(jsxContainer);
                     if (attrsType) {
-                        symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), (<JsxOpeningLikeElement>jsxContainer).attributes.properties);
+                        symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), jsxContainer.attributes.properties);
                         completionKind = CompletionKind.MemberLike;
                         isNewIdentifierLocation = false;
                         return true;
@@ -1430,10 +1444,10 @@ namespace ts.Completions {
                 // We are completing on contextual types, but may also include properties
                 // other than those within the declared type.
                 isNewIdentifierLocation = true;
-                const typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
+                const typeForObject = typeChecker.getContextualType(objectLikeContainer);
                 if (!typeForObject) return false;
                 typeMembers = getPropertiesForCompletion(typeForObject, typeChecker, /*isForAccess*/ false);
-                existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;
+                existingMembers = objectLikeContainer.properties;
             }
             else {
                 Debug.assert(objectLikeContainer.kind === SyntaxKind.ObjectBindingPattern);
@@ -1462,7 +1476,7 @@ namespace ts.Completions {
                     if (!typeForObject) return false;
                     // In a binding pattern, get only known properties. Everywhere else we will get all possible properties.
                     typeMembers = typeChecker.getPropertiesOfType(typeForObject).filter((symbol) => !(getDeclarationModifierFlagsFromSymbol(symbol) & ModifierFlags.NonPublicAccessibilityModifier));
-                    existingMembers = (<ObjectBindingPattern>objectLikeContainer).elements;
+                    existingMembers = objectLikeContainer.elements;
                 }
             }
 
@@ -2077,7 +2091,7 @@ namespace ts.Completions {
                 }
 
                 if (attr.kind === SyntaxKind.JsxAttribute) {
-                    seenNames.set((<JsxAttribute>attr).name.escapedText, true);
+                    seenNames.set(attr.name.escapedText, true);
                 }
             }
 
