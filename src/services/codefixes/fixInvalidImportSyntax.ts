@@ -26,38 +26,33 @@ namespace ts.codefix {
         const variations: CodeAction[] = [];
 
         // import Bluebird from "bluebird";
-        const replacement = createImportDeclaration(
+        variations.push(createAction(context, sourceFile, node, createImportDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             createImportClause(namespace.name, /*namedBindings*/ undefined),
             node.moduleSpecifier
-        );
-        const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        changeTracker.replaceNode(sourceFile, node, replacement, { useNonAdjustedEndPosition: true });
-        const changes = changeTracker.getChanges();
-        variations.push({
-            description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Replace_import_with_0), [changes[0].textChanges[0].newText]),
-            changes
-        });
+        )));
 
         if (getEmitModuleKind(opts) === ModuleKind.CommonJS) {
             // import Bluebird = require("bluebird");
-            const replacement = createImportEqualsDeclaration(
+            variations.push(createAction(context, sourceFile, node, createImportEqualsDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 namespace.name,
                 createExternalModuleReference(node.moduleSpecifier)
-            );
-            const changeTracker = textChanges.ChangeTracker.fromContext(context);
-            changeTracker.replaceNode(sourceFile, node, replacement, { useNonAdjustedEndPosition: true });
-            const changes = changeTracker.getChanges();
-            variations.push({
-                description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Replace_import_with_0), [changes[0].textChanges[0].newText]),
-                changes
-            });
+            )));
         }
 
         return variations;
+    }
+
+    function createAction(context: CodeFixContext, sourceFile: SourceFile, node: Node, replacement: Node): CodeAction {
+        // TODO: GH#21246 Should be able to use `replaceNode`, but be sure to preserve comments (see `codeFixCalledES2015Import11.ts`)
+        const changes = textChanges.ChangeTracker.with(context, t => t.replaceRange(sourceFile, { pos: node.getStart(), end: node.end }, replacement));
+        return {
+            description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Replace_import_with_0), [changes[0].textChanges[0].newText]),
+            changes,
+        };
     }
 
     registerCodeFix({
@@ -85,13 +80,9 @@ namespace ts.codefix {
         if (!isImportCall(relatedImport)) {
             addRange(fixes, getCodeFixesForImportDeclaration(context, relatedImport));
         }
-        const propertyAccess = createPropertyAccess(expr, "default");
-        const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        changeTracker.replaceNode(sourceFile, expr, propertyAccess, {});
-        const changes = changeTracker.getChanges();
         fixes.push({
             description: getLocaleSpecificMessage(Diagnostics.Use_synthetic_default_member),
-            changes
+            changes: textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, expr, createPropertyAccess(expr, "default"), {})),
         });
         return fixes;
     }

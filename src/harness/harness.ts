@@ -57,7 +57,7 @@ var assert: typeof _chai.assert = _chai.assert;
 }
 
 declare var __dirname: string; // Node-specific
-var global: NodeJS.Global = <any>Function("return this").call(undefined);
+var global: NodeJS.Global = Function("return this").call(undefined);
 
 declare var window: {};
 declare var XMLHttpRequest: {
@@ -767,10 +767,9 @@ namespace Harness {
                 return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), getCurrentDirectory(), depth, path => {
                     const entry = fs.traversePath(path);
                     if (entry && entry.isDirectory()) {
-                        const directory = <Utils.VirtualDirectory>entry;
                         return {
-                            files: ts.map(directory.getFiles(), f => f.name),
-                            directories: ts.map(directory.getDirectories(), d => d.name)
+                            files: ts.map(entry.getFiles(), f => f.name),
+                            directories: ts.map(entry.getDirectories(), d => d.name)
                         };
                     }
                     return { files: [], directories: [] };
@@ -1255,9 +1254,9 @@ namespace Harness {
 
             if (result.errors.length === 0) {
                 if (options.declaration) {
-                    if (options.emitDeclarationsOnly) {
+                    if (options.emitDeclarationOnly) {
                         if (result.files.length > 0 || result.declFilesCode.length === 0) {
-                            throw new Error("Only declaration files should be generated when emitDeclarationsOnly:true");
+                            throw new Error("Only declaration files should be generated when emitDeclarationOnly:true");
                         }
                     }
                     else if (result.declFilesCode.length !== result.files.length) {
@@ -1664,7 +1663,7 @@ namespace Harness {
         }
 
         export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: CompilerResult, tsConfigFiles: Harness.Compiler.TestFile[], toBeCompiled: Harness.Compiler.TestFile[], otherFiles: Harness.Compiler.TestFile[], harnessSettings: Harness.TestCaseParser.CompilerSettings) {
-            if (!options.noEmit && !options.emitDeclarationsOnly && result.files.length === 0 && result.errors.length === 0) {
+            if (!options.noEmit && !options.emitDeclarationOnly && result.files.length === 0 && result.errors.length === 0) {
                 throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
             }
 

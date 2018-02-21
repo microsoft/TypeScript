@@ -985,7 +985,7 @@ interface ReadonlyArray<T> {
       */
     toString(): string;
     /**
-      * Returns a string representation of an array. The elements are converted to string using thier toLocalString methods.
+      * Returns a string representation of an array. The elements are converted to string using their toLocalString methods.
       */
     toLocaleString(): string;
     /**
@@ -1104,7 +1104,7 @@ interface Array<T> {
       */
     toString(): string;
     /**
-      * Returns a string representation of an array. The elements are converted to string using thier toLocalString methods.
+      * Returns a string representation of an array. The elements are converted to string using their toLocalString methods.
       */
     toLocaleString(): string;
     /**
@@ -1318,6 +1318,13 @@ type Partial<T> = {
 };
 
 /**
+ * Make all properties in T required
+ */
+type Required<T> = {
+    [P in keyof T]-?: T[P];
+};
+
+/**
  * Make all properties in T readonly
  */
 type Readonly<T> = {
@@ -1337,6 +1344,31 @@ type Pick<T, K extends keyof T> = {
 type Record<K extends string, T> = {
     [P in K]: T;
 };
+
+/**
+ * Exclude from T those types that are assignable to U
+ */
+type Exclude<T, U> = T extends U ? never : T;
+
+/**
+ * Extract from T those types that are assignable to U
+ */
+type Extract<T, U> = T extends U ? T : never;
+
+/**
+ * Exclude null and undefined from T
+ */
+type NonNullable<T> = T extends null | undefined ? never : T;
+
+/**
+ * Obtain the return type of a function type
+ */
+type ReturnType<T extends (...args: any[]) => any> = T extends (...args: any[]) => infer R ? R : any;
+
+/**
+ * Obtain the return type of a constructor function type
+ */
+type InstanceType<T extends new (...args: any[]) => any> = T extends new (...args: any[]) => infer R ? R : any;
 
 /**
  * Marker for contextual 'this' type

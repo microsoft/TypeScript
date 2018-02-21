@@ -262,8 +262,12 @@ interface Array<T> {}`
     }
 
     export interface ReloadWatchInvokeOptions {
+        /** Invokes the directory watcher for the parent instead of the file changed */
         invokeDirectoryWatcherInsteadOfFileChanged: boolean;
+        /** When new file is created, do not invoke watches for it */
         ignoreWatchInvokedWithTriggerAsFileCreate: boolean;
+        /** Invoke the file delete, followed by create instead of file changed */
+        invokeFileDeleteCreateAsPartInsteadOfChange: boolean;
     }
 
     export enum Tsc_WatchDirectory {
@@ -371,14 +375,20 @@ interface Array<T> {}`
                         if (isString(fileOrDirectory.content)) {
                             // Update file
                             if (currentEntry.content !== fileOrDirectory.content) {
-                                currentEntry.content = fileOrDirectory.content;
-                                currentEntry.modifiedTime = new Date();
-                                this.fs.get(getDirectoryPath(currentEntry.path)).modifiedTime = new Date();
-                                if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
-                                    this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
+                                if (options && options.invokeFileDeleteCreateAsPartInsteadOfChange) {
+                                    this.removeFileOrFolder(currentEntry, returnFalse);
+                                    this.ensureFileOrFolder(fileOrDirectory);
                                 }
                                 else {
-                                    this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
+                                    currentEntry.content = fileOrDirectory.content;
+                                    currentEntry.modifiedTime = new Date();
+                                    this.fs.get(getDirectoryPath(currentEntry.path)).modifiedTime = new Date();
+                                    if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
+                                        this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
+                                    }
+                                    else {
+                                        this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
+                                    }
                                 }
                             }
                         }
@@ -454,9 +464,11 @@ interface Array<T> {}`
         ensureFileOrFolder(fileOrDirectory: FileOrFolder, ignoreWatchInvokedWithTriggerAsFileCreate?: boolean) {
             if (isString(fileOrDirectory.content)) {
                 const file = this.toFile(fileOrDirectory);
-                Debug.assert(!this.fs.get(file.path));
-                const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath));
-                this.addFileOrFolderInFolder(baseFolder, file, ignoreWatchInvokedWithTriggerAsFileCreate);
+                // file may already exist when updating existing type declaration file
+                if (!this.fs.get(file.path)) {
+                    const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath));
+                    this.addFileOrFolderInFolder(baseFolder, file, ignoreWatchInvokedWithTriggerAsFileCreate);
+                }
             }
             else if (isString(fileOrDirectory.symLink)) {
                 const symLink = this.toSymLink(fileOrDirectory);

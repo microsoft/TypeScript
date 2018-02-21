@@ -153,7 +153,7 @@ namespace ts {
                 if (statement.kind === SyntaxKind.ForOfStatement && (<ForOfStatement>statement).awaitModifier) {
                     return visitForOfStatement(<ForOfStatement>statement, node);
                 }
-                return restoreEnclosingLabel(visitEachChild(node, visitor, context), node);
+                return restoreEnclosingLabel(visitEachChild(statement, visitor, context), node);
             }
             return visitEachChild(node, visitor, context);
         }
@@ -167,7 +167,7 @@ namespace ts {
                         objects.push(createObjectLiteral(chunkObject));
                         chunkObject = undefined;
                     }
-                    const target = (e as SpreadAssignment).expression;
+                    const target = e.expression;
                     objects.push(visitNode(target, visitor, isExpression));
                 }
                 else {
@@ -175,8 +175,7 @@ namespace ts {
                         chunkObject = [];
                     }
                     if (e.kind === SyntaxKind.PropertyAssignment) {
-                        const p = e as PropertyAssignment;
-                        chunkObject.push(createPropertyAssignment(p.name, visitNode(p.initializer, visitor, isExpression)));
+                        chunkObject.push(createPropertyAssignment(e.name, visitNode(e.initializer, visitor, isExpression)));
                     }
                     else {
                         chunkObject.push(visitNode(e, visitor, isObjectLiteralElementLike));

@@ -1,5 +1,7 @@
 === tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts ===
 declare module "fs" {
+>"fs" : typeof "fs"
+
     export class File {
 >File : File
 
@@ -19,7 +21,7 @@ declare module "fs" {
 
 import fs = module("fs");
 >fs : any
->module : No type information available!
+>module : any
 >("fs") : "fs"
 >"fs" : "fs"
 
@@ -249,6 +251,7 @@ module TypeScriptAllInOne {
             var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; },  instanceof : () => 'objLit{42}' };
 >objLit : { "var": number; equals: (x: any) => boolean; instanceof: () => string; }
 >{ "var": number = 42, equals: function (x) { return x["var"] === 42; },  instanceof : () => 'objLit{42}' } : { "var": number; equals: (x: any) => boolean; instanceof: () => string; }
+>"var" : number
 >number = 42 : 42
 >number : number
 >42 : 42

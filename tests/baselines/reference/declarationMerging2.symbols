@@ -15,6 +15,8 @@ export class A {
 === tests/cases/compiler/b.ts ===
 export {}
 declare module "./a" {
+>"./a" : Symbol("tests/cases/compiler/a", Decl(a.ts, 0, 0), Decl(b.ts, 0, 9))
+
     interface A {
 >A : Symbol(A, Decl(a.ts, 0, 0), Decl(b.ts, 1, 22))
 

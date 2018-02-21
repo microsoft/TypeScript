@@ -1,9 +1,0 @@
-error TS5052: Option 'emitDeclarationsOnly' cannot be specified without specifying option 'declarations'.
-error TS5053: Option 'emitDeclarationsOnly' cannot be specified with option 'noEmit'.
-
-
-!!! error TS5052: Option 'emitDeclarationsOnly' cannot be specified without specifying option 'declarations'.
-!!! error TS5053: Option 'emitDeclarationsOnly' cannot be specified with option 'noEmit'.
-==== tests/cases/compiler/hello.ts (0 errors) ====
-    var hello = "yo!";
-    

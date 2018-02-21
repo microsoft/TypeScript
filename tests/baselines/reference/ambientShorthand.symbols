@@ -18,7 +18,9 @@ foo(bar, baz, boom);
 
 === tests/cases/conformance/ambient/declarations.d.ts ===
 declare module "jquery"
-No type information for this code.// Semicolon is optional
-No type information for this code.declare module "fs";
-No type information for this code.
-No type information for this code.
+>"jquery" : Symbol("jquery", Decl(declarations.d.ts, 0, 0))
+
+// Semicolon is optional
+declare module "fs";
+>"fs" : Symbol("fs", Decl(declarations.d.ts, 0, 23))
+

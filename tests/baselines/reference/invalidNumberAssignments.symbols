@@ -43,6 +43,7 @@ var g: { baz: string } = 1;
 
 var g2: { 0: number } = 1;
 >g2 : Symbol(g2, Decl(invalidNumberAssignments.ts, 14, 3))
+>0 : Symbol(0, Decl(invalidNumberAssignments.ts, 14, 9))
 
 module M { export var x = 1; }
 >M : Symbol(M, Decl(invalidNumberAssignments.ts, 14, 26))
