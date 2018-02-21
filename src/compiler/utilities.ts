@@ -425,8 +425,8 @@ namespace ts {
     }
 
     export function isAmbientModule(node: Node): boolean {
-        return node && node.kind === SyntaxKind.ModuleDeclaration &&
-            ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(<ModuleDeclaration>node));
+        return node && isModuleDeclaration(node) &&
+            (node.name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(node));
     }
 
     export function isModuleWithStringLiteralName(node: Node): node is ModuleDeclaration {
