@@ -14254,6 +14254,7 @@ namespace ts {
                 case SpecialPropertyAssignmentKind.ModuleExports:
                 case SpecialPropertyAssignmentKind.PrototypeProperty:
                 case SpecialPropertyAssignmentKind.ThisProperty:
+                case SpecialPropertyAssignmentKind.Prototype:
                     return false;
                 default:
                     Debug.assertNever(kind);

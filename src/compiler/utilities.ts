@@ -1590,6 +1590,10 @@ namespace ts {
                 return SpecialPropertyAssignmentKind.Property;
             }
         }
+        else if (lhs.name.escapedText === "prototype" && expr.right.kind === SyntaxKind.ObjectLiteralExpression) {
+            // F.prototype = { ... }
+            return SpecialPropertyAssignmentKind.Prototype;
+        }
         else if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
             return SpecialPropertyAssignmentKind.ThisProperty;
         }

@@ -2042,6 +2042,8 @@ namespace ts {
                         case SpecialPropertyAssignmentKind.PrototypeProperty:
                             bindPrototypePropertyAssignment((node as BinaryExpression).left as PropertyAccessEntityNameExpression, node);
                             break;
+                        case SpecialPropertyAssignmentKind.Prototype:
+                            bindPrototypeAssignment(node as BinaryExpression);
                         case SpecialPropertyAssignmentKind.ThisProperty:
                             bindThisPropertyAssignment(node as BinaryExpression);
                             break;
@@ -2361,8 +2363,13 @@ namespace ts {
             }
         }
 
+        /** For `x.prototype = { p, ... }`, declare members p,... if `x` is function/class/{}, or not declared. */
+        function bindPrototypeAssignment(node: BinaryExpression) {
+            return node;
+        }
+
         /**
-         * For 'x.prototype.y = z', declare a 'member' y on x if x is a function or class, or not declared.
+         * For `x.prototype.y = z`, declare a member `y` on `x` if `x` is a function or class, or not declared.
          * Note that jsdoc preceding an ExpressionStatement like `x.prototype.y;` is also treated as a declaration.
          */
         function bindPrototypePropertyAssignment(lhs: PropertyAccessEntityNameExpression, parent: Node) {
