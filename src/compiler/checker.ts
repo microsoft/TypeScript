@@ -400,6 +400,10 @@ namespace ts {
         let anyArrayType: Type;
         let autoArrayType: Type;
         let anyReadonlyArrayType: Type;
+        let deferredGlobalNonNullableTypeAlias: Symbol;
+        let deferredGlobalNonNullableTypeFallback: Type;
+        let deferredGlobalNonNullableTypeFallbackInstantiationCache: Map<Type>;
+        let deferredGlobalNonNullableTypeParameterFallback: TypeParameter;
 
         // The library files are only loaded when the feature is used.
         // This allows users to just specify library files they want to used through --lib
@@ -11037,8 +11041,31 @@ namespace ts {
             return type.flags & TypeFlags.Undefined ? type : getUnionType([type, undefinedType]);
         }
 
+        function getGlobalNonNullableTypeInstantiation(type: Type) {
+            if (!deferredGlobalNonNullableTypeAlias) {
+                deferredGlobalNonNullableTypeAlias = getGlobalSymbol("NonNullable" as __String, SymbolFlags.TypeAlias, /*diagnostic*/ undefined) || unknownSymbol;
+            }
+            // Use NonNullable global type alias if available to improve quick info/declaration emit
+            if (deferredGlobalNonNullableTypeAlias !== unknownSymbol) {
+                return getTypeAliasInstantiation(deferredGlobalNonNullableTypeAlias, [type]);
+            }
+            if (!deferredGlobalNonNullableTypeFallback) {
+                const p = deferredGlobalNonNullableTypeParameterFallback = createType(TypeFlags.TypeParameter) as TypeParameter;
+                deferredGlobalNonNullableTypeFallback = getConditionalType(p, getUnionType([nullType, undefinedType]), neverType, p, /*inferTypeParameters*/ undefined, /*target*/ undefined, /*mapper*/ undefined, /*alias*/ undefined, /*aliasTypeArguments*/ undefined);
+                deferredGlobalNonNullableTypeFallbackInstantiationCache = createMap();
+            }
+            // Fallback to manufacturing an anonymous conditional type instantiation
+            const args = [type];
+            const id = getTypeListId(args);
+            let instantiation = deferredGlobalNonNullableTypeFallbackInstantiationCache.get(id);
+            if (!instantiation) {
+                deferredGlobalNonNullableTypeFallbackInstantiationCache.set(id, instantiation = instantiateType(deferredGlobalNonNullableTypeFallback, createTypeMapper([deferredGlobalNonNullableTypeParameterFallback], [type])));
+            }
+            return instantiation;
+        }
+
         function getNonNullableType(type: Type): Type {
-            return strictNullChecks ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
+            return strictNullChecks ? getGlobalNonNullableTypeInstantiation(type) : type;
         }
 
         /**
@@ -13314,7 +13341,6 @@ namespace ts {
             return parent.kind === SyntaxKind.PropertyAccessExpression ||
                 parent.kind === SyntaxKind.CallExpression && (<CallExpression>parent).expression === node ||
                 parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>parent).expression === node ||
-                parent.kind === SyntaxKind.NonNullExpression ||
                 parent.kind === SyntaxKind.BindingElement && (<BindingElement>parent).name === node && !!(<BindingElement>parent).initializer;
         }
 
