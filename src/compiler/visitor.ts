@@ -183,8 +183,8 @@ namespace ts {
         const updated = visitNode(node, visitor, isConciseBody);
         const declarations = context.endLexicalEnvironment();
         if (some(declarations)) {
-            const block = convertToFunctionBody(updated!); // TODO: GH#18217
-            const statements = mergeLexicalEnvironment(block.statements!, declarations!);
+            const block = convertToFunctionBody(updated);
+            const statements = mergeLexicalEnvironment(block.statements, declarations!);
             return updateBlock(block, statements);
         }
         return updated;

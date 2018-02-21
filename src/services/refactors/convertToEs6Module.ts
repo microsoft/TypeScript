@@ -418,7 +418,7 @@ namespace ts.refactor {
                 const importSpecifiers = mapAllOrFail(name.elements, e =>
                     e.dotDotDotToken || e.initializer || e.propertyName && !isIdentifier(e.propertyName) || !isIdentifier(e.name)
                         ? undefined
-                        : makeImportSpecifier(e.propertyName && (e.propertyName as Identifier).text, e.name.text));
+                        : makeImportSpecifier(e.propertyName && e.propertyName.text, e.name.text));
                 if (importSpecifiers) {
                     return [makeImport(/*name*/ undefined, importSpecifiers, moduleSpecifier)];
                 }

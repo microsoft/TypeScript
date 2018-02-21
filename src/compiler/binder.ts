@@ -540,7 +540,7 @@ namespace ts {
                 bindChildren(node);
                 // Reset all reachability check related flags on node (for incremental scenarios)
                 node.flags &= ~NodeFlags.ReachabilityAndEmitFlags;
-                if (!(currentFlow!.flags & FlowFlags.Unreachable) && containerFlags & ContainerFlags.IsFunctionLike && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
+                if (!(currentFlow.flags & FlowFlags.Unreachable) && containerFlags & ContainerFlags.IsFunctionLike && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
                     node.flags |= NodeFlags.HasImplicitReturn;
                     if (hasExplicitReturn) node.flags |= NodeFlags.HasExplicitReturn;
                 }
@@ -1171,7 +1171,7 @@ namespace ts {
                     i++;
                 }
                 const preCaseLabel = createBranchLabel();
-                addAntecedent(preCaseLabel, createFlowSwitchClause(preSwitchCaseFlow!, <SwitchStatement>node.parent, clauseStart, i + 1));
+                addAntecedent(preCaseLabel, createFlowSwitchClause(preSwitchCaseFlow!, node.parent, clauseStart, i + 1));
                 addAntecedent(preCaseLabel, createFlowSwitchClause(preSwitchCaseFlow!, node.parent, clauseStart, i + 1));
                 addAntecedent(preCaseLabel, fallthroughFlow);
                 currentFlow = finishFlowLabel(preCaseLabel);
@@ -2328,8 +2328,8 @@ namespace ts {
 
         function bindThisPropertyAssignment(node: BinaryExpression | PropertyAccessExpression) {
             Debug.assert(isInJavaScriptFile(node));
-            const container = getThisContainer(node, /*includeArrowFunctions*/ false); // TODO: GH#18217
-            switch (container!.kind) {
+            const container = getThisContainer(node, /*includeArrowFunctions*/ false);
+            switch (container.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                     // Declare a 'member' if the container is an ES5 class or ES6 constructor

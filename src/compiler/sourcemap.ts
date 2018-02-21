@@ -245,7 +245,7 @@ namespace ts {
             // 5. Relative namePosition 0 based
             if (lastRecordedSourceMapSpan.nameIndex! >= 0) {
                 Debug.assert(false, "We do not support name index right now, Make sure to update updateLastEncodedAndRecordedSpans when we start using this");
-                sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan!.nameIndex! - lastEncodedNameIndex!);
+                sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.nameIndex! - lastEncodedNameIndex!);
                 lastEncodedNameIndex = lastRecordedSourceMapSpan.nameIndex;
             }
 

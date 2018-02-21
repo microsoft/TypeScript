@@ -2212,7 +2212,7 @@ namespace ts {
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
                 if (node.parent.kind === SyntaxKind.ComputedPropertyName) {
-                    return isObjectLiteralElement(node.parent.parent) ? node.parent.parent as ObjectLiteralElement : undefined;
+                    return isObjectLiteralElement(node.parent.parent) ? node.parent.parent : undefined;
                 }
             // falls through
             case SyntaxKind.Identifier:

@@ -375,7 +375,7 @@ namespace ts.BreakpointResolver {
             function textSpanFromVariableDeclaration(variableDeclaration: VariableDeclaration): TextSpan {
                 const parent = variableDeclaration.parent;
                 if (parent.kind === SyntaxKind.VariableDeclarationList &&
-                    parent.declarations![0] === variableDeclaration) {
+                    parent.declarations[0] === variableDeclaration) {
                     // First declaration - include let keyword
                     return textSpan(findPrecedingToken(variableDeclaration.pos, sourceFile, parent)!, variableDeclaration);
                 }
@@ -405,7 +405,7 @@ namespace ts.BreakpointResolver {
                     return textSpanFromVariableDeclaration(variableDeclaration);
                 }
 
-                if (parent.kind === SyntaxKind.VariableDeclarationList && parent.declarations![0] !== variableDeclaration) {
+                if (parent.kind === SyntaxKind.VariableDeclarationList && parent.declarations[0] !== variableDeclaration) {
                     // If we cannot set breakpoint on this declaration, set it on previous one
                     // Because the variable declaration may be binding pattern and
                     // we would like to set breakpoint in last binding element if that's the case,

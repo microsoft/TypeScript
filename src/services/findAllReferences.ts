@@ -1168,7 +1168,7 @@ namespace ts.FindAllReferences.Core {
             if (node.kind === SyntaxKind.ExpressionWithTypeArguments
                 && node.parent.kind === SyntaxKind.HeritageClause
                 && isClassLike(node.parent.parent)) {
-                return node.parent.parent as ClassLikeDeclaration;
+                return node.parent.parent;
             }
 
             else if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression) {
@@ -1318,7 +1318,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
-        let searchSpaceNode = getThisContainer(thisOrSuperKeyword, /* includeArrowFunctions */ false)!; // TODO: GH#18217
+        let searchSpaceNode = getThisContainer(thisOrSuperKeyword, /* includeArrowFunctions */ false);
 
         // Whether 'this' occurs in a static context within a class.
         let staticFlag = ModifierFlags.Static;

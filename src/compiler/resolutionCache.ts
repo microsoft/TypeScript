@@ -354,7 +354,7 @@ namespace ts {
 
         function getDirectoryToWatchFailedLookupLocation(failedLookupLocation: string, failedLookupLocationPath: Path): DirectoryOfFailedLookupWatch {
             if (isInDirectoryPath(rootPath, failedLookupLocationPath)) {
-                return { dir: rootDir!, dirPath: rootPath! }; // TODO: GH#18217
+                return { dir: rootDir!, dirPath: rootPath }; // TODO: GH#18217
             }
 
             let dir = getDirectoryPath(getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory()));

@@ -816,7 +816,7 @@ namespace ts.server {
         }
 
         private getProjects(args: protocol.FileRequestArgs): Projects {
-            let projects: ReadonlyArray<Project> ;
+            let projects: ReadonlyArray<Project> | undefined;
             let symLinkedProjects: MultiMap<Project> | undefined;
             if (args.projectFileName) {
                 const project = this.getProject(args.projectFileName);
@@ -830,11 +830,11 @@ namespace ts.server {
                 symLinkedProjects = this.projectService.getSymlinkedProjects(scriptInfo);
             }
             // filter handles case when 'projects' is undefined
-            projects = filter(projects!, p => p.languageServiceEnabled); // TODO: GH#18217
+            projects = filter(projects, p => p.languageServiceEnabled); // TODO: GH#18217
             if ((!projects || !projects.length) && !symLinkedProjects) {
                 return Errors.ThrowNoProject();
             }
-            return symLinkedProjects ? { projects, symLinkedProjects } : projects;
+            return symLinkedProjects ? { projects: projects!, symLinkedProjects } : projects!; // TODO: GH#18217
         }
 
         private getDefaultProject(args: protocol.FileRequestArgs) {
@@ -2106,7 +2106,7 @@ namespace ts.server {
 
         public onMessage(message: string) {
             this.gcTimer.scheduleCollect();
-            let start: number[];
+            let start: number[] | undefined;
             if (this.logger.hasLevel(LogLevel.requestTime)) {
                 start = this.hrtime();
                 if (this.logger.hasLevel(LogLevel.verbose)) {
@@ -2120,7 +2120,7 @@ namespace ts.server {
                 const { response, responseRequired } = this.executeCommand(request);
 
                 if (this.logger.hasLevel(LogLevel.requestTime)) {
-                    const elapsedTime = hrTimeToMilliseconds(this.hrtime(start!)).toFixed(4);
+                    const elapsedTime = hrTimeToMilliseconds(this.hrtime(start)).toFixed(4);
                     if (responseRequired) {
                         this.logger.perftrc(`${request.seq}::${request.command}: elapsed time (in milliseconds) ${elapsedTime}`);
                     }

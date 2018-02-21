@@ -833,7 +833,7 @@ namespace ts.server {
     // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
     function watchDirectorySwallowingException(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher {
         try {
-            return originalWatchDirectory!(path, callback, recursive); // TODO: GH#18217
+            return originalWatchDirectory(path, callback, recursive);
         }
         catch (e) {
             logger.info(`Exception when creating directory watcher: ${e.message}`);

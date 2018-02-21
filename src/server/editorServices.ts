@@ -218,13 +218,13 @@ namespace ts.server {
     const fileNamePropertyReader: FilePropertyReader<string> = {
         getFileName: x => x,
         getScriptKind: (fileName, extraFileExtensions) => {
-            let result: ScriptKind;
+            let result: ScriptKind | undefined;
             if (extraFileExtensions) {
                 const fileExtension = getAnyExtensionFromPath(fileName);
                 if (fileExtension) {
                     some(extraFileExtensions, info => {
                         if (info.extension === fileExtension) {
-                            result = info.scriptKind!; // TODO: GH#18217
+                            result = info.scriptKind;
                             return true;
                         }
                         return false;
@@ -2347,7 +2347,7 @@ namespace ts.server {
                         externalProject.enableLanguageService();
                     }
                     // external project already exists and not config files were added - update the project and return;
-                    this.updateNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, compilerOptions, proj.typeAcquisition!, proj.options.compileOnSave); // TODO: GH#18217
+                    this.updateNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, compilerOptions, proj.typeAcquisition, proj.options.compileOnSave);
                     return;
                 }
                 // some config files were added to external project (that previously were not there)
@@ -2406,7 +2406,7 @@ namespace ts.server {
             else {
                 // no config files - remove the item from the collection
                 this.externalProjectToConfiguredProjectMap.delete(proj.projectFileName);
-                this.createExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition!, excludedFiles); // TODO: GH#18217
+                this.createExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition, excludedFiles);
             }
         }
     }

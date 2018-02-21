@@ -3660,7 +3660,7 @@ namespace ts {
         let emitFlags: EmitFlags = 0;
         if (!allowSourceMaps) emitFlags |= EmitFlags.NoSourceMap;
         if (!allowComments) emitFlags |= EmitFlags.NoComments;
-        if (emitFlags) setEmitFlags(qualifiedName, emitFlags!);
+        if (emitFlags) setEmitFlags(qualifiedName, emitFlags);
         return qualifiedName;
     }
 

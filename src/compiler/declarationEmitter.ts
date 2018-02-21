@@ -53,7 +53,7 @@ namespace ts {
         let decreaseIndent: () => void;
         let writeTextOfNode: (text: string, node: Node) => void;
 
-        let writer: EmitTextWriterWithSymbolWriter;
+        let writer!: EmitTextWriterWithSymbolWriter;
 
         createAndSetNewTextWriterWithSymbolWriter();
 
@@ -166,7 +166,7 @@ namespace ts {
         return {
             reportedDeclarationError,
             moduleElementDeclarationEmitInfo: allSourcesModuleElementDeclarationEmitInfo,
-            synchronousDeclarationOutput: writer!.getText(),
+            synchronousDeclarationOutput: writer.getText(),
             referencesOutput,
         };
 
@@ -972,7 +972,7 @@ namespace ts {
                 write(" {");
                 writeLine();
                 increaseIndent();
-                emitLines((<ModuleBlock>node.body).statements);
+                emitLines(node.body.statements);
                 decreaseIndent();
                 write("}");
                 writeLine();
@@ -1193,7 +1193,7 @@ namespace ts {
             const prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
-            let tempVarName: string;
+            let tempVarName: string | undefined;
             if (baseTypeNode && !isEntityNameExpression(baseTypeNode.expression)) {
                 tempVarName = baseTypeNode.expression.kind === SyntaxKind.NullKeyword ?
                     "null" :

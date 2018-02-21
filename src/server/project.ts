@@ -1187,7 +1187,8 @@ namespace ts.server {
                 ProjectKind.Inferred,
                 projectService,
                 documentRegistry,
-                /*files*/ undefined!, // TODO: GH#18217
+                // TODO: GH#18217
+                /*files*/ undefined!,
                 /*lastFileExceededProgramSize*/ undefined,
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false,

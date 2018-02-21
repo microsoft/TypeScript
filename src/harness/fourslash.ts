@@ -1532,18 +1532,18 @@ Actual: ${stringify(fullActual)}`);
             let resultString = "";
             let currentLine: string;
             let previousSpanInfo: string | undefined;
-            let startColumn: number;
-            let length: number;
+            let startColumn: number | undefined;
+            let length: number | undefined;
             const prefixString = "    >";
 
             let pos = 0;
             const addSpanInfoString = () => {
                 if (previousSpanInfo) {
                     resultString += currentLine;
-                    let thisLineMarker = ts.repeatString(" ", startColumn) + ts.repeatString("~", length);
+                    let thisLineMarker = ts.repeatString(" ", startColumn!) + ts.repeatString("~", length!);
                     thisLineMarker += ts.repeatString(" ", this.alignmentForExtraInfo - thisLineMarker.length - prefixString.length + 1);
                     resultString += thisLineMarker;
-                    resultString += "=> Pos: (" + (pos - length) + " to " + (pos - 1) + ") ";
+                    resultString += "=> Pos: (" + (pos - length!) + " to " + (pos - 1) + ") ";
                     resultString += " " + previousSpanInfo;
                     previousSpanInfo = undefined;
                 }
@@ -3219,11 +3219,11 @@ Actual: ${stringify(fullActual)}`);
 
         private getTextSpanForRangeAtIndex(index: number): ts.TextSpan {
             const ranges = this.getRanges();
-            if (ranges && ranges.length > index) {
+            if (ranges.length > index) {
                 return ts.createTextSpanFromRange(ranges[index]);
             }
             else {
-                throw this.raiseError("Supplied span index: " + index + " does not exist in range list of size: " + (ranges ? 0 : ranges!.length)); // TODO: GH#18217 (ranges always defined)
+                throw this.raiseError("Supplied span index: " + index + " does not exist in range list of size: " + ranges.length);
             }
         }
 

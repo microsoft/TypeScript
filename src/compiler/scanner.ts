@@ -630,10 +630,10 @@ namespace ts {
      *      return value of the callback.
      */
     function iterateCommentRanges<T, U>(reduce: boolean, text: string, pos: number, trailing: boolean, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U | undefined) => U, state: T, initial?: U): U | undefined {
-        let pendingPos: number;
-        let pendingEnd: number;
-        let pendingKind: CommentKind;
-        let pendingHasTrailingNewLine: boolean;
+        let pendingPos: number | undefined;
+        let pendingEnd: number | undefined;
+        let pendingKind: CommentKind | undefined;
+        let pendingHasTrailingNewLine: boolean | undefined;
         let hasPendingCommentRange = false;
         let collecting = trailing || pos === 0;
         let accumulator = initial;
@@ -1362,8 +1362,8 @@ namespace ts {
                 let ch = text.charCodeAt(pos);
 
                 // Special handling for shebang
-                if (ch === CharacterCodes.hash && pos === 0 && isShebangTrivia(text!, pos)) {
-                    pos = scanShebangTrivia(text!, pos);
+                if (ch === CharacterCodes.hash && pos === 0 && isShebangTrivia(text, pos)) {
+                    pos = scanShebangTrivia(text, pos);
                     if (skipTrivia) {
                         continue;
                     }
@@ -1610,8 +1610,8 @@ namespace ts {
                         pos++;
                         return token = SyntaxKind.SemicolonToken;
                     case CharacterCodes.lessThan:
-                        if (isConflictMarkerTrivia(text!, pos)) {
-                            pos = scanConflictMarkerTrivia(text!, pos, error);
+                        if (isConflictMarkerTrivia(text, pos)) {
+                            pos = scanConflictMarkerTrivia(text, pos, error);
                             if (skipTrivia) {
                                 continue;
                             }
@@ -1637,8 +1637,8 @@ namespace ts {
                         pos++;
                         return token = SyntaxKind.LessThanToken;
                     case CharacterCodes.equals:
-                        if (isConflictMarkerTrivia(text!, pos)) {
-                            pos = scanConflictMarkerTrivia(text!, pos, error);
+                        if (isConflictMarkerTrivia(text, pos)) {
+                            pos = scanConflictMarkerTrivia(text, pos, error);
                             if (skipTrivia) {
                                 continue;
                             }
@@ -1659,8 +1659,8 @@ namespace ts {
                         pos++;
                         return token = SyntaxKind.EqualsToken;
                     case CharacterCodes.greaterThan:
-                        if (isConflictMarkerTrivia(text!, pos)) {
-                            pos = scanConflictMarkerTrivia(text!, pos, error);
+                        if (isConflictMarkerTrivia(text, pos)) {
+                            pos = scanConflictMarkerTrivia(text, pos, error);
                             if (skipTrivia) {
                                 continue;
                             }
@@ -1690,8 +1690,8 @@ namespace ts {
                         pos++;
                         return token = SyntaxKind.OpenBraceToken;
                     case CharacterCodes.bar:
-                        if (isConflictMarkerTrivia(text!, pos)) {
-                            pos = scanConflictMarkerTrivia(text!, pos, error);
+                        if (isConflictMarkerTrivia(text, pos)) {
+                            pos = scanConflictMarkerTrivia(text, pos, error);
                             if (skipTrivia) {
                                 continue;
                             }
@@ -1877,8 +1877,8 @@ namespace ts {
                     break;
                 }
                 if (char === CharacterCodes.lessThan) {
-                    if (isConflictMarkerTrivia(text!, pos)) {
-                        pos = scanConflictMarkerTrivia(text!, pos, error);
+                    if (isConflictMarkerTrivia(text, pos)) {
+                        pos = scanConflictMarkerTrivia(text, pos, error);
                         return token = SyntaxKind.ConflictMarkerTrivia;
                     }
                     break;
@@ -2045,7 +2045,7 @@ namespace ts {
         }
 
         function getText(): string {
-            return text!;
+            return text;
         }
 
         function setText(newText: string | undefined, start: number | undefined, length: number | undefined) {

@@ -529,7 +529,7 @@ namespace ts {
     }
 
     function simpleForwardCall(logger: Logger, actionDescription: string, action: () => {}, logPerformance: boolean): {} {
-        let start: number;
+        let start: number | undefined;
         if (logPerformance) {
             logger.log(actionDescription);
             start = timestamp();
@@ -539,7 +539,7 @@ namespace ts {
 
         if (logPerformance) {
             const end = timestamp();
-            logger.log(`${actionDescription} completed in ${end - start!} msec`); // TODO: GH#18217
+        logger.log(`${actionDescription} completed in ${end - start!} msec`);
             if (isString(result)) {
                 let str = result;
                 if (str.length > 128) {

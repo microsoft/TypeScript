@@ -371,7 +371,7 @@ namespace ts {
 
     export function addDirectoryWatcher(host: WatchDirectoryHost, directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): FileWatcher {
         const recursive = (flags & WatchDirectoryFlags.Recursive) !== 0;
-        return host.watchDirectory!(directory, cb, recursive);
+        return host.watchDirectory(directory, cb, recursive);
     }
 
     export function addDirectoryWatcherWithLogging(host: WatchDirectoryHost, directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags, log: (s: string) => void): FileWatcher {

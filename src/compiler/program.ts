@@ -912,7 +912,7 @@ namespace ts {
             for (const oldSourceFile of oldSourceFiles) {
                 let newSourceFile = host!.getSourceFileByPath
                     ? host!.getSourceFileByPath!(oldSourceFile.fileName, oldSourceFile.path, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile)
-                    : host!.getSourceFile(oldSourceFile.fileName!, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile); // TODO: GH#18217
+                    : host!.getSourceFile(oldSourceFile.fileName, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile); // TODO: GH#18217
 
                 if (!newSourceFile) {
                     return oldProgram.structureIsReused = StructureIsReused.Not;
@@ -1246,7 +1246,7 @@ namespace ts {
                 if (!sourceFile.additionalSyntacticDiagnostics) {
                     sourceFile.additionalSyntacticDiagnostics = getJavaScriptSyntacticDiagnosticsForFile(sourceFile);
                 }
-                return concatenate(sourceFile.additionalSyntacticDiagnostics, sourceFile.parseDiagnostics)!; // TODO: GH#18217
+                return concatenate(sourceFile.additionalSyntacticDiagnostics, sourceFile.parseDiagnostics);
             }
             return sourceFile.parseDiagnostics;
         }

@@ -547,7 +547,7 @@ namespace ts {
                 case ModuleKind.AMD:
                     return createImportCallExpressionAMD(argument, containsLexicalThis);
                 case ModuleKind.UMD:
-                    return createImportCallExpressionUMD(argument!, containsLexicalThis); // TODO: GH#18217
+                    return createImportCallExpressionUMD(argument, containsLexicalThis);
                 case ModuleKind.CommonJS:
                 default:
                     return createImportCallExpressionCommonJS(argument, containsLexicalThis);

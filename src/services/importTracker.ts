@@ -234,7 +234,7 @@ namespace ts.FindAllReferences {
             }
 
             if (exportKind === ExportKind.Named) {
-                searchForNamedImport(namedBindings as NamedImports | undefined);
+                searchForNamedImport(namedBindings);
             }
             else {
                 // `export =` might be imported by a default import if `--allowSyntheticDefaultImports` is on, so this handles both ExportKind.Default and ExportKind.ExportEquals
@@ -248,7 +248,7 @@ namespace ts.FindAllReferences {
 
                 // 'default' might be accessed as a named import `{ default as foo }`.
                 if (!isForRename && exportKind === ExportKind.Default) {
-                    searchForNamedImport(namedBindings as NamedImports | undefined);
+                    searchForNamedImport(namedBindings);
                 }
             }
         }

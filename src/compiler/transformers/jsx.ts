@@ -104,7 +104,7 @@ namespace ts {
                     spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
                         ? map(attrs, transformJsxSpreadAttributeToExpression)
                         : createObjectLiteral(map(attrs, transformJsxAttributeToObjectLiteralElement))
-                    )! // TODO: GH#18217
+                    )
                 );
 
                 if (isJsxSpreadAttribute(attrs[0])) {
@@ -160,11 +160,11 @@ namespace ts {
 
         function transformJsxAttributeToObjectLiteralElement(node: JsxAttribute) {
             const name = getAttributeName(node);
-            const expression = transformJsxAttributeInitializer(node.initializer!)!; // TODO: GH#18217
+            const expression = transformJsxAttributeInitializer(node.initializer);
             return createPropertyAssignment(name, expression);
         }
 
-        function transformJsxAttributeInitializer(node: StringLiteral | JsxExpression) {
+        function transformJsxAttributeInitializer(node: StringLiteral | JsxExpression | undefined) {
             if (node === undefined) {
                 return createTrue();
             }

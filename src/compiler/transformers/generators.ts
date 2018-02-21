@@ -1539,7 +1539,7 @@ namespace ts {
                 const keysArray = declareLocal(); // _a
                 const key = declareLocal(); // _b
                 const keysIndex = createLoopVariable(); // _i
-                const initializer = node.initializer!;
+                const initializer = node.initializer;
                 hoistVariableDeclaration(keysIndex);
                 emitAssignment(keysArray, createArrayLiteral());
 
@@ -1611,7 +1611,7 @@ namespace ts {
                 beginScriptLoopBlock();
             }
 
-            const initializer = node.initializer!;
+            const initializer = node.initializer;
             if (isVariableDeclarationList(initializer)) {
                 for (const variable of initializer.declarations) {
                     hoistVariableDeclaration(<Identifier>variable.name);
@@ -2438,7 +2438,7 @@ namespace ts {
          */
         function createInstruction(instruction: Instruction): NumericLiteral {
             const literal = createLiteral(instruction);
-            addSyntheticTrailingComment(literal, SyntaxKind.MultiLineCommentTrivia, getInstructionName(instruction)!); // TODO: GH#18217
+            addSyntheticTrailingComment(literal, SyntaxKind.MultiLineCommentTrivia, getInstructionName(instruction));
             return literal;
         }
 

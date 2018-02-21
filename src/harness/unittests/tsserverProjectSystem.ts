@@ -178,7 +178,7 @@ namespace ts.projectSystem {
         }
 
         getEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"]): T["data"] {
-            let eventData: T["data"];
+            let eventData: T["data"] | undefined;
             filterMutate(this.events, e => {
                 if (e.eventName === eventName) {
                     if (eventData !== undefined) {
@@ -189,8 +189,7 @@ namespace ts.projectSystem {
                 }
                 return true;
             });
-            assert.isDefined(eventData!);
-            return eventData!;
+            return Debug.assertDefined(eventData);
         }
 
         hasZeroEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"]) {

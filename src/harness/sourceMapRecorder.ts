@@ -345,7 +345,7 @@ namespace Harness.SourceMapRecorder {
                 return markerId;
             }
 
-            let prevEmittedCol: number;
+            let prevEmittedCol!: number;
             function iterateSpans(fn: (currentSpan: SourceMapSpanWithDecodeErrors, index: number) => void) {
                 prevEmittedCol = 1;
                 for (let i = 0; i < spansOnSingleLine.length; i++) {
@@ -419,7 +419,7 @@ namespace Harness.SourceMapRecorder {
                 iterateSpans(writeSourceMapMarker);
 
                 const jsFileText = getTextOfLine(currentJsLine, jsLineMap, jsFile.code);
-                if (prevEmittedCol! < jsFileText.length) {
+                if (prevEmittedCol < jsFileText.length) {
                     // There is remaining text on this line that will be part of next source span so write marker that continues
                     writeSourceMapMarker(/*currentSpan*/ undefined!, spansOnSingleLine.length, /*endColumn*/ jsFileText.length, /*endContinues*/ true); // TODO: GH#18217
                 }

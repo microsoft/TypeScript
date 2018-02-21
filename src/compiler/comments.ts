@@ -375,7 +375,7 @@ namespace ts {
         }
 
         function hasDetachedComments(pos: number) {
-            return detachedCommentsInfo !== undefined && last(detachedCommentsInfo!).nodePos === pos;
+            return detachedCommentsInfo !== undefined && last(detachedCommentsInfo).nodePos === pos;
         }
 
         function forEachLeadingCommentWithoutDetachedComments(cb: (commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) => void) {

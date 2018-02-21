@@ -1683,7 +1683,7 @@ namespace ts.Completions {
 
             // class c { method() { } | method2() { } }
             if (location && location.kind === SyntaxKind.SyntaxList && isClassLike(location.parent)) {
-                return location.parent as ClassLikeDeclaration;
+                return location.parent;
             }
             return undefined;
         }
@@ -1990,7 +1990,7 @@ namespace ts.Completions {
                     continue;
                 }
 
-                let existingName: __String;
+                let existingName: __String | undefined;
 
                 if (isBindingElement(m) && m.propertyName) {
                     // include only identifiers in completion list

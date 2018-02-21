@@ -514,7 +514,7 @@ namespace ts {
             readFile,
             trace,
             directoryExists: directoryStructureHost.directoryExists && (path => directoryStructureHost.directoryExists!(path)),
-            getDirectories: (directoryStructureHost.getDirectories! && ((path: string) => directoryStructureHost.getDirectories!(path)))!, // TODO: GH#18217
+            getDirectories: (directoryStructureHost.getDirectories && ((path: string) => directoryStructureHost.getDirectories!(path)))!, // TODO: GH#18217
             realpath: host.realpath && (s => host.realpath!(s)),
             getEnvironmentVariable: host.getEnvironmentVariable ? (name => host.getEnvironmentVariable!(name)) : (() => ""),
             onReleaseOldSourceFile,

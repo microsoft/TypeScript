@@ -644,7 +644,7 @@ namespace ts {
                 buildIndexSignatureDisplay(info, writer, kind, enclosing?, flags?) {
                     const sig = nodeBuilder.indexInfoToIndexSignatureDeclaration(info, kind, enclosing, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors, writer);
                     const printer = createPrinter({ removeComments: true });
-                    printer.writeNode(EmitHint.Unspecified, sig!, getSourceFileOfNode(getParseTreeNode(enclosing)), emitTextWriterWrapper(writer));  // TODO: GH#18217
+                    printer.writeNode(EmitHint.Unspecified, sig, getSourceFileOfNode(getParseTreeNode(enclosing)), emitTextWriterWrapper(writer));
                 },
                 buildParameterDisplay(symbol, writer, enclosing?, flags?) {
                     const node = nodeBuilder.symbolToParameterDeclaration(symbol, enclosing, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors, writer);
@@ -4209,7 +4209,7 @@ namespace ts {
                 }
 
                 if (isPropertyAccessExpression(expression.left) && expression.left.expression.kind === SyntaxKind.ThisKeyword) {
-                    if (getThisContainer(expression, /*includeArrowFunctions*/ false)!.kind === SyntaxKind.Constructor) {
+                    if (getThisContainer(expression, /*includeArrowFunctions*/ false).kind === SyntaxKind.Constructor) {
                         definedInConstructor = true;
                     }
                     else {
@@ -5573,7 +5573,7 @@ namespace ts {
             const source = resolveDeclaredMembers(type.target);
             const typeParameters = concatenate(source.typeParameters!, [source.thisType!]);
             const typeArguments = type.typeArguments && type.typeArguments.length === typeParameters.length ?
-                type.typeArguments : concatenate(type.typeArguments, [type])!;
+                type.typeArguments : concatenate(type.typeArguments, [type]);
             resolveObjectTypeMembers(type, source, typeParameters, typeArguments);
         }
 
@@ -7407,7 +7407,7 @@ namespace ts {
                 // the widened type(section 3.9) of which becomes the result.
                 links.resolvedType = getWidenedType(checkExpression(node.exprName));
             }
-            return links.resolvedType!;
+            return links.resolvedType;
         }
 
         function getTypeOfGlobalSymbol(symbol: Symbol | undefined, arity: number): ObjectType {
@@ -8528,8 +8528,8 @@ namespace ts {
             const container = getThisContainer(node, /*includeArrowFunctions*/ false);
             const parent = container && container.parent;
             if (parent && (isClassLike(parent) || parent.kind === SyntaxKind.InterfaceDeclaration)) {
-                if (!hasModifier(container!, ModifierFlags.Static) &&
-                    (container!.kind !== SyntaxKind.Constructor || isNodeDescendantOf(node, (<ConstructorDeclaration>container).body!))) {
+                if (!hasModifier(container, ModifierFlags.Static) &&
+                    (container.kind !== SyntaxKind.Constructor || isNodeDescendantOf(node, (<ConstructorDeclaration>container).body!))) {
                     return getDeclaredTypeOfClassOrInterface(getSymbolOfNode(parent)!).thisType!;
                 }
             }
@@ -8923,7 +8923,7 @@ namespace ts {
         }
 
         function instantiateType(type: Type, mapper: TypeMapper): Type;
-        function instantiateType(type: Type | undefined, mapper: TypeMapper): Type | undefined; //kill this overload?
+        function instantiateType(type: Type | undefined, mapper: TypeMapper): Type | undefined;
         function instantiateType(type: Type | undefined, mapper: TypeMapper): Type | undefined {
             if (type && mapper && mapper !== identityMapper) {
                 if (type.flags & TypeFlags.TypeParameter) {
@@ -11626,7 +11626,7 @@ namespace ts {
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     const targetTypes = (<UnionOrIntersectionType>target).types;
                     let typeVariableCount = 0;
-                    let typeVariable: TypeParameter | IndexedAccessType;
+                    let typeVariable: TypeParameter | IndexedAccessType | undefined;
                     // First infer to each type in union or intersection that isn't a type variable
                     for (const t of targetTypes) {
                         if (getInferenceInfoForType(t)) {
@@ -13681,7 +13681,7 @@ namespace ts {
         function checkThisExpression(node: Node): Type {
             // Stop at the first arrow function so that we can
             // tell whether 'this' needs to be captured.
-            let container = getThisContainer(node, /* includeArrowFunctions */ true)!;
+            let container = getThisContainer(node, /* includeArrowFunctions */ true);
             let needToCaptureLexicalThis = false;
 
             if (container.kind === SyntaxKind.Constructor) {
@@ -13690,7 +13690,7 @@ namespace ts {
 
             // Now skip arrow functions to get the "real" owner of 'this'.
             if (container.kind === SyntaxKind.ArrowFunction) {
-                container = getThisContainer(container, /* includeArrowFunctions */ false)!;
+                container = getThisContainer(container, /* includeArrowFunctions */ false);
 
                 // When targeting es6, arrow function lexically bind "this" so we do not need to do the work of binding "this" in emitted code
                 needToCaptureLexicalThis = (languageVersion < ScriptTarget.ES2015);
@@ -16354,7 +16354,7 @@ namespace ts {
          * Return the symbol of the for-in variable declared or referenced by the given for-in statement.
          */
         function getForInVariableSymbol(node: ForInStatement): Symbol | undefined {
-            const initializer = node.initializer!;
+            const initializer = node.initializer;
             if (initializer.kind === SyntaxKind.VariableDeclarationList) {
                 const variable = (<VariableDeclarationList>initializer).declarations[0];
                 if (variable && !isBindingPattern(variable.name)) {
@@ -16515,7 +16515,7 @@ namespace ts {
             let lastParent: Node | undefined;
             let lastSymbol: Symbol | undefined;
             let cutoffIndex = 0;
-            let index: number;
+            let index: number | undefined;
             let specializedIndex = -1;
             let spliceIndex: number;
             Debug.assert(!result.length);
@@ -19388,7 +19388,7 @@ namespace ts {
                             checkTypeAssignableTo(
                                 functionFlags & FunctionFlags.Async
                                     ? getAwaitedType(expressionType, node.expression, Diagnostics.Type_of_yield_operand_in_an_async_generator_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)!
-                                    : expressionType!,
+                                    : expressionType,
                                 signatureElementType,
                                 node.expression,
                                 /*headMessage*/ undefined);
@@ -20320,7 +20320,7 @@ namespace ts {
                 const constraint = getConstraintOfTypeParameter(typeParameters[i]);
                 if (constraint) {
                     if (!typeArguments) {
-                        typeArguments = getEffectiveTypeArguments(node, typeParameters)!;
+                        typeArguments = getEffectiveTypeArguments(node, typeParameters);
                         mapper = createTypeMapper(typeParameters, typeArguments);
                     }
                     result = result && checkTypeAssignableTo(
@@ -20372,7 +20372,7 @@ namespace ts {
             const typeReferenceNode = tryCast(node.parent, isTypeReferenceType);
             if (!typeReferenceNode) return undefined;
             const typeParameters = getTypeParametersForTypeReference(typeReferenceNode)!; // TODO: GH#18217
-            const constraint = getConstraintOfTypeParameter(typeParameters[typeReferenceNode.typeArguments!.indexOf(node)!]);
+            const constraint = getConstraintOfTypeParameter(typeParameters[typeReferenceNode.typeArguments!.indexOf(node)]);
             return constraint && instantiateType(constraint, createTypeMapper(typeParameters, getEffectiveTypeArguments(typeReferenceNode, typeParameters)));
         }
 
@@ -23846,9 +23846,9 @@ namespace ts {
                 // otherwise it will conflict with some local declaration). Note that in addition to normal flags we include matching SymbolFlags.Export*
                 // in order to prevent collisions with declarations that were exported from the current module (they still contribute to local names).
                 const excludedMeanings =
-                    (symbol!.flags & (SymbolFlags.Value | SymbolFlags.ExportValue) ? SymbolFlags.Value : 0) |
-                    (symbol!.flags & SymbolFlags.Type ? SymbolFlags.Type : 0) |
-                    (symbol!.flags & SymbolFlags.Namespace ? SymbolFlags.Namespace : 0);
+                    (symbol.flags & (SymbolFlags.Value | SymbolFlags.ExportValue) ? SymbolFlags.Value : 0) |
+                    (symbol.flags & SymbolFlags.Type ? SymbolFlags.Type : 0) |
+                    (symbol.flags & SymbolFlags.Namespace ? SymbolFlags.Namespace : 0);
                 if (target.flags & excludedMeanings) {
                     const message = node.kind === SyntaxKind.ExportSpecifier ?
                         Diagnostics.Export_declaration_conflicts_with_exported_declaration_of_0 :
@@ -24820,7 +24820,7 @@ namespace ts {
                     return getSymbolOfEntityNameOrPropertyAccessExpression(<EntityName | PropertyAccessExpression>node);
 
                 case SyntaxKind.ThisKeyword:
-                    const container = getThisContainer(node, /*includeArrowFunctions*/ false)!;
+                    const container = getThisContainer(node, /*includeArrowFunctions*/ false);
                     if (isFunctionLike(container)) {
                         const sig = getSignatureFromDeclaration(container);
                         if (sig.thisParameter) {
@@ -24861,7 +24861,7 @@ namespace ts {
                 case SyntaxKind.NumericLiteral:
                     // index access
                     const objectType = isElementAccessExpression(parent)
-                        ? parent.argumentExpression === node ? getTypeOfExpression(parent.expression!) : undefined
+                        ? parent.argumentExpression === node ? getTypeOfExpression(parent.expression) : undefined
                         : isLiteralTypeNode(parent) && isIndexedAccessTypeNode(grandParent)
                             ? getTypeFromTypeNode(grandParent.objectType)
                             : undefined;
@@ -26518,7 +26518,7 @@ namespace ts {
                 }
             }
 
-            if (forInOrOfStatement.initializer!.kind === SyntaxKind.VariableDeclarationList) {
+            if (forInOrOfStatement.initializer.kind === SyntaxKind.VariableDeclarationList) {
                 const variableList = <VariableDeclarationList>forInOrOfStatement.initializer;
                 if (!checkGrammarVariableDeclarationList(variableList)) {
                     const declarations = variableList.declarations;

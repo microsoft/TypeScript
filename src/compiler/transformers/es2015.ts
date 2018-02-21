@@ -652,7 +652,7 @@ namespace ts {
                     let returnExpression: Expression = createLiteral(labelMarker);
                     if (convertedLoopState.loopOutParameters!.length) {
                         const outParams = convertedLoopState.loopOutParameters!;
-                        let expr: Expression;
+                        let expr: Expression | undefined;
                         for (let i = 0; i < outParams.length; i++) {
                             const copyExpr = copyOutParameter(outParams[i], CopyDirection.ToOutParameter);
                             if (i === 0) {
@@ -2271,9 +2271,9 @@ namespace ts {
 
         function convertForOfStatementHead(node: ForOfStatement, boundValue: Expression, convertedLoopBodyStatements: Statement[]) {
             const statements: Statement[] = [];
-            const initializer = node.initializer!;
+            const initializer = node.initializer;
             if (isVariableDeclarationList(initializer)) {
-                if (node.initializer!.flags & NodeFlags.BlockScoped) {
+                if (node.initializer.flags & NodeFlags.BlockScoped) {
                     enableSubstitutionsForBlockScopedBindings();
                 }
 

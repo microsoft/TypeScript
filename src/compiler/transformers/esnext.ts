@@ -281,7 +281,7 @@ namespace ts {
          * @param node A ForOfStatement.
          */
         function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined): VisitResult<Statement> {
-            if (node.initializer!.transformFlags! & TransformFlags.ContainsObjectRest) {
+            if (node.initializer.transformFlags! & TransformFlags.ContainsObjectRest) {
                 node = transformForOfStatementWithObjectRest(node);
             }
             if (node.awaitModifier) {
@@ -293,7 +293,7 @@ namespace ts {
         }
 
         function transformForOfStatementWithObjectRest(node: ForOfStatement) {
-            const initializerWithoutParens = skipParentheses(node.initializer!) as ForInitializer;
+            const initializerWithoutParens = skipParentheses(node.initializer) as ForInitializer;
             if (isVariableDeclarationList(initializerWithoutParens) || isAssignmentPattern(initializerWithoutParens)) {
                 let bodyLocation: TextRange | undefined;
                 let statementsLocation: TextRange | undefined;
@@ -330,7 +330,7 @@ namespace ts {
         }
 
         function convertForOfStatementHead(node: ForOfStatement, boundValue: Expression) {
-            const binding = createForOfBindingStatement(node.initializer!, boundValue);
+            const binding = createForOfBindingStatement(node.initializer, boundValue);
 
             let bodyLocation: TextRange | undefined;
             let statementsLocation: TextRange | undefined;

@@ -675,7 +675,7 @@ namespace ts.refactor.extractSymbol {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.FunctionDeclaration:
                 return scope.name
-                    ? `function '${scope.name!.text}'`
+                    ? `function '${scope.name.text}'`
                     : "anonymous function";
             case SyntaxKind.ArrowFunction:
                 return "arrow function";
@@ -990,7 +990,7 @@ namespace ts.refactor.extractSymbol {
                 return undefined;
             }
 
-            const clone = getSynthesizedDeepClone(typeNode)!; // TODO: GH#18217
+            const clone = getSynthesizedDeepClone(typeNode);
             let withoutParens = clone;
             while (isParenthesizedTypeNode(withoutParens)) {
                 withoutParens = withoutParens.type;

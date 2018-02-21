@@ -588,7 +588,7 @@ namespace ts {
             case SyntaxKind.QualifiedName:
                 return entityNameToString(name.left) + "." + entityNameToString(name.right);
             case SyntaxKind.PropertyAccessExpression:
-                return entityNameToString(name.expression) + "." + entityNameToString(name.name!);
+                return entityNameToString(name.expression) + "." + entityNameToString(name.name);
             default:
                 throw Debug.assertNever(name);
         }
@@ -1503,7 +1503,7 @@ namespace ts {
     }
 
     export function isModuleExportsPropertyAccessExpression(node: Node) {
-        return isPropertyAccessExpression(node) && isIdentifier(node.expression) && node.expression.escapedText === "module" && node.name!.escapedText === "exports";
+        return isPropertyAccessExpression(node) && isIdentifier(node.expression) && node.expression.escapedText === "module" && node.name.escapedText === "exports";
     }
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
@@ -1522,7 +1522,7 @@ namespace ts {
                 // exports.name = expr
                 return SpecialPropertyAssignmentKind.ExportsProperty;
             }
-            else if (lhsId.escapedText === "module" && lhs.name!.escapedText === "exports") {
+            else if (lhsId.escapedText === "module" && lhs.name.escapedText === "exports") {
                 // module.exports = expr
                 return SpecialPropertyAssignmentKind.ModuleExports;
             }
@@ -1540,10 +1540,10 @@ namespace ts {
             if (innerPropertyAccess.expression.kind === SyntaxKind.Identifier) {
                 // module.exports.name = expr
                 const innerPropertyAccessIdentifier = <Identifier>innerPropertyAccess.expression;
-                if (innerPropertyAccessIdentifier.escapedText === "module" && innerPropertyAccess.name!.escapedText === "exports") {
+                if (innerPropertyAccessIdentifier.escapedText === "module" && innerPropertyAccess.name.escapedText === "exports") {
                     return SpecialPropertyAssignmentKind.ExportsProperty;
                 }
-                if (innerPropertyAccess.name!.escapedText === "prototype") {
+                if (innerPropertyAccess.name.escapedText === "prototype") {
                     return SpecialPropertyAssignmentKind.PrototypeProperty;
                 }
             }
@@ -2164,7 +2164,7 @@ namespace ts {
         if (name.kind === SyntaxKind.ComputedPropertyName) {
             const nameExpression = name.expression;
             if (isWellKnownSymbolSyntactically(nameExpression)) {
-                return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name!));
+                return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name));
             }
             else if (nameExpression.kind === SyntaxKind.StringLiteral || nameExpression.kind === SyntaxKind.NumericLiteral) {
                 return escapeLeadingUnderscores((<LiteralExpression>nameExpression).text);
@@ -2462,8 +2462,8 @@ namespace ts {
     }
 
     export function createDiagnosticCollection(): DiagnosticCollection {
-        let nonFileDiagnostics = [] as Array<Diagnostic> as SortedArray<Diagnostic>;
-        const filesWithDiagnostics = [] as Array<string> as SortedArray<string>;
+        let nonFileDiagnostics = [] as Diagnostic[] as SortedArray<Diagnostic>; // See GH#19873
+        const filesWithDiagnostics = [] as string[] as SortedArray<string>;
         const fileDiagnostics = createMap<SortedArray<Diagnostic>>();
         let hasReadNonFileDiagnostics = false;
         let modificationCount = 0;
@@ -2489,7 +2489,7 @@ namespace ts {
             if (diagnostic.file) {
                 diagnostics = fileDiagnostics.get(diagnostic.file.fileName);
                 if (!diagnostics) {
-                    diagnostics = [] as Array<Diagnostic> as SortedArray<Diagnostic>;
+                    diagnostics = [] as Diagnostic[] as SortedArray<Diagnostic>; // See GH#19873
                     fileDiagnostics.set(diagnostic.file.fileName, diagnostics);
                     insertSorted(filesWithDiagnostics, diagnostic.file.fileName, compareStringsCaseSensitive);
                 }
@@ -2824,7 +2824,7 @@ namespace ts {
 
     export function getThisParameter(signature: SignatureDeclaration): ParameterDeclaration | undefined {
         if (signature.parameters.length) {
-            const thisParameter = signature.parameters![0];
+            const thisParameter = signature.parameters[0];
             if (parameterIsThisKeyword(thisParameter)) {
                 return thisParameter;
             }
@@ -3248,7 +3248,7 @@ namespace ts {
         if (isExpressionWithTypeArguments(node) &&
             node.parent.token === SyntaxKind.ExtendsKeyword &&
             isClassLike(node.parent.parent)) {
-            return node.parent.parent as ClassLikeDeclaration;
+            return node.parent.parent;
         }
     }
 
@@ -3306,11 +3306,11 @@ namespace ts {
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
-        return isExportDefaultSymbol(symbol) ? symbol.declarations![0]!.localSymbol : undefined;
+        return isExportDefaultSymbol(symbol) ? symbol.declarations![0].localSymbol : undefined;
     }
 
     function isExportDefaultSymbol(symbol: Symbol): boolean {
-        return symbol && length(symbol.declarations) > 0 && hasModifier(symbol.declarations![0]!, ModifierFlags.Default);
+        return symbol && length(symbol.declarations) > 0 && hasModifier(symbol.declarations![0], ModifierFlags.Default);
     }
 
     /** Return ".ts", ".d.ts", or ".tsx", if that is the extension. */

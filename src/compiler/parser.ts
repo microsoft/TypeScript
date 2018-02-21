@@ -4050,7 +4050,7 @@ namespace ts {
             // If we are at this statement then we must have PropertyAccessExpression and because tag name in Jsx element can only
             // take forms of JsxTagNameExpression which includes an identifier, "this" expression, or another propertyAccessExpression
             // it is safe to case the expression property as such. See parseJsxElementName for how we parse tag name in Jsx element
-            return (<PropertyAccessExpression>lhs).name!.escapedText === (<PropertyAccessExpression>rhs).name!.escapedText &&
+            return (<PropertyAccessExpression>lhs).name.escapedText === (<PropertyAccessExpression>rhs).name.escapedText &&
                 tagNamesAreEquivalent((<PropertyAccessExpression>lhs).expression as JsxTagNameExpression, (<PropertyAccessExpression>rhs).expression as JsxTagNameExpression);
         }
 

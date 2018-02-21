@@ -72,7 +72,7 @@ namespace ts {
 
     function getOriginalSourceFileOrBundle(sourceFileOrBundle: SourceFile | Bundle) {
         if (sourceFileOrBundle.kind === SyntaxKind.Bundle) {
-            return updateBundle(sourceFileOrBundle, sameMap(sourceFileOrBundle.sourceFiles!, getOriginalSourceFile));
+            return updateBundle(sourceFileOrBundle, sameMap(sourceFileOrBundle.sourceFiles, getOriginalSourceFile));
         }
         return getOriginalSourceFile(sourceFileOrBundle);
     }
@@ -186,7 +186,7 @@ namespace ts {
 
             // Write the source map
             if (compilerOptions.sourceMap && !compilerOptions.inlineSourceMap) {
-                writeFile(host, emitterDiagnostics, sourceMapFilePath!, sourceMap.getText()!, /*writeByteOrderMark*/ false, sourceFiles); // TODO: GH#18217
+                writeFile(host, emitterDiagnostics, sourceMapFilePath!, sourceMap.getText(), /*writeByteOrderMark*/ false, sourceFiles); // TODO: GH#18217
             }
 
             // Record source map data for the test harness.
