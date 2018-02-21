@@ -709,6 +709,16 @@ namespace ts.FindAllReferences.Core {
         return exposedByParent ? scope.getSourceFile() : scope;
     }
 
+    /** Used as a quick check for whether a symbol is used at all in a file (besides its definition). */
+    export function isSymbolReferencedInFile(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile) {
+        const symbol = checker.getSymbolAtLocation(definition);
+        if (!symbol) return true; // Be lenient with invalid code.
+        return getPossibleSymbolReferencePositions(sourceFile, symbol.name).some(position => {
+            const token = tryCast(getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true), isIdentifier);
+            return token && token !== definition && token.escapedText === definition.escapedText && checker.getSymbolAtLocation(token) === symbol;
+        });
+    }
+
     function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): ReadonlyArray<number> {
         const positions: number[] = [];
 
