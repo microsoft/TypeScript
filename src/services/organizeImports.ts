@@ -13,13 +13,18 @@ namespace ts.OrganizeImports {
         host: LanguageServiceHost,
         program: Program) {
 
-        // TODO (https://github.com/Microsoft/TypeScript/issues/10020): sort *within* ambient modules (find using isAmbientModule)
+        const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext });
 
         // All of the old ImportDeclarations in the file, in syntactic order.
         const topLevelImportDecls = sourceFile.statements.filter(isImportDeclaration);
-
-        const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext });
         organizeImportsWorker(topLevelImportDecls);
+
+        for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
+            const ambientModuleBody = getModuleBlock(ambientModule as ModuleDeclaration);
+            const ambientModuleImportDecls = ambientModuleBody.statements.filter(isImportDeclaration);
+            organizeImportsWorker(ambientModuleImportDecls);
+        }
+
         return changeTracker.getChanges();
 
         function organizeImportsWorker(oldImportDecls: ReadonlyArray<ImportDeclaration>) {
@@ -52,6 +57,11 @@ namespace ts.OrganizeImports {
                 changeTracker.deleteNode(sourceFile, oldImportDecls[i]);
             }
         }
+    }
+
+    function getModuleBlock(moduleDecl: ModuleDeclaration): ModuleBlock | undefined {
+        const body = moduleDecl.body;
+        return body && !isIdentifier(body) && (isModuleBlock(body) ? body : getModuleBlock(body));
     }
 
     function removeUnusedImports(oldImports: ReadonlyArray<ImportDeclaration>, sourceFile: SourceFile, program: Program) {
