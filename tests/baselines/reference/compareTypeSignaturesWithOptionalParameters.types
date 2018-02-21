@@ -1,0 +1,166 @@
+=== tests/cases/compiler/compareTypeSignaturesWithOptionalParameters.ts ===
+let x1: (a?: {b?:number, c?:number}) => void;
+>x1 : (a?: { b?: number | undefined; c?: number | undefined; } | undefined) => void
+>a : { b?: number | undefined; c?: number | undefined; } | undefined
+>b : number | undefined
+>c : number | undefined
+
+x1 = ({b = 1, c = 2} = {}) => {};
+>x1 = ({b = 1, c = 2} = {}) => {} : ({ b, c }?: { b?: number | undefined; c?: number | undefined; } | undefined) => void
+>x1 : (a?: { b?: number | undefined; c?: number | undefined; } | undefined) => void
+>({b = 1, c = 2} = {}) => {} : ({ b, c }?: { b?: number | undefined; c?: number | undefined; } | undefined) => void
+>b : number
+>1 : 1
+>c : number
+>2 : 2
+>{} : {}
+
+const x2 = ({b = 1, c = 2} = {}) => {};
+>x2 : ({ b, c }?: { b?: number | undefined; c?: number | undefined; }) => void
+>({b = 1, c = 2} = {}) => {} : ({ b, c }?: { b?: number | undefined; c?: number | undefined; }) => void
+>b : number
+>1 : 1
+>c : number
+>2 : 2
+>{} : { b?: number; c?: number; }
+
+x1 = x2;
+>x1 = x2 : ({ b, c }?: { b?: number | undefined; c?: number | undefined; }) => void
+>x1 : (a?: { b?: number | undefined; c?: number | undefined; } | undefined) => void
+>x2 : ({ b, c }?: { b?: number | undefined; c?: number | undefined; }) => void
+
+let x3: (a?: {b?:number, c?:{d?:number, e?:number}}) => void;
+>x3 : (a?: { b?: number | undefined; c?: { d?: number | undefined; e?: number | undefined; } | undefined; } | undefined) => void
+>a : { b?: number | undefined; c?: { d?: number | undefined; e?: number | undefined; } | undefined; } | undefined
+>b : number | undefined
+>c : { d?: number | undefined; e?: number | undefined; } | undefined
+>d : number | undefined
+>e : number | undefined
+
+x3 = ({b = 1, c:{d = 2, e = 3} = {}} = {}) => {};
+>x3 = ({b = 1, c:{d = 2, e = 3} = {}} = {}) => {} : ({ b, c: { d, e } }?: { b?: number | undefined; c?: { d?: number | undefined; e?: number | undefined; } | undefined; } | undefined) => void
+>x3 : (a?: { b?: number | undefined; c?: { d?: number | undefined; e?: number | undefined; } | undefined; } | undefined) => void
+>({b = 1, c:{d = 2, e = 3} = {}} = {}) => {} : ({ b, c: { d, e } }?: { b?: number | undefined; c?: { d?: number | undefined; e?: number | undefined; } | undefined; } | undefined) => void
+>b : number
+>1 : 1
+>c : any
+>d : number
+>2 : 2
+>e : number
+>3 : 3
+>{} : { d?: number; e?: number; }
+>{} : {}
+
+const x4 = ({b = 1, c:{d = 2, e = 3} = {}} = {}) => {};
+>x4 : ({ b, c: { d, e } }?: { b?: number | undefined; c?: any; }) => void
+>({b = 1, c:{d = 2, e = 3} = {}} = {}) => {} : ({ b, c: { d, e } }?: { b?: number | undefined; c?: any; }) => void
+>b : number
+>1 : 1
+>c : any
+>d : number
+>2 : 2
+>e : number
+>3 : 3
+>{} : { d?: number; e?: number; }
+>{} : { b?: number; c?: { d?: number; e?: number; }; }
+
+x3 = x4;
+>x3 = x4 : ({ b, c: { d, e } }?: { b?: number | undefined; c?: any; }) => void
+>x3 : (a?: { b?: number | undefined; c?: { d?: number | undefined; e?: number | undefined; } | undefined; } | undefined) => void
+>x4 : ({ b, c: { d, e } }?: { b?: number | undefined; c?: any; }) => void
+
+let x5: (a?: {b?:number, c?:{d?:{f?:number, g?:number}, e?:number}}) => void;
+>x5 : (a?: { b?: number | undefined; c?: { d?: { f?: number | undefined; g?: number | undefined; } | undefined; e?: number | undefined; } | undefined; } | undefined) => void
+>a : { b?: number | undefined; c?: { d?: { f?: number | undefined; g?: number | undefined; } | undefined; e?: number | undefined; } | undefined; } | undefined
+>b : number | undefined
+>c : { d?: { f?: number | undefined; g?: number | undefined; } | undefined; e?: number | undefined; } | undefined
+>d : { f?: number | undefined; g?: number | undefined; } | undefined
+>f : number | undefined
+>g : number | undefined
+>e : number | undefined
+
+x5 = ({b = 1, c:{d:{f = 4, g = 5} = {}, e = 3} = {}} = {}) => {};
+>x5 = ({b = 1, c:{d:{f = 4, g = 5} = {}, e = 3} = {}} = {}) => {} : ({ b, c: { d: { f, g }, e } }?: { b?: number | undefined; c?: { d?: { f?: number | undefined; g?: number | undefined; } | undefined; e?: number | undefined; } | undefined; } | undefined) => void
+>x5 : (a?: { b?: number | undefined; c?: { d?: { f?: number | undefined; g?: number | undefined; } | undefined; e?: number | undefined; } | undefined; } | undefined) => void
+>({b = 1, c:{d:{f = 4, g = 5} = {}, e = 3} = {}} = {}) => {} : ({ b, c: { d: { f, g }, e } }?: { b?: number | undefined; c?: { d?: { f?: number | undefined; g?: number | undefined; } | undefined; e?: number | undefined; } | undefined; } | undefined) => void
+>b : number
+>1 : 1
+>c : any
+>d : any
+>f : number
+>4 : 4
+>g : number
+>5 : 5
+>{} : { f?: number; g?: number; }
+>e : number
+>3 : 3
+>{} : { d?: { f?: number; g?: number; }; e?: number; }
+>{} : {}
+
+const x6 = ({b = 1, c:{d:{f = 4, g = 5} = {}, e = 3} = {}} = {}) => {};
+>x6 : ({ b, c: { d: { f, g }, e } }?: { b?: number | undefined; c?: any; }) => void
+>({b = 1, c:{d:{f = 4, g = 5} = {}, e = 3} = {}} = {}) => {} : ({ b, c: { d: { f, g }, e } }?: { b?: number | undefined; c?: any; }) => void
+>b : number
+>1 : 1
+>c : any
+>d : any
+>f : number
+>4 : 4
+>g : number
+>5 : 5
+>{} : { f?: number; g?: number; }
+>e : number
+>3 : 3
+>{} : { d?: { f?: number; g?: number; }; e?: number; }
+>{} : { b?: number; c?: { d?: { f?: number; g?: number; }; e?: number; }; }
+
+x5 = x6;
+>x5 = x6 : ({ b, c: { d: { f, g }, e } }?: { b?: number | undefined; c?: any; }) => void
+>x5 : (a?: { b?: number | undefined; c?: { d?: { f?: number | undefined; g?: number | undefined; } | undefined; e?: number | undefined; } | undefined; } | undefined) => void
+>x6 : ({ b, c: { d: { f, g }, e } }?: { b?: number | undefined; c?: any; }) => void
+
+let useImplementation1 = true;
+>useImplementation1 : boolean
+>true : true
+
+let someOtherFunctionOfThisType = ({a = 3, b = 4} = {}) => a + b;
+>someOtherFunctionOfThisType : ({ a, b }?: { a?: number | undefined; b?: number | undefined; }) => number
+>({a = 3, b = 4} = {}) => a + b : ({ a, b }?: { a?: number | undefined; b?: number | undefined; }) => number
+>a : number
+>3 : 3
+>b : number
+>4 : 4
+>{} : { a?: number; b?: number; }
+>a + b : number
+>a : number
+>b : number
+
+let adder: (nums?: {a?:number, b?:number}) => number;
+>adder : (nums?: { a?: number | undefined; b?: number | undefined; } | undefined) => number
+>nums : { a?: number | undefined; b?: number | undefined; } | undefined
+>a : number | undefined
+>b : number | undefined
+
+if (useImplementation1) {
+>useImplementation1 : true
+
+  adder = ({a = 1, b = 2} = {}) => a + b;
+>adder = ({a = 1, b = 2} = {}) => a + b : ({ a, b }?: { a?: number | undefined; b?: number | undefined; } | undefined) => number
+>adder : (nums?: { a?: number | undefined; b?: number | undefined; } | undefined) => number
+>({a = 1, b = 2} = {}) => a + b : ({ a, b }?: { a?: number | undefined; b?: number | undefined; } | undefined) => number
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+>{} : {}
+>a + b : number
+>a : number
+>b : number
+
+} else {
+  adder = someOtherFunctionOfThisType;
+>adder = someOtherFunctionOfThisType : ({ a, b }?: { a?: number | undefined; b?: number | undefined; }) => number
+>adder : (nums?: { a?: number | undefined; b?: number | undefined; } | undefined) => number
+>someOtherFunctionOfThisType : ({ a, b }?: { a?: number | undefined; b?: number | undefined; }) => number
+}
+

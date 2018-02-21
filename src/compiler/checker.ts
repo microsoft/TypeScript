@@ -4014,7 +4014,8 @@ namespace ts {
                     if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
                         parentType = getNonNullableType(parentType);
                     }
-                    const propType = getTypeOfPropertyOfType(parentType, text);
+                    const parentTypeNEUndefined = getTypeWithFacts(parentType, TypeFacts.NEUndefined);
+                    const propType = getTypeOfPropertyOfType(parentTypeNEUndefined, text);
                     const declaredType = propType && getApparentTypeForLocation(propType, declaration.name);
                     type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
                         isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
@@ -9161,7 +9162,7 @@ namespace ts {
             const targetParams = target.parameters;
             for (let i = 0; i < checkCount; i++) {
                 const sourceType = i < sourceMax ? getTypeOfParameter(sourceParams[i]) : getRestTypeOfSignature(source);
-                const targetType = i < targetMax ? getTypeOfParameter(targetParams[i]) : getRestTypeOfSignature(target);
+                const targetType: Type = i < targetMax ? getTypeOfParameter(targetParams[i]) : getRestTypeOfSignature(target);
                 // In order to ensure that any generic type Foo<T> is at least co-variant with respect to T no matter
                 // how Foo uses T, we need to relate parameters bi-variantly (given that parameters are input positions,
                 // they naturally relate only contra-variantly). However, if the source and target parameters both have
@@ -18104,12 +18105,51 @@ namespace ts {
             }
         }
 
+        function getOptionalTypeRecursive(type: Type) {
+            if ((type as ResolvedType).properties) {
+                const rType = type as ResolvedType;
+                const propCount = rType.properties.length;
+
+                if (rType.flags & TypeFlags.Object) {
+                  for (let i = 0; i < propCount; i++) {
+                    const prop = rType.properties[i] as SymbolLinks;
+                    let innerType;
+                    if (prop.bindingElement && prop.bindingElement.initializer) {
+                        innerType = getOptionalTypeRecursive(prop.type);
+                        innerType = getOptionalType(innerType);
+                    }
+                    else if (prop.type.symbol) {
+                        innerType = getTypeOfParameter(prop.type.symbol);
+                    }
+                    else {
+                        innerType = prop.type;
+                    }
+                    prop.type = innerType;
+                    rType.properties[i] = prop as Symbol;
+                  }
+                }
+
+                if (type.flags & TypeFlags.Union || type.flags & TypeFlags.Intersection) {
+                  for (let i = 0; i < propCount; i++) {
+                    const prop = rType.properties[i] as SymbolLinks;
+                    const innerType = getOptionalTypeRecursive(prop.type);
+                    prop.type = innerType;
+                    rType.properties[i] = prop as Symbol;
+                  }
+                }
+                return rType as Type;
+            }
+            else {
+              return type;
+            }
+        }
+
         function getTypeOfParameter(symbol: Symbol) {
             const type = getTypeOfSymbol(symbol);
             if (strictNullChecks) {
                 const declaration = symbol.valueDeclaration;
                 if (declaration && hasInitializer(declaration)) {
-                    return getOptionalType(type);
+                    return getOptionalType(getOptionalTypeRecursive(type));
                 }
             }
             return type;
