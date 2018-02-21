@@ -303,6 +303,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime_7038" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[A namespace-style import cannot be called or constructed, and will cause a failure at runtime.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";A_parameter_initializer_is_only_allowed_in_a_function_or_constructor_implementation_2371" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[A parameter initializer is only allowed in a function or constructor implementation.]]></Val>
@@ -360,6 +366,12 @@
             <Item ItemId=";A_rest_element_cannot_contain_a_binding_pattern_2501" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[A rest element cannot contain a binding pattern.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";A_rest_element_cannot_have_a_property_name_2566" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[A rest element cannot have a property name.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -564,6 +576,12 @@
             <Item ItemId=";Add_0_to_existing_import_declaration_from_1_90015" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Add '{0}' to existing import declaration from "{1}"]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Add_async_modifier_to_containing_function_90029" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Add async modifier to containing function]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -828,6 +846,18 @@
             <Item ItemId=";An_index_signature_parameter_must_have_a_type_annotation_1022" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[An index signature parameter must have a type annotation.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";An_index_signature_parameter_type_cannot_be_a_type_alias_Consider_writing_0_Colon_1_Colon_2_instead_1336" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[An index signature parameter type cannot be a type alias. Consider writing '[{0}: {1}]5D;: {2}' instead.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";An_index_signature_parameter_type_cannot_be_a_union_type_Consider_using_a_mapped_object_type_instead_1337" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[An index signature parameter type cannot be a union type. Consider using a mapped object type instead.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -1191,6 +1221,24 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Cannot_invoke_an_object_which_is_possibly_null_2721" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Cannot invoke an object which is possibly 'null'.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Cannot_invoke_an_object_which_is_possibly_null_or_undefined_2723" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Cannot invoke an object which is possibly 'null' or 'undefined'.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Cannot_invoke_an_object_which_is_possibly_undefined_2722" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Cannot invoke an object which is possibly 'undefined'.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Cannot_re_export_a_type_when_the_isolatedModules_flag_is_provided_1205" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Cannot re-export a type when the '--isolatedModules' flag is provided.]]></Val>
@@ -1341,6 +1389,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclas_2720" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Class '{0}' incorrectly implements class '{1}'. Did you mean to extend '{1}' and inherit its members as a subclass?]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Class_0_incorrectly_implements_interface_1_2420" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Class '{0}' incorrectly implements interface '{1}'.]]></Val>
@@ -1482,6 +1536,12 @@
             <Item ItemId=";Convert_function_to_an_ES2015_class_95001" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Convert function to an ES2015 class]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Convert_to_ES6_module_95017" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Convert to ES6 module]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -1869,6 +1929,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Enables_emit_interoperability_between_CommonJS_and_ES_Modules_via_creation_of_namespace_objects_for__7037" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Enables_experimental_support_for_ES7_async_functions_6068" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Enables experimental support for ES7 async functions.]]></Val>
@@ -1890,6 +1956,12 @@
             <Item ItemId=";Enum_0_used_before_its_declaration_2450" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Enum '{0}' used before its declaration.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Enum_declarations_can_only_merge_with_namespace_or_other_enum_declarations_2567" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Enum declarations can only merge with namespace or other enum declarations.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -2127,12 +2199,6 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
-            <Item ItemId=";Extract_symbol_95003" ItemType="0" PsrId="306" Leaf="true">
-              <Str Cat="Text">
-                <Val><![CDATA[Extract symbol]]></Val>
-              </Str>
-              <Disp Icon="Str" />
-            </Item>
             <Item ItemId=";Extract_to_0_in_1_95004" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Extract to {0} in {1}]]></Val>
@@ -2241,12 +2307,6 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
-            <Item ItemId=";File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0_5011" ItemType="0" PsrId="306" Leaf="true">
-              <Str Cat="Text">
-                <Val><![CDATA[File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'.]]></Val>
-              </Str>
-              <Disp Icon="Str" />
-            </Item>
             <Item ItemId=";File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0_5010" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[File specification cannot end in a recursive directory wildcard ('**'): '{0}'.]]></Val>
@@ -2256,6 +2316,12 @@
             <Item ItemId=";Found_package_json_at_0_6099" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Found 'package.json' at '{0}'.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Found_package_json_at_0_Package_ID_is_1_6190" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Found 'package.json' at '{0}'. Package ID is '{1}'.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -2925,6 +2991,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Mapped_object_type_implicitly_has_an_any_template_type_7039" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Mapped object type implicitly has an 'any' template type.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Member_0_implicitly_has_an_1_type_7008" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Member '{0}' implicitly has an '{1}' type.]]></Val>
@@ -3063,6 +3135,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Multiple_consecutive_numeric_separators_are_not_permitted_6189" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Multiple consecutive numeric separators are not permitted.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Multiple_constructor_implementations_are_not_allowed_2392" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Multiple constructor implementations are not allowed.]]></Val>
@@ -3120,6 +3198,12 @@
             <Item ItemId=";Numeric_index_type_0_is_not_assignable_to_string_index_type_1_2413" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Numeric index type '{0}' is not assignable to string index type '{1}'.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Numeric_separators_are_not_allowed_here_6188" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Numeric separators are not allowed here.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -3216,6 +3300,12 @@
             <Item ItemId=";Only_amd_and_system_modules_are_supported_alongside_0_6082" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Only 'amd' and 'system' modules are supported alongside --{0}.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Only_emit_d_ts_declaration_files_6014" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Only emit '.d.ts' declaration files.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -3591,6 +3681,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2_2416" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Property '{0}' in type '{1}' is not assignable to the same property in base type '{2}'.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Property_0_in_type_1_is_not_assignable_to_type_2_2603" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Property '{0}' in type '{1}' is not assignable to type '{2}'.]]></Val>
@@ -3822,6 +3918,12 @@
             <Item ItemId=";Remove_declaration_for_Colon_0_90004" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Remove declaration for: '{0}']]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Replace_import_with_0_95015" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Replace import with '{0}'.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -4185,9 +4287,9 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
-            <Item ItemId=";Specify_library_files_to_be_included_in_the_compilation_Colon_6079" ItemType="0" PsrId="306" Leaf="true">
+            <Item ItemId=";Specify_library_files_to_be_included_in_the_compilation_6079" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
-                <Val><![CDATA[Specify library files to be included in the compilation: ]]></Val>
+                <Val><![CDATA[Specify library files to be included in the compilation.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -4242,6 +4344,12 @@
             <Item ItemId=";Spread_types_may_only_be_created_from_object_types_2698" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Spread types may only be created from object types.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Starting_compilation_in_watch_mode_6031" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Starting compilation in watch mode...]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -5163,6 +5271,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Use_synthetic_default_member_95016" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Use synthetic 'default' member.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Using_a_string_in_a_for_of_statement_is_only_supported_in_ECMAScript_5_and_higher_2494" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Using a string in a 'for...of' statement is only supported in ECMAScript 5 and higher.]]></Val>
@@ -5495,7 +5609,7 @@
             </Item>
             <Item ItemId=";const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_im_2475" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
-                <Val><![CDATA['const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.]]></Val>
+                <Val><![CDATA['const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -5580,6 +5694,12 @@
             <Item ItemId=";import_can_only_be_used_in_a_ts_file_8002" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA['import ... =' can only be used in a .ts file.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";infer_declarations_are_only_permitted_in_the_extends_clause_of_a_conditional_type_1338" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA['infer' declarations are only permitted in the 'extends' clause of a conditional type.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
