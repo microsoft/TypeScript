@@ -350,7 +350,7 @@ namespace ts.textChanges {
             else if (isVariableDeclaration(before)) { // insert `x = 1, ` into `const x = 1, y = 2;
                 return { suffix: ", " };
             }
-            throw Debug.failBadSyntaxKind(before); // We haven't handled this kind of node yet -- add it
+            return Debug.failBadSyntaxKind(before); // We haven't handled this kind of node yet -- add it
         }
 
         public insertNodeAtConstructorStart(sourceFile: SourceFile, ctr: ConstructorDeclaration, newStatement: Statement): void {
@@ -434,7 +434,7 @@ namespace ts.textChanges {
             else if (isVariableDeclaration(node)) {
                 return { prefix: ", " };
             }
-            throw Debug.failBadSyntaxKind(node); // We haven't handled this kind of node yet -- add it
+            return Debug.failBadSyntaxKind(node); // We haven't handled this kind of node yet -- add it
         }
 
         /**

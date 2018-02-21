@@ -109,7 +109,7 @@ namespace ts.codefix {
                 return isSetAccessor(containingFunction) ? getCodeActionForSetAccessor(containingFunction, program, cancellationToken) : undefined;
 
             default:
-                throw Debug.fail(String(errorCode));
+                return Debug.fail(String(errorCode));
         }
     }
 

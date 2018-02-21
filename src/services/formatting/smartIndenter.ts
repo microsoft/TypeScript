@@ -583,7 +583,7 @@ namespace ts.formatting {
                         case SyntaxKind.ModuleBlock:
                             return true;
                         default:
-                            throw Debug.fail();
+                            return Debug.fail();
                     }
                 case SyntaxKind.ContinueStatement:
                 case SyntaxKind.BreakStatement:
