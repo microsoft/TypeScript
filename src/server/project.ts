@@ -238,7 +238,10 @@ namespace ts.server {
 
             this.setInternalCompilerOptionsForEmittingJsFiles();
             const host = this.projectService.host;
-            if (host.trace) {
+            if (this.projectService.logger.loggingEnabled()) {
+                this.trace = s => this.writeLog(s);
+            }
+            else if (host.trace) {
                 this.trace = s => host.trace(s);
             }
 
