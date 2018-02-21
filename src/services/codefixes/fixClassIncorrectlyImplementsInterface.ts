@@ -31,9 +31,7 @@ namespace ts.codefix {
     });
 
     function getClass(sourceFile: SourceFile, pos: number): ClassLikeDeclaration {
-        const classDeclaration = getContainingClass(getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false));
-        Debug.assert(!!classDeclaration);
-        return classDeclaration!;
+        return Debug.assertDefined(getContainingClass(getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false)));
     }
 
     function addMissingDeclarations(

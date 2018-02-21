@@ -1366,20 +1366,20 @@ namespace ts {
      */
     export function arrayToMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string): Map<T>;
     export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue: (value: T) => U): Map<U>;
-    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue?: (value: T) => U): Map<T | U> {
+    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue: (value: T) => T | U = identity): Map<T | U> {
         const result = createMap<T | U>();
         for (const value of array) {
-            result.set(makeKey(value), makeValue ? makeValue(value) : value);
+            result.set(makeKey(value), makeValue(value));
         }
         return result;
     }
 
     export function arrayToNumericMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => number): T[];
-    export function arrayToNumericMap<T, V>(array: ReadonlyArray<T>, makeKey: (value: T) => number, makeValue: (value: T) => V): V[];
-    export function arrayToNumericMap<T, V>(array: ReadonlyArray<T>, makeKey: (value: T) => number, makeValue?: (value: T) => V): V[] {
-        const result: V[] = [];
+    export function arrayToNumericMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => number, makeValue: (value: T) => U): U[];
+    export function arrayToNumericMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => number, makeValue: (value: T) => T | U = identity): (T | U)[] {
+        const result: (T | U)[] = [];
         for (const value of array) {
-            result[makeKey(value)] = makeValue ? makeValue(value) : value as any as V;
+            result[makeKey(value)] = makeValue(value);
         }
         return result;
     }
@@ -1393,6 +1393,20 @@ namespace ts {
     export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string): Map<true>;
     export function arrayToSet(array: ReadonlyArray<any>, makeKey?: (value: any) => string): Map<true> {
         return arrayToMap<any, true>(array, makeKey || (s => s), () => true);
+    }
+
+    export function arrayToMultiMap<T>(values: ReadonlyArray<T>, makeKey: (value: T) => string): MultiMap<T>;
+    export function arrayToMultiMap<T, U>(values: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue: (value: T) => U): MultiMap<U>;
+    export function arrayToMultiMap<T, U>(values: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue: (value: T) => T | U = identity): MultiMap<T | U> {
+        const result = createMultiMap<T | U>();
+        for (const value of values) {
+            result.add(makeKey(value), makeValue(value));
+        }
+        return result;
+    }
+
+    export function group<T>(values: ReadonlyArray<T>, getGroupId: (value: T) => string): ReadonlyArray<ReadonlyArray<T>> {
+        return arrayFrom(arrayToMultiMap(values, getGroupId).values());
     }
 
     export function cloneMap(map: SymbolTable): SymbolTable;
@@ -1469,14 +1483,6 @@ namespace ts {
                 this.delete(key);
             }
         }
-    }
-
-    export function group<T>(values: ReadonlyArray<T>, getGroupId: (value: T) => string): ReadonlyArray<ReadonlyArray<T>> {
-        const groupIdToGroup = createMultiMap<T>();
-        for (const value of values) {
-            groupIdToGroup.add(getGroupId(value), value);
-        }
-        return arrayFrom(groupIdToGroup.values());
     }
 
     /**
