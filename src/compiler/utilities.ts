@@ -1587,6 +1587,9 @@ namespace ts {
             return SpecialPropertyAssignmentKind.None;
         }
         const lhs = expr.left;
+        if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
+            return SpecialPropertyAssignmentKind.ThisProperty;
+        }
         if (isIdentifier(lhs.expression)) {
             if (lhs.expression.escapedText === "exports") {
                 // exports.name = expr
@@ -1596,19 +1599,8 @@ namespace ts {
                 // module.exports = expr
                 return SpecialPropertyAssignmentKind.ModuleExports;
             }
-            // TODO: Can probably unify these checks with those in the second half
-            else if (lhs.name.escapedText === "prototype") {
-                return SpecialPropertyAssignmentKind.Prototype;
-            }
-            else {
-                // F.x = expr
-                return SpecialPropertyAssignmentKind.Property;
-            }
         }
-        else if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
-            return SpecialPropertyAssignmentKind.ThisProperty;
-        }
-        else if (isEntityNameExpression(lhs.expression)) {
+        if (isEntityNameExpression(lhs.expression)) {
             if (lhs.name.escapedText === "prototype" && isObjectLiteralExpression(expr.right)) {
                 // F.prototype = { ... }
                 return SpecialPropertyAssignmentKind.Prototype;

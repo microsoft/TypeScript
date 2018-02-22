@@ -2353,14 +2353,13 @@ namespace ts {
             if (node.expression.kind === SyntaxKind.ThisKeyword) {
                 bindThisPropertyAssignment(node);
             }
-            else if (isEntityNameExpression(node) &&
-                     isPropertyAccessExpression(node.expression) &&
-                     node.expression.name.escapedText === "prototype" &&
-                     node.parent.parent.kind === SyntaxKind.SourceFile) {
-                bindPrototypePropertyAssignment(node as PropertyAccessEntityNameExpression, node.parent);
-            }
             else if (isEntityNameExpression(node) && node.parent.parent.kind === SyntaxKind.SourceFile) {
-                bindStaticPropertyAssignment(node as PropertyAccessEntityNameExpression);
+                if (isPropertyAccessExpression(node.expression) && node.expression.name.escapedText === "prototype") {
+                    bindPrototypePropertyAssignment(node as PropertyAccessEntityNameExpression, node.parent);
+                }
+                else {
+                    bindStaticPropertyAssignment(node as PropertyAccessEntityNameExpression);
+                }
             }
         }
 
@@ -2368,7 +2367,8 @@ namespace ts {
         function bindPrototypeAssignment(node: BinaryExpression) {
             node.left.parent = node;
             node.right.parent = node;
-            bindPropertyAssignment(node.left as PropertyAccessEntityNameExpression, node.left as PropertyAccessEntityNameExpression, /*isPrototypeProperty*/ false);
+            const lhs = node.left as PropertyAccessEntityNameExpression;
+            bindPropertyAssignment(lhs, lhs, /*isPrototypeProperty*/ false);
         }
 
         /**
