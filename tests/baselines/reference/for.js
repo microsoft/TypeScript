@@ -52,5 +52,6 @@ for (var l = 0;; l++) {
 }
 for (;;) {
 }
-for (;;) {
+for (;; // error
+) {
 }

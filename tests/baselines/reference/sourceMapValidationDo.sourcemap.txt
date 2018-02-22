@@ -36,17 +36,20 @@ sourceFile:sourceMapValidationDo.ts
 ---
 >>>do {
 1 >
-2 >^^^
-3 >   ^
-4 >    ^^^^^->
+2 >^^
+3 >  ^
+4 >   ^
+5 >    ^^^^^->
 1 >
   >
 2 >do
-  >
-3 >   {
+3 >  
+  >  
+4 >   {
 1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
-2 >Emitted(2, 4) Source(3, 1) + SourceIndex(0)
-3 >Emitted(2, 5) Source(3, 2) + SourceIndex(0)
+2 >Emitted(2, 3) Source(2, 3) + SourceIndex(0)
+3 >Emitted(2, 4) Source(3, 1) + SourceIndex(0)
+4 >Emitted(2, 5) Source(3, 2) + SourceIndex(0)
 ---
 >>>    i++;
 1->^^^^
@@ -67,39 +70,54 @@ sourceFile:sourceMapValidationDo.ts
 >>>} while (i < 10);
 1->
 2 >^
-3 > ^^^^^^^^
-4 >         ^
-5 >          ^^^
-6 >             ^^
-7 >               ^^
+3 > ^
+4 >  ^^^^^
+5 >       ^
+6 >        ^
+7 >         ^
+8 >          ^^^
+9 >             ^^
+10>               ^
+11>                ^
 1->
   >
 2 >}
-3 >  while (
-4 >         i
-5 >           < 
-6 >             10
-7 >               );
+3 >  
+4 >  while
+5 >        
+6 >        (
+7 >         i
+8 >           < 
+9 >             10
+10>               )
+11>                ;
 1->Emitted(4, 1) Source(5, 1) + SourceIndex(0)
 2 >Emitted(4, 2) Source(5, 2) + SourceIndex(0)
-3 >Emitted(4, 10) Source(5, 10) + SourceIndex(0)
-4 >Emitted(4, 11) Source(5, 11) + SourceIndex(0)
-5 >Emitted(4, 14) Source(5, 14) + SourceIndex(0)
-6 >Emitted(4, 16) Source(5, 16) + SourceIndex(0)
-7 >Emitted(4, 18) Source(5, 18) + SourceIndex(0)
+3 >Emitted(4, 3) Source(5, 3) + SourceIndex(0)
+4 >Emitted(4, 8) Source(5, 8) + SourceIndex(0)
+5 >Emitted(4, 9) Source(5, 9) + SourceIndex(0)
+6 >Emitted(4, 10) Source(5, 10) + SourceIndex(0)
+7 >Emitted(4, 11) Source(5, 11) + SourceIndex(0)
+8 >Emitted(4, 14) Source(5, 14) + SourceIndex(0)
+9 >Emitted(4, 16) Source(5, 16) + SourceIndex(0)
+10>Emitted(4, 17) Source(5, 17) + SourceIndex(0)
+11>Emitted(4, 18) Source(5, 18) + SourceIndex(0)
 ---
 >>>do {
 1 >
-2 >^^^
-3 >   ^
-4 >    ^^^^^->
+2 >^^
+3 >  ^
+4 >   ^
+5 >    ^^^^^->
 1 >
   >
-2 >do 
-3 >   {
+2 >do
+3 >   
+4 >   {
 1 >Emitted(5, 1) Source(6, 1) + SourceIndex(0)
-2 >Emitted(5, 4) Source(6, 4) + SourceIndex(0)
-3 >Emitted(5, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(5, 3) Source(6, 3) + SourceIndex(0)
+3 >Emitted(5, 4) Source(6, 4) + SourceIndex(0)
+4 >Emitted(5, 5) Source(6, 5) + SourceIndex(0)
 ---
 >>>    i++;
 1->^^^^
@@ -120,26 +138,38 @@ sourceFile:sourceMapValidationDo.ts
 >>>} while (i < 20);
 1->
 2 >^
-3 > ^^^^^^^^
-4 >         ^
-5 >          ^^^
-6 >             ^^
-7 >               ^^
-8 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^
+4 >  ^^^^^
+5 >       ^
+6 >        ^
+7 >         ^
+8 >          ^^^
+9 >             ^^
+10>               ^
+11>                ^
+12>                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >}
-3 >  while (
-4 >         i
-5 >           < 
-6 >             20
-7 >               );
+3 >  
+4 >  while
+5 >        
+6 >        (
+7 >         i
+8 >           < 
+9 >             20
+10>               )
+11>                ;
 1->Emitted(7, 1) Source(8, 1) + SourceIndex(0)
 2 >Emitted(7, 2) Source(8, 2) + SourceIndex(0)
-3 >Emitted(7, 10) Source(8, 10) + SourceIndex(0)
-4 >Emitted(7, 11) Source(8, 11) + SourceIndex(0)
-5 >Emitted(7, 14) Source(8, 14) + SourceIndex(0)
-6 >Emitted(7, 16) Source(8, 16) + SourceIndex(0)
-7 >Emitted(7, 18) Source(8, 18) + SourceIndex(0)
+3 >Emitted(7, 3) Source(8, 3) + SourceIndex(0)
+4 >Emitted(7, 8) Source(8, 8) + SourceIndex(0)
+5 >Emitted(7, 9) Source(8, 9) + SourceIndex(0)
+6 >Emitted(7, 10) Source(8, 10) + SourceIndex(0)
+7 >Emitted(7, 11) Source(8, 11) + SourceIndex(0)
+8 >Emitted(7, 14) Source(8, 14) + SourceIndex(0)
+9 >Emitted(7, 16) Source(8, 16) + SourceIndex(0)
+10>Emitted(7, 17) Source(8, 17) + SourceIndex(0)
+11>Emitted(7, 18) Source(8, 18) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDo.js.map

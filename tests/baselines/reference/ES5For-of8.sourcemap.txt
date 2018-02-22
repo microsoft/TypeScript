@@ -56,75 +56,72 @@ sourceFile:ES5For-of8.ts
 ---
 >>>for (var _i = 0, _a = ['a', 'b', 'c']; _i < _a.length; _i++) {
 1->
-2 >^^^
-3 >   ^
-4 >    ^
-5 >     ^^^^^^^
-6 >            ^
-7 >             ^^
-8 >               ^^
-9 >                 ^^^
-10>                    ^
-11>                     ^^
-12>                       ^^^
-13>                          ^^
-14>                            ^^^
-15>                               ^^
-16>                                 ^^^
-17>                                    ^
-18>                                     ^^
-19>                                       ^^^^^^^^^^^^^^
-20>                                                     ^^
-21>                                                       ^^^^
+2 >^^^^
+3 >    ^
+4 >     ^^^^^^^
+5 >            ^
+6 >             ^^
+7 >               ^^
+8 >                 ^^^
+9 >                    ^
+10>                     ^^
+11>                       ^^^
+12>                          ^^
+13>                            ^^^
+14>                               ^^
+15>                                 ^^^
+16>                                    ^
+17>                                     ^^
+18>                                       ^^^^^^^^^^^^^^
+19>                                                     ^^
+20>                                                       ^^^^
 1->
   >
-2 >for
-3 >    
-4 >    (foo().x of 
-5 >     
-6 >            f
-7 >             unction foo() {
+2 >for 
+3 >    (foo().x of 
+4 >     
+5 >            f
+6 >             unction foo() {
   >                 return { x: 0 };
   >             }
   >             for (foo().x of ['a', 'b', 'c']
-8 >               
-9 >                 
-10>                    f
-11>                     unction foo() {
+7 >               
+8 >                 
+9 >                    f
+10>                     unction foo() {
   >                         return { x: 0 };
   >                     }
   >                     for (foo().x of [
-12>                       'a'
-13>                          , 
-14>                            'b'
-15>                               , 
-16>                                 'c'
-17>                                    ]
-18>                                     
-19>                                       ['a', 'b', 'c']
-20>                                                     
-21>                                                       ['a', 'b', 'c']
+11>                       'a'
+12>                          , 
+13>                            'b'
+14>                               , 
+15>                                 'c'
+16>                                    ]
+17>                                     
+18>                                       ['a', 'b', 'c']
+19>                                                     
+20>                                                       ['a', 'b', 'c']
 1->Emitted(4, 1) Source(4, 1) + SourceIndex(0)
-2 >Emitted(4, 4) Source(4, 4) + SourceIndex(0)
-3 >Emitted(4, 5) Source(4, 5) + SourceIndex(0)
-4 >Emitted(4, 6) Source(4, 17) + SourceIndex(0)
-5 >Emitted(4, 13) Source(1, 1) + SourceIndex(0)
-6 >Emitted(4, 14) Source(1, 2) + SourceIndex(0)
-7 >Emitted(4, 16) Source(4, 32) + SourceIndex(0)
-8 >Emitted(4, 18) Source(4, 17) + SourceIndex(0)
-9 >Emitted(4, 21) Source(1, 1) + SourceIndex(0)
-10>Emitted(4, 22) Source(1, 2) + SourceIndex(0)
-11>Emitted(4, 24) Source(4, 18) + SourceIndex(0)
-12>Emitted(4, 27) Source(4, 21) + SourceIndex(0)
-13>Emitted(4, 29) Source(4, 23) + SourceIndex(0)
-14>Emitted(4, 32) Source(4, 26) + SourceIndex(0)
-15>Emitted(4, 34) Source(4, 28) + SourceIndex(0)
-16>Emitted(4, 37) Source(4, 31) + SourceIndex(0)
-17>Emitted(4, 38) Source(4, 32) + SourceIndex(0)
-18>Emitted(4, 40) Source(4, 17) + SourceIndex(0)
-19>Emitted(4, 54) Source(4, 32) + SourceIndex(0)
-20>Emitted(4, 56) Source(4, 17) + SourceIndex(0)
-21>Emitted(4, 60) Source(4, 32) + SourceIndex(0)
+2 >Emitted(4, 5) Source(4, 5) + SourceIndex(0)
+3 >Emitted(4, 6) Source(4, 17) + SourceIndex(0)
+4 >Emitted(4, 13) Source(1, 1) + SourceIndex(0)
+5 >Emitted(4, 14) Source(1, 2) + SourceIndex(0)
+6 >Emitted(4, 16) Source(4, 32) + SourceIndex(0)
+7 >Emitted(4, 18) Source(4, 17) + SourceIndex(0)
+8 >Emitted(4, 21) Source(1, 1) + SourceIndex(0)
+9 >Emitted(4, 22) Source(1, 2) + SourceIndex(0)
+10>Emitted(4, 24) Source(4, 18) + SourceIndex(0)
+11>Emitted(4, 27) Source(4, 21) + SourceIndex(0)
+12>Emitted(4, 29) Source(4, 23) + SourceIndex(0)
+13>Emitted(4, 32) Source(4, 26) + SourceIndex(0)
+14>Emitted(4, 34) Source(4, 28) + SourceIndex(0)
+15>Emitted(4, 37) Source(4, 31) + SourceIndex(0)
+16>Emitted(4, 38) Source(4, 32) + SourceIndex(0)
+17>Emitted(4, 40) Source(4, 17) + SourceIndex(0)
+18>Emitted(4, 54) Source(4, 32) + SourceIndex(0)
+19>Emitted(4, 56) Source(4, 17) + SourceIndex(0)
+20>Emitted(4, 60) Source(4, 32) + SourceIndex(0)
 ---
 >>>    foo().x = _a[_i];
 1 >^^^^

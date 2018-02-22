@@ -55,53 +55,50 @@ sourceFile:ES5For-of25.ts
 ---
 >>>for (var _i = 0, a_1 = a; _i < a_1.length; _i++) {
 1->
-2 >^^^
-3 >   ^
-4 >    ^
-5 >     ^^^^^^^
-6 >            ^
-7 >             ^^
-8 >               ^^
-9 >                 ^^^^
-10>                     ^
-11>                      ^^
-12>                        ^^
-13>                          ^^^^^^^^^^^^^^^
-14>                                         ^^
-15>                                           ^^^^
+2 >^^^^
+3 >    ^
+4 >     ^^^^^^^
+5 >            ^
+6 >             ^^
+7 >               ^^
+8 >                 ^^^^
+9 >                     ^
+10>                      ^^
+11>                        ^^
+12>                          ^^^^^^^^^^^^^^^
+13>                                         ^^
+14>                                           ^^^^
 1->
   >
-2 >for
-3 >    
-4 >    (var v of 
-5 >     
-6 >            v
-7 >             ar a = [1, 2, 3];
+2 >for 
+3 >    (var v of 
+4 >     
+5 >            v
+6 >             ar a = [1, 2, 3];
   >             for (var v of a
-8 >               
-9 >                 
-10>                     v
-11>                      ar a = [1, 2, 3];
+7 >               
+8 >                 
+9 >                     v
+10>                      ar a = [1, 2, 3];
   >                      for (var v of a
-12>                        
-13>                          a
-14>                                         
-15>                                           a
+11>                        
+12>                          a
+13>                                         
+14>                                           a
 1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
-2 >Emitted(2, 4) Source(2, 4) + SourceIndex(0)
-3 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
-4 >Emitted(2, 6) Source(2, 15) + SourceIndex(0)
-5 >Emitted(2, 13) Source(1, 1) + SourceIndex(0)
-6 >Emitted(2, 14) Source(1, 2) + SourceIndex(0)
-7 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
-8 >Emitted(2, 18) Source(2, 15) + SourceIndex(0)
-9 >Emitted(2, 22) Source(1, 1) + SourceIndex(0)
-10>Emitted(2, 23) Source(1, 2) + SourceIndex(0)
-11>Emitted(2, 25) Source(2, 16) + SourceIndex(0)
-12>Emitted(2, 27) Source(2, 15) + SourceIndex(0)
-13>Emitted(2, 42) Source(2, 16) + SourceIndex(0)
-14>Emitted(2, 44) Source(2, 15) + SourceIndex(0)
-15>Emitted(2, 48) Source(2, 16) + SourceIndex(0)
+2 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+3 >Emitted(2, 6) Source(2, 15) + SourceIndex(0)
+4 >Emitted(2, 13) Source(1, 1) + SourceIndex(0)
+5 >Emitted(2, 14) Source(1, 2) + SourceIndex(0)
+6 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
+7 >Emitted(2, 18) Source(2, 15) + SourceIndex(0)
+8 >Emitted(2, 22) Source(1, 1) + SourceIndex(0)
+9 >Emitted(2, 23) Source(1, 2) + SourceIndex(0)
+10>Emitted(2, 25) Source(2, 16) + SourceIndex(0)
+11>Emitted(2, 27) Source(2, 15) + SourceIndex(0)
+12>Emitted(2, 42) Source(2, 16) + SourceIndex(0)
+13>Emitted(2, 44) Source(2, 15) + SourceIndex(0)
+14>Emitted(2, 48) Source(2, 16) + SourceIndex(0)
 ---
 >>>    var v = a_1[_i];
 1 >^^^^

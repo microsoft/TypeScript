@@ -77,10 +77,13 @@ sourceFile:sourceMapValidationDecorators.ts
 2 >             ^^^^^^^
 3 >                    ^
 4 >                     ^^
-5 >                       ^^
-6 >                         ^^^^^^^^^^^^^^^^^^^^^
-7 >                                              ^^
-8 >                                                ^^^^
+5 >                       ^
+6 >                        ^
+7 >                         ^^^^^^^^^^^^^^^^^^^^^
+8 >                                              ^
+9 >                                               ^
+10>                                                ^^^^
+11>                                                    ^
 1->
 2 >             
 3 >                    d
@@ -102,18 +105,24 @@ sourceFile:sourceMapValidationDecorators.ts
   >                           @ParameterDecorator1 
   >                           @ParameterDecorator2(30) 
   >                           ...b: string[]
-5 >                       
-6 >                         ...b: string[]
-7 >                                              
-8 >                                                ...b: string[]
+5 >                       )
+6 >                        
+7 >                         ...b: string[]
+8 >                                              )
+9 >                                               
+10>                                                ...b: string[]
+11>                                                    )
 1->Emitted(13, 14) Source(18, 7) + SourceIndex(0)
 2 >Emitted(13, 21) Source(1, 1) + SourceIndex(0)
 3 >Emitted(13, 22) Source(1, 2) + SourceIndex(0)
 4 >Emitted(13, 24) Source(18, 21) + SourceIndex(0)
-5 >Emitted(13, 26) Source(18, 7) + SourceIndex(0)
-6 >Emitted(13, 47) Source(18, 21) + SourceIndex(0)
-7 >Emitted(13, 49) Source(18, 7) + SourceIndex(0)
-8 >Emitted(13, 53) Source(18, 21) + SourceIndex(0)
+5 >Emitted(13, 25) Source(18, 22) + SourceIndex(0)
+6 >Emitted(13, 26) Source(18, 7) + SourceIndex(0)
+7 >Emitted(13, 47) Source(18, 21) + SourceIndex(0)
+8 >Emitted(13, 48) Source(18, 22) + SourceIndex(0)
+9 >Emitted(13, 49) Source(18, 7) + SourceIndex(0)
+10>Emitted(13, 53) Source(18, 21) + SourceIndex(0)
+11>Emitted(13, 54) Source(18, 22) + SourceIndex(0)
 ---
 >>>            b[_i - 1] = arguments[_i];
 1 >^^^^^^^^^^^^

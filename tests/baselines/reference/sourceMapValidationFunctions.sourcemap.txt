@@ -150,10 +150,13 @@ sourceFile:sourceMapValidationFunctions.ts
 2 >         ^^^^^^^
 3 >                ^
 4 >                 ^^
-5 >                   ^^
-6 >                     ^^^^^^^^^^^^^^^^^^^^^
-7 >                                          ^^
-8 >                                            ^^^^
+5 >                   ^
+6 >                    ^
+7 >                     ^^^^^^^^^^^^^^^^^^^^^
+8 >                                          ^
+9 >                                           ^
+10>                                            ^^^^
+11>                                                ^
 1->
 2 >         
 3 >                v
@@ -163,18 +166,24 @@ sourceFile:sourceMapValidationFunctions.ts
   >                     return greetings;
   >                 }
   >                 function greet2(greeting: string, n = 10, x?: string, ...restParams: string[]
-5 >                   
-6 >                     ...restParams: string[]
-7 >                                          
-8 >                                            ...restParams: string[]
+5 >                   )
+6 >                    
+7 >                     ...restParams: string[]
+8 >                                          )
+9 >                                           
+10>                                            ...restParams: string[]
+11>                                                )
 1->Emitted(9, 10) Source(6, 55) + SourceIndex(0)
 2 >Emitted(9, 17) Source(1, 1) + SourceIndex(0)
 3 >Emitted(9, 18) Source(1, 2) + SourceIndex(0)
 4 >Emitted(9, 20) Source(6, 78) + SourceIndex(0)
-5 >Emitted(9, 22) Source(6, 55) + SourceIndex(0)
-6 >Emitted(9, 43) Source(6, 78) + SourceIndex(0)
-7 >Emitted(9, 45) Source(6, 55) + SourceIndex(0)
-8 >Emitted(9, 49) Source(6, 78) + SourceIndex(0)
+5 >Emitted(9, 21) Source(6, 79) + SourceIndex(0)
+6 >Emitted(9, 22) Source(6, 55) + SourceIndex(0)
+7 >Emitted(9, 43) Source(6, 78) + SourceIndex(0)
+8 >Emitted(9, 44) Source(6, 79) + SourceIndex(0)
+9 >Emitted(9, 45) Source(6, 55) + SourceIndex(0)
+10>Emitted(9, 49) Source(6, 78) + SourceIndex(0)
+11>Emitted(9, 50) Source(6, 79) + SourceIndex(0)
 ---
 >>>        restParams[_i - 3] = arguments[_i];
 1 >^^^^^^^^
@@ -288,10 +297,13 @@ sourceFile:sourceMapValidationFunctions.ts
 2 >         ^^^^^^^
 3 >                ^
 4 >                 ^^
-5 >                   ^^
-6 >                     ^^^^^^^^^^^^^^^^^^^^^
-7 >                                          ^^
-8 >                                            ^^^^
+5 >                   ^
+6 >                    ^
+7 >                     ^^^^^^^^^^^^^^^^^^^^^
+8 >                                          ^
+9 >                                           ^
+10>                                            ^^^^
+11>                                                ^
 1->
 2 >         
 3 >                v
@@ -305,18 +317,24 @@ sourceFile:sourceMapValidationFunctions.ts
   >                     return greetings;
   >                 }
   >                 function foo(greeting: string, n = 10, x?: string, ...restParams: string[]
-5 >                   
-6 >                     ...restParams: string[]
-7 >                                          
-8 >                                            ...restParams: string[]
+5 >                   )
+6 >                    
+7 >                     ...restParams: string[]
+8 >                                          )
+9 >                                           
+10>                                            ...restParams: string[]
+11>                                                )
 1->Emitted(18, 10) Source(10, 52) + SourceIndex(0)
 2 >Emitted(18, 17) Source(1, 1) + SourceIndex(0)
 3 >Emitted(18, 18) Source(1, 2) + SourceIndex(0)
 4 >Emitted(18, 20) Source(10, 75) + SourceIndex(0)
-5 >Emitted(18, 22) Source(10, 52) + SourceIndex(0)
-6 >Emitted(18, 43) Source(10, 75) + SourceIndex(0)
-7 >Emitted(18, 45) Source(10, 52) + SourceIndex(0)
-8 >Emitted(18, 49) Source(10, 75) + SourceIndex(0)
+5 >Emitted(18, 21) Source(10, 76) + SourceIndex(0)
+6 >Emitted(18, 22) Source(10, 52) + SourceIndex(0)
+7 >Emitted(18, 43) Source(10, 75) + SourceIndex(0)
+8 >Emitted(18, 44) Source(10, 76) + SourceIndex(0)
+9 >Emitted(18, 45) Source(10, 52) + SourceIndex(0)
+10>Emitted(18, 49) Source(10, 75) + SourceIndex(0)
+11>Emitted(18, 50) Source(10, 76) + SourceIndex(0)
 ---
 >>>        restParams[_i - 3] = arguments[_i];
 1 >^^^^^^^^

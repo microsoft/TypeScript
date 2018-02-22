@@ -1457,7 +1457,7 @@ namespace ts {
         }
 
         function emitAwaitExpression(node: AwaitExpression) {
-            writeKeyword("await");
+            emitTokenWithComment(SyntaxKind.AwaitKeyword, node.pos, writeKeyword, node);
             writeSpace();
             emitExpression(node.expression);
         }
@@ -1535,7 +1535,7 @@ namespace ts {
         }
 
         function emitYieldExpression(node: YieldExpression) {
-            writeKeyword("yield");
+            emitTokenWithComment(SyntaxKind.YieldKeyword, node.pos, writeKeyword, node);
             emit(node.asteriskToken);
             emitExpressionWithLeadingSpace(node.expression);
         }
@@ -1638,8 +1638,16 @@ namespace ts {
             }
         }
 
+        function emitWhileClause(node: WhileStatement | DoStatement, startPos: number) {
+            const openParenPos = emitTokenWithComment(SyntaxKind.WhileKeyword, startPos, writeKeyword, node);
+            writeSpace();
+            emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
+            emitExpression(node.expression);
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
+        }
+
         function emitDoStatement(node: DoStatement) {
-            writeKeyword("do");
+            emitTokenWithComment(SyntaxKind.DoKeyword, node.pos, writeKeyword, node);
             emitEmbeddedStatement(node, node.statement);
             if (isBlock(node.statement)) {
                 writeSpace();
@@ -1648,59 +1656,52 @@ namespace ts {
                 writeLineOrSpace(node);
             }
 
-            writeKeyword("while");
-            writeSpace();
-            writePunctuation("(");
-            emitExpression(node.expression);
-            writePunctuation(");");
+            emitWhileClause(node, node.statement.end);
+            writePunctuation(";");
         }
 
         function emitWhileStatement(node: WhileStatement) {
-            writeKeyword("while");
-            writeSpace();
-            writePunctuation("(");
-            emitExpression(node.expression);
-            writePunctuation(")");
+            emitWhileClause(node, node.pos);
             emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForStatement(node: ForStatement) {
-            const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos, writeKeyword);
+            const openParenPos = emitTokenWithComment(SyntaxKind.ForKeyword, node.pos, writeKeyword, node);
             writeSpace();
-            writeToken(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, /*contextNode*/ node);
+            let pos = emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, /*contextNode*/ node);
             emitForBinding(node.initializer);
-            writeSemicolon();
+            pos = emitTokenWithComment(SyntaxKind.SemicolonToken, node.initializer ? node.initializer.end : pos, writeSemicolon, node);
             emitExpressionWithLeadingSpace(node.condition);
-            writeSemicolon();
+            pos = emitTokenWithComment(SyntaxKind.SemicolonToken, node.condition ? node.condition.end : pos, writeSemicolon, node);
             emitExpressionWithLeadingSpace(node.incrementor);
-            writePunctuation(")");
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.incrementor ? node.incrementor.end : pos, writePunctuation, node);
             emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForInStatement(node: ForInStatement) {
-            const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos, writeKeyword);
+            const openParenPos = emitTokenWithComment(SyntaxKind.ForKeyword, node.pos, writeKeyword, node);
             writeSpace();
-            writeToken(SyntaxKind.OpenParenToken, openParenPos, writePunctuation);
+            emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
             emitForBinding(node.initializer);
             writeSpace();
-            writeKeyword("in");
+            emitTokenWithComment(SyntaxKind.InKeyword, node.initializer.end, writeKeyword, node);
             writeSpace();
             emitExpression(node.expression);
-            writeToken(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation);
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
             emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForOfStatement(node: ForOfStatement) {
-            const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos, writeKeyword);
+            const openParenPos = emitTokenWithComment(SyntaxKind.ForKeyword, node.pos, writeKeyword, node);
             writeSpace();
             emitWithTrailingSpace(node.awaitModifier);
-            writeToken(SyntaxKind.OpenParenToken, openParenPos, writePunctuation);
+            emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
             emitForBinding(node.initializer);
             writeSpace();
-            writeKeyword("of");
+            emitTokenWithComment(SyntaxKind.OfKeyword, node.initializer.end, writeKeyword, node);
             writeSpace();
             emitExpression(node.expression);
-            writeToken(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation);
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
             emitEmbeddedStatement(node, node.statement);
         }
 

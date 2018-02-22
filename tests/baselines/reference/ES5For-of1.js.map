@@ -1,2 +1,2 @@
 //// [ES5For-of1.js.map]
-{"version":3,"file":"ES5For-of1.js","sourceRoot":"","sources":["ES5For-of1.ts"],"names":[],"mappings":"AAAA,GAAG,CAAC,CAAU,OAAd,CAAC,EAA4B,EAAf,GAAd,CAAC,EAAc,GAAG,EAAE,GAAG,EAAE,GAAG,CAAC,EAAf,cAAe,EAAf,IAAe;IAAxB,IAAI,CAAC,CAAC,CAAC,OAAF;IACN,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;CAClB"}
+{"version":3,"file":"ES5For-of1.js","sourceRoot":"","sources":["ES5For-of1.ts"],"names":[],"mappings":"AAAA,IAAI,CAAU,OAAd,CAAC,EAA4B,EAAf,GAAd,CAAC,EAAc,GAAG,EAAE,GAAG,EAAE,GAAG,CAAC,EAAf,cAAe,EAAf,IAAe;IAAxB,IAAI,CAAC,CAAC,CAAC,OAAF;IACN,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;CAClB"}
