@@ -3,6 +3,7 @@ interface I {
 >I : I
 
     [Symbol.unscopables](): string;
+>[Symbol.unscopables] : () => string
 >Symbol.unscopables : symbol
 >Symbol : SymbolConstructor
 >unscopables : symbol

@@ -20,6 +20,7 @@ extractIndexer({
 >{    [a]: ""} : { [x: number]: string; }
 
     [a]: ""
+>[a] : string
 >a : any
 >"" : ""
 
@@ -31,6 +32,7 @@ extractIndexer({
 >{    [E.x]: ""} : { [E.x]: string; }
 
     [E.x]: ""
+>[E.x] : string
 >E.x : E
 >E : typeof E
 >x : E
@@ -44,6 +46,7 @@ extractIndexer({
 >{    ["" || 0]: ""} : { ["" || 0]: string; }
 
     ["" || 0]: ""
+>["" || 0] : string
 >"" || 0 : 0
 >"" : ""
 >0 : 0

@@ -3,4 +3,5 @@ enum E {
 >E : Symbol(E, Decl(parserES5ComputedPropertyName6.ts, 0, 0))
 
   [e] = 1
+>[e] : Symbol(E[e], Decl(parserES5ComputedPropertyName6.ts, 0, 8))
 }

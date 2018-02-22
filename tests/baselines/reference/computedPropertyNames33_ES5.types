@@ -16,6 +16,7 @@ class C<T> {
 >{            [foo<T>()]() { }        } : { [x: string]: () => void; }
 
             [foo<T>()]() { }
+>[foo<T>()] : () => void
 >foo<T>() : string
 >foo : <T>() => string
 >T : T
