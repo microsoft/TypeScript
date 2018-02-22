@@ -330,17 +330,15 @@ namespace ts.FindAllReferences.Core {
         }
 
         // Labels
-        if (isLabelName(node)) {
-            if (isJumpStatementTarget(node)) {
-                const labelDefinition = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
-                // if we have a label definition, look within its statement for references, if not, then
-                // the label is undefined and we have no results..
-                return labelDefinition && getLabelReferencesInNode(labelDefinition.parent, labelDefinition);
-            }
-            else {
-                // it is a label definition and not a target, search within the parent labeledStatement
-                return getLabelReferencesInNode(node.parent, <Identifier>node);
-            }
+        if (isJumpStatementTarget(node)) {
+            const labelDefinition = getTargetLabel(node.parent, node.text);
+            // if we have a label definition, look within its statement for references, if not, then
+            // the label is undefined and we have no results..
+            return labelDefinition && getLabelReferencesInNode(labelDefinition.parent, labelDefinition);
+        }
+        else if (isLabelOfLabeledStatement(node)) {
+            // it is a label definition and not a target, search within the parent labeledStatement
+            return getLabelReferencesInNode(node.parent, node);
         }
 
         if (isThis(node)) {

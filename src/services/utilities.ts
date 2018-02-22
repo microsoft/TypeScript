@@ -214,16 +214,12 @@ namespace ts {
         return undefined;
     }
 
-    export function isJumpStatementTarget(node: Node): boolean {
-        return node.kind === SyntaxKind.Identifier &&
-            (node.parent.kind === SyntaxKind.BreakStatement || node.parent.kind === SyntaxKind.ContinueStatement) &&
-            (<BreakOrContinueStatement>node.parent).label === node;
-    }
+    export function isJumpStatementTarget(node: Node): node is Identifier & { parent: BreakOrContinueStatement } {
+        return node.kind === SyntaxKind.Identifier && isBreakOrContinueStatement(node.parent) && node.parent.label === node;
+     }
 
-    function isLabelOfLabeledStatement(node: Node): boolean {
-        return node.kind === SyntaxKind.Identifier &&
-            node.parent.kind === SyntaxKind.LabeledStatement &&
-            (<LabeledStatement>node.parent).label === node;
+    export function isLabelOfLabeledStatement(node: Node): node is Identifier {
+        return node.kind === SyntaxKind.Identifier && isLabeledStatement(node.parent) && node.parent.label === node;
     }
 
     export function isLabelName(node: Node): boolean {
