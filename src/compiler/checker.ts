@@ -17895,32 +17895,33 @@ namespace ts {
 
         function getJavaScriptClassType(symbol: Symbol): Type | undefined {
             if (isDeclarationOfFunctionOrClassExpression(symbol)) {
-                symbol = getSymbolOfNode((<VariableDeclaration>symbol.valueDeclaration).initializer);
+                symbol = getSymbolOfNode((symbol.valueDeclaration as VariableDeclaration).initializer);
             }
-            // TODO: Could stick members on this somehow
+            let assigned = getAssignedClassType(symbol);
+            let inferred: Type | undefined;
             if (isJavaScriptConstructor(symbol.valueDeclaration)) {
-                return getInferredClassType(symbol);
-            }
-            // // OR: Get them another way
-            const otherSymbol: Symbol = getOtherSymbol(symbol.valueDeclaration);
-            if (otherSymbol) {
-                const prototype = forEach(otherSymbol.declarations, d => getAssignedJavascriptPrototype(d.parent));
-                if (prototype) {
-                    // NOTE: Should be able to check the original symbol for other prototype declarations, right?
-                    // Not sure why not. Maybe intersecting them would work then.
-                    return checkExpression(prototype);
-                }
+                inferred = getInferredClassType(symbol);
             }
             if (symbol.flags & SymbolFlags.Variable) {
                 const valueType = getTypeOfSymbol(symbol);
                 if (valueType.symbol && !isInferredClassType(valueType) && isJavaScriptConstructor(valueType.symbol.valueDeclaration)) {
-                    return getInferredClassType(valueType.symbol);
+                    inferred = getInferredClassType(valueType.symbol);
                 }
             }
+            return !inferred ? assigned :
+                !assigned ? inferred :
+                getIntersectionType([inferred, assigned]);
         }
 
-        function getOtherSymbol(node: Node) {
-            return node && node.parent && isBinaryExpression(node.parent) && getSymbolOfNode(node.parent.left);
+        function getAssignedClassType(symbol: Symbol) {
+            const decl = symbol.valueDeclaration;
+            const assignmentSymbol = decl && decl.parent && isBinaryExpression(decl.parent) && getSymbolOfNode(decl.parent.left);
+            if (assignmentSymbol) {
+                const prototype = forEach(assignmentSymbol.declarations, d => getAssignedJavascriptPrototype(d.parent));
+                if (prototype) {
+                    return checkExpression(prototype);
+                }
+            }
         }
 
         function getInferredClassType(symbol: Symbol) {

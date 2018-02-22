@@ -2367,6 +2367,7 @@ namespace ts {
         /** For `x.prototype = { p, ... }`, declare members p,... if `x` is function/class/{}, or not declared. */
         function bindPrototypeAssignment(node: BinaryExpression) {
             node.left.parent = node;
+            node.right.parent = node;
             bindPropertyAssignment(node.left as PropertyAccessEntityNameExpression, node.left as PropertyAccessEntityNameExpression, /*isPrototypeProperty*/ false);
         }
 
@@ -2416,7 +2417,7 @@ namespace ts {
         function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
             let symbol = getJSInitializerSymbol(lookupSymbolForPropertyAccess(name));
             const isToplevelNamespaceableInitializer = isBinaryExpression(propertyAccess.parent) ?
-                propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile && (getJavascriptInitializer(propertyAccess.parent.right) || isJavascriptPrototypeAssignment(propertyAccess.parent)) :
+                propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile && getJavascriptInitializer(propertyAccess.parent.right) :
                 propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
             if (!isPrototypeProperty && (!symbol || !(symbol.flags & SymbolFlags.Namespace)) && isToplevelNamespaceableInitializer) {
                 // make symbols or add declarations for intermediate containers

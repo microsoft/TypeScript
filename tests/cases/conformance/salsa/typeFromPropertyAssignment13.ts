@@ -9,9 +9,12 @@ Outer.Inner.prototype = {
     m() { },
     i: 1
 }
-// NOTE: incremental assignments don't work (but don't need to for chrome at least)
+// incremental assignments still work
 Outer.Inner.prototype.j = 2
+/** @type {string} */
+Outer.Inner.prototype.k;
 var inner = new Outer.Inner()
 inner.m()
 inner.i
 inner.j
+inner.k
