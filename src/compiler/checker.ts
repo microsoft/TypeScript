@@ -23659,8 +23659,7 @@ namespace ts {
                         // - augmentation for some external module is applied if symbol for augmentation is merged (it was combined with target module).
                         const checkBody = isGlobalAugmentation || (getSymbolOfNode(node).flags & SymbolFlags.Transient);
                         if (checkBody && node.body) {
-                            // body of ambient external module is always a module block
-                            for (const statement of (<ModuleBlock>node.body).statements) {
+                            for (const statement of node.body.statements) {
                                 checkModuleAugmentationElement(statement, isGlobalAugmentation);
                             }
                         }

@@ -1597,32 +1597,30 @@ namespace ts {
                 if (hasModifier(node, ModifierFlags.Export)) {
                     errorOnFirstToken(node, Diagnostics.export_modifier_cannot_be_applied_to_ambient_modules_and_module_augmentations_since_they_are_always_visible);
                 }
+                const { name } = node;
                 if (isExternalModuleAugmentation(node)) {
                     declareModuleSymbol(node);
                 }
                 else {
                     let pattern: Pattern | undefined;
-                    if (node.name.kind === SyntaxKind.StringLiteral) {
-                        const { text } = node.name;
+                    if (name.kind === SyntaxKind.StringLiteral) {
+                        const { text } = name;
                         if (hasZeroOrOneAsteriskCharacter(text)) {
                             pattern = tryParsePattern(text);
                         }
                         else {
-                            errorOnFirstToken(node.name, Diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, text);
+                            errorOnFirstToken(name, Diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, text);
                         }
                     }
 
                     const symbol = declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
-
-                    if (pattern) {
-                        (file.patternAmbientModules || (file.patternAmbientModules = [])).push({ pattern, symbol });
-                    }
+                    file.patternAmbientModules = append(file.patternAmbientModules, pattern && { pattern, symbol });
                 }
             }
             else {
                 const state = declareModuleSymbol(node);
+                const { symbol } = node;
                 if (state !== ModuleInstanceState.NonInstantiated) {
-                    const { symbol } = node;
                     // if module was already merged with some function, class or non-const enum, treat it as non-const-enum-only
                     symbol.constEnumOnlyModule = (!(symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.RegularEnum)))
                         // Current must be `const enum` only

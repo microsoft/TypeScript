@@ -424,9 +424,9 @@ namespace ts {
         return node.kind === SyntaxKind.VariableDeclaration && node.parent.kind === SyntaxKind.CatchClause;
     }
 
-    export function isAmbientModule(node: Node): boolean {
-        return node && node.kind === SyntaxKind.ModuleDeclaration &&
-            ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(<ModuleDeclaration>node));
+    export interface AmbientModuleDeclaration extends ModuleDeclaration { body?: ModuleBlock; }
+    export function isAmbientModule(node: Node): node is AmbientModuleDeclaration {
+        return isModuleDeclaration(node) && (node.name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(node));
     }
 
     export function isModuleWithStringLiteralName(node: Node): node is ModuleDeclaration {
@@ -457,18 +457,18 @@ namespace ts {
         return !!(module.flags & NodeFlags.GlobalAugmentation);
     }
 
-    export function isExternalModuleAugmentation(node: Node): boolean {
+    export function isExternalModuleAugmentation(node: Node): node is AmbientModuleDeclaration {
         // external module augmentation is a ambient module declaration that is either:
         // - defined in the top level scope and source file is an external module
         // - defined inside ambient module declaration located in the top level scope and source file not an external module
-        if (!node || !isAmbientModule(node)) {
+        if (!isAmbientModule(node)) {
             return false;
         }
         switch (node.parent.kind) {
             case SyntaxKind.SourceFile:
-                return isExternalModule(<SourceFile>node.parent);
+                return isExternalModule(node.parent);
             case SyntaxKind.ModuleBlock:
-                return isAmbientModule(node.parent.parent) && !isExternalModule(<SourceFile>node.parent.parent.parent);
+                return isAmbientModule(node.parent.parent) && isSourceFile(node.parent.parent.parent) && !isExternalModule(node.parent.parent.parent);
         }
         return false;
     }
