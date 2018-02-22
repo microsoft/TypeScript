@@ -1717,7 +1717,7 @@ namespace ts {
         }
 
         function emitContinueStatement(node: ContinueStatement) {
-            writeToken(SyntaxKind.ContinueKeyword, node.pos, writeKeyword);
+            emitTokenWithComment(SyntaxKind.ContinueKeyword, node.pos, writeKeyword, node);
             emitWithLeadingSpace(node.label);
             writeSemicolon();
         }
@@ -1773,13 +1773,13 @@ namespace ts {
         }
 
         function emitThrowStatement(node: ThrowStatement) {
-            writeKeyword("throw");
+            emitTokenWithComment(SyntaxKind.ThrowKeyword, node.pos, writeKeyword, node);
             emitExpressionWithLeadingSpace(node.expression);
             writeSemicolon();
         }
 
         function emitTryStatement(node: TryStatement) {
-            writeKeyword("try");
+            emitTokenWithComment(SyntaxKind.TryKeyword, node.pos, writeKeyword, node);
             writeSpace();
             emit(node.tryBlock);
             if (node.catchClause) {
@@ -1788,7 +1788,7 @@ namespace ts {
             }
             if (node.finallyBlock) {
                 writeLineOrSpace(node);
-                writeKeyword("finally");
+                emitTokenWithComment(SyntaxKind.FinallyKeyword, (node.catchClause || node.tryBlock).end, writeKeyword, node);
                 writeSpace();
                 emit(node.finallyBlock);
             }
@@ -2332,12 +2332,12 @@ namespace ts {
         }
 
         function emitCatchClause(node: CatchClause) {
-            const openParenPos = writeToken(SyntaxKind.CatchKeyword, node.pos, writeKeyword);
+            const openParenPos = emitTokenWithComment(SyntaxKind.CatchKeyword, node.pos, writeKeyword, node);
             writeSpace();
             if (node.variableDeclaration) {
-                writeToken(SyntaxKind.OpenParenToken, openParenPos, writePunctuation);
+                emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
                 emit(node.variableDeclaration);
-                writeToken(SyntaxKind.CloseParenToken, node.variableDeclaration.end, writePunctuation);
+                emitTokenWithComment(SyntaxKind.CloseParenToken, node.variableDeclaration.end, writePunctuation, node);
                 writeSpace();
             }
             emit(node.block);
