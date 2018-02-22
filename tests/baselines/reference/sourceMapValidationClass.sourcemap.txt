@@ -10,15 +10,21 @@ sourceFile:sourceMapValidationClass.ts
 -------------------------------------------------------------------
 >>>var Greeter = /** @class */ (function () {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^
+3 >            ^
+4 >             ^^^^^^^^^^^^^^^^^^^^->
 1 >
+2 >class Greeter 
+3 >            {
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 13) Source(1, 15) + SourceIndex(0)
+3 >Emitted(1, 14) Source(1, 16) + SourceIndex(0)
 ---
 >>>    function Greeter(greeting) {
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^
 3 >                     ^^^^^^^^
-1->class Greeter {
+1->
   >    
 2 >    constructor(public 
 3 >                     greeting: string
@@ -28,32 +34,45 @@ sourceFile:sourceMapValidationClass.ts
 ---
 >>>        var b = [];
 1 >^^^^^^^^
-2 >        ^^^^^^^^^^^
-3 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^^^
+3 >              ^
+4 >               ^^^^
+5 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >, 
-2 >        ...b: string[]
+2 >        ...b: 
+3 >              s
+4 >               tring[]
 1 >Emitted(3, 9) Source(2, 42) + SourceIndex(0)
-2 >Emitted(3, 20) Source(2, 56) + SourceIndex(0)
+2 >Emitted(3, 15) Source(2, 48) + SourceIndex(0)
+3 >Emitted(3, 16) Source(2, 49) + SourceIndex(0)
+4 >Emitted(3, 20) Source(2, 56) + SourceIndex(0)
 ---
 >>>        for (var _i = 1; _i < arguments.length; _i++) {
 1->^^^^^^^^^^^^^
-2 >             ^^^^^^^^^^
-3 >                       ^^
-4 >                         ^^^^^^^^^^^^^^^^^^^^^
-5 >                                              ^^
-6 >                                                ^^^^
+2 >             ^^^^^^^
+3 >                    ^
+4 >                     ^^
+5 >                       ^^
+6 >                         ^^^^^^^^^^^^^^^^^^^^^
+7 >                                              ^^
+8 >                                                ^^^^
 1->
-2 >             ...b: string[]
-3 >                       
-4 >                         ...b: string[]
-5 >                                              
-6 >                                                ...b: string[]
+2 >             
+3 >                    c
+4 >                     lass Greeter {
+  >                         constructor(public greeting: string, ...b: string[]
+5 >                       
+6 >                         ...b: string[]
+7 >                                              
+8 >                                                ...b: string[]
 1->Emitted(4, 14) Source(2, 42) + SourceIndex(0)
-2 >Emitted(4, 24) Source(2, 56) + SourceIndex(0)
-3 >Emitted(4, 26) Source(2, 42) + SourceIndex(0)
-4 >Emitted(4, 47) Source(2, 56) + SourceIndex(0)
-5 >Emitted(4, 49) Source(2, 42) + SourceIndex(0)
-6 >Emitted(4, 53) Source(2, 56) + SourceIndex(0)
+2 >Emitted(4, 21) Source(1, 1) + SourceIndex(0)
+3 >Emitted(4, 22) Source(1, 2) + SourceIndex(0)
+4 >Emitted(4, 24) Source(2, 56) + SourceIndex(0)
+5 >Emitted(4, 26) Source(2, 42) + SourceIndex(0)
+6 >Emitted(4, 47) Source(2, 56) + SourceIndex(0)
+7 >Emitted(4, 49) Source(2, 42) + SourceIndex(0)
+8 >Emitted(4, 53) Source(2, 56) + SourceIndex(0)
 ---
 >>>            b[_i - 1] = arguments[_i];
 1 >^^^^^^^^^^^^

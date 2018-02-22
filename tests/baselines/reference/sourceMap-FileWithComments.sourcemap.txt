@@ -86,16 +86,22 @@ sourceFile:sourceMap-FileWithComments.ts
 ---
 >>>    var Point = /** @class */ (function () {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^
+3 >              ^
+4 >               ^^^^^^^^->
 1->
   >    
+2 >    export class Point 
+3 >              i
 1->Emitted(5, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(5, 15) Source(10, 24) + SourceIndex(0)
+3 >Emitted(5, 16) Source(10, 25) + SourceIndex(0)
 ---
 >>>        // Constructor
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^
 3 >                      ^^^^^^^^^->
-1->export class Point implements IPoint {
+1->mplements IPoint {
   >        
 2 >        // Constructor
 1->Emitted(6, 9) Source(11, 9) + SourceIndex(0)
@@ -379,23 +385,29 @@ sourceFile:sourceMap-FileWithComments.ts
 1 >^^^^
 2 >    ^^^^
 3 >        ^
-4 >         ^^^
-5 >            ^^
-6 >              ^
-7 >               ^^^^^^->
+4 >         ^
+5 >          ^
+6 >           ^
+7 >            ^^
+8 >              ^
+9 >               ^^^^^^->
 1 >
   >    
 2 >    var 
 3 >        a
-4 >          = 
-5 >            10
-6 >              ;
+4 >          
+5 >          =
+6 >            
+7 >            10
+8 >              ;
 1 >Emitted(19, 5) Source(22, 5) + SourceIndex(0)
 2 >Emitted(19, 9) Source(22, 9) + SourceIndex(0)
 3 >Emitted(19, 10) Source(22, 10) + SourceIndex(0)
-4 >Emitted(19, 13) Source(22, 13) + SourceIndex(0)
-5 >Emitted(19, 15) Source(22, 15) + SourceIndex(0)
-6 >Emitted(19, 16) Source(22, 16) + SourceIndex(0)
+4 >Emitted(19, 11) Source(22, 11) + SourceIndex(0)
+5 >Emitted(19, 12) Source(22, 12) + SourceIndex(0)
+6 >Emitted(19, 13) Source(22, 13) + SourceIndex(0)
+7 >Emitted(19, 15) Source(22, 15) + SourceIndex(0)
+8 >Emitted(19, 16) Source(22, 16) + SourceIndex(0)
 ---
 >>>    function foo() {
 1->^^^^
@@ -452,23 +464,29 @@ sourceFile:sourceMap-FileWithComments.ts
 1->^^^^
 2 >    ^^^^
 3 >        ^
-4 >         ^^^
-5 >            ^^
-6 >              ^
-7 >               ^^^^^^^^^^^^^^->
+4 >         ^
+5 >          ^
+6 >           ^
+7 >            ^^
+8 >              ^
+9 >               ^^^^^^^^^^^^^^->
 1->
   >    
 2 >    var 
 3 >        b
-4 >          = 
-5 >            10
-6 >              ;
+4 >          
+5 >          =
+6 >            
+7 >            10
+8 >              ;
 1->Emitted(26, 5) Source(30, 5) + SourceIndex(0)
 2 >Emitted(26, 9) Source(30, 9) + SourceIndex(0)
 3 >Emitted(26, 10) Source(30, 10) + SourceIndex(0)
-4 >Emitted(26, 13) Source(30, 13) + SourceIndex(0)
-5 >Emitted(26, 15) Source(30, 15) + SourceIndex(0)
-6 >Emitted(26, 16) Source(30, 16) + SourceIndex(0)
+4 >Emitted(26, 11) Source(30, 11) + SourceIndex(0)
+5 >Emitted(26, 12) Source(30, 12) + SourceIndex(0)
+6 >Emitted(26, 13) Source(30, 13) + SourceIndex(0)
+7 >Emitted(26, 15) Source(30, 15) + SourceIndex(0)
+8 >Emitted(26, 16) Source(30, 16) + SourceIndex(0)
 ---
 >>>})(Shapes || (Shapes = {}));
 1->
@@ -533,76 +551,88 @@ sourceFile:sourceMap-FileWithComments.ts
 1->
 2 >^^^^
 3 >    ^
-4 >     ^^^
-5 >        ^^^^
-6 >            ^^^^^^
-7 >                  ^
-8 >                   ^^^^^
-9 >                        ^
-10>                         ^
-11>                          ^^
-12>                            ^
-13>                             ^
-14>                              ^
+4 >     ^
+5 >      ^
+6 >       ^
+7 >        ^^^^
+8 >            ^^^^^^
+9 >                  ^
+10>                   ^^^^^
+11>                        ^
+12>                         ^
+13>                          ^^
+14>                            ^
+15>                             ^
+16>                              ^
 1->
   >
 2 >var 
 3 >    p
-4 >     : IPoint = 
-5 >        new 
-6 >            Shapes
-7 >                  .
-8 >                   Point
-9 >                        (
-10>                         3
-11>                          , 
-12>                            4
-13>                             )
-14>                              ;
+4 >     : 
+5 >      I
+6 >       Point = 
+7 >        new 
+8 >            Shapes
+9 >                  .
+10>                   Point
+11>                        (
+12>                         3
+13>                          , 
+14>                            4
+15>                             )
+16>                              ;
 1->Emitted(29, 1) Source(34, 1) + SourceIndex(0)
 2 >Emitted(29, 5) Source(34, 5) + SourceIndex(0)
 3 >Emitted(29, 6) Source(34, 6) + SourceIndex(0)
-4 >Emitted(29, 9) Source(34, 17) + SourceIndex(0)
-5 >Emitted(29, 13) Source(34, 21) + SourceIndex(0)
-6 >Emitted(29, 19) Source(34, 27) + SourceIndex(0)
-7 >Emitted(29, 20) Source(34, 28) + SourceIndex(0)
-8 >Emitted(29, 25) Source(34, 33) + SourceIndex(0)
-9 >Emitted(29, 26) Source(34, 34) + SourceIndex(0)
-10>Emitted(29, 27) Source(34, 35) + SourceIndex(0)
-11>Emitted(29, 29) Source(34, 37) + SourceIndex(0)
-12>Emitted(29, 30) Source(34, 38) + SourceIndex(0)
-13>Emitted(29, 31) Source(34, 39) + SourceIndex(0)
-14>Emitted(29, 32) Source(34, 40) + SourceIndex(0)
+4 >Emitted(29, 7) Source(34, 8) + SourceIndex(0)
+5 >Emitted(29, 8) Source(34, 9) + SourceIndex(0)
+6 >Emitted(29, 9) Source(34, 17) + SourceIndex(0)
+7 >Emitted(29, 13) Source(34, 21) + SourceIndex(0)
+8 >Emitted(29, 19) Source(34, 27) + SourceIndex(0)
+9 >Emitted(29, 20) Source(34, 28) + SourceIndex(0)
+10>Emitted(29, 25) Source(34, 33) + SourceIndex(0)
+11>Emitted(29, 26) Source(34, 34) + SourceIndex(0)
+12>Emitted(29, 27) Source(34, 35) + SourceIndex(0)
+13>Emitted(29, 29) Source(34, 37) + SourceIndex(0)
+14>Emitted(29, 30) Source(34, 38) + SourceIndex(0)
+15>Emitted(29, 31) Source(34, 39) + SourceIndex(0)
+16>Emitted(29, 32) Source(34, 40) + SourceIndex(0)
 ---
 >>>var dist = p.getDist();
 1 >
 2 >^^^^
 3 >    ^^^^
-4 >        ^^^
-5 >           ^
-6 >            ^
-7 >             ^^^^^^^
-8 >                    ^^
-9 >                      ^
-10>                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >        ^
+5 >         ^
+6 >          ^
+7 >           ^
+8 >            ^
+9 >             ^^^^^^^
+10>                    ^^
+11>                      ^
+12>                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >var 
 3 >    dist
-4 >         = 
-5 >           p
-6 >            .
-7 >             getDist
-8 >                    ()
-9 >                      ;
+4 >         
+5 >         =
+6 >           
+7 >           p
+8 >            .
+9 >             getDist
+10>                    ()
+11>                      ;
 1 >Emitted(30, 1) Source(35, 1) + SourceIndex(0)
 2 >Emitted(30, 5) Source(35, 5) + SourceIndex(0)
 3 >Emitted(30, 9) Source(35, 9) + SourceIndex(0)
-4 >Emitted(30, 12) Source(35, 12) + SourceIndex(0)
-5 >Emitted(30, 13) Source(35, 13) + SourceIndex(0)
-6 >Emitted(30, 14) Source(35, 14) + SourceIndex(0)
-7 >Emitted(30, 21) Source(35, 21) + SourceIndex(0)
-8 >Emitted(30, 23) Source(35, 23) + SourceIndex(0)
-9 >Emitted(30, 24) Source(35, 24) + SourceIndex(0)
+4 >Emitted(30, 10) Source(35, 10) + SourceIndex(0)
+5 >Emitted(30, 11) Source(35, 11) + SourceIndex(0)
+6 >Emitted(30, 12) Source(35, 12) + SourceIndex(0)
+7 >Emitted(30, 13) Source(35, 13) + SourceIndex(0)
+8 >Emitted(30, 14) Source(35, 14) + SourceIndex(0)
+9 >Emitted(30, 21) Source(35, 21) + SourceIndex(0)
+10>Emitted(30, 23) Source(35, 23) + SourceIndex(0)
+11>Emitted(30, 24) Source(35, 24) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMap-FileWithComments.js.map

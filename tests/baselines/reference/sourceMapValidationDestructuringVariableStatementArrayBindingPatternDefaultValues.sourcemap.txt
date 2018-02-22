@@ -12,16 +12,18 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 1 >
 2 >^^^^
 3 >    ^^^^^^
-4 >          ^^^
-5 >             ^
-6 >              ^
-7 >               ^^
-8 >                 ^^^^^^^
-9 >                        ^^
-10>                          ^^^^^^^^
-11>                                  ^
-12>                                   ^
-13>                                    ^^^^^->
+4 >          ^
+5 >           ^
+6 >            ^
+7 >             ^
+8 >              ^
+9 >               ^^
+10>                 ^^^^^^^
+11>                        ^^
+12>                          ^^^^^^^^
+13>                                  ^
+14>                                   ^
+15>                                    ^^^^^->
 1 >declare var console: {
   >    log(msg: string): void;
   >}
@@ -29,67 +31,77 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
   >
 2 >var 
 3 >    robotA
-4 >          : Robot = 
-5 >             [
-6 >              1
-7 >               , 
-8 >                 "mower"
-9 >                        , 
-10>                          "mowing"
-11>                                  ]
-12>                                   ;
+4 >          : 
+5 >           R
+6 >            obot = 
+7 >             [
+8 >              1
+9 >               , 
+10>                 "mower"
+11>                        , 
+12>                          "mowing"
+13>                                  ]
+14>                                   ;
 1 >Emitted(1, 1) Source(5, 1) + SourceIndex(0)
 2 >Emitted(1, 5) Source(5, 5) + SourceIndex(0)
 3 >Emitted(1, 11) Source(5, 11) + SourceIndex(0)
-4 >Emitted(1, 14) Source(5, 21) + SourceIndex(0)
-5 >Emitted(1, 15) Source(5, 22) + SourceIndex(0)
-6 >Emitted(1, 16) Source(5, 23) + SourceIndex(0)
-7 >Emitted(1, 18) Source(5, 25) + SourceIndex(0)
-8 >Emitted(1, 25) Source(5, 32) + SourceIndex(0)
-9 >Emitted(1, 27) Source(5, 34) + SourceIndex(0)
-10>Emitted(1, 35) Source(5, 42) + SourceIndex(0)
-11>Emitted(1, 36) Source(5, 43) + SourceIndex(0)
-12>Emitted(1, 37) Source(5, 44) + SourceIndex(0)
+4 >Emitted(1, 12) Source(5, 13) + SourceIndex(0)
+5 >Emitted(1, 13) Source(5, 14) + SourceIndex(0)
+6 >Emitted(1, 14) Source(5, 21) + SourceIndex(0)
+7 >Emitted(1, 15) Source(5, 22) + SourceIndex(0)
+8 >Emitted(1, 16) Source(5, 23) + SourceIndex(0)
+9 >Emitted(1, 18) Source(5, 25) + SourceIndex(0)
+10>Emitted(1, 25) Source(5, 32) + SourceIndex(0)
+11>Emitted(1, 27) Source(5, 34) + SourceIndex(0)
+12>Emitted(1, 35) Source(5, 42) + SourceIndex(0)
+13>Emitted(1, 36) Source(5, 43) + SourceIndex(0)
+14>Emitted(1, 37) Source(5, 44) + SourceIndex(0)
 ---
 >>>var robotB = [2, "trimmer", "trimming"];
 1->
 2 >^^^^
 3 >    ^^^^^^
-4 >          ^^^
-5 >             ^
-6 >              ^
-7 >               ^^
-8 >                 ^^^^^^^^^
-9 >                          ^^
-10>                            ^^^^^^^^^^
-11>                                      ^
-12>                                       ^
-13>                                        ^^^^^^^^^^^^^^^^^^^->
+4 >          ^
+5 >           ^
+6 >            ^
+7 >             ^
+8 >              ^
+9 >               ^^
+10>                 ^^^^^^^^^
+11>                          ^^
+12>                            ^^^^^^^^^^
+13>                                      ^
+14>                                       ^
+15>                                        ^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >var 
 3 >    robotB
-4 >          : Robot = 
-5 >             [
-6 >              2
-7 >               , 
-8 >                 "trimmer"
-9 >                          , 
-10>                            "trimming"
-11>                                      ]
-12>                                       ;
+4 >          : 
+5 >           R
+6 >            obot = 
+7 >             [
+8 >              2
+9 >               , 
+10>                 "trimmer"
+11>                          , 
+12>                            "trimming"
+13>                                      ]
+14>                                       ;
 1->Emitted(2, 1) Source(6, 1) + SourceIndex(0)
 2 >Emitted(2, 5) Source(6, 5) + SourceIndex(0)
 3 >Emitted(2, 11) Source(6, 11) + SourceIndex(0)
-4 >Emitted(2, 14) Source(6, 21) + SourceIndex(0)
-5 >Emitted(2, 15) Source(6, 22) + SourceIndex(0)
-6 >Emitted(2, 16) Source(6, 23) + SourceIndex(0)
-7 >Emitted(2, 18) Source(6, 25) + SourceIndex(0)
-8 >Emitted(2, 27) Source(6, 34) + SourceIndex(0)
-9 >Emitted(2, 29) Source(6, 36) + SourceIndex(0)
-10>Emitted(2, 39) Source(6, 46) + SourceIndex(0)
-11>Emitted(2, 40) Source(6, 47) + SourceIndex(0)
-12>Emitted(2, 41) Source(6, 48) + SourceIndex(0)
+4 >Emitted(2, 12) Source(6, 13) + SourceIndex(0)
+5 >Emitted(2, 13) Source(6, 14) + SourceIndex(0)
+6 >Emitted(2, 14) Source(6, 21) + SourceIndex(0)
+7 >Emitted(2, 15) Source(6, 22) + SourceIndex(0)
+8 >Emitted(2, 16) Source(6, 23) + SourceIndex(0)
+9 >Emitted(2, 18) Source(6, 25) + SourceIndex(0)
+10>Emitted(2, 27) Source(6, 34) + SourceIndex(0)
+11>Emitted(2, 29) Source(6, 36) + SourceIndex(0)
+12>Emitted(2, 39) Source(6, 46) + SourceIndex(0)
+13>Emitted(2, 40) Source(6, 47) + SourceIndex(0)
+14>Emitted(2, 41) Source(6, 48) + SourceIndex(0)
 ---
 >>>var _a = robotA[1], nameA = _a === void 0 ? "noName" : _a;
 1->

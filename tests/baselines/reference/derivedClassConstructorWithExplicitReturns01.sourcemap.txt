@@ -20,16 +20,22 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 >>>})();
 >>>var C = /** @class */ (function () {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^^^^^^^^^^^^->
 1 >
+2 >class C 
+3 >      {
 1 >Emitted(11, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(11, 7) Source(1, 9) + SourceIndex(0)
+3 >Emitted(11, 8) Source(1, 10) + SourceIndex(0)
 ---
 >>>    function C(value) {
 1->^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^
 4 >                    ^^^^^->
-1->class C {
+1->
   >    cProp = 10;
   >
   >    foo() { return "this never gets used."; }
@@ -227,16 +233,22 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 ---
 >>>var D = /** @class */ (function (_super) {
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >
+2 >class D 
+3 >      e
 1->Emitted(24, 1) Source(16, 1) + SourceIndex(0)
+2 >Emitted(24, 7) Source(16, 9) + SourceIndex(0)
+3 >Emitted(24, 8) Source(16, 10) + SourceIndex(0)
 ---
 >>>    __extends(D, _super);
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^
-1->class D extends 
+1->xtends 
 2 >    C
 1->Emitted(25, 5) Source(16, 17) + SourceIndex(0)
 2 >Emitted(25, 26) Source(16, 18) + SourceIndex(0)
@@ -273,19 +285,41 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 ---
 >>>        var _this = _super.call(this, a) || this;
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^
-3 >                    ^^^^^^^^^^^^^^^^^^
-4 >                                      ^
-5 >                                       ^
-6 >                                        ^^^^^^^^^
-7 >                                                 ^^^^->
+2 >        ^^^^^^^^^^
+3 >                  ^
+4 >                   ^
+5 >                    ^^^^^^^^^^^^^^^^^^
+6 >                                      ^
+7 >                                       ^
+8 >                                        ^^^^^^^^^
+9 >                                                 ^^^^->
 1->
-2 >        constructor(a = 100) {
-  >                
-3 >                    super(
-4 >                                      a
-5 >                                       )
-6 >                                        ;
+2 >        
+3 >                  c
+4 >                   lass C {
+  >                       cProp = 10;
+  >                   
+  >                       foo() { return "this never gets used."; }
+  >                   
+  >                       constructor(value: number) {
+  >                           return {
+  >                               cProp: value,
+  >                               foo() {
+  >                                   return "well this looks kinda C-ish.";
+  >                               }
+  >                           }
+  >                       }
+  >                   }
+  >                   
+  >                   class D extends C {
+  >                       dProp = () => this;
+  >                   
+  >                       constructor(a = 100) {
+  >                           
+5 >                    super(
+6 >                                      a
+7 >                                       )
+8 >                                        ;
   >                                        
   >                                                if (Math.random() < 0.5) {
   >                                                    "You win!"
@@ -299,11 +333,13 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
   >                                                    return null;
   >                                            }
 1->Emitted(28, 9) Source(19, 5) + SourceIndex(0)
-2 >Emitted(28, 21) Source(20, 9) + SourceIndex(0)
-3 >Emitted(28, 39) Source(20, 15) + SourceIndex(0)
-4 >Emitted(28, 40) Source(20, 16) + SourceIndex(0)
-5 >Emitted(28, 41) Source(20, 17) + SourceIndex(0)
-6 >Emitted(28, 50) Source(32, 6) + SourceIndex(0)
+2 >Emitted(28, 19) Source(1, 1) + SourceIndex(0)
+3 >Emitted(28, 20) Source(1, 2) + SourceIndex(0)
+4 >Emitted(28, 21) Source(20, 9) + SourceIndex(0)
+5 >Emitted(28, 39) Source(20, 15) + SourceIndex(0)
+6 >Emitted(28, 40) Source(20, 16) + SourceIndex(0)
+7 >Emitted(28, 41) Source(20, 17) + SourceIndex(0)
+8 >Emitted(28, 50) Source(32, 6) + SourceIndex(0)
 ---
 >>>        _this.dProp = function () { return _this; };
 1->^^^^^^^^

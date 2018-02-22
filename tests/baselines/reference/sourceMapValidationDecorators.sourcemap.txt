@@ -19,7 +19,9 @@ sourceFile:sourceMapValidationDecorators.ts
 >>>};
 >>>var Greeter = /** @class */ (function () {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^
+3 >            ^
+4 >             ^^^^^^^^^^^^^^^^^^^^->
 1 >declare function ClassDecorator1(target: Function): void;
   >declare function ClassDecorator2(x: number): (target: Function) => void;
   >declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;
@@ -30,13 +32,17 @@ sourceFile:sourceMapValidationDecorators.ts
   >@ClassDecorator1
   >@ClassDecorator2(10)
   >
+2 >class Greeter 
+3 >            {
 1 >Emitted(10, 1) Source(10, 1) + SourceIndex(0)
+2 >Emitted(10, 13) Source(10, 15) + SourceIndex(0)
+3 >Emitted(10, 14) Source(10, 16) + SourceIndex(0)
 ---
 >>>    function Greeter(greeting) {
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^
 3 >                     ^^^^^^^^
-1->class Greeter {
+1->
   >    
 2 >    constructor(
   >          @ParameterDecorator1 
@@ -49,36 +55,65 @@ sourceFile:sourceMapValidationDecorators.ts
 ---
 >>>        var b = [];
 1 >^^^^^^^^
-2 >        ^^^^^^^^^^^
-3 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^^^
+3 >              ^
+4 >               ^^^^
+5 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >, 
   >      
   >      @ParameterDecorator1 
   >      @ParameterDecorator2(30) 
   >      
-2 >        ...b: string[]
+2 >        ...b: 
+3 >              s
+4 >               tring[]
 1 >Emitted(12, 9) Source(18, 7) + SourceIndex(0)
-2 >Emitted(12, 20) Source(18, 21) + SourceIndex(0)
+2 >Emitted(12, 15) Source(18, 13) + SourceIndex(0)
+3 >Emitted(12, 16) Source(18, 14) + SourceIndex(0)
+4 >Emitted(12, 20) Source(18, 21) + SourceIndex(0)
 ---
 >>>        for (var _i = 1; _i < arguments.length; _i++) {
 1->^^^^^^^^^^^^^
-2 >             ^^^^^^^^^^
-3 >                       ^^
-4 >                         ^^^^^^^^^^^^^^^^^^^^^
-5 >                                              ^^
-6 >                                                ^^^^
+2 >             ^^^^^^^
+3 >                    ^
+4 >                     ^^
+5 >                       ^^
+6 >                         ^^^^^^^^^^^^^^^^^^^^^
+7 >                                              ^^
+8 >                                                ^^^^
 1->
-2 >             ...b: string[]
-3 >                       
-4 >                         ...b: string[]
-5 >                                              
-6 >                                                ...b: string[]
+2 >             
+3 >                    d
+4 >                     eclare function ClassDecorator1(target: Function): void;
+  >                     declare function ClassDecorator2(x: number): (target: Function) => void;
+  >                     declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;
+  >                     declare function PropertyDecorator2(x: number): (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void;
+  >                     declare function ParameterDecorator1(target: Object, key: string | symbol, paramIndex: number): void;
+  >                     declare function ParameterDecorator2(x: number): (target: Object, key: string | symbol, paramIndex: number) => void;
+  >                     
+  >                     @ClassDecorator1
+  >                     @ClassDecorator2(10)
+  >                     class Greeter {
+  >                         constructor(
+  >                           @ParameterDecorator1 
+  >                           @ParameterDecorator2(20) 
+  >                           public greeting: string, 
+  >                           
+  >                           @ParameterDecorator1 
+  >                           @ParameterDecorator2(30) 
+  >                           ...b: string[]
+5 >                       
+6 >                         ...b: string[]
+7 >                                              
+8 >                                                ...b: string[]
 1->Emitted(13, 14) Source(18, 7) + SourceIndex(0)
-2 >Emitted(13, 24) Source(18, 21) + SourceIndex(0)
-3 >Emitted(13, 26) Source(18, 7) + SourceIndex(0)
-4 >Emitted(13, 47) Source(18, 21) + SourceIndex(0)
-5 >Emitted(13, 49) Source(18, 7) + SourceIndex(0)
-6 >Emitted(13, 53) Source(18, 21) + SourceIndex(0)
+2 >Emitted(13, 21) Source(1, 1) + SourceIndex(0)
+3 >Emitted(13, 22) Source(1, 2) + SourceIndex(0)
+4 >Emitted(13, 24) Source(18, 21) + SourceIndex(0)
+5 >Emitted(13, 26) Source(18, 7) + SourceIndex(0)
+6 >Emitted(13, 47) Source(18, 21) + SourceIndex(0)
+7 >Emitted(13, 49) Source(18, 7) + SourceIndex(0)
+8 >Emitted(13, 53) Source(18, 21) + SourceIndex(0)
 ---
 >>>            b[_i - 1] = arguments[_i];
 1 >^^^^^^^^^^^^

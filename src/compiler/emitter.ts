@@ -998,7 +998,8 @@ namespace ts {
             else {
                 emitTypeAnnotation(node.type);
             }
-            emitInitializer(node.initializer);
+            // The comment position has to fallback to any present node within the parameterdeclaration because as it turns out, the parser can make parameter declarations with _just_ an initializer.
+            emitInitializer(node.initializer, (node.type ? node.type.end : node.questionToken ? node.questionToken.end : node.name ? node.name.end : node.modifiers ? node.modifiers.end : node.decorators ? node.decorators.end : node.pos) + 1, node);
         }
 
         function emitDecorator(decorator: Decorator) {
@@ -1025,7 +1026,7 @@ namespace ts {
             emit(node.name);
             emitIfPresent(node.questionToken);
             emitTypeAnnotation(node.type);
-            emitInitializer(node.initializer);
+            emitInitializer(node.initializer, (node.type ? node.type.end : node.questionToken ? node.questionToken.end : node.name.end) + 1, node);
             writeSemicolon();
         }
 
@@ -1307,7 +1308,7 @@ namespace ts {
                 writeSpace();
             }
             emit(node.name);
-            emitInitializer(node.initializer);
+            emitInitializer(node.initializer, node.name.end + 1, node);
         }
 
         //
@@ -1804,7 +1805,7 @@ namespace ts {
         function emitVariableDeclaration(node: VariableDeclaration) {
             emit(node.name);
             emitTypeAnnotation(node.type);
-            emitInitializer(node.initializer);
+            emitInitializer(node.initializer, (node.type ? node.type.end : node.name.end) + 1, node);
         }
 
         function emitVariableDeclarationList(node: VariableDeclarationList) {
@@ -2399,7 +2400,7 @@ namespace ts {
 
         function emitEnumMember(node: EnumMember) {
             emit(node.name);
-            emitInitializer(node.initializer);
+            emitInitializer(node.initializer, node.name.end + 1, node);
         }
 
         //
@@ -2529,10 +2530,10 @@ namespace ts {
             }
         }
 
-        function emitInitializer(node: Expression | undefined) {
+        function emitInitializer(node: Expression | undefined, equalCommentStartPos: number, container: Node) {
             if (node) {
                 writeSpace();
-                writeOperator("=");
+                emitTokenWithComment(SyntaxKind.EqualsToken, equalCommentStartPos, writeOperator, container);
                 writeSpace();
                 emitExpression(node);
             }

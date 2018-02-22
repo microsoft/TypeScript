@@ -213,10 +213,16 @@ sourceFile:recursiveClassReferenceTest.ts
 ---
 >>>                var StartFindAction = /** @class */ (function () {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >                ^^^^^^^^^^^^^^^^^^^^
+3 >                                    ^
+4 >                                     ^^^^^^^^^^^^->
 1-> {
   >	
+2 >                export class StartFindAction 
+3 >                                    i
 1->Emitted(21, 17) Source(33, 2) + SourceIndex(0)
+2 >Emitted(21, 37) Source(33, 31) + SourceIndex(0)
+3 >Emitted(21, 38) Source(33, 32) + SourceIndex(0)
 ---
 >>>                    function StartFindAction() {
 1->^^^^^^^^^^^^^^^^^^^^
@@ -637,17 +643,23 @@ sourceFile:recursiveClassReferenceTest.ts
 ---
 >>>            var FindWidget = /** @class */ (function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^
+3 >                           ^
+4 >                            ^^^^^^^^^^^^^^^^^^^^^->
 1-> {
   >	
+2 >            export class FindWidget 
+3 >                           i
 1->Emitted(40, 13) Source(45, 2) + SourceIndex(0)
+2 >Emitted(40, 28) Source(45, 26) + SourceIndex(0)
+3 >Emitted(40, 29) Source(45, 27) + SourceIndex(0)
 ---
 >>>                function FindWidget(codeThing) {
 1->^^^^^^^^^^^^^^^^
 2 >                ^^^^^^^^^^^^^^^^^^^^
 3 >                                    ^^^^^^^^^
 4 >                                             ^^^->
-1->export class FindWidget implements Sample.Thing.IWidget {
+1->mplements Sample.Thing.IWidget {
   >
   >		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
   >			
@@ -1121,12 +1133,18 @@ sourceFile:recursiveClassReferenceTest.ts
 ---
 >>>var AbstractMode = /** @class */ (function () {
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^
+3 >                 ^
+4 >                  ^^^^^^^^^^^^->
 1->
   >
   >interface IMode { getInitialState(): IState;} 
   >
+2 >class AbstractMode 
+3 >                 i
 1->Emitted(61, 1) Source(67, 1) + SourceIndex(0)
+2 >Emitted(61, 18) Source(67, 20) + SourceIndex(0)
+3 >Emitted(61, 19) Source(67, 21) + SourceIndex(0)
 ---
 >>>    function AbstractMode() {
 1->^^^^
@@ -1372,18 +1390,24 @@ sourceFile:recursiveClassReferenceTest.ts
 ---
 >>>                var State = /** @class */ (function () {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >                ^^^^^^^^^^
+3 >                          ^
+4 >                           ^^^^^^^^^^^^^^^^->
 1-> {
   >	
   >	
+2 >                export class State 
+3 >                          i
 1->Emitted(74, 17) Source(78, 2) + SourceIndex(0)
+2 >Emitted(74, 27) Source(78, 21) + SourceIndex(0)
+3 >Emitted(74, 28) Source(78, 22) + SourceIndex(0)
 ---
 >>>                    function State(mode) {
 1->^^^^^^^^^^^^^^^^^^^^
 2 >                    ^^^^^^^^^^^^^^^
 3 >                                   ^^^^
 4 >                                       ^^^->
-1->export class State implements IState {		
+1->mplements IState {		
   >        
 2 >                    constructor(private 
 3 >                                   mode: IMode
@@ -1607,16 +1631,22 @@ sourceFile:recursiveClassReferenceTest.ts
 ---
 >>>                var Mode = /** @class */ (function (_super) {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >                ^^^^^^^^^
+3 >                         ^
+4 >                          ^^^^^^^^^^^^^^^^^^^->
 1->
   >	
   >	
+2 >                export class Mode 
+3 >                         e
 1->Emitted(88, 17) Source(91, 2) + SourceIndex(0)
+2 >Emitted(88, 26) Source(91, 20) + SourceIndex(0)
+3 >Emitted(88, 27) Source(91, 21) + SourceIndex(0)
 ---
 >>>                    __extends(Mode, _super);
 1->^^^^^^^^^^^^^^^^^^^^
 2 >                    ^^^^^^^^^^^^^^^^^^^^^^^^
-1->export class Mode extends 
+1->xtends 
 2 >                    AbstractMode
 1->Emitted(89, 21) Source(91, 28) + SourceIndex(0)
 2 >Emitted(89, 45) Source(91, 40) + SourceIndex(0)

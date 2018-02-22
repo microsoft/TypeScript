@@ -12,26 +12,28 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 1 >
 2 >^^^^
 3 >    ^^^^^^
-4 >          ^^^
-5 >             ^^
-6 >               ^^^^
-7 >                   ^^
-8 >                     ^^^^^^^
-9 >                            ^^
-10>                              ^^^^^^
-11>                                    ^^
-12>                                      ^^
-13>                                        ^^^^^^^
-14>                                               ^^
-15>                                                 ^^^^^^^^
-16>                                                         ^^
-17>                                                           ^^^^^^^^^
-18>                                                                    ^^
-19>                                                                      ^^^^^^
-20>                                                                            ^^
-21>                                                                              ^^
-22>                                                                                ^
-23>                                                                                 ^^^^^^^->
+4 >          ^
+5 >           ^
+6 >            ^
+7 >             ^^
+8 >               ^^^^
+9 >                   ^^
+10>                     ^^^^^^^
+11>                            ^^
+12>                              ^^^^^^
+13>                                    ^^
+14>                                      ^^
+15>                                        ^^^^^^^
+16>                                               ^^
+17>                                                 ^^^^^^^^
+18>                                                         ^^
+19>                                                           ^^^^^^^^^
+20>                                                                    ^^
+21>                                                                      ^^^^^^
+22>                                                                            ^^
+23>                                                                              ^^
+24>                                                                                ^
+25>                                                                                 ^^^^^^^->
 1 >declare var console: {
   >    log(msg: string): void;
   >}
@@ -45,117 +47,127 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
   >
 2 >var 
 3 >    robotA
-4 >          : Robot = 
-5 >             { 
-6 >               name
-7 >                   : 
-8 >                     "mower"
-9 >                            , 
-10>                              skills
-11>                                    : 
-12>                                      { 
-13>                                        primary
-14>                                               : 
-15>                                                 "mowing"
-16>                                                         , 
-17>                                                           secondary
-18>                                                                    : 
-19>                                                                      "none"
-20>                                                                             }
-21>                                                                               }
-22>                                                                                ;
+4 >          : 
+5 >           R
+6 >            obot = 
+7 >             { 
+8 >               name
+9 >                   : 
+10>                     "mower"
+11>                            , 
+12>                              skills
+13>                                    : 
+14>                                      { 
+15>                                        primary
+16>                                               : 
+17>                                                 "mowing"
+18>                                                         , 
+19>                                                           secondary
+20>                                                                    : 
+21>                                                                      "none"
+22>                                                                             }
+23>                                                                               }
+24>                                                                                ;
 1 >Emitted(1, 1) Source(11, 1) + SourceIndex(0)
 2 >Emitted(1, 5) Source(11, 5) + SourceIndex(0)
 3 >Emitted(1, 11) Source(11, 11) + SourceIndex(0)
-4 >Emitted(1, 14) Source(11, 21) + SourceIndex(0)
-5 >Emitted(1, 16) Source(11, 23) + SourceIndex(0)
-6 >Emitted(1, 20) Source(11, 27) + SourceIndex(0)
-7 >Emitted(1, 22) Source(11, 29) + SourceIndex(0)
-8 >Emitted(1, 29) Source(11, 36) + SourceIndex(0)
-9 >Emitted(1, 31) Source(11, 38) + SourceIndex(0)
-10>Emitted(1, 37) Source(11, 44) + SourceIndex(0)
-11>Emitted(1, 39) Source(11, 46) + SourceIndex(0)
-12>Emitted(1, 41) Source(11, 48) + SourceIndex(0)
-13>Emitted(1, 48) Source(11, 55) + SourceIndex(0)
-14>Emitted(1, 50) Source(11, 57) + SourceIndex(0)
-15>Emitted(1, 58) Source(11, 65) + SourceIndex(0)
-16>Emitted(1, 60) Source(11, 67) + SourceIndex(0)
-17>Emitted(1, 69) Source(11, 76) + SourceIndex(0)
-18>Emitted(1, 71) Source(11, 78) + SourceIndex(0)
-19>Emitted(1, 77) Source(11, 84) + SourceIndex(0)
-20>Emitted(1, 79) Source(11, 86) + SourceIndex(0)
-21>Emitted(1, 81) Source(11, 88) + SourceIndex(0)
-22>Emitted(1, 82) Source(11, 89) + SourceIndex(0)
+4 >Emitted(1, 12) Source(11, 13) + SourceIndex(0)
+5 >Emitted(1, 13) Source(11, 14) + SourceIndex(0)
+6 >Emitted(1, 14) Source(11, 21) + SourceIndex(0)
+7 >Emitted(1, 16) Source(11, 23) + SourceIndex(0)
+8 >Emitted(1, 20) Source(11, 27) + SourceIndex(0)
+9 >Emitted(1, 22) Source(11, 29) + SourceIndex(0)
+10>Emitted(1, 29) Source(11, 36) + SourceIndex(0)
+11>Emitted(1, 31) Source(11, 38) + SourceIndex(0)
+12>Emitted(1, 37) Source(11, 44) + SourceIndex(0)
+13>Emitted(1, 39) Source(11, 46) + SourceIndex(0)
+14>Emitted(1, 41) Source(11, 48) + SourceIndex(0)
+15>Emitted(1, 48) Source(11, 55) + SourceIndex(0)
+16>Emitted(1, 50) Source(11, 57) + SourceIndex(0)
+17>Emitted(1, 58) Source(11, 65) + SourceIndex(0)
+18>Emitted(1, 60) Source(11, 67) + SourceIndex(0)
+19>Emitted(1, 69) Source(11, 76) + SourceIndex(0)
+20>Emitted(1, 71) Source(11, 78) + SourceIndex(0)
+21>Emitted(1, 77) Source(11, 84) + SourceIndex(0)
+22>Emitted(1, 79) Source(11, 86) + SourceIndex(0)
+23>Emitted(1, 81) Source(11, 88) + SourceIndex(0)
+24>Emitted(1, 82) Source(11, 89) + SourceIndex(0)
 ---
 >>>var robotB = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } };
 1->
 2 >^^^^
 3 >    ^^^^^^
-4 >          ^^^
-5 >             ^^
-6 >               ^^^^
-7 >                   ^^
-8 >                     ^^^^^^^^^
-9 >                              ^^
-10>                                ^^^^^^
-11>                                      ^^
-12>                                        ^^
-13>                                          ^^^^^^^
-14>                                                 ^^
-15>                                                   ^^^^^^^^^^
-16>                                                             ^^
-17>                                                               ^^^^^^^^^
-18>                                                                        ^^
-19>                                                                          ^^^^^^^^
-20>                                                                                  ^^
-21>                                                                                    ^^
-22>                                                                                      ^
-23>                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >          ^
+5 >           ^
+6 >            ^
+7 >             ^^
+8 >               ^^^^
+9 >                   ^^
+10>                     ^^^^^^^^^
+11>                              ^^
+12>                                ^^^^^^
+13>                                      ^^
+14>                                        ^^
+15>                                          ^^^^^^^
+16>                                                 ^^
+17>                                                   ^^^^^^^^^^
+18>                                                             ^^
+19>                                                               ^^^^^^^^^
+20>                                                                        ^^
+21>                                                                          ^^^^^^^^
+22>                                                                                  ^^
+23>                                                                                    ^^
+24>                                                                                      ^
+25>                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >var 
 3 >    robotB
-4 >          : Robot = 
-5 >             { 
-6 >               name
-7 >                   : 
-8 >                     "trimmer"
-9 >                              , 
-10>                                skills
-11>                                      : 
-12>                                        { 
-13>                                          primary
-14>                                                 : 
-15>                                                   "trimming"
-16>                                                             , 
-17>                                                               secondary
-18>                                                                        : 
-19>                                                                          "edging"
-20>                                                                                   }
-21>                                                                                     }
-22>                                                                                      ;
+4 >          : 
+5 >           R
+6 >            obot = 
+7 >             { 
+8 >               name
+9 >                   : 
+10>                     "trimmer"
+11>                              , 
+12>                                skills
+13>                                      : 
+14>                                        { 
+15>                                          primary
+16>                                                 : 
+17>                                                   "trimming"
+18>                                                             , 
+19>                                                               secondary
+20>                                                                        : 
+21>                                                                          "edging"
+22>                                                                                   }
+23>                                                                                     }
+24>                                                                                      ;
 1->Emitted(2, 1) Source(12, 1) + SourceIndex(0)
 2 >Emitted(2, 5) Source(12, 5) + SourceIndex(0)
 3 >Emitted(2, 11) Source(12, 11) + SourceIndex(0)
-4 >Emitted(2, 14) Source(12, 21) + SourceIndex(0)
-5 >Emitted(2, 16) Source(12, 23) + SourceIndex(0)
-6 >Emitted(2, 20) Source(12, 27) + SourceIndex(0)
-7 >Emitted(2, 22) Source(12, 29) + SourceIndex(0)
-8 >Emitted(2, 31) Source(12, 38) + SourceIndex(0)
-9 >Emitted(2, 33) Source(12, 40) + SourceIndex(0)
-10>Emitted(2, 39) Source(12, 46) + SourceIndex(0)
-11>Emitted(2, 41) Source(12, 48) + SourceIndex(0)
-12>Emitted(2, 43) Source(12, 50) + SourceIndex(0)
-13>Emitted(2, 50) Source(12, 57) + SourceIndex(0)
-14>Emitted(2, 52) Source(12, 59) + SourceIndex(0)
-15>Emitted(2, 62) Source(12, 69) + SourceIndex(0)
-16>Emitted(2, 64) Source(12, 71) + SourceIndex(0)
-17>Emitted(2, 73) Source(12, 80) + SourceIndex(0)
-18>Emitted(2, 75) Source(12, 82) + SourceIndex(0)
-19>Emitted(2, 83) Source(12, 90) + SourceIndex(0)
-20>Emitted(2, 85) Source(12, 92) + SourceIndex(0)
-21>Emitted(2, 87) Source(12, 94) + SourceIndex(0)
-22>Emitted(2, 88) Source(12, 95) + SourceIndex(0)
+4 >Emitted(2, 12) Source(12, 13) + SourceIndex(0)
+5 >Emitted(2, 13) Source(12, 14) + SourceIndex(0)
+6 >Emitted(2, 14) Source(12, 21) + SourceIndex(0)
+7 >Emitted(2, 16) Source(12, 23) + SourceIndex(0)
+8 >Emitted(2, 20) Source(12, 27) + SourceIndex(0)
+9 >Emitted(2, 22) Source(12, 29) + SourceIndex(0)
+10>Emitted(2, 31) Source(12, 38) + SourceIndex(0)
+11>Emitted(2, 33) Source(12, 40) + SourceIndex(0)
+12>Emitted(2, 39) Source(12, 46) + SourceIndex(0)
+13>Emitted(2, 41) Source(12, 48) + SourceIndex(0)
+14>Emitted(2, 43) Source(12, 50) + SourceIndex(0)
+15>Emitted(2, 50) Source(12, 57) + SourceIndex(0)
+16>Emitted(2, 52) Source(12, 59) + SourceIndex(0)
+17>Emitted(2, 62) Source(12, 69) + SourceIndex(0)
+18>Emitted(2, 64) Source(12, 71) + SourceIndex(0)
+19>Emitted(2, 73) Source(12, 80) + SourceIndex(0)
+20>Emitted(2, 75) Source(12, 82) + SourceIndex(0)
+21>Emitted(2, 83) Source(12, 90) + SourceIndex(0)
+22>Emitted(2, 85) Source(12, 92) + SourceIndex(0)
+23>Emitted(2, 87) Source(12, 94) + SourceIndex(0)
+24>Emitted(2, 88) Source(12, 95) + SourceIndex(0)
 ---
 >>>var _a = robotA.skills, _b = _a === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _a, _c = _b.primary, primaryA = _c === void 0 ? "noSkill" : _c, _d = _b.secondary, secondaryA = _d === void 0 ? "noSkill" : _d;
 1->

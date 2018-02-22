@@ -12,22 +12,28 @@ sourceFile:sourceMapValidationFunctions.ts
 1 >
 2 >^^^^
 3 >    ^^^^^^^^^
-4 >             ^^^
-5 >                ^
-6 >                 ^
-7 >                  ^^^^^^^^^->
+4 >             ^
+5 >              ^
+6 >               ^
+7 >                ^
+8 >                 ^
+9 >                  ^^^^^^^^^->
 1 >
 2 >var 
 3 >    greetings
-4 >              = 
-5 >                0
-6 >                 ;
+4 >              
+5 >              =
+6 >                
+7 >                0
+8 >                 ;
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
 3 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
-4 >Emitted(1, 17) Source(1, 17) + SourceIndex(0)
-5 >Emitted(1, 18) Source(1, 18) + SourceIndex(0)
-6 >Emitted(1, 19) Source(1, 19) + SourceIndex(0)
+4 >Emitted(1, 15) Source(1, 15) + SourceIndex(0)
+5 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
+6 >Emitted(1, 17) Source(1, 17) + SourceIndex(0)
+7 >Emitted(1, 18) Source(1, 18) + SourceIndex(0)
+8 >Emitted(1, 19) Source(1, 19) + SourceIndex(0)
 ---
 >>>function greet(greeting) {
 1->
@@ -126,32 +132,49 @@ sourceFile:sourceMapValidationFunctions.ts
 ---
 >>>    var restParams = [];
 1 >^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^
-3 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^
+3 >                   ^
+4 >                    ^^^^
+5 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >, x?: string, 
-2 >    ...restParams: string[]
+2 >    ...restParams: 
+3 >                   s
+4 >                    tring[]
 1 >Emitted(8, 5) Source(6, 55) + SourceIndex(0)
-2 >Emitted(8, 25) Source(6, 78) + SourceIndex(0)
+2 >Emitted(8, 20) Source(6, 70) + SourceIndex(0)
+3 >Emitted(8, 21) Source(6, 71) + SourceIndex(0)
+4 >Emitted(8, 25) Source(6, 78) + SourceIndex(0)
 ---
 >>>    for (var _i = 3; _i < arguments.length; _i++) {
 1->^^^^^^^^^
-2 >         ^^^^^^^^^^
-3 >                   ^^
-4 >                     ^^^^^^^^^^^^^^^^^^^^^
-5 >                                          ^^
-6 >                                            ^^^^
+2 >         ^^^^^^^
+3 >                ^
+4 >                 ^^
+5 >                   ^^
+6 >                     ^^^^^^^^^^^^^^^^^^^^^
+7 >                                          ^^
+8 >                                            ^^^^
 1->
-2 >         ...restParams: string[]
-3 >                   
-4 >                     ...restParams: string[]
-5 >                                          
-6 >                                            ...restParams: string[]
+2 >         
+3 >                v
+4 >                 ar greetings = 0;
+  >                 function greet(greeting: string): number {
+  >                     greetings++;
+  >                     return greetings;
+  >                 }
+  >                 function greet2(greeting: string, n = 10, x?: string, ...restParams: string[]
+5 >                   
+6 >                     ...restParams: string[]
+7 >                                          
+8 >                                            ...restParams: string[]
 1->Emitted(9, 10) Source(6, 55) + SourceIndex(0)
-2 >Emitted(9, 20) Source(6, 78) + SourceIndex(0)
-3 >Emitted(9, 22) Source(6, 55) + SourceIndex(0)
-4 >Emitted(9, 43) Source(6, 78) + SourceIndex(0)
-5 >Emitted(9, 45) Source(6, 55) + SourceIndex(0)
-6 >Emitted(9, 49) Source(6, 78) + SourceIndex(0)
+2 >Emitted(9, 17) Source(1, 1) + SourceIndex(0)
+3 >Emitted(9, 18) Source(1, 2) + SourceIndex(0)
+4 >Emitted(9, 20) Source(6, 78) + SourceIndex(0)
+5 >Emitted(9, 22) Source(6, 55) + SourceIndex(0)
+6 >Emitted(9, 43) Source(6, 78) + SourceIndex(0)
+7 >Emitted(9, 45) Source(6, 55) + SourceIndex(0)
+8 >Emitted(9, 49) Source(6, 78) + SourceIndex(0)
 ---
 >>>        restParams[_i - 3] = arguments[_i];
 1 >^^^^^^^^
@@ -247,32 +270,53 @@ sourceFile:sourceMapValidationFunctions.ts
 ---
 >>>    var restParams = [];
 1 >^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^
-3 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^
+3 >                   ^
+4 >                    ^^^^
+5 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >, x?: string, 
-2 >    ...restParams: string[]
+2 >    ...restParams: 
+3 >                   s
+4 >                    tring[]
 1 >Emitted(17, 5) Source(10, 52) + SourceIndex(0)
-2 >Emitted(17, 25) Source(10, 75) + SourceIndex(0)
+2 >Emitted(17, 20) Source(10, 67) + SourceIndex(0)
+3 >Emitted(17, 21) Source(10, 68) + SourceIndex(0)
+4 >Emitted(17, 25) Source(10, 75) + SourceIndex(0)
 ---
 >>>    for (var _i = 3; _i < arguments.length; _i++) {
 1->^^^^^^^^^
-2 >         ^^^^^^^^^^
-3 >                   ^^
-4 >                     ^^^^^^^^^^^^^^^^^^^^^
-5 >                                          ^^
-6 >                                            ^^^^
+2 >         ^^^^^^^
+3 >                ^
+4 >                 ^^
+5 >                   ^^
+6 >                     ^^^^^^^^^^^^^^^^^^^^^
+7 >                                          ^^
+8 >                                            ^^^^
 1->
-2 >         ...restParams: string[]
-3 >                   
-4 >                     ...restParams: string[]
-5 >                                          
-6 >                                            ...restParams: string[]
+2 >         
+3 >                v
+4 >                 ar greetings = 0;
+  >                 function greet(greeting: string): number {
+  >                     greetings++;
+  >                     return greetings;
+  >                 }
+  >                 function greet2(greeting: string, n = 10, x?: string, ...restParams: string[]): number {
+  >                     greetings++;
+  >                     return greetings;
+  >                 }
+  >                 function foo(greeting: string, n = 10, x?: string, ...restParams: string[]
+5 >                   
+6 >                     ...restParams: string[]
+7 >                                          
+8 >                                            ...restParams: string[]
 1->Emitted(18, 10) Source(10, 52) + SourceIndex(0)
-2 >Emitted(18, 20) Source(10, 75) + SourceIndex(0)
-3 >Emitted(18, 22) Source(10, 52) + SourceIndex(0)
-4 >Emitted(18, 43) Source(10, 75) + SourceIndex(0)
-5 >Emitted(18, 45) Source(10, 52) + SourceIndex(0)
-6 >Emitted(18, 49) Source(10, 75) + SourceIndex(0)
+2 >Emitted(18, 17) Source(1, 1) + SourceIndex(0)
+3 >Emitted(18, 18) Source(1, 2) + SourceIndex(0)
+4 >Emitted(18, 20) Source(10, 75) + SourceIndex(0)
+5 >Emitted(18, 22) Source(10, 52) + SourceIndex(0)
+6 >Emitted(18, 43) Source(10, 75) + SourceIndex(0)
+7 >Emitted(18, 45) Source(10, 52) + SourceIndex(0)
+8 >Emitted(18, 49) Source(10, 75) + SourceIndex(0)
 ---
 >>>        restParams[_i - 3] = arguments[_i];
 1 >^^^^^^^^

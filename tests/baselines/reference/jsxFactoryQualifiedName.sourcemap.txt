@@ -354,11 +354,17 @@ sourceFile:test.tsx
 >>>Object.defineProperty(exports, "__esModule", { value: true });
 >>>const Element_1 = require("./Element");
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >^^^^^^^^^^^^^^^^
+3 >                ^
+4 >                 ^^^^^^^^^^^^^^^^^^^^^^
 1 >
-2 >import { Element} from './Element';
+2 >
+3 >                i
+4 >                 mport { Element} from './Element';
 1 >Emitted(3, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(3, 40) Source(1, 36) + SourceIndex(0)
+2 >Emitted(3, 17) Source(1, 1) + SourceIndex(0)
+3 >Emitted(3, 18) Source(1, 2) + SourceIndex(0)
+4 >Emitted(3, 40) Source(1, 36) + SourceIndex(0)
 ---
 >>>let c;
 1 >

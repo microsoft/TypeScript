@@ -43,30 +43,42 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 1->^^^^
 2 >    ^^^^
 3 >        ^
-4 >         ^^^
-5 >            ^^
-6 >              ^
-7 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >         ^
+5 >          ^
+6 >           ^
+7 >            ^^
+8 >              ^
+9 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> {
   >    
 2 >    var 
 3 >        x
-4 >          = 
-5 >            10
-6 >              ;
+4 >          
+5 >          =
+6 >            
+7 >            10
+8 >              ;
 1->Emitted(3, 5) Source(2, 5) + SourceIndex(0)
 2 >Emitted(3, 9) Source(2, 9) + SourceIndex(0)
 3 >Emitted(3, 10) Source(2, 10) + SourceIndex(0)
-4 >Emitted(3, 13) Source(2, 13) + SourceIndex(0)
-5 >Emitted(3, 15) Source(2, 15) + SourceIndex(0)
-6 >Emitted(3, 16) Source(2, 16) + SourceIndex(0)
+4 >Emitted(3, 11) Source(2, 11) + SourceIndex(0)
+5 >Emitted(3, 12) Source(2, 12) + SourceIndex(0)
+6 >Emitted(3, 13) Source(2, 13) + SourceIndex(0)
+7 >Emitted(3, 15) Source(2, 15) + SourceIndex(0)
+8 >Emitted(3, 16) Source(2, 16) + SourceIndex(0)
 ---
 >>>    var c = /** @class */ (function () {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^
+3 >          ^
+4 >           ^^^^^^^^^^^^->
 1->
   >    
+2 >    export class c 
+3 >          {
 1->Emitted(4, 5) Source(3, 5) + SourceIndex(0)
+2 >Emitted(4, 11) Source(3, 20) + SourceIndex(0)
+3 >Emitted(4, 12) Source(3, 21) + SourceIndex(0)
 ---
 >>>        function c() {
 1->^^^^^^^^
@@ -169,34 +181,40 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 1->^^^^
 2 >    ^^^^
 3 >        ^
-4 >         ^^^
-5 >            ^^^^
-6 >                ^^
-7 >                  ^
-8 >                   ^
-9 >                    ^^
-10>                      ^
+4 >         ^
+5 >          ^
+6 >           ^
+7 >            ^^^^
+8 >                ^^
+9 >                  ^
+10>                   ^
+11>                    ^^
+12>                      ^
 1-> {
   >    
 2 >    var 
 3 >        b
-4 >          = 
-5 >            new 
-6 >                m1
-7 >                  .
-8 >                   c
-9 >                    ()
-10>                      ;
+4 >          
+5 >          =
+6 >            
+7 >            new 
+8 >                m1
+9 >                  .
+10>                   c
+11>                    ()
+12>                      ;
 1->Emitted(12, 5) Source(7, 5) + SourceIndex(0)
 2 >Emitted(12, 9) Source(7, 9) + SourceIndex(0)
 3 >Emitted(12, 10) Source(7, 10) + SourceIndex(0)
-4 >Emitted(12, 13) Source(7, 13) + SourceIndex(0)
-5 >Emitted(12, 17) Source(7, 17) + SourceIndex(0)
-6 >Emitted(12, 19) Source(7, 19) + SourceIndex(0)
-7 >Emitted(12, 20) Source(7, 20) + SourceIndex(0)
-8 >Emitted(12, 21) Source(7, 21) + SourceIndex(0)
-9 >Emitted(12, 23) Source(7, 23) + SourceIndex(0)
-10>Emitted(12, 24) Source(7, 24) + SourceIndex(0)
+4 >Emitted(12, 11) Source(7, 11) + SourceIndex(0)
+5 >Emitted(12, 12) Source(7, 12) + SourceIndex(0)
+6 >Emitted(12, 13) Source(7, 13) + SourceIndex(0)
+7 >Emitted(12, 17) Source(7, 17) + SourceIndex(0)
+8 >Emitted(12, 19) Source(7, 19) + SourceIndex(0)
+9 >Emitted(12, 20) Source(7, 20) + SourceIndex(0)
+10>Emitted(12, 21) Source(7, 21) + SourceIndex(0)
+11>Emitted(12, 23) Source(7, 23) + SourceIndex(0)
+12>Emitted(12, 24) Source(7, 24) + SourceIndex(0)
 ---
 >>>})(m1 || (m1 = {}));
 1 >

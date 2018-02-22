@@ -1,2 +1,2 @@
 //// [c.js.map]
-{"version":3,"file":"c.js","sourceRoot":"","sources":["tests/cases/compiler/a.ts","tests/cases/compiler/b.ts"],"names":[],"mappings":"AAAA;IAAA;IAAU,CAAC;IAAD,QAAC;AAAD,CAAC,AAAX,IAAW;ACAX;IAAA;IAAU,CAAC;IAAD,QAAC;AAAD,CAAC,AAAX,IAAW"}
+{"version":3,"file":"c.js","sourceRoot":"","sources":["tests/cases/compiler/a.ts","tests/cases/compiler/b.ts"],"names":[],"mappings":"AAAA,MAAQ,CAAC;IAAT;IAAU,CAAC;IAAD,QAAC;AAAD,CAAC,AAAX,IAAW;ACAX,MAAQ,CAAC;IAAT;IAAU,CAAC;IAAD,QAAC;AAAD,CAAC,AAAX,IAAW"}

@@ -71,17 +71,21 @@ sourceFile:ES5For-of34.ts
 3 >       ^
 4 >        ^
 5 >         ^^^^
-6 >             ^^^^^
-7 >                  ^^^^^^^^^
-8 >                           ^
-9 >                            ^^^
-10>                               ^^
-11>                                 ^^^
-12>                                    ^^
-13>                                      ^^^
-14>                                         ^
-15>                                          ^
-16>                                           ^^^^^^^^^^^^^^^^
+6 >             ^^^
+7 >                ^
+8 >                 ^
+9 >                  ^^^^^^^^^
+10>                           ^
+11>                            ^^^
+12>                               ^^
+13>                                 ^^^
+14>                                    ^^
+15>                                      ^^^
+16>                                         ^
+17>                                          ^
+18>                                           ^^^^^
+19>                                                ^
+20>                                                 ^^^^^^^^^^
 1->
   >
 2 >    for
@@ -89,32 +93,46 @@ sourceFile:ES5For-of34.ts
 4 >        (foo().x of 
 5 >         
 6 >             
-7 >                  
-8 >                           [
-9 >                            'a'
-10>                               , 
-11>                                 'b'
-12>                                    , 
-13>                                      'c'
-14>                                         ]
-15>                                          
-16>                                           
+7 >                f
+8 >                 unction foo() {
+  >                     return { x: 0 };
+  >                 }
+  >                 for (foo().x of 
+9 >                  
+10>                           [
+11>                            'a'
+12>                               , 
+13>                                 'b'
+14>                                    , 
+15>                                      'c'
+16>                                         ]
+17>                                          
+18>                                           
+19>                                                f
+20>                                                 unction foo() {
+  >                                                     return { x: 0 };
+  >                                                 }
+  >                                                 for (foo().x of ['a', 'b', 'c']
 1->Emitted(15, 5) Source(4, 1) + SourceIndex(0)
 2 >Emitted(15, 8) Source(4, 4) + SourceIndex(0)
 3 >Emitted(15, 9) Source(4, 5) + SourceIndex(0)
 4 >Emitted(15, 10) Source(4, 17) + SourceIndex(0)
 5 >Emitted(15, 14) Source(4, 17) + SourceIndex(0)
-6 >Emitted(15, 19) Source(4, 17) + SourceIndex(0)
-7 >Emitted(15, 28) Source(4, 17) + SourceIndex(0)
-8 >Emitted(15, 29) Source(4, 18) + SourceIndex(0)
-9 >Emitted(15, 32) Source(4, 21) + SourceIndex(0)
-10>Emitted(15, 34) Source(4, 23) + SourceIndex(0)
-11>Emitted(15, 37) Source(4, 26) + SourceIndex(0)
-12>Emitted(15, 39) Source(4, 28) + SourceIndex(0)
-13>Emitted(15, 42) Source(4, 31) + SourceIndex(0)
-14>Emitted(15, 43) Source(4, 32) + SourceIndex(0)
-15>Emitted(15, 44) Source(4, 32) + SourceIndex(0)
-16>Emitted(15, 60) Source(4, 32) + SourceIndex(0)
+6 >Emitted(15, 17) Source(1, 1) + SourceIndex(0)
+7 >Emitted(15, 18) Source(1, 2) + SourceIndex(0)
+8 >Emitted(15, 19) Source(4, 17) + SourceIndex(0)
+9 >Emitted(15, 28) Source(4, 17) + SourceIndex(0)
+10>Emitted(15, 29) Source(4, 18) + SourceIndex(0)
+11>Emitted(15, 32) Source(4, 21) + SourceIndex(0)
+12>Emitted(15, 34) Source(4, 23) + SourceIndex(0)
+13>Emitted(15, 37) Source(4, 26) + SourceIndex(0)
+14>Emitted(15, 39) Source(4, 28) + SourceIndex(0)
+15>Emitted(15, 42) Source(4, 31) + SourceIndex(0)
+16>Emitted(15, 43) Source(4, 32) + SourceIndex(0)
+17>Emitted(15, 44) Source(4, 32) + SourceIndex(0)
+18>Emitted(15, 49) Source(1, 1) + SourceIndex(0)
+19>Emitted(15, 50) Source(1, 2) + SourceIndex(0)
+20>Emitted(15, 60) Source(4, 32) + SourceIndex(0)
 ---
 >>>        foo().x = _b.value;
 1 >^^^^^^^^
@@ -140,31 +158,37 @@ sourceFile:ES5For-of34.ts
 1 >^^^^^^^^
 2 >        ^^^^
 3 >            ^
-4 >             ^^^
-5 >                ^^^
-6 >                   ^^
-7 >                     ^
-8 >                      ^
-9 >                       ^
+4 >             ^
+5 >              ^
+6 >               ^
+7 >                ^^^
+8 >                   ^^
+9 >                     ^
+10>                      ^
+11>                       ^
 1 > of ['a', 'b', 'c']) {
   >    
 2 >        var 
 3 >            p
-4 >              = 
-5 >                foo
-6 >                   ()
-7 >                     .
-8 >                      x
-9 >                       ;
+4 >              
+5 >              =
+6 >                
+7 >                foo
+8 >                   ()
+9 >                     .
+10>                      x
+11>                       ;
 1 >Emitted(17, 9) Source(5, 5) + SourceIndex(0)
 2 >Emitted(17, 13) Source(5, 9) + SourceIndex(0)
 3 >Emitted(17, 14) Source(5, 10) + SourceIndex(0)
-4 >Emitted(17, 17) Source(5, 13) + SourceIndex(0)
-5 >Emitted(17, 20) Source(5, 16) + SourceIndex(0)
-6 >Emitted(17, 22) Source(5, 18) + SourceIndex(0)
-7 >Emitted(17, 23) Source(5, 19) + SourceIndex(0)
-8 >Emitted(17, 24) Source(5, 20) + SourceIndex(0)
-9 >Emitted(17, 25) Source(5, 21) + SourceIndex(0)
+4 >Emitted(17, 15) Source(5, 11) + SourceIndex(0)
+5 >Emitted(17, 16) Source(5, 12) + SourceIndex(0)
+6 >Emitted(17, 17) Source(5, 13) + SourceIndex(0)
+7 >Emitted(17, 20) Source(5, 16) + SourceIndex(0)
+8 >Emitted(17, 22) Source(5, 18) + SourceIndex(0)
+9 >Emitted(17, 23) Source(5, 19) + SourceIndex(0)
+10>Emitted(17, 24) Source(5, 20) + SourceIndex(0)
+11>Emitted(17, 25) Source(5, 21) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^

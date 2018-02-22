@@ -12,17 +12,19 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 1 >
 2 >^^^^
 3 >    ^^^^^^
-4 >          ^^^
-5 >             ^
-6 >              ^^^^^^^^^
-7 >                       ^^
-8 >                         ^
-9 >                          ^^^^^^^^^^
-10>                                    ^^
-11>                                      ^^^^^^^^
-12>                                              ^
-13>                                               ^
-14>                                                ^
+4 >          ^
+5 >           ^
+6 >            ^
+7 >             ^
+8 >              ^^^^^^^^^
+9 >                       ^^
+10>                         ^
+11>                          ^^^^^^^^^^
+12>                                    ^^
+13>                                      ^^^^^^^^
+14>                                              ^
+15>                                               ^
+16>                                                ^
 1 >declare var console: {
   >    log(msg: any): void;
   >}
@@ -30,31 +32,35 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
   >
 2 >var 
 3 >    robotA
-4 >          : Robot = 
-5 >             [
-6 >              "trimmer"
-7 >                       , 
-8 >                         [
-9 >                          "trimming"
-10>                                    , 
-11>                                      "edging"
-12>                                              ]
-13>                                               ]
-14>                                                ;
+4 >          : 
+5 >           R
+6 >            obot = 
+7 >             [
+8 >              "trimmer"
+9 >                       , 
+10>                         [
+11>                          "trimming"
+12>                                    , 
+13>                                      "edging"
+14>                                              ]
+15>                                               ]
+16>                                                ;
 1 >Emitted(1, 1) Source(5, 1) + SourceIndex(0)
 2 >Emitted(1, 5) Source(5, 5) + SourceIndex(0)
 3 >Emitted(1, 11) Source(5, 11) + SourceIndex(0)
-4 >Emitted(1, 14) Source(5, 21) + SourceIndex(0)
-5 >Emitted(1, 15) Source(5, 22) + SourceIndex(0)
-6 >Emitted(1, 24) Source(5, 31) + SourceIndex(0)
-7 >Emitted(1, 26) Source(5, 33) + SourceIndex(0)
-8 >Emitted(1, 27) Source(5, 34) + SourceIndex(0)
-9 >Emitted(1, 37) Source(5, 44) + SourceIndex(0)
-10>Emitted(1, 39) Source(5, 46) + SourceIndex(0)
-11>Emitted(1, 47) Source(5, 54) + SourceIndex(0)
-12>Emitted(1, 48) Source(5, 55) + SourceIndex(0)
-13>Emitted(1, 49) Source(5, 56) + SourceIndex(0)
-14>Emitted(1, 50) Source(5, 57) + SourceIndex(0)
+4 >Emitted(1, 12) Source(5, 13) + SourceIndex(0)
+5 >Emitted(1, 13) Source(5, 14) + SourceIndex(0)
+6 >Emitted(1, 14) Source(5, 21) + SourceIndex(0)
+7 >Emitted(1, 15) Source(5, 22) + SourceIndex(0)
+8 >Emitted(1, 24) Source(5, 31) + SourceIndex(0)
+9 >Emitted(1, 26) Source(5, 33) + SourceIndex(0)
+10>Emitted(1, 27) Source(5, 34) + SourceIndex(0)
+11>Emitted(1, 37) Source(5, 44) + SourceIndex(0)
+12>Emitted(1, 39) Source(5, 46) + SourceIndex(0)
+13>Emitted(1, 47) Source(5, 54) + SourceIndex(0)
+14>Emitted(1, 48) Source(5, 55) + SourceIndex(0)
+15>Emitted(1, 49) Source(5, 56) + SourceIndex(0)
+16>Emitted(1, 50) Source(5, 57) + SourceIndex(0)
 ---
 >>>function foo1(_a) {
 1 >

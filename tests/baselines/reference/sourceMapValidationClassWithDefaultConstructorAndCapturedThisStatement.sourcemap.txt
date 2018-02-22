@@ -10,9 +10,15 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatemen
 -------------------------------------------------------------------
 >>>var Greeter = /** @class */ (function () {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^
+3 >            ^
+4 >             ^^^^^^^^^^^^->
 1 >
+2 >class Greeter 
+3 >            {
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 13) Source(1, 15) + SourceIndex(0)
+3 >Emitted(1, 14) Source(1, 16) + SourceIndex(0)
 ---
 >>>    function Greeter() {
 1->^^^^
@@ -22,14 +28,20 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatemen
 ---
 >>>        var _this = this;
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^
+2 >        ^^^^^^^^^^
+3 >                  ^
+4 >                   ^^^^^^
 1->
-2 >        class Greeter {
-  >            public a = 10;
-  >            public returnA = () => this.a;
-  >        }
+2 >        
+3 >                  c
+4 >                   lass Greeter {
+  >                       public a = 10;
+  >                       public returnA = () => this.a;
+  >                   }
 1->Emitted(3, 9) Source(1, 1) + SourceIndex(0)
-2 >Emitted(3, 26) Source(4, 2) + SourceIndex(0)
+2 >Emitted(3, 19) Source(1, 1) + SourceIndex(0)
+3 >Emitted(3, 20) Source(1, 2) + SourceIndex(0)
+4 >Emitted(3, 26) Source(4, 2) + SourceIndex(0)
 ---
 >>>        this.a = 10;
 1 >^^^^^^^^

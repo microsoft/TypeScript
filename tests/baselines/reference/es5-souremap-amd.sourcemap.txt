@@ -10,15 +10,21 @@ sourceFile:es5-souremap-amd.ts
 -------------------------------------------------------------------
 >>>var A = /** @class */ (function () {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^^^^^^^->
 1 >
+2 >class A
+  >
+3 >      {
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(2, 1) + SourceIndex(0)
+3 >Emitted(1, 8) Source(2, 2) + SourceIndex(0)
 ---
 >>>    function A() {
 1->^^^^
 2 >    ^^->
-1->class A
-  >{
+1->
   >    
 1->Emitted(2, 5) Source(3, 5) + SourceIndex(0)
 ---

@@ -12,9 +12,15 @@ sourceFile:sourceMapValidationExportAssignment.ts
 >>>    "use strict";
 >>>    var a = /** @class */ (function () {
 1 >^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^
+3 >          ^
+4 >           ^^^^^^^^^^^^->
 1 >
+2 >    class a 
+3 >          {
 1 >Emitted(3, 5) Source(1, 1) + SourceIndex(0)
+2 >Emitted(3, 11) Source(1, 9) + SourceIndex(0)
+3 >Emitted(3, 12) Source(1, 10) + SourceIndex(0)
 ---
 >>>        function a() {
 1->^^^^^^^^

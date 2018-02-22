@@ -10,9 +10,15 @@ sourceFile:a.ts
 -------------------------------------------------------------------
 >>>var c = /** @class */ (function () {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^^^^^^^->
 1 >
+2 >class c 
+3 >      {
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 9) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 10) + SourceIndex(0)
 ---
 >>>    function c() {
 1->^^^^

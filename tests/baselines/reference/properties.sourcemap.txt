@@ -10,9 +10,16 @@ sourceFile:properties.ts
 -------------------------------------------------------------------
 >>>var MyClass = /** @class */ (function () {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^
+3 >            ^
+4 >             ^^^^^^^^^^^^->
 1 >
+2 >class MyClass
+  >
+3 >            {
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 13) Source(2, 1) + SourceIndex(0)
+3 >Emitted(1, 14) Source(2, 2) + SourceIndex(0)
 ---
 >>>    function MyClass() {
 1->^^^^

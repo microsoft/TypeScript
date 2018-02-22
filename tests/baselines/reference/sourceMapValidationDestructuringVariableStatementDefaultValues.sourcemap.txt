@@ -12,10 +12,12 @@ sourceFile:sourceMapValidationDestructuringVariableStatementDefaultValues.ts
 1 >
 2 >^^^^
 3 >    ^^^^^
-4 >         ^^^
-5 >            ^^^^^^^
-6 >                   ^
-7 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >         ^
+5 >          ^
+6 >           ^
+7 >            ^^^^^^^
+8 >                   ^
+9 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >interface Robot {
   >    name: string;
   >    skill: string;
@@ -26,107 +28,123 @@ sourceFile:sourceMapValidationDestructuringVariableStatementDefaultValues.ts
   >
 2 >var 
 3 >    hello
-4 >          = 
-5 >            "hello"
-6 >                   ;
+4 >          
+5 >          =
+6 >            
+7 >            "hello"
+8 >                   ;
 1 >Emitted(1, 1) Source(8, 1) + SourceIndex(0)
 2 >Emitted(1, 5) Source(8, 5) + SourceIndex(0)
 3 >Emitted(1, 10) Source(8, 10) + SourceIndex(0)
-4 >Emitted(1, 13) Source(8, 13) + SourceIndex(0)
-5 >Emitted(1, 20) Source(8, 20) + SourceIndex(0)
-6 >Emitted(1, 21) Source(8, 21) + SourceIndex(0)
+4 >Emitted(1, 11) Source(8, 11) + SourceIndex(0)
+5 >Emitted(1, 12) Source(8, 12) + SourceIndex(0)
+6 >Emitted(1, 13) Source(8, 13) + SourceIndex(0)
+7 >Emitted(1, 20) Source(8, 20) + SourceIndex(0)
+8 >Emitted(1, 21) Source(8, 21) + SourceIndex(0)
 ---
 >>>var robotA = { name: "mower", skill: "mowing" };
 1->
 2 >^^^^
 3 >    ^^^^^^
-4 >          ^^^
-5 >             ^^
-6 >               ^^^^
-7 >                   ^^
-8 >                     ^^^^^^^
-9 >                            ^^
-10>                              ^^^^^
-11>                                   ^^
-12>                                     ^^^^^^^^
-13>                                             ^^
-14>                                               ^
-15>                                                ^^^^^->
+4 >          ^
+5 >           ^
+6 >            ^
+7 >             ^^
+8 >               ^^^^
+9 >                   ^^
+10>                     ^^^^^^^
+11>                            ^^
+12>                              ^^^^^
+13>                                   ^^
+14>                                     ^^^^^^^^
+15>                                             ^^
+16>                                               ^
+17>                                                ^^^^^->
 1->
   >
 2 >var 
 3 >    robotA
-4 >          : Robot = 
-5 >             { 
-6 >               name
-7 >                   : 
-8 >                     "mower"
-9 >                            , 
-10>                              skill
-11>                                   : 
-12>                                     "mowing"
-13>                                              }
-14>                                               ;
+4 >          : 
+5 >           R
+6 >            obot = 
+7 >             { 
+8 >               name
+9 >                   : 
+10>                     "mower"
+11>                            , 
+12>                              skill
+13>                                   : 
+14>                                     "mowing"
+15>                                              }
+16>                                               ;
 1->Emitted(2, 1) Source(9, 1) + SourceIndex(0)
 2 >Emitted(2, 5) Source(9, 5) + SourceIndex(0)
 3 >Emitted(2, 11) Source(9, 11) + SourceIndex(0)
-4 >Emitted(2, 14) Source(9, 21) + SourceIndex(0)
-5 >Emitted(2, 16) Source(9, 23) + SourceIndex(0)
-6 >Emitted(2, 20) Source(9, 27) + SourceIndex(0)
-7 >Emitted(2, 22) Source(9, 29) + SourceIndex(0)
-8 >Emitted(2, 29) Source(9, 36) + SourceIndex(0)
-9 >Emitted(2, 31) Source(9, 38) + SourceIndex(0)
-10>Emitted(2, 36) Source(9, 43) + SourceIndex(0)
-11>Emitted(2, 38) Source(9, 45) + SourceIndex(0)
-12>Emitted(2, 46) Source(9, 53) + SourceIndex(0)
-13>Emitted(2, 48) Source(9, 55) + SourceIndex(0)
-14>Emitted(2, 49) Source(9, 56) + SourceIndex(0)
+4 >Emitted(2, 12) Source(9, 13) + SourceIndex(0)
+5 >Emitted(2, 13) Source(9, 14) + SourceIndex(0)
+6 >Emitted(2, 14) Source(9, 21) + SourceIndex(0)
+7 >Emitted(2, 16) Source(9, 23) + SourceIndex(0)
+8 >Emitted(2, 20) Source(9, 27) + SourceIndex(0)
+9 >Emitted(2, 22) Source(9, 29) + SourceIndex(0)
+10>Emitted(2, 29) Source(9, 36) + SourceIndex(0)
+11>Emitted(2, 31) Source(9, 38) + SourceIndex(0)
+12>Emitted(2, 36) Source(9, 43) + SourceIndex(0)
+13>Emitted(2, 38) Source(9, 45) + SourceIndex(0)
+14>Emitted(2, 46) Source(9, 53) + SourceIndex(0)
+15>Emitted(2, 48) Source(9, 55) + SourceIndex(0)
+16>Emitted(2, 49) Source(9, 56) + SourceIndex(0)
 ---
 >>>var robotB = { name: "trimmer", skill: "trimming" };
 1->
 2 >^^^^
 3 >    ^^^^^^
-4 >          ^^^
-5 >             ^^
-6 >               ^^^^
-7 >                   ^^
-8 >                     ^^^^^^^^^
-9 >                              ^^
-10>                                ^^^^^
-11>                                     ^^
-12>                                       ^^^^^^^^^^
-13>                                                 ^^
-14>                                                   ^
-15>                                                    ^^^^^^^^^^^->
+4 >          ^
+5 >           ^
+6 >            ^
+7 >             ^^
+8 >               ^^^^
+9 >                   ^^
+10>                     ^^^^^^^^^
+11>                              ^^
+12>                                ^^^^^
+13>                                     ^^
+14>                                       ^^^^^^^^^^
+15>                                                 ^^
+16>                                                   ^
+17>                                                    ^^^^^^^^^^^->
 1->
   >
 2 >var 
 3 >    robotB
-4 >          : Robot = 
-5 >             { 
-6 >               name
-7 >                   : 
-8 >                     "trimmer"
-9 >                              , 
-10>                                skill
-11>                                     : 
-12>                                       "trimming"
-13>                                                  }
-14>                                                   ;
+4 >          : 
+5 >           R
+6 >            obot = 
+7 >             { 
+8 >               name
+9 >                   : 
+10>                     "trimmer"
+11>                              , 
+12>                                skill
+13>                                     : 
+14>                                       "trimming"
+15>                                                  }
+16>                                                   ;
 1->Emitted(3, 1) Source(10, 1) + SourceIndex(0)
 2 >Emitted(3, 5) Source(10, 5) + SourceIndex(0)
 3 >Emitted(3, 11) Source(10, 11) + SourceIndex(0)
-4 >Emitted(3, 14) Source(10, 21) + SourceIndex(0)
-5 >Emitted(3, 16) Source(10, 23) + SourceIndex(0)
-6 >Emitted(3, 20) Source(10, 27) + SourceIndex(0)
-7 >Emitted(3, 22) Source(10, 29) + SourceIndex(0)
-8 >Emitted(3, 31) Source(10, 38) + SourceIndex(0)
-9 >Emitted(3, 33) Source(10, 40) + SourceIndex(0)
-10>Emitted(3, 38) Source(10, 45) + SourceIndex(0)
-11>Emitted(3, 40) Source(10, 47) + SourceIndex(0)
-12>Emitted(3, 50) Source(10, 57) + SourceIndex(0)
-13>Emitted(3, 52) Source(10, 59) + SourceIndex(0)
-14>Emitted(3, 53) Source(10, 60) + SourceIndex(0)
+4 >Emitted(3, 12) Source(10, 13) + SourceIndex(0)
+5 >Emitted(3, 13) Source(10, 14) + SourceIndex(0)
+6 >Emitted(3, 14) Source(10, 21) + SourceIndex(0)
+7 >Emitted(3, 16) Source(10, 23) + SourceIndex(0)
+8 >Emitted(3, 20) Source(10, 27) + SourceIndex(0)
+9 >Emitted(3, 22) Source(10, 29) + SourceIndex(0)
+10>Emitted(3, 31) Source(10, 38) + SourceIndex(0)
+11>Emitted(3, 33) Source(10, 40) + SourceIndex(0)
+12>Emitted(3, 38) Source(10, 45) + SourceIndex(0)
+13>Emitted(3, 40) Source(10, 47) + SourceIndex(0)
+14>Emitted(3, 50) Source(10, 57) + SourceIndex(0)
+15>Emitted(3, 52) Source(10, 59) + SourceIndex(0)
+16>Emitted(3, 53) Source(10, 60) + SourceIndex(0)
 ---
 >>>var _a = robotA.name, nameA = _a === void 0 ? "<NoName>" : _a;
 1->

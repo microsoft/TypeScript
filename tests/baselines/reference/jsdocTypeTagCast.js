@@ -90,13 +90,13 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 // @ts-check
-var W = ((4));
-var W = (4); // Error
+var W = /** @type {string} */ ((4));
+var W = /** @type {string} */ (4); // Error
 /** @type {*} */
 var a;
 /** @type {string} */
 var s;
-var a = ("" + 4);
+var a = /** @type {*} */ ("" + 4);
 var s = "" + /** @type {*} */ (4);
 var SomeBase = /** @class */ (function () {
     function SomeBase() {

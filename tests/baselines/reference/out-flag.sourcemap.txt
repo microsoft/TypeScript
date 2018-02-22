@@ -30,10 +30,17 @@ sourceFile:out-flag.ts
 ---
 >>>var MyClass = /** @class */ (function () {
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^
+3 >            ^
+4 >             ^^^^^^^^^^^^->
 1->
   >
+2 >class MyClass
+  >
+3 >            {
 1->Emitted(3, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(3, 13) Source(5, 1) + SourceIndex(0)
+3 >Emitted(3, 14) Source(5, 2) + SourceIndex(0)
 ---
 >>>    function MyClass() {
 1->^^^^

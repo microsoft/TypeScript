@@ -12,90 +12,116 @@ sourceFile:ES5For-of25.ts
 1 >
 2 >^^^^
 3 >    ^
-4 >     ^^^
-5 >        ^
-6 >         ^
-7 >          ^^
-8 >            ^
-9 >             ^^
-10>               ^
-11>                ^
-12>                 ^
-13>                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >     ^
+5 >      ^
+6 >       ^
+7 >        ^
+8 >         ^
+9 >          ^^
+10>            ^
+11>             ^^
+12>               ^
+13>                ^
+14>                 ^
+15>                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >var 
 3 >    a
-4 >      = 
-5 >        [
-6 >         1
-7 >          , 
-8 >            2
-9 >             , 
-10>               3
-11>                ]
-12>                 ;
+4 >      
+5 >      =
+6 >        
+7 >        [
+8 >         1
+9 >          , 
+10>            2
+11>             , 
+12>               3
+13>                ]
+14>                 ;
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
 3 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
-4 >Emitted(1, 9) Source(1, 9) + SourceIndex(0)
-5 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
-6 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
-7 >Emitted(1, 13) Source(1, 13) + SourceIndex(0)
-8 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
-9 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
-10>Emitted(1, 17) Source(1, 17) + SourceIndex(0)
-11>Emitted(1, 18) Source(1, 18) + SourceIndex(0)
-12>Emitted(1, 19) Source(1, 19) + SourceIndex(0)
+4 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+5 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+6 >Emitted(1, 9) Source(1, 9) + SourceIndex(0)
+7 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+8 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
+9 >Emitted(1, 13) Source(1, 13) + SourceIndex(0)
+10>Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+11>Emitted(1, 16) Source(1, 16) + SourceIndex(0)
+12>Emitted(1, 17) Source(1, 17) + SourceIndex(0)
+13>Emitted(1, 18) Source(1, 18) + SourceIndex(0)
+14>Emitted(1, 19) Source(1, 19) + SourceIndex(0)
 ---
 >>>for (var _i = 0, a_1 = a; _i < a_1.length; _i++) {
 1->
 2 >^^^
 3 >   ^
 4 >    ^
-5 >     ^^^^^^^^^^
-6 >               ^^
-7 >                 ^^^^^^^
-8 >                        ^^
-9 >                          ^^^^^^^^^^^^^^^
-10>                                         ^^
-11>                                           ^^^^
+5 >     ^^^^^^^
+6 >            ^
+7 >             ^^
+8 >               ^^
+9 >                 ^^^^
+10>                     ^
+11>                      ^^
+12>                        ^^
+13>                          ^^^^^^^^^^^^^^^
+14>                                         ^^
+15>                                           ^^^^
 1->
   >
 2 >for
 3 >    
 4 >    (var v of 
-5 >     a
-6 >               
-7 >                 a
-8 >                        
-9 >                          a
-10>                                         
-11>                                           a
+5 >     
+6 >            v
+7 >             ar a = [1, 2, 3];
+  >             for (var v of a
+8 >               
+9 >                 
+10>                     v
+11>                      ar a = [1, 2, 3];
+  >                      for (var v of a
+12>                        
+13>                          a
+14>                                         
+15>                                           a
 1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
 2 >Emitted(2, 4) Source(2, 4) + SourceIndex(0)
 3 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
 4 >Emitted(2, 6) Source(2, 15) + SourceIndex(0)
-5 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
-6 >Emitted(2, 18) Source(2, 15) + SourceIndex(0)
-7 >Emitted(2, 25) Source(2, 16) + SourceIndex(0)
-8 >Emitted(2, 27) Source(2, 15) + SourceIndex(0)
-9 >Emitted(2, 42) Source(2, 16) + SourceIndex(0)
-10>Emitted(2, 44) Source(2, 15) + SourceIndex(0)
-11>Emitted(2, 48) Source(2, 16) + SourceIndex(0)
+5 >Emitted(2, 13) Source(1, 1) + SourceIndex(0)
+6 >Emitted(2, 14) Source(1, 2) + SourceIndex(0)
+7 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
+8 >Emitted(2, 18) Source(2, 15) + SourceIndex(0)
+9 >Emitted(2, 22) Source(1, 1) + SourceIndex(0)
+10>Emitted(2, 23) Source(1, 2) + SourceIndex(0)
+11>Emitted(2, 25) Source(2, 16) + SourceIndex(0)
+12>Emitted(2, 27) Source(2, 15) + SourceIndex(0)
+13>Emitted(2, 42) Source(2, 16) + SourceIndex(0)
+14>Emitted(2, 44) Source(2, 15) + SourceIndex(0)
+15>Emitted(2, 48) Source(2, 16) + SourceIndex(0)
 ---
 >>>    var v = a_1[_i];
 1 >^^^^
 2 >    ^^^^
 3 >        ^
-4 >         ^^^^^^^^^^
+4 >         ^
+5 >          ^
+6 >           ^^^^^^^^
 1 >
 2 >    var 
 3 >        v
-4 >         
+4 >          
+5 >          o
+6 >           
 1 >Emitted(3, 5) Source(2, 6) + SourceIndex(0)
 2 >Emitted(3, 9) Source(2, 10) + SourceIndex(0)
 3 >Emitted(3, 10) Source(2, 11) + SourceIndex(0)
-4 >Emitted(3, 20) Source(2, 11) + SourceIndex(0)
+4 >Emitted(3, 11) Source(2, 12) + SourceIndex(0)
+5 >Emitted(3, 12) Source(2, 13) + SourceIndex(0)
+6 >Emitted(3, 20) Source(2, 11) + SourceIndex(0)
 ---
 >>>    v;
 1 >^^^^

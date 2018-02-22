@@ -60,22 +60,28 @@ sourceFile:sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.t
 1 >^^^^^^^^
 2 >        ^^^^
 3 >            ^
-4 >             ^^^
-5 >                ^
-6 >                 ^
+4 >             ^
+5 >              ^
+6 >               ^
+7 >                ^
+8 >                 ^
 1 >
   >        
 2 >        var 
 3 >            a
-4 >              = 
-5 >                1
-6 >                 ;
+4 >              
+5 >              =
+6 >                
+7 >                1
+8 >                 ;
 1 >Emitted(5, 9) Source(4, 9) + SourceIndex(0)
 2 >Emitted(5, 13) Source(4, 13) + SourceIndex(0)
 3 >Emitted(5, 14) Source(4, 14) + SourceIndex(0)
-4 >Emitted(5, 17) Source(4, 17) + SourceIndex(0)
-5 >Emitted(5, 18) Source(4, 18) + SourceIndex(0)
-6 >Emitted(5, 19) Source(4, 19) + SourceIndex(0)
+4 >Emitted(5, 15) Source(4, 15) + SourceIndex(0)
+5 >Emitted(5, 16) Source(4, 16) + SourceIndex(0)
+6 >Emitted(5, 17) Source(4, 17) + SourceIndex(0)
+7 >Emitted(5, 18) Source(4, 18) + SourceIndex(0)
+8 >Emitted(5, 19) Source(4, 19) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
