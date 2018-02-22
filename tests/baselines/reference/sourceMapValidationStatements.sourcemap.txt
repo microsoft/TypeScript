@@ -977,21 +977,27 @@ sourceFile:sourceMapValidationStatements.ts
 ---
 >>>        case 0: {
 1 >^^^^^^^^
-2 >        ^^^^^
-3 >             ^
-4 >              ^^
-5 >                ^
+2 >        ^^^^
+3 >            ^
+4 >             ^
+5 >              ^
+6 >               ^
+7 >                ^
 1 >
   >        
-2 >        case 
-3 >             0
-4 >              : 
-5 >                {
+2 >        case
+3 >             
+4 >             0
+5 >              :
+6 >                
+7 >                {
 1 >Emitted(53, 9) Source(48, 9) + SourceIndex(0)
-2 >Emitted(53, 14) Source(48, 14) + SourceIndex(0)
-3 >Emitted(53, 15) Source(48, 15) + SourceIndex(0)
-4 >Emitted(53, 17) Source(48, 17) + SourceIndex(0)
-5 >Emitted(53, 18) Source(48, 18) + SourceIndex(0)
+2 >Emitted(53, 13) Source(48, 13) + SourceIndex(0)
+3 >Emitted(53, 14) Source(48, 14) + SourceIndex(0)
+4 >Emitted(53, 15) Source(48, 15) + SourceIndex(0)
+5 >Emitted(53, 16) Source(48, 16) + SourceIndex(0)
+6 >Emitted(53, 17) Source(48, 17) + SourceIndex(0)
+7 >Emitted(53, 18) Source(48, 18) + SourceIndex(0)
 ---
 >>>            x++;
 1 >^^^^^^^^^^^^
@@ -1034,21 +1040,27 @@ sourceFile:sourceMapValidationStatements.ts
 ---
 >>>        case 1: {
 1->^^^^^^^^
-2 >        ^^^^^
-3 >             ^
-4 >              ^^
-5 >                ^
+2 >        ^^^^
+3 >            ^
+4 >             ^
+5 >              ^
+6 >               ^
+7 >                ^
 1->
   >        
-2 >        case 
-3 >             1
-4 >              : 
-5 >                {
+2 >        case
+3 >             
+4 >             1
+5 >              :
+6 >                
+7 >                {
 1->Emitted(57, 9) Source(53, 9) + SourceIndex(0)
-2 >Emitted(57, 14) Source(53, 14) + SourceIndex(0)
-3 >Emitted(57, 15) Source(53, 15) + SourceIndex(0)
-4 >Emitted(57, 17) Source(53, 17) + SourceIndex(0)
-5 >Emitted(57, 18) Source(53, 18) + SourceIndex(0)
+2 >Emitted(57, 13) Source(53, 13) + SourceIndex(0)
+3 >Emitted(57, 14) Source(53, 14) + SourceIndex(0)
+4 >Emitted(57, 15) Source(53, 15) + SourceIndex(0)
+5 >Emitted(57, 16) Source(53, 16) + SourceIndex(0)
+6 >Emitted(57, 17) Source(53, 17) + SourceIndex(0)
+7 >Emitted(57, 18) Source(53, 18) + SourceIndex(0)
 ---
 >>>            x--;
 1 >^^^^^^^^^^^^
@@ -1091,16 +1103,22 @@ sourceFile:sourceMapValidationStatements.ts
 ---
 >>>        default: {
 1->^^^^^^^^
-2 >        ^^^^^^^^^
-3 >                 ^
-4 >                  ^^->
+2 >        ^^^^^^^
+3 >               ^
+4 >                ^
+5 >                 ^
+6 >                  ^^->
 1->
   >        
-2 >        default: 
-3 >                 {
+2 >        default
+3 >               :
+4 >                 
+5 >                 {
 1->Emitted(61, 9) Source(58, 9) + SourceIndex(0)
-2 >Emitted(61, 18) Source(58, 18) + SourceIndex(0)
-3 >Emitted(61, 19) Source(58, 19) + SourceIndex(0)
+2 >Emitted(61, 16) Source(58, 16) + SourceIndex(0)
+3 >Emitted(61, 17) Source(58, 17) + SourceIndex(0)
+4 >Emitted(61, 18) Source(58, 18) + SourceIndex(0)
+5 >Emitted(61, 19) Source(58, 19) + SourceIndex(0)
 ---
 >>>            x *= 2;
 1->^^^^^^^^^^^^

@@ -209,22 +209,28 @@ sourceFile:sourceMap-Comments.ts
 ---
 >>>                    case 1:
 1 >^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^
-3 >                         ^
-4 >                          ^^^^^->
+2 >                    ^^^^
+3 >                        ^
+4 >                         ^
+5 >                          ^
+6 >                           ^^^^->
 1 >
   >                
-2 >                    case 
-3 >                         1
+2 >                    case
+3 >                         
+4 >                         1
+5 >                          :
 1 >Emitted(11, 21) Source(6, 17) + SourceIndex(0)
-2 >Emitted(11, 26) Source(6, 22) + SourceIndex(0)
-3 >Emitted(11, 27) Source(6, 23) + SourceIndex(0)
+2 >Emitted(11, 25) Source(6, 21) + SourceIndex(0)
+3 >Emitted(11, 26) Source(6, 22) + SourceIndex(0)
+4 >Emitted(11, 27) Source(6, 23) + SourceIndex(0)
+5 >Emitted(11, 28) Source(6, 24) + SourceIndex(0)
 ---
 >>>                        break;
 1->^^^^^^^^^^^^^^^^^^^^^^^^
 2 >                        ^^^^^
 3 >                             ^
-1->:
+1->
   >                    
 2 >                        break
 3 >                             ;
@@ -234,22 +240,28 @@ sourceFile:sourceMap-Comments.ts
 ---
 >>>                    case 2:
 1 >^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^
-3 >                         ^
-4 >                          ^^^^^^^^^^^^^^^->
+2 >                    ^^^^
+3 >                        ^
+4 >                         ^
+5 >                          ^
+6 >                           ^^^^^^^^^^^^^^->
 1 >
   >                
-2 >                    case 
-3 >                         2
+2 >                    case
+3 >                         
+4 >                         2
+5 >                          :
 1 >Emitted(13, 21) Source(8, 17) + SourceIndex(0)
-2 >Emitted(13, 26) Source(8, 22) + SourceIndex(0)
-3 >Emitted(13, 27) Source(8, 23) + SourceIndex(0)
+2 >Emitted(13, 25) Source(8, 21) + SourceIndex(0)
+3 >Emitted(13, 26) Source(8, 22) + SourceIndex(0)
+4 >Emitted(13, 27) Source(8, 23) + SourceIndex(0)
+5 >Emitted(13, 28) Source(8, 24) + SourceIndex(0)
 ---
 >>>                        //line comment 1
 1->^^^^^^^^^^^^^^^^^^^^^^^^
 2 >                        ^^^^^^^^^^^^^^^^
 3 >                                        ^->
-1->:
+1->
   >                    
 2 >                        //line comment 1
 1->Emitted(14, 25) Source(9, 21) + SourceIndex(0)
@@ -278,21 +290,27 @@ sourceFile:sourceMap-Comments.ts
 ---
 >>>                    case 3:
 1 >^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^
-3 >                         ^
-4 >                          ^^^^^^^^^^->
+2 >                    ^^^^
+3 >                        ^
+4 >                         ^
+5 >                          ^
+6 >                           ^^^^^^^^^->
 1 >
   >                
-2 >                    case 
-3 >                         3
+2 >                    case
+3 >                         
+4 >                         3
+5 >                          :
 1 >Emitted(17, 21) Source(12, 17) + SourceIndex(0)
-2 >Emitted(17, 26) Source(12, 22) + SourceIndex(0)
-3 >Emitted(17, 27) Source(12, 23) + SourceIndex(0)
+2 >Emitted(17, 25) Source(12, 21) + SourceIndex(0)
+3 >Emitted(17, 26) Source(12, 22) + SourceIndex(0)
+4 >Emitted(17, 27) Source(12, 23) + SourceIndex(0)
+5 >Emitted(17, 28) Source(12, 24) + SourceIndex(0)
 ---
 >>>                        //a comment
 1->^^^^^^^^^^^^^^^^^^^^^^^^
 2 >                        ^^^^^^^^^^^
-1->:
+1->
   >                    
 2 >                        //a comment
 1->Emitted(18, 25) Source(13, 21) + SourceIndex(0)

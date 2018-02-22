@@ -1723,7 +1723,7 @@ namespace ts {
         }
 
         function emitBreakStatement(node: BreakStatement) {
-            writeToken(SyntaxKind.BreakKeyword, node.pos, writeKeyword);
+            emitTokenWithComment(SyntaxKind.BreakKeyword, node.pos, writeKeyword, node);
             emitWithLeadingSpace(node.label);
             writeSemicolon();
         }
@@ -1756,18 +1756,18 @@ namespace ts {
         }
 
         function emitSwitchStatement(node: SwitchStatement) {
-            const openParenPos = writeToken(SyntaxKind.SwitchKeyword, node.pos, writeKeyword);
+            const openParenPos = emitTokenWithComment(SyntaxKind.SwitchKeyword, node.pos, writeKeyword, node);
             writeSpace();
-            writeToken(SyntaxKind.OpenParenToken, openParenPos, writePunctuation);
+            emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
             emitExpression(node.expression);
-            writeToken(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation);
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
             writeSpace();
             emit(node.caseBlock);
         }
 
         function emitLabeledStatement(node: LabeledStatement) {
             emit(node.label);
-            writePunctuation(":");
+            emitTokenWithComment(SyntaxKind.ColonToken, node.label.end, writePunctuation, node);
             writeSpace();
             emit(node.statement);
         }
@@ -2051,9 +2051,9 @@ namespace ts {
         }
 
         function emitCaseBlock(node: CaseBlock) {
-            writeToken(SyntaxKind.OpenBraceToken, node.pos, writePunctuation);
+            emitTokenWithComment(SyntaxKind.OpenBraceToken, node.pos, writePunctuation, node);
             emitList(node, node.clauses, ListFormat.CaseBlockClauses);
-            writeToken(SyntaxKind.CloseBraceToken, node.clauses.end, writePunctuation);
+            emitTokenWithComment(SyntaxKind.CloseBraceToken, node.clauses.end, writePunctuation, node);
         }
 
         function emitImportEqualsDeclaration(node: ImportEqualsDeclaration) {
@@ -2288,21 +2288,21 @@ namespace ts {
         //
 
         function emitCaseClause(node: CaseClause) {
-            writeKeyword("case");
+            emitTokenWithComment(SyntaxKind.CaseKeyword, node.pos, writeKeyword, node);
             writeSpace();
             emitExpression(node.expression);
-            writePunctuation(":");
 
-            emitCaseOrDefaultClauseStatements(node, node.statements);
+            emitCaseOrDefaultClauseStatements(node, node.statements, node.expression.end);
         }
 
         function emitDefaultClause(node: DefaultClause) {
-            writeKeyword("default");
-            writePunctuation(":");
-            emitCaseOrDefaultClauseStatements(node, node.statements);
+            const pos = emitTokenWithComment(SyntaxKind.DefaultKeyword, node.pos, writeKeyword, node);
+            emitCaseOrDefaultClauseStatements(node, node.statements, pos);
         }
 
-        function emitCaseOrDefaultClauseStatements(parentNode: Node, statements: NodeArray<Statement>) {
+        function emitCaseOrDefaultClauseStatements(parentNode: Node, statements: NodeArray<Statement>, colonPos: number) {
+            // This also handles the colon token from the preceeding clause, as weather comments must be emitted for it depends on
+            // If it is going to be emitted as a single statement or not (as ListFormat.Multiline makes emitList emit not comments, but otherwise it will)
             const emitAsSingleStatement =
                 statements.length === 1 &&
                 (
@@ -2312,26 +2312,14 @@ namespace ts {
                     rangeStartPositionsAreOnSameLine(parentNode, statements[0], currentSourceFile)
                 );
 
-            // e.g:
-            //      case 0: // Zero
-            //      case 1: // One
-            //      case 2: // two
-            //          return "hi";
-            // If there is no statements, emitNodeWithComments of the parentNode which is caseClause will take care of trailing comment.
-            // So in example above, comment "// Zero" and "// One" will be emit in emitTrailingComments in emitNodeWithComments.
-            // However, for "case 2", because parentNode which is caseClause has an "end" property to be end of the statements (in this case return statement)
-            // comment "// two" will not be emitted in emitNodeWithComments.
-            // Therefore, we have to do the check here to emit such comment.
-            if (statements.length > 0) {
-                // We use emitTrailingCommentsOfPosition instead of emitLeadingCommentsOfPosition because leading comments is defined as comments before the node after newline character separating it from previous line
-                // Note: we can't use parentNode.end as such position includes statements.
-                emitTrailingCommentsOfPosition(statements.pos);
-            }
-
             let format = ListFormat.CaseOrDefaultClauseStatements;
             if (emitAsSingleStatement) {
+                writeToken(SyntaxKind.ColonToken, colonPos, writePunctuation, parentNode);
                 writeSpace();
                 format &= ~(ListFormat.MultiLine | ListFormat.Indented);
+            }
+            else {
+                emitTokenWithComment(SyntaxKind.ColonToken, colonPos, writePunctuation, parentNode);
             }
             emitList(parentNode, statements, format);
         }

@@ -64,16 +64,22 @@ sourceFile:sourceMapValidationSwitch.ts
 ---
 >>>    case 5:
 1 >^^^^
-2 >    ^^^^^
-3 >         ^
-4 >          ^^^->
+2 >    ^^^^
+3 >        ^
+4 >         ^
+5 >          ^
+6 >           ^^->
 1 >
   >    
-2 >    case 
-3 >         5
+2 >    case
+3 >         
+4 >         5
+5 >          :
 1 >Emitted(3, 5) Source(3, 5) + SourceIndex(0)
-2 >Emitted(3, 10) Source(3, 10) + SourceIndex(0)
-3 >Emitted(3, 11) Source(3, 11) + SourceIndex(0)
+2 >Emitted(3, 9) Source(3, 9) + SourceIndex(0)
+3 >Emitted(3, 10) Source(3, 10) + SourceIndex(0)
+4 >Emitted(3, 11) Source(3, 11) + SourceIndex(0)
+5 >Emitted(3, 12) Source(3, 12) + SourceIndex(0)
 ---
 >>>        x++;
 1->^^^^^^^^
@@ -81,7 +87,7 @@ sourceFile:sourceMapValidationSwitch.ts
 3 >         ^^
 4 >           ^
 5 >            ^^^->
-1->:
+1->
   >        
 2 >        x
 3 >         ++
@@ -105,21 +111,27 @@ sourceFile:sourceMapValidationSwitch.ts
 ---
 >>>    case 10:
 1 >^^^^
-2 >    ^^^^^
-3 >         ^^
+2 >    ^^^^
+3 >        ^
+4 >         ^^
+5 >           ^
 1 >
   >    
-2 >    case 
-3 >         10
+2 >    case
+3 >         
+4 >         10
+5 >           :
 1 >Emitted(6, 5) Source(6, 5) + SourceIndex(0)
-2 >Emitted(6, 10) Source(6, 10) + SourceIndex(0)
-3 >Emitted(6, 12) Source(6, 12) + SourceIndex(0)
+2 >Emitted(6, 9) Source(6, 9) + SourceIndex(0)
+3 >Emitted(6, 10) Source(6, 10) + SourceIndex(0)
+4 >Emitted(6, 12) Source(6, 12) + SourceIndex(0)
+5 >Emitted(6, 13) Source(6, 13) + SourceIndex(0)
 ---
 >>>        {
 1 >^^^^^^^^
 2 >        ^
 3 >         ^^^^^^^^->
-1 >:
+1 >
   >        
 2 >        {
 1 >Emitted(7, 9) Source(7, 9) + SourceIndex(0)
@@ -165,10 +177,16 @@ sourceFile:sourceMapValidationSwitch.ts
 ---
 >>>    default:
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^^^^^^->
 1->
   >    
+2 >    default
+3 >           :
 1->Emitted(11, 5) Source(11, 5) + SourceIndex(0)
+2 >Emitted(11, 12) Source(11, 12) + SourceIndex(0)
+3 >Emitted(11, 13) Source(11, 13) + SourceIndex(0)
 ---
 >>>        x = x * 10;
 1->^^^^^^^^
@@ -178,7 +196,7 @@ sourceFile:sourceMapValidationSwitch.ts
 5 >             ^^^
 6 >                ^^
 7 >                  ^
-1->default:
+1->
   >        
 2 >        x
 3 >          = 
@@ -234,16 +252,22 @@ sourceFile:sourceMapValidationSwitch.ts
 ---
 >>>    case 5:
 1 >^^^^
-2 >    ^^^^^
-3 >         ^
-4 >          ^^^->
+2 >    ^^^^
+3 >        ^
+4 >         ^
+5 >          ^
+6 >           ^^->
 1 >
   >    
-2 >    case 
-3 >         5
+2 >    case
+3 >         
+4 >         5
+5 >          :
 1 >Emitted(15, 5) Source(16, 5) + SourceIndex(0)
-2 >Emitted(15, 10) Source(16, 10) + SourceIndex(0)
-3 >Emitted(15, 11) Source(16, 11) + SourceIndex(0)
+2 >Emitted(15, 9) Source(16, 9) + SourceIndex(0)
+3 >Emitted(15, 10) Source(16, 10) + SourceIndex(0)
+4 >Emitted(15, 11) Source(16, 11) + SourceIndex(0)
+5 >Emitted(15, 12) Source(16, 12) + SourceIndex(0)
 ---
 >>>        x++;
 1->^^^^^^^^
@@ -251,7 +275,7 @@ sourceFile:sourceMapValidationSwitch.ts
 3 >         ^^
 4 >           ^
 5 >            ^^^->
-1->:
+1->
   >        
 2 >        x
 3 >         ++
@@ -275,21 +299,27 @@ sourceFile:sourceMapValidationSwitch.ts
 ---
 >>>    case 10:
 1 >^^^^
-2 >    ^^^^^
-3 >         ^^
+2 >    ^^^^
+3 >        ^
+4 >         ^^
+5 >           ^
 1 >
   >    
-2 >    case 
-3 >         10
+2 >    case
+3 >         
+4 >         10
+5 >           :
 1 >Emitted(18, 5) Source(19, 5) + SourceIndex(0)
-2 >Emitted(18, 10) Source(19, 10) + SourceIndex(0)
-3 >Emitted(18, 12) Source(19, 12) + SourceIndex(0)
+2 >Emitted(18, 9) Source(19, 9) + SourceIndex(0)
+3 >Emitted(18, 10) Source(19, 10) + SourceIndex(0)
+4 >Emitted(18, 12) Source(19, 12) + SourceIndex(0)
+5 >Emitted(18, 13) Source(19, 13) + SourceIndex(0)
 ---
 >>>        {
 1 >^^^^^^^^
 2 >        ^
 3 >         ^^^^^^^^->
-1 >:
+1 >
   >        
 2 >        {
 1 >Emitted(19, 9) Source(20, 9) + SourceIndex(0)
@@ -335,19 +365,24 @@ sourceFile:sourceMapValidationSwitch.ts
 ---
 >>>    default:
 1->^^^^
-2 >    ^^^^^^->
+2 >    ^^^^^^^
+3 >           ^
 1->
   >    
+2 >    default
+3 >           :
 1->Emitted(23, 5) Source(24, 5) + SourceIndex(0)
+2 >Emitted(23, 12) Source(24, 12) + SourceIndex(0)
+3 >Emitted(23, 13) Source(24, 13) + SourceIndex(0)
 ---
 >>>        {
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^
 3 >         ^^^^^^^^^^^^^^^->
-1->default:
+1 >
   >        
 2 >        {
-1->Emitted(24, 9) Source(25, 9) + SourceIndex(0)
+1 >Emitted(24, 9) Source(25, 9) + SourceIndex(0)
 2 >Emitted(24, 10) Source(25, 10) + SourceIndex(0)
 ---
 >>>            x = x * 10;
