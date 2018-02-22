@@ -1700,31 +1700,34 @@ sourceFile:recursiveClassReferenceTest.ts
 1 >^^^^^^^^^^^^^^^^^^^^^^^^
 2 >                        ^^^^^^
 3 >                              ^
-4 >                               ^^^^
-5 >                                   ^^^^^
-6 >                                        ^
-7 >                                         ^^^^
-8 >                                             ^
-9 >                                              ^
+4 >                               ^^^
+5 >                                  ^
+6 >                                   ^^^^^
+7 >                                        ^
+8 >                                         ^^^^
+9 >                                             ^
+10>                                              ^
 1 >public getInitialState(): IState {
   >			
 2 >                        return
 3 >                               
-4 >                               new 
-5 >                                   State
-6 >                                        (
-7 >                                         self
-8 >                                             )
-9 >                                              ;
+4 >                               new
+5 >                                   
+6 >                                   State
+7 >                                        (
+8 >                                         self
+9 >                                             )
+10>                                              ;
 1 >Emitted(95, 25) Source(95, 4) + SourceIndex(0)
 2 >Emitted(95, 31) Source(95, 10) + SourceIndex(0)
 3 >Emitted(95, 32) Source(95, 11) + SourceIndex(0)
-4 >Emitted(95, 36) Source(95, 15) + SourceIndex(0)
-5 >Emitted(95, 41) Source(95, 20) + SourceIndex(0)
-6 >Emitted(95, 42) Source(95, 21) + SourceIndex(0)
-7 >Emitted(95, 46) Source(95, 25) + SourceIndex(0)
-8 >Emitted(95, 47) Source(95, 26) + SourceIndex(0)
-9 >Emitted(95, 48) Source(95, 27) + SourceIndex(0)
+4 >Emitted(95, 35) Source(95, 14) + SourceIndex(0)
+5 >Emitted(95, 36) Source(95, 15) + SourceIndex(0)
+6 >Emitted(95, 41) Source(95, 20) + SourceIndex(0)
+7 >Emitted(95, 42) Source(95, 21) + SourceIndex(0)
+8 >Emitted(95, 46) Source(95, 25) + SourceIndex(0)
+9 >Emitted(95, 47) Source(95, 26) + SourceIndex(0)
+10>Emitted(95, 48) Source(95, 27) + SourceIndex(0)
 ---
 >>>                    };
 1 >^^^^^^^^^^^^^^^^^^^^

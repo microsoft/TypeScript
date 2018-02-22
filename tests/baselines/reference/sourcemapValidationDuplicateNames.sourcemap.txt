@@ -184,12 +184,13 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 4 >         ^
 5 >          ^
 6 >           ^
-7 >            ^^^^
-8 >                ^^
-9 >                  ^
-10>                   ^
-11>                    ^^
-12>                      ^
+7 >            ^^^
+8 >               ^
+9 >                ^^
+10>                  ^
+11>                   ^
+12>                    ^^
+13>                      ^
 1-> {
   >    
 2 >    var 
@@ -197,24 +198,26 @@ sourceFile:sourcemapValidationDuplicateNames.ts
 4 >          
 5 >          =
 6 >            
-7 >            new 
-8 >                m1
-9 >                  .
-10>                   c
-11>                    ()
-12>                      ;
+7 >            new
+8 >                
+9 >                m1
+10>                  .
+11>                   c
+12>                    ()
+13>                      ;
 1->Emitted(12, 5) Source(7, 5) + SourceIndex(0)
 2 >Emitted(12, 9) Source(7, 9) + SourceIndex(0)
 3 >Emitted(12, 10) Source(7, 10) + SourceIndex(0)
 4 >Emitted(12, 11) Source(7, 11) + SourceIndex(0)
 5 >Emitted(12, 12) Source(7, 12) + SourceIndex(0)
 6 >Emitted(12, 13) Source(7, 13) + SourceIndex(0)
-7 >Emitted(12, 17) Source(7, 17) + SourceIndex(0)
-8 >Emitted(12, 19) Source(7, 19) + SourceIndex(0)
-9 >Emitted(12, 20) Source(7, 20) + SourceIndex(0)
-10>Emitted(12, 21) Source(7, 21) + SourceIndex(0)
-11>Emitted(12, 23) Source(7, 23) + SourceIndex(0)
-12>Emitted(12, 24) Source(7, 24) + SourceIndex(0)
+7 >Emitted(12, 16) Source(7, 16) + SourceIndex(0)
+8 >Emitted(12, 17) Source(7, 17) + SourceIndex(0)
+9 >Emitted(12, 19) Source(7, 19) + SourceIndex(0)
+10>Emitted(12, 20) Source(7, 20) + SourceIndex(0)
+11>Emitted(12, 21) Source(7, 21) + SourceIndex(0)
+12>Emitted(12, 23) Source(7, 23) + SourceIndex(0)
+13>Emitted(12, 24) Source(7, 24) + SourceIndex(0)
 ---
 >>>})(m1 || (m1 = {}));
 1 >

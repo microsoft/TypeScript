@@ -285,37 +285,40 @@ sourceFile:sourceMap-FileWithComments.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^
 3 >                    ^^^
-4 >                       ^^^^
-5 >                           ^^^^^
-6 >                                ^
-7 >                                 ^
-8 >                                  ^^
-9 >                                    ^
-10>                                     ^
-11>                                      ^
+4 >                       ^^^
+5 >                          ^
+6 >                           ^^^^^
+7 >                                ^
+8 >                                 ^
+9 >                                  ^^
+10>                                    ^
+11>                                     ^
+12>                                      ^
 1->
   >        static 
 2 >        origin
 3 >                     = 
-4 >                       new 
-5 >                           Point
-6 >                                (
-7 >                                 0
-8 >                                  , 
-9 >                                    0
-10>                                     )
-11>                                      ;
+4 >                       new
+5 >                           
+6 >                           Point
+7 >                                (
+8 >                                 0
+9 >                                  , 
+10>                                    0
+11>                                     )
+12>                                      ;
 1->Emitted(14, 9) Source(18, 16) + SourceIndex(0)
 2 >Emitted(14, 21) Source(18, 22) + SourceIndex(0)
 3 >Emitted(14, 24) Source(18, 25) + SourceIndex(0)
-4 >Emitted(14, 28) Source(18, 29) + SourceIndex(0)
-5 >Emitted(14, 33) Source(18, 34) + SourceIndex(0)
-6 >Emitted(14, 34) Source(18, 35) + SourceIndex(0)
-7 >Emitted(14, 35) Source(18, 36) + SourceIndex(0)
-8 >Emitted(14, 37) Source(18, 38) + SourceIndex(0)
-9 >Emitted(14, 38) Source(18, 39) + SourceIndex(0)
-10>Emitted(14, 39) Source(18, 40) + SourceIndex(0)
-11>Emitted(14, 40) Source(18, 41) + SourceIndex(0)
+4 >Emitted(14, 27) Source(18, 28) + SourceIndex(0)
+5 >Emitted(14, 28) Source(18, 29) + SourceIndex(0)
+6 >Emitted(14, 33) Source(18, 34) + SourceIndex(0)
+7 >Emitted(14, 34) Source(18, 35) + SourceIndex(0)
+8 >Emitted(14, 35) Source(18, 36) + SourceIndex(0)
+9 >Emitted(14, 37) Source(18, 38) + SourceIndex(0)
+10>Emitted(14, 38) Source(18, 39) + SourceIndex(0)
+11>Emitted(14, 39) Source(18, 40) + SourceIndex(0)
+12>Emitted(14, 40) Source(18, 41) + SourceIndex(0)
 ---
 >>>        return Point;
 1 >^^^^^^^^
@@ -554,16 +557,17 @@ sourceFile:sourceMap-FileWithComments.ts
 4 >     ^
 5 >      ^
 6 >       ^
-7 >        ^^^^
-8 >            ^^^^^^
-9 >                  ^
-10>                   ^^^^^
-11>                        ^
-12>                         ^
-13>                          ^^
-14>                            ^
-15>                             ^
-16>                              ^
+7 >        ^^^
+8 >           ^
+9 >            ^^^^^^
+10>                  ^
+11>                   ^^^^^
+12>                        ^
+13>                         ^
+14>                          ^^
+15>                            ^
+16>                             ^
+17>                              ^
 1->
   >
 2 >var 
@@ -571,32 +575,34 @@ sourceFile:sourceMap-FileWithComments.ts
 4 >     : 
 5 >      I
 6 >       Point = 
-7 >        new 
-8 >            Shapes
-9 >                  .
-10>                   Point
-11>                        (
-12>                         3
-13>                          , 
-14>                            4
-15>                             )
-16>                              ;
+7 >        new
+8 >            
+9 >            Shapes
+10>                  .
+11>                   Point
+12>                        (
+13>                         3
+14>                          , 
+15>                            4
+16>                             )
+17>                              ;
 1->Emitted(29, 1) Source(34, 1) + SourceIndex(0)
 2 >Emitted(29, 5) Source(34, 5) + SourceIndex(0)
 3 >Emitted(29, 6) Source(34, 6) + SourceIndex(0)
 4 >Emitted(29, 7) Source(34, 8) + SourceIndex(0)
 5 >Emitted(29, 8) Source(34, 9) + SourceIndex(0)
 6 >Emitted(29, 9) Source(34, 17) + SourceIndex(0)
-7 >Emitted(29, 13) Source(34, 21) + SourceIndex(0)
-8 >Emitted(29, 19) Source(34, 27) + SourceIndex(0)
-9 >Emitted(29, 20) Source(34, 28) + SourceIndex(0)
-10>Emitted(29, 25) Source(34, 33) + SourceIndex(0)
-11>Emitted(29, 26) Source(34, 34) + SourceIndex(0)
-12>Emitted(29, 27) Source(34, 35) + SourceIndex(0)
-13>Emitted(29, 29) Source(34, 37) + SourceIndex(0)
-14>Emitted(29, 30) Source(34, 38) + SourceIndex(0)
-15>Emitted(29, 31) Source(34, 39) + SourceIndex(0)
-16>Emitted(29, 32) Source(34, 40) + SourceIndex(0)
+7 >Emitted(29, 12) Source(34, 20) + SourceIndex(0)
+8 >Emitted(29, 13) Source(34, 21) + SourceIndex(0)
+9 >Emitted(29, 19) Source(34, 27) + SourceIndex(0)
+10>Emitted(29, 20) Source(34, 28) + SourceIndex(0)
+11>Emitted(29, 25) Source(34, 33) + SourceIndex(0)
+12>Emitted(29, 26) Source(34, 34) + SourceIndex(0)
+13>Emitted(29, 27) Source(34, 35) + SourceIndex(0)
+14>Emitted(29, 29) Source(34, 37) + SourceIndex(0)
+15>Emitted(29, 30) Source(34, 38) + SourceIndex(0)
+16>Emitted(29, 31) Source(34, 39) + SourceIndex(0)
+17>Emitted(29, 32) Source(34, 40) + SourceIndex(0)
 ---
 >>>var dist = p.getDist();
 1 >

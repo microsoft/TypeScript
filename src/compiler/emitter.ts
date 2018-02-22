@@ -1394,7 +1394,7 @@ namespace ts {
         }
 
         function emitNewExpression(node: NewExpression) {
-            writeKeyword("new");
+            emitTokenWithComment(SyntaxKind.NewKeyword, node.pos, writeKeyword, node);
             writeSpace();
             emitExpression(node.expression);
             emitTypeArguments(node, node.typeArguments);
@@ -1439,19 +1439,19 @@ namespace ts {
         }
 
         function emitDeleteExpression(node: DeleteExpression) {
-            writeKeyword("delete");
+            emitTokenWithComment(SyntaxKind.DeleteKeyword, node.pos, writeKeyword, node);
             writeSpace();
             emitExpression(node.expression);
         }
 
         function emitTypeOfExpression(node: TypeOfExpression) {
-            writeKeyword("typeof");
+            emitTokenWithComment(SyntaxKind.TypeOfKeyword, node.pos, writeKeyword, node);
             writeSpace();
             emitExpression(node.expression);
         }
 
         function emitVoidExpression(node: VoidExpression) {
-            writeKeyword("void");
+            emitTokenWithComment(SyntaxKind.VoidKeyword, node.pos, writeKeyword, node);
             writeSpace();
             emitExpression(node.expression);
         }

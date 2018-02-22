@@ -755,25 +755,28 @@ sourceFile:sourceMapValidationStatements.ts
 1->^^^^^^^^
 2 >        ^^^^^
 3 >             ^
-4 >              ^^^^
-5 >                  ^^^^^
-6 >                       ^^
-7 >                         ^
+4 >              ^^^
+5 >                 ^
+6 >                  ^^^^^
+7 >                       ^^
+8 >                         ^
 1->
   >        
 2 >        throw
 3 >              
-4 >              new 
-5 >                  Error
-6 >                       ()
-7 >                         ;
+4 >              new
+5 >                  
+6 >                  Error
+7 >                       ()
+8 >                         ;
 1->Emitted(40, 9) Source(37, 9) + SourceIndex(0)
 2 >Emitted(40, 14) Source(37, 14) + SourceIndex(0)
 3 >Emitted(40, 15) Source(37, 15) + SourceIndex(0)
-4 >Emitted(40, 19) Source(37, 19) + SourceIndex(0)
-5 >Emitted(40, 24) Source(37, 24) + SourceIndex(0)
-6 >Emitted(40, 26) Source(37, 26) + SourceIndex(0)
-7 >Emitted(40, 27) Source(37, 27) + SourceIndex(0)
+4 >Emitted(40, 18) Source(37, 18) + SourceIndex(0)
+5 >Emitted(40, 19) Source(37, 19) + SourceIndex(0)
+6 >Emitted(40, 24) Source(37, 24) + SourceIndex(0)
+7 >Emitted(40, 26) Source(37, 26) + SourceIndex(0)
+8 >Emitted(40, 27) Source(37, 27) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^

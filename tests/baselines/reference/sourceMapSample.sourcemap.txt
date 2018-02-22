@@ -306,31 +306,34 @@ sourceFile:sourceMapSample.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^^
 3 >                  ^
-4 >                   ^^^^
-5 >                       ^^^^^^^
-6 >                              ^
-7 >                               ^^^^^^^^
-8 >                                       ^
-9 >                                        ^
+4 >                   ^^^
+5 >                      ^
+6 >                       ^^^^^^^
+7 >                              ^
+8 >                               ^^^^^^^^
+9 >                                       ^
+10>                                        ^
 1->): Foo.Bar.Greeter {
   >        
 2 >            return
 3 >                   
-4 >                   new 
-5 >                       Greeter
-6 >                              (
-7 >                               greeting
-8 >                                       )
-9 >                                        ;
+4 >                   new
+5 >                       
+6 >                       Greeter
+7 >                              (
+8 >                               greeting
+9 >                                       )
+10>                                        ;
 1->Emitted(16, 13) Source(15, 9) + SourceIndex(0)
 2 >Emitted(16, 19) Source(15, 15) + SourceIndex(0)
 3 >Emitted(16, 20) Source(15, 16) + SourceIndex(0)
-4 >Emitted(16, 24) Source(15, 20) + SourceIndex(0)
-5 >Emitted(16, 31) Source(15, 27) + SourceIndex(0)
-6 >Emitted(16, 32) Source(15, 28) + SourceIndex(0)
-7 >Emitted(16, 40) Source(15, 36) + SourceIndex(0)
-8 >Emitted(16, 41) Source(15, 37) + SourceIndex(0)
-9 >Emitted(16, 42) Source(15, 38) + SourceIndex(0)
+4 >Emitted(16, 23) Source(15, 19) + SourceIndex(0)
+5 >Emitted(16, 24) Source(15, 20) + SourceIndex(0)
+6 >Emitted(16, 31) Source(15, 27) + SourceIndex(0)
+7 >Emitted(16, 32) Source(15, 28) + SourceIndex(0)
+8 >Emitted(16, 40) Source(15, 36) + SourceIndex(0)
+9 >Emitted(16, 41) Source(15, 37) + SourceIndex(0)
+10>Emitted(16, 42) Source(15, 38) + SourceIndex(0)
 ---
 >>>        }
 1 >^^^^^^^^
@@ -349,12 +352,13 @@ sourceFile:sourceMapSample.ts
 4 >                   ^
 5 >                    ^
 6 >                     ^
-7 >                      ^^^^
-8 >                          ^^^^^^^
-9 >                                 ^
-10>                                  ^^^^^^^^^^^^^^^
-11>                                                 ^
-12>                                                  ^
+7 >                      ^^^
+8 >                         ^
+9 >                          ^^^^^^^
+10>                                 ^
+11>                                  ^^^^^^^^^^^^^^^
+12>                                                 ^
+13>                                                  ^
 1->
   >
   >    
@@ -363,24 +367,26 @@ sourceFile:sourceMapSample.ts
 4 >                    
 5 >                    =
 6 >                      
-7 >                      new 
-8 >                          Greeter
-9 >                                 (
-10>                                  "Hello, world!"
-11>                                                 )
-12>                                                  ;
+7 >                      new
+8 >                          
+9 >                          Greeter
+10>                                 (
+11>                                  "Hello, world!"
+12>                                                 )
+13>                                                  ;
 1->Emitted(18, 9) Source(18, 5) + SourceIndex(0)
 2 >Emitted(18, 13) Source(18, 9) + SourceIndex(0)
 3 >Emitted(18, 20) Source(18, 16) + SourceIndex(0)
 4 >Emitted(18, 21) Source(18, 17) + SourceIndex(0)
 5 >Emitted(18, 22) Source(18, 18) + SourceIndex(0)
 6 >Emitted(18, 23) Source(18, 19) + SourceIndex(0)
-7 >Emitted(18, 27) Source(18, 23) + SourceIndex(0)
-8 >Emitted(18, 34) Source(18, 30) + SourceIndex(0)
-9 >Emitted(18, 35) Source(18, 31) + SourceIndex(0)
-10>Emitted(18, 50) Source(18, 46) + SourceIndex(0)
-11>Emitted(18, 51) Source(18, 47) + SourceIndex(0)
-12>Emitted(18, 52) Source(18, 48) + SourceIndex(0)
+7 >Emitted(18, 26) Source(18, 22) + SourceIndex(0)
+8 >Emitted(18, 27) Source(18, 23) + SourceIndex(0)
+9 >Emitted(18, 34) Source(18, 30) + SourceIndex(0)
+10>Emitted(18, 35) Source(18, 31) + SourceIndex(0)
+11>Emitted(18, 50) Source(18, 46) + SourceIndex(0)
+12>Emitted(18, 51) Source(18, 47) + SourceIndex(0)
+13>Emitted(18, 52) Source(18, 48) + SourceIndex(0)
 ---
 >>>        var str = greeter.greet();
 1 >^^^^^^^^
@@ -546,13 +552,14 @@ sourceFile:sourceMapSample.ts
 4 >                     ^
 5 >                      ^
 6 >                       ^^^
-7 >                          ^^^^
-8 >                              ^^^^^^^
-9 >                                     ^
-10>                                      ^^^^^^^^
-11>                                              ^
-12>                                               ^
-13>                                                ^^^^^^^^^^^^^->
+7 >                          ^^^
+8 >                             ^
+9 >                              ^^^^^^^
+10>                                     ^
+11>                                      ^^^^^^^^
+12>                                              ^
+13>                                               ^
+14>                                                ^^^^^^^^^^^^^->
 1->
   >        
 2 >            greeters
@@ -560,24 +567,26 @@ sourceFile:sourceMapSample.ts
 4 >                     0
 5 >                      ]
 6 >                        = 
-7 >                          new 
-8 >                              Greeter
-9 >                                     (
-10>                                      greeting
-11>                                              )
-12>                                               ;
+7 >                          new
+8 >                              
+9 >                              Greeter
+10>                                     (
+11>                                      greeting
+12>                                              )
+13>                                               ;
 1->Emitted(26, 13) Source(23, 9) + SourceIndex(0)
 2 >Emitted(26, 21) Source(23, 17) + SourceIndex(0)
 3 >Emitted(26, 22) Source(23, 18) + SourceIndex(0)
 4 >Emitted(26, 23) Source(23, 19) + SourceIndex(0)
 5 >Emitted(26, 24) Source(23, 20) + SourceIndex(0)
 6 >Emitted(26, 27) Source(23, 23) + SourceIndex(0)
-7 >Emitted(26, 31) Source(23, 27) + SourceIndex(0)
-8 >Emitted(26, 38) Source(23, 34) + SourceIndex(0)
-9 >Emitted(26, 39) Source(23, 35) + SourceIndex(0)
-10>Emitted(26, 47) Source(23, 43) + SourceIndex(0)
-11>Emitted(26, 48) Source(23, 44) + SourceIndex(0)
-12>Emitted(26, 49) Source(23, 45) + SourceIndex(0)
+7 >Emitted(26, 30) Source(23, 26) + SourceIndex(0)
+8 >Emitted(26, 31) Source(23, 27) + SourceIndex(0)
+9 >Emitted(26, 38) Source(23, 34) + SourceIndex(0)
+10>Emitted(26, 39) Source(23, 35) + SourceIndex(0)
+11>Emitted(26, 47) Source(23, 43) + SourceIndex(0)
+12>Emitted(26, 48) Source(23, 44) + SourceIndex(0)
+13>Emitted(26, 49) Source(23, 45) + SourceIndex(0)
 ---
 >>>            for (var i = 0; i < restGreetings.length; i++) {
 1->^^^^^^^^^^^^
@@ -661,47 +670,50 @@ sourceFile:sourceMapSample.ts
 3 >                        ^
 4 >                         ^^^^
 5 >                             ^
-6 >                              ^^^^
-7 >                                  ^^^^^^^
-8 >                                         ^
-9 >                                          ^^^^^^^^^^^^^
-10>                                                       ^
-11>                                                        ^
-12>                                                         ^
-13>                                                          ^
-14>                                                           ^
-15>                                                            ^
+6 >                              ^^^
+7 >                                 ^
+8 >                                  ^^^^^^^
+9 >                                         ^
+10>                                          ^^^^^^^^^^^^^
+11>                                                       ^
+12>                                                        ^
+13>                                                         ^
+14>                                                          ^
+15>                                                           ^
+16>                                                            ^
 1->
   >            
 2 >                greeters
 3 >                        .
 4 >                         push
 5 >                             (
-6 >                              new 
-7 >                                  Greeter
-8 >                                         (
-9 >                                          restGreetings
-10>                                                       [
-11>                                                        i
-12>                                                         ]
-13>                                                          )
-14>                                                           )
-15>                                                            ;
+6 >                              new
+7 >                                  
+8 >                                  Greeter
+9 >                                         (
+10>                                          restGreetings
+11>                                                       [
+12>                                                        i
+13>                                                         ]
+14>                                                          )
+15>                                                           )
+16>                                                            ;
 1->Emitted(28, 17) Source(25, 13) + SourceIndex(0)
 2 >Emitted(28, 25) Source(25, 21) + SourceIndex(0)
 3 >Emitted(28, 26) Source(25, 22) + SourceIndex(0)
 4 >Emitted(28, 30) Source(25, 26) + SourceIndex(0)
 5 >Emitted(28, 31) Source(25, 27) + SourceIndex(0)
-6 >Emitted(28, 35) Source(25, 31) + SourceIndex(0)
-7 >Emitted(28, 42) Source(25, 38) + SourceIndex(0)
-8 >Emitted(28, 43) Source(25, 39) + SourceIndex(0)
-9 >Emitted(28, 56) Source(25, 52) + SourceIndex(0)
-10>Emitted(28, 57) Source(25, 53) + SourceIndex(0)
-11>Emitted(28, 58) Source(25, 54) + SourceIndex(0)
-12>Emitted(28, 59) Source(25, 55) + SourceIndex(0)
-13>Emitted(28, 60) Source(25, 56) + SourceIndex(0)
-14>Emitted(28, 61) Source(25, 57) + SourceIndex(0)
-15>Emitted(28, 62) Source(25, 58) + SourceIndex(0)
+6 >Emitted(28, 34) Source(25, 30) + SourceIndex(0)
+7 >Emitted(28, 35) Source(25, 31) + SourceIndex(0)
+8 >Emitted(28, 42) Source(25, 38) + SourceIndex(0)
+9 >Emitted(28, 43) Source(25, 39) + SourceIndex(0)
+10>Emitted(28, 56) Source(25, 52) + SourceIndex(0)
+11>Emitted(28, 57) Source(25, 53) + SourceIndex(0)
+12>Emitted(28, 58) Source(25, 54) + SourceIndex(0)
+13>Emitted(28, 59) Source(25, 55) + SourceIndex(0)
+14>Emitted(28, 60) Source(25, 56) + SourceIndex(0)
+15>Emitted(28, 61) Source(25, 57) + SourceIndex(0)
+16>Emitted(28, 62) Source(25, 58) + SourceIndex(0)
 ---
 >>>            }
 1 >^^^^^^^^^^^^
