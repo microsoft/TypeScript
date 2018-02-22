@@ -42,6 +42,7 @@ namespace ts {
 
     export interface ResolutionCacheHost extends ModuleResolutionHost {
         toPath(fileName: string): Path;
+        getCanonicalFileName: GetCanonicalFileName;
         getCompilationSettings(): CompilerOptions;
         watchDirectoryOfFailedLookupLocation(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): FileWatcher;
         onInvalidatedResolution(): void;
@@ -78,17 +79,24 @@ namespace ts {
         let filesWithInvalidatedResolutions: Map<true> | undefined;
         let allFilesHaveInvalidatedResolution = false;
 
+        const getCurrentDirectory = memoize(() => resolutionHost.getCurrentDirectory());
+        const cachedDirectoryStructureHost = resolutionHost.getCachedDirectoryStructureHost();
+
         // The resolvedModuleNames and resolvedTypeReferenceDirectives are the cache of resolutions per file.
         // The key in the map is source file's path.
         // The values are Map of resolutions with key being name lookedup.
         const resolvedModuleNames = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
         const perDirectoryResolvedModuleNames = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
+        const nonRelaticeModuleNameCache = createMap<PerModuleNameCache>();
+        const moduleResolutionCache = createModuleResolutionCacheWithMaps(
+            perDirectoryResolvedModuleNames,
+            nonRelaticeModuleNameCache,
+            getCurrentDirectory(),
+            resolutionHost.getCanonicalFileName
+        );
 
         const resolvedTypeReferenceDirectives = createMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
         const perDirectoryResolvedTypeReferenceDirectives = createMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
-
-        const getCurrentDirectory = memoize(() => resolutionHost.getCurrentDirectory());
-        const cachedDirectoryStructureHost = resolutionHost.getCachedDirectoryStructureHost();
 
         /**
          * These are the extensions that failed lookup files will have by default,
@@ -173,6 +181,7 @@ namespace ts {
 
         function clearPerDirectoryResolutions() {
             perDirectoryResolvedModuleNames.clear();
+            nonRelaticeModuleNameCache.clear();
             perDirectoryResolvedTypeReferenceDirectives.clear();
         }
 
@@ -189,7 +198,7 @@ namespace ts {
         }
 
         function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
-            const primaryResult = ts.resolveModuleName(moduleName, containingFile, compilerOptions, host);
+            const primaryResult = ts.resolveModuleName(moduleName, containingFile, compilerOptions, host, moduleResolutionCache);
             // return result immediately only if global cache support is not enabled or if it is .ts, .tsx or .d.ts
             if (!resolutionHost.getGlobalCache) {
                 return primaryResult;

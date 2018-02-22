@@ -211,6 +211,9 @@ namespace ts.server {
         public directoryStructureHost: DirectoryStructureHost;
 
         /*@internal*/
+        public readonly getCanonicalFileName: GetCanonicalFileName;
+
+        /*@internal*/
         constructor(
             /*@internal*/readonly projectName: string,
             readonly projectKind: ProjectKind,
@@ -224,6 +227,7 @@ namespace ts.server {
             currentDirectory: string | undefined) {
             this.directoryStructureHost = directoryStructureHost;
             this.currentDirectory = this.projectService.getNormalizedAbsolutePath(currentDirectory || "");
+            this.getCanonicalFileName = this.projectService.toCanonicalFileName;
 
             this.cancellationToken = new ThrottledCancellationToken(this.projectService.cancellationToken, this.projectService.throttleWaitMilliseconds);
             if (!this.compilerOptions) {

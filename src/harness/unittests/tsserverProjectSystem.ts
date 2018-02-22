@@ -7016,9 +7016,13 @@ namespace ts.projectSystem {
             return foundModule;
         }
 
-        function getExpectedMissedLocationResolutionTrace(host: TestServerHost, expectedTrace: string[], dirPath: string, module: FileOrFolder, moduleName: string, useNodeModules: boolean) {
+        function getExpectedMissedLocationResolutionTrace(host: TestServerHost, expectedTrace: string[], dirPath: string, module: FileOrFolder, moduleName: string, useNodeModules: boolean, cacheLocation?: string) {
             let foundModule = false;
             forEachAncestorDirectory(dirPath, dirPath => {
+                if (dirPath === cacheLocation) {
+                    return foundModule;
+                }
+
                 const directory = useNodeModules ? combinePaths(dirPath, nodeModules) : dirPath;
                 if (useNodeModules && !foundModule && !host.directoryExists(directory)) {
                     expectedTrace.push(`Directory '${directory}' does not exist, skipping all lookups in it.`);
@@ -7043,8 +7047,10 @@ namespace ts.projectSystem {
             );
         }
 
-        function getExpectedResolutionTraceFooter(expectedTrace: string[], module: FileOrFolder, moduleName: string, addRealPathTrace: boolean) {
-            expectedTrace.push(`File '${module.path}' exist - use it as a name resolution result.`);
+        function getExpectedResolutionTraceFooter(expectedTrace: string[], module: FileOrFolder, moduleName: string, addRealPathTrace: boolean, ignoreModuleFileFound?: boolean) {
+            if (!ignoreModuleFileFound) {
+                expectedTrace.push(`File '${module.path}' exist - use it as a name resolution result.`);
+            }
             if (addRealPathTrace) {
                 expectedTrace.push(`Resolving real path for '${module.path}', result '${module.path}'.`);
             }
@@ -7064,6 +7070,15 @@ namespace ts.projectSystem {
             expectedTrace.push(`Loading module '${moduleName}' from 'node_modules' folder, target file type 'TypeScript'.`);
             getExpectedMissedLocationResolutionTrace(host, expectedTrace, getDirectoryPath(file.path), module, moduleName, /*useNodeModules*/ true);
             getExpectedResolutionTraceFooter(expectedTrace, module, moduleName, /*addRealPathTrace*/ true);
+            return expectedTrace;
+        }
+
+        function getExpectedNonRelativeModuleResolutionFromCacheTrace(host: TestServerHost, file: FileOrFolder, module: FileOrFolder, moduleName: string, cacheLocation: string, expectedTrace: string[] = []) {
+            getExpectedResolutionTraceHeader(expectedTrace, file, moduleName);
+            expectedTrace.push(`Loading module '${moduleName}' from 'node_modules' folder, target file type 'TypeScript'.`);
+            getExpectedMissedLocationResolutionTrace(host, expectedTrace, getDirectoryPath(file.path), module, moduleName, /*useNodeModules*/ true, cacheLocation);
+            expectedTrace.push(`Resolution for module '${moduleName}' was found in cache from location '${cacheLocation}'.`);
+            getExpectedResolutionTraceFooter(expectedTrace, module, moduleName, /*addRealPathTrace*/ true, /*ignoreModuleFileFound*/ true);
             return expectedTrace;
         }
 
@@ -7223,12 +7238,12 @@ namespace ts.projectSystem {
                 service.openClientFile(file1.path);
                 const expectedTrace = getExpectedNonRelativeModuleResolutionTrace(host, file1, module1, module1Name);
                 getExpectedNonRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
-                getExpectedNonRelativeModuleResolutionTrace(host, file2, module1, module1Name, expectedTrace);
-                getExpectedNonRelativeModuleResolutionTrace(host, file2, module2, module2Name, expectedTrace);
-                getExpectedNonRelativeModuleResolutionTrace(host, file4, module1, module1Name, expectedTrace);
-                getExpectedNonRelativeModuleResolutionTrace(host, file4, module2, module2Name, expectedTrace);
-                getExpectedNonRelativeModuleResolutionTrace(host, file3, module1, module1Name, expectedTrace);
-                getExpectedNonRelativeModuleResolutionTrace(host, file3, module2, module2Name, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module1, module1Name, getDirectoryPath(file1.path), expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module2, module2Name, getDirectoryPath(file1.path), expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module1, module1Name, `${projectLocation}/product`, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module2, module2Name, `${projectLocation}/product`, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module1, module1Name, getDirectoryPath(file4.path), expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module2, module2Name, getDirectoryPath(file4.path), expectedTrace);
                 verifyTrace(resolutionTrace, expectedTrace);
                 verifyWatchesWithConfigFile(host, files, file1);
 
@@ -7266,12 +7281,12 @@ namespace ts.projectSystem {
                 getExpectedRelativeModuleResolutionTrace(host, file1, file3, file3Name, expectedTrace);
                 getExpectedNonRelativeModuleResolutionTrace(host, file1, module1, module1Name, expectedTrace);
                 getExpectedNonRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
-                getExpectedNonRelativeModuleResolutionTrace(host, file2, module1, module1Name, expectedTrace);
-                getExpectedNonRelativeModuleResolutionTrace(host, file2, module2, module2Name, expectedTrace);
-                getExpectedNonRelativeModuleResolutionTrace(host, file4, module1, module1Name, expectedTrace);
-                getExpectedNonRelativeModuleResolutionTrace(host, file4, module2, module2Name, expectedTrace);
-                getExpectedNonRelativeModuleResolutionTrace(host, file3, module1, module1Name, expectedTrace);
-                getExpectedNonRelativeModuleResolutionTrace(host, file3, module2, module2Name, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module1, module1Name, getDirectoryPath(file1.path), expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module2, module2Name, getDirectoryPath(file1.path), expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module1, module1Name, `${projectLocation}/product`, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module2, module2Name, `${projectLocation}/product`, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module1, module1Name, getDirectoryPath(file4.path), expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module2, module2Name, getDirectoryPath(file4.path), expectedTrace);
                 verifyTrace(resolutionTrace, expectedTrace);
 
                 const currentDirectory = getDirectoryPath(file1.path);
