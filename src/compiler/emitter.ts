@@ -2058,11 +2058,11 @@ namespace ts {
 
         function emitImportEqualsDeclaration(node: ImportEqualsDeclaration) {
             emitModifiers(node, node.modifiers);
-            writeKeyword("import");
+            emitTokenWithComment(SyntaxKind.ImportKeyword, node.modifiers ? node.modifiers.end : node.pos, writeKeyword, node);
             writeSpace();
             emit(node.name);
             writeSpace();
-            writePunctuation("=");
+            emitTokenWithComment(SyntaxKind.EqualsToken, node.name.end, writePunctuation, node);
             writeSpace();
             emitModuleReference(node.moduleReference);
             writeSemicolon();
@@ -2079,12 +2079,12 @@ namespace ts {
 
         function emitImportDeclaration(node: ImportDeclaration) {
             emitModifiers(node, node.modifiers);
-            writeKeyword("import");
+            emitTokenWithComment(SyntaxKind.ImportKeyword, node.modifiers ? node.modifiers.end : node.pos, writeKeyword, node);
             writeSpace();
             if (node.importClause) {
                 emit(node.importClause);
                 writeSpace();
-                writeKeyword("from");
+                emitTokenWithComment(SyntaxKind.FromKeyword, node.importClause.end, writeKeyword, node);
                 writeSpace();
             }
             emitExpression(node.moduleSpecifier);
@@ -2094,16 +2094,16 @@ namespace ts {
         function emitImportClause(node: ImportClause) {
             emit(node.name);
             if (node.name && node.namedBindings) {
-                writePunctuation(",");
+                emitTokenWithComment(SyntaxKind.CommaToken, node.name.end, writePunctuation, node);
                 writeSpace();
             }
             emit(node.namedBindings);
         }
 
         function emitNamespaceImport(node: NamespaceImport) {
-            writePunctuation("*");
+            const asPos = emitTokenWithComment(SyntaxKind.AsteriskToken, node.pos, writePunctuation, node);
             writeSpace();
-            writeKeyword("as");
+            emitTokenWithComment(SyntaxKind.AsKeyword, asPos, writeKeyword, node);
             writeSpace();
             emit(node.name);
         }
@@ -2117,13 +2117,13 @@ namespace ts {
         }
 
         function emitExportAssignment(node: ExportAssignment) {
-            writeKeyword("export");
+            const nextPos = emitTokenWithComment(SyntaxKind.ExportKeyword, node.pos, writeKeyword, node);
             writeSpace();
             if (node.isExportEquals) {
-                writeOperator("=");
+                emitTokenWithComment(SyntaxKind.EqualsToken, nextPos, writeOperator, node);
             }
             else {
-                writeKeyword("default");
+                emitTokenWithComment(SyntaxKind.DefaultKeyword, nextPos, writeKeyword, node);
             }
             writeSpace();
             emitExpression(node.expression);
@@ -2131,17 +2131,18 @@ namespace ts {
         }
 
         function emitExportDeclaration(node: ExportDeclaration) {
-            writeKeyword("export");
+            let nextPos = emitTokenWithComment(SyntaxKind.ExportKeyword, node.pos, writeKeyword, node);
             writeSpace();
             if (node.exportClause) {
                 emit(node.exportClause);
             }
             else {
-                writePunctuation("*");
+                nextPos = emitTokenWithComment(SyntaxKind.AsteriskToken, nextPos, writePunctuation, node);
             }
             if (node.moduleSpecifier) {
                 writeSpace();
-                writeKeyword("from");
+                const fromPos = node.exportClause ? node.exportClause.end : nextPos;
+                emitTokenWithComment(SyntaxKind.FromKeyword, fromPos, writeKeyword, node);
                 writeSpace();
                 emitExpression(node.moduleSpecifier);
             }
@@ -2149,11 +2150,11 @@ namespace ts {
         }
 
         function emitNamespaceExportDeclaration(node: NamespaceExportDeclaration) {
-            writeKeyword("export");
+            let nextPos = emitTokenWithComment(SyntaxKind.ExportKeyword, node.pos, writeKeyword, node);
             writeSpace();
-            writeKeyword("as");
+            nextPos = emitTokenWithComment(SyntaxKind.AsKeyword, nextPos, writeKeyword, node);
             writeSpace();
-            writeKeyword("namespace");
+            nextPos = emitTokenWithComment(SyntaxKind.NamespaceKeyword, nextPos, writeKeyword, node);
             writeSpace();
             emit(node.name);
             writeSemicolon();
@@ -2177,7 +2178,7 @@ namespace ts {
             if (node.propertyName) {
                 emit(node.propertyName);
                 writeSpace();
-                writeKeyword("as");
+                emitTokenWithComment(SyntaxKind.AsKeyword, node.propertyName.end, writeKeyword, node);
                 writeSpace();
             }
 
