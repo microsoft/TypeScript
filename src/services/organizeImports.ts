@@ -105,7 +105,7 @@ namespace ts.OrganizeImports {
 
         function isDeclarationUsed(identifier: Identifier) {
             // The JSX factory symbol is always used.
-            return jsxContext && identifier.text === jsxNamespace || FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
+            return jsxContext && (identifier.text === jsxNamespace) || FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
         }
     }
 
