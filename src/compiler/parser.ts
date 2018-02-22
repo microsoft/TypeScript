@@ -4176,8 +4176,9 @@ namespace ts {
             parseExpected(SyntaxKind.LessThanToken);
 
             if (token() === SyntaxKind.GreaterThanToken) {
-                parseExpected(SyntaxKind.GreaterThanToken);
+                // See below for explanation of scanJsxText
                 const node: JsxOpeningFragment = <JsxOpeningFragment>createNode(SyntaxKind.JsxOpeningFragment, fullStart);
+                scanJsxText();
                 return finishNode(node);
             }
 
