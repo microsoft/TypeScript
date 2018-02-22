@@ -1483,13 +1483,27 @@ namespace ts {
         return false;
     }
 
+    export function isJavascriptPrototypeAssignment(e: BinaryExpression) {
+        return isObjectLiteralExpression(e.right) &&
+            isPropertyAccessExpression(e.left) &&
+            e.left.name.escapedText === "prototype";
+    }
+
     export function getJSInitializerSymbol(symbol: Symbol) {
         if (!symbol || !symbol.valueDeclaration) {
             return symbol;
         }
         const declaration = symbol.valueDeclaration;
-        const e = getDeclaredJavascriptInitializer(declaration) || getAssignedJavascriptInitializer(declaration);
+        const e = getDeclaredJavascriptInitializer(declaration) || getAssignedJavascriptInitializer(declaration) || getAssignedJavascriptPrototype(declaration);
         return e ? e.symbol : symbol;
+    }
+
+    export function getAssignedJavascriptPrototype(node: Node) {
+        return isPropertyAccessExpression(node) &&
+            node.parent && isPropertyAccessExpression(node.parent) && node.parent.name.escapedText === "prototype" &&
+            node.parent.parent && isBinaryExpression(node.parent.parent) && node.parent.parent.operatorToken.kind === SyntaxKind.EqualsToken &&
+            node.parent.parent.right.kind === SyntaxKind.ObjectLiteralExpression &&
+            node.parent.parent.right;
     }
 
     export function getDeclaredJavascriptInitializer(node: Node) {

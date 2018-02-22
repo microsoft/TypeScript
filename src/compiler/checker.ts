@@ -4186,7 +4186,7 @@ namespace ts {
         }
 
         function getWidenedTypeFromJSSpecialPropertyDeclarations(symbol: Symbol) {
-            // function/class/{} assignments are fresh declarations, not property assignments, so return immediately
+            // function/class/{} assignments are fresh declarations, not property assignments, so only add prototype assignments
             const specialDeclaration = getAssignedJavascriptInitializer(symbol.valueDeclaration);
             if (specialDeclaration) {
                 return getWidenedLiteralType(checkExpressionCached(specialDeclaration));
@@ -17897,8 +17897,19 @@ namespace ts {
             if (isDeclarationOfFunctionOrClassExpression(symbol)) {
                 symbol = getSymbolOfNode((<VariableDeclaration>symbol.valueDeclaration).initializer);
             }
+            // TODO: Could stick members on this somehow
             if (isJavaScriptConstructor(symbol.valueDeclaration)) {
                 return getInferredClassType(symbol);
+            }
+            // // OR: Get them another way
+            const otherSymbol: Symbol = getOtherSymbol(symbol.valueDeclaration);
+            if (otherSymbol) {
+                const prototype = forEach(otherSymbol.declarations, d => getAssignedJavascriptPrototype(d.parent));
+                if (prototype) {
+                    // NOTE: Should be able to check the original symbol for other prototype declarations, right?
+                    // Not sure why not. Maybe intersecting them would work then.
+                    return checkExpression(prototype);
+                }
             }
             if (symbol.flags & SymbolFlags.Variable) {
                 const valueType = getTypeOfSymbol(symbol);
@@ -17906,6 +17917,10 @@ namespace ts {
                     return getInferredClassType(valueType.symbol);
                 }
             }
+        }
+
+        function getOtherSymbol(node: Node) {
+            return node && node.parent && isBinaryExpression(node.parent) && getSymbolOfNode(node.parent.left);
         }
 
         function getInferredClassType(symbol: Symbol) {

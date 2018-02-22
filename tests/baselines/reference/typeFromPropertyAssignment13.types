@@ -1,0 +1,63 @@
+=== tests/cases/conformance/salsa/module.js ===
+var Outer = {}
+>Outer : { [x: string]: any; Inner: () => void; }
+>{} : { [x: string]: any; Inner: () => void; }
+
+Outer.Inner = function() {}
+>Outer.Inner = function() {} : () => void
+>Outer.Inner : () => void
+>Outer : { [x: string]: any; Inner: () => void; }
+>Inner : () => void
+>function() {} : () => void
+
+Outer.Inner.prototype = {
+>Outer.Inner.prototype = {    m() { },    i: 1} : { [x: string]: any; m(): void; i: number; }
+>Outer.Inner.prototype : any
+>Outer.Inner : () => void
+>Outer : { [x: string]: any; Inner: () => void; }
+>Inner : () => void
+>prototype : any
+>{    m() { },    i: 1} : { [x: string]: any; m(): void; i: number; }
+
+    m() { },
+>m : () => void
+
+    i: 1
+>i : number
+>1 : 1
+}
+// NOTE: incremental assignments don't work (but don't need to for chrome at least)
+Outer.Inner.prototype.j = 2
+>Outer.Inner.prototype.j = 2 : 2
+>Outer.Inner.prototype.j : any
+>Outer.Inner.prototype : any
+>Outer.Inner : () => void
+>Outer : { [x: string]: any; Inner: () => void; }
+>Inner : () => void
+>prototype : any
+>j : any
+>2 : 2
+
+var inner = new Outer.Inner()
+>inner : { [x: string]: any; m(): void; i: number; }
+>new Outer.Inner() : { [x: string]: any; m(): void; i: number; }
+>Outer.Inner : () => void
+>Outer : { [x: string]: any; Inner: () => void; }
+>Inner : () => void
+
+inner.m()
+>inner.m() : void
+>inner.m : () => void
+>inner : { [x: string]: any; m(): void; i: number; }
+>m : () => void
+
+inner.i
+>inner.i : number
+>inner : { [x: string]: any; m(): void; i: number; }
+>i : number
+
+inner.j
+>inner.j : any
+>inner : { [x: string]: any; m(): void; i: number; }
+>j : any
+

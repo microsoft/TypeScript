@@ -2044,6 +2044,7 @@ namespace ts {
                             break;
                         case SpecialPropertyAssignmentKind.Prototype:
                             bindPrototypeAssignment(node as BinaryExpression);
+                            break;
                         case SpecialPropertyAssignmentKind.ThisProperty:
                             bindThisPropertyAssignment(node as BinaryExpression);
                             break;
@@ -2365,7 +2366,8 @@ namespace ts {
 
         /** For `x.prototype = { p, ... }`, declare members p,... if `x` is function/class/{}, or not declared. */
         function bindPrototypeAssignment(node: BinaryExpression) {
-            return node;
+            node.left.parent = node;
+            bindPropertyAssignment(node.left as PropertyAccessEntityNameExpression, node.left as PropertyAccessEntityNameExpression, /*isPrototypeProperty*/ false);
         }
 
         /**
@@ -2375,9 +2377,8 @@ namespace ts {
         function bindPrototypePropertyAssignment(lhs: PropertyAccessEntityNameExpression, parent: Node) {
             // Look up the function in the local scope, since prototype assignments should
             // follow the function declaration
-            // TODO: This cast is now insufficient for original case+nested case
             const classPrototype = lhs.expression as PropertyAccessEntityNameExpression;
-            const constructorFunction = classPrototype.expression as Identifier;
+            const constructorFunction = classPrototype.expression;
 
             // Fix up parent pointers since we're going to use these nodes before we bind into them
             lhs.parent = parent;
@@ -2415,7 +2416,7 @@ namespace ts {
         function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
             let symbol = getJSInitializerSymbol(lookupSymbolForPropertyAccess(name));
             const isToplevelNamespaceableInitializer = isBinaryExpression(propertyAccess.parent) ?
-                propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile && getJavascriptInitializer(propertyAccess.parent.right) :
+                propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile && (getJavascriptInitializer(propertyAccess.parent.right) || isJavascriptPrototypeAssignment(propertyAccess.parent)) :
                 propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
             if (!isPrototypeProperty && (!symbol || !(symbol.flags & SymbolFlags.Namespace)) && isToplevelNamespaceableInitializer) {
                 // make symbols or add declarations for intermediate containers
