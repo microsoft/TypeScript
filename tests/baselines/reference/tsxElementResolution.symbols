@@ -10,7 +10,10 @@ declare namespace JSX {
 >x : Symbol(x, Decl(tsxElementResolution.tsx, 2, 15))
 
 		'string_named';
+>'string_named' : Symbol(IntrinsicElements['string_named'], Decl(tsxElementResolution.tsx, 2, 28))
+
 		'var';
+>'var' : Symbol(IntrinsicElements['var'], Decl(tsxElementResolution.tsx, 3, 17))
 	}
 }
 

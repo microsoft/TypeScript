@@ -33,13 +33,16 @@ namespace ts.refactor {
                 return isExportsOrModuleExportsOrAlias(sourceFile, node as PropertyAccessExpression)
                     || isExportsOrModuleExportsOrAlias(sourceFile, (node as PropertyAccessExpression).expression);
             case SyntaxKind.VariableDeclarationList:
-                const decl = (node as VariableDeclarationList).declarations[0];
-                return isExportsOrModuleExportsOrAlias(sourceFile, decl.initializer);
+                return isVariableDeclarationTriggerLocation(firstOrUndefined((node as VariableDeclarationList).declarations));
             case SyntaxKind.VariableDeclaration:
-                return isExportsOrModuleExportsOrAlias(sourceFile, (node as VariableDeclaration).initializer);
+                return isVariableDeclarationTriggerLocation(node as VariableDeclaration);
             default:
                 return isExpression(node) && isExportsOrModuleExportsOrAlias(sourceFile, node)
                     || !onSecondTry && isAtTriggerLocation(sourceFile, node.parent, /*onSecondTry*/ true);
+        }
+
+        function isVariableDeclarationTriggerLocation(decl: VariableDeclaration | undefined) {
+            return !!decl && !!decl.initializer && isExportsOrModuleExportsOrAlias(sourceFile, decl.initializer);
         }
     }
 
@@ -191,7 +194,7 @@ namespace ts.refactor {
     }
 
     function convertVariableStatement(sourceFile: SourceFile, statement: VariableStatement, changes: textChanges.ChangeTracker, checker: TypeChecker, identifiers: Identifiers, target: ScriptTarget): void {
-        const { declarationList } = statement as VariableStatement;
+        const { declarationList } = statement;
         let foundImport = false;
         const newNodes = flatMap(declarationList.declarations, decl => {
             const { name, initializer } = decl;
@@ -287,14 +290,10 @@ namespace ts.refactor {
                 case SyntaxKind.ShorthandPropertyAssignment:
                 case SyntaxKind.SpreadAssignment:
                     return undefined;
-                case SyntaxKind.PropertyAssignment: {
-                    const { name, initializer } = prop as PropertyAssignment;
-                    return !isIdentifier(name) ? undefined : convertExportsDotXEquals(name.text, initializer);
-                }
-                case SyntaxKind.MethodDeclaration: {
-                    const m = prop as MethodDeclaration;
-                    return !isIdentifier(m.name) ? undefined : functionExpressionToDeclaration(m.name.text, [createToken(SyntaxKind.ExportKeyword)], m);
-                }
+                case SyntaxKind.PropertyAssignment:
+                    return !isIdentifier(prop.name) ? undefined : convertExportsDotXEquals(prop.name.text, prop.initializer);
+                case SyntaxKind.MethodDeclaration:
+                    return !isIdentifier(prop.name) ? undefined : functionExpressionToDeclaration(prop.name.text, [createToken(SyntaxKind.ExportKeyword)], prop);
                 default:
                     Debug.assertNever(prop);
             }
@@ -375,7 +374,14 @@ namespace ts.refactor {
     function convertExportsDotXEquals(name: string | undefined, exported: Expression): Statement {
         const modifiers = [createToken(SyntaxKind.ExportKeyword)];
         switch (exported.kind) {
-            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.FunctionExpression: {
+                const { name: expressionName } = exported as FunctionExpression;
+                if (expressionName && expressionName.text !== name) {
+                    // `exports.f = function g() {}` -> `export const f = function g() {}`
+                    return exportConst();
+                }
+            }
+                // falls through
             case SyntaxKind.ArrowFunction:
                 // `exports.f = function() {}` --> `export function f() {}`
                 return functionExpressionToDeclaration(name, modifiers, exported as FunctionExpression | ArrowFunction);
@@ -383,8 +389,12 @@ namespace ts.refactor {
                 // `exports.C = class {}` --> `export class C {}`
                 return classExpressionToDeclaration(name, modifiers, exported as ClassExpression);
             default:
-                // `exports.x = 0;` --> `export const x = 0;`
-                return makeConst(modifiers, createIdentifier(name), exported);
+                return exportConst();
+        }
+
+        function exportConst() {
+            // `exports.x = 0;` --> `export const x = 0;`
+            return makeConst(modifiers, createIdentifier(name), exported);
         }
     }
 

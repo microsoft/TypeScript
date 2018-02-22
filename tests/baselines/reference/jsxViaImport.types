@@ -35,6 +35,8 @@ declare module React {
 >U : U
 }
 declare module "BaseComponent" {
+>"BaseComponent" : typeof "BaseComponent"
+
     var base: React.Component<any, {}>;
 >base : React.Component<any, {}>
 >React : any

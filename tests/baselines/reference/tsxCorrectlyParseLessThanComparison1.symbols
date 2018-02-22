@@ -48,8 +48,6 @@ export class ShortDetails extends React.Component<{ id: number }, {}> {
 >id : Symbol(id, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 12, 51))
 
             return (<div></div>);
->div : Symbol(unknown)
->div : Symbol(unknown)
         }
     }
 }

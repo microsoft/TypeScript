@@ -3,4 +3,5 @@ var x = {
 >x : Symbol(x, Decl(parserSymbolIndexer5.ts, 0, 3))
 
     [s: symbol]: ""
+>"" : Symbol("", Decl(parserSymbolIndexer5.ts, 1, 16))
 }

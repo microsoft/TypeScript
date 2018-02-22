@@ -16,6 +16,7 @@ let {["bar"]: bar2} = {bar: "bar"};
 let {[11]: bar2_1} = {11: "bar"};
 >11 : Symbol(bar2_1, Decl(computedPropertiesInDestructuring1_ES6.ts, 5, 5))
 >bar2_1 : Symbol(bar2_1, Decl(computedPropertiesInDestructuring1_ES6.ts, 5, 5))
+>11 : Symbol(11, Decl(computedPropertiesInDestructuring1_ES6.ts, 5, 22))
 
 let foo2 = () => "bar";
 >foo2 : Symbol(foo2, Decl(computedPropertiesInDestructuring1_ES6.ts, 7, 3))

@@ -6,6 +6,8 @@ export as namespace Foo;
 === tests/cases/conformance/externalModules/err2.d.ts ===
 // Illegal, can't be in external ambient module
 declare module "Foo" {
+>"Foo" : typeof "Foo"
+
 	export as namespace Bar;
 >Bar : No type information available!
 }

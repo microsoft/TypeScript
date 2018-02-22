@@ -10,6 +10,7 @@ declare module JSX {
 
 		test1: { "data-foo"?: string };
 >test1 : Symbol(IntrinsicElements.test1, Decl(file.tsx, 2, 30))
+>"data-foo" : Symbol("data-foo", Decl(file.tsx, 3, 10))
 	}
 }
 

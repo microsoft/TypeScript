@@ -519,6 +519,7 @@ function container(
 >computedFirst : { a: number; b: string; "before everything": number; }
 >a : number
 >b : string
+>"before everything" : number
 
         { ['before everything']: 12, ...o, b: 'yes' }
 >{ ['before everything']: 12, ...o, b: 'yes' } : { b: string; a: number; ['before everything']: number; }
@@ -533,6 +534,7 @@ function container(
 >a : number
 >b : string
 >c : boolean
+>"in the middle" : number
 
         { ...o, ['in the middle']: 13, b: 'maybe?', ...o2 }
 >{ ...o, ['in the middle']: 13, b: 'maybe?', ...o2 } : { b: string; c: boolean; ['in the middle']: number; a: number; }
@@ -547,6 +549,7 @@ function container(
 >computedAfter : { a: number; b: string; "at the end": number; }
 >a : number
 >b : string
+>"at the end" : number
 
         { ...o, b: 'yeah', ['at the end']: 14 }
 >{ ...o, b: 'yeah', ['at the end']: 14 } : { b: string; ['at the end']: number; a: number; }

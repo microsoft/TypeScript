@@ -43,6 +43,7 @@ x = {
 >{    0: t => t * t, // Should error} : { 0: (t: string) => number; }
 
     0: t => t * t, // Should error
+>0 : (t: string) => number
 >t => t * t : (t: string) => number
 >t : string
 >t * t : number
@@ -70,6 +71,7 @@ y = {
 >{    0: t => t * t, // Should error} : { 0: (t: string) => number; }
 
     0: t => t * t, // Should error
+>0 : (t: string) => number
 >t => t * t : (t: string) => number
 >t : string
 >t * t : number

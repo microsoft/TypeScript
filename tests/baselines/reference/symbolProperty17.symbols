@@ -11,6 +11,7 @@ interface I {
 >s : Symbol(s, Decl(symbolProperty17.ts, 2, 5))
 
     "__@iterator": string;
+>"__@iterator" : Symbol(I["__@iterator"], Decl(symbolProperty17.ts, 2, 24))
 }
 
 var i: I;
