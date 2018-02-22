@@ -17915,14 +17915,33 @@ namespace ts {
 
         function getAssignedClassType(symbol: Symbol) {
             const decl = symbol.valueDeclaration;
-            const assignmentSymbol = decl && decl.parent && isBinaryExpression(decl.parent) && getSymbolOfNode(decl.parent.left);
+            const assignmentSymbol = decl && decl.parent &&
+                (isBinaryExpression(decl.parent) && getSymbolOfNode(decl.parent.left) ||
+                 isVariableDeclaration(decl.parent) && getSymbolOfNode(decl.parent));
             if (assignmentSymbol) {
-                const prototype = forEach(assignmentSymbol.declarations, d => getAssignedJavascriptPrototype(d.parent));
+                const prototype = forEach(assignmentSymbol.declarations, getAssignedJavascriptPrototype);
                 if (prototype) {
                     return checkExpression(prototype);
                 }
             }
         }
+
+        function getAssignedJavascriptPrototype(node: Node) {
+            if (!node.parent) {
+                return false;
+            }
+            let parent: Node = node.parent;
+            while (parent && parent.kind === SyntaxKind.PropertyAccessExpression) {
+                parent = parent.parent;
+            }
+            return parent && isBinaryExpression(parent) &&
+                isPropertyAccessExpression(parent.left) &&
+                parent.left.name.escapedText === "prototype" &&
+                parent.operatorToken.kind === SyntaxKind.EqualsToken &&
+                isObjectLiteralExpression(parent.right) &&
+                parent.right;
+        }
+
 
         function getInferredClassType(symbol: Symbol) {
             const links = getSymbolLinks(symbol);
