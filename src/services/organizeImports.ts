@@ -119,9 +119,7 @@ namespace ts.OrganizeImports {
     }
 
     function getExternalModuleName(specifier: Expression) {
-        return isStringLiteral(specifier) || isNoSubstitutionTemplateLiteral(specifier)
-            ? specifier.text
-            : undefined;
+        return isStringLiteralLike(specifier) ? specifier.text : undefined;
     }
 
     /* @internal */ // Internal for testing
