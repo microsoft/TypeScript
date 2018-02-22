@@ -66,11 +66,13 @@ class C {
 >C : C
 
     [G.A]() { }
+>[G.A] : () => void
 >G.A : G
 >G : typeof G
 >A : G
 
     get [G.B]() {
+>[G.B] : boolean
 >G.B : G
 >G : typeof G
 >B : G
@@ -79,6 +81,7 @@ class C {
 >true : true
     }
     set [G.B](x: number) { }
+>[G.B] : number
 >G.B : G
 >G : typeof G
 >B : G

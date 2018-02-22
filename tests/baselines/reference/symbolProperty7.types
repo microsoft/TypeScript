@@ -3,19 +3,23 @@ class C {
 >C : C
 
     [Symbol()] = 0;
+>[Symbol()] : number
 >Symbol() : symbol
 >Symbol : SymbolConstructor
 >0 : 0
 
     [Symbol()]: number;
+>[Symbol()] : number
 >Symbol() : symbol
 >Symbol : SymbolConstructor
 
     [Symbol()]() { }
+>[Symbol()] : () => void
 >Symbol() : symbol
 >Symbol : SymbolConstructor
 
     get [Symbol()]() {
+>[Symbol()] : number
 >Symbol() : symbol
 >Symbol : SymbolConstructor
 

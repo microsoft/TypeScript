@@ -13,6 +13,7 @@ class A {
 >A : A
 
     [foo<T>(a)]<T>(a: T) {  
+>[foo<T>(a)] : <T>(a: T) => void
 >foo<T>(a) : string
 >foo : <T>(a: T) => string
 >T : No type information available!

@@ -3,6 +3,7 @@ interface I {
 >I : I
 
     [Symbol.toPrimitive]: () => boolean;
+>[Symbol.toPrimitive] : () => boolean
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol
@@ -13,6 +14,7 @@ class C implements I {
 >I : I
 
     [Symbol.toPrimitive]() {
+>[Symbol.toPrimitive] : () => string
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol
