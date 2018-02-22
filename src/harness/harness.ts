@@ -57,7 +57,7 @@ var assert: typeof _chai.assert = _chai.assert;
 }
 
 declare var __dirname: string; // Node-specific
-var global: NodeJS.Global = <any>Function("return this").call(undefined);
+var global: NodeJS.Global = Function("return this").call(undefined);
 
 declare var window: {};
 declare var XMLHttpRequest: {
@@ -767,10 +767,9 @@ namespace Harness {
                 return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), getCurrentDirectory(), depth, path => {
                     const entry = fs.traversePath(path);
                     if (entry && entry.isDirectory()) {
-                        const directory = <Utils.VirtualDirectory>entry;
                         return {
-                            files: ts.map(directory.getFiles(), f => f.name),
-                            directories: ts.map(directory.getDirectories(), d => d.name)
+                            files: ts.map(entry.getFiles(), f => f.name),
+                            directories: ts.map(entry.getDirectories(), d => d.name)
                         };
                     }
                     return { files: [], directories: [] };
@@ -1252,8 +1251,18 @@ namespace Harness {
             options: ts.CompilerOptions,
             // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
             currentDirectory: string): DeclarationCompilationContext | undefined {
-            if (options.declaration && result.errors.length === 0 && result.declFilesCode.length !== result.files.length) {
-                throw new Error("There were no errors and declFiles generated did not match number of js files generated");
+
+            if (result.errors.length === 0) {
+                if (options.declaration) {
+                    if (options.emitDeclarationOnly) {
+                        if (result.files.length > 0 || result.declFilesCode.length === 0) {
+                            throw new Error("Only declaration files should be generated when emitDeclarationOnly:true");
+                        }
+                    }
+                    else if (result.declFilesCode.length !== result.files.length) {
+                        throw new Error("There were no errors and declFiles generated did not match number of js files generated");
+                    }
+                }
             }
 
             const declInputFiles: TestFile[] = [];
@@ -1654,7 +1663,7 @@ namespace Harness {
         }
 
         export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: CompilerResult, tsConfigFiles: Harness.Compiler.TestFile[], toBeCompiled: Harness.Compiler.TestFile[], otherFiles: Harness.Compiler.TestFile[], harnessSettings: Harness.TestCaseParser.CompilerSettings) {
-            if (!options.noEmit && result.files.length === 0 && result.errors.length === 0) {
+            if (!options.noEmit && !options.emitDeclarationOnly && result.files.length === 0 && result.errors.length === 0) {
                 throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
             }
 

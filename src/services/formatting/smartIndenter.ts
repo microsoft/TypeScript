@@ -383,9 +383,8 @@ namespace ts.formatting {
                 return Value.Unknown;
             }
 
-            if (node.parent && isCallOrNewExpression(node.parent) && (<CallExpression>node.parent).expression !== node) {
-
-                const fullCallOrNewExpression = (<CallExpression | NewExpression>node.parent).expression;
+            if (node.parent && isCallOrNewExpression(node.parent) && node.parent.expression !== node) {
+                const fullCallOrNewExpression = node.parent.expression;
                 const startingExpression = getStartingExpression(fullCallOrNewExpression);
 
                 if (fullCallOrNewExpression === startingExpression) {

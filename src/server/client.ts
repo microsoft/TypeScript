@@ -558,8 +558,7 @@ namespace ts.server {
             const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixes, args);
             const response = this.processResponse<protocol.CodeFixResponse>(request);
 
-            // TODO: GH#20538 shouldn't need cast
-            return (response.body as ReadonlyArray<protocol.CodeFixAction>).map(({ description, changes, fixId }) => ({ description, changes: this.convertChanges(changes, file), fixId }));
+            return response.body.map(({ description, changes, fixId }) => ({ description, changes: this.convertChanges(changes, file), fixId }));
         }
 
         getCombinedCodeFix = notImplemented;
@@ -628,6 +627,10 @@ namespace ts.server {
                 renameFilename,
                 renameLocation
             };
+        }
+
+        organizeImports(_scope: OrganizeImportsScope, _formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {
+            return notImplemented();
         }
 
         private convertCodeEditsToTextChanges(edits: protocol.FileCodeEdits[]): FileTextChanges[] {

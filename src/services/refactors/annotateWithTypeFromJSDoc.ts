@@ -1,21 +1,16 @@
 /* @internal */
 namespace ts.refactor.annotateWithTypeFromJSDoc {
+    const refactorName = "Annotate with type from JSDoc";
     const actionName = "annotate";
+    const description = Diagnostics.Annotate_with_type_from_JSDoc.message;
+    registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
-    const annotateTypeFromJSDoc: Refactor = {
-        name: "Annotate with type from JSDoc",
-        description: Diagnostics.Annotate_with_type_from_JSDoc.message,
-        getEditsForAction,
-        getAvailableActions
-    };
     type DeclarationWithType =
         | FunctionLikeDeclaration
         | VariableDeclaration
         | ParameterDeclaration
         | PropertySignature
         | PropertyDeclaration;
-
-    registerRefactor(annotateTypeFromJSDoc);
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
         if (isInJavaScriptFile(context.file)) {
@@ -25,11 +20,11 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         const node = getTokenAtPosition(context.file, context.startPosition, /*includeJsDocComment*/ false);
         if (hasUsableJSDoc(findAncestor(node, isDeclarationWithType))) {
             return [{
-                name: annotateTypeFromJSDoc.name,
-                description: annotateTypeFromJSDoc.description,
+                name: refactorName,
+                description,
                 actions: [
                     {
-                        description: annotateTypeFromJSDoc.description,
+                        description,
                         name: actionName
                     }
                 ]
@@ -81,7 +76,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
         const declarationWithType = addType(decl, transformJSDocType(jsdocType) as TypeNode);
         suppressLeadingAndTrailingTrivia(declarationWithType);
-        changeTracker.replaceRange(sourceFile, { pos: decl.getStart(), end: decl.end }, declarationWithType);
+        changeTracker.replaceNode(sourceFile, decl, declarationWithType, textChanges.useNonAdjustedPositions);
         return {
             edits: changeTracker.getChanges(),
             renameFilename: undefined,
@@ -96,7 +91,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
         const functionWithType = addTypesToFunctionLike(decl);
         suppressLeadingAndTrailingTrivia(functionWithType);
-        changeTracker.replaceRange(sourceFile, { pos: decl.getStart(), end: decl.end }, functionWithType);
+        changeTracker.replaceNode(sourceFile, decl, functionWithType, textChanges.useNonAdjustedPositions);
         return {
             edits: changeTracker.getChanges(),
             renameFilename: undefined,
@@ -123,7 +118,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
             case SyntaxKind.Constructor:
                 return createConstructor(decl.decorators, decl.modifiers, parameters, decl.body);
             case SyntaxKind.FunctionExpression:
-                return createFunctionExpression(decl.modifiers, decl.asteriskToken, (decl as FunctionExpression).name, typeParameters, parameters, returnType, decl.body);
+                return createFunctionExpression(decl.modifiers, decl.asteriskToken, decl.name, typeParameters, parameters, returnType, decl.body);
             case SyntaxKind.ArrowFunction:
                 return createArrowFunction(decl.modifiers, typeParameters, parameters, returnType, decl.equalsGreaterThanToken, decl.body);
             case SyntaxKind.MethodDeclaration:

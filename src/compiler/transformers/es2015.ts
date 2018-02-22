@@ -1995,7 +1995,7 @@ namespace ts {
             // If we are here it is because this is a destructuring assignment.
             if (isDestructuringAssignment(node)) {
                 return flattenDestructuringAssignment(
-                    <DestructuringAssignment>node,
+                    node,
                     visitor,
                     context,
                     FlattenLevel.All,
@@ -2023,7 +2023,7 @@ namespace ts {
                             );
                         }
                         else {
-                            assignment = createBinary(<Identifier>decl.name, SyntaxKind.EqualsToken, visitNode(decl.initializer, visitor, isExpression));
+                            assignment = createBinary(decl.name, SyntaxKind.EqualsToken, visitNode(decl.initializer, visitor, isExpression));
                             setTextRange(assignment, decl);
                         }
 
@@ -2632,10 +2632,10 @@ namespace ts {
 
             function visit(node: Identifier | BindingPattern) {
                 if (node.kind === SyntaxKind.Identifier) {
-                    state.hoistedLocalVariables.push((<Identifier>node));
+                    state.hoistedLocalVariables.push(node);
                 }
                 else {
-                    for (const element of (<BindingPattern>node).elements) {
+                    for (const element of node.elements) {
                         if (!isOmittedExpression(element)) {
                             visit(element.name);
                         }
@@ -2716,7 +2716,7 @@ namespace ts {
             convertedLoopState = outerConvertedLoopState;
 
             if (loopOutParameters.length || lexicalEnvironment) {
-                const statements = isBlock(loopBody) ? (<Block>loopBody).statements.slice() : [loopBody];
+                const statements = isBlock(loopBody) ? loopBody.statements.slice() : [loopBody];
                 if (loopOutParameters.length) {
                     copyOutParameters(loopOutParameters, CopyDirection.ToOutParameter, statements);
                 }
@@ -2856,7 +2856,7 @@ namespace ts {
                 loop = convert(node, outermostLabeledStatement, convertedLoopBodyStatements);
             }
             else {
-                let clone = <IterationStatement>getMutableClone(node);
+                let clone = getMutableClone(node);
                 // clean statement part
                 clone.statement = undefined;
                 // visit childnodes to transform initializer/condition/incrementor parts
@@ -3039,7 +3039,7 @@ namespace ts {
                 switch (property.kind) {
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        const accessors = getAllAccessorDeclarations(node.properties, <AccessorDeclaration>property);
+                        const accessors = getAllAccessorDeclarations(node.properties, property);
                         if (property === accessors.firstAccessor) {
                             expressions.push(transformAccessorsToExpression(receiver, accessors, node, node.multiLine));
                         }
@@ -3047,15 +3047,15 @@ namespace ts {
                         break;
 
                     case SyntaxKind.MethodDeclaration:
-                        expressions.push(transformObjectLiteralMethodDeclarationToExpression(<MethodDeclaration>property, receiver, node, node.multiLine));
+                        expressions.push(transformObjectLiteralMethodDeclarationToExpression(property, receiver, node, node.multiLine));
                         break;
 
                     case SyntaxKind.PropertyAssignment:
-                        expressions.push(transformPropertyAssignmentToExpression(<PropertyAssignment>property, receiver, node.multiLine));
+                        expressions.push(transformPropertyAssignmentToExpression(property, receiver, node.multiLine));
                         break;
 
                     case SyntaxKind.ShorthandPropertyAssignment:
-                        expressions.push(transformShorthandPropertyAssignmentToExpression(<ShorthandPropertyAssignment>property, receiver, node.multiLine));
+                        expressions.push(transformShorthandPropertyAssignmentToExpression(property, receiver, node.multiLine));
                         break;
 
                     default:
@@ -3439,64 +3439,71 @@ namespace ts {
         function visitCallExpressionWithPotentialCapturedThisAssignment(node: CallExpression, assignToCapturedThis: boolean): CallExpression | BinaryExpression {
             // We are here either because SuperKeyword was used somewhere in the expression, or
             // because we contain a SpreadElementExpression.
+            if (node.transformFlags & TransformFlags.ContainsSpread ||
+                node.expression.kind === SyntaxKind.SuperKeyword ||
+                isSuperProperty(skipOuterExpressions(node.expression))) {
 
-            const { target, thisArg } = createCallBinding(node.expression, hoistVariableDeclaration);
-            if (node.expression.kind === SyntaxKind.SuperKeyword) {
-                setEmitFlags(thisArg, EmitFlags.NoSubstitution);
-            }
-            let resultingCall: CallExpression | BinaryExpression;
-            if (node.transformFlags & TransformFlags.ContainsSpread) {
-                // [source]
-                //      f(...a, b)
-                //      x.m(...a, b)
-                //      super(...a, b)
-                //      super.m(...a, b) // in static
-                //      super.m(...a, b) // in instance
-                //
-                // [output]
-                //      f.apply(void 0, a.concat([b]))
-                //      (_a = x).m.apply(_a, a.concat([b]))
-                //      _super.apply(this, a.concat([b]))
-                //      _super.m.apply(this, a.concat([b]))
-                //      _super.prototype.m.apply(this, a.concat([b]))
+                const { target, thisArg } = createCallBinding(node.expression, hoistVariableDeclaration);
+                if (node.expression.kind === SyntaxKind.SuperKeyword) {
+                    setEmitFlags(thisArg, EmitFlags.NoSubstitution);
+                }
 
-                resultingCall = createFunctionApply(
-                    visitNode(target, callExpressionVisitor, isExpression),
-                    visitNode(thisArg, visitor, isExpression),
-                    transformAndSpreadElements(node.arguments, /*needsUniqueCopy*/ false, /*multiLine*/ false, /*hasTrailingComma*/ false)
-                );
-            }
-            else {
-                // [source]
-                //      super(a)
-                //      super.m(a) // in static
-                //      super.m(a) // in instance
-                //
-                // [output]
-                //      _super.call(this, a)
-                //      _super.m.call(this, a)
-                //      _super.prototype.m.call(this, a)
-                resultingCall = createFunctionCall(
-                    visitNode(target, callExpressionVisitor, isExpression),
-                    visitNode(thisArg, visitor, isExpression),
-                    visitNodes(node.arguments, visitor, isExpression),
-                    /*location*/ node
-                );
-            }
+                let resultingCall: CallExpression | BinaryExpression;
+                if (node.transformFlags & TransformFlags.ContainsSpread) {
+                    // [source]
+                    //      f(...a, b)
+                    //      x.m(...a, b)
+                    //      super(...a, b)
+                    //      super.m(...a, b) // in static
+                    //      super.m(...a, b) // in instance
+                    //
+                    // [output]
+                    //      f.apply(void 0, a.concat([b]))
+                    //      (_a = x).m.apply(_a, a.concat([b]))
+                    //      _super.apply(this, a.concat([b]))
+                    //      _super.m.apply(this, a.concat([b]))
+                    //      _super.prototype.m.apply(this, a.concat([b]))
 
-            if (node.expression.kind === SyntaxKind.SuperKeyword) {
-                const actualThis = createThis();
-                setEmitFlags(actualThis, EmitFlags.NoSubstitution);
-                const initializer =
-                    createLogicalOr(
-                        resultingCall,
-                        actualThis
+                    resultingCall = createFunctionApply(
+                        visitNode(target, callExpressionVisitor, isExpression),
+                        visitNode(thisArg, visitor, isExpression),
+                        transformAndSpreadElements(node.arguments, /*needsUniqueCopy*/ false, /*multiLine*/ false, /*hasTrailingComma*/ false)
                     );
-                resultingCall = assignToCapturedThis
-                    ? createAssignment(createIdentifier("_this"), initializer)
-                    : initializer;
+                }
+                else {
+                    // [source]
+                    //      super(a)
+                    //      super.m(a) // in static
+                    //      super.m(a) // in instance
+                    //
+                    // [output]
+                    //      _super.call(this, a)
+                    //      _super.m.call(this, a)
+                    //      _super.prototype.m.call(this, a)
+                    resultingCall = createFunctionCall(
+                        visitNode(target, callExpressionVisitor, isExpression),
+                        visitNode(thisArg, visitor, isExpression),
+                        visitNodes(node.arguments, visitor, isExpression),
+                        /*location*/ node
+                    );
+                }
+
+                if (node.expression.kind === SyntaxKind.SuperKeyword) {
+                    const actualThis = createThis();
+                    setEmitFlags(actualThis, EmitFlags.NoSubstitution);
+                    const initializer =
+                        createLogicalOr(
+                            resultingCall,
+                            actualThis
+                        );
+                    resultingCall = assignToCapturedThis
+                        ? createAssignment(createIdentifier("_this"), initializer)
+                        : initializer;
+                }
+                return setOriginalNode(resultingCall, node);
             }
-            return setOriginalNode(resultingCall, node);
+
+            return visitEachChild(node, visitor, context);
         }
 
         /**

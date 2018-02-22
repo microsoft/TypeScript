@@ -24,6 +24,7 @@ interface J extends Array<Number> {
 >Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     2: number;
+>2 : Symbol(J[2], Decl(destructuringArrayBindingPatternAndAssignment2.ts, 9, 35))
 }
 
 function bar(): J {
@@ -67,6 +68,7 @@ function foo(idx: number): F {
 
     return {
         2: true
+>2 : Symbol(2, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 29, 12))
     }
 }
 var [c4, c5, c6] = foo(1);  // Error

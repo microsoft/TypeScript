@@ -3800,6 +3800,8 @@ declare module Immutable {
   }
 }
 declare module "immutable" {
+>"immutable" : Symbol("immutable", Decl(immutable.ts, 506, 1))
+
   export = Immutable
 >Immutable : Symbol(Immutable, Decl(immutable.ts, 0, 0))
 }

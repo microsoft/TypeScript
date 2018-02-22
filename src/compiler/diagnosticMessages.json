@@ -947,6 +947,10 @@
         "category": "Error",
         "code": 1337
     },
+    "'infer' declarations are only permitted in the 'extends' clause of a conditional type.": {
+        "category": "Error",
+        "code": 1338
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1976,6 +1980,15 @@
         "category": "Error",
         "code": 2565
     },
+    "A rest element cannot have a property name.": {
+        "category": "Error",
+        "code": 2566
+    },
+    "Enum declarations can only merge with namespace or other enum declarations.": {
+        "category": "Error",
+        "code": 2567
+    },
+
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2803,6 +2816,10 @@
         "category": "Message",
         "code": 6013
     },
+    "Only emit '.d.ts' declaration files.": {
+        "category": "Message",
+        "code": 6014
+    },
     "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'.": {
         "category": "Message",
         "code": 6015
@@ -3015,7 +3032,7 @@
         "category": "Message",
         "code": 6078
     },
-    "Specify library files to be included in the compilation: ": {
+    "Specify library files to be included in the compilation.": {
         "category": "Message",
         "code": 6079
     },
@@ -3450,6 +3467,10 @@
     "Multiple consecutive numeric separators are not permitted.": {
         "category": "Error",
         "code": 6189
+    },
+    "Found 'package.json' at '{0}'. Package ID is '{1}'.": {
+        "category": "Message",
+        "code": 6190
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -3892,10 +3913,6 @@
     "Convert function '{0}' to class": {
         "category": "Message",
         "code": 95002
-    },
-    "Extract symbol": {
-        "category": "Message",
-        "code": 95003
     },
     "Extract to {0} in {1}": {
         "category": "Message",

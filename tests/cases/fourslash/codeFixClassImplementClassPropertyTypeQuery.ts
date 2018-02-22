@@ -7,12 +7,11 @@
 
 verify.codeFix({
     description: "Implement interface 'A'",
-    // TODO: GH#18445
     newFileContent:
 `class A {
     A: typeof A;
 }
-class D implements A {\r
-    A: typeof A;\r
+class D implements A {
+    A: typeof A;
 }`,
 });

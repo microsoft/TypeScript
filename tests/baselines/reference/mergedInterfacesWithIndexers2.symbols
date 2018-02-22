@@ -24,6 +24,7 @@ interface A2 {
 >x : Symbol(x, Decl(mergedInterfacesWithIndexers2.ts, 12, 5))
 
     'a': number; //error
+>'a' : Symbol(A2['a'], Decl(mergedInterfacesWithIndexers2.ts, 12, 24))
 }
 
 
@@ -35,6 +36,7 @@ interface A2 {
 >length : Symbol(length, Decl(mergedInterfacesWithIndexers2.ts, 18, 18))
 
     1: { length: number }; // error
+>1 : Symbol(A2[1], Decl(mergedInterfacesWithIndexers2.ts, 18, 36))
 >length : Symbol(length, Decl(mergedInterfacesWithIndexers2.ts, 19, 8))
 }
 

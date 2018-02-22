@@ -1,5 +1,7 @@
 === tests/cases/compiler/exportSpecifierAndLocalMemberDeclaration.ts ===
 declare module "m2" {
+>"m2" : Symbol("m2", Decl(exportSpecifierAndLocalMemberDeclaration.ts, 0, 0), Decl(exportSpecifierAndLocalMemberDeclaration.ts, 7, 1))
+
     module X {
 >X : Symbol(X, Decl(exportSpecifierAndLocalMemberDeclaration.ts, 0, 21))
 
@@ -20,6 +22,8 @@ declare module "m2" {
 }
 
 declare module "m2" {
+>"m2" : Symbol("m2", Decl(exportSpecifierAndLocalMemberDeclaration.ts, 0, 0), Decl(exportSpecifierAndLocalMemberDeclaration.ts, 7, 1))
+
     function Z2(): X.I;
 >Z2 : Symbol(Z2, Decl(exportSpecifierAndLocalMemberDeclaration.ts, 9, 21))
 }

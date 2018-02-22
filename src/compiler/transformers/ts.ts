@@ -242,13 +242,13 @@ namespace ts {
             }
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
-                    return visitImportDeclaration(<ImportDeclaration>node);
+                    return visitImportDeclaration(node);
                 case SyntaxKind.ImportEqualsDeclaration:
-                    return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
+                    return visitImportEqualsDeclaration(node);
                 case SyntaxKind.ExportAssignment:
-                    return visitExportAssignment(<ExportAssignment>node);
+                    return visitExportAssignment(node);
                 case SyntaxKind.ExportDeclaration:
-                    return visitExportDeclaration(<ExportDeclaration>node);
+                    return visitExportDeclaration(node);
                 default:
                     Debug.fail("Unhandled ellided statement");
             }
@@ -385,6 +385,7 @@ namespace ts {
                 case SyntaxKind.TypeReference:
                 case SyntaxKind.UnionType:
                 case SyntaxKind.IntersectionType:
+                case SyntaxKind.ConditionalType:
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.ThisType:
                 case SyntaxKind.TypeOperator:
@@ -893,11 +894,14 @@ namespace ts {
 
             if (some(staticProperties) || some(pendingExpressions)) {
                 const expressions: Expression[] = [];
-                const temp = createTempVariable(hoistVariableDeclaration);
-                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
+                const isClassWithConstructorReference = resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference;
+                const temp = createTempVariable(hoistVariableDeclaration, !!isClassWithConstructorReference);
+                if (isClassWithConstructorReference) {
                     // record an alias as the class name is not in scope for statics.
                     enableSubstitutionForClassAliases();
-                    classAliases[getOriginalNodeId(node)] = getSynthesizedClone(temp);
+                    const alias = getSynthesizedClone(temp);
+                    alias.autoGenerateFlags &= ~GeneratedIdentifierFlags.ReservedInNestedScopes;
+                    classAliases[getOriginalNodeId(node)] = alias;
                 }
 
                 // To preserve the behavior of the old emitter, we explicitly indent
@@ -2006,7 +2010,7 @@ namespace ts {
                 case SyntaxKind.Identifier:
                     // Create a clone of the name with a new parent, and treat it as if it were
                     // a source tree node for the purposes of the checker.
-                    const name = getMutableClone(<Identifier>node);
+                    const name = getMutableClone(node);
                     name.flags &= ~NodeFlags.Synthesized;
                     name.original = undefined;
                     name.parent = getParseTreeNode(currentScope); // ensure the parent is set to a parse tree node.
@@ -2023,7 +2027,7 @@ namespace ts {
                     return name;
 
                 case SyntaxKind.QualifiedName:
-                    return serializeQualifiedNameAsExpression(<QualifiedName>node, useFallback);
+                    return serializeQualifiedNameAsExpression(node, useFallback);
             }
         }
 
@@ -2087,9 +2091,9 @@ namespace ts {
         function getExpressionForPropertyName(member: ClassElement | EnumMember, generateNameForComputedPropertyName: boolean): Expression {
             const name = member.name;
             if (isComputedPropertyName(name)) {
-                return generateNameForComputedPropertyName && !isSimpleInlineableExpression((<ComputedPropertyName>name).expression)
+                return generateNameForComputedPropertyName && !isSimpleInlineableExpression(name.expression)
                     ? getGeneratedNameForNode(name)
-                    : (<ComputedPropertyName>name).expression;
+                    : name.expression;
             }
             else if (isIdentifier(name)) {
                 return createLiteral(idText(name));
@@ -2957,7 +2961,7 @@ namespace ts {
             const body = node.body;
             if (body.kind === SyntaxKind.ModuleBlock) {
                 saveStateAndInvoke(body, body => addRange(statements, visitNodes((<ModuleBlock>body).statements, namespaceElementVisitor, isStatement)));
-                statementsLocation = (<ModuleBlock>body).statements;
+                statementsLocation = body.statements;
                 blockLocation = body;
             }
             else {
@@ -3543,9 +3547,7 @@ namespace ts {
                 return undefined;
             }
 
-            return isPropertyAccessExpression(node) || isElementAccessExpression(node)
-                ? resolver.getConstantValue(<PropertyAccessExpression | ElementAccessExpression>node)
-                : undefined;
+            return isPropertyAccessExpression(node) || isElementAccessExpression(node) ? resolver.getConstantValue(node) : undefined;
         }
     }
 

@@ -66,5 +66,5 @@ module M {
 
     import d = asdf;
 >d : any
->asdf : No type information available!
+>asdf : any
 }

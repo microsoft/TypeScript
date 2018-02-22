@@ -15,7 +15,7 @@
 ////});
 
 goTo.marker("1");
-edit.insert("\r\n");
+edit.insert("\n");
 goTo.marker("0");
 // Won't-fixed: Smart indent during chained function calls
 verify.indentationIs(4);

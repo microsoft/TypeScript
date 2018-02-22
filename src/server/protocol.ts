@@ -102,8 +102,6 @@ namespace ts.server.protocol {
         GetCodeFixes = "getCodeFixes",
         /* @internal */
         GetCodeFixesFull = "getCodeFixes-full",
-        // TODO: GH#20538
-        /* @internal */
         GetCombinedCodeFix = "getCombinedCodeFix",
         /* @internal */
         GetCombinedCodeFixFull = "getCombinedCodeFix-full",
@@ -114,6 +112,10 @@ namespace ts.server.protocol {
         GetEditsForRefactor = "getEditsForRefactor",
         /* @internal */
         GetEditsForRefactorFull = "getEditsForRefactor-full",
+
+        OrganizeImports = "organizeImports",
+        /* @internal */
+        OrganizeImportsFull = "organizeImports-full",
 
         // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
     }
@@ -550,6 +552,27 @@ namespace ts.server.protocol {
     }
 
     /**
+     * Organize imports by:
+     *   1) Removing unused imports
+     *   2) Coalescing imports from the same module
+     *   3) Sorting imports
+     */
+    export interface OrganizeImportsRequest extends Request {
+        command: CommandTypes.OrganizeImports;
+        arguments: OrganizeImportsRequestArgs;
+    }
+
+    export type OrganizeImportsScope = GetCombinedCodeFixScope;
+
+    export interface OrganizeImportsRequestArgs {
+        scope: OrganizeImportsScope;
+    }
+
+    export interface OrganizeImportsResponse extends Response {
+        edits: ReadonlyArray<FileCodeEdits>;
+    }
+
+    /**
      * Request for the available codefixes at a specific position.
      */
     export interface CodeFixRequest extends Request {
@@ -557,15 +580,11 @@ namespace ts.server.protocol {
         arguments: CodeFixRequestArgs;
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface GetCombinedCodeFixRequest extends Request {
         command: CommandTypes.GetCombinedCodeFix;
         arguments: GetCombinedCodeFixRequestArgs;
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface GetCombinedCodeFixResponse extends Response {
         body: CombinedCodeActions;
     }
@@ -622,15 +641,11 @@ namespace ts.server.protocol {
         errorCodes?: ReadonlyArray<number>;
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface GetCombinedCodeFixRequestArgs {
         scope: GetCombinedCodeFixScope;
         fixId: {};
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface GetCombinedCodeFixScope {
         type: "file";
         args: FileRequestArgs;
@@ -1114,11 +1129,14 @@ namespace ts.server.protocol {
          * Current set of compiler options for project
          */
         options: ts.CompilerOptions;
-
         /**
          * true if project language service is disabled
          */
         languageServiceDisabled: boolean;
+        /**
+         * Filename of the last file analyzed before disabling the language service. undefined, if the language service is enabled.
+         */
+        lastFileExceededProgramSize: string | undefined;
     }
 
     /**
@@ -1619,7 +1637,7 @@ namespace ts.server.protocol {
 
     export interface CodeFixResponse extends Response {
         /** The code actions that are available */
-        body?: CodeAction[]; // TODO: GH#20538 CodeFixAction[]
+        body?: CodeFixAction[];
     }
 
     export interface CodeAction {
@@ -1631,15 +1649,11 @@ namespace ts.server.protocol {
         commands?: {}[];
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface CombinedCodeActions {
         changes: ReadonlyArray<FileCodeEdits>;
         commands?: ReadonlyArray<{}>;
     }
 
-    // TODO: GH#20538
-    /* @internal */
     export interface CodeFixAction extends CodeAction {
         /**
          * If present, one may call 'getCombinedCodeFix' with this fixId.

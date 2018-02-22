@@ -59,6 +59,7 @@ verify.completionListContains("constructor");
 verify.completionListContains("param");
 verify.completionListContains("type");
 verify.completionListContains("method");
+verify.completionListContains("template");
 
 goTo.marker('2');
 verify.completionListContains("constructor");

@@ -92,7 +92,7 @@ namespace ts {
             return SemanticMeaning.All;
         }
         else if (isInRightSideOfInternalImportEqualsDeclaration(node)) {
-            return getMeaningFromRightHandSideOfImportEquals(node);
+            return getMeaningFromRightHandSideOfImportEquals(node as Identifier);
         }
         else if (isDeclarationName(node)) {
             return getMeaningFromDeclaration(node.parent);
@@ -112,26 +112,19 @@ namespace ts {
         }
     }
 
-    function getMeaningFromRightHandSideOfImportEquals(node: Node) {
-        Debug.assert(node.kind === SyntaxKind.Identifier);
-
+    function getMeaningFromRightHandSideOfImportEquals(node: Node): SemanticMeaning {
         //     import a = |b|; // Namespace
         //     import a = |b.c|; // Value, type, namespace
         //     import a = |b.c|.d; // Namespace
-
-        if (node.parent.kind === SyntaxKind.QualifiedName &&
-            (<QualifiedName>node.parent).right === node &&
-            node.parent.parent.kind === SyntaxKind.ImportEqualsDeclaration) {
-            return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
-        }
-        return SemanticMeaning.Namespace;
+        const name = node.kind === SyntaxKind.QualifiedName ? node : isQualifiedName(node.parent) && node.parent.right === node ? node.parent : undefined;
+        return name && name.parent.kind === SyntaxKind.ImportEqualsDeclaration ? SemanticMeaning.All : SemanticMeaning.Namespace;
     }
 
     export function isInRightSideOfInternalImportEqualsDeclaration(node: Node) {
         while (node.parent.kind === SyntaxKind.QualifiedName) {
             node = node.parent;
         }
-        return isInternalModuleImportEqualsDeclaration(node.parent) && (<ImportEqualsDeclaration>node.parent).moduleReference === node;
+        return isInternalModuleImportEqualsDeclaration(node.parent) && node.parent.moduleReference === node;
     }
 
     function isNamespaceReference(node: Node): boolean {
@@ -761,23 +754,12 @@ namespace ts {
         Debug.assert(!(result && isWhiteSpaceOnlyJsxText(result)));
         return result;
 
-        function findRightmostToken(n: Node): Node {
-            if (isToken(n)) {
+        function find(n: Node): Node | undefined {
+            if (isNonWhitespaceToken(n)) {
                 return n;
             }
 
-            const children = n.getChildren();
-            const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
-            return candidate && findRightmostToken(candidate);
-
-        }
-
-        function find(n: Node): Node {
-            if (isToken(n)) {
-                return n;
-            }
-
-            const children = n.getChildren();
+            const children = n.getChildren(sourceFile);
             for (let i = 0; i < children.length; i++) {
                 const child = children[i];
                 // Note that the span of a node's tokens is [node.getStart(...), node.end).
@@ -795,7 +777,7 @@ namespace ts {
                     if (lookInPreviousChild) {
                         // actual start of the node is past the position - previous token should be at the end of previous child
                         const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
-                        return candidate && findRightmostToken(candidate);
+                        return candidate && findRightmostToken(candidate, sourceFile);
                     }
                     else {
                         // candidate should be in this node
@@ -812,29 +794,42 @@ namespace ts {
             // Namely we are skipping the check: 'position < node.end'
             if (children.length) {
                 const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
-                return candidate && findRightmostToken(candidate);
-            }
-        }
-
-        /**
-         * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
-         */
-        function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number): Node {
-            for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
-                const child = children[i];
-
-                if (isWhiteSpaceOnlyJsxText(child)) {
-                    Debug.assert(i > 0, "`JsxText` tokens should not be the first child of `JsxElement | JsxSelfClosingElement`");
-                }
-                else if (nodeHasTokens(children[i])) {
-                    return children[i];
-                }
+                return candidate && findRightmostToken(candidate, sourceFile);
             }
         }
     }
 
-    export function isInString(sourceFile: SourceFile, position: number): boolean {
-        const previousToken = findPrecedingToken(position, sourceFile);
+    function isNonWhitespaceToken(n: Node): boolean {
+        return isToken(n) && !isWhiteSpaceOnlyJsxText(n);
+    }
+
+    function findRightmostToken(n: Node, sourceFile: SourceFile): Node | undefined {
+        if (isNonWhitespaceToken(n)) {
+            return n;
+        }
+
+        const children = n.getChildren(sourceFile);
+        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
+        return candidate && findRightmostToken(candidate, sourceFile);
+    }
+
+    /**
+     * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
+     */
+    function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number): Node | undefined {
+        for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
+            const child = children[i];
+
+            if (isWhiteSpaceOnlyJsxText(child)) {
+                Debug.assert(i > 0, "`JsxText` tokens should not be the first child of `JsxElement | JsxSelfClosingElement`");
+            }
+            else if (nodeHasTokens(children[i])) {
+                return children[i];
+            }
+        }
+    }
+
+    export function isInString(sourceFile: SourceFile, position: number, previousToken = findPrecedingToken(position, sourceFile)): boolean {
         if (previousToken && isStringTextContainingNode(previousToken)) {
             const start = previousToken.getStart();
             const end = previousToken.getEnd();
@@ -894,7 +889,7 @@ namespace ts {
         return false;
     }
 
-    export function isWhiteSpaceOnlyJsxText(node: Node): node is JsxText {
+    function isWhiteSpaceOnlyJsxText(node: Node): boolean {
         return isJsxText(node) && node.containsOnlyWhiteSpaces;
     }
 
@@ -1068,15 +1063,27 @@ namespace ts {
         return createTextSpanFromBounds(range.pos, range.end);
     }
 
+    export function createTextChangeFromStartLength(start: number, length: number, newText: string): TextChange {
+        return createTextChange(createTextSpan(start, length), newText);
+    }
+
+    export function createTextChange(span: TextSpan, newText: string): TextChange {
+        return { span, newText };
+    }
+
     export const typeKeywords: ReadonlyArray<SyntaxKind> = [
         SyntaxKind.AnyKeyword,
         SyntaxKind.BooleanKeyword,
+        SyntaxKind.KeyOfKeyword,
         SyntaxKind.NeverKeyword,
+        SyntaxKind.NullKeyword,
         SyntaxKind.NumberKeyword,
         SyntaxKind.ObjectKeyword,
         SyntaxKind.StringKeyword,
         SyntaxKind.SymbolKeyword,
         SyntaxKind.VoidKeyword,
+        SyntaxKind.UndefinedKeyword,
+        SyntaxKind.UniqueKeyword,
     ];
 
     export function isTypeKeyword(kind: SyntaxKind): boolean {
@@ -1110,6 +1117,14 @@ namespace ts {
 
     export function getSnapshotText(snap: IScriptSnapshot): string {
         return snap.getText(0, snap.getLength());
+    }
+
+    export function repeatString(str: string, count: number): string {
+        let result = "";
+        for (let i = 0; i < count; i++) {
+            result += str;
+        }
+        return result;
     }
 }
 
@@ -1252,8 +1267,10 @@ namespace ts {
     /**
      * The default is CRLF.
      */
-    export function getNewLineOrDefaultFromHost(host: LanguageServiceHost | LanguageServiceShimHost) {
-        return host.getNewLine ? host.getNewLine() : carriageReturnLineFeed;
+    export function getNewLineOrDefaultFromHost(host: LanguageServiceHost | LanguageServiceShimHost, formatSettings?: FormatCodeSettings) {
+        return (formatSettings && formatSettings.newLineCharacter) ||
+            (host.getNewLine && host.getNewLine()) ||
+            carriageReturnLineFeed;
     }
 
     export function lineBreakPart() {
@@ -1279,7 +1296,7 @@ namespace ts {
 
     export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typeChecker.writeSymbol(symbol, enclosingDeclaration, meaning, flags, writer);
+            typeChecker.writeSymbol(symbol, enclosingDeclaration, meaning, flags | SymbolFormatFlags.UseAliasDefinedOutsideCurrentScope, writer);
         });
     }
 

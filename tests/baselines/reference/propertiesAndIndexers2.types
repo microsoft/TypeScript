@@ -18,14 +18,21 @@ interface B extends A {
 >c : string
 
     3: string;
+>3 : string
+
     Infinity: string;
 >Infinity : string
 
     "-Infinity": string;
+>"-Infinity" : string
+
     NaN: string;
 >NaN : string
 
     "-NaN": string;
+>"-NaN" : string
+
     6(): string;
+>6 : () => string
 }
 

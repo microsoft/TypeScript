@@ -4,6 +4,7 @@ const expect: typeof _chai.expect = _chai.expect;
 
 namespace ts.server {
     let lastWrittenToHost: string;
+    const noopFileWatcher: FileWatcher = { close: noop };
     const mockHost: ServerHost = {
         args: [],
         newLine: "\n",
@@ -26,6 +27,8 @@ namespace ts.server {
         setImmediate: () => 0,
         clearImmediate: noop,
         createHash: Harness.mockHash,
+        watchFile: () => noopFileWatcher,
+        watchDirectory: () => noopFileWatcher
     };
 
     class TestSession extends Session {
@@ -259,6 +262,8 @@ namespace ts.server {
                 CommandNames.GetApplicableRefactors,
                 CommandNames.GetEditsForRefactor,
                 CommandNames.GetEditsForRefactorFull,
+                CommandNames.OrganizeImports,
+                CommandNames.OrganizeImportsFull,
             ];
 
             it("should not throw when commands are executed with invalid arguments", () => {

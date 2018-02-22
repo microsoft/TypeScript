@@ -209,6 +209,8 @@ interface T12 {
 >a : number
 
     1: string;
+>1 : string
+
     [s2]: boolean;
 >s2 : unique symbol
 }
@@ -220,6 +222,8 @@ declare class T13 implements T2 {
 >a : number
 
     1: string;
+>1 : string
+
     [s2]: boolean;
 >s2 : unique symbol
 }
@@ -234,6 +238,8 @@ declare type T15 = {
 >a : number
 
     1: string;
+>1 : string
+
     [s2]: boolean;
 >s2 : unique symbol
 
@@ -246,6 +252,8 @@ declare class C {
 >a : number
 
     static 1: string;
+>1 : string
+
     static [s2]: boolean;
 >s2 : unique symbol
 }

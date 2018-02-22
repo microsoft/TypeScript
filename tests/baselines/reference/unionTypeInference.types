@@ -77,7 +77,7 @@ var b1 = g(["string", true]);
 >b1 : boolean
 >g(["string", true]) : boolean
 >g : <T>(value: [string, T]) => T
->["string", true] : [string, boolean]
+>["string", true] : [string, true]
 >"string" : "string"
 >true : true
 

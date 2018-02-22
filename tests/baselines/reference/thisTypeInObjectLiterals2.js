@@ -462,8 +462,8 @@ declare function defineProps<T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>):
 declare let p10: Point & Record<"foo", number>;
 declare let p11: Point & Record<"bar", number>;
 declare let p12: Point & {
-    foo: any;
-    bar: any;
+    foo: number;
+    bar: number;
 };
 declare type Accessors<T> = {
     [K in keyof T]: (() => T[K]) | Computed<T[K]>;
@@ -487,6 +487,6 @@ declare let vue: {
 } & {
     f(x: string): number;
 } & {
-    test: any;
-    hello: any;
+    test: number;
+    hello: string;
 };
