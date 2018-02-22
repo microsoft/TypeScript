@@ -1619,15 +1619,15 @@ namespace ts {
         }
 
         function emitIfStatement(node: IfStatement) {
-            const openParenPos = writeToken(SyntaxKind.IfKeyword, node.pos, writeKeyword, node);
+            const openParenPos = emitTokenWithComment(SyntaxKind.IfKeyword, node.pos, writeKeyword, node);
             writeSpace();
-            writeToken(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
+            emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
             emitExpression(node.expression);
-            writeToken(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
             emitEmbeddedStatement(node, node.thenStatement);
             if (node.elseStatement) {
                 writeLineOrSpace(node);
-                writeToken(SyntaxKind.ElseKeyword, node.thenStatement.end, writeKeyword, node);
+                emitTokenWithComment(SyntaxKind.ElseKeyword, node.thenStatement.end, writeKeyword, node);
                 if (node.elseStatement.kind === SyntaxKind.IfStatement) {
                     writeSpace();
                     emit(node.elseStatement);
