@@ -3011,6 +3011,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Enum_declarations_can_only_merge_with_namespace_or_other_enum_declarations_2567" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Enum declarations can only merge with namespace or other enum declarations.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[As declarações de enum apenas podem se mescladas com namespaces ou com outras declarações de enum.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Enum_declarations_must_all_be_const_or_non_const_2473" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enum declarations must all be const or non-const.]]></Val>

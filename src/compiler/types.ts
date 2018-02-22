@@ -2233,6 +2233,10 @@ namespace ts {
 
     export type ImportOrExportSpecifier = ImportSpecifier | ExportSpecifier;
 
+    /**
+     * This is either an `export =` or an `export default` declaration.
+     * Unless `isExportEquals` is set, this node was parsed as an `export default`.
+     */
     export interface ExportAssignment extends DeclarationStatementOnly {
         kind: SyntaxKind.ExportAssignment;
         parent?: SourceFile;

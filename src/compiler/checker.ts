@@ -4015,7 +4015,7 @@ namespace ts {
                         parentType = getNonNullableType(parentType);
                     }
                     const propType = getTypeOfPropertyOfType(parentType, text);
-                    const declaredType = propType && getApparentTypeForLocation(propType, declaration.name);
+                    const declaredType = propType && getConstraintForLocation(propType, declaration.name);
                     type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
                         isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
                         getIndexTypeOfType(parentType, IndexKind.String);
@@ -6138,17 +6138,29 @@ namespace ts {
             return getConstraintOfDistributiveConditionalType(type) || getDefaultConstraintOfConditionalType(type);
         }
 
-        function getBaseConstraintOfType(type: Type): Type {
+        function getBaseConstraintOfInstantiableNonPrimitiveUnionOrIntersection(type: Type) {
             if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection)) {
                 const constraint = getResolvedBaseConstraint(<InstantiableType | UnionOrIntersectionType>type);
                 if (constraint !== noConstraintType && constraint !== circularConstraintType) {
                     return constraint;
                 }
             }
-            else if (type.flags & TypeFlags.Index) {
+        }
+
+        function getBaseConstraintOfType(type: Type): Type {
+            const constraint = getBaseConstraintOfInstantiableNonPrimitiveUnionOrIntersection(type);
+            if (!constraint && type.flags & TypeFlags.Index) {
                 return stringType;
             }
-            return undefined;
+            return constraint;
+        }
+
+        /**
+         * This is similar to `getBaseConstraintOfType` except it returns the input type if there's no base constraint, instead of `undefined`
+         * It also doesn't map indexes to `string`, as where this is used this would be unneeded (and likely undesirable)
+         */
+        function getBaseConstraintOrType(type: Type) {
+            return getBaseConstraintOfType(type) || type;
         }
 
         function hasNonCircularBaseConstraint(type: InstantiableType): boolean {
@@ -11935,7 +11947,7 @@ namespace ts {
         function getFlowCacheKey(node: Node): string | undefined {
             if (node.kind === SyntaxKind.Identifier) {
                 const symbol = getResolvedSymbol(<Identifier>node);
-                return symbol !== unknownSymbol ? (isApparentTypePosition(node) ? "@" : "") + getSymbolId(symbol) : undefined;
+                return symbol !== unknownSymbol ? (isConstraintPosition(node) ? "@" : "") + getSymbolId(symbol) : undefined;
             }
             if (node.kind === SyntaxKind.ThisKeyword) {
                 return "0";
@@ -13297,7 +13309,7 @@ namespace ts {
             return annotationIncludesUndefined ? getTypeWithFacts(declaredType, TypeFacts.NEUndefined) : declaredType;
         }
 
-        function isApparentTypePosition(node: Node) {
+        function isConstraintPosition(node: Node) {
             const parent = node.parent;
             return parent.kind === SyntaxKind.PropertyAccessExpression ||
                 parent.kind === SyntaxKind.CallExpression && (<CallExpression>parent).expression === node ||
@@ -13310,13 +13322,13 @@ namespace ts {
             return type.flags & TypeFlags.InstantiableNonPrimitive && maybeTypeOfKind(getBaseConstraintOfType(type) || emptyObjectType, TypeFlags.Nullable);
         }
 
-        function getApparentTypeForLocation(type: Type, node: Node) {
+        function getConstraintForLocation(type: Type, node: Node) {
             // When a node is the left hand expression of a property access, element access, or call expression,
             // and the type of the node includes type variables with constraints that are nullable, we fetch the
             // apparent type of the node *before* performing control flow analysis such that narrowings apply to
             // the constraint type.
-            if (isApparentTypePosition(node) && forEachType(type, typeHasNullableConstraint)) {
-                return mapType(getWidenedType(type), getApparentType);
+            if (isConstraintPosition(node) && forEachType(type, typeHasNullableConstraint)) {
+                return mapType(getWidenedType(type), getBaseConstraintOrType);
             }
             return type;
         }
@@ -13404,7 +13416,7 @@ namespace ts {
             checkCollisionWithCapturedNewTargetVariable(node, node);
             checkNestedBlockScopedBinding(node, symbol);
 
-            const type = getApparentTypeForLocation(getTypeOfSymbol(localOrExportSymbol), node);
+            const type = getConstraintForLocation(getTypeOfSymbol(localOrExportSymbol), node);
             const assignmentKind = getAssignmentTargetKind(node);
 
             if (assignmentKind) {
@@ -16024,7 +16036,7 @@ namespace ts {
                         return unknownType;
                     }
                 }
-                propType = getApparentTypeForLocation(getTypeOfSymbol(prop), node);
+                propType = getConstraintForLocation(getTypeOfSymbol(prop), node);
             }
             // Only compute control flow type if this is a property access expression that isn't an
             // assignment target, and the referenced property was declared as a variable, property,
@@ -23753,7 +23765,11 @@ namespace ts {
 
         function checkExternalImportOrExportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): boolean {
             const moduleName = getExternalModuleName(node);
-            if (!nodeIsMissing(moduleName) && moduleName.kind !== SyntaxKind.StringLiteral) {
+            if (nodeIsMissing(moduleName)) {
+                // Should be a parse error.
+                return false;
+            }
+            if (!isStringLiteral(moduleName)) {
                 error(moduleName, Diagnostics.String_literal_expected);
                 return false;
             }
@@ -23764,7 +23780,7 @@ namespace ts {
                     Diagnostics.Import_declarations_in_a_namespace_cannot_reference_a_module);
                 return false;
             }
-            if (inAmbientExternalModule && isExternalModuleNameRelative(getTextOfIdentifierOrLiteral(<LiteralExpression | Identifier>moduleName))) {
+            if (inAmbientExternalModule && isExternalModuleNameRelative(moduleName.text)) {
                 // we have already reported errors on top level imports\exports in external module augmentations in checkModuleDeclaration
                 // no need to do this again.
                 if (!isTopLevelInExternalModuleAugmentation(node)) {
