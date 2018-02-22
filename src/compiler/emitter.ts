@@ -1382,7 +1382,7 @@ namespace ts {
 
         function emitElementAccessExpression(node: ElementAccessExpression) {
             emitExpression(node.expression);
-            writePunctuation("[");
+            emitTokenWithComment(SyntaxKind.OpenBracketToken, node.expression.end, writePunctuation, node);
             emitExpression(node.argumentExpression);
             writePunctuation("]");
         }
