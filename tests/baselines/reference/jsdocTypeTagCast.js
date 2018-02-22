@@ -146,6 +146,6 @@ someBase = /** @type {SomeBase} */ (someFakeClass);
 var numOrStr;
 /** @type {string} */
 var str;
-if ((numOrStr === undefined)) {
+if ((numOrStr === undefined)) { // Error
     str = numOrStr; // Error, no narrowing occurred
 }

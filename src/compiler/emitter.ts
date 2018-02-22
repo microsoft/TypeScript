@@ -1589,13 +1589,13 @@ namespace ts {
         //
 
         function emitBlock(node: Block) {
-            writeToken(SyntaxKind.OpenBraceToken, node.pos, writePunctuation, /*contextNode*/ node);
+            emitTokenWithComment(SyntaxKind.OpenBraceToken, node.pos, writePunctuation, /*contextNode*/ node);
             emitBlockStatements(node, /*forceSingleLine*/ !node.multiLine && isEmptyBlock(node));
             // We have to call emitLeadingComments explicitly here because otherwise leading comments of the close brace token will not be emitted
             increaseIndent();
             emitLeadingCommentsOfPosition(node.statements.end);
             decreaseIndent();
-            writeToken(SyntaxKind.CloseBraceToken, node.statements.end, writePunctuation, /*contextNode*/ node);
+            emitTokenWithComment(SyntaxKind.CloseBraceToken, node.statements.end, writePunctuation, /*contextNode*/ node);
         }
 
         function emitBlockStatements(node: BlockLike, forceSingleLine: boolean) {
