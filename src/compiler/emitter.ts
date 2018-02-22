@@ -1747,11 +1747,11 @@ namespace ts {
         }
 
         function emitWithStatement(node: WithStatement) {
-            writeKeyword("with");
+            const openParenPos = emitTokenWithComment(SyntaxKind.WithKeyword, node.pos, writeKeyword, node);
             writeSpace();
-            writePunctuation("(");
+            emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
             emitExpression(node.expression);
-            writePunctuation(")");
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
             emitEmbeddedStatement(node, node.statement);
         }
 
