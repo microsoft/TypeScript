@@ -1734,7 +1734,7 @@ namespace ts {
                 pos = skipTrivia(currentSourceFile.text, pos);
             }
             pos = writeToken(token, pos, writer, /*contextNode*/ contextNode);
-            if (node && node.kind === contextNode.kind) {
+            if (emitTrailingCommentsOfPosition && node && node.kind === contextNode.kind) {
                 emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ true);
             }
             return pos;
