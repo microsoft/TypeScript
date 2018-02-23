@@ -4,6 +4,7 @@ var x = {
 >{    [s: symbol]: ""} : { [x: number]: any; "": any; }
 
     [s: symbol]: ""
+>[s : any
 >s : any
 >symbol : any
 >"" : any

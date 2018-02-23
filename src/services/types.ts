@@ -727,7 +727,7 @@ namespace ts {
     }
 
     export interface CompletionInfo {
-        /** Not true for all glboal completions. This will be true if the enclosing scope matches a few syntax kinds. See `isGlobalCompletionScope`. */
+        /** Not true for all glboal completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. */
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
 

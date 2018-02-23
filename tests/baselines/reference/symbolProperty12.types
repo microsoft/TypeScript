@@ -3,6 +3,7 @@ class C {
 >C : C
 
     private [Symbol.iterator]: { x };
+>[Symbol.iterator] : { x: any; }
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
@@ -12,6 +13,7 @@ interface I {
 >I : I
 
     [Symbol.iterator]: { x };
+>[Symbol.iterator] : { x: any; }
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
