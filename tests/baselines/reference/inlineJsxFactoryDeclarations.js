@@ -10,7 +10,12 @@ declare global {
 }
 export function dom(): void;
 export function otherdom(): void;
+export function createElement(): void;
 export { dom as default };
+//// [otherreacty.tsx]
+/** @jsx React.createElement */
+import * as React from "./renderer";
+<h></h>
 //// [other.tsx]
 /** @jsx h */
 import { dom as h } from "./renderer"
@@ -32,6 +37,12 @@ export * from "./othernoalias";
 export * from "./reacty";
 
 
+//// [otherreacty.js]
+"use strict";
+exports.__esModule = true;
+/** @jsx React.createElement */
+var React = require("./renderer");
+React.createElement("h", null);
 //// [other.js]
 "use strict";
 exports.__esModule = true;

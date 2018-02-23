@@ -6189,7 +6189,7 @@ namespace ts {
 
         function extractPragmas(text: string) {
             const pragmas: { pragma: string, value: string | undefined }[] = [];
-            const pragmaRegEx = /@(\w+)(\W+(\w+)(\W+|$))?/gim;
+            const pragmaRegEx = /@(\S+)(\s+([\S]+)(\s+|$))?/gim;
             let matchResult: RegExpMatchArray;
             while (matchResult = pragmaRegEx.exec(text)) {
                 pragmas.push({ pragma: matchResult[1], value: matchResult[3] });

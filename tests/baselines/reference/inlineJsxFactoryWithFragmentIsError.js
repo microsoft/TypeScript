@@ -9,11 +9,23 @@ declare global {
     }
 }
 export function dom(): void;
+export function createElement(): void;
+//// [reacty.tsx]
+/** @jsx React.createElement */
+import * as React from "./renderer";
+<><h></h></>
 //// [index.tsx]
 /** @jsx dom */
 import { dom } from "./renderer";
 <><h></h></>
 
+//// [reacty.js]
+"use strict";
+exports.__esModule = true;
+/** @jsx React.createElement */
+var React = require("./renderer");
+React.createElement(React.Fragment, null,
+    React.createElement("h", null));
 //// [index.js]
 "use strict";
 exports.__esModule = true;

@@ -16,27 +16,25 @@ declare global {
 export function dom(): void;
 >dom : () => void
 
-export function createElement(): void;
->createElement : () => void
+export { dom as p };
+>dom : () => void
+>p : () => void
 
 === tests/cases/conformance/jsx/inline/reacty.tsx ===
-/** @jsx React.createElement */
-import * as React from "./renderer";
->React : typeof React
+/** @jsx dom */
+import {dom} from "./renderer";
+>dom : () => void
 
-<><h></h></>
-><><h></h></> : any
+<h></h>
 ><h></h> : any
 >h : any
 >h : any
 
 === tests/cases/conformance/jsx/inline/index.tsx ===
-/** @jsx dom */
-import { dom } from "./renderer";
->dom : () => void
+import { p } from "./renderer";
+>p : () => void
 
-<><h></h></>
-><><h></h></> : any
+<h></h>
 ><h></h> : any
 >h : any
 >h : any

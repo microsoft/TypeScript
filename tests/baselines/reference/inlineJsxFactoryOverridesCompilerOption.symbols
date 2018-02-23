@@ -16,24 +16,24 @@ declare global {
 export function dom(): void;
 >dom : Symbol(dom, Decl(renderer.d.ts, 6, 1))
 
-export function createElement(): void;
->createElement : Symbol(createElement, Decl(renderer.d.ts, 7, 28))
+export { dom as p };
+>dom : Symbol(p, Decl(renderer.d.ts, 8, 8))
+>p : Symbol(p, Decl(renderer.d.ts, 8, 8))
 
 === tests/cases/conformance/jsx/inline/reacty.tsx ===
-/** @jsx React.createElement */
-import * as React from "./renderer";
->React : Symbol(React, Decl(reacty.tsx, 1, 6))
+/** @jsx dom */
+import {dom} from "./renderer";
+>dom : Symbol(dom, Decl(reacty.tsx, 1, 8))
 
-<><h></h></>
+<h></h>
 >h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
 >h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
 
 === tests/cases/conformance/jsx/inline/index.tsx ===
-/** @jsx dom */
-import { dom } from "./renderer";
->dom : Symbol(dom, Decl(index.tsx, 1, 8))
+import { p } from "./renderer";
+>p : Symbol(p, Decl(index.tsx, 0, 8))
 
-<><h></h></>
+<h></h>
 >h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
 >h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
 

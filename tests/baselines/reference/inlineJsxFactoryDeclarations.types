@@ -19,9 +19,22 @@ export function dom(): void;
 export function otherdom(): void;
 >otherdom : () => void
 
+export function createElement(): void;
+>createElement : () => void
+
 export { dom as default };
 >dom : () => void
 >default : () => void
+
+=== tests/cases/conformance/jsx/inline/otherreacty.tsx ===
+/** @jsx React.createElement */
+import * as React from "./renderer";
+>React : typeof React
+
+<h></h>
+><h></h> : any
+>h : any
+>h : any
 
 === tests/cases/conformance/jsx/inline/other.tsx ===
 /** @jsx h */

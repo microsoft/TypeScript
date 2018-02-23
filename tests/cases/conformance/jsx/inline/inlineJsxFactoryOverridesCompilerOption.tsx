@@ -1,4 +1,5 @@
 // @jsx: react
+// @jsxFactory: p
 // @filename: renderer.d.ts
 declare global {
     namespace JSX {
@@ -8,12 +9,11 @@ declare global {
     }
 }
 export function dom(): void;
-export function createElement(): void;
+export { dom as p };
 // @filename: reacty.tsx
-/** @jsx React.createElement */
-import * as React from "./renderer";
-<><h></h></>
-// @filename: index.tsx
 /** @jsx dom */
-import { dom } from "./renderer";
-<><h></h></>
+import {dom} from "./renderer";
+<h></h>
+// @filename: index.tsx
+import { p } from "./renderer";
+<h></h>
