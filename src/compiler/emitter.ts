@@ -999,7 +999,7 @@ namespace ts {
                 emitTypeAnnotation(node.type);
             }
             // The comment position has to fallback to any present node within the parameterdeclaration because as it turns out, the parser can make parameter declarations with _just_ an initializer.
-            emitInitializer(node.initializer, (node.type ? node.type.end : node.questionToken ? node.questionToken.end : node.name ? node.name.end : node.modifiers ? node.modifiers.end : node.decorators ? node.decorators.end : node.pos) + 1, node);
+            emitInitializer(node.initializer, node.type ? node.type.end : node.questionToken ? node.questionToken.end : node.name ? node.name.end : node.modifiers ? node.modifiers.end : node.decorators ? node.decorators.end : node.pos, node);
         }
 
         function emitDecorator(decorator: Decorator) {
@@ -1026,7 +1026,7 @@ namespace ts {
             emit(node.name);
             emitIfPresent(node.questionToken);
             emitTypeAnnotation(node.type);
-            emitInitializer(node.initializer, (node.type ? node.type.end : node.questionToken ? node.questionToken.end : node.name.end) + 1, node);
+            emitInitializer(node.initializer, node.type ? node.type.end : node.questionToken ? node.questionToken.end : node.name.end, node);
             writeSemicolon();
         }
 
@@ -1308,7 +1308,7 @@ namespace ts {
                 writeSpace();
             }
             emit(node.name);
-            emitInitializer(node.initializer, node.name.end + 1, node);
+            emitInitializer(node.initializer, node.name.end, node);
         }
 
         //
@@ -1817,7 +1817,7 @@ namespace ts {
         function emitVariableDeclaration(node: VariableDeclaration) {
             emit(node.name);
             emitTypeAnnotation(node.type);
-            emitInitializer(node.initializer, (node.type ? node.type.end : node.name.end) + 1, node);
+            emitInitializer(node.initializer, node.type ? node.type.end : node.name.end, node);
         }
 
         function emitVariableDeclarationList(node: VariableDeclarationList) {
@@ -2399,7 +2399,7 @@ namespace ts {
 
         function emitEnumMember(node: EnumMember) {
             emit(node.name);
-            emitInitializer(node.initializer, node.name.end + 1, node);
+            emitInitializer(node.initializer, node.name.end, node);
         }
 
         //
