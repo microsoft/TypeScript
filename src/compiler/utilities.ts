@@ -3738,7 +3738,7 @@ namespace ts {
         return false;
     }
 
-    export function getClassLikeDeclarationOfSymbol(symbol: Symbol): Declaration | undefined {
+    export function getClassLikeDeclarationOfSymbol(symbol: Symbol): ClassLikeDeclaration | undefined {
         return find(symbol.declarations, isClassLike);
     }
 
