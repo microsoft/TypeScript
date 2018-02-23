@@ -1578,8 +1578,9 @@ namespace ts {
         }
 
         function checkAndReportErrorForUsingTypeAsNamespace(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
-            if (meaning === SymbolFlags.Namespace) {
-                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Namespace, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
+            const namespaceMeaning = SymbolFlags.Namespace | (isInJavaScriptFile(errorLocation) ? SymbolFlags.Value : 0);
+            if (meaning === namespaceMeaning) {
+                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~namespaceMeaning, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 const parent = errorLocation.parent;
                 if (symbol) {
                     if (isQualifiedName(parent)) {
@@ -1995,31 +1996,32 @@ namespace ts {
                 }
             }
             else if (name.kind === SyntaxKind.QualifiedName || name.kind === SyntaxKind.PropertyAccessExpression) {
-                let left: EntityNameOrEntityNameExpression;
-
-                if (name.kind === SyntaxKind.QualifiedName) {
-                    left = name.left;
-                }
-                else if (name.kind === SyntaxKind.PropertyAccessExpression) {
-                    left = name.expression;
-                }
-                else {
-                    // If the expression in property-access expression is not entity-name or parenthsizedExpression (e.g. it is a call expression), it won't be able to successfully resolve the name.
-                    // This is the case when we are trying to do any language service operation in heritage clauses. By return undefined, the getSymbolOfEntityNameOrPropertyAccessExpression
-                    // will attempt to checkPropertyAccessExpression to resolve symbol.
-                    // i.e class C extends foo()./*do language service operation here*/B {}
-                    return undefined;
-                }
+                const left = name.kind === SyntaxKind.QualifiedName ? name.left : name.expression;
                 const right = name.kind === SyntaxKind.QualifiedName ? name.right : name.name;
-                let namespace = resolveEntityName(left, SymbolFlags.Namespace, ignoreErrors, /*dontResolveAlias*/ false, location);
+                const namespaceMeaning = SymbolFlags.Namespace | (isInJavaScriptFile(name) ? meaning & SymbolFlags.Value : 0);
+                let namespace = resolveEntityName(left, namespaceMeaning, ignoreErrors, /*dontResolveAlias*/ false, location);
                 if (!namespace || nodeIsMissing(right)) {
                     return undefined;
                 }
                 else if (namespace === unknownSymbol) {
                     return namespace;
                 }
-                if (isInJavaScriptFile(name) && isDeclarationOfFunctionOrClassExpression(namespace)) {
-                    namespace = getSymbolOfNode((namespace.valueDeclaration as VariableDeclaration).initializer);
+                if (isInJavaScriptFile(name)) {
+                    if (isDeclarationOfFunctionOrClassExpression(namespace)) {
+                        namespace = getSymbolOfNode((namespace.valueDeclaration as VariableDeclaration).initializer);
+                    }
+                    if (namespace.valueDeclaration &&
+                        isVariableDeclaration(namespace.valueDeclaration) &&
+                        isCommonJsRequire(namespace.valueDeclaration.initializer)) {
+                        const moduleName = (namespace.valueDeclaration.initializer as CallExpression).arguments[0] as StringLiteral;
+                        const moduleSym = resolveExternalModuleName(moduleName, moduleName);
+                        if (moduleSym) {
+                            const resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
+                            if (resolvedModuleSymbol) {
+                                namespace = resolvedModuleSymbol;
+                            }
+                        }
+                    }
                 }
                 symbol = getSymbol(getExportsOfSymbol(namespace), right.escapedText, meaning);
                 if (!symbol) {
@@ -17954,7 +17956,7 @@ namespace ts {
 
             // In JavaScript files, calls to any identifier 'require' are treated as external module imports
             if (isInJavaScriptFile(node) && isCommonJsRequire(node)) {
-                return resolveExternalModuleTypeByLiteral(<StringLiteral>node.arguments[0]);
+                return resolveExternalModuleTypeByLiteral(node.arguments[0] as StringLiteral);
             }
 
             const returnType = getReturnTypeOfSignature(signature);
