@@ -2602,7 +2602,7 @@
         "code": 4083
     },
     "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
-        "category": "Message",
+        "category": "Error",
         "code": 4090
     },
     "Parameter '{0}' of index signature from exported interface has or is using name '{1}' from private module '{2}'.": {
