@@ -2664,6 +2664,9 @@ namespace ts {
 
             if (format & ListFormat.BracketsMask) {
                 writePunctuation(getOpeningBracket(format));
+                if (isEmpty) {
+                    emitTrailingCommentsOfPosition(children.pos, /*prefixSpace*/ true); // Emit comments within empty bracketed lists
+                }
             }
 
             if (onBeforeEmitNodeArray) {
@@ -2789,6 +2792,9 @@ namespace ts {
             }
 
             if (format & ListFormat.BracketsMask) {
+                if (isEmpty) {
+                    emitLeadingCommentsOfPosition(children.end); // Emit leading comments within empty lists
+                }
                 writePunctuation(getClosingBracket(format));
             }
         }
