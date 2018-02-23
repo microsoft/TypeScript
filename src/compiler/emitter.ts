@@ -1353,7 +1353,10 @@ namespace ts {
             increaseIndentIf(indentBeforeDot);
 
             const shouldEmitDotDot = !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
-            writePunctuation(shouldEmitDotDot ? ".." : ".");
+            if (shouldEmitDotDot) {
+                writePunctuation(".");
+            }
+            emitTokenWithComment(SyntaxKind.DotToken, node.expression.end, writePunctuation, node);
 
             increaseIndentIf(indentAfterDot);
             emit(node.name);
@@ -1589,18 +1592,14 @@ namespace ts {
         //
 
         function emitBlock(node: Block) {
-            emitTokenWithComment(SyntaxKind.OpenBraceToken, node.pos, writePunctuation, /*contextNode*/ node);
             emitBlockStatements(node, /*forceSingleLine*/ !node.multiLine && isEmptyBlock(node));
-            // We have to call emitLeadingComments explicitly here because otherwise leading comments of the close brace token will not be emitted
-            increaseIndent();
-            emitLeadingCommentsOfPosition(node.statements.end);
-            decreaseIndent();
-            emitTokenWithComment(SyntaxKind.CloseBraceToken, node.statements.end, writePunctuation, /*contextNode*/ node);
         }
 
         function emitBlockStatements(node: BlockLike, forceSingleLine: boolean) {
+            emitTokenWithComment(SyntaxKind.OpenBraceToken, node.pos, writePunctuation, /*contextNode*/ node);
             const format = forceSingleLine || getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineBlockStatements : ListFormat.MultiLineBlockStatements;
             emitList(node, node.statements, format);
+            emitTokenWithComment(SyntaxKind.CloseBraceToken, node.statements.end, writePunctuation, /*contextNode*/ node, /*indentLeading*/ !!(format & ListFormat.MultiLine));
         }
 
         function emitVariableStatement(node: VariableStatement) {
@@ -1728,10 +1727,21 @@ namespace ts {
             writeSemicolon();
         }
 
-        function emitTokenWithComment(token: SyntaxKind, pos: number, writer: (s: string) => void, contextNode?: Node) {
+        function emitTokenWithComment(token: SyntaxKind, pos: number, writer: (s: string) => void, contextNode?: Node, indentLeading?: boolean) {
             const node = contextNode && getParseTreeNode(contextNode);
+            const startPos = pos;
             if (node && node.kind === contextNode.kind) {
                 pos = skipTrivia(currentSourceFile.text, pos);
+            }
+            if (emitLeadingCommentsOfPosition && node && node.kind === contextNode.kind) {
+                const needsIndent = indentLeading && !positionsAreOnSameLine(startPos, pos, currentSourceFile);
+                if (needsIndent) {
+                    increaseIndent();
+                }
+                emitLeadingCommentsOfPosition(startPos);
+                if (needsIndent) {
+                    decreaseIndent();
+                }
             }
             pos = writeToken(token, pos, writer, /*contextNode*/ contextNode);
             if (emitTrailingCommentsOfPosition && node && node.kind === contextNode.kind) {
@@ -2044,16 +2054,14 @@ namespace ts {
 
         function emitModuleBlock(node: ModuleBlock) {
             pushNameGenerationScope(node);
-            writePunctuation("{");
             emitBlockStatements(node, /*forceSingleLine*/ isEmptyBlock(node));
-            writePunctuation("}");
             popNameGenerationScope(node);
         }
 
         function emitCaseBlock(node: CaseBlock) {
             emitTokenWithComment(SyntaxKind.OpenBraceToken, node.pos, writePunctuation, node);
             emitList(node, node.clauses, ListFormat.CaseBlockClauses);
-            emitTokenWithComment(SyntaxKind.CloseBraceToken, node.clauses.end, writePunctuation, node);
+            emitTokenWithComment(SyntaxKind.CloseBraceToken, node.clauses.end, writePunctuation, node, /*indentLeading*/ true);
         }
 
         function emitImportEqualsDeclaration(node: ImportEqualsDeclaration) {

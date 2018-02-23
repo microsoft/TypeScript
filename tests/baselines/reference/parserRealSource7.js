@@ -1482,6 +1482,8 @@ var TypeScript;
         else if (ast.nodeType == NodeType.InterfaceDeclaration) {
             go = preCollectInterfaceTypes(ast, parent, context);
         }
+        // This will be a constructor arg because this pass only traverses
+        // constructor arg lists
         else if (ast.nodeType == NodeType.ArgDecl) {
             go = preCollectArgDeclTypes(ast, parent, context);
         }

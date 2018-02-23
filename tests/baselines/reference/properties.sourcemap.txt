@@ -50,13 +50,20 @@ sourceFile:properties.ts
 >>>    Object.defineProperty(MyClass.prototype, "Count", {
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^
-3 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                          ^^^^^^^
+4 >                                 ^
+5 >                                  ^^^^^^^^^^^^^^^^^^
 1->
 2 >    public get 
-3 >                          Count
+3 >                          
+4 >                                 {
+5 >                                  
+  >                                      public get Count
 1->Emitted(4, 5) Source(3, 5) + SourceIndex(0)
 2 >Emitted(4, 27) Source(3, 16) + SourceIndex(0)
-3 >Emitted(4, 53) Source(3, 21) + SourceIndex(0)
+3 >Emitted(4, 34) Source(2, 1) + SourceIndex(0)
+4 >Emitted(4, 35) Source(2, 2) + SourceIndex(0)
+5 >Emitted(4, 53) Source(3, 21) + SourceIndex(0)
 ---
 >>>        get: function () {
 1 >^^^^^^^^^^^^^

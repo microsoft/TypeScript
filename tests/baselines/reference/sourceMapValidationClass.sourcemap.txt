@@ -252,14 +252,31 @@ sourceFile:sourceMapValidationClass.ts
 >>>    Object.defineProperty(Greeter.prototype, "greetings", {
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^
-3 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                          ^^^^^^^
+4 >                                 ^
+5 >                                  ^^^^^^^^^^^^^^^^^^^^^^
 1->
   >    
 2 >    get 
-3 >                          greetings
+3 >                          
+4 >                                 {
+5 >                                  
+  >                                      constructor(public greeting: string, ...b: string[]) {
+  >                                      }
+  >                                      greet() {
+  >                                          return "<h1>" + this.greeting + "</h1>";
+  >                                      }
+  >                                      private x: string;
+  >                                      private x1: number = 10;
+  >                                      private fn() {
+  >                                          return this.greeting;
+  >                                      }
+  >                                      get greetings
 1->Emitted(16, 5) Source(12, 5) + SourceIndex(0)
 2 >Emitted(16, 27) Source(12, 9) + SourceIndex(0)
-3 >Emitted(16, 57) Source(12, 18) + SourceIndex(0)
+3 >Emitted(16, 34) Source(1, 15) + SourceIndex(0)
+4 >Emitted(16, 35) Source(1, 16) + SourceIndex(0)
+5 >Emitted(16, 57) Source(12, 18) + SourceIndex(0)
 ---
 >>>        get: function () {
 1 >^^^^^^^^^^^^^
