@@ -1385,9 +1385,9 @@ namespace ts {
 
         function emitElementAccessExpression(node: ElementAccessExpression) {
             emitExpression(node.expression);
-            emitTokenWithComment(SyntaxKind.OpenBracketToken, node.expression.end, writePunctuation, node);
+            const openPos = emitTokenWithComment(SyntaxKind.OpenBracketToken, node.expression.end, writePunctuation, node);
             emitExpression(node.argumentExpression);
-            writePunctuation("]");
+            emitTokenWithComment(SyntaxKind.CloseBracketToken, node.argumentExpression ? node.argumentExpression.end : openPos, writePunctuation, node);
         }
 
         function emitCallExpression(node: CallExpression) {
