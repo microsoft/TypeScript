@@ -104,23 +104,8 @@ namespace ts.OrganizeImports {
         return usedImports;
 
         function isDeclarationUsed(identifier: Identifier) {
-            const symbol = typeChecker.getSymbolAtLocation(identifier);
-
-            // Be lenient with invalid code.
-            if (symbol === undefined) {
-                return true;
-            }
-
             // The JSX factory symbol is always used.
-            if (jsxContext && symbol.name === jsxNamespace) {
-                return true;
-            }
-
-            const entries = FindAllReferences.getReferenceEntriesForNode(identifier.pos, identifier, program, [sourceFile], {
-                isCancellationRequested: () => false,
-                throwIfCancellationRequested: () => { /*noop*/ },
-            }).filter(e => e.type === "node" && e.node.getSourceFile() === sourceFile);
-            return entries.length > 1;
+            return jsxContext && (identifier.text === jsxNamespace) || FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
         }
     }
 
