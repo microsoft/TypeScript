@@ -100,16 +100,10 @@ sourceFile:sourceMap-Comments.ts
 ---
 >>>        var Test = /** @class */ (function () {
 1->^^^^^^^^
-2 >        ^^^^^^^^^
-3 >                 ^
-4 >                  ^^^^^^^^^^^^->
+2 >        ^^^^^^^^^^^^^^^^^^^^^^->
 1-> {
   >    
-2 >        export class Test 
-3 >                 {
 1->Emitted(5, 9) Source(2, 5) + SourceIndex(0)
-2 >Emitted(5, 18) Source(2, 23) + SourceIndex(0)
-3 >Emitted(5, 19) Source(2, 24) + SourceIndex(0)
 ---
 >>>            function Test() {
 1->^^^^^^^^^^^^
@@ -156,112 +150,80 @@ sourceFile:sourceMap-Comments.ts
 1 >^^^^^^^^^^^^^^^^
 2 >                ^^^^
 3 >                    ^
-4 >                     ^
-5 >                      ^
-6 >                       ^
-7 >                        ^
-8 >                         ^
-9 >                          ^^^->
+4 >                     ^^^
+5 >                        ^
+6 >                         ^
+7 >                          ^^^->
 1 >public doX(): void {
   >            
 2 >                let 
 3 >                    f
-4 >                     : 
-5 >                      n
-6 >                       umber = 
-7 >                        2
-8 >                         ;
+4 >                     : number = 
+5 >                        2
+6 >                         ;
 1 >Emitted(9, 17) Source(4, 13) + SourceIndex(0)
 2 >Emitted(9, 21) Source(4, 17) + SourceIndex(0)
 3 >Emitted(9, 22) Source(4, 18) + SourceIndex(0)
-4 >Emitted(9, 23) Source(4, 20) + SourceIndex(0)
-5 >Emitted(9, 24) Source(4, 21) + SourceIndex(0)
-6 >Emitted(9, 25) Source(4, 29) + SourceIndex(0)
-7 >Emitted(9, 26) Source(4, 30) + SourceIndex(0)
-8 >Emitted(9, 27) Source(4, 31) + SourceIndex(0)
+4 >Emitted(9, 25) Source(4, 29) + SourceIndex(0)
+5 >Emitted(9, 26) Source(4, 30) + SourceIndex(0)
+6 >Emitted(9, 27) Source(4, 31) + SourceIndex(0)
 ---
 >>>                switch (f) {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^
-3 >                      ^
-4 >                       ^
-5 >                        ^
-6 >                         ^
-7 >                          ^
-8 >                           ^
+2 >                ^^^^^^^^
+3 >                        ^
+4 >                         ^^
+5 >                           ^->
 1->
   >            
-2 >                switch
-3 >                       
-4 >                       (
-5 >                        f
-6 >                         )
-7 >                           
-8 >                           {
+2 >                switch (
+3 >                        f
+4 >                         ) 
 1->Emitted(10, 17) Source(5, 13) + SourceIndex(0)
-2 >Emitted(10, 23) Source(5, 19) + SourceIndex(0)
-3 >Emitted(10, 24) Source(5, 20) + SourceIndex(0)
-4 >Emitted(10, 25) Source(5, 21) + SourceIndex(0)
-5 >Emitted(10, 26) Source(5, 22) + SourceIndex(0)
-6 >Emitted(10, 27) Source(5, 23) + SourceIndex(0)
-7 >Emitted(10, 28) Source(5, 24) + SourceIndex(0)
-8 >Emitted(10, 29) Source(5, 25) + SourceIndex(0)
+2 >Emitted(10, 25) Source(5, 21) + SourceIndex(0)
+3 >Emitted(10, 26) Source(5, 22) + SourceIndex(0)
+4 >Emitted(10, 28) Source(5, 24) + SourceIndex(0)
 ---
 >>>                    case 1:
-1 >^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^
-3 >                        ^
-4 >                         ^
-5 >                          ^
-6 >                           ^^^^->
-1 >
+1->^^^^^^^^^^^^^^^^^^^^
+2 >                    ^^^^^
+3 >                         ^
+4 >                          ^^^^^->
+1->{
   >                
-2 >                    case
-3 >                         
-4 >                         1
-5 >                          :
-1 >Emitted(11, 21) Source(6, 17) + SourceIndex(0)
-2 >Emitted(11, 25) Source(6, 21) + SourceIndex(0)
-3 >Emitted(11, 26) Source(6, 22) + SourceIndex(0)
-4 >Emitted(11, 27) Source(6, 23) + SourceIndex(0)
-5 >Emitted(11, 28) Source(6, 24) + SourceIndex(0)
+2 >                    case 
+3 >                         1
+1->Emitted(11, 21) Source(6, 17) + SourceIndex(0)
+2 >Emitted(11, 26) Source(6, 22) + SourceIndex(0)
+3 >Emitted(11, 27) Source(6, 23) + SourceIndex(0)
 ---
 >>>                        break;
 1->^^^^^^^^^^^^^^^^^^^^^^^^
-2 >                        ^^^^^
-3 >                             ^
-1->
+2 >                        ^^^^^^
+1->:
   >                    
-2 >                        break
-3 >                             ;
+2 >                        break;
 1->Emitted(12, 25) Source(7, 21) + SourceIndex(0)
-2 >Emitted(12, 30) Source(7, 26) + SourceIndex(0)
-3 >Emitted(12, 31) Source(7, 27) + SourceIndex(0)
+2 >Emitted(12, 31) Source(7, 27) + SourceIndex(0)
 ---
 >>>                    case 2:
 1 >^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^
-3 >                        ^
-4 >                         ^
-5 >                          ^
-6 >                           ^^^^^^^^^^^^^^->
+2 >                    ^^^^^
+3 >                         ^
+4 >                          ^^^^^^^^^^^^^^^->
 1 >
   >                
-2 >                    case
-3 >                         
-4 >                         2
-5 >                          :
+2 >                    case 
+3 >                         2
 1 >Emitted(13, 21) Source(8, 17) + SourceIndex(0)
-2 >Emitted(13, 25) Source(8, 21) + SourceIndex(0)
-3 >Emitted(13, 26) Source(8, 22) + SourceIndex(0)
-4 >Emitted(13, 27) Source(8, 23) + SourceIndex(0)
-5 >Emitted(13, 28) Source(8, 24) + SourceIndex(0)
+2 >Emitted(13, 26) Source(8, 22) + SourceIndex(0)
+3 >Emitted(13, 27) Source(8, 23) + SourceIndex(0)
 ---
 >>>                        //line comment 1
 1->^^^^^^^^^^^^^^^^^^^^^^^^
 2 >                        ^^^^^^^^^^^^^^^^
 3 >                                        ^->
-1->
+1->:
   >                    
 2 >                        //line comment 1
 1->Emitted(14, 25) Source(9, 21) + SourceIndex(0)
@@ -278,39 +240,30 @@ sourceFile:sourceMap-Comments.ts
 ---
 >>>                        break;
 1 >^^^^^^^^^^^^^^^^^^^^^^^^
-2 >                        ^^^^^
-3 >                             ^
+2 >                        ^^^^^^
 1 >
   >                    
-2 >                        break
-3 >                             ;
+2 >                        break;
 1 >Emitted(16, 25) Source(11, 21) + SourceIndex(0)
-2 >Emitted(16, 30) Source(11, 26) + SourceIndex(0)
-3 >Emitted(16, 31) Source(11, 27) + SourceIndex(0)
+2 >Emitted(16, 31) Source(11, 27) + SourceIndex(0)
 ---
 >>>                    case 3:
 1 >^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^
-3 >                        ^
-4 >                         ^
-5 >                          ^
-6 >                           ^^^^^^^^^->
+2 >                    ^^^^^
+3 >                         ^
+4 >                          ^^^^^^^^^^->
 1 >
   >                
-2 >                    case
-3 >                         
-4 >                         3
-5 >                          :
+2 >                    case 
+3 >                         3
 1 >Emitted(17, 21) Source(12, 17) + SourceIndex(0)
-2 >Emitted(17, 25) Source(12, 21) + SourceIndex(0)
-3 >Emitted(17, 26) Source(12, 22) + SourceIndex(0)
-4 >Emitted(17, 27) Source(12, 23) + SourceIndex(0)
-5 >Emitted(17, 28) Source(12, 24) + SourceIndex(0)
+2 >Emitted(17, 26) Source(12, 22) + SourceIndex(0)
+3 >Emitted(17, 27) Source(12, 23) + SourceIndex(0)
 ---
 >>>                        //a comment
 1->^^^^^^^^^^^^^^^^^^^^^^^^
 2 >                        ^^^^^^^^^^^
-1->
+1->:
   >                    
 2 >                        //a comment
 1->Emitted(18, 25) Source(13, 21) + SourceIndex(0)
@@ -318,24 +271,18 @@ sourceFile:sourceMap-Comments.ts
 ---
 >>>                        break;
 1 >^^^^^^^^^^^^^^^^^^^^^^^^
-2 >                        ^^^^^
-3 >                             ^
+2 >                        ^^^^^^
 1 >
   >                    
-2 >                        break
-3 >                             ;
+2 >                        break;
 1 >Emitted(19, 25) Source(14, 21) + SourceIndex(0)
-2 >Emitted(19, 30) Source(14, 26) + SourceIndex(0)
-3 >Emitted(19, 31) Source(14, 27) + SourceIndex(0)
+2 >Emitted(19, 31) Source(14, 27) + SourceIndex(0)
 ---
 >>>                }
-1 >^^^^^^^^^^^^^^^^
-2 >                ^
+1 >^^^^^^^^^^^^^^^^^
 1 >
-  >            
-2 >                }
-1 >Emitted(20, 17) Source(15, 13) + SourceIndex(0)
-2 >Emitted(20, 18) Source(15, 14) + SourceIndex(0)
+  >            }
+1 >Emitted(20, 18) Source(15, 14) + SourceIndex(0)
 ---
 >>>            };
 1 >^^^^^^^^^^^^

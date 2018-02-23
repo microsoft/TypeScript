@@ -21,82 +21,61 @@ sourceFile:ES5For-of33.ts
 >>>try {
 >>>    for (var _a = __values(['a', 'b', 'c']), _b = _a.next(); !_b.done; _b = _a.next()) {
 1 >^^^^
-2 >    ^^^^
-3 >        ^
-4 >         ^^^^
-5 >             ^^^
-6 >                ^
-7 >                 ^
-8 >                  ^^^^^^^^^
-9 >                           ^
-10>                            ^^^
-11>                               ^^
-12>                                 ^^^
-13>                                    ^^
-14>                                      ^^^
-15>                                         ^
-16>                                          ^
-17>                                           ^^^^^
-18>                                                ^
-19>                                                 ^^^^^^^^^^
+2 >    ^^^^^
+3 >         ^^^^
+4 >             ^^^^^
+5 >                  ^^^^^^^^^
+6 >                           ^
+7 >                            ^^^
+8 >                               ^^
+9 >                                 ^^^
+10>                                    ^^
+11>                                      ^^^
+12>                                         ^
+13>                                          ^
+14>                                           ^^^^^^^^^^^^^^^^
 1 >
-2 >    for 
-3 >        (var v of 
-4 >         
-5 >             
-6 >                f
-7 >                 or (var v of 
-8 >                  
-9 >                           [
-10>                            'a'
-11>                               , 
-12>                                 'b'
-13>                                    , 
-14>                                      'c'
-15>                                         ]
-16>                                          
-17>                                           
-18>                                                f
-19>                                                 or (var v of ['a', 'b', 'c']
+2 >    for (var v of 
+3 >         
+4 >             
+5 >                  
+6 >                           [
+7 >                            'a'
+8 >                               , 
+9 >                                 'b'
+10>                                    , 
+11>                                      'c'
+12>                                         ]
+13>                                          
+14>                                           
 1 >Emitted(12, 5) Source(1, 1) + SourceIndex(0)
-2 >Emitted(12, 9) Source(1, 5) + SourceIndex(0)
-3 >Emitted(12, 10) Source(1, 15) + SourceIndex(0)
-4 >Emitted(12, 14) Source(1, 15) + SourceIndex(0)
-5 >Emitted(12, 17) Source(1, 1) + SourceIndex(0)
-6 >Emitted(12, 18) Source(1, 2) + SourceIndex(0)
-7 >Emitted(12, 19) Source(1, 15) + SourceIndex(0)
-8 >Emitted(12, 28) Source(1, 15) + SourceIndex(0)
-9 >Emitted(12, 29) Source(1, 16) + SourceIndex(0)
-10>Emitted(12, 32) Source(1, 19) + SourceIndex(0)
-11>Emitted(12, 34) Source(1, 21) + SourceIndex(0)
-12>Emitted(12, 37) Source(1, 24) + SourceIndex(0)
-13>Emitted(12, 39) Source(1, 26) + SourceIndex(0)
-14>Emitted(12, 42) Source(1, 29) + SourceIndex(0)
-15>Emitted(12, 43) Source(1, 30) + SourceIndex(0)
-16>Emitted(12, 44) Source(1, 30) + SourceIndex(0)
-17>Emitted(12, 49) Source(1, 1) + SourceIndex(0)
-18>Emitted(12, 50) Source(1, 2) + SourceIndex(0)
-19>Emitted(12, 60) Source(1, 30) + SourceIndex(0)
+2 >Emitted(12, 10) Source(1, 15) + SourceIndex(0)
+3 >Emitted(12, 14) Source(1, 15) + SourceIndex(0)
+4 >Emitted(12, 19) Source(1, 15) + SourceIndex(0)
+5 >Emitted(12, 28) Source(1, 15) + SourceIndex(0)
+6 >Emitted(12, 29) Source(1, 16) + SourceIndex(0)
+7 >Emitted(12, 32) Source(1, 19) + SourceIndex(0)
+8 >Emitted(12, 34) Source(1, 21) + SourceIndex(0)
+9 >Emitted(12, 37) Source(1, 24) + SourceIndex(0)
+10>Emitted(12, 39) Source(1, 26) + SourceIndex(0)
+11>Emitted(12, 42) Source(1, 29) + SourceIndex(0)
+12>Emitted(12, 43) Source(1, 30) + SourceIndex(0)
+13>Emitted(12, 44) Source(1, 30) + SourceIndex(0)
+14>Emitted(12, 60) Source(1, 30) + SourceIndex(0)
 ---
 >>>        var v = _b.value;
 1 >^^^^^^^^
 2 >        ^^^^
 3 >            ^
-4 >             ^
-5 >              ^
-6 >               ^^^^^^^^^
+4 >             ^^^^^^^^^^^
 1 >
 2 >        var 
 3 >            v
-4 >              
-5 >              o
-6 >               
+4 >             
 1 >Emitted(13, 9) Source(1, 6) + SourceIndex(0)
 2 >Emitted(13, 13) Source(1, 10) + SourceIndex(0)
 3 >Emitted(13, 14) Source(1, 11) + SourceIndex(0)
-4 >Emitted(13, 15) Source(1, 12) + SourceIndex(0)
-5 >Emitted(13, 16) Source(1, 13) + SourceIndex(0)
-6 >Emitted(13, 25) Source(1, 11) + SourceIndex(0)
+4 >Emitted(13, 25) Source(1, 11) + SourceIndex(0)
 ---
 >>>        console.log(v);
 1 >^^^^^^^^

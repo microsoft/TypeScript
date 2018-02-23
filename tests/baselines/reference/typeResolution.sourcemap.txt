@@ -322,16 +322,10 @@ sourceFile:typeResolution.ts
 ---
 >>>                var ClassA = /** @class */ (function () {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^
-3 >                           ^
-4 >                            ^^^^^^^^^^^^->
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> {
   >            
-2 >                export class ClassA 
-3 >                           {
 1->Emitted(10, 17) Source(4, 13) + SourceIndex(0)
-2 >Emitted(10, 28) Source(4, 33) + SourceIndex(0)
-3 >Emitted(10, 29) Source(4, 34) + SourceIndex(0)
 ---
 >>>                    function ClassA() {
 1->^^^^^^^^^^^^^^^^^^^^
@@ -834,16 +828,10 @@ sourceFile:typeResolution.ts
 ---
 >>>                var ClassB = /** @class */ (function () {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^
-3 >                           ^
-4 >                            ^^^^^^^^^^^^->
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >            
-2 >                export class ClassB 
-3 >                           {
 1->Emitted(40, 17) Source(24, 13) + SourceIndex(0)
-2 >Emitted(40, 28) Source(24, 33) + SourceIndex(0)
-3 >Emitted(40, 29) Source(24, 34) + SourceIndex(0)
 ---
 >>>                    function ClassB() {
 1->^^^^^^^^^^^^^^^^^^^^
@@ -1401,22 +1389,16 @@ sourceFile:typeResolution.ts
 ---
 >>>                var NonExportedClassQ = /** @class */ (function () {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^^^^^^^^^^^^
-3 >                                      ^
-4 >                                       ^^^^^^^^^^^^->
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >            export interface InterfaceX { XisIn1_1_1(); }
   >            
-2 >                class NonExportedClassQ 
-3 >                                      {
 1->Emitted(73, 17) Source(48, 13) + SourceIndex(0)
-2 >Emitted(73, 39) Source(48, 37) + SourceIndex(0)
-3 >Emitted(73, 40) Source(48, 38) + SourceIndex(0)
 ---
 >>>                    function NonExportedClassQ() {
 1->^^^^^^^^^^^^^^^^^^^^
 2 >                    ^^^^^^^^^^^^^^^^^^^^->
-1->
+1->class NonExportedClassQ {
   >                
 1->Emitted(74, 21) Source(49, 17) + SourceIndex(0)
 ---
@@ -1731,21 +1713,15 @@ sourceFile:typeResolution.ts
 ---
 >>>            var ClassA = /** @class */ (function () {
 1 >^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^
-3 >                       ^
-4 >                        ^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >        
-2 >            class ClassA 
-3 >                       {
 1 >Emitted(91, 13) Source(62, 9) + SourceIndex(0)
-2 >Emitted(91, 24) Source(62, 22) + SourceIndex(0)
-3 >Emitted(91, 25) Source(62, 23) + SourceIndex(0)
 ---
 >>>                function ClassA() {
 1->^^^^^^^^^^^^^^^^
 2 >                ^^^^^^^^^^^^^^^^^^^^->
-1->
+1->class ClassA {
   >            
 1->Emitted(92, 17) Source(63, 13) + SourceIndex(0)
 ---
@@ -2153,16 +2129,10 @@ sourceFile:typeResolution.ts
 ---
 >>>                var ClassA = /** @class */ (function () {
 1 >^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^
-3 >                           ^
-4 >                            ^^^^^^^^^^^^->
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >            
-2 >                export class ClassA 
-3 >                           {
 1 >Emitted(113, 17) Source(79, 13) + SourceIndex(0)
-2 >Emitted(113, 28) Source(79, 33) + SourceIndex(0)
-3 >Emitted(113, 29) Source(79, 34) + SourceIndex(0)
 ---
 >>>                    function ClassA() {
 1->^^^^^^^^^^^^^^^^^^^^
@@ -2236,16 +2206,10 @@ sourceFile:typeResolution.ts
 ---
 >>>                var ClassB = /** @class */ (function () {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^
-3 >                           ^
-4 >                            ^^^^^^^^^^^^->
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >            
-2 >                export class ClassB 
-3 >                           {
 1->Emitted(120, 17) Source(80, 13) + SourceIndex(0)
-2 >Emitted(120, 28) Source(80, 33) + SourceIndex(0)
-3 >Emitted(120, 29) Source(80, 34) + SourceIndex(0)
 ---
 >>>                    function ClassB() {
 1->^^^^^^^^^^^^^^^^^^^^
@@ -2319,16 +2283,10 @@ sourceFile:typeResolution.ts
 ---
 >>>                var ClassC = /** @class */ (function () {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^
-3 >                           ^
-4 >                            ^^^^^^^^^^^^->
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >            
-2 >                export class ClassC 
-3 >                           {
 1->Emitted(127, 17) Source(81, 13) + SourceIndex(0)
-2 >Emitted(127, 28) Source(81, 33) + SourceIndex(0)
-3 >Emitted(127, 29) Source(81, 34) + SourceIndex(0)
 ---
 >>>                    function ClassC() {
 1->^^^^^^^^^^^^^^^^^^^^
@@ -2484,17 +2442,11 @@ sourceFile:typeResolution.ts
 ---
 >>>        var ClassA = /** @class */ (function () {
 1 >^^^^^^^^
-2 >        ^^^^^^^^^^^
-3 >                   ^
-4 >                    ^^^^^^^^^^^^->
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >    
   >    
-2 >        class ClassA 
-3 >                   {
 1 >Emitted(136, 9) Source(89, 5) + SourceIndex(0)
-2 >Emitted(136, 20) Source(89, 18) + SourceIndex(0)
-3 >Emitted(136, 21) Source(89, 19) + SourceIndex(0)
 ---
 >>>            function ClassA() {
 1->^^^^^^^^^^^^
@@ -2593,16 +2545,10 @@ sourceFile:typeResolution.ts
 ---
 >>>            var ClassA = /** @class */ (function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^
-3 >                       ^
-4 >                        ^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> {
   >        
-2 >            export class ClassA 
-3 >                       {
 1->Emitted(144, 13) Source(98, 9) + SourceIndex(0)
-2 >Emitted(144, 24) Source(98, 29) + SourceIndex(0)
-3 >Emitted(144, 25) Source(98, 30) + SourceIndex(0)
 ---
 >>>                function ClassA() {
 1->^^^^^^^^^^^^^^^^
@@ -2881,16 +2827,10 @@ sourceFile:typeResolution.ts
 ---
 >>>            var ClassA = /** @class */ (function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^
-3 >                       ^
-4 >                        ^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> {
   >        
-2 >            export class ClassA 
-3 >                       {
 1->Emitted(156, 13) Source(104, 9) + SourceIndex(0)
-2 >Emitted(156, 24) Source(104, 29) + SourceIndex(0)
-3 >Emitted(156, 25) Source(104, 30) + SourceIndex(0)
 ---
 >>>                function ClassA() {
 1->^^^^^^^^^^^^^^^^

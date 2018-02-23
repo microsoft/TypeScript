@@ -50,21 +50,15 @@ sourceFile:file.tsx
 ---
 >>>    var Foo = /** @class */ (function () {
 1->^^^^
-2 >    ^^^^^^^^
-3 >            ^
-4 >             ^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^->
 1-> {
   >	
-2 >    export class Foo 
-3 >            {
 1->Emitted(3, 5) Source(7, 2) + SourceIndex(0)
-2 >Emitted(3, 13) Source(7, 19) + SourceIndex(0)
-3 >Emitted(3, 14) Source(7, 20) + SourceIndex(0)
 ---
 >>>        function Foo() {
 1->^^^^^^^^
 2 >        ^^->
-1-> 
+1->export class Foo { 
 1->Emitted(4, 9) Source(7, 21) + SourceIndex(0)
 ---
 >>>        }
@@ -148,16 +142,10 @@ sourceFile:file.tsx
 ---
 >>>        var Bar = /** @class */ (function () {
 1->^^^^^^^^
-2 >        ^^^^^^^^
-3 >                ^
-4 >                 ^^^^^^^^^^^^->
+2 >        ^^^^^^^^^^^^^^^^^^^^^->
 1-> {
   >		
-2 >        export class Bar 
-3 >                {
 1->Emitted(11, 9) Source(9, 3) + SourceIndex(0)
-2 >Emitted(11, 17) Source(9, 20) + SourceIndex(0)
-3 >Emitted(11, 18) Source(9, 21) + SourceIndex(0)
 ---
 >>>            function Bar() {
 1->^^^^^^^^^^^^
@@ -654,29 +642,23 @@ sourceFile:file.tsx
 1->^^^^
 2 >    ^^^^
 3 >        ^
-4 >         ^
-5 >          ^
-6 >           ^
-7 >            ^^^
-8 >               ^
-9 >                ^^^^->
+4 >         ^^^
+5 >            ^^^
+6 >               ^
+7 >                ^^^^->
 1-> {
   >	
 2 >    var 
 3 >        M
-4 >          
-5 >          =
-6 >            
-7 >            100
-8 >               ;
+4 >          = 
+5 >            100
+6 >               ;
 1->Emitted(37, 5) Source(36, 2) + SourceIndex(0)
 2 >Emitted(37, 9) Source(36, 6) + SourceIndex(0)
 3 >Emitted(37, 10) Source(36, 7) + SourceIndex(0)
-4 >Emitted(37, 11) Source(36, 8) + SourceIndex(0)
-5 >Emitted(37, 12) Source(36, 9) + SourceIndex(0)
-6 >Emitted(37, 13) Source(36, 10) + SourceIndex(0)
-7 >Emitted(37, 16) Source(36, 13) + SourceIndex(0)
-8 >Emitted(37, 17) Source(36, 14) + SourceIndex(0)
+4 >Emitted(37, 13) Source(36, 10) + SourceIndex(0)
+5 >Emitted(37, 16) Source(36, 13) + SourceIndex(0)
+6 >Emitted(37, 17) Source(36, 14) + SourceIndex(0)
 ---
 >>>    // Emit M_1.Foo
 1->^^^^

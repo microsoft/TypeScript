@@ -42,16 +42,10 @@ sourceFile:sourceMapValidationImport.ts
 ---
 >>>    var c = /** @class */ (function () {
 1->^^^^
-2 >    ^^^^^^
-3 >          ^
-4 >           ^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^->
 1-> {
   >    
-2 >    export class c 
-3 >          {
 1->Emitted(5, 5) Source(2, 5) + SourceIndex(0)
-2 >Emitted(5, 11) Source(2, 20) + SourceIndex(0)
-3 >Emitted(5, 12) Source(2, 21) + SourceIndex(0)
 ---
 >>>        function c() {
 1->^^^^^^^^
@@ -146,35 +140,29 @@ sourceFile:sourceMapValidationImport.ts
 1 >
 2 >^^^^
 3 >    ^
-4 >     ^
-5 >      ^
-6 >       ^
-7 >        ^
-8 >         ^
-9 >          ^
-10>           ^
-11>            ^^^^^->
+4 >     ^^^
+5 >        ^
+6 >         ^
+7 >          ^
+8 >           ^
+9 >            ^^^^^->
 1 >
   >
 2 >import 
 3 >    a
-4 >      
-5 >      =
-6 >        
-7 >        m
-8 >         .
-9 >          c
-10>           ;
+4 >      = 
+5 >        m
+6 >         .
+7 >          c
+8 >           ;
 1 >Emitted(12, 1) Source(5, 1) + SourceIndex(0)
 2 >Emitted(12, 5) Source(5, 8) + SourceIndex(0)
 3 >Emitted(12, 6) Source(5, 9) + SourceIndex(0)
-4 >Emitted(12, 7) Source(5, 10) + SourceIndex(0)
-5 >Emitted(12, 8) Source(5, 11) + SourceIndex(0)
-6 >Emitted(12, 9) Source(5, 12) + SourceIndex(0)
-7 >Emitted(12, 10) Source(5, 13) + SourceIndex(0)
-8 >Emitted(12, 11) Source(5, 14) + SourceIndex(0)
-9 >Emitted(12, 12) Source(5, 15) + SourceIndex(0)
-10>Emitted(12, 13) Source(5, 16) + SourceIndex(0)
+4 >Emitted(12, 9) Source(5, 12) + SourceIndex(0)
+5 >Emitted(12, 10) Source(5, 13) + SourceIndex(0)
+6 >Emitted(12, 11) Source(5, 14) + SourceIndex(0)
+7 >Emitted(12, 12) Source(5, 15) + SourceIndex(0)
+8 >Emitted(12, 13) Source(5, 16) + SourceIndex(0)
 ---
 >>>exports.b = m.c;
 1->
@@ -208,74 +196,56 @@ sourceFile:sourceMapValidationImport.ts
 1->
 2 >^^^^
 3 >    ^
-4 >     ^
-5 >      ^
-6 >       ^
-7 >        ^^^
-8 >           ^
-9 >            ^
-10>             ^^
-11>               ^
-12>                ^^^^^^^^^->
+4 >     ^^^
+5 >        ^^^^
+6 >            ^
+7 >             ^^
+8 >               ^
+9 >                ^^^^^^^^^->
 1->
   >
 2 >var 
 3 >    x
-4 >      
-5 >      =
-6 >        
-7 >        new
-8 >            
-9 >            a
-10>             ()
-11>               ;
+4 >      = 
+5 >        new 
+6 >            a
+7 >             ()
+8 >               ;
 1->Emitted(14, 1) Source(7, 1) + SourceIndex(0)
 2 >Emitted(14, 5) Source(7, 5) + SourceIndex(0)
 3 >Emitted(14, 6) Source(7, 6) + SourceIndex(0)
-4 >Emitted(14, 7) Source(7, 7) + SourceIndex(0)
-5 >Emitted(14, 8) Source(7, 8) + SourceIndex(0)
-6 >Emitted(14, 9) Source(7, 9) + SourceIndex(0)
-7 >Emitted(14, 12) Source(7, 12) + SourceIndex(0)
-8 >Emitted(14, 13) Source(7, 13) + SourceIndex(0)
-9 >Emitted(14, 14) Source(7, 14) + SourceIndex(0)
-10>Emitted(14, 16) Source(7, 16) + SourceIndex(0)
-11>Emitted(14, 17) Source(7, 17) + SourceIndex(0)
+4 >Emitted(14, 9) Source(7, 9) + SourceIndex(0)
+5 >Emitted(14, 13) Source(7, 13) + SourceIndex(0)
+6 >Emitted(14, 14) Source(7, 14) + SourceIndex(0)
+7 >Emitted(14, 16) Source(7, 16) + SourceIndex(0)
+8 >Emitted(14, 17) Source(7, 17) + SourceIndex(0)
 ---
 >>>var y = new exports.b();
 1->
 2 >^^^^
 3 >    ^
-4 >     ^
-5 >      ^
-6 >       ^
-7 >        ^^^
-8 >           ^
-9 >            ^^^^^^^^^
-10>                     ^^
-11>                       ^
-12>                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >     ^^^
+5 >        ^^^^
+6 >            ^^^^^^^^^
+7 >                     ^^
+8 >                       ^
+9 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >var 
 3 >    y
-4 >      
-5 >      =
-6 >        
-7 >        new
-8 >            
-9 >            b
-10>                     ()
-11>                       ;
+4 >      = 
+5 >        new 
+6 >            b
+7 >                     ()
+8 >                       ;
 1->Emitted(15, 1) Source(8, 1) + SourceIndex(0)
 2 >Emitted(15, 5) Source(8, 5) + SourceIndex(0)
 3 >Emitted(15, 6) Source(8, 6) + SourceIndex(0)
-4 >Emitted(15, 7) Source(8, 7) + SourceIndex(0)
-5 >Emitted(15, 8) Source(8, 8) + SourceIndex(0)
-6 >Emitted(15, 9) Source(8, 9) + SourceIndex(0)
-7 >Emitted(15, 12) Source(8, 12) + SourceIndex(0)
-8 >Emitted(15, 13) Source(8, 13) + SourceIndex(0)
-9 >Emitted(15, 22) Source(8, 14) + SourceIndex(0)
-10>Emitted(15, 24) Source(8, 16) + SourceIndex(0)
-11>Emitted(15, 25) Source(8, 17) + SourceIndex(0)
+4 >Emitted(15, 9) Source(8, 9) + SourceIndex(0)
+5 >Emitted(15, 13) Source(8, 13) + SourceIndex(0)
+6 >Emitted(15, 22) Source(8, 14) + SourceIndex(0)
+7 >Emitted(15, 24) Source(8, 16) + SourceIndex(0)
+8 >Emitted(15, 25) Source(8, 17) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationImport.js.map

@@ -21,13 +21,6 @@ sourceFile:tests/cases/compiler/ref/a.ts
 >>>System.register("ref/a", [], function (exports_1, context_1) {
 >>>    "use strict";
 >>>    var __moduleName = context_1 && context_1.id;
-1 >^^^^^^^^^^^^^^^^^^^^^
-2 >                     ^
-1 >
-2 >                     e
-1 >Emitted(13, 22) Source(1, 1) + SourceIndex(0)
-2 >Emitted(13, 23) Source(1, 2) + SourceIndex(0)
----
 >>>    var A;
 >>>    return {
 >>>        setters: [],
@@ -95,13 +88,6 @@ sourceFile:tests/cases/compiler/b.ts
 >>>System.register("b", ["ref/a"], function (exports_2, context_2) {
 >>>    "use strict";
 >>>    var __moduleName = context_2 && context_2.id;
-1 >^^^^^^^^^^^^^^^^^^^^^
-2 >                     ^
-1 >
-2 >                     i
-1 >Emitted(29, 22) Source(1, 1) + SourceIndex(1)
-2 >Emitted(29, 23) Source(1, 2) + SourceIndex(1)
----
 >>>    var a_1, B;
 >>>    return {
 >>>        setters: [
@@ -113,7 +99,7 @@ sourceFile:tests/cases/compiler/b.ts
 >>>            B = /** @class */ (function (_super) {
 1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >mport {A} from "./ref/a";
+1 >import {A} from "./ref/a";
   >
 1 >Emitted(38, 13) Source(2, 1) + SourceIndex(1)
 ---

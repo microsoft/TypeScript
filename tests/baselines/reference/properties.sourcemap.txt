@@ -10,16 +10,9 @@ sourceFile:properties.ts
 -------------------------------------------------------------------
 >>>var MyClass = /** @class */ (function () {
 1 >
-2 >^^^^^^^^^^^^
-3 >            ^
-4 >             ^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >class MyClass
-  >
-3 >            {
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 13) Source(2, 1) + SourceIndex(0)
-3 >Emitted(1, 14) Source(2, 2) + SourceIndex(0)
 ---
 >>>    function MyClass() {
 1->^^^^
@@ -50,20 +43,13 @@ sourceFile:properties.ts
 >>>    Object.defineProperty(MyClass.prototype, "Count", {
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^
-3 >                          ^^^^^^^
-4 >                                 ^
-5 >                                  ^^^^^^^^^^^^^^^^^^
+3 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
 2 >    public get 
-3 >                          
-4 >                                 {
-5 >                                  
-  >                                      public get Count
+3 >                          Count
 1->Emitted(4, 5) Source(3, 5) + SourceIndex(0)
 2 >Emitted(4, 27) Source(3, 16) + SourceIndex(0)
-3 >Emitted(4, 34) Source(2, 1) + SourceIndex(0)
-4 >Emitted(4, 35) Source(2, 2) + SourceIndex(0)
-5 >Emitted(4, 53) Source(3, 21) + SourceIndex(0)
+3 >Emitted(4, 53) Source(3, 21) + SourceIndex(0)
 ---
 >>>        get: function () {
 1 >^^^^^^^^^^^^^
@@ -73,22 +59,19 @@ sourceFile:properties.ts
 ---
 >>>            return 42;
 1->^^^^^^^^^^^^
-2 >            ^^^^^^
-3 >                  ^
-4 >                   ^^
-5 >                     ^
+2 >            ^^^^^^^
+3 >                   ^^
+4 >                     ^
 1->public get Count(): number
   >    {
   >        
-2 >            return
-3 >                   
-4 >                   42
-5 >                     ;
+2 >            return 
+3 >                   42
+4 >                     ;
 1->Emitted(6, 13) Source(5, 9) + SourceIndex(0)
-2 >Emitted(6, 19) Source(5, 15) + SourceIndex(0)
-3 >Emitted(6, 20) Source(5, 16) + SourceIndex(0)
-4 >Emitted(6, 22) Source(5, 18) + SourceIndex(0)
-5 >Emitted(6, 23) Source(5, 19) + SourceIndex(0)
+2 >Emitted(6, 20) Source(5, 16) + SourceIndex(0)
+3 >Emitted(6, 22) Source(5, 18) + SourceIndex(0)
+4 >Emitted(6, 23) Source(5, 19) + SourceIndex(0)
 ---
 >>>        },
 1 >^^^^^^^^

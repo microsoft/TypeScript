@@ -10,15 +10,9 @@ sourceFile:sourceMapValidationWithComments.ts
 -------------------------------------------------------------------
 >>>var DebugClass = /** @class */ (function () {
 1 >
-2 >^^^^^^^^^^^^^^^
-3 >               ^
-4 >                ^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >class DebugClass 
-3 >               {
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 16) Source(1, 18) + SourceIndex(0)
-3 >Emitted(1, 17) Source(1, 19) + SourceIndex(0)
 ---
 >>>    function DebugClass() {
 1->^^^^
@@ -81,28 +75,22 @@ sourceFile:sourceMapValidationWithComments.ts
 1 >^^^^^^^^
 2 >        ^^^^
 3 >            ^
-4 >             ^
-5 >              ^
-6 >               ^
-7 >                ^
-8 >                 ^
+4 >             ^^^
+5 >                ^
+6 >                 ^
 1 >
   >        
 2 >        var 
 3 >            i
-4 >              
-5 >              =
-6 >                
-7 >                0
-8 >                 ;
+4 >              = 
+5 >                0
+6 >                 ;
 1 >Emitted(6, 9) Source(6, 9) + SourceIndex(0)
 2 >Emitted(6, 13) Source(6, 13) + SourceIndex(0)
 3 >Emitted(6, 14) Source(6, 14) + SourceIndex(0)
-4 >Emitted(6, 15) Source(6, 15) + SourceIndex(0)
-5 >Emitted(6, 16) Source(6, 16) + SourceIndex(0)
-6 >Emitted(6, 17) Source(6, 17) + SourceIndex(0)
-7 >Emitted(6, 18) Source(6, 18) + SourceIndex(0)
-8 >Emitted(6, 19) Source(6, 19) + SourceIndex(0)
+4 >Emitted(6, 17) Source(6, 17) + SourceIndex(0)
+5 >Emitted(6, 18) Source(6, 18) + SourceIndex(0)
+6 >Emitted(6, 19) Source(6, 19) + SourceIndex(0)
 ---
 >>>        i++;
 1 >^^^^^^^^
@@ -259,23 +247,20 @@ sourceFile:sourceMapValidationWithComments.ts
 ---
 >>>        return true;
 1 >^^^^^^^^
-2 >        ^^^^^^
-3 >              ^
-4 >               ^^^^
-5 >                   ^
+2 >        ^^^^^^^
+3 >               ^^^^
+4 >                   ^
 1 >
   >
   >
   >        
-2 >        return
-3 >               
-4 >               true
-5 >                   ;
+2 >        return 
+3 >               true
+4 >                   ;
 1 >Emitted(17, 9) Source(19, 9) + SourceIndex(0)
-2 >Emitted(17, 15) Source(19, 15) + SourceIndex(0)
-3 >Emitted(17, 16) Source(19, 16) + SourceIndex(0)
-4 >Emitted(17, 20) Source(19, 20) + SourceIndex(0)
-5 >Emitted(17, 21) Source(19, 21) + SourceIndex(0)
+2 >Emitted(17, 16) Source(19, 16) + SourceIndex(0)
+3 >Emitted(17, 20) Source(19, 20) + SourceIndex(0)
+4 >Emitted(17, 21) Source(19, 21) + SourceIndex(0)
 ---
 >>>    };
 1 >^^^^

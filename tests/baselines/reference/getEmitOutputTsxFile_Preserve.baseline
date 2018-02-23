@@ -1,6 +1,6 @@
 EmitSkipped: false
 FileName : /tests/cases/fourslash/inputFile1.js.map
-{"version":3,"file":"inputFile1.js","sourceRoot":"","sources":["inputFile1.ts"],"names":[],"mappings":"AAAA,kBAAkB;AACjB,IAAI,CAAC,CAAE,CAAC,CAAQ,CAAC,CAAC;AAClB,QAAU,CAAC;IAAX;IAGA,CAAC;IAAD,UAAC;AAAD,CAAC,AAHD,IAGC"}FileName : /tests/cases/fourslash/inputFile1.js
+{"version":3,"file":"inputFile1.js","sourceRoot":"","sources":["inputFile1.ts"],"names":[],"mappings":"AAAA,kBAAkB;AACjB,IAAI,CAAC,GAAW,CAAC,CAAC;AAClB;IAAA;IAGA,CAAC;IAAD,UAAC;AAAD,CAAC,AAHD,IAGC"}FileName : /tests/cases/fourslash/inputFile1.js
 // regular ts file
 var t = 5;
 var Bar = /** @class */ (function () {
@@ -17,7 +17,7 @@ declare class Bar {
 
 EmitSkipped: false
 FileName : /tests/cases/fourslash/inputFile2.jsx.map
-{"version":3,"file":"inputFile2.jsx","sourceRoot":"","sources":["inputFile2.tsx"],"names":[],"mappings":"AAAA,IAAI,CAAC,CAAC,CAAC,CAAC,QAAQ,CAAC;AACjB,IAAI,CAAC,CAAC,CAAC,CAAC,CAAC,GAAG,CAAC,IAAI,CAAE,CAAC,CAAC,CAAC,EAAG,CAAA"}FileName : /tests/cases/fourslash/inputFile2.jsx
+{"version":3,"file":"inputFile2.jsx","sourceRoot":"","sources":["inputFile2.tsx"],"names":[],"mappings":"AAAA,IAAI,CAAC,GAAG,QAAQ,CAAC;AACjB,IAAI,CAAC,GAAG,CAAC,GAAG,CAAC,IAAI,CAAE,CAAC,CAAC,CAAC,EAAG,CAAA"}FileName : /tests/cases/fourslash/inputFile2.jsx
 var y = "my div";
 var x = <div name={y}/>;
 //# sourceMappingURL=inputFile2.jsx.mapFileName : /tests/cases/fourslash/inputFile2.d.ts

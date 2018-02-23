@@ -51,50 +51,38 @@ sourceFile:sourceMap-StringLiteralWithNewLine.ts
 1->^^^^
 2 >    ^^^^
 3 >        ^
-4 >         ^
-5 >          ^
-6 >           ^
-7 >            ^^^^^^^
-8 >                   ^
+4 >         ^^^
+5 >            ^^^^^^^
+6 >                   ^
 1-> {
   >    
 2 >    var 
 3 >        x
-4 >          
-5 >          =
-6 >            
-7 >            "test1"
-8 >                   ;
+4 >          = 
+5 >            "test1"
+6 >                   ;
 1->Emitted(3, 5) Source(9, 5) + SourceIndex(0)
 2 >Emitted(3, 9) Source(9, 9) + SourceIndex(0)
 3 >Emitted(3, 10) Source(9, 10) + SourceIndex(0)
-4 >Emitted(3, 11) Source(9, 11) + SourceIndex(0)
-5 >Emitted(3, 12) Source(9, 12) + SourceIndex(0)
-6 >Emitted(3, 13) Source(9, 13) + SourceIndex(0)
-7 >Emitted(3, 20) Source(9, 20) + SourceIndex(0)
-8 >Emitted(3, 21) Source(9, 21) + SourceIndex(0)
+4 >Emitted(3, 13) Source(9, 13) + SourceIndex(0)
+5 >Emitted(3, 20) Source(9, 20) + SourceIndex(0)
+6 >Emitted(3, 21) Source(9, 21) + SourceIndex(0)
 ---
 >>>    var y = "test 2\
 1 >^^^^
 2 >    ^^^^
 3 >        ^
-4 >         ^
-5 >          ^
-6 >           ^
-7 >            ^^^^^^^^^^^^^^->
+4 >         ^^^
+5 >            ^^^^^^^^^^^^^^->
 1 >
   >    
 2 >    var 
 3 >        y
-4 >          
-5 >          =
-6 >            
+4 >          = 
 1 >Emitted(4, 5) Source(10, 5) + SourceIndex(0)
 2 >Emitted(4, 9) Source(10, 9) + SourceIndex(0)
 3 >Emitted(4, 10) Source(10, 10) + SourceIndex(0)
-4 >Emitted(4, 11) Source(10, 11) + SourceIndex(0)
-5 >Emitted(4, 12) Source(10, 12) + SourceIndex(0)
-6 >Emitted(4, 13) Source(10, 13) + SourceIndex(0)
+4 >Emitted(4, 13) Source(10, 13) + SourceIndex(0)
 ---
 >>>isn't this a lot of fun";
 1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -110,34 +98,28 @@ sourceFile:sourceMap-StringLiteralWithNewLine.ts
 1->^^^^
 2 >    ^^^^
 3 >        ^
-4 >         ^
-5 >          ^
-6 >           ^
-7 >            ^^^^^^
-8 >                  ^
-9 >                   ^^^^^^^^
-10>                           ^
+4 >         ^^^
+5 >            ^^^^^^
+6 >                  ^
+7 >                   ^^^^^^^^
+8 >                           ^
 1->
   >    
 2 >    var 
 3 >        z
-4 >          
-5 >          =
-6 >            
-7 >            window
-8 >                  .
-9 >                   document
-10>                           ;
+4 >          = 
+5 >            window
+6 >                  .
+7 >                   document
+8 >                           ;
 1->Emitted(6, 5) Source(12, 5) + SourceIndex(0)
 2 >Emitted(6, 9) Source(12, 9) + SourceIndex(0)
 3 >Emitted(6, 10) Source(12, 10) + SourceIndex(0)
-4 >Emitted(6, 11) Source(12, 11) + SourceIndex(0)
-5 >Emitted(6, 12) Source(12, 12) + SourceIndex(0)
-6 >Emitted(6, 13) Source(12, 13) + SourceIndex(0)
-7 >Emitted(6, 19) Source(12, 19) + SourceIndex(0)
-8 >Emitted(6, 20) Source(12, 20) + SourceIndex(0)
-9 >Emitted(6, 28) Source(12, 28) + SourceIndex(0)
-10>Emitted(6, 29) Source(12, 29) + SourceIndex(0)
+4 >Emitted(6, 13) Source(12, 13) + SourceIndex(0)
+5 >Emitted(6, 19) Source(12, 19) + SourceIndex(0)
+6 >Emitted(6, 20) Source(12, 20) + SourceIndex(0)
+7 >Emitted(6, 28) Source(12, 28) + SourceIndex(0)
+8 >Emitted(6, 29) Source(12, 29) + SourceIndex(0)
 ---
 >>>})(Foo || (Foo = {}));
 1 >

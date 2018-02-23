@@ -1729,11 +1729,12 @@ namespace ts {
 
         function emitTokenWithComment(token: SyntaxKind, pos: number, writer: (s: string) => void, contextNode?: Node, indentLeading?: boolean) {
             const node = contextNode && getParseTreeNode(contextNode);
+            const isSimilarNode = node && node.kind === contextNode.kind;
             const startPos = pos;
-            if (node && node.kind === contextNode.kind) {
+            if (isSimilarNode) {
                 pos = skipTrivia(currentSourceFile.text, pos);
             }
-            if (emitLeadingCommentsOfPosition && node && node.kind === contextNode.kind) {
+            if (emitLeadingCommentsOfPosition && isSimilarNode) {
                 const needsIndent = indentLeading && !positionsAreOnSameLine(startPos, pos, currentSourceFile);
                 if (needsIndent) {
                     increaseIndent();
@@ -1743,8 +1744,8 @@ namespace ts {
                     decreaseIndent();
                 }
             }
-            pos = writeToken(token, pos, writer, /*contextNode*/ contextNode);
-            if (emitTrailingCommentsOfPosition && node && node.kind === contextNode.kind) {
+            pos = writeTokenText(token, writer, pos);
+            if (emitTrailingCommentsOfPosition && isSimilarNode) {
                 emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ true);
             }
             return pos;

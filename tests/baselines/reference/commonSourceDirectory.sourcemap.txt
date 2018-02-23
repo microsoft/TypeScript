@@ -20,35 +20,22 @@ sourceFile:index.ts
 ---
 >>>var foo_1 = require("foo");
 1 >
-2 >^^^^^^^^^^
-3 >          ^
-4 >           ^^^^^^^^^^^^^^^^
-5 >                           ^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                           ^->
 1 >
   >
-2 >
-3 >          i
-4 >           mport { x } from "foo";
+2 >import { x } from "foo";
 1 >Emitted(4, 1) Source(2, 1) + SourceIndex(0)
-2 >Emitted(4, 11) Source(2, 1) + SourceIndex(0)
-3 >Emitted(4, 12) Source(2, 2) + SourceIndex(0)
-4 >Emitted(4, 28) Source(2, 25) + SourceIndex(0)
+2 >Emitted(4, 28) Source(2, 25) + SourceIndex(0)
 ---
 >>>var bar_1 = require("bar");
 1->
-2 >^^^^^^^^^^
-3 >          ^
-4 >           ^^^^^^^^^^^^^^^^
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
-2 >
-3 >          i
-4 >           mport { x } from "foo";
-  >           import { y } from "bar";
+2 >import { y } from "bar";
 1->Emitted(5, 1) Source(3, 1) + SourceIndex(0)
-2 >Emitted(5, 11) Source(2, 1) + SourceIndex(0)
-3 >Emitted(5, 12) Source(2, 2) + SourceIndex(0)
-4 >Emitted(5, 28) Source(3, 25) + SourceIndex(0)
+2 >Emitted(5, 28) Source(3, 25) + SourceIndex(0)
 ---
 >>>foo_1.x + bar_1.y;
 1 >

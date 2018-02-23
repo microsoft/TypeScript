@@ -1,6 +1,6 @@
 ===================================================================
 JsFile: outfile.js
-mapUrl: data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3V0ZmlsZS5qcyIsInNvdXJjZVJvb3QiOiJmaWxlOi8vL2ZvbGRlci8iLCJzb3VyY2VzIjpbImlubGluZVNvdXJjZU1hcDIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsdUJBQXVCO0FBRXZCLElBQUksQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUM7QUFDVixPQUFPLENBQUMsR0FBRyxDQUFDLENBQUMsQ0FBQyxDQUFDIn0=
+mapUrl: data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3V0ZmlsZS5qcyIsInNvdXJjZVJvb3QiOiJmaWxlOi8vL2ZvbGRlci8iLCJzb3VyY2VzIjpbImlubGluZVNvdXJjZU1hcDIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsdUJBQXVCO0FBRXZCLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQztBQUNWLE9BQU8sQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUMifQ==
 sourceRoot: file:///folder/
 sources: inlineSourceMap2.ts
 ===================================================================
@@ -20,30 +20,24 @@ sourceFile:inlineSourceMap2.ts
 1 >
 2 >^^^^
 3 >    ^
-4 >     ^
-5 >      ^
-6 >       ^
-7 >        ^
-8 >         ^
-9 >          ^^^^^^->
+4 >     ^^^
+5 >        ^
+6 >         ^
+7 >          ^^^^^^->
 1 >
   >
   >
 2 >var 
 3 >    x
-4 >      
-5 >      =
-6 >        
-7 >        0
-8 >         ;
+4 >      = 
+5 >        0
+6 >         ;
 1 >Emitted(2, 1) Source(3, 1) + SourceIndex(0)
 2 >Emitted(2, 5) Source(3, 5) + SourceIndex(0)
 3 >Emitted(2, 6) Source(3, 6) + SourceIndex(0)
-4 >Emitted(2, 7) Source(3, 7) + SourceIndex(0)
-5 >Emitted(2, 8) Source(3, 8) + SourceIndex(0)
-6 >Emitted(2, 9) Source(3, 9) + SourceIndex(0)
-7 >Emitted(2, 10) Source(3, 10) + SourceIndex(0)
-8 >Emitted(2, 11) Source(3, 11) + SourceIndex(0)
+4 >Emitted(2, 9) Source(3, 9) + SourceIndex(0)
+5 >Emitted(2, 10) Source(3, 10) + SourceIndex(0)
+6 >Emitted(2, 11) Source(3, 11) + SourceIndex(0)
 ---
 >>>console.log(x);
 1->
@@ -54,7 +48,7 @@ sourceFile:inlineSourceMap2.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+9 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >console
@@ -73,4 +67,4 @@ sourceFile:inlineSourceMap2.ts
 7 >Emitted(3, 15) Source(4, 15) + SourceIndex(0)
 8 >Emitted(3, 16) Source(4, 16) + SourceIndex(0)
 ---
->>>//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3V0ZmlsZS5qcyIsInNvdXJjZVJvb3QiOiJmaWxlOi8vL2ZvbGRlci8iLCJzb3VyY2VzIjpbImlubGluZVNvdXJjZU1hcDIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsdUJBQXVCO0FBRXZCLElBQUksQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUM7QUFDVixPQUFPLENBQUMsR0FBRyxDQUFDLENBQUMsQ0FBQyxDQUFDIn0=
+>>>//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3V0ZmlsZS5qcyIsInNvdXJjZVJvb3QiOiJmaWxlOi8vL2ZvbGRlci8iLCJzb3VyY2VzIjpbImlubGluZVNvdXJjZU1hcDIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsdUJBQXVCO0FBRXZCLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQztBQUNWLE9BQU8sQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUMifQ==

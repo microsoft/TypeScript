@@ -19,9 +19,7 @@ sourceFile:sourceMapValidationDecorators.ts
 >>>};
 >>>var Greeter = /** @class */ (function () {
 1 >
-2 >^^^^^^^^^^^^
-3 >            ^
-4 >             ^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >declare function ClassDecorator1(target: Function): void;
   >declare function ClassDecorator2(x: number): (target: Function) => void;
   >declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;
@@ -32,17 +30,13 @@ sourceFile:sourceMapValidationDecorators.ts
   >@ClassDecorator1
   >@ClassDecorator2(10)
   >
-2 >class Greeter 
-3 >            {
 1 >Emitted(10, 1) Source(10, 1) + SourceIndex(0)
-2 >Emitted(10, 13) Source(10, 15) + SourceIndex(0)
-3 >Emitted(10, 14) Source(10, 16) + SourceIndex(0)
 ---
 >>>    function Greeter(greeting) {
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^
 3 >                     ^^^^^^^^
-1->
+1->class Greeter {
   >    
 2 >    constructor(
   >          @ParameterDecorator1 
@@ -55,74 +49,36 @@ sourceFile:sourceMapValidationDecorators.ts
 ---
 >>>        var b = [];
 1 >^^^^^^^^
-2 >        ^^^^^^
-3 >              ^
-4 >               ^^^^
-5 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^^^^^^^^
+3 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >, 
   >      
   >      @ParameterDecorator1 
   >      @ParameterDecorator2(30) 
   >      
-2 >        ...b: 
-3 >              s
-4 >               tring[]
+2 >        ...b: string[]
 1 >Emitted(12, 9) Source(18, 7) + SourceIndex(0)
-2 >Emitted(12, 15) Source(18, 13) + SourceIndex(0)
-3 >Emitted(12, 16) Source(18, 14) + SourceIndex(0)
-4 >Emitted(12, 20) Source(18, 21) + SourceIndex(0)
+2 >Emitted(12, 20) Source(18, 21) + SourceIndex(0)
 ---
 >>>        for (var _i = 1; _i < arguments.length; _i++) {
 1->^^^^^^^^^^^^^
-2 >             ^^^^^^^
-3 >                    ^
-4 >                     ^^
-5 >                       ^
-6 >                        ^
-7 >                         ^^^^^^^^^^^^^^^^^^^^^
-8 >                                              ^
-9 >                                               ^
-10>                                                ^^^^
-11>                                                    ^
+2 >             ^^^^^^^^^^
+3 >                       ^^
+4 >                         ^^^^^^^^^^^^^^^^^^^^^
+5 >                                              ^^
+6 >                                                ^^^^
 1->
-2 >             
-3 >                    d
-4 >                     eclare function ClassDecorator1(target: Function): void;
-  >                     declare function ClassDecorator2(x: number): (target: Function) => void;
-  >                     declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;
-  >                     declare function PropertyDecorator2(x: number): (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void;
-  >                     declare function ParameterDecorator1(target: Object, key: string | symbol, paramIndex: number): void;
-  >                     declare function ParameterDecorator2(x: number): (target: Object, key: string | symbol, paramIndex: number) => void;
-  >                     
-  >                     @ClassDecorator1
-  >                     @ClassDecorator2(10)
-  >                     class Greeter {
-  >                         constructor(
-  >                           @ParameterDecorator1 
-  >                           @ParameterDecorator2(20) 
-  >                           public greeting: string, 
-  >                           
-  >                           @ParameterDecorator1 
-  >                           @ParameterDecorator2(30) 
-  >                           ...b: string[]
-5 >                       )
-6 >                        
-7 >                         ...b: string[]
-8 >                                              )
-9 >                                               
-10>                                                ...b: string[]
-11>                                                    )
+2 >             ...b: string[]
+3 >                       
+4 >                         ...b: string[]
+5 >                                              
+6 >                                                ...b: string[]
 1->Emitted(13, 14) Source(18, 7) + SourceIndex(0)
-2 >Emitted(13, 21) Source(1, 1) + SourceIndex(0)
-3 >Emitted(13, 22) Source(1, 2) + SourceIndex(0)
-4 >Emitted(13, 24) Source(18, 21) + SourceIndex(0)
-5 >Emitted(13, 25) Source(18, 22) + SourceIndex(0)
-6 >Emitted(13, 26) Source(18, 7) + SourceIndex(0)
-7 >Emitted(13, 47) Source(18, 21) + SourceIndex(0)
-8 >Emitted(13, 48) Source(18, 22) + SourceIndex(0)
-9 >Emitted(13, 49) Source(18, 7) + SourceIndex(0)
-10>Emitted(13, 53) Source(18, 21) + SourceIndex(0)
-11>Emitted(13, 54) Source(18, 22) + SourceIndex(0)
+2 >Emitted(13, 24) Source(18, 21) + SourceIndex(0)
+3 >Emitted(13, 26) Source(18, 7) + SourceIndex(0)
+4 >Emitted(13, 47) Source(18, 21) + SourceIndex(0)
+5 >Emitted(13, 49) Source(18, 7) + SourceIndex(0)
+6 >Emitted(13, 53) Source(18, 21) + SourceIndex(0)
 ---
 >>>            b[_i - 1] = arguments[_i];
 1 >^^^^^^^^^^^^
@@ -182,39 +138,36 @@ sourceFile:sourceMapValidationDecorators.ts
 ---
 >>>        return "<h1>" + this.greeting + "</h1>";
 1->^^^^^^^^
-2 >        ^^^^^^
-3 >              ^
-4 >               ^^^^^^
-5 >                     ^^^
-6 >                        ^^^^
-7 >                            ^
-8 >                             ^^^^^^^^
-9 >                                     ^^^
-10>                                        ^^^^^^^
-11>                                               ^
+2 >        ^^^^^^^
+3 >               ^^^^^^
+4 >                     ^^^
+5 >                        ^^^^
+6 >                            ^
+7 >                             ^^^^^^^^
+8 >                                     ^^^
+9 >                                        ^^^^^^^
+10>                                               ^
 1->greet() {
   >        
-2 >        return
-3 >               
-4 >               "<h1>"
-5 >                      + 
-6 >                        this
-7 >                            .
-8 >                             greeting
-9 >                                      + 
-10>                                        "</h1>"
-11>                                               ;
+2 >        return 
+3 >               "<h1>"
+4 >                      + 
+5 >                        this
+6 >                            .
+7 >                             greeting
+8 >                                      + 
+9 >                                        "</h1>"
+10>                                               ;
 1->Emitted(19, 9) Source(24, 9) + SourceIndex(0)
-2 >Emitted(19, 15) Source(24, 15) + SourceIndex(0)
-3 >Emitted(19, 16) Source(24, 16) + SourceIndex(0)
-4 >Emitted(19, 22) Source(24, 22) + SourceIndex(0)
-5 >Emitted(19, 25) Source(24, 25) + SourceIndex(0)
-6 >Emitted(19, 29) Source(24, 29) + SourceIndex(0)
-7 >Emitted(19, 30) Source(24, 30) + SourceIndex(0)
-8 >Emitted(19, 38) Source(24, 38) + SourceIndex(0)
-9 >Emitted(19, 41) Source(24, 41) + SourceIndex(0)
-10>Emitted(19, 48) Source(24, 48) + SourceIndex(0)
-11>Emitted(19, 49) Source(24, 49) + SourceIndex(0)
+2 >Emitted(19, 16) Source(24, 16) + SourceIndex(0)
+3 >Emitted(19, 22) Source(24, 22) + SourceIndex(0)
+4 >Emitted(19, 25) Source(24, 25) + SourceIndex(0)
+5 >Emitted(19, 29) Source(24, 29) + SourceIndex(0)
+6 >Emitted(19, 30) Source(24, 30) + SourceIndex(0)
+7 >Emitted(19, 38) Source(24, 38) + SourceIndex(0)
+8 >Emitted(19, 41) Source(24, 41) + SourceIndex(0)
+9 >Emitted(19, 48) Source(24, 48) + SourceIndex(0)
+10>Emitted(19, 49) Source(24, 49) + SourceIndex(0)
 ---
 >>>    };
 1 >^^^^
@@ -258,27 +211,24 @@ sourceFile:sourceMapValidationDecorators.ts
 ---
 >>>        return this.greeting;
 1 >^^^^^^^^
-2 >        ^^^^^^
-3 >              ^
-4 >               ^^^^
-5 >                   ^
-6 >                    ^^^^^^^^
-7 >                            ^
+2 >        ^^^^^^^
+3 >               ^^^^
+4 >                   ^
+5 >                    ^^^^^^^^
+6 >                            ^
 1 >) {
   >        
-2 >        return
-3 >               
-4 >               this
-5 >                   .
-6 >                    greeting
-7 >                            ;
+2 >        return 
+3 >               this
+4 >                   .
+5 >                    greeting
+6 >                            ;
 1 >Emitted(22, 9) Source(39, 9) + SourceIndex(0)
-2 >Emitted(22, 15) Source(39, 15) + SourceIndex(0)
-3 >Emitted(22, 16) Source(39, 16) + SourceIndex(0)
-4 >Emitted(22, 20) Source(39, 20) + SourceIndex(0)
-5 >Emitted(22, 21) Source(39, 21) + SourceIndex(0)
-6 >Emitted(22, 29) Source(39, 29) + SourceIndex(0)
-7 >Emitted(22, 30) Source(39, 30) + SourceIndex(0)
+2 >Emitted(22, 16) Source(39, 16) + SourceIndex(0)
+3 >Emitted(22, 20) Source(39, 20) + SourceIndex(0)
+4 >Emitted(22, 21) Source(39, 21) + SourceIndex(0)
+5 >Emitted(22, 29) Source(39, 29) + SourceIndex(0)
+6 >Emitted(22, 30) Source(39, 30) + SourceIndex(0)
 ---
 >>>    };
 1 >^^^^
@@ -293,57 +243,17 @@ sourceFile:sourceMapValidationDecorators.ts
 >>>    Object.defineProperty(Greeter.prototype, "greetings", {
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^
-3 >                          ^^^^^^^
-4 >                                 ^
-5 >                                  ^^^^^^^^^^^^^^^^^^^^^^
+3 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
   >    @PropertyDecorator1
   >    @PropertyDecorator2(80)
   >    
 2 >    get 
-3 >                          
-4 >                                 {
-5 >                                  
-  >                                      constructor(
-  >                                        @ParameterDecorator1 
-  >                                        @ParameterDecorator2(20) 
-  >                                        public greeting: string, 
-  >                                        
-  >                                        @ParameterDecorator1 
-  >                                        @ParameterDecorator2(30) 
-  >                                        ...b: string[]) {
-  >                                      }
-  >                                      
-  >                                      @PropertyDecorator1
-  >                                      @PropertyDecorator2(40)
-  >                                      greet() {
-  >                                          return "<h1>" + this.greeting + "</h1>";
-  >                                      }
-  >                                  
-  >                                      @PropertyDecorator1
-  >                                      @PropertyDecorator2(50)
-  >                                      private x: string;
-  >                                  
-  >                                      @PropertyDecorator1
-  >                                      @PropertyDecorator2(60)
-  >                                      private static x1: number = 10;
-  >                                      
-  >                                      private fn(
-  >                                        @ParameterDecorator1 
-  >                                        @ParameterDecorator2(70) 
-  >                                        x: number) {
-  >                                          return this.greeting;
-  >                                      }
-  >                                  
-  >                                      @PropertyDecorator1
-  >                                      @PropertyDecorator2(80)
-  >                                      get greetings
+3 >                          greetings
 1->Emitted(24, 5) Source(44, 5) + SourceIndex(0)
 2 >Emitted(24, 27) Source(44, 9) + SourceIndex(0)
-3 >Emitted(24, 34) Source(10, 15) + SourceIndex(0)
-4 >Emitted(24, 35) Source(10, 16) + SourceIndex(0)
-5 >Emitted(24, 57) Source(44, 18) + SourceIndex(0)
+3 >Emitted(24, 57) Source(44, 18) + SourceIndex(0)
 ---
 >>>        get: function () {
 1 >^^^^^^^^^^^^^
@@ -353,27 +263,24 @@ sourceFile:sourceMapValidationDecorators.ts
 ---
 >>>            return this.greeting;
 1->^^^^^^^^^^^^
-2 >            ^^^^^^
-3 >                  ^
-4 >                   ^^^^
-5 >                       ^
-6 >                        ^^^^^^^^
-7 >                                ^
+2 >            ^^^^^^^
+3 >                   ^^^^
+4 >                       ^
+5 >                        ^^^^^^^^
+6 >                                ^
 1->get greetings() {
   >        
-2 >            return
-3 >                   
-4 >                   this
-5 >                       .
-6 >                        greeting
-7 >                                ;
+2 >            return 
+3 >                   this
+4 >                       .
+5 >                        greeting
+6 >                                ;
 1->Emitted(26, 13) Source(45, 9) + SourceIndex(0)
-2 >Emitted(26, 19) Source(45, 15) + SourceIndex(0)
-3 >Emitted(26, 20) Source(45, 16) + SourceIndex(0)
-4 >Emitted(26, 24) Source(45, 20) + SourceIndex(0)
-5 >Emitted(26, 25) Source(45, 21) + SourceIndex(0)
-6 >Emitted(26, 33) Source(45, 29) + SourceIndex(0)
-7 >Emitted(26, 34) Source(45, 30) + SourceIndex(0)
+2 >Emitted(26, 20) Source(45, 16) + SourceIndex(0)
+3 >Emitted(26, 24) Source(45, 20) + SourceIndex(0)
+4 >Emitted(26, 25) Source(45, 21) + SourceIndex(0)
+5 >Emitted(26, 33) Source(45, 29) + SourceIndex(0)
+6 >Emitted(26, 34) Source(45, 30) + SourceIndex(0)
 ---
 >>>        },
 1 >^^^^^^^^
@@ -496,30 +403,12 @@ sourceFile:sourceMapValidationDecorators.ts
 5 >Emitted(37, 31) Source(22, 28) + SourceIndex(0)
 ---
 >>>    ], Greeter.prototype, "greet", null);
-1->^^^^^^^^^^^^^^
-2 >              ^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^
+1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >              {
-3 >               
-  >                   constructor(
-  >                     @ParameterDecorator1 
-  >                     @ParameterDecorator2(20) 
-  >                     public greeting: string, 
-  >                     
-  >                     @ParameterDecorator1 
-  >                     @ParameterDecorator2(30) 
-  >                     ...b: string[]) {
-  >                   }
-  >                   
-  >                   @PropertyDecorator1
-  >                   @PropertyDecorator2(40)
-  >                   greet() {
-  >                       return "<h1>" + this.greeting + "</h1>";
-  >                   }
-1->Emitted(38, 15) Source(10, 15) + SourceIndex(0)
-2 >Emitted(38, 16) Source(10, 16) + SourceIndex(0)
-3 >Emitted(38, 41) Source(25, 6) + SourceIndex(0)
+  >    greet() {
+  >        return "<h1>" + this.greeting + "</h1>";
+  >    }
+1->Emitted(38, 41) Source(25, 6) + SourceIndex(0)
 ---
 >>>    __decorate([
 1 >^^^^
@@ -560,34 +449,10 @@ sourceFile:sourceMapValidationDecorators.ts
 5 >Emitted(41, 31) Source(28, 28) + SourceIndex(0)
 ---
 >>>    ], Greeter.prototype, "x", void 0);
-1->^^^^^^^^^^^^^^
-2 >              ^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^
+1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >              {
-3 >               
-  >                   constructor(
-  >                     @ParameterDecorator1 
-  >                     @ParameterDecorator2(20) 
-  >                     public greeting: string, 
-  >                     
-  >                     @ParameterDecorator1 
-  >                     @ParameterDecorator2(30) 
-  >                     ...b: string[]) {
-  >                   }
-  >                   
-  >                   @PropertyDecorator1
-  >                   @PropertyDecorator2(40)
-  >                   greet() {
-  >                       return "<h1>" + this.greeting + "</h1>";
-  >                   }
-  >               
-  >                   @PropertyDecorator1
-  >                   @PropertyDecorator2(50)
-  >                   private x: string;
-1->Emitted(42, 15) Source(10, 15) + SourceIndex(0)
-2 >Emitted(42, 16) Source(10, 16) + SourceIndex(0)
-3 >Emitted(42, 39) Source(29, 23) + SourceIndex(0)
+  >    private x: string;
+1->Emitted(42, 39) Source(29, 23) + SourceIndex(0)
 ---
 >>>    __decorate([
 1 >^^^^
@@ -642,45 +507,12 @@ sourceFile:sourceMapValidationDecorators.ts
 7 >Emitted(45, 44) Source(37, 31) + SourceIndex(0)
 ---
 >>>    ], Greeter.prototype, "fn", null);
-1 >^^^^^^^^^^^^^^
-2 >              ^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^
-1 >
-2 >              {
-3 >               
-  >                   constructor(
-  >                     @ParameterDecorator1 
-  >                     @ParameterDecorator2(20) 
-  >                     public greeting: string, 
-  >                     
-  >                     @ParameterDecorator1 
-  >                     @ParameterDecorator2(30) 
-  >                     ...b: string[]) {
-  >                   }
-  >                   
-  >                   @PropertyDecorator1
-  >                   @PropertyDecorator2(40)
-  >                   greet() {
-  >                       return "<h1>" + this.greeting + "</h1>";
-  >                   }
-  >               
-  >                   @PropertyDecorator1
-  >                   @PropertyDecorator2(50)
-  >                   private x: string;
-  >               
-  >                   @PropertyDecorator1
-  >                   @PropertyDecorator2(60)
-  >                   private static x1: number = 10;
-  >                   
-  >                   private fn(
-  >                     @ParameterDecorator1 
-  >                     @ParameterDecorator2(70) 
-  >                     x: number) {
-  >                       return this.greeting;
-  >                   }
-1 >Emitted(46, 15) Source(10, 15) + SourceIndex(0)
-2 >Emitted(46, 16) Source(10, 16) + SourceIndex(0)
-3 >Emitted(46, 38) Source(40, 6) + SourceIndex(0)
+1 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 > 
+  >      x: number) {
+  >        return this.greeting;
+  >    }
+1 >Emitted(46, 38) Source(40, 6) + SourceIndex(0)
 ---
 >>>    __decorate([
 1 >^^^^
@@ -767,51 +599,9 @@ sourceFile:sourceMapValidationDecorators.ts
 7 >Emitted(51, 44) Source(50, 31) + SourceIndex(0)
 ---
 >>>    ], Greeter.prototype, "greetings", null);
-1->^^^^^^^^^^^^^^
-2 >              ^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >              {
-3 >               
-  >                   constructor(
-  >                     @ParameterDecorator1 
-  >                     @ParameterDecorator2(20) 
-  >                     public greeting: string, 
-  >                     
-  >                     @ParameterDecorator1 
-  >                     @ParameterDecorator2(30) 
-  >                     ...b: string[]) {
-  >                   }
-  >                   
-  >                   @PropertyDecorator1
-  >                   @PropertyDecorator2(40)
-  >                   greet() {
-  >                       return "<h1>" + this.greeting + "</h1>";
-  >                   }
-  >               
-  >                   @PropertyDecorator1
-  >                   @PropertyDecorator2(50)
-  >                   private x: string;
-  >               
-  >                   @PropertyDecorator1
-  >                   @PropertyDecorator2(60)
-  >                   private static x1: number = 10;
-  >                   
-  >                   private fn(
-  >                     @ParameterDecorator1 
-  >                     @ParameterDecorator2(70) 
-  >                     x: number) {
-  >                       return this.greeting;
-  >                   }
-  >               
-  >                   @PropertyDecorator1
-  >                   @PropertyDecorator2(80)
-  >                   get greetings() {
-  >                       return this.greeting;
-  >                   }
-1->Emitted(52, 15) Source(10, 15) + SourceIndex(0)
-2 >Emitted(52, 16) Source(10, 16) + SourceIndex(0)
-3 >Emitted(52, 45) Source(46, 6) + SourceIndex(0)
+1->Emitted(52, 45) Source(46, 6) + SourceIndex(0)
 ---
 >>>    __decorate([
 1 >^^^^

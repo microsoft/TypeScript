@@ -10,15 +10,9 @@ sourceFile:sourceMapValidationClassWithDefaultConstructor.ts
 -------------------------------------------------------------------
 >>>var Greeter = /** @class */ (function () {
 1 >
-2 >^^^^^^^^^^^^
-3 >            ^
-4 >             ^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >class Greeter 
-3 >            {
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 13) Source(1, 15) + SourceIndex(0)
-3 >Emitted(1, 14) Source(1, 16) + SourceIndex(0)
 ---
 >>>    function Greeter() {
 1->^^^^
