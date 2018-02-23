@@ -90,7 +90,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 // @ts-check
-var W = /** @type {string} */ ((4));
+var W = /** @type {string} */ ( /** @type {*} */(4));
 var W = /** @type {string} */ (4); // Error
 /** @type {*} */
 var a;

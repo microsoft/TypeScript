@@ -1418,9 +1418,9 @@ namespace ts {
         }
 
         function emitParenthesizedExpression(node: ParenthesizedExpression) {
-            writePunctuation("(");
+            const openParenPos = emitTokenWithComment(SyntaxKind.OpenParenToken, node.pos, writePunctuation, node);
             emitExpression(node.expression);
-            writePunctuation(")");
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression ? node.expression.end : openParenPos, writePunctuation, node);
         }
 
         function emitFunctionExpression(node: FunctionExpression) {
