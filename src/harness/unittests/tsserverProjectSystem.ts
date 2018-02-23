@@ -2978,6 +2978,47 @@ namespace ts.projectSystem {
                 checkProjectActualFiles(configuredProject, [file.path, filesFile1.path, libFile.path, config.path]);
             }
         });
+
+        it("requests are done on file on pendingReload but has svc for previous version", () => {
+            const projectLocation = "/user/username/projects/project";
+            const file1: FileOrFolder = {
+                path: `${projectLocation}/src/file1.ts`,
+                content: `import { y } from "./file1"; let x = 10;`
+            };
+            const file2: FileOrFolder = {
+                path: `${projectLocation}/src/file2.ts`,
+                content: "export let y = 10;"
+            };
+            const config: FileOrFolder = {
+                path: `${projectLocation}/tsconfig.json`,
+                content: "{}"
+            };
+            const files = [file1, file2, libFile, config];
+            const host = createServerHost(files);
+            const session = createSession(host);
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: protocol.CommandTypes.Open,
+                arguments: { file: file2.path, fileContent: file2.content }
+            });
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: protocol.CommandTypes.Open,
+                arguments: { file: file1.path }
+            });
+            session.executeCommandSeq<protocol.CloseRequest>({
+                command: protocol.CommandTypes.Close,
+                arguments: { file: file2.path }
+            });
+
+            file2.content += "export let z = 10;";
+            host.reloadFS(files);
+            // Do not let the timeout runs, before executing command
+            const startOffset = file2.content.indexOf("y") + 1;
+            session.executeCommandSeq<protocol.GetApplicableRefactorsRequest>({
+                command: protocol.CommandTypes.GetApplicableRefactors,
+                arguments: { file: file2.path, startLine: 1, startOffset, endLine: 1, endOffset: startOffset + 1 }
+            });
+
+        });
     });
 
     describe("tsserverProjectSystem Proper errors", () => {
