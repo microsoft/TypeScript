@@ -1941,16 +1941,9 @@ namespace ts {
         return false;
     }
 
-    // True if the given identifier, string literal, or number literal is the name of a declaration node
+    // True if `name` is the name of a declaration node
     export function isDeclarationName(name: Node): boolean {
-        switch (name.kind) {
-            case SyntaxKind.Identifier:
-            case SyntaxKind.StringLiteral:
-            case SyntaxKind.NumericLiteral:
-                return isDeclaration(name.parent) && name.parent.name === name;
-            default:
-                return false;
-        }
+        return !isSourceFile(name) && !isBindingPattern(name) && isDeclaration(name.parent) && name.parent.name === name;
     }
 
     // See GH#16030
@@ -2240,34 +2233,24 @@ namespace ts {
         return undefined;
     }
 
-    export function getTextOfIdentifierOrLiteral(node: Identifier | LiteralLikeNode) {
-        if (node) {
-            if (node.kind === SyntaxKind.Identifier) {
-                return idText(node as Identifier);
-            }
-            if (node.kind === SyntaxKind.StringLiteral ||
-                node.kind === SyntaxKind.NumericLiteral) {
-
-                return node.text;
-            }
+    export type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral;
+    export function isPropertyNameLiteral(node: Node): node is PropertyNameLiteral {
+        switch (node.kind) {
+            case SyntaxKind.Identifier:
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.NumericLiteral:
+                return true;
+            default:
+                return false;
         }
-
-        return undefined;
+    }
+    export function getTextOfIdentifierOrLiteral(node: PropertyNameLiteral): string {
+        return node.kind === SyntaxKind.Identifier ? idText(node) : node.text;
     }
 
-    export function getEscapedTextOfIdentifierOrLiteral(node: Identifier | LiteralLikeNode) {
-        if (node) {
-            if (node.kind === SyntaxKind.Identifier) {
-                return (node as Identifier).escapedText;
-            }
-            if (node.kind === SyntaxKind.StringLiteral ||
-                node.kind === SyntaxKind.NumericLiteral) {
-
-                return escapeLeadingUnderscores(node.text);
-            }
-        }
-
-        return undefined;
+    export function getEscapedTextOfIdentifierOrLiteral(node: PropertyNameLiteral): __String {
+        return node.kind === SyntaxKind.Identifier ? node.escapedText : escapeLeadingUnderscores(node.text);
     }
 
     export function getPropertyNameForKnownSymbolName(symbolName: string): __String {
@@ -3836,7 +3819,7 @@ namespace ts {
         return false;
     }
 
-    export function getClassLikeDeclarationOfSymbol(symbol: Symbol): Declaration | undefined {
+    export function getClassLikeDeclarationOfSymbol(symbol: Symbol): ClassLikeDeclaration | undefined {
         return find(symbol.declarations, isClassLike);
     }
 

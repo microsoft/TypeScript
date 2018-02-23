@@ -4,6 +4,7 @@ class C {
 
     // No ASI
     [e]: number = 0
+>[e] : number
 >e : any
 >0    [e2] : any
 >0 : 0
