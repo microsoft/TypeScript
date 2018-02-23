@@ -1860,16 +1860,9 @@ namespace ts {
         return false;
     }
 
-    // True if the given identifier, string literal, or number literal is the name of a declaration node
+    // True if `name` is the name of a declaration node
     export function isDeclarationName(name: Node): boolean {
-        switch (name.kind) {
-            case SyntaxKind.Identifier:
-            case SyntaxKind.StringLiteral:
-            case SyntaxKind.NumericLiteral:
-                return isDeclaration(name.parent) && name.parent.name === name;
-            default:
-                return false;
-        }
+        return !isSourceFile(name) && !isBindingPattern(name) && isDeclaration(name.parent) && name.parent.name === name;
     }
 
     // See GH#16030

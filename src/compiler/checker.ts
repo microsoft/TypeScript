@@ -23094,7 +23094,7 @@ namespace ts {
                         const rootChain = () => chainDiagnosticMessages(
                             /*details*/ undefined,
                             Diagnostics.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2,
-                            unescapeLeadingUnderscores(declaredProp.escapedName),
+                            symbolToString(declaredProp),
                             typeToString(typeWithThis),
                             typeToString(baseWithThis)
                         );

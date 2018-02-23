@@ -19,26 +19,31 @@ class C {
         return "BYE";
     }
     static get ["computedname"]() {
+>["computedname"] : Symbol(C["computedname"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 7, 5), Decl(emitClassDeclarationWithGetterSetterInES6.ts, 24, 33))
 >"computedname" : Symbol(C["computedname"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 7, 5), Decl(emitClassDeclarationWithGetterSetterInES6.ts, 24, 33))
 
         return "";
     }
     get ["computedname1"]() {
+>["computedname1"] : Symbol(C["computedname1"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 10, 5))
 >"computedname1" : Symbol(C["computedname1"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 10, 5))
 
         return "";
     }
     get ["computedname2"]() {
+>["computedname2"] : Symbol(C["computedname2"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 13, 5))
 >"computedname2" : Symbol(C["computedname2"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 13, 5))
 
         return "";
     }
 
     set ["computedname3"](x: any) {
+>["computedname3"] : Symbol(C["computedname3"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 16, 5))
 >"computedname3" : Symbol(C["computedname3"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 16, 5))
 >x : Symbol(x, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 18, 26))
     }
     set ["computedname4"](y: string) {
+>["computedname4"] : Symbol(C["computedname4"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 19, 5))
 >"computedname4" : Symbol(C["computedname4"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 19, 5))
 >y : Symbol(y, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 20, 26))
     }
@@ -52,6 +57,7 @@ class C {
 >b : Symbol(b, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 24, 19))
 
     static set ["computedname"](b: string) { }
+>["computedname"] : Symbol(C["computedname"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 7, 5), Decl(emitClassDeclarationWithGetterSetterInES6.ts, 24, 33))
 >"computedname" : Symbol(C["computedname"], Decl(emitClassDeclarationWithGetterSetterInES6.ts, 7, 5), Decl(emitClassDeclarationWithGetterSetterInES6.ts, 24, 33))
 >b : Symbol(b, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 25, 32))
 }

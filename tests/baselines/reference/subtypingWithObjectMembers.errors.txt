@@ -2,13 +2,13 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
   Type 'string' is not assignable to type 'Base'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(24,5): error TS2416: Property '2' in type 'B2' is not assignable to the same property in base type 'A2'.
   Type 'string' is not assignable to type 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(34,5): error TS2416: Property '2.0' in type 'B3' is not assignable to the same property in base type 'A3'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(34,5): error TS2416: Property ''2.0'' in type 'B3' is not assignable to the same property in base type 'A3'.
   Type 'string' is not assignable to type 'Base'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(45,9): error TS2416: Property 'bar' in type 'B' is not assignable to the same property in base type 'A'.
   Type 'string' is not assignable to type 'Base'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(55,9): error TS2416: Property '2' in type 'B2' is not assignable to the same property in base type 'A2'.
   Type 'string' is not assignable to type 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(65,9): error TS2416: Property '2.0' in type 'B3' is not assignable to the same property in base type 'A3'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(65,9): error TS2416: Property ''2.0'' in type 'B3' is not assignable to the same property in base type 'A3'.
   Type 'string' is not assignable to type 'Base'.
 
 
@@ -54,7 +54,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         '1': Derived; // ok
         '2.0': string; // error
         ~~~~~
-!!! error TS2416: Property '2.0' in type 'B3' is not assignable to the same property in base type 'A3'.
+!!! error TS2416: Property ''2.0'' in type 'B3' is not assignable to the same property in base type 'A3'.
 !!! error TS2416:   Type 'string' is not assignable to type 'Base'.
     }
     
@@ -94,7 +94,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
             '1': Derived2; // ok
             '2.0': string; // error
             ~~~~~
-!!! error TS2416: Property '2.0' in type 'B3' is not assignable to the same property in base type 'A3'.
+!!! error TS2416: Property ''2.0'' in type 'B3' is not assignable to the same property in base type 'A3'.
 !!! error TS2416:   Type 'string' is not assignable to type 'Base'.
         }
     }

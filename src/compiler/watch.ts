@@ -749,6 +749,9 @@ namespace ts {
                     (missingFilePathsRequestedForRelease || (missingFilePathsRequestedForRelease = [])).push(oldSourceFile.path);
                 }
                 else if ((hostSourceFileInfo as FilePresentOnHost).sourceFile === oldSourceFile) {
+                    if ((hostSourceFileInfo as FilePresentOnHost).fileWatcher) {
+                        (hostSourceFileInfo as FilePresentOnHost).fileWatcher.close();
+                    }
                     sourceFilesCache.delete(oldSourceFile.path);
                     resolutionCache.removeResolutionsOfFile(oldSourceFile.path);
                 }
