@@ -2042,6 +2042,9 @@ namespace ts {
                         case SpecialPropertyAssignmentKind.PrototypeProperty:
                             bindPrototypePropertyAssignment((node as BinaryExpression).left as PropertyAccessEntityNameExpression, node);
                             break;
+                        case SpecialPropertyAssignmentKind.Prototype:
+                            bindPrototypeAssignment(node as BinaryExpression);
+                            break;
                         case SpecialPropertyAssignmentKind.ThisProperty:
                             bindThisPropertyAssignment(node as BinaryExpression);
                             break;
@@ -2360,15 +2363,23 @@ namespace ts {
             }
         }
 
+        /** For `x.prototype = { p, ... }`, declare members p,... if `x` is function/class/{}, or not declared. */
+        function bindPrototypeAssignment(node: BinaryExpression) {
+            node.left.parent = node;
+            node.right.parent = node;
+            const lhs = node.left as PropertyAccessEntityNameExpression;
+            bindPropertyAssignment(lhs, lhs, /*isPrototypeProperty*/ false);
+        }
+
         /**
-         * For 'x.prototype.y = z', declare a 'member' y on x if x is a function or class, or not declared.
+         * For `x.prototype.y = z`, declare a member `y` on `x` if `x` is a function or class, or not declared.
          * Note that jsdoc preceding an ExpressionStatement like `x.prototype.y;` is also treated as a declaration.
          */
         function bindPrototypePropertyAssignment(lhs: PropertyAccessEntityNameExpression, parent: Node) {
             // Look up the function in the local scope, since prototype assignments should
             // follow the function declaration
             const classPrototype = lhs.expression as PropertyAccessEntityNameExpression;
-            const constructorFunction = classPrototype.expression as Identifier;
+            const constructorFunction = classPrototype.expression;
 
             // Fix up parent pointers since we're going to use these nodes before we bind into them
             lhs.parent = parent;
@@ -2382,7 +2393,8 @@ namespace ts {
         function bindSpecialPropertyAssignment(node: BinaryExpression) {
             const lhs = node.left as PropertyAccessEntityNameExpression;
             // Fix up parent pointers since we're going to use these nodes before we bind into them
-            lhs.parent = node;
+            node.left.parent = node;
+            node.right.parent = node;
             if (isIdentifier(lhs.expression) && container === file && isNameOfExportsOrModuleExportsAliasDeclaration(file, lhs.expression)) {
                 // This can be an alias for the 'exports' or 'module.exports' names, e.g.
                 //    var util = module.exports;
@@ -2433,7 +2445,9 @@ namespace ts {
                 (symbol.exports || (symbol.exports = createSymbolTable()));
 
             // Declare the method/property
-            declareSymbol(symbolTable, symbol, propertyAccess, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+            const symbolFlags = SymbolFlags.Property | (isToplevelNamespaceableInitializer ? SymbolFlags.JSContainer : 0);
+            const symbolExcludes = SymbolFlags.PropertyExcludes & ~(isToplevelNamespaceableInitializer ? SymbolFlags.JSContainer : 0);
+            declareSymbol(symbolTable, symbol, propertyAccess, symbolFlags, symbolExcludes);
         }
 
         function lookupSymbolForPropertyAccess(node: EntityNameExpression): Symbol | undefined {

@@ -16,8 +16,9 @@ namespace ts.refactor.convertFunctionToES6Class {
             return undefined;
         }
 
-        if (isDeclarationOfFunctionOrClassExpression(symbol)) {
-            symbol = (symbol.valueDeclaration as VariableDeclaration).initializer.symbol;
+        const initializer = getDeclaredJavascriptInitializer(symbol.valueDeclaration);
+        if (initializer) {
+            symbol = initializer.symbol;
         }
 
         if ((symbol.flags & SymbolFlags.Function) && symbol.members && (symbol.members.size > 0)) {

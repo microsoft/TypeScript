@@ -4,6 +4,7 @@
 // @target: es6
 // @Filename: module.js
 var Outer = function(element, config) {};
+// @Filename: usage.js
 /** @constructor */
 Outer.Pos = function (line, ch) {};
 /** @type {number} */

@@ -1471,18 +1471,6 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(sourceFile, str).charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
-    /**
-     * Returns true if the node is a variable declaration whose initializer is a function or class expression.
-     * This function does not test if the node is in a JavaScript file or not.
-     */
-    export function isDeclarationOfFunctionOrClassExpression(s: Symbol) {
-        if (s.valueDeclaration && isVariableDeclaration(s.valueDeclaration)) {
-            return s.valueDeclaration.initializer &&
-                (s.valueDeclaration.initializer.kind === SyntaxKind.FunctionExpression || s.valueDeclaration.initializer.kind === SyntaxKind.ClassExpression);
-        }
-        return false;
-    }
-
     export function getJSInitializerSymbol(symbol: Symbol) {
         if (!symbol || !symbol.valueDeclaration) {
             return symbol;
@@ -1511,9 +1499,12 @@ namespace ts {
             const e = skipParentheses(initializer.expression);
             return e.kind === SyntaxKind.FunctionExpression || e.kind === SyntaxKind.ArrowFunction ? initializer : undefined;
         }
-        if (initializer.kind === SyntaxKind.FunctionExpression ||
-            initializer.kind === SyntaxKind.ClassExpression ||
-            isObjectLiteralExpression(initializer) && initializer.properties.length === 0) {
+        if (initializer.kind === SyntaxKind.FunctionExpression || initializer.kind === SyntaxKind.ClassExpression) {
+            return initializer;
+        }
+        if (isObjectLiteralExpression(initializer) &&
+            (initializer.properties.length === 0 ||
+             isBinaryExpression(initializer.parent) && isPropertyAccessExpression(initializer.parent.left) && initializer.parent.left.name.escapedText === "prototype")) {
             return initializer;
         }
     }
@@ -1576,6 +1567,9 @@ namespace ts {
             return SpecialPropertyAssignmentKind.None;
         }
         const lhs = expr.left;
+        if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
+            return SpecialPropertyAssignmentKind.ThisProperty;
+        }
         if (isIdentifier(lhs.expression)) {
             if (lhs.expression.escapedText === "exports") {
                 // exports.name = expr
@@ -1585,28 +1579,27 @@ namespace ts {
                 // module.exports = expr
                 return SpecialPropertyAssignmentKind.ModuleExports;
             }
-            else {
-                // F.x = expr
-                return SpecialPropertyAssignmentKind.Property;
+        }
+        if (isEntityNameExpression(lhs.expression)) {
+            if (lhs.name.escapedText === "prototype" && isObjectLiteralExpression(expr.right)) {
+                // F.prototype = { ... }
+                return SpecialPropertyAssignmentKind.Prototype;
             }
-        }
-        else if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
-            return SpecialPropertyAssignmentKind.ThisProperty;
-        }
-        else if (isPropertyAccessExpression(lhs.expression)) {
-            // chained dot, e.g. x.y.z = expr; this var is the 'x.y' part
-            if (isIdentifier(lhs.expression.expression)) {
-                // module.exports.name = expr
-                if (lhs.expression.expression.escapedText === "module" && lhs.expression.name.escapedText === "exports") {
+            else if (isPropertyAccessExpression(lhs.expression)) {
+                // chained dot, e.g. x.y.z = expr; this var is the 'x.y' part
+                if (isIdentifier(lhs.expression.expression) &&
+                    lhs.expression.expression.escapedText === "module" &&
+                    lhs.expression.name.escapedText === "exports") {
+                    // module.exports.name = expr
                     return SpecialPropertyAssignmentKind.ExportsProperty;
                 }
                 if (lhs.expression.name.escapedText === "prototype") {
+                    // F.G....prototype.x = expr
                     return SpecialPropertyAssignmentKind.PrototypeProperty;
                 }
             }
-            if (isEntityNameExpression(lhs.expression)) {
-                return SpecialPropertyAssignmentKind.Property;
-            }
+            // F.G...x = expr
+            return SpecialPropertyAssignmentKind.Property;
         }
 
         return SpecialPropertyAssignmentKind.None;
