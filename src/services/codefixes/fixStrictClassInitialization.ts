@@ -81,7 +81,7 @@ namespace ts.codefix {
 
     function addUndefinedType(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration): void {
         const undefinedTypeNode = createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
-        const types = isUnionTypeNode(propertyDeclaration.type) ? (<UnionTypeNode>propertyDeclaration.type).types.concat(undefinedTypeNode) : [propertyDeclaration.type, undefinedTypeNode];
+        const types = isUnionTypeNode(propertyDeclaration.type) ? propertyDeclaration.type.types.concat(undefinedTypeNode) : [propertyDeclaration.type, undefinedTypeNode];
         changeTracker.replaceNode(propertyDeclarationSourceFile, propertyDeclaration.type, createUnionTypeNode(types));
     }
 

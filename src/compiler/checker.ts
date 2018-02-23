@@ -15889,7 +15889,7 @@ namespace ts {
 
             // Referencing abstract properties within their own constructors is not allowed
             if ((flags & ModifierFlags.Abstract) && isThisProperty(node) && symbolHasNonMethodDeclaration(prop)) {
-                const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop));
+                const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop));
                 if (declaringClassDeclaration && isNodeWithinConstructorOfClass(node, declaringClassDeclaration)) {
                     error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), getTextOfIdentifierOrLiteral(declaringClassDeclaration.name));
                     return false;
@@ -15905,7 +15905,7 @@ namespace ts {
 
             // Private property is accessible if the property is within the declaring class
             if (flags & ModifierFlags.Private) {
-                const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop));
+                const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop));
                 if (!isNodeWithinClass(node, declaringClassDeclaration)) {
                     error(errorNode, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1, symbolToString(prop), typeToString(getDeclaringClass(prop)));
                     return false;
@@ -17627,7 +17627,7 @@ namespace ts {
                 return true;
             }
 
-            const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(declaration.parent.symbol);
+            const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(declaration.parent.symbol);
             const declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(declaration.parent.symbol);
 
             // A private or protected constructor can only be instantiated within its own class (or a subclass, for protected)
@@ -23115,7 +23115,7 @@ namespace ts {
             if (signatures.length) {
                 const declaration = signatures[0].declaration;
                 if (declaration && hasModifier(declaration, ModifierFlags.Private)) {
-                    const typeClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(type.symbol);
+                    const typeClassDeclaration = getClassLikeDeclarationOfSymbol(type.symbol);
                     if (!isNodeWithinClass(node, typeClassDeclaration)) {
                         error(node, Diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, getFullyQualifiedName(type.symbol));
                     }
