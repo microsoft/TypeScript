@@ -1,5 +1,5 @@
 === tests/cases/compiler/file1.ts ===
-import b1 = require('./b.json');
+import b1 = require('./b'); // This should not resolve
 >b1 : Symbol(b1, Decl(file1.ts, 0, 0))
 
 let x = b1.a;
@@ -14,7 +14,9 @@ if (x) {
 
     let b = b2.b;
 >b : Symbol(b, Decl(file1.ts, 4, 7))
+>b2.b : Symbol("b", Decl(b.json, 1, 14))
 >b2 : Symbol(b2, Decl(file1.ts, 1, 13))
+>b : Symbol("b", Decl(b.json, 1, 14))
 
     x = (b1.b === b);
 >x : Symbol(x, Decl(file1.ts, 1, 3))
@@ -23,5 +25,10 @@ if (x) {
 }
 
 === tests/cases/compiler/b.json ===
+{
+    "a": true,
+>"a" : Symbol("a", Decl(b.json, 0, 1))
 
-No type information for this code.
+    "b": "hello"
+>"b" : Symbol("b", Decl(b.json, 1, 14))
+}

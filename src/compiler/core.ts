@@ -2674,21 +2674,14 @@ namespace ts {
     export const supportedTypescriptExtensionsForExtractExtension: ReadonlyArray<Extension> = [Extension.Dts, Extension.Ts, Extension.Tsx];
     export const supportedJavascriptExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx];
     const allSupportedExtensions: ReadonlyArray<Extension> = [...supportedTypeScriptExtensions, ...supportedJavascriptExtensions];
-    let allSupportedExtensionsIncludingJson: ReadonlyArray<Extension> | undefined;
-    function getAllSupportedExtensionsIncludingJson() {
-        return allSupportedExtensionsIncludingJson || (allSupportedExtensionsIncludingJson = [...allSupportedExtensions, Extension.Json]);
-    }
 
-    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<JsFileExtensionInfo>, excludeJson?: boolean): ReadonlyArray<string> {
+    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<JsFileExtensionInfo>): ReadonlyArray<string> {
         const needAllExtensions = options && options.allowJs;
-        const useJsonExtension = needAllExtensions && !excludeJson && getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs;
         if (!extraFileExtensions || extraFileExtensions.length === 0 || !needAllExtensions) {
-            return useJsonExtension ?
-                getAllSupportedExtensionsIncludingJson() :
-                needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
+            return needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
         }
         return deduplicate(
-            [...(useJsonExtension ? getAllSupportedExtensionsIncludingJson() : allSupportedExtensions), ...extraFileExtensions.map(e => e.extension)],
+            [...allSupportedExtensions, ...extraFileExtensions.map(e => e.extension)],
             equateStringsCaseSensitive,
             compareStringsCaseSensitive
         );
@@ -2696,10 +2689,6 @@ namespace ts {
 
     export function hasJavaScriptFileExtension(fileName: string) {
         return forEach(supportedJavascriptExtensions, extension => fileExtensionIs(fileName, extension));
-    }
-
-    export function hasJavaScriptOrJsonFileExtension(fileName: string) {
-        return hasJavaScriptFileExtension(fileName) || fileExtensionIs(fileName, Extension.Json);
     }
 
     export function hasTypeScriptFileExtension(fileName: string) {
@@ -3102,6 +3091,10 @@ namespace ts {
         return ext === Extension.Ts || ext === Extension.Tsx || ext === Extension.Dts;
     }
 
+    export function resolutionExtensionIsTypeScriptOrJson(ext: Extension) {
+        return extensionIsTypeScript(ext) || ext === Extension.Json;
+    }
+
     /**
      * Gets the extension from a path.
      * Path must have a valid extension.
@@ -3119,9 +3112,7 @@ namespace ts {
     }
 
     export function tryGetExtensionFromPath(path: string): Extension | undefined {
-        return find<Extension>(supportedTypescriptExtensionsForExtractExtension, e => fileExtensionIs(path, e)) ||
-            find(supportedJavascriptExtensions, e => fileExtensionIs(path, e)) ||
-            (fileExtensionIs(path, Extension.Json) ? Extension.Json : undefined);
+        return find<Extension>(supportedTypescriptExtensionsForExtractExtension, e => fileExtensionIs(path, e)) || find(supportedJavascriptExtensions, e => fileExtensionIs(path, e));
     }
 
     // Retrieves any string from the final "." onwards from a base file name.

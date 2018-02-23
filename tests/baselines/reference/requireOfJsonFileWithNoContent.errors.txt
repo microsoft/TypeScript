@@ -4,7 +4,7 @@ tests/cases/compiler/file1.ts(6,13): error TS2339: Property 'b' does not exist o
 
 
 ==== tests/cases/compiler/file1.ts (3 errors) ====
-    import b1 = require('./b');
+    import b1 = require('./b.json');
     let x = b1.a;
                ~
 !!! error TS2339: Property 'a' does not exist on type '{}'.

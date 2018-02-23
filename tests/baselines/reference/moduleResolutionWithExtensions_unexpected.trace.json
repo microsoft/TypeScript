@@ -36,13 +36,10 @@
     "'package.json' does not have a 'types' field.",
     "'package.json' has 'main' field 'normalize.css' that references '/node_modules/normalize.css/normalize.css'.",
     "Found 'package.json' at '/node_modules/normalize.css/package.json'.",
-    "File '/node_modules/normalize.css.json' does not exist.",
     "'package.json' has 'main' field 'normalize.css' that references '/node_modules/normalize.css/normalize.css'.",
     "File '/node_modules/normalize.css/normalize.css' exist - use it as a name resolution result.",
     "File '/node_modules/normalize.css/normalize.css' has an unsupported extension, so skipping it.",
     "Loading module as file / folder, candidate module location '/node_modules/normalize.css/normalize.css', target file type 'Json'.",
-    "File '/node_modules/normalize.css/normalize.css.json' does not exist.",
     "Directory '/node_modules/normalize.css/normalize.css' does not exist, skipping all lookups in it.",
-    "File '/node_modules/normalize.css/index.json' does not exist.",
     "======== Module name 'normalize.css' was not resolved. ========"
 ]

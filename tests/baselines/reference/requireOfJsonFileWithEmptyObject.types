@@ -1,5 +1,5 @@
 === tests/cases/compiler/file1.ts ===
-import b1 = require('./b');
+import b1 = require('./b.json');
 >b1 : {}
 
 let x = b1;

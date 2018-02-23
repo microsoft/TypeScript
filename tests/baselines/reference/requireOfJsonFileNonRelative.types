@@ -1,5 +1,5 @@
-=== tests/cases/compiler/file1.ts ===
-import b1 = require('./b.json');
+=== /src/projects/file1.ts ===
+import b1 = require('b.json');
 >b1 : { "a": boolean; "b": string; }
 
 let x = b1.a;
@@ -8,7 +8,7 @@ let x = b1.a;
 >b1 : { "a": boolean; "b": string; }
 >a : boolean
 
-import b2 = require('./b.json');
+import b2 = require('c.json');
 >b2 : { "a": boolean; "b": string; }
 
 if (x) {
@@ -31,7 +31,20 @@ if (x) {
 >b : string
 }
 
-=== tests/cases/compiler/b.json ===
+=== /src/projects/node_modules/b.json ===
+{
+>{    "a": true,    "b": "hello"} : { "a": boolean; "b": string; }
+
+    "a": true,
+>"a" : boolean
+>true : true
+
+    "b": "hello"
+>"b" : string
+>"hello" : "hello"
+}
+
+=== /src/node_modules/c.json ===
 {
 >{    "a": true,    "b": "hello"} : { "a": boolean; "b": string; }
 

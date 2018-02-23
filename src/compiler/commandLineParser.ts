@@ -2044,8 +2044,7 @@ namespace ts {
 
         // Rather than requery this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
-        // When computing file names, do not include json files. Use only module resolution or explicit includes for them
-        const supportedExtensions = getSupportedExtensions(options, extraFileExtensions, /*excludeJson*/ true);
+        const supportedExtensions = getSupportedExtensions(options, extraFileExtensions);
 
         // Literal files are always included verbatim. An "include" or "exclude" specification cannot
         // remove a literal file.

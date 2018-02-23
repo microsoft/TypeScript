@@ -1,7 +1,7 @@
-//// [tests/cases/compiler/requireOfJsonFileWithEmptyObjectWithErrors.ts] ////
+//// [tests/cases/compiler/requireOfJsonFileWithoutExtension.ts] ////
 
 //// [file1.ts]
-import b1 = require('./b.json');
+import b1 = require('./b'); // This should not resolve
 let x = b1.a;
 import b2 = require('./b.json');
 if (x) {
@@ -11,14 +11,19 @@ if (x) {
 
 //// [b.json]
 {
+    "a": true,
+    "b": "hello"
 }
 
 //// [b.json]
-{}
+{
+    "a": true,
+    "b": "hello"
+}
 //// [file1.js]
 "use strict";
 exports.__esModule = true;
-var b1 = require("./b.json");
+var b1 = require("./b"); // This should not resolve
 var x = b1.a;
 var b2 = require("./b.json");
 if (x) {
