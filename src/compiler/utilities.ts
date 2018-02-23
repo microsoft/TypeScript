@@ -1471,18 +1471,6 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(sourceFile, str).charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
-    /**
-     * Returns true if the node is a variable declaration whose initializer is a function or class expression.
-     * This function does not test if the node is in a JavaScript file or not.
-     */
-    export function isDeclarationOfFunctionOrClassExpression(s: Symbol) {
-        if (s.valueDeclaration && isVariableDeclaration(s.valueDeclaration)) {
-            return s.valueDeclaration.initializer &&
-                (s.valueDeclaration.initializer.kind === SyntaxKind.FunctionExpression || s.valueDeclaration.initializer.kind === SyntaxKind.ClassExpression);
-        }
-        return false;
-    }
-
     export function getJSInitializerSymbol(symbol: Symbol) {
         if (!symbol || !symbol.valueDeclaration) {
             return symbol;

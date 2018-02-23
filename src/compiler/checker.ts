@@ -2002,21 +2002,7 @@ namespace ts {
                 }
             }
             else if (name.kind === SyntaxKind.QualifiedName || name.kind === SyntaxKind.PropertyAccessExpression) {
-                let left: EntityNameOrEntityNameExpression;
-
-                if (name.kind === SyntaxKind.QualifiedName) {
-                    left = name.left;
-                }
-                else if (name.kind === SyntaxKind.PropertyAccessExpression) {
-                    left = name.expression;
-                }
-                else {
-                    // If the expression in property-access expression is not entity-name or parenthsizedExpression (e.g. it is a call expression), it won't be able to successfully resolve the name.
-                    // This is the case when we are trying to do any language service operation in heritage clauses. By return undefined, the getSymbolOfEntityNameOrPropertyAccessExpression
-                    // will attempt to checkPropertyAccessExpression to resolve symbol.
-                    // i.e class C extends foo()./*do language service operation here*/B {}
-                    return undefined;
-                }
+                const left = name.kind === SyntaxKind.QualifiedName ? name.left : name.expression;
                 const right = name.kind === SyntaxKind.QualifiedName ? name.right : name.name;
                 let namespace = resolveEntityName(left, SymbolFlags.Namespace, ignoreErrors, /*dontResolveAlias*/ false, location);
                 if (!namespace || nodeIsMissing(right)) {
@@ -2025,8 +2011,11 @@ namespace ts {
                 else if (namespace === unknownSymbol) {
                     return namespace;
                 }
-                if (isInJavaScriptFile(name) && isDeclarationOfFunctionOrClassExpression(namespace)) {
-                    namespace = getSymbolOfNode((namespace.valueDeclaration as VariableDeclaration).initializer);
+                if (isInJavaScriptFile(name)) {
+                    const initializer = getDeclaredJavascriptInitializer(namespace.valueDeclaration);
+                    if (initializer) {
+                        namespace = getSymbolOfNode(initializer);
+                    }
                 }
                 symbol = getSymbol(getExportsOfSymbol(namespace), right.escapedText, meaning);
                 if (!symbol) {
@@ -7246,12 +7235,11 @@ namespace ts {
             // A jsdoc TypeReference may have resolved to a value (as opposed to a type). If
             // the symbol is a constructor function, return the inferred class type; otherwise,
             // the type of this reference is just the type of the value we resolved to.
+            const assignedType = getAssignedClassType(symbol);
             const valueType = getTypeOfSymbol(symbol);
-            if (valueType.symbol && !isInferredClassType(valueType)) {
-                const referenceType = getTypeReferenceTypeWorker(node, valueType.symbol, typeArguments);
-                if (referenceType) {
-                    return referenceType;
-                }
+            const referenceType = valueType.symbol && !isInferredClassType(valueType) && getTypeReferenceTypeWorker(node, valueType.symbol, typeArguments);
+            if (referenceType || assignedType) {
+                return referenceType && assignedType ? getIntersectionType([assignedType, referenceType]) : referenceType || assignedType;
             }
 
             // Resolve the type reference as a Type for the purpose of reporting errors.
@@ -17894,23 +17882,22 @@ namespace ts {
         }
 
         function getJavaScriptClassType(symbol: Symbol): Type | undefined {
-            if (isDeclarationOfFunctionOrClassExpression(symbol)) {
-                symbol = getSymbolOfNode((symbol.valueDeclaration as VariableDeclaration).initializer);
+            const initializer = getDeclaredJavascriptInitializer(symbol.valueDeclaration);
+            if (initializer) {
+                symbol = getSymbolOfNode(initializer);
             }
-            let assigned = getAssignedClassType(symbol);
             let inferred: Type | undefined;
             if (isJavaScriptConstructor(symbol.valueDeclaration)) {
                 inferred = getInferredClassType(symbol);
             }
-            if (symbol.flags & SymbolFlags.Variable) {
-                const valueType = getTypeOfSymbol(symbol);
-                if (valueType.symbol && !isInferredClassType(valueType) && isJavaScriptConstructor(valueType.symbol.valueDeclaration)) {
-                    inferred = getInferredClassType(valueType.symbol);
-                }
+            const assigned = getAssignedClassType(symbol);
+            const valueType = getTypeOfSymbol(symbol);
+            if (valueType.symbol && !isInferredClassType(valueType) && isJavaScriptConstructor(valueType.symbol.valueDeclaration)) {
+                inferred = getInferredClassType(valueType.symbol);
             }
-            return !inferred ? assigned :
-                !assigned ? inferred :
-                getIntersectionType([inferred, assigned]);
+            return assigned && inferred ?
+                getIntersectionType([inferred, assigned]) :
+                assigned || inferred;
         }
 
         function getAssignedClassType(symbol: Symbol) {

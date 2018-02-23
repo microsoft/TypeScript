@@ -2393,7 +2393,8 @@ namespace ts {
         function bindSpecialPropertyAssignment(node: BinaryExpression) {
             const lhs = node.left as PropertyAccessEntityNameExpression;
             // Fix up parent pointers since we're going to use these nodes before we bind into them
-            lhs.parent = node;
+            node.left.parent = node;
+            node.right.parent = node;
             if (isIdentifier(lhs.expression) && container === file && isNameOfExportsOrModuleExportsAliasDeclaration(file, lhs.expression)) {
                 // This can be an alias for the 'exports' or 'module.exports' names, e.g.
                 //    var util = module.exports;
@@ -2444,7 +2445,9 @@ namespace ts {
                 (symbol.exports || (symbol.exports = createSymbolTable()));
 
             // Declare the method/property
-            declareSymbol(symbolTable, symbol, propertyAccess, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+            const symbolFlags = SymbolFlags.Property | (isToplevelNamespaceableInitializer ? SymbolFlags.JSContainer : 0);
+            const symbolExcludes = SymbolFlags.PropertyExcludes & ~(isToplevelNamespaceableInitializer ? SymbolFlags.JSContainer : 0);
+            declareSymbol(symbolTable, symbol, propertyAccess, symbolFlags, symbolExcludes);
         }
 
         function lookupSymbolForPropertyAccess(node: EntityNameExpression): Symbol | undefined {
