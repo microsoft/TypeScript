@@ -774,7 +774,8 @@ namespace ts {
                     }
                     const jsxPragma = file.pragmas.get("jsx");
                     if (jsxPragma) {
-                        file.localJsxFactory = parseIsolatedEntityName(jsxPragma, languageVersion);
+                        const chosenpragma = isArray(jsxPragma) ? jsxPragma[0] : jsxPragma;
+                        file.localJsxFactory = parseIsolatedEntityName(chosenpragma.arguments.factory, languageVersion);
                         if (file.localJsxFactory) {
                             return file.localJsxNamespace = getFirstIdentifier(file.localJsxFactory).escapedText;
                         }
