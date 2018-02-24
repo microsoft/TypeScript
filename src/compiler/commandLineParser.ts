@@ -1049,19 +1049,21 @@ namespace ts {
      * Convert the json syntax tree into the json value
      */
     export function convertToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>): any {
-        return convertToObjectWorker(sourceFile, errors, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
+        return convertToObjectWorker(sourceFile, errors, /*returnValue*/ true, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
     }
 
     /**
-     * Convert the json syntax tree into the json value
+     * Convert the json syntax tree into the json value and report errors
      */
-    function convertToObjectWorker(
+    /*@internal*/
+    export function convertToObjectWorker(
         sourceFile: JsonSourceFile,
         errors: Push<Diagnostic>,
+        returnValue: boolean,
         knownRootOptions: CommandLineOption | undefined,
         jsonConversionNotifier: JsonConversionNotifier | undefined): any {
         if (!sourceFile.statements.length) {
-            return {};
+            return returnValue ? {} : undefined;
         }
 
         return convertPropertyValueToJson(sourceFile.statements[0].expression, knownRootOptions);
@@ -1076,7 +1078,7 @@ namespace ts {
             extraKeyDiagnosticMessage: DiagnosticMessage | undefined,
             parentOption: string | undefined
         ): any {
-            const result: any = {};
+            const result: any = returnValue ? {} : undefined;
             for (const element of node.properties) {
                 if (element.kind !== SyntaxKind.PropertyAssignment) {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element, Diagnostics.Property_assignment_expected));
@@ -1097,7 +1099,9 @@ namespace ts {
                 }
                 const value = convertPropertyValueToJson(element.initializer, option);
                 if (typeof keyText !== "undefined") {
-                    result[keyText] = value;
+                    if (returnValue) {
+                        result[keyText] = value;
+                    }
                     // Notify key value set, if user asked for it
                     if (jsonConversionNotifier &&
                         // Current callbacks are only on known parent option or if we are setting values in the root
@@ -1128,8 +1132,8 @@ namespace ts {
         function convertArrayLiteralExpressionToJson(
             elements: NodeArray<Expression>,
             elementOption: CommandLineOption | undefined
-        ): any[] {
-            return elements.map(element => convertPropertyValueToJson(element, elementOption));
+        ): any[] | void {
+            return (returnValue ? elements.map : elements.forEach).call(elements, (element: Expression) => convertPropertyValueToJson(element, elementOption));
         }
 
         function convertPropertyValueToJson(valueExpression: Expression, option: CommandLineOption): any {
@@ -1693,7 +1697,7 @@ namespace ts {
                 }
             }
         };
-        const json = convertToObjectWorker(sourceFile, errors, getTsconfigRootOptionsMap(), optionsIterator);
+        const json = convertToObjectWorker(sourceFile, errors, /*returnValue*/ true, getTsconfigRootOptionsMap(), optionsIterator);
         if (!typeAcquisition) {
             if (typingOptionstypeAcquisition) {
                 typeAcquisition = (typingOptionstypeAcquisition.enableAutoDiscovery !== undefined) ?
