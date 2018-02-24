@@ -13,46 +13,55 @@ namespace ts.OrganizeImports {
         host: LanguageServiceHost,
         program: Program) {
 
-        // TODO (https://github.com/Microsoft/TypeScript/issues/10020): sort *within* ambient modules (find using isAmbientModule)
-
-        // All of the old ImportDeclarations in the file, in syntactic order.
-        const oldImportDecls = sourceFile.statements.filter(isImportDeclaration);
-
-        if (oldImportDecls.length === 0) {
-            return [];
-        }
-
-        const oldImportGroups = group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier));
-
-        const sortedImportGroups = stableSort(oldImportGroups, (group1, group2) =>
-            compareModuleSpecifiers(group1[0].moduleSpecifier, group2[0].moduleSpecifier));
-
-        const newImportDecls = flatMap(sortedImportGroups, importGroup =>
-            getExternalModuleName(importGroup[0].moduleSpecifier)
-                ? coalesceImports(removeUnusedImports(importGroup, sourceFile, program))
-                : importGroup);
-
         const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext });
 
-        // Delete or replace the first import.
-        if (newImportDecls.length === 0) {
-            changeTracker.deleteNode(sourceFile, oldImportDecls[0]);
-        }
-        else {
-            // Note: Delete the surrounding trivia because it will have been retained in newImportDecls.
-            changeTracker.replaceNodeWithNodes(sourceFile, oldImportDecls[0], newImportDecls, {
-                useNonAdjustedStartPosition: false,
-                useNonAdjustedEndPosition: false,
-                suffix: getNewLineOrDefaultFromHost(host, formatContext.options),
-            });
-        }
+        // All of the old ImportDeclarations in the file, in syntactic order.
+        const topLevelImportDecls = sourceFile.statements.filter(isImportDeclaration);
+        organizeImportsWorker(topLevelImportDecls);
 
-        // Delete any subsequent imports.
-        for (let i = 1; i < oldImportDecls.length; i++) {
-            changeTracker.deleteNode(sourceFile, oldImportDecls[i]);
+        for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
+            const ambientModuleBody = getModuleBlock(ambientModule as ModuleDeclaration);
+            const ambientModuleImportDecls = ambientModuleBody.statements.filter(isImportDeclaration);
+            organizeImportsWorker(ambientModuleImportDecls);
         }
 
         return changeTracker.getChanges();
+
+        function organizeImportsWorker(oldImportDecls: ReadonlyArray<ImportDeclaration>) {
+            if (length(oldImportDecls) === 0) {
+                return;
+            }
+
+            const oldImportGroups = group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier));
+            const sortedImportGroups = stableSort(oldImportGroups, (group1, group2) => compareModuleSpecifiers(group1[0].moduleSpecifier, group2[0].moduleSpecifier));
+            const newImportDecls = flatMap(sortedImportGroups, importGroup =>
+                getExternalModuleName(importGroup[0].moduleSpecifier)
+                    ? coalesceImports(removeUnusedImports(importGroup, sourceFile, program))
+                    : importGroup);
+
+            // Delete or replace the first import.
+            if (newImportDecls.length === 0) {
+                changeTracker.deleteNode(sourceFile, oldImportDecls[0]);
+            }
+            else {
+                // Note: Delete the surrounding trivia because it will have been retained in newImportDecls.
+                changeTracker.replaceNodeWithNodes(sourceFile, oldImportDecls[0], newImportDecls, {
+                    useNonAdjustedStartPosition: false,
+                    useNonAdjustedEndPosition: false,
+                    suffix: getNewLineOrDefaultFromHost(host, formatContext.options),
+                });
+            }
+
+            // Delete any subsequent imports.
+            for (let i = 1; i < oldImportDecls.length; i++) {
+                changeTracker.deleteNode(sourceFile, oldImportDecls[i]);
+            }
+        }
+    }
+
+    function getModuleBlock(moduleDecl: ModuleDeclaration): ModuleBlock | undefined {
+        const body = moduleDecl.body;
+        return body && !isIdentifier(body) && (isModuleBlock(body) ? body : getModuleBlock(body));
     }
 
     function removeUnusedImports(oldImports: ReadonlyArray<ImportDeclaration>, sourceFile: SourceFile, program: Program) {

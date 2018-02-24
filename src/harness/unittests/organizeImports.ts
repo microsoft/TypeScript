@@ -329,6 +329,43 @@ F1();
                 },
                 libFile);
 
+            testOrganizeImports("AmbientModule",
+                {
+                    path: "/test.ts",
+                    content: `
+declare module "mod" {
+    import { F1 } from "lib";
+    import * as NS from "lib";
+    import { F2 } from "lib";
+
+    function F(f1: {} = F1, f2: {} = F2) {}
+}
+`,
+                },
+                libFile);
+
+            testOrganizeImports("TopLevelAndAmbientModule",
+                {
+                    path: "/test.ts",
+                    content: `
+import D from "lib";
+
+declare module "mod" {
+    import { F1 } from "lib";
+    import * as NS from "lib";
+    import { F2 } from "lib";
+
+    function F(f1: {} = F1, f2: {} = F2) {}
+}
+
+import E from "lib";
+import "lib";
+
+D();
+`,
+                },
+                libFile);
+
             testOrganizeImports("JsxFactoryUsed",
                 {
                     path: "/test.tsx",
