@@ -2,6 +2,7 @@
 // @outdir: out/
 // @allowJs: true
 // @strictNullChecks: true
+// @fullEmitPaths: true
 
 // @Filename: file1.ts
 import b = require('./b.json');

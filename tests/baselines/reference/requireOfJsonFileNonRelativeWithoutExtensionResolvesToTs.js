@@ -13,10 +13,10 @@ let fnumber: number = f;
 //// [f.ts]
 export = 10;
 
-//// [f.js]
+//// [out/node_modules/f.js]
 "use strict";
 module.exports = 10;
-//// [file1.js]
+//// [out/projects/file1.js]
 "use strict";
 exports.__esModule = true;
 var f = require("f"); // should work to f.ts

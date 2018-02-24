@@ -1,5 +1,4 @@
 // @module: commonjs
-// @outdir: out/
 // @fullEmitPaths: true
 
 // @Filename: file1.ts

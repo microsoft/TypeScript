@@ -1,6 +1,7 @@
 // @module: commonjs
 // @outdir: out/
 // @allowJs: true
+// @fullEmitPaths: true
 
 // @Filename: /src/projects/file1.ts
 import f = require("f"); // should work to f.ts

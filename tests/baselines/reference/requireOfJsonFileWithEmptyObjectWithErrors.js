@@ -13,9 +13,9 @@ if (x) {
 {
 }
 
-//// [b.json]
+//// [out/b.json]
 {}
-//// [file1.js]
+//// [out/file1.js]
 "use strict";
 exports.__esModule = true;
 var b1 = require("./b.json");

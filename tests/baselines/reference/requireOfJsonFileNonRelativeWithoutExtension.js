@@ -22,6 +22,6 @@ import e = require("e"); // Should fail
     "b": "hello"
 }
 
-//// [file1.js]
+//// [out/file1.js]
 "use strict";
 exports.__esModule = true;

@@ -45,24 +45,24 @@ booleanLiteral = g[0];
 //// [g.json]
 [true, false]
 
-//// [b.json]
+//// [out/b.json]
 {
     "a": true,
     "b": "hello",
     "c": null,
     "d": false
 }
-//// [c.json]
+//// [out/c.json]
 ["a", null, "string"]
-//// [d.json]
+//// [out/d.json]
 "dConfig"
-//// [e.json]
+//// [out/e.json]
 -10
-//// [f.json]
+//// [out/f.json]
 [-10, 30]
-//// [g.json]
+//// [out/g.json]
 [true, false]
-//// [file1.js]
+//// [out/file1.js]
 "use strict";
 exports.__esModule = true;
 var b = require("./b.json");
