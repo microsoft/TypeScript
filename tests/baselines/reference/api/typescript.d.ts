@@ -2191,14 +2191,14 @@ declare namespace ts {
         node: ConditionalTypeNode;
         checkType: Type;
         extendsType: Type;
+        trueType: Type;
+        falseType: Type;
         isDistributive: boolean;
         inferTypeParameters: TypeParameter[];
         outerTypeParameters?: TypeParameter[];
         instantiations?: Map<Type>;
         aliasSymbol: Symbol;
         aliasTypeArguments: Type[];
-        resolvedTrueType?: Type;
-        resolvedFalseType?: Type;
     }
     interface ConditionalType extends InstantiableType {
         root: ConditionalRoot;
