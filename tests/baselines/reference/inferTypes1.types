@@ -50,8 +50,8 @@ type T05 = Unpacked<any>;  // any
 >T05 : any
 >Unpacked : Unpacked<T>
 
-type T06 = Unpacked<never>;  // never
->T06 : never
+type T06 = Unpacked<never>;  // {}
+>T06 : {}
 >Unpacked : Unpacked<T>
 
 function f1(s: string) {
@@ -154,8 +154,8 @@ type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A
 >A : A
 >A : A
 
-type T20 = ArgumentType<() => void>;  // never
->T20 : never
+type T20 = ArgumentType<() => void>;  // {}
+>T20 : {}
 >ArgumentType : ArgumentType<T>
 
 type T21 = ArgumentType<(x: string) => number>;  // string
@@ -312,7 +312,7 @@ type T60 = infer U;  // Error
 >U : U
 
 type T61<T> = infer A extends infer B ? infer C : infer D;  // Error
->T61 : never
+>T61 : {}
 >T : T
 >A : A
 >B : B
