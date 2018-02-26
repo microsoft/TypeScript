@@ -1333,20 +1333,20 @@ namespace ts {
      */
     export function arrayToMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string): Map<T>;
     export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue: (value: T) => U): Map<U>;
-    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue?: (value: T) => U): Map<T | U> {
+    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue: (value: T) => T | U = identity): Map<T | U> {
         const result = createMap<T | U>();
         for (const value of array) {
-            result.set(makeKey(value), makeValue ? makeValue(value) : value);
+            result.set(makeKey(value), makeValue(value));
         }
         return result;
     }
 
     export function arrayToNumericMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => number): T[];
-    export function arrayToNumericMap<T, V>(array: ReadonlyArray<T>, makeKey: (value: T) => number, makeValue: (value: T) => V): V[];
-    export function arrayToNumericMap<T, V>(array: ReadonlyArray<T>, makeKey: (value: T) => number, makeValue?: (value: T) => V): V[] {
-        const result: V[] = [];
+    export function arrayToNumericMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => number, makeValue: (value: T) => U): U[];
+    export function arrayToNumericMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => number, makeValue: (value: T) => T | U = identity): (T | U)[] {
+        const result: (T | U)[] = [];
         for (const value of array) {
-            result[makeKey(value)] = makeValue ? makeValue(value) : value as any as V;
+            result[makeKey(value)] = makeValue(value);
         }
         return result;
     }
@@ -1360,6 +1360,20 @@ namespace ts {
     export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string): Map<true>;
     export function arrayToSet(array: ReadonlyArray<any>, makeKey?: (value: any) => string): Map<true> {
         return arrayToMap<any, true>(array, makeKey || (s => s), () => true);
+    }
+
+    export function arrayToMultiMap<T>(values: ReadonlyArray<T>, makeKey: (value: T) => string): MultiMap<T>;
+    export function arrayToMultiMap<T, U>(values: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue: (value: T) => U): MultiMap<U>;
+    export function arrayToMultiMap<T, U>(values: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue: (value: T) => T | U = identity): MultiMap<T | U> {
+        const result = createMultiMap<T | U>();
+        for (const value of values) {
+            result.add(makeKey(value), makeValue(value));
+        }
+        return result;
+    }
+
+    export function group<T>(values: ReadonlyArray<T>, getGroupId: (value: T) => string): ReadonlyArray<ReadonlyArray<T>> {
+        return arrayFrom(arrayToMultiMap(values, getGroupId).values());
     }
 
     export function cloneMap(map: SymbolTable): SymbolTable;
@@ -1895,6 +1909,11 @@ namespace ts {
             compareValues(d1.code, d2.code) ||
             compareMessageText(d1.messageText, d2.messageText) ||
             Comparison.EqualTo;
+    }
+
+    /** True is greater than false. */
+    export function compareBooleans(a: boolean, b: boolean): Comparison {
+        return compareValues(a ? 1 : 0, b ? 1 : 0);
     }
 
     function compareMessageText(text1: string | DiagnosticMessageChain, text2: string | DiagnosticMessageChain): Comparison {
@@ -2927,7 +2946,8 @@ namespace ts {
         }
 
         export function showSymbol(symbol: Symbol): string {
-            return `{ flags: ${showFlags(symbol.flags, (ts as any).SymbolFlags)}; declarations: ${map(symbol.declarations, showSyntaxKind)} }`;
+            const symbolFlags = (ts as any).SymbolFlags;
+            return `{ flags: ${symbolFlags ? showFlags(symbol.flags, symbolFlags) : symbol.flags}; declarations: ${map(symbol.declarations, showSyntaxKind)} }`;
         }
 
         function showFlags(flags: number, flagsEnum: { [flag: number]: string }): string {
@@ -2942,7 +2962,8 @@ namespace ts {
         }
 
         export function showSyntaxKind(node: Node): string {
-            return (ts as any).SyntaxKind[node.kind];
+            const syntaxKind = (ts as any).SyntaxKind;
+            return syntaxKind ? syntaxKind[node.kind] : node.kind.toString();
         }
     }
 

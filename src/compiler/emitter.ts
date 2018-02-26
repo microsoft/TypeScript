@@ -951,7 +951,7 @@ namespace ts {
 
         function emitEntityName(node: EntityName) {
             if (node.kind === SyntaxKind.Identifier) {
-                emitExpression(<Identifier>node);
+                emitExpression(node);
             }
             else {
                 emit(node);
@@ -1024,6 +1024,7 @@ namespace ts {
             emitModifiers(node, node.modifiers);
             emit(node.name);
             emitIfPresent(node.questionToken);
+            emitIfPresent(node.exclamationToken);
             emitTypeAnnotation(node.type);
             emitInitializer(node.initializer);
             writeSemicolon();
@@ -1251,14 +1252,20 @@ namespace ts {
             }
             if (node.readonlyToken) {
                 emit(node.readonlyToken);
+                if (node.readonlyToken.kind !== SyntaxKind.ReadonlyKeyword) {
+                    writeKeyword("readonly");
+                }
                 writeSpace();
             }
-
             writePunctuation("[");
             pipelineEmitWithNotification(EmitHint.MappedTypeParameter, node.typeParameter);
             writePunctuation("]");
-
-            emitIfPresent(node.questionToken);
+            if (node.questionToken) {
+                emit(node.questionToken);
+                if (node.questionToken.kind !== SyntaxKind.QuestionToken) {
+                    writePunctuation("?");
+                }
+            }
             writePunctuation(":");
             writeSpace();
             emit(node.type);
@@ -1703,7 +1710,7 @@ namespace ts {
                     emit(node);
                 }
                 else {
-                    emitExpression(<Expression>node);
+                    emitExpression(node);
                 }
             }
         }
@@ -2062,7 +2069,7 @@ namespace ts {
 
         function emitModuleReference(node: ModuleReference) {
             if (node.kind === SyntaxKind.Identifier) {
-                emitExpression(<Identifier>node);
+                emitExpression(node);
             }
             else {
                 emit(node);
@@ -2466,12 +2473,12 @@ namespace ts {
 
         function emitPrologueDirectivesIfNeeded(sourceFileOrBundle: Bundle | SourceFile) {
             if (isSourceFile(sourceFileOrBundle)) {
-                setSourceFile(sourceFileOrBundle as SourceFile);
-                emitPrologueDirectives((sourceFileOrBundle as SourceFile).statements);
+                setSourceFile(sourceFileOrBundle);
+                emitPrologueDirectives(sourceFileOrBundle.statements);
             }
             else {
                 const seenPrologueDirectives = createMap<true>();
-                for (const sourceFile of (sourceFileOrBundle as Bundle).sourceFiles) {
+                for (const sourceFile of sourceFileOrBundle.sourceFiles) {
                     setSourceFile(sourceFile);
                     emitPrologueDirectives(sourceFile.statements, /*startWithNewLine*/ true, seenPrologueDirectives);
                 }

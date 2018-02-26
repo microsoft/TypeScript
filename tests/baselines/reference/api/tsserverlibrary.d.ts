@@ -477,6 +477,8 @@ declare namespace ts {
     type AtToken = Token<SyntaxKind.AtToken>;
     type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
     type AwaitKeywordToken = Token<SyntaxKind.AwaitKeyword>;
+    type PlusToken = Token<SyntaxKind.PlusToken>;
+    type MinusToken = Token<SyntaxKind.MinusToken>;
     type Modifier = Token<SyntaxKind.AbstractKeyword> | Token<SyntaxKind.AsyncKeyword> | Token<SyntaxKind.ConstKeyword> | Token<SyntaxKind.DeclareKeyword> | Token<SyntaxKind.DefaultKeyword> | Token<SyntaxKind.ExportKeyword> | Token<SyntaxKind.PublicKeyword> | Token<SyntaxKind.PrivateKeyword> | Token<SyntaxKind.ProtectedKeyword> | Token<SyntaxKind.ReadonlyKeyword> | Token<SyntaxKind.StaticKeyword>;
     type ModifiersArray = NodeArray<Modifier>;
     interface Identifier extends PrimaryExpression, Declaration {
@@ -766,9 +768,9 @@ declare namespace ts {
     }
     interface MappedTypeNode extends TypeNode, Declaration {
         kind: SyntaxKind.MappedType;
-        readonlyToken?: ReadonlyToken;
+        readonlyToken?: ReadonlyToken | PlusToken | MinusToken;
         typeParameter: TypeParameterDeclaration;
-        questionToken?: QuestionToken;
+        questionToken?: QuestionToken | PlusToken | MinusToken;
         type?: TypeNode;
     }
     interface LiteralTypeNode extends TypeNode {
@@ -778,6 +780,7 @@ declare namespace ts {
     interface StringLiteral extends LiteralExpression {
         kind: SyntaxKind.StringLiteral;
     }
+    type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
     interface Expression extends Node {
         _expressionBrand: any;
     }
@@ -1409,6 +1412,10 @@ declare namespace ts {
         name: Identifier;
     }
     type ImportOrExportSpecifier = ImportSpecifier | ExportSpecifier;
+    /**
+     * This is either an `export =` or an `export default` declaration.
+     * Unless `isExportEquals` is set, this node was parsed as an `export default`.
+     */
     interface ExportAssignment extends DeclarationStatement {
         kind: SyntaxKind.ExportAssignment;
         parent?: SourceFile;
@@ -3211,6 +3218,7 @@ declare namespace ts {
     /**
      * True if node is of some token syntax kind.
      * For example, this is true for an IfKeyword but not for an IfStatement.
+     * Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
      */
     function isToken(n: Node): boolean;
     function isLiteralExpression(node: Node): node is LiteralExpression;
@@ -3246,6 +3254,7 @@ declare namespace ts {
     function isSetAccessor(node: Node): node is SetAccessorDeclaration;
     function isGetAccessor(node: Node): node is GetAccessorDeclaration;
     function isObjectLiteralElement(node: Node): node is ObjectLiteralElement;
+    function isStringLiteralLike(node: Node): node is StringLiteralLike;
 }
 declare namespace ts {
     type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
@@ -3514,8 +3523,8 @@ declare namespace ts {
     function updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode): TypeOperatorNode;
     function createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode;
     function updateIndexedAccessTypeNode(node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode;
-    function createMappedTypeNode(readonlyToken: ReadonlyToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | undefined, type: TypeNode | undefined): MappedTypeNode;
-    function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | undefined, type: TypeNode | undefined): MappedTypeNode;
+    function createMappedTypeNode(readonlyToken: ReadonlyToken | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
+    function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyToken | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
     function createLiteralTypeNode(literal: LiteralTypeNode["literal"]): LiteralTypeNode;
     function updateLiteralTypeNode(node: LiteralTypeNode, literal: LiteralTypeNode["literal"]): LiteralTypeNode;
     function createObjectBindingPattern(elements: ReadonlyArray<BindingElement>): ObjectBindingPattern;
@@ -4130,6 +4139,7 @@ declare namespace ts {
         applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;
+        organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges>;
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
         getProgram(): Program;
         dispose(): void;
@@ -4138,6 +4148,7 @@ declare namespace ts {
         type: "file";
         fileName: string;
     }
+    type OrganizeImportsScope = CombinedCodeFixScope;
     interface GetCompletionsAtPositionOptions {
         includeExternalModuleExports: boolean;
         includeInsertTextCompletions: boolean;
@@ -4483,6 +4494,7 @@ declare namespace ts {
         argumentCount: number;
     }
     interface CompletionInfo {
+        /** Not true for all glboal completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. */
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
         /**
@@ -5046,6 +5058,7 @@ declare namespace ts.server.protocol {
         Navto = "navto",
         NavTree = "navtree",
         NavTreeFull = "navtree-full",
+        /** @deprecated */
         Occurrences = "occurrences",
         DocumentHighlights = "documentHighlights",
         Open = "open",
@@ -5073,6 +5086,7 @@ declare namespace ts.server.protocol {
         GetSupportedCodeFixes = "getSupportedCodeFixes",
         GetApplicableRefactors = "getApplicableRefactors",
         GetEditsForRefactor = "getEditsForRefactor",
+        OrganizeImports = "organizeImports",
     }
     /**
      * A TypeScript Server message
@@ -5425,6 +5439,23 @@ declare namespace ts.server.protocol {
         renameFilename?: string;
     }
     /**
+     * Organize imports by:
+     *   1) Removing unused imports
+     *   2) Coalescing imports from the same module
+     *   3) Sorting imports
+     */
+    interface OrganizeImportsRequest extends Request {
+        command: CommandTypes.OrganizeImports;
+        arguments: OrganizeImportsRequestArgs;
+    }
+    type OrganizeImportsScope = GetCombinedCodeFixScope;
+    interface OrganizeImportsRequestArgs {
+        scope: OrganizeImportsScope;
+    }
+    interface OrganizeImportsResponse extends Response {
+        edits: ReadonlyArray<FileCodeEdits>;
+    }
+    /**
      * Request for the available codefixes at a specific position.
      */
     interface CodeFixRequest extends Request {
@@ -5628,6 +5659,7 @@ declare namespace ts.server.protocol {
         openingBrace: string;
     }
     /**
+     * @deprecated
      * Get occurrences request; value of command field is
      * "occurrences". Return response giving spans that are relevant
      * in the file at a given line and column.
@@ -5635,6 +5667,7 @@ declare namespace ts.server.protocol {
     interface OccurrencesRequest extends FileLocationRequest {
         command: CommandTypes.Occurrences;
     }
+    /** @deprecated */
     interface OccurrencesResponseItem extends FileSpan {
         /**
          * True if the occurrence is a write location, false otherwise.
@@ -5645,6 +5678,7 @@ declare namespace ts.server.protocol {
          */
         isInString?: true;
     }
+    /** @deprecated */
     interface OccurrencesResponse extends Response {
         body?: OccurrencesResponseItem[];
     }
@@ -7277,6 +7311,7 @@ declare namespace ts.server {
         private extractPositionAndRange(args, scriptInfo);
         private getApplicableRefactors(args);
         private getEditsForRefactor(args, simplifiedResult);
+        private organizeImports({scope}, simplifiedResult);
         private getCodeFixes(args, simplifiedResult);
         private getCombinedCodeFix({scope, fixId}, simplifiedResult);
         private applyCodeActionCommand(args);
@@ -7543,7 +7578,6 @@ declare namespace ts.server {
          */
         updateGraph(): boolean;
         protected removeExistingTypings(include: string[]): string[];
-        private setTypings(typings);
         private updateGraphWorker();
         private detachScriptInfoFromProject(uncheckedFileName);
         private addMissingFileWatcher(missingFilePath);
@@ -7779,9 +7813,7 @@ declare namespace ts.server {
         private readonly hostConfiguration;
         private safelist;
         private legacySafelist;
-        private changedFiles;
         private pendingProjectUpdates;
-        private pendingInferredProjectUpdate;
         readonly currentDirectory: string;
         readonly toCanonicalFileName: (f: string) => string;
         readonly host: ServerHost;
@@ -7803,7 +7835,7 @@ declare namespace ts.server {
         toPath(fileName: string): Path;
         private loadTypesMap();
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void;
-        private delayInferredProjectsRefresh();
+        private delayEnsureProjectForOpenFiles();
         private delayUpdateProjectGraph(project);
         private sendProjectsUpdatedInBackgroundEvent();
         private delayUpdateProjectGraphs(projects);
@@ -7814,17 +7846,13 @@ declare namespace ts.server {
         /**
          * Ensures the project structures are upto date
          * This means,
-         * - if there are changedFiles (the files were updated but their containing project graph was not upto date),
-         *   their project graph is updated
-         * - If there are pendingProjectUpdates (scheduled to be updated with delay so they can batch update the graph if there are several changes in short time span)
-         *   their project graph is updated
-         * - If there were project graph updates and/or there was pending inferred project update and/or called forced the inferred project structure refresh
-         *   Inferred projects are created/updated/deleted based on open files states
-         * @param forceInferredProjectsRefresh when true updates the inferred projects even if there is no pending work to update the files/project structures
+         * - we go through all the projects and update them if they are dirty
+         * - if updates reflect some change in structure or there was pending request to ensure projects for open files
+         *   ensure that each open script info has project
          */
-        private ensureProjectStructuresUptoDate(forceInferredProjectsRefresh?);
+        private ensureProjectStructuresUptoDate();
+        private updateProjectIfDirty(project);
         getFormatCodeOptions(file?: NormalizedPath): FormatCodeSettings;
-        private updateProjectGraphs(projects);
         private onSourceFileChanged(fileName, eventKind);
         private handleDeletedFile(info);
         private onConfigChangedForConfiguredProject(project, eventKind);
@@ -7937,7 +7965,7 @@ declare namespace ts.server {
          * This will go through open files and assign them to inferred project if open file is not part of any other project
          * After that all the inferred project graphs are updated
          */
-        private refreshInferredProjects();
+        private ensureProjectForOpenFiles();
         /**
          * Open file whose contents is managed by the client
          * @param filename is absolute pathname
@@ -7953,14 +7981,14 @@ declare namespace ts.server {
         closeClientFile(uncheckedFileName: string): void;
         private collectChanges(lastKnownProjectVersions, currentProjects, result);
         private closeConfiguredProjectReferencedFromExternalProject(configFile);
-        closeExternalProject(uncheckedFileName: string, suppressRefresh?: boolean): void;
+        closeExternalProject(uncheckedFileName: string): void;
         openExternalProjects(projects: protocol.ExternalProject[]): void;
         /** Makes a filename safe to insert in a RegExp */
         private static readonly filenameEscapeRegexp;
         private static escapeFilenameForRegex(filename);
         resetSafeList(): void;
         applySafeList(proj: protocol.ExternalProject): NormalizedPath[];
-        openExternalProject(proj: protocol.ExternalProject, suppressRefreshOfInferredProjects?: boolean): void;
+        openExternalProject(proj: protocol.ExternalProject): void;
     }
 }
 

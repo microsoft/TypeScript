@@ -22,10 +22,12 @@ class D extends C {
 
     // Computed properties
     get ["get1"]() { return new Foo }
+>["get1"] : Symbol(D["get1"], Decl(computedPropertyNames43_ES6.ts, 7, 19))
 >"get1" : Symbol(D["get1"], Decl(computedPropertyNames43_ES6.ts, 7, 19))
 >Foo : Symbol(Foo, Decl(computedPropertyNames43_ES6.ts, 0, 0))
 
     set ["set1"](p: Foo2) { }
+>["set1"] : Symbol(D["set1"], Decl(computedPropertyNames43_ES6.ts, 9, 37))
 >"set1" : Symbol(D["set1"], Decl(computedPropertyNames43_ES6.ts, 9, 37))
 >p : Symbol(p, Decl(computedPropertyNames43_ES6.ts, 10, 17))
 >Foo2 : Symbol(Foo2, Decl(computedPropertyNames43_ES6.ts, 0, 15))

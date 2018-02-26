@@ -690,12 +690,12 @@ namespace ts {
             // Prime the scanner.
             nextToken();
             if (token() === SyntaxKind.EndOfFileToken) {
-                sourceFile.endOfFileToken = <EndOfFileToken>parseTokenNode();
+                sourceFile.endOfFileToken = parseTokenNode<EndOfFileToken>();
             }
             else if (token() === SyntaxKind.OpenBraceToken ||
                 lookAhead(() => token() === SyntaxKind.StringLiteral)) {
                 result.jsonObject = parseObjectLiteralExpression();
-                sourceFile.endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, /*reportAtCurrentPosition*/ false, Diagnostics.Unexpected_token);
+                sourceFile.endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token);
             }
             else {
                 parseExpected(SyntaxKind.OpenBraceToken);
@@ -773,7 +773,7 @@ namespace ts {
 
             sourceFile.statements = parseList(ParsingContext.SourceElements, parseStatement);
             Debug.assert(token() === SyntaxKind.EndOfFileToken);
-            sourceFile.endOfFileToken = addJSDocComment(parseTokenNode() as EndOfFileToken);
+            sourceFile.endOfFileToken = addJSDocComment(parseTokenNode());
 
             setExternalModuleIndicator(sourceFile);
 
@@ -1135,10 +1135,10 @@ namespace ts {
             return undefined;
         }
 
-        function parseExpectedToken<TKind extends SyntaxKind>(t: TKind, reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): Token<TKind>;
-        function parseExpectedToken(t: SyntaxKind, reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): Node {
+        function parseExpectedToken<TKind extends SyntaxKind>(t: TKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): Token<TKind>;
+        function parseExpectedToken(t: SyntaxKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): Node {
             return parseOptionalToken(t) ||
-                createMissingNode(t, reportAtCurrentPosition, diagnosticMessage, arg0);
+                createMissingNode(t, /*reportAtCurrentPosition*/ false, diagnosticMessage || Diagnostics._0_expected, arg0 || tokenToString(t));
         }
 
         function parseTokenNode<T extends Node>(): T {
@@ -1794,7 +1794,7 @@ namespace ts {
                         // into an actual .ConstructorDeclaration.
                         const methodDeclaration = <MethodDeclaration>node;
                         const nameIsConstructor = methodDeclaration.name.kind === SyntaxKind.Identifier &&
-                            (<Identifier>methodDeclaration.name).originalKeywordKind === SyntaxKind.ConstructorKeyword;
+                            methodDeclaration.name.originalKeywordKind === SyntaxKind.ConstructorKeyword;
 
                         return !nameIsConstructor;
                 }
@@ -2113,7 +2113,7 @@ namespace ts {
                 literal = parseTemplateMiddleOrTemplateTail();
             }
             else {
-                literal = <TemplateTail>parseExpectedToken(SyntaxKind.TemplateTail, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.CloseBraceToken));
+                literal = <TemplateTail>parseExpectedToken(SyntaxKind.TemplateTail, Diagnostics._0_expected, tokenToString(SyntaxKind.CloseBraceToken));
             }
 
             span.literal = literal;
@@ -2607,6 +2607,9 @@ namespace ts {
 
         function isStartOfMappedType() {
             nextToken();
+            if (token() === SyntaxKind.PlusToken || token() === SyntaxKind.MinusToken) {
+                return nextToken() === SyntaxKind.ReadonlyKeyword;
+            }
             if (token() === SyntaxKind.ReadonlyKeyword) {
                 nextToken();
             }
@@ -2624,11 +2627,21 @@ namespace ts {
         function parseMappedType() {
             const node = <MappedTypeNode>createNode(SyntaxKind.MappedType);
             parseExpected(SyntaxKind.OpenBraceToken);
-            node.readonlyToken = parseOptionalToken(SyntaxKind.ReadonlyKeyword);
+            if (token() === SyntaxKind.ReadonlyKeyword || token() === SyntaxKind.PlusToken || token() === SyntaxKind.MinusToken) {
+                node.readonlyToken = parseTokenNode();
+                if (node.readonlyToken.kind !== SyntaxKind.ReadonlyKeyword) {
+                    parseExpectedToken(SyntaxKind.ReadonlyKeyword);
+                }
+            }
             parseExpected(SyntaxKind.OpenBracketToken);
             node.typeParameter = parseMappedTypeParameter();
             parseExpected(SyntaxKind.CloseBracketToken);
-            node.questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
+            if (token() === SyntaxKind.QuestionToken || token() === SyntaxKind.PlusToken || token() === SyntaxKind.MinusToken) {
+                node.questionToken = parseTokenNode();
+                if (node.questionToken.kind !== SyntaxKind.QuestionToken) {
+                    parseExpectedToken(SyntaxKind.QuestionToken);
+                }
+            }
             node.type = parseTypeAnnotation();
             parseSemicolon();
             parseExpected(SyntaxKind.CloseBraceToken);
@@ -3162,7 +3175,7 @@ namespace ts {
             // Note: we call reScanGreaterToken so that we get an appropriately merged token
             // for cases like `> > =` becoming `>>=`
             if (isLeftHandSideExpression(expr) && isAssignmentOperator(reScanGreaterToken())) {
-                return makeBinaryExpression(expr, <BinaryOperatorToken>parseTokenNode(), parseAssignmentExpressionOrHigher());
+                return makeBinaryExpression(expr, parseTokenNode(), parseAssignmentExpressionOrHigher());
             }
 
             // It wasn't an assignment or a lambda.  This is a conditional expression:
@@ -3242,7 +3255,7 @@ namespace ts {
 
             node.parameters = createNodeArray<ParameterDeclaration>([parameter], parameter.pos, parameter.end);
 
-            node.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, "=>");
+            node.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken);
             node.body = parseArrowFunctionExpressionBody(/*isAsync*/ !!asyncModifier);
 
             return addJSDocComment(finishNode(node));
@@ -3273,7 +3286,7 @@ namespace ts {
             // If we have an arrow, then try to parse the body. Even if not, try to parse if we
             // have an opening brace, just in case we're in an error state.
             const lastToken = token();
-            arrowFunction.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, "=>");
+            arrowFunction.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken);
             arrowFunction.body = (lastToken === SyntaxKind.EqualsGreaterThanToken || lastToken === SyntaxKind.OpenBraceToken)
                 ? parseArrowFunctionExpressionBody(isAsync)
                 : parseIdentifier();
@@ -3539,8 +3552,7 @@ namespace ts {
             node.condition = leftOperand;
             node.questionToken = questionToken;
             node.whenTrue = doOutsideOfContext(disallowInAndDecoratorContext, parseAssignmentExpressionOrHigher);
-            node.colonToken = parseExpectedToken(SyntaxKind.ColonToken, /*reportAtCurrentPosition*/ false,
-                Diagnostics._0_expected, tokenToString(SyntaxKind.ColonToken));
+            node.colonToken = parseExpectedToken(SyntaxKind.ColonToken);
             node.whenFalse = nodeIsPresent(node.colonToken)
                 ? parseAssignmentExpressionOrHigher()
                 : createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.ColonToken));
@@ -3612,7 +3624,7 @@ namespace ts {
                     }
                 }
                 else {
-                    leftOperand = makeBinaryExpression(leftOperand, <BinaryOperatorToken>parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence));
+                    leftOperand = makeBinaryExpression(leftOperand, parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence));
                 }
             }
 
@@ -4014,7 +4026,7 @@ namespace ts {
             // If it wasn't then just try to parse out a '.' and report an error.
             const node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
             node.expression = expression;
-            parseExpectedToken(SyntaxKind.DotToken, /*reportAtCurrentPosition*/ false, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
+            parseExpectedToken(SyntaxKind.DotToken, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
             node.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
             return finishNode(node);
         }
@@ -4067,7 +4079,7 @@ namespace ts {
             else {
                 Debug.assert(opening.kind === SyntaxKind.JsxSelfClosingElement);
                 // Nothing else to do for self-closing elements
-                result = <JsxSelfClosingElement>opening;
+                result = opening;
             }
 
             // If the user writes the invalid code '<div></div><div></div>' in an expression context (i.e. not wrapped in
@@ -4085,7 +4097,7 @@ namespace ts {
                     badNode.end = invalidElement.end;
                     badNode.left = result;
                     badNode.right = invalidElement;
-                    badNode.operatorToken = <BinaryOperatorToken>createMissingNode(SyntaxKind.CommaToken, /*reportAtCurrentPosition*/ false, /*diagnosticMessage*/ undefined);
+                    badNode.operatorToken = createMissingNode(SyntaxKind.CommaToken, /*reportAtCurrentPosition*/ false, /*diagnosticMessage*/ undefined);
                     badNode.operatorToken.pos = badNode.operatorToken.end = badNode.right.pos;
                     return <JsxElement><Node>badNode;
                 }
@@ -5241,7 +5253,7 @@ namespace ts {
                     if (node.decorators || node.modifiers) {
                         // We reached this point because we encountered decorators and/or modifiers and assumed a declaration
                         // would follow. For recovery and error reporting purposes, return an incomplete declaration.
-                        const missing = <Statement>createMissingNode(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
+                        const missing = createMissingNode<Statement>(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
                         missing.pos = node.pos;
                         missing.decorators = node.decorators;
                         missing.modifiers = node.modifiers;

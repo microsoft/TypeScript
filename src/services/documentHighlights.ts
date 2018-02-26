@@ -21,23 +21,11 @@ namespace ts.DocumentHighlights {
         };
     }
 
-    function getSemanticDocumentHighlights(position: number, node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: ReadonlyArray<SourceFile>): DocumentHighlights[] {
+    function getSemanticDocumentHighlights(position: number, node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: ReadonlyArray<SourceFile>): DocumentHighlights[] | undefined {
         const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken);
-        return referenceEntries && convertReferencedSymbols(referenceEntries);
-    }
-
-    function convertReferencedSymbols(referenceEntries: ReadonlyArray<FindAllReferences.Entry>): DocumentHighlights[] {
-        const fileNameToDocumentHighlights = createMap<HighlightSpan[]>();
-        for (const entry of referenceEntries) {
-            const { fileName, span } = FindAllReferences.toHighlightSpan(entry);
-            let highlightSpans = fileNameToDocumentHighlights.get(fileName);
-            if (!highlightSpans) {
-                fileNameToDocumentHighlights.set(fileName, highlightSpans = []);
-            }
-            highlightSpans.push(span);
-        }
-
-        return arrayFrom(fileNameToDocumentHighlights.entries(), ([fileName, highlightSpans ]) => ({ fileName, highlightSpans }));
+        if (!referenceEntries) return undefined;
+        const map = arrayToMultiMap(referenceEntries.map(FindAllReferences.toHighlightSpan), e => e.fileName, e => e.span);
+        return arrayFrom(map.entries(), ([fileName, highlightSpans]) => ({ fileName, highlightSpans }));
     }
 
     function getSyntacticDocumentHighlights(node: Node, sourceFile: SourceFile): DocumentHighlights[] {

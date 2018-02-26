@@ -1086,7 +1086,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyReferenceGroups(startRanges: Range | Range[], parts: FourSlashInterface.ReferenceGroup[]): void {
+        public verifyReferenceGroups(starts: string | string[] | Range | Range[], parts: FourSlashInterface.ReferenceGroup[]): void {
             interface ReferenceGroupJson {
                 definition: string | { text: string, range: ts.TextSpan };
                 references: ts.ReferenceEntry[];
@@ -1105,8 +1105,13 @@ namespace FourSlash {
                 }),
             }));
 
-            for (const startRange of toArray(startRanges)) {
-                this.goToRangeStart(startRange);
+            for (const start of toArray<string | Range>(starts)) {
+                if (typeof start === "string") {
+                    this.goToMarker(start);
+                }
+                else {
+                    this.goToRangeStart(start);
+                }
                 const fullActual = ts.map<ts.ReferencedSymbol, ReferenceGroupJson>(this.findReferencesAtCaret(), ({ definition, references }, i) => {
                     const text = definition.displayParts.map(d => d.text).join("");
                     return {
@@ -1621,7 +1626,7 @@ Actual: ${stringify(fullActual)}`);
                             const diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram());
                             for (const diagnostic of diagnostics) {
                                 if (!ts.isString(diagnostic.messageText)) {
-                                    let chainedMessage = <ts.DiagnosticMessageChain>diagnostic.messageText;
+                                    let chainedMessage = diagnostic.messageText;
                                     let indentation = " ";
                                     while (chainedMessage) {
                                         resultString += indentation + chainedMessage.messageText + Harness.IO.newLine();
@@ -3109,6 +3114,9 @@ Actual: ${stringify(fullActual)}`);
             hasAction: boolean | undefined,
             options: FourSlashInterface.VerifyCompletionListContainsOptions | undefined,
         ) {
+            const eq = <T>(a: T, b: T, msg: string) => {
+                assert.deepEqual(a, b, this.assertionMessageAtLastKnownMarker(msg + " for " + stringify(entryId)));
+            };
             const matchingItems = items.filter(item => item.name === entryId.name && item.source === entryId.source);
             if (matchingItems.length === 0) {
                 const itemsString = items.map(item => stringify({ name: item.name, source: item.source, kind: item.kind })).join(",\n");
@@ -3123,30 +3131,30 @@ Actual: ${stringify(fullActual)}`);
                 const details = this.getCompletionEntryDetails(item.name, item.source);
 
                 if (documentation !== undefined) {
-                    assert.equal(ts.displayPartsToString(details.documentation), documentation, this.assertionMessageAtLastKnownMarker("completion item documentation for " + entryId));
+                    eq(ts.displayPartsToString(details.documentation), documentation, "completion item documentation");
                 }
                 if (text !== undefined) {
-                    assert.equal(ts.displayPartsToString(details.displayParts), text, this.assertionMessageAtLastKnownMarker("completion item detail text for " + entryId));
+                    eq(ts.displayPartsToString(details.displayParts), text, "completion item detail text");
                 }
 
                 if (entryId.source === undefined) {
-                    assert.equal(options && options.sourceDisplay, undefined);
+                    eq(options && options.sourceDisplay, /*b*/ undefined, "source display");
                 }
                 else {
-                    assert.deepEqual(details.source, [ts.textPart(options!.sourceDisplay)]);
+                    eq(details.source, [ts.textPart(options!.sourceDisplay)], "source display");
                 }
             }
 
             if (kind !== undefined) {
                 if (typeof kind === "string") {
-                    assert.equal(item.kind, kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + entryId));
+                    eq(item.kind, kind, "completion item kind");
                 }
                 else {
                     if (kind.kind) {
-                        assert.equal(item.kind, kind.kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + entryId));
+                        eq(item.kind, kind.kind, "completion item kind");
                     }
                     if (kind.kindModifiers !== undefined) {
-                        assert.equal(item.kindModifiers, kind.kindModifiers, this.assertionMessageAtLastKnownMarker("completion item kindModifiers for " + entryId));
+                        eq(item.kindModifiers, kind.kindModifiers, "completion item kindModifiers");
                     }
                 }
             }
@@ -3155,36 +3163,35 @@ Actual: ${stringify(fullActual)}`);
 
             if (spanIndex !== undefined) {
                 const span = this.getTextSpanForRangeAtIndex(spanIndex);
-                assert.isTrue(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + entryId));
+                assert.isTrue(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + stringify(entryId)));
             }
 
-            assert.equal(item.hasAction, hasAction, "hasAction");
-            assert.equal(item.isRecommended, options && options.isRecommended, "isRecommended");
-            assert.equal(item.insertText, options && options.insertText, "insertText");
+            eq(item.hasAction, hasAction, "hasAction");
+            eq(item.isRecommended, options && options.isRecommended, "isRecommended");
+            eq(item.insertText, options && options.insertText, "insertText");
             if (options && options.replacementSpan) { // TODO: GH#21679
-                assert.deepEqual(item.replacementSpan, options && options.replacementSpan && ts.createTextSpanFromRange(options.replacementSpan), "replacementSpan");
+                eq(item.replacementSpan, options && options.replacementSpan && ts.createTextSpanFromRange(options.replacementSpan), "replacementSpan");
             }
         }
 
         private findFile(indexOrName: string | number) {
-            let result: FourSlashFile;
             if (typeof indexOrName === "number") {
-                const index = <number>indexOrName;
+                const index = indexOrName;
                 if (index >= this.testData.files.length) {
                     throw new Error(`File index (${index}) in openFile was out of range. There are only ${this.testData.files.length} files in this test.`);
                 }
                 else {
-                    result = this.testData.files[index];
+                    return this.testData.files[index];
                 }
             }
             else if (ts.isString(indexOrName)) {
-                let name = <string>indexOrName;
+                let name = indexOrName;
 
                 // names are stored in the compiler with this relative path, this allows people to use goTo.file on just the fileName
                 name = name.indexOf("/") === -1 ? (this.basePath + "/" + name) : name;
 
                 const availableNames: string[] = [];
-                result = ts.forEach(this.testData.files, file => {
+                const result = ts.forEach(this.testData.files, file => {
                     const fn = file.fileName;
                     if (fn) {
                         if (fn === name) {
@@ -3197,12 +3204,11 @@ Actual: ${stringify(fullActual)}`);
                 if (!result) {
                     throw new Error(`No test file named "${name}" exists. Available file names are: ${availableNames.join(", ")}`);
                 }
+                return result;
             }
             else {
-                throw new Error("Unknown argument type");
+                return ts.Debug.assertNever(indexOrName);
             }
-
-            return result;
         }
 
         private getLineColStringAtPosition(position: number) {
@@ -4074,8 +4080,8 @@ namespace FourSlashInterface {
             this.state.verifyReferencesOf(start, references);
         }
 
-        public referenceGroups(startRanges: FourSlash.Range[], parts: ReferenceGroup[]) {
-            this.state.verifyReferenceGroups(startRanges, parts);
+        public referenceGroups(starts: string | string[] | FourSlash.Range | FourSlash.Range[], parts: ReferenceGroup[]) {
+            this.state.verifyReferenceGroups(starts, parts);
         }
 
         public noReferences(markerNameOrRange?: string | FourSlash.Range) {

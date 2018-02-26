@@ -390,7 +390,7 @@ namespace ts.BreakpointResolver {
 
                 // If this is a destructuring pattern, set breakpoint in binding pattern
                 if (isBindingPattern(variableDeclaration.name)) {
-                    return spanInBindingPattern(<BindingPattern>variableDeclaration.name);
+                    return spanInBindingPattern(variableDeclaration.name);
                 }
 
                 // Breakpoint is possible in variableDeclaration only if there is initialization
@@ -420,7 +420,7 @@ namespace ts.BreakpointResolver {
             function spanInParameterDeclaration(parameter: ParameterDeclaration): TextSpan {
                 if (isBindingPattern(parameter.name)) {
                     // Set breakpoint in binding pattern
-                    return spanInBindingPattern(<BindingPattern>parameter.name);
+                    return spanInBindingPattern(parameter.name);
                 }
                 else if (canHaveSpanInParameterDeclaration(parameter)) {
                     return textSpan(parameter);
@@ -540,10 +540,7 @@ namespace ts.BreakpointResolver {
 
             function spanInArrayLiteralOrObjectLiteralDestructuringPattern(node: DestructuringPattern): TextSpan {
                 Debug.assert(node.kind !== SyntaxKind.ArrayBindingPattern && node.kind !== SyntaxKind.ObjectBindingPattern);
-                const elements: NodeArray<Expression | ObjectLiteralElement> =
-                    node.kind === SyntaxKind.ArrayLiteralExpression ?
-                        (<ArrayLiteralExpression>node).elements :
-                        (<ObjectLiteralExpression>node).properties;
+                const elements: NodeArray<Expression | ObjectLiteralElement> = node.kind === SyntaxKind.ArrayLiteralExpression ? node.elements : (node as ObjectLiteralExpression).properties;
 
                 const firstBindingElement = forEach(elements,
                     element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined);

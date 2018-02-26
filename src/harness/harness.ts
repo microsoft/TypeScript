@@ -57,7 +57,7 @@ var assert: typeof _chai.assert = _chai.assert;
 }
 
 declare var __dirname: string; // Node-specific
-var global: NodeJS.Global = <any>Function("return this").call(undefined);
+var global: NodeJS.Global = Function("return this").call(undefined);
 
 declare var window: {};
 declare var XMLHttpRequest: {
@@ -767,10 +767,9 @@ namespace Harness {
                 return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), getCurrentDirectory(), depth, path => {
                     const entry = fs.traversePath(path);
                     if (entry && entry.isDirectory()) {
-                        const directory = <Utils.VirtualDirectory>entry;
                         return {
-                            files: ts.map(directory.getFiles(), f => f.name),
-                            directories: ts.map(directory.getDirectories(), d => d.name)
+                            files: ts.map(entry.getFiles(), f => f.name),
+                            directories: ts.map(entry.getDirectories(), d => d.name)
                         };
                     }
                     return { files: [], directories: [] };
@@ -1533,7 +1532,7 @@ namespace Harness {
             }
 
             if (typesError && symbolsError) {
-                throw new Error(typesError.message + Harness.IO.newLine() + symbolsError.message);
+                throw new Error(typesError.stack + Harness.IO.newLine() + symbolsError.stack);
             }
 
             if (typesError) {

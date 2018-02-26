@@ -15,4 +15,5 @@ class C extends Base {
     // Gets emitted as super, not _super, which is consistent with
     // use of super in static properties initializers.
     [super.bar()]() { }
+>[super.bar()] : Symbol(C[super.bar()], Decl(computedPropertyNames24_ES6.ts, 5, 22))
 }
