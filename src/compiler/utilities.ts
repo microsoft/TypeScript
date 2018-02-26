@@ -3806,7 +3806,7 @@ namespace ts {
     }
 
     export function textRangeContainsPositionInclusive(span: TextRange, position: number): boolean {
-        return position >= span.pos && position < span.end;
+        return position >= span.pos && position <= span.end;
     }
 
     // Returns true if 'span' contains 'other'.
