@@ -17,4 +17,4 @@
 /// <reference path='helpers.ts' />
 /// <reference path='inferFromUsage.ts' />
 /// <reference path="fixInvalidImportSyntax.ts" />
-
+/// <reference path="fixStrictClassInitialization.ts" />

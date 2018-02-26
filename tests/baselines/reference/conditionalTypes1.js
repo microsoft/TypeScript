@@ -286,6 +286,36 @@ function f50() {
     type B = Omit2<{ a: void; b: never; }>;  // 'a'
 }
 
+// Repro from #21862
+
+type OldDiff<T extends string, U extends string> = (
+    & { [P in T]: P; }
+    & { [P in U]: never; }
+    & { [x: string]: never; }
+)[T];
+type NewDiff<T, U> = T extends U ? never : T;
+interface A {
+    a: 'a';
+}
+interface B1 extends A {
+    b: 'b';
+    c: OldDiff<keyof this, keyof A>;
+}
+interface B2 extends A {
+    b: 'b';
+    c: NewDiff<keyof this, keyof A>;
+}
+type c1 = B1['c']; // 'c' | 'b'
+type c2 = B2['c']; // 'c' | 'b'
+
+// Repro from #21929
+
+type NonFooKeys1<T extends object> = OldDiff<keyof T, 'foo'>;
+type NonFooKeys2<T extends object> = Exclude<keyof T, 'foo'>;
+
+type Test1 = NonFooKeys1<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
+type Test2 = NonFooKeys2<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
+
 
 //// [conditionalTypes1.js]
 "use strict";
@@ -561,3 +591,36 @@ declare type T95<T> = T extends string ? boolean : number;
 declare const f44: <U>(value: T94<U>) => T95<U>;
 declare const f45: <U>(value: T95<U>) => T94<U>;
 declare function f50(): void;
+declare type OldDiff<T extends string, U extends string> = ({
+    [P in T]: P;
+} & {
+    [P in U]: never;
+} & {
+    [x: string]: never;
+})[T];
+declare type NewDiff<T, U> = T extends U ? never : T;
+interface A {
+    a: 'a';
+}
+interface B1 extends A {
+    b: 'b';
+    c: OldDiff<keyof this, keyof A>;
+}
+interface B2 extends A {
+    b: 'b';
+    c: NewDiff<keyof this, keyof A>;
+}
+declare type c1 = B1['c'];
+declare type c2 = B2['c'];
+declare type NonFooKeys1<T extends object> = OldDiff<keyof T, 'foo'>;
+declare type NonFooKeys2<T extends object> = Exclude<keyof T, 'foo'>;
+declare type Test1 = NonFooKeys1<{
+    foo: 1;
+    bar: 2;
+    baz: 3;
+}>;
+declare type Test2 = NonFooKeys2<{
+    foo: 1;
+    bar: 2;
+    baz: 3;
+}>;

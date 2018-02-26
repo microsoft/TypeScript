@@ -53,7 +53,6 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         "ru": "runners", "runner": "runners",
         "r": "reporter",
         "c": "colors", "color": "colors",
-        "f": "files", "file": "files",
         "w": "workers",
     },
     default: {
@@ -69,7 +68,6 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         light: process.env.light === undefined || process.env.light !== "false",
         reporter: process.env.reporter || process.env.r,
         lint: process.env.lint || true,
-        files: process.env.f || process.env.file || process.env.files || "",
         workers: process.env.workerCount || os.cpus().length,
     }
 });
@@ -1112,13 +1110,11 @@ function spawnLintWorker(files: {path: string}[], callback: (failures: number) =
 
 gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: --f[iles]=regex", ["build-rules"], () => {
     if (fold.isTravis()) console.log(fold.start("lint"));
-    const fileMatcher = cmdLineOptions.files;
-    const files = fileMatcher
-        ? `src/**/${fileMatcher}`
-        : `Gulpfile.ts "scripts/generateLocalizedDiagnosticMessages.ts" "scripts/tslint/**/*.ts" "src/**/*.ts" --exclude "src/lib/*.d.ts"`;
-    const cmd = `node node_modules/tslint/bin/tslint ${files} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
-    console.log("Linting: " + cmd);
-    child_process.execSync(cmd, { stdio: [0, 1, 2] });
+    for (const project of ["scripts/tslint/tsconfig.json", "src/tsconfig-base.json"]) {
+        const cmd = `node node_modules/tslint/bin/tslint --project ${project} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
+        console.log("Linting: " + cmd);
+        child_process.execSync(cmd, { stdio: [0, 1, 2] });
+    }
     if (fold.isTravis()) console.log(fold.end("lint"));
 });
 

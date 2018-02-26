@@ -197,13 +197,12 @@ namespace ts.textChanges {
 
     export class ChangeTracker {
         private readonly changes: Change[] = [];
-        private readonly newLineCharacter: string;
         private readonly deletedNodesInLists: true[] = []; // Stores ids of nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
         // Map from class id to nodes to insert at the start
         private readonly nodesInsertedAtClassStarts = createMap<{ sourceFile: SourceFile, cls: ClassLikeDeclaration, members: ClassElement[] }>();
 
         public static fromContext(context: TextChangesContext): ChangeTracker {
-            return new ChangeTracker(getNewLineOrDefaultFromHost(context.host, context.formatContext.options) === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed, context.formatContext);
+            return new ChangeTracker(getNewLineOrDefaultFromHost(context.host, context.formatContext.options), context.formatContext);
         }
 
         public static with(context: TextChangesContext, cb: (tracker: ChangeTracker) => void): FileTextChanges[] {
@@ -212,11 +211,11 @@ namespace ts.textChanges {
             return tracker.getChanges();
         }
 
+        /** Public for tests only. Other callers should use `ChangeTracker.with`. */
         constructor(
-            private readonly newLine: NewLineKind,
+            private readonly newLineCharacter: string,
             private readonly formatContext: ts.formatting.FormatContext,
             private readonly validator?: (text: NonFormattedText) => void) {
-            this.newLineCharacter = getNewLineCharacter({ newLine });
         }
 
         public deleteRange(sourceFile: SourceFile, range: TextRange) {
@@ -593,32 +592,12 @@ namespace ts.textChanges {
 
         public getChanges(): FileTextChanges[] {
             this.finishInsertNodeAtClassStart();
-
-            const changesPerFile = createMap<Change[]>();
-            // group changes per file
-            for (const c of this.changes) {
-                let changesInFile = changesPerFile.get(c.sourceFile.path);
-                if (!changesInFile) {
-                    changesPerFile.set(c.sourceFile.path, changesInFile = []);
-                }
-                changesInFile.push(c);
-            }
-            // convert changes
-            const fileChangesList: FileTextChanges[] = [];
-            changesPerFile.forEach(changesInFile => {
+            return group(this.changes, c => c.sourceFile.path).map(changesInFile => {
                 const sourceFile = changesInFile[0].sourceFile;
-                const fileTextChanges: FileTextChanges = { fileName: sourceFile.fileName, textChanges: [] };
-                for (const c of ChangeTracker.normalize(changesInFile)) {
-                    fileTextChanges.textChanges.push(createTextChange(this.computeSpan(c, sourceFile), this.computeNewText(c, sourceFile)));
-                }
-                fileChangesList.push(fileTextChanges);
+                const textChanges = ChangeTracker.normalize(changesInFile).map(c =>
+                    createTextChange(createTextSpanFromRange(c.range), this.computeNewText(c, sourceFile)));
+                return { fileName: sourceFile.fileName, textChanges };
             });
-
-            return fileChangesList;
-        }
-
-        private computeSpan(change: Change, _sourceFile: SourceFile): TextSpan {
-            return createTextSpanFromRange(change.range);
         }
 
         private computeNewText(change: Change, sourceFile: SourceFile): string {
@@ -651,7 +630,7 @@ namespace ts.textChanges {
         }
 
         private getFormattedTextOfNode(node: Node, sourceFile: SourceFile, pos: number, options: ChangeNodeOptions): string {
-            const nonformattedText = getNonformattedText(node, sourceFile, this.newLine);
+            const nonformattedText = getNonformattedText(node, sourceFile, this.newLineCharacter);
             if (this.validator) {
                 this.validator(nonformattedText);
             }
@@ -675,7 +654,7 @@ namespace ts.textChanges {
             return applyFormatting(nonformattedText, sourceFile, initialIndentation, delta, this.formatContext);
         }
 
-        private static normalize(changes: Change[]): Change[] {
+        private static normalize(changes: ReadonlyArray<Change>): ReadonlyArray<Change> {
             // order changes by start position
             const normalized = stableSort(changes, (a, b) => a.range.pos - b.range.pos);
             // verify that change intervals do not overlap, except possibly at end points.
@@ -691,10 +670,9 @@ namespace ts.textChanges {
         readonly node: Node;
     }
 
-    function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLine: NewLineKind): NonFormattedText {
-        const options = { newLine, target: sourceFile && sourceFile.languageVersion };
-        const writer = new Writer(getNewLineCharacter(options));
-        const printer = createPrinter(options, writer);
+    function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLine: string): NonFormattedText {
+        const writer = new Writer(newLine);
+        const printer = createPrinter({ newLine: newLine === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed }, writer);
         printer.writeNode(EmitHint.Unspecified, node, sourceFile, writer);
         return { text: writer.getText(), node: assignPositionsToNode(node) };
     }

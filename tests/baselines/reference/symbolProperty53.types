@@ -4,6 +4,7 @@ var obj = {
 >{    [Symbol.for]: 0} : { [Symbol.for]: number; }
 
     [Symbol.for]: 0
+>[Symbol.for] : number
 >Symbol.for : (key: string) => symbol
 >Symbol : SymbolConstructor
 >for : (key: string) => symbol

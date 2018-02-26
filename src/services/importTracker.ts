@@ -109,7 +109,9 @@ namespace ts.FindAllReferences {
                             }
                             else if (isDefaultImport(direct)) {
                                 const sourceFileLike = getSourceFileLikeForImportDeclaration(direct);
-                                addIndirectUser(sourceFileLike); // Add a check for indirect uses to handle synthetic default imports
+                                if (!isAvailableThroughGlobal) {
+                                    addIndirectUser(sourceFileLike); // Add a check for indirect uses to handle synthetic default imports
+                                }
                                 directImports.push(direct);
                             }
                             else {
@@ -629,7 +631,7 @@ namespace ts.FindAllReferences {
         // For `export { foo } from './bar", there's nothing to skip, because it does not create a new alias. But `export { foo } does.
         if (symbol.declarations) {
             for (const declaration of symbol.declarations) {
-                if (isExportSpecifier(declaration) && !(declaration as ExportSpecifier).propertyName && !(declaration as ExportSpecifier).parent.parent.moduleSpecifier) {
+                if (isExportSpecifier(declaration) && !declaration.propertyName && !declaration.parent.parent.moduleSpecifier) {
                     return checker.getExportSpecifierLocalTargetSymbol(declaration);
                 }
             }
@@ -651,8 +653,8 @@ namespace ts.FindAllReferences {
         if (parent.kind === SyntaxKind.SourceFile) {
             return parent as SourceFile;
         }
-        Debug.assert(parent.kind === SyntaxKind.ModuleBlock && isAmbientModuleDeclaration(parent.parent));
-        return parent.parent as AmbientModuleDeclaration;
+        Debug.assert(parent.kind === SyntaxKind.ModuleBlock);
+        return cast(parent.parent, isAmbientModuleDeclaration);
     }
 
     function isAmbientModuleDeclaration(node: Node): node is AmbientModuleDeclaration {

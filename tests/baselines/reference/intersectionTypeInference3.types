@@ -8,6 +8,7 @@ type Nominal<Kind extends string, Type> = Type & {
 >Type : Type
 
     [Symbol.species]: Kind;
+>[Symbol.species] : Kind
 >Symbol.species : symbol
 >Symbol : SymbolConstructor
 >species : symbol

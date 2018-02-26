@@ -2026,7 +2026,7 @@ namespace ts.server {
                         }
                         else {
                             configFileErrors = project.getAllProjectErrors();
-                            this.sendConfigFileDiagEvent(project as ConfiguredProject, fileName);
+                            this.sendConfigFileDiagEvent(project, fileName);
                         }
                     }
                     else {

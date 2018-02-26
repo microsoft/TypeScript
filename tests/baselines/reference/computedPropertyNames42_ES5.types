@@ -17,6 +17,7 @@ class C {
 
     // Computed properties
     [""]: Foo;
+>[""] : Foo
 >"" : ""
 >Foo : Foo
 }

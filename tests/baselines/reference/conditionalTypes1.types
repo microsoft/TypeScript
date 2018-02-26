@@ -1274,3 +1274,99 @@ function f50() {
 >b : never
 }
 
+// Repro from #21862
+
+type OldDiff<T extends string, U extends string> = (
+>OldDiff : ({ [P in T]: P; } & { [P in U]: never; } & { [x: string]: never; })[T]
+>T : T
+>U : U
+
+    & { [P in T]: P; }
+>P : P
+>T : T
+>P : P
+
+    & { [P in U]: never; }
+>P : P
+>U : U
+
+    & { [x: string]: never; }
+>x : string
+
+)[T];
+>T : T
+
+type NewDiff<T, U> = T extends U ? never : T;
+>NewDiff : NewDiff<T, U>
+>T : T
+>U : U
+>T : T
+>U : U
+>T : T
+
+interface A {
+>A : A
+
+    a: 'a';
+>a : "a"
+}
+interface B1 extends A {
+>B1 : B1
+>A : A
+
+    b: 'b';
+>b : "b"
+
+    c: OldDiff<keyof this, keyof A>;
+>c : ({ [P in keyof this]: P; } & { a: never; } & { [x: string]: never; })[keyof this]
+>OldDiff : ({ [P in T]: P; } & { [P in U]: never; } & { [x: string]: never; })[T]
+>A : A
+}
+interface B2 extends A {
+>B2 : B2
+>A : A
+
+    b: 'b';
+>b : "b"
+
+    c: NewDiff<keyof this, keyof A>;
+>c : NewDiff<keyof this, "a">
+>NewDiff : NewDiff<T, U>
+>A : A
+}
+type c1 = B1['c']; // 'c' | 'b'
+>c1 : "b" | "c"
+>B1 : B1
+
+type c2 = B2['c']; // 'c' | 'b'
+>c2 : "b" | "c"
+>B2 : B2
+
+// Repro from #21929
+
+type NonFooKeys1<T extends object> = OldDiff<keyof T, 'foo'>;
+>NonFooKeys1 : ({ [P in keyof T]: P; } & { foo: never; } & { [x: string]: never; })[keyof T]
+>T : T
+>OldDiff : ({ [P in T]: P; } & { [P in U]: never; } & { [x: string]: never; })[T]
+>T : T
+
+type NonFooKeys2<T extends object> = Exclude<keyof T, 'foo'>;
+>NonFooKeys2 : Exclude<keyof T, "foo">
+>T : T
+>Exclude : Exclude<T, U>
+>T : T
+
+type Test1 = NonFooKeys1<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
+>Test1 : "bar" | "baz"
+>NonFooKeys1 : ({ [P in keyof T]: P; } & { foo: never; } & { [x: string]: never; })[keyof T]
+>foo : 1
+>bar : 2
+>baz : 3
+
+type Test2 = NonFooKeys2<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
+>Test2 : "bar" | "baz"
+>NonFooKeys2 : Exclude<keyof T, "foo">
+>foo : 1
+>bar : 2
+>baz : 3
+

@@ -425,8 +425,8 @@ namespace ts {
     }
 
     export function isAmbientModule(node: Node): boolean {
-        return node && node.kind === SyntaxKind.ModuleDeclaration &&
-            ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(<ModuleDeclaration>node));
+        return node && isModuleDeclaration(node) &&
+            (node.name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(node));
     }
 
     export function isModuleWithStringLiteralName(node: Node): node is ModuleDeclaration {
@@ -570,17 +570,15 @@ namespace ts {
     export function getTextOfPropertyName(name: PropertyName): __String {
         switch (name.kind) {
             case SyntaxKind.Identifier:
-                return (<Identifier>name).escapedText;
+                return name.escapedText;
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
-                return escapeLeadingUnderscores((<LiteralExpression>name).text);
+                return escapeLeadingUnderscores(name.text);
             case SyntaxKind.ComputedPropertyName:
-                if (isStringOrNumericLiteral((<ComputedPropertyName>name).expression)) {
-                    return escapeLeadingUnderscores((<LiteralExpression>(<ComputedPropertyName>name).expression).text);
-                }
+                return isStringOrNumericLiteral(name.expression) ? escapeLeadingUnderscores(name.expression.text) : undefined;
+            default:
+                Debug.assertNever(name);
         }
-
-        return undefined;
     }
 
     export function entityNameToString(name: EntityNameOrEntityNameExpression): string {
@@ -906,11 +904,10 @@ namespace ts {
                     return;
                 default:
                     if (isFunctionLike(node)) {
-                        const name = (<FunctionLikeDeclaration>node).name;
-                        if (name && name.kind === SyntaxKind.ComputedPropertyName) {
+                        if (node.name && node.name.kind === SyntaxKind.ComputedPropertyName) {
                             // Note that we will not include methods/accessors of a class because they would require
                             // first descending into the class. This is by design.
-                            traverse((<ComputedPropertyName>name).expression);
+                            traverse(node.name.expression);
                             return;
                         }
                     }
@@ -1221,15 +1218,15 @@ namespace ts {
     }
 
     export function getInvokedExpression(node: CallLikeExpression): Expression {
-        if (node.kind === SyntaxKind.TaggedTemplateExpression) {
-            return (<TaggedTemplateExpression>node).tag;
+        switch (node.kind) {
+            case SyntaxKind.TaggedTemplateExpression:
+                return node.tag;
+            case SyntaxKind.JsxOpeningElement:
+            case SyntaxKind.JsxSelfClosingElement:
+                return node.tagName;
+            default:
+                return node.expression;
         }
-        else if (isJsxOpeningLikeElement(node)) {
-            return node.tagName;
-        }
-
-        // Will either be a CallExpression, NewExpression, or Decorator.
-        return (<CallExpression | Decorator>node).expression;
     }
 
     export function nodeCanBeDecorated(node: ClassDeclaration): true;
@@ -1561,7 +1558,7 @@ namespace ts {
         if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
             const reference = (<ImportEqualsDeclaration>node).moduleReference;
             if (reference.kind === SyntaxKind.ExternalModuleReference) {
-                return (<ExternalModuleReference>reference).expression;
+                return reference.expression;
             }
         }
         if (node.kind === SyntaxKind.ExportDeclaration) {
@@ -1573,20 +1570,20 @@ namespace ts {
     }
 
     export function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): ImportEqualsDeclaration | NamespaceImport {
-        if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
-            return <ImportEqualsDeclaration>node;
-        }
-
-        const importClause = (<ImportDeclaration>node).importClause;
-        if (importClause && importClause.namedBindings && importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-            return <NamespaceImport>importClause.namedBindings;
+        switch (node.kind) {
+            case SyntaxKind.ImportDeclaration:
+                return node.importClause && tryCast(node.importClause.namedBindings, isNamespaceImport);
+            case SyntaxKind.ImportEqualsDeclaration:
+                return node;
+            case SyntaxKind.ExportDeclaration:
+                return undefined;
+            default:
+                return Debug.assertNever(node);
         }
     }
 
     export function isDefaultImport(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
-        return node.kind === SyntaxKind.ImportDeclaration
-            && (<ImportDeclaration>node).importClause
-            && !!(<ImportDeclaration>node).importClause.name;
+        return node.kind === SyntaxKind.ImportDeclaration && node.importClause && !!node.importClause.name;
     }
 
     export function hasQuestionToken(node: Node) {
@@ -1620,17 +1617,19 @@ namespace ts {
             node.expression.right;
     }
 
-    function getSingleInitializerOfVariableStatement(node: Node, child?: Node): Node {
-        return isVariableStatement(node) &&
-            node.declarationList.declarations.length > 0 &&
-            (!child || node.declarationList.declarations[0].initializer === child) &&
-            node.declarationList.declarations[0].initializer;
+    function getSingleInitializerOfVariableStatementOrPropertyDeclaration(node: Node): Expression | undefined {
+        switch (node.kind) {
+            case ts.SyntaxKind.VariableStatement:
+                const v = getSingleVariableOfVariableStatement(node);
+                return v && v.initializer;
+            case ts.SyntaxKind.PropertyDeclaration:
+                return (node as PropertyDeclaration).initializer;
+        }
     }
 
-    function getSingleVariableOfVariableStatement(node: Node, child?: Node): Node {
+    function getSingleVariableOfVariableStatement(node: Node): VariableDeclaration | undefined {
         return isVariableStatement(node) &&
             node.declarationList.declarations.length > 0 &&
-            (!child || node.declarationList.declarations[0] === child) &&
             node.declarationList.declarations[0];
     }
 
@@ -1648,7 +1647,7 @@ namespace ts {
 
         function getJSDocCommentsAndTagsWorker(node: Node): void {
             const parent = node.parent;
-            if (parent && (parent.kind === SyntaxKind.PropertyAssignment || getNestedModuleDeclaration(parent))) {
+            if (parent && (parent.kind === SyntaxKind.PropertyAssignment || parent.kind === SyntaxKind.PropertyDeclaration || getNestedModuleDeclaration(parent))) {
                 getJSDocCommentsAndTagsWorker(parent);
             }
             // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement.
@@ -1658,10 +1657,10 @@ namespace ts {
             //   */
             // var x = function(name) { return name.length; }
             if (parent && parent.parent &&
-                (getSingleVariableOfVariableStatement(parent.parent, node) || getSourceOfAssignment(parent.parent))) {
+                (getSingleVariableOfVariableStatement(parent.parent) === node || getSourceOfAssignment(parent.parent))) {
                 getJSDocCommentsAndTagsWorker(parent.parent);
             }
-            if (parent && parent.parent && parent.parent.parent && getSingleInitializerOfVariableStatement(parent.parent.parent, node)) {
+            if (parent && parent.parent && parent.parent.parent && getSingleInitializerOfVariableStatementOrPropertyDeclaration(parent.parent.parent) === node) {
                 getJSDocCommentsAndTagsWorker(parent.parent.parent);
             }
             if (isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) !== SpecialPropertyAssignmentKind.None ||
@@ -1704,7 +1703,7 @@ namespace ts {
     export function getHostSignatureFromJSDoc(node: JSDocParameterTag): FunctionLike | undefined {
         const host = getJSDocHost(node);
         const decl = getSourceOfAssignment(host) ||
-            getSingleInitializerOfVariableStatement(host) ||
+            getSingleInitializerOfVariableStatementOrPropertyDeclaration(host) ||
             getSingleVariableOfVariableStatement(host) ||
             getNestedModuleDeclaration(host) ||
             host;
@@ -1861,16 +1860,9 @@ namespace ts {
         return false;
     }
 
-    // True if the given identifier, string literal, or number literal is the name of a declaration node
+    // True if `name` is the name of a declaration node
     export function isDeclarationName(name: Node): boolean {
-        switch (name.kind) {
-            case SyntaxKind.Identifier:
-            case SyntaxKind.StringLiteral:
-            case SyntaxKind.NumericLiteral:
-                return isDeclaration(name.parent) && name.parent.name === name;
-            default:
-                return false;
-        }
+        return !isSourceFile(name) && !isBindingPattern(name) && isDeclaration(name.parent) && name.parent.name === name;
     }
 
     // See GH#16030
@@ -2127,8 +2119,8 @@ namespace ts {
 
     export function isDynamicName(name: DeclarationName): boolean {
         return name.kind === SyntaxKind.ComputedPropertyName &&
-            !isStringOrNumericLiteral((<ComputedPropertyName>name).expression) &&
-            !isWellKnownSymbolSyntactically((<ComputedPropertyName>name).expression);
+            !isStringOrNumericLiteral(name.expression) &&
+            !isWellKnownSymbolSyntactically(name.expression);
     }
 
     /**
@@ -2160,34 +2152,24 @@ namespace ts {
         return undefined;
     }
 
-    export function getTextOfIdentifierOrLiteral(node: Identifier | LiteralLikeNode) {
-        if (node) {
-            if (node.kind === SyntaxKind.Identifier) {
-                return idText(node as Identifier);
-            }
-            if (node.kind === SyntaxKind.StringLiteral ||
-                node.kind === SyntaxKind.NumericLiteral) {
-
-                return (node as LiteralLikeNode).text;
-            }
+    export type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral;
+    export function isPropertyNameLiteral(node: Node): node is PropertyNameLiteral {
+        switch (node.kind) {
+            case SyntaxKind.Identifier:
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.NumericLiteral:
+                return true;
+            default:
+                return false;
         }
-
-        return undefined;
+    }
+    export function getTextOfIdentifierOrLiteral(node: PropertyNameLiteral): string {
+        return node.kind === SyntaxKind.Identifier ? idText(node) : node.text;
     }
 
-    export function getEscapedTextOfIdentifierOrLiteral(node: Identifier | LiteralLikeNode) {
-        if (node) {
-            if (node.kind === SyntaxKind.Identifier) {
-                return (node as Identifier).escapedText;
-            }
-            if (node.kind === SyntaxKind.StringLiteral ||
-                node.kind === SyntaxKind.NumericLiteral) {
-
-                return escapeLeadingUnderscores((node as LiteralLikeNode).text);
-            }
-        }
-
-        return undefined;
+    export function getEscapedTextOfIdentifierOrLiteral(node: PropertyNameLiteral): __String {
+        return node.kind === SyntaxKind.Identifier ? node.escapedText : escapeLeadingUnderscores(node.text);
     }
 
     export function getPropertyNameForKnownSymbolName(symbolName: string): __String {
@@ -3756,7 +3738,7 @@ namespace ts {
         return false;
     }
 
-    export function getClassLikeDeclarationOfSymbol(symbol: Symbol): Declaration | undefined {
+    export function getClassLikeDeclarationOfSymbol(symbol: Symbol): ClassLikeDeclaration | undefined {
         return find(symbol.declarations, isClassLike);
     }
 
@@ -4258,13 +4240,12 @@ namespace ts {
         // Covers remaining cases
         switch (hostNode.kind) {
             case SyntaxKind.VariableStatement:
-                if ((hostNode as VariableStatement).declarationList &&
-                (hostNode as VariableStatement).declarationList.declarations[0]) {
-                    return getDeclarationIdentifier((hostNode as VariableStatement).declarationList.declarations[0]);
+                if (hostNode.declarationList && hostNode.declarationList.declarations[0]) {
+                    return getDeclarationIdentifier(hostNode.declarationList.declarations[0]);
                 }
                 return undefined;
             case SyntaxKind.ExpressionStatement:
-                const expr = (hostNode as ExpressionStatement).expression;
+                const expr = hostNode.expression;
                 switch (expr.kind) {
                     case SyntaxKind.PropertyAccessExpression:
                         return (expr as PropertyAccessExpression).name;
@@ -4297,7 +4278,7 @@ namespace ts {
     }
 
     export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {
-        return declaration.name || nameForNamelessJSDocTypedef(declaration as JSDocTypedefTag);
+        return declaration.name || nameForNamelessJSDocTypedef(declaration);
     }
 
     export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
@@ -4353,7 +4334,7 @@ namespace ts {
     export function getJSDocParameterTags(param: ParameterDeclaration): ReadonlyArray<JSDocParameterTag> | undefined {
         if (param.name && isIdentifier(param.name)) {
             const name = param.name.escapedText;
-            return getJSDocTags(param.parent).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name) as JSDocParameterTag[];
+            return getJSDocTags(param.parent).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name);
         }
         // a binding pattern doesn't have a name, so it's not possible to match it a JSDoc parameter, which is identified by name
         return undefined;
@@ -5939,5 +5920,14 @@ namespace ts {
             default:
                 return false;
         }
+    }
+
+    /* @internal */
+    export function isTypeReferenceType(node: Node): node is TypeReferenceType {
+        return node.kind === SyntaxKind.TypeReference || node.kind === SyntaxKind.ExpressionWithTypeArguments;
+    }
+
+    export function isStringLiteralLike(node: Node): node is StringLiteralLike {
+        return node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 }

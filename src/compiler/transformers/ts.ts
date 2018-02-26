@@ -242,13 +242,13 @@ namespace ts {
             }
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
-                    return visitImportDeclaration(<ImportDeclaration>node);
+                    return visitImportDeclaration(node);
                 case SyntaxKind.ImportEqualsDeclaration:
-                    return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
+                    return visitImportEqualsDeclaration(node);
                 case SyntaxKind.ExportAssignment:
-                    return visitExportAssignment(<ExportAssignment>node);
+                    return visitExportAssignment(node);
                 case SyntaxKind.ExportDeclaration:
-                    return visitExportDeclaration(<ExportDeclaration>node);
+                    return visitExportDeclaration(node);
                 default:
                     Debug.fail("Unhandled ellided statement");
             }
@@ -1147,20 +1147,23 @@ namespace ts {
             setEmitFlags(localName, EmitFlags.NoComments);
 
             return startOnNewLine(
-                setTextRange(
-                    createStatement(
-                        createAssignment(
-                            setTextRange(
-                                createPropertyAccess(
-                                    createThis(),
-                                    propertyName
+                setEmitFlags(
+                    setTextRange(
+                        createStatement(
+                            createAssignment(
+                                setTextRange(
+                                    createPropertyAccess(
+                                        createThis(),
+                                        propertyName
+                                    ),
+                                    node.name
                                 ),
-                                node.name
-                            ),
-                            localName
-                        )
+                                localName
+                            )
+                        ),
+                        moveRangePos(node, -1)
                     ),
-                    moveRangePos(node, -1)
+                    EmitFlags.NoComments
                 )
             );
         }
@@ -2010,7 +2013,7 @@ namespace ts {
                 case SyntaxKind.Identifier:
                     // Create a clone of the name with a new parent, and treat it as if it were
                     // a source tree node for the purposes of the checker.
-                    const name = getMutableClone(<Identifier>node);
+                    const name = getMutableClone(node);
                     name.flags &= ~NodeFlags.Synthesized;
                     name.original = undefined;
                     name.parent = getParseTreeNode(currentScope); // ensure the parent is set to a parse tree node.
@@ -2027,7 +2030,7 @@ namespace ts {
                     return name;
 
                 case SyntaxKind.QualifiedName:
-                    return serializeQualifiedNameAsExpression(<QualifiedName>node, useFallback);
+                    return serializeQualifiedNameAsExpression(node, useFallback);
             }
         }
 
@@ -2091,9 +2094,9 @@ namespace ts {
         function getExpressionForPropertyName(member: ClassElement | EnumMember, generateNameForComputedPropertyName: boolean): Expression {
             const name = member.name;
             if (isComputedPropertyName(name)) {
-                return generateNameForComputedPropertyName && !isSimpleInlineableExpression((<ComputedPropertyName>name).expression)
+                return generateNameForComputedPropertyName && !isSimpleInlineableExpression(name.expression)
                     ? getGeneratedNameForNode(name)
-                    : (<ComputedPropertyName>name).expression;
+                    : name.expression;
             }
             else if (isIdentifier(name)) {
                 return createLiteral(idText(name));
@@ -2961,7 +2964,7 @@ namespace ts {
             const body = node.body;
             if (body.kind === SyntaxKind.ModuleBlock) {
                 saveStateAndInvoke(body, body => addRange(statements, visitNodes((<ModuleBlock>body).statements, namespaceElementVisitor, isStatement)));
-                statementsLocation = (<ModuleBlock>body).statements;
+                statementsLocation = body.statements;
                 blockLocation = body;
             }
             else {
@@ -3547,9 +3550,7 @@ namespace ts {
                 return undefined;
             }
 
-            return isPropertyAccessExpression(node) || isElementAccessExpression(node)
-                ? resolver.getConstantValue(<PropertyAccessExpression | ElementAccessExpression>node)
-                : undefined;
+            return isPropertyAccessExpression(node) || isElementAccessExpression(node) ? resolver.getConstantValue(node) : undefined;
         }
     }
 

@@ -14,18 +14,22 @@ namespace ts.codefix {
             return changes.length === 0 ? undefined : [{ description: getLocaleSpecificMessage(Diagnostics.Implement_inherited_abstract_class), changes, fixId }];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-            addMissingMembers(getClass(diag.file!, diag.start!), context.sourceFile, context.program.getTypeChecker(), changes);
-        }),
+        getAllCodeActions: context => {
+            const seenClassDeclarations = createMap<true>();
+            return codeFixAll(context, errorCodes, (changes, diag) => {
+                const classDeclaration = getClass(diag.file!, diag.start!);
+                if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
+                    addMissingMembers(classDeclaration, context.sourceFile, context.program.getTypeChecker(), changes);
+                }
+            });
+        },
     });
 
     function getClass(sourceFile: SourceFile, pos: number): ClassLikeDeclaration {
-        // This is the identifier in the case of a class declaration
+        // Token is the identifier in the case of a class declaration
         // or the class keyword token in the case of a class expression.
         const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
-        const classDeclaration = token.parent;
-        Debug.assert(isClassLike(classDeclaration));
-        return classDeclaration as ClassLikeDeclaration;
+        return cast(token.parent, isClassLike);
     }
 
     function addMissingMembers(classDeclaration: ClassLikeDeclaration, sourceFile: SourceFile, checker: TypeChecker, changeTracker: textChanges.ChangeTracker): void {
