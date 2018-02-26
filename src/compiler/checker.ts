@@ -8188,9 +8188,6 @@ namespace ts {
         }
 
         function getConditionalType(root: ConditionalRoot, mapper: TypeMapper): Type {
-            let combinedMapper: TypeMapper;
-            const getTrueType = () => instantiateType(root.trueType, combinedMapper || mapper);
-            const getFalseType = () => instantiateType(root.falseType, mapper);
             const checkType = instantiateType(root.checkType, mapper);
             const extendsType = instantiateType(root.extendsType, mapper);
             // Return falseType for a definitely false extends check. We check an instantations of the two
@@ -8198,9 +8195,10 @@ namespace ts {
             // possible (the wildcard type is assignable to and from all types). If those are not related,
             // then no instatiations will be and we can just return the false branch type.
             if (!typeMaybeAssignableTo(getWildcardInstantiation(checkType), getWildcardInstantiation(extendsType))) {
-                return getFalseType();
+                return instantiateType(root.falseType, mapper);
             }
             // The check could be true for some instantiation
+            let combinedMapper: TypeMapper;
             if (root.inferTypeParameters) {
                 const inferences = map(root.inferTypeParameters, createInferenceInfo);
                 // We don't want inferences from constraints as they may cause us to eagerly resolve the
@@ -8208,12 +8206,12 @@ namespace ts {
                 // types rules (i.e. proper contravariance) for inferences.
                 inferTypes(inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
                 // We infer 'never' when there are no candidates for a type parameter
-                const inferredTypes = map(inferences, inference => getTypeFromInference(inference) || neverType);
+                const inferredTypes = map(inferences, inference => getTypeFromInference(inference) || emptyObjectType);
                 combinedMapper = combineTypeMappers(mapper, createTypeMapper(root.inferTypeParameters, inferredTypes));
             }
             // Return union of trueType and falseType for any and never since they match anything
             if (checkType.flags & TypeFlags.Any || (checkType.flags & TypeFlags.Never && !(extendsType.flags & TypeFlags.Never))) {
-                return getUnionType([getTrueType(), getFalseType()]);
+                return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), instantiateType(root.falseType, mapper)]);
             }
             // Instantiate the extends type including inferences for 'infer T' type parameters
             const inferredExtendsType = combinedMapper ? instantiateType(root.extendsType, combinedMapper) : extendsType;
@@ -8222,7 +8220,7 @@ namespace ts {
             //   type Foo<T extends { x: any }> = T extends { x: string } ? string : number
             // would immediately resolve to 'string' instead of being deferred.
             if (checkTypeRelatedTo(checkType, inferredExtendsType, definitelyAssignableRelation, /*errorNode*/ undefined)) {
-                return getTrueType();
+                return instantiateType(root.trueType, combinedMapper || mapper);
             }
             // Return a deferred type for a check that is neither definitely true nor definitely false
             const erasedCheckType = getActualTypeParameter(checkType);
