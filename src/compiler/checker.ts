@@ -2092,7 +2092,7 @@ namespace ts {
                 else if (noImplicitAny && moduleNotFoundError) {
                     let errorInfo = resolvedModule.packageId && chainDiagnosticMessages(/*details*/ undefined,
                         Diagnostics.Try_npm_install_types_Slash_0_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
-                        resolvedModule.packageId.name);
+                        getMangledNameForScopedPackage(resolvedModule.packageId.name));
                     errorInfo = chainDiagnosticMessages(errorInfo,
                         Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
                         moduleReference,
