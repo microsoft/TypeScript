@@ -101,7 +101,7 @@ namespace ts {
         return node;
     }
 
-    function createLiteralFromNode(sourceNode: StringLiteralLike | NumericLiteral | Identifier): StringLiteral {
+    function createLiteralFromNode(sourceNode: PropertyNameLiteral): StringLiteral {
         const node = createStringLiteral(getTextOfIdentifierOrLiteral(sourceNode));
         node.textSourceNode = sourceNode;
         return node;

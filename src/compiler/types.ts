@@ -3910,6 +3910,7 @@ namespace ts {
         AlwaysStrict      = 1 << 4,  // Always use strict rules for contravariant inferences
     }
 
+    /* @internal */
     export interface InferenceInfo {
         typeParameter: TypeParameter;  // Type parameter for which inferences are being made
         candidates: Type[];            // Candidates in covariant positions (or undefined)
@@ -3920,6 +3921,7 @@ namespace ts {
         isFixed: boolean;              // True if inferences are fixed
     }
 
+    /* @internal */
     export const enum InferenceFlags {
         None            =      0,  // No special inference behaviors
         InferUnionTypes = 1 << 0,  // Infer union types for disjoint candidates (otherwise unknownType)
@@ -3936,12 +3938,14 @@ namespace ts {
      * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
      * x | y is True if either x or y is True.
      */
+    /* @internal */
     export const enum Ternary {
         False = 0,
         Maybe = 1,
         True = -1
     }
 
+    /* @internal */
     export type TypeComparer = (s: Type, t: Type, reportErrors?: boolean) => Ternary;
 
     /* @internal */

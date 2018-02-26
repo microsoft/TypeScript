@@ -1157,7 +1157,8 @@ namespace ts {
         return `@types/${getMangledNameForScopedPackage(packageName)}`;
     }
 
-    function getMangledNameForScopedPackage(packageName: string): string {
+    /* @internal */
+    export function getMangledNameForScopedPackage(packageName: string): string {
         if (startsWith(packageName, "@")) {
             const replaceSlash = packageName.replace(ts.directorySeparator, mangledScopedPackageSeparator);
             if (replaceSlash !== packageName) {

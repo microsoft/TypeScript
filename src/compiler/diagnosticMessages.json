@@ -3965,5 +3965,17 @@
     "Convert to ES6 module": {
         "category": "Message",
         "code": 95017
+    },
+    "Add 'undefined' type to property '{0}'": {
+        "category": "Message",
+        "code": 95018
+    },
+    "Add initializer to property '{0}'": {
+        "category": "Message",
+        "code": 95019
+    },
+    "Add definite assignment assertion to property '{0}'": {
+        "category": "Message",
+        "code": 95020
     }
 }

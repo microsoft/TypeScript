@@ -22,6 +22,7 @@ class C extends Base {
                 // illegal, and not capturing this is consistent with
                 //treatment of other similar violations.
                 [(super(), "prop")]() { }
+>[(super(), "prop")] : () => void
 >(super(), "prop") : "prop"
 >super(), "prop" : "prop"
 >super() : void

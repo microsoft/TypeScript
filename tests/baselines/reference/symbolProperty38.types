@@ -3,6 +3,7 @@ interface I {
 >I : I
 
     [Symbol.isConcatSpreadable]: string;
+>[Symbol.isConcatSpreadable] : string
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
@@ -11,6 +12,7 @@ interface I {
 >I : I
 
     [Symbol.isConcatSpreadable]: string;
+>[Symbol.isConcatSpreadable] : string
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol

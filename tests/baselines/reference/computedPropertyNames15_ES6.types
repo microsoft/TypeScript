@@ -12,11 +12,14 @@ class C {
 >C : C
 
     [p1]() { }
+>[p1] : () => void
 >p1 : string | number
 
     [p2]() { }
+>[p2] : () => void
 >p2 : number | number[]
 
     [p3]() { }
+>[p3] : () => void
 >p3 : string | boolean
 }
