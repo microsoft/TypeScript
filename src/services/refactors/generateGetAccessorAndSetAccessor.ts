@@ -1,9 +1,19 @@
 /* @internal */
-namespace ts.refactor.GenerateGetterAndSetter {
+namespace ts.refactor.generateGetAccessorAndSetAccessor {
     const actionName = "Generate 'get' and 'set' accessors";
     const actionDescription = Diagnostics.Generate_get_and_set_accessors.message;
-
     registerRefactor(actionName, { getEditsForAction, getAvailableActions });
+
+    interface Info {
+        originalName: string;
+        fieldName: string;
+        accessorName: string;
+        accessorType: TypeNode;
+        propertyDeclaration: PropertyDeclaration;
+        needUpdateName: boolean;
+        hasModifiers: boolean;
+        needUpdateModifiers: boolean;
+    }
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
         const { file, startPosition } = context;
@@ -34,15 +44,17 @@ namespace ts.refactor.GenerateGetterAndSetter {
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
         const newLineCharacter = getNewLineOrDefaultFromHost(context.host, context.formatContext.options);
 
-        const { fieldName, accessorName, propertyDeclaration, needUpdateName, hasModifiers, needUpdateModifiers } = fieldInfo;
-        const accessorModifiers = hasModifiers ? createNodeArray([createToken(SyntaxKind.PublicKeyword)]) : undefined;
+        const { fieldName, accessorName, accessorType, propertyDeclaration, needUpdateName, hasModifiers, needUpdateModifiers } = fieldInfo;
+        const accessorModifiers = hasModifiers ? (
+            (getModifierFlags(propertyDeclaration) & ModifierFlags.Private || !propertyDeclaration.modifiers) ? createNodeArray([createToken(SyntaxKind.PublicKeyword)]) : propertyDeclaration.modifiers
+        ) : undefined;
 
-        const getAccessor = generateGetAccessor(propertyDeclaration, fieldName, accessorName, accessorModifiers);
-        const setAccessor = generateSetAccessor(propertyDeclaration, fieldName, accessorName, accessorModifiers);
+        const getAccessor = generateGetAccessor(fieldName, accessorName, accessorType, accessorModifiers);
+        const setAccessor = generateSetAccessor(fieldName, accessorName, accessorType, accessorModifiers);
 
-        const modifiers = needUpdateModifiers ? createNodeArray([createToken(SyntaxKind.PrivateKeyword)]) : propertyDeclaration.modifiers;
+        const modifiers = hasModifiers ? createNodeArray([createToken(SyntaxKind.PrivateKeyword)]) : undefined;
         if (needUpdateName || needUpdateModifiers) {
-            changeTracker.replaceNode(file, propertyDeclaration, updateOriginPropertyDeclaration(propertyDeclaration, fieldName, modifiers), {
+            changeTracker.replaceNode(file, propertyDeclaration, updateoriginalPropertyDeclaration(propertyDeclaration, fieldName, modifiers), {
                 suffix: newLineCharacter
             });
         }
@@ -57,13 +69,13 @@ namespace ts.refactor.GenerateGetterAndSetter {
         };
     }
 
-    interface Info { originName: string; fieldName: string; accessorName: string; propertyDeclaration: PropertyDeclaration; needUpdateName: boolean; hasModifiers: boolean; needUpdateModifiers: boolean; }
     function getConvertibleFieldAtPosition(file: SourceFile, startPosition: number): Info | undefined {
         const node = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
         const propertyDeclaration = findAncestor(node.parent, isPropertyDeclaration);
 
-        if (!(propertyDeclaration && propertyDeclaration.name.kind === SyntaxKind.Identifier &&
-            (getModifierFlags(propertyDeclaration) | ModifierFlags.AccessibilityModifier) === ModifierFlags.AccessibilityModifier)) return undefined;
+        if (!propertyDeclaration || propertyDeclaration.name.kind !== SyntaxKind.Identifier) return undefined;
+        // make sure propertyDeclaration have only AccessibilityModifier
+        if ((getModifierFlags(propertyDeclaration) | ModifierFlags.AccessibilityModifier) !== ModifierFlags.AccessibilityModifier) return undefined;
 
         const containerClass = getContainingClass(propertyDeclaration);
         if (!containerClass) return undefined;
@@ -79,12 +91,14 @@ namespace ts.refactor.GenerateGetterAndSetter {
         if (find(members, member => needUpdateName ? member.name.getText() === fieldName : member.name.getText() === accessorName)) return undefined;
 
         const hasModifiers = !!find(members, member => !!member.modifiers);
-        const needUpdateModifiers = hasModifiers && (!propertyDeclaration.modifiers || hasModifier(propertyDeclaration, ModifierFlags.Public));
+        const needUpdateModifiers = hasModifiers && (!propertyDeclaration.modifiers || !hasModifier(propertyDeclaration, ModifierFlags.Private));
+        const accessorType = propertyDeclaration.questionToken ? mergeTypeNodeToUnion(propertyDeclaration.type, createKeywordTypeNode(SyntaxKind.UndefinedKeyword)) : propertyDeclaration.type;
 
         return {
-            originName: propertyDeclaration.name.text,
+            originalName: propertyDeclaration.name.text,
             fieldName,
             accessorName,
+            accessorType,
             propertyDeclaration,
             needUpdateName,
             hasModifiers,
@@ -92,13 +106,13 @@ namespace ts.refactor.GenerateGetterAndSetter {
         };
     }
 
-    function generateGetAccessor (propertyDeclaration: PropertyDeclaration, fieldName: string, name: string, modifiers: ModifiersArray) {
+    function generateGetAccessor (fieldName: string, name: string, type: TypeNode, modifiers: ModifiersArray) {
         return createGetAccessor(
             /*decorators*/ undefined,
             modifiers,
             name,
             /*parameters*/ undefined,
-            propertyDeclaration.type,
+            type,
             createBlock([
                 createReturn(
                     createPropertyAccess(
@@ -110,7 +124,7 @@ namespace ts.refactor.GenerateGetterAndSetter {
         );
     }
 
-    function generateSetAccessor (propertyDeclaration: PropertyDeclaration, fieldName: string, name: string, modifiers: ModifiersArray) {
+    function generateSetAccessor (fieldName: string, name: string, type: TypeNode, modifiers: ModifiersArray) {
         return createSetAccessor(
             /*decorators*/ undefined,
             modifiers,
@@ -121,7 +135,7 @@ namespace ts.refactor.GenerateGetterAndSetter {
                 /*dotDotDotToken*/ undefined,
                 createIdentifier("value"),
                 /*questionToken*/ undefined,
-                propertyDeclaration.type
+                type
             )],
             createBlock([
                 createStatement(
@@ -137,15 +151,15 @@ namespace ts.refactor.GenerateGetterAndSetter {
         );
     }
 
-    function updateOriginPropertyDeclaration (propertyDeclaration: PropertyDeclaration, fieldName: string, modifiers: ModifiersArray) {
+    function updateoriginalPropertyDeclaration (propertyDeclaration: PropertyDeclaration, fieldName: string, modifiers: ModifiersArray) {
         return updateProperty(
             propertyDeclaration,
-            /*decorators*/ undefined,
+            propertyDeclaration.decorators,
             modifiers,
             fieldName,
-            /*questionOrExclamationToken*/ undefined,
+            propertyDeclaration.questionToken || propertyDeclaration.exclamationToken,
             propertyDeclaration.type,
-            propertyDeclaration.initializer,
+            propertyDeclaration.initializer
         );
     }
 }

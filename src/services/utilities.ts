@@ -269,6 +269,10 @@ namespace ts {
             getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node;
     }
 
+    export function mergeTypeNodeToUnion(target: TypeNode, ...types: TypeNode[]) {
+        return createUnionTypeNode(isUnionTypeNode(target) ? target.types.concat(types) : [target].concat(types));
+    }
+
     export function getContainerNode(node: Node): Declaration {
         if (node.kind === SyntaxKind.JSDocTypedefTag) {
             // This doesn't just apply to the node immediately under the comment, but to everything in its parent's scope.
