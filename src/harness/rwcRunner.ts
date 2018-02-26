@@ -55,7 +55,7 @@ namespace RWC {
             });
 
             it("can compile", function(this: Mocha.ITestCallbackContext) {
-                this.timeout(800000); // Allow long timeouts for RWC compilations
+                this.timeout(800_000); // Allow long timeouts for RWC compilations
                 let opts: ts.ParsedCommandLine;
 
                 const ioLog: IoLog = Playback.newStyleLogIntoOldStyleLog(JSON.parse(Harness.IO.readFile(`internal/cases/rwc/${jsonPath}/test.json`)), Harness.IO, `internal/cases/rwc/${baseName}`);
