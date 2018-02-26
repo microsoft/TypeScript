@@ -9,12 +9,14 @@ module M {
 >C : C
 
         [Symbol.iterator]: I;
+>[Symbol.iterator] : I
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
 >I : I
 
         [Symbol.toPrimitive](x: I) { }
+>[Symbol.toPrimitive] : (x: I) => void
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol
@@ -22,6 +24,7 @@ module M {
 >I : I
 
         [Symbol.isConcatSpreadable](): I {
+>[Symbol.isConcatSpreadable] : () => I
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
@@ -31,12 +34,14 @@ module M {
 >undefined : undefined
         }
         get [Symbol.toPrimitive]() { return undefined; }
+>[Symbol.toPrimitive] : any
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol
 >undefined : undefined
 
         set [Symbol.toPrimitive](x: I) { }
+>[Symbol.toPrimitive] : I
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol

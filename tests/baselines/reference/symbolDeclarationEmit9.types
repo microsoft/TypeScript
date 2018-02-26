@@ -4,6 +4,7 @@ var obj = {
 >{    [Symbol.isConcatSpreadable]() { }} : { [Symbol.isConcatSpreadable](): void; }
 
     [Symbol.isConcatSpreadable]() { }
+>[Symbol.isConcatSpreadable] : () => void
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol

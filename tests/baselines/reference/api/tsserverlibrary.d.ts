@@ -2227,36 +2227,6 @@ declare namespace ts {
         NoConstraints = 8,
         AlwaysStrict = 16,
     }
-    interface InferenceInfo {
-        typeParameter: TypeParameter;
-        candidates: Type[];
-        contraCandidates: Type[];
-        inferredType: Type;
-        priority: InferencePriority;
-        topLevel: boolean;
-        isFixed: boolean;
-    }
-    enum InferenceFlags {
-        None = 0,
-        InferUnionTypes = 1,
-        NoDefault = 2,
-        AnyDefault = 4,
-    }
-    /**
-     * Ternary values are defined such that
-     * x & y is False if either x or y is False.
-     * x & y is Maybe if either x or y is Maybe, but neither x or y is False.
-     * x & y is True if both x and y are True.
-     * x | y is False if both x and y are False.
-     * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
-     * x | y is True if either x or y is True.
-     */
-    enum Ternary {
-        False = 0,
-        Maybe = 1,
-        True = -1,
-    }
-    type TypeComparer = (s: Type, t: Type, reportErrors?: boolean) => Ternary;
     interface JsFileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
@@ -5058,6 +5028,7 @@ declare namespace ts.server.protocol {
         Navto = "navto",
         NavTree = "navtree",
         NavTreeFull = "navtree-full",
+        /** @deprecated */
         Occurrences = "occurrences",
         DocumentHighlights = "documentHighlights",
         Open = "open",
@@ -5658,6 +5629,7 @@ declare namespace ts.server.protocol {
         openingBrace: string;
     }
     /**
+     * @deprecated
      * Get occurrences request; value of command field is
      * "occurrences". Return response giving spans that are relevant
      * in the file at a given line and column.
@@ -5665,6 +5637,7 @@ declare namespace ts.server.protocol {
     interface OccurrencesRequest extends FileLocationRequest {
         command: CommandTypes.Occurrences;
     }
+    /** @deprecated */
     interface OccurrencesResponseItem extends FileSpan {
         /**
          * True if the occurrence is a write location, false otherwise.
@@ -5675,6 +5648,7 @@ declare namespace ts.server.protocol {
          */
         isInString?: true;
     }
+    /** @deprecated */
     interface OccurrencesResponse extends Response {
         body?: OccurrencesResponseItem[];
     }

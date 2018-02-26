@@ -2092,7 +2092,7 @@ namespace ts {
                 else if (noImplicitAny && moduleNotFoundError) {
                     let errorInfo = resolvedModule.packageId && chainDiagnosticMessages(/*details*/ undefined,
                         Diagnostics.Try_npm_install_types_Slash_0_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
-                        resolvedModule.packageId.name);
+                        getMangledNameForScopedPackage(resolvedModule.packageId.name));
                     errorInfo = chainDiagnosticMessages(errorInfo,
                         Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
                         moduleReference,
@@ -15889,7 +15889,7 @@ namespace ts {
 
             // Referencing abstract properties within their own constructors is not allowed
             if ((flags & ModifierFlags.Abstract) && isThisProperty(node) && symbolHasNonMethodDeclaration(prop)) {
-                const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop));
+                const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop));
                 if (declaringClassDeclaration && isNodeWithinConstructorOfClass(node, declaringClassDeclaration)) {
                     error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), getTextOfIdentifierOrLiteral(declaringClassDeclaration.name));
                     return false;
@@ -15905,7 +15905,7 @@ namespace ts {
 
             // Private property is accessible if the property is within the declaring class
             if (flags & ModifierFlags.Private) {
-                const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop));
+                const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop));
                 if (!isNodeWithinClass(node, declaringClassDeclaration)) {
                     error(errorNode, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1, symbolToString(prop), typeToString(getDeclaringClass(prop)));
                     return false;
@@ -17627,7 +17627,7 @@ namespace ts {
                 return true;
             }
 
-            const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(declaration.parent.symbol);
+            const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(declaration.parent.symbol);
             const declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(declaration.parent.symbol);
 
             // A private or protected constructor can only be instantiated within its own class (or a subclass, for protected)
@@ -23094,7 +23094,7 @@ namespace ts {
                         const rootChain = () => chainDiagnosticMessages(
                             /*details*/ undefined,
                             Diagnostics.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2,
-                            unescapeLeadingUnderscores(declaredProp.escapedName),
+                            symbolToString(declaredProp),
                             typeToString(typeWithThis),
                             typeToString(baseWithThis)
                         );
@@ -23115,7 +23115,7 @@ namespace ts {
             if (signatures.length) {
                 const declaration = signatures[0].declaration;
                 if (declaration && hasModifier(declaration, ModifierFlags.Private)) {
-                    const typeClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(type.symbol);
+                    const typeClassDeclaration = getClassLikeDeclarationOfSymbol(type.symbol);
                     if (!isNodeWithinClass(node, typeClassDeclaration)) {
                         error(node, Diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, getFullyQualifiedName(type.symbol));
                     }

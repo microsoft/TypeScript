@@ -1113,6 +1113,34 @@ namespace ts.tscWatch {
             checkProgramActualFiles(watch(), files.map(file => file.path));
             checkOutputErrors(host, [], ExpectedOutputErrorsPosition.AfterFileChangeDetected);
         });
+
+        it("watched files when file is deleted and new file is added as part of change", () => {
+            const projectLocation = "/home/username/project";
+            const file: FileOrFolder = {
+                path: `${projectLocation}/src/file1.ts`,
+                content: "var a = 10;"
+            };
+            const configFile: FileOrFolder = {
+                path: `${projectLocation}/tsconfig.json`,
+                content: "{}"
+            };
+            const files = [file, libFile, configFile];
+            const host = createWatchedSystem(files);
+            const watch = createWatchOfConfigFile(configFile.path, host);
+            verifyProgram();
+
+            file.path = file.path.replace("file1", "file2");
+            host.reloadFS(files);
+            host.runQueuedTimeoutCallbacks();
+            verifyProgram();
+
+            function verifyProgram() {
+                checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));
+                checkWatchedDirectories(host, [], /*recursive*/ false);
+                checkWatchedDirectories(host, [projectLocation, `${projectLocation}/node_modules/@types`], /*recursive*/ true);
+                checkWatchedFiles(host, files.map(f => f.path));
+            }
+        });
     });
 
     describe("tsc-watch emit with outFile or out setting", () => {

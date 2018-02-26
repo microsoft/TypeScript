@@ -10,6 +10,7 @@ var v = {
 >{    [E.member]: 0} : { [E.member]: number; }
 
     [E.member]: 0
+>[E.member] : number
 >E.member : E
 >E : typeof E
 >member : E

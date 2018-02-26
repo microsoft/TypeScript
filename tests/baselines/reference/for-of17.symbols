@@ -15,6 +15,7 @@ class NumberIterator {
         };
     }
     [Symbol.iterator]() {
+>[Symbol.iterator] : Symbol(NumberIterator[Symbol.iterator], Decl(for-of17.ts, 6, 5))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))

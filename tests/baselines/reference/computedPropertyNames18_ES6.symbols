@@ -6,5 +6,6 @@ function foo() {
 >obj : Symbol(obj, Decl(computedPropertyNames18_ES6.ts, 1, 7))
 
         [this.bar]: 0
+>[this.bar] : Symbol([this.bar], Decl(computedPropertyNames18_ES6.ts, 1, 15))
     }
 }
