@@ -1988,10 +1988,6 @@
         "category": "Error",
         "code": 2567
     },
-    "Recursive instantiations of type '{0}' are excessively deep and possibly infinite.": {
-        "category": "Error",
-        "code": 2568
-    },
 
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
