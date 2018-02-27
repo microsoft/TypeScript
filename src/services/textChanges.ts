@@ -594,21 +594,22 @@ namespace ts.textChanges {
          */
         public getChanges(validate?: ValidateNonFormattedText): FileTextChanges[] {
             this.finishInsertNodeAtClassStart();
-            return changesToText.changesToText(this.changes, this.newLineCharacter, this.formatContext, validate);
+            return changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
         }
     }
 
     export type ValidateNonFormattedText = (node: Node, text: string) => void;
 
     namespace changesToText {
-        export function changesToText(changes: ReadonlyArray<Change>, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText): FileTextChanges[] {
+        export function getTextChangesFromChanges(changes: ReadonlyArray<Change>, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText): FileTextChanges[] {
             return group(changes, c => c.sourceFile.path).map(changesInFile => {
                 const sourceFile = changesInFile[0].sourceFile;
                 // order changes by start position
                 const normalized = stableSort(changesInFile, (a, b) => a.range.pos - b.range.pos);
                 // verify that change intervals do not overlap, except possibly at end points.
                 for (let i = 0; i < normalized.length - 2; i++) {
-                    Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos);
+                    Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos, "Changes overlap", () =>
+                        `${JSON.stringify(normalized[i].range)} and ${JSON.stringify(normalized[i + 1].range)}`);
                 }
                 const textChanges = normalized.map(c =>
                     createTextChange(createTextSpanFromRange(c.range), computeNewText(c, sourceFile, newLineCharacter, formatContext, validate)));
