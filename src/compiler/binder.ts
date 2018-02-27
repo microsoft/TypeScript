@@ -2071,7 +2071,7 @@ namespace ts {
                     seenThisKeyword = true;
                     return;
                 case SyntaxKind.TypePredicate:
-                    return checkTypePredicate(node as TypePredicateNode);
+                    break; // Binding the children will handle everything
                 case SyntaxKind.TypeParameter:
                     return bindTypeParameter(node as TypeParameterDeclaration);
                 case SyntaxKind.Parameter:
@@ -2202,17 +2202,6 @@ namespace ts {
 
         function bindAnonymousTypeWorker(node: TypeLiteralNode | MappedTypeNode | JSDocTypeLiteral) {
             return bindAnonymousDeclaration(<Declaration>node, SymbolFlags.TypeLiteral, InternalSymbolName.Type);
-        }
-
-        function checkTypePredicate(node: TypePredicateNode) {
-            const { parameterName, type } = node;
-            if (parameterName && parameterName.kind === SyntaxKind.Identifier) {
-                checkStrictModeIdentifier(parameterName);
-            }
-            if (parameterName && parameterName.kind === SyntaxKind.ThisType) {
-                seenThisKeyword = true;
-            }
-            bind(type);
         }
 
         function bindSourceFileIfExternalModule() {
