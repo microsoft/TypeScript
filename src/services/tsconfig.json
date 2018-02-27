@@ -53,6 +53,7 @@
         "documentRegistry.ts",
         "findAllReferences.ts",
         "importTracker.ts",
+        "infoDiagnostics.ts",
         "goToDefinition.ts",
         "jsDoc.ts",
         "jsTyping.ts",

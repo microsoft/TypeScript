@@ -1,85 +1,23 @@
 /* @internal */
-namespace ts.refactor {
-    const actionName = "Convert to ES6 module";
-    const description = getLocaleSpecificMessage(Diagnostics.Convert_to_ES6_module);
-    registerRefactor(actionName, { getEditsForAction, getAvailableActions });
-
-    function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
-        const { file, startPosition } = context;
-        if (!isSourceFileJavaScript(file) || !file.commonJsModuleIndicator) {
-            return undefined;
-        }
-
-        const node = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
-        return !isAtTriggerLocation(file, node) ? undefined : [
-            {
-                name: actionName,
-                description,
-                actions: [
-                    {
-                        description,
-                        name: actionName,
-                    },
-                ],
-            },
-        ];
-    }
-
-    function isAtTriggerLocation(sourceFile: SourceFile, node: Node, onSecondTry = false): boolean {
-        switch (node.kind) {
-            case SyntaxKind.CallExpression:
-                return isAtTopLevelRequire(node as CallExpression);
-            case SyntaxKind.PropertyAccessExpression:
-                return isExportsOrModuleExportsOrAlias(sourceFile, node as PropertyAccessExpression)
-                    || isExportsOrModuleExportsOrAlias(sourceFile, (node as PropertyAccessExpression).expression);
-            case SyntaxKind.VariableDeclarationList:
-                return isVariableDeclarationTriggerLocation(firstOrUndefined((node as VariableDeclarationList).declarations));
-            case SyntaxKind.VariableDeclaration:
-                return isVariableDeclarationTriggerLocation(node as VariableDeclaration);
-            default:
-                return isExpression(node) && isExportsOrModuleExportsOrAlias(sourceFile, node)
-                    || !onSecondTry && isAtTriggerLocation(sourceFile, node.parent, /*onSecondTry*/ true);
-        }
-
-        function isVariableDeclarationTriggerLocation(decl: VariableDeclaration | undefined) {
-            return !!decl && !!decl.initializer && isExportsOrModuleExportsOrAlias(sourceFile, decl.initializer);
-        }
-    }
-
-    function isAtTopLevelRequire(call: CallExpression): boolean {
-        if (!isRequireCall(call, /*checkArgumentIsStringLiteral*/ true)) {
-            return false;
-        }
-        const { parent: propAccess } = call;
-        const varDecl = isPropertyAccessExpression(propAccess) ? propAccess.parent : propAccess;
-        if (isExpressionStatement(varDecl) && isSourceFile(varDecl.parent)) { // `require("x");` as a statement
-            return true;
-        }
-        if (!isVariableDeclaration(varDecl)) {
-            return false;
-        }
-        const { parent: varDeclList } = varDecl;
-        if (varDeclList.kind !== SyntaxKind.VariableDeclarationList) {
-            return false;
-        }
-        const { parent: varStatement } = varDeclList;
-        return varStatement.kind === SyntaxKind.VariableStatement && varStatement.parent.kind === SyntaxKind.SourceFile;
-    }
-
-    function getEditsForAction(context: RefactorContext, _actionName: string): RefactorEditInfo | undefined {
-        Debug.assertEqual(actionName, _actionName);
-        const { file, program } = context;
-        Debug.assert(isSourceFileJavaScript(file));
-        const edits = textChanges.ChangeTracker.with(context, changes => {
-            const moduleExportsChangedToDefault = convertFileToEs6Module(file, program.getTypeChecker(), changes, program.getCompilerOptions().target);
-            if (moduleExportsChangedToDefault) {
-                for (const importingFile of program.getSourceFiles()) {
-                    fixImportOfModuleExports(importingFile, file, changes);
+namespace ts.codefix {
+    const errorCodes = [Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module.code];
+    registerCodeFix({
+        errorCodes,
+        getCodeActions(context) {
+            const description = getLocaleSpecificMessage(Diagnostics.Convert_to_ES6_module);
+            const { sourceFile, program } = context;
+            const changes = textChanges.ChangeTracker.with(context, changes => {
+                const moduleExportsChangedToDefault = convertFileToEs6Module(sourceFile, program.getTypeChecker(), changes, program.getCompilerOptions().target);
+                if (moduleExportsChangedToDefault) {
+                    for (const importingFile of program.getSourceFiles()) {
+                        fixImportOfModuleExports(importingFile, sourceFile, changes);
+                    }
                 }
-            }
-        });
-        return { edits, renameFilename: undefined, renameLocation: undefined };
-    }
+            });
+            // No support for fix-all since this applies to the whole file at once anyway.
+            return [{ description, changes, fixId: undefined }];
+        },
+    });
 
     function fixImportOfModuleExports(importingFile: ts.SourceFile, exportingFile: ts.SourceFile, changes: textChanges.ChangeTracker) {
         for (const moduleSpecifier of importingFile.imports) {

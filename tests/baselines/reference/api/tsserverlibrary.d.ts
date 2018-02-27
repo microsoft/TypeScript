@@ -2262,7 +2262,8 @@ declare namespace ts {
     enum DiagnosticCategory {
         Warning = 0,
         Error = 1,
-        Message = 2,
+        Info = 2,
+        Message = 3,
     }
     enum ModuleResolutionKind {
         Classic = 1,
@@ -4054,6 +4055,7 @@ declare namespace ts {
         cleanupSemanticCache(): void;
         getSyntacticDiagnostics(fileName: string): Diagnostic[];
         getSemanticDiagnostics(fileName: string): Diagnostic[];
+        getInfoDiagnostics(fileName: string): Diagnostic[];
         getCompilerOptionsDiagnostics(): Diagnostic[];
         /**
          * @deprecated Use getEncodedSyntacticClassifications instead.
@@ -5024,6 +5026,7 @@ declare namespace ts.server.protocol {
         GeterrForProject = "geterrForProject",
         SemanticDiagnosticsSync = "semanticDiagnosticsSync",
         SyntacticDiagnosticsSync = "syntacticDiagnosticsSync",
+        InfoDiagnosticsSync = "infoDiagnosticsSync",
         NavBar = "navbar",
         Navto = "navto",
         NavTree = "navtree",
@@ -6546,6 +6549,16 @@ declare namespace ts.server.protocol {
     interface SemanticDiagnosticsSyncResponse extends Response {
         body?: Diagnostic[] | DiagnosticWithLinePosition[];
     }
+    interface InfoDiagnosticsSyncRequest extends FileRequest {
+        command: CommandTypes.InfoDiagnosticsSync;
+        arguments: InfoDiagnosticsSyncRequestArgs;
+    }
+    interface InfoDiagnosticsSyncRequestArgs extends FileRequestArgs {
+        includeLinePosition?: boolean;
+    }
+    interface InfoDiagnosticsSyncResponse extends Response {
+        body?: Diagnostic[] | DiagnosticWithLinePosition[];
+    }
     /**
      * Synchronous request for syntactic diagnostics of one file.
      */
@@ -6642,7 +6655,7 @@ declare namespace ts.server.protocol {
          */
         text: string;
         /**
-         * The category of the diagnostic message, e.g. "error" vs. "warning"
+         * The category of the diagnostic message. This is the lower-case of a DiagnosticCategory member.
          */
         category: string;
         /**
@@ -6670,8 +6683,9 @@ declare namespace ts.server.protocol {
          */
         diagnostics: Diagnostic[];
     }
+    type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "infoDiag";
     /**
-     * Event message for "syntaxDiag" and "semanticDiag" event types.
+     * Event message for DiagnosticEventKind event types.
      * These events provide syntactic and semantic errors for a file.
      */
     interface DiagnosticEvent extends Event {
@@ -7206,6 +7220,8 @@ declare namespace ts.server {
         private doOutput(info, cmdName, reqSeq, success, message?);
         private semanticCheck(file, project);
         private syntacticCheck(file, project);
+        private infoCheck(file, project);
+        private sendDiagnosticsEvent(file, project, diagnostics, kind);
         private updateErrorCheck(next, checkList, ms, requireOpen?);
         private cleanProjects(caption, projects);
         private cleanup();
@@ -7226,6 +7242,7 @@ declare namespace ts.server {
         private getOccurrences(args);
         private getSyntacticDiagnosticsSync(args);
         private getSemanticDiagnosticsSync(args);
+        private getInfoDiagnosticsSync(args);
         private getDocumentHighlights(args, simplifiedResult);
         private setCompilerOptionsForInferredProjects(args);
         private getProjectInfo(args);

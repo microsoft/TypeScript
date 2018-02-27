@@ -79,7 +79,7 @@ namespace ts.server {
             end: scriptInfo.positionToLineOffset(diag.start + diag.length),
             text: flattenDiagnosticMessageText(diag.messageText, "\n"),
             code: diag.code,
-            category: DiagnosticCategory[diag.category].toLowerCase(),
+            category: diagnosticCategoryName(diag),
             source: diag.source
         };
     }
@@ -95,7 +95,7 @@ namespace ts.server {
         const end = diag.file && convertToLocation(getLineAndCharacterOfPosition(diag.file, diag.start + diag.length));
         const text = flattenDiagnosticMessageText(diag.messageText, "\n");
         const { code, source } = diag;
-        const category = DiagnosticCategory[diag.category].toLowerCase();
+        const category = diagnosticCategoryName(diag);
         return includeFileName ? { start, end, text, code, category, source, fileName: diag.file && diag.file.fileName } :
             { start, end, text, code, category, source };
     }
@@ -467,13 +467,10 @@ namespace ts.server {
 
         private semanticCheck(file: NormalizedPath, project: Project) {
             try {
-                let diags: ReadonlyArray<Diagnostic> = emptyArray;
-                if (!isDeclarationFileInJSOnlyNonConfiguredProject(project, file)) {
-                    diags = project.getLanguageService().getSemanticDiagnostics(file);
-                }
-
-                const bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
-                this.event<protocol.DiagnosticEventBody>({ file, diagnostics: bakedDiags }, "semanticDiag");
+                const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
+                    ? emptyArray
+                    : project.getLanguageService().getSemanticDiagnostics(file);
+                this.sendDiagnosticsEvent(file, project, diags, "semanticDiag");
             }
             catch (err) {
                 this.logError(err, "semantic check");
@@ -482,15 +479,28 @@ namespace ts.server {
 
         private syntacticCheck(file: NormalizedPath, project: Project) {
             try {
-                const diags = project.getLanguageService().getSyntacticDiagnostics(file);
-                if (diags) {
-                    const bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
-                    this.event<protocol.DiagnosticEventBody>({ file, diagnostics: bakedDiags }, "syntaxDiag");
+                // TODO: why do we check for diagnostics existence here, but in semanticCheck send unconditionally?
+                const diagnostics = project.getLanguageService().getSyntacticDiagnostics(file);
+                if (diagnostics) {
+                    this.sendDiagnosticsEvent(file, project, diagnostics, "syntaxDiag");
                 }
             }
             catch (err) {
                 this.logError(err, "syntactic check");
             }
+        }
+
+        private infoCheck(file: NormalizedPath, project: Project) {
+            try {
+                this.sendDiagnosticsEvent(file, project, project.getLanguageService().getInfoDiagnostics(file), "infoDiag");
+            }
+            catch (err) {
+                this.logError(err, "info check");
+            }
+        }
+
+        private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: ReadonlyArray<Diagnostic>, kind: protocol.DiagnosticEventKind): void {
+            this.event<protocol.DiagnosticEventBody>({ file, diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)) }, kind);
         }
 
         private updateErrorCheck(next: NextStep, checkList: PendingErrorCheck[], ms: number, requireOpen = true) {
@@ -499,21 +509,34 @@ namespace ts.server {
 
             let index = 0;
             const checkOne = () => {
-                if (this.changeSeq === seq) {
-                    const checkSpec = checkList[index];
-                    index++;
-                    if (checkSpec.project.containsFile(checkSpec.fileName, requireOpen)) {
-                        this.syntacticCheck(checkSpec.fileName, checkSpec.project);
-                        if (this.changeSeq === seq) {
-                            next.immediate(() => {
-                                this.semanticCheck(checkSpec.fileName, checkSpec.project);
-                                if (checkList.length > index) {
-                                    next.delay(followMs, checkOne);
-                                }
-                            });
-                        }
-                    }
+                if (this.changeSeq !== seq) {
+                    return;
                 }
+
+                const { fileName, project } = checkList[index];
+                index++;
+                if (!project.containsFile(fileName, requireOpen)) {
+                    return;
+                }
+
+                this.syntacticCheck(fileName, project);
+                if (this.changeSeq !== seq) {
+                    return;
+                }
+
+                next.immediate(() => {
+                    this.semanticCheck(fileName, project);
+                    if (this.changeSeq !== seq) {
+                        return;
+                    }
+
+                    next.immediate(() => {
+                        this.infoCheck(fileName, project);
+                        if (checkList.length > index) {
+                            next.delay(followMs, checkOne);
+                        }
+                    });
+                });
             };
 
             if (checkList.length > index && this.changeSeq === seq) {
@@ -580,7 +603,7 @@ namespace ts.server {
                 message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
                 start: d.start,
                 length: d.length,
-                category: DiagnosticCategory[d.category].toLowerCase(),
+                category: diagnosticCategoryName(d),
                 code: d.code,
                 startLocation: d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start)),
                 endLocation: d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start + d.length))
@@ -606,7 +629,7 @@ namespace ts.server {
                 message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
                 start: d.start,
                 length: d.length,
-                category: DiagnosticCategory[d.category].toLowerCase(),
+                category: diagnosticCategoryName(d),
                 code: d.code,
                 source: d.source,
                 startLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start),
@@ -754,6 +777,16 @@ namespace ts.server {
                 return this.getConfigFileDiagnostics(configFile, project, args.includeLinePosition);
             }
             return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSemanticDiagnostics(file), args.includeLinePosition);
+        }
+
+        private getInfoDiagnosticsSync(args: protocol.InfoDiagnosticsSyncRequestArgs): ReadonlyArray<protocol.Diagnostic> | ReadonlyArray<protocol.DiagnosticWithLinePosition> {
+            const { configFile } = this.getConfigFileAndProject(args);
+            if (configFile) {
+                // Currently there are no info diagnostics for config files.
+                return emptyArray;
+            }
+            // isSemantic because we don't want to info diagnostics in declaration files for JS-only users
+            return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getInfoDiagnostics(file), args.includeLinePosition);
         }
 
         private getDocumentHighlights(args: protocol.DocumentHighlightsRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.DocumentHighlightsItem> | ReadonlyArray<DocumentHighlights> {
@@ -1952,6 +1985,9 @@ namespace ts.server {
             },
             [CommandNames.SyntacticDiagnosticsSync]: (request: protocol.SyntacticDiagnosticsSyncRequest) => {
                 return this.requiredResponse(this.getSyntacticDiagnosticsSync(request.arguments));
+            },
+            [CommandNames.InfoDiagnosticsSync]: (request: protocol.InfoDiagnosticsSyncRequest) => {
+                return this.requiredResponse(this.getInfoDiagnosticsSync(request.arguments));
             },
             [CommandNames.Geterr]: (request: protocol.GeterrRequest) => {
                 this.errorCheck.startNew(next => this.getDiagnostics(next, request.arguments.delay, request.arguments.files));

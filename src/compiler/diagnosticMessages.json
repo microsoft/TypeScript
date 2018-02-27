@@ -3810,6 +3810,11 @@
         "code": 18003
     },
 
+    "File is a CommonJS module; it may be converted to an ES6 module.": {
+        "category": "Info",
+        "code": 80001
+    },
+
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001

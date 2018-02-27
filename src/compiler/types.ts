@@ -4017,7 +4017,13 @@ namespace ts {
     export enum DiagnosticCategory {
         Warning,
         Error,
+        Info,
         Message
+    }
+    /* @internal */
+    export function diagnosticCategoryName(d: { category: DiagnosticCategory }, lowerCase = true): string {
+        const name = DiagnosticCategory[d.category];
+        return lowerCase ? name.toLowerCase() : name;
     }
 
     export enum ModuleResolutionKind {
