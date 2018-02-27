@@ -20,18 +20,39 @@ type ShouldBeString = Foo['bar']['baz'];
 >ShouldBeString : Symbol(ShouldBeString, Decl(indexedAccessPartialUnions.ts, 8, 1))
 >Foo : Symbol(Foo, Decl(indexedAccessPartialUnions.ts, 0, 0))
 
+function f(foo: Foo) {
+>f : Symbol(f, Decl(indexedAccessPartialUnions.ts, 10, 40))
+>foo : Symbol(foo, Decl(indexedAccessPartialUnions.ts, 12, 11))
+>Foo : Symbol(Foo, Decl(indexedAccessPartialUnions.ts, 0, 0))
+
+    return foo['bar']['baz']; // Error
+>foo : Symbol(foo, Decl(indexedAccessPartialUnions.ts, 12, 11))
+>'bar' : Symbol(Foo.bar, Decl(indexedAccessPartialUnions.ts, 2, 15))
+}
+
+function g(foo: Foo) {
+>g : Symbol(g, Decl(indexedAccessPartialUnions.ts, 14, 1))
+>foo : Symbol(foo, Decl(indexedAccessPartialUnions.ts, 16, 11))
+>Foo : Symbol(Foo, Decl(indexedAccessPartialUnions.ts, 0, 0))
+
+    return foo.bar.baz; // Error
+>foo.bar : Symbol(Foo.bar, Decl(indexedAccessPartialUnions.ts, 2, 15))
+>foo : Symbol(foo, Decl(indexedAccessPartialUnions.ts, 16, 11))
+>bar : Symbol(Foo.bar, Decl(indexedAccessPartialUnions.ts, 2, 15))
+}
+
 interface HasOptionalMember {
->HasOptionalMember : Symbol(HasOptionalMember, Decl(indexedAccessPartialUnions.ts, 10, 40))
+>HasOptionalMember : Symbol(HasOptionalMember, Decl(indexedAccessPartialUnions.ts, 18, 1))
 
     bar?: {
->bar : Symbol(HasOptionalMember.bar, Decl(indexedAccessPartialUnions.ts, 12, 29))
+>bar : Symbol(HasOptionalMember.bar, Decl(indexedAccessPartialUnions.ts, 20, 29))
 
         baz: string;
->baz : Symbol(baz, Decl(indexedAccessPartialUnions.ts, 13, 11))
+>baz : Symbol(baz, Decl(indexedAccessPartialUnions.ts, 21, 11))
     }
 }
 
 type ShouldBeString2 = HasOptionalMember['bar']['baz'];
->ShouldBeString2 : Symbol(ShouldBeString2, Decl(indexedAccessPartialUnions.ts, 16, 1))
->HasOptionalMember : Symbol(HasOptionalMember, Decl(indexedAccessPartialUnions.ts, 10, 40))
+>ShouldBeString2 : Symbol(ShouldBeString2, Decl(indexedAccessPartialUnions.ts, 24, 1))
+>HasOptionalMember : Symbol(HasOptionalMember, Decl(indexedAccessPartialUnions.ts, 18, 1))
 

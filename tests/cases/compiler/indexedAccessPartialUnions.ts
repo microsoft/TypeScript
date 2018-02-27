@@ -12,6 +12,14 @@ interface Foo {
 
 type ShouldBeString = Foo['bar']['baz'];
 
+function f(foo: Foo) {
+    return foo['bar']['baz']; // Error
+}
+
+function g(foo: Foo) {
+    return foo.bar.baz; // Error
+}
+
 interface HasOptionalMember {
     bar?: {
         baz: string;

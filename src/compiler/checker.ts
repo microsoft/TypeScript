@@ -8003,7 +8003,7 @@ namespace ts {
                     getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>accessExpression.argumentExpression).name)) :
                     undefined;
             if (propName !== undefined) {
-                const prop = getPropertyOfType(objectType, propName, /*allowPartialUnions*/ true);
+                const prop = getPropertyOfType(objectType, propName, /*allowPartialUnions*/ !accessExpression);
                 if (prop) {
                     if (accessExpression) {
                         markPropertyAsReferenced(prop, accessExpression, /*isThisAccess*/ accessExpression.expression.kind === SyntaxKind.ThisKeyword);

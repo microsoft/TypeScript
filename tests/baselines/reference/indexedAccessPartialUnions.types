@@ -20,6 +20,32 @@ type ShouldBeString = Foo['bar']['baz'];
 >ShouldBeString : string
 >Foo : Foo
 
+function f(foo: Foo) {
+>f : (foo: Foo) => any
+>foo : Foo
+>Foo : Foo
+
+    return foo['bar']['baz']; // Error
+>foo['bar']['baz'] : any
+>foo['bar'] : { baz: string; } | { qux: number; }
+>foo : Foo
+>'bar' : "bar"
+>'baz' : "baz"
+}
+
+function g(foo: Foo) {
+>g : (foo: Foo) => any
+>foo : Foo
+>Foo : Foo
+
+    return foo.bar.baz; // Error
+>foo.bar.baz : any
+>foo.bar : { baz: string; } | { qux: number; }
+>foo : Foo
+>bar : { baz: string; } | { qux: number; }
+>baz : any
+}
+
 interface HasOptionalMember {
 >HasOptionalMember : HasOptionalMember
 
