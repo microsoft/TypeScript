@@ -11167,6 +11167,10 @@ namespace ts {
             }
             const result = createSymbol(SymbolFlags.Property | SymbolFlags.Optional, name);
             result.type = undefinedType;
+            const associatedKeyType = getLiteralType(unescapeLeadingUnderscores(name));
+            if (associatedKeyType.flags & TypeFlags.StringLiteral) {
+                result.syntheticLiteralTypeOrigin = associatedKeyType as StringLiteralType;
+            }
             undefinedProperties.set(name, result);
             return result;
         }
