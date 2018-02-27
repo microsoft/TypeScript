@@ -1,0 +1,9 @@
+=== tests/cases/compiler/inferredNonidentifierTypesGetQuotes.ts ===
+var x = [{ "a-b": "string" }, {}];
+>x : ({ "a-b": string; } | { "a-b"?: undefined; })[]
+>[{ "a-b": "string" }, {}] : ({ "a-b": string; } | {})[]
+>{ "a-b": "string" } : { "a-b": string; }
+>"a-b" : string
+>"string" : "string"
+>{} : {}
+

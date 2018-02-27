@@ -3693,13 +3693,16 @@ namespace ts {
                         return "(Anonymous function)";
                 }
             }
+            let stringValue = symbolName(symbol);
             if ((symbol as TransientSymbol).syntheticLiteralTypeOrigin) {
-                const stringValue = (symbol as TransientSymbol).syntheticLiteralTypeOrigin.value;
-                if (!isIdentifierText(stringValue, compilerOptions.target)) {
-                    return `"${escapeString(stringValue, CharacterCodes.doubleQuote)}"`;
-                }
+                stringValue = (symbol as TransientSymbol).syntheticLiteralTypeOrigin.value;
             }
-            return symbolName(symbol);
+            // Module symbols (intentionally) already start with double quotes, so we avoid requoting them here;
+            // They aren't really valid in any syntax positions, but hopefully that should be caught higher up the callstack when it matters
+            if (!((symbol.flags & SymbolFlags.Module) && isExternalModuleSymbol(symbol)) && !isIdentifierText(stringValue, compilerOptions.target) && !isNumericLiteralName(stringValue)) {
+                return `"${escapeString(stringValue, CharacterCodes.doubleQuote)}"`;
+            }
+            return stringValue;
         }
 
         function isDeclarationVisible(node: Declaration): boolean {
