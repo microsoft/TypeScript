@@ -2303,7 +2303,17 @@ namespace ts {
             // When we create a property via 'exports.foo = bar', the 'exports.foo' property access
             // expression is the declaration
             setCommonJsModuleIndicator(node);
-            declareSymbol(file.symbol.exports, file.symbol, <PropertyAccessExpression>node.left, SymbolFlags.Property | SymbolFlags.ExportValue, SymbolFlags.None);
+            const lhs = node.left as PropertyAccessEntityNameExpression;
+            const symbol = forEachIdentifierInEntityName(lhs.expression, (id, original, e) => {
+                if (isExportsOrModuleExportsOrAlias(file, e) || (isIdentifier(e) && e.escapedText === "module" && original === undefined)) {
+                    return file.symbol;
+                }
+                Debug.assert(!!original);
+                const s = getJSInitializerSymbol(original);
+                addDeclarationToSymbol(s, id, SymbolFlags.Module | SymbolFlags.JSContainer);
+                return s;
+            });
+            declareSymbol(symbol.exports, symbol, lhs, SymbolFlags.Property | SymbolFlags.ExportValue, SymbolFlags.None);
         }
 
         function bindModuleExportsAssignment(node: BinaryExpression) {
@@ -2460,14 +2470,14 @@ namespace ts {
             }
         }
 
-        function forEachIdentifierInEntityName(e: EntityNameExpression, action: (e: Identifier, symbol: Symbol) => Symbol): Symbol {
+        function forEachIdentifierInEntityName(e: EntityNameExpression, action: (e: Identifier, symbol: Symbol, k: EntityNameExpression) => Symbol): Symbol {
             if (isIdentifier(e)) {
-                return action(e, lookupSymbolForPropertyAccess(e));
+                return action(e, lookupSymbolForPropertyAccess(e), e);
             }
             else {
                 const s = getJSInitializerSymbol(forEachIdentifierInEntityName(e.expression, action));
                 Debug.assert(!!s && !!s.exports);
-                return action(e.name, s.exports.get(e.name.escapedText));
+                return action(e.name, s.exports.get(e.name.escapedText), e);
             }
         }
 

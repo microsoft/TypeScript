@@ -1488,7 +1488,8 @@ namespace ts {
     }
 
     export function getAssignedJavascriptInitializer(node: Node) {
-        return (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.BarBarToken || isPropertyAccessExpression(node)) &&
+        return node &&
+            (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.BarBarToken || isPropertyAccessExpression(node)) &&
             node.parent && isBinaryExpression(node.parent) &&
             node.parent.operatorToken.kind === SyntaxKind.EqualsToken &&
             (getJavascriptInitializer(node.parent.right) || getDefaultedJavascriptInitializer(node.parent.left as EntityNameExpression, node.parent.right));
@@ -1570,33 +1571,30 @@ namespace ts {
         if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
             return SpecialPropertyAssignmentKind.ThisProperty;
         }
-        if (isIdentifier(lhs.expression)) {
-            if (lhs.expression.escapedText === "exports") {
-                // exports.name = expr
-                return SpecialPropertyAssignmentKind.ExportsProperty;
-            }
-            else if (lhs.expression.escapedText === "module" && lhs.name.escapedText === "exports") {
-                // module.exports = expr
-                return SpecialPropertyAssignmentKind.ModuleExports;
-            }
+        else  if (isIdentifier(lhs.expression) && lhs.expression.escapedText === "module" && lhs.name.escapedText === "exports") {
+            // module.exports = expr
+            return SpecialPropertyAssignmentKind.ModuleExports;
         }
-        if (isEntityNameExpression(lhs.expression)) {
+        else if (isEntityNameExpression(lhs.expression)) {
             if (lhs.name.escapedText === "prototype" && isObjectLiteralExpression(expr.right)) {
                 // F.prototype = { ... }
                 return SpecialPropertyAssignmentKind.Prototype;
             }
-            else if (isPropertyAccessExpression(lhs.expression)) {
-                // chained dot, e.g. x.y.z = expr; this var is the 'x.y' part
-                if (isIdentifier(lhs.expression.expression) &&
-                    lhs.expression.expression.escapedText === "module" &&
-                    lhs.expression.name.escapedText === "exports") {
-                    // module.exports.name = expr
-                    return SpecialPropertyAssignmentKind.ExportsProperty;
-                }
-                if (lhs.expression.name.escapedText === "prototype") {
-                    // F.G....prototype.x = expr
-                    return SpecialPropertyAssignmentKind.PrototypeProperty;
-                }
+            else if (isPropertyAccessExpression(lhs.expression) && lhs.expression.name.escapedText === "prototype") {
+                // F.G....prototype.x = expr
+                return SpecialPropertyAssignmentKind.PrototypeProperty;
+            }
+
+            let nextToLast = lhs;
+            while (isPropertyAccessExpression(nextToLast.expression)) {
+                nextToLast = nextToLast.expression;
+            }
+            Debug.assert(isIdentifier(nextToLast.expression));
+            const id = nextToLast.expression as Identifier;
+            if (id.escapedText === "exports" ||
+                id.escapedText === "module" && nextToLast.name.escapedText === "exports") {
+                // exports.name = expr OR module.exports.name = expr
+                return SpecialPropertyAssignmentKind.ExportsProperty;
             }
             // F.G...x = expr
             return SpecialPropertyAssignmentKind.Property;

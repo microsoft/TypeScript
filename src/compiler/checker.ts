@@ -1585,8 +1585,9 @@ namespace ts {
         }
 
         function checkAndReportErrorForUsingTypeAsNamespace(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
-            if (meaning === SymbolFlags.Namespace) {
-                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Namespace, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
+            const namespaceMeaning = SymbolFlags.Namespace | (isInJavaScriptFile(errorLocation) ? SymbolFlags.Value : 0);
+            if (meaning === namespaceMeaning) {
+                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~namespaceMeaning, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 const parent = errorLocation.parent;
                 if (symbol) {
                     if (isQualifiedName(parent)) {
@@ -1992,9 +1993,10 @@ namespace ts {
                 return undefined;
             }
 
+            const namespaceMeaning = SymbolFlags.Namespace | (isInJavaScriptFile(name) ? meaning & SymbolFlags.Value : 0);
             let symbol: Symbol;
             if (name.kind === SyntaxKind.Identifier) {
-                const message = meaning === SymbolFlags.Namespace ? Diagnostics.Cannot_find_namespace_0 : Diagnostics.Cannot_find_name_0;
+                const message = meaning === namespaceMeaning ? Diagnostics.Cannot_find_namespace_0 : Diagnostics.Cannot_find_name_0;
 
                 symbol = resolveName(location || name, name.escapedText, meaning, ignoreErrors ? undefined : message, name, /*isUse*/ true);
                 if (!symbol) {
@@ -2004,7 +2006,7 @@ namespace ts {
             else if (name.kind === SyntaxKind.QualifiedName || name.kind === SyntaxKind.PropertyAccessExpression) {
                 const left = name.kind === SyntaxKind.QualifiedName ? name.left : name.expression;
                 const right = name.kind === SyntaxKind.QualifiedName ? name.right : name.name;
-                let namespace = resolveEntityName(left, SymbolFlags.Namespace, ignoreErrors, /*dontResolveAlias*/ false, location);
+                let namespace = resolveEntityName(left, namespaceMeaning, ignoreErrors, /*dontResolveAlias*/ false, location);
                 if (!namespace || nodeIsMissing(right)) {
                     return undefined;
                 }
@@ -2012,7 +2014,7 @@ namespace ts {
                     return namespace;
                 }
                 if (isInJavaScriptFile(name)) {
-                    const initializer = getDeclaredJavascriptInitializer(namespace.valueDeclaration);
+                    const initializer = getDeclaredJavascriptInitializer(namespace.valueDeclaration) || getAssignedJavascriptInitializer(namespace.valueDeclaration);
                     if (initializer) {
                         namespace = getSymbolOfNode(initializer);
                     }
