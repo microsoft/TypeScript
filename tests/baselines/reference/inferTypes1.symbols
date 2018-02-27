@@ -50,7 +50,7 @@ type T05 = Unpacked<any>;  // any
 >T05 : Symbol(T05, Decl(inferTypes1.ts, 10, 49))
 >Unpacked : Symbol(Unpacked, Decl(inferTypes1.ts, 0, 0))
 
-type T06 = Unpacked<never>;  // {}
+type T06 = Unpacked<never>;  // never
 >T06 : Symbol(T06, Decl(inferTypes1.ts, 11, 25))
 >Unpacked : Symbol(Unpacked, Decl(inferTypes1.ts, 0, 0))
 

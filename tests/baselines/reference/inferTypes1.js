@@ -11,7 +11,7 @@ type T02 = Unpacked<() => string>;  // string
 type T03 = Unpacked<Promise<string>>;  // string
 type T04 = Unpacked<Unpacked<Promise<string>[]>>;  // string
 type T05 = Unpacked<any>;  // any
-type T06 = Unpacked<never>;  // {}
+type T06 = Unpacked<never>;  // never
 
 function f1(s: string) {
     return { a: 1, b: s };

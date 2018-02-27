@@ -50,8 +50,8 @@ type T05 = Unpacked<any>;  // any
 >T05 : any
 >Unpacked : Unpacked<T>
 
-type T06 = Unpacked<never>;  // {}
->T06 : {}
+type T06 = Unpacked<never>;  // never
+>T06 : never
 >Unpacked : Unpacked<T>
 
 function f1(s: string) {
