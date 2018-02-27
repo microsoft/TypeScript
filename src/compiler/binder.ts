@@ -2308,12 +2308,16 @@ namespace ts {
                 if (isExportsOrModuleExportsOrAlias(file, e) || (isIdentifier(e) && e.escapedText === "module" && original === undefined)) {
                     return file.symbol;
                 }
-                Debug.assert(!!original);
+                if (!original) {
+                    return undefined;
+                }
                 const s = getJSInitializerSymbol(original);
                 addDeclarationToSymbol(s, id, SymbolFlags.Module | SymbolFlags.JSContainer);
                 return s;
             });
-            declareSymbol(symbol.exports, symbol, lhs, SymbolFlags.Property | SymbolFlags.ExportValue, SymbolFlags.None);
+            if (symbol) {
+                declareSymbol(symbol.exports, symbol, lhs, SymbolFlags.Property | SymbolFlags.ExportValue, SymbolFlags.None);
+            }
         }
 
         function bindModuleExportsAssignment(node: BinaryExpression) {
