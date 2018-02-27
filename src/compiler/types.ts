@@ -2473,7 +2473,7 @@ namespace ts {
      */
     export interface SourceFileLike {
         readonly text: string;
-        lineMap: ReadonlyArray<number>;
+        lineMap?: ReadonlyArray<number>;
     }
 
 
