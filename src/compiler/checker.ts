@@ -11496,8 +11496,15 @@ namespace ts {
                 if (!couldContainTypeVariables(target)) {
                     return;
                 }
-                if (source === wildcardType) {
-                    source = getWildcardInstantiation(target);
+                if (source === neverType || source === wildcardType) {
+                    // We are inferring from 'never' or the wildcard type. We want to infer this
+                    // type for every type parameter referenced in the target type, so we infer from
+                    // target to itself with a flag we check when recording candidates.
+                    const savePriority = priority;
+                    priority |= source === neverType ? InferencePriority.Never : InferencePriority.Wildcard;
+                    inferFromTypes(target, target);
+                    priority = savePriority;
+                    return;
                 }
                 if (source.aliasSymbol && source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol) {
                     // Source and target are types originating in the same generic type alias declaration.
@@ -11560,17 +11567,21 @@ namespace ts {
                     const inference = getInferenceInfoForType(target);
                     if (inference) {
                         if (!inference.isFixed) {
-                            if (inference.priority === undefined || priority < inference.priority) {
+                            const p = priority & InferencePriority.Mask;
+                            if (inference.priority === undefined || p < inference.priority) {
                                 inference.candidates = undefined;
                                 inference.contraCandidates = undefined;
-                                inference.priority = priority;
+                                inference.priority = p;
                             }
-                            if (priority === inference.priority) {
+                            if (p === inference.priority) {
+                                const candidate = priority & InferencePriority.Never ? neverType :
+                                    priority & InferencePriority.Wildcard ? wildcardType :
+                                    source;
                                 if (contravariant) {
-                                    inference.contraCandidates = append(inference.contraCandidates, source);
+                                    inference.contraCandidates = append(inference.contraCandidates, candidate);
                                 }
                                 else {
-                                    inference.candidates = append(inference.candidates, source);
+                                    inference.candidates = append(inference.candidates, candidate);
                                 }
                             }
                             if (!(priority & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
