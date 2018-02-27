@@ -651,6 +651,9 @@ namespace ts {
         public ambientModuleNames: string[];
         public checkJsDirective: CheckJsDirective | undefined;
         public possiblyContainDynamicImport: boolean;
+        public pragmas: PragmaMap;
+        public localJsxFactory: EntityName;
+        public localJsxNamespace: __String;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             super(kind, pos, end);

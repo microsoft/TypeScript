@@ -347,8 +347,8 @@ declare namespace FourSlashInterface {
             start: number;
             length: number;
         }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: ts.JSDocTagInfo[]): void;
-        getSyntacticDiagnostics(expected: string): void;
-        getSemanticDiagnostics(expected: string): void;
+        getSyntacticDiagnostics(expected: ReadonlyArray<RealizedDiagnostic>): void;
+        getSemanticDiagnostics(expected: ReadonlyArray<RealizedDiagnostic>): void;
         ProjectInfo(expected: string[]): void;
         allRangesAppearInImplementationList(markerName: string): void;
     }
@@ -519,6 +519,13 @@ declare namespace FourSlashInterface {
     interface ReferencesDefinition {
         text: string;
         range: Range;
+    }
+    interface RealizedDiagnostic {
+        message: string;
+        start: number;
+        length: number;
+        category: string;
+        code: number;
     }
 }
 declare function verifyOperationIsCancelled(f: any): void;
