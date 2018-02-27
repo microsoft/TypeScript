@@ -14,9 +14,8 @@ namespace ts.GoToDefinition {
 
         // Labels
         if (isJumpStatementTarget(node)) {
-            const labelName = (<Identifier>node).text;
-            const label = getTargetLabel((<BreakOrContinueStatement>parent), labelName);
-            return label ? [createDefinitionInfoFromName(label, ScriptElementKind.label, labelName, /*containerName*/ undefined!)] : undefined; // TODO: GH#18217
+            const label = getTargetLabel(node.parent, node.text);
+            return label ? [createDefinitionInfoFromName(label, ScriptElementKind.label, node.text, /*containerName*/ undefined!)] : undefined; // TODO: GH#18217
         }
 
         const typeChecker = program.getTypeChecker();

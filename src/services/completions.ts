@@ -106,7 +106,7 @@ namespace ts.Completions {
     }
 
     function completionInfoFromData(sourceFile: SourceFile, typeChecker: TypeChecker, compilerOptions: CompilerOptions, log: Log, completionData: CompletionData, includeInsertTextCompletions: boolean): CompletionInfo | undefined {
-        const { symbols, completionKind, isNewIdentifierLocation, location, propertyAccessToConvert, keywordFilters, symbolToOriginInfoMap, recommendedCompletion, isJsxInitializer } = completionData;
+        const { symbols, completionKind, isInSnippetScope, isNewIdentifierLocation, location, propertyAccessToConvert, keywordFilters, symbolToOriginInfoMap, recommendedCompletion, isJsxInitializer } = completionData;
 
         if (sourceFile.languageVariant === LanguageVariant.JSX && location && location.parent && isJsxClosingElement(location.parent)) {
             // In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,
@@ -148,7 +148,7 @@ namespace ts.Completions {
             addRange(entries, getKeywordCompletions(keywordFilters));
         }
 
-        return { isGlobalCompletion: completionKind === CompletionKind.Global, isMemberCompletion, isNewIdentifierLocation, entries };
+        return { isGlobalCompletion: isInSnippetScope, isMemberCompletion, isNewIdentifierLocation, entries };
     }
 
     function isMemberCompletionKind(kind: CompletionKind): boolean {
@@ -635,6 +635,7 @@ namespace ts.Completions {
         readonly kind: CompletionDataKind.Data;
         readonly symbols: ReadonlyArray<Symbol>;
         readonly completionKind: CompletionKind;
+        readonly isInSnippetScope: boolean;
         /** Note that the presence of this alone doesn't mean that we need a conversion. Only do that if the completion is not an ordinary identifier. */
         readonly propertyAccessToConvert: PropertyAccessExpression | undefined;
         readonly isNewIdentifierLocation: boolean;
@@ -649,7 +650,6 @@ namespace ts.Completions {
 
     const enum CompletionKind {
         ObjectPropertyDeclaration,
-        /** Note that sometimes we access completions from global scope, but use "None" instead of this. See isGlobalCompletionScope. */
         Global,
         PropertyAccess,
         MemberLike,
@@ -753,6 +753,7 @@ namespace ts.Completions {
         log("getCompletionData: Is inside comment: " + (timestamp() - start));
 
         let insideJsDocTagTypeExpression = false;
+        let isInSnippetScope = false;
         if (insideComment) {
             if (hasDocComment(sourceFile, position)) {
                 if (sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
@@ -971,7 +972,7 @@ namespace ts.Completions {
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
         const recommendedCompletion = previousToken && getRecommendedCompletion(previousToken, position, sourceFile, typeChecker);
-        return { kind: CompletionDataKind.Data, symbols, completionKind, propertyAccessToConvert, isNewIdentifierLocation, location, keywordFilters, symbolToOriginInfoMap, recommendedCompletion, previousToken, isJsxInitializer };
+        return { kind: CompletionDataKind.Data, symbols, completionKind, isInSnippetScope, propertyAccessToConvert, isNewIdentifierLocation, location, keywordFilters, symbolToOriginInfoMap, recommendedCompletion, previousToken, isJsxInitializer };
 
         type JSDocTagWithTypeExpression = JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag;
 
@@ -1098,7 +1099,7 @@ namespace ts.Completions {
             }
 
             // Get all entities in the current scope.
-            completionKind = CompletionKind.None;
+            completionKind = CompletionKind.Global;
             isNewIdentifierLocation = isNewIdentifierDefinitionLocation(contextToken);
 
             if (previousToken !== contextToken) {
@@ -1134,9 +1135,7 @@ namespace ts.Completions {
                 position;
 
             const scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile) || sourceFile;
-            if (isGlobalCompletionScope(scopeNode)) {
-                completionKind = CompletionKind.Global;
-            }
+            isInSnippetScope = isSnippetScope(scopeNode);
 
             const symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
 
@@ -1161,7 +1160,7 @@ namespace ts.Completions {
             return true;
         }
 
-        function isGlobalCompletionScope(scopeNode: Node): boolean {
+        function isSnippetScope(scopeNode: Node): boolean {
             switch (scopeNode.kind) {
                 case SyntaxKind.SourceFile:
                 case SyntaxKind.TemplateExpression:
@@ -2132,10 +2131,10 @@ namespace ts.Completions {
                 // TODO: GH#18169
                 return { name: JSON.stringify(name), needsConvertPropertyAccess: false };
             case CompletionKind.PropertyAccess:
-            case CompletionKind.None:
             case CompletionKind.Global:
                 // Don't add a completion for a name starting with a space. See https://github.com/Microsoft/TypeScript/pull/20547
                 return name.charCodeAt(0) === CharacterCodes.space ? undefined : { name, needsConvertPropertyAccess: true };
+            case CompletionKind.None:
             case CompletionKind.String:
                 return validIdentiferResult;
             default:

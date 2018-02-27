@@ -4,12 +4,12 @@
 // @Filename: a.js
 //// module M { }
 
-verify.getSyntacticDiagnostics(`[
+verify.getSyntacticDiagnostics([
   {
-    "message": "'module declarations' can only be used in a .ts file.",
-    "start": 7,
-    "length": 1,
-    "category": "error",
-    "code": 8007
+    message: "'module declarations' can only be used in a .ts file.",
+    start: 7,
+    length: 1,
+    category: "error",
+    code: 8007
   }
-]`);
+]);

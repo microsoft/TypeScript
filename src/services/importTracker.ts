@@ -109,7 +109,9 @@ namespace ts.FindAllReferences {
                             }
                             else if (isDefaultImport(direct)) {
                                 const sourceFileLike = getSourceFileLikeForImportDeclaration(direct);
-                                addIndirectUser(sourceFileLike); // Add a check for indirect uses to handle synthetic default imports
+                                if (!isAvailableThroughGlobal) {
+                                    addIndirectUser(sourceFileLike); // Add a check for indirect uses to handle synthetic default imports
+                                }
                                 directImports.push(direct);
                             }
                             else {
@@ -651,8 +653,8 @@ namespace ts.FindAllReferences {
         if (parent.kind === SyntaxKind.SourceFile) {
             return parent as SourceFile;
         }
-        Debug.assert(parent.kind === SyntaxKind.ModuleBlock && isAmbientModuleDeclaration(parent.parent));
-        return parent.parent as AmbientModuleDeclaration;
+        Debug.assert(parent.kind === SyntaxKind.ModuleBlock);
+        return cast(parent.parent, isAmbientModuleDeclaration);
     }
 
     function isAmbientModuleDeclaration(node: Node): node is AmbientModuleDeclaration {

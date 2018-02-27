@@ -16,6 +16,7 @@ class C extends Base {
     // Gets emitted as super, not _super, which is consistent with
     // use of super in static properties initializers.
     [super.bar()]() { }
+>[super.bar()] : () => void
 >super.bar() : any
 >super.bar : any
 >super : any

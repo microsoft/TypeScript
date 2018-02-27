@@ -50,6 +50,7 @@ namespace ts.server.protocol {
         NavtoFull = "navto-full",
         NavTree = "navtree",
         NavTreeFull = "navtree-full",
+        /** @deprecated */
         Occurrences = "occurrences",
         DocumentHighlights = "documentHighlights",
         /* @internal */
@@ -829,6 +830,7 @@ namespace ts.server.protocol {
     }
 
     /**
+     * @deprecated
      * Get occurrences request; value of command field is
      * "occurrences". Return response giving spans that are relevant
      * in the file at a given line and column.
@@ -837,6 +839,7 @@ namespace ts.server.protocol {
         command: CommandTypes.Occurrences;
     }
 
+    /** @deprecated */
     export interface OccurrencesResponseItem extends FileSpan {
         /**
          * True if the occurrence is a write location, false otherwise.
@@ -849,6 +852,7 @@ namespace ts.server.protocol {
         isInString?: true;
     }
 
+    /** @deprecated */
     export interface OccurrencesResponse extends Response {
         body?: OccurrencesResponseItem[];
     }

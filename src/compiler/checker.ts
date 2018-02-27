@@ -299,7 +299,7 @@ namespace ts {
             resolveName(name, location, meaning, excludeGlobals) {
                 return resolveName(location, escapeLeadingUnderscores(name), meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false, excludeGlobals);
             },
-            getJsxNamespace: () => unescapeLeadingUnderscores(getJsxNamespace()),
+            getJsxNamespace: n => unescapeLeadingUnderscores(getJsxNamespace(n)),
             getAccessibleSymbolChain,
             getTypePredicateOfSignature: getTypePredicateOfSignature as (signature: Signature) => TypePredicate, // TODO: GH#18217
             resolveExternalModuleSymbol,
@@ -766,7 +766,23 @@ namespace ts {
             }
         }
 
-        function getJsxNamespace(): __String {
+        function getJsxNamespace(location: Node | undefined): __String {
+            if (location) {
+                const file = getSourceFileOfNode(location);
+                if (file) {
+                    if (file.localJsxNamespace) {
+                        return file.localJsxNamespace;
+                    }
+                    const jsxPragma = file.pragmas.get("jsx");
+                    if (jsxPragma) {
+                        const chosenpragma: any = isArray(jsxPragma) ? jsxPragma[0] : jsxPragma; // TODO: GH#18217
+                        file.localJsxFactory = parseIsolatedEntityName(chosenpragma.arguments.factory, languageVersion);
+                        if (file.localJsxFactory) {
+                            return file.localJsxNamespace = getFirstIdentifier(file.localJsxFactory).escapedText;
+                        }
+                    }
+                }
+            }
             if (!_jsxNamespace) {
                 _jsxNamespace = "React" as __String;
                 if (compilerOptions.jsxFactory) {
@@ -2099,7 +2115,7 @@ namespace ts {
                 else if (noImplicitAny && moduleNotFoundError) {
                     let errorInfo = resolvedModule!.packageId && chainDiagnosticMessages(/*details*/ undefined,
                         Diagnostics.Try_npm_install_types_Slash_0_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
-                        resolvedModule!.packageId!.name); // TODO: GH#18217
+                        getMangledNameForScopedPackage(resolvedModule!.packageId!.name)); // TODO: GH#18217
                     errorInfo = chainDiagnosticMessages(errorInfo,
                         Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
                         moduleReference,
@@ -4031,7 +4047,7 @@ namespace ts {
                         parentType = getNonNullableType(parentType);
                     }
                     const propType = getTypeOfPropertyOfType(parentType, text);
-                    const declaredType = propType && getApparentTypeForLocation(propType, declaration.name);
+                    const declaredType = propType && getConstraintForLocation(propType, declaration.name);
                     type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
                         isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
                         getIndexTypeOfType(parentType, IndexKind.String);
@@ -6159,17 +6175,29 @@ namespace ts {
             return getConstraintOfDistributiveConditionalType(type) || getDefaultConstraintOfConditionalType(type);
         }
 
-        function getBaseConstraintOfType(type: Type): Type | undefined {
+        function getBaseConstraintOfInstantiableNonPrimitiveUnionOrIntersection(type: Type) {
             if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection)) {
                 const constraint = getResolvedBaseConstraint(<InstantiableType | UnionOrIntersectionType>type);
                 if (constraint !== noConstraintType && constraint !== circularConstraintType) {
                     return constraint;
                 }
             }
-            else if (type.flags & TypeFlags.Index) {
+        }
+
+        function getBaseConstraintOfType(type: Type): Type | undefined {
+            const constraint = getBaseConstraintOfInstantiableNonPrimitiveUnionOrIntersection(type);
+            if (!constraint && type.flags & TypeFlags.Index) {
                 return stringType;
             }
-            return undefined;
+            return constraint;
+        }
+
+        /**
+         * This is similar to `getBaseConstraintOfType` except it returns the input type if there's no base constraint, instead of `undefined`
+         * It also doesn't map indexes to `string`, as where this is used this would be unneeded (and likely undesirable)
+         */
+        function getBaseConstraintOrType(type: Type) {
+            return getBaseConstraintOfType(type) || type;
         }
 
         function hasNonCircularBaseConstraint(type: InstantiableType): boolean {
@@ -11971,7 +11999,7 @@ namespace ts {
         function getFlowCacheKey(node: Node): string | undefined {
             if (node.kind === SyntaxKind.Identifier) {
                 const symbol = getResolvedSymbol(<Identifier>node);
-                return symbol !== unknownSymbol ? (isApparentTypePosition(node) ? "@" : "") + getSymbolId(symbol) : undefined;
+                return symbol !== unknownSymbol ? (isConstraintPosition(node) ? "@" : "") + getSymbolId(symbol) : undefined;
             }
             if (node.kind === SyntaxKind.ThisKeyword) {
                 return "0";
@@ -13336,8 +13364,8 @@ namespace ts {
             return annotationIncludesUndefined ? getTypeWithFacts(declaredType, TypeFacts.NEUndefined) : declaredType;
         }
 
-        function isApparentTypePosition(node: Node) {
-            const { parent } = node;
+        function isConstraintPosition(node: Node) {
+            const parent = node.parent;
             return parent.kind === SyntaxKind.PropertyAccessExpression ||
                 parent.kind === SyntaxKind.CallExpression && (<CallExpression>parent).expression === node ||
                 parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>parent).expression === node ||
@@ -13349,13 +13377,13 @@ namespace ts {
             return type.flags & TypeFlags.InstantiableNonPrimitive && maybeTypeOfKind(getBaseConstraintOfType(type) || emptyObjectType, TypeFlags.Nullable);
         }
 
-        function getApparentTypeForLocation(type: Type, node: Node) {
+        function getConstraintForLocation(type: Type, node: Node) {
             // When a node is the left hand expression of a property access, element access, or call expression,
             // and the type of the node includes type variables with constraints that are nullable, we fetch the
             // apparent type of the node *before* performing control flow analysis such that narrowings apply to
             // the constraint type.
-            if (isApparentTypePosition(node) && forEachType(type, typeHasNullableConstraint)) {
-                return mapType(getWidenedType(type), getApparentType);
+            if (isConstraintPosition(node) && forEachType(type, typeHasNullableConstraint)) {
+                return mapType(getWidenedType(type), getBaseConstraintOrType);
             }
             return type;
         }
@@ -13443,7 +13471,7 @@ namespace ts {
             checkCollisionWithCapturedNewTargetVariable(node, node);
             checkNestedBlockScopedBinding(node, symbol);
 
-            const type = getApparentTypeForLocation(getTypeOfSymbol(localOrExportSymbol), node);
+            const type = getConstraintForLocation(getTypeOfSymbol(localOrExportSymbol), node);
             const assignmentKind = getAssignmentTargetKind(node);
 
             if (assignmentKind) {
@@ -15109,8 +15137,10 @@ namespace ts {
         function checkJsxFragment(node: JsxFragment, checkMode: CheckMode | undefined): Type {
             checkJsxOpeningLikeElementOrOpeningFragment(node.openingFragment, checkMode);
 
-            if (compilerOptions.jsx === JsxEmit.React && compilerOptions.jsxFactory) {
-                error(node, Diagnostics.JSX_fragment_is_not_supported_when_using_jsxFactory);
+            if (compilerOptions.jsx === JsxEmit.React && (compilerOptions.jsxFactory || getSourceFileOfNode(node).pragmas.has("jsx"))) {
+                error(node, compilerOptions.jsxFactory
+                    ? Diagnostics.JSX_fragment_is_not_supported_when_using_jsxFactory
+                    : Diagnostics.JSX_fragment_is_not_supported_when_using_an_inline_JSX_factory_pragma);
             }
 
             return getJsxGlobalElementType() || anyType;
@@ -15737,7 +15767,7 @@ namespace ts {
             // The reactNamespace/jsxFactory's root symbol should be marked as 'used' so we don't incorrectly elide its import.
             // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
             const reactRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
-            const reactNamespace = getJsxNamespace();
+            const reactNamespace = getJsxNamespace(node);
             const reactLocation = isNodeOpeningLikeElement ? (<JsxOpeningLikeElement>node).tagName : node;
             const reactSym = resolveName(reactLocation, reactNamespace, SymbolFlags.Value, reactRefErr, reactNamespace, /*isUse*/ true);
             if (reactSym) {
@@ -15917,7 +15947,7 @@ namespace ts {
 
             // Referencing abstract properties within their own constructors is not allowed
             if ((flags & ModifierFlags.Abstract) && isThisProperty(node) && symbolHasNonMethodDeclaration(prop)) {
-                const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop)!);
+                const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop)!);
                 if (declaringClassDeclaration && isNodeWithinConstructorOfClass(node, declaringClassDeclaration)) {
                     error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), getTextOfIdentifierOrLiteral(declaringClassDeclaration.name!)); // TODO: GH#18217
                     return false;
@@ -15933,7 +15963,7 @@ namespace ts {
 
             // Private property is accessible if the property is within the declaring class
             if (flags & ModifierFlags.Private) {
-                const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop)!);
+                const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop)!)!;
                 if (!isNodeWithinClass(node, declaringClassDeclaration)) {
                     error(errorNode, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1, symbolToString(prop), typeToString(getDeclaringClass(prop)!));
                     return false;
@@ -16064,7 +16094,7 @@ namespace ts {
                         return unknownType;
                     }
                 }
-                propType = getApparentTypeForLocation(getTypeOfSymbol(prop), node);
+                propType = getConstraintForLocation(getTypeOfSymbol(prop), node);
             }
             // Only compute control flow type if this is a property access expression that isn't an
             // assignment target, and the referenced property was declared as a variable, property,
@@ -17657,7 +17687,7 @@ namespace ts {
                 return true;
             }
 
-            const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(declaration.parent.symbol!);
+            const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(declaration.parent.symbol!)!;
             const declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(declaration.parent.symbol!);
 
             // A private or protected constructor can only be instantiated within its own class (or a subclass, for protected)
@@ -23138,7 +23168,7 @@ namespace ts {
                         const rootChain = () => chainDiagnosticMessages(
                             /*details*/ undefined,
                             Diagnostics.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2,
-                            unescapeLeadingUnderscores(declaredProp.escapedName),
+                            symbolToString(declaredProp),
                             typeToString(typeWithThis),
                             typeToString(baseWithThis)
                         );
@@ -23159,7 +23189,7 @@ namespace ts {
             if (signatures.length) {
                 const declaration = signatures[0].declaration;
                 if (declaration && hasModifier(declaration, ModifierFlags.Private)) {
-                    const typeClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(type.symbol!);
+                    const typeClassDeclaration = getClassLikeDeclarationOfSymbol(type.symbol!)!;
                     if (!isNodeWithinClass(node, typeClassDeclaration)) {
                         error(node, Diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, getFullyQualifiedName(type.symbol!));
                     }
@@ -25597,7 +25627,7 @@ namespace ts {
                     return !!(symbol && getCheckFlags(symbol) & CheckFlags.Late);
                 },
                 writeLiteralConstValue,
-                getJsxFactoryEntity: () => _jsxFactoryEntity!, // TODO: GH#18217
+                getJsxFactoryEntity: location => location ? (getJsxNamespace(location), (getSourceFileOfNode(location).localJsxFactory || _jsxFactoryEntity!)) : _jsxFactoryEntity!, // TODO: GH#18217
             };
 
             // defined here to avoid outer scope pollution

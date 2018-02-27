@@ -1533,7 +1533,7 @@ namespace Harness {
             }
 
             if (typesError && symbolsError) {
-                throw new Error(typesError.message + Harness.IO.newLine() + symbolsError.message);
+                throw new Error(typesError.stack + Harness.IO.newLine() + symbolsError.stack);
             }
 
             if (typesError) {

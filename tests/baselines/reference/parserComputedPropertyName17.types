@@ -2,6 +2,7 @@
 var v = { set [e](v) { } }
 >v : { [x: number]: any; }
 >{ set [e](v) { } } : { [x: number]: any; }
+>[e] : any
 >e : any
 >v : any
 

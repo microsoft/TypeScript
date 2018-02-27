@@ -30,6 +30,8 @@ const obj = {
 
   /** @type {number} */
   ['b' + 'ar1']: 42,
+>['b' + 'ar1'] : Symbol(['b' + 'ar1'], Decl(0.js, 12, 6))
+
   /** @type {function(number): number} */
   arrowFunc: (num) => num + 42
 >arrowFunc : Symbol(arrowFunc, Decl(0.js, 14, 20))

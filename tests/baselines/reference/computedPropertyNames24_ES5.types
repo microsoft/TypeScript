@@ -14,6 +14,7 @@ class C extends Base {
 >Base : Base
 
     [super.bar()]() { }
+>[super.bar()] : () => void
 >super.bar() : any
 >super.bar : any
 >super : any

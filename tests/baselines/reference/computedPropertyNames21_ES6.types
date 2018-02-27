@@ -9,6 +9,7 @@ class C {
 >0 : 0
     }
     [this.bar()]() { }
+>[this.bar()] : () => void
 >this.bar() : any
 >this.bar : any
 >this : any

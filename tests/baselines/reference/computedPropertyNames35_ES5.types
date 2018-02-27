@@ -12,6 +12,7 @@ interface I<T> {
 >bar : () => string
 
     [foo<T>()](): void;
+>[foo<T>()] : () => void
 >foo<T>() : string
 >foo : <T>() => string
 >T : No type information available!

@@ -427,8 +427,8 @@ namespace ts {
     }
 
     export function isAmbientModule(node: Node): boolean {
-        return node && node.kind === SyntaxKind.ModuleDeclaration &&
-            ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(<ModuleDeclaration>node));
+        return node && isModuleDeclaration(node) &&
+            (node.name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(node));
     }
 
     export function isModuleWithStringLiteralName(node: Node): node is ModuleDeclaration {
@@ -1871,18 +1871,9 @@ namespace ts {
         return false;
     }
 
-    // True if the given identifier, string literal, or number literal is the name of a declaration node
+    // True if `name` is the name of a declaration node
     export function isDeclarationName(name: Node): boolean {
-        switch (name.kind) {
-            case SyntaxKind.Identifier:
-            case SyntaxKind.StringLiteral:
-            case SyntaxKind.NumericLiteral: {
-                const parent = name.parent;
-                return isDeclaration(parent) && parent.name === name;
-            }
-            default:
-                return false;
-        }
+        return !isSourceFile(name) && !isBindingPattern(name) && isDeclaration(name.parent) && name.parent.name === name;
     }
 
     // See GH#16030
@@ -2008,40 +1999,6 @@ namespace ts {
             }
             node = node.parent;
         }
-        return undefined;
-    }
-
-    export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult | undefined {
-        const simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
-        const isNoDefaultLibRegEx = new RegExp(defaultLibReferenceRegEx.source, "gim");
-        if (simpleReferenceRegEx.test(comment)) {
-            if (isNoDefaultLibRegEx.test(comment)) {
-                return { isNoDefaultLib: true };
-            }
-            else {
-                const refMatchResult = fullTripleSlashReferencePathRegEx.exec(comment);
-                const refLibResult = !refMatchResult && fullTripleSlashReferenceTypeReferenceDirectiveRegEx.exec(comment);
-                const match = refMatchResult || refLibResult;
-                if (match) {
-                    const pos = commentRange.pos + match[1].length + match[2].length;
-                    return {
-                        fileReference: {
-                            pos,
-                            end: pos + match[3].length,
-                            fileName: match[3]
-                        },
-                        isNoDefaultLib: false,
-                        isTypeReferenceDirective: !!refLibResult
-                    };
-                }
-
-                return {
-                    diagnosticMessage: Diagnostics.Invalid_reference_directive_syntax,
-                    isNoDefaultLib: false
-                };
-            }
-        }
-
         return undefined;
     }
 
@@ -3760,7 +3717,7 @@ namespace ts {
         return false;
     }
 
-    export function getClassLikeDeclarationOfSymbol(symbol: Symbol): Declaration | undefined {
+    export function getClassLikeDeclarationOfSymbol(symbol: Symbol): ClassLikeDeclaration | undefined {
         return find(symbol.declarations!, isClassLike);
     }
 

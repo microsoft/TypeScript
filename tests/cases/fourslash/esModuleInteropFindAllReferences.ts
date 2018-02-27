@@ -1,3 +1,5 @@
+/// <reference path="fourslash.ts"/>
+
 // @esModuleInterop: true
 
 // @Filename: /abc.d.ts
@@ -6,7 +8,7 @@
 ////}
 
 // @Filename: /b.ts
-////import * as a from "a";
+////import a from "a";
 ////a.[|x|];
 
 verify.rangesReferenceEachOther();

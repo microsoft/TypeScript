@@ -3788,6 +3788,10 @@
         "category": "Error",
         "code": 17016
     },
+    "JSX fragment is not supported when using an inline JSX factory pragma": {
+        "category": "Error",
+        "code": 17017
+    },
 
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
@@ -3965,5 +3969,17 @@
     "Convert to ES6 module": {
         "category": "Message",
         "code": 95017
+    },
+    "Add 'undefined' type to property '{0}'": {
+        "category": "Message",
+        "code": 95018
+    },
+    "Add initializer to property '{0}'": {
+        "category": "Message",
+        "code": 95019
+    },
+    "Add definite assignment assertion to property '{0}'": {
+        "category": "Message",
+        "code": 95020
     }
 }
