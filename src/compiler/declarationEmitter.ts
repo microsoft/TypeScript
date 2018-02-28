@@ -608,7 +608,12 @@ namespace ts {
                         "?");
                 }
                 write(": ");
-                emitType(node.type);
+                if (node.type) {
+                    emitType(node.type);
+                }
+                else {
+                    write("any");
+                }
                 write(";");
                 writeLine();
                 decreaseIndent();
