@@ -13,7 +13,7 @@ verify.codeFix({
     description: "Declare static method 'm1'",
     index: 0,
     newRangeContent: `
-    static m1(arg0: any, arg1: any, arg2: any): any {
+    static m1(arg0: number, arg1: number, arg2: number): any {
         throw new Error("Method not implemented.");
     }
     `,
@@ -23,10 +23,10 @@ verify.codeFix({
     description: "Declare static method 'm2'",
     index: 0,
     newRangeContent: `
-    static m2(arg0: any, arg1: any): any {
+    static m2(arg0: number, arg1: number): any {
         throw new Error("Method not implemented.");
     }
-    static m1(arg0: any, arg1: any, arg2: any): any {
+    static m1(arg0: number, arg1: number, arg2: number): any {
         throw new Error("Method not implemented.");
     }
     `,
@@ -37,10 +37,10 @@ verify.codeFix({
     index: 0,
     newRangeContent: `
     static prop1: number;
-    static m2(arg0: any, arg1: any): any {
+    static m2(arg0: number, arg1: number): any {
         throw new Error("Method not implemented.");
     }
-    static m1(arg0: any, arg1: any, arg2: any): any {
+    static m1(arg0: number, arg1: number, arg2: number): any {
         throw new Error("Method not implemented.");
     }
     `,
@@ -52,10 +52,10 @@ verify.codeFix({
     newRangeContent: `
     static prop2: string;
     static prop1: number;
-    static m2(arg0: any, arg1: any): any {
+    static m2(arg0: number, arg1: number): any {
         throw new Error("Method not implemented.");
     }
-    static m1(arg0: any, arg1: any, arg2: any): any {
+    static m1(arg0: number, arg1: number, arg2: number): any {
         throw new Error("Method not implemented.");
     }
     `,

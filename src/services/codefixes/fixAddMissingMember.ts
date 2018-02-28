@@ -31,7 +31,7 @@ namespace ts.codefix {
 
                 // Always prefer to add a method declaration if possible.
                 if (call) {
-                    addMethodDeclaration(changes, classDeclarationSourceFile, classDeclaration, token, call, makeStatic, inJs);
+                    addMethodDeclaration(context, changes, classDeclarationSourceFile, classDeclaration, token, call, makeStatic, inJs);
                 }
                 else {
                     if (inJs) {
@@ -181,14 +181,14 @@ namespace ts.codefix {
         return { description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_signature_for_property_0), [tokenName]), changes, fixId: undefined };
     }
 
-    function getActionForMethodDeclaration(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, token: Identifier, callExpression: CallExpression, makeStatic: boolean, inJs: boolean): CodeFixAction | undefined {
+    function getActionForMethodDeclaration(context: CodeFixContextBase, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, token: Identifier, callExpression: CallExpression, makeStatic: boolean, inJs: boolean): CodeFixAction | undefined {
         const description = formatStringFromArgs(getLocaleSpecificMessage(makeStatic ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0), [token.text]);
-        const changes = textChanges.ChangeTracker.with(context, t => addMethodDeclaration(t, classDeclarationSourceFile, classDeclaration, token, callExpression, makeStatic, inJs));
+        const changes = textChanges.ChangeTracker.with(context, t => addMethodDeclaration(context, t, classDeclarationSourceFile, classDeclaration, token, callExpression, makeStatic, inJs));
         return { description, changes, fixId };
     }
 
-    function addMethodDeclaration(changeTracker: textChanges.ChangeTracker, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, token: Identifier, callExpression: CallExpression, makeStatic: boolean, inJs: boolean) {
-        const methodDeclaration = createMethodFromCallExpression(callExpression, token.text, inJs, makeStatic);
+    function addMethodDeclaration(context: CodeFixContextBase, changeTracker: textChanges.ChangeTracker, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, token: Identifier, callExpression: CallExpression, makeStatic: boolean, inJs: boolean) {
+        const methodDeclaration = createMethodFromCallExpression(context, callExpression, token.text, inJs, makeStatic);
         changeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, methodDeclaration);
     }
 }

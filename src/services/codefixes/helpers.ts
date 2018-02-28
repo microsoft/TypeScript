@@ -107,7 +107,18 @@ namespace ts.codefix {
         return nodes && createNodeArray(nodes.map(getSynthesizedDeepClone));
     }
 
-    export function createMethodFromCallExpression({ typeArguments, arguments: args }: CallExpression, methodName: string, inJs: boolean, makeStatic: boolean): MethodDeclaration {
+    export function createMethodFromCallExpression(context: CodeFixContextBase, { typeArguments, arguments: args }: CallExpression, methodName: string, inJs: boolean, makeStatic: boolean): MethodDeclaration {
+        const checker = context.program.getTypeChecker();
+        const types = map(args,
+            (arg) => {
+                let type = checker.getTypeAtLocation(arg);
+                // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
+                type = checker.getBaseTypeOfLiteralType(type);
+                return checker.typeToTypeNode(type);
+            });
+        const names = map(args, (arg) =>
+            isIdentifier(arg) ? arg.text :
+            isPropertyAccessExpression(arg) ? arg.name.text : undefined);
         return createMethod(
             /*decorators*/ undefined,
             /*modifiers*/ makeStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
@@ -116,12 +127,12 @@ namespace ts.codefix {
             /*questionToken*/ undefined,
             /*typeParameters*/ inJs ? undefined : map(typeArguments, (_, i) =>
                 createTypeParameterDeclaration(CharacterCodes.T + typeArguments.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`)),
-            /*parameters*/ createDummyParameters(args.length, /*names*/ undefined, /*minArgumentCount*/ undefined, inJs),
+            /*parameters*/ createDummyParameters(args.length, names, types, /*minArgumentCount*/ undefined, inJs),
             /*type*/ inJs ? undefined : createKeywordTypeNode(SyntaxKind.AnyKeyword),
             createStubbedMethodBody());
     }
 
-    function createDummyParameters(argCount: number, names: string[] | undefined, minArgumentCount: number | undefined, inJs: boolean): ParameterDeclaration[] {
+    function createDummyParameters(argCount: number, names: string[] | undefined, types: TypeNode[], minArgumentCount: number | undefined, inJs: boolean): ParameterDeclaration[] {
         const parameters: ParameterDeclaration[] = [];
         for (let i = 0; i < argCount; i++) {
             const newParameter = createParameter(
@@ -130,7 +141,7 @@ namespace ts.codefix {
                 /*dotDotDotToken*/ undefined,
                 /*name*/ names && names[i] || `arg${i}`,
                 /*questionToken*/ minArgumentCount !== undefined && i >= minArgumentCount ? createToken(SyntaxKind.QuestionToken) : undefined,
-                /*type*/ inJs ? undefined : createKeywordTypeNode(SyntaxKind.AnyKeyword),
+                /*type*/ inJs ? undefined : types && types[i] || createKeywordTypeNode(SyntaxKind.AnyKeyword),
                 /*initializer*/ undefined);
             parameters.push(newParameter);
         }
@@ -157,7 +168,7 @@ namespace ts.codefix {
         const maxNonRestArgs = maxArgsSignature.parameters.length - (maxArgsSignature.hasRestParameter ? 1 : 0);
         const maxArgsParameterSymbolNames = maxArgsSignature.parameters.map(symbol => symbol.name);
 
-        const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, minArgumentCount, /*inJs*/ false);
+        const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, /* types */ undefined, minArgumentCount, /*inJs*/ false);
 
         if (someSigHasRestParameter) {
             const anyArrayType = createArrayTypeNode(createKeywordTypeNode(SyntaxKind.AnyKeyword));
