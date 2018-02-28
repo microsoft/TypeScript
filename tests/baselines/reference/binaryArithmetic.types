@@ -1,0 +1,40 @@
+=== tests/cases/compiler/binaryArithmetic.ts ===
+4 | null;
+>4 | null : number
+>4 : 4
+>null : null
+
+4 | undefined;
+>4 | undefined : number
+>4 : 4
+>undefined : undefined
+
+undefined | undefined;
+>undefined | undefined : number
+>undefined : undefined
+>undefined : undefined
+
+null | null;
+>null | null : number
+>null : null
+>null : null
+
+function f(x: number | undefined, y: number | undefined) {
+>f : (x: number | undefined, y: number | undefined) => void
+>x : number | undefined
+>y : number | undefined
+
+    x |= y;
+>x |= y : number
+>x : number | undefined
+>y : number | undefined
+
+    x |= 1;
+>x |= 1 : number
+>x : number | undefined
+>1 : 1
+
+    x; // TODO: should be `number` now
+>x : number | undefined
+}
+

@@ -1,7 +1,0 @@
-=== tests/cases/compiler/binaryArithmatic2.ts ===
-var v = 4 | undefined;
->v : number
->4 | undefined : number
->4 : 4
->undefined : undefined
-

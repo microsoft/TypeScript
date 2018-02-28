@@ -54,33 +54,9 @@ tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeti
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(40,25): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(41,11): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(41,25): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(44,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(44,18): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(45,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(45,18): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(46,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(46,23): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(47,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(47,23): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(50,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(50,18): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(51,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(51,18): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(52,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(52,23): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(53,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(53,23): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(56,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(56,18): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(57,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(57,18): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(58,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(58,23): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(59,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts(59,23): error TS2532: Object is possibly 'undefined'.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts (80 errors) ====
+==== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts (56 errors) ====
     // operator *
     var ra1 = null * null;
               ~~~~
@@ -237,66 +213,18 @@ tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeti
     
     // operator &
     var rh1 = null & null;
-              ~~~~
-!!! error TS2531: Object is possibly 'null'.
-                     ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var rh2 = null & undefined;
-              ~~~~
-!!! error TS2531: Object is possibly 'null'.
-                     ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var rh3 = undefined & null;
-              ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
-                          ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var rh4 = undefined & undefined;
-              ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
-                          ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     
     // operator ^
     var ri1 = null ^ null;
-              ~~~~
-!!! error TS2531: Object is possibly 'null'.
-                     ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var ri2 = null ^ undefined;
-              ~~~~
-!!! error TS2531: Object is possibly 'null'.
-                     ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var ri3 = undefined ^ null;
-              ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
-                          ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var ri4 = undefined ^ undefined;
-              ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
-                          ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     
     // operator |
     var rj1 = null | null;
-              ~~~~
-!!! error TS2531: Object is possibly 'null'.
-                     ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var rj2 = null | undefined;
-              ~~~~
-!!! error TS2531: Object is possibly 'null'.
-                     ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var rj3 = undefined | null;
-              ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
-                          ~~~~
-!!! error TS2531: Object is possibly 'null'.
     var rj4 = undefined | undefined;
-              ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
-                          ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.

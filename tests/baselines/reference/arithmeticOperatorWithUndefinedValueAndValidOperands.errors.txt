@@ -54,33 +54,9 @@ tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeti
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(78,17): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(79,17): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(80,19): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(83,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(84,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(85,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(86,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(87,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(88,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(89,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(90,17): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(93,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(94,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(95,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(96,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(97,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(98,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(99,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(100,17): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(103,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(104,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(105,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(106,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(107,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(108,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(109,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(110,17): error TS2532: Object is possibly 'undefined'.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts (80 errors) ====
+==== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts (56 errors) ====
     // If one operand is the undefined or undefined value, it is treated as having the type of the
     // other operand.
     
@@ -276,78 +252,30 @@ tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeti
     
     // operator &
     var rh1 = undefined & a;
-              ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var rh2 = undefined & b;
-              ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var rh3 = undefined & 1;
-              ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var rh4 = undefined & E.a;
-              ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var rh5 = a & undefined;
-                  ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var rh6 = b & undefined;
-                  ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var rh7 = 0 & undefined;
-                  ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var rh8 = E.b & undefined;
-                    ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     
     // operator ^
     var ri1 = undefined ^ a;
-              ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var ri2 = undefined ^ b;
-              ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var ri3 = undefined ^ 1;
-              ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var ri4 = undefined ^ E.a;
-              ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var ri5 = a ^ undefined;
-                  ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var ri6 = b ^ undefined;
-                  ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var ri7 = 0 ^ undefined;
-                  ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var ri8 = E.b ^ undefined;
-                    ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     
     // operator |
     var rj1 = undefined | a;
-              ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var rj2 = undefined | b;
-              ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var rj3 = undefined | 1;
-              ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var rj4 = undefined | E.a;
-              ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var rj5 = a | undefined;
-                  ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var rj6 = b | undefined;
-                  ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var rj7 = 0 | undefined;
-                  ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     var rj8 = E.b | undefined;
-                    ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
