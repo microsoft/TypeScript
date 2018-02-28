@@ -110,8 +110,8 @@ type T15 = ReturnType<any>;  // any
 >T15 : any
 >ReturnType : ReturnType<T>
 
-type T16 = ReturnType<never>;  // any
->T16 : any
+type T16 = ReturnType<never>;  // never
+>T16 : never
 >ReturnType : ReturnType<T>
 
 type T17 = ReturnType<string>;  // Error
@@ -132,8 +132,8 @@ type U11 = InstanceType<any>;  // any
 >U11 : any
 >InstanceType : InstanceType<T>
 
-type U12 = InstanceType<never>;  // any
->U12 : any
+type U12 = InstanceType<never>;  // never
+>U12 : never
 >InstanceType : InstanceType<T>
 
 type U13 = InstanceType<string>;  // Error
@@ -188,8 +188,8 @@ type T26 = ArgumentType<any>;  // any
 >T26 : any
 >ArgumentType : ArgumentType<T>
 
-type T27 = ArgumentType<never>;  // any
->T27 : any
+type T27 = ArgumentType<never>;  // never
+>T27 : never
 >ArgumentType : ArgumentType<T>
 
 type X1<T extends { x: any, y: any }> = T extends { x: infer X, y: infer Y } ? [X, Y] : any;

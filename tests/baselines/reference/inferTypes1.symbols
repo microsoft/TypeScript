@@ -106,7 +106,7 @@ type T15 = ReturnType<any>;  // any
 >T15 : Symbol(T15, Decl(inferTypes1.ts, 27, 33))
 >ReturnType : Symbol(ReturnType, Decl(lib.d.ts, --, --))
 
-type T16 = ReturnType<never>;  // any
+type T16 = ReturnType<never>;  // never
 >T16 : Symbol(T16, Decl(inferTypes1.ts, 28, 27))
 >ReturnType : Symbol(ReturnType, Decl(lib.d.ts, --, --))
 
@@ -128,7 +128,7 @@ type U11 = InstanceType<any>;  // any
 >U11 : Symbol(U11, Decl(inferTypes1.ts, 33, 34))
 >InstanceType : Symbol(InstanceType, Decl(lib.d.ts, --, --))
 
-type U12 = InstanceType<never>;  // any
+type U12 = InstanceType<never>;  // never
 >U12 : Symbol(U12, Decl(inferTypes1.ts, 34, 29))
 >InstanceType : Symbol(InstanceType, Decl(lib.d.ts, --, --))
 
@@ -184,7 +184,7 @@ type T26 = ArgumentType<any>;  // any
 >T26 : Symbol(T26, Decl(inferTypes1.ts, 46, 34))
 >ArgumentType : Symbol(ArgumentType, Decl(inferTypes1.ts, 37, 34))
 
-type T27 = ArgumentType<never>;  // any
+type T27 = ArgumentType<never>;  // never
 >T27 : Symbol(T27, Decl(inferTypes1.ts, 47, 29))
 >ArgumentType : Symbol(ArgumentType, Decl(inferTypes1.ts, 37, 34))
 
