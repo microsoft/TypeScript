@@ -83,7 +83,7 @@ namespace ts.server {
         };
     }
 
-    export function mergeMapLikes<T>(target: T, source: Partial<T>): void {
+    export function mergeMapLikes<T extends object>(target: T, source: Partial<T>): void {
         for (const key in source) {
             if (hasProperty(source, key)) {
                 target[key] = source[key];
