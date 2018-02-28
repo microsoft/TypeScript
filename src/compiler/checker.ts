@@ -8225,7 +8225,7 @@ namespace ts {
                 // conditional type instead of deferring resolution. Also, we always want strict function
                 // types rules (i.e. proper contravariance) for inferences.
                 inferTypes(inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
-                // We infer 'never' when there are no candidates for a type parameter
+                // We infer {} when there are no candidates for a type parameter
                 const inferredTypes = map(inferences, inference => getTypeFromInference(inference) || emptyObjectType);
                 combinedMapper = combineTypeMappers(mapper, createTypeMapper(root.inferTypeParameters, inferredTypes));
             }
