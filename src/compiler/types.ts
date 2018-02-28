@@ -4048,6 +4048,7 @@ namespace ts {
         baseUrl?: string;
         charset?: string;
         checkJs?: boolean;
+        /* @internal */ clearWatchOutput?: boolean;
         /* @internal */ configFilePath?: string;
         /** configFile is set as non enumerable property so as to avoid checking of json source files */
         /* @internal */ readonly configFile?: JsonSourceFile;
