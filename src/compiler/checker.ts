@@ -11490,20 +11490,21 @@ namespace ts {
             let symbolStack: Symbol[];
             let visited: Map<boolean>;
             let contravariant = false;
+            let propagationType: Type;
             inferFromTypes(originalSource, originalTarget);
 
             function inferFromTypes(source: Type, target: Type) {
                 if (!couldContainTypeVariables(target)) {
                     return;
                 }
-                if (source === neverType || source === wildcardType) {
-                    // We are inferring from 'never' or the wildcard type. We want to infer this
-                    // type for every type parameter referenced in the target type, so we infer from
-                    // target to itself with a flag we check when recording candidates.
-                    const savePriority = priority;
-                    priority |= source === neverType ? InferencePriority.Never : InferencePriority.Wildcard;
+                if (source.flags & (TypeFlags.Any | TypeFlags.Never) && source !== silentNeverType) {
+                    // We are inferring from 'any' or 'never'. We want to infer this type for every type parameter
+                    // referenced in the target type, so we record the propagation type and infer from the target
+                    // to itself. Then, as we find candidates we substitute the propagation type.
+                    const savePropagationType = propagationType;
+                    propagationType = source;
                     inferFromTypes(target, target);
-                    priority = savePriority;
+                    propagationType = savePropagationType;
                     return;
                 }
                 if (source.aliasSymbol && source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol) {
@@ -11567,16 +11568,13 @@ namespace ts {
                     const inference = getInferenceInfoForType(target);
                     if (inference) {
                         if (!inference.isFixed) {
-                            const p = priority & InferencePriority.Mask;
-                            if (inference.priority === undefined || p < inference.priority) {
+                            if (inference.priority === undefined || priority < inference.priority) {
                                 inference.candidates = undefined;
                                 inference.contraCandidates = undefined;
-                                inference.priority = p;
+                                inference.priority = priority;
                             }
-                            if (p === inference.priority) {
-                                const candidate = priority & InferencePriority.Never ? neverType :
-                                    priority & InferencePriority.Wildcard ? wildcardType :
-                                    source;
+                            if (priority === inference.priority) {
+                                const candidate = propagationType || source;
                                 if (contravariant) {
                                     inference.contraCandidates = append(inference.contraCandidates, candidate);
                                 }
