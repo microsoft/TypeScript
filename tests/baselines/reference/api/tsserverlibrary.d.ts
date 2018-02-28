@@ -2240,9 +2240,6 @@ declare namespace ts {
         ReturnType = 4,
         NoConstraints = 8,
         AlwaysStrict = 16,
-        Wildcard = 32,
-        Never = 64,
-        Mask = 7,
     }
     interface JsFileExtensionInfo {
         extension: string;
