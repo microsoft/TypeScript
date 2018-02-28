@@ -3472,6 +3472,10 @@
         "category": "Message",
         "code": 6190
     },
+    "Whether to keep outdated console output in watch mode instead of clearing the screen.": {
+        "category": "Message",
+        "code": 6191
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
