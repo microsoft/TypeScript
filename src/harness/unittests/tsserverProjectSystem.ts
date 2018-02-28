@@ -467,12 +467,12 @@ namespace ts.projectSystem {
         verifyDiagnostics(actual, []);
     }
 
-    function checkErrorMessage(session: TestSession, eventName: "syntaxDiag" | "semanticDiag", diagnostics: protocol.DiagnosticEventBody) {
-        checkNthEvent(session, ts.server.toEvent(eventName, diagnostics), 0, /*isMostRecent*/ false);
+    function checkErrorMessage(session: TestSession, eventName: protocol.DiagnosticEventKind, diagnostics: protocol.DiagnosticEventBody, isMostRecent = false): void {
+        checkNthEvent(session, ts.server.toEvent(eventName, diagnostics), 0, isMostRecent);
     }
 
-    function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number) {
-        checkNthEvent(session, ts.server.toEvent("requestCompleted", { request_seq: expectedSequenceId }), numberOfCurrentEvents - 1, /*isMostRecent*/ true);
+    function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number, isMostRecent = true): void {
+        checkNthEvent(session, ts.server.toEvent("requestCompleted", { request_seq: expectedSequenceId }), numberOfCurrentEvents - 1, isMostRecent);
     }
 
     function checkProjectUpdatedInBackgroundEvent(session: TestSession, openFiles: string[]) {
@@ -3076,8 +3076,13 @@ namespace ts.projectSystem {
                 host.runQueuedImmediateCallbacks();
                 assert.isFalse(hasError());
                 checkErrorMessage(session, "semanticDiag", { file: untitledFile, diagnostics: [] });
+                session.clearMessages();
 
+                host.runQueuedImmediateCallbacks(1);
+                assert.isFalse(hasError());
+                checkErrorMessage(session, "suggestionDiag", { file: untitledFile, diagnostics: [] });
                 checkCompleteEvent(session, 2, expectedSequenceId);
+                session.clearMessages();
             }
 
             it("has projectRoot", () => {
@@ -3136,6 +3141,10 @@ namespace ts.projectSystem {
 
                 host.runQueuedImmediateCallbacks();
                 checkErrorMessage(session, "semanticDiag", { file: app.path, diagnostics: [] });
+                session.clearMessages();
+
+                host.runQueuedImmediateCallbacks(1);
+                checkErrorMessage(session, "suggestionDiag", { file: app.path, diagnostics: [] });
                 checkCompleteEvent(session, 2, expectedSequenceId);
                 session.clearMessages();
             }
@@ -3934,18 +3943,17 @@ namespace ts.projectSystem {
             session.clearMessages();
 
             host.runQueuedImmediateCallbacks();
-            const moduleNotFound = Diagnostics.Cannot_find_module_0;
             const startOffset = file1.content.indexOf('"') + 1;
             checkErrorMessage(session, "semanticDiag", {
-                file: file1.path, diagnostics: [{
-                    start: { line: 1, offset: startOffset },
-                    end: { line: 1, offset: startOffset + '"pad"'.length },
-                    text: formatStringFromArgs(moduleNotFound.message, ["pad"]),
-                    code: moduleNotFound.code,
-                    category: DiagnosticCategory[moduleNotFound.category].toLowerCase(),
-                    source: undefined
-                }]
+                file: file1.path,
+                diagnostics: [
+                    createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + '"pad"'.length }, Diagnostics.Cannot_find_module_0, ["pad"])
+                ],
             });
+            session.clearMessages();
+
+            host.runQueuedImmediateCallbacks(1);
+            checkErrorMessage(session, "suggestionDiag", { file: file1.path, diagnostics: [] });
             checkCompleteEvent(session, 2, expectedSequenceId);
             session.clearMessages();
 
@@ -3966,6 +3974,63 @@ namespace ts.projectSystem {
             host.runQueuedImmediateCallbacks();
             checkErrorMessage(session, "semanticDiag", { file: file1.path, diagnostics: [] });
         });
+
+        it("info diagnostics", () => {
+            const file: FileOrFolder = {
+                path: "/a.js",
+                content: 'require("b")',
+            };
+
+            const host = createServerHost([file]);
+            const session = createSession(host, { canUseEvents: true });
+            const service = session.getProjectService();
+
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: server.CommandNames.Open,
+                arguments: { file: file.path, fileContent: file.content },
+            });
+
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            session.clearMessages();
+            const expectedSequenceId = session.getNextSeq();
+            host.checkTimeoutQueueLengthAndRun(2);
+
+            checkProjectUpdatedInBackgroundEvent(session, [file.path]);
+            session.clearMessages();
+
+            session.executeCommandSeq<protocol.GeterrRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    files: [file.path],
+                }
+            });
+
+            host.checkTimeoutQueueLengthAndRun(1);
+
+            checkErrorMessage(session, "syntaxDiag", { file: file.path, diagnostics: [] }, /*isMostRecent*/ true);
+            session.clearMessages();
+
+            host.runQueuedImmediateCallbacks(1);
+
+            checkErrorMessage(session, "semanticDiag", { file: file.path, diagnostics: [] });
+            session.clearMessages();
+
+            host.runQueuedImmediateCallbacks(1);
+
+            checkErrorMessage(session, "suggestionDiag", {
+                file: file.path,
+                diagnostics: [
+                    createDiagnostic({ line: 1, offset: 1 }, { line: 1, offset: 13 }, Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module)
+                ],
+            });
+            checkCompleteEvent(session, 2, expectedSequenceId);
+            session.clearMessages();
+        });
+
+        function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: ReadonlyArray<string> = []): protocol.Diagnostic {
+            return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category: diagnosticCategoryName(message), source: undefined };
+        }
     });
 
     describe("tsserverProjectSystem Configure file diagnostics events", () => {
@@ -5154,9 +5219,15 @@ namespace ts.projectSystem {
 
                 // the semanticDiag message
                 host.runQueuedImmediateCallbacks();
-                assert.equal(host.getOutput().length, 2, "expect 2 messages");
+                assert.equal(host.getOutput().length, 1);
                 const e2 = <protocol.Event>getMessage(0);
                 assert.equal(e2.event, "semanticDiag");
+                session.clearMessages();
+
+                host.runQueuedImmediateCallbacks(1);
+                assert.equal(host.getOutput().length, 2);
+                const e3 = <protocol.Event>getMessage(0);
+                assert.equal(e3.event, "suggestionDiag");
                 verifyRequestCompleted(getErrId, 1);
 
                 cancellationToken.resetToken();
@@ -5194,6 +5265,7 @@ namespace ts.projectSystem {
                 return JSON.parse(server.extractMessage(host.getOutput()[n]));
             }
         });
+
         it("Lower priority tasks are cancellable", () => {
             const f1 = {
                 path: "/a/app.ts",
@@ -5495,7 +5567,7 @@ namespace ts.projectSystem {
         }
         type CalledMaps = CalledMapsWithSingleArg | CalledMapsWithFiveArgs;
         function createCallsTrackingHost(host: TestServerHost) {
-            const calledMaps: Record<CalledMapsWithSingleArg, MultiMap<true>> & Record<CalledMapsWithFiveArgs, MultiMap<[ReadonlyArray<string>, ReadonlyArray<string>, ReadonlyArray<string>, number]>>  = {
+            const calledMaps: Record<CalledMapsWithSingleArg, MultiMap<true>> & Record<CalledMapsWithFiveArgs, MultiMap<[ReadonlyArray<string>, ReadonlyArray<string>, ReadonlyArray<string>, number]>> = {
                 fileExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.fileExists),
                 directoryExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.directoryExists),
                 getDirectories: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.getDirectories),
