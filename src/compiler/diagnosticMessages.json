@@ -3814,6 +3814,10 @@
         "category": "Suggestion",
         "code": 80001
     },
+    "Function may be converted to a class.": {
+        "category": "Suggestion",
+        "code": 80002
+    },
 
     "Add missing 'super()' call": {
         "category": "Message",
