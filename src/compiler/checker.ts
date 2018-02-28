@@ -8308,7 +8308,15 @@ namespace ts {
                             error(accessExpression.argumentExpression, Diagnostics.Element_implicitly_has_an_any_type_because_index_expression_is_not_of_type_number);
                         }
                         else {
-                            error(accessExpression, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(objectType));
+                            let suggestion: string;
+                            if (propName !== undefined && (suggestion = getSuggestionForNonexistentProperty(propName as string, objectType))) {
+                                if (suggestion !== undefined) {
+                                    error(accessExpression.argumentExpression, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, propName as string, typeToString(objectType), suggestion);
+                                }
+                            }
+                            else {
+                                error(accessExpression, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(objectType));
+                            }
                         }
                     }
                     return anyType;
@@ -10139,7 +10147,7 @@ namespace ts {
                                         errorNode = propDeclaration;
 
                                         if (isIdentifier(propDeclaration.name)) {
-                                            suggestion = getSuggestionForNonexistentProperty(propDeclaration.name, target);
+                                            suggestion = getSuggestionForNonexistentProperty(idText(propDeclaration.name), target);
                                         }
                                     }
 
@@ -16667,12 +16675,12 @@ namespace ts {
                     }
                 }
             }
-            const promisedType = getPromisedTypeOfPromise(containingType);
-            if (promisedType && getPropertyOfType(promisedType, propNode.escapedText)) {
-                errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_forget_to_use_await, declarationNameToString(propNode), typeToString(containingType));
+            const suggestion = getSuggestionForNonexistentProperty(idText(propNode), containingType);
+            if (suggestion !== undefined) {
+                errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, declarationNameToString(propNode), typeToString(containingType), suggestion);
             }
             else {
-                const suggestion = getSuggestionForNonexistentProperty(propNode, containingType);
+                const suggestion = getSuggestionForNonexistentProperty(idText(propNode), containingType);
                 if (suggestion !== undefined) {
                     errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, declarationNameToString(propNode), typeToString(containingType), suggestion);
                 }
@@ -16683,8 +16691,8 @@ namespace ts {
             diagnostics.add(createDiagnosticForNodeFromMessageChain(propNode, errorInfo));
         }
 
-        function getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): string | undefined {
-            const suggestion = getSpellingSuggestionForName(idText(node), getPropertiesOfType(containingType), SymbolFlags.Value);
+        function getSuggestionForNonexistentProperty(name: string, containingType: Type): string | undefined {
+            const suggestion = getSpellingSuggestionForName(name, getPropertiesOfType(containingType), SymbolFlags.Value);
             return suggestion && symbolName(suggestion);
         }
 
