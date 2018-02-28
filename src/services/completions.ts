@@ -33,6 +33,7 @@ namespace ts.Completions {
         position: number,
         allSourceFiles: ReadonlyArray<SourceFile>,
         options: GetCompletionsAtPositionOptions,
+        settings: ServicesSettings,
     ): CompletionInfo | undefined {
         if (isInReferenceComment(sourceFile, position)) {
             const entries = PathCompletions.getTripleSlashReferenceCompletion(sourceFile, position, compilerOptions, host);
@@ -44,7 +45,7 @@ namespace ts.Completions {
         if (isInString(sourceFile, position, contextToken)) {
             return !contextToken || !isStringLiteralLike(contextToken)
                 ? undefined
-                : convertStringLiteralCompletions(getStringLiteralCompletionEntries(sourceFile, contextToken, position, typeChecker, compilerOptions, host), sourceFile, typeChecker, log);
+                : convertStringLiteralCompletions(getStringLiteralCompletionEntries(sourceFile, contextToken, position, typeChecker, compilerOptions, host), sourceFile, typeChecker, log, settings);
         }
 
         if (contextToken && isBreakOrContinueStatement(contextToken.parent)
@@ -59,7 +60,7 @@ namespace ts.Completions {
 
         switch (completionData.kind) {
             case CompletionDataKind.Data:
-                return completionInfoFromData(sourceFile, typeChecker, compilerOptions, log, completionData, options.includeInsertTextCompletions);
+                return completionInfoFromData(sourceFile, typeChecker, compilerOptions, log, completionData, options.includeInsertTextCompletions, settings);
             case CompletionDataKind.JsDocTagName:
                 // If the current position is a jsDoc tag name, only tag names should be provided for completion
                 return jsdocCompletionInfo(JsDoc.getJSDocTagNameCompletions());
@@ -73,7 +74,7 @@ namespace ts.Completions {
         }
     }
 
-    function convertStringLiteralCompletions(completion: StringLiteralCompletion | undefined, sourceFile: SourceFile, checker: TypeChecker, log: Log): CompletionInfo | undefined {
+    function convertStringLiteralCompletions(completion: StringLiteralCompletion | undefined, sourceFile: SourceFile, checker: TypeChecker, log: Log, settings: ServicesSettings): CompletionInfo | undefined {
         if (completion === undefined) {
             return undefined;
         }
@@ -82,7 +83,7 @@ namespace ts.Completions {
                 return convertPathCompletions(completion.paths);
             case StringLiteralCompletionKind.Properties: {
                 const entries: CompletionEntry[] = [];
-                getCompletionEntriesFromSymbols(completion.symbols, entries, sourceFile, sourceFile, checker, ScriptTarget.ESNext, log, CompletionKind.String); // Target will not be used, so arbitrary
+                getCompletionEntriesFromSymbols(completion.symbols, entries, sourceFile, sourceFile, checker, ScriptTarget.ESNext, log, CompletionKind.String, settings); // Target will not be used, so arbitrary
                 return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: true, entries };
             }
             case StringLiteralCompletionKind.Types: {
@@ -105,7 +106,7 @@ namespace ts.Completions {
         return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
     }
 
-    function completionInfoFromData(sourceFile: SourceFile, typeChecker: TypeChecker, compilerOptions: CompilerOptions, log: Log, completionData: CompletionData, includeInsertTextCompletions: boolean): CompletionInfo {
+    function completionInfoFromData(sourceFile: SourceFile, typeChecker: TypeChecker, compilerOptions: CompilerOptions, log: Log, completionData: CompletionData, includeInsertTextCompletions: boolean, settings: ServicesSettings): CompletionInfo {
         const { symbols, completionKind, isInSnippetScope, isNewIdentifierLocation, location, propertyAccessToConvert, keywordFilters, symbolToOriginInfoMap, recommendedCompletion, isJsxInitializer } = completionData;
 
         if (sourceFile.languageVariant === LanguageVariant.JSX && location && location.parent && isJsxClosingElement(location.parent)) {
@@ -127,7 +128,7 @@ namespace ts.Completions {
         const entries: CompletionEntry[] = [];
 
         if (isSourceFileJavaScript(sourceFile)) {
-            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, sourceFile, typeChecker, compilerOptions.target, log, completionKind, includeInsertTextCompletions, propertyAccessToConvert, isJsxInitializer, recommendedCompletion, symbolToOriginInfoMap);
+            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, sourceFile, typeChecker, compilerOptions.target, log, completionKind, settings, includeInsertTextCompletions, propertyAccessToConvert, isJsxInitializer, recommendedCompletion, symbolToOriginInfoMap);
             getJavaScriptCompletionEntries(sourceFile, location.pos, uniqueNames, compilerOptions.target, entries);
         }
         else {
@@ -135,7 +136,7 @@ namespace ts.Completions {
                 return undefined;
             }
 
-            getCompletionEntriesFromSymbols(symbols, entries, location, sourceFile, typeChecker, compilerOptions.target, log, completionKind, includeInsertTextCompletions, propertyAccessToConvert, isJsxInitializer, recommendedCompletion, symbolToOriginInfoMap);
+            getCompletionEntriesFromSymbols(symbols, entries, location, sourceFile, typeChecker, compilerOptions.target, log, completionKind, settings, includeInsertTextCompletions, propertyAccessToConvert, isJsxInitializer, recommendedCompletion, symbolToOriginInfoMap);
         }
 
         // TODO add filter for keyword based on type/value/namespace and also location
@@ -197,6 +198,7 @@ namespace ts.Completions {
         propertyAccessToConvert: PropertyAccessExpression | undefined,
         isJsxInitializer: IsJsxInitializer,
         includeInsertTextCompletions: boolean,
+        settings: ServicesSettings,
     ): CompletionEntry | undefined {
         const info = getCompletionEntryDisplayNameForSymbol(symbol, target, origin, kind);
         if (!info) {
@@ -208,10 +210,10 @@ namespace ts.Completions {
         let replacementSpan: TextSpan | undefined;
         if (includeInsertTextCompletions) {
             if (origin && origin.type === "this-type") {
-                insertText = needsConvertPropertyAccess ? `this[${quote(name)}]` : `this.${name}`;
+                insertText = needsConvertPropertyAccess ? `this[${quote(name, settings)}]` : `this.${name}`;
             }
             else if (needsConvertPropertyAccess) {
-                insertText = `[${quote(name)}]`;
+                insertText = `[${quote(name, settings)}]`;
                 const dot = findChildOfKind(propertyAccessToConvert!, SyntaxKind.DotToken, sourceFile)!;
                 // If the text after the '.' starts with this name, write over it. Else, add new text.
                 const end = startsWith(name, propertyAccessToConvert!.name.text) ? propertyAccessToConvert!.name.end : dot.end;
@@ -252,9 +254,11 @@ namespace ts.Completions {
         };
     }
 
-    function quote(text: string): string {
-        // TODO: GH#20619 Use configured quote style
-        return JSON.stringify(text);
+    function quote(text: string, settings: ServicesSettings): string {
+        const quoted = JSON.stringify(text);
+        return settings.quote === "'"
+            ? `'${stripQuotes(quoted).replace("'", "\\'").replace('\\"', '"')}'`
+            : quoted;
     }
 
     function isRecommendedCompletionMatch(localSymbol: Symbol, recommendedCompletion: Symbol, checker: TypeChecker): boolean {
@@ -279,6 +283,7 @@ namespace ts.Completions {
         target: ScriptTarget,
         log: Log,
         kind: CompletionKind,
+        settings: ServicesSettings,
         includeInsertTextCompletions?: boolean,
         propertyAccessToConvert?: PropertyAccessExpression | undefined,
         isJsxInitializer?: IsJsxInitializer,
@@ -293,7 +298,7 @@ namespace ts.Completions {
         const uniques = createMap<true>();
         for (const symbol of symbols) {
             const origin = symbolToOriginInfoMap ? symbolToOriginInfoMap[getSymbolId(symbol)] : undefined;
-            const entry = createCompletionEntry(symbol, location, sourceFile, typeChecker, target, kind, origin, recommendedCompletion, propertyAccessToConvert, isJsxInitializer, includeInsertTextCompletions);
+            const entry = createCompletionEntry(symbol, location, sourceFile, typeChecker, target, kind, origin, recommendedCompletion, propertyAccessToConvert, isJsxInitializer, includeInsertTextCompletions, settings);
             if (!entry) {
                 continue;
             }

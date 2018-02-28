@@ -204,7 +204,8 @@ namespace ts.server {
          * All projects that include this file
          */
         readonly containingProjects: Project[] = [];
-        private formatCodeSettings: FormatCodeSettings;
+        private formatSettings: FormatCodeSettings | undefined;
+        private servicesSettings: ServicesSettings | undefined;
 
         /* @internal */
         fileWatcher: FileWatcher;
@@ -293,9 +294,8 @@ namespace ts.server {
             return this.realpath && this.realpath !== this.path ? this.realpath : undefined;
         }
 
-        getFormatCodeSettings() {
-            return this.formatCodeSettings;
-        }
+        getFormatCodeSettings(): FormatCodeSettings { return this.formatSettings; }
+        getServicesSettings(): ServicesSettings { return this.servicesSettings; }
 
         attachToProject(project: Project): boolean {
             const isNew = !this.isAttached(project);
@@ -388,12 +388,19 @@ namespace ts.server {
             }
         }
 
-        setFormatOptions(formatSettings: FormatCodeSettings): void {
+        setSettings(formatSettings: FormatCodeSettings, servicesSettings: ServicesSettings): void {
             if (formatSettings) {
-                if (!this.formatCodeSettings) {
-                    this.formatCodeSettings = getDefaultFormatCodeSettings(this.host);
+                if (!this.formatSettings) {
+                    this.formatSettings = getDefaultFormatCodeSettings(this.host);
                 }
-                mergeMapLikes(this.formatCodeSettings, formatSettings);
+                mergeMapLikes(this.formatSettings, formatSettings);
+            }
+
+            if (servicesSettings) {
+                if (!this.servicesSettings) {
+                    this.servicesSettings = clone(defaultServicesSettings);
+                }
+                mergeMapLikes(this.servicesSettings, servicesSettings);
             }
         }
 

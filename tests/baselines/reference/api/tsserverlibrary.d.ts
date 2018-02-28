@@ -4050,6 +4050,9 @@ declare namespace ts {
         isKnownTypesPackageName?(name: string): boolean;
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
     }
+    interface ServicesSettings {
+        readonly quote: '"' | "'";
+    }
     interface LanguageService {
         cleanupSemanticCache(): void;
         getSyntacticDiagnostics(fileName: string): Diagnostic[];
@@ -4065,7 +4068,7 @@ declare namespace ts {
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
-        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionInfo;
+        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined, settings: ServicesSettings | undefined): CompletionInfo;
         getCompletionEntryDetails(fileName: string, position: number, name: string, options: FormatCodeOptions | FormatCodeSettings | undefined, source: string | undefined): CompletionEntryDetails;
         getCompletionEntrySymbol(fileName: string, position: number, name: string, source: string | undefined): Symbol;
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
@@ -5911,6 +5914,7 @@ declare namespace ts.server.protocol {
          * The format options to use during formatting and other code editing features.
          */
         formatOptions?: FormatCodeSettings;
+        servicesOptions?: ServicesSettings;
         /**
          * The host's additional supported .js file extensions
          */
@@ -7041,6 +7045,9 @@ declare namespace ts.server.protocol {
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
         insertSpaceBeforeTypeAnnotation?: boolean;
     }
+    interface ServicesSettings {
+        quote: '"' | "'";
+    }
     interface CompilerOptions {
         allowJs?: boolean;
         allowSyntheticDefaultImports?: boolean;
@@ -7303,6 +7310,8 @@ declare namespace ts.server {
         executeWithRequestId<T>(requestId: number, f: () => T): T;
         executeCommand(request: protocol.Request): HandlerResponse;
         onMessage(message: string): void;
+        private formatSettings(file);
+        private servicesSettings(file);
     }
     interface HandlerResponse {
         response?: {};
@@ -7320,7 +7329,8 @@ declare namespace ts.server {
          * All projects that include this file
          */
         readonly containingProjects: Project[];
-        private formatCodeSettings;
+        private formatSettings;
+        private servicesSettings;
         private textStorage;
         constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path);
         isScriptOpen(): boolean;
@@ -7329,13 +7339,14 @@ declare namespace ts.server {
         getSnapshot(): IScriptSnapshot;
         private ensureRealPath();
         getFormatCodeSettings(): FormatCodeSettings;
+        getServicesSettings(): ServicesSettings;
         attachToProject(project: Project): boolean;
         isAttached(project: Project): boolean;
         detachFromProject(project: Project): void;
         detachAllProjects(): void;
         getDefaultProject(): Project;
         registerFileUpdate(): void;
-        setFormatOptions(formatSettings: FormatCodeSettings): void;
+        setSettings(formatSettings: FormatCodeSettings, servicesSettings: ServicesSettings): void;
         getLatestVersion(): string;
         saveTo(fileName: string): void;
         reloadFromFile(tempFileName?: NormalizedPath): void;
@@ -7713,6 +7724,7 @@ declare namespace ts.server {
     function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind.Unknown | ScriptKind.JS | ScriptKind.JSX | ScriptKind.TS | ScriptKind.TSX;
     interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
+        servicesOptions: ServicesSettings;
         hostInfo: string;
         extraFileExtensions?: JsFileExtensionInfo[];
     }
@@ -7822,7 +7834,8 @@ declare namespace ts.server {
          */
         private ensureProjectStructuresUptoDate();
         private updateProjectIfDirty(project);
-        getFormatCodeOptions(file?: NormalizedPath): FormatCodeSettings;
+        getFormatCodeOptions(file: NormalizedPath): FormatCodeSettings;
+        getServicesSettings(file: NormalizedPath): ServicesSettings;
         private onSourceFileChanged(fileName, eventKind);
         private handleDeletedFile(info);
         private onConfigChangedForConfiguredProject(project, eventKind);

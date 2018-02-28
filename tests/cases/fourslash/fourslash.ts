@@ -199,6 +199,7 @@ declare namespace FourSlashInterface {
         completionsAt(markerName: string, completions: ReadonlyArray<string | { name: string, insertText?: string, replacementSpan?: Range }>, options?: {
             isNewIdentifierLocation?: boolean;
             includeInsertTextCompletions?: boolean;
+            settings?: ServicesSettings;
         }): void;
         completionsAndDetailsAt(
             markerName: string,
@@ -526,6 +527,9 @@ declare namespace FourSlashInterface {
         length: number;
         category: string;
         code: number;
+    }
+    interface ServicesSettings {
+        quote?: '"' | "'";
     }
 }
 declare function verifyOperationIsCancelled(f: any): void;

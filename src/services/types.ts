@@ -214,6 +214,14 @@ namespace ts {
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
     }
 
+    export interface ServicesSettings {
+        readonly quote: '"' | "'";
+    }
+    /* @internal */
+    export const defaultServicesSettings: ServicesSettings = {
+        quote: '"'
+    };
+
     //
     // Public services of a language service instance associated
     // with a language service host instance
@@ -242,7 +250,7 @@ namespace ts {
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
 
-        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionInfo;
+        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined, settings: ServicesSettings | undefined): CompletionInfo;
         // "options" and "source" are optional only for backwards-compatibility
         getCompletionEntryDetails(
             fileName: string,
@@ -333,6 +341,8 @@ namespace ts {
         includeExternalModuleExports: boolean;
         includeInsertTextCompletions: boolean;
     }
+    /* @internal */
+    export const defaultCompletionOptions: GetCompletionsAtPositionOptions = { includeExternalModuleExports: false, includeInsertTextCompletions: false };
 
     export interface ApplyCodeActionCommandResult {
         successMessage: string;

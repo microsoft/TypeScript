@@ -1221,7 +1221,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         private getCompletionListAtCaret(options?: FourSlashInterface.CompletionsAtOptions): ts.CompletionInfo {
-            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, options);
+            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, options, options && options.settings);
         }
 
         private getCompletionEntryDetails(entryName: string, source?: string): ts.CompletionEntryDetails {
@@ -1818,7 +1818,7 @@ Actual: ${stringify(fullActual)}`);
                     }
                     else if (prevChar === " " && /A-Za-z_/.test(ch)) {
                         /* Completions */
-                        this.languageService.getCompletionsAtPosition(this.activeFile.fileName, offset, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
+                        this.languageService.getCompletionsAtPosition(this.activeFile.fileName, offset, ts.defaultCompletionOptions, ts.defaultServicesSettings);
                     }
 
                     if (i % checkCadence === 0) {
@@ -2393,7 +2393,7 @@ Actual: ${stringify(fullActual)}`);
         public applyCodeActionFromCompletion(markerName: string, options: FourSlashInterface.VerifyCompletionActionOptions) {
             this.goToMarker(markerName);
 
-            const actualCompletion = this.getCompletionListAtCaret({ includeExternalModuleExports: true, includeInsertTextCompletions: false }).entries.find(e =>
+            const actualCompletion = this.getCompletionListAtCaret({ ...ts.defaultCompletionOptions, includeExternalModuleExports: true }).entries.find(e =>
                 e.name === options.name && e.source === options.source);
 
             if (!actualCompletion.hasAction) {
@@ -4618,6 +4618,7 @@ namespace FourSlashInterface {
     export type ExpectedCompletionEntry = string | { name: string, insertText?: string, replacementSpan?: FourSlash.Range };
     export interface CompletionsAtOptions extends ts.GetCompletionsAtPositionOptions {
         isNewIdentifierLocation?: boolean;
+        settings?: ts.ServicesSettings;
     }
 
     export interface VerifyCompletionListContainsOptions extends ts.GetCompletionsAtPositionOptions {

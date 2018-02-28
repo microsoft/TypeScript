@@ -1424,7 +1424,7 @@ namespace ts {
             return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
         }
 
-        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = { includeExternalModuleExports: false, includeInsertTextCompletions: false }): CompletionInfo {
+    function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = defaultCompletionOptions, settings: ServicesSettings = defaultServicesSettings): CompletionInfo {
             synchronizeHostData();
             return Completions.getCompletionsAtPosition(
                 host,
@@ -1434,7 +1434,8 @@ namespace ts {
                 getValidSourceFile(fileName),
                 position,
                 program.getSourceFiles(),
-                options);
+                options,
+                settings);
         }
 
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions?: FormatCodeSettings, source?: string): CompletionEntryDetails {

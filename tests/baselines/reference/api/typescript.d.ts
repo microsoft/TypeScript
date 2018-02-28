@@ -4302,6 +4302,9 @@ declare namespace ts {
         isKnownTypesPackageName?(name: string): boolean;
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
     }
+    interface ServicesSettings {
+        readonly quote: '"' | "'";
+    }
     interface LanguageService {
         cleanupSemanticCache(): void;
         getSyntacticDiagnostics(fileName: string): Diagnostic[];
@@ -4317,7 +4320,7 @@ declare namespace ts {
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
-        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionInfo;
+        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined, settings: ServicesSettings | undefined): CompletionInfo;
         getCompletionEntryDetails(fileName: string, position: number, name: string, options: FormatCodeOptions | FormatCodeSettings | undefined, source: string | undefined): CompletionEntryDetails;
         getCompletionEntrySymbol(fileName: string, position: number, name: string, source: string | undefined): Symbol;
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;

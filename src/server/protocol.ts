@@ -1232,6 +1232,8 @@ namespace ts.server.protocol {
          */
         formatOptions?: FormatCodeSettings;
 
+        servicesOptions?: ServicesSettings;
+
         /**
          * The host's additional supported .js file extensions
          */
@@ -2586,6 +2588,10 @@ namespace ts.server.protocol {
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
         insertSpaceBeforeTypeAnnotation?: boolean;
+    }
+
+    export interface ServicesSettings {
+        quote: '"' | "'";
     }
 
     export interface CompilerOptions {

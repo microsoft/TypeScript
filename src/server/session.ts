@@ -1094,7 +1094,7 @@ namespace ts.server {
         private getIndentation(args: protocol.IndentationRequestArgs) {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const position = this.getPositionInFile(args, file);
-            const options = args.options ? convertFormatOptions(args.options) : this.projectService.getFormatCodeOptions(file);
+            const options = args.options ? convertFormatOptions(args.options) : this.formatSettings(file);
             const indentation = languageService.getIndentationAtPosition(file, position, options);
             return { position, indentation };
         }
@@ -1152,8 +1152,7 @@ namespace ts.server {
             const endPosition = scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
 
             // TODO: avoid duplicate code (with formatonkey)
-            const edits = languageService.getFormattingEditsForRange(file, startPosition, endPosition,
-                this.projectService.getFormatCodeOptions(file));
+            const edits = languageService.getFormattingEditsForRange(file, startPosition, endPosition, this.formatSettings(file));
             if (!edits) {
                 return undefined;
             }
@@ -1163,19 +1162,19 @@ namespace ts.server {
 
         private getFormattingEditsForRangeFull(args: protocol.FormatRequestArgs) {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
-            const options = args.options ? convertFormatOptions(args.options) : this.projectService.getFormatCodeOptions(file);
+            const options = args.options ? convertFormatOptions(args.options) : this.formatSettings(file);
             return languageService.getFormattingEditsForRange(file, args.position, args.endPosition, options);
         }
 
         private getFormattingEditsForDocumentFull(args: protocol.FormatRequestArgs) {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
-            const options = args.options ? convertFormatOptions(args.options) : this.projectService.getFormatCodeOptions(file);
+            const options = args.options ? convertFormatOptions(args.options) : this.formatSettings(file);
             return languageService.getFormattingEditsForDocument(file, options);
         }
 
         private getFormattingEditsAfterKeystrokeFull(args: protocol.FormatOnKeyRequestArgs) {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
-            const options = args.options ? convertFormatOptions(args.options) : this.projectService.getFormatCodeOptions(file);
+            const options = args.options ? convertFormatOptions(args.options) : this.formatSettings(file);
             return languageService.getFormattingEditsAfterKeystroke(file, args.position, args.key, options);
         }
 
@@ -1183,7 +1182,7 @@ namespace ts.server {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
             const position = scriptInfo.lineOffsetToPosition(args.line, args.offset);
-            const formatOptions = this.projectService.getFormatCodeOptions(file);
+            const formatOptions = this.formatSettings(file);
             const edits = languageService.getFormattingEditsAfterKeystroke(file, position, args.key,
                 formatOptions);
             // Check whether we should auto-indent. This will be when
@@ -1239,7 +1238,7 @@ namespace ts.server {
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
             const position = this.getPosition(args, scriptInfo);
 
-            const completions = project.getLanguageService().getCompletionsAtPosition(file, position, args);
+            const completions = project.getLanguageService().getCompletionsAtPosition(file, position, args, this.servicesSettings(file));
             if (simplifiedResult) {
                 return mapDefined<CompletionEntry, protocol.CompletionEntry>(completions && completions.entries, entry => {
                     if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
@@ -1571,7 +1570,7 @@ namespace ts.server {
 
             const result = project.getLanguageService().getEditsForRefactor(
                 file,
-                this.projectService.getFormatCodeOptions(file),
+                this.formatSettings(file),
                 position || textRange,
                 args.refactor,
                 args.action
@@ -1600,7 +1599,7 @@ namespace ts.server {
         private organizeImports({ scope }: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileCodeEdits> | ReadonlyArray<FileTextChanges> {
             Debug.assert(scope.type === "file");
             const { file, project } = this.getFileAndProject(scope.args);
-            const formatOptions = this.projectService.getFormatCodeOptions(file);
+            const formatOptions = this.formatSettings(file);
             const changes = project.getLanguageService().organizeImports({ type: "file", fileName: file }, formatOptions);
             if (simplifiedResult) {
                 return this.mapTextChangesToCodeEdits(project, changes);
@@ -1618,7 +1617,7 @@ namespace ts.server {
 
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const { startPosition, endPosition } = this.getStartAndEndPosition(args, scriptInfo);
-            const formatOptions = this.projectService.getFormatCodeOptions(file);
+            const formatOptions = this.formatSettings(file);
 
             const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes, formatOptions);
             if (!codeActions) {
@@ -1635,7 +1634,7 @@ namespace ts.server {
         private getCombinedCodeFix({ scope, fixId }: protocol.GetCombinedCodeFixRequestArgs, simplifiedResult: boolean): protocol.CombinedCodeActions | CombinedCodeActions {
             Debug.assert(scope.type === "file");
             const { file, project } = this.getFileAndProject(scope.args);
-            const formatOptions = this.projectService.getFormatCodeOptions(file);
+            const formatOptions = this.formatSettings(file);
             const res = project.getLanguageService().getCombinedCodeFix({ type: "file", fileName: file }, fixId, formatOptions);
             if (simplifiedResult) {
                 return { changes: this.mapTextChangesToCodeEdits(project, res.changes), commands: res.commands };
@@ -2150,6 +2149,14 @@ namespace ts.server {
                     /*success*/ false,
                     "Error processing request. " + (<StackTraceError>err).message + "\n" + (<StackTraceError>err).stack);
             }
+        }
+
+        private formatSettings(file: NormalizedPath): FormatCodeSettings {
+            return this.projectService.getFormatCodeOptions(file);
+        }
+
+        private servicesSettings(file: NormalizedPath): ServicesSettings {
+            return this.projectService.getServicesSettings(file);
         }
     }
 

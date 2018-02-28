@@ -200,6 +200,7 @@ namespace ts.server {
 
     export interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
+        servicesOptions: ServicesSettings;
         hostInfo: string;
         extraFileExtensions?: JsFileExtensionInfo[];
     }
@@ -442,6 +443,7 @@ namespace ts.server {
 
             this.hostConfiguration = {
                 formatCodeOptions: getDefaultFormatCodeSettings(this.host),
+                servicesOptions: defaultServicesSettings,
                 hostInfo: "Unknown host",
                 extraFileExtensions: []
             };
@@ -703,15 +705,14 @@ namespace ts.server {
             return project.dirty && project.updateGraph();
         }
 
-        getFormatCodeOptions(file?: NormalizedPath) {
-            let formatCodeSettings: FormatCodeSettings;
-            if (file) {
-                const info = this.getScriptInfoForNormalizedPath(file);
-                if (info) {
-                    formatCodeSettings = info.getFormatCodeSettings();
-                }
-            }
-            return formatCodeSettings || this.hostConfiguration.formatCodeOptions;
+        getFormatCodeOptions(file: NormalizedPath) {
+            const info = this.getScriptInfoForNormalizedPath(file);
+            return info && info.getFormatCodeSettings() || this.hostConfiguration.formatCodeOptions;
+        }
+
+        getServicesSettings(file: NormalizedPath) {
+            const info = this.getScriptInfoForNormalizedPath(file);
+            return info && info.getServicesSettings() || this.hostConfiguration.servicesOptions;
         }
 
         private onSourceFileChanged(fileName: NormalizedPath, eventKind: FileWatcherEventKind) {
@@ -1829,7 +1830,7 @@ namespace ts.server {
             if (args.file) {
                 const info = this.getScriptInfoForNormalizedPath(toNormalizedPath(args.file));
                 if (info) {
-                    info.setFormatOptions(convertFormatOptions(args.formatOptions));
+                    info.setSettings(convertFormatOptions(args.formatOptions), args.servicesOptions);
                     this.logger.info(`Host configuration update for file ${args.file}`);
                 }
             }
@@ -1841,6 +1842,9 @@ namespace ts.server {
                 if (args.formatOptions) {
                     mergeMapLikes(this.hostConfiguration.formatCodeOptions, convertFormatOptions(args.formatOptions));
                     this.logger.info("Format host information updated");
+                }
+                if (args.servicesOptions) {
+                    mergeMapLikes(this.hostConfiguration.servicesOptions, args.servicesOptions);
                 }
                 if (args.extraFileExtensions) {
                     this.hostConfiguration.extraFileExtensions = args.extraFileExtensions;
