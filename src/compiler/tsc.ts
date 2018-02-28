@@ -144,7 +144,8 @@ namespace ts {
         enableStatistics(compilerOptions);
 
         const program = createProgram(rootFileNames, compilerOptions, compilerHost);
-        const exitStatus = emitFilesAndReportErrors(program, reportDiagnostic, s => sys.write(s + sys.newLine));
+        const diagnosticsAndEmit = getProgramDiagnosticsAndEmit(program);
+        const exitStatus = reportDiagnosticErrors(program, diagnosticsAndEmit, reportDiagnostic, s => sys.write(s + sys.newLine));
         reportStatistics(program);
         return sys.exit(exitStatus);
     }

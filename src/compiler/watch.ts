@@ -31,11 +31,18 @@ namespace ts {
         };
     }
 
+    const nonClearingMessageCodes: number[] = [
+        Diagnostics.Compilation_complete_Watching_for_file_changes.code,
+        Diagnostics.Found_1_error_in_1_file.code,
+        Diagnostics.Found_0_errors_in_1_file.code,
+        Diagnostics.Found_0_errors_in_1_files.code,
+    ];
+
     function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions) {
         if (system.clearScreen &&
-            diagnostic.code !== Diagnostics.Compilation_complete_Watching_for_file_changes.code &&
             !options.extendedDiagnostics &&
-            !options.diagnostics) {
+            !options.diagnostics &&
+            !contains(nonClearingMessageCodes, diagnostic.code)) {
             system.clearScreen();
         }
     }
@@ -120,10 +127,15 @@ namespace ts {
         emit(): EmitResult;
     }
 
-    /**
-     * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
-     */
-    export function emitFilesAndReportErrors(program: ProgramToEmitFilesAndReportErrors, reportDiagnostic: DiagnosticReporter, writeFileName?: (s: string) => void) {
+    /** @internal */
+    export interface ProgramDiagnosticsAndEmit {
+        diagnostics: Diagnostic[];
+        emittedFiles: string[];
+        emitSkipped: boolean;
+    }
+
+    /** @internal */
+    export function getProgramDiagnosticsAndEmit(program: ProgramToEmitFilesAndReportErrors): ProgramDiagnosticsAndEmit {
         // First get and report any syntactic errors.
         const diagnostics = program.getSyntacticDiagnostics().slice();
         let reportSemanticDiagnostics = false;
@@ -146,6 +158,15 @@ namespace ts {
         if (reportSemanticDiagnostics) {
             addRange(diagnostics, program.getSemanticDiagnostics());
         }
+
+        return { diagnostics, emittedFiles, emitSkipped };
+    }
+
+    /**
+     * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
+     */
+    export function reportDiagnosticErrors(program: ProgramToEmitFilesAndReportErrors, diagnosticsAndEmit: ProgramDiagnosticsAndEmit, reportDiagnostic: DiagnosticReporter, writeFileName?: (s: string) => void) {
+        const { diagnostics, emittedFiles, emitSkipped } = diagnosticsAndEmit;
 
         sortAndDeduplicateDiagnostics(diagnostics).forEach(reportDiagnostic);
         if (writeFileName) {
@@ -174,6 +195,34 @@ namespace ts {
         return ExitStatus.Success;
     }
 
+    function summarizeDiagnosticsAcrossFiles(diagnostics: Diagnostic[], reporter: WatchStatusReporter, newLine: string, compilerOptions: CompilerOptions): void {
+        if (diagnostics.length === 1) {
+            reporter(createCompilerDiagnostic(Diagnostics.Found_1_error_in_1_file), newLine, compilerOptions);
+            return;
+        }
+
+        const uniqueFileNamesCount = countUniqueDiagnosticFileNames(diagnostics);
+
+        if (uniqueFileNamesCount === 1) {
+            reporter(createCompilerDiagnostic(Diagnostics.Found_0_errors_in_1_file, diagnostics.length), newLine, compilerOptions);
+        }
+        else if (uniqueFileNamesCount !== 0) {
+            reporter(createCompilerDiagnostic(Diagnostics.Found_0_errors_in_1_files, diagnostics.length, uniqueFileNamesCount), newLine, compilerOptions);
+        }
+    }
+
+    function countUniqueDiagnosticFileNames(diagnostics: Diagnostic[]): number {
+        const fileNames = createMap<boolean>();
+
+        for (const diagnostic of diagnostics) {
+            if (diagnostic.file) {
+                fileNames.set(diagnostic.file.fileName, true);
+            }
+        }
+
+        return fileNames.size;
+    }
+
     const noopFileWatcher: FileWatcher = { close: noop };
 
     /**
@@ -187,6 +236,7 @@ namespace ts {
         let host: DirectoryStructureHost = system;
         const useCaseSensitiveFileNames = () => system.useCaseSensitiveFileNames;
         const writeFileName = (s: string) => system.write(s + system.newLine);
+        const onWatchStatusChange = reportWatchStatus || createWatchStatusReporter(system);
         return {
             useCaseSensitiveFileNames,
             getNewLine: () => system.newLine,
@@ -205,7 +255,7 @@ namespace ts {
             setTimeout: system.setTimeout ? ((callback, ms, ...args: any[]) => system.setTimeout.call(system, callback, ms, ...args)) : noop,
             clearTimeout: system.clearTimeout ? (timeoutId => system.clearTimeout(timeoutId)) : noop,
             trace: s => system.write(s),
-            onWatchStatusChange: reportWatchStatus || createWatchStatusReporter(system),
+            onWatchStatusChange,
             createDirectory: path => system.createDirectory(path),
             writeFile: (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
             onCachedDirectoryStructureHostCreate: cacheHost => host = cacheHost || system,
@@ -219,7 +269,13 @@ namespace ts {
         }
 
         function emitFilesAndReportErrorUsingBuilder(builderProgram: BuilderProgram) {
-            emitFilesAndReportErrors(builderProgram, reportDiagnostic, writeFileName);
+            const diagnosticsAndEmit = getProgramDiagnosticsAndEmit(builderProgram);
+            reportDiagnosticErrors(builderProgram, diagnosticsAndEmit, reportDiagnostic, writeFileName);
+
+            const compilerOptions = builderProgram.getCompilerOptions();
+            if (compilerOptions.pretty) {
+                summarizeDiagnosticsAcrossFiles(diagnosticsAndEmit.diagnostics, onWatchStatusChange, system.newLine, compilerOptions);
+            }
         }
     }
 
