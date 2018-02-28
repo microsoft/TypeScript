@@ -11706,7 +11706,7 @@ namespace ts {
                             const inferredType = inferTypeForHomomorphicMappedType(source, <MappedType>target);
                             if (inferredType) {
                                 const savePriority = priority;
-                                priority |= InferencePriority.MappedType;
+                                priority |= InferencePriority.HomomorphicMappedType;
                                 inferFromTypes(inferredType, inference.typeParameter);
                                 priority = savePriority;
                             }
@@ -11716,7 +11716,10 @@ namespace ts {
                     if (constraintType.flags & TypeFlags.TypeParameter) {
                         // We're inferring from some source type S to a mapped type { [P in T]: X }, where T is a type
                         // parameter. Infer from 'keyof S' to T and infer from a union of each property type in S to X.
+                        const savePriority = priority;
+                        priority |= InferencePriority.MappedType;
                         inferFromTypes(getIndexType(source), constraintType);
+                        priority = savePriority;
                         inferFromTypes(getUnionType(map(getPropertiesOfType(source), getTypeOfSymbol)), getTemplateTypeFromMappedType(<MappedType>target));
                         return;
                     }
@@ -11848,7 +11851,7 @@ namespace ts {
                     // If all inferences were made from contravariant positions, infer a common subtype. Otherwise, if
                     // union types were requested or if all inferences were made from the return type position, infer a
                     // union type. Otherwise, infer a common supertype.
-                    const unwidenedType = context.flags & InferenceFlags.InferUnionTypes || inference.priority & InferencePriority.ReturnType ?
+                    const unwidenedType = context.flags & InferenceFlags.InferUnionTypes || inference.priority & InferencePriority.PriorityImpliesUnion ?
                         getUnionType(baseCandidates, UnionReduction.Subtype) :
                         getCommonSupertype(baseCandidates);
                     inferredType = getWidenedType(unwidenedType);

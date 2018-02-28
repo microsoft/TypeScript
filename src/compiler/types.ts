@@ -3902,11 +3902,14 @@ namespace ts {
     export type TypeMapper = (t: TypeParameter) => Type;
 
     export const enum InferencePriority {
-        NakedTypeVariable = 1 << 0,  // Naked type variable in union or intersection type
-        MappedType        = 1 << 1,  // Reverse inference for mapped type
-        ReturnType        = 1 << 2,  // Inference made from return type of generic function
-        NoConstraints     = 1 << 3,  // Don't infer from constraints of instantiable types
-        AlwaysStrict      = 1 << 4,  // Always use strict rules for contravariant inferences
+        NakedTypeVariable           = 1 << 0,  // Naked type variable in union or intersection type
+        HomomorphicMappedType       = 1 << 1,  // Reverse inference for hoimomorphic mapped type
+        MappedType                  = 1 << 2,  // Reverse inference for mapped type
+        ReturnType                  = 1 << 3,  // Inference made from return type of generic function
+        NoConstraints               = 1 << 4,  // Don't infer from constraints of instantiable types
+        AlwaysStrict                = 1 << 5,  // Always use strict rules for contravariant inferences
+
+        PriorityImpliesUnion        = ReturnType | MappedType,  // These priorities imply that the resulting type should be a union of all candidates
     }
 
     /* @internal */
