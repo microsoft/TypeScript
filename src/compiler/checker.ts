@@ -260,7 +260,7 @@ namespace ts {
                 node = getParseTreeNode(node, isJsxOpeningLikeElement);
                 return node ? getAllAttributesTypeFromJsxOpeningLikeElement(node) : undefined;
             },
-            getJsxIntrinsicTagNames,
+            getJsxIntrinsicTagNamesAt,
             isOptionalParameter: node => {
                 node = getParseTreeNode(node, isParameter);
                 return node ? isOptionalParameter(node) : false;
@@ -14325,7 +14325,7 @@ namespace ts {
         function getContextualTypeForChildJsxExpression(node: JsxElement) {
             const attributesType = getApparentTypeOfContextualType(node.openingElement.tagName);
             // JSX expression is in children of JSX Element, we will look for an "children" atttribute (we get the name from JSX.ElementAttributesProperty)
-            const jsxChildrenPropertyName = getJsxElementChildrenPropertyName(getJsxNamespaceForLocation(node));
+            const jsxChildrenPropertyName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(node));
             return attributesType && !isTypeAny(attributesType) && jsxChildrenPropertyName && jsxChildrenPropertyName !== "" ? getTypeOfPropertyOfContextualType(attributesType, jsxChildrenPropertyName) : undefined;
         }
 
@@ -14537,7 +14537,7 @@ namespace ts {
                 return hostClassType;
             }
 
-            const propsName = getJsxElementPropertiesName(getJsxNamespaceForLocation(context));
+            const propsName = getJsxElementPropertiesName(getJsxNamespaceAt(context));
             if (propsName === undefined) {
                 // There is no type ElementAttributesProperty, return 'any'
                 return anyType;
@@ -15117,7 +15117,7 @@ namespace ts {
             let hasSpreadAnyType = false;
             let typeToIntersect: Type;
             let explicitlySpecifyChildrenAttribute = false;
-            const jsxChildrenPropertyName = getJsxElementChildrenPropertyName(getJsxNamespaceForLocation(openingLikeElement));
+            const jsxChildrenPropertyName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(openingLikeElement));
 
             for (const attributeDecl of attributes.properties) {
                 const member = attributeDecl.symbol;
@@ -15234,7 +15234,7 @@ namespace ts {
         }
 
         function getJsxType(name: __String, location: Node) {
-            const namespace = getJsxNamespaceForLocation(location);
+            const namespace = getJsxNamespaceAt(location);
             const exports = namespace && getExportsOfSymbol(namespace);
             const typeSymbol = exports && getSymbol(exports, name, SymbolFlags.Type);
             return typeSymbol ? getDeclaredTypeOfSymbol(typeSymbol) : unknownType;
@@ -15321,7 +15321,7 @@ namespace ts {
             return getUnionType(map(instantiatedSignatures, getReturnTypeOfSignature), UnionReduction.Subtype);
         }
 
-        function getJsxNamespaceForLocation(location: Node) {
+        function getJsxNamespaceAt(location: Node) {
             const namespaceName = getJsxNamespace(location);
             const resolvedNamespace = resolveName(location, namespaceName, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined, namespaceName, /*isUse*/ false);
             if (resolvedNamespace) {
@@ -15656,7 +15656,7 @@ namespace ts {
         /**
          * Returns all the properties of the Jsx.IntrinsicElements interface
          */
-        function getJsxIntrinsicTagNames(location: Node): Symbol[] {
+        function getJsxIntrinsicTagNamesAt(location: Node): Symbol[] {
             const intrinsics = getJsxType(JsxNames.IntrinsicElements, location);
             return intrinsics ? getPropertiesOfType(intrinsics) : emptyArray;
         }
@@ -15767,7 +15767,7 @@ namespace ts {
             // If the targetAttributesType is an emptyObjectType, indicating that there is no property named 'props' on this instance type.
             // but there exists a sourceAttributesType, we need to explicitly give an error as normal assignability check allow excess properties and will pass.
             if (targetAttributesType === emptyObjectType && (isTypeAny(sourceAttributesType) || getPropertiesOfType(<ResolvedType>sourceAttributesType).length > 0)) {
-                error(openingLikeElement, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, unescapeLeadingUnderscores(getJsxElementPropertiesName(getJsxNamespaceForLocation(openingLikeElement))));
+                error(openingLikeElement, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, unescapeLeadingUnderscores(getJsxElementPropertiesName(getJsxNamespaceAt(openingLikeElement))));
             }
             else {
                 // Check if sourceAttributesType assignable to targetAttributesType though this check will allow excess properties
