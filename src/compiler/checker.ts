@@ -8229,8 +8229,8 @@ namespace ts {
                 const inferredTypes = map(inferences, inference => getTypeFromInference(inference) || emptyObjectType);
                 combinedMapper = combineTypeMappers(mapper, createTypeMapper(root.inferTypeParameters, inferredTypes));
             }
-            // Return union of trueType and falseType for any and never since they match anything
-            if (checkType.flags & TypeFlags.Any || (checkType.flags & TypeFlags.Never && !(extendsType.flags & TypeFlags.Never))) {
+            // Return union of trueType and falseType for 'any' since it matches anything
+            if (checkType.flags & TypeFlags.Any) {
                 return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), instantiateType(root.falseType, mapper)]);
             }
             // Instantiate the extends type including inferences for 'infer T' type parameters
@@ -8911,7 +8911,7 @@ namespace ts {
             if (root.isDistributive) {
                 const checkType = <TypeParameter>root.checkType;
                 const instantiatedType = mapper(checkType);
-                if (checkType !== instantiatedType && instantiatedType.flags & TypeFlags.Union) {
+                if (checkType !== instantiatedType && instantiatedType.flags & (TypeFlags.Union | TypeFlags.Never)) {
                     return mapType(instantiatedType, t => getConditionalType(root, createReplacementMapper(checkType, t, mapper)));
                 }
             }
@@ -12449,6 +12449,9 @@ namespace ts {
         // is a union type, the mapping function is applied to each constituent type and a union
         // of the resulting types is returned.
         function mapType(type: Type, mapper: (t: Type) => Type, noReductions?: boolean): Type {
+            if (type.flags & TypeFlags.Never) {
+                return type;
+            }
             if (!(type.flags & TypeFlags.Union)) {
                 return mapper(type);
             }
