@@ -11647,7 +11647,7 @@ namespace ts {
                     }
                 }
                 else {
-                    if (!(priority && InferencePriority.NoConstraints && source.flags & (TypeFlags.Intersection | TypeFlags.Instantiable))) {
+                    if (!(priority & InferencePriority.NoConstraints && source.flags & (TypeFlags.Intersection | TypeFlags.Instantiable))) {
                         source = getApparentType(source);
                     }
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
