@@ -255,7 +255,7 @@ namespace ts {
         switch (category) {
             case DiagnosticCategory.Error: return ForegroundColorEscapeSequences.Red;
             case DiagnosticCategory.Warning: return ForegroundColorEscapeSequences.Yellow;
-            case DiagnosticCategory.Info: return Debug.fail("Should never get an Info diagnostic on the command line.");
+            case DiagnosticCategory.Suggestion: return Debug.fail("Should never get an Info diagnostic on the command line.");
             case DiagnosticCategory.Message: return ForegroundColorEscapeSequences.Blue;
         }
     }

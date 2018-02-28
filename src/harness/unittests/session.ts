@@ -216,7 +216,7 @@ namespace ts.server {
                 CommandNames.GeterrForProject,
                 CommandNames.SemanticDiagnosticsSync,
                 CommandNames.SyntacticDiagnosticsSync,
-                CommandNames.InfoDiagnosticsSync,
+                CommandNames.SuggestionDiagnosticsSync,
                 CommandNames.NavBar,
                 CommandNames.NavBarFull,
                 CommandNames.Navto,

@@ -42,7 +42,7 @@ namespace ts.server.protocol {
         GeterrForProject = "geterrForProject",
         SemanticDiagnosticsSync = "semanticDiagnosticsSync",
         SyntacticDiagnosticsSync = "syntacticDiagnosticsSync",
-        InfoDiagnosticsSync = "infoDiagnosticsSync",
+        SuggestionDiagnosticsSync = "suggestionDiagnosticsSync",
         NavBar = "navbar",
         /* @internal */
         NavBarFull = "navbar-full",
@@ -2011,18 +2011,13 @@ namespace ts.server.protocol {
         body?: Diagnostic[] | DiagnosticWithLinePosition[];
     }
 
-    export interface InfoDiagnosticsSyncRequest extends FileRequest {
-        command: CommandTypes.InfoDiagnosticsSync;
-        arguments: InfoDiagnosticsSyncRequestArgs;
+    export interface SuggestionDiagnosticsSyncRequest extends FileRequest {
+        command: CommandTypes.SuggestionDiagnosticsSync;
+        arguments: SuggestionDiagnosticsSyncRequestArgs;
     }
 
-    export interface InfoDiagnosticsSyncRequestArgs extends FileRequestArgs {
-        includeLinePosition?: boolean;
-    }
-
-    export interface InfoDiagnosticsSyncResponse extends Response {
-        body?: Diagnostic[] | DiagnosticWithLinePosition[];
-    }
+    export type SuggestionDiagnosticsSyncRequestArgs = SemanticDiagnosticsSyncRequestArgs;
+    export type SuggestionDiagnosticsSyncResponse = SemanticDiagnosticsSyncResponse;
 
     /**
      * Synchronous request for syntactic diagnostics of one file.
@@ -2135,7 +2130,7 @@ namespace ts.server.protocol {
         text: string;
 
         /**
-         * The category of the diagnostic message. This is the lower-case of a DiagnosticCategory member.
+         * The category of the diagnostic message, e.g. "error", "warning", or "suggestion".
          */
         category: string;
 
@@ -2169,7 +2164,7 @@ namespace ts.server.protocol {
         diagnostics: Diagnostic[];
     }
 
-    export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "infoDiag";
+    export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag";
 
     /**
      * Event message for DiagnosticEventKind event types.

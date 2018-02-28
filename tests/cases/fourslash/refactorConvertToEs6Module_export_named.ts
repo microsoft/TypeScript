@@ -7,11 +7,11 @@
 ////exports.C = class {}
 ////exports.x = 0;
 
-verify.getInfoDiagnostics([{
+verify.getSuggestionDiagnostics([{
     message: "File is a CommonJS module; it may be converted to an ES6 module.",
     start: 0,
     length: test.marker("diagEnd").position,
-    category: "info",
+    category: "suggestion",
     code: 80001,
 }]);
 

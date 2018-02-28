@@ -348,13 +348,13 @@ namespace ts.server {
         getSemanticDiagnostics(file: string): Diagnostic[] {
             return this.getDiagnostics(file, CommandNames.SemanticDiagnosticsSync);
         }
-        getInfoDiagnostics(file: string): Diagnostic[] {
-            return this.getDiagnostics(file, CommandNames.InfoDiagnosticsSync);
+        getSuggestionDiagnostics(file: string): Diagnostic[] {
+            return this.getDiagnostics(file, CommandNames.SuggestionDiagnosticsSync);
         }
 
         private getDiagnostics(file: string, command: CommandNames) {
-            const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest | protocol.SemanticDiagnosticsSyncRequest | protocol.InfoDiagnosticsSyncRequest>(command, { file, includeLinePosition: true });
-            const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse | protocol.SemanticDiagnosticsSyncResponse | protocol.InfoDiagnosticsSyncResponse>(request);
+            const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest | protocol.SemanticDiagnosticsSyncRequest | protocol.SuggestionDiagnosticsSyncRequest>(command, { file, includeLinePosition: true });
+            const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse | protocol.SemanticDiagnosticsSyncResponse | protocol.SuggestionDiagnosticsSyncResponse>(request);
 
             return (<protocol.DiagnosticWithLinePosition[]>response.body).map(entry => {
                 const category = firstDefined(Object.keys(DiagnosticCategory), id =>

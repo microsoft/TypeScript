@@ -466,41 +466,27 @@ namespace ts.server {
         }
 
         private semanticCheck(file: NormalizedPath, project: Project) {
-            try {
-                const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
-                    ? emptyArray
-                    : project.getLanguageService().getSemanticDiagnostics(file);
-                this.sendDiagnosticsEvent(file, project, diags, "semanticDiag");
-            }
-            catch (err) {
-                this.logError(err, "semantic check");
-            }
+            const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
+                ? emptyArray
+                : project.getLanguageService().getSemanticDiagnostics(file);
+            this.sendDiagnosticsEvent(file, project, diags, "semanticDiag");
         }
 
         private syntacticCheck(file: NormalizedPath, project: Project) {
-            try {
-                // TODO: why do we check for diagnostics existence here, but in semanticCheck send unconditionally?
-                const diagnostics = project.getLanguageService().getSyntacticDiagnostics(file);
-                if (diagnostics) {
-                    this.sendDiagnosticsEvent(file, project, diagnostics, "syntaxDiag");
-                }
-            }
-            catch (err) {
-                this.logError(err, "syntactic check");
-            }
+            this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag");
         }
 
         private infoCheck(file: NormalizedPath, project: Project) {
-            try {
-                this.sendDiagnosticsEvent(file, project, project.getLanguageService().getInfoDiagnostics(file), "infoDiag");
-            }
-            catch (err) {
-                this.logError(err, "info check");
-            }
+            this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag");
         }
 
         private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: ReadonlyArray<Diagnostic>, kind: protocol.DiagnosticEventKind): void {
-            this.event<protocol.DiagnosticEventBody>({ file, diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)) }, kind);
+            try {
+                this.event<protocol.DiagnosticEventBody>({ file, diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)) }, kind);
+            }
+            catch (err) {
+                this.logError(err, kind);
+            }
         }
 
         private updateErrorCheck(next: NextStep, checkList: PendingErrorCheck[], ms: number, requireOpen = true) {
@@ -779,14 +765,14 @@ namespace ts.server {
             return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSemanticDiagnostics(file), args.includeLinePosition);
         }
 
-        private getInfoDiagnosticsSync(args: protocol.InfoDiagnosticsSyncRequestArgs): ReadonlyArray<protocol.Diagnostic> | ReadonlyArray<protocol.DiagnosticWithLinePosition> {
+        private getSuggestionDiagnosticsSync(args: protocol.SuggestionDiagnosticsSyncRequestArgs): ReadonlyArray<protocol.Diagnostic> | ReadonlyArray<protocol.DiagnosticWithLinePosition> {
             const { configFile } = this.getConfigFileAndProject(args);
             if (configFile) {
                 // Currently there are no info diagnostics for config files.
                 return emptyArray;
             }
             // isSemantic because we don't want to info diagnostics in declaration files for JS-only users
-            return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getInfoDiagnostics(file), args.includeLinePosition);
+            return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSuggestionDiagnostics(file), args.includeLinePosition);
         }
 
         private getDocumentHighlights(args: protocol.DocumentHighlightsRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.DocumentHighlightsItem> | ReadonlyArray<DocumentHighlights> {
@@ -1986,8 +1972,8 @@ namespace ts.server {
             [CommandNames.SyntacticDiagnosticsSync]: (request: protocol.SyntacticDiagnosticsSyncRequest) => {
                 return this.requiredResponse(this.getSyntacticDiagnosticsSync(request.arguments));
             },
-            [CommandNames.InfoDiagnosticsSync]: (request: protocol.InfoDiagnosticsSyncRequest) => {
-                return this.requiredResponse(this.getInfoDiagnosticsSync(request.arguments));
+            [CommandNames.SuggestionDiagnosticsSync]: (request: protocol.SuggestionDiagnosticsSyncRequest) => {
+                return this.requiredResponse(this.getSuggestionDiagnosticsSync(request.arguments));
             },
             [CommandNames.Geterr]: (request: protocol.GeterrRequest) => {
                 this.errorCheck.startNew(next => this.getDiagnostics(next, request.arguments.delay, request.arguments.files));

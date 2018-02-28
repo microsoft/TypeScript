@@ -10,7 +10,6 @@
 /// <reference path='documentRegistry.ts' />
 /// <reference path='findAllReferences.ts' />
 /// <reference path='goToDefinition.ts' />
-/// <reference path='infoDiagnostics.ts' />
 /// <reference path='jsDoc.ts' />
 /// <reference path='jsTyping.ts' />
 /// <reference path='navigateTo.ts' />
@@ -21,6 +20,7 @@
 /// <reference path='preProcess.ts' />
 /// <reference path='rename.ts' />
 /// <reference path='signatureHelp.ts' />
+/// <reference path='suggestionDiagnostics.ts' />
 /// <reference path='symbolDisplay.ts' />
 /// <reference path='transpile.ts' />
 /// <reference path='formatting\formatting.ts' />
@@ -1420,9 +1420,9 @@ namespace ts {
             return [...semanticDiagnostics, ...declarationDiagnostics];
         }
 
-        function getInfoDiagnostics(fileName: string): Diagnostic[] {
+        function getSuggestionDiagnostics(fileName: string): Diagnostic[] {
             synchronizeHostData();
-            return infoDiagnostics(getValidSourceFile(fileName));
+            return computeSuggestionDiagnostics(getValidSourceFile(fileName));
         }
 
         function getCompilerOptionsDiagnostics() {
@@ -2107,7 +2107,7 @@ namespace ts {
             cleanupSemanticCache,
             getSyntacticDiagnostics,
             getSemanticDiagnostics,
-            getInfoDiagnostics,
+            getSuggestionDiagnostics,
             getCompilerOptionsDiagnostics,
             getSyntacticClassifications,
             getSemanticClassifications,

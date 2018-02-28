@@ -509,7 +509,7 @@ namespace FourSlash {
             return [
                 ...this.languageService.getSyntacticDiagnostics(fileName),
                 ...this.languageService.getSemanticDiagnostics(fileName),
-                ...this.languageService.getInfoDiagnostics(fileName),
+                ...this.languageService.getSuggestionDiagnostics(fileName),
             ];
         }
 
@@ -581,11 +581,10 @@ namespace FourSlash {
             return "global";
         }
 
-        public verifyNoErrors(options: FourSlashInterface.VerifyNoErrorsOptions) {
+        public verifyNoErrors() {
             ts.forEachKey(this.inputFiles, fileName => {
                 if (!ts.isAnySupportedFileExtension(fileName)) return;
-                let errors = this.getDiagnostics(fileName);
-                if (options.ignoreInfoDiagnostics) errors = errors.filter(e => e.category !== ts.DiagnosticCategory.Info);
+                const errors = this.getDiagnostics(fileName).filter(e => e.category !== ts.DiagnosticCategory.Suggestion);
                 if (errors.length) {
                     this.printErrorLog(/*expectErrors*/ false, errors);
                     const error = errors[0];
@@ -1250,8 +1249,8 @@ Actual: ${stringify(fullActual)}`);
             this.testDiagnostics(expected, diagnostics);
         }
 
-        public getInfoDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>): void {
-            this.testDiagnostics(expected, this.languageService.getInfoDiagnostics(this.activeFile.fileName));
+        public getSuggestionDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>): void {
+            this.testDiagnostics(expected, this.languageService.getSuggestionDiagnostics(this.activeFile.fileName));
         }
 
         private testDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>, diagnostics: ReadonlyArray<ts.Diagnostic>) {
@@ -4146,8 +4145,8 @@ namespace FourSlashInterface {
             this.state.verifyCurrentSignatureHelpIs(expected);
         }
 
-        public noErrors(options: VerifyNoErrorsOptions = {}) {
-            this.state.verifyNoErrors(options);
+        public noErrors() {
+            this.state.verifyNoErrors();
         }
 
         public numberOfErrorsInCurrentFile(expected: number) {
@@ -4335,8 +4334,8 @@ namespace FourSlashInterface {
             this.state.getSemanticDiagnostics(expected);
         }
 
-        public getInfoDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>) {
-            this.state.getInfoDiagnostics(expected);
+        public getSuggestionDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>) {
+            this.state.getSuggestionDiagnostics(expected);
         }
 
         public ProjectInfo(expected: string[]) {
@@ -4676,9 +4675,5 @@ namespace FourSlashInterface {
         name: string;
         source?: string;
         description: string;
-    }
-
-    export interface VerifyNoErrorsOptions {
-        ignoreInfoDiagnostics?: boolean;
     }
 }

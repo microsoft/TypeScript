@@ -2262,7 +2262,7 @@ declare namespace ts {
     enum DiagnosticCategory {
         Warning = 0,
         Error = 1,
-        Info = 2,
+        Suggestion = 2,
         Message = 3,
     }
     enum ModuleResolutionKind {
@@ -4055,7 +4055,7 @@ declare namespace ts {
         cleanupSemanticCache(): void;
         getSyntacticDiagnostics(fileName: string): Diagnostic[];
         getSemanticDiagnostics(fileName: string): Diagnostic[];
-        getInfoDiagnostics(fileName: string): Diagnostic[];
+        getSuggestionDiagnostics(fileName: string): Diagnostic[];
         getCompilerOptionsDiagnostics(): Diagnostic[];
         /**
          * @deprecated Use getEncodedSyntacticClassifications instead.
@@ -5026,7 +5026,7 @@ declare namespace ts.server.protocol {
         GeterrForProject = "geterrForProject",
         SemanticDiagnosticsSync = "semanticDiagnosticsSync",
         SyntacticDiagnosticsSync = "syntacticDiagnosticsSync",
-        InfoDiagnosticsSync = "infoDiagnosticsSync",
+        SuggestionDiagnosticsSync = "suggestionDiagnosticsSync",
         NavBar = "navbar",
         Navto = "navto",
         NavTree = "navtree",
@@ -6549,16 +6549,12 @@ declare namespace ts.server.protocol {
     interface SemanticDiagnosticsSyncResponse extends Response {
         body?: Diagnostic[] | DiagnosticWithLinePosition[];
     }
-    interface InfoDiagnosticsSyncRequest extends FileRequest {
-        command: CommandTypes.InfoDiagnosticsSync;
-        arguments: InfoDiagnosticsSyncRequestArgs;
+    interface SuggestionDiagnosticsSyncRequest extends FileRequest {
+        command: CommandTypes.SuggestionDiagnosticsSync;
+        arguments: SuggestionDiagnosticsSyncRequestArgs;
     }
-    interface InfoDiagnosticsSyncRequestArgs extends FileRequestArgs {
-        includeLinePosition?: boolean;
-    }
-    interface InfoDiagnosticsSyncResponse extends Response {
-        body?: Diagnostic[] | DiagnosticWithLinePosition[];
-    }
+    type SuggestionDiagnosticsSyncRequestArgs = SemanticDiagnosticsSyncRequestArgs;
+    type SuggestionDiagnosticsSyncResponse = SemanticDiagnosticsSyncResponse;
     /**
      * Synchronous request for syntactic diagnostics of one file.
      */
@@ -6655,7 +6651,7 @@ declare namespace ts.server.protocol {
          */
         text: string;
         /**
-         * The category of the diagnostic message. This is the lower-case of a DiagnosticCategory member.
+         * The category of the diagnostic message, e.g. "error", "warning", or "suggestion".
          */
         category: string;
         /**
@@ -6683,7 +6679,7 @@ declare namespace ts.server.protocol {
          */
         diagnostics: Diagnostic[];
     }
-    type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "infoDiag";
+    type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag";
     /**
      * Event message for DiagnosticEventKind event types.
      * These events provide syntactic and semantic errors for a file.
@@ -7242,7 +7238,7 @@ declare namespace ts.server {
         private getOccurrences(args);
         private getSyntacticDiagnosticsSync(args);
         private getSemanticDiagnosticsSync(args);
-        private getInfoDiagnosticsSync(args);
+        private getSuggestionDiagnosticsSync(args);
         private getDocumentHighlights(args, simplifiedResult);
         private setCompilerOptionsForInferredProjects(args);
         private getProjectInfo(args);

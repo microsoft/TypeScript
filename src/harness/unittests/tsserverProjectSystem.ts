@@ -3080,7 +3080,7 @@ namespace ts.projectSystem {
 
                 host.runQueuedImmediateCallbacks(1);
                 assert.isFalse(hasError());
-                checkErrorMessage(session, "infoDiag", { file: untitledFile, diagnostics: [] });
+                checkErrorMessage(session, "suggestionDiag", { file: untitledFile, diagnostics: [] });
                 checkCompleteEvent(session, 2, expectedSequenceId);
                 session.clearMessages();
             }
@@ -3144,7 +3144,7 @@ namespace ts.projectSystem {
                 session.clearMessages();
 
                 host.runQueuedImmediateCallbacks(1);
-                checkErrorMessage(session, "infoDiag", { file: app.path, diagnostics: [] });
+                checkErrorMessage(session, "suggestionDiag", { file: app.path, diagnostics: [] });
                 checkCompleteEvent(session, 2, expectedSequenceId);
                 session.clearMessages();
             }
@@ -3953,7 +3953,7 @@ namespace ts.projectSystem {
             session.clearMessages();
 
             host.runQueuedImmediateCallbacks(1);
-            checkErrorMessage(session, "infoDiag", { file: file1.path, diagnostics: [] });
+            checkErrorMessage(session, "suggestionDiag", { file: file1.path, diagnostics: [] });
             checkCompleteEvent(session, 2, expectedSequenceId);
             session.clearMessages();
 
@@ -4018,7 +4018,7 @@ namespace ts.projectSystem {
 
             host.runQueuedImmediateCallbacks(1);
 
-            checkErrorMessage(session, "infoDiag", {
+            checkErrorMessage(session, "suggestionDiag", {
                 file: file.path,
                 diagnostics: [
                     createDiagnostic({ line: 1, offset: 1 }, { line: 1, offset: 13 }, Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module)
@@ -5227,7 +5227,7 @@ namespace ts.projectSystem {
                 host.runQueuedImmediateCallbacks(1);
                 assert.equal(host.getOutput().length, 2);
                 const e3 = <protocol.Event>getMessage(0);
-                assert.equal(e3.event, "infoDiag");
+                assert.equal(e3.event, "suggestionDiag");
                 verifyRequestCompleted(getErrId, 1);
 
                 cancellationToken.resetToken();

@@ -144,7 +144,7 @@ namespace ts {
 
         getSyntacticDiagnostics(fileName: string): string;
         getSemanticDiagnostics(fileName: string): string;
-        getInfoDiagnostics(fileName: string): string;
+        getSuggestionDiagnostics(fileName: string): string;
         getCompilerOptionsDiagnostics(): string;
 
         getSyntacticClassifications(fileName: string, start: number, length: number): string;
@@ -716,8 +716,8 @@ namespace ts {
                 });
         }
 
-        public getInfoDiagnostics(fileName: string): string {
-            return this.forwardJSONCall(`getInfoDiagnostics('${fileName}')`, () => this.realizeDiagnostics(this.languageService.getInfoDiagnostics(fileName)));
+        public getSuggestionDiagnostics(fileName: string): string {
+            return this.forwardJSONCall(`getSuggestionDiagnostics('${fileName}')`, () => this.realizeDiagnostics(this.languageService.getSuggestionDiagnostics(fileName)));
         }
 
         public getCompilerOptionsDiagnostics(): string {

@@ -282,9 +282,7 @@ declare namespace FourSlashInterface {
         currentSignatureTypeParameterCountIs(expected: number): void;
         currentSignatureHelpIs(expected: string): void;
         // Checks that there are no compile errors.
-        noErrors(options?: {
-            ignoreInfoDiagnostics?: boolean,
-        }): void;
+        noErrors(): void;
         numberOfErrorsInCurrentFile(expected: number): void;
         baselineCurrentFileBreakpointLocations(): void;
         baselineCurrentFileNameOrDottedNameSpans(): void;
@@ -351,7 +349,7 @@ declare namespace FourSlashInterface {
         }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: ts.JSDocTagInfo[]): void;
         getSyntacticDiagnostics(expected: ReadonlyArray<RealizedDiagnostic>): void;
         getSemanticDiagnostics(expected: ReadonlyArray<RealizedDiagnostic>): void;
-        getInfoDiagnostics(expected: ReadonlyArray<RealizedDiagnostic>): void;
+        getSuggestionDiagnostics(expected: ReadonlyArray<RealizedDiagnostic>): void;
         ProjectInfo(expected: string[]): void;
         allRangesAppearInImplementationList(markerName: string): void;
     }

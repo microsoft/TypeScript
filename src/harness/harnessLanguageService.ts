@@ -402,8 +402,8 @@ namespace Harness.LanguageService {
         getSemanticDiagnostics(fileName: string): ts.Diagnostic[] {
             return unwrapJSONCallResult(this.shim.getSemanticDiagnostics(fileName));
         }
-        getInfoDiagnostics(fileName: string): ts.Diagnostic[] {
-            return unwrapJSONCallResult(this.shim.getInfoDiagnostics(fileName));
+        getSuggestionDiagnostics(fileName: string): ts.Diagnostic[] {
+            return unwrapJSONCallResult(this.shim.getSuggestionDiagnostics(fileName));
         }
         getCompilerOptionsDiagnostics(): ts.Diagnostic[] {
             return unwrapJSONCallResult(this.shim.getCompilerOptionsDiagnostics());

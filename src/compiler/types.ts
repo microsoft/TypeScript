@@ -4017,7 +4017,7 @@ namespace ts {
     export enum DiagnosticCategory {
         Warning,
         Error,
-        Info,
+        Suggestion,
         Message
     }
     /* @internal */
