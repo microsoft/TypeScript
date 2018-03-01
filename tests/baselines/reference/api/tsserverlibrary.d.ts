@@ -2223,7 +2223,7 @@ declare namespace ts {
     enum InferencePriority {
         NakedTypeVariable = 1,
         HomomorphicMappedType = 2,
-        MappedType = 4,
+        MappedTypeConstraint = 4,
         ReturnType = 8,
         NoConstraints = 16,
         AlwaysStrict = 32,

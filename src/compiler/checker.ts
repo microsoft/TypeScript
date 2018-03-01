@@ -11717,7 +11717,7 @@ namespace ts {
                         // We're inferring from some source type S to a mapped type { [P in T]: X }, where T is a type
                         // parameter. Infer from 'keyof S' to T and infer from a union of each property type in S to X.
                         const savePriority = priority;
-                        priority |= InferencePriority.MappedType;
+                        priority |= InferencePriority.MappedTypeConstraint;
                         inferFromTypes(getIndexType(source), constraintType);
                         priority = savePriority;
                         inferFromTypes(getUnionType(map(getPropertiesOfType(source), getTypeOfSymbol)), getTemplateTypeFromMappedType(<MappedType>target));
