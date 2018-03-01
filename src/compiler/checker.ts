@@ -2756,7 +2756,7 @@ namespace ts {
             }
         }
 
-        function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer: EmitTextWriter = createTextWriter("")): string {
+        function typeToString(type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType, writer: EmitTextWriter = createTextWriter("")): string {
             const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors, writer);
             Debug.assert(typeNode !== undefined, "should always get typenode");
             const options = { removeComments: true };
