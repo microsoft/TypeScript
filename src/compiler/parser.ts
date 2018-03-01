@@ -7560,7 +7560,7 @@ namespace ts {
                 case "amd-dependency": {
                     context.amdDependencies = map(
                         toArray(entryOrList),
-                        (x: PragmaPsuedoMap["amd-dependency"]) => ({ name: x!.arguments.name!, path: x!.arguments.path! })); // TODO: GH#18217
+                        (x: PragmaPsuedoMap["amd-dependency"]) => ({ name: x!.arguments.name!, path: x!.arguments.path })); // TODO: GH#18217
                     break;
                 }
                 case "amd-module": {

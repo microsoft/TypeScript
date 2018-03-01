@@ -80,7 +80,7 @@ namespace ts.BreakpointResolver {
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.PropertySignature:
-                        return spanInVariableDeclaration(<VariableDeclaration>node);
+                        return spanInVariableDeclaration(<VariableDeclaration | PropertyDeclaration | PropertySignature>node);
 
                     case SyntaxKind.Parameter:
                         return spanInParameterDeclaration(<ParameterDeclaration>node);
@@ -275,18 +275,17 @@ namespace ts.BreakpointResolver {
                         }
 
                         if (node.kind === SyntaxKind.BinaryExpression) {
-                            const binaryExpression = <BinaryExpression>node;
+                            const { left, operatorToken } = <BinaryExpression>node;
                             // Set breakpoint in destructuring pattern if its destructuring assignment
                             // [a, b, c] or {a, b, c} of
                             // [a, b, c] = expression or
                             // {a, b, c} = expression
-                            if (isArrayLiteralOrObjectLiteralDestructuringPattern(binaryExpression.left)) {
+                            if (isArrayLiteralOrObjectLiteralDestructuringPattern(left)) {
                                 return spanInArrayLiteralOrObjectLiteralDestructuringPattern(
-                                    <ArrayLiteralExpression | ObjectLiteralExpression>binaryExpression.left);
+                                    <ArrayLiteralExpression | ObjectLiteralExpression>left);
                             }
 
-                            if (binaryExpression.operatorToken.kind === SyntaxKind.EqualsToken &&
-                                isArrayLiteralOrObjectLiteralDestructuringPattern(parent)) {
+                            if (operatorToken.kind === SyntaxKind.EqualsToken && isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)) {
                                 // Set breakpoint on assignment expression element of destructuring pattern
                                 // a = expression of
                                 // [a = expression, b, c] = someExpression or
@@ -294,8 +293,8 @@ namespace ts.BreakpointResolver {
                                 return textSpan(node);
                             }
 
-                            if (binaryExpression.operatorToken.kind === SyntaxKind.CommaToken) {
-                                return spanInNode(binaryExpression.left);
+                            if (operatorToken.kind === SyntaxKind.CommaToken) {
+                                return spanInNode(left);
                             }
                         }
 
@@ -329,42 +328,42 @@ namespace ts.BreakpointResolver {
                             }
                         }
 
-                        // If this is name of property assignment, set breakpoint in the initializer
-                        if (parent.kind === SyntaxKind.PropertyAssignment &&
-                            (<PropertyDeclaration>node.parent).name === node &&
-                            !isArrayLiteralOrObjectLiteralDestructuringPattern(parent.parent)) {
-                            return spanInNode((<PropertyDeclaration>node.parent).initializer);
-                        }
-
-                        // Breakpoint in type assertion goes to its operand
-                        if (parent.kind === SyntaxKind.TypeAssertionExpression && (<TypeAssertion>parent).type === node) {
-                            return spanInNextNode((<TypeAssertion>parent).type);
-                        }
-
-                        // return type of function go to previous token
-                        if (isFunctionLike(parent) && (<FunctionLikeDeclaration>parent).type === node) {
-                            return spanInPreviousNode(node);
-                        }
-
-                        // initializer of variable/parameter declaration go to previous node
-                        if ((parent.kind === SyntaxKind.VariableDeclaration ||
-                            parent.kind === SyntaxKind.Parameter)) {
-                            const paramOrVarDecl = <VariableDeclaration | ParameterDeclaration>node.parent;
-                            if (paramOrVarDecl.initializer === node ||
-                                paramOrVarDecl.type === node ||
-                                isAssignmentOperator(node.kind)) {
-                                return spanInPreviousNode(node);
+                        switch (node.parent.kind) {
+                            case SyntaxKind.PropertyAssignment:
+                                // If this is name of property assignment, set breakpoint in the initializer
+                                if ((<PropertyAssignment>node.parent).name === node &&
+                                    !isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.parent)) {
+                                    return spanInNode((<PropertyAssignment>node.parent).initializer);
+                                }
+                                break;
+                            case SyntaxKind.TypeAssertionExpression:
+                                // Breakpoint in type assertion goes to its operand
+                                if ((<TypeAssertion>node.parent).type === node) {
+                                    return spanInNextNode((<TypeAssertion>node.parent).type);
+                                }
+                                break;
+                            case SyntaxKind.VariableDeclaration:
+                            case SyntaxKind.Parameter: {
+                                // initializer of variable/parameter declaration go to previous node
+                                const { initializer, type } = <VariableDeclaration | ParameterDeclaration>node.parent;
+                                if (initializer === node || type === node || isAssignmentOperator(node.kind)) {
+                                    return spanInPreviousNode(node);
+                                }
+                                break;
                             }
-                        }
-
-                        if (parent.kind === SyntaxKind.BinaryExpression) {
-                            const binaryExpression = <BinaryExpression>node.parent;
-                            if (isArrayLiteralOrObjectLiteralDestructuringPattern(binaryExpression.left) &&
-                                (binaryExpression.right === node ||
-                                    binaryExpression.operatorToken === node)) {
-                                // If initializer of destructuring assignment move to previous token
-                                return spanInPreviousNode(node);
+                            case SyntaxKind.BinaryExpression: {
+                                const { left } = <BinaryExpression>node.parent;
+                                if (isArrayLiteralOrObjectLiteralDestructuringPattern(left) && node !== left) {
+                                    // If initializer of destructuring assignment move to previous token
+                                    return spanInPreviousNode(node);
+                                }
+                                break;
                             }
+                            default:
+                                // return type of function go to previous token
+                                if (isFunctionLike(node.parent) && node.parent.type === node) {
+                                    return spanInPreviousNode(node);
+                                }
                         }
 
                         // Default go to parent to set the breakpoint
@@ -372,12 +371,10 @@ namespace ts.BreakpointResolver {
                 }
             }
 
-            function textSpanFromVariableDeclaration(variableDeclaration: VariableDeclaration): TextSpan {
-                const parent = variableDeclaration.parent;
-                if (parent.kind === SyntaxKind.VariableDeclarationList &&
-                    parent.declarations[0] === variableDeclaration) {
+            function textSpanFromVariableDeclaration(variableDeclaration: VariableDeclaration | PropertyDeclaration | PropertySignature): TextSpan {
+                if (isVariableDeclarationList(variableDeclaration.parent) && variableDeclaration.parent.declarations[0] === variableDeclaration) {
                     // First declaration - include let keyword
-                    return textSpan(findPrecedingToken(variableDeclaration.pos, sourceFile, parent)!, variableDeclaration);
+                    return textSpan(findPrecedingToken(variableDeclaration.pos, sourceFile, variableDeclaration.parent)!, variableDeclaration);
                 }
                 else {
                     // Span only on this declaration
@@ -385,13 +382,13 @@ namespace ts.BreakpointResolver {
                 }
             }
 
-            function spanInVariableDeclaration(variableDeclaration: VariableDeclaration): TextSpan | undefined {
+            function spanInVariableDeclaration(variableDeclaration: VariableDeclaration | PropertyDeclaration | PropertySignature): TextSpan | undefined {
                 // If declaration of for in statement, just set the span in parent
-                const parent = variableDeclaration.parent;
-                if (parent.parent.kind === SyntaxKind.ForInStatement) {
+                if (variableDeclaration.parent.parent.kind === SyntaxKind.ForInStatement) {
                     return spanInNode(variableDeclaration.parent.parent);
                 }
 
+                const parent = variableDeclaration.parent;
                 // If this is a destructuring pattern, set breakpoint in binding pattern
                 if (isBindingPattern(variableDeclaration.name)) {
                     return spanInBindingPattern(variableDeclaration.name);
@@ -405,7 +402,8 @@ namespace ts.BreakpointResolver {
                     return textSpanFromVariableDeclaration(variableDeclaration);
                 }
 
-                if (parent.kind === SyntaxKind.VariableDeclarationList && parent.declarations[0] !== variableDeclaration) {
+                if (isVariableDeclarationList(variableDeclaration.parent) &&
+                    variableDeclaration.parent.declarations[0] !== variableDeclaration) {
                     // If we cannot set breakpoint on this declaration, set it on previous one
                     // Because the variable declaration may be binding pattern and
                     // we would like to set breakpoint in last binding element if that's the case,

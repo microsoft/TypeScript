@@ -223,6 +223,7 @@ namespace ts {
 
         getSyntacticDiagnostics(fileName: string): Diagnostic[];
         getSemanticDiagnostics(fileName: string): Diagnostic[];
+        getSuggestionDiagnostics(fileName: string): Diagnostic[];
 
         // TODO: Rename this to getProgramDiagnostics to better indicate that these are any
         // diagnostics present for the program level, and not just 'options' diagnostics.
