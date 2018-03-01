@@ -27,6 +27,10 @@
         "category": "Error",
         "code": 1012
     },
+    "A rest parameter may not have a trailing comma.": {
+        "category": "Error",
+        "code": 1013
+    },
     "A rest parameter must be last in a parameter list.": {
         "category": "Error",
         "code": 1014
