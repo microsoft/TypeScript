@@ -5578,6 +5578,8 @@ namespace ts {
 
     // Statement
 
+    export function isIterationStatement(node: Node, lookInLabeledStatements: false): node is IterationStatement;
+    export function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement | LabeledStatement;
     export function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement {
         switch (node.kind) {
             case SyntaxKind.ForStatement:
