@@ -2602,7 +2602,7 @@
         "code": 4083
     },
     "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
-        "category": "Message",
+        "category": "Error",
         "code": 4090
     },
     "Parameter '{0}' of index signature from exported interface has or is using name '{1}' from private module '{2}'.": {
@@ -3296,7 +3296,7 @@
         "category": "Message",
         "code": 6146
     },
-    "Resolution for module '{0}' was found in cache.": {
+    "Resolution for module '{0}' was found in cache from location '{1}'.": {
         "category": "Message",
         "code": 6147
     },
@@ -3471,6 +3471,10 @@
     "Found 'package.json' at '{0}'. Package ID is '{1}'.": {
         "category": "Message",
         "code": 6190
+    },
+    "Whether to keep outdated console output in watch mode instead of clearing the screen.": {
+        "category": "Message",
+        "code": 6191
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -3808,6 +3812,11 @@
     "No inputs were found in config file '{0}'. Specified 'include' paths were '{1}' and 'exclude' paths were '{2}'.": {
         "category": "Error",
         "code": 18003
+    },
+
+    "File is a CommonJS module; it may be converted to an ES6 module.": {
+        "category": "Suggestion",
+        "code": 80001
     },
 
     "Add missing 'super()' call": {

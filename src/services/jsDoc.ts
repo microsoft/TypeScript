@@ -139,7 +139,7 @@ namespace ts.JsDoc {
     }
 
     export function getJSDocTagNameCompletions(): CompletionEntry[] {
-        return jsDocTagNameCompletionEntries || (jsDocTagNameCompletionEntries = ts.map(jsDocTagNames, tagName => {
+        return jsDocTagNameCompletionEntries || (jsDocTagNameCompletionEntries = map(jsDocTagNames, tagName => {
             return {
                 name: tagName,
                 kind: ScriptElementKind.keyword,
@@ -152,7 +152,7 @@ namespace ts.JsDoc {
     export const getJSDocTagNameCompletionDetails = getJSDocTagCompletionDetails;
 
     export function getJSDocTagCompletions(): CompletionEntry[] {
-        return jsDocTagCompletionEntries || (jsDocTagCompletionEntries = ts.map(jsDocTagNames, tagName => {
+        return jsDocTagCompletionEntries || (jsDocTagCompletionEntries = map(jsDocTagNames, tagName => {
             return {
                 name: `@${tagName}`,
                 kind: ScriptElementKind.keyword,
@@ -181,7 +181,7 @@ namespace ts.JsDoc {
         const nameThusFar = tag.name.text;
         const jsdoc = tag.parent;
         const fn = jsdoc.parent;
-        if (!ts.isFunctionLike(fn)) return [];
+        if (!isFunctionLike(fn)) return [];
 
         return mapDefined(fn.parameters, param => {
             if (!isIdentifier(param.name)) return undefined;
@@ -338,7 +338,7 @@ namespace ts.JsDoc {
 
                 case SyntaxKind.BinaryExpression: {
                     const be = commentOwner as BinaryExpression;
-                    if (getSpecialPropertyAssignmentKind(be) === ts.SpecialPropertyAssignmentKind.None) {
+                    if (getSpecialPropertyAssignmentKind(be) === SpecialPropertyAssignmentKind.None) {
                         return undefined;
                     }
                     const parameters = isFunctionLike(be.right) ? be.right.parameters : emptyArray;

@@ -2358,7 +2358,7 @@ namespace ts {
         const node = <PropertyAssignment>createSynthesizedNode(SyntaxKind.PropertyAssignment);
         node.name = asName(name);
         node.questionToken = undefined;
-        node.initializer = initializer !== undefined ? parenthesizeExpressionForList(initializer) : undefined;
+        node.initializer = parenthesizeExpressionForList(initializer);
         return node;
     }
 

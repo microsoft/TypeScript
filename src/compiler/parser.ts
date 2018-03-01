@@ -5927,7 +5927,7 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseImportEqualsDeclaration(node: ImportEqualsDeclaration, identifier: ts.Identifier): ImportEqualsDeclaration {
+        function parseImportEqualsDeclaration(node: ImportEqualsDeclaration, identifier: Identifier): ImportEqualsDeclaration {
             node.kind = SyntaxKind.ImportEqualsDeclaration;
             node.name = identifier;
             parseExpected(SyntaxKind.EqualsToken);

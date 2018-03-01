@@ -243,7 +243,7 @@ type T21 = TypeName<any>;  // "string" | "number" | "boolean" | "undefined" | "f
 >T21 : Symbol(T21, Decl(conditionalTypes1.ts, 63, 43))
 >TypeName : Symbol(TypeName, Decl(conditionalTypes1.ts, 53, 43))
 
-type T22 = TypeName<never>;  // "string" | "number" | "boolean" | "undefined" | "function" | "object"
+type T22 = TypeName<never>;  // never
 >T22 : Symbol(T22, Decl(conditionalTypes1.ts, 64, 25))
 >TypeName : Symbol(TypeName, Decl(conditionalTypes1.ts, 53, 43))
 
@@ -668,7 +668,7 @@ type Q3 = IsString<any>;  // boolean
 >Q3 : Symbol(Q3, Decl(conditionalTypes1.ts, 171, 26))
 >IsString : Symbol(IsString, Decl(conditionalTypes1.ts, 166, 63))
 
-type Q4 = IsString<never>;  // boolean
+type Q4 = IsString<never>;  // never
 >Q4 : Symbol(Q4, Decl(conditionalTypes1.ts, 172, 24))
 >IsString : Symbol(IsString, Decl(conditionalTypes1.ts, 166, 63))
 
@@ -762,16 +762,16 @@ type T40 = never extends never ? true : false;  // true
 type T41 = number extends never ? true : false;  // false
 >T41 : Symbol(T41, Decl(conditionalTypes1.ts, 199, 46))
 
-type T42 = never extends number ? true : false;  // boolean
+type T42 = never extends number ? true : false;  // true
 >T42 : Symbol(T42, Decl(conditionalTypes1.ts, 200, 47))
 
-type IsNever<T> = T extends never ? true : false;
+type IsNever<T> = [T] extends [never] ? true : false;
 >IsNever : Symbol(IsNever, Decl(conditionalTypes1.ts, 201, 47))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 203, 13))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 203, 13))
 
 type T50 = IsNever<never>;  // true
->T50 : Symbol(T50, Decl(conditionalTypes1.ts, 203, 49))
+>T50 : Symbol(T50, Decl(conditionalTypes1.ts, 203, 53))
 >IsNever : Symbol(IsNever, Decl(conditionalTypes1.ts, 201, 47))
 
 type T51 = IsNever<number>;  // false

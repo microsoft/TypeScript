@@ -206,7 +206,7 @@ var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };
 });
 
-var es2018LibrarySource = [];
+var es2018LibrarySource = ["es2018.regexp.d.ts"];
 
 var es2018LibrarySourceMap = es2018LibrarySource.map(function (source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };

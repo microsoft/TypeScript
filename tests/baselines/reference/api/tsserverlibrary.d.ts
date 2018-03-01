@@ -1812,7 +1812,7 @@ declare namespace ts {
         getAliasedSymbol(symbol: Symbol): Symbol;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
         getAllAttributesTypeFromJsxOpeningLikeElement(elementNode: JsxOpeningLikeElement): Type | undefined;
-        getJsxIntrinsicTagNames(): Symbol[];
+        getJsxIntrinsicTagNamesAt(location: Node): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
         tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
@@ -2193,11 +2193,25 @@ declare namespace ts {
     interface IndexType extends InstantiableType {
         type: InstantiableType | UnionOrIntersectionType;
     }
-    interface ConditionalType extends InstantiableType {
+    interface ConditionalRoot {
+        node: ConditionalTypeNode;
         checkType: Type;
         extendsType: Type;
         trueType: Type;
         falseType: Type;
+        isDistributive: boolean;
+        inferTypeParameters: TypeParameter[];
+        outerTypeParameters?: TypeParameter[];
+        instantiations?: Map<Type>;
+        aliasSymbol: Symbol;
+        aliasTypeArguments: Type[];
+    }
+    interface ConditionalType extends InstantiableType {
+        root: ConditionalRoot;
+        checkType: Type;
+        extendsType: Type;
+        resolvedTrueType?: Type;
+        resolvedFalseType?: Type;
     }
     interface SubstitutionType extends InstantiableType {
         typeParameter: TypeParameter;
@@ -2263,7 +2277,8 @@ declare namespace ts {
     enum DiagnosticCategory {
         Warning = 0,
         Error = 1,
-        Message = 2
+        Suggestion = 2,
+        Message = 3
     }
     enum ModuleResolutionKind {
         Classic = 1,
@@ -3217,7 +3232,8 @@ declare namespace ts {
     function isCallOrNewExpression(node: Node): node is CallExpression | NewExpression;
     function isTemplateLiteral(node: Node): node is TemplateLiteral;
     function isAssertionExpression(node: Node): node is AssertionExpression;
-    function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement;
+    function isIterationStatement(node: Node, lookInLabeledStatements: false): node is IterationStatement;
+    function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement | LabeledStatement;
     function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeElement;
     function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause;
     /** True if node is of a kind that may contain comment text. */
@@ -4069,6 +4085,7 @@ declare namespace ts {
         cleanupSemanticCache(): void;
         getSyntacticDiagnostics(fileName: string): Diagnostic[];
         getSemanticDiagnostics(fileName: string): Diagnostic[];
+        getSuggestionDiagnostics(fileName: string): Diagnostic[];
         getCompilerOptionsDiagnostics(): Diagnostic[];
         /**
          * @deprecated Use getEncodedSyntacticClassifications instead.
@@ -4979,7 +4996,7 @@ declare namespace ts.server {
         function ThrowProjectDoesNotContainDocument(fileName: string, project: Project): never;
     }
     function getDefaultFormatCodeSettings(host: ServerHost): FormatCodeSettings;
-    function mergeMapLikes(target: MapLike<any>, source: MapLike<any>): void;
+    function mergeMapLikes<T extends object>(target: T, source: Partial<T>): void;
     type NormalizedPath = string & {
         __normalizedPathTag: any;
     };
@@ -5039,6 +5056,7 @@ declare namespace ts.server.protocol {
         GeterrForProject = "geterrForProject",
         SemanticDiagnosticsSync = "semanticDiagnosticsSync",
         SyntacticDiagnosticsSync = "syntacticDiagnosticsSync",
+        SuggestionDiagnosticsSync = "suggestionDiagnosticsSync",
         NavBar = "navbar",
         Navto = "navto",
         NavTree = "navtree",
@@ -6561,6 +6579,12 @@ declare namespace ts.server.protocol {
     interface SemanticDiagnosticsSyncResponse extends Response {
         body?: Diagnostic[] | DiagnosticWithLinePosition[];
     }
+    interface SuggestionDiagnosticsSyncRequest extends FileRequest {
+        command: CommandTypes.SuggestionDiagnosticsSync;
+        arguments: SuggestionDiagnosticsSyncRequestArgs;
+    }
+    type SuggestionDiagnosticsSyncRequestArgs = SemanticDiagnosticsSyncRequestArgs;
+    type SuggestionDiagnosticsSyncResponse = SemanticDiagnosticsSyncResponse;
     /**
      * Synchronous request for syntactic diagnostics of one file.
      */
@@ -6657,7 +6681,7 @@ declare namespace ts.server.protocol {
          */
         text: string;
         /**
-         * The category of the diagnostic message, e.g. "error" vs. "warning"
+         * The category of the diagnostic message, e.g. "error", "warning", or "suggestion".
          */
         category: string;
         /**
@@ -6685,8 +6709,9 @@ declare namespace ts.server.protocol {
          */
         diagnostics: Diagnostic[];
     }
+    type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag";
     /**
-     * Event message for "syntaxDiag" and "semanticDiag" event types.
+     * Event message for DiagnosticEventKind event types.
      * These events provide syntactic and semantic errors for a file.
      */
     interface DiagnosticEvent extends Event {
@@ -7171,7 +7196,7 @@ declare namespace ts.server {
     }
     type CommandNames = protocol.CommandTypes;
     const CommandNames: any;
-    function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string;
+    function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string;
     type Event = <T extends object>(body: T, eventName: string) => void;
     interface EventSender {
         event: Event;
@@ -7221,6 +7246,8 @@ declare namespace ts.server {
         private doOutput;
         private semanticCheck;
         private syntacticCheck;
+        private infoCheck;
+        private sendDiagnosticsEvent;
         private updateErrorCheck;
         private cleanProjects;
         private cleanup;
@@ -7241,6 +7268,7 @@ declare namespace ts.server {
         private getOccurrences;
         private getSyntacticDiagnosticsSync;
         private getSemanticDiagnosticsSync;
+        private getSuggestionDiagnosticsSync;
         private getDocumentHighlights;
         private setCompilerOptionsForInferredProjects;
         private getProjectInfo;
