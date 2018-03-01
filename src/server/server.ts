@@ -310,7 +310,7 @@ namespace ts.server {
                 args.push(Arguments.EnableTelemetry);
             }
             if (this.logger.loggingEnabled() && this.logger.getLogFileName()) {
-                args.push(Arguments.LogFile, combinePaths(getDirectoryPath(normalizeSlashes(this.logger.getLogFileName())), `ti-${process.pid}.log`));
+                args.push(Arguments.LogFile, combinePaths(getDirectoryPath(normalizeSlashes(this.logger.getLogFileName()!)), `ti-${process.pid}.log`));
             }
             if (this.typingSafeListLocation) {
                 args.push(Arguments.TypingSafeListLocation, this.typingSafeListLocation);
@@ -466,7 +466,7 @@ namespace ts.server {
                         }
 
                         while (this.requestQueue.length > 0) {
-                            const queuedRequest = this.requestQueue.shift();
+                            const queuedRequest = this.requestQueue.shift()!;
                             if (this.requestMap.get(queuedRequest.operationId) === queuedRequest) {
                                 this.requestMap.delete(queuedRequest.operationId);
                                 this.scheduleRequest(queuedRequest);
@@ -499,7 +499,7 @@ namespace ts.server {
     }
 
     class IOSession extends Session {
-        private eventPort: number;
+        private eventPort: number | undefined;
         private eventSocket: NodeSocket | undefined;
         private socketEventQueue: { body: any, eventName: string }[] | undefined;
         private constructed: boolean | undefined;
@@ -557,7 +557,7 @@ namespace ts.server {
         }
 
         event<T extends object>(body: T, eventName: string): void {
-            Debug.assert(this.constructed, "Should only call `IOSession.prototype.event` on an initialized IOSession");
+            Debug.assert(!!this.constructed, "Should only call `IOSession.prototype.event` on an initialized IOSession");
 
             if (this.canUseEvents && this.eventPort) {
                 if (!this.eventSocket) {
@@ -578,7 +578,7 @@ namespace ts.server {
         }
 
         private writeToEventSocket(body: object, eventName: string): void {
-            this.eventSocket.write(formatMessage(toEvent(eventName, body), this.logger, this.byteLength, this.host.newLine), "utf8");
+            this.eventSocket!.write(formatMessage(toEvent(eventName, body), this.logger, this.byteLength, this.host.newLine), "utf8");
         }
 
         exit() {

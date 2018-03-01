@@ -3777,7 +3777,7 @@ namespace ts {
         return overlapStart < overlapEnd;
     }
 
-    export function textSpanOverlap(span1: TextSpan, span2: TextSpan) {
+    export function textSpanOverlap(span1: TextSpan, span2: TextSpan): TextSpan | undefined {
         const overlapStart = Math.max(span1.start, span2.start);
         const overlapEnd = Math.min(textSpanEnd(span1), textSpanEnd(span2));
         if (overlapStart < overlapEnd) {
@@ -3805,7 +3805,7 @@ namespace ts {
         return position <= textSpanEnd(span) && position >= span.start;
     }
 
-    export function textSpanIntersection(span1: TextSpan, span2: TextSpan) {
+    export function textSpanIntersection(span1: TextSpan, span2: TextSpan): TextSpan | undefined {
         const intersectStart = Math.max(span1.start, span2.start);
         const intersectEnd = Math.min(textSpanEnd(span1), textSpanEnd(span2));
         if (intersectStart <= intersectEnd) {

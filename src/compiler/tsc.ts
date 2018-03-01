@@ -47,7 +47,7 @@ namespace ts {
         const commandLine = parseCommandLine(args);
 
         // Configuration file name (if any)
-        let configFileName: string;
+        let configFileName: string | undefined;
         if (commandLine.options.locale) {
             validateLocaleAndSetLanguage(commandLine.options.locale, sys, commandLine.errors);
         }
@@ -71,7 +71,7 @@ namespace ts {
 
         if (commandLine.options.help || commandLine.options.all) {
             printVersion();
-            printHelp(commandLine.options.all);
+            printHelp(!!commandLine.options.all);
             return sys.exit(ExitStatus.Success);
         }
 
@@ -104,13 +104,13 @@ namespace ts {
 
         if (commandLine.fileNames.length === 0 && !configFileName) {
             printVersion();
-            printHelp(commandLine.options.all);
+            printHelp(!!commandLine.options.all);
             return sys.exit(ExitStatus.Success);
         }
 
         const commandLineOptions = commandLine.options;
         if (configFileName) {
-            const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, sys, reportDiagnostic);
+            const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, sys, reportDiagnostic)!; // TODO: GH#18217
             udpateReportDiagnostic(configParseResult.options);
             if (isWatchSet(configParseResult.options)) {
                 reportWatchModeWithoutSysSupport();
@@ -155,7 +155,7 @@ namespace ts {
             enableStatistics(options);
             return compileUsingBuilder(rootNames, options, host, oldProgram);
         };
-        const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate;
+        const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
         watchCompilerHost.afterProgramCreate = builderProgram => {
             emitFilesUsingBuilder(builderProgram);
             reportStatistics(builderProgram.getProgram());
@@ -167,7 +167,7 @@ namespace ts {
     }
 
     function createWatchOfConfigFile(configParseResult: ParsedCommandLine, optionsToExtend: CompilerOptions) {
-        const watchCompilerHost = ts.createWatchCompilerHostOfConfigFile(configParseResult.options.configFilePath, optionsToExtend, sys, /*createProgram*/ undefined, reportDiagnostic, createWatchStatusReporter(configParseResult.options));
+        const watchCompilerHost = ts.createWatchCompilerHostOfConfigFile(configParseResult.options.configFilePath!, optionsToExtend, sys, /*createProgram*/ undefined, reportDiagnostic, createWatchStatusReporter(configParseResult.options)); // TODO: GH#18217
         updateWatchCompilationHost(watchCompilerHost);
         watchCompilerHost.rootFiles = configParseResult.fileNames;
         watchCompilerHost.options = configParseResult.options;
@@ -292,7 +292,7 @@ namespace ts {
         // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
         const optsList = showAllOptions ?
             sort(optionDeclarations, (a, b) => compareStringsCaseInsensitive(a.name, b.name)) :
-            filter(optionDeclarations.slice(), v => v.showInSimplifiedHelpView);
+            filter(optionDeclarations.slice(), v => !!v.showInSimplifiedHelpView);
 
         // We want our descriptions to align at the same column in our output,
         // so we keep track of the longest option usage string.

@@ -12,7 +12,7 @@ export class Rule extends Lint.Rules.AbstractRule {
 function walk(ctx: Lint.WalkContext<void>): void {
     ts.forEachChild(ctx.sourceFile, recur);
     function recur(node: ts.Node): void {
-        if (node.kind === ts.SyntaxKind.InKeyword && node.parent.kind === ts.SyntaxKind.BinaryExpression) {
+        if (node.kind === ts.SyntaxKind.InKeyword && node.parent!.kind === ts.SyntaxKind.BinaryExpression) {
             ctx.addFailureAtNode(node, Rule.FAILURE_STRING);
         }
     }

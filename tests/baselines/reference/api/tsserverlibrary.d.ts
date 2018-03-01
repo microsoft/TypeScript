@@ -2896,7 +2896,7 @@ declare namespace ts {
     interface FileWatcher {
         close(): void;
     }
-    function getNodeMajorVersion(): number;
+    function getNodeMajorVersion(): number | undefined;
     let sys: System;
 }
 declare namespace ts {
@@ -2906,12 +2906,12 @@ declare namespace ts {
     function textSpanContainsPosition(span: TextSpan, position: number): boolean;
     function textSpanContainsTextSpan(span: TextSpan, other: TextSpan): boolean;
     function textSpanOverlapsWith(span: TextSpan, other: TextSpan): boolean;
-    function textSpanOverlap(span1: TextSpan, span2: TextSpan): TextSpan;
+    function textSpanOverlap(span1: TextSpan, span2: TextSpan): TextSpan | undefined;
     function textSpanIntersectsWithTextSpan(span: TextSpan, other: TextSpan): boolean;
     function textSpanIntersectsWith(span: TextSpan, start: number, length: number): boolean;
     function decodedTextSpanIntersectsWith(start1: number, length1: number, start2: number, length2: number): boolean;
     function textSpanIntersectsWithPosition(span: TextSpan, position: number): boolean;
-    function textSpanIntersection(span1: TextSpan, span2: TextSpan): TextSpan;
+    function textSpanIntersection(span1: TextSpan, span2: TextSpan): TextSpan | undefined;
     function createTextSpan(start: number, length: number): TextSpan;
     function createTextSpanFromBounds(start: number, end: number): TextSpan;
     function textChangeRangeNewSpan(range: TextChangeRange): TextSpan;
@@ -3293,8 +3293,8 @@ declare namespace ts {
     function forEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T): U | undefined;
     function forEachTrailingCommentRange<U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean) => U): U | undefined;
     function forEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T): U | undefined;
-    function reduceEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U): U;
-    function reduceEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U): U;
+    function reduceEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U): U | undefined;
+    function reduceEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U): U | undefined;
     function getLeadingCommentRanges(text: string, pos: number): CommentRange[] | undefined;
     function getTrailingCommentRanges(text: string, pos: number): CommentRange[] | undefined;
     /** Optionally, get the shebang */
@@ -3797,7 +3797,7 @@ declare namespace ts {
     /**
      * Gets the constant value to emit for an expression.
      */
-    function getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): string | number;
+    function getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
     /**
      * Sets the constant value to emit for an expression.
      */
@@ -7440,7 +7440,7 @@ declare namespace ts.server {
         clear(): void;
         getVersion(): number;
         remove(path: Path): void;
-        get(path: Path): ReadonlyArray<string>;
+        get(path: Path): ReadonlyArray<string> | undefined;
         set(path: Path, value: ReadonlyArray<string>): void;
     }
     interface PluginCreateInfo {
@@ -7557,7 +7557,7 @@ declare namespace ts.server {
         abstract getTypeAcquisition(): TypeAcquisition;
         protected removeLocalTypingsFromTypeAcquisition(newTypeAcquisition: TypeAcquisition): TypeAcquisition;
         getExternalFiles(): SortedReadonlyArray<string>;
-        getSourceFile(path: Path): SourceFile;
+        getSourceFile(path: Path): SourceFile | undefined;
         close(): void;
         private detachScriptInfoIfNotRoot(uncheckedFilename);
         isClosed(): boolean;
@@ -7586,8 +7586,8 @@ declare namespace ts.server {
         private detachScriptInfoFromProject(uncheckedFileName);
         private addMissingFileWatcher(missingFilePath);
         private isWatchedMissingFile(path);
-        getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo;
-        getScriptInfo(uncheckedFileName: string): ScriptInfo;
+        getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined;
+        getScriptInfo(uncheckedFileName: string): ScriptInfo | undefined;
         filesToString(writeProjectFileNames: boolean): string;
         setCompilerOptions(compilerOptions: CompilerOptions): void;
         protected removeRoot(info: ScriptInfo): void;
@@ -7846,7 +7846,7 @@ declare namespace ts.server {
         setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void;
         findProject(projectName: string): Project | undefined;
         getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined;
-        getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string): ScriptInfo;
+        getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string): ScriptInfo | undefined;
         /**
          * Ensures the project structures are upto date
          * This means,
@@ -7930,18 +7930,18 @@ declare namespace ts.server {
         private getOrCreateInferredProjectForProjectRootPathIfEnabled(info, projectRootPath);
         private getOrCreateSingleInferredProjectIfEnabled();
         private createInferredProject(currentDirectory, isSingleInferredProject?, projectRootPath?);
-        getScriptInfo(uncheckedFileName: string): ScriptInfo;
+        getScriptInfo(uncheckedFileName: string): ScriptInfo | undefined;
         private watchClosedScriptInfo(info);
         private stopWatchingScriptInfo(info);
         getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: {
             fileExists(path: string): boolean;
-        }): ScriptInfo;
+        }): ScriptInfo | undefined;
         private getOrCreateScriptInfoWorker(fileName, currentDirectory, openedByClient, fileContent?, scriptKind?, hasMixedContent?, hostToQueryFileExistsOn?);
         /**
          * This gets the script info for the normalized path. If the path is not rooted disk path then the open script info with project root context is preferred
          */
-        getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo;
-        getScriptInfoForPath(fileName: Path): ScriptInfo;
+        getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined;
+        getScriptInfoForPath(fileName: Path): ScriptInfo | undefined;
         setHostConfiguration(args: protocol.ConfigureRequestArguments): void;
         closeLog(): void;
         /**

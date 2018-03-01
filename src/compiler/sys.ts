@@ -82,7 +82,7 @@ namespace ts {
     declare const global: any;
     declare const __filename: string;
 
-    export function getNodeMajorVersion() {
+    export function getNodeMajorVersion(): number | undefined {
         if (typeof process === "undefined") {
             return undefined;
         }
