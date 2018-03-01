@@ -708,7 +708,10 @@ interface Array<T> {}`
             }
         }
 
-        runQueuedImmediateCallbacks() {
+        runQueuedImmediateCallbacks(checkCount?: number) {
+            if (checkCount !== undefined) {
+                assert.equal(this.immediateCallbacks.count(), checkCount);
+            }
             this.immediateCallbacks.invoke();
         }
 

@@ -42,6 +42,7 @@ namespace ts.server.protocol {
         GeterrForProject = "geterrForProject",
         SemanticDiagnosticsSync = "semanticDiagnosticsSync",
         SyntacticDiagnosticsSync = "syntacticDiagnosticsSync",
+        SuggestionDiagnosticsSync = "suggestionDiagnosticsSync",
         NavBar = "navbar",
         /* @internal */
         NavBarFull = "navbar-full",
@@ -2010,6 +2011,14 @@ namespace ts.server.protocol {
         body?: Diagnostic[] | DiagnosticWithLinePosition[];
     }
 
+    export interface SuggestionDiagnosticsSyncRequest extends FileRequest {
+        command: CommandTypes.SuggestionDiagnosticsSync;
+        arguments: SuggestionDiagnosticsSyncRequestArgs;
+    }
+
+    export type SuggestionDiagnosticsSyncRequestArgs = SemanticDiagnosticsSyncRequestArgs;
+    export type SuggestionDiagnosticsSyncResponse = SemanticDiagnosticsSyncResponse;
+
     /**
      * Synchronous request for syntactic diagnostics of one file.
      */
@@ -2121,7 +2130,7 @@ namespace ts.server.protocol {
         text: string;
 
         /**
-         * The category of the diagnostic message, e.g. "error" vs. "warning"
+         * The category of the diagnostic message, e.g. "error", "warning", or "suggestion".
          */
         category: string;
 
@@ -2155,8 +2164,10 @@ namespace ts.server.protocol {
         diagnostics: Diagnostic[];
     }
 
+    export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag";
+
     /**
-     * Event message for "syntaxDiag" and "semanticDiag" event types.
+     * Event message for DiagnosticEventKind event types.
      * These events provide syntactic and semantic errors for a file.
      */
     export interface DiagnosticEvent extends Event {

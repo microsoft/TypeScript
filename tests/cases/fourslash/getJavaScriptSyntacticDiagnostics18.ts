@@ -9,15 +9,15 @@
 ////}
 
 goTo.file("a.js");
-verify.getSyntacticDiagnostics(`[
+verify.getSyntacticDiagnostics([
   {
-    "message": "\'public\' can only be used in a .ts file.",
-    "start": 93,
-    "length": 6,
-    "category": "error",
-    "code": 8009
+    message: "\'public\' can only be used in a .ts file.",
+    start: 93,
+    length: 6,
+    category: "error",
+    code: 8009
   }
-]`);
+]);
 
 // @Filename: b.js
 ////class C {
@@ -25,12 +25,12 @@ verify.getSyntacticDiagnostics(`[
 ////}
 
 goTo.file("b.js");
-verify.getSyntacticDiagnostics(`[
+verify.getSyntacticDiagnostics([
   {
-    "message": "'types' can only be used in a .ts file.",
-    "start": 17,
-    "length": 6,
-    "category": "error",
-    "code": 8010
+    message: "'types' can only be used in a .ts file.",
+    start: 17,
+    length: 6,
+    category: "error",
+    code: 8010
   }
-]`);
+]);

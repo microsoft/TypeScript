@@ -14,8 +14,6 @@
 // @Filename: /d.ts
 //// /// <reference path="[|./a.ts|]" />
 
-verify.noErrors();
-
 const ranges = test.ranges();
 const [r0, r1, r2] = ranges;
 verify.referenceGroups(ranges, [{ definition: 'module "/a"', ranges: [r0, r2, r1] }]);

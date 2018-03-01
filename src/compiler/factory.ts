@@ -2375,6 +2375,9 @@ namespace ts {
             if (node.resolvedTypeReferenceDirectiveNames !== undefined) updated.resolvedTypeReferenceDirectiveNames = node.resolvedTypeReferenceDirectiveNames;
             if (node.imports !== undefined) updated.imports = node.imports;
             if (node.moduleAugmentations !== undefined) updated.moduleAugmentations = node.moduleAugmentations;
+            if (node.pragmas !== undefined) updated.pragmas = node.pragmas;
+            if (node.localJsxFactory !== undefined) updated.localJsxFactory = node.localJsxFactory;
+            if (node.localJsxNamespace !== undefined) updated.localJsxNamespace = node.localJsxNamespace;
             return updateNode(updated, node);
         }
 
