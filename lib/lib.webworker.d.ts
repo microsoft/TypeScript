@@ -86,12 +86,13 @@ interface ObjectURLOptions {
 }
 
 interface PushSubscriptionOptionsInit {
-    applicationServerKey?: any;
+    applicationServerKey?: BufferSource | null;
     userVisibleOnly?: boolean;
 }
 
 interface RequestInit {
-    body?: any;
+    signal?: AbortSignal;
+    body?: Blob | BufferSource | FormData | string | null;
     cache?: RequestCache;
     credentials?: RequestCredentials;
     headers?: HeadersInit;
@@ -139,7 +140,7 @@ interface NotificationEventInit extends ExtendableEventInit {
 }
 
 interface PushEventInit extends ExtendableEventInit {
-    data?: any;
+    data?: BufferSource | USVString;
 }
 
 interface SyncEventInit extends ExtendableEventInit {
@@ -148,18 +149,6 @@ interface SyncEventInit extends ExtendableEventInit {
 }
 
 interface EventListener {
-    (evt: Event): void;
-}
-
-interface WebKitEntriesCallback {
-    (evt: Event): void;
-}
-
-interface WebKitErrorCallback {
-    (evt: Event): void;
-}
-
-interface WebKitFileCallback {
     (evt: Event): void;
 }
 
@@ -423,9 +412,9 @@ declare var Event: {
 };
 
 interface EventTarget {
-    addEventListener(type: string, listener?: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     dispatchEvent(evt: Event): boolean;
-    removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
 declare var EventTarget: {
@@ -434,9 +423,10 @@ declare var EventTarget: {
 };
 
 interface File extends Blob {
-    readonly lastModifiedDate: any;
+    readonly lastModifiedDate: Date;
     readonly name: string;
     readonly webkitRelativePath: string;
+    readonly lastModified: number;
 }
 
 declare var File: {
@@ -910,7 +900,7 @@ declare var ProgressEvent: {
 };
 
 interface PushManager {
-    getSubscription(): Promise<PushSubscription>;
+    getSubscription(): Promise<PushSubscription | null>;
     permissionState(options?: PushSubscriptionOptionsInit): Promise<PushPermissionState>;
     subscribe(options?: PushSubscriptionOptionsInit): Promise<PushSubscription>;
 }
@@ -979,6 +969,7 @@ interface Request extends Object, Body {
     readonly referrerPolicy: ReferrerPolicy;
     readonly type: RequestType;
     readonly url: string;
+    readonly signal: AbortSignal;
     clone(): Request;
 }
 
@@ -1081,7 +1072,7 @@ interface URL {
 
 declare var URL: {
     prototype: URL;
-    new(url: string, base?: string): URL;
+    new(url: string, base?: string | URL): URL;
     createObjectURL(object: any, options?: ObjectURLOptions): string;
     revokeObjectURL(url: string): void;
 };
@@ -1105,7 +1096,7 @@ interface WebSocket extends EventTarget {
     readonly readyState: number;
     readonly url: string;
     close(code?: number, reason?: string): void;
-    send(data: any): void;
+    send(data: USVString | ArrayBuffer | Blob | ArrayBufferView): void;
     readonly CLOSED: number;
     readonly CLOSING: number;
     readonly CONNECTING: number;
@@ -1841,6 +1832,43 @@ interface AddEventListenerOptions extends EventListenerOptions {
     once?: boolean;
 }
 
+interface AbortController {
+    readonly signal: AbortSignal;
+    abort(): void;
+}
+
+declare var AbortController: {
+    prototype: AbortController;
+    new(): AbortController;
+};
+
+interface AbortSignal extends EventTarget {
+    readonly aborted: boolean;
+    onabort: (ev: Event) => any;
+}
+
+interface EventSource extends EventTarget {
+    readonly url: string;
+    readonly withCredentials: boolean;
+    readonly CONNECTING: number;
+    readonly OPEN: number;
+    readonly CLOSED: number;
+    readonly readyState: number;
+    onopen: (evt: MessageEvent) => any;
+    onmessage: (evt: MessageEvent) => any;
+    onerror: (evt: MessageEvent) => any;
+    close(): void;
+}
+
+declare var EventSource: {
+    prototype: EventSource;
+    new(url: string, eventSourceInitDict?: EventSourceInit): EventSource;
+};
+
+interface EventSourceInit {
+    readonly withCredentials: boolean;
+}
+
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
 interface DecodeErrorCallback {
@@ -1903,7 +1931,7 @@ declare function addEventListener(type: string, listener: EventListenerOrEventLi
 declare function removeEventListener<K extends keyof DedicatedWorkerGlobalScopeEventMap>(type: K, listener: (this: DedicatedWorkerGlobalScope, ev: DedicatedWorkerGlobalScopeEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
 declare function removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 type AlgorithmIdentifier = string | Algorithm;
-type BodyInit = any;
+type BodyInit = Blob | BufferSource | FormData | string;
 type IDBKeyPath = string;
 type RequestInfo = Request | string;
 type USVString = string;

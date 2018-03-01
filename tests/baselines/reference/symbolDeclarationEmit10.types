@@ -4,12 +4,14 @@ var obj = {
 >{    get [Symbol.isConcatSpreadable]() { return '' },    set [Symbol.isConcatSpreadable](x) { }} : { [Symbol.isConcatSpreadable]: string; }
 
     get [Symbol.isConcatSpreadable]() { return '' },
+>[Symbol.isConcatSpreadable] : string
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
 >'' : ""
 
     set [Symbol.isConcatSpreadable](x) { }
+>[Symbol.isConcatSpreadable] : string
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol

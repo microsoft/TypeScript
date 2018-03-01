@@ -14,7 +14,4 @@
 ////var start: Second.Test.[|start|];
 ////var stop: Second.Test.stop;
 
-const ranges = test.ranges();
-const [r0, r1] = ranges;
-verify.referenceGroups(r0, [{ definition: "interface Test.start", ranges }]);
-verify.referenceGroups(r1, [{ definition: "interface Second.Test.start", ranges }]);
+verify.singleReferenceGroup("interface Test.start");

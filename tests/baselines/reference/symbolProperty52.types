@@ -4,6 +4,7 @@ var obj = {
 >{    [Symbol.nonsense]: 0} : { [Symbol.nonsense]: number; }
 
     [Symbol.nonsense]: 0
+>[Symbol.nonsense] : number
 >Symbol.nonsense : any
 >Symbol : SymbolConstructor
 >nonsense : any

@@ -92,7 +92,7 @@ namespace ts {
             return SemanticMeaning.All;
         }
         else if (isInRightSideOfInternalImportEqualsDeclaration(node)) {
-            return getMeaningFromRightHandSideOfImportEquals(node);
+            return getMeaningFromRightHandSideOfImportEquals(node as Identifier);
         }
         else if (isDeclarationName(node)) {
             return getMeaningFromDeclaration(node.parent);
@@ -112,19 +112,12 @@ namespace ts {
         }
     }
 
-    function getMeaningFromRightHandSideOfImportEquals(node: Node) {
-        Debug.assert(node.kind === SyntaxKind.Identifier);
-
+    function getMeaningFromRightHandSideOfImportEquals(node: Node): SemanticMeaning {
         //     import a = |b|; // Namespace
         //     import a = |b.c|; // Value, type, namespace
         //     import a = |b.c|.d; // Namespace
-
-        if (node.parent.kind === SyntaxKind.QualifiedName &&
-            (<QualifiedName>node.parent).right === node &&
-            node.parent.parent.kind === SyntaxKind.ImportEqualsDeclaration) {
-            return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
-        }
-        return SemanticMeaning.Namespace;
+        const name = node.kind === SyntaxKind.QualifiedName ? node : isQualifiedName(node.parent) && node.parent.right === node ? node.parent : undefined;
+        return name && name.parent.kind === SyntaxKind.ImportEqualsDeclaration ? SemanticMeaning.All : SemanticMeaning.Namespace;
     }
 
     export function isInRightSideOfInternalImportEqualsDeclaration(node: Node) {
@@ -221,16 +214,12 @@ namespace ts {
         return undefined;
     }
 
-    export function isJumpStatementTarget(node: Node): boolean {
-        return node.kind === SyntaxKind.Identifier &&
-            (node.parent.kind === SyntaxKind.BreakStatement || node.parent.kind === SyntaxKind.ContinueStatement) &&
-            (<BreakOrContinueStatement>node.parent).label === node;
-    }
+    export function isJumpStatementTarget(node: Node): node is Identifier & { parent: BreakOrContinueStatement } {
+        return node.kind === SyntaxKind.Identifier && isBreakOrContinueStatement(node.parent) && node.parent.label === node;
+     }
 
-    function isLabelOfLabeledStatement(node: Node): boolean {
-        return node.kind === SyntaxKind.Identifier &&
-            node.parent.kind === SyntaxKind.LabeledStatement &&
-            (<LabeledStatement>node.parent).label === node;
+    export function isLabelOfLabeledStatement(node: Node): node is Identifier {
+        return node.kind === SyntaxKind.Identifier && isLabeledStatement(node.parent) && node.parent.label === node;
     }
 
     export function isLabelName(node: Node): boolean {
@@ -630,13 +619,7 @@ namespace ts {
         // be parented by the container of the SyntaxList, not the SyntaxList itself.
         // In order to find the list item index, we first need to locate SyntaxList itself and then search
         // for the position of the relevant node (or comma).
-        const syntaxList = forEach(node.parent.getChildren(), c => {
-            // find syntax list that covers the span of the node
-            if (isSyntaxList(c) && c.pos <= node.pos && c.end >= node.end) {
-                return c;
-            }
-        });
-
+        const syntaxList = find(node.parent.getChildren(), (c): c is SyntaxList => isSyntaxList(c) && rangeContainsRange(c, node));
         // Either we didn't find an appropriate list, or the list must contain us.
         Debug.assert(!syntaxList || contains(syntaxList.getChildren(), node));
         return syntaxList;

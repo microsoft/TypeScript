@@ -506,8 +506,11 @@ namespace FourSlash {
         }
 
         private getDiagnostics(fileName: string): ts.Diagnostic[] {
-            return ts.concatenate(this.languageService.getSyntacticDiagnostics(fileName),
-                this.languageService.getSemanticDiagnostics(fileName));
+            return [
+                ...this.languageService.getSyntacticDiagnostics(fileName),
+                ...this.languageService.getSemanticDiagnostics(fileName),
+                ...this.languageService.getSuggestionDiagnostics(fileName),
+            ];
         }
 
         private getAllDiagnostics(): ts.Diagnostic[] {
@@ -581,7 +584,7 @@ namespace FourSlash {
         public verifyNoErrors() {
             ts.forEachKey(this.inputFiles, fileName => {
                 if (!ts.isAnySupportedFileExtension(fileName)) return;
-                const errors = this.getDiagnostics(fileName);
+                const errors = this.getDiagnostics(fileName).filter(e => e.category !== ts.DiagnosticCategory.Suggestion);
                 if (errors.length) {
                     this.printErrorLog(/*expectErrors*/ false, errors);
                     const error = errors[0];
@@ -1086,7 +1089,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyReferenceGroups(startRanges: Range | Range[], parts: FourSlashInterface.ReferenceGroup[]): void {
+        public verifyReferenceGroups(starts: string | string[] | Range | Range[], parts: FourSlashInterface.ReferenceGroup[]): void {
             interface ReferenceGroupJson {
                 definition: string | { text: string, range: ts.TextSpan };
                 references: ts.ReferenceEntry[];
@@ -1105,8 +1108,13 @@ namespace FourSlash {
                 }),
             }));
 
-            for (const startRange of toArray(startRanges)) {
-                this.goToRangeStart(startRange);
+            for (const start of toArray<string | Range>(starts)) {
+                if (typeof start === "string") {
+                    this.goToMarker(start);
+                }
+                else {
+                    this.goToRangeStart(start);
+                }
                 const fullActual = ts.map<ts.ReferencedSymbol, ReferenceGroupJson>(this.findReferencesAtCaret(), ({ definition, references }, i) => {
                     const text = definition.displayParts.map(d => d.text).join("");
                     return {
@@ -1231,20 +1239,23 @@ Actual: ${stringify(fullActual)}`);
             return this.languageService.findReferences(this.activeFile.fileName, this.currentCaretPosition);
         }
 
-        public getSyntacticDiagnostics(expected: string) {
+        public getSyntacticDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>) {
             const diagnostics = this.languageService.getSyntacticDiagnostics(this.activeFile.fileName);
-            this.testDiagnostics(expected, diagnostics);
+            this.testDiagnostics(expected, diagnostics, "error");
         }
 
-        public getSemanticDiagnostics(expected: string) {
+        public getSemanticDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>) {
             const diagnostics = this.languageService.getSemanticDiagnostics(this.activeFile.fileName);
-            this.testDiagnostics(expected, diagnostics);
+            this.testDiagnostics(expected, diagnostics, "error");
         }
 
-        private testDiagnostics(expected: string, diagnostics: ReadonlyArray<ts.Diagnostic>) {
-            const realized = ts.realizeDiagnostics(diagnostics, "\r\n");
-            const actual = stringify(realized);
-            assert.equal(actual, expected);
+        public getSuggestionDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>): void {
+            this.testDiagnostics(expected, this.languageService.getSuggestionDiagnostics(this.activeFile.fileName), "suggestion");
+        }
+
+        private testDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>, diagnostics: ReadonlyArray<ts.Diagnostic>, category: string) {
+            assert.deepEqual(ts.realizeDiagnostics(diagnostics, ts.newLineCharacter), expected.map<ts.RealizedDiagnostic>(e => (
+                { message: e.message, category, code: e.code, ...ts.createTextSpanFromRange(e.range || this.getRanges()[0]) })));
         }
 
         public verifyQuickInfoAt(markerName: string, expectedText: string, expectedDocumentation?: string) {
@@ -4075,8 +4086,8 @@ namespace FourSlashInterface {
             this.state.verifyReferencesOf(start, references);
         }
 
-        public referenceGroups(startRanges: FourSlash.Range[], parts: ReferenceGroup[]) {
-            this.state.verifyReferenceGroups(startRanges, parts);
+        public referenceGroups(starts: string | string[] | FourSlash.Range | FourSlash.Range[], parts: ReferenceGroup[]) {
+            this.state.verifyReferenceGroups(starts, parts);
         }
 
         public noReferences(markerNameOrRange?: string | FourSlash.Range) {
@@ -4316,12 +4327,16 @@ namespace FourSlashInterface {
             this.state.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation, tags);
         }
 
-        public getSyntacticDiagnostics(expected: string) {
+        public getSyntacticDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>) {
             this.state.getSyntacticDiagnostics(expected);
         }
 
-        public getSemanticDiagnostics(expected: string) {
+        public getSemanticDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>) {
             this.state.getSemanticDiagnostics(expected);
+        }
+
+        public getSuggestionDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>) {
+            this.state.getSuggestionDiagnostics(expected);
         }
 
         public ProjectInfo(expected: string[]) {
@@ -4661,5 +4676,11 @@ namespace FourSlashInterface {
         name: string;
         source?: string;
         description: string;
+    }
+
+    export interface Diagnostic {
+        message: string;
+        range?: FourSlash.Range;
+        code: number;
     }
 }

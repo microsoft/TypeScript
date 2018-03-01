@@ -20,6 +20,7 @@
 /// <reference path='preProcess.ts' />
 /// <reference path='rename.ts' />
 /// <reference path='signatureHelp.ts' />
+/// <reference path='suggestionDiagnostics.ts' />
 /// <reference path='symbolDisplay.ts' />
 /// <reference path='transpile.ts' />
 /// <reference path='formatting\formatting.ts' />
@@ -651,6 +652,9 @@ namespace ts {
         public ambientModuleNames: string[];
         public checkJsDirective: CheckJsDirective | undefined;
         public possiblyContainDynamicImport: boolean;
+        public pragmas: PragmaMap;
+        public localJsxFactory: EntityName;
+        public localJsxNamespace: __String;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             super(kind, pos, end);
@@ -721,23 +725,8 @@ namespace ts {
 
             function getDeclarationName(declaration: Declaration) {
                 const name = getNameOfDeclaration(declaration);
-                if (name) {
-                    const result = getTextOfIdentifierOrLiteral(name as (Identifier | LiteralExpression));
-                    if (result !== undefined) {
-                        return result;
-                    }
-
-                    if (name.kind === SyntaxKind.ComputedPropertyName) {
-                        const expr = name.expression;
-                        if (expr.kind === SyntaxKind.PropertyAccessExpression) {
-                            return (<PropertyAccessExpression>expr).name.text;
-                        }
-
-                        return getTextOfIdentifierOrLiteral(expr as (Identifier | LiteralExpression));
-                    }
-                }
-
-                return undefined;
+                return name && (isPropertyNameLiteral(name) ? getTextOfIdentifierOrLiteral(name) :
+                    name.kind === SyntaxKind.ComputedPropertyName && isPropertyAccessExpression(name.expression) ? name.expression.name.text : undefined);
             }
 
             function visit(node: Node): void {
@@ -1431,6 +1420,11 @@ namespace ts {
             return [...semanticDiagnostics, ...declarationDiagnostics];
         }
 
+        function getSuggestionDiagnostics(fileName: string): Diagnostic[] {
+            synchronizeHostData();
+            return computeSuggestionDiagnostics(getValidSourceFile(fileName));
+        }
+
         function getCompilerOptionsDiagnostics() {
             synchronizeHostData();
             return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
@@ -1482,10 +1476,7 @@ namespace ts {
             const sourceFile = getValidSourceFile(fileName);
             const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
             if (node === sourceFile) {
-                return undefined;
-            }
-
-            if (isLabelName(node)) {
+                // Avoid giving quickInfo for the sourceFile as a whole.
                 return undefined;
             }
 
@@ -1496,6 +1487,11 @@ namespace ts {
                 // Try getting just type at this position and show
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
+                        if (isLabelName(node)) {
+                            // Type here will be 'any', avoid displaying this.
+                            return undefined;
+                        }
+                        // falls through
                     case SyntaxKind.PropertyAccessExpression:
                     case SyntaxKind.QualifiedName:
                     case SyntaxKind.ThisKeyword:
@@ -1503,29 +1499,27 @@ namespace ts {
                     case SyntaxKind.SuperKeyword:
                         // For the identifiers/this/super etc get the type at position
                         const type = typeChecker.getTypeAtLocation(node);
-                        if (type) {
-                            return {
-                                kind: ScriptElementKind.unknown,
-                                kindModifiers: ScriptElementKindModifier.none,
-                                textSpan: createTextSpan(node.getStart(), node.getWidth()),
-                                displayParts: typeToDisplayParts(typeChecker, type, getContainerNode(node)),
-                                documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
-                                tags: type.symbol ? type.symbol.getJsDocTags() : undefined
-                            };
-                        }
+                        return type && {
+                            kind: ScriptElementKind.unknown,
+                            kindModifiers: ScriptElementKindModifier.none,
+                            textSpan: createTextSpanFromNode(node, sourceFile),
+                            displayParts: typeToDisplayParts(typeChecker, type, getContainerNode(node)),
+                            documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
+                            tags: type.symbol ? type.symbol.getJsDocTags() : undefined
+                        };
                 }
 
                 return undefined;
             }
 
-            const displayPartsDocumentationsAndKind = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(node), node);
+            const { symbolKind, displayParts, documentation, tags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(node), node);
             return {
-                kind: displayPartsDocumentationsAndKind.symbolKind,
+                kind: symbolKind,
                 kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
-                textSpan: createTextSpan(node.getStart(), node.getWidth()),
-                displayParts: displayPartsDocumentationsAndKind.displayParts,
-                documentation: displayPartsDocumentationsAndKind.documentation,
-                tags: displayPartsDocumentationsAndKind.tags
+                textSpan: createTextSpanFromNode(node, sourceFile),
+                displayParts,
+                documentation,
+                tags,
             };
         }
 
@@ -1534,11 +1528,9 @@ namespace ts {
                 && isPropertyAssignment(node.parent)
                 && node.parent.name === node) {
                 const type = checker.getContextualType(node.parent.parent);
-                if (type) {
-                    const property = checker.getPropertyOfType(type, getTextOfIdentifierOrLiteral(node));
-                    if (property) {
-                        return property;
-                    }
+                const property = type && checker.getPropertyOfType(type, getTextOfIdentifierOrLiteral(node));
+                if (property) {
+                    return property;
                 }
             }
             return checker.getSymbolAtLocation(node);
@@ -1855,7 +1847,7 @@ namespace ts {
             const sourceFile = getValidSourceFile(scope.fileName);
             const formatContext = formatting.getFormatContext(formatOptions);
 
-            return OrganizeImports.organizeImports(sourceFile, formatContext, host);
+            return OrganizeImports.organizeImports(sourceFile, formatContext, host, program);
         }
 
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
@@ -2115,6 +2107,7 @@ namespace ts {
             cleanupSemanticCache,
             getSyntacticDiagnostics,
             getSemanticDiagnostics,
+            getSuggestionDiagnostics,
             getCompilerOptionsDiagnostics,
             getSyntacticClassifications,
             getSemanticClassifications,

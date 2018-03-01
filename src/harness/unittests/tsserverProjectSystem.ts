@@ -145,6 +145,12 @@ namespace ts.projectSystem {
         return map;
     }
 
+    function createHostModuleResolutionTrace(host: TestServerHost & ModuleResolutionHost) {
+        const resolutionTrace: string[] = [];
+        host.trace = resolutionTrace.push.bind(resolutionTrace);
+        return resolutionTrace;
+    }
+
     export function toExternalFile(fileName: string): protocol.ExternalFile {
         return { fileName };
     }
@@ -467,12 +473,12 @@ namespace ts.projectSystem {
         verifyDiagnostics(actual, []);
     }
 
-    function checkErrorMessage(session: TestSession, eventName: "syntaxDiag" | "semanticDiag", diagnostics: protocol.DiagnosticEventBody) {
-        checkNthEvent(session, ts.server.toEvent(eventName, diagnostics), 0, /*isMostRecent*/ false);
+    function checkErrorMessage(session: TestSession, eventName: protocol.DiagnosticEventKind, diagnostics: protocol.DiagnosticEventBody, isMostRecent = false): void {
+        checkNthEvent(session, ts.server.toEvent(eventName, diagnostics), 0, isMostRecent);
     }
 
-    function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number) {
-        checkNthEvent(session, ts.server.toEvent("requestCompleted", { request_seq: expectedSequenceId }), numberOfCurrentEvents - 1, /*isMostRecent*/ true);
+    function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number, isMostRecent = true): void {
+        checkNthEvent(session, ts.server.toEvent("requestCompleted", { request_seq: expectedSequenceId }), numberOfCurrentEvents - 1, isMostRecent);
     }
 
     function checkProjectUpdatedInBackgroundEvent(session: TestSession, openFiles: string[]) {
@@ -3076,8 +3082,13 @@ namespace ts.projectSystem {
                 host.runQueuedImmediateCallbacks();
                 assert.isFalse(hasError());
                 checkErrorMessage(session, "semanticDiag", { file: untitledFile, diagnostics: [] });
+                session.clearMessages();
 
+                host.runQueuedImmediateCallbacks(1);
+                assert.isFalse(hasError());
+                checkErrorMessage(session, "suggestionDiag", { file: untitledFile, diagnostics: [] });
                 checkCompleteEvent(session, 2, expectedSequenceId);
+                session.clearMessages();
             }
 
             it("has projectRoot", () => {
@@ -3136,6 +3147,10 @@ namespace ts.projectSystem {
 
                 host.runQueuedImmediateCallbacks();
                 checkErrorMessage(session, "semanticDiag", { file: app.path, diagnostics: [] });
+                session.clearMessages();
+
+                host.runQueuedImmediateCallbacks(1);
+                checkErrorMessage(session, "suggestionDiag", { file: app.path, diagnostics: [] });
                 checkCompleteEvent(session, 2, expectedSequenceId);
                 session.clearMessages();
             }
@@ -3201,8 +3216,7 @@ namespace ts.projectSystem {
                 content: "export let x = 1"
             };
             const host: TestServerHost & ModuleResolutionHost = createServerHost([file1, lib]);
-            const resolutionTrace: string[] = [];
-            host.trace = resolutionTrace.push.bind(resolutionTrace);
+            const resolutionTrace = createHostModuleResolutionTrace(host);
             const projectService = createProjectService(host, { typingsInstaller: new TestTypingsInstaller("/a/cache", /*throttleLimit*/5, host) });
 
             projectService.setCompilerOptionsForInferredProjects({ traceResolution: true, allowJs: true });
@@ -3934,18 +3948,17 @@ namespace ts.projectSystem {
             session.clearMessages();
 
             host.runQueuedImmediateCallbacks();
-            const moduleNotFound = Diagnostics.Cannot_find_module_0;
             const startOffset = file1.content.indexOf('"') + 1;
             checkErrorMessage(session, "semanticDiag", {
-                file: file1.path, diagnostics: [{
-                    start: { line: 1, offset: startOffset },
-                    end: { line: 1, offset: startOffset + '"pad"'.length },
-                    text: formatStringFromArgs(moduleNotFound.message, ["pad"]),
-                    code: moduleNotFound.code,
-                    category: DiagnosticCategory[moduleNotFound.category].toLowerCase(),
-                    source: undefined
-                }]
+                file: file1.path,
+                diagnostics: [
+                    createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + '"pad"'.length }, Diagnostics.Cannot_find_module_0, ["pad"])
+                ],
             });
+            session.clearMessages();
+
+            host.runQueuedImmediateCallbacks(1);
+            checkErrorMessage(session, "suggestionDiag", { file: file1.path, diagnostics: [] });
             checkCompleteEvent(session, 2, expectedSequenceId);
             session.clearMessages();
 
@@ -3966,6 +3979,63 @@ namespace ts.projectSystem {
             host.runQueuedImmediateCallbacks();
             checkErrorMessage(session, "semanticDiag", { file: file1.path, diagnostics: [] });
         });
+
+        it("info diagnostics", () => {
+            const file: FileOrFolder = {
+                path: "/a.js",
+                content: 'require("b")',
+            };
+
+            const host = createServerHost([file]);
+            const session = createSession(host, { canUseEvents: true });
+            const service = session.getProjectService();
+
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: server.CommandNames.Open,
+                arguments: { file: file.path, fileContent: file.content },
+            });
+
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            session.clearMessages();
+            const expectedSequenceId = session.getNextSeq();
+            host.checkTimeoutQueueLengthAndRun(2);
+
+            checkProjectUpdatedInBackgroundEvent(session, [file.path]);
+            session.clearMessages();
+
+            session.executeCommandSeq<protocol.GeterrRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    files: [file.path],
+                }
+            });
+
+            host.checkTimeoutQueueLengthAndRun(1);
+
+            checkErrorMessage(session, "syntaxDiag", { file: file.path, diagnostics: [] }, /*isMostRecent*/ true);
+            session.clearMessages();
+
+            host.runQueuedImmediateCallbacks(1);
+
+            checkErrorMessage(session, "semanticDiag", { file: file.path, diagnostics: [] });
+            session.clearMessages();
+
+            host.runQueuedImmediateCallbacks(1);
+
+            checkErrorMessage(session, "suggestionDiag", {
+                file: file.path,
+                diagnostics: [
+                    createDiagnostic({ line: 1, offset: 1 }, { line: 1, offset: 13 }, Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module)
+                ],
+            });
+            checkCompleteEvent(session, 2, expectedSequenceId);
+            session.clearMessages();
+        });
+
+        function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: ReadonlyArray<string> = []): protocol.Diagnostic {
+            return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category: diagnosticCategoryName(message), source: undefined };
+        }
     });
 
     describe("tsserverProjectSystem Configure file diagnostics events", () => {
@@ -5154,9 +5224,15 @@ namespace ts.projectSystem {
 
                 // the semanticDiag message
                 host.runQueuedImmediateCallbacks();
-                assert.equal(host.getOutput().length, 2, "expect 2 messages");
+                assert.equal(host.getOutput().length, 1);
                 const e2 = <protocol.Event>getMessage(0);
                 assert.equal(e2.event, "semanticDiag");
+                session.clearMessages();
+
+                host.runQueuedImmediateCallbacks(1);
+                assert.equal(host.getOutput().length, 2);
+                const e3 = <protocol.Event>getMessage(0);
+                assert.equal(e3.event, "suggestionDiag");
                 verifyRequestCompleted(getErrId, 1);
 
                 cancellationToken.resetToken();
@@ -5194,6 +5270,7 @@ namespace ts.projectSystem {
                 return JSON.parse(server.extractMessage(host.getOutput()[n]));
             }
         });
+
         it("Lower priority tasks are cancellable", () => {
             const f1 = {
                 path: "/a/app.ts",
@@ -5495,7 +5572,7 @@ namespace ts.projectSystem {
         }
         type CalledMaps = CalledMapsWithSingleArg | CalledMapsWithFiveArgs;
         function createCallsTrackingHost(host: TestServerHost) {
-            const calledMaps: Record<CalledMapsWithSingleArg, MultiMap<true>> & Record<CalledMapsWithFiveArgs, MultiMap<[ReadonlyArray<string>, ReadonlyArray<string>, ReadonlyArray<string>, number]>>  = {
+            const calledMaps: Record<CalledMapsWithSingleArg, MultiMap<true>> & Record<CalledMapsWithFiveArgs, MultiMap<[ReadonlyArray<string>, ReadonlyArray<string>, ReadonlyArray<string>, number]>> = {
                 fileExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.fileExists),
                 directoryExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.directoryExists),
                 getDirectories: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.getDirectories),
@@ -6969,6 +7046,355 @@ namespace ts.projectSystem {
 
             const diagnostics = configuredProjectAt(projectService, 0).getLanguageService().getCompilerOptionsDiagnostics();
             assert.deepEqual(diagnostics, []);
+        });
+    });
+
+    describe("tsserverProjectSystem module resolution caching", () => {
+        const projectLocation = "/user/username/projects/myproject";
+        const configFile: FileOrFolder = {
+            path: `${projectLocation}/tsconfig.json`,
+            content: JSON.stringify({ compilerOptions: { traceResolution: true } })
+        };
+
+        function getModules(module1Path: string, module2Path: string) {
+            const module1: FileOrFolder = {
+                path: module1Path,
+                content: `export function module1() {}`
+            };
+            const module2: FileOrFolder = {
+                path: module2Path,
+                content: `export function module2() {}`
+            };
+            return { module1, module2 };
+        }
+
+        function verifyTrace(resolutionTrace: string[], expected: string[]) {
+            assert.deepEqual(resolutionTrace, expected);
+            resolutionTrace.length = 0;
+        }
+
+        function getExpectedFileDoesNotExistResolutionTrace(host: TestServerHost, expectedTrace: string[], foundModule: boolean, module: FileOrFolder, directory: string, file: string, ignoreIfParentMissing?: boolean) {
+            if (!foundModule) {
+                const path = combinePaths(directory, file);
+                if (!ignoreIfParentMissing || host.directoryExists(getDirectoryPath(path))) {
+                    if (module.path === path) {
+                        foundModule = true;
+                    }
+                    else {
+                        expectedTrace.push(`File '${path}' does not exist.`);
+                    }
+                }
+            }
+            return foundModule;
+        }
+
+        function getExpectedMissedLocationResolutionTrace(host: TestServerHost, expectedTrace: string[], dirPath: string, module: FileOrFolder, moduleName: string, useNodeModules: boolean, cacheLocation?: string) {
+            let foundModule = false;
+            forEachAncestorDirectory(dirPath, dirPath => {
+                if (dirPath === cacheLocation) {
+                    return foundModule;
+                }
+
+                const directory = useNodeModules ? combinePaths(dirPath, nodeModules) : dirPath;
+                if (useNodeModules && !foundModule && !host.directoryExists(directory)) {
+                    expectedTrace.push(`Directory '${directory}' does not exist, skipping all lookups in it.`);
+                    return undefined;
+                }
+                foundModule = getExpectedFileDoesNotExistResolutionTrace(host, expectedTrace, foundModule, module, directory, `${moduleName}/package.json`, /*ignoreIfParentMissing*/ true);
+                foundModule = getExpectedFileDoesNotExistResolutionTrace(host, expectedTrace, foundModule, module, directory, `${moduleName}.ts`);
+                foundModule = getExpectedFileDoesNotExistResolutionTrace(host, expectedTrace, foundModule, module, directory, `${moduleName}.tsx`);
+                foundModule = getExpectedFileDoesNotExistResolutionTrace(host, expectedTrace, foundModule, module, directory, `${moduleName}.d.ts`);
+                foundModule = getExpectedFileDoesNotExistResolutionTrace(host, expectedTrace, foundModule, module, directory, `${moduleName}/index.ts`, /*ignoreIfParentMissing*/ true);
+                if (useNodeModules && !foundModule) {
+                    expectedTrace.push(`Directory '${directory}/@types' does not exist, skipping all lookups in it.`);
+                }
+                return foundModule ? true : undefined;
+            });
+        }
+
+        function getExpectedResolutionTraceHeader(expectedTrace: string[], file: FileOrFolder, moduleName: string) {
+            expectedTrace.push(
+                `======== Resolving module '${moduleName}' from '${file.path}'. ========`,
+                `Module resolution kind is not specified, using 'NodeJs'.`
+            );
+        }
+
+        function getExpectedResolutionTraceFooter(expectedTrace: string[], module: FileOrFolder, moduleName: string, addRealPathTrace: boolean, ignoreModuleFileFound?: boolean) {
+            if (!ignoreModuleFileFound) {
+                expectedTrace.push(`File '${module.path}' exist - use it as a name resolution result.`);
+            }
+            if (addRealPathTrace) {
+                expectedTrace.push(`Resolving real path for '${module.path}', result '${module.path}'.`);
+            }
+            expectedTrace.push(`======== Module name '${moduleName}' was successfully resolved to '${module.path}'. ========`);
+        }
+
+        function getExpectedRelativeModuleResolutionTrace(host: TestServerHost, file: FileOrFolder, module: FileOrFolder, moduleName: string, expectedTrace: string[] = []) {
+            getExpectedResolutionTraceHeader(expectedTrace, file, moduleName);
+            expectedTrace.push(`Loading module as file / folder, candidate module location '${removeFileExtension(module.path)}', target file type 'TypeScript'.`);
+            getExpectedMissedLocationResolutionTrace(host, expectedTrace, getDirectoryPath(normalizePath(combinePaths(getDirectoryPath(file.path), moduleName))), module, moduleName.substring(moduleName.lastIndexOf("/") + 1), /*useNodeModules*/ false);
+            getExpectedResolutionTraceFooter(expectedTrace, module, moduleName, /*addRealPathTrace*/ false);
+            return expectedTrace;
+        }
+
+        function getExpectedNonRelativeModuleResolutionTrace(host: TestServerHost, file: FileOrFolder, module: FileOrFolder, moduleName: string, expectedTrace: string[] = []) {
+            getExpectedResolutionTraceHeader(expectedTrace, file, moduleName);
+            expectedTrace.push(`Loading module '${moduleName}' from 'node_modules' folder, target file type 'TypeScript'.`);
+            getExpectedMissedLocationResolutionTrace(host, expectedTrace, getDirectoryPath(file.path), module, moduleName, /*useNodeModules*/ true);
+            getExpectedResolutionTraceFooter(expectedTrace, module, moduleName, /*addRealPathTrace*/ true);
+            return expectedTrace;
+        }
+
+        function getExpectedNonRelativeModuleResolutionFromCacheTrace(host: TestServerHost, file: FileOrFolder, module: FileOrFolder, moduleName: string, cacheLocation: string, expectedTrace: string[] = []) {
+            getExpectedResolutionTraceHeader(expectedTrace, file, moduleName);
+            expectedTrace.push(`Loading module '${moduleName}' from 'node_modules' folder, target file type 'TypeScript'.`);
+            getExpectedMissedLocationResolutionTrace(host, expectedTrace, getDirectoryPath(file.path), module, moduleName, /*useNodeModules*/ true, cacheLocation);
+            expectedTrace.push(`Resolution for module '${moduleName}' was found in cache from location '${cacheLocation}'.`);
+            getExpectedResolutionTraceFooter(expectedTrace, module, moduleName, /*addRealPathTrace*/ true, /*ignoreModuleFileFound*/ true);
+            return expectedTrace;
+        }
+
+        function getExpectedReusingResolutionFromOldProgram(file: FileOrFolder, moduleName: string) {
+            return `Reusing resolution of module '${moduleName}' to file '${file.path}' from old program.`;
+        }
+
+        function verifyWatchesWithConfigFile(host: TestServerHost, files: FileOrFolder[], openFile: FileOrFolder) {
+            checkWatchedFiles(host, mapDefined(files, f => f === openFile ? undefined : f.path));
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            const configDirectory = getDirectoryPath(configFile.path);
+            checkWatchedDirectories(host, [configDirectory, `${configDirectory}/${nodeModulesAtTypes}`], /*recursive*/ true);
+        }
+
+        describe("from files in same folder", () => {
+            function getFiles(fileContent: string) {
+                const file1: FileOrFolder = {
+                    path: `${projectLocation}/src/file1.ts`,
+                    content: fileContent
+                };
+                const file2: FileOrFolder = {
+                    path: `${projectLocation}/src/file2.ts`,
+                    content: fileContent
+                };
+                return { file1, file2 };
+            }
+
+            it("relative module name", () => {
+                const module1Name = "./module1";
+                const module2Name = "../module2";
+                const fileContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
+                const { file1, file2 } = getFiles(fileContent);
+                const { module1, module2 } = getModules(`${projectLocation}/src/module1.ts`, `${projectLocation}/module2.ts`);
+                const files = [module1, module2, file1, file2, configFile, libFile];
+                const host = createServerHost(files);
+                const resolutionTrace = createHostModuleResolutionTrace(host);
+                const service = createProjectService(host);
+                service.openClientFile(file1.path);
+                const expectedTrace = getExpectedRelativeModuleResolutionTrace(host, file1, module1, module1Name);
+                getExpectedRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
+                verifyTrace(resolutionTrace, expectedTrace);
+                verifyWatchesWithConfigFile(host, files, file1);
+
+                file1.content += fileContent;
+                file2.content += fileContent;
+                host.reloadFS(files);
+                host.runQueuedTimeoutCallbacks();
+                verifyTrace(resolutionTrace, [
+                    getExpectedReusingResolutionFromOldProgram(file1, module1Name),
+                    getExpectedReusingResolutionFromOldProgram(file1, module2Name)
+                ]);
+                verifyWatchesWithConfigFile(host, files, file1);
+            });
+
+            it("non relative module name", () => {
+                const module1Name = "module1";
+                const module2Name = "module2";
+                const fileContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
+                const { file1, file2 } = getFiles(fileContent);
+                const { module1, module2 } = getModules(`${projectLocation}/src/node_modules/module1/index.ts`, `${projectLocation}/node_modules/module2/index.ts`);
+                const files = [module1, module2, file1, file2, configFile, libFile];
+                const host = createServerHost(files);
+                const resolutionTrace = createHostModuleResolutionTrace(host);
+                const service = createProjectService(host);
+                service.openClientFile(file1.path);
+                const expectedTrace = getExpectedNonRelativeModuleResolutionTrace(host, file1, module1, module1Name);
+                getExpectedNonRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
+                verifyTrace(resolutionTrace, expectedTrace);
+                verifyWatchesWithConfigFile(host, files, file1);
+
+                file1.content += fileContent;
+                file2.content += fileContent;
+                host.reloadFS(files);
+                host.runQueuedTimeoutCallbacks();
+                verifyTrace(resolutionTrace, [
+                    getExpectedReusingResolutionFromOldProgram(file1, module1Name),
+                    getExpectedReusingResolutionFromOldProgram(file1, module2Name)
+                ]);
+                verifyWatchesWithConfigFile(host, files, file1);
+            });
+        });
+
+        describe("from files in different folders", () => {
+            function getFiles(fileContent1: string, fileContent2 = fileContent1, fileContent3 = fileContent1, fileContent4 = fileContent1) {
+                const file1: FileOrFolder = {
+                    path: `${projectLocation}/product/src/file1.ts`,
+                    content: fileContent1
+                };
+                const file2: FileOrFolder = {
+                    path: `${projectLocation}/product/src/feature/file2.ts`,
+                    content: fileContent2
+                };
+                const file3: FileOrFolder = {
+                    path: `${projectLocation}/product/test/src/file3.ts`,
+                    content: fileContent3
+                };
+                const file4: FileOrFolder = {
+                    path: `${projectLocation}/product/test/file4.ts`,
+                    content: fileContent4
+                };
+                return { file1, file2, file3, file4 };
+            }
+
+            it("relative module name", () => {
+                const module1Name = "./module1";
+                const module2Name = "../module2";
+                const module3Name = "../module1";
+                const module4Name = "../../module2";
+                const module5Name = "../../src/module1";
+                const module6Name = "../src/module1";
+                const fileContent1 = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
+                const fileContent2 = `import { module1 } from "${module3Name}";import { module2 } from "${module4Name}";`;
+                const fileContent3 = `import { module1 } from "${module5Name}";import { module2 } from "${module4Name}";`;
+                const fileContent4 = `import { module1 } from "${module6Name}";import { module2 } from "${module2Name}";`;
+                const { file1, file2, file3, file4 } = getFiles(fileContent1, fileContent2, fileContent3, fileContent4);
+                const { module1, module2 } = getModules(`${projectLocation}/product/src/module1.ts`, `${projectLocation}/product/module2.ts`);
+                const files = [module1, module2, file1, file2, file3, file4, configFile, libFile];
+                const host = createServerHost(files);
+                const resolutionTrace = createHostModuleResolutionTrace(host);
+                const service = createProjectService(host);
+                service.openClientFile(file1.path);
+                const expectedTrace = getExpectedRelativeModuleResolutionTrace(host, file1, module1, module1Name);
+                getExpectedRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
+                getExpectedRelativeModuleResolutionTrace(host, file2, module1, module3Name, expectedTrace);
+                getExpectedRelativeModuleResolutionTrace(host, file2, module2, module4Name, expectedTrace);
+                getExpectedRelativeModuleResolutionTrace(host, file4, module1, module6Name, expectedTrace);
+                getExpectedRelativeModuleResolutionTrace(host, file4, module2, module2Name, expectedTrace);
+                getExpectedRelativeModuleResolutionTrace(host, file3, module1, module5Name, expectedTrace);
+                getExpectedRelativeModuleResolutionTrace(host, file3, module2, module4Name, expectedTrace);
+                verifyTrace(resolutionTrace, expectedTrace);
+                verifyWatchesWithConfigFile(host, files, file1);
+
+                file1.content += fileContent1;
+                file2.content += fileContent2;
+                file3.content += fileContent3;
+                file4.content += fileContent4;
+                host.reloadFS(files);
+                host.runQueuedTimeoutCallbacks();
+
+                verifyTrace(resolutionTrace, [
+                    getExpectedReusingResolutionFromOldProgram(file1, module1Name),
+                    getExpectedReusingResolutionFromOldProgram(file1, module2Name)
+                ]);
+                verifyWatchesWithConfigFile(host, files, file1);
+            });
+
+            it("non relative module name", () => {
+                const module1Name = "module1";
+                const module2Name = "module2";
+                const fileContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
+                const { file1, file2, file3, file4 } = getFiles(fileContent);
+                const { module1, module2 } = getModules(`${projectLocation}/product/node_modules/module1/index.ts`, `${projectLocation}/node_modules/module2/index.ts`);
+                const files = [module1, module2, file1, file2, file3, file4, configFile, libFile];
+                const host = createServerHost(files);
+                const resolutionTrace = createHostModuleResolutionTrace(host);
+                const service = createProjectService(host);
+                service.openClientFile(file1.path);
+                const expectedTrace = getExpectedNonRelativeModuleResolutionTrace(host, file1, module1, module1Name);
+                getExpectedNonRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module1, module1Name, getDirectoryPath(file1.path), expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module2, module2Name, getDirectoryPath(file1.path), expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module1, module1Name, `${projectLocation}/product`, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module2, module2Name, `${projectLocation}/product`, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module1, module1Name, getDirectoryPath(file4.path), expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module2, module2Name, getDirectoryPath(file4.path), expectedTrace);
+                verifyTrace(resolutionTrace, expectedTrace);
+                verifyWatchesWithConfigFile(host, files, file1);
+
+                file1.content += fileContent;
+                file2.content += fileContent;
+                file3.content += fileContent;
+                file4.content += fileContent;
+                host.reloadFS(files);
+                host.runQueuedTimeoutCallbacks();
+
+                verifyTrace(resolutionTrace, [
+                    getExpectedReusingResolutionFromOldProgram(file1, module1Name),
+                    getExpectedReusingResolutionFromOldProgram(file1, module2Name)
+                ]);
+                verifyWatchesWithConfigFile(host, files, file1);
+            });
+
+            it("non relative module name from inferred project", () => {
+                const module1Name = "module1";
+                const module2Name = "module2";
+                const file2Name = "./feature/file2";
+                const file3Name = "../test/src/file3";
+                const file4Name = "../test/file4";
+                const importModuleContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
+                const { file1, file2, file3, file4 } = getFiles(`import "${file2Name}"; import "${file4Name}"; import "${file3Name}"; ${importModuleContent}`, importModuleContent, importModuleContent, importModuleContent);
+                const { module1, module2 } = getModules(`${projectLocation}/product/node_modules/module1/index.ts`, `${projectLocation}/node_modules/module2/index.ts`);
+                const files = [module1, module2, file1, file2, file3, file4, libFile];
+                const host = createServerHost(files);
+                const resolutionTrace = createHostModuleResolutionTrace(host);
+                const service = createProjectService(host);
+                service.setCompilerOptionsForInferredProjects({ traceResolution: true });
+                service.openClientFile(file1.path);
+                const expectedTrace = getExpectedRelativeModuleResolutionTrace(host, file1, file2, file2Name);
+                getExpectedRelativeModuleResolutionTrace(host, file1, file4, file4Name, expectedTrace);
+                getExpectedRelativeModuleResolutionTrace(host, file1, file3, file3Name, expectedTrace);
+                getExpectedNonRelativeModuleResolutionTrace(host, file1, module1, module1Name, expectedTrace);
+                getExpectedNonRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module1, module1Name, getDirectoryPath(file1.path), expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module2, module2Name, getDirectoryPath(file1.path), expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module1, module1Name, `${projectLocation}/product`, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module2, module2Name, `${projectLocation}/product`, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module1, module1Name, getDirectoryPath(file4.path), expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module2, module2Name, getDirectoryPath(file4.path), expectedTrace);
+                verifyTrace(resolutionTrace, expectedTrace);
+
+                const currentDirectory = getDirectoryPath(file1.path);
+                const watchedFiles = mapDefined(files, f => f === file1 ? undefined : f.path);
+                forEachAncestorDirectory(currentDirectory, d => {
+                    watchedFiles.push(combinePaths(d, "tsconfig.json"), combinePaths(d, "jsconfig.json"));
+                });
+                const watchedRecursiveDirectories = getTypeRootsFromLocation(currentDirectory).concat([
+                    currentDirectory, `${projectLocation}/product/${nodeModules}`,
+                    `${projectLocation}/${nodeModules}`, `${projectLocation}/product/test/${nodeModules}`,
+                    `${projectLocation}/product/test/src/${nodeModules}`
+                ]);
+                checkWatches();
+
+                file1.content += importModuleContent;
+                file2.content += importModuleContent;
+                file3.content += importModuleContent;
+                file4.content += importModuleContent;
+                host.reloadFS(files);
+                host.runQueuedTimeoutCallbacks();
+
+                verifyTrace(resolutionTrace, [
+                    getExpectedReusingResolutionFromOldProgram(file1, file2Name),
+                    getExpectedReusingResolutionFromOldProgram(file1, file4Name),
+                    getExpectedReusingResolutionFromOldProgram(file1, file3Name),
+                    getExpectedReusingResolutionFromOldProgram(file1, module1Name),
+                    getExpectedReusingResolutionFromOldProgram(file1, module2Name)
+                ]);
+                checkWatches();
+
+                function checkWatches() {
+                    checkWatchedFiles(host, watchedFiles);
+                    checkWatchedDirectories(host, [], /*recursive*/ false);
+                    checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
+                }
+            });
         });
     });
 }

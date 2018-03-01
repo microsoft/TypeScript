@@ -3,11 +3,13 @@ interface I {
 >I : I
 
     [Symbol.unscopables]: number;
+>[Symbol.unscopables] : number
 >Symbol.unscopables : symbol
 >Symbol : SymbolConstructor
 >unscopables : symbol
 
     [Symbol.toPrimitive]();
+>[Symbol.toPrimitive] : () => any
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol

@@ -1,0 +1,26 @@
+tests/cases/conformance/jsx/inline/index.tsx(3,1): error TS17017: JSX fragment is not supported when using an inline JSX factory pragma
+tests/cases/conformance/jsx/inline/reacty.tsx(3,1): error TS17017: JSX fragment is not supported when using an inline JSX factory pragma
+
+
+==== tests/cases/conformance/jsx/inline/renderer.d.ts (0 errors) ====
+    declare global {
+        namespace JSX {
+            interface IntrinsicElements {
+                [e: string]: any;
+            }
+        }
+    }
+    export function dom(): void;
+    export function createElement(): void;
+==== tests/cases/conformance/jsx/inline/reacty.tsx (1 errors) ====
+    /** @jsx React.createElement */
+    import * as React from "./renderer";
+    <><h></h></>
+    ~~~~~~~~~~~~
+!!! error TS17017: JSX fragment is not supported when using an inline JSX factory pragma
+==== tests/cases/conformance/jsx/inline/index.tsx (1 errors) ====
+    /** @jsx dom */
+    import { dom } from "./renderer";
+    <><h></h></>
+    ~~~~~~~~~~~~
+!!! error TS17017: JSX fragment is not supported when using an inline JSX factory pragma
