@@ -1811,7 +1811,7 @@ declare namespace ts {
         getAliasedSymbol(symbol: Symbol): Symbol;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
         getAllAttributesTypeFromJsxOpeningLikeElement(elementNode: JsxOpeningLikeElement): Type | undefined;
-        getJsxIntrinsicTagNames(): Symbol[];
+        getJsxIntrinsicTagNamesAt(location: Node): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
         tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
@@ -2192,11 +2192,25 @@ declare namespace ts {
     interface IndexType extends InstantiableType {
         type: InstantiableType | UnionOrIntersectionType;
     }
-    interface ConditionalType extends InstantiableType {
+    interface ConditionalRoot {
+        node: ConditionalTypeNode;
         checkType: Type;
         extendsType: Type;
         trueType: Type;
         falseType: Type;
+        isDistributive: boolean;
+        inferTypeParameters: TypeParameter[];
+        outerTypeParameters?: TypeParameter[];
+        instantiations?: Map<Type>;
+        aliasSymbol: Symbol;
+        aliasTypeArguments: Type[];
+    }
+    interface ConditionalType extends InstantiableType {
+        root: ConditionalRoot;
+        checkType: Type;
+        extendsType: Type;
+        resolvedTrueType?: Type;
+        resolvedFalseType?: Type;
     }
     interface SubstitutionType extends InstantiableType {
         typeParameter: TypeParameter;
@@ -2262,7 +2276,8 @@ declare namespace ts {
     enum DiagnosticCategory {
         Warning = 0,
         Error = 1,
-        Message = 2,
+        Suggestion = 2,
+        Message = 3,
     }
     enum ModuleResolutionKind {
         Classic = 1,
@@ -3271,7 +3286,8 @@ declare namespace ts {
     function isCallOrNewExpression(node: Node): node is CallExpression | NewExpression;
     function isTemplateLiteral(node: Node): node is TemplateLiteral;
     function isAssertionExpression(node: Node): node is AssertionExpression;
-    function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement;
+    function isIterationStatement(node: Node, lookInLabeledStatements: false): node is IterationStatement;
+    function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement | LabeledStatement;
     function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeElement;
     function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause;
     /** True if node is of a kind that may contain comment text. */
@@ -4306,6 +4322,7 @@ declare namespace ts {
         cleanupSemanticCache(): void;
         getSyntacticDiagnostics(fileName: string): Diagnostic[];
         getSemanticDiagnostics(fileName: string): Diagnostic[];
+        getSuggestionDiagnostics(fileName: string): Diagnostic[];
         getCompilerOptionsDiagnostics(): Diagnostic[];
         /**
          * @deprecated Use getEncodedSyntacticClassifications instead.

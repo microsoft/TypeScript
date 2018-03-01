@@ -1545,7 +1545,7 @@ namespace ts {
         return SpecialPropertyAssignmentKind.None;
     }
 
-    export function isSpecialPropertyDeclaration(expr: ts.PropertyAccessExpression): boolean {
+    export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression): boolean {
         return isInJavaScriptFile(expr) &&
             expr.parent && expr.parent.kind === SyntaxKind.ExpressionStatement &&
             !!getJSDocTypeTag(expr.parent);
@@ -1619,10 +1619,10 @@ namespace ts {
 
     function getSingleInitializerOfVariableStatementOrPropertyDeclaration(node: Node): Expression | undefined {
         switch (node.kind) {
-            case ts.SyntaxKind.VariableStatement:
+            case SyntaxKind.VariableStatement:
                 const v = getSingleVariableOfVariableStatement(node);
                 return v && v.initializer;
-            case ts.SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertyDeclaration:
                 return (node as PropertyDeclaration).initializer;
         }
     }
@@ -1717,7 +1717,7 @@ namespace ts {
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
         const name = node.name.escapedText;
-        const { typeParameters } = (node.parent.parent.parent as ts.SignatureDeclaration | ts.InterfaceDeclaration | ts.ClassDeclaration);
+        const { typeParameters } = (node.parent.parent.parent as SignatureDeclaration | InterfaceDeclaration | ClassDeclaration);
         return find(typeParameters, p => p.name.escapedText === name);
     }
 
@@ -4097,6 +4097,7 @@ namespace ts {
                 return false;
             }
             try {
+                // tslint:disable-next-line no-unnecessary-qualifier (making clear this is a global mutation!)
                 ts.localizedDiagnosticMessages = JSON.parse(fileContents);
             }
             catch (e) {
@@ -5578,6 +5579,8 @@ namespace ts {
 
     // Statement
 
+    export function isIterationStatement(node: Node, lookInLabeledStatements: false): node is IterationStatement;
+    export function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement | LabeledStatement;
     export function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement {
         switch (node.kind) {
             case SyntaxKind.ForStatement:
