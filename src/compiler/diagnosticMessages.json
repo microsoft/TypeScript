@@ -27,7 +27,7 @@
         "category": "Error",
         "code": 1012
     },
-    "A rest parameter may not have a trailing comma.": {
+    "A rest parameter or binding pattern may not have a trailing comma.": {
         "category": "Error",
         "code": 1013
     },

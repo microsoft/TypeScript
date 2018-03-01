@@ -18824,6 +18824,7 @@ namespace ts {
 
         function checkObjectLiteralAssignment(node: ObjectLiteralExpression, sourceType: Type): Type {
             const properties = node.properties;
+            checkGrammarForDisallowedTrailingComma(properties, Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma);
             if (strictNullChecks && properties.length === 0) {
                 return checkNonNullType(sourceType, node);
             }
@@ -18882,6 +18883,8 @@ namespace ts {
         }
 
         function checkArrayLiteralAssignment(node: ArrayLiteralExpression, sourceType: Type, checkMode?: CheckMode): Type {
+            const elements = node.elements;
+            checkGrammarForDisallowedTrailingComma(elements, Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma);
             if (languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.Read);
             }
@@ -18890,7 +18893,6 @@ namespace ts {
             // present (aka the tuple element property). This call also checks that the parentType is in
             // fact an iterable or array (depending on target language).
             const elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false, /*allowAsyncIterables*/ false) || unknownType;
-            const elements = node.elements;
             for (let i = 0; i < elements.length; i++) {
                 checkArrayLiteralDestructuringElementAssignment(node, sourceType, i, elementType, checkMode);
             }
@@ -26067,11 +26069,9 @@ namespace ts {
             return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_here, "async");
         }
 
-        function checkGrammarForDisallowedTrailingComma(list: NodeArray<Node>): boolean {
+        function checkGrammarForDisallowedTrailingComma(list: NodeArray<Node>, diag = Diagnostics.Trailing_comma_not_allowed): boolean {
             if (list && list.hasTrailingComma) {
-                const start = list.end - ",".length;
-                const end = list.end;
-                return grammarErrorAtPos(list[0], start, end - start, Diagnostics.Trailing_comma_not_allowed);
+                return grammarErrorAtPos(list[0], list.end - ",".length, ",".length, diag);
             }
         }
 
@@ -26093,9 +26093,7 @@ namespace ts {
                     if (i !== (parameterCount - 1)) {
                         return grammarErrorOnNode(parameter.dotDotDotToken, Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list);
                     }
-                    if (parameters.hasTrailingComma) {
-                        return grammarErrorOnNode(parameter.dotDotDotToken, Diagnostics.A_rest_parameter_may_not_have_a_trailing_comma);
-                    }
+                    checkGrammarForDisallowedTrailingComma(parameters, Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma);
 
                     if (isBindingPattern(parameter.name)) {
                         return grammarErrorOnNode(parameter.name, Diagnostics.A_rest_element_cannot_contain_a_binding_pattern);
@@ -26709,6 +26707,7 @@ namespace ts {
                 if (node !== last(elements)) {
                     return grammarErrorOnNode(node, Diagnostics.A_rest_element_must_be_last_in_a_destructuring_pattern);
                 }
+                checkGrammarForDisallowedTrailingComma(elements, Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma);
 
                 if (node.name.kind === SyntaxKind.ArrayBindingPattern || node.name.kind === SyntaxKind.ObjectBindingPattern) {
                     return grammarErrorOnNode(node.name, Diagnostics.A_rest_element_cannot_contain_a_binding_pattern);

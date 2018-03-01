@@ -1,4 +1,4 @@
-tests/cases/conformance/es7/trailingCommasInFunctionParametersAndArguments.ts(5,13): error TS1013: A rest parameter may not have a trailing comma.
+tests/cases/conformance/es7/trailingCommasInFunctionParametersAndArguments.ts(5,20): error TS1013: A rest parameter or binding pattern may not have a trailing comma.
 
 
 ==== tests/cases/conformance/es7/trailingCommasInFunctionParametersAndArguments.ts (1 errors) ====
@@ -7,8 +7,8 @@ tests/cases/conformance/es7/trailingCommasInFunctionParametersAndArguments.ts(5,
     f1(1,);
     
     function f2(...args,) {}
-                ~~~
-!!! error TS1013: A rest parameter may not have a trailing comma.
+                       ~
+!!! error TS1013: A rest parameter or binding pattern may not have a trailing comma.
     
     f2(...[],);
     
