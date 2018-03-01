@@ -476,6 +476,8 @@ namespace ts.FindAllReferences.Core {
          */
         readonly markSeenReExportRHS = nodeSeenTracker();
 
+        private readonly includedSourceFiles: Map<true>;
+
         constructor(
             readonly sourceFiles: ReadonlyArray<SourceFile>,
             /** True if we're searching for constructor references. */
@@ -484,7 +486,13 @@ namespace ts.FindAllReferences.Core {
             readonly cancellationToken: CancellationToken,
             readonly searchMeaning: SemanticMeaning,
             readonly options: Options,
-            private readonly result: Push<SymbolAndEntries>) {}
+            private readonly result: Push<SymbolAndEntries>) {
+            this.includedSourceFiles = arrayToSet(sourceFiles, s => s.fileName);
+        }
+
+        includesSourceFile(sourceFile: SourceFile): boolean {
+            return this.includedSourceFiles.has(sourceFile.fileName);
+        }
 
         private importTracker: ImportTracker | undefined;
         /** Gets every place to look for references of an exported symbols. See `ImportsResult` in `importTracker.ts` for more documentation. */
@@ -586,7 +594,10 @@ namespace ts.FindAllReferences.Core {
     // Go to the symbol we imported from and find references for it.
     function searchForImportedSymbol(symbol: Symbol, state: State): void {
         for (const declaration of symbol.declarations) {
-            getReferencesInSourceFile(declaration.getSourceFile(), state.createSearch(declaration, symbol, ImportExport.Import), state);
+            const exportingFile = declaration.getSourceFile();
+            if (state.includesSourceFile(exportingFile)) {
+                getReferencesInSourceFile(exportingFile, state.createSearch(declaration, symbol, ImportExport.Import), state);
+            }
         }
     }
 
