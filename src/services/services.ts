@@ -1422,7 +1422,7 @@ namespace ts {
 
         function getSuggestionDiagnostics(fileName: string): Diagnostic[] {
             synchronizeHostData();
-            return computeSuggestionDiagnostics(getValidSourceFile(fileName));
+            return computeSuggestionDiagnostics(getValidSourceFile(fileName), program);
         }
 
         function getCompilerOptionsDiagnostics() {

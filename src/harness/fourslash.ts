@@ -505,11 +505,11 @@ namespace FourSlash {
             return "\nMarker: " + this.lastKnownMarker + "\nChecking: " + msg + "\n\n";
         }
 
-        private getDiagnostics(fileName: string): ts.Diagnostic[] {
+        private getDiagnostics(fileName: string, includeSuggestions = false): ts.Diagnostic[] {
             return [
                 ...this.languageService.getSyntacticDiagnostics(fileName),
                 ...this.languageService.getSemanticDiagnostics(fileName),
-                ...this.languageService.getSuggestionDiagnostics(fileName),
+                ...(includeSuggestions ? this.languageService.getSuggestionDiagnostics(fileName) : ts.emptyArray),
             ];
         }
 
@@ -583,7 +583,8 @@ namespace FourSlash {
 
         public verifyNoErrors() {
             ts.forEachKey(this.inputFiles, fileName => {
-                if (!ts.isAnySupportedFileExtension(fileName)) return;
+                if (!ts.isAnySupportedFileExtension(fileName)
+                    || !this.getProgram().getCompilerOptions().allowJs && !ts.extensionIsTypeScript(ts.extensionFromPath(fileName))) return;
                 const errors = this.getDiagnostics(fileName).filter(e => e.category !== ts.DiagnosticCategory.Suggestion);
                 if (errors.length) {
                     this.printErrorLog(/*expectErrors*/ false, errors);
@@ -2522,7 +2523,7 @@ Actual: ${stringify(fullActual)}`);
          * @param fileName Path to file where error should be retrieved from.
          */
         private getCodeFixes(fileName: string, errorCode?: number): ts.CodeFixAction[] {
-            const diagnosticsForCodeFix = this.getDiagnostics(fileName).map(diagnostic => ({
+            const diagnosticsForCodeFix = this.getDiagnostics(fileName, /*includeSuggestions*/ true).map(diagnostic => ({
                 start: diagnostic.start,
                 length: diagnostic.length,
                 code: diagnostic.code
