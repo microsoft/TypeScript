@@ -3821,16 +3821,27 @@ namespace ts {
         type: InstantiableType | UnionOrIntersectionType;
     }
 
-    // T extends U ? X : Y (TypeFlags.Conditional)
-    export interface ConditionalType extends InstantiableType {
+    export interface ConditionalRoot {
+        node: ConditionalTypeNode;
         checkType: Type;
         extendsType: Type;
         trueType: Type;
         falseType: Type;
-        /* @internal */
+        isDistributive: boolean;
         inferTypeParameters: TypeParameter[];
-        /* @internal */
-        target?: ConditionalType;
+        outerTypeParameters?: TypeParameter[];
+        instantiations?: Map<Type>;
+        aliasSymbol: Symbol;
+        aliasTypeArguments: Type[];
+    }
+
+    // T extends U ? X : Y (TypeFlags.Conditional)
+    export interface ConditionalType extends InstantiableType {
+        root: ConditionalRoot;
+        checkType: Type;
+        extendsType: Type;
+        resolvedTrueType?: Type;
+        resolvedFalseType?: Type;
         /* @internal */
         mapper?: TypeMapper;
     }
