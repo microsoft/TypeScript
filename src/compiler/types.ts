@@ -3903,7 +3903,7 @@ namespace ts {
 
     export const enum InferencePriority {
         NakedTypeVariable           = 1 << 0,  // Naked type variable in union or intersection type
-        HomomorphicMappedType       = 1 << 1,  // Reverse inference for hoimomorphic mapped type
+        HomomorphicMappedType       = 1 << 1,  // Reverse inference for homomorphic mapped type
         MappedTypeConstraint        = 1 << 2,  // Reverse inference for mapped type
         ReturnType                  = 1 << 3,  // Inference made from return type of generic function
         NoConstraints               = 1 << 4,  // Don't infer from constraints of instantiable types
