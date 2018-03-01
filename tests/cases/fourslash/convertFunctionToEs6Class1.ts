@@ -2,7 +2,7 @@
 
 // @allowNonTsExtensions: true
 // @Filename: test123.js
-////function /*diagStart*/foo/*diagEnd*/() { }
+////function [|foo|]() { }
 ////foo.prototype.instanceMethod1 = function() { return "this is name"; };
 ////foo.prototype.instanceMethod2 = () => { return "this is name"; };
 ////foo.prototype.instanceProp1 = "hello";
@@ -13,8 +13,6 @@
 
 verify.getSuggestionDiagnostics([{
     message: "Function may be converted to a class.",
-    start: test.marker("diagStart").position,
-    length: test.marker("diagEnd").position - test.marker("diagStart").position,
     category: "suggestion",
     code: 80002,
 }]);

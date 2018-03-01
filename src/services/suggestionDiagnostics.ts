@@ -11,17 +11,17 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
-                    if (isInJavaScriptFile(node)) {
-                        const symbol = node.symbol;
-                        if (symbol.members && (symbol.members.size > 0)) {
-                            diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.Function_may_be_converted_to_a_class));
-                        }
+                    const symbol = node.symbol;
+                    if (symbol.members && (symbol.members.size > 0)) {
+                        diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.Function_may_be_converted_to_a_class));
                     }
                     break;
             }
             node.forEachChild(check);
         }
-        check(sourceFile);
+        if (isInJavaScriptFile(sourceFile)) {
+            check(sourceFile);
+        }
 
         return diags;
     }
