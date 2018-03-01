@@ -60,6 +60,9 @@ namespace ts {
 
             // github #18071
             printsCorrectly("regularExpressionLiteral", {}, printer => printer.printFile(createSourceFile("source.ts", "let regex = /abc/;", ScriptTarget.ES2017)));
+
+            // github #22239
+            printsCorrectly("importStatementRemoveComments", { removeComments: true }, printer => printer.printFile(createSourceFile("source.ts", "import {foo} from 'foo';", ScriptTarget.ESNext)));
         });
 
         describe("printBundle", () => {

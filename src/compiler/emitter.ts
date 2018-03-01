@@ -515,7 +515,7 @@ namespace ts {
             writeSpace();
             writeKeyword("in");
             writeSpace();
-            emit(node.constraint);
+            emitIfPresent(node.constraint);
         }
 
         function pipelineEmitUnspecified(node: Node): void {
@@ -993,7 +993,7 @@ namespace ts {
             }
             emitIfPresent(node.questionToken);
             if (node.parent && node.parent.kind === SyntaxKind.JSDocFunctionType && !node.name) {
-                emit(node.type);
+                emitIfPresent(node.type);
             }
             else {
                 emitTypeAnnotation(node.type);
@@ -1120,14 +1120,14 @@ namespace ts {
             writeSpace();
             writePunctuation("=>");
             writeSpace();
-            emit(node.type);
+            emitIfPresent(node.type);
         }
 
         function emitJSDocFunctionType(node: JSDocFunctionType) {
             write("function");
             emitParameters(node, node.parameters);
             write(":");
-            emit(node.type);
+            emitIfPresent(node.type);
         }
 
 
@@ -1154,7 +1154,7 @@ namespace ts {
             writeSpace();
             writePunctuation("=>");
             writeSpace();
-            emit(node.type);
+            emitIfPresent(node.type);
         }
 
         function emitTypeQuery(node: TypeQueryNode) {
@@ -1268,7 +1268,7 @@ namespace ts {
             }
             writePunctuation(":");
             writeSpace();
-            emit(node.type);
+            emitIfPresent(node.type);
             writeSemicolon();
             if (emitFlags & EmitFlags.SingleLine) {
                 writeSpace();
@@ -1536,7 +1536,7 @@ namespace ts {
 
         function emitYieldExpression(node: YieldExpression) {
             writeKeyword("yield");
-            emit(node.asteriskToken);
+            emitIfPresent(node.asteriskToken);
             emitExpressionWithLeadingSpace(node.expression);
         }
 
@@ -2091,12 +2091,12 @@ namespace ts {
         }
 
         function emitImportClause(node: ImportClause) {
-            emit(node.name);
+            emitIfPresent(node.name);
             if (node.name && node.namedBindings) {
                 writePunctuation(",");
                 writeSpace();
             }
-            emit(node.namedBindings);
+            emitIfPresent(node.namedBindings);
         }
 
         function emitNamespaceImport(node: NamespaceImport) {
