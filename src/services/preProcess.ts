@@ -1,10 +1,17 @@
 namespace ts {
     export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): PreProcessedFileInfo {
-        const referencedFiles: FileReference[] = [];
-        const typeReferenceDirectives: FileReference[] = [];
+        const pragmaContext: PragmaContext = {
+            languageVersion: ScriptTarget.ES5, // controls weather the token scanner considers unicode identifiers or not - shouldn't matter, since we're only using it for trivia
+            pragmas: undefined,
+            checkJsDirective: undefined,
+            referencedFiles: [],
+            typeReferenceDirectives: [],
+            amdDependencies: [],
+            hasNoDefaultLib: undefined,
+            moduleName: undefined
+        };
         const importedFiles: FileReference[] = [];
         let ambientExternalModules: { ref: FileReference, depth: number }[];
-        let isNoDefaultLib = false;
         let braceNesting = 0;
         // assume that text represent an external module if it contains at least one top level import/export
         // ambient modules that are found inside external modules are interpreted as module augmentations
@@ -19,25 +26,6 @@ namespace ts {
                 braceNesting--;
             }
             return token;
-        }
-
-        function processTripleSlashDirectives(): void {
-            const commentRanges = getLeadingCommentRanges(sourceText, 0);
-            forEach(commentRanges, commentRange => {
-                const comment = sourceText.substring(commentRange.pos, commentRange.end);
-                const referencePathMatchResult = getFileReferenceFromReferencePath(comment, commentRange);
-                if (referencePathMatchResult) {
-                    isNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
-                    const fileReference = referencePathMatchResult.fileReference;
-                    if (fileReference) {
-                        const collection = referencePathMatchResult.isTypeReferenceDirective
-                            ? typeReferenceDirectives
-                            : referencedFiles;
-
-                        collection.push(fileReference);
-                    }
-                }
-            });
         }
 
         function getFileReference() {
@@ -328,7 +316,8 @@ namespace ts {
         if (readImportFiles) {
             processImports();
         }
-        processTripleSlashDirectives();
+        processCommentPragmas(pragmaContext, sourceText);
+        processPragmasIntoFields(pragmaContext, noop);
         if (externalModule) {
             // for external modules module all nested ambient modules are augmentations
             if (ambientExternalModules) {
@@ -337,7 +326,7 @@ namespace ts {
                     importedFiles.push(decl.ref);
                 }
             }
-            return { referencedFiles, typeReferenceDirectives, importedFiles, isLibFile: isNoDefaultLib, ambientExternalModules: undefined };
+            return { referencedFiles: pragmaContext.referencedFiles, typeReferenceDirectives: pragmaContext.typeReferenceDirectives, importedFiles, isLibFile: pragmaContext.hasNoDefaultLib, ambientExternalModules: undefined };
         }
         else {
             // for global scripts ambient modules still can have augmentations - look for ambient modules with depth > 0
@@ -355,7 +344,7 @@ namespace ts {
                     }
                 }
             }
-            return { referencedFiles, typeReferenceDirectives, importedFiles, isLibFile: isNoDefaultLib, ambientExternalModules: ambientModuleNames };
+            return { referencedFiles: pragmaContext.referencedFiles, typeReferenceDirectives: pragmaContext.typeReferenceDirectives, importedFiles, isLibFile: pragmaContext.hasNoDefaultLib, ambientExternalModules: ambientModuleNames };
         }
     }
 }

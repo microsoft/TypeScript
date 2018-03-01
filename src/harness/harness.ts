@@ -242,7 +242,7 @@ namespace Utils {
             start: diagnostic.start,
             length: diagnostic.length,
             messageText: ts.flattenDiagnosticMessageText(diagnostic.messageText, Harness.IO.newLine()),
-            category: (<any>ts).DiagnosticCategory[diagnostic.category],
+            category: ts.diagnosticCategoryName(diagnostic, /*lowerCase*/ false),
             code: diagnostic.code
         };
     }
@@ -1376,7 +1376,7 @@ namespace Harness {
                     .split("\n")
                     .map(s => s.length > 0 && s.charAt(s.length - 1) === "\r" ? s.substr(0, s.length - 1) : s)
                     .filter(s => s.length > 0)
-                    .map(s => "!!! " + ts.DiagnosticCategory[error.category].toLowerCase() + " TS" + error.code + ": " + s);
+                    .map(s => "!!! " + ts.diagnosticCategoryName(error) + " TS" + error.code + ": " + s);
                 errLines.forEach(e => outputLines += (newLine() + e));
                 errorsReported++;
 
@@ -1532,7 +1532,7 @@ namespace Harness {
             }
 
             if (typesError && symbolsError) {
-                throw new Error(typesError.message + IO.newLine() + symbolsError.message);
+                throw new Error(typesError.stack + IO.newLine() + symbolsError.stack);
             }
 
             if (typesError) {

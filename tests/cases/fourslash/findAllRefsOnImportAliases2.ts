@@ -22,8 +22,7 @@ const c3s = { definition: "(alias) class C3\nimport C3", ranges: c3Ranges };
 
 verify.referenceGroups(classRanges, [classes, c2s, c3s]);
 
-verify.referenceGroups(c2_0, [c2s])
-verify.referenceGroups(c2_1, [{ definition: "(alias) new C2(): C2\nimport C2", ranges: c2Ranges }]);
+verify.referenceGroups(c2Ranges, [c2s])
 
 verify.referenceGroups(c3Ranges, [c3s]);
 

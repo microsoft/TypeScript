@@ -1,4 +1,5 @@
 /// <reference path="addMissingInvocationForDecorator.ts" />
+/// <reference path="convertToEs6Module.ts" />
 /// <reference path="correctQualifiedNameToIndexedAccessType.ts" />
 /// <reference path="fixClassIncorrectlyImplementsInterface.ts" />
 /// <reference path="fixAddMissingMember.ts" />
@@ -17,4 +18,4 @@
 /// <reference path='helpers.ts' />
 /// <reference path='inferFromUsage.ts' />
 /// <reference path="fixInvalidImportSyntax.ts" />
-
+/// <reference path="fixStrictClassInitialization.ts" />

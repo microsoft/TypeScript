@@ -16,6 +16,7 @@ class C extends Base {
 >{            [(super(), "prop")]() { }        } : { [x: string]: () => void; }
 
             [(super(), "prop")]() { }
+>[(super(), "prop")] : () => void
 >(super(), "prop") : "prop"
 >super(), "prop" : "prop"
 >super() : void

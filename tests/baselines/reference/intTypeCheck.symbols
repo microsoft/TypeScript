@@ -84,6 +84,8 @@ interface i4 {
 
     // Used to be indexer, now it is a computed property
     [p];
+>[p] : Symbol(i4[p], Decl(intTypeCheck.ts, 32, 14))
+
     //Index Signatures
     [p1: string];
 >p1 : Symbol(p1, Decl(intTypeCheck.ts, 36, 5))
@@ -166,6 +168,8 @@ interface i11 {
     
     // Used to be indexer, now it is a computed property
     [p];
+>[p] : Symbol(i11[p], Decl(intTypeCheck.ts, 67, 35))
+
     //Index Signatures
     [p1: string];
 >p1 : Symbol(p1, Decl(intTypeCheck.ts, 72, 5))

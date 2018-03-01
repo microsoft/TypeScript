@@ -5,14 +5,11 @@
 // @Filename: /a.js
 ////const exportsAlias = exports;
 ////exportsAlias.f = function() {};
-/////*a*/module/*b*/.exports = exportsAlias;
+////module.exports = exportsAlias;
 
-goTo.select("a", "b");
-edit.applyRefactor({
-    refactorName: "Convert to ES6 module",
-    actionName: "Convert to ES6 module",
-    actionDescription: "Convert to ES6 module",
-    newContent: `
+verify.codeFix({
+    description: "Convert to ES6 module",
+    newFileContent: `
 export function f() { }
 `,
 });

@@ -1147,20 +1147,23 @@ namespace ts {
             setEmitFlags(localName, EmitFlags.NoComments);
 
             return startOnNewLine(
-                setTextRange(
-                    createStatement(
-                        createAssignment(
-                            setTextRange(
-                                createPropertyAccess(
-                                    createThis(),
-                                    propertyName
+                setEmitFlags(
+                    setTextRange(
+                        createStatement(
+                            createAssignment(
+                                setTextRange(
+                                    createPropertyAccess(
+                                        createThis(),
+                                        propertyName
+                                    ),
+                                    node.name
                                 ),
-                                node.name
-                            ),
-                            localName
-                        )
+                                localName
+                            )
+                        ),
+                        moveRangePos(node, -1)
                     ),
-                    moveRangePos(node, -1)
+                    EmitFlags.NoComments
                 )
             );
         }

@@ -10,7 +10,6 @@ workflows:
                 - release-2.5
                 - release-2.6
                 - release-2.7
-                - circleci
       - node8:
           filters:
             branches:
@@ -19,7 +18,6 @@ workflows:
                 - release-2.5
                 - release-2.6
                 - release-2.7
-                - circleci
       - node6:
           filters:
             branches:
@@ -28,7 +26,6 @@ workflows:
                 - release-2.5
                 - release-2.6
                 - release-2.7
-                - circleci
   nightly:
     triggers:
       - schedule:
@@ -45,7 +42,6 @@ workflows:
                 - release-2.5
                 - release-2.6
                 - release-2.7
-                - circleci
           context: nightlies
       - node8:
           filters:
@@ -55,7 +51,6 @@ workflows:
                 - release-2.5
                 - release-2.6
                 - release-2.7
-                - circleci
           context: nightlies
       - node6:
           filters:
@@ -65,7 +60,6 @@ workflows:
                 - release-2.5
                 - release-2.6
                 - release-2.7
-                - circleci
           context: nightlies
 
 base: &base

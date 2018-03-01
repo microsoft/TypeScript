@@ -33,6 +33,7 @@ namespace ts {
 
     function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions) {
         if (system.clearScreen &&
+            !options.preserveWatchOutput &&
             diagnostic.code !== Diagnostics.Compilation_complete_Watching_for_file_changes.code &&
             !options.extendedDiagnostics &&
             !options.diagnostics) {
@@ -749,6 +750,9 @@ namespace ts {
                     (missingFilePathsRequestedForRelease || (missingFilePathsRequestedForRelease = [])).push(oldSourceFile.path);
                 }
                 else if ((hostSourceFileInfo as FilePresentOnHost).sourceFile === oldSourceFile) {
+                    if ((hostSourceFileInfo as FilePresentOnHost).fileWatcher) {
+                        (hostSourceFileInfo as FilePresentOnHost).fileWatcher.close();
+                    }
                     sourceFilesCache.delete(oldSourceFile.path);
                     resolutionCache.removeResolutionsOfFile(oldSourceFile.path);
                 }

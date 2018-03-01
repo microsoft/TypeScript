@@ -663,7 +663,7 @@ namespace ts.codefix {
             const parent = token.parent;
             const isNodeOpeningLikeElement = isJsxOpeningLikeElement(parent);
             if ((isJsxOpeningLikeElement && (<JsxOpeningLikeElement>parent).tagName === token) || parent.kind === SyntaxKind.JsxOpeningFragment) {
-                umdSymbol = checker.resolveName(checker.getJsxNamespace(),
+                umdSymbol = checker.resolveName(checker.getJsxNamespace(parent),
                     isNodeOpeningLikeElement ? (<JsxOpeningLikeElement>parent).tagName : parent, SymbolFlags.Value, /*excludeGlobals*/ false);
             }
         }

@@ -30,26 +30,26 @@ type T12 = ReturnType<(<T>() => T)>;  // {}
 type T13 = ReturnType<(<T extends U, U extends number[]>() => T)>;  // number[]
 type T14 = ReturnType<typeof f1>;  // { a: number, b: string }
 type T15 = ReturnType<any>;  // any
-type T16 = ReturnType<never>;  // any
+type T16 = ReturnType<never>;  // never
 type T17 = ReturnType<string>;  // Error
 type T18 = ReturnType<Function>;  // Error
 
 type U10 = InstanceType<typeof C>;  // C
 type U11 = InstanceType<any>;  // any
-type U12 = InstanceType<never>;  // any
+type U12 = InstanceType<never>;  // never
 type U13 = InstanceType<string>;  // Error
 type U14 = InstanceType<Function>;  // Error
 
 type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A : any;
 
-type T20 = ArgumentType<() => void>;  // never
+type T20 = ArgumentType<() => void>;  // {}
 type T21 = ArgumentType<(x: string) => number>;  // string
 type T22 = ArgumentType<(x?: string) => number>;  // string | undefined
 type T23 = ArgumentType<(...args: string[]) => number>;  // string
 type T24 = ArgumentType<(x: string, y: string) => number>;  // Error
 type T25 = ArgumentType<Function>;  // Error
 type T26 = ArgumentType<any>;  // any
-type T27 = ArgumentType<never>;  // any
+type T27 = ArgumentType<never>;  // never
 
 type X1<T extends { x: any, y: any }> = T extends { x: infer X, y: infer Y } ? [X, Y] : any;
 

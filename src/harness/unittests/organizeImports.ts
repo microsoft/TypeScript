@@ -175,6 +175,17 @@ export default function F2();
 `,
             };
 
+            const reactLibFile = {
+                path: "/react.ts",
+                content: `
+export const React = {
+createElement: (_type, _props, _children) => {},
+};
+
+export const Other = 1;
+`,
+            };
+
             // Don't bother to actually emit a baseline for this.
             it("NoImports", () => {
                 const testFile = {
@@ -202,6 +213,30 @@ F2();
                 },
                 libFile);
 
+            testOrganizeImports("Unused_Some",
+                {
+                    path: "/test.ts",
+                    content: `
+import { F1, F2 } from "lib";
+import * as NS from "lib";
+import D from "lib";
+
+D();
+`,
+                },
+                libFile);
+
+            testOrganizeImports("Unused_All",
+                {
+                    path: "/test.ts",
+                    content: `
+import { F1, F2 } from "lib";
+import * as NS from "lib";
+import D from "lib";
+`,
+                },
+                libFile);
+
             testOrganizeImports("MoveToTop",
                 {
                     path: "/test.ts",
@@ -217,7 +252,7 @@ D();
                 },
                 libFile);
 
-                // tslint:disable no-invalid-template-strings
+            // tslint:disable no-invalid-template-strings
             testOrganizeImports("MoveToTop_Invalid",
                 {
                     path: "/test.ts",
@@ -234,7 +269,7 @@ D();
 `,
                 },
                 libFile);
-                // tslint:enable no-invalid-template-strings
+            // tslint:enable no-invalid-template-strings
 
             testOrganizeImports("CoalesceMultipleModules",
                 {
@@ -244,10 +279,11 @@ import { d } from "lib1";
 import { b } from "lib1";
 import { c } from "lib2";
 import { a } from "lib2";
+a + b + c + d;
 `,
                 },
-                { path: "/lib1.ts", content: "" },
-                { path: "/lib2.ts", content: "" });
+                { path: "/lib1.ts", content: "export const b = 1, d = 2;" },
+                { path: "/lib2.ts", content: "export const a = 3, c = 4;" });
 
             testOrganizeImports("CoalesceTrivia",
                 {
@@ -272,6 +308,93 @@ F2();
                 },
                 { path: "/lib1.ts", content: "" },
                 { path: "/lib2.ts", content: "" });
+
+            testOrganizeImports("UnusedTrivia1",
+                {
+                    path: "/test.ts",
+                    content: `
+/*A*/import /*B*/ { /*C*/ F1 /*D*/ } /*E*/ from /*F*/ "lib" /*G*/;/*H*/ //I
+`,
+                },
+                libFile);
+
+            testOrganizeImports("UnusedTrivia2",
+                {
+                    path: "/test.ts",
+                    content: `
+/*A*/import /*B*/ { /*C*/ F1 /*D*/, /*E*/ F2 /*F*/ } /*G*/ from /*H*/ "lib" /*I*/;/*J*/ //K
+
+F1();
+`,
+                },
+                libFile);
+
+            testOrganizeImports("AmbientModule",
+                {
+                    path: "/test.ts",
+                    content: `
+declare module "mod" {
+    import { F1 } from "lib";
+    import * as NS from "lib";
+    import { F2 } from "lib";
+
+    function F(f1: {} = F1, f2: {} = F2) {}
+}
+`,
+                },
+                libFile);
+
+            testOrganizeImports("TopLevelAndAmbientModule",
+                {
+                    path: "/test.ts",
+                    content: `
+import D from "lib";
+
+declare module "mod" {
+    import { F1 } from "lib";
+    import * as NS from "lib";
+    import { F2 } from "lib";
+
+    function F(f1: {} = F1, f2: {} = F2) {}
+}
+
+import E from "lib";
+import "lib";
+
+D();
+`,
+                },
+                libFile);
+
+            testOrganizeImports("JsxFactoryUsed",
+                {
+                    path: "/test.tsx",
+                    content: `
+import { React, Other } from "react";
+
+<div/>;
+`,
+                },
+                reactLibFile);
+
+            // This is descriptive, rather than normative
+            testOrganizeImports("JsxFactoryUnusedTsx",
+                {
+                    path: "/test.tsx",
+                    content: `
+import { React, Other } from "react";
+`,
+                },
+                reactLibFile);
+
+            testOrganizeImports("JsxFactoryUnusedTs",
+                {
+                    path: "/test.ts",
+                    content: `
+import { React, Other } from "react";
+`,
+                },
+                reactLibFile);
 
             function testOrganizeImports(testName: string, testFile: TestFSWithWatch.FileOrFolder, ...otherFiles: TestFSWithWatch.FileOrFolder[]) {
                 it(testName, () => runBaseline(`organizeImports/${testName}.ts`, testFile, ...otherFiles));
@@ -298,6 +421,7 @@ F2();
             function makeLanguageService(...files: TestFSWithWatch.FileOrFolder[]) {
                 const host = projectSystem.createServerHost(files);
                 const projectService = projectSystem.createProjectService(host, { useSingleInferredProject: true });
+                projectService.setCompilerOptionsForInferredProjects({ jsx: files.some(f => f.path.endsWith("x")) ? JsxEmit.React : JsxEmit.None });
                 files.forEach(f => projectService.openClientFile(f.path));
                 return projectService.inferredProjects[0].getLanguageService();
             }
