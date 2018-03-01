@@ -63,6 +63,13 @@ namespace ts {
             description: Diagnostics.Stylize_errors_and_messages_using_color_and_context_experimental
         },
         {
+            name: "preserveWatchOutput",
+            type: "boolean",
+            showInSimplifiedHelpView: false,
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Whether_to_keep_outdated_console_output_in_watch_mode_instead_of_clearing_the_screen,
+        },
+        {
             name: "watch",
             shortName: "w",
             type: "boolean",
