@@ -19361,7 +19361,9 @@ namespace ts {
             // A place where we actually *are* concerned with the expressions' types are
             // in tagged templates.
             forEach(node.templateSpans, templateSpan => {
-                checkExpression(templateSpan.expression);
+                if (maybeTypeOfKind(checkExpression(templateSpan.expression), TypeFlags.ESSymbolLike)) {
+                    error(templateSpan.expression, Diagnostics.Type_0_cannot_be_converted_to_type_1, typeToString(esSymbolType), typeToString(stringType));
+                }
             });
 
             return stringType;
