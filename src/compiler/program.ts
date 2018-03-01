@@ -2416,24 +2416,8 @@ namespace ts {
             return options.jsx ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set;
         }
         function needAllowJs() {
-            return willAllowImplicitAnyJsModule(options) ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
+            return options.allowJs || !getStrictOptionValue(options, "noImplicitAny") ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
         }
-    }
-
-    export function willAllowImplicitAnyJsModule(options: CompilerOptions): boolean {
-        return options.allowJs || !getStrictOptionValue(options, "noImplicitAny");
-    }
-
-    export function createDiagnosticForModuleMissingTypes(errorNode: Node, { packageId, resolvedFileName }: ResolvedModuleFull, moduleReference: string, diag: DiagnosticMessage): Diagnostic {
-        const errorInfo = packageId && chainDiagnosticMessages(
-            /*details*/ undefined,
-            Diagnostics.Try_npm_install_types_Slash_0_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
-            getMangledNameForScopedPackage(packageId.name));
-        return createDiagnosticForNodeFromMessageChain(errorNode, chainDiagnosticMessages(
-            errorInfo,
-            diag,
-            moduleReference,
-            resolvedFileName));
     }
 
     function checkAllDefined(names: string[]): string[] {

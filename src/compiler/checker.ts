@@ -311,6 +311,8 @@ namespace ts {
                 node = getParseTreeNode(node, isTypeNode);
                 return node && getTypeArgumentConstraint(node);
             },
+
+            getSuggestionDiagnostics: file => suggestionDiagnostics.get(file.fileName) || emptyArray,
         };
 
         const tupleTypes: GenericType[] = [];
@@ -449,6 +451,19 @@ namespace ts {
         const awaitedTypeStack: number[] = [];
 
         const diagnostics = createDiagnosticCollection();
+        // Suggestion diagnostics must have a file. Keyed by source file name.
+        const suggestionDiagnostics = createMultiMap<Diagnostic>();
+        function addSuggestionDiagnostic(diag: Diagnostic): void {
+            suggestionDiagnostics.add(diag.file.fileName, { ...diag, category: DiagnosticCategory.Suggestion });
+        }
+        function addErrorOrSuggestionDiagnostic(isError: boolean, diag: Diagnostic): void {
+            if (isError) {
+                diagnostics.add(diag);
+            }
+            else {
+                addSuggestionDiagnostic(diag);
+            }
+        }
 
         const enum TypeFacts {
             None = 0,
@@ -2095,8 +2110,16 @@ namespace ts {
                     const diag = Diagnostics.Invalid_module_name_in_augmentation_Module_0_resolves_to_an_untyped_module_at_1_which_cannot_be_augmented;
                     error(errorNode, diag, moduleReference, resolvedModule.resolvedFileName);
                 }
-                else if (noImplicitAny && moduleNotFoundError) {
-                    diagnostics.add(createDiagnosticForModuleMissingTypes(errorNode, resolvedModule, moduleReference, Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type));
+                else {
+                    const errorInfo = resolvedModule.packageId && chainDiagnosticMessages(
+                        /*details*/ undefined,
+                        Diagnostics.Try_npm_install_types_Slash_0_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
+                        getMangledNameForScopedPackage(resolvedModule.packageId.name));
+                    addErrorOrSuggestionDiagnostic(noImplicitAny && !!moduleNotFoundError, createDiagnosticForNodeFromMessageChain(errorNode, chainDiagnosticMessages(
+                        errorInfo,
+                        Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
+                        moduleReference,
+                        resolvedModule.resolvedFileName)));
                 }
                 // Failed imports and untyped modules are both treated in an untyped manner; only difference is whether we give a diagnostic first.
                 return undefined;

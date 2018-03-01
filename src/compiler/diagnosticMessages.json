@@ -3818,10 +3818,6 @@
         "category": "Suggestion",
         "code": 80001
     },
-    "Did not find a declaration file for module '{0}'. '{1}' implicitly has an 'any' type.": {
-        "category": "Suggestion",
-        "code": 80002
-    },
 
     "Add missing 'super()' call": {
         "category": "Message",

@@ -15,8 +15,8 @@ test.setTypesRegistry({
 verify.noErrors();
 goTo.file("/a.ts");
 verify.getSuggestionDiagnostics([{
-    message: "Did not find a declaration file for module 'abs/subModule'. '/node_modules/abs/subModule.js' implicitly has an 'any' type.",
-    code: 80002,
+    message: "Could not find a declaration file for module 'abs/subModule'. '/node_modules/abs/subModule.js' implicitly has an 'any' type.",
+    code: 7016,
 }]);
 
 verify.codeFixAvailable([{
