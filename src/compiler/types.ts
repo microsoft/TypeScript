@@ -2955,6 +2955,10 @@ namespace ts {
         /* @internal */ tryGetThisTypeAt(node: Node): Type | undefined;
         /* @internal */ getTypeArgumentConstraint(node: TypeNode): Type | undefined;
 
+        /**
+         * Does *not* get *all* suggestion diagnostics, just the ones that were convenient to report in the checker.
+         * Others are added in computeSuggestionDiagnostics.
+         */
         /* @internal */ getSuggestionDiagnostics(file: SourceFile): ReadonlyArray<Diagnostic>;
     }
 
