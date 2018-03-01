@@ -2161,8 +2161,9 @@ declare module "fs" {
         });
     });
 
+
     describe("tsc-watch console clearing", () => {
-        function checkConsoleClearing(diagnostics: boolean, extendedDiagnostics: boolean) {
+        function checkConsoleClearing(options: CompilerOptions = {}) {
             const file = {
                 path: "f.ts",
                 content: ""
@@ -2172,7 +2173,7 @@ declare module "fs" {
             let clearCount: number | undefined;
             checkConsoleClears();
 
-            createWatchOfFilesAndCompilerOptions([file.path], host, { diagnostics, extendedDiagnostics });
+            createWatchOfFilesAndCompilerOptions([file.path], host, options);
             checkConsoleClears();
 
             file.content = "//";
@@ -2182,10 +2183,10 @@ declare module "fs" {
             checkConsoleClears();
 
             function checkConsoleClears() {
-                if (clearCount === undefined) {
+                if (clearCount === undefined || !options.clearWatchOutput) {
                     clearCount = 0;
                 }
-                else if (!diagnostics && !extendedDiagnostics) {
+                else if (!options.diagnostics && !options.extendedDiagnostics) {
                     clearCount++;
                 }
                 host.checkScreenClears(clearCount);
@@ -2194,13 +2195,24 @@ declare module "fs" {
         }
 
         it("without --diagnostics or --extendedDiagnostics", () => {
-            checkConsoleClearing(/*diagnostics*/ false, /*extendedDiagnostics*/ false);
+            checkConsoleClearing({
+                clearWatchOutput: true,
+            });
         });
         it("with --diagnostics", () => {
-            checkConsoleClearing(/*diagnostics*/ true, /*extendedDiagnostics*/ false);
+            checkConsoleClearing({
+                clearWatchOutput: true,
+                diagnostics: true,
+            });
         });
         it("with --extendedDiagnostics", () => {
-            checkConsoleClearing(/*diagnostics*/ false, /*extendedDiagnostics*/ true);
+            checkConsoleClearing({
+                clearWatchOutput: true,
+                extendedDiagnostics: true,
+            });
+        });
+        it("without --clearWatchOutput", () => {
+            checkConsoleClearing();
         });
     });
 }

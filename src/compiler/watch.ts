@@ -33,6 +33,7 @@ namespace ts {
 
     function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions) {
         if (system.clearScreen &&
+            options.clearWatchOutput &&
             diagnostic.code !== Diagnostics.Compilation_complete_Watching_for_file_changes.code &&
             !options.extendedDiagnostics &&
             !options.diagnostics) {

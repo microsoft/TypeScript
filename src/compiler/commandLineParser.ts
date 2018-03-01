@@ -63,6 +63,13 @@ namespace ts {
             description: Diagnostics.Stylize_errors_and_messages_using_color_and_context_experimental
         },
         {
+            name: "clearWatchOutput",
+            type: "boolean",
+            showInSimplifiedHelpView: false,
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Whether_to_clear_the_console_in_watch_mode_on_new_results,
+        },
+        {
             name: "watch",
             shortName: "w",
             type: "boolean",
