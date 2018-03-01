@@ -335,8 +335,20 @@ namespace ts {
     }
 
     export function createModuleResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string): ModuleResolutionCache {
-        const directoryToModuleNameMap = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
-        const moduleNameToDirectoryMap = createMap<PerModuleNameCache>();
+        return createModuleResolutionCacheWithMaps(
+            createMap<Map<ResolvedModuleWithFailedLookupLocations>>(),
+            createMap<PerModuleNameCache>(),
+            currentDirectory,
+            getCanonicalFileName
+        );
+    }
+
+    /*@internal*/
+    export function createModuleResolutionCacheWithMaps(
+        directoryToModuleNameMap: Map<Map<ResolvedModuleWithFailedLookupLocations>>,
+        moduleNameToDirectoryMap: Map<PerModuleNameCache>,
+        currentDirectory: string,
+        getCanonicalFileName: GetCanonicalFileName): ModuleResolutionCache {
 
         return { getOrCreateCacheForDirectory, getOrCreateCacheForModuleName };
 
@@ -445,7 +457,7 @@ namespace ts {
 
         if (result) {
             if (traceEnabled) {
-                trace(host, Diagnostics.Resolution_for_module_0_was_found_in_cache, moduleName);
+                trace(host, Diagnostics.Resolution_for_module_0_was_found_in_cache_from_location_1, moduleName, containingDirectory);
             }
         }
         else {
@@ -1188,7 +1200,7 @@ namespace ts {
         const result = cache && cache.get(containingDirectory);
         if (result) {
             if (traceEnabled) {
-                trace(host, Diagnostics.Resolution_for_module_0_was_found_in_cache, moduleName);
+                trace(host, Diagnostics.Resolution_for_module_0_was_found_in_cache_from_location_1, moduleName, containingDirectory);
             }
             return { value: result.resolvedModule && { path: result.resolvedModule.resolvedFileName, extension: result.resolvedModule.extension, packageId: result.resolvedModule.packageId } };
         }
