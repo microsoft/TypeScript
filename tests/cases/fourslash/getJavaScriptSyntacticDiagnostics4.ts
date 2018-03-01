@@ -2,14 +2,9 @@
 
 // @allowJs: true
 // @Filename: a.js
-//// public class C { }
+////[|public|] class C { }
 
-verify.getSyntacticDiagnostics([
-  {
+verify.getSyntacticDiagnostics([{
     message: "'public' can only be used in a .ts file.",
-    start: 0,
-    length: 6,
-    category: "error",
     code: 8009
-  }
-]);
+}]);

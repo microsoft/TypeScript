@@ -1239,22 +1239,23 @@ Actual: ${stringify(fullActual)}`);
             return this.languageService.findReferences(this.activeFile.fileName, this.currentCaretPosition);
         }
 
-        public getSyntacticDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>) {
+        public getSyntacticDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>) {
             const diagnostics = this.languageService.getSyntacticDiagnostics(this.activeFile.fileName);
-            this.testDiagnostics(expected, diagnostics);
+            this.testDiagnostics(expected, diagnostics, "error");
         }
 
-        public getSemanticDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>) {
+        public getSemanticDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>) {
             const diagnostics = this.languageService.getSemanticDiagnostics(this.activeFile.fileName);
-            this.testDiagnostics(expected, diagnostics);
+            this.testDiagnostics(expected, diagnostics, "error");
         }
 
-        public getSuggestionDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>): void {
-            this.testDiagnostics(expected, this.languageService.getSuggestionDiagnostics(this.activeFile.fileName));
+        public getSuggestionDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>): void {
+            this.testDiagnostics(expected, this.languageService.getSuggestionDiagnostics(this.activeFile.fileName), "suggestion");
         }
 
-        private testDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>, diagnostics: ReadonlyArray<ts.Diagnostic>) {
-            assert.deepEqual(ts.realizeDiagnostics(diagnostics, ts.newLineCharacter), expected);
+        private testDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>, diagnostics: ReadonlyArray<ts.Diagnostic>, category: string) {
+            assert.deepEqual(ts.realizeDiagnostics(diagnostics, ts.newLineCharacter), expected.map<ts.RealizedDiagnostic>(e => (
+                { message: e.message, category, code: e.code, ...ts.createTextSpanFromRange(e.range || this.getRanges()[0]) })));
         }
 
         public verifyQuickInfoAt(markerName: string, expectedText: string, expectedDocumentation?: string) {
@@ -4675,5 +4676,11 @@ namespace FourSlashInterface {
         name: string;
         source?: string;
         description: string;
+    }
+
+    export interface Diagnostic {
+        message: string;
+        range?: FourSlash.Range;
+        code: number;
     }
 }
