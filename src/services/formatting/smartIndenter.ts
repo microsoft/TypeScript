@@ -102,7 +102,7 @@ namespace ts.formatting {
                 current--;
             }
 
-            const lineStart = ts.getLineStartPositionForPosition(current, sourceFile);
+            const lineStart = getLineStartPositionForPosition(current, sourceFile);
             return findFirstNonWhitespaceColumn(lineStart, current, sourceFile, options);
         }
 

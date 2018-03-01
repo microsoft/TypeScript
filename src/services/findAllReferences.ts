@@ -10,9 +10,9 @@ namespace ts.FindAllReferences {
     export type Definition =
         | { type: "symbol"; symbol: Symbol }
         | { type: "label"; node: Identifier }
-        | { type: "keyword"; node: ts.Node }
-        | { type: "this"; node: ts.Node }
-        | { type: "string"; node: ts.StringLiteral };
+        | { type: "keyword"; node: Node }
+        | { type: "this"; node: Node }
+        | { type: "string"; node: StringLiteral };
 
     export type Entry = NodeEntry | SpanEntry;
     export interface NodeEntry {
@@ -25,7 +25,7 @@ namespace ts.FindAllReferences {
         fileName: string;
         textSpan: TextSpan;
     }
-    export function nodeEntry(node: ts.Node, isInString?: true): NodeEntry {
+    export function nodeEntry(node: Node, isInString?: true): NodeEntry {
         return { type: "node", node, isInString };
     }
 
@@ -168,7 +168,7 @@ namespace ts.FindAllReferences {
         };
     }
 
-    function toImplementationLocation(entry: Entry, checker: ts.TypeChecker): ImplementationLocation {
+    function toImplementationLocation(entry: Entry, checker: TypeChecker): ImplementationLocation {
         if (entry.type === "node") {
             const { node } = entry;
             return { textSpan: getTextSpan(node), fileName: node.getSourceFile().fileName, ...implementationKindDisplayParts(node, checker) };
@@ -179,7 +179,7 @@ namespace ts.FindAllReferences {
         }
     }
 
-    function implementationKindDisplayParts(node: ts.Node, checker: ts.TypeChecker): { kind: ScriptElementKind, displayParts: SymbolDisplayPart[] } {
+    function implementationKindDisplayParts(node: Node, checker: TypeChecker): { kind: ScriptElementKind, displayParts: SymbolDisplayPart[] } {
         const symbol = checker.getSymbolAtLocation(isDeclaration(node) && node.name ? node.name : node);
         if (symbol) {
             return getDefinitionKindAndDisplayParts(symbol, checker, node);
@@ -201,7 +201,7 @@ namespace ts.FindAllReferences {
         }
     }
 
-    export function toHighlightSpan(entry: FindAllReferences.Entry): { fileName: string, span: HighlightSpan } {
+    export function toHighlightSpan(entry: Entry): { fileName: string, span: HighlightSpan } {
         if (entry.type === "span") {
             const { fileName, textSpan } = entry;
             return { fileName, span: { textSpan, kind: HighlightSpanKind.reference } };
@@ -267,7 +267,7 @@ namespace ts.FindAllReferences.Core {
         return getReferencedSymbolsForSymbol(symbol, node, sourceFiles, checker, cancellationToken, options);
     }
 
-    function isModuleReferenceLocation(node: ts.Node): boolean {
+    function isModuleReferenceLocation(node: Node): boolean {
         if (!isStringLiteralLike(node)) {
             return false;
         }
@@ -302,11 +302,11 @@ namespace ts.FindAllReferences.Core {
 
         for (const decl of symbol.declarations) {
             switch (decl.kind) {
-                case ts.SyntaxKind.SourceFile:
+                case SyntaxKind.SourceFile:
                     // Don't include the source file itself. (This may not be ideal behavior, but awkward to include an entire file as a reference.)
                     break;
-                case ts.SyntaxKind.ModuleDeclaration:
-                    references.push({ type: "node", node: (decl as ts.ModuleDeclaration).name });
+                case SyntaxKind.ModuleDeclaration:
+                    references.push({ type: "node", node: (decl as ModuleDeclaration).name });
                     break;
                 default:
                     Debug.fail("Expected a module symbol to be declared by a SourceFile or ModuleDeclaration.");
@@ -787,7 +787,7 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    function getAllReferencesForKeyword(sourceFiles: ReadonlyArray<SourceFile>, keywordKind: ts.SyntaxKind, cancellationToken: CancellationToken): SymbolAndEntries[] {
+    function getAllReferencesForKeyword(sourceFiles: ReadonlyArray<SourceFile>, keywordKind: SyntaxKind, cancellationToken: CancellationToken): SymbolAndEntries[] {
         const references = flatMap(sourceFiles, sourceFile => {
             cancellationToken.throwIfCancellationRequested();
             return mapDefined(getPossibleSymbolReferencePositions(sourceFile, tokenToString(keywordKind), sourceFile), position => {
@@ -798,7 +798,7 @@ namespace ts.FindAllReferences.Core {
         return references.length ? [{ definition: { type: "keyword", node: references[0].node }, references }] : undefined;
     }
 
-    function getReferencesInSourceFile(sourceFile: ts.SourceFile, search: Search, state: State): void {
+    function getReferencesInSourceFile(sourceFile: SourceFile, search: Search, state: State): void {
         state.cancellationToken.throwIfCancellationRequested();
         return getReferencesInContainer(sourceFile, sourceFile, search, state);
     }
@@ -808,7 +808,7 @@ namespace ts.FindAllReferences.Core {
      * tuple of(searchSymbol, searchText, searchLocation, and searchMeaning).
      * searchLocation: a node where the search value
      */
-    function getReferencesInContainer(container: Node, sourceFile: ts.SourceFile, search: Search, state: State): void {
+    function getReferencesInContainer(container: Node, sourceFile: SourceFile, search: Search, state: State): void {
         if (!state.markSearchedSymbol(sourceFile, search.symbol)) {
             return;
         }
@@ -910,7 +910,7 @@ namespace ts.FindAllReferences.Core {
 
         // For `export { foo as bar }`, rename `foo`, but not `bar`.
         if (!(referenceLocation === propertyName && state.options.isForRename)) {
-            const exportKind = referenceLocation.originalKeywordKind === ts.SyntaxKind.DefaultKeyword ? ExportKind.Default : ExportKind.Named;
+            const exportKind = referenceLocation.originalKeywordKind === SyntaxKind.DefaultKeyword ? ExportKind.Default : ExportKind.Named;
             const exportInfo = getExportInfo(referenceSymbol, exportKind, state.checker);
             Debug.assert(!!exportInfo);
             searchForImportsOfExport(referenceLocation, referenceSymbol, exportInfo, state);
@@ -1043,7 +1043,7 @@ namespace ts.FindAllReferences.Core {
      */
     function findOwnConstructorReferences(classSymbol: Symbol, sourceFile: SourceFile, addNode: (node: Node) => void): void {
         for (const decl of classSymbol.members.get(InternalSymbolName.Constructor).declarations) {
-            const ctrKeyword = findChildOfKind(decl, ts.SyntaxKind.ConstructorKeyword, sourceFile)!;
+            const ctrKeyword = findChildOfKind(decl, SyntaxKind.ConstructorKeyword, sourceFile)!;
             Debug.assert(decl.kind === SyntaxKind.Constructor && !!ctrKeyword);
             addNode(ctrKeyword);
         }

@@ -680,9 +680,9 @@ namespace ts {
 
             function emitTextWriterWrapper(underlying: SymbolWriter): EmitTextWriter {
                 return {
-                    write: ts.noop,
-                    writeTextOfNode: ts.noop,
-                    writeLine: ts.noop,
+                    write: noop,
+                    writeTextOfNode: noop,
+                    writeLine: noop,
                     increaseIndent() {
                         return underlying.increaseIndent();
                     },
@@ -692,7 +692,7 @@ namespace ts {
                     getText() {
                         return "";
                     },
-                    rawWrite: ts.noop,
+                    rawWrite: noop,
                     writeLiteral(s) {
                         return underlying.writeStringLiteral(s);
                     },
@@ -3449,7 +3449,7 @@ namespace ts {
                         // If this is the last part of outputting the symbol, always output. The cases apply only to parent symbols.
                         endOfChain ||
                         // If a parent symbol is an external module, don't write it. (We prefer just `x` vs `"foo/bar".x`.)
-                        !(!parentSymbol && ts.forEach(symbol.declarations, hasExternalModuleSymbol)) &&
+                        !(!parentSymbol && forEach(symbol.declarations, hasExternalModuleSymbol)) &&
                         // If a parent symbol is an anonymous type, don't write it.
                         !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral))) {
 
@@ -16308,7 +16308,7 @@ namespace ts {
 
         function isValidPropertyAccessForCompletions(node: PropertyAccessExpression, type: Type, property: Symbol): boolean {
             return isValidPropertyAccessWithType(node, node.expression, property.escapedName, type)
-                && (!(property.flags & ts.SymbolFlags.Method) || isValidMethodAccess(property, type));
+                && (!(property.flags & SymbolFlags.Method) || isValidMethodAccess(property, type));
         }
         function isValidMethodAccess(method: Symbol, type: Type) {
             const propType = getTypeOfFuncClassEnumModule(method);
