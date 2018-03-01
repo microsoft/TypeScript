@@ -2087,6 +2087,9 @@ namespace ts {
             const sourceFile = resolvedModule && !resolutionDiagnostic && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
                 if (sourceFile.symbol) {
+                    if (resolvedModule.isExternalLibraryImport && !extensionIsTypeScript(resolvedModule.extension)) {
+                        addSuggestionDiagnostic(createModuleImplicitlyAnyDiagnostic(errorNode, resolvedModule, moduleReference));
+                    }
                     // merged symbol is module declaration symbol combined with all augmentations
                     return getMergedSymbol(sourceFile.symbol);
                 }
@@ -2111,15 +2114,7 @@ namespace ts {
                     error(errorNode, diag, moduleReference, resolvedModule.resolvedFileName);
                 }
                 else {
-                    const errorInfo = resolvedModule.packageId && chainDiagnosticMessages(
-                        /*details*/ undefined,
-                        Diagnostics.Try_npm_install_types_Slash_0_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
-                        getMangledNameForScopedPackage(resolvedModule.packageId.name));
-                    addErrorOrSuggestionDiagnostic(noImplicitAny && !!moduleNotFoundError, createDiagnosticForNodeFromMessageChain(errorNode, chainDiagnosticMessages(
-                        errorInfo,
-                        Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
-                        moduleReference,
-                        resolvedModule.resolvedFileName)));
+                    addErrorOrSuggestionDiagnostic(noImplicitAny && !!moduleNotFoundError, createModuleImplicitlyAnyDiagnostic(errorNode, resolvedModule, moduleReference));
                 }
                 // Failed imports and untyped modules are both treated in an untyped manner; only difference is whether we give a diagnostic first.
                 return undefined;
@@ -2142,6 +2137,18 @@ namespace ts {
                 }
             }
             return undefined;
+        }
+
+        function createModuleImplicitlyAnyDiagnostic(errorNode: Node, { packageId, resolvedFileName }: ResolvedModuleFull, moduleReference: string): Diagnostic {
+            const errorInfo = packageId && chainDiagnosticMessages(
+                /*details*/ undefined,
+                Diagnostics.Try_npm_install_types_Slash_0_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
+                getMangledNameForScopedPackage(packageId.name));
+            return createDiagnosticForNodeFromMessageChain(errorNode, chainDiagnosticMessages(
+                errorInfo,
+                Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
+                moduleReference,
+                resolvedFileName));
         }
 
         // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
