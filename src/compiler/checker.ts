@@ -8278,7 +8278,9 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 const checkType = getTypeFromTypeNode(node.checkType);
-                const outerTypeParameters = getOuterTypeParameters(node, /*includeThisTypes*/ true);
+                const aliasTypeArguments = getAliasTypeArgumentsForTypeNode(node);
+                const allOuterTypeParameters = getOuterTypeParameters(node, /*includeThisTypes*/ true);
+                const outerTypeParameters = aliasTypeArguments ? allOuterTypeParameters : filter(allOuterTypeParameters, tp => isTypeParameterPossiblyReferenced(tp, node));
                 const root: ConditionalRoot = {
                     node,
                     checkType,
@@ -8290,7 +8292,7 @@ namespace ts {
                     outerTypeParameters,
                     instantiations: undefined,
                     aliasSymbol: getAliasSymbolForTypeNode(node),
-                    aliasTypeArguments: getAliasTypeArgumentsForTypeNode(node)
+                    aliasTypeArguments
                 };
                 links.resolvedType = getConditionalType(root, /*mapper*/ undefined);
                 if (outerTypeParameters) {
