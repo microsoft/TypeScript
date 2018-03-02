@@ -3787,14 +3787,10 @@
         "category": "Error",
         "code": 17016
     },
-<<<<<<< 03ba8a0852b5b038d2377d53e9a2e12c860f5a79
     "JSX fragment is not supported when using an inline JSX factory pragma": {
         "category": "Error",
         "code": 17017
     },
-
-=======
->>>>>>> Show better error message about incompatible construct signature.
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
         "code": 18000
@@ -3811,15 +3807,10 @@
         "category": "Error",
         "code": 18003
     },
-<<<<<<< 03ba8a0852b5b038d2377d53e9a2e12c860f5a79
-
     "File is a CommonJS module; it may be converted to an ES6 module.": {
         "category": "Suggestion",
         "code": 80001
     },
-
-=======
->>>>>>> Show better error message about incompatible construct signature.
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
