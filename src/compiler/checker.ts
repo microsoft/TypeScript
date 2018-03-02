@@ -15333,7 +15333,7 @@ namespace ts {
                 const intrinsicElementsType = getJsxType(JsxNames.IntrinsicElements, node);
                 if (intrinsicElementsType !== unknownType) {
                     // Property case
-                    if (!isIdentifier(node.tagName)) throw Debug.fail();
+                    if (!isIdentifier(node.tagName)) return Debug.fail();
                     const intrinsicProp = getPropertyOfType(intrinsicElementsType, node.tagName.escapedText);
                     if (intrinsicProp) {
                         links.jsxFlags |= JsxFlags.IntrinsicNamedElement;
@@ -18106,7 +18106,7 @@ namespace ts {
             }
 
             // Make sure require is not a local function
-            if (!isIdentifier(node.expression)) throw Debug.fail();
+            if (!isIdentifier(node.expression)) return Debug.fail();
             const resolvedRequire = resolveName(node.expression, node.expression.escapedText, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
             if (!resolvedRequire) {
                 // project does not contain symbol named 'require' - assume commonjs require
@@ -21841,7 +21841,7 @@ namespace ts {
 
             const symbol = getSymbolOfNode(node);
             if (symbol.flags & SymbolFlags.FunctionScopedVariable) {
-                if (!isIdentifier(node.name)) throw Debug.fail();
+                if (!isIdentifier(node.name)) return Debug.fail();
                 const localDeclarationSymbol = resolveName(node, node.name.escapedText, SymbolFlags.Variable, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
                 if (localDeclarationSymbol &&
                     localDeclarationSymbol !== symbol &&

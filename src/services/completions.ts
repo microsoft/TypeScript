@@ -69,7 +69,7 @@ namespace ts.Completions {
             case CompletionDataKind.JsDocParameterName:
                 return jsdocCompletionInfo(JsDoc.getJSDocParameterNameCompletions(completionData.tag));
             default:
-                throw Debug.assertNever(completionData);
+                return Debug.assertNever(completionData);
         }
     }
 
@@ -1453,7 +1453,7 @@ namespace ts.Completions {
                 isNewIdentifierLocation = false;
 
                 const rootDeclaration = getRootDeclaration(objectLikeContainer.parent);
-                if (!isVariableLike(rootDeclaration)) throw Debug.fail("Root declaration is not variable-like.");
+                if (!isVariableLike(rootDeclaration)) return Debug.fail("Root declaration is not variable-like.");
 
                 // We don't want to complete using the type acquired by the shape
                 // of the binding pattern; we are only interested in types acquired
