@@ -1,6 +1,8 @@
 /* @internal */
 namespace ts {
-    export function computeSuggestionDiagnostics(sourceFile: SourceFile): Diagnostic[] {
+    export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program): Diagnostic[] {
+        program.getSemanticDiagnostics(sourceFile);
+        const checker = program.getDiagnosticsProducingTypeChecker();
         const diags: Diagnostic[] = [];
 
         if (sourceFile.commonJsModuleIndicator) {
@@ -23,6 +25,6 @@ namespace ts {
             check(sourceFile);
         }
 
-        return diags;
+        return diags.concat(checker.getSuggestionDiagnostics(sourceFile));
     }
 }

@@ -2317,6 +2317,10 @@
         "category": "Error",
         "code": 2723
     },
+    "Module '{0}' has no exported member '{1}'. Did you mean '{2}'?": {
+        "category": "Error",
+        "code": 2724
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -3471,6 +3475,10 @@
     "Found 'package.json' at '{0}'. Package ID is '{1}'.": {
         "category": "Message",
         "code": 6190
+    },
+    "Whether to keep outdated console output in watch mode instead of clearing the screen.": {
+        "category": "Message",
+        "code": 6191
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

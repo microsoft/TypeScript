@@ -22,8 +22,7 @@ const ranges = test.rangesByText();
 verify.singleReferenceGroup("var topLevelVar: number", ranges.get("topLevelVar"));
 
 const topLevelClass = ranges.get("topLevelClass");
-verify.referenceGroups(topLevelClass[0], [{ definition: "class topLevelClass", ranges: topLevelClass }]);
-verify.referenceGroups(topLevelClass[1], [{ definition: "constructor topLevelClass(): topLevelClass", ranges: topLevelClass }]);
+verify.singleReferenceGroup("class topLevelClass", topLevelClass);
 
 verify.singleReferenceGroup("interface topLevelInterface", ranges.get("topLevelInterface"));
 verify.singleReferenceGroup("namespace topLevelModule", ranges.get("topLevelModule"));
