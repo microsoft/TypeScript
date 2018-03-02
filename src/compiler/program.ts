@@ -3,7 +3,7 @@
 /// <reference path="core.ts" />
 
 namespace ts {
-    const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?)/;
+    const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?(?:\s+((?:(?:TS\d+)\s*,\s*)*TS\d+))?)/;
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string | undefined {
         return forEachAncestorDirectory(searchPath, ancestor => {
@@ -1108,7 +1108,7 @@ namespace ts {
             // otherwise, using options specified in '--lib' instead of '--target' default library file
             const equalityComparer = host.useCaseSensitiveFileNames() ? equateStringsCaseSensitive : equateStringsCaseInsensitive;
             if (!options.lib) {
-               return equalityComparer(file.fileName, getDefaultLibraryFileName());
+                return equalityComparer(file.fileName, getDefaultLibraryFileName());
             }
             else {
                 return forEach(options.lib, libFileName => equalityComparer(file.fileName, combinePaths(defaultLibraryPath, libFileName)));
@@ -1321,6 +1321,11 @@ namespace ts {
                     }
                     if (result[3]) {
                         // @ts-ignore
+                        const ignoreOptions = result[4];
+                        if (ignoreOptions) {
+                            const errorCodes = ignoreOptions.split(/\s*,\s*/g);
+                            return errorCodes.indexOf("TS" + diagnostic.code) === -1;
+                        }
                         return false;
                     }
                     line--;
