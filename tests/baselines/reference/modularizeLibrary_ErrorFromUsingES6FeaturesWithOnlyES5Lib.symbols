@@ -45,6 +45,7 @@ var o = {
 >a : Symbol(a, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 22, 9))
 
     [Symbol.hasInstance](value: any) {
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 23, 9))
 >value : Symbol(value, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 24, 25))
 
         return false;
@@ -90,6 +91,7 @@ const o1 = {
 >o1 : Symbol(o1, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 49, 5))
 
     [Symbol.hasInstance](value: any) {
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 49, 12))
 >value : Symbol(value, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 50, 25))
 
         return false;

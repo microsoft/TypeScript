@@ -7,6 +7,7 @@ const foo = Symbol.for("foo");
 
 const o = { [foo]: undefined };
 >o : Symbol(o, Decl(objectLiteralPropertyImplicitlyAny.ts, 1, 5))
+>[foo] : Symbol([foo], Decl(objectLiteralPropertyImplicitlyAny.ts, 1, 11))
 >foo : Symbol(foo, Decl(objectLiteralPropertyImplicitlyAny.ts, 0, 5))
 >undefined : Symbol(undefined)
 

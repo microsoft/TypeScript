@@ -5,6 +5,7 @@ var x = {
 >x : Symbol(x, Decl(privateIndexer2.ts, 2, 3))
 
     private [x: string]: string;
+>[x : Symbol([x, Decl(privateIndexer2.ts, 2, 9))
 >x : Symbol(x, Decl(privateIndexer2.ts, 2, 3))
 >string : Symbol(string, Decl(privateIndexer2.ts, 3, 24))
 }

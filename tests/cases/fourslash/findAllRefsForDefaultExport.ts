@@ -16,7 +16,6 @@ verify.referenceGroups(r0, [
     { definition: "function f(): void", ranges: [r0] },
     { definition: "(alias) function g(): void\nimport g", ranges: [r1, r2] }
 ]);
-verify.referenceGroups(r1, [{ definition: "(alias) function g(): void\nimport g", ranges: [r1, r2] }]);
-verify.referenceGroups(r2, [{ definition: "(alias) g(): void\nimport g", ranges: [r1, r2] }]);
+verify.singleReferenceGroup("(alias) function g(): void\nimport g", [r1, r2]);
 
 verify.goToDefinition("ref", "def");

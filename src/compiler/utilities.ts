@@ -425,8 +425,8 @@ namespace ts {
     }
 
     export function isAmbientModule(node: Node): boolean {
-        return node && node.kind === SyntaxKind.ModuleDeclaration &&
-            ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(<ModuleDeclaration>node));
+        return node && isModuleDeclaration(node) &&
+            (node.name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(node));
     }
 
     export function isModuleWithStringLiteralName(node: Node): node is ModuleDeclaration {
@@ -1545,7 +1545,7 @@ namespace ts {
         return SpecialPropertyAssignmentKind.None;
     }
 
-    export function isSpecialPropertyDeclaration(expr: ts.PropertyAccessExpression): boolean {
+    export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression): boolean {
         return isInJavaScriptFile(expr) &&
             expr.parent && expr.parent.kind === SyntaxKind.ExpressionStatement &&
             !!getJSDocTypeTag(expr.parent);
@@ -1619,10 +1619,10 @@ namespace ts {
 
     function getSingleInitializerOfVariableStatementOrPropertyDeclaration(node: Node): Expression | undefined {
         switch (node.kind) {
-            case ts.SyntaxKind.VariableStatement:
+            case SyntaxKind.VariableStatement:
                 const v = getSingleVariableOfVariableStatement(node);
                 return v && v.initializer;
-            case ts.SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertyDeclaration:
                 return (node as PropertyDeclaration).initializer;
         }
     }
@@ -1717,7 +1717,7 @@ namespace ts {
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
         const name = node.name.escapedText;
-        const { typeParameters } = (node.parent.parent.parent as ts.SignatureDeclaration | ts.InterfaceDeclaration | ts.ClassDeclaration);
+        const { typeParameters } = (node.parent.parent.parent as SignatureDeclaration | InterfaceDeclaration | ClassDeclaration);
         return find(typeParameters, p => p.name.escapedText === name);
     }
 
@@ -1860,16 +1860,9 @@ namespace ts {
         return false;
     }
 
-    // True if the given identifier, string literal, or number literal is the name of a declaration node
+    // True if `name` is the name of a declaration node
     export function isDeclarationName(name: Node): boolean {
-        switch (name.kind) {
-            case SyntaxKind.Identifier:
-            case SyntaxKind.StringLiteral:
-            case SyntaxKind.NumericLiteral:
-                return isDeclaration(name.parent) && name.parent.name === name;
-            default:
-                return false;
-        }
+        return !isSourceFile(name) && !isBindingPattern(name) && isDeclaration(name.parent) && name.parent.name === name;
     }
 
     // See GH#16030
@@ -1993,40 +1986,6 @@ namespace ts {
             }
             node = node.parent;
         }
-        return undefined;
-    }
-
-    export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult {
-        const simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
-        const isNoDefaultLibRegEx = new RegExp(defaultLibReferenceRegEx.source, "gim");
-        if (simpleReferenceRegEx.test(comment)) {
-            if (isNoDefaultLibRegEx.test(comment)) {
-                return { isNoDefaultLib: true };
-            }
-            else {
-                const refMatchResult = fullTripleSlashReferencePathRegEx.exec(comment);
-                const refLibResult = !refMatchResult && fullTripleSlashReferenceTypeReferenceDirectiveRegEx.exec(comment);
-                const match = refMatchResult || refLibResult;
-                if (match) {
-                    const pos = commentRange.pos + match[1].length + match[2].length;
-                    return {
-                        fileReference: {
-                            pos,
-                            end: pos + match[3].length,
-                            fileName: match[3]
-                        },
-                        isNoDefaultLib: false,
-                        isTypeReferenceDirective: !!refLibResult
-                    };
-                }
-
-                return {
-                    diagnosticMessage: Diagnostics.Invalid_reference_directive_syntax,
-                    isNoDefaultLib: false
-                };
-            }
-        }
-
         return undefined;
     }
 
@@ -3745,7 +3704,7 @@ namespace ts {
         return false;
     }
 
-    export function getClassLikeDeclarationOfSymbol(symbol: Symbol): Declaration | undefined {
+    export function getClassLikeDeclarationOfSymbol(symbol: Symbol): ClassLikeDeclaration | undefined {
         return find(symbol.declarations, isClassLike);
     }
 
@@ -3800,27 +3759,20 @@ namespace ts {
     }
 
     export function textSpanOverlapsWith(span: TextSpan, other: TextSpan) {
-        const overlapStart = Math.max(span.start, other.start);
-        const overlapEnd = Math.min(textSpanEnd(span), textSpanEnd(other));
-        return overlapStart < overlapEnd;
+        return textSpanOverlap(span, other) !== undefined;
     }
 
     export function textSpanOverlap(span1: TextSpan, span2: TextSpan) {
-        const overlapStart = Math.max(span1.start, span2.start);
-        const overlapEnd = Math.min(textSpanEnd(span1), textSpanEnd(span2));
-        if (overlapStart < overlapEnd) {
-            return createTextSpanFromBounds(overlapStart, overlapEnd);
-        }
-        return undefined;
+        const overlap = textSpanIntersection(span1, span2);
+        return overlap && overlap.length === 0 ? undefined : overlap;
     }
 
     export function textSpanIntersectsWithTextSpan(span: TextSpan, other: TextSpan) {
-        return other.start <= textSpanEnd(span) && textSpanEnd(other) >= span.start;
+        return decodedTextSpanIntersectsWith(span.start, span.length, other.start, other.length);
     }
 
     export function textSpanIntersectsWith(span: TextSpan, start: number, length: number) {
-        const end = start + length;
-        return start <= textSpanEnd(span) && end >= span.start;
+        return decodedTextSpanIntersectsWith(span.start, span.length, start, length);
     }
 
     export function decodedTextSpanIntersectsWith(start1: number, length1: number, start2: number, length2: number) {
@@ -3834,12 +3786,9 @@ namespace ts {
     }
 
     export function textSpanIntersection(span1: TextSpan, span2: TextSpan) {
-        const intersectStart = Math.max(span1.start, span2.start);
-        const intersectEnd = Math.min(textSpanEnd(span1), textSpanEnd(span2));
-        if (intersectStart <= intersectEnd) {
-            return createTextSpanFromBounds(intersectStart, intersectEnd);
-        }
-        return undefined;
+        const start = Math.max(span1.start, span2.start);
+        const end = Math.min(textSpanEnd(span1), textSpanEnd(span2));
+        return start <= end ? createTextSpanFromBounds(start, end) : undefined;
     }
 
     export function createTextSpan(start: number, length: number): TextSpan {
@@ -4138,6 +4087,7 @@ namespace ts {
                 return false;
             }
             try {
+                // tslint:disable-next-line no-unnecessary-qualifier (making clear this is a global mutation!)
                 ts.localizedDiagnosticMessages = JSON.parse(fileContents);
             }
             catch (e) {
@@ -5619,6 +5569,8 @@ namespace ts {
 
     // Statement
 
+    export function isIterationStatement(node: Node, lookInLabeledStatements: false): node is IterationStatement;
+    export function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement | LabeledStatement;
     export function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement {
         switch (node.kind) {
             case SyntaxKind.ForStatement:

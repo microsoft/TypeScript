@@ -106,7 +106,7 @@ namespace ts.Completions {
     }
 
     function completionInfoFromData(sourceFile: SourceFile, typeChecker: TypeChecker, compilerOptions: CompilerOptions, log: Log, completionData: CompletionData, includeInsertTextCompletions: boolean): CompletionInfo {
-        const { symbols, completionKind, isNewIdentifierLocation, location, propertyAccessToConvert, keywordFilters, symbolToOriginInfoMap, recommendedCompletion, isJsxInitializer } = completionData;
+        const { symbols, completionKind, isInSnippetScope, isNewIdentifierLocation, location, propertyAccessToConvert, keywordFilters, symbolToOriginInfoMap, recommendedCompletion, isJsxInitializer } = completionData;
 
         if (sourceFile.languageVariant === LanguageVariant.JSX && location && location.parent && isJsxClosingElement(location.parent)) {
             // In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,
@@ -148,7 +148,7 @@ namespace ts.Completions {
             addRange(entries, getKeywordCompletions(keywordFilters));
         }
 
-        return { isGlobalCompletion: completionKind === CompletionKind.Global, isMemberCompletion, isNewIdentifierLocation, entries };
+        return { isGlobalCompletion: isInSnippetScope, isMemberCompletion, isNewIdentifierLocation, entries };
     }
 
     function isMemberCompletionKind(kind: CompletionKind): boolean {
@@ -635,6 +635,7 @@ namespace ts.Completions {
         readonly kind: CompletionDataKind.Data;
         readonly symbols: ReadonlyArray<Symbol>;
         readonly completionKind: CompletionKind;
+        readonly isInSnippetScope: boolean;
         /** Note that the presence of this alone doesn't mean that we need a conversion. Only do that if the completion is not an ordinary identifier. */
         readonly propertyAccessToConvert: PropertyAccessExpression | undefined;
         readonly isNewIdentifierLocation: boolean;
@@ -649,7 +650,6 @@ namespace ts.Completions {
 
     const enum CompletionKind {
         ObjectPropertyDeclaration,
-        /** Note that sometimes we access completions from global scope, but use "None" instead of this. See isGlobalCompletionScope. */
         Global,
         PropertyAccess,
         MemberLike,
@@ -673,11 +673,11 @@ namespace ts.Completions {
                 return getContextualTypeFromParent(currentToken as Identifier, checker);
             case SyntaxKind.EqualsToken:
                 switch (parent.kind) {
-                    case ts.SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.VariableDeclaration:
                         return checker.getContextualType((parent as VariableDeclaration).initializer);
-                    case ts.SyntaxKind.BinaryExpression:
+                    case SyntaxKind.BinaryExpression:
                         return checker.getTypeAtLocation((parent as BinaryExpression).left);
-                    case ts.SyntaxKind.JsxAttribute:
+                    case SyntaxKind.JsxAttribute:
                         return checker.getContextualTypeForJsxAttribute(parent as JsxAttribute);
                     default:
                         return undefined;
@@ -700,25 +700,25 @@ namespace ts.Completions {
         }
     }
 
-    function getContextualTypeFromParent(node: ts.Expression, checker: ts.TypeChecker): Type | undefined {
+    function getContextualTypeFromParent(node: Expression, checker: TypeChecker): Type | undefined {
         const { parent } = node;
         switch (parent.kind) {
-            case ts.SyntaxKind.NewExpression:
-                return checker.getContextualType(parent as ts.NewExpression);
-            case ts.SyntaxKind.BinaryExpression: {
-                const { left, operatorToken, right } = parent as ts.BinaryExpression;
+            case SyntaxKind.NewExpression:
+                return checker.getContextualType(parent as NewExpression);
+            case SyntaxKind.BinaryExpression: {
+                const { left, operatorToken, right } = parent as BinaryExpression;
                 return isEqualityOperatorKind(operatorToken.kind)
                     ? checker.getTypeAtLocation(node === right ? left : right)
                     : checker.getContextualType(node);
             }
-            case ts.SyntaxKind.CaseClause:
-                return (parent as ts.CaseClause).expression === node ? getSwitchedType(parent as ts.CaseClause, checker) : undefined;
+            case SyntaxKind.CaseClause:
+                return (parent as CaseClause).expression === node ? getSwitchedType(parent as CaseClause, checker) : undefined;
             default:
                 return checker.getContextualType(node);
         }
     }
 
-    function getSwitchedType(caseClause: ts.CaseClause, checker: ts.TypeChecker): ts.Type {
+    function getSwitchedType(caseClause: CaseClause, checker: TypeChecker): Type {
         return checker.getTypeAtLocation(caseClause.parent.parent.expression);
     }
 
@@ -753,6 +753,7 @@ namespace ts.Completions {
         log("getCompletionData: Is inside comment: " + (timestamp() - start));
 
         let insideJsDocTagTypeExpression = false;
+        let isInSnippetScope = false;
         if (insideComment) {
             if (hasDocComment(sourceFile, position)) {
                 if (sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
@@ -942,7 +943,7 @@ namespace ts.Completions {
             getTypeScriptMemberSymbols();
         }
         else if (isRightOfOpenTag) {
-            const tagSymbols = Debug.assertEachDefined(typeChecker.getJsxIntrinsicTagNames(), "getJsxIntrinsicTagNames() should all be defined");
+            const tagSymbols = Debug.assertEachDefined(typeChecker.getJsxIntrinsicTagNamesAt(location), "getJsxIntrinsicTagNames() should all be defined");
             if (tryGetGlobalSymbols()) {
                 symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & (SymbolFlags.Value | SymbolFlags.Alias))));
             }
@@ -971,7 +972,7 @@ namespace ts.Completions {
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
         const recommendedCompletion = previousToken && getRecommendedCompletion(previousToken, position, sourceFile, typeChecker);
-        return { kind: CompletionDataKind.Data, symbols, completionKind, propertyAccessToConvert, isNewIdentifierLocation, location, keywordFilters, symbolToOriginInfoMap, recommendedCompletion, previousToken, isJsxInitializer };
+        return { kind: CompletionDataKind.Data, symbols, completionKind, isInSnippetScope, propertyAccessToConvert, isNewIdentifierLocation, location, keywordFilters, symbolToOriginInfoMap, recommendedCompletion, previousToken, isJsxInitializer };
 
         type JSDocTagWithTypeExpression = JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag;
 
@@ -1098,7 +1099,7 @@ namespace ts.Completions {
             }
 
             // Get all entities in the current scope.
-            completionKind = CompletionKind.None;
+            completionKind = CompletionKind.Global;
             isNewIdentifierLocation = isNewIdentifierDefinitionLocation(contextToken);
 
             if (previousToken !== contextToken) {
@@ -1134,9 +1135,7 @@ namespace ts.Completions {
                 position;
 
             const scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile) || sourceFile;
-            if (isGlobalCompletionScope(scopeNode)) {
-                completionKind = CompletionKind.Global;
-            }
+            isInSnippetScope = isSnippetScope(scopeNode);
 
             const symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
 
@@ -1161,7 +1160,7 @@ namespace ts.Completions {
             return true;
         }
 
-        function isGlobalCompletionScope(scopeNode: Node): boolean {
+        function isSnippetScope(scopeNode: Node): boolean {
             switch (scopeNode.kind) {
                 case SyntaxKind.SourceFile:
                 case SyntaxKind.TemplateExpression:
@@ -2128,10 +2127,10 @@ namespace ts.Completions {
                 // TODO: GH#18169
                 return { name: JSON.stringify(name), needsConvertPropertyAccess: false };
             case CompletionKind.PropertyAccess:
-            case CompletionKind.None:
             case CompletionKind.Global:
                 // Don't add a completion for a name starting with a space. See https://github.com/Microsoft/TypeScript/pull/20547
                 return name.charCodeAt(0) === CharacterCodes.space ? undefined : { name, needsConvertPropertyAccess: true };
+            case CompletionKind.None:
             case CompletionKind.String:
                 return validIdentiferResult;
             default:
@@ -2141,7 +2140,7 @@ namespace ts.Completions {
 
     // A cache of completion entries for keywords, these do not change between sessions
     const _keywordCompletions: ReadonlyArray<CompletionEntry>[] = [];
-    const allKeywordsCompletions: () => ReadonlyArray<CompletionEntry> = ts.memoize(() => {
+    const allKeywordsCompletions: () => ReadonlyArray<CompletionEntry> = memoize(() => {
         const res: CompletionEntry[] = [];
         for (let i = SyntaxKind.FirstKeyword; i <= SyntaxKind.LastKeyword; i++) {
             res.push({
@@ -2225,12 +2224,12 @@ namespace ts.Completions {
         return true;
     }
 
-    function isEqualityOperatorKind(kind: ts.SyntaxKind): kind is EqualityOperator {
+    function isEqualityOperatorKind(kind: SyntaxKind): kind is EqualityOperator {
         switch (kind) {
-            case ts.SyntaxKind.EqualsEqualsEqualsToken:
-            case ts.SyntaxKind.EqualsEqualsToken:
-            case ts.SyntaxKind.ExclamationEqualsEqualsToken:
-            case ts.SyntaxKind.ExclamationEqualsToken:
+            case SyntaxKind.EqualsEqualsEqualsToken:
+            case SyntaxKind.EqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsToken:
                 return true;
             default:
                 return false;

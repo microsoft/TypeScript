@@ -178,7 +178,7 @@ namespace ts {
     /// If we consider every slash token to be a regex, we could be missing cases like "1/2/3", where
     /// we have a series of divide operator. this list allows us to be more accurate by ruling out
     /// locations where a regexp cannot exist.
-    const noRegexTable: true[] = ts.arrayToNumericMap<SyntaxKind, true>([
+    const noRegexTable: true[] = arrayToNumericMap<SyntaxKind, true>([
         SyntaxKind.Identifier,
         SyntaxKind.StringLiteral,
         SyntaxKind.NumericLiteral,

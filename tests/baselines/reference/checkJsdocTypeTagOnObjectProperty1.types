@@ -35,6 +35,7 @@ const obj = {
 
   /** @type {number} */
   ['b' + 'ar1']: 42,
+>['b' + 'ar1'] : number
 >'b' + 'ar1' : string
 >'b' : "b"
 >'ar1' : "ar1"

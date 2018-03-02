@@ -144,6 +144,7 @@ namespace ts {
 
         getSyntacticDiagnostics(fileName: string): string;
         getSemanticDiagnostics(fileName: string): string;
+        getSuggestionDiagnostics(fileName: string): string;
         getCompilerOptionsDiagnostics(): string;
 
         getSyntacticClassifications(fileName: string, start: number, length: number): string;
@@ -581,7 +582,7 @@ namespace ts {
         }
     }
 
-    interface RealizedDiagnostic {
+    export interface RealizedDiagnostic {
         message: string;
         start: number;
         length: number;
@@ -597,8 +598,7 @@ namespace ts {
             message: flattenDiagnosticMessageText(diagnostic.messageText, newLine),
             start: diagnostic.start,
             length: diagnostic.length,
-            /// TODO: no need for the tolowerCase call
-            category: DiagnosticCategory[diagnostic.category].toLowerCase(),
+            category: diagnosticCategoryName(diagnostic),
             code: diagnostic.code
         };
     }
@@ -663,7 +663,7 @@ namespace ts {
 
         private realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): { message: string; start: number; length: number; category: string; }[] {
             const newLine = getNewLineOrDefaultFromHost(this.host);
-            return ts.realizeDiagnostics(diagnostics, newLine);
+            return realizeDiagnostics(diagnostics, newLine);
         }
 
         public getSyntacticClassifications(fileName: string, start: number, length: number): string {
@@ -714,6 +714,10 @@ namespace ts {
                     const diagnostics = this.languageService.getSemanticDiagnostics(fileName);
                     return this.realizeDiagnostics(diagnostics);
                 });
+        }
+
+        public getSuggestionDiagnostics(fileName: string): string {
+            return this.forwardJSONCall(`getSuggestionDiagnostics('${fileName}')`, () => this.realizeDiagnostics(this.languageService.getSuggestionDiagnostics(fileName)));
         }
 
         public getCompilerOptionsDiagnostics(): string {
@@ -921,7 +925,7 @@ namespace ts {
             return this.forwardJSONCall(
                 `getCompletionEntryDetails('${fileName}', ${position}, '${entryName}')`,
                 () => {
-                    const localOptions: ts.FormatCodeOptions = options === undefined ? undefined : JSON.parse(options);
+                    const localOptions: FormatCodeOptions = options === undefined ? undefined : JSON.parse(options);
                     return this.languageService.getCompletionEntryDetails(fileName, position, entryName, localOptions, source);
                 }
             );
@@ -931,7 +935,7 @@ namespace ts {
             return this.forwardJSONCall(
                 `getFormattingEditsForRange('${fileName}', ${start}, ${end})`,
                 () => {
-                    const localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    const localOptions: FormatCodeOptions = JSON.parse(options);
                     return this.languageService.getFormattingEditsForRange(fileName, start, end, localOptions);
                 });
         }
@@ -940,7 +944,7 @@ namespace ts {
             return this.forwardJSONCall(
                 `getFormattingEditsForDocument('${fileName}')`,
                 () => {
-                    const localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    const localOptions: FormatCodeOptions = JSON.parse(options);
                     return this.languageService.getFormattingEditsForDocument(fileName, localOptions);
                 });
         }
@@ -949,7 +953,7 @@ namespace ts {
             return this.forwardJSONCall(
                 `getFormattingEditsAfterKeystroke('${fileName}', ${position}, '${key}')`,
                 () => {
-                    const localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    const localOptions: FormatCodeOptions = JSON.parse(options);
                     return this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
                 });
         }
