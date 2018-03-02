@@ -951,7 +951,6 @@
         "category": "Error",
         "code": 1338
     },
-
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1988,7 +1987,10 @@
         "category": "Error",
         "code": 2567
     },
-
+    "Types of construct signature is incompatible.": {
+        "category": "Error",
+        "code": 2568
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2621,7 +2623,6 @@
         "category": "Error",
         "code": 4094
     },
-
     "Public static method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
         "category": "Error",
         "code": 4095
@@ -2654,7 +2655,6 @@
         "category": "Error",
         "code": 4102
     },
-
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
@@ -2767,7 +2767,6 @@
         "category": "Error",
         "code": 5068
     },
-
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -3800,7 +3799,6 @@
         "category": "Error",
         "code": 17017
     },
-
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
         "code": 18000
@@ -3817,12 +3815,10 @@
         "category": "Error",
         "code": 18003
     },
-
     "File is a CommonJS module; it may be converted to an ES6 module.": {
         "category": "Suggestion",
         "code": 80001
     },
-
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
