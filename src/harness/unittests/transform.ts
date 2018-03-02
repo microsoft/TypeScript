@@ -3,7 +3,7 @@
 
 namespace ts {
     describe("TransformAPI", () => {
-        function replaceUndefinedWithVoid0(context: ts.TransformationContext) {
+        function replaceUndefinedWithVoid0(context: TransformationContext) {
             const previousOnSubstituteNode = context.onSubstituteNode;
             context.enableSubstitution(SyntaxKind.Identifier);
             context.onSubstituteNode = (hint, node) => {
@@ -18,19 +18,19 @@ namespace ts {
                 }
                 return node;
             };
-            return (file: ts.SourceFile) => file;
+            return (file: SourceFile) => file;
         }
-        function replaceNumberWith2(context: ts.TransformationContext) {
+        function replaceNumberWith2(context: TransformationContext) {
             function visitor(node: Node): Node {
                 if (isNumericLiteral(node)) {
                     return createNumericLiteral("2");
                 }
                 return visitEachChild(node, visitor, context);
             }
-            return (file: ts.SourceFile) => visitNode(file, visitor);
+            return (file: SourceFile) => visitNode(file, visitor);
         }
 
-        function replaceIdentifiersNamedOldNameWithNewName(context: ts.TransformationContext) {
+        function replaceIdentifiersNamedOldNameWithNewName(context: TransformationContext) {
             const previousOnSubstituteNode = context.onSubstituteNode;
             context.enableSubstitution(SyntaxKind.Identifier);
             context.onSubstituteNode = (hint, node) => {
@@ -40,7 +40,7 @@ namespace ts {
                 }
                 return node;
             };
-            return (file: ts.SourceFile) => file;
+            return (file: SourceFile) => file;
         }
 
         function transformSourceFile(sourceText: string, transformers: TransformerFactory<SourceFile>[]) {
@@ -73,7 +73,7 @@ namespace ts {
         });
 
         testBaseline("fromTranspileModule", () => {
-            return ts.transpileModule(`var oldName = undefined;`, {
+            return transpileModule(`var oldName = undefined;`, {
                 transformers: {
                     before: [replaceUndefinedWithVoid0],
                     after: [replaceIdentifiersNamedOldNameWithNewName]
@@ -85,7 +85,7 @@ namespace ts {
         });
 
         testBaseline("rewrittenNamespace", () => {
-            return ts.transpileModule(`namespace Reflect { const x = 1; }`, {
+            return transpileModule(`namespace Reflect { const x = 1; }`, {
                 transformers: {
                     before: [forceNamespaceRewrite],
                 },
@@ -96,7 +96,7 @@ namespace ts {
         });
 
         testBaseline("rewrittenNamespaceFollowingClass", () => {
-            return ts.transpileModule(`
+            return transpileModule(`
             class C { foo = 10; static bar = 20 }
             namespace C { export let x = 10; }
             `, {
@@ -104,90 +104,90 @@ namespace ts {
                         before: [forceNamespaceRewrite],
                     },
                     compilerOptions: {
-                        target: ts.ScriptTarget.ESNext,
+                        target: ScriptTarget.ESNext,
                         newLine: NewLineKind.CarriageReturnLineFeed,
                     }
                 }).outputText;
         });
 
         testBaseline("transformTypesInExportDefault", () => {
-            return ts.transpileModule(`
+            return transpileModule(`
             export default (foo: string) => { return 1; }
             `, {
                     transformers: {
                         before: [replaceNumberWith2],
                     },
                     compilerOptions: {
-                        target: ts.ScriptTarget.ESNext,
+                        target: ScriptTarget.ESNext,
                         newLine: NewLineKind.CarriageReturnLineFeed,
                     }
                 }).outputText;
         });
 
         testBaseline("synthesizedClassAndNamespaceCombination", () => {
-            return ts.transpileModule("", {
+            return transpileModule("", {
                 transformers: {
                     before: [replaceWithClassAndNamespace],
                 },
                 compilerOptions: {
-                    target: ts.ScriptTarget.ESNext,
+                    target: ScriptTarget.ESNext,
                     newLine: NewLineKind.CarriageReturnLineFeed,
                 }
             }).outputText;
 
             function replaceWithClassAndNamespace() {
-                return (sourceFile: ts.SourceFile) => {
+                return (sourceFile: SourceFile) => {
                     const result = getMutableClone(sourceFile);
-                    result.statements = ts.createNodeArray([
-                        ts.createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined),
-                        ts.createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createIdentifier("Foo"), createModuleBlock([createEmptyStatement()]))
+                    result.statements = createNodeArray([
+                        createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined),
+                        createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createIdentifier("Foo"), createModuleBlock([createEmptyStatement()]))
                     ]);
                     return result;
                 };
             }
         });
 
-        function forceNamespaceRewrite(context: ts.TransformationContext) {
-            return (sourceFile: ts.SourceFile): ts.SourceFile => {
+        function forceNamespaceRewrite(context: TransformationContext) {
+            return (sourceFile: SourceFile): SourceFile => {
                 return visitNode(sourceFile);
 
-                function visitNode<T extends ts.Node>(node: T): T {
-                    if (node.kind === ts.SyntaxKind.ModuleBlock) {
-                        const block = node as T & ts.ModuleBlock;
-                        const statements = ts.createNodeArray([...block.statements]);
-                        return ts.updateModuleBlock(block, statements) as typeof block;
+                function visitNode<T extends Node>(node: T): T {
+                    if (node.kind === SyntaxKind.ModuleBlock) {
+                        const block = node as T & ModuleBlock;
+                        const statements = createNodeArray([...block.statements]);
+                        return updateModuleBlock(block, statements) as typeof block;
                     }
-                    return ts.visitEachChild(node, visitNode, context);
+                    return visitEachChild(node, visitNode, context);
                 }
             };
         }
 
         testBaseline("transformAwayExportStar", () => {
-            return ts.transpileModule("export * from './helper';", {
+            return transpileModule("export * from './helper';", {
                 transformers: {
                     before: [expandExportStar],
                 },
                 compilerOptions: {
-                    target: ts.ScriptTarget.ESNext,
+                    target: ScriptTarget.ESNext,
                     newLine: NewLineKind.CarriageReturnLineFeed,
                 }
             }).outputText;
 
-            function expandExportStar(context: ts.TransformationContext) {
-                return (sourceFile: ts.SourceFile): ts.SourceFile => {
+            function expandExportStar(context: TransformationContext) {
+                return (sourceFile: SourceFile): SourceFile => {
                     return visitNode(sourceFile);
 
-                    function visitNode<T extends ts.Node>(node: T): T {
-                        if (node.kind === ts.SyntaxKind.ExportDeclaration) {
-                            const ed = node as ts.Node as ts.ExportDeclaration;
+                    function visitNode<T extends Node>(node: T): T {
+                        if (node.kind === SyntaxKind.ExportDeclaration) {
+                            const ed = node as Node as ExportDeclaration;
                             const exports = [{ name: "x" }];
-                            const exportSpecifiers = exports.map(e => ts.createExportSpecifier(e.name, e.name));
-                            const exportClause = ts.createNamedExports(exportSpecifiers);
-                            const newEd = ts.updateExportDeclaration(ed, ed.decorators, ed.modifiers, exportClause, ed.moduleSpecifier);
+                            const exportSpecifiers = exports.map(e => createExportSpecifier(e.name, e.name));
+                            const exportClause = createNamedExports(exportSpecifiers);
+                            const newEd = updateExportDeclaration(ed, ed.decorators, ed.modifiers, exportClause, ed.moduleSpecifier);
 
-                            return newEd as ts.Node as T;
+                            return newEd as Node as T;
                         }
-                        return ts.visitEachChild(node, visitNode, context);
+                        return visitEachChild(node, visitNode, context);
                     }
                 };
             }
@@ -195,58 +195,58 @@ namespace ts {
 
         // https://github.com/Microsoft/TypeScript/issues/19618
         testBaseline("transformAddImportStar", () => {
-            return ts.transpileModule("", {
+            return transpileModule("", {
                 transformers: {
                     before: [transformAddImportStar],
                 },
                 compilerOptions: {
-                    target: ts.ScriptTarget.ES5,
-                    module: ts.ModuleKind.System,
+                    target: ScriptTarget.ES5,
+                    module: ModuleKind.System,
                     newLine: NewLineKind.CarriageReturnLineFeed,
                 }
             }).outputText;
 
-            function transformAddImportStar(_context: ts.TransformationContext) {
-                return (sourceFile: ts.SourceFile): ts.SourceFile => {
+            function transformAddImportStar(_context: TransformationContext) {
+                return (sourceFile: SourceFile): SourceFile => {
                     return visitNode(sourceFile);
                 };
-                function visitNode(sf: ts.SourceFile) {
+                function visitNode(sf: SourceFile) {
                     // produce `import * as i0 from './comp';
-                    const importStar = ts.createImportDeclaration(
+                    const importStar = createImportDeclaration(
                         /*decorators*/ undefined,
                         /*modifiers*/ undefined,
-                        /*importClause*/ ts.createImportClause(
+                        /*importClause*/ createImportClause(
                             /*name*/ undefined,
-                            ts.createNamespaceImport(ts.createIdentifier("i0"))
+                            createNamespaceImport(createIdentifier("i0"))
                         ),
-                        /*moduleSpecifier*/ ts.createLiteral("./comp1"));
-                    return ts.updateSourceFileNode(sf, [importStar]);
+                        /*moduleSpecifier*/ createLiteral("./comp1"));
+                    return updateSourceFileNode(sf, [importStar]);
                 }
             }
         });
 
         // https://github.com/Microsoft/TypeScript/issues/17384
         testBaseline("transformAddDecoratedNode", () => {
-            return ts.transpileModule("", {
+            return transpileModule("", {
                 transformers: {
                     before: [transformAddDecoratedNode],
                 },
                 compilerOptions: {
-                    target: ts.ScriptTarget.ES5,
+                    target: ScriptTarget.ES5,
                     newLine: NewLineKind.CarriageReturnLineFeed,
                 }
             }).outputText;
 
-            function transformAddDecoratedNode(_context: ts.TransformationContext) {
-                return (sourceFile: ts.SourceFile): ts.SourceFile => {
+            function transformAddDecoratedNode(_context: TransformationContext) {
+                return (sourceFile: SourceFile): SourceFile => {
                     return visitNode(sourceFile);
                 };
-                function visitNode(sf: ts.SourceFile) {
+                function visitNode(sf: SourceFile) {
                     // produce `class Foo { @Bar baz() {} }`;
-                    const classDecl = ts.createClassDeclaration([], [], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                        ts.createMethod([ts.createDecorator(ts.createIdentifier("Bar"))], [], /**/ undefined, "baz", /**/ undefined, /**/ undefined, [], /**/ undefined, ts.createBlock([]))
+                    const classDecl = createClassDeclaration([], [], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
+                        createMethod([createDecorator(createIdentifier("Bar"))], [], /**/ undefined, "baz", /**/ undefined, /**/ undefined, [], /**/ undefined, createBlock([]))
                     ]);
-                    return ts.updateSourceFileNode(sf, [classDecl]);
+                    return updateSourceFileNode(sf, [classDecl]);
                 }
             }
         });

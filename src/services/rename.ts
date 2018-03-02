@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.Rename {
     export function getRenameInfo(typeChecker: TypeChecker, defaultLibFileName: string, getCanonicalFileName: GetCanonicalFileName, sourceFile: SourceFile, position: number): RenameInfo {
-        const getCanonicalDefaultLibName = memoize(() => getCanonicalFileName(ts.normalizePath(defaultLibFileName)));
+        const getCanonicalDefaultLibName = memoize(() => getCanonicalFileName(normalizePath(defaultLibFileName)));
         const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ true);
         const renameInfo = node && nodeIsEligibleForRename(node)
             ? getRenameInfoForNode(node, typeChecker, sourceFile, isDefinedInLibraryFile)
@@ -14,7 +14,7 @@ namespace ts.Rename {
             }
 
             const sourceFile = declaration.getSourceFile();
-            const canonicalName = getCanonicalFileName(ts.normalizePath(sourceFile.fileName));
+            const canonicalName = getCanonicalFileName(normalizePath(sourceFile.fileName));
             return canonicalName === getCanonicalDefaultLibName();
         }
     }
