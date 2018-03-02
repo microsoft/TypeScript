@@ -2470,12 +2470,19 @@ namespace ts {
             return rightMeaning === SymbolFlags.Value ? SymbolFlags.Value : SymbolFlags.Namespace;
         }
 
-        function getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined {
+        function getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean, visitedSymbolTablesMap: Map<SymbolTable[]> = createMap()): Symbol[] | undefined {
             if (!(symbol && !isPropertyOrMethodDeclarationSymbol(symbol))) {
                 return undefined;
             }
 
-            const visitedSymbolTables: SymbolTable[] = [];
+            const id = "" + getSymbolId(symbol);
+            let visitedSymbolTables: SymbolTable[];
+            if (visitedSymbolTablesMap.has(id)) {
+                visitedSymbolTables = visitedSymbolTablesMap.get(id);
+            }
+            else {
+                visitedSymbolTablesMap.set(id, visitedSymbolTables = []);
+            }
             return forEachSymbolTableInScope(enclosingDeclaration, getAccessibleSymbolChainFromSymbolTable);
 
             /**
@@ -2495,7 +2502,7 @@ namespace ts {
                 // If the symbol is equivalent and doesn't need further qualification, this symbol is accessible
                 return !needsQualification(symbolFromSymbolTable, enclosingDeclaration, meaning) ||
                     // If symbol needs qualification, make sure that parent is accessible, if it is then this symbol is accessible too
-                    !!getAccessibleSymbolChain(symbolFromSymbolTable.parent, enclosingDeclaration, getQualifiedLeftMeaning(meaning), useOnlyExternalAliasing);
+                    !!getAccessibleSymbolChain(symbolFromSymbolTable.parent, enclosingDeclaration, getQualifiedLeftMeaning(meaning), useOnlyExternalAliasing, visitedSymbolTablesMap);
             }
 
             function isAccessible(symbolFromSymbolTable: Symbol, resolvedAliasSymbol?: Symbol, ignoreQualification?: boolean) {
