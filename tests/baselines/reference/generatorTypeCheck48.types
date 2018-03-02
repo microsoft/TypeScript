@@ -1,7 +1,16 @@
 === tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck48.ts ===
 function* g() {
->g : () => IterableIterator<undefined>
+>g : () => IterableIterator<any>
 
     yield;
 >yield : any
 }
+
+function* h() {
+>h : () => IterableIterator<any>
+
+    yield undefined;
+>yield undefined : any
+>undefined : undefined
+}
+

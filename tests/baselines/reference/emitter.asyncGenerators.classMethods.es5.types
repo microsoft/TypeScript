@@ -11,7 +11,7 @@ class C2 {
 >C2 : C2
 
     async * f() {
->f : () => AsyncIterableIterator<undefined>
+>f : () => AsyncIterableIterator<any>
 
         const x = yield;
 >x : any

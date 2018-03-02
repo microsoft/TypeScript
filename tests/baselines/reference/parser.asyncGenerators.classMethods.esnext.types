@@ -140,7 +140,7 @@ class C13 {
 >C13 : C13
 
     async * f() {
->f : () => AsyncIterableIterator<undefined>
+>f : () => AsyncIterableIterator<any>
 
         yield;
 >yield : any
@@ -250,7 +250,7 @@ class C22 {
 >C22 : C22
 
     async * f() {
->f : () => AsyncIterableIterator<undefined>
+>f : () => AsyncIterableIterator<any>
 
         const x = { [yield]: 1 };
 >x : { [x: number]: number; }

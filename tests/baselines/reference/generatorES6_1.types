@@ -1,6 +1,6 @@
 === tests/cases/compiler/generatorES6_1.ts ===
 function* foo() {
->foo : () => IterableIterator<undefined>
+>foo : () => IterableIterator<any>
 
     yield
 >yield : any
