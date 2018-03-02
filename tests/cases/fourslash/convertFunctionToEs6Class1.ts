@@ -12,7 +12,7 @@
 ////foo.staticMethod2 = () => "this is static name";
 
 verify.getSuggestionDiagnostics([{
-    message: "Function may be converted to a class.",
+    message: "This constructor function may be converted to a class declaration.",
     category: "suggestion",
     code: 80002,
 }]);

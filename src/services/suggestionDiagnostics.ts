@@ -13,7 +13,7 @@ namespace ts {
                 case SyntaxKind.FunctionExpression:
                     const symbol = node.symbol;
                     if (symbol.members && (symbol.members.size > 0)) {
-                        diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.Function_may_be_converted_to_a_class));
+                        diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
                     }
                     break;
             }

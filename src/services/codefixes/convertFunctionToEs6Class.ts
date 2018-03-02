@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.codefix {
     const fixId = "convertFunctionToEs6Class";
-    const errorCodes = [Diagnostics.Function_may_be_converted_to_a_class.code];
+    const errorCodes = [Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration.code];
     registerCodeFix({
         errorCodes,
         getCodeActions(context: CodeFixContext) {

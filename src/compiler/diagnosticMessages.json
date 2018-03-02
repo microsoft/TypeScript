@@ -3814,7 +3814,7 @@
         "category": "Suggestion",
         "code": 80001
     },
-    "Function may be converted to a class.": {
+    "This constructor function may be converted to a class declaration.": {
         "category": "Suggestion",
         "code": 80002
     },
