@@ -230,9 +230,16 @@ namespace ts {
             : node;
     }
 
+    function parenthesizeForComputedName(expression: Expression): Expression {
+        return (isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken) ||
+            expression.kind === SyntaxKind.CommaListExpression ?
+            createParen(expression) :
+            expression;
+    }
+
     export function createComputedPropertyName(expression: Expression) {
         const node = <ComputedPropertyName>createSynthesizedNode(SyntaxKind.ComputedPropertyName);
-        node.expression = expression;
+        node.expression = parenthesizeForComputedName(expression);
         return node;
     }
 
