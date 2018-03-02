@@ -1,0 +1,45 @@
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck62.ts(24,70): error TS7025: Generator implicitly has type 'IterableIterator<any>' because it does not yield any values. Consider supplying a return type.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck62.ts(32,70): error TS7025: Generator implicitly has type 'IterableIterator<any>' because it does not yield any values. Consider supplying a return type.
+
+
+==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck62.ts (2 errors) ====
+    export interface StrategicState {
+        lastStrategyApplied?: string;
+    }
+    
+    export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined>): (a: T) => IterableIterator<T | undefined> {
+        return function*(state) {
+            for (const next of gen(state)) {
+                if (next) {
+                    next.lastStrategyApplied = stratName;
+                }
+                yield next;
+            }
+        }
+    }
+    
+    export interface Strategy<T> {
+        (a: T): IterableIterator<T | undefined>;
+    }
+    
+    export interface State extends StrategicState {
+        foo: number;
+    }
+    
+    export const Nothing1: Strategy<State> = strategy("Nothing", function*(state: State) {
+                                                                         ~
+!!! error TS7025: Generator implicitly has type 'IterableIterator<any>' because it does not yield any values. Consider supplying a return type.
+        return state;
+    });
+    
+    export const Nothing2: Strategy<State> = strategy("Nothing", function*(state: State) {
+        yield state;
+    });
+    
+    export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: State) {
+                                                                         ~
+!!! error TS7025: Generator implicitly has type 'IterableIterator<any>' because it does not yield any values. Consider supplying a return type.
+        yield ;
+        return state;
+    });
+     

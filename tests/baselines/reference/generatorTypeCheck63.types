@@ -74,7 +74,7 @@ export const Nothing: Strategy<State> = strategy("Nothing", function* (state: St
 >strategy("Nothing", function* (state: State) {    yield 1;    return state;}) : any
 >strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T>) => (a: T) => IterableIterator<T>
 >"Nothing" : "Nothing"
->function* (state: State) {    yield 1;    return state;} : (state: State) => IterableIterator<State | 1>
+>function* (state: State) {    yield 1;    return state;} : (state: State) => IterableIterator<number>
 >state : State
 >State : State
 
@@ -104,10 +104,10 @@ export const Nothing2: Strategy<State> = strategy("Nothing", function* (state: S
 >Nothing2 : Strategy<State>
 >Strategy : Strategy<T>
 >State : State
->strategy("Nothing", function* (state: State) {    return 1;}) : any
+>strategy("Nothing", function* (state: State) {    return 1;}) : (a: any) => IterableIterator<any>
 >strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T>) => (a: T) => IterableIterator<T>
 >"Nothing" : "Nothing"
->function* (state: State) {    return 1;} : (state: State) => IterableIterator<number>
+>function* (state: State) {    return 1;} : (state: State) => IterableIterator<any>
 >state : State
 >State : State
 
@@ -120,10 +120,10 @@ export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: S
 >Nothing3 : Strategy<State>
 >Strategy : Strategy<T>
 >State : State
->strategy("Nothing", function* (state: State) {    yield state;    return 1;}) : any
+>strategy("Nothing", function* (state: State) {    yield state;    return 1;}) : (a: State) => IterableIterator<State>
 >strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T>) => (a: T) => IterableIterator<T>
 >"Nothing" : "Nothing"
->function* (state: State) {    yield state;    return 1;} : (state: State) => IterableIterator<State | 1>
+>function* (state: State) {    yield state;    return 1;} : (state: State) => IterableIterator<State>
 >state : State
 >State : State
 
