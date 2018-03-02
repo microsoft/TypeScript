@@ -6,8 +6,8 @@
 /* @internal */
 namespace ts.formatting {
     export interface FormatContext {
-        readonly options: ts.FormatCodeSettings;
-        readonly getRule: ts.formatting.RulesMap;
+        readonly options: FormatCodeSettings;
+        readonly getRule: RulesMap;
     }
 
     export interface TextRangeWithKind extends TextRange {

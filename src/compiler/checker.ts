@@ -311,6 +311,8 @@ namespace ts {
                 const node = getParseTreeNode(nodeIn, isTypeNode);
                 return node && getTypeArgumentConstraint(node);
             },
+
+            getSuggestionDiagnostics: file => suggestionDiagnostics.get(file.fileName) || emptyArray,
         };
 
         const tupleTypes: GenericType[] = [];
@@ -449,6 +451,19 @@ namespace ts {
         const awaitedTypeStack: number[] = [];
 
         const diagnostics = createDiagnosticCollection();
+        // Suggestion diagnostics must have a file. Keyed by source file name.
+        const suggestionDiagnostics = createMultiMap<Diagnostic>();
+        function addSuggestionDiagnostic(diag: Diagnostic): void {
+            suggestionDiagnostics.add(diag.file!.fileName, { ...diag, category: DiagnosticCategory.Suggestion });
+        }
+        function addErrorOrSuggestionDiagnostic(isError: boolean, diag: Diagnostic): void {
+            if (isError) {
+                diagnostics.add(diag);
+            }
+            else {
+                addSuggestionDiagnostic(diag);
+            }
+        }
 
         const enum TypeFacts {
             None = 0,
@@ -681,9 +696,9 @@ namespace ts {
 
             function emitTextWriterWrapper(underlying: SymbolWriter): EmitTextWriter {
                 return {
-                    write: ts.noop,
-                    writeTextOfNode: ts.noop,
-                    writeLine: ts.noop,
+                    write: noop,
+                    writeTextOfNode: noop,
+                    writeLine: noop,
                     increaseIndent() {
                         return underlying.increaseIndent();
                     },
@@ -693,7 +708,7 @@ namespace ts {
                     getText() {
                         return "";
                     },
-                    rawWrite: ts.noop,
+                    rawWrite: noop,
                     writeLiteral(s) {
                         return underlying.writeStringLiteral(s);
                     },
@@ -1817,13 +1832,13 @@ namespace ts {
         }
 
         function getExternalModuleMember(node: ImportDeclaration | ExportDeclaration, specifier: ImportOrExportSpecifier, dontResolveAlias = false): Symbol | undefined {
-            const moduleSymbol = resolveExternalModuleName(node, node.moduleSpecifier!);
+            const moduleSymbol = resolveExternalModuleName(node, node.moduleSpecifier!)!; // TODO: GH#18217
             const targetSymbol = resolveESModuleSymbol(moduleSymbol, node.moduleSpecifier!, dontResolveAlias);
             if (targetSymbol) {
                 const name = specifier.propertyName || specifier.name;
                 if (name.escapedText) {
-                    if (isShorthandAmbientModuleSymbol(moduleSymbol!)) {
-                        return moduleSymbol!;
+                    if (isShorthandAmbientModuleSymbol(moduleSymbol)) {
+                        return moduleSymbol;
                     }
 
                     let symbolFromVariable: Symbol | undefined;
@@ -1845,7 +1860,15 @@ namespace ts {
                         combineValueAndTypeSymbols(symbolFromVariable, symbolFromModule) :
                         symbolFromModule || symbolFromVariable;
                     if (!symbol) {
-                        error(name, Diagnostics.Module_0_has_no_exported_member_1, getFullyQualifiedName(moduleSymbol!), declarationNameToString(name));
+                        const moduleName = getFullyQualifiedName(moduleSymbol);
+                        const declarationName = declarationNameToString(name);
+                        const suggestion = getSuggestionForNonexistentModule(name, targetSymbol);
+                        if (suggestion !== undefined) {
+                            error(name, Diagnostics.Module_0_has_no_exported_member_1_Did_you_mean_2, moduleName, declarationName, suggestion);
+                        }
+                        else {
+                            error(name, Diagnostics.Module_0_has_no_exported_member_1, moduleName, declarationName);
+                        }
                     }
                     return symbol;
                 }
@@ -2074,11 +2097,14 @@ namespace ts {
             if (ambientModule) {
                 return ambientModule;
             }
-            const resolvedModule = getResolvedModule(getSourceFileOfNode(location), moduleReference);
+            const resolvedModule = getResolvedModule(getSourceFileOfNode(location), moduleReference)!; // TODO: GH#18217
             const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
             const sourceFile = resolvedModule && !resolutionDiagnostic && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
                 if (sourceFile.symbol) {
+                    if (resolvedModule.isExternalLibraryImport && !extensionIsTypeScript(resolvedModule.extension)) {
+                        addSuggestionDiagnostic(createModuleImplicitlyAnyDiagnostic(errorNode, resolvedModule, moduleReference));
+                    }
                     // merged symbol is module declaration symbol combined with all augmentations
                     return getMergedSymbol(sourceFile.symbol);
                 }
@@ -2100,17 +2126,10 @@ namespace ts {
             if (resolvedModule && !extensionIsTypeScript(resolvedModule.extension) && resolutionDiagnostic === undefined || resolutionDiagnostic === Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type) {
                 if (isForAugmentation) {
                     const diag = Diagnostics.Invalid_module_name_in_augmentation_Module_0_resolves_to_an_untyped_module_at_1_which_cannot_be_augmented;
-                    error(errorNode, diag, moduleReference, resolvedModule!.resolvedFileName); // TODO: GH#18217
+                    error(errorNode, diag, moduleReference, resolvedModule.resolvedFileName); // TODO: GH#18217
                 }
-                else if (noImplicitAny && moduleNotFoundError) {
-                    let errorInfo = resolvedModule!.packageId && chainDiagnosticMessages(/*details*/ undefined,
-                        Diagnostics.Try_npm_install_types_Slash_0_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
-                        getMangledNameForScopedPackage(resolvedModule!.packageId!.name)); // TODO: GH#18217
-                    errorInfo = chainDiagnosticMessages(errorInfo,
-                        Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
-                        moduleReference,
-                        resolvedModule!.resolvedFileName);
-                    diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo));
+                else {
+                    addErrorOrSuggestionDiagnostic(noImplicitAny && !!moduleNotFoundError, createModuleImplicitlyAnyDiagnostic(errorNode, resolvedModule, moduleReference));
                 }
                 // Failed imports and untyped modules are both treated in an untyped manner; only difference is whether we give a diagnostic first.
                 return undefined;
@@ -2119,7 +2138,7 @@ namespace ts {
             if (moduleNotFoundError) {
                 // report errors only if it was requested
                 if (resolutionDiagnostic) {
-                    error(errorNode, resolutionDiagnostic, moduleReference, resolvedModule!.resolvedFileName);
+                    error(errorNode, resolutionDiagnostic, moduleReference, resolvedModule.resolvedFileName);
                 }
                 else {
                     const tsExtension = tryExtractTypeScriptExtension(moduleReference);
@@ -2133,6 +2152,18 @@ namespace ts {
                 }
             }
             return undefined;
+        }
+
+        function createModuleImplicitlyAnyDiagnostic(errorNode: Node, { packageId, resolvedFileName }: ResolvedModuleFull, moduleReference: string): Diagnostic {
+            const errorInfo = packageId && chainDiagnosticMessages(
+                /*details*/ undefined,
+                Diagnostics.Try_npm_install_types_Slash_0_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
+                getMangledNameForScopedPackage(packageId.name));
+            return createDiagnosticForNodeFromMessageChain(errorNode, chainDiagnosticMessages(
+                errorInfo,
+                Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
+                moduleReference,
+                resolvedFileName));
         }
 
         // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
@@ -2462,12 +2493,19 @@ namespace ts {
             return rightMeaning === SymbolFlags.Value ? SymbolFlags.Value : SymbolFlags.Namespace;
         }
 
-        function getAccessibleSymbolChain(symbol: Symbol | undefined, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined {
+        function getAccessibleSymbolChain(symbol: Symbol | undefined, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean, visitedSymbolTablesMap: Map<SymbolTable[]> = createMap()): Symbol[] | undefined {
             if (!(symbol && !isPropertyOrMethodDeclarationSymbol(symbol))) {
                 return undefined;
             }
 
-            const visitedSymbolTables: SymbolTable[] = [];
+            const id = "" + getSymbolId(symbol);
+            let visitedSymbolTables: SymbolTable[];
+            if (visitedSymbolTablesMap.has(id)) {
+                visitedSymbolTables = visitedSymbolTablesMap.get(id)!;
+            }
+            else {
+                visitedSymbolTablesMap.set(id, visitedSymbolTables = []);
+            }
             return forEachSymbolTableInScope(enclosingDeclaration, getAccessibleSymbolChainFromSymbolTable);
 
             /**
@@ -2487,7 +2525,7 @@ namespace ts {
                 // If the symbol is equivalent and doesn't need further qualification, this symbol is accessible
                 return !needsQualification(symbolFromSymbolTable, enclosingDeclaration, meaning) ||
                     // If symbol needs qualification, make sure that parent is accessible, if it is then this symbol is accessible too
-                    !!getAccessibleSymbolChain(symbolFromSymbolTable.parent, enclosingDeclaration, getQualifiedLeftMeaning(meaning), useOnlyExternalAliasing);
+                    !!getAccessibleSymbolChain(symbolFromSymbolTable.parent, enclosingDeclaration, getQualifiedLeftMeaning(meaning), useOnlyExternalAliasing, visitedSymbolTablesMap);
             }
 
             function isAccessible(symbolFromSymbolTable: Symbol, resolvedAliasSymbol?: Symbol, ignoreQualification?: boolean) {
@@ -3466,7 +3504,7 @@ namespace ts {
                         // If this is the last part of outputting the symbol, always output. The cases apply only to parent symbols.
                         endOfChain ||
                         // If a parent symbol is an external module, don't write it. (We prefer just `x` vs `"foo/bar".x`.)
-                        !(!parentSymbol && ts.forEach(symbol.declarations, hasExternalModuleSymbol)) &&
+                        !(!parentSymbol && forEach(symbol.declarations, hasExternalModuleSymbol)) &&
                         // If a parent symbol is an anonymous type, don't write it.
                         !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral))) {
 
@@ -5440,7 +5478,12 @@ namespace ts {
                     }
 
                     addDeclarationToLateBoundSymbol(lateSymbol, decl, symbolFlags);
-                    lateSymbol.parent = parent;
+                    if (lateSymbol.parent) {
+                        Debug.assert(lateSymbol.parent === parent, "Existing symbol parent should match new one");
+                    }
+                    else {
+                        lateSymbol.parent = parent;
+                    }
                     return links.resolvedSymbol = lateSymbol;
                 }
             }
@@ -11540,10 +11583,10 @@ namespace ts {
                 if (!couldContainTypeVariables(target)) {
                     return;
                 }
-                if (source.flags & (TypeFlags.Any | TypeFlags.Never) && source !== silentNeverType) {
-                    // We are inferring from 'any' or 'never'. We want to infer this type for every type parameter
-                    // referenced in the target type, so we record the propagation type and infer from the target
-                    // to itself. Then, as we find candidates we substitute the propagation type.
+                if (source.flags & TypeFlags.Any) {
+                    // We are inferring from an 'any' type. We want to infer this type for every type parameter
+                    // referenced in the target type, so we record it as the propagation type and infer from the
+                    // target to itself. Then, as we find candidates we substitute the propagation type.
                     const savePropagationType = propagationType;
                     propagationType = source;
                     inferFromTypes(target, target);
@@ -16225,6 +16268,11 @@ namespace ts {
             return result && symbolName(result);
         }
 
+        function getSuggestionForNonexistentModule(name: Identifier, targetModule: Symbol): string | undefined {
+            const suggestion = targetModule.exports && getSpellingSuggestionForName(idText(name), getExportsOfModuleAsArray(targetModule), SymbolFlags.ModuleMember);
+            return suggestion && symbolName(suggestion);
+        }
+
         /**
          * Given a name and a list of symbols whose names are *not* equal to the name, return a spelling suggestion if there is one that is close enough.
          * Names less than length 3 only check for case-insensitive equality, not levenshtein distance.
@@ -16350,7 +16398,7 @@ namespace ts {
 
         function isValidPropertyAccessForCompletions(node: PropertyAccessExpression, type: Type, property: Symbol): boolean {
             return isValidPropertyAccessWithType(node, node.expression, property.escapedName, type)
-                && (!(property.flags & ts.SymbolFlags.Method) || isValidMethodAccess(property, type));
+                && (!(property.flags & SymbolFlags.Method) || isValidMethodAccess(property, type));
         }
         function isValidMethodAccess(method: Symbol, type: Type) {
             const propType = getTypeOfFuncClassEnumModule(method);

@@ -884,9 +884,9 @@ namespace ts {
         });
     });
 
-    type FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
-    import createTestSystem = ts.TestFSWithWatch.createWatchedSystem;
-    import libFile = ts.TestFSWithWatch.libFile;
+    type FileOrFolder = TestFSWithWatch.FileOrFolder;
+    import createTestSystem = TestFSWithWatch.createWatchedSystem;
+    import libFile = TestFSWithWatch.libFile;
 
     describe("isProgramUptoDate should return true when there is no change in compiler options and", () => {
         function verifyProgramIsUptoDate(

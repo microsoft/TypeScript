@@ -31,7 +31,7 @@ namespace ts.codefix {
         return host.isKnownTypesPackageName!(packageName) ? getTypesPackageName(packageName) : undefined; // TODO: GH#18217
     }
 
-    export function tryGetCodeActionForInstallPackageTypes(host: LanguageServiceHost, fileName: string, moduleName: string): CodeAction | undefined {
+    function tryGetCodeActionForInstallPackageTypes(host: LanguageServiceHost, fileName: string, moduleName: string): CodeAction | undefined {
         const packageName = getTypesPackageNameToInstall(host, moduleName);
         return packageName === undefined ? undefined : {
             description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Install_0), [packageName]),

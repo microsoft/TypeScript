@@ -441,7 +441,7 @@ export = C;
                 "/a/b/c.ts": `/// <reference path="d.ts"/>`,
                 "/a/b/d.ts": "var x"
             });
-            test(files, { module: ts.ModuleKind.AMD }, "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "/a/b/d.ts"], []);
+            test(files, { module: ModuleKind.AMD }, "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "/a/b/d.ts"], []);
         });
 
         it("should fail when two files used in program differ only in casing (tripleslash references)", () => {
@@ -449,7 +449,7 @@ export = C;
                 "/a/b/c.ts": `/// <reference path="D.ts"/>`,
                 "/a/b/d.ts": "var x"
             });
-            test(files, { module: ts.ModuleKind.AMD, forceConsistentCasingInFileNames: true }, "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], [1149]);
+            test(files, { module: ModuleKind.AMD, forceConsistentCasingInFileNames: true }, "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], [1149]);
         });
 
         it("should fail when two files used in program differ only in casing (imports)", () => {
@@ -457,7 +457,7 @@ export = C;
                 "/a/b/c.ts": `import {x} from "D"`,
                 "/a/b/d.ts": "export var x"
             });
-            test(files, { module: ts.ModuleKind.AMD, forceConsistentCasingInFileNames: true }, "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], [1149]);
+            test(files, { module: ModuleKind.AMD, forceConsistentCasingInFileNames: true }, "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], [1149]);
         });
 
         it("should fail when two files used in program differ only in casing (imports, relative module names)", () => {
@@ -465,7 +465,7 @@ export = C;
                 "moduleA.ts": `import {x} from "./ModuleB"`,
                 "moduleB.ts": "export var x"
             });
-            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "", /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts"], [1149]);
+            test(files, { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "", /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts"], [1149]);
         });
 
         it("should fail when two files exist on disk that differs only in casing", () => {
@@ -474,7 +474,7 @@ export = C;
                 "/a/b/D.ts": "export var x",
                 "/a/b/d.ts": "export var y"
             });
-            test(files, { module: ts.ModuleKind.AMD }, "/a/b", /*useCaseSensitiveFileNames*/ true, ["c.ts", "d.ts"], [1149]);
+            test(files, { module: ModuleKind.AMD }, "/a/b", /*useCaseSensitiveFileNames*/ true, ["c.ts", "d.ts"], [1149]);
         });
 
         it("should fail when module name in 'require' calls has inconsistent casing", () => {
@@ -483,7 +483,7 @@ export = C;
                 "moduleB.ts": `import a = require("./moduleC")`,
                 "moduleC.ts": "export var x"
             });
-            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "", /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts", "moduleC.ts"], [1149, 1149]);
+            test(files, { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "", /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts", "moduleC.ts"], [1149, 1149]);
         });
 
         it("should fail when module names in 'require' calls has inconsistent casing and current directory has uppercase chars", () => {
@@ -496,7 +496,7 @@ import a = require("./moduleA");
 import b = require("./moduleB");
                 `
             });
-            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], [1149]);
+            test(files, { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], [1149]);
         });
         it("should not fail when module names in 'require' calls has consistent casing and current directory has uppercase chars", () => {
             const files = createMapFromTemplate({
@@ -508,7 +508,7 @@ import a = require("./moduleA");
 import b = require("./moduleB");
                 `
             });
-            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], []);
+            test(files, { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], []);
         });
     });
 

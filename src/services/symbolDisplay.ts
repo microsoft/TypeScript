@@ -117,7 +117,7 @@ namespace ts.SymbolDisplay {
         const displayParts: SymbolDisplayPart[] = [];
         let documentation: SymbolDisplayPart[] | undefined;
         let tags: JSDocTagInfo[] | undefined;
-        const symbolFlags = ts.getCombinedLocalAndExportSymbolFlags(symbol);
+        const symbolFlags = getCombinedLocalAndExportSymbolFlags(symbol);
         let symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location);
         let hasAddedSymbolInfo = false;
         const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isExpression(location);
@@ -369,16 +369,16 @@ namespace ts.SymbolDisplay {
                 const resolvedSymbol = typeChecker.getAliasedSymbol(symbol);
                 if (resolvedSymbol !== symbol && resolvedSymbol.declarations && resolvedSymbol.declarations.length > 0) {
                     const resolvedNode = resolvedSymbol.declarations[0];
-                    const declarationName = ts.getNameOfDeclaration(resolvedNode);
+                    const declarationName = getNameOfDeclaration(resolvedNode);
                     if (declarationName) {
                         const isExternalModuleDeclaration =
-                            ts.isModuleWithStringLiteralName(resolvedNode) &&
-                            ts.hasModifier(resolvedNode, ModifierFlags.Ambient);
+                            isModuleWithStringLiteralName(resolvedNode) &&
+                            hasModifier(resolvedNode, ModifierFlags.Ambient);
                         const shouldUseAliasName = symbol.name !== "default" && !isExternalModuleDeclaration;
                         const resolvedInfo = getSymbolDisplayPartsDocumentationAndSymbolKind(
                             typeChecker,
                             resolvedSymbol,
-                            ts.getSourceFileOfNode(resolvedNode),
+                            getSourceFileOfNode(resolvedNode),
                             resolvedNode,
                             declarationName,
                             semanticMeaning,
@@ -406,7 +406,7 @@ namespace ts.SymbolDisplay {
             }
             displayParts.push(spacePart());
             addFullSymbolName(symbol);
-            ts.forEach(symbol.declarations, declaration => {
+            forEach(symbol.declarations, declaration => {
                 if (declaration.kind === SyntaxKind.ImportEqualsDeclaration) {
                     const importEqualsDeclaration = <ImportEqualsDeclaration>declaration;
                     if (isExternalModuleImportEqualsDeclaration(importEqualsDeclaration)) {
@@ -607,7 +607,7 @@ namespace ts.SymbolDisplay {
             return false; // This is exported symbol
         }
 
-        return ts.forEach(symbol.declarations, declaration => {
+        return forEach(symbol.declarations, declaration => {
             // Function expressions are local
             if (declaration.kind === SyntaxKind.FunctionExpression) {
                 return true;

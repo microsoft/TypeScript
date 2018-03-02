@@ -17,7 +17,7 @@ namespace ts {
                 getDefaultLibFileName: () => "lib.d.ts",
                 getCurrentDirectory: () => "",
             };
-            return ts.createLanguageService(lshost);
+            return createLanguageService(lshost);
         }
 
         function verifyNewLines(content: string, options: CompilerOptions) {

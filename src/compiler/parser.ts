@@ -4185,8 +4185,9 @@ namespace ts {
             parseExpected(SyntaxKind.LessThanToken);
 
             if (token() === SyntaxKind.GreaterThanToken) {
-                parseExpected(SyntaxKind.GreaterThanToken);
+                // See below for explanation of scanJsxText
                 const node: JsxOpeningFragment = <JsxOpeningFragment>createNode(SyntaxKind.JsxOpeningFragment, fullStart);
+                scanJsxText();
                 return finishNode(node);
             }
 
@@ -5928,7 +5929,7 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseImportEqualsDeclaration(node: ImportEqualsDeclaration, identifier: ts.Identifier): ImportEqualsDeclaration {
+        function parseImportEqualsDeclaration(node: ImportEqualsDeclaration, identifier: Identifier): ImportEqualsDeclaration {
             node.kind = SyntaxKind.ImportEqualsDeclaration;
             node.name = identifier;
             parseExpected(SyntaxKind.EqualsToken);

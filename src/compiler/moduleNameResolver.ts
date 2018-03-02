@@ -161,7 +161,7 @@ namespace ts {
         }
 
         let typeRoots: string[] | undefined;
-        forEachAncestorDirectory(ts.normalizePath(currentDirectory), directory => {
+        forEachAncestorDirectory(normalizePath(currentDirectory), directory => {
             const atTypes = combinePaths(directory, nodeModulesAtTypes);
             if (host.directoryExists!(atTypes)) {
                 (typeRoots || (typeRoots = [])).push(atTypes);
@@ -728,7 +728,7 @@ namespace ts {
     /* @internal */
     export function resolveJavaScriptModule(moduleName: string, initialDir: string, host: ModuleResolutionHost): string {
         const { resolvedModule, failedLookupLocations } =
-            nodeModuleNameResolverWorker(moduleName, initialDir, { moduleResolution: ts.ModuleResolutionKind.NodeJs, allowJs: true }, host, /*cache*/ undefined, /*jsOnly*/ true);
+            nodeModuleNameResolverWorker(moduleName, initialDir, { moduleResolution: ModuleResolutionKind.NodeJs, allowJs: true }, host, /*cache*/ undefined, /*jsOnly*/ true);
         if (!resolvedModule) {
             throw new Error(`Could not resolve JS module '${moduleName}' starting at '${initialDir}'. Looked in: ${failedLookupLocations.join(", ")}`);
         }
@@ -1171,7 +1171,7 @@ namespace ts {
     /* @internal */
     export function getMangledNameForScopedPackage(packageName: string): string {
         if (startsWith(packageName, "@")) {
-            const replaceSlash = packageName.replace(ts.directorySeparator, mangledScopedPackageSeparator);
+            const replaceSlash = packageName.replace(directorySeparator, mangledScopedPackageSeparator);
             if (replaceSlash !== packageName) {
                 return replaceSlash.slice(1); // Take off the "@"
             }
@@ -1191,7 +1191,7 @@ namespace ts {
     /* @internal */
     export function getUnmangledNameForScopedPackage(typesPackageName: string): string {
         return stringContains(typesPackageName, mangledScopedPackageSeparator) ?
-            "@" + typesPackageName.replace(mangledScopedPackageSeparator, ts.directorySeparator) :
+            "@" + typesPackageName.replace(mangledScopedPackageSeparator, directorySeparator) :
             typesPackageName;
     }
 

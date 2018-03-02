@@ -192,7 +192,7 @@ namespace ts.textChanges {
 
     export interface TextChangesContext {
         host: LanguageServiceHost;
-        formatContext: ts.formatting.FormatContext;
+        formatContext: formatting.FormatContext;
     }
 
     export class ChangeTracker {
@@ -212,7 +212,7 @@ namespace ts.textChanges {
         }
 
         /** Public for tests only. Other callers should use `ChangeTracker.with`. */
-        constructor(private readonly newLineCharacter: string, private readonly formatContext: ts.formatting.FormatContext) {}
+        constructor(private readonly newLineCharacter: string, private readonly formatContext: formatting.FormatContext) {}
 
         public deleteRange(sourceFile: SourceFile, range: TextRange) {
             this.changes.push({ kind: ChangeKind.Remove, sourceFile, range });

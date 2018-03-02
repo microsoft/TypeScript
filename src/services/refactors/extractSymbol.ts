@@ -409,7 +409,7 @@ namespace ts.refactor.extractSymbol {
                     switch (node.kind) {
                         case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.ClassDeclaration:
-                            if (node.parent.kind === SyntaxKind.SourceFile && (node.parent as ts.SourceFile).externalModuleIndicator === undefined) {
+                            if (isSourceFile(node.parent) && node.parent.externalModuleIndicator === undefined) {
                                 // You cannot extract global declarations
                                 (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.functionWillNotBeVisibleInTheNewScope));
                             }
@@ -1359,9 +1359,9 @@ namespace ts.refactor.extractSymbol {
     }
 
     function getPropertyAssignmentsForWritesAndVariableDeclarations(
-        exposedVariableDeclarations: ReadonlyArray<ts.VariableDeclaration>,
-        writes: ReadonlyArray<UsageEntry> | undefined): ShorthandPropertyAssignment[] {
-
+        exposedVariableDeclarations: ReadonlyArray<VariableDeclaration>,
+        writes: ReadonlyArray<UsageEntry> | undefined
+    ): ShorthandPropertyAssignment[] {
         const variableAssignments = map(exposedVariableDeclarations, v => createShorthandPropertyAssignment(v.symbol!.name));
         const writeAssignments = map(writes, w => createShorthandPropertyAssignment(w.symbol.name));
 

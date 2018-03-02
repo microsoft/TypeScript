@@ -18,7 +18,7 @@ namespace ts.codefix {
         },
     });
 
-    function fixImportOfModuleExports(importingFile: ts.SourceFile, exportingFile: ts.SourceFile, changes: textChanges.ChangeTracker) {
+    function fixImportOfModuleExports(importingFile: SourceFile, exportingFile: SourceFile, changes: textChanges.ChangeTracker) {
         for (const moduleSpecifier of importingFile.imports) {
             const imported = getResolvedModule(importingFile, moduleSpecifier.text);
             if (!imported || imported.resolvedFileName !== exportingFile.fileName) {
@@ -366,7 +366,7 @@ namespace ts.codefix {
                 import x from "x";
                 const [a, b, c] = x;
                 */
-                const tmp = makeUniqueName(codefix.moduleSpecifierToValidIdentifier(moduleSpecifier, target), identifiers);
+                const tmp = makeUniqueName(moduleSpecifierToValidIdentifier(moduleSpecifier, target), identifiers);
                 return [
                     makeImport(createIdentifier(tmp), /*namedImports*/ undefined, moduleSpecifier),
                     makeConst(/*modifiers*/ undefined, getSynthesizedDeepClone(name), createIdentifier(tmp)),

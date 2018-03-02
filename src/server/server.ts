@@ -141,7 +141,7 @@ namespace ts.server {
         terminal: false,
     });
 
-    class Logger implements server.Logger {
+    class Logger implements server.Logger { // tslint:disable-line no-unnecessary-qualifier
         private fd = -1;
         private seq = 0;
         private inGroup = false;
@@ -265,7 +265,7 @@ namespace ts.server {
 
         constructor(
             private readonly telemetryEnabled: boolean,
-            private readonly logger: server.Logger,
+            private readonly logger: Logger,
             private readonly host: ServerHost,
             readonly globalTypingsCacheLocation: string,
             readonly typingSafeListLocation: string,
@@ -310,7 +310,7 @@ namespace ts.server {
                 args.push(Arguments.EnableTelemetry);
             }
             if (this.logger.loggingEnabled() && this.logger.getLogFileName()) {
-                args.push(Arguments.LogFile, combinePaths(getDirectoryPath(normalizeSlashes(this.logger.getLogFileName()!)), `ti-${process.pid}.log`));
+                args.push(Arguments.LogFile, combinePaths(getDirectoryPath(normalizeSlashes(this.logger.getLogFileName())), `ti-${process.pid}.log`));
             }
             if (this.typingSafeListLocation) {
                 args.push(Arguments.TypingSafeListLocation, this.typingSafeListLocation);
@@ -390,7 +390,7 @@ namespace ts.server {
 
             switch (response.kind) {
                 case EventTypesRegistry:
-                    this.typesRegistryCache = ts.createMapFromTemplate(response.typesRegistry);
+                    this.typesRegistryCache = createMapFromTemplate(response.typesRegistry);
                     break;
                 case ActionPackageInstalled: {
                     const { success, message } = response;

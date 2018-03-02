@@ -859,7 +859,7 @@ namespace ts.server {
         }
 
         protected removeExistingTypings(include: string[]): string[] {
-            const existing = ts.getAutomaticTypeDirectiveNames(this.getCompilerOptions(), this.directoryStructureHost);
+            const existing = getAutomaticTypeDirectiveNames(this.getCompilerOptions(), this.directoryStructureHost);
             return include.filter(i => existing.indexOf(i) < 0);
         }
 

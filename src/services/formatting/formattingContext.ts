@@ -22,7 +22,7 @@ namespace ts.formatting {
         private contextNodeBlockIsOnOneLine: boolean | undefined;
         private nextNodeBlockIsOnOneLine: boolean | undefined;
 
-        constructor(public readonly sourceFile: SourceFileLike, public formattingRequestKind: FormattingRequestKind, public options: ts.FormatCodeSettings) {
+        constructor(public readonly sourceFile: SourceFileLike, public formattingRequestKind: FormattingRequestKind, public options: FormatCodeSettings) {
         }
 
         public updateContext(currentRange: TextRangeWithKind, currentTokenParent: Node, nextRange: TextRangeWithKind, nextTokenParent: Node, commonParent: Node) {

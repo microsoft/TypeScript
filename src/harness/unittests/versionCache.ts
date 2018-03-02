@@ -302,7 +302,7 @@ and grew 1cm per day`;
         it("Line/offset from pos", () => {
             for (let i = 0; i < iterationCount; i++) {
                 const lp = lineIndex.positionToLineOffset(rsa[i]);
-                const lac = ts.computeLineAndCharacterOfPosition(lineMap, rsa[i]);
+                const lac = computeLineAndCharacterOfPosition(lineMap, rsa[i]);
                 assert.equal(lac.line + 1, lp.line, "Line number mismatch " + (lac.line + 1) + " " + lp.line + " " + i);
                 assert.equal(lac.character, lp.offset - 1, "Character offset mismatch " + lac.character + " " + (lp.offset - 1) + " " + i);
             }
