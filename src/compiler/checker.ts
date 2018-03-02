@@ -11525,10 +11525,10 @@ namespace ts {
                 if (!couldContainTypeVariables(target)) {
                     return;
                 }
-                if (source.flags & (TypeFlags.Any | TypeFlags.Never) && source !== silentNeverType) {
-                    // We are inferring from 'any' or 'never'. We want to infer this type for every type parameter
-                    // referenced in the target type, so we record the propagation type and infer from the target
-                    // to itself. Then, as we find candidates we substitute the propagation type.
+                if (source.flags & TypeFlags.Any) {
+                    // We are inferring from an 'any' type. We want to infer this type for every type parameter
+                    // referenced in the target type, so we record it as the propagation type and infer from the
+                    // target to itself. Then, as we find candidates we substitute the propagation type.
                     const savePropagationType = propagationType;
                     propagationType = source;
                     inferFromTypes(target, target);
