@@ -5445,7 +5445,12 @@ namespace ts {
                     }
 
                     addDeclarationToLateBoundSymbol(lateSymbol, decl, symbolFlags);
-                    lateSymbol.parent = parent;
+                    if (lateSymbol.parent) {
+                        Debug.assert(lateSymbol.parent === parent, "Existing symbol parent should match new one");
+                    }
+                    else {
+                        lateSymbol.parent = parent;
+                    }
                     return links.resolvedSymbol = lateSymbol;
                 }
             }
