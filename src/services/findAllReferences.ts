@@ -1010,7 +1010,7 @@ namespace ts.FindAllReferences.Core {
 
     function addClassStaticThisReferences(referenceLocation: Node, search: Search, state: State): void {
         addReference(referenceLocation, search.symbol, state);
-        if (isClassLike(referenceLocation.parent)) {
+        if (!state.options.isForRename && isClassLike(referenceLocation.parent)) {
             Debug.assert(referenceLocation.parent.name === referenceLocation);
             // This is the class declaration.
             addStaticThisReferences(referenceLocation.parent, state.referenceAdder(search.symbol));
