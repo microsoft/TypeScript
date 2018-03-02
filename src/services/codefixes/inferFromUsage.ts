@@ -109,7 +109,7 @@ namespace ts.codefix {
                 return isSetAccessor(containingFunction) ? getCodeActionForSetAccessor(containingFunction, program, cancellationToken) : undefined;
 
             default:
-                throw Debug.fail(String(errorCode));
+                return Debug.fail(String(errorCode));
         }
     }
 
@@ -310,13 +310,13 @@ namespace ts.codefix {
             const callContexts = isConstructor ? usageContext.constructContexts : usageContext.callContexts;
             return callContexts && declaration.parameters.map((parameter, parameterIndex) => {
                 const types: Type[] = [];
-                const isRestParameter = ts.isRestParameter(parameter);
+                const isRest = isRestParameter(parameter);
                 for (const callContext of callContexts) {
                     if (callContext.argumentTypes.length <= parameterIndex) {
                         continue;
                     }
 
-                    if (isRestParameter) {
+                    if (isRest) {
                         for (let i = parameterIndex; i < callContext.argumentTypes.length; i++) {
                             types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[i]));
                         }
@@ -329,7 +329,7 @@ namespace ts.codefix {
                     return undefined;
                 }
                 const type = checker.getWidenedType(checker.getUnionType(types, UnionReduction.Subtype));
-                return isRestParameter ? checker.createArrayType(type) : type;
+                return isRest ? checker.createArrayType(type) : type;
             });
         }
 

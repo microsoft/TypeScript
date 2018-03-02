@@ -635,7 +635,7 @@ namespace ts.NavigationBar {
         return node.kind === SyntaxKind.SourceFile ? createTextSpanFromRange(node) : createTextSpanFromNode(node, curSourceFile);
     }
 
-    function getModifiers(node: ts.Node): string {
+    function getModifiers(node: Node): string {
         if (node.parent && node.parent.kind === SyntaxKind.VariableDeclaration) {
             node = node.parent;
         }
