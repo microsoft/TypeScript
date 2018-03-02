@@ -3,7 +3,7 @@ async function * inferReturnType1() {
 >inferReturnType1 : () => AsyncIterableIterator<any>
 }
 async function * inferReturnType2() {
->inferReturnType2 : () => AsyncIterableIterator<any>
+>inferReturnType2 : () => AsyncIterableIterator<undefined>
 
     yield;
 >yield : any

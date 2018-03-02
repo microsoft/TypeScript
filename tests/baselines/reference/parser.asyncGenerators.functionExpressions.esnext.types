@@ -113,8 +113,8 @@ const f12 = async function * () {
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldIsOk.ts ===
 const f13 = async function * () {
->f13 : () => AsyncIterableIterator<any>
->async function * () {    yield;} : () => AsyncIterableIterator<any>
+>f13 : () => AsyncIterableIterator<undefined>
+>async function * () {    yield;} : () => AsyncIterableIterator<undefined>
 
     yield;
 >yield : any
@@ -198,8 +198,8 @@ const f20 = async function * () {
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldInNestedComputedPropertyIsOk.ts ===
 const f21 = async function *() {
->f21 : () => AsyncIterableIterator<any>
->async function *() {    const x = { [yield]: 1 };} : () => AsyncIterableIterator<any>
+>f21 : () => AsyncIterableIterator<undefined>
+>async function *() {    const x = { [yield]: 1 };} : () => AsyncIterableIterator<undefined>
 
     const x = { [yield]: 1 };
 >x : { [x: number]: number; }

@@ -18380,25 +18380,21 @@ namespace ts {
 
         function checkAndAggregateYieldOperandTypes(func: FunctionLikeDeclaration, checkMode: CheckMode): Type[] {
             const aggregatedTypes: Type[] = [];
-            const functionFlags = getFunctionFlags(func);
+            const isAsync = (getFunctionFlags(func) & FunctionFlags.Async) !== 0;
             forEachYieldExpression(<Block>func.body, yieldExpression => {
-                const expr = yieldExpression.expression;
-                if (expr) {
-                    let type = checkExpressionCached(expr, checkMode);
-                    if (yieldExpression.asteriskToken) {
-                        // A yield* expression effectively yields everything that its operand yields
-                        type = checkIteratedTypeOrElementType(type, yieldExpression.expression, /*allowStringInput*/ false, (functionFlags & FunctionFlags.Async) !== 0);
-                    }
-                    if (functionFlags & FunctionFlags.Async) {
-                        type = checkAwaitedType(type, expr, yieldExpression.asteriskToken
-                            ? Diagnostics.Type_of_iterated_elements_of_a_yield_Asterisk_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member
-                            : Diagnostics.Type_of_yield_operand_in_an_async_generator_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
-                    }
-                    pushIfUnique(aggregatedTypes, type);
-                }
+                pushIfUnique(aggregatedTypes, getYieldedTypeOfYieldExpression(yieldExpression, isAsync, checkMode));
             });
-
             return aggregatedTypes;
+        }
+
+        function getYieldedTypeOfYieldExpression(node: YieldExpression, isAsync: boolean, checkMode?: CheckMode): Type {
+            const errorNode = node.expression || node;
+            const expressionType = node.expression ? checkExpressionCached(node.expression, checkMode) : undefinedType;
+            // A yield* expression effectively yields everything that its operand yields
+            const yieldedType = node.asteriskToken ? checkIteratedTypeOrElementType(expressionType, errorNode, /*allowStringInput*/ false, isAsync) : expressionType;
+            return !isAsync ? yieldedType : getAwaitedType(yieldedType, errorNode, node.asteriskToken
+                ? Diagnostics.Type_of_iterated_elements_of_a_yield_Asterisk_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member
+                : Diagnostics.Type_of_yield_operand_in_an_async_generator_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
         }
 
         function isExhaustiveSwitchStatement(node: SwitchStatement): boolean {
@@ -19353,60 +19349,38 @@ namespace ts {
                 }
             }
 
-            if (node.expression) {
-                const func = getContainingFunction(node);
-                // If the user's code is syntactically correct, the func should always have a star. After all,
-                // we are in a yield context.
-                const functionFlags = func && getFunctionFlags(func);
-                if (node.asteriskToken) {
-                    // Async generator functions prior to ESNext require the __await, __asyncDelegator,
-                    // and __asyncValues helpers
-                    if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.AsyncGenerator &&
-                        languageVersion < ScriptTarget.ESNext) {
-                        checkExternalEmitHelpers(node, ExternalEmitHelpers.AsyncDelegatorIncludes);
-                    }
+            const func = getContainingFunction(node);
+            const functionFlags = func ? getFunctionFlags(func) : FunctionFlags.Normal;
 
-                    // Generator functions prior to ES2015 require the __values helper
-                    if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Generator &&
-                        languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
-                        checkExternalEmitHelpers(node, ExternalEmitHelpers.Values);
-                    }
+            if (!(functionFlags & FunctionFlags.Generator)) {
+                // If the user's code is syntactically correct, the func should always have a star. After all, we are in a yield context.
+                return anyType;
+            }
+
+            if (node.asteriskToken) {
+                // Async generator functions prior to ESNext require the __await, __asyncDelegator,
+                // and __asyncValues helpers
+                if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.AsyncGenerator &&
+                    languageVersion < ScriptTarget.ESNext) {
+                    checkExternalEmitHelpers(node, ExternalEmitHelpers.AsyncDelegatorIncludes);
                 }
 
-                if (functionFlags & FunctionFlags.Generator) {
-                    const expressionType = checkExpressionCached(node.expression);
-                    let expressionElementType: Type;
-                    const nodeIsYieldStar = !!node.asteriskToken;
-                    if (nodeIsYieldStar) {
-                        expressionElementType = checkIteratedTypeOrElementType(expressionType, node.expression, /*allowStringInput*/ false, (functionFlags & FunctionFlags.Async) !== 0);
-                    }
-
-                    // There is no point in doing an assignability check if the function
-                    // has no explicit return type because the return type is directly computed
-                    // from the yield expressions.
-                    const returnType = getEffectiveReturnTypeNode(func);
-                    if (returnType) {
-                        const signatureElementType = getIteratedTypeOfGenerator(getTypeFromTypeNode(returnType), (functionFlags & FunctionFlags.Async) !== 0) || anyType;
-                        if (nodeIsYieldStar) {
-                            checkTypeAssignableTo(
-                                functionFlags & FunctionFlags.Async
-                                    ? getAwaitedType(expressionElementType, node.expression, Diagnostics.Type_of_iterated_elements_of_a_yield_Asterisk_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
-                                    : expressionElementType,
-                                signatureElementType,
-                                node.expression,
-                                /*headMessage*/ undefined);
-                        }
-                        else {
-                            checkTypeAssignableTo(
-                                functionFlags & FunctionFlags.Async
-                                    ? getAwaitedType(expressionType, node.expression, Diagnostics.Type_of_yield_operand_in_an_async_generator_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
-                                    : expressionType,
-                                signatureElementType,
-                                node.expression,
-                                /*headMessage*/ undefined);
-                        }
-                    }
+                // Generator functions prior to ES2015 require the __values helper
+                if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Generator &&
+                    languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
+                    checkExternalEmitHelpers(node, ExternalEmitHelpers.Values);
                 }
+            }
+
+            const isAsync = (functionFlags & FunctionFlags.Async) !== 0;
+            const yieldedType = getYieldedTypeOfYieldExpression(node, isAsync);
+            // There is no point in doing an assignability check if the function
+            // has no explicit return type because the return type is directly computed
+            // from the yield expressions.
+            const returnType = getEffectiveReturnTypeNode(func);
+            if (returnType) {
+                const signatureElementType = getIteratedTypeOfGenerator(getTypeFromTypeNode(returnType), isAsync) || anyType;
+                checkTypeAssignableTo(yieldedType, signatureElementType, node.expression || node, /*headMessage*/ undefined);
             }
 
             // Both yield and yield* expressions have type 'any'

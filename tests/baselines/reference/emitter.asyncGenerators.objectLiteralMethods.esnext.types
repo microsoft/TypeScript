@@ -9,11 +9,11 @@ const o1 = {
 }
 === tests/cases/conformance/emitter/esnext/asyncGenerators/O2.ts ===
 const o2 = {
->o2 : { f(): AsyncIterableIterator<any>; }
->{    async * f() {        const x = yield;    }} : { f(): AsyncIterableIterator<any>; }
+>o2 : { f(): AsyncIterableIterator<undefined>; }
+>{    async * f() {        const x = yield;    }} : { f(): AsyncIterableIterator<undefined>; }
 
     async * f() {
->f : () => AsyncIterableIterator<any>
+>f : () => AsyncIterableIterator<undefined>
 
         const x = yield;
 >x : any

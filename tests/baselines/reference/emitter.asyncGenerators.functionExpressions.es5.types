@@ -5,8 +5,8 @@ const f1 = async function * () {
 }
 === tests/cases/conformance/emitter/es5/asyncGenerators/F2.ts ===
 const f2 = async function * () {
->f2 : () => AsyncIterableIterator<any>
->async function * () {    const x = yield;} : () => AsyncIterableIterator<any>
+>f2 : () => AsyncIterableIterator<undefined>
+>async function * () {    const x = yield;} : () => AsyncIterableIterator<undefined>
 
     const x = yield;
 >x : any
