@@ -2317,6 +2317,10 @@
         "category": "Error",
         "code": 2723
     },
+    "Module '{0}' has no exported member '{1}'. Did you mean '{2}'?": {
+        "category": "Error",
+        "code": 2724
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

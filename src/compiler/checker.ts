@@ -1852,7 +1852,15 @@ namespace ts {
                         combineValueAndTypeSymbols(symbolFromVariable, symbolFromModule) :
                         symbolFromModule || symbolFromVariable;
                     if (!symbol) {
-                        error(name, Diagnostics.Module_0_has_no_exported_member_1, getFullyQualifiedName(moduleSymbol), declarationNameToString(name));
+                        const moduleName = getFullyQualifiedName(moduleSymbol);
+                        const declarationName = declarationNameToString(name);
+                        const suggestion = getSuggestionForNonexistentModule(name, targetSymbol);
+                        if (suggestion !== undefined) {
+                            error(name, Diagnostics.Module_0_has_no_exported_member_1_Did_you_mean_2, moduleName, declarationName, suggestion);
+                        }
+                        else {
+                            error(name, Diagnostics.Module_0_has_no_exported_member_1, moduleName, declarationName);
+                        }
                     }
                     return symbol;
                 }
@@ -16186,6 +16194,11 @@ namespace ts {
                 return symbol || getSpellingSuggestionForName(unescapeLeadingUnderscores(name), arrayFrom(symbols.values()), meaning);
             });
             return result && symbolName(result);
+        }
+
+        function getSuggestionForNonexistentModule(name: Identifier, targetModule: Symbol): string | undefined {
+            const suggestion = targetModule.exports && getSpellingSuggestionForName(idText(name), getExportsOfModuleAsArray(targetModule), SymbolFlags.ModuleMember);
+            return suggestion && symbolName(suggestion);
         }
 
         /**
