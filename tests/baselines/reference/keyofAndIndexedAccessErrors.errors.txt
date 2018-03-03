@@ -22,11 +22,12 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(64,33): error
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(66,24): error TS2345: Argument of type '"size"' is not assignable to parameter of type '"name" | "width" | "height" | "visible"'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(67,24): error TS2345: Argument of type '"name" | "size"' is not assignable to parameter of type '"name" | "width" | "height" | "visible"'.
   Type '"size"' is not assignable to type '"name" | "width" | "height" | "visible"'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(72,5): error TS2536: Type 'keyof (T & U)' cannot be used to index type 'T | U'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(72,5): error TS2536: Type 'keyof T | keyof U' cannot be used to index type 'T | U'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(76,5): error TS2322: Type 'T | U' is not assignable to type 'T & U'.
   Type 'T' is not assignable to type 'T & U'.
     Type 'T' is not assignable to type 'U'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(77,5): error TS2322: Type 'keyof (T & U)' is not assignable to type 'keyof (T | U)'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(77,5): error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof (T | U)'.
+  Type 'keyof T' is not assignable to type 'keyof (T | U)'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(86,9): error TS2322: Type 'keyof T' is not assignable to type 'K'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(88,9): error TS2322: Type 'T[keyof T]' is not assignable to type 'T[K]'.
   Type 'keyof T' is not assignable to type 'K'.
@@ -161,7 +162,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(100,5): error
         o1[k1];
         o1[k2];   // Error
         ~~~~~~
-!!! error TS2536: Type 'keyof (T & U)' cannot be used to index type 'T | U'.
+!!! error TS2536: Type 'keyof T | keyof U' cannot be used to index type 'T | U'.
         o2[k1];
         o2[k2];
         o1 = o2;
@@ -172,7 +173,8 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(100,5): error
 !!! error TS2322:     Type 'T' is not assignable to type 'U'.
         k1 = k2;  // Error
         ~~
-!!! error TS2322: Type 'keyof (T & U)' is not assignable to type 'keyof (T | U)'.
+!!! error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof (T | U)'.
+!!! error TS2322:   Type 'keyof T' is not assignable to type 'keyof (T | U)'.
         k2 = k1;
     }
     

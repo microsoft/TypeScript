@@ -143,7 +143,7 @@ const es2017LibrarySource = [
 const es2017LibrarySourceMap = es2017LibrarySource.map(source =>
     ({ target: "lib." + source, sources: ["header.d.ts", source] }));
 
-const es2018LibrarySource = [];
+const es2018LibrarySource = ["es2018.regexp.d.ts"];
 const es2018LibrarySourceMap = es2018LibrarySource.map(source =>
     ({ target: "lib." + source, sources: ["header.d.ts", source] }));
 

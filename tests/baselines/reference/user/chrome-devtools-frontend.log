@@ -18,12 +18,9 @@ Standard output:
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(43,8): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(95,28): error TS2339: Property 'response' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(147,37): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/Runtime.js(158,21): error TS2345: Argument of type 'Promise<string>' is not assignable to parameter of type 'Promise<undefined>'.
-  Type 'string' is not assignable to type 'undefined'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(161,5): error TS2322: Type 'Promise<undefined[]>' is not assignable to type 'Promise<undefined>'.
   Type 'undefined[]' is not assignable to type 'undefined'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(187,12): error TS2339: Property 'eval' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/Runtime.js(197,5): error TS2322: Type 'Promise<string>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(219,13): error TS2339: Property 'timeStamp' does not exist on type 'Console'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(267,14): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(269,59): error TS2339: Property 'runtime' does not exist on type 'Window'.
@@ -3655,8 +3652,6 @@ node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(341,
 node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(351,31): error TS2694: Namespace 'Protocol' has no exported member 'Debugger'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(362,31): error TS2694: Namespace 'Protocol' has no exported member 'Debugger'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(375,9): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
-node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(378,9): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
-node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(381,5): error TS2322: Type 'Promise<boolean>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(43,52): error TS2339: Property 'Storage' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(49,89): error TS2694: Namespace 'Bindings' has no exported member 'BreakpointManager'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(51,63): error TS2694: Namespace 'Bindings' has no exported member 'BreakpointManager'.
@@ -8056,7 +8051,6 @@ node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(28
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2906,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2910,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2918,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
-node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2956,5): error TS2322: Type 'Promise<boolean>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2977,107): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2978,35): error TS2300: Duplicate identifier 'Context'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2978,35): error TS2339: Property 'Context' does not exist on type 'typeof (Anonymous class)'.
@@ -13090,9 +13084,9 @@ node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1057,39): 
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1108,15): error TS2339: Property 'valuesArray' does not exist on type 'Set<any>'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1116,15): error TS2339: Property 'firstValue' does not exist on type 'Set<any>'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1126,15): error TS2339: Property 'addAll' does not exist on type 'Set<any>'.
-node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1127,17): error TS2495: Type 'Iterable<T> | T[]' is not an array type or a string type.
+node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1127,17): error TS2495: Type 'T[] | Iterable<T>' is not an array type or a string type.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1136,15): error TS2339: Property 'containsAll' does not exist on type 'Set<any>'.
-node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1137,17): error TS2495: Type 'Iterable<T> | T[]' is not an array type or a string type.
+node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1137,17): error TS2495: Type 'T[] | Iterable<T>' is not an array type or a string type.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1148,15): error TS2339: Property 'remove' does not exist on type 'Map<any, any>'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1155,21): error TS2304: Cannot find name 'VALUE'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1157,15): error TS2339: Property 'valuesArray' does not exist on type 'Map<any, any>'.
@@ -16337,10 +16331,6 @@ node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1153,31): er
 node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1176,31): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1234,21): error TS2694: Namespace 'SDK' has no exported member 'CallFunctionResult'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1265,21): error TS2694: Namespace 'SDK' has no exported member 'CallFunctionResult'.
-node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1325,5): error TS2322: Type 'Promise<{ properties: (Anonymous class)[]; internalProperties: (Anonymous class)[]; }>' is not assignable to type 'Promise<(Anonymous class)>'.
-node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1325,5): error TS2322: Type 'Promise<{ properties: (Anonymous class)[]; internalProperties: (Anonymous class)[]; }>' is not assignable to type 'Promise<(Anonymous class)>'.
-  Type '{ properties: (Anonymous class)[]; internalProperties: (Anonymous class)[]; }' is not assignable to type '(Anonymous class)'.
-    Property 'customPreview' is missing in type '{ properties: (Anonymous class)[]; internalProperties: (Anonymous class)[]; }'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1345,29): error TS2694: Namespace 'SDK' has no exported member 'DebuggerModel'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1352,31): error TS2694: Namespace 'SDK' has no exported member 'DebuggerModel'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1363,21): error TS2694: Namespace 'SDK' has no exported member 'DebuggerModel'.
@@ -18006,12 +17996,10 @@ node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSid
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(73,36): error TS2339: Property 'createChild' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(74,56): error TS2339: Property '_snippetElementSymbol' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(77,51): error TS2339: Property 'get' does not exist on type '{ _map: Map<K, Set<V>>; }'.
-node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(78,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'uiLocation' must be of type '(Anonymous class)', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(91,13): error TS2339: Property 'remove' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(110,54): error TS2339: Property '_locationSymbol' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(113,74): error TS2339: Property '_checkboxLabelSymbol' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(118,75): error TS2339: Property '_snippetElementSymbol' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(119,5): error TS2322: Type 'Promise<string>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(141,29): error TS2339: Property 'enclosingNodeOrSelfWithClass' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(144,58): error TS2339: Property '_locationSymbol' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(156,33): error TS2339: Property 'checkboxElement' does not exist on type 'EventTarget'.

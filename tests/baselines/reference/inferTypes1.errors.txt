@@ -50,7 +50,7 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(134,40): error TS2322: 
     type T13 = ReturnType<(<T extends U, U extends number[]>() => T)>;  // number[]
     type T14 = ReturnType<typeof f1>;  // { a: number, b: string }
     type T15 = ReturnType<any>;  // any
-    type T16 = ReturnType<never>;  // any
+    type T16 = ReturnType<never>;  // never
     type T17 = ReturnType<string>;  // Error
                           ~~~~~~
 !!! error TS2344: Type 'string' does not satisfy the constraint '(...args: any[]) => any'.
@@ -61,7 +61,7 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(134,40): error TS2322: 
     
     type U10 = InstanceType<typeof C>;  // C
     type U11 = InstanceType<any>;  // any
-    type U12 = InstanceType<never>;  // any
+    type U12 = InstanceType<never>;  // never
     type U13 = InstanceType<string>;  // Error
                             ~~~~~~
 !!! error TS2344: Type 'string' does not satisfy the constraint 'new (...args: any[]) => any'.
@@ -72,7 +72,7 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(134,40): error TS2322: 
     
     type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A : any;
     
-    type T20 = ArgumentType<() => void>;  // never
+    type T20 = ArgumentType<() => void>;  // {}
     type T21 = ArgumentType<(x: string) => number>;  // string
     type T22 = ArgumentType<(x?: string) => number>;  // string | undefined
     type T23 = ArgumentType<(...args: string[]) => number>;  // string
@@ -84,7 +84,7 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(134,40): error TS2322: 
 !!! error TS2344: Type 'Function' does not satisfy the constraint '(x: any) => any'.
 !!! error TS2344:   Type 'Function' provides no match for the signature '(x: any): any'.
     type T26 = ArgumentType<any>;  // any
-    type T27 = ArgumentType<never>;  // any
+    type T27 = ArgumentType<never>;  // never
     
     type X1<T extends { x: any, y: any }> = T extends { x: infer X, y: infer Y } ? [X, Y] : any;
     
