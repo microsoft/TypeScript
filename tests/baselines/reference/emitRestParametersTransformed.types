@@ -1,0 +1,64 @@
+=== tests/cases/conformance/es6/restParameters/emitRestParametersTransformed.ts ===
+function foo1(x: number, ...rest: number[]) {
+>foo1 : (x: number, ...rest: number[]) => number[]
+>x : number
+>rest : number[]
+
+    return [x].concat(rest);
+>[x].concat(rest) : number[]
+>[x].concat : { (...items: (number[] | ReadonlyArray<number>)[]): number[]; (...items: (number | number[] | ReadonlyArray<number>)[]): number[]; }
+>[x] : number[]
+>x : number
+>concat : { (...items: (number[] | ReadonlyArray<number>)[]): number[]; (...items: (number | number[] | ReadonlyArray<number>)[]): number[]; }
+>rest : number[]
+}
+
+class C {
+>C : C
+
+    constructor(x: number, ...rest: number[]) {
+>x : number
+>rest : number[]
+
+        this.foo2(x);
+>this.foo2(x) : number[]
+>this.foo2 : (x: number, ...rest: number[]) => number[]
+>this : this
+>foo2 : (x: number, ...rest: number[]) => number[]
+>x : number
+
+        this.foo2(x, ...rest);
+>this.foo2(x, ...rest) : number[]
+>this.foo2 : (x: number, ...rest: number[]) => number[]
+>this : this
+>foo2 : (x: number, ...rest: number[]) => number[]
+>x : number
+>...rest : number
+>rest : number[]
+    }
+    private foo2(x: number, ...rest: number[]) {
+>foo2 : (x: number, ...rest: number[]) => number[]
+>x : number
+>rest : number[]
+
+        return rest;
+>rest : number[]
+    }
+}
+
+class D extends C {
+>D : D
+>C : C
+
+    constructor(...rest: number[]) {
+>rest : number[]
+
+        super(0, ...rest);
+>super(0, ...rest) : void
+>super : typeof C
+>0 : 0
+>...rest : number
+>rest : number[]
+    }
+}
+

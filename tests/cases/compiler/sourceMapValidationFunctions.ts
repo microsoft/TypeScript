@@ -5,10 +5,12 @@ function greet(greeting: string): number {
     return greetings;
 }
 function greet2(greeting: string, n = 10, x?: string, ...restParams: string[]): number {
+    restParams;
     greetings++;
     return greetings;
 }
 function foo(greeting: string, n = 10, x?: string, ...restParams: string[])
 {
+    restParams;
     return;
 }

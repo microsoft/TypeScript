@@ -32,10 +32,6 @@ function f3(a, b, c) {
 }
 function f4(a, b) {
     if (b === void 0) { b = 0; }
-    var c = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        c[_i - 2] = arguments[_i];
-    }
 }
 f1(0, 1, 2);
 f2(0, 1, 2);

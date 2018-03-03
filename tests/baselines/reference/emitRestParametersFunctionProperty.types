@@ -9,9 +9,10 @@ var obj: {
 
 var obj2 = {
 >obj2 : { func(...rest: any[]): void; }
->{    func(...rest) { }} : { func(...rest: any[]): void; }
+>{    func(...rest) { rest; }} : { func(...rest: any[]): void; }
 
-    func(...rest) { }
+    func(...rest) { rest; }
 >func : (...rest: any[]) => void
+>rest : any[]
 >rest : any[]
 }

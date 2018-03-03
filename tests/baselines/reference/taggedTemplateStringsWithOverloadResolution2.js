@@ -23,19 +23,11 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     return cooked;
 };
 function foo1() {
-    var stuff = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        stuff[_i] = arguments[_i];
-    }
     return undefined;
 }
 var a = foo1(__makeTemplateObject(["", ""], ["", ""]), 1);
 var b = foo1([], 1);
 function foo2() {
-    var stuff = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        stuff[_i] = arguments[_i];
-    }
     return undefined;
 }
 var c = foo2(__makeTemplateObject(["", ""], ["", ""]), 1);

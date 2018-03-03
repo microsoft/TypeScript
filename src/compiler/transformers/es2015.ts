@@ -944,7 +944,6 @@ namespace ts {
 
             if (constructor) {
                 addDefaultValueAssignmentsIfNeeded(statements, constructor);
-                addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
                 if (!hasSynthesizedSuper) {
                     // If no super call has been synthesized, emit custom prologue directives.
                     statementOffset = addCustomPrologue(statements, constructor.body.statements, statementOffset, visitor);
@@ -969,6 +968,7 @@ namespace ts {
                 }
 
                 addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset));
+                insertRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
             }
 
             // Return `_this` unless we're sure enough that it would be pointless to add a return statement.
@@ -1348,6 +1348,38 @@ namespace ts {
         }
 
         /**
+         * Gets the index of the first statement that contains a reference to a given parameter
+         *
+         * @param restParameter The ParameterDeclaration to which we are finding references.
+         * @param statements An array of Statement nodes to search
+         */
+        function findRestParameterReferenceIndex(restParameter: ParameterDeclaration, statements: Statement[]) {
+            const originalRestParameter = getOriginalNode(restParameter);
+
+            return findIndex(statements, containsReferenceToParameter);
+
+            function containsReferenceToParameter(statement: Statement): boolean {
+                return (isIdentifier(statement) && originalRestParameter === resolver.getReferencedValueDeclaration(statement)) ||
+                    forEachChild(statement, containsReferenceToParameter);
+            }
+        }
+
+        /**
+         * Gets the index of the first statement that contains a re-definition of "arguments"
+         *
+         * @param statements An array of Statement nodes to search
+         */
+        function findArgumentsRedefinitionIndex(statements: Statement[]) {
+            return findIndex(statements, containsArgumentsRedeclaration);
+
+            function containsArgumentsRedeclaration(statement: Statement): boolean {
+                return (isAssignmentExpression(statement) && isIdentifier(statement.left) && statement.left.escapedText === "arguments") ||
+                    (isVariableDeclaration(statement) && statement.initializer && (<Identifier>statement.name).escapedText === "arguments") ||
+                    forEachChild(statement, containsArgumentsRedeclaration);
+            }
+        }
+
+        /**
          * Adds statements to the body of a function-like node if it contains a rest parameter.
          *
          * @param statements The statements for the new function body.
@@ -1356,10 +1388,21 @@ namespace ts {
          *                                          part of a constructor declaration with a
          *                                          synthesized call to `super`
          */
-        function addRestParameterIfNeeded(statements: Statement[], node: FunctionLikeDeclaration, inConstructorWithSynthesizedSuper: boolean): void {
+        function insertRestParameterIfNeeded(statements: Statement[], node: FunctionLikeDeclaration, inConstructorWithSynthesizedSuper: boolean): void {
             const parameter = lastOrUndefined(node.parameters);
             if (!shouldAddRestParameter(parameter, inConstructorWithSynthesizedSuper)) {
                 return;
+            }
+
+            let referenceIndex = findRestParameterReferenceIndex(parameter, statements);
+            if (referenceIndex === -1) {
+                return;
+            }
+
+            const argumentsRedefinitionIndex = findArgumentsRedefinitionIndex(statements);
+            if (argumentsRedefinitionIndex > -1) {
+                // If the "arguments" variable is redefined, need to make sure to emit the rest parameter initialization before then.
+                referenceIndex = Math.min(referenceIndex, argumentsRedefinitionIndex);
             }
 
             // `declarationName` is the name of the local declaration for the parameter.
@@ -1372,9 +1415,7 @@ namespace ts {
             const temp = createLoopVariable();
 
             // var param = [];
-            statements.push(
-                setEmitFlags(
-                    setTextRange(
+            const variableStatement = setTextRange(
                         createVariableStatement(
                             /*modifiers*/ undefined,
                             createVariableDeclarationList([
@@ -1386,10 +1427,7 @@ namespace ts {
                             ])
                         ),
                         /*location*/ parameter
-                    ),
-                    EmitFlags.CustomPrologue
-                )
-            );
+                    );
 
             // for (var _i = restIndex; _i < arguments.length; _i++) {
             //   param[_i - restIndex] = arguments[_i];
@@ -1429,9 +1467,8 @@ namespace ts {
                 ])
             );
 
-            setEmitFlags(forStatement, EmitFlags.CustomPrologue);
             startOnNewLine(forStatement);
-            statements.push(forStatement);
+            statements.splice(referenceIndex, 0, variableStatement, forStatement);
         }
 
         /**
@@ -1849,7 +1886,6 @@ namespace ts {
 
             addCaptureThisForNodeIfNeeded(statements, node);
             addDefaultValueAssignmentsIfNeeded(statements, node);
-            addRestParameterIfNeeded(statements, node, /*inConstructorWithSynthesizedSuper*/ false);
 
             // If we added any generated statements, this must be a multi-line block.
             if (!multiLine && statements.length > 0) {
@@ -1898,13 +1934,16 @@ namespace ts {
                 closeBraceLocation = body;
             }
 
+            const statementBodyLength = statements.length;
+            insertRestParameterIfNeeded(statements, node, /*inConstructorWithSynthesizedSuper*/ false);
+
             const lexicalEnvironment = context.endLexicalEnvironment();
             addRange(statements, lexicalEnvironment);
 
             prependCaptureNewTargetIfNeeded(statements, node, /*copyOnWrite*/ false);
 
             // If we added any final generated statements, this must be a multi-line block
-            if (!multiLine && lexicalEnvironment && lexicalEnvironment.length) {
+            if (!multiLine && statements.length !== statementBodyLength) {
                 multiLine = true;
             }
 

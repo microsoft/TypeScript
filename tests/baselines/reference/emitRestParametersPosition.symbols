@@ -1,0 +1,95 @@
+=== tests/cases/conformance/es6/restParameters/emitRestParametersPosition.ts ===
+function foo1(x: number, ...rest) {
+>foo1 : Symbol(foo1, Decl(emitRestParametersPosition.ts, 0, 0))
+>x : Symbol(x, Decl(emitRestParametersPosition.ts, 0, 14))
+>rest : Symbol(rest, Decl(emitRestParametersPosition.ts, 0, 24))
+
+    if (x > 0) {
+>x : Symbol(x, Decl(emitRestParametersPosition.ts, 0, 14))
+
+        return true;
+    }
+
+    return rest;
+>rest : Symbol(rest, Decl(emitRestParametersPosition.ts, 0, 24))
+}
+
+function foo2(x: number, ...rest) {
+>foo2 : Symbol(foo2, Decl(emitRestParametersPosition.ts, 6, 1))
+>x : Symbol(x, Decl(emitRestParametersPosition.ts, 8, 14))
+>rest : Symbol(rest, Decl(emitRestParametersPosition.ts, 8, 24))
+
+    if (x > 0) {
+>x : Symbol(x, Decl(emitRestParametersPosition.ts, 8, 14))
+
+        return true;
+    }
+    else if (x < 0) {
+>x : Symbol(x, Decl(emitRestParametersPosition.ts, 8, 14))
+
+        return rest[0];
+>rest : Symbol(rest, Decl(emitRestParametersPosition.ts, 8, 24))
+    }
+
+    return rest;
+>rest : Symbol(rest, Decl(emitRestParametersPosition.ts, 8, 24))
+}
+
+function foo3(x: number, ...rest) {
+>foo3 : Symbol(foo3, Decl(emitRestParametersPosition.ts, 17, 1))
+>x : Symbol(x, Decl(emitRestParametersPosition.ts, 19, 14))
+>rest : Symbol(rest, Decl(emitRestParametersPosition.ts, 19, 24))
+
+    if (x > 0) {
+>x : Symbol(x, Decl(emitRestParametersPosition.ts, 19, 14))
+
+        return true;
+    }
+    else if (x < 0) {
+>x : Symbol(x, Decl(emitRestParametersPosition.ts, 19, 14))
+
+        return false;
+    }
+
+    return rest;
+>rest : Symbol(rest, Decl(emitRestParametersPosition.ts, 19, 24))
+}
+
+function foo4(s: string, ...rest) {
+>foo4 : Symbol(foo4, Decl(emitRestParametersPosition.ts, 28, 1))
+>s : Symbol(s, Decl(emitRestParametersPosition.ts, 30, 14))
+>rest : Symbol(rest, Decl(emitRestParametersPosition.ts, 30, 24))
+
+    if (s === "hello world") {
+>s : Symbol(s, Decl(emitRestParametersPosition.ts, 30, 14))
+
+        return true;
+    }
+
+    if (s) {
+>s : Symbol(s, Decl(emitRestParametersPosition.ts, 30, 14))
+
+        for (let i = 0; i < s.length; i++) {
+>i : Symbol(i, Decl(emitRestParametersPosition.ts, 36, 16))
+>i : Symbol(i, Decl(emitRestParametersPosition.ts, 36, 16))
+>s.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>s : Symbol(s, Decl(emitRestParametersPosition.ts, 30, 14))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>i : Symbol(i, Decl(emitRestParametersPosition.ts, 36, 16))
+
+            if (s.charAt(i) === "1") {
+>s.charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>s : Symbol(s, Decl(emitRestParametersPosition.ts, 30, 14))
+>charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>i : Symbol(i, Decl(emitRestParametersPosition.ts, 36, 16))
+
+                return rest[0];
+>rest : Symbol(rest, Decl(emitRestParametersPosition.ts, 30, 24))
+            }
+        }
+    }
+
+    return rest[1];
+>rest : Symbol(rest, Decl(emitRestParametersPosition.ts, 30, 24))
+}
+

@@ -66,10 +66,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 var Greeter = /** @class */ (function () {
     function Greeter(greeting) {
-        var b = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            b[_i - 1] = arguments[_i];
-        }
         this.greeting = greeting;
     }
     Greeter.prototype.greet = function () {

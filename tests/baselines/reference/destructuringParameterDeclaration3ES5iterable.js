@@ -68,36 +68,11 @@ var __spread = (this && this.__spread) || function () {
     for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
     return ar;
 };
-function a1() {
-    var x = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i] = arguments[_i];
-    }
-}
-function a2() {
-    var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i] = arguments[_i];
-    }
-}
-function a3() {
-    var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i] = arguments[_i];
-    }
-}
-function a4() {
-    var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i] = arguments[_i];
-    }
-}
-function a5() {
-    var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i] = arguments[_i];
-    }
-}
+function a1() { }
+function a2() { }
+function a3() { }
+function a4() { }
+function a5() { }
 function a9(_a) {
     var _b = __read(_a, 3), a = _b[0], b = _b[1], _c = __read(_b[2], 1), _d = __read(_c[0], 1), c = _d[0];
 }
@@ -117,12 +92,7 @@ a10([1, 2, 3, false, true]); // Parameter type is any[]
 a10([1, 2]); // Parameter type is any[]
 a11([1, 2]); // Parameter type is number[]
 // Rest parameter with generic
-function foo() {
-    var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i] = arguments[_i];
-    }
-}
+function foo() { }
 foo("hello", 1, 2);
 foo("hello", "world");
 var E;
@@ -130,11 +100,6 @@ var E;
     E[E["a"] = 0] = "a";
     E[E["b"] = 1] = "b";
 })(E || (E = {}));
-function foo1() {
-    var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i] = arguments[_i];
-    }
-}
+function foo1() { }
 foo1(1, 2, 3, E.a);
 foo1(1, 2, 3, 0 /* a */, E.b);

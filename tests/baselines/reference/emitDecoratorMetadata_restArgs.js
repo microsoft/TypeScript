@@ -29,17 +29,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var A = /** @class */ (function () {
     function A() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
     }
-    A.prototype.method = function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-    };
+    A.prototype.method = function () { };
     __decorate([
         MyMethodDecorator,
         __metadata("design:type", Function),
@@ -54,17 +45,8 @@ var A = /** @class */ (function () {
 }());
 var B = /** @class */ (function () {
     function B() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
     }
-    B.prototype.method = function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-    };
+    B.prototype.method = function () { };
     __decorate([
         MyMethodDecorator,
         __metadata("design:type", Function),

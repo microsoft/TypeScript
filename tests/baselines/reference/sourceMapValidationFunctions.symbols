@@ -19,6 +19,9 @@ function greet2(greeting: string, n = 10, x?: string, ...restParams: string[]): 
 >x : Symbol(x, Decl(sourceMapValidationFunctions.ts, 5, 41))
 >restParams : Symbol(restParams, Decl(sourceMapValidationFunctions.ts, 5, 53))
 
+    restParams;
+>restParams : Symbol(restParams, Decl(sourceMapValidationFunctions.ts, 5, 53))
+
     greetings++;
 >greetings : Symbol(greetings, Decl(sourceMapValidationFunctions.ts, 0, 3))
 
@@ -26,11 +29,14 @@ function greet2(greeting: string, n = 10, x?: string, ...restParams: string[]): 
 >greetings : Symbol(greetings, Decl(sourceMapValidationFunctions.ts, 0, 3))
 }
 function foo(greeting: string, n = 10, x?: string, ...restParams: string[])
->foo : Symbol(foo, Decl(sourceMapValidationFunctions.ts, 8, 1))
->greeting : Symbol(greeting, Decl(sourceMapValidationFunctions.ts, 9, 13))
->n : Symbol(n, Decl(sourceMapValidationFunctions.ts, 9, 30))
->x : Symbol(x, Decl(sourceMapValidationFunctions.ts, 9, 38))
->restParams : Symbol(restParams, Decl(sourceMapValidationFunctions.ts, 9, 50))
+>foo : Symbol(foo, Decl(sourceMapValidationFunctions.ts, 9, 1))
+>greeting : Symbol(greeting, Decl(sourceMapValidationFunctions.ts, 10, 13))
+>n : Symbol(n, Decl(sourceMapValidationFunctions.ts, 10, 30))
+>x : Symbol(x, Decl(sourceMapValidationFunctions.ts, 10, 38))
+>restParams : Symbol(restParams, Decl(sourceMapValidationFunctions.ts, 10, 50))
 {
+    restParams;
+>restParams : Symbol(restParams, Decl(sourceMapValidationFunctions.ts, 10, 50))
+
     return;
 }

@@ -4,134 +4,146 @@ class c1 {
 >c1 : Symbol(c1, Decl(collisionRestParameterClassConstructor.ts, 0, 0))
 
     constructor(_i: number, ...restParameters) { //_i is error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 2, 16), Decl(collisionRestParameterClassConstructor.ts, 3, 11))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 2, 16), Decl(collisionRestParameterClassConstructor.ts, 4, 11))
+>restParameters : Symbol(restParameters, Decl(collisionRestParameterClassConstructor.ts, 2, 27))
+
+        restParameters;
 >restParameters : Symbol(restParameters, Decl(collisionRestParameterClassConstructor.ts, 2, 27))
 
         var _i = 10; // no error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 2, 16), Decl(collisionRestParameterClassConstructor.ts, 3, 11))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 2, 16), Decl(collisionRestParameterClassConstructor.ts, 4, 11))
     }
 }
 class c1NoError {
->c1NoError : Symbol(c1NoError, Decl(collisionRestParameterClassConstructor.ts, 5, 1))
+>c1NoError : Symbol(c1NoError, Decl(collisionRestParameterClassConstructor.ts, 6, 1))
 
     constructor(_i: number) { // no error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 7, 16), Decl(collisionRestParameterClassConstructor.ts, 8, 11))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 8, 16), Decl(collisionRestParameterClassConstructor.ts, 9, 11))
 
         var _i = 10; // no error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 7, 16), Decl(collisionRestParameterClassConstructor.ts, 8, 11))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 8, 16), Decl(collisionRestParameterClassConstructor.ts, 9, 11))
     }
 }
 
 class c2 {
->c2 : Symbol(c2, Decl(collisionRestParameterClassConstructor.ts, 10, 1))
+>c2 : Symbol(c2, Decl(collisionRestParameterClassConstructor.ts, 11, 1))
 
     constructor(...restParameters) {
->restParameters : Symbol(restParameters, Decl(collisionRestParameterClassConstructor.ts, 13, 16))
+>restParameters : Symbol(restParameters, Decl(collisionRestParameterClassConstructor.ts, 14, 16))
+
+        restParameters;
+>restParameters : Symbol(restParameters, Decl(collisionRestParameterClassConstructor.ts, 14, 16))
 
         var _i = 10; // no error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 14, 11))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 16, 11))
     }
 }
 class c2NoError {
->c2NoError : Symbol(c2NoError, Decl(collisionRestParameterClassConstructor.ts, 16, 1))
+>c2NoError : Symbol(c2NoError, Decl(collisionRestParameterClassConstructor.ts, 18, 1))
 
     constructor() {
         var _i = 10; // no error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 19, 11))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 21, 11))
     }
 }
 
 class c3 {
->c3 : Symbol(c3, Decl(collisionRestParameterClassConstructor.ts, 21, 1))
+>c3 : Symbol(c3, Decl(collisionRestParameterClassConstructor.ts, 23, 1))
 
     constructor(public _i: number, ...restParameters) { //_i is error
->_i : Symbol(c3._i, Decl(collisionRestParameterClassConstructor.ts, 24, 16))
->restParameters : Symbol(restParameters, Decl(collisionRestParameterClassConstructor.ts, 24, 34))
+>_i : Symbol(c3._i, Decl(collisionRestParameterClassConstructor.ts, 26, 16))
+>restParameters : Symbol(restParameters, Decl(collisionRestParameterClassConstructor.ts, 26, 34))
+
+        restParameters;
+>restParameters : Symbol(restParameters, Decl(collisionRestParameterClassConstructor.ts, 26, 34))
 
         var _i = 10; // no error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 24, 16), Decl(collisionRestParameterClassConstructor.ts, 25, 11))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 26, 16), Decl(collisionRestParameterClassConstructor.ts, 28, 11))
     }
 }
 class c3NoError {
->c3NoError : Symbol(c3NoError, Decl(collisionRestParameterClassConstructor.ts, 27, 1))
+>c3NoError : Symbol(c3NoError, Decl(collisionRestParameterClassConstructor.ts, 30, 1))
 
     constructor(public _i: number) { // no error
->_i : Symbol(c3NoError._i, Decl(collisionRestParameterClassConstructor.ts, 29, 16))
+>_i : Symbol(c3NoError._i, Decl(collisionRestParameterClassConstructor.ts, 32, 16))
 
         var _i = 10; // no error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 29, 16), Decl(collisionRestParameterClassConstructor.ts, 30, 11))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 32, 16), Decl(collisionRestParameterClassConstructor.ts, 33, 11))
     }
 }
 
 declare class c4 {
->c4 : Symbol(c4, Decl(collisionRestParameterClassConstructor.ts, 32, 1))
+>c4 : Symbol(c4, Decl(collisionRestParameterClassConstructor.ts, 35, 1))
 
     constructor(_i: number, ...restParameters); // No error - no code gen
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 35, 16))
->restParameters : Symbol(restParameters, Decl(collisionRestParameterClassConstructor.ts, 35, 27))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 38, 16))
+>restParameters : Symbol(restParameters, Decl(collisionRestParameterClassConstructor.ts, 38, 27))
 }
 declare class c4NoError {
->c4NoError : Symbol(c4NoError, Decl(collisionRestParameterClassConstructor.ts, 36, 1))
+>c4NoError : Symbol(c4NoError, Decl(collisionRestParameterClassConstructor.ts, 39, 1))
 
     constructor(_i: number);  // no error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 38, 16))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 41, 16))
 }
 
 class c5 {
->c5 : Symbol(c5, Decl(collisionRestParameterClassConstructor.ts, 39, 1))
+>c5 : Symbol(c5, Decl(collisionRestParameterClassConstructor.ts, 42, 1))
 
     constructor(_i: number, ...rest); // no codegen no error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 42, 16))
->rest : Symbol(rest, Decl(collisionRestParameterClassConstructor.ts, 42, 27))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 45, 16))
+>rest : Symbol(rest, Decl(collisionRestParameterClassConstructor.ts, 45, 27))
 
     constructor(_i: string, ...rest); // no codegen no error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 43, 16))
->rest : Symbol(rest, Decl(collisionRestParameterClassConstructor.ts, 43, 27))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 46, 16))
+>rest : Symbol(rest, Decl(collisionRestParameterClassConstructor.ts, 46, 27))
 
     constructor(_i: any, ...rest) { // error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 44, 16), Decl(collisionRestParameterClassConstructor.ts, 45, 11))
->rest : Symbol(rest, Decl(collisionRestParameterClassConstructor.ts, 44, 24))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 47, 16), Decl(collisionRestParameterClassConstructor.ts, 49, 11))
+>rest : Symbol(rest, Decl(collisionRestParameterClassConstructor.ts, 47, 24))
+
+        rest;
+>rest : Symbol(rest, Decl(collisionRestParameterClassConstructor.ts, 47, 24))
 
         var _i: any; // no error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 44, 16), Decl(collisionRestParameterClassConstructor.ts, 45, 11))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 47, 16), Decl(collisionRestParameterClassConstructor.ts, 49, 11))
     }
 }
 
 class c5NoError {
->c5NoError : Symbol(c5NoError, Decl(collisionRestParameterClassConstructor.ts, 47, 1))
+>c5NoError : Symbol(c5NoError, Decl(collisionRestParameterClassConstructor.ts, 51, 1))
 
     constructor(_i: number); // no error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 50, 16))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 54, 16))
 
     constructor(_i: string); // no error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 51, 16))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 55, 16))
 
     constructor(_i: any) { // no error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 52, 16), Decl(collisionRestParameterClassConstructor.ts, 53, 11))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 56, 16), Decl(collisionRestParameterClassConstructor.ts, 57, 11))
 
         var _i: any; // no error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 52, 16), Decl(collisionRestParameterClassConstructor.ts, 53, 11))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 56, 16), Decl(collisionRestParameterClassConstructor.ts, 57, 11))
     }
 }
 
 declare class c6 {
->c6 : Symbol(c6, Decl(collisionRestParameterClassConstructor.ts, 55, 1))
+>c6 : Symbol(c6, Decl(collisionRestParameterClassConstructor.ts, 59, 1))
 
     constructor(_i: number, ...rest); // no codegen no error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 58, 16))
->rest : Symbol(rest, Decl(collisionRestParameterClassConstructor.ts, 58, 27))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 62, 16))
+>rest : Symbol(rest, Decl(collisionRestParameterClassConstructor.ts, 62, 27))
 
     constructor(_i: string, ...rest); // no codegen no error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 59, 16))
->rest : Symbol(rest, Decl(collisionRestParameterClassConstructor.ts, 59, 27))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 63, 16))
+>rest : Symbol(rest, Decl(collisionRestParameterClassConstructor.ts, 63, 27))
 }
 
 declare class c6NoError {
->c6NoError : Symbol(c6NoError, Decl(collisionRestParameterClassConstructor.ts, 60, 1))
+>c6NoError : Symbol(c6NoError, Decl(collisionRestParameterClassConstructor.ts, 64, 1))
 
     constructor(_i: number); // no error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 63, 16))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 67, 16))
 
     constructor(_i: string); // no error
->_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 64, 16))
+>_i : Symbol(_i, Decl(collisionRestParameterClassConstructor.ts, 68, 16))
 }

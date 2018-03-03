@@ -22,6 +22,9 @@ function greet2(greeting: string, n = 10, x?: string, ...restParams: string[]): 
 >x : string
 >restParams : string[]
 
+    restParams;
+>restParams : string[]
+
     greetings++;
 >greetings++ : number
 >greetings : number
@@ -37,5 +40,8 @@ function foo(greeting: string, n = 10, x?: string, ...restParams: string[])
 >x : string
 >restParams : string[]
 {
+    restParams;
+>restParams : string[]
+
     return;
 }

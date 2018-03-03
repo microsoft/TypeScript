@@ -40,36 +40,11 @@ foo1(1, 2, "string", E1.a, E.b);  // Error
 //// [destructuringParameterDeclaration4.js]
 // If the parameter is a rest parameter, the parameter type is any[]
 // A type annotation for a rest parameter must denote an array type.
-function a0() {
-    var x = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i] = arguments[_i];
-    }
-} // Error, rest parameter must be array type
-function a1() {
-    var x = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i] = arguments[_i];
-    }
-}
-function a2() {
-    var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i] = arguments[_i];
-    }
-} // Error, rest parameter must be array type
-function a3() {
-    var b = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        b[_i] = arguments[_i];
-    }
-} // Error, can't be optional
-function a4() {
-    var b = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        b[_i] = arguments[_i];
-    }
-} // Error, can't have initializer
+function a0() { } // Error, rest parameter must be array type
+function a1() { }
+function a2() { } // Error, rest parameter must be array type
+function a3() { } // Error, can't be optional
+function a4() { } // Error, can't have initializer
 function a5(_a) {
     var a = _a[0], b = _a[1], c = _a[2][0][0];
 }
@@ -93,10 +68,5 @@ var C = /** @class */ (function () {
     return C;
 }());
 // Rest parameter with generic
-function foo1() {
-    var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i] = arguments[_i];
-    }
-}
+function foo1() { }
 foo1(1, 2, "string", E1.a, E.b); // Error

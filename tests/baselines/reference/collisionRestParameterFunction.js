@@ -1,6 +1,7 @@
 //// [collisionRestParameterFunction.ts]
 // Functions
 function f1(_i: number, ...restParameters) { //_i is error
+    restParameters;
     var _i = 10; // no error
 }
 function f1NoError(_i: number) { // no error
@@ -11,6 +12,7 @@ declare function f2(_i: number, ...restParameters); // no error - no code gen
 declare function f2NoError(_i: number); // no error
 
 function f3(...restParameters) {
+    restParameters;
     var _i = 10; // no error
 }
 function f3NoError() {
@@ -20,6 +22,7 @@ function f3NoError() {
 function f4(_i: number, ...rest); // no codegen no error
 function f4(_i: string, ...rest); // no codegen no error
 function f4(_i: any, ...rest) { // error
+    rest;
 }
 
 function f4NoError(_i: number); // no error
@@ -40,6 +43,7 @@ function f1(_i) {
     for (var _a = 1; _a < arguments.length; _a++) {
         restParameters[_a - 1] = arguments[_a];
     }
+    restParameters;
     var _i = 10; // no error
 }
 function f1NoError(_i) {
@@ -50,6 +54,7 @@ function f3() {
     for (var _a = 0; _a < arguments.length; _a++) {
         restParameters[_a] = arguments[_a];
     }
+    restParameters;
     var _i = 10; // no error
 }
 function f3NoError() {
@@ -60,6 +65,7 @@ function f4(_i) {
     for (var _a = 1; _a < arguments.length; _a++) {
         rest[_a - 1] = arguments[_a];
     }
+    rest;
 }
 function f4NoError(_i) {
 }

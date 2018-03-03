@@ -1,14 +1,14 @@
 ﻿// @target: es5
 class C {
-    constructor(name: string, ...rest) { }
+    constructor(name: string, ...rest) { rest; }
 
-    public bar(...rest) { }
-    public foo(x: number, ...rest) { }
+    public bar(...rest) { rest; }
+    public foo(x: number, ...rest) { rest; }
 }
 
 class D {
-    constructor(...rest) { }
+    constructor(...rest) { rest; }
 
-    public bar(...rest) { }
-    public foo(x: number, ...rest) { }
+    public bar(...rest) { rest; }
+    public foo(x: number, ...rest) { rest; }
 }

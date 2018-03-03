@@ -2,32 +2,38 @@
 class C {
 >C : C
 
-    constructor(name: string, ...rest) { }
+    constructor(name: string, ...rest) { rest; }
 >name : string
 >rest : any[]
-
-    public bar(...rest) { }
->bar : (...rest: any[]) => void
 >rest : any[]
 
-    public foo(x: number, ...rest) { }
+    public bar(...rest) { rest; }
+>bar : (...rest: any[]) => void
+>rest : any[]
+>rest : any[]
+
+    public foo(x: number, ...rest) { rest; }
 >foo : (x: number, ...rest: any[]) => void
 >x : number
+>rest : any[]
 >rest : any[]
 }
 
 class D {
 >D : D
 
-    constructor(...rest) { }
+    constructor(...rest) { rest; }
+>rest : any[]
 >rest : any[]
 
-    public bar(...rest) { }
+    public bar(...rest) { rest; }
 >bar : (...rest: any[]) => void
 >rest : any[]
+>rest : any[]
 
-    public foo(x: number, ...rest) { }
+    public foo(x: number, ...rest) { rest; }
 >foo : (x: number, ...rest: any[]) => void
 >x : number
+>rest : any[]
 >rest : any[]
 }

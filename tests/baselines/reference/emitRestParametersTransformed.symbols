@@ -1,0 +1,56 @@
+=== tests/cases/conformance/es6/restParameters/emitRestParametersTransformed.ts ===
+function foo1(x: number, ...rest: number[]) {
+>foo1 : Symbol(foo1, Decl(emitRestParametersTransformed.ts, 0, 0))
+>x : Symbol(x, Decl(emitRestParametersTransformed.ts, 0, 14))
+>rest : Symbol(rest, Decl(emitRestParametersTransformed.ts, 0, 24))
+
+    return [x].concat(rest);
+>[x].concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(emitRestParametersTransformed.ts, 0, 14))
+>concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>rest : Symbol(rest, Decl(emitRestParametersTransformed.ts, 0, 24))
+}
+
+class C {
+>C : Symbol(C, Decl(emitRestParametersTransformed.ts, 2, 1))
+
+    constructor(x: number, ...rest: number[]) {
+>x : Symbol(x, Decl(emitRestParametersTransformed.ts, 5, 16))
+>rest : Symbol(rest, Decl(emitRestParametersTransformed.ts, 5, 26))
+
+        this.foo2(x);
+>this.foo2 : Symbol(C.foo2, Decl(emitRestParametersTransformed.ts, 8, 5))
+>this : Symbol(C, Decl(emitRestParametersTransformed.ts, 2, 1))
+>foo2 : Symbol(C.foo2, Decl(emitRestParametersTransformed.ts, 8, 5))
+>x : Symbol(x, Decl(emitRestParametersTransformed.ts, 5, 16))
+
+        this.foo2(x, ...rest);
+>this.foo2 : Symbol(C.foo2, Decl(emitRestParametersTransformed.ts, 8, 5))
+>this : Symbol(C, Decl(emitRestParametersTransformed.ts, 2, 1))
+>foo2 : Symbol(C.foo2, Decl(emitRestParametersTransformed.ts, 8, 5))
+>x : Symbol(x, Decl(emitRestParametersTransformed.ts, 5, 16))
+>rest : Symbol(rest, Decl(emitRestParametersTransformed.ts, 5, 26))
+    }
+    private foo2(x: number, ...rest: number[]) {
+>foo2 : Symbol(C.foo2, Decl(emitRestParametersTransformed.ts, 8, 5))
+>x : Symbol(x, Decl(emitRestParametersTransformed.ts, 9, 17))
+>rest : Symbol(rest, Decl(emitRestParametersTransformed.ts, 9, 27))
+
+        return rest;
+>rest : Symbol(rest, Decl(emitRestParametersTransformed.ts, 9, 27))
+    }
+}
+
+class D extends C {
+>D : Symbol(D, Decl(emitRestParametersTransformed.ts, 12, 1))
+>C : Symbol(C, Decl(emitRestParametersTransformed.ts, 2, 1))
+
+    constructor(...rest: number[]) {
+>rest : Symbol(rest, Decl(emitRestParametersTransformed.ts, 15, 16))
+
+        super(0, ...rest);
+>super : Symbol(C, Decl(emitRestParametersTransformed.ts, 2, 1))
+>rest : Symbol(rest, Decl(emitRestParametersTransformed.ts, 15, 16))
+    }
+}
+

@@ -341,13 +341,7 @@ var thisConstructorType;
 function notFirst(a) { return this.n; }
 ///// parse errors /////
 function modifiers() { return this.n; }
-function restParam() {
-    var  = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        [_i] = arguments[_i];
-    }
-    return this.n;
-}
+function restParam() { return this.n; }
 function optional() { return this.n; }
 function decorated() { return this.n; }
 function initializer(, C) { }

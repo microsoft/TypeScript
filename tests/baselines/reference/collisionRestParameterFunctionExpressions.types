@@ -7,6 +7,9 @@ function foo() {
 >_i : number
 >restParameters : any[]
 
+        restParameters;
+>restParameters : any[]
+
         var _i = 10; // no error
 >_i : number
 >10 : 10
@@ -21,6 +24,9 @@ function foo() {
     }
     function f3(...restParameters) {
 >f3 : (...restParameters: any[]) => void
+>restParameters : any[]
+
+        restParameters;
 >restParameters : any[]
 
         var _i = 10; // no error
@@ -48,6 +54,9 @@ function foo() {
     function f4(_i: any, ...rest) { // error
 >f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }
 >_i : any
+>rest : any[]
+
+        rest;
 >rest : any[]
     }
 

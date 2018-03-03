@@ -14,6 +14,9 @@ class Foo {
     constructor(...args: any[]) {
 >args : any[]
 
+        args;
+>args : any[]
+
         console.log(_i); // This should result in error
 >console.log(_i) : void
 >console.log : (msg?: string) => void
