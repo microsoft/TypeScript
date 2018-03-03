@@ -14,7 +14,7 @@ var a0: [any, any, any] = [];                             // Error
 
 var a1: [boolean, string, number] = ["string", 1, true];  // Error
 >a1 : [boolean, string, number]
->["string", 1, true] : ["string", number, boolean]
+>["string", 1, true] : [string, number, boolean]
 >"string" : "string"
 >1 : 1
 >true : true
@@ -64,7 +64,10 @@ interface tup {
 >tup : tup
 
     0: number[]|string[];
+>0 : number[] | string[]
+
     1: number[]|string[];
+>1 : number[] | string[]
 }
 interface myArray extends Array<Number> { }
 >myArray : myArray

@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts"/>
 
-////// interface 
+////// interface
 ////interface IFoo[| {
 ////    getDist(): number;
 ////}|]
@@ -63,9 +63,9 @@
 ////}|])
 ////
 ////// trivia handeling
-////class ClassFooWithTrivia[| /*  some comments */ 
+////class ClassFooWithTrivia[| /*  some comments */
 ////   /* more trivia */ {
-////    
+////
 ////
 ////    /*some trailing trivia */
 ////}|] /* even more */
@@ -85,8 +85,8 @@
 ////        [
 ////          [
 ////            [
-////              1,2,3    
-////            ]    
+////              1,2,3
+////            ]
 ////          ]
 ////        ]
 ////      ]

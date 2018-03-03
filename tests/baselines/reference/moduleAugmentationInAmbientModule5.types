@@ -18,12 +18,16 @@ let y = x.getA().x;
 
 === tests/cases/compiler/array.d.ts ===
 declare module "A" {
+>"A" : typeof "A"
+
     class A { x: number; }
 >A : A
 >x : number
 }
 
 declare module "array" {
+>"array" : typeof "array"
+
     import {A} from "A";
 >A : typeof A
 

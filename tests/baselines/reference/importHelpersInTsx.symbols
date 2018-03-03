@@ -7,7 +7,6 @@ declare var o: any;
 
 export const x = <span {...o} />
 >x : Symbol(x, Decl(external.tsx, 2, 12))
->span : Symbol(unknown)
 >o : Symbol(o, Decl(external.tsx, 1, 11))
 
 === tests/cases/compiler/script.tsx ===
@@ -19,7 +18,6 @@ declare var o: any;
 
 const x = <span {...o} />
 >x : Symbol(x, Decl(script.tsx, 2, 5))
->span : Symbol(unknown)
 >o : Symbol(o, Decl(script.tsx, 1, 11))
 
 === tests/cases/compiler/tslib.d.ts ===

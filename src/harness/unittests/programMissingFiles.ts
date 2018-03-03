@@ -9,7 +9,7 @@ namespace ts {
             assert.isTrue(value, `${missing} to be ${value === undefined ? "not present" : "present only once"}, in actual: ${missingPaths} expected: ${expected}`);
             map.set(missing, false);
         }
-        const notFound = mapDefinedIter(map.keys(), k => map.get(k) === true ? k : undefined);
+        const notFound = arrayFrom(mapDefinedIterator(map.keys(), k => map.get(k) === true ? k : undefined));
         assert.equal(notFound.length, 0, `Not found ${notFound} in actual: ${missingPaths} expected: ${expected}`);
     }
 

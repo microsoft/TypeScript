@@ -8,6 +8,6 @@
 //// }
 
 verify.codeFix({
-    description: "Remove declaration for: 'K'.",
+    description: "Remove declaration for: 'K'",
     newRangeContent: "new <T, U>(a: T): A<U>;",
 });

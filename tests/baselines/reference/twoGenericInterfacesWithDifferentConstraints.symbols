@@ -99,3 +99,54 @@ module M3 {
 >T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 31, 23), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 37, 23))
     }
 }
+
+interface B<T extends number> {
+>B : Symbol(B, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 40, 1), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 45, 1))
+>T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 42, 12), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 47, 12))
+
+  u: T;
+>u : Symbol(B.u, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 42, 31))
+>T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 42, 12), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 47, 12))
+
+  v: Constraint<T>; // ok
+>v : Symbol(B.v, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 43, 7))
+>Constraint : Symbol(Constraint, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 58, 1))
+>T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 42, 12), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 47, 12))
+}
+
+interface B<T> { // ok
+>B : Symbol(B, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 40, 1), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 45, 1))
+>T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 42, 12), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 47, 12))
+
+  x: T;
+>x : Symbol(B.x, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 47, 16))
+>T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 42, 12), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 47, 12))
+
+  y: Constraint<T>; // ok
+>y : Symbol(B.y, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 48, 7))
+>Constraint : Symbol(Constraint, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 58, 1))
+>T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 42, 12), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 47, 12))
+}
+
+interface C<T> {
+>C : Symbol(C, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 50, 1), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 54, 1))
+>T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 52, 12), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 56, 12))
+
+  x: T;
+>x : Symbol(C.x, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 52, 16))
+>T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 52, 12), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 56, 12))
+}
+
+interface C<T extends number> { // error
+>C : Symbol(C, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 50, 1), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 54, 1))
+>T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 52, 12), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 56, 12))
+
+  y: T;
+>y : Symbol(C.y, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 56, 31))
+>T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 52, 12), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 56, 12))
+}
+
+interface Constraint<T extends number> {}
+>Constraint : Symbol(Constraint, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 58, 1))
+>T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 60, 21))
+

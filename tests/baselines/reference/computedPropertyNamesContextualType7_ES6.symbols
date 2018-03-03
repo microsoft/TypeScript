@@ -36,9 +36,17 @@ foo({
 >foo : Symbol(foo, Decl(computedPropertyNamesContextualType7_ES6.ts, 5, 1))
 
     0: () => { },
+>0 : Symbol(0, Decl(computedPropertyNamesContextualType7_ES6.ts, 10, 5))
+
     ["hi" + "bye"]: true,
+>["hi" + "bye"] : Symbol(["hi" + "bye"], Decl(computedPropertyNamesContextualType7_ES6.ts, 11, 17))
+
     [0 + 1]: 0,
+>[0 + 1] : Symbol([0 + 1], Decl(computedPropertyNamesContextualType7_ES6.ts, 12, 25))
+
     [+"hi"]: [0]
+>[+"hi"] : Symbol([+"hi"], Decl(computedPropertyNamesContextualType7_ES6.ts, 13, 15))
+
 });
 
 g({ p: "" });

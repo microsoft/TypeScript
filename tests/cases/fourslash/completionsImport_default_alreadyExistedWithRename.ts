@@ -8,13 +8,16 @@
 ////f/**/;
 
 goTo.marker("");
-verify.completionListContains("foo", "function foo(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true);
+verify.completionListContains({ name: "foo", source: "/a" }, "function foo(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true, {
+    includeExternalModuleExports: true,
+    sourceDisplay: "./a",
+});
 
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
-    description: `Import 'foo' from "./a".`,
-    // TODO: GH#18445
+    source: "/a",
+    description: `Import 'foo' from module "./a"`,
     newFileContent: `import f_o_o from "./a";
-import foo from "./a";\r
+import foo from "./a";
 f;`,
 });

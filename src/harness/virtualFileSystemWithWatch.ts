@@ -1,10 +1,17 @@
 /// <reference path="harness.ts" />
 
 namespace ts.TestFSWithWatch {
-    const { content: libFileContent } = Harness.getDefaultLibraryFile(Harness.IO);
     export const libFile: FileOrFolder = {
         path: "/a/lib/lib.d.ts",
-        content: libFileContent
+        content: `/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> {}`
     };
 
     export const safeList = {
@@ -63,6 +70,7 @@ namespace ts.TestFSWithWatch {
         path: string;
         content?: string;
         fileSize?: number;
+        symLink?: string;
     }
 
     interface FSEntry {
@@ -79,12 +87,20 @@ namespace ts.TestFSWithWatch {
         entries: FSEntry[];
     }
 
+    interface SymLink extends FSEntry {
+        symLink: string;
+    }
+
     function isFolder(s: FSEntry): s is Folder {
         return s && isArray((<Folder>s).entries);
     }
 
     function isFile(s: FSEntry): s is File {
         return s && isString((<File>s).content);
+    }
+
+    function isSymLink(s: FSEntry): s is SymLink {
+        return s && isString((<SymLink>s).symLink);
     }
 
     function invokeWatcherCallbacks<T>(callbacks: T[], invokeCallback: (cb: T) => void): void {
@@ -137,9 +153,9 @@ namespace ts.TestFSWithWatch {
     }
 
     export function checkFileNames(caption: string, actualFileNames: ReadonlyArray<string>, expectedFileNames: string[]) {
-        assert.equal(actualFileNames.length, expectedFileNames.length, `${caption}: incorrect actual number of files, expected ${expectedFileNames}, got ${actualFileNames}`);
+        assert.equal(actualFileNames.length, expectedFileNames.length, `${caption}: incorrect actual number of files, expected:\r\n${expectedFileNames.join("\r\n")}\r\ngot: ${actualFileNames.join("\r\n")}`);
         for (const f of expectedFileNames) {
-            assert.isTrue(contains(actualFileNames, f), `${caption}: expected to find ${f} in ${actualFileNames}`);
+            assert.equal(true, contains(actualFileNames, f), `${caption}: expected to find ${f} in ${actualFileNames}`);
         }
     }
 
@@ -161,7 +177,7 @@ namespace ts.TestFSWithWatch {
                 mapSeen.set(f, true);
             }
         }
-        assert.equal(mapExpected.size, 0, `Output has missing ${JSON.stringify(flatMapIter(mapExpected.keys(), key => key))} in ${JSON.stringify(host.getOutput())}`);
+        assert.equal(mapExpected.size, 0, `Output has missing ${JSON.stringify(arrayFrom(mapExpected.keys()))} in ${JSON.stringify(host.getOutput())}`);
     }
 
     export function checkOutputDoesNotContain(host: TestServerHost, expectedToBeAbsent: string[] | ReadonlyArray<string>) {
@@ -174,6 +190,10 @@ namespace ts.TestFSWithWatch {
     class Callbacks {
         private map: TimeOutCallback[] = [];
         private nextId = 1;
+
+        getNextId() {
+            return this.nextId;
+        }
 
         register(cb: (...args: any[]) => void, args: any[]) {
             const timeoutId = this.nextId;
@@ -196,7 +216,13 @@ namespace ts.TestFSWithWatch {
             return n;
         }
 
-        invoke() {
+        invoke(invokeKey?: number) {
+            if (invokeKey) {
+                this.map[invokeKey]();
+                delete this.map[invokeKey];
+                return;
+            }
+
             // Note: invoking a callback may result in new callbacks been queued,
             // so do not clear the entire callback list regardless. Only remove the
             // ones we have invoked.
@@ -219,7 +245,16 @@ namespace ts.TestFSWithWatch {
         directoryName: string;
     }
 
-    export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost {
+    export interface ReloadWatchInvokeOptions {
+        /** Invokes the directory watcher for the parent instead of the file changed */
+        invokeDirectoryWatcherInsteadOfFileChanged: boolean;
+        /** When new file is created, do not invoke watches for it */
+        ignoreWatchInvokedWithTriggerAsFileCreate: boolean;
+        /** Invoke the file delete, followed by create instead of file changed */
+        invokeFileDeleteCreateAsPartInsteadOfChange: boolean;
+    }
+
+    export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
         args: string[] = [];
 
         private readonly output: string[] = [];
@@ -229,6 +264,7 @@ namespace ts.TestFSWithWatch {
         private toPath: (f: string) => Path;
         private timeoutCallbacks = new Callbacks();
         private immediateCallbacks = new Callbacks();
+        private screenClears = 0;
 
         readonly watchedDirectories = createMultiMap<TestDirectoryWatcher>();
         readonly watchedDirectoriesRecursive = createMultiMap<TestDirectoryWatcher>();
@@ -263,7 +299,7 @@ namespace ts.TestFSWithWatch {
             return s;
         }
 
-        reloadFS(fileOrFolderList: ReadonlyArray<FileOrFolder>, invokeDirectoryWatcherInsteadOfFileChanged?: boolean) {
+        reloadFS(fileOrFolderList: ReadonlyArray<FileOrFolder>, options?: Partial<ReloadWatchInvokeOptions>) {
             const mapNewLeaves = createMap<true>();
             const isNewFs = this.fs.size === 0;
             fileOrFolderList = fileOrFolderList.concat(this.withSafeList ? safeList : []);
@@ -283,18 +319,27 @@ namespace ts.TestFSWithWatch {
                         if (isString(fileOrDirectory.content)) {
                             // Update file
                             if (currentEntry.content !== fileOrDirectory.content) {
-                                currentEntry.content = fileOrDirectory.content;
-                                if (invokeDirectoryWatcherInsteadOfFileChanged) {
-                                    this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
+                                if (options && options.invokeFileDeleteCreateAsPartInsteadOfChange) {
+                                    this.removeFileOrFolder(currentEntry, returnFalse);
+                                    this.ensureFileOrFolder(fileOrDirectory);
                                 }
                                 else {
-                                    this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
+                                    currentEntry.content = fileOrDirectory.content;
+                                    if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
+                                        this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
+                                    }
+                                    else {
+                                        this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
+                                    }
                                 }
                             }
                         }
                         else {
-                            // TODO: Changing from file => folder
+                            // TODO: Changing from file => folder/Symlink
                         }
+                    }
+                    else if (isSymLink(currentEntry)) {
+                        // TODO: update symlinks
                     }
                     else {
                         // Folder
@@ -307,7 +352,7 @@ namespace ts.TestFSWithWatch {
                     }
                 }
                 else {
-                    this.ensureFileOrFolder(fileOrDirectory);
+                    this.ensureFileOrFolder(fileOrDirectory, options && options.ignoreWatchInvokedWithTriggerAsFileCreate);
                 }
             }
 
@@ -316,7 +361,7 @@ namespace ts.TestFSWithWatch {
                     // If this entry is not from the new file or folder
                     if (!mapNewLeaves.get(path)) {
                         // Leaf entries that arent in new list => remove these
-                        if (isFile(fileOrDirectory) || isFolder(fileOrDirectory) && fileOrDirectory.entries.length === 0) {
+                        if (isFile(fileOrDirectory) || isSymLink(fileOrDirectory) || isFolder(fileOrDirectory) && fileOrDirectory.entries.length === 0) {
                             this.removeFileOrFolder(fileOrDirectory, folder => !mapNewLeaves.get(folder.path));
                         }
                     }
@@ -324,12 +369,53 @@ namespace ts.TestFSWithWatch {
             }
         }
 
-        ensureFileOrFolder(fileOrDirectory: FileOrFolder) {
+        renameFolder(folderName: string, newFolderName: string) {
+            const fullPath = getNormalizedAbsolutePath(folderName, this.currentDirectory);
+            const path = this.toPath(fullPath);
+            const folder = this.fs.get(path) as Folder;
+            Debug.assert(!!folder);
+
+            // Only remove the folder
+            this.removeFileOrFolder(folder, returnFalse, /*isRenaming*/ true);
+
+            // Add updated folder with new folder name
+            const newFullPath = getNormalizedAbsolutePath(newFolderName, this.currentDirectory);
+            const newFolder = this.toFolder(newFullPath);
+            const newPath = newFolder.path;
+            const basePath = getDirectoryPath(path);
+            Debug.assert(basePath !== path);
+            Debug.assert(basePath === getDirectoryPath(newPath));
+            const baseFolder = this.fs.get(basePath) as Folder;
+            this.addFileOrFolderInFolder(baseFolder, newFolder);
+
+            // Invoke watches for files in the folder as deleted (from old path)
+            for (const entry of folder.entries) {
+                Debug.assert(isFile(entry));
+                this.fs.delete(entry.path);
+                this.invokeFileWatcher(entry.fullPath, FileWatcherEventKind.Deleted);
+
+                entry.fullPath = combinePaths(newFullPath, getBaseFileName(entry.fullPath));
+                entry.path = this.toPath(entry.fullPath);
+                newFolder.entries.push(entry);
+                this.fs.set(entry.path, entry);
+                this.invokeFileWatcher(entry.fullPath, FileWatcherEventKind.Created);
+            }
+        }
+
+        ensureFileOrFolder(fileOrDirectory: FileOrFolder, ignoreWatchInvokedWithTriggerAsFileCreate?: boolean) {
             if (isString(fileOrDirectory.content)) {
                 const file = this.toFile(fileOrDirectory);
-                Debug.assert(!this.fs.get(file.path));
-                const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath));
-                this.addFileOrFolderInFolder(baseFolder, file);
+                // file may already exist when updating existing type declaration file
+                if (!this.fs.get(file.path)) {
+                    const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath));
+                    this.addFileOrFolderInFolder(baseFolder, file, ignoreWatchInvokedWithTriggerAsFileCreate);
+                }
+            }
+            else if (isString(fileOrDirectory.symLink)) {
+                const symLink = this.toSymLink(fileOrDirectory);
+                Debug.assert(!this.fs.get(symLink.path));
+                const baseFolder = this.ensureFolder(getDirectoryPath(symLink.fullPath));
+                this.addFileOrFolderInFolder(baseFolder, symLink, ignoreWatchInvokedWithTriggerAsFileCreate);
             }
             else {
                 const fullPath = getNormalizedAbsolutePath(fileOrDirectory.path, this.currentDirectory);
@@ -358,17 +444,20 @@ namespace ts.TestFSWithWatch {
             return folder;
         }
 
-        private addFileOrFolderInFolder(folder: Folder, fileOrDirectory: File | Folder) {
+        private addFileOrFolderInFolder(folder: Folder, fileOrDirectory: File | Folder | SymLink, ignoreWatch?: boolean) {
             folder.entries.push(fileOrDirectory);
             this.fs.set(fileOrDirectory.path, fileOrDirectory);
 
-            if (isFile(fileOrDirectory)) {
+            if (ignoreWatch) {
+                return;
+            }
+            if (isFile(fileOrDirectory) || isSymLink(fileOrDirectory)) {
                 this.invokeFileWatcher(fileOrDirectory.fullPath, FileWatcherEventKind.Created);
             }
             this.invokeDirectoryWatcher(folder.fullPath, fileOrDirectory.fullPath);
         }
 
-        private removeFileOrFolder(fileOrDirectory: File | Folder, isRemovableLeafFolder: (folder: Folder) => boolean) {
+        private removeFileOrFolder(fileOrDirectory: File | Folder | SymLink, isRemovableLeafFolder: (folder: Folder) => boolean, isRenaming?: boolean) {
             const basePath = getDirectoryPath(fileOrDirectory.path);
             const baseFolder = this.fs.get(basePath) as Folder;
             if (basePath !== fileOrDirectory.path) {
@@ -377,11 +466,11 @@ namespace ts.TestFSWithWatch {
             }
             this.fs.delete(fileOrDirectory.path);
 
-            if (isFile(fileOrDirectory)) {
+            if (isFile(fileOrDirectory) || isSymLink(fileOrDirectory)) {
                 this.invokeFileWatcher(fileOrDirectory.fullPath, FileWatcherEventKind.Deleted);
             }
             else {
-                Debug.assert(fileOrDirectory.entries.length === 0);
+                Debug.assert(fileOrDirectory.entries.length === 0 || isRenaming);
                 const relativePath = this.getRelativePathToDirectory(fileOrDirectory.fullPath, fileOrDirectory.fullPath);
                 // Invoke directory and recursive directory watcher for the folder
                 // Here we arent invoking recursive directory watchers for the base folders
@@ -402,7 +491,7 @@ namespace ts.TestFSWithWatch {
 
         private invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind) {
             const callbacks = this.watchedFiles.get(this.toPath(fileFullPath));
-            invokeWatcherCallbacks(callbacks, ({ cb, fileName }) => cb(fileName, eventKind));
+            invokeWatcherCallbacks(callbacks, ({ cb }) => cb(fileFullPath, eventKind));
         }
 
         private getRelativePathToDirectory(directoryFullPath: string, fileFullPath: string) {
@@ -444,6 +533,15 @@ namespace ts.TestFSWithWatch {
             };
         }
 
+        private toSymLink(fileOrDirectory: FileOrFolder): SymLink {
+            const fullPath = getNormalizedAbsolutePath(fileOrDirectory.path, this.currentDirectory);
+            return {
+                path: this.toPath(fullPath),
+                fullPath,
+                symLink: getNormalizedAbsolutePath(fileOrDirectory.symLink, getDirectoryPath(fullPath))
+            };
+        }
+
         private toFolder(path: string): Folder {
             const fullPath = getNormalizedAbsolutePath(path, this.currentDirectory);
             return {
@@ -453,14 +551,52 @@ namespace ts.TestFSWithWatch {
             };
         }
 
-        fileExists(s: string) {
-            const path = this.toFullPath(s);
-            return isFile(this.fs.get(path));
+        private getRealFsEntry<T extends FSEntry>(isFsEntry: (fsEntry: FSEntry) => fsEntry is T, path: Path, fsEntry = this.fs.get(path)): T | undefined {
+            if (isFsEntry(fsEntry)) {
+                return fsEntry;
+            }
+
+            if (isSymLink(fsEntry)) {
+                return this.getRealFsEntry(isFsEntry, this.toPath(fsEntry.symLink));
+            }
+
+            if (fsEntry) {
+                // This fs entry is something else
+                return undefined;
+            }
+
+            const realpath = this.realpath(path);
+            if (path !== realpath) {
+                return this.getRealFsEntry(isFsEntry, realpath as Path);
+            }
+
+            return undefined;
         }
 
-        readFile(s: string) {
-            const fsEntry = this.fs.get(this.toFullPath(s));
-            return isFile(fsEntry) ? fsEntry.content : undefined;
+        private isFile(fsEntry: FSEntry) {
+            return !!this.getRealFile(fsEntry.path, fsEntry);
+        }
+
+        private getRealFile(path: Path, fsEntry?: FSEntry): File | undefined {
+            return this.getRealFsEntry(isFile, path, fsEntry);
+        }
+
+        private isFolder(fsEntry: FSEntry) {
+            return !!this.getRealFolder(fsEntry.path, fsEntry);
+        }
+
+        private getRealFolder(path: Path, fsEntry = this.fs.get(path)): Folder | undefined {
+            return this.getRealFsEntry(isFolder, path, fsEntry);
+        }
+
+        fileExists(s: string) {
+            const path = this.toFullPath(s);
+            return !!this.getRealFile(path);
+        }
+
+        readFile(s: string): string {
+            const fsEntry = this.getRealFile(this.toFullPath(s));
+            return fsEntry ? fsEntry.content : undefined;
         }
 
         getFileSize(s: string) {
@@ -474,30 +610,30 @@ namespace ts.TestFSWithWatch {
 
         directoryExists(s: string) {
             const path = this.toFullPath(s);
-            return isFolder(this.fs.get(path));
+            return !!this.getRealFolder(path);
         }
 
-        getDirectories(s: string) {
+        getDirectories(s: string): string[] {
             const path = this.toFullPath(s);
-            const folder = this.fs.get(path);
-            if (isFolder(folder)) {
-                return mapDefined(folder.entries, entry => isFolder(entry) ? getBaseFileName(entry.fullPath) : undefined);
+            const folder = this.getRealFolder(path);
+            if (folder) {
+                return mapDefined(folder.entries, entry => this.isFolder(entry) ? getBaseFileName(entry.fullPath) : undefined);
             }
             Debug.fail(folder ? "getDirectories called on file" : "getDirectories called on missing folder");
             return [];
         }
 
         readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
-            return ts.matchFiles(this.toNormalizedAbsolutePath(path), extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, (dir) => {
+            return matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, (dir) => {
                 const directories: string[] = [];
                 const files: string[] = [];
-                const dirEntry = this.fs.get(this.toPath(dir));
-                if (isFolder(dirEntry)) {
-                    dirEntry.entries.forEach((entry) => {
-                        if (isFolder(entry)) {
+                const folder = this.getRealFolder(this.toPath(dir));
+                if (folder) {
+                    folder.entries.forEach((entry) => {
+                        if (this.isFolder(entry)) {
                             directories.push(getBaseFileName(entry.fullPath));
                         }
-                        else if (isFile(entry)) {
+                        else if (this.isFile(entry)) {
                             files.push(getBaseFileName(entry.fullPath));
                         }
                         else {
@@ -538,8 +674,16 @@ namespace ts.TestFSWithWatch {
             return this.timeoutCallbacks.register(callback, args);
         }
 
+        getNextTimeoutId() {
+            return this.timeoutCallbacks.getNextId();
+        }
+
         clearTimeout(timeoutId: any): void {
             this.timeoutCallbacks.unregister(timeoutId);
+        }
+
+        clearScreen(): void {
+            this.screenClears += 1;
         }
 
         checkTimeoutQueueLengthAndRun(expected: number) {
@@ -552,9 +696,9 @@ namespace ts.TestFSWithWatch {
             assert.equal(callbacksCount, expected, `expected ${expected} timeout callbacks queued but found ${callbacksCount}.`);
         }
 
-        runQueuedTimeoutCallbacks() {
+        runQueuedTimeoutCallbacks(timeoutId?: number) {
             try {
-                this.timeoutCallbacks.invoke();
+                this.timeoutCallbacks.invoke(timeoutId);
             }
             catch (e) {
                 if (e.message === this.existMessage) {
@@ -564,7 +708,10 @@ namespace ts.TestFSWithWatch {
             }
         }
 
-        runQueuedImmediateCallbacks() {
+        runQueuedImmediateCallbacks(checkCount?: number) {
+            if (checkCount !== undefined) {
+                assert.equal(this.immediateCallbacks.count(), checkCount);
+            }
             this.immediateCallbacks.invoke();
         }
 
@@ -574,6 +721,10 @@ namespace ts.TestFSWithWatch {
 
         clearImmediate(timeoutId: any): void {
             this.immediateCallbacks.unregister(timeoutId);
+        }
+
+        checkScreenClears(expected: number): void {
+            assert.equal(this.screenClears, expected);
         }
 
         createDirectory(directoryName: string): void {
@@ -609,6 +760,23 @@ namespace ts.TestFSWithWatch {
 
         clearOutput() {
             clear(this.output);
+        }
+
+        realpath(s: string): string {
+            const fullPath = this.toNormalizedAbsolutePath(s);
+            const path = this.toPath(fullPath);
+            if (getDirectoryPath(path) === path) {
+                // Root
+                return s;
+            }
+            const dirFullPath = this.realpath(getDirectoryPath(fullPath));
+            const realFullPath = combinePaths(dirFullPath, getBaseFileName(fullPath));
+            const fsEntry = this.fs.get(this.toPath(realFullPath));
+            if (isSymLink(fsEntry)) {
+                return this.realpath(fsEntry.symLink);
+            }
+
+            return realFullPath;
         }
 
         readonly existMessage = "System Exit";

@@ -17,7 +17,7 @@ module m {
 >public2 : public2
         }
     }
-    
+
     export class c {
 >c : c
 
@@ -71,7 +71,7 @@ module m {
 >param : private1
 >private1 : private1
         }
-    
+
         // getter with annotation
         get foo11(): public1 {
 >foo11 : public1

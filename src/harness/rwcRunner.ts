@@ -6,7 +6,7 @@
 /* tslint:disable:no-null-keyword */
 
 namespace RWC {
-    function runWithIOLog(ioLog: IOLog, fn: (oldIO: Harness.IO) => void) {
+    function runWithIOLog(ioLog: IoLog, fn: (oldIO: Harness.Io) => void) {
         const oldIO = Harness.IO;
 
         const wrappedIO = Playback.wrapIO(oldIO);
@@ -39,8 +39,6 @@ namespace RWC {
             const baseName = ts.getBaseFileName(jsonPath);
             let currentDirectory: string;
             let useCustomLibraryFile: boolean;
-            let skipTypeAndSymbolbaselines = false;
-            const typeAndSymbolSizeLimit = 10000000;
             after(() => {
                 // Mocha holds onto the closure environment of the describe callback even after the test is done.
                 // Therefore we have to clean out large objects after the test is done.
@@ -54,17 +52,15 @@ namespace RWC {
                 // or to use lib.d.ts inside the json object. If the flag is true, use the lib.d.ts inside json file
                 // otherwise use the lib.d.ts from built/local
                 useCustomLibraryFile = undefined;
-                skipTypeAndSymbolbaselines = false;
             });
 
             it("can compile", function(this: Mocha.ITestCallbackContext) {
-                this.timeout(800000); // Allow long timeouts for RWC compilations
+                this.timeout(800_000); // Allow long timeouts for RWC compilations
                 let opts: ts.ParsedCommandLine;
 
-                const ioLog: IOLog = Playback.newStyleLogIntoOldStyleLog(JSON.parse(Harness.IO.readFile(`internal/cases/rwc/${jsonPath}/test.json`)), Harness.IO, `internal/cases/rwc/${baseName}`);
+                const ioLog: IoLog = Playback.newStyleLogIntoOldStyleLog(JSON.parse(Harness.IO.readFile(`internal/cases/rwc/${jsonPath}/test.json`)), Harness.IO, `internal/cases/rwc/${baseName}`);
                 currentDirectory = ioLog.currentDirectory;
                 useCustomLibraryFile = ioLog.useCustomLibraryFile;
-                skipTypeAndSymbolbaselines = ioLog.filesRead.reduce((acc, elem) => (elem && elem.result && elem.result.contents) ? acc + elem.result.contents.length : acc, 0) > typeAndSymbolSizeLimit;
                 runWithIOLog(ioLog, () => {
                     opts = ts.parseCommandLine(ioLog.arguments, fileName => Harness.IO.readFile(fileName));
                     assert.equal(opts.errors.length, 0);
@@ -135,13 +131,14 @@ namespace RWC {
                                 }
                                 else {
                                     // set the flag to put default library to the beginning of the list
-                                    inputFiles.unshift(Harness.getDefaultLibraryFile(oldIO));
+                                    inputFiles.unshift(Harness.getDefaultLibraryFile(fileRead.path, oldIO));
                                 }
                             }
                         }
                     }
 
                     // do not use lib since we already read it in above
+                    opts.options.lib = undefined;
                     opts.options.noLib = true;
 
                     // Emit the results
@@ -173,7 +170,8 @@ namespace RWC {
             });
 
 
-            it("has the expected emitted code", () => {
+            it("has the expected emitted code", function(this: Mocha.ITestCallbackContext) {
+                this.timeout(100_000); // Allow longer timeouts for RWC js verification
                 Harness.Baseline.runMultifileBaseline(baseName, "", () => {
                     return Harness.Compiler.iterateOutputs(compilerResult.files);
                 }, baselineOpts, [".js", ".jsx"]);
@@ -199,14 +197,6 @@ namespace RWC {
                 }, baselineOpts, [".map"]);
             });
 
-            /*it("has correct source map record", () => {
-                if (compilerOptions.sourceMap) {
-                    Harness.Baseline.runBaseline(baseName + ".sourcemap.txt", () => {
-                        return compilerResult.getSourceMapRecord();
-                    }, baselineOpts);
-                }
-            });*/
-
             it("has the expected errors", () => {
                 Harness.Baseline.runMultifileBaseline(baseName, ".errors.txt", () => {
                     if (compilerResult.errors.length === 0) {
@@ -217,14 +207,6 @@ namespace RWC {
                     const errors = compilerResult.errors.filter(e => !e.file || !Harness.isDefaultLibraryFile(e.file.fileName));
                     return Harness.Compiler.iterateErrorBaseline(baselineFiles, errors);
                 }, baselineOpts);
-            });
-
-            it("has the expected types", () => {
-                // We don't need to pass the extension here because "doTypeAndSymbolBaseline" will append appropriate extension of ".types" or ".symbols"
-                Harness.Compiler.doTypeAndSymbolBaseline(baseName, compilerResult.program, inputFiles
-                    .concat(otherFiles)
-                    .filter(file => !!compilerResult.program.getSourceFile(file.unitName))
-                    .filter(e => !Harness.isDefaultLibraryFile(e.unitName)), baselineOpts, /*multifile*/ true, skipTypeAndSymbolbaselines);
             });
 
             // Ideally, a generated declaration file will have no errors. But we allow generated
@@ -265,10 +247,8 @@ class RWCRunner extends RunnerBase {
      */
     public initializeTests(): void {
         // Read in and evaluate the test list
-        const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
-
-        for (let i = 0; i < testList.length; i++) {
-            this.runTest(testList[i]);
+        for (const test of this.tests && this.tests.length ? this.tests : this.enumerateTestFiles()) {
+            this.runTest(test);
         }
     }
 

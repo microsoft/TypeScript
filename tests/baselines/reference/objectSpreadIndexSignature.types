@@ -50,3 +50,19 @@ indexed3 = { ...b ? indexed3 : undefined };
 >indexed3 : { [n: string]: number; }
 >undefined : undefined
 
+declare var roindex: { readonly [x:string]: number };
+>roindex : { readonly [x: string]: number; }
+>x : string
+
+var writable = { ...roindex };
+>writable : { [x: string]: number; }
+>{ ...roindex } : { [x: string]: number; }
+>roindex : { readonly [x: string]: number; }
+
+writable.a = 0;  // should be ok.
+>writable.a = 0 : 0
+>writable.a : number
+>writable : { [x: string]: number; }
+>a : number
+>0 : 0
+

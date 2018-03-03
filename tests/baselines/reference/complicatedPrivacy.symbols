@@ -69,6 +69,7 @@ module m1 {
 >arg1 : Symbol(arg1, Decl(complicatedPrivacy.ts, 32, 23))
     {
     [number]: C1; // Used to be indexer, now it is a computed property
+>[number] : Symbol([number], Decl(complicatedPrivacy.ts, 33, 5))
 >C1 : Symbol(C1, Decl(complicatedPrivacy.ts, 50, 5))
 
     }) {

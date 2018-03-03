@@ -1,0 +1,12 @@
+/b.ts(2,1): error TS2511: Cannot create an instance of an abstract class.
+
+
+==== /a.ts (0 errors) ====
+    export default abstract class {}
+    
+==== /b.ts (1 errors) ====
+    import A from "./a";
+    new A();
+    ~~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    

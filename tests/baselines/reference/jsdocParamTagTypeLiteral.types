@@ -162,7 +162,7 @@ foo5([{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unne
 >{ idea: 'idea', oh: false } : { idea: string; oh: false; }
 >idea : string
 >'idea' : "idea"
->oh : boolean
+>oh : false
 >false : false
 >unnest : number
 >1 : 1

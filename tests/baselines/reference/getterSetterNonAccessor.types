@@ -28,7 +28,7 @@ Object.defineProperty({}, "0", <PropertyDescriptor>({
 >setFunc : (v: any) => void
 
           configurable: true
->configurable : boolean
+>configurable : true
 >true : true
 
       }));

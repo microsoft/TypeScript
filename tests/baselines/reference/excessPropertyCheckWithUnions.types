@@ -23,16 +23,16 @@ let wrong: ADT = { tag: "T", a1: "extra" }
 >wrong : ADT
 >ADT : ADT
 >{ tag: "T", a1: "extra" } : { tag: "T"; a1: string; }
->tag : string
+>tag : "T"
 >"T" : "T"
 >a1 : string
 >"extra" : "extra"
 
 wrong = { tag: "A", d20: 12 }
->wrong = { tag: "A", d20: 12 } : { tag: "A"; d20: 12; }
+>wrong = { tag: "A", d20: 12 } : { tag: "A"; d20: number; }
 >wrong : ADT
->{ tag: "A", d20: 12 } : { tag: "A"; d20: 12; }
->tag : string
+>{ tag: "A", d20: 12 } : { tag: "A"; d20: number; }
+>tag : "A"
 >"A" : "A"
 >d20 : number
 >12 : 12
@@ -41,7 +41,7 @@ wrong = { tag: "D" }
 >wrong = { tag: "D" } : { tag: "D"; }
 >wrong : ADT
 >{ tag: "D" } : { tag: "D"; }
->tag : string
+>tag : "D"
 >"D" : "D"
 
 type Ambiguous = {
@@ -80,7 +80,7 @@ amb = { tag: "A", x: "hi" }
 >amb = { tag: "A", x: "hi" } : { tag: "A"; x: string; }
 >amb : Ambiguous
 >{ tag: "A", x: "hi" } : { tag: "A"; x: string; }
->tag : string
+>tag : "A"
 >"A" : "A"
 >x : string
 >"hi" : "hi"
@@ -89,7 +89,7 @@ amb = { tag: "A", y: 12 }
 >amb = { tag: "A", y: 12 } : { tag: "A"; y: number; }
 >amb : Ambiguous
 >{ tag: "A", y: 12 } : { tag: "A"; y: number; }
->tag : string
+>tag : "A"
 >"A" : "A"
 >y : number
 >12 : 12
@@ -98,7 +98,7 @@ amb = { tag: "A", x: "hi", y: 12 }
 >amb = { tag: "A", x: "hi", y: 12 } : { tag: "A"; x: string; y: number; }
 >amb : Ambiguous
 >{ tag: "A", x: "hi", y: 12 } : { tag: "A"; x: string; y: number; }
->tag : string
+>tag : "A"
 >"A" : "A"
 >x : string
 >"hi" : "hi"
@@ -110,7 +110,7 @@ amb = { tag: "A", x: "hi", extra: 12 }
 >amb = { tag: "A", x: "hi", extra: 12 } : { tag: "A"; x: string; extra: number; }
 >amb : Ambiguous
 >{ tag: "A", x: "hi", extra: 12 } : { tag: "A"; x: string; extra: number; }
->tag : string
+>tag : "A"
 >"A" : "A"
 >x : string
 >"hi" : "hi"
@@ -121,7 +121,7 @@ amb = { tag: "A", y: 12, extra: 12 }
 >amb = { tag: "A", y: 12, extra: 12 } : { tag: "A"; y: number; extra: number; }
 >amb : Ambiguous
 >{ tag: "A", y: 12, extra: 12 } : { tag: "A"; y: number; extra: number; }
->tag : string
+>tag : "A"
 >"A" : "A"
 >y : number
 >12 : 12
@@ -135,16 +135,16 @@ amb = { tag: "A" }
 >amb = { tag: "A" } : { tag: "A"; }
 >amb : Ambiguous
 >{ tag: "A" } : { tag: "A"; }
->tag : string
+>tag : "A"
 >"A" : "A"
 
 amb = { tag: "A", z: true }
 >amb = { tag: "A", z: true } : { tag: "A"; z: true; }
 >amb : Ambiguous
 >{ tag: "A", z: true } : { tag: "A"; z: true; }
->tag : string
+>tag : "A"
 >"A" : "A"
->z : boolean
+>z : true
 >true : true
 
 type Overlapping =
@@ -167,14 +167,14 @@ let over: Overlapping
 >over : Overlapping
 >Overlapping : Overlapping
 
-// these two are not reported because there are two discriminant properties
+// these two are still errors despite their doubled up discriminants
 over = { a: 1, b: 1, first: "ok", second: "error" }
 >over = { a: 1, b: 1, first: "ok", second: "error" } : { a: 1; b: 1; first: string; second: string; }
 >over : Overlapping
 >{ a: 1, b: 1, first: "ok", second: "error" } : { a: 1; b: 1; first: string; second: string; }
->a : number
+>a : 1
 >1 : 1
->b : number
+>b : 1
 >1 : 1
 >first : string
 >"ok" : "ok"
@@ -185,9 +185,9 @@ over = { a: 1, b: 1, first: "ok", third: "error" }
 >over = { a: 1, b: 1, first: "ok", third: "error" } : { a: 1; b: 1; first: string; third: string; }
 >over : Overlapping
 >{ a: 1, b: 1, first: "ok", third: "error" } : { a: 1; b: 1; first: string; third: string; }
->a : number
+>a : 1
 >1 : 1
->b : number
+>b : 1
 >1 : 1
 >first : string
 >"ok" : "ok"
@@ -220,4 +220,68 @@ t0 = t2
 >t0 = t2 : { a: any; b: any; c: any; } | { c: any; d: any; e: any; }
 >t0 : { a: any; b: any; } | { d: any; e: any; }
 >t2 : { a: any; b: any; c: any; } | { c: any; d: any; e: any; }
+
+// Nested excess property checks work with discriminated unions
+type AN = { a: string } | { c: string }
+>AN : AN
+>a : string
+>c : string
+
+type BN = { b: string }
+>BN : BN
+>b : string
+
+type AB = { kind: "A", n: AN } | { kind: "B", n: BN }
+>AB : AB
+>kind : "A"
+>n : AN
+>AN : AN
+>kind : "B"
+>n : BN
+>BN : BN
+
+const abab: AB = {
+>abab : AB
+>AB : AB
+>{    kind: "A",    n: {        a: "a",        b: "b", // excess -- kind: "A"    }} : { kind: "A"; n: { a: string; b: string; }; }
+
+    kind: "A",
+>kind : "A"
+>"A" : "A"
+
+    n: {
+>n : { a: string; b: string; }
+>{        a: "a",        b: "b", // excess -- kind: "A"    } : { a: string; b: string; }
+
+        a: "a",
+>a : string
+>"a" : "a"
+
+        b: "b", // excess -- kind: "A"
+>b : string
+>"b" : "b"
+    }
+}
+const abac: AB = {
+>abac : AB
+>AB : AB
+>{    kind: "A",    n: {        a: "a",        c: "c", // ok -- kind: "A", an: { a: string } | { c: string }    }} : { kind: "A"; n: { a: string; c: string; }; }
+
+    kind: "A",
+>kind : "A"
+>"A" : "A"
+
+    n: {
+>n : { a: string; c: string; }
+>{        a: "a",        c: "c", // ok -- kind: "A", an: { a: string } | { c: string }    } : { a: string; c: string; }
+
+        a: "a",
+>a : string
+>"a" : "a"
+
+        c: "c", // ok -- kind: "A", an: { a: string } | { c: string }
+>c : string
+>"c" : "c"
+    }
+}
 

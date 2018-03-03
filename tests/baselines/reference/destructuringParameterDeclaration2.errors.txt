@@ -2,10 +2,8 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
   Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(7,29): error TS1005: ',' expected.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(8,4): error TS2345: Argument of type '[number, number, string[][], string]' is not assignable to parameter of type '[number, number, string[][]]'.
-  Types of property 'pop' are incompatible.
-    Type '() => string | number | string[][]' is not assignable to type '() => number | string[][]'.
-      Type 'string | number | string[][]' is not assignable to type 'number | string[][]'.
-        Type 'string' is not assignable to type 'number | string[][]'.
+  Types of property 'length' are incompatible.
+    Type '4' is not assignable to type '3'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(16,8): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(16,16): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(23,14): error TS2345: Argument of type '{ x: string; y: boolean; }' is not assignable to parameter of type '{ x: number; y: any; }'.
@@ -36,13 +34,12 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
       Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(46,13): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(47,13): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(55,7): error TS2420: Class 'C4' incorrectly implements interface 'F2'.
-  Types of property 'd4' are incompatible.
-    Type '({ x, y, c }: { x: any; y: any; c: any; }) => void' is not assignable to type '({ x, y, z }?: { x: any; y: any; z: any; }) => any'.
-      Types of parameters '__0' and '__0' are incompatible.
-        Type '{ x: any; y: any; z: any; }' is not assignable to type '{ x: any; y: any; c: any; }'.
-          Property 'c' is missing in type '{ x: any; y: any; z: any; }'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(56,8): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(57,5): error TS2416: Property 'd4' in type 'C4' is not assignable to the same property in base type 'F2'.
+  Type '({ x, y, c }: { x: any; y: any; c: any; }) => void' is not assignable to type '({ x, y, z }?: { x: any; y: any; z: any; }) => any'.
+    Types of parameters '__0' and '__0' are incompatible.
+      Type '{ x: any; y: any; z: any; }' is not assignable to type '{ x: any; y: any; c: any; }'.
+        Property 'c' is missing in type '{ x: any; y: any; z: any; }'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(65,18): error TS2300: Duplicate identifier 'number'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(65,26): error TS2300: Duplicate identifier 'number'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(65,34): error TS2300: Duplicate identifier 'number'.
@@ -64,10 +61,8 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
     a0([1, 2, [["world"]], "string"]);  // Error
        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '[number, number, string[][], string]' is not assignable to parameter of type '[number, number, string[][]]'.
-!!! error TS2345:   Types of property 'pop' are incompatible.
-!!! error TS2345:     Type '() => string | number | string[][]' is not assignable to type '() => number | string[][]'.
-!!! error TS2345:       Type 'string | number | string[][]' is not assignable to type 'number | string[][]'.
-!!! error TS2345:         Type 'string' is not assignable to type 'number | string[][]'.
+!!! error TS2345:   Types of property 'length' are incompatible.
+!!! error TS2345:     Type '4' is not assignable to type '3'.
     
     
     // If the declaration includes an initializer expression (which is permitted only
@@ -159,17 +154,16 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
     }
     
     class C4 implements F2 {
-          ~~
-!!! error TS2420: Class 'C4' incorrectly implements interface 'F2'.
-!!! error TS2420:   Types of property 'd4' are incompatible.
-!!! error TS2420:     Type '({ x, y, c }: { x: any; y: any; c: any; }) => void' is not assignable to type '({ x, y, z }?: { x: any; y: any; z: any; }) => any'.
-!!! error TS2420:       Types of parameters '__0' and '__0' are incompatible.
-!!! error TS2420:         Type '{ x: any; y: any; z: any; }' is not assignable to type '{ x: any; y: any; c: any; }'.
-!!! error TS2420:           Property 'c' is missing in type '{ x: any; y: any; z: any; }'.
         d3([a, b, c]?) { }  // Error, binding pattern can't be optional in implementation signature
            ~~~~~~~~~~
 !!! error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
         d4({x, y, c}) { }
+        ~~
+!!! error TS2416: Property 'd4' in type 'C4' is not assignable to the same property in base type 'F2'.
+!!! error TS2416:   Type '({ x, y, c }: { x: any; y: any; c: any; }) => void' is not assignable to type '({ x, y, z }?: { x: any; y: any; z: any; }) => any'.
+!!! error TS2416:     Types of parameters '__0' and '__0' are incompatible.
+!!! error TS2416:       Type '{ x: any; y: any; z: any; }' is not assignable to type '{ x: any; y: any; c: any; }'.
+!!! error TS2416:         Property 'c' is missing in type '{ x: any; y: any; z: any; }'.
         e0([a, b, q]) { }
     }
     

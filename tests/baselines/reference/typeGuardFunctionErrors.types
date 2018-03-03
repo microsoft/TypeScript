@@ -264,7 +264,7 @@ var b1: b is A;
 >A : any
 
 function b2(a: b is A) {};
->b2 : (a: any, A: any) => void
+>b2 : (a: any, is: any, A: any) => void
 >a : any
 >b : No type information available!
 >is : any
@@ -434,9 +434,11 @@ declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
 
 type Foo = { 'a': string; }
 >Foo : Foo
+>'a' : string
 
 type Bar = { 'a': number; }
 >Bar : Bar
+>'a' : number
 
 interface NeedsFoo<T extends Foo> {
 >NeedsFoo : NeedsFoo<T>

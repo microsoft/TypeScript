@@ -352,8 +352,8 @@ function f12(t: [Shape, boolean]) {
 >Shape : Shape
 
     let len = getProperty(t, "length");
->len : number
->getProperty(t, "length") : number
+>len : 2
+>getProperty(t, "length") : 2
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >t : [Shape, boolean]
 >"length" : "length"
@@ -579,7 +579,7 @@ function f31<K extends keyof Shape>(key: K) {
 >5 : 5
 >height : number
 >10 : 10
->visible : boolean
+>visible : true
 >true : true
 
     return shape[key];  // Shape[K]
@@ -604,7 +604,7 @@ function f32<K extends "width" | "height">(key: K) {
 >5 : 5
 >height : number
 >10 : 10
->visible : boolean
+>visible : true
 >true : true
 
     return shape[key];  // Shape[K]
@@ -953,7 +953,7 @@ function f71(func: <T, U>(x: T, y: U) => Partial<T & U>) {
 >b : string
 >"hello" : "hello"
 >{ c: true } : { c: true; }
->c : boolean
+>c : true
 >true : true
 
     x.a;  // number | undefined
@@ -1000,7 +1000,7 @@ function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T &
 >b : string
 >"hello" : "hello"
 >{ c: true } : { c: true; }
->c : boolean
+>c : true
 >true : true
 >'a' : "a"
 
@@ -1014,7 +1014,7 @@ function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T &
 >b : string
 >"hello" : "hello"
 >{ c: true } : { c: true; }
->c : boolean
+>c : true
 >true : true
 >'b' : "b"
 
@@ -1028,7 +1028,7 @@ function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T &
 >b : string
 >"hello" : "hello"
 >{ c: true } : { c: true; }
->c : boolean
+>c : true
 >true : true
 >'c' : "c"
 }
@@ -1061,7 +1061,7 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 >b : string
 >"hello" : "hello"
 >{ c: true } : { c: true; }
->c : boolean
+>c : true
 >true : true
 >'a' : "a"
 
@@ -1075,7 +1075,7 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 >b : string
 >"hello" : "hello"
 >{ c: true } : { c: true; }
->c : boolean
+>c : true
 >true : true
 >'b' : "b"
 
@@ -1089,7 +1089,7 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 >b : string
 >"hello" : "hello"
 >{ c: true } : { c: true; }
->c : boolean
+>c : true
 >true : true
 >'c' : "c"
 }
@@ -1124,7 +1124,7 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
 >{ a: 2, b: true } : { a: number; b: true; }
 >a : number
 >2 : 2
->b : boolean
+>b : true
 >true : true
 >'a' : "a"
 
@@ -1140,7 +1140,7 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
 >{ a: 2, b: true } : { a: number; b: true; }
 >a : number
 >2 : 2
->b : boolean
+>b : true
 >true : true
 >'b' : "b"
 }
@@ -1793,8 +1793,8 @@ declare function on<T>(handlerHash: Handlers<T>): T
 >T : T
 
 var hashOfEmpty1 = on({ test: () => {} });  // {}
->hashOfEmpty1 : {}
->on({ test: () => {} }) : {}
+>hashOfEmpty1 : { test: {}; }
+>on({ test: () => {} }) : { test: {}; }
 >on : <T>(handlerHash: Handlers<T>) => T
 >{ test: () => {} } : { test: () => void; }
 >test : () => void
@@ -2293,4 +2293,52 @@ new AnotherSampleClass({});
 >new AnotherSampleClass({}) : AnotherSampleClass<{}>
 >AnotherSampleClass : typeof AnotherSampleClass
 >{} : {}
+
+// Positive repro from #17166
+function f3<T, K extends keyof T>(t: T, k: K, tk: T[K]): void {
+>f3 : <T, K extends keyof T>(t: T, k: K, tk: T[K]) => void
+>T : T
+>K : K
+>T : T
+>t : T
+>T : T
+>k : K
+>K : K
+>tk : T[K]
+>T : T
+>K : K
+
+    for (let key in t) {
+>key : keyof T
+>t : T
+
+        key = k // ok, K ==> keyof T
+>key = k : K
+>key : keyof T
+>k : K
+
+        t[key] = tk; // ok, T[K] ==> T[keyof T]
+>t[key] = tk : T[K]
+>t[key] : T[keyof T]
+>t : T
+>key : keyof T
+>tk : T[K]
+    }
+}
+
+// # 21185
+type Predicates<TaggedRecord> = {
+>Predicates : Predicates<TaggedRecord>
+>TaggedRecord : TaggedRecord
+
+  [T in keyof TaggedRecord]: (variant: TaggedRecord[keyof TaggedRecord]) => variant is TaggedRecord[T]
+>T : T
+>TaggedRecord : TaggedRecord
+>variant : TaggedRecord[keyof TaggedRecord]
+>TaggedRecord : TaggedRecord
+>TaggedRecord : TaggedRecord
+>variant : any
+>TaggedRecord : TaggedRecord
+>T : T
+}
 

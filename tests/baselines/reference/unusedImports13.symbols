@@ -4,8 +4,6 @@ import React = require("react");
 
 export const FooComponent = <div></div>
 >FooComponent : Symbol(FooComponent, Decl(foo.tsx, 2, 12))
->div : Symbol(unknown)
->div : Symbol(unknown)
 
 === tests/cases/compiler/node_modules/@types/react/index.d.ts ===
 export = React;

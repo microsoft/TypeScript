@@ -4,12 +4,13 @@ tests/cases/conformance/types/never/neverTypeErrors2.ts(5,5): error TS2322: Type
 tests/cases/conformance/types/never/neverTypeErrors2.ts(6,5): error TS2322: Type 'undefined' is not assignable to type 'never'.
 tests/cases/conformance/types/never/neverTypeErrors2.ts(7,5): error TS2322: Type 'null' is not assignable to type 'never'.
 tests/cases/conformance/types/never/neverTypeErrors2.ts(8,5): error TS2322: Type '{}' is not assignable to type 'never'.
-tests/cases/conformance/types/never/neverTypeErrors2.ts(12,5): error TS2322: Type 'undefined' is not assignable to type 'never'.
-tests/cases/conformance/types/never/neverTypeErrors2.ts(16,5): error TS2322: Type '1' is not assignable to type 'never'.
-tests/cases/conformance/types/never/neverTypeErrors2.ts(19,16): error TS2534: A function returning 'never' cannot have a reachable end point.
+tests/cases/conformance/types/never/neverTypeErrors2.ts(9,5): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'never' has no compatible call signatures.
+tests/cases/conformance/types/never/neverTypeErrors2.ts(13,5): error TS2322: Type 'undefined' is not assignable to type 'never'.
+tests/cases/conformance/types/never/neverTypeErrors2.ts(17,5): error TS2322: Type '1' is not assignable to type 'never'.
+tests/cases/conformance/types/never/neverTypeErrors2.ts(20,16): error TS2534: A function returning 'never' cannot have a reachable end point.
 
 
-==== tests/cases/conformance/types/never/neverTypeErrors2.ts (9 errors) ====
+==== tests/cases/conformance/types/never/neverTypeErrors2.ts (10 errors) ====
     function f1() {
         let x: never;
         x = 1;
@@ -30,6 +31,9 @@ tests/cases/conformance/types/never/neverTypeErrors2.ts(19,16): error TS2534: A 
         x = {};
         ~
 !!! error TS2322: Type '{}' is not assignable to type 'never'.
+        x();
+        ~~~
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'never' has no compatible call signatures.
     }
     
     function f2(): never {

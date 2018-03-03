@@ -14,9 +14,10 @@
 
 goTo.marker("");
 
-verify.not.completionListContains("abcde");
-verify.not.completionListContains("dbf");
+const options = { includeExternalModuleExports: true, sourceDisplay: "./a" };
+verify.not.completionListContains({ name: "abcde", source: "/a" }, undefined, undefined, undefined, undefined, undefined, options);
+verify.not.completionListContains({ name: "dbf", source: "/a" }, undefined, undefined, undefined, undefined, undefined, options);
 
-verify.completionListContains("bdf", "function bdf(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true);
-verify.completionListContains("abcdef", "function abcdef(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true);
-verify.completionListContains("BDF", "function BDF(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true);
+verify.completionListContains({ name: "bdf", source: "/a" }, "function bdf(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true, options);
+verify.completionListContains({ name: "abcdef", source: "/a" }, "function abcdef(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true, options);
+verify.completionListContains({ name: "BDF", source: "/a" }, "function BDF(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true, options);

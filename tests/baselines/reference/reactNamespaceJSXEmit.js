@@ -2,6 +2,7 @@
 declare var myReactLib: any;
 declare var foo: any;
 declare var Bar: any;
+declare var _Bar: any;
 declare var x: any;
 
 <foo data/>;
@@ -9,6 +10,7 @@ declare var x: any;
 <x-component />;
 <Bar {...x} />;
 <Bar { ...x } y={2} />;
+<_Bar { ...x } />;
 
 
 //// [reactNamespaceJSXEmit.js]
@@ -25,3 +27,4 @@ myReactLib.createElement(Bar, { x: x });
 myReactLib.createElement("x-component", null);
 myReactLib.createElement(Bar, __assign({}, x));
 myReactLib.createElement(Bar, __assign({}, x, { y: 2 }));
+myReactLib.createElement(_Bar, __assign({}, x));

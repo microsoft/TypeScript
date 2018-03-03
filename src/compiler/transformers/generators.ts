@@ -1077,7 +1077,7 @@ namespace ts {
                 const visited = visitNode(expression, visitor, isExpression);
                 if (visited) {
                     if (multiLine) {
-                        visited.startsOnNewLine = true;
+                        startOnNewLine(visited);
                     }
                     expressions.push(visited);
                 }
@@ -1771,16 +1771,15 @@ namespace ts {
                     for (let i = clausesWritten; i < numClauses; i++) {
                         const clause = caseBlock.clauses[i];
                         if (clause.kind === SyntaxKind.CaseClause) {
-                            const caseClause = <CaseClause>clause;
-                            if (containsYield(caseClause.expression) && pendingClauses.length > 0) {
+                            if (containsYield(clause.expression) && pendingClauses.length > 0) {
                                 break;
                             }
 
                             pendingClauses.push(
                                 createCaseClause(
-                                    visitNode(caseClause.expression, visitor, isExpression),
+                                    visitNode(clause.expression, visitor, isExpression),
                                     [
-                                        createInlineBreak(clauseLabels[i], /*location*/ caseClause.expression)
+                                        createInlineBreak(clauseLabels[i], /*location*/ clause.expression)
                                     ]
                                 )
                             );
@@ -2683,8 +2682,7 @@ namespace ts {
             if (clauses) {
                 const labelExpression = createPropertyAccess(state, "label");
                 const switchStatement = createSwitch(labelExpression, createCaseBlock(clauses));
-                switchStatement.startsOnNewLine = true;
-                return [switchStatement];
+                return [startOnNewLine(switchStatement)];
             }
 
             if (statements) {
@@ -3191,8 +3189,8 @@ namespace ts {
     // `throw` methods that step through the generator when invoked.
     //
     // parameters:
-    //  thisArg  The value to use as the `this` binding for the transformed generator body.
-    //  body     A function that acts as the transformed generator body.
+    //  @param thisArg  The value to use as the `this` binding for the transformed generator body.
+    //  @param body     A function that acts as the transformed generator body.
     //
     // variables:
     //  _       Persistent state for the generator that is shared between the helper and the

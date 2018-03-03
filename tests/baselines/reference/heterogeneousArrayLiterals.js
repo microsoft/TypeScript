@@ -268,4 +268,4 @@ function foo4(t, u) {
 //    var i = [u, base]; // Base[]
 //    var j = [u, derived]; // Derived[]
 //    var k: Base[] = [t, u];
-//} 
+//}

@@ -24,6 +24,7 @@ namespace ts {
         context.onSubstituteNode = onSubstituteNode;
         context.onEmitNode = onEmitNode;
         context.enableSubstitution(SyntaxKind.Identifier); // Substitutes expression identifiers for imported symbols.
+        context.enableSubstitution(SyntaxKind.ShorthandPropertyAssignment); // Substitutes expression identifiers for imported symbols
         context.enableSubstitution(SyntaxKind.BinaryExpression); // Substitutes assignments to exported symbols.
         context.enableSubstitution(SyntaxKind.PrefixUnaryExpression); // Substitutes updates to exported symbols.
         context.enableSubstitution(SyntaxKind.PostfixUnaryExpression); // Substitutes updates to exported symbols.
@@ -146,8 +147,7 @@ namespace ts {
         function collectDependencyGroups(externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]) {
             const groupIndices = createMap<number>();
             const dependencyGroups: DependencyGroup[] = [];
-            for (let i = 0; i < externalImports.length; i++) {
-                const externalImport = externalImports[i];
+            for (const externalImport of externalImports) {
                 const externalModuleName = getExternalModuleNameLiteral(externalImport, currentSourceFile, host, resolver, compilerOptions);
                 if (externalModuleName) {
                     const text = externalModuleName.text;
@@ -225,7 +225,7 @@ namespace ts {
             startLexicalEnvironment();
 
             // Add any prologue directives.
-            const ensureUseStrict = compilerOptions.alwaysStrict || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
+            const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
             const statementOffset = addPrologue(statements, node.statements, ensureUseStrict, sourceElementVisitor);
 
             // var __moduleName = context_1 && context_1.id;
@@ -343,13 +343,12 @@ namespace ts {
                     continue;
                 }
 
-                const exportDecl = <ExportDeclaration>externalImport;
-                if (!exportDecl.exportClause) {
+                if (!externalImport.exportClause) {
                     // export * from ...
                     continue;
                 }
 
-                for (const element of exportDecl.exportClause.elements) {
+                for (const element of externalImport.exportClause.elements) {
                     // write name of indirectly exported entry, i.e. 'export {x} from ...'
                     exportedNames.push(
                         createPropertyAssignment(
@@ -472,7 +471,7 @@ namespace ts {
                     const importVariableName = getLocalNameForExternalImport(entry, currentSourceFile);
                     switch (entry.kind) {
                         case SyntaxKind.ImportDeclaration:
-                            if (!(<ImportDeclaration>entry).importClause) {
+                            if (!entry.importClause) {
                                 // 'import "..."' case
                                 // module is imported only for side-effects, no emit required
                                 break;
@@ -491,7 +490,7 @@ namespace ts {
 
                         case SyntaxKind.ExportDeclaration:
                             Debug.assert(importVariableName !== undefined);
-                            if ((<ExportDeclaration>entry).exportClause) {
+                            if (entry.exportClause) {
                                 //  export {a, b as c} from 'foo'
                                 //
                                 // emit as:
@@ -501,7 +500,7 @@ namespace ts {
                                 //     "c": _["b"]
                                 //  });
                                 const properties: PropertyAssignment[] = [];
-                                for (const e of (<ExportDeclaration>entry).exportClause.elements) {
+                                for (const e of entry.exportClause.elements) {
                                     properties.push(
                                         createPropertyAssignment(
                                             createLiteral(idText(e.name)),
@@ -1626,7 +1625,61 @@ namespace ts {
             if (hint === EmitHint.Expression) {
                 return substituteExpression(<Expression>node);
             }
+            else if (hint === EmitHint.Unspecified) {
+                return substituteUnspecified(node);
+            }
 
+            return node;
+        }
+
+        /**
+         * Substitute the node, if necessary.
+         *
+         * @param node The node to substitute.
+         */
+        function substituteUnspecified(node: Node) {
+            switch (node.kind) {
+                case SyntaxKind.ShorthandPropertyAssignment:
+                    return substituteShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
+            }
+            return node;
+        }
+        /**
+         * Substitution for a ShorthandPropertyAssignment whose name that may contain an imported or exported symbol.
+         *
+         * @param node The node to substitute.
+         */
+        function substituteShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
+            const name = node.name;
+            if (!isGeneratedIdentifier(name) && !isLocalName(name)) {
+                const importDeclaration = resolver.getReferencedImportDeclaration(name);
+                if (importDeclaration) {
+                    if (isImportClause(importDeclaration)) {
+                        return setTextRange(
+                            createPropertyAssignment(
+                                getSynthesizedClone(name),
+                                createPropertyAccess(
+                                    getGeneratedNameForNode(importDeclaration.parent),
+                                    createIdentifier("default")
+                                )
+                            ),
+                            /*location*/ node
+                        );
+                    }
+                    else if (isImportSpecifier(importDeclaration)) {
+                        return setTextRange(
+                            createPropertyAssignment(
+                                getSynthesizedClone(name),
+                                createPropertyAccess(
+                                    getGeneratedNameForNode(importDeclaration.parent.parent.parent),
+                                    getSynthesizedClone(importDeclaration.propertyName || importDeclaration.name)
+                                ),
+                            ),
+                            /*location*/ node
+                        );
+                    }
+                }
+            }
             return node;
         }
 

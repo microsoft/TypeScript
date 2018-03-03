@@ -1,4 +1,5 @@
-//@noUnusedLocals:true
+// @noUnusedLocals: true
+// @noUnusedParameters:true
 
 //@filename: bar.ts
 export interface IEventSourcedEntity { }

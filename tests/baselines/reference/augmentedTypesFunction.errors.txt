@@ -8,8 +8,8 @@ tests/cases/compiler/augmentedTypesFunction.ts(13,10): error TS2300: Duplicate i
 tests/cases/compiler/augmentedTypesFunction.ts(14,7): error TS2300: Duplicate identifier 'y3'.
 tests/cases/compiler/augmentedTypesFunction.ts(16,10): error TS2300: Duplicate identifier 'y3a'.
 tests/cases/compiler/augmentedTypesFunction.ts(17,7): error TS2300: Duplicate identifier 'y3a'.
-tests/cases/compiler/augmentedTypesFunction.ts(20,10): error TS2300: Duplicate identifier 'y4'.
-tests/cases/compiler/augmentedTypesFunction.ts(21,6): error TS2300: Duplicate identifier 'y4'.
+tests/cases/compiler/augmentedTypesFunction.ts(20,10): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+tests/cases/compiler/augmentedTypesFunction.ts(21,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 
 
 ==== tests/cases/compiler/augmentedTypesFunction.ts (12 errors) ====
@@ -54,10 +54,10 @@ tests/cases/compiler/augmentedTypesFunction.ts(21,6): error TS2300: Duplicate id
     // function then enum
     function y4() { } // error
              ~~
-!!! error TS2300: Duplicate identifier 'y4'.
+!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
     enum y4 { One } // error
          ~~
-!!! error TS2300: Duplicate identifier 'y4'.
+!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
     
     // function then internal module
     function y5() { }

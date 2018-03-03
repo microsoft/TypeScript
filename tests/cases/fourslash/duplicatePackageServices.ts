@@ -2,7 +2,7 @@
 // @noImplicitReferences: true
 
 // @Filename: /node_modules/a/index.d.ts
-////import /*useAX*/[|{| "isWriteAccess": true, "isDefinition": true |}X|] from "x";
+////import [|{| "name": "useAX", "isWriteAccess": true, "isDefinition": true |}X|] from "x";
 ////export function a(x: [|X|]): void;
 
 // @Filename: /node_modules/a/node_modules/x/index.d.ts
@@ -14,7 +14,7 @@
 ////{ "name": "x", "version": "1.2.3" }
 
 // @Filename: /node_modules/b/index.d.ts
-////import /*useBX*/[|{| "isWriteAccess": true, "isDefinition": true |}X|] from "x";
+////import [|{| "name": "useBX", "isWriteAccess": true, "isDefinition": true |}X|] from "x";
 ////export const b: [|X|];
 
 // @Filename: /node_modules/b/node_modules/x/index.d.ts
@@ -36,9 +36,9 @@ verify.goToDefinition("useAX", "defAX");
 verify.goToDefinition("useBX", "defAX");
 
 const [r0, r1, r2, r3, r4, r5] = test.ranges();
-const aImport = { definition: "import X", ranges: [r0, r1] };
+const aImport = { definition: "(alias) class X\nimport X", ranges: [r0, r1] };
 const def = { definition: "class X", ranges: [r2] };
-const bImport = { definition: "import X", ranges: [r3, r4] };
+const bImport = { definition: "(alias) class X\nimport X", ranges: [r3, r4] };
 verify.referenceGroups([r0, r1], [aImport, def, bImport]);
 verify.referenceGroups([r2], [def, aImport, bImport]);
 verify.referenceGroups([r3, r4], [bImport, def, aImport]);

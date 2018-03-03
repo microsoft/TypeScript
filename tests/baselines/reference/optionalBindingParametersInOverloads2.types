@@ -22,7 +22,7 @@ foo({ x: "", y: 0, z: false });
 >"" : ""
 >y : number
 >0 : 0
->z : boolean
+>z : false
 >false : false
 
 foo({ x: false, y: 0, z: "" });

@@ -246,7 +246,7 @@ function f3() {
 >assignBoxified : <T>(obj: Boxified<T>, values: T) => void
 >b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
 >{ c: false } : { c: false; }
->c : boolean
+>c : false
 >false : false
 }
 
@@ -391,15 +391,15 @@ function f6(s: string) {
 
     });
     let v = unboxify(b);
->v : { [x: string]: string | number | boolean; }
->unboxify(b) : { [x: string]: string | number | boolean; }
+>v : { [x: string]: any; }
+>unboxify(b) : { [x: string]: any; }
 >unboxify : <T>(obj: Boxified<T>) => T
 >b : { [x: string]: Box<number> | Box<string> | Box<boolean>; }
 
     let x: string | number | boolean = v[s];
 >x : string | number | boolean
 >v[s] : string | number | boolean
->v : { [x: string]: string | number | boolean; }
+>v : { [x: string]: any; }
 >s : string
 }
 
@@ -507,8 +507,8 @@ declare function applySpec<T>(obj: Spec<T>): (...args: any[]) => T;
 
 // Infers g1: (...args: any[]) => { sum: number, nested: { mul: string } }
 var g1 = applySpec({
->g1 : (...args: any[]) => { sum: number; nested: { mul: string; }; }
->applySpec({    sum: (a: any) => 3,    nested: {        mul: (b: any) => "n"    }}) : (...args: any[]) => { sum: number; nested: { mul: string; }; }
+>g1 : (...args: any[]) => { sum: number; nested: { mul: any; }; }
+>applySpec({    sum: (a: any) => 3,    nested: {        mul: (b: any) => "n"    }}) : (...args: any[]) => { sum: number; nested: { mul: any; }; }
 >applySpec : <T>(obj: Spec<T>) => (...args: any[]) => T
 >{    sum: (a: any) => 3,    nested: {        mul: (b: any) => "n"    }} : { sum: (a: any) => number; nested: { mul: (b: any) => string; }; }
 
@@ -532,8 +532,8 @@ var g1 = applySpec({
 
 // Infers g2: (...args: any[]) => { foo: { bar: { baz: boolean } } }
 var g2 = applySpec({ foo: { bar: { baz: (x: any) => true } } });
->g2 : (...args: any[]) => { foo: { bar: { baz: boolean; }; }; }
->applySpec({ foo: { bar: { baz: (x: any) => true } } }) : (...args: any[]) => { foo: { bar: { baz: boolean; }; }; }
+>g2 : (...args: any[]) => { foo: { bar: any; }; }
+>applySpec({ foo: { bar: { baz: (x: any) => true } } }) : (...args: any[]) => { foo: { bar: any; }; }
 >applySpec : <T>(obj: Spec<T>) => (...args: any[]) => T
 >{ foo: { bar: { baz: (x: any) => true } } } : { foo: { bar: { baz: (x: any) => boolean; }; }; }
 >foo : { bar: { baz: (x: any) => boolean; }; }

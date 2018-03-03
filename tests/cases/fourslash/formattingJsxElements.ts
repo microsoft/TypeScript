@@ -47,6 +47,16 @@
 ////    )
 ////}
 ////
+////const bar = (
+////    <>
+////    /*fragmentChildIndent*/<p>text</p>
+////    </>
+////);
+////
+////const bar2 = <>
+////    <p>text</p>
+////    /*fragmentClosingTagIndent*/</>;
+////
 ////(function () {
 ////    return <div
 ////className=""/*attrAutoformat*/
@@ -68,8 +78,12 @@
 ////
 ////<div>,{integer}</div>;/*commaInJsxElement*/
 ////<div>,   {integer}</div>;/*commaInJsxElement2*/
+////<>,{integer}</>;/*commaInJsxFragment*/
+////<>,   {integer}</>;/*commaInJsxFragment2*/
 ////<span>)</span>;/*closingParenInJsxElement*/
 ////<span>)   </span>;/*closingParenInJsxElement2*/
+////<>)</>;/*closingParenInJsxFragment*/
+////<>)   </>;/*closingParenInJsxFragment2*/
 ////<Router        routes      =        { 3 }   /      >;/*jsxExpressionSpaces*/
 ////<Router routes={                (3)    } />;/*jsxExpressionSpaces2*/
 ////<Router routes={() => {}}/*jsxExpressionSpaces3*/
@@ -111,6 +125,10 @@ verify.currentLineContentIs('            class3={');
 goTo.marker("6");
 verify.currentLineContentIs('            } />');
 
+goTo.marker("fragmentChildIndent");
+verify.currentLineContentIs("        <p>text</p>");
+goTo.marker("fragmentClosingTagIndent");
+verify.currentLineContentIs("</>;");
 
 goTo.marker("attrAutoformat");
 verify.currentLineContentIs('        className=""');
@@ -139,10 +157,18 @@ goTo.marker("commaInJsxElement");
 verify.currentLineContentIs("<div>,{integer}</div>;");
 goTo.marker("commaInJsxElement2");
 verify.currentLineContentIs("<div>,   {integer}</div>;");
+goTo.marker("commaInJsxFragment");
+verify.currentLineContentIs("<>,{integer}</>;");
+goTo.marker("commaInJsxFragment2");
+verify.currentLineContentIs("<>,   {integer}</>;");
 goTo.marker("closingParenInJsxElement");
 verify.currentLineContentIs("<span>)</span>;");
 goTo.marker("closingParenInJsxElement2");
 verify.currentLineContentIs("<span>)   </span>;");
+goTo.marker("closingParenInJsxFragment");
+verify.currentLineContentIs("<>)</>;");
+goTo.marker("closingParenInJsxFragment2");
+verify.currentLineContentIs("<>)   </>;");
 goTo.marker("jsxExpressionSpaces");
 verify.currentLineContentIs("<Router routes={3} />;");
 goTo.marker("jsxExpressionSpaces2");

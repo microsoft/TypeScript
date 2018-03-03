@@ -2,10 +2,10 @@
 /// <reference path="..\..\compiler\parser.ts" />
 
 namespace ts {
-    ts.disableIncrementalParsing = false;
+    ts.disableIncrementalParsing = false; // tslint:disable-line no-unnecessary-qualifier (make clear this is a global mutation!)
 
     function withChange(text: IScriptSnapshot, start: number, length: number, newText: string): { text: IScriptSnapshot; textChangeRange: TextChangeRange; } {
-        const contents = text.getText(0, text.getLength());
+        const contents = getSnapshotText(text);
         const newContents = contents.substr(0, start) + newText + contents.substring(start + length);
 
         return { text: ScriptSnapshot.fromString(newContents), textChangeRange: createTextChangeRange(createTextSpan(start, length), newText.length) };
@@ -105,7 +105,7 @@ namespace ts {
             const newTextAndChange = withDelete(oldText, index, 1);
             const newTree = compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1, oldTree).incrementalNewTree;
 
-            source = newTextAndChange.text.getText(0, newTextAndChange.text.getLength());
+            source = getSnapshotText(newTextAndChange.text);
             oldTree = newTree;
         }
     }
@@ -118,7 +118,7 @@ namespace ts {
             const newTextAndChange = withInsert(oldText, index + i, toInsert.charAt(i));
             const newTree = compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1, oldTree).incrementalNewTree;
 
-            source = newTextAndChange.text.getText(0, newTextAndChange.text.getLength());
+            source = getSnapshotText(newTextAndChange.text);
             oldTree = newTree;
         }
     }
@@ -591,7 +591,7 @@ module m3 { }\
             const index = 0;
             const newTextAndChange = withInsert(oldText, index, "declare ");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 3);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
         it("Insert function above arrow function with comment", () => {
@@ -674,7 +674,7 @@ module m3 { }\
             const oldText = ScriptSnapshot.fromString(source);
             const newTextAndChange = withInsert(oldText, 0, "{");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 9);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
         });
 
         it("Removing block around function declarations", () => {
@@ -683,7 +683,7 @@ module m3 { }\
             const oldText = ScriptSnapshot.fromString(source);
             const newTextAndChange = withDelete(oldText, 0, "{".length);
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 9);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
         });
 
         it("Moving methods from class to object literal", () => {

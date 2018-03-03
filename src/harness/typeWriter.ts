@@ -52,7 +52,7 @@ class TypeWriterWalker {
     }
 
     private *visitNode(node: ts.Node, isSymbolWalk: boolean): IterableIterator<TypeWriterResult> {
-        if (ts.isPartOfExpression(node) || node.kind === ts.SyntaxKind.Identifier) {
+        if (ts.isExpressionNode(node) || node.kind === ts.SyntaxKind.Identifier || ts.isDeclarationName(node)) {
             const result = this.writeTypeOrSymbol(node, isSymbolWalk);
             if (result) {
                 yield result;
@@ -79,7 +79,7 @@ class TypeWriterWalker {
             // Workaround to ensure we output 'C' instead of 'typeof C' for base class expressions
             // let type = this.checker.getTypeAtLocation(node);
             const type = node.parent && ts.isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) && this.checker.getTypeAtLocation(node.parent) || this.checker.getTypeAtLocation(node);
-            const typeString = type ? this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation) : "No type information available!";
+            const typeString = type ? this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType) : "No type information available!";
             return {
                 line: lineAndCharacter.line,
                 syntaxKind: node.kind,
@@ -101,8 +101,8 @@ class TypeWriterWalker {
                 }
                 count++;
                 symbolString += ", ";
-                if ((declaration as any)["__symbolTestOutputCache"]) {
-                    symbolString += (declaration as any)["__symbolTestOutputCache"];
+                if ((declaration as any).__symbolTestOutputCache) {
+                    symbolString += (declaration as any).__symbolTestOutputCache;
                     continue;
                 }
                 const declSourceFile = declaration.getSourceFile();
@@ -111,7 +111,7 @@ class TypeWriterWalker {
                 const isLibFile = /lib(.*)\.d\.ts/i.test(fileName);
                 const declText = `Decl(${ fileName }, ${ isLibFile ? "--" : declLineAndCharacter.line }, ${ isLibFile ? "--" : declLineAndCharacter.character })`;
                 symbolString += declText;
-                (declaration as any)["__symbolTestOutputCache"] = declText;
+                (declaration as any).__symbolTestOutputCache = declText;
             }
         }
         symbolString += ")";

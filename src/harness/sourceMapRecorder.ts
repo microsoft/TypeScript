@@ -386,9 +386,9 @@ namespace Harness.SourceMapRecorder {
 
                 if (currentSpan.decodeErrors) {
                     // If there are decode errors, write
-                    for (let i = 0; i < currentSpan.decodeErrors.length; i++) {
+                    for (const decodeError of currentSpan.decodeErrors) {
                         writeSourceMapIndent(prevEmittedCol, markerIds[index]);
-                        sourceMapRecorder.WriteLine(currentSpan.decodeErrors[i]);
+                        sourceMapRecorder.WriteLine(decodeError);
                     }
                 }
 
@@ -442,8 +442,7 @@ namespace Harness.SourceMapRecorder {
             let prevSourceFile: ts.SourceFile;
 
             SourceMapSpanWriter.initializeSourceMapSpanWriter(sourceMapRecorder, sourceMapData, jsFiles[i]);
-            for (let j = 0; j < sourceMapData.sourceMapDecodedMappings.length; j++) {
-                const decodedSourceMapping = sourceMapData.sourceMapDecodedMappings[j];
+            for (const decodedSourceMapping of sourceMapData.sourceMapDecodedMappings) {
                 const currentSourceFile = program.getSourceFile(sourceMapData.inputSourceFileNames[decodedSourceMapping.sourceIndex]);
                 if (currentSourceFile !== prevSourceFile) {
                     SourceMapSpanWriter.recordNewSourceFileSpan(decodedSourceMapping, currentSourceFile.text);

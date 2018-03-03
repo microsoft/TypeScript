@@ -38,6 +38,7 @@ declare function OneThing(l1: {data: string, "data-prop": boolean}): JSX.Element
 >OneThing : { (k: { yxx: string; }): JSX.Element; (k: { yxx1: string; children: string; }): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; (l: { yy: number; yy1: string; yy2: boolean; }): JSX.Element; (l1: { data: string; "data-prop": boolean; }): JSX.Element; }
 >l1 : { data: string; "data-prop": boolean; }
 >data : string
+>"data-prop" : boolean
 >JSX : any
 >Element : JSX.Element
 
@@ -88,6 +89,7 @@ declare function TestingOneThing({y1: string}): JSX.Element;
 declare function TestingOneThing(j: {"extra-data": string, yy?: string}): JSX.Element;
 >TestingOneThing : { ({ y1: string }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
 >j : { "extra-data": string; yy?: string; }
+>"extra-data" : string
 >yy : string
 >JSX : any
 >Element : JSX.Element

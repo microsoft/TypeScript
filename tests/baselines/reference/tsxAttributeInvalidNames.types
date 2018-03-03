@@ -10,9 +10,11 @@ declare module JSX {
 
 		test1: { "data-foo"?: string };
 >test1 : { "data-foo"?: string; }
+>"data-foo" : string
 
 		test2: { "data-foo"?: string };
 >test2 : { "data-foo"?: string; }
+>"data-foo" : string
 	}
 }
 
@@ -26,6 +28,7 @@ declare module JSX {
 >{32} /> : boolean
 >{32} / : number
 >{32} : { 32: any; }
+>32 : any
 > : any
 > : any
 > : any

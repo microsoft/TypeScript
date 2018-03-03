@@ -1,0 +1,10 @@
+[
+    "======== Resolving module '@speedy/folder1/testing' from 'c:/root/index.ts'. ========",
+    "Explicitly specified module resolution kind: 'Classic'.",
+    "'baseUrl' option is set to 'c:/root', using this value to resolve non-relative module name '@speedy/folder1/testing'.",
+    "'paths' option is specified, looking for a pattern to match module name '@speedy/folder1/testing'.",
+    "Module name '@speedy/folder1/testing', matched pattern '@speedy/*/testing'.",
+    "Trying substitution '*/dist/index.ts', candidate module location: 'folder1/dist/index.ts'.",
+    "File 'c:/root/folder1/dist/index.ts' exist - use it as a name resolution result.",
+    "======== Module name '@speedy/folder1/testing' was successfully resolved to 'c:/root/folder1/dist/index.ts'. ========"
+]

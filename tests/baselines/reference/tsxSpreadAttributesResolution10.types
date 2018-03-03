@@ -37,7 +37,7 @@ const obj1: OptionProp = {
 >{    x: 2} : { x: 2; }
 
     x: 2
->x : number
+>x : 2
 >2 : 2
 }
 
@@ -47,7 +47,7 @@ let y = <Opt {...obj} x={3}/>;
 ><Opt {...obj} x={3}/> : JSX.Element
 >Opt : typeof Opt
 >obj : OptionProp
->x : number
+>x : 3
 >3 : 3
 
 let y1 = <Opt {...obj1} x="Hi"/>;
@@ -62,7 +62,7 @@ let y2 = <Opt {...obj1} x={3}/>;
 ><Opt {...obj1} x={3}/> : JSX.Element
 >Opt : typeof Opt
 >obj1 : OptionProp
->x : number
+>x : 3
 >3 : 3
 
 let y3 = <Opt x />;

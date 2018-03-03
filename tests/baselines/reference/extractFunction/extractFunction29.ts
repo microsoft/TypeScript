@@ -26,7 +26,7 @@ interface UnaryExpression {
 function parseUnaryExpression(operator: string): UnaryExpression {
     return /*RENAME*/newFunction();
 
-    function newFunction() {
+    function newFunction(): UnaryExpression {
         return {
             kind: "Unary",
             operator,
@@ -49,7 +49,7 @@ function parseUnaryExpression(operator: string): UnaryExpression {
     return /*RENAME*/newFunction(operator);
 }
 
-function newFunction(operator: string) {
+function newFunction(operator: string): UnaryExpression {
     return {
         kind: "Unary",
         operator,

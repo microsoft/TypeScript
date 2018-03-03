@@ -56,7 +56,7 @@ var [b2 = 3, b3 = true, b4 = temp] = [3, false, { t1: false, t2: "hello" }];
 >3 : 3
 >false : false
 >{ t1: false, t2: "hello" } : { t1: false; t2: string; }
->t1 : boolean
+>t1 : false
 >false : false
 >t2 : string
 >"hello" : "hello"
@@ -151,9 +151,9 @@ var {f: [f1, f2, { f3: f4, f5 }, , ]} = { f: [1, 2, { f3: 4, f5: 0 }] };
 >f4 : number
 >f5 : number
 > : undefined
->{ f: [1, 2, { f3: 4, f5: 0 }] } : { f: [number, number, { f3: number; f5: number; }, any]; }
->f : [number, number, { f3: number; f5: number; }, any]
->[1, 2, { f3: 4, f5: 0 }] : [number, number, { f3: number; f5: number; }, any]
+>{ f: [1, 2, { f3: 4, f5: 0 }] } : { f: [number, number, { f3: number; f5: number; }, undefined]; }
+>f : [number, number, { f3: number; f5: number; }, undefined]
+>[1, 2, { f3: 4, f5: 0 }] : [number, number, { f3: number; f5: number; }, undefined]
 >1 : 1
 >2 : 2
 >{ f3: 4, f5: 0 } : { f3: number; f5: number; }

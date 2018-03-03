@@ -18,6 +18,7 @@
 /// <reference path="fourslashRunner.ts" />
 /// <reference path="projectsRunner.ts" />
 /// <reference path="rwcRunner.ts" />
+/// <reference path="externalCompileRunner.ts" />
 /// <reference path="harness.ts" />
 /// <reference path="./parallel/shared.ts" />
 
@@ -26,8 +27,8 @@ let iterations = 1;
 
 function runTests(runners: RunnerBase[]) {
     for (let i = iterations; i > 0; i--) {
-        for (let j = 0; j < runners.length; j++) {
-            runners[j].initializeTests();
+        for (const runner of runners) {
+            runner.initializeTests();
         }
     }
 }
@@ -59,6 +60,10 @@ function createRunner(kind: TestRunnerKind): RunnerBase {
             return new RWCRunner();
         case "test262":
             return new Test262BaselineRunner();
+        case "user":
+            return new UserCodeRunner();
+        case "dt":
+            return new DefinitelyTypedRunner();
     }
     ts.Debug.fail(`Unknown runner kind ${kind}`);
 }
@@ -92,8 +97,10 @@ interface TestConfig {
     workerCount?: number;
     stackTraceLimit?: number | "full";
     test?: string[];
+    runners?: string[];
     runUnitTests?: boolean;
     noColors?: boolean;
+    timeout?: number;
 }
 
 interface TaskSet {
@@ -102,11 +109,15 @@ interface TaskSet {
 }
 
 let configOption: string;
+let globalTimeout: number;
 function handleTestConfig() {
     if (testConfigContent !== "") {
         const testConfig = <TestConfig>JSON.parse(testConfigContent);
         if (testConfig.light) {
             Harness.lightMode = true;
+        }
+        if (testConfig.timeout) {
+            globalTimeout = testConfig.timeout;
         }
         runUnitTests = testConfig.runUnitTests;
         if (testConfig.workerCount) {
@@ -129,8 +140,9 @@ function handleTestConfig() {
             return true;
         }
 
-        if (testConfig.test && testConfig.test.length > 0) {
-            for (const option of testConfig.test) {
+        const runnerConfig = testConfig.runners || testConfig.test;
+        if (runnerConfig && runnerConfig.length > 0) {
+            for (const option of runnerConfig) {
                 if (!option) {
                     continue;
                 }
@@ -175,6 +187,12 @@ function handleTestConfig() {
                     case "test262":
                         runners.push(new Test262BaselineRunner());
                         break;
+                    case "user":
+                        runners.push(new UserCodeRunner());
+                        break;
+                    case "dt":
+                        runners.push(new DefinitelyTypedRunner());
+                        break;
                 }
             }
         }
@@ -196,6 +214,11 @@ function handleTestConfig() {
         runners.push(new FourSlashRunner(FourSlashTestType.ShimsWithPreprocess));
         runners.push(new FourSlashRunner(FourSlashTestType.Server));
         // runners.push(new GeneratedFourslashRunner());
+
+        // CRON-only tests
+        if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser && process.env.TRAVIS_EVENT_TYPE === "cron") {
+            runners.push(new UserCodeRunner());
+        }
     }
     if (runUnitTests === undefined) {
         runUnitTests = runners.length !== 1; // Don't run unit tests when running only one runner if unit tests were not explicitly asked for
@@ -207,6 +230,14 @@ function beginTests() {
         ts.Debug.enableDebugInfo();
     }
 
+    // run tests in en-US by default.
+    let savedUILocale: string | undefined;
+    beforeEach(() => {
+        savedUILocale = ts.getUILocale();
+        ts.setUILocale("en-US");
+    });
+    afterEach(() => ts.setUILocale(savedUILocale));
+
     runTests(runners);
 
     if (!runUnitTests) {
@@ -215,8 +246,9 @@ function beginTests() {
     }
 }
 
+let isWorker: boolean;
 function startTestEnvironment() {
-    const isWorker = handleTestConfig();
+    isWorker = handleTestConfig();
     if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser) {
         if (isWorker) {
             return Harness.Parallel.Worker.start();

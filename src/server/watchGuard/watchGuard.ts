@@ -14,6 +14,5 @@ try {
     const watcher = fs.watch(directoryName, { recursive: true }, () => ({}));
     watcher.close();
 }
-catch (_e) {
-}
+catch { /*ignore*/ }
 process.exit(0);

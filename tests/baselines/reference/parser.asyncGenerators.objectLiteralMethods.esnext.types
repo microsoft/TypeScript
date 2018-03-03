@@ -163,11 +163,11 @@ const o13 = {
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldWithValueIsOk.ts ===
 const o14 = {
->o14 : { f(): AsyncIterableIterator<1>; }
->{    async * f() {        yield 1;    }} : { f(): AsyncIterableIterator<1>; }
+>o14 : { f(): AsyncIterableIterator<number>; }
+>{    async * f() {        yield 1;    }} : { f(): AsyncIterableIterator<number>; }
 
     async * f() {
->f : () => AsyncIterableIterator<1>
+>f : () => AsyncIterableIterator<number>
 
         yield 1;
 >yield 1 : any
@@ -189,11 +189,11 @@ const o15 = {
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldStarWithValueIsOk.ts ===
 const o16 = {
->o16 : { f(): AsyncIterableIterator<undefined>; }
->{    async * f() {        yield * [];    }} : { f(): AsyncIterableIterator<undefined>; }
+>o16 : { f(): AsyncIterableIterator<any>; }
+>{    async * f() {        yield * [];    }} : { f(): AsyncIterableIterator<any>; }
 
     async * f() {
->f : () => AsyncIterableIterator<undefined>
+>f : () => AsyncIterableIterator<any>
 
         yield * [];
 >yield * [] : any
@@ -269,6 +269,7 @@ const o21 = {
         const x = { [yield]: 1 };
 >x : { [x: number]: number; }
 >{ [yield]: 1 } : { [x: number]: number; }
+>[yield] : number
 >yield : any
 >1 : 1
     }
