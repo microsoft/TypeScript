@@ -110,13 +110,13 @@ namespace ts.codefix {
     export function createMethodFromCallExpression(context: CodeFixContextBase, { typeArguments, arguments: args }: CallExpression, methodName: string, inJs: boolean, makeStatic: boolean): MethodDeclaration {
         const checker = context.program.getTypeChecker();
         const types = map(args,
-            (arg) => {
+            arg => {
                 let type = checker.getTypeAtLocation(arg);
                 // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
                 type = checker.getBaseTypeOfLiteralType(type);
                 return checker.typeToTypeNode(type);
             });
-        const names = map(args, (arg) =>
+        const names = map(args, arg =>
             isIdentifier(arg) ? arg.text :
             isPropertyAccessExpression(arg) ? arg.name.text : undefined);
         return createMethod(
