@@ -2303,17 +2303,15 @@ namespace ts {
             writeSpace();
             emitExpression(node.expression);
 
-            emitCaseOrDefaultClauseStatements(node, node.statements, node.expression.end);
+            emitCaseOrDefaultClauseRest(node, node.statements, node.expression.end);
         }
 
         function emitDefaultClause(node: DefaultClause) {
             const pos = emitTokenWithComment(SyntaxKind.DefaultKeyword, node.pos, writeKeyword, node);
-            emitCaseOrDefaultClauseStatements(node, node.statements, pos);
+            emitCaseOrDefaultClauseRest(node, node.statements, pos);
         }
 
-        function emitCaseOrDefaultClauseStatements(parentNode: Node, statements: NodeArray<Statement>, colonPos: number) {
-            // This also handles the colon token from the preceeding clause, as weather comments must be emitted for it depends on
-            // If it is going to be emitted as a single statement or not (as ListFormat.Multiline makes emitList emit not comments, but otherwise it will)
+        function emitCaseOrDefaultClauseRest(parentNode: Node, statements: NodeArray<Statement>, colonPos: number) {
             const emitAsSingleStatement =
                 statements.length === 1 &&
                 (
