@@ -2531,7 +2531,8 @@ namespace ts {
                 // Check if symbol is any of the alias
                 return forEachEntry(symbols, symbolFromSymbolTable => {
                     if (symbolFromSymbolTable.flags & SymbolFlags.Alias
-                        && symbolFromSymbolTable.escapedName !== "export="
+                        && symbolFromSymbolTable.escapedName !== InternalSymbolName.ExportEquals
+                        && symbolFromSymbolTable.escapedName !== InternalSymbolName.Default
                         && !(isUMDExportSymbol(symbolFromSymbolTable) && enclosingDeclaration && isExternalModule(getSourceFileOfNode(enclosingDeclaration)))
                         // If `!useOnlyExternalAliasing`, we can use any type of alias to get the name
                         && (!useOnlyExternalAliasing || some(symbolFromSymbolTable.declarations, isExternalModuleImportEqualsDeclaration))) {
