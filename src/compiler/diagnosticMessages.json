@@ -2317,6 +2317,10 @@
         "category": "Error",
         "code": 2723
     },
+    "Module '{0}' has no exported member '{1}'. Did you mean '{2}'?": {
+        "category": "Error",
+        "code": 2724
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -3817,6 +3821,10 @@
     "File is a CommonJS module; it may be converted to an ES6 module.": {
         "category": "Suggestion",
         "code": 80001
+    },
+    "This constructor function may be converted to a class declaration.": {
+        "category": "Suggestion",
+        "code": 80002
     },
 
     "Add missing 'super()' call": {
