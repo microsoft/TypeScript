@@ -615,7 +615,7 @@ namespace ts {
             }
 
             const oldWithinObjectLiteralType = suppressNewDiagnosticContexts;
-            let shouldEnterSuppressNewDiagnosticsContextContext = (input.kind === SyntaxKind.TypeLiteral && input.parent.kind !== SyntaxKind.TypeAliasDeclaration);
+            let shouldEnterSuppressNewDiagnosticsContextContext = ((input.kind === SyntaxKind.TypeLiteral || input.kind === SyntaxKind.MappedType) && input.parent.kind !== SyntaxKind.TypeAliasDeclaration);
             if (shouldEnterSuppressNewDiagnosticsContextContext) {
                 // We stop making new diagnostic contexts within object literal types. Unless it's an object type on the RHS of a type alias declaration. Then we do.
                 suppressNewDiagnosticContexts = true;
