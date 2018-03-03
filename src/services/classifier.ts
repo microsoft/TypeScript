@@ -345,7 +345,7 @@ namespace ts {
             case EndOfLineState.None:
                 return { prefix: "" };
             default:
-                throw Debug.assertNever(lexState);
+                return Debug.assertNever(lexState);
         }
     }
 

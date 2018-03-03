@@ -888,20 +888,20 @@ function f60<T>(source: T, target: T) {
 }
 
 function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
->f70 : (func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) => void
->func : <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void
+>f70 : (func: <T, U>(k1: keyof (T | U), k2: keyof T | keyof U) => void) => void
+>func : <T, U>(k1: keyof (T | U), k2: keyof T | keyof U) => void
 >T : T
 >U : U
 >k1 : keyof (T | U)
 >T : T
 >U : U
->k2 : keyof (T & U)
+>k2 : keyof T | keyof U
 >T : T
 >U : U
 
     func<{ a: any, b: any }, { a: any, c: any }>('a', 'a');
 >func<{ a: any, b: any }, { a: any, c: any }>('a', 'a') : void
->func : <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void
+>func : <T, U>(k1: keyof (T | U), k2: keyof T | keyof U) => void
 >a : any
 >b : any
 >a : any
@@ -911,7 +911,7 @@ function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
 
     func<{ a: any, b: any }, { a: any, c: any }>('a', 'b');
 >func<{ a: any, b: any }, { a: any, c: any }>('a', 'b') : void
->func : <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void
+>func : <T, U>(k1: keyof (T | U), k2: keyof T | keyof U) => void
 >a : any
 >b : any
 >a : any
@@ -921,7 +921,7 @@ function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
 
     func<{ a: any, b: any }, { a: any, c: any }>('a', 'c');
 >func<{ a: any, b: any }, { a: any, c: any }>('a', 'c') : void
->func : <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void
+>func : <T, U>(k1: keyof (T | U), k2: keyof T | keyof U) => void
 >a : any
 >b : any
 >a : any
@@ -1034,8 +1034,8 @@ function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T &
 }
 
 function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]) {
->f73 : (func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]) => void
->func : <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]
+>f73 : (func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]) => void
+>func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
 >T : T
 >U : U
 >K : K
@@ -1054,7 +1054,7 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
     let a = func({ a: 1, b: "hello" }, { c: true }, 'a');  // number
 >a : number
 >func({ a: 1, b: "hello" }, { c: true }, 'a') : number
->func : <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]
+>func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
 >{ a: 1, b: "hello" } : { a: number; b: string; }
 >a : number
 >1 : 1
@@ -1068,7 +1068,7 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
     let b = func({ a: 1, b: "hello" }, { c: true }, 'b');  // string
 >b : string
 >func({ a: 1, b: "hello" }, { c: true }, 'b') : string
->func : <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]
+>func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
 >{ a: 1, b: "hello" } : { a: number; b: string; }
 >a : number
 >1 : 1
@@ -1082,7 +1082,7 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
     let c = func({ a: 1, b: "hello" }, { c: true }, 'c');  // boolean
 >c : boolean
 >func({ a: 1, b: "hello" }, { c: true }, 'c') : boolean
->func : <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]
+>func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
 >{ a: 1, b: "hello" } : { a: number; b: string; }
 >a : number
 >1 : 1
@@ -1837,7 +1837,7 @@ declare class Component1<Data, Computed> {
 >Computed : Computed
 
     get<K extends keyof (Data & Computed)>(key: K): (Data & Computed)[K];
->get : <K extends keyof (Data & Computed)>(key: K) => (Data & Computed)[K]
+>get : <K extends keyof Data | keyof Computed>(key: K) => (Data & Computed)[K]
 >K : K
 >Data : Data
 >Computed : Computed
@@ -2035,9 +2035,9 @@ function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
 
     handler.onChange('preset')
 >handler.onChange('preset') : void
->handler.onChange : (name: keyof (T & { preset: number; })) => void
+>handler.onChange : (name: keyof T | "preset") => void
 >handler : Handler<T & { preset: number; }>
->onChange : (name: keyof (T & { preset: number; })) => void
+>onChange : (name: keyof T | "preset") => void
 >'preset' : "preset"
 }
 

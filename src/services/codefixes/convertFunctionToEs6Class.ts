@@ -1,61 +1,30 @@
 /* @internal */
+namespace ts.codefix {
+    const fixId = "convertFunctionToEs6Class";
+    const errorCodes = [Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration.code];
+    registerCodeFix({
+        errorCodes,
+        getCodeActions(context: CodeFixContext) {
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start, context.program.getTypeChecker()));
+            return [{ description: getLocaleSpecificMessage(Diagnostics.Convert_function_to_an_ES2015_class), changes, fixId }];
+        },
+        fixIds: [fixId],
+        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => doChange(changes, err.file!, err.start!, context.program.getTypeChecker())),
+    });
 
-namespace ts.refactor.convertFunctionToES6Class {
-    const refactorName = "Convert to ES2015 class";
-    const actionName = "convert";
-    const description = Diagnostics.Convert_function_to_an_ES2015_class.message;
-    registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
-
-    function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
-        if (!isInJavaScriptFile(context.file)) {
-            return undefined;
-        }
-
-        let symbol = getConstructorSymbol(context);
-        if (!symbol) {
-            return undefined;
-        }
-
-        if (isDeclarationOfFunctionOrClassExpression(symbol)) {
-            symbol = (symbol.valueDeclaration as VariableDeclaration).initializer!.symbol!;
-        }
-
-        if ((symbol.flags & SymbolFlags.Function) && symbol.members && (symbol.members.size > 0)) {
-            return [
-                {
-                    name: refactorName,
-                    description,
-                    actions: [
-                        {
-                            description,
-                            name: actionName
-                        }
-                    ]
-                }
-            ];
-        }
-    }
-
-    function getEditsForAction(context: RefactorContext, action: string): RefactorEditInfo | undefined {
-        // Somehow wrong action got invoked?
-        if (actionName !== action) {
-            return undefined;
-        }
-
-        const { file: sourceFile } = context;
-        const ctorSymbol = getConstructorSymbol(context)!;
-
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker): void {
         const deletedNodes: Node[] = [];
-        const deletes: (() => any)[] = [];
+        const deletes: (() => void)[] = [];
+        const ctorSymbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false))!;
 
-        if (!(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))) {
+        if (!ctorSymbol || !(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))) {
+            // Bad input
             return undefined;
         }
 
         const ctorDeclaration = ctorSymbol.valueDeclaration!;
-        const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
-        let precedingNode: Node;
+        let precedingNode: Node | undefined;
         let newClassDeclaration: ClassDeclaration | undefined;
         switch (ctorDeclaration.kind) {
             case SyntaxKind.FunctionDeclaration:
@@ -74,9 +43,6 @@ namespace ts.refactor.convertFunctionToES6Class {
                 }
                 newClassDeclaration = createClassFromVariableDeclaration(ctorDeclaration as VariableDeclaration);
                 break;
-
-            default:
-                return Debug.fail();
         }
 
         if (!newClassDeclaration) {
@@ -84,16 +50,10 @@ namespace ts.refactor.convertFunctionToES6Class {
         }
 
         // Because the preceding node could be touched, we need to insert nodes before delete nodes.
-        changeTracker.insertNodeAfter(sourceFile, precedingNode, newClassDeclaration);
+        changes.insertNodeAfter(sourceFile, precedingNode!, newClassDeclaration);
         for (const deleteCallback of deletes) {
             deleteCallback();
         }
-
-        return {
-            edits: changeTracker.getChanges(),
-            renameFilename: undefined,
-            renameLocation: undefined,
-        };
 
         function deleteNode(node: Node, inList = false) {
             if (deletedNodes.some(n => isNodeDescendantOf(node, n))) {
@@ -102,10 +62,10 @@ namespace ts.refactor.convertFunctionToES6Class {
             }
             deletedNodes.push(node);
             if (inList) {
-                deletes.push(() => changeTracker.deleteNodeInList(sourceFile, node));
+                deletes.push(() => changes.deleteNodeInList(sourceFile, node));
             }
             else {
-                deletes.push(() => changeTracker.deleteNode(sourceFile, node));
+                deletes.push(() => changes.deleteNode(sourceFile, node));
             }
         }
 
@@ -168,7 +128,7 @@ namespace ts.refactor.convertFunctionToES6Class {
                         const fullModifiers = concatenate(modifiers, getModifierKindFromSource(functionExpression, SyntaxKind.AsyncKeyword));
                         const method = createMethod(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, memberDeclaration.name, /*questionToken*/ undefined,
                             /*typeParameters*/ undefined, functionExpression.parameters, /*type*/ undefined, functionExpression.body);
-                        copyComments(assignmentBinaryExpression, method);
+                        copyComments(assignmentBinaryExpression, method, sourceFile);
                         return method;
                     }
 
@@ -188,7 +148,7 @@ namespace ts.refactor.convertFunctionToES6Class {
                         const fullModifiers = concatenate(modifiers, getModifierKindFromSource(arrowFunction, SyntaxKind.AsyncKeyword));
                         const method = createMethod(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, memberDeclaration.name, /*questionToken*/ undefined,
                             /*typeParameters*/ undefined, arrowFunction.parameters, /*type*/ undefined, bodyBlock);
-                        copyComments(assignmentBinaryExpression, method);
+                        copyComments(assignmentBinaryExpression, method, sourceFile);
                         return method;
                     }
 
@@ -199,27 +159,11 @@ namespace ts.refactor.convertFunctionToES6Class {
                         }
                         const prop = createProperty(/*decorators*/ undefined, modifiers, memberDeclaration.name, /*questionToken*/ undefined,
                             /*type*/ undefined, assignmentBinaryExpression.right);
-                        copyComments(assignmentBinaryExpression.parent, prop);
+                        copyComments(assignmentBinaryExpression.parent, prop, sourceFile);
                         return prop;
                     }
                 }
             }
-        }
-
-        function copyComments(sourceNode: Node, targetNode: Node) {
-            forEachLeadingCommentRange(sourceFile.text, sourceNode.pos, (pos, end, kind, htnl) => {
-                if (kind === SyntaxKind.MultiLineCommentTrivia) {
-                    // Remove leading /*
-                    pos += 2;
-                    // Remove trailing */
-                    end -= 2;
-                }
-                else {
-                    // Remove leading //
-                    pos += 2;
-                }
-                addSyntheticLeadingComment(targetNode, kind, sourceFile.text.slice(pos, end), htnl);
-            });
         }
 
         function createClassFromVariableDeclaration(node: VariableDeclaration): ClassDeclaration | undefined {
@@ -256,15 +200,25 @@ namespace ts.refactor.convertFunctionToES6Class {
             // Don't call copyComments here because we'll already leave them in place
             return cls;
         }
-
-        function getModifierKindFromSource(source: Node, kind: SyntaxKind) {
-            return filter(source.modifiers, modifier => modifier.kind === kind);
-        }
     }
 
-    function getConstructorSymbol({ startPosition, file, program }: RefactorContext): Symbol | undefined {
-        const checker = program.getTypeChecker();
-        const token = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
-        return checker.getSymbolAtLocation(token);
+    function copyComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile) {
+        forEachLeadingCommentRange(sourceFile.text, sourceNode.pos, (pos, end, kind, htnl) => {
+            if (kind === SyntaxKind.MultiLineCommentTrivia) {
+                // Remove leading /*
+                pos += 2;
+                // Remove trailing */
+                end -= 2;
+            }
+            else {
+                // Remove leading //
+                pos += 2;
+            }
+            addSyntheticLeadingComment(targetNode, kind, sourceFile.text.slice(pos, end), htnl);
+        });
+    }
+
+    function getModifierKindFromSource(source: Node, kind: SyntaxKind): ReadonlyArray<Modifier> | undefined {
+        return filter(source.modifiers, modifier => modifier.kind === kind);
     }
 }

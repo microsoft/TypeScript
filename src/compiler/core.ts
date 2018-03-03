@@ -2986,7 +2986,7 @@ namespace ts {
         }
 
         function showFlags(flags: number, flagsEnum: { [flag: number]: string }): string {
-            const out = [];
+            const out: string[] = [];
             for (let pow = 0; pow <= 30; pow++) {
                 const n = 1 << pow;
                 if (flags & n) {

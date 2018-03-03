@@ -3822,6 +3822,10 @@
         "category": "Suggestion",
         "code": 80001
     },
+    "This constructor function may be converted to a class declaration.": {
+        "category": "Suggestion",
+        "code": 80002
+    },
 
     "Add missing 'super()' call": {
         "category": "Message",

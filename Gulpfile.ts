@@ -286,6 +286,7 @@ function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): ts
     for (const key in base) {
         copy[key] = base[key];
     }
+    copy.strictNullChecks = true;
     if (!useDebugMode) {
         if (copy.removeComments === undefined) copy.removeComments = true;
     }
