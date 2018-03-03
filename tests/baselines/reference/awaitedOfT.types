@@ -1,0 +1,236 @@
+=== tests/cases/compiler/awaitedOfT.ts ===
+type T1 = Awaited<number>; // number (same as 'await')
+>T1 : number
+>Awaited : Awaited<T>
+
+type T2 = Awaited<Promise<number>>; // number (same as 'await')
+>T2 : number
+>Awaited : Awaited<T>
+>Promise : Promise<T>
+
+type T3 = Awaited<Promise<Promise<number>>>; // number (same as 'await')
+>T3 : number
+>Awaited : Awaited<T>
+>Promise : Promise<T>
+>Promise : Promise<T>
+
+type T4 = Awaited<Promise<Promise<Promise<number>>>>; // number (same as 'await')
+>T4 : number
+>Awaited : Awaited<T>
+>Promise : Promise<T>
+>Promise : Promise<T>
+>Promise : Promise<T>
+
+type T5 = Awaited<PromiseLike<number>>; // number (same as 'await')
+>T5 : number
+>Awaited : Awaited<T>
+>PromiseLike : PromiseLike<T>
+
+type T6 = Awaited<PromiseLike<PromiseLike<number>>>; // number (same as 'await')
+>T6 : number
+>Awaited : Awaited<T>
+>PromiseLike : PromiseLike<T>
+>PromiseLike : PromiseLike<T>
+
+type T7 = Awaited<PromiseLike<PromiseLike<PromiseLike<number>>>>; // number (same as 'await')
+>T7 : number
+>Awaited : Awaited<T>
+>PromiseLike : PromiseLike<T>
+>PromiseLike : PromiseLike<T>
+>PromiseLike : PromiseLike<T>
+
+type T8 = Awaited<Promise<PromiseLike<number>>>; // number (same as 'await')
+>T8 : number
+>Awaited : Awaited<T>
+>Promise : Promise<T>
+>PromiseLike : PromiseLike<T>
+
+type T9 = Awaited<PromiseLike<Promise<number>>>; // number (same as 'await')
+>T9 : number
+>Awaited : Awaited<T>
+>PromiseLike : PromiseLike<T>
+>Promise : Promise<T>
+
+type T10 = Awaited<{ then: any; }>; // never (no way to know what this might resolve to, differs from 'await')
+>T10 : never
+>Awaited : Awaited<T>
+>then : any
+
+type T11 = Awaited<{ then: number; }>; // { then: number; } (same as 'await')
+>T11 : { then: number; }
+>Awaited : Awaited<T>
+>then : number
+
+type T12 = Awaited<{ then(): void; }>; // never (no way to know what this might resolve to, error for 'await')
+>T12 : never
+>Awaited : Awaited<T>
+>then : () => void
+
+type T13 = Awaited<{ then(x: any): void; }>; // never (no way to know what this might resolve to, error for 'await')
+>T13 : never
+>Awaited : Awaited<T>
+>then : (x: any) => void
+>x : any
+
+type T14 = Awaited<{ then(x: number): void; }>; // never (cannot be resolved correctly, error for 'await')
+>T14 : never
+>Awaited : Awaited<T>
+>then : (x: number) => void
+>x : number
+
+type T15 = Awaited<{ then(x: () => void): void; }>; // never (no way to know what this might resolve to)
+>T15 : never
+>Awaited : Awaited<T>
+>then : (x: () => void) => void
+>x : () => void
+
+type T16 = Awaited<{ then(x: (y: any) => void): void; }>; // any (same as 'await')
+>T16 : any
+>Awaited : Awaited<T>
+>then : (x: (y: any) => void) => void
+>x : (y: any) => void
+>y : any
+
+type T17 = Awaited<{ then(x: (y: number) => void): void; }>; // number (same as 'await')
+>T17 : number
+>Awaited : Awaited<T>
+>then : (x: (y: number) => void) => void
+>x : (y: number) => void
+>y : number
+
+type T18 = Awaited<{ then(x: (y: { then: any; }) => void): void; }>; // { then: any; } (no recursive unwrap, differs from 'await')
+>T18 : { then: any; }
+>Awaited : Awaited<T>
+>then : (x: (y: { then: any; }) => void) => void
+>x : (y: { then: any; }) => void
+>y : { then: any; }
+>then : any
+
+type T19 = Awaited<{ then(x: (y: { then: number; }) => void): void; }>; // { then: number; } (no recursive unwrap, differs from 'await')
+>T19 : { then: number; }
+>Awaited : Awaited<T>
+>then : (x: (y: { then: number; }) => void) => void
+>x : (y: { then: number; }) => void
+>y : { then: number; }
+>then : number
+
+type T20 = Awaited<{ then(x: (y: { then(): void; }) => void): void; }>; // { then(): void; } (no recursive unwrap, differs from 'await')
+>T20 : { then(): void; }
+>Awaited : Awaited<T>
+>then : (x: (y: { then(): void; }) => void) => void
+>x : (y: { then(): void; }) => void
+>y : { then(): void; }
+>then : () => void
+
+type T21 = Awaited<{ then(x: (y: { then(x: any): void; }) => void): void; }>; // { then(x: any): void; } (no recursive unwrap, differs from 'await')
+>T21 : { then(x: any): void; }
+>Awaited : Awaited<T>
+>then : (x: (y: { then(x: any): void; }) => void) => void
+>x : (y: { then(x: any): void; }) => void
+>y : { then(x: any): void; }
+>then : (x: any) => void
+>x : any
+
+type T22 = Awaited<{ then(x: (y: { then(x: number): void; }) => void): void; }>; // { then(x: number): void; } (no recursive unwrap, differs from 'await')
+>T22 : { then(x: number): void; }
+>Awaited : Awaited<T>
+>then : (x: (y: { then(x: number): void; }) => void) => void
+>x : (y: { then(x: number): void; }) => void
+>y : { then(x: number): void; }
+>then : (x: number) => void
+>x : number
+
+type T23 = Awaited<{ then(x: (y: { then(x: () => void): void; }) => void): void; }>; // { then(x: () => void): void; } (no recursive unwrap, differs from 'await')
+>T23 : { then(x: () => void): void; }
+>Awaited : Awaited<T>
+>then : (x: (y: { then(x: () => void): void; }) => void) => void
+>x : (y: { then(x: () => void): void; }) => void
+>y : { then(x: () => void): void; }
+>then : (x: () => void) => void
+>x : () => void
+
+type T24 = Awaited<{ then(x: (y: { then(x: (y: any) => void): void; }) => void): void; }>; // { then(x: (y: any) => void): void; } (no recursive unwrap, differs from 'await')
+>T24 : { then(x: (y: any) => void): void; }
+>Awaited : Awaited<T>
+>then : (x: (y: { then(x: (y: any) => void): void; }) => void) => void
+>x : (y: { then(x: (y: any) => void): void; }) => void
+>y : { then(x: (y: any) => void): void; }
+>then : (x: (y: any) => void) => void
+>x : (y: any) => void
+>y : any
+
+type T25 = Awaited<{ then(x: (y: { then(x: (y: number) => void): void; }) => void): void; }>; // { then(x: (y: number) => void): void; } (no recursive unwrap, differs from 'await')
+>T25 : { then(x: (y: number) => void): void; }
+>Awaited : Awaited<T>
+>then : (x: (y: { then(x: (y: number) => void): void; }) => void) => void
+>x : (y: { then(x: (y: number) => void): void; }) => void
+>y : { then(x: (y: number) => void): void; }
+>then : (x: (y: number) => void) => void
+>x : (y: number) => void
+>y : number
+
+// self recursive bad promise
+type T26 = Awaited<BadPromise>; // BadPromise (no recursive unwrap, differs from 'await')
+>T26 : BadPromise
+>Awaited : Awaited<T>
+>BadPromise : BadPromise
+
+interface BadPromise { then(cb: (value: BadPromise) => void): any; }
+>BadPromise : BadPromise
+>then : (cb: (value: BadPromise) => void) => any
+>cb : (value: BadPromise) => void
+>value : BadPromise
+>BadPromise : BadPromise
+
+// mutually recursive bad promises
+type T27 = Awaited<BadPromiseA>; // BadPromiseB (no recursive unwrap, differs from 'await')
+>T27 : BadPromiseB
+>Awaited : Awaited<T>
+>BadPromiseA : BadPromiseA
+
+interface BadPromiseA { then(cb: (value: BadPromiseB) => void): any; }
+>BadPromiseA : BadPromiseA
+>then : (cb: (value: BadPromiseB) => void) => any
+>cb : (value: BadPromiseB) => void
+>value : BadPromiseB
+>BadPromiseB : BadPromiseB
+
+interface BadPromiseB { then(cb: (value: BadPromiseA) => void): any; }
+>BadPromiseB : BadPromiseB
+>then : (cb: (value: BadPromiseA) => void) => any
+>cb : (value: BadPromiseA) => void
+>value : BadPromiseA
+>BadPromiseA : BadPromiseA
+
+type T28 = Awaited<never>; // never (same as 'await')
+>T28 : never
+>Awaited : Awaited<T>
+
+type T29 = Awaited<number | Promise<string>>; // string | number (same as 'await')
+>T29 : string | number
+>Awaited : Awaited<T>
+>Promise : Promise<T>
+
+type T30 = Awaited<number | Promise<never>>; // number (same as 'await')
+>T30 : number
+>Awaited : Awaited<T>
+>Promise : Promise<T>
+
+type T31 = Awaited<PromiseLike<number> | Promise<string>>; // string | number (same as 'await')
+>T31 : string | number
+>Awaited : Awaited<T>
+>PromiseLike : PromiseLike<T>
+>Promise : Promise<T>
+
+type T32 = Awaited<Awaited<number>>; // number (same as 'await')
+>T32 : number
+>Awaited : Awaited<T>
+>Awaited : Awaited<T>
+
+type T33 = Awaited<Promise<Awaited<Promise<number>>>>; // number (same as 'await')
+>T33 : number
+>Awaited : Awaited<T>
+>Promise : Promise<T>
+>Awaited : Awaited<T>
+>Promise : Promise<T>
+

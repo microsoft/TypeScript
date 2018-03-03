@@ -150,13 +150,14 @@ async function fGenericIndexedTypeForPromiseOfStringProp<TObj extends Obj>(obj: 
 >stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
 }
 
-async function fGenericIndexedTypeForExplicitPromiseOfStringProp<TObj extends Obj>(obj: TObj): Promise<TObj["stringProp"]> {
+async function fGenericIndexedTypeForExplicitPromiseOfStringProp<TObj extends Obj>(obj: TObj): Promise<Awaited<TObj["stringProp"]>> {
 >fGenericIndexedTypeForExplicitPromiseOfStringProp : Symbol(fGenericIndexedTypeForExplicitPromiseOfStringProp, Decl(asyncFunctionReturnType.ts, 46, 1))
 >TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 48, 65))
 >Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
 >obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 48, 83))
 >TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 48, 65))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
 >TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 48, 65))
 
     return Promise.resolve<TObj["stringProp"]>(obj.stringProp);
@@ -240,7 +241,7 @@ async function fGenericIndexedTypeForKProp<TObj extends Obj, K extends keyof TOb
 >key : Symbol(key, Decl(asyncFunctionReturnType.ts, 64, 93))
 }
 
-async function fGenericIndexedTypeForPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K]> {
+async function fGenericIndexedTypeForPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<Awaited<TObj[K]>> {
 >fGenericIndexedTypeForPromiseOfKProp : Symbol(fGenericIndexedTypeForPromiseOfKProp, Decl(asyncFunctionReturnType.ts, 66, 1))
 >TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 68, 52))
 >Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
@@ -251,6 +252,7 @@ async function fGenericIndexedTypeForPromiseOfKProp<TObj extends Obj, K extends 
 >key : Symbol(key, Decl(asyncFunctionReturnType.ts, 68, 102))
 >K : Symbol(K, Decl(asyncFunctionReturnType.ts, 68, 69))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
 >TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 68, 52))
 >K : Symbol(K, Decl(asyncFunctionReturnType.ts, 68, 69))
 
@@ -262,7 +264,7 @@ async function fGenericIndexedTypeForPromiseOfKProp<TObj extends Obj, K extends 
 >key : Symbol(key, Decl(asyncFunctionReturnType.ts, 68, 102))
 }
 
-async function fGenericIndexedTypeForExplicitPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K]> {
+async function fGenericIndexedTypeForExplicitPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<Awaited<TObj[K]>> {
 >fGenericIndexedTypeForExplicitPromiseOfKProp : Symbol(fGenericIndexedTypeForExplicitPromiseOfKProp, Decl(asyncFunctionReturnType.ts, 70, 1))
 >TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 72, 60))
 >Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
@@ -273,6 +275,7 @@ async function fGenericIndexedTypeForExplicitPromiseOfKProp<TObj extends Obj, K 
 >key : Symbol(key, Decl(asyncFunctionReturnType.ts, 72, 110))
 >K : Symbol(K, Decl(asyncFunctionReturnType.ts, 72, 77))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
 >TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 72, 60))
 >K : Symbol(K, Decl(asyncFunctionReturnType.ts, 72, 77))
 
