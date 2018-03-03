@@ -20,7 +20,7 @@ namespace ts {
             getCanonicalFileName: createGetCanonicalFileName(system.useCaseSensitiveFileNames),
         };
         if (!pretty) {
-            return diagnostic => system.write(ts.formatDiagnostic(diagnostic, host));
+            return diagnostic => system.write(formatDiagnostic(diagnostic, host));
         }
 
         const diagnostics: Diagnostic[] = new Array(1);
@@ -33,6 +33,7 @@ namespace ts {
 
     function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions) {
         if (system.clearScreen &&
+            !options.preserveWatchOutput &&
             diagnostic.code !== Diagnostics.Compilation_complete_Watching_for_file_changes.code &&
             !options.extendedDiagnostics &&
             !options.diagnostics) {
@@ -482,9 +483,8 @@ namespace ts {
         }
 
         const trace = host.trace && ((s: string) => { host.trace(s + newLine); });
-
-        const watchLogLevel = compilerOptions.extendedDiagnostics ? WatchLogLevel.Verbose :
-            compilerOptions.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
+        const watchLogLevel = trace ? compilerOptions.extendedDiagnostics ? WatchLogLevel.Verbose :
+            compilerOptions.diagnostis ? WatchLogLevel.TriggerOnly : WatchLogLevel.None : WatchLogLevel.None;
         const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? trace : noop;
         const { watchFile, watchFilePath, watchDirectory: watchDirectoryWorker } = getWatchFactory(watchLogLevel, writeLog);
 
@@ -826,7 +826,7 @@ namespace ts {
         }
 
         function parseConfigFile() {
-            const configParseResult = ts.getParsedCommandLineOfConfigFile(configFileName, optionsToExtendForConfigFile, parseConfigFileHost);
+            const configParseResult = getParsedCommandLineOfConfigFile(configFileName, optionsToExtendForConfigFile, parseConfigFileHost);
             rootFileNames = configParseResult.fileNames;
             compilerOptions = configParseResult.options;
             configFileSpecs = configParseResult.configFileSpecs;

@@ -734,7 +734,7 @@ namespace ts {
                             // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
                             const fileName = !isString(relativeFileName)
                                 ? undefined
-                                : ts.getNormalizedAbsolutePath(relativeFileName, dirName);
+                                : getNormalizedAbsolutePath(relativeFileName, dirName);
                             // Some applications save a working file via rename operations
                             const callbacks = fileWatcherCallbacks.get(toCanonicalName(fileName));
                             if (callbacks) {

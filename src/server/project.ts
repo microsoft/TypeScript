@@ -211,6 +211,9 @@ namespace ts.server {
         public directoryStructureHost: DirectoryStructureHost;
 
         /*@internal*/
+        public readonly getCanonicalFileName: GetCanonicalFileName;
+
+        /*@internal*/
         constructor(
             /*@internal*/readonly projectName: string,
             readonly projectKind: ProjectKind,
@@ -224,6 +227,7 @@ namespace ts.server {
             currentDirectory: string | undefined) {
             this.directoryStructureHost = directoryStructureHost;
             this.currentDirectory = this.projectService.getNormalizedAbsolutePath(currentDirectory || "");
+            this.getCanonicalFileName = this.projectService.toCanonicalFileName;
 
             this.cancellationToken = new ThrottledCancellationToken(this.projectService.cancellationToken, this.projectService.throttleWaitMilliseconds);
             if (!this.compilerOptions) {
@@ -238,7 +242,10 @@ namespace ts.server {
 
             this.setInternalCompilerOptionsForEmittingJsFiles();
             const host = this.projectService.host;
-            if (host.trace) {
+            if (this.projectService.logger.loggingEnabled()) {
+                this.trace = s => this.writeLog(s);
+            }
+            else if (host.trace) {
                 this.trace = s => host.trace(s);
             }
 
@@ -853,7 +860,7 @@ namespace ts.server {
         }
 
         protected removeExistingTypings(include: string[]): string[] {
-            const existing = ts.getAutomaticTypeDirectiveNames(this.getCompilerOptions(), this.directoryStructureHost);
+            const existing = getAutomaticTypeDirectiveNames(this.getCompilerOptions(), this.directoryStructureHost);
             return include.filter(i => existing.indexOf(i) < 0);
         }
 

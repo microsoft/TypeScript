@@ -4,8 +4,8 @@
 namespace ts {
     describe("parseCommandLine", () => {
 
-        function assertParseResult(commandLine: string[], expectedParsedCommandLine: ts.ParsedCommandLine) {
-            const parsed = ts.parseCommandLine(commandLine);
+        function assertParseResult(commandLine: string[], expectedParsedCommandLine: ParsedCommandLine) {
+            const parsed = parseCommandLine(commandLine);
             const parsedCompilerOptions = JSON.stringify(parsed.options);
             const expectedCompilerOptions = JSON.stringify(expectedParsedCommandLine.options);
             assert.equal(parsedCompilerOptions, expectedCompilerOptions);
@@ -60,10 +60,9 @@ namespace ts {
             assertParseResult(["--lib", "es5,invalidOption", "0.ts"],
                 {
                     errors: [{
-                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'esnext.array', 'esnext.asynciterable', 'esnext.promise'.",
-                        category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                        code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
-
+                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.promise', 'es2018.regexp', 'esnext.array', 'esnext.asynciterable'.",
+                        category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                        code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         file: undefined,
                         start: undefined,
                         length: undefined,
@@ -80,16 +79,16 @@ namespace ts {
                 {
                     errors: [{
                         messageText: "Compiler option 'jsx' expects an argument.",
-                        category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
-                        code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
+                        category: Diagnostics.Compiler_option_0_expects_an_argument.category,
+                        code: Diagnostics.Compiler_option_0_expects_an_argument.code,
 
                         file: undefined,
                         start: undefined,
                         length: undefined,
                     }, {
                             messageText: "Argument for '--jsx' option must be: 'preserve', 'react-native', 'react'.",
-                            category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                            code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                            category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                            code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
                             file: undefined,
                             start: undefined,
@@ -106,16 +105,16 @@ namespace ts {
                 {
                     errors: [{
                         messageText: "Compiler option 'module' expects an argument.",
-                        category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
-                        code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
+                        category: Diagnostics.Compiler_option_0_expects_an_argument.category,
+                        code: Diagnostics.Compiler_option_0_expects_an_argument.code,
 
                         file: undefined,
                         start: undefined,
                         length: undefined,
                     }, {
                             messageText: "Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'esnext'.",
-                            category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                            code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                            category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                            code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
                             file: undefined,
                             start: undefined,
@@ -132,16 +131,16 @@ namespace ts {
                 {
                     errors: [{
                         messageText: "Compiler option 'newLine' expects an argument.",
-                        category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
-                        code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
+                        category: Diagnostics.Compiler_option_0_expects_an_argument.category,
+                        code: Diagnostics.Compiler_option_0_expects_an_argument.code,
 
                         file: undefined,
                         start: undefined,
                         length: undefined,
                     }, {
                             messageText: "Argument for '--newLine' option must be: 'crlf', 'lf'.",
-                            category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                            code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                            category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                            code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
                             file: undefined,
                             start: undefined,
@@ -158,16 +157,16 @@ namespace ts {
                 {
                     errors: [{
                         messageText: "Compiler option 'target' expects an argument.",
-                        category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
-                        code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
+                        category: Diagnostics.Compiler_option_0_expects_an_argument.category,
+                        code: Diagnostics.Compiler_option_0_expects_an_argument.code,
 
                         file: undefined,
                         start: undefined,
                         length: undefined,
                     }, {
                             messageText: "Argument for '--target' option must be: 'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'esnext'.",
-                            category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                            code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                            category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                            code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
                             file: undefined,
                             start: undefined,
@@ -184,16 +183,16 @@ namespace ts {
                 {
                     errors: [{
                         messageText: "Compiler option 'moduleResolution' expects an argument.",
-                        category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
-                        code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
+                        category: Diagnostics.Compiler_option_0_expects_an_argument.category,
+                        code: Diagnostics.Compiler_option_0_expects_an_argument.code,
 
                         file: undefined,
                         start: undefined,
                         length: undefined,
                     }, {
                             messageText: "Argument for '--moduleResolution' option must be: 'node', 'classic'.",
-                            category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                            code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                            category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                            code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
                             file: undefined,
                             start: undefined,
@@ -210,8 +209,8 @@ namespace ts {
                 {
                     errors: [{
                         messageText: "Compiler option 'lib' expects an argument.",
-                        category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
-                        code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
+                        category: Diagnostics.Compiler_option_0_expects_an_argument.category,
+                        code: Diagnostics.Compiler_option_0_expects_an_argument.code,
 
                         file: undefined,
                         start: undefined,
@@ -231,8 +230,8 @@ namespace ts {
                 {
                     errors: [{
                         messageText: "Compiler option 'lib' expects an argument.",
-                        category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
-                        code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
+                        category: Diagnostics.Compiler_option_0_expects_an_argument.category,
+                        code: Diagnostics.Compiler_option_0_expects_an_argument.code,
 
                         file: undefined,
                         start: undefined,
@@ -263,10 +262,9 @@ namespace ts {
             assertParseResult(["--lib", "es5,", "es7", "0.ts"],
                 {
                     errors: [{
-                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'esnext.array', 'esnext.asynciterable', 'esnext.promise'.",
-                        category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                        code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
-
+                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.promise', 'es2018.regexp', 'esnext.array', 'esnext.asynciterable'.",
+                        category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                        code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         file: undefined,
                         start: undefined,
                         length: undefined,
@@ -283,10 +281,9 @@ namespace ts {
             assertParseResult(["--lib", "es5, ", "es7", "0.ts"],
                 {
                     errors: [{
-                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'esnext.array', 'esnext.asynciterable', 'esnext.promise'.",
-                        category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                        code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
-
+                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.promise', 'es2018.regexp', 'esnext.array', 'esnext.asynciterable'.",
+                        category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                        code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         file: undefined,
                         start: undefined,
                         length: undefined,
@@ -306,7 +303,7 @@ namespace ts {
                     fileNames: ["0.ts"],
                     options: {
                         lib: ["lib.es5.d.ts", "lib.es2015.symbol.wellknown.d.ts"],
-                        target: ts.ScriptTarget.ES5,
+                        target: ScriptTarget.ES5,
                     }
                 });
         });
@@ -318,8 +315,8 @@ namespace ts {
                     errors: [],
                     fileNames: ["0.ts"],
                     options: {
-                        module: ts.ModuleKind.CommonJS,
-                        target: ts.ScriptTarget.ES5,
+                        module: ModuleKind.CommonJS,
+                        target: ScriptTarget.ES5,
                         lib: ["lib.es5.d.ts", "lib.es2015.symbol.wellknown.d.ts"],
                     }
                 });
@@ -332,8 +329,8 @@ namespace ts {
                     errors: [],
                     fileNames: ["0.ts"],
                     options: {
-                        module: ts.ModuleKind.CommonJS,
-                        target: ts.ScriptTarget.ES5,
+                        module: ModuleKind.CommonJS,
+                        target: ScriptTarget.ES5,
                         lib: ["lib.es2015.core.d.ts", "lib.es2015.symbol.wellknown.d.ts"],
                     }
                 });

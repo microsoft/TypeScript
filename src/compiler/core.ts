@@ -2622,7 +2622,7 @@ namespace ts {
             // Iterate over each include base path and include unique base paths that are not a
             // subpath of an existing base path
             for (const includeBasePath of includeBasePaths) {
-                if (ts.every(basePaths, basePath => !containsPath(basePath, includeBasePath, path, !useCaseSensitiveFileNames))) {
+                if (every(basePaths, basePath => !containsPath(basePath, includeBasePath, path, !useCaseSensitiveFileNames))) {
                     basePaths.push(includeBasePath);
                 }
             }

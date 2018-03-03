@@ -1311,24 +1311,27 @@ namespace ts {
                     setTextRange(
                         createBlock([
                             createStatement(
-                                setTextRange(
-                                    createAssignment(
-                                        setEmitFlags(getMutableClone(name), EmitFlags.NoSourceMap),
-                                        setEmitFlags(initializer, EmitFlags.NoSourceMap | getEmitFlags(initializer))
+                                setEmitFlags(
+                                    setTextRange(
+                                        createAssignment(
+                                            setEmitFlags(getMutableClone(name), EmitFlags.NoSourceMap),
+                                            setEmitFlags(initializer, EmitFlags.NoSourceMap | getEmitFlags(initializer) | EmitFlags.NoComments)
+                                        ),
+                                        parameter
                                     ),
-                                    parameter
+                                    EmitFlags.NoComments
                                 )
                             )
                         ]),
                         parameter
                     ),
-                    EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps
+                    EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps | EmitFlags.NoComments
                 )
             );
 
             startOnNewLine(statement);
             setTextRange(statement, parameter);
-            setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue);
+            setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue | EmitFlags.NoComments);
             statements.push(statement);
         }
 

@@ -42,7 +42,7 @@ var M;
     }
     try {
     }
-    catch (asdf) {
+    catch (asdf) { // no error
     }
     switch (asdf) {
         case qwerty:

@@ -35,3 +35,4 @@ declare var React: any;
 >span : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
 >span : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
 
+<>#</>; // # would cause scanning error if not in jsxtext

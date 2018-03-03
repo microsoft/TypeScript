@@ -88,11 +88,11 @@ namespace ts.codefix {
         sourceFile: SourceFile,
         symbolName: string,
         host: LanguageServiceHost,
-        program: ts.Program,
-        checker: ts.TypeChecker,
-        compilerOptions: ts.CompilerOptions,
-        allSourceFiles: ReadonlyArray<ts.SourceFile>,
-        formatContext: ts.formatting.FormatContext,
+        program: Program,
+        checker: TypeChecker,
+        compilerOptions: CompilerOptions,
+        allSourceFiles: ReadonlyArray<SourceFile>,
+        formatContext: formatting.FormatContext,
         getCanonicalFileName: GetCanonicalFileName,
         symbolToken: Node | undefined,
     ): { readonly moduleSpecifier: string, readonly codeAction: CodeAction } {
@@ -663,7 +663,7 @@ namespace ts.codefix {
             const parent = token.parent;
             const isNodeOpeningLikeElement = isJsxOpeningLikeElement(parent);
             if ((isJsxOpeningLikeElement && (<JsxOpeningLikeElement>parent).tagName === token) || parent.kind === SyntaxKind.JsxOpeningFragment) {
-                umdSymbol = checker.resolveName(checker.getJsxNamespace(),
+                umdSymbol = checker.resolveName(checker.getJsxNamespace(parent),
                     isNodeOpeningLikeElement ? (<JsxOpeningLikeElement>parent).tagName : parent, SymbolFlags.Value, /*excludeGlobals*/ false);
             }
         }
@@ -699,7 +699,7 @@ namespace ts.codefix {
                 // Fall back to the `import * as ns` style import.
                 return ImportKind.Namespace;
             default:
-                throw Debug.assertNever(moduleKind);
+                return Debug.assertNever(moduleKind);
         }
     }
 

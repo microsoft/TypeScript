@@ -1393,7 +1393,7 @@ namespace ts.server {
             return project;
         }
 
-        private sendProjectTelemetry(projectKey: string, project: server.ExternalProject | server.ConfiguredProject, projectOptions?: ProjectOptions): void {
+        private sendProjectTelemetry(projectKey: string, project: ExternalProject | ConfiguredProject, projectOptions?: ProjectOptions): void {
             if (this.seenProjects.has(projectKey)) {
                 return;
             }
@@ -1414,18 +1414,18 @@ namespace ts.server {
                 exclude: projectOptions && projectOptions.configHasExcludeProperty,
                 compileOnSave: project.compileOnSaveEnabled,
                 configFileName: configFileName(),
-                projectType: project instanceof server.ExternalProject ? "external" : "configured",
+                projectType: project instanceof ExternalProject ? "external" : "configured",
                 languageServiceEnabled: project.languageServiceEnabled,
                 version,
             };
             this.eventHandler({ eventName: ProjectInfoTelemetryEvent, data });
 
             function configFileName(): ProjectInfoTelemetryEventData["configFileName"] {
-                if (!(project instanceof server.ConfiguredProject)) {
+                if (!(project instanceof ConfiguredProject)) {
                     return "other";
                 }
 
-                const configFilePath = project instanceof server.ConfiguredProject && project.getConfigFilePath();
+                const configFilePath = project instanceof ConfiguredProject && project.getConfigFilePath();
                 return getBaseConfigFileName(configFilePath) || "other";
             }
 
@@ -2240,7 +2240,7 @@ namespace ts.server {
             }
 
             const excludeRegexes = excludeRules.map(e => new RegExp(e, "i"));
-            const filesToKeep: ts.server.protocol.ExternalFile[] = [];
+            const filesToKeep: protocol.ExternalFile[] = [];
             for (let i = 0; i < proj.rootFiles.length; i++) {
                 if (excludeRegexes.some(re => re.test(normalizedNames[i]))) {
                     excludedFiles.push(normalizedNames[i]);
