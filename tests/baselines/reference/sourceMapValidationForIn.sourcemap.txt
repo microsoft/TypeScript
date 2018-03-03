@@ -10,38 +10,26 @@ sourceFile:sourceMapValidationForIn.ts
 -------------------------------------------------------------------
 >>>for (var x in String) {
 1 >
-2 >^^^
-3 >   ^
-4 >    ^
-5 >     ^^^^
-6 >         ^
-7 >          ^^^^
-8 >              ^^^^^^
-9 >                    ^
-10>                     ^
-11>                      ^
+2 >^^^^^
+3 >     ^^^^
+4 >         ^
+5 >          ^^^^
+6 >              ^^^^^^
+7 >                    ^^
 1 >
-2 >for
-3 >    
-4 >    (
-5 >     var 
-6 >         x
-7 >           in 
-8 >              String
-9 >                    )
-10>                      
-11>                      {
+2 >for (
+3 >     var 
+4 >         x
+5 >           in 
+6 >              String
+7 >                    ) 
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 4) Source(1, 4) + SourceIndex(0)
-3 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
-4 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
-5 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
-6 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
-7 >Emitted(1, 15) Source(1, 15) + SourceIndex(0)
-8 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
-9 >Emitted(1, 22) Source(1, 22) + SourceIndex(0)
-10>Emitted(1, 23) Source(1, 23) + SourceIndex(0)
-11>Emitted(1, 24) Source(1, 24) + SourceIndex(0)
+2 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
+3 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+4 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
+5 >Emitted(1, 15) Source(1, 15) + SourceIndex(0)
+6 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
+7 >Emitted(1, 23) Source(1, 23) + SourceIndex(0)
 ---
 >>>    WScript.Echo(x);
 1 >^^^^
@@ -52,7 +40,7 @@ sourceFile:sourceMapValidationForIn.ts
 6 >                 ^
 7 >                  ^
 8 >                   ^
-1 >
+1 >{
   >    
 2 >    WScript
 3 >           .
@@ -71,48 +59,33 @@ sourceFile:sourceMapValidationForIn.ts
 8 >Emitted(2, 21) Source(2, 21) + SourceIndex(0)
 ---
 >>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >^
-3 > ^^^^^^^^^^^^^^^^^^^->
-1 >
-  >
-2 >}
-1 >Emitted(3, 1) Source(3, 1) + SourceIndex(0)
-2 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
+  >}
+1 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
 ---
 >>>for (x in String) {
 1->
-2 >^^^
-3 >   ^
-4 >    ^
-5 >     ^
-6 >      ^^^^
-7 >          ^^^^^^
-8 >                ^
-9 >                 ^
-10>                  ^
-11>                   ^^->
+2 >^^^^^
+3 >     ^
+4 >      ^^^^
+5 >          ^^^^^^
+6 >                ^^
+7 >                  ^^^->
 1->
   >
-2 >for
-3 >    
-4 >    (
-5 >     x
-6 >       in 
-7 >          String
-8 >                )
-9 >                  
-10>                  {
+2 >for (
+3 >     x
+4 >       in 
+5 >          String
+6 >                ) 
 1->Emitted(4, 1) Source(4, 1) + SourceIndex(0)
-2 >Emitted(4, 4) Source(4, 4) + SourceIndex(0)
-3 >Emitted(4, 5) Source(4, 5) + SourceIndex(0)
-4 >Emitted(4, 6) Source(4, 6) + SourceIndex(0)
-5 >Emitted(4, 7) Source(4, 7) + SourceIndex(0)
-6 >Emitted(4, 11) Source(4, 11) + SourceIndex(0)
-7 >Emitted(4, 17) Source(4, 17) + SourceIndex(0)
-8 >Emitted(4, 18) Source(4, 18) + SourceIndex(0)
-9 >Emitted(4, 19) Source(4, 19) + SourceIndex(0)
-10>Emitted(4, 20) Source(4, 20) + SourceIndex(0)
+2 >Emitted(4, 6) Source(4, 6) + SourceIndex(0)
+3 >Emitted(4, 7) Source(4, 7) + SourceIndex(0)
+4 >Emitted(4, 11) Source(4, 11) + SourceIndex(0)
+5 >Emitted(4, 17) Source(4, 17) + SourceIndex(0)
+6 >Emitted(4, 19) Source(4, 19) + SourceIndex(0)
 ---
 >>>    WScript.Echo(x);
 1->^^^^
@@ -123,7 +96,7 @@ sourceFile:sourceMapValidationForIn.ts
 6 >                 ^
 7 >                  ^
 8 >                   ^
-1->
+1->{
   >    
 2 >    WScript
 3 >           .
@@ -142,51 +115,36 @@ sourceFile:sourceMapValidationForIn.ts
 8 >Emitted(5, 21) Source(5, 21) + SourceIndex(0)
 ---
 >>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-  >
-2 >}
-1 >Emitted(6, 1) Source(6, 1) + SourceIndex(0)
-2 >Emitted(6, 2) Source(6, 2) + SourceIndex(0)
+  >}
+1 >Emitted(6, 2) Source(6, 2) + SourceIndex(0)
 ---
 >>>for (var x2 in String) {
 1->
-2 >^^^
-3 >   ^
-4 >    ^
-5 >     ^^^^
-6 >         ^^
-7 >           ^^^^
-8 >               ^^^^^^
-9 >                     ^
-10>                      ^
-11>                       ^
+2 >^^^^^
+3 >     ^^^^
+4 >         ^^
+5 >           ^^^^
+6 >               ^^^^^^
+7 >                     ^^
 1->
   >
-2 >for
-3 >    
-4 >    (
-5 >     var 
-6 >         x2
-7 >            in 
-8 >               String
-9 >                     )
-10>                      
-  >                      
-11>                       {
+2 >for (
+3 >     var 
+4 >         x2
+5 >            in 
+6 >               String
+7 >                     )
+  >                     
 1->Emitted(7, 1) Source(7, 1) + SourceIndex(0)
-2 >Emitted(7, 4) Source(7, 4) + SourceIndex(0)
-3 >Emitted(7, 5) Source(7, 5) + SourceIndex(0)
-4 >Emitted(7, 6) Source(7, 6) + SourceIndex(0)
-5 >Emitted(7, 10) Source(7, 10) + SourceIndex(0)
-6 >Emitted(7, 12) Source(7, 12) + SourceIndex(0)
-7 >Emitted(7, 16) Source(7, 16) + SourceIndex(0)
-8 >Emitted(7, 22) Source(7, 22) + SourceIndex(0)
-9 >Emitted(7, 23) Source(7, 23) + SourceIndex(0)
-10>Emitted(7, 24) Source(8, 1) + SourceIndex(0)
-11>Emitted(7, 25) Source(8, 2) + SourceIndex(0)
+2 >Emitted(7, 6) Source(7, 6) + SourceIndex(0)
+3 >Emitted(7, 10) Source(7, 10) + SourceIndex(0)
+4 >Emitted(7, 12) Source(7, 12) + SourceIndex(0)
+5 >Emitted(7, 16) Source(7, 16) + SourceIndex(0)
+6 >Emitted(7, 22) Source(7, 22) + SourceIndex(0)
+7 >Emitted(7, 24) Source(8, 1) + SourceIndex(0)
 ---
 >>>    WScript.Echo(x2);
 1 >^^^^
@@ -197,7 +155,7 @@ sourceFile:sourceMapValidationForIn.ts
 6 >                 ^^
 7 >                   ^
 8 >                    ^
-1 >
+1 >{
   >    
 2 >    WScript
 3 >           .
@@ -216,49 +174,34 @@ sourceFile:sourceMapValidationForIn.ts
 8 >Emitted(8, 22) Source(9, 22) + SourceIndex(0)
 ---
 >>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >^
-3 > ^^^^^^^^^^^^^^^^^^^->
-1 >
-  >
-2 >}
-1 >Emitted(9, 1) Source(10, 1) + SourceIndex(0)
-2 >Emitted(9, 2) Source(10, 2) + SourceIndex(0)
+  >}
+1 >Emitted(9, 2) Source(10, 2) + SourceIndex(0)
 ---
 >>>for (x in String) {
 1->
-2 >^^^
-3 >   ^
-4 >    ^
-5 >     ^
-6 >      ^^^^
-7 >          ^^^^^^
-8 >                ^
-9 >                 ^
-10>                  ^
-11>                   ^^->
+2 >^^^^^
+3 >     ^
+4 >      ^^^^
+5 >          ^^^^^^
+6 >                ^^
+7 >                  ^^^->
 1->
   >
-2 >for
-3 >    
-4 >    (
-5 >     x
-6 >       in 
-7 >          String
-8 >                )
-9 >                 
-  >                 
-10>                  {
+2 >for (
+3 >     x
+4 >       in 
+5 >          String
+6 >                )
+  >                
 1->Emitted(10, 1) Source(11, 1) + SourceIndex(0)
-2 >Emitted(10, 4) Source(11, 4) + SourceIndex(0)
-3 >Emitted(10, 5) Source(11, 5) + SourceIndex(0)
-4 >Emitted(10, 6) Source(11, 6) + SourceIndex(0)
-5 >Emitted(10, 7) Source(11, 7) + SourceIndex(0)
-6 >Emitted(10, 11) Source(11, 11) + SourceIndex(0)
-7 >Emitted(10, 17) Source(11, 17) + SourceIndex(0)
-8 >Emitted(10, 18) Source(11, 18) + SourceIndex(0)
-9 >Emitted(10, 19) Source(12, 1) + SourceIndex(0)
-10>Emitted(10, 20) Source(12, 2) + SourceIndex(0)
+2 >Emitted(10, 6) Source(11, 6) + SourceIndex(0)
+3 >Emitted(10, 7) Source(11, 7) + SourceIndex(0)
+4 >Emitted(10, 11) Source(11, 11) + SourceIndex(0)
+5 >Emitted(10, 17) Source(11, 17) + SourceIndex(0)
+6 >Emitted(10, 19) Source(12, 1) + SourceIndex(0)
 ---
 >>>    WScript.Echo(x);
 1->^^^^
@@ -269,7 +212,7 @@ sourceFile:sourceMapValidationForIn.ts
 6 >                 ^
 7 >                  ^
 8 >                   ^
-1->
+1->{
   >    
 2 >    WScript
 3 >           .
@@ -288,13 +231,10 @@ sourceFile:sourceMapValidationForIn.ts
 8 >Emitted(11, 21) Source(13, 21) + SourceIndex(0)
 ---
 >>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-  >
-2 >}
-1 >Emitted(12, 1) Source(14, 1) + SourceIndex(0)
-2 >Emitted(12, 2) Source(14, 2) + SourceIndex(0)
+  >}
+1 >Emitted(12, 2) Source(14, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationForIn.js.map

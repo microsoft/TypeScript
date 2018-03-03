@@ -21,48 +21,42 @@ sourceFile:ES5For-of35.ts
 >>>try {
 >>>    for (var _a = __values([2, 3]), _b = _a.next(); !_b.done; _b = _a.next()) {
 1 >^^^^
-2 >    ^^^
-3 >       ^
-4 >        ^
-5 >         ^^^^
-6 >             ^^^^^
-7 >                  ^^^^^^^^^
-8 >                           ^
-9 >                            ^
-10>                             ^^
-11>                               ^
-12>                                ^
-13>                                 ^
-14>                                  ^^^^^^^^^^^^^^^^
-15>                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^
+3 >         ^^^^
+4 >             ^^^^^
+5 >                  ^^^^^^^^^
+6 >                           ^
+7 >                            ^
+8 >                             ^^
+9 >                               ^
+10>                                ^
+11>                                 ^
+12>                                  ^^^^^^^^^^^^^^^^
+13>                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >    for
-3 >        
-4 >        (const {x: a = 0, y: b = 1} of 
-5 >         
-6 >             
-7 >                  
-8 >                           [
-9 >                            2
-10>                             , 
-11>                               3
-12>                                ]
-13>                                 
-14>                                  
+2 >    for (const {x: a = 0, y: b = 1} of 
+3 >         
+4 >             
+5 >                  
+6 >                           [
+7 >                            2
+8 >                             , 
+9 >                               3
+10>                                ]
+11>                                 
+12>                                  
 1 >Emitted(12, 5) Source(1, 1) + SourceIndex(0)
-2 >Emitted(12, 8) Source(1, 4) + SourceIndex(0)
-3 >Emitted(12, 9) Source(1, 5) + SourceIndex(0)
-4 >Emitted(12, 10) Source(1, 36) + SourceIndex(0)
-5 >Emitted(12, 14) Source(1, 36) + SourceIndex(0)
-6 >Emitted(12, 19) Source(1, 36) + SourceIndex(0)
-7 >Emitted(12, 28) Source(1, 36) + SourceIndex(0)
-8 >Emitted(12, 29) Source(1, 37) + SourceIndex(0)
-9 >Emitted(12, 30) Source(1, 38) + SourceIndex(0)
-10>Emitted(12, 32) Source(1, 40) + SourceIndex(0)
-11>Emitted(12, 33) Source(1, 41) + SourceIndex(0)
-12>Emitted(12, 34) Source(1, 42) + SourceIndex(0)
-13>Emitted(12, 35) Source(1, 42) + SourceIndex(0)
-14>Emitted(12, 51) Source(1, 42) + SourceIndex(0)
+2 >Emitted(12, 10) Source(1, 36) + SourceIndex(0)
+3 >Emitted(12, 14) Source(1, 36) + SourceIndex(0)
+4 >Emitted(12, 19) Source(1, 36) + SourceIndex(0)
+5 >Emitted(12, 28) Source(1, 36) + SourceIndex(0)
+6 >Emitted(12, 29) Source(1, 37) + SourceIndex(0)
+7 >Emitted(12, 30) Source(1, 38) + SourceIndex(0)
+8 >Emitted(12, 32) Source(1, 40) + SourceIndex(0)
+9 >Emitted(12, 33) Source(1, 41) + SourceIndex(0)
+10>Emitted(12, 34) Source(1, 42) + SourceIndex(0)
+11>Emitted(12, 35) Source(1, 42) + SourceIndex(0)
+12>Emitted(12, 51) Source(1, 42) + SourceIndex(0)
 ---
 >>>        var _c = _b.value, _d = _c.x, a = _d === void 0 ? 0 : _d, _e = _c.y, b = _e === void 0 ? 1 : _e;
 1->^^^^^^^^
