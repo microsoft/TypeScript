@@ -1,0 +1,140 @@
+=== tests/cases/compiler/operatorErrorsDetectedByNarrowingMessage.ts ===
+const enum Keys {
+>Keys : Symbol(Keys, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 0, 0))
+
+    Tab = 10,
+>Tab : Symbol(Keys.Tab, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 0, 17))
+
+    Shift = 13
+>Shift : Symbol(Keys.Shift, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 1, 13))
+}
+
+function enumType() {
+>enumType : Symbol(enumType, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 3, 1))
+
+    let key: Keys;
+>key : Symbol(key, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 6, 7))
+>Keys : Symbol(Keys, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 0, 0))
+
+    if (key === Keys.Tab) {
+>key : Symbol(key, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 6, 7))
+>Keys.Tab : Symbol(Keys.Tab, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 0, 17))
+>Keys : Symbol(Keys, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 0, 0))
+>Tab : Symbol(Keys.Tab, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 0, 17))
+
+        return;
+    }
+
+    if (key === Keys.Tab || key === Keys.Shift) {
+>key : Symbol(key, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 6, 7))
+>Keys.Tab : Symbol(Keys.Tab, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 0, 17))
+>Keys : Symbol(Keys, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 0, 0))
+>Tab : Symbol(Keys.Tab, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 0, 17))
+>key : Symbol(key, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 6, 7))
+>Keys.Shift : Symbol(Keys.Shift, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 1, 13))
+>Keys : Symbol(Keys, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 0, 0))
+>Shift : Symbol(Keys.Shift, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 1, 13))
+
+        return;
+    }
+}
+
+
+function unionType() {
+>unionType : Symbol(unionType, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 15, 1))
+
+    let x!: string | number;
+>x : Symbol(x, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 19, 7))
+
+    let y!: string | number;
+>y : Symbol(y, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 20, 7))
+
+    if (typeof x === 'number') {
+>x : Symbol(x, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 19, 7))
+
+        return;
+    }
+    if (typeof y === 'string') {
+>y : Symbol(y, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 20, 7))
+
+        return;
+    }
+    return x === y;
+>x : Symbol(x, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 19, 7))
+>y : Symbol(y, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 20, 7))
+}
+
+interface Left {
+>Left : Symbol(Left, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 28, 1))
+
+    kind: 'left'
+>kind : Symbol(Left.kind, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 30, 16))
+
+    data: number;
+>data : Symbol(Left.data, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 31, 16))
+}
+
+interface Right {
+>Right : Symbol(Right, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 33, 1))
+
+    kind: 'right'
+>kind : Symbol(Right.kind, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 35, 17))
+
+    data: string;
+>data : Symbol(Right.data, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 36, 17))
+}
+
+function discriminatedType() {
+>discriminatedType : Symbol(discriminatedType, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 38, 1))
+
+    let x!: Left;
+>x : Symbol(x, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 41, 7))
+>Left : Symbol(Left, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 28, 1))
+
+    let y!: Left | Right;
+>y : Symbol(y, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 42, 7))
+>Left : Symbol(Left, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 28, 1))
+>Right : Symbol(Right, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 33, 1))
+
+    if (y.kind === 'left') {
+>y.kind : Symbol(kind, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 30, 16), Decl(operatorErrorsDetectedByNarrowingMessage.ts, 35, 17))
+>y : Symbol(y, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 42, 7))
+>kind : Symbol(kind, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 30, 16), Decl(operatorErrorsDetectedByNarrowingMessage.ts, 35, 17))
+
+        return;
+    }
+    return x.data === y.data;
+>x.data : Symbol(Left.data, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 31, 16))
+>x : Symbol(x, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 41, 7))
+>data : Symbol(Left.data, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 31, 16))
+>y.data : Symbol(Right.data, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 36, 17))
+>y : Symbol(y, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 42, 7))
+>data : Symbol(Right.data, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 36, 17))
+}
+
+
+function booleanType(bar: boolean) {
+>booleanType : Symbol(booleanType, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 47, 1))
+>bar : Symbol(bar, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 50, 21))
+
+    if (bar === true) {
+>bar : Symbol(bar, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 50, 21))
+
+        return "true";
+    }
+    if (bar === true) {
+>bar : Symbol(bar, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 50, 21))
+
+        return "false";
+    }
+
+    const f: boolean = false;
+>f : Symbol(f, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 58, 9))
+
+    if (f === true) {
+>f : Symbol(f, Decl(operatorErrorsDetectedByNarrowingMessage.ts, 58, 9))
+
+        return "false";
+    }
+}
+

@@ -1,0 +1,166 @@
+=== tests/cases/compiler/operatorErrorsDetectedByNarrowingMessage.ts ===
+const enum Keys {
+>Keys : Keys
+
+    Tab = 10,
+>Tab : Keys.Tab
+>10 : 10
+
+    Shift = 13
+>Shift : Keys.Shift
+>13 : 13
+}
+
+function enumType() {
+>enumType : () => void
+
+    let key: Keys;
+>key : Keys
+>Keys : Keys
+
+    if (key === Keys.Tab) {
+>key === Keys.Tab : boolean
+>key : Keys
+>Keys.Tab : Keys.Tab
+>Keys : typeof Keys
+>Tab : Keys.Tab
+
+        return;
+    }
+
+    if (key === Keys.Tab || key === Keys.Shift) {
+>key === Keys.Tab || key === Keys.Shift : boolean
+>key === Keys.Tab : boolean
+>key : Keys.Shift
+>Keys.Tab : Keys.Tab
+>Keys : typeof Keys
+>Tab : Keys.Tab
+>key === Keys.Shift : boolean
+>key : Keys.Shift
+>Keys.Shift : Keys.Shift
+>Keys : typeof Keys
+>Shift : Keys.Shift
+
+        return;
+    }
+}
+
+
+function unionType() {
+>unionType : () => boolean
+
+    let x!: string | number;
+>x : string | number
+
+    let y!: string | number;
+>y : string | number
+
+    if (typeof x === 'number') {
+>typeof x === 'number' : boolean
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>'number' : "number"
+
+        return;
+    }
+    if (typeof y === 'string') {
+>typeof y === 'string' : boolean
+>typeof y : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>y : string | number
+>'string' : "string"
+
+        return;
+    }
+    return x === y;
+>x === y : boolean
+>x : string
+>y : number
+}
+
+interface Left {
+>Left : Left
+
+    kind: 'left'
+>kind : "left"
+
+    data: number;
+>data : number
+}
+
+interface Right {
+>Right : Right
+
+    kind: 'right'
+>kind : "right"
+
+    data: string;
+>data : string
+}
+
+function discriminatedType() {
+>discriminatedType : () => boolean
+
+    let x!: Left;
+>x : Left
+>Left : Left
+
+    let y!: Left | Right;
+>y : Left | Right
+>Left : Left
+>Right : Right
+
+    if (y.kind === 'left') {
+>y.kind === 'left' : boolean
+>y.kind : "left" | "right"
+>y : Left | Right
+>kind : "left" | "right"
+>'left' : "left"
+
+        return;
+    }
+    return x.data === y.data;
+>x.data === y.data : boolean
+>x.data : number
+>x : Left
+>data : number
+>y.data : string
+>y : Right
+>data : string
+}
+
+
+function booleanType(bar: boolean) {
+>booleanType : (bar: boolean) => "true" | "false"
+>bar : boolean
+
+    if (bar === true) {
+>bar === true : boolean
+>bar : boolean
+>true : true
+
+        return "true";
+>"true" : "true"
+    }
+    if (bar === true) {
+>bar === true : boolean
+>bar : false
+>true : true
+
+        return "false";
+>"false" : "false"
+    }
+
+    const f: boolean = false;
+>f : boolean
+>false : false
+
+    if (f === true) {
+>f === true : boolean
+>f : false
+>true : true
+
+        return "false";
+>"false" : "false"
+    }
+}
+
