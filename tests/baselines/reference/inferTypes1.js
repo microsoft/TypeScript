@@ -134,6 +134,21 @@ type C2<S, U extends void> = S extends A2<infer T, U> ? [T, U] : never;
 type A<T> = T extends string ? { [P in T]: void; } : T;
 type B<T> = string extends T ? { [P in T]: void; } : T;  // Error
 
+// Repro from #22302
+
+type MatchingKeys<T, U, K extends keyof T = keyof T> =
+    K extends keyof T ? T[K] extends U ? K : never : never;
+
+type VoidKeys<T> = MatchingKeys<T, void>;
+
+interface test {
+    a: 1,
+    b: void
+}
+
+type T80 = MatchingKeys<test, void>;
+type T81 = VoidKeys<test>;
+
 
 //// [inferTypes1.js]
 "use strict";
