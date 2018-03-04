@@ -432,19 +432,20 @@ namespace ts.textChanges {
             }
             return Debug.failBadSyntaxKind(node); // We haven't handled this kind of node yet -- add it
         }
+
         /**
          * This function should be used to insert nodes alphabetically in lists when nodes don't carry separators as the part of the node range,
          * e.g. export lists, import lists, etc.
          * Linear search is used instead of binary as the (generally few) nodes are not guaranteed to be in order.
          */
-        public insertNodeInListAlphabetically(sourceFile: SourceFile, containingList: NodeArray<ImportSpecifier>, newNode: ImportSpecifier): this {
-            if (newNode.name.text < containingList[0].name.text) {
+        public insertNodeInsideListNodesAlphabetically(sourceFile: SourceFile, containingList: NodeArray<ImportSpecifier>, newNode: ImportSpecifier): this {
+            if (compareStringsCaseInsensitive(newNode.name.text, containingList[0].name.text) === Comparison.LessThan) {
                 this.insertNodeInListBeforeFirst(sourceFile, containingList, containingList[0], newNode);
                 return this;
             }
 
             for (let i = 1; i < containingList.length; i += 1) {
-                if (newNode.name.text < containingList[i].name.text) {
+                if (compareStringsCaseInsensitive(newNode.name.text, containingList[i].name.text) === Comparison.LessThan) {
                     this.insertNodeInListAfter(sourceFile, containingList[i - 1], newNode);
                     return this;
                 }
