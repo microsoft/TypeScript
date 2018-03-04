@@ -434,28 +434,6 @@ namespace ts.textChanges {
         }
 
         /**
-         * This function should be used to insert nodes alphabetically in lists when nodes don't carry separators as the part of the node range,
-         * e.g. export lists, import lists, etc.
-         * Linear search is used instead of binary as the (generally few) nodes are not guaranteed to be in order.
-         */
-        public insertNodeInsideListNodesAlphabetically(sourceFile: SourceFile, containingList: NodeArray<ImportSpecifier>, newNode: ImportSpecifier): this {
-            if (compareStringsCaseInsensitive(newNode.name.text, containingList[0].name.text) === Comparison.LessThan) {
-                this.insertNodeInListBeforeFirst(sourceFile, containingList, containingList[0], newNode);
-                return this;
-            }
-
-            for (let i = 1; i < containingList.length; i += 1) {
-                if (compareStringsCaseInsensitive(newNode.name.text, containingList[i].name.text) === Comparison.LessThan) {
-                    this.insertNodeInListAfter(sourceFile, containingList[i - 1], newNode);
-                    return this;
-                }
-            }
-
-            this.insertNodeInListAfter(sourceFile, containingList[containingList.length - 1], newNode);
-            return this;
-        }
-
-        /**
          * This function should be used to insert nodes in lists when nodes don't carry separators as the part of the node range,
          * i.e. arguments in arguments lists, parameters in parameter lists etc.
          * Note that separators are part of the node in statements and class elements.
@@ -484,7 +462,7 @@ namespace ts.textChanges {
             return this;
         }
 
-        private insertNodeInListBeforeFirst(sourceFile: SourceFile, containingList: NodeArray<Node>, first: Node, newNode: Node): void {
+        public insertNodeInListBeforeFirst(sourceFile: SourceFile, containingList: NodeArray<Node>, first: Node, newNode: Node): void {
             const startPosition = first.getStart(sourceFile);
             const afterStartLinePosition = getLineStartPositionForPosition(startPosition, sourceFile);
             const { multilineList, separator } = this.getMultilineAndSeparatorOfList(sourceFile, containingList, afterStartLinePosition, 1, first);
