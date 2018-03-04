@@ -23,3 +23,4 @@ Jakefile.js
 .parallelperf.json
 test.config
 package-lock.json
+yarn.lock
