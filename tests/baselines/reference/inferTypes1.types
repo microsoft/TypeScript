@@ -312,7 +312,7 @@ type T60 = infer U;  // Error
 >U : U
 
 type T61<T> = infer A extends infer B ? infer C : infer D;  // Error
->T61 : {}
+>T61 : T61<T>
 >T : T
 >A : A
 >B : B
