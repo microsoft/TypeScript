@@ -246,32 +246,29 @@ sourceFile:recursiveClassReferenceTest.ts
 2 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                   ^^^
 4 >                                                      ^^^^^^^^^^^^^^
-5 >                                                                    ^^^^^^
-6 >                                                                          ^
-7 >                                                                           ^^^^
-8 >                                                                               ^
-9 >                                                                                ^
-10>                                                                                 ^
+5 >                                                                    ^^^^^^^
+6 >                                                                           ^^^^
+7 >                                                                               ^
+8 >                                                                                ^
+9 >                                                                                 ^
 1->
 2 >                    getId
 3 >                                                   
 4 >                                                      public getId() { 
-5 >                                                                    return
-6 >                                                                           
-7 >                                                                           "yo"
-8 >                                                                               ;
-9 >                                                                                 
-10>                                                                                 }
+5 >                                                                    return 
+6 >                                                                           "yo"
+7 >                                                                               ;
+8 >                                                                                 
+9 >                                                                                 }
 1->Emitted(24, 21) Source(35, 10) + SourceIndex(0)
 2 >Emitted(24, 52) Source(35, 15) + SourceIndex(0)
 3 >Emitted(24, 55) Source(35, 3) + SourceIndex(0)
 4 >Emitted(24, 69) Source(35, 20) + SourceIndex(0)
-5 >Emitted(24, 75) Source(35, 26) + SourceIndex(0)
-6 >Emitted(24, 76) Source(35, 27) + SourceIndex(0)
-7 >Emitted(24, 80) Source(35, 31) + SourceIndex(0)
-8 >Emitted(24, 81) Source(35, 32) + SourceIndex(0)
-9 >Emitted(24, 82) Source(35, 33) + SourceIndex(0)
-10>Emitted(24, 83) Source(35, 34) + SourceIndex(0)
+5 >Emitted(24, 76) Source(35, 27) + SourceIndex(0)
+6 >Emitted(24, 80) Source(35, 31) + SourceIndex(0)
+7 >Emitted(24, 81) Source(35, 32) + SourceIndex(0)
+8 >Emitted(24, 82) Source(35, 33) + SourceIndex(0)
+9 >Emitted(24, 83) Source(35, 34) + SourceIndex(0)
 ---
 >>>                    StartFindAction.prototype.run = function (Thing) {
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -294,22 +291,19 @@ sourceFile:recursiveClassReferenceTest.ts
 ---
 >>>                        return true;
 1 >^^^^^^^^^^^^^^^^^^^^^^^^
-2 >                        ^^^^^^
-3 >                              ^
-4 >                               ^^^^
-5 >                                   ^
+2 >                        ^^^^^^^
+3 >                               ^^^^
+4 >                                   ^
 1 >):boolean {
   >
   >			
-2 >                        return
-3 >                               
-4 >                               true
-5 >                                   ;
+2 >                        return 
+3 >                               true
+4 >                                   ;
 1 >Emitted(26, 25) Source(39, 4) + SourceIndex(0)
-2 >Emitted(26, 31) Source(39, 10) + SourceIndex(0)
-3 >Emitted(26, 32) Source(39, 11) + SourceIndex(0)
-4 >Emitted(26, 36) Source(39, 15) + SourceIndex(0)
-5 >Emitted(26, 37) Source(39, 16) + SourceIndex(0)
+2 >Emitted(26, 32) Source(39, 11) + SourceIndex(0)
+3 >Emitted(26, 36) Source(39, 15) + SourceIndex(0)
+4 >Emitted(26, 37) Source(39, 16) + SourceIndex(0)
 ---
 >>>                    };
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -754,80 +748,62 @@ sourceFile:recursiveClassReferenceTest.ts
 4 >                                           ^^^^^^^^^^
 5 >                                                     ^^^^^^
 6 >                                                           ^^^^
-7 >                                                               ^^
-8 >                                                                 ^
-9 >                                                                  ^
-10>                                                                   ^^^^
-11>                                                                       ^
-12>                                                                        ^
-13>                                                                         ^
+7 >                                                               ^^^^
+8 >                                                                   ^^^^
+9 >                                                                       ^^
 1->
 2 >                gar
 3 >                                        
 4 >                                           public gar(
 5 >                                                     runner:(widget:Sample.Thing.IWidget)=>any
 6 >                                                           ) { 
-7 >                                                               if
-8 >                                                                  
-9 >                                                                  (
-10>                                                                   true
-11>                                                                       )
-12>                                                                         
-13>                                                                         {
+7 >                                                               if (
+8 >                                                                   true
+9 >                                                                       ) 
 1->Emitted(47, 17) Source(47, 10) + SourceIndex(0)
 2 >Emitted(47, 41) Source(47, 13) + SourceIndex(0)
 3 >Emitted(47, 44) Source(47, 3) + SourceIndex(0)
 4 >Emitted(47, 54) Source(47, 14) + SourceIndex(0)
 5 >Emitted(47, 60) Source(47, 55) + SourceIndex(0)
 6 >Emitted(47, 64) Source(47, 59) + SourceIndex(0)
-7 >Emitted(47, 66) Source(47, 61) + SourceIndex(0)
-8 >Emitted(47, 67) Source(47, 62) + SourceIndex(0)
-9 >Emitted(47, 68) Source(47, 63) + SourceIndex(0)
-10>Emitted(47, 72) Source(47, 67) + SourceIndex(0)
-11>Emitted(47, 73) Source(47, 68) + SourceIndex(0)
-12>Emitted(47, 74) Source(47, 69) + SourceIndex(0)
-13>Emitted(47, 75) Source(47, 70) + SourceIndex(0)
+7 >Emitted(47, 68) Source(47, 63) + SourceIndex(0)
+8 >Emitted(47, 72) Source(47, 67) + SourceIndex(0)
+9 >Emitted(47, 74) Source(47, 69) + SourceIndex(0)
 ---
 >>>                    return runner(this);
 1 >^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^^
-3 >                          ^
-4 >                           ^^^^^^
-5 >                                 ^
-6 >                                  ^^^^
-7 >                                      ^
-8 >                                       ^
-1 >
-2 >                    return
-3 >                           
-4 >                           runner
-5 >                                 (
-6 >                                  this
-7 >                                      )
-8 >                                       ;
+2 >                    ^^^^^^^
+3 >                           ^^^^^^
+4 >                                 ^
+5 >                                  ^^^^
+6 >                                      ^
+7 >                                       ^
+1 >{
+2 >                    return 
+3 >                           runner
+4 >                                 (
+5 >                                  this
+6 >                                      )
+7 >                                       ;
 1 >Emitted(48, 21) Source(47, 70) + SourceIndex(0)
-2 >Emitted(48, 27) Source(47, 76) + SourceIndex(0)
-3 >Emitted(48, 28) Source(47, 77) + SourceIndex(0)
-4 >Emitted(48, 34) Source(47, 83) + SourceIndex(0)
-5 >Emitted(48, 35) Source(47, 84) + SourceIndex(0)
-6 >Emitted(48, 39) Source(47, 88) + SourceIndex(0)
-7 >Emitted(48, 40) Source(47, 89) + SourceIndex(0)
-8 >Emitted(48, 41) Source(47, 90) + SourceIndex(0)
+2 >Emitted(48, 28) Source(47, 77) + SourceIndex(0)
+3 >Emitted(48, 34) Source(47, 83) + SourceIndex(0)
+4 >Emitted(48, 35) Source(47, 84) + SourceIndex(0)
+5 >Emitted(48, 39) Source(47, 88) + SourceIndex(0)
+6 >Emitted(48, 40) Source(47, 89) + SourceIndex(0)
+7 >Emitted(48, 41) Source(47, 90) + SourceIndex(0)
 ---
 >>>                } };
-1 >^^^^^^^^^^^^^^^^
-2 >                ^
-3 >                 ^
-4 >                  ^
-5 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-2 >                }
-3 >                 
-4 >                  }
-1 >Emitted(49, 17) Source(47, 90) + SourceIndex(0)
-2 >Emitted(49, 18) Source(47, 91) + SourceIndex(0)
-3 >Emitted(49, 19) Source(47, 91) + SourceIndex(0)
-4 >Emitted(49, 20) Source(47, 92) + SourceIndex(0)
+1 >^^^^^^^^^^^^^^^^^
+2 >                 ^
+3 >                  ^
+4 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >}
+2 >                 
+3 >                  }
+1 >Emitted(49, 18) Source(47, 91) + SourceIndex(0)
+2 >Emitted(49, 19) Source(47, 91) + SourceIndex(0)
+3 >Emitted(49, 20) Source(47, 92) + SourceIndex(0)
 ---
 >>>                FindWidget.prototype.getDomNode = function () {
 1->^^^^^^^^^^^^^^^^
@@ -850,21 +826,18 @@ sourceFile:recursiveClassReferenceTest.ts
 ---
 >>>                    return domNode;
 1 >^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^^
-3 >                          ^
-4 >                           ^^^^^^^
-5 >                                  ^
+2 >                    ^^^^^^^
+3 >                           ^^^^^^^
+4 >                                  ^
 1 >public getDomNode() {
   >			
-2 >                    return
-3 >                           
-4 >                           domNode
-5 >                                  ;
+2 >                    return 
+3 >                           domNode
+4 >                                  ;
 1 >Emitted(51, 21) Source(56, 4) + SourceIndex(0)
-2 >Emitted(51, 27) Source(56, 10) + SourceIndex(0)
-3 >Emitted(51, 28) Source(56, 11) + SourceIndex(0)
-4 >Emitted(51, 35) Source(56, 18) + SourceIndex(0)
-5 >Emitted(51, 36) Source(56, 19) + SourceIndex(0)
+2 >Emitted(51, 28) Source(56, 11) + SourceIndex(0)
+3 >Emitted(51, 35) Source(56, 18) + SourceIndex(0)
+4 >Emitted(51, 36) Source(56, 19) + SourceIndex(0)
 ---
 >>>                };
 1 >^^^^^^^^^^^^^^^^
@@ -1148,32 +1121,29 @@ sourceFile:recursiveClassReferenceTest.ts
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                          ^^^
 4 >                                             ^^^^^^^^^^^^^^
-5 >                                                           ^^^^^^
-6 >                                                                 ^
-7 >                                                                  ^^^^
-8 >                                                                      ^
-9 >                                                                       ^
-10>                                                                        ^
+5 >                                                           ^^^^^^^
+6 >                                                                  ^^^^
+7 >                                                                      ^
+8 >                                                                       ^
+9 >                                                                        ^
 1->
 2 >    getInitialState
 3 >                                          
 4 >                                             public getInitialState(): IState { 
-5 >                                                           return
-6 >                                                                  
-7 >                                                                  null
-8 >                                                                      ;
-9 >                                                                       
-10>                                                                        }
+5 >                                                           return 
+6 >                                                                  null
+7 >                                                                      ;
+8 >                                                                       
+9 >                                                                        }
 1->Emitted(64, 5) Source(67, 46) + SourceIndex(0)
 2 >Emitted(64, 43) Source(67, 61) + SourceIndex(0)
 3 >Emitted(64, 46) Source(67, 39) + SourceIndex(0)
 4 >Emitted(64, 60) Source(67, 74) + SourceIndex(0)
-5 >Emitted(64, 66) Source(67, 80) + SourceIndex(0)
-6 >Emitted(64, 67) Source(67, 81) + SourceIndex(0)
-7 >Emitted(64, 71) Source(67, 85) + SourceIndex(0)
-8 >Emitted(64, 72) Source(67, 86) + SourceIndex(0)
-9 >Emitted(64, 73) Source(67, 86) + SourceIndex(0)
-10>Emitted(64, 74) Source(67, 87) + SourceIndex(0)
+5 >Emitted(64, 67) Source(67, 81) + SourceIndex(0)
+6 >Emitted(64, 71) Source(67, 85) + SourceIndex(0)
+7 >Emitted(64, 72) Source(67, 86) + SourceIndex(0)
+8 >Emitted(64, 73) Source(67, 86) + SourceIndex(0)
+9 >Emitted(64, 74) Source(67, 87) + SourceIndex(0)
 ---
 >>>    return AbstractMode;
 1 >^^^^
@@ -1431,21 +1401,18 @@ sourceFile:recursiveClassReferenceTest.ts
 ---
 >>>                        return this;
 1 >^^^^^^^^^^^^^^^^^^^^^^^^
-2 >                        ^^^^^^
-3 >                              ^
-4 >                               ^^^^
-5 >                                   ^
+2 >                        ^^^^^^^
+3 >                               ^^^^
+4 >                                   ^
 1 >public clone():IState {
   >			
-2 >                        return
-3 >                               
-4 >                               this
-5 >                                   ;
+2 >                        return 
+3 >                               this
+4 >                                   ;
 1 >Emitted(79, 25) Source(81, 4) + SourceIndex(0)
-2 >Emitted(79, 31) Source(81, 10) + SourceIndex(0)
-3 >Emitted(79, 32) Source(81, 11) + SourceIndex(0)
-4 >Emitted(79, 36) Source(81, 15) + SourceIndex(0)
-5 >Emitted(79, 37) Source(81, 16) + SourceIndex(0)
+2 >Emitted(79, 32) Source(81, 11) + SourceIndex(0)
+3 >Emitted(79, 36) Source(81, 15) + SourceIndex(0)
+4 >Emitted(79, 37) Source(81, 16) + SourceIndex(0)
 ---
 >>>                    };
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -1478,27 +1445,24 @@ sourceFile:recursiveClassReferenceTest.ts
 ---
 >>>                        return this === other;
 1 >^^^^^^^^^^^^^^^^^^^^^^^^
-2 >                        ^^^^^^
-3 >                              ^
-4 >                               ^^^^
-5 >                                   ^^^^^
-6 >                                        ^^^^^
-7 >                                             ^
+2 >                        ^^^^^^^
+3 >                               ^^^^
+4 >                                   ^^^^^
+5 >                                        ^^^^^
+6 >                                             ^
 1 >):boolean {
   >			
-2 >                        return
-3 >                               
-4 >                               this
-5 >                                    === 
-6 >                                        other
-7 >                                             ;
+2 >                        return 
+3 >                               this
+4 >                                    === 
+5 >                                        other
+6 >                                             ;
 1 >Emitted(82, 25) Source(85, 4) + SourceIndex(0)
-2 >Emitted(82, 31) Source(85, 10) + SourceIndex(0)
-3 >Emitted(82, 32) Source(85, 11) + SourceIndex(0)
-4 >Emitted(82, 36) Source(85, 15) + SourceIndex(0)
-5 >Emitted(82, 41) Source(85, 20) + SourceIndex(0)
-6 >Emitted(82, 46) Source(85, 25) + SourceIndex(0)
-7 >Emitted(82, 47) Source(85, 26) + SourceIndex(0)
+2 >Emitted(82, 32) Source(85, 11) + SourceIndex(0)
+3 >Emitted(82, 36) Source(85, 15) + SourceIndex(0)
+4 >Emitted(82, 41) Source(85, 20) + SourceIndex(0)
+5 >Emitted(82, 46) Source(85, 25) + SourceIndex(0)
+6 >Emitted(82, 47) Source(85, 26) + SourceIndex(0)
 ---
 >>>                    };
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -1515,34 +1479,31 @@ sourceFile:recursiveClassReferenceTest.ts
 2 >                    ^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                           ^^^
 4 >                                              ^^^^^^^^^^^^^^
-5 >                                                            ^^^^^^
-6 >                                                                  ^
-7 >                                                                   ^^^^
-8 >                                                                       ^
-9 >                                                                        ^
-10>                                                                         ^
+5 >                                                            ^^^^^^^
+6 >                                                                   ^^^^
+7 >                                                                       ^
+8 >                                                                        ^
+9 >                                                                         ^
 1->
   >		
   >		public 
 2 >                    getMode
 3 >                                           
 4 >                                              public getMode(): IMode { 
-5 >                                                            return
-6 >                                                                   
-7 >                                                                   mode
-8 >                                                                       ;
-9 >                                                                         
-10>                                                                         }
+5 >                                                            return 
+6 >                                                                   mode
+7 >                                                                       ;
+8 >                                                                         
+9 >                                                                         }
 1->Emitted(84, 21) Source(88, 10) + SourceIndex(0)
 2 >Emitted(84, 44) Source(88, 17) + SourceIndex(0)
 3 >Emitted(84, 47) Source(88, 3) + SourceIndex(0)
 4 >Emitted(84, 61) Source(88, 29) + SourceIndex(0)
-5 >Emitted(84, 67) Source(88, 35) + SourceIndex(0)
-6 >Emitted(84, 68) Source(88, 36) + SourceIndex(0)
-7 >Emitted(84, 72) Source(88, 40) + SourceIndex(0)
-8 >Emitted(84, 73) Source(88, 41) + SourceIndex(0)
-9 >Emitted(84, 74) Source(88, 42) + SourceIndex(0)
-10>Emitted(84, 75) Source(88, 43) + SourceIndex(0)
+5 >Emitted(84, 68) Source(88, 36) + SourceIndex(0)
+6 >Emitted(84, 72) Source(88, 40) + SourceIndex(0)
+7 >Emitted(84, 73) Source(88, 41) + SourceIndex(0)
+8 >Emitted(84, 74) Source(88, 42) + SourceIndex(0)
+9 >Emitted(84, 75) Source(88, 43) + SourceIndex(0)
 ---
 >>>                    return State;
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -1668,33 +1629,30 @@ sourceFile:recursiveClassReferenceTest.ts
 ---
 >>>                        return new State(self);
 1 >^^^^^^^^^^^^^^^^^^^^^^^^
-2 >                        ^^^^^^
-3 >                              ^
-4 >                               ^^^^
-5 >                                   ^^^^^
-6 >                                        ^
-7 >                                         ^^^^
-8 >                                             ^
-9 >                                              ^
+2 >                        ^^^^^^^
+3 >                               ^^^^
+4 >                                   ^^^^^
+5 >                                        ^
+6 >                                         ^^^^
+7 >                                             ^
+8 >                                              ^
 1 >public getInitialState(): IState {
   >			
-2 >                        return
-3 >                               
-4 >                               new 
-5 >                                   State
-6 >                                        (
-7 >                                         self
-8 >                                             )
-9 >                                              ;
+2 >                        return 
+3 >                               new 
+4 >                                   State
+5 >                                        (
+6 >                                         self
+7 >                                             )
+8 >                                              ;
 1 >Emitted(95, 25) Source(95, 4) + SourceIndex(0)
-2 >Emitted(95, 31) Source(95, 10) + SourceIndex(0)
-3 >Emitted(95, 32) Source(95, 11) + SourceIndex(0)
-4 >Emitted(95, 36) Source(95, 15) + SourceIndex(0)
-5 >Emitted(95, 41) Source(95, 20) + SourceIndex(0)
-6 >Emitted(95, 42) Source(95, 21) + SourceIndex(0)
-7 >Emitted(95, 46) Source(95, 25) + SourceIndex(0)
-8 >Emitted(95, 47) Source(95, 26) + SourceIndex(0)
-9 >Emitted(95, 48) Source(95, 27) + SourceIndex(0)
+2 >Emitted(95, 32) Source(95, 11) + SourceIndex(0)
+3 >Emitted(95, 36) Source(95, 15) + SourceIndex(0)
+4 >Emitted(95, 41) Source(95, 20) + SourceIndex(0)
+5 >Emitted(95, 42) Source(95, 21) + SourceIndex(0)
+6 >Emitted(95, 46) Source(95, 25) + SourceIndex(0)
+7 >Emitted(95, 47) Source(95, 26) + SourceIndex(0)
+8 >Emitted(95, 48) Source(95, 27) + SourceIndex(0)
 ---
 >>>                    };
 1 >^^^^^^^^^^^^^^^^^^^^

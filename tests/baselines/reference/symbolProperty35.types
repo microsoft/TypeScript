@@ -3,6 +3,7 @@ interface I1 {
 >I1 : I1
 
     [Symbol.toStringTag](): { x: string }
+>[Symbol.toStringTag] : () => { x: string; }
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
@@ -12,6 +13,7 @@ interface I2 {
 >I2 : I2
 
     [Symbol.toStringTag](): { x: number }
+>[Symbol.toStringTag] : () => { x: number; }
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol

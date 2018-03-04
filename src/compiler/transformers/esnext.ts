@@ -159,7 +159,7 @@ namespace ts {
         }
 
         function chunkObjectLiteralElements(elements: ReadonlyArray<ObjectLiteralElementLike>): Expression[] {
-            let chunkObject: ObjectLiteralElementLike[];
+            let chunkObject: ObjectLiteralElementLike[] | undefined;
             const objects: Expression[] = [];
             for (const e of elements) {
                 if (e.kind === SyntaxKind.SpreadAssignment) {
@@ -171,15 +171,9 @@ namespace ts {
                     objects.push(visitNode(target, visitor, isExpression));
                 }
                 else {
-                    if (!chunkObject) {
-                        chunkObject = [];
-                    }
-                    if (e.kind === SyntaxKind.PropertyAssignment) {
-                        chunkObject.push(createPropertyAssignment(e.name, visitNode(e.initializer, visitor, isExpression)));
-                    }
-                    else {
-                        chunkObject.push(visitNode(e, visitor, isObjectLiteralElementLike));
-                    }
+                    chunkObject = append(chunkObject, e.kind === SyntaxKind.PropertyAssignment
+                        ? createPropertyAssignment(e.name, visitNode(e.initializer, visitor, isExpression))
+                        : visitNode(e, visitor, isObjectLiteralElementLike));
                 }
             }
             if (chunkObject) {

@@ -70,6 +70,7 @@
         "semver.ts",
         "shims.ts",
         "signatureHelp.ts",
+        "suggestionDiagnostics.ts",
         "symbolDisplay.ts",
         "textChanges.ts",
         "refactorProvider.ts",

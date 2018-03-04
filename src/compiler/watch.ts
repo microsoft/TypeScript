@@ -20,7 +20,7 @@ namespace ts {
             getCanonicalFileName: createGetCanonicalFileName(system.useCaseSensitiveFileNames),
         };
         if (!pretty) {
-            return diagnostic => system.write(ts.formatDiagnostic(diagnostic, host));
+            return diagnostic => system.write(formatDiagnostic(diagnostic, host));
         }
 
         const diagnostics: Diagnostic[] = new Array(1);
@@ -33,6 +33,7 @@ namespace ts {
 
     function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions) {
         if (system.clearScreen &&
+            !options.preserveWatchOutput &&
             diagnostic.code !== Diagnostics.Compilation_complete_Watching_for_file_changes.code &&
             !options.extendedDiagnostics &&
             !options.diagnostics) {
@@ -484,9 +485,9 @@ namespace ts {
         const trace = host.trace && ((s: string) => { host.trace(s + newLine); });
         const loggingEnabled = trace && (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics);
         const writeLog = loggingEnabled ? trace : noop;
-        const watchFile = compilerOptions.extendedDiagnostics ? ts.addFileWatcherWithLogging : loggingEnabled ? ts.addFileWatcherWithOnlyTriggerLogging : ts.addFileWatcher;
-        const watchFilePath = compilerOptions.extendedDiagnostics ? ts.addFilePathWatcherWithLogging : ts.addFilePathWatcher;
-        const watchDirectoryWorker = compilerOptions.extendedDiagnostics ? ts.addDirectoryWatcherWithLogging : ts.addDirectoryWatcher;
+        const watchFile = compilerOptions.extendedDiagnostics ? addFileWatcherWithLogging : loggingEnabled ? addFileWatcherWithOnlyTriggerLogging : addFileWatcher;
+        const watchFilePath = compilerOptions.extendedDiagnostics ? addFilePathWatcherWithLogging : addFilePathWatcher;
+        const watchDirectoryWorker = compilerOptions.extendedDiagnostics ? addDirectoryWatcherWithLogging : addDirectoryWatcher;
 
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
         let newLine = updateNewLine();
@@ -749,6 +750,9 @@ namespace ts {
                     (missingFilePathsRequestedForRelease || (missingFilePathsRequestedForRelease = [])).push(oldSourceFile.path);
                 }
                 else if ((hostSourceFileInfo as FilePresentOnHost).sourceFile === oldSourceFile) {
+                    if ((hostSourceFileInfo as FilePresentOnHost).fileWatcher) {
+                        (hostSourceFileInfo as FilePresentOnHost).fileWatcher.close();
+                    }
                     sourceFilesCache.delete(oldSourceFile.path);
                     resolutionCache.removeResolutionsOfFile(oldSourceFile.path);
                 }
@@ -823,7 +827,7 @@ namespace ts {
         }
 
         function parseConfigFile() {
-            const configParseResult = ts.getParsedCommandLineOfConfigFile(configFileName, optionsToExtendForConfigFile, parseConfigFileHost);
+            const configParseResult = getParsedCommandLineOfConfigFile(configFileName, optionsToExtendForConfigFile, parseConfigFileHost);
             rootFileNames = configParseResult.fileNames;
             compilerOptions = configParseResult.options;
             configFileSpecs = configParseResult.configFileSpecs;

@@ -3,16 +3,14 @@
 // @allowJs: true
 
 // @Filename: /a.js
-////const mod = /*a*/require/*b*/("mod");
+////const mod = require("mod");
 ////const x = 0;
 ////mod.x(x);
 
-goTo.select("a", "b");
-edit.applyRefactor({
-    refactorName: "Convert to ES6 module",
-    actionName: "Convert to ES6 module",
-    actionDescription: "Convert to ES6 module",
-    newContent: `import { x as _x } from "mod";
+verify.codeFix({
+    description: "Convert to ES6 module",
+    newFileContent:
+`import { x as _x } from "mod";
 const x = 0;
-_x(x);`
+_x(x);`,
 });

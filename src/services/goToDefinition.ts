@@ -13,9 +13,8 @@ namespace ts.GoToDefinition {
 
         // Labels
         if (isJumpStatementTarget(node)) {
-            const labelName = (<Identifier>node).text;
-            const label = getTargetLabel((<BreakOrContinueStatement>node.parent), labelName);
-            return label ? [createDefinitionInfoFromName(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
+            const label = getTargetLabel(node.parent, node.text);
+            return label ? [createDefinitionInfoFromName(label, ScriptElementKind.label, node.text, /*containerName*/ undefined)] : undefined;
         }
 
         const typeChecker = program.getTypeChecker();
@@ -213,11 +212,11 @@ namespace ts.GoToDefinition {
 
     function isSignatureDeclaration(node: Node): boolean {
         switch (node.kind) {
-            case ts.SyntaxKind.Constructor:
-            case ts.SyntaxKind.ConstructSignature:
-            case ts.SyntaxKind.FunctionDeclaration:
-            case ts.SyntaxKind.MethodDeclaration:
-            case ts.SyntaxKind.MethodSignature:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
                 return true;
             default:
                 return false;
