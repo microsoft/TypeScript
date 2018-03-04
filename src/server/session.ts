@@ -79,7 +79,7 @@ namespace ts.server {
             end: scriptInfo.positionToLineOffset(diag.start + diag.length),
             text: flattenDiagnosticMessageText(diag.messageText, "\n"),
             code: diag.code,
-            category: DiagnosticCategory[diag.category].toLowerCase(),
+            category: diagnosticCategoryName(diag),
             source: diag.source
         };
     }
@@ -95,7 +95,7 @@ namespace ts.server {
         const end = diag.file && convertToLocation(getLineAndCharacterOfPosition(diag.file, diag.start + diag.length));
         const text = flattenDiagnosticMessageText(diag.messageText, "\n");
         const { code, source } = diag;
-        const category = DiagnosticCategory[diag.category].toLowerCase();
+        const category = diagnosticCategoryName(diag);
         return includeFileName ? { start, end, text, code, category, source, fileName: diag.file && diag.file.fileName } :
             { start, end, text, code, category, source };
     }
@@ -105,7 +105,7 @@ namespace ts.server {
         project: Project;
     }
 
-    function allEditsBeforePos(edits: ts.TextChange[], pos: number) {
+    function allEditsBeforePos(edits: TextChange[], pos: number) {
         for (const edit of edits) {
             if (textSpanEnd(edit.span) >= pos) {
                 return false;
@@ -122,7 +122,7 @@ namespace ts.server {
     export type CommandNames = protocol.CommandTypes;
     export const CommandNames = (<any>protocol).CommandTypes; // tslint:disable-line variable-name
 
-    export function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
+    export function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
         const verboseLogging = logger.hasLevel(LogLevel.verbose);
 
         const json = JSON.stringify(msg);
@@ -466,30 +466,26 @@ namespace ts.server {
         }
 
         private semanticCheck(file: NormalizedPath, project: Project) {
-            try {
-                let diags: ReadonlyArray<Diagnostic> = emptyArray;
-                if (!isDeclarationFileInJSOnlyNonConfiguredProject(project, file)) {
-                    diags = project.getLanguageService().getSemanticDiagnostics(file);
-                }
-
-                const bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
-                this.event<protocol.DiagnosticEventBody>({ file, diagnostics: bakedDiags }, "semanticDiag");
-            }
-            catch (err) {
-                this.logError(err, "semantic check");
-            }
+            const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
+                ? emptyArray
+                : project.getLanguageService().getSemanticDiagnostics(file);
+            this.sendDiagnosticsEvent(file, project, diags, "semanticDiag");
         }
 
         private syntacticCheck(file: NormalizedPath, project: Project) {
+            this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag");
+        }
+
+        private infoCheck(file: NormalizedPath, project: Project) {
+            this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag");
+        }
+
+        private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: ReadonlyArray<Diagnostic>, kind: protocol.DiagnosticEventKind): void {
             try {
-                const diags = project.getLanguageService().getSyntacticDiagnostics(file);
-                if (diags) {
-                    const bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
-                    this.event<protocol.DiagnosticEventBody>({ file, diagnostics: bakedDiags }, "syntaxDiag");
-                }
+                this.event<protocol.DiagnosticEventBody>({ file, diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)) }, kind);
             }
             catch (err) {
-                this.logError(err, "syntactic check");
+                this.logError(err, kind);
             }
         }
 
@@ -499,21 +495,34 @@ namespace ts.server {
 
             let index = 0;
             const checkOne = () => {
-                if (this.changeSeq === seq) {
-                    const checkSpec = checkList[index];
-                    index++;
-                    if (checkSpec.project.containsFile(checkSpec.fileName, requireOpen)) {
-                        this.syntacticCheck(checkSpec.fileName, checkSpec.project);
-                        if (this.changeSeq === seq) {
-                            next.immediate(() => {
-                                this.semanticCheck(checkSpec.fileName, checkSpec.project);
-                                if (checkList.length > index) {
-                                    next.delay(followMs, checkOne);
-                                }
-                            });
-                        }
-                    }
+                if (this.changeSeq !== seq) {
+                    return;
                 }
+
+                const { fileName, project } = checkList[index];
+                index++;
+                if (!project.containsFile(fileName, requireOpen)) {
+                    return;
+                }
+
+                this.syntacticCheck(fileName, project);
+                if (this.changeSeq !== seq) {
+                    return;
+                }
+
+                next.immediate(() => {
+                    this.semanticCheck(fileName, project);
+                    if (this.changeSeq !== seq) {
+                        return;
+                    }
+
+                    next.immediate(() => {
+                        this.infoCheck(fileName, project);
+                        if (checkList.length > index) {
+                            next.delay(followMs, checkOne);
+                        }
+                    });
+                });
             };
 
             if (checkList.length > index && this.changeSeq === seq) {
@@ -580,7 +589,7 @@ namespace ts.server {
                 message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
                 start: d.start,
                 length: d.length,
-                category: DiagnosticCategory[d.category].toLowerCase(),
+                category: diagnosticCategoryName(d),
                 code: d.code,
                 startLocation: d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start)),
                 endLocation: d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start + d.length))
@@ -606,7 +615,7 @@ namespace ts.server {
                 message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
                 start: d.start,
                 length: d.length,
-                category: DiagnosticCategory[d.category].toLowerCase(),
+                category: diagnosticCategoryName(d),
                 code: d.code,
                 source: d.source,
                 startLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start),
@@ -754,6 +763,16 @@ namespace ts.server {
                 return this.getConfigFileDiagnostics(configFile, project, args.includeLinePosition);
             }
             return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSemanticDiagnostics(file), args.includeLinePosition);
+        }
+
+        private getSuggestionDiagnosticsSync(args: protocol.SuggestionDiagnosticsSyncRequestArgs): ReadonlyArray<protocol.Diagnostic> | ReadonlyArray<protocol.DiagnosticWithLinePosition> {
+            const { configFile } = this.getConfigFileAndProject(args);
+            if (configFile) {
+                // Currently there are no info diagnostics for config files.
+                return emptyArray;
+            }
+            // isSemantic because we don't want to info diagnostics in declaration files for JS-only users
+            return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSuggestionDiagnostics(file), args.includeLinePosition);
         }
 
         private getDocumentHighlights(args: protocol.DocumentHighlightsRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.DocumentHighlightsItem> | ReadonlyArray<DocumentHighlights> {
@@ -1597,6 +1616,19 @@ namespace ts.server {
             }
         }
 
+        private organizeImports({ scope }: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileCodeEdits> | ReadonlyArray<FileTextChanges> {
+            Debug.assert(scope.type === "file");
+            const { file, project } = this.getFileAndProject(scope.args);
+            const formatOptions = this.projectService.getFormatCodeOptions(file);
+            const changes = project.getLanguageService().organizeImports({ type: "file", fileName: file }, formatOptions);
+            if (simplifiedResult) {
+                return this.mapTextChangesToCodeEdits(project, changes);
+            }
+            else {
+                return changes;
+            }
+        }
+
         private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.CodeAction> | ReadonlyArray<CodeAction> {
             if (args.errorCodes.length === 0) {
                 return undefined;
@@ -1681,7 +1713,7 @@ namespace ts.server {
             };
         }
 
-        private convertTextChangeToCodeEdit(change: ts.TextChange, scriptInfo: ScriptInfo): protocol.CodeEdit {
+        private convertTextChangeToCodeEdit(change: TextChange, scriptInfo: ScriptInfo): protocol.CodeEdit {
             return {
                 start: scriptInfo.positionToLineOffset(change.span.start),
                 end: scriptInfo.positionToLineOffset(change.span.start + change.span.length),
@@ -1769,7 +1801,7 @@ namespace ts.server {
                 return this.requiredResponse(response);
             },
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
-                this.projectService.openExternalProject(request.arguments, /*suppressRefreshOfInferredProjects*/ false);
+                this.projectService.openExternalProject(request.arguments);
                 // TODO: GH#20447 report errors
                 return this.requiredResponse(/*response*/ true);
             },
@@ -1940,6 +1972,9 @@ namespace ts.server {
             [CommandNames.SyntacticDiagnosticsSync]: (request: protocol.SyntacticDiagnosticsSyncRequest) => {
                 return this.requiredResponse(this.getSyntacticDiagnosticsSync(request.arguments));
             },
+            [CommandNames.SuggestionDiagnosticsSync]: (request: protocol.SuggestionDiagnosticsSyncRequest) => {
+                return this.requiredResponse(this.getSuggestionDiagnosticsSync(request.arguments));
+            },
             [CommandNames.Geterr]: (request: protocol.GeterrRequest) => {
                 this.errorCheck.startNew(next => this.getDiagnostics(next, request.arguments.delay, request.arguments.files));
                 return this.notRequired();
@@ -2041,6 +2076,12 @@ namespace ts.server {
             },
             [CommandNames.GetEditsForRefactorFull]: (request: protocol.GetEditsForRefactorRequest) => {
                 return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ false));
+            },
+            [CommandNames.OrganizeImports]: (request: protocol.OrganizeImportsRequest) => {
+                return this.requiredResponse(this.organizeImports(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.OrganizeImportsFull]: (request: protocol.OrganizeImportsRequest) => {
+                return this.requiredResponse(this.organizeImports(request.arguments, /*simplifiedResult*/ false));
             }
         });
 

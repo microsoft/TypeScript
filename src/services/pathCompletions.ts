@@ -170,7 +170,7 @@ namespace ts.Completions.PathCompletions {
             }
         }
 
-        if (compilerOptions.moduleResolution === ts.ModuleResolutionKind.NodeJs) {
+        if (compilerOptions.moduleResolution === ModuleResolutionKind.NodeJs) {
             forEachAncestorDirectory(scriptPath, ancestor => {
                 const nodeModules = combinePaths(ancestor, "node_modules");
                 if (host.directoryExists(nodeModules)) {

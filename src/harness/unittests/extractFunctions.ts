@@ -553,6 +553,11 @@ export default class {
         [#|1 + 1|];
     }
 }`);
+
+    testExtractFunction("extractFunction_NoDeclarations", `
+function F() {
+[#|arguments.length|]; // arguments has no declaration
+}`);
     });
 
     function testExtractFunction(caption: string, text: string, includeLib?: boolean) {

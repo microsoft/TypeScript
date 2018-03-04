@@ -17,5 +17,4 @@
 const [type1, namespace1, value1, namespace2, type2, value2] = test.ranges();
 verify.singleReferenceGroup("interface Foo\nnamespace Foo\nfunction Foo(): void", [type1, type2]);
 verify.singleReferenceGroup("namespace Foo\nfunction Foo(): void", [namespace1, namespace2]);
-verify.referenceGroups(value1, [{ definition: "function Foo(): void\nnamespace Foo", ranges: [value1, value2] }]);
-verify.referenceGroups(value2, [{ definition: "namespace Foo\nfunction Foo(): void", ranges: [value1, value2] }]);
+verify.singleReferenceGroup("namespace Foo\nfunction Foo(): void", [value1, value2]);

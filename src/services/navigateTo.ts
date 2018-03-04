@@ -62,7 +62,7 @@ namespace ts.NavigateTo {
         }
     }
 
-    function shouldKeepItem(declaration: Declaration, checker: ts.TypeChecker): boolean {
+    function shouldKeepItem(declaration: Declaration, checker: TypeChecker): boolean {
         switch (declaration.kind) {
             case SyntaxKind.ImportClause:
             case SyntaxKind.ImportSpecifier:
@@ -89,45 +89,37 @@ namespace ts.NavigateTo {
     }
 
     function tryAddSingleDeclarationName(declaration: Declaration, containers: string[]): boolean {
-        if (declaration) {
-            const name = getNameOfDeclaration(declaration);
-            if (name) {
-                const text = getTextOfIdentifierOrLiteral(name as (Identifier | LiteralExpression));
-                if (text !== undefined) {
-                    containers.unshift(text);
-                }
-                else if (name.kind === SyntaxKind.ComputedPropertyName) {
-                    return tryAddComputedPropertyName((<ComputedPropertyName>name).expression, containers, /*includeLastPortion*/ true);
-                }
-                else {
-                    // Don't know how to add this.
-                    return false;
-                }
-            }
+        const name = getNameOfDeclaration(declaration);
+        if (name && isPropertyNameLiteral(name)) {
+            containers.unshift(getTextOfIdentifierOrLiteral(name));
+            return true;
         }
-
-        return true;
+        else if (name && name.kind === SyntaxKind.ComputedPropertyName) {
+            return tryAddComputedPropertyName(name.expression, containers, /*includeLastPortion*/ true);
+        }
+        else {
+            // Don't know how to add this.
+            return false;
+        }
     }
 
     // Only added the names of computed properties if they're simple dotted expressions, like:
     //
     //      [X.Y.Z]() { }
     function tryAddComputedPropertyName(expression: Expression, containers: string[], includeLastPortion: boolean): boolean {
-        const text = getTextOfIdentifierOrLiteral(expression as LiteralExpression);
-        if (text !== undefined) {
+        if (isPropertyNameLiteral(expression)) {
+            const text = getTextOfIdentifierOrLiteral(expression);
             if (includeLastPortion) {
                 containers.unshift(text);
             }
             return true;
         }
-
-        if (expression.kind === SyntaxKind.PropertyAccessExpression) {
-            const propertyAccess = <PropertyAccessExpression>expression;
+        if (isPropertyAccessExpression(expression)) {
             if (includeLastPortion) {
-                containers.unshift(propertyAccess.name.text);
+                containers.unshift(expression.name.text);
             }
 
-            return tryAddComputedPropertyName(propertyAccess.expression, containers, /*includeLastPortion*/ true);
+            return tryAddComputedPropertyName(expression.expression, containers, /*includeLastPortion*/ true);
         }
 
         return false;
@@ -140,7 +132,7 @@ namespace ts.NavigateTo {
         // portion into the container array.
         const name = getNameOfDeclaration(declaration);
         if (name.kind === SyntaxKind.ComputedPropertyName) {
-            if (!tryAddComputedPropertyName((<ComputedPropertyName>name).expression, containers, /*includeLastPortion*/ false)) {
+            if (!tryAddComputedPropertyName(name.expression, containers, /*includeLastPortion*/ false)) {
                 return undefined;
             }
         }
@@ -181,7 +173,7 @@ namespace ts.NavigateTo {
 
     function createNavigateToItem(rawItem: RawNavigateToItem): NavigateToItem {
         const declaration = rawItem.declaration;
-        const container = <Declaration>getContainerNode(declaration);
+        const container = getContainerNode(declaration);
         const containerName = container && getNameOfDeclaration(container);
         return {
             name: rawItem.name,

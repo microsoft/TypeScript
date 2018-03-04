@@ -11,6 +11,7 @@ class Bar {
 >Bar : Bar
 
     [symbol]() {
+>[symbol] : () => any
 >symbol : symbol
 
         return super[symbol]();

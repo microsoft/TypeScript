@@ -92,6 +92,9 @@ namespace ts.formatting {
             rule("SpaceBetweenCloseBraceAndWhile", SyntaxKind.CloseBraceToken, SyntaxKind.WhileKeyword, [isNonJsxSameLineTokenContext], RuleAction.Space),
             rule("NoSpaceBetweenEmptyBraceBrackets", SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, [isNonJsxSameLineTokenContext, isObjectContext], RuleAction.Delete),
 
+            // Add a space after control dec context if the next character is an open bracket ex: 'if (false)[a, b] = [1, 2];' -> 'if (false) [a, b] = [1, 2];'
+            rule("SpaceAfterConditionalClosingParen", SyntaxKind.CloseParenToken, SyntaxKind.OpenBracketToken, [isControlDeclContext], RuleAction.Space),
+
             rule("NoSpaceBetweenFunctionKeywordAndStar", SyntaxKind.FunctionKeyword, SyntaxKind.AsteriskToken, [isFunctionDeclarationOrFunctionExpressionContext], RuleAction.Delete),
             rule("SpaceAfterStarInGeneratorDeclaration", SyntaxKind.AsteriskToken, [SyntaxKind.Identifier, SyntaxKind.OpenParenToken], [isFunctionDeclarationOrFunctionExpressionContext], RuleAction.Space),
 
@@ -162,6 +165,7 @@ namespace ts.formatting {
                     SyntaxKind.TypeKeyword,
                     SyntaxKind.FromKeyword,
                     SyntaxKind.KeyOfKeyword,
+                    SyntaxKind.InferKeyword,
                 ],
                 anyToken,
                 [isNonJsxSameLineTokenContext],

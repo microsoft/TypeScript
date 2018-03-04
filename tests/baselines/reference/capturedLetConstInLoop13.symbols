@@ -23,6 +23,7 @@ class Main {
 >bar : Symbol(Main.bar, Decl(capturedLetConstInLoop13.ts, 13, 5))
 
                 [name + ".a"]: () => { this.foo(name); },
+>[name + ".a"] : Symbol([name + ".a"], Decl(capturedLetConstInLoop13.ts, 9, 22))
 >name : Symbol(name, Decl(capturedLetConstInLoop13.ts, 7, 16))
 >this.foo : Symbol(Main.foo, Decl(capturedLetConstInLoop13.ts, 15, 33))
 >this : Symbol(Main, Decl(capturedLetConstInLoop13.ts, 0, 0))

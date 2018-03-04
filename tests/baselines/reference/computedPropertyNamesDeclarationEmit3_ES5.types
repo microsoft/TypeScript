@@ -3,6 +3,7 @@ interface I {
 >I : I
 
     ["" + ""](): void;
+>["" + ""] : () => void
 >"" + "" : string
 >"" : ""
 >"" : ""

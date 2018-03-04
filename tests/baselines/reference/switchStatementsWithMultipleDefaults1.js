@@ -17,7 +17,7 @@ var x = 10;
 switch (x) {
     case 1:
     case 2:
-    default:// No issues.
+    default: // No issues.
         break;
     default: // Error; second 'default' clause.
     default: // Error; third 'default' clause.
