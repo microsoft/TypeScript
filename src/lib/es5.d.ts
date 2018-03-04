@@ -985,7 +985,7 @@ interface ReadonlyArray<T> {
       */
     toString(): string;
     /**
-      * Returns a string representation of an array. The elements are converted to string using thier toLocalString methods.
+      * Returns a string representation of an array. The elements are converted to string using their toLocalString methods.
       */
     toLocaleString(): string;
     /**
@@ -1104,7 +1104,7 @@ interface Array<T> {
       */
     toString(): string;
     /**
-      * Returns a string representation of an array. The elements are converted to string using thier toLocalString methods.
+      * Returns a string representation of an array. The elements are converted to string using their toLocalString methods.
       */
     toLocaleString(): string;
     /**
@@ -1315,6 +1315,13 @@ interface ArrayLike<T> {
  */
 type Partial<T> = {
     [P in keyof T]?: T[P];
+};
+
+/**
+ * Make all properties in T required
+ */
+type Required<T> = {
+    [P in keyof T]-?: T[P];
 };
 
 /**

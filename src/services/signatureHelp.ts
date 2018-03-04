@@ -57,14 +57,9 @@ namespace ts.SignatureHelp {
         }
 
         // See if we can find some symbol with the call expression name that has call signatures.
-        const callExpression = <CallExpression>argumentInfo.invocation;
+        const callExpression = argumentInfo.invocation;
         const expression = callExpression.expression;
-        const name = expression.kind === SyntaxKind.Identifier
-            ? <Identifier>expression
-            : expression.kind === SyntaxKind.PropertyAccessExpression
-                ? (<PropertyAccessExpression>expression).name
-                : undefined;
-
+        const name = isIdentifier(expression) ? expression : isPropertyAccessExpression(expression) ? expression.name : undefined;
         if (!name || !name.escapedText) {
             return undefined;
         }
@@ -95,7 +90,7 @@ namespace ts.SignatureHelp {
      * Returns relevant information for the argument list and the current argument if we are
      * in the argument of an invocation; returns undefined otherwise.
      */
-    export function getImmediatelyContainingArgumentInfo(node: Node, position: number, sourceFile: SourceFile): ArgumentListInfo {
+    export function getImmediatelyContainingArgumentInfo(node: Node, position: number, sourceFile: SourceFile): ArgumentListInfo | undefined {
         if (isCallOrNewExpression(node.parent)) {
             const invocation = node.parent;
             let list: Node;
@@ -160,7 +155,7 @@ namespace ts.SignatureHelp {
         }
         else if (node.parent.kind === SyntaxKind.TemplateSpan && node.parent.parent.parent.kind === SyntaxKind.TaggedTemplateExpression) {
             const templateSpan = <TemplateSpan>node.parent;
-            const templateExpression = <TemplateExpression>templateSpan.parent;
+            const templateExpression = templateSpan.parent;
             const tagExpression = <TaggedTemplateExpression>templateExpression.parent;
             Debug.assert(templateExpression.kind === SyntaxKind.TemplateExpression);
 
@@ -207,8 +202,7 @@ namespace ts.SignatureHelp {
         // that trailing comma in the list, and we'll have generated the appropriate
         // arg index.
         let argumentIndex = 0;
-        const listChildren = argumentsList.getChildren();
-        for (const child of listChildren) {
+        for (const child of argumentsList.getChildren()) {
             if (child === node) {
                 break;
             }
@@ -270,10 +264,7 @@ namespace ts.SignatureHelp {
 
     function getArgumentListInfoForTemplate(tagExpression: TaggedTemplateExpression, argumentIndex: number, sourceFile: SourceFile): ArgumentListInfo {
         // argumentCount is either 1 or (numSpans + 1) to account for the template strings array argument.
-        const argumentCount = tagExpression.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral
-            ? 1
-            : (<TemplateExpression>tagExpression.template).templateSpans.length + 1;
-
+        const argumentCount = isNoSubstitutionTemplateLiteral(tagExpression.template) ? 1 : tagExpression.template.templateSpans.length + 1;
         if (argumentIndex !== 0) {
             Debug.assertLessThan(argumentIndex, argumentCount);
         }
@@ -314,7 +305,7 @@ namespace ts.SignatureHelp {
         // This is because a Missing node has no width. However, what we actually want is to include trivia
         // leading up to the next token in case the user is about to type in a TemplateMiddle or TemplateTail.
         if (template.kind === SyntaxKind.TemplateExpression) {
-            const lastSpan = lastOrUndefined((<TemplateExpression>template).templateSpans);
+            const lastSpan = lastOrUndefined(template.templateSpans);
             if (lastSpan.literal.getFullWidth() === 0) {
                 applicableSpanEnd = skipTrivia(sourceFile.text, applicableSpanEnd, /*stopAfterLineBreak*/ false);
             }

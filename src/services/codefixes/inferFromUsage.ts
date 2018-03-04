@@ -86,8 +86,8 @@ namespace ts.codefix {
         if (containingFunction === undefined) {
             return undefined;
         }
-        switch (errorCode) {
 
+        switch (errorCode) {
             // Parameter declarations
             case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
                 if (isSetAccessor(containingFunction)) {
@@ -96,7 +96,7 @@ namespace ts.codefix {
                 // falls through
             case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
                 return !seenFunctions || addToSeen(seenFunctions, getNodeId(containingFunction))
-                    ? getCodeActionForParameters(<ParameterDeclaration>token.parent, containingFunction, sourceFile, program, cancellationToken)
+                    ? getCodeActionForParameters(cast(token.parent, isParameter), containingFunction, sourceFile, program, cancellationToken)
                     : undefined;
 
             // Get Accessor declarations
@@ -109,7 +109,7 @@ namespace ts.codefix {
                 return isSetAccessor(containingFunction) ? getCodeActionForSetAccessor(containingFunction, program, cancellationToken) : undefined;
 
             default:
-                throw Debug.fail(String(errorCode));
+                return Debug.fail(String(errorCode));
         }
     }
 
@@ -140,7 +140,7 @@ namespace ts.codefix {
             case SyntaxKind.Constructor:
                 return true;
             case SyntaxKind.FunctionExpression:
-                return !!(declaration as FunctionExpression).name;
+                return !!declaration.name;
         }
         return false;
     }
@@ -310,13 +310,13 @@ namespace ts.codefix {
             const callContexts = isConstructor ? usageContext.constructContexts : usageContext.callContexts;
             return callContexts && declaration.parameters.map((parameter, parameterIndex) => {
                 const types: Type[] = [];
-                const isRestParameter = ts.isRestParameter(parameter);
+                const isRest = isRestParameter(parameter);
                 for (const callContext of callContexts) {
                     if (callContext.argumentTypes.length <= parameterIndex) {
                         continue;
                     }
 
-                    if (isRestParameter) {
+                    if (isRest) {
                         for (let i = parameterIndex; i < callContext.argumentTypes.length; i++) {
                             types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[i]));
                         }
@@ -329,7 +329,7 @@ namespace ts.codefix {
                     return undefined;
                 }
                 const type = checker.getWidenedType(checker.getUnionType(types, UnionReduction.Subtype));
-                return isRestParameter ? checker.createArrayType(type) : type;
+                return isRest ? checker.createArrayType(type) : type;
             });
         }
 
@@ -497,7 +497,7 @@ namespace ts.codefix {
         }
 
         function inferTypeFromSwitchStatementLabelContext(parent: CaseOrDefaultClause, checker: TypeChecker, usageContext: UsageContext): void {
-            addCandidateType(usageContext, checker.getTypeAtLocation((<SwitchStatement>parent.parent.parent).expression));
+            addCandidateType(usageContext, checker.getTypeAtLocation(parent.parent.parent.expression));
         }
 
         function inferTypeFromCallExpressionContext(parent: CallExpression | NewExpression, checker: TypeChecker, usageContext: UsageContext): void {

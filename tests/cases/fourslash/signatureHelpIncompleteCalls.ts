@@ -27,5 +27,5 @@ verify.currentSignatureParameterCountIs(2);
 verify.currentSignatureHelpIs("f3(n: number, s: string): string");
 
 verify.currentParameterHelpArgumentNameIs("s");
-verify.currentParameterSpanIs("s: string");  
+verify.currentParameterSpanIs("s: string");
 

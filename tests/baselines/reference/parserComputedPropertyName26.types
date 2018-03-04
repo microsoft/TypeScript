@@ -4,6 +4,7 @@ enum E {
 
     // No ASI
     [e] = 0
+>[e] : E
 >e : any
 >0    [e2] = 1 : 1
 >0    [e2] : any

@@ -72,6 +72,7 @@ module m1 {
 >arg1 : {}
     {
     [number]: C1; // Used to be indexer, now it is a computed property
+>[number] : C1
 >number : any
 >C1 : C1
 

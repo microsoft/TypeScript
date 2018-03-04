@@ -129,17 +129,17 @@ namespace ts {
             ["under a case sensitive host", caseSensitiveBasePath, caseSensitiveHost]
         ], ([testName, basePath, host]) => {
             function getParseCommandLine(entry: string) {
-                const {config, error} = ts.readConfigFile(entry, name => host.readFile(name));
+                const {config, error} = readConfigFile(entry, name => host.readFile(name));
                 assert(config && !error, flattenDiagnosticMessageText(error && error.messageText, "\n"));
-                return ts.parseJsonConfigFileContent(config, host, basePath, {}, entry);
+                return parseJsonConfigFileContent(config, host, basePath, {}, entry);
             }
 
             function getParseCommandLineJsonSourceFile(entry: string) {
-                const jsonSourceFile = ts.readJsonConfigFile(entry, name => host.readFile(name));
+                const jsonSourceFile = readJsonConfigFile(entry, name => host.readFile(name));
                 assert(jsonSourceFile.endOfFileToken && !jsonSourceFile.parseDiagnostics.length, flattenDiagnosticMessageText(jsonSourceFile.parseDiagnostics[0] && jsonSourceFile.parseDiagnostics[0].messageText, "\n"));
                 return {
                     jsonSourceFile,
-                    parsed: ts.parseJsonSourceFileConfigFileContent(jsonSourceFile, host, basePath, {}, entry)
+                    parsed: parseJsonSourceFileConfigFileContent(jsonSourceFile, host, basePath, {}, entry)
                 };
             }
 

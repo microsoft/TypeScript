@@ -223,6 +223,7 @@ namespace ts {
 
         getSyntacticDiagnostics(fileName: string): Diagnostic[];
         getSemanticDiagnostics(fileName: string): Diagnostic[];
+        getSuggestionDiagnostics(fileName: string): Diagnostic[];
 
         // TODO: Rename this to getProgramDiagnostics to better indicate that these are any
         // diagnostics present for the program level, and not just 'options' diagnostics.
@@ -308,6 +309,7 @@ namespace ts {
         applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;
+        organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges>;
 
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 
@@ -325,6 +327,8 @@ namespace ts {
     }
 
     export interface CombinedCodeFixScope { type: "file"; fileName: string; }
+
+    export type OrganizeImportsScope = CombinedCodeFixScope;
 
     export interface GetCompletionsAtPositionOptions {
         includeExternalModuleExports: boolean;
@@ -724,6 +728,7 @@ namespace ts {
     }
 
     export interface CompletionInfo {
+        /** Not true for all glboal completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. */
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
 

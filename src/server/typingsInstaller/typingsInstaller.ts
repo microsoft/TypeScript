@@ -1,10 +1,3 @@
-/// <reference path="../../compiler/core.ts" />
-/// <reference path="../../compiler/moduleNameResolver.ts" />
-/// <reference path="../../services/jsTyping.ts"/>
-/// <reference path="../../services/semver.ts"/>
-/// <reference path="../types.ts"/>
-/// <reference path="../shared.ts"/>
-
 namespace ts.server.typingsInstaller {
     interface NpmConfig {
         devDependencies: MapLike<any>;
@@ -284,7 +277,7 @@ namespace ts.server.typingsInstaller {
             this.sendResponse(<BeginInstallTypes>{
                 kind: EventBeginInstallTypes,
                 eventId: requestId,
-                typingsInstallerVersion: ts.version, // qualified explicitly to prevent occasional shadowing
+                typingsInstallerVersion: ts.version, // tslint:disable-line no-unnecessary-qualifier (qualified explicitly to prevent occasional shadowing)
                 projectName: req.projectName
             });
 
@@ -315,7 +308,7 @@ namespace ts.server.typingsInstaller {
 
                         // packageName is guaranteed to exist in typesRegistry by filterTypings
                         const distTags = this.typesRegistry.get(packageName);
-                        const newVersion = Semver.parse(distTags[`ts${ts.versionMajorMinor}`] || distTags[latestDistTag]);
+                        const newVersion = Semver.parse(distTags[`ts${versionMajorMinor}`] || distTags[latestDistTag]);
                         const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, version: newVersion };
                         this.packageNameToTypingLocation.set(packageName, newTyping);
                         installedTypingFiles.push(typingFile);
@@ -333,7 +326,7 @@ namespace ts.server.typingsInstaller {
                         projectName: req.projectName,
                         packagesToInstall: scopedTypings,
                         installSuccess: ok,
-                        typingsInstallerVersion: ts.version // qualified explicitly to prevent occasional shadowing
+                        typingsInstallerVersion: ts.version // tslint:disable-line no-unnecessary-qualifier (qualified explicitly to prevent occasional shadowing)
                     };
                     this.sendResponse(response);
                 }
@@ -366,7 +359,7 @@ namespace ts.server.typingsInstaller {
                         this.log.writeLine(`Got FS notification for ${f}, handler is already invoked '${isInvoked}'`);
                     }
                     if (!isInvoked) {
-                        this.sendResponse({ projectName, kind: server.ActionInvalidate });
+                        this.sendResponse({ projectName, kind: ActionInvalidate });
                         isInvoked = true;
                     }
                 }, /*pollingInterval*/ 2000);

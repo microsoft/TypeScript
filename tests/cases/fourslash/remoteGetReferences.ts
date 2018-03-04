@@ -188,13 +188,5 @@ test.rangesByText().forEach((ranges, text) => {
         }
     })();
 
-    if (text === "remotefooCls") {
-        verify.referenceGroups([ranges[0], ...ranges.slice(2)], [{ definition, ranges }]);
-        verify.referenceGroups(ranges[1], [
-            { definition: "constructor remotefooCls(remoteclsParam: number): remotefooCls", ranges}
-        ]);
-    }
-    else {
-        verify.singleReferenceGroup(definition, ranges);
-    }
+    verify.singleReferenceGroup(definition, ranges);
 });

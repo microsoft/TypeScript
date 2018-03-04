@@ -1,29 +1,26 @@
 Exit Code: 1
 Standard output:
-../../../../built/local/lib.dom.d.ts(1743,11): error TS2300: Duplicate identifier 'Comment'.
-../../../../built/local/lib.dom.d.ts(1747,13): error TS2300: Duplicate identifier 'Comment'.
-../../../../built/local/lib.dom.d.ts(1948,11): error TS2300: Duplicate identifier 'CSSRule'.
-../../../../built/local/lib.dom.d.ts(1967,13): error TS2300: Duplicate identifier 'CSSRule'.
-../../../../built/local/lib.dom.d.ts(3694,11): error TS2300: Duplicate identifier 'Event'.
-../../../../built/local/lib.dom.d.ts(3718,13): error TS2300: Duplicate identifier 'Event'.
-../../../../built/local/lib.dom.d.ts(9098,11): error TS2300: Duplicate identifier 'Position'.
-../../../../built/local/lib.dom.d.ts(9103,13): error TS2300: Duplicate identifier 'Position'.
-../../../../built/local/lib.dom.d.ts(9246,11): error TS2300: Duplicate identifier 'Request'.
-../../../../built/local/lib.dom.d.ts(9264,13): error TS2300: Duplicate identifier 'Request'.
-../../../../built/local/lib.dom.d.ts(13522,11): error TS2300: Duplicate identifier 'Window'.
-../../../../built/local/lib.dom.d.ts(13711,13): error TS2300: Duplicate identifier 'Window'.
+../../../../built/local/lib.dom.d.ts(1737,11): error TS2300: Duplicate identifier 'Comment'.
+../../../../built/local/lib.dom.d.ts(1741,13): error TS2300: Duplicate identifier 'Comment'.
+../../../../built/local/lib.dom.d.ts(1942,11): error TS2300: Duplicate identifier 'CSSRule'.
+../../../../built/local/lib.dom.d.ts(1961,13): error TS2300: Duplicate identifier 'CSSRule'.
+../../../../built/local/lib.dom.d.ts(3689,11): error TS2300: Duplicate identifier 'Event'.
+../../../../built/local/lib.dom.d.ts(3713,13): error TS2300: Duplicate identifier 'Event'.
+../../../../built/local/lib.dom.d.ts(9090,11): error TS2300: Duplicate identifier 'Position'.
+../../../../built/local/lib.dom.d.ts(9095,13): error TS2300: Duplicate identifier 'Position'.
+../../../../built/local/lib.dom.d.ts(9238,11): error TS2300: Duplicate identifier 'Request'.
+../../../../built/local/lib.dom.d.ts(9256,13): error TS2300: Duplicate identifier 'Request'.
+../../../../built/local/lib.dom.d.ts(13516,11): error TS2300: Duplicate identifier 'Window'.
+../../../../built/local/lib.dom.d.ts(13705,13): error TS2300: Duplicate identifier 'Window'.
 ../../../../built/local/lib.es5.d.ts(1328,11): error TS2300: Duplicate identifier 'ArrayLike'.
-../../../../built/local/lib.es5.d.ts(1357,6): error TS2300: Duplicate identifier 'Record'.
+../../../../built/local/lib.es5.d.ts(1364,6): error TS2300: Duplicate identifier 'Record'.
 ../../../../node_modules/@types/node/index.d.ts(150,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{ [x: string]: any; }', but here has type 'NodeModule'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(43,8): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(95,28): error TS2339: Property 'response' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(147,37): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/Runtime.js(158,21): error TS2345: Argument of type 'Promise<string>' is not assignable to parameter of type 'Promise<undefined>'.
-  Type 'string' is not assignable to type 'undefined'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(161,5): error TS2322: Type 'Promise<undefined[]>' is not assignable to type 'Promise<undefined>'.
   Type 'undefined[]' is not assignable to type 'undefined'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(187,12): error TS2339: Property 'eval' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/Runtime.js(197,5): error TS2322: Type 'Promise<string>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(219,13): error TS2339: Property 'timeStamp' does not exist on type 'Console'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(267,14): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(269,59): error TS2339: Property 'runtime' does not exist on type 'Window'.
@@ -336,77 +333,84 @@ node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityStrin
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityStrings.js(177,15): error TS2339: Property 'AccessibilityStrings' does not exist on type 'typeof Accessibility'.
 node_modules/chrome-devtools-frontend/front_end/accessibility_test_runner/AccessibilityPaneTestRunner.js(11,15): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/accessibility_test_runner/AccessibilityPaneTestRunner.js(17,12): error TS2339: Property 'runtime' does not exist on type 'Window'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationGroupPreviewUI.js(7,11): error TS2339: Property 'AnimationGroupPreviewUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationGroupPreviewUI.js(9,25): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationGroupPreviewUI.js(14,18): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationGroupPreviewUI.js(15,39): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationGroupPreviewUI.js(17,47): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationGroupPreviewUI.js(18,30): error TS2339: Property 'createSVGChild' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationGroupPreviewUI.js(70,37): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(8,11): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(15,26): error TS2339: Property 'animationAgent' does not exist on type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(16,12): error TS2339: Property 'registerAnimationDispatcher' does not exist on type '(Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(16,54): error TS2339: Property 'AnimationDispatcher' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(17,41): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(19,41): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(25,62): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(28,62): error TS2339: Property 'ScreenshotCapture' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(28,47): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(35,5): error TS2554: Expected 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(35,60): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(35,45): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(49,29): error TS2339: Property 'remove' does not exist on type 'string[]'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(54,24): error TS2694: Namespace 'Protocol' has no exported member 'Animation'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(61,46): error TS2339: Property 'Animation' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(61,31): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(65,31): error TS2339: Property 'remove' does not exist on type 'string[]'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(86,25): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(91,23): error TS2495: Type 'IterableIterator<any>' is not an array type or a string type.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(104,60): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(104,45): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(109,26): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(123,41): error TS2339: Property 'AnimationGroup' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(123,26): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(168,14): error TS2339: Property 'register' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(168,33): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(168,60): error TS2339: Property 'Capability' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(171,26): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(180,26): error TS2339: Property 'Animation' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(171,11): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(180,11): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(183,24): error TS2694: Namespace 'Protocol' has no exported member 'Animation'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(188,49): error TS2339: Property 'AnimationEffect' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(188,34): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(189,46): error TS2694: Namespace 'Protocol' has no exported member 'Animation'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(194,24): error TS2694: Namespace 'Protocol' has no exported member 'Animation'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(195,26): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(198,41): error TS2339: Property 'Animation' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(198,26): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(202,25): error TS2694: Namespace 'Protocol' has no exported member 'Animation'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(283,26): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(290,26): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(293,34): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(297,25): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(328,50): error TS2339: Property 'Animation' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(330,55): error TS2339: Property 'Animation' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(358,26): error TS2339: Property 'Animation' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(367,26): error TS2339: Property 'AnimationEffect' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(328,35): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(330,40): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(358,11): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(367,11): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(370,24): error TS2694: Namespace 'Protocol' has no exported member 'Animation'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(376,58): error TS2339: Property 'KeyframesRule' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(376,43): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(457,26): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(474,26): error TS2339: Property 'KeyframesRule' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(474,11): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(476,24): error TS2694: Namespace 'Protocol' has no exported member 'Animation'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(481,43): error TS2339: Property 'KeyframeStyle' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(481,28): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(486,32): error TS2694: Namespace 'Protocol' has no exported member 'Animation'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(490,43): error TS2339: Property 'KeyframeStyle' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(490,28): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(502,34): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(512,26): error TS2339: Property 'KeyframeStyle' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(512,11): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(514,24): error TS2694: Namespace 'Protocol' has no exported member 'Animation'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(553,26): error TS2339: Property 'AnimationGroup' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(553,11): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(557,33): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(576,34): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(583,43): error TS2339: Property 'remove' does not exist on type 'Map<string, any>'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(592,27): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(656,25): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(661,27): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(665,52): error TS2339: Property 'Animation' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(665,37): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(683,25): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(691,24): error TS2304: Cannot find name 'Image'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(708,11): error TS2339: Property 'AnimationDispatcher' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(731,24): error TS2694: Namespace 'Protocol' has no exported member 'Animation'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(741,26): error TS2339: Property 'ScreenshotCapture' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(741,11): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(747,34): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(751,68): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(751,53): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(778,24): error TS2694: Namespace 'Protocol' has no exported member 'Page'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(782,27): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(810,65): error TS1003: Identifier expected.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(811,26): error TS2339: Property 'ScreenshotCapture' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(811,11): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(811,44): error TS2300: Duplicate identifier 'Request'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationScreenshotPopover.js(7,11): error TS2339: Property 'AnimationScreenshotPopover' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationScreenshotPopover.js(9,23): error TS2304: Cannot find name 'Image'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationScreenshotPopover.js(18,39): error TS2345: Argument of type 'new (width?: number, height?: number) => HTMLImageElement' is not assignable to parameter of type 'Node'.
   Property 'attributes' is missing in type 'new (width?: number, height?: number) => HTMLImageElement'.
@@ -418,6 +422,7 @@ node_modules/chrome-devtools-frontend/front_end/animation/AnimationScreenshotPop
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationScreenshotPopover.js(42,39): error TS2339: Property 'window' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationScreenshotPopover.js(53,50): error TS2339: Property 'style' does not exist on type 'new (width?: number, height?: number) => HTMLImageElement'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationScreenshotPopover.js(55,52): error TS2339: Property 'style' does not exist on type 'new (width?: number, height?: number) => HTMLImageElement'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(8,11): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(14,38): error TS2339: Property 'createSVGChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(19,53): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(20,44): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -427,13 +432,16 @@ node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(2
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(30,33): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(33,41): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(35,67): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(36,47): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(36,63): error TS2345: Argument of type 'this' is not assignable to parameter of type '<T>() => void'.
   Type '(Anonymous class)' is not assignable to type '<T>() => void'.
     Type '(Anonymous class)' provides no match for the signature '<T>(): void'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(80,34): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(81,62): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(89,34): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(90,65): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(44,67): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(52,67): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(80,19): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(81,47): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(89,19): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(90,50): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(94,24): error TS2495: Type 'IterableIterator<any>' is not an array type or a string type.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(103,57): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(105,28): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -442,7 +450,7 @@ node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(1
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(113,51): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(117,46): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(118,57): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(123,58): error TS2339: Property 'GlobalPlaybackRates' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(123,40): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(125,45): error TS2345: Argument of type 'TemplateStringsArray' is not assignable to parameter of type 'string | string[]'.
   Type 'TemplateStringsArray' is not assignable to type 'string[]'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(125,72): error TS2555: Expected at least 2 arguments, but got 1.
@@ -453,7 +461,7 @@ node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(1
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(138,35): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(139,41): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(144,48): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(145,54): error TS2339: Property '_ControlState' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(145,36): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(147,59): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(151,5): error TS2554: Expected 6-7 arguments, but got 5.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(155,5): error TS2554: Expected 6-7 arguments, but got 5.
@@ -463,17 +471,18 @@ node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(1
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(176,44): error TS2339: Property 'keysArray' does not exist on type 'Map<any, (Anonymous class)>'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(177,63): error TS2339: Property 'parentElement' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(194,30): error TS2304: Cannot find name 'Image'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(197,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(197,25): error TS2339: Property 'AnimationScreenshotPopover' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(208,50): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(208,67): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(216,67): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(218,51): error TS2339: Property 'Action' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(233,60): error TS2339: Property '_ControlState' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(235,65): error TS2339: Property '_ControlState' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(244,56): error TS2339: Property '_ControlState' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(233,42): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(235,47): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(244,38): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(246,36): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(249,56): error TS2339: Property '_ControlState' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(249,38): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(251,36): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(254,56): error TS2339: Property '_ControlState' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(254,38): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(256,36): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(334,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(337,51): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
@@ -482,13 +491,15 @@ node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(3
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(346,27): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(359,28): error TS2345: Argument of type '(left: any, right: any) => boolean' is not assignable to parameter of type '(a: any, b: any) => number'.
   Type 'boolean' is not assignable to type 'number'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(373,33): error TS2339: Property 'AnimationGroupPreviewUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(382,25): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(386,23): error TS2339: Property 'remove' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(390,11): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(399,25): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(404,27): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(429,25): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(445,48): error TS2339: Property 'NodeUI' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(445,30): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(450,37): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(457,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(484,36): error TS2339: Property 'millisToString' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(534,25): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
@@ -501,45 +512,47 @@ node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(6
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(627,41): error TS2339: Property 'x' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(637,23): error TS2339: Property 'x' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(640,44): error TS2339: Property 'millisToString' does not exist on type 'NumberConstructor'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(655,29): error TS2339: Property 'GlobalPlaybackRates' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(658,29): error TS2339: Property '_ControlState' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(667,29): error TS2339: Property 'NodeUI' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(655,11): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(658,11): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(667,11): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(669,25): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(673,38): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(674,42): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(687,46): error TS2339: Property 'DOMPresentationUtils' does not exist on type 'typeof Components'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(713,29): error TS2339: Property 'StepTimingFunction' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(713,11): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(725,26): error TS2694: Namespace 'Animation' has no exported member 'AnimationTimeline'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(730,46): error TS2339: Property 'StepTimingFunction' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(733,46): error TS2339: Property 'StepTimingFunction' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(730,28): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(733,28): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(7,11): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(9,25): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(21,39): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(24,31): error TS2339: Property 'createSVGChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(25,60): error TS2339: Property 'Options' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(26,62): error TS2339: Property 'Options' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(30,85): error TS2339: Property 'MouseEvents' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(25,48): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(26,50): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(30,73): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(37,29): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(41,25): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(45,51): error TS2551: Property 'Colors' does not exist on type 'typeof (Anonymous class)'. Did you mean 'Color'?
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(46,39): error TS2551: Property 'Colors' does not exist on type 'typeof (Anonymous class)'. Did you mean 'Color'?
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(45,39): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(46,27): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(46,59): error TS2339: Property 'hashCode' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(47,40): error TS2339: Property 'Format' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(51,26): error TS2694: Namespace 'Animation' has no exported member 'AnimationModel'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(69,30): error TS2339: Property 'createSVGChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(70,51): error TS2339: Property 'Options' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(71,51): error TS2339: Property 'Options' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(72,51): error TS2339: Property 'Options' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(87,83): error TS2339: Property 'Options' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(100,40): error TS2339: Property 'Options' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(70,39): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(71,39): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(72,39): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(87,71): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(100,28): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(129,23): error TS2339: Property 'createSVGChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(131,53): error TS2339: Property 'Options' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(133,52): error TS2339: Property 'Options' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(145,41): error TS2339: Property 'MouseEvents' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(147,41): error TS2339: Property 'MouseEvents' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(149,41): error TS2339: Property 'MouseEvents' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(131,41): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(133,40): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(145,29): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(147,29): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(149,29): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(150,5): error TS2554: Expected 6-7 arguments, but got 5.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(170,32): error TS2339: Property 'createSVGChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(173,53): error TS2339: Property 'Options' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(174,53): error TS2339: Property 'Options' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(173,41): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(174,41): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(178,21): error TS2339: Property 'Geometry' does not exist on type 'typeof UI'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(181,53): error TS2339: Property 'createSVGChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(182,53): error TS2339: Property 'createSVGChild' does not exist on type 'Element'.
@@ -547,23 +560,23 @@ node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(185,11)
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(188,13): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(189,42): error TS2339: Property 'Height' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(193,13): error TS2339: Property 'style' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(196,54): error TS2339: Property 'StepTimingFunction' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(196,36): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(197,13): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(206,67): error TS2339: Property 'Options' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(208,75): error TS2339: Property 'Options' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(213,80): error TS2339: Property 'Options' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(240,64): error TS2339: Property 'Options' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(242,73): error TS2339: Property 'Options' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(245,82): error TS2339: Property 'Options' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(206,55): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(208,63): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(213,68): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(240,52): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(242,61): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(245,70): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(255,94): error TS2339: Property 'createSVGChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(258,11): error TS2339: Property 'style' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(264,33): error TS2339: Property 'Options' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(272,82): error TS2339: Property 'Options' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(281,56): error TS2339: Property 'MouseEvents' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(282,56): error TS2339: Property 'MouseEvents' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(293,56): error TS2339: Property 'MouseEvents' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(295,61): error TS2339: Property 'MouseEvents' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(306,56): error TS2339: Property 'MouseEvents' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(264,21): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(272,70): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(281,44): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(282,44): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(293,44): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(295,49): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(306,44): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(316,25): error TS2694: Namespace 'Animation' has no exported member 'AnimationUI'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(321,15): error TS2339: Property 'buttons' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(327,30): error TS2339: Property 'clientX' does not exist on type 'Event'.
@@ -571,11 +584,11 @@ node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(328,11)
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(330,23): error TS2339: Property 'reveal' does not exist on type '() => void'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(338,33): error TS2339: Property 'clientX' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(348,33): error TS2339: Property 'clientX' does not exist on type 'Event'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(351,56): error TS2339: Property 'MouseEvents' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(351,44): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(380,11): error TS2339: Property 'consume' does not exist on type 'Event'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(387,23): error TS2339: Property 'MouseEvents' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(394,23): error TS2339: Property 'Options' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(402,23): error TS2551: Property 'Colors' does not exist on type 'typeof (Anonymous class)'. Did you mean 'Color'?
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(387,11): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(394,11): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(402,11): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/application_test_runner/AppcacheTestRunner.js(20,26): error TS2339: Property 'resourceTreeModel' does not exist on type 'typeof TestRunner'.
 node_modules/chrome-devtools-frontend/front_end/application_test_runner/AppcacheTestRunner.js(31,26): error TS2339: Property 'resourceTreeModel' does not exist on type 'typeof TestRunner'.
 node_modules/chrome-devtools-frontend/front_end/application_test_runner/AppcacheTestRunner.js(41,26): error TS2339: Property 'resourceTreeModel' does not exist on type 'typeof TestRunner'.
@@ -3639,8 +3652,6 @@ node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(341,
 node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(351,31): error TS2694: Namespace 'Protocol' has no exported member 'Debugger'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(362,31): error TS2694: Namespace 'Protocol' has no exported member 'Debugger'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(375,9): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
-node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(378,9): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
-node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(381,5): error TS2322: Type 'Promise<boolean>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(43,52): error TS2339: Property 'Storage' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(49,89): error TS2694: Namespace 'Bindings' has no exported member 'BreakpointManager'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(51,63): error TS2694: Namespace 'Bindings' has no exported member 'BreakpointManager'.
@@ -6957,8 +6968,9 @@ node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(921,58): 
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(924,29): error TS2339: Property 'setDevicesDiscoveryConfig' does not exist on type 'typeof InspectorFrontendHost'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(930,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(933,32): error TS2503: Cannot find namespace 'Adb'.
+node_modules/chrome-devtools-frontend/front_end/devtools_compatibility.js(20,18): error TS2315: Type 'Object' is not generic.
 node_modules/chrome-devtools-frontend/front_end/devtools_compatibility.js(20,34): error TS1005: '>' expected.
-node_modules/chrome-devtools-frontend/front_end/devtools_compatibility.js(56,48): error TS2315: Type 'any' is not generic.
+node_modules/chrome-devtools-frontend/front_end/devtools_compatibility.js(56,48): error TS2315: Type 'Object' is not generic.
 node_modules/chrome-devtools-frontend/front_end/devtools_compatibility.js(56,61): error TS1009: Trailing comma not allowed.
 node_modules/chrome-devtools-frontend/front_end/devtools_compatibility.js(56,63): error TS1005: '>' expected.
 node_modules/chrome-devtools-frontend/front_end/devtools_compatibility.js(110,17): error TS2503: Cannot find namespace 'Adb'.
@@ -7085,11 +7097,11 @@ node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(27
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(279,24): error TS2339: Property 'getComponentSelection' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(289,16): error TS2339: Property 'window' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(293,19): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(305,10): error TS2554: Expected 1 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(305,42): error TS2559: Type 'string' has no properties in common with type 'ElementCreationOptions'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(314,34): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
   Type 'number' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(323,20): error TS2339: Property 'createElementWithClass' does not exist on type 'Document'.
-node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(324,17): error TS2554: Expected 1 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(324,49): error TS2559: Type 'string' has no properties in common with type 'ElementCreationOptions'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(338,19): error TS2339: Property 'createElementWithClass' does not exist on type 'Document'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(346,20): error TS2551: Property 'createSVGElement' does not exist on type 'Document'. Did you mean 'createElementNS'?
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(360,19): error TS2551: Property 'createSVGElement' does not exist on type 'Document'. Did you mean 'createElementNS'?
@@ -8039,7 +8051,6 @@ node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(28
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2906,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2910,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2918,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
-node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2956,5): error TS2322: Type 'Promise<boolean>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2977,107): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2978,35): error TS2300: Duplicate identifier 'Context'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2978,35): error TS2339: Property 'Context' does not exist on type 'typeof (Anonymous class)'.
@@ -8091,6 +8102,7 @@ node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTes
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(1048,6): error TS2551: Property 'panels' does not exist on type 'typeof UI'. Did you mean 'Panel'?
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(1052,6): error TS2551: Property 'panels' does not exist on type 'typeof UI'. Did you mean 'Panel'?
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(1073,35): error TS2339: Property 'OverlayAgent' does not exist on type 'typeof TestRunner'.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(1080,35): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/SetOuterHTMLTestRunner.js(10,20): error TS2339: Property 'events' does not exist on type 'typeof ElementsTestRunner'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/SetOuterHTMLTestRunner.js(11,20): error TS2339: Property 'containerId' does not exist on type 'typeof ElementsTestRunner'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/SetOuterHTMLTestRunner.js(21,24): error TS2339: Property 'containerId' does not exist on type 'typeof ElementsTestRunner'.
@@ -13048,7 +13060,7 @@ node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(806,31): e
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(819,31): error TS2345: Argument of type 'PropertyDescriptor' is not assignable to parameter of type 'T[]'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(829,8): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(830,17): error TS2339: Property 'vsprintf' does not exist on type 'StringConstructor'.
-node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(835,13): error TS2315: Type 'any' is not generic.
+node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(835,13): error TS2315: Type 'Object' is not generic.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(835,27): error TS1009: Trailing comma not allowed.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(835,29): error TS1005: '>' expected.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(835,29): error TS8024: JSDoc '@param' tag has name 'function', but there is no parameter with that name.
@@ -13060,7 +13072,7 @@ node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(911,8): er
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(941,8): error TS2339: Property 'vsprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(943,8): error TS2339: Property 'format' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(944,41): error TS2339: Property 'standardFormatters' does not exist on type 'StringConstructor'.
-node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(954,13): error TS2315: Type 'any' is not generic.
+node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(954,13): error TS2315: Type 'Object' is not generic.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(954,27): error TS1009: Trailing comma not allowed.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(954,29): error TS1005: '>' expected.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(954,29): error TS8024: JSDoc '@param' tag has name 'function', but there is no parameter with that name.
@@ -15088,7 +15100,6 @@ node_modules/chrome-devtools-frontend/front_end/sdk/CSSModel.js(587,24): error T
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSModel.js(604,48): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSModel.js(608,24): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSModel.js(615,32): error TS2339: Property 'remove' does not exist on type 'Map<string, (Anonymous class)>'.
-node_modules/chrome-devtools-frontend/front_end/sdk/CSSModel.js(617,46): error TS2315: Type 'any' is not generic.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSModel.js(617,64): error TS2694: Namespace 'Protocol' has no exported member 'Page'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSModel.js(617,96): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSModel.js(624,35): error TS2339: Property 'remove' does not exist on type 'Map<string, any>'.
@@ -16320,10 +16331,6 @@ node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1153,31): er
 node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1176,31): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1234,21): error TS2694: Namespace 'SDK' has no exported member 'CallFunctionResult'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1265,21): error TS2694: Namespace 'SDK' has no exported member 'CallFunctionResult'.
-node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1325,5): error TS2322: Type 'Promise<{ properties: (Anonymous class)[]; internalProperties: (Anonymous class)[]; }>' is not assignable to type 'Promise<(Anonymous class)>'.
-node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1325,5): error TS2322: Type 'Promise<{ properties: (Anonymous class)[]; internalProperties: (Anonymous class)[]; }>' is not assignable to type 'Promise<(Anonymous class)>'.
-  Type '{ properties: (Anonymous class)[]; internalProperties: (Anonymous class)[]; }' is not assignable to type '(Anonymous class)'.
-    Property 'customPreview' is missing in type '{ properties: (Anonymous class)[]; internalProperties: (Anonymous class)[]; }'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1345,29): error TS2694: Namespace 'SDK' has no exported member 'DebuggerModel'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1352,31): error TS2694: Namespace 'SDK' has no exported member 'DebuggerModel'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RemoteObject.js(1363,21): error TS2694: Namespace 'SDK' has no exported member 'DebuggerModel'.
@@ -17989,12 +17996,10 @@ node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSid
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(73,36): error TS2339: Property 'createChild' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(74,56): error TS2339: Property '_snippetElementSymbol' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(77,51): error TS2339: Property 'get' does not exist on type '{ _map: Map<K, Set<V>>; }'.
-node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(78,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'uiLocation' must be of type '(Anonymous class)', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(91,13): error TS2339: Property 'remove' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(110,54): error TS2339: Property '_locationSymbol' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(113,74): error TS2339: Property '_checkboxLabelSymbol' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(118,75): error TS2339: Property '_snippetElementSymbol' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(119,5): error TS2322: Type 'Promise<string>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(141,29): error TS2339: Property 'enclosingNodeOrSelfWithClass' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(144,58): error TS2339: Property '_locationSymbol' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(156,33): error TS2339: Property 'checkboxElement' does not exist on type 'EventTarget'.
@@ -19500,7 +19505,6 @@ node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(27,23)
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(42,21): error TS2339: Property 'testRunner' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(45,18): error TS2339: Property 'eval' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(76,8): error TS2339: Property 'testRunner' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(117,13): error TS2315: Type 'any[]' is not generic.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(117,18): error TS1099: Type argument list cannot be empty.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(117,19): error TS1005: '>' expected.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(117,19): error TS8024: JSDoc '@param' tag has name 'function', but there is no parameter with that name.
@@ -19616,7 +19620,6 @@ node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1016,1
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1016,76): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1025,32): error TS2339: Property '_pageLoadedCallback' does not exist on type 'typeof TestRunner'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1031,14): error TS2339: Property '_pageLoadedCallback' does not exist on type 'typeof TestRunner'.
-node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1035,13): error TS2315: Type 'any[]' is not generic.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1035,18): error TS1099: Type argument list cannot be empty.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1035,19): error TS1005: '>' expected.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1035,19): error TS8024: JSDoc '@param' tag has name 'function', but there is no parameter with that name.
@@ -21674,7 +21677,6 @@ node_modules/chrome-devtools-frontend/front_end/timeline_model/TracingLayerTree.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TracingLayerTree.js(97,39): error TS2694: Namespace 'SDK' has no exported member 'SnapshotWithRect'.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TracingLayerTree.js(102,39): error TS2694: Namespace 'SDK' has no exported member 'SnapshotWithRect'.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TracingLayerTree.js(104,18): error TS2339: Property '_pictureForRect' does not exist on type '() => void'.
-node_modules/chrome-devtools-frontend/front_end/timeline_model/TracingLayerTree.js(119,15): error TS2315: Type 'any' is not generic.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TracingLayerTree.js(119,44): error TS2694: Namespace 'SDK' has no exported member 'Layer'.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TracingLayerTree.js(120,29): error TS2694: Namespace 'TimelineModel' has no exported member 'TracingLayerPayload'.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TracingLayerTree.js(133,27): error TS2345: Argument of type '(Anonymous class)' is not assignable to parameter of type '() => void'.

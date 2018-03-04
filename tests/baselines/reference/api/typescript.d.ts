@@ -477,6 +477,8 @@ declare namespace ts {
     type AtToken = Token<SyntaxKind.AtToken>;
     type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
     type AwaitKeywordToken = Token<SyntaxKind.AwaitKeyword>;
+    type PlusToken = Token<SyntaxKind.PlusToken>;
+    type MinusToken = Token<SyntaxKind.MinusToken>;
     type Modifier = Token<SyntaxKind.AbstractKeyword> | Token<SyntaxKind.AsyncKeyword> | Token<SyntaxKind.ConstKeyword> | Token<SyntaxKind.DeclareKeyword> | Token<SyntaxKind.DefaultKeyword> | Token<SyntaxKind.ExportKeyword> | Token<SyntaxKind.PublicKeyword> | Token<SyntaxKind.PrivateKeyword> | Token<SyntaxKind.ProtectedKeyword> | Token<SyntaxKind.ReadonlyKeyword> | Token<SyntaxKind.StaticKeyword>;
     type ModifiersArray = NodeArray<Modifier>;
     interface Identifier extends PrimaryExpression, Declaration {
@@ -651,10 +653,12 @@ declare namespace ts {
     }
     interface MethodSignature extends SignatureDeclarationBase, TypeElement {
         kind: SyntaxKind.MethodSignature;
+        parent?: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
         name: PropertyName;
     }
     interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer {
         kind: SyntaxKind.MethodDeclaration;
+        parent?: ClassLikeDeclaration | ObjectLiteralExpression;
         name: PropertyName;
         body?: FunctionBody;
     }
@@ -765,9 +769,9 @@ declare namespace ts {
     }
     interface MappedTypeNode extends TypeNode, Declaration {
         kind: SyntaxKind.MappedType;
-        readonlyToken?: ReadonlyToken;
+        readonlyToken?: ReadonlyToken | PlusToken | MinusToken;
         typeParameter: TypeParameterDeclaration;
-        questionToken?: QuestionToken;
+        questionToken?: QuestionToken | PlusToken | MinusToken;
         type?: TypeNode;
     }
     interface LiteralTypeNode extends TypeNode {
@@ -777,6 +781,7 @@ declare namespace ts {
     interface StringLiteral extends LiteralExpression {
         kind: SyntaxKind.StringLiteral;
     }
+    type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
     interface Expression extends Node {
         _expressionBrand: any;
     }
@@ -1408,6 +1413,10 @@ declare namespace ts {
         name: Identifier;
     }
     type ImportOrExportSpecifier = ImportSpecifier | ExportSpecifier;
+    /**
+     * This is either an `export =` or an `export default` declaration.
+     * Unless `isExportEquals` is set, this node was parsed as an `export default`.
+     */
     interface ExportAssignment extends DeclarationStatement {
         kind: SyntaxKind.ExportAssignment;
         parent?: SourceFile;
@@ -1803,7 +1812,7 @@ declare namespace ts {
         getAliasedSymbol(symbol: Symbol): Symbol;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
         getAllAttributesTypeFromJsxOpeningLikeElement(elementNode: JsxOpeningLikeElement): Type | undefined;
-        getJsxIntrinsicTagNames(): Symbol[];
+        getJsxIntrinsicTagNamesAt(location: Node): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
         tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
@@ -2184,11 +2193,25 @@ declare namespace ts {
     interface IndexType extends InstantiableType {
         type: InstantiableType | UnionOrIntersectionType;
     }
-    interface ConditionalType extends InstantiableType {
+    interface ConditionalRoot {
+        node: ConditionalTypeNode;
         checkType: Type;
         extendsType: Type;
         trueType: Type;
         falseType: Type;
+        isDistributive: boolean;
+        inferTypeParameters: TypeParameter[];
+        outerTypeParameters?: TypeParameter[];
+        instantiations?: Map<Type>;
+        aliasSymbol: Symbol;
+        aliasTypeArguments: Type[];
+    }
+    interface ConditionalType extends InstantiableType {
+        root: ConditionalRoot;
+        checkType: Type;
+        extendsType: Type;
+        resolvedTrueType?: Type;
+        resolvedFalseType?: Type;
     }
     interface SubstitutionType extends InstantiableType {
         typeParameter: TypeParameter;
@@ -2219,36 +2242,6 @@ declare namespace ts {
         NoConstraints = 8,
         AlwaysStrict = 16,
     }
-    interface InferenceInfo {
-        typeParameter: TypeParameter;
-        candidates: Type[];
-        contraCandidates: Type[];
-        inferredType: Type;
-        priority: InferencePriority;
-        topLevel: boolean;
-        isFixed: boolean;
-    }
-    enum InferenceFlags {
-        None = 0,
-        InferUnionTypes = 1,
-        NoDefault = 2,
-        AnyDefault = 4,
-    }
-    /**
-     * Ternary values are defined such that
-     * x & y is False if either x or y is False.
-     * x & y is Maybe if either x or y is Maybe, but neither x or y is False.
-     * x & y is True if both x and y are True.
-     * x | y is False if both x and y are False.
-     * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
-     * x | y is True if either x or y is True.
-     */
-    enum Ternary {
-        False = 0,
-        Maybe = 1,
-        True = -1,
-    }
-    type TypeComparer = (s: Type, t: Type, reportErrors?: boolean) => Ternary;
     interface JsFileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
@@ -2284,7 +2277,8 @@ declare namespace ts {
     enum DiagnosticCategory {
         Warning = 0,
         Error = 1,
-        Message = 2,
+        Suggestion = 2,
+        Message = 3,
     }
     enum ModuleResolutionKind {
         Classic = 1,
@@ -3265,6 +3259,7 @@ declare namespace ts {
     /**
      * True if node is of some token syntax kind.
      * For example, this is true for an IfKeyword but not for an IfStatement.
+     * Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
      */
     function isToken(n: Node): boolean;
     function isLiteralExpression(node: Node): node is LiteralExpression;
@@ -3292,7 +3287,8 @@ declare namespace ts {
     function isCallOrNewExpression(node: Node): node is CallExpression | NewExpression;
     function isTemplateLiteral(node: Node): node is TemplateLiteral;
     function isAssertionExpression(node: Node): node is AssertionExpression;
-    function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement;
+    function isIterationStatement(node: Node, lookInLabeledStatements: false): node is IterationStatement;
+    function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement | LabeledStatement;
     function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeElement;
     function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause;
     /** True if node is of a kind that may contain comment text. */
@@ -3300,6 +3296,7 @@ declare namespace ts {
     function isSetAccessor(node: Node): node is SetAccessorDeclaration;
     function isGetAccessor(node: Node): node is GetAccessorDeclaration;
     function isObjectLiteralElement(node: Node): node is ObjectLiteralElement;
+    function isStringLiteralLike(node: Node): node is StringLiteralLike;
 }
 declare namespace ts {
     function createNode(kind: SyntaxKind, pos?: number, end?: number): Node;
@@ -3460,8 +3457,8 @@ declare namespace ts {
     function updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode): TypeOperatorNode;
     function createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode;
     function updateIndexedAccessTypeNode(node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode;
-    function createMappedTypeNode(readonlyToken: ReadonlyToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | undefined, type: TypeNode | undefined): MappedTypeNode;
-    function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | undefined, type: TypeNode | undefined): MappedTypeNode;
+    function createMappedTypeNode(readonlyToken: ReadonlyToken | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
+    function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyToken | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
     function createLiteralTypeNode(literal: LiteralTypeNode["literal"]): LiteralTypeNode;
     function updateLiteralTypeNode(node: LiteralTypeNode, literal: LiteralTypeNode["literal"]): LiteralTypeNode;
     function createObjectBindingPattern(elements: ReadonlyArray<BindingElement>): ObjectBindingPattern;
@@ -4326,6 +4323,7 @@ declare namespace ts {
         cleanupSemanticCache(): void;
         getSyntacticDiagnostics(fileName: string): Diagnostic[];
         getSemanticDiagnostics(fileName: string): Diagnostic[];
+        getSuggestionDiagnostics(fileName: string): Diagnostic[];
         getCompilerOptionsDiagnostics(): Diagnostic[];
         /**
          * @deprecated Use getEncodedSyntacticClassifications instead.
@@ -4381,6 +4379,7 @@ declare namespace ts {
         applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;
+        organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges>;
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
         getProgram(): Program;
         dispose(): void;
@@ -4389,6 +4388,7 @@ declare namespace ts {
         type: "file";
         fileName: string;
     }
+    type OrganizeImportsScope = CombinedCodeFixScope;
     interface GetCompletionsAtPositionOptions {
         includeExternalModuleExports: boolean;
         includeInsertTextCompletions: boolean;
@@ -4734,6 +4734,7 @@ declare namespace ts {
         argumentCount: number;
     }
     interface CompletionInfo {
+        /** Not true for all glboal completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. */
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
         /**

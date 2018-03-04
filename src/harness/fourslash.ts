@@ -418,7 +418,7 @@ namespace FourSlash {
             this.goToPosition(marker.position);
         }
 
-        public goToEachMarker(markers: ReadonlyArray<Marker>, action: (marker: FourSlash.Marker, index: number) => void) {
+        public goToEachMarker(markers: ReadonlyArray<Marker>, action: (marker: Marker, index: number) => void) {
             assert(markers.length);
             for (let i = 0; i < markers.length; i++) {
                 this.goToMarker(markers[i]);
@@ -505,9 +505,12 @@ namespace FourSlash {
             return "\nMarker: " + this.lastKnownMarker + "\nChecking: " + msg + "\n\n";
         }
 
-        private getDiagnostics(fileName: string): ts.Diagnostic[] {
-            return ts.concatenate(this.languageService.getSyntacticDiagnostics(fileName),
-                this.languageService.getSemanticDiagnostics(fileName));
+        private getDiagnostics(fileName: string, includeSuggestions = false): ts.Diagnostic[] {
+            return [
+                ...this.languageService.getSyntacticDiagnostics(fileName),
+                ...this.languageService.getSemanticDiagnostics(fileName),
+                ...(includeSuggestions ? this.languageService.getSuggestionDiagnostics(fileName) : ts.emptyArray),
+            ];
         }
 
         private getAllDiagnostics(): ts.Diagnostic[] {
@@ -580,8 +583,9 @@ namespace FourSlash {
 
         public verifyNoErrors() {
             ts.forEachKey(this.inputFiles, fileName => {
-                if (!ts.isAnySupportedFileExtension(fileName)) return;
-                const errors = this.getDiagnostics(fileName);
+                if (!ts.isAnySupportedFileExtension(fileName)
+                    || !this.getProgram().getCompilerOptions().allowJs && !ts.extensionIsTypeScript(ts.extensionFromPath(fileName))) return;
+                const errors = this.getDiagnostics(fileName).filter(e => e.category !== ts.DiagnosticCategory.Suggestion);
                 if (errors.length) {
                     this.printErrorLog(/*expectErrors*/ false, errors);
                     const error = errors[0];
@@ -1086,7 +1090,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyReferenceGroups(startRanges: Range | Range[], parts: FourSlashInterface.ReferenceGroup[]): void {
+        public verifyReferenceGroups(starts: string | string[] | Range | Range[], parts: FourSlashInterface.ReferenceGroup[]): void {
             interface ReferenceGroupJson {
                 definition: string | { text: string, range: ts.TextSpan };
                 references: ts.ReferenceEntry[];
@@ -1105,8 +1109,13 @@ namespace FourSlash {
                 }),
             }));
 
-            for (const startRange of toArray(startRanges)) {
-                this.goToRangeStart(startRange);
+            for (const start of toArray<string | Range>(starts)) {
+                if (typeof start === "string") {
+                    this.goToMarker(start);
+                }
+                else {
+                    this.goToRangeStart(start);
+                }
                 const fullActual = ts.map<ts.ReferencedSymbol, ReferenceGroupJson>(this.findReferencesAtCaret(), ({ definition, references }, i) => {
                     const text = definition.displayParts.map(d => d.text).join("");
                     return {
@@ -1231,20 +1240,23 @@ Actual: ${stringify(fullActual)}`);
             return this.languageService.findReferences(this.activeFile.fileName, this.currentCaretPosition);
         }
 
-        public getSyntacticDiagnostics(expected: string) {
+        public getSyntacticDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>) {
             const diagnostics = this.languageService.getSyntacticDiagnostics(this.activeFile.fileName);
-            this.testDiagnostics(expected, diagnostics);
+            this.testDiagnostics(expected, diagnostics, "error");
         }
 
-        public getSemanticDiagnostics(expected: string) {
+        public getSemanticDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>) {
             const diagnostics = this.languageService.getSemanticDiagnostics(this.activeFile.fileName);
-            this.testDiagnostics(expected, diagnostics);
+            this.testDiagnostics(expected, diagnostics, "error");
         }
 
-        private testDiagnostics(expected: string, diagnostics: ReadonlyArray<ts.Diagnostic>) {
-            const realized = ts.realizeDiagnostics(diagnostics, "\r\n");
-            const actual = stringify(realized);
-            assert.equal(actual, expected);
+        public getSuggestionDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>): void {
+            this.testDiagnostics(expected, this.languageService.getSuggestionDiagnostics(this.activeFile.fileName), "suggestion");
+        }
+
+        private testDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>, diagnostics: ReadonlyArray<ts.Diagnostic>, category: string) {
+            assert.deepEqual(ts.realizeDiagnostics(diagnostics, ts.newLineCharacter), expected.map<ts.RealizedDiagnostic>(e => (
+                { message: e.message, category, code: e.code, ...ts.createTextSpanFromRange(e.range || this.getRanges()[0]) })));
         }
 
         public verifyQuickInfoAt(markerName: string, expectedText: string, expectedDocumentation?: string) {
@@ -1621,7 +1633,7 @@ Actual: ${stringify(fullActual)}`);
                             const diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram());
                             for (const diagnostic of diagnostics) {
                                 if (!ts.isString(diagnostic.messageText)) {
-                                    let chainedMessage = <ts.DiagnosticMessageChain>diagnostic.messageText;
+                                    let chainedMessage = diagnostic.messageText;
                                     let indentation = " ";
                                     while (chainedMessage) {
                                         resultString += indentation + chainedMessage.messageText + Harness.IO.newLine();
@@ -2345,7 +2357,7 @@ Actual: ${stringify(fullActual)}`);
             this.verifyClassifications(expected, actual, this.activeFile.content);
         }
 
-        public verifyOutliningSpans(spans: FourSlash.Range[]) {
+        public verifyOutliningSpans(spans: Range[]) {
             const actual = this.languageService.getOutliningSpans(this.activeFile.fileName);
 
             if (actual.length !== spans.length) {
@@ -2511,7 +2523,7 @@ Actual: ${stringify(fullActual)}`);
          * @param fileName Path to file where error should be retrieved from.
          */
         private getCodeFixes(fileName: string, errorCode?: number): ts.CodeFixAction[] {
-            const diagnosticsForCodeFix = this.getDiagnostics(fileName).map(diagnostic => ({
+            const diagnosticsForCodeFix = this.getDiagnostics(fileName, /*includeSuggestions*/ true).map(diagnostic => ({
                 start: diagnostic.start,
                 length: diagnostic.length,
                 code: diagnostic.code
@@ -2549,12 +2561,14 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyImportFixAtPosition(expectedTextArray: string[], errorCode?: number) {
-            const ranges = this.getRanges().filter(r => r.fileName === this.activeFile.fileName);
+            const { fileName } = this.activeFile;
+            const ranges = this.getRanges().filter(r => r.fileName === fileName);
             if (ranges.length !== 1) {
                 this.raiseError("Exactly one range should be specified in the testfile.");
             }
+            const range = ts.first(ranges);
 
-            const codeFixes = this.getCodeFixes(this.activeFile.fileName, errorCode);
+            const codeFixes = this.getCodeFixes(fileName, errorCode);
 
             if (codeFixes.length === 0) {
                 if (expectedTextArray.length !== 0) {
@@ -2564,11 +2578,14 @@ Actual: ${stringify(fullActual)}`);
             }
 
             const actualTextArray: string[] = [];
-            const scriptInfo = this.languageServiceAdapterHost.getScriptInfo(codeFixes[0].changes[0].fileName);
+            const scriptInfo = this.languageServiceAdapterHost.getScriptInfo(fileName);
             const originalContent = scriptInfo.content;
             for (const codeFix of codeFixes) {
-                this.applyEdits(codeFix.changes[0].fileName, codeFix.changes[0].textChanges, /*isFormattingEdit*/ false);
-                const text = this.rangeText(ranges[0]);
+                ts.Debug.assert(codeFix.changes.length === 1);
+                const change = ts.first(codeFix.changes);
+                ts.Debug.assert(change.fileName === fileName);
+                this.applyEdits(change.fileName, change.textChanges, /*isFormattingEdit*/ false);
+                const text = this.rangeText(range);
                 actualTextArray.push(text);
                 scriptInfo.updateContent(originalContent);
             }
@@ -3104,6 +3121,9 @@ Actual: ${stringify(fullActual)}`);
             hasAction: boolean | undefined,
             options: FourSlashInterface.VerifyCompletionListContainsOptions | undefined,
         ) {
+            const eq = <T>(a: T, b: T, msg: string) => {
+                assert.deepEqual(a, b, this.assertionMessageAtLastKnownMarker(msg + " for " + stringify(entryId)));
+            };
             const matchingItems = items.filter(item => item.name === entryId.name && item.source === entryId.source);
             if (matchingItems.length === 0) {
                 const itemsString = items.map(item => stringify({ name: item.name, source: item.source, kind: item.kind })).join(",\n");
@@ -3118,30 +3138,30 @@ Actual: ${stringify(fullActual)}`);
                 const details = this.getCompletionEntryDetails(item.name, item.source);
 
                 if (documentation !== undefined) {
-                    assert.equal(ts.displayPartsToString(details.documentation), documentation, this.assertionMessageAtLastKnownMarker("completion item documentation for " + entryId));
+                    eq(ts.displayPartsToString(details.documentation), documentation, "completion item documentation");
                 }
                 if (text !== undefined) {
-                    assert.equal(ts.displayPartsToString(details.displayParts), text, this.assertionMessageAtLastKnownMarker("completion item detail text for " + entryId));
+                    eq(ts.displayPartsToString(details.displayParts), text, "completion item detail text");
                 }
 
                 if (entryId.source === undefined) {
-                    assert.equal(options && options.sourceDisplay, undefined);
+                    eq(options && options.sourceDisplay, /*b*/ undefined, "source display");
                 }
                 else {
-                    assert.deepEqual(details.source, [ts.textPart(options!.sourceDisplay)]);
+                    eq(details.source, [ts.textPart(options!.sourceDisplay)], "source display");
                 }
             }
 
             if (kind !== undefined) {
                 if (typeof kind === "string") {
-                    assert.equal(item.kind, kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + entryId));
+                    eq(item.kind, kind, "completion item kind");
                 }
                 else {
                     if (kind.kind) {
-                        assert.equal(item.kind, kind.kind, this.assertionMessageAtLastKnownMarker("completion item kind for " + entryId));
+                        eq(item.kind, kind.kind, "completion item kind");
                     }
                     if (kind.kindModifiers !== undefined) {
-                        assert.equal(item.kindModifiers, kind.kindModifiers, this.assertionMessageAtLastKnownMarker("completion item kindModifiers for " + entryId));
+                        eq(item.kindModifiers, kind.kindModifiers, "completion item kindModifiers");
                     }
                 }
             }
@@ -3150,36 +3170,35 @@ Actual: ${stringify(fullActual)}`);
 
             if (spanIndex !== undefined) {
                 const span = this.getTextSpanForRangeAtIndex(spanIndex);
-                assert.isTrue(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + entryId));
+                assert.isTrue(TestState.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + stringify(entryId)));
             }
 
-            assert.equal(item.hasAction, hasAction, "hasAction");
-            assert.equal(item.isRecommended, options && options.isRecommended, "isRecommended");
-            assert.equal(item.insertText, options && options.insertText, "insertText");
+            eq(item.hasAction, hasAction, "hasAction");
+            eq(item.isRecommended, options && options.isRecommended, "isRecommended");
+            eq(item.insertText, options && options.insertText, "insertText");
             if (options && options.replacementSpan) { // TODO: GH#21679
-                assert.deepEqual(item.replacementSpan, options && options.replacementSpan && ts.createTextSpanFromRange(options.replacementSpan), "replacementSpan");
+                eq(item.replacementSpan, options && options.replacementSpan && ts.createTextSpanFromRange(options.replacementSpan), "replacementSpan");
             }
         }
 
         private findFile(indexOrName: string | number) {
-            let result: FourSlashFile;
             if (typeof indexOrName === "number") {
-                const index = <number>indexOrName;
+                const index = indexOrName;
                 if (index >= this.testData.files.length) {
                     throw new Error(`File index (${index}) in openFile was out of range. There are only ${this.testData.files.length} files in this test.`);
                 }
                 else {
-                    result = this.testData.files[index];
+                    return this.testData.files[index];
                 }
             }
             else if (ts.isString(indexOrName)) {
-                let name = <string>indexOrName;
+                let name = indexOrName;
 
                 // names are stored in the compiler with this relative path, this allows people to use goTo.file on just the fileName
                 name = name.indexOf("/") === -1 ? (this.basePath + "/" + name) : name;
 
                 const availableNames: string[] = [];
-                result = ts.forEach(this.testData.files, file => {
+                const result = ts.forEach(this.testData.files, file => {
                     const fn = file.fileName;
                     if (fn) {
                         if (fn === name) {
@@ -3192,12 +3211,11 @@ Actual: ${stringify(fullActual)}`);
                 if (!result) {
                     throw new Error(`No test file named "${name}" exists. Available file names are: ${availableNames.join(", ")}`);
                 }
+                return result;
             }
             else {
-                throw new Error("Unknown argument type");
+                return ts.Debug.assertNever(indexOrName);
             }
-
-            return result;
         }
 
         private getLineColStringAtPosition(position: number) {
@@ -3273,7 +3291,7 @@ ${code}
             const format = new FourSlashInterface.Format(state);
             const cancellation = new FourSlashInterface.Cancellation(state);
             const f = eval(wrappedCode);
-            f(test, goTo, verify, edit, debug, format, cancellation, FourSlashInterface.Classification, FourSlash.verifyOperationIsCancelled);
+            f(test, goTo, verify, edit, debug, format, cancellation, FourSlashInterface.Classification, verifyOperationIsCancelled);
         }
         catch (err) {
             throw err;
@@ -3946,7 +3964,7 @@ namespace FourSlashInterface {
             this.state.verifySpanOfEnclosingComment(this.negative, onlyMultiLineDiverges);
         }
 
-        public codeFix(options: FourSlashInterface.VerifyCodeFixOptions) {
+        public codeFix(options: VerifyCodeFixOptions) {
             this.state.verifyCodeFix(options);
         }
 
@@ -4069,8 +4087,8 @@ namespace FourSlashInterface {
             this.state.verifyReferencesOf(start, references);
         }
 
-        public referenceGroups(startRanges: FourSlash.Range[], parts: ReferenceGroup[]) {
-            this.state.verifyReferenceGroups(startRanges, parts);
+        public referenceGroups(starts: string | string[] | FourSlash.Range | FourSlash.Range[], parts: ReferenceGroup[]) {
+            this.state.verifyReferenceGroups(starts, parts);
         }
 
         public noReferences(markerNameOrRange?: string | FourSlash.Range) {
@@ -4310,12 +4328,16 @@ namespace FourSlashInterface {
             this.state.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation, tags);
         }
 
-        public getSyntacticDiagnostics(expected: string) {
+        public getSyntacticDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>) {
             this.state.getSyntacticDiagnostics(expected);
         }
 
-        public getSemanticDiagnostics(expected: string) {
+        public getSemanticDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>) {
             this.state.getSemanticDiagnostics(expected);
+        }
+
+        public getSuggestionDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>) {
+            this.state.getSuggestionDiagnostics(expected);
         }
 
         public ProjectInfo(expected: string[]) {
@@ -4655,5 +4677,11 @@ namespace FourSlashInterface {
         name: string;
         source?: string;
         description: string;
+    }
+
+    export interface Diagnostic {
+        message: string;
+        range?: FourSlash.Range;
+        code: number;
     }
 }

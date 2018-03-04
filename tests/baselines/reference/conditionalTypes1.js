@@ -25,6 +25,13 @@ function f3<T>(x: Partial<T>[keyof T], y: NonNullable<Partial<T>[keyof T]>) {
     y = x;  // Error
 }
 
+function f4<T extends { x: string | undefined }>(x: T["x"], y: NonNullable<T["x"]>) {
+    x = y;
+    y = x;  // Error
+    let s1: string = x;  // Error
+    let s2: string = y;
+}
+
 type Options = { k: "a", a: number } | { k: "b", b: string } | { k: "c", c: boolean };
 
 type T10 = Exclude<Options, { k: "a" | "b" }>;  // { k: "c", c: boolean }
@@ -36,8 +43,8 @@ type T13 = Extract<Options, { k: "a" } | { k: "b" }>;  // { k: "a", a: number } 
 type T14 = Exclude<Options, { q: "a" }>;  // Options
 type T15 = Extract<Options, { q: "a" }>;  // never
 
-declare function f4<T extends Options, K extends string>(p: K): Extract<T, { k: K }>;
-let x0 = f4("a");  // { k: "a", a: number }
+declare function f5<T extends Options, K extends string>(p: K): Extract<T, { k: K }>;
+let x0 = f5("a");  // { k: "a", a: number }
 
 type OptionsOfKind<K extends Options["k"]> = Extract<Options, { k: K }>;
 
@@ -57,7 +64,7 @@ type TypeName<T> =
 
 type T20 = TypeName<string | (() => void)>;  // "string" | "function"
 type T21 = TypeName<any>;  // "string" | "number" | "boolean" | "undefined" | "function" | "object"
-type T22 = TypeName<never>;  // "string" | "number" | "boolean" | "undefined" | "function" | "object"
+type T22 = TypeName<never>;  // never
 type T23 = TypeName<{}>;  // "object"
 
 type KnockoutObservable<T> = { object: T };
@@ -165,7 +172,7 @@ type IsString<T> = Extends<T, string>;
 type Q1 = IsString<number>;  // false
 type Q2 = IsString<"abc">;  // true
 type Q3 = IsString<any>;  // boolean
-type Q4 = IsString<never>;  // boolean
+type Q4 = IsString<never>;  // never
 
 type N1 = Not<false>;  // true
 type N2 = Not<true>;  // false
@@ -193,9 +200,9 @@ type O9 = Or<boolean, boolean>;  // boolean
 
 type T40 = never extends never ? true : false;  // true
 type T41 = number extends never ? true : false;  // false
-type T42 = never extends number ? true : false;  // boolean
+type T42 = never extends number ? true : false;  // true
 
-type IsNever<T> = T extends never ? true : false;
+type IsNever<T> = [T] extends [never] ? true : false;
 
 type T50 = IsNever<never>;  // true
 type T51 = IsNever<number>;  // false
@@ -251,6 +258,64 @@ function f33<T, U>() {
     var z: T2;
 }
 
+// Repro from #21823
+
+type T90<T> = T extends 0 ? 0 : () => 0;
+type T91<T> = T extends 0 ? 0 : () => 0;
+const f40 = <U>(a: T90<U>): T91<U> => a;
+const f41 = <U>(a: T91<U>): T90<U> => a;
+
+type T92<T> = T extends () => 0 ? () => 1 : () => 2;
+type T93<T> = T extends () => 0 ? () => 1 : () => 2;
+const f42 = <U>(a: T92<U>): T93<U> => a;
+const f43 = <U>(a: T93<U>): T92<U> => a;
+
+type T94<T> = T extends string ? true : 42;
+type T95<T> = T extends string ? boolean : number;
+const f44 = <U>(value: T94<U>): T95<U> => value;
+const f45 = <U>(value: T95<U>): T94<U> => value;  // Error
+
+// Repro from #21863
+
+function f50() {
+    type Eq<T, U> = T extends U ? U extends T ? true : false : false;
+    type If<S, T, U> = S extends false ? U : T;
+    type Omit<T extends object> = { [P in keyof T]: If<Eq<T[P], never>, never, P>; }[keyof T];
+    type Omit2<T extends object, U = never> = { [P in keyof T]: If<Eq<T[P], U>, never, P>; }[keyof T];
+    type A = Omit<{ a: void; b: never; }>;  // 'a'
+    type B = Omit2<{ a: void; b: never; }>;  // 'a'
+}
+
+// Repro from #21862
+
+type OldDiff<T extends string, U extends string> = (
+    & { [P in T]: P; }
+    & { [P in U]: never; }
+    & { [x: string]: never; }
+)[T];
+type NewDiff<T, U> = T extends U ? never : T;
+interface A {
+    a: 'a';
+}
+interface B1 extends A {
+    b: 'b';
+    c: OldDiff<keyof this, keyof A>;
+}
+interface B2 extends A {
+    b: 'b';
+    c: NewDiff<keyof this, keyof A>;
+}
+type c1 = B1['c']; // 'c' | 'b'
+type c2 = B2['c']; // 'c' | 'b'
+
+// Repro from #21929
+
+type NonFooKeys1<T extends object> = OldDiff<keyof T, 'foo'>;
+type NonFooKeys2<T extends object> = Exclude<keyof T, 'foo'>;
+
+type Test1 = NonFooKeys1<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
+type Test2 = NonFooKeys2<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
+
 
 //// [conditionalTypes1.js]
 "use strict";
@@ -268,7 +333,13 @@ function f3(x, y) {
     x = y;
     y = x; // Error
 }
-var x0 = f4("a"); // { k: "a", a: number }
+function f4(x, y) {
+    x = y;
+    y = x; // Error
+    var s1 = x; // Error
+    var s2 = y;
+}
+var x0 = f5("a"); // { k: "a", a: number }
 function f7(x, y, z) {
     x = y; // Error
     x = z; // Error
@@ -325,6 +396,15 @@ function f33() {
     var z;
     var z;
 }
+var f40 = function (a) { return a; };
+var f41 = function (a) { return a; };
+var f42 = function (a) { return a; };
+var f43 = function (a) { return a; };
+var f44 = function (value) { return value; };
+var f45 = function (value) { return value; }; // Error
+// Repro from #21863
+function f50() {
+}
 
 
 //// [conditionalTypes1.d.ts]
@@ -337,6 +417,9 @@ declare type T05 = NonNullable<(() => string) | string[] | null | undefined>;
 declare function f1<T>(x: T, y: NonNullable<T>): void;
 declare function f2<T extends string | undefined>(x: T, y: NonNullable<T>): void;
 declare function f3<T>(x: Partial<T>[keyof T], y: NonNullable<Partial<T>[keyof T]>): void;
+declare function f4<T extends {
+    x: string | undefined;
+}>(x: T["x"], y: NonNullable<T["x"]>): void;
 declare type Options = {
     k: "a";
     a: number;
@@ -369,7 +452,7 @@ declare type T14 = Exclude<Options, {
 declare type T15 = Extract<Options, {
     q: "a";
 }>;
-declare function f4<T extends Options, K extends string>(p: K): Extract<T, {
+declare function f5<T extends Options, K extends string>(p: K): Extract<T, {
     k: K;
 }>;
 declare let x0: {
@@ -468,7 +551,7 @@ declare type O9 = Or<boolean, boolean>;
 declare type T40 = never extends never ? true : false;
 declare type T41 = number extends never ? true : false;
 declare type T42 = never extends number ? true : false;
-declare type IsNever<T> = T extends never ? true : false;
+declare type IsNever<T> = [T] extends [never] ? true : false;
 declare type T50 = IsNever<never>;
 declare type T51 = IsNever<number>;
 declare type T52 = IsNever<any>;
@@ -489,9 +572,55 @@ declare type T82 = Eq2<false, true>;
 declare type T83 = Eq2<false, false>;
 declare type Foo<T> = T extends string ? boolean : number;
 declare type Bar<T> = T extends string ? boolean : number;
-declare const convert: <U>(value: Foo<U>) => Foo<U>;
+declare const convert: <U>(value: Foo<U>) => Bar<U>;
 declare type Baz<T> = Foo<T>;
 declare const convert2: <T>(value: Foo<T>) => Foo<T>;
 declare function f31<T>(): void;
 declare function f32<T, U>(): void;
 declare function f33<T, U>(): void;
+declare type T90<T> = T extends 0 ? 0 : () => 0;
+declare type T91<T> = T extends 0 ? 0 : () => 0;
+declare const f40: <U>(a: T90<U>) => T91<U>;
+declare const f41: <U>(a: T91<U>) => T90<U>;
+declare type T92<T> = T extends () => 0 ? () => 1 : () => 2;
+declare type T93<T> = T extends () => 0 ? () => 1 : () => 2;
+declare const f42: <U>(a: T92<U>) => T93<U>;
+declare const f43: <U>(a: T93<U>) => T92<U>;
+declare type T94<T> = T extends string ? true : 42;
+declare type T95<T> = T extends string ? boolean : number;
+declare const f44: <U>(value: T94<U>) => T95<U>;
+declare const f45: <U>(value: T95<U>) => T94<U>;
+declare function f50(): void;
+declare type OldDiff<T extends string, U extends string> = ({
+    [P in T]: P;
+} & {
+    [P in U]: never;
+} & {
+    [x: string]: never;
+})[T];
+declare type NewDiff<T, U> = T extends U ? never : T;
+interface A {
+    a: 'a';
+}
+interface B1 extends A {
+    b: 'b';
+    c: OldDiff<keyof this, keyof A>;
+}
+interface B2 extends A {
+    b: 'b';
+    c: NewDiff<keyof this, keyof A>;
+}
+declare type c1 = B1['c'];
+declare type c2 = B2['c'];
+declare type NonFooKeys1<T extends object> = OldDiff<keyof T, 'foo'>;
+declare type NonFooKeys2<T extends object> = Exclude<keyof T, 'foo'>;
+declare type Test1 = NonFooKeys1<{
+    foo: 1;
+    bar: 2;
+    baz: 3;
+}>;
+declare type Test2 = NonFooKeys2<{
+    foo: 1;
+    bar: 2;
+    baz: 3;
+}>;

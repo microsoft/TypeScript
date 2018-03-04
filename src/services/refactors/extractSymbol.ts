@@ -223,7 +223,7 @@ namespace ts.refactor.extractSymbol {
                 return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
             }
             const statements: Statement[] = [];
-            for (const statement of (<BlockLike>start.parent).statements) {
+            for (const statement of start.parent.statements) {
                 if (statement === start || statements.length) {
                     const errors = checkNode(statement);
                     if (errors) {
@@ -405,7 +405,7 @@ namespace ts.refactor.extractSymbol {
                     switch (node.kind) {
                         case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.ClassDeclaration:
-                            if (node.parent.kind === SyntaxKind.SourceFile && (node.parent as ts.SourceFile).externalModuleIndicator === undefined) {
+                            if (isSourceFile(node.parent) && node.parent.externalModuleIndicator === undefined) {
                                 // You cannot extract global declarations
                                 (errors || (errors = [])).push(createDiagnosticForNode(node, Messages.functionWillNotBeVisibleInTheNewScope));
                             }
@@ -1358,7 +1358,7 @@ namespace ts.refactor.extractSymbol {
     }
 
     function getPropertyAssignmentsForWritesAndVariableDeclarations(
-        exposedVariableDeclarations: ReadonlyArray<ts.VariableDeclaration>,
+        exposedVariableDeclarations: ReadonlyArray<VariableDeclaration>,
         writes: ReadonlyArray<UsageEntry>) {
 
         const variableAssignments = map(exposedVariableDeclarations, v => createShorthandPropertyAssignment(v.symbol.name));
@@ -1476,7 +1476,7 @@ namespace ts.refactor.extractSymbol {
         }
 
         const seenUsages = createMap<Usage>();
-        const target = isReadonlyArray(targetRange.range) ? createBlock(<Statement[]>targetRange.range) : targetRange.range;
+        const target = isReadonlyArray(targetRange.range) ? createBlock(targetRange.range) : targetRange.range;
 
         const unmodifiedNode = isReadonlyArray(targetRange.range) ? first(targetRange.range) : targetRange.range;
         const inGenericContext = isInGenericContext(unmodifiedNode);
@@ -1681,15 +1681,16 @@ namespace ts.refactor.extractSymbol {
                 // if we get here this means that we are trying to handle 'write' and 'read' was already processed
                 // walk scopes and update existing records.
                 for (const perScope of usagesPerScope) {
-                    const prevEntry = perScope.usages.get(identifier.text as string);
+                    const prevEntry = perScope.usages.get(identifier.text);
                     if (prevEntry) {
-                        perScope.usages.set(identifier.text as string, { usage, symbol, node: identifier });
+                        perScope.usages.set(identifier.text, { usage, symbol, node: identifier });
                     }
                 }
                 return symbolId;
             }
             // find first declaration in this file
-            const declInFile = find(symbol.getDeclarations(), d => d.getSourceFile() === sourceFile);
+            const decls = symbol.getDeclarations();
+            const declInFile = decls && find(decls, d => d.getSourceFile() === sourceFile);
             if (!declInFile) {
                 return undefined;
             }
@@ -1729,7 +1730,7 @@ namespace ts.refactor.extractSymbol {
                         }
                     }
                     else {
-                        usagesPerScope[i].usages.set(identifier.text as string, { usage, symbol, node: identifier });
+                        usagesPerScope[i].usages.set(identifier.text, { usage, symbol, node: identifier });
                     }
                 }
             }
@@ -1782,7 +1783,8 @@ namespace ts.refactor.extractSymbol {
             if (!symbol) {
                 return undefined;
             }
-            if (symbol.getDeclarations().some(d => d.parent === scopeDecl)) {
+            const decls = symbol.getDeclarations();
+            if (decls && decls.some(d => d.parent === scopeDecl)) {
                 return createIdentifier(symbol.name);
             }
             const prefix = tryReplaceWithQualifiedNameOrPropertyAccess(symbol.parent, scopeDecl, isTypeNode);

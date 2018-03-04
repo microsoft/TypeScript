@@ -1173,17 +1173,11 @@ interface EventListener {
     (evt: Event): void;
 }
 
-interface WebKitEntriesCallback {
-    (evt: Event): void;
-}
+type WebKitEntriesCallback = ((entries: WebKitEntry[]) => void) | { handleEvent(entries: WebKitEntry[]): void; };
 
-interface WebKitErrorCallback {
-    (evt: Event): void;
-}
+type WebKitErrorCallback = ((err: DOMError) => void) | { handleEvent(err: DOMError): void; };
 
-interface WebKitFileCallback {
-    (evt: Event): void;
-}
+type WebKitFileCallback = ((file: File) => void) | { handleEvent(file: File): void; };
 
 interface AnalyserNode extends AudioNode {
     fftSize: number;
@@ -3080,6 +3074,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
      * Gets or sets the version attribute specified in the declaration of an XML document.
      */
     xmlVersion: string | null;
+    onvisibilitychange: (this: Document, ev: Event) => any;
     adoptNode<T extends Node>(source: T): T;
     captureEvents(): void;
     caretRangeFromPoint(x: number, y: number): Range;
@@ -3108,8 +3103,8 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
      * Creates an instance of the element for the specified tag.
      * @param tagName The name of an element.
      */
-    createElement<K extends keyof HTMLElementTagNameMap>(tagName: K): HTMLElementTagNameMap[K];
-    createElement(tagName: string): HTMLElement;
+    createElement<K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K];
+    createElement(tagName: string, options?: ElementCreationOptions): HTMLElement;
     createElementNS(namespaceURI: "http://www.w3.org/1999/xhtml", qualifiedName: string): HTMLElement;
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "a"): SVGAElement;
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "circle"): SVGCircleElement;
@@ -3704,9 +3699,9 @@ declare var Event: {
 };
 
 interface EventTarget {
-    addEventListener(type: string, listener?: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     dispatchEvent(evt: Event): boolean;
-    removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
 declare var EventTarget: {
@@ -4694,6 +4689,7 @@ interface HTMLElement extends Element {
     dragDrop(): boolean;
     focus(): void;
     msGetInputContext(): MSInputMethodContext;
+    animate(keyframes: AnimationKeyFrame | AnimationKeyFrame[], options: number | AnimationOptions): Animation;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -5968,10 +5964,6 @@ declare var HTMLModElement: {
 
 interface HTMLObjectElement extends HTMLElement, GetSVGDocument {
     align: string;
-    /**
-     * Sets or retrieves a text alternative to the graphic.
-     */
-    alt: string;
     /**
      * Gets or sets the optional alternative HTML script to execute if the object fails to load.
      */
@@ -9124,7 +9116,7 @@ declare var ProgressEvent: {
 };
 
 interface PushManager {
-    getSubscription(): Promise<PushSubscription>;
+    getSubscription(): Promise<PushSubscription | null>;
     permissionState(options?: PushSubscriptionOptionsInit): Promise<PushPermissionState>;
     subscribe(options?: PushSubscriptionOptionsInit): Promise<PushSubscription>;
 }
@@ -9627,6 +9619,8 @@ interface Screen extends EventTarget {
     readonly width: number;
     msLockOrientation(orientations: string | string[]): boolean;
     msUnlockOrientation(): void;
+    lockOrientation(orientations: OrientationLockType | OrientationLockType[]): boolean;
+    unlockOrientation(): void;
     addEventListener<K extends keyof ScreenEventMap>(type: K, listener: (this: Screen, ev: ScreenEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof ScreenEventMap>(type: K, listener: (this: Screen, ev: ScreenEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -12565,24 +12559,24 @@ interface WebGLRenderingContext {
     texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, width: number, height: number, format: number, type: number, pixels: ArrayBufferView | null): void;
     texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, pixels: ImageBitmap | ImageData | HTMLVideoElement | HTMLImageElement | HTMLCanvasElement): void;
     uniform1f(location: WebGLUniformLocation | null, x: number): void;
-    uniform1fv(location: WebGLUniformLocation, v: Float32Array | number[]): void;
+    uniform1fv(location: WebGLUniformLocation, v: Float32Array | ArrayLike<number>): void;
     uniform1i(location: WebGLUniformLocation | null, x: number): void;
-    uniform1iv(location: WebGLUniformLocation, v: Int32Array | number[]): void;
+    uniform1iv(location: WebGLUniformLocation, v: Int32Array | ArrayLike<number>): void;
     uniform2f(location: WebGLUniformLocation | null, x: number, y: number): void;
-    uniform2fv(location: WebGLUniformLocation, v: Float32Array | number[]): void;
+    uniform2fv(location: WebGLUniformLocation, v: Float32Array | ArrayLike<number>): void;
     uniform2i(location: WebGLUniformLocation | null, x: number, y: number): void;
-    uniform2iv(location: WebGLUniformLocation, v: Int32Array | number[]): void;
+    uniform2iv(location: WebGLUniformLocation, v: Int32Array | ArrayLike<number>): void;
     uniform3f(location: WebGLUniformLocation | null, x: number, y: number, z: number): void;
-    uniform3fv(location: WebGLUniformLocation, v: Float32Array | number[]): void;
+    uniform3fv(location: WebGLUniformLocation, v: Float32Array | ArrayLike<number>): void;
     uniform3i(location: WebGLUniformLocation | null, x: number, y: number, z: number): void;
-    uniform3iv(location: WebGLUniformLocation, v: Int32Array | number[]): void;
+    uniform3iv(location: WebGLUniformLocation, v: Int32Array | ArrayLike<number>): void;
     uniform4f(location: WebGLUniformLocation | null, x: number, y: number, z: number, w: number): void;
-    uniform4fv(location: WebGLUniformLocation, v: Float32Array | number[]): void;
+    uniform4fv(location: WebGLUniformLocation, v: Float32Array | ArrayLike<number>): void;
     uniform4i(location: WebGLUniformLocation | null, x: number, y: number, z: number, w: number): void;
-    uniform4iv(location: WebGLUniformLocation, v: Int32Array | number[]): void;
-    uniformMatrix2fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array | number[]): void;
-    uniformMatrix3fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array | number[]): void;
-    uniformMatrix4fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array | number[]): void;
+    uniform4iv(location: WebGLUniformLocation, v: Int32Array | ArrayLike<number>): void;
+    uniformMatrix2fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array | ArrayLike<number>): void;
+    uniformMatrix3fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array | ArrayLike<number>): void;
+    uniformMatrix4fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array | ArrayLike<number>): void;
     useProgram(program: WebGLProgram | null): void;
     validateProgram(program: WebGLProgram | null): void;
     vertexAttrib1f(indx: number, x: number): void;
@@ -13362,7 +13356,7 @@ interface WebSocket extends EventTarget {
     readonly readyState: number;
     readonly url: string;
     close(code?: number, reason?: string): void;
-    send(data: any): void;
+    send(data: USVString | ArrayBuffer | Blob | ArrayBufferView): void;
     readonly CLOSED: number;
     readonly CLOSING: number;
     readonly CONNECTING: number;
@@ -14570,7 +14564,7 @@ interface ParentNode {
 
 interface DocumentOrShadowRoot {
     readonly activeElement: Element | null;
-    readonly stylesheets: StyleSheetList;
+    readonly styleSheets: StyleSheetList;
     getSelection(): Selection | null;
     elementFromPoint(x: number, y: number): Element | null;
     elementsFromPoint(x: number, y: number): Element[];
@@ -14597,6 +14591,10 @@ interface AssignedNodesOptions {
 
 interface ElementDefinitionOptions {
     extends: string;
+}
+
+interface ElementCreationOptions {
+    is?: string;
 }
 
 interface CustomElementRegistry {
@@ -14863,6 +14861,81 @@ interface EventSourceInit {
     readonly withCredentials: boolean;
 }
 
+interface AnimationKeyFrame {
+    offset?: number | null | (number | null)[];
+    easing?: string | string[];
+    [index: string]: string | number | number[] | string[] | null | (number | null)[] | undefined;
+}
+
+interface AnimationOptions {
+    id?: string;
+    delay?: number;
+    direction?: "normal" | "reverse" | "alternate" | "alternate-reverse";
+    duration?: number;
+    easing?: string;
+    endDelay?: number;
+    fill?: "none" | "forwards" | "backwards" | "both"| "auto";
+    iterationStart?: number;
+    iterations?: number;
+}
+
+interface AnimationTimeline {
+    readonly currentTime: number | null;
+}
+
+interface ComputedTimingProperties {
+    endTime: number;
+    activeDuration: number;
+    localTime: number | null;
+    progress: number | null;
+    currentIteration: number | null;
+}
+
+interface AnimationEffectReadOnly {
+    readonly timing: number;
+    getComputedTiming(): ComputedTimingProperties;
+}
+
+interface AnimationPlaybackEventInit extends EventInit {
+    currentTime?: number | null;
+    timelineTime?: number | null;
+}
+
+interface AnimationPlaybackEvent extends Event {
+    readonly currentTime: number | null;
+    readonly timelineTime: number | null;
+}
+
+declare var AnimationPlaybackEvent: {
+    prototype: AnimationPlaybackEvent;
+    new(type: string, eventInitDict?: AnimationPlaybackEventInit): AnimationPlaybackEvent;
+};
+
+interface Animation {
+    currentTime: number | null;
+    effect: AnimationEffectReadOnly;
+    readonly finished: Promise<Animation>;
+    id: string;
+    readonly pending: boolean;
+    readonly playState: "idle" | "running" | "paused" | "finished";
+    playbackRate: number;
+    readonly ready: Promise<Animation>;
+    startTime: number;
+    timeline: AnimationTimeline;
+    oncancel: (this: Animation, ev: AnimationPlaybackEvent) => any;
+    onfinish: (this: Animation, ev: AnimationPlaybackEvent) => any;
+    cancel(): void;
+    finish(): void;
+    pause(): void;
+    play(): void;
+    reverse(): void;
+}
+
+declare var Animation: {
+    prototype: Animation;
+    new(effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation;
+};
+
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
 interface DecodeErrorCallback {
@@ -14875,7 +14948,7 @@ interface ErrorEventHandler {
     (message: string, filename?: string, lineno?: number, colno?: number, error?: Error): void;
 }
 interface ForEachCallback {
-    (keyId: BufferSource, status: MediaKeyStatus): void;
+    (keyId: any, status: MediaKeyStatus): void;
 }
 interface FrameRequestCallback {
     (time: number): void;
@@ -15027,6 +15100,7 @@ interface HTMLElementTagNameMap {
     "script": HTMLScriptElement;
     "section": HTMLElement;
     "select": HTMLSelectElement;
+    "slot": HTMLSlotElement;
     "small": HTMLElement;
     "source": HTMLSourceElement;
     "span": HTMLSpanElement;
@@ -15373,6 +15447,7 @@ type ScrollRestoration = "auto" | "manual";
 type FormDataEntryValue = string | File;
 type InsertPosition = "beforebegin" | "afterbegin" | "beforeend" | "afterend";
 type HeadersInit = Headers | string[][] | { [key: string]: string };
+type OrientationLockType = "any" | "natural" | "portrait" | "landscape" | "portrait-primary" | "portrait-secondary" | "landscape-primary"| "landscape-secondary";
 type AppendMode = "segments" | "sequence";
 type AudioContextState = "suspended" | "running" | "closed";
 type BiquadFilterType = "lowpass" | "highpass" | "bandpass" | "lowshelf" | "highshelf" | "peaking" | "notch" | "allpass";

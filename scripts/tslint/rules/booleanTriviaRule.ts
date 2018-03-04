@@ -27,7 +27,7 @@ function walk(ctx: Lint.WalkContext<void>): void {
     /** Skip certain function/method names whose parameter names are not informative. */
     function shouldIgnoreCalledExpression(expression: ts.Expression): boolean {
         if (expression.kind === ts.SyntaxKind.PropertyAccessExpression) {
-            const methodName = (expression as ts.PropertyAccessExpression).name.text as string;
+            const methodName = (expression as ts.PropertyAccessExpression).name.text;
             if (methodName.indexOf("set") === 0) {
                 return true;
             }
@@ -45,7 +45,7 @@ function walk(ctx: Lint.WalkContext<void>): void {
             }
         }
         else if (expression.kind === ts.SyntaxKind.Identifier) {
-            const functionName = (expression as ts.Identifier).text as string;
+            const functionName = (expression as ts.Identifier).text;
             if (functionName.indexOf("set") === 0) {
                 return true;
             }
