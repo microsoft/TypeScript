@@ -8007,7 +8007,8 @@ namespace ts {
         function getLiteralTypeFromPropertyName(prop: Symbol) {
             const links = getSymbolLinks(prop);
             if (!links.nameType) {
-                if (links.target && links.target.escapedName === prop.escapedName) {
+                if (links.target) {
+                    Debug.assert(links.target.escapedName === prop.escapedName, "Target symbol and symbol do not have the same name");
                     links.nameType = getLiteralTypeFromPropertyName(links.target);
                 }
                 else {
