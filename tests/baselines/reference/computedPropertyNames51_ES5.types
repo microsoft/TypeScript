@@ -18,10 +18,12 @@ function f<T, K extends keyof T>() {
 >{        [t]: 0,        [k]: 1    } : { [x: string]: number; }
 
         [t]: 0,
+>[t] : number
 >t : T
 >0 : 0
 
         [k]: 1
+>[k] : number
 >k : K
 >1 : 1
 

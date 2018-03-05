@@ -9,8 +9,10 @@ function f (m: string) {
 >i : Symbol(i, Decl(commaOperatorInConditionalExpression.ts, 1, 18))
 
         return true? { [m]: i } : { [m]: i + 1 }
+>[m] : Symbol([m], Decl(commaOperatorInConditionalExpression.ts, 2, 22))
 >m : Symbol(m, Decl(commaOperatorInConditionalExpression.ts, 0, 12))
 >i : Symbol(i, Decl(commaOperatorInConditionalExpression.ts, 1, 18))
+>[m] : Symbol([m], Decl(commaOperatorInConditionalExpression.ts, 2, 35))
 >m : Symbol(m, Decl(commaOperatorInConditionalExpression.ts, 0, 12))
 >i : Symbol(i, Decl(commaOperatorInConditionalExpression.ts, 1, 18))
 

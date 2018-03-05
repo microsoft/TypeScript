@@ -18,6 +18,7 @@ class C {
 >C : Symbol(C, Decl(numericIndexerConstraint3.ts, 6, 1))
 
     0: B;
+>0 : Symbol(C[0], Decl(numericIndexerConstraint3.ts, 8, 9))
 >B : Symbol(B, Decl(numericIndexerConstraint3.ts, 2, 1))
 
     [x: number]: A;

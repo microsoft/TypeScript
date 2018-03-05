@@ -42,7 +42,7 @@ namespace ts.server {
         let lastSent: protocol.Message;
 
         function createSession(): TestSession {
-            const opts: server.SessionOptions = {
+            const opts: SessionOptions = {
                 host: mockHost,
                 cancellationToken: nullCancellationToken,
                 useSingleInferredProject: false,
@@ -181,9 +181,7 @@ namespace ts.server {
                     type: "request"
                 };
 
-                const expected: protocol.StatusResponseBody = {
-                     version: ts.version
-                };
+                const expected: protocol.StatusResponseBody = { version };
                 assert.deepEqual(session.executeCommand(req).response, expected);
             });
         });
@@ -216,6 +214,7 @@ namespace ts.server {
                 CommandNames.GeterrForProject,
                 CommandNames.SemanticDiagnosticsSync,
                 CommandNames.SyntacticDiagnosticsSync,
+                CommandNames.SuggestionDiagnosticsSync,
                 CommandNames.NavBar,
                 CommandNames.NavBarFull,
                 CommandNames.Navto,
@@ -262,6 +261,8 @@ namespace ts.server {
                 CommandNames.GetApplicableRefactors,
                 CommandNames.GetEditsForRefactor,
                 CommandNames.GetEditsForRefactorFull,
+                CommandNames.OrganizeImports,
+                CommandNames.OrganizeImportsFull,
             ];
 
             it("should not throw when commands are executed with invalid arguments", () => {
@@ -327,7 +328,7 @@ namespace ts.server {
 
         describe("send", () => {
             it("is an overrideable handle which sends protocol messages over the wire", () => {
-                const msg: server.protocol.Request = { seq: 0, type: "request", command: "" };
+                const msg: protocol.Request = { seq: 0, type: "request", command: "" };
                 const strmsg = JSON.stringify(msg);
                 const len = 1 + Utils.byteLength(strmsg, "utf8");
                 const resultMsg = `Content-Length: ${len}\r\n\r\n${strmsg}\n`;
@@ -345,7 +346,7 @@ namespace ts.server {
                     item: false
                 };
                 const command = "newhandle";
-                const result: ts.server.HandlerResponse = {
+                const result: HandlerResponse = {
                     response: respBody,
                     responseRequired: true
                 };
@@ -362,7 +363,7 @@ namespace ts.server {
                 const respBody = {
                     item: false
                 };
-                const resp: ts.server.HandlerResponse = {
+                const resp: HandlerResponse = {
                     response: respBody,
                     responseRequired: true
                 };
@@ -709,7 +710,7 @@ namespace ts.server {
             const text = `// blank line\nconst x = 0;`;
             const renameLocationInOldText = text.indexOf("0");
             const fileName = "/a.ts";
-            const edits: ts.FileTextChanges = {
+            const edits: FileTextChanges = {
                 fileName,
                 textChanges: [
                     {

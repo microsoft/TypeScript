@@ -1,19 +1,14 @@
 === tests/cases/compiler/jsxMultilineAttributeStringValues.tsx ===
 const a = <input value="
 >a : Symbol(a, Decl(jsxMultilineAttributeStringValues.tsx, 0, 5))
->input : Symbol(unknown)
 >value : Symbol(value, Decl(jsxMultilineAttributeStringValues.tsx, 0, 16))
 
   foo: 23
 "></input>;
->input : Symbol(unknown)
-
 const b = <input value='
 >b : Symbol(b, Decl(jsxMultilineAttributeStringValues.tsx, 3, 5))
->input : Symbol(unknown)
 >value : Symbol(value, Decl(jsxMultilineAttributeStringValues.tsx, 3, 16))
 
 foo: 23
 '></input>;
->input : Symbol(unknown)
 

@@ -4,6 +4,8 @@ declare module X { export interface bar { } }
 >bar : bar
 
 declare module "m" {
+>"m" : typeof "m"
+
     export { X };
 >X : any
 

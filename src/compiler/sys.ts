@@ -120,15 +120,40 @@ namespace ts {
     };
 
     export let sys: System = (() => {
-        const utf8ByteOrderMark = "\u00EF\u00BB\u00BF";
+        // NodeJS detects "\uFEFF" at the start of the string and *replaces* it with the actual
+        // byte order mark from the specified encoding. Using any other byte order mark does
+        // not actually work.
+        const byteOrderMarkIndicator = "\uFEFF";
 
         function getNodeSystem(): System {
             const _fs = require("fs");
             const _path = require("path");
             const _os = require("os");
-            const _crypto = require("crypto");
+            // crypto can be absent on reduced node installations
+            let _crypto: any;
+            try {
+              _crypto = require("crypto");
+            }
+            catch {
+              _crypto = undefined;
+            }
 
             const useNonPollingWatchers = process.env.TSC_NONPOLLING_WATCHER;
+
+            /**
+             * djb2 hashing algorithm
+             * http://www.cse.yorku.ca/~oz/hash.html
+             */
+            function generateDjb2Hash(data: string): string {
+              const chars = data.split("").map(str => str.charCodeAt(0));
+              return `${chars.reduce((prev, curr) => ((prev << 5) + prev) + curr, 5381)}`;
+            }
+
+            function createMD5HashUsingNativeCrypto(data: string) {
+              const hash = _crypto.createHash("md5");
+              hash.update(data);
+              return hash.digest("hex");
+            }
 
             function createWatchedFileSet() {
                 const dirWatchers = createMap<DirectoryWatcher>();
@@ -187,7 +212,7 @@ namespace ts {
                     // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
                     const fileName = !isString(relativeFileName)
                         ? undefined
-                        : ts.getNormalizedAbsolutePath(relativeFileName, baseDirPath);
+                        : getNormalizedAbsolutePath(relativeFileName, baseDirPath);
                     // Some applications save a working file via rename operations
                     if ((eventName === "change" || eventName === "rename")) {
                         const callbacks = fileWatcherCallbacks.get(fileName);
@@ -345,7 +370,7 @@ namespace ts {
             function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
                 // If a BOM is required, emit one
                 if (writeByteOrderMark) {
-                    data = utf8ByteOrderMark + data;
+                    data = byteOrderMarkIndicator + data;
                 }
 
                 let fd: number;
@@ -493,11 +518,7 @@ namespace ts {
                         return undefined;
                     }
                 },
-                createHash(data) {
-                    const hash = _crypto.createHash("md5");
-                    hash.update(data);
-                    return hash.digest("hex");
-                },
+                createHash: _crypto ? createMD5HashUsingNativeCrypto : generateDjb2Hash,
                 getMemoryUsage() {
                     if (global.gc) {
                         global.gc();
@@ -554,7 +575,7 @@ namespace ts {
                 writeFile(path: string, data: string, writeByteOrderMark?: boolean) {
                     // If a BOM is required, emit one
                     if (writeByteOrderMark) {
-                        data = utf8ByteOrderMark + data;
+                        data = byteOrderMarkIndicator + data;
                     }
 
                     ChakraHost.writeFile(path, data);

@@ -16,12 +16,15 @@ export interface T0 {
 >T0 : T0
 
     [c0]: number;
+>[c0] : number
 >c0 : "a"
 
     [c1]: string;
+>[c1] : string
 >c1 : 1
 
     [s0]: boolean;
+>[s0] : boolean
 >s0 : unique symbol
 }
 export declare class T1 implements T2 {
@@ -29,12 +32,15 @@ export declare class T1 implements T2 {
 >T2 : T2
 
     [c0]: number;
+>[c0] : number
 >c0 : "a"
 
     [c1]: string;
+>[c1] : string
 >c1 : 1
 
     [s0]: boolean;
+>[s0] : boolean
 >s0 : unique symbol
 }
 export declare class T2 extends T1 {
@@ -45,12 +51,15 @@ export declare type T3 = {
 >T3 : T3
 
     [c0]: number;
+>[c0] : number
 >c0 : "a"
 
     [c1]: string;
+>[c1] : string
 >c1 : 1
 
     [s0]: boolean;
+>[s0] : boolean
 >s0 : unique symbol
 
 };
@@ -88,16 +97,19 @@ namespace N {
 >T4 : T4
 
         [N.c2]: number;
+>[N.c2] : number
 >N.c2 : "a"
 >N : typeof N
 >c2 : "a"
 
         [N.c3]: string;
+>[N.c3] : string
 >N.c3 : 1
 >N : typeof N
 >c3 : 1
 
         [N.s1]: boolean;
+>[N.s1] : boolean
 >N.s1 : unique symbol
 >N : typeof N
 >s1 : unique symbol
@@ -107,16 +119,19 @@ namespace N {
 >T4 : T4
 
         [N.c2]: number;
+>[N.c2] : number
 >N.c2 : "a"
 >N : typeof N
 >c2 : "a"
 
         [N.c3]: string;
+>[N.c3] : string
 >N.c3 : 1
 >N : typeof N
 >c3 : 1
 
         [N.s1]: boolean;
+>[N.s1] : boolean
 >N.s1 : unique symbol
 >N : typeof N
 >s1 : unique symbol
@@ -129,16 +144,19 @@ namespace N {
 >T7 : { [N.c2]: number; [N.c3]: string; [N.s1]: boolean; }
 
         [N.c2]: number;
+>[N.c2] : number
 >N.c2 : "a"
 >N : typeof N
 >c2 : "a"
 
         [N.c3]: string;
+>[N.c3] : string
 >N.c3 : 1
 >N : typeof N
 >c3 : 1
 
         [N.s1]: boolean;
+>[N.s1] : boolean
 >N.s1 : unique symbol
 >N : typeof N
 >s1 : unique symbol
@@ -163,12 +181,15 @@ interface T8 {
 >T8 : T8
 
     [c4]: number;
+>[c4] : number
 >c4 : "a"
 
     [c5]: string;
+>[c5] : string
 >c5 : 1
 
     [s2]: boolean;
+>[s2] : boolean
 >s2 : unique symbol
 }
 declare class T9 implements T8 {
@@ -176,12 +197,15 @@ declare class T9 implements T8 {
 >T8 : T8
 
     [c4]: number;
+>[c4] : number
 >c4 : "a"
 
     [c5]: string;
+>[c5] : string
 >c5 : 1
 
     [s2]: boolean;
+>[s2] : boolean
 >s2 : unique symbol
 }
 declare class T10 extends T9 {
@@ -192,12 +216,15 @@ declare type T11 = {
 >T11 : { [c4]: number; [c5]: string; [s2]: boolean; }
 
     [c4]: number;
+>[c4] : number
 >c4 : "a"
 
     [c5]: string;
+>[c5] : string
 >c5 : 1
 
     [s2]: boolean;
+>[s2] : boolean
 >s2 : unique symbol
 
 };
@@ -209,7 +236,10 @@ interface T12 {
 >a : number
 
     1: string;
+>1 : string
+
     [s2]: boolean;
+>[s2] : boolean
 >s2 : unique symbol
 }
 declare class T13 implements T2 {
@@ -220,7 +250,10 @@ declare class T13 implements T2 {
 >a : number
 
     1: string;
+>1 : string
+
     [s2]: boolean;
+>[s2] : boolean
 >s2 : unique symbol
 }
 declare class T14 extends T13 {
@@ -234,7 +267,10 @@ declare type T15 = {
 >a : number
 
     1: string;
+>1 : string
+
     [s2]: boolean;
+>[s2] : boolean
 >s2 : unique symbol
 
 };
@@ -246,7 +282,10 @@ declare class C {
 >a : number
 
     static 1: string;
+>1 : string
+
     static [s2]: boolean;
+>[s2] : boolean
 >s2 : unique symbol
 }
 
@@ -481,14 +520,17 @@ export const o1 = {
 >{    [c4]: 1,    [c5]: "a",    [s2]: true} : { [c4]: number; [c5]: string; [s2]: boolean; }
 
     [c4]: 1,
+>[c4] : number
 >c4 : "a"
 >1 : 1
 
     [c5]: "a",
+>[c5] : string
 >c5 : 1
 >"a" : "a"
 
     [s2]: true
+>[s2] : boolean
 >s2 : unique symbol
 >true : true
 
@@ -538,6 +580,7 @@ interface RI<T extends "a" | "b"> {
 >T : T
 
     [rI.x]: "b";
+>[rI.x] : "b"
 >rI.x : "a"
 >rI : RI<"a">
 >x : "a"
@@ -561,6 +604,7 @@ declare class RC<T extends "a" | "b"> {
 >T : T
 
     [rC.x]: "b";
+>[rC.x] : "b"
 >rC.x : "a"
 >rC : RC<"a">
 >x : "a"

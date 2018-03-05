@@ -4,9 +4,9 @@ var x = [].concat([{ a: 1 }], [{ a: 2 }])
 >[].concat([{ a: 1 }], [{ a: 2 }])          .map(b => b.a) : any[]
 >[].concat([{ a: 1 }], [{ a: 2 }])          .map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
 >[].concat([{ a: 1 }], [{ a: 2 }]) : any[]
->[].concat : { (...items: (any[] | ReadonlyArray<any>)[]): any[]; (...items: any[]): any[]; }
+>[].concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
 >[] : undefined[]
->concat : { (...items: (any[] | ReadonlyArray<any>)[]): any[]; (...items: any[]): any[]; }
+>concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
 >[{ a: 1 }] : { a: number; }[]
 >{ a: 1 } : { a: number; }
 >a : number

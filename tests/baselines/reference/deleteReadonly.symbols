@@ -31,6 +31,8 @@ var b: B = {
 >B : Symbol(B, Decl(deleteReadonly.ts, 7, 11))
 
   'test': 'test'
+>'test' : Symbol('test', Decl(deleteReadonly.ts, 13, 12))
+
 };
 
 delete b['test'];

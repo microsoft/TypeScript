@@ -203,15 +203,15 @@ function f2() {
 
     };
     let v = unboxify(b);
->v : { a: any; b: any; c: any; }
->unboxify(b) : { a: any; b: any; c: any; }
+>v : { a: number; b: string; c: boolean; }
+>unboxify(b) : { a: number; b: string; c: boolean; }
 >unboxify : <T>(obj: Boxified<T>) => T
 >b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
 
     let x: number = v.a;
 >x : number
 >v.a : number
->v : { a: any; b: any; c: any; }
+>v : { a: number; b: string; c: boolean; }
 >a : number
 }
 
@@ -245,8 +245,8 @@ function f3() {
 >assignBoxified(b, { c: false }) : void
 >assignBoxified : <T>(obj: Boxified<T>, values: T) => void
 >b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
->{ c: false } : { c: boolean; }
->c : boolean
+>{ c: false } : { c: false; }
+>c : false
 >false : false
 }
 
@@ -277,11 +277,11 @@ function f4() {
 
     };
     b = boxify(unboxify(b));
->b = boxify(unboxify(b)) : Boxified<{ a: any; b: any; c: any; }>
+>b = boxify(unboxify(b)) : Boxified<{ a: number; b: string; c: boolean; }>
 >b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
->boxify(unboxify(b)) : Boxified<{ a: any; b: any; c: any; }>
+>boxify(unboxify(b)) : Boxified<{ a: number; b: string; c: boolean; }>
 >boxify : <T>(obj: T) => Boxified<T>
->unboxify(b) : { a: any; b: any; c: any; }
+>unboxify(b) : { a: number; b: string; c: boolean; }
 >unboxify : <T>(obj: Boxified<T>) => T
 >b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
 
@@ -338,15 +338,15 @@ function f5(s: string) {
 
     });
     let v = unboxify(b);
->v : { a: any; b: any; c: any; }
->unboxify(b) : { a: any; b: any; c: any; }
+>v : { a: string | number | boolean; b: string | number | boolean; c: string | number | boolean; }
+>unboxify(b) : { a: string | number | boolean; b: string | number | boolean; c: string | number | boolean; }
 >unboxify : <T>(obj: Boxified<T>) => T
 >b : { a: Box<number> | Box<string> | Box<boolean>; b: Box<number> | Box<string> | Box<boolean>; c: Box<number> | Box<string> | Box<boolean>; }
 
     let x: string | number | boolean = v.a;
 >x : string | number | boolean
 >v.a : string | number | boolean
->v : { a: any; b: any; c: any; }
+>v : { a: string | number | boolean; b: string | number | boolean; c: string | number | boolean; }
 >a : string | number | boolean
 }
 
@@ -449,20 +449,20 @@ function f10(foo: Foo) {
 >Foo : Foo
 
     let x = validate(foo);  // { a: number, readonly b: string }
->x : { a: any; readonly b: any; }
->validate(foo) : { a: any; readonly b: any; }
+>x : { a: number; readonly b: string; }
+>validate(foo) : { a: number; readonly b: string; }
 >validate : <T>(obj: { [P in keyof T]?: T[P] | undefined; }) => T
 >foo : Foo
 
     let y = clone(foo);  // { a?: number, b: string }
->y : { a?: any; b: any; }
->clone(foo) : { a?: any; b: any; }
+>y : { a?: number | undefined; b: string; }
+>clone(foo) : { a?: number | undefined; b: string; }
 >clone : <T>(obj: { readonly [P in keyof T]: T[P]; }) => T
 >foo : Foo
 
     let z = validateAndClone(foo);  // { a: number, b: string }
->z : { a: any; b: any; }
->validateAndClone(foo) : { a: any; b: any; }
+>z : { a: number; b: string; }
+>validateAndClone(foo) : { a: number; b: string; }
 >validateAndClone : <T>(obj: { readonly [P in keyof T]?: T[P] | undefined; }) => T
 >foo : Foo
 }
@@ -507,8 +507,8 @@ declare function applySpec<T>(obj: Spec<T>): (...args: any[]) => T;
 
 // Infers g1: (...args: any[]) => { sum: number, nested: { mul: string } }
 var g1 = applySpec({
->g1 : (...args: any[]) => { sum: any; nested: any; }
->applySpec({    sum: (a: any) => 3,    nested: {        mul: (b: any) => "n"    }}) : (...args: any[]) => { sum: any; nested: any; }
+>g1 : (...args: any[]) => { sum: number; nested: { mul: any; }; }
+>applySpec({    sum: (a: any) => 3,    nested: {        mul: (b: any) => "n"    }}) : (...args: any[]) => { sum: number; nested: { mul: any; }; }
 >applySpec : <T>(obj: Spec<T>) => (...args: any[]) => T
 >{    sum: (a: any) => 3,    nested: {        mul: (b: any) => "n"    }} : { sum: (a: any) => number; nested: { mul: (b: any) => string; }; }
 
@@ -532,8 +532,8 @@ var g1 = applySpec({
 
 // Infers g2: (...args: any[]) => { foo: { bar: { baz: boolean } } }
 var g2 = applySpec({ foo: { bar: { baz: (x: any) => true } } });
->g2 : (...args: any[]) => { foo: any; }
->applySpec({ foo: { bar: { baz: (x: any) => true } } }) : (...args: any[]) => { foo: any; }
+>g2 : (...args: any[]) => { foo: { bar: any; }; }
+>applySpec({ foo: { bar: { baz: (x: any) => true } } }) : (...args: any[]) => { foo: { bar: any; }; }
 >applySpec : <T>(obj: Spec<T>) => (...args: any[]) => T
 >{ foo: { bar: { baz: (x: any) => true } } } : { foo: { bar: { baz: (x: any) => boolean; }; }; }
 >foo : { bar: { baz: (x: any) => boolean; }; }

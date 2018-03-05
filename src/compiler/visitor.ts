@@ -387,6 +387,17 @@ namespace ts {
                 return updateIntersectionTypeNode(<IntersectionTypeNode>node,
                     nodesVisitor((<IntersectionTypeNode>node).types, visitor, isTypeNode));
 
+            case SyntaxKind.ConditionalType:
+                return updateConditionalTypeNode(<ConditionalTypeNode>node,
+                    visitNode((<ConditionalTypeNode>node).checkType, visitor, isTypeNode),
+                    visitNode((<ConditionalTypeNode>node).extendsType, visitor, isTypeNode),
+                    visitNode((<ConditionalTypeNode>node).trueType, visitor, isTypeNode),
+                    visitNode((<ConditionalTypeNode>node).falseType, visitor, isTypeNode));
+
+            case SyntaxKind.InferType:
+                return updateInferTypeNode(<InferTypeNode>node,
+                    visitNode((<InferTypeNode>node).typeParameter, visitor, isTypeParameterDeclaration));
+
             case SyntaxKind.ParenthesizedType:
                 return updateParenthesizedType(<ParenthesizedTypeNode>node,
                     visitNode((<ParenthesizedTypeNode>node).type, visitor, isTypeNode));
@@ -1534,10 +1545,10 @@ namespace ts {
         let isDebugInfoEnabled = false;
 
         export const failBadSyntaxKind = shouldAssert(AssertionLevel.Normal)
-            ? (node: Node, message?: string): void => fail(
+            ? (node: Node, message?: string): never => fail(
                 `${message || "Unexpected node."}\r\nNode ${formatSyntaxKind(node.kind)} was unexpected.`,
                 failBadSyntaxKind)
-            : noop;
+            : noop as () => never; // TODO: GH#22091
 
         export const assertEachNode = shouldAssert(AssertionLevel.Normal)
             ? (nodes: Node[], test: (node: Node) => boolean, message?: string): void => assert(

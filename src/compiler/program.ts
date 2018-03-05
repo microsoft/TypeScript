@@ -227,8 +227,7 @@ namespace ts {
     }
 
     export function formatDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string {
-        const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        const errorMessage = `${category} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine())}${host.getNewLine()}`;
+        const errorMessage = `${diagnosticCategoryName(diagnostic)} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine())}${host.getNewLine()}`;
 
         if (diagnostic.file) {
             const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
@@ -254,8 +253,9 @@ namespace ts {
     const ellipsis = "...";
     function getCategoryFormat(category: DiagnosticCategory): string {
         switch (category) {
-            case DiagnosticCategory.Warning: return ForegroundColorEscapeSequences.Yellow;
             case DiagnosticCategory.Error: return ForegroundColorEscapeSequences.Red;
+            case DiagnosticCategory.Warning: return ForegroundColorEscapeSequences.Yellow;
+            case DiagnosticCategory.Suggestion: return Debug.fail("Should never get an Info diagnostic on the command line.");
             case DiagnosticCategory.Message: return ForegroundColorEscapeSequences.Blue;
         }
     }
@@ -289,8 +289,8 @@ namespace ts {
                     gutterWidth = Math.max(ellipsis.length, gutterWidth);
                 }
 
-                context += host.getNewLine();
                 for (let i = firstLine; i <= lastLine; i++) {
+                    context += host.getNewLine();
                     // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
                     // so we'll skip ahead to the second-to-last line.
                     if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
@@ -337,9 +337,7 @@ namespace ts {
                 output += " - ";
             }
 
-            const categoryColor = getCategoryFormat(diagnostic.category);
-            const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-            output += formatColorAndReset(category, categoryColor);
+            output += formatColorAndReset(diagnosticCategoryName(diagnostic), getCategoryFormat(diagnostic.category));
             output += formatColorAndReset(` TS${ diagnostic.code }: `, ForegroundColorEscapeSequences.Grey);
             output += flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine());
 
@@ -416,7 +414,7 @@ namespace ts {
         hasInvalidatedResolution: HasInvalidatedResolution,
         hasChangedAutomaticTypeDirectiveNames: boolean,
     ): boolean {
-        // If we haven't create a program yet or has changed automatic type directives, then it is not up-to-date
+        // If we haven't created a program yet or have changed automatic type directives, then it is not up-to-date
         if (!program || hasChangedAutomaticTypeDirectiveNames) {
             return false;
         }
@@ -457,10 +455,10 @@ namespace ts {
     }
 
     /**
-     * Determined if source file needs to be re-created even if its text hasnt changed
+     * Determined if source file needs to be re-created even if its text hasn't changed
      */
     function shouldProgramCreateNewSourceFiles(program: Program, newOptions: CompilerOptions) {
-        // If any of these options change, we cant reuse old source file even if version match
+        // If any of these options change, we can't reuse old source file even if version match
         // The change in options like these could result in change in syntax tree change
         const oldOptions = program && program.getCompilerOptions();
         return oldOptions && (
@@ -812,7 +810,7 @@ namespace ts {
             if (!result) {
                 // There were no unresolved/ambient resolutions.
                 Debug.assert(resolutions.length === moduleNames.length);
-                return <ResolvedModuleFull[]>resolutions;
+                return resolutions;
             }
 
             let j = 0;
@@ -1179,7 +1177,7 @@ namespace ts {
             // This is because in the -out scenario all files need to be emitted, and therefore all
             // files need to be type checked. And the way to specify that all files need to be type
             // checked is to not pass the file to getEmitResolver.
-            const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile, cancellationToken, emitOnlyDtsFiles);
+            const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile, cancellationToken);
 
             performance.mark("beforeEmit");
 
@@ -2201,6 +2199,16 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "checkJs", "allowJs"));
             }
 
+            if (options.emitDeclarationOnly) {
+                if (!options.declaration) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDeclarationOnly", "declarations");
+                }
+
+                if (options.noEmit) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "emitDeclarationOnly", "noEmit");
+                }
+            }
+
             if (options.emitDecoratorMetadata &&
                 !options.experimentalDecorators) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators");
@@ -2223,7 +2231,9 @@ namespace ts {
                 const emitHost = getEmitHost();
                 const emitFilesSeen = createMap<true>();
                 forEachEmittedFile(emitHost, (emitFileNames) => {
-                    verifyEmitFilePath(emitFileNames.jsFilePath, emitFilesSeen);
+                    if (!options.emitDeclarationOnly) {
+                        verifyEmitFilePath(emitFileNames.jsFilePath, emitFilesSeen);
+                    }
                     verifyEmitFilePath(emitFileNames.declarationFilePath, emitFilesSeen);
                 });
             }
@@ -2351,9 +2361,30 @@ namespace ts {
                 return false;
             }
 
-            return forEachEmittedFile(getEmitHost(), ({ jsFilePath, declarationFilePath }) =>
-                isSameFile(jsFilePath, file) ||
-                (declarationFilePath && isSameFile(declarationFilePath, file)));
+            // If this is source file, its not emitted file
+            const filePath = toPath(file);
+            if (getSourceFileByPath(filePath)) {
+                return false;
+            }
+
+            // If options have --outFile or --out just check that
+            const out = options.outFile || options.out;
+            if (out) {
+                return isSameFile(filePath, out) || isSameFile(filePath, removeFileExtension(out) + Extension.Dts);
+            }
+
+            // If --outDir, check if file is in that directory
+            if (options.outDir) {
+                return containsPath(options.outDir, filePath, currentDirectory, !host.useCaseSensitiveFileNames());
+            }
+
+            if (fileExtensionIsOneOf(filePath, supportedJavascriptExtensions) || fileExtensionIs(filePath, Extension.Dts)) {
+                // Otherwise just check if sourceFile with the name exists
+                const filePathWithoutExtension = removeFileExtension(filePath);
+                return !!getSourceFileByPath(combinePaths(filePathWithoutExtension, Extension.Ts) as Path) ||
+                    !!getSourceFileByPath(combinePaths(filePathWithoutExtension, Extension.Tsx) as Path);
+            }
+            return false;
         }
 
         function isSameFile(file1: string, file2: string) {

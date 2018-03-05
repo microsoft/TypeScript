@@ -10,5 +10,5 @@
 ////     }
 //// }
 
-verify.getSyntacticDiagnostics(`[]`);
-verify.getSemanticDiagnostics(`[]`);
+verify.getSyntacticDiagnostics([]);
+verify.getSemanticDiagnostics([]);

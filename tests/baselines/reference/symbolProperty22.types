@@ -5,6 +5,7 @@ interface I<T, U> {
 >U : U
 
     [Symbol.unscopables](x: T): U;
+>[Symbol.unscopables] : (x: T) => U
 >Symbol.unscopables : symbol
 >Symbol : SymbolConstructor
 >unscopables : symbol
@@ -30,6 +31,7 @@ foo("", { [Symbol.unscopables]: s => s.length });
 >foo : <T, U>(p1: T, p2: I<T, U>) => U
 >"" : ""
 >{ [Symbol.unscopables]: s => s.length } : { [Symbol.unscopables]: (s: string) => number; }
+>[Symbol.unscopables] : (s: string) => number
 >Symbol.unscopables : symbol
 >Symbol : SymbolConstructor
 >unscopables : symbol

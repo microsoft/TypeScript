@@ -102,7 +102,7 @@ namespace ts.formatting {
                 current--;
             }
 
-            const lineStart = ts.getLineStartPositionForPosition(current, sourceFile);
+            const lineStart = getLineStartPositionForPosition(current, sourceFile);
             return findFirstNonWhitespaceColumn(lineStart, current, sourceFile, options);
         }
 
@@ -383,9 +383,8 @@ namespace ts.formatting {
                 return Value.Unknown;
             }
 
-            if (node.parent && isCallOrNewExpression(node.parent) && (<CallExpression>node.parent).expression !== node) {
-
-                const fullCallOrNewExpression = (<CallExpression | NewExpression>node.parent).expression;
+            if (node.parent && isCallOrNewExpression(node.parent) && node.parent.expression !== node) {
+                const fullCallOrNewExpression = node.parent.expression;
                 const startingExpression = getStartingExpression(fullCallOrNewExpression);
 
                 if (fullCallOrNewExpression === startingExpression) {
@@ -566,26 +565,14 @@ namespace ts.formatting {
         function isControlFlowEndingStatement(kind: SyntaxKind, parent: TextRangeWithKind): boolean {
             switch (kind) {
                 case SyntaxKind.ReturnStatement:
-                case SyntaxKind.ThrowStatement:
-                    switch (parent.kind) {
-                        case SyntaxKind.Block:
-                            const grandParent = (parent as Node).parent;
-                            switch (grandParent && grandParent.kind) {
-                                case SyntaxKind.FunctionDeclaration:
-                                case SyntaxKind.FunctionExpression:
-                                    // We may want to write inner functions after this.
-                                    return false;
-                                default:
-                                    return true;
-                            }
-                        case SyntaxKind.CaseClause:
-                        case SyntaxKind.DefaultClause:
-                        case SyntaxKind.SourceFile:
-                        case SyntaxKind.ModuleBlock:
-                            return true;
-                        default:
-                            throw Debug.fail();
+                case SyntaxKind.ThrowStatement: {
+                    if (parent.kind !== SyntaxKind.Block) {
+                        return true;
                     }
+                    const grandParent = (parent as Node).parent;
+                    // In a function, we may want to write inner functions after this.
+                    return !(grandParent && grandParent.kind === SyntaxKind.FunctionExpression || grandParent.kind === SyntaxKind.FunctionDeclaration);
+                }
                 case SyntaxKind.ContinueStatement:
                 case SyntaxKind.BreakStatement:
                     return true;

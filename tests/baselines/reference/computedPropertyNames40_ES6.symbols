@@ -17,10 +17,12 @@ class C {
 
     // Computed properties
     [""]() { return new Foo }
+>[""] : Symbol(C[""], Decl(computedPropertyNames40_ES6.ts, 4, 28), Decl(computedPropertyNames40_ES6.ts, 7, 29))
 >"" : Symbol(C[""], Decl(computedPropertyNames40_ES6.ts, 4, 28), Decl(computedPropertyNames40_ES6.ts, 7, 29))
 >Foo : Symbol(Foo, Decl(computedPropertyNames40_ES6.ts, 0, 0))
 
     [""]() { return new Foo2 }
+>[""] : Symbol(C[""], Decl(computedPropertyNames40_ES6.ts, 4, 28), Decl(computedPropertyNames40_ES6.ts, 7, 29))
 >"" : Symbol(C[""], Decl(computedPropertyNames40_ES6.ts, 4, 28), Decl(computedPropertyNames40_ES6.ts, 7, 29))
 >Foo2 : Symbol(Foo2, Decl(computedPropertyNames40_ES6.ts, 0, 15))
 }

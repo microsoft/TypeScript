@@ -13,9 +13,8 @@ namespace ts.GoToDefinition {
 
         // Labels
         if (isJumpStatementTarget(node)) {
-            const labelName = (<Identifier>node).text;
-            const label = getTargetLabel((<BreakOrContinueStatement>node.parent), labelName);
-            return label ? [createDefinitionInfoFromName(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
+            const label = getTargetLabel(node.parent, node.text);
+            return label ? [createDefinitionInfoFromName(label, ScriptElementKind.label, node.text, /*containerName*/ undefined)] : undefined;
         }
 
         const typeChecker = program.getTypeChecker();
@@ -149,10 +148,7 @@ namespace ts.GoToDefinition {
         // Check if position is on triple slash reference.
         const comment = findReferenceInPosition(sourceFile.referencedFiles, position) || findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
         if (comment) {
-            return {
-                definitions,
-                textSpan: createTextSpanFromBounds(comment.pos, comment.end)
-            };
+            return { definitions, textSpan: createTextSpanFromRange(comment) };
         }
 
         const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
@@ -191,7 +187,7 @@ namespace ts.GoToDefinition {
         function getConstructSignatureDefinition(): DefinitionInfo[] | undefined {
             // Applicable only if we are in a new expression, or we are on a constructor declaration
             // and in either case the symbol has a construct signature definition, i.e. class
-            if (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword && symbol.flags & SymbolFlags.Class) {
+            if (symbol.flags & SymbolFlags.Class && (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword)) {
                 const cls = find(symbol.declarations, isClassLike) || Debug.fail("Expected declaration to have at least one class-like declaration");
                 return getSignatureDefinition(cls.members, /*selectConstructors*/ true);
             }
@@ -216,10 +212,11 @@ namespace ts.GoToDefinition {
 
     function isSignatureDeclaration(node: Node): boolean {
         switch (node.kind) {
-            case ts.SyntaxKind.Constructor:
-            case ts.SyntaxKind.FunctionDeclaration:
-            case ts.SyntaxKind.MethodDeclaration:
-            case ts.SyntaxKind.MethodSignature:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
                 return true;
             default:
                 return false;
@@ -257,7 +254,7 @@ namespace ts.GoToDefinition {
         return createDefinitionInfo(decl, symbolKind, symbolName, containerName);
     }
 
-    export function findReferenceInPosition(refs: ReadonlyArray<FileReference>, pos: number): FileReference {
+    export function findReferenceInPosition(refs: ReadonlyArray<FileReference>, pos: number): FileReference | undefined {
         for (const ref of refs) {
             if (ref.pos <= pos && pos <= ref.end) {
                 return ref;

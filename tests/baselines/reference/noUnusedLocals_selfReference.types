@@ -30,6 +30,29 @@ enum E { A = 0, B = E.A }
 >E : typeof E
 >A : E
 
+interface I { x: I };
+>I : I
+>x : I
+>I : I
+
+type T = { x: T };
+>T : { x: T; }
+>x : { x: T; }
+>T : { x: T; }
+
+namespace N { N; }
+>N : typeof N
+>N : typeof N
+
+// Avoid a false positive.
+// Previously `T` was considered unused due to merging with the property,
+// back when all non-blocks were checked for recursion.
+export interface A<T> { T: T }
+>A : A<T>
+>T : T
+>T : T
+>T : T
+
 class P { private m() { this.m; } }
 >P : P
 >m : () => void

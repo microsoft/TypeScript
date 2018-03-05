@@ -6,8 +6,8 @@
 /* @internal */
 namespace ts.formatting {
     export interface FormatContext {
-        readonly options: ts.FormatCodeSettings;
-        readonly getRule: ts.formatting.RulesMap;
+        readonly options: FormatCodeSettings;
+        readonly getRule: RulesMap;
     }
 
     export interface TextRangeWithKind extends TextRange {
@@ -200,7 +200,7 @@ namespace ts.formatting {
                 return rangeContainsRange((<InterfaceDeclaration>parent).members, node);
             case SyntaxKind.ModuleDeclaration:
                 const body = (<ModuleDeclaration>parent).body;
-                return body && body.kind === SyntaxKind.ModuleBlock && rangeContainsRange((<ModuleBlock>body).statements, node);
+                return body && body.kind === SyntaxKind.ModuleBlock && rangeContainsRange(body.statements, node);
             case SyntaxKind.SourceFile:
             case SyntaxKind.Block:
             case SyntaxKind.ModuleBlock:
@@ -1078,19 +1078,15 @@ namespace ts.formatting {
             trimTrailingWhitespacesForLines(startLine, endLine + 1, previousRange);
         }
 
-        function newTextChange(start: number, len: number, newText: string): TextChange {
-            return { span: createTextSpan(start, len), newText };
-        }
-
         function recordDelete(start: number, len: number) {
             if (len) {
-                edits.push(newTextChange(start, len, ""));
+                edits.push(createTextChangeFromStartLength(start, len, ""));
             }
         }
 
         function recordReplace(start: number, len: number, newText: string) {
             if (len || newText) {
-                edits.push(newTextChange(start, len, newText));
+                edits.push(createTextChangeFromStartLength(start, len, newText));
             }
         }
 

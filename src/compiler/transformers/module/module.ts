@@ -533,7 +533,7 @@ namespace ts {
             }
 
             if (isImportCall(node)) {
-                return visitImportCallExpression(<ImportCall>node);
+                return visitImportCallExpression(node);
             }
             else {
                 return visitEachChild(node, importCallExpressionVisitor, context);
@@ -690,16 +690,15 @@ namespace ts {
             return createCall(createPropertyAccess(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
         }
 
-
         function getHelperExpressionForImport(node: ImportDeclaration, innerExpr: Expression) {
             if (!compilerOptions.esModuleInterop || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
                 return innerExpr;
             }
-            if (getNamespaceDeclarationNode(node)) {
+            if (getImportNeedsImportStarHelper(node)) {
                 context.requestEmitHelper(importStarHelper);
                 return createCall(getHelperName("__importStar"), /*typeArguments*/ undefined, [innerExpr]);
             }
-            if (isDefaultImport(node)) {
+            if (getImportNeedsImportDefaultHelper(node)) {
                 context.requestEmitHelper(importDefaultHelper);
                 return createCall(getHelperName("__importDefault"), /*typeArguments*/ undefined, [innerExpr]);
             }
@@ -1729,7 +1728,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
     result["default"] = mod;
     return result;
-}`
+};`
     };
 
     // emit helper for `import Name from "foo"`
@@ -1739,6 +1738,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
         text: `
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
-}`
+};`
     };
 }

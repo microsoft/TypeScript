@@ -176,8 +176,13 @@ namespace ts.server {
                 return this.switchToScriptVersionCache();
             }
 
-            // Else if the svc is uptodate with the text, we are good
-            return !this.pendingReloadFromDisk && this.svc;
+            // If there is pending reload from the disk then, reload the text
+            if (this.pendingReloadFromDisk) {
+                this.reloadWithFileText();
+            }
+
+            // At this point if svc is present its valid
+            return this.svc;
         }
 
         private getOrLoadText() {
@@ -196,7 +201,7 @@ namespace ts.server {
 
     /*@internal*/
     export function isDynamicFileName(fileName: NormalizedPath) {
-        return getBaseFileName(fileName)[0] === "^";
+        return fileName[0] === "^" || getBaseFileName(fileName)[0] === "^";
     }
 
     export class ScriptInfo {
