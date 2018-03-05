@@ -401,6 +401,7 @@ namespace ts {
         let anyArrayType: Type;
         let autoArrayType: Type;
         let anyReadonlyArrayType: Type;
+        let deferredGlobalNonNullableTypeAlias: Symbol;
 
         // The library files are only loaded when the feature is used.
         // This allows users to just specify library files they want to used through --lib
@@ -11122,8 +11123,19 @@ namespace ts {
             return type.flags & TypeFlags.Undefined ? type : getUnionType([type, undefinedType]);
         }
 
+        function getGlobalNonNullableTypeInstantiation(type: Type) {
+            if (!deferredGlobalNonNullableTypeAlias) {
+                deferredGlobalNonNullableTypeAlias = getGlobalSymbol("NonNullable" as __String, SymbolFlags.TypeAlias, /*diagnostic*/ undefined) || unknownSymbol;
+            }
+            // Use NonNullable global type alias if available to improve quick info/declaration emit
+            if (deferredGlobalNonNullableTypeAlias !== unknownSymbol) {
+                return getTypeAliasInstantiation(deferredGlobalNonNullableTypeAlias, [type]);
+            }
+            return getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull); // Type alias unavailable, fall back to non-higherorder behavior
+        }
+
         function getNonNullableType(type: Type): Type {
-            return strictNullChecks ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
+            return strictNullChecks ? getGlobalNonNullableTypeInstantiation(type) : type;
         }
 
         /**
@@ -13427,7 +13439,6 @@ namespace ts {
             return parent.kind === SyntaxKind.PropertyAccessExpression ||
                 parent.kind === SyntaxKind.CallExpression && (<CallExpression>parent).expression === node ||
                 parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>parent).expression === node ||
-                parent.kind === SyntaxKind.NonNullExpression ||
                 parent.kind === SyntaxKind.BindingElement && (<BindingElement>parent).name === node && !!(<BindingElement>parent).initializer;
         }
 
