@@ -3725,8 +3725,8 @@ namespace ts {
                         return "(Anonymous function)";
                 }
             }
-            if ((symbol as TransientSymbol).syntheticLiteralTypeOrigin) {
-                const stringValue = (symbol as TransientSymbol).syntheticLiteralTypeOrigin.value;
+            if ((symbol as TransientSymbol).nameType && (symbol as TransientSymbol).nameType.flags & TypeFlags.StringLiteral) {
+                const stringValue = ((symbol as TransientSymbol).nameType as StringLiteralType).value;
                 if (!isIdentifierText(stringValue, compilerOptions.target)) {
                     return `"${escapeString(stringValue, CharacterCodes.doubleQuote)}"`;
                 }
@@ -5460,6 +5460,12 @@ namespace ts {
                         lateSymbol = createSymbol(SymbolFlags.None, memberName, CheckFlags.Late);
                     }
 
+                    const symbolLinks = getSymbolLinks(lateSymbol);
+                    if (!symbolLinks.nameType) {
+                        // Retain link to name type so that it can be reused later
+                        symbolLinks.nameType = type;
+                    }
+
                     addDeclarationToLateBoundSymbol(lateSymbol, decl, symbolFlags);
                     if (lateSymbol.parent) {
                         Debug.assert(lateSymbol.parent === parent, "Existing symbol parent should match new one");
@@ -5948,7 +5954,7 @@ namespace ts {
                 // If the current iteration type constituent is a string literal type, create a property.
                 // Otherwise, for type string create a string index signature.
                 if (t.flags & TypeFlags.StringLiteral) {
-                    const propName = escapeLeadingUnderscores((<StringLiteralType>t).value);
+                    const propName = getLateBoundNameFromType(t as LiteralType | UniqueESSymbolType);
                     const modifiersProp = getPropertyOfType(modifiersType, propName);
                     const isOptional = !!(templateModifiers & MappedTypeModifiers.IncludeOptional ||
                         !(templateModifiers & MappedTypeModifiers.ExcludeOptional) && modifiersProp && modifiersProp.flags & SymbolFlags.Optional);
@@ -5965,7 +5971,7 @@ namespace ts {
                         prop.syntheticOrigin = propertySymbol;
                         prop.declarations = propertySymbol.declarations;
                     }
-                    prop.syntheticLiteralTypeOrigin = t as StringLiteralType;
+                    prop.nameType = t;
                     members.set(propName, prop);
                 }
                 else if (t.flags & (TypeFlags.Any | TypeFlags.String)) {
@@ -7999,9 +8005,18 @@ namespace ts {
         }
 
         function getLiteralTypeFromPropertyName(prop: Symbol) {
-            return getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier || isKnownSymbol(prop) ?
-                neverType :
-                getLiteralType(symbolName(prop));
+            const links = getSymbolLinks(prop);
+            if (!links.nameType) {
+                if (links.target && links.target.escapedName === prop.escapedName) {
+                    links.nameType = getLiteralTypeFromPropertyName(links.target);
+                }
+                else {
+                    links.nameType = getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier || isKnownSymbol(prop) ?
+                        neverType :
+                        getLiteralType(symbolName(prop));
+                }
+            }
+            return links.nameType;
         }
 
         function getLiteralTypeFromPropertyNames(type: Type) {
@@ -11225,7 +11240,7 @@ namespace ts {
             result.type = undefinedType;
             const associatedKeyType = getLiteralType(unescapeLeadingUnderscores(name));
             if (associatedKeyType.flags & TypeFlags.StringLiteral) {
-                result.syntheticLiteralTypeOrigin = associatedKeyType as StringLiteralType;
+                result.nameType = associatedKeyType;
             }
             undefinedProperties.set(name, result);
             return result;
@@ -14998,9 +15013,14 @@ namespace ts {
                     typeFlags |= type.flags;
 
                     const nameType = hasLateBindableName(memberDecl) ? checkComputedPropertyName(memberDecl.name) : undefined;
-                    const prop = nameType && isTypeUsableAsLateBoundName(nameType)
-                        ? createSymbol(SymbolFlags.Property | member.flags, getLateBoundNameFromType(nameType), CheckFlags.Late)
+                    const hasLateBoundName = nameType && isTypeUsableAsLateBoundName(nameType);
+                    const prop = hasLateBoundName
+                        ? createSymbol(SymbolFlags.Property | member.flags, getLateBoundNameFromType(nameType as LiteralType | UniqueESSymbolType), CheckFlags.Late)
                         : createSymbol(SymbolFlags.Property | member.flags, literalName || member.escapedName);
+
+                    if (hasLateBoundName) {
+                        prop.nameType = nameType;
+                    }
 
                     if (inDestructuringPattern) {
                         // If object literal is an assignment pattern and if the assignment pattern specifies a default value

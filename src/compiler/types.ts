@@ -3344,7 +3344,6 @@ namespace ts {
         leftSpread?: Symbol;                // Left source for synthetic spread property
         rightSpread?: Symbol;               // Right source for synthetic spread property
         syntheticOrigin?: Symbol;           // For a property on a mapped or spread type, points back to the original property
-        syntheticLiteralTypeOrigin?: StringLiteralType; // For a property on a mapped type, indicates the type whose text to use as the declaration name, instead of the symbol name
         isDiscriminantProperty?: boolean;   // True if discriminant synthetic property
         resolvedExports?: SymbolTable;      // Resolved exports of module or combined early- and late-bound static members of a class.
         resolvedMembers?: SymbolTable;      // Combined early- and late-bound members of a symbol
@@ -3356,6 +3355,7 @@ namespace ts {
         enumKind?: EnumKind;                // Enum declaration classification
         originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
+        nameType?: Type;                    // Type associate with a late-bound or mapped type property symbol's name
     }
 
     /* @internal */
