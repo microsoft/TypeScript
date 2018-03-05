@@ -3830,6 +3830,10 @@
         "category": "Suggestion",
         "code": 80003
     },
+    "JSDoc types may be moved to TypeScript types.": {
+        "category": "Suggestion",
+        "code": 80004
+    },
 
     "Add missing 'super()' call": {
         "category": "Message",

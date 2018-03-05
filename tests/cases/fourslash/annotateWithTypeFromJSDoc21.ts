@@ -3,19 +3,19 @@
 /////**
 //// * @return {number}
 //// */
-////function /*1*/f(x, y) {
+////function [|f|](x, y) {
 ////}
 ////
 /////**
 //// * @return {number}
 //// */
-////function /*2*/g(x, y): number {
+////function g(x, y): number {
 ////    return 0;
 ////}
 /////**
 //// * @param {number} x
 //// */
-////function /*3*/h(x: number, y): number {
+////function h(x: number, y): number {
 ////    return 0;
 ////}
 ////
@@ -23,22 +23,25 @@
 //// * @param {number} x
 //// * @param {string} y
 //// */
-////function /*4*/i(x: number, y: string) {
+////function i(x: number, y: string) {
 ////}
 /////**
 //// * @param {number} x
 //// * @return {boolean}
 //// */
-////function /*5*/j(x: number, y): boolean {
+////function j(x: number, y): boolean {
 ////    return true;
 ////}
 
-verify.not.applicableRefactorAvailableAtMarker('2');
-verify.not.applicableRefactorAvailableAtMarker('3');
-verify.not.applicableRefactorAvailableAtMarker('4');
-verify.not.applicableRefactorAvailableAtMarker('5');
-verify.applicableRefactorAvailableAtMarker('1');
-verify.fileAfterApplyingRefactorAtMarker('1',
+// Only first location triggers a suggestion
+verify.getSuggestionDiagnostics([{
+    message: "JSDoc types may be moved to TypeScript types.",
+    code: 80004,
+}]);
+
+verify.codeFix({
+    description: "Annotate with type from JSDoc",
+   newFileContent:
 `/**
  * @return {number}
  */
@@ -70,4 +73,5 @@ function i(x: number, y: string) {
  */
 function j(x: number, y): boolean {
     return true;
-}`, 'Annotate with type from JSDoc', 'annotate');
+}`,
+});

@@ -1,108 +1,66 @@
 /* @internal */
-namespace ts.refactor.annotateWithTypeFromJSDoc {
-    const refactorName = "Annotate with type from JSDoc";
-    const actionName = "annotate";
-    const description = Diagnostics.Annotate_with_type_from_JSDoc.message;
-    registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
+namespace ts.codefix {
+    const fixId = "annotateWithTypeFromJSDoc";
+    const errorCodes = [Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types.code];
+    registerCodeFix({
+        errorCodes,
+        getCodeActions(context) {
+            const decl = getDeclaration(context.sourceFile, context.span.start);
+            if (!decl) return;
+            const description = getLocaleSpecificMessage(Diagnostics.Annotate_with_type_from_JSDoc);
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, decl));
+            return [{ description, changes, fixId }];
+        },
+        fixIds: [fixId],
+        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
+            const decl = getDeclaration(diag.file!, diag.start!);
+            if (decl) doChange(changes, diag.file!, decl);
+        }),
+    });
+
+    function getDeclaration(file: SourceFile, pos: number): DeclarationWithType | undefined {
+        const name = getTokenAtPosition(file, pos, /*includeJsDocComment*/ false);
+        // For an arrow function with no name, 'name' lands on the first parameter.
+        return tryCast(isParameter(name.parent) ? name.parent.parent : name.parent, parameterShouldGetTypeFromJSDoc);
+    }
 
     type DeclarationWithType =
         | FunctionLikeDeclaration
         | VariableDeclaration
-        | ParameterDeclaration
         | PropertySignature
         | PropertyDeclaration;
 
-    function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
-        if (isInJavaScriptFile(context.file)) {
-            return undefined;
-        }
-
-        const node = getTokenAtPosition(context.file, context.startPosition, /*includeJsDocComment*/ false);
-        if (hasUsableJSDoc(findAncestor(node, isDeclarationWithType))) {
-            return [{
-                name: refactorName,
-                description,
-                actions: [
-                    {
-                        description,
-                        name: actionName
-                    }
-                ]
-            }];
-        }
+    export function parameterShouldGetTypeFromJSDoc(node: Node): node is DeclarationWithType {
+        return isDeclarationWithType(node) && hasUsableJSDoc(node);
     }
 
-    function hasUsableJSDoc(decl: DeclarationWithType): boolean {
-        if (!decl) {
-            return false;
-        }
-        if (isFunctionLikeDeclaration(decl)) {
-            return decl.parameters.some(hasUsableJSDoc) || (!decl.type && !!getJSDocReturnType(decl));
-        }
-        return !decl.type && !!getJSDocType(decl);
+    function hasUsableJSDoc(decl: DeclarationWithType | ParameterDeclaration): boolean {
+        return isFunctionLikeDeclaration(decl)
+            ? decl.parameters.some(hasUsableJSDoc) || (!decl.type && !!getJSDocReturnType(decl))
+            : !decl.type && !!getJSDocType(decl);
     }
 
-    function getEditsForAction(context: RefactorContext, action: string): RefactorEditInfo | undefined {
-        if (actionName !== action) {
-            return Debug.fail(`actionName !== action: ${actionName} !== ${action}`);
-        }
-        const node = getTokenAtPosition(context.file, context.startPosition, /*includeJsDocComment*/ false);
-        const decl = findAncestor(node, isDeclarationWithType);
-        if (!decl || decl.type) {
-            return undefined;
-        }
-        const jsdocType = getJSDocType(decl);
-        const isFunctionWithJSDoc = isFunctionLikeDeclaration(decl) && (getJSDocReturnType(decl) || decl.parameters.some(p => !!getJSDocType(p)));
-        if (isFunctionWithJSDoc || jsdocType && decl.kind === SyntaxKind.Parameter) {
-            return getEditsForFunctionAnnotation(context);
-        }
-        else if (jsdocType) {
-            return getEditsForAnnotation(context);
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, decl: DeclarationWithType): void {
+        if (isFunctionLikeDeclaration(decl) && (getJSDocReturnType(decl) || decl.parameters.some(p => !!getJSDocType(p)))) {
+            findAncestor(decl, isFunctionLike);
+            const fn = findAncestor(decl, isFunctionLikeDeclaration);
+            const functionWithType = addTypesToFunctionLike(fn);
+            suppressLeadingAndTrailingTrivia(functionWithType);
+            changes.replaceNode(sourceFile, fn, functionWithType, textChanges.useNonAdjustedPositions);
+            return;
         }
         else {
-            Debug.assert(!!refactor, "No applicable refactor found.");
+            const jsdocType = Debug.assertDefined(getJSDocType(decl)); // If not defined, shouldn't have been an error to fix
+            Debug.assert(!decl.type); // If defined, shouldn't have been an error to fix.
+            const declarationWithType = addType(decl, transformJSDocType(jsdocType) as TypeNode);
+            suppressLeadingAndTrailingTrivia(declarationWithType);
+            changes.replaceNode(sourceFile, decl, declarationWithType, textChanges.useNonAdjustedPositions);
         }
-    }
-
-    function getEditsForAnnotation(context: RefactorContext): RefactorEditInfo | undefined {
-        const sourceFile = context.file;
-        const token = getTokenAtPosition(sourceFile, context.startPosition, /*includeJsDocComment*/ false);
-        const decl = findAncestor(token, isDeclarationWithType);
-        const jsdocType = getJSDocType(decl);
-        if (!decl || !jsdocType || decl.type) {
-            return Debug.fail(`!decl || !jsdocType || decl.type: !${decl} || !${jsdocType} || ${decl.type}`);
-        }
-
-        const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        const declarationWithType = addType(decl, transformJSDocType(jsdocType) as TypeNode);
-        suppressLeadingAndTrailingTrivia(declarationWithType);
-        changeTracker.replaceNode(sourceFile, decl, declarationWithType, textChanges.useNonAdjustedPositions);
-        return {
-            edits: changeTracker.getChanges(),
-            renameFilename: undefined,
-            renameLocation: undefined
-        };
-    }
-
-    function getEditsForFunctionAnnotation(context: RefactorContext): RefactorEditInfo | undefined {
-        const sourceFile = context.file;
-        const token = getTokenAtPosition(sourceFile, context.startPosition, /*includeJsDocComment*/ false);
-        const decl = findAncestor(token, isFunctionLikeDeclaration);
-        const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        const functionWithType = addTypesToFunctionLike(decl);
-        suppressLeadingAndTrailingTrivia(functionWithType);
-        changeTracker.replaceNode(sourceFile, decl, functionWithType, textChanges.useNonAdjustedPositions);
-        return {
-            edits: changeTracker.getChanges(),
-            renameFilename: undefined,
-            renameLocation: undefined
-        };
     }
 
     function isDeclarationWithType(node: Node): node is DeclarationWithType {
         return isFunctionLikeDeclaration(node) ||
             node.kind === SyntaxKind.VariableDeclaration ||
-            node.kind === SyntaxKind.Parameter ||
             node.kind === SyntaxKind.PropertySignature ||
             node.kind === SyntaxKind.PropertyDeclaration;
     }

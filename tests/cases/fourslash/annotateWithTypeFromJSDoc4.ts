@@ -9,11 +9,12 @@
 //// * @param {number?} gamma
 //// * @param {number!} delta
 //// */
-////function f(/*1*/x, /*2*/y, /*3*/z, /*4*/alpha, /*5*/beta, /*6*/gamma, /*7*/delta) {
+////function [|f|](x, y, z, alpha, beta, gamma, delta) {
 ////}
 
-verify.applicableRefactorAvailableAtMarker('5');
-verify.fileAfterApplyingRefactorAtMarker('5',
+verify.codeFix({
+    description: "Annotate with type from JSDoc",
+    newFileContent:
 `/**
  * @param {*} x
  * @param {?} y
@@ -24,4 +25,5 @@ verify.fileAfterApplyingRefactorAtMarker('5',
  * @param {number!} delta
  */
 function f(x: any, y: any, z: number | undefined, alpha: number[], beta: (this: { a: string; }, arg1: string, arg2: number) => boolean, gamma: number | null, delta: number) {
-}`, 'Annotate with type from JSDoc', 'annotate');
+}`,
+});

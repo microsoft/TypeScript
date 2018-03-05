@@ -13,17 +13,22 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
-                    const symbol = node.symbol;
-                    if (symbol.members && (symbol.members.size > 0)) {
-                        diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
+                    if (isInJavaScriptFile(node)) {
+                        const symbol = node.symbol;
+                        if (symbol.members && (symbol.members.size > 0)) {
+                            diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
+                        }
                     }
                     break;
             }
+
+            if (!isInJavaScriptFile(node) && codefix.parameterShouldGetTypeFromJSDoc(node)) {
+                diags.push(createDiagnosticForNode(node.name || node, Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types));
+            }
+
             node.forEachChild(check);
         }
-        if (isInJavaScriptFile(sourceFile)) {
-            check(sourceFile);
-        }
+        check(sourceFile);
 
         if (getAllowSyntheticDefaultImports(program.getCompilerOptions())) {
             for (const importNode of sourceFile.imports) {
