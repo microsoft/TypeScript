@@ -412,6 +412,46 @@ type T78<T> = T extends T76<infer X, infer X> ? T76<X, X> : never;
 >X : X
 >X : X
 
+type Foo<T extends string, U extends T> = [T, U];
+>Foo : [T, U]
+>T : T
+>U : U
+>T : T
+>T : T
+>U : U
+
+type Bar<T> = T extends Foo<infer X, infer Y> ? Foo<X, Y> : never;
+>Bar : Bar<T>
+>T : T
+>T : T
+>Foo : [T, U]
+>X : X
+>Y : Y
+>Foo : [T, U]
+>X : X
+>Y : Y
+
+type T90 = Bar<[string, string]>;  // [string, string]
+>T90 : [string, string]
+>Bar : Bar<T>
+
+type T91 = Bar<[string, "a"]>;  // [string, "a"]
+>T91 : [string, "a"]
+>Bar : Bar<T>
+
+type T92 = Bar<[string, "a"] & { x: string }>;  // [string, "a"]
+>T92 : [string, "a"]
+>Bar : Bar<T>
+>x : string
+
+type T93 = Bar<["a", string]>;  // never
+>T93 : never
+>Bar : Bar<T>
+
+type T94 = Bar<[number, number]>;  // never
+>T94 : never
+>Bar : Bar<T>
+
 // Example from #21496
 
 type JsonifiedObject<T extends object> = { [K in keyof T]: Jsonified<T[K]> };
@@ -625,4 +665,27 @@ type T81 = VoidKeys<test>;
 >T81 : "b"
 >VoidKeys : MatchingKeys<T, void, keyof T>
 >test : test
+
+// Repro from #22221
+
+type MustBeString<T extends string> = T;
+>MustBeString : T
+>T : T
+>T : T
+
+type EnsureIsString<T> = T extends MustBeString<infer U> ? U : never;
+>EnsureIsString : EnsureIsString<T>
+>T : T
+>T : T
+>MustBeString : T
+>U : U
+>U : U
+
+type Test1 = EnsureIsString<"hello">;  // "hello"
+>Test1 : "hello"
+>EnsureIsString : EnsureIsString<T>
+
+type Test2 = EnsureIsString<42>;  // never
+>Test2 : never
+>EnsureIsString : EnsureIsString<T>
 
