@@ -9,17 +9,17 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
-            const { sourceFile, program, span } = context;
+            const { sourceFile, program, span, host, formatContext } = context;
 
             if (!isInJavaScriptFile(sourceFile) || !isCheckJsEnabledForFile(sourceFile, program.getCompilerOptions())) {
                 return undefined;
             }
 
-            const newLineCharacter = getNewLineOrDefaultFromHost(context.host, context.formatContext.options);
+            const newLineCharacter = getNewLineOrDefaultFromHost(host, formatContext.options);
 
             return [{
                 description: getLocaleSpecificMessage(Diagnostics.Ignore_this_error_message),
-                changes: [createFileTextChanges(sourceFile.fileName, [getIgnoreCommentLocationForLocation(sourceFile, span.start, newLineCharacter).change])],
+                changes: textChanges.ChangeTracker.with(context, t => makeChange(t, sourceFile, span.start, newLineCharacter)),
                 fixId,
             },
             {
@@ -33,37 +33,37 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => {
-            const seenLines = createMap<true>(); // Only need to add `// @ts-ignore` for a line once.
-            return codeFixAllWithTextChanges(context, errorCodes, (changes, err) => {
-                if (err.start !== undefined) {
-                    const { lineNumber, change } = getIgnoreCommentLocationForLocation(err.file!, err.start, getNewLineOrDefaultFromHost(context.host, context.formatContext.options));
-                    if (addToSeen(seenLines, lineNumber)) {
-                        changes.push(change);
-                    }
-                }
-            });
+            const newLineCharacter = getNewLineOrDefaultFromHost(context.host, context.formatContext.options);
+            const seenLines = createMap<true>();
+            return codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file!, diag.start!, newLineCharacter, seenLines));
         },
     });
 
-    function getIgnoreCommentLocationForLocation(sourceFile: SourceFile, position: number, newLineCharacter: string): { lineNumber: number, change: TextChange } {
+    function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, newLineCharacter: string, seenLines?: Map<true>) {
+        if (isInComment(sourceFile, position) || isInString(sourceFile, position) || isInTemplateString(sourceFile, position)) {
+            return;
+        }
+
         const { line: lineNumber } = getLineAndCharacterOfPosition(sourceFile, position);
+
+        // Only need to add `// @ts-ignore` for a line once.
+        if (seenLines && !addToSeen(seenLines, lineNumber)) {
+            return;
+        }
+
         const lineStartPosition = getStartPositionOfLine(lineNumber, sourceFile);
         const startPosition = getFirstNonSpaceCharacterPosition(sourceFile.text, lineStartPosition);
-        const indentation = sourceFile.text.substring(lineStartPosition, startPosition);
 
         // First try to see if we can put the '// @ts-ignore' on the previous line.
         // We need to make sure that we are not in the middle of a string literal or a comment.
-        // We also want to check if the previous line holds a comment for a node on the next line
-        // if so, we do not want to separate the node from its comment if we can.
-        if (!isInComment(sourceFile, startPosition) && !isInString(sourceFile, startPosition) && !isInTemplateString(sourceFile, startPosition)) {
-            const token = getTouchingToken(sourceFile, startPosition, /*includeJsDocComment*/ false);
-            const tokenLeadingComments = getLeadingCommentRangesOfNode(token, sourceFile);
-            if (!tokenLeadingComments || !tokenLeadingComments.length || tokenLeadingComments[0].pos >= startPosition) {
-                return { lineNumber, change: createTextChangeFromStartLength(lineStartPosition, 0, `${indentation}// @ts-ignore${newLineCharacter}`) };
-            }
-        }
+        // If so, we do not want to separate the node from its comment if we can.
+        // Otherwise, add an extra new line immediately before the error span.
+        const insertAtLineStart = !isInComment(sourceFile, startPosition) &&
+            !isInString(sourceFile, startPosition) && !isInTemplateString(sourceFile, startPosition);
 
-        // If all fails, add an extra new line immediately before the error span.
-        return { lineNumber, change: createTextChangeFromStartLength(position, 0, `${position === startPosition ? "" : newLineCharacter}${indentation}// @ts-ignore${newLineCharacter}${indentation}`) };
+        const token = getTouchingToken(sourceFile, insertAtLineStart ? startPosition : position, /*includeJsDocComment*/ false);
+        const clone = setStartsOnNewLine(getSynthesizedDeepClone(token), true);
+        addSyntheticLeadingComment(clone, SyntaxKind.SingleLineCommentTrivia, " @ts-ignore");
+        changes.replaceNode(sourceFile, token, clone, { preseveLeadingWhiteSpaces: true, prefix: insertAtLineStart ? undefined : newLineCharacter });
     }
 }
