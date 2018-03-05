@@ -575,3 +575,47 @@ type B<T> = string extends T ? { [P in T]: void; } : T;  // Error
 >T : Symbol(T, Decl(inferTypes1.ts, 133, 7))
 >T : Symbol(T, Decl(inferTypes1.ts, 133, 7))
 
+// Repro from #22302
+
+type MatchingKeys<T, U, K extends keyof T = keyof T> =
+>MatchingKeys : Symbol(MatchingKeys, Decl(inferTypes1.ts, 133, 55))
+>T : Symbol(T, Decl(inferTypes1.ts, 137, 18))
+>U : Symbol(U, Decl(inferTypes1.ts, 137, 20))
+>K : Symbol(K, Decl(inferTypes1.ts, 137, 23))
+>T : Symbol(T, Decl(inferTypes1.ts, 137, 18))
+>T : Symbol(T, Decl(inferTypes1.ts, 137, 18))
+
+    K extends keyof T ? T[K] extends U ? K : never : never;
+>K : Symbol(K, Decl(inferTypes1.ts, 137, 23))
+>T : Symbol(T, Decl(inferTypes1.ts, 137, 18))
+>T : Symbol(T, Decl(inferTypes1.ts, 137, 18))
+>K : Symbol(K, Decl(inferTypes1.ts, 137, 23))
+>U : Symbol(U, Decl(inferTypes1.ts, 137, 20))
+>K : Symbol(K, Decl(inferTypes1.ts, 137, 23))
+
+type VoidKeys<T> = MatchingKeys<T, void>;
+>VoidKeys : Symbol(VoidKeys, Decl(inferTypes1.ts, 138, 59))
+>T : Symbol(T, Decl(inferTypes1.ts, 140, 14))
+>MatchingKeys : Symbol(MatchingKeys, Decl(inferTypes1.ts, 133, 55))
+>T : Symbol(T, Decl(inferTypes1.ts, 140, 14))
+
+interface test {
+>test : Symbol(test, Decl(inferTypes1.ts, 140, 41))
+
+    a: 1,
+>a : Symbol(test.a, Decl(inferTypes1.ts, 142, 16))
+
+    b: void
+>b : Symbol(test.b, Decl(inferTypes1.ts, 143, 9))
+}
+
+type T80 = MatchingKeys<test, void>;
+>T80 : Symbol(T80, Decl(inferTypes1.ts, 145, 1))
+>MatchingKeys : Symbol(MatchingKeys, Decl(inferTypes1.ts, 133, 55))
+>test : Symbol(test, Decl(inferTypes1.ts, 140, 41))
+
+type T81 = VoidKeys<test>;
+>T81 : Symbol(T81, Decl(inferTypes1.ts, 147, 36))
+>VoidKeys : Symbol(VoidKeys, Decl(inferTypes1.ts, 138, 59))
+>test : Symbol(test, Decl(inferTypes1.ts, 140, 41))
+

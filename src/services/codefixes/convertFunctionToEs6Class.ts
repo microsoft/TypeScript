@@ -181,7 +181,7 @@ namespace ts.codefix {
                 memberElements.unshift(createConstructor(/*decorators*/ undefined, /*modifiers*/ undefined, initializer.parameters, initializer.body));
             }
 
-            const modifiers = getModifierKindFromSource(precedingNode, SyntaxKind.ExportKeyword);
+            const modifiers = getModifierKindFromSource(precedingNode!, SyntaxKind.ExportKeyword); // TODO: GH#18217
             const cls = createClassDeclaration(/*decorators*/ undefined, modifiers, node.name,
                 /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements);
             // Don't call copyComments here because we'll already leave them in place
