@@ -8,8 +8,7 @@ node_js:
 sudo: false
 
 env:
-  - workerCount=3
-  - timeout=600000
+  - workerCount=3 timeout=600000
 
 matrix:
   fast_finish: true
