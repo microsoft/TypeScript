@@ -49,6 +49,7 @@ namespace ts.codefix {
         const { line: lineNumber } = getLineAndCharacterOfPosition(sourceFile, position);
         const lineStartPosition = getStartPositionOfLine(lineNumber, sourceFile);
         const startPosition = getFirstNonSpaceCharacterPosition(sourceFile.text, lineStartPosition);
+        const indentation = sourceFile.text.substring(lineStartPosition, startPosition);
 
         // First try to see if we can put the '// @ts-ignore' on the previous line.
         // We need to make sure that we are not in the middle of a string literal or a comment.
@@ -58,11 +59,11 @@ namespace ts.codefix {
             const token = getTouchingToken(sourceFile, startPosition, /*includeJsDocComment*/ false);
             const tokenLeadingComments = getLeadingCommentRangesOfNode(token, sourceFile);
             if (!tokenLeadingComments || !tokenLeadingComments.length || tokenLeadingComments[0].pos >= startPosition) {
-                return { lineNumber, change: createTextChangeFromStartLength(startPosition, 0, `// @ts-ignore${newLineCharacter}`) };
+                return { lineNumber, change: createTextChangeFromStartLength(lineStartPosition, 0, `${indentation}// @ts-ignore${newLineCharacter}`) };
             }
         }
 
         // If all fails, add an extra new line immediately before the error span.
-        return { lineNumber, change: createTextChangeFromStartLength(position, 0, `${position === startPosition ? "" : newLineCharacter}// @ts-ignore${newLineCharacter}`) };
+        return { lineNumber, change: createTextChangeFromStartLength(position, 0, `${position === startPosition ? "" : newLineCharacter}${indentation}// @ts-ignore${newLineCharacter}${indentation}`) };
     }
 }
