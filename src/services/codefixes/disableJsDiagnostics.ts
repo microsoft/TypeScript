@@ -62,8 +62,7 @@ namespace ts.codefix {
         // We need to make sure that we are not in the middle of a string literal or a comment.
         // If so, we do not want to separate the node from its comment if we can.
         // Otherwise, add an extra new line immediately before the error span.
-        const insertAtLineStart = !isInComment(sourceFile, startPosition) &&
-            !isInString(sourceFile, startPosition) && !isInTemplateString(sourceFile, startPosition);
+        const insertAtLineStart = isValidSuppressLocation(sourceFile, startPosition);
 
         const token = getTouchingToken(sourceFile, insertAtLineStart ? startPosition : position, /*includeJsDocComment*/ false);
         const clone = setStartsOnNewLine(getSynthesizedDeepClone(token), true);
