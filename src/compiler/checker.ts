@@ -401,9 +401,6 @@ namespace ts {
         let autoArrayType: Type;
         let anyReadonlyArrayType: Type;
         let deferredGlobalNonNullableTypeAlias: Symbol;
-        let deferredGlobalNonNullableTypeFallback: Type;
-        let deferredGlobalNonNullableTypeFallbackInstantiationCache: Map<Type>;
-        let deferredGlobalNonNullableTypeParameterFallback: TypeParameter;
 
         // The library files are only loaded when the feature is used.
         // This allows users to just specify library files they want to used through --lib
@@ -11049,19 +11046,7 @@ namespace ts {
             if (deferredGlobalNonNullableTypeAlias !== unknownSymbol) {
                 return getTypeAliasInstantiation(deferredGlobalNonNullableTypeAlias, [type]);
             }
-            if (!deferredGlobalNonNullableTypeFallback) {
-                const p = deferredGlobalNonNullableTypeParameterFallback = createType(TypeFlags.TypeParameter) as TypeParameter;
-                deferredGlobalNonNullableTypeFallback = getConditionalType(p, getUnionType([nullType, undefinedType]), neverType, p, /*inferTypeParameters*/ undefined, /*target*/ undefined, /*mapper*/ undefined, /*alias*/ undefined, /*aliasTypeArguments*/ undefined);
-                deferredGlobalNonNullableTypeFallbackInstantiationCache = createMap();
-            }
-            // Fallback to manufacturing an anonymous conditional type instantiation
-            const args = [type];
-            const id = getTypeListId(args);
-            let instantiation = deferredGlobalNonNullableTypeFallbackInstantiationCache.get(id);
-            if (!instantiation) {
-                deferredGlobalNonNullableTypeFallbackInstantiationCache.set(id, instantiation = instantiateType(deferredGlobalNonNullableTypeFallback, createTypeMapper([deferredGlobalNonNullableTypeParameterFallback], [type])));
-            }
-            return instantiation;
+            return getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull); // Type alias unavailable, fall back to non-higherorder behavior
         }
 
         function getNonNullableType(type: Type): Type {
