@@ -424,7 +424,6 @@ namespace ts {
         return node.kind === SyntaxKind.VariableDeclaration && node.parent.kind === SyntaxKind.CatchClause;
     }
 
-    export interface AmbientModuleDeclaration extends ModuleDeclaration { body?: ModuleBlock; }
     export function isAmbientModule(node: Node): node is AmbientModuleDeclaration {
         return isModuleDeclaration(node) && (node.name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(node));
     }
@@ -458,12 +457,13 @@ namespace ts {
     }
 
     export function isExternalModuleAugmentation(node: Node): node is AmbientModuleDeclaration {
+        return isAmbientModule(node) && isModuleAugmentationExternal(node);
+    }
+
+    export function isModuleAugmentationExternal(node: AmbientModuleDeclaration) {
         // external module augmentation is a ambient module declaration that is either:
         // - defined in the top level scope and source file is an external module
         // - defined inside ambient module declaration located in the top level scope and source file not an external module
-        if (!isAmbientModule(node)) {
-            return false;
-        }
         switch (node.parent.kind) {
             case SyntaxKind.SourceFile:
                 return isExternalModule(node.parent);

@@ -2093,6 +2093,9 @@ namespace ts {
 
     export type ModuleBody = NamespaceBody | JSDocNamespaceBody;
 
+    /* @internal */
+    export interface AmbientModuleDeclaration extends ModuleDeclaration { body?: ModuleBlock; }
+
     export interface ModuleDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.ModuleDeclaration;
         parent?: ModuleBody | SourceFile;
