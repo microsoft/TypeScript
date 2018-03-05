@@ -20,3 +20,4 @@
 /// <reference path='inferFromUsage.ts' />
 /// <reference path="fixInvalidImportSyntax.ts" />
 /// <reference path="fixStrictClassInitialization.ts" />
+/// <reference path="useDefaultImport.ts" />

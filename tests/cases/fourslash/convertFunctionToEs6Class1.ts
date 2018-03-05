@@ -13,7 +13,6 @@
 
 verify.getSuggestionDiagnostics([{
     message: "This constructor function may be converted to a class declaration.",
-    category: "suggestion",
     code: 80002,
 }]);
 
