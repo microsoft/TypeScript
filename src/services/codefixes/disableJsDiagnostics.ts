@@ -11,7 +11,7 @@ namespace ts.codefix {
         getCodeActions(context) {
             const { sourceFile, program, span, host, formatContext } = context;
 
-            if (!isInJavaScriptFile(sourceFile) || !isCheckJsEnabledForFile(sourceFile, program.getCompilerOptions())) {
+            if (!isInJavaScriptFile(sourceFile) || !isCheckJsEnabledForFile(sourceFile, program.getCompilerOptions()) || !isValidSuppressLocation(sourceFile, span.start)) {
                 return undefined;
             }
 
@@ -35,15 +35,19 @@ namespace ts.codefix {
         getAllCodeActions: context => {
             const newLineCharacter = getNewLineOrDefaultFromHost(context.host, context.formatContext.options);
             const seenLines = createMap<true>();
-            return codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file!, diag.start!, newLineCharacter, seenLines));
+            return codeFixAll(context, errorCodes, (changes, diag) => {
+                if (isValidSuppressLocation(diag.file!, diag.start!)) {
+                    return makeChange(changes, diag.file!, diag.start!, newLineCharacter, seenLines);
+                }
+            });
         },
     });
 
-    function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, newLineCharacter: string, seenLines?: Map<true>) {
-        if (isInComment(sourceFile, position) || isInString(sourceFile, position) || isInTemplateString(sourceFile, position)) {
-            return;
-        }
+    function isValidSuppressLocation(sourceFile: SourceFile, position: number) {
+        return !isInComment(sourceFile, position) && !isInString(sourceFile, position) && !isInTemplateString(sourceFile, position);
+    }
 
+    function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, newLineCharacter: string, seenLines?: Map<true>) {
         const { line: lineNumber } = getLineAndCharacterOfPosition(sourceFile, position);
 
         // Only need to add `// @ts-ignore` for a line once.
