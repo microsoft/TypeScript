@@ -27,15 +27,12 @@ sourceFile:sourceMap-Comments2.ts
 ---
 >>>    return;
 1 >^^^^
-2 >    ^^^^^^
-3 >          ^
+2 >    ^^^^^^^
 1 >): void {
   >    
-2 >    return
-3 >          ;
+2 >    return;
 1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
-2 >Emitted(2, 11) Source(2, 11) + SourceIndex(0)
-3 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -84,15 +81,12 @@ sourceFile:sourceMap-Comments2.ts
 ---
 >>>    return;
 1 >^^^^
-2 >    ^^^^^^
-3 >          ^
+2 >    ^^^^^^^
 1 >): void {
   >    
-2 >    return
-3 >          ;
+2 >    return;
 1 >Emitted(8, 5) Source(9, 5) + SourceIndex(0)
-2 >Emitted(8, 11) Source(9, 11) + SourceIndex(0)
-3 >Emitted(8, 12) Source(9, 12) + SourceIndex(0)
+2 >Emitted(8, 12) Source(9, 12) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -135,15 +129,12 @@ sourceFile:sourceMap-Comments2.ts
 ---
 >>>    return;
 1 >^^^^
-2 >    ^^^^^^
-3 >          ^
+2 >    ^^^^^^^
 1 >): void {
   >    
-2 >    return
-3 >          ;
+2 >    return;
 1 >Emitted(12, 5) Source(14, 5) + SourceIndex(0)
-2 >Emitted(12, 11) Source(14, 11) + SourceIndex(0)
-3 >Emitted(12, 12) Source(14, 12) + SourceIndex(0)
+2 >Emitted(12, 12) Source(14, 12) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -176,15 +167,12 @@ sourceFile:sourceMap-Comments2.ts
 ---
 >>>    return;
 1 >^^^^
-2 >    ^^^^^^
-3 >          ^
+2 >    ^^^^^^^
 1 >): void {
   >    
-2 >    return
-3 >          ;
+2 >    return;
 1 >Emitted(15, 5) Source(18, 5) + SourceIndex(0)
-2 >Emitted(15, 11) Source(18, 11) + SourceIndex(0)
-3 >Emitted(15, 12) Source(18, 12) + SourceIndex(0)
+2 >Emitted(15, 12) Source(18, 12) + SourceIndex(0)
 ---
 >>>}
 1 >

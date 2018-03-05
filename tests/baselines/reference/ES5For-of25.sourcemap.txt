@@ -49,39 +49,33 @@ sourceFile:ES5For-of25.ts
 ---
 >>>for (var _i = 0, a_1 = a; _i < a_1.length; _i++) {
 1->
-2 >^^^
-3 >   ^
-4 >    ^
-5 >     ^^^^^^^^^^
-6 >               ^^
-7 >                 ^^^^^^^
-8 >                        ^^
-9 >                          ^^^^^^^^^^^^^^^
-10>                                         ^^
-11>                                           ^^^^
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^^
+6 >                        ^^
+7 >                          ^^^^^^^^^^^^^^^
+8 >                                         ^^
+9 >                                           ^^^^
 1->
   >
-2 >for
-3 >    
-4 >    (var v of 
-5 >     a
-6 >               
-7 >                 a
-8 >                        
-9 >                          a
-10>                                         
-11>                                           a
+2 >for (var v of 
+3 >     a
+4 >               
+5 >                 a
+6 >                        
+7 >                          a
+8 >                                         
+9 >                                           a
 1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
-2 >Emitted(2, 4) Source(2, 4) + SourceIndex(0)
-3 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
-4 >Emitted(2, 6) Source(2, 15) + SourceIndex(0)
-5 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
-6 >Emitted(2, 18) Source(2, 15) + SourceIndex(0)
-7 >Emitted(2, 25) Source(2, 16) + SourceIndex(0)
-8 >Emitted(2, 27) Source(2, 15) + SourceIndex(0)
-9 >Emitted(2, 42) Source(2, 16) + SourceIndex(0)
-10>Emitted(2, 44) Source(2, 15) + SourceIndex(0)
-11>Emitted(2, 48) Source(2, 16) + SourceIndex(0)
+2 >Emitted(2, 6) Source(2, 15) + SourceIndex(0)
+3 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
+4 >Emitted(2, 18) Source(2, 15) + SourceIndex(0)
+5 >Emitted(2, 25) Source(2, 16) + SourceIndex(0)
+6 >Emitted(2, 27) Source(2, 15) + SourceIndex(0)
+7 >Emitted(2, 42) Source(2, 16) + SourceIndex(0)
+8 >Emitted(2, 44) Source(2, 15) + SourceIndex(0)
+9 >Emitted(2, 48) Source(2, 16) + SourceIndex(0)
 ---
 >>>    var v = a_1[_i];
 1 >^^^^
