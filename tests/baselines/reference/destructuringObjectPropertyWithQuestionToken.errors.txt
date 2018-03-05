@@ -1,0 +1,10 @@
+tests/cases/conformance/es6/destructuring/destructuringObjectPropertyWithQuestionToken.ts(2,10): error TS1339: Property in destructuring not be marked optional.
+
+
+==== tests/cases/conformance/es6/destructuring/destructuringObjectPropertyWithQuestionToken.ts (1 errors) ====
+    declare class C {
+        f({ x?: number }): void;
+             ~
+!!! error TS1339: Property in destructuring not be marked optional.
+    }
+    

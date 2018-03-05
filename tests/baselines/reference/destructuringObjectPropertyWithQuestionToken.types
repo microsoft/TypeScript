@@ -1,0 +1,10 @@
+=== tests/cases/conformance/es6/destructuring/destructuringObjectPropertyWithQuestionToken.ts ===
+declare class C {
+>C : C
+
+    f({ x?: number }): void;
+>f : ({ x: number }: { x: any; }) => void
+>x : any
+>number : any
+}
+

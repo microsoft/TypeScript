@@ -5301,6 +5301,10 @@ namespace ts {
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             const tokenIsIdentifier = isIdentifier();
             const propertyName = parsePropertyName();
+            if (token() === SyntaxKind.QuestionToken) {
+                parseErrorAtCurrentToken(Diagnostics.Property_in_destructuring_not_be_marked_optional);
+                nextToken();
+            }
             if (tokenIsIdentifier && token() !== SyntaxKind.ColonToken) {
                 node.name = <Identifier>propertyName;
             }

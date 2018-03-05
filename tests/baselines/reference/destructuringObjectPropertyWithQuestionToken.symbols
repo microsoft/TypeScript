@@ -1,0 +1,10 @@
+=== tests/cases/conformance/es6/destructuring/destructuringObjectPropertyWithQuestionToken.ts ===
+declare class C {
+>C : Symbol(C, Decl(destructuringObjectPropertyWithQuestionToken.ts, 0, 0))
+
+    f({ x?: number }): void;
+>f : Symbol(C.f, Decl(destructuringObjectPropertyWithQuestionToken.ts, 0, 17))
+>x : Symbol(x)
+>number : Symbol(number, Decl(destructuringObjectPropertyWithQuestionToken.ts, 1, 7))
+}
+
