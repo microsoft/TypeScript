@@ -8,7 +8,5 @@ verify.completionsAt("", [{ name: `"'`, insertText: `["\\"'"]`, replacementSpan 
 
 verify.completionsAt("", [{ name: `"'`, insertText: `['"\\'']`, replacementSpan }], {
     includeInsertTextCompletions: true,
-    settings: {
-        quote: "'",
-    },
+    quote: "single",
 });

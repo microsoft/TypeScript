@@ -4050,8 +4050,10 @@ declare namespace ts {
         isKnownTypesPackageName?(name: string): boolean;
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
     }
-    interface ServicesSettings {
-        readonly quote: '"' | "'";
+    interface Options {
+        readonly quote?: "double" | "single";
+        readonly includeExternalModuleExports?: boolean;
+        readonly includeInsertTextCompletions?: boolean;
     }
     interface LanguageService {
         cleanupSemanticCache(): void;
@@ -4068,7 +4070,7 @@ declare namespace ts {
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
-        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined, settings: ServicesSettings | undefined): CompletionInfo;
+        getCompletionsAtPosition(fileName: string, position: number, settings: Options | undefined): CompletionInfo;
         getCompletionEntryDetails(fileName: string, position: number, name: string, options: FormatCodeOptions | FormatCodeSettings | undefined, source: string | undefined): CompletionEntryDetails;
         getCompletionEntrySymbol(fileName: string, position: number, name: string, source: string | undefined): Symbol;
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
@@ -4099,8 +4101,8 @@ declare namespace ts {
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings): ReadonlyArray<CodeFixAction>;
-        getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions;
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, servicesOptions: Options): ReadonlyArray<CodeFixAction>;
+        getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, servicesOptions: Options): CombinedCodeActions;
         applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
@@ -4122,10 +4124,8 @@ declare namespace ts {
         fileName: string;
     }
     type OrganizeImportsScope = CombinedCodeFixScope;
-    interface GetCompletionsAtPositionOptions {
-        includeExternalModuleExports: boolean;
-        includeInsertTextCompletions: boolean;
-    }
+    /** @deprecated Use Options */
+    type GetCompletionsAtPositionOptions = Options;
     interface ApplyCodeActionCommandResult {
         successMessage: string;
     }
@@ -5914,7 +5914,7 @@ declare namespace ts.server.protocol {
          * The format options to use during formatting and other code editing features.
          */
         formatOptions?: FormatCodeSettings;
-        servicesOptions?: ServicesSettings;
+        options?: Options;
         /**
          * The host's additional supported .js file extensions
          */
@@ -6287,15 +6287,13 @@ declare namespace ts.server.protocol {
          */
         prefix?: string;
         /**
-         * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
-         * This affects lone identifier completions but not completions on the right hand side of `obj.`.
+         * @deprecated Use Options
          */
-        includeExternalModuleExports: boolean;
+        includeExternalModuleExports?: boolean;
         /**
-         * If enabled, the completion list will include completions with invalid identifier names.
-         * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
+         * @deprecated Use Options
          */
-        includeInsertTextCompletions: boolean;
+        includeInsertTextCompletions?: boolean;
     }
     /**
      * Completions request; value of command field is "completions".
@@ -7045,8 +7043,18 @@ declare namespace ts.server.protocol {
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
         insertSpaceBeforeTypeAnnotation?: boolean;
     }
-    interface ServicesSettings {
-        quote: '"' | "'";
+    interface Options {
+        quote: "double" | "single";
+        /**
+         * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
+         * This affects lone identifier completions but not completions on the right hand side of `obj.`.
+         */
+        includeExternalModuleExports: boolean;
+        /**
+         * If enabled, the completion list will include completions with invalid identifier names.
+         * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
+         */
+        includeInsertTextCompletions: boolean;
     }
     interface CompilerOptions {
         allowJs?: boolean;
@@ -7310,8 +7318,8 @@ declare namespace ts.server {
         executeWithRequestId<T>(requestId: number, f: () => T): T;
         executeCommand(request: protocol.Request): HandlerResponse;
         onMessage(message: string): void;
-        private formatSettings(file);
-        private servicesSettings(file);
+        private getFormatOptions(file);
+        private getServicesOptions(file);
     }
     interface HandlerResponse {
         response?: {};
@@ -7330,7 +7338,7 @@ declare namespace ts.server {
          */
         readonly containingProjects: Project[];
         private formatSettings;
-        private servicesSettings;
+        private options;
         private textStorage;
         constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path);
         isScriptOpen(): boolean;
@@ -7339,14 +7347,14 @@ declare namespace ts.server {
         getSnapshot(): IScriptSnapshot;
         private ensureRealPath();
         getFormatCodeSettings(): FormatCodeSettings;
-        getServicesSettings(): ServicesSettings;
+        getOptions(): Options;
         attachToProject(project: Project): boolean;
         isAttached(project: Project): boolean;
         detachFromProject(project: Project): void;
         detachAllProjects(): void;
         getDefaultProject(): Project;
         registerFileUpdate(): void;
-        setSettings(formatSettings: FormatCodeSettings, servicesSettings: ServicesSettings): void;
+        setOptions(formatSettings: FormatCodeSettings, options: Options): void;
         getLatestVersion(): string;
         saveTo(fileName: string): void;
         reloadFromFile(tempFileName?: NormalizedPath): void;
@@ -7724,7 +7732,7 @@ declare namespace ts.server {
     function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind.Unknown | ScriptKind.JS | ScriptKind.JSX | ScriptKind.TS | ScriptKind.TSX;
     interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
-        servicesOptions: ServicesSettings;
+        options: Options;
         hostInfo: string;
         extraFileExtensions?: JsFileExtensionInfo[];
     }
@@ -7835,7 +7843,7 @@ declare namespace ts.server {
         private ensureProjectStructuresUptoDate();
         private updateProjectIfDirty(project);
         getFormatCodeOptions(file: NormalizedPath): FormatCodeSettings;
-        getServicesSettings(file: NormalizedPath): ServicesSettings;
+        getOptions(file: NormalizedPath): Options;
         private onSourceFileChanged(fileName, eventKind);
         private handleDeletedFile(info);
         private onConfigChangedForConfiguredProject(project, eventKind);

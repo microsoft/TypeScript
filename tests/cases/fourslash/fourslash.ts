@@ -151,9 +151,7 @@ declare namespace FourSlashInterface {
             kind?: string | { kind?: string, kindModifiers?: string },
             spanIndex?: number,
             hasAction?: boolean,
-            options?: {
-                includeExternalModuleExports?: boolean,
-                includeInsertTextCompletions?: boolean,
+            options?: Options & {
                 sourceDisplay?: string,
                 isRecommended?: true,
                 insertText?: string,
@@ -196,11 +194,7 @@ declare namespace FourSlashInterface {
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
-        completionsAt(markerName: string, completions: ReadonlyArray<string | { name: string, insertText?: string, replacementSpan?: Range }>, options?: {
-            isNewIdentifierLocation?: boolean;
-            includeInsertTextCompletions?: boolean;
-            settings?: ServicesSettings;
-        }): void;
+        completionsAt(markerName: string, completions: ReadonlyArray<string | { name: string, insertText?: string, replacementSpan?: Range }>, options?: CompletionsAtOptions): void;
         completionsAndDetailsAt(
             markerName: string,
             completions: {
@@ -528,8 +522,12 @@ declare namespace FourSlashInterface {
         category: string;
         code: number;
     }
-    interface ServicesSettings {
-        quote?: '"' | "'";
+    interface Options {
+        quote?: "double" | "single";
+        includeInsertTextCompletions?: boolean;
+    }
+    interface CompletionsAtOptions extends Options {
+        isNewIdentifierLocation?: boolean;
     }
 }
 declare function verifyOperationIsCancelled(f: any): void;

@@ -417,8 +417,8 @@ namespace Harness.LanguageService {
         getEncodedSemanticClassifications(fileName: string, span: ts.TextSpan): ts.Classifications {
             return unwrapJSONCallResult(this.shim.getEncodedSemanticClassifications(fileName, span.start, span.length));
         }
-        getCompletionsAtPosition(fileName: string, position: number, options: ts.GetCompletionsAtPositionOptions | undefined, settings: ts.ServicesSettings): ts.CompletionInfo {
-            return unwrapJSONCallResult(this.shim.getCompletionsAtPosition(fileName, position, options, settings));
+        getCompletionsAtPosition(fileName: string, position: number, options: ts.Options | undefined): ts.CompletionInfo {
+            return unwrapJSONCallResult(this.shim.getCompletionsAtPosition(fileName, position, options));
         }
         getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: ts.FormatCodeOptions | undefined, source: string | undefined): ts.CompletionEntryDetails {
             return unwrapJSONCallResult(this.shim.getCompletionEntryDetails(fileName, position, entryName, JSON.stringify(options), source));

@@ -365,7 +365,6 @@ namespace FourSlash {
 
             function memoWrap(ls: ts.LanguageService, target: TestState): ts.LanguageService {
                 const cacheableMembers: (keyof typeof ls)[] = [
-                    "getCompletionsAtPosition",
                     "getCompletionEntryDetails",
                     "getCompletionEntrySymbol",
                     "getQuickInfoAtPosition",
@@ -1221,7 +1220,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         private getCompletionListAtCaret(options?: FourSlashInterface.CompletionsAtOptions): ts.CompletionInfo {
-            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, options, options && options.settings);
+            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, options);
         }
 
         private getCompletionEntryDetails(entryName: string, source?: string): ts.CompletionEntryDetails {
@@ -1719,7 +1718,7 @@ Actual: ${stringify(fullActual)}`);
             Harness.IO.log(stringify(sigHelp));
         }
 
-        public printCompletionListMembers(options: ts.GetCompletionsAtPositionOptions | undefined) {
+        public printCompletionListMembers(options: ts.Options | undefined) {
             const completions = this.getCompletionListAtCaret(options);
             this.printMembersOrCompletions(completions);
         }
@@ -1818,7 +1817,7 @@ Actual: ${stringify(fullActual)}`);
                     }
                     else if (prevChar === " " && /A-Za-z_/.test(ch)) {
                         /* Completions */
-                        this.languageService.getCompletionsAtPosition(this.activeFile.fileName, offset, ts.defaultCompletionOptions, ts.defaultServicesSettings);
+                        this.languageService.getCompletionsAtPosition(this.activeFile.fileName, offset, ts.defaultOptions);
                     }
 
                     if (i % checkCadence === 0) {
@@ -2393,7 +2392,7 @@ Actual: ${stringify(fullActual)}`);
         public applyCodeActionFromCompletion(markerName: string, options: FourSlashInterface.VerifyCompletionActionOptions) {
             this.goToMarker(markerName);
 
-            const actualCompletion = this.getCompletionListAtCaret({ ...ts.defaultCompletionOptions, includeExternalModuleExports: true }).entries.find(e =>
+            const actualCompletion = this.getCompletionListAtCaret({ ...ts.defaultOptions, includeExternalModuleExports: true }).entries.find(e =>
                 e.name === options.name && e.source === options.source);
 
             if (!actualCompletion.hasAction) {
@@ -2445,7 +2444,7 @@ Actual: ${stringify(fullActual)}`);
             const { fixId, newFileContent } = options;
             const fixIds = ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => a.fixId);
             ts.Debug.assert(ts.contains(fixIds, fixId), "No available code fix has that group id.", () => `Expected '${fixId}'. Available action ids: ${fixIds}`);
-            const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings);
+            const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings, ts.defaultOptions);
             assert.deepEqual(commands, options.commands);
             assert(changes.every(c => c.fileName === this.activeFile.fileName), "TODO: support testing codefixes that touch multiple files");
             this.applyChanges(changes);
@@ -2525,7 +2524,7 @@ Actual: ${stringify(fullActual)}`);
                     return;
                 }
 
-                return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.start + diagnostic.length, [diagnostic.code], this.formatCodeSettings);
+                return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.start + diagnostic.length, [diagnostic.code], this.formatCodeSettings, ts.defaultOptions);
             });
         }
 
@@ -4419,7 +4418,7 @@ namespace FourSlashInterface {
             this.state.printCurrentSignatureHelp();
         }
 
-        public printCompletionListMembers(options: ts.GetCompletionsAtPositionOptions | undefined) {
+        public printCompletionListMembers(options: ts.Options | undefined) {
             this.state.printCompletionListMembers(options);
         }
 
@@ -4616,12 +4615,11 @@ namespace FourSlashInterface {
     }
 
     export type ExpectedCompletionEntry = string | { name: string, insertText?: string, replacementSpan?: FourSlash.Range };
-    export interface CompletionsAtOptions extends ts.GetCompletionsAtPositionOptions {
+    export interface CompletionsAtOptions extends Partial<ts.Options> {
         isNewIdentifierLocation?: boolean;
-        settings?: ts.ServicesSettings;
     }
 
-    export interface VerifyCompletionListContainsOptions extends ts.GetCompletionsAtPositionOptions {
+    export interface VerifyCompletionListContainsOptions extends ts.Options {
         sourceDisplay: string;
         isRecommended?: true;
         insertText?: string;

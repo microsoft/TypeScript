@@ -1424,7 +1424,7 @@ namespace ts {
             return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
         }
 
-    function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = defaultCompletionOptions, settings: ServicesSettings = defaultServicesSettings): CompletionInfo {
+    function getCompletionsAtPosition(fileName: string, position: number, settings: Options = defaultOptions): CompletionInfo {
             synchronizeHostData();
             return Completions.getCompletionsAtPosition(
                 host,
@@ -1434,7 +1434,6 @@ namespace ts {
                 getValidSourceFile(fileName),
                 position,
                 program.getSourceFiles(),
-                options,
                 settings);
         }
 
@@ -1815,7 +1814,7 @@ namespace ts {
             return [];
         }
 
-        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings): ReadonlyArray<CodeFixAction> {
+        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, options: Options): ReadonlyArray<CodeFixAction> {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const span = createTextSpanFromBounds(start, end);
@@ -1823,17 +1822,17 @@ namespace ts {
 
             return flatMap(deduplicate(errorCodes, equateValues, compareValues), errorCode => {
                 cancellationToken.throwIfCancellationRequested();
-                return codefix.getFixes({ errorCode, sourceFile, span, program, host, cancellationToken, formatContext });
+                return codefix.getFixes({ errorCode, sourceFile, span, program, host, cancellationToken, formatContext, options });
             });
         }
 
-        function getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions {
+        function getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, options: Options): CombinedCodeActions {
             synchronizeHostData();
             Debug.assert(scope.type === "file");
             const sourceFile = getValidSourceFile(scope.fileName);
             const formatContext = formatting.getFormatContext(formatOptions);
 
-            return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext });
+            return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext, options });
         }
 
         function organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {

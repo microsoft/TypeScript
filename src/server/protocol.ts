@@ -1232,7 +1232,7 @@ namespace ts.server.protocol {
          */
         formatOptions?: FormatCodeSettings;
 
-        servicesOptions?: ServicesSettings;
+        options?: Options;
 
         /**
          * The host's additional supported .js file extensions
@@ -1709,15 +1709,13 @@ namespace ts.server.protocol {
          */
         prefix?: string;
         /**
-         * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
-         * This affects lone identifier completions but not completions on the right hand side of `obj.`.
+         * @deprecated Use Options
          */
-        includeExternalModuleExports: boolean;
+        includeExternalModuleExports?: boolean;
         /**
-         * If enabled, the completion list will include completions with invalid identifier names.
-         * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
+         * @deprecated Use Options
          */
-        includeInsertTextCompletions: boolean;
+        includeInsertTextCompletions?: boolean;
     }
 
     /**
@@ -2590,8 +2588,18 @@ namespace ts.server.protocol {
         insertSpaceBeforeTypeAnnotation?: boolean;
     }
 
-    export interface ServicesSettings {
-        quote: '"' | "'";
+    export interface Options {
+        quote: "double" | "single";
+        /**
+         * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
+         * This affects lone identifier completions but not completions on the right hand side of `obj.`.
+         */
+        includeExternalModuleExports: boolean;
+        /**
+         * If enabled, the completion list will include completions with invalid identifier names.
+         * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
+         */
+        includeInsertTextCompletions: boolean;
     }
 
     export interface CompilerOptions {

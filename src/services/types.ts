@@ -214,13 +214,13 @@ namespace ts {
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
     }
 
-    export interface ServicesSettings {
-        readonly quote: '"' | "'";
+    export interface Options {
+        readonly quote?: "double" | "single";
+        readonly includeExternalModuleExports?: boolean;
+        readonly includeInsertTextCompletions?: boolean;
     }
     /* @internal */
-    export const defaultServicesSettings: ServicesSettings = {
-        quote: '"'
-    };
+    export const defaultOptions: Options = {};
 
     //
     // Public services of a language service instance associated
@@ -250,7 +250,7 @@ namespace ts {
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
 
-        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined, settings: ServicesSettings | undefined): CompletionInfo;
+        getCompletionsAtPosition(fileName: string, position: number, settings: Options | undefined): CompletionInfo;
         // "options" and "source" are optional only for backwards-compatibility
         getCompletionEntryDetails(
             fileName: string,
@@ -303,8 +303,8 @@ namespace ts {
 
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
 
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings): ReadonlyArray<CodeFixAction>;
-        getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions;
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, servicesOptions: Options): ReadonlyArray<CodeFixAction>;
+        getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, servicesOptions: Options): CombinedCodeActions;
         applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
@@ -337,12 +337,8 @@ namespace ts {
 
     export type OrganizeImportsScope = CombinedCodeFixScope;
 
-    export interface GetCompletionsAtPositionOptions {
-        includeExternalModuleExports: boolean;
-        includeInsertTextCompletions: boolean;
-    }
-    /* @internal */
-    export const defaultCompletionOptions: GetCompletionsAtPositionOptions = { includeExternalModuleExports: false, includeInsertTextCompletions: false };
+    /** @deprecated Use Options */
+    export type GetCompletionsAtPositionOptions = Options;
 
     export interface ApplyCodeActionCommandResult {
         successMessage: string;
