@@ -3826,6 +3826,10 @@
         "category": "Suggestion",
         "code": 80002
     },
+    "Import may be converted to a default import.": {
+        "category": "Suggestion",
+        "code": 80003
+    },
 
     "Add missing 'super()' call": {
         "category": "Message",
