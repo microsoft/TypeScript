@@ -246,8 +246,12 @@ interface Array<T> {}`
     }
 
     export interface ReloadWatchInvokeOptions {
+        /** Invokes the directory watcher for the parent instead of the file changed */
         invokeDirectoryWatcherInsteadOfFileChanged: boolean;
+        /** When new file is created, do not invoke watches for it */
         ignoreWatchInvokedWithTriggerAsFileCreate: boolean;
+        /** Invoke the file delete, followed by create instead of file changed */
+        invokeFileDeleteCreateAsPartInsteadOfChange: boolean;
     }
 
     export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
@@ -315,12 +319,18 @@ interface Array<T> {}`
                         if (isString(fileOrDirectory.content)) {
                             // Update file
                             if (currentEntry.content !== fileOrDirectory.content) {
-                                currentEntry.content = fileOrDirectory.content;
-                                if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
-                                    this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
+                                if (options && options.invokeFileDeleteCreateAsPartInsteadOfChange) {
+                                    this.removeFileOrFolder(currentEntry, returnFalse);
+                                    this.ensureFileOrFolder(fileOrDirectory);
                                 }
                                 else {
-                                    this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
+                                    currentEntry.content = fileOrDirectory.content;
+                                    if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
+                                        this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
+                                    }
+                                    else {
+                                        this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
+                                    }
                                 }
                             }
                         }
@@ -395,9 +405,11 @@ interface Array<T> {}`
         ensureFileOrFolder(fileOrDirectory: FileOrFolder, ignoreWatchInvokedWithTriggerAsFileCreate?: boolean) {
             if (isString(fileOrDirectory.content)) {
                 const file = this.toFile(fileOrDirectory);
-                Debug.assert(!this.fs.get(file.path));
-                const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath));
-                this.addFileOrFolderInFolder(baseFolder, file, ignoreWatchInvokedWithTriggerAsFileCreate);
+                // file may already exist when updating existing type declaration file
+                if (!this.fs.get(file.path)) {
+                    const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath));
+                    this.addFileOrFolderInFolder(baseFolder, file, ignoreWatchInvokedWithTriggerAsFileCreate);
+                }
             }
             else if (isString(fileOrDirectory.symLink)) {
                 const symLink = this.toSymLink(fileOrDirectory);
@@ -612,7 +624,7 @@ interface Array<T> {}`
         }
 
         readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
-            return ts.matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, (dir) => {
+            return matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, (dir) => {
                 const directories: string[] = [];
                 const files: string[] = [];
                 const folder = this.getRealFolder(this.toPath(dir));
@@ -696,7 +708,10 @@ interface Array<T> {}`
             }
         }
 
-        runQueuedImmediateCallbacks() {
+        runQueuedImmediateCallbacks(checkCount?: number) {
+            if (checkCount !== undefined) {
+                assert.equal(this.immediateCallbacks.count(), checkCount);
+            }
             this.immediateCallbacks.invoke();
         }
 

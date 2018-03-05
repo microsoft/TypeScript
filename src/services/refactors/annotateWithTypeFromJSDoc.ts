@@ -76,7 +76,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
         const declarationWithType = addType(decl, transformJSDocType(jsdocType) as TypeNode);
         suppressLeadingAndTrailingTrivia(declarationWithType);
-        changeTracker.replaceRange(sourceFile, { pos: decl.getStart(), end: decl.end }, declarationWithType);
+        changeTracker.replaceNode(sourceFile, decl, declarationWithType, textChanges.useNonAdjustedPositions);
         return {
             edits: changeTracker.getChanges(),
             renameFilename: undefined,
@@ -91,7 +91,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
         const functionWithType = addTypesToFunctionLike(decl);
         suppressLeadingAndTrailingTrivia(functionWithType);
-        changeTracker.replaceRange(sourceFile, { pos: decl.getStart(), end: decl.end }, functionWithType);
+        changeTracker.replaceNode(sourceFile, decl, functionWithType, textChanges.useNonAdjustedPositions);
         return {
             edits: changeTracker.getChanges(),
             renameFilename: undefined,
@@ -118,7 +118,7 @@ namespace ts.refactor.annotateWithTypeFromJSDoc {
             case SyntaxKind.Constructor:
                 return createConstructor(decl.decorators, decl.modifiers, parameters, decl.body);
             case SyntaxKind.FunctionExpression:
-                return createFunctionExpression(decl.modifiers, decl.asteriskToken, (decl as FunctionExpression).name, typeParameters, parameters, returnType, decl.body);
+                return createFunctionExpression(decl.modifiers, decl.asteriskToken, decl.name, typeParameters, parameters, returnType, decl.body);
             case SyntaxKind.ArrowFunction:
                 return createArrowFunction(decl.modifiers, typeParameters, parameters, returnType, decl.equalsGreaterThanToken, decl.body);
             case SyntaxKind.MethodDeclaration:

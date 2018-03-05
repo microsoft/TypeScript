@@ -243,13 +243,13 @@ function f10(shape: Shape) {
 }
 
 function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {
->f20 : <T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) => void
+>f20 : <T, U>(k1: keyof (T | U), k2: keyof T | keyof U, o1: T | U, o2: T & U) => void
 >T : T
 >U : U
 >k1 : keyof (T | U)
 >T : T
 >U : U
->k2 : keyof (T & U)
+>k2 : keyof T | keyof U
 >T : T
 >U : U
 >o1 : T | U
@@ -265,9 +265,9 @@ function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {
 >k1 : keyof (T | U)
 
     o1[k2];   // Error
->o1[k2] : (T | U)[keyof (T & U)]
+>o1[k2] : (T | U)[keyof T | keyof U]
 >o1 : T | U
->k2 : keyof (T & U)
+>k2 : keyof T | keyof U
 
     o2[k1];
 >o2[k1] : (T & U)[keyof (T | U)]
@@ -275,9 +275,9 @@ function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {
 >k1 : keyof (T | U)
 
     o2[k2];
->o2[k2] : (T & U)[keyof (T & U)]
+>o2[k2] : (T & U)[keyof T | keyof U]
 >o2 : T & U
->k2 : keyof (T & U)
+>k2 : keyof T | keyof U
 
     o1 = o2;
 >o1 = o2 : T & U
@@ -290,13 +290,13 @@ function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {
 >o1 : T | U
 
     k1 = k2;  // Error
->k1 = k2 : keyof (T & U)
+>k1 = k2 : keyof T | keyof U
 >k1 : keyof (T | U)
->k2 : keyof (T & U)
+>k2 : keyof T | keyof U
 
     k2 = k1;
 >k2 = k1 : keyof (T | U)
->k2 : keyof (T & U)
+>k2 : keyof T | keyof U
 >k1 : keyof (T | U)
 }
 

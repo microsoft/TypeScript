@@ -4,6 +4,7 @@ var obj = {
 >{    [Symbol.iterator]: 0} : { [Symbol.iterator]: number; }
 
     [Symbol.iterator]: 0
+>[Symbol.iterator] : number
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol

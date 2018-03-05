@@ -8,12 +8,13 @@ let x = Test; // emit test_1.default
 >Test : Symbol(Test, Decl(consumer.tsx, 1, 6))
 
 <anything attr={Test} />; // ?
->anything : Symbol(unknown)
 >attr : Symbol(attr, Decl(consumer.tsx, 4, 9))
 >Test : Symbol(Test, Decl(consumer.tsx, 1, 6))
 
 === tests/cases/compiler/component.d.ts ===
 declare module "Test" {
+>"Test" : Symbol("Test", Decl(component.d.ts, 0, 0))
+
 	export default class Text { }
 >Text : Symbol(Text, Decl(component.d.ts, 0, 23))
 }

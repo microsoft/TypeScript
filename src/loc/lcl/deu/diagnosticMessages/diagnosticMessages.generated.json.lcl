@@ -3018,6 +3018,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Enum_declarations_can_only_merge_with_namespace_or_other_enum_declarations_2567" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Enum declarations can only merge with namespace or other enum declarations.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Enumerationsdeklarationen können nur mit Namespace- oder anderen Enumerationsdeklarationen zusammengeführt werden.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Enum_declarations_must_all_be_const_or_non_const_2473" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enum declarations must all be const or non-const.]]></Val>
@@ -8756,6 +8765,15 @@
           <Val><![CDATA['import ... =' can only be used in a .ts file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA["import... =" kann nur in einer TS-Datei verwendet werden.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";infer_declarations_are_only_permitted_in_the_extends_clause_of_a_conditional_type_1338" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['infer' declarations are only permitted in the 'extends' clause of a conditional type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[infer-Deklarationen sind nur in der extends-Klausel eines bedingten Typs zulässig.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

@@ -3,5 +3,6 @@ class C {
 >C : C
 
   set "a"(i) { }
+>"a" : any
 >i : any
 }

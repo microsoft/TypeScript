@@ -102,7 +102,7 @@ declare namespace FourSlashInterface {
     }
     interface Range {
         fileName: string;
-        start: number;
+        pos: number;
         end: number;
         marker?: Marker;
     }
@@ -157,6 +157,7 @@ declare namespace FourSlashInterface {
                 sourceDisplay?: string,
                 isRecommended?: true,
                 insertText?: string,
+                replacementSpan?: Range,
             },
         ): void;
         completionListItemsCountIsGreaterThan(count: number): void;
@@ -180,7 +181,7 @@ declare namespace FourSlashInterface {
             errorCode?: number,
             index?: number,
         });
-        codeFixAvailable(options: Array<{ description: string, actions?: Array<{ type: string, data: {} }>, commands?: {}[] }>): void;
+        codeFixAvailable(options?: Array<{ description: string, actions?: Array<{ type: string, data: {} }>, commands?: {}[] }>): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
@@ -255,10 +256,10 @@ declare namespace FourSlashInterface {
          */
         referencesOf(start: Range, references: Range[]): void;
         /**
-         * For each of startRanges, asserts the ranges that are referenced from there.
+         * For each of starts, asserts the ranges that are referenced from there.
          * This uses the 'findReferences' command instead of 'getReferencesAtPosition', so references are grouped by their definition.
          */
-        referenceGroups(startRanges: Range | Range[], parts: Array<{ definition: ReferencesDefinition, ranges: Range[] }>): void;
+        referenceGroups(starts: string | string[] | Range | Range[], parts: Array<{ definition: ReferencesDefinition, ranges: Range[] }>): void;
         singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[]): void;
         rangesAreOccurrences(isWriteAccess?: boolean): void;
         rangesWithSameTextAreRenameLocations(): void;
@@ -288,7 +289,7 @@ declare namespace FourSlashInterface {
         baselineGetEmitOutput(): void;
         baselineQuickInfo(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
-        outliningSpansInCurrentFile(spans: TextSpan[]): void;
+        outliningSpansInCurrentFile(spans: Range[]): void;
         todoCommentsInCurrentFile(descriptors: string[]): void;
         matchingBracePositionInCurrentFile(bracePosition: number, expectedMatchPosition: number): void;
         noMatchingBracePositionInCurrentFile(bracePosition: number): void;
@@ -346,8 +347,9 @@ declare namespace FourSlashInterface {
             start: number;
             length: number;
         }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: ts.JSDocTagInfo[]): void;
-        getSyntacticDiagnostics(expected: string): void;
-        getSemanticDiagnostics(expected: string): void;
+        getSyntacticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
+        getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
+        getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         ProjectInfo(expected: string[]): void;
         allRangesAppearInImplementationList(markerName: string): void;
     }
@@ -515,9 +517,15 @@ declare namespace FourSlashInterface {
         };
     }
 
-    interface ReferencesDefinition {
+    type ReferencesDefinition = string | {
         text: string;
         range: Range;
+    }
+    interface Diagnostic {
+        message: string;
+        /** @default `test.ranges()[0]` */
+        range?: Range;
+        code: number;
     }
 }
 declare function verifyOperationIsCancelled(f: any): void;

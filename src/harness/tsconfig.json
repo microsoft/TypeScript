@@ -129,6 +129,7 @@
         "./unittests/tsserverProjectSystem.ts",
         "./unittests/tscWatchMode.ts",
         "./unittests/matchFiles.ts",
+        "./unittests/organizeImports.ts",
         "./unittests/initializeTSConfig.ts",
         "./unittests/compileOnSave.ts",
         "./unittests/typingsInstaller.ts",

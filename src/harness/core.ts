@@ -2,6 +2,7 @@
 
 namespace core {
     const _core = require("@typescript/harness-core");
+    // tslint:disable:no-unnecessary-qualifier
     core.identity = _core.identity;
     core.compareNumbers = _core.compareNumbers;
     core.compareStrings = _core.compareStrings;
@@ -25,6 +26,7 @@ namespace core {
     core.splitLines = _core.splitLines;
     core.computeLineStarts = _core.computeLineStarts;
     core.sha1 = _core.sha1;
+    // tslint:enable:no-unnecessary-qualifier
 }
 
 declare module "_core" {

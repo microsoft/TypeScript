@@ -37,6 +37,7 @@ x = {
 >x : Symbol(x, Decl(objectLitIndexerContextualType.ts, 8, 3))
 
     0: t => t * t, // Should error
+>0 : Symbol(0, Decl(objectLitIndexerContextualType.ts, 13, 5))
 >t : Symbol(t, Decl(objectLitIndexerContextualType.ts, 14, 6))
 >t : Symbol(t, Decl(objectLitIndexerContextualType.ts, 14, 6))
 >t : Symbol(t, Decl(objectLitIndexerContextualType.ts, 14, 6))
@@ -56,6 +57,7 @@ y = {
 >y : Symbol(y, Decl(objectLitIndexerContextualType.ts, 9, 3))
 
     0: t => t * t, // Should error
+>0 : Symbol(0, Decl(objectLitIndexerContextualType.ts, 19, 5))
 >t : Symbol(t, Decl(objectLitIndexerContextualType.ts, 20, 6))
 >t : Symbol(t, Decl(objectLitIndexerContextualType.ts, 20, 6))
 >t : Symbol(t, Decl(objectLitIndexerContextualType.ts, 20, 6))

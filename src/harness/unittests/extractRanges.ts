@@ -9,7 +9,7 @@ namespace ts {
             if (!selectionRange) {
                 throw new Error(`Test ${s} does not specify selection range`);
             }
-            const result = refactor.extractSymbol.getRangeToExtract(file, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
+            const result = refactor.extractSymbol.getRangeToExtract(file, createTextSpanFromRange(selectionRange));
             assert(result.targetRange === undefined, "failure expected");
             const sortedErrors = result.errors.map(e => <string>e.messageText).sort();
             assert.deepEqual(sortedErrors, expectedErrors.sort(), "unexpected errors");
@@ -23,19 +23,19 @@ namespace ts {
         if (!selectionRange) {
             throw new Error(`Test ${s} does not specify selection range`);
         }
-        const result = refactor.extractSymbol.getRangeToExtract(f, createTextSpanFromBounds(selectionRange.start, selectionRange.end));
+        const result = refactor.extractSymbol.getRangeToExtract(f, createTextSpanFromRange(selectionRange));
         const expectedRange = t.ranges.get("extracted");
         if (expectedRange) {
-            let start: number, end: number;
-            if (ts.isArray(result.targetRange.range)) {
-                start = result.targetRange.range[0].getStart(f);
-                end = ts.lastOrUndefined(result.targetRange.range).getEnd();
+            let pos: number, end: number;
+            if (isArray(result.targetRange.range)) {
+                pos = result.targetRange.range[0].getStart(f);
+                end = lastOrUndefined(result.targetRange.range).getEnd();
             }
             else {
-                start = result.targetRange.range.getStart(f);
+                pos = result.targetRange.range.getStart(f);
                 end = result.targetRange.range.getEnd();
             }
-            assert.equal(start, expectedRange.start, "incorrect start of range");
+            assert.equal(pos, expectedRange.pos, "incorrect pos of range");
             assert.equal(end, expectedRange.end, "incorrect end of range");
         }
         else {

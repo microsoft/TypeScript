@@ -13,7 +13,7 @@ export class Directory {
     public readonly uid: number | undefined;
     public readonly gid: number | undefined;
     public readonly mode: number | undefined;
-    public readonly meta: Record<string, any>;
+    public readonly meta: Record<string, any> | undefined;
     constructor(files: FileSet, { uid, gid, mode, meta }: { uid?: number, gid?: number, mode?: number, meta?: Record<string, any> } = {}) {
         this.files = files;
         this.uid = uid;
@@ -29,8 +29,8 @@ export class File {
     public readonly encoding: string | undefined;
     public readonly uid: number | undefined;
     public readonly gid: number | undefined;
-    public readonly mode: number | undefined;
-    public readonly meta: Record<string, any>;
+    public readonly mode: number | undefined | undefined;
+    public readonly meta: Record<string, any> | undefined;
     constructor(data: Buffer | string, { uid, gid, mode, meta, encoding }: { encoding?: string, uid?: number, gid?: number, mode?: number, meta?: Record<string, any> } = {}) {
         this.data = data;
         this.encoding = encoding;
@@ -55,7 +55,7 @@ export class Symlink {
     public readonly uid: number | undefined;
     public readonly gid: number | undefined;
     public readonly mode: number | undefined;
-    public readonly meta: Record<string, any>;
+    public readonly meta: Record<string, any> | undefined;
     constructor(symlink: string, { uid, gid, mode, meta }: { uid?: number, gid?: number, mode?: number, meta?: Record<string, any> } = {}) {
         this.symlink = symlink;
         this.uid = uid;
@@ -72,7 +72,7 @@ export class Mount {
     public readonly uid: number | undefined;
     public readonly gid: number | undefined;
     public readonly mode: number | undefined;
-    public readonly meta: Record<string, any>;
+    public readonly meta: Record<string, any> | undefined;
     constructor(source: string, resolver: FileSystemResolver, { uid, gid, mode, meta }: { uid?: number, gid?: number, mode?: number, meta?: Record<string, any> } = {}) {
         this.source = source;
         this.resolver = resolver;

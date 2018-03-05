@@ -83,7 +83,7 @@ namespace ts.server {
         };
     }
 
-    export function mergeMapLikes(target: MapLike<any>, source: MapLike<any>): void {
+    export function mergeMapLikes<T extends object>(target: T, source: Partial<T>): void {
         for (const key in source) {
             if (hasProperty(source, key)) {
                 target[key] = source[key];
@@ -230,18 +230,6 @@ namespace ts.server {
     export function getBaseConfigFileName(configFilePath: NormalizedPath): "tsconfig.json" | "jsconfig.json" | undefined {
         const base = getBaseFileName(configFilePath);
         return base === "tsconfig.json" || base === "jsconfig.json" ? base : undefined;
-    }
-
-    export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void {
-        if (array.length === 0) {
-            array.push(insert);
-            return;
-        }
-
-        const insertIndex = binarySearch(array, insert, identity, compare);
-        if (insertIndex < 0) {
-            array.splice(~insertIndex, 0, insert);
-        }
     }
 
     export function removeSorted<T>(array: SortedArray<T>, remove: T, compare: Comparer<T>): void {

@@ -9,6 +9,7 @@ declare class Foo {
 >"test" : "test"
 
 	"some prop" = 42;
+>"some prop" : number
 >42 : 42
 
 	fn(): boolean {

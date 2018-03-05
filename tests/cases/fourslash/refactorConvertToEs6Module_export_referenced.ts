@@ -7,7 +7,7 @@
 ////exports.x;
 ////
 ////const y = 1;
-/////*a*/exports/*b*/.y = y;
+////exports.y = y;
 ////exports.y;
 ////
 ////exports.z = 2;
@@ -15,12 +15,10 @@
 ////    exports.z;
 ////}
 
-goTo.select("a", "b");
-edit.applyRefactor({
-    refactorName: "Convert to ES6 module",
-    actionName: "Convert to ES6 module",
-    actionDescription: "Convert to ES6 module",
-    newContent: `export const x = 0;
+verify.codeFix({
+    description: "Convert to ES6 module",
+    newFileContent:
+`export const x = 0;
 x;
 
 const y = 1;

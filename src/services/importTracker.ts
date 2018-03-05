@@ -86,7 +86,7 @@ namespace ts.FindAllReferences {
                             if (!isAvailableThroughGlobal) {
                                 const parent = direct.parent!;
                                 if (exportKind === ExportKind.ExportEquals && parent.kind === SyntaxKind.VariableDeclaration) {
-                                    const { name } = parent as ts.VariableDeclaration;
+                                    const { name } = parent as VariableDeclaration;
                                     if (name.kind === SyntaxKind.Identifier) {
                                         directImports.push(name);
                                         break;
@@ -106,6 +106,13 @@ namespace ts.FindAllReferences {
                             const namedBindings = direct.importClause && direct.importClause.namedBindings;
                             if (namedBindings && namedBindings.kind === SyntaxKind.NamespaceImport) {
                                 handleNamespaceImport(direct, namedBindings.name);
+                            }
+                            else if (isDefaultImport(direct)) {
+                                const sourceFileLike = getSourceFileLikeForImportDeclaration(direct);
+                                if (!isAvailableThroughGlobal) {
+                                    addIndirectUser(sourceFileLike); // Add a check for indirect uses to handle synthetic default imports
+                                }
+                                directImports.push(direct);
                             }
                             else {
                                 directImports.push(direct);
@@ -202,7 +209,7 @@ namespace ts.FindAllReferences {
                 return;
             }
 
-            if (decl.kind === ts.SyntaxKind.Identifier) {
+            if (decl.kind === SyntaxKind.Identifier) {
                 handleNamespaceImportLike(decl);
                 return;
             }
@@ -322,7 +329,7 @@ namespace ts.FindAllReferences {
         const checker = program.getTypeChecker();
         for (const referencingFile of sourceFiles) {
             const searchSourceFile = searchModuleSymbol.valueDeclaration;
-            if (searchSourceFile.kind === ts.SyntaxKind.SourceFile) {
+            if (searchSourceFile.kind === SyntaxKind.SourceFile) {
                 for (const ref of referencingFile.referencedFiles) {
                     if (program.getSourceFileFromReference(referencingFile, ref) === searchSourceFile) {
                         refs.push({ kind: "reference", referencingFile, ref });
@@ -330,7 +337,7 @@ namespace ts.FindAllReferences {
                 }
                 for (const ref of referencingFile.typeReferenceDirectives) {
                     const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName);
-                    if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile as ts.SourceFile).fileName) {
+                    if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile as SourceFile).fileName) {
                         refs.push({ kind: "reference", referencingFile, ref });
                     }
                 }
@@ -496,7 +503,7 @@ namespace ts.FindAllReferences {
                 return { kind: ImportExport.Export, symbol, exportInfo: { exportingModuleSymbol, exportKind } };
             }
 
-            function getSpecialPropertyExport(node: ts.BinaryExpression, useLhsSymbol: boolean): ExportedSymbol | undefined {
+            function getSpecialPropertyExport(node: BinaryExpression, useLhsSymbol: boolean): ExportedSymbol | undefined {
                 let kind: ExportKind;
                 switch (getSpecialPropertyAssignmentKind(node)) {
                     case SpecialPropertyAssignmentKind.ExportsProperty:
@@ -512,27 +519,10 @@ namespace ts.FindAllReferences {
                 const sym = useLhsSymbol ? checker.getSymbolAtLocation(cast(node.left, isPropertyAccessExpression).name) : symbol;
                 // Better detection for GH#20803
                 if (sym && !(checker.getMergedSymbol(sym.parent).flags & SymbolFlags.Module)) {
-                    Debug.fail(`Special property assignment kind does not have a module as its parent. Assignment is ${showSymbol(sym)}, parent is ${showSymbol(sym.parent)}`);
+                    Debug.fail(`Special property assignment kind does not have a module as its parent. Assignment is ${Debug.showSymbol(sym)}, parent is ${Debug.showSymbol(sym.parent)}`);
                 }
                 return sym && exportInfo(sym, kind);
             }
-        }
-
-        function showSymbol(s: Symbol): string {
-            const decls = s.declarations.map(d => (ts as any).SyntaxKind[d.kind]).join(",");
-            const flags = showFlags(s.flags, (ts as any).SymbolFlags);
-            return `{ declarations: ${decls}, flags: ${flags} }`;
-        }
-
-        function showFlags(f: number, flags: any) {
-            const out = [];
-            for (let pow = 0; pow <= 30; pow++) {
-                const n = 1 << pow;
-                if (f & n) {
-                    out.push(flags[n]);
-                }
-            }
-            return out.join("|");
         }
 
         function getImport(): ImportedSymbol | undefined {
@@ -572,26 +562,26 @@ namespace ts.FindAllReferences {
 
     function getExportEqualsLocalSymbol(importedSymbol: Symbol, checker: TypeChecker): Symbol {
         if (importedSymbol.flags & SymbolFlags.Alias) {
-            return checker.getImmediateAliasedSymbol(importedSymbol);
+            return Debug.assertDefined(checker.getImmediateAliasedSymbol(importedSymbol));
         }
 
         const decl = importedSymbol.valueDeclaration;
         if (isExportAssignment(decl)) { // `export = class {}`
-            return decl.expression.symbol;
+            return Debug.assertDefined(decl.expression.symbol);
         }
         else if (isBinaryExpression(decl)) { // `module.exports = class {}`
-            return decl.right.symbol;
+            return Debug.assertDefined(decl.right.symbol);
         }
-        Debug.fail();
+        return Debug.fail();
     }
 
     // If a reference is a class expression, the exported node would be its parent.
     // If a reference is a variable declaration, the exported node would be the variable statement.
     function getExportNode(parent: Node, node: Node): Node | undefined {
         if (parent.kind === SyntaxKind.VariableDeclaration) {
-            const p = parent as ts.VariableDeclaration;
+            const p = parent as VariableDeclaration;
             return p.name !== node ? undefined :
-                p.parent.kind === ts.SyntaxKind.CatchClause ? undefined : p.parent.parent.kind === SyntaxKind.VariableStatement ? p.parent.parent : undefined;
+                p.parent.kind === SyntaxKind.CatchClause ? undefined : p.parent.parent.kind === SyntaxKind.VariableStatement ? p.parent.parent : undefined;
         }
         else {
             return parent;
@@ -618,7 +608,9 @@ namespace ts.FindAllReferences {
     }
 
     export function getExportInfo(exportSymbol: Symbol, exportKind: ExportKind, checker: TypeChecker): ExportInfo | undefined {
-        const exportingModuleSymbol = checker.getMergedSymbol(exportSymbol.parent); // Need to get merged symbol in case there's an augmentation.
+        const moduleSymbol = exportSymbol.parent;
+        if (!moduleSymbol) return undefined; // This can happen if an `export` is not at the top-level (which is a compile error).
+        const exportingModuleSymbol = checker.getMergedSymbol(moduleSymbol); // Need to get merged symbol in case there's an augmentation.
         // `export` may appear in a namespace. In that case, just rely on global search.
         return isExternalModuleSymbol(exportingModuleSymbol) ? { exportingModuleSymbol, exportKind } : undefined;
     }
@@ -639,7 +631,7 @@ namespace ts.FindAllReferences {
         // For `export { foo } from './bar", there's nothing to skip, because it does not create a new alias. But `export { foo } does.
         if (symbol.declarations) {
             for (const declaration of symbol.declarations) {
-                if (isExportSpecifier(declaration) && !(declaration as ExportSpecifier).propertyName && !(declaration as ExportSpecifier).parent.parent.moduleSpecifier) {
+                if (isExportSpecifier(declaration) && !declaration.propertyName && !declaration.parent.parent.moduleSpecifier) {
                     return checker.getExportSpecifierLocalTargetSymbol(declaration);
                 }
             }
@@ -661,8 +653,8 @@ namespace ts.FindAllReferences {
         if (parent.kind === SyntaxKind.SourceFile) {
             return parent as SourceFile;
         }
-        Debug.assert(parent.kind === SyntaxKind.ModuleBlock && isAmbientModuleDeclaration(parent.parent));
-        return parent.parent as AmbientModuleDeclaration;
+        Debug.assert(parent.kind === SyntaxKind.ModuleBlock);
+        return cast(parent.parent, isAmbientModuleDeclaration);
     }
 
     function isAmbientModuleDeclaration(node: Node): node is AmbientModuleDeclaration {

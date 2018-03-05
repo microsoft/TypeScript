@@ -4,15 +4,15 @@
 
 namespace ts.tscWatch {
 
-    import WatchedSystem = ts.TestFSWithWatch.TestServerHost;
-    type FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
-    import createWatchedSystem = ts.TestFSWithWatch.createWatchedSystem;
-    import checkFileNames = ts.TestFSWithWatch.checkFileNames;
-    import libFile = ts.TestFSWithWatch.libFile;
-    import checkWatchedFiles = ts.TestFSWithWatch.checkWatchedFiles;
-    import checkWatchedDirectories = ts.TestFSWithWatch.checkWatchedDirectories;
-    import checkOutputContains = ts.TestFSWithWatch.checkOutputContains;
-    import checkOutputDoesNotContain = ts.TestFSWithWatch.checkOutputDoesNotContain;
+    import WatchedSystem = TestFSWithWatch.TestServerHost;
+    type FileOrFolder = TestFSWithWatch.FileOrFolder;
+    import createWatchedSystem = TestFSWithWatch.createWatchedSystem;
+    import checkFileNames = TestFSWithWatch.checkFileNames;
+    import libFile = TestFSWithWatch.libFile;
+    import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
+    import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
+    import checkOutputContains = TestFSWithWatch.checkOutputContains;
+    import checkOutputDoesNotContain = TestFSWithWatch.checkOutputDoesNotContain;
 
     export function checkProgramActualFiles(program: Program, expectedFiles: string[]) {
         checkFileNames(`Program actual files`, program.getSourceFiles().map(file => file.fileName), expectedFiles);
@@ -23,7 +23,7 @@ namespace ts.tscWatch {
     }
 
     function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, maxNumberOfFilesToIterateForInvalidation?: number) {
-        const compilerHost = ts.createWatchCompilerHostOfConfigFile(configFileName, {}, host);
+        const compilerHost = createWatchCompilerHostOfConfigFile(configFileName, {}, host);
         compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
         const watch = createWatchProgram(compilerHost);
         return () => watch.getCurrentProgram().getProgram();
@@ -111,7 +111,7 @@ namespace ts.tscWatch {
         });
         if (!skipWaiting) {
             if (errorsPosition === ExpectedOutputErrorsPosition.BeforeCompilationStarts) {
-                assertWatchDiagnosticAt(host, index, ts.Diagnostics.Starting_compilation_in_watch_mode);
+                assertWatchDiagnosticAt(host, index, Diagnostics.Starting_compilation_in_watch_mode);
                 index += 1;
             }
             assertWatchDiagnosticAt(host, index, Diagnostics.Compilation_complete_Watching_for_file_changes);
@@ -1113,6 +1113,34 @@ namespace ts.tscWatch {
             checkProgramActualFiles(watch(), files.map(file => file.path));
             checkOutputErrors(host, [], ExpectedOutputErrorsPosition.AfterFileChangeDetected);
         });
+
+        it("watched files when file is deleted and new file is added as part of change", () => {
+            const projectLocation = "/home/username/project";
+            const file: FileOrFolder = {
+                path: `${projectLocation}/src/file1.ts`,
+                content: "var a = 10;"
+            };
+            const configFile: FileOrFolder = {
+                path: `${projectLocation}/tsconfig.json`,
+                content: "{}"
+            };
+            const files = [file, libFile, configFile];
+            const host = createWatchedSystem(files);
+            const watch = createWatchOfConfigFile(configFile.path, host);
+            verifyProgram();
+
+            file.path = file.path.replace("file1", "file2");
+            host.reloadFS(files);
+            host.runQueuedTimeoutCallbacks();
+            verifyProgram();
+
+            function verifyProgram() {
+                checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));
+                checkWatchedDirectories(host, [], /*recursive*/ false);
+                checkWatchedDirectories(host, [projectLocation, `${projectLocation}/node_modules/@types`], /*recursive*/ true);
+                checkWatchedFiles(host, files.map(f => f.path));
+            }
+        });
     });
 
     describe("tsc-watch emit with outFile or out setting", () => {
@@ -1719,6 +1747,38 @@ namespace ts.tscWatch {
                 return [files[0]];
             }
         });
+
+        it("file is deleted and created as part of change", () => {
+            const projectLocation = "/home/username/project";
+            const file: FileOrFolder = {
+                path: `${projectLocation}/app/file.ts`,
+                content: "var a = 10;"
+            };
+            const fileJs = `${projectLocation}/app/file.js`;
+            const configFile: FileOrFolder = {
+                path: `${projectLocation}/tsconfig.json`,
+                content: JSON.stringify({
+                    include: [
+                        "app/**/*.ts"
+                    ]
+                })
+            };
+            const files = [file, configFile, libFile];
+            const host = createWatchedSystem(files, { currentDirectory: projectLocation, useCaseSensitiveFileNames: true });
+            createWatchOfConfigFile("tsconfig.json", host);
+            verifyProgram();
+
+            file.content += "\nvar b = 10;";
+
+            host.reloadFS(files, { invokeFileDeleteCreateAsPartInsteadOfChange: true });
+            host.runQueuedTimeoutCallbacks();
+            verifyProgram();
+
+            function verifyProgram() {
+                assert.isTrue(host.fileExists(fileJs));
+                assert.equal(host.readFile(fileJs), file.content + "\n");
+            }
+        });
     });
 
     describe("tsc-watch module resolution caching", () => {
@@ -2102,7 +2162,7 @@ declare module "fs" {
     });
 
     describe("tsc-watch console clearing", () => {
-        function checkConsoleClearing(diagnostics: boolean, extendedDiagnostics: boolean) {
+        function checkConsoleClearing(options: CompilerOptions = {}) {
             const file = {
                 path: "f.ts",
                 content: ""
@@ -2112,7 +2172,7 @@ declare module "fs" {
             let clearCount: number | undefined;
             checkConsoleClears();
 
-            createWatchOfFilesAndCompilerOptions([file.path], host, { diagnostics, extendedDiagnostics });
+            createWatchOfFilesAndCompilerOptions([file.path], host, options);
             checkConsoleClears();
 
             file.content = "//";
@@ -2122,10 +2182,10 @@ declare module "fs" {
             checkConsoleClears();
 
             function checkConsoleClears() {
-                if (clearCount === undefined) {
+                if (clearCount === undefined || options.preserveWatchOutput) {
                     clearCount = 0;
                 }
-                else if (!diagnostics && !extendedDiagnostics) {
+                else if (!options.diagnostics && !options.extendedDiagnostics) {
                     clearCount++;
                 }
                 host.checkScreenClears(clearCount);
@@ -2134,13 +2194,22 @@ declare module "fs" {
         }
 
         it("without --diagnostics or --extendedDiagnostics", () => {
-            checkConsoleClearing(/*diagnostics*/ false, /*extendedDiagnostics*/ false);
+            checkConsoleClearing();
         });
         it("with --diagnostics", () => {
-            checkConsoleClearing(/*diagnostics*/ true, /*extendedDiagnostics*/ false);
+            checkConsoleClearing({
+                diagnostics: true,
+            });
         });
         it("with --extendedDiagnostics", () => {
-            checkConsoleClearing(/*diagnostics*/ false, /*extendedDiagnostics*/ true);
+            checkConsoleClearing({
+                extendedDiagnostics: true,
+            });
+        });
+        it("with --preserveWatchOutput", () => {
+            checkConsoleClearing({
+                preserveWatchOutput: true,
+            });
         });
     });
 }

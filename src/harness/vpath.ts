@@ -2,6 +2,7 @@
 
 namespace vpath {
     const _vpath = require("@typescript/vfs-path") as typeof vpath;
+    // tslint:disable:no-unnecessary-qualifier
     vpath.sep = _vpath.sep;
     vpath.normalizeSeparators = _vpath.normalizeSeparators;
     (<any>vpath).ValidationFlags = (<any>_vpath).ValidationFlags;
@@ -26,6 +27,7 @@ namespace vpath {
     vpath.basename = _vpath.basename;
     vpath.extname = _vpath.extname;
     vpath.changeExtension = _vpath.changeExtension;
+    // tslint:enable:no-unnecessary-qualifier
 }
 
 declare module "_vpath" {

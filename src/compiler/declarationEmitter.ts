@@ -350,8 +350,8 @@ namespace ts {
             // and also for non-optional initialized parameters that aren't a parameter property
             // these types may need to add `undefined`.
             const shouldUseResolverType = declaration.kind === SyntaxKind.Parameter &&
-                (resolver.isRequiredInitializedParameter(declaration as ParameterDeclaration) ||
-                 resolver.isOptionalUninitializedParameterProperty(declaration as ParameterDeclaration));
+                (resolver.isRequiredInitializedParameter(declaration) ||
+                 resolver.isOptionalUninitializedParameterProperty(declaration));
             if (type && !shouldUseResolverType) {
                 // Write the type
                 emitType(type);
@@ -593,7 +593,9 @@ namespace ts {
                 writeLine();
                 increaseIndent();
                 if (node.readonlyToken) {
-                    write("readonly ");
+                    write(node.readonlyToken.kind === SyntaxKind.PlusToken ? "+readonly " :
+                        node.readonlyToken.kind === SyntaxKind.MinusToken ? "-readonly " :
+                        "readonly ");
                 }
                 write("[");
                 writeEntityName(node.typeParameter.name);
@@ -601,10 +603,17 @@ namespace ts {
                 emitType(node.typeParameter.constraint);
                 write("]");
                 if (node.questionToken) {
-                    write("?");
+                    write(node.questionToken.kind === SyntaxKind.PlusToken ? "+?" :
+                        node.questionToken.kind === SyntaxKind.MinusToken ? "-?" :
+                        "?");
                 }
                 write(": ");
-                emitType(node.type);
+                if (node.type) {
+                    emitType(node.type);
+                }
+                else {
+                    write("any");
+                }
                 write(";");
                 writeLine();
                 decreaseIndent();
@@ -835,10 +844,10 @@ namespace ts {
         function isVisibleNamedBinding(namedBindings: NamespaceImport | NamedImports): boolean {
             if (namedBindings) {
                 if (namedBindings.kind === SyntaxKind.NamespaceImport) {
-                    return resolver.isDeclarationVisible(<NamespaceImport>namedBindings);
+                    return resolver.isDeclarationVisible(namedBindings);
                 }
                 else {
-                    return forEach((<NamedImports>namedBindings).elements, namedImport => resolver.isDeclarationVisible(namedImport));
+                    return namedBindings.elements.some(namedImport => resolver.isDeclarationVisible(namedImport));
                 }
             }
         }
@@ -861,11 +870,11 @@ namespace ts {
                     }
                     if (node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
                         write("* as ");
-                        writeTextOfNode(currentText, (<NamespaceImport>node.importClause.namedBindings).name);
+                        writeTextOfNode(currentText, node.importClause.namedBindings.name);
                     }
                     else {
                         write("{ ");
-                        emitCommaList((<NamedImports>node.importClause.namedBindings).elements, emitImportOrExportSpecifier, resolver.isDeclarationVisible);
+                        emitCommaList(node.importClause.namedBindings.elements, emitImportOrExportSpecifier, resolver.isDeclarationVisible);
                         write(" }");
                     }
                 }
@@ -882,18 +891,8 @@ namespace ts {
             // external modules since they are indistinguishable from script files with ambient modules. To fix this in such d.ts files we'll emit top level 'export {}'
             // so compiler will treat them as external modules.
             resultHasExternalModuleIndicator = resultHasExternalModuleIndicator || parent.kind !== SyntaxKind.ModuleDeclaration;
-            let moduleSpecifier: Node;
-            if (parent.kind === SyntaxKind.ImportEqualsDeclaration) {
-                const node = parent as ImportEqualsDeclaration;
-                moduleSpecifier = getExternalModuleImportEqualsDeclarationExpression(node);
-            }
-            else if (parent.kind === SyntaxKind.ModuleDeclaration) {
-                moduleSpecifier = (<ModuleDeclaration>parent).name;
-            }
-            else {
-                const node = parent as (ImportDeclaration | ExportDeclaration);
-                moduleSpecifier = node.moduleSpecifier;
-            }
+            const moduleSpecifier = parent.kind === SyntaxKind.ImportEqualsDeclaration ? getExternalModuleImportEqualsDeclarationExpression(parent) :
+                parent.kind === SyntaxKind.ModuleDeclaration ? parent.name : parent.moduleSpecifier;
 
             if (moduleSpecifier.kind === SyntaxKind.StringLiteral && isBundledEmit && (compilerOptions.out || compilerOptions.outFile)) {
                 const moduleName = getExternalModuleNameFromDeclaration(host, resolver, parent);
@@ -1289,7 +1288,7 @@ namespace ts {
             // so there is no check needed to see if declaration is visible
             if (node.kind !== SyntaxKind.VariableDeclaration || isVariableDeclarationVisible(node)) {
                 if (isBindingPattern(node.name)) {
-                    emitBindingPattern(<BindingPattern>node.name);
+                    emitBindingPattern(node.name);
                 }
                 else {
                     writeNameOfDeclaration(node, getVariableDeclarationTypeVisibilityError);
@@ -1297,7 +1296,7 @@ namespace ts {
                     // If optional property emit ? but in the case of parameterProperty declaration with "?" indicating optional parameter for the constructor
                     // we don't want to emit property declaration with "?"
                     if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature ||
-                        (node.kind === SyntaxKind.Parameter && !isParameterPropertyDeclaration(<ParameterDeclaration>node))) && hasQuestionToken(node)) {
+                        (node.kind === SyntaxKind.Parameter && !isParameterPropertyDeclaration(node))) && hasQuestionToken(node)) {
                         write("?");
                     }
                     if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && node.parent.kind === SyntaxKind.TypeLiteral) {
@@ -1385,7 +1384,7 @@ namespace ts {
 
                 if (bindingElement.name) {
                     if (isBindingPattern(bindingElement.name)) {
-                        emitBindingPattern(<BindingPattern>bindingElement.name);
+                        emitBindingPattern(bindingElement.name);
                     }
                     else {
                         writeTextOfNode(currentText, bindingElement.name);
@@ -1778,7 +1777,7 @@ namespace ts {
                 // For bindingPattern, we can't simply writeTextOfNode from the source file
                 // because we want to omit the initializer and using writeTextOfNode will result in initializer get emitted.
                 // Therefore, we will have to recursively emit each element in the bindingPattern.
-                emitBindingPattern(<BindingPattern>node.name);
+                emitBindingPattern(node.name);
             }
             else {
                 writeTextOfNode(currentText, node.name);
@@ -1917,7 +1916,7 @@ namespace ts {
                             //      emit    : declare function foo([a, [[b]], c]: [number, [[string]], number]): void;
                             //      original with rest: function foo([a, ...c]) {}
                             //      emit              : declare function foo([a, ...c]): void;
-                            emitBindingPattern(<BindingPattern>bindingElement.name);
+                            emitBindingPattern(bindingElement.name);
                         }
                         else {
                             Debug.assert(bindingElement.name.kind === SyntaxKind.Identifier);

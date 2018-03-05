@@ -27,7 +27,7 @@ namespace ts.codefix {
     }
 
     function doChanges(changes: textChanges.ChangeTracker, sourceFile: SourceFile, extendsToken: Node, heritageClauses: ReadonlyArray<HeritageClause>): void {
-        changes.replaceRange(sourceFile, { pos: extendsToken.getStart(), end: extendsToken.end }, createToken(SyntaxKind.ImplementsKeyword));
+        changes.replaceNode(sourceFile, extendsToken, createToken(SyntaxKind.ImplementsKeyword), textChanges.useNonAdjustedPositions);
 
         // If there is already an implements clause, replace the implements keyword with a comma.
         if (heritageClauses.length === 2 &&
@@ -42,7 +42,7 @@ namespace ts.codefix {
             // (Trailing because leading might be indentation, which is more sensitive.)
             const text = sourceFile.text;
             let end = implementsToken.end;
-            while (end < text.length && ts.isWhiteSpaceSingleLine(text.charCodeAt(end))) {
+            while (end < text.length && isWhiteSpaceSingleLine(text.charCodeAt(end))) {
                 end++;
             }
 

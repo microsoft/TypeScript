@@ -227,8 +227,7 @@ namespace ts {
     }
 
     export function formatDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string {
-        const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        const errorMessage = `${category} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine())}${host.getNewLine()}`;
+        const errorMessage = `${diagnosticCategoryName(diagnostic)} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine())}${host.getNewLine()}`;
 
         if (diagnostic.file) {
             const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
@@ -254,8 +253,9 @@ namespace ts {
     const ellipsis = "...";
     function getCategoryFormat(category: DiagnosticCategory): string {
         switch (category) {
-            case DiagnosticCategory.Warning: return ForegroundColorEscapeSequences.Yellow;
             case DiagnosticCategory.Error: return ForegroundColorEscapeSequences.Red;
+            case DiagnosticCategory.Warning: return ForegroundColorEscapeSequences.Yellow;
+            case DiagnosticCategory.Suggestion: return Debug.fail("Should never get an Info diagnostic on the command line.");
             case DiagnosticCategory.Message: return ForegroundColorEscapeSequences.Blue;
         }
     }
@@ -289,8 +289,8 @@ namespace ts {
                     gutterWidth = Math.max(ellipsis.length, gutterWidth);
                 }
 
-                context += host.getNewLine();
                 for (let i = firstLine; i <= lastLine; i++) {
+                    context += host.getNewLine();
                     // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
                     // so we'll skip ahead to the second-to-last line.
                     if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
@@ -337,9 +337,7 @@ namespace ts {
                 output += " - ";
             }
 
-            const categoryColor = getCategoryFormat(diagnostic.category);
-            const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-            output += formatColorAndReset(category, categoryColor);
+            output += formatColorAndReset(diagnosticCategoryName(diagnostic), getCategoryFormat(diagnostic.category));
             output += formatColorAndReset(` TS${ diagnostic.code }: `, ForegroundColorEscapeSequences.Grey);
             output += flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine());
 
@@ -812,7 +810,7 @@ namespace ts {
             if (!result) {
                 // There were no unresolved/ambient resolutions.
                 Debug.assert(resolutions.length === moduleNames.length);
-                return <ResolvedModuleFull[]>resolutions;
+                return resolutions;
             }
 
             let j = 0;

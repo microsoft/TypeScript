@@ -3,5 +3,6 @@ class C {
 >C : C
 
    [e]();
+>[e] : () => any
 >e : any
 }

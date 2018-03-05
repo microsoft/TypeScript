@@ -156,7 +156,10 @@ class C8 {
 >a : number
 
     "b": number;
+>"b" : number
+
     0: number;
+>0 : number
 }
 
 // No strict initialization checks for abstract members

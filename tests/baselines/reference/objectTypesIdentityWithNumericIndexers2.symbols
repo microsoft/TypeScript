@@ -64,6 +64,7 @@ var b: { [x: number]: Derived; } = { 0: <Derived>null };
 >b : Symbol(b, Decl(objectTypesIdentityWithNumericIndexers2.ts, 30, 3))
 >x : Symbol(x, Decl(objectTypesIdentityWithNumericIndexers2.ts, 30, 10))
 >Derived : Symbol(Derived, Decl(objectTypesIdentityWithNumericIndexers2.ts, 2, 27))
+>0 : Symbol(0, Decl(objectTypesIdentityWithNumericIndexers2.ts, 30, 36))
 >Derived : Symbol(Derived, Decl(objectTypesIdentityWithNumericIndexers2.ts, 2, 27))
 
 function foo1(x: A);

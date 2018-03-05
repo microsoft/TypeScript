@@ -2,6 +2,7 @@
 
 namespace vfs {
     const _vfs = require("@typescript/vfs");
+    // tslint:disable:no-unnecessary-qualifier
     vfs.Directory = _vfs.Directory;
     vfs.File = _vfs.File;
     vfs.Link = _vfs.Link;
@@ -10,6 +11,7 @@ namespace vfs {
     vfs.FileSystem = _vfs.FileSystem;
     vfs.Stats = _vfs.Stats;
     vfs.FSWatcher = _vfs.FSWatcher;
+    // tslint:enable:no-unnecessary-qualifier
 }
 
 declare module "_vfs" {

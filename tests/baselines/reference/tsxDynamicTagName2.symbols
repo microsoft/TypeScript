@@ -17,6 +17,3 @@ var customTag = "h1";
 >customTag : Symbol(customTag, Decl(tsxDynamicTagName2.tsx, 7, 3))
 
 <customTag> Hello World </customTag>  // This should be an error. The lower-case is look up as an intrinsic element name
->customTag : Symbol(unknown)
->customTag : Symbol(unknown)
-

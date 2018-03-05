@@ -15,6 +15,7 @@ class C<T> {
 >0 : 0
     }
     [foo<T>()]() { }
+>[foo<T>()] : () => void
 >foo<T>() : string
 >foo : <T>() => string
 >T : No type information available!

@@ -661,6 +661,8 @@ namespace ts {
     export type AtToken = Token<SyntaxKind.AtToken>;
     export type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
     export type AwaitKeywordToken = Token<SyntaxKind.AwaitKeyword>;
+    export type PlusToken = Token<SyntaxKind.PlusToken>;
+    export type MinusToken = Token<SyntaxKind.MinusToken>;
 
     export type Modifier
         = Token<SyntaxKind.AbstractKeyword>
@@ -983,6 +985,7 @@ namespace ts {
 
     export interface MethodSignature extends SignatureDeclarationBase, TypeElement {
         kind: SyntaxKind.MethodSignature;
+        parent?: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
         name: PropertyName;
     }
 
@@ -997,6 +1000,7 @@ namespace ts {
     // of the method, or use helpers like isObjectLiteralMethodDeclaration
     export interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer {
         kind: SyntaxKind.MethodDeclaration;
+        parent?: ClassLikeDeclaration | ObjectLiteralExpression;
         name: PropertyName;
         body?: FunctionBody;
     }
@@ -1156,9 +1160,9 @@ namespace ts {
 
     export interface MappedTypeNode extends TypeNode, Declaration {
         kind: SyntaxKind.MappedType;
-        readonlyToken?: ReadonlyToken;
+        readonlyToken?: ReadonlyToken | PlusToken | MinusToken;
         typeParameter: TypeParameterDeclaration;
-        questionToken?: QuestionToken;
+        questionToken?: QuestionToken | PlusToken | MinusToken;
         type?: TypeNode;
     }
 
@@ -1174,7 +1178,7 @@ namespace ts {
         /* @internal */ singleQuote?: boolean;
     }
 
-    /* @internal */ export type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
+    export type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
     // Consider 'Expression'.  Without the brand, 'Expression' is actually no different
@@ -2216,6 +2220,10 @@ namespace ts {
 
     export type ImportOrExportSpecifier = ImportSpecifier | ExportSpecifier;
 
+    /**
+     * This is either an `export =` or an `export default` declaration.
+     * Unless `isExportEquals` is set, this node was parsed as an `export default`.
+     */
     export interface ExportAssignment extends DeclarationStatement {
         kind: SyntaxKind.ExportAssignment;
         parent?: SourceFile;
@@ -2465,7 +2473,7 @@ namespace ts {
      */
     export interface SourceFileLike {
         readonly text: string;
-        lineMap: ReadonlyArray<number>;
+        lineMap?: ReadonlyArray<number>;
     }
 
 
@@ -2560,6 +2568,9 @@ namespace ts {
         /* @internal */ ambientModuleNames: ReadonlyArray<string>;
         /* @internal */ checkJsDirective: CheckJsDirective | undefined;
         /* @internal */ version: string;
+        /* @internal */ pragmas: PragmaMap;
+        /* @internal */ localJsxNamespace?: __String;
+        /* @internal */ localJsxFactory?: EntityName;
     }
 
     export interface Bundle extends Node {
@@ -2831,6 +2842,8 @@ namespace ts {
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
         getContextualType(node: Expression): Type | undefined;
+        /* @internal */ getContextualTypeForArgumentAtIndex(call: CallLikeExpression, argIndex: number): Type;
+        /* @internal */ getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute): Type | undefined;
         /* @internal */ isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElementLike | JsxAttributeLike): boolean;
 
         /**
@@ -2858,7 +2871,7 @@ namespace ts {
         /* @internal */ getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
 
         getAllAttributesTypeFromJsxOpeningLikeElement(elementNode: JsxOpeningLikeElement): Type | undefined;
-        getJsxIntrinsicTagNames(): Symbol[];
+        getJsxIntrinsicTagNamesAt(location: Node): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
 
@@ -2924,7 +2937,7 @@ namespace ts {
         /* @internal */ isArrayLikeType(type: Type): boolean;
         /* @internal */ getAllPossiblePropertiesOfTypes(type: ReadonlyArray<Type>): Symbol[];
         /* @internal */ resolveName(name: string, location: Node, meaning: SymbolFlags, excludeGlobals: boolean): Symbol | undefined;
-        /* @internal */ getJsxNamespace(): string;
+        /* @internal */ getJsxNamespace(location?: Node): string;
 
         /**
          * Note that this will return undefined in the following case:
@@ -2940,6 +2953,13 @@ namespace ts {
         /* @internal */ resolveExternalModuleSymbol(symbol: Symbol): Symbol;
         /** @param node A location where we might consider accessing `this`. Not necessarily a ThisExpression. */
         /* @internal */ tryGetThisTypeAt(node: Node): Type | undefined;
+        /* @internal */ getTypeArgumentConstraint(node: TypeNode): Type | undefined;
+
+        /**
+         * Does *not* get *all* suggestion diagnostics, just the ones that were convenient to report in the checker.
+         * Others are added in computeSuggestionDiagnostics.
+         */
+        /* @internal */ getSuggestionDiagnostics(file: SourceFile): ReadonlyArray<Diagnostic>;
     }
 
     /* @internal */
@@ -2983,6 +3003,7 @@ namespace ts {
         InObjectTypeLiteral                     = 1 << 22,
         InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
         InInitialEntityName                     = 1 << 24,    // Set when writing the LHS of an entity name or entity name expression
+        InReverseMappedType                     = 1 << 25,
     }
 
     // Ensure the shared flags between this and `NodeBuilderFlags` stay in alignment
@@ -3196,7 +3217,7 @@ namespace ts {
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
         writeLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, writer: EmitTextWriter): void;
-        getJsxFactoryEntity(): EntityName;
+        getJsxFactoryEntity(location?: Node): EntityName;
     }
 
     export const enum SymbolFlags {
@@ -3301,7 +3322,7 @@ namespace ts {
         /* @internal */ parent?: Symbol;        // Parent symbol
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
-        /* @internal */ isReferenced?: boolean; // True if the symbol is referenced elsewhere
+        /* @internal */ isReferenced?: SymbolFlags; // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
         /* @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
         /* @internal */ isAssigned?: boolean;   // True if the symbol is a parameter with assignments
     }
@@ -3311,6 +3332,7 @@ namespace ts {
         immediateTarget?: Symbol;           // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
         target?: Symbol;                    // Resolved (non-alias) target of an alias
         type?: Type;                        // Type of value symbol
+        uniqueESSymbolType?: Type;          // UniqueESSymbol type for a symbol
         declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
         typeParameters?: TypeParameter[];   // Type parameters of type alias (undefined if non-generic)
         outerTypeParameters?: TypeParameter[];  // Outer type parameters of anonymous object type
@@ -3805,16 +3827,27 @@ namespace ts {
         type: InstantiableType | UnionOrIntersectionType;
     }
 
-    // T extends U ? X : Y (TypeFlags.Conditional)
-    export interface ConditionalType extends InstantiableType {
+    export interface ConditionalRoot {
+        node: ConditionalTypeNode;
         checkType: Type;
         extendsType: Type;
         trueType: Type;
         falseType: Type;
-        /* @internal */
+        isDistributive: boolean;
         inferTypeParameters: TypeParameter[];
-        /* @internal */
-        target?: ConditionalType;
+        outerTypeParameters?: TypeParameter[];
+        instantiations?: Map<Type>;
+        aliasSymbol: Symbol;
+        aliasTypeArguments: Type[];
+    }
+
+    // T extends U ? X : Y (TypeFlags.Conditional)
+    export interface ConditionalType extends InstantiableType {
+        root: ConditionalRoot;
+        checkType: Type;
+        extendsType: Type;
+        resolvedTrueType?: Type;
+        resolvedFalseType?: Type;
         /* @internal */
         mapper?: TypeMapper;
     }
@@ -3893,6 +3926,7 @@ namespace ts {
         AlwaysStrict      = 1 << 4,  // Always use strict rules for contravariant inferences
     }
 
+    /* @internal */
     export interface InferenceInfo {
         typeParameter: TypeParameter;  // Type parameter for which inferences are being made
         candidates: Type[];            // Candidates in covariant positions (or undefined)
@@ -3903,6 +3937,7 @@ namespace ts {
         isFixed: boolean;              // True if inferences are fixed
     }
 
+    /* @internal */
     export const enum InferenceFlags {
         None            =      0,  // No special inference behaviors
         InferUnionTypes = 1 << 0,  // Infer union types for disjoint candidates (otherwise unknownType)
@@ -3919,17 +3954,20 @@ namespace ts {
      * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
      * x | y is True if either x or y is True.
      */
+    /* @internal */
     export const enum Ternary {
         False = 0,
         Maybe = 1,
         True = -1
     }
 
+    /* @internal */
     export type TypeComparer = (s: Type, t: Type, reportErrors?: boolean) => Ternary;
 
     /* @internal */
     export interface InferenceContext extends TypeMapper {
-        signature: Signature;               // Generic signature for which inferences are made
+        typeParameters: TypeParameter[];    // Type parameters for which inferences are made
+        signature: Signature;               // Generic signature for which inferences are made (if any)
         inferences: InferenceInfo[];        // Inferences made for each type parameter
         flags: InferenceFlags;              // Inference flags
         compareTypes: TypeComparer;         // Type comparer function
@@ -3997,7 +4035,13 @@ namespace ts {
     export enum DiagnosticCategory {
         Warning,
         Error,
+        Suggestion,
         Message
+    }
+    /* @internal */
+    export function diagnosticCategoryName(d: { category: DiagnosticCategory }, lowerCase = true): string {
+        const name = DiagnosticCategory[d.category];
+        return lowerCase ? name.toLowerCase() : name;
     }
 
     export enum ModuleResolutionKind {
@@ -4074,6 +4118,7 @@ namespace ts {
         /*@internal*/ plugins?: PluginImport[];
         preserveConstEnums?: boolean;
         preserveSymlinks?: boolean;
+        /* @internal */ preserveWatchOutput?: boolean;
         project?: string;
         /* @internal */ pretty?: DiagnosticStyle;
         reactNamespace?: string;
@@ -4114,16 +4159,6 @@ namespace ts {
         include?: string[];
         exclude?: string[];
         [option: string]: string[] | boolean | undefined;
-    }
-
-    export interface DiscoverTypingsInfo {
-        fileNames: string[];                            // The file names that belong to the same project.
-        projectRootPath: string;                        // The path to the project root directory
-        safeListPath: string;                           // The path used to retrieve the safe list
-        packageNameToTypingLocation: Map<string>;       // The map of package names to their cached typing locations
-        typeAcquisition: TypeAcquisition;               // Used to customize the type acquisition process
-        compilerOptions: CompilerOptions;               // Used as a source for typing inference
-        unresolvedImports: ReadonlyArray<string>;       // List of unresolved module ids from imports
     }
 
     export enum ModuleKind {
@@ -5008,6 +5043,10 @@ namespace ts {
         newLength: number;
     }
 
+    export interface SortedArray<T> extends Array<T> {
+        " __sortedArrayBrand": any;
+    }
+
     /* @internal */
     export interface DiagnosticCollection {
         // Adds a diagnostic to this diagnostic collection.
@@ -5115,5 +5154,128 @@ namespace ts {
         TypeParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | AngleBrackets | Optional,
         Parameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis,
         IndexSignatureParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | SquareBrackets,
+    }
+
+    /* @internal */
+    export const enum PragmaKindFlags {
+        None            =      0,
+        /**
+         * Triple slash comment of the form
+         * /// <pragma-name argname="value" />
+         */
+        TripleSlashXML  = 1 << 0,
+        /**
+         * Single line comment of the form
+         * // @pragma-name argval1 argval2
+         * or
+         * /// @pragma-name argval1 argval2
+         */
+        SingleLine      = 1 << 1,
+        /**
+         * Multiline non-jsdoc pragma of the form
+         * /* @pragma-name argval1 argval2 * /
+         */
+        MultiLine       = 1 << 2,
+        All = TripleSlashXML | SingleLine | MultiLine,
+        Default = All,
+    }
+
+    /* @internal */
+    interface PragmaArgumentSpecification<TName extends string> {
+        name: TName; // Determines the name of the key in the resulting parsed type, type parameter to cause literal type inference
+        optional?: boolean;
+        captureSpan?: boolean;
+    }
+
+    /* @internal */
+    export interface PragmaDefinition<T1 extends string = string, T2 extends string = string, T3 extends string = string> {
+        args?: [PragmaArgumentSpecification<T1>] | [PragmaArgumentSpecification<T1>, PragmaArgumentSpecification<T2>] | [PragmaArgumentSpecification<T1>, PragmaArgumentSpecification<T2>, PragmaArgumentSpecification<T3>];
+        // If not present, defaults to PragmaKindFlags.Default
+        kind?: PragmaKindFlags;
+    }
+
+    /**
+     * This function only exists to cause exact types to be inferred for all the literals within `commentPragmas`
+     */
+    /* @internal */
+    function _contextuallyTypePragmas<T extends {[name: string]: PragmaDefinition<K1, K2, K3>}, K1 extends string, K2 extends string, K3 extends string>(args: T): T {
+        return args;
+    }
+
+    // While not strictly a type, this is here because `PragmaMap` needs to be here to be used with `SourceFile`, and we don't
+    //  fancy effectively defining it twice, once in value-space and once in type-space
+    /* @internal */
+    export const commentPragmas = _contextuallyTypePragmas({
+        "reference": {
+            args: [
+                { name: "types", optional: true, captureSpan: true },
+                { name: "path", optional: true, captureSpan: true },
+                { name: "no-default-lib", optional: true }
+            ],
+            kind: PragmaKindFlags.TripleSlashXML
+        },
+        "amd-dependency": {
+            args: [{ name: "path" }, { name: "name", optional: true }],
+            kind: PragmaKindFlags.TripleSlashXML
+        },
+        "amd-module": {
+            args: [{ name: "name" }],
+            kind: PragmaKindFlags.TripleSlashXML
+        },
+        "ts-check": {
+            kind: PragmaKindFlags.SingleLine
+        },
+        "ts-nocheck": {
+            kind: PragmaKindFlags.SingleLine
+        },
+        "jsx": {
+            args: [{ name: "factory" }],
+            kind: PragmaKindFlags.MultiLine
+        },
+    });
+
+    /* @internal */
+    type PragmaArgTypeMaybeCapture<TDesc> = TDesc extends {captureSpan: true} ? {value: string, pos: number, end: number} : string;
+
+    /* @internal */
+    type PragmaArgTypeOptional<TDesc, TName extends string> =
+        TDesc extends {optional: true}
+            ? {[K in TName]?: PragmaArgTypeMaybeCapture<TDesc>}
+            : {[K in TName]: PragmaArgTypeMaybeCapture<TDesc>};
+
+    /**
+     * Maps a pragma definition into the desired shape for its arguments object
+     * Maybe the below is a good argument for types being iterable on struture in some way.
+     */
+    /* @internal */
+    type PragmaArgumentType<T extends PragmaDefinition> =
+        T extends { args: [PragmaArgumentSpecification<infer TName1>, PragmaArgumentSpecification<infer TName2>, PragmaArgumentSpecification<infer TName3>] }
+        ? PragmaArgTypeOptional<T["args"][0], TName1> & PragmaArgTypeOptional<T["args"][1], TName2> & PragmaArgTypeOptional<T["args"][2], TName3>
+        : T extends { args: [PragmaArgumentSpecification<infer TName1>, PragmaArgumentSpecification<infer TName2>] }
+            ? PragmaArgTypeOptional<T["args"][0], TName1> & PragmaArgTypeOptional<T["args"][1], TName2>
+            : T extends { args: [PragmaArgumentSpecification<infer TName>] }
+                ? PragmaArgTypeOptional<T["args"][0], TName>
+                : object;
+    // The above fallback to `object` when there's no args to allow `{}` (as intended), but not the number 2, for example
+    // TODO: Swap to `undefined` for a cleaner API once strictNullChecks is enabled
+
+    type ConcretePragmaSpecs = typeof commentPragmas;
+
+    /* @internal */
+    export type PragmaPsuedoMap = {[K in keyof ConcretePragmaSpecs]?: {arguments: PragmaArgumentType<ConcretePragmaSpecs[K]>, range: CommentRange}};
+
+    /* @internal */
+    export type PragmaPsuedoMapEntry = {[K in keyof PragmaPsuedoMap]: {name: K, args: PragmaPsuedoMap[K]}}[keyof PragmaPsuedoMap];
+
+    /**
+     * A strongly-typed es6 map of pragma entries, the values of which are either a single argument
+     * value (if only one was found), or an array of multiple argument values if the pragma is present
+     * in multiple places
+     */
+    /* @internal */
+    export interface PragmaMap extends Map<PragmaPsuedoMap[keyof PragmaPsuedoMap] | PragmaPsuedoMap[keyof PragmaPsuedoMap][]> {
+        set<TKey extends keyof PragmaPsuedoMap>(key: TKey, value: PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][]): this;
+        get<TKey extends keyof PragmaPsuedoMap>(key: TKey): PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][];
+        forEach(action: <TKey extends keyof PragmaPsuedoMap>(value: PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][], key: TKey) => void): void;
     }
 }

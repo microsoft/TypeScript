@@ -127,7 +127,10 @@ var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };
 });
 
-var es2018LibrarySource = [];
+var es2018LibrarySource = [
+    "es2018.regexp.d.ts",
+    "es2018.promise.d.ts"
+];
 
 var es2018LibrarySourceMap = es2018LibrarySource.map(function (source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };
@@ -135,8 +138,7 @@ var es2018LibrarySourceMap = es2018LibrarySource.map(function (source) {
 
 var esnextLibrarySource = [
     "esnext.asynciterable.d.ts",
-    "esnext.array.d.ts",
-    "esnext.promise.d.ts"
+    "esnext.array.d.ts"
 ];
 
 var esnextLibrarySourceMap = esnextLibrarySource.map(function (source) {
@@ -1334,15 +1336,13 @@ function spawnLintWorker(files, callback) {
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
 task("lint", ["build-rules"], () => {
     if (fold.isTravis()) console.log(fold.start("lint"));
-    const fileMatcher = process.env.f || process.env.file || process.env.files;
-
-    const files = fileMatcher
-        ? `src/**/${fileMatcher}`
-        : `Gulpfile.ts scripts/generateLocalizedDiagnosticMessages.ts "scripts/tslint/**/*.ts" "src/**/*.ts" --exclude "src/lib/*.d.ts"`;
-    const cmd = `node node_modules/tslint/bin/tslint ${files} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
-    console.log("Linting: " + cmd);
-    jake.exec([cmd], () => {
+   function lint(project, cb) {
+        const cmd = `node node_modules/tslint/bin/tslint --project ${project} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
+        console.log("Linting: " + cmd);
+        jake.exec([cmd], cb, /** @type {jake.ExecOptions} */{ interactive: true, windowsVerbatimArguments: true });
+   }
+   lint("scripts/tslint/tsconfig.json", () => lint("src/tsconfig-base.json", () => {
         if (fold.isTravis()) console.log(fold.end("lint"));
         complete();
-    }, /** @type {jake.ExecOptions} */({ interactive: true }));
+   }));
 });

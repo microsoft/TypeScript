@@ -148,6 +148,7 @@ const f21 = async function *() {
 
     const x = { [yield]: 1 };
 >x : Symbol(x, Decl(yieldInNestedComputedPropertyIsOk.ts, 1, 9))
+>[yield] : Symbol([yield], Decl(yieldInNestedComputedPropertyIsOk.ts, 1, 15))
 
 };
 

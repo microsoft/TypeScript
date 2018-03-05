@@ -3,6 +3,7 @@ interface I {
 >I : Symbol(I, Decl(symbolProperty17.ts, 0, 0))
 
     [Symbol.iterator]: number;
+>[Symbol.iterator] : Symbol(I[Symbol.iterator], Decl(symbolProperty17.ts, 0, 13))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
@@ -11,6 +12,7 @@ interface I {
 >s : Symbol(s, Decl(symbolProperty17.ts, 2, 5))
 
     "__@iterator": string;
+>"__@iterator" : Symbol(I["__@iterator"], Decl(symbolProperty17.ts, 2, 24))
 }
 
 var i: I;

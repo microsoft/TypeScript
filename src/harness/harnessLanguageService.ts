@@ -207,7 +207,7 @@ namespace Harness.LanguageService {
 
         getCurrentDirectory(): string { return virtualFileSystemRoot; }
 
-        getDefaultLibFileName(): string { return Harness.Compiler.defaultLibFileName; }
+        getDefaultLibFileName(): string { return Compiler.defaultLibFileName; }
 
         getScriptFileNames(): string[] {
             return this.getFilenames().filter(ts.isAnySupportedFileExtension);
@@ -415,6 +415,9 @@ namespace Harness.LanguageService {
         getSemanticDiagnostics(fileName: string): ts.Diagnostic[] {
             return unwrapJSONCallResult(this.shim.getSemanticDiagnostics(fileName));
         }
+        getSuggestionDiagnostics(fileName: string): ts.Diagnostic[] {
+            return unwrapJSONCallResult(this.shim.getSuggestionDiagnostics(fileName));
+        }
         getCompilerOptionsDiagnostics(): ts.Diagnostic[] {
             return unwrapJSONCallResult(this.shim.getCompilerOptionsDiagnostics());
         }
@@ -535,6 +538,9 @@ namespace Harness.LanguageService {
         getApplicableRefactors(): ts.ApplicableRefactorInfo[] {
             throw new Error("Not supported on the shim.");
         }
+        organizeImports(_scope: ts.OrganizeImportsScope, _formatOptions: ts.FormatCodeSettings): ReadonlyArray<ts.FileTextChanges> {
+            throw new Error("Not supported on the shim.");
+        }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
         }
@@ -648,8 +654,8 @@ namespace Harness.LanguageService {
         }
 
         readFile(fileName: string): string | undefined {
-            if (fileName.indexOf(Harness.Compiler.defaultLibFileName) >= 0) {
-                fileName = Harness.Compiler.defaultLibFileName;
+            if (ts.stringContains(fileName, Compiler.defaultLibFileName)) {
+                fileName = Compiler.defaultLibFileName;
             }
 
             const snapshot = this.host.getScriptSnapshot(fileName);

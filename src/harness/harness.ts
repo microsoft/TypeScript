@@ -57,7 +57,7 @@ var assert: typeof _chai.assert = _chai.assert;
     };
 }
 
-var global: NodeJS.Global = <any>Function("return this").call(undefined);
+var global: NodeJS.Global = Function("return this").call(undefined);
 
 declare var window: {};
 declare var XMLHttpRequest: {
@@ -246,7 +246,7 @@ namespace Utils {
             start: diagnostic.start,
             length: diagnostic.length,
             messageText: ts.flattenDiagnosticMessageText(diagnostic.messageText, Harness.IO.newLine()),
-            category: (<any>ts).DiagnosticCategory[diagnostic.category],
+            category: ts.diagnosticCategoryName(diagnostic, /*lowerCase*/ false),
             code: diagnostic.code
         };
     }
@@ -340,7 +340,7 @@ namespace Utils {
 
                     case "referenceDiagnostics":
                     case "parseDiagnostics":
-                        o[propertyName] = Utils.convertDiagnostics((<any>n)[propertyName]);
+                        o[propertyName] = convertDiagnostics((<any>n)[propertyName]);
                         break;
 
                     case "nextContainer":
@@ -1062,7 +1062,7 @@ namespace Harness {
             sourceText: string,
             languageVersion: ts.ScriptTarget) {
             // We'll only assert invariants outside of light mode.
-            const shouldAssertInvariants = !Harness.lightMode;
+            const shouldAssertInvariants = !lightMode;
 
             // Only set the parent nodes if we're asserting invariants.  We don't need them otherwise.
             const result = ts.createSourceFile(fileName, sourceText, languageVersion, /*setParentNodes:*/ shouldAssertInvariants);
@@ -1157,7 +1157,7 @@ namespace Harness {
             return optionsIndex.get(name.toLowerCase());
         }
 
-        export function setCompilerOptionsFromHarnessSetting(settings: Harness.TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnessOptions): void {
+        export function setCompilerOptionsFromHarnessSetting(settings: TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnessOptions): void {
             for (const name in settings) {
                 if (settings.hasOwnProperty(name)) {
                     const value = settings[name];
@@ -1349,7 +1349,7 @@ namespace Harness {
         }
 
         export function minimalDiagnosticsToString(diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
-            const host = { getCanonicalFileName, getCurrentDirectory: () => "", getNewLine: () => Harness.IO.newLine() };
+            const host = { getCanonicalFileName, getCurrentDirectory: () => "", getNewLine: () => IO.newLine() };
             return (pretty ? ts.formatDiagnosticsWithColorAndContext : ts.formatDiagnostics)(diagnostics, host);
         }
 
@@ -1383,13 +1383,13 @@ namespace Harness {
             }
 
             function outputErrorText(error: ts.Diagnostic) {
-                const message = ts.flattenDiagnosticMessageText(error.messageText, Harness.IO.newLine());
+                const message = ts.flattenDiagnosticMessageText(error.messageText, IO.newLine());
 
                 const errLines = utils.removeTestPathPrefixes(message)
                     .split("\n")
                     .map(s => s.length > 0 && s.charAt(s.length - 1) === "\r" ? s.substr(0, s.length - 1) : s)
                     .filter(s => s.length > 0)
-                    .map(s => "!!! " + ts.DiagnosticCategory[error.category].toLowerCase() + " TS" + error.code + ": " + s);
+                    .map(s => "!!! " + ts.diagnosticCategoryName(error) + " TS" + error.code + ": " + s);
                 errLines.forEach(e => outputLines += (newLine() + e));
                 errorsReported++;
 
@@ -1403,7 +1403,7 @@ namespace Harness {
                 }
             }
 
-            yield [diagnosticSummaryMarker, utils.removeTestPathPrefixes(minimalDiagnosticsToString(diagnostics, pretty)) + Harness.IO.newLine() + Harness.IO.newLine(), diagnostics.length];
+            yield [diagnosticSummaryMarker, utils.removeTestPathPrefixes(minimalDiagnosticsToString(diagnostics, pretty)) + IO.newLine() + IO.newLine(), diagnostics.length];
 
             // Report global errors
             const globalErrors = diagnostics.filter(err => !err.file);
@@ -1499,7 +1499,7 @@ namespace Harness {
         }
 
         export function doErrorBaseline(baselinePath: string, inputFiles: ReadonlyArray<TestFile>, errors: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
-            Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"), (): string => {
+            Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"), (): string => {
                 if (!errors || (errors.length === 0)) {
                     /* tslint:disable:no-null-keyword */
                     return null;
@@ -1509,7 +1509,7 @@ namespace Harness {
             });
         }
 
-        export function doTypeAndSymbolBaseline(baselinePath: string, program: ts.Program, allFiles: {unitName: string, content: string}[], opts?: Harness.Baseline.BaselineOptions, multifile?: boolean, skipTypeBaselines?: boolean, skipSymbolBaselines?: boolean) {
+        export function doTypeAndSymbolBaseline(baselinePath: string, program: ts.Program, allFiles: {unitName: string, content: string}[], opts?: Baseline.BaselineOptions, multifile?: boolean, skipTypeBaselines?: boolean, skipSymbolBaselines?: boolean) {
             // The full walker simulates the types that you would get from doing a full
             // compile.  The pull walker simulates the types you get when you just do
             // a type query for a random node (like how the LS would do it).  Most of the
@@ -1545,7 +1545,7 @@ namespace Harness {
             }
 
             if (typesError && symbolsError) {
-                throw new Error(typesError.message + Harness.IO.newLine() + symbolsError.message);
+                throw new Error(typesError.stack + IO.newLine() + symbolsError.stack);
             }
 
             if (typesError) {
@@ -1568,10 +1568,10 @@ namespace Harness {
 
                 if (!multifile) {
                     const fullBaseLine = generateBaseLine(isSymbolBaseLine, isSymbolBaseLine ? skipSymbolBaselines : skipTypeBaselines);
-                    Harness.Baseline.runBaseline(outputFileName + fullExtension, () => fullBaseLine, opts);
+                    Baseline.runBaseline(outputFileName + fullExtension, () => fullBaseLine, opts);
                 }
                 else {
-                    Harness.Baseline.runMultifileBaseline(outputFileName, fullExtension, () => {
+                    Baseline.runMultifileBaseline(outputFileName, fullExtension, () => {
                         return iterateBaseLine(isSymbolBaseLine, isSymbolBaseLine ? skipSymbolBaselines : skipTypeBaselines);
                     }, opts);
                 }
@@ -1640,7 +1640,7 @@ namespace Harness {
             }
         }
 
-        export function doSourcemapBaseline(baselinePath: string, options: ts.CompilerOptions, result: compiler.CompilationResult, harnessSettings: Harness.TestCaseParser.CompilerSettings) {
+        export function doSourcemapBaseline(baselinePath: string, options: ts.CompilerOptions, result: compiler.CompilationResult, harnessSettings: TestCaseParser.CompilerSettings) {
             if (options.inlineSourceMap) {
                 if (result.maps.size > 0) {
                     throw new Error("No sourcemap files should be generated if inlineSourceMaps was set.");
@@ -1652,7 +1652,7 @@ namespace Harness {
                     throw new Error("Number of sourcemap files should be same as js files.");
                 }
 
-                Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ".js.map"), () => {
+                Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ".js.map"), () => {
                     if ((options.noEmitOnError && result.diagnostics.length !== 0) || result.maps.size === 0) {
                         // We need to return null here or the runBaseLine will actually create a empty file.
                         // Baselining isn't required here because there is no output.
@@ -1671,13 +1671,13 @@ namespace Harness {
             }
         }
 
-        export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: compiler.CompilationResult, tsConfigFiles: ReadonlyArray<Harness.Compiler.TestFile>, toBeCompiled: ReadonlyArray<Harness.Compiler.TestFile>, otherFiles: ReadonlyArray<Harness.Compiler.TestFile>, harnessSettings: Harness.TestCaseParser.CompilerSettings) {
+        export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: compiler.CompilationResult, tsConfigFiles: ReadonlyArray<TestFile>, toBeCompiled: ReadonlyArray<TestFile>, otherFiles: ReadonlyArray<TestFile>, harnessSettings: TestCaseParser.CompilerSettings) {
             if (!options.noEmit && !options.emitDeclarationOnly && result.js.size === 0 && result.diagnostics.length === 0) {
                 throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
             }
 
             // check js output
-            Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ts.Extension.Js), () => {
+            Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ts.Extension.Js), () => {
                 let tsCode = "";
                 const tsSources = otherFiles.concat(toBeCompiled);
                 if (tsSources.length > 1) {
@@ -1700,15 +1700,15 @@ namespace Harness {
                     });
                 }
 
-                const declFileContext = Harness.Compiler.prepareDeclarationCompilationContext(
+                const declFileContext = prepareDeclarationCompilationContext(
                     toBeCompiled, otherFiles, result, harnessSettings, options, /*currentDirectory*/ undefined
                 );
-                const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(declFileContext);
+                const declFileCompilationResult = compileDeclarationFiles(declFileContext);
 
                 if (declFileCompilationResult && declFileCompilationResult.declResult.diagnostics.length) {
                     jsCode += "\r\n\r\n//// [DtsFileErrors]\r\n";
                     jsCode += "\r\n\r\n";
-                    jsCode += Harness.Compiler.getErrorBaseline(tsConfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.diagnostics);
+                    jsCode += getErrorBaseline(tsConfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.diagnostics);
                 }
 
                 if (jsCode.length > 0) {
@@ -1722,7 +1722,7 @@ namespace Harness {
             });
         }
 
-        function fileOutput(file: documents.TextDocument, harnessSettings: Harness.TestCaseParser.CompilerSettings): string {
+        function fileOutput(file: documents.TextDocument, harnessSettings: TestCaseParser.CompilerSettings): string {
             const fileName = harnessSettings.fullEmitPaths ? utils.removeTestPathPrefixes(file.file) : ts.getBaseFileName(file.file);
             return "//// [" + fileName + "]\r\n" + utils.removeTestPathPrefixes(file.text);
         }
@@ -1959,10 +1959,10 @@ namespace Harness {
 
         function baselinePath(fileName: string, type: string, baselineFolder: string, subfolder?: string) {
             if (subfolder !== undefined) {
-                return Harness.userSpecifiedRoot + baselineFolder + "/" + subfolder + "/" + type + "/" + fileName;
+                return userSpecifiedRoot + baselineFolder + "/" + subfolder + "/" + type + "/" + fileName;
             }
             else {
-                return Harness.userSpecifiedRoot + baselineFolder + "/" + type + "/" + fileName;
+                return userSpecifiedRoot + baselineFolder + "/" + type + "/" + fileName;
             }
         }
 
@@ -2021,7 +2021,7 @@ namespace Harness {
             }
 
             // Create folders if needed
-            createDirectoryStructure(Harness.IO.directoryName(actualFileName));
+            createDirectoryStructure(IO.directoryName(actualFileName));
 
             // Delete the actual file in case it fails
             if (IO.fileExists(actualFileName)) {
@@ -2070,7 +2070,7 @@ namespace Harness {
             }
 
             const referenceDir = referencePath(relativeFileBase, opts && opts.Baselinefolder, opts && opts.Subfolder);
-            let existing = Harness.IO.readDirectory(referenceDir, referencedExtensions || [extension]);
+            let existing = IO.readDirectory(referenceDir, referencedExtensions || [extension]);
             if (extension === ".ts" || referencedExtensions && referencedExtensions.indexOf(".ts") > -1 && referencedExtensions.indexOf(".d.ts") === -1) {
                 // special-case and filter .d.ts out of .ts results
                 existing = existing.filter(f => !ts.endsWith(f, ".d.ts"));
@@ -2112,12 +2112,12 @@ namespace Harness {
     }
 
     export function isBuiltFile(filePath: string): boolean {
-        return filePath.indexOf(Harness.libFolder) === 0 ||
+        return filePath.indexOf(libFolder) === 0 ||
             filePath.indexOf(vpath.addTrailingSeparator(vfsutils.builtFolder)) === 0;
     }
 
-    export function getDefaultLibraryFile(filePath: string, io: Harness.IO): Harness.Compiler.TestFile {
-        const libFile = Harness.userSpecifiedRoot + Harness.libFolder + ts.getBaseFileName(ts.normalizeSlashes(filePath));
+    export function getDefaultLibraryFile(filePath: string, io: IO): Compiler.TestFile {
+        const libFile = userSpecifiedRoot + libFolder + ts.getBaseFileName(ts.normalizeSlashes(filePath));
         return { unitName: libFile, content: io.readFile(libFile) };
     }
 

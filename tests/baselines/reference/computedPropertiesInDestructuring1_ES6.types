@@ -22,6 +22,7 @@ let {[11]: bar2_1} = {11: "bar"};
 >11 : 11
 >bar2_1 : string
 >{11: "bar"} : { 11: string; }
+>11 : string
 >"bar" : "bar"
 
 let foo2 = () => "bar";
@@ -112,6 +113,7 @@ let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
 >({[foo]: bar} = {bar: "bar"}) : { bar: string; }
 >{[foo]: bar} = {bar: "bar"} : { bar: string; }
 >{[foo]: bar} : { [x: string]: any; }
+>[foo] : any
 >foo : string
 >bar : any
 >{bar: "bar"} : { bar: string; }
@@ -122,6 +124,7 @@ let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
 >({["bar"]: bar2} = {bar: "bar"}) : { bar: string; }
 >{["bar"]: bar2} = {bar: "bar"} : { bar: string; }
 >{["bar"]: bar2} : { ["bar"]: string; }
+>["bar"] : string
 >"bar" : "bar"
 >bar2 : string
 >{bar: "bar"} : { bar: string; }
@@ -132,6 +135,7 @@ let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
 >({[foo2()]: bar3} = {bar: "bar"}) : { bar: string; }
 >{[foo2()]: bar3} = {bar: "bar"} : { bar: string; }
 >{[foo2()]: bar3} : { [x: string]: any; }
+>[foo2()] : any
 >foo2() : string
 >foo2 : () => string
 >bar3 : any
@@ -143,6 +147,7 @@ let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
 >[{[foo]: bar4}] = [{bar: "bar"}] : [{ bar: string; }]
 >[{[foo]: bar4}] : [{ [x: string]: any; }]
 >{[foo]: bar4} : { [x: string]: any; }
+>[foo] : any
 >foo : string
 >bar4 : any
 >[{bar: "bar"}] : [{ bar: string; }]
@@ -154,6 +159,7 @@ let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
 >[{[foo2()]: bar5}] = [{bar: "bar"}] : [{ bar: string; }]
 >[{[foo2()]: bar5}] : [{ [x: string]: any; }]
 >{[foo2()]: bar5} : { [x: string]: any; }
+>[foo2()] : any
 >foo2() : string
 >foo2 : () => string
 >bar5 : any
@@ -166,6 +172,7 @@ let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
 >[{[foo()]: bar4}] = [{bar: "bar"}] : [{ bar: string; }]
 >[{[foo()]: bar4}] : [{ [x: number]: any; }]
 >{[foo()]: bar4} : { [x: number]: any; }
+>[foo()] : any
 >foo() : any
 >foo : string
 >bar4 : any
@@ -178,6 +185,7 @@ let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
 >[{[(1 + {})]: bar4}] = [{bar: "bar"}] : [{ bar: string; }]
 >[{[(1 + {})]: bar4}] : [{ [x: number]: any; }]
 >{[(1 + {})]: bar4} : { [x: number]: any; }
+>[(1 + {})] : any
 >(1 + {}) : any
 >1 + {} : any
 >1 : 1

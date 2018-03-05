@@ -22,10 +22,6 @@ declare namespace ts.server {
         require?(initialPath: string, moduleName: string): RequireResult;
     }
 
-    export interface SortedArray<T> extends Array<T> {
-        " __sortedArrayBrand": any;
-    }
-
     export interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
         " __sortedArrayBrand": any;
     }
@@ -79,7 +75,7 @@ declare namespace ts.server {
     /* @internal */
     export interface TypesRegistryResponse extends TypingInstallerResponse {
         readonly kind: EventTypesRegistry;
-        readonly typesRegistry: MapLike<void>;
+        readonly typesRegistry: MapLike<MapLike<string>>;
     }
 
     export interface PackageInstalledResponse extends ProjectResponse {

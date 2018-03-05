@@ -241,6 +241,7 @@ class C21 {
 >C21 : C21
 
     async * [yield]() {
+>[yield] : () => AsyncIterableIterator<any>
 >yield : any
     }
 }
@@ -254,6 +255,7 @@ class C22 {
         const x = { [yield]: 1 };
 >x : { [x: number]: number; }
 >{ [yield]: 1 } : { [x: number]: number; }
+>[yield] : number
 >yield : any
 >1 : 1
     }
@@ -286,4 +288,5 @@ class C25 {
 
     async * x = 1;
 >x : () => any
+>1 : any
 }

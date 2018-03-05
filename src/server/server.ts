@@ -142,7 +142,7 @@ namespace ts.server {
         terminal: false,
     });
 
-    class Logger implements server.Logger {
+    class Logger implements server.Logger { // tslint:disable-line no-unnecessary-qualifier
         private fd = -1;
         private seq = 0;
         private inGroup = false;
@@ -253,7 +253,7 @@ namespace ts.server {
         private requestMap = createMap<QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
         /** We will lazily request the types registry on the first call to `isKnownTypesPackageName` and store it in `typesRegistryCache`. */
         private requestedRegistry: boolean;
-        private typesRegistryCache: Map<void> | undefined;
+        private typesRegistryCache: Map<MapLike<string>> | undefined;
 
         // This number is essentially arbitrary.  Processing more than one typings request
         // at a time makes sense, but having too many in the pipe results in a hang
@@ -266,7 +266,7 @@ namespace ts.server {
 
         constructor(
             private readonly telemetryEnabled: boolean,
-            private readonly logger: server.Logger,
+            private readonly logger: Logger,
             private readonly host: ServerHost,
             readonly globalTypingsCacheLocation: string,
             readonly typingSafeListLocation: string,
@@ -391,7 +391,7 @@ namespace ts.server {
 
             switch (response.kind) {
                 case EventTypesRegistry:
-                    this.typesRegistryCache = ts.createMapFromTemplate(response.typesRegistry);
+                    this.typesRegistryCache = createMapFromTemplate(response.typesRegistry);
                     break;
                 case ActionPackageInstalled: {
                     const { success, message } = response;
