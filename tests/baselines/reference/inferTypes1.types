@@ -312,7 +312,7 @@ type T60 = infer U;  // Error
 >U : U
 
 type T61<T> = infer A extends infer B ? infer C : infer D;  // Error
->T61 : {}
+>T61 : T61<T>
 >T : T
 >A : A
 >B : B
@@ -581,4 +581,48 @@ type B<T> = string extends T ? { [P in T]: void; } : T;  // Error
 >P : P
 >T : T
 >T : T
+
+// Repro from #22302
+
+type MatchingKeys<T, U, K extends keyof T = keyof T> =
+>MatchingKeys : MatchingKeys<T, U, K>
+>T : T
+>U : U
+>K : K
+>T : T
+>T : T
+
+    K extends keyof T ? T[K] extends U ? K : never : never;
+>K : K
+>T : T
+>T : T
+>K : K
+>U : U
+>K : K
+
+type VoidKeys<T> = MatchingKeys<T, void>;
+>VoidKeys : MatchingKeys<T, void, keyof T>
+>T : T
+>MatchingKeys : MatchingKeys<T, U, K>
+>T : T
+
+interface test {
+>test : test
+
+    a: 1,
+>a : 1
+
+    b: void
+>b : void
+}
+
+type T80 = MatchingKeys<test, void>;
+>T80 : "b"
+>MatchingKeys : MatchingKeys<T, U, K>
+>test : test
+
+type T81 = VoidKeys<test>;
+>T81 : "b"
+>VoidKeys : MatchingKeys<T, void, keyof T>
+>test : test
 
