@@ -18,7 +18,7 @@ namespace ts.codefix {
         },
     });
 
-    function fixImportOfModuleExports(importingFile: ts.SourceFile, exportingFile: ts.SourceFile, changes: textChanges.ChangeTracker) {
+    function fixImportOfModuleExports(importingFile: SourceFile, exportingFile: SourceFile, changes: textChanges.ChangeTracker) {
         for (const moduleSpecifier of importingFile.imports) {
             const imported = getResolvedModule(importingFile, moduleSpecifier.text);
             if (!imported || imported.resolvedFileName !== exportingFile.fileName) {
@@ -365,7 +365,7 @@ namespace ts.codefix {
                 import x from "x";
                 const [a, b, c] = x;
                 */
-                const tmp = makeUniqueName(codefix.moduleSpecifierToValidIdentifier(moduleSpecifier, target), identifiers);
+                const tmp = makeUniqueName(moduleSpecifierToValidIdentifier(moduleSpecifier, target), identifiers);
                 return [
                     makeImport(createIdentifier(tmp), /*namedImports*/ undefined, moduleSpecifier),
                     makeConst(/*modifiers*/ undefined, getSynthesizedDeepClone(name), createIdentifier(tmp)),
@@ -495,9 +495,13 @@ namespace ts.codefix {
             : makeImport(/*name*/ undefined, [makeImportSpecifier(propertyName, localName)], moduleSpecifier);
     }
 
-    function makeImport(name: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier>, moduleSpecifier: string): ImportDeclaration {
+    function makeImport(name: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string): ImportDeclaration {
+        return makeImportDeclaration(name, namedImports, createLiteral(moduleSpecifier));
+    }
+
+    export function makeImportDeclaration(name: Identifier, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: Expression) {
         const importClause = (name || namedImports) && createImportClause(name, namedImports && createNamedImports(namedImports));
-        return createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, importClause, createLiteral(moduleSpecifier));
+        return createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, importClause, moduleSpecifier);
     }
 
     function makeImportSpecifier(propertyName: string | undefined, name: string): ImportSpecifier {

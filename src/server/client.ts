@@ -71,7 +71,7 @@ namespace ts.server {
             };
         }
 
-        private convertCodeEditsToTextChange(fileName: string, codeEdit: protocol.CodeEdit): ts.TextChange {
+        private convertCodeEditsToTextChange(fileName: string, codeEdit: protocol.CodeEdit): TextChange {
             return { span: this.decodeSpan(codeEdit, fileName), newText: codeEdit.newText };
         }
 
@@ -229,7 +229,7 @@ namespace ts.server {
             }));
         }
 
-        getFormattingEditsForRange(file: string, start: number, end: number, _options: FormatCodeOptions): ts.TextChange[] {
+        getFormattingEditsForRange(file: string, start: number, end: number, _options: FormatCodeOptions): TextChange[] {
             const args: protocol.FormatRequestArgs = this.createFileLocationRequestArgsWithEndLineAndOffset(file, start, end);
 
 
@@ -240,11 +240,11 @@ namespace ts.server {
             return response.body.map(entry => this.convertCodeEditsToTextChange(file, entry));
         }
 
-        getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): ts.TextChange[] {
+        getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[] {
             return this.getFormattingEditsForRange(fileName, 0, this.host.getScriptSnapshot(fileName).getLength(), options);
         }
 
-        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, _options: FormatCodeOptions): ts.TextChange[] {
+        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, _options: FormatCodeOptions): TextChange[] {
             const args: protocol.FormatOnKeyRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), key };
 
             // TODO: handle FormatCodeOptions
@@ -640,7 +640,7 @@ namespace ts.server {
             }));
         }
 
-        convertTextChangeToCodeEdit(change: protocol.CodeEdit, fileName: string): ts.TextChange {
+        convertTextChangeToCodeEdit(change: protocol.CodeEdit, fileName: string): TextChange {
             return {
                 span: this.decodeSpan(change, fileName),
                 newText: change.newText ? change.newText : ""

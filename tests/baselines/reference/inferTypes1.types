@@ -110,8 +110,8 @@ type T15 = ReturnType<any>;  // any
 >T15 : any
 >ReturnType : ReturnType<T>
 
-type T16 = ReturnType<never>;  // any
->T16 : any
+type T16 = ReturnType<never>;  // never
+>T16 : never
 >ReturnType : ReturnType<T>
 
 type T17 = ReturnType<string>;  // Error
@@ -132,8 +132,8 @@ type U11 = InstanceType<any>;  // any
 >U11 : any
 >InstanceType : InstanceType<T>
 
-type U12 = InstanceType<never>;  // any
->U12 : any
+type U12 = InstanceType<never>;  // never
+>U12 : never
 >InstanceType : InstanceType<T>
 
 type U13 = InstanceType<string>;  // Error
@@ -154,8 +154,8 @@ type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A
 >A : A
 >A : A
 
-type T20 = ArgumentType<() => void>;  // never
->T20 : never
+type T20 = ArgumentType<() => void>;  // {}
+>T20 : {}
 >ArgumentType : ArgumentType<T>
 
 type T21 = ArgumentType<(x: string) => number>;  // string
@@ -188,8 +188,8 @@ type T26 = ArgumentType<any>;  // any
 >T26 : any
 >ArgumentType : ArgumentType<T>
 
-type T27 = ArgumentType<never>;  // any
->T27 : any
+type T27 = ArgumentType<never>;  // never
+>T27 : never
 >ArgumentType : ArgumentType<T>
 
 type X1<T extends { x: any, y: any }> = T extends { x: infer X, y: infer Y } ? [X, Y] : any;
@@ -312,7 +312,7 @@ type T60 = infer U;  // Error
 >U : U
 
 type T61<T> = infer A extends infer B ? infer C : infer D;  // Error
->T61 : never
+>T61 : T61<T>
 >T : T
 >A : A
 >B : B
@@ -411,6 +411,46 @@ type T78<T> = T extends T76<infer X, infer X> ? T76<X, X> : never;
 >T76 : T76<T, U>
 >X : X
 >X : X
+
+type Foo<T extends string, U extends T> = [T, U];
+>Foo : [T, U]
+>T : T
+>U : U
+>T : T
+>T : T
+>U : U
+
+type Bar<T> = T extends Foo<infer X, infer Y> ? Foo<X, Y> : never;
+>Bar : Bar<T>
+>T : T
+>T : T
+>Foo : [T, U]
+>X : X
+>Y : Y
+>Foo : [T, U]
+>X : X
+>Y : Y
+
+type T90 = Bar<[string, string]>;  // [string, string]
+>T90 : [string, string]
+>Bar : Bar<T>
+
+type T91 = Bar<[string, "a"]>;  // [string, "a"]
+>T91 : [string, "a"]
+>Bar : Bar<T>
+
+type T92 = Bar<[string, "a"] & { x: string }>;  // [string, "a"]
+>T92 : [string, "a"]
+>Bar : Bar<T>
+>x : string
+
+type T93 = Bar<["a", string]>;  // never
+>T93 : never
+>Bar : Bar<T>
+
+type T94 = Bar<[number, number]>;  // never
+>T94 : never
+>Bar : Bar<T>
 
 // Example from #21496
 
@@ -581,4 +621,71 @@ type B<T> = string extends T ? { [P in T]: void; } : T;  // Error
 >P : P
 >T : T
 >T : T
+
+// Repro from #22302
+
+type MatchingKeys<T, U, K extends keyof T = keyof T> =
+>MatchingKeys : MatchingKeys<T, U, K>
+>T : T
+>U : U
+>K : K
+>T : T
+>T : T
+
+    K extends keyof T ? T[K] extends U ? K : never : never;
+>K : K
+>T : T
+>T : T
+>K : K
+>U : U
+>K : K
+
+type VoidKeys<T> = MatchingKeys<T, void>;
+>VoidKeys : MatchingKeys<T, void, keyof T>
+>T : T
+>MatchingKeys : MatchingKeys<T, U, K>
+>T : T
+
+interface test {
+>test : test
+
+    a: 1,
+>a : 1
+
+    b: void
+>b : void
+}
+
+type T80 = MatchingKeys<test, void>;
+>T80 : "b"
+>MatchingKeys : MatchingKeys<T, U, K>
+>test : test
+
+type T81 = VoidKeys<test>;
+>T81 : "b"
+>VoidKeys : MatchingKeys<T, void, keyof T>
+>test : test
+
+// Repro from #22221
+
+type MustBeString<T extends string> = T;
+>MustBeString : T
+>T : T
+>T : T
+
+type EnsureIsString<T> = T extends MustBeString<infer U> ? U : never;
+>EnsureIsString : EnsureIsString<T>
+>T : T
+>T : T
+>MustBeString : T
+>U : U
+>U : U
+
+type Test1 = EnsureIsString<"hello">;  // "hello"
+>Test1 : "hello"
+>EnsureIsString : EnsureIsString<T>
+
+type Test2 = EnsureIsString<42>;  // never
+>Test2 : never
+>EnsureIsString : EnsureIsString<T>
 

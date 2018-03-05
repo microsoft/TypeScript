@@ -20,11 +20,7 @@ const [C, B0, B1] = ranges;
 const classes = { definition: "class B", ranges: [C] };
 const imports = { definition: "(alias) class B\nimport B", ranges: [B0, B1] };
 verify.referenceGroups(C, [classes, imports]);
-verify.referenceGroups(B0, [imports, classes]);
-verify.referenceGroups(B1, [
-    { definition: "(alias) new B(): B\nimport B", ranges: [B0, B1] },
-    classes
-]);
+verify.referenceGroups([B0, B1], [imports, classes]);
 
 verify.renameLocations(C, ranges);
 verify.rangesAreRenameLocations([B0, B1]);
