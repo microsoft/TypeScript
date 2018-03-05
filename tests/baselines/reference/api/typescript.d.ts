@@ -2236,10 +2236,12 @@ declare namespace ts {
     }
     enum InferencePriority {
         NakedTypeVariable = 1,
-        MappedType = 2,
-        ReturnType = 4,
-        NoConstraints = 8,
-        AlwaysStrict = 16,
+        HomomorphicMappedType = 2,
+        MappedTypeConstraint = 4,
+        ReturnType = 8,
+        NoConstraints = 16,
+        AlwaysStrict = 32,
+        PriorityImpliesUnion = 12,
     }
     interface JsFileExtensionInfo {
         extension: string;
