@@ -1811,7 +1811,7 @@ declare namespace ts {
         getAliasedSymbol(symbol: Symbol): Symbol;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
         getAllAttributesTypeFromJsxOpeningLikeElement(elementNode: JsxOpeningLikeElement): Type | undefined;
-        getJsxIntrinsicTagNames(): Symbol[];
+        getJsxIntrinsicTagNamesAt(location: Node): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
         tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
@@ -2192,11 +2192,25 @@ declare namespace ts {
     interface IndexType extends InstantiableType {
         type: InstantiableType | UnionOrIntersectionType;
     }
-    interface ConditionalType extends InstantiableType {
+    interface ConditionalRoot {
+        node: ConditionalTypeNode;
         checkType: Type;
         extendsType: Type;
         trueType: Type;
         falseType: Type;
+        isDistributive: boolean;
+        inferTypeParameters: TypeParameter[];
+        outerTypeParameters?: TypeParameter[];
+        instantiations?: Map<Type>;
+        aliasSymbol: Symbol;
+        aliasTypeArguments: Type[];
+    }
+    interface ConditionalType extends InstantiableType {
+        root: ConditionalRoot;
+        checkType: Type;
+        extendsType: Type;
+        resolvedTrueType?: Type;
+        resolvedFalseType?: Type;
     }
     interface SubstitutionType extends InstantiableType {
         typeParameter: TypeParameter;
@@ -2222,41 +2236,13 @@ declare namespace ts {
     }
     enum InferencePriority {
         NakedTypeVariable = 1,
-        MappedType = 2,
-        ReturnType = 4,
-        NoConstraints = 8,
-        AlwaysStrict = 16,
+        HomomorphicMappedType = 2,
+        MappedTypeConstraint = 4,
+        ReturnType = 8,
+        NoConstraints = 16,
+        AlwaysStrict = 32,
+        PriorityImpliesUnion = 12,
     }
-    interface InferenceInfo {
-        typeParameter: TypeParameter;
-        candidates: Type[];
-        contraCandidates: Type[];
-        inferredType: Type;
-        priority: InferencePriority;
-        topLevel: boolean;
-        isFixed: boolean;
-    }
-    enum InferenceFlags {
-        None = 0,
-        InferUnionTypes = 1,
-        NoDefault = 2,
-        AnyDefault = 4,
-    }
-    /**
-     * Ternary values are defined such that
-     * x & y is False if either x or y is False.
-     * x & y is Maybe if either x or y is Maybe, but neither x or y is False.
-     * x & y is True if both x and y are True.
-     * x | y is False if both x and y are False.
-     * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
-     * x | y is True if either x or y is True.
-     */
-    enum Ternary {
-        False = 0,
-        Maybe = 1,
-        True = -1,
-    }
-    type TypeComparer = (s: Type, t: Type, reportErrors?: boolean) => Ternary;
     interface JsFileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
@@ -2292,7 +2278,8 @@ declare namespace ts {
     enum DiagnosticCategory {
         Warning = 0,
         Error = 1,
-        Message = 2,
+        Suggestion = 2,
+        Message = 3,
     }
     enum ModuleResolutionKind {
         Classic = 1,
@@ -3301,7 +3288,8 @@ declare namespace ts {
     function isCallOrNewExpression(node: Node): node is CallExpression | NewExpression;
     function isTemplateLiteral(node: Node): node is TemplateLiteral;
     function isAssertionExpression(node: Node): node is AssertionExpression;
-    function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement;
+    function isIterationStatement(node: Node, lookInLabeledStatements: false): node is IterationStatement;
+    function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement | LabeledStatement;
     function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeElement;
     function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause;
     /** True if node is of a kind that may contain comment text. */
@@ -4336,6 +4324,7 @@ declare namespace ts {
         cleanupSemanticCache(): void;
         getSyntacticDiagnostics(fileName: string): Diagnostic[];
         getSemanticDiagnostics(fileName: string): Diagnostic[];
+        getSuggestionDiagnostics(fileName: string): Diagnostic[];
         getCompilerOptionsDiagnostics(): Diagnostic[];
         /**
          * @deprecated Use getEncodedSyntacticClassifications instead.

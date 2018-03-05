@@ -3,5 +3,6 @@ interface I {
 >I : I
 
     [e]: number 
+>[e] : number
 >e : any
 }

@@ -2,14 +2,9 @@
 
 // @allowJs: true
 // @Filename: a.js
-//// function F(a: number) { }
+////function F(a: [|number|]) { }
 
-verify.getSyntacticDiagnostics(`[
-  {
-    "message": "'types' can only be used in a .ts file.",
-    "start": 14,
-    "length": 6,
-    "category": "error",
-    "code": 8010
-  }
-]`);
+verify.getSyntacticDiagnostics([{
+    message: "'types' can only be used in a .ts file.",
+    code: 8010
+}]);

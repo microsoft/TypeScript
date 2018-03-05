@@ -4,18 +4,21 @@ var i = {
 >{    [Symbol.iterator]: 0,    [Symbol.toStringTag]() { return "" },    set [Symbol.toPrimitive](p: boolean) { }} : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
 
     [Symbol.iterator]: 0,
+>[Symbol.iterator] : number
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
 >0 : 0
 
     [Symbol.toStringTag]() { return "" },
+>[Symbol.toStringTag] : () => string
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 >"" : ""
 
     set [Symbol.toPrimitive](p: boolean) { }
+>[Symbol.toPrimitive] : boolean
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol

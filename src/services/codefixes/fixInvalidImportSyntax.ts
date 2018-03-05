@@ -26,12 +26,7 @@ namespace ts.codefix {
         const variations: CodeAction[] = [];
 
         // import Bluebird from "bluebird";
-        variations.push(createAction(context, sourceFile, node, createImportDeclaration(
-            /*decorators*/ undefined,
-            /*modifiers*/ undefined,
-            createImportClause(namespace.name, /*namedBindings*/ undefined),
-            node.moduleSpecifier
-        )));
+        variations.push(createAction(context, sourceFile, node, makeImportDeclaration(namespace.name, /*namedImports*/ undefined, node.moduleSpecifier)));
 
         if (getEmitModuleKind(opts) === ModuleKind.CommonJS) {
             // import Bluebird = require("bluebird");

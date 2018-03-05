@@ -49,22 +49,19 @@ sourceFile:es5-souremap-amd.ts
 ---
 >>>        return 42;
 1 >^^^^^^^^
-2 >        ^^^^^^
-3 >              ^
-4 >               ^^
-5 >                 ^
+2 >        ^^^^^^^
+3 >               ^^
+4 >                 ^
 1 >public B()
   >    {
   >        
-2 >        return
-3 >               
-4 >               42
-5 >                 ;
+2 >        return 
+3 >               42
+4 >                 ;
 1 >Emitted(5, 9) Source(10, 9) + SourceIndex(0)
-2 >Emitted(5, 15) Source(10, 15) + SourceIndex(0)
-3 >Emitted(5, 16) Source(10, 16) + SourceIndex(0)
-4 >Emitted(5, 18) Source(10, 18) + SourceIndex(0)
-5 >Emitted(5, 19) Source(10, 19) + SourceIndex(0)
+2 >Emitted(5, 16) Source(10, 16) + SourceIndex(0)
+3 >Emitted(5, 18) Source(10, 18) + SourceIndex(0)
+4 >Emitted(5, 19) Source(10, 19) + SourceIndex(0)
 ---
 >>>    };
 1 >^^^^

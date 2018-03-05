@@ -42,7 +42,7 @@ namespace ts.codefix {
             // (Trailing because leading might be indentation, which is more sensitive.)
             const text = sourceFile.text;
             let end = implementsToken.end;
-            while (end < text.length && ts.isWhiteSpaceSingleLine(text.charCodeAt(end))) {
+            while (end < text.length && isWhiteSpaceSingleLine(text.charCodeAt(end))) {
                 end++;
             }
 
