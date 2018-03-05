@@ -4300,9 +4300,7 @@ namespace ts {
 
     /** @internal */
     export function isNamedDeclaration(node: Node): node is NamedDeclaration & { name: DeclarationName } {
-        const name = (node as NamedDeclaration).name;
-        Debug.assert(!name || isDeclaration(node) && node.name === name, "A 'name' property should always be a DeclarationName.");
-        return !!name;
+        return !!(node as NamedDeclaration).name; // A 'name' property should always be a DeclarationName.
     }
 
     export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
