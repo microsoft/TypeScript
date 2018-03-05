@@ -1,0 +1,30 @@
+=== tests/cases/compiler/strictGenericNarrowingUsesNonFalsy.ts ===
+function f<T extends { x?: number }>(o: Readonly<T>) {
+>f : <T extends { x?: number | undefined; }>(o: Readonly<T>) => void
+>T : T
+>x : number | undefined
+>o : Readonly<T>
+>Readonly : Readonly<T>
+>T : T
+
+    if (o.x) {
+>o.x : T["x"]
+>o : Readonly<T>
+>x : T["x"]
+
+        o.x.toExponential(); // Hover over 'x' shows number
+>o.x.toExponential() : string
+>o.x.toExponential : (fractionDigits?: number | undefined) => string
+>o.x : number
+>o : Readonly<T>
+>x : number
+>toExponential : (fractionDigits?: number | undefined) => string
+
+        const n: number = o.x; // Error. Hover over 'x' shows `T["x"]`
+>n : number
+>o.x : TypeFacts.Truthy<T["x"]>
+>o : Readonly<T>
+>x : TypeFacts.Truthy<T["x"]>
+    }
+}
+

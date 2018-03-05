@@ -1,0 +1,29 @@
+=== tests/cases/compiler/strictGenericNarrowingUsesNonFalsy.ts ===
+function f<T extends { x?: number }>(o: Readonly<T>) {
+>f : Symbol(f, Decl(strictGenericNarrowingUsesNonFalsy.ts, 0, 0))
+>T : Symbol(T, Decl(strictGenericNarrowingUsesNonFalsy.ts, 0, 11))
+>x : Symbol(x, Decl(strictGenericNarrowingUsesNonFalsy.ts, 0, 22))
+>o : Symbol(o, Decl(strictGenericNarrowingUsesNonFalsy.ts, 0, 37))
+>Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(strictGenericNarrowingUsesNonFalsy.ts, 0, 11))
+
+    if (o.x) {
+>o.x : Symbol(x, Decl(strictGenericNarrowingUsesNonFalsy.ts, 0, 22))
+>o : Symbol(o, Decl(strictGenericNarrowingUsesNonFalsy.ts, 0, 37))
+>x : Symbol(x, Decl(strictGenericNarrowingUsesNonFalsy.ts, 0, 22))
+
+        o.x.toExponential(); // Hover over 'x' shows number
+>o.x.toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>o.x : Symbol(x, Decl(strictGenericNarrowingUsesNonFalsy.ts, 0, 22))
+>o : Symbol(o, Decl(strictGenericNarrowingUsesNonFalsy.ts, 0, 37))
+>x : Symbol(x, Decl(strictGenericNarrowingUsesNonFalsy.ts, 0, 22))
+>toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+
+        const n: number = o.x; // Error. Hover over 'x' shows `T["x"]`
+>n : Symbol(n, Decl(strictGenericNarrowingUsesNonFalsy.ts, 3, 13))
+>o.x : Symbol(x, Decl(strictGenericNarrowingUsesNonFalsy.ts, 0, 22))
+>o : Symbol(o, Decl(strictGenericNarrowingUsesNonFalsy.ts, 0, 37))
+>x : Symbol(x, Decl(strictGenericNarrowingUsesNonFalsy.ts, 0, 22))
+    }
+}
+

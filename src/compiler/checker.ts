@@ -402,6 +402,7 @@ namespace ts {
         let autoArrayType: Type;
         let anyReadonlyArrayType: Type;
         let deferredGlobalNonNullableTypeAlias: Symbol;
+        let deferredGlobalTypefactsNamespace: Symbol;
 
         // The library files are only loaded when the feature is used.
         // This allows users to just specify library files they want to used through --lib
@@ -464,6 +465,29 @@ namespace ts {
                 addSuggestionDiagnostic(diag);
             }
         }
+
+        const typeFactsKeysWithTypes = [
+            ["EQString", TypeFacts.TypeofEQString],
+            ["EQNumber", TypeFacts.TypeofEQNumber],
+            ["EQBoolean", TypeFacts.TypeofEQBoolean],
+            ["EQSymbol", TypeFacts.TypeofEQSymbol],
+            ["EQObject", TypeFacts.TypeofEQObject],
+            ["EQFunction", TypeFacts.TypeofEQFunction],
+            ["NEString", TypeFacts.TypeofNEString],
+            ["NENumber", TypeFacts.TypeofNENumber],
+            ["NEBoolean", TypeFacts.TypeofNEBoolean],
+            ["NESymbol", TypeFacts.TypeofNESymbol],
+            ["NEObject", TypeFacts.TypeofNEObject],
+            ["NEFunction", TypeFacts.TypeofNEFunction],
+            ["EQUndefined", TypeFacts.EQUndefined],
+            ["EQNull", TypeFacts.EQNull],
+            ["EQUndefinedOrNull", TypeFacts.EQUndefinedOrNull],
+            ["NEUndefined", TypeFacts.NEUndefined],
+            ["NENull", TypeFacts.NENull],
+            ["NEUndefinedOrNull", TypeFacts.NEUndefinedOrNull],
+            ["Truthy", TypeFacts.Truthy],
+            ["Falsy", TypeFacts.Falsy],
+        ] as [__String, TypeFacts][];
 
         const enum TypeFacts {
             None = 0,
@@ -12321,7 +12345,35 @@ namespace ts {
             return TypeFacts.All;
         }
 
+        function getGlobalTypeFactsNamespace() {
+            if (!deferredGlobalTypefactsNamespace) {
+                deferredGlobalTypefactsNamespace = getGlobalSymbol("TypeFacts" as __String, SymbolFlags.Namespace, /*diagnostic*/ undefined) || unknownSymbol;
+            }
+            return deferredGlobalTypefactsNamespace;
+        }
+
+        function getFactType(ns: Symbol, factName: __String, type: Type): Type {
+            const alias = getExportOfModule(ns, factName, /*dontResolveAlias*/ false) || unknownSymbol;
+            if (!(alias.flags & SymbolFlags.TypeAlias)) {
+                return type; // Either invalid type or unknown symbol
+            }
+            return getTypeAliasInstantiation(alias, [type]);
+        }
+
         function getTypeWithFacts(type: Type, include: TypeFacts) {
+            const ns = getGlobalTypeFactsNamespace();
+            if (ns === unknownSymbol) {
+                return filterTypeWithFacts(type, include);
+            }
+            for (const [name, flag] of typeFactsKeysWithTypes) {
+                if (include & flag) {
+                    type = getFactType(ns, name, type);
+                }
+            }
+            return type;
+        }
+
+        function filterTypeWithFacts(type: Type, include: TypeFacts) {
             return filterType(type, t => (getTypeFacts(t) & include) !== 0);
         }
 

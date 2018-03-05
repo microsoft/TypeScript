@@ -1360,6 +1360,108 @@ type Extract<T, U> = T extends U ? T : never;
  */
 type NonNullable<T> = T extends null | undefined ? never : T;
 
+declare namespace TypeFacts {
+  /**
+   * Include only string from T
+   */
+  export type EQString<T> = T extends string ? T : never;
+
+  /**
+   * Include only number from T
+   */
+  export type EQNumber<T> = T extends number ? T : never;
+
+  /**
+   * Include only boolean from T
+   */
+  export type EQBoolean<T> = T extends boolean ? T : never;
+
+  /**
+   * Include only symbol from T
+   */
+  export type EQSymbol<T> = T extends symbol ? T : never;
+
+  /**
+   * Include only object from T
+   */
+  export type EQObject<T> = T extends object ? T : never;
+
+  /**
+   * Include only functions from T
+   */
+  export type EQFunction<T> = T extends (...args: any[]) => any ? T : never;
+
+  /**
+   * Exclude only string from T
+   */
+  export type NEString<T> = T extends string ? never : T;
+
+  /**
+   * Exclude only number from T
+   */
+  export type NENumber<T> = T extends number ? never : T;
+
+  /**
+   * Exclude only boolean from T
+   */
+  export type NEBoolean<T> = T extends boolean ? never : T;
+
+  /**
+   * Exclude only symbol from T
+   */
+  export type NESymbol<T> = T extends symbol ? never : T;
+
+  /**
+   * Exclude only object from T
+   */
+  export type NEObject<T> = T extends object ? never : T;
+
+  /**
+   * Exclude only functions from T
+   */
+  export type NEFunction<T> = T extends (...args: any[]) => any ? never : T;
+
+  /**
+   * Include only undefined from T
+   */
+  export type EQUndefined<T> = T extends undefined | void ? T : never;
+
+  /**
+   * Include only null from T
+   */
+  export type EQNull<T> = T extends null ? T : never;
+
+  /**
+   * Include only null and undefined from T
+   */
+  export type EQUndefinedOrNull<T> = T extends null | undefined | void ? T : never;
+
+  /**
+   * Exclude only undefined from T
+   */
+  export type NEUndefined<T> = T extends undefined | void ? never : T;
+
+  /**
+   * Exclude only null from T
+   */
+  export type NENull<T> = T extends null ? never : T;
+
+  /**
+   * Exclude null and undefined from T (different from NonNullable as it also filters void)
+   */
+  export type NEUndefinedOrNull<T> = T extends null | undefined | void ? never : T;
+
+  /**
+   * Include truthy (or exclude falsy) types from T
+   */
+  export type Truthy<T> = T extends false | null | undefined | void | 0 | "" ? never : T;
+
+  /**
+   * Include falsy from T
+   */
+  export type Falsy<T> = T extends false | null | undefined | void | 0 | "" ? T : never;
+}
+
 /**
  * Obtain the return type of a function type
  */
