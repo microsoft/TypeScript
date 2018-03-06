@@ -24,3 +24,15 @@ str += symbol;
 >str : string
 >symbol : symbol
 
+let symbolUnionNumber!: symbol | number;
+>symbolUnionNumber : number | symbol
+
+let symbolUnionString!: symbol | string;
+>symbolUnionString : string | symbol
+
+const templateStrUnion = `union with number ${symbolUnionNumber} and union with string ${symbolUnionString}`;
+>templateStrUnion : string
+>`union with number ${symbolUnionNumber} and union with string ${symbolUnionString}` : string
+>symbolUnionNumber : number | symbol
+>symbolUnionString : string | symbol
+
