@@ -1,4 +1,5 @@
 /// <reference path="addMissingInvocationForDecorator.ts" />
+/// <reference path="annotateWithTypeFromJSDoc.ts" />
 /// <reference path="convertFunctionToEs6Class.ts" />
 /// <reference path="convertToEs6Module.ts" />
 /// <reference path="correctQualifiedNameToIndexedAccessType.ts" />
