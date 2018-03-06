@@ -1835,13 +1835,13 @@ namespace ts {
             return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext, options });
         }
 
-        function organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {
+        function organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, options: Options): ReadonlyArray<FileTextChanges> {
             synchronizeHostData();
             Debug.assert(scope.type === "file");
             const sourceFile = getValidSourceFile(scope.fileName);
             const formatContext = formatting.getFormatContext(formatOptions);
 
-            return OrganizeImports.organizeImports(sourceFile, formatContext, host, program);
+            return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, options);
         }
 
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
@@ -2065,7 +2065,7 @@ namespace ts {
             return Rename.getRenameInfo(program.getTypeChecker(), defaultLibFileName, getCanonicalFileName, getValidSourceFile(fileName), position);
         }
 
-        function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, formatOptions?: FormatCodeSettings): RefactorContext {
+        function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, options: Options, formatOptions?: FormatCodeSettings): RefactorContext {
             const [startPosition, endPosition] = typeof positionOrRange === "number" ? [positionOrRange, undefined] : [positionOrRange.pos, positionOrRange.end];
             return {
                 file,
@@ -2075,13 +2075,14 @@ namespace ts {
                 host,
                 formatContext: formatting.getFormatContext(formatOptions),
                 cancellationToken,
+                options,
             };
         }
 
-        function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange): ApplicableRefactorInfo[] {
+        function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, options: Options): ApplicableRefactorInfo[] {
             synchronizeHostData();
             const file = getValidSourceFile(fileName);
-            return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange));
+            return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, options));
         }
 
         function getEditsForRefactor(
@@ -2089,11 +2090,13 @@ namespace ts {
             formatOptions: FormatCodeSettings,
             positionOrRange: number | TextRange,
             refactorName: string,
-            actionName: string): RefactorEditInfo {
+            actionName: string,
+            options: Options,
+        ): RefactorEditInfo {
 
             synchronizeHostData();
             const file = getValidSourceFile(fileName);
-            return refactor.getEditsForRefactor(getRefactorContext(file, positionOrRange, formatOptions), refactorName, actionName);
+            return refactor.getEditsForRefactor(getRefactorContext(file, positionOrRange, options, formatOptions), refactorName, actionName);
         }
 
         return {

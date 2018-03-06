@@ -4101,8 +4101,8 @@ declare namespace ts {
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, servicesOptions: Options): ReadonlyArray<CodeFixAction>;
-        getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, servicesOptions: Options): CombinedCodeActions;
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, options: Options): ReadonlyArray<CodeFixAction>;
+        getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, options: Options): CombinedCodeActions;
         applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
@@ -4112,9 +4112,9 @@ declare namespace ts {
         applyCodeActionCommand(fileName: string, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
-        getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
-        getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;
-        organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges>;
+        getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange, options: Options): ApplicableRefactorInfo[];
+        getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, options: Options): RefactorEditInfo | undefined;
+        organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, options: Options): ReadonlyArray<FileTextChanges>;
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
         getProgram(): Program;
         dispose(): void;
@@ -7044,17 +7044,17 @@ declare namespace ts.server.protocol {
         insertSpaceBeforeTypeAnnotation?: boolean;
     }
     interface Options {
-        quote: "double" | "single";
+        quote?: "double" | "single";
         /**
          * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
          * This affects lone identifier completions but not completions on the right hand side of `obj.`.
          */
-        includeExternalModuleExports: boolean;
+        includeExternalModuleExports?: boolean;
         /**
          * If enabled, the completion list will include completions with invalid identifier names.
          * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
          */
-        includeInsertTextCompletions: boolean;
+        includeInsertTextCompletions?: boolean;
     }
     interface CompilerOptions {
         allowJs?: boolean;
@@ -7319,7 +7319,7 @@ declare namespace ts.server {
         executeCommand(request: protocol.Request): HandlerResponse;
         onMessage(message: string): void;
         private getFormatOptions(file);
-        private getServicesOptions(file);
+        private getOptions(file);
     }
     interface HandlerResponse {
         response?: {};

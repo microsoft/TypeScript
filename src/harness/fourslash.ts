@@ -2924,7 +2924,7 @@ Actual: ${stringify(fullActual)}`);
 
         public verifyApplicableRefactorAvailableAtMarker(negative: boolean, markerName: string) {
             const marker = this.getMarkerByName(markerName);
-            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, marker.position);
+            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, marker.position, ts.defaultOptions);
             const isAvailable = applicableRefactors && applicableRefactors.length > 0;
             if (negative && isAvailable) {
                 this.raiseError(`verifyApplicableRefactorAvailableAtMarker failed - expected no refactor at marker ${markerName} but found some.`);
@@ -2944,7 +2944,7 @@ Actual: ${stringify(fullActual)}`);
         public verifyRefactorAvailable(negative: boolean, name: string, actionName?: string) {
             const selection = this.getSelection();
 
-            let refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, selection) || [];
+            let refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, selection, ts.defaultOptions) || [];
             refactors = refactors.filter(r => r.name === name && (actionName === undefined || r.actions.some(a => a.name === actionName)));
             const isAvailable = refactors.length > 0;
 
@@ -2966,7 +2966,7 @@ Actual: ${stringify(fullActual)}`);
         public verifyRefactor({ name, actionName, refactors }: FourSlashInterface.VerifyRefactorOptions) {
             const selection = this.getSelection();
 
-            const actualRefactors = (this.languageService.getApplicableRefactors(this.activeFile.fileName, selection) || ts.emptyArray)
+            const actualRefactors = (this.languageService.getApplicableRefactors(this.activeFile.fileName, selection, ts.defaultOptions) || ts.emptyArray)
                 .filter(r => r.name === name && r.actions.some(a => a.name === actionName));
             this.assertObjectsEqual(actualRefactors, refactors);
         }
@@ -2977,7 +2977,7 @@ Actual: ${stringify(fullActual)}`);
                 throw new Error("Exactly one refactor range is allowed per test.");
             }
 
-            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, { pos: ranges[0].pos, end: ranges[0].end });
+            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, ts.first(ranges), ts.defaultOptions);
             const isAvailable = applicableRefactors && applicableRefactors.length > 0;
             if (negative && isAvailable) {
                 this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected no refactor but found some.`);
@@ -2989,7 +2989,7 @@ Actual: ${stringify(fullActual)}`);
 
         public applyRefactor({ refactorName, actionName, actionDescription, newContent: newContentWithRenameMarker }: FourSlashInterface.ApplyRefactorOptions) {
             const range = this.getSelection();
-            const refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, range);
+            const refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, range, ts.defaultOptions);
             const refactorsWithName = refactors.filter(r => r.name === refactorName);
             if (refactorsWithName.length === 0) {
                 this.raiseError(`The expected refactor: ${refactorName} is not available at the marker location.\nAvailable refactors: ${refactors.map(r => r.name)}`);
@@ -3003,7 +3003,7 @@ Actual: ${stringify(fullActual)}`);
                 this.raiseError(`Expected action description to be ${JSON.stringify(actionDescription)}, got: ${JSON.stringify(action.description)}`);
             }
 
-            const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, this.formatCodeSettings, range, refactorName, actionName);
+            const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, this.formatCodeSettings, range, refactorName, actionName, ts.defaultOptions);
             for (const edit of editInfo.edits) {
                 this.applyEdits(edit.fileName, edit.textChanges, /*isFormattingEdit*/ false);
             }
@@ -3048,14 +3048,14 @@ Actual: ${stringify(fullActual)}`);
             formattingOptions = formattingOptions || this.formatCodeSettings;
             const markerPos = this.getMarkerByName(markerName).position;
 
-            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, markerPos);
+            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, markerPos, ts.defaultOptions);
             const applicableRefactorToApply = ts.find(applicableRefactors, refactor => refactor.name === refactorNameToApply);
 
             if (!applicableRefactorToApply) {
                 this.raiseError(`The expected refactor: ${refactorNameToApply} is not available at the marker location.`);
             }
 
-            const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, formattingOptions, markerPos, refactorNameToApply, actionName);
+            const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, formattingOptions, markerPos, refactorNameToApply, actionName, ts.defaultOptions);
 
             for (const edit of editInfo.edits) {
                 this.applyEdits(edit.fileName, edit.textChanges, /*isFormattingEdit*/ false);

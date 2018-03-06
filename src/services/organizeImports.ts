@@ -11,7 +11,9 @@ namespace ts.OrganizeImports {
         sourceFile: SourceFile,
         formatContext: formatting.FormatContext,
         host: LanguageServiceHost,
-        program: Program) {
+        program: Program,
+        _options: Options,
+    ) {
 
         const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext });
 
