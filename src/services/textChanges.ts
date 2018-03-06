@@ -199,6 +199,8 @@ namespace ts.textChanges {
         formatContext: formatting.FormatContext;
     }
 
+    export type TypeAnnotatable = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature;
+
     export class ChangeTracker {
         private readonly changes: Change[] = [];
         private readonly deletedNodesInLists: true[] = []; // Stores ids of nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
@@ -341,6 +343,13 @@ namespace ts.textChanges {
         public insertModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
             const pos = before.getStart(sourceFile);
             this.replaceRange(sourceFile, { pos, end: pos }, createToken(modifier), { suffix: " " });
+        }
+
+        public insertTypeAnnotation(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): void {
+            const end = (isFunctionLike(node)
+                ? findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile)!
+                : node.kind !== SyntaxKind.VariableDeclaration && node.questionToken ? node.questionToken : node.name).end;
+            this.insertNodeAt(sourceFile, end, type, { prefix: ": " });
         }
 
         private getOptionsForInsertNodeBefore(before: Node, doubleNewlines: boolean): ChangeNodeOptions {
