@@ -97,7 +97,7 @@ namespace ts.textChanges {
         /**
          * Do not trim leading white spaces in the edit range
          */
-        preseveLeadingWhiteSpaces?: boolean;
+        preserveLeadingWhitespace?: boolean;
     }
 
     enum ChangeKind {
@@ -216,7 +216,7 @@ namespace ts.textChanges {
         }
 
         /** Public for tests only. Other callers should use `ChangeTracker.with`. */
-        constructor(private readonly newLineCharacter: string, private readonly formatContext: formatting.FormatContext) {}
+        constructor(public readonly newLineCharacter: string, private readonly formatContext: formatting.FormatContext) {}
 
         public deleteRange(sourceFile: SourceFile, range: TextRange) {
             this.changes.push({ kind: ChangeKind.Remove, sourceFile, range });
@@ -632,7 +632,7 @@ namespace ts.textChanges {
                 ? change.nodes.map(n => removeSuffix(format(n), newLineCharacter)).join(newLineCharacter)
                 : format(change.node);
             // strip initial indentation (spaces or tabs) if text will be inserted in the middle of the line
-            const noIndent = (options.preseveLeadingWhiteSpaces || options.indentation !== undefined || getLineStartPositionForPosition(pos, sourceFile) === pos) ? text : text.replace(/^\s+/, "");
+            const noIndent = (options.preserveLeadingWhitespace || options.indentation !== undefined || getLineStartPositionForPosition(pos, sourceFile) === pos) ? text : text.replace(/^\s+/, "");
             return (options.prefix || "") + noIndent + (options.suffix || "");
         }
 
