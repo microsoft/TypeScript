@@ -2568,7 +2568,7 @@ Actual: ${stringify(fullActual)}`);
             }
             const range = ts.first(ranges);
 
-            const codeFixes = this.getCodeFixes(fileName, errorCode);
+            const codeFixes = this.getCodeFixes(fileName, errorCode).filter(f => f.fixId === undefined); // TODO: GH#20315 filter out those that use the import fix ID
 
             if (codeFixes.length === 0) {
                 if (expectedTextArray.length !== 0) {

@@ -65,7 +65,6 @@ namespace ts {
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const modulekind = getEmitModuleKind(compilerOptions);
-        const noUnusedIdentifiers = !!compilerOptions.noUnusedLocals || !!compilerOptions.noUnusedParameters;
         const allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
         const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
         const strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
@@ -453,17 +452,6 @@ namespace ts {
         const diagnostics = createDiagnosticCollection();
         // Suggestion diagnostics must have a file. Keyed by source file name.
         const suggestionDiagnostics = createMultiMap<Diagnostic>();
-        function addSuggestionDiagnostic(diag: Diagnostic): void {
-            suggestionDiagnostics.add(diag.file.fileName, { ...diag, category: DiagnosticCategory.Suggestion });
-        }
-        function addErrorOrSuggestionDiagnostic(isError: boolean, diag: Diagnostic): void {
-            if (isError) {
-                diagnostics.add(diag);
-            }
-            else {
-                addSuggestionDiagnostic(diag);
-            }
-        }
 
         const enum TypeFacts {
             None = 0,
@@ -814,6 +802,16 @@ namespace ts {
                 ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3)
                 : createCompilerDiagnostic(message, arg0, arg1, arg2, arg3);
             diagnostics.add(diagnostic);
+        }
+
+        function errorOrSuggestion(isError: boolean, location: Node, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
+            const diagnostic = "message" in message ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3) : createDiagnosticForNodeFromMessageChain(location, message);
+            if (isError) {
+                diagnostics.add(diagnostic);
+            }
+            else {
+                suggestionDiagnostics.add(diagnostic.file.fileName, { ...diagnostic, category: DiagnosticCategory.Suggestion });
+            }
         }
 
         function createSymbol(flags: SymbolFlags, name: __String, checkFlags?: CheckFlags) {
@@ -1422,7 +1420,7 @@ namespace ts {
             // We just climbed up parents looking for the name, meaning that we started in a descendant node of `lastLocation`.
             // If `result === lastSelfReferenceLocation.symbol`, that means that we are somewhere inside `lastSelfReferenceLocation` looking up a name, and resolving to `lastLocation` itself.
             // That means that this is a self-reference of `lastLocation`, and shouldn't count this when considering whether `lastLocation` is used.
-            if (isUse && result && nameNotFoundMessage && noUnusedIdentifiers && (!lastSelfReferenceLocation || result !== lastSelfReferenceLocation.symbol)) {
+            if (isUse && result && nameNotFoundMessage && (!lastSelfReferenceLocation || result !== lastSelfReferenceLocation.symbol)) {
                 result.isReferenced |= meaning;
             }
 
@@ -2096,7 +2094,7 @@ namespace ts {
             if (sourceFile) {
                 if (sourceFile.symbol) {
                     if (resolvedModule.isExternalLibraryImport && !extensionIsTypeScript(resolvedModule.extension)) {
-                        addSuggestionDiagnostic(createModuleImplicitlyAnyDiagnostic(errorNode, resolvedModule, moduleReference));
+                        errorOnImplicitAnyModule(/*isError*/ false, errorNode, resolvedModule, moduleReference);
                     }
                     // merged symbol is module declaration symbol combined with all augmentations
                     return getMergedSymbol(sourceFile.symbol);
@@ -2122,7 +2120,7 @@ namespace ts {
                     error(errorNode, diag, moduleReference, resolvedModule.resolvedFileName);
                 }
                 else {
-                    addErrorOrSuggestionDiagnostic(noImplicitAny && !!moduleNotFoundError, createModuleImplicitlyAnyDiagnostic(errorNode, resolvedModule, moduleReference));
+                    errorOnImplicitAnyModule(/*isError*/ noImplicitAny && !!moduleNotFoundError, errorNode, resolvedModule, moduleReference);
                 }
                 // Failed imports and untyped modules are both treated in an untyped manner; only difference is whether we give a diagnostic first.
                 return undefined;
@@ -2147,12 +2145,12 @@ namespace ts {
             return undefined;
         }
 
-        function createModuleImplicitlyAnyDiagnostic(errorNode: Node, { packageId, resolvedFileName }: ResolvedModuleFull, moduleReference: string): Diagnostic {
+        function errorOnImplicitAnyModule(isError: boolean, errorNode: Node, { packageId, resolvedFileName }: ResolvedModuleFull, moduleReference: string): void {
             const errorInfo = packageId && chainDiagnosticMessages(
                 /*details*/ undefined,
                 Diagnostics.Try_npm_install_types_Slash_0_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
                 getMangledNameForScopedPackage(packageId.name));
-            return createDiagnosticForNodeFromMessageChain(errorNode, chainDiagnosticMessages(
+            errorOrSuggestion(isError, errorNode, chainDiagnosticMessages(
                 errorInfo,
                 Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
                 moduleReference,
@@ -16382,7 +16380,7 @@ namespace ts {
         }
 
         function markPropertyAsReferenced(prop: Symbol, nodeForCheckWriteOnly: Node | undefined, isThisAccess: boolean) {
-            if (!prop || !noUnusedIdentifiers || !(prop.flags & SymbolFlags.ClassMember) || !prop.valueDeclaration || !hasModifier(prop.valueDeclaration, ModifierFlags.Private)) {
+            if (!prop || !(prop.flags & SymbolFlags.ClassMember) || !prop.valueDeclaration || !hasModifier(prop.valueDeclaration, ModifierFlags.Private)) {
                 return;
             }
             if (nodeForCheckWriteOnly && isWriteOnlyAccess(nodeForCheckWriteOnly) && !(prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor))) {
@@ -20044,7 +20042,7 @@ namespace ts {
                         checkAsyncFunctionReturnType(<FunctionLikeDeclaration>node);
                     }
                 }
-                if (noUnusedIdentifiers && !(<FunctionDeclaration>node).body) {
+                if (!(<FunctionDeclaration>node).body) {
                     checkUnusedTypeParameters(node);
                 }
             }
@@ -21561,7 +21559,7 @@ namespace ts {
         }
 
         function checkUnusedLocalsAndParameters(node: Node): void {
-            if (noUnusedIdentifiers && !(node.flags & NodeFlags.Ambient)) {
+            if (!(node.flags & NodeFlags.Ambient)) {
                 node.locals.forEach(local => {
                     // If it's purely a type parameter, ignore, will be checked in `checkUnusedTypeParameters`.
                     // If it's a type parameter merged with a parameter, check if the parameter-side is used.
@@ -21569,14 +21567,11 @@ namespace ts {
                         if (local.valueDeclaration && getRootDeclaration(local.valueDeclaration).kind === SyntaxKind.Parameter) {
                             const parameter = <ParameterDeclaration>getRootDeclaration(local.valueDeclaration);
                             const name = getNameOfDeclaration(local.valueDeclaration);
-                            if (compilerOptions.noUnusedParameters &&
-                                !isParameterPropertyDeclaration(parameter) &&
-                                !parameterIsThisKeyword(parameter) &&
-                                !parameterNameStartsWithUnderscore(name)) {
-                                error(name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(local));
+                            if (!isParameterPropertyDeclaration(parameter) && !parameterIsThisKeyword(parameter) && !parameterNameStartsWithUnderscore(name)) {
+                                errorOrSuggestion(/*isError*/ compilerOptions.noUnusedParameters, name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(local));
                             }
                         }
-                        else if (compilerOptions.noUnusedLocals) {
+                        else {
                             forEach(local.declarations, d => errorUnusedLocal(d, symbolName(local)));
                         }
                     }
@@ -21603,7 +21598,7 @@ namespace ts {
             }
 
             if (!isRemovedPropertyFromObjectSpread(node.kind === SyntaxKind.Identifier ? node.parent : node)) {
-                error(node, Diagnostics._0_is_declared_but_its_value_is_never_read, name);
+                errorOrSuggestion(/*isError*/ compilerOptions.noUnusedLocals, node, Diagnostics._0_is_declared_but_its_value_is_never_read, name);
             }
         }
 
@@ -21616,7 +21611,7 @@ namespace ts {
         }
 
         function checkUnusedClassMembers(node: ClassDeclaration | ClassExpression): void {
-            if (compilerOptions.noUnusedLocals && !(node.flags & NodeFlags.Ambient)) {
+            if (!(node.flags & NodeFlags.Ambient)) {
                 for (const member of node.members) {
                     switch (member.kind) {
                         case SyntaxKind.MethodDeclaration:
@@ -21629,13 +21624,13 @@ namespace ts {
                             }
                             const symbol = getSymbolOfNode(member);
                             if (!symbol.isReferenced && hasModifier(member, ModifierFlags.Private)) {
-                                error(member.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolToString(symbol));
+                                errorOrSuggestion(/*isError*/ compilerOptions.noUnusedLocals, member.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolToString(symbol));
                             }
                             break;
                         case SyntaxKind.Constructor:
                             for (const parameter of (<ConstructorDeclaration>member).parameters) {
                                 if (!parameter.symbol.isReferenced && hasModifier(parameter, ModifierFlags.Private)) {
-                                    error(parameter.name, Diagnostics.Property_0_is_declared_but_its_value_is_never_read, symbolName(parameter.symbol));
+                                    errorOrSuggestion(/*isError*/ compilerOptions.noUnusedLocals, parameter.name, Diagnostics.Property_0_is_declared_but_its_value_is_never_read, symbolName(parameter.symbol));
                                 }
                             }
                             break;
@@ -21651,26 +21646,19 @@ namespace ts {
         }
 
         function checkUnusedTypeParameters(node: ClassDeclaration | ClassExpression | FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | ConstructorDeclaration | SignatureDeclaration | InterfaceDeclaration | TypeAliasDeclaration) {
-            if (compilerOptions.noUnusedParameters && !(node.flags & NodeFlags.Ambient)) {
-                if (node.typeParameters) {
-                    // Only report errors on the last declaration for the type parameter container;
-                    // this ensures that all uses have been accounted for.
-                    const symbol = getSymbolOfNode(node);
-                    const lastDeclaration = symbol && symbol.declarations && lastOrUndefined(symbol.declarations);
-                    if (lastDeclaration !== node) {
-                        return;
-                    }
-                    for (const typeParameter of node.typeParameters) {
-                        if (!(getMergedSymbol(typeParameter.symbol).isReferenced & SymbolFlags.TypeParameter) && !isIdentifierThatStartsWithUnderScore(typeParameter.name)) {
-                            error(typeParameter.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(typeParameter.symbol));
-                        }
+            // Only report errors on the last declaration for the type parameter container;
+            // this ensures that all uses have been accounted for.
+            if (!(node.flags & NodeFlags.Ambient) && node.typeParameters && last(getSymbolOfNode(node)!.declarations) === node) {
+                for (const typeParameter of node.typeParameters) {
+                    if (!(getMergedSymbol(typeParameter.symbol).isReferenced & SymbolFlags.TypeParameter) && !isIdentifierThatStartsWithUnderScore(typeParameter.name)) {
+                        errorOrSuggestion(/*isError*/ compilerOptions.noUnusedParameters, typeParameter.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(typeParameter.symbol));
                     }
                 }
             }
         }
 
         function checkUnusedModuleMembers(node: ModuleDeclaration | SourceFile): void {
-            if (compilerOptions.noUnusedLocals && !(node.flags & NodeFlags.Ambient)) {
+            if (!(node.flags & NodeFlags.Ambient)) {
                 node.locals.forEach(local => {
                     if (!local.isReferenced && !local.exportSymbol) {
                         for (const declaration of local.declarations) {
@@ -24459,7 +24447,7 @@ namespace ts {
                 clear(potentialNewTargetCollisions);
 
                 deferredNodes = [];
-                deferredUnusedIdentifierNodes = produceDiagnostics && noUnusedIdentifiers ? [] : undefined;
+                deferredUnusedIdentifierNodes = produceDiagnostics ? [] : undefined;
                 flowAnalysisDisabled = false;
 
                 forEach(node.statements, checkSourceElement);

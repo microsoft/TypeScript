@@ -3958,7 +3958,7 @@ namespace ts.projectSystem {
             const folderPath = "/a/b/projects/temp";
             const file1: FileOrFolder = {
                 path: `${folderPath}/a.ts`,
-                content: 'import f = require("pad")'
+                content: 'import f = require("pad"); f;'
             };
             const files = [file1, libFile];
             const host = createServerHost(files);

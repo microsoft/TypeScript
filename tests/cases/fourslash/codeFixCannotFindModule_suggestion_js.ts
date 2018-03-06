@@ -8,6 +8,7 @@
 
 // @Filename: /a.js
 ////import abs from [|"abs"|];
+////abs;
 
 test.setTypesRegistry({ "abs": undefined });
 

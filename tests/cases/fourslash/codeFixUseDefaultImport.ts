@@ -8,15 +8,18 @@
 
 // @Filename: /b.ts
 ////import * as [|a|] from "./a";
+////a;
 
 // @Filename: /c.ts
 ////import [|a|] = require("./a");
+////a;
 
 // @Filename: /d.ts
 ////import "./a";
 
 // @Filename: /e.ts
 ////import * as n from "./non-existant";
+////n;
 
 for (const file of ["/b.ts", "/c.ts"]) {
     goTo.file(file);
@@ -29,7 +32,8 @@ for (const file of ["/b.ts", "/c.ts"]) {
 
     verify.codeFix({
         description: "Convert to default import",
-        newFileContent: `import a from "./a";`,
+        // TODO: GH#22337
+        newFileContent: `import a from "./a";a;`,
     });
 }
 
