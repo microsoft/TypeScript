@@ -967,15 +967,8 @@ namespace ts {
         | SetAccessorDeclaration
         | FunctionExpression
         | ArrowFunction;
-    export type FunctionLike =
-        | FunctionLikeDeclaration
-        | FunctionTypeNode
-        | ConstructorTypeNode
-        | IndexSignatureDeclaration
-        | MethodSignature
-        | ConstructSignatureDeclaration
-        | CallSignatureDeclaration
-        | JSDocFunctionType;
+    /** @deprecated Use SignatureDeclaration */
+    export type FunctionLike = SignatureDeclaration;
 
     export interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement {
         kind: SyntaxKind.FunctionDeclaration;
@@ -2855,7 +2848,7 @@ namespace ts {
          */
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
-        isImplementationOfOverload(node: FunctionLike): boolean | undefined;
+        isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
         isUnknownSymbol(symbol: Symbol): boolean;
