@@ -32,7 +32,7 @@
 
 namespace ts {
     /** The version of the language service API */
-    export const servicesVersion = "0.7";
+    export const servicesVersion = "0.8";
 
     function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent?: Node): NodeObject | TokenObject<TKind> | IdentifierObject {
         const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
@@ -1424,7 +1424,13 @@ namespace ts {
             return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
         }
 
-    function getCompletionsAtPosition(fileName: string, position: number, settings: Options = defaultOptions): CompletionInfo {
+        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = defaultOptions): CompletionInfo {
+            // Convert from deprecated options names to new names
+            const fullOptions: Options = {
+                ...identity<Options>(options), // avoid excess property check
+                includeExternalModuleExportsInCompletionList: options.includeExternalModuleExportsInCompletionList || options.includeExternalModuleExports,
+                includeInsertTextCompletionsInCompletionList: options.includeInsertTextCompletionsInCompletionList || options.includeInsertTextCompletions,
+            };
             synchronizeHostData();
             return Completions.getCompletionsAtPosition(
                 host,
@@ -1434,7 +1440,7 @@ namespace ts {
                 getValidSourceFile(fileName),
                 position,
                 program.getSourceFiles(),
-                settings);
+                fullOptions);
         }
 
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions?: FormatCodeSettings, source?: string): CompletionEntryDetails {
@@ -1814,7 +1820,7 @@ namespace ts {
             return [];
         }
 
-        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, options: Options): ReadonlyArray<CodeFixAction> {
+        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, options: Options = defaultOptions): ReadonlyArray<CodeFixAction> {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const span = createTextSpanFromBounds(start, end);
@@ -1826,7 +1832,7 @@ namespace ts {
             });
         }
 
-        function getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, options: Options): CombinedCodeActions {
+        function getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, options: Options = defaultOptions): CombinedCodeActions {
             synchronizeHostData();
             Debug.assert(scope.type === "file");
             const sourceFile = getValidSourceFile(scope.fileName);
@@ -1835,7 +1841,7 @@ namespace ts {
             return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext, options });
         }
 
-        function organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, options: Options): ReadonlyArray<FileTextChanges> {
+        function organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, options: Options = defaultOptions): ReadonlyArray<FileTextChanges> {
             synchronizeHostData();
             Debug.assert(scope.type === "file");
             const sourceFile = getValidSourceFile(scope.fileName);
@@ -2079,7 +2085,7 @@ namespace ts {
             };
         }
 
-        function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, options: Options): ApplicableRefactorInfo[] {
+        function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, options: Options = defaultOptions): ApplicableRefactorInfo[] {
             synchronizeHostData();
             const file = getValidSourceFile(fileName);
             return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, options));
@@ -2091,7 +2097,7 @@ namespace ts {
             positionOrRange: number | TextRange,
             refactorName: string,
             actionName: string,
-            options: Options,
+            options: Options = defaultOptions,
         ): RefactorEditInfo {
 
             synchronizeHostData();

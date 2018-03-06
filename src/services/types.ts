@@ -216,8 +216,8 @@ namespace ts {
 
     export interface Options {
         readonly quote?: "double" | "single";
-        readonly includeExternalModuleExports?: boolean;
-        readonly includeInsertTextCompletions?: boolean;
+        readonly includeExternalModuleExportsInCompletionList?: boolean;
+        readonly includeInsertTextCompletionsInCompletionList?: boolean;
     }
     /* @internal */
     export const defaultOptions: Options = {};
@@ -250,7 +250,7 @@ namespace ts {
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
 
-        getCompletionsAtPosition(fileName: string, position: number, settings: Options | undefined): CompletionInfo;
+        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionInfo;
         // "options" and "source" are optional only for backwards-compatibility
         getCompletionEntryDetails(
             fileName: string,
@@ -314,9 +314,9 @@ namespace ts {
         applyCodeActionCommand(fileName: string, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
-        getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange, options: Options): ApplicableRefactorInfo[];
-        getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, options: Options): RefactorEditInfo | undefined;
-        organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, options: Options): ReadonlyArray<FileTextChanges>;
+        getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange, options: Options | undefined): ApplicableRefactorInfo[];
+        getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, options: Options | undefined): RefactorEditInfo | undefined;
+        organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, options: Options | undefined): ReadonlyArray<FileTextChanges>;
 
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 
@@ -338,7 +338,12 @@ namespace ts {
     export type OrganizeImportsScope = CombinedCodeFixScope;
 
     /** @deprecated Use Options */
-    export type GetCompletionsAtPositionOptions = Options;
+    export interface GetCompletionsAtPositionOptions extends Options {
+        /** @deprecated Use includeExternalModuleExportsInCompletionList */
+        includeExternalModuleExports?: boolean;
+        /** @deprecated Use includeInsertTextCompletionsInCompletionList */
+        includeInsertTextCompletions?: boolean;
+    }
 
     export interface ApplyCodeActionCommandResult {
         successMessage: string;

@@ -206,7 +206,7 @@ namespace ts.Completions {
 
         let insertText: string | undefined;
         let replacementSpan: TextSpan | undefined;
-        if (options.includeInsertTextCompletions) {
+        if (options.includeInsertTextCompletionsInCompletionList) {
             if (origin && origin.type === "this-type") {
                 insertText = needsConvertPropertyAccess ? `this[${quote(name, options)}]` : `this.${name}`;
             }
@@ -227,7 +227,7 @@ namespace ts.Completions {
             }
         }
 
-        if (insertText !== undefined && !options.includeInsertTextCompletions) {
+        if (insertText !== undefined && !options.includeInsertTextCompletionsInCompletionList) {
             return undefined;
         }
 
@@ -479,7 +479,7 @@ namespace ts.Completions {
         { name, source }: CompletionEntryIdentifier,
         allSourceFiles: ReadonlyArray<SourceFile>,
     ): SymbolCompletion | { type: "request", request: Request } | { type: "none" } {
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, { includeExternalModuleExports: true, includeInsertTextCompletions: true }, compilerOptions.target);
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, { includeExternalModuleExportsInCompletionList: true, includeInsertTextCompletionsInCompletionList: true }, compilerOptions.target);
         if (!completionData) {
             return { type: "none" };
         }
@@ -746,7 +746,7 @@ namespace ts.Completions {
         sourceFile: SourceFile,
         position: number,
         allSourceFiles: ReadonlyArray<SourceFile>,
-        options: Pick<Options, "includeExternalModuleExports" | "includeInsertTextCompletions">,
+        options: Pick<Options, "includeExternalModuleExportsInCompletionList" | "includeInsertTextCompletionsInCompletionList">,
         target: ScriptTarget,
     ): CompletionData | Request | undefined {
         let start = timestamp();
@@ -1150,7 +1150,7 @@ namespace ts.Completions {
             symbols = Debug.assertEachDefined(typeChecker.getSymbolsInScope(scopeNode, symbolMeanings), "getSymbolsInScope() should all be defined");
 
             // Need to insert 'this.' before properties of `this` type, so only do that if `includeInsertTextCompletions`
-            if (options.includeInsertTextCompletions && scopeNode.kind !== SyntaxKind.SourceFile) {
+            if (options.includeInsertTextCompletionsInCompletionList && scopeNode.kind !== SyntaxKind.SourceFile) {
                 const thisType = typeChecker.tryGetThisTypeAt(scopeNode);
                 if (thisType) {
                     for (const symbol of getPropertiesForCompletion(thisType, typeChecker, /*isForAccess*/ true)) {
@@ -1160,7 +1160,7 @@ namespace ts.Completions {
                 }
             }
 
-            if (options.includeExternalModuleExports) {
+            if (options.includeExternalModuleExportsInCompletionList) {
                 getSymbolsFromOtherSourceFileExports(symbols, previousToken && isIdentifier(previousToken) ? previousToken.text : "", target);
             }
             filterGlobalCompletion(symbols);

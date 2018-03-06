@@ -4052,8 +4052,8 @@ declare namespace ts {
     }
     interface Options {
         readonly quote?: "double" | "single";
-        readonly includeExternalModuleExports?: boolean;
-        readonly includeInsertTextCompletions?: boolean;
+        readonly includeExternalModuleExportsInCompletionList?: boolean;
+        readonly includeInsertTextCompletionsInCompletionList?: boolean;
     }
     interface LanguageService {
         cleanupSemanticCache(): void;
@@ -4070,7 +4070,7 @@ declare namespace ts {
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
-        getCompletionsAtPosition(fileName: string, position: number, settings: Options | undefined): CompletionInfo;
+        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionInfo;
         getCompletionEntryDetails(fileName: string, position: number, name: string, options: FormatCodeOptions | FormatCodeSettings | undefined, source: string | undefined): CompletionEntryDetails;
         getCompletionEntrySymbol(fileName: string, position: number, name: string, source: string | undefined): Symbol;
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
@@ -4112,9 +4112,9 @@ declare namespace ts {
         applyCodeActionCommand(fileName: string, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
-        getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange, options: Options): ApplicableRefactorInfo[];
-        getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, options: Options): RefactorEditInfo | undefined;
-        organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, options: Options): ReadonlyArray<FileTextChanges>;
+        getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange, options: Options | undefined): ApplicableRefactorInfo[];
+        getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, options: Options | undefined): RefactorEditInfo | undefined;
+        organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, options: Options | undefined): ReadonlyArray<FileTextChanges>;
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
         getProgram(): Program;
         dispose(): void;
@@ -4125,7 +4125,12 @@ declare namespace ts {
     }
     type OrganizeImportsScope = CombinedCodeFixScope;
     /** @deprecated Use Options */
-    type GetCompletionsAtPositionOptions = Options;
+    interface GetCompletionsAtPositionOptions extends Options {
+        /** @deprecated Use includeExternalModuleExportsInCompletionList */
+        includeExternalModuleExports?: boolean;
+        /** @deprecated Use includeInsertTextCompletionsInCompletionList */
+        includeInsertTextCompletions?: boolean;
+    }
     interface ApplyCodeActionCommandResult {
         successMessage: string;
     }
@@ -4793,7 +4798,7 @@ declare namespace ts {
 }
 declare namespace ts {
     /** The version of the language service API */
-    const servicesVersion = "0.7";
+    const servicesVersion = "0.8";
     function toEditorSettings(options: EditorOptions | EditorSettings): EditorSettings;
     function displayPartsToString(displayParts: SymbolDisplayPart[]): string;
     function getDefaultCompilerOptions(): CompilerOptions;
@@ -7044,17 +7049,17 @@ declare namespace ts.server.protocol {
         insertSpaceBeforeTypeAnnotation?: boolean;
     }
     interface Options {
-        quote?: "double" | "single";
+        readonly quote?: "double" | "single";
         /**
          * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
          * This affects lone identifier completions but not completions on the right hand side of `obj.`.
          */
-        includeExternalModuleExports?: boolean;
+        readonly includeExternalModuleExportsInCompletionList?: boolean;
         /**
          * If enabled, the completion list will include completions with invalid identifier names.
          * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
          */
-        includeInsertTextCompletions?: boolean;
+        readonly includeInsertTextCompletionsInCompletionList?: boolean;
     }
     interface CompilerOptions {
         allowJs?: boolean;
