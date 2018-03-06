@@ -216,8 +216,8 @@ namespace ts {
 
     export interface Options {
         readonly quote?: "double" | "single";
-        readonly includeExternalModuleExportsInCompletionList?: boolean;
-        readonly includeInsertTextCompletionsInCompletionList?: boolean;
+        readonly includeCompletionsForExternalModuleExports?: boolean;
+        readonly includeCompletionsWithInsertText?: boolean;
     }
     /* @internal */
     export const defaultOptions: Options = {};
@@ -339,9 +339,9 @@ namespace ts {
 
     /** @deprecated Use Options */
     export interface GetCompletionsAtPositionOptions extends Options {
-        /** @deprecated Use includeExternalModuleExportsInCompletionList */
+        /** @deprecated Use includeCompletionsForExternalModuleExports */
         includeExternalModuleExports?: boolean;
-        /** @deprecated Use includeInsertTextCompletionsInCompletionList */
+        /** @deprecated Use includeCompletionsWithInsertText */
         includeInsertTextCompletions?: boolean;
     }
 

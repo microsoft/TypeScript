@@ -2392,7 +2392,7 @@ Actual: ${stringify(fullActual)}`);
         public applyCodeActionFromCompletion(markerName: string, options: FourSlashInterface.VerifyCompletionActionOptions) {
             this.goToMarker(markerName);
 
-            const actualCompletion = this.getCompletionListAtCaret({ ...ts.defaultOptions, includeExternalModuleExportsInCompletionList: true }).entries.find(e =>
+            const actualCompletion = this.getCompletionListAtCaret({ ...ts.defaultOptions, includeCompletionsForExternalModuleExports: true }).entries.find(e =>
                 e.name === options.name && e.source === options.source);
 
             if (!actualCompletion.hasAction) {

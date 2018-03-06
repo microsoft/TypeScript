@@ -4304,8 +4304,8 @@ declare namespace ts {
     }
     interface Options {
         readonly quote?: "double" | "single";
-        readonly includeExternalModuleExportsInCompletionList?: boolean;
-        readonly includeInsertTextCompletionsInCompletionList?: boolean;
+        readonly includeCompletionsForExternalModuleExports?: boolean;
+        readonly includeCompletionsWithInsertText?: boolean;
     }
     interface LanguageService {
         cleanupSemanticCache(): void;
@@ -4378,9 +4378,9 @@ declare namespace ts {
     type OrganizeImportsScope = CombinedCodeFixScope;
     /** @deprecated Use Options */
     interface GetCompletionsAtPositionOptions extends Options {
-        /** @deprecated Use includeExternalModuleExportsInCompletionList */
+        /** @deprecated Use includeCompletionsForExternalModuleExports */
         includeExternalModuleExports?: boolean;
-        /** @deprecated Use includeInsertTextCompletionsInCompletionList */
+        /** @deprecated Use includeCompletionsWithInsertText */
         includeInsertTextCompletions?: boolean;
     }
     interface ApplyCodeActionCommandResult {

@@ -4052,8 +4052,8 @@ declare namespace ts {
     }
     interface Options {
         readonly quote?: "double" | "single";
-        readonly includeExternalModuleExportsInCompletionList?: boolean;
-        readonly includeInsertTextCompletionsInCompletionList?: boolean;
+        readonly includeCompletionsForExternalModuleExports?: boolean;
+        readonly includeCompletionsWithInsertText?: boolean;
     }
     interface LanguageService {
         cleanupSemanticCache(): void;
@@ -4126,9 +4126,9 @@ declare namespace ts {
     type OrganizeImportsScope = CombinedCodeFixScope;
     /** @deprecated Use Options */
     interface GetCompletionsAtPositionOptions extends Options {
-        /** @deprecated Use includeExternalModuleExportsInCompletionList */
+        /** @deprecated Use includeCompletionsForExternalModuleExports */
         includeExternalModuleExports?: boolean;
-        /** @deprecated Use includeInsertTextCompletionsInCompletionList */
+        /** @deprecated Use includeCompletionsWithInsertText */
         includeInsertTextCompletions?: boolean;
     }
     interface ApplyCodeActionCommandResult {
@@ -7054,12 +7054,12 @@ declare namespace ts.server.protocol {
          * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
          * This affects lone identifier completions but not completions on the right hand side of `obj.`.
          */
-        readonly includeExternalModuleExportsInCompletionList?: boolean;
+        readonly includeCompletionsForExternalModuleExports?: boolean;
         /**
          * If enabled, the completion list will include completions with invalid identifier names.
          * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
          */
-        readonly includeInsertTextCompletionsInCompletionList?: boolean;
+        readonly includeCompletionsWithInsertText?: boolean;
     }
     interface CompilerOptions {
         allowJs?: boolean;
