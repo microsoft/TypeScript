@@ -42,7 +42,7 @@ namespace ts.codefix {
             const seenLines = createMap<true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 if (isValidSuppressLocation(diag.file!, diag.start!)) {
-                    return makeChange(changes, diag.file!, diag.start!, seenLines);
+                    makeChange(changes, diag.file!, diag.start!, seenLines);
                 }
             });
         },
