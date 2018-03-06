@@ -585,9 +585,21 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Add_definite_assignment_assertion_to_property_0_95020" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Add definite assignment assertion to property '{0}']]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Add_index_signature_for_property_0_90017" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Add index signature for property '{0}']]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Add_initializer_to_property_0_95019" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Add initializer to property '{0}']]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -600,6 +612,12 @@
             <Item ItemId=";Add_this_to_unresolved_variable_90008" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Add 'this.' to unresolved variable]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Add_undefined_type_to_property_0_95018" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Add 'undefined' type to property '{0}']]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -2289,6 +2307,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module_80001" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[File is a CommonJS module; it may be converted to an ES6 module.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";File_name_0_differs_from_already_included_file_name_1_only_in_casing_1149" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[File name '{0}' differs from already included file name '{1}' only in casing.]]></Val>
@@ -2565,6 +2589,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Import_may_be_converted_to_a_default_import_80003" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Import may be converted to a default import.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Import_name_cannot_be_0_2438" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Import name cannot be '{0}'.]]></Val>
@@ -2805,6 +2835,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";JSDoc_types_may_be_moved_to_TypeScript_types_80004" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[JSDoc types may be moved to TypeScript types.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";JSX_attribute_expected_17003" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[JSX attribute expected.]]></Val>
@@ -2874,6 +2910,12 @@
             <Item ItemId=";JSX_fragment_has_no_corresponding_closing_tag_17014" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[JSX fragment has no corresponding closing tag.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";JSX_fragment_is_not_supported_when_using_an_inline_JSX_factory_pragma_17017" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[JSX fragment is not supported when using an inline JSX factory pragma]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -3060,6 +3102,12 @@
             <Item ItemId=";Module_0_has_no_exported_member_1_2305" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Module '{0}' has no exported member '{1}'.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Module_0_has_no_exported_member_1_Did_you_mean_2_2724" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Module '{0}' has no exported member '{1}'. Did you mean '{2}'?]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -3963,9 +4011,9 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
-            <Item ItemId=";Resolution_for_module_0_was_found_in_cache_6147" ItemType="0" PsrId="306" Leaf="true">
+            <Item ItemId=";Resolution_for_module_0_was_found_in_cache_from_location_1_6147" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
-                <Val><![CDATA[Resolution for module '{0}' was found in cache.]]></Val>
+                <Val><![CDATA[Resolution for module '{0}' was found in cache from location '{1}'.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -4767,6 +4815,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";This_constructor_function_may_be_converted_to_a_class_declaration_80002" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[This constructor function may be converted to a class declaration.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found_2354" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[This syntax requires an imported helper but module '{0}' cannot be found.]]></Val>
@@ -5340,6 +5394,12 @@
             <Item ItemId=";Watch_input_files_6005" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Watch input files.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Whether_to_keep_outdated_console_output_in_watch_mode_instead_of_clearing_the_screen_6191" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Whether to keep outdated console output in watch mode instead of clearing the screen.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
