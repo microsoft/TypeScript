@@ -2923,6 +2923,10 @@ Actual: ${stringify(fullActual)}`);
             if (!codeFixes.length) {
                 this.raiseError(`verifyCodeFixAvailable failed - expected code fixes but none found.`);
             }
+            codeFixes.forEach(fix => fix.changes.forEach(change => {
+                assert.isObject(change, `Invalid change in code fix: ${JSON.stringify(fix)}`);
+                change.textChanges.forEach(textChange => assert.isObject(textChange, `Invalid textChange in codeFix: ${JSON.stringify(fix)}`));
+            }));
             if (info) {
                 assert.equal(info.length, codeFixes.length);
                 ts.zipWith(codeFixes, info, (fix, info) => {
