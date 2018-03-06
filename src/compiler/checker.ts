@@ -6959,7 +6959,10 @@ namespace ts {
         }
 
         function createSignatureInstantiation(signature: Signature, typeArguments: Type[]): Signature {
-            return instantiateSignature(signature, createTypeMapper(signature.typeParameters, typeArguments), /*eraseTypeParameters*/ true);
+            return instantiateSignature(signature, createSignatureTypeMapper(signature, typeArguments), /*eraseTypeParameters*/ true);
+        }
+        function createSignatureTypeMapper(signature: Signature, typeArguments: Type[]): TypeMapper {
+            return createTypeMapper(signature.typeParameters, typeArguments);
         }
 
         function getErasedSignature(signature: Signature): Signature {
@@ -11419,8 +11422,8 @@ namespace ts {
             }
         }
 
-        function createInferenceContext(typeParameters: TypeParameter[], signature: Signature, flags: InferenceFlags, compareTypes?: TypeComparer, baseInferences?: InferenceInfo[]): InferenceContext {
-            const inferences = baseInferences ? map(baseInferences, cloneInferenceInfo) : map(typeParameters, createInferenceInfo);
+        function createInferenceContext(typeParameters: TypeParameter[], signature: Signature | undefined, flags: InferenceFlags, compareTypes?: TypeComparer, baseInferences?: InferenceInfo[]): InferenceContext {
+            const inferences = baseInferences ? baseInferences.map(cloneInferenceInfo) : typeParameters.map(createInferenceInfo);
             const context = mapper as InferenceContext;
             context.typeParameters = typeParameters;
             context.signature = signature;
@@ -16409,14 +16412,22 @@ namespace ts {
             return isValidPropertyAccessWithType(node, node.expression, property.escapedName, type)
                 && (!(property.flags & SymbolFlags.Method) || isValidMethodAccess(property, type));
         }
-        function isValidMethodAccess(method: Symbol, type: Type) {
+        function isValidMethodAccess(method: Symbol, actualThisType: Type): boolean {
             const propType = getTypeOfFuncClassEnumModule(method);
             const signatures = getSignaturesOfType(getNonNullableType(propType), SignatureKind.Call);
             Debug.assert(signatures.length !== 0);
             return signatures.some(sig => {
-                const thisType = getThisTypeOfSignature(sig);
-                return !thisType || isTypeAssignableTo(type, thisType);
+                const signatureThisType = getThisTypeOfSignature(sig);
+                return !signatureThisType || isTypeAssignableTo(actualThisType, getInstantiatedSignatureThisType(sig, signatureThisType, actualThisType));
             });
+        }
+        function getInstantiatedSignatureThisType(sig: Signature, signatureThisType: Type, actualThisType: Type): Type {
+            if (!sig.typeParameters) {
+                return signatureThisType;
+            }
+            const context = createInferenceContext(sig.typeParameters, sig, InferenceFlags.None);
+            inferTypes(context.inferences, actualThisType, signatureThisType);
+            return instantiateType(signatureThisType, createSignatureTypeMapper(sig, getInferredTypes(context)));
         }
 
         function isValidPropertyAccessWithType(
