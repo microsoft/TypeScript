@@ -509,7 +509,7 @@ namespace ts.FindAllReferences.Core {
             // here appears to be intentional).
             const {
                 text = stripQuotes(unescapeLeadingUnderscores((getLocalSymbolForExportDefault(symbol) || symbol).escapedName)),
-                allSearchSymbols = undefined,
+                allSearchSymbols,
             } = searchOptions;
             const escapedText = escapeLeadingUnderscores(text);
             const parents = this.options.implementations && getParentSymbolsOfPropertyAccess(location, symbol, this.checker);
@@ -1146,7 +1146,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function getContainingTypeReference(node: Node): Node {
-        let topLevelTypeReference: Node = undefined;
+        let topLevelTypeReference: Node;
 
         while (node) {
             if (isTypeNode(node)) {

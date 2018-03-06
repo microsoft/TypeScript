@@ -1403,7 +1403,7 @@ namespace ts {
         function suppressTrailing(node: Node) {
             addEmitFlags(node, EmitFlags.NoTrailingComments);
 
-            let lastChild: Node = undefined;
+            let lastChild: Node;
             forEachChild(
                 node,
                 child => (lastChild = child, undefined),

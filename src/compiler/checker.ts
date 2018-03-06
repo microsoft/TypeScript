@@ -3200,7 +3200,7 @@ namespace ts {
                             }
                         }
 
-                        let entityName: EntityName = undefined;
+                        let entityName: EntityName;
                         const nameIdentifier = symbolToTypeReferenceName(type.symbol);
                         if (qualifiedName) {
                             Debug.assert(!qualifiedName.right);
@@ -5695,7 +5695,7 @@ namespace ts {
                 }
                 return [signature];
             }
-            let result: Signature[] = undefined;
+            let result: Signature[];
             for (let i = 0; i < signatureLists.length; i++) {
                 // Allow matching non-generic signatures to have excess parameters and different return types
                 const match = i === listIndex ? signature : findMatchingSignature(signatureLists[i], signature, /*partialMatch*/ true, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true);
@@ -5713,7 +5713,7 @@ namespace ts {
         // type is the union of the constituent return types.
         function getUnionSignatures(types: Type[], kind: SignatureKind): Signature[] {
             const signatureLists = map(types, t => getSignaturesOfType(t, kind));
-            let result: Signature[] = undefined;
+            let result: Signature[];
             for (let i = 0; i < signatureLists.length; i++) {
                 for (const signature of signatureLists[i]) {
                     // Only process signatures with parameter lists that aren't already in the result list
@@ -5849,7 +5849,7 @@ namespace ts {
             else {
                 // Combinations of function, class, enum and module
                 let members = emptySymbols;
-                let stringIndexInfo: IndexInfo = undefined;
+                let stringIndexInfo: IndexInfo;
                 if (symbol.exports) {
                     members = getExportsOfSymbol(symbol);
                 }
@@ -6401,7 +6401,7 @@ namespace ts {
             }
             const propTypes: Type[] = [];
             const declarations: Declaration[] = [];
-            let commonType: Type = undefined;
+            let commonType: Type;
             for (const prop of props) {
                 if (prop.declarations) {
                     addRange(declarations, prop.declarations);
@@ -6682,7 +6682,7 @@ namespace ts {
                 const parameters: Symbol[] = [];
                 let hasLiteralTypes = false;
                 let minArgumentCount = 0;
-                let thisParameter: Symbol = undefined;
+                let thisParameter: Symbol;
                 let hasThisParameter: boolean;
                 const iife = getImmediatelyInvokedFunctionExpression(declaration);
                 const isJSConstructSignature = isJSDocConstructSignature(declaration);

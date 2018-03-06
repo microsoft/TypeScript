@@ -1971,7 +1971,7 @@ namespace ts {
                         continue;
                     }
 
-                    let descriptor: TodoCommentDescriptor = undefined;
+                    let descriptor: TodoCommentDescriptor;
                     for (let i = 0; i < descriptors.length; i++) {
                         if (matchArray[i + firstDescriptorCaptureIndex]) {
                             descriptor = descriptors[i];

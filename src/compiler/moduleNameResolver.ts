@@ -674,7 +674,7 @@ namespace ts {
         }
 
         // string is for exact match
-        let matchedPattern: Pattern | string | undefined = undefined;
+        let matchedPattern: Pattern | string | undefined;
         if (state.compilerOptions.paths) {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0, moduleName);
