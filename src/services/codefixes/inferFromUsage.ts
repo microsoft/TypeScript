@@ -186,7 +186,8 @@ namespace ts.codefix {
     }
 
     function makeFix(declaration: Declaration, start: number, type: Type | undefined, program: Program): Fix | undefined {
-        return type && { declaration, textChanges: [makeChange(declaration, start, type, program)] };
+        const change = makeChange(declaration, start, type, program);
+        return change && { declaration, textChanges: [change] };
     }
 
     function makeChange(declaration: Declaration, start: number, type: Type | undefined, program: Program): TextChange | undefined {
