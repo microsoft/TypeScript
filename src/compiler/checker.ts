@@ -21682,16 +21682,56 @@ namespace ts {
 
         function checkUnusedModuleMembers(node: ModuleDeclaration | SourceFile): void {
             if (compilerOptions.noUnusedLocals && !(node.flags & NodeFlags.Ambient)) {
+                // Ideally we could use the ImportClause directly as a key, but must wait until we have full ES6 maps. So must store key along with value.
+                const unusedImports = createMap<[ImportClause, ImportedDeclaration[]]>();
                 node.locals.forEach(local => {
-                    if (!local.isReferenced && !local.exportSymbol) {
-                        for (const declaration of local.declarations) {
-                            if (!isAmbientModule(declaration)) {
-                                errorUnusedLocal(declaration, symbolName(local));
+                    if (local.isReferenced || local.exportSymbol) return;
+                    for (const declaration of local.declarations) {
+                        if (isAmbientModule(declaration)) continue;
+                        if (isImportedDeclaration(declaration)) {
+                            const importClause = importClauseFromImported(declaration);
+                            const key = String(getNodeId(importClause));
+                            const group = unusedImports.get(key);
+                            if (group) {
+                                group[1].push(declaration);
                             }
+                            else {
+                                unusedImports.set(key, [importClause, [declaration]]);
+                            }
+                        }
+                        else {
+                            errorUnusedLocal(declaration, symbolName(local));
                         }
                     }
                 });
+
+                unusedImports.forEach(([importClause, unuseds]) => {
+                    const importDecl = importClause.parent;
+                    if (forEachImportedDeclaration(importClause, d => !contains(unuseds, d))) {
+                        for (const unused of unuseds) errorUnusedLocal(unused, idText(unused.name));
+                    }
+                    else if (unuseds.length === 1) {
+                        error(importDecl, Diagnostics._0_is_declared_but_its_value_is_never_read, idText(first(unuseds).name));
+                    }
+                    else {
+                        error(importDecl, Diagnostics.All_imports_in_import_declaration_are_unused, showModuleSpecifier(importDecl));
+                    }
+                });
             }
+        }
+
+        type ImportedDeclaration = ImportClause | ImportSpecifier | NamespaceImport;
+        function isImportedDeclaration(node: Node): node is ImportedDeclaration {
+            return node.kind === SyntaxKind.ImportClause || node.kind === SyntaxKind.ImportSpecifier || node.kind === SyntaxKind.NamespaceImport;
+        }
+        function importClauseFromImported(decl: ImportedDeclaration): ImportClause {
+            return decl.kind === SyntaxKind.ImportClause ? decl : decl.kind === SyntaxKind.NamespaceImport ? decl.parent : decl.parent.parent;
+        }
+
+        function forEachImportedDeclaration<T>(importClause: ImportClause, cb: (im: ImportedDeclaration) => T | undefined): T | undefined {
+            const { name: defaultName, namedBindings } = importClause;
+            return (defaultName && cb(importClause)) ||
+                namedBindings && (namedBindings.kind === SyntaxKind.NamespaceImport ? cb(namedBindings) : forEach(namedBindings.elements, cb));
         }
 
         function checkBlock(node: Block) {
