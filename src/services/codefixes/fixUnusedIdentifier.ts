@@ -10,7 +10,7 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions(context) {
             const { sourceFile } = context;
-            const token = getToken(sourceFile, context.span.start);
+            const token = getToken(sourceFile, textSpanEnd(context.span));
             const result: CodeFixAction[] = [];
 
             const deletion = textChanges.ChangeTracker.with(context, t => tryDeleteDeclaration(t, sourceFile, token));
@@ -30,7 +30,7 @@ namespace ts.codefix {
         fixIds: [fixIdPrefix, fixIdDelete],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
             const { sourceFile } = context;
-            const token = getToken(diag.file!, diag.start!);
+            const token = findPrecedingToken(textSpanEnd(diag), diag.file!);
             switch (context.fixId) {
                 case fixIdPrefix:
                     if (isIdentifier(token) && canPrefix(token)) {
@@ -47,9 +47,9 @@ namespace ts.codefix {
     });
 
     function getToken(sourceFile: SourceFile, pos: number): Node {
-        const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        const token = findPrecedingToken(pos, sourceFile);
         // this handles var ["computed"] = 12;
-        return token.kind === SyntaxKind.OpenBracketToken ? getTokenAtPosition(sourceFile, pos + 1, /*includeJsDocComment*/ false) : token;
+        return token.kind === SyntaxKind.CloseBracketToken ? findPrecedingToken(pos - 1, sourceFile) : token;
     }
 
     function tryPrefixDeclaration(changes: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, token: Node): void {

@@ -998,7 +998,8 @@ namespace ts {
             else {
                 emitTypeAnnotation(node.type);
             }
-            emitInitializer(node.initializer);
+            // The comment position has to fallback to any present node within the parameterdeclaration because as it turns out, the parser can make parameter declarations with _just_ an initializer.
+            emitInitializer(node.initializer, node.type ? node.type.end : node.questionToken ? node.questionToken.end : node.name ? node.name.end : node.modifiers ? node.modifiers.end : node.decorators ? node.decorators.end : node.pos, node);
         }
 
         function emitDecorator(decorator: Decorator) {
@@ -1026,7 +1027,7 @@ namespace ts {
             emitIfPresent(node.questionToken);
             emitIfPresent(node.exclamationToken);
             emitTypeAnnotation(node.type);
-            emitInitializer(node.initializer);
+            emitInitializer(node.initializer, node.type ? node.type.end : node.questionToken ? node.questionToken.end : node.name.end, node);
             writeSemicolon();
         }
 
@@ -1308,7 +1309,7 @@ namespace ts {
                 writeSpace();
             }
             emit(node.name);
-            emitInitializer(node.initializer);
+            emitInitializer(node.initializer, node.name.end, node);
         }
 
         //
@@ -1353,7 +1354,10 @@ namespace ts {
             increaseIndentIf(indentBeforeDot);
 
             const shouldEmitDotDot = !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
-            writePunctuation(shouldEmitDotDot ? ".." : ".");
+            if (shouldEmitDotDot) {
+                writePunctuation(".");
+            }
+            emitTokenWithComment(SyntaxKind.DotToken, node.expression.end, writePunctuation, node);
 
             increaseIndentIf(indentAfterDot);
             emit(node.name);
@@ -1382,9 +1386,9 @@ namespace ts {
 
         function emitElementAccessExpression(node: ElementAccessExpression) {
             emitExpression(node.expression);
-            writePunctuation("[");
+            const openPos = emitTokenWithComment(SyntaxKind.OpenBracketToken, node.expression.end, writePunctuation, node);
             emitExpression(node.argumentExpression);
-            writePunctuation("]");
+            emitTokenWithComment(SyntaxKind.CloseBracketToken, node.argumentExpression ? node.argumentExpression.end : openPos, writePunctuation, node);
         }
 
         function emitCallExpression(node: CallExpression) {
@@ -1394,7 +1398,7 @@ namespace ts {
         }
 
         function emitNewExpression(node: NewExpression) {
-            writeKeyword("new");
+            emitTokenWithComment(SyntaxKind.NewKeyword, node.pos, writeKeyword, node);
             writeSpace();
             emitExpression(node.expression);
             emitTypeArguments(node, node.typeArguments);
@@ -1415,9 +1419,9 @@ namespace ts {
         }
 
         function emitParenthesizedExpression(node: ParenthesizedExpression) {
-            writePunctuation("(");
+            const openParenPos = emitTokenWithComment(SyntaxKind.OpenParenToken, node.pos, writePunctuation, node);
             emitExpression(node.expression);
-            writePunctuation(")");
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression ? node.expression.end : openParenPos, writePunctuation, node);
         }
 
         function emitFunctionExpression(node: FunctionExpression) {
@@ -1439,25 +1443,25 @@ namespace ts {
         }
 
         function emitDeleteExpression(node: DeleteExpression) {
-            writeKeyword("delete");
+            emitTokenWithComment(SyntaxKind.DeleteKeyword, node.pos, writeKeyword, node);
             writeSpace();
             emitExpression(node.expression);
         }
 
         function emitTypeOfExpression(node: TypeOfExpression) {
-            writeKeyword("typeof");
+            emitTokenWithComment(SyntaxKind.TypeOfKeyword, node.pos, writeKeyword, node);
             writeSpace();
             emitExpression(node.expression);
         }
 
         function emitVoidExpression(node: VoidExpression) {
-            writeKeyword("void");
+            emitTokenWithComment(SyntaxKind.VoidKeyword, node.pos, writeKeyword, node);
             writeSpace();
             emitExpression(node.expression);
         }
 
         function emitAwaitExpression(node: AwaitExpression) {
-            writeKeyword("await");
+            emitTokenWithComment(SyntaxKind.AwaitKeyword, node.pos, writeKeyword, node);
             writeSpace();
             emitExpression(node.expression);
         }
@@ -1535,7 +1539,7 @@ namespace ts {
         }
 
         function emitYieldExpression(node: YieldExpression) {
-            writeKeyword("yield");
+            emitTokenWithComment(SyntaxKind.YieldKeyword, node.pos, writeKeyword, node);
             emit(node.asteriskToken);
             emitExpressionWithLeadingSpace(node.expression);
         }
@@ -1589,18 +1593,14 @@ namespace ts {
         //
 
         function emitBlock(node: Block) {
-            writeToken(SyntaxKind.OpenBraceToken, node.pos, writePunctuation, /*contextNode*/ node);
             emitBlockStatements(node, /*forceSingleLine*/ !node.multiLine && isEmptyBlock(node));
-            // We have to call emitLeadingComments explicitly here because otherwise leading comments of the close brace token will not be emitted
-            increaseIndent();
-            emitLeadingCommentsOfPosition(node.statements.end);
-            decreaseIndent();
-            writeToken(SyntaxKind.CloseBraceToken, node.statements.end, writePunctuation, /*contextNode*/ node);
         }
 
         function emitBlockStatements(node: BlockLike, forceSingleLine: boolean) {
+            emitTokenWithComment(SyntaxKind.OpenBraceToken, node.pos, writePunctuation, /*contextNode*/ node);
             const format = forceSingleLine || getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineBlockStatements : ListFormat.MultiLineBlockStatements;
             emitList(node, node.statements, format);
+            emitTokenWithComment(SyntaxKind.CloseBraceToken, node.statements.end, writePunctuation, /*contextNode*/ node, /*indentLeading*/ !!(format & ListFormat.MultiLine));
         }
 
         function emitVariableStatement(node: VariableStatement) {
@@ -1619,15 +1619,15 @@ namespace ts {
         }
 
         function emitIfStatement(node: IfStatement) {
-            const openParenPos = writeToken(SyntaxKind.IfKeyword, node.pos, writeKeyword, node);
+            const openParenPos = emitTokenWithComment(SyntaxKind.IfKeyword, node.pos, writeKeyword, node);
             writeSpace();
-            writeToken(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
+            emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
             emitExpression(node.expression);
-            writeToken(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
             emitEmbeddedStatement(node, node.thenStatement);
             if (node.elseStatement) {
                 writeLineOrSpace(node);
-                writeToken(SyntaxKind.ElseKeyword, node.thenStatement.end, writeKeyword, node);
+                emitTokenWithComment(SyntaxKind.ElseKeyword, node.thenStatement.end, writeKeyword, node);
                 if (node.elseStatement.kind === SyntaxKind.IfStatement) {
                     writeSpace();
                     emit(node.elseStatement);
@@ -1638,8 +1638,16 @@ namespace ts {
             }
         }
 
+        function emitWhileClause(node: WhileStatement | DoStatement, startPos: number) {
+            const openParenPos = emitTokenWithComment(SyntaxKind.WhileKeyword, startPos, writeKeyword, node);
+            writeSpace();
+            emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
+            emitExpression(node.expression);
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
+        }
+
         function emitDoStatement(node: DoStatement) {
-            writeKeyword("do");
+            emitTokenWithComment(SyntaxKind.DoKeyword, node.pos, writeKeyword, node);
             emitEmbeddedStatement(node, node.statement);
             if (isBlock(node.statement)) {
                 writeSpace();
@@ -1648,59 +1656,52 @@ namespace ts {
                 writeLineOrSpace(node);
             }
 
-            writeKeyword("while");
-            writeSpace();
-            writePunctuation("(");
-            emitExpression(node.expression);
-            writePunctuation(");");
+            emitWhileClause(node, node.statement.end);
+            writePunctuation(";");
         }
 
         function emitWhileStatement(node: WhileStatement) {
-            writeKeyword("while");
-            writeSpace();
-            writePunctuation("(");
-            emitExpression(node.expression);
-            writePunctuation(")");
+            emitWhileClause(node, node.pos);
             emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForStatement(node: ForStatement) {
-            const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos, writeKeyword);
+            const openParenPos = emitTokenWithComment(SyntaxKind.ForKeyword, node.pos, writeKeyword, node);
             writeSpace();
-            writeToken(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, /*contextNode*/ node);
+            let pos = emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, /*contextNode*/ node);
             emitForBinding(node.initializer);
-            writeSemicolon();
+            pos = emitTokenWithComment(SyntaxKind.SemicolonToken, node.initializer ? node.initializer.end : pos, writeSemicolon, node);
             emitExpressionWithLeadingSpace(node.condition);
-            writeSemicolon();
+            pos = emitTokenWithComment(SyntaxKind.SemicolonToken, node.condition ? node.condition.end : pos, writeSemicolon, node);
             emitExpressionWithLeadingSpace(node.incrementor);
-            writePunctuation(")");
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.incrementor ? node.incrementor.end : pos, writePunctuation, node);
             emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForInStatement(node: ForInStatement) {
-            const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos, writeKeyword);
+            const openParenPos = emitTokenWithComment(SyntaxKind.ForKeyword, node.pos, writeKeyword, node);
             writeSpace();
-            writeToken(SyntaxKind.OpenParenToken, openParenPos, writePunctuation);
+            emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
             emitForBinding(node.initializer);
             writeSpace();
-            writeKeyword("in");
+            emitTokenWithComment(SyntaxKind.InKeyword, node.initializer.end, writeKeyword, node);
             writeSpace();
             emitExpression(node.expression);
-            writeToken(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation);
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
             emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForOfStatement(node: ForOfStatement) {
-            const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos, writeKeyword);
+            const openParenPos = emitTokenWithComment(SyntaxKind.ForKeyword, node.pos, writeKeyword, node);
             writeSpace();
             emitWithTrailingSpace(node.awaitModifier);
-            writeToken(SyntaxKind.OpenParenToken, openParenPos, writePunctuation);
+            emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
             emitForBinding(node.initializer);
             writeSpace();
-            writeKeyword("of");
+            emitTokenWithComment(SyntaxKind.OfKeyword, node.initializer.end, writeKeyword, node);
             writeSpace();
             emitExpression(node.expression);
-            writeToken(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation);
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
             emitEmbeddedStatement(node, node.statement);
         }
 
@@ -1716,24 +1717,36 @@ namespace ts {
         }
 
         function emitContinueStatement(node: ContinueStatement) {
-            writeToken(SyntaxKind.ContinueKeyword, node.pos, writeKeyword);
+            emitTokenWithComment(SyntaxKind.ContinueKeyword, node.pos, writeKeyword, node);
             emitWithLeadingSpace(node.label);
             writeSemicolon();
         }
 
         function emitBreakStatement(node: BreakStatement) {
-            writeToken(SyntaxKind.BreakKeyword, node.pos, writeKeyword);
+            emitTokenWithComment(SyntaxKind.BreakKeyword, node.pos, writeKeyword, node);
             emitWithLeadingSpace(node.label);
             writeSemicolon();
         }
 
-        function emitTokenWithComment(token: SyntaxKind, pos: number, writer: (s: string) => void, contextNode?: Node) {
+        function emitTokenWithComment(token: SyntaxKind, pos: number, writer: (s: string) => void, contextNode?: Node, indentLeading?: boolean) {
             const node = contextNode && getParseTreeNode(contextNode);
-            if (node && node.kind === contextNode.kind) {
+            const isSimilarNode = node && node.kind === contextNode.kind;
+            const startPos = pos;
+            if (isSimilarNode) {
                 pos = skipTrivia(currentSourceFile.text, pos);
             }
-            pos = writeToken(token, pos, writer, /*contextNode*/ contextNode);
-            if (node && node.kind === contextNode.kind) {
+            if (emitLeadingCommentsOfPosition && isSimilarNode) {
+                const needsIndent = indentLeading && !positionsAreOnSameLine(startPos, pos, currentSourceFile);
+                if (needsIndent) {
+                    increaseIndent();
+                }
+                emitLeadingCommentsOfPosition(startPos);
+                if (needsIndent) {
+                    decreaseIndent();
+                }
+            }
+            pos = writeTokenText(token, writer, pos);
+            if (emitTrailingCommentsOfPosition && isSimilarNode) {
                 emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ true);
             }
             return pos;
@@ -1746,39 +1759,39 @@ namespace ts {
         }
 
         function emitWithStatement(node: WithStatement) {
-            writeKeyword("with");
+            const openParenPos = emitTokenWithComment(SyntaxKind.WithKeyword, node.pos, writeKeyword, node);
             writeSpace();
-            writePunctuation("(");
+            emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
             emitExpression(node.expression);
-            writePunctuation(")");
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
             emitEmbeddedStatement(node, node.statement);
         }
 
         function emitSwitchStatement(node: SwitchStatement) {
-            const openParenPos = writeToken(SyntaxKind.SwitchKeyword, node.pos, writeKeyword);
+            const openParenPos = emitTokenWithComment(SyntaxKind.SwitchKeyword, node.pos, writeKeyword, node);
             writeSpace();
-            writeToken(SyntaxKind.OpenParenToken, openParenPos, writePunctuation);
+            emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
             emitExpression(node.expression);
-            writeToken(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation);
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
             writeSpace();
             emit(node.caseBlock);
         }
 
         function emitLabeledStatement(node: LabeledStatement) {
             emit(node.label);
-            writePunctuation(":");
+            emitTokenWithComment(SyntaxKind.ColonToken, node.label.end, writePunctuation, node);
             writeSpace();
             emit(node.statement);
         }
 
         function emitThrowStatement(node: ThrowStatement) {
-            writeKeyword("throw");
+            emitTokenWithComment(SyntaxKind.ThrowKeyword, node.pos, writeKeyword, node);
             emitExpressionWithLeadingSpace(node.expression);
             writeSemicolon();
         }
 
         function emitTryStatement(node: TryStatement) {
-            writeKeyword("try");
+            emitTokenWithComment(SyntaxKind.TryKeyword, node.pos, writeKeyword, node);
             writeSpace();
             emit(node.tryBlock);
             if (node.catchClause) {
@@ -1787,7 +1800,7 @@ namespace ts {
             }
             if (node.finallyBlock) {
                 writeLineOrSpace(node);
-                writeKeyword("finally");
+                emitTokenWithComment(SyntaxKind.FinallyKeyword, (node.catchClause || node.tryBlock).end, writeKeyword, node);
                 writeSpace();
                 emit(node.finallyBlock);
             }
@@ -1805,7 +1818,7 @@ namespace ts {
         function emitVariableDeclaration(node: VariableDeclaration) {
             emit(node.name);
             emitTypeAnnotation(node.type);
-            emitInitializer(node.initializer);
+            emitInitializer(node.initializer, node.type ? node.type.end : node.name.end, node);
         }
 
         function emitVariableDeclarationList(node: VariableDeclarationList) {
@@ -2043,25 +2056,23 @@ namespace ts {
 
         function emitModuleBlock(node: ModuleBlock) {
             pushNameGenerationScope(node);
-            writePunctuation("{");
             emitBlockStatements(node, /*forceSingleLine*/ isEmptyBlock(node));
-            writePunctuation("}");
             popNameGenerationScope(node);
         }
 
         function emitCaseBlock(node: CaseBlock) {
-            writeToken(SyntaxKind.OpenBraceToken, node.pos, writePunctuation);
+            emitTokenWithComment(SyntaxKind.OpenBraceToken, node.pos, writePunctuation, node);
             emitList(node, node.clauses, ListFormat.CaseBlockClauses);
-            writeToken(SyntaxKind.CloseBraceToken, node.clauses.end, writePunctuation);
+            emitTokenWithComment(SyntaxKind.CloseBraceToken, node.clauses.end, writePunctuation, node, /*indentLeading*/ true);
         }
 
         function emitImportEqualsDeclaration(node: ImportEqualsDeclaration) {
             emitModifiers(node, node.modifiers);
-            writeKeyword("import");
+            emitTokenWithComment(SyntaxKind.ImportKeyword, node.modifiers ? node.modifiers.end : node.pos, writeKeyword, node);
             writeSpace();
             emit(node.name);
             writeSpace();
-            writePunctuation("=");
+            emitTokenWithComment(SyntaxKind.EqualsToken, node.name.end, writePunctuation, node);
             writeSpace();
             emitModuleReference(node.moduleReference);
             writeSemicolon();
@@ -2078,12 +2089,12 @@ namespace ts {
 
         function emitImportDeclaration(node: ImportDeclaration) {
             emitModifiers(node, node.modifiers);
-            writeKeyword("import");
+            emitTokenWithComment(SyntaxKind.ImportKeyword, node.modifiers ? node.modifiers.end : node.pos, writeKeyword, node);
             writeSpace();
             if (node.importClause) {
                 emit(node.importClause);
                 writeSpace();
-                writeKeyword("from");
+                emitTokenWithComment(SyntaxKind.FromKeyword, node.importClause.end, writeKeyword, node);
                 writeSpace();
             }
             emitExpression(node.moduleSpecifier);
@@ -2093,16 +2104,16 @@ namespace ts {
         function emitImportClause(node: ImportClause) {
             emit(node.name);
             if (node.name && node.namedBindings) {
-                writePunctuation(",");
+                emitTokenWithComment(SyntaxKind.CommaToken, node.name.end, writePunctuation, node);
                 writeSpace();
             }
             emit(node.namedBindings);
         }
 
         function emitNamespaceImport(node: NamespaceImport) {
-            writePunctuation("*");
+            const asPos = emitTokenWithComment(SyntaxKind.AsteriskToken, node.pos, writePunctuation, node);
             writeSpace();
-            writeKeyword("as");
+            emitTokenWithComment(SyntaxKind.AsKeyword, asPos, writeKeyword, node);
             writeSpace();
             emit(node.name);
         }
@@ -2116,13 +2127,13 @@ namespace ts {
         }
 
         function emitExportAssignment(node: ExportAssignment) {
-            writeKeyword("export");
+            const nextPos = emitTokenWithComment(SyntaxKind.ExportKeyword, node.pos, writeKeyword, node);
             writeSpace();
             if (node.isExportEquals) {
-                writeOperator("=");
+                emitTokenWithComment(SyntaxKind.EqualsToken, nextPos, writeOperator, node);
             }
             else {
-                writeKeyword("default");
+                emitTokenWithComment(SyntaxKind.DefaultKeyword, nextPos, writeKeyword, node);
             }
             writeSpace();
             emitExpression(node.expression);
@@ -2130,17 +2141,18 @@ namespace ts {
         }
 
         function emitExportDeclaration(node: ExportDeclaration) {
-            writeKeyword("export");
+            let nextPos = emitTokenWithComment(SyntaxKind.ExportKeyword, node.pos, writeKeyword, node);
             writeSpace();
             if (node.exportClause) {
                 emit(node.exportClause);
             }
             else {
-                writePunctuation("*");
+                nextPos = emitTokenWithComment(SyntaxKind.AsteriskToken, nextPos, writePunctuation, node);
             }
             if (node.moduleSpecifier) {
                 writeSpace();
-                writeKeyword("from");
+                const fromPos = node.exportClause ? node.exportClause.end : nextPos;
+                emitTokenWithComment(SyntaxKind.FromKeyword, fromPos, writeKeyword, node);
                 writeSpace();
                 emitExpression(node.moduleSpecifier);
             }
@@ -2148,11 +2160,11 @@ namespace ts {
         }
 
         function emitNamespaceExportDeclaration(node: NamespaceExportDeclaration) {
-            writeKeyword("export");
+            let nextPos = emitTokenWithComment(SyntaxKind.ExportKeyword, node.pos, writeKeyword, node);
             writeSpace();
-            writeKeyword("as");
+            nextPos = emitTokenWithComment(SyntaxKind.AsKeyword, nextPos, writeKeyword, node);
             writeSpace();
-            writeKeyword("namespace");
+            nextPos = emitTokenWithComment(SyntaxKind.NamespaceKeyword, nextPos, writeKeyword, node);
             writeSpace();
             emit(node.name);
             writeSemicolon();
@@ -2176,7 +2188,7 @@ namespace ts {
             if (node.propertyName) {
                 emit(node.propertyName);
                 writeSpace();
-                writeKeyword("as");
+                emitTokenWithComment(SyntaxKind.AsKeyword, node.propertyName.end, writeKeyword, node);
                 writeSpace();
             }
 
@@ -2287,21 +2299,19 @@ namespace ts {
         //
 
         function emitCaseClause(node: CaseClause) {
-            writeKeyword("case");
+            emitTokenWithComment(SyntaxKind.CaseKeyword, node.pos, writeKeyword, node);
             writeSpace();
             emitExpression(node.expression);
-            writePunctuation(":");
 
-            emitCaseOrDefaultClauseStatements(node, node.statements);
+            emitCaseOrDefaultClauseRest(node, node.statements, node.expression.end);
         }
 
         function emitDefaultClause(node: DefaultClause) {
-            writeKeyword("default");
-            writePunctuation(":");
-            emitCaseOrDefaultClauseStatements(node, node.statements);
+            const pos = emitTokenWithComment(SyntaxKind.DefaultKeyword, node.pos, writeKeyword, node);
+            emitCaseOrDefaultClauseRest(node, node.statements, pos);
         }
 
-        function emitCaseOrDefaultClauseStatements(parentNode: Node, statements: NodeArray<Statement>) {
+        function emitCaseOrDefaultClauseRest(parentNode: Node, statements: NodeArray<Statement>, colonPos: number) {
             const emitAsSingleStatement =
                 statements.length === 1 &&
                 (
@@ -2311,26 +2321,14 @@ namespace ts {
                     rangeStartPositionsAreOnSameLine(parentNode, statements[0], currentSourceFile)
                 );
 
-            // e.g:
-            //      case 0: // Zero
-            //      case 1: // One
-            //      case 2: // two
-            //          return "hi";
-            // If there is no statements, emitNodeWithComments of the parentNode which is caseClause will take care of trailing comment.
-            // So in example above, comment "// Zero" and "// One" will be emit in emitTrailingComments in emitNodeWithComments.
-            // However, for "case 2", because parentNode which is caseClause has an "end" property to be end of the statements (in this case return statement)
-            // comment "// two" will not be emitted in emitNodeWithComments.
-            // Therefore, we have to do the check here to emit such comment.
-            if (statements.length > 0) {
-                // We use emitTrailingCommentsOfPosition instead of emitLeadingCommentsOfPosition because leading comments is defined as comments before the node after newline character separating it from previous line
-                // Note: we can't use parentNode.end as such position includes statements.
-                emitTrailingCommentsOfPosition(statements.pos);
-            }
-
             let format = ListFormat.CaseOrDefaultClauseStatements;
             if (emitAsSingleStatement) {
+                writeToken(SyntaxKind.ColonToken, colonPos, writePunctuation, parentNode);
                 writeSpace();
                 format &= ~(ListFormat.MultiLine | ListFormat.Indented);
+            }
+            else {
+                emitTokenWithComment(SyntaxKind.ColonToken, colonPos, writePunctuation, parentNode);
             }
             emitList(parentNode, statements, format);
         }
@@ -2343,12 +2341,12 @@ namespace ts {
         }
 
         function emitCatchClause(node: CatchClause) {
-            const openParenPos = writeToken(SyntaxKind.CatchKeyword, node.pos, writeKeyword);
+            const openParenPos = emitTokenWithComment(SyntaxKind.CatchKeyword, node.pos, writeKeyword, node);
             writeSpace();
             if (node.variableDeclaration) {
-                writeToken(SyntaxKind.OpenParenToken, openParenPos, writePunctuation);
+                emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
                 emit(node.variableDeclaration);
-                writeToken(SyntaxKind.CloseParenToken, node.variableDeclaration.end, writePunctuation);
+                emitTokenWithComment(SyntaxKind.CloseParenToken, node.variableDeclaration.end, writePunctuation, node);
                 writeSpace();
             }
             emit(node.block);
@@ -2400,7 +2398,7 @@ namespace ts {
 
         function emitEnumMember(node: EnumMember) {
             emit(node.name);
-            emitInitializer(node.initializer);
+            emitInitializer(node.initializer, node.name.end, node);
         }
 
         //
@@ -2530,10 +2528,10 @@ namespace ts {
             }
         }
 
-        function emitInitializer(node: Expression | undefined) {
+        function emitInitializer(node: Expression | undefined, equalCommentStartPos: number, container: Node) {
             if (node) {
                 writeSpace();
-                writeOperator("=");
+                emitTokenWithComment(SyntaxKind.EqualsToken, equalCommentStartPos, writeOperator, container);
                 writeSpace();
                 emitExpression(node);
             }
@@ -2674,6 +2672,9 @@ namespace ts {
 
             if (format & ListFormat.BracketsMask) {
                 writePunctuation(getOpeningBracket(format));
+                if (isEmpty) {
+                    emitTrailingCommentsOfPosition(children.pos, /*prefixSpace*/ true); // Emit comments within empty bracketed lists
+                }
             }
 
             if (onBeforeEmitNodeArray) {
@@ -2799,6 +2800,9 @@ namespace ts {
             }
 
             if (format & ListFormat.BracketsMask) {
+                if (isEmpty) {
+                    emitLeadingCommentsOfPosition(children.end); // Emit leading comments within empty lists
+                }
                 writePunctuation(getClosingBracket(format));
             }
         }

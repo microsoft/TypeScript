@@ -212,11 +212,11 @@ namespace ts.GoToDefinition {
 
     function isSignatureDeclaration(node: Node): boolean {
         switch (node.kind) {
-            case ts.SyntaxKind.Constructor:
-            case ts.SyntaxKind.ConstructSignature:
-            case ts.SyntaxKind.FunctionDeclaration:
-            case ts.SyntaxKind.MethodDeclaration:
-            case ts.SyntaxKind.MethodSignature:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
                 return true;
             default:
                 return false;

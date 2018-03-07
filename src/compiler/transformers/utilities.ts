@@ -48,7 +48,7 @@ namespace ts {
         const uniqueExports = createMap<boolean>();
         let exportedNames: Identifier[];
         let hasExportDefault = false;
-        let exportEquals: ExportAssignment = undefined;
+        let exportEquals: ExportAssignment;
         let hasExportStarsToExportValues = false;
         let hasImportStarOrImportDefault = false;
 

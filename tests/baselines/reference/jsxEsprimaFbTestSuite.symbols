@@ -71,7 +71,6 @@ baz
 <LeftRight left=<a /> right=<b>monkeys /> gorillas</b> />;
 >LeftRight : Symbol(LeftRight, Decl(jsxEsprimaFbTestSuite.tsx, 3, 11))
 >left : Symbol(left, Decl(jsxEsprimaFbTestSuite.tsx, 38, 10))
->right : Symbol(right, Decl(jsxEsprimaFbTestSuite.tsx, 38, 21))
 
 <a.b></a.b>;
 >a : Symbol(a, Decl(jsxEsprimaFbTestSuite.tsx, 5, 11))

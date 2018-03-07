@@ -18,9 +18,4 @@ const classes = { definition: "class Class", ranges: [r0] };
 const imports = { definition: "(alias) class Class\nimport Class", ranges: [r1, r2] };
 const reExports = { definition: "(alias) class Class\nimport Class", ranges: [r3] };
 verify.referenceGroups(r0, [classes, imports, reExports]);
-verify.referenceGroups(r1, [imports, classes, reExports]);
-verify.referenceGroups(r2, [
-    { definition: "(alias) new Class(): Class\nimport Class", ranges: [r1, r2] },
-    classes,
-    reExports
-]);
+verify.referenceGroups([r1, r2], [imports, classes, reExports]);
