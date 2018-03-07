@@ -21682,13 +21682,22 @@ namespace ts {
 
         function checkUnusedModuleMembers(node: ModuleDeclaration | SourceFile): void {
             if (compilerOptions.noUnusedLocals && !(node.flags & NodeFlags.Ambient)) {
-                const unusedImports = createMultiMap<ImportedDeclaration>();
+                // Ideally we could use the ImportClause directly as a key, but must wait until we have full ES6 maps. So must store key along with value.
+                const unusedImports = createMap<[ImportClause, ImportedDeclaration[]]>();
                 node.locals.forEach(local => {
                     if (local.isReferenced || local.exportSymbol) return;
                     for (const declaration of local.declarations) {
                         if (isAmbientModule(declaration)) continue;
                         if (isImportedDeclaration(declaration)) {
-                            unusedImports.add(String(getNodeId(importClauseFromImported(declaration))), declaration);
+                            const importClause = importClauseFromImported(declaration);
+                            const key = String(getNodeId(importClause));
+                            const group = unusedImports.get(key);
+                            if (group) {
+                                group[1].push(declaration);
+                            }
+                            else {
+                                unusedImports.set(key, [importClause, [declaration]]);
+                            }
                         }
                         else {
                             errorUnusedLocal(declaration, symbolName(local));
@@ -21696,8 +21705,7 @@ namespace ts {
                     }
                 });
 
-                unusedImports.forEach(unuseds => {
-                    const importClause = importClauseFromImported(first(unuseds)); // others will have the same clause
+                unusedImports.forEach(([importClause, unuseds]) => {
                     const importDecl = importClause.parent;
                     if (forEachImportedDeclaration(importClause, d => !contains(unuseds, d))) {
                         for (const unused of unuseds) errorUnusedLocal(unused, idText(unused.name));
