@@ -3538,6 +3538,7 @@ namespace ts {
         /* @internal */
         ContainsAnyFunctionType = 1 << 26,  // Type is or contains the anyFunctionType
         NonPrimitive            = 1 << 27,  // intrinsic object type
+        InferType               = 1 << 28,  // A type whose concrete value upon instantiation will be inferred at a given site
         /* @internal */
         GenericMappedType       = 1 << 29,  // Flag used by maybeTypeOfKind
 
@@ -3562,7 +3563,7 @@ namespace ts {
         ESSymbolLike = ESSymbol | UniqueESSymbol,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
-        TypeVariable = TypeParameter | IndexedAccess,
+        TypeVariable = TypeParameter | IndexedAccess | InferType,
         InstantiableNonPrimitive = TypeVariable | Conditional | Substitution,
         InstantiablePrimitive = Index,
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
@@ -3817,6 +3818,11 @@ namespace ts {
         resolvedDefaultType?: Type;
     }
 
+    // Infer Types (TypeFlags.InferType)
+    export interface InferType extends Type {
+        target: TypeParameter;
+    }
+
     // Indexed access types (TypeFlags.IndexedAccess)
     // Possible forms are T[xxx], xxx[T], or xxx[keyof T], where T is a type variable
     export interface IndexedAccessType extends InstantiableType {
@@ -3919,7 +3925,7 @@ namespace ts {
     }
 
     /* @internal */
-    export type TypeMapper = (t: TypeParameter) => Type;
+    export type TypeMapper = (t: TypeParameter, isInferDeclaration?: boolean) => Type;
 
     export const enum InferencePriority {
         NakedTypeVariable           = 1 << 0,  // Naked type variable in union or intersection type

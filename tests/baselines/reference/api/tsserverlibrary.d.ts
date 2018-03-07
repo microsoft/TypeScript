@@ -2074,6 +2074,7 @@ declare namespace ts {
         Conditional = 2097152,
         Substitution = 4194304,
         NonPrimitive = 134217728,
+        InferType = 268435456,
         Literal = 224,
         Unit = 13536,
         StringOrNumberLiteral = 96,
@@ -2085,12 +2086,12 @@ declare namespace ts {
         ESSymbolLike = 1536,
         UnionOrIntersection = 393216,
         StructuredType = 458752,
-        TypeVariable = 1081344,
-        InstantiableNonPrimitive = 7372800,
+        TypeVariable = 269516800,
+        InstantiableNonPrimitive = 275808256,
         InstantiablePrimitive = 524288,
-        Instantiable = 7897088,
-        StructuredOrInstantiable = 8355840,
-        Narrowable = 142575359,
+        Instantiable = 276332544,
+        StructuredOrInstantiable = 276791296,
+        Narrowable = 411010815,
         NotUnionOrUnit = 134283777,
     }
     type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -2183,6 +2184,9 @@ declare namespace ts {
     interface InstantiableType extends Type {
     }
     interface TypeParameter extends InstantiableType {
+    }
+    interface InferType extends Type {
+        target: TypeParameter;
     }
     interface IndexedAccessType extends InstantiableType {
         objectType: Type;

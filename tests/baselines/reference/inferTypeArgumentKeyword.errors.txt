@@ -1,0 +1,24 @@
+tests/cases/conformance/types/typeParameters/typeArgumentLists/inferTypeArgumentKeyword.ts(7,51): error TS2345: Argument of type '{ z: number; }' is not assignable to parameter of type '{ z: { y: number; }; }'.
+  Types of property 'z' are incompatible.
+    Type 'number' is not assignable to type '{ y: number; }'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/inferTypeArgumentKeyword.ts(10,30): error TS2345: Argument of type '{ y: number; }' is not assignable to parameter of type 'number'.
+
+
+==== tests/cases/conformance/types/typeParameters/typeArgumentLists/inferTypeArgumentKeyword.ts (2 errors) ====
+    declare function foo<A, B, C>(x: A, y: B, z: { z: C }): A & B & C;
+    
+    // good
+    foo<infer A, {x: string}, A>({y: 12}, {x: "yes"}, {z: {y: 12}});
+    
+    // error on 3rd arg
+    foo<infer A, {x: string}, A>({y: 12}, {x: "yes"}, {z: 12});
+                                                      ~~~~~~~
+!!! error TS2345: Argument of type '{ z: number; }' is not assignable to parameter of type '{ z: { y: number; }; }'.
+!!! error TS2345:   Types of property 'z' are incompatible.
+!!! error TS2345:     Type 'number' is not assignable to type '{ y: number; }'.
+    
+    // error on first arg
+    foo<A, {x: string}, infer A>({y: 12}, {x: "yes"}, {z: 12});
+                                 ~~~~~~~
+!!! error TS2345: Argument of type '{ y: number; }' is not assignable to parameter of type 'number'.
+    

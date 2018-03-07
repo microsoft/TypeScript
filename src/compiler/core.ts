@@ -414,6 +414,17 @@ namespace ts {
         array.length = 0;
     }
 
+    export function mapIndexless<T, U>(array: ReadonlyArray<T>, f: (x: T) => U): U[] {
+        let result: U[];
+        if (array) {
+            result = [];
+            for (const elem of array) {
+                result.push(f(elem));
+            }
+        }
+        return result;
+    }
+
     export function map<T, U>(array: ReadonlyArray<T>, f: (x: T, i: number) => U): U[] {
         let result: U[];
         if (array) {

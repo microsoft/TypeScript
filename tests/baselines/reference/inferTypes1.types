@@ -150,7 +150,7 @@ type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A
 >T : T
 >x : any
 >T : T
->a : A
+>a : infer A
 >A : A
 >A : A
 
@@ -198,9 +198,9 @@ type X1<T extends { x: any, y: any }> = T extends { x: infer X, y: infer Y } ? [
 >x : any
 >y : any
 >T : T
->x : X
+>x : infer X
 >X : X
->y : Y
+>y : infer Y
 >Y : Y
 >X : X
 >Y : Y
@@ -228,9 +228,9 @@ type X2<T> = T extends { a: infer U, b: infer U } ? U : never;
 >X2 : X2<T>
 >T : T
 >T : T
->a : U
+>a : infer U
 >U : U
->b : U
+>b : infer U
 >U : U
 >U : U
 
@@ -266,11 +266,11 @@ type X3<T> = T extends { a: (x: infer U) => void, b: (x: infer U) => void } ? U 
 >X3 : X3<T>
 >T : T
 >T : T
->a : (x: U) => void
->x : U
+>a : (x: infer U) => void
+>x : infer U
 >U : U
->b : (x: U) => void
->x : U
+>b : (x: infer U) => void
+>x : infer U
 >U : U
 >U : U
 
@@ -308,11 +308,11 @@ type T54 = X3<{ a: (x: number) => void, b: () => void }>;  // number
 >b : () => void
 
 type T60 = infer U;  // Error
->T60 : U
+>T60 : infer U
 >U : U
 
 type T61<T> = infer A extends infer B ? infer C : infer D;  // Error
->T61 : T61<T>
+>T61 : {}
 >T : T
 >A : A
 >B : B
@@ -478,7 +478,7 @@ type Jsonified<T> =
 
     : T extends { toJSON(): infer R } ? R // toJSON is called if it exists (e.g. Date)
 >T : T
->toJSON : () => R
+>toJSON : () => infer R
 >R : R
 >R : R
 

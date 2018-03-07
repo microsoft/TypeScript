@@ -1,0 +1,70 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/inferTypeArgumentKeyword.ts ===
+declare function foo<A, B, C>(x: A, y: B, z: { z: C }): A & B & C;
+>foo : <A, B, C>(x: A, y: B, z: { z: C; }) => A & B & C
+>A : A
+>B : B
+>C : C
+>x : A
+>A : A
+>y : B
+>B : B
+>z : { z: C; }
+>z : C
+>C : C
+>A : A
+>B : B
+>C : C
+
+// good
+foo<infer A, {x: string}, A>({y: 12}, {x: "yes"}, {z: {y: 12}});
+>foo<infer A, {x: string}, A>({y: 12}, {x: "yes"}, {z: {y: 12}}) : { y: number; } & { x: string; }
+>foo : <A, B, C>(x: A, y: B, z: { z: C; }) => A & B & C
+>A : A
+>x : string
+>A : A
+>{y: 12} : { y: number; }
+>y : number
+>12 : 12
+>{x: "yes"} : { x: string; }
+>x : string
+>"yes" : "yes"
+>{z: {y: 12}} : { z: { y: number; }; }
+>z : { y: number; }
+>{y: 12} : { y: number; }
+>y : number
+>12 : 12
+
+// error on 3rd arg
+foo<infer A, {x: string}, A>({y: 12}, {x: "yes"}, {z: 12});
+>foo<infer A, {x: string}, A>({y: 12}, {x: "yes"}, {z: 12}) : any
+>foo : <A, B, C>(x: A, y: B, z: { z: C; }) => A & B & C
+>A : A
+>x : string
+>A : A
+>{y: 12} : { y: number; }
+>y : number
+>12 : 12
+>{x: "yes"} : { x: string; }
+>x : string
+>"yes" : "yes"
+>{z: 12} : { z: number; }
+>z : number
+>12 : 12
+
+// error on first arg
+foo<A, {x: string}, infer A>({y: 12}, {x: "yes"}, {z: 12});
+>foo<A, {x: string}, infer A>({y: 12}, {x: "yes"}, {z: 12}) : any
+>foo : <A, B, C>(x: A, y: B, z: { z: C; }) => A & B & C
+>A : A
+>x : string
+>A : A
+>{y: 12} : { y: number; }
+>y : number
+>12 : 12
+>{x: "yes"} : { x: string; }
+>x : string
+>"yes" : "yes"
+>{z: 12} : { z: number; }
+>z : number
+>12 : 12
+
