@@ -21,40 +21,34 @@ namespace ts.codefix {
             return actions;
 
             function fix(type: Type, fixId: string): CodeFixAction {
-                const newText = typeString(type, checker);
-                return {
-                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Change_0_to_1), [original, newText]),
-                    changes: [createFileTextChanges(sourceFile.fileName, [createChange(typeNode, sourceFile, newText)])],
-                    fixId,
-                };
+                const newText = checker.typeToString(type);
+                const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Change_0_to_1), [original, newText]);
+                const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, typeNode, type, checker));
+                return { description, changes, fixId };
             }
         },
         fixIds: [fixIdPlain, fixIdNullable],
         getAllCodeActions(context) {
             const { fixId, program, sourceFile } = context;
             const checker = program.getTypeChecker();
-            return codeFixAllWithTextChanges(context, errorCodes, (changes, err) => {
+            return codeFixAll(context, errorCodes, (changes, err) => {
                 const info = getInfo(err.file, err.start!, checker);
                 if (!info) return;
                 const { typeNode, type } = info;
                 const fixedType = typeNode.kind === SyntaxKind.JSDocNullableType && fixId === fixIdNullable ? checker.getNullableType(type, TypeFlags.Undefined) : type;
-                changes.push(createChange(typeNode, sourceFile, typeString(fixedType, checker)));
+                doChange(changes, sourceFile, typeNode, fixedType, checker);
             });
         }
     });
+
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, oldTypeNode: TypeNode, newType: Type, checker: TypeChecker): void {
+        changes.replaceNode(sourceFile, oldTypeNode, checker.typeToTypeNode(newType, /*enclosingDeclaration*/ oldTypeNode));
+    }
 
     function getInfo(sourceFile: SourceFile, pos: number, checker: TypeChecker): { readonly typeNode: TypeNode, type: Type } {
         const decl = findAncestor(getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false), isTypeContainer);
         const typeNode = decl && decl.type;
         return typeNode && { typeNode, type: checker.getTypeFromTypeNode(typeNode) };
-    }
-
-    function createChange(declaration: TypeNode, sourceFile: SourceFile, newText: string): TextChange {
-        return createTextChange(createTextSpanFromNode(declaration, sourceFile), newText);
-    }
-
-    function typeString(type: Type, checker: TypeChecker): string {
-        return checker.typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.NoTruncation);
     }
 
     // TODO: GH#19856 Node & { type: TypeNode }
