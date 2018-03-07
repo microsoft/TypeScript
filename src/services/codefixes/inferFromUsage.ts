@@ -175,7 +175,7 @@ namespace ts.codefix {
     }
 
     function annotateSetAccessor(changes: textChanges.ChangeTracker, sourceFile: SourceFile, setAccessorDeclaration: SetAccessorDeclaration, program: Program, cancellationToken: CancellationToken): void {
-        const param = setAccessorDeclaration.parameters[0];
+        const param = firstOrUndefined(setAccessorDeclaration.parameters);
         if (param && isIdentifier(setAccessorDeclaration.name) && isIdentifier(param.name)) {
             const type = inferTypeForVariableFromUsage(setAccessorDeclaration.name, program, cancellationToken) ||
                 inferTypeForVariableFromUsage(param.name, program, cancellationToken);
@@ -184,10 +184,22 @@ namespace ts.codefix {
     }
 
     function annotate(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type | undefined, program: Program): void {
-        const checker = program.getTypeChecker();
-        if (!type || !isTypeAccessible(type, declaration, checker)) return;
-        const typeNode = checker.typeToTypeNode(type, declaration);
+        const typeNode = type && getTypeNodeIfAccessible(type, declaration, program.getTypeChecker());
         if (typeNode) changes.insertTypeAnnotation(sourceFile, declaration, typeNode);
+    }
+
+    function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, checker: TypeChecker): TypeNode | undefined {
+        let typeIsAccessible = true;
+        const notAccessible = () => { typeIsAccessible = false; };
+        const res = checker.typeToTypeNode(type, enclosingScope, /*flags*/ undefined, {
+            trackSymbol: (symbol, declaration, meaning) => {
+                typeIsAccessible = typeIsAccessible && checker.isSymbolAccessible(symbol, declaration, meaning, /*shouldComputeAliasToMarkVisible*/ false).accessibility === SymbolAccessibility.Accessible;
+            },
+            reportInaccessibleThisError: notAccessible,
+            reportPrivateInBaseOfClassExpression: notAccessible,
+            reportInaccessibleUniqueSymbolError: notAccessible,
+        });
+        return typeIsAccessible ? res : undefined;
     }
 
     function getReferences(token: PropertyName | Token<SyntaxKind.ConstructorKeyword>, program: Program, cancellationToken: CancellationToken): ReadonlyArray<Identifier> {
@@ -214,43 +226,6 @@ namespace ts.codefix {
                     return InferFromReference.inferTypeForParametersFromReferences(getReferences(searchToken, program, cancellationToken), containingFunction, program.getTypeChecker(), cancellationToken);
                 }
         }
-    }
-
-    function isTypeAccessible(type: Type, enclosingDeclaration: Declaration, checker: TypeChecker): boolean {
-        let typeIsAccessible = true;
-        const notAccessible = () => { typeIsAccessible = false; };
-        const writer: EmitTextWriter = {
-            getText: () => "",
-            writeKeyword: noop,
-            writeOperator: noop,
-            writePunctuation: noop,
-            writeSpace: noop,
-            writeStringLiteral: noop,
-            writeParameter: noop,
-            writeProperty: noop,
-            writeSymbol: noop,
-            write: noop,
-            writeTextOfNode: noop,
-            rawWrite: noop,
-            writeLiteral: noop,
-            getTextPos: () => 0,
-            getLine: () => 0,
-            getColumn: () => 0,
-            getIndent: () => 0,
-            isAtStartOfLine: returnFalse,
-            writeLine: noop,
-            increaseIndent: noop,
-            decreaseIndent: noop,
-            clear: () => { typeIsAccessible = true; },
-            trackSymbol: (symbol, declaration, meaning) => {
-                typeIsAccessible = typeIsAccessible && checker.isSymbolAccessible(symbol, declaration, meaning, /*shouldComputeAliasToMarkVisible*/ false).accessibility === SymbolAccessibility.Accessible;
-            },
-            reportInaccessibleThisError: notAccessible,
-            reportPrivateInBaseOfClassExpression: notAccessible,
-            reportInaccessibleUniqueSymbolError: notAccessible,
-        };
-        checker.writeType(type, enclosingDeclaration, /*flags*/ undefined, writer);
-        return typeIsAccessible;
     }
 
     namespace InferFromReference {
