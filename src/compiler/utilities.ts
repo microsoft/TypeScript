@@ -314,20 +314,15 @@ namespace ts {
     }
 
     export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node, includeTrivia = false): string {
-        if (nodeIsMissing(node)) {
-            return "";
-        }
-
-        const text = sourceFile.text;
-        return text.substring(includeTrivia ? node.pos : skipTrivia(text, node.pos), node.end);
+        return getTextOfNodeFromSourceText(sourceFile.text, node, includeTrivia);
     }
 
-    export function getTextOfNodeFromSourceText(sourceText: string, node: Node): string {
+    export function getTextOfNodeFromSourceText(sourceText: string, node: Node, includeTrivia = false): string {
         if (nodeIsMissing(node)) {
             return "";
         }
 
-        return sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
+        return sourceText.substring(includeTrivia ? node.pos : skipTrivia(sourceText, node.pos), node.end);
     }
 
     export function getTextOfNode(node: Node, includeTrivia = false): string {
