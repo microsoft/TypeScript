@@ -9,6 +9,6 @@ verify.codeFix({
     newFileContent:
 `class C {
     /** @return {number} */
-    get c(): number { return 12; }
+    get c(): number { return 12 }
 }`,
 });

@@ -327,6 +327,10 @@ namespace ts.textChanges {
             return this;
         }
 
+        private insertNodesAt(sourceFile: SourceFile, pos: number, newNodes: ReadonlyArray<Node>, options: InsertNodeOptions = {}): void {
+            this.changes.push({ kind: ChangeKind.ReplaceWithMultipleNodes, sourceFile, options, nodes: newNodes, range: { pos, end: pos } });
+        }
+
         public insertNodeAtTopOfFile(sourceFile: SourceFile, newNode: Statement, blankLineBetween: boolean): void {
             const pos = getInsertionPositionAtSourceFileTop(sourceFile);
             this.insertNodeAt(sourceFile, pos, newNode, {
@@ -351,6 +355,11 @@ namespace ts.textChanges {
                 ? findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile)!
                 : node.kind !== SyntaxKind.VariableDeclaration && node.questionToken ? node.questionToken : node.name).end;
             this.insertNodeAt(sourceFile, end, type, { prefix: ": " });
+        }
+
+        public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: ReadonlyArray<TypeParameterDeclaration>): void {
+            const lparen = findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile)!.pos;
+            this.insertNodesAt(sourceFile, lparen, typeParameters, { prefix: "<", suffix: ">" });
         }
 
         private getOptionsForInsertNodeBefore(before: Node, doubleNewlines: boolean): ChangeNodeOptions {
