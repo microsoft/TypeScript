@@ -345,6 +345,7 @@ namespace ts.textChanges {
             this.replaceRange(sourceFile, { pos, end: pos }, createToken(modifier), { suffix: " " });
         }
 
+        /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
         public insertTypeAnnotation(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): void {
             const end = (isFunctionLike(node)
                 ? findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile)!
