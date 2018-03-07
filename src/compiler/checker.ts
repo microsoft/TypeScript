@@ -21682,16 +21682,43 @@ namespace ts {
 
         function checkUnusedModuleMembers(node: ModuleDeclaration | SourceFile): void {
             if (compilerOptions.noUnusedLocals && !(node.flags & NodeFlags.Ambient)) {
+                const unusedImports: ImportedDeclaration[] = [];
                 node.locals.forEach(local => {
-                    if (!local.isReferenced && !local.exportSymbol) {
-                        for (const declaration of local.declarations) {
-                            if (!isAmbientModule(declaration)) {
-                                errorUnusedLocal(declaration, symbolName(local));
-                            }
+                    if (local.isReferenced || local.exportSymbol) return;
+                    for (const declaration of local.declarations) {
+                        if (isAmbientModule(declaration)) continue;
+                        if (isImportedDeclaration(declaration)) {
+                            unusedImports.push(declaration);
+                        }
+                        else {
+                            errorUnusedLocal(declaration, symbolName(local));
                         }
                     }
                 });
+
+                while (unusedImports.length) {
+                    const decl = unusedImports.pop()!;
+                    const importClause = decl.kind === SyntaxKind.ImportClause ? decl : decl.kind === SyntaxKind.NamespaceImport ? decl.parent : decl.parent.parent;
+                    if (!forEachImportedDeclaration(importClause, d => d !== decl && !contains(unusedImports, d))) {
+                        forEachImportedDeclaration(importClause, d => unorderedRemoveItem(unusedImports, d));
+                        error(importClause.parent, Diagnostics.No_import_of_0_is_used, showModuleSpecifier(importClause.parent));
+                    }
+                    else {
+                        errorUnusedLocal(decl, idText(decl.name));
+                    }
+                }
             }
+        }
+
+        type ImportedDeclaration = ImportClause | ImportSpecifier | NamespaceImport;
+        function isImportedDeclaration(node: Node): node is ImportedDeclaration {
+            return node.kind === SyntaxKind.ImportClause || node.kind === SyntaxKind.ImportSpecifier || node.kind === SyntaxKind.NamespaceImport;
+        }
+
+        function forEachImportedDeclaration<T>(importClause: ImportClause, cb: (im: ImportedDeclaration) => T | undefined): T | undefined {
+            const { name: defaultName, namedBindings } = importClause;
+            return (defaultName && cb(importClause)) ||
+                namedBindings && (namedBindings.kind === SyntaxKind.NamespaceImport ? cb(namedBindings) : forEach(namedBindings.elements, cb));
         }
 
         function checkBlock(node: Block) {

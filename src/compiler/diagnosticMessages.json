@@ -3480,6 +3480,10 @@
         "category": "Message",
         "code": 6191
     },
+    "No import of '{0}' is used.": {
+        "category": "Error",
+        "code": 6192
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

@@ -5,12 +5,21 @@ namespace ts.codefix {
     const errorCodes = [
         Diagnostics._0_is_declared_but_its_value_is_never_read.code,
         Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code,
+        Diagnostics.No_import_of_0_is_used.code,
     ];
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
-            const { sourceFile } = context;
+            const { errorCode, sourceFile } = context;
             const token = getToken(sourceFile, context.span.start);
+
+            if (errorCode === Diagnostics.No_import_of_0_is_used.code) {
+                const decl = getImportDeclarationAtErrorLocation(token);
+                const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Remove_declaration_for_Colon_0), [showModuleSpecifier(decl)]);
+                const changes = textChanges.ChangeTracker.with(context, t => t.deleteNode(sourceFile, decl));
+                return [{ description, changes, fixId: fixIdDelete }];
+            }
+
             const result: CodeFixAction[] = [];
 
             const deletion = textChanges.ChangeTracker.with(context, t => tryDeleteDeclaration(t, sourceFile, token));
@@ -19,7 +28,7 @@ namespace ts.codefix {
                 result.push({ description, changes: deletion, fixId: fixIdDelete });
             }
 
-            const prefix = textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, context.errorCode, sourceFile, token));
+            const prefix = textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, errorCode, sourceFile, token));
             if (prefix.length) {
                 const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Prefix_0_with_an_underscore), [token.getText()]);
                 result.push({ description, changes: prefix, fixId: fixIdPrefix });
@@ -38,13 +47,23 @@ namespace ts.codefix {
                     }
                     break;
                 case fixIdDelete:
-                    tryDeleteDeclaration(changes, sourceFile, token);
+                    if (diag.code === Diagnostics.No_import_of_0_is_used.code) {
+                        changes.deleteNode(sourceFile, getImportDeclarationAtErrorLocation(token));
+                    }
+                    else {
+                        tryDeleteDeclaration(changes, sourceFile, token);
+                    }
                     break;
                 default:
                     Debug.fail(JSON.stringify(context.fixId));
             }
         }),
     });
+
+    function getImportDeclarationAtErrorLocation(token: Node): ImportDeclaration {
+        Debug.assert(token.kind === SyntaxKind.ImportKeyword);
+        return cast(token.parent, isImportDeclaration);
+    }
 
     function getToken(sourceFile: SourceFile, pos: number): Node {
         const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
