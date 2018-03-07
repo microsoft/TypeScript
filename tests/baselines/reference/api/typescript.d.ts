@@ -4304,7 +4304,7 @@ declare namespace ts {
     }
     interface Options {
         readonly quote?: "double" | "single";
-        readonly includeCompletionsForExternalModuleExports?: boolean;
+        readonly includeCompletionsForModuleExports?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
     }
     interface LanguageService {
@@ -4378,7 +4378,7 @@ declare namespace ts {
     type OrganizeImportsScope = CombinedCodeFixScope;
     /** @deprecated Use Options */
     interface GetCompletionsAtPositionOptions extends Options {
-        /** @deprecated Use includeCompletionsForExternalModuleExports */
+        /** @deprecated Use includeCompletionsForModuleExports */
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
         includeInsertTextCompletions?: boolean;

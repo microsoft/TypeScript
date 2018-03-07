@@ -479,7 +479,7 @@ namespace ts.Completions {
         { name, source }: CompletionEntryIdentifier,
         allSourceFiles: ReadonlyArray<SourceFile>,
     ): SymbolCompletion | { type: "request", request: Request } | { type: "none" } {
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, { includeCompletionsForExternalModuleExports: true, includeCompletionsWithInsertText: true }, compilerOptions.target);
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true }, compilerOptions.target);
         if (!completionData) {
             return { type: "none" };
         }
@@ -746,7 +746,7 @@ namespace ts.Completions {
         sourceFile: SourceFile,
         position: number,
         allSourceFiles: ReadonlyArray<SourceFile>,
-        options: Pick<Options, "includeCompletionsForExternalModuleExports" | "includeCompletionsWithInsertText">,
+        options: Pick<Options, "includeCompletionsForModuleExports" | "includeCompletionsWithInsertText">,
         target: ScriptTarget,
     ): CompletionData | Request | undefined {
         let start = timestamp();
@@ -1160,7 +1160,7 @@ namespace ts.Completions {
                 }
             }
 
-            if (options.includeCompletionsForExternalModuleExports) {
+            if (options.includeCompletionsForModuleExports) {
                 getSymbolsFromOtherSourceFileExports(symbols, previousToken && isIdentifier(previousToken) ? previousToken.text : "", target);
             }
             filterGlobalCompletion(symbols);

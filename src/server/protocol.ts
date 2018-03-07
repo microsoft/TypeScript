@@ -2594,7 +2594,7 @@ namespace ts.server.protocol {
          * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
          * This affects lone identifier completions but not completions on the right hand side of `obj.`.
          */
-        readonly includeCompletionsForExternalModuleExports?: boolean;
+        readonly includeCompletionsForModuleExports?: boolean;
         /**
          * If enabled, the completion list will include completions with invalid identifier names.
          * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.

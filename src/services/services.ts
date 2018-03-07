@@ -1428,7 +1428,7 @@ namespace ts {
             // Convert from deprecated options names to new names
             const fullOptions: Options = {
                 ...identity<Options>(options), // avoid excess property check
-                includeCompletionsForExternalModuleExports: options.includeCompletionsForExternalModuleExports || options.includeExternalModuleExports,
+                includeCompletionsForModuleExports: options.includeCompletionsForModuleExports || options.includeExternalModuleExports,
                 includeCompletionsWithInsertText: options.includeCompletionsWithInsertText || options.includeInsertTextCompletions,
             };
             synchronizeHostData();
