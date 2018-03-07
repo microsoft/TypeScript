@@ -5,7 +5,7 @@ namespace ts.codefix {
     const errorCodes = [
         Diagnostics._0_is_declared_but_its_value_is_never_read.code,
         Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code,
-        Diagnostics.No_import_of_0_is_used.code,
+        Diagnostics.All_imports_in_import_declaration_are_unused.code,
     ];
     registerCodeFix({
         errorCodes,
@@ -13,9 +13,10 @@ namespace ts.codefix {
             const { errorCode, sourceFile } = context;
             const token = getToken(sourceFile, context.span.start);
 
-            if (errorCode === Diagnostics.No_import_of_0_is_used.code) {
-                const decl = getImportDeclarationAtErrorLocation(token);
-                const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Remove_declaration_for_Colon_0), [showModuleSpecifier(decl)]);
+            // For single imports, we will use the whole span but still use "'{0}' is declared but its value is never read."
+            if (token.kind === SyntaxKind.ImportKeyword) {
+                const decl = cast(token.parent, isImportDeclaration);
+                const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Remove_import_from_0), [showModuleSpecifier(decl)]);
                 const changes = textChanges.ChangeTracker.with(context, t => t.deleteNode(sourceFile, decl));
                 return [{ description, changes, fixId: fixIdDelete }];
             }
@@ -47,8 +48,8 @@ namespace ts.codefix {
                     }
                     break;
                 case fixIdDelete:
-                    if (diag.code === Diagnostics.No_import_of_0_is_used.code) {
-                        changes.deleteNode(sourceFile, getImportDeclarationAtErrorLocation(token));
+                    if (token.kind === SyntaxKind.ImportKeyword) {
+                        changes.deleteNode(sourceFile, cast(token.parent, isImportDeclaration));
                     }
                     else {
                         tryDeleteDeclaration(changes, sourceFile, token);
@@ -59,11 +60,6 @@ namespace ts.codefix {
             }
         }),
     });
-
-    function getImportDeclarationAtErrorLocation(token: Node): ImportDeclaration {
-        Debug.assert(token.kind === SyntaxKind.ImportKeyword);
-        return cast(token.parent, isImportDeclaration);
-    }
 
     function getToken(sourceFile: SourceFile, pos: number): Node {
         const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);

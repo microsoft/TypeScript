@@ -140,7 +140,7 @@ namespace ts.textChanges {
 
     export function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStart, position: Position) {
         if (options.useNonAdjustedStartPosition) {
-            return node.getStart();
+            return node.getStart(sourceFile);
         }
         const fullStart = node.getFullStart();
         const start = node.getStart(sourceFile);

@@ -1,5 +1,5 @@
-/b.ts(1,1): error TS6192: No import of './a' is used.
-/b.ts(2,1): error TS6192: No import of './a' is used.
+/b.ts(1,1): error TS6192: All imports in import declaration are unused.
+/b.ts(2,1): error TS6192: All imports in import declaration are unused.
 /b.ts(4,19): error TS6133: 'a2' is declared but its value is never read.
 /b.ts(4,28): error TS6133: 'b2' is declared but its value is never read.
 /b.ts(6,17): error TS6133: 'ns2' is declared but its value is never read.
@@ -14,10 +14,10 @@
 ==== /b.ts (6 errors) ====
     import d1, { a as a1, b as b1 } from "./a";
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6192: No import of './a' is used.
+!!! error TS6192: All imports in import declaration are unused.
     import d2, * as ns from "./a";
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6192: No import of './a' is used.
+!!! error TS6192: All imports in import declaration are unused.
     
     import d3, { a as a2, b as b2 } from "./a";
                       ~~

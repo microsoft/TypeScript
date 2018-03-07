@@ -21682,13 +21682,13 @@ namespace ts {
 
         function checkUnusedModuleMembers(node: ModuleDeclaration | SourceFile): void {
             if (compilerOptions.noUnusedLocals && !(node.flags & NodeFlags.Ambient)) {
-                const unusedImports: ImportedDeclaration[] = [];
+                const unusedImports = createMultiMap<ImportedDeclaration>();
                 node.locals.forEach(local => {
                     if (local.isReferenced || local.exportSymbol) return;
                     for (const declaration of local.declarations) {
                         if (isAmbientModule(declaration)) continue;
                         if (isImportedDeclaration(declaration)) {
-                            unusedImports.push(declaration);
+                            unusedImports.add(String(getNodeId(importClauseFromImported(declaration))), declaration);
                         }
                         else {
                             errorUnusedLocal(declaration, symbolName(local));
@@ -21696,23 +21696,28 @@ namespace ts {
                     }
                 });
 
-                while (unusedImports.length) {
-                    const decl = unusedImports.pop()!;
-                    const importClause = decl.kind === SyntaxKind.ImportClause ? decl : decl.kind === SyntaxKind.NamespaceImport ? decl.parent : decl.parent.parent;
-                    if (!forEachImportedDeclaration(importClause, d => d !== decl && !contains(unusedImports, d))) {
-                        forEachImportedDeclaration(importClause, d => unorderedRemoveItem(unusedImports, d));
-                        error(importClause.parent, Diagnostics.No_import_of_0_is_used, showModuleSpecifier(importClause.parent));
+                unusedImports.forEach(unuseds => {
+                    const importClause = importClauseFromImported(first(unuseds)); // others will have the same clause
+                    const importDecl = importClause.parent;
+                    if (forEachImportedDeclaration(importClause, d => !contains(unuseds, d))) {
+                        for (const unused of unuseds) errorUnusedLocal(unused, idText(unused.name));
+                    }
+                    else if (unuseds.length === 1) {
+                        error(importDecl, Diagnostics._0_is_declared_but_its_value_is_never_read, idText(first(unuseds).name));
                     }
                     else {
-                        errorUnusedLocal(decl, idText(decl.name));
+                        error(importDecl, Diagnostics.All_imports_in_import_declaration_are_unused, showModuleSpecifier(importDecl));
                     }
-                }
+                });
             }
         }
 
         type ImportedDeclaration = ImportClause | ImportSpecifier | NamespaceImport;
         function isImportedDeclaration(node: Node): node is ImportedDeclaration {
             return node.kind === SyntaxKind.ImportClause || node.kind === SyntaxKind.ImportSpecifier || node.kind === SyntaxKind.NamespaceImport;
+        }
+        function importClauseFromImported(decl: ImportedDeclaration): ImportClause {
+            return decl.kind === SyntaxKind.ImportClause ? decl : decl.kind === SyntaxKind.NamespaceImport ? decl.parent : decl.parent.parent;
         }
 
         function forEachImportedDeclaration<T>(importClause: ImportClause, cb: (im: ImportedDeclaration) => T | undefined): T | undefined {

@@ -3480,7 +3480,7 @@
         "category": "Message",
         "code": 6191
     },
-    "No import of '{0}' is used.": {
+    "All imports in import declaration are unused.": {
         "category": "Error",
         "code": 6192
     },
@@ -3854,6 +3854,10 @@
     "Remove declaration for: '{0}'": {
         "category": "Message",
         "code": 90004
+    },
+    "Remove import from '{0}'": {
+        "category": "Message",
+        "code": 90005
     },
     "Implement interface '{0}'": {
         "category": "Message",

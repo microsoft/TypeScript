@@ -2,9 +2,10 @@
 
 // @noUnusedLocals: true
 // @Filename: /a.ts
-////import a, { b } from "mod";
+////// leading trivia
+////import a, { b } from "mod"; // trailing trivia
 
 verify.codeFix({
-    description: "Remove declaration for: 'mod'",
-    newFileContent: "",
+    description: "Remove import from 'mod'",
+    newFileContent: " // trailing trivia",
 });
