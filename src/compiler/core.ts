@@ -1988,6 +1988,18 @@ namespace ts {
         return normalized;
     }
 
+    /**
+     * Normalizes a path including its leading drive letter (if any)
+     */
+    export function normalizePathAndRoot(path: string): string {
+        const normalized = normalizePathAndParts(path).path;
+        const rootLength = getRootLength(normalized);
+        if (rootLength === 0) {
+            return normalized;
+        }
+        return path.substr(0, rootLength).toLowerCase() + path.substr(rootLength);
+    }
+
     export function normalizePath(path: string): string {
         return normalizePathAndParts(path).path;
     }
@@ -2059,6 +2071,13 @@ namespace ts {
             : compilerOptions.esModuleInterop
                 ? moduleKind !== ModuleKind.None && moduleKind < ModuleKind.ES2015
                 : moduleKind === ModuleKind.System;
+    }
+
+    export function getEmitDeclarations(compilerOptions: CompilerOptions): boolean {
+        if (compilerOptions.composite) {
+            return true;
+        }
+        return !!compilerOptions.declaration;
     }
 
     export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictPropertyInitialization" | "alwaysStrict";

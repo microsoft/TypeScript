@@ -17,16 +17,19 @@ namespace ts {
      *   Else, calls `getSourceFilesToEmit` with the (optional) target source file to determine the list of source files to emit.
      */
     export function forEachEmittedFile<T>(
-        host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) => T,
+        host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle, emitOnlyDtsFiles: boolean) => T,
         sourceFilesOrTargetSourceFile?: ReadonlyArray<SourceFile> | SourceFile,
         emitOnlyDtsFiles?: boolean) {
-
         const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile);
         const options = host.getCompilerOptions();
         if (options.outFile || options.out) {
             if (sourceFiles.length) {
                 const bundle = createBundle(sourceFiles);
-                const result = action(getOutputPathsFor(bundle, host, emitOnlyDtsFiles), bundle);
+                const jsFilePath = options.outFile || options.out;
+                const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
+                const declarationFilePath = options.declaration ? removeFileExtension(jsFilePath) + Extension.Dts : "";
+                const bundleInfoPath = options.references && jsFilePath && (removeFileExtension(jsFilePath) + ".bundle_info");
+                const result = action({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath: undefined, bundleInfoPath }, createBundle(sourceFiles, host.getPrependNodes()), emitOnlyDtsFiles);
                 if (result) {
                     return result;
                 }
@@ -34,7 +37,10 @@ namespace ts {
         }
         else {
             for (const sourceFile of sourceFiles) {
-                const result = action(getOutputPathsFor(sourceFile, host, emitOnlyDtsFiles), sourceFile);
+                const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, getOutputExtension(sourceFile, options));
+                const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
+                const declarationFilePath = !isSourceFileJavaScript(sourceFile) && (emitOnlyDtsFiles || options.declaration || options.composite) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
+                const result = action({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath: undefined, bundleInfoPath: undefined }, sourceFile, emitOnlyDtsFiles);
                 if (result) {
                     return result;
                 }
@@ -67,6 +73,13 @@ namespace ts {
         return (options.sourceMap && !options.inlineSourceMap) ? jsFilePath + ".map" : undefined;
     }
 
+    function createDefaultBundleInfo(): BundleInfo {
+        return {
+            originalOffset: -1,
+            totalLength: -1
+        };
+    }
+
     // JavaScript files are always LanguageVariant.JSX, as JSX syntax is allowed in .js files also.
     // So for JavaScript files, '.jsx' is only emitted if the input was '.jsx', and JsxEmit.Preserve.
     // For TypeScript, the only time to emit with a '.jsx' extension, is on JSX input, and JsxEmit.Preserve
@@ -85,6 +98,16 @@ namespace ts {
         return Extension.Js;
     }
 
+<<<<<<< HEAD
+=======
+    function getOriginalSourceFileOrBundle(sourceFileOrBundle: SourceFile | Bundle) {
+        if (sourceFileOrBundle.kind === SyntaxKind.Bundle) {
+            return updateBundle(sourceFileOrBundle, sameMap(sourceFileOrBundle.sourceFiles, getOriginalSourceFile), sourceFileOrBundle.prepends);
+        }
+        return getOriginalSourceFile(sourceFileOrBundle);
+    }
+
+>>>>>>> Project References
     /*@internal*/
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean, transformers?: TransformerFactory<SourceFile>[]): EmitResult {
@@ -104,6 +127,7 @@ namespace ts {
             // Explicitly do not passthru either `inline` option
         });
 
+        let bundleInfo: BundleInfo = createDefaultBundleInfo();
         let currentSourceFile: SourceFile;
         let bundledHelpers: Map<boolean>;
         let isOwnFileEmit: boolean;
@@ -122,9 +146,26 @@ namespace ts {
             sourceMaps: sourceMapDataList
         };
 
+<<<<<<< HEAD
         function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
             emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath);
             emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath);
+=======
+        function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, bundleInfoPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
+            // Make sure not to write js file and source map file if any of them cannot be written
+            if (!host.isEmitBlocked(jsFilePath) && !compilerOptions.noEmit && !compilerOptions.emitDeclarationOnly) {
+                if (!emitOnlyDtsFiles) {
+                    printSourceFileOrBundle(jsFilePath, sourceMapFilePath, bundleInfoPath, sourceFileOrBundle);
+                }
+            }
+            else {
+                emitSkipped = true;
+            }
+
+            if (declarationFilePath) {
+                emitSkipped = writeDeclarationFile(declarationFilePath, getOriginalSourceFileOrBundle(sourceFileOrBundle), host, resolver, emitterDiagnostics, emitOnlyDtsFiles) || emitSkipped;
+            }
+>>>>>>> Project References
 
             if (!emitSkipped && emittedFilesList) {
                 if (!emitOnlyDtsFiles) {
@@ -136,9 +177,13 @@ namespace ts {
                 if (declarationFilePath) {
                     emittedFilesList.push(declarationFilePath);
                 }
+                if (bundleInfoPath) {
+                    emittedFilesList.push(bundleInfoPath);
+                }
             }
         }
 
+<<<<<<< HEAD
         function emitJsFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, jsFilePath: string, sourceMapFilePath: string) {
             const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;
             // Make sure not to write js file and source map file if any of them cannot be written
@@ -214,6 +259,9 @@ namespace ts {
         }
 
         function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, printer: Printer, mapRecorder: SourceMapWriter) {
+=======
+        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string, bundleInfoPath: string | undefined, sourceFileOrBundle: SourceFile | Bundle) {
+>>>>>>> Project References
             const bundle = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle : undefined;
             const sourceFile = sourceFileOrBundle.kind === SyntaxKind.SourceFile ? sourceFileOrBundle : undefined;
             const sourceFiles = bundle ? bundle.sourceFiles : [sourceFile];
@@ -222,7 +270,7 @@ namespace ts {
             if (bundle) {
                 bundledHelpers = createMap<boolean>();
                 isOwnFileEmit = false;
-                printer.writeBundle(bundle, writer);
+                printer.writeBundle(bundle, writer, bundleInfo);
             }
             else {
                 isOwnFileEmit = true;
@@ -244,6 +292,12 @@ namespace ts {
             // Write the output file
             writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), compilerOptions.emitBOM, sourceFiles);
 
+            // Write bundled offset information if applicable
+            if (bundleInfoPath) {
+                bundleInfo.totalLength = writer.getTextPos();
+                writeFile(host, emitterDiagnostics, bundleInfoPath, JSON.stringify(bundleInfo, undefined, 2), /*writeByteOrderMark*/ false);
+            }
+
             // Reset state
             mapRecorder.reset();
             writer.clear();
@@ -251,6 +305,7 @@ namespace ts {
             currentSourceFile = undefined;
             bundledHelpers = undefined;
             isOwnFileEmit = false;
+            bundleInfo = createDefaultBundleInfo();
         }
 
         function setSourceFile(node: SourceFile) {
@@ -382,10 +437,14 @@ namespace ts {
                 case EmitHint.Expression:
                     Debug.assert(isExpression(node), "Expected an Expression node.");
                     break;
+                case EmitHint.Prepend:
+                    Debug.assert(node.kind === SyntaxKind.Prepend, "Expected an Prepend node.");
+                    break;
             }
             switch (node.kind) {
                 case SyntaxKind.SourceFile: return printFile(<SourceFile>node);
                 case SyntaxKind.Bundle: return printBundle(<Bundle>node);
+                case SyntaxKind.Prepend: return printPrepend(<PrependNode>node);
             }
             writeNode(hint, node, sourceFile, beginPrint());
             return endPrint();
@@ -403,6 +462,11 @@ namespace ts {
 
         function printFile(sourceFile: SourceFile): string {
             writeFile(sourceFile, beginPrint());
+            return endPrint();
+        }
+
+        function printPrepend(prepend: PrependNode): string {
+            writePrepend(prepend, beginPrint());
             return endPrint();
         }
 
@@ -430,16 +494,35 @@ namespace ts {
             writer = previousWriter;
         }
 
-        function writeBundle(bundle: Bundle, output: EmitTextWriter) {
+        function writeBundle(bundle: Bundle, output: EmitTextWriter, bundleInfo?: BundleInfo) {
             const previousWriter = writer;
             setWriter(output);
             emitShebangIfNeeded(bundle);
             emitPrologueDirectivesIfNeeded(bundle);
+            for (const prepend of bundle.prepends) {
+                print(EmitHint.Prepend, prepend, /*sourceFile*/ undefined);
+            }
+
+            if (bundleInfo) {
+                bundleInfo.originalOffset = writer.getTextPos();
+            }
             emitHelpersIndirect(bundle);
+<<<<<<< HEAD
             emitSyntheticTripleSlashReferencesIfNeeded(bundle);
+=======
+
+>>>>>>> Project References
             for (const sourceFile of bundle.sourceFiles) {
                 print(EmitHint.SourceFile, sourceFile, sourceFile);
             }
+            reset();
+            writer = previousWriter;
+        }
+
+        function writePrepend(prepend: PrependNode, output: EmitTextWriter) {
+            const previousWriter = writer;
+            setWriter(output);
+            print(EmitHint.Prepend, prepend, /*sourceFile*/ undefined);
             reset();
             writer = previousWriter;
         }
@@ -549,7 +632,10 @@ namespace ts {
                 case EmitHint.IdentifierName: return pipelineEmitIdentifierName(node);
                 case EmitHint.Expression: return pipelineEmitExpression(node);
                 case EmitHint.MappedTypeParameter: return emitMappedTypeParameter(cast(node, isTypeParameterDeclaration));
+                case EmitHint.Prepend:
                 case EmitHint.Unspecified: return pipelineEmitUnspecified(node);
+                default:
+                    assertTypeIsNever(hint);
             }
         }
 
@@ -588,6 +674,8 @@ namespace ts {
                 case SyntaxKind.TemplateMiddle:
                 case SyntaxKind.TemplateTail:
                     return emitLiteral(<LiteralExpression>node);
+                case SyntaxKind.Prepend:
+                    return emitPrepend(<PrependNode>node);
 
                 // Identifiers
                 case SyntaxKind.Identifier:
@@ -980,6 +1068,11 @@ namespace ts {
                 // Quick info expects all literals to be called with writeStringLiteral, as there's no specific type for numberLiterals
                 writeStringLiteral(text);
             }
+        }
+
+        // SyntaxKind.Prepend
+        function emitPrepend(prepend: PrependNode) {
+            write(prepend.javascriptText);
         }
 
         //

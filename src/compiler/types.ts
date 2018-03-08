@@ -396,6 +396,7 @@ namespace ts {
         // Top-level nodes
         SourceFile,
         Bundle,
+        Prepend,
 
         // JSDoc nodes
         JSDocTypeExpression,
@@ -2574,6 +2575,12 @@ namespace ts {
         /* @internal */ resolvedModules: Map<ResolvedModuleFull | undefined>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: ReadonlyArray<StringLiteralLike>;
+        /**
+         * When a file's references are redirected due to project reference directives,
+         * the original names of the references are stored in this array
+         */
+        /* @internal*/
+        redirectedReferences?: ReadonlyArray<string>;
         // Identifier only if `declare global`
         /* @internal */ moduleAugmentations: ReadonlyArray<StringLiteral | Identifier>;
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
@@ -2587,9 +2594,16 @@ namespace ts {
 
     export interface Bundle extends Node {
         kind: SyntaxKind.Bundle;
+        prepends: ReadonlyArray<PrependNode>;
         sourceFiles: ReadonlyArray<SourceFile>;
         /* @internal */ syntheticFileReferences?: ReadonlyArray<FileReference>;
         /* @internal */ syntheticTypeReferences?: ReadonlyArray<FileReference>;
+    }
+
+    export interface PrependNode extends Node {
+        kind: SyntaxKind.Prepend;
+        javascriptText: string;
+        declarationText: string;
     }
 
     export interface JsonSourceFile extends SourceFile {
@@ -4093,7 +4107,12 @@ namespace ts {
         name: string;
     }
 
-    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | null | undefined;
+    export interface ProjectReference {
+        path: string;
+        prepend?: boolean;
+    }
+
+    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
 
     export interface CompilerOptions {
         /*@internal*/ all?: boolean;
@@ -4164,6 +4183,8 @@ namespace ts {
         /* @internal */ pretty?: DiagnosticStyle;
         reactNamespace?: string;
         jsxFactory?: string;
+        references?: ProjectReference[];
+        composite?: boolean;
         removeComments?: boolean;
         rootDir?: string;
         rootDirs?: string[];
@@ -4807,6 +4828,7 @@ namespace ts {
         Expression,          // Emitting an Expression
         IdentifierName,      // Emitting an IdentifierName
         MappedTypeParameter, // Emitting a TypeParameterDeclaration inside of a MappedTypeNode
+        Prepend,             // Emitting a literal node from a prior emit output of a referenced project
         Unspecified,         // Emitting an otherwise unspecified node
     }
 
@@ -4822,6 +4844,8 @@ namespace ts {
         getNewLine(): string;
 
         isEmitBlocked(emitFileName: string): boolean;
+
+        getPrependNodes(): PrependNode[];
 
         writeFile: WriteFileCallback;
     }
@@ -4974,7 +4998,23 @@ namespace ts {
         /*@internal*/ writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
         /*@internal*/ writeList<T extends Node>(format: ListFormat, list: NodeArray<T>, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
         /*@internal*/ writeFile(sourceFile: SourceFile, writer: EmitTextWriter): void;
-        /*@internal*/ writeBundle(bundle: Bundle, writer: EmitTextWriter): void;
+        /*@internal*/ writeBundle(bundle: Bundle, writer: EmitTextWriter, info?: BundleInfo): void;
+    }
+
+    /**
+     * When a bundle contains prepended content, we store a file on disk indicating where the non-prepended
+     * content of that file starts. On a subsequent build where there are no upstream .d.ts changes, we
+     * read the bundle info file and the original .js file to quickly re-use portion of the file
+     * that didn't originate in prepended content.
+     */
+    /* @internal */
+    export interface BundleInfo {
+        // The offset (in characters, i.e. suitable for .substr) at which the
+        // non-prepended portion of the emitted file starts.
+        originalOffset: number;
+        // The total length of this bundle. Used to ensure we're pulling from
+        // the same source as we originally wrote.
+        totalLength: number;
     }
 
     export interface PrintHandlers {

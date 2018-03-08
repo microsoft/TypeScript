@@ -241,6 +241,12 @@ namespace ts {
             description: Diagnostics.Specify_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir,
         },
         {
+            name: "composite",
+            type: "boolean",
+            category: Diagnostics.Basic_Options,
+            description: Diagnostics.Enable_project_compilation,
+        },
+        {
             name: "removeComments",
             type: "boolean",
             showInSimplifiedHelpView: true,
@@ -416,6 +422,17 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Type_declaration_files_to_be_included_in_compilation
+        },
+        {
+            name: "references",
+            type: "list",
+            element: {
+                name: "references",
+                type: "object"
+            },
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Module_Resolution_Options,
+            description: Diagnostics.Projects_to_reference
         },
         {
             name: "allowSyntheticDefaultImports",
@@ -942,8 +959,9 @@ namespace ts {
      */
     export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
         const jsonSourceFile = parseJsonText(fileName, jsonText);
+        const config = convertToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics);
         return {
-            config: convertToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics),
+            config,
             error: jsonSourceFile.parseDiagnostics.length ? jsonSourceFile.parseDiagnostics[0] : undefined
         };
     }
@@ -1003,6 +1021,22 @@ namespace ts {
                     type: "list",
                     element: {
                         name: "files",
+                        type: "string"
+                    }
+                },
+                {
+                    name: "references",
+                    type: "list",
+                    element: {
+                        name: "references",
+                        type: "object"
+                    }
+                },
+                {
+                    name: "projects",
+                    type: "list",
+                    element: {
+                        name: "projects",
                         type: "string"
                     }
                 },
@@ -1470,7 +1504,7 @@ namespace ts {
         const parsedConfig = parseConfig(json, sourceFile, host, basePath, configFileName, resolutionStack, errors);
         const { raw } = parsedConfig;
         const options = extend(existingOptions, parsedConfig.options || {});
-        options.configFilePath = configFileName;
+        options.configFilePath = configFileName && normalizeSlashes(configFileName);
         setConfigFileInOptions(options, sourceFile);
         const { fileNames, wildcardDirectories, spec } = getFileNames();
         return {
@@ -1529,7 +1563,7 @@ namespace ts {
             }
 
             const result = matchFileNames(filesSpecs, includeSpecs, excludeSpecs, configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath, options, host, errors, extraFileExtensions, sourceFile);
-            if (result.fileNames.length === 0 && !hasProperty(raw, "files") && resolutionStack.length === 0) {
+            if (result.fileNames.length === 0 && !hasProperty(raw, "files") && resolutionStack.length === 0 && !options.references) {
                 errors.push(getErrorForNoInputFiles(result.spec, configFileName));
             }
 
@@ -1821,6 +1855,9 @@ namespace ts {
 
         const options = getDefaultCompilerOptions(configFileName);
         convertOptionsFromJson(optionDeclarations, jsonOptions, basePath, options, Diagnostics.Unknown_compiler_option_0, errors);
+        if (configFileName) {
+            options.configFilePath = configFileName;
+        }
         return options;
     }
 

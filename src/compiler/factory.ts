@@ -2531,15 +2531,23 @@ namespace ts {
             : node;
     }
 
-    export function createBundle(sourceFiles: ReadonlyArray<SourceFile>) {
+    export function createBundle(sourceFiles: ReadonlyArray<SourceFile>, prepends: ReadonlyArray<PrependNode> = emptyArray) {
         const node = <Bundle>createNode(SyntaxKind.Bundle);
+        node.prepends = prepends;
         node.sourceFiles = sourceFiles;
         return node;
     }
 
-    export function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>) {
+    export function createPrepend(javascript: string, declaration: string): PrependNode {
+        const node = <PrependNode>createNode(SyntaxKind.Prepend);
+        node.javascriptText = javascript;
+        node.declarationText = declaration;
+        return node;
+    }
+
+    export function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>, prepends: ReadonlyArray<PrependNode> = emptyArray) {
         if (node.sourceFiles !== sourceFiles) {
-            return createBundle(sourceFiles);
+            return createBundle(sourceFiles, prepends);
         }
         return node;
     }

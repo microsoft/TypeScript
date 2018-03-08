@@ -2842,6 +2842,7 @@ namespace ts {
         sourceMapFilePath: string | undefined;
         declarationFilePath: string | undefined;
         declarationMapPath: string | undefined;
+        bundleInfoPath: string | undefined;
     }
 
     /**
