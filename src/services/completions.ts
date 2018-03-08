@@ -1135,7 +1135,7 @@ namespace ts.Completions {
                 position;
 
             const scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile) || sourceFile;
-            isInSnippetScope = isSnippetScope(scopeNode);
+            isInSnippetScope = !isInComment(sourceFile, position) && isSnippetScope(scopeNode);
 
             const symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
 
