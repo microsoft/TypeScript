@@ -991,6 +991,7 @@ namespace ts.server {
         ioSession.logError(err, "unknown");
     });
     // See https://github.com/Microsoft/TypeScript/issues/11348
+    // tslint:disable-next-line no-unnecessary-type-assertion-2
     (process as any).noAsar = true;
     // Start listening
     ioSession.listen();
