@@ -2126,31 +2126,35 @@ namespace ts {
             : node;
     }
 
-    export function createJsxSelfClosingElement(tagName: JsxTagNameExpression, attributes: JsxAttributes) {
+    export function createJsxSelfClosingElement(tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes) {
         const node = <JsxSelfClosingElement>createSynthesizedNode(SyntaxKind.JsxSelfClosingElement);
         node.tagName = tagName;
+        node.typeArguments = typeArguments && createNodeArray(typeArguments);
         node.attributes = attributes;
         return node;
     }
 
-    export function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: JsxTagNameExpression, attributes: JsxAttributes) {
+    export function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes) {
         return node.tagName !== tagName
+            || node.typeArguments !== typeArguments
             || node.attributes !== attributes
-            ? updateNode(createJsxSelfClosingElement(tagName, attributes), node)
+            ? updateNode(createJsxSelfClosingElement(tagName, typeArguments, attributes), node)
             : node;
     }
 
-    export function createJsxOpeningElement(tagName: JsxTagNameExpression, attributes: JsxAttributes) {
+    export function createJsxOpeningElement(tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes) {
         const node = <JsxOpeningElement>createSynthesizedNode(SyntaxKind.JsxOpeningElement);
         node.tagName = tagName;
+        node.typeArguments = typeArguments && createNodeArray(typeArguments);
         node.attributes = attributes;
         return node;
     }
 
-    export function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, attributes: JsxAttributes) {
+    export function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes) {
         return node.tagName !== tagName
+            || node.typeArguments !== typeArguments
             || node.attributes !== attributes
-            ? updateNode(createJsxOpeningElement(tagName, attributes), node)
+            ? updateNode(createJsxOpeningElement(tagName, typeArguments, attributes), node)
             : node;
     }
 

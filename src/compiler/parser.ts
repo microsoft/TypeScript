@@ -422,6 +422,7 @@ namespace ts {
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxOpeningElement:
                 return visitNode(cbNode, (<JsxOpeningLikeElement>node).tagName) ||
+                    visitNodes(cbNode, cbNodes, (<JsxOpeningLikeElement>node).typeArguments) ||
                     visitNode(cbNode, (<JsxOpeningLikeElement>node).attributes);
             case SyntaxKind.JsxAttributes:
                 return visitNodes(cbNode, cbNodes, (<JsxAttributes>node).properties);
@@ -4189,6 +4190,7 @@ namespace ts {
             }
 
             const tagName = parseJsxElementName();
+            const typeArguments = tryParseTypeArguments();
             const attributes = parseJsxAttributes();
 
             let node: JsxOpeningLikeElement;
@@ -4213,6 +4215,7 @@ namespace ts {
             }
 
             node.tagName = tagName;
+            node.typeArguments = typeArguments;
             node.attributes = attributes;
 
             return finishNode(node);

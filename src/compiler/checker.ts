@@ -14636,7 +14636,7 @@ namespace ts {
             return mapType(valueType, t => getJsxSignaturesParameterTypes(t, isJs, node));
         }
 
-        function getJsxSignaturesParameterTypes(valueType: Type, isJs: boolean, context: Node) {
+        function getJsxSignaturesParameterTypes(valueType: Type, isJs: boolean, context: JsxOpeningLikeElement) {
             // If the elemType is a string type, we have to return anyType to prevent an error downstream as we will try to find construct or call signature of the type
             if (valueType.flags & TypeFlags.String) {
                 return anyType;
@@ -14672,6 +14672,10 @@ namespace ts {
                     // We found no signatures at all, which is an error
                     return unknownType;
                 }
+            }
+
+            if (context.typeArguments) {
+                signatures = mapDefined(signatures, s => getJsxSignatureTypeArgumentInstantiation(s, context, isJs));
             }
 
             return getUnionType(map(signatures, ctor ? t => getJsxPropsTypeFromConstructSignature(t, isJs, context) : t => getJsxPropsTypeFromCallSignature(t, context)), UnionReduction.None);
@@ -15475,19 +15479,55 @@ namespace ts {
 
             // Instantiate in context of source type
             const instantiatedSignatures = [];
+            let candidateForTypeArgumentError: Signature;
+            let hasTypeArgumentError: boolean = !!node.typeArguments;
             for (const signature of signatures) {
                 if (signature.typeParameters) {
                     const isJavascript = isInJavaScriptFile(node);
-                    const inferenceContext = createInferenceContext(signature.typeParameters, signature, /*flags*/ isJavascript ? InferenceFlags.AnyDefault : InferenceFlags.None);
-                    const typeArguments = inferJsxTypeArguments(signature, node, inferenceContext);
-                    instantiatedSignatures.push(getSignatureInstantiation(signature, typeArguments, isJavascript));
+                    const typeArgumentInstantiated = getJsxSignatureTypeArgumentInstantiation(signature, node, isJavascript, /*reportErrors*/ false);
+                    if (typeArgumentInstantiated) {
+                        hasTypeArgumentError = false;
+                        instantiatedSignatures.push(typeArgumentInstantiated);
+                    }
+                    else {
+                        if (node.typeArguments && hasCorrectTypeArgumentArity(signature, node.typeArguments)) {
+                            candidateForTypeArgumentError = signature;
+                        }
+                        const inferenceContext = createInferenceContext(signature.typeParameters, signature, /*flags*/ isJavascript ? InferenceFlags.AnyDefault : InferenceFlags.None);
+                        const typeArguments = inferJsxTypeArguments(signature, node, inferenceContext);
+                        instantiatedSignatures.push(getSignatureInstantiation(signature, typeArguments, isJavascript));
+                    }
                 }
                 else {
                     instantiatedSignatures.push(signature);
                 }
             }
 
+            if (node.typeArguments && hasTypeArgumentError) {
+                if (candidateForTypeArgumentError) {
+                    checkTypeArguments(candidateForTypeArgumentError, node.typeArguments, /*reportErrors*/ true);
+                }
+                // Length check to avoid issuing an arity error on length=0, the "Type argument list cannot be empty" grammar error alone is fine
+                else if (node.typeArguments.length !== 0) {
+                    diagnostics.add(getTypeArgumentArityError(node, signatures, node.typeArguments));
+                }
+            }
+
             return getUnionType(map(instantiatedSignatures, getReturnTypeOfSignature), UnionReduction.Subtype);
+        }
+
+        function getJsxSignatureTypeArgumentInstantiation(signature: Signature, node: JsxOpeningLikeElement, isJavascript: boolean, reportErrors?: boolean) {
+            if (!node.typeArguments) {
+                return;
+            }
+            if (!hasCorrectTypeArgumentArity(signature, node.typeArguments)) {
+                return;
+            }
+            const args = checkTypeArguments(signature, node.typeArguments, reportErrors);
+            if (!args) {
+                return;
+            }
+            return getSignatureInstantiation(signature, args, isJavascript);
         }
 
         function getJsxNamespaceAt(location: Node) {
@@ -16750,13 +16790,7 @@ namespace ts {
                 spreadArgIndex = getSpreadArgumentIndex(args);
             }
 
-            // If the user supplied type arguments, but the number of type arguments does not match
-            // the declared number of type parameters, the call has an incorrect arity.
-            const numTypeParameters = length(signature.typeParameters);
-            const minTypeArgumentCount = getMinTypeArgumentCount(signature.typeParameters);
-            const hasRightNumberOfTypeArgs = !typeArguments ||
-                (typeArguments.length >= minTypeArgumentCount && typeArguments.length <= numTypeParameters);
-            if (!hasRightNumberOfTypeArgs) {
+            if (!hasCorrectTypeArgumentArity(signature, typeArguments)) {
                 return false;
             }
 
@@ -16774,6 +16808,15 @@ namespace ts {
             // If the call is incomplete, we should skip the lower bound check.
             const hasEnoughArguments = argCount >= signature.minArgumentCount;
             return callIsIncomplete || hasEnoughArguments;
+        }
+
+        function hasCorrectTypeArgumentArity(signature: Signature, typeArguments: NodeArray<TypeNode> | undefined) {
+            // If the user supplied type arguments, but the number of type arguments does not match
+            // the declared number of type parameters, the call has an incorrect arity.
+            const numTypeParameters = length(signature.typeParameters);
+            const minTypeArgumentCount = getMinTypeArgumentCount(signature.typeParameters);
+            return !typeArguments ||
+                (typeArguments.length >= minTypeArgumentCount && typeArguments.length <= numTypeParameters);
         }
 
         // If type has a single call signature and no other members, return that signature. Otherwise, return undefined.
@@ -17337,6 +17380,17 @@ namespace ts {
             }
         }
 
+        function getTypeArgumentArityError(node: Node, signatures: Signature[], typeArguments: NodeArray<TypeNode>) {
+            let min = Number.POSITIVE_INFINITY;
+            let max = Number.NEGATIVE_INFINITY;
+            for (const sig of signatures) {
+                min = Math.min(min, getMinTypeArgumentCount(sig.typeParameters));
+                max = Math.max(max, length(sig.typeParameters));
+            }
+            const paramCount = min < max ? min + "-" + max : min;
+            return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, paramCount, typeArguments.length);
+        }
+
         function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], fallbackError?: DiagnosticMessage): Signature {
             const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             const isDecorator = node.kind === SyntaxKind.Decorator;
@@ -17464,14 +17518,7 @@ namespace ts {
                 checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression).typeArguments, /*reportErrors*/ true, fallbackError);
             }
             else if (typeArguments && every(signatures, sig => length(sig.typeParameters) !== typeArguments.length)) {
-                let min = Number.POSITIVE_INFINITY;
-                let max = Number.NEGATIVE_INFINITY;
-                for (const sig of signatures) {
-                    min = Math.min(min, getMinTypeArgumentCount(sig.typeParameters));
-                    max = Math.max(max, length(sig.typeParameters));
-                }
-                const paramCount = min < max ? min + "-" + max : min;
-                diagnostics.add(createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, paramCount, typeArguments.length));
+                diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments));
             }
             else if (args) {
                 let min = Number.POSITIVE_INFINITY;
@@ -26678,6 +26725,7 @@ namespace ts {
         }
 
         function checkGrammarJsxElement(node: JsxOpeningLikeElement) {
+            checkGrammarTypeArguments(node, node.typeArguments);
             const seen = createUnderscoreEscapedMap<boolean>();
 
             for (const attr of node.attributes.properties) {
