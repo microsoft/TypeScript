@@ -435,7 +435,7 @@ namespace FourSlash {
             }
         }
 
-        private markerName(m: Marker): string {
+        public markerName(m: Marker): string {
             return ts.forEachEntry(this.testData.markerPositions, (marker, name) => {
                 if (marker === m) {
                     return name;
@@ -3768,6 +3768,10 @@ namespace FourSlashInterface {
             return this.state.getMarkerByName(name);
         }
 
+        public markerName(m: FourSlash.Marker) {
+            return this.state.markerName(m);
+        }
+
         public ranges(): FourSlash.Range[] {
             return this.state.getRanges();
         }
@@ -3809,6 +3813,7 @@ namespace FourSlashInterface {
             const markers = typeof a === "function" ? this.state.getMarkers() : a.map(m => this.state.getMarkerByName(m));
             this.state.goToEachMarker(markers, typeof a === "function" ? a : b);
         }
+
 
         public rangeStart(range: FourSlash.Range) {
             this.state.goToRangeStart(range);
