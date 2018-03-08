@@ -224,7 +224,7 @@ namespace ts {
                         case SyntaxKind.NoSubstitutionTemplateLiteral:
                             return EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate;
                         default:
-                            throw Debug.fail("Only 'NoSubstitutionTemplateLiteral's and 'TemplateTail's can be unterminated; got SyntaxKind #" + token);
+                            return Debug.fail("Only 'NoSubstitutionTemplateLiteral's and 'TemplateTail's can be unterminated; got SyntaxKind #" + token);
                     }
                 }
                 return lastOnTemplateStack === SyntaxKind.TemplateHead ? EndOfLineState.InTemplateSubstitutionPosition : undefined;
@@ -343,7 +343,7 @@ namespace ts {
             case EndOfLineState.None:
                 return { prefix: "" };
             default:
-                throw Debug.assertNever(lexState);
+                return Debug.assertNever(lexState);
         }
     }
 

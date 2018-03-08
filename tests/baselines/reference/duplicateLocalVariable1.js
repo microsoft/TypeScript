@@ -382,7 +382,7 @@ var TestRunner = /** @class */ (function () {
                 exception = true;
                 testResult = false;
                 if (typeof testcase.errorMessageRegEx === "string") {
-                    if (testcase.errorMessageRegEx === "") {
+                    if (testcase.errorMessageRegEx === "") { // Any error is fine
                         testResult = true;
                     }
                     else if (e.message) {

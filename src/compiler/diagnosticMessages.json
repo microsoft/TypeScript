@@ -2317,6 +2317,10 @@
         "category": "Error",
         "code": 2723
     },
+    "Module '{0}' has no exported member '{1}'. Did you mean '{2}'?": {
+        "category": "Error",
+        "code": 2724
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -3476,6 +3480,10 @@
         "category": "Message",
         "code": 6191
     },
+    "All imports in import declaration are unused.": {
+        "category": "Error",
+        "code": 6192
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3818,6 +3826,18 @@
         "category": "Suggestion",
         "code": 80001
     },
+    "This constructor function may be converted to a class declaration.": {
+        "category": "Suggestion",
+        "code": 80002
+    },
+    "Import may be converted to a default import.": {
+        "category": "Suggestion",
+        "code": 80003
+    },
+    "JSDoc types may be moved to TypeScript types.": {
+        "category": "Suggestion",
+        "code": 80004
+    },
 
     "Add missing 'super()' call": {
         "category": "Message",
@@ -3834,6 +3854,10 @@
     "Remove declaration for: '{0}'": {
         "category": "Message",
         "code": 90004
+    },
+    "Remove import from '{0}'": {
+        "category": "Message",
+        "code": 90005
     },
     "Implement interface '{0}'": {
         "category": "Message",

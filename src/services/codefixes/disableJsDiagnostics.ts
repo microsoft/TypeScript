@@ -9,60 +9,69 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
-            const { sourceFile, program, span } = context;
+            const { sourceFile, program, span, host, formatContext } = context;
 
             if (!isInJavaScriptFile(sourceFile) || !isCheckJsEnabledForFile(sourceFile, program.getCompilerOptions())) {
                 return undefined;
             }
 
-            const newLineCharacter = getNewLineOrDefaultFromHost(context.host, context.formatContext.options);
+            const fixes: CodeFixAction[] = [
+                {
+                    description: getLocaleSpecificMessage(Diagnostics.Disable_checking_for_this_file),
+                    changes: [createFileTextChanges(sourceFile.fileName, [
+                        createTextChange(sourceFile.checkJsDirective
+                            ? createTextSpanFromBounds(sourceFile.checkJsDirective.pos, sourceFile.checkJsDirective.end)
+                            : createTextSpan(0, 0), `// @ts-nocheck${getNewLineOrDefaultFromHost(host, formatContext.options)}`),
+                    ])],
+                    // fixId unnecessary because adding `// @ts-nocheck` even once will ignore every error in the file.
+                    fixId: undefined,
+                }];
 
-            return [{
-                description: getLocaleSpecificMessage(Diagnostics.Ignore_this_error_message),
-                changes: [createFileTextChanges(sourceFile.fileName, [getIgnoreCommentLocationForLocation(sourceFile, span.start, newLineCharacter).change])],
-                fixId,
-            },
-            {
-                description: getLocaleSpecificMessage(Diagnostics.Disable_checking_for_this_file),
-                changes: [createFileTextChanges(sourceFile.fileName, [
-                    createTextChange(sourceFile.checkJsDirective ? createTextSpanFromBounds(sourceFile.checkJsDirective.pos, sourceFile.checkJsDirective.end) : createTextSpan(0, 0), `// @ts-nocheck${newLineCharacter}`),
-                ])],
-                // fixId unnecessary because adding `// @ts-nocheck` even once will ignore every error in the file.
-                fixId: undefined,
-            }];
+            if (isValidSuppressLocation(sourceFile, span.start)) {
+                fixes.unshift({
+                    description: getLocaleSpecificMessage(Diagnostics.Ignore_this_error_message),
+                    changes: textChanges.ChangeTracker.with(context, t => makeChange(t, sourceFile, span.start)),
+                    fixId,
+                });
+            }
+
+            return fixes;
         },
         fixIds: [fixId],
         getAllCodeActions: context => {
-            const seenLines = createMap<true>(); // Only need to add `// @ts-ignore` for a line once.
-            return codeFixAllWithTextChanges(context, errorCodes, (changes, err) => {
-                if (err.start !== undefined) {
-                    const { lineNumber, change } = getIgnoreCommentLocationForLocation(err.file!, err.start, getNewLineOrDefaultFromHost(context.host, context.formatContext.options));
-                    if (addToSeen(seenLines, lineNumber)) {
-                        changes.push(change);
-                    }
+            const seenLines = createMap<true>();
+            return codeFixAll(context, errorCodes, (changes, diag) => {
+                if (isValidSuppressLocation(diag.file!, diag.start!)) {
+                    makeChange(changes, diag.file!, diag.start!, seenLines);
                 }
             });
         },
     });
 
-    function getIgnoreCommentLocationForLocation(sourceFile: SourceFile, position: number, newLineCharacter: string): { lineNumber: number, change: TextChange } {
+    function isValidSuppressLocation(sourceFile: SourceFile, position: number) {
+        return !isInComment(sourceFile, position) && !isInString(sourceFile, position) && !isInTemplateString(sourceFile, position);
+    }
+
+    function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, seenLines?: Map<true>) {
         const { line: lineNumber } = getLineAndCharacterOfPosition(sourceFile, position);
+
+        // Only need to add `// @ts-ignore` for a line once.
+        if (seenLines && !addToSeen(seenLines, lineNumber)) {
+            return;
+        }
+
         const lineStartPosition = getStartPositionOfLine(lineNumber, sourceFile);
         const startPosition = getFirstNonSpaceCharacterPosition(sourceFile.text, lineStartPosition);
 
         // First try to see if we can put the '// @ts-ignore' on the previous line.
         // We need to make sure that we are not in the middle of a string literal or a comment.
-        // We also want to check if the previous line holds a comment for a node on the next line
-        // if so, we do not want to separate the node from its comment if we can.
-        if (!isInComment(sourceFile, startPosition) && !isInString(sourceFile, startPosition) && !isInTemplateString(sourceFile, startPosition)) {
-            const token = getTouchingToken(sourceFile, startPosition, /*includeJsDocComment*/ false);
-            const tokenLeadingComments = getLeadingCommentRangesOfNode(token, sourceFile);
-            if (!tokenLeadingComments || !tokenLeadingComments.length || tokenLeadingComments[0].pos >= startPosition) {
-                return { lineNumber, change: createTextChangeFromStartLength(startPosition, 0, `// @ts-ignore${newLineCharacter}`) };
-            }
-        }
+        // If so, we do not want to separate the node from its comment if we can.
+        // Otherwise, add an extra new line immediately before the error span.
+        const insertAtLineStart = isValidSuppressLocation(sourceFile, startPosition);
 
-        // If all fails, add an extra new line immediately before the error span.
-        return { lineNumber, change: createTextChangeFromStartLength(position, 0, `${position === startPosition ? "" : newLineCharacter}// @ts-ignore${newLineCharacter}`) };
+        const token = getTouchingToken(sourceFile, insertAtLineStart ? startPosition : position, /*includeJsDocComment*/ false);
+        const clone = setStartsOnNewLine(getSynthesizedDeepClone(token), true);
+        addSyntheticLeadingComment(clone, SyntaxKind.SingleLineCommentTrivia, " @ts-ignore");
+        changes.replaceNode(sourceFile, token, clone, { preserveLeadingWhitespace: true, prefix: insertAtLineStart ? undefined : changes.newLineCharacter });
     }
 }

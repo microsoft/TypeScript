@@ -318,7 +318,7 @@ namespace ts.JsTyping {
             case PackageNameValidationResult.NameContainsNonURISafeCharacters:
                 return `Package name '${typing}' contains non URI safe characters`;
             case PackageNameValidationResult.Ok:
-                throw Debug.fail(); // Shouldn't have called this.
+                return Debug.fail(); // Shouldn't have called this.
             default:
                 Debug.assertNever(result);
         }

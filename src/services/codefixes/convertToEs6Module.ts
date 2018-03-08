@@ -495,9 +495,13 @@ namespace ts.codefix {
             : makeImport(/*name*/ undefined, [makeImportSpecifier(propertyName, localName)], moduleSpecifier);
     }
 
-    function makeImport(name: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier>, moduleSpecifier: string): ImportDeclaration {
+    function makeImport(name: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string): ImportDeclaration {
+        return makeImportDeclaration(name, namedImports, createLiteral(moduleSpecifier));
+    }
+
+    export function makeImportDeclaration(name: Identifier, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: Expression) {
         const importClause = (name || namedImports) && createImportClause(name, namedImports && createNamedImports(namedImports));
-        return createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, importClause, createLiteral(moduleSpecifier));
+        return createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, importClause, moduleSpecifier);
     }
 
     function makeImportSpecifier(propertyName: string | undefined, name: string): ImportSpecifier {

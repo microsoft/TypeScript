@@ -10,6 +10,7 @@ No type information for this code.=== tests/cases/conformance/jsx/3.tsx ===
 No type information for this code.=== tests/cases/conformance/jsx/4.tsx ===
 <a b=d />;
 >b : Symbol(b, Decl(4.tsx, 0, 2))
+>d : Symbol(d, Decl(4.tsx, 0, 5))
 
 === tests/cases/conformance/jsx/5.tsx ===
 <a>;
