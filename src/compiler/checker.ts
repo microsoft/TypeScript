@@ -22851,8 +22851,7 @@ namespace ts {
                                      return "quit";
                                  }
                                  if (current.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>current).label.escapedText === node.label.escapedText) {
-                                     const sourceFile = getSourceFileOfNode(node);
-                                     grammarErrorOnNode(node.label, Diagnostics.Duplicate_label_0, getTextOfNodeFromSourceText(sourceFile.text, node.label));
+                                     grammarErrorOnNode(node.label, Diagnostics.Duplicate_label_0, getTextOfNode(node.label));
                                      return true;
                                  }
                              });
