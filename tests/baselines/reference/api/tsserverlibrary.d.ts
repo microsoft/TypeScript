@@ -2855,11 +2855,6 @@ declare namespace ts {
     }
     type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind) => void;
     type DirectoryWatcherCallback = (fileName: string) => void;
-    interface WatchedFile {
-        fileName: string;
-        callback: FileWatcherCallback;
-        mtime?: Date;
-    }
     interface System {
         args: string[];
         newLine: string;
@@ -7832,7 +7827,6 @@ declare namespace ts.server {
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects;
         constructor(opts: ProjectServiceOptions);
-        private createWatcherLog(watchType, project);
         toPath(fileName: string): Path;
         private loadTypesMap();
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void;
@@ -7854,7 +7848,7 @@ declare namespace ts.server {
         private ensureProjectStructuresUptoDate();
         private updateProjectIfDirty(project);
         getFormatCodeOptions(file?: NormalizedPath): FormatCodeSettings;
-        private onSourceFileChanged(fileName, eventKind);
+        private onSourceFileChanged(fileName, eventKind, path);
         private handleDeletedFile(info);
         private onConfigChangedForConfiguredProject(project, eventKind);
         /**
