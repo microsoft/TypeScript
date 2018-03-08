@@ -54,7 +54,7 @@ namespace ts.codefix {
                     if (paramType) changes.insertTypeAnnotation(sourceFile, param, transformJSDocType(paramType));
                 }
             }
-            if (needParens) changes.insertNodeAfter(sourceFile, first(decl.parameters), createToken(SyntaxKind.CloseParenToken));
+            if (needParens) changes.insertNodeAfter(sourceFile, last(decl.parameters), createToken(SyntaxKind.CloseParenToken));
             if (!decl.type) {
                 const returnType = getJSDocReturnType(decl);
                 if (returnType) changes.insertTypeAnnotation(sourceFile, decl, transformJSDocType(returnType));
