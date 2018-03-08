@@ -2539,7 +2539,6 @@ namespace ts {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
 
-        const comparer = useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
         const patterns = getFileMatcherPatterns(path, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
 
         const regexFlag = useCaseSensitiveFileNames ? "" : "i";
@@ -2560,7 +2559,7 @@ namespace ts {
         function visitDirectory(path: string, absolutePath: string, depth: number | undefined) {
             const { files, directories } = getFileSystemEntries(path);
 
-            for (const current of sort(files, comparer)) {
+            for (const current of sort(files, compareStringsCaseSensitive)) {
                 const name = combinePaths(path, current);
                 const absoluteName = combinePaths(absolutePath, current);
                 if (extensions && !fileExtensionIsOneOf(name, extensions)) continue;
@@ -2583,7 +2582,7 @@ namespace ts {
                 }
             }
 
-            for (const current of sort(directories, comparer)) {
+            for (const current of sort(directories, compareStringsCaseSensitive)) {
                 const name = combinePaths(path, current);
                 const absoluteName = combinePaths(absolutePath, current);
                 if ((!includeDirectoryRegex || includeDirectoryRegex.test(absoluteName)) &&
