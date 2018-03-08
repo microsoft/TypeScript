@@ -16,7 +16,7 @@ function makePoint(x) {
 }
 ;
 var /*4*/ point = makePoint(2);
-var /*2*/ x = point.x;
+var /*2*/ x = point. /*3*/x;
 
 
 //// [declFileObjectLiteralWithOnlyGetter.d.ts]

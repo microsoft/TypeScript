@@ -1545,10 +1545,10 @@ namespace ts {
         let isDebugInfoEnabled = false;
 
         export const failBadSyntaxKind = shouldAssert(AssertionLevel.Normal)
-            ? (node: Node, message?: string): void => fail(
+            ? (node: Node, message?: string): never => fail(
                 `${message || "Unexpected node."}\r\nNode ${formatSyntaxKind(node.kind)} was unexpected.`,
                 failBadSyntaxKind)
-            : noop;
+            : noop as () => never; // TODO: GH#22091
 
         export const assertEachNode = shouldAssert(AssertionLevel.Normal)
             ? (nodes: Node[], test: (node: Node) => boolean, message?: string): void => assert(

@@ -73,8 +73,8 @@ var fooFunc = function FooFunctionValue(/** fooFunctionValue param */ b) {
     return b;
 };
 /// lamdaFoo var comment
-var lambdaFoo = function (/**param a*/ a, /**param b*/ b) { return a + b; };
-var lambddaNoVarComment = function (/**param a*/ a, /**param b*/ b) { return a * b; };
+var lambdaFoo = /** this is lambda comment*/ function (/**param a*/ a, /**param b*/ b) { return a + b; };
+var lambddaNoVarComment = /** this is lambda multiplication*/ function (/**param a*/ a, /**param b*/ b) { return a * b; };
 lambdaFoo(10, 20);
 lambddaNoVarComment(10, 20);
 function blah(a /* multiline trailing comment

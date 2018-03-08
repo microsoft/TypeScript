@@ -848,7 +848,7 @@ namespace FourSlash {
             const actual = actualCompletions.entries;
 
             if (actual.length !== expected.length) {
-                this.raiseError(`Expected ${expected.length} completions, got ${actual.map(a => a.name)}.`);
+                this.raiseError(`Expected ${expected.length} completions, got ${actual.length} (${actual.map(a => a.name)}).`);
             }
 
             ts.zipWith(actual, expected, (completion, expectedCompletion, index) => {
@@ -2923,6 +2923,10 @@ Actual: ${stringify(fullActual)}`);
             if (!codeFixes.length) {
                 this.raiseError(`verifyCodeFixAvailable failed - expected code fixes but none found.`);
             }
+            codeFixes.forEach(fix => fix.changes.forEach(change => {
+                assert.isObject(change, `Invalid change in code fix: ${JSON.stringify(fix)}`);
+                change.textChanges.forEach(textChange => assert.isObject(textChange, `Invalid textChange in codeFix: ${JSON.stringify(fix)}`));
+            }));
             if (info) {
                 assert.equal(info.length, codeFixes.length);
                 ts.zipWith(codeFixes, info, (fix, info) => {
@@ -3329,7 +3333,7 @@ ${code}
         const ranges: Range[] = [];
 
         // Stuff related to the subfile we're parsing
-        let currentFileContent: string = undefined;
+        let currentFileContent: string;
         let currentFileName = fileName;
         let currentFileSymlinks: string[] | undefined;
         let currentFileOptions: { [s: string]: string } = {};
@@ -3464,7 +3468,7 @@ ${code}
     }
 
     function recordObjectMarker(fileName: string, location: LocationInformation, text: string, markerMap: ts.Map<Marker>, markers: Marker[]): Marker {
-        let markerValue: any = undefined;
+        let markerValue: any;
         try {
             // Attempt to parse the marker value as JSON
             markerValue = JSON.parse("{ " + text + " }");
@@ -3523,7 +3527,7 @@ ${code}
         let output = "";
 
         /// The current marker (or maybe multi-line comment?) we're parsing, possibly
-        let openMarker: LocationInformation = undefined;
+        let openMarker: LocationInformation;
 
         /// A stack of the open range markers that are still unclosed
         const openRanges: RangeLocationInformation[] = [];

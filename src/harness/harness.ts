@@ -145,7 +145,7 @@ namespace Utils {
             path = "tests/" + path;
         }
 
-        let content: string = undefined;
+        let content: string;
         try {
             content = Harness.IO.readFile(Harness.userSpecifiedRoot + path);
         }
@@ -1891,9 +1891,9 @@ namespace Harness {
             const lines = Utils.splitContentByNewlines(code);
 
             // Stuff related to the subfile we're parsing
-            let currentFileContent: string = undefined;
+            let currentFileContent: string;
             let currentFileOptions: any = {};
-            let currentFileName: any = undefined;
+            let currentFileName: any;
             let refs: string[] = [];
 
             for (const line of lines) {

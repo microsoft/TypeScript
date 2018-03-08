@@ -90,6 +90,15 @@ type T76<T extends T[], U extends T> = { x: T };
 type T77<T> = T extends T76<infer X, infer Y> ? T76<X, Y> : never;
 type T78<T> = T extends T76<infer X, infer X> ? T76<X, X> : never;
 
+type Foo<T extends string, U extends T> = [T, U];
+type Bar<T> = T extends Foo<infer X, infer Y> ? Foo<X, Y> : never;
+
+type T90 = Bar<[string, string]>;  // [string, string]
+type T91 = Bar<[string, "a"]>;  // [string, "a"]
+type T92 = Bar<[string, "a"] & { x: string }>;  // [string, "a"]
+type T93 = Bar<["a", string]>;  // never
+type T94 = Bar<[number, number]>;  // never
+
 // Example from #21496
 
 type JsonifiedObject<T extends object> = { [K in keyof T]: Jsonified<T[K]> };
@@ -135,3 +144,26 @@ type C2<S, U extends void> = S extends A2<infer T, U> ? [T, U] : never;
 
 type A<T> = T extends string ? { [P in T]: void; } : T;
 type B<T> = string extends T ? { [P in T]: void; } : T;  // Error
+
+// Repro from #22302
+
+type MatchingKeys<T, U, K extends keyof T = keyof T> =
+    K extends keyof T ? T[K] extends U ? K : never : never;
+
+type VoidKeys<T> = MatchingKeys<T, void>;
+
+interface test {
+    a: 1,
+    b: void
+}
+
+type T80 = MatchingKeys<test, void>;
+type T81 = VoidKeys<test>;
+
+// Repro from #22221
+
+type MustBeString<T extends string> = T;
+type EnsureIsString<T> = T extends MustBeString<infer U> ? U : never;
+
+type Test1 = EnsureIsString<"hello">;  // "hello"
+type Test2 = EnsureIsString<42>;  // never

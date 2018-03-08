@@ -9,7 +9,6 @@
 
 verify.getSuggestionDiagnostics([{
     message: "File is a CommonJS module; it may be converted to an ES6 module.",
-    category: "suggestion",
     code: 80001,
 }]);
 

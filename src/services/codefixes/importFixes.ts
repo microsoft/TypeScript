@@ -699,7 +699,7 @@ namespace ts.codefix {
                 // Fall back to the `import * as ns` style import.
                 return ImportKind.Namespace;
             default:
-                throw Debug.assertNever(moduleKind);
+                return Debug.assertNever(moduleKind);
         }
     }
 

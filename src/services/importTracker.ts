@@ -63,7 +63,7 @@ namespace ts.FindAllReferences {
             // Module augmentations may use this module's exports without importing it.
             for (const decl of exportingModuleSymbol.declarations) {
                 if (isExternalModuleAugmentation(decl)) {
-                    addIndirectUser(decl as SourceFileLike);
+                    addIndirectUser(decl);
                 }
             }
 

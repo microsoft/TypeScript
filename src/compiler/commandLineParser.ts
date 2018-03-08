@@ -151,10 +151,10 @@ namespace ts {
                     "es2017.string": "lib.es2017.string.d.ts",
                     "es2017.intl": "lib.es2017.intl.d.ts",
                     "es2017.typedarrays": "lib.es2017.typedarrays.d.ts",
+                    "es2018.promise": "lib.es2018.promise.d.ts",
                     "es2018.regexp": "lib.es2018.regexp.d.ts",
                     "esnext.array": "lib.esnext.array.d.ts",
                     "esnext.asynciterable": "lib.esnext.asynciterable.d.ts",
-                    "esnext.promise": "lib.esnext.promise.d.ts",
                 }),
             },
             showInSimplifiedHelpView: true,
@@ -2029,7 +2029,7 @@ namespace ts {
     export function getFileNamesFromConfigSpecs(spec: ConfigFileSpecs, basePath: string, options: CompilerOptions, host: ParseConfigHost, extraFileExtensions: ReadonlyArray<JsFileExtensionInfo> = []): ExpandResult {
         basePath = normalizePath(basePath);
 
-        const keyMapper = host.useCaseSensitiveFileNames ? caseSensitiveKeyMapper : caseInsensitiveKeyMapper;
+        const keyMapper = host.useCaseSensitiveFileNames ? identity : toLowerCase;
 
         // Literal file names (provided via the "files" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map later when when including
@@ -2231,24 +2231,6 @@ namespace ts {
             const lowerPriorityPath = keyMapper(changeExtension(file, lowerPriorityExtension));
             wildcardFiles.delete(lowerPriorityPath);
         }
-    }
-
-    /**
-     * Gets a case sensitive key.
-     *
-     * @param key The original key.
-     */
-    function caseSensitiveKeyMapper(key: string) {
-        return key;
-    }
-
-    /**
-     * Gets a case insensitive key.
-     *
-     * @param key The original key.
-     */
-    function caseInsensitiveKeyMapper(key: string) {
-        return key.toLowerCase();
     }
 
     /**
