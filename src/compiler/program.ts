@@ -2191,10 +2191,6 @@ namespace ts {
                 }
             }
 
-            if (!options.noEmit && options.allowJs && options.declaration) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration");
-            }
-
             if (options.checkJs && !options.allowJs) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "checkJs", "allowJs"));
             }

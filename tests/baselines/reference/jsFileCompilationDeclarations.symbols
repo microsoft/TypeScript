@@ -1,0 +1,240 @@
+=== tests/cases/compiler/a.js ===
+//
+// Variables
+//
+
+/**
+ * @type {string}
+ */
+var var1;
+>var1 : Symbol(var1, Decl(a.js, 7, 3))
+
+/** @type {Window} */
+var var2;
+>var2 : Symbol(var2, Decl(a.js, 10, 3))
+
+/** @type {PromiseLike<string>} */
+var var3;
+>var3 : Symbol(var3, Decl(a.js, 13, 3))
+
+/**
+ * The type specifier can specify a union type - e.g. a string or a boolean
+ * @type {(string | boolean)}
+ */
+var var4;
+>var4 : Symbol(var4, Decl(a.js, 19, 3))
+
+/**
+ * Note that parens are options for union types
+ * @type {string | boolean}
+ */
+var var5;
+>var5 : Symbol(var5, Decl(a.js, 25, 3))
+
+
+// You can specify an array type (e.g. an array of numbers)
+/** @type {number[]} */
+var var6;
+>var6 : Symbol(var6, Decl(a.js, 30, 3))
+
+// An array of numbers (alternate syntax)
+/** @type {Array.<number>} */
+var var7;
+>var7 : Symbol(var7, Decl(a.js, 34, 3))
+
+/** @type {Array<number>} */
+var var8;
+>var8 : Symbol(var8, Decl(a.js, 37, 3))
+
+
+// An object specification may also be used within the braces
+// For example, an object used as a boolean map
+/** @type {{[a: string]: boolean}} */
+var var9;
+>var9 : Symbol(var9, Decl(a.js, 43, 3))
+
+//
+// Typedefs
+//
+
+// "@typedef" maybe used to define complex types
+/**
+ * @typedef {Object} SpecialType - creates a new type named 'SpecialType'
+ * @property {string} prop1 - a string property of SpecialType
+ * @property {number} prop2 - a number property of SpecialType
+ * @property {number=} prop3 - an optional number property of SpecialType
+ * @prop {number} [prop4] - an optional number property of SpecialType
+ * @prop {number} [prop5=42] - an optional number property of SpecialType with default value
+ */
+/** @type {SpecialType} */
+var specialTypeObject;
+>specialTypeObject : Symbol(specialTypeObject, Decl(a.js, 59, 3))
+
+// You can use both 'object' and 'Object'
+/**
+ * @typedef {object} SpecialType1 - creates a new type named 'SpecialType'
+ * @property {string} prop1 - a string property of SpecialType
+ * @property {number} prop2 - a number property of SpecialType
+ * @property {number=} prop3 - an optional number property of SpecialType
+ */
+/** @type {SpecialType1} */
+var specialTypeObject1;
+>specialTypeObject1 : Symbol(specialTypeObject1, Decl(a.js, 69, 3))
+
+
+//
+// Functions
+//
+
+// Likewise, for the return type of a function
+/**
+ * @return {PromiseLike<string>}
+ */
+function fn1() { }
+>fn1 : Symbol(fn1, Decl(a.js, 69, 23))
+
+/**
+ * @returns {{a: string, b: number}} - May use '@returns' as well as '@return'
+ */
+function fn2() { }
+>fn2 : Symbol(fn2, Decl(a.js, 80, 18))
+
+
+// Parameters may be declared in a variety of syntactic forms
+/**
+ * @param p0 {string} - A string param declared using TS-style
+ * @param {string}  p1 - A string param.
+ * @param {string=} p2 - An optional param
+ * @param {string} [p3] - Another optional param.
+ * @param {string} [p4="test"] - An optional param with a default value
+ * @return {string} This is the result
+ */
+function fn3(p0, p1, p2, p3, p4) {
+>fn3 : Symbol(fn3, Decl(a.js, 85, 18))
+>p0 : Symbol(p0, Decl(a.js, 97, 13))
+>p1 : Symbol(p1, Decl(a.js, 97, 16))
+>p2 : Symbol(p2, Decl(a.js, 97, 20))
+>p3 : Symbol(p3, Decl(a.js, 97, 24))
+>p4 : Symbol(p4, Decl(a.js, 97, 28))
+
+  // TODO
+}
+
+
+// Generic types may also be used
+/**
+ * @template T
+ * @param {T} p1 - A generic parameter that flows through to the return type
+ * @return {T}
+ */
+function fn4(p1) { }
+>fn4 : Symbol(fn4, Decl(a.js, 99, 1))
+>p1 : Symbol(p1, Decl(a.js, 108, 13))
+
+// Define function type
+/** @type {function(string, boolean): number} */
+var fn5;
+>fn5 : Symbol(fn5, Decl(a.js, 112, 3))
+
+// Both "fn6" and "fn7" have same type of Function type.
+/** @type {function} */
+var fn6;
+>fn6 : Symbol(fn6, Decl(a.js, 116, 3))
+
+/** @type {Function} */
+var fn7;
+>fn7 : Symbol(fn7, Decl(a.js, 119, 3))
+
+/**
+ * @param {*} p1 - Param can be 'any' type
+ * @param {?} p2 - Param is of unknown type (same as 'any')
+ */
+function fn8(p1, p2) { }
+>fn8 : Symbol(fn8, Decl(a.js, 119, 8))
+>p1 : Symbol(p1, Decl(a.js, 125, 13))
+>p2 : Symbol(p2, Decl(a.js, 125, 16))
+
+var someObj = {
+>someObj : Symbol(someObj, Decl(a.js, 127, 3))
+
+  /**
+   * @param {string} param1 - Docs on property assignments work
+   */
+  x: function (param1) { }
+>x : Symbol(x, Decl(a.js, 127, 15))
+>param1 : Symbol(param1, Decl(a.js, 131, 15))
+
+};
+
+/**
+ * As do docs on variable assignments
+ * @return {Window}
+ */
+let someFunc = function () { };
+>someFunc : Symbol(someFunc, Decl(a.js, 138, 3))
+
+var Foo = function() {}
+>Foo : Symbol(Foo, Decl(a.js, 140, 3))
+
+/**
+ * And class methods
+ * @param {string} greeting The greeting to use
+ */
+Foo.prototype.sayHi = (greeting) => console.log("Hi!");
+>Foo.prototype : Symbol(Foo.sayHi, Decl(a.js, 140, 23))
+>Foo : Symbol(Foo, Decl(a.js, 140, 3))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>sayHi : Symbol(Foo.sayHi, Decl(a.js, 140, 23))
+>greeting : Symbol(greeting, Decl(a.js, 146, 23))
+
+/**
+ * And arrow functions expressions
+ * @param {number} x - A multiplier
+ */
+let myArrow = x => x * x;
+>myArrow : Symbol(myArrow, Decl(a.js, 152, 3))
+>x : Symbol(x, Decl(a.js, 152, 13))
+>x : Symbol(x, Decl(a.js, 152, 13))
+>x : Symbol(x, Decl(a.js, 152, 13))
+
+
+/**
+ * A parameter can be a class constructor.
+ *
+ * @param {{new(...args: any[]): object}} C - The class to register
+ */
+function registerClass(C) { }
+>registerClass : Symbol(registerClass, Decl(a.js, 152, 25))
+>C : Symbol(C, Decl(a.js, 160, 23))
+
+/**
+ * ES6 Classes
+ */
+class IconComponent {
+>IconComponent : Symbol(IconComponent, Decl(a.js, 160, 29))
+
+  /** @readonly */
+  static observedAttributes() {
+>observedAttributes : Symbol(IconComponent.observedAttributes, Decl(a.js, 165, 21))
+
+    return ['icon']
+  }
+
+  constructor() {}
+
+  /**
+   * @param name {string}
+   * @param oldValue {null | string}
+   * @param newValue {null | string}
+   */
+  attributeChangedCallback(name, oldValue, newValue) {}
+>attributeChangedCallback : Symbol(IconComponent.attributeChangedCallback, Decl(a.js, 171, 18))
+>name : Symbol(name, Decl(a.js, 178, 27))
+>oldValue : Symbol(oldValue, Decl(a.js, 178, 32))
+>newValue : Symbol(newValue, Decl(a.js, 178, 42))
+
+  /** @private */
+  _render() {}
+>_render : Symbol(IconComponent._render, Decl(a.js, 178, 55))
+}
+

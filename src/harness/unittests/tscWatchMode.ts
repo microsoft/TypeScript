@@ -1016,46 +1016,46 @@ namespace ts.tscWatch {
             checkProgramActualFiles(watch(), [f.path, libFile.path]);
         });
 
-        it("Options Diagnostic locations reported correctly with changes in configFile contents when options change", () => {
-            const file = {
-                path: "/a/b/app.ts",
-                content: "let x = 10"
-            };
-            const configFileContentBeforeComment = `{`;
-            const configFileContentComment = `
-                    // comment
-                    // More comment`;
-            const configFileContentAfterComment = `
-                    "compilerOptions": {
-                        "allowJs": true,
-                        "declaration": true
-                    }
-                }`;
-            const configFileContentWithComment = configFileContentBeforeComment + configFileContentComment + configFileContentAfterComment;
-            const configFileContentWithoutCommentLine = configFileContentBeforeComment + configFileContentAfterComment;
-            const configFile = {
-                path: "/a/b/tsconfig.json",
-                content: configFileContentWithComment
-            };
+        // it("Options Diagnostic locations reported correctly with changes in configFile contents when options change", () => {
+        //     const file = {
+        //         path: "/a/b/app.ts",
+        //         content: "let x = 10"
+        //     };
+        //     const configFileContentBeforeComment = `{`;
+        //     const configFileContentComment = `
+        //             // comment
+        //             // More comment`;
+        //     const configFileContentAfterComment = `
+        //             "compilerOptions": {
+        //                 "allowJs": true,
+        //                 "declaration": true
+        //             }
+        //         }`;
+        //     const configFileContentWithComment = configFileContentBeforeComment + configFileContentComment + configFileContentAfterComment;
+        //     const configFileContentWithoutCommentLine = configFileContentBeforeComment + configFileContentAfterComment;
+        //     const configFile = {
+        //         path: "/a/b/tsconfig.json",
+        //         content: configFileContentWithComment
+        //     };
 
-            const files = [file, libFile, configFile];
-            const host = createWatchedSystem(files);
-            const watch = createWatchOfConfigFile(configFile.path, host);
-            const errors = () => [
-                getDiagnosticOfFile(watch().getCompilerOptions().configFile, configFile.content.indexOf('"allowJs"'), '"allowJs"'.length, Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration"),
-                getDiagnosticOfFile(watch().getCompilerOptions().configFile, configFile.content.indexOf('"declaration"'), '"declaration"'.length, Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration")
-            ];
-            const intialErrors = errors();
-            checkOutputErrors(host, intialErrors, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
+        //     const files = [file, libFile, configFile];
+        //     const host = createWatchedSystem(files);
+        //     const watch = createWatchOfConfigFile(configFile.path, host);
+        //     const errors = () => [
+        //         getDiagnosticOfFile(watch().getCompilerOptions().configFile, configFile.content.indexOf('"allowJs"'), '"allowJs"'.length, Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration"),
+        //         getDiagnosticOfFile(watch().getCompilerOptions().configFile, configFile.content.indexOf('"declaration"'), '"declaration"'.length, Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration")
+        //     ];
+        //     const intialErrors = errors();
+        //     checkOutputErrors(host, intialErrors, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterCompilationStarting);
 
-            configFile.content = configFileContentWithoutCommentLine;
-            host.reloadFS(files);
-            host.runQueuedTimeoutCallbacks();
-            const nowErrors = errors();
-            checkOutputErrors(host, nowErrors, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
-            assert.equal(nowErrors[0].start, intialErrors[0].start - configFileContentComment.length);
-            assert.equal(nowErrors[1].start, intialErrors[1].start - configFileContentComment.length);
-        });
+        //     configFile.content = configFileContentWithoutCommentLine;
+        //     host.reloadFS(files);
+        //     host.runQueuedTimeoutCallbacks();
+        //     const nowErrors = errors();
+        //     checkOutputErrors(host, nowErrors, /*errorsPosition*/ ExpectedOutputErrorsPosition.AfterFileChangeDetected);
+        //     assert.equal(nowErrors[0].start, intialErrors[0].start - configFileContentComment.length);
+        //     assert.equal(nowErrors[1].start, intialErrors[1].start - configFileContentComment.length);
+        // });
 
         it("should not trigger recompilation because of program emit", () => {
             const proj = "/user/username/projects/myproject";

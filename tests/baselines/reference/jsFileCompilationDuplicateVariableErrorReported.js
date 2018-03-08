@@ -13,3 +13,4 @@ var x = 10; // Error reported so no declaration file generated?
 
 //// [out.d.ts]
 declare var x: string;
+declare var x: string;
