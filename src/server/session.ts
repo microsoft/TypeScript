@@ -1087,9 +1087,21 @@ namespace ts.server {
             return { file, project };
         }
 
-        private getOutliningSpans(args: protocol.FileRequestArgs) {
+        private getOutliningSpans(args: protocol.FileRequestArgs, simplifiedResult: boolean): protocol.OutliningSpan[] | OutliningSpan[] {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
-            return languageService.getOutliningSpans(file);
+            const spans = languageService.getOutliningSpans(file);
+            if (simplifiedResult) {
+                const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
+                return spans.map(s => ({
+                    textSpan: this.toLocationTextSpan(s.textSpan, scriptInfo),
+                    hintSpan: this.toLocationTextSpan(s.hintSpan, scriptInfo),
+                    bannerText: s.bannerText,
+                    autoCollapse: s.autoCollapse
+                }));
+            }
+            else {
+                return spans;
+            }
         }
 
         private getTodoComments(args: protocol.TodoCommentRequestArgs) {
@@ -1893,8 +1905,11 @@ namespace ts.server {
             [CommandNames.QuickinfoFull]: (request: protocol.QuickInfoRequest) => {
                 return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.OutliningSpans]: (request: protocol.FileRequest) => {
-                return this.requiredResponse(this.getOutliningSpans(request.arguments));
+            [CommandNames.GetOutliningSpans]: (request: protocol.FileRequest) => {
+                return this.requiredResponse(this.getOutliningSpans(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.GetOutliningSpansFull]: (request: protocol.FileRequest) => {
+                return this.requiredResponse(this.getOutliningSpans(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.TodoComments]: (request: protocol.TodoCommentRequest) => {
                 return this.requiredResponse(this.getTodoComments(request.arguments));
