@@ -7238,7 +7238,7 @@ namespace ts {
             forEachChild(sourceFile, visit);
 
             if (lastNodeEntirelyBeforePosition) {
-                const lastChildOfLastEntireNodeBeforePosition = getLastChild(lastNodeEntirelyBeforePosition);
+                const lastChildOfLastEntireNodeBeforePosition = getLastDescendant(lastNodeEntirelyBeforePosition);
                 if (lastChildOfLastEntireNodeBeforePosition.pos > bestResult.pos) {
                     bestResult = lastChildOfLastEntireNodeBeforePosition;
                 }
@@ -7246,9 +7246,9 @@ namespace ts {
 
             return bestResult;
 
-            function getLastChild(node: Node): Node {
+            function getLastDescendant(node: Node): Node {
                 while (true) {
-                    const lastChild = getLastChildWorker(node);
+                    const lastChild = getLastChild(node);
                     if (lastChild) {
                         node = lastChild;
                     }
@@ -7256,16 +7256,6 @@ namespace ts {
                         return node;
                     }
                 }
-            }
-
-            function getLastChildWorker(node: Node): Node | undefined {
-                let last: Node;
-                forEachChild(node, child => {
-                    if (nodeIsPresent(child)) {
-                        last = child;
-                    }
-                });
-                return last;
             }
 
             function visit(child: Node) {
