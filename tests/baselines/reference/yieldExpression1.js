@@ -1,9 +1,21 @@
 //// [yieldExpression1.ts]
-function* foo() {
-    yield
+function* a() {
+    yield;
+    yield 0;
 }
 
-//// [yieldExpression1.js]
-function* foo() {
+function* b(): IterableIterator<number> {
     yield;
+    yield 0;
+}
+
+
+//// [yieldExpression1.js]
+function* a() {
+    yield;
+    yield 0;
+}
+function* b() {
+    yield;
+    yield 0;
 }

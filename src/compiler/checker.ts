@@ -18525,9 +18525,7 @@ namespace ts {
             const aggregatedTypes: Type[] = [];
             const isAsync = (getFunctionFlags(func) & FunctionFlags.Async) !== 0;
             forEachYieldExpression(<Block>func.body, yieldExpression => {
-                if (yieldExpression.expression) { // TODO: GH#22297
-                    pushIfUnique(aggregatedTypes, getYieldedTypeOfYieldExpression(yieldExpression, isAsync, checkMode));
-                }
+                pushIfUnique(aggregatedTypes, getYieldedTypeOfYieldExpression(yieldExpression, isAsync, checkMode));
             });
             return aggregatedTypes;
         }
@@ -19519,8 +19517,6 @@ namespace ts {
                     checkExternalEmitHelpers(node, ExternalEmitHelpers.Values);
                 }
             }
-
-            if (!node.expression) return anyType; // TODO: GH#22297
 
             const isAsync = (functionFlags & FunctionFlags.Async) !== 0;
             const yieldedType = getYieldedTypeOfYieldExpression(node, isAsync);
