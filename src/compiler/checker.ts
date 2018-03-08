@@ -10413,7 +10413,7 @@ namespace ts {
                     const eraseGenerics = relation === comparableRelation || compilerOptions.noStrictGenericChecks;
                     result = signatureRelatedTo(sourceSignatures[0], targetSignatures[0], eraseGenerics, reportErrors);
 
-                    if (result === Ternary.False && reportErrors && targetSignatures[0].declaration && targetSignatures[0].declaration.kind === SyntaxKind.ConstructSignature) {
+                    if (result === Ternary.False && reportErrors && targetSignatures[0].declaration && isConstructSignatureDeclaration(targetSignatures[0].declaration)) {
                         const flags = TypeFormatFlags.WriteArrowStyleSignature;
                         const sourceSignature = signatureToString(sourceSignatures[0], /*enclosingDeclaration*/ undefined, flags, kind);
                         const targetSignature = signatureToString(targetSignatures[0], /*enclosingDeclaration*/ undefined, flags, kind);
