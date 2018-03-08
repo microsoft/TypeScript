@@ -1489,7 +1489,7 @@ namespace ts {
         }
         const declaration = symbol.valueDeclaration;
         const e = getDeclaredJavascriptInitializer(declaration) || getAssignedJavascriptInitializer(declaration);
-        return e ? e.symbol : symbol;
+        return e && e.symbol ? e.symbol : symbol;
     }
 
     /** Get the declaration initializer, when the initializer is container-like (See getJavascriptInitializer) */
