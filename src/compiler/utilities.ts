@@ -1472,13 +1472,115 @@ namespace ts {
     }
 
     /**
-     * Returns true if the node is a variable declaration whose initializer is a function or class expression.
-     * This function does not test if the node is in a JavaScript file or not.
+     * Given the symbol of a declaration, find the symbol of its Javascript container-like initializer,
+     * if it has one. Otherwise just return the original symbol.
+     *
+     * Container-like initializer behave like namespaces, so the binder needs to add contained symbols
+     * to their exports. An example is a function with assignments to `this` inside.
      */
-    export function isDeclarationOfFunctionOrClassExpression(s: Symbol) {
-        if (s.valueDeclaration && s.valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
-            const declaration = s.valueDeclaration as VariableDeclaration;
-            return declaration.initializer && (declaration.initializer.kind === SyntaxKind.FunctionExpression || declaration.initializer.kind === SyntaxKind.ClassExpression);
+    export function getJSInitializerSymbol(symbol: Symbol) {
+        if (!symbol || !symbol.valueDeclaration) {
+            return symbol;
+        }
+        const declaration = symbol.valueDeclaration;
+        const e = getDeclaredJavascriptInitializer(declaration) || getAssignedJavascriptInitializer(declaration);
+        return e && e.symbol ? e.symbol : symbol;
+    }
+
+    /** Get the declaration initializer, when the initializer is container-like (See getJavascriptInitializer) */
+    export function getDeclaredJavascriptInitializer(node: Node) {
+        if (node && isVariableDeclaration(node) && node.initializer) {
+            return getJavascriptInitializer(node.initializer, /*isPrototypeAssignment*/ false) ||
+                isIdentifier(node.name) && getDefaultedJavascriptInitializer(node.name, node.initializer, /*isPrototypeAssignment*/ false);
+        }
+    }
+
+    /**
+     * Get the assignment 'initializer' -- the righthand side-- when the initializer is container-like (See getJavascriptInitializer).
+     * We treat the right hand side of assignments with container-like initalizers as declarations.
+     */
+    export function getAssignedJavascriptInitializer(node: Node) {
+        if (node && node.parent && isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
+            const isPrototypeAssignment = isPropertyAccessExpression(node.parent.left) && node.parent.left.name.escapedText === "prototype";
+            return getJavascriptInitializer(node.parent.right, isPrototypeAssignment) ||
+                getDefaultedJavascriptInitializer(node.parent.left as EntityNameExpression, node.parent.right, isPrototypeAssignment);
+        }
+    }
+
+    /**
+     * Recognized Javascript container-like initializers are:
+     * 1. (function() {})() -- IIFEs
+     * 2. function() { } -- Function expressions
+     * 3. class { } -- Class expressions
+     * 4. {} -- Empty object literals
+     * 5. { ... } -- Non-empty object literals, when used to initialize a prototype, like `C.prototype = { m() { } }`
+     *
+     * This function returns the provided initializer, or undefined if it is not valid.
+     */
+    export function getJavascriptInitializer(initializer: Node, isPrototypeAssignment: boolean): Expression {
+        if (isCallExpression(initializer)) {
+            const e = skipParentheses(initializer.expression);
+            return e.kind === SyntaxKind.FunctionExpression || e.kind === SyntaxKind.ArrowFunction ? initializer : undefined;
+        }
+        if (initializer.kind === SyntaxKind.FunctionExpression || initializer.kind === SyntaxKind.ClassExpression) {
+            return initializer as Expression;
+        }
+        if (isObjectLiteralExpression(initializer) && (initializer.properties.length === 0 || isPrototypeAssignment)) {
+            return initializer;
+        }
+    }
+
+    /**
+     * A defaulted Javascript initializer matches the pattern
+     * `Lhs = Lhs || JavascriptInitializer`
+     * or `var Lhs = Lhs || JavascriptInitializer`
+     *
+     * The second Lhs is required to be the same as the first except that it may be prefixed with
+     * 'window.', 'global.' or 'self.' The second Lhs is otherwise ignored by the binder and checker.
+     */
+    function getDefaultedJavascriptInitializer(name: EntityNameExpression, initializer: Expression, isPrototypeAssignment: boolean) {
+        const e = isBinaryExpression(initializer) && initializer.operatorToken.kind === SyntaxKind.BarBarToken && getJavascriptInitializer(initializer.right, isPrototypeAssignment);
+        if (e && isSameEntityName(name, (initializer as BinaryExpression).left as EntityNameExpression)) {
+            return e;
+        }
+    }
+
+    /** Given a Javascript initializer, return the outer name. That is, the lhs of the assignment or the declaration name. */
+    export function getOuterNameOfJsInitializer(node: Declaration): DeclarationName | undefined {
+        if (isBinaryExpression(node.parent)) {
+            const parent = (node.parent.operatorToken.kind === SyntaxKind.BarBarToken && isBinaryExpression(node.parent.parent)) ? node.parent.parent : node.parent;
+            if (parent.operatorToken.kind === SyntaxKind.EqualsToken && isIdentifier(parent.left)) {
+                return parent.left;
+            }
+        }
+        else if (isVariableDeclaration(node.parent)) {
+            return node.parent.name;
+        }
+    }
+
+    /**
+     * Is the 'declared' name the same as the one in the initializer?
+     * @return true for identical entity names, as well as ones where the initializer is prefixed with
+     * 'window', 'self' or 'global'. For example:
+     *
+     * var my = my || {}
+     * var min = window.min || {}
+     * my.app = self.my.app || class { }
+     */
+    function isSameEntityName(name: EntityNameExpression, initializer: EntityNameExpression): boolean {
+        if (isIdentifier(name) && isIdentifier(initializer)) {
+            return name.escapedText === initializer.escapedText;
+        }
+        if (isIdentifier(name) && isPropertyAccessExpression(initializer)) {
+            return (initializer.expression.kind as SyntaxKind.ThisKeyword === SyntaxKind.ThisKeyword ||
+                    isIdentifier(initializer.expression) &&
+                    (initializer.expression.escapedText === "window" as __String ||
+                     initializer.expression.escapedText === "self" as __String ||
+                     initializer.expression.escapedText === "global" as __String)) &&
+                isSameEntityName(name, initializer.name);
+        }
+        if (isPropertyAccessExpression(name) && isPropertyAccessExpression(initializer)) {
+            return name.name.escapedText === initializer.name.escapedText && isSameEntityName(name.expression, initializer.expression);
         }
         return false;
     }
@@ -1501,46 +1603,43 @@ namespace ts {
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
     export function getSpecialPropertyAssignmentKind(expr: BinaryExpression): SpecialPropertyAssignmentKind {
-        if (!isInJavaScriptFile(expr)) {
+        if (!isInJavaScriptFile(expr) ||
+            expr.operatorToken.kind !== SyntaxKind.EqualsToken ||
+            !isPropertyAccessExpression(expr.left)) {
             return SpecialPropertyAssignmentKind.None;
         }
-        if (expr.operatorToken.kind !== SyntaxKind.EqualsToken || expr.left.kind !== SyntaxKind.PropertyAccessExpression) {
-            return SpecialPropertyAssignmentKind.None;
-        }
-        const lhs = <PropertyAccessExpression>expr.left;
-        if (lhs.expression.kind === SyntaxKind.Identifier) {
-            const lhsId = <Identifier>lhs.expression;
-            if (lhsId.escapedText === "exports") {
-                // exports.name = expr
-                return SpecialPropertyAssignmentKind.ExportsProperty;
-            }
-            else if (lhsId.escapedText === "module" && lhs.name.escapedText === "exports") {
-                // module.exports = expr
-                return SpecialPropertyAssignmentKind.ModuleExports;
-            }
-            else {
-                // F.x = expr
-                return SpecialPropertyAssignmentKind.Property;
-            }
-        }
-        else if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
+        const lhs = expr.left;
+        if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
             return SpecialPropertyAssignmentKind.ThisProperty;
         }
-        else if (lhs.expression.kind === SyntaxKind.PropertyAccessExpression) {
-            // chained dot, e.g. x.y.z = expr; this var is the 'x.y' part
-            const innerPropertyAccess = <PropertyAccessExpression>lhs.expression;
-            if (innerPropertyAccess.expression.kind === SyntaxKind.Identifier) {
-                // module.exports.name = expr
-                const innerPropertyAccessIdentifier = <Identifier>innerPropertyAccess.expression;
-                if (innerPropertyAccessIdentifier.escapedText === "module" && innerPropertyAccess.name.escapedText === "exports") {
-                    return SpecialPropertyAssignmentKind.ExportsProperty;
-                }
-                if (innerPropertyAccess.name.escapedText === "prototype") {
-                    return SpecialPropertyAssignmentKind.PrototypeProperty;
-                }
-            }
+        else if (isIdentifier(lhs.expression) && lhs.expression.escapedText === "module" && lhs.name.escapedText === "exports") {
+            // module.exports = expr
+            return SpecialPropertyAssignmentKind.ModuleExports;
         }
+        else if (isEntityNameExpression(lhs.expression)) {
+            if (lhs.name.escapedText === "prototype" && isObjectLiteralExpression(expr.right)) {
+                // F.prototype = { ... }
+                return SpecialPropertyAssignmentKind.Prototype;
+            }
+            else if (isPropertyAccessExpression(lhs.expression) && lhs.expression.name.escapedText === "prototype") {
+                // F.G....prototype.x = expr
+                return SpecialPropertyAssignmentKind.PrototypeProperty;
+            }
 
+            let nextToLast = lhs;
+            while (isPropertyAccessExpression(nextToLast.expression)) {
+                nextToLast = nextToLast.expression;
+            }
+            Debug.assert(isIdentifier(nextToLast.expression));
+            const id = nextToLast.expression as Identifier;
+            if (id.escapedText === "exports" ||
+                id.escapedText === "module" && nextToLast.name.escapedText === "exports") {
+                // exports.name = expr OR module.exports.name = expr
+                return SpecialPropertyAssignmentKind.ExportsProperty;
+            }
+            // F.G...x = expr
+            return SpecialPropertyAssignmentKind.Property;
+        }
 
         return SpecialPropertyAssignmentKind.None;
     }
@@ -1617,6 +1716,15 @@ namespace ts {
             node.expression.right;
     }
 
+    function getSourceOfDefaultedAssignment(node: Node): Node {
+        return isExpressionStatement(node) &&
+            isBinaryExpression(node.expression) &&
+            getSpecialPropertyAssignmentKind(node.expression) !== SpecialPropertyAssignmentKind.None &&
+            isBinaryExpression(node.expression.right) &&
+            node.expression.right.operatorToken.kind === SyntaxKind.BarBarToken &&
+            node.expression.right.right;
+    }
+
     function getSingleInitializerOfVariableStatementOrPropertyDeclaration(node: Node): Expression | undefined {
         switch (node.kind) {
             case SyntaxKind.VariableStatement:
@@ -1660,7 +1768,8 @@ namespace ts {
                 (getSingleVariableOfVariableStatement(parent.parent) === node || getSourceOfAssignment(parent.parent))) {
                 getJSDocCommentsAndTagsWorker(parent.parent);
             }
-            if (parent && parent.parent && parent.parent.parent && getSingleInitializerOfVariableStatementOrPropertyDeclaration(parent.parent.parent) === node) {
+            if (parent && parent.parent && parent.parent.parent &&
+                (getSingleInitializerOfVariableStatementOrPropertyDeclaration(parent.parent.parent) === node || getSourceOfDefaultedAssignment(parent.parent.parent))) {
                 getJSDocCommentsAndTagsWorker(parent.parent.parent);
             }
             if (isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) !== SpecialPropertyAssignmentKind.None ||
@@ -1702,7 +1811,8 @@ namespace ts {
 
     export function getHostSignatureFromJSDoc(node: JSDocParameterTag): FunctionLike | undefined {
         const host = getJSDocHost(node);
-        const decl = getSourceOfAssignment(host) ||
+        const decl = getSourceOfDefaultedAssignment(host) ||
+            getSourceOfAssignment(host) ||
             getSingleInitializerOfVariableStatementOrPropertyDeclaration(host) ||
             getSingleVariableOfVariableStatement(host) ||
             getNestedModuleDeclaration(host) ||
@@ -1841,6 +1951,16 @@ namespace ts {
 
     export function walkUpParenthesizedExpressions(node: Node) {
         return walkUp(node, SyntaxKind.ParenthesizedExpression);
+    }
+
+    export function skipParentheses(node: Expression): Expression;
+    export function skipParentheses(node: Node): Node;
+    export function skipParentheses(node: Node): Node {
+        while (node.kind === SyntaxKind.ParenthesizedExpression) {
+            node = (<ParenthesizedExpression>node).expression;
+        }
+
+        return node;
     }
 
     // a node is delete target iff. it is PropertyAccessExpression/ElementAccessExpression with parentheses skipped

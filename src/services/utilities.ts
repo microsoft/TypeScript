@@ -359,6 +359,8 @@ namespace ts {
                     case SpecialPropertyAssignmentKind.Property:
                         // static method / property
                         return isFunctionExpression(right) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
+                    case SpecialPropertyAssignmentKind.Prototype:
+                        return ScriptElementKind.localClassElement;
                     default: {
                         assertTypeIsNever(kind);
                         return ScriptElementKind.unknown;
