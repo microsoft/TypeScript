@@ -1,17 +1,17 @@
 Exit Code: 1
 Standard output:
-../../../../built/local/lib.dom.d.ts(1737,11): error TS2300: Duplicate identifier 'Comment'.
-../../../../built/local/lib.dom.d.ts(1741,13): error TS2300: Duplicate identifier 'Comment'.
-../../../../built/local/lib.dom.d.ts(1942,11): error TS2300: Duplicate identifier 'CSSRule'.
-../../../../built/local/lib.dom.d.ts(1961,13): error TS2300: Duplicate identifier 'CSSRule'.
-../../../../built/local/lib.dom.d.ts(3689,11): error TS2300: Duplicate identifier 'Event'.
-../../../../built/local/lib.dom.d.ts(3713,13): error TS2300: Duplicate identifier 'Event'.
-../../../../built/local/lib.dom.d.ts(9090,11): error TS2300: Duplicate identifier 'Position'.
-../../../../built/local/lib.dom.d.ts(9095,13): error TS2300: Duplicate identifier 'Position'.
-../../../../built/local/lib.dom.d.ts(9238,11): error TS2300: Duplicate identifier 'Request'.
-../../../../built/local/lib.dom.d.ts(9256,13): error TS2300: Duplicate identifier 'Request'.
-../../../../built/local/lib.dom.d.ts(13516,11): error TS2300: Duplicate identifier 'Window'.
-../../../../built/local/lib.dom.d.ts(13705,13): error TS2300: Duplicate identifier 'Window'.
+../../../../built/local/lib.dom.d.ts(2255,11): error TS2300: Duplicate identifier 'CSSRule'.
+../../../../built/local/lib.dom.d.ts(2274,13): error TS2300: Duplicate identifier 'CSSRule'.
+../../../../built/local/lib.dom.d.ts(2964,11): error TS2300: Duplicate identifier 'Comment'.
+../../../../built/local/lib.dom.d.ts(2968,13): error TS2300: Duplicate identifier 'Comment'.
+../../../../built/local/lib.dom.d.ts(4605,11): error TS2300: Duplicate identifier 'Event'.
+../../../../built/local/lib.dom.d.ts(4630,13): error TS2300: Duplicate identifier 'Event'.
+../../../../built/local/lib.dom.d.ts(10082,11): error TS2300: Duplicate identifier 'Position'.
+../../../../built/local/lib.dom.d.ts(10087,13): error TS2300: Duplicate identifier 'Position'.
+../../../../built/local/lib.dom.d.ts(10575,11): error TS2300: Duplicate identifier 'Request'.
+../../../../built/local/lib.dom.d.ts(10593,13): error TS2300: Duplicate identifier 'Request'.
+../../../../built/local/lib.dom.d.ts(14907,11): error TS2300: Duplicate identifier 'Window'.
+../../../../built/local/lib.dom.d.ts(15102,13): error TS2300: Duplicate identifier 'Window'.
 ../../../../built/local/lib.es5.d.ts(1328,11): error TS2300: Duplicate identifier 'ArrayLike'.
 ../../../../built/local/lib.es5.d.ts(1364,6): error TS2300: Duplicate identifier 'Record'.
 ../../../../node_modules/@types/node/index.d.ts(150,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{ [x: string]: any; }', but here has type 'NodeModule'.
@@ -21,7 +21,6 @@ node_modules/chrome-devtools-frontend/front_end/Runtime.js(147,37): error TS2339
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(161,5): error TS2322: Type 'Promise<undefined[]>' is not assignable to type 'Promise<undefined>'.
   Type 'undefined[]' is not assignable to type 'undefined'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(187,12): error TS2339: Property 'eval' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/Runtime.js(219,13): error TS2339: Property 'timeStamp' does not exist on type 'Console'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(267,14): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(269,59): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(270,9): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
@@ -413,7 +412,7 @@ node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(811,
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationScreenshotPopover.js(7,11): error TS2339: Property 'AnimationScreenshotPopover' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationScreenshotPopover.js(9,23): error TS2304: Cannot find name 'Image'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationScreenshotPopover.js(18,39): error TS2345: Argument of type 'new (width?: number, height?: number) => HTMLImageElement' is not assignable to parameter of type 'Node'.
-  Property 'attributes' is missing in type 'new (width?: number, height?: number) => HTMLImageElement'.
+  Property 'baseURI' is missing in type 'new (width?: number, height?: number) => HTMLImageElement'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationScreenshotPopover.js(19,13): error TS2339: Property 'style' does not exist on type 'new (width?: number, height?: number) => HTMLImageElement'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationScreenshotPopover.js(22,21): error TS2339: Property 'style' does not exist on type 'new (width?: number, height?: number) => HTMLImageElement'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationScreenshotPopover.js(23,45): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -1429,6 +1428,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(39899,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(39909,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(39957,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(39957,68): error TS2339: Property 'message' does not exist on type 'ProgressEvent'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(39963,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(39980,16): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(39986,1): error TS2304: Cannot find name 'WebInspector'.
@@ -1727,7 +1727,6 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43262,37): error TS2339: Property 'regexSpecialCharacters' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43369,8): error TS2339: Property 'hashCode' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43395,8): error TS2339: Property 'isDigitAt' does not exist on type 'StringConstructor'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43414,17): error TS2304: Cannot find name 'TextEncoder'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43442,8): error TS2339: Property 'naturalOrderComparator' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43486,8): error TS2339: Property 'caseInsensetiveComparator' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43501,8): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
@@ -3935,7 +3934,6 @@ node_modules/chrome-devtools-frontend/front_end/bindings/FileUtils.js(43,15): er
 node_modules/chrome-devtools-frontend/front_end/bindings/FileUtils.js(48,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/bindings/FileUtils.js(55,16): error TS2304: Cannot find name 'FileError'.
 node_modules/chrome-devtools-frontend/front_end/bindings/FileUtils.js(68,33): error TS2694: Namespace 'Bindings' has no exported member 'ChunkedReader'.
-node_modules/chrome-devtools-frontend/front_end/bindings/FileUtils.js(76,25): error TS2304: Cannot find name 'TextDecoder'.
 node_modules/chrome-devtools-frontend/front_end/bindings/FileUtils.js(78,17): error TS2304: Cannot find name 'FileError'.
 node_modules/chrome-devtools-frontend/front_end/bindings/FileUtils.js(83,22): error TS2694: Namespace 'Common' has no exported member 'OutputStream'.
 node_modules/chrome-devtools-frontend/front_end/bindings/FileUtils.js(88,38): error TS2345: Argument of type 'this' is not assignable to parameter of type '() => void'.
@@ -3944,7 +3942,6 @@ node_modules/chrome-devtools-frontend/front_end/bindings/FileUtils.js(88,38): er
 node_modules/chrome-devtools-frontend/front_end/bindings/FileUtils.js(125,23): error TS2339: Property 'name' does not exist on type 'Blob'.
 node_modules/chrome-devtools-frontend/front_end/bindings/FileUtils.js(130,16): error TS2304: Cannot find name 'FileError'.
 node_modules/chrome-devtools-frontend/front_end/bindings/FileUtils.js(143,22): error TS2339: Property 'readyState' does not exist on type 'EventTarget'.
-node_modules/chrome-devtools-frontend/front_end/bindings/FileUtils.js(143,48): error TS2339: Property 'DONE' does not exist on type '{ new (): FileReader; prototype: FileReader; }'.
 node_modules/chrome-devtools-frontend/front_end/bindings/FileUtils.js(146,31): error TS2339: Property 'result' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/bindings/FileUtils.js(150,18): error TS2339: Property 'write' does not exist on type '() => void'.
 node_modules/chrome-devtools-frontend/front_end/bindings/FileUtils.js(154,38): error TS2345: Argument of type 'this' is not assignable to parameter of type '() => void'.
@@ -5013,8 +5010,8 @@ node_modules/chrome-devtools-frontend/front_end/common/Settings.js(432,15): erro
 node_modules/chrome-devtools-frontend/front_end/common/Settings.js(458,76): error TS2339: Property '_currentVersionName' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/common/Settings.js(459,81): error TS2339: Property '_currentVersionName' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/common/Settings.js(460,51): error TS2339: Property 'currentVersion' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/common/Settings.js(461,55): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
-  Type 'number' is not assignable to type 'string'.
+node_modules/chrome-devtools-frontend/front_end/common/Settings.js(467,58): error TS2345: Argument of type 'number | V' is not assignable to parameter of type 'number'.
+  Type 'V' is not assignable to type 'number'.
 node_modules/chrome-devtools-frontend/front_end/common/Settings.js(489,68): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'V'.
 node_modules/chrome-devtools-frontend/front_end/common/Settings.js(493,64): error TS2345: Argument of type '{}' is not assignable to parameter of type 'V'.
 node_modules/chrome-devtools-frontend/front_end/common/Settings.js(534,18): error TS2339: Property 'vertical' does not exist on type '{}'.
@@ -5199,7 +5196,6 @@ node_modules/chrome-devtools-frontend/front_end/components/DockController.js(98,
 node_modules/chrome-devtools-frontend/front_end/components/DockController.js(99,54): error TS2339: Property 'State' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/components/DockController.js(116,33): error TS2339: Property 'deepActiveElement' does not exist on type 'Document'.
 node_modules/chrome-devtools-frontend/front_end/components/DockController.js(118,61): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/components/DockController.js(119,13): error TS2339: Property 'timeStamp' does not exist on type 'Console'.
 node_modules/chrome-devtools-frontend/front_end/components/DockController.js(121,39): error TS2345: Argument of type 'string' is not assignable to parameter of type 'V'.
 node_modules/chrome-devtools-frontend/front_end/components/DockController.js(122,27): error TS2339: Property 'setIsDocked' does not exist on type 'typeof InspectorFrontendHost'.
 node_modules/chrome-devtools-frontend/front_end/components/DockController.js(123,48): error TS2339: Property 'State' does not exist on type 'typeof (Anonymous class)'.
@@ -7174,7 +7170,7 @@ node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(74
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(745,60): error TS2339: Property 'pageY' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(753,20): error TS2551: Property 'deepElementFromPoint' does not exist on type 'Document'. Did you mean 'msElementsFromPoint'?
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(761,5): error TS2322: Type 'ShadowRoot' is not assignable to type 'Document'.
-  Property 'alinkColor' is missing in type 'ShadowRoot'.
+  Property 'URL' is missing in type 'ShadowRoot'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(766,28): error TS2339: Property 'deepElementFromPoint' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(766,70): error TS2551: Property 'deepElementFromPoint' does not exist on type 'Document'. Did you mean 'msElementsFromPoint'?
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(771,20): error TS2339: Property 'deepActiveElement' does not exist on type 'Document'.
@@ -8140,7 +8136,6 @@ node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(38,44):
 node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(42,35): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(44,35): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(46,35): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(49,13): error TS2339: Property 'timeStamp' does not exist on type 'Console'.
 node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(56,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(59,77): error TS2339: Property 'State' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(88,7): error TS2554: Expected 2 arguments, but got 1.
@@ -8161,7 +8156,6 @@ node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(151,48)
 node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(154,86): error TS2339: Property 'State' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(165,79): error TS2339: Property 'State' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(169,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
-node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(180,13): error TS2339: Property 'timeStamp' does not exist on type 'Console'.
 node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(181,27): error TS2339: Property 'setInspectedPageBounds' does not exist on type 'typeof InspectorFrontendHost'.
 node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(186,23): error TS2339: Property '_appInstance' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(196,23): error TS2694: Namespace 'Common' has no exported member 'App'.
@@ -10530,9 +10524,7 @@ node_modules/chrome-devtools-frontend/front_end/main/ExecutionContextSelector.js
 node_modules/chrome-devtools-frontend/front_end/main/ExecutionContextSelector.js(174,31): error TS2345: Argument of type 'typeof (Anonymous class)' is not assignable to parameter of type 'new (arg1: any) => (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/main/ExecutionContextSelector.js(203,29): error TS2345: Argument of type 'typeof (Anonymous class)' is not assignable to parameter of type 'new (arg1: any) => (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(39,15): error TS2339: Property '_instanceForTest' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/main/Main.js(69,13): error TS2339: Property 'timeStamp' does not exist on type 'Console'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(71,27): error TS2339: Property 'getPreferences' does not exist on type 'typeof InspectorFrontendHost'.
-node_modules/chrome-devtools-frontend/front_end/main/Main.js(78,13): error TS2339: Property 'timeStamp' does not exist on type 'Console'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(80,12): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(105,38): error TS2339: Property 'setPreference' does not exist on type 'typeof InspectorFrontendHost'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(105,75): error TS2339: Property 'removePreference' does not exist on type 'typeof InspectorFrontendHost'.
@@ -10561,7 +10553,6 @@ node_modules/chrome-devtools-frontend/front_end/main/Main.js(273,15): error TS23
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(284,27): error TS2339: Property 'connectionReady' does not exist on type 'typeof InspectorFrontendHost'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(287,27): error TS2339: Property 'readyForTest' does not exist on type 'typeof InspectorFrontendHost'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(294,17): error TS2339: Property '_disconnectedScreenWithReasonWasShown' does not exist on type 'typeof Main'.
-node_modules/chrome-devtools-frontend/front_end/main/Main.js(300,13): error TS2339: Property 'timeStamp' does not exist on type 'Console'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(314,27): error TS2339: Property 'setWhitelistedShortcuts' does not exist on type 'typeof InspectorFrontendHost'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(318,52): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/main/Main.js(321,24): error TS2694: Namespace 'Common' has no exported member 'Event'.
@@ -13011,7 +13002,6 @@ node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(132,8): er
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(133,27): error TS2339: Property 'regexSpecialCharacters' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(250,8): error TS2339: Property 'hashCode' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(275,8): error TS2339: Property 'isDigitAt' does not exist on type 'StringConstructor'.
-node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(291,21): error TS2304: Cannot find name 'TextEncoder'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(320,8): error TS2339: Property 'naturalOrderComparator' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(335,19): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(336,19): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
@@ -17718,6 +17708,7 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(223,35):
 node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(250,48): error TS2339: Property 'Node' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(266,25): error TS2339: Property 'highlightedSearchResultClassName' does not exist on type 'typeof UI'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(290,24): error TS2339: Property 'tagName' does not exist on type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(296,31): error TS2339: Property 'attributes' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(305,20): error TS2339: Property 'childElementCount' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(342,21): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(372,25): error TS2339: Property 'Node' does not exist on type 'typeof (Anonymous class)'.
@@ -19589,6 +19580,7 @@ node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(712,2)
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(713,12): error TS2339: Property 'CustomFormatters' does not exist on type 'typeof TestRunner'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(717,24): error TS2694: Namespace 'TestRunner' has no exported member 'CustomFormatters'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(748,24): error TS2694: Namespace 'TestRunner' has no exported member 'CustomFormatters'.
+node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(777,22): error TS2339: Property 'attributes' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(785,14): error TS2339: Property 'shadowRoot' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(786,39): error TS2339: Property 'shadowRoot' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(805,12): error TS2339: Property 'shadowRoot' does not exist on type 'Node'.
@@ -19635,8 +19627,8 @@ node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1279,4
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1279,81): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(value: any) => any'.
   Type 'Function' provides no match for the signature '(value: any): any'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1304,3): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
-node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1310,30): error TS2551: Property 'getAttribute' does not exist on type 'Node'. Did you mean 'attributes'?
-node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1311,44): error TS2551: Property 'getAttribute' does not exist on type 'Node'. Did you mean 'attributes'?
+node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1310,30): error TS2339: Property 'getAttribute' does not exist on type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1311,44): error TS2339: Property 'getAttribute' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1388,16): error TS2339: Property 'testRunner' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1424,14): error TS2339: Property '_initializeTargetForStartupTest' does not exist on type 'typeof TestRunner'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1425,37): error TS2339: Property '_instanceForTest' does not exist on type 'typeof (Anonymous class)'.
@@ -20232,7 +20224,7 @@ node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataP
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(655,39): error TS2339: Property 'naturalWidth' does not exist on type 'new (width?: number, height?: number) => HTMLImageElement'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(660,23): error TS2345: Argument of type 'new (width?: number, height?: number) => HTMLImageElement' is not assignable to parameter of type 'HTMLCanvasElement | HTMLImageElement | HTMLVideoElement | ImageBitmap'.
   Type 'new (width?: number, height?: number) => HTMLImageElement' is not assignable to type 'ImageBitmap'.
-    Property 'width' is missing in type 'new (width?: number, height?: number) => HTMLImageElement'.
+    Property 'height' is missing in type 'new (width?: number, height?: number) => HTMLImageElement'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(682,62): error TS2339: Property 'EntryType' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(696,37): error TS2694: Namespace 'TimelineModel' has no exported member 'TimelineIRModel'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(705,35): error TS2694: Namespace 'SDK' has no exported member 'TracingModel'.
@@ -21129,7 +21121,7 @@ node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1669
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1672,32): error TS2339: Property 'Dialog' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1675,5): error TS2322: Type 'DocumentFragment' is not assignable to type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1675,5): error TS2322: Type 'DocumentFragment' is not assignable to type 'Element'.
-  Property 'classList' is missing in type 'DocumentFragment'.
+  Property 'assignedSlot' is missing in type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1684,30): error TS2339: Property 'millisToString' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1685,16): error TS2339: Property 'millisToString' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1687,13): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
@@ -21879,12 +21871,18 @@ node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(77,19): error TS2
 node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(84,19): error TS2694: Namespace 'UI' has no exported member 'Fragment'.
 node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(99,40): error TS2339: Property '_textMarker' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(99,66): error TS2339: Property '_attributeMarker' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(114,18): error TS2551: Property 'hasAttribute' does not exist on type 'Node'. Did you mean 'hasAttributes'?
-node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(116,39): error TS2551: Property 'getAttribute' does not exist on type 'Node'. Did you mean 'attributes'?
+node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(113,55): error TS2339: Property 'hasAttributes' does not exist on type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(114,18): error TS2339: Property 'hasAttribute' does not exist on type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(116,39): error TS2339: Property 'getAttribute' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(117,16): error TS2339: Property 'removeAttribute' does not exist on type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(121,34): error TS2339: Property 'attributes' does not exist on type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(122,27): error TS2339: Property 'attributes' does not exist on type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(130,75): error TS2339: Property 'attributes' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(134,28): error TS2339: Property '_attributeMarkerRegex' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(135,28): error TS2339: Property '_attributeMarkerRegex' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(135,60): error TS2339: Property 'attributes' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(141,52): error TS2339: Property '_attributeMarkerRegex' does not exist on type 'typeof (Anonymous class)'.
+node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(143,35): error TS2339: Property 'attributes' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(143,73): error TS2339: Property '_attributeMarkerRegex' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(148,16): error TS2339: Property 'removeAttribute' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/ui/Fragment.js(151,52): error TS2339: Property 'data' does not exist on type 'Node'.
@@ -22913,7 +22911,7 @@ node_modules/chrome-devtools-frontend/front_end/ui/TextPrompt.js(610,54): error 
 node_modules/chrome-devtools-frontend/front_end/ui/TextPrompt.js(622,35): error TS2339: Property 'getComponentSelection' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/TextPrompt.js(627,7): error TS2322: Type 'Node' is not assignable to type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/TextPrompt.js(627,7): error TS2322: Type 'Node' is not assignable to type 'Element'.
-  Property 'classList' is missing in type 'Node'.
+  Property 'assignedSlot' is missing in type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/ui/TextPrompt.js(652,15): error TS2339: Property 'DefaultAutocompletionTimeout' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/ui/TextPrompt.js(655,15): error TS2339: Property 'Events' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/ui/Toolbar.js(43,50): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -23005,7 +23003,7 @@ node_modules/chrome-devtools-frontend/front_end/ui/Tooltip.js(177,12): error TS2
 node_modules/chrome-devtools-frontend/front_end/ui/Tooltip.js(178,17): error TS2304: Cannot find name 'ObjectPropertyDescriptor'.
 node_modules/chrome-devtools-frontend/front_end/ui/Tooltip.js(186,35): error TS2339: Property '_symbol' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/ui/Tooltip.js(195,24): error TS2345: Argument of type 'PropertyDescriptor' is not assignable to parameter of type 'Element'.
-  Property 'classList' is missing in type 'PropertyDescriptor'.
+  Property 'assignedSlot' is missing in type 'PropertyDescriptor'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(31,4): error TS2339: Property 'highlightedSearchResultClassName' does not exist on type 'typeof UI'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(32,4): error TS2339: Property 'highlightedCurrentSearchResultClassName' does not exist on type 'typeof UI'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(69,13): error TS2339: Property 'style' does not exist on type 'Element'.
