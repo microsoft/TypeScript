@@ -2016,21 +2016,6 @@ namespace ts {
         return getFileNamesFromConfigSpecs(spec, basePath, options, host, extraFileExtensions);
     }
 
-    interface WildcardFileInfo {
-        path: string;
-        includeIndex: number;
-    }
-
-    function makeCompareWildcardFileInfo(basePath: string) {
-        return (a: WildcardFileInfo, b: WildcardFileInfo) => {
-            return compareValues(a.includeIndex, b.includeIndex) || comparePaths(a.path, b.path, basePath); // Always compare case-sensitive so included files are in the same order on all platforms
-        };
-    }
-
-    function getFilePathFromWildcardFileInfo(info: WildcardFileInfo) {
-        return info.path;
-    }
-
     /**
      * Gets the file names from the provided config file specs that contain, files, include, exclude and
      * other properties needed to resolve the file names
@@ -2054,7 +2039,7 @@ namespace ts {
         // Wildcard paths (provided via the "includes" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map to store paths matched
         // via wildcard, and to handle extension priority.
-        const wildcardFileMap = createMap<WildcardFileInfo>();
+        const wildcardFileMap = createMap<string>();
 
         const { filesSpecs, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories } = spec;
 
@@ -2072,35 +2057,32 @@ namespace ts {
         }
 
         if (validatedIncludeSpecs && validatedIncludeSpecs.length > 0) {
-            for (let i = 0; i < validatedIncludeSpecs.length; i++) {
-                // We search one include spec at a time to ensure we respect include spec ordering
-                for (const file of host.readDirectory(basePath, supportedExtensions, validatedExcludeSpecs, [validatedIncludeSpecs[i]], /*depth*/ undefined)) {
-                    // If we have already included a literal or wildcard path with a
-                    // higher priority extension, we should skip this file.
-                    //
-                    // This handles cases where we may encounter both <file>.ts and
-                    // <file>.d.ts (or <file>.js if "allowJs" is enabled) in the same
-                    // directory when they are compilation outputs.
-                    if (hasFileWithHigherPriorityExtension(file, literalFileMap, wildcardFileMap, supportedExtensions, keyMapper)) {
-                        continue;
-                    }
+            for (const file of host.readDirectory(basePath, supportedExtensions, validatedExcludeSpecs, validatedIncludeSpecs, /*depth*/ undefined)) {
+                // If we have already included a literal or wildcard path with a
+                // higher priority extension, we should skip this file.
+                //
+                // This handles cases where we may encounter both <file>.ts and
+                // <file>.d.ts (or <file>.js if "allowJs" is enabled) in the same
+                // directory when they are compilation outputs.
+                if (hasFileWithHigherPriorityExtension(file, literalFileMap, wildcardFileMap, supportedExtensions, keyMapper)) {
+                    continue;
+                }
 
-                    // We may have included a wildcard path with a lower priority
-                    // extension due to the user-defined order of entries in the
-                    // "include" array. If there is a lower priority extension in the
-                    // same directory, we should remove it.
-                    removeWildcardFilesWithLowerPriorityExtension(file, wildcardFileMap, supportedExtensions, keyMapper);
+                // We may have included a wildcard path with a lower priority
+                // extension due to the user-defined order of entries in the
+                // "include" array. If there is a lower priority extension in the
+                // same directory, we should remove it.
+                removeWildcardFilesWithLowerPriorityExtension(file, wildcardFileMap, supportedExtensions, keyMapper);
 
-                    const key = keyMapper(file);
-                    if (!literalFileMap.has(key) && !wildcardFileMap.has(key)) {
-                        wildcardFileMap.set(key, { path: file, includeIndex: i });
-                    }
+                const key = keyMapper(file);
+                if (!literalFileMap.has(key) && !wildcardFileMap.has(key)) {
+                    wildcardFileMap.set(key, file);
                 }
             }
         }
 
         const literalFiles = arrayFrom(literalFileMap.values());
-        const wildcardFiles = map(sort(arrayFrom(wildcardFileMap.values()), makeCompareWildcardFileInfo(basePath)), getFilePathFromWildcardFileInfo);
+        const wildcardFiles = arrayFrom(wildcardFileMap.values());
         return {
             fileNames: literalFiles.concat(wildcardFiles),
             wildcardDirectories,
@@ -2219,7 +2201,7 @@ namespace ts {
      * @param extensionPriority The priority of the extension.
      * @param context The expansion context.
      */
-    function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<string>, wildcardFiles: Map<WildcardFileInfo>, extensions: ReadonlyArray<string>, keyMapper: (value: string) => string) {
+    function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<string>, wildcardFiles: Map<string>, extensions: ReadonlyArray<string>, keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
         const adjustedExtensionPriority = adjustExtensionPriority(extensionPriority, extensions);
         for (let i = ExtensionPriority.Highest; i < adjustedExtensionPriority; i++) {
@@ -2241,7 +2223,7 @@ namespace ts {
      * @param extensionPriority The priority of the extension.
      * @param context The expansion context.
      */
-    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: Map<WildcardFileInfo>, extensions: ReadonlyArray<string>, keyMapper: (value: string) => string) {
+    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: Map<string>, extensions: ReadonlyArray<string>, keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
         const nextExtensionPriority = getNextLowestExtensionPriority(extensionPriority, extensions);
         for (let i = nextExtensionPriority; i < extensions.length; i++) {

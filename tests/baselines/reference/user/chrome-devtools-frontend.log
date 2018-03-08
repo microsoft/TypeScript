@@ -14,6 +14,7 @@ Standard output:
 ../../../../built/local/lib.dom.d.ts(13705,13): error TS2300: Duplicate identifier 'Window'.
 ../../../../built/local/lib.es5.d.ts(1328,11): error TS2300: Duplicate identifier 'ArrayLike'.
 ../../../../built/local/lib.es5.d.ts(1364,6): error TS2300: Duplicate identifier 'Record'.
+../../../../node_modules/@types/node/index.d.ts(150,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{ [x: string]: any; }', but here has type 'NodeModule'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(43,8): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(95,28): error TS2339: Property 'response' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(147,37): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window'.
@@ -9016,7 +9017,6 @@ node_modules/chrome-devtools-frontend/front_end/externs.js(336,68): error TS1003
 node_modules/chrome-devtools-frontend/front_end/externs.js(338,65): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/externs.js(340,31): error TS1003: Identifier expected.
 node_modules/chrome-devtools-frontend/front_end/externs.js(344,2): error TS1131: Property or signature expected.
-node_modules/chrome-devtools-frontend/front_end/externs.js(354,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type 'NodeModule', but here has type '{ [x: string]: any; }'.
 node_modules/chrome-devtools-frontend/front_end/externs.js(366,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/externs.js(395,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/externs.js(416,14): error TS1110: Type expected.

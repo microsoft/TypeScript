@@ -7313,11 +7313,10 @@ namespace ts.projectSystem {
                 const resolutionTrace = createHostModuleResolutionTrace(host);
                 const service = createProjectService(host);
                 service.openClientFile(file1.path);
-                // The correct (execution) order for the created files is file2, file1, file4, file3, as that is the (case sensitive) order of the file paths
-                const expectedTrace = getExpectedRelativeModuleResolutionTrace(host, file2, module1, module3Name);
-                getExpectedRelativeModuleResolutionTrace(host, file2, module2, module4Name, expectedTrace);
-                getExpectedRelativeModuleResolutionTrace(host, file1, module1, module1Name, expectedTrace);
+                const expectedTrace = getExpectedRelativeModuleResolutionTrace(host, file1, module1, module1Name);
                 getExpectedRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
+                getExpectedRelativeModuleResolutionTrace(host, file2, module1, module3Name, expectedTrace);
+                getExpectedRelativeModuleResolutionTrace(host, file2, module2, module4Name, expectedTrace);
                 getExpectedRelativeModuleResolutionTrace(host, file4, module1, module6Name, expectedTrace);
                 getExpectedRelativeModuleResolutionTrace(host, file4, module2, module2Name, expectedTrace);
                 getExpectedRelativeModuleResolutionTrace(host, file3, module1, module5Name, expectedTrace);
@@ -7350,11 +7349,10 @@ namespace ts.projectSystem {
                 const resolutionTrace = createHostModuleResolutionTrace(host);
                 const service = createProjectService(host);
                 service.openClientFile(file1.path);
-                // The correct (execution) order for the created files is file2, file1, file4, file3, as that is the (case sensitive) order of the file paths
-                const expectedTrace = getExpectedNonRelativeModuleResolutionTrace(host, file2, module1, module1Name);
-                getExpectedNonRelativeModuleResolutionTrace(host, file2, module2, module2Name, expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file1, module1, module1Name, getDirectoryPath(file1.path), expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file1, module2, module2Name, getDirectoryPath(file1.path), expectedTrace);
+                const expectedTrace = getExpectedNonRelativeModuleResolutionTrace(host, file1, module1, module1Name);
+                getExpectedNonRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module1, module1Name, getDirectoryPath(file1.path), expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module2, module2Name, getDirectoryPath(file1.path), expectedTrace);
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module1, module1Name, `${projectLocation}/product`, expectedTrace);
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module2, module2Name, `${projectLocation}/product`, expectedTrace);
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module1, module1Name, getDirectoryPath(file4.path), expectedTrace);
