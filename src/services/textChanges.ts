@@ -140,7 +140,7 @@ namespace ts.textChanges {
 
     export function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStart, position: Position) {
         if (options.useNonAdjustedStartPosition) {
-            return node.getStart();
+            return node.getStart(sourceFile);
         }
         const fullStart = node.getFullStart();
         const start = node.getStart(sourceFile);
@@ -198,6 +198,8 @@ namespace ts.textChanges {
         host: LanguageServiceHost;
         formatContext: formatting.FormatContext;
     }
+
+    export type TypeAnnotatable = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature;
 
     export class ChangeTracker {
         private readonly changes: Change[] = [];
@@ -341,6 +343,14 @@ namespace ts.textChanges {
         public insertModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
             const pos = before.getStart(sourceFile);
             this.replaceRange(sourceFile, { pos, end: pos }, createToken(modifier), { suffix: " " });
+        }
+
+        /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
+        public insertTypeAnnotation(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): void {
+            const end = (isFunctionLike(node)
+                ? findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile)!
+                : node.kind !== SyntaxKind.VariableDeclaration && node.questionToken ? node.questionToken : node.name).end;
+            this.insertNodeAt(sourceFile, end, type, { prefix: ": " });
         }
 
         private getOptionsForInsertNodeBefore(before: Node, doubleNewlines: boolean): ChangeNodeOptions {

@@ -3480,6 +3480,10 @@
         "category": "Message",
         "code": 6191
     },
+    "All imports in import declaration are unused.": {
+        "category": "Error",
+        "code": 6192
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3850,6 +3854,10 @@
     "Remove declaration for: '{0}'": {
         "category": "Message",
         "code": 90004
+    },
+    "Remove import from '{0}'": {
+        "category": "Message",
+        "code": 90005
     },
     "Implement interface '{0}'": {
         "category": "Message",

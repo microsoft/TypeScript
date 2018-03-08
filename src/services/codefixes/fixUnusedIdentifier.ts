@@ -5,11 +5,19 @@ namespace ts.codefix {
     const errorCodes = [
         Diagnostics._0_is_declared_but_its_value_is_never_read.code,
         Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code,
+        Diagnostics.All_imports_in_import_declaration_are_unused.code,
     ];
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
-            const { sourceFile } = context;
+            const { errorCode, sourceFile } = context;
+            const importDecl = tryGetFullImport(sourceFile, context.span.start);
+            if (importDecl) {
+                const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Remove_import_from_0), [showModuleSpecifier(importDecl)]);
+                const changes = textChanges.ChangeTracker.with(context, t => t.deleteNode(sourceFile, importDecl));
+                return [{ description, changes, fixId: fixIdDelete }];
+            }
+
             const token = getToken(sourceFile, textSpanEnd(context.span));
             const result: CodeFixAction[] = [];
 
@@ -19,7 +27,7 @@ namespace ts.codefix {
                 result.push({ description, changes: deletion, fixId: fixIdDelete });
             }
 
-            const prefix = textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, context.errorCode, sourceFile, token));
+            const prefix = textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, errorCode, sourceFile, token));
             if (prefix.length) {
                 const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Prefix_0_with_an_underscore), [token.getText()]);
                 result.push({ description, changes: prefix, fixId: fixIdPrefix });
@@ -38,13 +46,25 @@ namespace ts.codefix {
                     }
                     break;
                 case fixIdDelete:
-                    tryDeleteDeclaration(changes, sourceFile, token);
+                    const importDecl = tryGetFullImport(diag.file!, diag.start!);
+                    if (importDecl) {
+                        changes.deleteNode(sourceFile, importDecl);
+                    }
+                    else {
+                        tryDeleteDeclaration(changes, sourceFile, token);
+                    }
                     break;
                 default:
                     Debug.fail(JSON.stringify(context.fixId));
             }
         }),
     });
+
+    // Sometimes the diagnostic span is an entire ImportDeclaration, so we should remove the whole thing.
+    function tryGetFullImport(sourceFile: SourceFile, pos: number): ImportDeclaration | undefined {
+        const startToken = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        return startToken.kind === SyntaxKind.ImportKeyword ? tryCast(startToken.parent, isImportDeclaration) : undefined;
+    }
 
     function getToken(sourceFile: SourceFile, pos: number): Node {
         const token = findPrecedingToken(pos, sourceFile);

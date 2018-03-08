@@ -314,20 +314,15 @@ namespace ts {
     }
 
     export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node, includeTrivia = false): string {
-        if (nodeIsMissing(node)) {
-            return "";
-        }
-
-        const text = sourceFile.text;
-        return text.substring(includeTrivia ? node.pos : skipTrivia(text, node.pos), node.end);
+        return getTextOfNodeFromSourceText(sourceFile.text, node, includeTrivia);
     }
 
-    export function getTextOfNodeFromSourceText(sourceText: string, node: Node): string {
+    export function getTextOfNodeFromSourceText(sourceText: string, node: Node, includeTrivia = false): string {
         if (nodeIsMissing(node)) {
             return "";
         }
 
-        return sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
+        return sourceText.substring(includeTrivia ? node.pos : skipTrivia(sourceText, node.pos), node.end);
     }
 
     export function getTextOfNode(node: Node, includeTrivia = false): string {
@@ -1204,7 +1199,7 @@ namespace ts {
             && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.ThisKeyword;
     }
 
-   export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNameExpression {
+    export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNameExpression {
         switch (node.kind) {
             case SyntaxKind.TypeReference:
                 return (<TypeReferenceNode>node).typeName;
@@ -2591,7 +2586,6 @@ namespace ts {
     const singleQuoteEscapedCharsRegExp = /[\\\'\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
     const backtickQuoteEscapedCharsRegExp = /[\\\`\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
     const escapedCharsMap = createMapFromTemplate({
-        "\0": "\\0",
         "\t": "\\t",
         "\v": "\\v",
         "\f": "\\f",
@@ -2606,7 +2600,6 @@ namespace ts {
         "\u2029": "\\u2029", // paragraphSeparator
         "\u0085": "\\u0085"  // nextLine
     });
-    const escapedNullRegExp = /\\0[0-9]/g;
 
     /**
      * Based heavily on the abstract 'Quote'/'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
@@ -2618,14 +2611,19 @@ namespace ts {
             quoteChar === CharacterCodes.backtick ? backtickQuoteEscapedCharsRegExp :
             quoteChar === CharacterCodes.singleQuote ? singleQuoteEscapedCharsRegExp :
             doubleQuoteEscapedCharsRegExp;
-        return s.replace(escapedCharsRegExp, getReplacement).replace(escapedNullRegExp, nullReplacement);
+        return s.replace(escapedCharsRegExp, getReplacement);
     }
 
-    function nullReplacement(c: string) {
-        return "\\x00" + c.charAt(c.length - 1);
-    }
-
-    function getReplacement(c: string) {
+    function getReplacement(c: string, offset: number, input: string) {
+        if (c.charCodeAt(0) === CharacterCodes.nullCharacter) {
+            const lookAhead = input.charCodeAt(offset + c.length);
+            if (lookAhead >= CharacterCodes._0 && lookAhead <= CharacterCodes._9) {
+                // If the null character is followed by digits, print as a hex escape to prevent the result from parsing as an octal (which is forbidden in strict mode)
+                return "\\x00";
+            }
+            // Otherwise, keep printing a literal \0 for the null character
+            return "\\0";
+        }
         return escapedCharsMap.get(c) || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
     }
 
@@ -3848,6 +3846,10 @@ namespace ts {
     export function isUMDExportSymbol(symbol: Symbol) {
         return symbol && symbol.declarations && symbol.declarations[0] && isNamespaceExportDeclaration(symbol.declarations[0]);
     }
+
+    export function showModuleSpecifier({ moduleSpecifier }: ImportDeclaration): string {
+        return isStringLiteral(moduleSpecifier) ? moduleSpecifier.text : getTextOfNode(moduleSpecifier);
+    }
 }
 
 namespace ts {
@@ -4361,6 +4363,11 @@ namespace ts {
 
     export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {
         return declaration.name || nameForNamelessJSDocTypedef(declaration);
+    }
+
+    /** @internal */
+    export function isNamedDeclaration(node: Node): node is NamedDeclaration & { name: DeclarationName } {
+        return !!(node as NamedDeclaration).name; // A 'name' property should always be a DeclarationName.
     }
 
     export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {

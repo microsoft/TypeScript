@@ -315,7 +315,7 @@ namespace ts {
         }
 
         function getDisplayName(node: Declaration): string {
-            return (node as NamedDeclaration).name ? declarationNameToString((node as NamedDeclaration).name) : unescapeLeadingUnderscores(getDeclarationName(node));
+            return isNamedDeclaration(node) ? declarationNameToString(node.name) : unescapeLeadingUnderscores(getDeclarationName(node));
         }
 
         /**
@@ -383,8 +383,8 @@ namespace ts {
                         symbolTable.set(name, symbol = createSymbol(SymbolFlags.None, name));
                     }
                     else {
-                        if ((node as NamedDeclaration).name) {
-                            (node as NamedDeclaration).name.parent = node;
+                        if (isNamedDeclaration(node)) {
+                            node.name.parent = node;
                         }
 
                         // Report errors every position with duplicate declaration
@@ -1996,7 +1996,7 @@ namespace ts {
 
         /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
         function isUseStrictPrologueDirective(node: ExpressionStatement): boolean {
-            const nodeText = getTextOfNodeFromSourceText(file.text, node.expression);
+            const nodeText = getSourceTextOfNodeFromSourceFile(file, node.expression);
 
             // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
             // string to contain unicode escapes (as per ES5).
