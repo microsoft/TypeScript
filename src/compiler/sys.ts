@@ -133,11 +133,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function createDynamicPriorityPollingWatchFile(host: System): HostWatchFile {
-        if (!host.getModifiedTime || !host.setTimeout) {
-            throw notImplemented();
-        }
-
+    export function createDynamicPriorityPollingWatchFile(host: { getModifiedTime: System["getModifiedTime"]; setTimeout: System["setTimeout"]; }): HostWatchFile {
         interface WatchedFile extends ts.WatchedFile {
             isClosed?: boolean;
             unchangedPolls: number;
@@ -555,6 +551,8 @@ namespace ts {
                 },
                 readFile,
                 writeFile,
+                watchFile: getWatchFile(),
+                watchDirectory: getWatchDirectory(),
                 resolvePath: path => _path.resolve(path),
                 fileExists,
                 directoryExists,
@@ -574,14 +572,7 @@ namespace ts {
                     return process.env[name] || "";
                 },
                 readDirectory,
-                getModifiedTime(path) {
-                    try {
-                        return _fs.statSync(path).mtime;
-                    }
-                    catch (e) {
-                        return undefined;
-                    }
-                },
+                getModifiedTime,
                 createHash: _crypto ? createMD5HashUsingNativeCrypto : generateDjb2Hash,
                 getMemoryUsage() {
                     if (global.gc) {
@@ -625,9 +616,6 @@ namespace ts {
                     process.stdout.write("\x1Bc");
                 }
             };
-
-            nodeSystem.watchFile = getWatchFile();
-            nodeSystem.watchDirectory = getWatchDirectory();
             return nodeSystem;
 
             function isFileSystemCaseSensitive(): boolean {
@@ -654,13 +642,13 @@ namespace ts {
                         return fsWatchFile;
                     case "DynamicPriorityPolling":
                         // Use polling interval but change the interval depending on file changes and their default polling interval
-                        return createDynamicPriorityPollingWatchFile(nodeSystem);
+                        return createDynamicPriorityPollingWatchFile({ getModifiedTime, setTimeout });
                     case "UseFsEvents":
                         // Use notifications from FS to watch with falling back to fs.watchFile
                         return watchFileUsingFsWatch;
                     case "UseFsEventsWithFallbackDynamicPolling":
                         // Use notifications from FS to watch with falling back to dynamic watch file
-                        dynamicPollingWatchFile = createDynamicPriorityPollingWatchFile(nodeSystem);
+                        dynamicPollingWatchFile = createDynamicPriorityPollingWatchFile({ getModifiedTime, setTimeout });
                         return createWatchFileUsingDynamicWatchFile(dynamicPollingWatchFile);
                     case "UseFsEventsOnParentDirectory":
                         // Use notifications from FS to watch with falling back to fs.watchFile
@@ -683,7 +671,7 @@ namespace ts {
                 const watchDirectory = tscWatchDirectory === "RecursiveDirectoryUsingFsWatchFile" ?
                     createWatchDirectoryUsing(fsWatchFile) :
                     tscWatchDirectory === "RecursiveDirectoryUsingDynamicPriorityPolling" ?
-                        createWatchDirectoryUsing(dynamicPollingWatchFile || createDynamicPriorityPollingWatchFile(nodeSystem)) :
+                        createWatchDirectoryUsing(dynamicPollingWatchFile || createDynamicPriorityPollingWatchFile({ getModifiedTime, setTimeout })) :
                         watchDirectoryUsingFsWatch;
                 const watchDirectoryRecursively = createRecursiveDirectoryWatcher({
                     filePathComparer: useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
@@ -1025,6 +1013,15 @@ namespace ts {
 
             function getDirectories(path: string): string[] {
                 return filter<string>(_fs.readdirSync(path), dir => fileSystemEntryExists(combinePaths(path, dir), FileSystemEntryKind.Directory));
+            }
+
+            function getModifiedTime(path: string) {
+                try {
+                    return _fs.statSync(path).mtime;
+                }
+                catch (e) {
+                    return undefined;
+                }
             }
 
             /**
