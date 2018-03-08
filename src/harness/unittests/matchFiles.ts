@@ -91,6 +91,18 @@ namespace ts {
         "c:/dev/g.min.js/.g/g.ts"
     ]);
 
+    const caseInsensitiveOrderingDiffersWithCaseHost = new Utils.MockParseConfigHost(caseInsensitiveBasePath, /*useCaseSensitiveFileNames*/ false, [
+        "c:/dev/xylophone.ts",
+        "c:/dev/Yosemite.ts",
+        "c:/dev/zebra.ts",
+    ]);
+
+    const caseSensitiveOrderingDiffersWithCaseHost = new Utils.MockParseConfigHost(caseSensitiveBasePath, /*useCaseSensitiveFileNames*/ true, [
+        "/dev/xylophone.ts",
+        "/dev/Yosemite.ts",
+        "/dev/zebra.ts",
+    ]);
+
     function assertParsed(actual: ParsedCommandLine, expected: ParsedCommandLine): void {
         assert.deepEqual(actual.fileNames, expected.fileNames);
         assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
@@ -1481,6 +1493,26 @@ namespace ts {
                 };
                 validateMatches(expected, json, caseSensitiveHost, caseSensitiveBasePath);
             });
+        });
+
+        it("can include files in the same order on multiple platforms", () => {
+            function getExpected(basePath: string): ParsedCommandLine {
+                return {
+                    options: {},
+                    errors: [],
+                    fileNames: [
+                        `${basePath}Yosemite.ts`, // capital always comes before lowercase letters
+                        `${basePath}xylophone.ts`,
+                        `${basePath}zebra.ts`
+                    ],
+                    wildcardDirectories: {
+                        [basePath.slice(0, basePath.length - 1)]: WatchDirectoryFlags.Recursive
+                    },
+                };
+            }
+            const json = {};
+            validateMatches(getExpected(caseSensitiveBasePath), json, caseSensitiveOrderingDiffersWithCaseHost, caseSensitiveBasePath);
+            validateMatches(getExpected(caseInsensitiveBasePath), json, caseInsensitiveOrderingDiffersWithCaseHost, caseInsensitiveBasePath);
         });
     });
 }
