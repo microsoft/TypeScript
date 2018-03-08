@@ -67,6 +67,7 @@ sourceFile:ES5For-of8.ts
 13>                                       ^^^^^^^^^^^^^^
 14>                                                     ^^
 15>                                                       ^^^^
+16>                                                           ^^
 1->
   >
 2 >for (foo().x of 
@@ -83,6 +84,7 @@ sourceFile:ES5For-of8.ts
 13>                                       ['a', 'b', 'c']
 14>                                                     
 15>                                                       ['a', 'b', 'c']
+16>                                                           ) 
 1->Emitted(4, 1) Source(4, 1) + SourceIndex(0)
 2 >Emitted(4, 6) Source(4, 17) + SourceIndex(0)
 3 >Emitted(4, 16) Source(4, 32) + SourceIndex(0)
@@ -98,6 +100,7 @@ sourceFile:ES5For-of8.ts
 13>Emitted(4, 54) Source(4, 32) + SourceIndex(0)
 14>Emitted(4, 56) Source(4, 17) + SourceIndex(0)
 15>Emitted(4, 60) Source(4, 32) + SourceIndex(0)
+16>Emitted(4, 62) Source(4, 34) + SourceIndex(0)
 ---
 >>>    foo().x = _a[_i];
 1 >^^^^
