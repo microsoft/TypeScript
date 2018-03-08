@@ -2049,6 +2049,18 @@ namespace ts {
                     if (initializer) {
                         namespace = getSymbolOfNode(initializer);
                     }
+                    if (namespace.valueDeclaration &&
+                        isVariableDeclaration(namespace.valueDeclaration) &&
+                        isCommonJsRequire(namespace.valueDeclaration.initializer)) {
+                        const moduleName = (namespace.valueDeclaration.initializer as CallExpression).arguments[0] as StringLiteral;
+                        const moduleSym = resolveExternalModuleName(moduleName, moduleName);
+                        if (moduleSym) {
+                            const resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
+                            if (resolvedModuleSymbol) {
+                                namespace = resolvedModuleSymbol;
+                            }
+                        }
+                    }
                 }
                 symbol = getSymbol(getExportsOfSymbol(namespace), right.escapedText, meaning);
                 if (!symbol) {
@@ -18133,7 +18145,7 @@ namespace ts {
 
             // In JavaScript files, calls to any identifier 'require' are treated as external module imports
             if (isInJavaScriptFile(node) && isCommonJsRequire(node)) {
-                return resolveExternalModuleTypeByLiteral(<StringLiteral>node.arguments[0]);
+                return resolveExternalModuleTypeByLiteral(node.arguments[0] as StringLiteral);
             }
 
             const returnType = getReturnTypeOfSignature(signature);
