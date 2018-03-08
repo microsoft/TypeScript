@@ -1476,6 +1476,13 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(sourceFile, str).charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
+    /**
+     * Given the symbol of a declaration, find the symbol of its Javascript container-like initializer,
+     * if it has one. Otherwise just return the original symbol.
+     *
+     * Container-like initializer behave like namespaces, so the binder needs to add contained symbols
+     * to their exports. An example is a function with assignments to `this` inside.
+     */
     export function getJSInitializerSymbol(symbol: Symbol) {
         if (!symbol || !symbol.valueDeclaration) {
             return symbol;
@@ -1485,22 +1492,37 @@ namespace ts {
         return e ? e.symbol : symbol;
     }
 
+    /** Get the declaration initializer, when the initializer is container-like (See getJavascriptInitializer) */
     export function getDeclaredJavascriptInitializer(node: Node) {
         if (node && isVariableDeclaration(node) && node.initializer) {
-            return getJavascriptInitializer(node.initializer) ||
-                isIdentifier(node.name) && getDefaultedJavascriptInitializer(node.name, node.initializer);
+            return getJavascriptInitializer(node.initializer, /*isPrototypeAssignment*/ false) ||
+                isIdentifier(node.name) && getDefaultedJavascriptInitializer(node.name, node.initializer, /*isPrototypeAssignment*/ false);
         }
     }
 
+    /**
+     * Get the assignment 'initializer' -- the righthand side-- when the initializer is container-like (See getJavascriptInitializer).
+     * We treat the right hand side of assignments with container-like initalizers as declarations.
+     */
     export function getAssignedJavascriptInitializer(node: Node) {
-        return node &&
-            (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.BarBarToken || isPropertyAccessExpression(node)) &&
-            node.parent && isBinaryExpression(node.parent) &&
-            node.parent.operatorToken.kind === SyntaxKind.EqualsToken &&
-            (getJavascriptInitializer(node.parent.right) || getDefaultedJavascriptInitializer(node.parent.left as EntityNameExpression, node.parent.right));
+        if (node && node.parent && isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
+            const isPrototypeAssignment = isPropertyAccessExpression(node.parent.left) && node.parent.left.name.escapedText === "prototype";
+            return getJavascriptInitializer(node.parent.right, isPrototypeAssignment) ||
+                getDefaultedJavascriptInitializer(node.parent.left as EntityNameExpression, node.parent.right, isPrototypeAssignment);
+        }
     }
 
-    export function getJavascriptInitializer(initializer: Expression) {
+    /**
+     * Recognized Javascript container-like initializers are:
+     * 1. (function() {})() -- IIFEs
+     * 2. function() { } -- Function expressions
+     * 3. class { } -- Class expressions
+     * 4. {} -- Empty object literals
+     * 5. { ... } -- Non-empty object literals, when used to initialize a prototype, like `C.prototype = { m() { } }`
+     *
+     * This function returns the provided initializer, or undefined if it is not valid.
+     */
+    export function getJavascriptInitializer(initializer: Expression, isPrototypeAssignment: boolean) {
         if (isCallExpression(initializer)) {
             const e = skipParentheses(initializer.expression);
             return e.kind === SyntaxKind.FunctionExpression || e.kind === SyntaxKind.ArrowFunction ? initializer : undefined;
@@ -1508,15 +1530,21 @@ namespace ts {
         if (initializer.kind === SyntaxKind.FunctionExpression || initializer.kind === SyntaxKind.ClassExpression) {
             return initializer;
         }
-        if (isObjectLiteralExpression(initializer) &&
-            (initializer.properties.length === 0 ||
-             isBinaryExpression(initializer.parent) && isPropertyAccessExpression(initializer.parent.left) && initializer.parent.left.name.escapedText === "prototype")) {
+        if (isObjectLiteralExpression(initializer) && (initializer.properties.length === 0 || isPrototypeAssignment)) {
             return initializer;
         }
     }
 
-    function getDefaultedJavascriptInitializer(name: EntityNameExpression, initializer: Expression) {
-        const e = isBinaryExpression(initializer) && getJavascriptInitializer(initializer.right);
+    /**
+     * A defaulted Javascript initializer matches the pattern
+     * `Lhs = Lhs || JavascriptInitializer`
+     * or `var Lhs = Lhs || JavascriptInitializer`
+     *
+     * The second Lhs is required to be the same as the first except that it may be prefixed with
+     * 'window.', 'global.' or 'self.' The second Lhs is otherwise ignored by the binder and checker.
+     */
+    function getDefaultedJavascriptInitializer(name: EntityNameExpression, initializer: Expression, isPrototypeAssignment: boolean) {
+        const e = isBinaryExpression(initializer) && initializer.operatorToken.kind === SyntaxKind.BarBarToken && getJavascriptInitializer(initializer.right, isPrototypeAssignment);
         if (e && isSameEntityName(name, (initializer as BinaryExpression).left as EntityNameExpression)) {
             return e;
         }

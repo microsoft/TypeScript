@@ -2295,10 +2295,7 @@ namespace ts {
             // expression is the declaration
             setCommonJsModuleIndicator(node);
             const lhs = node.left as PropertyAccessEntityNameExpression;
-            const symbol = forEachIdentifierInEntityName(lhs.expression, (id, original, e) => {
-                if (isExportsOrModuleExportsOrAlias(file, e) || (isIdentifier(e) && e.escapedText === "module" && original === undefined)) {
-                    return file.symbol;
-                }
+            const symbol = forEachIdentifierInEntityName(lhs.expression, (id, original) => {
                 if (!original) {
                     return undefined;
                 }
@@ -2422,9 +2419,15 @@ namespace ts {
 
         function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
             let symbol = getJSInitializerSymbol(lookupSymbolForPropertyAccess(name));
-            const isToplevelNamespaceableInitializer = isBinaryExpression(propertyAccess.parent) ?
-                propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile && getJavascriptInitializer(propertyAccess.parent.right) :
-                propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
+            let isToplevelNamespaceableInitializer: boolean;
+            if (isBinaryExpression(propertyAccess.parent)) {
+                const isPrototypeAssignment = isPropertyAccessExpression(propertyAccess.parent.left) && propertyAccess.parent.left.name.escapedText === "prototype";
+                isToplevelNamespaceableInitializer = propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile &&
+                    !!getJavascriptInitializer(propertyAccess.parent.right, isPrototypeAssignment);
+            }
+            else {
+                isToplevelNamespaceableInitializer = propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
+            }
             if (!isPrototypeProperty && (!symbol || !(symbol.flags & SymbolFlags.Namespace)) && isToplevelNamespaceableInitializer) {
                 // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.JSContainer;
@@ -2465,14 +2468,17 @@ namespace ts {
             }
         }
 
-        function forEachIdentifierInEntityName(e: EntityNameExpression, action: (e: Identifier, symbol: Symbol, k: EntityNameExpression) => Symbol): Symbol {
-            if (isIdentifier(e)) {
-                return action(e, lookupSymbolForPropertyAccess(e), e);
+        function forEachIdentifierInEntityName(e: EntityNameExpression, action: (e: Identifier, symbol: Symbol) => Symbol): Symbol {
+            if (isExportsOrModuleExportsOrAlias(file, e)) {
+                return file.symbol;
+            }
+            else if (isIdentifier(e)) {
+                return action(e, lookupSymbolForPropertyAccess(e));
             }
             else {
                 const s = getJSInitializerSymbol(forEachIdentifierInEntityName(e.expression, action));
                 Debug.assert(!!s && !!s.exports);
-                return action(e.name, s.exports.get(e.name.escapedText), e);
+                return action(e.name, s.exports.get(e.name.escapedText));
             }
         }
 
@@ -2704,7 +2710,7 @@ namespace ts {
 
     function isExportsOrModuleExportsOrAliasOrAssignment(sourceFile: SourceFile, node: Expression): boolean {
         return isExportsOrModuleExportsOrAlias(sourceFile, node) ||
-            (isAssignmentExpression(node, /*excludeCompoundAssignements*/ true) && (
+            (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true) && (
                 isExportsOrModuleExportsOrAliasOrAssignment(sourceFile, node.left) || isExportsOrModuleExportsOrAliasOrAssignment(sourceFile, node.right)));
     }
 
