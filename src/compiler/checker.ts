@@ -8008,10 +8008,10 @@ namespace ts {
         }
 
         function getLiteralTypeFromPropertyName(prop: Symbol) {
-            const links = getSymbolLinks(prop);
+            const links = getSymbolLinks(getLateBoundSymbol(prop));
             if (!links.nameType) {
                 if (links.target) {
-                    Debug.assert(links.target.escapedName === prop.escapedName, "Target symbol and symbol do not have the same name");
+                    Debug.assert(links.target.escapedName === prop.escapedName || links.target.escapedName === InternalSymbolName.Computed, "Target symbol and symbol do not have the same name");
                     links.nameType = getLiteralTypeFromPropertyName(links.target);
                 }
                 else {
@@ -10556,6 +10556,11 @@ namespace ts {
                 let result = Ternary.True;
                 for (const prop of getPropertiesOfObjectType(source)) {
                     if (isIgnoredJsxProperty(source, prop, /*targetMemberType*/ undefined)) {
+                        continue;
+                    }
+                    // Skip over symbol-named members
+                    const nameType = getLiteralTypeFromPropertyName(prop);
+                    if (nameType !== undefined && !(isRelatedTo(nameType, stringType) || isRelatedTo(nameType, numberType))) {
                         continue;
                     }
                     if (kind === IndexKind.String || isNumericLiteralName(prop.escapedName)) {
