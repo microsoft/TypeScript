@@ -4,35 +4,35 @@
 namespace ts {
     describe("parseConfigFileTextToJson", () => {
         function assertParseResult(jsonText: string, expectedConfigObject: { config?: any; error?: Diagnostic[] }) {
-            const parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
+            const parsed = parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
             assert.equal(JSON.stringify(parsed), JSON.stringify(expectedConfigObject));
         }
 
         function assertParseErrorWithExcludesKeyword(jsonText: string) {
             {
-                const parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
-                const parsedCommand = ts.parseJsonConfigFileContent(parsed.config, ts.sys, "tests/cases/unittests");
+                const parsed = parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
+                const parsedCommand = parseJsonConfigFileContent(parsed.config, sys, "tests/cases/unittests");
                 assert.isTrue(parsedCommand.errors && parsedCommand.errors.length === 1 &&
-                    parsedCommand.errors[0].code === ts.Diagnostics.Unknown_option_excludes_Did_you_mean_exclude.code);
+                    parsedCommand.errors[0].code === Diagnostics.Unknown_option_excludes_Did_you_mean_exclude.code);
             }
             {
-                const parsed = ts.parseJsonText("/apath/tsconfig.json", jsonText);
-                const parsedCommand = ts.parseJsonSourceFileConfigFileContent(parsed, ts.sys, "tests/cases/unittests");
+                const parsed = parseJsonText("/apath/tsconfig.json", jsonText);
+                const parsedCommand = parseJsonSourceFileConfigFileContent(parsed, sys, "tests/cases/unittests");
                 assert.isTrue(parsedCommand.errors && parsedCommand.errors.length === 1 &&
-                    parsedCommand.errors[0].code === ts.Diagnostics.Unknown_option_excludes_Did_you_mean_exclude.code);
+                    parsedCommand.errors[0].code === Diagnostics.Unknown_option_excludes_Did_you_mean_exclude.code);
             }
         }
 
         function getParsedCommandJson(jsonText: string, configFileName: string, basePath: string, allFileList: string[]) {
-            const parsed = ts.parseConfigFileTextToJson(configFileName, jsonText);
+            const parsed = parseConfigFileTextToJson(configFileName, jsonText);
             const host: ParseConfigHost = new Utils.MockParseConfigHost(basePath, true, allFileList);
-            return ts.parseJsonConfigFileContent(parsed.config, host, basePath, /*existingOptions*/ undefined, configFileName);
+            return parseJsonConfigFileContent(parsed.config, host, basePath, /*existingOptions*/ undefined, configFileName);
         }
 
         function getParsedCommandJsonNode(jsonText: string, configFileName: string, basePath: string, allFileList: string[]) {
-            const parsed = ts.parseJsonText(configFileName, jsonText);
+            const parsed = parseJsonText(configFileName, jsonText);
             const host: ParseConfigHost = new Utils.MockParseConfigHost(basePath, true, allFileList);
-            return ts.parseJsonSourceFileConfigFileContent(parsed, host, basePath, /*existingOptions*/ undefined, configFileName);
+            return parseJsonSourceFileConfigFileContent(parsed, host, basePath, /*existingOptions*/ undefined, configFileName);
         }
 
         function assertParseFileList(jsonText: string, configFileName: string, basePath: string, allFileList: string[], expectedFileList: string[]) {
@@ -128,9 +128,9 @@ namespace ts {
          });
 
         it("returns object with error when json is invalid", () => {
-            const parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", "invalid");
+            const parsed = parseConfigFileTextToJson("/apath/tsconfig.json", "invalid");
             assert.deepEqual(parsed.config, { invalid: undefined });
-            const expected = ts.createCompilerDiagnostic(ts.Diagnostics._0_expected, "{");
+            const expected = createCompilerDiagnostic(Diagnostics._0_expected, "{");
             assert.equal(parsed.error.messageText, expected.messageText);
             assert.equal(parsed.error.category, expected.category);
             assert.equal(parsed.error.code, expected.code);

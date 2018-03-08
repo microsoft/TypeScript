@@ -28,26 +28,26 @@ type T12 = ReturnType<(<T>() => T)>;  // {}
 type T13 = ReturnType<(<T extends U, U extends number[]>() => T)>;  // number[]
 type T14 = ReturnType<typeof f1>;  // { a: number, b: string }
 type T15 = ReturnType<any>;  // any
-type T16 = ReturnType<never>;  // any
+type T16 = ReturnType<never>;  // never
 type T17 = ReturnType<string>;  // Error
 type T18 = ReturnType<Function>;  // Error
 
 type U10 = InstanceType<typeof C>;  // C
 type U11 = InstanceType<any>;  // any
-type U12 = InstanceType<never>;  // any
+type U12 = InstanceType<never>;  // never
 type U13 = InstanceType<string>;  // Error
 type U14 = InstanceType<Function>;  // Error
 
 type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A : any;
 
-type T20 = ArgumentType<() => void>;  // never
+type T20 = ArgumentType<() => void>;  // {}
 type T21 = ArgumentType<(x: string) => number>;  // string
 type T22 = ArgumentType<(x?: string) => number>;  // string | undefined
 type T23 = ArgumentType<(...args: string[]) => number>;  // string
 type T24 = ArgumentType<(x: string, y: string) => number>;  // Error
 type T25 = ArgumentType<Function>;  // Error
 type T26 = ArgumentType<any>;  // any
-type T27 = ArgumentType<never>;  // any
+type T27 = ArgumentType<never>;  // never
 
 type X1<T extends { x: any, y: any }> = T extends { x: infer X, y: infer Y } ? [X, Y] : any;
 
@@ -87,6 +87,15 @@ type T75<T> = T extends T74<infer U, infer U> ? T70<U> | T72<U> | T74<U, U> : ne
 type T76<T extends T[], U extends T> = { x: T };
 type T77<T> = T extends T76<infer X, infer Y> ? T76<X, Y> : never;
 type T78<T> = T extends T76<infer X, infer X> ? T76<X, X> : never;
+
+type Foo<T extends string, U extends T> = [T, U];
+type Bar<T> = T extends Foo<infer X, infer Y> ? Foo<X, Y> : never;
+
+type T90 = Bar<[string, string]>;  // [string, string]
+type T91 = Bar<[string, "a"]>;  // [string, "a"]
+type T92 = Bar<[string, "a"] & { x: string }>;  // [string, "a"]
+type T93 = Bar<["a", string]>;  // never
+type T94 = Bar<[number, number]>;  // never
 
 // Example from #21496
 
@@ -133,6 +142,29 @@ type C2<S, U extends void> = S extends A2<infer T, U> ? [T, U] : never;
 
 type A<T> = T extends string ? { [P in T]: void; } : T;
 type B<T> = string extends T ? { [P in T]: void; } : T;  // Error
+
+// Repro from #22302
+
+type MatchingKeys<T, U, K extends keyof T = keyof T> =
+    K extends keyof T ? T[K] extends U ? K : never : never;
+
+type VoidKeys<T> = MatchingKeys<T, void>;
+
+interface test {
+    a: 1,
+    b: void
+}
+
+type T80 = MatchingKeys<test, void>;
+type T81 = VoidKeys<test>;
+
+// Repro from #22221
+
+type MustBeString<T extends string> = T;
+type EnsureIsString<T> = T extends MustBeString<infer U> ? U : never;
+
+type Test1 = EnsureIsString<"hello">;  // "hello"
+type Test2 = EnsureIsString<42>;  // never
 
 
 //// [inferTypes1.js]

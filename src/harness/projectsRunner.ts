@@ -163,7 +163,7 @@ class ProjectRunner extends RunnerBase {
             }
 
             function getSourceFile(fileName: string, languageVersion: ts.ScriptTarget): ts.SourceFile {
-                let sourceFile: ts.SourceFile = undefined;
+                let sourceFile: ts.SourceFile;
                 if (fileName === Harness.Compiler.defaultLibFileName) {
                     sourceFile = Harness.Compiler.getDefaultLibrarySourceFile(Harness.Compiler.getDefaultLibFileName(compilerOptions));
                 }
@@ -294,7 +294,7 @@ class ProjectRunner extends RunnerBase {
             }
 
             function getSourceFileText(fileName: string): string {
-                let text: string = undefined;
+                let text: string;
                 try {
                     text = Harness.IO.readFile(getFileNameInTheProjectTest(fileName));
                 }
@@ -370,7 +370,7 @@ class ProjectRunner extends RunnerBase {
                     allInputFiles.unshift({ emittedFileName: sourceFile.fileName, code: sourceFile.text });
                 }
                 else if (!(compilerOptions.outFile || compilerOptions.out)) {
-                    let emitOutputFilePathWithoutExtension: string = undefined;
+                    let emitOutputFilePathWithoutExtension: string;
                     if (compilerOptions.outDir) {
                         let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, compilerResult.program.getCurrentDirectory());
                         sourceFilePath = sourceFilePath.replace(compilerResult.program.getCommonSourceDirectory(), "");

@@ -1,11 +1,14 @@
 /// <reference path='fourslash.ts' />
 ////class C {
 ////    /** @return {number} */
-////    get /*1*/c() { return 12 }
+////    get c() { return 12 }
 ////}
-verify.applicableRefactorAvailableAtMarker('1');
-verify.fileAfterApplyingRefactorAtMarker('1',
+
+verify.codeFix({
+    description: "Annotate with type from JSDoc",
+    newFileContent:
 `class C {
     /** @return {number} */
-    get c(): number { return 12; }
-}`, 'Annotate with type from JSDoc', 'annotate');
+    get c(): number { return 12 }
+}`,
+});
