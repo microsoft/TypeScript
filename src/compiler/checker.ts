@@ -911,10 +911,12 @@ namespace ts {
                         ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
                         : Diagnostics.Duplicate_identifier_0;
                 forEach(source.declarations, node => {
-                    error(getNameOfDeclaration(node) || node, message, symbolToString(source));
+                    const errorNode = (getJavascriptInitializer(node, /*isPrototypeAssignment*/ false) ? getOuterNameOfJsInitializer(node) : getNameOfDeclaration(node)) || node;
+                    error(errorNode, message, symbolToString(source));
                 });
                 forEach(target.declarations, node => {
-                    error(getNameOfDeclaration(node) || node, message, symbolToString(source));
+                    const errorNode = (getJavascriptInitializer(node, /*isPrototypeAssignment*/ false) ? getOuterNameOfJsInitializer(node) : getNameOfDeclaration(node)) || node;
+                    error(errorNode, message, symbolToString(source));
                 });
             }
         }

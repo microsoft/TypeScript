@@ -1522,13 +1522,13 @@ namespace ts {
      *
      * This function returns the provided initializer, or undefined if it is not valid.
      */
-    export function getJavascriptInitializer(initializer: Expression, isPrototypeAssignment: boolean) {
+    export function getJavascriptInitializer(initializer: Node, isPrototypeAssignment: boolean): Expression {
         if (isCallExpression(initializer)) {
             const e = skipParentheses(initializer.expression);
             return e.kind === SyntaxKind.FunctionExpression || e.kind === SyntaxKind.ArrowFunction ? initializer : undefined;
         }
         if (initializer.kind === SyntaxKind.FunctionExpression || initializer.kind === SyntaxKind.ClassExpression) {
-            return initializer;
+            return initializer as Expression;
         }
         if (isObjectLiteralExpression(initializer) && (initializer.properties.length === 0 || isPrototypeAssignment)) {
             return initializer;
@@ -1547,6 +1547,19 @@ namespace ts {
         const e = isBinaryExpression(initializer) && initializer.operatorToken.kind === SyntaxKind.BarBarToken && getJavascriptInitializer(initializer.right, isPrototypeAssignment);
         if (e && isSameEntityName(name, (initializer as BinaryExpression).left as EntityNameExpression)) {
             return e;
+        }
+    }
+
+    /** Given a Javascript initializer, return the outer name. That is, the lhs of the assignment or the declaration name. */
+    export function getOuterNameOfJsInitializer(node: Declaration): DeclarationName | undefined {
+        if (isBinaryExpression(node.parent)) {
+            const parent = (node.parent.operatorToken.kind === SyntaxKind.BarBarToken && isBinaryExpression(node.parent.parent)) ? node.parent.parent : node.parent;
+            if (parent.operatorToken.kind === SyntaxKind.EqualsToken && isIdentifier(parent.left)) {
+                return parent.left;
+            }
+        }
+        else if (isVariableDeclaration(node.parent)) {
+            return node.parent.name;
         }
     }
 
