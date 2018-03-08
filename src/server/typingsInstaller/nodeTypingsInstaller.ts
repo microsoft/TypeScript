@@ -1,4 +1,4 @@
-/// <reference types="node" />
+// tslint:disable no-unnecessary-type-assertion (TODO: tslint can't find node types)
 
 namespace ts.server.typingsInstaller {
     const fs: {

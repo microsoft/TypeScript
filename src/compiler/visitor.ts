@@ -808,7 +808,7 @@ namespace ts {
 
             case SyntaxKind.ExternalModuleReference:
                 return updateExternalModuleReference(<ExternalModuleReference>node,
-                    visitNode((<ExternalModuleReference>node).expression!, visitor, isExpression));
+                    visitNode((<ExternalModuleReference>node).expression, visitor, isExpression));
 
             // JSX
 

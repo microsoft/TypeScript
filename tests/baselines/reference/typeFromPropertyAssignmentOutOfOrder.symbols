@@ -1,24 +1,24 @@
 === tests/cases/conformance/salsa/index.js ===
 Common.Item = class I {}
 >Common.Item : Symbol(Common.Item, Decl(index.js, 0, 0))
->Common : Symbol(Common, Decl(index.js, 0, 0), Decl(roots.js, 0, 3))
+>Common : Symbol(Common, Decl(index.js, 0, 0), Decl(roots.js, 0, 3), Decl(roots.js, 0, 12))
 >Item : Symbol(Common.Item, Decl(index.js, 0, 0))
 >I : Symbol(I, Decl(index.js, 0, 13))
 
 Common.Object = class extends Common.Item {}
 >Common.Object : Symbol(Common.Object, Decl(index.js, 0, 24))
->Common : Symbol(Common, Decl(index.js, 0, 0), Decl(roots.js, 0, 3))
+>Common : Symbol(Common, Decl(index.js, 0, 0), Decl(roots.js, 0, 3), Decl(roots.js, 0, 12))
 >Object : Symbol(Common.Object, Decl(index.js, 0, 24))
 >Common.Item : Symbol(Common.Item, Decl(index.js, 0, 0))
->Common : Symbol(Common, Decl(index.js, 0, 0), Decl(roots.js, 0, 3))
+>Common : Symbol(Common, Decl(index.js, 0, 0), Decl(roots.js, 0, 3), Decl(roots.js, 0, 12))
 >Item : Symbol(Common.Item, Decl(index.js, 0, 0))
 
 Workspace.Object = class extends Common.Object {}
 >Workspace.Object : Symbol(Workspace.Object, Decl(index.js, 1, 44))
->Workspace : Symbol(Workspace, Decl(index.js, 1, 44), Decl(roots.js, 1, 3))
+>Workspace : Symbol(Workspace, Decl(index.js, 1, 44), Decl(roots.js, 1, 3), Decl(roots.js, 1, 15))
 >Object : Symbol(Workspace.Object, Decl(index.js, 1, 44))
 >Common.Object : Symbol(Common.Object, Decl(index.js, 0, 24))
->Common : Symbol(Common, Decl(index.js, 0, 0), Decl(roots.js, 0, 3))
+>Common : Symbol(Common, Decl(index.js, 0, 0), Decl(roots.js, 0, 3), Decl(roots.js, 0, 12))
 >Object : Symbol(Common.Object, Decl(index.js, 0, 24))
 
 /** @type {Workspace.Object} */
@@ -27,8 +27,8 @@ var am;
 
 === tests/cases/conformance/salsa/roots.js ===
 var Common = {};
->Common : Symbol(Common, Decl(index.js, 0, 0), Decl(roots.js, 0, 3))
+>Common : Symbol(Common, Decl(index.js, 0, 0), Decl(roots.js, 0, 3), Decl(roots.js, 0, 12))
 
 var Workspace = {};
->Workspace : Symbol(Workspace, Decl(index.js, 1, 44), Decl(roots.js, 1, 3))
+>Workspace : Symbol(Workspace, Decl(index.js, 1, 44), Decl(roots.js, 1, 3), Decl(roots.js, 1, 15))
 

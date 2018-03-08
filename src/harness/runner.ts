@@ -68,7 +68,7 @@ function createRunner(kind: TestRunnerKind): RunnerBase {
     return ts.Debug.fail(`Unknown runner kind ${kind}`);
 }
 
-if (Harness.IO.tryEnableSourceMapsForHost && /^development$/i.test(Harness.IO.getEnvironmentVariable!("NODE_ENV"))) {
+if (Harness.IO.tryEnableSourceMapsForHost && /^development$/i.test(Harness.IO.getEnvironmentVariable!("NODE_ENV")!)) {
     Harness.IO.tryEnableSourceMapsForHost();
 }
 

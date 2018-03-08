@@ -10,7 +10,7 @@ namespace ts.projectSystem {
     export import TestServerHost = TestFSWithWatch.TestServerHost;
     export type FileOrFolder = TestFSWithWatch.FileOrFolder;
     export import createServerHost = TestFSWithWatch.createServerHost;
-    export import checkFileNames = TestFSWithWatch.checkFileNames;
+    export import checkArray = TestFSWithWatch.checkArray;
     export import libFile = TestFSWithWatch.libFile;
     export import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
     import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
@@ -354,11 +354,11 @@ namespace ts.projectSystem {
     }
 
     export function checkProjectActualFiles(project: server.Project, expectedFiles: string[]) {
-        checkFileNames(`${server.ProjectKind[project.projectKind]} project, actual files`, project.getFileNames(), expectedFiles);
+        checkArray(`${server.ProjectKind[project.projectKind]} project, actual files`, project.getFileNames(), expectedFiles);
     }
 
     function checkProjectRootFiles(project: server.Project, expectedFiles: string[]) {
-        checkFileNames(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
+        checkArray(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
     }
 
     function mapCombinedPathsInAncestor(dir: string, path2: string, mapAncestor: (ancestor: string) => boolean) {
@@ -391,7 +391,7 @@ namespace ts.projectSystem {
     }
 
     function checkOpenFiles(projectService: server.ProjectService, expectedFiles: FileOrFolder[]) {
-        checkFileNames("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path)!.fileName), expectedFiles.map(file => file.path));
+        checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path)!.fileName), expectedFiles.map(file => file.path));
     }
 
     /**
@@ -530,7 +530,7 @@ namespace ts.projectSystem {
 
             const project = projectService.inferredProjects[0];
 
-            checkFileNames("inferred project", project.getFileNames(), [appFile.path, libFile.path, moduleFile.path]);
+            checkArray("inferred project", project.getFileNames(), [appFile.path, libFile.path, moduleFile.path]);
             const configFileLocations = ["/a/b/c/", "/a/b/", "/a/", "/"];
             const configFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]);
             checkWatchedFiles(host, configFiles.concat(libFile.path, moduleFile.path));
@@ -5662,16 +5662,11 @@ namespace ts.projectSystem {
             }
 
             function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: Map<number>) {
-                const calledMap = calledMaps[callback];
-                TestFSWithWatch.verifyMapSize(callback, calledMap, arrayFrom(expectedKeys.keys()));
-                expectedKeys.forEach((called, name) => {
-                    assert.isTrue(calledMap.has(name), `${callback} is expected to contain ${name}, actual keys: ${arrayFrom(calledMap.keys())}`);
-                    assert.equal(calledMap.get(name)!.length, called, `${callback} is expected to be called ${called} times with ${name}. Actual entry: ${calledMap.get(name)}`);
-                });
+                TestFSWithWatch.checkMultiMapKeyCount(callback, calledMaps[callback], expectedKeys);
             }
 
             function verifyCalledOnEachEntryNTimes(callback: CalledMaps, expectedKeys: string[], nTimes: number) {
-                return verifyCalledOnEachEntry(callback, zipToMap(expectedKeys, expectedKeys.map(() => nTimes)));
+                TestFSWithWatch.checkMultiMapEachKeyWithCount(callback, calledMaps[callback], expectedKeys, nTimes);
             }
 
             function verifyNoHostCalls() {
@@ -7008,7 +7003,6 @@ namespace ts.projectSystem {
             assert.isDefined(projectService.configuredProjects.get(aTsconfig.path));
             assert.isDefined(projectService.configuredProjects.get(bTsconfig.path));
 
-            debugger;
             verifyRenameResponse(session.executeCommandSeq<protocol.RenameRequest>({
                 command: protocol.CommandTypes.Rename,
                 arguments: {
@@ -7435,6 +7429,89 @@ namespace ts.projectSystem {
                     checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
                 }
             });
+        });
+    });
+
+    describe("watchDirectories implementation", () => {
+        function verifyCompletionListWithNewFileInSubFolder(tscWatchDirectory: TestFSWithWatch.Tsc_WatchDirectory) {
+            const projectFolder = "/a/username/project";
+            const projectSrcFolder = `${projectFolder}/src`;
+            const configFile: FileOrFolder = {
+                path: `${projectFolder}/tsconfig.json`,
+                content: "{}"
+            };
+            const index: FileOrFolder = {
+                path: `${projectSrcFolder}/index.ts`,
+                content: `import {} from "./"`
+            };
+            const file1: FileOrFolder = {
+                path: `${projectSrcFolder}/file1.ts`,
+                content: ""
+            };
+
+            const files = [index, file1, configFile, libFile];
+            const fileNames = files.map(file => file.path);
+            // All closed files(files other than index), project folder, project/src folder and project/node_modules/@types folder
+            const expectedWatchedFiles = arrayToMap(fileNames.slice(1), s => s, () => 1);
+            const expectedWatchedDirectories = createMap<number>();
+            const mapOfDirectories = tscWatchDirectory === TestFSWithWatch.Tsc_WatchDirectory.NonRecursiveWatchDirectory ?
+                expectedWatchedDirectories :
+                tscWatchDirectory === TestFSWithWatch.Tsc_WatchDirectory.WatchFile ?
+                    expectedWatchedFiles :
+                    createMap();
+            // For failed resolution lookup and tsconfig files
+            mapOfDirectories.set(projectFolder, 2);
+            // Through above recursive watches
+            mapOfDirectories.set(projectSrcFolder, 2);
+            // node_modules/@types folder
+            mapOfDirectories.set(`${projectFolder}/${nodeModulesAtTypes}`, 1);
+            const expectedCompletions = ["file1"];
+            const completionPosition = index.content!.lastIndexOf('"');
+            const environmentVariables = createMap<string>();
+            environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
+            const host = createServerHost(files, { environmentVariables });
+            const projectService = createProjectService(host);
+            projectService.openClientFile(index.path);
+
+            const project = Debug.assertDefined(projectService.configuredProjects.get(configFile.path));
+            verifyProjectAndCompletions();
+
+            // Add file2
+            const file2: FileOrFolder = {
+                path: `${projectSrcFolder}/file2.ts`,
+                content: ""
+            };
+            files.push(file2);
+            fileNames.push(file2.path);
+            expectedWatchedFiles.set(file2.path, 1);
+            expectedCompletions.push("file2");
+            host.reloadFS(files);
+            host.runQueuedTimeoutCallbacks();
+            assert.equal(projectService.configuredProjects.get(configFile.path), project);
+            verifyProjectAndCompletions();
+
+            function verifyProjectAndCompletions() {
+                const completions = project.getLanguageService().getCompletionsAtPosition(index.path, completionPosition, { includeExternalModuleExports: false, includeInsertTextCompletions: false })!;
+                checkArray("Completion Entries", completions.entries.map(e => e.name), expectedCompletions);
+
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+
+                TestFSWithWatch.checkMultiMapKeyCount("watchedFiles", host.watchedFiles, expectedWatchedFiles);
+                TestFSWithWatch.checkMultiMapKeyCount("watchedDirectories", host.watchedDirectories, expectedWatchedDirectories);
+                checkProjectActualFiles(project, fileNames);
+            }
+        }
+
+        it("uses watchFile when file is added to subfolder, completion list has new file", () => {
+            verifyCompletionListWithNewFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.WatchFile);
+        });
+
+        it("uses non recursive watchDirectory when file is added to subfolder, completion list has new file", () => {
+            verifyCompletionListWithNewFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.NonRecursiveWatchDirectory);
+        });
+
+        it("uses dynamic polling when file is added to subfolder, completion list has new file", () => {
+            verifyCompletionListWithNewFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.DynamicPolling);
         });
     });
 }

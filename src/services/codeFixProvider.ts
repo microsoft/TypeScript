@@ -88,15 +88,8 @@ namespace ts {
             return createCombinedCodeActions(changes, commands.length === 0 ? undefined : commands);
         }
 
-        export function codeFixAllWithTextChanges(context: CodeFixAllContext, errorCodes: number[], use: (changes: Push<TextChange>, error: Diagnostic) => void): CombinedCodeActions {
-            const changes: TextChange[] = [];
-            eachDiagnostic(context, errorCodes, diag => use(changes, diag));
-            changes.sort((a, b) => b.span.start - a.span.start);
-            return createCombinedCodeActions([createFileTextChanges(context.sourceFile.fileName, changes)]);
-        }
-
         function eachDiagnostic({ program, sourceFile }: CodeFixAllContext, errorCodes: number[], cb: (diag: Diagnostic) => void): void {
-            for (const diag of program.getSemanticDiagnostics(sourceFile)) {
+            for (const diag of program.getSemanticDiagnostics(sourceFile).concat(computeSuggestionDiagnostics(sourceFile, program))) {
                 if (contains(errorCodes, diag.code)) {
                     cb(diag);
                 }

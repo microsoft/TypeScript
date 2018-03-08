@@ -361,6 +361,8 @@ namespace ts {
                     case SpecialPropertyAssignmentKind.Property:
                         // static method / property
                         return isFunctionExpression(right) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
+                    case SpecialPropertyAssignmentKind.Prototype:
+                        return ScriptElementKind.localClassElement;
                     default: {
                         assertTypeIsNever(kind);
                         return ScriptElementKind.unknown;
@@ -1392,37 +1394,30 @@ namespace ts {
      */
     /* @internal */
     export function suppressLeadingAndTrailingTrivia(node: Node) {
-        Debug.assert(node !== undefined);
-
-        suppressLeading(node);
-        suppressTrailing(node);
-
-        function suppressLeading(node: Node) {
-            addEmitFlags(node, EmitFlags.NoLeadingComments);
-
-            const firstChild = forEachChild(node, child => child);
-            if (firstChild) {
-                suppressLeading(firstChild);
-            }
+        Debug.assertDefined(node);
+        suppress(node, EmitFlags.NoLeadingComments, getFirstChild);
+        suppress(node, EmitFlags.NoTrailingComments, getLastChild);
+        function suppress(node: Node, flag: EmitFlags, getChild: (n: Node) => Node | undefined) {
+            addEmitFlags(node, flag);
+            const child = getChild(node);
+            if (child) suppress(child, flag, getChild);
         }
+    }
 
-        function suppressTrailing(node: Node) {
-            addEmitFlags(node, EmitFlags.NoTrailingComments);
+    function getFirstChild(node: Node): Node | undefined {
+        return node.forEachChild(child => child);
+    }
 
-            let lastChild: Node | undefined;
-            forEachChild(
-                node,
-                child => (lastChild = child, undefined),
-                children => {
-                    // As an optimization, jump straight to the end of the list.
-                    if (children.length) {
-                        lastChild = last(children);
-                    }
-                    return undefined;
-                });
-            if (lastChild) {
-                suppressTrailing(lastChild);
-            }
-        }
+    function getLastChild(node: Node): Node | undefined {
+        let lastChild: Node | undefined;
+        node.forEachChild(
+            child => { lastChild = child; },
+            children => {
+                // As an optimization, jump straight to the end of the list.
+                if (children.length) {
+                    lastChild = last(children);
+                }
+            });
+        return lastChild;
     }
 }

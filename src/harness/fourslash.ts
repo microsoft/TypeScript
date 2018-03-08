@@ -848,7 +848,7 @@ namespace FourSlash {
             const actual = actualCompletions.entries;
 
             if (actual.length !== expected.length) {
-                this.raiseError(`Expected ${expected.length} completions, got ${actual.map(a => a.name)}.`);
+                this.raiseError(`Expected ${expected.length} completions, got ${actual.length} (${actual.map(a => a.name)}).`);
             }
 
             ts.zipWith(actual, expected, (completion, expectedCompletion, index) => {
@@ -2924,6 +2924,10 @@ Actual: ${stringify(fullActual)}`);
             if (!codeFixes.length) {
                 this.raiseError(`verifyCodeFixAvailable failed - expected code fixes but none found.`);
             }
+            codeFixes.forEach(fix => fix.changes.forEach(change => {
+                assert.isObject(change, `Invalid change in code fix: ${JSON.stringify(fix)}`);
+                change.textChanges.forEach(textChange => assert.isObject(textChange, `Invalid textChange in codeFix: ${JSON.stringify(fix)}`));
+            }));
             if (info) {
                 assert.equal(info.length, codeFixes.length);
                 ts.zipWith(codeFixes, info, (fix, info) => {
@@ -3465,7 +3469,7 @@ ${code}
     }
 
     function recordObjectMarker(fileName: string, location: LocationInformation, text: string, markerMap: ts.Map<Marker>, markers: Marker[]): Marker | undefined {
-        let markerValue: any = undefined;
+        let markerValue: any;
         try {
             // Attempt to parse the marker value as JSON
             markerValue = JSON.parse("{ " + text + " }");

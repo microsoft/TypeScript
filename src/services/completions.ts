@@ -2001,7 +2001,7 @@ namespace ts.Completions {
                     // TODO: Account for computed property name
                     // NOTE: if one only performs this step when m.name is an identifier,
                     // things like '__proto__' are not filtered out.
-                    const name = getNameOfDeclaration(m)!; // TODO: GH#18217
+                    const name = getNameOfDeclaration(m);
                     existingName = isPropertyNameLiteral(name) ? getEscapedTextOfIdentifierOrLiteral(name) : undefined;
                 }
 

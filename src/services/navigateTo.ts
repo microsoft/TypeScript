@@ -130,7 +130,7 @@ namespace ts.NavigateTo {
 
         // First, if we started with a computed property name, then add all but the last
         // portion into the container array.
-        const name = getNameOfDeclaration(declaration)!; // TODO: GH#18217
+        const name = getNameOfDeclaration(declaration);
         if (name.kind === SyntaxKind.ComputedPropertyName) {
             if (!tryAddComputedPropertyName(name.expression, containers, /*includeLastPortion*/ false)) {
                 return undefined;

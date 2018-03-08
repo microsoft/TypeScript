@@ -2202,7 +2202,7 @@ namespace ts {
         function emitExternalModuleReference(node: ExternalModuleReference) {
             writeKeyword("require");
             writePunctuation("(");
-            emitExpression(node.expression!); // TODO: GH#18217
+            emitExpression(node.expression);
             writePunctuation(")");
         }
 

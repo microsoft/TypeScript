@@ -4128,7 +4128,7 @@ namespace ts {
                 case SyntaxKind.JsxTextAllWhiteSpaces:
                     return parseJsxText();
                 case SyntaxKind.OpenBraceToken:
-                    return parseJsxExpression(/*inExpressionContext*/ false);
+                    return parseJsxExpression(/*inExpressionContext*/ false)!;
                 case SyntaxKind.LessThanToken:
                     return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ false);
             }
@@ -4239,10 +4239,13 @@ namespace ts {
             return expression;
         }
 
-        function parseJsxExpression(inExpressionContext: boolean): JsxExpression {
+        function parseJsxExpression(inExpressionContext: boolean): JsxExpression | undefined {
             const node = <JsxExpression>createNode(SyntaxKind.JsxExpression);
 
-            parseExpected(SyntaxKind.OpenBraceToken);
+            if (!parseExpected(SyntaxKind.OpenBraceToken)) {
+                return undefined;
+            }
+
             if (token() !== SyntaxKind.CloseBraceToken) {
                 node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
                 node.expression = parseAssignmentExpressionOrHigher();
@@ -6232,7 +6235,7 @@ namespace ts {
                     // Initially we can parse out a tag.  We also have seen a starting asterisk.
                     // This is so that /** * @type */ doesn't parse.
                     let state = JSDocState.SawAsterisk;
-                    let margin: number | undefined = undefined;
+                    let margin: number | undefined;
                     // + 4 for leading '/** '
                     let indent = start - Math.max(content.lastIndexOf("\n", start), 0) + 4;
                     function pushComment(text: string) {

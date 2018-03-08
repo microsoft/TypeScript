@@ -1,3 +1,5 @@
+// tslint:disable no-unnecessary-type-assertion (TODO: tslint can't find node types)
+
 if (typeof describe === "undefined") {
     (global as any).describe = undefined; // If launched without mocha for parallel mode, we still need a global describe visible to satisfy the parsing of the unit tests
     (global as any).it = undefined;

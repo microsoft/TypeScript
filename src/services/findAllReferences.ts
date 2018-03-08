@@ -509,7 +509,7 @@ namespace ts.FindAllReferences.Core {
             // here appears to be intentional).
             const {
                 text = stripQuotes(unescapeLeadingUnderscores((getLocalSymbolForExportDefault(symbol) || symbol).escapedName)),
-                allSearchSymbols = undefined,
+                allSearchSymbols,
             } = searchOptions;
             const escapedText = escapeLeadingUnderscores(text);
             const parents = this.options.implementations ? getParentSymbolsOfPropertyAccess(location, symbol, this.checker) : undefined;
@@ -973,7 +973,7 @@ namespace ts.FindAllReferences.Core {
          * position of property accessing, the referenceEntry of such position will be handled in the first case.
          */
         if (!(flags & SymbolFlags.Transient) && search.includes(shorthandValueSymbol)) {
-            addReference(getNameOfDeclaration(valueDeclaration!)!, shorthandValueSymbol, state);
+            addReference(getNameOfDeclaration(valueDeclaration!), shorthandValueSymbol, state);
         }
     }
 

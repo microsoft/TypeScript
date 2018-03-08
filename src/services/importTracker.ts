@@ -63,7 +63,7 @@ namespace ts.FindAllReferences {
             // Module augmentations may use this module's exports without importing it.
             for (const decl of exportingModuleSymbol.declarations!) {
                 if (isExternalModuleAugmentation(decl)) {
-                    addIndirectUser(decl as SourceFileLike);
+                    addIndirectUser(decl);
                 }
             }
 
@@ -404,7 +404,7 @@ namespace ts.FindAllReferences {
                         const decl = statement as ImportEqualsDeclaration;
                         const { moduleReference } = decl;
                         if (moduleReference.kind === SyntaxKind.ExternalModuleReference &&
-                            moduleReference.expression!.kind === SyntaxKind.StringLiteral) {
+                            moduleReference.expression.kind === SyntaxKind.StringLiteral) {
                             action(decl, moduleReference.expression as StringLiteral);
                         }
                         break;
@@ -662,6 +662,6 @@ namespace ts.FindAllReferences {
     }
 
     function isExternalModuleImportEquals({ moduleReference }: ImportEqualsDeclaration): boolean {
-        return moduleReference.kind === SyntaxKind.ExternalModuleReference && moduleReference.expression!.kind === SyntaxKind.StringLiteral;
+        return moduleReference.kind === SyntaxKind.ExternalModuleReference && moduleReference.expression.kind === SyntaxKind.StringLiteral;
     }
 }

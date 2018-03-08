@@ -396,7 +396,11 @@ if (ts.Debug.isDebugging) {
     ts.Debug.enableDebugInfo();
 }
 
-if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
+if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV")!)) {
     ts.sys.tryEnableSourceMapsForHost();
+}
+declare var process: any;
+if (process && process.stdout && process.stdout._handle && process.stdout._handle.setBlocking) {
+    process.stdout._handle.setBlocking(true);
 }
 ts.executeCommandLine(ts.sys.args);

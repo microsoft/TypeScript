@@ -521,7 +521,7 @@ namespace Harness {
         exit(exitCode?: number): void;
         readDirectory(path: string, extension?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
         tryEnableSourceMapsForHost?(): void;
-        getEnvironmentVariable?(name: string): string;
+        getEnvironmentVariable?(name: string): string | undefined;
     }
     export let IO: Io;
 
@@ -1894,7 +1894,7 @@ namespace Harness {
             // Stuff related to the subfile we're parsing
             let currentFileContent: string | undefined;
             let currentFileOptions: any = {};
-            let currentFileName: any = undefined;
+            let currentFileName: any;
             let refs: string[] = [];
 
             for (const line of lines) {

@@ -398,7 +398,7 @@ namespace ts.server {
 
         /*@internal*/
         watchDirectoryOfFailedLookupLocation(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags) {
-            return this.projectService.watchDirectory(
+            return this.projectService.watchFactory.watchDirectory(
                 this.projectService.host,
                 directory,
                 cb,
@@ -415,7 +415,7 @@ namespace ts.server {
 
         /*@internal*/
         watchTypeRootsDirectory(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags) {
-            return this.projectService.watchDirectory(
+            return this.projectService.watchFactory.watchDirectory(
                 this.projectService.host,
                 directory,
                 cb,
@@ -906,7 +906,7 @@ namespace ts.server {
 
             const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;
             this.externalFiles = this.getExternalFiles();
-            enumerateInsertsAndDeletes<string>(this.externalFiles, oldExternalFiles,
+            enumerateInsertsAndDeletes<string, string>(this.externalFiles, oldExternalFiles, compareStringsCaseSensitive,
                 // Ensure a ScriptInfo is created for new external files. This is performed indirectly
                 // by the LSHost for files in the program when the program is retrieved above but
                 // the program doesn't contain external files so this must be done explicitly.
@@ -914,8 +914,7 @@ namespace ts.server {
                     const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.currentDirectory, this.directoryStructureHost)!;
                     scriptInfo.attachToProject(this);
                 },
-                removed => this.detachScriptInfoFromProject(removed),
-                compareStringsCaseSensitive
+                removed => this.detachScriptInfoFromProject(removed)
             );
             const elapsed = timestamp() - start;
             this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Version: ${this.getProjectVersion()} structureChanged: ${hasChanges} Elapsed: ${elapsed}ms`);
@@ -931,7 +930,7 @@ namespace ts.server {
         }
 
         private addMissingFileWatcher(missingFilePath: Path) {
-            const fileWatcher = this.projectService.watchFile(
+            const fileWatcher = this.projectService.watchFactory.watchFile(
                 this.projectService.host,
                 missingFilePath,
                 (fileName, eventKind) => {
@@ -947,6 +946,7 @@ namespace ts.server {
                         this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
                     }
                 },
+                PollingInterval.Medium,
                 WatchType.MissingFilePath,
                 this
             );
