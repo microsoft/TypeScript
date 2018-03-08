@@ -2957,49 +2957,38 @@ namespace ts {
      * Gets the effective type annotation of a variable, parameter, or property. If the node was
      * parsed in a JavaScript file, gets the type annotation from JSDoc.
      */
-    export function getEffectiveTypeAnnotationNode(node: Node, checkJSDoc?: boolean): TypeNode | undefined {
-        if (hasType(node)) {
-            return node.type;
-        }
-        if (checkJSDoc || isInJavaScriptFile(node)) {
-            return getJSDocType(node);
-        }
+    export function getEffectiveTypeAnnotationNode(node: Node): TypeNode | undefined {
+        return (node as HasType).type || (isInJavaScriptFile(node) ? getJSDocType(node) : undefined);
     }
 
     /**
      * Gets the effective return type annotation of a signature. If the node was parsed in a
      * JavaScript file, gets the return type annotation from JSDoc.
      */
-    export function getEffectiveReturnTypeNode(node: SignatureDeclaration, checkJSDoc?: boolean): TypeNode | undefined {
-        if (node.type) {
-            return node.type;
-        }
-        if (checkJSDoc || isInJavaScriptFile(node)) {
-            return getJSDocReturnType(node);
-        }
+    export function getEffectiveReturnTypeNode(node: SignatureDeclaration): TypeNode | undefined {
+        return node.type || (isInJavaScriptFile(node) ? getJSDocReturnType(node) : undefined);
     }
 
     /**
      * Gets the effective type parameters. If the node was parsed in a
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
      */
-    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters, checkJSDoc?: boolean): ReadonlyArray<TypeParameterDeclaration> {
-        if (node.typeParameters) {
-            return node.typeParameters;
-        }
-        if (checkJSDoc || isInJavaScriptFile(node)) {
-            const templateTag = getJSDocTemplateTag(node);
-            return templateTag && templateTag.typeParameters;
-        }
+    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> | undefined {
+        return node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : undefined);
+    }
+
+    export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
+        const templateTag = getJSDocTemplateTag(node);
+        return templateTag && templateTag.typeParameters;
     }
 
     /**
      * Gets the effective type annotation of the value parameter of a set accessor. If the node
      * was parsed in a JavaScript file, gets the type annotation from JSDoc.
      */
-    export function getEffectiveSetAccessorTypeAnnotationNode(node: SetAccessorDeclaration, checkJSDoc?: boolean): TypeNode {
+    export function getEffectiveSetAccessorTypeAnnotationNode(node: SetAccessorDeclaration): TypeNode {
         const parameter = getSetAccessorValueParameter(node);
-        return parameter && getEffectiveTypeAnnotationNode(parameter, checkJSDoc);
+        return parameter && getEffectiveTypeAnnotationNode(parameter);
     }
 
     export function emitNewLineBeforeLeadingComments(lineMap: ReadonlyArray<number>, writer: EmitTextWriter, node: TextRange, leadingComments: ReadonlyArray<CommentRange>) {
