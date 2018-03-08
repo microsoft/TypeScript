@@ -128,7 +128,7 @@ namespace ts.server {
 
     const fs: {
         openSync(path: string, options: string): number;
-        close(fd: number): void;
+        close(fd: number, callback: (err: NodeJS.ErrnoException) => void): void;
         writeSync(fd: number, buffer: Buffer, offset: number, length: number, position?: number): number;
         writeSync(fd: number, data: any, position?: number, enconding?: string): number;
         statSync(path: string): Stats;
@@ -167,7 +167,7 @@ namespace ts.server {
 
         close() {
             if (this.fd >= 0) {
-                fs.close(this.fd);
+                fs.close(this.fd, noop);
             }
         }
 
