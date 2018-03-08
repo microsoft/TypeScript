@@ -33,7 +33,7 @@ namespace Harness.Parallel.Host {
         return `${perfdataFileNameFragment}${target ? `.${target}` : ""}.json`;
     }
     function readSavedPerfData(target?: string): {[testHash: string]: number} {
-        const perfDataContents = Harness.IO.readFile(perfdataFileName(target));
+        const perfDataContents = IO.readFile(perfdataFileName(target));
         if (perfDataContents) {
             return JSON.parse(perfDataContents);
         }
@@ -90,7 +90,7 @@ namespace Harness.Parallel.Host {
                     catch {
                         // May be a directory
                         try {
-                            size = Harness.IO.listFiles(path.join(runner.workingDirectory, file), /.*/g, { recursive: true }).reduce((acc, elem) => acc + statSync(elem).size, 0);
+                            size = IO.listFiles(path.join(runner.workingDirectory, file), /.*/g, { recursive: true }).reduce((acc, elem) => acc + statSync(elem).size, 0);
                         }
                         catch {
                             // Unknown test kind, just return 0 and let the historical analysis take over after one run
@@ -144,9 +144,9 @@ namespace Harness.Parallel.Host {
         let closedWorkers = 0;
         for (let i = 0; i < workerCount; i++) {
             // TODO: Just send the config over the IPC channel or in the command line arguments
-            const config: TestConfig = { light: Harness.lightMode, listenForWork: true, runUnitTests };
+            const config: TestConfig = { light: lightMode, listenForWork: true, runUnitTests };
             const configPath = ts.combinePaths(taskConfigsFolder, `task-config${i}.json`);
-            Harness.IO.writeFile(configPath, JSON.stringify(config));
+            IO.writeFile(configPath, JSON.stringify(config));
             const child = fork(__filename, [`--config="${configPath}"`]);
             let currentTimeout = defaultTimeout;
             const killChild = () => {
@@ -364,7 +364,7 @@ namespace Harness.Parallel.Host {
                 reporter.epilogue();
             }
 
-            Harness.IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4)); // tslint:disable-line:no-null-keyword
+            IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4)); // tslint:disable-line:no-null-keyword
 
             process.exit(errorResults.length);
         }

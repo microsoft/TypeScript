@@ -63,7 +63,7 @@ namespace ts.FindAllReferences {
             // Module augmentations may use this module's exports without importing it.
             for (const decl of exportingModuleSymbol.declarations) {
                 if (isExternalModuleAugmentation(decl)) {
-                    addIndirectUser(decl as SourceFileLike);
+                    addIndirectUser(decl);
                 }
             }
 
@@ -86,7 +86,7 @@ namespace ts.FindAllReferences {
                             if (!isAvailableThroughGlobal) {
                                 const parent = direct.parent!;
                                 if (exportKind === ExportKind.ExportEquals && parent.kind === SyntaxKind.VariableDeclaration) {
-                                    const { name } = parent as ts.VariableDeclaration;
+                                    const { name } = parent as VariableDeclaration;
                                     if (name.kind === SyntaxKind.Identifier) {
                                         directImports.push(name);
                                         break;
@@ -209,7 +209,7 @@ namespace ts.FindAllReferences {
                 return;
             }
 
-            if (decl.kind === ts.SyntaxKind.Identifier) {
+            if (decl.kind === SyntaxKind.Identifier) {
                 handleNamespaceImportLike(decl);
                 return;
             }
@@ -329,7 +329,7 @@ namespace ts.FindAllReferences {
         const checker = program.getTypeChecker();
         for (const referencingFile of sourceFiles) {
             const searchSourceFile = searchModuleSymbol.valueDeclaration;
-            if (searchSourceFile.kind === ts.SyntaxKind.SourceFile) {
+            if (searchSourceFile.kind === SyntaxKind.SourceFile) {
                 for (const ref of referencingFile.referencedFiles) {
                     if (program.getSourceFileFromReference(referencingFile, ref) === searchSourceFile) {
                         refs.push({ kind: "reference", referencingFile, ref });
@@ -337,7 +337,7 @@ namespace ts.FindAllReferences {
                 }
                 for (const ref of referencingFile.typeReferenceDirectives) {
                     const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName);
-                    if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile as ts.SourceFile).fileName) {
+                    if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile as SourceFile).fileName) {
                         refs.push({ kind: "reference", referencingFile, ref });
                     }
                 }
@@ -503,7 +503,7 @@ namespace ts.FindAllReferences {
                 return { kind: ImportExport.Export, symbol, exportInfo: { exportingModuleSymbol, exportKind } };
             }
 
-            function getSpecialPropertyExport(node: ts.BinaryExpression, useLhsSymbol: boolean): ExportedSymbol | undefined {
+            function getSpecialPropertyExport(node: BinaryExpression, useLhsSymbol: boolean): ExportedSymbol | undefined {
                 let kind: ExportKind;
                 switch (getSpecialPropertyAssignmentKind(node)) {
                     case SpecialPropertyAssignmentKind.ExportsProperty:
@@ -579,9 +579,9 @@ namespace ts.FindAllReferences {
     // If a reference is a variable declaration, the exported node would be the variable statement.
     function getExportNode(parent: Node, node: Node): Node | undefined {
         if (parent.kind === SyntaxKind.VariableDeclaration) {
-            const p = parent as ts.VariableDeclaration;
+            const p = parent as VariableDeclaration;
             return p.name !== node ? undefined :
-                p.parent.kind === ts.SyntaxKind.CatchClause ? undefined : p.parent.parent.kind === SyntaxKind.VariableStatement ? p.parent.parent : undefined;
+                p.parent.kind === SyntaxKind.CatchClause ? undefined : p.parent.parent.kind === SyntaxKind.VariableStatement ? p.parent.parent : undefined;
         }
         else {
             return parent;

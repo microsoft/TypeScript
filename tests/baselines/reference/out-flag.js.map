@@ -1,2 +1,2 @@
 //// [out-flag.js.map]
-{"version":3,"file":"out-flag.js","sourceRoot":"","sources":["out-flag.ts"],"names":[],"mappings":"AAAA,eAAe;AAEf,oBAAoB;AACpB;IAAA;IAYA,CAAC;IAVG,uBAAuB;IAChB,uBAAK,GAAZ;QAEI,MAAM,CAAC,EAAE,CAAC;IACd,CAAC;IAEM,0BAAQ,GAAf,UAAgB,KAAa;QAEzB,EAAE;IACN,CAAC;IACL,cAAC;AAAD,CAAC,AAZD,IAYC"}
+{"version":3,"file":"out-flag.js","sourceRoot":"","sources":["out-flag.ts"],"names":[],"mappings":"AAAA,eAAe;AAEf,oBAAoB;AACpB;IAAA;IAYA,CAAC;IAVG,uBAAuB;IAChB,uBAAK,GAAZ;QAEI,OAAO,EAAE,CAAC;IACd,CAAC;IAEM,0BAAQ,GAAf,UAAgB,KAAa;QAEzB,EAAE;IACN,CAAC;IACL,cAAC;AAAD,CAAC,AAZD,IAYC"}

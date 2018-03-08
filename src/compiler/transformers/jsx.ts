@@ -122,7 +122,7 @@ namespace ts {
             }
 
             const element = createExpressionForJsxElement(
-                context.getEmitResolver().getJsxFactoryEntity(),
+                context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),
                 compilerOptions.reactNamespace,
                 tagName,
                 objectProperties,
@@ -140,7 +140,7 @@ namespace ts {
 
         function visitJsxOpeningFragment(node: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, isChild: boolean, location: TextRange) {
             const element = createExpressionForJsxFragment(
-                context.getEmitResolver().getJsxFactoryEntity(),
+                context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),
                 compilerOptions.reactNamespace,
                 mapDefined(children, transformJsxChildToExpression),
                 node,

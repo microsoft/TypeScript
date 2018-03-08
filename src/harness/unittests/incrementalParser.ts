@@ -2,7 +2,7 @@
 /// <reference path="..\..\compiler\parser.ts" />
 
 namespace ts {
-    ts.disableIncrementalParsing = false;
+    ts.disableIncrementalParsing = false; // tslint:disable-line no-unnecessary-qualifier (make clear this is a global mutation!)
 
     function withChange(text: IScriptSnapshot, start: number, length: number, newText: string): { text: IScriptSnapshot; textChangeRange: TextChangeRange; } {
         const contents = getSnapshotText(text);

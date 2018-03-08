@@ -230,9 +230,16 @@ namespace ts {
             : node;
     }
 
+    function parenthesizeForComputedName(expression: Expression): Expression {
+        return (isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken) ||
+            expression.kind === SyntaxKind.CommaListExpression ?
+            createParen(expression) :
+            expression;
+    }
+
     export function createComputedPropertyName(expression: Expression) {
         const node = <ComputedPropertyName>createSynthesizedNode(SyntaxKind.ComputedPropertyName);
-        node.expression = expression;
+        node.expression = parenthesizeForComputedName(expression);
         return node;
     }
 
@@ -2287,7 +2294,7 @@ namespace ts {
         const node = <PropertyAssignment>createSynthesizedNode(SyntaxKind.PropertyAssignment);
         node.name = asName(name);
         node.questionToken = undefined;
-        node.initializer = initializer !== undefined ? parenthesizeExpressionForList(initializer) : undefined;
+        node.initializer = parenthesizeExpressionForList(initializer);
         return node;
     }
 
@@ -2375,6 +2382,9 @@ namespace ts {
             if (node.resolvedTypeReferenceDirectiveNames !== undefined) updated.resolvedTypeReferenceDirectiveNames = node.resolvedTypeReferenceDirectiveNames;
             if (node.imports !== undefined) updated.imports = node.imports;
             if (node.moduleAugmentations !== undefined) updated.moduleAugmentations = node.moduleAugmentations;
+            if (node.pragmas !== undefined) updated.pragmas = node.pragmas;
+            if (node.localJsxFactory !== undefined) updated.localJsxFactory = node.localJsxFactory;
+            if (node.localJsxNamespace !== undefined) updated.localJsxNamespace = node.localJsxNamespace;
             return updateNode(updated, node);
         }
 
@@ -4252,16 +4262,6 @@ namespace ts {
             }
         }
         while (previousNode !== node);
-
-        return node;
-    }
-
-    export function skipParentheses(node: Expression): Expression;
-    export function skipParentheses(node: Node): Node;
-    export function skipParentheses(node: Node): Node {
-        while (node.kind === SyntaxKind.ParenthesizedExpression) {
-            node = (<ParenthesizedExpression>node).expression;
-        }
 
         return node;
     }

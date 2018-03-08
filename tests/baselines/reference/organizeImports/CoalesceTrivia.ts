@@ -8,8 +8,7 @@ F2();
 
 // ==ORGANIZED==
 
-/*A*/ import { /*L*/ F1 /*M*/, /*C*/ F2 /*D*/ } /*E*/ from "lib" /*G*/; /*H*/ //I
-
+/*A*/ import /*B*/ { /*L*/ F1 /*M*/, /*C*/ F2 /*D*/ } /*E*/ from /*F*/ "lib" /*G*/; /*H*/ //I
 
 F1();
 F2();

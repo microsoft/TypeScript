@@ -4,12 +4,14 @@
 //// * @param {?} x
 //// * @returns {number}
 //// */
-////var f = /*1*/(/*2*/x) => x
+////var f = (x) => x
 
-verify.applicableRefactorAvailableAtMarker('2');
-verify.fileAfterApplyingRefactorAtMarker('2',
+verify.codeFix({
+    description: "Annotate with type from JSDoc",
+    newFileContent:
 `/**
  * @param {?} x
  * @returns {number}
  */
-var f = (x: any): number => x`, 'Annotate with type from JSDoc', 'annotate');
+var f = (x: any): number => x`,
+});
