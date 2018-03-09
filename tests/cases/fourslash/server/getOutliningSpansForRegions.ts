@@ -48,6 +48,4 @@
 ////// #endregion
 ////*/
 
-debugger;
-
 verify.outliningSpansInCurrentFile(test.ranges());
