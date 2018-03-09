@@ -14110,7 +14110,7 @@ namespace ts {
             }
         }
 
-        function getContainingObjectLiteral(func: FunctionLike): ObjectLiteralExpression | undefined {
+        function getContainingObjectLiteral(func: SignatureDeclaration): ObjectLiteralExpression | undefined {
             return (func.kind === SyntaxKind.MethodDeclaration ||
                 func.kind === SyntaxKind.GetAccessor ||
                 func.kind === SyntaxKind.SetAccessor) && func.parent.kind === SyntaxKind.ObjectLiteralExpression ? func.parent :
@@ -14128,7 +14128,7 @@ namespace ts {
             });
         }
 
-        function getContextualThisParameterType(func: FunctionLike): Type {
+        function getContextualThisParameterType(func: SignatureDeclaration): Type {
             if (func.kind === SyntaxKind.ArrowFunction) {
                 return undefined;
             }
@@ -14325,7 +14325,7 @@ namespace ts {
             return false;
         }
 
-        function getContextualReturnType(functionDecl: FunctionLike): Type {
+        function getContextualReturnType(functionDecl: SignatureDeclaration): Type {
             // If the containing function has a return type annotation, is a constructor, or is a get accessor whose
             // corresponding set accessor has a type annotation, return statements in the function are contextually typed
             if (functionDecl.kind === SyntaxKind.Constructor ||
@@ -20680,12 +20680,12 @@ namespace ts {
             let hasOverloads = false;
             let bodyDeclaration: FunctionLikeDeclaration;
             let lastSeenNonAmbientDeclaration: FunctionLikeDeclaration;
-            let previousDeclaration: FunctionLike;
+            let previousDeclaration: SignatureDeclaration;
 
             const declarations = symbol.declarations;
             const isConstructor = (symbol.flags & SymbolFlags.Constructor) !== 0;
 
-            function reportImplementationExpectedError(node: FunctionLike): void {
+            function reportImplementationExpectedError(node: SignatureDeclaration): void {
                 if (node.name && nodeIsMissing(node.name)) {
                     return;
                 }
@@ -20747,7 +20747,7 @@ namespace ts {
             let duplicateFunctionDeclaration = false;
             let multipleConstructorImplementation = false;
             for (const current of declarations) {
-                const node = <FunctionLike>current;
+                const node = <SignatureDeclaration>current;
                 const inAmbientContext = node.flags & NodeFlags.Ambient;
                 const inAmbientContextOrInterface = node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.TypeLiteral || inAmbientContext;
                 if (inAmbientContextOrInterface) {
@@ -22755,12 +22755,12 @@ namespace ts {
             // TODO: Check that target label is valid
         }
 
-        function isGetAccessorWithAnnotatedSetAccessor(node: FunctionLike) {
+        function isGetAccessorWithAnnotatedSetAccessor(node: SignatureDeclaration) {
             return node.kind === SyntaxKind.GetAccessor
                 && getEffectiveSetAccessorTypeAnnotationNode(getDeclarationOfKind<SetAccessorDeclaration>(node.symbol, SyntaxKind.SetAccessor)) !== undefined;
         }
 
-        function isUnwrappedReturnTypeVoidOrAny(func: FunctionLike, returnType: Type): boolean {
+        function isUnwrappedReturnTypeVoidOrAny(func: SignatureDeclaration, returnType: Type): boolean {
             const unwrappedReturnType = (getFunctionFlags(func) & FunctionFlags.AsyncGenerator) === FunctionFlags.Async
                 ? getPromisedTypeOfPromise(returnType) // Async function
                 : returnType; // AsyncGenerator function, Generator function, or normal function
@@ -25481,7 +25481,7 @@ namespace ts {
             return false;
         }
 
-        function isImplementationOfOverload(node: FunctionLike) {
+        function isImplementationOfOverload(node: SignatureDeclaration) {
             if (nodeIsPresent((node as FunctionLikeDeclaration).body)) {
                 const symbol = getSymbolOfNode(node);
                 const signaturesOfSymbol = getSignaturesOfSymbol(symbol);

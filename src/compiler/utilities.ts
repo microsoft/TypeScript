@@ -1035,7 +1035,7 @@ namespace ts {
         });
     }
 
-    export function getContainingFunction(node: Node): FunctionLike {
+    export function getContainingFunction(node: Node): SignatureDeclaration {
         return findAncestor(node.parent, isFunctionLike);
     }
 
@@ -1809,7 +1809,7 @@ namespace ts {
         return parameter && parameter.symbol;
     }
 
-    export function getHostSignatureFromJSDoc(node: JSDocParameterTag): FunctionLike | undefined {
+    export function getHostSignatureFromJSDoc(node: JSDocParameterTag): SignatureDeclaration | undefined {
         const host = getJSDocHost(node);
         const decl = getSourceOfDefaultedAssignment(host) ||
             getSourceOfAssignment(host) ||
@@ -2144,7 +2144,7 @@ namespace ts {
         AsyncGenerator = Async | Generator, // Function is an async generator function
     }
 
-    export function getFunctionFlags(node: FunctionLike | undefined) {
+    export function getFunctionFlags(node: SignatureDeclaration | undefined) {
         if (!node) {
             return FunctionFlags.Invalid;
         }
@@ -5309,7 +5309,7 @@ namespace ts {
 
     // Functions
 
-    export function isFunctionLike(node: Node): node is FunctionLike {
+    export function isFunctionLike(node: Node): node is SignatureDeclaration {
         return node && isFunctionLikeKind(node.kind);
     }
 
