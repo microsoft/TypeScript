@@ -113,6 +113,7 @@ declare namespace FourSlashInterface {
     class test_ {
         markers(): Marker[];
         markerNames(): string[];
+        markerName(m: Marker): string;
         marker(name?: string): Marker;
         ranges(): Range[];
         spans(): Array<{ start: number, length: number }>;
