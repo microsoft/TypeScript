@@ -67,9 +67,10 @@ base: &base
     - workerCount: 4
     - timeout: 400000
   steps:
-    - checkout
+    - checkout:
+        post:
+          - git submodule update --init --recursive
     - run: |
-        git submodule update --init --recursive
         npm uninstall typescript --no-save
         npm uninstall tslint --no-save
         npm install
