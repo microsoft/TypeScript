@@ -65,6 +65,7 @@ workflows:
 base: &base
   environment:
     - workerCount: 4
+    - timeout: 400000
   steps:
     - checkout
     - run: |

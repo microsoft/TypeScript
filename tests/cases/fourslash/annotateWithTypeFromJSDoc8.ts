@@ -14,6 +14,6 @@ verify.codeFix({
  * @param {number} x
  * @returns {number}
  */
-var f = function(x: number): number {
+var f = function (x: number): number {
 }`,
 });
