@@ -69,6 +69,7 @@ base: &base
   steps:
     - checkout
     - run: |
+        git submodule update --init --recursive
         npm uninstall typescript --no-save
         npm uninstall tslint --no-save
         npm install
