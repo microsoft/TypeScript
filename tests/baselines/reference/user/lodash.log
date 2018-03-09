@@ -1,8 +1,5 @@
 Exit Code: 1
 Standard output:
-../../../../node_modules/@types/gulp-help/index.d.ts(70,15): error TS2430: Interface 'GulpHelp' incorrectly extends interface 'Orchestrator'.
-  Types of property 'task' are incompatible.
-    Type 'TaskMethod' is not assignable to type '{ (name: string): Task; (name: string, fn: TaskFunc): void; (name: string, dep: string[], fn: Tas...'.
 node_modules/lodash/_Stack.js(17,20): error TS2339: Property 'size' does not exist on type '{ clear: () => void; get: (key: string) => any; has: (key: string) => boolean; set: (key: string,...'.
 node_modules/lodash/_arrayIncludes.js(9,15): error TS8024: JSDoc '@param' tag has name 'target', but there is no parameter with that name.
 node_modules/lodash/_arrayIncludesWith.js(6,15): error TS8024: JSDoc '@param' tag has name 'target', but there is no parameter with that name.

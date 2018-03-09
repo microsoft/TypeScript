@@ -1,19 +1,24 @@
 Exit Code: 1
 Standard output:
-../../../../node_modules/@types/gulp-help/index.d.ts(70,15): error TS2430: Interface 'GulpHelp' incorrectly extends interface 'Orchestrator'.
-  Types of property 'task' are incompatible.
-    Type 'TaskMethod' is not assignable to type '{ (name: string): Task; (name: string, fn: TaskFunc): void; (name: string, dep: string[], fn: Tas...'.
-node_modules/util/test/browser/inspect.js(25,1): error TS2554: Expected 2 arguments, but got 1.
+node_modules/util/test/browser/inspect.js(25,1): error TS2304: Cannot find name 'suite'.
+node_modules/util/test/browser/inspect.js(27,1): error TS2304: Cannot find name 'test'.
 node_modules/util/test/browser/inspect.js(29,16): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/util/test/browser/inspect.js(31,16): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/util/test/browser/inspect.js(33,16): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/browser/inspect.js(36,1): error TS2304: Cannot find name 'test'.
 node_modules/util/test/browser/inspect.js(37,16): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/util/test/browser/inspect.js(38,16): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/util/test/browser/inspect.js(39,16): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/util/test/browser/inspect.js(40,16): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/util/test/browser/is.js(26,1): error TS2554: Expected 2 arguments, but got 1.
+node_modules/util/test/browser/is.js(26,1): error TS2304: Cannot find name 'suite'.
+node_modules/util/test/browser/is.js(28,1): error TS2304: Cannot find name 'test'.
+node_modules/util/test/browser/is.js(41,1): error TS2304: Cannot find name 'test'.
 node_modules/util/test/browser/is.js(43,36): error TS2554: Expected 1-2 arguments, but got 0.
 node_modules/util/test/browser/is.js(44,36): error TS2554: Expected 1-2 arguments, but got 0.
+node_modules/util/test/browser/is.js(51,1): error TS2304: Cannot find name 'test'.
+node_modules/util/test/browser/is.js(61,1): error TS2304: Cannot find name 'test'.
+node_modules/util/test/browser/is.js(71,1): error TS2304: Cannot find name 'test'.
+node_modules/util/test/browser/is.js(81,1): error TS2304: Cannot find name 'test'.
 node_modules/util/test/browser/is.js(83,36): error TS2348: Value of type '{ new (str: string, encoding?: string | undefined): Buffer; new (size: number): Buffer; new (arra...' is not callable. Did you mean to include 'new'?
 node_modules/util/test/node/debug.js(53,45): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string | undefined'.
 node_modules/util/test/node/inspect.js(31,12): error TS2555: Expected at least 2 arguments, but got 1.

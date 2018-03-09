@@ -1,8 +1,5 @@
 Exit Code: 1
 Standard output:
-../../../../node_modules/@types/gulp-help/index.d.ts(70,15): error TS2430: Interface 'GulpHelp' incorrectly extends interface 'Orchestrator'.
-  Types of property 'task' are incompatible.
-    Type 'TaskMethod' is not assignable to type '{ (name: string): Task; (name: string, fn: TaskFunc): void; (name: string, dep: string[], fn: Tas...'.
 node_modules/url-search-params/build/url-search-params.js(2,5): error TS2322: Type '{ new (init?: string | URLSearchParams | undefined): URLSearchParams; prototype: URLSearchParams; }' is not assignable to type '(query: any) => void'.
   Type '{ new (init?: string | URLSearchParams | undefined): URLSearchParams; prototype: URLSearchParams; }' provides no match for the signature '(query: any): void'.
 node_modules/url-search-params/build/url-search-params.js(2,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'URLSearchParams' must be of type '{ new (init?: string | URLSearchParams | undefined): URLSearchParams; prototype: URLSearchParams; }', but here has type '(query: any) => void'.

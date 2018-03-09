@@ -1,8 +1,5 @@
 Exit Code: 1
 Standard output:
-../../../../node_modules/@types/gulp-help/index.d.ts(70,15): error TS2430: Interface 'GulpHelp' incorrectly extends interface 'Orchestrator'.
-  Types of property 'task' are incompatible.
-    Type 'TaskMethod' is not assignable to type '{ (name: string): Task; (name: string, fn: TaskFunc): void; (name: string, dep: string[], fn: Tas...'.
 node_modules/follow-redirects/index.js(62,5): error TS2532: Object is possibly 'undefined'.
 node_modules/follow-redirects/index.js(62,35): error TS2345: Argument of type '{ data: any; encoding: any; }' is not assignable to parameter of type 'never'.
 node_modules/follow-redirects/index.js(63,10): error TS2339: Property '_currentRequest' does not exist on type '{ _options: any; _redirectCount: number | undefined; _requestBodyLength: number | undefined; _req...'.

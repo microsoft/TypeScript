@@ -1,8 +1,5 @@
 Exit Code: 1
 Standard output:
-../../../../node_modules/@types/gulp-help/index.d.ts(70,15): error TS2430: Interface 'GulpHelp' incorrectly extends interface 'Orchestrator'.
-  Types of property 'task' are incompatible.
-    Type 'TaskMethod' is not assignable to type '{ (name: string): Task; (name: string, fn: TaskFunc): void; (name: string, dep: string[], fn: Tas...'.
 node_modules/clone/clone.js(10,15): error TS2304: Cannot find name 'Map'.
 node_modules/clone/clone.js(19,15): error TS2304: Cannot find name 'Set'.
 node_modules/clone/clone.js(26,19): error TS2693: 'Promise' only refers to a type, but is being used as a value here.

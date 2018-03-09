@@ -1,8 +1,5 @@
 Exit Code: 1
 Standard output:
-../../../../node_modules/@types/gulp-help/index.d.ts(70,15): error TS2430: Interface 'GulpHelp' incorrectly extends interface 'Orchestrator'.
-  Types of property 'task' are incompatible.
-    Type 'TaskMethod' is not assignable to type '{ (name: string): Task; (name: string, fn: TaskFunc): void; (name: string, dep: string[], fn: Tas...'.
 node_modules/debug/src/browser.js(7,1): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/browser"' because it is not a variable.
 node_modules/debug/src/browser.js(7,11): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/debug/src/browser.js(8,9): error TS2339: Property 'log' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/browser"'.

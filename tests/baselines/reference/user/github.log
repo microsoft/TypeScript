@@ -1,8 +1,0 @@
-Exit Code: 1
-Standard output:
-index.ts(1,25): error TS7016: Could not find a declaration file for module 'github'. '/home/nathansa/ts/tests/cases/user/github/node_modules/github/index.js' implicitly has an 'any' type.
-  Try `npm install @types/github` if it exists or add a new declaration (.d.ts) file containing `declare module 'github';`
-
-
-
-Standard error:

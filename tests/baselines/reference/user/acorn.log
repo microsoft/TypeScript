@@ -1,8 +1,5 @@
 Exit Code: 1
 Standard output:
-../../../../node_modules/@types/gulp-help/index.d.ts(70,15): error TS2430: Interface 'GulpHelp' incorrectly extends interface 'Orchestrator'.
-  Types of property 'task' are incompatible.
-    Type 'TaskMethod' is not assignable to type '{ (name: string): Task; (name: string, fn: TaskFunc): void; (name: string, dep: string[], fn: Tas...'.
 node_modules/acorn/bin/_acorn.js(51,30): error TS2339: Property 'getToken' does not exist on type '{ options: any; sourceFile: any; keywords: RegExp | undefined; reservedWords: RegExp | undefined;...'.
 node_modules/acorn/bin/_acorn.js(59,59): error TS2345: Argument of type '2 | null' is not assignable to parameter of type 'string | number | undefined'.
   Type 'null' is not assignable to type 'string | number | undefined'.
