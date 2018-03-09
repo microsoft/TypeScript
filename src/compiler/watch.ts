@@ -127,7 +127,6 @@ namespace ts {
         emit(): EmitResult;
     }
 
-    /** @internal */
     export type ReportEmitErrorSummary = (errorCount: number) => void;
 
     /**
@@ -234,19 +233,15 @@ namespace ts {
         }
 
         function emitFilesAndReportErrorUsingBuilder(builderProgram: BuilderProgram) {
-            let reportSummary: ReportEmitErrorSummary | undefined;
             const compilerOptions = builderProgram.getCompilerOptions();
-
-            if (compilerOptions.pretty) {
-                reportSummary = (errorCount: number) => {
-                    if (errorCount === 1) {
-                        onWatchStatusChange(createCompilerDiagnostic(Diagnostics.Found_1_error, errorCount), sys.newLine, compilerOptions);
-                    }
-                    else {
-                        onWatchStatusChange(createCompilerDiagnostic(Diagnostics.Found_0_errors, errorCount, errorCount), sys.newLine, compilerOptions);
-                    }
-                };
-            }
+            const reportSummary = (errorCount: number) => {
+                if (errorCount === 1) {
+                    onWatchStatusChange(createCompilerDiagnostic(Diagnostics.Found_1_error, errorCount), sys.newLine, compilerOptions);
+                }
+                else {
+                    onWatchStatusChange(createCompilerDiagnostic(Diagnostics.Found_0_errors, errorCount, errorCount), sys.newLine, compilerOptions);
+                }
+            };
 
             emitFilesAndReportErrors(builderProgram, reportDiagnostic, reportSummary, writeFileName);
         }
