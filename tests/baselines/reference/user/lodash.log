@@ -1,0 +1,1034 @@
+Exit Code: 1
+Standard output:
+node_modules/lodash/_Stack.js(17,20): error TS2339: Property 'size' does not exist on type '{ clear: () => void; get: (key: string) => any; has: (key: string) => boolean; set: (key: string,...'.
+node_modules/lodash/_arrayIncludes.js(9,15): error TS8024: JSDoc '@param' tag has name 'target', but there is no parameter with that name.
+node_modules/lodash/_arrayIncludesWith.js(6,15): error TS8024: JSDoc '@param' tag has name 'target', but there is no parameter with that name.
+node_modules/lodash/_asciiSize.js(7,20): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/_asciiWords.js(8,20): error TS8024: JSDoc '@param' tag has name 'The', but there is no parameter with that name.
+node_modules/lodash/_baseClone.js(91,16): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/lodash/_baseClone.js(92,16): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/lodash/_baseClone.js(93,16): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/lodash/_baseClone.js(115,33): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/_baseClone.js(128,43): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/_baseClone.js(157,17): error TS2552: Cannot find name 'keysIn'. Did you mean 'keys'?
+node_modules/lodash/_baseCreate.js(11,20): error TS8024: JSDoc '@param' tag has name 'proto', but there is no parameter with that name.
+node_modules/lodash/_baseDifference.js(37,5): error TS2322: Type '(array?: any[], value: any, comparator: Function) => boolean' is not assignable to type '(array?: any[], value: any) => boolean'.
+node_modules/lodash/_baseDifference.js(43,5): error TS2322: Type '{ __data__: { clear: () => void; get: (key: string) => any; has: (key: string) => boolean; set: (...' is not assignable to type 'any[]'.
+  Property 'length' is missing in type '{ __data__: { clear: () => void; get: (key: string) => any; has: (key: string) => boolean; set: (...'.
+node_modules/lodash/_baseDifference.js(60,15): error TS2554: Expected 2 arguments, but got 3.
+node_modules/lodash/_baseEach.js(8,26): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/_baseEach.js(9,22): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/_baseEachRight.js(8,26): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/_baseEachRight.js(9,22): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/_baseFlatten.js(19,17): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean'.
+node_modules/lodash/_baseFlatten.js(24,22): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'Boolean' has no compatible call signatures.
+node_modules/lodash/_baseFor.js(9,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/_baseFor.js(10,22): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/_baseFor.js(11,22): error TS8024: JSDoc '@param' tag has name 'keysFunc', but there is no parameter with that name.
+node_modules/lodash/_baseForRight.js(8,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/_baseForRight.js(9,22): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/_baseForRight.js(10,22): error TS8024: JSDoc '@param' tag has name 'keysFunc', but there is no parameter with that name.
+node_modules/lodash/_baseIsEqual.js(25,40): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+node_modules/lodash/_baseIsMatch.js(52,47): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/_baseMatchesProperty.js(23,36): error TS2345: Argument of type 'string | symbol' is not assignable to parameter of type 'string'.
+  Type 'symbol' is not assignable to type 'string'.
+node_modules/lodash/_baseMatchesProperty.js(29,41): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/_basePullAt.js(30,26): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string | any[]'.
+node_modules/lodash/_baseSet.js(41,25): error TS2345: Argument of type 'string | symbol' is not assignable to parameter of type 'string'.
+  Type 'symbol' is not assignable to type 'string'.
+node_modules/lodash/_baseSetData.js(8,22): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/_baseSetData.js(9,15): error TS8024: JSDoc '@param' tag has name 'data', but there is no parameter with that name.
+node_modules/lodash/_baseSetToString.js(9,22): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/_baseSetToString.js(10,22): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/_baseSortBy.js(14,14): error TS2345: Argument of type 'Function' is not assignable to parameter of type '((a: any, b: any) => number) | undefined'.
+  Type 'Function' is not assignable to type '(a: any, b: any) => number'.
+    Type 'Function' provides no match for the signature '(a: any, b: any): number'.
+node_modules/lodash/_baseUniq.js(30,5): error TS2322: Type '(array?: any[], value: any, comparator: Function) => boolean' is not assignable to type '(array?: any[], value: any) => boolean'.
+node_modules/lodash/_baseUniq.js(33,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/_baseUniq.js(39,5): error TS2322: Type '{ __data__: { clear: () => void; get: (key: string) => any; has: (key: string) => boolean; set: (...' is not assignable to type 'any[]'.
+node_modules/lodash/_baseUniq.js(62,15): error TS2554: Expected 2 arguments, but got 3.
+node_modules/lodash/_castRest.js(9,22): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/_cloneArrayBuffer.js(11,16): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_cloneBuffer.js(4,69): error TS2339: Property 'nodeType' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/lodash/node_modules/lodash/_cloneBuffer"'.
+node_modules/lodash/_cloneBuffer.js(7,80): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
+node_modules/lodash/_copySymbols.js(13,29): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/_copySymbolsIn.js(13,29): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/_createAggregator.js(19,37): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/_createCompounder.js(20,24): error TS2554: Expected 3 arguments, but got 1.
+node_modules/lodash/_createCtor.js(19,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_createCtor.js(20,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_createCtor.js(21,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_createCtor.js(22,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_createCtor.js(23,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_createCtor.js(24,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_createCtor.js(25,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_createCtor.js(26,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_createCurry.js(37,46): error TS2339: Property 'placeholder' does not exist on type '(...args: any[]) => any'.
+node_modules/lodash/_createCurry.js(38,24): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'any[]'.
+node_modules/lodash/_createFind.js(16,22): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/_createFind.js(21,34): error TS2454: Variable 'iteratee' is used before being assigned.
+node_modules/lodash/_createFlow.js(38,22): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/_createFlow.js(42,13): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/_createFlow.js(47,42): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/_createFlow.js(53,19): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/_createFlow.js(53,55): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/_createFlow.js(56,13): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/_createFlow.js(57,13): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/_createFlow.js(57,21): error TS2339: Property 'thru' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __chain__: boolean | undefined; __index__: ...'.
+node_modules/lodash/_createFlow.js(65,24): error TS2339: Property 'plant' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __chain__: boolean | undefined; __index__: ...'.
+node_modules/lodash/_createHybrid.js(44,49): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/_createHybrid.js(64,15): error TS2454: Variable 'holdersCount' is used before being assigned.
+node_modules/lodash/_createHybrid.js(68,9): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/_createHybrid.js(68,46): error TS2339: Property 'placeholder' does not exist on type '(...args: any[]) => any'.
+node_modules/lodash/_createHybrid.js(73,38): error TS2538: Type 'Function' cannot be used as an index type.
+node_modules/lodash/_createSet.js(12,19): error TS8024: JSDoc '@param' tag has name 'values', but there is no parameter with that name.
+node_modules/lodash/_createWrap.js(59,5): error TS2322: Type 'undefined' is not assignable to type 'any[]'.
+node_modules/lodash/_createWrap.js(59,16): error TS2322: Type 'undefined' is not assignable to type 'any[]'.
+node_modules/lodash/_createWrap.js(69,5): error TS2322: Type 'undefined' is not assignable to type 'any[]'.
+node_modules/lodash/_createWrap.js(69,16): error TS2322: Type 'undefined' is not assignable to type 'any[]'.
+node_modules/lodash/_createWrap.js(71,38): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/_createWrap.js(74,48): error TS2454: Variable 'partialsRight' is used before being assigned.
+node_modules/lodash/_createWrap.js(74,63): error TS2454: Variable 'holdersRight' is used before being assigned.
+node_modules/lodash/_createWrap.js(94,29): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/_createWrap.js(96,26): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/_createWrap.js(98,28): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/_createWrap.js(103,51): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/_customDefaultsMerge.js(22,35): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
+node_modules/lodash/_customOmitClone.js(9,20): error TS8024: JSDoc '@param' tag has name 'key', but there is no parameter with that name.
+node_modules/lodash/_deburrLetter.js(66,20): error TS8024: JSDoc '@param' tag has name 'letter', but there is no parameter with that name.
+node_modules/lodash/_equalArrays.js(64,22): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_equalByTag.js(86,7): error TS2454: Variable 'convert' is used before being assigned.
+node_modules/lodash/_equalObjects.js(70,18): error TS2322: Type 'boolean' is not assignable to type 'number'.
+node_modules/lodash/_escapeHtmlChar.js(16,20): error TS8024: JSDoc '@param' tag has name 'chr', but there is no parameter with that name.
+node_modules/lodash/_flatRest.js(13,37): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
+node_modules/lodash/_getData.js(8,22): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/_getFuncName.js(17,22): error TS2339: Property 'name' does not exist on type 'Function'.
+node_modules/lodash/_getHolder.js(10,17): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/_getRawTag.js(36,7): error TS2454: Variable 'unmasked' is used before being assigned.
+node_modules/lodash/_getSymbols.js(11,31): error TS2551: Property 'getOwnPropertySymbols' does not exist on type 'ObjectConstructor'. Did you mean 'getOwnPropertyNames'?
+node_modules/lodash/_getSymbols.js(17,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/_getSymbolsIn.js(7,31): error TS2551: Property 'getOwnPropertySymbols' does not exist on type 'ObjectConstructor'. Did you mean 'getOwnPropertyNames'?
+node_modules/lodash/_getSymbolsIn.js(13,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/_getSymbolsIn.js(19,23): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/_getTag.js(29,15): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/_hasPath.js(35,50): error TS2454: Variable 'key' is used before being assigned.
+node_modules/lodash/_hashDelete.js(7,20): error TS8024: JSDoc '@param' tag has name 'hash', but there is no parameter with that name.
+node_modules/lodash/_initCloneArray.js(16,16): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_initCloneArray.js(20,26): error TS2339: Property 'index' does not exist on type 'any[]'.
+node_modules/lodash/_initCloneArray.js(21,26): error TS2339: Property 'input' does not exist on type 'any[]'.
+node_modules/lodash/_insertWrapDetails.js(10,5): error TS1223: 'returns' tag already specified.
+node_modules/lodash/_insertWrapDetails.js(15,5): error TS2322: Type 'string' is not assignable to type 'any[]'.
+node_modules/lodash/_insertWrapDetails.js(20,3): error TS2322: Type 'string' is not assignable to type 'any[]'.
+node_modules/lodash/_isLaziable.js(24,14): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/_isMaskable.js(9,15): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/_lazyClone.js(14,3): error TS2322: Type 'any[]' is not assignable to type 'never[] | undefined'.
+  Type 'any[]' is not assignable to type 'never[]'.
+    Type 'any' is not assignable to type 'never'.
+node_modules/lodash/_lazyClone.js(17,3): error TS2322: Type 'any[]' is not assignable to type 'never[] | undefined'.
+  Type 'any[]' is not assignable to type 'never[]'.
+node_modules/lodash/_lazyClone.js(19,3): error TS2322: Type 'any[]' is not assignable to type 'never[] | undefined'.
+  Type 'any[]' is not assignable to type 'never[]'.
+node_modules/lodash/_lazyReverse.js(18,5): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_memoizeCapped.js(22,22): error TS2339: Property 'cache' does not exist on type 'Function'.
+node_modules/lodash/_mergeData.js(60,26): error TS2554: Expected 4 arguments, but got 3.
+node_modules/lodash/_mergeData.js(67,26): error TS2554: Expected 4 arguments, but got 3.
+node_modules/lodash/_nodeUtil.js(4,69): error TS2339: Property 'nodeType' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/lodash/node_modules/lodash/_nodeUtil"'.
+node_modules/lodash/_nodeUtil.js(7,80): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
+node_modules/lodash/_nodeUtil.js(13,47): error TS2339: Property 'process' does not exist on type 'boolean | Global'.
+  Property 'process' does not exist on type 'true'.
+node_modules/lodash/_root.js(4,56): error TS2339: Property 'Object' does not exist on type 'Window'.
+node_modules/lodash/_setData.js(14,22): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/_setData.js(15,15): error TS8024: JSDoc '@param' tag has name 'data', but there is no parameter with that name.
+node_modules/lodash/_setToString.js(8,22): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/_setToString.js(9,22): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/_stringToPath.js(13,20): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/_unescapeHtmlChar.js(16,20): error TS8024: JSDoc '@param' tag has name 'chr', but there is no parameter with that name.
+node_modules/lodash/_unicodeWords.js(62,20): error TS8024: JSDoc '@param' tag has name 'The', but there is no parameter with that name.
+node_modules/lodash/_updateWrapDetails.js(34,5): error TS1223: 'returns' tag already specified.
+node_modules/lodash/_wrapperClone.js(17,3): error TS2322: Type 'any[]' is not assignable to type 'never[] | undefined'.
+  Type 'any[]' is not assignable to type 'never[]'.
+node_modules/lodash/add.js(10,20): error TS8024: JSDoc '@param' tag has name 'augend', but there is no parameter with that name.
+node_modules/lodash/add.js(11,20): error TS8024: JSDoc '@param' tag has name 'addend', but there is no parameter with that name.
+node_modules/lodash/ary.js(16,10): error TS1003: Identifier expected.
+node_modules/lodash/ary.js(16,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/ary.js(24,3): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+node_modules/lodash/ary.js(26,53): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'any[]'.
+node_modules/lodash/assign.js(26,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/assign.js(27,24): error TS8024: JSDoc '@param' tag has name 'sources', but there is no parameter with that name.
+node_modules/lodash/assignIn.js(16,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/assignIn.js(17,24): error TS8024: JSDoc '@param' tag has name 'sources', but there is no parameter with that name.
+node_modules/lodash/assignInWith.js(18,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/assignInWith.js(19,23): error TS8024: JSDoc '@param' tag has name 'sources', but there is no parameter with that name.
+node_modules/lodash/assignInWith.js(20,23): error TS8024: JSDoc '@param' tag has name 'customizer', but there is no parameter with that name.
+node_modules/lodash/assignWith.js(17,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/assignWith.js(18,23): error TS8024: JSDoc '@param' tag has name 'sources', but there is no parameter with that name.
+node_modules/lodash/assignWith.js(19,23): error TS8024: JSDoc '@param' tag has name 'customizer', but there is no parameter with that name.
+node_modules/lodash/at.js(11,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/at.js(12,35): error TS8024: JSDoc '@param' tag has name 'paths', but there is no parameter with that name.
+node_modules/lodash/attempt.js(13,22): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/attempt.js(14,19): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
+node_modules/lodash/before.js(34,7): error TS2322: Type 'undefined' is not assignable to type 'Function'.
+node_modules/lodash/bind.js(24,22): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/bind.js(25,15): error TS8024: JSDoc '@param' tag has name 'thisArg', but there is no parameter with that name.
+node_modules/lodash/bind.js(26,19): error TS8024: JSDoc '@param' tag has name 'partials', but there is no parameter with that name.
+node_modules/lodash/bind.js(51,55): error TS2454: Variable 'holders' is used before being assigned.
+node_modules/lodash/bind.js(55,6): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/bindAll.js(17,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/bindAll.js(18,34): error TS8024: JSDoc '@param' tag has name 'methodNames', but there is no parameter with that name.
+node_modules/lodash/bindKey.js(27,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/bindKey.js(28,20): error TS8024: JSDoc '@param' tag has name 'key', but there is no parameter with that name.
+node_modules/lodash/bindKey.js(29,19): error TS8024: JSDoc '@param' tag has name 'partials', but there is no parameter with that name.
+node_modules/lodash/bindKey.js(62,53): error TS2454: Variable 'holders' is used before being assigned.
+node_modules/lodash/bindKey.js(66,9): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/camelCase.js(11,21): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/castArray.js(10,15): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/ceil.js(10,20): error TS8024: JSDoc '@param' tag has name 'number', but there is no parameter with that name.
+node_modules/lodash/ceil.js(11,21): error TS8024: JSDoc '@param' tag has name 'precision', but there is no parameter with that name.
+node_modules/lodash/chunk.js(20,10): error TS1003: Identifier expected.
+node_modules/lodash/chunk.js(20,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/clamp.js(26,5): error TS2322: Type 'undefined' is not assignable to type 'number'.
+node_modules/lodash/clone.js(33,27): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/cloneDeep.js(26,27): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/cloneDeepWith.js(36,3): error TS2322: Type 'Function | undefined' is not assignable to type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/lodash/cloneDeepWith.js(37,27): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/cloneWith.js(38,3): error TS2322: Type 'Function | undefined' is not assignable to type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/lodash/cloneWith.js(39,27): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/concat.js(14,19): error TS8024: JSDoc '@param' tag has name 'array', but there is no parameter with that name.
+node_modules/lodash/concat.js(15,19): error TS8024: JSDoc '@param' tag has name 'values', but there is no parameter with that name.
+node_modules/lodash/conforms.js(32,41): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/core.js(68,58): error TS2339: Property 'Object' does not exist on type 'Window'.
+node_modules/lodash/core.js(77,82): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
+node_modules/lodash/core.js(185,22): error TS8024: JSDoc '@param' tag has name 'chr', but there is no parameter with that name.
+node_modules/lodash/core.js(365,22): error TS8024: JSDoc '@param' tag has name 'proto', but there is no parameter with that name.
+node_modules/lodash/core.js(454,28): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/core.js(455,24): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/core.js(540,19): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean'.
+node_modules/lodash/core.js(545,24): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'Boolean' has no compatible call signatures.
+node_modules/lodash/core.js(565,22): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/core.js(566,24): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/core.js(567,24): error TS8024: JSDoc '@param' tag has name 'keysFunc', but there is no parameter with that name.
+node_modules/lodash/core.js(627,17): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/core.js(664,42): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+node_modules/lodash/core.js(721,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'result' must be of type 'boolean', but here has type 'any'.
+node_modules/lodash/core.js(749,18): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/core.js(811,53): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/core.js(826,24): error TS8024: JSDoc '@param' tag has name 'paths', but there is no parameter with that name.
+node_modules/lodash/core.js(848,12): error TS2554: Expected 1 arguments, but got 2.
+node_modules/lodash/core.js(886,22): error TS8024: JSDoc '@param' tag has name 'array', but there is no parameter with that name.
+node_modules/lodash/core.js(1118,24): error TS2554: Expected 1 arguments, but got 2.
+node_modules/lodash/core.js(1123,36): error TS2454: Variable 'iteratee' is used before being assigned.
+node_modules/lodash/core.js(1313,20): error TS2322: Type 'boolean' is not assignable to type 'number'.
+node_modules/lodash/core.js(1338,12): error TS2554: Expected 1 arguments, but got 2.
+node_modules/lodash/core.js(1349,30): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/core.js(1458,24): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/core.js(1459,24): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/core.js(1493,21): error TS8024: JSDoc '@param' tag has name 'array', but there is no parameter with that name.
+node_modules/lodash/core.js(1494,21): error TS8024: JSDoc '@param' tag has name 'values', but there is no parameter with that name.
+node_modules/lodash/core.js(1566,33): error TS2554: Expected 1 arguments, but got 2.
+node_modules/lodash/core.js(1872,12): error TS1003: Identifier expected.
+node_modules/lodash/core.js(1872,12): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/core.js(1952,28): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/core.js(1953,25): error TS8024: JSDoc '@param' tag has name 'predicate', but there is no parameter with that name.
+node_modules/lodash/core.js(1954,23): error TS8024: JSDoc '@param' tag has name 'fromIndex', but there is no parameter with that name.
+node_modules/lodash/core.js(2142,12): error TS1003: Identifier expected.
+node_modules/lodash/core.js(2142,12): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/core.js(2183,41): error TS8024: JSDoc '@param' tag has name 'iteratees', but there is no parameter with that name.
+node_modules/lodash/core.js(2262,24): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/core.js(2263,17): error TS8024: JSDoc '@param' tag has name 'thisArg', but there is no parameter with that name.
+node_modules/lodash/core.js(2264,21): error TS8024: JSDoc '@param' tag has name 'partials', but there is no parameter with that name.
+node_modules/lodash/core.js(2295,24): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/core.js(2296,21): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
+node_modules/lodash/core.js(2317,24): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/core.js(2318,22): error TS8024: JSDoc '@param' tag has name 'wait', but there is no parameter with that name.
+node_modules/lodash/core.js(2319,21): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
+node_modules/lodash/core.js(2462,17): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/core.js(2473,21): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/core.js(2485,17): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/core.js(2561,17): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/core.js(2609,39): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/core.js(2644,12): error TS2554: Expected 3-5 arguments, but got 2.
+node_modules/lodash/core.js(2887,17): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/core.js(2982,17): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/core.js(3007,17): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/core.js(3067,22): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/core.js(3068,26): error TS8024: JSDoc '@param' tag has name 'sources', but there is no parameter with that name.
+node_modules/lodash/core.js(3102,22): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/core.js(3103,26): error TS8024: JSDoc '@param' tag has name 'sources', but there is no parameter with that name.
+node_modules/lodash/core.js(3177,22): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/core.js(3178,26): error TS8024: JSDoc '@param' tag has name 'sources', but there is no parameter with that name.
+node_modules/lodash/core.js(3259,22): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/core.js(3287,22): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/core.js(3310,22): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/core.js(3311,37): error TS8024: JSDoc '@param' tag has name 'paths', but there is no parameter with that name.
+node_modules/lodash/core.js(3354,53): error TS2538: Type 'any[]' cannot be used as an index type.
+node_modules/lodash/core.js(3424,41): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+  Type 'Function' provides no match for the signature '(substring: string, ...args: any[]): string'.
+node_modules/lodash/core.js(3461,18): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/core.js(3590,63): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
+  Property 'push' is missing in type 'IArguments'.
+node_modules/lodash/core.js(3830,14): error TS2304: Cannot find name 'define'.
+node_modules/lodash/core.js(3830,45): error TS2304: Cannot find name 'define'.
+node_modules/lodash/core.js(3830,71): error TS2304: Cannot find name 'define'.
+node_modules/lodash/core.js(3839,5): error TS2304: Cannot find name 'define'.
+node_modules/lodash/core.js(3846,35): error TS2339: Property '_' does not exist on type '{ (value: any): any; assignIn: Function; before: (n: number, func: Function) => Function; bind: F...'.
+node_modules/lodash/countBy.js(20,26): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/countBy.js(21,23): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/curry.js(24,10): error TS1003: Identifier expected.
+node_modules/lodash/curry.js(24,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/curry.js(48,3): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+node_modules/lodash/curry.js(49,61): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'any[]'.
+node_modules/lodash/curry.js(50,10): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/curryRight.js(21,10): error TS1003: Identifier expected.
+node_modules/lodash/curryRight.js(21,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/curryRight.js(45,3): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+node_modules/lodash/curryRight.js(46,67): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'any[]'.
+node_modules/lodash/curryRight.js(47,10): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/deburr.js(42,44): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+node_modules/lodash/defaults.js(24,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/defaults.js(25,24): error TS8024: JSDoc '@param' tag has name 'sources', but there is no parameter with that name.
+node_modules/lodash/defaultsDeep.js(16,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/defaultsDeep.js(17,24): error TS8024: JSDoc '@param' tag has name 'sources', but there is no parameter with that name.
+node_modules/lodash/defer.js(12,22): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/defer.js(13,19): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
+node_modules/lodash/delay.js(13,22): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/delay.js(14,20): error TS8024: JSDoc '@param' tag has name 'wait', but there is no parameter with that name.
+node_modules/lodash/delay.js(15,19): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
+node_modules/lodash/difference.js(18,19): error TS8024: JSDoc '@param' tag has name 'array', but there is no parameter with that name.
+node_modules/lodash/difference.js(19,23): error TS8024: JSDoc '@param' tag has name 'values', but there is no parameter with that name.
+node_modules/lodash/difference.js(29,52): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/differenceBy.js(21,19): error TS8024: JSDoc '@param' tag has name 'array', but there is no parameter with that name.
+node_modules/lodash/differenceBy.js(22,23): error TS8024: JSDoc '@param' tag has name 'values', but there is no parameter with that name.
+node_modules/lodash/differenceBy.js(23,23): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/differenceBy.js(40,52): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/differenceBy.js(40,78): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/differenceWith.js(19,19): error TS8024: JSDoc '@param' tag has name 'array', but there is no parameter with that name.
+node_modules/lodash/differenceWith.js(20,23): error TS8024: JSDoc '@param' tag has name 'values', but there is no parameter with that name.
+node_modules/lodash/differenceWith.js(21,23): error TS8024: JSDoc '@param' tag has name 'comparator', but there is no parameter with that name.
+node_modules/lodash/differenceWith.js(36,52): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/differenceWith.js(36,78): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Function'.
+node_modules/lodash/divide.js(10,20): error TS8024: JSDoc '@param' tag has name 'dividend', but there is no parameter with that name.
+node_modules/lodash/divide.js(11,20): error TS8024: JSDoc '@param' tag has name 'divisor', but there is no parameter with that name.
+node_modules/lodash/drop.js(13,10): error TS1003: Identifier expected.
+node_modules/lodash/drop.js(13,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/dropRight.js(13,10): error TS1003: Identifier expected.
+node_modules/lodash/dropRight.js(13,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/dropRightWhile.js(41,24): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/dropWhile.js(41,24): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/escape.js(39,39): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+node_modules/lodash/every.js(23,10): error TS1003: Identifier expected.
+node_modules/lodash/every.js(23,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/every.js(51,5): error TS2322: Type 'undefined' is not assignable to type 'Function'.
+node_modules/lodash/every.js(53,27): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/filter.js(45,27): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/find.js(13,26): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/find.js(14,23): error TS8024: JSDoc '@param' tag has name 'predicate', but there is no parameter with that name.
+node_modules/lodash/find.js(15,21): error TS8024: JSDoc '@param' tag has name 'fromIndex', but there is no parameter with that name.
+node_modules/lodash/findIndex.js(52,31): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/findKey.js(41,30): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/findLast.js(12,26): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/findLast.js(13,23): error TS8024: JSDoc '@param' tag has name 'predicate', but there is no parameter with that name.
+node_modules/lodash/findLast.js(14,21): error TS8024: JSDoc '@param' tag has name 'fromIndex', but there is no parameter with that name.
+node_modules/lodash/findLastIndex.js(56,31): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/findLastKey.js(41,30): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/floor.js(10,20): error TS8024: JSDoc '@param' tag has name 'number', but there is no parameter with that name.
+node_modules/lodash/floor.js(11,21): error TS8024: JSDoc '@param' tag has name 'precision', but there is no parameter with that name.
+node_modules/lodash/flow.js(12,39): error TS8024: JSDoc '@param' tag has name 'funcs', but there is no parameter with that name.
+node_modules/lodash/flowRight.js(11,39): error TS8024: JSDoc '@param' tag has name 'funcs', but there is no parameter with that name.
+node_modules/lodash/fp.js(2,18): error TS2554: Expected 3-4 arguments, but got 2.
+node_modules/lodash/fp/_baseConvert.js(144,5): error TS2559: Type 'Function' has no properties in common with type '{ cap?: boolean; curry?: boolean; fixed?: boolean; immutable?: boolean; rearg?: boolean; }'.
+node_modules/lodash/fp/_baseConvert.js(145,5): error TS2322: Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(146,5): error TS2322: Type 'undefined' is not assignable to type 'string'.
+node_modules/lodash/fp/_baseConvert.js(165,31): error TS2339: Property 'runInContext' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(184,21): error TS2339: Property 'ary' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'ary' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(185,24): error TS2339: Property 'assign' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'assign' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(186,23): error TS2339: Property 'clone' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'clone' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(187,23): error TS2339: Property 'curry' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'curry' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(188,22): error TS2339: Property 'forEach' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'forEach' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(189,25): error TS2339: Property 'isArray' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'isArray' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(190,25): error TS2339: Property 'isError' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'isError' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(191,28): error TS2339: Property 'isFunction' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'isFunction' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(192,27): error TS2339: Property 'isWeakMap' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'isWeakMap' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(193,22): error TS2339: Property 'keys' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'keys' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(194,23): error TS2339: Property 'rearg' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'rearg' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(195,27): error TS2339: Property 'toInteger' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'toInteger' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(196,24): error TS2339: Property 'toPath' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'toPath' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(263,57): error TS2345: Argument of type '{ cap?: boolean; curry?: boolean; fixed?: boolean; immutable?: boolean; rearg?: boolean; }' is not assignable to parameter of type 'Function'.
+  Property 'apply' is missing in type '{ cap?: boolean; curry?: boolean; fixed?: boolean; immutable?: boolean; rearg?: boolean; }'.
+node_modules/lodash/fp/_baseConvert.js(379,14): error TS2339: Property 'runInContext' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(516,33): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(559,5): error TS2339: Property 'convert' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(561,7): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/fp/_convertBrowser.js(12,30): error TS2345: Argument of type 'Function' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/_convertBrowser.js(15,12): error TS2304: Cannot find name '_'.
+node_modules/lodash/fp/_convertBrowser.js(15,38): error TS2304: Cannot find name '_'.
+node_modules/lodash/fp/_convertBrowser.js(16,3): error TS2304: Cannot find name '_'.
+node_modules/lodash/fp/_convertBrowser.js(16,22): error TS2304: Cannot find name '_'.
+node_modules/lodash/fp/array.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'chunk': (array: any[], size?: number, guard: any) => any[]; 'compact': (arra...' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/collection.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'countBy': Function; 'each': (collection: any, iteratee?: Function) => any; '...' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/date.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'now': () => number; }' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/function.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'after': (n: number, func: Function) => Function; 'ary': (func: Function, n?:...' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/lang.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'castArray': (...args: any[]) => any[]; 'clone': (value: any) => any; 'cloneD...' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/math.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'add': Function; 'ceil': Function; 'divide': Function; 'floor': Function; 'ma...' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/number.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'clamp': (number: number, lower?: number, upper: number) => number; 'inRange'...' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/object.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'assign': Function; 'assignIn': Function; 'assignInWith': Function; 'assignWi...' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/seq.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'at': Function; 'chain': (value: any) => any; 'commit': () => any; 'lodash': ...' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/string.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'camelCase': Function; 'capitalize': (string?: string) => string; 'deburr': (...' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/util.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'attempt': Function; 'bindAll': Function; 'cond': (pairs: any[]) => Function;...' is not assignable to parameter of type 'string'.
+node_modules/lodash/groupBy.js(21,26): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/groupBy.js(22,23): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/gt.js(11,15): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/gt.js(12,15): error TS8024: JSDoc '@param' tag has name 'other', but there is no parameter with that name.
+node_modules/lodash/gte.js(10,15): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/gte.js(11,15): error TS8024: JSDoc '@param' tag has name 'other', but there is no parameter with that name.
+node_modules/lodash/includes.js(24,10): error TS1003: Identifier expected.
+node_modules/lodash/includes.js(24,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/index.js(1,26): error TS2306: File '/home/nathansa/ts/tests/cases/user/lodash/node_modules/lodash/lodash.js' is not a module.
+node_modules/lodash/intersection.js(16,23): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/intersectionBy.js(19,23): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/intersectionBy.js(20,23): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/intersectionBy.js(41,32): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/intersectionWith.js(17,23): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/intersectionWith.js(18,23): error TS8024: JSDoc '@param' tag has name 'comparator', but there is no parameter with that name.
+node_modules/lodash/intersectionWith.js(37,32): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Function'.
+node_modules/lodash/invert.js(24,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/invertBy.js(28,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/invertBy.js(29,23): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/invoke.js(11,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/invoke.js(12,26): error TS8024: JSDoc '@param' tag has name 'path', but there is no parameter with that name.
+node_modules/lodash/invoke.js(13,19): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
+node_modules/lodash/invokeMap.js(17,26): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/invokeMap.js(18,35): error TS8024: JSDoc '@param' tag has name 'path', but there is no parameter with that name.
+node_modules/lodash/invokeMap.js(20,19): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
+node_modules/lodash/isArguments.js(20,15): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/isArray.js(8,15): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/isArrayBuffer.js(15,15): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/isBuffer.js(5,69): error TS2339: Property 'nodeType' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/lodash/node_modules/lodash/isBuffer"'.
+node_modules/lodash/isBuffer.js(8,80): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
+node_modules/lodash/isBuffer.js(26,15): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/isDate.js(15,15): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/isEqual.js(32,10): error TS2554: Expected 3-5 arguments, but got 2.
+node_modules/lodash/isEqualWith.js(36,3): error TS2322: Type 'Function | undefined' is not assignable to type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/lodash/isEqualWith.js(38,59): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/isMap.js(15,15): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/isMatchWith.js(37,3): error TS2322: Type 'Function | undefined' is not assignable to type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/lodash/isRegExp.js(15,15): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/isSet.js(15,15): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/isTypedArray.js(15,15): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/iteratee.js(50,74): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/kebabCase.js(11,21): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/keyBy.js(14,26): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/keyBy.js(15,23): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/keys.js(34,32): error TS2554: Expected 2 arguments, but got 1.
+node_modules/lodash/lodash.js(419,58): error TS2339: Property 'Object' does not exist on type 'Window'.
+node_modules/lodash/lodash.js(428,82): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
+node_modules/lodash/lodash.js(434,49): error TS2339: Property 'process' does not exist on type 'false | Global'.
+  Property 'process' does not exist on type 'false'.
+node_modules/lodash/lodash.js(587,17): error TS8024: JSDoc '@param' tag has name 'target', but there is no parameter with that name.
+node_modules/lodash/lodash.js(600,17): error TS8024: JSDoc '@param' tag has name 'target', but there is no parameter with that name.
+node_modules/lodash/lodash.js(729,22): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/lodash.js(749,22): error TS8024: JSDoc '@param' tag has name 'The', but there is no parameter with that name.
+node_modules/lodash/lodash.js(924,16): error TS2345: Argument of type 'Function' is not assignable to parameter of type '((a: any, b: any) => number) | undefined'.
+  Type 'Function' is not assignable to type '(a: any, b: any) => number'.
+node_modules/lodash/lodash.js(1087,22): error TS8024: JSDoc '@param' tag has name 'letter', but there is no parameter with that name.
+node_modules/lodash/lodash.js(1096,22): error TS8024: JSDoc '@param' tag has name 'chr', but there is no parameter with that name.
+node_modules/lodash/lodash.js(1339,22): error TS8024: JSDoc '@param' tag has name 'chr', but there is no parameter with that name.
+node_modules/lodash/lodash.js(1374,22): error TS8024: JSDoc '@param' tag has name 'The', but there is no parameter with that name.
+node_modules/lodash/lodash.js(1390,23): error TS8024: JSDoc '@param' tag has name 'context', but there is no parameter with that name.
+node_modules/lodash/lodash.js(1671,24): error TS8024: JSDoc '@param' tag has name 'proto', but there is no parameter with that name.
+node_modules/lodash/lodash.js(1771,9): error TS2322: Type '{ (value: any): any; templateSettings: any; prototype: any; after: (n: number, func: Function) =>...' is not assignable to type 'Function'.
+  Types of property 'bind' are incompatible.
+    Type 'Function' is not assignable to type '(this: Function, thisArg: any, ...argArray: any[]) => any'.
+      Type 'Function' provides no match for the signature '(this: Function, thisArg: any, ...argArray: any[]): any'.
+node_modules/lodash/lodash.js(1811,7): error TS2322: Type 'any[]' is not assignable to type 'never[] | undefined'.
+  Type 'any[]' is not assignable to type 'never[]'.
+node_modules/lodash/lodash.js(1814,7): error TS2322: Type 'any[]' is not assignable to type 'never[] | undefined'.
+  Type 'any[]' is not assignable to type 'never[]'.
+node_modules/lodash/lodash.js(1816,7): error TS2322: Type 'any[]' is not assignable to type 'never[] | undefined'.
+  Type 'any[]' is not assignable to type 'never[]'.
+node_modules/lodash/lodash.js(1835,9): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(1939,24): error TS8024: JSDoc '@param' tag has name 'hash', but there is no parameter with that name.
+node_modules/lodash/lodash.js(2288,24): error TS2339: Property 'size' does not exist on type '{ clear: () => void; get: (key: string) => any; has: (key: string) => boolean; set: (key: string,...'.
+node_modules/lodash/lodash.js(2628,20): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/lodash/lodash.js(2629,20): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/lodash/lodash.js(2630,20): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/lodash/lodash.js(2652,37): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(2665,47): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(2791,9): error TS2322: Type '(array?: any[], value: any, comparator: Function) => boolean' is not assignable to type '(array?: any[], value: any) => boolean'.
+node_modules/lodash/lodash.js(2797,9): error TS2322: Type '{ __data__: { clear: () => void; get: (key: string) => any; has: (key: string) => boolean; set: (...' is not assignable to type 'any[]'.
+  Property 'length' is missing in type '{ __data__: { clear: () => void; get: (key: string) => any; has: (key: string) => boolean; set: (...'.
+node_modules/lodash/lodash.js(2814,19): error TS2554: Expected 2 arguments, but got 3.
+node_modules/lodash/lodash.js(2825,30): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/lodash.js(2826,26): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/lodash.js(2835,30): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/lodash.js(2836,26): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/lodash.js(2949,21): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean'.
+node_modules/lodash/lodash.js(2954,26): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'Boolean' has no compatible call signatures.
+node_modules/lodash/lodash.js(2974,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(2975,26): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/lodash.js(2976,26): error TS8024: JSDoc '@param' tag has name 'keysFunc', but there is no parameter with that name.
+node_modules/lodash/lodash.js(2986,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(2987,26): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/lodash.js(2988,26): error TS8024: JSDoc '@param' tag has name 'keysFunc', but there is no parameter with that name.
+node_modules/lodash/lodash.js(3286,44): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+node_modules/lodash/lodash.js(3403,51): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(3587,40): error TS2345: Argument of type 'string | symbol' is not assignable to parameter of type 'string'.
+  Type 'symbol' is not assignable to type 'string'.
+node_modules/lodash/lodash.js(3593,45): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(3860,30): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string | any[]'.
+node_modules/lodash/lodash.js(4001,29): error TS2345: Argument of type 'string | symbol' is not assignable to parameter of type 'string'.
+  Type 'symbol' is not assignable to type 'string'.
+node_modules/lodash/lodash.js(4011,26): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/lodash.js(4012,19): error TS8024: JSDoc '@param' tag has name 'data', but there is no parameter with that name.
+node_modules/lodash/lodash.js(4024,26): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/lodash.js(4025,26): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/lodash.js(4271,9): error TS2322: Type '(array?: any[], value: any, comparator: Function) => boolean' is not assignable to type '(array?: any[], value: any) => boolean'.
+node_modules/lodash/lodash.js(4274,37): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/lodash.js(4280,9): error TS2322: Type '{ __data__: { clear: () => void; get: (key: string) => any; has: (key: string) => boolean; set: (...' is not assignable to type 'any[]'.
+node_modules/lodash/lodash.js(4303,19): error TS2554: Expected 2 arguments, but got 3.
+node_modules/lodash/lodash.js(4480,26): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/lodash.js(4504,31): error TS8024: JSDoc '@param' tag has name 'id', but there is no parameter with that name.
+node_modules/lodash/lodash.js(4537,20): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/lodash.js(4807,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/lodash.js(4819,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/lodash.js(4982,28): error TS2554: Expected 3 arguments, but got 1.
+node_modules/lodash/lodash.js(5001,26): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/lodash.js(5002,26): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/lodash.js(5003,26): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/lodash.js(5004,26): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/lodash.js(5005,26): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/lodash.js(5006,26): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/lodash.js(5007,26): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/lodash.js(5008,26): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/lodash.js(5047,50): error TS2339: Property 'placeholder' does not exist on type '(...args: any[]) => any'.
+node_modules/lodash/lodash.js(5072,38): error TS2454: Variable 'iteratee' is used before being assigned.
+node_modules/lodash/lodash.js(5097,26): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/lodash.js(5101,17): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/lodash.js(5106,46): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/lodash.js(5112,23): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/lodash.js(5112,59): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/lodash.js(5115,17): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/lodash.js(5116,17): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/lodash.js(5116,25): error TS2339: Property 'thru' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __chain__: boolean | undefined; __index__: ...'.
+node_modules/lodash/lodash.js(5124,28): error TS2339: Property 'plant' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __chain__: boolean | undefined; __index__: ...'.
+node_modules/lodash/lodash.js(5162,53): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/lodash.js(5182,19): error TS2454: Variable 'holdersCount' is used before being assigned.
+node_modules/lodash/lodash.js(5186,13): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/lodash.js(5186,50): error TS2339: Property 'placeholder' does not exist on type '(...args: any[]) => any'.
+node_modules/lodash/lodash.js(5191,42): error TS2538: Type 'Function' cannot be used as an index type.
+node_modules/lodash/lodash.js(5448,23): error TS8024: JSDoc '@param' tag has name 'values', but there is no parameter with that name.
+node_modules/lodash/lodash.js(5520,42): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/lodash.js(5523,52): error TS2454: Variable 'partialsRight' is used before being assigned.
+node_modules/lodash/lodash.js(5523,67): error TS2454: Variable 'holdersRight' is used before being assigned.
+node_modules/lodash/lodash.js(5543,33): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/lodash.js(5545,30): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/lodash.js(5547,32): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/lodash.js(5552,55): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/lodash.js(5605,24): error TS8024: JSDoc '@param' tag has name 'key', but there is no parameter with that name.
+node_modules/lodash/lodash.js(5742,11): error TS2454: Variable 'convert' is used before being assigned.
+node_modules/lodash/lodash.js(5826,22): error TS2322: Type 'boolean' is not assignable to type 'number'.
+node_modules/lodash/lodash.js(5883,26): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/lodash.js(5898,26): error TS2339: Property 'name' does not exist on type 'Function'.
+node_modules/lodash/lodash.js(5921,21): error TS2339: Property 'placeholder' does not exist on type 'Function | { (value: any): any; templateSettings: any; prototype: any; after: (n: number, func: F...'.
+  Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/lodash.js(5931,20): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/lodash.js(5932,25): error TS8024: JSDoc '@param' tag has name 'arity', but there is no parameter with that name.
+node_modules/lodash/lodash.js(5938,33): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/lodash.js(6006,11): error TS2454: Variable 'unmasked' is used before being assigned.
+node_modules/lodash/lodash.js(6020,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6037,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6043,27): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/lodash.js(6053,19): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6149,54): error TS2454: Variable 'key' is used before being assigned.
+node_modules/lodash/lodash.js(6162,20): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/lodash.js(6166,30): error TS2339: Property 'index' does not exist on type 'any[]'.
+node_modules/lodash/lodash.js(6167,30): error TS2339: Property 'input' does not exist on type 'any[]'.
+node_modules/lodash/lodash.js(6239,9): error TS1223: 'returns' tag already specified.
+node_modules/lodash/lodash.js(6244,9): error TS2322: Type 'string' is not assignable to type 'any[]'.
+node_modules/lodash/lodash.js(6249,7): error TS2322: Type 'string' is not assignable to type 'any[]'.
+node_modules/lodash/lodash.js(6359,18): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/lodash.js(6378,19): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6444,26): error TS2339: Property 'cache' does not exist on type 'Function'.
+node_modules/lodash/lodash.js(6489,30): error TS2554: Expected 4 arguments, but got 3.
+node_modules/lodash/lodash.js(6496,30): error TS2554: Expected 4 arguments, but got 3.
+node_modules/lodash/lodash.js(6623,26): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6624,19): error TS8024: JSDoc '@param' tag has name 'data', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6633,26): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6634,24): error TS8024: JSDoc '@param' tag has name 'wait', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6645,26): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6646,26): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6724,24): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6778,9): error TS1223: 'returns' tag already specified.
+node_modules/lodash/lodash.js(6802,7): error TS2322: Type 'any[]' is not assignable to type 'never[] | undefined'.
+  Type 'any[]' is not assignable to type 'never[]'.
+node_modules/lodash/lodash.js(6821,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(6821,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6889,23): error TS8024: JSDoc '@param' tag has name 'array', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6890,23): error TS8024: JSDoc '@param' tag has name 'values', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6930,23): error TS8024: JSDoc '@param' tag has name 'array', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6931,27): error TS8024: JSDoc '@param' tag has name 'values', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6941,56): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(6958,23): error TS8024: JSDoc '@param' tag has name 'array', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6959,27): error TS8024: JSDoc '@param' tag has name 'values', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6960,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6977,56): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(6993,23): error TS8024: JSDoc '@param' tag has name 'array', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6994,27): error TS8024: JSDoc '@param' tag has name 'values', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6995,27): error TS8024: JSDoc '@param' tag has name 'comparator', but there is no parameter with that name.
+node_modules/lodash/lodash.js(7010,56): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(7023,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(7023,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(7057,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(7057,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(7483,27): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/lodash.js(7508,27): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/lodash.js(7509,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/lodash.js(7544,27): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/lodash.js(7545,27): error TS8024: JSDoc '@param' tag has name 'comparator', but there is no parameter with that name.
+node_modules/lodash/lodash.js(7679,23): error TS8024: JSDoc '@param' tag has name 'array', but there is no parameter with that name.
+node_modules/lodash/lodash.js(7680,23): error TS8024: JSDoc '@param' tag has name 'values', but there is no parameter with that name.
+node_modules/lodash/lodash.js(7786,23): error TS8024: JSDoc '@param' tag has name 'array', but there is no parameter with that name.
+node_modules/lodash/lodash.js(7787,39): error TS8024: JSDoc '@param' tag has name 'indexes', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8145,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(8145,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8178,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(8178,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8295,27): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8303,46): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(8317,27): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8318,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8334,46): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(8347,27): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8348,27): error TS8024: JSDoc '@param' tag has name 'comparator', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8361,46): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(8518,23): error TS8024: JSDoc '@param' tag has name 'array', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8519,23): error TS8024: JSDoc '@param' tag has name 'values', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8543,27): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8566,27): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8567,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8596,27): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8597,27): error TS8024: JSDoc '@param' tag has name 'comparator', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8622,27): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8679,27): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8680,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8797,39): error TS8024: JSDoc '@param' tag has name 'paths', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8822,55): error TS2339: Property 'thru' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __chain__: boolean | undefined; __index__: ...'.
+node_modules/lodash/lodash.js(9057,30): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9058,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9093,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(9093,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9177,30): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9178,27): error TS8024: JSDoc '@param' tag has name 'predicate', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9179,25): error TS8024: JSDoc '@param' tag has name 'fromIndex', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9214,30): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9215,27): error TS8024: JSDoc '@param' tag has name 'predicate', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9216,25): error TS8024: JSDoc '@param' tag has name 'fromIndex', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9373,30): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9374,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9407,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(9407,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9446,30): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9447,39): error TS8024: JSDoc '@param' tag has name 'path', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9449,23): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9480,30): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9481,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9563,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(9563,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9587,9): error TS2322: Type 'string[][]' is not assignable to type 'string[]'.
+  Type 'string[]' is not assignable to type 'string'.
+node_modules/lodash/lodash.js(9602,30): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9603,27): error TS8024: JSDoc '@param' tag has name 'predicate', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9673,14): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((array?: any[], iteratee: Function, accumulator?: any, initAccum?: boolean) => any) | ((collecti...' has no compatible call signatures.
+node_modules/lodash/lodash.js(9702,14): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((collection: any, iteratee: Function, accumulator: any, initAccum: boolean, eachFunc: Function) ...' has no compatible call signatures.
+node_modules/lodash/lodash.js(9773,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(9773,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9859,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(9859,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9902,30): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9903,43): error TS8024: JSDoc '@param' tag has name 'iteratees', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10004,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(10004,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10065,26): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10066,19): error TS8024: JSDoc '@param' tag has name 'thisArg', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10067,23): error TS8024: JSDoc '@param' tag has name 'partials', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10092,59): error TS2454: Variable 'holders' is used before being assigned.
+node_modules/lodash/lodash.js(10111,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10112,24): error TS8024: JSDoc '@param' tag has name 'key', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10113,23): error TS8024: JSDoc '@param' tag has name 'partials', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10146,57): error TS2454: Variable 'holders' is used before being assigned.
+node_modules/lodash/lodash.js(10167,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(10167,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10193,14): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/lodash.js(10193,34): error TS2339: Property 'placeholder' does not exist on type '(func: Function, arity?: number, guard: any) => Function'.
+node_modules/lodash/lodash.js(10212,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(10212,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10238,14): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/lodash.js(10238,39): error TS2339: Property 'placeholder' does not exist on type '(func: Function, arity?: number, guard: any) => Function'.
+node_modules/lodash/lodash.js(10428,26): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10429,23): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10450,26): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10451,24): error TS8024: JSDoc '@param' tag has name 'wait', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10452,23): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10619,26): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10620,43): error TS8024: JSDoc '@param' tag has name 'transforms', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10675,26): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10676,23): error TS8024: JSDoc '@param' tag has name 'partials', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10712,26): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10713,23): error TS8024: JSDoc '@param' tag has name 'partials', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10745,26): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10746,38): error TS8024: JSDoc '@param' tag has name 'indexes', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10922,14): error TS2554: Expected 3 arguments, but got 2.
+node_modules/lodash/lodash.js(10960,19): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/lodash.js(11021,31): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(11057,31): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(11079,31): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(11112,31): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(11186,19): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/lodash.js(11187,19): error TS8024: JSDoc '@param' tag has name 'other', but there is no parameter with that name.
+node_modules/lodash/lodash.js(11211,19): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/lodash.js(11212,19): error TS8024: JSDoc '@param' tag has name 'other', but there is no parameter with that name.
+node_modules/lodash/lodash.js(11238,19): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/lodash.js(11261,19): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/lodash.js(11286,19): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/lodash.js(11385,19): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/lodash.js(11404,19): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/lodash.js(11523,14): error TS2554: Expected 3-5 arguments, but got 2.
+node_modules/lodash/lodash.js(11774,19): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12047,19): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12097,19): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12160,19): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12242,19): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12243,19): error TS8024: JSDoc '@param' tag has name 'other', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12267,19): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12268,19): error TS8024: JSDoc '@param' tag has name 'other', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12566,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12567,28): error TS8024: JSDoc '@param' tag has name 'sources', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12609,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12610,28): error TS8024: JSDoc '@param' tag has name 'sources', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12646,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12647,27): error TS8024: JSDoc '@param' tag has name 'sources', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12648,27): error TS8024: JSDoc '@param' tag has name 'customizer', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12678,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12679,27): error TS8024: JSDoc '@param' tag has name 'sources', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12680,27): error TS8024: JSDoc '@param' tag has name 'customizer', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12705,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12706,39): error TS8024: JSDoc '@param' tag has name 'paths', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12768,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12769,28): error TS8024: JSDoc '@param' tag has name 'sources', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12818,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(12819,28): error TS8024: JSDoc '@param' tag has name 'sources', but there is no parameter with that name.
+node_modules/lodash/lodash.js(13192,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(13221,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(13222,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/lodash.js(13256,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(13257,30): error TS8024: JSDoc '@param' tag has name 'path', but there is no parameter with that name.
+node_modules/lodash/lodash.js(13258,23): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
+node_modules/lodash/lodash.js(13298,36): error TS2554: Expected 2 arguments, but got 1.
+node_modules/lodash/lodash.js(13412,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(13413,28): error TS8024: JSDoc '@param' tag has name 'sources', but there is no parameter with that name.
+node_modules/lodash/lodash.js(13445,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(13446,27): error TS8024: JSDoc '@param' tag has name 'sources', but there is no parameter with that name.
+node_modules/lodash/lodash.js(13447,26): error TS8024: JSDoc '@param' tag has name 'customizer', but there is no parameter with that name.
+node_modules/lodash/lodash.js(13477,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(13478,39): error TS8024: JSDoc '@param' tag has name 'paths', but there is no parameter with that name.
+node_modules/lodash/lodash.js(13500,36): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(13540,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(13541,39): error TS8024: JSDoc '@param' tag has name 'paths', but there is no parameter with that name.
+node_modules/lodash/lodash.js(13707,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(13733,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(13796,7): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((array?: any[], iteratee: Function) => any[]) | ((object: any, iteratee: Function) => any)' has no compatible call signatures.
+node_modules/lodash/lodash.js(14117,25): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14174,48): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+node_modules/lodash/lodash.js(14245,43): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+node_modules/lodash/lodash.js(14279,25): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14303,25): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14327,25): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14458,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(14458,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14486,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(14486,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14518,25): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14519,31): error TS8024: JSDoc '@param' tag has name 'pattern', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14520,33): error TS8024: JSDoc '@param' tag has name 'replacement', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14542,25): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14607,25): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14692,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(14692,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14877,25): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14902,25): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14928,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(14928,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14966,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(14966,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14999,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(14999,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15083,20): error TS2454: Variable 'strSymbols' is used before being assigned.
+node_modules/lodash/lodash.js(15090,11): error TS2454: Variable 'strSymbols' is used before being assigned.
+node_modules/lodash/lodash.js(15138,41): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+node_modules/lodash/lodash.js(15149,25): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15173,25): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15194,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(15194,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15224,26): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15225,23): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15256,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15257,38): error TS8024: JSDoc '@param' tag has name 'methodNames', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15356,45): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(15417,43): error TS8024: JSDoc '@param' tag has name 'funcs', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15440,43): error TS8024: JSDoc '@param' tag has name 'funcs', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15518,78): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(15550,44): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(15580,34): error TS2345: Argument of type 'string | any[]' is not assignable to parameter of type 'string'.
+  Type 'any[]' is not assignable to type 'string'.
+node_modules/lodash/lodash.js(15580,60): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(15591,30): error TS8024: JSDoc '@param' tag has name 'path', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15592,23): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15622,24): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15623,23): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15706,65): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
+node_modules/lodash/lodash.js(15785,43): error TS8024: JSDoc '@param' tag has name 'iteratees', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15805,43): error TS8024: JSDoc '@param' tag has name 'predicates', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15831,43): error TS8024: JSDoc '@param' tag has name 'predicates', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15872,41): error TS2345: Argument of type 'string | symbol' is not assignable to parameter of type 'string'.
+  Type 'symbol' is not assignable to type 'string'.
+node_modules/lodash/lodash.js(15915,25): error TS8024: JSDoc '@param' tag has name 'start', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15916,24): error TS8024: JSDoc '@param' tag has name 'end', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15917,25): error TS8024: JSDoc '@param' tag has name 'step', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15953,25): error TS8024: JSDoc '@param' tag has name 'start', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15954,24): error TS8024: JSDoc '@param' tag has name 'end', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15955,25): error TS8024: JSDoc '@param' tag has name 'step', but there is no parameter with that name.
+node_modules/lodash/lodash.js(16170,24): error TS8024: JSDoc '@param' tag has name 'augend', but there is no parameter with that name.
+node_modules/lodash/lodash.js(16171,24): error TS8024: JSDoc '@param' tag has name 'addend', but there is no parameter with that name.
+node_modules/lodash/lodash.js(16189,24): error TS8024: JSDoc '@param' tag has name 'number', but there is no parameter with that name.
+node_modules/lodash/lodash.js(16190,25): error TS8024: JSDoc '@param' tag has name 'precision', but there is no parameter with that name.
+node_modules/lodash/lodash.js(16212,24): error TS8024: JSDoc '@param' tag has name 'dividend', but there is no parameter with that name.
+node_modules/lodash/lodash.js(16213,24): error TS8024: JSDoc '@param' tag has name 'divisor', but there is no parameter with that name.
+node_modules/lodash/lodash.js(16231,24): error TS8024: JSDoc '@param' tag has name 'number', but there is no parameter with that name.
+node_modules/lodash/lodash.js(16232,25): error TS8024: JSDoc '@param' tag has name 'precision', but there is no parameter with that name.
+node_modules/lodash/lodash.js(16405,24): error TS8024: JSDoc '@param' tag has name 'multiplier', but there is no parameter with that name.
+node_modules/lodash/lodash.js(16406,24): error TS8024: JSDoc '@param' tag has name 'multiplicand', but there is no parameter with that name.
+node_modules/lodash/lodash.js(16424,24): error TS8024: JSDoc '@param' tag has name 'number', but there is no parameter with that name.
+node_modules/lodash/lodash.js(16425,25): error TS8024: JSDoc '@param' tag has name 'precision', but there is no parameter with that name.
+node_modules/lodash/lodash.js(16447,24): error TS8024: JSDoc '@param' tag has name 'minuend', but there is no parameter with that name.
+node_modules/lodash/lodash.js(16448,24): error TS8024: JSDoc '@param' tag has name 'subtrahend', but there is no parameter with that name.
+node_modules/lodash/lodash.js(16914,19): error TS2339: Property 'filter' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __dir__: number | undefined; __filtered__: ...'.
+node_modules/lodash/lodash.js(16918,19): error TS2339: Property 'filter' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __dir__: number | undefined; __filtered__: ...'.
+node_modules/lodash/lodash.js(16935,19): error TS2339: Property 'filter' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __dir__: number | undefined; __filtered__: ...'.
+node_modules/lodash/lodash.js(16946,25): error TS2339: Property 'takeRight' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __dir__: number | undefined; __filtered__: ...'.
+node_modules/lodash/lodash.js(16948,25): error TS2339: Property 'drop' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __dir__: number | undefined; __filtered__: ...'.
+node_modules/lodash/lodash.js(16952,35): error TS2339: Property 'dropRight' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __dir__: number | undefined; __filtered__: ...'.
+node_modules/lodash/lodash.js(16952,60): error TS2339: Property 'take' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __dir__: number | undefined; __filtered__: ...'.
+node_modules/lodash/lodash.js(16962,19): error TS2339: Property 'take' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __dir__: number | undefined; __filtered__: ...'.
+node_modules/lodash/lodash.js(16983,68): error TS2345: Argument of type 'IArguments | number[]' is not assignable to parameter of type 'any[]'.
+  Type 'IArguments' is not assignable to type 'any[]'.
+node_modules/lodash/lodash.js(17039,59): error TS2339: Property 'name' does not exist on type 'Function'.
+node_modules/lodash/lodash.js(17073,14): error TS2304: Cannot find name 'define'.
+node_modules/lodash/lodash.js(17073,45): error TS2304: Cannot find name 'define'.
+node_modules/lodash/lodash.js(17073,71): error TS2304: Cannot find name 'define'.
+node_modules/lodash/lodash.js(17082,5): error TS2304: Cannot find name 'define'.
+node_modules/lodash/lodash.js(17089,30): error TS2339: Property '_' does not exist on type '{ (value: any): any; templateSettings: any; prototype: any; after: (n: number, func: Function) =>...'.
+node_modules/lodash/lowerCase.js(10,21): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/lowerFirst.js(10,21): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/lt.js(11,15): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/lt.js(12,15): error TS8024: JSDoc '@param' tag has name 'other', but there is no parameter with that name.
+node_modules/lodash/lte.js(10,15): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/lte.js(11,15): error TS8024: JSDoc '@param' tag has name 'other', but there is no parameter with that name.
+node_modules/lodash/map.js(50,27): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/mapKeys.js(28,14): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/mapValues.js(35,14): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/matches.js(36,40): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/matchesProperty.js(34,30): error TS2345: Argument of type 'string | any[]' is not assignable to parameter of type 'string'.
+  Type 'any[]' is not assignable to type 'string'.
+node_modules/lodash/matchesProperty.js(34,56): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/maxBy.js(30,27): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/meanBy.js(28,26): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/merge.js(19,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/merge.js(20,24): error TS8024: JSDoc '@param' tag has name 'sources', but there is no parameter with that name.
+node_modules/lodash/mergeWith.js(17,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/mergeWith.js(18,23): error TS8024: JSDoc '@param' tag has name 'sources', but there is no parameter with that name.
+node_modules/lodash/mergeWith.js(19,22): error TS8024: JSDoc '@param' tag has name 'customizer', but there is no parameter with that name.
+node_modules/lodash/method.js(12,26): error TS8024: JSDoc '@param' tag has name 'path', but there is no parameter with that name.
+node_modules/lodash/method.js(13,19): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
+node_modules/lodash/methodOf.js(13,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/methodOf.js(14,19): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
+node_modules/lodash/minBy.js(30,27): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/mixin.js(66,61): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
+node_modules/lodash/multiply.js(10,20): error TS8024: JSDoc '@param' tag has name 'multiplier', but there is no parameter with that name.
+node_modules/lodash/multiply.js(11,20): error TS8024: JSDoc '@param' tag has name 'multiplicand', but there is no parameter with that name.
+node_modules/lodash/omit.js(25,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/omit.js(26,35): error TS8024: JSDoc '@param' tag has name 'paths', but there is no parameter with that name.
+node_modules/lodash/omit.js(48,32): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/orderBy.js(18,10): error TS1003: Identifier expected.
+node_modules/lodash/orderBy.js(18,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/orderBy.js(40,3): error TS2322: Type 'string[] | undefined' is not assignable to type 'string[]'.
+  Type 'undefined' is not assignable to type 'string[]'.
+node_modules/lodash/over.js(12,39): error TS8024: JSDoc '@param' tag has name 'iteratees', but there is no parameter with that name.
+node_modules/lodash/overArgs.js(20,22): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/overArgs.js(21,39): error TS8024: JSDoc '@param' tag has name 'transforms', but there is no parameter with that name.
+node_modules/lodash/overEvery.js(12,39): error TS8024: JSDoc '@param' tag has name 'predicates', but there is no parameter with that name.
+node_modules/lodash/overSome.js(12,39): error TS8024: JSDoc '@param' tag has name 'predicates', but there is no parameter with that name.
+node_modules/lodash/parseInt.js(24,10): error TS1003: Identifier expected.
+node_modules/lodash/parseInt.js(24,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/partial.js(24,22): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/partial.js(25,19): error TS8024: JSDoc '@param' tag has name 'partials', but there is no parameter with that name.
+node_modules/lodash/partial.js(48,9): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/partialRight.js(23,22): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/partialRight.js(24,19): error TS8024: JSDoc '@param' tag has name 'partials', but there is no parameter with that name.
+node_modules/lodash/partialRight.js(47,14): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/partition.js(13,26): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/partition.js(14,23): error TS8024: JSDoc '@param' tag has name 'predicate', but there is no parameter with that name.
+node_modules/lodash/pick.js(11,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/pick.js(12,35): error TS8024: JSDoc '@param' tag has name 'paths', but there is no parameter with that name.
+node_modules/lodash/property.js(29,37): error TS2345: Argument of type 'string | symbol' is not assignable to parameter of type 'string'.
+  Type 'symbol' is not assignable to type 'string'.
+node_modules/lodash/pull.js(16,19): error TS8024: JSDoc '@param' tag has name 'array', but there is no parameter with that name.
+node_modules/lodash/pull.js(17,19): error TS8024: JSDoc '@param' tag has name 'values', but there is no parameter with that name.
+node_modules/lodash/pullAllBy.js(29,34): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/pullAllWith.js(28,34): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Function'.
+node_modules/lodash/pullAt.js(18,19): error TS8024: JSDoc '@param' tag has name 'array', but there is no parameter with that name.
+node_modules/lodash/pullAt.js(19,35): error TS8024: JSDoc '@param' tag has name 'indexes', but there is no parameter with that name.
+node_modules/lodash/random.js(45,5): error TS2322: Type 'undefined' is not assignable to type 'number'.
+node_modules/lodash/random.js(45,13): error TS2322: Type 'undefined' is not assignable to type 'boolean'.
+node_modules/lodash/random.js(50,7): error TS2322: Type 'undefined' is not assignable to type 'number'.
+node_modules/lodash/random.js(54,7): error TS2322: Type 'undefined' is not assignable to type 'number'.
+node_modules/lodash/range.js(16,21): error TS8024: JSDoc '@param' tag has name 'start', but there is no parameter with that name.
+node_modules/lodash/range.js(17,20): error TS8024: JSDoc '@param' tag has name 'end', but there is no parameter with that name.
+node_modules/lodash/range.js(18,21): error TS8024: JSDoc '@param' tag has name 'step', but there is no parameter with that name.
+node_modules/lodash/rangeRight.js(11,21): error TS8024: JSDoc '@param' tag has name 'start', but there is no parameter with that name.
+node_modules/lodash/rangeRight.js(12,20): error TS8024: JSDoc '@param' tag has name 'end', but there is no parameter with that name.
+node_modules/lodash/rangeRight.js(13,21): error TS8024: JSDoc '@param' tag has name 'step', but there is no parameter with that name.
+node_modules/lodash/rearg.js(17,22): error TS8024: JSDoc '@param' tag has name 'func', but there is no parameter with that name.
+node_modules/lodash/rearg.js(18,34): error TS8024: JSDoc '@param' tag has name 'indexes', but there is no parameter with that name.
+node_modules/lodash/rearg.js(30,55): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'any[]'.
+node_modules/lodash/reduce.js(48,10): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((array?: any[], iteratee: Function, accumulator?: any, initAccum?: boolean) => any) | ((collecti...' has no compatible call signatures.
+node_modules/lodash/reduce.js(48,27): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/reduceRight.js(33,10): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((array?: any[], iteratee: Function, accumulator?: any, initAccum?: boolean) => any) | ((collecti...' has no compatible call signatures.
+node_modules/lodash/reduceRight.js(33,27): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/reject.js(43,34): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/remove.js(41,15): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/repeat.js(15,10): error TS1003: Identifier expected.
+node_modules/lodash/repeat.js(15,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/replace.js(13,21): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/replace.js(14,27): error TS8024: JSDoc '@param' tag has name 'pattern', but there is no parameter with that name.
+node_modules/lodash/replace.js(15,29): error TS8024: JSDoc '@param' tag has name 'replacement', but there is no parameter with that name.
+node_modules/lodash/round.js(10,20): error TS8024: JSDoc '@param' tag has name 'number', but there is no parameter with that name.
+node_modules/lodash/round.js(11,21): error TS8024: JSDoc '@param' tag has name 'precision', but there is no parameter with that name.
+node_modules/lodash/sampleSize.js(17,10): error TS1003: Identifier expected.
+node_modules/lodash/sampleSize.js(17,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/setWith.js(28,3): error TS2322: Type 'Function | undefined' is not assignable to type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/lodash/snakeCase.js(11,21): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/some.js(18,10): error TS1003: Identifier expected.
+node_modules/lodash/some.js(18,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/some.js(46,5): error TS2322: Type 'undefined' is not assignable to type 'Function'.
+node_modules/lodash/some.js(48,27): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/sortBy.js(16,26): error TS8024: JSDoc '@param' tag has name 'collection', but there is no parameter with that name.
+node_modules/lodash/sortBy.js(17,39): error TS8024: JSDoc '@param' tag has name 'iteratees', but there is no parameter with that name.
+node_modules/lodash/sortedIndexBy.js(30,42): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/sortedLastIndexBy.js(30,42): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/sortedUniqBy.js(22,29): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/split.js(33,5): error TS2322: Type 'undefined' is not assignable to type 'string | RegExp'.
+node_modules/lodash/split.js(33,17): error TS2322: Type 'undefined' is not assignable to type 'number'.
+node_modules/lodash/startCase.js(12,21): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/subtract.js(10,20): error TS8024: JSDoc '@param' tag has name 'minuend', but there is no parameter with that name.
+node_modules/lodash/subtract.js(11,20): error TS8024: JSDoc '@param' tag has name 'subtrahend', but there is no parameter with that name.
+node_modules/lodash/sumBy.js(29,22): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/take.js(13,10): error TS1003: Identifier expected.
+node_modules/lodash/take.js(13,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/takeRight.js(13,10): error TS1003: Identifier expected.
+node_modules/lodash/takeRight.js(13,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/takeRightWhile.js(41,24): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/takeWhile.js(41,24): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/template.js(65,10): error TS1003: Identifier expected.
+node_modules/lodash/template.js(65,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/template.js(141,5): error TS2322: Type 'undefined' is not assignable to type '{ escape?: RegExp; evaluate?: RegExp; imports?: any; interpolate?: RegExp; sourceURL?: string; va...'.
+node_modules/lodash/template.js(225,21): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'string'.
+node_modules/lodash/templateSettings.js(63,12): error TS2322: Type '{ [x: string]: any; 'escape': (string?: string) => string; }' is not assignable to type 'Function'.
+  Object literal may only specify known properties, and ''escape'' does not exist in type 'Function'.
+node_modules/lodash/toLower.js(11,21): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/toPairs.js(14,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/toPairsIn.js(14,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
+node_modules/lodash/toUpper.js(11,21): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/transform.js(46,14): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/transform.js(59,3): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((array?: any[], iteratee: Function) => any[]) | ((object: any, iteratee: Function) => any)' has no compatible call signatures.
+node_modules/lodash/trim.js(20,10): error TS1003: Identifier expected.
+node_modules/lodash/trim.js(20,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/trimEnd.js(19,10): error TS1003: Identifier expected.
+node_modules/lodash/trimEnd.js(19,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/trimStart.js(19,10): error TS1003: Identifier expected.
+node_modules/lodash/trimStart.js(19,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/truncate.js(78,16): error TS2454: Variable 'strSymbols' is used before being assigned.
+node_modules/lodash/truncate.js(85,7): error TS2454: Variable 'strSymbols' is used before being assigned.
+node_modules/lodash/unary.js(19,10): error TS2554: Expected 3 arguments, but got 2.
+node_modules/lodash/unescape.js(30,37): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+node_modules/lodash/union.js(15,23): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/union.js(23,42): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/unionBy.js(19,23): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/unionBy.js(20,23): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/unionBy.js(36,42): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/unionBy.js(36,68): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/unionWith.js(17,23): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/unionWith.js(18,23): error TS8024: JSDoc '@param' tag has name 'comparator', but there is no parameter with that name.
+node_modules/lodash/unionWith.js(31,42): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/unionWith.js(31,68): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Function'.
+node_modules/lodash/uniqBy.js(28,52): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/uniqWith.js(24,3): error TS2322: Type 'Function | undefined' is not assignable to type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/lodash/uniqWith.js(25,52): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Function'.
+node_modules/lodash/updateWith.js(29,3): error TS2322: Type 'Function | undefined' is not assignable to type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/lodash/upperCase.js(10,21): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/upperFirst.js(10,21): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/without.js(16,19): error TS8024: JSDoc '@param' tag has name 'array', but there is no parameter with that name.
+node_modules/lodash/without.js(17,19): error TS8024: JSDoc '@param' tag has name 'values', but there is no parameter with that name.
+node_modules/lodash/words.js(15,10): error TS1003: Identifier expected.
+node_modules/lodash/words.js(15,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/words.js(27,3): error TS2322: Type 'string | RegExp | undefined' is not assignable to type 'string | RegExp'.
+  Type 'undefined' is not assignable to type 'string | RegExp'.
+node_modules/lodash/wrapperAt.js(15,35): error TS8024: JSDoc '@param' tag has name 'paths', but there is no parameter with that name.
+node_modules/lodash/wrapperAt.js(40,51): error TS2339: Property 'thru' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __chain__: boolean | undefined; __index__: ...'.
+node_modules/lodash/xor.js(16,23): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/xorBy.js(19,23): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/xorBy.js(20,23): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+node_modules/lodash/xorBy.js(36,58): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/xorWith.js(17,23): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/xorWith.js(18,23): error TS8024: JSDoc '@param' tag has name 'comparator', but there is no parameter with that name.
+node_modules/lodash/xorWith.js(31,58): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Function'.
+node_modules/lodash/zip.js(13,23): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/zipWith.js(13,23): error TS8024: JSDoc '@param' tag has name 'arrays', but there is no parameter with that name.
+node_modules/lodash/zipWith.js(14,23): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
+
+
+
+Standard error:

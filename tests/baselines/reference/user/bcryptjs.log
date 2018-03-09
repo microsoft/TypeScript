@@ -1,0 +1,169 @@
+Exit Code: 1
+Standard output:
+../../../../node_modules/@types/node/index.d.ts(138,13): error TS2300: Duplicate identifier 'require'.
+../../../../node_modules/@types/node/index.d.ts(150,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{ exports: any; }', but here has type 'NodeModule'.
+../../../../node_modules/@types/node/index.d.ts(174,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Buffer' must be of type '(s: string) => void', but here has type '{ new (str: string, encoding?: string | undefined): Buffer; new (size: number): Buffer; new (arra...'.
+node_modules/bcryptjs/dist/bcrypt.js(37,16): error TS2345: Argument of type 'never[]' is not assignable to parameter of type 'string'.
+node_modules/bcryptjs/dist/bcrypt.js(134,18): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+node_modules/bcryptjs/dist/bcrypt.js(141,13): error TS2322: Type 'undefined' is not assignable to type 'number | ((arg0: Error, arg1?: string) => any)'.
+node_modules/bcryptjs/dist/bcrypt.js(144,13): error TS2322: Type 'undefined' is not assignable to type 'number | ((arg0: Error, arg1?: string) => any)'.
+node_modules/bcryptjs/dist/bcrypt.js(165,24): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bcryptjs/dist/bcrypt.js(190,9): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+node_modules/bcryptjs/dist/bcrypt.js(200,18): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+node_modules/bcryptjs/dist/bcrypt.js(222,24): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bcryptjs/dist/bcrypt.js(278,18): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+node_modules/bcryptjs/dist/bcrypt.js(306,24): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bcryptjs/dist/bcrypt.js(348,25): error TS8028: JSDoc '...' may only appear in the last parameter of a signature.
+node_modules/bcryptjs/dist/bcrypt.js(348,34): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
+node_modules/bcryptjs/dist/bcrypt.js(401,9): error TS2322: Type '(...codes: number[]) => string' is not assignable to type '(arg0: number | undefined) => string'.
+  Types of parameters 'codes' and 'arg0' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+node_modules/bcryptjs/dist/bcrypt.js(563,42): error TS2531: Object is possibly 'null'.
+node_modules/bcryptjs/dist/bcrypt.js(566,44): error TS2531: Object is possibly 'null'.
+node_modules/bcryptjs/dist/bcrypt.js(566,59): error TS2533: Object is possibly 'null' or 'undefined'.
+node_modules/bcryptjs/dist/bcrypt.js(569,44): error TS2531: Object is possibly 'null'.
+node_modules/bcryptjs/dist/bcrypt.js(569,61): error TS2533: Object is possibly 'null' or 'undefined'.
+node_modules/bcryptjs/dist/bcrypt.js(569,76): error TS2533: Object is possibly 'null' or 'undefined'.
+node_modules/bcryptjs/dist/bcrypt.js(1203,26): error TS2345: Argument of type 'number[] | Int32Array' is not assignable to parameter of type 'number[]'.
+  Type 'Int32Array' is not assignable to type 'number[]'.
+    Property 'push' is missing in type 'Int32Array'.
+node_modules/bcryptjs/dist/bcrypt.js(1233,30): error TS2345: Argument of type 'null' is not assignable to parameter of type 'Error'.
+node_modules/bcryptjs/dist/bcrypt.js(1345,27): error TS2345: Argument of type 'number[] | undefined' is not assignable to parameter of type 'number[]'.
+  Type 'undefined' is not assignable to type 'number[]'.
+node_modules/bcryptjs/dist/bcrypt.js(1351,35): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string'.
+node_modules/bcryptjs/dist/bcrypt.js(1353,30): error TS2345: Argument of type 'null' is not assignable to parameter of type 'Error'.
+node_modules/bcryptjs/dist/bcrypt.js(1361,33): error TS8024: JSDoc '@param' tag has name 'b', but there is no parameter with that name.
+node_modules/bcryptjs/dist/bcrypt.js(1362,24): error TS8024: JSDoc '@param' tag has name 'len', but there is no parameter with that name.
+node_modules/bcryptjs/dist/bcrypt.js(1371,24): error TS8024: JSDoc '@param' tag has name 's', but there is no parameter with that name.
+node_modules/bcryptjs/dist/bcrypt.js(1372,24): error TS8024: JSDoc '@param' tag has name 'len', but there is no parameter with that name.
+node_modules/bcryptjs/externs/bcrypt.js(36,14): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+node_modules/bcryptjs/externs/bcrypt.js(50,14): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+node_modules/bcryptjs/externs/bcrypt.js(65,14): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+node_modules/bcryptjs/externs/bcrypt.js(80,14): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+node_modules/bcryptjs/externs/bcrypt.js(87,14): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+node_modules/bcryptjs/externs/minimal-env.js(10,10): error TS2300: Duplicate identifier 'require'.
+node_modules/bcryptjs/externs/minimal-env.js(48,1): error TS8022: JSDoc '@extends' is not attached to a class.
+node_modules/bcryptjs/externs/minimal-env.js(63,14): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+node_modules/bcryptjs/externs/minimal-env.js(65,8): error TS2339: Property 'randomBytes' does not exist on type 'Crypto'.
+node_modules/bcryptjs/externs/minimal-env.js(70,8): error TS2540: Cannot assign to 'crypto' because it is a constant or a read-only property.
+node_modules/bcryptjs/externs/minimal-env.js(75,1): error TS2322: Type '(array: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array) => void' is not assignable to type '(array: DataView | Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32A...'.
+  Type 'void' is not assignable to type 'DataView | Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | U...'.
+node_modules/bcryptjs/externs/minimal-env.js(79,21): error TS8028: JSDoc '...' may only appear in the last parameter of a signature.
+node_modules/bcryptjs/externs/minimal-env.js(90,14): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+node_modules/bcryptjs/externs/minimal-env.js(92,8): error TS2339: Property 'fromCodePoint' does not exist on type 'StringConstructor'.
+node_modules/bcryptjs/externs/minimal-env.js(96,14): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+node_modules/bcryptjs/scripts/build.js(5,20): error TS2339: Property 'join' does not exist on type 'void'.
+node_modules/bcryptjs/scripts/build.js(6,19): error TS2339: Property 'join' does not exist on type 'void'.
+node_modules/bcryptjs/scripts/build.js(7,20): error TS2339: Property 'join' does not exist on type 'void'.
+node_modules/bcryptjs/scripts/build.js(8,24): error TS2339: Property 'join' does not exist on type 'void'.
+node_modules/bcryptjs/scripts/build.js(12,18): error TS2339: Property 'version' does not exist on type 'void'.
+node_modules/bcryptjs/scripts/build.js(18,4): error TS2339: Property 'writeFileSync' does not exist on type 'void'.
+node_modules/bcryptjs/scripts/build.js(19,10): error TS2339: Property 'join' does not exist on type 'void'.
+node_modules/bcryptjs/scripts/build.js(20,16): error TS2339: Property 'transform' does not exist on type 'void'.
+node_modules/bcryptjs/scripts/build.js(20,29): error TS2339: Property 'readFileSync' does not exist on type 'void'.
+node_modules/bcryptjs/scripts/build.js(20,58): error TS2339: Property 'join' does not exist on type 'void'.
+node_modules/bcryptjs/scripts/build.js(32,1): error TS2322: Type '{ VERSION: any; }' is not assignable to type '{ [x: string]: any; VERSION: any; ISAAC: boolean; }'.
+  Property 'ISAAC' is missing in type '{ VERSION: any; }'.
+node_modules/bcryptjs/scripts/build.js(32,24): error TS2339: Property 'version' does not exist on type 'void'.
+node_modules/bcryptjs/scripts/build.js(34,4): error TS2339: Property 'writeFileSync' does not exist on type 'void'.
+node_modules/bcryptjs/scripts/build.js(35,10): error TS2339: Property 'join' does not exist on type 'void'.
+node_modules/bcryptjs/scripts/build.js(36,16): error TS2339: Property 'transform' does not exist on type 'void'.
+node_modules/bcryptjs/scripts/build.js(36,29): error TS2339: Property 'readFileSync' does not exist on type 'void'.
+node_modules/bcryptjs/scripts/build.js(36,58): error TS2339: Property 'join' does not exist on type 'void'.
+node_modules/bcryptjs/src/bcrypt.js(94,14): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+node_modules/bcryptjs/src/bcrypt.js(101,9): error TS2322: Type 'undefined' is not assignable to type 'number | ((arg0: Error, arg1?: string) => any)'.
+node_modules/bcryptjs/src/bcrypt.js(104,9): error TS2322: Type 'undefined' is not assignable to type 'number | ((arg0: Error, arg1?: string) => any)'.
+node_modules/bcryptjs/src/bcrypt.js(125,20): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bcryptjs/src/bcrypt.js(150,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+node_modules/bcryptjs/src/bcrypt.js(160,14): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+node_modules/bcryptjs/src/bcrypt.js(182,20): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bcryptjs/src/bcrypt.js(238,14): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+node_modules/bcryptjs/src/bcrypt.js(266,20): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bcryptjs/src/bcrypt.js(312,29): error TS8024: JSDoc '@param' tag has name 'b', but there is no parameter with that name.
+node_modules/bcryptjs/src/bcrypt.js(313,20): error TS8024: JSDoc '@param' tag has name 'len', but there is no parameter with that name.
+node_modules/bcryptjs/src/bcrypt.js(322,20): error TS8024: JSDoc '@param' tag has name 's', but there is no parameter with that name.
+node_modules/bcryptjs/src/bcrypt.js(323,20): error TS8024: JSDoc '@param' tag has name 'len', but there is no parameter with that name.
+node_modules/bcryptjs/src/bcrypt/impl.js(516,22): error TS2345: Argument of type 'number[] | Int32Array' is not assignable to parameter of type 'number[]'.
+  Type 'Int32Array' is not assignable to type 'number[]'.
+node_modules/bcryptjs/src/bcrypt/impl.js(546,26): error TS2345: Argument of type 'null' is not assignable to parameter of type 'Error'.
+node_modules/bcryptjs/src/bcrypt/impl.js(658,23): error TS2345: Argument of type 'number[] | undefined' is not assignable to parameter of type 'number[]'.
+  Type 'undefined' is not assignable to type 'number[]'.
+node_modules/bcryptjs/src/bcrypt/impl.js(664,31): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string'.
+node_modules/bcryptjs/src/bcrypt/impl.js(666,26): error TS2345: Argument of type 'null' is not assignable to parameter of type 'Error'.
+node_modules/bcryptjs/src/bcrypt/prng/accum.js(51,74): error TS2339: Property 'attachEvent' does not exist on type 'Document'.
+node_modules/bcryptjs/src/bcrypt/prng/accum.js(52,22): error TS2339: Property 'attachEvent' does not exist on type 'Document'.
+node_modules/bcryptjs/src/bcrypt/prng/accum.js(53,22): error TS2339: Property 'attachEvent' does not exist on type 'Document'.
+node_modules/bcryptjs/src/bcrypt/prng/accum.js(65,74): error TS2339: Property 'detachEvent' does not exist on type 'Document'.
+node_modules/bcryptjs/src/bcrypt/prng/accum.js(66,22): error TS2339: Property 'detachEvent' does not exist on type 'Document'.
+node_modules/bcryptjs/src/bcrypt/prng/accum.js(67,22): error TS2339: Property 'detachEvent' does not exist on type 'Document'.
+node_modules/bcryptjs/src/bcrypt/util.js(4,21): error TS8028: JSDoc '...' may only appear in the last parameter of a signature.
+node_modules/bcryptjs/src/bcrypt/util.js(4,30): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
+node_modules/bcryptjs/src/bcrypt/util.js(20,5): error TS2304: Cannot find name 'utfx'.
+node_modules/bcryptjs/src/bcrypt/util/base64.js(29,5): error TS2322: Type '(...codes: number[]) => string' is not assignable to type '(arg0: number | undefined) => string'.
+  Types of parameters 'codes' and 'arg0' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+node_modules/bcryptjs/src/wrap.js(38,16): error TS2345: Argument of type 'never[]' is not assignable to parameter of type 'string'.
+node_modules/bcryptjs/tests/suite.js(4,27): error TS2339: Property 'join' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(15,26): error TS2339: Property 'encodeBase64' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(21,28): error TS2339: Property 'decodeBase64' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(27,27): error TS2339: Property 'genSaltSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(35,16): error TS2339: Property 'genSalt' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(45,20): error TS2339: Property 'hashSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(47,30): error TS2339: Property 'hashSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(47,60): error TS2339: Property 'hashSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(52,16): error TS2339: Property 'hash' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(60,28): error TS2339: Property 'genSaltSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(61,28): error TS2339: Property 'hashSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(62,28): error TS2339: Property 'genSaltSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(63,28): error TS2339: Property 'hashSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(64,28): error TS2339: Property 'genSaltSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(65,28): error TS2339: Property 'hashSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(68,24): error TS2339: Property 'compareSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(69,27): error TS2339: Property 'compareSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(70,27): error TS2339: Property 'compareSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(73,24): error TS2339: Property 'compareSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(74,27): error TS2339: Property 'compareSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(75,27): error TS2339: Property 'compareSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(78,24): error TS2339: Property 'compareSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(79,27): error TS2339: Property 'compareSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(80,27): error TS2339: Property 'compareSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(86,28): error TS2339: Property 'genSaltSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(87,28): error TS2339: Property 'hashSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(88,28): error TS2339: Property 'genSaltSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(90,28): error TS2339: Property 'hashSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(91,16): error TS2339: Property 'compare' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(94,20): error TS2339: Property 'compare' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(97,24): error TS2339: Property 'compare' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(100,28): error TS2339: Property 'compare' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(111,28): error TS2339: Property 'hashSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(111,53): error TS2339: Property 'genSaltSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(112,27): error TS2339: Property 'getSalt' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(113,28): error TS2339: Property 'hashSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(119,28): error TS2339: Property 'hashSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(119,53): error TS2339: Property 'genSaltSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(120,27): error TS2339: Property 'getRounds' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(125,16): error TS2339: Property 'genSalt' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(128,20): error TS2339: Property 'hash' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(142,16): error TS2339: Property 'genSalt' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(144,20): error TS2339: Property 'hash' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(147,24): error TS2339: Property 'compare' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(150,28): error TS2339: Property 'genSalt' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(170,27): error TS2339: Property 'readFileSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(170,45): error TS2339: Property 'join' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(171,31): error TS2339: Property 'genSaltSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(172,33): error TS2339: Property 'hashSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(173,32): error TS2339: Property 'hashSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(179,32): error TS2339: Property 'genSaltSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(180,33): error TS2339: Property 'genSaltSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(184,28): error TS2339: Property 'genSaltSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(185,28): error TS2339: Property 'genSaltSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(189,28): error TS2339: Property 'genSaltSync' does not exist on type 'void'.
+node_modules/bcryptjs/tests/suite.js(190,28): error TS2339: Property 'genSaltSync' does not exist on type 'void'.
+
+
+
+Standard error:
