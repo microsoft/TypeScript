@@ -3677,7 +3677,7 @@ interface Document extends Node, GlobalEventHandlers, ParentNode, DocumentEvent 
     /**
      * Contains information about the current URL.
      */
-    location: Location | string;
+    location: Location;
     msCSSOMElementFloatMetrics: boolean;
     msCapsLockWarningOff: boolean;
     /**
@@ -14932,7 +14932,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     readonly innerWidth: number;
     readonly isSecureContext: boolean;
     readonly length: number;
-    location: Location | string;
+    location: Location;
     readonly locationbar: BarProp;
     readonly menubar: BarProp;
     readonly msContentScript: ExtensionScriptApis;
@@ -15741,7 +15741,7 @@ declare var innerHeight: number;
 declare var innerWidth: number;
 declare var isSecureContext: boolean;
 declare var length: number;
-declare var location: Location | string;
+declare var location: Location;
 declare var locationbar: BarProp;
 declare var menubar: BarProp;
 declare var msContentScript: ExtensionScriptApis;
