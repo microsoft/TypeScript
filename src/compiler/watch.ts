@@ -33,9 +33,8 @@ namespace ts {
 
     const nonClearingMessageCodes: number[] = [
         Diagnostics.Compilation_complete_Watching_for_file_changes.code,
-        Diagnostics.Found_1_error_in_1_file.code,
-        Diagnostics.Found_0_errors_in_1_file.code,
-        Diagnostics.Found_0_errors_in_1_files.code,
+        Diagnostics.Found_1_error.code,
+        Diagnostics.Found_0_errors.code
     ];
 
     function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions) {
@@ -135,7 +134,12 @@ namespace ts {
     }
 
     /** @internal */
-    export function getProgramDiagnosticsAndEmit(program: ProgramToEmitFilesAndReportErrors): ProgramDiagnosticsAndEmit {
+    export type ReportEmitErrorSummary = (errorCount: number) => void;
+
+    /**
+     * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
+     */
+    export function emitFilesAndReportErrors(program: ProgramToEmitFilesAndReportErrors, reportDiagnostic: DiagnosticReporter, reportSummary?: ReportEmitErrorSummary, writeFileName?: (s: string) => void) {
         // First get and report any syntactic errors.
         const diagnostics = program.getSyntacticDiagnostics().slice();
         let reportSemanticDiagnostics = false;
@@ -159,15 +163,6 @@ namespace ts {
             addRange(diagnostics, program.getSemanticDiagnostics());
         }
 
-        return { diagnostics, emittedFiles, emitSkipped };
-    }
-
-    /**
-     * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
-     */
-    export function reportDiagnosticErrors(program: ProgramToEmitFilesAndReportErrors, diagnosticsAndEmit: ProgramDiagnosticsAndEmit, reportDiagnostic: DiagnosticReporter, writeFileName?: (s: string) => void) {
-        const { diagnostics, emittedFiles, emitSkipped } = diagnosticsAndEmit;
-
         sortAndDeduplicateDiagnostics(diagnostics).forEach(reportDiagnostic);
         if (writeFileName) {
             const currentDir = program.getCurrentDirectory();
@@ -183,6 +178,10 @@ namespace ts {
             }
         }
 
+        if (reportSummary) {
+            reportSummary(diagnostics.filter(diagnostic => diagnostic.category === DiagnosticCategory.Error).length);
+        }
+
         if (emitSkipped && diagnostics.length > 0) {
             // If the emitter didn't emit anything, then pass that value along.
             return ExitStatus.DiagnosticsPresent_OutputsSkipped;
@@ -193,34 +192,6 @@ namespace ts {
             return ExitStatus.DiagnosticsPresent_OutputsGenerated;
         }
         return ExitStatus.Success;
-    }
-
-    function summarizeDiagnosticsAcrossFiles(diagnostics: Diagnostic[], reporter: WatchStatusReporter, newLine: string, compilerOptions: CompilerOptions): void {
-        if (diagnostics.length === 1) {
-            reporter(createCompilerDiagnostic(Diagnostics.Found_1_error_in_1_file), newLine, compilerOptions);
-            return;
-        }
-
-        const uniqueFileNamesCount = countUniqueDiagnosticFileNames(diagnostics);
-
-        if (uniqueFileNamesCount === 1) {
-            reporter(createCompilerDiagnostic(Diagnostics.Found_0_errors_in_1_file, diagnostics.length), newLine, compilerOptions);
-        }
-        else if (uniqueFileNamesCount !== 0) {
-            reporter(createCompilerDiagnostic(Diagnostics.Found_0_errors_in_1_files, diagnostics.length, uniqueFileNamesCount), newLine, compilerOptions);
-        }
-    }
-
-    function countUniqueDiagnosticFileNames(diagnostics: Diagnostic[]): number {
-        const fileNames = createMap<boolean>();
-
-        for (const diagnostic of diagnostics) {
-            if (diagnostic.file) {
-                fileNames.set(diagnostic.file.fileName, true);
-            }
-        }
-
-        return fileNames.size;
     }
 
     const noopFileWatcher: FileWatcher = { close: noop };
@@ -269,13 +240,21 @@ namespace ts {
         }
 
         function emitFilesAndReportErrorUsingBuilder(builderProgram: BuilderProgram) {
-            const diagnosticsAndEmit = getProgramDiagnosticsAndEmit(builderProgram);
-            reportDiagnosticErrors(builderProgram, diagnosticsAndEmit, reportDiagnostic, writeFileName);
-
+            let reportSummary: ReportEmitErrorSummary | undefined;
             const compilerOptions = builderProgram.getCompilerOptions();
+
             if (compilerOptions.pretty) {
-                summarizeDiagnosticsAcrossFiles(diagnosticsAndEmit.diagnostics, onWatchStatusChange, system.newLine, compilerOptions);
+                reportSummary = (errorCount: number) => {
+                    if (errorCount === 1) {
+                        onWatchStatusChange(createCompilerDiagnostic(Diagnostics.Found_1_error, errorCount), sys.newLine, compilerOptions);
+                    }
+                    else {
+                        onWatchStatusChange(createCompilerDiagnostic(Diagnostics.Found_0_errors, errorCount, errorCount), sys.newLine, compilerOptions);
+                    }
+                };
             }
+
+            emitFilesAndReportErrors(builderProgram, reportDiagnostic, reportSummary, writeFileName);
         }
     }
 
