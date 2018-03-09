@@ -967,15 +967,8 @@ namespace ts {
         | SetAccessorDeclaration
         | FunctionExpression
         | ArrowFunction;
-    export type FunctionLike =
-        | FunctionLikeDeclaration
-        | FunctionTypeNode
-        | ConstructorTypeNode
-        | IndexSignatureDeclaration
-        | MethodSignature
-        | ConstructSignatureDeclaration
-        | CallSignatureDeclaration
-        | JSDocFunctionType;
+    /** @deprecated Use SignatureDeclaration */
+    export type FunctionLike = SignatureDeclaration;
 
     export interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement {
         kind: SyntaxKind.FunctionDeclaration;
@@ -2793,6 +2786,7 @@ namespace ts {
 
         /** Note that the resulting nodes cannot be checked. */
         typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeNode;
+        /* @internal */ typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode; // tslint:disable-line unified-signatures
         /** Note that the resulting nodes cannot be checked. */
         signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): SignatureDeclaration & {typeArguments?: NodeArray<TypeNode>} | undefined;
         /** Note that the resulting nodes cannot be checked. */
@@ -2855,7 +2849,7 @@ namespace ts {
          */
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
-        isImplementationOfOverload(node: FunctionLike): boolean | undefined;
+        isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
         isUnknownSymbol(symbol: Symbol): boolean;
@@ -3259,8 +3253,8 @@ namespace ts {
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
-        Value = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
-        Type = Class | Interface | Enum | EnumMember | TypeLiteral | ObjectLiteral | TypeParameter | TypeAlias,
+        Value = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor | JSContainer,
+        Type = Class | Interface | Enum | EnumMember | TypeLiteral | ObjectLiteral | TypeParameter | TypeAlias | JSContainer,
         Namespace = ValueModule | NamespaceModule | Enum,
         Module = ValueModule | NamespaceModule,
         Accessor = GetAccessor | SetAccessor,
@@ -3999,7 +3993,9 @@ namespace ts {
         /// this.name = expr
         ThisProperty,
         // F.name = expr
-        Property
+        Property,
+        // F.prototype = { ... }
+        Prototype,
     }
 
     export interface JsFileExtensionInfo {
@@ -5003,12 +4999,9 @@ namespace ts {
     }
 
     /* @internal */
-    export interface EmitTextWriter extends SymbolTracker, SymbolWriter {
+    export interface EmitTextWriter extends SymbolWriter {
         write(s: string): void;
         writeTextOfNode(text: string, node: Node): void;
-        writeLine(): void;
-        increaseIndent(): void;
-        decreaseIndent(): void;
         getText(): string;
         rawWrite(s: string): void;
         writeLiteral(s: string): void;
@@ -5017,18 +5010,10 @@ namespace ts {
         getColumn(): number;
         getIndent(): number;
         isAtStartOfLine(): boolean;
-        clear(): void;
-
-        writeKeyword(text: string): void;
-        writeOperator(text: string): void;
-        writePunctuation(text: string): void;
-        writeSpace(text: string): void;
-        writeStringLiteral(text: string): void;
-        writeParameter(text: string): void;
-        writeProperty(text: string): void;
-        writeSymbol(text: string, symbol: Symbol): void;
     }
 
+    /** @deprecated See comment on SymbolWriter */
+    // Note: this has non-deprecated internal uses.
     export interface SymbolTracker {
         // Called when the symbol writer encounters a symbol to write.  Currently only used by the
         // declaration emitter to help determine if it should patch up the final declaration file
