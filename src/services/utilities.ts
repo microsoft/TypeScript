@@ -913,6 +913,11 @@ namespace ts {
     }
 
     export function isPossiblyTypeArgumentPosition(token: Node, sourceFile: SourceFile) {
+        // This function determines if the node could be type argument position
+        // Since during editing, when type argument list is not complete,
+        // the tree could be of any shape depending on the tokens parsed before current node,
+        // scanning of the previous identifier followed by "<" before current node would give us better result
+        // Note that we also balance out the already provided type arguments, arrays, object literals while doing so
         let remainingLessThanTokens = 0;
         while (token) {
             switch (token.kind) {
@@ -927,11 +932,13 @@ namespace ts {
                     break;
 
                 case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-                    remainingLessThanTokens++;
-                // falls through
+                    remainingLessThanTokens = + 3;
+                    break;
+
                 case SyntaxKind.GreaterThanGreaterThanToken:
-                    remainingLessThanTokens++;
-                // falls through
+                    remainingLessThanTokens = + 2;
+                    break;
+
                 case SyntaxKind.GreaterThanToken:
                     remainingLessThanTokens++;
                     break;
@@ -990,7 +997,6 @@ namespace ts {
 
         return false;
     }
-
 
     /**
      * Returns true if the cursor at position in sourceFile is within a comment.
