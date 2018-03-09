@@ -1,0 +1,43 @@
+=== tests/cases/conformance/salsa/module.js ===
+var Outer = function(element, config) {};
+>Outer : typeof Outer
+>function(element, config) {} : typeof Outer
+>element : any
+>config : any
+
+=== tests/cases/conformance/salsa/usage.js ===
+/** @constructor */
+Outer.Pos = function (line, ch) {};
+>Outer.Pos = function (line, ch) {} : (line: any, ch: any) => void
+>Outer.Pos : (line: any, ch: any) => void
+>Outer : typeof Outer
+>Pos : (line: any, ch: any) => void
+>function (line, ch) {} : (line: any, ch: any) => void
+>line : any
+>ch : any
+
+/** @type {number} */
+Outer.Pos.prototype.line;
+>Outer.Pos.prototype.line : any
+>Outer.Pos.prototype : any
+>Outer.Pos : (line: any, ch: any) => void
+>Outer : typeof Outer
+>Pos : (line: any, ch: any) => void
+>prototype : any
+>line : any
+
+var pos = new Outer.Pos(1, 'x');
+>pos : { line: number; }
+>new Outer.Pos(1, 'x') : { line: number; }
+>Outer.Pos : (line: any, ch: any) => void
+>Outer : typeof Outer
+>Pos : (line: any, ch: any) => void
+>1 : 1
+>'x' : "x"
+
+pos.line;
+>pos.line : number
+>pos : { line: number; }
+>line : number
+
+

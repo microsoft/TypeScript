@@ -1,10 +1,10 @@
-tests/cases/compiler/unusedInterfaceinNamespace2.ts(2,15): error TS6133: 'i1' is declared but its value is never read.
+tests/cases/compiler/unusedInterfaceinNamespace2.ts(2,5): error TS6133: 'i1' is declared but its value is never read.
 
 
 ==== tests/cases/compiler/unusedInterfaceinNamespace2.ts (1 errors) ====
     namespace Validation {
         interface i1 {
-                  ~~
+        ~~~~~~~~~~~~
 !!! error TS6133: 'i1' is declared but its value is never read.
     
         }

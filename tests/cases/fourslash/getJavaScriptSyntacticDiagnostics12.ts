@@ -2,14 +2,9 @@
 
 // @allowJs: true
 // @Filename: a.js
-//// declare var v;
+////[|declare|] var v;
 
-verify.getSyntacticDiagnostics(`[
-  {
-    "message": "'declare' can only be used in a .ts file.",
-    "start": 0,
-    "length": 7,
-    "category": "error",
-    "code": 8009
-  }
-]`);
+verify.getSyntacticDiagnostics([{
+    message: "'declare' can only be used in a .ts file.",
+    code: 8009
+}]);

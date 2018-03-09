@@ -128,7 +128,7 @@ namespace ts.server {
 
     const fs: {
         openSync(path: string, options: string): number;
-        close(fd: number): void;
+        close(fd: number, callback: (err: NodeJS.ErrnoException) => void): void;
         writeSync(fd: number, buffer: Buffer, offset: number, length: number, position?: number): number;
         writeSync(fd: number, data: any, position?: number, enconding?: string): number;
         statSync(path: string): Stats;
@@ -142,7 +142,7 @@ namespace ts.server {
         terminal: false,
     });
 
-    class Logger implements server.Logger {
+    class Logger implements server.Logger { // tslint:disable-line no-unnecessary-qualifier
         private fd = -1;
         private seq = 0;
         private inGroup = false;
@@ -167,7 +167,7 @@ namespace ts.server {
 
         close() {
             if (this.fd >= 0) {
-                fs.close(this.fd);
+                fs.close(this.fd, noop);
             }
         }
 
@@ -266,7 +266,7 @@ namespace ts.server {
 
         constructor(
             private readonly telemetryEnabled: boolean,
-            private readonly logger: server.Logger,
+            private readonly logger: Logger,
             private readonly host: ServerHost,
             readonly globalTypingsCacheLocation: string,
             readonly typingSafeListLocation: string,
@@ -391,7 +391,7 @@ namespace ts.server {
 
             switch (response.kind) {
                 case EventTypesRegistry:
-                    this.typesRegistryCache = ts.createMapFromTemplate(response.typesRegistry);
+                    this.typesRegistryCache = createMapFromTemplate(response.typesRegistry);
                     break;
                 case ActionPackageInstalled: {
                     const { success, message } = response;
@@ -685,11 +685,11 @@ namespace ts.server {
                 return;
             }
 
-            fs.stat(watchedFile.fileName, (err: any, stats: any) => {
+            fs.stat(watchedFile.fileName, (err, stats) => {
                 if (err) {
                     if (err.code === "ENOENT") {
                         if (watchedFile.mtime.getTime() !== 0) {
-                            watchedFile.mtime = new Date(0);
+                            watchedFile.mtime = missingFileModifiedTime;
                             watchedFile.callback(watchedFile.fileName, FileWatcherEventKind.Deleted);
                         }
                     }
@@ -698,17 +698,7 @@ namespace ts.server {
                     }
                 }
                 else {
-                    const oldTime = watchedFile.mtime.getTime();
-                    const newTime = stats.mtime.getTime();
-                    if (oldTime !== newTime) {
-                        watchedFile.mtime = stats.mtime;
-                        const eventKind = oldTime === 0
-                            ? FileWatcherEventKind.Created
-                            : newTime === 0
-                                ? FileWatcherEventKind.Deleted
-                                : FileWatcherEventKind.Changed;
-                        watchedFile.callback(watchedFile.fileName, eventKind);
-                    }
+                    onWatchedFileStat(watchedFile, stats.mtime);
                 }
             });
         }
@@ -742,7 +732,7 @@ namespace ts.server {
                 callback,
                 mtime: sys.fileExists(fileName)
                     ? getModifiedTime(fileName)
-                    : new Date(0) // Any subsequent modification will occur after this time
+                    : missingFileModifiedTime // Any subsequent modification will occur after this time
             };
 
             watchedFiles.push(file);
@@ -991,6 +981,7 @@ namespace ts.server {
         ioSession.logError(err, "unknown");
     });
     // See https://github.com/Microsoft/TypeScript/issues/11348
+    // tslint:disable-next-line no-unnecessary-type-assertion-2
     (process as any).noAsar = true;
     // Start listening
     ioSession.listen();
