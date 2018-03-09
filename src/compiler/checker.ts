@@ -7951,6 +7951,15 @@ namespace ts {
                     typeSet.push(type);
                 }
             }
+            // cases for the non-strict null and undefined - if, for example, the interection is _just_ null and/or undefined
+            else if (flags & TypeFlags.Nullable) {
+                if (flags & TypeFlags.Null) {
+                    includes |= TypeIncludes.Null
+                }
+                if (flags & TypeFlags.Undefined) {
+                    includes |= TypeIncludes.Undefined;
+                }
+            }
             return includes;
         }
 
@@ -7988,6 +7997,14 @@ namespace ts {
             if (includes & TypeIncludes.EmptyObject && !(includes & TypeIncludes.ObjectType)) {
                 typeSet.push(emptyObjectType);
             }
+            if (typeSet.length === 0) {
+                if (includes & TypeIncludes.Null) {
+                    typeSet.push(nullType);
+                }
+                if (includes & TypeIncludes.Undefined) {
+                    typeSet.push(undefinedType);
+                }
+            }
             if (typeSet.length === 1) {
                 return typeSet[0];
             }
@@ -7999,6 +8016,7 @@ namespace ts {
                 return getUnionType(map(unionType.types, t => getIntersectionType(replaceElement(typeSet, unionIndex, t))),
                     UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
             }
+            Debug.assert(typeSet.length > 1, "Intersection type must have more than one member");
             const id = getTypeListId(typeSet);
             let type = intersectionTypes.get(id);
             if (!type) {
