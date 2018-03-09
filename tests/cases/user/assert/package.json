@@ -6,6 +6,6 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "assert": "latest"
+    "assert": "^1.4.1"
   }
 }

@@ -6,6 +6,6 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "content-disposition": "latest"
+    "content-disposition": "^0.5.2"
   }
 }

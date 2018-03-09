@@ -6,6 +6,6 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "clear-require": "latest"
+    "clear-require": "^2.0.0"
   }
 }

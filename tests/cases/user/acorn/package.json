@@ -6,6 +6,6 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "acorn": "latest"
+    "acorn": "^5.5.3"
   }
 }

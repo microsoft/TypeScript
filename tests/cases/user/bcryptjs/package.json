@@ -6,6 +6,6 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "bcryptjs": "latest"
+    "bcryptjs": "^2.4.3"
   }
 }

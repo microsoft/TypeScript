@@ -6,6 +6,6 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "async": "latest"
+    "async": "^2.6.0"
   }
 }
