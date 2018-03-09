@@ -128,13 +128,6 @@ namespace ts {
     }
 
     /** @internal */
-    export interface ProgramDiagnosticsAndEmit {
-        diagnostics: Diagnostic[];
-        emittedFiles: string[];
-        emitSkipped: boolean;
-    }
-
-    /** @internal */
     export type ReportEmitErrorSummary = (errorCount: number) => void;
 
     /**
