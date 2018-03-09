@@ -352,14 +352,16 @@ namespace ts.textChanges {
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
         public insertTypeAnnotation(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): void {
             const end = (isFunctionLike(node)
-                ? findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile)!
+                // If no `)`, is an arrow function `x => x`, so use the end of the first parameter
+                ? findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile) || first(node.parameters)
                 : node.kind !== SyntaxKind.VariableDeclaration && node.questionToken ? node.questionToken : node.name).end;
             this.insertNodeAt(sourceFile, end, type, { prefix: ": " });
         }
 
         public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: ReadonlyArray<TypeParameterDeclaration>): void {
-            const lparen = findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile)!.pos;
-            this.insertNodesAt(sourceFile, lparen, typeParameters, { prefix: "<", suffix: ">" });
+            // If no `(`, is an arrow function `x => x`, so use the pos of the first parameter
+            const start = (findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile) || first(node.parameters)).getStart(sourceFile);
+            this.insertNodesAt(sourceFile, start, typeParameters, { prefix: "<", suffix: ">" });
         }
 
         private getOptionsForInsertNodeBefore(before: Node, doubleNewlines: boolean): ChangeNodeOptions {
@@ -368,6 +370,9 @@ namespace ts.textChanges {
             }
             else if (isVariableDeclaration(before)) { // insert `x = 1, ` into `const x = 1, y = 2;
                 return { suffix: ", " };
+            }
+            else if (isParameter(before)) {
+                return {};
             }
             return Debug.failBadSyntaxKind(before); // We haven't handled this kind of node yet -- add it
         }
@@ -452,6 +457,9 @@ namespace ts.textChanges {
             }
             else if (isVariableDeclaration(node)) {
                 return { prefix: ", " };
+            }
+            else if (isParameter(node)) {
+                return {};
             }
             return Debug.failBadSyntaxKind(node); // We haven't handled this kind of node yet -- add it
         }
