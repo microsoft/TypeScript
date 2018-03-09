@@ -1,0 +1,63 @@
+=== tests/cases/compiler/indexedAccessPartialUnions.ts ===
+// Repro from #21975
+
+interface Foo {
+>Foo : Foo
+
+    bar: {
+>bar : { baz: string; } | { qux: number; }
+
+        baz: string;
+>baz : string
+
+    } | {
+        qux: number;
+>qux : number
+    }
+}
+
+type ShouldBeString = Foo['bar']['baz'];
+>ShouldBeString : string
+>Foo : Foo
+
+function f(foo: Foo) {
+>f : (foo: Foo) => any
+>foo : Foo
+>Foo : Foo
+
+    return foo['bar']['baz']; // Error
+>foo['bar']['baz'] : any
+>foo['bar'] : { baz: string; } | { qux: number; }
+>foo : Foo
+>'bar' : "bar"
+>'baz' : "baz"
+}
+
+function g(foo: Foo) {
+>g : (foo: Foo) => any
+>foo : Foo
+>Foo : Foo
+
+    return foo.bar.baz; // Error
+>foo.bar.baz : any
+>foo.bar : { baz: string; } | { qux: number; }
+>foo : Foo
+>bar : { baz: string; } | { qux: number; }
+>baz : any
+}
+
+interface HasOptionalMember {
+>HasOptionalMember : HasOptionalMember
+
+    bar?: {
+>bar : { baz: string; } | undefined
+
+        baz: string;
+>baz : string
+    }
+}
+
+type ShouldBeString2 = HasOptionalMember['bar']['baz'];
+>ShouldBeString2 : string
+>HasOptionalMember : HasOptionalMember
+

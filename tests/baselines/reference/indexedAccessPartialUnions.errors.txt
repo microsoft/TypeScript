@@ -1,0 +1,39 @@
+tests/cases/compiler/indexedAccessPartialUnions.ts(14,12): error TS7017: Element implicitly has an 'any' type because type '{ baz: string; } | { qux: number; }' has no index signature.
+tests/cases/compiler/indexedAccessPartialUnions.ts(18,20): error TS2339: Property 'baz' does not exist on type '{ baz: string; } | { qux: number; }'.
+  Property 'baz' does not exist on type '{ qux: number; }'.
+
+
+==== tests/cases/compiler/indexedAccessPartialUnions.ts (2 errors) ====
+    // Repro from #21975
+    
+    interface Foo {
+        bar: {
+            baz: string;
+        } | {
+            qux: number;
+        }
+    }
+    
+    type ShouldBeString = Foo['bar']['baz'];
+    
+    function f(foo: Foo) {
+        return foo['bar']['baz']; // Error
+               ~~~~~~~~~~~~~~~~~
+!!! error TS7017: Element implicitly has an 'any' type because type '{ baz: string; } | { qux: number; }' has no index signature.
+    }
+    
+    function g(foo: Foo) {
+        return foo.bar.baz; // Error
+                       ~~~
+!!! error TS2339: Property 'baz' does not exist on type '{ baz: string; } | { qux: number; }'.
+!!! error TS2339:   Property 'baz' does not exist on type '{ qux: number; }'.
+    }
+    
+    interface HasOptionalMember {
+        bar?: {
+            baz: string;
+        }
+    }
+    
+    type ShouldBeString2 = HasOptionalMember['bar']['baz'];
+    
