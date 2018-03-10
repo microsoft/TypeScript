@@ -645,7 +645,8 @@ declare namespace ts {
         body?: Block | Expression;
     }
     type FunctionLikeDeclaration = FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | FunctionExpression | ArrowFunction;
-    type FunctionLike = FunctionLikeDeclaration | FunctionTypeNode | ConstructorTypeNode | IndexSignatureDeclaration | MethodSignature | ConstructSignatureDeclaration | CallSignatureDeclaration | JSDocFunctionType;
+    /** @deprecated Use SignatureDeclaration */
+    type FunctionLike = SignatureDeclaration;
     interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement {
         kind: SyntaxKind.FunctionDeclaration;
         name?: Identifier;
@@ -1812,7 +1813,7 @@ declare namespace ts {
          */
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
-        isImplementationOfOverload(node: FunctionLike): boolean | undefined;
+        isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
         isUnknownSymbol(symbol: Symbol): boolean;
@@ -3277,7 +3278,7 @@ declare namespace ts {
     function isEntityName(node: Node): node is EntityName;
     function isPropertyName(node: Node): node is PropertyName;
     function isBindingName(node: Node): node is BindingName;
-    function isFunctionLike(node: Node): node is FunctionLike;
+    function isFunctionLike(node: Node): node is SignatureDeclaration;
     function isClassElement(node: Node): node is ClassElement;
     function isClassLike(node: Node): node is ClassLikeDeclaration;
     function isAccessor(node: Node): node is AccessorDeclaration;

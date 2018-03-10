@@ -5354,13 +5354,13 @@ namespace ts.projectSystem {
                 });
 
                 // send outlining spans request (normal priority)
-                session.executeCommandSeq(<protocol.OutliningSpansRequest>{
+                session.executeCommandSeq(<protocol.OutliningSpansRequestFull>{
                     command: "outliningSpans",
                     arguments: { file: f1.path }
                 });
 
                 // ensure the outlining spans request can be canceled
-                verifyExecuteCommandSeqIsCancellable(<protocol.OutliningSpansRequest>{
+                verifyExecuteCommandSeqIsCancellable(<protocol.OutliningSpansRequestFull>{
                     command: "outliningSpans",
                     arguments: { file: f1.path }
                 });

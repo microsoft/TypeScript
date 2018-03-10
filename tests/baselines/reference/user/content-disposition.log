@@ -1,0 +1,7 @@
+Exit Code: 1
+Standard output:
+node_modules/content-disposition/index.js(13,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+
+
+
+Standard error:

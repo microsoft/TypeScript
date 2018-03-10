@@ -2201,7 +2201,7 @@ namespace ts {
 
             if (options.emitDeclarationOnly) {
                 if (!options.declaration) {
-                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDeclarationOnly", "declarations");
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDeclarationOnly", "declaration");
                 }
 
                 if (options.noEmit) {
