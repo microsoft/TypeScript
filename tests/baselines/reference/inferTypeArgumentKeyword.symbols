@@ -16,33 +16,94 @@ declare function foo<A, B, C>(x: A, y: B, z: { z: C }): A & B & C;
 >C : Symbol(C, Decl(inferTypeArgumentKeyword.ts, 0, 26))
 
 // good
-foo<infer A, {x: string}, A>({y: 12}, {x: "yes"}, {z: {y: 12}});
+var a = foo<infer A, {x: string}, A>({y: 12}, {x: "yes"}, {z: {y: 12}});
+>a : Symbol(a, Decl(inferTypeArgumentKeyword.ts, 3, 3))
 >foo : Symbol(foo, Decl(inferTypeArgumentKeyword.ts, 0, 0))
->A : Symbol(A, Decl(inferTypeArgumentKeyword.ts, 3, 9))
->x : Symbol(x, Decl(inferTypeArgumentKeyword.ts, 3, 14))
->A : Symbol(A, Decl(inferTypeArgumentKeyword.ts, 3, 9))
->y : Symbol(y, Decl(inferTypeArgumentKeyword.ts, 3, 30))
->x : Symbol(x, Decl(inferTypeArgumentKeyword.ts, 3, 39))
->z : Symbol(z, Decl(inferTypeArgumentKeyword.ts, 3, 51))
->y : Symbol(y, Decl(inferTypeArgumentKeyword.ts, 3, 55))
+>A : Symbol(A, Decl(inferTypeArgumentKeyword.ts, 3, 17))
+>x : Symbol(x, Decl(inferTypeArgumentKeyword.ts, 3, 22))
+>A : Symbol(A, Decl(inferTypeArgumentKeyword.ts, 3, 17))
+>y : Symbol(y, Decl(inferTypeArgumentKeyword.ts, 3, 38))
+>x : Symbol(x, Decl(inferTypeArgumentKeyword.ts, 3, 47))
+>z : Symbol(z, Decl(inferTypeArgumentKeyword.ts, 3, 59))
+>y : Symbol(y, Decl(inferTypeArgumentKeyword.ts, 3, 63))
 
 // error on 3rd arg
-foo<infer A, {x: string}, A>({y: 12}, {x: "yes"}, {z: 12});
+var b = foo<infer A, {x: string}, A>({y: 12}, {x: "yes"}, {z: 12});
+>b : Symbol(b, Decl(inferTypeArgumentKeyword.ts, 6, 3))
 >foo : Symbol(foo, Decl(inferTypeArgumentKeyword.ts, 0, 0))
->A : Symbol(A, Decl(inferTypeArgumentKeyword.ts, 6, 9))
->x : Symbol(x, Decl(inferTypeArgumentKeyword.ts, 6, 14))
->A : Symbol(A, Decl(inferTypeArgumentKeyword.ts, 6, 9))
->y : Symbol(y, Decl(inferTypeArgumentKeyword.ts, 6, 30))
->x : Symbol(x, Decl(inferTypeArgumentKeyword.ts, 6, 39))
->z : Symbol(z, Decl(inferTypeArgumentKeyword.ts, 6, 51))
+>A : Symbol(A, Decl(inferTypeArgumentKeyword.ts, 6, 17))
+>x : Symbol(x, Decl(inferTypeArgumentKeyword.ts, 6, 22))
+>A : Symbol(A, Decl(inferTypeArgumentKeyword.ts, 6, 17))
+>y : Symbol(y, Decl(inferTypeArgumentKeyword.ts, 6, 38))
+>x : Symbol(x, Decl(inferTypeArgumentKeyword.ts, 6, 47))
+>z : Symbol(z, Decl(inferTypeArgumentKeyword.ts, 6, 59))
 
 // error on first arg
-foo<A, {x: string}, infer A>({y: 12}, {x: "yes"}, {z: 12});
+var c = foo<A, {x: string}, infer A>({y: 12}, {x: "yes"}, {z: 12});
+>c : Symbol(c, Decl(inferTypeArgumentKeyword.ts, 9, 3))
 >foo : Symbol(foo, Decl(inferTypeArgumentKeyword.ts, 0, 0))
->A : Symbol(A, Decl(inferTypeArgumentKeyword.ts, 9, 25))
->x : Symbol(x, Decl(inferTypeArgumentKeyword.ts, 9, 8))
->A : Symbol(A, Decl(inferTypeArgumentKeyword.ts, 9, 25))
->y : Symbol(y, Decl(inferTypeArgumentKeyword.ts, 9, 30))
->x : Symbol(x, Decl(inferTypeArgumentKeyword.ts, 9, 39))
->z : Symbol(z, Decl(inferTypeArgumentKeyword.ts, 9, 51))
+>A : Symbol(A, Decl(inferTypeArgumentKeyword.ts, 9, 33))
+>x : Symbol(x, Decl(inferTypeArgumentKeyword.ts, 9, 16))
+>A : Symbol(A, Decl(inferTypeArgumentKeyword.ts, 9, 33))
+>y : Symbol(y, Decl(inferTypeArgumentKeyword.ts, 9, 38))
+>x : Symbol(x, Decl(inferTypeArgumentKeyword.ts, 9, 47))
+>z : Symbol(z, Decl(inferTypeArgumentKeyword.ts, 9, 59))
+
+type Ob<T> = {y: T};
+>Ob : Symbol(Ob, Decl(inferTypeArgumentKeyword.ts, 9, 67))
+>T : Symbol(T, Decl(inferTypeArgumentKeyword.ts, 11, 8))
+>y : Symbol(y, Decl(inferTypeArgumentKeyword.ts, 11, 14))
+>T : Symbol(T, Decl(inferTypeArgumentKeyword.ts, 11, 8))
+
+// good
+var d = foo<Ob<infer A>, {x: string}, A>({y: 12}, {x: "yes"}, {z: 12});
+>d : Symbol(d, Decl(inferTypeArgumentKeyword.ts, 13, 3))
+>foo : Symbol(foo, Decl(inferTypeArgumentKeyword.ts, 0, 0))
+>Ob : Symbol(Ob, Decl(inferTypeArgumentKeyword.ts, 9, 67))
+>A : Symbol(A, Decl(inferTypeArgumentKeyword.ts, 13, 20))
+>x : Symbol(x, Decl(inferTypeArgumentKeyword.ts, 13, 26))
+>A : Symbol(A, Decl(inferTypeArgumentKeyword.ts, 13, 20))
+>y : Symbol(y, Decl(inferTypeArgumentKeyword.ts, 13, 42))
+>x : Symbol(x, Decl(inferTypeArgumentKeyword.ts, 13, 51))
+>z : Symbol(z, Decl(inferTypeArgumentKeyword.ts, 13, 63))
+
+// error on 3rd arg
+var e = foo<Ob<infer A>, {x: string}, A>({y: 12}, {x: "yes"}, {z: "no"});
+>e : Symbol(e, Decl(inferTypeArgumentKeyword.ts, 16, 3), Decl(inferTypeArgumentKeyword.ts, 19, 3))
+>foo : Symbol(foo, Decl(inferTypeArgumentKeyword.ts, 0, 0))
+>Ob : Symbol(Ob, Decl(inferTypeArgumentKeyword.ts, 9, 67))
+>A : Symbol(A, Decl(inferTypeArgumentKeyword.ts, 16, 20))
+>x : Symbol(x, Decl(inferTypeArgumentKeyword.ts, 16, 26))
+>A : Symbol(A, Decl(inferTypeArgumentKeyword.ts, 16, 20))
+>y : Symbol(y, Decl(inferTypeArgumentKeyword.ts, 16, 42))
+>x : Symbol(x, Decl(inferTypeArgumentKeyword.ts, 16, 51))
+>z : Symbol(z, Decl(inferTypeArgumentKeyword.ts, 16, 63))
+
+// good
+var e = foo<{y: A}, {x: string}, Ob<infer A>>({y: 12}, {x: "yes"}, {z: { y: 12 }});
+>e : Symbol(e, Decl(inferTypeArgumentKeyword.ts, 16, 3), Decl(inferTypeArgumentKeyword.ts, 19, 3))
+>foo : Symbol(foo, Decl(inferTypeArgumentKeyword.ts, 0, 0))
+>y : Symbol(y, Decl(inferTypeArgumentKeyword.ts, 19, 13))
+>A : Symbol(A, Decl(inferTypeArgumentKeyword.ts, 19, 41))
+>x : Symbol(x, Decl(inferTypeArgumentKeyword.ts, 19, 21))
+>Ob : Symbol(Ob, Decl(inferTypeArgumentKeyword.ts, 9, 67))
+>A : Symbol(A, Decl(inferTypeArgumentKeyword.ts, 19, 41))
+>y : Symbol(y, Decl(inferTypeArgumentKeyword.ts, 19, 47))
+>x : Symbol(x, Decl(inferTypeArgumentKeyword.ts, 19, 56))
+>z : Symbol(z, Decl(inferTypeArgumentKeyword.ts, 19, 68))
+>y : Symbol(y, Decl(inferTypeArgumentKeyword.ts, 19, 72))
+
+// error on 1st arg
+var f = foo<{y: A}, {x: string}, Ob<infer A>>({y: "no"}, {x: "yes"}, {z: { y: 12 }});
+>f : Symbol(f, Decl(inferTypeArgumentKeyword.ts, 22, 3))
+>foo : Symbol(foo, Decl(inferTypeArgumentKeyword.ts, 0, 0))
+>y : Symbol(y, Decl(inferTypeArgumentKeyword.ts, 22, 13))
+>A : Symbol(A, Decl(inferTypeArgumentKeyword.ts, 22, 41))
+>x : Symbol(x, Decl(inferTypeArgumentKeyword.ts, 22, 21))
+>Ob : Symbol(Ob, Decl(inferTypeArgumentKeyword.ts, 9, 67))
+>A : Symbol(A, Decl(inferTypeArgumentKeyword.ts, 22, 41))
+>y : Symbol(y, Decl(inferTypeArgumentKeyword.ts, 22, 47))
+>x : Symbol(x, Decl(inferTypeArgumentKeyword.ts, 22, 58))
+>z : Symbol(z, Decl(inferTypeArgumentKeyword.ts, 22, 70))
+>y : Symbol(y, Decl(inferTypeArgumentKeyword.ts, 22, 74))
 
