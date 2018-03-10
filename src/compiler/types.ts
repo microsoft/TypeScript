@@ -3925,7 +3925,7 @@ namespace ts {
     }
 
     /* @internal */
-    export type TypeMapper = (t: TypeParameter, isInferDeclaration?: boolean) => Type;
+    export type TypeMapper = (t: TypeParameter) => Type;
 
     export const enum InferencePriority {
         NakedTypeVariable           = 1 << 0,  // Naked type variable in union or intersection type

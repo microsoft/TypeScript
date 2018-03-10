@@ -9050,7 +9050,13 @@ namespace ts {
                     return mapper((<SubstitutionType>type).typeParameter);
                 }
                 if (type.flags & TypeFlags.InferType) {
-                    return mapper((<InferType>type).target, /*isInferDeclaration*/ true);
+                    // Fresh infer types are not *actually* type parameters, but look like one; this gives mappers the opportunity
+                    // to handle one directly (as is done for partial inference), before it gets mapped to its target.
+                    const result = mapper(<InferType>type);
+                    if (result !== type) {
+                        return result;
+                    }
+                    return instantiateType((<InferType>type).target, mapper);
                 }
             }
             return type;
@@ -17566,8 +17572,14 @@ namespace ts {
                                         const inferParams = getInferTypeParameters(node);
                                         // Mapper replaces references to infered type parameters with emptyObjectType
                                         // Causing the original location to be the _only_ inference site
-                                        const preprocessMapper = (p: TypeParameter, isInferDecl: boolean) => {
-                                            if (!isInferDecl && contains(inferParams, p)) return emptyObjectType;
+                                        const preprocessMapper = (p: TypeParameter) => {
+                                            // Fresh infer types are not *actually* type parameters, but look like one
+                                            if (p.flags & TypeFlags.InferType) {
+                                                return p.target; // By doing the replacement here, we cause this mapper to be not-called with the target
+                                            }
+                                            if (contains(inferParams, p)) {
+                                                return emptyObjectType;
+                                            }
                                             return p;
                                         };
                                         const resultsWithNonInferInferredVarsDefaulted = map(typeArgumentResult, t => instantiateType(t, preprocessMapper));
