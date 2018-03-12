@@ -10,7 +10,7 @@ namespace ts.codefix {
         getCodeActions(context) {
             const { program, sourceFile, span } = context;
             const changes = textChanges.ChangeTracker.with(context, t =>
-                addMissingMembers(getClass(sourceFile, span.start), sourceFile, program.getTypeChecker(), t));
+                addMissingMembers(getClass(sourceFile, span.start), sourceFile, program.getTypeChecker(), t, context.options));
             return changes.length === 0 ? undefined : [{ description: getLocaleSpecificMessage(Diagnostics.Implement_inherited_abstract_class), changes, fixId }];
         },
         fixIds: [fixId],
@@ -19,7 +19,7 @@ namespace ts.codefix {
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const classDeclaration = getClass(diag.file!, diag.start!);
                 if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
-                    addMissingMembers(classDeclaration, context.sourceFile, context.program.getTypeChecker(), changes);
+                    addMissingMembers(classDeclaration, context.sourceFile, context.program.getTypeChecker(), changes, context.options);
                 }
             });
         },
@@ -32,7 +32,7 @@ namespace ts.codefix {
         return cast(token.parent, isClassLike);
     }
 
-    function addMissingMembers(classDeclaration: ClassLikeDeclaration, sourceFile: SourceFile, checker: TypeChecker, changeTracker: textChanges.ChangeTracker): void {
+    function addMissingMembers(classDeclaration: ClassLikeDeclaration, sourceFile: SourceFile, checker: TypeChecker, changeTracker: textChanges.ChangeTracker, options: Options): void {
         const extendsNode = getClassExtendsHeritageClauseElement(classDeclaration);
         const instantiatedExtendsType = checker.getTypeAtLocation(extendsNode);
 
@@ -40,7 +40,7 @@ namespace ts.codefix {
         // so duplicates cannot occur.
         const abstractAndNonPrivateExtendsSymbols = checker.getPropertiesOfType(instantiatedExtendsType).filter(symbolPointsToNonPrivateAndAbstractMember);
 
-        createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, checker, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
+        createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, checker, options, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
     }
 
     function symbolPointsToNonPrivateAndAbstractMember(symbol: Symbol): boolean {

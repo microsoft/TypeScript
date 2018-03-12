@@ -179,6 +179,7 @@ declare namespace FourSlashInterface {
             newRangeContent?: string,
             errorCode?: number,
             index?: number,
+            options?: Options,
         });
         codeFixAvailable(options?: Array<{ description: string, actions?: Array<{ type: string, data: {} }>, commands?: {}[] }>): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;

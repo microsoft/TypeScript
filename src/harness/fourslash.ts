@@ -2482,7 +2482,7 @@ Actual: ${stringify(fullActual)}`);
 
         public verifyCodeFix(options: FourSlashInterface.VerifyCodeFixOptions) {
             const fileName = this.activeFile.fileName;
-            const actions = this.getCodeFixes(fileName, options.errorCode);
+            const actions = this.getCodeFixes(fileName, options.errorCode, options.options);
             let index = options.index;
             if (index === undefined) {
                 if (!(actions && actions.length === 1)) {
@@ -4662,6 +4662,7 @@ namespace FourSlashInterface {
         description: string;
         errorCode?: number;
         index?: number;
+        options?: ts.Options;
     }
 
     export interface VerifyCodeFixAvailableOptions {

@@ -185,11 +185,11 @@ namespace ts.codefix {
     }
 
     function getCodeActionForNewImport(context: SymbolContext & { options: Options }, { moduleSpecifier, importKind }: NewImportInfo): CodeFixAction {
-        const { sourceFile, symbolName } = context;
+        const { sourceFile, symbolName, options } = context;
         const lastImportDeclaration = findLast(sourceFile.statements, isAnyImportSyntax);
 
         const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier);
-        const quotedModuleSpecifier = createStringLiteralWithQuoteStyle(sourceFile, moduleSpecifierWithoutQuotes, context.options);
+        const quotedModuleSpecifier = createLiteral(moduleSpecifierWithoutQuotes, shouldUseSingleQuote(sourceFile, options));
         const importDecl = importKind !== ImportKind.Equals
             ? createImportDeclaration(
                 /*decorators*/ undefined,
@@ -217,11 +217,6 @@ namespace ts.codefix {
         return createCodeAction(Diagnostics.Import_0_from_module_1, [symbolName, moduleSpecifierWithoutQuotes], changes);
     }
 
-    function createStringLiteralWithQuoteStyle(sourceFile: SourceFile, text: string, options: Options): StringLiteral {
-        const literal = createLiteral(text);
-        literal.singleQuote = shouldUseSingleQuote(sourceFile, options);
-        return literal;
-    }
     function shouldUseSingleQuote(sourceFile: SourceFile, options: Options): boolean {
         if (options.quote) {
             return options.quote === "single";
