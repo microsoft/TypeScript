@@ -142,6 +142,11 @@ namespace ts.codefix {
 
             case SyntaxKind.Parameter:
                 const oldFunction = parent.parent;
+                if (isSetAccessor(oldFunction)) {
+                    // Setter must have a parameter
+                    break;
+                }
+
                 if (isArrowFunction(oldFunction) && oldFunction.parameters.length === 1) {
                     // Lambdas with exactly one parameter are special because, after removal, there
                     // must be an empty parameter list (i.e. `()`) and this won't necessarily be the
