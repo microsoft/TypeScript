@@ -1266,7 +1266,7 @@ namespace ts.server {
 
             const result = mapDefined(args.entryNames, entryName => {
                 const { name, source } = typeof entryName === "string" ? { name: entryName, source: undefined } : entryName;
-                return project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source);
+                return project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source, this.getOptions(file));
             });
             return simplifiedResult
                 ? result.map(details => ({ ...details, codeActions: map(details.codeActions, action => this.mapCodeAction(project, action)) }))

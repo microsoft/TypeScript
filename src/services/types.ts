@@ -256,8 +256,9 @@ namespace ts {
             fileName: string,
             position: number,
             name: string,
-            options: FormatCodeOptions | FormatCodeSettings | undefined,
+            formatOptions: FormatCodeOptions | FormatCodeSettings | undefined,
             source: string | undefined,
+            options: Options | undefined,
         ): CompletionEntryDetails;
         getCompletionEntrySymbol(fileName: string, position: number, name: string, source: string | undefined): Symbol;
 

@@ -1443,7 +1443,7 @@ namespace ts {
                 fullOptions);
         }
 
-        function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions?: FormatCodeSettings, source?: string): CompletionEntryDetails {
+        function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, options: Options = defaultOptions): CompletionEntryDetails {
             synchronizeHostData();
             return Completions.getCompletionEntryDetails(
                 program,
@@ -1455,7 +1455,8 @@ namespace ts {
                 program.getSourceFiles(),
                 host,
                 formattingOptions && formatting.getFormatContext(formattingOptions),
-                getCanonicalFileName);
+                getCanonicalFileName,
+                options);
         }
 
         function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol {

@@ -151,8 +151,8 @@ namespace ts {
         getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string;
         getEncodedSemanticClassifications(fileName: string, start: number, length: number): string;
 
-        getCompletionsAtPosition(fileName: string, position: number, settings: Options | undefined): string;
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined): string;
+        getCompletionsAtPosition(fileName: string, position: number, options: Options | undefined): string;
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined, options: Options | undefined): string;
 
         getQuickInfoAtPosition(fileName: string, position: number): string;
 
@@ -909,20 +909,20 @@ namespace ts {
          * to provide at the given source position and providing a member completion
          * list if requested.
          */
-        public getCompletionsAtPosition(fileName: string, position: number, settings: Options | undefined) {
+        public getCompletionsAtPosition(fileName: string, position: number, options: Options | undefined) {
             return this.forwardJSONCall(
-                `getCompletionsAtPosition('${fileName}', ${position}, ${settings})`,
-                () => this.languageService.getCompletionsAtPosition(fileName, position, settings)
+                `getCompletionsAtPosition('${fileName}', ${position}, ${options})`,
+                () => this.languageService.getCompletionsAtPosition(fileName, position, options)
             );
         }
 
         /** Get a string based representation of a completion list entry details */
-        public getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined) {
+        public getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined, options: Options | undefined) {
             return this.forwardJSONCall(
                 `getCompletionEntryDetails('${fileName}', ${position}, '${entryName}')`,
                 () => {
-                    const localOptions: ts.FormatCodeOptions = options === undefined ? undefined : JSON.parse(options);
-                    return this.languageService.getCompletionEntryDetails(fileName, position, entryName, localOptions, source);
+                    const localOptions: ts.FormatCodeOptions = formatOptions === undefined ? undefined : JSON.parse(formatOptions);
+                    return this.languageService.getCompletionEntryDetails(fileName, position, entryName, localOptions, source, options);
                 }
             );
         }

@@ -209,6 +209,7 @@ declare namespace FourSlashInterface {
             description: string,
             newFileContent?: string,
             newRangeContent?: string,
+            options?: Options,
         });
         indentationIs(numberOfSpaces: number): void;
         indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle, baseIndentSize?: number): void;
@@ -296,7 +297,7 @@ declare namespace FourSlashInterface {
         rangeIs(expectedText: string, includeWhiteSpace?: boolean): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: FormatCodeOptions): void;
         getAndApplyCodeFix(errorCode?: number, index?: number): void;
-        importFixAtPosition(expectedTextArray: string[], errorCode?: number): void;
+        importFixAtPosition(expectedTextArray: string[], errorCode?: number, options?: Options): void;
 
         navigationBar(json: any, options?: { checkSpans?: boolean }): void;
         navigationTree(json: any, options?: { checkSpans?: boolean }): void;

@@ -1223,8 +1223,8 @@ Actual: ${stringify(fullActual)}`);
             return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, options);
         }
 
-        private getCompletionEntryDetails(entryName: string, source?: string): ts.CompletionEntryDetails {
-            return this.languageService.getCompletionEntryDetails(this.activeFile.fileName, this.currentCaretPosition, entryName, this.formatCodeSettings, source);
+        private getCompletionEntryDetails(entryName: string, source?: string, options?: ts.Options): ts.CompletionEntryDetails {
+            return this.languageService.getCompletionEntryDetails(this.activeFile.fileName, this.currentCaretPosition, entryName, this.formatCodeSettings, source, options);
         }
 
         private getReferencesAtCaret() {
@@ -2399,7 +2399,7 @@ Actual: ${stringify(fullActual)}`);
                 this.raiseError(`Completion for ${options.name} does not have an associated action.`);
             }
 
-            const details = this.getCompletionEntryDetails(options.name, actualCompletion.source);
+            const details = this.getCompletionEntryDetails(options.name, actualCompletion.source, options.options);
             if (details.codeActions.length !== 1) {
                 this.raiseError(`Expected one code action, got ${details.codeActions.length}`);
             }
@@ -2512,7 +2512,7 @@ Actual: ${stringify(fullActual)}`);
          * Rerieves a codefix satisfying the parameters, or undefined if no such codefix is found.
          * @param fileName Path to file where error should be retrieved from.
          */
-        private getCodeFixes(fileName: string, errorCode?: number): ts.CodeFixAction[] {
+        private getCodeFixes(fileName: string, errorCode?: number, options: ts.Options = ts.defaultOptions): ts.CodeFixAction[] {
             const diagnosticsForCodeFix = this.getDiagnostics(fileName).map(diagnostic => ({
                 start: diagnostic.start,
                 length: diagnostic.length,
@@ -2524,7 +2524,7 @@ Actual: ${stringify(fullActual)}`);
                     return;
                 }
 
-                return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.start + diagnostic.length, [diagnostic.code], this.formatCodeSettings, ts.defaultOptions);
+                return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.start + diagnostic.length, [diagnostic.code], this.formatCodeSettings, options);
             });
         }
 
@@ -2550,7 +2550,7 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyImportFixAtPosition(expectedTextArray: string[], errorCode?: number) {
+        public verifyImportFixAtPosition(expectedTextArray: string[], errorCode: number | undefined, options: ts.Options | undefined) {
             const { fileName } = this.activeFile;
             const ranges = this.getRanges().filter(r => r.fileName === fileName);
             if (ranges.length !== 1) {
@@ -2558,7 +2558,7 @@ Actual: ${stringify(fullActual)}`);
             }
             const range = ts.first(ranges);
 
-            const codeFixes = this.getCodeFixes(fileName, errorCode);
+            const codeFixes = this.getCodeFixes(fileName, errorCode, options);
 
             if (codeFixes.length === 0) {
                 if (expectedTextArray.length !== 0) {
@@ -4215,8 +4215,8 @@ namespace FourSlashInterface {
             this.state.applyCodeActionFromCompletion(markerName, options);
         }
 
-        public importFixAtPosition(expectedTextArray: string[], errorCode?: number): void {
-            this.state.verifyImportFixAtPosition(expectedTextArray, errorCode);
+        public importFixAtPosition(expectedTextArray: string[], errorCode?: number, options?: ts.Options): void {
+            this.state.verifyImportFixAtPosition(expectedTextArray, errorCode, options);
         }
 
         public navigationBar(json: any, options?: { checkSpans?: boolean }) {
@@ -4663,5 +4663,6 @@ namespace FourSlashInterface {
         name: string;
         source?: string;
         description: string;
+        options?: ts.Options;
     }
 }

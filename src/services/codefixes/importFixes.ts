@@ -30,6 +30,7 @@ namespace ts.codefix {
         compilerOptions: CompilerOptions;
         getCanonicalFileName: GetCanonicalFileName;
         cachedImportDeclarations?: ImportDeclarationMap;
+        options: Options;
     }
 
     function createCodeAction(descriptionDiagnostic: DiagnosticMessage, diagnosticArgs: string[], changes: FileTextChanges[]): CodeFixAction {
@@ -53,7 +54,8 @@ namespace ts.codefix {
             cachedImportDeclarations: [],
             getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames),
             symbolName,
-            symbolToken
+            symbolToken,
+            options: context.options,
         };
     }
 
@@ -95,12 +97,13 @@ namespace ts.codefix {
         formatContext: ts.formatting.FormatContext,
         getCanonicalFileName: GetCanonicalFileName,
         symbolToken: Node | undefined,
+        options: Options,
     ): { readonly moduleSpecifier: string, readonly codeAction: CodeAction } {
         const exportInfos = getAllReExportingModules(exportedSymbol, checker, allSourceFiles);
         Debug.assert(exportInfos.some(info => info.moduleSymbol === moduleSymbol));
         // We sort the best codefixes first, so taking `first` is best for completions.
         const moduleSpecifier = first(getNewImportInfos(program, sourceFile, exportInfos, compilerOptions, getCanonicalFileName, host)).moduleSpecifier;
-        const ctx: ImportCodeFixContext = { host, program, checker, compilerOptions, sourceFile, formatContext, symbolName, getCanonicalFileName, symbolToken };
+        const ctx: ImportCodeFixContext = { host, program, checker, compilerOptions, sourceFile, formatContext, symbolName, getCanonicalFileName, symbolToken, options };
         return { moduleSpecifier, codeAction: first(getCodeActionsForImport(exportInfos, ctx)) };
     }
     function getAllReExportingModules(exportedSymbol: Symbol, checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>): ReadonlyArray<SymbolExportInfo> {
@@ -181,12 +184,12 @@ namespace ts.codefix {
         }
     }
 
-    function getCodeActionForNewImport(context: SymbolContext, { moduleSpecifier, importKind }: NewImportInfo): CodeFixAction {
+    function getCodeActionForNewImport(context: SymbolContext & { options: Options }, { moduleSpecifier, importKind }: NewImportInfo): CodeFixAction {
         const { sourceFile, symbolName } = context;
         const lastImportDeclaration = findLast(sourceFile.statements, isAnyImportSyntax);
 
         const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier);
-        const quotedModuleSpecifier = createStringLiteralWithQuoteStyle(sourceFile, moduleSpecifierWithoutQuotes);
+        const quotedModuleSpecifier = createStringLiteralWithQuoteStyle(sourceFile, moduleSpecifierWithoutQuotes, context.options);
         const importDecl = importKind !== ImportKind.Equals
             ? createImportDeclaration(
                 /*decorators*/ undefined,
@@ -214,11 +217,19 @@ namespace ts.codefix {
         return createCodeAction(Diagnostics.Import_0_from_module_1, [symbolName, moduleSpecifierWithoutQuotes], changes);
     }
 
-    function createStringLiteralWithQuoteStyle(sourceFile: SourceFile, text: string): StringLiteral {
+    function createStringLiteralWithQuoteStyle(sourceFile: SourceFile, text: string, options: Options): StringLiteral {
         const literal = createLiteral(text);
-        const firstModuleSpecifier = firstOrUndefined(sourceFile.imports);
-        literal.singleQuote = !!firstModuleSpecifier && !isStringDoubleQuoted(firstModuleSpecifier, sourceFile);
+        literal.singleQuote = shouldUseSingleQuote(sourceFile, options);
         return literal;
+    }
+    function shouldUseSingleQuote(sourceFile: SourceFile, options: Options): boolean {
+        if (options.quote) {
+            return options.quote === "single";
+        }
+        else {
+            const firstModuleSpecifier = firstOrUndefined(sourceFile.imports);
+            return !!firstModuleSpecifier && !isStringDoubleQuoted(firstModuleSpecifier, sourceFile);
+        }
     }
 
     function usesJsExtensionOnImports(sourceFile: SourceFile): boolean {

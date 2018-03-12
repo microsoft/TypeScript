@@ -524,6 +524,7 @@ namespace ts.Completions {
         host: LanguageServiceHost,
         formatContext: formatting.FormatContext,
         getCanonicalFileName: GetCanonicalFileName,
+        options: Options,
     ): CompletionEntryDetails {
         const typeChecker = program.getTypeChecker();
         const { name } = entryId;
@@ -545,7 +546,7 @@ namespace ts.Completions {
             }
             case "symbol": {
                 const { symbol, location, symbolToOriginInfoMap, previousToken } = symbolCompletion;
-                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(symbolToOriginInfoMap, symbol, program, typeChecker, host, compilerOptions, sourceFile, previousToken, formatContext, getCanonicalFileName, allSourceFiles);
+                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(symbolToOriginInfoMap, symbol, program, typeChecker, host, compilerOptions, sourceFile, previousToken, formatContext, getCanonicalFileName, allSourceFiles, options);
                 const kindModifiers = SymbolDisplay.getSymbolModifiers(symbol);
                 const { displayParts, documentation, symbolKind, tags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, location, location, SemanticMeaning.All);
                 return { name, kindModifiers, kind: symbolKind, displayParts, documentation, tags, codeActions, source: sourceDisplay };
@@ -585,26 +586,13 @@ namespace ts.Completions {
         formatContext: formatting.FormatContext,
         getCanonicalFileName: GetCanonicalFileName,
         allSourceFiles: ReadonlyArray<SourceFile>,
+        options: Options,
     ): CodeActionsAndSourceDisplay {
         const symbolOriginInfo = symbolToOriginInfoMap[getSymbolId(symbol)];
-        return symbolOriginInfo && symbolOriginInfo.type === "export"
-            ? getCodeActionsAndSourceDisplayForImport(symbolOriginInfo, symbol, program, checker, host, compilerOptions, sourceFile, previousToken, formatContext, getCanonicalFileName, allSourceFiles)
-            : { codeActions: undefined, sourceDisplay: undefined };
-    }
+        if (!symbolOriginInfo || symbolOriginInfo.type !== "export") {
+            return { codeActions: undefined, sourceDisplay: undefined };
+        }
 
-    function getCodeActionsAndSourceDisplayForImport(
-        symbolOriginInfo: SymbolOriginInfoExport,
-        symbol: Symbol,
-        program: Program,
-        checker: TypeChecker,
-        host: LanguageServiceHost,
-        compilerOptions: CompilerOptions,
-        sourceFile: SourceFile,
-        previousToken: Node,
-        formatContext: formatting.FormatContext,
-        getCanonicalFileName: GetCanonicalFileName,
-        allSourceFiles: ReadonlyArray<SourceFile>
-    ): CodeActionsAndSourceDisplay {
         const { moduleSymbol } = symbolOriginInfo;
         const exportedSymbol = skipAlias(symbol.exportSymbol || symbol, checker);
         const { moduleSpecifier, codeAction } = codefix.getImportCompletionAction(
@@ -619,7 +607,8 @@ namespace ts.Completions {
             allSourceFiles,
             formatContext,
             getCanonicalFileName,
-            previousToken);
+            previousToken,
+            options);
         return { sourceDisplay: [textPart(moduleSpecifier)], codeActions: [codeAction] };
     }
 
