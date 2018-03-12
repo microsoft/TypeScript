@@ -9,6 +9,6 @@ verify.codeFix({
     newFileContent:
 `class C {
     /** @param {number} value */
-    set c(value: number) { return value; }
+    set c(value: number) { return value }
 }`,
 });

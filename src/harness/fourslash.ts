@@ -435,7 +435,7 @@ namespace FourSlash {
             }
         }
 
-        private markerName(m: Marker): string {
+        public markerName(m: Marker): string {
             return ts.forEachEntry(this.testData.markerPositions, (marker, name) => {
                 if (marker === m) {
                     return name;
@@ -848,7 +848,7 @@ namespace FourSlash {
             const actual = actualCompletions.entries;
 
             if (actual.length !== expected.length) {
-                this.raiseError(`Expected ${expected.length} completions, got ${actual.map(a => a.name)}.`);
+                this.raiseError(`Expected ${expected.length} completions, got ${actual.length} (${actual.map(a => a.name)}).`);
             }
 
             ts.zipWith(actual, expected, (completion, expectedCompletion, index) => {
@@ -2923,6 +2923,10 @@ Actual: ${stringify(fullActual)}`);
             if (!codeFixes.length) {
                 this.raiseError(`verifyCodeFixAvailable failed - expected code fixes but none found.`);
             }
+            codeFixes.forEach(fix => fix.changes.forEach(change => {
+                assert.isObject(change, `Invalid change in code fix: ${JSON.stringify(fix)}`);
+                change.textChanges.forEach(textChange => assert.isObject(textChange, `Invalid textChange in codeFix: ${JSON.stringify(fix)}`));
+            }));
             if (info) {
                 assert.equal(info.length, codeFixes.length);
                 ts.zipWith(codeFixes, info, (fix, info) => {
@@ -3764,6 +3768,10 @@ namespace FourSlashInterface {
             return this.state.getMarkerByName(name);
         }
 
+        public markerName(m: FourSlash.Marker) {
+            return this.state.markerName(m);
+        }
+
         public ranges(): FourSlash.Range[] {
             return this.state.getRanges();
         }
@@ -3805,6 +3813,7 @@ namespace FourSlashInterface {
             const markers = typeof a === "function" ? this.state.getMarkers() : a.map(m => this.state.getMarkerByName(m));
             this.state.goToEachMarker(markers, typeof a === "function" ? a : b);
         }
+
 
         public rangeStart(range: FourSlash.Range) {
             this.state.goToRangeStart(range);

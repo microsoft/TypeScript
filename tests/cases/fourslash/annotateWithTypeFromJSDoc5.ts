@@ -10,6 +10,6 @@ verify.codeFix({
     newFileContent:
 `class C {
     /** @type {number | null} */
-    p: number | null = null;
+    p: number | null = null
 }`,
 });

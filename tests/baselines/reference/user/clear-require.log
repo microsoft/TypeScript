@@ -1,0 +1,8 @@
+Exit Code: 1
+Standard output:
+node_modules/clear-require/index.js(14,7): error TS2339: Property 'all' does not exist on type '(moduleId: any) => void'.
+node_modules/clear-require/index.js(20,7): error TS2339: Property 'match' does not exist on type '(moduleId: any) => void'.
+
+
+
+Standard error:

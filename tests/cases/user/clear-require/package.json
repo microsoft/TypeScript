@@ -1,0 +1,11 @@
+{
+  "name": "clear-require-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "clear-require": "^2.0.0"
+  }
+}

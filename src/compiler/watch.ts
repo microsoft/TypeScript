@@ -483,18 +483,17 @@ namespace ts {
         }
 
         const trace = host.trace && ((s: string) => { host.trace(s + newLine); });
-        const loggingEnabled = trace && (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics);
-        const writeLog = loggingEnabled ? trace : noop;
-        const watchFile = compilerOptions.extendedDiagnostics ? addFileWatcherWithLogging : loggingEnabled ? addFileWatcherWithOnlyTriggerLogging : addFileWatcher;
-        const watchFilePath = compilerOptions.extendedDiagnostics ? addFilePathWatcherWithLogging : addFilePathWatcher;
-        const watchDirectoryWorker = compilerOptions.extendedDiagnostics ? addDirectoryWatcherWithLogging : addDirectoryWatcher;
+        const watchLogLevel = trace ? compilerOptions.extendedDiagnostics ? WatchLogLevel.Verbose :
+            compilerOptions.diagnostis ? WatchLogLevel.TriggerOnly : WatchLogLevel.None : WatchLogLevel.None;
+        const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? trace : noop;
+        const { watchFile, watchFilePath, watchDirectory: watchDirectoryWorker } = getWatchFactory(watchLogLevel, writeLog);
 
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
         let newLine = updateNewLine();
 
         writeLog(`Current directory: ${currentDirectory} CaseSensitiveFileNames: ${useCaseSensitiveFileNames}`);
         if (configFileName) {
-            watchFile(host, configFileName, scheduleProgramReload, writeLog);
+            watchFile(host, configFileName, scheduleProgramReload, PollingInterval.High);
         }
 
         const compilerHost: CompilerHost & ResolutionCacheHost = {
@@ -583,8 +582,8 @@ namespace ts {
             }
 
             // Compile the program
-            if (loggingEnabled) {
-                writeLog(`CreatingProgramWith::`);
+            if (watchLogLevel !== WatchLogLevel.None) {
+                writeLog("CreatingProgramWith::");
                 writeLog(`  roots: ${JSON.stringify(rootFileNames)}`);
                 writeLog(`  options: ${JSON.stringify(compilerOptions)}`);
             }
@@ -677,7 +676,7 @@ namespace ts {
                         (hostSourceFile as FilePresentOnHost).sourceFile = sourceFile;
                         sourceFile.version = hostSourceFile.version.toString();
                         if (!(hostSourceFile as FilePresentOnHost).fileWatcher) {
-                            (hostSourceFile as FilePresentOnHost).fileWatcher = watchFilePath(host, fileName, onSourceFileChange, path, writeLog);
+                            (hostSourceFile as FilePresentOnHost).fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, path);
                         }
                     }
                     else {
@@ -691,7 +690,7 @@ namespace ts {
                 else {
                     if (sourceFile) {
                         sourceFile.version = initialVersion.toString();
-                        const fileWatcher = watchFilePath(host, fileName, onSourceFileChange, path, writeLog);
+                        const fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, path);
                         sourceFilesCache.set(path, { sourceFile, version: initialVersion, fileWatcher });
                     }
                     else {
@@ -854,11 +853,11 @@ namespace ts {
         }
 
         function watchDirectory(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags) {
-            return watchDirectoryWorker(host, directory, cb, flags, writeLog);
+            return watchDirectoryWorker(host, directory, cb, flags);
         }
 
         function watchMissingFilePath(missingFilePath: Path) {
-            return watchFilePath(host, missingFilePath, onMissingFileChange, missingFilePath, writeLog);
+            return watchFilePath(host, missingFilePath, onMissingFileChange, PollingInterval.Medium, missingFilePath);
         }
 
         function onMissingFileChange(fileName: string, eventKind: FileWatcherEventKind, missingFilePath: Path) {

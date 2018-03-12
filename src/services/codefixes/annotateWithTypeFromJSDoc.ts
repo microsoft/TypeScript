@@ -42,19 +42,28 @@ namespace ts.codefix {
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, decl: DeclarationWithType): void {
         if (isFunctionLikeDeclaration(decl) && (getJSDocReturnType(decl) || decl.parameters.some(p => !!getJSDocType(p)))) {
-            findAncestor(decl, isFunctionLike);
-            const fn = findAncestor(decl, isFunctionLikeDeclaration);
-            const functionWithType = addTypesToFunctionLike(fn);
-            suppressLeadingAndTrailingTrivia(functionWithType);
-            changes.replaceNode(sourceFile, fn, functionWithType, textChanges.useNonAdjustedPositions);
-            return;
+            if (!decl.typeParameters) {
+                const typeParameters = getJSDocTypeParameterDeclarations(decl);
+                if (typeParameters) changes.insertTypeParameters(sourceFile, decl, typeParameters);
+            }
+            const needParens = isArrowFunction(decl) && !findChildOfKind(decl, SyntaxKind.OpenParenToken, sourceFile);
+            if (needParens) changes.insertNodeBefore(sourceFile, first(decl.parameters), createToken(SyntaxKind.OpenParenToken));
+            for (const param of decl.parameters) {
+                if (!param.type) {
+                    const paramType = getJSDocType(param);
+                    if (paramType) changes.insertTypeAnnotation(sourceFile, param, transformJSDocType(paramType));
+                }
+            }
+            if (needParens) changes.insertNodeAfter(sourceFile, last(decl.parameters), createToken(SyntaxKind.CloseParenToken));
+            if (!decl.type) {
+                const returnType = getJSDocReturnType(decl);
+                if (returnType) changes.insertTypeAnnotation(sourceFile, decl, transformJSDocType(returnType));
+            }
         }
         else {
             const jsdocType = Debug.assertDefined(getJSDocType(decl)); // If not defined, shouldn't have been an error to fix
             Debug.assert(!decl.type); // If defined, shouldn't have been an error to fix.
-            const declarationWithType = addType(decl, transformJSDocType(jsdocType) as TypeNode);
-            suppressLeadingAndTrailingTrivia(declarationWithType);
-            changes.replaceNode(sourceFile, decl, declarationWithType, textChanges.useNonAdjustedPositions);
+            changes.insertTypeAnnotation(sourceFile, decl, transformJSDocType(jsdocType));
         }
     }
 
@@ -65,48 +74,7 @@ namespace ts.codefix {
             node.kind === SyntaxKind.PropertyDeclaration;
     }
 
-    function addTypesToFunctionLike(decl: FunctionLikeDeclaration) {
-        const typeParameters = getEffectiveTypeParameterDeclarations(decl, /*checkJSDoc*/ true);
-        const parameters = decl.parameters.map(
-            p => createParameter(p.decorators, p.modifiers, p.dotDotDotToken, p.name, p.questionToken, transformJSDocType(getEffectiveTypeAnnotationNode(p, /*checkJSDoc*/ true)) as TypeNode, p.initializer));
-        const returnType = transformJSDocType(getEffectiveReturnTypeNode(decl, /*checkJSDoc*/ true)) as TypeNode;
-        switch (decl.kind) {
-            case SyntaxKind.FunctionDeclaration:
-                return createFunctionDeclaration(decl.decorators, decl.modifiers, decl.asteriskToken, decl.name, typeParameters, parameters, returnType, decl.body);
-            case SyntaxKind.Constructor:
-                return createConstructor(decl.decorators, decl.modifiers, parameters, decl.body);
-            case SyntaxKind.FunctionExpression:
-                return createFunctionExpression(decl.modifiers, decl.asteriskToken, decl.name, typeParameters, parameters, returnType, decl.body);
-            case SyntaxKind.ArrowFunction:
-                return createArrowFunction(decl.modifiers, typeParameters, parameters, returnType, decl.equalsGreaterThanToken, decl.body);
-            case SyntaxKind.MethodDeclaration:
-                return createMethod(decl.decorators, decl.modifiers, decl.asteriskToken, decl.name, decl.questionToken, typeParameters, parameters, returnType, decl.body);
-            case SyntaxKind.GetAccessor:
-                return createGetAccessor(decl.decorators, decl.modifiers, decl.name, decl.parameters, returnType, decl.body);
-            case SyntaxKind.SetAccessor:
-                return createSetAccessor(decl.decorators, decl.modifiers, decl.name, parameters, decl.body);
-            default:
-                return Debug.assertNever(decl, `Unexpected SyntaxKind: ${(decl as any).kind}`);
-        }
-    }
-
-    function addType(decl: DeclarationWithType, jsdocType: TypeNode) {
-        switch (decl.kind) {
-            case SyntaxKind.VariableDeclaration:
-                return createVariableDeclaration(decl.name, jsdocType, decl.initializer);
-            case SyntaxKind.PropertySignature:
-                return createPropertySignature(decl.modifiers, decl.name, decl.questionToken, jsdocType, decl.initializer);
-            case SyntaxKind.PropertyDeclaration:
-                return createProperty(decl.decorators, decl.modifiers, decl.name, decl.questionToken, jsdocType, decl.initializer);
-            default:
-                return Debug.fail(`Unexpected SyntaxKind: ${decl.kind}`);
-        }
-    }
-
-    function transformJSDocType(node: Node): Node | undefined {
-        if (node === undefined) {
-            return undefined;
-        }
+    function transformJSDocType(node: TypeNode): TypeNode | undefined {
         switch (node.kind) {
             case SyntaxKind.JSDocAllType:
             case SyntaxKind.JSDocUnknownType:
@@ -121,12 +89,10 @@ namespace ts.codefix {
                 return transformJSDocVariadicType(node as JSDocVariadicType);
             case SyntaxKind.JSDocFunctionType:
                 return transformJSDocFunctionType(node as JSDocFunctionType);
-            case SyntaxKind.Parameter:
-                return transformJSDocParameter(node as ParameterDeclaration);
             case SyntaxKind.TypeReference:
                 return transformJSDocTypeReference(node as TypeReferenceNode);
             default:
-                const visited = visitEachChild(node, transformJSDocType, /*context*/ undefined) as TypeNode;
+                const visited = visitEachChild(node, transformJSDocType, /*context*/ undefined);
                 setEmitFlags(visited, EmitFlags.SingleLine);
                 return visited;
         }
@@ -145,8 +111,7 @@ namespace ts.codefix {
     }
 
     function transformJSDocFunctionType(node: JSDocFunctionType) {
-        const parameters = node.parameters && node.parameters.map(transformJSDocType);
-        return createFunctionTypeNode(emptyArray, parameters as ParameterDeclaration[], node.type);
+        return createFunctionTypeNode(emptyArray, node.parameters.map(transformJSDocParameter), node.type);
     }
 
     function transformJSDocParameter(node: ParameterDeclaration) {
