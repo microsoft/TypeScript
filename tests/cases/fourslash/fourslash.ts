@@ -527,6 +527,7 @@ declare namespace FourSlashInterface {
         /** @default `test.ranges()[0]` */
         range?: Range;
         code: number;
+        unused?: true;
     }
 }
 declare function verifyOperationIsCancelled(f: any): void;

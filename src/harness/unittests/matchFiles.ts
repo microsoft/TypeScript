@@ -130,6 +130,7 @@ namespace ts {
                 length: undefined,
                 messageText: error.messageText,
                 start: undefined,
+                unused: undefined,
             }));
             assertParsed(actual, expected);
         }
