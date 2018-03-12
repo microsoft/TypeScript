@@ -3,16 +3,19 @@
 // @allowJs: true
 
 // @Filename: /a.js
-/////*a*/exports/*b*/.f = function() {}
-////exports.C = class {}
+////[|exports.f = function() {}|];
+////exports.C = class {};
 ////exports.x = 0;
 
-goTo.select("a", "b");
-edit.applyRefactor({
-    refactorName: "Convert to ES6 module",
-    actionName: "Convert to ES6 module",
-    actionDescription: "Convert to ES6 module",
-    newContent: `export function f() { }
+verify.getSuggestionDiagnostics([{
+    message: "File is a CommonJS module; it may be converted to an ES6 module.",
+    code: 80001,
+}]);
+
+verify.codeFix({
+    description: "Convert to ES6 module",
+    newFileContent:
+`export function f() { }
 export class C {
 }
 export const x = 0;`,

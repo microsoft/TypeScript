@@ -1,31 +1,21 @@
+defaultFilters: &defaultFilters
+  filters:
+    branches:
+      only:
+        - master
+        - release-2.5
+        - release-2.6
+        - release-2.7
 workflows:
   version: 2
   main:
     jobs:
       - node9:
-          filters:
-            branches:
-              only:
-                - master
-                - release-2.5
-                - release-2.6
-                - release-2.7
+          <<: *defaultFilters
       - node8:
-          filters:
-            branches:
-              only:
-                - master
-                - release-2.5
-                - release-2.6
-                - release-2.7
+          <<: *defaultFilters
       - node6:
-          filters:
-            branches:
-              only:
-                - master
-                - release-2.5
-                - release-2.6
-                - release-2.7
+          <<: *defaultFilters
   nightly:
     triggers:
       - schedule:
@@ -35,38 +25,23 @@ workflows:
               only: master
     jobs:
       - node9:
-          filters:
-            branches:
-              only:
-                - master
-                - release-2.5
-                - release-2.6
-                - release-2.7
+          <<: *defaultFilters
           context: nightlies
       - node8:
-          filters:
-            branches:
-              only:
-                - master
-                - release-2.5
-                - release-2.6
-                - release-2.7
+          <<: *defaultFilters
           context: nightlies
       - node6:
-          filters:
-            branches:
-              only:
-                - master
-                - release-2.5
-                - release-2.6
-                - release-2.7
+          <<: *defaultFilters
           context: nightlies
 
 base: &base
   environment:
     - workerCount: 4
+    - timeout: 400000
   steps:
-    - checkout
+    - checkout:
+        post:
+          - git submodule update --init --recursive
     - run: |
         npm uninstall typescript --no-save
         npm uninstall tslint --no-save

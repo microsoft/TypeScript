@@ -4,3 +4,11 @@ function* g() {
 
     yield;
 }
+
+function* h() {
+>h : Symbol(h, Decl(generatorTypeCheck48.ts, 2, 1))
+
+    yield undefined;
+>undefined : Symbol(undefined)
+}
+

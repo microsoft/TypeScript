@@ -30,11 +30,7 @@ namespace ts.DocumentHighlights {
 
     function getSyntacticDocumentHighlights(node: Node, sourceFile: SourceFile): DocumentHighlights[] {
         const highlightSpans = getHighlightSpans(node, sourceFile);
-        if (!highlightSpans || highlightSpans.length === 0) {
-            return undefined;
-        }
-
-        return [{ fileName: sourceFile.fileName, highlightSpans }];
+        return highlightSpans && [{ fileName: sourceFile.fileName, highlightSpans }];
     }
 
     function getHighlightSpans(node: Node, sourceFile: SourceFile): HighlightSpan[] | undefined {

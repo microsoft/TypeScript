@@ -66,7 +66,7 @@ type TypeName<T> =
 
 type T20 = TypeName<string | (() => void)>;  // "string" | "function"
 type T21 = TypeName<any>;  // "string" | "number" | "boolean" | "undefined" | "function" | "object"
-type T22 = TypeName<never>;  // "string" | "number" | "boolean" | "undefined" | "function" | "object"
+type T22 = TypeName<never>;  // never
 type T23 = TypeName<{}>;  // "object"
 
 type KnockoutObservable<T> = { object: T };
@@ -174,7 +174,7 @@ type IsString<T> = Extends<T, string>;
 type Q1 = IsString<number>;  // false
 type Q2 = IsString<"abc">;  // true
 type Q3 = IsString<any>;  // boolean
-type Q4 = IsString<never>;  // boolean
+type Q4 = IsString<never>;  // never
 
 type N1 = Not<false>;  // true
 type N2 = Not<true>;  // false
@@ -202,9 +202,9 @@ type O9 = Or<boolean, boolean>;  // boolean
 
 type T40 = never extends never ? true : false;  // true
 type T41 = number extends never ? true : false;  // false
-type T42 = never extends number ? true : false;  // boolean
+type T42 = never extends number ? true : false;  // true
 
-type IsNever<T> = T extends never ? true : false;
+type IsNever<T> = [T] extends [never] ? true : false;
 
 type T50 = IsNever<never>;  // true
 type T51 = IsNever<number>;  // false

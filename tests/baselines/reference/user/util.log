@@ -1,0 +1,64 @@
+Exit Code: 1
+Standard output:
+node_modules/util/test/browser/inspect.js(25,1): error TS2304: Cannot find name 'suite'.
+node_modules/util/test/browser/inspect.js(27,1): error TS2304: Cannot find name 'test'.
+node_modules/util/test/browser/inspect.js(29,16): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/browser/inspect.js(31,16): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/browser/inspect.js(33,16): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/browser/inspect.js(36,1): error TS2304: Cannot find name 'test'.
+node_modules/util/test/browser/inspect.js(37,16): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/browser/inspect.js(38,16): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/browser/inspect.js(39,16): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/browser/inspect.js(40,16): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/browser/is.js(26,1): error TS2304: Cannot find name 'suite'.
+node_modules/util/test/browser/is.js(28,1): error TS2304: Cannot find name 'test'.
+node_modules/util/test/browser/is.js(41,1): error TS2304: Cannot find name 'test'.
+node_modules/util/test/browser/is.js(43,36): error TS2554: Expected 1-2 arguments, but got 0.
+node_modules/util/test/browser/is.js(44,36): error TS2554: Expected 1-2 arguments, but got 0.
+node_modules/util/test/browser/is.js(51,1): error TS2304: Cannot find name 'test'.
+node_modules/util/test/browser/is.js(61,1): error TS2304: Cannot find name 'test'.
+node_modules/util/test/browser/is.js(71,1): error TS2304: Cannot find name 'test'.
+node_modules/util/test/browser/is.js(81,1): error TS2304: Cannot find name 'test'.
+node_modules/util/test/browser/is.js(83,36): error TS2348: Value of type '{ new (str: string, encoding?: string | undefined): Buffer; new (size: number): Buffer; new (arra...' is not callable. Did you mean to include 'new'?
+node_modules/util/test/node/debug.js(53,45): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string | undefined'.
+node_modules/util/test/node/inspect.js(31,12): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/node/inspect.js(33,13): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/node/inspect.js(38,14): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/node/inspect.js(40,14): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/node/inspect.js(42,14): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/node/inspect.js(66,14): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/node/inspect.js(67,14): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/node/inspect.js(68,14): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/node/inspect.js(69,14): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/node/inspect.js(71,3): error TS2304: Cannot find name 'undef'.
+node_modules/util/test/node/inspect.js(73,16): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/node/inspect.js(82,14): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/node/inspect.js(87,3): error TS2322: Type 'null' is not assignable to type '() => string'.
+node_modules/util/test/node/inspect.js(88,3): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/node/inspect.js(93,3): error TS2322: Type 'null' is not assignable to type '() => string'.
+node_modules/util/test/node/inspect.js(94,3): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/node/inspect.js(99,3): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/node/inspect.js(106,11): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/node/inspect.js(133,3): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/node/inspect.js(151,1): error TS2322: Type '{ inspect: () => number; }' is not assignable to type '{ [x: string]: any; foo: string; hello: number; a: { [x: string]: any; b: { [x: string]: any; c: ...'.
+  Property 'foo' is missing in type '{ inspect: () => number; }'.
+node_modules/util/test/node/inspect.js(161,14): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/node/inspect.js(175,23): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/test/node/log.js(34,9): error TS2339: Property '_stderr' does not exist on type 'Console'.
+node_modules/util/test/node/log.js(55,16): error TS2531: Object is possibly 'null'.
+node_modules/util/test/node/util.js(43,34): error TS2554: Expected 1-2 arguments, but got 0.
+node_modules/util/test/node/util.js(44,34): error TS2554: Expected 1-2 arguments, but got 0.
+node_modules/util/util.js(27,20): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/util.js(35,45): error TS2345: Argument of type '(x: string) => string | number' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+  Type 'string | number' is not assignable to type 'string'.
+    Type 'number' is not assignable to type 'string'.
+node_modules/util/util.js(55,20): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/util.js(73,15): error TS2339: Property 'noDeprecation' does not exist on type 'Process'.
+node_modules/util/util.js(80,19): error TS2339: Property 'throwDeprecation' does not exist on type 'Process'.
+node_modules/util/util.js(82,26): error TS2339: Property 'traceDeprecation' does not exist on type 'Process'.
+node_modules/util/util.js(566,22): error TS8024: JSDoc '@param' tag has name 'ctor', but there is no parameter with that name.
+node_modules/util/util.js(568,22): error TS8024: JSDoc '@param' tag has name 'superCtor', but there is no parameter with that name.
+
+
+
+Standard error:

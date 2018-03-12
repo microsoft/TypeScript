@@ -94,6 +94,10 @@ namespace ts.textChanges {
          * Text of inserted node will be formatted with this delta, otherwise delta will be inferred from the new node kind
          */
         delta?: number;
+        /**
+         * Do not trim leading white spaces in the edit range
+         */
+        preserveLeadingWhitespace?: boolean;
     }
 
     enum ChangeKind {
@@ -136,7 +140,7 @@ namespace ts.textChanges {
 
     export function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStart, position: Position) {
         if (options.useNonAdjustedStartPosition) {
-            return node.getStart();
+            return node.getStart(sourceFile);
         }
         const fullStart = node.getFullStart();
         const start = node.getStart(sourceFile);
@@ -192,8 +196,10 @@ namespace ts.textChanges {
 
     export interface TextChangesContext {
         host: LanguageServiceHost;
-        formatContext: ts.formatting.FormatContext;
+        formatContext: formatting.FormatContext;
     }
+
+    export type TypeAnnotatable = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature;
 
     export class ChangeTracker {
         private readonly changes: Change[] = [];
@@ -212,7 +218,7 @@ namespace ts.textChanges {
         }
 
         /** Public for tests only. Other callers should use `ChangeTracker.with`. */
-        constructor(private readonly newLineCharacter: string, private readonly formatContext: ts.formatting.FormatContext) {}
+        constructor(public readonly newLineCharacter: string, private readonly formatContext: formatting.FormatContext) {}
 
         public deleteRange(sourceFile: SourceFile, range: TextRange) {
             this.changes.push({ kind: ChangeKind.Remove, sourceFile, range });
@@ -321,6 +327,10 @@ namespace ts.textChanges {
             return this;
         }
 
+        private insertNodesAt(sourceFile: SourceFile, pos: number, newNodes: ReadonlyArray<Node>, options: InsertNodeOptions = {}): void {
+            this.changes.push({ kind: ChangeKind.ReplaceWithMultipleNodes, sourceFile, options, nodes: newNodes, range: { pos, end: pos } });
+        }
+
         public insertNodeAtTopOfFile(sourceFile: SourceFile, newNode: Statement, blankLineBetween: boolean): void {
             const pos = getInsertionPositionAtSourceFileTop(sourceFile);
             this.insertNodeAt(sourceFile, pos, newNode, {
@@ -339,6 +349,21 @@ namespace ts.textChanges {
             this.replaceRange(sourceFile, { pos, end: pos }, createToken(modifier), { suffix: " " });
         }
 
+        /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
+        public insertTypeAnnotation(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): void {
+            const end = (isFunctionLike(node)
+                // If no `)`, is an arrow function `x => x`, so use the end of the first parameter
+                ? findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile) || first(node.parameters)
+                : node.kind !== SyntaxKind.VariableDeclaration && node.questionToken ? node.questionToken : node.name).end;
+            this.insertNodeAt(sourceFile, end, type, { prefix: ": " });
+        }
+
+        public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: ReadonlyArray<TypeParameterDeclaration>): void {
+            // If no `(`, is an arrow function `x => x`, so use the pos of the first parameter
+            const start = (findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile) || first(node.parameters)).getStart(sourceFile);
+            this.insertNodesAt(sourceFile, start, typeParameters, { prefix: "<", suffix: ">" });
+        }
+
         private getOptionsForInsertNodeBefore(before: Node, doubleNewlines: boolean): ChangeNodeOptions {
             if (isStatement(before) || isClassElement(before)) {
                 return { suffix: doubleNewlines ? this.newLineCharacter + this.newLineCharacter : this.newLineCharacter };
@@ -346,7 +371,10 @@ namespace ts.textChanges {
             else if (isVariableDeclaration(before)) { // insert `x = 1, ` into `const x = 1, y = 2;
                 return { suffix: ", " };
             }
-            throw Debug.failBadSyntaxKind(before); // We haven't handled this kind of node yet -- add it
+            else if (isParameter(before)) {
+                return {};
+            }
+            return Debug.failBadSyntaxKind(before); // We haven't handled this kind of node yet -- add it
         }
 
         public insertNodeAtConstructorStart(sourceFile: SourceFile, ctr: ConstructorDeclaration, newStatement: Statement): void {
@@ -430,7 +458,10 @@ namespace ts.textChanges {
             else if (isVariableDeclaration(node)) {
                 return { prefix: ", " };
             }
-            throw Debug.failBadSyntaxKind(node); // We haven't handled this kind of node yet -- add it
+            else if (isParameter(node)) {
+                return {};
+            }
+            return Debug.failBadSyntaxKind(node); // We haven't handled this kind of node yet -- add it
         }
 
         /**
@@ -628,7 +659,7 @@ namespace ts.textChanges {
                 ? change.nodes.map(n => removeSuffix(format(n), newLineCharacter)).join(newLineCharacter)
                 : format(change.node);
             // strip initial indentation (spaces or tabs) if text will be inserted in the middle of the line
-            const noIndent = (options.indentation !== undefined || getLineStartPositionForPosition(pos, sourceFile) === pos) ? text : text.replace(/^\s+/, "");
+            const noIndent = (options.preserveLeadingWhitespace || options.indentation !== undefined || getLineStartPositionForPosition(pos, sourceFile) === pos) ? text : text.replace(/^\s+/, "");
             return (options.prefix || "") + noIndent + (options.suffix || "");
         }
 

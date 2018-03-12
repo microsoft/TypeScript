@@ -69,7 +69,7 @@ namespace ts.Completions {
             case CompletionDataKind.JsDocParameterName:
                 return jsdocCompletionInfo(JsDoc.getJSDocParameterNameCompletions(completionData.tag));
             default:
-                throw Debug.assertNever(completionData);
+                return Debug.assertNever(completionData);
         }
     }
 
@@ -670,11 +670,11 @@ namespace ts.Completions {
                 return getContextualTypeFromParent(currentToken as Identifier, checker);
             case SyntaxKind.EqualsToken:
                 switch (parent.kind) {
-                    case ts.SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.VariableDeclaration:
                         return checker.getContextualType((parent as VariableDeclaration).initializer);
-                    case ts.SyntaxKind.BinaryExpression:
+                    case SyntaxKind.BinaryExpression:
                         return checker.getTypeAtLocation((parent as BinaryExpression).left);
-                    case ts.SyntaxKind.JsxAttribute:
+                    case SyntaxKind.JsxAttribute:
                         return checker.getContextualTypeForJsxAttribute(parent as JsxAttribute);
                     default:
                         return undefined;
@@ -697,25 +697,25 @@ namespace ts.Completions {
         }
     }
 
-    function getContextualTypeFromParent(node: ts.Expression, checker: ts.TypeChecker): Type | undefined {
+    function getContextualTypeFromParent(node: Expression, checker: TypeChecker): Type | undefined {
         const { parent } = node;
         switch (parent.kind) {
-            case ts.SyntaxKind.NewExpression:
-                return checker.getContextualType(parent as ts.NewExpression);
-            case ts.SyntaxKind.BinaryExpression: {
-                const { left, operatorToken, right } = parent as ts.BinaryExpression;
+            case SyntaxKind.NewExpression:
+                return checker.getContextualType(parent as NewExpression);
+            case SyntaxKind.BinaryExpression: {
+                const { left, operatorToken, right } = parent as BinaryExpression;
                 return isEqualityOperatorKind(operatorToken.kind)
                     ? checker.getTypeAtLocation(node === right ? left : right)
                     : checker.getContextualType(node);
             }
-            case ts.SyntaxKind.CaseClause:
-                return (parent as ts.CaseClause).expression === node ? getSwitchedType(parent as ts.CaseClause, checker) : undefined;
+            case SyntaxKind.CaseClause:
+                return (parent as CaseClause).expression === node ? getSwitchedType(parent as CaseClause, checker) : undefined;
             default:
                 return checker.getContextualType(node);
         }
     }
 
-    function getSwitchedType(caseClause: ts.CaseClause, checker: ts.TypeChecker): ts.Type {
+    function getSwitchedType(caseClause: CaseClause, checker: TypeChecker): Type {
         return checker.getTypeAtLocation(caseClause.parent.parent.expression);
     }
 
@@ -940,7 +940,7 @@ namespace ts.Completions {
             getTypeScriptMemberSymbols();
         }
         else if (isRightOfOpenTag) {
-            const tagSymbols = Debug.assertEachDefined(typeChecker.getJsxIntrinsicTagNames(), "getJsxIntrinsicTagNames() should all be defined");
+            const tagSymbols = Debug.assertEachDefined(typeChecker.getJsxIntrinsicTagNamesAt(location), "getJsxIntrinsicTagNames() should all be defined");
             if (tryGetGlobalSymbols()) {
                 symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & (SymbolFlags.Value | SymbolFlags.Alias))));
             }
@@ -991,6 +991,7 @@ namespace ts.Completions {
             // Since this is qualified name check its a type node location
             const isTypeLocation = insideJsDocTagTypeExpression || isPartOfTypeNode(node.parent);
             const isRhsOfImportDeclaration = isInRightSideOfInternalImportEqualsDeclaration(node);
+            const allowTypeOrValue = isRhsOfImportDeclaration || (!isTypeLocation && isPossiblyTypeArgumentPosition(contextToken, sourceFile));
             if (isEntityName(node)) {
                 let symbol = typeChecker.getSymbolAtLocation(node);
                 if (symbol) {
@@ -1001,7 +1002,7 @@ namespace ts.Completions {
                         const exportedSymbols = Debug.assertEachDefined(typeChecker.getExportsOfModule(symbol), "getExportsOfModule() should all be defined");
                         const isValidValueAccess = (symbol: Symbol) => typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name);
                         const isValidTypeAccess = (symbol: Symbol) => symbolCanBeReferencedAtTypeLocation(symbol);
-                        const isValidAccess = isRhsOfImportDeclaration ?
+                        const isValidAccess = allowTypeOrValue ?
                             // Any kind is allowed when dotting off namespace in internal import equals declaration
                             (symbol: Symbol) => isValidTypeAccess(symbol) || isValidValueAccess(symbol) :
                             isTypeLocation ? isValidTypeAccess : isValidValueAccess;
@@ -1170,8 +1171,9 @@ namespace ts.Completions {
         }
 
         function filterGlobalCompletion(symbols: Symbol[]): void {
-            const isTypeCompletion = insideJsDocTagTypeExpression || !isContextTokenValueLocation(contextToken) && (isPartOfTypeNode(location) || isContextTokenTypeLocation(contextToken));
-            if (isTypeCompletion) keywordFilters = KeywordCompletionFilters.TypeKeywords;
+            const isTypeOnlyCompletion = insideJsDocTagTypeExpression || !isContextTokenValueLocation(contextToken) && (isPartOfTypeNode(location) || isContextTokenTypeLocation(contextToken));
+            const allowTypes = isTypeOnlyCompletion || !isContextTokenValueLocation(contextToken) && isPossiblyTypeArgumentPosition(contextToken, sourceFile);
+            if (isTypeOnlyCompletion) keywordFilters = KeywordCompletionFilters.TypeKeywords;
 
             filterMutate(symbols, symbol => {
                 if (!isSourceFile(location)) {
@@ -1187,9 +1189,12 @@ namespace ts.Completions {
                         return !!(symbol.flags & SymbolFlags.Namespace);
                     }
 
-                    if (isTypeCompletion) {
+                    if (allowTypes) {
                         // Its a type, but you can reach it by namespace.type as well
-                        return symbolCanBeReferencedAtTypeLocation(symbol);
+                        const symbolAllowedAsType = symbolCanBeReferencedAtTypeLocation(symbol);
+                        if (symbolAllowedAsType || isTypeOnlyCompletion) {
+                            return symbolAllowedAsType;
+                        }
                     }
                 }
 
@@ -1201,7 +1206,7 @@ namespace ts.Completions {
         function isContextTokenValueLocation(contextToken: Node) {
             return contextToken &&
                 contextToken.kind === SyntaxKind.TypeOfKeyword &&
-                contextToken.parent.kind === SyntaxKind.TypeQuery;
+                (contextToken.parent.kind === SyntaxKind.TypeQuery || isTypeOfExpression(contextToken.parent));
         }
 
         function isContextTokenTypeLocation(contextToken: Node): boolean {
@@ -1450,7 +1455,7 @@ namespace ts.Completions {
                 isNewIdentifierLocation = false;
 
                 const rootDeclaration = getRootDeclaration(objectLikeContainer.parent);
-                if (!isVariableLike(rootDeclaration)) throw Debug.fail("Root declaration is not variable-like.");
+                if (!isVariableLike(rootDeclaration)) return Debug.fail("Root declaration is not variable-like.");
 
                 // We don't want to complete using the type acquired by the shape
                 // of the binding pattern; we are only interested in types acquired
@@ -2137,7 +2142,7 @@ namespace ts.Completions {
 
     // A cache of completion entries for keywords, these do not change between sessions
     const _keywordCompletions: ReadonlyArray<CompletionEntry>[] = [];
-    const allKeywordsCompletions: () => ReadonlyArray<CompletionEntry> = ts.memoize(() => {
+    const allKeywordsCompletions: () => ReadonlyArray<CompletionEntry> = memoize(() => {
         const res: CompletionEntry[] = [];
         for (let i = SyntaxKind.FirstKeyword; i <= SyntaxKind.LastKeyword; i++) {
             res.push({
@@ -2221,12 +2226,12 @@ namespace ts.Completions {
         return true;
     }
 
-    function isEqualityOperatorKind(kind: ts.SyntaxKind): kind is EqualityOperator {
+    function isEqualityOperatorKind(kind: SyntaxKind): kind is EqualityOperator {
         switch (kind) {
-            case ts.SyntaxKind.EqualsEqualsEqualsToken:
-            case ts.SyntaxKind.EqualsEqualsToken:
-            case ts.SyntaxKind.ExclamationEqualsEqualsToken:
-            case ts.SyntaxKind.ExclamationEqualsToken:
+            case SyntaxKind.EqualsEqualsEqualsToken:
+            case SyntaxKind.EqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsToken:
                 return true;
             default:
                 return false;

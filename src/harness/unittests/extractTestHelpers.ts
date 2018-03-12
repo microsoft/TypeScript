@@ -67,12 +67,12 @@ namespace ts {
     }
 
     export const newLineCharacter = "\n";
-    export const testFormatOptions: ts.FormatCodeSettings = {
+    export const testFormatOptions: FormatCodeSettings = {
         indentSize: 4,
         tabSize: 4,
         newLineCharacter,
         convertTabsToSpaces: true,
-        indentStyle: ts.IndentStyle.Smart,
+        indentStyle: IndentStyle.Smart,
         insertSpaceAfterConstructor: false,
         insertSpaceAfterCommaDelimiter: true,
         insertSpaceAfterSemicolonInForStatements: true,

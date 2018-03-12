@@ -9,16 +9,13 @@
 
 // @Filename: a.ts
 // @emitThisFile: true
-////function foo() { return 30; }/*2*/
+////function [|foo|]() { return 30; }/*2*/
 
 goTo.marker("1");
 verify.getSemanticDiagnostics([]);
 goTo.marker("2");
 verify.getSemanticDiagnostics([{
     message: "Duplicate function implementation.",
-    start: 9,
-    length: 3,
-    category: "error",
     code: 2393
 }]);
 verify.verifyGetEmitOutputContentsForCurrentFile([
@@ -27,9 +24,6 @@ verify.verifyGetEmitOutputContentsForCurrentFile([
 goTo.marker("2");
 verify.getSemanticDiagnostics([{
     message: "Duplicate function implementation.",
-    start: 9,
-    length: 3,
-    category: "error",
     code: 2393
 }]);
 goTo.marker("1");

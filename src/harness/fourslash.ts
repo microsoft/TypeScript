@@ -417,7 +417,7 @@ namespace FourSlash {
             this.goToPosition(marker.position);
         }
 
-        public goToEachMarker(markers: ReadonlyArray<Marker>, action: (marker: FourSlash.Marker, index: number) => void) {
+        public goToEachMarker(markers: ReadonlyArray<Marker>, action: (marker: Marker, index: number) => void) {
             assert(markers.length);
             for (let i = 0; i < markers.length; i++) {
                 this.goToMarker(markers[i]);
@@ -434,7 +434,7 @@ namespace FourSlash {
             }
         }
 
-        private markerName(m: Marker): string {
+        public markerName(m: Marker): string {
             return ts.forEachEntry(this.testData.markerPositions, (marker, name) => {
                 if (marker === m) {
                     return name;
@@ -504,9 +504,12 @@ namespace FourSlash {
             return "\nMarker: " + this.lastKnownMarker + "\nChecking: " + msg + "\n\n";
         }
 
-        private getDiagnostics(fileName: string): ts.Diagnostic[] {
-            return ts.concatenate(this.languageService.getSyntacticDiagnostics(fileName),
-                this.languageService.getSemanticDiagnostics(fileName));
+        private getDiagnostics(fileName: string, includeSuggestions = false): ts.Diagnostic[] {
+            return [
+                ...this.languageService.getSyntacticDiagnostics(fileName),
+                ...this.languageService.getSemanticDiagnostics(fileName),
+                ...(includeSuggestions ? this.languageService.getSuggestionDiagnostics(fileName) : ts.emptyArray),
+            ];
         }
 
         private getAllDiagnostics(): ts.Diagnostic[] {
@@ -579,8 +582,9 @@ namespace FourSlash {
 
         public verifyNoErrors() {
             ts.forEachKey(this.inputFiles, fileName => {
-                if (!ts.isAnySupportedFileExtension(fileName)) return;
-                const errors = this.getDiagnostics(fileName);
+                if (!ts.isAnySupportedFileExtension(fileName)
+                    || !this.getProgram().getCompilerOptions().allowJs && !ts.extensionIsTypeScript(ts.extensionFromPath(fileName))) return;
+                const errors = this.getDiagnostics(fileName).filter(e => e.category !== ts.DiagnosticCategory.Suggestion);
                 if (errors.length) {
                     this.printErrorLog(/*expectErrors*/ false, errors);
                     const error = errors[0];
@@ -843,7 +847,7 @@ namespace FourSlash {
             const actual = actualCompletions.entries;
 
             if (actual.length !== expected.length) {
-                this.raiseError(`Expected ${expected.length} completions, got ${actual.map(a => a.name)}.`);
+                this.raiseError(`Expected ${expected.length} completions, got ${actual.length} (${actual.map(a => a.name)}).`);
             }
 
             ts.zipWith(actual, expected, (completion, expectedCompletion, index) => {
@@ -1235,18 +1239,23 @@ Actual: ${stringify(fullActual)}`);
             return this.languageService.findReferences(this.activeFile.fileName, this.currentCaretPosition);
         }
 
-        public getSyntacticDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>) {
+        public getSyntacticDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>) {
             const diagnostics = this.languageService.getSyntacticDiagnostics(this.activeFile.fileName);
-            this.testDiagnostics(expected, diagnostics);
+            this.testDiagnostics(expected, diagnostics, "error");
         }
 
-        public getSemanticDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>) {
+        public getSemanticDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>) {
             const diagnostics = this.languageService.getSemanticDiagnostics(this.activeFile.fileName);
-            this.testDiagnostics(expected, diagnostics);
+            this.testDiagnostics(expected, diagnostics, "error");
         }
 
-        private testDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>, diagnostics: ReadonlyArray<ts.Diagnostic>) {
-            assert.deepEqual(ts.realizeDiagnostics(diagnostics, ts.newLineCharacter), expected);
+        public getSuggestionDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>): void {
+            this.testDiagnostics(expected, this.languageService.getSuggestionDiagnostics(this.activeFile.fileName), "suggestion");
+        }
+
+        private testDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>, diagnostics: ReadonlyArray<ts.Diagnostic>, category: string) {
+            assert.deepEqual(ts.realizeDiagnostics(diagnostics, ts.newLineCharacter), expected.map<ts.RealizedDiagnostic>(e => (
+                { message: e.message, category, code: e.code, ...ts.createTextSpanFromRange(e.range || this.getRanges()[0]) })));
         }
 
         public verifyQuickInfoAt(markerName: string, expectedText: string, expectedDocumentation?: string) {
@@ -2347,7 +2356,7 @@ Actual: ${stringify(fullActual)}`);
             this.verifyClassifications(expected, actual, this.activeFile.content);
         }
 
-        public verifyOutliningSpans(spans: FourSlash.Range[]) {
+        public verifyOutliningSpans(spans: Range[]) {
             const actual = this.languageService.getOutliningSpans(this.activeFile.fileName);
 
             if (actual.length !== spans.length) {
@@ -2513,7 +2522,7 @@ Actual: ${stringify(fullActual)}`);
          * @param fileName Path to file where error should be retrieved from.
          */
         private getCodeFixes(fileName: string, errorCode?: number, options: ts.Options = ts.defaultOptions): ts.CodeFixAction[] {
-            const diagnosticsForCodeFix = this.getDiagnostics(fileName).map(diagnostic => ({
+            const diagnosticsForCodeFix = this.getDiagnostics(fileName, /*includeSuggestions*/ true).map(diagnostic => ({
                 start: diagnostic.start,
                 length: diagnostic.length,
                 code: diagnostic.code
@@ -2913,6 +2922,10 @@ Actual: ${stringify(fullActual)}`);
             if (!codeFixes.length) {
                 this.raiseError(`verifyCodeFixAvailable failed - expected code fixes but none found.`);
             }
+            codeFixes.forEach(fix => fix.changes.forEach(change => {
+                assert.isObject(change, `Invalid change in code fix: ${JSON.stringify(fix)}`);
+                change.textChanges.forEach(textChange => assert.isObject(textChange, `Invalid textChange in codeFix: ${JSON.stringify(fix)}`));
+            }));
             if (info) {
                 assert.equal(info.length, codeFixes.length);
                 ts.zipWith(codeFixes, info, (fix, info) => {
@@ -3281,7 +3294,7 @@ ${code}
             const format = new FourSlashInterface.Format(state);
             const cancellation = new FourSlashInterface.Cancellation(state);
             const f = eval(wrappedCode);
-            f(test, goTo, verify, edit, debug, format, cancellation, FourSlashInterface.Classification, FourSlash.verifyOperationIsCancelled);
+            f(test, goTo, verify, edit, debug, format, cancellation, FourSlashInterface.Classification, verifyOperationIsCancelled);
         }
         catch (err) {
             throw err;
@@ -3319,7 +3332,7 @@ ${code}
         const ranges: Range[] = [];
 
         // Stuff related to the subfile we're parsing
-        let currentFileContent: string = undefined;
+        let currentFileContent: string;
         let currentFileName = fileName;
         let currentFileSymlinks: string[] | undefined;
         let currentFileOptions: { [s: string]: string } = {};
@@ -3454,7 +3467,7 @@ ${code}
     }
 
     function recordObjectMarker(fileName: string, location: LocationInformation, text: string, markerMap: ts.Map<Marker>, markers: Marker[]): Marker {
-        let markerValue: any = undefined;
+        let markerValue: any;
         try {
             // Attempt to parse the marker value as JSON
             markerValue = JSON.parse("{ " + text + " }");
@@ -3513,7 +3526,7 @@ ${code}
         let output = "";
 
         /// The current marker (or maybe multi-line comment?) we're parsing, possibly
-        let openMarker: LocationInformation = undefined;
+        let openMarker: LocationInformation;
 
         /// A stack of the open range markers that are still unclosed
         const openRanges: RangeLocationInformation[] = [];
@@ -3754,6 +3767,10 @@ namespace FourSlashInterface {
             return this.state.getMarkerByName(name);
         }
 
+        public markerName(m: FourSlash.Marker) {
+            return this.state.markerName(m);
+        }
+
         public ranges(): FourSlash.Range[] {
             return this.state.getRanges();
         }
@@ -3795,6 +3812,7 @@ namespace FourSlashInterface {
             const markers = typeof a === "function" ? this.state.getMarkers() : a.map(m => this.state.getMarkerByName(m));
             this.state.goToEachMarker(markers, typeof a === "function" ? a : b);
         }
+
 
         public rangeStart(range: FourSlash.Range) {
             this.state.goToRangeStart(range);
@@ -3954,7 +3972,7 @@ namespace FourSlashInterface {
             this.state.verifySpanOfEnclosingComment(this.negative, onlyMultiLineDiverges);
         }
 
-        public codeFix(options: FourSlashInterface.VerifyCodeFixOptions) {
+        public codeFix(options: VerifyCodeFixOptions) {
             this.state.verifyCodeFix(options);
         }
 
@@ -4326,6 +4344,10 @@ namespace FourSlashInterface {
             this.state.getSemanticDiagnostics(expected);
         }
 
+        public getSuggestionDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>) {
+            this.state.getSuggestionDiagnostics(expected);
+        }
+
         public ProjectInfo(expected: string[]) {
             this.state.verifyProjectInfo(expected);
         }
@@ -4664,5 +4686,11 @@ namespace FourSlashInterface {
         source?: string;
         description: string;
         options?: ts.Options;
+    }
+
+    export interface Diagnostic {
+        message: string;
+        range?: FourSlash.Range;
+        code: number;
     }
 }

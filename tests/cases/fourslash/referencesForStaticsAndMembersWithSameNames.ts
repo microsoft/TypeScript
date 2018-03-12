@@ -34,10 +34,7 @@ verify.singleReferenceGroup("(method) MixedStaticsClassTest.Foo.foo(): void", [f
 verify.singleReferenceGroup("(method) MixedStaticsClassTest.Foo.foo(): void", [fooStaticFoo, staticFoo]);
 
 // References to a member property with the same name as a static.
-//verify.singleReferenceGroup("(property) MixedStaticsClassTest.Foo.bar: Foo", [fooBar, xBar]);
-verify.referenceGroups(fooBar, [{ definition: "(property) MixedStaticsClassTest.Foo.bar: Foo", ranges: [fooBar, xBar] }]);
-verify.referenceGroups(xBar, [{ definition: "(property) MixedStaticsClassTest.Foo.bar: MixedStaticsClassTest.Foo", ranges: [fooBar, xBar] }]);
+verify.singleReferenceGroup("(property) MixedStaticsClassTest.Foo.bar: Foo", [fooBar, xBar]);
 
 // References to a static property with the same name as a member.
-verify.referenceGroups(fooStaticBar, [{ definition: "(property) MixedStaticsClassTest.Foo.bar: Foo", ranges: [fooStaticBar, staticBar] }]);
-verify.referenceGroups(staticBar, [{ definition: "(property) MixedStaticsClassTest.Foo.bar: MixedStaticsClassTest.Foo", ranges: [fooStaticBar, staticBar] }]);
+verify.singleReferenceGroup("(property) MixedStaticsClassTest.Foo.bar: Foo", [fooStaticBar, staticBar]);

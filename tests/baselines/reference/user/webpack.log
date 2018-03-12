@@ -1,0 +1,1215 @@
+Exit Code: 1
+Standard output:
+node_modules/webpack/bin/webpack.js(12,10): error TS2307: Cannot find module 'webpack-cli'.
+node_modules/webpack/buildin/amd-options.js(2,18): error TS2304: Cannot find name '__webpack_amd_options__'.
+node_modules/webpack/hot/dev-server.js(6,12): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
+node_modules/webpack/hot/dev-server.js(9,27): error TS2304: Cannot find name '__webpack_hash__'.
+node_modules/webpack/hot/dev-server.js(13,10): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
+node_modules/webpack/hot/dev-server.js(37,25): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
+node_modules/webpack/hot/dev-server.js(53,29): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
+node_modules/webpack/hot/log-apply-result.js(28,9): error TS2339: Property 'groupCollapsed' does not exist on type '(level: any, msg: any) => void'.
+node_modules/webpack/hot/log-apply-result.js(30,9): error TS2339: Property 'groupEnd' does not exist on type '(level: any, msg: any) => void'.
+node_modules/webpack/hot/log.js(21,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+node_modules/webpack/hot/only-dev-server.js(6,12): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
+node_modules/webpack/hot/only-dev-server.js(9,27): error TS2304: Cannot find name '__webpack_hash__'.
+node_modules/webpack/hot/only-dev-server.js(13,10): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
+node_modules/webpack/hot/only-dev-server.js(25,19): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
+node_modules/webpack/hot/only-dev-server.js(69,25): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
+node_modules/webpack/hot/only-dev-server.js(88,24): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
+node_modules/webpack/hot/poll.js(6,12): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
+node_modules/webpack/hot/poll.js(7,25): error TS2304: Cannot find name '__resourceQuery'.
+node_modules/webpack/hot/poll.js(11,14): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
+node_modules/webpack/hot/poll.js(12,11): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
+node_modules/webpack/hot/poll.js(23,26): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
+node_modules/webpack/hot/signal.js(6,12): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
+node_modules/webpack/hot/signal.js(9,10): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
+node_modules/webpack/hot/signal.js(18,19): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
+node_modules/webpack/hot/signal.js(37,25): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
+node_modules/webpack/hot/signal.js(48,13): error TS2304: Cannot find name '__resourceQuery'.
+node_modules/webpack/hot/signal.js(49,14): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
+node_modules/webpack/hot/signal.js(52,51): error TS2339: Property 'hot' does not exist on type 'NodeModule'.
+node_modules/webpack/lib/AsyncDependenciesBlock.js(18,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/AsyncDependenciesBlock.js(22,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/AsyncDependenciesBlock.js(30,5): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/BannerPlugin.js(13,24): error TS2307: Cannot find module '../schemas/plugins/BannerPlugin.json'.
+node_modules/webpack/lib/CachePlugin.js(48,51): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/Chunk.js(36,31): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/Chunk.js(63,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/Chunk.js(67,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/Chunk.js(71,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/Chunk.js(75,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/Chunk.js(80,28): error TS2495: Type 'SortableSet' is not an array type or a string type.
+node_modules/webpack/lib/Chunk.js(88,28): error TS2495: Type 'SortableSet' is not an array type or a string type.
+node_modules/webpack/lib/Chunk.js(95,20): error TS2339: Property 'size' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/Chunk.js(96,28): error TS2495: Type 'SortableSet' is not an array type or a string type.
+node_modules/webpack/lib/Chunk.js(107,22): error TS2339: Property 'has' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/Chunk.js(127,24): error TS2339: Property 'size' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/Chunk.js(130,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/Chunk.js(135,20): error TS2339: Property 'has' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/Chunk.js(141,21): error TS2339: Property 'has' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/Chunk.js(147,23): error TS2339: Property 'has' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/Chunk.js(151,23): error TS2339: Property 'size' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/Chunk.js(154,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/Chunk.js(161,21): error TS2339: Property 'size' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/Chunk.js(162,21): error TS2339: Property 'size' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/Chunk.js(178,24): error TS2339: Property 'has' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/Chunk.js(192,30): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/Chunk.js(195,28): error TS2495: Type 'SortableSet' is not an array type or a string type.
+node_modules/webpack/lib/Chunk.js(212,30): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/Chunk.js(237,28): error TS2495: Type 'SortableSet' is not an array type or a string type.
+node_modules/webpack/lib/Chunk.js(244,24): error TS2339: Property 'size' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/Chunk.js(249,26): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Chunk.js(251,19): error TS2495: Type 'SortableSet' is not an array type or a string type.
+node_modules/webpack/lib/Chunk.js(258,22): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/Chunk.js(306,23): error TS2339: Property 'has' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/Chunk.js(323,29): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/Chunk.js(324,21): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/Chunk.js(325,22): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/Chunk.js(384,21): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/Chunk.js(385,31): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/Chunk.js(403,25): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/Chunk.js(419,16): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/ChunkGroup.js(12,31): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/ChunkGroup.js(40,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/ChunkGroup.js(41,16): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/ChunkGroup.js(44,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/ChunkGroup.js(45,16): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/ChunkGroup.js(49,38): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/ChunkGroup.js(52,24): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/ChunkGroup.js(54,24): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/ChunkGroup.js(61,38): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/ChunkGroup.js(62,35): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/ChunkGroup.js(68,31): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/ChunkGroup.js(70,31): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/ChunkGroup.js(77,38): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/ChunkGroup.js(81,20): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/ChunkGroup.js(86,38): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/ChunkGroup.js(88,38): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/ChunkGroup.js(90,4): error TS2322: Type 'any' is not assignable to type 'never'.
+node_modules/webpack/lib/ChunkGroup.js(97,4): error TS2322: Type 'any' is not assignable to type 'never'.
+node_modules/webpack/lib/ChunkGroup.js(104,35): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/ChunkGroup.js(117,22): error TS2339: Property 'has' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/ChunkGroup.js(129,25): error TS2339: Property 'size' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/ChunkGroup.js(132,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/ChunkGroup.js(137,23): error TS2339: Property 'has' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/ChunkGroup.js(147,22): error TS2339: Property 'has' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/ChunkGroup.js(164,24): error TS2339: Property 'size' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/ChunkGroup.js(168,24): error TS2339: Property 'has' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/ChunkGroup.js(171,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/ChunkGroup.js(191,23): error TS2339: Property 'size' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/ChunkGroup.js(195,23): error TS2339: Property 'has' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/ChunkGroup.js(198,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/ChunkGroup.js(203,21): error TS2339: Property 'has' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/ChunkGroup.js(211,21): error TS2345: Argument of type '{ module: any; loc: any; request: any; }' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/ChunkGroup.js(220,14): error TS2339: Property 'containsModule' does not exist on type 'never'.
+node_modules/webpack/lib/ChunkGroup.js(227,34): error TS2495: Type 'SortableSet' is not an array type or a string type.
+node_modules/webpack/lib/ChunkGroup.js(232,29): error TS2495: Type 'SortableSet' is not an array type or a string type.
+node_modules/webpack/lib/ChunkGroup.js(250,28): error TS2495: Type 'SortableSet' is not an array type or a string type.
+node_modules/webpack/lib/ChunkGroup.js(256,23): error TS2495: Type 'SortableSet' is not an array type or a string type.
+node_modules/webpack/lib/ChunkGroup.js(262,10): error TS2339: Property 'removeGroup' does not exist on type 'never'.
+node_modules/webpack/lib/ChunkGroup.js(267,21): error TS2345: Argument of type '(a: any, b: any) => 1 | 0 | -1 | undefined' is not assignable to parameter of type '((a: never, b: never) => number) | undefined'.
+  Type '(a: any, b: any) => 1 | 0 | -1 | undefined' is not assignable to type '(a: never, b: never) => number'.
+    Type '1 | 0 | -1 | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+node_modules/webpack/lib/ChunkGroup.js(274,23): error TS2495: Type 'SortableSet' is not an array type or a string type.
+node_modules/webpack/lib/ChunkGroup.js(282,29): error TS2495: Type 'SortableSet' is not an array type or a string type.
+node_modules/webpack/lib/ChunkTemplate.js(13,3): error TS2346: Call target does not contain any signatures.
+node_modules/webpack/lib/CompatibilityPlugin.js(40,13): error TS2339: Property 'loc' does not exist on type 'ConstDependency'.
+node_modules/webpack/lib/Compilation.js(90,3): error TS2346: Call target does not contain any signatures.
+node_modules/webpack/lib/Compilation.js(231,26): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/Compilation.js(234,31): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/Compilation.js(235,26): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/Compilation.js(237,23): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/Compilation.js(247,34): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/Compilation.js(248,34): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/Compilation.js(254,31): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/Compilation.js(255,33): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/Compilation.js(274,21): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compilation.js(275,24): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compilation.js(288,23): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(289,60): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(290,64): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(303,4): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compilation.js(305,21): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(357,39): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(358,28): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(370,25): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(384,28): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/Compilation.js(398,48): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/Compilation.js(452,7): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+node_modules/webpack/lib/Compilation.js(453,17): error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
+node_modules/webpack/lib/Compilation.js(454,26): error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
+node_modules/webpack/lib/Compilation.js(463,6): error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
+node_modules/webpack/lib/Compilation.js(463,24): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(472,6): error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
+node_modules/webpack/lib/Compilation.js(472,26): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(476,23): error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
+node_modules/webpack/lib/Compilation.js(478,10): error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
+node_modules/webpack/lib/Compilation.js(485,19): error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
+node_modules/webpack/lib/Compilation.js(492,12): error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
+node_modules/webpack/lib/Compilation.js(531,32): error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
+node_modules/webpack/lib/Compilation.js(545,10): error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
+node_modules/webpack/lib/Compilation.js(558,13): error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
+node_modules/webpack/lib/Compilation.js(572,9): error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
+node_modules/webpack/lib/Compilation.js(578,15): error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
+node_modules/webpack/lib/Compilation.js(596,9): error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
+node_modules/webpack/lib/Compilation.js(627,23): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(731,34): error TS2345: Argument of type '{ [x: string]: any; name: any; request: any; module: null; }' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(736,23): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(746,52): error TS2345: Argument of type '{ [x: string]: any; name: any; request: any; module: null; }' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(821,11): error TS2339: Property 'unseal' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(840,38): error TS2339: Property 'module' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(841,36): error TS2339: Property 'name' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(845,56): error TS2339: Property 'request' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(848,26): error TS2345: Argument of type 'Entrypoint' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(982,26): error TS2345: Argument of type 'ModuleDependencyWarning' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(991,24): error TS2345: Argument of type 'ModuleDependencyError' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(1016,25): error TS2345: Argument of type 'ChunkGroup' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(1031,20): error TS2345: Argument of type 'Chunk' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(1039,9): error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+node_modules/webpack/lib/Compilation.js(1044,20): error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
+node_modules/webpack/lib/Compilation.js(1044,20): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/Compilation.js(1047,39): error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
+node_modules/webpack/lib/Compilation.js(1047,39): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/Compilation.js(1100,4): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/webpack/lib/Compilation.js(1105,21): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/Compilation.js(1156,33): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/Compilation.js(1157,37): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/Compilation.js(1161,32): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/Compilation.js(1182,7): error TS2345: Argument of type 'AsyncDependencyToInitialChunkError' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(1271,27): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/Compilation.js(1294,38): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/Compilation.js(1308,48): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/Compilation.js(1327,30): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/Compilation.js(1335,32): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/Compilation.js(1366,38): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(1444,23): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/Compilation.js(1446,21): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compilation.js(1454,16): error TS2339: Property 'id' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1455,25): error TS2339: Property 'id' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1481,16): error TS2339: Property 'id' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1482,39): error TS2339: Property 'id' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1483,18): error TS2339: Property 'id' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1489,23): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/Compilation.js(1493,21): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compilation.js(1506,30): error TS2339: Property 'id' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1536,14): error TS2339: Property 'id' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1537,37): error TS2339: Property 'id' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1538,16): error TS2339: Property 'id' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1540,15): error TS2339: Property 'ids' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1541,11): error TS2339: Property 'ids' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1541,24): error TS2339: Property 'id' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1551,25): error TS2339: Property 'sortItems' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1556,23): error TS2339: Property 'sortItems' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1562,15): error TS2339: Property 'sortItems' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1572,30): error TS2339: Property 'sortItems' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1577,23): error TS2339: Property 'sortItems' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1604,45): error TS2339: Property 'fileDependencies' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1605,48): error TS2339: Property 'contextDependencies' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1606,48): error TS2339: Property 'missingDependencies' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1616,15): error TS2339: Property 'buildInfo' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1617,47): error TS2339: Property 'buildInfo' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1619,15): error TS2339: Property 'buildInfo' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1622,13): error TS2339: Property 'buildInfo' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1628,18): error TS2339: Property 'missing' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1629,11): error TS2339: Property 'missing' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1630,11): error TS2339: Property 'missing' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1632,49): error TS2339: Property 'missing' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1651,56): error TS2339: Property 'hash' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1652,63): error TS2339: Property 'message' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1653,57): error TS2339: Property 'message' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1658,11): error TS2339: Property 'updateHash' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1659,11): error TS2339: Property 'hash' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1660,11): error TS2339: Property 'renderedHash' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1660,33): error TS2339: Property 'hash' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1670,21): error TS2339: Property 'hasRuntime' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1671,21): error TS2339: Property 'hasRuntime' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1680,10): error TS2339: Property 'updateHash' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1681,14): error TS2339: Property 'hasRuntime' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1687,10): error TS2339: Property 'hash' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1688,22): error TS2339: Property 'hash' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1689,10): error TS2339: Property 'renderedHash' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1689,31): error TS2339: Property 'hash' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1710,15): error TS2339: Property 'buildInfo' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1711,48): error TS2339: Property 'buildInfo' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1713,37): error TS2339: Property 'buildInfo' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1722,31): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/Compilation.js(1725,10): error TS2339: Property 'files' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1730,28): error TS2339: Property 'hasRuntime' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1747,7): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compilation.js(1748,7): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compilation.js(1750,16): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compilation.js(1765,8): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compilation.js(1777,12): error TS2339: Property 'files' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1782,6): error TS2345: Argument of type 'ChunkRenderError' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Compilation.js(1807,23): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/Compilation.js(1811,42): error TS2339: Property 'id' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1823,64): error TS2339: Property 'debugId' does not exist on type 'never'.
+node_modules/webpack/lib/Compilation.js(1828,15): error TS2339: Property 'checkConstraints' does not exist on type 'never'.
+node_modules/webpack/lib/Compiler.js(28,3): error TS2346: Call target does not contain any signatures.
+node_modules/webpack/lib/Compiler.js(82,29): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/Compiler.js(83,32): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/Compiler.js(135,29): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/Compiler.js(136,32): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/Compiler.js(148,11): error TS2339: Property 'startTime' does not exist on type 'Stats'.
+node_modules/webpack/lib/Compiler.js(149,11): error TS2339: Property 'endTime' does not exist on type 'Stats'.
+node_modules/webpack/lib/Compiler.js(164,12): error TS2339: Property 'startTime' does not exist on type 'Stats'.
+node_modules/webpack/lib/Compiler.js(165,12): error TS2339: Property 'endTime' does not exist on type 'Stats'.
+node_modules/webpack/lib/Compiler.js(181,12): error TS2339: Property 'startTime' does not exist on type 'Stats'.
+node_modules/webpack/lib/Compiler.js(182,12): error TS2339: Property 'endTime' does not exist on type 'Stats'.
+node_modules/webpack/lib/Compiler.js(215,26): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/Compiler.js(227,31): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compiler.js(228,4): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compiler.js(248,26): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compiler.js(264,7): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compiler.js(269,7): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compiler.js(270,8): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compiler.js(290,4): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compiler.js(296,16): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compiler.js(297,16): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compiler.js(300,33): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compiler.js(302,33): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compiler.js(305,4): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compiler.js(313,3): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compiler.js(324,3): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compiler.js(329,4): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Compiler.js(365,7): error TS2339: Property 'includes' does not exist on type 'string[]'.
+node_modules/webpack/lib/Compiler.js(433,32): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/webpack/lib/Compiler.js(445,33): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/ConstPlugin.js(40,27): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/ConstPlugin.js(90,15): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/ConstPlugin.js(111,13): error TS2339: Property 'loc' does not exist on type 'ConstDependency'.
+node_modules/webpack/lib/ConstPlugin.js(167,13): error TS2339: Property 'loc' does not exist on type 'ConstDependency'.
+node_modules/webpack/lib/ConstPlugin.js(181,14): error TS2339: Property 'loc' does not exist on type 'ConstDependency'.
+node_modules/webpack/lib/ConstPlugin.js(202,13): error TS2339: Property 'loc' does not exist on type 'ConstDependency'.
+node_modules/webpack/lib/ContextModule.js(35,25): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/ContextModule.js(43,35): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/ContextModule.js(67,2): error TS2416: Property 'identifier' in type 'ContextModule' is not assignable to the same property in base type 'Module'.
+  Type '() => null' is not assignable to type 'null'.
+node_modules/webpack/lib/ContextModule.js(67,2): error TS2425: Class 'Module' defines instance member property 'identifier', but extended class 'ContextModule' defines it as instance member function.
+node_modules/webpack/lib/ContextModule.js(70,4): error TS2322: Type 'string' is not assignable to type 'null'.
+node_modules/webpack/lib/ContextModule.js(71,26): error TS2322: Type 'string' is not assignable to type 'null'.
+node_modules/webpack/lib/ContextModule.js(72,32): error TS2322: Type 'string' is not assignable to type 'null'.
+node_modules/webpack/lib/ContextModule.js(73,27): error TS2322: Type 'string' is not assignable to type 'null'.
+node_modules/webpack/lib/ContextModule.js(74,28): error TS2322: Type 'string' is not assignable to type 'null'.
+node_modules/webpack/lib/ContextModule.js(75,29): error TS2322: Type 'string' is not assignable to type 'null'.
+node_modules/webpack/lib/ContextModule.js(76,29): error TS2322: Type 'string' is not assignable to type 'null'.
+node_modules/webpack/lib/ContextModule.js(78,4): error TS2322: Type 'string' is not assignable to type 'null'.
+node_modules/webpack/lib/ContextModule.js(79,42): error TS2322: Type 'string' is not assignable to type 'null'.
+node_modules/webpack/lib/ContextModule.js(84,2): error TS2416: Property 'readableIdentifier' in type 'ContextModule' is not assignable to the same property in base type 'Module'.
+  Type '(requestShortener: any) => any' is not assignable to type 'null'.
+node_modules/webpack/lib/ContextModule.js(84,2): error TS2425: Class 'Module' defines instance member property 'readableIdentifier', but extended class 'ContextModule' defines it as instance member function.
+node_modules/webpack/lib/ContextModule.js(127,16): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/ContextModule.js(130,2): error TS2416: Property 'build' in type 'ContextModule' is not assignable to the same property in base type 'Module'.
+  Type '(options: any, compilation: any, resolver: any, fs: any, callback: any) => void' is not assignable to type 'null'.
+node_modules/webpack/lib/ContextModule.js(130,2): error TS2425: Class 'Module' defines instance member property 'build', but extended class 'ContextModule' defines it as instance member function.
+node_modules/webpack/lib/ContextModule.js(581,12): error TS2339: Property 'dependencies' does not exist on type 'never'.
+node_modules/webpack/lib/ContextModule.js(606,12): error TS2339: Property 'useSourceMap' does not exist on type 'ContextModule'.
+node_modules/webpack/lib/ContextModule.js(612,2): error TS2416: Property 'source' in type 'ContextModule' is not assignable to the same property in base type 'Module'.
+  Type '(dependencyTemplates: any, runtimeTemplate: any) => any' is not assignable to type 'null'.
+node_modules/webpack/lib/ContextModule.js(612,2): error TS2425: Class 'Module' defines instance member property 'source', but extended class 'ContextModule' defines it as instance member function.
+node_modules/webpack/lib/ContextModule.js(618,2): error TS2416: Property 'size' in type 'ContextModule' is not assignable to the same property in base type 'Module'.
+  Type '() => any' is not assignable to type 'null'.
+node_modules/webpack/lib/ContextModule.js(618,2): error TS2425: Class 'Module' defines instance member property 'size', but extended class 'ContextModule' defines it as instance member function.
+node_modules/webpack/lib/ContextModuleFactory.js(20,3): error TS2346: Call target does not contain any signatures.
+node_modules/webpack/lib/ContextModuleFactory.js(45,11): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/ContextModuleFactory.js(131,15): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/DelegatedModule.js(33,2): error TS2416: Property 'identifier' in type 'DelegatedModule' is not assignable to the same property in base type 'Module'.
+  Type '() => string' is not assignable to type 'null'.
+node_modules/webpack/lib/DelegatedModule.js(33,2): error TS2425: Class 'Module' defines instance member property 'identifier', but extended class 'DelegatedModule' defines it as instance member function.
+node_modules/webpack/lib/DelegatedModule.js(39,2): error TS2416: Property 'readableIdentifier' in type 'DelegatedModule' is not assignable to the same property in base type 'Module'.
+  Type '() => string' is not assignable to type 'null'.
+node_modules/webpack/lib/DelegatedModule.js(39,2): error TS2425: Class 'Module' defines instance member property 'readableIdentifier', but extended class 'DelegatedModule' defines it as instance member function.
+node_modules/webpack/lib/DelegatedModule.js(47,2): error TS2416: Property 'build' in type 'DelegatedModule' is not assignable to the same property in base type 'Module'.
+  Type '(options: any, compilation: any, resolver: any, fs: any, callback: any) => void' is not assignable to type 'null'.
+node_modules/webpack/lib/DelegatedModule.js(47,2): error TS2425: Class 'Module' defines instance member property 'build', but extended class 'DelegatedModule' defines it as instance member function.
+node_modules/webpack/lib/DelegatedModule.js(49,27): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/DelegatedModule.js(58,2): error TS2416: Property 'source' in type 'DelegatedModule' is not assignable to the same property in base type 'Module'.
+  Type '(depTemplates: any, runtime: any) => any' is not assignable to type 'null'.
+node_modules/webpack/lib/DelegatedModule.js(58,2): error TS2425: Class 'Module' defines instance member property 'source', but extended class 'DelegatedModule' defines it as instance member function.
+node_modules/webpack/lib/DelegatedModule.js(60,28): error TS2339: Property 'module' does not exist on type 'never'.
+node_modules/webpack/lib/DelegatedModule.js(68,18): error TS2339: Property 'request' does not exist on type 'never'.
+node_modules/webpack/lib/DelegatedModule.js(83,12): error TS2339: Property 'useSourceMap' does not exist on type 'DelegatedModule'.
+node_modules/webpack/lib/DelegatedModule.js(90,2): error TS2416: Property 'size' in type 'DelegatedModule' is not assignable to the same property in base type 'Module'.
+  Type '() => number' is not assignable to type 'null'.
+node_modules/webpack/lib/DelegatedModule.js(90,2): error TS2425: Class 'Module' defines instance member property 'size', but extended class 'DelegatedModule' defines it as instance member function.
+node_modules/webpack/lib/DependenciesBlock.js(17,20): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/DependenciesBlock.js(23,10): error TS2339: Property 'name' does not exist on type 'never'.
+node_modules/webpack/lib/DependenciesBlock.js(23,29): error TS2339: Property 'expression' does not exist on type 'never'.
+node_modules/webpack/lib/DependenciesBlock.js(28,4): error TS2345: Argument of type 'DependenciesBlockVariable' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/DependenciesBlock.js(33,26): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/DependenciesBlock.js(37,41): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/DependenciesBlock.js(42,44): error TS2339: Property 'updateHash' does not exist on type 'never'.
+node_modules/webpack/lib/DependenciesBlock.js(43,42): error TS2339: Property 'updateHash' does not exist on type 'never'.
+node_modules/webpack/lib/DependenciesBlock.js(44,51): error TS2339: Property 'updateHash' does not exist on type 'never'.
+node_modules/webpack/lib/DependenciesBlock.js(48,44): error TS2339: Property 'disconnect' does not exist on type 'never'.
+node_modules/webpack/lib/DependenciesBlock.js(49,42): error TS2339: Property 'disconnect' does not exist on type 'never'.
+node_modules/webpack/lib/DependenciesBlock.js(50,51): error TS2339: Property 'disconnect' does not exist on type 'never'.
+node_modules/webpack/lib/DependenciesBlock.js(54,42): error TS2339: Property 'unseal' does not exist on type 'never'.
+node_modules/webpack/lib/DependenciesBlock.js(69,14): error TS2339: Property 'hasDependencies' does not exist on type 'never'.
+node_modules/webpack/lib/DependenciesBlock.js(72,17): error TS2339: Property 'hasDependencies' does not exist on type 'never'.
+node_modules/webpack/lib/DependenciesBlock.js(78,42): error TS2339: Property 'sortItems' does not exist on type 'never'.
+node_modules/webpack/lib/Dependency.js(43,31): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/DllEntryPlugin.js(39,11): error TS2339: Property 'loc' does not exist on type 'SingleEntryDependency'.
+node_modules/webpack/lib/DllModule.js(20,2): error TS2416: Property 'identifier' in type 'DllModule' is not assignable to the same property in base type 'Module'.
+  Type '() => string' is not assignable to type 'null'.
+node_modules/webpack/lib/DllModule.js(20,2): error TS2425: Class 'Module' defines instance member property 'identifier', but extended class 'DllModule' defines it as instance member function.
+node_modules/webpack/lib/DllModule.js(24,2): error TS2416: Property 'readableIdentifier' in type 'DllModule' is not assignable to the same property in base type 'Module'.
+  Type '() => string' is not assignable to type 'null'.
+node_modules/webpack/lib/DllModule.js(24,2): error TS2425: Class 'Module' defines instance member property 'readableIdentifier', but extended class 'DllModule' defines it as instance member function.
+node_modules/webpack/lib/DllModule.js(28,2): error TS2416: Property 'build' in type 'DllModule' is not assignable to the same property in base type 'Module'.
+  Type '(options: any, compilation: any, resolver: any, fs: any, callback: any) => any' is not assignable to type 'null'.
+node_modules/webpack/lib/DllModule.js(28,2): error TS2425: Class 'Module' defines instance member property 'build', but extended class 'DllModule' defines it as instance member function.
+node_modules/webpack/lib/DllModule.js(35,2): error TS2416: Property 'source' in type 'DllModule' is not assignable to the same property in base type 'Module'.
+  Type '() => any' is not assignable to type 'null'.
+node_modules/webpack/lib/DllModule.js(35,2): error TS2425: Class 'Module' defines instance member property 'source', but extended class 'DllModule' defines it as instance member function.
+node_modules/webpack/lib/DllModule.js(43,2): error TS2416: Property 'size' in type 'DllModule' is not assignable to the same property in base type 'Module'.
+  Type '() => number' is not assignable to type 'null'.
+node_modules/webpack/lib/DllModule.js(43,2): error TS2425: Class 'Module' defines instance member property 'size', but extended class 'DllModule' defines it as instance member function.
+node_modules/webpack/lib/DllModuleFactory.js(12,3): error TS2346: Call target does not contain any signatures.
+node_modules/webpack/lib/DllPlugin.js(12,24): error TS2307: Cannot find module '../schemas/plugins/DllPlugin.json'.
+node_modules/webpack/lib/DllReferencePlugin.js(14,24): error TS2307: Cannot find module '../schemas/plugins/DllReferencePlugin.json'.
+node_modules/webpack/lib/DynamicEntryPlugin.js(41,17): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/webpack/lib/DynamicEntryPlugin.js(49,5): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/webpack/lib/DynamicEntryPlugin.js(53,7): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/webpack/lib/Entrypoint.js(20,21): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/Entrypoint.js(23,29): error TS2339: Property 'files' does not exist on type 'never'.
+node_modules/webpack/lib/Entrypoint.js(28,16): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/EvalDevToolModuleTemplatePlugin.js(9,19): error TS2304: Cannot find name 'WeakMap'.
+node_modules/webpack/lib/EvalSourceMapDevToolModuleTemplatePlugin.js(57,31): error TS2339: Property 'sources' does not exist on type '{}'.
+node_modules/webpack/lib/EvalSourceMapDevToolModuleTemplatePlugin.js(78,15): error TS2339: Property 'sources' does not exist on type '{}'.
+node_modules/webpack/lib/EvalSourceMapDevToolModuleTemplatePlugin.js(79,15): error TS2339: Property 'sourceRoot' does not exist on type '{}'.
+node_modules/webpack/lib/EvalSourceMapDevToolModuleTemplatePlugin.js(80,15): error TS2339: Property 'file' does not exist on type '{}'.
+node_modules/webpack/lib/ExternalModule.js(31,2): error TS2416: Property 'identifier' in type 'ExternalModule' is not assignable to the same property in base type 'Module'.
+  Type '() => string' is not assignable to type 'null'.
+node_modules/webpack/lib/ExternalModule.js(31,2): error TS2425: Class 'Module' defines instance member property 'identifier', but extended class 'ExternalModule' defines it as instance member function.
+node_modules/webpack/lib/ExternalModule.js(35,2): error TS2416: Property 'readableIdentifier' in type 'ExternalModule' is not assignable to the same property in base type 'Module'.
+  Type '() => string' is not assignable to type 'null'.
+node_modules/webpack/lib/ExternalModule.js(35,2): error TS2425: Class 'Module' defines instance member property 'readableIdentifier', but extended class 'ExternalModule' defines it as instance member function.
+node_modules/webpack/lib/ExternalModule.js(43,2): error TS2416: Property 'build' in type 'ExternalModule' is not assignable to the same property in base type 'Module'.
+  Type '(options: any, compilation: any, resolver: any, fs: any, callback: any) => void' is not assignable to type 'null'.
+node_modules/webpack/lib/ExternalModule.js(43,2): error TS2425: Class 'Module' defines instance member property 'build', but extended class 'ExternalModule' defines it as instance member function.
+node_modules/webpack/lib/ExternalModule.js(136,12): error TS2339: Property 'useSourceMap' does not exist on type 'ExternalModule'.
+node_modules/webpack/lib/ExternalModule.js(143,2): error TS2416: Property 'source' in type 'ExternalModule' is not assignable to the same property in base type 'Module'.
+  Type '(dependencyTemplates: any, runtime: any) => any' is not assignable to type 'null'.
+node_modules/webpack/lib/ExternalModule.js(143,2): error TS2425: Class 'Module' defines instance member property 'source', but extended class 'ExternalModule' defines it as instance member function.
+node_modules/webpack/lib/ExternalModule.js(147,2): error TS2416: Property 'size' in type 'ExternalModule' is not assignable to the same property in base type 'Module'.
+  Type '() => number' is not assignable to type 'null'.
+node_modules/webpack/lib/ExternalModule.js(147,2): error TS2425: Class 'Module' defines instance member property 'size', but extended class 'ExternalModule' defines it as instance member function.
+node_modules/webpack/lib/FlagDependencyExportsPlugin.js(28,32): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/FlagDependencyExportsPlugin.js(79,50): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/FlagDependencyExportsPlugin.js(113,16): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/FlagDependencyExportsPlugin.js(114,16): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/FlagDependencyExportsPlugin.js(120,51): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/FlagDependencyExportsPlugin.js(128,38): error TS2304: Cannot find name 'WeakMap'.
+node_modules/webpack/lib/HashedModuleIdsPlugin.js(9,24): error TS2307: Cannot find module '../schemas/plugins/HashedModuleIdsPlugin.json'.
+node_modules/webpack/lib/HashedModuleIdsPlugin.js(15,25): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/HashedModuleIdsPlugin.js(29,24): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(8,23): error TS2304: Cannot find name '$hash$'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(9,26): error TS2304: Cannot find name '$requestTimeout$'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(17,12): error TS2304: Cannot find name 'installedModules'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(18,19): error TS2304: Cannot find name '$require$'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(21,9): error TS2304: Cannot find name 'installedModules'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(22,11): error TS2304: Cannot find name 'installedModules'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(23,7): error TS2304: Cannot find name 'installedModules'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(38,11): error TS2304: Cannot find name '$require$'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(45,13): error TS2304: Cannot find name '$require$'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(48,6): error TS2304: Cannot find name '$require$'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(52,20): error TS2304: Cannot find name '$require$'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(54,42): error TS2304: Cannot find name '$require$'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(63,11): error TS2304: Cannot find name '$require$'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(112,31): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(115,31): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(118,44): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(174,10): error TS2304: Cannot find name 'hotDownloadManifest'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(185,22): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(196,26): error TS2304: Cannot find name 'chunkId'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(230,4): error TS2304: Cannot find name 'hotDownloadUpdateChunk'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(243,4): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(289,20): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(290,17): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(291,14): error TS2304: Cannot find name 'installedModules'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(309,19): error TS2304: Cannot find name 'installedModules'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(319,26): error TS2339: Property 'includes' does not exist on type 'any[]'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(378,16): error TS2339: Property 'chain' does not exist on type '{ [x: string]: any; type: string; chain: any[]; moduleId: any; parentId?: undefined; outdatedModu...'.
+  Property 'chain' does not exist on type '{ type: string; moduleId: string; }'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(379,52): error TS2339: Property 'chain' does not exist on type '{ [x: string]: any; type: string; chain: any[]; moduleId: any; parentId?: undefined; outdatedModu...'.
+  Property 'chain' does not exist on type '{ type: string; moduleId: string; }'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(385,8): error TS2322: Type 'Error' is not assignable to type 'boolean'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(394,8): error TS2322: Type 'Error' is not assignable to type 'boolean'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(398,17): error TS2339: Property 'parentId' does not exist on type '{ [x: string]: any; type: string; chain: any[]; moduleId: any; parentId?: undefined; outdatedModu...'.
+  Property 'parentId' does not exist on type '{ type: string; moduleId: string; }'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(405,8): error TS2322: Type 'Error' is not assignable to type 'boolean'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(422,13): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(426,42): error TS2339: Property 'outdatedModules' does not exist on type '{ [x: string]: any; type: string; chain: any[]; moduleId: any; parentId?: undefined; outdatedModu...'.
+  Property 'outdatedModules' does not exist on type '{ type: string; moduleId: string; }'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(427,30): error TS2339: Property 'outdatedDependencies' does not exist on type '{ [x: string]: any; type: string; chain: any[]; moduleId: any; parentId?: undefined; outdatedModu...'.
+  Property 'outdatedDependencies' does not exist on type '{ type: string; moduleId: string; }'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(430,16): error TS2339: Property 'outdatedDependencies' does not exist on type '{ [x: string]: any; type: string; chain: any[]; moduleId: any; parentId?: undefined; outdatedModu...'.
+  Property 'outdatedDependencies' does not exist on type '{ type: string; moduleId: string; }'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(438,16): error TS2339: Property 'outdatedDependencies' does not exist on type '{ [x: string]: any; type: string; chain: any[]; moduleId: any; parentId?: undefined; outdatedModu...'.
+  Property 'outdatedDependencies' does not exist on type '{ type: string; moduleId: string; }'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(455,5): error TS2304: Cannot find name 'installedModules'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(456,5): error TS2304: Cannot find name 'installedModules'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(460,20): error TS2304: Cannot find name 'installedModules'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(468,5): error TS2304: Cannot find name 'hotDisposeChunk'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(476,13): error TS2304: Cannot find name 'installedModules'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(493,11): error TS2304: Cannot find name 'installedModules'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(500,17): error TS2304: Cannot find name 'installedModules'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(516,14): error TS2304: Cannot find name 'installedModules'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(536,5): error TS2304: Cannot find name 'modules'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(546,14): error TS2304: Cannot find name 'installedModules'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(554,22): error TS2339: Property 'includes' does not exist on type 'any[]'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(586,5): error TS2304: Cannot find name '$require$'.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(623,11): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/webpack/lib/HotModuleReplacement.runtime.js(627,14): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/webpack/lib/HotModuleReplacementPlugin.js(86,49): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/HotModuleReplacementPlugin.js(148,8): error TS2322: Type 'string | number' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
+node_modules/webpack/lib/HotModuleReplacementPlugin.js(156,32): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/HotModuleReplacementPlugin.js(340,15): error TS2339: Property 'loc' does not exist on type 'ModuleHotAcceptDependency'.
+node_modules/webpack/lib/HotModuleReplacementPlugin.js(341,15): error TS2339: Property 'loc' does not exist on type 'ModuleHotAcceptDependency'.
+node_modules/webpack/lib/HotModuleReplacementPlugin.js(374,14): error TS2339: Property 'loc' does not exist on type 'ModuleHotDeclineDependency'.
+node_modules/webpack/lib/HotModuleReplacementPlugin.js(375,14): error TS2339: Property 'loc' does not exist on type 'ModuleHotDeclineDependency'.
+node_modules/webpack/lib/HotUpdateChunkTemplate.js(15,3): error TS2346: Call target does not contain any signatures.
+node_modules/webpack/lib/HotUpdateChunkTemplate.js(49,18): error TS2551: Property 'removedModules' does not exist on type 'Chunk'. Did you mean 'removeModule'?
+node_modules/webpack/lib/JavascriptModulesPlugin.js(35,14): error TS2554: Expected 0 arguments, but got 1.
+node_modules/webpack/lib/JavascriptModulesPlugin.js(40,14): error TS2554: Expected 0 arguments, but got 1.
+node_modules/webpack/lib/JavascriptModulesPlugin.js(45,14): error TS2554: Expected 0 arguments, but got 1.
+node_modules/webpack/lib/LibManifestPlugin.js(39,23): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/LoaderOptionsPlugin.js(10,24): error TS2307: Cannot find module '../schemas/plugins/LoaderOptionsPlugin.json'.
+node_modules/webpack/lib/MainTemplate.js(35,3): error TS2346: Call target does not contain any signatures.
+node_modules/webpack/lib/Module.js(72,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/Module.js(73,29): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/Module.js(76,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/Module.js(77,29): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/Module.js(117,20): error TS2339: Property 'has' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/Module.js(131,23): error TS2339: Property 'has' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/Module.js(135,23): error TS2495: Type 'SortableSet' is not an array type or a string type.
+node_modules/webpack/lib/Module.js(141,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/Module.js(144,30): error TS2339: Property 'dependency' does not exist on type 'never'.
+node_modules/webpack/lib/Module.js(144,46): error TS2339: Property 'dependency' does not exist on type 'never'.
+node_modules/webpack/lib/Module.js(149,16): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/Module.js(153,23): error TS2339: Property 'size' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/Module.js(156,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/Module.js(161,20): error TS2339: Property 'size' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/Module.js(176,21): error TS2345: Argument of type 'ModuleReason' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Module.js(182,10): error TS2339: Property 'module' does not exist on type 'never'.
+node_modules/webpack/lib/Module.js(182,33): error TS2339: Property 'dependency' does not exist on type 'never'.
+node_modules/webpack/lib/Module.js(193,45): error TS2339: Property 'oldChunk' does not exist on type 'never'.
+node_modules/webpack/lib/Module.js(193,65): error TS2339: Property 'newChunks' does not exist on type 'never'.
+node_modules/webpack/lib/Module.js(197,24): error TS2339: Property 'hasChunk' does not exist on type 'never'.
+node_modules/webpack/lib/Module.js(210,36): error TS2345: Argument of type '{ oldChunk: any; newChunks: any; }' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/Module.js(218,20): error TS2339: Property 'rewriteChunks' does not exist on type 'never'.
+node_modules/webpack/lib/Module.js(228,13): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Module.js(233,8): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/Module.js(236,5): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/Module.js(237,6): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Module.js(245,22): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/Module.js(246,10): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/Module.js(267,10): error TS2339: Property 'module' does not exist on type 'never'.
+node_modules/webpack/lib/Module.js(267,23): error TS2339: Property 'module' does not exist on type 'never'.
+node_modules/webpack/lib/Module.js(268,11): error TS2339: Property 'module' does not exist on type 'never'.
+node_modules/webpack/lib/Module.js(269,11): error TS2339: Property 'module' does not exist on type 'never'.
+node_modules/webpack/lib/Module.js(270,22): error TS2339: Property 'module' does not exist on type 'never'.
+node_modules/webpack/lib/Module.js(270,32): error TS2339: Property 'module' does not exist on type 'never'.
+node_modules/webpack/lib/Module.js(273,4): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/Module.js(286,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/Module.js(290,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/Module.js(307,16): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/ModuleFilenameHelpers.js(57,22): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/ModuleReason.js(26,24): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/ModuleReason.js(28,24): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/ModuleTemplate.js(13,3): error TS2346: Call target does not contain any signatures.
+node_modules/webpack/lib/MultiCompiler.js(16,3): error TS2346: Call target does not contain any signatures.
+node_modules/webpack/lib/MultiCompiler.js(58,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/MultiCompiler.js(73,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/MultiCompiler.js(77,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/MultiCompiler.js(81,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/MultiCompiler.js(87,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/MultiCompiler.js(94,21): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/MultiCompiler.js(140,24): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/MultiCompiler.js(155,30): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/MultiEntryPlugin.js(52,9): error TS2339: Property 'loc' does not exist on type 'SingleEntryDependency'.
+node_modules/webpack/lib/MultiModule.js(20,2): error TS2416: Property 'identifier' in type 'MultiModule' is not assignable to the same property in base type 'Module'.
+  Type '() => string' is not assignable to type 'null'.
+node_modules/webpack/lib/MultiModule.js(20,2): error TS2425: Class 'Module' defines instance member property 'identifier', but extended class 'MultiModule' defines it as instance member function.
+node_modules/webpack/lib/MultiModule.js(24,2): error TS2416: Property 'readableIdentifier' in type 'MultiModule' is not assignable to the same property in base type 'Module'.
+  Type '(requestShortener: any) => string' is not assignable to type 'null'.
+node_modules/webpack/lib/MultiModule.js(24,2): error TS2425: Class 'Module' defines instance member property 'readableIdentifier', but extended class 'MultiModule' defines it as instance member function.
+node_modules/webpack/lib/MultiModule.js(30,2): error TS2416: Property 'build' in type 'MultiModule' is not assignable to the same property in base type 'Module'.
+  Type '(options: any, compilation: any, resolver: any, fs: any, callback: any) => any' is not assignable to type 'null'.
+node_modules/webpack/lib/MultiModule.js(30,2): error TS2425: Class 'Module' defines instance member property 'build', but extended class 'MultiModule' defines it as instance member function.
+node_modules/webpack/lib/MultiModule.js(41,2): error TS2416: Property 'size' in type 'MultiModule' is not assignable to the same property in base type 'Module'.
+  Type '() => number' is not assignable to type 'null'.
+node_modules/webpack/lib/MultiModule.js(41,2): error TS2425: Class 'Module' defines instance member property 'size', but extended class 'MultiModule' defines it as instance member function.
+node_modules/webpack/lib/MultiModule.js(51,2): error TS2416: Property 'source' in type 'MultiModule' is not assignable to the same property in base type 'Module'.
+  Type '(dependencyTemplates: any, runtimeTemplate: any) => any' is not assignable to type 'null'.
+node_modules/webpack/lib/MultiModule.js(51,2): error TS2425: Class 'Module' defines instance member property 'source', but extended class 'MultiModule' defines it as instance member function.
+node_modules/webpack/lib/MultiModuleFactory.js(12,3): error TS2346: Call target does not contain any signatures.
+node_modules/webpack/lib/MultiStats.js(71,42): error TS2307: Cannot find module '../package.json'.
+node_modules/webpack/lib/NodeStuffPlugin.js(34,29): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/NormalModule.js(65,40): error TS2304: Cannot find name 'WeakMap'.
+node_modules/webpack/lib/NormalModule.js(108,2): error TS2416: Property 'identifier' in type 'NormalModule' is not assignable to the same property in base type 'Module'.
+  Type '() => any' is not assignable to type 'null'.
+node_modules/webpack/lib/NormalModule.js(108,2): error TS2425: Class 'Module' defines instance member property 'identifier', but extended class 'NormalModule' defines it as instance member function.
+node_modules/webpack/lib/NormalModule.js(112,2): error TS2416: Property 'readableIdentifier' in type 'NormalModule' is not assignable to the same property in base type 'Module'.
+  Type '(requestShortener: any) => any' is not assignable to type 'null'.
+node_modules/webpack/lib/NormalModule.js(112,2): error TS2425: Class 'Module' defines instance member property 'readableIdentifier', but extended class 'NormalModule' defines it as instance member function.
+node_modules/webpack/lib/NormalModule.js(120,2): error TS2416: Property 'nameForCondition' in type 'NormalModule' is not assignable to the same property in base type 'Module'.
+  Type '() => any' is not assignable to type 'null'.
+node_modules/webpack/lib/NormalModule.js(120,2): error TS2425: Class 'Module' defines instance member property 'nameForCondition', but extended class 'NormalModule' defines it as instance member function.
+node_modules/webpack/lib/NormalModule.js(144,24): error TS2345: Argument of type 'ModuleWarning' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/NormalModule.js(148,22): error TS2345: Argument of type 'ModuleError' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/NormalModule.js(151,47): error TS2345: Argument of type 'this' is not assignable to parameter of type 'Module | undefined'.
+  Type 'NormalModule' is not assignable to type 'Module | undefined'.
+    Type 'NormalModule' is not assignable to type 'Module'.
+      Type 'this' is not assignable to type 'Module'.
+        Type 'NormalModule' is not assignable to type 'Module'.
+          Property 'exports' is missing in type 'NormalModule'.
+node_modules/webpack/lib/NormalModule.js(152,33): error TS2339: Property '_nodeModulePaths' does not exist on type 'typeof Module'.
+node_modules/webpack/lib/NormalModule.js(161,10): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/NormalModule.js(161,33): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/NormalModule.js(162,5): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/NormalModule.js(178,30): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/NormalModule.js(228,6): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/NormalModule.js(229,6): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/NormalModule.js(229,44): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/NormalModule.js(230,6): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/NormalModule.js(230,47): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/NormalModule.js(271,27): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/NormalModule.js(274,20): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/NormalModule.js(322,2): error TS2416: Property 'build' in type 'NormalModule' is not assignable to the same property in base type 'Module'.
+  Type '(options: any, compilation: any, resolver: any, fs: any, callback: any) => void' is not assignable to type 'null'.
+node_modules/webpack/lib/NormalModule.js(322,2): error TS2425: Class 'Module' defines instance member property 'build', but extended class 'NormalModule' defines it as instance member function.
+node_modules/webpack/lib/NormalModule.js(333,26): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/NormalModule.js(334,29): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/NormalModule.js(398,2): error TS2416: Property 'source' in type 'NormalModule' is not assignable to the same property in base type 'Module'.
+  Type '(dependencyTemplates: any, runtimeTemplate: any) => any' is not assignable to type 'null'.
+node_modules/webpack/lib/NormalModule.js(398,2): error TS2425: Class 'Module' defines instance member property 'source', but extended class 'NormalModule' defines it as instance member function.
+node_modules/webpack/lib/NormalModule.js(426,8): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/NormalModule.js(431,22): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/NormalModule.js(434,21): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/NormalModule.js(436,22): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/NormalModule.js(439,21): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/NormalModule.js(445,2): error TS2416: Property 'size' in type 'NormalModule' is not assignable to the same property in base type 'Module'.
+  Type '() => any' is not assignable to type 'null'.
+node_modules/webpack/lib/NormalModule.js(445,2): error TS2425: Class 'Module' defines instance member property 'size', but extended class 'NormalModule' defines it as instance member function.
+node_modules/webpack/lib/NormalModuleFactory.js(51,3): error TS2346: Call target does not contain any signatures.
+node_modules/webpack/lib/NormalModuleFactory.js(417,15): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/OptionsDefaulter.js(35,20): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/OptionsDefaulter.js(43,6): error TS2554: Expected 0-3 arguments, but got 4.
+node_modules/webpack/lib/OptionsDefaulter.js(52,7): error TS2554: Expected 0-3 arguments, but got 4.
+node_modules/webpack/lib/Parser.js(37,3): error TS2346: Call target does not contain any signatures.
+node_modules/webpack/lib/Parser.js(1119,27): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/Parser.js(1171,26): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/Parser.js(1987,42): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/Parser.js(2030,32): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/ParserHelpers.js(41,7): error TS2339: Property 'loc' does not exist on type 'ConstDependency'.
+node_modules/webpack/lib/ParserHelpers.js(50,7): error TS2339: Property 'loc' does not exist on type 'ConstDependency'.
+node_modules/webpack/lib/ParserHelpers.js(84,7): error TS2339: Property 'loc' does not exist on type 'ConstDependency'.
+node_modules/webpack/lib/ProvidePlugin.js(41,32): error TS2339: Property 'includes' does not exist on type 'string'.
+node_modules/webpack/lib/RawModule.js(20,2): error TS2416: Property 'identifier' in type 'RawModule' is not assignable to the same property in base type 'Module'.
+  Type '() => any' is not assignable to type 'null'.
+node_modules/webpack/lib/RawModule.js(20,2): error TS2425: Class 'Module' defines instance member property 'identifier', but extended class 'RawModule' defines it as instance member function.
+node_modules/webpack/lib/RawModule.js(24,2): error TS2416: Property 'size' in type 'RawModule' is not assignable to the same property in base type 'Module'.
+  Type '() => any' is not assignable to type 'null'.
+node_modules/webpack/lib/RawModule.js(24,2): error TS2425: Class 'Module' defines instance member property 'size', but extended class 'RawModule' defines it as instance member function.
+node_modules/webpack/lib/RawModule.js(28,2): error TS2416: Property 'readableIdentifier' in type 'RawModule' is not assignable to the same property in base type 'Module'.
+  Type '(requestShortener: any) => any' is not assignable to type 'null'.
+node_modules/webpack/lib/RawModule.js(28,2): error TS2425: Class 'Module' defines instance member property 'readableIdentifier', but extended class 'RawModule' defines it as instance member function.
+node_modules/webpack/lib/RawModule.js(36,2): error TS2416: Property 'build' in type 'RawModule' is not assignable to the same property in base type 'Module'.
+  Type '(options: any, compilations: any, resolver: any, fs: any, callback: any) => void' is not assignable to type 'null'.
+node_modules/webpack/lib/RawModule.js(36,2): error TS2425: Class 'Module' defines instance member property 'build', but extended class 'RawModule' defines it as instance member function.
+node_modules/webpack/lib/RawModule.js(45,2): error TS2416: Property 'source' in type 'RawModule' is not assignable to the same property in base type 'Module'.
+  Type '() => any' is not assignable to type 'null'.
+node_modules/webpack/lib/RawModule.js(45,2): error TS2425: Class 'Module' defines instance member property 'source', but extended class 'RawModule' defines it as instance member function.
+node_modules/webpack/lib/RawModule.js(46,12): error TS2339: Property 'useSourceMap' does not exist on type 'RawModule'.
+node_modules/webpack/lib/RecordIdsPlugin.js(41,27): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/RecordIdsPlugin.js(59,39): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/RecordIdsPlugin.js(111,26): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/RecordIdsPlugin.js(121,37): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/RecordIdsPlugin.js(128,26): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/RecordIdsPlugin.js(154,38): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/RequestShortener.js(51,20): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/ResolverFactory.js(15,3): error TS2346: Call target does not contain any signatures.
+node_modules/webpack/lib/ResolverFactory.js(43,21): error TS2304: Cannot find name 'WeakMap'.
+node_modules/webpack/lib/ResolverFactory.js(44,21): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/RuleSet.js(307,6): error TS2339: Property 'includes' does not exist on type 'string[]'.
+node_modules/webpack/lib/RuleSet.js(380,33): error TS2339: Property 'includes' does not exist on type 'string[]'.
+node_modules/webpack/lib/RuleSet.js(486,6): error TS2339: Property 'includes' does not exist on type 'string[]'.
+node_modules/webpack/lib/RuntimeTemplate.js(62,26): error TS2345: Argument of type '{ request: any; }' is not assignable to parameter of type '{ request: any; chunkName: any; chunkReason: any; message: any; exportName: any; }'.
+  Property 'chunkName' is missing in type '{ request: any; }'.
+node_modules/webpack/lib/RuntimeTemplate.js(113,32): error TS2345: Argument of type '{ request: any; }' is not assignable to parameter of type '{ request: any; chunkName: any; chunkReason: any; message: any; exportName: any; }'.
+  Property 'chunkName' is missing in type '{ request: any; }'.
+node_modules/webpack/lib/RuntimeTemplate.js(164,32): error TS2345: Argument of type '{ request: any; }' is not assignable to parameter of type '{ request: any; chunkName: any; chunkReason: any; message: any; exportName: any; }'.
+  Property 'chunkName' is missing in type '{ request: any; }'.
+node_modules/webpack/lib/RuntimeTemplate.js(263,33): error TS2345: Argument of type '{ message: any; }' is not assignable to parameter of type '{ request: any; chunkName: any; chunkReason: any; message: any; exportName: any; }'.
+  Property 'request' is missing in type '{ message: any; }'.
+node_modules/webpack/lib/RuntimeTemplate.js(271,32): error TS2345: Argument of type '{ message: any; chunkName: any; chunkReason: any; }' is not assignable to parameter of type '{ request: any; chunkName: any; chunkReason: any; message: any; exportName: any; }'.
+  Property 'request' is missing in type '{ message: any; chunkName: any; chunkReason: any; }'.
+node_modules/webpack/lib/SingleEntryPlugin.js(39,7): error TS2339: Property 'loc' does not exist on type 'SingleEntryDependency'.
+node_modules/webpack/lib/SourceMapDevToolPlugin.js(15,24): error TS2307: Cannot find module '../schemas/plugins/SourceMapDevToolPlugin.json'.
+node_modules/webpack/lib/SourceMapDevToolPlugin.js(101,44): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/SourceMapDevToolPlugin.js(159,31): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/SourceMapDevToolPlugin.js(160,39): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/SourceMapDevToolPlugin.js(163,31): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/Stats.js(15,22): error TS2339: Property 'find' does not exist on type 'any[]'.
+node_modules/webpack/lib/Stats.js(37,8): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+node_modules/webpack/lib/Stats.js(38,30): error TS2339: Property 'test' does not exist on type 'never'.
+node_modules/webpack/lib/Stats.js(316,26): error TS2307: Cannot find module '../package.json'.
+node_modules/webpack/lib/Stats.js(320,27): error TS2339: Property 'startTime' does not exist on type 'Stats'.
+node_modules/webpack/lib/Stats.js(320,45): error TS2339: Property 'endTime' does not exist on type 'Stats'.
+node_modules/webpack/lib/Stats.js(321,20): error TS2339: Property 'endTime' does not exist on type 'Stats'.
+node_modules/webpack/lib/Stats.js(321,35): error TS2339: Property 'startTime' does not exist on type 'Stats'.
+node_modules/webpack/lib/Stats.js(324,27): error TS2339: Property 'endTime' does not exist on type 'Stats'.
+node_modules/webpack/lib/Stats.js(325,23): error TS2339: Property 'endTime' does not exist on type 'Stats'.
+node_modules/webpack/lib/Stats.js(378,18): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'ConcatArray<never>'.
+  Types of property 'slice' are incompatible.
+    Type '(start?: number | undefined, end?: number | undefined) => any[]' is not assignable to type '(start?: number | undefined, end?: number | undefined) => never[]'.
+      Type 'any[]' is not assignable to type 'never[]'.
+        Type 'any' is not assignable to type 'never'.
+node_modules/webpack/lib/Stats.js(423,19): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/Stats.js(507,25): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/Stats.js(508,26): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/Stats.js(509,26): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/Stats.js(536,22): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/Stats.js(537,21): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/Stats.js(538,22): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/Stats.js(550,26): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/Stats.js(741,6): error TS2345: Argument of type '{ day: string; month: string; year: string; }' is not assignable to parameter of type 'string | string[] | undefined'.
+  Object literal may only specify known properties, and 'day' does not exist in type 'string | string[] | undefined'.
+node_modules/webpack/lib/Stats.js(1225,31): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/Stats.js(1227,17): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/Template.js(178,24): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/UseStrictPlugin.js(27,12): error TS2339: Property 'loc' does not exist on type 'ConstDependency'.
+node_modules/webpack/lib/WarnCaseSensitiveModulesPlugin.js(15,36): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/WatchIgnorePlugin.js(8,24): error TS2307: Cannot find module '../schemas/plugins/WatchIgnorePlugin.json'.
+node_modules/webpack/lib/Watching.js(21,31): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/Watching.js(61,14): error TS2339: Property 'startTime' does not exist on type 'Stats'.
+node_modules/webpack/lib/Watching.js(62,14): error TS2339: Property 'endTime' does not exist on type 'Stats'.
+node_modules/webpack/lib/Watching.js(83,9): error TS2339: Property 'startTime' does not exist on type 'Stats'.
+node_modules/webpack/lib/Watching.js(84,9): error TS2339: Property 'endTime' does not exist on type 'Stats'.
+node_modules/webpack/lib/Watching.js(103,12): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/Watching.js(104,12): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/Watching.js(105,12): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/Watching.js(108,37): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'never' has no compatible call signatures.
+node_modules/webpack/lib/Watching.js(145,24): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/WebAssemblyParser.js(15,3): error TS2346: Call target does not contain any signatures.
+node_modules/webpack/lib/WebAssemblyParser.js(30,14): error TS2304: Cannot find name 'WebAssembly'.
+node_modules/webpack/lib/WebAssemblyParser.js(31,4): error TS2304: Cannot find name 'WebAssembly'.
+node_modules/webpack/lib/WebAssemblyParser.js(33,47): error TS2304: Cannot find name 'WebAssembly'.
+node_modules/webpack/lib/WebAssemblyParser.js(36,24): error TS2304: Cannot find name 'WebAssembly'.
+node_modules/webpack/lib/WebAssemblyParser.js(37,19): error TS2554: Expected 0-2 arguments, but got 3.
+node_modules/webpack/lib/WebpackError.js(9,29): error TS2339: Property 'details' does not exist on type 'WebpackError'.
+node_modules/webpack/lib/WebpackError.js(9,49): error TS2339: Property 'details' does not exist on type 'WebpackError'.
+node_modules/webpack/lib/WebpackOptionsApply.js(88,6): error TS2554: Expected 0 arguments, but got 1.
+node_modules/webpack/lib/WebpackOptionsApply.js(89,6): error TS2554: Expected 0 arguments, but got 1.
+node_modules/webpack/lib/WebpackOptionsApply.js(99,6): error TS2554: Expected 0 arguments, but got 1.
+node_modules/webpack/lib/WebpackOptionsApply.js(113,6): error TS2554: Expected 0 arguments, but got 1.
+node_modules/webpack/lib/WebpackOptionsApply.js(122,6): error TS2554: Expected 0 arguments, but got 1.
+node_modules/webpack/lib/WebpackOptionsApply.js(168,6): error TS2554: Expected 0 arguments, but got 1.
+node_modules/webpack/lib/WebpackOptionsApply.js(365,19): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/WebpackOptionsApply.js(376,19): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/WebpackOptionsApply.js(388,19): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/WebpackOptionsDefaulter.js(32,46): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/WebpackOptionsDefaulter.js(81,19): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/WebpackOptionsDefaulter.js(158,19): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/WebpackOptionsDefaulter.js(178,19): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/WebpackOptionsDefaulter.js(287,47): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/WebpackOptionsDefaulter.js(309,53): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/WebpackOptionsValidationError.js(8,38): error TS2307: Cannot find module '../schemas/WebpackOptions.json'.
+node_modules/webpack/lib/WebpackOptionsValidationError.js(144,33): error TS2345: Argument of type '0' is not assignable to parameter of type '(string | number)[] | null | undefined'.
+node_modules/webpack/lib/WebpackOptionsValidationError.js(194,14): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/WebpackOptionsValidationError.js(196,29): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/WebpackOptionsValidationError.js(311,5): error TS2345: Argument of type '0' is not assignable to parameter of type '(string | number)[] | null | undefined'.
+node_modules/webpack/lib/debug/ProfilingPlugin.js(4,24): error TS2307: Cannot find module '../../schemas/plugins/debug/ProfilingPlugin.json'.
+node_modules/webpack/lib/debug/ProfilingPlugin.js(25,11): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/webpack/lib/debug/ProfilingPlugin.js(33,11): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/webpack/lib/debug/ProfilingPlugin.js(36,10): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/webpack/lib/debug/ProfilingPlugin.js(47,15): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/webpack/lib/debug/ProfilingPlugin.js(57,11): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/webpack/lib/debug/ProfilingPlugin.js(66,10): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/webpack/lib/debug/ProfilingPlugin.js(276,6): error TS2304: Cannot find name 'Reflect'.
+node_modules/webpack/lib/debug/ProfilingPlugin.js(322,56): error TS8024: JSDoc '@param' tag has name 'opts', but there is no parameter with that name.
+node_modules/webpack/lib/debug/ProfilingPlugin.js(404,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+node_modules/webpack/lib/dependencies/AMDDefineDependency.js(18,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/AMDDefineDependency.js(24,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/AMDDefineDependencyParserPlugin.js(67,40): error TS2339: Property 'includes' does not exist on type 'string[]'.
+node_modules/webpack/lib/dependencies/AMDDefineDependencyParserPlugin.js(84,39): error TS2339: Property 'includes' does not exist on type 'string[]'.
+node_modules/webpack/lib/dependencies/AMDDefineDependencyParserPlugin.js(95,11): error TS2339: Property 'loc' does not exist on type 'LocalModuleDependency'.
+node_modules/webpack/lib/dependencies/AMDDefineDependencyParserPlugin.js(99,11): error TS2339: Property 'loc' does not exist on type 'AMDRequireItemDependency'.
+node_modules/webpack/lib/dependencies/AMDDefineDependencyParserPlugin.js(106,9): error TS2339: Property 'loc' does not exist on type 'AMDRequireArrayDependency'.
+node_modules/webpack/lib/dependencies/AMDDefineDependencyParserPlugin.js(125,49): error TS2339: Property 'includes' does not exist on type 'string[]'.
+node_modules/webpack/lib/dependencies/AMDDefineDependencyParserPlugin.js(139,9): error TS2339: Property 'loc' does not exist on type 'ConstDependency | AMDRequireItemDependency | LocalModuleDependency'.
+  Property 'loc' does not exist on type 'ConstDependency'.
+node_modules/webpack/lib/dependencies/AMDDefineDependencyParserPlugin.js(277,47): error TS2339: Property 'includes' does not exist on type 'string[]'.
+node_modules/webpack/lib/dependencies/AMDDefineDependencyParserPlugin.js(299,9): error TS2339: Property 'loc' does not exist on type 'AMDDefineDependency'.
+node_modules/webpack/lib/dependencies/AMDDefineDependencyParserPlugin.js(301,10): error TS2339: Property 'localModule' does not exist on type 'AMDDefineDependency'.
+node_modules/webpack/lib/dependencies/AMDPlugin.js(108,12): error TS2339: Property 'loc' does not exist on type 'AMDRequireItemDependency'.
+node_modules/webpack/lib/dependencies/AMDPlugin.js(174,11): error TS2339: Property 'loc' does not exist on type 'AMDRequireItemDependency'.
+node_modules/webpack/lib/dependencies/AMDRequireArrayDependency.js(15,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/AMDRequireContextDependency.js(15,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/AMDRequireDependenciesBlock.js(38,7): error TS2339: Property 'loc' does not exist on type 'AMDRequireDependency'.
+node_modules/webpack/lib/dependencies/AMDRequireDependenciesBlockParserPlugin.js(30,47): error TS2339: Property 'includes' does not exist on type 'string[]'.
+node_modules/webpack/lib/dependencies/AMDRequireDependenciesBlockParserPlugin.js(88,39): error TS2339: Property 'includes' does not exist on type 'string[]'.
+node_modules/webpack/lib/dependencies/AMDRequireDependenciesBlockParserPlugin.js(98,11): error TS2339: Property 'loc' does not exist on type 'LocalModuleDependency'.
+node_modules/webpack/lib/dependencies/AMDRequireDependenciesBlockParserPlugin.js(102,11): error TS2339: Property 'loc' does not exist on type 'AMDRequireItemDependency'.
+node_modules/webpack/lib/dependencies/AMDRequireDependenciesBlockParserPlugin.js(109,9): error TS2339: Property 'loc' does not exist on type 'AMDRequireArrayDependency'.
+node_modules/webpack/lib/dependencies/AMDRequireDependenciesBlockParserPlugin.js(149,9): error TS2339: Property 'loc' does not exist on type 'ConstDependency | AMDRequireItemDependency | LocalModuleDependency'.
+  Property 'loc' does not exist on type 'ConstDependency'.
+node_modules/webpack/lib/dependencies/AMDRequireDependenciesBlockParserPlugin.js(222,7): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/dependencies/AMDRequireDependenciesBlockParserPlugin.js(222,11): error TS2339: Property 'functionBindThis' does not exist on type 'AMDRequireDependenciesBlock'.
+node_modules/webpack/lib/dependencies/AMDRequireDependenciesBlockParserPlugin.js(227,8): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/dependencies/AMDRequireDependenciesBlockParserPlugin.js(227,12): error TS2339: Property 'errorCallbackBindThis' does not exist on type 'AMDRequireDependenciesBlock'.
+node_modules/webpack/lib/dependencies/AMDRequireItemDependency.js(15,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/CommonJsPlugin.js(127,11): error TS2339: Property 'loc' does not exist on type 'ConstDependency'.
+node_modules/webpack/lib/dependencies/CommonJsPlugin.js(138,11): error TS2339: Property 'loc' does not exist on type 'ConstDependency'.
+node_modules/webpack/lib/dependencies/CommonJsRequireContextDependency.js(16,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/CommonJsRequireDependency.js(15,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/CommonJsRequireDependencyParserPlugin.js(26,9): error TS2339: Property 'loc' does not exist on type 'CommonJsRequireDependency'.
+node_modules/webpack/lib/dependencies/CommonJsRequireDependencyParserPlugin.js(68,9): error TS2339: Property 'critical' does not exist on type 'CommonJsRequireContextDependency'.
+node_modules/webpack/lib/dependencies/CommonJsRequireDependencyParserPlugin.js(71,9): error TS2339: Property 'loc' does not exist on type 'CommonJsRequireContextDependency'.
+node_modules/webpack/lib/dependencies/CommonJsRequireDependencyParserPlugin.js(86,10): error TS2339: Property 'loc' does not exist on type 'RequireHeaderDependency'.
+node_modules/webpack/lib/dependencies/CommonJsRequireDependencyParserPlugin.js(108,10): error TS2339: Property 'loc' does not exist on type 'LocalModuleDependency'.
+node_modules/webpack/lib/dependencies/CommonJsRequireDependencyParserPlugin.js(117,11): error TS2339: Property 'loc' does not exist on type 'RequireHeaderDependency'.
+node_modules/webpack/lib/dependencies/ContextDependency.js(24,2): error TS2416: Property 'getResourceIdentifier' in type 'ContextDependency' is not assignable to the same property in base type 'Dependency'.
+  Type '() => string' is not assignable to type '() => null'.
+    Type 'string' is not assignable to type 'null'.
+node_modules/webpack/lib/dependencies/ContextDependency.js(34,2): error TS2416: Property 'getWarnings' in type 'ContextDependency' is not assignable to the same property in base type 'Dependency'.
+  Type '() => never[]' is not assignable to type '() => null'.
+    Type 'never[]' is not assignable to type 'null'.
+node_modules/webpack/lib/dependencies/ContextDependency.js(36,12): error TS2339: Property 'critical' does not exist on type 'ContextDependency'.
+node_modules/webpack/lib/dependencies/ContextDependency.js(37,18): error TS2345: Argument of type 'CriticalDependencyWarning' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/dependencies/ContextDependency.js(37,53): error TS2339: Property 'critical' does not exist on type 'ContextDependency'.
+node_modules/webpack/lib/dependencies/ContextDependency.js(41,5): error TS2345: Argument of type 'CriticalDependencyWarning' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/dependencies/ContextDependencyHelpers.js(55,11): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/dependencies/ContextDependencyHelpers.js(104,11): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/dependencies/ContextDependencyHelpers.js(124,11): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/dependencies/ContextElementDependency.js(16,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/DelegatedExportsDependency.js(15,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/DelegatedExportsDependency.js(19,2): error TS2416: Property 'getReference' in type 'DelegatedExportsDependency' is not assignable to the same property in base type 'NullDependency'.
+  Type '() => { [x: string]: any; module: any; importedNames: boolean; }' is not assignable to type '() => { [x: string]: any; module: null; weak: boolean; importedNames: boolean; } | null'.
+    Type '{ [x: string]: any; module: any; importedNames: boolean; }' is not assignable to type '{ [x: string]: any; module: null; weak: boolean; importedNames: boolean; } | null'.
+      Type '{ [x: string]: any; module: any; importedNames: boolean; }' is not assignable to type '{ [x: string]: any; module: null; weak: boolean; importedNames: boolean; }'.
+        Property 'weak' is missing in type '{ [x: string]: any; module: any; importedNames: boolean; }'.
+node_modules/webpack/lib/dependencies/DelegatedExportsDependency.js(26,2): error TS2416: Property 'getExports' in type 'DelegatedExportsDependency' is not assignable to the same property in base type 'NullDependency'.
+  Type '() => { [x: string]: any; exports: any; }' is not assignable to type '() => null'.
+    Type '{ [x: string]: any; exports: any; }' is not assignable to type 'null'.
+node_modules/webpack/lib/dependencies/DelegatedSourceDependency.js(13,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/DllEntryDependency.js(15,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/HarmonyAcceptDependency.js(18,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/HarmonyAcceptImportDependency.js(8,7): error TS2417: Class static side 'typeof HarmonyAcceptImportDependency' incorrectly extends base class static side 'typeof HarmonyImportDependency'.
+  Types of property 'Template' are incompatible.
+    Type 'typeof HarmonyAcceptImportDependencyTemplate' is not assignable to type 'typeof HarmonyImportDependencyTemplate'.
+      Property 'isImportEmitted' is missing in type 'typeof HarmonyAcceptImportDependencyTemplate'.
+node_modules/webpack/lib/dependencies/HarmonyAcceptImportDependency.js(14,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/HarmonyCompatibilityDependency.js(14,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/HarmonyDetectionParserPlugin.js(22,15): error TS2339: Property 'loc' does not exist on type 'HarmonyCompatibilityDependency'.
+node_modules/webpack/lib/dependencies/HarmonyDetectionParserPlugin.js(35,13): error TS2339: Property 'loc' does not exist on type 'HarmonyInitDependency'.
+node_modules/webpack/lib/dependencies/HarmonyExportDependencyParserPlugin.js(27,9): error TS2339: Property 'loc' does not exist on type 'HarmonyExportHeaderDependency'.
+node_modules/webpack/lib/dependencies/HarmonyExportDependencyParserPlugin.js(28,9): error TS2339: Property 'loc' does not exist on type 'HarmonyExportHeaderDependency'.
+node_modules/webpack/lib/dependencies/HarmonyExportDependencyParserPlugin.js(39,14): error TS2339: Property 'loc' does not exist on type 'ConstDependency'.
+node_modules/webpack/lib/dependencies/HarmonyExportDependencyParserPlugin.js(40,14): error TS2339: Property 'loc' does not exist on type 'ConstDependency'.
+node_modules/webpack/lib/dependencies/HarmonyExportDependencyParserPlugin.js(48,19): error TS2339: Property 'loc' does not exist on type 'HarmonyImportSideEffectDependency'.
+node_modules/webpack/lib/dependencies/HarmonyExportDependencyParserPlugin.js(49,19): error TS2339: Property 'loc' does not exist on type 'HarmonyImportSideEffectDependency'.
+node_modules/webpack/lib/dependencies/HarmonyExportDependencyParserPlugin.js(62,9): error TS2339: Property 'loc' does not exist on type 'HarmonyExportExpressionDependency'.
+node_modules/webpack/lib/dependencies/HarmonyExportDependencyParserPlugin.js(63,9): error TS2339: Property 'loc' does not exist on type 'HarmonyExportExpressionDependency'.
+node_modules/webpack/lib/dependencies/HarmonyExportDependencyParserPlugin.js(78,46): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/dependencies/HarmonyExportDependencyParserPlugin.js(100,9): error TS2339: Property 'loc' does not exist on type 'HarmonyExportSpecifierDependency | HarmonyExportImportedSpecifierDependency'.
+  Property 'loc' does not exist on type 'HarmonyExportSpecifierDependency'.
+node_modules/webpack/lib/dependencies/HarmonyExportDependencyParserPlugin.js(101,9): error TS2339: Property 'loc' does not exist on type 'HarmonyExportSpecifierDependency | HarmonyExportImportedSpecifierDependency'.
+  Property 'loc' does not exist on type 'HarmonyExportSpecifierDependency'.
+node_modules/webpack/lib/dependencies/HarmonyExportDependencyParserPlugin.js(110,46): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/dependencies/HarmonyExportDependencyParserPlugin.js(132,9): error TS2339: Property 'loc' does not exist on type 'HarmonyExportImportedSpecifierDependency'.
+node_modules/webpack/lib/dependencies/HarmonyExportDependencyParserPlugin.js(133,9): error TS2339: Property 'loc' does not exist on type 'HarmonyExportImportedSpecifierDependency'.
+node_modules/webpack/lib/dependencies/HarmonyExportExpressionDependency.js(16,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/HarmonyExportExpressionDependency.js(20,2): error TS2416: Property 'getExports' in type 'HarmonyExportExpressionDependency' is not assignable to the same property in base type 'NullDependency'.
+  Type '() => { [x: string]: any; exports: string[]; }' is not assignable to type '() => null'.
+    Type '{ [x: string]: any; exports: string[]; }' is not assignable to type 'null'.
+node_modules/webpack/lib/dependencies/HarmonyExportHeaderDependency.js(15,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(29,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(57,19): error TS2339: Property 'buildMeta' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(57,48): error TS2339: Property 'buildMeta' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(88,16): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(111,19): error TS2339: Property 'buildMeta' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(119,21): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(125,13): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(145,20): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(171,20): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(172,20): error TS2339: Property 'buildMeta' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(202,2): error TS2416: Property 'getReference' in type 'HarmonyExportImportedSpecifierDependency' is not assignable to the same property in base type 'HarmonyImportDependency'.
+  Type '() => { [x: string]: any; module: undefined; importedNames: any; } | null' is not assignable to type '() => { [x: string]: any; module: null; importedNames: boolean; weak: boolean; } | null'.
+    Type '{ [x: string]: any; module: undefined; importedNames: any; } | null' is not assignable to type '{ [x: string]: any; module: null; importedNames: boolean; weak: boolean; } | null'.
+      Type '{ [x: string]: any; module: undefined; importedNames: any; }' is not assignable to type '{ [x: string]: any; module: null; importedNames: boolean; weak: boolean; } | null'.
+        Type '{ [x: string]: any; module: undefined; importedNames: any; }' is not assignable to type '{ [x: string]: any; module: null; importedNames: boolean; weak: boolean; }'.
+          Property 'weak' is missing in type '{ [x: string]: any; module: undefined; importedNames: any; }'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(230,27): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(245,42): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(246,22): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(261,2): error TS2416: Property 'getExports' in type 'HarmonyExportImportedSpecifierDependency' is not assignable to the same property in base type 'HarmonyImportDependency'.
+  Type '() => { [x: string]: any; exports: any[]; dependencies?: undefined; } | { [x: string]: any; expor...' is not assignable to type '() => null'.
+    Type '{ [x: string]: any; exports: any[]; dependencies?: undefined; } | { [x: string]: any; exports: nu...' is not assignable to type 'null'.
+      Type '{ [x: string]: any; exports: any[]; dependencies?: undefined; }' is not assignable to type 'null'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(277,36): error TS2339: Property 'buildMeta' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(279,29): error TS2339: Property 'buildMeta' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(286,22): error TS2339: Property 'buildMeta' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(298,2): error TS2416: Property 'getWarnings' in type 'HarmonyExportImportedSpecifierDependency' is not assignable to the same property in base type 'HarmonyImportDependency'.
+  Type '() => Error[] | undefined' is not assignable to type '() => null'.
+    Type 'Error[] | undefined' is not assignable to type 'null'.
+      Type 'undefined' is not assignable to type 'null'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(308,2): error TS2416: Property 'getErrors' in type 'HarmonyExportImportedSpecifierDependency' is not assignable to the same property in base type 'HarmonyImportDependency'.
+  Type '() => Error[] | undefined' is not assignable to type '() => null'.
+    Type 'Error[] | undefined' is not assignable to type 'null'.
+      Type 'undefined' is not assignable to type 'null'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(324,23): error TS2339: Property 'buildMeta' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(324,52): error TS2339: Property 'buildMeta' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(339,9): error TS2339: Property 'hideStack' does not exist on type 'Error'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(349,22): error TS2339: Property 'isProvided' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(361,7): error TS2339: Property 'hideStack' does not exist on type 'Error'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(390,3): error TS2554: Expected 0-3 arguments, but got 4.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(509,18): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(525,18): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/dependencies/HarmonyExportImportedSpecifierDependency.js(541,31): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/dependencies/HarmonyExportSpecifierDependency.js(16,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/HarmonyExportSpecifierDependency.js(20,2): error TS2416: Property 'getExports' in type 'HarmonyExportSpecifierDependency' is not assignable to the same property in base type 'NullDependency'.
+  Type '() => { [x: string]: any; exports: any[]; }' is not assignable to type '() => null'.
+    Type '{ [x: string]: any; exports: any[]; }' is not assignable to type 'null'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependency.js(29,73): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependency.js(54,22): error TS2339: Property 'buildMeta' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependency.js(54,50): error TS2339: Property 'buildMeta' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependency.js(57,49): error TS2339: Property 'id' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependency.js(63,30): error TS2304: Cannot find name 'WeakMap'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependency.js(85,26): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependencyParserPlugin.js(27,14): error TS2339: Property 'loc' does not exist on type 'ConstDependency'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependencyParserPlugin.js(35,19): error TS2339: Property 'loc' does not exist on type 'HarmonyImportSideEffectDependency'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependencyParserPlugin.js(46,42): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependencyParserPlugin.js(70,9): error TS2339: Property 'shorthand' does not exist on type 'HarmonyImportSpecifierDependency'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependencyParserPlugin.js(71,5): error TS2322: Type 'true' is not assignable to type 'undefined'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependencyParserPlugin.js(72,9): error TS2339: Property 'loc' does not exist on type 'HarmonyImportSpecifierDependency'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependencyParserPlugin.js(92,9): error TS2339: Property 'shorthand' does not exist on type 'HarmonyImportSpecifierDependency'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependencyParserPlugin.js(93,5): error TS2322: Type 'false' is not assignable to type 'undefined'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependencyParserPlugin.js(94,9): error TS2339: Property 'loc' does not exist on type 'HarmonyImportSpecifierDependency'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependencyParserPlugin.js(118,10): error TS2339: Property 'shorthand' does not exist on type 'HarmonyImportSpecifierDependency'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependencyParserPlugin.js(119,6): error TS2322: Type 'false' is not assignable to type 'undefined'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependencyParserPlugin.js(121,10): error TS2339: Property 'loc' does not exist on type 'HarmonyImportSpecifierDependency'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependencyParserPlugin.js(146,5): error TS2322: Type 'true' is not assignable to type 'undefined'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependencyParserPlugin.js(149,9): error TS2339: Property 'loc' does not exist on type 'HarmonyImportSpecifierDependency'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependencyParserPlugin.js(174,10): error TS2339: Property 'loc' does not exist on type 'HarmonyAcceptImportDependency'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependencyParserPlugin.js(184,10): error TS2339: Property 'loc' does not exist on type 'HarmonyAcceptDependency'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependencyParserPlugin.js(198,10): error TS2339: Property 'loc' does not exist on type 'HarmonyAcceptImportDependency'.
+node_modules/webpack/lib/dependencies/HarmonyImportDependencyParserPlugin.js(208,10): error TS2339: Property 'loc' does not exist on type 'HarmonyAcceptDependency'.
+node_modules/webpack/lib/dependencies/HarmonyImportSideEffectDependency.js(14,22): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/dependencies/HarmonyImportSideEffectDependency.js(19,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/HarmonyImportSpecifierDependency.js(30,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/HarmonyImportSpecifierDependency.js(34,2): error TS2416: Property 'getReference' in type 'HarmonyImportSpecifierDependency' is not assignable to the same property in base type 'HarmonyImportDependency'.
+  Type '() => { [x: string]: any; module: null; importedNames: boolean | string[]; } | null' is not assignable to type '() => { [x: string]: any; module: null; importedNames: boolean; weak: boolean; } | null'.
+    Type '{ [x: string]: any; module: null; importedNames: boolean | string[]; } | null' is not assignable to type '{ [x: string]: any; module: null; importedNames: boolean; weak: boolean; } | null'.
+      Type '{ [x: string]: any; module: null; importedNames: boolean | string[]; }' is not assignable to type '{ [x: string]: any; module: null; importedNames: boolean; weak: boolean; } | null'.
+        Type '{ [x: string]: any; module: null; importedNames: boolean | string[]; }' is not assignable to type '{ [x: string]: any; module: null; importedNames: boolean; weak: boolean; }'.
+          Property 'weak' is missing in type '{ [x: string]: any; module: null; importedNames: boolean | string[]; }'.
+node_modules/webpack/lib/dependencies/HarmonyImportSpecifierDependency.js(43,2): error TS2416: Property 'getWarnings' in type 'HarmonyImportSpecifierDependency' is not assignable to the same property in base type 'HarmonyImportDependency'.
+  Type '() => Error[] | undefined' is not assignable to type '() => null'.
+    Type 'Error[] | undefined' is not assignable to type 'null'.
+      Type 'undefined' is not assignable to type 'null'.
+node_modules/webpack/lib/dependencies/HarmonyImportSpecifierDependency.js(53,2): error TS2416: Property 'getErrors' in type 'HarmonyImportSpecifierDependency' is not assignable to the same property in base type 'HarmonyImportDependency'.
+  Type '() => Error[] | undefined' is not assignable to type '() => null'.
+    Type 'Error[] | undefined' is not assignable to type 'null'.
+      Type 'undefined' is not assignable to type 'null'.
+node_modules/webpack/lib/dependencies/HarmonyImportSpecifierDependency.js(69,23): error TS2339: Property 'buildMeta' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyImportSpecifierDependency.js(69,52): error TS2339: Property 'buildMeta' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyImportSpecifierDependency.js(84,9): error TS2339: Property 'hideStack' does not exist on type 'Error'.
+node_modules/webpack/lib/dependencies/HarmonyImportSpecifierDependency.js(94,22): error TS2339: Property 'isProvided' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyImportSpecifierDependency.js(106,7): error TS2339: Property 'hideStack' does not exist on type 'Error'.
+node_modules/webpack/lib/dependencies/HarmonyImportSpecifierDependency.js(120,49): error TS2339: Property 'isUsed' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyImportSpecifierDependency.js(124,22): error TS2339: Property 'buildMeta' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyImportSpecifierDependency.js(124,50): error TS2339: Property 'buildMeta' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyImportSpecifierDependency.js(129,20): error TS2339: Property 'used' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyImportSpecifierDependency.js(129,57): error TS2339: Property 'usedExports' does not exist on type 'never'.
+node_modules/webpack/lib/dependencies/HarmonyImportSpecifierDependency.js(136,3): error TS2554: Expected 0 arguments, but got 3.
+node_modules/webpack/lib/dependencies/HarmonyInitDependency.js(15,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/HarmonyTopLevelThisParserPlugin.js(19,10): error TS2339: Property 'loc' does not exist on type 'ConstDependency'.
+node_modules/webpack/lib/dependencies/ImportContextDependency.js(16,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/ImportDependenciesBlock.js(14,7): error TS2339: Property 'loc' does not exist on type 'ImportDependency'.
+node_modules/webpack/lib/dependencies/ImportDependency.js(15,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/ImportEagerDependency.js(15,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/ImportWeakDependency.js(16,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/JsonExportsDependency.js(14,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/JsonExportsDependency.js(18,2): error TS2416: Property 'getExports' in type 'JsonExportsDependency' is not assignable to the same property in base type 'NullDependency'.
+  Type '() => { [x: string]: any; exports: any; }' is not assignable to type '() => null'.
+    Type '{ [x: string]: any; exports: any; }' is not assignable to type 'null'.
+node_modules/webpack/lib/dependencies/LoaderDependency.js(13,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/LoaderPlugin.js(27,11): error TS2339: Property 'loc' does not exist on type 'LoaderDependency'.
+node_modules/webpack/lib/dependencies/LoaderPlugin.js(35,27): error TS2339: Property 'name' does not exist on type 'Function'.
+node_modules/webpack/lib/dependencies/LoaderPlugin.js(56,13): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/dependencies/LoaderPlugin.js(56,47): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/dependencies/LoaderPlugin.js(57,14): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/dependencies/LoaderPlugin.js(62,30): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/dependencies/LoaderPlugin.js(71,13): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/dependencies/LoaderPlugin.js(72,26): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/dependencies/LoaderPlugin.js(76,13): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/dependencies/LoaderPlugin.js(77,26): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/dependencies/ModuleDependency.js(15,2): error TS2416: Property 'getResourceIdentifier' in type 'ModuleDependency' is not assignable to the same property in base type 'Dependency'.
+  Type '() => string' is not assignable to type '() => null'.
+    Type 'string' is not assignable to type 'null'.
+node_modules/webpack/lib/dependencies/ModuleHotAcceptDependency.js(16,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/ModuleHotDeclineDependency.js(16,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/MultiEntryDependency.js(15,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/NullDependency.js(9,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/PrefetchDependency.js(13,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/RequireContextDependency.js(15,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/RequireContextDependencyParserPlugin.js(48,11): error TS2339: Property 'loc' does not exist on type 'RequireContextDependency'.
+node_modules/webpack/lib/dependencies/RequireEnsureDependenciesBlock.js(30,7): error TS2339: Property 'loc' does not exist on type 'RequireEnsureDependency'.
+node_modules/webpack/lib/dependencies/RequireEnsureDependenciesBlockParserPlugin.js(77,24): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/webpack/lib/dependencies/RequireEnsureDependency.js(14,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/RequireEnsureItemDependency.js(14,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/RequireIncludeDependency.js(16,2): error TS2416: Property 'getReference' in type 'RequireIncludeDependency' is not assignable to the same property in base type 'ModuleDependency'.
+  Type '() => { [x: string]: any; module: null; importedNames: never[]; } | null' is not assignable to type '() => { [x: string]: any; module: null; weak: boolean; importedNames: boolean; } | null'.
+    Type '{ [x: string]: any; module: null; importedNames: never[]; } | null' is not assignable to type '{ [x: string]: any; module: null; weak: boolean; importedNames: boolean; } | null'.
+      Type '{ [x: string]: any; module: null; importedNames: never[]; }' is not assignable to type '{ [x: string]: any; module: null; weak: boolean; importedNames: boolean; } | null'.
+        Type '{ [x: string]: any; module: null; importedNames: never[]; }' is not assignable to type '{ [x: string]: any; module: null; weak: boolean; importedNames: boolean; }'.
+          Property 'weak' is missing in type '{ [x: string]: any; module: null; importedNames: never[]; }'.
+node_modules/webpack/lib/dependencies/RequireIncludeDependency.js(24,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/RequireIncludeDependencyParserPlugin.js(18,9): error TS2339: Property 'loc' does not exist on type 'RequireIncludeDependency'.
+node_modules/webpack/lib/dependencies/RequireResolveContextDependency.js(16,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/RequireResolveDependency.js(15,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/RequireResolveDependencyParserPlugin.js(31,9): error TS2339: Property 'loc' does not exist on type 'RequireResolveHeaderDependency'.
+node_modules/webpack/lib/dependencies/RequireResolveDependencyParserPlugin.js(40,9): error TS2339: Property 'loc' does not exist on type 'RequireResolveHeaderDependency'.
+node_modules/webpack/lib/dependencies/RequireResolveDependencyParserPlugin.js(48,9): error TS2339: Property 'loc' does not exist on type 'RequireResolveDependency'.
+node_modules/webpack/lib/dependencies/SingleEntryDependency.js(13,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/dependencies/WebAssemblyImportDependency.js(14,2): error TS2416: Property 'getReference' in type 'WebAssemblyImportDependency' is not assignable to the same property in base type 'ModuleDependency'.
+  Type '() => { [x: string]: any; module: null; importedNames: any[]; } | null' is not assignable to type '() => { [x: string]: any; module: null; weak: boolean; importedNames: boolean; } | null'.
+    Type '{ [x: string]: any; module: null; importedNames: any[]; } | null' is not assignable to type '{ [x: string]: any; module: null; weak: boolean; importedNames: boolean; } | null'.
+      Type '{ [x: string]: any; module: null; importedNames: any[]; }' is not assignable to type '{ [x: string]: any; module: null; weak: boolean; importedNames: boolean; } | null'.
+        Type '{ [x: string]: any; module: null; importedNames: any[]; }' is not assignable to type '{ [x: string]: any; module: null; weak: boolean; importedNames: boolean; }'.
+          Property 'weak' is missing in type '{ [x: string]: any; module: null; importedNames: any[]; }'.
+node_modules/webpack/lib/dependencies/WebAssemblyImportDependency.js(22,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/node/NodeMainTemplate.runtime.js(9,30): error TS2304: Cannot find name '$hotChunkFilename$'.
+node_modules/webpack/lib/node/NodeMainTemplate.runtime.js(10,3): error TS2304: Cannot find name 'hotAddUpdateChunk'.
+node_modules/webpack/lib/node/NodeMainTemplate.runtime.js(16,32): error TS2304: Cannot find name '$hotMainFilename$'.
+node_modules/webpack/lib/node/NodeMainTemplate.runtime.js(18,11): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/webpack/lib/node/NodeMainTemplate.runtime.js(20,10): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/webpack/lib/node/NodeMainTemplate.runtime.js(25,10): error TS2304: Cannot find name 'installedChunks'.
+node_modules/webpack/lib/node/NodeMainTemplateAsync.runtime.js(9,50): error TS2304: Cannot find name '$hotChunkFilename$'.
+node_modules/webpack/lib/node/NodeMainTemplateAsync.runtime.js(12,9): error TS2304: Cannot find name '$require$'.
+node_modules/webpack/lib/node/NodeMainTemplateAsync.runtime.js(12,35): error TS2304: Cannot find name '$require$'.
+node_modules/webpack/lib/node/NodeMainTemplateAsync.runtime.js(18,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'RunningScriptOptions | undefined'.
+node_modules/webpack/lib/node/NodeMainTemplateAsync.runtime.js(20,4): error TS2304: Cannot find name 'hotAddUpdateChunk'.
+node_modules/webpack/lib/node/NodeMainTemplateAsync.runtime.js(26,50): error TS2304: Cannot find name '$hotMainFilename$'.
+node_modules/webpack/lib/node/NodeMainTemplateAsync.runtime.js(27,14): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/webpack/lib/node/NodeMainTemplateAsync.runtime.js(42,10): error TS2304: Cannot find name 'installedChunks'.
+node_modules/webpack/lib/node/NodeSourcePlugin.js(62,29): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/node/NodeTargetPlugin.js(10,20): error TS2339: Property 'builtinModules' does not exist on type 'typeof Module'.
+node_modules/webpack/lib/node/NodeTargetPlugin.js(10,58): error TS2339: Property 'binding' does not exist on type 'Process'.
+node_modules/webpack/lib/node/NodeWatchFileSystem.js(45,34): error TS2339: Property 'includes' does not exist on type 'any[]'.
+node_modules/webpack/lib/node/NodeWatchFileSystem.js(46,33): error TS2339: Property 'includes' does not exist on type 'any[]'.
+node_modules/webpack/lib/node/NodeWatchFileSystem.js(47,36): error TS2339: Property 'includes' does not exist on type 'any[]'.
+node_modules/webpack/lib/node/NodeWatchFileSystem.js(72,21): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/node/NodeWatchFileSystem.js(76,21): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/AggressiveSplittingPlugin.js(10,24): error TS2307: Cannot find module '../../schemas/plugins/optimize/AggressiveSplittingPlugin.json'.
+node_modules/webpack/lib/optimize/AggressiveSplittingPlugin.js(48,39): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/AggressiveSplittingPlugin.js(49,30): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/AggressiveSplittingPlugin.js(55,35): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/AggressiveSplittingPlugin.js(56,35): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/AggressiveSplittingPlugin.js(68,27): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/AggressiveSplittingPlugin.js(105,38): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/AggressiveSplittingPlugin.js(114,15): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/optimize/AggressiveSplittingPlugin.js(117,29): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/optimize/AggressiveSplittingPlugin.js(155,31): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/optimize/AggressiveSplittingPlugin.js(156,31): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/optimize/AggressiveSplittingPlugin.js(217,29): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/AggressiveSplittingPlugin.js(218,33): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/AggressiveSplittingPlugin.js(262,41): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/optimize/ChunkModuleIdRangePlugin.js(14,24): error TS2339: Property 'chunks' does not exist on type 'ChunkModuleIdRangePlugin'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(153,31): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(156,31): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(173,27): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(188,26): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(271,26): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(272,29): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(282,26): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(307,29): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(322,58): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(324,52): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(329,13): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(336,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(342,2): error TS2416: Property 'identifier' in type 'ConcatenatedModule' is not assignable to the same property in base type 'Module'.
+  Type '() => string' is not assignable to type 'null'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(342,2): error TS2425: Class 'Module' defines instance member property 'identifier', but extended class 'ConcatenatedModule' defines it as instance member function.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(346,2): error TS2416: Property 'readableIdentifier' in type 'ConcatenatedModule' is not assignable to the same property in base type 'Module'.
+  Type '(requestShortener: any) => string' is not assignable to type 'null'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(346,2): error TS2425: Class 'Module' defines instance member property 'readableIdentifier', but extended class 'ConcatenatedModule' defines it as instance member function.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(357,2): error TS2416: Property 'nameForCondition' in type 'ConcatenatedModule' is not assignable to the same property in base type 'Module'.
+  Type '() => any' is not assignable to type 'null'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(357,2): error TS2425: Class 'Module' defines instance member property 'nameForCondition', but extended class 'ConcatenatedModule' defines it as instance member function.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(361,2): error TS2416: Property 'build' in type 'ConcatenatedModule' is not assignable to the same property in base type 'Module'.
+  Type '(options: any, compilation: any, resolver: any, fs: any, callback: any) => void' is not assignable to type 'null'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(361,2): error TS2425: Class 'Module' defines instance member property 'build', but extended class 'ConcatenatedModule' defines it as instance member function.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(365,2): error TS2416: Property 'size' in type 'ConcatenatedModule' is not assignable to the same property in base type 'Module'.
+  Type '() => any' is not assignable to type 'null'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(365,2): error TS2425: Class 'Module' defines instance member property 'size', but extended class 'ConcatenatedModule' defines it as instance member function.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(380,19): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(407,10): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(437,2): error TS2416: Property 'source' in type 'ConcatenatedModule' is not assignable to the same property in base type 'Module'.
+  Type '(dependencyTemplates: any, runtimeTemplate: any) => any' is not assignable to type 'null'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(437,2): error TS2425: Class 'Module' defines instance member property 'source', but extended class 'ConcatenatedModule' defines it as instance member function.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(443,28): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(444,30): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(474,43): error TS2339: Property 'buildMeta' does not exist on type 'never'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(497,26): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(521,31): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(527,40): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(552,4): error TS2554: Expected 0-2 arguments, but got 3.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(626,28): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(824,29): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(857,29): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(863,32): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(873,35): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(885,10): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(887,10): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(905,6): error TS2322: Type 'string' is not assignable to type 'undefined'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(917,7): error TS2322: Type 'string' is not assignable to type 'undefined'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(927,7): error TS2322: Type 'string' is not assignable to type 'undefined'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(937,29): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(963,7): error TS2532: Object is possibly 'undefined'.
+node_modules/webpack/lib/optimize/ConcatenatedModule.js(984,21): error TS2339: Property 'namespaceObjectSource' does not exist on type 'never'.
+node_modules/webpack/lib/optimize/EnsureChunkConditionsPlugin.js(18,32): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/EnsureChunkConditionsPlugin.js(19,31): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/EnsureChunkConditionsPlugin.js(29,32): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/LimitChunkCountPlugin.js(8,24): error TS2307: Cannot find module '../../schemas/plugins/optimize/LimitChunkCountPlugin.json'.
+node_modules/webpack/lib/optimize/MergeDuplicateChunksPlugin.js(16,33): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/MergeDuplicateChunksPlugin.js(35,38): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/MinChunkSizePlugin.js(8,24): error TS2307: Cannot find module '../../schemas/plugins/optimize/MinChunkSizePlugin.json'.
+node_modules/webpack/lib/optimize/ModuleConcatenationPlugin.js(45,34): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/ModuleConcatenationPlugin.js(66,34): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/ModuleConcatenationPlugin.js(144,38): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/ModuleConcatenationPlugin.js(147,43): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/ModuleConcatenationPlugin.js(150,42): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/ModuleConcatenationPlugin.js(151,16): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/optimize/ModuleConcatenationPlugin.js(153,15): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/ModuleConcatenationPlugin.js(162,30): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/optimize/ModuleConcatenationPlugin.js(167,41): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/optimize/ModuleConcatenationPlugin.js(172,37): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/optimize/ModuleConcatenationPlugin.js(199,31): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/ModuleConcatenationPlugin.js(209,33): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/ModuleConcatenationPlugin.js(239,31): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/ModuleConcatenationPlugin.js(248,44): error TS2345: Argument of type '(requestShortener: any) => string' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/optimize/ModuleConcatenationPlugin.js(290,17): error TS2339: Property 'module' does not exist on type 'never'.
+node_modules/webpack/lib/optimize/ModuleConcatenationPlugin.js(291,28): error TS2339: Property 'module' does not exist on type 'never'.
+node_modules/webpack/lib/optimize/ModuleConcatenationPlugin.js(309,16): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/optimize/ModuleConcatenationPlugin.js(310,8): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/ModuleConcatenationPlugin.js(429,14): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/OccurrenceOrderPlugin.js(22,43): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/OccurrenceOrderPlugin.js(23,39): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/OccurrenceOrderPlugin.js(25,39): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/OccurrenceOrderPlugin.js(26,32): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/OccurrenceOrderPlugin.js(61,32): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/OccurrenceOrderPlugin.js(92,43): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/OccurrenceOrderPlugin.js(93,32): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/RemoveParentModulesPlugin.js(12,20): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/RemoveParentModulesPlugin.js(32,37): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/RemoveParentModulesPlugin.js(36,46): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/RemoveParentModulesPlugin.js(50,32): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/RemoveParentModulesPlugin.js(79,41): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/optimize/RemoveParentModulesPlugin.js(86,27): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/RuntimeChunkPlugin.js(9,25): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/optimize/SideEffectsFlagPlugin.js(45,31): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/SideEffectsFlagPlugin.js(52,27): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/optimize/SideEffectsFlagPlugin.js(63,48): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/SideEffectsFlagPlugin.js(77,8): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/optimize/SideEffectsFlagPlugin.js(77,29): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/optimize/SplitChunksPlugin.js(151,31): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/optimize/SplitChunksPlugin.js(217,27): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/SplitChunksPlugin.js(223,20): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/optimize/SplitChunksPlugin.js(228,35): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/SplitChunksPlugin.js(231,46): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/SplitChunksPlugin.js(233,31): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/SplitChunksPlugin.js(245,32): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/SplitChunksPlugin.js(291,36): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/optimize/SplitChunksPlugin.js(299,19): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/optimize/SplitChunksPlugin.js(303,20): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/optimize/SplitChunksPlugin.js(306,20): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/optimize/SplitChunksPlugin.js(332,24): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/optimize/SplitChunksPlugin.js(333,34): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/optimize/SplitChunksPlugin.js(334,28): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/performance/SizeLimitsPlugin.js(56,18): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/webpack/lib/util/Queue.js(5,18): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/util/Queue.js(9,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/util/Semaphore.js(18,22): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/webpack/lib/util/Semaphore.js(25,21): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Function'.
+node_modules/webpack/lib/util/SetHelpers.js(4,36): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/util/SetHelpers.js(5,36): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/util/SetHelpers.js(15,22): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/util/SortableSet.js(3,27): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/util/SortableSet.js(41,12): error TS2339: Property 'size' does not exist on type 'SortableSet'.
+node_modules/webpack/lib/util/SortableSet.js(46,29): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/util/SortableSet.js(68,22): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/util/SortableSet.js(86,38): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/util/StackedSetMap.js(15,18): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/util/StackedSetMap.js(71,18): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/util/StackedSetMap.js(83,16): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/util/StackedSetMap.js(87,14): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/util/StackedSetMap.js(92,16): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/util/StackedSetMap.js(99,14): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/util/StackedSetMap.js(102,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/util/StackedSetMap.js(111,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/util/StackedSetMap.js(115,6): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+node_modules/webpack/lib/util/TrackingSet.js(10,19): error TS2304: Cannot find name 'Set'.
+node_modules/webpack/lib/util/cachedMerge.js(7,24): error TS2304: Cannot find name 'WeakMap'.
+node_modules/webpack/lib/util/cachedMerge.js(12,10): error TS2448: Block-scoped variable 'cachedMerge' used before its declaration.
+node_modules/webpack/lib/util/cachedMerge.js(12,29): error TS2448: Block-scoped variable 'cachedMerge' used before its declaration.
+node_modules/webpack/lib/util/cachedMerge.js(17,20): error TS2304: Cannot find name 'WeakMap'.
+node_modules/webpack/lib/util/cachedMerge.js(22,26): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/webpack/lib/util/identifier.js(26,53): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/util/identifier.js(31,50): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/util/objectToMap.js(6,14): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/util/objectToMap.js(9,13): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/wasm/WasmModuleTemplatePlugin.js(44,33): error TS2304: Cannot find name 'Map'.
+node_modules/webpack/lib/wasm/WasmModuleTemplatePlugin.js(53,40): error TS2531: Object is possibly 'null'.
+node_modules/webpack/lib/web/JsonpChunkTemplatePlugin.js(27,13): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/web/JsonpMainTemplate.runtime.js(9,3): error TS2304: Cannot find name 'hotAddUpdateChunk'.
+node_modules/webpack/lib/web/JsonpMainTemplate.runtime.js(10,7): error TS2304: Cannot find name 'parentHotUpdateCallback'.
+node_modules/webpack/lib/web/JsonpMainTemplate.runtime.js(10,32): error TS2304: Cannot find name 'parentHotUpdateCallback'.
+node_modules/webpack/lib/web/JsonpMainTemplate.runtime.js(18,16): error TS2304: Cannot find name '$require$'.
+node_modules/webpack/lib/web/JsonpMainTemplate.runtime.js(18,30): error TS2304: Cannot find name '$hotChunkFilename$'.
+node_modules/webpack/lib/web/JsonpMainTemplate.runtime.js(19,3): error TS2304: Cannot find name '$crossOriginLoading$'.
+node_modules/webpack/lib/web/JsonpMainTemplate.runtime.js(26,14): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/webpack/lib/web/JsonpMainTemplate.runtime.js(31,23): error TS2304: Cannot find name '$require$'.
+node_modules/webpack/lib/web/JsonpMainTemplate.runtime.js(31,37): error TS2304: Cannot find name '$hotMainFilename$'.
+node_modules/webpack/lib/web/JsonpMainTemplatePlugin.js(316,15): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/webpack/lib/webpack.js(14,38): error TS2307: Cannot find module '../schemas/WebpackOptions.json'.
+node_modules/webpack/lib/webpack.js(16,25): error TS2307: Cannot find module '../package.json'.
+node_modules/webpack/lib/webpack.js(63,1): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/webpack/node_modules/webpack/lib/webpack"' because it is not a variable.
+node_modules/webpack/lib/webpack.js(63,11): error TS2309: An export assignment cannot be used in a module with other exported elements.
+node_modules/webpack/lib/webpack.js(64,9): error TS2339: Property 'version' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/webpack/node_modules/webpack/lib/webpack"'.
+node_modules/webpack/lib/webpack.js(66,9): error TS2339: Property 'WebpackOptionsDefaulter' does not exist on type '(options: any, callback: any) => any'.
+node_modules/webpack/lib/webpack.js(67,9): error TS2339: Property 'WebpackOptionsApply' does not exist on type '(options: any, callback: any) => any'.
+node_modules/webpack/lib/webpack.js(68,9): error TS2339: Property 'Compiler' does not exist on type '(options: any, callback: any) => any'.
+node_modules/webpack/lib/webpack.js(69,9): error TS2339: Property 'MultiCompiler' does not exist on type '(options: any, callback: any) => any'.
+node_modules/webpack/lib/webpack.js(70,9): error TS2339: Property 'NodeEnvironmentPlugin' does not exist on type '(options: any, callback: any) => any'.
+node_modules/webpack/lib/webpack.js(71,9): error TS2339: Property 'validate' does not exist on type '(options: any, callback: any) => any'.
+node_modules/webpack/lib/webpack.js(72,9): error TS2339: Property 'validateSchema' does not exist on type '(options: any, callback: any) => any'.
+node_modules/webpack/lib/webpack.js(73,9): error TS2339: Property 'WebpackOptionsValidationError' does not exist on type '(options: any, callback: any) => any'.
+node_modules/webpack/lib/webpack.js(125,24): error TS2339: Property 'optimize' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/webpack/node_modules/webpack/lib/webpack"'.
+node_modules/webpack/lib/webpack.js(140,24): error TS2339: Property 'web' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/webpack/node_modules/webpack/lib/webpack"'.
+node_modules/webpack/lib/webpack.js(145,24): error TS2339: Property 'webworker' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/webpack/node_modules/webpack/lib/webpack"'.
+node_modules/webpack/lib/webpack.js(148,24): error TS2339: Property 'node' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/webpack/node_modules/webpack/lib/webpack"'.
+node_modules/webpack/lib/webpack.js(153,24): error TS2339: Property 'debug' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/webpack/node_modules/webpack/lib/webpack"'.
+node_modules/webpack/lib/webpack.js(158,2): error TS2304: Cannot find name 'Reflect'.
+node_modules/webpack/lib/webpack.js(169,10): error TS2339: Property 'optimize' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/webpack/node_modules/webpack/lib/webpack"'.
+node_modules/webpack/lib/webpack.js(176,10): error TS2339: Property 'optimize' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/webpack/node_modules/webpack/lib/webpack"'.
+node_modules/webpack/lib/webworker/WebWorkerMainTemplate.runtime.js(9,3): error TS2304: Cannot find name 'hotAddUpdateChunk'.
+node_modules/webpack/lib/webworker/WebWorkerMainTemplate.runtime.js(10,7): error TS2304: Cannot find name 'parentHotUpdateCallback'.
+node_modules/webpack/lib/webworker/WebWorkerMainTemplate.runtime.js(10,32): error TS2304: Cannot find name 'parentHotUpdateCallback'.
+node_modules/webpack/lib/webworker/WebWorkerMainTemplate.runtime.js(15,17): error TS2304: Cannot find name '$require$'.
+node_modules/webpack/lib/webworker/WebWorkerMainTemplate.runtime.js(15,31): error TS2304: Cannot find name '$hotChunkFilename$'.
+node_modules/webpack/lib/webworker/WebWorkerMainTemplate.runtime.js(21,14): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/webpack/lib/webworker/WebWorkerMainTemplate.runtime.js(26,23): error TS2304: Cannot find name '$require$'.
+node_modules/webpack/lib/webworker/WebWorkerMainTemplate.runtime.js(26,37): error TS2304: Cannot find name '$hotMainFilename$'.
+node_modules/webpack/lib/webworker/WebWorkerMainTemplate.runtime.js(62,10): error TS2304: Cannot find name 'installedChunks'.
+node_modules/webpack/schemas/ajv.absolutePath.js(22,5): error TS2322: Type '{ [x: string]: any; keyword: string; params: { [x: string]: any; absolutePath: any; }; message: s...' is not assignable to type 'never[]'.
+  Type '{ [x: string]: any; keyword: string; params: { [x: string]: any; absolutePath: any; }; message: s...' is not assignable to type 'never'.
+
+
+
+Standard error:

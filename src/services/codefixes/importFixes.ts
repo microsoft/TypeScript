@@ -90,11 +90,11 @@ namespace ts.codefix {
         sourceFile: SourceFile,
         symbolName: string,
         host: LanguageServiceHost,
-        program: ts.Program,
-        checker: ts.TypeChecker,
-        compilerOptions: ts.CompilerOptions,
-        allSourceFiles: ReadonlyArray<ts.SourceFile>,
-        formatContext: ts.formatting.FormatContext,
+        program: Program,
+        checker: TypeChecker,
+        compilerOptions: CompilerOptions,
+        allSourceFiles: ReadonlyArray<SourceFile>,
+        formatContext: formatting.FormatContext,
         getCanonicalFileName: GetCanonicalFileName,
         symbolToken: Node | undefined,
         options: Options,
@@ -273,7 +273,7 @@ namespace ts.codefix {
                 }
 
                 const relativePath = removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), compilerOptions, addJsExtension);
-                if (!baseUrl || options.importModuleSpecifierPreference == "relative") {
+                if (!baseUrl || options.importModuleSpecifierPreference === "relative") {
                     return [relativePath];
                 }
 
@@ -717,7 +717,7 @@ namespace ts.codefix {
                 // Fall back to the `import * as ns` style import.
                 return ImportKind.Namespace;
             default:
-                throw Debug.assertNever(moduleKind);
+                return Debug.assertNever(moduleKind);
         }
     }
 

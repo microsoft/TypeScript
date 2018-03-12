@@ -1,20 +1,20 @@
-tests/cases/compiler/unusedLocalsAndParametersTypeAliases2.ts(2,6): error TS6133: 'handler1' is declared but its value is never read.
-tests/cases/compiler/unusedLocalsAndParametersTypeAliases2.ts(5,10): error TS6133: 'foo' is declared but its value is never read.
-tests/cases/compiler/unusedLocalsAndParametersTypeAliases2.ts(6,10): error TS6133: 'handler2' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParametersTypeAliases2.ts(2,1): error TS6133: 'handler1' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParametersTypeAliases2.ts(5,1): error TS6133: 'foo' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParametersTypeAliases2.ts(6,5): error TS6133: 'handler2' is declared but its value is never read.
 
 
 ==== tests/cases/compiler/unusedLocalsAndParametersTypeAliases2.ts (3 errors) ====
     // unused
     type handler1 = () => void;
-         ~~~~~~~~
+    ~~~~~~~~~~~~~
 !!! error TS6133: 'handler1' is declared but its value is never read.
     
     
     function foo() {
-             ~~~
+    ~~~~~~~~~~~~
 !!! error TS6133: 'foo' is declared but its value is never read.
         type handler2 = () => void;
-             ~~~~~~~~
+        ~~~~~~~~~~~~~
 !!! error TS6133: 'handler2' is declared but its value is never read.
         foo();
     }

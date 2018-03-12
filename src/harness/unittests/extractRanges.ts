@@ -27,9 +27,9 @@ namespace ts {
         const expectedRange = t.ranges.get("extracted");
         if (expectedRange) {
             let pos: number, end: number;
-            if (ts.isArray(result.targetRange.range)) {
+            if (isArray(result.targetRange.range)) {
                 pos = result.targetRange.range[0].getStart(f);
-                end = ts.lastOrUndefined(result.targetRange.range).getEnd();
+                end = lastOrUndefined(result.targetRange.range).getEnd();
             }
             else {
                 pos = result.targetRange.range.getStart(f);

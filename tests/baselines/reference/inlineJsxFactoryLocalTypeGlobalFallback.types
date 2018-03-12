@@ -1,0 +1,110 @@
+=== tests/cases/conformance/jsx/inline/renderer.d.ts ===
+declare global {
+>global : any
+
+    namespace JSX {
+>JSX : any
+
+        interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+            [e: string]: {};
+>e : string
+        }
+        interface Element {
+>Element : Element
+
+            __domBrand: void;
+>__domBrand : void
+
+            children: Element[];
+>children : Element[]
+>Element : Element
+
+            props: {};
+>props : {}
+        }
+        interface ElementAttributesProperty { props: any; }
+>ElementAttributesProperty : ElementAttributesProperty
+>props : any
+
+        interface ElementChildrenAttribute { children: any; }
+>ElementChildrenAttribute : ElementChildrenAttribute
+>children : any
+    }
+}
+export function dom(): JSX.Element;
+>dom : () => JSX.Element
+>JSX : any
+>Element : JSX.Element
+
+=== tests/cases/conformance/jsx/inline/renderer2.d.ts ===
+export namespace predom {
+>predom : () => JSX.Element
+
+    namespace JSX {
+>JSX : any
+
+        interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+            [e: string]: {};
+>e : string
+        }
+        interface Element {
+>Element : Element
+
+            __predomBrand: void;
+>__predomBrand : void
+
+            children: Element[];
+>children : Element[]
+>Element : Element
+
+            props: {};
+>props : {}
+        }
+        interface ElementAttributesProperty { props: any; }
+>ElementAttributesProperty : ElementAttributesProperty
+>props : any
+
+        interface ElementChildrenAttribute { children: any; }
+>ElementChildrenAttribute : ElementChildrenAttribute
+>children : any
+    }
+}
+export function predom(): predom.JSX.Element;
+>predom : () => predom.JSX.Element
+>predom : any
+>JSX : any
+>Element : predom.JSX.Element
+
+=== tests/cases/conformance/jsx/inline/component.tsx ===
+/** @jsx predom */
+import { predom } from "./renderer2"
+>predom : () => predom.JSX.Element
+
+export default <h></h>
+><h></h> : predom.JSX.Element
+>h : any
+>h : any
+
+=== tests/cases/conformance/jsx/inline/index.tsx ===
+/** @jsx dom */
+import { dom } from "./renderer"
+>dom : () => JSX.Element
+
+import prerendered from "./component";
+>prerendered : predom.JSX.Element
+
+let elem = prerendered;
+>elem : predom.JSX.Element
+>prerendered : predom.JSX.Element
+
+elem = <h></h>; // Expect assignability error here
+>elem = <h></h> : JSX.Element
+>elem : predom.JSX.Element
+><h></h> : JSX.Element
+>h : any
+>h : any
+

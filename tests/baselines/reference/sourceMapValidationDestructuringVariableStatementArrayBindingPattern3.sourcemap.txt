@@ -763,38 +763,26 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3
 ---
 >>>if (nameA == nameB) {
 1 >
-2 >^^
-3 >  ^
-4 >   ^
-5 >    ^^^^^
-6 >         ^^^^
-7 >             ^^^^^
-8 >                  ^
-9 >                   ^
-10>                    ^
-11>                     ^^^^->
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^^
+5 >             ^^^^^
+6 >                  ^^
+7 >                    ^^^^^->
 1 >
   >
   >
-2 >if
-3 >   
-4 >   (
-5 >    nameA
-6 >          == 
-7 >             nameB
-8 >                  )
-9 >                    
-10>                    {
+2 >if (
+3 >    nameA
+4 >          == 
+5 >             nameB
+6 >                  ) 
 1 >Emitted(33, 1) Source(46, 1) + SourceIndex(0)
-2 >Emitted(33, 3) Source(46, 3) + SourceIndex(0)
-3 >Emitted(33, 4) Source(46, 4) + SourceIndex(0)
-4 >Emitted(33, 5) Source(46, 5) + SourceIndex(0)
-5 >Emitted(33, 10) Source(46, 10) + SourceIndex(0)
-6 >Emitted(33, 14) Source(46, 14) + SourceIndex(0)
-7 >Emitted(33, 19) Source(46, 19) + SourceIndex(0)
-8 >Emitted(33, 20) Source(46, 20) + SourceIndex(0)
-9 >Emitted(33, 21) Source(46, 21) + SourceIndex(0)
-10>Emitted(33, 22) Source(46, 22) + SourceIndex(0)
+2 >Emitted(33, 5) Source(46, 5) + SourceIndex(0)
+3 >Emitted(33, 10) Source(46, 10) + SourceIndex(0)
+4 >Emitted(33, 14) Source(46, 14) + SourceIndex(0)
+5 >Emitted(33, 19) Source(46, 19) + SourceIndex(0)
+6 >Emitted(33, 21) Source(46, 21) + SourceIndex(0)
 ---
 >>>    console.log(skillB);
 1->^^^^
@@ -805,7 +793,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3
 6 >                ^^^^^^
 7 >                      ^
 8 >                       ^
-1->
+1->{
   >    
 2 >    console
 3 >           .
@@ -824,14 +812,11 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3
 8 >Emitted(34, 25) Source(47, 25) + SourceIndex(0)
 ---
 >>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-  >
-2 >}
-1 >Emitted(35, 1) Source(48, 1) + SourceIndex(0)
-2 >Emitted(35, 2) Source(48, 2) + SourceIndex(0)
+  >}
+1 >Emitted(35, 2) Source(48, 2) + SourceIndex(0)
 ---
 >>>function getRobotB() {
 1->
@@ -843,21 +828,18 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3
 ---
 >>>    return robotB;
 1->^^^^
-2 >    ^^^^^^
-3 >          ^
-4 >           ^^^^^^
-5 >                 ^
+2 >    ^^^^^^^
+3 >           ^^^^^^
+4 >                 ^
 1->function getRobotB() {
   >    
-2 >    return
-3 >           
-4 >           robotB
-5 >                 ;
+2 >    return 
+3 >           robotB
+4 >                 ;
 1->Emitted(37, 5) Source(51, 5) + SourceIndex(0)
-2 >Emitted(37, 11) Source(51, 11) + SourceIndex(0)
-3 >Emitted(37, 12) Source(51, 12) + SourceIndex(0)
-4 >Emitted(37, 18) Source(51, 18) + SourceIndex(0)
-5 >Emitted(37, 19) Source(51, 19) + SourceIndex(0)
+2 >Emitted(37, 12) Source(51, 12) + SourceIndex(0)
+3 >Emitted(37, 18) Source(51, 18) + SourceIndex(0)
+4 >Emitted(37, 19) Source(51, 19) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -879,21 +861,18 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3
 ---
 >>>    return multiRobotB;
 1->^^^^
-2 >    ^^^^^^
-3 >          ^
-4 >           ^^^^^^^^^^^
-5 >                      ^
+2 >    ^^^^^^^
+3 >           ^^^^^^^^^^^
+4 >                      ^
 1->function getMultiRobotB() {
   >    
-2 >    return
-3 >           
-4 >           multiRobotB
-5 >                      ;
+2 >    return 
+3 >           multiRobotB
+4 >                      ;
 1->Emitted(40, 5) Source(55, 5) + SourceIndex(0)
-2 >Emitted(40, 11) Source(55, 11) + SourceIndex(0)
-3 >Emitted(40, 12) Source(55, 12) + SourceIndex(0)
-4 >Emitted(40, 23) Source(55, 23) + SourceIndex(0)
-5 >Emitted(40, 24) Source(55, 24) + SourceIndex(0)
+2 >Emitted(40, 12) Source(55, 12) + SourceIndex(0)
+3 >Emitted(40, 23) Source(55, 23) + SourceIndex(0)
+4 >Emitted(40, 24) Source(55, 24) + SourceIndex(0)
 ---
 >>>}
 1 >
