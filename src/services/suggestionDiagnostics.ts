@@ -34,9 +34,9 @@ namespace ts {
 
         if (getAllowSyntheticDefaultImports(program.getCompilerOptions())) {
             for (const importNode of sourceFile.imports) {
-                const name = importNameForConvertToDefaultImport(importNode.parent);
+                const name = importNameForConvertToDefaultImport(importNode);
                 if (!name) continue;
-                const module = getResolvedModule(sourceFile, importNode.text);
+                const module = getResolvedModule(sourceFile, moduleSpecifierFromImport(importNode).text);
                 const resolvedFile = module && program.getSourceFile(module.resolvedFileName);
                 if (resolvedFile && resolvedFile.externalModuleIndicator && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals) {
                     diags.push(createDiagnosticForNode(name, Diagnostics.Import_may_be_converted_to_a_default_import));
@@ -47,15 +47,17 @@ namespace ts {
         return diags.concat(checker.getSuggestionDiagnostics(sourceFile));
     }
 
-    function importNameForConvertToDefaultImport(node: Node): Identifier | undefined {
-        if (isExternalModuleReference(node)) {
-            return node.parent.name;
-        }
-        if (isImportDeclaration(node)) {
-            const { importClause, moduleSpecifier } = node;
-            return importClause && !importClause.name && importClause.namedBindings.kind === SyntaxKind.NamespaceImport && isStringLiteral(moduleSpecifier)
-                ? importClause.namedBindings.name
-                : undefined;
+    function importNameForConvertToDefaultImport(node: AnyValidImportOrReExport): Identifier | undefined {
+        switch (node.kind) {
+            case SyntaxKind.ImportDeclaration:
+                const { importClause, moduleSpecifier } = node;
+                return importClause && !importClause.name && importClause.namedBindings.kind === SyntaxKind.NamespaceImport && isStringLiteral(moduleSpecifier)
+                    ? importClause.namedBindings.name
+                    : undefined;
+            case SyntaxKind.ImportEqualsDeclaration:
+                return node.name;
+            default:
+                return undefined;
         }
     }
 }

@@ -83,7 +83,7 @@ namespace ts.BuilderState {
         if (sourceFile.imports && sourceFile.imports.length > 0) {
             const checker: TypeChecker = program.getTypeChecker();
             for (const importName of sourceFile.imports) {
-                const symbol = checker.getSymbolAtLocation(importName);
+                const symbol = checker.getSymbolAtLocation(moduleSpecifierFromImport(importName));
                 if (symbol && symbol.declarations && symbol.declarations[0]) {
                     const declarationSourceFile = getSourceFileOfNode(symbol.declarations[0]);
                     if (declarationSourceFile) {

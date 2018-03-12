@@ -158,27 +158,11 @@ namespace ts.codefix {
         const moduleSymbolId = getUniqueSymbolId(moduleSymbol, checker);
         let cached = cachedImportDeclarations[moduleSymbolId];
         if (!cached) {
-            cached = cachedImportDeclarations[moduleSymbolId] = mapDefined<StringLiteral, ExistingImportInfo>(imports, importModuleSpecifier => {
-                const declaration = checker.getSymbolAtLocation(importModuleSpecifier) === moduleSymbol ? getImportDeclaration(importModuleSpecifier) : undefined;
-                return declaration && { declaration, importKind };
-            });
+            cached = cachedImportDeclarations[moduleSymbolId] = mapDefined<AnyValidImportOrReExport, ExistingImportInfo>(imports, i =>
+                (i.kind === SyntaxKind.ImportDeclaration || i.kind === SyntaxKind.ImportEqualsDeclaration)
+                    && checker.getSymbolAtLocation(moduleSpecifierFromImport(i)) === moduleSymbol ? { declaration: i, importKind } : undefined);
         }
         return cached;
-    }
-
-    function getImportDeclaration({ parent }: LiteralExpression): AnyImportSyntax | undefined {
-        switch (parent.kind) {
-            case SyntaxKind.ImportDeclaration:
-                return parent as ImportDeclaration;
-            case SyntaxKind.ExternalModuleReference:
-                return (parent as ExternalModuleReference).parent;
-            case SyntaxKind.ExportDeclaration:
-            case SyntaxKind.CallExpression: // For "require()" calls
-                // Ignore these, can't add imports to them.
-                return undefined;
-            default:
-                Debug.fail();
-        }
     }
 
     function getCodeActionForNewImport(context: SymbolContext, { moduleSpecifier, importKind }: NewImportInfo): CodeFixAction {
@@ -217,12 +201,15 @@ namespace ts.codefix {
     function createStringLiteralWithQuoteStyle(sourceFile: SourceFile, text: string): StringLiteral {
         const literal = createLiteral(text);
         const firstModuleSpecifier = firstOrUndefined(sourceFile.imports);
-        literal.singleQuote = !!firstModuleSpecifier && !isStringDoubleQuoted(firstModuleSpecifier, sourceFile);
+        literal.singleQuote = !!firstModuleSpecifier && !isStringDoubleQuoted(moduleSpecifierFromImport(firstModuleSpecifier), sourceFile);
         return literal;
     }
 
     function usesJsExtensionOnImports(sourceFile: SourceFile): boolean {
-        return firstDefined(sourceFile.imports, ({ text }) => pathIsRelative(text) ? fileExtensionIs(text, Extension.Js) : undefined) || false;
+        return firstDefined(sourceFile.imports, i => {
+            const { text } = moduleSpecifierFromImport(i);
+            return pathIsRelative(text) ? fileExtensionIs(text, Extension.Js) : undefined;
+        }) || false;
     }
 
     function createImportClauseOfKind(kind: ImportKind.Default | ImportKind.Named | ImportKind.Namespace, symbolName: string) {

@@ -971,7 +971,7 @@ namespace ts {
 
                     // check imports and module augmentations
                     collectExternalModuleReferences(newSourceFile);
-                    if (!arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo)) {
+                    if (!arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, importHasSameModuleName)) {
                         // imports has changed
                         oldProgram.structureIsReused = StructureIsReused.SafeModules;
                     }
@@ -1574,6 +1574,10 @@ namespace ts {
             return a.fileName === b.fileName;
         }
 
+        function importHasSameModuleName(a: AnyValidImportOrReExport, b: AnyValidImportOrReExport): boolean {
+            return moduleSpecifierFromImport(a).text === moduleSpecifierFromImport(b).text;
+        }
+
         function moduleNameIsEqualTo(a: StringLiteral | Identifier, b: StringLiteral | Identifier): boolean {
             return a.kind === SyntaxKind.StringLiteral
                 ? b.kind === SyntaxKind.StringLiteral && a.text === b.text
@@ -1589,7 +1593,7 @@ namespace ts {
             const isExternalModuleFile = isExternalModule(file);
 
             // file.imports may not be undefined if there exists dynamic import
-            let imports: StringLiteral[];
+            let imports: AnyValidImportOrReExport[] | undefined;
             let moduleAugmentations: (StringLiteral | Identifier)[];
             let ambientModules: string[];
 
@@ -1599,12 +1603,11 @@ namespace ts {
                 && (options.isolatedModules || isExternalModuleFile)
                 && !file.isDeclarationFile) {
                 // synthesize 'import "tslib"' declaration
-                const externalHelpersModuleReference = createLiteral(externalHelpersModuleNameText);
-                const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined);
+                const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined, createLiteral(externalHelpersModuleNameText));
                 addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
-                externalHelpersModuleReference.parent = importDecl;
+                importDecl.moduleSpecifier.parent = importDecl;
                 importDecl.parent = file;
-                imports = [externalHelpersModuleReference];
+                imports = [importDecl as ImportDeclaration & { moduleSpecifier: StringLiteral }];
             }
 
             for (const node of file.statements) {
@@ -1621,66 +1624,55 @@ namespace ts {
             return;
 
             function collectModuleReferences(node: Statement, inAmbientModule: boolean): void {
-                switch (node.kind) {
-                    case SyntaxKind.ImportDeclaration:
-                    case SyntaxKind.ImportEqualsDeclaration:
-                    case SyntaxKind.ExportDeclaration:
-                        const moduleNameExpr = getExternalModuleName(node);
-                        if (!moduleNameExpr || !isStringLiteral(moduleNameExpr)) {
-                            break;
+                if (isAnyImportOrReExport(node)) {
+                    const moduleNameExpr = getExternalModuleName(node);
+                    // TypeScript 1.0 spec (April 2014): 12.1.6
+                    // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference other external modules
+                    // only through top - level external module names. Relative external module names are not permitted.
+                    if (moduleNameExpr && isStringLiteral(moduleNameExpr) && moduleNameExpr.text && (!inAmbientModule || !isExternalModuleNameRelative(moduleNameExpr.text))) {
+                        imports = append(imports, node as AnyValidImportOrReExport);
+                    }
+                }
+                else if (isModuleDeclaration(node)) {
+                    if (isAmbientModule(node) && (inAmbientModule || hasModifier(node, ModifierFlags.Ambient) || file.isDeclarationFile)) {
+                        const nameText = getTextOfIdentifierOrLiteral(node.name);
+                        // Ambient module declarations can be interpreted as augmentations for some existing external modules.
+                        // This will happen in two cases:
+                        // - if current file is external module then module augmentation is a ambient module declaration defined in the top level scope
+                        // - if current file is not external module then module augmentation is an ambient module declaration with non-relative module name
+                        //   immediately nested in top level ambient module declaration .
+                        if (isExternalModuleFile || (inAmbientModule && !isExternalModuleNameRelative(nameText))) {
+                            (moduleAugmentations || (moduleAugmentations = [])).push(node.name);
                         }
-                        if (!moduleNameExpr.text) {
-                            break;
-                        }
-
-                        // TypeScript 1.0 spec (April 2014): 12.1.6
-                        // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference other external modules
-                        // only through top - level external module names. Relative external module names are not permitted.
-                        if (!inAmbientModule || !isExternalModuleNameRelative(moduleNameExpr.text)) {
-                            (imports || (imports = [])).push(moduleNameExpr);
-                        }
-                        break;
-                    case SyntaxKind.ModuleDeclaration:
-                        if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || hasModifier(node, ModifierFlags.Ambient) || file.isDeclarationFile)) {
-                            const moduleName = (<ModuleDeclaration>node).name;
-                            const nameText = getTextOfIdentifierOrLiteral(moduleName);
-                            // Ambient module declarations can be interpreted as augmentations for some existing external modules.
-                            // This will happen in two cases:
-                            // - if current file is external module then module augmentation is a ambient module declaration defined in the top level scope
-                            // - if current file is not external module then module augmentation is an ambient module declaration with non-relative module name
-                            //   immediately nested in top level ambient module declaration .
-                            if (isExternalModuleFile || (inAmbientModule && !isExternalModuleNameRelative(nameText))) {
-                                (moduleAugmentations || (moduleAugmentations = [])).push(moduleName);
+                        else if (!inAmbientModule) {
+                            if (file.isDeclarationFile) {
+                                // for global .d.ts files record name of ambient module
+                                (ambientModules || (ambientModules = [])).push(nameText);
                             }
-                            else if (!inAmbientModule) {
-                                if (file.isDeclarationFile) {
-                                    // for global .d.ts files record name of ambient module
-                                    (ambientModules || (ambientModules = [])).push(nameText);
-                                }
-                                // An AmbientExternalModuleDeclaration declares an external module.
-                                // This type of declaration is permitted only in the global module.
-                                // The StringLiteral must specify a top - level external module name.
-                                // Relative external module names are not permitted
+                            // An AmbientExternalModuleDeclaration declares an external module.
+                            // This type of declaration is permitted only in the global module.
+                            // The StringLiteral must specify a top - level external module name.
+                            // Relative external module names are not permitted
 
-                                // NOTE: body of ambient module is always a module block, if it exists
-                                const body = <ModuleBlock>(<ModuleDeclaration>node).body;
-                                if (body) {
-                                    for (const statement of body.statements) {
-                                        collectModuleReferences(statement, /*inAmbientModule*/ true);
-                                    }
+                            // NOTE: body of ambient module is always a module block, if it exists
+                            const body = <ModuleBlock>(<ModuleDeclaration>node).body;
+                            if (body) {
+                                for (const statement of body.statements) {
+                                    collectModuleReferences(statement, /*inAmbientModule*/ true);
                                 }
                             }
                         }
+                    }
                 }
             }
 
             function collectDynamicImportOrRequireCalls(node: Node): void {
                 if (isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
-                    (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
+                    imports = append(imports, node);
                 }
                 // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.
                 else if (isImportCall(node) && node.arguments.length === 1 && node.arguments[0].kind === SyntaxKind.StringLiteral) {
-                    (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
+                    imports = append(imports, node as CallExpression as RequireOrImportCall);
                 }
                 else {
                     forEachChild(node, collectDynamicImportOrRequireCalls);
@@ -2426,7 +2418,7 @@ namespace ts {
     }
 
     function getModuleNames({ imports, moduleAugmentations }: SourceFile): string[] {
-        const res = imports.map(i => i.text);
+        const res = imports.map(i => moduleSpecifierFromImport(i).text);
         for (const aug of moduleAugmentations) {
             if (aug.kind === SyntaxKind.StringLiteral) {
                 res.push(aug.text);

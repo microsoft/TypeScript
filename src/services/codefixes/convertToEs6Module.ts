@@ -19,26 +19,22 @@ namespace ts.codefix {
     });
 
     function fixImportOfModuleExports(importingFile: SourceFile, exportingFile: SourceFile, changes: textChanges.ChangeTracker) {
-        for (const moduleSpecifier of importingFile.imports) {
-            const imported = getResolvedModule(importingFile, moduleSpecifier.text);
+        for (const importNode of importingFile.imports) {
+            const { text } = moduleSpecifierFromImport(importNode);
+            const imported = getResolvedModule(importingFile, text);
             if (!imported || imported.resolvedFileName !== exportingFile.fileName) {
                 continue;
             }
 
-            const { parent } = moduleSpecifier;
-            switch (parent.kind) {
-                case SyntaxKind.ExternalModuleReference: {
-                    const importEq = (parent as ExternalModuleReference).parent;
-                    changes.replaceNode(importingFile, importEq, makeImport(importEq.name, /*namedImports*/ undefined, moduleSpecifier.text));
+            switch (importNode.kind) {
+                case SyntaxKind.ImportEqualsDeclaration:
+                    changes.replaceNode(importingFile, importNode, makeImport(importNode.name, /*namedImports*/ undefined, text));
                     break;
-                }
-                case SyntaxKind.CallExpression: {
-                    const call = parent as CallExpression;
-                    if (isRequireCall(call, /*checkArgumentIsStringLiteral*/ false)) {
-                        changes.replaceNode(importingFile, parent, createPropertyAccess(getSynthesizedDeepClone(call), "default"));
+                case SyntaxKind.CallExpression:
+                    if (isRequireCall(importNode, /*checkArgumentIsStringLiteral*/ false)) {
+                        changes.replaceNode(importingFile, importNode, createPropertyAccess(getSynthesizedDeepClone(importNode), "default"));
                     }
                     break;
-                }
             }
         }
     }
