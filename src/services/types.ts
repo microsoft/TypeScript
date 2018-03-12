@@ -218,6 +218,7 @@ namespace ts {
         readonly quote?: "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
+        readonly importModuleSpecifierPreference?: "relative" | "baseUrl";
     }
     /* @internal */
     export const defaultOptions: Options = {};

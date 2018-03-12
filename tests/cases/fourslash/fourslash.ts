@@ -527,6 +527,7 @@ declare namespace FourSlashInterface {
         quote?: "double" | "single";
         includeCompletionsForModuleExports?: boolean;
         includeInsertTextCompletions?: boolean;
+        importModuleSpecifierPreference?: "relative" | "baseUrl";
     }
     interface CompletionsAtOptions extends Options {
         isNewIdentifierLocation?: boolean;

@@ -102,7 +102,7 @@ namespace ts.codefix {
         const exportInfos = getAllReExportingModules(exportedSymbol, checker, allSourceFiles);
         Debug.assert(exportInfos.some(info => info.moduleSymbol === moduleSymbol));
         // We sort the best codefixes first, so taking `first` is best for completions.
-        const moduleSpecifier = first(getNewImportInfos(program, sourceFile, exportInfos, compilerOptions, getCanonicalFileName, host)).moduleSpecifier;
+        const moduleSpecifier = first(getNewImportInfos(program, sourceFile, exportInfos, compilerOptions, getCanonicalFileName, host, options)).moduleSpecifier;
         const ctx: ImportCodeFixContext = { host, program, checker, compilerOptions, sourceFile, formatContext, symbolName, getCanonicalFileName, symbolToken, options };
         return { moduleSpecifier, codeAction: first(getCodeActionsForImport(exportInfos, ctx)) };
     }
@@ -254,25 +254,26 @@ namespace ts.codefix {
         program: Program,
         sourceFile: SourceFile,
         moduleSymbols: ReadonlyArray<SymbolExportInfo>,
-        options: CompilerOptions,
+        compilerOptions: CompilerOptions,
         getCanonicalFileName: (file: string) => string,
         host: LanguageServiceHost,
+        options: Options,
     ): ReadonlyArray<NewImportInfo> {
-        const { baseUrl, paths, rootDirs } = options;
+        const { baseUrl, paths, rootDirs } = compilerOptions;
         const addJsExtension = usesJsExtensionOnImports(sourceFile);
         const choicesForEachExportingModule = flatMap<SymbolExportInfo, NewImportInfo[]>(moduleSymbols, ({ moduleSymbol, importKind }) => {
             const modulePathsGroups = getAllModulePaths(program, moduleSymbol.valueDeclaration.getSourceFile()).map(moduleFileName => {
                 const sourceDirectory = getDirectoryPath(sourceFile.fileName);
                 const global = tryGetModuleNameFromAmbientModule(moduleSymbol)
-                    || tryGetModuleNameFromTypeRoots(options, host, getCanonicalFileName, moduleFileName, addJsExtension)
-                    || tryGetModuleNameAsNodeModule(options, moduleFileName, host, getCanonicalFileName, sourceDirectory)
+                    || tryGetModuleNameFromTypeRoots(compilerOptions, host, getCanonicalFileName, moduleFileName, addJsExtension)
+                    || tryGetModuleNameAsNodeModule(compilerOptions, moduleFileName, host, getCanonicalFileName, sourceDirectory)
                     || rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName);
                 if (global) {
                     return [global];
                 }
 
-                const relativePath = removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), options, addJsExtension);
-                if (!baseUrl) {
+                const relativePath = removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), compilerOptions, addJsExtension);
+                if (!baseUrl || options.importModuleSpecifierPreference == "relative") {
                     return [relativePath];
                 }
 
@@ -281,13 +282,19 @@ namespace ts.codefix {
                     return [relativePath];
                 }
 
-                const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, options, addJsExtension);
+                const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, compilerOptions, addJsExtension);
                 if (paths) {
                     const fromPaths = tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
                     if (fromPaths) {
                         return [fromPaths];
                     }
                 }
+
+                if (options.importModuleSpecifierPreference === "baseUrl") {
+                    return [importRelativeToBaseUrl];
+                }
+
+                if (options.importModuleSpecifierPreference !== undefined) Debug.assertNever(options.importModuleSpecifierPreference);
 
                 if (isPathRelativeToParent(relativeToBaseUrl)) {
                     return [relativePath];
@@ -584,7 +591,7 @@ namespace ts.codefix {
         const existingDeclaration = firstDefined(existingImports, newImportInfoFromExistingSpecifier);
         const newImportInfos = existingDeclaration
             ? [existingDeclaration]
-            : getNewImportInfos(ctx.program, ctx.sourceFile, exportInfos, ctx.compilerOptions, ctx.getCanonicalFileName, ctx.host);
+            : getNewImportInfos(ctx.program, ctx.sourceFile, exportInfos, ctx.compilerOptions, ctx.getCanonicalFileName, ctx.host, ctx.options);
         return newImportInfos.map(info => getCodeActionForNewImport(ctx, info));
     }
 
