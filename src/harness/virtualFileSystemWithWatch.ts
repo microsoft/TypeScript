@@ -88,7 +88,7 @@ interface Array<T> {}`
     }
 
     interface Folder extends FSEntry {
-        entries: FSEntry[];
+        entries: SortedArray<FSEntry>;
     }
 
     interface SymLink extends FSEntry {
@@ -504,7 +504,7 @@ interface Array<T> {}`
         }
 
         private addFileOrFolderInFolder(folder: Folder, fileOrDirectory: File | Folder | SymLink, ignoreWatch?: boolean) {
-            folder.entries.push(fileOrDirectory);
+            insertSorted(folder.entries, fileOrDirectory, (a, b) => compareStringsCaseSensitive(getBaseFileName(a.path), getBaseFileName(b.path)));
             folder.modifiedTime = new Date();
             this.fs.set(fileOrDirectory.path, fileOrDirectory);
 
@@ -606,7 +606,7 @@ interface Array<T> {}`
 
         private toFolder(path: string): Folder {
             const folder = this.toFsEntry(path) as Folder;
-            folder.entries = [];
+            folder.entries = [] as SortedArray<FSEntry>;
             return folder;
         }
 
